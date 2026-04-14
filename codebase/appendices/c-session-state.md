@@ -11,43 +11,61 @@ nav_order: 3
 
 `SessionStateShape` in `src/debug/session-state.ts` is the central mutable store for a debug session. One instance is created per session and reset on each launch. All adapter logic that needs to share state reads and writes it directly.
 
+The module defines two ways to access the same data: **flat fields** and **domain views**. The flat fields (`runtime`, `listing`, `loadedProgram`, etc.) are the original surface and remain fully accessible for backward compatibility. The five domain-view interfaces (`source`, `launch`, `runtimeState`, `platform`, `ui`) are get/set proxies built by `createSessionState()` that close over the same underlying slots. Writing to `state.source.listing` and writing to `state.listing` affect the same value. New code should prefer the domain views to reduce coupling to the full flat shape.
+
 ---
 
-## Program and artifacts
+## Domain views
+
+`createSessionState()` builds the five proxy objects before the final `Object.assign` that merges them with the flat backing store. The returned state object is a single reference where both the flat fields and the domain views are present simultaneously — no unsafe casts, no two-phase initialisation.
+
+| View | Interface | Fields exposed | Flat fields aliased |
+|------|-----------|----------------|---------------------|
+| `source` | `SessionSourceState` | `listing`, `listingPath`, `mapping`, `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceRoots`, `extraListingPaths` | Same names on the flat object |
+| `launch` | `SessionLaunchState` | `baseDir`, `loadedProgram`, `loadedEntry`, `restartCaptureAddress`, `entryCpuState`, `launchArgs` | Same names on the flat object |
+| `runtimeState` | `SessionRuntimeState` | `execution` | `runtime` |
+| `platform` | `SessionPlatformState` | `tec1Runtime`, `tec1gRuntime`, `platformRuntime`, `tec1gConfig` | Same names on the flat object |
+| `ui` | `SessionUiState` | `terminalState` | Same name on the flat object |
+
+Note that `runtimeState.execution` aliases the flat field `runtime` under a different name — it is the only view field that does not share its name with its backing slot.
+
+---
+
+## Flat field reference
+
+The tables below list all flat fields on `SessionStateShape`, grouped by the domain view they belong to. Fields in each group are also accessible through the corresponding domain view.
+
+### Program and artifacts (`launch` view)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `runtime` | `Z80Runtime \| undefined` | Z80 CPU emulator instance |
 | `loadedProgram` | `HexProgram \| undefined` | Parsed Intel HEX with write ranges |
 | `loadedEntry` | `number \| undefined` | Entry point address written by the program loader |
+| `baseDir` | `string` | Base directory for all relative path resolution |
+| `launchArgs` | `LaunchRequestArguments \| undefined` | Merged launch configuration as received at session start |
+| `restartCaptureAddress` | `number \| undefined` | If set, the run loop captures CPU state when it reaches this address |
+| `entryCpuState` | `CpuStateSnapshot \| undefined` | Snapshot of CPU registers at program entry; used for warm restart |
+
+### Source and symbols (`source` view)
+
+| Field | Type | Description |
+|-------|------|-------------|
 | `listing` | `ListingInfo \| undefined` | Parsed assembly listing with bidirectional line↔address maps |
 | `listingPath` | `string \| undefined` | Absolute path to the listing file |
 | `mapping` | `MappingParseResult \| undefined` | Raw output of the source mapper parser |
 | `mappingIndex` | `SourceMapIndex \| undefined` | Indexed source map used for all address↔location queries |
-| `extraListingPaths` | `string[]` | Paths of additional listings loaded alongside the main one |
-
----
-
-## Symbol information
-
-| Field | Type | Description |
-|-------|------|-------------|
 | `symbolAnchors` | `SourceMapAnchor[]` | File-tracking anchors from the source map |
 | `symbolList` | `Array<{ name: string; address: number }>` | Flat symbol table used for variable watches and the memory inspector |
 | `sourceRoots` | `string[]` | Directories searched when resolving source file paths from listing |
+| `extraListingPaths` | `string[]` | Paths of additional listings loaded alongside the main one |
 
----
-
-## Configuration and context
+### Runtime (`runtimeState` view)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `baseDir` | `string` | Base directory for all relative path resolution |
-| `launchArgs` | `LaunchRequestArguments \| undefined` | Merged launch configuration as received at session start |
+| `runtime` | `Z80Runtime \| undefined` | Z80 CPU emulator instance (also accessible as `runtimeState.execution`) |
 
----
-
-## Platform-specific state
+### Platform-specific state (`platform` view)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -55,13 +73,18 @@ nav_order: 3
 | `tec1gRuntime` | `Tec1gRuntime \| undefined` | TEC-1G hardware emulation state; set during TEC-1G launch |
 | `platformRuntime` | `ActivePlatformRuntime \| undefined` | Generic handle to whichever platform is active |
 | `tec1gConfig` | `Tec1gPlatformConfigNormalized \| undefined` | Normalised TEC-1G config snapshot |
+
+### UI state (`ui` view)
+
+| Field | Type | Description |
+|-------|------|-------------|
 | `terminalState` | `TerminalState \| undefined` | Terminal emulator state when `terminal` is configured |
 
 ---
 
 ## Execution control (`runState`)
 
-`runState` is a nested `RunState` object reset on every launch.
+`runState` is a nested `RunState` object reset on every launch. It is not covered by a domain view; all access is through `state.runState.*` directly.
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -80,12 +103,9 @@ nav_order: 3
 
 ---
 
-## CPU state capture
+## Reset behaviour
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `entryCpuState` | `CpuStateSnapshot \| undefined` | Snapshot of CPU registers at program entry; used for warm restart |
-| `restartCaptureAddress` | `number \| undefined` | If set, the run loop captures CPU state when it reaches this address |
+`resetSessionState(target)` resets all flat fields by creating a fresh state object via `createSessionState()` and copying each field individually onto the existing target. The domain views are **not** reassigned — they are get/set proxies that close over the same backing slots as the flat fields, so they automatically reflect every reset value without being touched. After `resetSessionState()` returns, reading `target.source.listing` and reading `target.listing` both return `undefined`, because both paths read the same underlying slot.
 
 ---
 

@@ -108,18 +108,26 @@ webview/
     styles.css
   tec1g/            TEC-1G panel
     index.html
-    index.ts        Entry point (721 lines)
-    matrix-ui.ts    RGB LED matrix + matrix keyboard controller
+    index.ts        Composition root — imports modules, sets up message dispatcher, wires them together
+    entry-types.ts  Shared type definitions (IncomingMessage, Tec1gUpdatePayload, etc.)
+    tec1g-platform-update.ts  applyTec1gPlatformUpdate() — applies hardware state to DOM
+    tec1g-project-status-ui.ts  Project header rendering and interaction
+    tec1g-tab-memory.ts  Tab switching, memory layout, and row-size management
+    tec1g-audio.ts  Web Audio API speaker tone generator
+    tec1g-keypad.ts  Hex keypad and physical keyboard wiring
+    tec1g-memory-views.ts  Memory view section factory
+    visibility-controller.ts  Dynamic section show/hide
+    matrix-ui.ts    RGB LED matrix display + matrix keyboard controller
     glcd-renderer.ts ST7920 GLCD canvas renderer (128×64)
     lcd-renderer.ts HD44780 canvas renderer (20×4) with CGRAM support
     hd44780-a00.ts  HD44780 A00 ROM character table
     st7920-font.bin ST7920 GLCD font binary
-    visibility-controller.ts Dynamic section show/hide
+    keypad-layout.ts  Key layout constants
     serial-ui.ts
     styles.css
 ```
 
-Each `index.ts` is the entry point. It acquires the VS Code API, queries the DOM, wires up event listeners, creates rendering components, and installs the `window.message` handler. All platform logic is local to the webview — no shared code between TEC-1 and TEC-1G beyond what lives in `common/`.
+The TEC-1 `index.ts` is a self-contained entry point that acquires the VS Code API, queries the DOM, wires up event listeners, creates rendering components, and installs the `window.message` handler. The TEC-1G `index.ts` is a thin composition root — it imports all the feature modules, queries the DOM once, and wires them together. All TEC-1G platform logic lives in the feature modules, not in `index.ts`.
 
 ---
 
@@ -166,12 +174,12 @@ When a `projectStatus` message arrives:
 
 ## Tab switching
 
-`createPanelLayoutController()` in `webview/tec1/panel-layout.ts` manages tab state.
+`createPanelLayoutController()` in `webview/tec1/panel-layout.ts` manages tab state for the TEC-1 panel. The TEC-1G equivalent is `createTec1gTabMemory()` in `webview/tec1g/tec1g-tab-memory.ts`.
 
 `setTab(tab, notify)`:
 - Applies the `active` CSS class to the selected tab button.
 - Applies the `active` CSS class to the matching panel div.
-- If `notify` is true, posts `{ type: 'tab', tab }` to the extension host so the provider can update `tec1ActiveTab` and adjust memory polling.
+- If `notify` is true, posts `{ type: 'tab', tab }` to the extension host so the provider can update the active tab and adjust memory polling.
 - If switching to the memory tab, immediately requests a memory snapshot.
 
 `updateMemoryLayout(forceRefresh)`:
@@ -241,7 +249,27 @@ When `speakerHz` drops to 0 or the mute button is pressed, the gain ramps down a
 
 ## The TEC-1G panel
 
-The TEC-1G panel is significantly larger (721 lines in `index.ts`) due to the additional hardware. The structure follows the same pattern as TEC-1 but with additional rendering components.
+The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root that imports all feature modules, queries DOM elements, and wires them together. It installs a single `window.addEventListener('message', ...)` dispatcher that delegates to the appropriate module.
+
+### TEC-1G webview module layout
+
+| File | Responsibility |
+|------|---------------|
+| `index.ts` | Composition root — DOM queries, module wiring, message dispatcher |
+| `entry-types.ts` | Shared types: `IncomingMessage`, `Tec1gUpdatePayload`, `Tec1gPanelTab`, `Tec1gSpeedMode` |
+| `tec1g-platform-update.ts` | `applyTec1gPlatformUpdate()` — applies a hardware update payload to all display components |
+| `tec1g-project-status-ui.ts` | `createTec1gProjectStatusUi()` — project header rendering and interaction |
+| `tec1g-tab-memory.ts` | `createTec1gTabMemory()` — tab switching, active-tab tracking, memory row sizing |
+| `tec1g-audio.ts` | `createTec1gAudio()` — Web Audio API speaker tone, mute button wiring |
+| `tec1g-keypad.ts` | `createTec1gKeypad()` — hex keypad, key map, physical keyboard wiring |
+| `tec1g-memory-views.ts` | `createTec1gMemoryViews()` — memory view section factory |
+| `visibility-controller.ts` | `createVisibilityController()` — dynamic section show/hide |
+| `matrix-ui.ts` | `createMatrixUiController()` — RGB LED matrix display and matrix keyboard input |
+| `glcd-renderer.ts` | `createGlcdRenderer()` — ST7920 128×64 GLCD canvas renderer |
+| `lcd-renderer.ts` | `createLcdRenderer()` — HD44780 20×4 text LCD canvas renderer with CGRAM |
+| `hd44780-a00.ts` | HD44780 A00 ROM character table |
+| `keypad-layout.ts` | `TEC1G_DIGITS`, `TEC1G_KEY_MAP` constants |
+| `serial-ui.ts` | `wireTec1gSerialUi()` — serial terminal wiring |
 
 ### Visibility controller
 
@@ -253,7 +281,7 @@ This allows the TEC-1G panel to be configured for different hardware variants �
 
 ### RGB LED matrix (`matrix-ui.ts`)
 
-`createMatrixUi()` in `webview/tec1g/matrix-ui.ts` manages both the LED display and the matrix keyboard input.
+`createMatrixUiController()` in `webview/tec1g/matrix-ui.ts` manages both the LED display and the matrix keyboard input.
 
 **LED rendering.** The matrix is rendered as 64 `<div>` elements in an 8×8 grid. Each element receives inline `background-color` styling based on the R, G, B brightness values from the update payload:
 
@@ -282,7 +310,11 @@ The 64-entry brightness arrays (one per channel) come from the `matrixBrightness
 
 The `key` field encodes the row and column. Physical keyboard events are captured globally when matrix mode is active and translated to the same message format.
 
-`createMatrixUi()` also handles the matrix mode toggle button, which sends `{ type: 'matrixMode', enabled: boolean }`.
+`createMatrixUiController()` also handles the matrix mode toggle button, which sends `{ type: 'matrixMode', enabled: boolean }`.
+
+### Platform update application (`tec1g-platform-update.ts`)
+
+`applyTec1gPlatformUpdate()` receives a `Tec1gUpdatePayload` and dispatches it to the individual rendering components: digit elements, audio controller, speed indicator, LCD renderer, matrix UI, GLCD renderer, and keypad state indicators. This function is the single point of contact between an arriving `update` message and all the display components.
 
 ### GLCD renderer (`glcd-renderer.ts`)
 
@@ -333,27 +365,27 @@ Each character is rendered into a small off-screen canvas (5×8 pixels scaled up
 
 ## The message handler
 
-Both `index.ts` files install a single `window.addEventListener('message', handler)`. The handler dispatches on `event.data.type`:
+The TEC-1 `index.ts` installs a single `window.addEventListener('message', handler)`. The TEC-1G `index.ts` does the same, dispatching on `event.data.type`:
 
 ```typescript
-window.addEventListener('message', event => {
-  const msg = event.data;
-  switch (msg.type) {
-    case 'projectStatus':   applyProjectStatus(msg); break;
-    case 'sessionStatus':   sessionStatusController.setStatus(msg.status); break;
-    case 'selectTab':       panelLayout.setTab(msg.tab, false); break;
-    case 'update':
-      if (msg.uiRevision < currentRevision) return;  // stale
-      currentRevision = msg.uiRevision;
-      applyUpdate(msg);
-      if (activeTab === 'memory') memoryPanel.requestSnapshot();
-      break;
-    case 'serial':          appendSerialText(serialOutEl, msg.text, MAX_SERIAL); break;
-    case 'serialInit':      serialOutEl.textContent = msg.text; break;
-    case 'snapshot':        memoryPanel.handleSnapshot(msg); break;
-    case 'snapshotError':   memoryPanel.handleSnapshotError(msg.message); break;
-    case 'uiVisibility':    visibilityController.apply(msg.visibility, msg.persist); break;
+window.addEventListener('message', (event: MessageEvent<IncomingMessage | undefined>): void => {
+  const message = event.data;
+  if (!message) return;
+  if (message.type === 'projectStatus') { projectStatusUi.applyProjectStatus(message); return; }
+  if (message.type === 'sessionStatus') { sessionStatusController.setStatus(message.status); return; }
+  if (message.type === 'selectTab')     { tabMemory.setTab(message.tab, false); return; }
+  if (message.type === 'uiVisibility')  { visibilityController.applyOverride(message.visibility, ...); return; }
+  if (message.type === 'update') {
+    if (typeof message.uiRevision === 'number') {
+      if (message.uiRevision < uiRevision) return;  // stale
+      uiRevision = message.uiRevision;
+    }
+    applyUpdateFromPayload(message);
+    if (tabMemory.getActiveTab() === 'memory') memoryPanelController?.requestSnapshot();
+    return;
   }
+  if (message.type === 'snapshot')      { memoryPanelController?.handleSnapshot(message); return; }
+  if (message.type === 'snapshotError') { memoryPanelController?.handleSnapshotError(message.message); }
 });
 ```
 
@@ -401,9 +433,9 @@ The edit field accepts hex input without a `0x` prefix. Input is validated befor
 
 - Tabs switch between the hardware UI panel and the CPU/memory panel. Tab state is reported to the extension host so the provider can control memory refresh polling.
 
-- The TEC-1 panel renders six SVG seven-segment digits, an 8×8 LED matrix, a 16×2 HD44780 canvas LCD, a hex keypad, a speaker indicator with Web Audio output, and a serial terminal.
+- The TEC-1 panel renders six SVG seven-segment digits, an 8×8 LED matrix, a 16×2 HD44780 canvas LCD, a hex keypad, a speaker indicator with Web Audio output, and a serial terminal. All logic is in `index.ts`.
 
-- The TEC-1G panel adds an RGB LED matrix with per-pixel brightness, a 128×64 ST7920 GLCD, a 20×4 HD44780 LCD with CGRAM, and a matrix keyboard mode. A visibility controller allows individual sections to be shown or hidden.
+- The TEC-1G `index.ts` is a thin composition root. Feature logic is split across `tec1g-platform-update.ts`, `tec1g-project-status-ui.ts`, `tec1g-tab-memory.ts`, `tec1g-audio.ts`, `tec1g-keypad.ts`, `tec1g-memory-views.ts`, `visibility-controller.ts`, and `entry-types.ts`. The RGB LED matrix with per-pixel brightness, 128×64 ST7920 GLCD, 20×4 HD44780 LCD with CGRAM, and matrix keyboard mode are each handled by their dedicated module.
 
 - The `uiRevision` guard in the message handler rejects stale update messages from previous sessions.
 

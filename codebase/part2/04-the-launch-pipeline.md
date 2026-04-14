@@ -271,23 +271,23 @@ The raw listing content is also preserved — the source mapping stage needs it 
 
 Source mapping connects memory addresses to source file locations. This is what makes "set a breakpoint on line 12" work — the breakpoint manager needs to know which memory address corresponds to line 12.
 
-The source mapping stage has three parts: building the debug map, building the symbol index, and resolving source roots.
+The source mapping stage has three parts: building the debug map, building the symbol index, and resolving source roots. As of the extraction described below, all of this is handled by `buildLaunchSourceState()` in `src/debug/launch-source-state.ts`. `launch-sequence.ts` calls it with the assembled inputs and receives a `LaunchSourceBuildResult` in return.
+
+### `buildLaunchSourceState()` — `src/debug/launch-source-state.ts`
+
+`buildLaunchSourceState()` owns the entire source-state setup for a launch. It was extracted from `launch-sequence.ts` because that file was handling too many concerns; the extraction gives source-state setup a single testable entry point with a well-defined input/output contract.
+
+The function:
+
+1. **Resolves source roots** — walks `args.sourceRoots` and the assembly source directory to build the initial root list.
+2. **Instantiates `SourceManager`** — creates the manager with path-resolution callbacks for the current session and injects it into the `SourceStateManager`.
+3. **Calls `sourceState.build()`** — triggers listing load, D8 map detection, and `buildSourceMapIndex()` invocation via the manager.
+4. **Builds the symbol index** — calls `buildSymbolIndex()` from `src/debug/symbol-service.ts` and applies the lookup anchors back to `sourceState`.
+5. **Returns** a `LaunchSourceBuildResult` containing `sourceRoots`, `extraListingPaths`, `mapping`, `mappingIndex`, `symbolAnchors`, and `symbolList`.
 
 ### The SourceManager
 
-`SourceManager` in `src/debug/source-manager.ts` orchestrates source state construction. It is created during the launch pipeline and injected into the `SourceStateManager` wrapper:
-
-```typescript
-context.sourceState.setManager(new SourceManager({
-  platform, baseDir,
-  resolveRelative, resolveMappedPath, relativeIfPossible,
-  resolveExtraDebugMapPath, resolveDebugMapPath,
-  resolveListingSourcePath,
-  logger,
-}));
-```
-
-The manager's `buildState()` method coordinates the work:
+`SourceManager` in `src/debug/source-manager.ts` orchestrates source state construction. It is instantiated inside `buildLaunchSourceState()` and injected into the `SourceStateManager` wrapper. The manager's `buildState()` method coordinates the work:
 
 1. **Resolve the main source file** — prioritizes the ASM path, falls back to `sourceFile`, then derives from the listing path.
 2. **Resolve source roots** — directories where source files live, used to map relative paths in listings to absolute paths on disk.
@@ -482,7 +482,7 @@ All three paths send an error response to VS Code, which shows the error and cle
 
 - Program loading builds a platform-specific memory image: plain for simple, ROM + RAM overlay for TEC-1/TEC-1G. The listing file is parsed for source mapping and symbol extraction.
 
-- Source mapping produces a `SourceMapIndex` for fast address-to-source lookups and a `SymbolIndex` for label resolution. Both the listing file and optional debug map files contribute to the mapping.
+- Source mapping is handled by `buildLaunchSourceState()` in `src/debug/launch-source-state.ts`. This function owns `SourceManager` instantiation, listing load, D8 map detection, `buildSourceMapIndex()` invocation, and symbol list construction. It was extracted from `launch-sequence.ts` to give source-state setup a single testable entry point.
 
 - The Z80 runtime is created last, with platform I/O handlers and ROM protection ranges. Platform providers can finalize the runtime with additional setup after creation.
 

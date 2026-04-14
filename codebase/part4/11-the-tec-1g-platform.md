@@ -15,6 +15,21 @@ The platform lives in `src/platforms/tec1g/`.
 
 ---
 
+## Module layout
+
+The platform was decomposed into six focused modules. `runtime.ts` is now a thin facade: it re-exports `normalizeTec1gConfig` and `Tec1gState`, and exports `createTec1gRuntime()` and the `Tec1gRuntime` interface. All substantive logic lives in the files below.
+
+| File | Responsibility |
+|------|---------------|
+| `runtime.ts` | Facade — wires the other modules together and exports the public `Tec1gRuntime` interface and `createTec1gRuntime()` factory |
+| `runtime-config.ts` | `normalizeTec1gConfig()` — applies defaults, validates bounds, and produces `Tec1gPlatformConfigNormalized` |
+| `runtime-state.ts` | `Tec1gState` interface definition and `createTec1gInitialState()` — the full mutable hardware state object |
+| `runtime-matrix.ts` | `handleMatrixPortWrite()` and `maybeCommitMatrixOnIdle()` — RGB LED matrix staging, commit, and idle-flush logic |
+| `runtime-storage.ts` | `createTec1gSdSpi()` — SD card image loading and file-backed persistence wiring |
+| `runtime-lifecycle.ts` | `silenceTec1gSpeaker()` and `resetTec1gRuntimeState()` — speaker mute and full hardware reset |
+
+---
+
 ## Memory layout
 
 The TEC-1G has a richer address space than the TEC-1:
@@ -51,7 +66,7 @@ Cartridge images (loaded from `tec1gConfig.cartridgeHex`) are placed into the ex
 
 ## Platform state
 
-`Tec1gState` in `src/platforms/tec1g/runtime.ts` is larger than the TEC-1 equivalent. It groups hardware into four subsystems.
+`Tec1gState` in `src/platforms/tec1g/runtime-state.ts` is larger than the TEC-1 equivalent. It groups hardware into four subsystems.
 
 ### display
 
