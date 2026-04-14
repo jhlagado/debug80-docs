@@ -84,7 +84,7 @@ Extra listings are resolved during the launch pipeline and added to the source m
 - `resolveEntry`: Returns the configured entry address, or the start of the first ROM range
 - `finalizeRuntime`: Not implemented (simple platform requires no post-creation setup)
 
-The `payload` sent to the extension host via `debug80/platform` identifies the platform as `'simple'` and triggers the webview to render the terminal panel (if any).
+The `payload` sent to the extension host via `debug80/platform` identifies the platform as `'simple'`. This causes `PlatformViewProvider` to switch the sidebar to the simple platform UI — a two-tab panel with a TERMINAL output area (UI tab) and the standard CPU/memory inspector (CPU tab). Terminal output from `debug80/terminalOutput` events is routed to the sidebar rather than to a separate VS Code panel.
 
 ---
 

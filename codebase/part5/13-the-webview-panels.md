@@ -97,6 +97,10 @@ Each platform has its own directory under `webview/`:
 ```
 webview/
   common/           Shared utilities and styles
+  simple/           Simple platform panel
+    index.html      HTML template
+    index.ts        Entry point — project header, terminal display, memory inspector
+    styles.css
   tec1/             TEC-1 panel
     index.html      HTML template
     index.ts        Entry point — initialisation, message handling, update applying
@@ -133,23 +137,32 @@ The TEC-1 `index.ts` is a self-contained entry point that acquires the VS Code A
 
 ## HTML template structure
 
-Both `index.html` files follow the same structure:
+All three `index.html` files follow the same structure:
 
 ```html
 <div class="project-header">
   <button id="selectProject">...</button>
   <select id="homeTargetSelect"></select>
+  <select id="platformSelect">
+    <option value="simple">Simple</option>
+    <option value="tec1">TEC-1</option>
+    <option value="tec1g">TEC-1G</option>
+  </select>
+</div>
+<div class="setup-card" id="setupCard">
+  <div id="setupCardText">...</div>
+  <button id="setupPrimaryAction">...</button>
 </div>
 <div class="tabs">
   <button class="tab" data-tab="ui">UI</button>
   <button class="tab" data-tab="memory">CPU</button>
   <button class="session-status" id="sessionStatus">...</button>
 </div>
-<div class="panel panel-ui" id="panel-ui"> ... hardware UI ... </div>
+<div class="panel panel-ui" id="panel-ui"> ... platform UI content ... </div>
 <div class="panel panel-memory" id="panel-memory"> ... registers + memory ... </div>
 ```
 
-The `project-header` div contains the workspace root button and the target selector — always visible regardless of which tab is active. The `tabs` row selects between the hardware UI panel and the CPU/memory panel.
+The `project-header` div contains three controls — always visible regardless of which tab is active. The `setup-card` div is shown when the workspace is not fully configured and hidden once a project exists. The `tabs` row selects between the platform UI panel and the CPU/memory panel.
 
 Only one `panel` div is active at a time; CSS classes control visibility.
 
@@ -157,18 +170,29 @@ Only one `panel` div is active at a time; CSS classes control visibility.
 
 ## The project header
 
-The project header renders the current workspace context and lets the user change it without leaving the panel.
+The project header renders the current workspace context and lets the user change it without leaving the panel. It contains three controls, always visible regardless of which tab is active.
 
-**Root button** — shows the name of the selected workspace folder (or "No workspace" if none). Clicking it sends `{ type: 'selectProject', rootPath }` to the extension host, which triggers the workspace selection command.
+**Root button** — shows the name of the selected workspace folder. Clicking it sends `{ type: 'selectProject', rootPath }`, triggering the workspace selection command.
 
-**Target selector** — a `<select>` element populated from the `targets[]` array in the `projectStatus` message. When the user picks a target, the webview sends `{ type: 'selectTarget', rootPath, targetName }`.
+**Target selector** — a `<select>` populated from the `targets[]` array in the `projectStatus` message. When the user picks a target, the webview sends `{ type: 'selectTarget', rootPath, targetName }`.
+
+**Platform selector** — a `<select>` with three fixed options: Simple, TEC-1, TEC-1G. Its value is set from `projectStatus.platform` on each `projectStatus` message. When the user changes it, the webview sends `{ type: 'saveProjectConfig', platform: string }`. The extension host writes the chosen platform to `debug80.json` (both `projectPlatform` and all per-target `platform` fields) and then restarts the debug session so the new platform takes effect immediately.
 
 When a `projectStatus` message arrives:
 
 1. The root button text is updated to show the current root name.
-2. The target `<select>` is repopulated with options from `targets[]`.
-3. The current target, if present, is pre-selected.
-4. If no project is found, the selector is hidden.
+2. The target `<select>` is repopulated with options from `targets[]` and the current target is pre-selected.
+3. The platform `<select>` value is set from `platform`.
+
+## The setup card
+
+Below the project header, a setup card handles the not-yet-configured states:
+
+- **No workspace roots** → displays "Select a workspace root to get started." with an Open Folder button. Clicking sends `{ type: 'openWorkspaceFolder' }`.
+- **Workspace available but no project** → displays a prompt with a Create Project button. Clicking sends `{ type: 'createProject', rootPath }`.
+- **Project exists** → the card is **hidden entirely**. There is no intermediate "configured" state shown in the UI.
+
+The setup card state is recalculated on every `projectStatus` message by `resolveSetupCardState()` in `webview/common/setup-card-state.ts`, which returns `null` when a project exists (causing the card to be hidden).
 
 ---
 
@@ -393,6 +417,29 @@ The `uiRevision` guard is applied to `update` messages. Other message types do n
 
 ---
 
+## The Simple platform panel
+
+The simple platform panel (`webview/simple/`) is a self-contained entry point in `index.ts`. It shares the same project header, setup card, session status button, and CPU/memory tab as the hardware platforms, but its UI tab contains a terminal display instead of hardware emulation.
+
+### UI tab
+
+The UI tab contains a single **TERMINAL** section:
+
+- A `<pre id="terminalOut">` element accumulates text output received from the running program via the Z80 terminal I/O bridge (`debug80/terminalOutput` events, routed to the sidebar for simple sessions).
+- A **CLEAR** button clears the display locally and sends `{ type: 'serialClear' }` to the extension host, which clears the server-side buffer.
+
+The `serial`, `serialInit`, and `serialClear` message types used by the hardware platform serial terminals are reused for the simple platform's terminal output. On rehydration, the accumulated terminal text is replayed via `serialInit`.
+
+### CPU tab
+
+Identical to the TEC-1 and TEC-1G CPU tabs — four independent memory view sections, register strip, inline editing. Uses the same `MemoryPanel` from `webview/common/memory-panel.ts`.
+
+### Tab switching
+
+Tab state is tracked locally and reported to the extension host via `{ type: 'tab', tab }` so the provider can control memory refresh polling. The default tab on session start is `'ui'`.
+
+---
+
 ## The memory inspector
 
 `MemoryPanel` in `webview/common/memory-panel.ts` (435 lines) manages the CPU/memory tab. It handles up to four independent memory view sections.
@@ -427,17 +474,21 @@ The edit field accepts hex input without a `0x` prefix. Input is validated befor
 
 - The webview is sandboxed JavaScript with access only to the VS Code postMessage channel. All communication with the adapter is mediated by the extension host.
 
-- Common infrastructure (`vscode.ts`, `session-status.ts`, `digits.ts`, `serial.ts`) is shared between TEC-1 and TEC-1G panels.
+- Common infrastructure (`vscode.ts`, `session-status.ts`, `digits.ts`, `serial.ts`, `memory-panel.ts`) is shared by all three platform panels.
 
-- The project header is always visible and lets the user switch workspace roots and targets without leaving the panel.
+- Every platform panel has the same outer shell: project header (Project button, Target dropdown, Platform dropdown), setup card, tab bar with session status button, UI tab panel, and CPU/memory tab panel.
 
-- Tabs switch between the hardware UI panel and the CPU/memory panel. Tab state is reported to the extension host so the provider can control memory refresh polling.
+- The **Platform dropdown** in the project header lets the user switch between Simple, TEC-1, and TEC-1G without stopping the session. Selecting a new platform saves the choice to `debug80.json` and restarts the emulator immediately.
 
-- The TEC-1 panel renders six SVG seven-segment digits, an 8×8 LED matrix, a 16×2 HD44780 canvas LCD, a hex keypad, a speaker indicator with Web Audio output, and a serial terminal. All logic is in `index.ts`.
+- The **setup card** is shown when the workspace is not yet configured and hidden entirely once a project exists. There is no intermediate "configured" state.
 
-- The TEC-1G `index.ts` is a thin composition root. Feature logic is split across `tec1g-platform-update.ts`, `tec1g-project-status-ui.ts`, `tec1g-tab-memory.ts`, `tec1g-audio.ts`, `tec1g-keypad.ts`, `tec1g-memory-views.ts`, `visibility-controller.ts`, and `entry-types.ts`. The RGB LED matrix with per-pixel brightness, 128×64 ST7920 GLCD, 20×4 HD44780 LCD with CGRAM, and matrix keyboard mode are each handled by their dedicated module.
+- The **Simple platform** UI tab displays a TERMINAL output area driven by `debug80/terminalOutput` events. It has no hardware display. Its CPU tab is identical to TEC-1/TEC-1G.
 
-- The `uiRevision` guard in the message handler rejects stale update messages from previous sessions.
+- The **TEC-1** panel renders six SVG seven-segment digits, an 8×8 LED matrix, a 16×2 HD44780 canvas LCD, a hex keypad, a speaker indicator with Web Audio output, and a serial terminal. All logic is in `index.ts`.
+
+- The **TEC-1G** `index.ts` is a thin composition root. Feature logic is split across dedicated modules. The RGB LED matrix with per-pixel brightness, 128×64 ST7920 GLCD, 20×4 HD44780 LCD with CGRAM, and matrix keyboard mode are each handled by their dedicated module.
+
+- The `uiRevision` guard in the message handler rejects stale `update` messages from previous sessions.
 
 - The memory inspector polls the adapter at 150 ms intervals when visible, renders register and memory snapshots, and supports inline hex editing of registers and memory bytes.
 
