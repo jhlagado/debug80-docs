@@ -38,14 +38,15 @@ export class PlatformViewProvider implements vscode.WebviewViewProvider {
 
 ### Parallel state trees
 
-The provider maintains parallel state trees for TEC-1 and TEC-1G. Both are held in memory simultaneously:
+The provider maintains a `platformStates: Map<string, PerPlatformState>` with an entry for every registered platform (Simple, TEC-1, TEC-1G). All three are held in memory simultaneously. Each entry holds:
 
-- `tec1UiState` / `tec1gUiState` — digits, matrix rows, LCD buffer, speaker state, speed mode
-- `tec1SerialBuffer` / `tec1gSerialBuffer` — accumulated serial output text
-- `tec1MemoryViews` / `tec1gMemoryViews` — which memory regions are shown in the memory inspector
-- `tec1RefreshController` / `tec1gRefreshController` — memory snapshot polling machinery
+- `uiState` — platform-specific hardware state (digits, matrix rows, LCD buffer, speaker, etc.; empty for Simple)
+- `serialBuffer` — accumulated serial / terminal output text (max 8 000 characters)
+- `memoryViews` — which memory regions are shown in the memory inspector
+- `activeTab` — which tab (`'ui'` or `'memory'`) was last active
+- `refreshController` — memory snapshot polling machinery
 
-Only one platform is active at a time (`currentPlatform`), but the other platform's state is preserved. If the user switches from a TEC-1 session to a TEC-1G session and back, the TEC-1 state rehydrates without a round trip to the adapter.
+Only one platform is active at a time (`currentPlatform`), but all other platforms' state is preserved. If the user switches from TEC-1 to TEC-1G and back, the TEC-1 state rehydrates without a round trip to the adapter.
 
 ### The `uiRevision` counter
 
@@ -98,11 +99,11 @@ This is the method that actually populates the panel. It runs on every platform 
 
 ```
 1. Set webview.html to platform HTML (destroys old webview)
-2. Post projectStatus (workspace roots, current target)
+2. Post projectStatus (workspace roots, targets, selected target, active platform)
 3. Post sessionStatus (running/paused/not running)
-4. Post full update (digits, matrix, LCD, speaker state)
+4. Post full update snapshot (hardware state for TEC-1/TEC-1G; empty for Simple)
 5. If TEC-1G and uiVisibility override is set, post uiVisibility
-6. Post serialInit (full buffered serial text, if any)
+6. Post serialInit (full buffered serial/terminal text, if any)
 7. Post selectTab (active tab)
 8. Sync memory refresh (start polling if on memory tab)
 ```
@@ -145,10 +146,11 @@ All messages are posted via `postMessage()`. The webview handles them in `window
 
 | Type | Key fields | When sent |
 |------|-----------|-----------|
-| `update` | `uiRevision`, `digits[]`, `matrix[]`, `speaker`, `speedMode`, `lcd[]`, `speakerHz?` (plus TEC-1G fields) | Platform hardware state changes |
-| `serial` | `text: string` | Incremental serial data from adapter |
-| `serialInit` | `text: string` | Full serial buffer on rehydration |
-| `projectStatus` | `roots[]`, `targets[]`, `rootName?`, `rootPath?`, `hasProject?`, `targetName?`, `entrySource?` | Workspace or project state changes |
+| `update` | `uiRevision`, platform-specific hardware fields (empty object for Simple) | Platform hardware state changes |
+| `serial` | `text: string` | Incremental serial/terminal data |
+| `serialInit` | `text: string` | Full serial/terminal buffer on rehydration |
+| `serialClear` | — | Clear the serial/terminal display |
+| `projectStatus` | `roots[]`, `targets[]`, `rootName?`, `rootPath?`, `hasProject?`, `targetName?`, `entrySource?`, `platform?` | Workspace or project state changes |
 | `sessionStatus` | `status: 'starting' \| 'running' \| 'paused' \| 'not running'` | Debug session state changes |
 | `selectTab` | `tab: 'ui' \| 'memory'` | Tab should be selected |
 | `snapshot` | Register and memory dump | Memory inspector refresh completes |
@@ -197,16 +199,17 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 | Type | Key fields | Handler |
 |------|-----------|---------|
 | `startDebug` | — | Execute start debug command |
-| `createProject` | — | Execute create project command |
+| `createProject` | `rootPath` | Execute create project command |
 | `openWorkspaceFolder` | — | Execute open folder command |
 | `selectProject` | `rootPath` | Execute workspace selection |
-| `configureProject` | — | Execute open project config panel |
+| `configureProject` | — | No-op (config is now done via project header controls) |
+| `saveProjectConfig` | `platform: string` | Write `projectPlatform` + per-target `platform` to `debug80.json`, then restart debug |
 | `selectTarget` | `rootPath`, `targetName` | Execute target selection |
 | `restartDebug` | — | Execute restart debug command |
 | `setEntrySource` | — | Execute set entry source command |
-| `serialSendFile` | — | File picker → character-by-character send |
+| `serialSendFile` | — | File picker → character-by-character send (TEC-1/TEC-1G) |
 | `serialSave` | `text` | Save dialog → write file |
-| `serialClear` | — | Clear serial buffer |
+| `serialClear` | — | Clear serial/terminal buffer |
 | `key` | `code: number` | Platform adapter → adapter custom request |
 | `reset` | — | Platform adapter → adapter custom request |
 | `speed` | `mode` | Platform adapter → adapter custom request |
@@ -247,8 +250,8 @@ All adapter requests go through `session.customRequest()` on the current `vscode
 The types shared between the extension host and webview are defined in `src/contracts/platform-view.ts`:
 
 - **`PlatformId`** — `'simple' | 'tec1' | 'tec1g'`; the canonical platform identifier used throughout the extension and webview.
-- **`ProjectStatusPayload`** — the shape of the `projectStatus` message body, including `roots`, `targets`, and the optional `rootName`, `rootPath`, `hasProject`, `targetName`, and `entrySource` fields.
-- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`).
+- **`ProjectStatusPayload`** — the shape of the `projectStatus` message body, including `roots`, `targets`, and the optional `rootName`, `rootPath`, `hasProject`, `targetName`, `entrySource`, and `platform` fields. The `platform` field carries the current platform ID (`'simple'`, `'tec1'`, or `'tec1g'`) so the webview can pre-select the Platform dropdown on load.
+- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart.
 - **`PlatformViewInboundMessage`** — the full union of all messages the extension host can receive: `PlatformViewControlMessage | Tec1Message | Tec1gMessage | { type?: string; [key: string]: unknown }`.
 
 This file is the authoritative definition of the message boundary. Platform-view-messages.ts imports `PlatformViewInboundMessage` directly from it.
@@ -293,28 +296,43 @@ The snapshot payload describes which memory regions and views are currently disp
 - `findProjectConfigPath(folder)` — whether each root has a `debug80.json`
 - `resolveProjectStatusSummary()` — the selected target and entry source from workspace state
 - `listProjectTargetChoices()` — the target names available in the config file
+- `resolveProjectPlatform(config)` — the active platform ID from `projectPlatform` or per-target `platform`
 
-This payload is posted as a `projectStatus` message. The webview renders it as a compact header: a button showing the current workspace root (clicking it sends `selectProject`) and a dropdown of available targets (changing it sends `selectTarget`).
+This payload is posted as a `projectStatus` message. The webview renders it as a compact project header with three controls:
+
+- A **Project button** showing the current workspace root name — clicking it sends `selectProject`.
+- A **Target dropdown** populated from `targets[]` — changing it sends `selectTarget`.
+- A **Platform dropdown** with options Simple / TEC-1 / TEC-1G — value set from `payload.platform`; changing it sends `saveProjectConfig` with `{ platform: string }`.
+
+Below the project header, a **setup card** may appear when the workspace is not fully configured:
+
+- No workspace roots → shows "Select a workspace root to get started." with an Open Folder button.
+- Workspace available but no `debug80.json` → shows a prompt with a Create Project button.
+- Project exists with at least one target → setup card is **hidden entirely**. There is no "configured" or "ready" state shown in the card.
+
+The setup card is part of each platform's webview HTML; it is hidden or shown by the webview based on the `projectStatus` payload it receives.
 
 ---
 
 ## Summary
 
-- `PlatformViewProvider` is the single point of contact between the debug adapter and the webview. It holds all hardware display state and serial buffers in memory on the extension host side.
+- `PlatformViewProvider` is the single point of contact between the debug adapter and the webview. It holds all hardware display state and serial/terminal buffers in memory on the extension host side for all three platforms simultaneously.
 
 - The webview HTML is regenerated on every platform switch and sidebar reveal. Buffered state is reposted from in-memory copies, making the panel self-restoring.
 
 - The `uiRevision` counter only ever increments — it is never reset, not even when the webview HTML is replaced. The webview's own counter resets when new HTML is set; the host counter does not.
 
-- Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch goes through `resolvePlatformAdapter()`.
+- Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch goes through the platform modules.
 
-- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload`, `PlatformViewControlMessage`, and `PlatformViewInboundMessage`.
+- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (now includes `platform?`), `PlatformViewControlMessage` (now includes `saveProjectConfig`), and `PlatformViewInboundMessage`.
 
 - `registerExtensionPlatform()` in `platform-extension-model.ts` is the unified API for registering both the runtime and UI concerns of a platform in a single call.
 
 - The memory refresh controller polls the adapter at 150 ms intervals when the memory tab is active and the panel is visible. Polling stops automatically on tab switch or panel hide.
 
-- Project status is assembled from workspace folders, `debug80.json` discovery, and workspace-persisted target selection. It drives the compact project header that appears on all tabs.
+- Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It drives the project header (Project button, Target dropdown, Platform dropdown) that appears on all platform panels.
+
+- The setup card (shown when no project is configured) is hidden entirely once a project exists. There is no intermediate "configured" state — the project header controls are always sufficient.
 
 ---
 
