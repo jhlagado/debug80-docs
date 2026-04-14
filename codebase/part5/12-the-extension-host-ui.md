@@ -11,7 +11,7 @@ nav_order: 1
 
 The debug80 sidebar panel is a VS Code WebviewView — an iframe-based panel embedded in the Activity Bar sidebar. It runs in a separate JavaScript context from the extension and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
 
-This chapter covers the provider class: what state it holds, how the webview is created and destroyed, the complete message catalogue in both directions, and how the provider wires together the debug adapter, the workspace, and the UI.
+This chapter covers the provider class: what state it holds, how the webview is created and destroyed, the complete message catalogue in both directions, how message routing is structured, and how the provider wires together the debug adapter, the workspace, and the UI.
 
 ---
 
@@ -51,7 +51,7 @@ Only one platform is active at a time (`currentPlatform`), but the other platfor
 
 Every `update` message from the extension host carries a `uiRevision` number. The webview tracks the last revision it applied and ignores any message with a lower number. This prevents a race condition where a slow-arriving update from a previous session overwrites a fresh update from the current one.
 
-The counter increments via `nextUiRevision()` on every state-bearing message. It is reset to 0 when `renderCurrentView()` is called (new HTML is set, so the webview's counter resets to 0 as well).
+The counter only ever increases. `nextUiRevision()` increments `uiRevision` and returns the new value; it is called each time a state-bearing message is sent. The counter is **never reset** — not even when `renderCurrentView()` is called. When `renderCurrentView()` sets new HTML on the webview, the webview's own JavaScript state (including its local `uiRevision` tracking) resets to zero because the webview frame is destroyed and recreated. The extension host counter continues to increase from wherever it was, so the first `update` message sent after a render will have a revision number higher than zero and the freshly initialised webview will accept it.
 
 ---
 
@@ -82,38 +82,7 @@ This is the provider's main lifecycle method. VS Code calls it once, providing t
 2. Configures the webview options (scripts enabled, resource roots).
 3. Registers the message handler.
 4. Registers visibility and disposal handlers.
-5. Calls `renderCurrentView(true)` to populate the initial HTML and state.
-
-### Message handler
-
-The message handler dispatches on `msg.type`. Messages fall into three categories:
-
-**Project and session commands** — handled directly in the provider:
-
-| Type | Action |
-|------|--------|
-| `startDebug` | Execute `debug80.startDebug` command |
-| `createProject` | Execute `debug80.createProject` command |
-| `selectProject` | Execute `debug80.selectWorkspaceFolder` with `rootPath` |
-| `selectTarget` | Execute `debug80.selectTarget` with `rootPath` and `targetName` |
-| `setEntrySource` | Execute `debug80.setEntrySource` command |
-
-**Serial I/O commands** — handled in the provider:
-
-| Type | Action |
-|------|--------|
-| `serialSendFile` | Open file picker, send file contents character-by-character to adapter |
-| `serialSave` | Open save dialog, write buffered serial text to file |
-| `serialClear` | Clear the serial buffer for the current platform |
-
-**Platform-specific messages** — forwarded to `handleTec1Message()` or `handleTec1gMessage()`:
-
-| Type | Examples |
-|------|---------|
-| Hardware input | `key`, `reset`, `speed`, `matrixKey`, `matrixMode` |
-| Memory inspector | `tab`, `refresh`, `registerEdit`, `memoryEdit` |
-
-The platform message handlers receive a context object containing `getSession()`, the refresh controller, the active tab accessors, and the memory view state.
+5. Calls `renderCurrentView(false)` to populate the initial HTML and state.
 
 ### Visibility handler
 
@@ -132,12 +101,41 @@ This is the method that actually populates the panel. It runs on every platform 
 2. Post projectStatus (workspace roots, current target)
 3. Post sessionStatus (running/paused/not running)
 4. Post full update (digits, matrix, LCD, speaker state)
-5. Post serialInit (full buffered serial text, if any)
-6. Post selectTab (active tab)
-7. Sync memory refresh (start polling if on memory tab)
+5. If TEC-1G and uiVisibility override is set, post uiVisibility
+6. Post serialInit (full buffered serial text, if any)
+7. Post selectTab (active tab)
+8. Sync memory refresh (start polling if on memory tab)
 ```
 
 When no platform is set yet (before the first debug session), the provider renders the TEC-1G webview as a default. This ensures the panel shows something meaningful even before the first launch.
+
+---
+
+## Message routing
+
+Inbound messages from the webview are typed as `PlatformViewInboundMessage` — a union defined in `src/contracts/platform-view.ts`. The raw message is immediately handed to `handlePlatformViewMessage()` in `src/extension/platform-view-messages.ts`, which is responsible for all routing decisions.
+
+### `platform-view-messages.ts`
+
+`handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
+
+- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command.
+- Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
+- `serialClear` calls `clearSerialBuffer` for the current platform.
+- Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
+
+This function contains no provider state — it is a pure routing layer, which makes it independently testable.
+
+### Serial actions — `platform-view-serial-actions.ts`
+
+`handlePlatformSerialSendFile()` and `handlePlatformSerialSave()` in `src/extension/platform-view-serial-actions.ts` handle the two serial file workflows:
+
+- `handlePlatformSerialSendFile()` opens a file picker, reads the file, and sends each character individually as a `debug80/tec1SerialInput` or `debug80/tec1gSerialInput` custom request (2 ms between characters, 10 ms between lines, CR appended at each line end). A cancellable progress notification shows during the transfer.
+- `handlePlatformSerialSave()` opens a save dialog and writes the buffered serial text to a file. If the contents look like Intel HEX (all lines start with `:`), the default filter offers `.hex`.
+
+### Platform adapter dispatch — `resolvePlatformAdapter()`
+
+Platform-specific messages (hardware input, memory inspector, tab changes) are routed through the `PlatformUiAdapter` object returned by `resolvePlatformAdapter(platform)`. The adapter bundles all platform-specific behaviour: HTML generation, UI state serialization, serial buffer access, message handling, and memory refresh control. Calling `adapter.handleMessage(msg, ...)` delegates to `handleTec1Message()` or `handleTec1gMessage()` as appropriate.
 
 ---
 
@@ -200,27 +198,30 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 |------|-----------|---------|
 | `startDebug` | — | Execute start debug command |
 | `createProject` | — | Execute create project command |
+| `openWorkspaceFolder` | — | Execute open folder command |
 | `selectProject` | `rootPath` | Execute workspace selection |
+| `configureProject` | — | Execute open project config panel |
 | `selectTarget` | `rootPath`, `targetName` | Execute target selection |
+| `restartDebug` | — | Execute restart debug command |
 | `setEntrySource` | — | Execute set entry source command |
 | `serialSendFile` | — | File picker → character-by-character send |
 | `serialSave` | `text` | Save dialog → write file |
 | `serialClear` | — | Clear serial buffer |
-| `key` | `code: number` | Platform handler → adapter custom request |
-| `reset` | — | Platform handler → adapter custom request |
-| `speed` | `mode` | Platform handler → adapter custom request |
+| `key` | `code: number` | Platform adapter → adapter custom request |
+| `reset` | — | Platform adapter → adapter custom request |
+| `speed` | `mode` | Platform adapter → adapter custom request |
 | `tab` | `tab` | Update active tab; start/stop memory polling |
-| `refresh` | memory params | Platform handler → fetch memory snapshot |
-| `registerEdit` | `register`, `value` | Platform handler → adapter custom request |
-| `memoryEdit` | `address`, `value` | Platform handler → adapter custom request |
-| `matrixKey` | `key`, `pressed`, modifiers | TEC-1G only; platform handler |
-| `matrixMode` | `enabled` | TEC-1G only; platform handler |
+| `refresh` | memory params | Platform adapter → fetch memory snapshot |
+| `registerEdit` | `register`, `value` | Platform adapter → adapter custom request |
+| `memoryEdit` | `address`, `value` | Platform adapter → adapter custom request |
+| `matrixKey` | `key`, `pressed`, modifiers | TEC-1G only; platform adapter |
+| `matrixMode` | `enabled` | TEC-1G only; platform adapter |
 
 ---
 
 ## Platform message routing
 
-When a platform-specific message arrives, the provider calls `handleTec1Message()` or `handleTec1gMessage()` with a context object. These functions translate webview messages into debug adapter custom requests:
+When a platform-specific message arrives, `resolvePlatformAdapter()` returns the appropriate adapter and `adapter.handleMessage()` delegates to `handleTec1Message()` or `handleTec1gMessage()`. These functions translate webview messages into debug adapter custom requests:
 
 | Webview message | Adapter custom request |
 |----------------|----------------------|
@@ -241,13 +242,43 @@ All adapter requests go through `session.customRequest()` on the current `vscode
 
 ---
 
+## Shared message contract — `src/contracts/platform-view.ts`
+
+The types shared between the extension host and webview are defined in `src/contracts/platform-view.ts`:
+
+- **`PlatformId`** — `'simple' | 'tec1' | 'tec1g'`; the canonical platform identifier used throughout the extension and webview.
+- **`ProjectStatusPayload`** — the shape of the `projectStatus` message body, including `roots`, `targets`, and the optional `rootName`, `rootPath`, `hasProject`, `targetName`, and `entrySource` fields.
+- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`).
+- **`PlatformViewInboundMessage`** — the full union of all messages the extension host can receive: `PlatformViewControlMessage | Tec1Message | Tec1gMessage | { type?: string; [key: string]: unknown }`.
+
+This file is the authoritative definition of the message boundary. Platform-view-messages.ts imports `PlatformViewInboundMessage` directly from it.
+
+---
+
+## Platform registration model — `src/extension/platform-extension-model.ts`
+
+`registerExtensionPlatform()` in `src/extension/platform-extension-model.ts` is the unified API for registering a platform with both the runtime provider registry and the extension UI:
+
+```typescript
+interface ExtensionPlatformEntry {
+  runtime: PlatformManifestEntry;
+  ui?: PlatformUiEntry;
+}
+
+function registerExtensionPlatform(entry: ExtensionPlatformEntry): void;
+```
+
+A single call registers the platform's runtime (via `registerPlatform()` in `src/platforms/provider.ts`) and, if a `ui` entry is provided, its sidebar UI (via `registerPlatformUi()` in `platform-view-manifest.ts`). `listExtensionPlatforms()` returns the unified list in runtime-manifest order, merging any UI entries that are present. `registerRuntimePlatform()` is a compatibility alias for registering runtime-only platforms using the existing public surface.
+
+---
+
 ## Memory refresh
 
 The memory inspector polls the adapter for live register and memory snapshots while the session is paused. The refresh controller (`tec1RefreshController`, `tec1gRefreshController`) manages this polling:
 
 - Start polling when the memory tab becomes active.
 - Stop polling when the panel is hidden or the tab switches away.
-- Poll at 150 ms intervals via `refreshTec1Snapshot()`.
+- Poll at 150 ms intervals.
 - On each poll, call `session.customRequest('debug80/tec1MemorySnapshot', snapshotPayload)` and post the result as a `snapshot` message.
 
 The snapshot payload describes which memory regions and views are currently displayed. The adapter reads those regions from the Z80 memory array and returns them in a single response.
@@ -267,29 +298,19 @@ This payload is posted as a `projectStatus` message. The webview renders it as a
 
 ---
 
-## Serial file send
-
-`handleSerialSendFile()` handles the `serialSendFile` webview message. It:
-
-1. Opens a file picker filtered to `.hex`, `.txt`, and all files.
-2. Reads the file as UTF-8 text.
-3. Sends each character individually as a `debug80/tec1SerialInput` (or `debug80/tec1gSerialInput`) custom request, with 2 ms between characters and 10 ms between lines.
-4. Appends a CR (`\r`) at the end of each line.
-5. Shows a cancellable progress notification.
-
-The character-by-character sending mirrors the timing of a real terminal, giving the program time to process each byte. Intel HEX files sent this way are loaded by the MON-1B or MON-3 monitor's load routine.
-
----
-
 ## Summary
 
 - `PlatformViewProvider` is the single point of contact between the debug adapter and the webview. It holds all hardware display state and serial buffers in memory on the extension host side.
 
 - The webview HTML is regenerated on every platform switch and sidebar reveal. Buffered state is reposted from in-memory copies, making the panel self-restoring.
 
-- The `uiRevision` counter prevents stale updates from a previous session overwriting current state.
+- The `uiRevision` counter only ever increments — it is never reset, not even when the webview HTML is replaced. The webview's own counter resets when new HTML is set; the host counter does not.
 
-- Twelve message types flow from the extension host to the webview; sixteen message types flow back. Platform-specific messages are translated into debug adapter custom requests.
+- Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch goes through `resolvePlatformAdapter()`.
+
+- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload`, `PlatformViewControlMessage`, and `PlatformViewInboundMessage`.
+
+- `registerExtensionPlatform()` in `platform-extension-model.ts` is the unified API for registering both the runtime and UI concerns of a platform in a single call.
 
 - The memory refresh controller polls the adapter at 150 ms intervals when the memory tab is active and the panel is visible. Polling stops automatically on tab switch or panel hide.
 
