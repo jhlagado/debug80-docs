@@ -37,9 +37,3 @@ are in `examples/unit1/`, Chapter 2's in `examples/unit2/`, and so on.
 ```sh
 npm run zax -- learning/part2/examples/unit1/fibonacci.zax
 ```
-
----
-
-## Editorial standard
-
-All prose in this volume is held to [`docs/work/course-writing-standard.md`](../../docs/work/course-writing-standard.md).
