@@ -6,7 +6,7 @@ nav_order: 1
 
 # debug80 Documentation
 
-Technical documentation for the **debug80** Z80 debugger extension for Visual Studio Code.
+Technical documentation for the **debug80** Z80 debugger extension and the **ZAX** assembler for Visual Studio Code.
 
 ---
 
@@ -20,8 +20,16 @@ For engineers who need to understand, modify, or extend debug80.
 
 ---
 
+### [Learn ZAX Assembly](zax-book/)
+
+A two-part course in Z80 assembly programming using the ZAX assembler. Part 1 starts from no prior knowledge and covers the Z80 from bare machine code through structured control flow, IX-frame functions, and op macros. Part 2 works through real algorithms and data structures — sorting, searching, recursion, composition, and pointer structures — covering the language as each construct appears naturally.
+
+For programmers learning Z80 assembly or the ZAX language.
+
+---
+
 ## About debug80
 
 debug80 is a VS Code debugger extension for Z80 assembly programs targeting the TEC-1, TEC-1G, and compatible hardware. It provides full source-level debugging: breakpoints, step over/into/out, memory inspection, register editing, and platform-specific hardware emulation.
 
-Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80)
+Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80) · [github.com/jhlagado/zax](https://github.com/jhlagado/zax)
