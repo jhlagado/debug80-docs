@@ -20,6 +20,14 @@ For engineers who need to understand, modify, or extend debug80.
 
 ---
 
+### [Understanding the ZAX Compiler](zax-codebase/)
+
+A sixteen-chapter engineering reference for the ZAX structured assembler, tracing every phase of the compilation pipeline from source text to Z80 machine code. Covers the module loader, frontend parser, AST contract, semantic analysis, the four-phase lowering system, Z80 instruction encoding, output format writers, diagnostics, and the design patterns used throughout.
+
+For engineers who need to understand, modify, or extend the ZAX compiler.
+
+---
+
 ### [Learn ZAX Assembly](zax-book/)
 
 A two-part course in Z80 assembly programming using the ZAX assembler. Part 1 starts from no prior knowledge and covers the Z80 from bare machine code through structured control flow, IX-frame functions, and op macros. Part 2 works through real algorithms and data structures — sorting, searching, recursion, composition, and pointer structures — covering the language as each construct appears naturally.
