@@ -133,6 +133,8 @@ webview/
 
 The TEC-1 `index.ts` is a self-contained entry point that acquires the VS Code API, queries the DOM, wires up event listeners, creates rendering components, and installs the `window.message` handler. The TEC-1G `index.ts` is a thin composition root — it imports all the feature modules, queries the DOM once, and wires them together. All TEC-1G platform logic lives in the feature modules, not in `index.ts`.
 
+`entry-types.ts` exists to break circular imports. The feature modules (`tec1g-audio.ts`, `tec1g-keypad.ts`, `matrix-ui.ts`, etc.) all need to refer to the same `IncomingMessage`, `Tec1gUpdatePayload`, `Tec1gPanelTab`, and `Tec1gSpeedMode` types. If each module defined its own copy, or if modules imported types from each other, the import graph would become tangled. Instead, all shared types are defined once in `entry-types.ts` and every module that needs them imports from there. `index.ts` imports from both `entry-types.ts` and the feature modules; the feature modules import only from `entry-types.ts` (not from `index.ts`), keeping the dependency graph acyclic.
+
 ---
 
 ## HTML template structure
@@ -294,6 +296,7 @@ The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root
 | `hd44780-a00.ts` | HD44780 A00 ROM character table |
 | `keypad-layout.ts` | `TEC1G_DIGITS`, `TEC1G_KEY_MAP` constants |
 | `serial-ui.ts` | `wireTec1gSerialUi()` — serial terminal wiring |
+| `st7920-font.bin` | ST7920 GLCD character font binary (shipped as a static asset, loaded at runtime by `glcd-renderer.ts`) |
 
 ### Visibility controller
 
