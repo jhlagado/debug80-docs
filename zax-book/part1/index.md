@@ -88,9 +88,3 @@ After assembling and loading a program into the emulator:
 3. **Inspect the flags register** whenever a jump goes the wrong way. The emulator's register panel shows each flag bit; compare what you see to what Chapter 5 says the instruction should produce.
 
 If the program does not halt or produces wrong values, the debugging steps in Chapter 3 ("When Your Program Does the Wrong Thing") give a systematic method for tracing the failure.
-
----
-
-## Editorial standard
-
-All prose in this volume is held to [`docs/work/course-writing-standard.md`](../../docs/work/course-writing-standard.md).
