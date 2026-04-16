@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Understanding the ZAX Compiler"
-nav_order: 3
+nav_order: 4
 has_children: true
 ---
 # Understanding the ZAX Compiler
