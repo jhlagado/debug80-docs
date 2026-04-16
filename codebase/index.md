@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Understanding the debug80 Codebase"
-nav_order: 1
+nav_order: 3
 has_children: true
 ---
 # debug80 Engineering Manual
