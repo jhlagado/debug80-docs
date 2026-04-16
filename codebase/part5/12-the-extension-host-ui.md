@@ -36,6 +36,46 @@ export class PlatformViewProvider implements vscode.WebviewViewProvider {
 }
 ```
 
+### Platform module cache — `loadedModules`
+
+The provider maintains a second parallel map: `loadedModules: Map<string, PlatformUiModules>`. Where `platformStates` holds *runtime data* (hardware state, serial buffer, tab), `loadedModules` holds *behaviour* — the functions that know how to generate HTML, serialize state to update messages, and handle incoming webview messages.
+
+Modules are loaded once via `preloadAllPlatforms()` (called early in the extension lifecycle) and then cached permanently. The loading is parallel: all three platforms' modules are fetched with `Promise.all()`. After loading, `initPlatformState()` is called to create the corresponding `PerPlatformState` entry.
+
+The `getActiveBundle(id)` helper retrieves both maps together, returning `{ modules, state }` or `undefined`. This ensures the two maps stay synchronized — callers never work with state that has no matching modules, or vice versa.
+
+#### The `PlatformUiModules` contract
+
+`PlatformUiModules` in `src/extension/platform-view-manifest.ts` is the interface every platform UI must satisfy:
+
+```typescript
+interface PlatformUiModules<TUiState = unknown> {
+  getHtml(tab: PanelTab, webview: vscode.Webview, extensionUri: vscode.Uri): string;
+  createUiState(): TUiState;
+  resetUiState(state: TUiState): void;
+  applyUpdate(state: TUiState, payload: unknown): Record<string, unknown>;
+  createMemoryViewState(): MemoryViewState;
+  handleMessage(message: PlatformViewMessage, context: PlatformUiMessageContext): Promise<void>;
+  buildUpdateMessage(state: TUiState, uiRevision: number): Record<string, unknown>;
+  buildClearMessage(state: TUiState, uiRevision: number): Record<string, unknown>;
+  snapshotCommand: 'debug80/tec1MemorySnapshot' | 'debug80/tec1gMemorySnapshot';
+}
+```
+
+| Method | Role |
+|--------|------|
+| `getHtml` | Build the webview HTML for a given initial tab and webview context |
+| `createUiState` | Allocate a blank `TUiState` (called once per platform on module load) |
+| `resetUiState` | Zero out UI state on session end (called by `clear()`) |
+| `applyUpdate` | Merge an incoming hardware update payload into `TUiState`; return the serialized message fields |
+| `createMemoryViewState` | Create a fresh `MemoryViewState` for the memory inspector |
+| `handleMessage` | Dispatch a platform-specific webview message (e.g. `key`, `matrixKey`, `refresh`) |
+| `buildUpdateMessage` | Serialize the current `TUiState` into a full `update` message (used for rehydration) |
+| `buildClearMessage` | Serialize a zeroed `TUiState` into a clear `update` message (session ended) |
+| `snapshotCommand` | The DAP custom request name to use when fetching a memory snapshot |
+
+Each platform wires its modules through a `PlatformUiEntry` factory (`createTec1PlatformUiEntry()`, etc.) in `src/extension/platform-ui-entries.ts`. The factory's `loadUiModules()` function uses dynamic `import()` to pull in the platform's HTML, memory, message-handling, and state modules, then composes them into a single `PlatformUiModules` object.
+
 ### Parallel state trees
 
 The provider maintains a `platformStates: Map<string, PerPlatformState>` with an entry for every registered platform (Simple, TEC-1, TEC-1G). All three are held in memory simultaneously. Each entry holds:
@@ -134,9 +174,9 @@ This function contains no provider state — it is a pure routing layer, which m
 - `handlePlatformSerialSendFile()` opens a file picker, reads the file, and sends each character individually as a `debug80/tec1SerialInput` or `debug80/tec1gSerialInput` custom request (2 ms between characters, 10 ms between lines, CR appended at each line end). A cancellable progress notification shows during the transfer.
 - `handlePlatformSerialSave()` opens a save dialog and writes the buffered serial text to a file. If the contents look like Intel HEX (all lines start with `:`), the default filter offers `.hex`.
 
-### Platform adapter dispatch — `resolvePlatformAdapter()`
+### Platform module dispatch
 
-Platform-specific messages (hardware input, memory inspector, tab changes) are routed through the `PlatformUiAdapter` object returned by `resolvePlatformAdapter(platform)`. The adapter bundles all platform-specific behaviour: HTML generation, UI state serialization, serial buffer access, message handling, and memory refresh control. Calling `adapter.handleMessage(msg, ...)` delegates to `handleTec1Message()` or `handleTec1gMessage()` as appropriate.
+Platform-specific messages (hardware input, memory inspector, tab changes) are routed through the `PlatformUiModules` object retrieved from `loadedModules`. Calling `modules.handleMessage(msg, context)` delegates to the platform's own message handler, which translates webview messages into debug adapter custom requests. There is no platform-specific branching in `platform-view-messages.ts` itself — all platform variation lives behind the `PlatformUiModules` interface.
 
 ---
 
@@ -322,7 +362,9 @@ The setup card is part of each platform's webview HTML; it is hidden or shown by
 
 - The `uiRevision` counter only ever increments — it is never reset, not even when the webview HTML is replaced. The webview's own counter resets when new HTML is set; the host counter does not.
 
-- Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch goes through the platform modules.
+- Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch calls `modules.handleMessage()` via the `PlatformUiModules` interface — no platform branching in the routing layer.
+
+- The provider holds two parallel maps: `platformStates` (hardware state, serial buffer, tab) and `loadedModules` (behaviour — HTML generation, state serialization, message handling). Modules are loaded once at startup via `preloadAllPlatforms()` and cached permanently. `PlatformUiModules` in `platform-view-manifest.ts` is the interface every platform UI must satisfy.
 
 - The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (now includes `platform?`), `PlatformViewControlMessage` (now includes `saveProjectConfig`), and `PlatformViewInboundMessage`.
 
