@@ -373,7 +373,7 @@ type ProjectKit = {
   entry: number;
   starterTemplates: Record<StarterLanguage, string>;  // relative template paths
   bundledProfile?: {
-    bundleId: string;              // matches BUNDLED_*_REL constant
+    bundleRelPath: string;         // versioned bundle dir path, e.g. 'tec1/mon1b/v1'
     romPath: string;               // workspace-relative ROM destination
     listingPath?: string;
     sourceRoots: string[];

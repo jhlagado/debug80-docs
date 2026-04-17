@@ -201,7 +201,7 @@ Bundle metadata is embedded in `ProjectKit.bundledProfile` (defined in `src/exte
 
 ```typescript
 bundledProfile: {
-  bundleId: string;        // e.g. 'tec1/mon1b/v1'
+  bundleRelPath: string;   // versioned bundle dir path, e.g. 'tec1/mon1b/v1'
   romPath: string;         // workspace-relative destination, e.g. 'roms/tec1/mon1b/mon-1b.bin'
   listingPath?: string;    // e.g. 'roms/tec1/mon1b/mon-1b.lst'
   sourceRoots: string[];   // source root directories for the debug adapter
