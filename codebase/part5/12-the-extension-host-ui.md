@@ -9,7 +9,7 @@ nav_order: 1
 
 # Chapter 12 — The Extension Host UI
 
-The debug80 sidebar panel is a VS Code WebviewView — an iframe-based panel embedded in the Activity Bar sidebar. It runs in a separate JavaScript context from the extension and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
+The debug80 sidebar panel is a VS Code WebviewView — an iframe-based panel embedded in the **secondary sidebar** (the right-hand panel). It runs in a separate JavaScript context from the extension and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
 
 This chapter covers the provider class: what state it holds, how the webview is created and destroyed, the complete message catalogue in both directions, how message routing is structured, and how the provider wires together the debug adapter, the workspace, and the UI.
 
@@ -160,7 +160,7 @@ Inbound messages from the webview are typed as `PlatformViewInboundMessage` — 
 
 `handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
 
-- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command.
+- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string extracted from the message to `debug80.createProject`, where it pre-filters the project-kit picker.
 - Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
 - `serialClear` calls `clearSerialBuffer` for the current platform.
 - Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
@@ -239,7 +239,7 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 | Type | Key fields | Handler |
 |------|-----------|---------|
 | `startDebug` | — | Execute start debug command |
-| `createProject` | `rootPath` | Execute create project command |
+| `createProject` | `rootPath`, `platform?` | Execute create project command; optional `platform` pre-selects kit filter |
 | `openWorkspaceFolder` | — | Execute open folder command |
 | `selectProject` | `rootPath` | Execute workspace selection |
 | `configureProject` | — | No-op (config is now done via project header controls) |
@@ -291,7 +291,7 @@ The types shared between the extension host and webview are defined in `src/cont
 
 - **`PlatformId`** — `'simple' | 'tec1' | 'tec1g'`; the canonical platform identifier used throughout the extension and webview.
 - **`ProjectStatusPayload`** — the shape of the `projectStatus` message body, including `roots`, `targets`, and the optional `rootName`, `rootPath`, `hasProject`, `targetName`, `entrySource`, and `platform` fields. The `platform` field carries the current platform ID (`'simple'`, `'tec1'`, or `'tec1g'`) so the webview can pre-select the Platform dropdown on load.
-- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart.
+- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message now carries an optional `platform?: string` field that, when present, restricts the kit quick-pick to kits for that platform.
 - **`PlatformViewInboundMessage`** — the full union of all messages the extension host can receive: `PlatformViewControlMessage | Tec1Message | Tec1gMessage | { type?: string; [key: string]: unknown }`.
 
 This file is the authoritative definition of the message boundary. Platform-view-messages.ts imports `PlatformViewInboundMessage` directly from it.
@@ -354,9 +354,78 @@ The setup card is part of each platform's webview HTML; it is hidden or shown by
 
 ---
 
+## Project scaffolding and project kits
+
+When `debug80.createProject` runs for a new workspace, it calls `scaffoldProject()` in `src/extension/project-scaffolding.ts`. The core abstraction that replaced the old ad-hoc platform field is the **project kit** (`src/extension/project-kits.ts`).
+
+### `ProjectKit`
+
+A `ProjectKit` is an immutable descriptor for one platform/profile combination:
+
+```typescript
+type ProjectKit = {
+  id: ProjectKitId;                // e.g. 'tec1/mon1b'
+  platform: ScaffoldPlatform;      // 'simple' | 'tec1' | 'tec1g'
+  profileName: string;             // profile key written into debug80.json
+  label: string;                   // shown in the quick-pick
+  description: string;
+  appStart: number;
+  entry: number;
+  starterTemplates: Record<StarterLanguage, string>;  // relative template paths
+  bundledProfile?: {
+    bundleId: string;              // matches BUNDLED_*_REL constant
+    romPath: string;               // workspace-relative ROM destination
+    listingPath?: string;
+    sourceRoots: string[];
+  };
+};
+```
+
+The four built-in kits are:
+
+| Kit ID | Platform | Profile | Monitor |
+|--------|----------|---------|---------|
+| `simple/default` | `simple` | `default` | none |
+| `tec1/classic-2k` | `tec1` | `classic-2k` | none |
+| `tec1/mon1b` | `tec1` | `mon1b` | MON-1B (bundled) |
+| `tec1g/mon3` | `tec1g` | `mon3` | MON3 (bundled) |
+
+### Kit selection — `chooseProjectKit()`
+
+`chooseProjectKit(preselectedPlatform?)` calls `getProjectKitChoices()`, which calls `listProjectKits()`. If a platform string is passed in and matches a known platform exactly (`simple`, `tec1`, `tec1g`), only kits for that platform are returned. If only one kit matches, the picker is skipped and that kit is returned immediately. Otherwise a `showQuickPick()` prompt lists all matching kits.
+
+The `preselectedPlatform` value flows from the `platform?` field on the `createProject` webview message, through `handleCreateProject` in `platform-view-messages.ts`, through the `debug80.createProject` command args, and finally into `scaffoldProject()`.
+
+### `buildScaffoldPlan()` — interactive plan construction
+
+After kit selection, `buildScaffoldPlan()` collects the remaining inputs:
+
+1. A target name (input box, default `'app'`).
+2. A source file choice: an existing `.asm`/`.zax` file from the workspace, or a new ASM/ZAX starter file.
+
+The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, artifactBase, starterLanguage?, starterFile? }`.
+
+### `createDefaultProjectConfig()` — writing `debug80.json`
+
+`createDefaultProjectConfig(plan)` assembles the `debug80.json` structure from the plan:
+
+- A `profiles` section with one entry (`plan.kit.profileName`) containing the platform, description, and — if the kit has a `bundledProfile` — a `bundledAssets` map with `romHex` and optionally `listing` entries (each a `BundledAssetReference`).
+- A `targets` section with one entry (`plan.targetName`) containing `sourceFile`, `outputDir`, `artifactBase`, `platform`, `profile`, and the platform-specific memory map block (`simple`, `tec1`, or `tec1g`). For kits with a `bundledProfile`, the target block also includes `romHex`, optional `extraListings`, and `sourceRoots`.
+- Top-level `projectVersion`, `projectPlatform`, `defaultProfile`, and `defaultTarget` fields.
+
+Bundled ROM files are **not copied during scaffolding**. They are written to the workspace the first time the project is launched, via `materializeBundledAsset()` resolving the `BundledAssetReference` entries.
+
+### Starter templates
+
+If the user chose to create a starter source file, `createStarterSourceContent()` reads the template from `resources/project-kits/<kit.starterTemplates[language]>` via `readProjectKitStarterTemplate()`. The file is written to the workspace before `debug80.json` is created. If the file already exists, it is not overwritten.
+
+---
+
 ## Summary
 
 - `PlatformViewProvider` is the single point of contact between the debug adapter and the webview. It holds all hardware display state and serial/terminal buffers in memory on the extension host side for all three platforms simultaneously.
+
+- The Debug80 panel is registered in the **secondary sidebar** (`viewsContainers.secondarySideBar` in `package.json`), not the Activity Bar. The `debug80.openDebug80View` command programmatically reveals it.
 
 - The webview HTML is regenerated on every platform switch and sidebar reveal. Buffered state is reposted from in-memory copies, making the panel self-restoring.
 
@@ -364,9 +433,11 @@ The setup card is part of each platform's webview HTML; it is hidden or shown by
 
 - Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch calls `modules.handleMessage()` via the `PlatformUiModules` interface — no platform branching in the routing layer.
 
+- The `createProject` webview message now carries an optional `platform?` field. It flows through `platform-view-messages.ts` into the `debug80.createProject` command and then into `scaffoldProject()`, where it pre-filters the project-kit picker.
+
 - The provider holds two parallel maps: `platformStates` (hardware state, serial buffer, tab) and `loadedModules` (behaviour — HTML generation, state serialization, message handling). Modules are loaded once at startup via `preloadAllPlatforms()` and cached permanently. `PlatformUiModules` in `platform-view-manifest.ts` is the interface every platform UI must satisfy.
 
-- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (now includes `platform?`), `PlatformViewControlMessage` (now includes `saveProjectConfig`), and `PlatformViewInboundMessage`.
+- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `platform?`), `PlatformViewControlMessage` (includes `saveProjectConfig` and `createProject` with optional `platform?`), and `PlatformViewInboundMessage`.
 
 - `registerExtensionPlatform()` in `platform-extension-model.ts` is the unified API for registering both the runtime and UI concerns of a platform in a single call.
 
@@ -375,6 +446,8 @@ The setup card is part of each platform's webview HTML; it is hidden or shown by
 - Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It drives the project header (Project button, Target dropdown, Platform dropdown) that appears on all platform panels.
 
 - The setup card (shown when no project is configured) is hidden entirely once a project exists. There is no intermediate "configured" state — the project header controls are always sufficient.
+
+- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively; `createDefaultProjectConfig()` writes `profiles` and `targets` from it. Bundled ROM files are not copied at scaffold time — they are materialized at first launch.
 
 ---
 
