@@ -9,7 +9,9 @@ nav_order: 1
 
 # Chapter 12 — The Extension Host UI
 
-The debug80 sidebar panel is a VS Code WebviewView — an iframe-based panel embedded in the **secondary sidebar** (the right-hand panel). It runs in a separate JavaScript context from the extension and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
+The debug80 sidebar panel is a VS Code WebviewView — an iframe-based panel embedded in the **Run & Debug sidebar** (the built-in `debug` view container). It runs in a separate JavaScript context from the extension and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
+
+The view is registered under `"views": { "debug": [...] }` in `package.json`, which places it as a collapsible subpanel alongside Variables, Watch, Call Stack, and Breakpoints. The extension activates as soon as the user expands the panel, via the `"onView:debug80.platformView"` activation event.
 
 This chapter covers the provider class: what state it holds, how the webview is created and destroyed, the complete message catalogue in both directions, how message routing is structured, and how the provider wires together the debug adapter, the workspace, and the UI.
 
@@ -160,7 +162,7 @@ Inbound messages from the webview are typed as `PlatformViewInboundMessage` — 
 
 `handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
 
-- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string extracted from the message to `debug80.createProject`, where it pre-filters the project-kit picker.
+- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing pickers. `setStopOnEntry` is handled inline by the provider — it updates `this.stopOnEntry` and refreshes the `projectStatus` payload.
 - Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
 - `serialClear` calls `clearSerialBuffer` for the current platform.
 - Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
@@ -290,8 +292,8 @@ All adapter requests go through `session.customRequest()` on the current `vscode
 The types shared between the extension host and webview are defined in `src/contracts/platform-view.ts`:
 
 - **`PlatformId`** — `'simple' | 'tec1' | 'tec1g'`; the canonical platform identifier used throughout the extension and webview.
-- **`ProjectStatusPayload`** — the shape of the `projectStatus` message body, including `roots`, `targets`, and the optional `rootName`, `rootPath`, `hasProject`, `targetName`, `entrySource`, and `platform` fields. The `platform` field carries the current platform ID (`'simple'`, `'tec1'`, or `'tec1g'`) so the webview can pre-select the Platform dropdown on load.
-- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message now carries an optional `platform?: string` field that, when present, restricts the kit quick-pick to kits for that platform.
+- **`ProjectStatusPayload`** — the shape of the `projectStatus` message body. The key field is `projectState?: 'noWorkspace' | 'uninitialized' | 'initialized'`, which drives control visibility in the webview. Other fields: `roots[]`, `targets[]`, `rootName`, `rootPath`, `hasProject` (legacy compat), `targetName`, `entrySource`, `platform`, and `stopOnEntry` (the current global stop-on-entry toggle value).
+- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `restartDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `setStopOnEntry`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message carries an optional `platform?: string` field that, when present, selects the default kit for that platform without showing pickers. The `setStopOnEntry` message carries `{ stopOnEntry: boolean }` and updates the provider's global toggle.
 - **`PlatformViewInboundMessage`** — the full union of all messages the extension host can receive: `PlatformViewControlMessage | Tec1Message | Tec1gMessage | { type?: string; [key: string]: unknown }`.
 
 This file is the authoritative definition of the message boundary. Platform-view-messages.ts imports `PlatformViewInboundMessage` directly from it.
@@ -328,29 +330,44 @@ The snapshot payload describes which memory regions and views are currently disp
 
 ---
 
-## Project status
+## Project status and the three-state model
 
-`getProjectStatusPayload()` assembles the project header data. It queries:
+`getProjectStatusPayload()` assembles the project header data and signals one of three explicit project states via the `projectState` field of `ProjectStatusPayload`.
 
-- `vscode.workspace.workspaceFolders` — all open workspace roots
-- `findProjectConfigPath(folder)` — whether each root has a `debug80.json`
-- `resolveProjectStatusSummary()` — the selected target and entry source from workspace state
-- `listProjectTargetChoices()` — the target names available in the config file
-- `resolveProjectPlatform(config)` — the active platform ID from `projectPlatform` or per-target `platform`
+### `projectState` values
 
-This payload is posted as a `projectStatus` message. The webview renders it as a compact project header with three controls:
+| Value | Condition | What the provider includes |
+|-------|-----------|---------------------------|
+| `'noWorkspace'` | No workspace folder selected | `roots[]` only |
+| `'uninitialized'` | Folder selected, no `debug80.json` found | `rootName`, `rootPath`, `platform` (current or `'simple'`), `stopOnEntry` |
+| `'initialized'` | Folder has a `debug80.json` | Full payload: `targets[]`, `targetName`, `platform`, `stopOnEntry`, `entrySource` |
 
-- A **Project button** showing the current workspace root name — clicking it sends `selectProject`.
-- A **Target dropdown** populated from `targets[]` — changing it sends `selectTarget`.
-- A **Platform dropdown** with options Simple / TEC-1 / TEC-1G — value set from `payload.platform`; changing it sends `saveProjectConfig` with `{ platform: string }`.
+The `'uninitialized'` branch includes `platform: this.currentPlatform ?? 'simple'` so the webview can show the Platform selector at its correct value even before a project config exists.
 
-Below the project header, a **setup card** may appear when the workspace is not fully configured:
+### Webview state helpers — `webview/common/`
 
-- No workspace roots → shows "Select a workspace root to get started." with an Open Folder button.
-- Workspace available but no `debug80.json` → shows a prompt with a Create Project button.
-- Project exists with at least one target → setup card is **hidden entirely**. There is no "configured" or "ready" state shown in the card.
+Three shared modules translate the payload into rendering decisions:
 
-The setup card is part of each platform's webview HTML; it is hidden or shown by the webview based on the `projectStatus` payload it receives.
+**`project-state.ts`** — exports `ProjectViewState = 'noWorkspace' | 'uninitialized' | 'initialized'` and `resolveProjectViewState(payload)`. The function prefers the explicit `projectState` field when present, falling back to inferring state from `hasProject` and `rootPath` for backward compatibility.
+
+**`setup-card-state.ts`** — exports `resolveSetupCardState(selectedRoot, projectState, targetCount): SetupCardState | null`. Returns the text and primary-action label for the onboarding card, or `null` to hide it:
+
+- `noWorkspace` / no selected root → "No workspace folder is open" + **Open Folder** button
+- `uninitialized` → "Uninitialized Debug80 project" + **Initialize Project** button
+- `initialized` → `null` (card hidden)
+
+**`project-controls.ts`** — exports `applyInitializedProjectControls(payload, elements)`. Enforces which controls are visible based on `projectState`:
+
+| Control | `uninitialized` | `initialized` |
+|---------|----------------|---------------|
+| Platform selector | **visible** | hidden |
+| Target control | hidden | **visible** |
+| Stop on entry label | hidden | **visible** |
+| Restart button | hidden | **visible** |
+| Tabs (UI / Memory) | hidden | **visible** |
+| Panel content areas | hidden | **visible** |
+
+The Platform selector is intentionally shown in the uninitialized state so the user can choose a platform before clicking Initialize Project. Once the project exists, the platform is stored in `debug80.json` and the selector is hidden.
 
 ---
 
@@ -390,11 +407,15 @@ The four built-in kits are:
 | `tec1/mon1b` | `tec1` | `mon1b` | MON-1B (bundled) |
 | `tec1g/mon3` | `tec1g` | `mon3` | MON3 (bundled) |
 
-### Kit selection — `chooseProjectKit()`
+### Kit selection — `getDefaultProjectKitForPlatform()` and `chooseProjectKit()`
 
-`chooseProjectKit(preselectedPlatform?)` calls `getProjectKitChoices()`, which calls `listProjectKits()`. If a platform string is passed in and matches a known platform exactly (`simple`, `tec1`, `tec1g`), only kits for that platform are returned. If only one kit matches, the picker is skipped and that kit is returned immediately. Otherwise a `showQuickPick()` prompt lists all matching kits.
+`project-kits.ts` exports two selection paths:
 
-The `preselectedPlatform` value flows from the `platform?` field on the `createProject` webview message, through `handleCreateProject` in `platform-view-messages.ts`, through the `debug80.createProject` command args, and finally into `scaffoldProject()`.
+**`getDefaultProjectKitForPlatform(platform)`** — returns the single default kit for a platform string (`'simple'`, `'tec1'`, or `'tec1g'`) without showing any picker. This is the path taken when the user clicks **Initialize Project** from the panel's uninitialized state: the platform value already shown in the Platform selector is passed directly, and the project is scaffolded immediately using the platform's bundle-first default kit (TEC-1 → `tec1/mon1b`; TEC-1G → `tec1g/mon3`; Simple → `simple/default`).
+
+**`chooseProjectKit(preselectedPlatform?)`** — the interactive path. Calls `getProjectKitChoices()` / `listProjectKits()`. If only one kit matches the platform, the picker is skipped. Otherwise a `showQuickPick()` prompt lists all matching kits. This path is used when the command is invoked without a pre-selected platform (e.g. from the Command Palette).
+
+The `platform?` field on the `createProject` webview message flows through `handleCreateProject` in `platform-view-messages.ts` into the `debug80.createProject` command args and then into `scaffoldProject()`.
 
 ### `buildScaffoldPlan()` — interactive plan construction
 
@@ -425,7 +446,9 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - `PlatformViewProvider` is the single point of contact between the debug adapter and the webview. It holds all hardware display state and serial/terminal buffers in memory on the extension host side for all three platforms simultaneously.
 
-- The Debug80 panel is registered in the **secondary sidebar** (`viewsContainers.secondarySideBar` in `package.json`), not the Activity Bar. The `debug80.openDebug80View` command programmatically reveals it.
+- The Debug80 panel is registered under `"views": { "debug": [...] }` in `package.json`, placing it as a collapsible subpanel in the **Run & Debug sidebar**. The `"onView:debug80.platformView"` activation event ensures the extension starts as soon as the user expands the panel.
+
+- The panel uses a **responsive two-column layout** driven by CSS container queries on `#app`. Below 440 px (TEC-1) or 480 px (TEC-1G) the layout collapses to a single column; above those thresholds the original two-column grid is restored.
 
 - The webview HTML is regenerated on every platform switch and sidebar reveal. Buffered state is reposted from in-memory copies, making the panel self-restoring.
 
@@ -433,21 +456,25 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch calls `modules.handleMessage()` via the `PlatformUiModules` interface — no platform branching in the routing layer.
 
-- The `createProject` webview message now carries an optional `platform?` field. It flows through `platform-view-messages.ts` into the `debug80.createProject` command and then into `scaffoldProject()`, where it pre-filters the project-kit picker.
+- `ProjectStatusPayload` carries a `projectState` field with three explicit values: `'noWorkspace'`, `'uninitialized'`, and `'initialized'`. The webview uses `resolveProjectViewState()` from `webview/common/project-state.ts` to map this to rendering decisions. `applyInitializedProjectControls()` from `webview/common/project-controls.ts` shows or hides each control depending on the state — the Platform selector is visible only while uninitialized; all debug controls are visible only once initialized.
+
+- When `projectState` is `'uninitialized'`, the setup card shows an **Initialize Project** button. Clicking it sends `createProject` with the platform currently shown in the Platform selector. The extension uses `getDefaultProjectKitForPlatform()` to resolve the default kit and scaffolds the project without displaying any pickers.
+
+- **Stop on entry** is a global session toggle held as `public stopOnEntry = false` on `PlatformViewProvider` — not stored in `debug80.json` and not persisted across restarts. It defaults to `false`. When the checkbox changes, the provider updates the field and broadcasts a `projectStatus` refresh; the new value applies on the **next explicit restart** (it does not trigger an automatic restart). At every call to `startCurrentProjectDebugging()`, `platformViewProvider.stopOnEntry` is passed directly in the launch config object, taking priority over any `stopOnEntry` value left in the project config.
+
+- **Restart semantics for workspace changes**: `debug80.selectWorkspaceFolder` restarts the active debug session whenever the selected project config **path** changes — regardless of whether the platform changed. Previously the restart was only triggered on a platform change.
 
 - The provider holds two parallel maps: `platformStates` (hardware state, serial buffer, tab) and `loadedModules` (behaviour — HTML generation, state serialization, message handling). Modules are loaded once at startup via `preloadAllPlatforms()` and cached permanently. `PlatformUiModules` in `platform-view-manifest.ts` is the interface every platform UI must satisfy.
 
-- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `platform?`), `PlatformViewControlMessage` (includes `saveProjectConfig` and `createProject` with optional `platform?`), and `PlatformViewInboundMessage`.
+- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `projectState`, `platform`, `stopOnEntry`), `PlatformViewControlMessage` (includes `setStopOnEntry`, `saveProjectConfig`, `createProject` with optional `platform?`), and `PlatformViewInboundMessage`.
 
 - `registerExtensionPlatform()` in `platform-extension-model.ts` is the unified API for registering both the runtime and UI concerns of a platform in a single call.
 
 - The memory refresh controller polls the adapter at 150 ms intervals when the memory tab is active and the panel is visible. Polling stops automatically on tab switch or panel hide.
 
-- Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It drives the project header (Project button, Target dropdown, Platform dropdown) that appears on all platform panels.
+- Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It emits one of three `projectState` values and drives the project header (Project button, Target dropdown, Platform dropdown, Stop-on-entry checkbox, Restart button).
 
-- The setup card (shown when no project is configured) is hidden entirely once a project exists. There is no intermediate "configured" state — the project header controls are always sufficient.
-
-- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively; `createDefaultProjectConfig()` writes `profiles` and `targets` from it. Bundled ROM files are not copied at scaffold time — they are materialized at first launch.
+- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively (command palette path); `getDefaultProjectKitForPlatform()` selects the bundle-first default silently (panel initialization path). `createDefaultProjectConfig()` writes `profiles` and `targets` from the chosen kit. Bundled ROM files are not copied at scaffold time — they are materialized at first launch.
 
 ---
 
