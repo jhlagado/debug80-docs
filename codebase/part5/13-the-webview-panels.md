@@ -37,24 +37,24 @@ The result is acquired once at module load time and passed to every component th
 
 ### Session status controller (`common/session-status.ts`)
 
-The session status button appears in the tab bar of every platform panel. `createSessionStatusController()` manages it:
+The Restart button sits in the tab row of every platform panel (`id="restartDebug"`). `createSessionStatusController()` manages it:
 
 ```typescript
 const controller = createSessionStatusController(vscode, buttonElement);
-controller.setStatus('running');   // disables button, updates label
-controller.setStatus('not running'); // re-enables button, click sends startDebug
+controller.setStatus('running');
+controller.setStatus('not running');
 ```
 
-The button is enabled only when `status === 'not running'`. In all other states it is disabled — the session is either starting, active, or paused. A click when enabled sends `{ type: 'startDebug' }` to the extension host.
+The button always renders with the label **Restart**. Its visual state is carried in `data-status` and CSS classes (`status-running`, `status-paused`, etc.). A click sends `{ type: 'restartDebug' }` to the extension host unless the session is still in the `'starting'` state. The button is disabled only while starting.
 
-Labels and tooltips are set for all four states:
+The status values are:
 
 | Status | Label | Behaviour |
 |--------|-------|-----------|
-| `'not running'` | "Start debugging" | Clickable |
-| `'starting'` | "Starting…" | Disabled |
-| `'running'` | "Running" | Disabled |
-| `'paused'` | "Paused" | Disabled |
+| `'not running'` | "Restart" | Clickable |
+| `'starting'` | "Restart" | Disabled |
+| `'running'` | "Restart" | Clickable |
+| `'paused'` | "Restart" | Clickable |
 
 ### Seven-segment digit factory (`common/digits.ts`)
 
@@ -143,28 +143,52 @@ All three `index.html` files follow the same structure:
 
 ```html
 <div class="project-header">
-  <button id="selectProject">...</button>
-  <select id="homeTargetSelect"></select>
-  <select id="platformSelect">
-    <option value="simple">Simple</option>
-    <option value="tec1">TEC-1</option>
-    <option value="tec1g">TEC-1G</option>
-  </select>
+  <div class="project-control">                          <!-- always visible -->
+    <span class="project-label">Project</span>
+    <button id="selectProject">No workspace roots available</button>
+    <button id="addWorkspaceFolder" title="Add folder to workspace">+</button>
+  </div>
+  <div class="project-control">                          <!-- visible only when initialized -->
+    <span class="project-label">Target</span>
+    <select id="homeTargetSelect"></select>
+  </div>
+  <div class="project-control" hidden>                   <!-- visible only when uninitialized -->
+    <span class="project-label">Platform</span>
+    <select id="platformSelect">
+      <option value="simple">Simple</option>
+      <option value="tec1">TEC-1</option>
+      <option value="tec1g">TEC-1G</option>
+    </select>
+  </div>
+    <button id="platformInitButton">Initialize</button>
+  </div>
+  <div class="project-control" id="platformInfoControl" hidden>  <!-- currently kept hidden -->
+    <span class="project-label">Platform</span>
+    <span id="platformValue"></span>
+  </div>
+  <label class="stop-on-entry-label" hidden>             <!-- visible only when initialized -->
+    <input type="checkbox" id="stopOnEntry" />
+    Stop on entry
+  </label>
 </div>
 <div class="setup-card" id="setupCard">
   <div id="setupCardText">...</div>
   <button id="setupPrimaryAction">...</button>
 </div>
 <div class="tabs">
-  <button class="tab" data-tab="ui">UI</button>
-  <button class="tab" data-tab="memory">CPU</button>
-  <button class="session-status" id="sessionStatus">...</button>
+  <div class="tabs-buttons">
+    <button class="tab" data-tab="ui">UI</button>
+    <button class="tab" data-tab="memory">CPU</button>
+  </div>
+  <div class="tabs-status-slot">
+    <button class="session-status" id="restartDebug">Restart</button>
+  </div>
 </div>
 <div class="panel panel-ui" id="panel-ui"> ... platform UI content ... </div>
 <div class="panel panel-memory" id="panel-memory"> ... registers + memory ... </div>
 ```
 
-The `project-header` div contains three controls — always visible regardless of which tab is active. The `setup-card` div is shown when the workspace is not fully configured and hidden once a project exists. The `tabs` row selects between the platform UI panel and the CPU/memory panel.
+The `project-header` occupies the top of the panel whenever there is a workspace context to act on. In the special `noWorkspace` state it is hidden entirely, leaving only the empty-state card visible. The `setup-card` is shown when the workspace is not fully configured and hidden once a project exists. The `tabs` row sits below the setup card and is hidden until the project is initialized.
 
 Only one `panel` div is active at a time; CSS classes control visibility.
 
@@ -172,27 +196,40 @@ Only one `panel` div is active at a time; CSS classes control visibility.
 
 ## The project header
 
-The project header renders the current workspace context and lets the user change it without leaving the panel. It contains three controls, always visible regardless of which tab is active.
+The project header renders the current workspace context and lets the user change it without leaving the panel. It is always visible at the top of the panel, regardless of project state or which tab is active. Individual controls within it are shown or hidden by `applyInitializedProjectControls()` depending on `projectState`.
 
-**Root button** — shows the name of the selected workspace folder. Clicking it sends `{ type: 'selectProject', rootPath }`, triggering the workspace selection command.
+**Project button** — always visible whenever the header is visible. Shows the selected workspace folder name (or a placeholder when no folder is selected). Clicking it sends `{ type: 'selectProject', rootPath }`, triggering workspace selection.
 
-**Target selector** — a `<select>` populated from the `targets[]` array in the `projectStatus` message. When the user picks a target, the webview sends `{ type: 'selectTarget', rootPath, targetName }`.
+**Add folder button** (`+`) — always visible, next to the root button. Clicking it sends `{ type: 'openWorkspaceFolder' }`, which runs the VS Code command to add a new folder to the workspace. This button is always present so the user can add workspace folders from any state without needing to navigate away from the panel.
 
-**Platform selector** — a `<select>` with three fixed options: Simple, TEC-1, TEC-1G. Its value is set from `projectStatus.platform` on each `projectStatus` message. When the user changes it, the webview sends `{ type: 'saveProjectConfig', platform: string }`. The extension host writes the chosen platform to `debug80.json` (both `projectPlatform` and all per-target `platform` fields) and then restarts the debug session so the new platform takes effect immediately.
+**Target selector** — visible only when `projectState === 'initialized'`. A `<select>` populated from the `targets[]` array in the `projectStatus` message. When the user picks a target, the webview sends `{ type: 'selectTarget', rootPath, targetName }`.
+
+**Platform selector** — visible only when `projectState === 'uninitialized'`. A `<select>` with three fixed options: Simple, TEC-1, TEC-1G. Its value is set from `projectStatus.platform` on each `projectStatus` message. In the current panel redesign it shares the row with an inline **Initialize** button (`platformInitButton`), so project creation can happen directly from the platform row instead of from a duplicate card button.
+
+**Platform info row** — the old read-only `platformInfoControl` slot still exists in the DOM, but the current UI contract keeps it hidden. That avoids rendering a second platform control in initialized state.
+
+**Stop on entry** — visible only when `projectState === 'initialized'`. A checkbox in the project header row that toggles the global stop-on-entry flag for the current VS Code window session. When toggled, the webview sends `{ type: 'setStopOnEntry', stopOnEntry: boolean }`. The value is not persisted into `debug80.json`.
 
 When a `projectStatus` message arrives:
 
-1. The root button text is updated to show the current root name.
+1. The project button text is updated to show the current root name.
 2. The target `<select>` is repopulated with options from `targets[]` and the current target is pre-selected.
 3. The platform `<select>` value is set from `platform`.
+4. `applyInitializedProjectControls()` shows or hides each control row.
+5. The stop-on-entry checkbox value is set from `message.stopOnEntry`.
+
+### `projectIsInitialized` guard
+
+Each panel's `index.ts` tracks a module-level `let projectIsInitialized = false` boolean. It is set to `true` after the first `projectStatus` message that resolves to `'initialized'`. The platform `<select>` change handler is wrapped in `if (projectIsInitialized)` — this prevents a spurious `saveProjectConfig` message from firing when the platform value is programmatically set during panel initialization or rehydration, before a real project exists. Without this guard, the change event would trigger on the initial value assignment and cause the extension host to re-render the view unexpectedly.
 
 ## The setup card
 
 Below the project header, a setup card handles the not-yet-configured states:
 
-- **No workspace roots** → displays "Select a workspace root to get started." with an Open Folder button. Clicking sends `{ type: 'openWorkspaceFolder' }`.
-- **Workspace available but no project** → displays a prompt with a Create Project button. Clicking sends `{ type: 'createProject', rootPath }`.
-- **Project exists** → the card is **hidden entirely**. There is no intermediate "configured" state shown in the UI.
+- **No workspace roots** → displays an empty-state message and an **Open Folder** action. The header itself is hidden in this state.
+- **Workspace available but no selected root** → displays a **Select Project** action.
+- **Selected root but no initialized debug80 project** → displays **Uninitialized Debug80 project**. In the current panel redesign the setup card hides its own button for the create-project case, because the active create action lives in the inline `platformInitButton` on the platform row.
+- **Project exists** → the card is **hidden entirely**.
 
 The setup card state is recalculated on every `projectStatus` message by `resolveSetupCardState()` in `webview/common/setup-card-state.ts`, which returns `null` when a project exists (causing the card to be hidden).
 
@@ -479,9 +516,11 @@ The edit field accepts hex input without a `0x` prefix. Input is validated befor
 
 - Common infrastructure (`vscode.ts`, `session-status.ts`, `digits.ts`, `serial.ts`, `memory-panel.ts`) is shared by all three platform panels.
 
-- Every platform panel has the same outer shell: project header (Project button, Target dropdown, Platform dropdown), setup card, tab bar with session status button, UI tab panel, and CPU/memory tab panel.
+- Every platform panel has the same outer shell: project header (Project button + `+` button, Target dropdown, Platform dropdown, Stop-on-entry checkbox), setup card, tab bar with Restart button, UI tab panel, and CPU/memory tab panel.
 
-- The **Platform dropdown** in the project header lets the user switch between Simple, TEC-1, and TEC-1G without stopping the session. Selecting a new platform saves the choice to `debug80.json` and restarts the emulator immediately.
+- The **project header** is always visible. The `+` (Add folder) button is always present. The Target dropdown and Stop-on-entry checkbox are shown only when `projectState === 'initialized'`. The Platform dropdown is shown only when `projectState === 'uninitialized'` so the user can choose a platform before initializing — once a project exists it is hidden.
+
+- Each panel's `index.ts` maintains `let projectIsInitialized = false`. The platform `<select>` change handler only fires `saveProjectConfig` when `projectIsInitialized === true`, preventing spurious config writes during panel initialization.
 
 - The **setup card** is shown when the workspace is not yet configured and hidden entirely once a project exists. There is no intermediate "configured" state.
 

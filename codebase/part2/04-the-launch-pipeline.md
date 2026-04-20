@@ -69,7 +69,14 @@ const merged = populateFromConfig(args, {
 
 ### Finding the config file
 
-`populateFromConfig()` searches for the config file by walking up the filesystem from the assembly source file's directory. It looks for `debug80.json`, `.debug80.json`, and `.vscode/debug80.json` at each level. It also checks `package.json` for a `debug80` field — useful for projects that want to keep their config inside an existing manifest.
+`populateFromConfig()` searches for the config file by walking up the filesystem from the assembly source file's directory. At each level it checks, in order:
+
+1. an explicit `projectConfig` path from the launch args (if present)
+2. `debug80.json`
+3. `.debug80.json`
+4. `.vscode/debug80.json`
+
+If none of those files exist, it also checks `package.json` for a `debug80` field. That `package.json` path is a compatibility path in the launch layer rather than the normal project-discovery path used by the workspace UI.
 
 ### Platform block merging
 

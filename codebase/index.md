@@ -8,6 +8,14 @@ has_children: true
 
 A technical reference for engineers working with the debug80 codebase.
 
+This manual is updated against the codebase state through **2026-04-20**. The most important recent shifts are:
+
+- the project manifest has moved to the version 2 model (`projectVersion`, `projectPlatform`, `profiles`, `defaultProfile`, `bundledAssets`)
+- project creation and first launch can materialize bundled ROM assets into the workspace automatically
+- the panel lifecycle is now explicitly three-state: `noWorkspace`, `uninitialized`, `initialized`
+- the project header owns project selection, target selection, stop-on-entry, restart, and workspace-folder addition
+- several debug/extension responsibilities were split or consolidated, notably memory snapshot handling and mapping-cache decisions
+
 ---
 
 ## Part I — Orientation
