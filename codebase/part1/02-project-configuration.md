@@ -19,49 +19,53 @@ If you are going to work on any part of debug80 that touches launching, target s
 
 Debug80 looks for a project configuration file in three locations, checked in this order:
 
-1. `.vscode/debug80.json`
-2. `debug80.json`
+1. `debug80.json`
+2. `.vscode/debug80.json`
 3. `.debug80.json`
 
 The first file found wins. The search starts from the workspace folder root. If none of these files exist, the project has no debug80 configuration and the extension treats it as unconfigured — no targets appear in the selector, and launching a debug session requires either creating a project or providing explicit launch arguments.
 
 The discovery logic lives in `findProjectConfigPath()` in `src/extension/project-config.ts`. It takes a `WorkspaceFolder` and returns the absolute path to the first matching config file, or `undefined`.
 
+The current preference for `debug80.json` at the workspace root is deliberate. It makes the project marker visible at the top level of the repo instead of hiding it under `.vscode/`.
+
 ---
 
 ## The ProjectConfig type
 
-The config file is parsed into a `ProjectConfig` object, defined in `src/debug/types.ts`. Here is the full shape:
+The config file is parsed into a `ProjectConfig` object, defined in `src/debug/types.ts`. The current model is a **versioned manifest** with backwards-compatible support for older root-level fields.
 
 ```typescript
 interface ProjectConfig {
-  // Target management
-  defaultTarget?: string;       // Which target to use when none is specified
-  target?: string;              // Alias for defaultTarget
+  projectVersion?: 1 | 2;
+  projectPlatform?: string;
+  profiles?: Record<string, ProjectProfileConfig>;
+  bundledAssets?: Record<string, BundledAssetReference>;
+  defaultProfile?: string;
 
-  // Named target configurations
-  targets?: Record<string, Partial<LaunchRequestArguments> & { source?: string }>;
+  defaultTarget?: string;
+  target?: string;
+  targets?: Record<
+    string,
+    Partial<LaunchRequestArguments> & { source?: string; profile?: string }
+  >;
 
-  // Root-level defaults (applied to all targets unless overridden)
-  asm?: string;                 // Source file path
-  sourceFile?: string;          // Alias for asm
-  source?: string;              // Alias for asm (used in some config styles)
-  assembler?: string;           // 'asm80' or 'zax'
-  hex?: string;                 // Intel HEX binary path
-  listing?: string;             // Listing file path
-  outputDir?: string;           // Build output directory
-  artifactBase?: string;        // Base name for build artifacts
-  entry?: number;               // Execution entry point address
-  stopOnEntry?: boolean;        // Break at entry point
-  platform?: string;            // 'simple', 'tec1', or 'tec1g'
-  assemble?: boolean;           // Whether to run the assembler before debugging
-  sourceRoots?: string[];       // Directories to search for source files
-
-  // Stepping limits
+  // Legacy / root-level defaults still supported
+  asm?: string;
+  sourceFile?: string;
+  source?: string;
+  assembler?: string;
+  hex?: string;
+  listing?: string;
+  outputDir?: string;
+  artifactBase?: string;
+  entry?: number;
+  stopOnEntry?: boolean;
+  platform?: string;
+  assemble?: boolean;
+  sourceRoots?: string[];
   stepOverMaxInstructions?: number;
   stepOutMaxInstructions?: number;
-
-  // Platform-specific configuration blocks
   terminal?: TerminalConfig;
   simple?: SimplePlatformConfig;
   tec1?: Tec1PlatformConfig;
@@ -69,7 +73,48 @@ interface ProjectConfig {
 }
 ```
 
-The `targets` field is where the real work happens. Everything else at the root level serves as defaults — values that apply to all targets unless a specific target overrides them.
+### Version 2 manifests
+
+The current scaffolding path writes a **version 2** manifest. The important additions are:
+
+- `projectVersion: 2` marks the manifest as using the newer model
+- `projectPlatform` records the project's baseline platform identity
+- `profiles` define reusable platform-and-bundle baselines
+- `defaultProfile` selects the profile used when a target does not override it
+- `bundledAssets` and profile-level `bundledAssets` can point at extension-shipped ROM/listing/source bundles
+
+In practice, the v2 manifest lets the scaffolder create monitor-first projects without hard-coding absolute paths into the starter config. Instead, the config can describe a bundled asset reference and the extension can materialize the real files into the workspace when needed.
+
+### Bundled assets
+
+`BundledAssetReference` is a small indirection object:
+
+```typescript
+interface BundledAssetReference {
+  bundleId: string;   // e.g. 'tec1/mon1b/v1' or 'tec1g/mon3/v1'
+  path: string;       // file path inside the bundle
+  destination?: string; // optional workspace-relative destination override
+}
+```
+
+Bundled assets are used mainly for monitor ROMs, listings, and ROM source files. The current project kits use them to seed:
+
+- `TEC-1 / MON-1B`
+- `TEC-1G / MON-3`
+
+The materialization path lives in `src/extension/bundle-materialize.ts`. Bundles are verified against `bundle.json` manifests and copied into workspace-relative destinations such as `roms/tec1/...` or `roms/tec1g/...`.
+
+### Project kits
+
+Scaffolding is no longer just "pick a platform and write a bare JSON file". The extension now has explicit **project kits** in `src/extension/project-kits.ts`. A kit defines:
+
+- the platform
+- the profile name
+- the default app start address
+- starter templates for ASM and ZAX
+- any bundled monitor assets that should be associated with the project
+
+`src/extension/project-scaffolding.ts` builds the initial `debug80.json` from a `ScaffoldPlan`, writes starter source files, and can materialize bundled ROM assets at project creation time.
 
 ---
 
@@ -107,6 +152,23 @@ A typical multi-target config:
 
 In this example, all three targets share the same `tec1g` block at the root — the ROM image and application start address are inherited. Each target specifies its own source file and assembler. The `matrix` target is the default.
 
+In the v2 manifest, a target can also point at a named profile:
+
+```json
+{
+  "defaultProfile": "mon3",
+  "targets": {
+    "matrix": {
+      "profile": "mon3",
+      "sourceFile": "src/matrix.zax",
+      "assembler": "zax"
+    }
+  }
+}
+```
+
+That arrangement lets the target inherit bundled ROM assets and baseline platform identity from the profile while still overriding source/build details at the target layer.
+
 ### Target selection priority
 
 When a debug session launches, the system must decide which target to use. The resolution order is:
@@ -120,7 +182,7 @@ This logic lives in `populateFromConfig()` in `src/debug/launch-args.ts`.
 
 ### Remembering the selected target
 
-When a user selects a target — either through the panel selector or a Quick Pick — the selection is stored in VS Code's workspace state under the key:
+When a user selects a target — either through the panel selector or a command flow that resolves a target explicitly — the selection is stored in VS Code's workspace state under the key:
 
 ```
 debug80.selectedTarget:{projectConfigPath}
@@ -142,6 +204,8 @@ Several fields have aliases — different names for the same value. This exists 
 | `defaultTarget` | `target` | Which target to use by default |
 
 During resolution, all aliases are checked in a defined order. The first non-undefined value wins. If you are writing code that reads these fields, always use the resolution helpers in `launch-args.ts` rather than reading fields directly — they handle the alias chain correctly.
+
+One practical example is `stopOnEntry`: the panel-level toggle is **not** written back into `debug80.json`, but target/root-level config values still merge through the launch pipeline. `resolveStopOnEntryForTarget()` in `src/extension/project-config.ts` mirrors the launch merge so the panel can show the effective project-level value without pretending it is persisted UI state.
 
 ---
 
@@ -323,58 +387,81 @@ When a user creates a new project, the scaffolding system generates the config f
 
 ### The scaffolding steps
 
-1. **Check for existing config.** If a `debug80.json` already exists in any of the three locations, abort — do not overwrite.
+1. **Check for existing config.** If a project config already exists in any of the supported locations, abort — do not overwrite.
 
-2. **Prompt for target name.** An input box asks the user to name the target (default: `app`).
+2. **Resolve the kit.** If the caller already supplied a platform (the panel path), `getDefaultProjectKitForPlatform()` selects the default kit immediately. Otherwise `chooseProjectKit()` shows the kit picker.
 
-3. **Choose entry source.** A Quick Pick shows:
-   - Any `.asm` or `.zax` files already in the project folder
-   - "Create ASM starter" — generates a minimal `.asm` file
-   - "Create ZAX starter" — generates a minimal `.zax` file
+3. **Build the scaffold plan.** A `ScaffoldPlan` captures the kit, target name, source file path, output directory, artifact base, and optional starter-file details. In the panel's platform-preselected path this is intentionally minimal: the default source file is `src/main.asm`, the target name is derived from the filename, and no extra prompts are shown.
 
-4. **Build the scaffold plan.** A `ScaffoldPlan` object captures the target name, source file path, output directory, artifact base name, assembler type, and optional starter file content.
+4. **Write files.** The scaffold writes:
+   - the starter source file if it does not already exist
+   - `debug80.json` at the workspace root
+   - bundled ROM assets for kits that ship them
 
-5. **Write files.** The scaffold writes:
-   - The starter source file (if requested)
-   - `.vscode/debug80.json` with the generated config
+5. **Optionally write launch.json.** `.vscode/launch.json` is created only when the caller asked for launch scaffolding as well. The plain project-init path no longer creates an empty `.vscode` folder.
 
 ### The default config
 
-The generated config always uses platform `simple` with a basic memory layout:
+The generated config now depends on the selected **project kit**. The common shape is:
 
 ```json
 {
+  "projectVersion": 2,
+  "projectPlatform": "tec1g",
+  "defaultProfile": "mon3",
   "defaultTarget": "app",
+  "profiles": {
+    "mon3": {
+      "platform": "tec1g",
+      "description": "TEC-1G monitor-first profile with user code at 0x4000.",
+      "bundledAssets": {
+        "romHex": {
+          "bundleId": "tec1g/mon3/v1",
+          "path": "mon3.bin",
+          "destination": "roms/tec1g/mon3/mon3.bin"
+        },
+        "listing": {
+          "bundleId": "tec1g/mon3/v1",
+          "path": "mon3.lst",
+          "destination": "roms/tec1g/mon3/mon3.lst"
+        }
+      }
+    }
+  },
   "targets": {
     "app": {
-      "sourceFile": "src/main.zax",
+      "sourceFile": "src/main.asm",
       "outputDir": "build",
       "artifactBase": "main",
-      "assembler": "zax",
-      "platform": "simple",
-      "simple": {
+      "platform": "tec1g",
+      "profile": "mon3",
+      "tec1g": {
         "regions": [
           { "start": 0, "end": 2047, "kind": "rom" },
-          { "start": 2048, "end": 65535, "kind": "ram" }
+          { "start": 2048, "end": 49151, "kind": "ram" },
+          { "start": 49152, "end": 65535, "kind": "rom" }
         ],
-        "appStart": 2304,
-        "entry": 0
+        "appStart": 16384,
+        "entry": 0,
+        "romHex": "roms/tec1g/mon3/mon3.bin",
+        "extraListings": ["roms/tec1g/mon3/mon3.lst"],
+        "sourceRoots": ["src", "roms/tec1g/mon3"]
       }
     }
   }
 }
 ```
 
-This is a known limitation — the scaffolding does not offer a platform choice. Users who want TEC-1 or TEC-1G must edit the config manually after creation. Adding platform selection to the scaffolding flow is planned.
+For `simple/default` and `tec1/mon1b` the same structure is used, but with the kit's platform-specific memory block and profile metadata. The platform is now selected during initialization rather than being a manual post-edit step.
 
 ### Assembler auto-detection
 
 When a source file is selected or changed, the system infers the assembler from the file extension:
 
 - `.zax` → `assembler: "zax"`
-- `.asm` → remove the `assembler` field (defaults to asm80)
+- `.asm` → omit the `assembler` field and let asm80 remain the default
 
-This logic runs both during scaffolding and when updating a target's source file via `updateProjectTargetSource()`.
+This logic still matters when targets are retargeted later, but the new project-init path currently defaults straight to `src/main.asm` for the platform's default kit and does not prompt for an alternative entry source.
 
 ---
 
@@ -417,7 +504,7 @@ The watcher registration lives in `WorkspaceSelectionController.registerInfrastr
 
 ## Summary
 
-- Debug80 projects are defined by a JSON config file at `.vscode/debug80.json`, `debug80.json`, or `.debug80.json`. The first found wins.
+- Debug80 projects are defined by a JSON config file at `debug80.json`, `.vscode/debug80.json`, or `.debug80.json`. The first found wins, and the root-level `debug80.json` is now the preferred modern location.
 
 - The `ProjectConfig` type defines the file structure. The `targets` object holds named build configurations; root-level fields serve as defaults for all targets.
 
@@ -431,7 +518,7 @@ The watcher registration lives in `WorkspaceSelectionController.registerInfrastr
 
 - Three platform config types exist: `SimplePlatformConfig` (memory regions only), `Tec1PlatformConfig` (adds ROM and timing), and `Tec1gPlatformConfig` (adds banking, peripherals, and UI visibility).
 
-- Project scaffolding generates a default `simple` platform config. Platform selection during creation is not yet implemented.
+- Project scaffolding is now kit-driven. Platform selection happens during initialization, and the scaffold writes a version 2 manifest plus any bundled monitor assets required by the selected kit.
 
 - The `Debug80ConfigurationProvider` enables F5-to-debug without a `launch.json` — it resolves the project config and target dynamically.
 

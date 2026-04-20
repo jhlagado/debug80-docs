@@ -9,7 +9,7 @@ nav_order: 1
 
 # Chapter 12 — The Extension Host UI
 
-The debug80 sidebar panel is a VS Code WebviewView — an iframe-based panel embedded in the **Run & Debug sidebar** (the built-in `debug` view container). It runs in a separate JavaScript context from the extension and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
+The debug80 sidebar panel is a VS Code `WebviewView` embedded in the built-in **Run & Debug** container (`"views": { "debug": [...] }` in `package.json`). It runs in a separate JavaScript context from the extension host and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
 
 The view is registered under `"views": { "debug": [...] }` in `package.json`, which places it as a collapsible subpanel alongside Variables, Watch, Call Stack, and Breakpoints. The extension activates as soon as the user expands the panel, via the `"onView:debug80.platformView"` activation event.
 
@@ -42,7 +42,7 @@ export class PlatformViewProvider implements vscode.WebviewViewProvider {
 
 The provider maintains a second parallel map: `loadedModules: Map<string, PlatformUiModules>`. Where `platformStates` holds *runtime data* (hardware state, serial buffer, tab), `loadedModules` holds *behaviour* — the functions that know how to generate HTML, serialize state to update messages, and handle incoming webview messages.
 
-Modules are loaded once via `preloadAllPlatforms()` (called early in the extension lifecycle) and then cached permanently. The loading is parallel: all three platforms' modules are fetched with `Promise.all()`. After loading, `initPlatformState()` is called to create the corresponding `PerPlatformState` entry.
+Modules are loaded through `loadPlatformUi()` and cached in `loadedModules`. In the current provider implementation that loading is done eagerly by `preloadAllPlatforms()` during `resolveWebviewView()`, so each registered platform has both its module bundle and state entry ready before the first render. After a module is loaded, `initPlatformState()` creates the corresponding `PerPlatformState` entry.
 
 The `getActiveBundle(id)` helper retrieves both maps together, returning `{ modules, state }` or `undefined`. This ensures the two maps stay synchronized — callers never work with state that has no matching modules, or vice versa.
 
@@ -150,7 +150,7 @@ This is the method that actually populates the panel. It runs on every platform 
 8. Sync memory refresh (start polling if on memory tab)
 ```
 
-When no platform is set yet (before the first debug session), the provider renders the TEC-1G webview as a default. This ensures the panel shows something meaningful even before the first launch.
+When no debug session is active, the provider still renders a platform webview so the project header and setup card remain interactive. The selected platform identity comes from the remembered workspace/project state rather than from an active runtime.
 
 ---
 
@@ -162,7 +162,7 @@ Inbound messages from the webview are typed as `PlatformViewInboundMessage` — 
 
 `handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
 
-- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing pickers. `setStopOnEntry` is handled inline by the provider — it updates `this.stopOnEntry` and refreshes the `projectStatus` payload.
+- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing additional pickers. `setStopOnEntry` is handled inline by the provider — it updates `this.stopOnEntry` and refreshes the `projectStatus` payload.
 - Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
 - `serialClear` calls `clearSerialBuffer` for the current platform.
 - Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
@@ -192,7 +192,7 @@ All messages are posted via `postMessage()`. The webview handles them in `window
 | `serial` | `text: string` | Incremental serial/terminal data |
 | `serialInit` | `text: string` | Full serial/terminal buffer on rehydration |
 | `serialClear` | — | Clear the serial/terminal display |
-| `projectStatus` | `roots[]`, `targets[]`, `rootName?`, `rootPath?`, `hasProject?`, `targetName?`, `entrySource?`, `platform?` | Workspace or project state changes |
+| `projectStatus` | `roots[]`, `targets[]`, `rootName?`, `rootPath?`, `projectState?`, `hasProject?`, `targetName?`, `entrySource?`, `platform?`, `stopOnEntry?` | Workspace or project state changes |
 | `sessionStatus` | `status: 'starting' \| 'running' \| 'paused' \| 'not running'` | Debug session state changes |
 | `selectTab` | `tab: 'ui' \| 'memory'` | Tab should be selected |
 | `snapshot` | Register and memory dump | Memory inspector refresh completes |
@@ -245,7 +245,7 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 | `openWorkspaceFolder` | — | Execute open folder command |
 | `selectProject` | `rootPath` | Execute workspace selection |
 | `configureProject` | — | No-op (config is now done via project header controls) |
-| `saveProjectConfig` | `platform: string` | Write `projectPlatform` + per-target `platform` to `debug80.json`, then restart debug |
+| `saveProjectConfig` | `platform: string` | Write `projectPlatform` + per-target `platform` to `debug80.json`, then restart debug. This is now effectively a legacy path because the platform selector is hidden once a project is initialized. |
 | `selectTarget` | `rootPath`, `targetName` | Execute target selection |
 | `restartDebug` | — | Execute restart debug command |
 | `setEntrySource` | — | Execute set entry source command |
@@ -358,16 +358,19 @@ Three shared modules translate the payload into rendering decisions:
 
 **`project-controls.ts`** — exports `applyInitializedProjectControls(payload, elements)`. Enforces which controls are visible based on `projectState`:
 
-| Control | `uninitialized` | `initialized` |
-|---------|----------------|---------------|
-| Platform selector | **visible** | hidden |
-| Target control | hidden | **visible** |
-| Stop on entry label | hidden | **visible** |
-| Restart button | hidden | **visible** |
-| Tabs (UI / Memory) | hidden | **visible** |
-| Panel content areas | hidden | **visible** |
+| Control | `noWorkspace` | `uninitialized` | `initialized` |
+|---------|--------------|----------------|---------------|
+| Platform selector | hidden | **visible** | hidden |
+| `platformInfoControl` | hidden | hidden | hidden |
+| Target control | hidden | hidden | **visible** |
+| Stop on entry label | hidden | hidden | **visible** |
+| Restart button | hidden | hidden | **visible** |
+| Tabs (UI / Memory) | hidden | hidden | **visible** |
+| Panel content areas | hidden | hidden | **visible** |
 
-The Platform selector is intentionally shown in the uninitialized state so the user can choose a platform before clicking Initialize Project. Once the project exists, the platform is stored in `debug80.json` and the selector is hidden.
+The Platform selector is intentionally shown in the uninitialized state so the user can choose a platform before clicking Initialize Project. Once the project exists, the platform is stored in `debug80.json` and the selector is hidden. The `platformInfoControl` element (a read-only platform label) is always hidden — it exists in the HTML for legacy reasons but is never made visible by `applyInitializedProjectControls`.
+
+Because VS Code webview stylesheets set `display: flex` on `.project-control` elements, the UA `[hidden]` → `display: none` rule is overridden. `webview/common/styles.css` includes an explicit `.project-control[hidden] { display: none }` rule, and likewise `.stop-on-entry-label[hidden] { display: none }`, to ensure hidden controls are correctly invisible.
 
 ---
 
@@ -411,7 +414,7 @@ The four built-in kits are:
 
 `project-kits.ts` exports two selection paths:
 
-**`getDefaultProjectKitForPlatform(platform)`** — returns the single default kit for a platform string (`'simple'`, `'tec1'`, or `'tec1g'`) without showing any picker. This is the path taken when the user clicks **Initialize Project** from the panel's uninitialized state: the platform value already shown in the Platform selector is passed directly, and the project is scaffolded immediately using the platform's bundle-first default kit (TEC-1 → `tec1/mon1b`; TEC-1G → `tec1g/mon3`; Simple → `simple/default`).
+**`getDefaultProjectKitForPlatform(platform)`** — returns the single default kit for a platform string (`'simple'`, `'tec1'`, or `'tec1g'`) without showing any picker. This is the path taken when the user clicks **Initialize Project** from the panel's uninitialized state: the platform value already shown in the Platform selector is passed directly, and the project is scaffolded immediately using the platform's bundle-first default kit (TEC-1 → `tec1/mon1b`; TEC-1G → `tec1g/mon3`; Simple → `simple/default`). In this path the scaffold does not ask for target name or source language; it creates `src/main.asm` and derives the initial target name from that file.
 
 **`chooseProjectKit(preselectedPlatform?)`** — the interactive path. Calls `getProjectKitChoices()` / `listProjectKits()`. If only one kit matches the platform, the picker is skipped. Otherwise a `showQuickPick()` prompt lists all matching kits. This path is used when the command is invoked without a pre-selected platform (e.g. from the Command Palette).
 
@@ -434,7 +437,9 @@ The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, ar
 - A `targets` section with one entry (`plan.targetName`) containing `sourceFile`, `outputDir`, `artifactBase`, `platform`, `profile`, and the platform-specific memory map block (`simple`, `tec1`, or `tec1g`). For kits with a `bundledProfile`, the target block also includes `romHex`, optional `extraListings`, and `sourceRoots`.
 - Top-level `projectVersion`, `projectPlatform`, `defaultProfile`, and `defaultTarget` fields.
 
-Bundled ROM files are **not copied during scaffolding**. They are written to the workspace the first time the project is launched, via `materializeBundledAsset()` resolving the `BundledAssetReference` entries.
+Bundled ROM files are **copied immediately during scaffolding**. After writing `debug80.json`, `scaffoldProject()` calls `materializeBundledRom(extensionUri, workspaceRoot, bundleRelPath)` to copy the ROM and listing files into the workspace straight away. If the `extensionUri` is not available (rare edge case), or the copy fails, a warning is shown but the project config is still written.
+
+As a safety net, `ensureBundledAssetsPresent()` in `src/extension/commands.ts` is also called at the start of every debug session. It checks each `BundledAssetReference` in the project config and silently copies any file that is missing — recovering projects created before eager scaffolding was introduced, or where files were accidentally deleted.
 
 ### Starter templates
 
@@ -472,9 +477,9 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - The memory refresh controller polls the adapter at 150 ms intervals when the memory tab is active and the panel is visible. Polling stops automatically on tab switch or panel hide.
 
-- Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It emits one of three `projectState` values and drives the project header (Project button, Target dropdown, Platform dropdown, Stop-on-entry checkbox, Restart button).
+- Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It emits one of three `projectState` values and drives the project header (Project button + `+` Add-folder button, Target dropdown, Platform dropdown, Stop-on-entry checkbox, Restart button).
 
-- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively (command palette path); `getDefaultProjectKitForPlatform()` selects the bundle-first default silently (panel initialization path). `createDefaultProjectConfig()` writes `profiles` and `targets` from the chosen kit. Bundled ROM files are not copied at scaffold time — they are materialized at first launch.
+- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively (command palette path); `getDefaultProjectKitForPlatform()` selects the bundle-first default silently (panel initialization path). `createDefaultProjectConfig()` writes `profiles` and `targets` from the chosen kit. Bundled ROM files are **copied eagerly during scaffolding** via `materializeBundledRom()`; `ensureBundledAssetsPresent()` acts as a safety net at session launch for older projects or accidentally deleted files.
 
 ---
 
