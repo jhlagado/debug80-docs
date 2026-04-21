@@ -201,7 +201,7 @@ On each `StoppedEvent`, the stack frame builder calls `findSegmentForAddress()` 
 
 ## Stack frame integration
 
-The `resolveStackFrame()` function in `src/debug/stack-service.ts` calls `findSegmentForAddress()` for each frame address. Three outcomes are possible:
+The `resolveStackFrame()` function in `src/debug/mapping/stack-service.ts` calls `findSegmentForAddress()` for each frame address. Three outcomes are possible:
 
 1. **Segment found, confidence HIGH or MEDIUM** — the frame shows the source file and line with a filled location icon.
 2. **Segment found, confidence LOW** — the frame shows the location with a warning icon; the editor highlights the approximate line.
@@ -213,7 +213,7 @@ This three-path behaviour is described in Chapter 5. The source mapper's confide
 
 ## SourceManager orchestration
 
-`SourceManager` in `src/debug/source-manager.ts` orchestrates the full mapping pipeline at launch:
+`SourceManager` in `src/debug/mapping/source-manager.ts` orchestrates the full mapping pipeline at launch:
 
 1. Receive the assembled listing path from the launch pipeline.
 2. Check for a D8 debug map at the conventional path (`<listing>.d8.json`).
@@ -221,7 +221,7 @@ This three-path behaviour is described in Chapter 5. The source mapper's confide
 4. If no D8 map: call `parseMapping()`, then `applyLayer2()`, then `buildSourceMapIndex()`.
 5. Store the `SourceMapIndex` on the session state for all subsequent lookups.
 
-The `SourceStateManager` (`src/debug/source-state-manager.ts`) wraps `SourceManager` and mediates access across multiple source files when the project has more than one assembled output (for example, separate ROM and RAM assembly runs).
+The `SourceStateManager` (`src/debug/mapping/source-state-manager.ts`) wraps `SourceManager` and mediates access across multiple source files when the project has more than one assembled output (for example, separate ROM and RAM assembly runs).
 
 ---
 

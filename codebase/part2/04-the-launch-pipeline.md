@@ -28,23 +28,23 @@ launchRequest arrives
     ├─ 2. Platform resolution         (platforms/manifest.ts)
     │     Lazy-load the platform provider → ResolvedPlatformProvider
     │
-    ├─ 3. Artifact path resolution    (launch-args.ts, path-resolver.ts)
+    ├─ 3. Artifact path resolution    (launch-args.ts, mapping/path-resolver.ts)
     │     Derive .hex, .lst, .asm paths → absolute file paths
     │
-    ├─ 4. Assembly                    (launch-pipeline.ts, assembler.ts)
+    ├─ 4. Assembly                    (launch-pipeline.ts, launch/assembler.ts)
     │     Invoke asm80 or zax assembler → .hex + .lst files on disk
     │
-    ├─ 5. Program loading             (program-loader.ts)
+    ├─ 5. Program loading             (launch/program-loader.ts)
     │     Parse HEX, build memory image → HexProgram + ListingInfo
     │
-    ├─ 6. Source mapping              (source-manager.ts, symbol-service.ts)
+    ├─ 6. Source mapping              (mapping/source-manager.ts, requests/symbol-service.ts)
     │     Parse listing + debug map → MappingIndex + SymbolIndex
     │
-    └─ 7. Runtime creation            (launch-sequence.ts)
+    └─ 7. Runtime creation            (launch/launch-sequence.ts)
           Create Z80Runtime with platform I/O → ready to execute
 ```
 
-All seven stages happen inside `buildLaunchSession()` in `src/debug/launch-sequence.ts`. The function takes the merged `LaunchRequestArguments` and a `LaunchSequenceContext` (callbacks for emitting events and sending responses) and returns a `LaunchSessionArtifacts` object.
+All seven stages happen inside `buildLaunchSession()` in `src/debug/launch/launch-sequence.ts`. The function takes the merged `LaunchRequestArguments` and a `LaunchSequenceContext` (callbacks for emitting events and sending responses) and returns a `LaunchSessionArtifacts` object.
 
 If any stage fails, the error propagates up to `handleLaunchRequest()` in the session class. Two error types receive special handling: `MissingLaunchArtifactsError` prompts the user to create a config file; `AssembleFailureError` formats the assembly diagnostic and sends it to both the Debug Console and the extension host.
 
@@ -52,7 +52,7 @@ If any stage fails, the error propagates up to `handleLaunchRequest()` in the se
 
 ## Stage 1: Configuration merge
 
-The raw `LaunchRequestArguments` from VS Code's `launch.json` is sparse — it might contain only a `projectConfig` path and a `target` name. `populateFromConfig()` in `src/debug/launch-args.ts` fills in the gaps by reading the project configuration file and merging its fields.
+The raw `LaunchRequestArguments` from VS Code's `launch.json` is sparse — it might contain only a `projectConfig` path and a `target` name. `populateFromConfig()` in `src/debug/launch-args.ts` fills in the gaps by reading the project configuration file and merging its fields. (Note: `launch-args.ts` remains at the `src/debug/` top level.)
 
 The merge follows the four-layer pipeline described in Chapter 2:
 
@@ -163,7 +163,7 @@ The resolution rules:
 - If an output directory is configured, artifacts go there. Otherwise they sit next to the source.
 - All paths are resolved to absolute.
 
-The base directory (`baseDir`) is resolved from the workspace root or the project config file's parent directory. Path resolution functions live in two files: `src/debug/launch-args.ts` for the pure logic (testable without VS Code) and `src/debug/path-resolver.ts` for the VS Code-aware version (uses `vscode.workspace.workspaceFolders`).
+The base directory (`baseDir`) is resolved from the workspace root or the project config file's parent directory. Path resolution functions live in two files: `src/debug/launch-args.ts` for the pure logic (testable without VS Code) and `src/debug/mapping/path-resolver.ts` for the VS Code-aware version (uses `vscode.workspace.workspaceFolders`).
 
 ---
 
@@ -185,7 +185,7 @@ assembleIfRequested({
 
 ### Assembler backend selection
 
-`resolveAssemblerBackend()` in `src/debug/assembler-backend.ts` chooses the assembler based on the `assembler` field in the launch arguments, or infers it from the file extension:
+`resolveAssemblerBackend()` in `src/debug/launch/assembler-backend.ts` chooses the assembler based on the `assembler` field in the launch arguments, or infers it from the file extension:
 
 | Extension | Backend |
 |-----------|---------|
@@ -207,7 +207,7 @@ interface AssemblerBackend {
 
 ### The asm80 invocation
 
-`runAssembler()` in `src/debug/assembler.ts` spawns the asm80 process:
+`runAssembler()` in `src/debug/launch/assembler.ts` spawns the asm80 process:
 
 ```
 asm80 -m Z80 -t hex -o <outputDir> <asmPath>
@@ -236,7 +236,7 @@ The assembly error is shown in three places: the Debug Console (full detail), th
 
 ## Stage 5: Program loading
 
-With the `.hex` and `.lst` files on disk, `loadProgramArtifacts()` in `src/debug/program-loader.ts` reads and parses them:
+With the `.hex` and `.lst` files on disk, `loadProgramArtifacts()` in `src/debug/launch/program-loader.ts` reads and parses them:
 
 ```typescript
 const { program, listingInfo, listingContent } = loadProgramArtifacts({
@@ -278,9 +278,9 @@ The raw listing content is also preserved — the source mapping stage needs it 
 
 Source mapping connects memory addresses to source file locations. This is what makes "set a breakpoint on line 12" work — the breakpoint manager needs to know which memory address corresponds to line 12.
 
-The source mapping stage has three parts: building the debug map, building the symbol index, and resolving source roots. As of the extraction described below, all of this is handled by `buildLaunchSourceState()` in `src/debug/launch-source-state.ts`. `launch-sequence.ts` calls it with the assembled inputs and receives a `LaunchSourceBuildResult` in return.
+The source mapping stage has three parts: building the debug map, building the symbol index, and resolving source roots. As of the extraction described below, all of this is handled by `buildLaunchSourceState()` in `src/debug/launch/launch-source-state.ts`. `launch-sequence.ts` calls it with the assembled inputs and receives a `LaunchSourceBuildResult` in return.
 
-### `buildLaunchSourceState()` — `src/debug/launch-source-state.ts`
+### `buildLaunchSourceState()` — `src/debug/launch/launch-source-state.ts`
 
 `buildLaunchSourceState()` owns the entire source-state setup for a launch. It was extracted from `launch-sequence.ts` because that file was handling too many concerns; the extraction gives source-state setup a single testable entry point with a well-defined input/output contract.
 
@@ -289,12 +289,12 @@ The function:
 1. **Resolves source roots** — walks `args.sourceRoots` and the assembly source directory to build the initial root list.
 2. **Instantiates `SourceManager`** — creates the manager with path-resolution callbacks for the current session and injects it into the `SourceStateManager`.
 3. **Calls `sourceState.build()`** — triggers listing load, D8 map detection, and `buildSourceMapIndex()` invocation via the manager.
-4. **Builds the symbol index** — calls `buildSymbolIndex()` from `src/debug/symbol-service.ts` and applies the lookup anchors back to `sourceState`.
+4. **Builds the symbol index** — calls `buildSymbolIndex()` from `src/debug/mapping/symbol-service.ts` and applies the lookup anchors back to `sourceState`.
 5. **Returns** a `LaunchSourceBuildResult` containing `sourceRoots`, `extraListingPaths`, `mapping`, `mappingIndex`, `symbolAnchors`, and `symbolList`.
 
 ### The SourceManager
 
-`SourceManager` in `src/debug/source-manager.ts` orchestrates source state construction. It is instantiated inside `buildLaunchSourceState()` and injected into the `SourceStateManager` wrapper. The manager's `buildState()` method coordinates the work:
+`SourceManager` in `src/debug/mapping/source-manager.ts` orchestrates source state construction. It is instantiated inside `buildLaunchSourceState()` and injected into the `SourceStateManager` wrapper. The manager's `buildState()` method coordinates the work:
 
 1. **Resolve the main source file** — prioritizes the ASM path, falls back to `sourceFile`, then derives from the listing path.
 2. **Resolve source roots** — directories where source files live, used to map relative paths in listings to absolute paths on disk.
@@ -315,7 +315,7 @@ If a debug map file exists and is not stale (newer than the listing), it is used
 
 ### The symbol index
 
-`buildSymbolIndex()` in `src/debug/symbol-service.ts` creates a searchable index of symbols (labels) and their addresses:
+`buildSymbolIndex()` in `src/debug/mapping/symbol-service.ts` creates a searchable index of symbols (labels) and their addresses:
 
 ```typescript
 const symbolIndex = buildSymbolIndex({
@@ -489,7 +489,7 @@ All three paths send an error response to VS Code, which shows the error and cle
 
 - Program loading builds a platform-specific memory image: plain for simple, ROM + RAM overlay for TEC-1/TEC-1G. The listing file is parsed for source mapping and symbol extraction.
 
-- Source mapping is handled by `buildLaunchSourceState()` in `src/debug/launch-source-state.ts`. This function owns `SourceManager` instantiation, listing load, D8 map detection, `buildSourceMapIndex()` invocation, and symbol list construction. It was extracted from `launch-sequence.ts` to give source-state setup a single testable entry point.
+- Source mapping is handled by `buildLaunchSourceState()` in `src/debug/launch/launch-source-state.ts`. This function owns `SourceManager` instantiation, listing load, D8 map detection, `buildSourceMapIndex()` invocation, and symbol list construction. It was extracted from `launch-sequence.ts` to give source-state setup a single testable entry point.
 
 - The Z80 runtime is created last, with platform I/O handlers and ROM protection ranges. Platform providers can finalize the runtime with additional setup after creation.
 

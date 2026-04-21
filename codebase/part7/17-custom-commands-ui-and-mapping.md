@@ -62,7 +62,7 @@ Command names follow the pattern `debug80/{platformId}{Verb}`. Use PascalCase fo
 
 ### Accessing the runtime
 
-The handlers close over `context.sessionState`. The session state shape (`src/debug/session-state.ts`) has typed fields for each platform's runtime (`tec1Runtime`, `tec1gRuntime`). Add your runtime field there:
+The handlers close over `context.sessionState`. The session state shape (`src/debug/session/session-state.ts`) has typed fields for each platform's runtime (`tec1Runtime`, `tec1gRuntime`). Add your runtime field there:
 
 ```typescript
 // In SessionStateShape:
@@ -300,7 +300,7 @@ Call `buildSourceMapIndex()` on the result as normal. Layer 2 and the index stru
 
 ### Plugging in a custom parser
 
-`SourceManager.buildState()` in `src/debug/source-manager.ts` is where the listing parser is invoked. The cleanest extension point is to pass a `parser` option:
+`SourceManager.buildState()` in `src/debug/mapping/source-manager.ts` is where the listing parser is invoked. The cleanest extension point is to pass a `parser` option:
 
 ```typescript
 buildState({

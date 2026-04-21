@@ -439,7 +439,7 @@ The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, ar
 
 Bundled ROM files are **copied immediately during scaffolding**. After writing `debug80.json`, `scaffoldProject()` calls `materializeBundledRom(extensionUri, workspaceRoot, bundleRelPath)` to copy the ROM and listing files into the workspace straight away. If the `extensionUri` is not available (rare edge case), or the copy fails, a warning is shown but the project config is still written.
 
-As a safety net, `ensureBundledAssetsPresent()` in `src/extension/commands.ts` is also called at the start of every debug session. It checks each `BundledAssetReference` in the project config and silently copies any file that is missing — recovering projects created before eager scaffolding was introduced, or where files were accidentally deleted.
+As a safety net, `ensureBundledAssetsPresent()` in `src/extension/bundle-asset-installer.ts` is also called at the start of every debug session. It checks each `BundledAssetReference` in the project config and silently copies any file that is missing — recovering projects created before eager scaffolding was introduced, or where files were accidentally deleted.
 
 ### Starter templates
 
@@ -479,7 +479,7 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It emits one of three `projectState` values and drives the project header (Project button + `+` Add-folder button, Target dropdown, Platform dropdown, Stop-on-entry checkbox, Restart button).
 
-- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively (command palette path); `getDefaultProjectKitForPlatform()` selects the bundle-first default silently (panel initialization path). `createDefaultProjectConfig()` writes `profiles` and `targets` from the chosen kit. Bundled ROM files are **copied eagerly during scaffolding** via `materializeBundledRom()`; `ensureBundledAssetsPresent()` acts as a safety net at session launch for older projects or accidentally deleted files.
+- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively (command palette path); `getDefaultProjectKitForPlatform()` selects the bundle-first default silently (panel initialization path). `createDefaultProjectConfig()` writes `profiles` and `targets` from the chosen kit. Bundled ROM files are **copied eagerly during scaffolding** via `materializeBundledRom()`; `ensureBundledAssetsPresent()` in `src/extension/bundle-asset-installer.ts` acts as a safety net at session launch for older projects or accidentally deleted files.
 
 ---
 

@@ -9,7 +9,7 @@ nav_order: 3
 
 # Appendix C — Session State Reference
 
-`SessionStateShape` in `src/debug/session-state.ts` is the central mutable store for a debug session. One instance is created per session and reset on each launch. All adapter logic that needs to share state reads and writes it directly.
+`SessionStateShape` in `src/debug/session/session-state.ts` is the central mutable store for a debug session. One instance is created per session and reset on each launch. All adapter logic that needs to share state reads and writes it directly.
 
 The module defines two ways to access the same data: **flat fields** and **domain views**. The flat fields (`runtime`, `listing`, `loadedProgram`, etc.) are the original surface and remain fully accessible for backward compatibility. The five domain-view interfaces (`source`, `launch`, `runtimeState`, `platform`, `ui`) are get/set proxies built by `createSessionState()` that close over the same underlying slots. Writing to `state.source.listing` and writing to `state.listing` affect the same value. New code should prefer the domain views to reduce coupling to the full flat shape.
 

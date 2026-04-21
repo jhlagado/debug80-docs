@@ -241,7 +241,7 @@ To add a new bundle (e.g. a different firmware version or a new platform ROM):
 2. Place the files there and create a `bundle.json` with `schemaVersion: 1`.
 3. Add a constant for the new relative path in `bundle-materialize.ts` (e.g. `BUNDLED_MON3_V2_REL`).
 4. Add a new `ProjectKit` entry in `project-kits.ts` with a `bundledProfile` referencing the new bundle.
-5. If the bundle should be available via the manual install command, add it to `buildBundledAssetFallbackPlans()` in `commands.ts`.
+5. If the bundle should be available via the manual install command, add it to `buildBundledAssetFallbackPlans()` in `src/extension/bundle-asset-installer.ts`.
 
 The manifest validator (`isBundleManifestV1`) checks `schemaVersion === 1`. Future schema versions would add a new `isBundleManifestV2` validator and a migration path, leaving V1 parsing unchanged.
 
@@ -255,7 +255,8 @@ The manifest validator (`isBundleManifestV1`) checks `schemaVersion === 1`. Futu
 | `src/extension/bundle-materialize.ts` | `materializeBundledAsset()`, `materializeBundledRom()`, `BUNDLED_MON1B_V1_REL`, `BUNDLED_MON3_V1_REL` |
 | `src/extension/project-kits.ts` | `ProjectKit` type with `bundledProfile`; kit registry for all platforms |
 | `src/extension/project-scaffolding.ts` | `createDefaultProjectConfig()` writes `bundledAssets` into profile from kit metadata |
-| `src/extension/commands.ts` | Registers `debug80.materializeBundledRom` command; calls `materializeBundledAsset()` |
+| `src/extension/commands.ts` | Registers `debug80.materializeBundledRom` command (thin shell; logic delegated to `bundle-asset-installer.ts`) |
+| `src/extension/bundle-asset-installer.ts` | `ensureBundledAssetsPresent()`, `buildBundledAssetFallbackPlans()`, and bundled asset install plan logic |
 | `resources/bundles/tec1/mon1b/v1/` | Shipped MON-1B bundle: `bundle.json`, `mon-1b.bin`, `mon-1b.lst` |
 | `resources/bundles/tec1g/mon3/v1/` | Shipped MON3 bundle: `bundle.json`, `mon3.bin`, `mon3.lst` |
 | `tests/extension/bundle-materialize.test.ts` | Unit tests for `materializeBundledRom()` and checksum mismatch handling |

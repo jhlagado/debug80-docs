@@ -52,10 +52,10 @@ The adapter is where the Z80 emulator lives. When VS Code says "continue," the a
 Key files:
 
 - `src/debug/adapter.ts` — the `Z80DebugSession` class, implementing DAP
-- `src/debug/adapter-request-controller.ts` — delegates DAP requests to specialised handlers
-- `src/debug/session-state.ts` — all per-session state: the runtime, source maps, breakpoints, run state
-- `src/debug/launch-sequence.ts` — the pipeline from "launch" to "Z80 is running"
-- `src/debug/runtime-control.ts` — execution control: run, step, pause
+- `src/debug/requests/adapter-request-controller.ts` — delegates DAP requests to specialised handlers
+- `src/debug/session/session-state.ts` — all per-session state: the runtime, source maps, breakpoints, run state
+- `src/debug/launch/launch-sequence.ts` — the pipeline from "launch" to "Z80 is running"
+- `src/debug/session/runtime-control.ts` — execution control: run, step, pause
 
 ### The webview
 
@@ -138,7 +138,7 @@ Debug80 has seven major subsystems. Each one owns a specific responsibility and 
 
 **What it does:** Assembles Z80 source files into loadable binaries. Two assembler backends are supported: asm80 (a traditional Z80 assembler) and ZAX (a structured assembler with functions and control flow). The pipeline also parses Intel HEX files to load program bytes into the emulated memory.
 
-**Where it lives:** `src/debug/assembler.ts`, `src/debug/asm80-backend.ts`, `src/debug/zax-backend.ts`, `src/z80/loaders.ts`
+**Where it lives:** `src/debug/launch/assembler.ts`, `src/debug/launch/asm80-backend.ts`, `src/debug/launch/zax-backend.ts`, `src/z80/loaders.ts`
 
 **Key flow:** Source file → assembler backend → Intel HEX binary + listing file + (optionally) D8 debug map → `parseHex()` → byte array loaded into Z80 memory.
 
