@@ -17,7 +17,7 @@ This chapter covers the webview's internal architecture: the common infrastructu
 
 ## Common infrastructure
 
-Three modules in `webview/common/` are shared by all platform panels.
+Five modules in `webview/common/` are shared by all platform panels.
 
 ### VS Code API bridge (`common/vscode.ts`)
 
@@ -88,6 +88,16 @@ The segment encoding matches the TEC-1 hardware: bit 0 is the top segment, bit 7
 
 `appendSerialText(element, text, maxLength)` appends text to a `<pre>` element and auto-scrolls to the bottom. If the total length would exceed `maxLength`, the oldest text is trimmed from the front. This prevents the serial display from growing without bound.
 
+### Project status UI (`common/project-status-ui.ts`)
+
+`createProjectStatusUi(vscode, elements, platform)` wires up the project header for a platform panel: it handles `projectStatus` messages, populates the Target dropdown, sets the Platform selector value, shows or hides controls via `applyInitializedProjectControls()`, and wires the Initialize button, target change handler, and stop-on-entry checkbox. This function consolidates the setup-card/target-dropdown/project-root wiring that was previously duplicated across `simple/index.ts`, `tec1/index.ts`, and `tec1g/tec1g-project-status-ui.ts`. All three platform panels now call `createProjectStatusUi()` from this shared module.
+
+`webview/tec1g/tec1g-project-status-ui.ts` re-exports from `webview/common/project-status-ui.ts` for backward compatibility rather than containing the implementation itself.
+
+### Create project helper (`common/create-project.ts`)
+
+`sendCreateProject(vscode, platform)` posts the `{ type: 'createProject', platform }` message to the extension host. It is used by all three platform webviews when the user clicks the Initialize button, replacing the copy-pasted `vscode.postMessage` calls that previously appeared in each platform's own entry point.
+
 ---
 
 ## Webview file structure
@@ -97,6 +107,14 @@ Each platform has its own directory under `webview/`:
 ```
 webview/
   common/           Shared utilities and styles
+    create-project.ts   sendCreateProject() helper used by all three platforms
+    project-status-ui.ts  createProjectStatusUi() — shared setup-card/target-dropdown/project-root wiring
+    memory-panel.ts
+    session-status.ts
+    vscode.ts
+    digits.ts
+    serial.ts
+    styles.css
   simple/           Simple platform panel
     index.html      HTML template
     index.ts        Entry point — project header, terminal display, memory inspector
@@ -321,7 +339,7 @@ The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root
 | `index.ts` | Composition root — DOM queries, module wiring, message dispatcher |
 | `entry-types.ts` | Shared types: `IncomingMessage`, `Tec1gUpdatePayload`, `Tec1gPanelTab`, `Tec1gSpeedMode` |
 | `tec1g-platform-update.ts` | `applyTec1gPlatformUpdate()` — applies a hardware update payload to all display components |
-| `tec1g-project-status-ui.ts` | `createTec1gProjectStatusUi()` — project header rendering and interaction |
+| `tec1g-project-status-ui.ts` | Re-exports `createProjectStatusUi` from `webview/common/project-status-ui.ts`; implementation is now shared |
 | `tec1g-tab-memory.ts` | `createTec1gTabMemory()` — tab switching, active-tab tracking, memory row sizing |
 | `tec1g-audio.ts` | `createTec1gAudio()` — Web Audio API speaker tone, mute button wiring |
 | `tec1g-keypad.ts` | `createTec1gKeypad()` — hex keypad, key map, physical keyboard wiring |

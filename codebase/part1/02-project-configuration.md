@@ -33,7 +33,7 @@ The current preference for `debug80.json` at the workspace root is deliberate. I
 
 ## The ProjectConfig type
 
-The config file is parsed into a `ProjectConfig` object, defined in `src/debug/types.ts`. The current model is a **versioned manifest** with backwards-compatible support for older root-level fields.
+The config file is parsed into a `ProjectConfig` object, defined in `src/debug/session/types.ts`. The current model is a **versioned manifest** with backwards-compatible support for older root-level fields.
 
 ```typescript
 interface ProjectConfig {

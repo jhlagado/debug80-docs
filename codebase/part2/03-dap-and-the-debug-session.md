@@ -125,7 +125,7 @@ Running inline means the adapter shares the Node.js event loop with the extensio
 
 ## The request controller
 
-`AdapterRequestController` in `src/debug/adapter-request-controller.ts` is where the work happens. It receives all the session's dependencies through an `AdapterRequestControllerDeps` interface and implements the logic for every DAP request.
+`AdapterRequestController` in `src/debug/requests/adapter-request-controller.ts` is where the work happens. It receives all the session's dependencies through an `AdapterRequestControllerDeps` interface and implements the logic for every DAP request.
 
 The controller exists to keep the session class small and to make the request-handling logic testable without needing a real `DebugSession` instance. Tests can create a controller with mock dependencies and call its methods directly.
 
@@ -194,7 +194,7 @@ Both `CommandRouter` and `PlatformRegistry` are simple classes — under 30 line
 
 ## Session state
 
-Every debug session has a single `SessionStateShape` object, defined in `src/debug/session-state.ts`. This is the most important data structure in the adapter — it holds everything about the current debug session in one place.
+Every debug session has a single `SessionStateShape` object, defined in `src/debug/session/session-state.ts`. This is the most important data structure in the adapter — it holds everything about the current debug session in one place.
 
 ```typescript
 interface SessionStateShape {

@@ -15,7 +15,7 @@ Once the launch pipeline finishes and the session state is populated, the debug 
 
 ## The execution loop
 
-The main execution function is `runUntilStopAsync()` in `src/debug/runtime-control.ts`. It runs the Z80 emulator one instruction at a time until one of five conditions stops it:
+The main execution function is `runUntilStopAsync()` in `src/debug/session/runtime-control.ts`. It runs the Z80 emulator one instruction at a time until one of five conditions stops it:
 
 1. A breakpoint is hit.
 2. A pause is requested.
@@ -157,7 +157,7 @@ Both execution functions also check for breakpoints and pause requests during St
 
 ### Storage
 
-`BreakpointManager` in `src/debug/breakpoint-manager.ts` maintains two data structures:
+`BreakpointManager` in `src/debug/mapping/breakpoint-manager.ts` maintains two data structures:
 
 - **`pendingBySource`** — a `Map<string, SourceBreakpoint[]>` keyed by source file path. This holds what the user has set, before verification against the source map.
 - **`active`** — a `Set<number>` of verified Z80 addresses. This is what the execution loop checks.
@@ -217,7 +217,7 @@ The address is skipped exactly once — after that step, `skipBreakpointOnce` is
 
 The TEC-1G has shadow RAM: a copy of the low 32KB (0x0000–0x7FFF) also visible at 0x8000–0xFFFF when shadow mode is enabled. A breakpoint set in user code at address 0x1000 should also fire if the CPU executes the same code via its shadow alias at 0x9000.
 
-`isBreakpointAddress()` in `src/debug/debug-addressing.ts` handles this:
+`isBreakpointAddress()` in `src/debug/mapping/debug-addressing.ts` handles this:
 
 ```typescript
 function isBreakpointAddress(address, options) {
@@ -262,7 +262,7 @@ Before stepping, `resolveUnmappedCall()` checks whether the current instruction 
 const unmappedReturn = resolveUnmappedCall();
 ```
 
-`getUnmappedCallReturnAddress()` in `src/debug/step-call-resolver.ts` decodes the opcode at the current PC. It handles all 16 CALL and RST variants, evaluating the condition flags to determine if the call would be taken, and reading the target address from the instruction encoding:
+`getUnmappedCallReturnAddress()` in `src/debug/session/step-call-resolver.ts` decodes the opcode at the current PC. It handles all 16 CALL and RST variants, evaluating the condition flags to determine if the call would be taken, and reading the target address from the instruction encoding:
 
 ```
 CALL nn (0xCD):  target = mem16(pc+1), return = pc+3
@@ -302,7 +302,7 @@ The flag is checked before anything else — before breakpoints, before stepping
 
 ### Stack trace
 
-When the program is stopped, VS Code requests a stack trace. The `stackTraceRequest()` handler calls `buildStackFrames()` in `src/debug/stack-service.ts` with the current PC.
+When the program is stopped, VS Code requests a stack trace. The `stackTraceRequest()` handler calls `buildStackFrames()` in `src/debug/mapping/stack-service.ts` with the current PC.
 
 The Z80 is a single-context machine — there is no reconstructed call chain. Debug80 returns a single stack frame named "main". The interesting part is resolving the source location.
 
@@ -357,7 +357,7 @@ Two custom DAP requests modify the live CPU state during a paused session:
 
 ### `debug80/registerWrite`
 
-`handleRegisterWriteRequest()` in `src/debug/register-request.ts` validates the request and writes to a register:
+`handleRegisterWriteRequest()` in `src/debug/requests/register-request.ts` validates the request and writes to a register:
 
 1. Check runtime exists.
 2. Check session is not running (register writes are only valid when paused).
@@ -369,7 +369,7 @@ The whitelist and decomposition logic mirror the `setVariableRequest` path. The 
 
 ### `debug80/memoryWrite`
 
-`handleMemoryWriteRequest()` in `src/debug/memory-write.ts` writes a single byte to memory:
+`handleMemoryWriteRequest()` in `src/debug/requests/memory-write.ts` writes a single byte to memory:
 
 1. Check runtime exists.
 2. Check session is not running.
