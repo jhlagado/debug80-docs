@@ -249,7 +249,7 @@ DOWN 3 2 1 0
 SHIFT
 ```
 
-`AD`/`GO`/`UP`/`DOWN` map to key codes 0x13, 0x12, 0x10, 0x11. Hex digits 0–F map to 0x00–0x0F. **Shift** (physical or on-screen) acts as a momentary **FN** modifier; additional shortcuts include **Space→AD**, **Enter→GO**, and **Escape→Reset** (aligning with the TEC-1G map). The keypad `div` is focusable (`tabIndex=0`); key routing runs only while the keypad has focus, and a `mousedown` handler on the UI panel (excluding native form controls) re-focuses the keypad so clicking the emulated front panel does not leave keyboard input targeting the parent document. See the **debug80** repository `README` for the panel keyboard shortcuts section (TEC-1 / TEC-1G).
+`AD`/`GO` and the two directional keys map to 0x13, 0x12, 0x10, 0x11. The same `tec-keypad-layout` tokens are used for both platforms: on the **TEC-1G** panel the keycaps are **◀** (left) and **▶** (right); on **TEC-1** hardware the physical switches are often labeled **UP**/**DOWN** but the webview uses the same chevron keycaps. Hex digits 0–F map to 0x00–0x0F. **Shift** (physical or on-screen) acts as a momentary **FN** modifier; additional shortcuts include **Space→AD**, **Enter→GO**, and **Escape→Reset** (aligning with the TEC-1G map). The keypad `div` is focusable (`tabIndex=0`); key routing runs only while the keypad has focus, and a `mousedown` handler on the UI panel (excluding native form controls) re-focuses the keypad so clicking the emulated front panel does not leave keyboard input targeting the parent document. See the **debug80** repository `src/platforms/tec1/README.md` and `src/platforms/tec1g/README.md` for the panel keyboard shortcut tables.
 
 Each key click or keydown sends `{ type: 'key', code: number }` to the extension host.
 
