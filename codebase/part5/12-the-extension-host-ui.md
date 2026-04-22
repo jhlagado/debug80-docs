@@ -144,11 +144,13 @@ This is the method that actually populates the panel. It runs on every platform 
 2. Post projectStatus (workspace roots, targets, selected target, active platform)
 3. Post sessionStatus (running/paused/not running)
 4. Post full update snapshot (hardware state for TEC-1/TEC-1G; empty for Simple)
-5. If TEC-1G and uiVisibility override is set, post uiVisibility
+5. For TEC-1G: merge and post `uiVisibility` (defaults → launch `tec1g.uiVisibility` if any → workspace Memento per target) with `persist: true` so the webview and `getState` stay aligned
 6. Post serialInit (full buffered serial/terminal text, if any)
 7. Post selectTab (active tab)
 8. Sync memory refresh (start polling if on memory tab)
 ```
+
+`mergeAndPostTec1gPanelVisibility()` is also invoked when `refreshProjectStatus()` reposts project metadata (e.g. after target change) and after `setTec1gAdapterVisibility()` runs from the `debug80/platform` custom event, but it is **not** tied to every lightweight `postProjectStatus()` (such as stop-on-entry toggles) to avoid spuriously overwriting the in-flight webview.
 
 When no debug session is active, the provider still renders a platform webview so the project header and setup card remain interactive. The selected platform identity comes from the remembered workspace/project state rather than from an active runtime.
 
@@ -163,6 +165,7 @@ Inbound messages from the webview are typed as `PlatformViewInboundMessage` — 
 `handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
 
 - Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing additional pickers. `setStopOnEntry` is handled inline by the provider — it updates `this.stopOnEntry` and refreshes the `projectStatus` payload.
+- `saveTec1gPanelVisibility` (TEC-1G) carries `visibility` and optional `targetName` and is handled by the provider before the platform-adapter path — it updates `workspaceState` under `debug80.tec1g.uiVisibilityByTarget` and does not require an active `z80` session.
 - Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
 - `serialClear` calls `clearSerialBuffer` for the current platform.
 - Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
@@ -197,7 +200,7 @@ All messages are posted via `postMessage()`. The webview handles them in `window
 | `selectTab` | `tab: 'ui' \| 'memory'` | Tab should be selected |
 | `snapshot` | Register and memory dump | Memory inspector refresh completes |
 | `snapshotError` | `message?: string` | Memory snapshot request failed |
-| `uiVisibility` | `visibility: Record<string, boolean>`, `persist: boolean` | TEC-1G section visibility changes |
+| `uiVisibility` | `visibility: Record<string, boolean>`, `persist: boolean` | TEC-1G section visibility (merged payload; `persist: true` also mirrors into webview `setState` when the controller applies the message) |
 
 The TEC-1G `update` message carries additional fields not present in TEC-1:
 
@@ -252,6 +255,7 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 | `serialSendFile` | — | File picker → character-by-character send (TEC-1/TEC-1G) |
 | `serialSave` | `text` | Save dialog → write file |
 | `serialClear` | — | Clear serial/terminal buffer |
+| `saveTec1gPanelVisibility` | `visibility`, optional `targetName` | Provider persists TEC-1G section toggles to workspace Memento (see `platform-view-messages` bullet above) |
 | `key` | `code: number` | Platform adapter → adapter custom request |
 | `reset` | — | Platform adapter → adapter custom request |
 | `speed` | `mode` | Platform adapter → adapter custom request |
@@ -293,7 +297,7 @@ The types shared between the extension host and webview are defined in `src/cont
 
 - **`PlatformId`** — `'simple' | 'tec1' | 'tec1g'`; the canonical platform identifier used throughout the extension and webview.
 - **`ProjectStatusPayload`** — the shape of the `projectStatus` message body. The key field is `projectState?: 'noWorkspace' | 'uninitialized' | 'initialized'`, which drives control visibility in the webview. Other fields: `roots[]`, `targets[]`, `rootName`, `rootPath`, `hasProject` (legacy compat), `targetName`, `entrySource`, `platform`, and `stopOnEntry` (the current global stop-on-entry toggle value).
-- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `restartDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `setStopOnEntry`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message carries an optional `platform?: string` field that, when present, selects the default kit for that platform without showing pickers. The `setStopOnEntry` message carries `{ stopOnEntry: boolean }` and updates the provider's global toggle.
+- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `restartDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `setStopOnEntry`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`, `saveTec1gPanelVisibility`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message carries an optional `platform?: string` field that, when present, selects the default kit for that platform without showing pickers. The `setStopOnEntry` message carries `{ stopOnEntry: boolean }` and updates the provider's global toggle. The `saveTec1gPanelVisibility` message carries the full section visibility object and an optional `targetName` to key workspace persistence.
 - **`PlatformViewInboundMessage`** — the full union of all messages the extension host can receive: `PlatformViewControlMessage | Tec1Message | Tec1gMessage | { type?: string; [key: string]: unknown }`.
 
 This file is the authoritative definition of the message boundary. Platform-view-messages.ts imports `PlatformViewInboundMessage` directly from it.
@@ -439,6 +443,8 @@ The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, ar
 
 Bundled ROM files are **copied immediately during scaffolding**. After writing `debug80.json`, `scaffoldProject()` calls `materializeBundledRom(extensionUri, workspaceRoot, bundleRelPath)` to copy the ROM and listing files into the workspace straight away. If the `extensionUri` is not available (rare edge case), or the copy fails, a warning is shown but the project config is still written.
 
+When the scaffold **creates** new files in this pass (`debug80.json` and/or a new `.vscode/launch.json`), it also calls `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` to create or append a standard **Debug80**-marked ignore block (see Chapter 2).
+
 As a safety net, `ensureBundledAssetsPresent()` in `src/extension/bundle-asset-installer.ts` is also called at the start of every debug session. It checks each `BundledAssetReference` in the project config and silently copies any file that is missing — recovering projects created before eager scaffolding was introduced, or where files were accidentally deleted.
 
 ### Starter templates
@@ -471,7 +477,7 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - The provider holds two parallel maps: `platformStates` (hardware state, serial buffer, tab) and `loadedModules` (behaviour — HTML generation, state serialization, message handling). Modules are loaded once at startup via `preloadAllPlatforms()` and cached permanently. `PlatformUiModules` in `platform-view-manifest.ts` is the interface every platform UI must satisfy.
 
-- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `projectState`, `platform`, `stopOnEntry`), `PlatformViewControlMessage` (includes `setStopOnEntry`, `saveProjectConfig`, `createProject` with optional `platform?`), and `PlatformViewInboundMessage`.
+- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `projectState`, `platform`, `stopOnEntry`), `PlatformViewControlMessage` (includes `setStopOnEntry`, `saveProjectConfig`, `createProject` with optional `platform?`, `saveTec1gPanelVisibility` for TEC-1G section persistence), and `PlatformViewInboundMessage`.
 
 - `registerExtensionPlatform()` in `platform-extension-model.ts` is the unified API for registering both the runtime and UI concerns of a platform in a single call.
 

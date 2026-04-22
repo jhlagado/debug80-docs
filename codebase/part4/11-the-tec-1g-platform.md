@@ -233,7 +233,9 @@ The GLCD is an ST7920 controller driving a 128×64 pixel monochrome display. Por
 - Addressing registers: `addrY`, `addrX`, and bank bits
 - Control flags: display on, graphics mode, extended register mode, cursor blink
 
-The GDRAM addressing scheme interleaves two 64-pixel banks horizontally. Each DDRAM address maps to a 16-pixel wide column; the bank bit selects the left or right half. The webview receives the full GDRAM array and renders it as a bitmap.
+The GDRAM addressing scheme interleaves two 64-pixel wide regions horizontally. The emulated **column address** is a full 4-bit value (0–15): the **active ST7920 chip (upper vs lower 64×64)** is selected from **bit 3** of that counter, and auto-increment is capped at 0x0F per the datasheet, **not** masked to 3 bits. This matters for monitor code paths such as `clearGrLCD` that write 16 words per display row in one pass, relying on X auto-increment to walk across both chips — an earlier 3-bit column mask would leave the lower half of the display uncleared.
+
+The webview receives the full GDRAM array and renders it as a bitmap.
 
 ---
 
