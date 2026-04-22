@@ -170,6 +170,12 @@ for each segment with lstText defined:
 
 When Layer 2 encounters a run of listing lines that all correspond to the same source line (the hallmark of a macro expansion), it marks the entire run as a single macro block and assigns the source line of the macro call site. This prevents the expansion's internal instructions from being incorrectly attributed to whichever source line happens to have matching text.
 
+### Include-anchor remapping and segment propagation
+
+asm80 sometimes attributes every byte of an included routine to the **parent** file (e.g. `packages.z80`) even when the listing text clearly belongs to a **sibling** include (e.g. `glcd_library.z80`). Layer2 can **remap** the anchor when the symbol table points at the wrong file: it searches other `.z80`/`.asm` files in the same directory for a definition at the reported line and repoints the anchor.
+
+**Propagation** (`propagateMisassignedIncludeSegments` in `src/mapping/layer2.ts`) extends that fix: after the remapped entry address, every segment that still carried the wrong parent file is retagged until the next genuine symbol in the parent file, so **step-in**, **stack frames**, and breakpoints track the include file for the full body of each routine — not only the entry label.
+
 ### Confidence degradation
 
 When Layer 2 cannot find a text match for a segment:
@@ -184,6 +190,8 @@ When Layer 2 cannot find a text match for a segment:
 When a D8 debug map is available, `buildMappingFromD8DebugMap()` in `src/mapping/d8-map.ts` builds the segment list directly from the D8 data rather than parsing the listing. Each `D8Segment` in each file entry becomes a `SourceMapSegment` with `confidence: HIGH`.
 
 The listing file is still read — its text content is loaded into a lookup table for Layer 2 to use, but Layer 2 runs in verification mode only: it confirms HIGH-confidence segments rather than trying to repair LOW-confidence ones. Any segment that fails text verification is downgraded from HIGH to MEDIUM, not discarded.
+
+**Native D8 maps** previously skipped the listing-only Layer2 pipeline, so the same asm80 mis-attribution (parent file on every byte of an included library) could persist. The mapper now runs the **include-anchor remapping** pass after `buildMappingFromD8DebugMap()` and syncs only **affected** addresses into the mapping service, so native maps get the same sibling-file correction as listing-built maps.
 
 `parseD8DebugMap()` handles the JSON parse with schema validation. If the `version` field is not `1`, or if required fields are missing, it throws. The caller falls back to listing-only parsing.
 
@@ -217,8 +225,8 @@ This three-path behaviour is described in Chapter 5. The source mapper's confide
 
 1. Receive the assembled listing path from the launch pipeline.
 2. Check for a D8 debug map at the conventional path (`<listing>.d8.json`).
-3. If D8 map found: call `buildMappingFromD8DebugMap()`, then `buildSourceMapIndex()`.
-4. If no D8 map: call `parseMapping()`, then `applyLayer2()`, then `buildSourceMapIndex()`.
+3. If D8 map found: call `buildMappingFromD8DebugMap()`, apply the **remap + propagate** passes for include mis-attribution, then `buildSourceMapIndex()`.
+4. If no D8 map: call `parseMapping()`, then `applyLayer2()` (which includes remap and propagate), then `buildSourceMapIndex()`.
 5. Store the `SourceMapIndex` on the session state for all subsequent lookups.
 
 The `SourceStateManager` (`src/debug/mapping/source-state-manager.ts`) wraps `SourceManager` and mediates access across multiple source files when the project has more than one assembled output (for example, separate ROM and RAM assembly runs).
@@ -232,8 +240,8 @@ The `SourceStateManager` (`src/debug/mapping/source-state-manager.ts`) wraps `So
 - `buildSourceMapIndex()` produces three indexes: address-sorted, file/line-grouped, and anchors-by-file.
 - `findSegmentForAddress()` binary searches by address and prefers the narrowest span among candidates.
 - `resolveLocation()` slop-searches ±4 lines from the requested line before falling back to the nearest anchor.
-- Layer 2 normalises and compares listing and source text to upgrade MEDIUM confidence and catch listing/source misalignments; macro blocks are detected and collapsed.
-- D8 maps bypass listing inference entirely and produce HIGH-confidence segments; Layer 2 runs in verification mode only.
+- Layer 2 normalises and compares listing and source text to upgrade MEDIUM confidence and catch listing/source misalignments; macro blocks are detected and collapsed. Include **anchor remapping** and **propagation of mis-attributed include segments** correct asm80 file attribution for `.include`d libraries.
+- D8 maps bypass listing inference entirely and produce HIGH-confidence segments; the same **include remapping** can run on native D8-built maps, and listing text is still used for verification-only Layer2 passes.
 - Breakpoint binding calls `resolveLocation()`; stack frame resolution calls `findSegmentForAddress()`. Confidence levels drive the VS Code UI: hollow breakpoints, approximate-location warnings, and raw-address fallbacks.
 
 ---

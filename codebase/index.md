@@ -8,11 +8,21 @@ has_children: true
 
 A technical reference for engineers working with the debug80 codebase.
 
-This manual is updated against the codebase state through **2026-04-20**. The most important recent shifts are:
+This manual is updated against the codebase state through **2026-04-22**. The most important **recent** shifts (including work landed on `main` in the last day) are:
 
-- the project manifest has moved to the version 2 model (`projectVersion`, `projectPlatform`, `profiles`, `defaultProfile`, `bundledAssets`)
+- **Scaffold:** new projects can merge a standard **Debug80** `.gitignore` block (extension cache, `outputDir`, optional `.vscode/launch.json`, OS junk) via `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts`, invoked from `scaffoldProject()`.
+- **TEC-1G panel UI:** section checkboxes (7-seg, LCD, GLCD, 8×8, etc.) **persist** — merge order is built-in defaults → `debug80.json` `tec1g.uiVisibility` (from the active launch) → **workspace** `Memento` keyed by **debug target** (`debug80.tec1g.uiVisibilityByTarget`). The webview posts `saveTec1gPanelVisibility` when checkboxes change; the extension no longer re-broadcasts a stale launch-only override on every HTML rehydration in a way that clobbered user choices.
+- **Mapping / MON-style includes:** Layer2 **include-anchor remapping** and **propagation of mis-attributed include segments** fix stepping and stack frames when asm80 attributes bytes to the parent file but the real code lives in a sibling include (e.g. `glcd_library.z80`); the same remap runs on **native `.d8.json`** maps (not only listing-derived mapping).
+- **Z80 / debugger:** a single **Step** over the **ED** block-repeat instructions (LDIR, LDDR, CPIR, CPDR, INIR, INDR, OTIR, OTDR) runs the instruction to completion in one user-visible step; **DJNZ** is *not* treated as a block-repeat bulk op.
+- **ST7920 / GLCD:** the emulator keeps a full **4-bit** column counter and derives the **upper/lower 64×64 chip bank** from it so routines such as `clearGrLCD` that rely on X auto-increment can clear the full 128×64 surface in one pass.
+- **Webview (TEC-1 + TEC-1G):** shared **common/** modules (serial UI, Web Audio core, matrix renderer, seven-seg display, keypad core, TEC keycap layout, styles) replaced large duplicated platform trees; panel **layout, focus, and keyboard shortcuts** were reworked (focus-gated keypad, panel click-to-focus, Space/Escape/Shift behaviour — see in-repo `README` / platform `README` for binding tables).
+- **Extension:** on open, **`.z80` / `.a80` / `.s`** are assigned the `z80-asm` language id so decorations and breakpoints align with `files.associations` in `package.json`.
+
+**Longer-standing** architecture notes:
+
+- the project manifest uses the version 2 model (`projectVersion`, `projectPlatform`, `profiles`, `defaultProfile`, `bundledAssets`)
 - project creation and first launch can materialize bundled ROM assets into the workspace automatically
-- the panel lifecycle is now explicitly three-state: `noWorkspace`, `uninitialized`, `initialized`
+- the panel lifecycle is three-state: `noWorkspace`, `uninitialized`, `initialized`
 - the project header owns project selection, target selection, stop-on-entry, restart, and workspace-folder addition
 - several debug/extension responsibilities were split or consolidated, notably memory snapshot handling and mapping-cache decisions
 

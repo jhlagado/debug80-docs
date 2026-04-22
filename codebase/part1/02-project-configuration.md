@@ -377,7 +377,7 @@ interface Tec1gPlatformConfig extends Tec1PlatformConfig {
 }
 ```
 
-The `uiVisibility` field controls which hardware sections appear in the webview panel. This is a convenience — not all programs use all peripherals, and hiding unused sections keeps the UI clean.
+The `uiVisibility` field sets **defaults from config** for which hardware sections are shown in the TEC-1G webview. At run time, the extension **merges** that with the built-in default visibility map and with **per-target** preferences stored in workspace `Memento` under `debug80.tec1g.uiVisibilityByTarget` (see Chapter 12). Committing `uiVisibility` in `debug80.json` is therefore optional; personal layout choices can live entirely in workspace state, keyed by target name.
 
 ---
 
@@ -398,7 +398,9 @@ When a user creates a new project, the scaffolding system generates the config f
    - `debug80.json` at the workspace root
    - bundled ROM assets for kits that ship them
 
-5. **Optionally write launch.json.** `.vscode/launch.json` is created only when the caller asked for launch scaffolding as well. The plain project-init path no longer creates an empty `.vscode` folder.
+5. **Merge `.gitignore`.** `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` appends a small, idempotent **Debug80**-marked block if one is not already present: `.debug80/` cache, the scaffold `outputDir` (e.g. `build/`), `out/` and `dist/`, `.vscode/launch.json` (local-only; the extension can still provide a default launch), and common OS files. The block does **not** ignore the entire `.vscode/` tree, so `debug80.json` can still live at `.vscode/debug80.json` if you prefer.
+
+6. **Optionally write launch.json.** `.vscode/launch.json` is created only when the caller asked for launch scaffolding as well. The plain project-init path no longer creates an empty `.vscode` folder.
 
 ### The default config
 

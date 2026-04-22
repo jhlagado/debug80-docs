@@ -281,6 +281,14 @@ if (unmappedReturn !== null && trace.kind && trace.taken) {
 
 This is the mechanic that makes Step Into feel right: you step into your own code, you skip past ROM calls.
 
+### Single step vs. ED block-repeat instructions
+
+A normal **single-instruction** `step` executes one `execute()` in the Z80 core. A small set of **ED-prefixed** block-repeat instructions (LDIR, LDDR, CPIR, CPDR, INIR, INDR, OTIR, OTDR) re-enter the *same* instruction while internal counters run down — a naive step would keep the stopped PC on the same **source** line for thousands of micro-iterations.
+
+`stepRuntime` in `src/z80/runtime.ts` detects when the current instruction is one of these block-repeat opcodes and loops `execute()` until the program counter **leaves** that instruction, so a single user Step advances to the *next* op in one visible stop. The loop has an **iteration cap** to avoid pathological hangs.
+
+**DJNZ** is **not** included: it is a conditional branch, not a bulk data move. Step advances one DJNZ at a time. (If a future “step over inner loop” behaviour is needed for DJNZ, it would use a different mechanism, such as a temporary breakpoint on the fall-through path.)
+
 ### Pause (`pauseRequest`)
 
 Pause sets the `pauseRequested` flag in the run state. The execution loop checks this flag at the start of each iteration:
@@ -410,6 +418,7 @@ The snapshot is taken exactly once — the first time the PC reaches the applica
 - Step Over uses the runtime's trace output to detect taken calls, then runs to the return address as an extra breakpoint. Step Into uses opcode decoding to distinguish calls to mapped user code (step into) from calls to unmapped ROM (step over).
 
 - Step Out runs `runUntilReturnAsync()`, which stops when a `ret` instruction brings the call depth below the baseline.
+- The Z80 runtime can complete a single **ED** block-repeat instruction in one step (not **DJNZ**), so the debugger does not appear “stuck” on the same source line while BC runs down.
 
 - The Variables pane is populated from the CPU state. Register pairs are assembled from 8-bit components; flags are shown as both a packed byte and a character string. Registers can be edited in-line.
 
