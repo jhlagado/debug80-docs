@@ -8,6 +8,8 @@ has_children: true
 
 A technical reference for engineers working with the debug80 codebase.
 
+[Read this publication as a single page](single-page/) for screen readers, browser reading mode, or offline capture.
+
 This manual is updated against the codebase state through **2026-04-22**. The most important **recent** shifts (including work landed on `main` in the last day) are:
 
 - **Scaffold:** new projects can merge a standard **Debug80** `.gitignore` block (extension cache, `outputDir`, optional `.vscode/launch.json`, OS junk) via `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts`, invoked from `scaffoldProject()`.

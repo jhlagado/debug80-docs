@@ -1,0 +1,9 @@
+- root: codebase
+  title: Understanding the debug80 Codebase
+  description: A single-page reader version of the debug80 engineering manual.
+- root: zax-codebase
+  title: Understanding the ZAX Compiler
+  description: A single-page reader version of the ZAX compiler engineering manual.
+- root: zax-book
+  title: Learn ZAX Assembly
+  description: A single-page reader version of the ZAX assembly course.
