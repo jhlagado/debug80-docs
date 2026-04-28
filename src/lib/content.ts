@@ -124,7 +124,7 @@ export function getNavigation(): NavItem[] {
 }
 
 export function markdownToHtml(body: string, page: DocPage, readerAnchors?: Map<string, string>): string {
-  const cleanedBody = stripNavigationRows(stripReaderLinks(body));
+  const cleanedBody = stripNavigationRows(body);
   return renderMarkdown(rewriteMarkdownLinks(cleanedBody, page, readerAnchors));
 }
 

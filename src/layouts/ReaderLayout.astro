@@ -1,5 +1,5 @@
 ---
-import type { PublicationConfig } from "../lib/content";
+import { withBase, type PublicationConfig } from "../lib/content";
 
 interface Props {
   title: string;
@@ -16,14 +16,14 @@ const { title, description, publication } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} | debug80 Docs</title>
     <meta name="description" content={description ?? "Technical documentation for debug80 and ZAX."} />
-    <link rel="icon" href={`${import.meta.env.BASE_URL}assets/images/favicon.svg`} />
-    <style>
+    <link rel="icon" href={withBase("/assets/images/favicon.svg")} />
+    <style is:global>
       :root {
         color-scheme: light dark;
         --reader-background: #111318;
         --reader-foreground: #f2f4f8;
         --reader-muted: #b7bfcc;
-        --reader-link: #8ab4ff;
+        --reader-link: #b8d7ff;
         --reader-border: #3a4353;
         --reader-code: #1d2430;
       }
@@ -49,6 +49,7 @@ const { title, description, publication } = Astro.props;
 
       a {
         color: var(--reader-link);
+        text-underline-offset: 0.18em;
       }
 
       h1,
