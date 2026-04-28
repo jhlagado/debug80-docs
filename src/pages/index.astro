@@ -1,0 +1,15 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { getHomePage, markdownToHtml } from "../lib/content";
+
+const page = getHomePage();
+const content = markdownToHtml(page.body, page);
+---
+
+<SiteLayout
+  title={page.frontmatter.title ?? "Home"}
+  description="Technical documentation for the debug80 Z80 debugger extension and the ZAX assembler"
+  currentPath="/"
+>
+  <article class="doc-page" set:html={content} />
+</SiteLayout>

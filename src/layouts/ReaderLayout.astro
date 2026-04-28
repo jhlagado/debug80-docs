@@ -1,0 +1,143 @@
+---
+import { withBase, type PublicationConfig } from "../lib/content";
+
+interface Props {
+  title: string;
+  description?: string;
+  publication: PublicationConfig;
+}
+
+const { title, description, publication } = Astro.props;
+---
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | debug80 Docs</title>
+    <meta name="description" content={description ?? "Technical documentation for debug80 and ZAX."} />
+    <link rel="icon" href={withBase("/assets/images/favicon.svg")} />
+    <style is:global>
+      :root {
+        color-scheme: light dark;
+        --reader-background: #111318;
+        --reader-foreground: #f2f4f8;
+        --reader-muted: #b7bfcc;
+        --reader-link: #b8d7ff;
+        --reader-border: #3a4353;
+        --reader-code: #1d2430;
+      }
+
+      html {
+        font-size: 18px;
+        line-height: 1.65;
+      }
+
+      body {
+        margin: 0;
+        background: var(--reader-background);
+        color: var(--reader-foreground);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        box-sizing: border-box;
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 5rem;
+      }
+
+      a {
+        color: var(--reader-link);
+        text-underline-offset: 0.18em;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        line-height: 1.25;
+      }
+
+      h1 {
+        margin-top: 0;
+        font-size: clamp(2rem, 8vw, 4rem);
+      }
+
+      h2 {
+        border-top: 1px solid var(--reader-border);
+        margin-top: 3rem;
+        padding-top: 2rem;
+      }
+
+      .reader-intro {
+        color: var(--reader-muted);
+        font-size: 1.1rem;
+      }
+
+      .skip-link {
+        background: var(--reader-foreground);
+        color: var(--reader-background);
+        left: 1rem;
+        padding: 0.5rem 0.75rem;
+        position: absolute;
+        top: 1rem;
+        transform: translateY(-200%);
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .reader-section {
+        margin-top: 2rem;
+      }
+
+      code,
+      pre {
+        background: var(--reader-code);
+        border-radius: 0.25rem;
+      }
+
+      code {
+        padding: 0.1rem 0.25rem;
+      }
+
+      pre {
+        overflow-x: auto;
+        padding: 1rem;
+      }
+
+      pre code {
+        padding: 0;
+      }
+
+      table {
+        border-collapse: collapse;
+        display: block;
+        overflow-x: auto;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--reader-border);
+        padding: 0.35rem 0.6rem;
+      }
+
+      blockquote {
+        border-left: 0.25rem solid var(--reader-border);
+        color: var(--reader-muted);
+        margin-left: 0;
+        padding-left: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#reader-content">Skip to reader content</a>
+    <main id="reader-content">
+      <h1>{publication.title}</h1>
+      {description && <p class="reader-intro">{description}</p>}
+      <slot />
+    </main>
+  </body>
+</html>

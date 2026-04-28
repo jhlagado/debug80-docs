@@ -8,6 +8,8 @@ has_children: true
 
 A two-part course in Z80 assembly programming using the ZAX assembler, written for the debug80 ecosystem.
 
+[Read this publication as a single page](single-page/) for screen readers, browser reading mode, and offline capture.
+
 ---
 
 ## [Introduction](introduction.md)

@@ -10,6 +10,8 @@ A chapter-by-chapter engineering reference for the ZAX structured assembler. Cov
 
 > **Audience** — Someone reading the ZAX source code for the first time and wanting a coherent mental model before diving in. By the end you should be able to open any file in `src/`, understand which phase it belongs to, why it exists, and how it connects to its neighbours.
 
+[Read as a single page](single-page/) for screen readers or continuous reading.
+
 ---
 
 ## [Part I — Orientation](part1/)
