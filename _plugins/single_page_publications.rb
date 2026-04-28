@@ -124,13 +124,14 @@ module SinglePagePublications
       data = front_matter(file)
       body = File.read(file).sub(FRONT_MATTER, "")
       body = strip_navigation_rows(body)
+      body = strip_reader_links(body)
       body = remove_first_heading(body)
       body = rewrite_links(site, file, body, anchors)
       title = data.fetch("title", File.basename(file, ".md"))
       anchor = anchors.fetch(file)
 
       <<~MARKDOWN
-        <section id="#{anchor}" class="reader-section">
+        <section id="#{anchor}" class="reader-section" markdown="1">
 
         ## #{title}
 
@@ -147,6 +148,10 @@ module SinglePagePublications
       lines.pop while lines.last&.strip == ""
       lines.pop if navigation_row?(lines.last)
       lines.join
+    end
+
+    def strip_reader_links(body)
+      body.lines.reject { |line| line.include?("single-page/") && line.match?(/single page/i) }.join
     end
 
     def remove_first_heading(body)
