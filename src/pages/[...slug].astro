@@ -1,0 +1,17 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { getAllPages, markdownToHtml } from "../lib/content";
+
+export function getStaticPaths() {
+  return getAllPages()
+    .map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const content = markdownToHtml(page.body, page);
+const title = page.frontmatter.title ?? "Untitled";
+---
+
+<SiteLayout title={title} currentPath={`/${page.route}`}>
+  <article class="doc-page" set:html={content} />
+</SiteLayout>

@@ -1,0 +1,54 @@
+---
+import ReaderLayout from "../../../layouts/ReaderLayout.astro";
+import {
+  getPublication,
+  getPublications,
+  getReaderSections,
+  readerMarkdownToHtml,
+  withBase,
+  type PublicationConfig,
+} from "../../../lib/content";
+
+export function getStaticPaths() {
+  return getPublications().map((publication: PublicationConfig) => ({
+    params: { publication: publication.root },
+  }));
+}
+
+const publication = getPublication(Astro.params.publication ?? "");
+if (!publication) {
+  return Astro.redirect("/404");
+}
+
+const sections = getReaderSections(publication);
+const renderedSections = sections.map((section) => ({
+  ...section,
+  html: readerMarkdownToHtml(section.body, section.page, sections),
+}));
+---
+
+<ReaderLayout title={`${publication.title} - Single-page reader`} publication={publication} description={publication.description}>
+  <p class="reader-note">Single-page reader version. <a href={withBase(`/${publication.root}/`)}>Return to {publication.title}</a>.</p>
+
+  <h2 id="contents">Contents</h2>
+  <nav aria-label={`${publication.title} contents`}>
+    <ul class="reader-toc">
+      {
+        renderedSections.map((section) => (
+          <li style={`--depth: ${section.depth}`}>
+            <a href={`#${section.anchor}`}>{section.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  {
+    renderedSections.map((section) => (
+      <section id={section.anchor} class="reader-section">
+        <h2>{section.title}</h2>
+        <div set:html={section.html} />
+      </section>
+    ))
+  }
+</ReaderLayout>

@@ -1,10 +1,22 @@
+---
+import type { PublicationConfig } from "../lib/content";
+
+interface Props {
+  title: string;
+  description?: string;
+  publication: PublicationConfig;
+}
+
+const { title, description, publication } = Astro.props;
+---
 <!doctype html>
-<html lang="{{ site.lang | default: 'en-US' }}">
+<html lang="en-US">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page.title }} | {{ site.title }}</title>
-    <meta name="description" content="{{ page.description | default: site.description }}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | debug80 Docs</title>
+    <meta name="description" content={description ?? "Technical documentation for debug80 and ZAX."} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}assets/images/favicon.svg`} />
     <style>
       :root {
         color-scheme: light dark;
@@ -122,11 +134,9 @@
   <body>
     <a class="skip-link" href="#reader-content">Skip to reader content</a>
     <main id="reader-content">
-      <h1>{{ page.publication_title }}</h1>
-      {% if page.description %}
-        <p class="reader-intro">{{ page.description }}</p>
-      {% endif %}
-      {{ content }}
+      <h1>{publication.title}</h1>
+      {description && <p class="reader-intro">{description}</p>}
+      <slot />
     </main>
   </body>
 </html>

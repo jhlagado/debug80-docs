@@ -1,0 +1,275 @@
+---
+import { getNavigation, withBase } from "../lib/content";
+
+type Props = {
+  title: string;
+  description?: string;
+  currentPath?: string;
+};
+
+const { title, description, currentPath = "" } = Astro.props;
+const pageTitle = title === "debug80 Docs" ? title : `${title} | debug80 Docs`;
+const navItems = getNavigation();
+
+const isCurrent = (href: string) => {
+  if (href === "/") {
+    return currentPath === "/";
+  }
+  return currentPath === href || currentPath.startsWith(href);
+};
+---
+
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta
+      name="description"
+      content={description ?? "Technical documentation for the debug80 Z80 debugger extension and the ZAX assembler"}
+    />
+    <link rel="icon" href={withBase("/assets/images/favicon.svg")} />
+    <style is:global>
+      :root {
+        color-scheme: dark;
+        --bg: #111318;
+        --panel: #181b22;
+        --panel-strong: #202633;
+        --text: #f2f4f8;
+        --muted: #b7bfcc;
+        --link: #8ab4ff;
+        --border: #3a4353;
+        --code: #1d2430;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      a {
+        color: var(--link);
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        line-height: 1.25;
+      }
+
+      h1 {
+        margin-top: 0;
+        font-size: clamp(2.1rem, 7vw, 4rem);
+      }
+
+      h2 {
+        border-top: 1px solid var(--border);
+        margin-top: 3rem;
+        padding-top: 2rem;
+      }
+
+      code,
+      pre {
+        background: var(--code);
+        border-radius: 0.25rem;
+      }
+
+      code {
+        padding: 0.1rem 0.25rem;
+      }
+
+      pre {
+        overflow-x: auto;
+        padding: 1rem;
+      }
+
+      pre code {
+        padding: 0;
+      }
+
+      table {
+        border-collapse: collapse;
+        display: block;
+        overflow-x: auto;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--border);
+        padding: 0.35rem 0.6rem;
+      }
+
+      blockquote {
+        border-left: 0.25rem solid var(--border);
+        color: var(--muted);
+        margin-left: 0;
+        padding-left: 1rem;
+      }
+
+      .skip-link {
+        background: var(--text);
+        color: var(--bg);
+        left: 1rem;
+        padding: 0.5rem 0.75rem;
+        position: absolute;
+        top: 1rem;
+        transform: translateY(-200%);
+        z-index: 10;
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .site-shell {
+        display: grid;
+        grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr);
+        min-height: 100vh;
+      }
+
+      .site-nav {
+        background: var(--panel);
+        border-right: 1px solid var(--border);
+        height: 100vh;
+        overflow-y: auto;
+        padding: 1.25rem;
+        position: sticky;
+        top: 0;
+      }
+
+      .site-nav-title {
+        color: var(--text);
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-decoration: none;
+      }
+
+      .nav-list,
+      .nav-children {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-children {
+        border-left: 1px solid var(--border);
+        margin-left: 0.6rem;
+        padding-left: 0.75rem;
+      }
+
+      .nav-link {
+        border-radius: 0.35rem;
+        color: var(--muted);
+        display: block;
+        padding: 0.22rem 0.35rem;
+        text-decoration: none;
+      }
+
+      .nav-link:hover,
+      .nav-link[aria-current="page"] {
+        background: var(--panel-strong);
+        color: var(--text);
+      }
+
+      .content {
+        max-width: 76rem;
+        padding: 2rem clamp(1rem, 4vw, 4rem) 5rem;
+      }
+
+      .reader .site-shell {
+        display: block;
+      }
+
+      .reader .site-nav {
+        display: none;
+      }
+
+      .reader .content {
+        margin: 0 auto;
+        max-width: 72rem;
+      }
+
+      .reader-section {
+        margin-top: 2rem;
+      }
+
+      @media (max-width: 52rem) {
+        .site-shell {
+          display: block;
+        }
+
+        .site-nav {
+          height: auto;
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="site-shell">
+      <nav class="site-nav" aria-label="Site navigation">
+        <a class="site-nav-title" href={withBase("/")}>debug80 Docs</a>
+        <ul class="nav-list">
+          {
+            navItems.map((item) => (
+              <li>
+                <a class="nav-link" href={withBase(item.href)} aria-current={isCurrent(item.href) ? "page" : undefined}>
+                  {item.title}
+                </a>
+                {item.children.length > 0 && (
+                  <ul class="nav-children">
+                    {item.children.map((child) => (
+                      <li>
+                        <a class="nav-link" href={withBase(child.href)} aria-current={isCurrent(child.href) ? "page" : undefined}>
+                          {child.title}
+                        </a>
+                        {child.children.length > 0 && (
+                          <ul class="nav-children">
+                            {child.children.map((grandchild) => (
+                              <li>
+                                <a
+                                  class="nav-link"
+                                  href={withBase(grandchild.href)}
+                                  aria-current={isCurrent(grandchild.href) ? "page" : undefined}
+                                >
+                                  {grandchild.title}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <main id="content" class="content">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
