@@ -44,7 +44,9 @@ function decodeInstruction(cpu: Cpu, cb: Callbacks, opcode: number): void {
 }
 ```
 
-`createDecoder()` is expensive — it constructs instruction tables, creates helper closures, and wires up all the ALU functions. By caching this per CPU, the cost is paid once at session start rather than on every instruction. The cache invalidates if the callbacks change, which happens during warm rebuilds.
+`createDecoder()` is expensive — it constructs instruction tables, creates helper closures, and wires up all the ALU functions. By caching this per CPU, the cost is paid once at session start rather than on every instruction. The cache invalidates if the callback object identity changes.
+
+`createZ80Runtime()` therefore keeps the callback object stable for the lifetime of the runtime. Platform memory hooks are read through `hardware.memRead` / `hardware.memWrite` at the point of use, so a platform can install finalized hooks without forcing decoder reconstruction. This is a deliberate performance contract: frequent callback replacement would defeat the `WeakMap` cache and can materially slow the emulator.
 
 The cache key is the `Cpu` object itself (via `WeakMap`). When a session ends and the CPU is garbage-collected, the cache entry disappears automatically.
 
@@ -290,6 +292,8 @@ DAA is one of the most complex flag-affecting instructions in the Z80 and is oft
 ## Summary
 
 - The decoder is built once per `(Cpu, Callbacks)` pair by `createDecoder()` and cached via `WeakMap`. All instruction handlers close over the CPU and callbacks — no per-instruction parameter passing.
+
+- The runtime preserves callback identity and reads mutable hardware hooks dynamically. This keeps the decoder cache valid while still allowing platform finalization to install banking or ROM-protection hooks.
 
 - The primary opcode space uses direct computation for the 8-bit load (0x40–0x7F) and ALU (0x80–0xBF) blocks, and a sparse table for the remaining irregular instructions.
 

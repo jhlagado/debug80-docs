@@ -258,6 +258,12 @@ This runs the full test suite via vitest. Tests cover:
 
 Tests use a mock VS Code API (`tests/__mocks__/vscode.ts`) so they run without a VS Code instance.
 
+Release and regression checks are broader than `npm test`:
+
+- `npm run package-check` type-checks both extension and webview code, runs the test suites, builds a VSIX, and verifies the packaged contents. This is the main "can this ship?" local gate.
+- `npm run test:vscode` runs the VS Code extension-host smoke test. This catches manifest, activation, and view-registration failures that ordinary Vitest tests cannot see.
+- `npm run perf:z80` exercises the emulator performance path. It should be treated as a regression signal whenever runtime, decoder, memory polling, or webview update cadence changes.
+
 ### Project structure at a glance
 
 ```

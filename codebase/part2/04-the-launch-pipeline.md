@@ -32,7 +32,7 @@ launchRequest arrives
     │     Derive .hex, .lst, .asm paths → absolute file paths
     │
     ├─ 4. Assembly                    (launch-pipeline.ts, launch/assembler.ts)
-    │     Invoke asm80 or zax assembler → .hex + .lst files on disk
+    │     Run linked asm80 or zax backend → .hex + .lst files on disk
     │
     ├─ 5. Program loading             (launch/program-loader.ts)
     │     Parse HEX, build memory image → HexProgram + ListingInfo
@@ -207,15 +207,23 @@ interface AssemblerBackend {
 
 ### The asm80 invocation
 
-`runAssembler()` in `src/debug/launch/assembler.ts` spawns the asm80 process:
+`runAssembler()` in `src/debug/launch/assembler.ts` calls the asm80 JavaScript API in-process:
 
 ```
-asm80 -m Z80 -t hex -o <outputDir> <asmPath>
+asm80 -m Z80 -t hex -o <outputDir> <asmPath>   // logical invocation
 ```
 
-The function finds the asm80 binary by searching `node_modules/.bin/` up from the workspace root, then checking the extension's bundled copy, then `require.resolve()`. On failure, it parses the asm80 error output into a structured `AssemblyDiagnostic` with file path, line number, column, and source line. This diagnostic is formatted and sent to both the Debug Console and the extension host (as a `debug80/assemblyFailed` event).
+The command line above describes the compatibility surface rather than a spawned child process. Debug80 constructs equivalent options, invokes the linked asm80 module, then writes the expected artifacts to the configured output directory. The backend remains serial: asm80's library state is not treated as re-entrant, so Debug80 should not run multiple asm80 compilations concurrently unless a future compile queue explicitly guards the shared state.
 
-Assembly output is captured line-by-line and emitted to the Debug Console via `OutputEvent`, so the user sees assembler progress in real time.
+On failure, the backend parses asm80 diagnostics into a structured `AssemblyDiagnostic` with file path, line number, column, and source line. This diagnostic is formatted and sent to both the Debug Console and the extension host (as a `debug80/assemblyFailed` event).
+
+Assembler diagnostics are emitted through `OutputEvent`, so errors and warnings appear in the Debug Console even though the normal successful path is now in-process and quiet.
+
+### The zax invocation
+
+The zax backend follows the same linked-library direction, but with one JavaScript module-system wrinkle: zax is published as ESM, while the VS Code extension bundle still runs as CommonJS. The backend therefore uses dynamic `import()` at the integration boundary instead of `require()`. This keeps Debug80 compatible with the current VS Code extension runtime while allowing zax to remain a modern ESM package.
+
+Both assembler backends should be treated as part of the extension's packaged dependency set for release. The release process must verify that `npm run package` / VSIX creation includes the runtime code needed for linked assembly on a clean machine, not only on the developer's workspace.
 
 ### Error handling
 

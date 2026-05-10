@@ -8,8 +8,11 @@ has_children: true
 
 A technical reference for engineers working with the debug80 codebase.
 
-This manual is updated against the codebase state through **2026-04-22**. The most important **recent** shifts (including work landed on `main` in the last day) are:
+This manual is updated against the codebase state through **2026-05-10**. The most important **recent** shifts are:
 
+- **Assembler integration:** asm80 and zax are linked directly into the extension host instead of being treated primarily as external executables. The launch pipeline still writes the normal `.hex` / `.lst` / `.bin` artifacts, but backend invocation now happens through the JavaScript APIs where available, reducing process-spawn and path-resolution fragility.
+- **Runtime performance:** `createZ80Runtime()` now keeps stable decoder callbacks whose implementations read the current hardware hooks dynamically. This preserves decoder-cache reuse even when a platform finalizes `memRead` / `memWrite` after runtime creation. Runtime-control also has starvation instrumentation so long chunks and yield delays can be observed during extension-host debugging.
+- **Webview audio:** speaker mute state is session-local. New webviews start muted because browsers and VS Code webviews require a real user gesture before reliable audio playback; the unmuted state is not persisted across reloads or extension restarts.
 - **Scaffold:** new projects can merge a standard **Debug80** `.gitignore` block (extension cache, `outputDir`, optional `.vscode/launch.json`, OS junk) via `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts`, invoked from `scaffoldProject()`.
 - **TEC-1G panel UI:** section checkboxes (7-seg, LCD, GLCD, 8×8, etc.) **persist** — merge order is built-in defaults → `debug80.json` `tec1g.uiVisibility` (from the active launch) → **workspace** `Memento` keyed by **debug target** (`debug80.tec1g.uiVisibilityByTarget`). The webview posts `saveTec1gPanelVisibility` when checkboxes change; the extension no longer re-broadcasts a stale launch-only override on every HTML rehydration in a way that clobbered user choices.
 - **Mapping / MON-style includes:** Layer2 **include-anchor remapping** and **propagation of mis-attributed include segments** fix stepping and stack frames when asm80 attributes bytes to the parent file but the real code lives in a sibling include (e.g. `glcd_library.z80`); the same remap runs on **native `.d8.json`** maps (not only listing-derived mapping).
