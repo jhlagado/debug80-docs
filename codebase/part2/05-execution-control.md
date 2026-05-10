@@ -25,6 +25,8 @@ The main execution function is `runUntilStopAsync()` in `src/debug/session/runti
 
 The function is `async` because it must yield to the Node.js event loop between batches of instructions — the adapter runs inline with the extension host, so a tight synchronous loop would freeze VS Code. Between each batch of 1000 instructions, `runUntilStopAsync()` awaits a minimal delay and then continues.
 
+The loop is performance-sensitive because it shares the VS Code extension-host process with webview message handling, file watching, and DAP requests. Recent runtime work added starvation instrumentation around the chunk/yield boundary: long synchronous chunks and excessive event-loop delay can be logged, and `DEBUG80_PERF=1` enables periodic summaries while debugging the extension. This is intended as a regression guard, not as a user-facing feature.
+
 ### The instruction chunk
 
 Each batch processes up to 1000 instructions in a tight synchronous loop:
@@ -65,6 +67,8 @@ if (waitMs > 0) {
 This reproduces the real timing of the TEC-1's 4 MHz Z80. Without it, the platform state updates (display refreshes, speaker output) would fire at CPU speed rather than hardware speed, producing incorrect behaviour.
 
 For platforms without a configured clock speed, the loop yields between chunks via `setImmediate()` — enough to keep VS Code responsive without adding unnecessary latency.
+
+The chunk size is deliberately a compromise. Larger chunks improve raw emulation throughput but can starve the extension host; smaller chunks improve UI responsiveness but increase scheduling overhead. Any future tuning should be checked against both emulator speed and webview responsiveness, especially when the memory and register panels are visible.
 
 ### RuntimeControlContext
 
@@ -408,6 +412,8 @@ The snapshot is taken exactly once — the first time the PC reaches the applica
 - The execution loop (`runUntilStopAsync`) runs the Z80 in chunks of 1000 instructions, yielding between chunks. It stops on breakpoints, pause requests, extra breakpoints (step targets), halts, and instruction limits.
 
 - Platform throttling applies cycle-accurate timing on TEC-1 and TEC-1G platforms, sleeping between chunks to match the configured clock speed.
+
+- Runtime performance instrumentation watches for long chunks and yield starvation. `DEBUG80_PERF=1` enables periodic diagnostic summaries during extension-host debugging.
 
 - `RuntimeControlContext` is a set of accessor functions over `SessionStateShape`. The execution functions receive it instead of the full session, keeping their dependencies minimal.
 

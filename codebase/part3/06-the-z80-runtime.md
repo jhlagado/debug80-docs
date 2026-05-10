@@ -235,6 +235,8 @@ The factory:
 5. Constructs the `Callbacks` object that the instruction decoder uses.
 6. Returns the runtime object with bound step and state methods.
 
+The decoder callbacks are intentionally stable for the lifetime of the runtime. Their function identities do not change when a platform later installs or replaces `hardware.memRead` / `hardware.memWrite`; the callbacks read those hooks dynamically on each access. This matters for TEC-1G, where banking and ROM-protection hooks can be finalized after the base runtime exists. Stable callback identity lets the decoder cache stay hot instead of rebuilding opcode closures after platform finalization.
+
 ---
 
 ## The loaders

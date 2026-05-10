@@ -35,6 +35,8 @@ export function acquireVscodeApi(): VscodeApi {
 
 The result is acquired once at module load time and passed to every component that needs to communicate outward.
 
+Not every webview preference should be stored here. In particular, speaker mute state is intentionally **not** persisted: each new webview starts muted, and the user must unmute through a real interaction before audio playback is reliable.
+
 ### Session status controller (`common/session-status.ts`)
 
 The Restart button sits in the tab row of every platform panel (`id="restartDebug"`). `createSessionStatusController()` manages it:
@@ -253,7 +255,7 @@ SHIFT
 
 Each key click or keydown sends `{ type: 'key', code: number }` to the extension host.
 
-**Speaker.** An indicator element shows "SPEAKER ON" when `speaker` is true. The `speakerHz` label shows the last measured frequency. The mute button toggles the Web Audio API tone without telling the adapter — muting is a local webview preference.
+**Speaker.** An indicator element shows "SPEAKER ON" when `speaker` is true. The `speakerHz` label shows the last measured frequency. The mute button toggles the Web Audio API tone without telling the adapter — muting is local to the current webview session and is not persisted.
 
 **Speed.** A SLOW/FAST toggle button. Clicking sends `{ type: 'speed', mode: 'slow' | 'fast' }`.
 
@@ -284,7 +286,7 @@ When the user edits a byte in the memory dump, the panel sends `{ type: 'memoryE
 2. A `GainNode` applies a gentle ramp-up to avoid clicks.
 3. The oscillator connects through the gain to the audio context destination.
 
-When `speakerHz` drops to 0 or the mute button is pressed, the gain ramps down and the oscillator is disconnected. The mute state is local to the webview — it is not communicated to the adapter.
+When `speakerHz` drops to 0 or the mute button is pressed, the gain ramps down and the oscillator is disconnected. The mute state is local to the webview — it is not communicated to the adapter and is not written to `vscode.setState()`. A recreated webview starts muted again. This matches Web Audio's user-gesture requirement: VS Code webviews cannot reliably begin audible playback just because a previous session was left unmuted.
 
 ---
 
