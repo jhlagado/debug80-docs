@@ -74,3 +74,6 @@ This manual is updated against the codebase state through **2026-05-10**. The mo
 - [Appendix A — Custom DAP Request Reference](appendices/a-custom-dap-requests.md)
 - [Appendix B — Platform Configuration Reference](appendices/b-platform-config.md)
 - [Appendix C — Session State Reference](appendices/c-session-state.md)
+- [Appendix D — ROM Bundle Infrastructure](appendices/d-bundle-manifest.md)
+- [Appendix E — Release and Local VSIX Testing](appendices/e-release-and-local-vsix.md)
+- [Appendix F — Regression Gates](appendices/f-regression-gates.md)
