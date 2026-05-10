@@ -13,3 +13,5 @@ Quick-reference material for engineers working with the debug80 codebase.
 - [Appendix B — Platform Configuration Reference](b-platform-config.md)
 - [Appendix C — Session State Reference](c-session-state.md)
 - [Appendix D — ROM Bundle Infrastructure](d-bundle-manifest.md)
+- [Appendix E — Release and Local VSIX Testing](e-release-and-local-vsix.md)
+- [Appendix F — Regression Gates](f-regression-gates.md)
