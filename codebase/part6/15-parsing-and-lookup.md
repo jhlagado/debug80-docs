@@ -5,245 +5,184 @@ parent: "Part VI — Source Mapping"
 grand_parent: "Understanding the debug80 Codebase"
 nav_order: 2
 ---
-[← Mapping Data Structures](14-mapping-data-structures.md) | [Part VI](README.md)
+[← Mapping Data Structures](14-mapping-data-structures.md) | [Part VI](index.md)
 
 # Chapter 15 — Parsing and Lookup
 
-This chapter covers the algorithms: how the listing file is parsed into segments, how anchors are attached, how the index is built, how address-to-source and source-to-address lookups work, and how Layer 2 refinement improves confidence for listings that lack D8 debug maps.
+This chapter follows the current source-mapping path from listing text or D8 JSON to breakpoint and stack-frame lookup.
 
 ---
 
-## Parsing a listing
+## Parsing a Listing
 
-`parseMapping()` in `src/mapping/parser.ts` reads the listing file line by line. Each line is matched against two regular expressions: one for assembled-code lines and one for anchor comments.
+`parseMapping()` in `src/mapping/parser.ts` reads an asm80-style listing. It collects two records:
 
-### Assembled-code lines
+- listing entries, parsed from rows that begin with a four-hex-digit address
+- symbol anchors, parsed from symbol-table definition rows
 
-A listing line looks like:
+### Listing Rows
 
-```
-00800  3E 01       LD A, 1
-```
+A listing row starts with an address and may contain byte tokens:
 
-The regex captures the address field, the hex bytes, and the source text. From this the parser extracts:
-- `address` — the assembled address of this instruction
-- `byteCount` — the number of bytes (determines `endAddress`)
-- `lstLine` — the current line number in the listing
-
-The parser accumulates these into `SourceMapSegment` objects. An instruction with no bytes (a label, an EQU, a comment-only line) produces no segment.
-
-### Anchor comments
-
-Anchor lines look like:
-
-```
-; file: /path/to/source.asm, line: 42
+```text
+0800  3E 01       LD A,1
+0802              START:
 ```
 
-The regex captures the file path and line number. Each match produces a `SourceMapAnchor` at the current `lstLine`.
+The parser captures:
+
+- `startAddr` from the leading address
+- byte count from consecutive two-hex-digit byte tokens
+- `endAddr` as `startAddr + byteCount`
+- `asmText` as the remaining listing text
+- `lstLineNumber`
+
+Rows with no bytes still become entries. They produce zero-width segments after attachment and can provide source context, but they are filtered out for executable breakpoints.
+
+### Symbol Anchors
+
+The parser switches into symbol-table mode when it sees `DEFINED AT LINE`. Definition rows match this shape:
+
+```text
+LABEL: 0800 DEFINED AT LINE 12 IN src/main.asm
+```
+
+Rows containing `USED AT LINE` are ignored. Each definition becomes a `SourceMapAnchor`.
 
 ### `attachAnchors()`
 
-After the listing is fully parsed, `attachAnchors()` threads file context through the segment list. It iterates the segments in listing order and maintains a cursor into the anchor list. When the cursor's anchor `lstLine ≤ segment.lstLine`, the anchor fires: subsequent segments are tagged with that anchor's `file` and `line` offset.
+After parsing, `attachAnchors()` walks the listing entries in order. If an entry starts at an anchor address and that address has not already consumed an anchor, the segment receives the anchor's file and line exactly.
 
-The `line` offset works as follows: the anchor says "listing line N corresponds to source line M in file F". Segments that appear after that anchor have their source line calculated as:
+For later entries, the mapper keeps the current file and estimates the source line by adding the listing-line distance from the last anchor:
 
-```
-segment.line = anchor.line + (segment.lstLine - anchor.lstLine)
-```
-
-This is correct when source lines and listing lines are in 1:1 correspondence. Macro expansions break that assumption — a single source line expands to many listing lines. The mapper handles this by treating macro spans as a single segment with `endLine === line` (the expansion shares the macro call site's line number).
-
-When the listing has no anchors (`lstInfo.hasAnchors === false`), the mapper assigns all segments to the single source file passed in as context.
-
----
-
-## Building the index
-
-`buildSourceMapIndex()` in `src/mapping/source-map.ts` takes a `MappingParseResult` and constructs a `SourceMapIndex`.
-
-1. **Sort by address** — `segmentsByAddress` is the segment array sorted by `startAddress` ascending.
-
-2. **Group by file/line** — iterate all segments; for each segment, insert it into the nested `Map<string, Map<number, SourceMapSegment[]>>` under its `file` key and each line from `line` to `endLine`. Multi-line segments are indexed under every line they span, so a breakpoint on any line of a multi-line statement resolves correctly.
-
-3. **Group anchors by file** — collect anchors into a `Map<string, SourceMapAnchor[]>` sorted by `lstLine` within each file.
-
----
-
-## Address-to-source lookup: `findSegmentForAddress()`
-
-Given a Z80 address, find the source location. This is used to populate the stack frame when execution pauses and to highlight the current instruction in the editor.
-
-```
-function findSegmentForAddress(index, address):
-  candidates = binary search segmentsByAddress for segments where
-               startAddress ≤ address ≤ endAddress
-
-  if no candidates: return undefined
-
-  prefer segment where:
-    1. confidence is highest
-    2. span is narrowest (endAddress - startAddress)
-    3. line is valid (≥ 1)
-
-  return best candidate
+```text
+source line = anchor.line + (entry.lstLineNumber - anchorListingLine)
 ```
 
-The narrowest-span preference is important. Macro expansions often create a wide segment covering the entire expansion alongside narrow per-instruction segments covering individual instructions within the expansion. The narrow segment gives the more precise location.
+Entries before any anchor keep `loc.file: null` and `loc.line: null`.
+
+Duplicate anchor addresses reduce anchor-hit confidence from `HIGH` to `MEDIUM`. Entries inferred after an anchor are `MEDIUM`; entries with no current file are `LOW`.
 
 ---
 
-## Source-to-address lookup: `resolveLocation()`
+## Source Fallback and Layer 2
 
-Given a file path and line number, find the Z80 address. This is used when binding breakpoints and when navigating to an address from the editor.
+`buildMappingFromListing()` in `src/debug/mapping/mapping-service.ts` orchestrates listing-derived mapping.
 
-`resolveLocation()` uses a slop search: it first tries the exact line, then tries `line ± 1`, `line ± 2`, up to `line ± 4`. This accommodates blank lines, comment-only lines, and minor listing/source misalignments.
+When a target source file is known, `applySourceFallback()` fills missing or unresolved segment files with that source. This keeps simple single-file projects usable even when the listing has weak source attribution.
 
-```
-function resolveLocation(index, file, line):
-  for slop in [0, 1, -1, 2, -2, 3, -3, 4, -4]:
-    candidates = index.segmentsByFileLine[file][line + slop]
-    if candidates:
-      best = highest confidence, then narrowest span
-      return { address: best.startAddress, line: best.line }
+Then `applyLayer2()` in `src/mapping/layer2.ts` refines the mapping by comparing listing text to source text:
 
-  // Anchor fallback
-  anchor = findAnchorLine(index, file, line)
-  if anchor:
-    return { address: anchor.address, line: anchor.line, confidence: LOW }
+1. Resolve and load referenced source files.
+2. Normalize listing text and source text with `normalizeAsm()`.
+3. Search near the current source line for the best match.
+4. Update segment line/confidence when a reliable match is found.
+5. Report missing source files without aborting launch.
 
-  return undefined
-```
+Layer 2 also handles a MON-style include problem. asm80 can assign bytes from an included file to the parent file while preserving the included file's line numbers. `remapAsm80MisassignedIncludeAnchors()` searches sibling `.z80` and `.asm` files for the symbol at the reported line. If exactly one sibling defines the symbol, the anchor is repointed. `propagateMisassignedIncludeSegments()` then retags the following segment range until the next genuine parent-file symbol.
 
-The anchor fallback handles lines that appear in the source but produced no assembled output — for example, a section of a file that is only assembled when a conditional is true but was not assembled in this build. The nearest anchor before the requested line provides the best available address.
+The same remap and propagation pass runs after native D8 import, because a native map can contain the same inherited asm80 path attribution.
 
 ---
 
-## `findAnchorLine()`
+## Loading a D8 Map
 
-`findAnchorLine()` searches the `anchorsByFile` map for the anchor whose listing line is nearest to the requested source line. It binary searches the sorted anchor array for the file, then scans outward from the closest match. This is used by both the `resolveLocation()` fallback and by Layer 2 when it needs to correlate source lines to listing lines for text matching.
+When a D8 map is available, Debug80 parses and validates it with `parseD8DebugMap()` and `validateD8DebugMap()`. Structural validation uses the JSON schema shape: `format: "d8-debug-map"`, `version: 1`, architecture metadata, and grouped `files`.
+
+`validateD8Segments()` performs quality checks and logs warnings. Warnings do not abort mapping; invalid JSON or schema-level failures make Debug80 fall back to listing-derived mapping.
+
+`buildMappingFromD8DebugMap()` converts D8 file entries into `SourceMapSegment` and `SourceMapAnchor` arrays. D8 confidence strings are mapped into runtime confidence values:
+
+| D8 | Runtime |
+|---|---|
+| `high` | `HIGH` |
+| `medium` | `MEDIUM` |
+| `low` | `LOW` |
+
+If a native D8 map is loaded, Debug80 logs the generator label. Native maps are preferred over generated cache maps even when the listing is newer.
 
 ---
 
-## Layer 2 refinement: `applyLayer2()`
+## Building the Index
 
-Layer 2 is a post-processing pass in `src/mapping/layer2.ts` that improves segment confidence by comparing the listing text of each segment against the corresponding source line.
+`buildSourceMapIndex()` builds three lookup structures:
 
-This matters when the mapper has only a listing file (no D8 map). Listing parsing can assign incorrect line numbers when includes are nested or macros are used. Layer 2 catches these by verifying that the text matches.
+1. `segmentsByAddress`, sorted by `start`, then listing line.
+2. `segmentsByFileLine`, grouped by normalized resolved file path and line.
+3. `anchorsByFile`, grouped by normalized resolved file path and sorted by source line/address.
 
-### Text normalisation
+Only resolvable files enter the file-line and anchor indexes. A segment can remain valid for address lookup even when it cannot be resolved to a source file.
 
-Both the listing line and the source line are normalised before comparison:
+---
 
-1. Strip comments (everything after `;`)
-2. Uppercase
-3. Compress whitespace to single spaces
-4. Trim
+## Address-to-Source Lookup
 
-This makes `LD  A, (HL)    ; load accumulator` compare equal to `ld a,(hl)`.
+`findSegmentForAddress()` scans `segmentsByAddress` until it reaches a segment whose `start` is greater than the requested address.
 
-### The refinement algorithm
+A segment matches when:
 
-```
-for each segment with lstText defined:
-  listing_text = normalise(lstText)
-  source_text  = normalise(source_file[segment.line])
-
-  if listing_text == source_text:
-    segment.confidence = max(segment.confidence, MEDIUM)
-    continue
-
-  // Search nearby source lines
-  for offset in [-3, -2, -1, +1, +2, +3]:
-    candidate_text = normalise(source_file[segment.line + offset])
-    if listing_text == candidate_text:
-      segment.line = segment.line + offset
-      segment.confidence = MEDIUM
-      break
-
-  // If still no match and segment is data, downgrade
-  if no match found and segment.kind == 'data':
-    segment.confidence = LOW
+```text
+segment.start <= address < segment.end
 ```
 
-### Macro block detection
+When several segments overlap, the lookup prefers:
 
-When Layer 2 encounters a run of listing lines that all correspond to the same source line (the hallmark of a macro expansion), it marks the entire run as a single macro block and assigns the source line of the macro call site. This prevents the expansion's internal instructions from being incorrectly attributed to whichever source line happens to have matching text.
+1. a segment with a valid source line over one without a valid line
+2. the narrowest address span
 
-### Include-anchor remapping and segment propagation
-
-asm80 sometimes attributes every byte of an included routine to the **parent** file (e.g. `packages.z80`) even when the listing text clearly belongs to a **sibling** include (e.g. `glcd_library.z80`). Layer2 can **remap** the anchor when the symbol table points at the wrong file: it searches other `.z80`/`.asm` files in the same directory for a definition at the reported line and repoints the anchor.
-
-**Propagation** (`propagateMisassignedIncludeSegments` in `src/mapping/layer2.ts`) extends that fix: after the remapped entry address, every segment that still carried the wrong parent file is retagged until the next genuine symbol in the parent file, so **step-in**, **stack frames**, and breakpoints track the include file for the full body of each routine — not only the entry label.
-
-### Confidence degradation
-
-When Layer 2 cannot find a text match for a segment:
-- `kind === 'code'` — confidence stays as-is; the parse was probably correct
-- `kind === 'data'` — confidence degrades to LOW; data lines are prone to aliasing (many `DB 0x00` lines are textually identical)
-- Ambiguous match (multiple lines match) — confidence degrades to LOW regardless of kind
+This prevents broad context segments from shadowing instruction-level mappings. If the best segment has no valid source line, the warning handler can log a diagnostic.
 
 ---
 
-## Building from a D8 map
+## Source-to-Address Lookup
 
-When a D8 debug map is available, `buildMappingFromD8DebugMap()` in `src/mapping/d8-map.ts` builds the segment list directly from the D8 data rather than parsing the listing. Each `D8Segment` in each file entry becomes a `SourceMapSegment` with `confidence: HIGH`.
+`resolveLocation()` and `resolveExecutableLocation()` both call the same internal lookup:
 
-The listing file is still read — its text content is loaded into a lookup table for Layer 2 to use, but Layer 2 runs in verification mode only: it confirms HIGH-confidence segments rather than trying to repair LOW-confidence ones. Any segment that fails text verification is downgraded from HIGH to MEDIUM, not discarded.
+```typescript
+const lineSlop = [0, -1, 1, -2, 2, -3, 3, -4, 4];
+```
 
-**Native D8 maps** previously skipped the listing-only Layer2 pipeline, so the same asm80 mis-attribution (parent file on every byte of an included library) could persist. The mapper now runs the **include-anchor remapping** pass after `buildMappingFromD8DebugMap()` and syncs only **affected** addresses into the mapping service, so native maps get the same sibling-file correction as listing-built maps.
+The lookup tries the exact line first, then nearby lines. This handles blank lines, labels, comments, and minor listing/source shifts.
 
-`parseD8DebugMap()` handles the JSON parse with schema validation. If the `version` field is not `1`, or if required fields are missing, it throws. The caller falls back to listing-only parsing.
+`resolveLocation()` may fall back to the nearest anchor at or before the requested line. `resolveExecutableLocation()` returns only segments with `end > start` and never falls back to anchors. Breakpoint binding uses the executable path so labels, EQU rows, and directive-only lines do not become active breakpoints.
 
----
-
-## Breakpoint integration
-
-When the debug adapter receives a `setBreakpoints` request (Chapter 5), it calls `resolveLocation()` for each requested file and line. The returned address is registered with the `BreakpointManager`. If `resolveLocation()` returns `undefined`, the breakpoint is marked unverified and the editor shows it as a hollow dot.
-
-The confidence of the resolved segment is stored on the breakpoint. LOW-confidence breakpoints are still active — they fire — but the debug console emits a note that the location may be approximate.
-
-On each `StoppedEvent`, the stack frame builder calls `findSegmentForAddress()` for each frame's program counter. The returned `file` and `line` are sent to VS Code to highlight the current line and populate the call stack.
+Both functions return an array of addresses. A source line can map to more than one address when macros or repeated listing rows are involved.
 
 ---
 
-## Stack frame integration
+## Stack Frames and Breakpoints
 
-The `resolveStackFrame()` function in `src/debug/mapping/stack-service.ts` calls `findSegmentForAddress()` for each frame address. Three outcomes are possible:
+Breakpoint handling calls source-to-address lookup during `setBreakpoints`. Addresses returned by `resolveExecutableLocation()` are registered with the breakpoint manager. If no executable address is found, VS Code receives an unverified breakpoint.
 
-1. **Segment found, confidence HIGH or MEDIUM** — the frame shows the source file and line with a filled location icon.
-2. **Segment found, confidence LOW** — the frame shows the location with a warning icon; the editor highlights the approximate line.
-3. **No segment** — the frame shows the raw address as a hex string (`0x1A3F`) with no source link.
-
-This three-path behaviour is described in Chapter 5. The source mapper's confidence levels are what drive the path selection.
+Stack-frame resolution calls `findSegmentForAddress()` for the program counter. If a mapped file and line are available, VS Code can open and highlight that location. If mapping is missing, the stack display falls back to the raw address.
 
 ---
 
-## SourceManager orchestration
+## SourceManager Orchestration
 
-`SourceManager` in `src/debug/mapping/source-manager.ts` orchestrates the full mapping pipeline at launch:
+`SourceManager` in `src/debug/mapping/source-manager.ts` wraps the mapping service for launch:
 
-1. Receive the assembled listing path from the launch pipeline.
-2. Check for a D8 debug map at the conventional path (`<listing>.d8.json`).
-3. If D8 map found: call `buildMappingFromD8DebugMap()`, apply the **remap + propagate** passes for include mis-attribution, then `buildSourceMapIndex()`.
-4. If no D8 map: call `parseMapping()`, then `applyLayer2()` (which includes remap and propagate), then `buildSourceMapIndex()`.
-5. Store the `SourceMapIndex` on the session state for all subsequent lookups.
+1. Resolve the main source file from `asmPath`, `sourceFile`, or listing path.
+2. Resolve configured `sourceRoots`.
+3. Resolve and validate `extraListings`.
+4. Extend source roots with extra listing directories.
+5. Call `buildMappingFromListing()` with listing content, listing path, source fallback, extra listings, and D8 path resolvers.
+6. Return source file, merged roots, extra listing paths, mapping, index, and missing-source warnings.
 
-The `SourceStateManager` (`src/debug/mapping/source-state-manager.ts`) wraps `SourceManager` and mediates access across multiple source files when the project has more than one assembled output (for example, separate ROM and RAM assembly runs).
+Extra listings, such as monitor ROM listings, are loaded through the same mapping path and merged into the primary mapping before the final index is built.
 
 ---
 
 ## Summary
 
-- The listing parser extracts segments from address/byte/source triplets and anchors from file-tracking comments.
-- `attachAnchors()` threads file context through segments by carrying the most recent anchor forward.
-- `buildSourceMapIndex()` produces three indexes: address-sorted, file/line-grouped, and anchors-by-file.
-- `findSegmentForAddress()` binary searches by address and prefers the narrowest span among candidates.
-- `resolveLocation()` slop-searches ±4 lines from the requested line before falling back to the nearest anchor.
-- Layer 2 normalises and compares listing and source text to upgrade MEDIUM confidence and catch listing/source misalignments; macro blocks are detected and collapsed. Include **anchor remapping** and **propagation of mis-attributed include segments** correct asm80 file attribution for `.include`d libraries.
-- D8 maps bypass listing inference entirely and produce HIGH-confidence segments; the same **include remapping** can run on native D8-built maps, and listing text is still used for verification-only Layer2 passes.
-- Breakpoint binding calls `resolveLocation()`; stack frame resolution calls `findSegmentForAddress()`. Confidence levels drive the VS Code UI: hollow breakpoints, approximate-location warnings, and raw-address fallbacks.
+- The listing parser reads address rows and symbol-table `DEFINED AT LINE` anchors.
+- Address ranges are exclusive at `end`; zero-width rows can provide context but not executable breakpoints.
+- Layer 2 matches listing text against source and repairs common include mis-attribution.
+- D8 maps use the current `d8-debug-map` schema and can be native or Debug80-generated.
+- Native D8 maps win over listing-derived caches.
+- Address lookup prefers valid source lines and narrow spans.
+- Breakpoint lookup uses executable-only source-to-address resolution.
 
 ---
 
-[← Mapping Data Structures](14-mapping-data-structures.md) | [Part VI](README.md)
+[← Mapping Data Structures](14-mapping-data-structures.md) | [Part VI](index.md)

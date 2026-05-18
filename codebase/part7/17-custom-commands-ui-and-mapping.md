@@ -259,8 +259,7 @@ Most platforms can use the existing mapper without modification — if you assem
 
 ```typescript
 export function parseMyassemblerListing(
-  listingContent: string,
-  listingPath: string
+  listingContent: string
 ): MappingParseResult {
   // Parse your listing format
   // Return the same MappingParseResult shape
@@ -274,33 +273,23 @@ export function parseMyassemblerListing(
     const address = parseInt(match[1], 16);
     const byteCount = parseBytes(match[2]).length;
     segments.push({
-      startAddress: address,
-      endAddress: address + byteCount - 1,
-      lstLine: lineIndex + 1,
-      lstEndLine: lineIndex + 1,
-      file: listingPath,   // Overridden by attachAnchors if anchors present
-      line: lineIndex + 1,
-      endLine: lineIndex + 1,
+      start: address,
+      end: address + byteCount,
+      loc: { file: null, line: null },
+      lst: { line: lineIndex + 1, text: line },
       confidence: 'MEDIUM',
-      kind: 'code',
     });
   }
 
-  attachAnchors(segments, anchors);
-
-  return {
-    segments,
-    anchors,
-    lstInfo: { listingPath, hasAnchors: anchors.length > 0, lineCount: lineIndex + 1 },
-  };
+  return { segments, anchors };
 }
 ```
 
-Call `buildSourceMapIndex()` on the result as normal. Layer 2 and the index structure are format-agnostic.
+Call `buildSourceMapIndex()` on the result as normal. Layer 2 and the index structure are format-agnostic once the custom parser produces `SourceMapSegment` and `SourceMapAnchor` records in the current shape.
 
 ### Plugging in a custom parser
 
-`SourceManager.buildState()` in `src/debug/mapping/source-manager.ts` is where the listing parser is invoked. The cleanest extension point is to pass a `parser` option:
+`SourceManager.buildState()` in `src/debug/mapping/source-manager.ts` is where source-state construction is orchestrated, but the parser call currently sits inside `buildMappingFromListing()` in `src/debug/mapping/mapping-service.ts`. Debug80 does not currently expose a parser plug-in option. To add one, thread a parser callback through `SourceManager.buildState()` and into `buildMappingFromListing()`:
 
 ```typescript
 buildState({
@@ -311,7 +300,7 @@ buildState({
 })
 ```
 
-If `SourceManager` does not yet support a parser option, add one. The change is localised: the method already accepts an options object, and the parser function signature (`string, string) => MappingParseResult`) is stable.
+The current parser entry point is `parseMapping(content: string): MappingParseResult`, so a custom parser should return the same `segments` and `anchors` shape.
 
 ### Providing a custom D8 map
 
@@ -321,13 +310,17 @@ The `D8DebugMap` format is documented in Chapter 14. The minimum viable D8 file 
 
 ```json
 {
+  "format": "d8-debug-map",
   "version": 1,
+  "arch": "z80",
+  "addressWidth": 16,
+  "endianness": "little",
   "generator": { "name": "myassembler", "version": "1.0" },
   "files": {
     "/path/to/source.asm": {
       "segments": [
-        { "address": 2048, "endAddress": 2049, "lstLine": 5,
-          "line": 5, "endLine": 5, "confidence": "HIGH", "kind": "code" }
+        { "start": 2048, "end": 2050, "lstLine": 5,
+          "line": 5, "confidence": "high", "kind": "code" }
       ],
       "symbols": []
     }
@@ -336,7 +329,7 @@ The `D8DebugMap` format is documented in Chapter 14. The minimum viable D8 file 
 }
 ```
 
-Place it at `<listing-path>.d8.json` and `SourceManager` will pick it up automatically over the listing-only path.
+Place it beside the listing as `<listing-basename>.d8.json`; for example, `build/main.d8.json` for `build/main.lst`. `SourceManager` will pick it up automatically over the listing-only path.
 
 ---
 
@@ -345,7 +338,7 @@ Place it at `<listing-path>.d8.json` and `SourceManager` will pick it up automat
 - Custom DAP commands are registered in `registerCommands` via `registry.register({ id, commands })`. Name them `debug80/{platformId}{Verb}`. Handlers receive the raw response object and must call `sendResponse` or `sendErrorResponse` exactly once.
 - A sidebar UI panel requires six files: three on the extension host side (html, state, messages) and three on the webview side (index.html, index.ts, styles.css). Register the panel in `extension.ts` by adding a `PlatformUiEntry` to the UI registry.
 - The extension host side holds all hardware display state as a plain object. On every hardware update, `buildUpdateMessage` serialises it into a `postMessage` payload. On sidebar hide/show, `renderCurrentView` rehydrates the webview from the buffered state.
-- To extend the source mapper for a non-standard listing format, write a parallel `parseListing` function returning `MappingParseResult` and pass it as an option to `SourceManager.buildState()`. Alternatively, write a converter to D8 JSON — the D8 path is already high-confidence and fully integrated.
+- To extend the source mapper for a non-standard listing format, write a parallel parser that returns `MappingParseResult`, then add an explicit parser hook through `SourceManager.buildState()` and `buildMappingFromListing()`. Alternatively, write a converter to D8 JSON — the D8 path is already high-confidence and fully integrated.
 
 ---
 

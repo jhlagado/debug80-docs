@@ -203,6 +203,8 @@ When port 0x05 or any colour port is written:
 
 The brightness arrays contain the final frame — 64 values per channel, ready for the webview to render.
 
+The hardware column bits are mirrored when staging is converted into visible pixels. `matrixDisplayIndex(row, hardwareColumn)` maps a hardware column to `row * 8 + (7 - hardwareColumn)`, so bit 0 appears on the right edge of the visible row and bit 7 appears on the left edge. This correction lives in `src/platforms/tec1g/runtime-matrix.ts`; the webview renders the already-oriented brightness arrays.
+
 ### Idle flush
 
 If a program updates fewer than eight rows (partial refresh), the staging never commits via the mask. An idle flush fires after `TEC1G_MATRIX_IDLE_FLUSH_MS` (40ms) with no new port writes. It commits whatever staging has accumulated, ensuring partial updates reach the display.
