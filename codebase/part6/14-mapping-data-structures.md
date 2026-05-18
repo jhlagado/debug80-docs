@@ -5,197 +5,168 @@ parent: "Part VI — Source Mapping"
 grand_parent: "Understanding the debug80 Codebase"
 nav_order: 1
 ---
-[Part VI](README.md) | [Parsing and Lookup →](15-parsing-and-lookup.md)
+[Part VI](index.md) | [Parsing and Lookup →](15-parsing-and-lookup.md)
 
 # Chapter 14 — Mapping Data Structures
 
-When the user steps to the next instruction and the editor highlights a source line, or sets a breakpoint on a line and the debugger maps it to an address, that work is done by the source mapper. The mapper maintains a bidirectional index between Z80 addresses and source file locations. This chapter covers every type the mapper uses.
+Source mapping is the bridge between the Z80 program counter and the file open in VS Code. When execution stops at an address, Debug80 asks the mapping index for a source location. When the user sets a breakpoint, Debug80 asks the same index which address belongs to that source line.
 
-The source mapping code lives in `src/mapping/`.
-
----
-
-## The problem
-
-The assembler produces a `.lst` listing file alongside the binary. A listing interleaves source lines with their assembled bytes and addresses:
-
-```
-00800  3E 01       LD A, 1
-00802  32 00 09    LD (0x0900), A
-```
-
-The mapper parses this listing and builds a table of segments: spans of addresses that correspond to spans of source lines. It also resolves anchor comments that pin a listing line to a specific source file and line number — necessary when the assembler includes files and the listing interleaves content from multiple sources.
+The core mapping types live in `src/mapping/parser.ts`, `src/mapping/source-map.ts`, and `src/mapping/d8-map.ts`.
 
 ---
 
-## SourceMapSegment
+## Listing Parse Result
 
-`SourceMapSegment` in `src/mapping/parser.ts` is the fundamental mapping unit. Each segment represents a contiguous range of Z80 addresses that corresponds to a range of lines in a listing file:
-
-```typescript
-interface SourceMapSegment {
-  startAddress: number;   // First address in this segment
-  endAddress: number;     // Last address (inclusive)
-  lstLine: number;        // Line number in the listing file (1-based)
-  lstEndLine: number;     // Last listing line for this segment
-  file: string;           // Source file path
-  line: number;           // Source line number (1-based)
-  endLine: number;        // Last source line for this segment
-  confidence: SegmentConfidence;
-  kind: SegmentKind;
-  lstText?: string;       // Deduplication index into lstText table (D8 maps only)
-}
-```
-
-The `startAddress`/`endAddress` pair describes the byte span assembled from these source lines. The `lstLine`/`lstEndLine` pair locates the same content in the listing file. The `file`/`line`/`endLine` triplet locates it in the original source file.
-
-Segments are typically one instruction long — one or a few source lines assembling to a few bytes. But macro expansions or multi-line data statements produce segments where `endLine > line` by several lines.
-
-### SegmentConfidence
-
-Confidence describes how certain the mapper is about the address-to-source correspondence:
-
-| Value | Meaning |
-|-------|---------|
-| `HIGH` | From a D8 debug map — the assembler emitted this mapping explicitly |
-| `MEDIUM` | Parsed from a listing file with no ambiguity |
-| `LOW` | Derived from a listing file where the exact source line is uncertain |
-
-The confidence is used during display: HIGH and MEDIUM segments drive editor highlights and breakpoint binding without reservation; LOW segments are used only when no better option exists.
-
-### SegmentKind
-
-Kind categorises what kind of source content produced this segment:
-
-| Value | Meaning |
-|-------|---------|
-| `'code'` | Executable instructions |
-| `'data'` | Data declarations (DB, DW, etc.) |
-| `'unknown'` | Could not be classified |
-
-Kind matters for Layer 2 refinement (Chapter 15): data segments use different text-matching heuristics than code segments.
-
----
-
-## SourceMapAnchor
-
-Anchors are comments in the listing file that name the source file and line. When the assembler encounters an `INCLUDE` directive, it typically emits a comment like:
-
-```
-; file: src/lib/delay.asm, line: 1
-```
-
-The mapper recognises these comments and uses them to thread file context through the listing. Each parsed anchor is a `SourceMapAnchor`:
-
-```typescript
-interface SourceMapAnchor {
-  lstLine: number;    // Line number in the listing where this anchor appears
-  file: string;       // Absolute path to the source file
-  line: number;       // Line number within that source file
-}
-```
-
-Anchors are attached to segments during the parse phase. A segment's `file` and `line` fields come from the most recently seen anchor at or before the segment's `lstLine`. This is the `attachAnchors()` threading mechanism described in Chapter 15.
-
----
-
-## MappingParseResult
-
-`parseMapping()` returns a `MappingParseResult`:
+The listing parser returns a `MappingParseResult`:
 
 ```typescript
 interface MappingParseResult {
   segments: SourceMapSegment[];
   anchors: SourceMapAnchor[];
-  lstInfo: LstInfo;
 }
 ```
 
-`LstInfo` records metadata extracted during the parse:
+The parser does not keep a separate listing metadata object. Listing file path, source-root resolution, extra listings, and D8 map decisions are handled by the debug-layer mapping service in `src/debug/mapping/mapping-service.ts` and `src/debug/mapping/source-manager.ts`.
+
+---
+
+## SourceMapSegment
+
+`SourceMapSegment` is the address range that Debug80 can map back to source:
 
 ```typescript
-interface LstInfo {
-  listingPath: string;
-  hasAnchors: boolean;     // Whether any anchor comments were found
-  lineCount: number;       // Total lines in the listing
+interface SourceMapSegment {
+  start: number;          // Inclusive Z80 address
+  end: number;            // Exclusive Z80 address
+  loc: {
+    file: string | null;  // Source file, if known
+    line: number | null;  // 1-based source line, if known
+  };
+  lst: {
+    line: number;         // 1-based listing line
+    text: string;         // Assembly text captured from the listing
+  };
+  confidence: 'HIGH' | 'MEDIUM' | 'LOW';
 }
 ```
 
-`hasAnchors` is checked before anchor-dependent logic runs — if the listing has no file-tracking comments, the file context is assumed to be the single assembled source file throughout.
+`start` and `end` use JavaScript slice-style ranges: `start` is included, `end` is excluded. A normal three-byte instruction at `0x0800` has `start: 0x0800` and `end: 0x0803`.
+
+Some listing rows produce zero-width segments where `start === end`. Those rows can still provide useful source context for stack display or symbol lookup, but `resolveExecutableLocation()` filters them out when binding breakpoints.
+
+`loc.file` and `loc.line` may be `null`. That happens when the listing has no usable symbol anchor yet, a source path cannot be resolved, or a D8 segment intentionally carries no source line.
+
+### Confidence
+
+| Value | Meaning |
+|---|---|
+| `HIGH` | The segment is tied to a symbol anchor or native D8 data with high confidence. |
+| `MEDIUM` | The segment was inferred between known anchors or came from duplicate-address conditions. |
+| `LOW` | The segment has weak or missing source attribution. |
+
+The current address lookup prefers the narrowest segment with a valid source line. It does not sort by confidence at lookup time. Confidence still matters for diagnostics and for understanding why a map may be approximate.
+
+---
+
+## SourceMapAnchor
+
+Anchors come from asm80-style symbol table lines, not from file/line comments in the listing body. The parser recognizes lines shaped like:
+
+```text
+SYMBOL: 0800 DEFINED AT LINE 42 IN src/main.asm
+```
+
+Each match becomes:
+
+```typescript
+interface SourceMapAnchor {
+  address: number;
+  symbol: string;
+  file: string;
+  line: number;
+}
+```
+
+Anchors give the mapper a known file and source line for a specific address. During `attachAnchors()`, each segment at an anchor address receives that exact source location. Later segments inherit the most recent current file and advance line numbers by listing-line distance.
+
+Duplicate anchor addresses lower confidence because several symbols point at the same address. `USED AT LINE` symbol-table rows are ignored; Debug80 only treats definitions as anchors.
 
 ---
 
 ## SourceMapIndex
 
-`SourceMapIndex` in `src/mapping/source-map.ts` is the runtime query structure. It wraps the raw segment array with three indexes optimised for the two lookup directions and for the listing-line queries the D8 validator needs:
+`buildSourceMapIndex()` turns a `MappingParseResult` into lookup structures:
 
 ```typescript
 interface SourceMapIndex {
-  segments: SourceMapSegment[];
-  segmentsByAddress: SourceMapSegment[];          // sorted by startAddress
-  segmentsByFileLine: Map<string,                 // file path
-                       Map<number,               // line number
-                           SourceMapSegment[]>>; // all segments on that line
-  anchorsByFile: Map<string, SourceMapAnchor[]>; // anchors sorted by lstLine
+  segmentsByAddress: SourceMapSegment[];
+  segmentsByFileLine: Map<string, Map<number, SourceMapSegment[]>>;
+  anchorsByFile: Map<string, SourceMapAnchor[]>;
 }
 ```
 
-### `segmentsByAddress`
+`segmentsByAddress` is sorted by `start`, then listing line. Address lookup scans this ordered array until the requested address is before the next segment.
 
-A sorted copy of the segment array, ordered by `startAddress`. Address-to-source lookup uses binary search on this array to find the candidate segment. Because segments do not always cover every address (data gaps, alignment padding, unreachable code), the lookup finds the segment whose `startAddress ≤ address ≤ endAddress` and picks the narrowest span when multiple segments match.
+`segmentsByFileLine` groups segments by normalized absolute file path and 1-based source line. Only segments with a resolved file and line are indexed here. Each line list is sorted by address.
 
-### `segmentsByFileLine`
+`anchorsByFile` groups anchors by normalized absolute file path. Each list is sorted by source line, then address. `resolveLocation()` uses this only as a non-executable fallback; `resolveExecutableLocation()` skips anchor fallback so labels and directives do not become active breakpoints.
 
-A nested Map keyed first by file path, then by source line number. Each entry holds all segments that include that source line. Source-to-address lookup — binding a user breakpoint at a given file and line — scans this map. When multiple segments match (a line that assembles to more than one address range, or a line shared between a macro definition and its expansion site), the mapper returns the first one with the highest confidence.
-
-### `anchorsByFile`
-
-A Map from file path to the list of anchors in that file, sorted by `lstLine`. This is used by `findAnchorLine()` during Layer 2 refinement to locate listing content that corresponds to a specific source line.
+Path keys are normalized with `normalizePathForKey()` so source lookup is case-insensitive where the platform requires it.
 
 ---
 
 ## D8DebugMap
 
-The D8 debug map is a JSON file produced by the ZAX assembler when invoked with the `--d8` flag. It carries higher-quality mapping data than can be inferred from a listing alone, because the assembler knows the exact correspondence at assembly time rather than having it reconstructed afterward.
-
-The format is defined in `src/mapping/d8-map.ts`:
+D8 is the structured debug-map format used by Debug80 and by native producers such as ZAX. The current v1 root object is:
 
 ```typescript
 interface D8DebugMap {
+  format: 'd8-debug-map';
   version: 1;
-  generator: {
-    name: string;
-    version: string;
-  };
-  files: {
-    [filePath: string]: {
-      segments: D8Segment[];
-      symbols: D8Symbol[];
-    };
-  };
-  lstText: string[];     // Deduplication table for listing line text
-  diagnostics?: D8Diagnostic[];
+  arch: string;
+  addressWidth: number;
+  endianness: 'little' | 'big';
+  files: Record<string, D8FileEntry>;
+  lstText?: string[];
+  segmentDefaults?: D8SegmentDefaults;
+  symbolDefaults?: D8SymbolDefaults;
+  memory?: D8MemoryLayout;
+  generator?: D8Generator;
+  diagnostics?: D8Diagnostics;
+}
+```
+
+The JSON schema lives at `schemas/d8-debug-map.schema.json`. Required fields are `format`, `version`, `arch`, `addressWidth`, `endianness`, and `files`.
+
+File entries group segments and symbols under a source path key. The empty string key represents unknown source.
+
+```typescript
+interface D8FileEntry {
+  meta?: { sha256?: string; lineCount?: number };
+  segments?: D8Segment[];
+  symbols?: D8Symbol[];
 }
 ```
 
 ### D8Segment
 
-Each segment in the D8 map describes one instruction or data item:
-
 ```typescript
 interface D8Segment {
-  address: number;
-  endAddress: number;
+  start: number;          // Inclusive address
+  end: number;            // Exclusive address
+  line?: number | null;
+  column?: number;
+  kind?: 'code' | 'data' | 'directive' | 'label' | 'macro' | 'unknown';
+  confidence?: 'high' | 'medium' | 'low';
   lstLine: number;
-  line: number;
-  endLine: number;
-  confidence: SegmentConfidence;
-  kind: SegmentKind;
-  lstText?: number;      // Index into D8DebugMap.lstText deduplication table
+  lstText?: string;
+  lstTextId?: number;
+  includeChain?: string[];
+  macro?: { name: string; callsite: { file: string; line: number; column?: number } };
 }
 ```
 
-The `lstText` field is an index into the top-level `lstText` array rather than the literal string. Many instructions produce identical listing text (e.g. `NOP` always produces `00`), so deduplication keeps the map file small. Layer 2 refinement dereferences this index when it needs the actual text.
+`buildMappingFromD8DebugMap()` converts each D8 segment into a `SourceMapSegment`. If `line` is missing, it falls back to `lstLine`; values below 1 become `null`. If `lstTextId` is present, the text is read from the top-level `lstText` table.
 
 ### D8Symbol
 
@@ -203,66 +174,40 @@ The `lstText` field is an index into the top-level `lstText` array rather than t
 interface D8Symbol {
   name: string;
   address: number;
-  line: number;
-  kind: 'label' | 'equ' | 'macro';
-}
-```
-
-Symbols in the D8 map are used to populate the symbol index (Chapter 4) and to provide variable resolution in the Variables pane.
-
-### Diagnostics
-
-The assembler may emit diagnostic entries describing portions of the source that could not be mapped confidently:
-
-```typescript
-interface D8Diagnostic {
-  kind: 'warning' | 'info';
-  message: string;
-  file?: string;
   line?: number;
+  kind?: 'label' | 'constant' | 'data' | 'macro' | 'unknown';
+  scope?: 'global' | 'local';
+  size?: number;
 }
 ```
 
-These surface in the debug console when the mapper processes a D8 file.
+Symbols with a source line become `SourceMapAnchor` entries during D8 import.
 
 ---
 
-## D8ValidationWarning
+## Debug Map Selection
 
-Before a D8 map is used, `validateD8Map()` in `src/mapping/d8-validate.ts` checks it for structural problems. Each problem is a `D8ValidationWarning`:
+`buildMappingFromListing()` prefers sidecar native maps before cached Debug80 maps. Candidate paths are:
 
-```typescript
-interface D8ValidationWarning {
-  kind: D8WarningKind;
-  message: string;
-  file?: string;
-  line?: number;
-  address?: number;
-}
-```
+1. `<listing basename>.d8.json` beside the listing.
+2. The cache path resolved for the target.
+3. The legacy cache path.
 
-The validator checks for:
+Native maps win over generated listing caches and are not rejected because the listing has a newer mtime. Debug80-generated maps are checked for staleness against the listing.
 
-| Check | Why |
-|-------|-----|
-| `lstLine === 0` | A segment with no listing line cannot be used for Layer 2 refinement |
-| `line < 1` | A segment pointing at line zero is invalid |
-| Empty address range | `startAddress === endAddress` is suspicious for non-data segments |
-| Wide segment shadowing narrow | When a broad segment and a narrow segment share an address, the broad one should not have higher confidence |
-
-Warnings do not abort the mapping load — they are collected and logged. The mapper continues with whatever valid segments remain.
+If no usable map exists, Debug80 parses the listing, applies Layer 2 refinement, builds a D8 map with `generator: { name: 'debug80' }`, writes it to the cache path, then imports it through the same D8 path used for native maps.
 
 ---
 
 ## Summary
 
-- `SourceMapSegment` is the atom: one address range ↔ one source line range, with confidence and kind.
-- `SourceMapAnchor` threads file context through a listing by recording where each included file begins.
-- `MappingParseResult` is the raw output of the listing parser.
-- `SourceMapIndex` wraps the segments in three indexes: sorted by address, grouped by file/line, and anchors grouped by file.
-- `D8DebugMap` is the assembler-native format: JSON with a per-file segment list, a symbol table, a listing-text deduplication table, and optional diagnostics.
-- `SegmentConfidence` (HIGH/MEDIUM/LOW) records how certain each mapping is; confidence is used to arbitrate when multiple segments compete for the same address or line.
+- `SourceMapSegment` now uses `start`, exclusive `end`, `loc`, `lst`, and `confidence`.
+- `SourceMapAnchor` is an address/symbol/file/line record parsed from symbol definitions.
+- `SourceMapIndex` has three lookup structures: by address, by file/line, and by file anchors.
+- D8 v1 requires `format`, `version`, `arch`, `addressWidth`, `endianness`, and grouped `files`.
+- D8 segments use `start` and exclusive `end`, matching runtime `SourceMapSegment` ranges.
+- Native D8 maps are preferred over generated cache maps; listing-derived maps are regenerated when stale.
 
 ---
 
-[Part VI](README.md) | [Parsing and Lookup →](15-parsing-and-lookup.md)
+[Part VI](index.md) | [Parsing and Lookup →](15-parsing-and-lookup.md)

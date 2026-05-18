@@ -17,6 +17,26 @@ This chapter covers the provider class: what state it holds, how the webview is 
 
 ---
 
+## Language contributions
+
+Debug80 also owns the editor-facing language contribution for Z80 assembly. In `package.json`, the extension contributes:
+
+- language id `z80-asm` for `.asm`, `.z80`, `.a80`, and `.s`
+- language id `z80-lst` for `.lst`
+- language id `zax` for `.zax`
+- breakpoint support for common Z80 assembly language ids and listings
+- TextMate grammars at `syntaxes/z80-asm.tmLanguage.json` and `syntaxes/z80-lst.tmLanguage.json`
+
+The Z80 assembly grammar is deliberately lexical. It recognizes semicolon comments, strings, labels, local labels, directives, condition-bearing control instructions, Z80 mnemonics, registers, condition codes, number formats, symbols, operators, and routine-comment annotations such as `@routine`, `@in`, `@out`, `@clobbers`, and `@preserves`.
+
+Colour is driven by default `editor.tokenColorCustomizations` in `package.json`. The current palette distinguishes comments, labels, symbols, directives, annotations, instructions, registers, conditions and flags, strings, function names, operators, and numeric literals. This is TextMate colouring, not semantic-token analysis.
+
+`registerLanguageAssociations()` in `src/extension/language-association.ts` is a safety net for opened documents. Once VS Code knows the contributed languages, it assigns `.asm`, `.z80`, `.a80`, and `.s` documents to `z80-asm`, and `.zax` documents to `zax`, for `file` and `untitled` documents. That keeps decorations and breakpoints aligned with the contributed language ids even when a file was opened before associations settled.
+
+The language-server design note in the source repository is still a future direction. The current implementation provides TextMate highlighting and file association, not LSP diagnostics, completion, hover, or semantic tokens.
+
+---
+
 ## The provider class
 
 `PlatformViewProvider` implements `vscode.WebviewViewProvider`. VS Code calls `resolveWebviewView()` once when the sidebar panel first becomes visible. After that, the provider drives the webview by posting messages to it and handling messages it sends back.
@@ -441,11 +461,9 @@ The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, ar
 - A `targets` section with one entry (`plan.targetName`) containing `sourceFile`, `outputDir`, `artifactBase`, `platform`, `profile`, and the platform-specific memory map block (`simple`, `tec1`, or `tec1g`). For kits with a `bundledProfile`, the target block also includes `romHex`, optional `extraListings`, and `sourceRoots`.
 - Top-level `projectVersion`, `projectPlatform`, `defaultProfile`, and `defaultTarget` fields.
 
-Bundled ROM files are **copied immediately during scaffolding**. After writing `debug80.json`, `scaffoldProject()` calls `materializeBundledRom(extensionUri, workspaceRoot, bundleRelPath)` to copy the ROM and listing files into the workspace straight away. If the `extensionUri` is not available (rare edge case), or the copy fails, a warning is shown but the project config is still written.
-
 When the scaffold **creates** new files in this pass (`debug80.json` and/or a new `.vscode/launch.json`), it also calls `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` to create or append a standard **Debug80**-marked ignore block (see Chapter 2).
 
-As a safety net, `ensureBundledAssetsPresent()` in `src/extension/bundle-asset-installer.ts` is also called at the start of every debug session. It checks each `BundledAssetReference` in the project config and silently copies any file that is missing — recovering projects created before eager scaffolding was introduced, or where files were accidentally deleted.
+Bundled ROM files are **not copied during scaffolding**. The generated profile records `BundledAssetReference` entries. During launch, `resolveBundledAssetRuntimePath()` in `src/debug/launch-args.ts` checks the workspace path first; if that path is missing and corresponds to the bundled asset destination, it falls back to the copy inside the extension bundle. The explicit `debug80.materializeBundledRom` command copies local files when the user wants workspace copies.
 
 ### Starter templates
 
@@ -485,7 +503,7 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - Project status is assembled from workspace folders, `debug80.json` discovery, workspace-persisted target selection, and the active platform ID. It emits one of three `projectState` values and drives the project header (Project button + `+` Add-folder button, Target dropdown, Platform dropdown, Stop-on-entry checkbox, Restart button).
 
-- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively (command palette path); `getDefaultProjectKitForPlatform()` selects the bundle-first default silently (panel initialization path). `createDefaultProjectConfig()` writes `profiles` and `targets` from the chosen kit. Bundled ROM files are **copied eagerly during scaffolding** via `materializeBundledRom()`; `ensureBundledAssetsPresent()` in `src/extension/bundle-asset-installer.ts` acts as a safety net at session launch for older projects or accidentally deleted files.
+- Project scaffolding is driven by **project kits** (`src/extension/project-kits.ts`). A kit packages the platform, profile name, memory-map defaults, starter templates, and optional bundled ROM references into a single descriptor. `buildScaffoldPlan()` selects a kit interactively (command palette path); `getDefaultProjectKitForPlatform()` selects the bundle-first default silently (panel initialization path). `createDefaultProjectConfig()` writes `profiles` and `targets` from the chosen kit. Bundled ROM references resolve to workspace files first, then extension-bundled files; `debug80.materializeBundledRom` installs workspace copies on demand.
 
 ---
 
