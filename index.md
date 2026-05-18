@@ -12,6 +12,14 @@ Technical documentation for the **debug80** Z80 debugger extension and the **ZAX
 
 ## Publications
 
+### [Using Debug80 in VS Code](manual/)
+
+A practical manual for Z80 hobbyists using Debug80 with VS Code. It covers project setup, TEC-1 and TEC-1G profile kits, F5 debugging, breakpoints, registers, memory, ROM bundles, serial workflows, assembler artifacts, source mapping, and the common failures you are likely to meet while bringing a project up.
+
+For users who want to run and debug Z80 code, not modify the debugger itself.
+
+---
+
 ### [Understanding the debug80 Codebase](codebase/)
 
 A seventeen-chapter engineering reference covering every layer of the debugger: the DAP session model, the launch pipeline, the Z80 CPU emulator, all three platform runtimes, the extension UI and webview panels, source mapping, and a practical guide to extending the codebase.
@@ -39,5 +47,7 @@ For programmers learning Z80 assembly or the ZAX language.
 ## About debug80
 
 debug80 is a VS Code debugger extension for Z80 assembly programs targeting the TEC-1, TEC-1G, and compatible hardware. It provides full source-level debugging: breakpoints, step over/into/out, memory inspection, register editing, and platform-specific hardware emulation.
+
+See [Docs Readiness](docs-readiness.md) for the publishing audit behind the Debug80 user manual.
 
 Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80) · [github.com/jhlagado/zax](https://github.com/jhlagado/zax)

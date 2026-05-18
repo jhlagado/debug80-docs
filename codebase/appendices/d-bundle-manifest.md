@@ -9,7 +9,7 @@ nav_order: 4
 
 # Appendix D — ROM Bundle Infrastructure
 
-The debug80 extension ships ROM firmware, listing files, and related assets for supported platforms directly inside the VSIX package. These assets are called **ROM bundles**. When a monitor-backed project is created (TEC-1 with MON-1B or TEC-1G with MON3), the relevant ROM bundle is *materialized* into the workspace — meaning the files are copied from the extension directory into the project folder, where the debug adapter can load them at launch.
+The debug80 extension ships ROM firmware, listing files, and related assets for supported platforms directly inside the VSIX package. These assets are called **ROM bundles**. A monitor-backed project records stable workspace-relative ROM/listing paths and profile-level `bundledAssets` references in `debug80.json`. At launch, missing workspace files resolve to the copy inside the extension bundle. The explicit bundled-assets command can copy those files into the workspace when the user wants local files to inspect or override.
 
 This appendix covers the bundle manifest schema, the materialization functions, the resource directory layout, and how bundles are wired into the project-kit scaffolding and command flows.
 
@@ -142,7 +142,7 @@ The MON-1B v1 `bundle.json`:
 
 ### `materializeBundledAsset()` — single asset reference
 
-This is the primary materialization path used by the `debug80.materializeBundledRom` command and by project configuration during launch:
+This is the per-asset materialization path used by the `debug80.materializeBundledRom` command:
 
 ```typescript
 function materializeBundledAsset(
@@ -165,7 +165,7 @@ function materializeBundledAsset(
 
 ### `materializeBundledRom()` — whole-bundle copy
 
-The older function that copies *all* files in a bundle into a single flat destination directory. It is used by the `debug80.materializeBundledRom` fallback path for bundles that do not yet have per-asset project config references:
+This function copies *all* files in a bundle into the destination directory declared by the manifest. It is available for whole-bundle installation workflows when the workspace needs local copies of ROM, listing, and source files:
 
 ```typescript
 function materializeBundledRom(
@@ -208,9 +208,9 @@ bundledProfile: {
 }
 ```
 
-When `createDefaultProjectConfig()` in `project-scaffolding.ts` builds a `debug80.json` for a kit with a `bundledProfile`, it writes a `bundledAssets` map into the profile section. Each entry is a `BundledAssetReference` (`{ bundleId, path, destination }`) that the extension resolves via `materializeBundledAsset()` at launch time rather than at scaffold time.
+When `createDefaultProjectConfig()` in `project-scaffolding.ts` builds a `debug80.json` for a kit with a `bundledProfile`, it writes a `bundledAssets` map into the profile section. Each entry is a `BundledAssetReference` (`{ bundleId, path, destination }`). Scaffolding records these references but does not copy the ROM files immediately.
 
-This deferred approach means no ROM files are written to disk during project creation. Instead, the extension copies them into the workspace the first time the user starts a debug session, so `debug80.json` is the single source of truth for what assets are needed.
+The launch argument resolver checks the configured workspace path first. If that file does not exist, and the path matches the bundled asset's declared destination, it resolves the asset from `<extension>/resources/bundles/<bundleId>/<path>`. This keeps the project runnable without writing ROM files into the workspace.
 
 The two monitor-backed kits and their bundles:
 
@@ -225,11 +225,11 @@ The `debug80.materializeBundledRom` VS Code command (registered in `src/extensio
 
 1. Prompts for a workspace folder.
 2. If a `debug80.json` exists, reads the `bundledAssets` from the default profile and uses those references.
-3. If no project config is found, shows a quick-pick with the available bundles (MON3 and MON-1B) and uses `materializeBundledAsset()` for each selected reference.
+3. If no project config is found, shows a quick-pick with the available fallback plans (MON3 and MON-1B) and uses `materializeBundledAsset()` for each selected reference.
 4. Asks whether to overwrite existing files or skip them.
 5. Reports success or failure via `vscode.window.showInformationMessage()`.
 
-This is useful if a user accidentally deleted the ROM files from their workspace and wants to restore them without recreating the project.
+This is useful if a user wants local ROM/listing files for inspection or replacement. Normal launch does not require this step.
 
 ---
 
@@ -256,7 +256,7 @@ The manifest validator (`isBundleManifestV1`) checks `schemaVersion === 1`. Futu
 | `src/extension/project-kits.ts` | `ProjectKit` type with `bundledProfile`; kit registry for all platforms |
 | `src/extension/project-scaffolding.ts` | `createDefaultProjectConfig()` writes `bundledAssets` into profile from kit metadata |
 | `src/extension/commands.ts` | Registers `debug80.materializeBundledRom` command (thin shell; logic delegated to `bundle-asset-installer.ts`) |
-| `src/extension/bundle-asset-installer.ts` | `ensureBundledAssetsPresent()`, `buildBundledAssetFallbackPlans()`, and bundled asset install plan logic |
+| `src/extension/bundle-asset-installer.ts` | `buildBundledAssetFallbackPlans()` and bundled asset install plan logic for the explicit install command |
 | `resources/bundles/tec1/mon1b/v1/` | Shipped MON-1B bundle: `bundle.json`, `mon-1b.bin`, `mon-1b.lst` |
 | `resources/bundles/tec1g/mon3/v1/` | Shipped MON3 bundle: `bundle.json`, `mon3.bin`, `mon3.lst` |
 | `tests/extension/bundle-materialize.test.ts` | Unit tests for `materializeBundledRom()` and checksum mismatch handling |

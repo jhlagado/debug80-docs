@@ -83,7 +83,7 @@ The current scaffolding path writes a **version 2** manifest. The important addi
 - `defaultProfile` selects the profile used when a target does not override it
 - `bundledAssets` and profile-level `bundledAssets` can point at extension-shipped ROM/listing/source bundles
 
-In practice, the v2 manifest lets the scaffolder create monitor-first projects without hard-coding absolute paths into the starter config. Instead, the config can describe a bundled asset reference and the extension can materialize the real files into the workspace when needed.
+In practice, the v2 manifest lets the scaffolder create monitor-first projects without hard-coding absolute paths into the starter config. Instead, the config can describe a bundled asset reference and the launch resolver can fall back to the extension-bundled file when the workspace copy is absent.
 
 ### Bundled assets
 
@@ -114,7 +114,7 @@ Scaffolding is no longer just "pick a platform and write a bare JSON file". The 
 - starter templates for ASM and ZAX
 - any bundled monitor assets that should be associated with the project
 
-`src/extension/project-scaffolding.ts` builds the initial `debug80.json` from a `ScaffoldPlan`, writes starter source files, and can materialize bundled ROM assets at project creation time.
+`src/extension/project-scaffolding.ts` builds the initial `debug80.json` from a `ScaffoldPlan` and writes starter source files. Bundled ROM assets remain referenced in the config; the launch resolver uses those references to locate extension-bundled files when workspace files are absent, and the explicit bundled-assets command can install local copies on demand.
 
 ---
 
@@ -396,7 +396,6 @@ When a user creates a new project, the scaffolding system generates the config f
 4. **Write files.** The scaffold writes:
    - the starter source file if it does not already exist
    - `debug80.json` at the workspace root
-   - bundled ROM assets for kits that ship them
 
 5. **Merge `.gitignore`.** `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` appends a small, idempotent **Debug80**-marked block if one is not already present: `.debug80/` cache, the scaffold `outputDir` (e.g. `build/`), `out/` and `dist/`, `.vscode/launch.json` (local-only; the extension can still provide a default launch), and common OS files. The block does **not** ignore the entire `.vscode/` tree, so `debug80.json` can still live at `.vscode/debug80.json` if you prefer.
 
@@ -520,7 +519,7 @@ The watcher registration lives in `WorkspaceSelectionController.registerInfrastr
 
 - Three platform config types exist: `SimplePlatformConfig` (memory regions only), `Tec1PlatformConfig` (adds ROM and timing), and `Tec1gPlatformConfig` (adds banking, peripherals, and UI visibility).
 
-- Project scaffolding is now kit-driven. Platform selection happens during initialization, and the scaffold writes a version 2 manifest plus any bundled monitor assets required by the selected kit.
+- Project scaffolding is now kit-driven. Platform selection happens during initialization, and the scaffold writes a version 2 manifest with profile-level bundled-asset references for monitor-backed kits. Missing workspace assets resolve from the extension bundle at launch; the explicit bundled-assets command copies local files when requested.
 
 - The `Debug80ConfigurationProvider` enables F5-to-debug without a `launch.json` — it resolves the project config and target dynamically.
 
