@@ -72,14 +72,21 @@ The course is platform-agnostic. The programs in Part 1 target a Z80 with ROM st
 
 ### Emulator
 
-You need a Z80 emulator that shows you registers and memory at each step. Any emulator that exposes these will work. Two options that fit the course:
+Use **Debug80**, the VS Code debugger extension for this documentation site and the AZM toolchain. It is the preferred way to run course examples: assemble AZM sources, load the program image, map listing lines back to source, and debug with the same controls you would use for any VS Code project.
 
-- **FUSE** (free, cross-platform): a reference-accurate Z80 emulator with a debugger interface.
-- **ZEsarUX** (free, cross-platform): a multi-machine emulator that includes a full Z80 debugger with memory inspection, step mode, and watchpoints.
+During a session you get:
 
-For the TEC-1 I/O examples specifically, the **TEC-1 emulator** available at [git.io/tec1](https://github.com/jhlagado/tec-1) provides accurate port behaviour and a display panel matching the real hardware.
+- **Step mode** — step into, over, and out at source level; continue, pause, restart, and stop the emulated CPU.
+- **Registers** — AF, BC, DE, HL, alternate set, index registers, stack pointer, and program counter in the Variables view (including flags when a branch looks wrong).
+- **Memory** — inspect and edit RAM through Debug80's platform panels; confirm results at labels such as `$8000` after `halt`.
+- **Breakpoints** — set breakpoints in `.asm` source before or during a run; resolved breakpoints map to the generated Z80 addresses.
+- **TEC-1 support** — for Chapter 9 port I/O, configure a **TEC-1** or **Simple** target in `debug80.json` so `in`/`out` examples see the expected port map; the TEC-1 panel can drive keypad and display behaviour where the chapter references hardware.
 
-Any emulator will do for Chapters 1–8 and 10–14. Port behaviour matters only in Chapter 9.
+Install the extension, open or create a `debug80.json` project (see [Using Debug80 in VS Code](../../manual/)), assemble with `azm`, then press **F5** to start debugging. Chapters 1–8 and 10–14 need only a plain Z80 memory map; port-accurate behaviour matters mainly in Chapter 9.
+
+### Other emulators
+
+If you prefer a standalone desktop emulator, **FUSE** and **ZEsarUX** (both free and cross-platform) also expose registers, memory, and step mode. Load the `.hex` or binary AZM emits and single-step the same way Chapter 3 describes. For TEC-1-specific display and port behaviour outside VS Code, the [TEC-1 emulator](https://github.com/jhlagado/tec-1) remains a useful alternative for Chapter 9.
 
 ### Verifying a program ran correctly
 
