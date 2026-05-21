@@ -6,7 +6,7 @@ nav_order: 1
 
 # debug80 Documentation
 
-Technical documentation for the **debug80** Z80 debugger extension and the **ZAX** assembler for Visual Studio Code.
+Technical documentation for the **debug80** Z80 debugger extension and the **ZAX** and **AZM** assemblers for Visual Studio Code.
 
 ---
 
@@ -41,6 +41,14 @@ For engineers who need to understand, modify, or extend the ZAX compiler.
 A two-part course in Z80 assembly programming using the ZAX assembler. Part 1 starts from no prior knowledge and covers the Z80 from bare machine code through structured control flow, IX-frame functions, and op macros. Part 2 works through real algorithms and data structures — sorting, searching, recursion, composition, and pointer structures — covering the language as each construct appears naturally.
 
 For programmers learning Z80 assembly or the ZAX language.
+
+---
+
+### [Learn AZM Assembly](azm-book/)
+
+A two-part course in Z80 assembly programming using the AZM assembler. Part 1 starts from no prior knowledge and covers the Z80 from bare machine code through op macros, layout types, and register contracts. Part 2 works through real algorithms and data structures — sorting, searching, recursion, composition, and pointer structures — using the full AZM surface as each construct appears naturally.
+
+For programmers learning Z80 assembly or the AZM language.
 
 ---
 
