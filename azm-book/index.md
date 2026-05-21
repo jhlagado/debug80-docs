@@ -26,9 +26,9 @@ Fourteen chapters from bare machine code through ops, layout types, and register
 
 ## [AZM Book 2 — Programming the TEC-1G](book2/)
 
-In progress and publishable as a roadmap. Learn the TEC-1G as a concrete target: Debug80 projects, MON-3, the memory map, keypad input, the 8x8 RGB display, the LCD, the six-digit seven-segment display, sound, and small interactive programs.
+In progress and publishable as a roadmap. Learn the TEC-1G as a concrete target: MON-3 services, Debug80 projects, keypad input, LCD text, the six-digit seven-segment display, scanning, sound, the 8x8 RGB add-on, and small interactive programs.
 
-The outline draws on the Tetro and Pacmo TEC-1G game codebases without depending on those games as prerequisites.
+The outline draws on the Tetro and Pacmo TEC-1G game codebases without depending on those games as prerequisites. Their shared hardware layer comes before the case studies, so those chapters can grow into multi-chapter material later if the programs need more room.
 
 ---
 

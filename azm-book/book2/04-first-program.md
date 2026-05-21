@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Chapter 3 — First Program at $4000"
+title: "Chapter 4 — First Program at $4000"
 parent: "AZM Book 2 — Programming the TEC-1G"
 grand_parent: "AZM Books"
-nav_order: 4
+nav_order: 5
 ---
-[← Debug80 Workflow](02-debug80-workflow.md) | [Book 2](index.md) | [Ports and Output →](04-ports-and-output.md)
+[← Debug80 Workflow](03-debug80-workflow.md) | [Book 2](index.md) | [Keypad Input →](05-keypad-input.md)
 
-# Chapter 3 — First Program at `$4000`
+# Chapter 4 — First Program at `$4000`
 
 This chapter will assemble and run the first TEC-1G program.
 
@@ -15,7 +15,8 @@ Planned coverage:
 
 - why MON-3 user programs commonly start at `$4000`
 - how `.org $4000` differs from the platform-neutral examples in Book 1
-- proving execution with a visible memory or display change
+- a minimal loop that proves execution without touching much hardware
+- calling a simple MON-3 service, such as beep or delay
 - using the listing to confirm addresses
 - stepping the first instructions in Debug80
 - returning to MON-3 or looping deliberately
@@ -24,4 +25,4 @@ The goal is a small program whose behavior is visible without needing a full har
 
 ---
 
-[← Debug80 Workflow](02-debug80-workflow.md) | [Book 2](index.md) | [Ports and Output →](04-ports-and-output.md)
+[← Debug80 Workflow](03-debug80-workflow.md) | [Book 2](index.md) | [Keypad Input →](05-keypad-input.md)

@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Chapter 9 — A Cooperative Runtime"
+title: "Chapter 13 — A Cooperative Runtime"
 parent: "AZM Book 2 — Programming the TEC-1G"
 grand_parent: "AZM Books"
-nav_order: 10
+nav_order: 14
 ---
-[← LCD Output](08-lcd-output.md) | [Book 2](index.md) | [Tetro Case Study →](10-tetro-case-study.md)
+[← Framebuffers and Colour](12-framebuffers-and-colour.md) | [Book 2](index.md) | [Shared Game Architecture →](14-shared-game-architecture.md)
 
-# Chapter 9 — A Cooperative Runtime
+# Chapter 13 — A Cooperative Runtime
 
 This chapter will bring the hardware pieces together.
 
@@ -16,8 +16,9 @@ Planned coverage:
 - the no-background-task constraint
 - a main loop shaped as scan service plus logic service
 - keeping the matrix visible while doing useful work
-- spreading a logical frame across display rows
 - servicing sound and seven-segment scan during the same loop
+- polling keypad input without blocking scanout
+- spreading a logical frame across several passes
 - deciding what belongs in shared hardware routines and what belongs in program logic
 
 The key pattern is:
@@ -33,4 +34,4 @@ The real work is deciding what each tick is allowed to do before the hardware ne
 
 ---
 
-[← LCD Output](08-lcd-output.md) | [Book 2](index.md) | [Tetro Case Study →](10-tetro-case-study.md)
+[← Framebuffers and Colour](12-framebuffers-and-colour.md) | [Book 2](index.md) | [Shared Game Architecture →](14-shared-game-architecture.md)

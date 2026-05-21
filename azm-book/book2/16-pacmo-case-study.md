@@ -1,15 +1,15 @@
 ---
 layout: default
-title: "Chapter 11 — Pacmo Case Study"
+title: "Chapter 16 — Pacmo Case Study"
 parent: "AZM Book 2 — Programming the TEC-1G"
 grand_parent: "AZM Books"
-nav_order: 12
+nav_order: 17
 ---
-[← Tetro Case Study](10-tetro-case-study.md) | [Book 2](index.md) | [Capstone Project →](12-capstone-project.md)
+[← Tetro Case Study](15-tetro-case-study.md) | [Book 2](index.md) | [Beyond the Core →](17-beyond-core.md)
 
-# Chapter 11 — Pacmo Case Study
+# Chapter 16 — Pacmo Case Study
 
-This chapter will use Pacmo as a second TEC-1G program tour.
+This chapter will begin the Pacmo code tour. Like the Tetro material, it may split into several chapters once the full treatment is written.
 
 Planned coverage:
 
@@ -21,9 +21,10 @@ Planned coverage:
 - rendering world state into the matrix framebuffer
 - scoring on the seven-segment display
 - LCD messages and sound cues
+- how the same hardware services support a very different program structure
 
 Pacmo is useful because it stresses a different part of the same machine. Tetro is about pieces and collision in a fixed board. Pacmo is about a larger world seen through a tiny display.
 
 ---
 
-[← Tetro Case Study](10-tetro-case-study.md) | [Book 2](index.md) | [Capstone Project →](12-capstone-project.md)
+[← Tetro Case Study](15-tetro-case-study.md) | [Book 2](index.md) | [Beyond the Core →](17-beyond-core.md)
