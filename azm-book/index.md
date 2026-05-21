@@ -6,7 +6,7 @@ has_children: true
 ---
 # Learn AZM Assembly
 
-A two-part course in Z80 assembly programming using the AZM assembler, written for the debug80 ecosystem.
+A two-part course in Z80 assembly programming using the **AZM** assembler—the same tool as the standalone `@jhlagado/azm` CLI and the assembler Debug80 runs when you debug `.asm` projects in VS Code.
 
 ---
 

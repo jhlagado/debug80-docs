@@ -237,7 +237,7 @@ You have compilable code now. At some point — probably soon — a program will
 
 ### Step 1: Read the assembler listing
 
-Run `azm --list` on your source file. The listing shows each source line alongside the hex bytes it generated and the address where they were placed. Before running a program, glance at the listing and confirm:
+Produce a listing before you run the program. From a terminal, run `azm --list` on your source file. In VS Code with Debug80, start a debug session (**F5**); the target's `outputDir` receives a `.lst` (and related artifacts) you can open alongside the source. The listing shows each source line alongside the hex bytes it generated and the address where they were placed. Before running a program, glance at the listing and confirm:
 
 - Did every instruction assemble without an error or warning?
 - Is the data section placed where you intended? (`count` at `$8000`, `scratch` at `$8001`?)

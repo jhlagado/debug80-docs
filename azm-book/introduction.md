@@ -42,6 +42,8 @@ And the Z80 has enough structure to be interesting. It has a proper set of regis
 
 AZM is an assembler for the Z80, written in the tradition of ASM80 — a flat, instruction-level assembler where the machine is always visible. Every line you write maps directly to Z80 instructions, and the output you get is exactly what you wrote.
 
+You can use AZM in two ways. Install the standalone Node.js CLI (`npm install -g @jhlagado/azm`) and run `azm file.asm` from a terminal. Or open the same `.asm` in VS Code with the **Debug80** extension: when you start debugging (F5), Debug80 assembles your source as part of the launch workflow—breakpoints, stepping, registers, and memory inspection use the generated listing and program image. See [Using Debug80 in VS Code](../manual/) for extension install and `debug80.json` project setup.
+
 This is different from assemblers that add a high-level layer — typed functions, structured control flow, hidden code generation. AZM does not do that. Labels are addresses. `.db` places bytes. `call` and `ret` are what you write when you want a subroutine call. The machine is always present, never hidden.
 
 What AZM adds on top of plain assembly is practical:
@@ -90,11 +92,19 @@ By the end of Part 2 you will be able to:
 
 ## Before you start
 
-You will need:
+You will need a way to **assemble** course examples and a way to **run** them to check results.
 
-- The AZM assembler (install with `npm install -g @jhlagado/azm`, or build from source with `npm run build`)
-- A Z80 emulator or debugger to verify your programs execute correctly
-- A text editor
+**Assemble**
+
+- **Terminal:** Node.js 20+ and the AZM CLI — `npm install -g @jhlagado/azm`, then `azm path/to/program.asm` (or build AZM from source with `npm run build` and use `npm run azm --` in the AZM repo).
+- **VS Code + Debug80:** Install the Debug80 extension, add a `debug80.json` target for your `.asm` file, and press **F5**. Debug80 assembles as part of starting a debug session; you do not need a separate `azm` step for day-to-day work in the editor. Setup is in [Using Debug80 in VS Code](../manual/).
+
+**Run and verify**
+
+- With Debug80, F5 also loads the program into the emulated Z80 and opens the debugger (step mode, registers, memory, breakpoints on source lines).
+- Without VS Code, assemble with `azm`, then load the `.hex` (or binary) into a desktop emulator such as FUSE or ZEsarUX.
+
+A text editor is enough for the CLI path; VS Code is recommended when you use Debug80.
 
 You do not need prior programming experience. Part 1 assumes none. You do need patience with precision: assembly rewards careful reading and makes you pay immediately for careless writing. That is not a warning — it is most of the point.
 

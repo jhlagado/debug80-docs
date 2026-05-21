@@ -14,7 +14,7 @@ Technical documentation for the **debug80** Z80 debugger extension and the **AZM
 
 ### [Learn AZM Assembly](azm-book/)
 
-A two-part course in Z80 assembly programming using the AZM assembler. Part 1 starts from no prior knowledge and covers the Z80 from bare machine code through op macros, layout types, and register contracts. Part 2 works through real algorithms and data structures — sorting, searching, recursion, composition, and pointer structures — using the full AZM surface as each construct appears naturally.
+A two-part course in Z80 assembly programming using the AZM assembler (`@jhlagado/azm` from the terminal, or the same assembler when you assemble and debug `.asm` with Debug80 in VS Code). Part 1 starts from no prior knowledge and covers the Z80 from bare machine code through op macros, layout types, and register contracts. Part 2 works through real algorithms and data structures — sorting, searching, recursion, composition, and pointer structures — using the full AZM surface as each construct appears naturally.
 
 For programmers learning Z80 assembly or the AZM language.
 
