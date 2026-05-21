@@ -36,8 +36,6 @@ Read the first assembler diagnostic in the Debug Console. Then check:
 - The output directory.
 - Include paths and files referenced by the source.
 
-For ZAX work, make sure the target uses `"assembler": "zax"` or a `.zax` source path that the project intends to assemble with ZAX.
-
 ## ROM Asset Missing
 
 For bundled profiles, a missing workspace ROM is only a problem when the profile lacks a matching `bundledAssets` entry or the path is misspelled.
@@ -70,4 +68,3 @@ Set these launch options when you want predictable editor placement:
 ```
 
 `sourceColumn` controls source files opened by Debug80. `panelColumn` controls platform panels.
-

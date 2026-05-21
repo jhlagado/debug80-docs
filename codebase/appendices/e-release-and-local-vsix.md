@@ -23,7 +23,7 @@ the expected flow for contributors.
 
 - Build release candidates from a clean commit on `main`.
 - Keep runtime assembler dependencies in `dependencies`, not `devDependencies`.
-- Do not rely on globally installed `asm80`, globally installed ZAX, `npm link`, or sibling
+- Do not rely on globally installed `asm80`, `npm link`, or sibling
   checkouts.
 - Rebuild the extension and webview output before packaging.
 - Install and smoke-test the generated VSIX before marketplace publishing.
@@ -64,7 +64,6 @@ Before calling a VSIX candidate releasable, test:
 - an initialized project auto-starts;
 - TEC-1G MON3 launch works;
 - asm80 target assembly works;
-- ZAX target assembly works;
 - restart works;
 - breakpoints work in included source files;
 - register editing works while paused;
@@ -83,7 +82,6 @@ Before calling a VSIX candidate releasable, test:
 - `schemas/`
 - `syntaxes/`
 - `node_modules/asm80`
-- `node_modules/@jhlagado/zax`
 - `README.md`
 - `LICENSE` or `LICENSE.txt`
 - `THIRD_PARTY_NOTICES.md`

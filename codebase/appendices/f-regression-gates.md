@@ -35,7 +35,7 @@ The source-of-truth strategy lives in `debug80/docs/regression-test-strategy.md`
 
 The most important scenarios to keep guarded are:
 
-- asm80 and ZAX assemble through linked library backends, not global CLIs;
+- asm80 assembles through linked library backends, not global CLIs;
 - sparse `ORG` programs preserve address-bearing HEX/D8M behavior;
 - breakpoints verify and stop in target and included source files;
 - Windows-style and portable paths resolve consistently;

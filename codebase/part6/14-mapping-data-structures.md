@@ -117,7 +117,7 @@ Path keys are normalized with `normalizePathForKey()` so source lookup is case-i
 
 ## D8DebugMap
 
-D8 is the structured debug-map format used by Debug80 and by native producers such as ZAX. The current v1 root object is:
+D8 is the structured debug-map format used by Debug80 and native mapping producers. The current v1 root object is:
 
 ```typescript
 interface D8DebugMap {

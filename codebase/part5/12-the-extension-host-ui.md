@@ -23,7 +23,6 @@ Debug80 also owns the editor-facing language contribution for Z80 assembly. In `
 
 - language id `z80-asm` for `.asm`, `.z80`, `.a80`, and `.s`
 - language id `z80-lst` for `.lst`
-- language id `zax` for `.zax`
 - breakpoint support for common Z80 assembly language ids and listings
 - TextMate grammars at `syntaxes/z80-asm.tmLanguage.json` and `syntaxes/z80-lst.tmLanguage.json`
 
@@ -31,7 +30,7 @@ The Z80 assembly grammar is deliberately lexical. It recognizes semicolon commen
 
 Colour is driven by default `editor.tokenColorCustomizations` in `package.json`. The current palette distinguishes comments, labels, symbols, directives, annotations, instructions, registers, conditions and flags, strings, function names, operators, and numeric literals. This is TextMate colouring, not semantic-token analysis.
 
-`registerLanguageAssociations()` in `src/extension/language-association.ts` is a safety net for opened documents. Once VS Code knows the contributed languages, it assigns `.asm`, `.z80`, `.a80`, and `.s` documents to `z80-asm`, and `.zax` documents to `zax`, for `file` and `untitled` documents. That keeps decorations and breakpoints aligned with the contributed language ids even when a file was opened before associations settled.
+`registerLanguageAssociations()` in `src/extension/language-association.ts` is a safety net for opened documents. Once VS Code knows the contributed languages, it assigns `.asm`, `.z80`, `.a80`, and `.s` documents to `z80-asm` for `file` and `untitled` documents. That keeps decorations and breakpoints aligned with the contributed language ids even when a file was opened before associations settled.
 
 The language-server design note in the source repository is still a future direction. The current implementation provides TextMate highlighting and file association, not LSP diagnostics, completion, hover, or semantic tokens.
 
@@ -449,7 +448,7 @@ The `platform?` field on the `createProject` webview message flows through `hand
 After kit selection, `buildScaffoldPlan()` collects the remaining inputs:
 
 1. A target name (input box, default `'app'`).
-2. A source file choice: an existing `.asm`/`.zax` file from the workspace, or a new ASM/ZAX starter file.
+2. A source file choice: an existing `.asm` file from the workspace, or a new assembly starter file.
 
 The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, artifactBase, starterLanguage?, starterFile? }`.
 

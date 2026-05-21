@@ -21,5 +21,4 @@ This manual is for Z80 hobbyists. You may already know assembly, monitors, ROMs,
 7. [Assemblers and Source Mapping](07-assemblers-source-mapping.md)
 8. [Troubleshooting](08-troubleshooting.md)
 
-Start with chapters 2 through 4 if you want the shortest route to a running session. Read chapters 5 through 7 when you begin using TEC panels, ROM listings, serial transfer, or ZAX projects.
-
+Start with chapters 2 through 4 if you want the shortest route to a running session. Read chapters 5 through 7 when you begin using TEC panels, ROM listings, serial transfer, or source mapping.

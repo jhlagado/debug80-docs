@@ -176,7 +176,7 @@ When breakpoints are set or when a new session launches, the manager verifies pe
 
 2. **Source map** — if the source file is a mapped source, `resolveSourceBreakpoint()` looks up the (file, line) pair in the `SourceMapIndex`.
 
-3. **Alternate path** — if the source map lookup fails, the manager tries an alternate path form. The zax assembler generates two files: `program.zax` (the source) and `program.source.zax` (a preprocessed copy). The user may have either one open. The manager tries both.
+3. **Alternate path** — if the source map lookup fails, the manager tries an alternate path form. Some assembler flows generate both `program.asm` and `program.source.asm`. The user may have either one open. The manager tries both.
 
 ```typescript
 private resolveAlternateSourcePath(sourcePath: string): string | undefined {
@@ -186,7 +186,6 @@ private resolveAlternateSourcePath(sourcePath: string): string | undefined {
   if (sourcePath.endsWith('.asm')) {
     return sourcePath.replace('.asm', '.source.asm');
   }
-  // similar for .zax
 }
 ```
 

@@ -18,7 +18,7 @@ Current docs are useful but uneven:
 - **End users / Z80 hobbyists:** not publication-ready. The docs explain architecture better than day-to-day use.
 - **Debug80 contributors:** partially ready. The codebase manual is valuable, but some chapters need freshness checks.
 - **Extension/platform developers:** decent foundation, but should be treated as engineering reference, not onboarding.
-- **Beginners learning ZAX/Z80:** the ZAX book is the right publication track, but it does not replace a Debug80 VS Code manual.
+- **Beginners learning AZM/Z80:** the AZM book is the right publication track, but it does not replace a Debug80 VS Code manual.
 
 Part VI of the codebase manual is out of date in important ways. It describes older `SourceMapSegment`, `SourceMapAnchor`, and D8 map shapes that conflict with the current code and schema.
 
@@ -31,13 +31,13 @@ Part VI of the codebase manual is out of date in important ways. It describes ol
 | Z80 hobbyists using VS Code | **Low** | The existing site explains internals before it explains the day-to-day path: create a project, launch, step, inspect memory, and interact with TEC panels. |
 | Debug80 contributors | **Medium** | The engineering manual gives a useful map of the codebase, but some chapters need freshness checks against the current TypeScript. |
 | Platform extension authors | **Medium** | The platform API material is useful after a contributor already understands Debug80. It needs clearer entry points for first-time extension authors. |
-| ZAX and Z80 learners | **Medium** | The ZAX book is the right teaching track. It does not teach how to operate Debug80 inside VS Code. |
+| AZM and Z80 learners | **Medium** | The AZM book is the right teaching track. It does not teach how to operate Debug80 inside VS Code. |
 
 ---
 
 ## Key Findings
 
-The public docs site has three distinct publications: Debug80 codebase, ZAX codebase, and Learn ZAX Assembly.
+The public docs site has three distinct publications: the Debug80 user manual, the Debug80 codebase manual, and Learn AZM Assembly.
 
 The Debug80 codebase manual currently claims freshness through **2026-05-10**, but freshness is mixed by chapter.
 
@@ -78,7 +78,7 @@ The user manual is being built as `manual/` in this repo, separate from the code
 | 4. Debug in VS Code | F5, breakpoints, step controls, registers, Variables view, error messages |
 | 5. Use the Debug80 Panel | Project selector, target selector, platform panels per platform |
 | 6. ROMs, Bundled Assets, and Serial | Bundled ROM assets, `Copy Bundled Assets`, serial send/save |
-| 7. Assemblers and Source Mapping | asm80, ZAX, generated files, approximate mapping and what to do |
+| 7. Assemblers and Source Mapping | asm80, generated files, approximate mapping and what to do |
 | 8. Troubleshooting | Top failure cases with recovery steps |
 | Appendix | Command palette cheat sheet, glossary, keyboard shortcut reference per platform |
 
@@ -101,7 +101,7 @@ Validate the manual against real workflows, not just code review:
 - Fresh TEC-1G MON-3 kit: verify launch, panel sections, serial, memory, and bundled assets.
 - Existing project with `.vscode/debug80.json`.
 - Existing project with root `debug80.json`.
-- ZAX source project using `.zax`.
+- AZM source project using `.asm`.
 - Breakpoint flow in source and listing fallback.
 - Failure cases: missing `sourceFile`, missing generated listing, missing ROM override, invalid config.
 

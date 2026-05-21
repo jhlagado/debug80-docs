@@ -136,9 +136,9 @@ Debug80 has seven major subsystems. Each one owns a specific responsibility and 
 
 ### Assembly pipeline
 
-**What it does:** Assembles Z80 source files into loadable binaries. Two assembler backends are supported: asm80 (a traditional Z80 assembler) and ZAX (a structured assembler with functions and control flow). The pipeline also parses Intel HEX files to load program bytes into the emulated memory.
+**What it does:** Assembles Z80 source files into loadable binaries. The documented backend is asm80, a traditional Z80 assembler. The pipeline also parses Intel HEX files to load program bytes into the emulated memory.
 
-**Where it lives:** `src/debug/launch/assembler.ts`, `src/debug/launch/asm80-backend.ts`, `src/debug/launch/zax-backend.ts`, `src/z80/loaders.ts`
+**Where it lives:** `src/debug/launch/assembler.ts`, `src/debug/launch/asm80-backend.ts`, `src/z80/loaders.ts`
 
 **Key flow:** Source file → assembler backend → Intel HEX binary + listing file + (optionally) D8 debug map → `parseHex()` → byte array loaded into Z80 memory.
 

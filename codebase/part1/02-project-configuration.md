@@ -111,7 +111,7 @@ Scaffolding is no longer just "pick a platform and write a bare JSON file". The 
 - the platform
 - the profile name
 - the default app start address
-- starter templates for ASM and ZAX
+- starter templates for assembly projects
 - any bundled monitor assets that should be associated with the project
 
 `src/extension/project-scaffolding.ts` builds the initial `debug80.json` from a `ScaffoldPlan` and writes starter source files. Bundled ROM assets remain referenced in the config; the launch resolver uses those references to locate extension-bundled files when workspace files are absent, and the explicit bundled-assets command can install local copies on demand.
@@ -129,8 +129,7 @@ A typical multi-target config:
   "defaultTarget": "matrix",
   "targets": {
     "matrix": {
-      "sourceFile": "src/matrix.zax",
-      "assembler": "zax",
+      "sourceFile": "src/matrix.asm",
       "platform": "tec1g"
     },
     "hello": {
@@ -138,8 +137,7 @@ A typical multi-target config:
       "platform": "tec1g"
     },
     "test-serial": {
-      "sourceFile": "src/test-serial.zax",
-      "assembler": "zax",
+      "sourceFile": "src/test-serial.asm",
       "platform": "tec1g"
     }
   },
@@ -150,7 +148,7 @@ A typical multi-target config:
 }
 ```
 
-In this example, all three targets share the same `tec1g` block at the root — the ROM image and application start address are inherited. Each target specifies its own source file and assembler. The `matrix` target is the default.
+In this example, all three targets share the same `tec1g` block at the root — the ROM image and application start address are inherited. Each target specifies its own source file. The `matrix` target is the default.
 
 In the v2 manifest, a target can also point at a named profile:
 
@@ -160,8 +158,7 @@ In the v2 manifest, a target can also point at a named profile:
   "targets": {
     "matrix": {
       "profile": "mon3",
-      "sourceFile": "src/matrix.zax",
-      "assembler": "zax"
+      "sourceFile": "src/matrix.asm"
     }
   }
 }
@@ -240,7 +237,7 @@ Consider:
   },
   "targets": {
     "app": {
-      "sourceFile": "src/app.zax",
+      "sourceFile": "src/app.asm",
       "tec1g": {
         "appStart": 16384
       }
@@ -459,7 +456,6 @@ For `simple/default` and `tec1/mon1b` the same structure is used, but with the k
 
 When a source file is selected or changed, the system infers the assembler from the file extension:
 
-- `.zax` → `assembler: "zax"`
 - `.asm` → omit the `assembler` field and let asm80 remain the default
 
 This logic still matters when targets are retargeted later, but the new project-init path currently defaults straight to `src/main.asm` for the platform's default kit and does not prompt for an alternative entry source.

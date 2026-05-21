@@ -22,7 +22,7 @@ The Debug Adapter Protocol is a JSON-based request/response protocol. VS Code se
 A typical exchange:
 
 ```
-VS Code  →  launchRequest({ sourceFile: "src/app.zax", platform: "tec1g" })
+VS Code  →  launchRequest({ sourceFile: "src/app.asm", platform: "tec1g" })
 Adapter  ←  launchResponse()
 Adapter  ←  StoppedEvent('entry', threadId=1)
 

@@ -251,11 +251,11 @@ The `acquireVsCodeApi()` bridge, session status controller, and project header r
 
 ## Extending the source mapper
 
-Most platforms can use the existing mapper without modification — if you assemble with ZAX and pass `--d8`, you get HIGH-confidence mappings for free. But if you are adding a platform that uses a different assembler or a non-standard listing format, you may need to extend the parser.
+Most platforms can use the existing mapper without modification. If you are adding a platform that uses a different assembler or a non-standard listing format, you may need to extend the parser.
 
 ### Adding a listing format variant
 
-`parseMapping()` in `src/mapping/parser.ts` recognises the asm80/ZAX listing format. If your assembler produces a different format, add a parallel parser function:
+`parseMapping()` in `src/mapping/parser.ts` recognises the asm80 listing format. If your assembler produces a different format, add a parallel parser function:
 
 ```typescript
 export function parseMyassemblerListing(

@@ -43,10 +43,9 @@ If a launch configuration sets `projectConfig`, that path wins.
 
 A practical project has:
 
-- A source file such as `src/main.asm` or `src/main.zax`.
+- A source file such as `src/main.asm`.
 - A Debug80 config file with at least one target.
 - An output directory such as `build`.
 - A platform block for `simple`, `tec1`, or `tec1g`.
 
 The scaffold command creates these pieces for you.
-

@@ -10,14 +10,13 @@ Debug80 needs machine code to run and source mapping to show you where the CPU i
 
 ## Assembler Backends
 
-Debug80 supports two assembler backends:
+Debug80 uses the configured assembler backend to turn source into artifacts:
 
 | Backend | Use it for |
 |---|---|
 | `asm80` | Traditional Z80 assembly projects using asm80-compatible source. |
-| `zax` | ZAX structured assembler projects and `.zax` source files. |
 
-If the target omits `assembler`, Debug80 uses `asm80`. Set `"assembler": "zax"` for ZAX projects.
+If the target omits `assembler`, Debug80 uses `asm80`.
 
 ## Generated Artifacts
 
@@ -29,7 +28,6 @@ During launch, Debug80 writes artifacts under the target's `outputDir` using `ar
 | `.lst` | Listing file used for source mapping and inspection. |
 | `.bin` | Compact binary output when the target requests a binary range. |
 | `.d8.json` | D8 debug map used for higher-confidence source mapping. |
-| `.z80` | Lowered Z80 assembly emitted by the ZAX backend. |
 
 The exact set depends on the backend and target options.
 
@@ -46,4 +44,3 @@ When mapping looks wrong:
 - Check `sourceRoots` for included files.
 - Put the breakpoint on an instruction line rather than a label, comment, or directive-only line.
 - Open the ROM listing/source if the PC is inside monitor code.
-
