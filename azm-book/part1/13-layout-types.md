@@ -5,7 +5,7 @@ parent: "Part 1 — Z80 Fundamentals"
 grand_parent: "Learn AZM Assembly"
 nav_order: 13
 ---
-[← Register Contracts](12-register-contracts-azmdoc.md) | [Part 1](index.md) | [Op Declarations →](14-op-macros.md)
+[← Register Contracts](12-register-contracts-azmdoc.md) | [Part 1](index.md) | [Op Declarations →](14-op-declarations.md)
 
 # Chapter 13 — Layout Types
 
@@ -531,4 +531,4 @@ Without running AZM, compute `sizeof(Enemy)`, `offset(Enemy, x)`, `offset(Enemy,
 
 ---
 
-[← Register Contracts](12-register-contracts-azmdoc.md) | [Part 1](index.md) | [Op Declarations →](14-op-macros.md)
+[← Register Contracts](12-register-contracts-azmdoc.md) | [Part 1](index.md) | [Op Declarations →](14-op-declarations.md)

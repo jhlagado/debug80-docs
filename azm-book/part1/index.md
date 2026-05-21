@@ -44,7 +44,7 @@ By Chapter 10 you can read and write any raw Z80 program. By Chapter 14 you can 
 | 11 | [Subroutine Conventions](11-subroutine-conventions.md) | Register discipline, calling conventions, push/pop preservation |
 | 12 | [Register Contracts with AZMDoc](12-register-contracts-azmdoc.md) | AZMDoc `;!` contracts, `@ROUTINE:` entry labels, register-care analysis |
 | 13 | [Layout Types](13-layout-types.md) | `byte`/`word` scalars, `.type`/`.union`, `sizeof`/`offset`, `.ds` type expressions, layout casts, enums |
-| 14 | [Op Declarations](14-op-macros.md) | `op` for inline expansion, operand matchers, pseudo-opcodes |
+| 14 | [Op Declarations](14-op-declarations.md) | `op` for inline expansion, operand matchers, pseudo-opcodes |
 
 Example files are under `examples/` in this directory. Examples `00` and `01` accompany Chapter 3; example `02` accompanies Chapter 4. From `03` onward, each example corresponds to the next chapter: `03_flag_tests_and_jumps.asm` goes with Chapter 5, `04_djnz_loops.asm` with Chapter 6, and so on. Chapters 1 and 2 have no example files — they cover concepts that precede writing code.
 

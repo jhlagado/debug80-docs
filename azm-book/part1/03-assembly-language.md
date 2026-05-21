@@ -52,12 +52,14 @@ You just saw two constructs in that program that are not Z80 instructions: `.org
 **AZM adds** the following on top:
 
 - **Directives**: `.org` places code and data at specific addresses; `.equ` names a compile-time constant; `.db`, `.dw`, `.ds` define storage; `.include` splits programs across files; `.cstr`, `.pstr`, `.istr` handle string types
-- **`op`** — defines an inline instruction-sequence macro that expands at each call site, with no call overhead
+- **`op`** — defines an inline instruction sequence that expands at each call site, with no call overhead
 - **`type` / `union`** — named record layouts with scalar types (`byte`, `word`, `addr`); `sizeof` and `offset` compute byte sizes and field positions as compile-time constants; `.ds` accepts type expressions such as `.ds Sprite[16]`
 - **`enum`** — named sets of values with no memory allocated
 - **AZMDoc** — formal `;!` register contracts on subroutines, verified by the assembler
 
-AZM does **not** add function declarations, local variables, structured control-flow keywords, or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`. Every program is flat Z80 instructions with labels. If you look up `.org` or `.equ` in a Z80 reference you will find them — they are standard assembler directives, not AZM inventions. The Z80 mnemonics (`ld`, `add`, `cp`, `djnz`, `call`, `ret`) are always Z80 instructions, and any Z80 reference covers them.
+AZM does **not** add function declarations, local variables, structured control-flow keywords, or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`. Every program is flat Z80 instructions with labels.
+
+If you look up `.org` or `.equ` in a Z80 reference you will find them — they are standard assembler directives, not AZM inventions. The Z80 mnemonics (`ld`, `add`, `cp`, `djnz`, `call`, `ret`) are always Z80 instructions, and any Z80 reference covers them.
 
 ---
 

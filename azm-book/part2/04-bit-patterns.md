@@ -11,7 +11,7 @@ nav_order: 5
 
 Chapters 2 and 3 treated each byte as one number. Hardware status registers, UART flags, and packed record fields treat a byte as **eight switches in one box**. You set one switch without breaking the others with masks, `and` / `or` / `xor`, and shifts.
 
-This chapter works through a packed status byte: test a flag, set a flag, clear a flag, isolate one bit for a boolean result. Named `op` macros from Part 1 Chapter 14 spell the repeated mask idioms. The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm).
+This chapter works through a packed status byte: test a flag, set a flag, clear a flag, isolate one bit for a boolean result. Named `op` declarations from Part 1 Chapter 14 spell the repeated mask idioms. The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm).
 
 ---
 
