@@ -283,7 +283,7 @@ If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` w
 ; ring_push: append one byte; carry set on success, carry clear when full
 ;!      in        A, IX
 ;!      out       carry
-;!      clobbers  AF, BC, DE, HL
+;!      clobbers  BC, DE, HL
 @ring_push:
     ld e, a
     ld a, (ix + RING_COUNT)
@@ -317,7 +317,7 @@ The byte to store starts in A; the routine moves it to E while using A for compa
 ; ring_pop: remove oldest byte; carry set on success, carry clear when empty
 ;!      in        IX
 ;!      out       A, carry
-;!      clobbers  AF, BC, DE, HL
+;!      clobbers  BC, DE, HL
 @ring_pop:
     ld a, (ix + RING_COUNT)
     or a

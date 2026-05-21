@@ -68,7 +68,7 @@ main:
 ; ring_push: append one byte; carry set on success, carry clear when full
 ;!      in        A, IX
 ;!      out       carry
-;!      clobbers  AF, BC, DE, HL
+;!      clobbers  BC, DE, HL
 @ring_push:
     ld e, a
     ld a, (ix + RING_COUNT)
@@ -96,7 +96,7 @@ main:
 ; ring_pop: remove oldest byte; carry set on success, carry clear when empty
 ;!      in        IX
 ;!      out       A, carry
-;!      clobbers  AF, BC, DE, HL
+;!      clobbers  BC, DE, HL
 @ring_pop:
     ld a, (ix + RING_COUNT)
     or a

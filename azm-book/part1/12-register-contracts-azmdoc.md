@@ -206,7 +206,7 @@ That declares an intentional transformation, not an accidental clobber.
 
 ## Flags are return values
 
-Part 2 uses carry for success and failure (`ring_push`, `ring_pop`, and others). Chapter 12 should treat flags as first-class contract carriers, not an afterthought.
+Part 2 uses carry for success and failure (`ring_push`, `ring_pop`, and others). Flags are first-class contract carriers, not an afterthought.
 
 ### Success on carry set
 
@@ -214,7 +214,7 @@ Part 2 uses carry for success and failure (`ring_push`, `ring_pop`, and others).
 ; try_read: read one byte into A; carry set on success
 ;!      in        HL
 ;!      out       A, carry
-;!      clobbers  AF, BC, HL
+;!      clobbers  BC, HL
 @try_read:
     ...
     scf
@@ -251,11 +251,27 @@ A flag can be the entire return value. You do not need a separate error code byt
 ; ring_push: append byte in A; carry set on success, carry clear when full
 ;!      in        A, IX
 ;!      out       carry
-;!      clobbers  AF, BC, DE, HL
+;!      clobbers  BC, DE, HL
 @ring_push:
 ```
 
 Avoid embedding flag syntax in the machine line (`out F.C`) when `out carry` is the formal carrier and the comment carries the success/failure story.
+
+### `out` and `clobbers` must not contradict
+
+Register pairs in `clobbers` expand to their parts: `AF` means A and F together. If A or a flag is an **`out`**, do not also list that carrier inside a broad `clobbers AF` line — beginners read that as “return A, but destroy A.”
+
+Rule: **`out` describes what the caller may rely on after `ret`; `clobbers` lists everything else destroyed without restore.** When A and carry are outputs, name them in `out` and list only the other scratch registers in `clobbers`:
+
+```asm
+; ring_pop: oldest byte in A; carry set on success, carry clear when empty
+;!      in        IX
+;!      out       A, carry
+;!      clobbers  BC, DE, HL
+@ring_pop:
+```
+
+Register-care treats `out` as authoritative at the return boundary. Internal use of A or flags mid-routine does not require listing A in `clobbers` when the contract promises a defined A and carry on exit.
 
 ---
 
@@ -511,7 +527,7 @@ Does push/pop on BC belong in `clobbers` or not? Why?
 **2. Read a diagnostic.**
 
 ```text
-source.asm:18: warning: C is live across call to find_max, but find_max may clobber C
+source.asm:18: warning: HL is live across call to find_max, but find_max may clobber H, L
 ```
 
 `find_max` declares `clobbers B, HL` only. What does the warning mean? What should the caller change?
