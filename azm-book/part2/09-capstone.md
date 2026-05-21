@@ -68,7 +68,7 @@ diag_diff_used .field byte[15]
 
 QS_SOLUTION .equ offset(QueenWorkspace, solution_count)
 QS_COLS     .equ offset(QueenWorkspace, queen_cols)
-; ... then (ix + QS_COLS) instead of a global col_used label
+; ... then (ix + QS_COLS) instead of a global queen_cols label
 ```
 
 Layout types scale to whole workspace regions: one `.type`, one base label, constants for every inner field — still plain Z80 in the listing.
