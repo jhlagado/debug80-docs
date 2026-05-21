@@ -6,6 +6,7 @@
 ;   (sum_rec)   at $8002 — $8003 — sum_u8_rec on demo table → $001A (26)
 
 FACT_N .equ 5
+NUMS_LEN .equ 5
 
 ; Stack budget for factorial_u8 (compile-time check on paper):
 ;   each active frame: return address (2) + push bc (2) = 4 bytes
@@ -26,7 +27,7 @@ main:
     ld (fact_iter), a
 
     ld hl, demo_nums
-    ld a, 5
+    ld a, NUMS_LEN
     call sum_u8_rec
     ld (sum_rec), hl
 
@@ -36,7 +37,7 @@ main:
 ; Self-call; max depth FACT_MAX_DEPTH; frame FACT_FRAME_BYTES bytes.
 ;!      in        B
 ;!      out       A
-;!      clobbers  AF, BC
+;!      clobbers  AF, BC, DE
 @factorial_u8:
     ld a, b
     or a
@@ -67,8 +68,10 @@ main:
     or a
     jr z, .iter_done
     ld a, e
+    push bc
     call mul8_a_by_c
     ld e, a
+    pop bc
     dec c
     jr .iter_loop
 .iter_done:
@@ -105,18 +108,17 @@ main:
     or a
     jr z, .zero
     push af
-    push bc
     ld b, a
     ld a, (hl)
-    ld c, a
+    push af
     inc hl
     dec b
     ld a, b
     call sum_u8_rec
-    ld e, c
+    pop af
+    ld e, a
     ld d, 0
     add hl, de
-    pop bc
     pop af
     ret
 .zero:

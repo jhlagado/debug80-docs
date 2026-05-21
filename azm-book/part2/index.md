@@ -55,10 +55,10 @@ Companion examples live in [`examples/`](examples/). Each full chapter cites a m
 | 3 | [Strings](03-strings.md) | **Written** | Null-terminated strings, strlen/copy/compare, char search |
 | 4 | [Bit Patterns](04-bit-patterns.md) | **Written** | Masks, shifts, packed flags, `op` idioms |
 | 5 | [Records](05-records.md) | **Written** | `.type` records, `sizeof`/`offset`, layout casts, ring buffer FIFO |
-| 6 | [Recursion](06-recursion.md) | Outlined | Stack depth, Hanoi, recursive list walk |
+| 6 | [Recursion](06-recursion.md) | **Written** | Stack budget, factorial vs iterative, `sum_u8_rec`, AZMDoc on self-calls |
 | 7 | [Composition](07-composition.md) | **Written** | `.include`, `lib/strings.asm`, symbol discipline, `.asmi` sketch |
-| 8 | [Pointer Structures](08-pointer-structures.md) | Outlined | Linked list, BST insert/search |
-| 9 | [Capstone](09-capstone.md) | Outlined | Eight queens backtracking |
+| 8 | [Pointer Structures](08-pointer-structures.md) | **Written** | `.word` links, singly linked list traverse/find/head insert, optional BST sketch |
+| 9 | [Capstone](09-capstone.md) | **Written** | Eight queens backtracking |
 
 ---
 
@@ -71,7 +71,10 @@ Companion examples live in [`examples/`](examples/). Each full chapter cites a m
 | [examples/03_string_length.asm](examples/03_string_length.asm) | 3 | `strlen`, `strcpy`, `strcmp`, `str_find_char`, then `halt` |
 | [examples/04_bit_flags.asm](examples/04_bit_flags.asm) | 4 | Set/test/clear flag bits with `op` helpers, then `halt` |
 | [examples/05_ring_buffer.asm](examples/05_ring_buffer.asm) | 5 | Ring buffer push/pop, full-ring fail, FIFO verify |
+| [examples/06_factorial.asm](examples/06_factorial.asm) | 6 | Recursive and iterative `5!`, recursive table sum |
 | [examples/07_include_demo.asm](examples/07_include_demo.asm) | 7 | `main` includes `lib/strings.asm`, calls shared `strlen_u8` |
+| [examples/08_linked_list.asm](examples/08_linked_list.asm) | 8 | List sum, find `$22`, insert `$40` at head |
+| [examples/09_eight_queens.asm](examples/09_eight_queens.asm) | 9 | Count all 8-queen solutions → `solution_count` = 92 |
 
 ---
 
