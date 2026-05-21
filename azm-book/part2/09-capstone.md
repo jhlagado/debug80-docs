@@ -55,6 +55,24 @@ DIAG_DIFF_LEN .equ 15
 
 This is not a 64-cell chess diagram in RAM. You do not need one byte per square to **search** — you need fast answers to “is this column or diagonal already taken?” Byte tables indexed by column or by diagonal id are enough. Chapter 4's masks would pack each `col_used` row into one bit per column (a **bitboard** per row); the companion uses whole bytes for clarity so every test is `ld a, (hl)` / `or a` / `jr nz`.
 
+The companion keeps separate `.ds` labels for teaching clarity. In a larger project you can fold the workspace into one record and name every field offset once — the same idiom as the ring buffer in Chapter 5:
+
+```asm
+.type QueenWorkspace
+solution_count .word
+queen_cols     .field byte[8]
+col_used       .field byte[8]
+diag_sum_used  .field byte[15]
+diag_diff_used .field byte[15]
+.endtype
+
+QS_SOLUTION .equ offset(QueenWorkspace, solution_count)
+QS_COLS     .equ offset(QueenWorkspace, queen_cols)
+; ... then (ix + QS_COLS) instead of a global col_used label
+```
+
+Layout types scale to whole workspace regions: one `.type`, one base label, constants for every inner field — still plain Z80 in the listing.
+
 `queen_cols` updates whenever you commit a placement so the last completed board is visible when the count finishes. Counting all solutions does not require printing the board.
 
 ---

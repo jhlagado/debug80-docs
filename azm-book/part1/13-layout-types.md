@@ -35,6 +35,8 @@ That works as long as the layout never changes. Add a field before color and eve
 
 AZM's layout type system closes that gap. You describe a record once, and the assembler computes every size and offset from that description at assembly time. The CPU still performs the actual address arithmetic at run time — AZM does not generate hidden indexing code. It gives you named constants so the layout lives in one place.
 
+**AZM does not add hidden data access. It gives names to layout facts.** Layout types are not runtime types — they are **compile-time memory contracts**, the same way AZMDoc documents register boundaries at subroutine calls. One names what crosses a `call`; the other names what sits at each byte offset in a record. Both keep intent explicit while the emitted machine code stays visible.
+
 ---
 
 ## Scalar types: `byte`, `word`, and `addr`
@@ -130,6 +132,19 @@ sprite_table:
 ```
 
 `.ds Sprite[8]` reserves `sizeof(Sprite) * 8` bytes. The label `sprite_table` is an ordinary address. AZM does not permanently attach a type to it; you supply the layout when you need a constant offset (covered later in this chapter).
+
+### Named element counts
+
+When the number of elements is a named constant, multiply explicitly — the current assembler accepts literal counts inside `Type[N]` for `.ds`, not a `.equ` name in those brackets:
+
+```asm
+NumSprites .equ 16
+
+sprite_table:
+    .ds NumSprites * sizeof(Sprite)   ; same bytes as .ds Sprite[16]
+```
+
+Use `.ds Sprite[16]` when the count is written as a literal in source. Use `.ds Count * sizeof(Sprite)` when the count lives in a `.equ`. Part 2's ring buffer uses the same idea for scalar buffers: `.ds RING_CAP` alongside `.ds byte[8]` for a fixed width.
 
 A `.type` block must list fields. One-line aliases such as `.type Pair byte[2]` are rejected — if you need a pair of bytes, write the fields:
 
@@ -293,8 +308,30 @@ tag     .byte
 
 sizeof(Cell)                  ; = 2
 offset(Cell, raw)             ; = 0
-offset(Cell, pair.right)      ; = 1
+offset(Cell, pair.lo)         ; = 0
+offset(Cell, pair.hi)         ; = 1
 ```
+
+### Alternate views of the same bytes
+
+Unions matter when the **same address** should be described two ways — as a 16-bit quantity or as low/high bytes, as a raw port byte or as flag bits:
+
+```asm
+.type Pair
+lo      .byte
+hi      .byte
+.endtype
+
+.union WordView
+raw     .word
+bytes   .field Pair
+.endunion
+
+WORD_LO .equ offset(WordView, bytes.lo)
+WORD_HI .equ offset(WordView, bytes.hi)
+```
+
+`sizeof(WordView)` is 2. `offset(WordView, raw)` and `offset(WordView, bytes.lo)` are both 0; `offset(WordView, bytes.hi)` is 1. At run time you still use plain `ld` / `ld (hl)` — the union only documents that the low byte of the word and `bytes.lo` share the same offset. Part 2's bit-pattern chapter treats a status byte as flags; a union could also name `raw` vs `flags` views of one hardware register when you want both spellings in layout constants.
 
 Unions nest inside records:
 
@@ -344,6 +381,44 @@ tile_map:
 
 Member values are assigned sequentially from 0: `North = 0`, `South = 1`, `East = 2`, `West = 3`.
 
+### Enums as state and command names
+
+Enums are not high-level data types. They are **grouped constants with collision protection** — named states, command bytes, and token kinds that would otherwise be bare `$00`, `$01`, `$02`.
+
+Store a mode byte in RAM and branch on it:
+
+```asm
+enum GameMode Title, Playing, Paused, GameOver
+
+game_mode:
+    .db GameMode.Title
+
+    ...
+    ld a, (game_mode)
+    cp GameMode.Playing
+    jr z, .playing
+    cp GameMode.Paused
+    jr z, .paused
+```
+
+`GameMode.Playing` assembles to the constant `1`. The qualification prevents a short name like `Playing` from colliding with a label elsewhere.
+
+Command dispatch uses the same pattern:
+
+```asm
+enum Command MoveLeft, MoveRight, Rotate, Drop
+
+pending:
+    .db Command.Rotate
+
+    ...
+    ld a, (pending)
+    cp Command.Rotate
+    jr z, .do_rotate
+```
+
+`Command.Rotate` is still just a byte in memory and in A. The enum carries **intent** for the reader and the assembler; it does not add runtime checking. For tables of handlers you would still index by that byte yourself — the enum documents which values are legal, not how to jump.
+
 ---
 
 ## Layout cast syntax
@@ -377,12 +452,14 @@ Nested fields work the same way:
   ld hl, <Actor>player.pos.x
 ```
 
-The index inside the brackets must be a compile-time constant. A named constant is fine:
+The index inside the brackets must be a compile-time constant. A named `.equ` used in an **expression** is fine for layout-cast indexes:
 
 ```asm
 BASE .equ 2
   ld hl, <Sprite[16]>sprite_table[BASE + 1].color
 ```
+
+That is different from `.ds Sprite[NumSprites]` — reservation with `Type[N]` requires a **literal** `N` in the current assembler; use `.ds NumSprites * sizeof(Sprite)` for a named count.
 
 A runtime register is not valid:
 
@@ -428,8 +505,10 @@ POINT_Y     .equ offset(Point, y)
 NumPoints   .equ 4
 
 points:
-    .ds Point[NumPoints]     ; 8 bytes: space for 4 points
+    .ds NumPoints * sizeof(Point)   ; 8 bytes: space for 4 points
 ```
+
+Named counts work through ordinary expression arithmetic, not through `Point[NumPoints]` in `.ds`.
 
 Initialize the table in ROM with four points:
 
@@ -497,7 +576,7 @@ The assembler computes `points + 2 * sizeof(Point) + offset(Point, y)` = `points
 
 - `byte`, `word`, and `addr` are scalar layout types. `sizeof(byte)` is 1; `sizeof(word)` is 2.
 - `.type Name` / `.endtype` declares a packed record layout. Fields use `.byte`, `.word`, `.addr`, or `.field N`. Field declarations do not allocate memory.
-- `.ds TypeExpr` reserves storage: `.ds byte`, `.ds word[8]`, `.ds Sprite`, `.ds Sprite[16]`.
+- `.ds TypeExpr` reserves storage: `.ds byte`, `.ds word[8]`, `.ds Sprite`, `.ds Sprite[16]`, or `.ds Count * sizeof(Sprite)` for a named element count.
 - `sizeof(Type)` returns the exact byte size. `sizeof(Sprite[16])` returns `16 * sizeof(Sprite)`.
 - `offset(Type, path)` returns a field's byte offset. Paths can nest (`pos.x`) and index arrays (`sprites[3].color`, or `offset(Sprite[16], [2].flags)`).
 - Use `.equ` to name these constants, then use the names in instructions and `.ds` directives.
@@ -528,6 +607,8 @@ Without running AZM, compute `sizeof(Enemy)`, `offset(Enemy, x)`, `offset(Enemy,
 **3. Write a layout cast.** Using the `Enemy` type from Exercise 1, write the instruction that loads the address of the `flags` field of `enemy_table[4]` into HL, where `enemy_table` is the base label. Verify your answer: what numeric offset from `enemy_table` does this expand to?
 
 **4. Enum in a dispatch.** Define an enum `Command` with members `Move`, `Attack`, `Wait`, `Retreat`. Write the instruction that loads the value of `Command.Attack` into A. Then write a comment explaining why `ld a, Attack` would fail to assemble.
+
+**5. Union offsets.** Given `WordView` from this chapter (`raw` as `.word`, `bytes` as `.field Pair`), write `.equ` lines for `WORD_LO` and `WORD_HI` using `offset`. What is `sizeof(WordView)`? Why are `offset(WordView, raw)` and `offset(WordView, bytes.lo)` both 0?
 
 ---
 

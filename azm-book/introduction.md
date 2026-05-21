@@ -50,8 +50,8 @@ What AZM adds on top of plain assembly is practical:
 
 - **Directives** like `.org`, `.db`, `.dw`, `.ds`, `.equ`, `.include`, and string types give you clean, documented ways to lay out your program in memory
 - **`op` declarations** let you give a short instruction sequence a name and expand it inline wherever you use it — without introducing a call boundary or any hidden overhead
-- **Layout types** (`byte`, `word`, `type`, `union`, `sizeof`, `offset`) let you define named record layouts, reserve storage with `.ds Sprite[16]`, and compute byte offsets as compile-time constants, so you never count struct offsets by hand
-- **Enums** give names to sets of values without allocating any memory
+- **Layout types** (`byte`, `word`, `type`, `union`, `sizeof`, `offset`) name memory layout at assembly time — allocation and constants, not hidden loads or stores — so you never count struct offsets by hand
+- **Enums** name states and command bytes as grouped constants (`GameMode.Playing`), not runtime types
 - **AZMDoc** lets you write formal register contracts for your subroutines — documenting what goes in, what comes out, and what gets clobbered — and have the assembler verify callers and callees agree
 - **Register-care analysis** uses those contracts to warn you when a subroutine's actual register usage contradicts what its documentation claims
 
