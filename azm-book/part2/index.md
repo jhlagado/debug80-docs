@@ -7,9 +7,9 @@ has_children: true
 ---
 # Part 2 — Algorithms and Data Structures
 
-**Prerequisite:** complete [Part 1 — Z80 Fundamentals](../part1/index.md) through Chapter 14. You should be comfortable with raw Z80, subroutine conventions, AZMDoc contracts, layout types, and `op` macros before starting here.
+**Prerequisite:** complete [Part 1 — Z80 Fundamentals](../part1/index.md) through Chapter 14. You should be comfortable with raw Z80, subroutine conventions, AZMDoc contracts, layout types, and ops before starting here.
 
-This part is **not** a port of the ZAX Part 2 volume. It teaches classic algorithms and small data structures in **flat AZM assembly** — the same machine model as Part 1, with representation before algorithm (Wirth) and small complete programs with explicit invariants (K&R).
+This part teaches classic algorithms and small data structures in **flat AZM assembly** — the same machine model as Part 1, with representation before algorithm (Wirth) and small complete programs with explicit invariants (K&R).
 
 ---
 
@@ -23,7 +23,7 @@ Part 1 taught the Z80 and the AZM tooling that makes assembly maintainable. Part
 | AZMDoc `;!` + `@ROUTINE:` | Machine-checkable subroutine specs |
 | `byte` / `word` / `addr`, `.type`, `sizeof`, `offset` | Arrays, records, and layout-aware indexing |
 | `.ds Type[N]` | Workspace RAM for algorithm-local state |
-| `op` macros | Named idioms inside hot loops |
+| Ops | Named idioms inside hot loops |
 
 There is no hidden runtime: no `func`, no `:=`, no structured `if`/`while`, no `import`, no typed memory lowering. Every branch and every memory access is visible in the listing.
 

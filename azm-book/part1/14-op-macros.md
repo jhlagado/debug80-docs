@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Chapter 14 — Op Macros"
+title: "Chapter 14 — Op Declarations"
 parent: "Part 1 — Z80 Fundamentals"
 grand_parent: "Learn AZM Assembly"
 nav_order: 14
 ---
 [← Layout Types](13-layout-types.md) | [Part 1](index.md)
 
-# Chapter 14 — Op Macros
+# Chapter 14 — Op Declarations
 
 The Z80 instruction set has gaps. `ld hl, de` does not exist — copying HL into DE requires two separate byte moves. Testing whether A is strictly greater than a threshold takes a `cp` and two conditional jumps. Zeroing a register pair means loading the immediate zero, not a dedicated clear instruction.
 
@@ -214,7 +214,7 @@ end
 
 ## Op expansion is visible in the listing
 
-When you run `azm --list source.asm`, the listing shows the expanded instructions at each call site — not the op name. This is deliberate: the listing reflects the actual machine output.
+When you run `azm source.asm`, AZM writes a `.lst` file by default. That listing shows the expanded instructions at each call site — not the op name. This is deliberate: the listing reflects the actual machine output.
 
 For `count_above` from Chapter 10, if the strictly-above check were wrapped in an op:
 
@@ -318,7 +318,7 @@ The machine output is identical. The listing shows the same three instructions a
 - Parameterized ops substitute matched operands into the body. Matcher types: `reg8` (A–L), `reg16` (HL/DE/BC/SP), `imm8` (8-bit immediate), `imm16` (16-bit immediate or label), `ea` (effective address), `mem8`/`mem16` (memory operand with parentheses), `cc` (condition code).
 - Multiple overloads of the same op name are resolved by specificity. Fixed-register matchers beat class matchers; `imm8` beats `imm16` for small values.
 - Use an op for short sequences where call overhead would be a significant fraction of the work. Use a subroutine when the body is long enough that a single copy saves meaningful space.
-- The listing (`--list`) shows expanded instructions at each call site, not the op name. The analyzer sees the expanded sequence.
+- The listing (`.lst`) shows expanded instructions at each call site, not the op name. The analyzer sees the expanded sequence.
 - Pseudo-opcodes are ops that fill gaps in the Z80 instruction set: `ld hl, de` (two byte moves), `clear16 HL` (load immediate zero), and similar.
 
 ---

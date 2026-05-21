@@ -34,7 +34,7 @@ The Z80 has a small instruction set. There are a few hundred instructions, and o
 
 The Z80 has a clean memory model. A 16-bit address bus gives 65,536 bytes of addressable space. Everything — code, data, the stack — lives in that flat array. There is no virtual memory, no protected mode, no operating system in the way. You put bytes in memory and the CPU runs them.
 
-And the Z80 has enough structure to be interesting. It has a proper set of registers, an index register for structured data access, a hardware stack, and a well-designed calling convention. Everything that matters in real-world assembly programming is present, in a form simple enough to understand completely.
+And the Z80 has enough structure to be interesting. It has a proper set of registers, an index register for structured data access, a hardware stack, and simple `call` / `ret` instructions, so you can build clear subroutine conventions yourself. Everything that matters in real-world assembly programming is present, in a form simple enough to understand completely.
 
 ---
 
@@ -44,7 +44,7 @@ AZM is an assembler for the Z80, written in the tradition of ASM80 — a flat, i
 
 You can use AZM in two ways. Install the standalone Node.js CLI (`npm install -g @jhlagado/azm`) and run `azm file.asm` from a terminal. Or open the same `.asm` in VS Code with the **Debug80** extension: when you start debugging (F5), Debug80 assembles your source as part of the launch workflow—breakpoints, stepping, registers, and memory inspection use the generated listing and program image. See [Using Debug80 in VS Code](../manual/) for extension install and `debug80.json` project setup.
 
-This is different from assemblers that add a high-level layer — typed functions, structured control flow, hidden code generation. AZM does not do that. Labels are addresses. `.db` places bytes. `call` and `ret` are what you write when you want a subroutine call. The machine is always present, never hidden.
+This is different from assemblers that add a high-level layer — typed routines, structured control flow, hidden code generation. AZM does not do that. Labels are addresses. `.db` places bytes. `call` and `ret` are what you write when you want a subroutine call. The machine is always present, never hidden.
 
 What AZM adds on top of plain assembly is practical:
 

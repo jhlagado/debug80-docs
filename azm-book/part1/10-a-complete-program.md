@@ -183,7 +183,7 @@ These four things become increasingly tedious as programs grow past a handful of
 
 ## What the next chapters address
 
-Chapter 11 covers subroutine calling conventions in depth: how to pass arguments, which registers to save and restore, and the IX-frame pattern for subroutines that need local storage. Chapter 12 introduces AZMDoc, which turns the comment-only contracts above each subroutine into machine-checkable `;!` annotations — the assembler can verify that the caller sets the right registers and that the subroutine produces what it claims. Chapter 13 introduces layout types — scalar types, `.type` records, `sizeof`, `offset`, and `.ds` type expressions — so byte offsets in records are always named and never counted by hand. Chapter 14 introduces `op` macros, which give names to short instruction sequences and expand them inline wherever you write the name.
+Chapter 11 covers subroutine calling conventions in depth: how to pass arguments, which registers to save and restore, and the IX-frame pattern for subroutines that need local storage. Chapter 12 introduces AZMDoc, which turns the comment-only contracts above each subroutine into machine-checkable `;!` annotations — the assembler can verify that the caller sets the right registers and that the subroutine produces what it claims. Chapter 13 introduces layout types — scalar types, `.type` records, `sizeof`, `offset`, and `.ds` type expressions — so byte offsets in records are always named and never counted by hand. Chapter 14 introduces `op` declarations, which give names to short instruction sequences and expand them inline wherever you write the name.
 
 ---
 
@@ -194,7 +194,7 @@ Chapter 11 covers subroutine calling conventions in depth: how to pass arguments
 - The caller must reload any register that the subroutine modified before the next call.
 - The push/pop in `count_above` around `ld d, 0` protects BC while initializing D — it turns out to be unnecessary here, but the instinct to save registers when uncertain is reasonable in a longer subroutine.
 - The double `cp c` implements "strictly greater than" using the only comparisons the Z80 offers: less-than (carry) and equal (zero). The intent is not visible from either instruction alone.
-- Chapters 11–14 — calling conventions, AZMDoc contracts, layout types, and `op` macros — each address one of the friction points this program exposes.
+- Chapters 11–14 — calling conventions, AZMDoc contracts, layout types, and ops — each address one of the friction points this program exposes.
 
 ---
 

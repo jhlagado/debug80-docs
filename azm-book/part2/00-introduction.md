@@ -9,7 +9,7 @@ nav_order: 1
 
 # Introduction to Part 2
 
-You finished Part 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, AZMDoc contracts, layout types, and `op` macros. Part 2 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
+You finished Part 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, AZMDoc contracts, layout types, and ops. Part 2 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
 
 ---
 
@@ -19,7 +19,7 @@ The goal is not to learn a second language layered on top of the CPU. The goal i
 
 Each chapter starts from a concrete problem (sort this table, find this value, walk this string), shows a complete AZM program or subroutine, then names the invariants and conventions that make the code trustworthy. You will see the same patterns repeat: a calling convention, a loop whose entry condition you can state in one sentence, workspace RAM when the register file runs out, and AZMDoc lines that tell the analyzer what the routine promised.
 
-The ZAX learning track covers similar topics with functions, `:=`, and structured control. This book deliberately does **not** copy that syntax. If you read both volumes, treat Part 2 here as the machine-level counterpart: same ideas, flat spelling.
+This book stays at the machine level: labels, registers, memory, branches, `call`, and `ret`. The algorithms are standard, but every step is spelled as flat assembly.
 
 ---
 

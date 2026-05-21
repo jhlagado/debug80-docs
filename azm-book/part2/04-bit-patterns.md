@@ -232,10 +232,9 @@ main:
 
 ```sh
 azm examples/04_bit_flags.asm
-azm --list examples/04_bit_flags.asm
 ```
 
-Use `--list` to confirm `bit_set` expanded to `or` at the call site, not a subroutine call.
+AZM writes `examples/04_bit_flags.lst` by default. Open that listing to confirm `bit_set` expanded to `or` at the call site, not a subroutine call.
 
 ---
 
@@ -255,7 +254,7 @@ Use `--list` to confirm `bit_set` expanded to `or` at the call site, not a subro
 1. Start from `$05`. Predict `(device_flags)` after only `bit_set A, FLAG_ERROR` without clearing busy.
 2. Add `FLAG_FAULT .equ $08`. Write `main` so a fault sets bit 3 and forces busy clear in one pass through A.
 3. Implement `popcount_u8`: count set bits in A with a loop (`and 1`, `srl`, increment counter). Return count in A.
-4. Implement `parity_u8`: return 1 if odd number of set bits, 0 if even (xor-toggle trick from the ZAX bit chapter).
+4. Implement `parity_u8`: return 1 if odd number of set bits, 0 if even. One compact approach is to toggle a workspace byte each time you find a set bit.
 5. Replace `extract_bit_u8` with eight `bit n, a` / `jr` branches — when is the shift loop smaller?
 6. Define an `op` `rot_right(reg reg8)` that expands to `rra` with A loaded from `reg` — use it in a 16-bit shift across A and a workspace byte.
 

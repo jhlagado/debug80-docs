@@ -9,7 +9,7 @@ has_children: true
 
 No prior knowledge of computers or programming assumed.
 
-The first two chapters describe the machine and what a program looks like as raw bytes. Chapter 3 introduces assembly language and the AZM program structure. Chapters 4–10 teach raw Z80 programming. Chapters 11–14 introduce AZM-specific features: subroutine conventions and register discipline, AZMDoc register contracts, layout types, and op macros.
+The first two chapters describe the machine and what a program looks like as raw bytes. Chapter 3 introduces assembly language and the AZM program structure. Chapters 4–10 teach raw Z80 programming. Chapters 11–14 introduce AZM-specific features: subroutine conventions and register discipline, AZMDoc register contracts, layout types, and op declarations.
 
 Continue with [Part 2 — Algorithms and Data Structures](../part2/index.md) when you are done.
 
@@ -21,7 +21,7 @@ Chapters 1 and 2 cover the machine before any code: how the CPU fetches and exec
 
 Chapter 10 is a capstone: a complete AZM program built from the techniques of Chapters 3–9. It is a real, working program — and it also exposes the practical frictions that grow with any assembly codebase: subroutines whose register usage is undocumented, layouts whose byte offsets have to be counted by hand, and short instruction patterns repeated throughout the code. Those frictions are real, and naming them is the point.
 
-Chapters 11 through 14 each address one of those friction points. Chapter 11 covers subroutine calling conventions and the discipline of register ownership — the raw techniques that any serious assembly program needs. Chapter 12 introduces AZMDoc, AZM's formal register-contract system, which lets you document what goes in, what comes out, and what gets clobbered — and have the assembler verify it. Chapter 13 covers AZM's layout type system: scalar types (`byte`, `word`), record and union declarations, `sizeof` and `offset` for compile-time constants, `.ds` type expressions for storage, layout casts, and enums. Chapter 14 introduces `op` macros, which give a name to a short instruction sequence and expand it inline at every call site.
+Chapters 11 through 14 each address one of those friction points. Chapter 11 covers subroutine calling conventions and the discipline of register ownership — the raw techniques that any serious assembly program needs. Chapter 12 introduces AZMDoc, AZM's formal register-contract system, which lets you document what goes in, what comes out, and what gets clobbered — and have the assembler verify it. Chapter 13 covers AZM's layout type system: scalar types (`byte`, `word`), record and union declarations, `sizeof` and `offset` for compile-time constants, `.ds` type expressions for storage, layout casts, and enums. Chapter 14 introduces `op` declarations, which give a name to a short instruction sequence and expand it inline at every call site.
 
 By Chapter 10 you can read and write any raw Z80 program. By Chapter 14 you can write AZM programs that are self-documenting, where layouts never require hand-counted offsets and repeated instruction patterns have names — while retaining access to every raw instruction when you need it.
 
@@ -44,7 +44,7 @@ By Chapter 10 you can read and write any raw Z80 program. By Chapter 14 you can 
 | 11 | [Subroutine Conventions](11-subroutine-conventions.md) | Register discipline, calling conventions, push/pop preservation |
 | 12 | [Register Contracts with AZMDoc](12-register-contracts-azmdoc.md) | AZMDoc `;!` contracts, `@ROUTINE:` entry labels, register-care analysis |
 | 13 | [Layout Types](13-layout-types.md) | `byte`/`word` scalars, `.type`/`.union`, `sizeof`/`offset`, `.ds` type expressions, layout casts, enums |
-| 14 | [Op Macros](14-op-macros.md) | `op` for inline expansion, operand matchers, pseudo-opcodes |
+| 14 | [Op Declarations](14-op-macros.md) | `op` for inline expansion, operand matchers, pseudo-opcodes |
 
 Example files are under `examples/` in this directory. Examples `00` and `01` accompany Chapter 3; example `02` accompanies Chapter 4. From `03` onward, each example corresponds to the next chapter: `03_flag_tests_and_jumps.asm` goes with Chapter 5, `04_djnz_loops.asm` with Chapter 6, and so on. Chapters 1 and 2 have no example files — they cover concepts that precede writing code.
 

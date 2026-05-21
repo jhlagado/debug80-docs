@@ -57,7 +57,7 @@ You just saw two constructs in that program that are not Z80 instructions: `.org
 - **`enum`** — named sets of values with no memory allocated
 - **AZMDoc** — formal `;!` register contracts on subroutines, verified by the assembler
 
-AZM does **not** add functions, local variables, structured control-flow keywords, or typed assignment operators. Every program is flat Z80 instructions with labels. If you look up `.org` or `.equ` in a Z80 reference you will find them — they are standard assembler directives, not AZM inventions. The Z80 mnemonics (`ld`, `add`, `cp`, `djnz`, `call`, `ret`) are always Z80 instructions, and any Z80 reference covers them.
+AZM does **not** add function declarations, local variables, structured control-flow keywords, or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`. Every program is flat Z80 instructions with labels. If you look up `.org` or `.equ` in a Z80 reference you will find them — they are standard assembler directives, not AZM inventions. The Z80 mnemonics (`ld`, `add`, `cp`, `djnz`, `call`, `ret`) are always Z80 instructions, and any Z80 reference covers them.
 
 ---
 
@@ -237,7 +237,7 @@ You have compilable code now. At some point — probably soon — a program will
 
 ### Step 1: Read the assembler listing
 
-Produce a listing before you run the program. From a terminal, run `azm --list` on your source file. In VS Code with Debug80, start a debug session (**F5**); the target's `outputDir` receives a `.lst` (and related artifacts) you can open alongside the source. The listing shows each source line alongside the hex bytes it generated and the address where they were placed. Before running a program, glance at the listing and confirm:
+Produce a listing before you run the program. From a terminal, run `azm your-file.asm`; AZM writes a `.lst` by default unless you pass `--nolist`. In VS Code with Debug80, start a debug session (**F5**); the target's `outputDir` receives a `.lst` (and related artifacts) you can open alongside the source. The listing shows each source line alongside the hex bytes it generated and the address where they were placed. Before running a program, glance at the listing and confirm:
 
 - Did every instruction assemble without an error or warning?
 - Is the data section placed where you intended? (`count` at `$8000`, `scratch` at `$8001`?)

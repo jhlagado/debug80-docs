@@ -17,7 +17,7 @@ Every program you have written so far is a single block of instructions that run
 
 ## What a subroutine actually is
 
-Before the mechanics: a useful mental model. The Z80 has no hardware concept of a function call. There is no special mode the CPU enters, no register tracking call depth, no difference between bytes at a call site and bytes inside a subroutine body. `call label` does two things — pushes an address, jumps. `ret` does one thing — pops that address back into PC. The subroutine abstraction is entirely a matter of discipline; the hardware enforces nothing.
+Before the mechanics: a useful mental model. The Z80 has no hardware concept of a subroutine beyond `call` and `ret`. There is no special mode the CPU enters, no register tracking call depth, no difference between bytes at a call site and bytes inside a subroutine body. `call label` does two things — pushes an address, jumps. `ret` does one thing — pops that address back into PC. The subroutine abstraction is entirely a matter of discipline; the hardware enforces nothing.
 
 That matters because any failure of discipline — an unbalanced push/pop, a missing `ret`, a jump that skips the cleanup — produces a silent wrong result with nothing to indicate where it went wrong. The mechanics below are what make that discipline reliable.
 
@@ -104,7 +104,7 @@ example:
   ret
 ```
 
-The critical rule: every `push` in a subroutine must have exactly one matching `pop` before the function returns. If a subroutine pushes twice and pops once, the stack has an extra word on it when `ret` runs. `ret` will then read that extra word as the return address and jump to garbage.
+The critical rule: every `push` in a subroutine must have exactly one matching `pop` before the subroutine returns. If a subroutine pushes twice and pops once, the stack has an extra word on it when `ret` runs. `ret` will then read that extra word as the return address and jump to garbage.
 
 Stack depth discipline: count your pushes and pops. They must be balanced.
 
@@ -219,13 +219,13 @@ max_is_de:
   ret
 ```
 
-`max_word` receives two 16-bit values in HL and DE and returns the larger one in HL. The function preserves DE with an explicit push/pop. AF is clobbered by `or a` and `sbc hl, de`; the comment header documents this.
+`max_word` receives two 16-bit values in HL and DE and returns the larger one in HL. The subroutine preserves DE with an explicit push/pop. AF is clobbered by `or a` and `sbc hl, de`; the comment header documents this.
 
 The `or a` before `sbc hl, de` clears the carry flag. `sbc hl, de` subtracts DE from HL including the carry bit, so carry must be clear before the instruction for a pure 16-bit subtraction.
 
 After `sbc hl, de`, the carry flag indicates the comparison result:
 
-- **Carry clear** — HL was greater than or equal to DE (no unsigned borrow). HL now holds `original_HL - DE`, which is not the result we want. `add hl, de` restores HL to its original value, and the function returns with that value.
+- **Carry clear** — HL was greater than or equal to DE (no unsigned borrow). HL now holds `original_HL - DE`, which is not the result we want. `add hl, de` restores HL to its original value, and the subroutine returns with that value.
 - **Carry set** — HL was less than DE (unsigned borrow occurred). DE is the larger value. `ex de, hl` puts DE into HL and the second `ret` returns.
 
 The `or a / sbc hl, de / add hl, de` sequence is how you do an unsigned 16-bit comparison when you need the original HL back after the test. `sbc hl, de` is destructive; `add hl, de` undoes the subtraction when HL was the larger value.
@@ -241,7 +241,7 @@ The caller passes 80 (`$0050`) in HL and 200 (`$00C8`) in DE:
 
 After the call, `result_max` holds 200.
 
-**Stack balance in `max_word`.** The function has one `push de` and one `pop de`. The pop occurs before `jr c, max_is_de`, which means DE is restored regardless of which branch the conditional takes. The stack is clean for both `ret` paths.
+**Stack balance in `max_word`.** The subroutine has one `push de` and one `pop de`. The pop occurs before `jr c, max_is_de`, which means DE is restored regardless of which branch the conditional takes. The stack is clean for both `ret` paths.
 
 ---
 

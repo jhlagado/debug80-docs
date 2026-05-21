@@ -94,8 +94,8 @@ element's value).
 `ld a, (hl)` reads the byte at the address in HL. Only this instruction
 produces the value stored in the table.
 
-This distinction matters most when a function receives a table to process. The
-function receives the address — loaded into HL or another pair by the caller —
+This distinction matters most when a subroutine receives a table to process. The
+subroutine receives the address — loaded into HL or another pair by the caller —
 and uses `(hl)` to reach the values.
 
 ---

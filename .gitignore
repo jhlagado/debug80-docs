@@ -4,3 +4,9 @@ _site/
 .jekyll-metadata
 vendor/
 Gemfile.lock
+
+# AZM example build outputs are generated from tracked .asm sources.
+azm-book/**/*.bin
+azm-book/**/*.hex
+azm-book/**/*.lst
+azm-book/**/*.d8.json

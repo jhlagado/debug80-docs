@@ -56,7 +56,7 @@ ring_state:
     .ds RingState
 ```
 
-`ring_buf` reserves eight data bytes. `ring_state` reserves `sizeof(RingState)` bytes — three bytes for `head`, `tail`, and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type form `byte[RING_CAP]` requires `RING_CAP` to be a literal in the current assembler.
+`ring_buf` reserves eight data bytes. `ring_state` reserves `sizeof(RingState)` bytes — three bytes for `head`, `tail`, and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type-array form uses literal lengths in the current assembler, not named constants.
 
 Name the compile-time constants you will use in instructions:
 
@@ -81,10 +81,16 @@ If you add a field to `RingState`, reassemble and every `.equ` that uses `offset
 | `word` | 2 |
 | `addr` | 2 |
 
-For arrays in size positions, multiply:
+For arrays in size positions, literal lengths multiply:
 
 ```asm
-BUF_BYTES .equ sizeof(byte[RING_CAP])   ; = 8
+BUF_BYTES .equ sizeof(byte[8])   ; = 8
+```
+
+If the capacity is a named constant, use the constant directly:
+
+```asm
+BUF_BYTES .equ RING_CAP
 ```
 
 `.ds` accepts a type expression wherever it needs a byte count:
@@ -168,7 +174,7 @@ The assembler computes `ring_state + offset(RingState, count)` and emits `ld hl,
 For an array of records with a constant index:
 
 ```asm
-  ld hl, <byte[RING_CAP]>ring_buf[3]
+  ld hl, <byte[8]>ring_buf[3]
 ```
 
 That is `ring_buf + 3` when the element type is `byte`. For a table of structures:
@@ -425,7 +431,7 @@ Single-step through `ring_push` once with the emulator: watch `head` and `count`
 
 - **`.type` / `.endtype`** describe packed layout; they do not emit bytes by themselves.
 - **`sizeof(Type)`** and **`offset(Type, field)`** are compile-time constants — name them with `.equ` and use them in code and `.ds`.
-- **`.ds byte[N]`**, **`.ds RingState`**, and **`.ds Record[N]`** reserve exact byte counts from type expressions.
+- **`.ds byte[8]`**, **`.ds RING_CAP`**, **`.ds RingState`**, and literal record arrays such as **`.ds Record[4]`** reserve exact byte counts.
 - **IX + offset constants** is the idiomatic in-record access; **HL + BC** handles `table + runtime_index`.
 - **Layout casts** `<Type>label.field` and `<Type[N]>table[i].field` fold constant addresses; runtime indices use explicit arithmetic.
 - A **ring buffer** implements a FIFO with head, tail, count, and wrap — no memory shifting.

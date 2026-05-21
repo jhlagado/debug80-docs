@@ -9,7 +9,7 @@ nav_order: 2
 
 # Chapter 1 — Foundations
 
-You can scan a byte table and call subroutines with documented register effects. The next step is to treat those subroutines as **small functions with a fixed contract** — even though AZM has no `func` keyword — and to use workspace RAM when an algorithm needs more live state than the register file holds.
+You can scan a byte table and call subroutines with documented register effects. The next step is to treat those subroutines as **small routines with a fixed contract** and to use workspace RAM when an algorithm needs more live state than the register file holds.
 
 This chapter works through greatest common divisor (GCD) on 16-bit values, then 8-bit exponentiation. Both programs are complete, compilable, and halt when finished. The companion listing is [`examples/01_gcd.asm`](examples/01_gcd.asm).
 

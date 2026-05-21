@@ -183,7 +183,7 @@ STACK_TOP         .equ $9FFF
 
 ### Stopping at the first solution
 
-The companion counts **all** 92 solutions. To stop after the first, add a `found` byte in workspace, set it in `count_solution`, and after `call place_row` in the column loop load `found` and `ret` early from `place_row` when it is non-zero — propagating the flag up every return, because `ret` only exits one frame. The ZAX capstone discusses that pattern with structured `break`; here you use explicit memory and branches.
+The companion counts **all** 92 solutions. To stop after the first, add a `found` byte in workspace, set it in `count_solution`, and after `call place_row` in the column loop load `found` and `ret` early from `place_row` when it is non-zero — propagating the flag up every return, because `ret` only exits one frame. In AZM you use explicit memory and branches for this early-exit state.
 
 ---
 

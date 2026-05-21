@@ -20,7 +20,7 @@ Why assembly language, why AZM, why the Z80 — and what you'll be able to do af
 
 No prior knowledge assumed. Learn the machine from first principles: memory, registers, instructions, flags, loops, subroutines, I/O, and the AZM features that make assembly practical and safe.
 
-Fourteen chapters from bare machine code through op macros, layout types, and register contracts.
+Fourteen chapters from bare machine code through ops, layout types, and register contracts.
 
 ---
 

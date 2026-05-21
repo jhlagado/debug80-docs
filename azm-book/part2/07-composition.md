@@ -24,7 +24,7 @@ You need two things at once:
 1. **Physical split** — edit strings in one file, main flow in another.
 2. **Logical contract** — callers still know which registers to set before `call`.
 
-ZAX answers (1) with `import` and a module qualifier. AZM answers with **`.include`** plus documented globals. The CPU never sees files; the assembler merges text before it emits bytes.
+AZM answers the physical split with **`.include`** plus documented globals. The CPU never sees files; the assembler merges text before it emits bytes.
 
 ---
 
