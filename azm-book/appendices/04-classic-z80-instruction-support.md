@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix 4 — Z80 Instruction Reference"
 parent: "Appendices"
-grand_parent: "Learn AZM Assembly"
+grand_parent: "AZM Books"
 nav_order: 4
 ---
 # Appendix 4 — Classic Z80 Instruction Support Table

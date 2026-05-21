@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix 3 — Addressing, Prefixes, and Forms"
 parent: "Appendices"
-grand_parent: "Learn AZM Assembly"
+grand_parent: "AZM Books"
 nav_order: 3
 ---
 # Appendix 3 — Addressing, Prefixes, and Instruction Forms

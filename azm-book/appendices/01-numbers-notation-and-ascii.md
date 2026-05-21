@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix 1 — Numbers, Notation, and ASCII"
 parent: "Appendices"
-grand_parent: "Learn AZM Assembly"
+grand_parent: "AZM Books"
 nav_order: 1
 ---
 # Appendix 1 — Numbers, Notation, and ASCII

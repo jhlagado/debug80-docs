@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix 2 — Registers, Flags, and Conditions"
 parent: "Appendices"
-grand_parent: "Learn AZM Assembly"
+grand_parent: "AZM Books"
 nav_order: 2
 ---
 # Appendix 2 — Registers, Flags, and Conditions

@@ -6,15 +6,19 @@ nav_order: 1
 
 # debug80 Documentation
 
-Technical documentation for the **debug80** Z80 debugger extension and the **AZM** assembler for Visual Studio Code. **Learn AZM Assembly** is the primary course on this site; manuals and engineering references for debug80 follow below.
+Technical documentation for the **debug80** Z80 debugger extension and the **AZM** assembler for Visual Studio Code. The **AZM Books** are the primary course material on this site; manuals and engineering references for debug80 follow below.
 
 ---
 
 ## Publications
 
-### [Learn AZM Assembly](azm-book/)
+### [AZM Books](azm-book/)
 
-A two-part course in Z80 assembly programming using the AZM assembler (`@jhlagado/azm` from the terminal, or the same assembler when you assemble and debug `.asm` with Debug80 in VS Code). Part 1 starts from no prior knowledge and covers the Z80 from bare machine code through op macros, layout types, and register contracts. Part 2 works through real algorithms and data structures — sorting, searching, recursion, composition, and pointer structures — using the full AZM surface as each construct appears naturally.
+A three-book course in Z80 assembly programming using the AZM assembler (`@jhlagado/azm` from the terminal, or the same assembler when you assemble and debug `.asm` with Debug80 in VS Code).
+
+- [AZM Book 1 — Z80 Fundamentals](azm-book/book1/) starts from no prior knowledge and covers the Z80 from bare machine code through ops, layout types, and register contracts.
+- [AZM Book 2 — Programming the TEC-1G](azm-book/book2/) is an in-progress hardware-focused book on Debug80, MON-3, the TEC-1G memory map, keypad input, the 8x8 RGB display, the LCD, the seven-segment display, and sound.
+- [AZM Book 3 — Algorithms and Data Structures](azm-book/book3/) works through sorting, searching, recursion, composition, pointer structures, and larger AZM program design.
 
 For programmers learning Z80 assembly or the AZM language.
 

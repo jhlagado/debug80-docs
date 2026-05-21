@@ -1,17 +1,17 @@
 ---
 layout: default
 title: "Appendices"
-parent: "Learn AZM Assembly"
-nav_order: 4
+parent: "AZM Books"
+nav_order: 5
 has_children: true
 ---
 # Appendices — Global Reference
 
-Use these appendices as lookup material for **both** parts of the course.
+Use these appendices as lookup material for the whole AZM book series.
 
-Parts 1 and 2 should still be read in order. The appendices are not a third
-teaching volume. They are the tables and reference pages you flip back to when
-you need a quick answer.
+The books should still be read in order when you are learning from scratch. The
+appendices are not another teaching volume. They are the tables and reference
+pages you flip back to when you need a quick answer.
 
 ---
 
@@ -30,7 +30,7 @@ you need a quick answer.
 
 These appendices are course-wide. They are meant to help with:
 
-- fast lookup while reading Part 1 or Part 2
+- fast lookup while reading any AZM book
 - checking a mnemonic or operand form without leaving the book
 - remembering the small exceptions the Z80 instruction set is full of
 

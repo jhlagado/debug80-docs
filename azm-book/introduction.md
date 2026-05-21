@@ -1,10 +1,10 @@
 ---
 layout: default
 title: "Introduction"
-parent: "Learn AZM Assembly"
+parent: "AZM Books"
 nav_order: 1
 ---
-[Part 1 →](part1/index.md)
+[Book 1 →](book1/index.md)
 
 # Introduction — Why Assembly, Why AZM, Why the Z80
 
@@ -57,13 +57,13 @@ What AZM adds on top of plain assembly is practical:
 
 None of this adds instructions the CPU does not run. Every AZM construct compiles to Z80 bytes you can read in the listing and verify directly.
 
-This course teaches raw Z80 assembly first — registers, flags, jumps, the stack, subroutines, I/O — and then introduces AZM's additions one at a time, each one motivated by a specific problem in the raw code.
+These books teach raw Z80 assembly first — registers, flags, jumps, the stack, subroutines, I/O — then move to the TEC-1G as a concrete target, and then use AZM's additions for larger algorithms and data structures.
 
 ---
 
 ## What you will be able to do
 
-By the end of Part 1 you will be able to:
+By the end of Book 1 you will be able to:
 
 - Read and write any raw Z80 program: move data between registers and memory, test flags and branch, loop with DJNZ, call subroutines and return correctly
 - Understand what the CPU is doing at every step, because you placed every byte
@@ -71,7 +71,14 @@ By the end of Part 1 you will be able to:
 - Name and inline short instruction sequences with `op`, define record layouts with `type`, and document subroutine contracts with AZMDoc
 - Recognise the difference between code that runs correctly by design and code that runs correctly by accident
 
-By the end of Part 2 you will be able to:
+By the end of Book 2 you will be able to:
+
+- Configure and run a TEC-1G Debug80 project using AZM source
+- Understand the MON-3 workbench memory region and the TEC-1G I/O ports used by early programs
+- Drive the keypad, 8x8 RGB display, LCD, seven-segment display, and one-bit speaker from Z80 code
+- Structure a cooperative loop that keeps hardware refreshed while program logic runs
+
+By the end of Book 3 you will be able to:
 
 - Implement and reason about standard algorithms and data structures — sorting, searching, strings, recursion, records, linked structures — in a low-level language with no standard library
 - Read unfamiliar assembly code and understand what it is doing
@@ -82,11 +89,13 @@ By the end of Part 2 you will be able to:
 
 ## How this course is organised
 
-**Part 1** starts with the bare machine: what a byte is, what a program looks like as raw hex in memory, why raw hex is unmanageable, and how assembly language solves that. It then builds the Z80 programming model instruction by instruction — loads, flags, jumps, loops, tables, the stack, subroutines, I/O — before introducing AZM's features in the final four chapters.
+**Book 1** starts with the bare machine: what a byte is, what a program looks like as raw hex in memory, why raw hex is unmanageable, and how assembly language solves that. It then builds the Z80 programming model instruction by instruction — loads, flags, jumps, loops, tables, the stack, subroutines, I/O — before introducing AZM's features in the final four chapters.
 
-**Part 2** moves to algorithms and data structures. Each chapter works through a real, compilable AZM program that solves a non-trivial problem. These chapters assume everything in Part 1.
+**Book 2** moves to the TEC-1G. It shows how AZM and Debug80 fit the main hardware target for this site: MON-3, the `$4000` workbench region, keypad input, display output, sound, and small interactive programs.
 
-**Appendices** are reference material: number notation, ASCII, the full register set, flags and condition codes, and a searchable Z80 instruction table. Use them while reading either part.
+**Book 3** moves to algorithms and data structures. Each chapter works through a real, compilable AZM program that solves a non-trivial problem. These chapters assume everything in Book 1; Book 2 is useful background when you want a hardware target.
+
+**Appendices** are reference material: number notation, ASCII, the full register set, flags and condition codes, and a searchable Z80 instruction table. Use them while reading any book in the series.
 
 ---
 
@@ -106,10 +115,10 @@ You will need a way to **assemble** course examples and a way to **run** them to
 
 A text editor is enough for the CLI path; VS Code is recommended when you use Debug80.
 
-You do not need prior programming experience. Part 1 assumes none. You do need patience with precision: assembly rewards careful reading and makes you pay immediately for careless writing. That is not a warning — it is most of the point.
+You do not need prior programming experience. Book 1 assumes none. You do need patience with precision: assembly rewards careful reading and makes you pay immediately for careless writing. That is not a warning — it is most of the point.
 
-Start with [Part 1, Chapter 1](part1/01-the-computer.md).
+Start with [Book 1, Chapter 1](book1/01-the-computer.md).
 
 ---
 
-[Part 1 →](part1/index.md)
+[Book 1 →](book1/index.md)
