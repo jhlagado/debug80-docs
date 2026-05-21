@@ -390,7 +390,7 @@ A runtime register is not valid:
   ld hl, <Sprite>sprite_table[hl].color    ; invalid: HL is not a constant
 ```
 
-Layout casts fold to a constant address. They cannot generate multiply-and-add code. For run-time indexing, write the Z80 instructions yourself.
+Layout casts fold to a **constant address** at assembly time. `<Sprite[8]>sprite_table[3].color` is not a typed pointer, not a load, and not runtime indexing — the assembler replaces the whole expression with one number (for example `sprite_table + 11`) that you could have written by hand. The CPU never sees `<Sprite>`; it only sees `ld hl, imm16` or `ld a, (imm16)`. If the index is not known until the program runs, you cannot use a layout cast; write the multiply-and-add in Z80 instructions yourself.
 
 Layout casts also work inside memory operands. The parentheses are ordinary Z80 dereference syntax — they mean "byte at address":
 

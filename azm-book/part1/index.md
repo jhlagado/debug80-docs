@@ -42,7 +42,7 @@ By Chapter 10 you can read and write any raw Z80 program. By Chapter 14 you can 
 | 9 | [I/O and Ports](09-io-and-ports.md) | `in`, `out`, port-mapped I/O, TEC-1 hardware examples |
 | 10 | [A Complete Program](10-a-complete-program.md) | Putting it all together: a real program from start to finish |
 | 11 | [Subroutine Conventions](11-subroutine-conventions.md) | Register discipline, calling conventions, push/pop preservation |
-| 12 | [Register Contracts with AZMDoc](12-register-contracts-azmdoc.md) | AZMDoc `;!` contracts, `@ROUTINE:` entry labels, register-care analysis |
+| 12 | [Register Contracts with AZMDoc](12-register-contracts-azmdoc.md) | Caller/callee contracts, flags as `out`, `@` entries, `.asmi`, register-care CLI |
 | 13 | [Layout Types](13-layout-types.md) | `byte`/`word` scalars, `.type`/`.union`, `sizeof`/`offset`, `.ds` type expressions, layout casts, enums |
 | 14 | [Op Declarations](14-op-declarations.md) | `op` for inline expansion, operand matchers, pseudo-opcodes |
 

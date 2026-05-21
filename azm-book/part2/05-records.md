@@ -280,9 +280,9 @@ If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` w
 ### Push
 
 ```asm
-; ring_push: append one byte; fail when count == RING_CAP
+; ring_push: append one byte; carry set on success, carry clear when full
 ;!      in        A, IX
-;!      out       F.C set on success, F.C clear when full
+;!      out       carry
 ;!      clobbers  AF, BC, DE, HL
 @ring_push:
     ld e, a
@@ -314,9 +314,9 @@ The byte to store starts in A; the routine moves it to E while using A for compa
 ### Pop
 
 ```asm
-; ring_pop: remove oldest byte; fail when count == 0
+; ring_pop: remove oldest byte; carry set on success, carry clear when empty
 ;!      in        IX
-;!      out       A, F.C set on success, F.C clear when empty
+;!      out       A, carry
 ;!      clobbers  AF, BC, DE, HL
 @ring_pop:
     ld a, (ix + RING_COUNT)
@@ -358,7 +358,7 @@ Part 1 Chapter 12 introduced AZMDoc: semicolon comments with `;!` tags for regis
 
 Callable entries use `@name:` so the register-care analyzer knows where a routine body starts (AZM assembly baseline). Call sites still say `call ring_push`, not `call @ring_push`.
 
-For `ring_push`, document failure in `out`: carry clear means full. For `ring_pop`, carry clear means empty. Callers that ignore carry after a failed pop will see garbage in A — the routine does not define A on failure.
+For `ring_push` and `ring_pop`, put success/failure meaning in the human `;` line and name the carrier in `;! out` as `carry` (not `F.C`). Carry clear means full or empty respectively. Callers that ignore carry after a failed pop will see garbage in A — the routine does not define A on failure.
 
 Run the checker when you want machine verification:
 

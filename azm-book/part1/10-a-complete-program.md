@@ -149,7 +149,7 @@ The subroutine needs a counter. It uses D, and D must be initialized to zero bef
 
 Register-only code extracts this cost: with three inputs and a counter all living in registers, keeping a reliable mental model of which registers are safe to touch requires constant attention. When that attention lapses — even briefly — the instinct is to save everything, whether or not it was at risk. The push/pop pair is not wrong; it is a hedge against uncertainty. In a longer subroutine with more registers in flight, that hedge is often correct. Here it happens to be unnecessary.
 
-The double `cp c` in the loop body is a different kind of cost. `cp c` sets carry when A < C and sets Z when A == C. To test "strictly greater than" you need both conditions false: carry clear and Z clear. The code tests them with two separate `cp c` / `jr` pairs, running the comparison twice per element. The intent — skip unless A > C — is not visible until you trace both branches.
+The loop body uses one `cp c` and two conditional branches on the **same** flag result — a useful Z80 idiom. `cp c` sets carry when A < C and sets Z when A == C. To count only entries strictly greater than C, both conditions must be false: carry clear and Z clear. The code runs `jr c, count_above_skip` (skip if A < C) and `jr z, count_above_skip` (skip if A == C) immediately after that single comparison. No instruction between `cp c` and those branches changes the flags, so both tests read the same comparison. The intent — skip unless A > C — is still buried in two branch instructions, but the comparison itself is not duplicated.
 
 ---
 
@@ -175,7 +175,7 @@ These four things become increasingly tedious as programs grow past a handful of
 
 **Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name — the register is D, and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. No declaration says "D is the counter." Chapter 11 covers the manual discipline for managing register ownership across subroutines; Chapter 12 shows how AZMDoc makes the contract explicit.
 
-**Repeated comparison patterns have no name.** The double `cp c` / `jr` pair in `count_above` implements "strictly greater than" — a concept with no single Z80 opcode. The same pair of instructions will appear every time you want a strict greater-than test. There is nothing to call that pattern, and no way to verify both branches are correct without re-reading them each time. Chapter 14 introduces `op` declarations, which give a name to a short instruction sequence and expand it inline wherever you write the name.
+**Repeated comparison patterns have no name.** The `cp c` / `jr c` / `jr z` sequence in `count_above` implements "strictly greater than" — a concept with no single Z80 opcode. The same three-instruction pattern will appear every time you want a strict greater-than test. There is nothing to call that pattern, and no way to verify both branches are correct without re-reading them each time. Chapter 14 introduces `op` declarations, which give a name to a short instruction sequence and expand it inline wherever you write the name.
 
 **Byte offsets in data structures must be counted by hand.** This program has no compound data structures, but once you start grouping related bytes — a sprite with `x`, `y`, and `color` fields, for example — every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. Chapter 13 introduces AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant without counting.
 
@@ -193,7 +193,7 @@ Chapter 11 covers subroutine calling conventions in depth: how to pass arguments
 - Subroutines receive inputs in registers and return results in registers. Document which registers each subroutine reads and which it modifies; nothing enforces these contracts.
 - The caller must reload any register that the subroutine modified before the next call.
 - The push/pop in `count_above` around `ld d, 0` protects BC while initializing D — it turns out to be unnecessary here, but the instinct to save registers when uncertain is reasonable in a longer subroutine.
-- The double `cp c` implements "strictly greater than" using the only comparisons the Z80 offers: less-than (carry) and equal (zero). The intent is not visible from either instruction alone.
+- One `cp c` plus two branches on the same flags implements "strictly greater than": skip if carry (A < C) or zero (A == C). The intent is not visible from the mnemonic sequence alone.
 - Chapters 11–14 — calling conventions, AZMDoc contracts, layout types, and ops — each address one of the friction points this program exposes.
 
 ---
@@ -213,7 +213,7 @@ What is A when the loop exits? Does it match the expected result (91)?
 
 **2. The invisible side effect.** `main` reloads `ld hl, values` before calling `count_above`. Why? What value would HL hold after `find_max` returns if you did not reload it? What would `count_above` scan if HL were not reloaded, and what result would `above_64` receive?
 
-**3. Find the redundancy.** The `count_above` subroutine runs `cp c` twice in the loop body. Explain in one sentence why each `cp c` is there and what flag it is testing. Could you combine them into a single test using a different jump? _(Hint: after the first `jr c, count_above_skip`, you know A is ≥ C. What additional condition do you need to check?)_
+**3. Trace the flags.** The `count_above` loop runs `cp c` once, then `jr c` and `jr z` before `inc d`. Explain what each branch tests and why a second comparison is not needed between them. What would break if you inserted `ld a, (hl)` between `cp c` and `jr c`?
 
 **4. Add a third task.** Extend the program to also count entries strictly less than 32, storing the count in a new variable named `below_32`. Write the additional subroutine and the three lines in `main` that call it. Document which registers carry each argument and what you must reload before the call.
 

@@ -65,9 +65,9 @@ main:
 .after_full_test:
     halt
 
-; ring_push: append one byte; fail when count == RING_CAP
+; ring_push: append one byte; carry set on success, carry clear when full
 ;!      in        A, IX
-;!      out       F.C set on success, F.C clear when full
+;!      out       carry
 ;!      clobbers  AF, BC, DE, HL
 @ring_push:
     ld e, a
@@ -93,9 +93,9 @@ main:
     or a
     ret
 
-; ring_pop: remove oldest byte; fail when count == 0
+; ring_pop: remove oldest byte; carry set on success, carry clear when empty
 ;!      in        IX
-;!      out       A, F.C set on success, F.C clear when empty
+;!      out       A, carry
 ;!      clobbers  AF, BC, DE, HL
 @ring_pop:
     ld a, (ix + RING_COUNT)

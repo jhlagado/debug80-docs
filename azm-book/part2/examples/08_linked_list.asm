@@ -70,9 +70,9 @@ main:
     ex de, hl
     ret
 
-; list_find_u8: find first node with value A; HL = node or 0, C set if found
+; list_find_u8: find first node with value A; HL = node or 0, carry set if found
 ;!      in        HL, A
-;!      out       HL, F.C
+;!      out       HL, carry
 ;!      clobbers  AF, BC, DE
 @list_find_u8:
     ld b, a

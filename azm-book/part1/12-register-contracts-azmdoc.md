@@ -9,63 +9,157 @@ nav_order: 12
 
 # Chapter 12 — Register Contracts with AZMDoc
 
-Chapter 11's comment block is the right idea. The subroutine declares its inputs, outputs, and clobbers; the caller reads the declaration and writes code accordingly. But a semicolon comment can say anything. AZM has no way to check whether the comment matches the code. Over time, as subroutines are modified and callers multiply, the comment drifts.
+Chapter 11's comment block is the right idea: the subroutine declares what it reads, what it returns, and what it destroys; the caller reads that and writes code accordingly. But a semicolon comment can say anything, and nothing checks whether the comment still matches the code after the tenth edit.
 
-This chapter introduces AZMDoc — a structured comment format that AZM's register-care analyzer can read. The syntax lives in ordinary comments, so other assemblers ignore it. AZM treats it as a machine-checkable contract.
+AZMDoc is AZM's structured contract format — ordinary `;!` comment lines that the **register-care** analyzer reads. The syntax stays in comments, so other assemblers ignore it. AZM treats it as machine-checkable boundary information at every `call`. That is one of AZM's defining features: informal subroutine discipline becomes something the assembler can verify.
+
+This chapter is not a syntax appendix. It teaches the mental model — caller liveness, callee boundaries, flags as return values, `@` entry spans, external `.asmi` contracts, and the CLI workflow that makes register-care part of daily work.
 
 ---
 
-## The problem with comment documentation
+## The bug contracts catch
 
-Consider a `process_table` subroutine whose comment block was written accurately at first, then the body was changed to walk HL through the table. The `Preserves: HL` line was never updated:
+Consider a caller that keeps HL live across a call:
 
 ```asm
-; process_table: scan table for matching entry
-; In:  HL = pointer to first byte
-;      B  = count
-; Out: A  = 1 if match found, 0 otherwise
-; Preserves: HL              <— wrong: the new body clobbers HL
-process_table:
-  ld a, 0
+    ld hl, table
+    ld b, 8
+    call find_max
+    ld a, (hl)             ; BUG if find_max clobbered HL
+```
+
+If `find_max` walks HL through the table and does not restore it, HL now points past the end. The next `ld a, (hl)` reads the wrong byte. The assembler still accepts the program; the CPU runs it; the bug is silent.
+
+AZMDoc plus register-care closes that gap. A contract on `find_max` might say:
+
+```asm
+; find_max: scan a byte table and return the largest value
+;!      in        HL, B
+;!      out       A
+;!      clobbers  B, HL
+@find_max:
+```
+
+Running `azm --rc warn source.asm` can then report:
+
+```text
+source.asm:6: warning: HL is live across call to find_max, but find_max may clobber H, L
+```
+
+The analyzer does not need to know what `table` means. It only needs to know: the caller had a value in HL, called something that may destroy HL, then used HL again. That is enough to flag a real bug.
+
+The fix is caller-side: reload HL, save it before the call, or stop using HL after the call:
+
+```asm
+    ld hl, table
+    ld b, 8
+    call find_max
+    ld hl, table        ; reload — find_max clobbered HL
+    ld a, (hl)
+```
+
+Register-care is not linting for style. It is **boundary checking** at subroutine calls — turning "I thought HL was still valid" into a diagnostic with a line number.
+
+---
+
+## A contract is the boundary between caller and callee
+
+The caller asks one question about every register it still plans to use after `call`:
+
+> Is this register still mine?
+
+The callee contract answers:
+
+```asm
+;!      clobbers  HL
+```
+
+"No — HL may be different after return."
+
+The caller sees only the **external interface**: registers and flags that must be set on entry, registers and flags that carry results on exit, and registers the routine destroys without restoring. Everything that happens inside the body — scratch registers, loop counters, temporary pushes — matters only if it leaks across `ret`.
+
+That caller-side **liveness** idea is the heart of register-care. The subroutine body can be long; the contract is short because it describes the door, not the room.
+
+---
+
+## Caller and callee see different things
+
+### Internal scratch is not an `out`
+
+A loop counter in B is internal:
+
+```asm
+@copy_bytes:
+    ld b, 4
 .loop:
-  ld a, (hl)
-  cp $FF
-  jr z, .found
-  inc hl               ; HL walks through the table — clobbers it
-  djnz .loop
-  ld a, 0
-  ret
-.found:
-  ld a, 1
-  ret
+    ...
+    djnz .loop
+    ret
 ```
 
-A caller reads the comment and writes this:
+The caller does not read B after return. B was scratch inside the routine. You do **not** write `out B` unless the caller is supposed to use B as a result. Register-care cares whether the caller's B was preserved, not whether B changed inside the callee.
+
+### `push` / `pop` means preserved, not `out`
 
 ```asm
-  ld hl, my_table
-  ld b, 16
-  call process_table   ; expects HL preserved afterward
-  ld (found_flag), a
-  ld a, (hl)           ; BUG: HL now points past the table end
+@copy_bytes:
+    push bc
+.loop:
+    ld a, (hl)
+    ld (de), a
+    inc hl
+    inc de
+    djnz .loop
+    pop bc
+    ret
 ```
 
-The assembler accepts this. The CPU runs it. The `ld a, (hl)` reads whatever sits past the table — a different variable, ROM, or hardware register. The bug is silent at the call site.
+BC is restored before `ret`. The caller's BC is intact. Correct contract:
 
-You followed the comment. The comment was wrong, and the assembler had no way to notice.
+```asm
+;!      in        HL, DE, B
+;!      clobbers  A, HL, DE
+```
+
+BC does not appear in `clobbers` because the push/pop pair preserved it. Writing `out BC` would wrongly suggest the caller should read BC as a return value.
+
+### Common mistake: confusing preserved with returned
+
+```asm
+push bc
+...
+pop bc
+ret
+```
+
+does **not** mean `out BC`. It means BC is preserved, so it usually does not appear in the generated contract at all.
+
+Likewise:
+
+```asm
+ld b, 4
+.loop:
+    ...
+    djnz .loop
+ret
+```
+
+does **not** mean `out B` unless the caller is meant to read B after return. B was an internal loop counter.
+
+This distinction is the bug pattern behind many real projects: a tool or human sees `ld b, …` inside a routine and assumes B is an output. The contract should describe what the **caller** may rely on, not every register touched along the way.
 
 ---
 
-## AZMDoc `;!` contracts
+## The four contract words
 
-AZMDoc adds machine-readable metadata to the comment syntax. Lines starting with `;!` immediately before a routine entry label carry the contract. They are ordinary comments to any assembler that does not understand AZMDoc; AZM parses them as structured declarations.
+AZMDoc lines start with `;!` immediately before a routine entry. The four keys are:
 
-The four keys are:
-
-- `in` — registers and flags whose incoming value is meaningful to the routine
-- `out` — registers and flags that carry the returned result
-- `clobbers` — registers and flags the routine modifies and does not restore
-- `preserves` — registers and flags explicitly restored before return
+| Key | Meaning |
+|-----|---------|
+| `in` | Registers and flags whose incoming value is meaningful to the routine |
+| `out` | Registers and flags that carry the returned result |
+| `clobbers` | Registers and flags the routine modifies and does not restore |
+| `preserves` | Registers and flags explicitly restored before return (uncommon when push/pop already handled it) |
 
 A complete contract for `find_max`:
 
@@ -86,9 +180,9 @@ A complete contract for `find_max`:
   ret
 ```
 
-The human-readable comment stays as a regular `;` line. The `;!` lines carry the structured data that the analyzer reads.
+The human-readable `;` line stays for prose. The `;!` lines are what the analyzer parses.
 
-Carrier lists use comma-separated register names:
+Carrier lists use comma-separated names:
 
 ```asm
 ;!      in        A, DE, HL
@@ -96,9 +190,9 @@ Carrier lists use comma-separated register names:
 ;!      clobbers  BC
 ```
 
-Register pairs are shorthand: `BC` means both B and C. The analyzer decomposes pairs into their 8-bit constituents. Flags are named individually: `carry`, `zero`, `sign`, `parity`, `halfCarry`. Use `carry` for the carry flag and `C` for register C — both appear as short names in the same context, so the distinction matters.
+Register pairs are shorthand: `BC` means B and C. Flags are named individually: `carry`, `zero`, `sign`, `parity`, `halfCarry`. Use `carry` for the carry flag and `C` for register C — both are short names; the distinction matters.
 
-A carrier that transforms from input to output can appear in both `in` and `out`:
+A carrier that transforms in place can appear in both `in` and `out`:
 
 ```asm
 ;!      in        DE
@@ -106,13 +200,68 @@ A carrier that transforms from input to output can appear in both `in` and `out`
 ;!      clobbers  A
 ```
 
-This declares that DE carries a meaningful value on entry and a different meaningful value on exit — the routine transforms DE in place. The analyzer uses this to distinguish an intentional transformation from an accidental clobber.
+That declares an intentional transformation, not an accidental clobber.
 
 ---
 
-## `@ROUTINE:` — marking subroutine entries
+## Flags are return values
 
-The `@` prefix before a label marks it as an explicit routine entry for the register-care analyzer.
+Part 2 uses carry for success and failure (`ring_push`, `ring_pop`, and others). Chapter 12 should treat flags as first-class contract carriers, not an afterthought.
+
+### Success on carry set
+
+```asm
+; try_read: read one byte into A; carry set on success
+;!      in        HL
+;!      out       A, carry
+;!      clobbers  AF, BC, HL
+@try_read:
+    ...
+    scf
+    ret
+.empty:
+    or a        ; clears carry
+    ret
+```
+
+The human comment explains *meaning* (success vs empty). The contract names the **carrier**:
+
+```asm
+;!      out       carry
+```
+
+### Empty test on zero
+
+```asm
+; is_empty: return whether count byte is zero
+;!      out       zero
+@is_empty:
+    ld a, (count)
+    or a
+    ret
+```
+
+`or a` sets Z when A is zero. Callers test with `jr z`, `jr nz`, `ret z`, or `call nz` — those instructions are evidence the flag mattered.
+
+### Teaching point
+
+A flag can be the entire return value. You do not need a separate error code byte when carry or zero already communicates success, failure, or "found". Document the flag in `out`; put semantic wording in the plain `;` line above the contract:
+
+```asm
+; ring_push: append byte in A; carry set on success, carry clear when full
+;!      in        A, IX
+;!      out       carry
+;!      clobbers  AF, BC, DE, HL
+@ring_push:
+```
+
+Avoid embedding flag syntax in the machine line (`out F.C`) when `out carry` is the formal carrier and the comment carries the success/failure story.
+
+---
+
+## Mark real entries with `@`
+
+The `@` prefix marks an explicit routine entry for register-care:
 
 ```asm
 ;!      in        HL, B
@@ -121,65 +270,81 @@ The `@` prefix before a label marks it as an explicit routine entry for the regi
 @find_max:
 ```
 
-Without `@`, AZM infers routine boundaries from the label structure — which works for simple cases but can misclassify an internal loop label as a new routine, splitting a push/pop-protected body in the middle. The `@` spelling removes the ambiguity: `@find_max:` starts the analysis span for `find_max`. Plain labels and leading-dot local labels inside the routine body are internal branch targets only.
+Without `@`, AZM infers boundaries from label structure. That works for tiny routines but can misclassify internal labels as separate routines — splitting a push/pop body in the middle and producing nonsense contracts.
 
-The callable symbol is `find_max`, without the `@`. Callers write:
+### Failure story: global loop labels
 
 ```asm
-  call find_max
+check_collision:
+    push bc
+    ...
+loop:                   ; global label — looks like a new routine
+    ...
+done:                   ; another "routine" boundary
+    pop bc
+    ret
 ```
 
-The `@` only appears in the label definition. It tells AZM tools "this is a subroutine entry"; it does not change the symbol name the linker and caller use.
+A tool may treat `loop` and `done` as separate entries. The `push bc` appears in one inferred routine and `pop bc` in another, so inferred preservation makes no sense.
 
-Multiple `@` labels placed consecutively before the first instruction declare aliases for the same entry body:
+Correct shape:
+
+```asm
+@check_collision:
+    push bc
+    ...
+.loop:
+    ...
+.done:
+    pop bc
+    ret
+```
+
+`@check_collision:` starts the analysis span. Leading-dot labels (`.loop`, `.done`) are internal branch targets only. The callable symbol remains `check_collision` — callers write `call check_collision`, not `call @check_collision`.
+
+Multiple `@` labels before the first instruction declare aliases for the same body:
 
 ```asm
 @find_maximum:
 @find_max:
-  ; both names refer to the same code
+  ...
 ```
-
-Plain labels inside the routine body — loop tops, skip targets, early exits — should use the leading-dot form (`.loop:`, `.skip:`) to make clear they are intra-routine waypoints, not separate entry points.
 
 ---
 
-## Running register-care analysis
+## AZMDoc syntax reference
 
-`azm --rc warn file.asm` runs the register-care analyzer in warning mode. It reads AZMDoc contracts, infers effects from the instruction stream, and reports any conflict between what a caller has live across a call and what the callee may modify.
+Lines starting with `;!` immediately before `@entry` carry the contract. Register-care modes:
 
-Given a caller that stores something in HL before calling `find_max` and then uses HL after:
+| Command | Effect |
+|---------|--------|
+| `azm --rc audit source.asm` | Report conflicts; build succeeds |
+| `azm --rc warn source.asm` | Warnings on conflicts; build succeeds |
+| `azm --rc error source.asm` | Errors on conflicts; build fails |
 
-```asm
-  ld hl, table
-  ld b, 8
-  call find_max          ; find_max clobbers HL
-  ld (max_val), a
-  ld a, (hl)             ; HL now points past the table: bug
+Practical workflow beyond audit/warn/error:
+
+```sh
+azm --rc audit --reg-report source.asm
+azm --contracts --rc audit source.asm
+azm --reg-interface source.asm
+azm --rc error --interface monitor.asmi source.asm
 ```
 
-Running `azm --rc warn` on this source produces something like:
+| Flag | Role |
+|------|------|
+| `--reg-report` | Inspect what register-care inferred per routine |
+| `--contracts` | Generate or upgrade `;!` blocks from inference |
+| `--reg-interface` | Export `.asmi` contracts from annotated source |
+| `--interface file.asmi` | Import contracts for code you cannot inspect |
 
-```
-source.asm:6: warning: HL is live across call to find_max, but find_max may clobber H, L
-```
-
-The diagnostic names the register, the call site, and the callee. The caller can then decide: save HL before the call, reload it after, or restructure the code so HL is not needed past the call.
-
-Three modes are available:
-
-- `azm --rc audit source.asm` — reports conflicts without failing the build. Use this while annotating a codebase that does not yet have complete contracts.
-- `azm --rc warn source.asm` — warns on every conflict. The build succeeds; all conflicts appear as warnings.
-- `azm --rc error source.asm` — treats conflicts as errors. The build fails until every conflict is resolved.
-
-Start with `--rc audit` on existing code to see the current state. Once all reported conflicts are addressed, move to `--rc warn` to catch new ones as code changes.
+Typical progression: run `--rc audit --reg-report` on legacy code, add `@` entries and `;!` lines (or `--contracts` as a draft), fix call sites, then enforce with `--rc warn` or `--rc error`.
 
 ---
 
-## External contracts for system calls and ROM routines
+## External code uses `.asmi`
 
-System calls and ROM routines do not have AZMDoc in their source — they are pre-assembled code, binary data, or hardware. The register-care analyzer cannot inspect their bodies.
-
-External contracts live in `.asmi` files. A `.asmi` file is not assembly source — it contains only contract records, one per external routine, with no comment syntax:
+ROM routines, monitor calls, BIOS entry points, and Debug80 stubs have no AZM source to analyze. Register-care cannot inspect their bodies. **`.asmi`** files declare their boundaries — one record per external symbol, no comment syntax:
 
 ```
 extern MON_PRINT_CHAR
@@ -194,23 +359,32 @@ clobbers carry
 end
 ```
 
-Load the interface file when assembling:
+Load when assembling:
 
-```
+```sh
 azm --interface monitor.asmi --rc warn source.asm
 ```
 
-The analyzer then knows that `MON_PRINT_CHAR` takes A as input and clobbers A, and that `MON_GET_KEY` returns A and the zero flag. Call sites that have registers live across those calls are checked against these declared effects.
+Caller in source:
 
-If a project calls many ROM or system routines, a single `.asmi` file can hold all their contracts. The file is separate from the source so the declarations can be updated independently when the platform's documentation changes.
+```asm
+    ld a, 'A'
+    call MON_PRINT_CHAR
+```
+
+AZM cannot see inside ROM. `.asmi` is how you teach the analyzer what the external routine does — the same `in` / `out` / `clobbers` vocabulary as `;!` blocks, stored in a separate file you can share across projects (MON3, platform ROM tables, emulator integration).
+
+If a project calls many system routines, one `.asmi` file holds all declarations. Update it when platform documentation changes; source files stay unchanged.
+
+Part 2 Chapter 7 revisits `.include` and library layout; the external boundary story lives here in Part 1.
 
 ---
 
 ## A worked example: annotating find_max and count_above
 
-Starting from the Chapter 10 subroutines, here is the process of adding AZMDoc contracts.
+From Chapter 10's subroutines:
 
-**Step 1: add `@` entry labels, no contracts yet.**
+**Step 1 — add `@` entries, no contracts yet.**
 
 ```asm
 @find_max:
@@ -241,18 +415,9 @@ Starting from the Chapter 10 subroutines, here is the process of adding AZMDoc c
   ret
 ```
 
-Running `azm --rc audit source.asm` at this stage reports inferred summaries for both routines and flags any call-site conflicts it can detect from the instruction stream alone. It might report:
+`azm --rc audit --reg-report source.asm` shows inferred summaries and any call-site conflicts visible without contracts.
 
-```
-source.asm: info: find_max inferred clobbers H, L, B, A
-source.asm: info: count_above inferred clobbers H, L, B, A; preserves D, E, C
-```
-
-The inferred summaries are a starting point. If main has HL or B live across either call, the audit mode notes it here.
-
-**Step 2: add contracts.**
-
-Add `;!` lines for each routine, based on the intended behavior from Chapter 11's comment blocks:
+**Step 2 — add contracts from intended behavior.**
 
 ```asm
 ; find_max: scan a byte table and return the largest value
@@ -260,78 +425,72 @@ Add `;!` lines for each routine, based on the intended behavior from Chapter 11'
 ;!      out       A
 ;!      clobbers  B, HL
 @find_max:
-  ld a, 0
-.loop:
-  cp (hl)
-  jr nc, .skip
-  ld a, (hl)
-.skip:
-  inc hl
-  djnz .loop
-  ret
+  ...
 
-; count_above: count bytes in table strictly above a threshold
+; count_above: count bytes strictly above threshold in C
 ;!      in        HL, B, C
 ;!      out       A
 ;!      clobbers  B, HL
 @count_above:
   push de
   ld d, 0
-.loop:
-  ld a, (hl)
-  cp c
-  jr c, .skip
-  jr z, .skip
-  inc d
-.skip:
-  inc hl
-  djnz .loop
-  ld a, d
+  ...
   pop de
   ret
 ```
 
-`count_above` does not list D in `clobbers` because the push/pop makes DE externally preserved — the caller's D and E are intact after the call. The declared interface only describes what the caller sees. What happens inside the subroutine body is invisible to callers, as long as the contract is correct.
+D does not appear in `clobbers` because push/pop preserves DE for the caller. The contract describes the door: caller's DE is intact; internal use of D is invisible.
 
-**Step 3: verify with --rc warn.**
+**Step 3 — verify.**
 
-```
+```sh
 azm --rc warn source.asm
 ```
 
-If main reloads HL and B before each call (as Chapter 10's main did), the check passes with no diagnostics. If main tries to use HL after `find_max` without reloading it, the analyzer reports the conflict. The contract on `find_max` — `clobbers B, HL` — gives the analyzer the information it needs to flag that specific call site.
+If `main` reloads HL before each call (Chapter 10), checks pass. If `main` uses HL after `find_max` without reloading, register-care reports the conflict against `clobbers HL`.
 
-**Step 4: catch a wrong contract.**
+**Step 4 — catch a lying contract.**
 
-Suppose a future version of `find_max` is changed to record the address of the maximum element in a global, and the clobbers line is not updated:
+If `find_max` later uses DE internally but the contract still omits DE:
 
 ```asm
-;!      clobbers  B, HL   <— now also clobbers DE (the new code uses DE internally)
+;!      clobbers  B, HL   ; stale — body now uses DE
 @find_max:
-  ; new body that uses DE
   ...
-  ret
 ```
 
-With `--rc error`, the assembler infers that `find_max` clobbers DE, compares that against the declared contract (which says nothing about DE), and flags the mismatch. The contract and the code are out of sync — the declared interface is a lie, and any caller that relies on DE being preserved across a call to `find_max` has a latent bug.
+With `--rc error`, inferred effects that exceed the declared contract are flagged. Callers that relied on DE across the call had a latent bug; the stale contract hid it.
+
+---
+
+## What register-care does not prove
+
+Register-care verifies **register and flag boundary consistency** at calls. It does not prove:
+
+- Algorithm correctness (GCD, sort order, chess rules)
+- Memory aliasing (two pointers to the same buffer)
+- Stack depth or overflow
+- Interrupt safety or re-entrancy
+- Semantic meaning of values in registers (HL as string vs table vs node)
+
+Use it where informal discipline breaks down: live registers across `call`, documented clobbers vs actual code, and external routines described in `.asmi`. It turns comments into checkable promises at the boundary — AZM's killer feature for maintainable assembly, not a replacement for thinking about the algorithm.
 
 ---
 
 ## Summary
 
-- AZMDoc uses `;!` lines immediately before a routine entry to declare structured register contracts. Keys: `in`, `out`, `clobbers`, `preserves`.
-- Carrier lists are comma-separated register and flag names. Register pairs (`BC`, `HL`) expand to their constituent 8-bit registers. Flags are named individually: `carry`, `zero`, `sign`, `parity`, `halfCarry`.
-- `@Name:` marks a label as an explicit routine entry for register-care analysis. The callable symbol is `Name` without the `@`.
-- Internal branch targets (loops, skip labels, error exits) should use leading-dot labels (`.loop:`, `.skip:`) and do not receive AZMDoc contracts.
-- `azm --rc audit` reports without failing. `--rc warn` warns. `--rc error` fails the build on conflicts.
-- External contracts for system calls and ROM routines live in `.asmi` files and are loaded with `azm --interface`.
-- The contract describes the externally visible interface, not internal scratch. A register preserved via push/pop does not appear in `clobbers`.
+- A contract is checked at the **call site**: caller liveness vs callee `in` / `out` / `clobbers`.
+- **Internal scratch** and **push/pop preservation** are not `out` values; preserved registers usually omit `clobbers`.
+- **Flags** (`carry`, `zero`, …) are first-class returns; put meaning in human `;` lines, carriers in `;! out`.
+- **`@name:`** marks routine entries; **`.loop`** / **`.done`** are internal labels, not separate routines.
+- **`.asmi`** describes ROM/monitor/external code; **`--interface`** imports it.
+- Workflow: **`--reg-report`**, **`--contracts`**, **`--reg-interface`**, then **`--rc warn`** or **`--rc error`**.
 
 ---
 
 ## Exercises
 
-**1. Write a contract.** Given this subroutine, write the correct AZMDoc contract block. Identify what goes in each of `in`, `out`, `clobbers`, and whether `preserves` is needed:
+**1. Write a contract.** Given this subroutine, write the correct AZMDoc block (`in`, `out`, `clobbers`; use `preserves` only if needed):
 
 ```asm
 ; copy_bytes: copy B bytes from HL to DE
@@ -347,19 +506,21 @@ copy_bytes:
   ret
 ```
 
-Which registers does the caller lose? Which are preserved? Does the push/pop on BC affect what goes into `clobbers`?
+Does push/pop on BC belong in `clobbers` or not? Why?
 
-**2. Read a register-care diagnostic.** The following output appears when running `azm --rc warn source.asm`:
+**2. Read a diagnostic.**
 
-```
+```text
 source.asm:18: warning: C is live across call to find_max, but find_max may clobber C
 ```
 
-Looking at `find_max`'s contract (`in HL, B`, `out A`, `clobbers B, HL`), explain what the warning actually means. Is C in `find_max`'s clobbers list? Where did the analyzer get the information to generate this warning? What should the caller do to fix it?
+`find_max` declares `clobbers B, HL` only. What does the warning mean? What should the caller change?
 
-**3. Write an external contract.** A program calls `BIOS_READ_SECTOR`, a ROM routine that reads a disk sector. It takes HL as the address of a 512-byte buffer (where the sector will be written), B as the sector number, and returns carry clear on success, carry set on error. It clobbers A, BC, and DE. Write the `.asmi` contract for `BIOS_READ_SECTOR`.
+**3. Write an external contract.** `BIOS_READ_SECTOR` takes HL = buffer, B = sector number; returns **carry clear** on success, **carry set** on error; clobbers A, BC, DE. Write the `.asmi` record (use `carry`, not `F.C`).
 
-**4. Spot the wrong contract.** This subroutine has a contract that does not match its body:
+**4. Flags as return.** Write `ring_try_pop` that returns the oldest byte in A with **carry set** on success and **carry clear** when empty. Include human `;` line and `;!` block. Show one caller fragment that branches on carry after `call`.
+
+**5. Spot the wrong contract.**
 
 ```asm
 ; normalize: clamp A to range 0-127
@@ -374,7 +535,9 @@ Looking at `find_max`'s contract (`in HL, B`, `out A`, `clobbers B, HL`), explai
   ret
 ```
 
-Read the code. Does it actually use or clobber B? What is the cost of declaring a false clobber? What is the cost of missing a true clobber? Rewrite the contract accurately.
+Does the body use B? What is the cost of a false clobber vs a missing one? Rewrite the contract.
+
+**6. `@` and local labels.** Rewrite `check_collision` from this chapter so `loop`/`done` cannot be mistaken for routine entries. Explain in one sentence why `@` plus `.loop` fixes the push/pop inference problem.
 
 ---
 
