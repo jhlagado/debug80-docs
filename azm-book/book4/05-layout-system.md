@@ -423,10 +423,6 @@ TIMER:
 ; The high byte is at TIMER + 1 — no union field names the second byte of an overlaid word.
 ```
 
-### No runtime tag
-
-The output contains no tag byte or discriminant. Reading a union member that was written through a different member is legal assembly. Whether that read makes sense is up to you.
-
 ### When a union is clearer than comments
 
 A union makes the alternate-view intent explicit and machine-checkable. The alternative is bare byte arithmetic with comments:
