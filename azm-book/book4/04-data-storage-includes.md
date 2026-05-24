@@ -287,11 +287,10 @@ AZM searches the source file's directory first, then the `-I` paths in order.
 
 ## Include and the translation unit
 
-AZM has no module system. All included files become part of a single translation unit, and every symbol is global — include a file that defines `COUNTER` and that label is visible everywhere in the build.
+AZM has no module system. All included files merge into a single translation unit — every label and constant defined anywhere is visible everywhere. This has three practical consequences:
 
-This means:
-- Every label must be globally unique
-- The order of includes can matter (forward references are generally fine, but some expressions may depend on earlier definitions)
+- Every label must be globally unique across all included files
+- The order of includes can matter, since some expressions depend on earlier definitions
 - Including the same file twice defines its labels twice, which is a duplicate-symbol error
 
 Avoid recursive includes — AZM has no cycle detection, and a file that includes itself will loop until the process runs out of resources.

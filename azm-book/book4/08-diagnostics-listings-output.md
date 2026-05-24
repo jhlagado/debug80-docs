@@ -120,10 +120,7 @@ warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9
   but DRAW_FRAME may modify B (inferred clobbers: A,B,DE)
 ```
 
-The diagnostic names the live register, the call site, and the callee's inferred clobber set. Three options to resolve:
-1. Save B around the call: `push bc / ... / pop bc`
-2. Restructure code so B is not live across the call
-3. Add a callee contract if DRAW_FRAME does actually preserve B
+The diagnostic names the live register, the call site, and the callee's inferred clobber set. Resolution options are: save the register around the call, restructure so it is not live across the call, or add a callee contract. Chapter 6 covers each option in detail.
 
 ### Reducing a failing source file
 

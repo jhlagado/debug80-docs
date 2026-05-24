@@ -9,15 +9,13 @@ nav_order: 7
 
 # Chapter 7 — Op Declarations and Aliases
 
-Two features extend the core directive set beyond the covered so far: op declarations let you define reusable instruction idioms that expand inline at each call site, and directive aliases let legacy spellings like `DEFB` resolve to canonical AZM directives. This chapter covers both.
+Two features extend the directive set covered so far: op declarations let you define reusable instruction idioms that expand inline at each call site, and directive aliases let legacy spellings like `DEFB` resolve to canonical AZM directives. This chapter covers both.
 
 ---
 
 ## Op declarations
 
-An op is a named instruction idiom that expands inline at each call site into ordinary Z80 instructions. It is not a subroutine — there is no call, no return address, no stack frame. It is not a text macro — the assembler parses and matches operands as structured assembly rather than substituting text.
-
-The expansion is visible in the listing at the call site. What you see in the listing is exactly what the CPU executes.
+An op is a named instruction idiom that expands inline at each call site into ordinary Z80 instructions. At each expansion, the assembler parses and matches operands as structured assembly — no text substitution, no call overhead, no return address. The expanded instructions appear in the listing at the call site exactly as if you had typed them.
 
 ### Simple zero-operand ops
 
@@ -356,7 +354,7 @@ Repeatable for multiple alias files:
 azm --aliases base.aliases.json --aliases local.aliases.json program.asm
 ```
 
-### What aliases rewrite — and what they do not
+### What do aliases rewrite?
 
 Aliases only normalize the **directive head**: the first token of a statement after an optional label. They do not rewrite operands, expressions, register names, instruction mnemonics, or op names.
 
@@ -384,7 +382,7 @@ Aliases normalize spelling; ops expand instruction sequences.
 
 AZM's ASM80 compatibility baseline lets you assemble existing Z80 source with minimal changes. The built-in alias profile handles the most common directive spelling differences. For source that uses `DEFB`, `RMB`, or similar, add a project alias file.
 
-The assembly address behavior, label handling, expression forms, and Z80 instruction encoding all match ASM80 behavior for the covered corpus. AZM is stricter about unknown directives and malformed operands — ASM80 sometimes silently ignores what it does not understand; AZM does not.
+The assembly address behavior, label handling, expression forms, and Z80 instruction encoding all match ASM80 behavior for the covered corpus. AZM is stricter than ASM80 about unknown directives and malformed operands — see Chapter 2.
 
 ### Normalizing source to canonical style
 

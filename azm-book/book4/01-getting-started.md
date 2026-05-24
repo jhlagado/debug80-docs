@@ -15,9 +15,7 @@ AZM is a Z80 assembler written in Node.js. You write `.asm` source files; AZM tu
 
 ## What is AZM?
 
-AZM is a Z80 assembler. You write `.asm` or `.z80` source files; AZM turns them into machine code. Every instruction in your source becomes bytes in the output.
-
-When you write `ld a,42`, the assembled binary contains the two bytes for that load. When you write `call DRAW_SPRITE`, those three bytes appear where you put them. AZM adds no preamble, generated stack frame, or implicit register saves.
+Every instruction in your source becomes bytes in the output. When you write `ld a,42`, the assembled binary contains the two bytes for that load. When you write `call DRAW_SPRITE`, those three bytes appear where you put them. AZM adds no preamble, generated stack frame, or implicit register saves.
 
 ## At a glance
 
@@ -143,7 +141,7 @@ By default, AZM writes four output files next to the source:
 
 All four are the default artifact set. Chapter 8 covers output selection, suppression flags, Debug80 source paths, exit status, and artifact formats.
 
-### How Debug80 invokes AZM
+### How does Debug80 invoke AZM?
 
 Debug80 calls AZM internally when assembling an open source file. It passes `--source-root` and `--output` with paths relative to the project root, producing a `.d8.json` alongside the binary. You do not need to invoke AZM separately to use Debug80. The CLI is for command-line builds, CI pipelines, and projects that run outside the Debug80 IDE.
 

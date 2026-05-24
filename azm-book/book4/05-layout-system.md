@@ -49,7 +49,7 @@ ptr     .addr
 .endtype
 ```
 
-`sizeof(Sprite)` and `offset(Sprite, flags)` update automatically.
+`sizeof(Sprite)` and `offset(Sprite, flags)` update automatically. The assembler also validates field names: `offset(Sprite, flagz)` catches the typo at assemble time, while the bare-number approach accepts the wrong offset silently.
 
 ### Scalar layout types
 
@@ -122,23 +122,9 @@ Array type expressions appear in:
 
 The equivalence is exact. The type form documents intent while still reserving an ordinary byte count.
 
-### What layout types do not do
+### Compile-time only
 
-Layout types are not a runtime type system. They:
-- Do not attach type information to labels permanently
-- Do not cause AZM to infer typed memory access from instruction operands
-- Do not generate hidden indexing or load/store code
-- Do not create a separate initialization syntax
-
-The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
-
-### Why layout constants belong in source
-
-Hard-coded offsets produce correct code until the layout changes. Add a field before `flags` in the Sprite record and every bare `2` used as the flags offset now addresses the wrong byte. The assembler accepts the number without complaint.
-
-Symbolic names fix this. When `flags` is an `offset` query, adding a field causes the assembler to recompute every offset from the declaration automatically. The call sites need no edits.
-
-The assembler can also verify field names. `offset(Sprite, flagz)` errors on the misspelling, and storage such as `.ds Sprite[16]` stays tied to the same declaration as the field offsets.
+Layout types produce no runtime objects, no hidden loads or stores, and no tag bytes. They do not cause AZM to infer typed memory access from instruction operands or generate any initialization code. The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
 
 ---
 

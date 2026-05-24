@@ -39,7 +39,7 @@ result:
 
 The code assembles at `$0100`. The storage assembles at `$8000`. Both land in the same output binary at their respective offsets.
 
-## What `.org` affects
+## What does `.org` affect?
 
 `.org` changes where AZM places the next bytes, emitting nothing itself. Your loader or boot ROM determines where the CPU begins executing — `.org` only tells the assembler where to position subsequent output. AZM warns when a new `.org` overlaps already-assembled bytes.
 
@@ -291,7 +291,7 @@ AZM supports symbolic operators only:
 | `<<` | left shift |
 | `>>` | right shift |
 
-Word-form operators (`MOD`, `AND`, `OR`, `XOR`, `NOT`, `SHL`, `SHR`) are not recognised. Note that `%` has two roles: as a number prefix it introduces a binary literal (`%10101010`), and as an infix operator it is modulo. Context determines which: a `%` after an expression is modulo; a `%` at the start of a value is a binary literal.
+Word-form operators (`MOD`, `AND`, `OR`, `XOR`, `NOT`, `SHL`, `SHR`) are not recognised. `%` has two roles: as a number prefix it introduces a binary literal (`%10101010`), and as an infix operator it is modulo. A `%` after an expression is modulo; a `%` at the start of a value is a binary literal.
 
 Operator precedence follows conventional arithmetic rules. Parentheses group sub-expressions:
 
@@ -302,14 +302,12 @@ ENTRY_ADDR  .equ TABLE_BASE + (ENTRY_NUM * 3)
 
 ### `$` in expressions
 
-Inside an expression, `$` is the current assembly address:
-
 ```asm
 MSG:    .db "Hello"
 MSG_LEN .equ $ - MSG        ; byte count of "Hello"
 ```
 
-The value of `$` is the address *after* the last emitted byte on the preceding line when it appears in a `.equ` or data context.
+In a `.equ` or data context, `$` resolves to the address *after* the last emitted byte on the preceding line.
 
 ### Expressions in instructions
 

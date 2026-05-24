@@ -59,7 +59,7 @@ ScanRowBitLoop:
 
 `ScanRowBitLoop` is a plain branch label inside `SCAN_ROW`. Register-care sees the whole body as one span. If `SCAN_ROW` pushed a register, the pop anywhere after `ScanRowBitLoop` would be found and the register counted as preserved. The next `@` label starts the next analyzed routine.
 
-## What register-care infers
+## What does register-care infer?
 
 Given a routine body, AZM infers:
 - **Inputs** (`in`): registers and flags whose incoming value is read before any write
@@ -131,7 +131,7 @@ azm --reg-profile mon3 program.asm
 
 The `mon3` profile provides built-in register-care summaries for MON3 RST service calls. Without it, calls to ROM RST addresses appear as unknown targets and the analyzer assumes they modify all registers.
 
-## What contracts can and cannot prove
+## Analysis scope and limits
 
 Register-care analysis is an assembler-level data-flow pass. It proves:
 - Register and flag values through straight-line code and simple loops
@@ -197,9 +197,7 @@ After `--fix` runs:
 
 ## AZMDoc syntax
 
-AZMDoc is the comment format for machine-readable register contracts. Human prose stays in ordinary `;` comments. Contracts use a separate `;!` prefix so the register-care analyzer never has to mine prose for meaning.
-
-AZMDoc metadata does not change the bytes AZM emits. Assemblers that do not understand AZMDoc see `;!` lines as ordinary comments.
+AZMDoc is the comment format for machine-readable register contracts. The `;!` prefix (introduced in Chapter 2's discussion of comments) keeps contracts separate from human prose so the register-care analyzer never has to mine prose for meaning. AZMDoc metadata does not change the bytes AZM emits.
 
 ### Source contract syntax
 
@@ -315,13 +313,7 @@ azm --interface mon3.asmi --rc error program.asm
 
 ### Generating contracts with `--contracts`
 
-```sh
-azm --contracts --rc audit program.asm
-```
-
-AZM infers contracts for all `@` routines and writes `;!` blocks into the source file in place. Tool-owned blocks (the contiguous `;!` lines) are replaced on each run. Human prose above the `;!` block is preserved.
-
-Generated blocks are omitted for routines where all carriers are empty — no inputs, no outputs, no clobbers.
+See "Generating contracts from inference" earlier in this chapter for the full `--contracts` workflow. Generated blocks are omitted for routines where all carriers are empty — no inputs, no outputs, no clobbers.
 
 ### Generating `.asmi` with `--reg-interface`
 
@@ -343,13 +335,11 @@ azm --rc audit --reg-report program.asm
 
 This infers contracts and writes `program.regcare.txt` without producing diagnostics or failing the build. Read the report to understand what AZM found before committing to anything.
 
-**2. Generate `;!` blocks into source:**
+**2. Generate `;!` blocks into source** (see "Generating contracts from inference" above):
 
 ```sh
 azm --contracts --rc audit program.asm
 ```
-
-AZM writes inferred contracts above every `@` entry. Review them. Correct cases where inference misclassified an intentional in/out transformation as a clobber. Delete generated blocks where the routine is private and the contract is obvious.
 
 **3. Escalate to warn:**
 

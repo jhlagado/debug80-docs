@@ -483,7 +483,7 @@ Eight sprites at four bytes each place `found_at` at `$8020`.
 
 ---
 
-### What this program demonstrates
+### What does this program demonstrate?
 
 | Feature | Location |
 |---------|----------|

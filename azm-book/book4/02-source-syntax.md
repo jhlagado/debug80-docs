@@ -15,7 +15,7 @@ AZM parses source one line at a time. This chapter covers the rules that govern 
 
 ## Line structure
 
-AZM parses source one line at a time. Each line contains at most one of:
+Each line contains at most one of:
 
 - A label, optionally followed by an instruction or directive
 - An instruction or directive without a label
@@ -220,8 +220,6 @@ An **entry label** begins with `@` followed by a plain identifier:
 
 The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; `@SHIFT_ROW` is the source annotation. Both forms place a label at the current assembly address. The difference is what they tell register-care analysis — covered in the next section and in Chapter 6.
 
-Labels are case-sensitive. `loop`, `Loop`, and `LOOP` are three different symbols. All labels must be globally unique across the translation unit.
-
 ## The `@` entry prefix
 
 `@NAME:` marks `NAME` as a routine entry point for register-care analysis. The callable symbol is `NAME`, without the `@`. Call sites write `call NAME`.
@@ -236,7 +234,7 @@ Labels are case-sensitive. `loop`, `Loop`, and `LOOP` are three different symbol
         ret
 ```
 
-The `@` marker does not create a local-label namespace. Branch labels inside routines are still global symbols, so two routines that both need a loop label must use distinct names:
+Branch labels inside routines are still global symbols, so two routines that both need a loop label must use distinct names:
 
 ```asm
 @SHIFT_ROW:
