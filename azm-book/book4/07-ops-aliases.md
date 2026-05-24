@@ -202,6 +202,8 @@ AZM tracks the expansion stack and stops with an error when the same op appears 
 
 ### Diagnostics for ops
 
+Message wording is illustrative. AZM reports a shaped `AZMN_PARSE` diagnostic; exact text may vary.
+
 **No overload matches:**
 
 ```

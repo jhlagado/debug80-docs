@@ -89,7 +89,7 @@ counter:
         .db 0
 ```
 
-Every AZM concept appears in those fifteen lines.
+Several core AZM concepts appear in those lines.
 
 ### `.org` — setting the assembly address
 
@@ -403,7 +403,7 @@ Chapter 7 covers the alias file format.
 azm --asm80 program.asm
 ```
 
-Writes `program.z80` — a lowered version of the source with AZM features translated to plain ASM80 syntax. This output is in beta: coverage is growing but does not yet cover all ISA forms or full programs. The `AZMN_ASM80` diagnostic marks unsupported lowering. Prefer binary and `.d8.json` for production workflows.
+Writes `program.z80` — a lowered version of the source with AZM features translated to plain ASM80 syntax. `--asm80` is a compatibility output. It is covered by the current asm80 fixture and parity gates, but treat it as a generated verification aid rather than the primary production artifact. Prefer AZM's `.bin`, `.hex`, `.lst`, and `.d8.json` outputs for normal workflows. If AZM reports `AZMN_ASM80`, the AZM binary output may still be valid while the lowered ASM80 artifact needs attention.
 
 ### Exit status
 

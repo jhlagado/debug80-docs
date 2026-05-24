@@ -126,7 +126,10 @@ AZM's canonical directive names start with a dot:
 .org    .equ    .db    .dw    .ds
 .cstr   .pstr   .istr  .include   .end
 .align  .binfrom  .binto
+.type   .endtype  .union  .endunion
 ```
+
+`.type` / `.endtype` and `.union` / `.endunion` are layout block delimiters; covered in Chapter 5.
 
 Undotted forms (`ORG`, `EQU`, `DB`, `DW`, `DS`, …) are accepted through the built-in alias layer. Either form works in source. Canonical AZM style uses the dotted lowercase forms for new source. Chapter 7 covers the alias mechanism in full.
 
@@ -187,7 +190,7 @@ MY_LABEL:
 MY_LABEL: ld a,0
 ```
 
-Both forms are valid. The colon is required. Plain-label identifiers can contain letters, digits, and underscores, and must start with a letter.
+Both forms are valid. The colon is required. Plain-label identifiers can contain letters, digits, and underscores, and must start with a letter. The parser accepts some compatibility forms, but new source should use the canonical style.
 
 An **entry label** begins with `@` followed by a plain identifier:
 

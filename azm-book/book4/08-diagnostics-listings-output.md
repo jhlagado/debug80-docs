@@ -35,7 +35,7 @@ Parse errors occur when a source line cannot be recognized as a valid label, ins
 .macro FOO    ; error: .macro is not an AZM directive
 ```
 
-AZM does not support text macros. If you have source using `.macro`, load a directive alias file that maps it, or remove the macros before assembling.
+AZM does not support text macros. A directive alias file handles simple spelling differences such as `DEFB` to `.db`, but it cannot implement `.macro` / `.endm` — aliases only rename directive heads, not syntax or expansion behavior. Rewrite macros as AZM `op` declarations where they are instruction idioms, or pre-process the source before assembling.
 
 **Malformed operand:**
 
@@ -153,7 +153,7 @@ azm --rc error program.asm || exit 1
 
 ### AZMN diagnostic codes
 
-Diagnostics carry a code of the form `AZMN_*` for programmatic identification. Known codes:
+Diagnostics carry a code of the form `AZMN_*` for programmatic identification. Diagnostic codes are stable enough for tooling integration; message wording may change between AZM versions. Do not script against full message text. Known codes:
 
 | Code | Trigger |
 |------|---------|
@@ -396,24 +396,19 @@ Writes a `.z80` file alongside the other artifacts. The `.z80` file is a lowered
 | AZMDoc `;!` comments | Omitted (treated as comments) |
 | `.type` / `.union` declarations | Omitted (no ASM80 equivalent) |
 
-**Beta status and coverage:**
+**Coverage:**
 
-`--asm80` output covers a growing fixture corpus but does not yet produce correct lowering for all ISA forms or full real programs. Unsupported lowering emits the `AZMN_ASM80` diagnostic and may produce incomplete output.
-
-For production workflows where you need to compare AZM against ASM80 output:
-1. Use binary comparison against a known-good ASM80 binary (see Binary comparison workflow below)
-2. Use `--asm80` only for spot-checking specific features
-3. Check the AZM changelog for current `--asm80` coverage status
+`--asm80` is a compatibility output. It is covered by the current asm80 fixture and parity gates, but treat it as a generated verification aid rather than the primary production artifact. Prefer AZM's `.bin`, `.hex`, `.lst`, and `.d8.json` outputs for normal workflows. If AZM reports `AZMN_ASM80`, the AZM binary output may still be valid while the lowered ASM80 artifact needs attention.
 
 **The `AZMN_ASM80` diagnostic:**
 
 The `AZMN_ASM80` diagnostic appears when a feature cannot be lowered to ASM80. It identifies the file, line, and the feature that blocked lowering:
 
 ```
-program.asm:47:9: warning AZMN_ASM80: cannot lower layout-cast to ASM80
+program.asm:47:9: warning AZMN_ASM80: source construct cannot be lowered to ASM80-compatible form
 ```
 
-The build continues with the lowered file incomplete for that feature. Treat it as a "feature not yet supported in `--asm80` mode" notice, not a build failure. The AZM binary output is still correct.
+Exact message wording varies by construct. The build continues with the lowered file incomplete for that feature. Treat it as a notice that the ASM80 artifact needs attention, not a build failure. The AZM binary output is still correct.
 
 **Using the lowered source for verification:**
 

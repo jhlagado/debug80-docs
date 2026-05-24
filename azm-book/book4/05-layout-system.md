@@ -397,11 +397,12 @@ Or with multiple named views:
 
 ```asm
 .union Coord16
-lo      .byte
-hi      .byte
-full    .word
+byte_view   .byte
+word_view   .word
 .endunion
 ```
+
+All union members start at offset 0. The high byte is at `BASE + 1`, not a union member — there is no union syntax for naming the second byte of an overlaid word.
 
 Members use the same field declarations as `.type`: `.byte`, `.word`, `.addr`, `.field`.
 
@@ -426,8 +427,7 @@ A common use: a hardware peripheral register that can be accessed as a byte or a
 
 ```asm
 .union TimerReg
-lo      .byte     ; timer low byte
-hi      .byte     ; timer high byte
+lo      .byte     ; low byte view
 count   .word     ; full 16-bit count
 .endunion
 
@@ -439,6 +439,9 @@ TIMER:
 
 ; Read only the low byte:
         ld   a,(TIMER + offset(TimerReg, lo))
+
+; The high byte is at TIMER + 1 — there is no union syntax for naming
+; the second byte of an overlaid word.
 ```
 
 ### No runtime tag or safety check

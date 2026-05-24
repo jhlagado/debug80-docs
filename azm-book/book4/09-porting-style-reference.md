@@ -553,7 +553,7 @@ The include chain runs top-to-bottom. Hardware constants arrive first, then the 
         ld   (ix+SPRITE_FLAGS),Flags.Alive
 ```
 
-The layout cast `<Sprite[8]>SPRITE_TABLE[2]` computes `SPRITE_TABLE + 2 * sizeof(Sprite)` at assemble time. Since `sizeof(Sprite)` is 4, that is `SPRITE_TABLE + 8`. AZM folds this to a constant and emits `ld ix,SPRITE_TABLE+8` — the listing shows the resolved address. The array length in the TypeExpr must be a numeric literal (`8`), not a symbol — `<Sprite[MAX_SPRITES]>` would fail to parse.
+The layout cast `<Sprite[8]>SPRITE_TABLE[2]` computes `SPRITE_TABLE + 2 * sizeof(Sprite)` at assemble time. Since `sizeof(Sprite)` is 4, that is `SPRITE_TABLE + 8`. AZM folds this to a constant and emits `ld ix,SPRITE_TABLE+8` — the listing shows the resolved address. TypeExpr array lengths must be numeric literals; see Chapter 5.
 
 The four field writes use IX-relative addressing with the offset constants. `Tile.Player` is the enum value 2. `Flags.Alive` is 0. Both are immediate byte constants in the emitted instruction. The listing shows the numeric values alongside the symbolic names.
 
@@ -587,7 +587,7 @@ found_at:
 
 The RAM layout follows the code under a separate `.org`. `SPRITE_TABLE` reserves `sizeof(Sprite) * 8` = 32 bytes. `found_at` reserves 2 bytes (an address).
 
-Placing storage at the end under its own `.org` keeps it visually separate from code and makes the total RAM footprint easy to read. `Sprite[8]` is a type expression — it uses a numeric literal because TypeExpr array lengths do not accept symbols. `addr` names the intent: one address-sized slot.
+Placing storage at the end under its own `.org` keeps it visually separate from code and makes the total RAM footprint easy to read. `Sprite[8]` is a type expression; TypeExpr array lengths must be numeric literals (see Chapter 5). `addr` names the intent: one address-sized slot.
 
 ---
 

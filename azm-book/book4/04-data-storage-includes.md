@@ -146,7 +146,7 @@ When you use `.type` declarations (Chapter 5), you know the field offsets and ca
 
 ## `.ds` — reserve storage
 
-`.ds` reserves a block of uninitialized storage. It advances the assembly address counter by the given byte count but emits no initialized values. The bytes at those addresses contain whatever is in memory when the program runs. Use `.ds` for variables, buffers, and workspace that the program initializes at runtime.
+`.ds count` reserves address space without initialized bytes. `.ds count,fill` reserves the same space and writes the fill byte into the output image. The bytes at those addresses contain whatever is in memory when the program runs. Use `.ds` for variables, buffers, and workspace that the program initializes at runtime.
 
 `.db` and `.dw` write values into the binary now. `.ds` claims address space without writing anything.
 
@@ -225,7 +225,7 @@ RING_BUF:
         .ds RING_CAP          ; idiomatic when capacity is named
 ```
 
-The type-array form `.ds byte[RING_CAP]` requires a literal length in the current assembler for the array part. Use `RING_CAP` directly as the `.ds` operand when the count is already named.
+TypeExpr array lengths must be numeric literals; see Chapter 5. Use `RING_CAP` directly as the `.ds` operand when the count is already named.
 
 ### Storage maps
 
@@ -338,7 +338,7 @@ project/
         .include "routines/input.asm"
 
         .org $0100
-main:
+@main:
         ; ...
 
         .include "ram.asm"
