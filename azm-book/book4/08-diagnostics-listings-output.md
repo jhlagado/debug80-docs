@@ -173,6 +173,41 @@ program.asm:14:5: error AZMN_PARSE: immediate value 300 out of range 0..255
 
 When writing scripts that parse AZM output, match on the code rather than the message text — the code is stable across releases; the message wording may change.
 
+### Reading a failing build
+
+When a build fails, the diagnostic tells you the file, the line, the column, and the problem. Learning to read one quickly takes a single concrete example.
+
+Suppose you have a loop that branches forward around a handler block. The handler starts small, but grows. At 140 bytes between the `jr` and its target, running `azm scan.asm` stops immediately:
+
+```asm
+        .org $0100
+
+SCAN_LOOP:
+        ld   a,(hl)
+        cp   SENTINEL
+        jr   nz,SKIP_HANDLER
+
+        ; ... handler code, 140 bytes ...
+
+SKIP_HANDLER:
+        inc  hl
+        djnz SCAN_LOOP
+```
+
+```
+scan.asm:6:9: error AZMN_PARSE: branch offset 140 out of range -128..127
+```
+
+Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is the column, pointing at the `jr nz` where encoding failed. The severity `error` means no binary was written. `AZMN_PARSE` is the code; for a range error it appears at parse level because the encoded value does not fit the slot. The message names the actual value (140) and the allowed range (−128 to 127).
+
+A `jr` encodes a signed 8-bit offset from the byte following the instruction: maximum forward reach is 127 bytes. The handler accumulated past that. The fix is one line: replace `jr` with `jp`, which carries a full 16-bit address and has no range constraint:
+
+```asm
+        jp   nz,SKIP_HANDLER    ; jp carries a 16-bit target address
+```
+
+Reassemble. Exit code is 0. Open the listing at line 6 and the two bytes for the `jr` (`20 XX`) are now three bytes for the `jp` (`C2 XX XX`), the last two showing the resolved address of `SKIP_HANDLER`. The diagnostic gave you the location and the problem; the listing confirms the fix was correct.
+
 ---
 
 ## Listings and symbol visibility
@@ -202,6 +237,8 @@ Columns:
 4. **Source text** — the original source line, including labels and comments
 
 For `ld (RESULT),a` at address `$0102`, the bytes `32 08 01` represent the opcode ($32) and the address of `RESULT` ($0108) in little-endian order.
+
+Each column serves a different moment in debugging. The address column is the first thing to check when something lands at the wrong place — if code you expected at `$0100` shows up at `$0000`, an `.org` is missing or was placed after the first instruction. The bytes column is for verifying encoding: `ld a,42` showing `3E 2A` means the immediate assembled correctly; wrong bytes mean the operand expression is wrong or an instruction was misidentified. The line number points straight back to source without searching, useful when the listing runs long and an unexpected address gap tells you something is wrong but not where. The source text column matters most when tracing an expression that computed unexpectedly — both what you wrote and what the assembler saw appear on the same listing line, so you can catch the moment they diverged.
 
 ### Suppressing the listing
 
@@ -312,13 +349,15 @@ Wide byte sequences (instructions with multiple operand bytes) appear on a singl
 
 The bytes column typically shows up to four bytes. For `.db` lines that emit many bytes, the listing may show the first several and continue on the next address line. When you need the exact byte count for a data block, trust the address arithmetic (`TABLE_END - TABLE_START`) rather than counting bytes in the listing.
 
+Once the listing shows that everything assembled where you expected, the build's artifacts become the deliverables. The binary or HEX file goes to hardware or a loader; the debug map goes to Debug80; the listing stays with the source as a record of what the assembler decided. Knowing which artifact each tool needs tells you which ones to suppress — the next section covers each format.
+
 ---
 
 ## Output formats
 
 A single assembly run can produce up to seven output files. By default, AZM produces the standard set: binary, HEX, listing, and Debug80 map. The sections below describe each format and when to use suppression flags to trim the output to exactly what you need.
 
-AZM produces up to seven output artifacts from a single assembly run. All are written to the same base path as the source by default; the primary output can be redirected with `--output`.
+All are written to the same base path as the source by default; the primary output can be redirected with `--output`.
 
 ### Flat binary (`.bin`)
 
@@ -423,7 +462,7 @@ Open the `.z80` file alongside the original `.asm` to verify that AZM computed w
 - Layout expressions should expand to the expected address constants
 - Op call sites should expand to the expected instruction sequences
 
-This is particularly useful when a layout calculation produces an unexpected result: the lowered source shows the computed value directly.
+Layout calculations are where the lowered source earns its keep: when a result is unexpected, the computed value appears as a numeric literal in the `.z80` file, so you can verify it without re-deriving the arithmetic.
 
 **`--asm80` and register-care:**
 

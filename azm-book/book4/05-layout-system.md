@@ -105,7 +105,7 @@ word[8]      ; 16 bytes
 Sprite[16]   ; sizeof(Sprite) * 16 bytes
 ```
 
-This is a size-calculation rule, not a data declaration. `Sprite[16]` does not create sixteen named Sprite variables. It computes the number of bytes needed to store sixteen Sprite records.
+The bracket form is a size expression, not a data declaration. `Sprite[16]` does not create sixteen named Sprite variables — it computes the number of bytes needed to store sixteen Sprite records.
 
 Array type expressions appear in:
 - `.ds` operands
@@ -734,7 +734,7 @@ SPRITE2_FLAGS .equ offset(Sprite[16], [2].flags)
         ld   a,(hl)
 ```
 
-This is equivalent to the layout cast `<Sprite[16]>SPRITE_TABLE[2].flags`. Both reach the same constant.
+Both forms reach the same constant as the layout cast `<Sprite[16]>SPRITE_TABLE[2].flags`.
 
 The index inside the `offset` path must be a numeric literal. Layout-cast paths accept compile-time constant expressions in brackets; `offset()` paths accept only numeric literals. Runtime registers are rejected in both cases.
 

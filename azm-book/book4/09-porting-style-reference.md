@@ -78,6 +78,8 @@ ld   a,(ix+SPRITE_FLAGS)
 
 At this point the binary is still identical. You have replaced numbers with names.
 
+Steps 1 through 4 are safe by design — mechanical replacements that leave the binary identical and require no structural decisions. From here the work changes character. Step 5 introduces declarations that derive offsets from the layout automatically; step 7 adds contracts that commit to how registers flow between routines; step 8 may surface call sites that have been relying on register values surviving by accident. Each step still ends with a binary comparison, but by step 8 you will have a list of register-care conflicts — and resolving them one by one is where you learn which routines were quietly depending on values that only survived by chance.
+
 ### Step 5 — Introduce `.type` declarations for recurring layouts
 
 If the same set of field offsets appears in multiple places, consolidate them into a `.type` block:
@@ -188,7 +190,7 @@ Binary-compare after each op introduction to confirm the expansion is byte-ident
 
 ### Binary comparison is the safety net
 
-After every step, compare output against the reference binary. If they diverge, you introduced a change. The listing shows where addresses differ. Fix the discrepancy before continuing. Migrating in small steps with binary verification at each step catches mistakes when they are small and easy to isolate.
+After every step, compare output against the reference binary. If they diverge, you introduced a change. Fix the discrepancy before continuing. Migrating in small steps with binary verification at each step catches mistakes when they are small and easy to isolate.
 
 The listing is a valuable companion to binary comparison. When two binaries differ, the listing shows where addresses diverge — often a single wrong offset or a label that resolved differently. Comparing the two listings side by side is usually faster than reading raw bytes from a hex dump.
 
@@ -196,9 +198,7 @@ The listing is a valuable companion to binary comparison. When two binaries diff
 
 ## Style guide for AZM source
 
-These are conventions, not language rules. They collect the choices used throughout this manual so a project can stay consistent without rereading the earlier chapters.
-
-The conventions here are not enforced by the assembler. They are the choices that make AZM source consistent with the examples throughout this manual, and that keep listings readable.
+These are conventions, not language rules — the assembler does not enforce them. They collect the choices used throughout this manual so a project can stay consistent and keep listings readable.
 
 | Area | Convention |
 |------|------------|
@@ -223,6 +223,8 @@ A typical include order is:
 8. RAM layout (storage blocks at their own `.org`)
 
 Each category belongs in its own file. Application code should not define hardware constants; hardware files should not include application code. The organizing test is the listing: after all naming, layout, contract, and op choices, you should still be able to open the listing and understand what the CPU will execute without needing to hold anything in your head that is not on the page.
+
+The underlying reason this consistency matters more in assembly than in most other languages is that the assembler enforces none of it. No type checker rejects a wrong field offset. No linter flags an inconsistent naming convention. No compiler error tells you when a routine receives the wrong value in a register. Convention is the only enforcement mechanism — and when it is applied consistently across a project, it is because the code has no other way to stay auditable as it grows.
 
 ---
 

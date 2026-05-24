@@ -409,7 +409,7 @@ If you want to normalize an existing project to canonical AZM style:
 3. Remove the alias file from the build command
 4. Reassemble and verify output is still byte-identical
 
-This is a reversible migration. Chapter 9 covers porting more broadly.
+The migration is reversible. Chapter 9 covers porting more broadly.
 
 ---
 
