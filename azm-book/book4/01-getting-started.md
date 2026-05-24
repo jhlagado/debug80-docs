@@ -13,7 +13,7 @@ AZM is a Z80 assembler written in Node.js. You write `.asm` source files; AZM tu
 
 ---
 
-## AZM
+## What is AZM?
 
 AZM is a Z80 assembler. You write `.asm` or `.z80` source files; AZM turns them into machine code. Every instruction in your source becomes bytes in the output. Nothing is hidden.
 
