@@ -17,11 +17,11 @@ AZM can infer what each subroutine does to registers and flags, check those infe
 
 Every `call` in Z80 assembly is a contract: the calling code hands certain register values to the callee and expects certain values back. The callee may destroy registers the caller still needs. In practice this produces subtle bugs — a loop counter, a pointer, or a carry flag survives across a call only because you remembered to save it, or wrote a callee that happens not to clobber it, or got lucky.
 
-AZM's register-care system makes those contracts explicit and checkable at assemble time. It infers what each routine does to registers and flags, checks that against what callers need, and reports conflicts.
+AZM's register-care system makes those contracts explicit and checkable at assemble time. It infers what each routine does to registers and flags, checks that against what callers need, and reports conflicts. Register care is AZM's form of liveness analysis — the technique compilers use to track which values in registers are still needed at each program point. In a compiler, that analysis is invisible and automatic; in AZM, it surfaces as a check: the analyzer warns you when a call site leaves a live value in a register that the called routine will clobber.
 
 ## Routine boundaries: `@` entry labels
 
-For register-care analysis to work, AZM needs to know where each routine starts and ends. The `@` prefix on a label marks it as a routine entry:
+AZM's register-care analysis, contract generation, and autofix all work from routine boundaries. The `@` prefix is how you define those boundaries:
 
 ```asm
 @CHECK_COLLISION:
@@ -33,13 +33,15 @@ For register-care analysis to work, AZM needs to know where each routine starts 
 
 The callable symbol is `CHECK_COLLISION` — callers write `call CHECK_COLLISION`. The `@` is AZM's marker; it does not appear in the emitted binary.
 
-When `@` labels are present, AZM uses them as routine boundaries:
+When a file contains `@NAME:` labels, AZM uses them as the authoritative routine boundaries:
 - `@Name:` starts a new routine named `Name`
 - Plain branch labels inside the body are not new routines
 - The next `@OtherName:` ends the current routine and starts a new one
 - Consecutive `@` labels before the first instruction are aliases for the same routine entry
 
-Without `@` labels, AZM falls back to a heuristic: a plain label after at least one instruction begins a new routine boundary. This can misfire — particularly when a push/pop routine has a branch label inside the body that splits the analysis span before the matching pop.
+Only `@`-labeled routines get precise analysis. Running `--contracts` writes `;!` contract blocks above each `@`-labeled routine; running `--fix` repairs call sites relative to those same boundaries. A plain `NAME:` still assembles and runs correctly — it stays outside the contract-generation and repair workflow.
+
+Without any `@` labels, AZM falls back to a heuristic: a plain label after at least one instruction begins a new routine boundary. This can misfire — particularly when a push/pop routine has a branch label inside the body that splits the analysis span before the matching pop.
 
 ## Plain labels inside `@` routines
 
@@ -214,6 +216,8 @@ A source contract is a block of contiguous `;!` lines immediately before a routi
 ```
 
 The `;!` lines must be directly above the entry label with no intervening blank lines or other statements. Human prose comments can precede the `;!` block.
+
+`;!` blocks have two origins. You write them by hand to pin a routine's contract explicitly — documenting what you know, not what the analyzer infers. AZM also generates them when you run `--contracts` or `--fix`, writing or overwriting the `;!` block above each analyzed routine. Treat tool-generated blocks as build artifacts: do not hand-edit them, because the next `--contracts` or `--fix` run will overwrite your changes. If you want to override an inferred contract, write the hand-authored block yourself and skip `--fix` on that routine.
 
 ### Contract keys
 
