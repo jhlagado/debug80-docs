@@ -51,6 +51,7 @@ The first three AZM books teach programming tracks. Book 4 teaches the assembler
 | A | [Directive Reference](appendix-a-directives.md) | All directives with syntax, purpose, and chapter reference |
 | B | [Expression Operators](appendix-b-operators.md) | Operator table with precedence and numeric literal formats |
 | C | [CLI Flag Reference](appendix-c-cli.md) | All command-line flags grouped by category |
+| D | [Built-in Functions](appendix-d-functions.md) | `sizeof`, `offset`, `LSB`, and `MSB` — syntax, return values, and case rules |
 
 The general [AZM Books appendices](../appendices/index.md) cover number notation, registers, flags, addressing forms, and Z80 instruction support.
 
