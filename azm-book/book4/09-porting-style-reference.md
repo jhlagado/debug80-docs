@@ -5,7 +5,7 @@ parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 9
 ---
-[← Diagnostics, Listings, and Output](08-diagnostics-listings-output.md) | [Manual](index.md)
+[← Diagnostics, Listings, and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix A: Directive Reference →](appendix-a-directives.md)
 
 # Chapter 9 — Porting, Style, and Reference
 
@@ -514,4 +514,4 @@ The point of the example is not to introduce new rules. It is a final check that
 
 ---
 
-[← Diagnostics, Listings, and Output](08-diagnostics-listings-output.md) | [Manual](index.md)
+[← Diagnostics, Listings, and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix A: Directive Reference →](appendix-a-directives.md)

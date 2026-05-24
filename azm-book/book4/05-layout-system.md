@@ -656,24 +656,6 @@ Use explicit arithmetic when the index is in a register:
 
 AZM cannot generate runtime index computation from a cast expression — the cast is purely compile-time. When you need a runtime index, write the arithmetic yourself.
 
-### Common mistakes
-
-**Trying to use a register in a cast path:**
-
-```asm
-ld   a,(<Sprite[16]>SPRITES[HL].flags)   ; error
-```
-
-This fails because `HL` is a runtime value, not a constant.
-
-**Omitting the type from the cast:**
-
-```asm
-ld   hl,SPRITES[3].flags    ; error: not a valid expression without cast
-```
-
-The `<TypeExpr>` is required. Without it, the bracket and dot are not layout-path operators.
-
 ### Union casts
 
 The same cast syntax works with union types:

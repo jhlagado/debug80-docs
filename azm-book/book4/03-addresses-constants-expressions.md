@@ -239,27 +239,7 @@ AZM has no enforced naming convention for constants. Common conventions in the Z
 
 All-uppercase is the most common in Z80 source and the convention used throughout this manual. Enum members use qualified dotted names (`Mode.Read`) which look different from raw equates. Layout-derived constants from `sizeof` and `offset` are often named with the type name as a prefix: `SPRITE_SIZE`, `SPRITE_FLAGS`.
 
-### Common mistakes
-
-**Missing the `.equ`:**
-
-```asm
-MAX  64          ; error — this is not a directive
-MAX .equ 64      ; correct
-```
-
-**Using a label instead of `.equ`:**
-
-```asm
-MAX:             ; MAX is the address of the next byte, not 64
-        .db 64
-```
-
-`MAX` here is the address of the byte, not the value 64. To get the value, use `ld a,(MAX)`, not `ld a,MAX`. If you want the constant 64, write `.equ`.
-
-**Arithmetic overflow in `.equ`:**
-
-Expressions in `.equ` compute in assembler-integer arithmetic (typically 32-bit). Values that exceed 16 bits can still be used in `.equ` but will be range-checked when used in instruction operands. See Range checks below.
+`.equ` expressions compute in 32-bit assembler arithmetic. A value that exceeds 16 bits is valid in a `.equ` definition; the range is checked when that value is consumed by an instruction operand or data directive. See Range checks below.
 
 ---
 

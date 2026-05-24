@@ -32,7 +32,7 @@ A compact reference for AZM's core rules:
 | Labels | Global, case-sensitive, unique across all included files |
 | Entry labels | `@NAME:` marks a routine boundary; callable as `NAME` |
 | Opcodes and registers | Case-insensitive |
-| Directives | Canonical dotted lowercase (`.db`, `.equ`, `.org`); legacy undotted forms accepted via alias layer |
+| Directives | Lowercase, case-sensitive (`.db`, `.equ`, `.org`); legacy undotted forms normalised by alias layer |
 | Expressions | Compile-time only; symbolic operators: `+ - * / % & \| ^ ~ << >>` |
 | Layouts | Compile-time constants only; no hidden loads or stores |
 | Ops | Inline expansion at each call site; not subroutine calls |

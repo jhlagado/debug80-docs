@@ -167,7 +167,7 @@ AZM is case-insensitive for Z80 instruction mnemonics and register names. `LD`, 
 
 The case-sensitivity rule for labels is strict and catches real bugs. A loop label named `LoopStart` in one routine and `loopStart` in another are two different symbols — if you accidentally use one where you meant the other, AZM reports an unknown-symbol error rather than silently branching to the wrong place.
 
-AZM is case-insensitive for directive names after alias resolution: `.DB`, `.db`, and `.Db` all parse as the byte-data directive.
+Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors. The alias layer that normalises `DB`, `ORG`, and similar undotted tokens to canonical dotted lowercase runs before the parser — but it applies only to undotted tokens. Once dotted, the case is fixed: `.db` only.
 
 ## Strict parsing
 
