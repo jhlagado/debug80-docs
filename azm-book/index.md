@@ -6,7 +6,7 @@ has_children: true
 ---
 # AZM Books
 
-Three books for learning Z80 programming with **AZM**, the assembler used by the Debug80 environment. Start with the machine, move to the TEC-1G target and Debug80 workflow, then use AZM's larger-program features for algorithms and data structures.
+Three teaching books and one assembler manual for working with **AZM**, the assembler used by the Debug80 environment. Start with the machine, move to the TEC-1G target and Debug80 workflow, then use AZM's larger-program features for algorithms and data structures. Use the manual when you already know assembly and want the AZM language and tool behavior directly.
 
 ---
 
@@ -37,6 +37,14 @@ The outline draws on the Tetro and Pacmo TEC-1G game codebases without depending
 For readers who know the Z80 basics. Works through real algorithms — sorting, searching, strings, bit manipulation, recursion, composition, pointer structures — using the full AZM surface as each construct appears naturally.
 
 Ten chapters from foundations to a complete eight-queens capstone.
+
+---
+
+## [AZM Assembler Manual](book4/)
+
+A supplementary manual for experienced assembly programmers. It covers AZM syntax, directives, expressions, labels, enums, storage, layout types, register contracts, op declarations, aliases, diagnostics, listings, output formats, ASM80-compatible output, porting, and source style.
+
+This is the direct route into the assembler itself, not a beginner Z80 course.
 
 ---
 
