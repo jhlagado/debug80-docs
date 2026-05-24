@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Chapter 4 — Data, Storage, and Includes"
-parent: "AZM Assembler Manual"
+parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 4
 ---

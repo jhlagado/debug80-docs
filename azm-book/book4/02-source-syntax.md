@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Chapter 2 — Source Syntax and Symbols"
-parent: "AZM Assembler Manual"
+parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 2
 ---

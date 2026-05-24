@@ -40,7 +40,7 @@ Ten chapters from foundations to a complete eight-queens capstone.
 
 ---
 
-## [AZM Assembler Manual](book4/)
+## [AZM Book 4 — Assembler Manual](book4/)
 
 A supplementary manual for experienced assembly programmers. It covers AZM syntax, directives, expressions, labels, enums, storage, layout types, register contracts, op declarations, aliases, diagnostics, listings, output formats, ASM80-compatible output, porting, and source style.
 

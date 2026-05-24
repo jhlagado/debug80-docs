@@ -1,15 +1,15 @@
 ---
 layout: default
-title: "AZM Assembler Manual"
+title: "AZM Book 4 — Assembler Manual"
 parent: "AZM Books"
 nav_order: 5
 has_children: true
 ---
-# AZM Assembler Manual
+# AZM Book 4 — Assembler Manual
 
 This manual is for programmers who already know assembly language and want to learn the AZM assembler itself. It is not a novice Z80 course. It assumes you can read ordinary Z80 code and focuses on AZM source syntax, directives, expressions, layout types, register contracts, op declarations, compatibility features, diagnostics, and output formats.
 
-The three numbered AZM books teach programming. This supplementary manual teaches the tool.
+The first three AZM books teach programming tracks. Book 4 teaches the assembler itself.
 
 ---
 

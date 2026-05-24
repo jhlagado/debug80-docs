@@ -19,7 +19,7 @@ A three-book course in Z80 assembly programming, plus a supplementary AZM assemb
 - [AZM Book 1 — Z80 Fundamentals](azm-book/book1/) starts from no prior knowledge and covers the Z80 from bare machine code through ops, layout types, and register contracts.
 - [AZM Book 2 — Programming the TEC-1G](azm-book/book2/) is an in-progress hardware-focused book on MON-3, Debug80, keypad input, LCD text, seven-segment scanning, sound, the 8x8 RGB add-on, and larger TEC-1G programs.
 - [AZM Book 3 — Algorithms and Data Structures](azm-book/book3/) works through sorting, searching, recursion, composition, pointer structures, and larger AZM program design.
-- [AZM Assembler Manual](azm-book/book4/) is a supplementary reference-style book for experienced assembly programmers learning AZM syntax, directives, layout types, ops, diagnostics, and output formats.
+- [AZM Book 4 — Assembler Manual](azm-book/book4/) is a supplementary reference-style book for experienced assembly programmers learning AZM syntax, directives, layout types, ops, diagnostics, and output formats.
 
 For programmers learning Z80 assembly or the AZM language.
 
