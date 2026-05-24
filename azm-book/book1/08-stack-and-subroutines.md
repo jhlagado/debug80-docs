@@ -15,7 +15,7 @@ Every program you have written so far is a single block of instructions that run
 
 ---
 
-## What a subroutine actually is
+## Subroutines
 
 Before the mechanics: a useful mental model. The Z80 has no hardware concept of a subroutine beyond `call` and `ret`. There is no special mode the CPU enters, no register tracking call depth, no difference between bytes at a call site and bytes inside a subroutine body. `call label` does two things — pushes an address, jumps. `ret` does one thing — pops that address back into PC. The subroutine abstraction is entirely a matter of discipline; the hardware enforces nothing.
 
@@ -23,7 +23,7 @@ That matters because any failure of discipline — an unbalanced push/pop, a mis
 
 ---
 
-## How `call` works
+## The `call` instruction
 
 `call label` is a push of the return address followed by a jump — two operations in one opcode. Concretely:
 
@@ -38,7 +38,7 @@ After the `call`, the CPU is executing instructions inside the subroutine. The s
 
 ---
 
-## How `ret` works
+## The `ret` instruction
 
 `ret` is equivalent to `pop pc` — if such an instruction existed. The CPU reads the top two bytes of the stack into the program counter, increments SP by two, and execution resumes at the instruction after the original `call`.
 

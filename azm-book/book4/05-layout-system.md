@@ -370,7 +370,7 @@ The index inside an `offset` array path must be a numeric literal — a bare int
 
 ## Unions and alternate views
 
-### What a union is
+### Unions
 
 A union describes multiple overlapping views of the same bytes. All fields in a union start at offset zero. The union's total size is the size of its largest member. No bytes are shared in the sense of interleaving — every member covers the full span from zero to its own size.
 

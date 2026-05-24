@@ -70,7 +70,7 @@ Typical layout:
 
 Put `.include` where the library code should land — often after `main` and before data, or at the bottom of the code section. Forward references work: `call strlen_u8` in `main` is legal even when the `.include` line appears later in the source.
 
-### What `.include` is not
+### Include scope
 
 - Not a library with a private symbol table — every label in the included file is global unless you discipline names yourself.
 - Not a substitute for AZMDoc — contracts stay in `;!` comments on `@` routines.

@@ -17,7 +17,7 @@ These patterns appear constantly. None of them are complex. The problem is that 
 
 ---
 
-## What `op` is
+## Op declarations
 
 An op declaration gives a name to an instruction sequence. At every call site, the assembler places the body of the op directly into the instruction stream — as if you had typed those instructions at that location. The call is textually replaced with the expansion.
 

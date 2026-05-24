@@ -13,7 +13,7 @@ You finished Book 1 with a complete picture of the Z80 and the AZM surface that 
 
 ---
 
-## What this book is for
+## About this book
 
 The goal is not to learn a second language layered on top of the CPU. The goal is to learn how **representation and algorithm** fit together when you own every byte and every branch.
 
