@@ -236,9 +236,7 @@ Labels are case-sensitive. `loop`, `Loop`, and `LOOP` are three different symbol
         ret
 ```
 
-When a file contains `@` labels, AZM uses them as the source of truth for routine boundaries. Plain labels inside an `@` routine body — loop targets, branch join points, early exit labels — are ordinary branch targets; they do not start new routines. The next `@OTHERNAME:` ends the current routine and begins the next one.
-
-This means two routines that both need a loop label must use distinct globally-unique names:
+The `@` marker does not create a local-label namespace. Branch labels inside routines are still global symbols, so two routines that both need a loop label must use distinct names:
 
 ```asm
 @SHIFT_ROW:
@@ -260,7 +258,7 @@ CopyRowLoop:
         ret
 ```
 
-When no `@` labels appear, AZM falls back to a heuristic: a plain label after at least one instruction is treated as a new routine boundary. This can misfire when a push/pop routine has a branch label inside the body that splits the analysis span before the matching pop. Using `@` entry labels prevents this — routine boundaries are explicit, not inferred.
+Chapter 6 explains how `@` labels define routine boundaries for register-care analysis.
 
 ## Forward references
 

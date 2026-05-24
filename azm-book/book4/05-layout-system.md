@@ -120,7 +120,7 @@ Array type expressions appear in:
 .ds Sprite[16]  ; same as .ds sizeof(Sprite) * 16
 ```
 
-The equivalence is exact. The type form documents intent; the numeric form would require a comment to explain what the number means.
+The equivalence is exact. The type form documents intent while still reserving an ordinary byte count.
 
 ### What layout types do not do
 
@@ -130,7 +130,7 @@ Layout types are not a runtime type system. They:
 - Do not generate hidden indexing or load/store code
 - Do not create a separate initialization syntax
 
-The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Code that accesses fields of those sprites writes explicit Z80 arithmetic to compute the address. Layout constants give you the numbers; you write the instructions.
+The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
 
 ### Why layout constants belong in source
 
@@ -138,7 +138,7 @@ Hard-coded offsets produce correct code until the layout changes. Add a field be
 
 Symbolic names fix this. When `flags` is an `offset` query, adding a field causes the assembler to recompute every offset from the declaration automatically. The call sites need no edits.
 
-A second benefit: the assembler can verify you. `offset(Sprite, flagz)` errors on the misspelling. `sizeof(Sprite) * 16` in a `.ds` uses the same declaration as all the offset queries, so the storage allocation stays consistent with the access constants automatically.
+The assembler can also verify field names. `offset(Sprite, flagz)` errors on the misspelling, and storage such as `.ds Sprite[16]` stays tied to the same declaration as the field offsets.
 
 ---
 
@@ -236,7 +236,7 @@ PLAYER:
         .ds Sprite        ; sizeof(Sprite) bytes, uninitialized
 ```
 
-`PLAYER` is an ordinary address. No type information attaches to it. Access its fields through offset constants:
+Access its fields through offset constants:
 
 ```asm
         ld   ix,PLAYER
@@ -268,7 +268,7 @@ Or using layout-cast syntax (see Compact layout access syntax later in this chap
 
 Both assemble to the same constant address.
 
-For runtime indexing — when `n` is in a register at runtime — you write the arithmetic yourself:
+For runtime indexing — when `n` is in a register — write the address arithmetic explicitly:
 
 ```asm
 ; A = sprite index (0..15)
@@ -282,11 +282,11 @@ For runtime indexing — when `n` is in a register at runtime — you write the 
         add  hl,bc            ; HL = SPRITE_TABLE + A * 5 (sizeof Sprite)
 ```
 
-AZM does not generate this multiplication. You write it.
+The layout declaration supplies `sizeof(Sprite)`; the instruction sequence is still yours.
 
 ### Initialized records
 
-AZM has no record constructor syntax. An initialized record is written as `.db` / `.dw` in field order:
+An initialized record is written as `.db` / `.dw` in field order:
 
 ```asm
 INIT_SPRITE:
@@ -296,7 +296,7 @@ INIT_SPRITE:
         .dw 0           ; ptr
 ```
 
-The `.type` declaration provides the field sizes and offsets for reference and verification; it does not change how initialized data is written.
+The `.type` declaration provides the field sizes and offsets for reference and verification.
 
 ### Single-line type aliases are not supported
 
@@ -315,11 +315,11 @@ hi  .byte
 .endtype
 ```
 
-For storage contexts where you want a descriptive name for a two-byte quantity, write the type expression directly in `.ds`:
+For a two-byte storage slot, write the type expression directly in `.ds`:
 
 ```asm
 SCRATCH:
-        .ds byte[2]    ; readable form of .ds 2
+        .ds byte[2]
 ```
 
 Array types in `.field` declarations work with built-in scalar names and any declared record:
@@ -370,8 +370,6 @@ The index inside an `offset` array path must be a numeric literal — a bare int
 
 ## Unions and alternate views
 
-### Unions
-
 A union describes multiple overlapping views of the same bytes. All fields in a union start at offset zero. The union's total size is the size of its largest member. No bytes are shared in the sense of interleaving — every member covers the full span from zero to its own size.
 
 ```asm
@@ -381,9 +379,7 @@ both    .word
 .endunion
 ```
 
-This union has two members. `lo` is at offset 0 (1 byte) and `both` is at offset 0 (2 bytes). `sizeof(RegPair)` is 2 — the largest member.
-
-All union members start at offset 0. `lo` gives a 1-byte view of the first byte; `both` gives a 2-byte word view of the same region. To read the high byte independently, use `+1` arithmetic — a union cannot name it, because every member starts at zero.
+This union has two members. `lo` is a 1-byte view at offset 0; `both` is a 2-byte view at offset 0. `sizeof(RegPair)` is 2.
 
 ### Declaring a union
 
@@ -402,8 +398,6 @@ word_view   .word
 .endunion
 ```
 
-All union members start at offset 0. The high byte is at `BASE + 1`, not a union member — there is no union syntax for naming the second byte of an overlaid word.
-
 Members use the same field declarations as `.type`: `.byte`, `.word`, `.addr`, `.field`.
 
 ### Size rule
@@ -419,7 +413,7 @@ word_view .word         ; 2 bytes
 ; sizeof(Status) = 2
 ```
 
-Because all members start at offset 0, a 1-byte member accessed through a union that is 2 bytes wide refers only to the low byte of the 2-byte storage.
+Because all members start at offset 0, a 1-byte member in a 2-byte union refers only to the low byte of that storage.
 
 ### Hardware register overlays
 
@@ -472,8 +466,6 @@ lo      .byte    ; low byte only
 .endunion
 ```
 
-Both `count` and `lo` start at offset 0. `count` gives a 2-byte word access; `lo` gives a 1-byte access to the low byte at the same address. `sizeof(Counter16)` is 2 (the size of the largest member).
-
 ```asm
 TIMER:
         .ds Counter16
@@ -487,15 +479,11 @@ TIMER:
         ld   a,(TIMER + offset(Counter16, lo))
 ```
 
-Because all union fields start at offset 0, both `offset(Counter16, count)` and `offset(Counter16, lo)` return 0. The distinction is in field size — word vs. byte — not in position.
-
-To access the high byte independently, add 1 explicitly:
+Both fields have offset 0. The distinction is field size, not position. To access the high byte independently, add 1 explicitly:
 
 ```asm
         ld   a,(TIMER + 1)      ; high byte of the counter
 ```
-
-A union cannot give the high byte a named offset, because all members start at zero. Use explicit `+1` arithmetic for the high byte.
 
 ### Packet format overlays
 
@@ -551,7 +539,7 @@ The exact syntax for embedded anonymous inline unions inside a `.type` is not ye
 
 ## Compact layout access syntax
 
-The `sizeof` and `offset` forms from the Records and Unions sections above are always correct. This section introduces shorter notation for the same constants, and explains where it applies and where it does not.
+The `sizeof` and `offset` forms above are always correct. Layout casts are shorter notation for the same constants.
 
 ### The long form
 
@@ -584,9 +572,9 @@ The structure is:
 - `[index]` — zero or more array index steps (compile-time constants only)
 - `.field` — zero or more field name steps
 
-The assembler computes the same constant as the long form and emits it as an ordinary fixup operand. No extra instructions are generated.
+The assembler computes the same constant as the long form and emits it as an ordinary operand.
 
-### Equivalence guarantee
+### Equivalence
 
 These two lines must produce the same assembled bytes:
 
@@ -595,7 +583,7 @@ ld   hl,SPRITES + (3 * sizeof(Sprite)) + offset(Sprite, flags)
 ld   hl,<Sprite[16]>SPRITES[3].flags
 ```
 
-If they do not, that is an assembler bug. The cast is syntactic sugar over the same constant-expression machinery.
+The cast is syntax over the same constant-expression machinery.
 
 ### Memory dereference stays explicit
 
@@ -619,7 +607,7 @@ ld   hl,<Sprite[16]>SPRITES[3].flags        ; valid: 3 is a constant
 ld   hl,<Sprite[16]>SPRITES[HL].flags       ; error: HL is not a constant
 ```
 
-The rejection of runtime registers is what prevents the feature from generating hidden multiply/add code. If the index lives in a register at runtime, you write the arithmetic yourself.
+If the index lives in a register at runtime, write the arithmetic yourself.
 
 ### Dot notation for nested fields
 
@@ -667,7 +655,7 @@ Use explicit arithmetic when the index is in a register:
 ld   a,(<Sprite[16]>SPRITES[HL].flags)   ; error
 ```
 
-This fails because `HL` is a runtime value, not a constant. Write the address calculation in instructions.
+This fails because `HL` is a runtime value, not a constant.
 
 **Omitting the type from the cast:**
 
@@ -697,7 +685,7 @@ ld   hl,<Counter16>TIMER.count      ; folds to TIMER + offset(Counter16, count)
 ld   a,(<Counter16>TIMER.lo)        ; folds to (TIMER + offset(Counter16, lo))
 ```
 
-Both `offset(Counter16, count)` and `offset(Counter16, lo)` are 0, so both casts fold to the same address as the bare label. The cast's value is readability and type documentation, not a different address.
+Both fields have offset 0, so both casts fold to the same address as the bare label. The cast records which view the code is using.
 
 When a union is nested inside a record, the path steps through both:
 
@@ -739,7 +727,7 @@ SPRITE2_FLAGS .equ offset(Sprite[16], [2].flags)
 
 This is equivalent to the layout cast `<Sprite[16]>SPRITE_TABLE[2].flags`. Both reach the same constant.
 
-The index inside the `offset` path must be a numeric literal (a bare integer). Layout-cast paths accept compile-time constant expressions in brackets; `offset()` paths accept only numeric literals. Runtime registers are rejected in both cases — accepting them would require generating multiply-add code rather than folding a constant.
+The index inside the `offset` path must be a numeric literal. Layout-cast paths accept compile-time constant expressions in brackets; `offset()` paths accept only numeric literals. Runtime registers are rejected in both cases.
 
 ---
 

@@ -190,87 +190,20 @@ After every step, compare output against the reference binary. If they diverge, 
 
 ## Style guide for AZM source
 
-These are conventions, not rules AZM enforces. A project that disagrees with any of them will still assemble correctly. The goal is source that reads clearly, ports cleanly, and makes the machine code visible.
+These are conventions, not language rules. They collect the choices used throughout this manual so a project can stay consistent without rereading the earlier chapters.
 
-### Directive style
+| Area | Convention |
+|------|------------|
+| Directives | Use lowercase dotted forms: `.org`, `.equ`, `.db`, `.dw`, `.ds`, `.include` |
+| Labels | Use descriptive names; keep branch labels globally unique, often by prefixing them with the routine name |
+| Constants | Put hardware ports, ROM addresses, memory addresses, and repeated numeric meanings in `.equ` |
+| Enums | Use qualified enum names such as `State.Idle` instead of bare member names |
+| Public routines | Mark callable routine boundaries with `@` and put AZMDoc contracts immediately above them |
+| Layouts | Keep `.type` and `.union` declarations in a shared file included before code that uses them |
+| Ops | Name ops like instruction idioms: `clear_a`, `negate_a`, `load8` |
+| RAM layout | Group storage blocks under a dedicated `.org` near the end of the program |
 
-Use lowercase dotted directives for new source:
-
-```asm
-.org $0100
-LIMIT .equ 64
-.db "Hello",0
-.ds byte[32]
-.include "hardware.asm"
-```
-
-The undotted uppercase forms (`ORG`, `EQU`, `DB`, etc.) are accepted for legacy source. Do not mix them in new AZM source — it creates visual noise that makes the distinction between directives and labels harder to see.
-
-### Label naming
-
-Use descriptive names that say what the label represents, not where it is:
-
-```asm
-; Prefer:
-RING_BUF:
-CHECK_COLLISION:
-SPRITE_TABLE:
-
-; Avoid:
-buf1:
-sub3:
-table_thing:
-```
-
-All-uppercase with underscores is conventional in Z80 source and used throughout this manual. Internal branch labels within a routine body follow the same identifier rules and must be globally unique — prefix them with a routine name to avoid collisions: `DrawLoop`, `DrawDone`, `FindScan`, `FindFound`.
-
-Enum members use the qualified dotted form: `State.Idle`, not `IDLE` standing alone.
-
-### Constants and equates
-
-Every hardware port, ROM address, memory address, and magic number belongs in a `.equ`:
-
-```asm
-LCD_PORT   .equ $00
-MON_PUTC   .equ $0008
-SCREEN_W   .equ 128
-MAX_TILES  .equ 256
-```
-
-Derived sizes come from other constants or from layout expressions:
-
-```asm
-TILE_BYTES  .equ TILE_W * TILE_H
-SPRITE_SIZE .equ sizeof(Sprite)
-```
-
-Bare numbers in instruction operands (other than 0, 1, and obvious small counters) are a sign that a constant is missing.
-
-### Entry labels
-
-Mark every public subroutine with `@`:
-
-```asm
-;!      in        A,HL
-;!      out       carry
-;!      clobbers  BC
-@CHECK_BOUNDS:
-```
-
-Use plain labels for data and for internal code that is not called directly from outside:
-
-```asm
-JUMP_TABLE:        ; data label — no @
-        .dw HANDLER_A, HANDLER_B
-
-CHECK_BOUNDS:      ; also valid for older style; @ preferred for new code
-```
-
-The `@` marking tells both you and the register-care analyzer that this is a deliberate call boundary.
-
-### Include file order
-
-A canonical AZM file include order:
+A typical include order is:
 
 1. Hardware definitions (ports, ROM addresses, board-specific constants)
 2. Layout declarations (`.type`, `.union`)
@@ -281,91 +214,13 @@ A canonical AZM file include order:
 7. Application code
 8. RAM layout (storage blocks at their own `.org`)
 
-Each category belongs in its own file. Application code does not define hardware constants; hardware files do not include application code.
-
-### Layout declarations
-
-Define layouts in a dedicated file included before any code that uses them:
-
-```asm
-; layout.asm
-.type Sprite
-x       .byte
-y       .byte
-tile    .byte
-flags   .byte
-ptr     .addr
-.endtype
-```
-
-Name constants derived from the layout with the type as a prefix:
-
-```asm
-SPRITE_X     .equ offset(Sprite, x)
-SPRITE_FLAGS .equ offset(Sprite, flags)
-SPRITE_SIZE  .equ sizeof(Sprite)
-```
-
-### Comments and contracts
-
-Use ordinary `;` comments for human explanation. Use `;!` only for AZMDoc register contracts immediately before entry labels.
-
-```asm
-; Copies HL bytes from DE to HL.
-; DE = source address, HL = destination, B = byte count.
-; BC, DE, HL are modified by this operation.
-;!      in        B,DE,HL
-;!      out       DE,HL
-;!      clobbers  AF
-@MEMCOPY:
-```
-
-Do not put `;!` lines in the middle of routine bodies — they are contract markers for entry labels only.
-
-### Op naming
-
-Op names should read like instructions, not like function calls. Keep them short and specific:
-
-```asm
-op clear_a()          ; not: op zero_accumulator()
-op negate_a()         ; not: op negate_accumulator_register()
-op load8(dst reg8, val imm8)    ; not: op load_8bit_immediate(destination, value)
-```
-
-Ops with a specific register in the name are acceptable when the op is genuinely register-specific.
-
-### Hardware maps in RAM
-
-Put all storage blocks in one section at the end of the source, under their own `.org`:
-
-```asm
-; --- RAM layout ---
-        .org $8000
-
-RING_BUF:    .ds RING_CAP
-RING_STATE:  .ds RingState
-FRAME_BUF:   .ds FRAME_W * FRAME_H
-SPRITES:     .ds MAX_SPRITES * sizeof(Sprite)
-
-        .org $8FFE
-STACK_TOP:
-```
-
-Grouping storage makes it easy to see the total RAM footprint and to verify that areas do not overlap.
-
-### Keep the machine code visible
-
-The organizing principle behind all of these conventions: the machine code should remain visible and reviewable. Named constants let you see what a number means. Layout types let you see what a byte offset represents. AZMDoc lets you see what a subroutine expects and returns. Op expansions show you what code will execute.
-
-When in doubt about whether an abstraction is too much, check whether you can still read the listing and understand every byte.
+Each category belongs in its own file. Application code should not define hardware constants; hardware files should not include application code. The organizing test is the listing: after all naming, layout, contract, and op choices, you should still be able to read the emitted bytes and understand what the CPU will execute.
 
 ---
 
 ## Complete worked reference program
 
-This section assembles one medium-sized program using most of the language surface from previous chapters — layout types, enums, ops, AZMDoc contracts, entry labels, includes, and all four default output artifacts. The program is synthetic but realistic: it manages a small sprite table, initializes it, sets up one sprite, and searches for a tile type.
-
-The full source is spread across six files in a `worked/` directory. Read them in the order they appear in the include chain.
+This compact program shows the whole manual surface in one place: includes, constants, layout, enums, ops, contracts, entry labels, RAM storage, and listing verification. It manages a small sprite table, initializes it, sets up one sprite, and searches for a tile type.
 
 ---
 
@@ -381,7 +236,7 @@ worked/
   sprites.asm   — sprite management routines with entry labels and contracts
 ```
 
-`main.asm` includes everything. Each included file handles one category: constants, layout, enums, ops, or subroutines. Nothing includes anything else. This keeps the dependency graph flat and avoids include cycles.
+`main.asm` includes everything. The included files do not include each other.
 
 ---
 
@@ -392,7 +247,7 @@ worked/
 HALT_ADDR   .equ $0000    ; or board-specific
 ```
 
-A single constant, standing in for the hardware constants file that any real project would have — port addresses, ROM entry points, board geometry. Keeping these in their own file means porting to a different board is a single-file edit.
+A real hardware file would hold port addresses, ROM entry points, and board geometry.
 
 ---
 
@@ -414,9 +269,7 @@ SPRITE_FLAGS .equ offset(Sprite, flags)
 SPRITE_SIZE  .equ sizeof(Sprite)
 ```
 
-The `.type` block gives `Sprite` four fields totalling four bytes. The five `.equ` lines derive the offset and size constants from the declaration. When you add a field — say, a velocity byte between `tile` and `flags` — all five constants update automatically on the next assembly.
-
-`SPRITE_SIZE` is `sizeof(Sprite)` = 4. Every address calculation that steps through the sprite table multiplies by this constant. Changing the layout changes the stride everywhere.
+The derived constants are the only field offsets used by the routines below.
 
 ---
 
@@ -428,9 +281,7 @@ enum Tile Empty, Wall, Player, Enemy, Pill
 enum Flags Alive, Dead
 ```
 
-Two enum groups. `Tile.Player` is the integer 2; `Flags.Alive` is 0. Code that loads a tile type into A writes `ld a,Tile.Player`, not `ld a,2`. If the order of the enum changes — inserting a new tile kind before `Player` — the name continues to resolve correctly and nothing else in the source changes.
-
-Unqualified references like `Player` produce an error. This is intentional: any project of real size will have enough constants that bare names become ambiguous.
+The code below uses `Tile.Player` and `Flags.Alive` instead of raw bytes.
 
 ---
 
@@ -447,9 +298,7 @@ op set_hl_zero()
 end
 ```
 
-Two utility ops. `clear_a` expands to `xor a` — it zeros A and sets the zero flag. `set_hl_zero` expands to `ld hl,0`. Neither of these is a subroutine: there is no `call` instruction, no return address, no stack effect. The expansion appears verbatim at every call site and is visible in the listing.
-
-These are deliberately small. An op earns its existence when the idiom appears four or more times and is short enough that the call overhead of a subroutine would be significant. `clear_a` appears in initialization code, interrupt handlers, and loop resets — often enough to name.
+These ops are deliberately small; their expansions remain visible in the listing.
 
 ---
 
@@ -461,7 +310,7 @@ These are deliberately small. An op earns its existence when the idiom appears f
 MAX_SPRITES .equ 8
 ```
 
-The sprite count belongs here, alongside the routines that use it. It is a constant, not a label — it emits nothing, it names the number.
+The sprite count sits with the routines that use it.
 
 ```asm
 ; Zero-initialise the sprite table. B = sprite count, IX = table base.
@@ -480,13 +329,7 @@ SpriteInitLoop:
         ret
 ```
 
-`SPRITES_INIT` walks the sprite table through IX, zeroing four fields per sprite, then advancing IX by `SPRITE_SIZE` bytes. It uses `DJNZ` with B as the counter.
-
-The AZMDoc contract above the entry label says: this routine reads B and IX on entry, and clobbers A, BC, and DE. `add ix,de` writes DE into IX — so DE is consumed. B counts down to zero through DJNZ, so BC is clobbered. A is used as the fill byte. That matches what the code does.
-
-The `@` prefix on the label marks `SPRITES_INIT` as an explicit routine boundary for register-care analysis. Callers write `call SPRITES_INIT`, not `call @SPRITES_INIT`.
-
-`SpriteInitLoop` is a plain branch label inside the `SPRITES_INIT` body. Because `@SPRITES_INIT:` is present, register-care analysis sees the full body as one span: the entry through DJNZ and the return. `SpriteInitLoop` is not treated as a new routine boundary.
+`SPRITES_INIT` zeros each sprite and advances IX by `SPRITE_SIZE`. Its contract records the incoming registers and clobbers.
 
 ```asm
 ; Find first sprite with tile T. A = tile to find, IX = table base.
@@ -510,11 +353,7 @@ SpriteFindFound:
         ret
 ```
 
-`SPRITES_FIND_TILE` takes the tile value in A and a table base in IX. It walks the table, comparing each sprite's tile field against A. On a match, it sets carry and returns with IX pointing to the found sprite. On exhaustion, it clears carry via `or a`.
-
-The contract lists `carry` and `IX` as outputs — both carry meaningful return values. A is an input (`cp c` reads A to compare against the tile field) but is not written by the loop, so it is preserved and does not appear in clobbers. B counts down through DJNZ and is gone on return. DE is loaded each iteration with `ld de,SPRITE_SIZE` and consumed by `add ix,de`, so both BC and DE end up modified — both are listed in clobbers.
-
-`ld de,SPRITE_SIZE` is inside the loop because DE is needed to advance IX on each iteration. It could be hoisted above the loop for efficiency, but the current form is clear and the branch path to `SpriteFindFound` skips the advance entirely, which is the correct behaviour.
+`SPRITES_FIND_TILE` returns carry set and IX pointing at the matching sprite. On failure, it clears carry.
 
 ---
 
@@ -530,7 +369,7 @@ The contract lists `carry` and `IX` as outputs — both carry meaningful return 
         .include "sprites.asm"
 ```
 
-The include chain runs top-to-bottom. Hardware constants arrive first, then the layout declaration, then enum groups, then op definitions, then the subroutines that use all of the above. The test code in `@main` follows. This order ensures every name is defined before any code references it.
+The include chain follows the style order above.
 
 ```asm
         .org $0100
@@ -542,7 +381,7 @@ The include chain runs top-to-bottom. Hardware constants arrive first, then the 
         call SPRITES_INIT
 ```
 
-`@main` is the program entry. IX receives the table base address; B receives the count. Then `SPRITES_INIT` zeroes the table. After the call, IX has been advanced past the end of the table — SPRITES_INIT consumed it. To work with specific sprites after initialization, load IX from the table base again.
+After `SPRITES_INIT`, IX has been advanced past the table, so `@main` reloads IX before writing sprite 2.
 
 ```asm
         ; Set up sprite 2 as a player tile
@@ -553,9 +392,7 @@ The include chain runs top-to-bottom. Hardware constants arrive first, then the 
         ld   (ix+SPRITE_FLAGS),Flags.Alive
 ```
 
-The layout cast `<Sprite[8]>SPRITE_TABLE[2]` computes `SPRITE_TABLE + 2 * sizeof(Sprite)` at assemble time. Since `sizeof(Sprite)` is 4, that is `SPRITE_TABLE + 8`. AZM folds this to a constant and emits `ld ix,SPRITE_TABLE+8` — the listing shows the resolved address. TypeExpr array lengths must be numeric literals; see Chapter 5.
-
-The four field writes use IX-relative addressing with the offset constants. `Tile.Player` is the enum value 2. `Flags.Alive` is 0. Both are immediate byte constants in the emitted instruction. The listing shows the numeric values alongside the symbolic names.
+The layout cast computes the address of sprite 2 at assemble time. The field writes use the derived offsets.
 
 ```asm
         ; Find the player sprite
@@ -569,9 +406,7 @@ not_found:
         halt
 ```
 
-IX is reset to the table base. A is loaded with `Tile.Player` (2). The search returns carry set and IX pointing to sprite 2 if found. The carry check branches to `not_found` on failure. On success, IX — the address of the matching sprite — is stored in `found_at`.
-
-After the halt, inspecting `found_at` in memory should show the address of sprite 2 in the table. That is the observable result of the program.
+On success, `found_at` receives the address of sprite 2.
 
 ```asm
 ; --- RAM ---
@@ -585,9 +420,7 @@ found_at:
         .ds addr
 ```
 
-The RAM layout follows the code under a separate `.org`. `SPRITE_TABLE` reserves `sizeof(Sprite) * 8` = 32 bytes. `found_at` reserves 2 bytes (an address).
-
-Placing storage at the end under its own `.org` keeps it visually separate from code and makes the total RAM footprint easy to read. `Sprite[8]` is a type expression; TypeExpr array lengths must be numeric literals (see Chapter 5). `addr` names the intent: one address-sized slot.
+The RAM layout follows the code under a separate `.org`.
 
 ---
 
@@ -604,7 +437,7 @@ azm --rc warn --output worked.bin main.asm
 azm --source-root . --output worked.hex main.asm
 ```
 
-The `--rc warn` run will produce warnings if any call site puts a live register at risk across a call. With the contracts written as shown, the expected result is zero warnings: `SPRITES_INIT` and `SPRITES_FIND_TILE` both document their clobbers, and `@main` has no conflicting use after the calls.
+The `--rc warn` run should produce no register-care warnings for this source.
 
 ---
 
@@ -619,17 +452,17 @@ The listing verifies several things at once:
                   SPRITE_FLAGS .equ 3
 ```
 
-Both appear as zero-byte entries (no emitted code) with their computed values. Confirm they match the `.type` declaration.
+Confirm they match the `.type` declaration.
 
 **Enum values:**
 
-The `ld (ix+SPRITE_TILE),Tile.Player` instruction appears in the listing as:
+The `ld (ix+SPRITE_TILE),Tile.Player` instruction should show both the field offset and the enum value:
 
 ```
 0120 DD 36 02 02         ld   (ix+SPRITE_TILE),Tile.Player
 ```
 
-Byte `$02` at offset 3 is the `ix+` offset (SPRITE_TILE = 2, not 3 — verify against SPRITE_TILE in the listing). Byte `$02` at offset 4 is the immediate value `Tile.Player` = 2. Both resolve correctly.
+Here the first `$02` is the `ix+` offset and the second is `Tile.Player`.
 
 **Layout cast:**
 
@@ -637,7 +470,7 @@ Byte `$02` at offset 3 is the `ix+` offset (SPRITE_TILE = 2, not 3 — verify ag
 010A DD 21 08 80         ld   ix,<Sprite[8]>SPRITE_TABLE[2]
 ```
 
-The address `$8008` = `$8000 + 8` = `SPRITE_TABLE + 2 * SPRITE_SIZE`. The cast folded to the correct constant.
+The address `$8008` is `SPRITE_TABLE + 2 * SPRITE_SIZE`.
 
 **RAM addresses:**
 
@@ -646,7 +479,7 @@ The address `$8008` = `$8000 + 8` = `SPRITE_TABLE + 2 * SPRITE_SIZE`. The cast f
 8020              found_at:
 ```
 
-`SPRITE_TABLE` at `$8000`, `found_at` at `$8000 + 32` = `$8020`. Eight sprites × four bytes each = 32 bytes. Confirmed.
+Eight sprites at four bytes each place `found_at` at `$8020`.
 
 ---
 
@@ -665,7 +498,7 @@ The address `$8008` = `$8000 + 8` = `SPRITE_TABLE + 2 * SPRITE_SIZE`. The cast f
 | RAM layout under its own `.org` | `main.asm` |
 | Listing verification of all of the above | `.lst` |
 
-Every chapter in this manual appears in one of those rows. The program uses none of these features as decoration — each one solves a specific problem: the layout type removes fragile offset arithmetic; the enums remove magic numbers; the contracts prevent call-site register bugs; the layout cast replaces a multiplication you would otherwise write by hand. The listing confirms all of it in one readable document.
+The point of the example is not to introduce new rules. It is a final check that the rules compose without hiding the emitted machine code.
 
 ---
 

@@ -193,28 +193,17 @@ The binary is cropped at the last byte of real content — useful when your prog
 
 ### Type expressions in `.ds`
 
-When you are using AZM layout types (Chapter 5), `.ds` accepts a type expression as its byte count:
+Chapter 5 introduces layout type expressions such as `byte[32]`, `addr`, and `Sprite[16]`. `.ds` accepts those expressions wherever it expects a byte count:
 
 ```asm
-; Scalar layout names:
-ONE_BYTE:  .ds byte         ; 1 byte
-ONE_WORD:  .ds word         ; 2 bytes
-ONE_ADDR:  .ds addr         ; 2 bytes
-
-; Scalar array forms:
-BYTE_BUF:  .ds byte[32]     ; 32 bytes
-WORD_BUF:  .ds word[8]      ; 16 bytes
-
-; Record type (requires .type declaration):
+BYTE_BUF:  .ds byte[32]      ; 32 bytes
 PLAYER:    .ds Sprite        ; sizeof(Sprite) bytes
-TABLE:     .ds Sprite[16]   ; sizeof(Sprite) * 16 bytes
+TABLE:     .ds Sprite[16]    ; sizeof(Sprite) * 16 bytes
 ```
 
-These are byte-count expressions, not typed storage declarations. `.ds byte[32]` is the readable form of `.ds 32`. `.ds Sprite[16]` is the readable form of `.ds sizeof(Sprite) * 16`. The assembler evaluates the type expression to a byte count and then reserves that many bytes.
+The storage rule stays the same: `.ds` reserves bytes. Layout types only compute the count.
 
-The `PLAYER` label above is still an untyped address. No type information attaches to it permanently. When you access its fields, you use `offset(Sprite, ...)` constants or layout-cast syntax at the use site (Chapter 5).
-
-### Named-count idiom
+### Named counts
 
 When the size comes from a named constant, use it directly:
 
@@ -225,7 +214,7 @@ RING_BUF:
         .ds RING_CAP          ; idiomatic when capacity is named
 ```
 
-TypeExpr array lengths must be numeric literals; see Chapter 5. Use `RING_CAP` directly as the `.ds` operand when the count is already named.
+Use `RING_CAP` directly when the count is already named.
 
 ### Storage maps
 
