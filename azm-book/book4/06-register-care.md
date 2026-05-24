@@ -35,15 +35,15 @@ The callable symbol is `CHECK_COLLISION` — callers write `call CHECK_COLLISION
 
 When `@` labels are present, AZM uses them as routine boundaries:
 - `@Name:` starts a new routine named `Name`
-- Plain labels inside the body are internal branch targets, not new routines
+- Plain branch labels inside the body are not new routines
 - The next `@OtherName:` ends the current routine and starts a new one
 - Consecutive `@` labels before the first instruction are aliases for the same routine entry
 
-Without `@` labels, AZM falls back to a heuristic: a plain label after at least one instruction begins a new routine boundary. This can misfire — particularly when a push/pop routine has an internal branch label that splits the analysis span before the matching pop.
+Without `@` labels, AZM falls back to a heuristic: a plain label after at least one instruction begins a new routine boundary. This can misfire — particularly when a push/pop routine has a branch label inside the body that splits the analysis span before the matching pop.
 
 ## Plain labels inside `@` routines
 
-When a file has `@` labels, plain labels inside an `@` routine body are ordinary branch targets — they do not start new routines:
+When a file has `@` labels, plain branch labels inside an `@` routine body are ordinary branch targets — they do not start new routines. AZM has no local-label namespace: plain labels are global symbols, unique across the entire translation unit.
 
 ```asm
 @SCAN_ROW:
@@ -55,7 +55,7 @@ ScanRowBitLoop:
         ret
 ```
 
-`ScanRowBitLoop` is an internal branch target inside `SCAN_ROW`. Register-care sees the whole body as one span. If `SCAN_ROW` pushed a register, the pop anywhere after `ScanRowBitLoop` would be found and the register counted as preserved. The next `@` label starts the next analyzed routine.
+`ScanRowBitLoop` is a plain branch label inside `SCAN_ROW`. Register-care sees the whole body as one span. If `SCAN_ROW` pushed a register, the pop anywhere after `ScanRowBitLoop` would be found and the register counted as preserved. The next `@` label starts the next analyzed routine.
 
 ## What register-care infers
 
@@ -156,7 +156,7 @@ azm --contracts --rc audit program.asm
 
 AZM infers register contracts for each `@` routine and inserts `;!` blocks directly above the entry labels. On subsequent runs, it replaces the generated block. Human prose comments above the `;!` block are preserved untouched — only the contiguous block of `;!` lines is tool-owned.
 
-Review generated contracts after the first run. Inference is accurate for routines that push/pop symmetrically and have clear data-flow. It can misclassify intentional in/out transformations (a register read as input and returned modified) as clobbers. When AZM infers a clobber but the value is intentionally returned, use `--accept-out` to promote it:
+Review generated contracts after the first run. Generated contracts are inferred — verify them before relying on them in production source. Inference works well for routines that push/pop symmetrically and have clear data-flow, but can misclassify intentional in/out transformations (a register read as input and returned modified) as clobbers. When AZM infers a clobber but the value is intentionally returned, use `--accept-out` to promote it:
 
 ```sh
 azm --accept-out NORMALISE_COORD:DE --rc audit program.asm
@@ -180,7 +180,7 @@ Writes `program.asmi` with `extern` contract records for every `@` routine. Othe
 azm --fix --rc warn program.asm
 ```
 
-AZM identifies call sites where a live register is clearly destroyed by the callee and inserts `push`/`pop` pairs. It also updates the `;!` contract blocks to reflect the repair.
+AZM identifies call sites where a live register is clearly destroyed by the callee and may apply conservative source annotations — including expects-out hints where the analysis has sufficient certainty, or `push`/`pop` pairs where the save/restore is unambiguous. It also updates the `;!` contract blocks to reflect the repair.
 
 AZM will not silently rewrite code it cannot prove safe. The rule: `--fix` adds register saves where the before/after liveness is unambiguous. Where the conflict involves an intentional in/out transformation or the inference is uncertain, no autofix is applied — those require manual review.
 
@@ -371,7 +371,7 @@ At this level, any unresolved conflict fails the build. Use this mode once the c
 **Register-care conflict:**
 
 ```
-warning AZMN_RC_CONFLICT: B is live across CALL DRAW_FRAME at program.asm:47:9,
+warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9,
   but DRAW_FRAME may modify B (inferred clobbers: A,B,DE)
 ```
 
@@ -384,7 +384,7 @@ Reading this: register `B` holds a pre-call value that is read after the call re
 **Inferred clobbers mismatch:**
 
 ```
-warning AZMN_RC_CONFLICT: DE is live across CALL NORMALISE_COORD, but NORMALISE_COORD
+warning AZMN_REGISTER_CARE: DE is live across CALL NORMALISE_COORD, but NORMALISE_COORD
   may modify D,E (inferred: in DE, out DE — use --accept-out to promote)
 ```
 

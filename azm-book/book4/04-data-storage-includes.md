@@ -245,7 +245,7 @@ RING_COUNT:     .ds 1
 FRAME_BUF:      .ds FRAME_W * FRAME_H
 
 ; sprite table
-SPRITES:        .ds Sprite[MAX_SPRITES]
+SPRITES:        .ds MAX_SPRITES * sizeof(Sprite)
 
 ; stack (grows downward from top)
         .org $8FFE

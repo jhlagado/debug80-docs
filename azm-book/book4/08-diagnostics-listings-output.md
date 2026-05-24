@@ -20,9 +20,9 @@ AZM prints diagnostics with file name, line number, column, severity, and a diag
 Diagnostic format:
 
 ```
-program.asm:14:5: error AZMN_RANGE: immediate value 300 out of range 0..255
-program.asm:23:1: error AZMN_DUPSYM: duplicate symbol COUNT
-program.asm:31:8: warning AZMN_RC_CONFLICT: DE is live across CALL CHECK_FOO, but CHECK_FOO may modify D,E
+program.asm:14:5: error AZMN_PARSE: immediate value 300 out of range 0..255
+program.asm:23:1: error AZMN_SYMBOL: duplicate symbol COUNT
+program.asm:31:8: warning AZMN_REGISTER_CARE: DE is live across CALL CHECK_FOO, but CHECK_FOO may modify D,E
 ```
 
 ### Parse errors
@@ -65,7 +65,7 @@ A label or `.equ` name defined more than once in the same translation unit:
 
 ```asm
 COUNT: .db 0
-COUNT: .db 0    ; error AZMN_DUPSYM
+COUNT: .db 0    ; error AZMN_SYMBOL
 ```
 
 Includes the file name and line number of both definitions. Fix by renaming one of them.
@@ -106,17 +106,17 @@ ld   hl,<Sprite[16]>TABLE[HL].flags  ; error: HL is not a constant
 ### Op overload failures
 
 ```
-error AZMN_OP_NOMATCH: no overload of 'load8' matches operands (HL, imm8)
+error AZMN_PARSE: no overload of 'load8' matches operands (HL, imm8)
 ```
 
-The diagnostic lists what the op expected versus what it got. Check that the operand classes in your op declaration match the operands at the call site.
+AZM reports a parse-level diagnostic at the relevant source location for op errors — no-match, ambiguous overload, arity mismatch, or expansion cycle. Check that the operand classes in your op declaration match the operands at the call site.
 
 ### Register-care diagnostics
 
 When `--rc warn` or `--rc error` is active:
 
 ```
-warning AZMN_RC_CONFLICT: B is live across CALL DRAW_FRAME at program.asm:47:9,
+warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9,
   but DRAW_FRAME may modify B (inferred clobbers: A,B,DE)
 ```
 
@@ -157,20 +157,17 @@ Diagnostics carry a code of the form `AZMN_*` for programmatic identification. K
 
 | Code | Trigger |
 |------|---------|
-| `AZMN_RANGE` | Expression value outside the valid range for its context (e.g., immediate > 255, branch offset > 127) |
-| `AZMN_DUPSYM` | Label or `.equ` name defined more than once in the translation unit |
-| `AZMN_UNDEF` | Symbol referenced but never defined, or forward reference unresolvable after all passes |
-| `AZMN_RC_CONFLICT` | Register-care conflict: a live pre-call value may be destroyed by the callee |
-| `AZMN_OP_NOMATCH` | No op overload matches the operands at the call site |
-| `AZMN_OP_AMBIGUOUS` | Multiple op overloads match the operands at the call site |
-| `AZMN_OP_CYCLE` | Op expansion cycle detected (recursive expansion) |
-| `AZMN_OP_ARITY` | Wrong number of operands at an op call site |
+| `AZMN_PARSE` | Parse error: unrecognized line, malformed operand, range overflow, op overload failure, or any other syntax-level problem |
+| `AZMN_SYMBOL` | Symbol error: label or `.equ` name defined more than once, or referenced but never defined after all passes |
+| `AZMN_REGISTER_CARE` | Register-care conflict: a live pre-call value may be destroyed by the callee |
+| `AZMN_CASE_STYLE` | Case-style lint violation (requires `--case-style`) |
 | `AZMN_ASM80` | Feature cannot be lowered to ASM80 syntax in `--asm80` mode |
+| `AZMN_SOURCE` | Source file error: file not found, unreadable, or include cycle |
 
 The diagnostic code appears after the severity in the output:
 
 ```
-program.asm:14:5: error AZMN_RANGE: immediate value 300 out of range 0..255
+program.asm:14:5: error AZMN_PARSE: immediate value 300 out of range 0..255
 ```
 
 When writing scripts that parse AZM output, match on the code rather than the message text — the code is stable across releases; the message wording may change.
@@ -332,10 +329,10 @@ azm --type bin --output build/program.bin program.asm
 ```asm
         .binfrom $0100
         ; ... code ...
-        .binto
+        .binto $0200
 ```
 
-The binary then contains only bytes from `$0100` to the last assembled byte before `.binto`.
+The binary then contains only bytes between the two addresses.
 
 **Trailing `.ds` trimming:** A `.ds` block at the very end of a source file, with no subsequent emitted bytes, does not extend the binary. The binary is cropped at the last byte of real content.
 

@@ -37,6 +37,23 @@ Beyond bare assembly, AZM adds a small set of compile-time tools:
 
 **Multiple output formats.** A single assembly run produces any combination of: Intel HEX (`.hex`), flat binary (`.bin`), listing (`.lst`), and Debug80 map (`.d8.json`). The ASM80-compatible lowered source (`.z80`) is a separate beta output covered in Chapter 8.
 
+## At a glance
+
+A compact reference for AZM's core rules:
+
+| Property | Rule |
+|----------|------|
+| Labels | Global, case-sensitive, unique across all included files |
+| Entry labels | `@NAME:` marks a routine boundary; callable as `NAME` |
+| Opcodes and registers | Case-insensitive |
+| Directives | Canonical dotted lowercase (`.db`, `.equ`, `.org`); legacy undotted forms accepted via alias layer |
+| Expressions | Compile-time only; symbolic operators: `+ - * / % & \| ^ ~ << >>` |
+| Layouts | Compile-time constants only; no hidden loads or stores |
+| Ops | Inline expansion at each call site; not subroutine calls |
+| Register-care | Analysis and metadata; no byte changes unless `--fix` is requested |
+
+---
+
 ### The Debug80 connection
 
 Debug80 is the companion debugging tool for this toolchain. It uses the `.d8.json` metadata file that AZM emits alongside each binary — a map of addresses, symbols, and source line positions that Debug80 reads to display source-correlated debug information. When Debug80 assembles a file, it calls AZM. When you run AZM from the command line, the `.d8.json` file is ready for Debug80 to consume.

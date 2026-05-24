@@ -205,7 +205,7 @@ AZM tracks the expansion stack and stops with an error when the same op appears 
 **No overload matches:**
 
 ```
-error AZMN_OP_NOMATCH: no overload of 'load8' matches operands (HL, imm8)
+error AZMN_PARSE: no overload of 'load8' matches operands (HL, imm8)
   tried: load8(reg8, imm8)
 ```
 
@@ -214,7 +214,7 @@ The diagnostic lists what was tried. `HL` is a 16-bit register; `reg8` requires 
 **Ambiguous match:**
 
 ```
-error AZMN_OP_AMBIGUOUS: call to 'increment' matches multiple overloads
+error AZMN_PARSE: call to 'increment' matches multiple overloads
 ```
 
 Two overload declarations both match the operands at the call site. Review the overloads and add a more specific fixed-token overload to disambiguate, or collapse the two overloads into one with a broader operand class.
@@ -222,7 +222,7 @@ Two overload declarations both match the operands at the call site. Review the o
 **Expansion cycle:**
 
 ```
-error AZMN_OP_CYCLE: op expansion cycle detected: loop_op → helper → loop_op
+error AZMN_PARSE: op expansion cycle detected: loop_op → helper → loop_op
 ```
 
 AZM shows the expansion path that produced the cycle. Refactor the ops to break the cycle.
@@ -230,7 +230,7 @@ AZM shows the expansion path that produced the cycle. Refactor the ops to break 
 **Arity mismatch:**
 
 ```
-error AZMN_OP_ARITY: 'load8' expects 2 operands, got 1
+error AZMN_PARSE: 'load8' expects 2 operands, got 1
 ```
 
 The call site passed the wrong number of operands. Count the parameters in the op declaration and match the call.

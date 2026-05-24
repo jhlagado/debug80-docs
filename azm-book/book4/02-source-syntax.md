@@ -42,14 +42,13 @@ Both forms are valid. Labels on their own line are common for routines; labels o
 
 Whitespace before the label, between the label and the directive, between the directive and its operands, and between operands is flexible. AZM does not enforce specific column positions. One or more spaces or tabs separate tokens.
 
-Commas separate operand lists:
+Commas separate operand lists in `.db`, `.dw`, and similar data directives:
 
 ```asm
 .db $48,$65,$6C,$6C,$6F   ; five bytes
-.equ MY_CONST,42          ; also valid — comma after name
 ```
 
-The `.equ` directive accepts either `NAME .equ expr` (space-separated) or `NAME: .equ expr` (colon form). Both are legal.
+`.equ` does not use a comma. The two valid forms are `NAME .equ expr` and `NAME: .equ expr`. The name always comes first.
 
 ## Comments
 
@@ -103,17 +102,19 @@ All of `$2A`, `%101010`, `0b101010`, `0x2A`, `02AH`, and `101010B` assemble to 4
 
 ## String and character literals
 
-Double-quoted strings appear in `.db`, `.dw`, `.cstr`, `.pstr`, and `.istr` operands:
+Multi-character string literals appear in `.db`, `.cstr`, `.pstr`, and `.istr` operands. `.db` accepts string fragments directly:
 
 ```asm
 .db "Hello"          ; 5 bytes: H e l l o
 .db "Hello",0        ; 6 bytes: H e l l o NUL
 ```
 
+`.dw` accepts word expressions, including single-character quoted values (`'A'` or `"A"` evaluate to the ASCII code as a 16-bit value). It does not accept multi-character string fragments.
+
 Single-character strings in expression context evaluate to the character's ASCII code:
 
 ```asm
-.equ NEWLINE, $0A
+NEWLINE .equ $0A
 .db 'A'              ; byte $41
 ```
 
@@ -167,7 +168,7 @@ READ_LOOP:
 
 ## Global labels
 
-All labels in AZM are global by default. Every label must be unique across the entire translation unit — the source file plus all included files. If two labels share a name, AZM reports a duplicate-symbol error.
+AZM has no local-label namespace. Every plain label is a global symbol, unique across the entire translation unit — the source file plus all included files. If two labels share a name, AZM reports a duplicate-symbol error.
 
 ```asm
 ; error: two definitions of COUNT
@@ -236,7 +237,7 @@ CopyRowLoop:
         ret
 ```
 
-When no `@` labels appear, AZM falls back to a heuristic: a plain label after at least one instruction is treated as a new routine boundary. This can misfire when a push/pop routine has an internal branch label that splits the analysis span before the matching pop. Using `@` entry labels prevents this — routine boundaries are explicit, not inferred.
+When no `@` labels appear, AZM falls back to a heuristic: a plain label after at least one instruction is treated as a new routine boundary. This can misfire when a push/pop routine has a branch label inside the body that splits the analysis span before the matching pop. Using `@` entry labels prevents this — routine boundaries are explicit, not inferred.
 
 ## Forward references
 

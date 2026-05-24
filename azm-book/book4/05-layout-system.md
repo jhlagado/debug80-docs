@@ -90,7 +90,7 @@ The result is an ordinary integer constant, valid anywhere an expression is vali
 
 ```asm
 SPRITE_SIZE .equ sizeof(Sprite)
-TOTAL_RAM   .equ sizeof(Sprite[MAX_SPRITES]) + sizeof(GameState)
+TOTAL_RAM   .equ MAX_SPRITES * sizeof(Sprite) + sizeof(GameState)
 ```
 
 ### Array type expressions
@@ -358,13 +358,13 @@ This returns the byte offset of the `flags` field of element 2 of a 16-element S
 A concrete use: derive a constant for accessing a specific array element from the base address:
 
 ```asm
-.equ ELEM2_FLAGS,  offset(Sprite[16], [2].flags)
+ELEM2_FLAGS .equ offset(Sprite[16], [2].flags)
 
         ld   hl,SPRITES + ELEM2_FLAGS
         ld   a,(hl)                    ; read flags of sprite 2
 ```
 
-The index inside an `offset` array path must be a compile-time constant. A register value produces an error — exactly as with layout-cast paths.
+The index inside an `offset` array path must be a numeric literal — a bare integer like `[2]`, not a symbol or expression. Layout-cast paths (`<Sprite[16]>TABLE[IDX].flags`) accept compile-time constant expressions in their brackets, but `offset()` paths do not. A register value or a symbol produces an error in both cases.
 
 ---
 
@@ -377,14 +377,13 @@ A union describes multiple overlapping views of the same bytes. All fields in a 
 ```asm
 .union RegPair
 lo      .byte
-hi      .byte
 both    .word
 .endunion
 ```
 
-This union has three members. `lo` is at offset 0 (1 byte), `hi` is at offset 0 (1 byte), and `both` is at offset 0 (2 bytes). `sizeof(RegPair)` is 2 — the largest member.
+This union has two members. `lo` is at offset 0 (1 byte) and `both` is at offset 0 (2 bytes). `sizeof(RegPair)` is 2 — the largest member.
 
-The members do not all coexist independently: they describe alternate interpretations of the same 2-byte region. Reading `hi` reads the same byte as the second byte of `both`, though `offset(RegPair, hi)` is 0 — it is a 1-byte view starting at offset 0.
+All union members start at offset 0. `lo` gives a 1-byte view of the first byte; `both` gives a 2-byte word view of the same region. To read the high byte independently, use `+1` arithmetic — a union cannot name it, because every member starts at zero.
 
 ### Declaring a union
 
@@ -537,8 +536,8 @@ value   .field ByteOrWord
 Access the nested union field through the outer record's `offset`:
 
 ```asm
-.equ PORT_VALUE_WORD,  offset(IoPort, value) + offset(ByteOrWord, word_view)
-.equ PORT_VALUE_BYTE,  offset(IoPort, value) + offset(ByteOrWord, byte_view)
+PORT_VALUE_WORD  .equ offset(IoPort, value) + offset(ByteOrWord, word_view)
+PORT_VALUE_BYTE  .equ offset(IoPort, value) + offset(ByteOrWord, byte_view)
 ```
 
 Both constants resolve to the same byte offset from the start of `IoPort` — because `ByteOrWord` starts at `offset(IoPort, value)` and all of its own members start at zero within it.
@@ -729,7 +728,7 @@ offset(Sprite[16], [2].flags)
 Expands to `2 * sizeof(Sprite) + offset(Sprite, flags)`. You can use this in `.equ` lines when the element index is a known constant:
 
 ```asm
-.equ SPRITE2_FLAGS,  offset(Sprite[16], [2].flags)
+SPRITE2_FLAGS .equ offset(Sprite[16], [2].flags)
 
         ld   hl,SPRITE_TABLE + SPRITE2_FLAGS
         ld   a,(hl)
@@ -737,7 +736,7 @@ Expands to `2 * sizeof(Sprite) + offset(Sprite, flags)`. You can use this in `.e
 
 This is equivalent to the layout cast `<Sprite[16]>SPRITE_TABLE[2].flags`. Both reach the same constant.
 
-The index inside the `offset` path must be a compile-time expression. Runtime registers are rejected, for the same reason they are rejected in layout casts: accepting them would require generating multiply-add code rather than folding a constant.
+The index inside the `offset` path must be a numeric literal (a bare integer). Layout-cast paths accept compile-time constant expressions in brackets; `offset()` paths accept only numeric literals. Runtime registers are rejected in both cases — accepting them would require generating multiply-add code rather than folding a constant.
 
 ---
 

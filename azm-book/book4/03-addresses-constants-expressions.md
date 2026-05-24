@@ -94,10 +94,10 @@ When you use two `.org` directives with a gap between them, the binary output ma
 ```asm
         .binfrom $0100
         ; ... code and data ...
-        .binto
+        .binto $0200
 ```
 
-The binary contains only the bytes from `$0100` to the last assembled byte before `.binto`. Any trailing `.ds` after `.binto` advances the address counter but does not extend the binary file.
+The binary contains only the bytes between the two addresses. Any trailing `.ds` after `.binto` advances the address counter but does not extend the binary file.
 
 ## `.align`
 
@@ -105,7 +105,7 @@ The binary contains only the bytes from `$0100` to the last assembled byte befor
         .align 16
 ```
 
-Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. The argument must be a power of two or a positive integer. Use `.align` when hardware or lookup-table requirements demand address alignment.
+Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. The argument must be a positive integer. Use `.align` when hardware or lookup-table requirements demand address alignment.
 
 ---
 
@@ -261,7 +261,7 @@ $FF             ; hex
 All four evaluate to the same integer, 255. Expressions can mix formats:
 
 ```asm
-.equ MASK, $F0 | 00001111B    ; $F0 OR $0F = $FF
+MASK .equ $F0 | 00001111B    ; $F0 OR $0F = $FF
 ```
 
 ### Symbols and `.equ` names
@@ -269,13 +269,13 @@ All four evaluate to the same integer, 255. Expressions can mix formats:
 Any previously defined label or `.equ` name is valid in an expression. Forward references are supported but must be resolvable by the end of assembly:
 
 ```asm
-.equ STRIDE,  sizeof(Sprite)         ; layout constant
-.equ TABLE_LEN, TABLE_END - TABLE    ; address arithmetic
+STRIDE    .equ sizeof(Sprite)         ; layout constant
+TABLE_LEN .equ TABLE_END - TABLE      ; address arithmetic
 ```
 
 ### Arithmetic operators
 
-AZM supports:
+AZM supports symbolic operators only:
 
 | Operator | Meaning |
 |----------|---------|
@@ -283,19 +283,21 @@ AZM supports:
 | `-` | subtraction (or unary negate) |
 | `*` | multiplication |
 | `/` | integer division |
-| `MOD` | modulo |
-| `&` or `AND` | bitwise AND |
-| `\|` or `OR` | bitwise OR |
-| `^` or `XOR` | bitwise XOR |
-| `~` or `NOT` | bitwise complement |
-| `<<` or `SHL` | left shift |
-| `>>` or `SHR` | right shift |
+| `%` | modulo |
+| `&` | bitwise AND |
+| `\|` | bitwise OR |
+| `^` | bitwise XOR |
+| `~` | bitwise complement (unary) |
+| `<<` | left shift |
+| `>>` | right shift |
+
+Word-form operators (`MOD`, `AND`, `OR`, `XOR`, `NOT`, `SHL`, `SHR`) are not recognised. Note that `%` has two roles: as a number prefix it introduces a binary literal (`%10101010`), and as an infix operator it is modulo. Context determines which: a `%` after an expression is modulo; a `%` at the start of a value is a binary literal.
 
 Operator precedence follows conventional arithmetic rules. Parentheses group sub-expressions:
 
 ```asm
-.equ FRAME_SIZE,  (COLS * ROWS) + 2
-.equ ENTRY_ADDR,  TABLE_BASE + (ENTRY_NUM * 3)
+FRAME_SIZE  .equ (COLS * ROWS) + 2
+ENTRY_ADDR  .equ TABLE_BASE + (ENTRY_NUM * 3)
 ```
 
 ### `$` in expressions
@@ -323,17 +325,18 @@ AZM substitutes the folded constant into the instruction encoding. Range checkin
 ### Expressions in data directives
 
 ```asm
-.db MAX_VAL - 1, LOW(ENTRY), HIGH(ENTRY)
+.db MAX_VAL - 1
 .dw TABLE_BASE + STRIDE * 3
 .ds SPRITE_COUNT * sizeof(Sprite)
 ```
 
 `.db` accepts byte-range expressions (0–255 or −128–127 for signed). `.dw` accepts word-range expressions (0–65535). `.ds` accepts any non-negative count expression.
 
-`LOW(expr)` returns bits 0–7 of the value; `HIGH(expr)` returns bits 8–15. These are useful for splitting a 16-bit address into two bytes:
+To split a 16-bit address into two bytes, use bitwise operators:
 
 ```asm
-.db LOW(VECTOR_TABLE), HIGH(VECTOR_TABLE)
+.db VECTOR_TABLE & $FF       ; low byte
+.db (VECTOR_TABLE >> 8) & $FF ; high byte
 ```
 
 ### Constant folding
@@ -342,8 +345,8 @@ AZM folds all expressions at assemble time. An expression whose value depends on
 
 ```asm
 ; These are compile-time constants:
-.equ SIZE,   sizeof(Sprite) * 16
-.equ OFFSET, offset(Sprite, flags)
+SIZE   .equ sizeof(Sprite) * 16
+OFFSET .equ offset(Sprite, flags)
 
 ; This is an instruction, not an expression:
         add  hl,bc           ; runtime addition
@@ -410,7 +413,7 @@ enum Mode Read, Write, Append
         cp   Mode.Append        ; compare A with 2
 
         .db Mode.Read           ; emit byte 0
-        .equ CURR_MODE, Mode.Read
+CURR_MODE .equ Mode.Read
 ```
 
 ### When to use enums

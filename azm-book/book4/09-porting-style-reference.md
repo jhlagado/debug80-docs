@@ -198,7 +198,7 @@ Use lowercase dotted directives for new source:
 
 ```asm
 .org $0100
-.equ LIMIT, 64
+LIMIT .equ 64
 .db "Hello",0
 .ds byte[32]
 .include "hardware.asm"
@@ -345,7 +345,7 @@ Put all storage blocks in one section at the end of the source, under their own 
 RING_BUF:    .ds RING_CAP
 RING_STATE:  .ds RingState
 FRAME_BUF:   .ds FRAME_W * FRAME_H
-SPRITES:     .ds Sprite[MAX_SPRITES]
+SPRITES:     .ds MAX_SPRITES * sizeof(Sprite)
 
         .org $8FFE
 STACK_TOP:
@@ -486,14 +486,14 @@ The AZMDoc contract above the entry label says: this routine reads B and IX on e
 
 The `@` prefix on the label marks `SPRITES_INIT` as an explicit routine boundary for register-care analysis. Callers write `call SPRITES_INIT`, not `call @SPRITES_INIT`.
 
-`SpriteInitLoop` is an internal branch target inside the `SPRITES_INIT` body. Because `@SPRITES_INIT:` is present, register-care analysis sees the full body as one span: the entry through DJNZ and the return. `SpriteInitLoop` is not treated as a new routine boundary.
+`SpriteInitLoop` is a plain branch label inside the `SPRITES_INIT` body. Because `@SPRITES_INIT:` is present, register-care analysis sees the full body as one span: the entry through DJNZ and the return. `SpriteInitLoop` is not treated as a new routine boundary.
 
 ```asm
 ; Find first sprite with tile T. A = tile to find, IX = table base.
 ; Returns carry set and IX pointing to found sprite, or carry clear if none.
 ;!      in        A,IX
 ;!      out       carry,IX
-;!      clobbers  A,BC
+;!      clobbers  BC,DE
 @SPRITES_FIND_TILE:
         ld   b,MAX_SPRITES
 SpriteFindLoop:
@@ -512,9 +512,9 @@ SpriteFindFound:
 
 `SPRITES_FIND_TILE` takes the tile value in A and a table base in IX. It walks the table, comparing each sprite's tile field against A. On a match, it sets carry and returns with IX pointing to the found sprite. On exhaustion, it clears carry via `or a`.
 
-The contract lists `carry` and `IX` as outputs — both carry meaningful return values. A is listed as a clobber: the loop loads `c,(ix+SPRITE_TILE)` and uses `cp c`, which writes flags from A. B counts down and is gone on return.
+The contract lists `carry` and `IX` as outputs — both carry meaningful return values. A is an input (`cp c` reads A to compare against the tile field) but is not written by the loop, so it is preserved and does not appear in clobbers. B counts down through DJNZ and is gone on return. DE is loaded each iteration with `ld de,SPRITE_SIZE` and consumed by `add ix,de`, so both BC and DE end up modified — both are listed in clobbers.
 
-Two things worth noting in the search loop. `ld de,SPRITE_SIZE` is inside the loop because DE is needed to advance IX — it could be hoisted before `.search` for efficiency if B were tracked differently. As written, it is clear and correct. Second, `add ix,de` corrupts DE after adding it to IX, which is why DE appears implicitly clobbered (BC as written in the contract covers B; the DE destruction comes from `add ix,de` — both BC and DE end up modified, which is why the clobbers list covers them).
+`ld de,SPRITE_SIZE` is inside the loop because DE is needed to advance IX on each iteration. It could be hoisted above the loop for efficiency, but the current form is clear and the branch path to `SpriteFindFound` skips the advance entirely, which is the correct behaviour.
 
 ---
 
@@ -546,14 +546,14 @@ The include chain runs top-to-bottom. Hardware constants arrive first, then the 
 
 ```asm
         ; Set up sprite 2 as a player tile
-        ld   ix,<Sprite[MAX_SPRITES]>SPRITE_TABLE[2]
+        ld   ix,<Sprite[8]>SPRITE_TABLE[2]
         ld   (ix+SPRITE_X),$10
         ld   (ix+SPRITE_Y),$08
         ld   (ix+SPRITE_TILE),Tile.Player
         ld   (ix+SPRITE_FLAGS),Flags.Alive
 ```
 
-The layout cast `<Sprite[MAX_SPRITES]>SPRITE_TABLE[2]` computes `SPRITE_TABLE + 2 * sizeof(Sprite)` at assemble time. Since `sizeof(Sprite)` is 4, that is `SPRITE_TABLE + 8`. AZM folds this to a constant and emits `ld ix,SPRITE_TABLE+8` — the listing shows the resolved address.
+The layout cast `<Sprite[8]>SPRITE_TABLE[2]` computes `SPRITE_TABLE + 2 * sizeof(Sprite)` at assemble time. Since `sizeof(Sprite)` is 4, that is `SPRITE_TABLE + 8`. AZM folds this to a constant and emits `ld ix,SPRITE_TABLE+8` — the listing shows the resolved address. The array length in the TypeExpr must be a numeric literal (`8`), not a symbol — `<Sprite[MAX_SPRITES]>` would fail to parse.
 
 The four field writes use IX-relative addressing with the offset constants. `Tile.Player` is the enum value 2. `Flags.Alive` is 0. Both are immediate byte constants in the emitted instruction. The listing shows the numeric values alongside the symbolic names.
 
@@ -579,7 +579,7 @@ After the halt, inspecting `found_at` in memory should show the address of sprit
         .org $8000
 
 SPRITE_TABLE:
-        .ds Sprite[MAX_SPRITES]
+        .ds Sprite[8]
 
 found_at:
         .ds addr
@@ -587,7 +587,7 @@ found_at:
 
 The RAM layout follows the code under a separate `.org`. `SPRITE_TABLE` reserves `sizeof(Sprite) * 8` = 32 bytes. `found_at` reserves 2 bytes (an address).
 
-Placing storage at the end under its own `.org` keeps it visually separate from code and makes the total RAM footprint easy to read. The `.ds` expressions document what the storage holds — `Sprite[MAX_SPRITES]` says "eight sprites," `addr` says "one address" — without requiring any arithmetic.
+Placing storage at the end under its own `.org` keeps it visually separate from code and makes the total RAM footprint easy to read. `Sprite[8]` is a type expression — it uses a numeric literal because TypeExpr array lengths do not accept symbols. `addr` names the intent: one address-sized slot.
 
 ---
 
@@ -634,7 +634,7 @@ Byte `$02` at offset 3 is the `ix+` offset (SPRITE_TILE = 2, not 3 — verify ag
 **Layout cast:**
 
 ```
-010A DD 21 08 80         ld   ix,<Sprite[MAX_SPRITES]>SPRITE_TABLE[2]
+010A DD 21 08 80         ld   ix,<Sprite[8]>SPRITE_TABLE[2]
 ```
 
 The address `$8008` = `$8000 + 8` = `SPRITE_TABLE + 2 * SPRITE_SIZE`. The cast folded to the correct constant.
