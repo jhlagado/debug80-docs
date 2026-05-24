@@ -329,7 +329,7 @@ Op names should read like instructions, not like function calls. Keep them short
 ```asm
 op clear_a()          ; not: op zero_accumulator()
 op negate_a()         ; not: op negate_accumulator_register()
-op load8(dst, val)    ; not: op load_8bit_immediate(destination, value)
+op load8(dst reg8, val imm8)    ; not: op load_8bit_immediate(destination, value)
 ```
 
 Ops with a specific register in the name are acceptable when the op is genuinely register-specific.
@@ -363,7 +363,7 @@ When in doubt about whether an abstraction is too much, check whether you can st
 
 ## Complete worked reference program
 
-This section assembles one medium-sized program using most of the language surface from previous chapters — layout types, enums, ops, AZMDoc contracts, entry labels, includes, and all four output artifacts. The program is synthetic but realistic: it manages a small sprite table, initializes it, sets up one sprite, and searches for a tile type.
+This section assembles one medium-sized program using most of the language surface from previous chapters — layout types, enums, ops, AZMDoc contracts, entry labels, includes, and all four default output artifacts. The program is synthetic but realistic: it manages a small sprite table, initializes it, sets up one sprite, and searches for a tile type.
 
 The full source is spread across six files in a `worked/` directory. Read them in the order they appear in the include chain.
 

@@ -148,7 +148,7 @@ When you use `.type` declarations (Chapter 5), you know the field offsets and ca
 
 `.ds count` reserves address space without initialized bytes. `.ds count,fill` reserves the same space and writes the fill byte into the output image. The bytes at those addresses contain whatever is in memory when the program runs. Use `.ds` for variables, buffers, and workspace that the program initializes at runtime.
 
-`.db` and `.dw` write values into the binary now. `.ds` claims address space without writing anything.
+`.db` and `.dw` always write initialized values. `.ds count` only advances the address counter; `.ds count,fill` also writes the fill byte across the reserved range.
 
 ### Basic syntax
 

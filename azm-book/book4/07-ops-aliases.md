@@ -88,8 +88,10 @@ Operand classes match categories of Z80 operands. The full set supported in AZM 
 | `cc` | Condition codes: NZ, Z, NC, C, PO, PE, P, M |
 | `idx16` | IX or IY indexed memory operand: `(IX+d)`, `(IY+d)` |
 | `ea` | Effective address expression |
-| `mem8` | Memory dereference for byte access: `(HL)`, `(DE)`, `(BC)`, `(nn)` |
-| `mem16` | Memory dereference for word access |
+| `mem8` | Memory dereference intended for byte-form op overloads |
+| `mem16` | Memory dereference intended for word-form op overloads |
+
+The matcher class selects the overload; whether the operand is treated as byte or word is determined when the expanded instruction is parsed and encoded.
 
 Any token that does not match a class is treated as a fixed token — an exact literal that the call site must reproduce verbatim.
 

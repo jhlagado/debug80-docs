@@ -35,7 +35,7 @@ Parse errors occur when a source line cannot be recognized as a valid label, ins
 .macro FOO    ; error: .macro is not an AZM directive
 ```
 
-AZM does not support text macros. A directive alias file handles simple spelling differences such as `DEFB` to `.db`, but it cannot implement `.macro` / `.endm` — aliases only rename directive heads, not syntax or expansion behavior. Rewrite macros as AZM `op` declarations where they are instruction idioms, or pre-process the source before assembling.
+AZM does not support text macros. If existing source depends on text macros, expand or rewrite them before assembling with AZM. For small reusable instruction idioms, use AZM `op` declarations, which are parsed, typed, and expanded as ordinary assembly instructions.
 
 **Malformed operand:**
 
