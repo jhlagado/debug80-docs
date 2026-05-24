@@ -71,7 +71,7 @@ These names are valid in size positions — inside `.type` / `.union` declaratio
 .ds addr       ; 2 bytes
 ```
 
-They are **not** data emission directives. Outside a layout declaration, `.byte`, `.word`, and `.addr` as field shorthands inside `.type` are the only valid context — they do not emit bytes on their own in code.
+They compute sizes only; they do not emit bytes.
 
 ### `sizeof`
 
@@ -124,7 +124,7 @@ The equivalence is exact. The type form documents intent while still reserving a
 
 ### Compile-time only
 
-Layout types produce no runtime objects, no hidden loads or stores, and no tag bytes. They do not cause AZM to infer typed memory access from instruction operands or generate any initialization code. The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
+Layout types produce no runtime objects, no hidden loads or stores, and no tag bytes. The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
 
 ---
 
@@ -420,13 +420,12 @@ TIMER:
 ; Read only the low byte:
         ld   a,(TIMER + offset(TimerReg, lo))
 
-; The high byte is at TIMER + 1 — there is no union syntax for naming
-; the second byte of an overlaid word.
+; The high byte is at TIMER + 1 — no union field names the second byte of an overlaid word.
 ```
 
-### No runtime tag or safety check
+### No runtime tag
 
-AZM does not generate any tag byte or discriminant. Reading a union member that was written through a different member is legal assembly — the assembler does not object. Whether that read makes sense is up to you.
+The output contains no tag byte or discriminant. Reading a union member that was written through a different member is legal assembly. Whether that read makes sense is up to you.
 
 ### When a union is clearer than comments
 

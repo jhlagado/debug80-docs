@@ -293,7 +293,7 @@ AZM has no module system. All included files merge into a single translation uni
 - The order of includes can matter, since some expressions depend on earlier definitions
 - Including the same file twice defines its labels twice, which is a duplicate-symbol error
 
-Avoid recursive includes — AZM has no cycle detection, and a file that includes itself will loop until the process runs out of resources.
+Avoid recursive includes — a file that includes itself will loop until the process runs out of resources.
 
 ## Typical project structure
 

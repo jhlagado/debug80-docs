@@ -203,7 +203,7 @@ AZM resolves forward references across passes. Circular references produce an er
 
 ### Re-definition
 
-AZM does not allow redefining a `.equ` name to a different value in the same translation unit:
+`.equ` names are unique within the translation unit. Defining the same name twice is an error:
 
 ```asm
 COUNT   .equ 10
@@ -434,7 +434,7 @@ enum Key Left, Right, Up, Down, Fire
 
 ### Unqualified names are rejected
 
-AZM does not allow bare member names without the group prefix:
+Member names require the group qualifier:
 
 ```asm
 enum Mode Read, Write, Append
@@ -491,7 +491,7 @@ CMD_TABLE:
 
 ### No runtime type checking
 
-Enums are purely compile-time. AZM does not generate any range check or tag byte in the output. A value loaded at runtime could be any byte — the assembler has no way to verify it. Enum-related safety is in how you structure data and how you validate inputs before dispatching on them.
+Enums are purely compile-time. The output contains no range checks or tag bytes. A value loaded at runtime could be any byte — validate inputs before dispatching on them.
 
 ---
 

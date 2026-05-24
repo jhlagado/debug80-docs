@@ -48,7 +48,7 @@ Commas separate operand lists in `.db`, `.dw`, and similar data directives:
 .db $48,$65,$6C,$6C,$6F   ; five bytes
 ```
 
-`.equ` does not use a comma. The two valid forms are `NAME .equ expr` and `NAME: .equ expr`. The name always comes first.
+The two valid forms are `NAME .equ expr` and `NAME: .equ expr`. The name always comes first.
 
 ## Comments
 
@@ -288,7 +288,7 @@ Both `ENTRY_A` and `ENTRY_B` call into the same instruction. Use this when a rou
 
 ## Data labels vs code labels
 
-AZM does not distinguish data labels from code labels — both are addresses; the difference is in how you use them. Data labels name storage:
+Data labels and code labels are both addresses — the difference is in how you use them. Data labels name storage:
 
 ```asm
 COUNTER:  .db 0

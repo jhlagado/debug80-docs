@@ -15,7 +15,7 @@ This chapter covers three practical aspects of working with AZM: migrating exist
 
 ## Porting Z80 source to AZM
 
-The migration strategy is: assemble first, then improve. Start by getting AZM to produce byte-identical output to your existing assembler. Only then add AZM features. Comparing binaries after each step keeps you honest.
+The migration strategy is: assemble first, then improve. Start by getting AZM to produce byte-identical output to your existing assembler. Only then add AZM features. Comparing binaries after each step catches unintended changes while they are still small.
 
 ### Step 1 — Get it to assemble
 

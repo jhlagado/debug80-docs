@@ -184,7 +184,7 @@ azm --fix --rc warn program.asm
 
 AZM identifies call sites where a live register is clearly destroyed by the callee and may apply conservative source annotations — including expects-out hints where the analysis has sufficient certainty, or `push`/`pop` pairs where the save/restore is unambiguous. It also updates the `;!` contract blocks to reflect the repair.
 
-AZM will not silently rewrite code it cannot prove safe. The rule: `--fix` adds register saves where the before/after liveness is unambiguous. Where the conflict involves an intentional in/out transformation or the inference is uncertain, no autofix is applied — those require manual review.
+The rule: `--fix` adds register saves where the before/after liveness is unambiguous. Where the conflict involves an intentional in/out transformation or the inference is uncertain, the fix is skipped — manual review is needed.
 
 After `--fix` runs:
 1. Inspect the diff. Every inserted `push`/`pop` is a behavior change in memory and register state.
@@ -197,7 +197,7 @@ After `--fix` runs:
 
 ## AZMDoc syntax
 
-AZMDoc is the comment format for machine-readable register contracts. The `;!` prefix (introduced in Chapter 2's discussion of comments) keeps contracts separate from human prose so the register-care analyzer never has to mine prose for meaning. AZMDoc metadata does not change the bytes AZM emits.
+AZMDoc is the comment format for machine-readable register contracts. The `;!` prefix (introduced in Chapter 2's discussion of comments) keeps contracts separate from human prose so the register-care analyzer never has to mine prose for meaning. AZMDoc metadata is parse-only; the assembled bytes are unaffected.
 
 ### Source contract syntax
 
@@ -358,7 +358,7 @@ Now AZM reports conflicts but does not fail the build. Review each warning. Deci
 azm --rc error program.asm
 ```
 
-At this level, any unresolved conflict fails the build. Use this mode once the codebase is clean. Commit `--rc error` to your CI pipeline and keep it there.
+At this level, any unresolved conflict fails the build. Use this mode once all register-care conflicts are resolved. Commit `--rc error` to your CI pipeline and keep it there.
 
 ### Common diagnostic messages
 

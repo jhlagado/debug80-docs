@@ -143,7 +143,7 @@ All four are the default artifact set. Chapter 8 covers output selection, suppre
 
 ### How does Debug80 invoke AZM?
 
-Debug80 calls AZM internally when assembling an open source file. It passes `--source-root` and `--output` with paths relative to the project root, producing a `.d8.json` alongside the binary. You do not need to invoke AZM separately to use Debug80. The CLI is for command-line builds, CI pipelines, and projects that run outside the Debug80 IDE.
+Debug80 calls AZM internally when assembling an open source file. It passes `--source-root` and `--output` with paths relative to the project root, producing a `.d8.json` alongside the binary. The CLI is for command-line builds, CI pipelines, and projects that run outside the Debug80 IDE.
 
 ---
 
