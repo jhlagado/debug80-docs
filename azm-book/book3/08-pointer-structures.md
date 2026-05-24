@@ -149,16 +149,16 @@ Summing the list is a `while`-shaped loop (Chapter 2’s invariant style): HL is
 ;!      clobbers  AF, BC, DE, HL
 @list_sum_u16:
     ld de, 0
-.sum_loop:
+ListSumLoop:
     ld a, h
     or l
-    jr z, .sum_done
+    jr z, ListSumDone
     ld a, (hl)
     add a, e
     ld e, a
-    jr nc, .sum_no_carry
+    jr nc, ListSumNoCarry
     inc d
-.sum_no_carry:
+ListSumNoCarry:
     ld bc, LIST_NEXT
     add hl, bc
     ld a, (hl)
@@ -167,13 +167,13 @@ Summing the list is a `while`-shaped loop (Chapter 2’s invariant style): HL is
     ld a, (hl)
     ld h, a
     ld l, c
-    jr .sum_loop
-.sum_done:
+    jr ListSumLoop
+ListSumDone:
     ex de, hl
     ret
 ```
 
-**Invariant at `.sum_loop`:** DE is the sum of all `value` bytes in nodes strictly before the node HL points at (if any). When HL is null, DE is the full sum returned in HL via `ex de, hl`.
+**Invariant at `ListSumLoop`:** DE is the sum of all `value` bytes in nodes strictly before the node HL points at (if any). When HL is null, DE is the full sum returned in HL via `ex de, hl`.
 
 For the static chain `$10`, `$22`, `$30`, the result is `$003C` (60). The companion stores it in `list_sum`.
 
@@ -192,13 +192,13 @@ Search reuses the same advance pattern, comparing `(hl)` to the target byte in B
 ;!      clobbers  AF, BC, DE
 @list_find_u8:
     ld b, a
-.find_loop:
+ListFindLoop:
     ld a, h
     or l
-    jr z, .not_found
+    jr z, ListFindMissing
     ld a, (hl)
     cp b
-    jr z, .found
+    jr z, ListFindFound
     ld bc, LIST_NEXT
     add hl, bc
     ld a, (hl)
@@ -207,11 +207,11 @@ Search reuses the same advance pattern, comparing `(hl)` to the target byte in B
     ld a, (hl)
     ld h, a
     ld l, c
-    jr .find_loop
-.found:
+    jr ListFindLoop
+ListFindFound:
     scf
     ret
-.not_found:
+ListFindMissing:
     ld hl, 0
     or a
     ret

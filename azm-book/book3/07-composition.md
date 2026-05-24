@@ -89,14 +89,14 @@ Treat a library file as **implementation you paste in**, plus a header comment t
 ;!      clobbers  AF, B, HL
 @strlen_u8:
     ld b, 0
-.loop:
+StrLenLoop:
     ld a, (hl)
     or a
-    jr z, .done
+    jr z, StrLenDone
     inc hl
     inc b
-    jr .loop
-.done:
+    jr StrLenLoop
+StrLenDone:
     ld a, b
     ret
 ```
@@ -153,7 +153,7 @@ Without `import`, **the contract is documentation plus naming discipline**:
 
 Callers obey the contract the same way they obey Chapter 3's table: set HL, `call`, read A, assume everything in `clobbers` is garbage unless you saved it.
 
-**Private helpers** stay local by convention: use a leading dot on loop labels (`.loop`, `.done`) inside a routine, and avoid `@` on helpers that are not meant to be called from outside the library file. If a helper must be shared between two routines in the same library, give it a prefixed name (`str_advance`) and document it as internal in the file header — still global to the assembler, but obvious to readers.
+**Private helpers** stay local by convention: avoid `@` on helpers that are not meant to be called from outside the library file. For branch labels inside a routine body, use prefixed names (`str_loop`, `str_done`) so they stay unique across the translation unit — all labels are global to the assembler. If a helper must be shared between two routines in the same library, give it a prefixed name (`str_advance`) and document it as internal in the file header.
 
 ### Symbol collisions
 
@@ -161,7 +161,7 @@ Because all included text shares one namespace, two files must not both define `
 
 - Prefix workspace labels: `demo_buffer`, `demo_str_len`.
 - Prefix library routines: `str_strlen_u8` if you ever link two libraries that both exported `strlen_u8` — rename once, update AZMDoc and all `call` sites.
-- Keep loop labels **local** with a dot prefix inside each subroutine.
+- Keep branch labels **unique** by prefixing them with the routine name (`StrLenLoop`, `FindScan`).
 
 When the assembler reports "duplicate label," search all `.include` branches — the second definition wins silently in some tools; in AZM treat it as an error to fix immediately.
 

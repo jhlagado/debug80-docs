@@ -15,46 +15,32 @@ The three numbered AZM books teach programming. This supplementary manual teache
 
 ## Learning arc
 
-1. **Orientation** — what AZM is, how it fits with Debug80, and what a small AZM program looks like.
-2. **Source syntax** — parser rules, labels, symbols, `.org`, `$`, `.equ`, expressions, enums, data directives, storage, and includes.
-3. **Layout facilities** — built-in layout types, records, unions, `sizeof`, `offset`, typed `.ds`, and compact layout notation.
-4. **Assembler extensions** — AZMDoc register contracts, `@` entry labels, op declarations, aliases, and compatibility syntax.
-5. **Operating the assembler** — diagnostics, listings, output formats, ASM80-compatible output, porting, style, and a complete worked reference program.
+1. **Getting started** — what AZM is, how it fits with Debug80, what a small program looks like, and how to invoke the CLI.
+2. **Source syntax and symbols** — parser rules, labels, the `@` entry prefix, forward references, and case rules.
+3. **Addresses, constants, and expressions** — `.org`, `$`, `.equ`, expression operators, range checks, and enums.
+4. **Data, storage, and includes** — `.db`, `.dw`, string directives, `.ds`, and multi-file project organization.
+5. **The layout system** — scalar types, `sizeof`, `offset`, records with `.type`, unions with `.union`, and compact cast syntax.
+6. **Register care and contracts** — `@` entry labels, AZMDoc `;!` syntax, conflict checking, and the audit-to-error workflow.
+7. **Ops and aliases** — inline op declarations, operand classes, overloads, and directive compatibility.
+8. **Diagnostics, listings, and output** — error codes, listing format, output artifacts, and binary comparison.
+9. **Porting, style, and reference** — nine-step migration strategy, style conventions, and a complete worked program.
 
 ---
 
 ## Chapter table
 
-| Ch | File | Status | What it covers |
-|----|------|--------|----------------|
-| — | [Preface](00-preface.md) | **Stub** | Audience, assumptions, and the purpose of the manual |
-| 1 | [What AZM Is](01-what-azm-is.md) | **Stub** | AZM as a Z80 assembler, Debug80 integration, and the feature map |
-| 2 | [A First AZM Program](02-first-azm-program.md) | **Stub** | Minimal source structure, `.org`, labels, comments, data, and listings |
-| 3 | [Running AZM](03-running-azm.md) | **Stub** | CLI use, npm install, default artifacts, `--nolist`, `--asm80`, and Debug80 |
-| 4 | [Lexical Syntax and Parser Rules](04-lexical-syntax.md) | **Stub** | Lines, comments, numbers, strings, case rules, and strict parsing |
-| 5 | [Labels and Symbols](05-labels-and-symbols.md) | **Stub** | Global labels, case-sensitive symbols, forward references, and `@` entries |
-| 6 | [Program Addressing with `.org` and `$`](06-org-and-current-address.md) | **Stub** | Origins, assembly location, `$`, address arithmetic, and gaps |
-| 7 | [Constants with `.equ`](07-equ-constants.md) | **Stub** | Equates, hardware constants, addresses, sizes, and style |
-| 8 | [Expressions](08-expressions.md) | **Stub** | Arithmetic, symbols, range checks, folding, and invalid expressions |
-| 9 | [Enums as Grouped Constants](09-enums.md) | **Stub** | State, command, and token constants with qualified names |
-| 10 | [Data Directives](10-data-directives.md) | **Stub** | `.db`, `.dw`, `.addr`, strings, vectors, and endianness |
-| 11 | [Reserving Storage with `.ds`](11-ds-storage.md) | **Stub** | Raw storage, typed storage, fill bytes, and named-count idioms |
-| 12 | [Includes and Source Organization](12-includes.md) | **Stub** | `.include`, include boundaries, shared constants, layouts, and libraries |
-| 13 | [Layout Types: The Core Idea](13-layout-types-core.md) | **Stub** | Compile-time memory contracts, scalar types, `sizeof`, and arrays |
-| 14 | [Records with `.type`](14-records.md) | **Stub** | Record fields, nested layouts, `offset`, allocation, and IX/IY offsets |
-| 15 | [Unions and Alternate Views](15-unions.md) | **Stub** | Overlaid fields, word/byte views, and hardware register overlays |
-| 16 | [Compact Layout Access Syntax](16-compact-layout-syntax.md) | **Stub** | Dot/bracket notation as constant-address notation |
-| 17 | [Labels, Entry Points, and Register Contracts](17-entry-points-register-contracts.md) | **Stub** | `@` labels, subroutine boundaries, liveness, and register-care analysis |
-| 18 | [AZMDoc Syntax](18-azmdoc-syntax.md) | **Stub** | Register contract notation, inputs, outputs, clobbers, and warnings |
-| 19 | [Op Declarations](19-op-declarations.md) | **Stub** | Inline ops, operands, overloads, hygiene, cycles, and diagnostics |
-| 20 | [Aliases and Compatibility Syntax](20-aliases-compatibility.md) | **Stub** | Canonical dotted directives, accepted aliases, and legacy source |
-| 21 | [Diagnostics and Error Handling](21-diagnostics.md) | **Stub** | Parse errors, range errors, duplicate symbols, op failures, and warnings |
-| 22 | [Listings and Symbol Visibility](22-listings.md) | **Stub** | `.lst` output, default listings, `--nolist`, addresses, bytes, and source lines |
-| 23 | [Output Formats](23-output-formats.md) | **Stub** | Binary, Intel HEX, listings, Debug80 metadata, and segment behavior |
-| 24 | [ASM80-Compatible Output](24-asm80-output.md) | **Stub** | Lowered source, `--asm80`, compatibility limits, and comparison workflows |
-| 25 | [Porting Existing Z80 Source to AZM](25-porting-source.md) | **Stub** | Migration strategy, syntax normalization, layout improvements, and binary comparison |
-| 26 | [Style Guide for AZM Source](26-style-guide.md) | **Stub** | Naming, file order, comments, contracts, ops, and keeping machine code visible |
-| 27 | [Complete Worked Reference Program](27-worked-reference-program.md) | **Stub** | One medium program using constants, layouts, contracts, ops, and outputs |
+| Ch | File | What it covers |
+|----|------|----------------|
+| — | [Preface](00-preface.md) | Audience, assumptions, and the purpose of the manual |
+| 1 | [Getting Started with AZM](01-getting-started.md) | Feature map, Debug80 integration, a first program, and the full CLI reference |
+| 2 | [Source Syntax and Symbols](02-source-syntax.md) | Line structure, number formats, strings, directive names, labels, `@` entries, and forward references |
+| 3 | [Addresses, Constants, and Expressions](03-addresses-constants-expressions.md) | `.org`, `$`, `.equ`, expressions, range checks, and enums |
+| 4 | [Data, Storage, and Includes](04-data-storage-includes.md) | `.db`, `.dw`, string directives, `.ds`, and project file organization |
+| 5 | [The Layout System](05-layout-system.md) | Scalar types, `sizeof`, `offset`, records, unions, and compact cast syntax |
+| 6 | [Register Care and Contracts](06-register-care.md) | `@` entry labels, AZMDoc `;!` syntax, conflict checking, and the audit-to-error workflow |
+| 7 | [Op Declarations and Aliases](07-ops-aliases.md) | Inline op declarations, operand classes, overloads, and directive compatibility |
+| 8 | [Diagnostics, Listings, and Output](08-diagnostics-listings-output.md) | Error codes, listing format, binary/HEX/d8.json/ASM80 outputs, and binary comparison |
+| 9 | [Porting, Style, and Reference](09-porting-style-reference.md) | Nine-step migration strategy, style conventions, and a complete worked reference program |
 
 ---
 

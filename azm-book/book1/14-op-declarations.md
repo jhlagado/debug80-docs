@@ -273,19 +273,19 @@ The rewritten `count_above`:
 @count_above:
   push de
   ld d, 0
-.loop:
+CountAboveLoop:
   ld a, (hl)
-  jr_if_not_above C, .skip    ; expands to three instructions
+  jr_if_not_above C, CountAboveSkip    ; expands to three instructions
   inc d
-.skip:
+CountAboveSkip:
   inc hl
-  djnz .loop
+  djnz CountAboveLoop
   ld a, d
   pop de
   ret
 ```
 
-The call site now reads: if A is not above C, skip to `.skip`. The jump destination and the threshold both appear on the same line. The two-jump structure is an implementation detail of the Z80 flag set; the op name says what the code does.
+The call site now reads: if A is not above C, skip to `CountAboveSkip`. The jump destination and the threshold both appear on the same line. The two-jump structure is an implementation detail of the Z80 flag set; the op name says what the code does.
 
 Compare the two versions side by side:
 
@@ -293,18 +293,18 @@ Compare the two versions side by side:
 ```asm
   ld a, (hl)
   cp c
-  jr c, .skip
-  jr z, .skip
+  jr c, CountAboveSkip
+  jr z, CountAboveSkip
   inc d
-.skip:
+CountAboveSkip:
 ```
 
 **With op:**
 ```asm
   ld a, (hl)
-  jr_if_not_above C, .skip
+  jr_if_not_above C, CountAboveSkip
   inc d
-.skip:
+CountAboveSkip:
 ```
 
 The machine output is identical. The listing shows the same three instructions at the `jr_if_not_above` site. The only difference is what the source communicates.

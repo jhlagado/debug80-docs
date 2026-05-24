@@ -155,10 +155,10 @@ Entry (store length through HL — `ld (sort_len), b` is not a supported AZM for
 Compare `values[j]` to `key_byte`. While the element is greater, shift it right by one index:
 
 ```asm
-.inner:
+InsertInner:
     ld a, b
     or a
-    jr z, .place
+    jr z, InsertPlace
     ld hl, de
     ld a, b
     ld c, a
@@ -175,7 +175,7 @@ The listing uses `ld a, (hl)` then `cp` against the key loaded into A from `(key
 
 ### Place the key
 
-When j < 0 or `values[j] <= key`, write `key_byte` at `values[j+1]` (implemented as base + j + 1 with careful index handling at `.place`).
+When j < 0 or `values[j] <= key`, write `key_byte` at `values[j+1]` (implemented as base + j + 1 with careful index handling at `InsertPlace`).
 
 Full source: see [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
 
@@ -198,18 +198,18 @@ After sorting, find the first index where `values[i] >= C`:
 ;!      clobbers  AF, B, HL
 @find_byte_ge:
     ld b, 0
-.scan:
+FindByteScan:
     ld a, (hl)
     cp c
-    jr nc, .found
+    jr nc, FindByteFound
     inc hl
     inc b
     ld a, b
     cp ARRAY_LEN
-    jr c, .scan
+    jr c, FindByteScan
     ld a, $FF
     ret
-.found:
+FindByteFound:
     ld a, b
     ret
 ```

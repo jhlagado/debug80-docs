@@ -61,27 +61,27 @@ Every subroutine in this book should document its contract with AZMDoc (Book 1 C
 ;!      out       HL
 ;!      clobbers  AF, DE
 @gcd_u16:
-.loop:
+GcdLoop:
     ld a, h
     or l
-    jr z, .right_is_answer
+    jr z, GcdRightAnswer
     ld a, d
     or e
-    jr z, .left_is_answer
+    jr z, GcdLeftAnswer
     push hl
     or a
     sbc hl, de
     pop hl
-    jr c, .swap
+    jr c, GcdSwap
     or a
     sbc hl, de
-    jr .loop
-.swap:
+    jr GcdLoop
+GcdSwap:
     ex de, hl
-    jr .loop
-.left_is_answer:
+    jr GcdLoop
+GcdLeftAnswer:
     ret
-.right_is_answer:
+GcdRightAnswer:
     ex de, hl
     ret
 ```
@@ -92,7 +92,7 @@ Every subroutine in this book should document its contract with AZMDoc (Book 1 C
 
 ### Unsigned compare via `sbc hl, de`
 
-`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned). The routine pushes HL, subtracts in the scratch copy, pops the original HL, and branches to `.swap` when carry is set.
+`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned). The routine pushes HL, subtracts in the scratch copy, pops the original HL, and branches to `GcdSwap` when carry is set.
 
 If HL ≥ DE, the second `sbc hl, de` performs the Euclidean subtraction step and the loop repeats.
 
@@ -178,16 +178,16 @@ Binary exponentiation is a natural follow-on (used heavily in crypto and fixed-p
 ;!      clobbers  AF, BC, DE
 @power_u8:
     ld e, 1
-.pow_loop:
+PowerLoop:
     ld a, b
     or a
-    jr z, .done
+    jr z, PowerDone
     dec b
     ld a, e
     call mul8_a_by_c
     ld e, a
-    jr .pow_loop
-.done:
+    jr PowerLoop
+PowerDone:
     ld a, e
     ret
 ```

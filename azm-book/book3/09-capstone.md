@@ -168,20 +168,20 @@ When all three tests pass, **mark** before `call place_row`, and **unmark** afte
 @place_row:
     ld a, b
     cp BOARD_SIZE
-    jr nz, .try_cols
+    jr nz, PlaceRowTryCols
     call count_solution
     ret
-.try_cols:
+PlaceRowTryCols:
     ld c, 0
-.col_loop:
+PlaceRowColLoop:
     ld a, c
     cp BOARD_SIZE
-    jr nc, .row_done
+    jr nc, PlaceRowDone
     ; ... col_free, diag_sum_free, diag_diff_free ...
     ; ... mark, inc b, call place_row, unmark ...
     inc c
-    jr .col_loop
-.row_done:
+    jr PlaceRowColLoop
+PlaceRowDone:
     ret
 ```
 

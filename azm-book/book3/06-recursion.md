@@ -84,7 +84,7 @@ Wirth's programs are often shown twice: a recursive definition and an equivalent
 @factorial_u8:
     ld a, b
     or a
-    jr z, .fact_one
+    jr z, FactOne
     push bc
     dec b
     call factorial_u8
@@ -92,7 +92,7 @@ Wirth's programs are often shown twice: a recursive definition and an equivalent
     ld c, b
     call mul8_a_by_c
     ret
-.fact_one:
+FactOne:
     ld a, 1
     ret
 ```
@@ -115,24 +115,24 @@ Same contract, no self-call:
 @factorial_iter_u8:
     ld a, b
     or a
-    jr z, .iter_one
+    jr z, FactIterOne
     ld e, 1
     ld c, b
-.iter_loop:
+FactIterLoop:
     ld a, c
     or a
-    jr z, .iter_done
+    jr z, FactIterDone
     ld a, e
     push bc
     call mul8_a_by_c
     ld e, a
     pop bc
     dec c
-    jr .iter_loop
-.iter_done:
+    jr FactIterLoop
+FactIterDone:
     ld a, e
     ret
-.iter_one:
+FactIterOne:
     ld a, 1
     ret
 ```
@@ -192,7 +192,7 @@ demo_nums:
 ;!      clobbers  AF, BC, DE, HL
 @sum_u8_rec:
     or a
-    jr z, .zero
+    jr z, SumRecZero
     push af
     ld b, a
     ld a, (hl)
@@ -207,7 +207,7 @@ demo_nums:
     add hl, de
     pop af
     ret
-.zero:
+SumRecZero:
     ld hl, 0
     ret
 ```

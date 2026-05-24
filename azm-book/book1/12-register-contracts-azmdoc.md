@@ -91,9 +91,9 @@ A loop counter in B is internal:
 ```asm
 @copy_bytes:
     ld b, 4
-.loop:
+CopyBytesLoop:
     ...
-    djnz .loop
+    djnz CopyBytesLoop
     ret
 ```
 
@@ -104,12 +104,12 @@ The caller does not read B after return. B was scratch inside the routine. You d
 ```asm
 @copy_bytes:
     push bc
-.loop:
+CopyBytesLoop:
     ld a, (hl)
     ld (de), a
     inc hl
     inc de
-    djnz .loop
+    djnz CopyBytesLoop
     pop bc
     ret
 ```
@@ -138,9 +138,9 @@ Likewise:
 
 ```asm
 ld b, 4
-.loop:
+CalcLoop:
     ...
-    djnz .loop
+    djnz CalcLoop
 ret
 ```
 
@@ -170,13 +170,13 @@ A complete contract for `find_max`:
 ;!      clobbers  B, HL
 @find_max:
   ld a, 0
-.loop:
+FindMaxLoop:
   cp (hl)
-  jr nc, .skip
+  jr nc, FindMaxSkip
   ld a, (hl)
-.skip:
+FindMaxSkip:
   inc hl
-  djnz .loop
+  djnz FindMaxLoop
   ret
 ```
 
@@ -219,7 +219,7 @@ Book 3 uses carry for success and failure (`ring_push`, `ring_pop`, and others).
     ...
     scf
     ret
-.empty:
+TryReadEmpty:
     or a        ; clears carry
     ret
 ```
@@ -288,20 +288,20 @@ The `@` prefix marks an explicit routine entry for register-care:
 
 Without `@`, AZM infers boundaries from label structure. That works for tiny routines but can misclassify internal labels as separate routines — splitting a push/pop body in the middle and producing nonsense contracts.
 
-### Failure story: global loop labels
+### Failure story: ambiguous routine boundaries
 
 ```asm
 check_collision:
     push bc
     ...
-loop:                   ; global label — looks like a new routine
+loop:                   ; plain label — looks like a new routine boundary
     ...
-done:                   ; another "routine" boundary
+done:                   ; another apparent boundary
     pop bc
     ret
 ```
 
-A tool may treat `loop` and `done` as separate entries. The `push bc` appears in one inferred routine and `pop bc` in another, so inferred preservation makes no sense.
+Without `@` labels, AZM's heuristic treats `loop` and `done` as new routine boundaries. The `push bc` appears in one inferred routine and `pop bc` in another, so inferred preservation makes no sense.
 
 Correct shape:
 
@@ -309,14 +309,14 @@ Correct shape:
 @check_collision:
     push bc
     ...
-.loop:
+CollisionLoop:
     ...
-.done:
+CollisionDone:
     pop bc
     ret
 ```
 
-`@check_collision:` starts the analysis span. Leading-dot labels (`.loop`, `.done`) are internal branch targets only. The callable symbol remains `check_collision` — callers write `call check_collision`, not `call @check_collision`.
+`@check_collision:` starts the analysis span and makes routine boundaries explicit. Plain labels inside the body — `CollisionLoop`, `CollisionDone` — are branch targets, not new routines. The callable symbol remains `check_collision` — callers write `call check_collision`, not `call @check_collision`.
 
 Multiple `@` labels before the first instruction declare aliases for the same body:
 
@@ -405,27 +405,27 @@ From Chapter 10's subroutines:
 ```asm
 @find_max:
   ld a, 0
-.loop:
+FindMaxLoop:
   cp (hl)
-  jr nc, .skip
+  jr nc, FindMaxSkip
   ld a, (hl)
-.skip:
+FindMaxSkip:
   inc hl
-  djnz .loop
+  djnz FindMaxLoop
   ret
 
 @count_above:
   push de
   ld d, 0
-.loop:
+CountAboveLoop:
   ld a, (hl)
   cp c
-  jr c, .skip
-  jr z, .skip
+  jr c, CountAboveSkip
+  jr z, CountAboveSkip
   inc d
-.skip:
+CountAboveSkip:
   inc hl
-  djnz .loop
+  djnz CountAboveLoop
   ld a, d
   pop de
   ret
@@ -498,7 +498,7 @@ Use it where informal discipline breaks down: live registers across `call`, docu
 - A contract is checked at the **call site**: caller liveness vs callee `in` / `out` / `clobbers`.
 - **Internal scratch** and **push/pop preservation** are not `out` values; preserved registers usually omit `clobbers`.
 - **Flags** (`carry`, `zero`, …) are first-class returns; put meaning in human `;` lines, carriers in `;! out`.
-- **`@name:`** marks routine entries; **`.loop`** / **`.done`** are internal labels, not separate routines.
+- **`@name:`** marks routine entries; plain labels inside an `@` body are branch targets, not new routines.
 - **`.asmi`** describes ROM/monitor/external code; **`--interface`** imports it.
 - Workflow: **`--reg-report`**, **`--contracts`**, **`--reg-interface`**, then **`--rc warn`** or **`--rc error`**.
 
@@ -512,12 +512,12 @@ Use it where informal discipline breaks down: live registers across `call`, docu
 ; copy_bytes: copy B bytes from HL to DE
 copy_bytes:
   push bc
-.loop:
+CopyBytesLoop:
   ld a, (hl)
   ld (de), a
   inc hl
   inc de
-  djnz .loop
+  djnz CopyBytesLoop
   pop bc
   ret
 ```
@@ -545,15 +545,15 @@ source.asm:18: warning: HL is live across call to find_max, but find_max may clo
 ;!      clobbers  B
 @normalize:
   cp $80
-  jr c, .done
+  jr c, NormalizeDone
   ld a, $7F
-.done:
+NormalizeDone:
   ret
 ```
 
 Does the body use B? What is the cost of a false clobber vs a missing one? Rewrite the contract.
 
-**6. `@` and local labels.** Rewrite `check_collision` from this chapter so `loop`/`done` cannot be mistaken for routine entries. Explain in one sentence why `@` plus `.loop` fixes the push/pop inference problem.
+**6. `@` and branch labels.** Rewrite `check_collision` from this chapter using `@check_collision:` and plain prefixed labels such as `CollisionLoop` and `CollisionDone`. Explain in one sentence why adding `@check_collision:` prevents those labels from being treated as separate routine boundaries.
 
 ---
 

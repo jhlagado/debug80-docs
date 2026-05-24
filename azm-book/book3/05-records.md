@@ -304,7 +304,7 @@ If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` w
     ld (ix + RING_COUNT), a
     scf
     ret
-.full:
+RingPushFull:
     or a
     ret
 ```
@@ -337,7 +337,7 @@ The byte to store starts in A; the routine moves it to E while using A for compa
     ld a, e
     scf
     ret
-.empty:
+RingPopEmpty:
     or a
     ret
 ```

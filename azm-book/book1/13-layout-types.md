@@ -531,10 +531,10 @@ sum_x_coords:
   ld a, 0                ; A  = running sum
   ld d, 0                ; D  = high byte for HL arithmetic
   ld e, POINT_SIZE       ; E  = stride (sizeof(Point) = 2)
-.loop:
+SumXLoop:
   add a, (hl)            ; add x coordinate (field offset 0)
   add hl, de             ; advance HL by POINT_SIZE to next point
-  djnz .loop
+  djnz SumXLoop
   ret
 ```
 
@@ -551,13 +551,13 @@ Now the loop reads every y coordinate. The expression `points + POINT_Y` is comp
 For a two-field read (both x and y from the same entry), load x, then add 1 to HL, then load y:
 
 ```asm
-.loop:
+ReadXYLoop:
   ld c, (hl)             ; C = x coordinate
   inc hl                 ; advance to y
   ld b, (hl)             ; B = y coordinate
   ; process C (x) and B (y) here
   inc hl                 ; advance past y to next entry
-  djnz .loop
+  djnz ReadXYLoop
 ```
 
 Because `sizeof(Point) = 2` and the fields are at offsets 0 and 1, each `inc hl` steps exactly one field. For a type with more fields, load DE with `POINT_SIZE` once before the loop and use `add hl, de` to step.

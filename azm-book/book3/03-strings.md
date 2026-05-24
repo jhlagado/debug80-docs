@@ -110,19 +110,19 @@ When output is wrong, check that HL still satisfies the invariant — not every 
 ;!      clobbers  AF, B, HL
 @strlen_u8:
     ld b, 0
-.loop:
+StrLenLoop:
     ld a, (hl)
     or a
-    jr z, .done
+    jr z, StrLenDone
     inc hl
     inc b
-    jr .loop
-.done:
+    jr StrLenLoop
+StrLenDone:
     ld a, b
     ret
 ```
 
-B is the running length. The loop invariant: at `.loop`, B equals the number of non-null bytes already passed.
+B is the running length. The loop invariant: at `StrLenLoop`, B equals the number of non-null bytes already passed.
 
 For `message` above, `str_len` at `$8008` should hold `$05` after `halt`.
 
@@ -138,13 +138,13 @@ Copying uses **two pointers**: HL reads, DE writes. Each iteration moves one byt
 ;!      out       DE
 ;!      clobbers  AF, HL, DE
 @strcpy_u8:
-.copy:
+StrCopyLoop:
     ld a, (hl)
     ld (de), a
     inc hl
     inc de
     or a
-    jr nz, .copy
+    jr nz, StrCopyLoop
     ret
 ```
 
@@ -165,24 +165,24 @@ Chapter 2's `find_byte_ge` returned the first index where `values[i] >= C`. Stri
 ;!      clobbers  AF, B, HL
 @str_find_char:
     ld b, 0
-.scan:
+FindCharScan:
     ld a, (hl)
     or a
-    jr z, .missing
+    jr z, FindCharMissing
     cp c
-    jr z, .found
+    jr z, FindCharFound
     inc hl
     inc b
-    jr .scan
-.found:
+    jr FindCharScan
+FindCharFound:
     ld a, b
     ret
-.missing:
+FindCharMissing:
     ld a, $FF
     ret
 ```
 
-Invariant at `.scan`: no byte at index `< B` equals C.
+Invariant at `FindCharScan`: no byte at index `< B` equals C.
 
 For `'L'` in `"HELLO"`, `find_index` should be `$02` (0-based).
 
@@ -198,31 +198,31 @@ Lexicographic compare reads one byte from each string until bytes differ or both
 ;!      out       A
 ;!      clobbers  AF, HL, DE
 @strcmp_u8:
-.cmp_loop:
+StrCmpLoop:
     ld a, (hl)
     push af
     ld a, (de)
     pop bc
     cp c
-    jr c, .less
-    jr nz, .greater
+    jr c, StrCmpLess
+    jr nz, StrCmpGreater
     or a
-    jr z, .equal
+    jr z, StrCmpEqual
     inc hl
     inc de
-    jr .cmp_loop
-.less:
+    jr StrCmpLoop
+StrCmpLess:
     ld a, $FF
     ret
-.greater:
+StrCmpGreater:
     ld a, 1
     ret
-.equal:
+StrCmpEqual:
     xor a
     ret
 ```
 
-Order matters: compare characters **before** you decide both strings ended. If both bytes are zero, `cp b` sets Z, the `jr nz` to `.greater` does not fire, and `.equal` returns 0. If one string is a prefix of the other, the shorter one ends first on a later iteration — `cp` sees `0` against a non-zero byte and returns less or greater correctly.
+Order matters: compare characters **before** you decide both strings ended. If both bytes are zero, `cp b` sets Z, the `jr nz` to `StrCmpGreater` does not fire, and `StrCmpEqual` returns 0. If one string is a prefix of the other, the shorter one ends first on a later iteration — `cp` sees `0` against a non-zero byte and returns less or greater correctly.
 
 The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$8009` should be `$01`.
 

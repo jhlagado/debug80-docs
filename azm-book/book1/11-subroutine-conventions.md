@@ -67,15 +67,15 @@ The fix: push and pop DE around the body.
 count_above:
   push de            ; save caller's DE (D used internally as counter)
   ld d, 0            ; D = running count
-.loop:
+CountAboveLoop:
   ld a, (hl)
   cp c
-  jr c, .skip        ; A < threshold: skip
-  jr z, .skip        ; A = threshold: skip (strictly above only)
+  jr c, CountAboveSkip   ; A < threshold: skip
+  jr z, CountAboveSkip   ; A = threshold: skip (strictly above only)
   inc d
-.skip:
+CountAboveSkip:
   inc hl
-  djnz .loop
+  djnz CountAboveLoop
   ld a, d            ; return count in A
   pop de             ; restore caller's DE
   ret
@@ -174,13 +174,13 @@ The comment block lives immediately before the subroutine label and declares eve
 ; Clobbers: B (reaches 0 after the loop), HL (advances past last byte)
 find_max:
   ld a, 0
-.loop:
+FindMaxLoop:
   cp (hl)
-  jr nc, .skip
+  jr nc, FindMaxSkip
   ld a, (hl)
-.skip:
+FindMaxSkip:
   inc hl
-  djnz .loop
+  djnz FindMaxLoop
   ret
 ```
 
@@ -199,15 +199,15 @@ The comment block for `count_above` with push/pop discipline:
 count_above:
   push de
   ld d, 0
-.loop:
+CountAboveLoop:
   ld a, (hl)
   cp c
-  jr c, .skip
-  jr z, .skip
+  jr c, CountAboveSkip
+  jr z, CountAboveSkip
   inc d
-.skip:
+CountAboveSkip:
   inc hl
-  djnz .loop
+  djnz CountAboveLoop
   ld a, d
   pop de
   ret
@@ -234,13 +234,13 @@ Here are both subroutines from Chapter 10 with full push/pop discipline and comp
 ; Preserves: C, D, E, IX, IY
 find_max:
   ld a, 0
-.loop:
+FindMaxLoop:
   cp (hl)
-  jr nc, .skip
+  jr nc, FindMaxSkip
   ld a, (hl)
-.skip:
+FindMaxSkip:
   inc hl
-  djnz .loop
+  djnz FindMaxLoop
   ret
 ```
 
@@ -257,15 +257,15 @@ find_max:
 count_above:
   push de            ; D used as counter; save caller's DE
   ld d, 0
-.loop:
+CountAboveLoop:
   ld a, (hl)
   cp c               ; compare byte against threshold
-  jr c, .skip        ; A < C: skip (carry set = unsigned less-than)
-  jr z, .skip        ; A = C: skip (zero set = equal, not above)
-  inc d              ; A > C: increment counter
-.skip:
+  jr c, CountAboveSkip   ; A < C: skip (carry set = unsigned less-than)
+  jr z, CountAboveSkip   ; A = C: skip (zero set = equal, not above)
+  inc d                  ; A > C: increment counter
+CountAboveSkip:
   inc hl
-  djnz .loop
+  djnz CountAboveLoop
   ld a, d            ; move count from D into A for return
   pop de             ; restore caller's DE before returning
   ret
@@ -327,12 +327,12 @@ Write the correct epilogue (three pops in the right order). Then explain what ha
 sum_bytes:
   push bc
   ld c, 0            ; C = running sum
-.loop:
+SumBytesLoop:
   ld a, (hl)
   add a, c
   ld c, a
   inc hl
-  djnz .loop
+  djnz SumBytesLoop
   ld a, c
   pop bc
   ret
@@ -343,15 +343,15 @@ If `b` is loaded with 0 before the call, `djnz` will execute 256 times (the Z80'
 ```asm
   ld a, (hl)
   or a
-  jr z, .early_exit  ; found zero, abort
+  jr z, SumEarlyExit ; found zero, abort
   add a, c
   ld c, a
   inc hl
-  djnz .loop
+  djnz SumBytesLoop
   ld a, c
   pop bc
   ret
-.early_exit:
+SumEarlyExit:
   ld a, 0
   ret                ; BUG: missing pop
 ```
