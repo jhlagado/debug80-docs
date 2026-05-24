@@ -415,7 +415,7 @@ Open the `.z80` file alongside the original `.asm` to verify that AZM computed w
 - Layout expressions should expand to the expected address constants
 - Op call sites should expand to the expected instruction sequences
 
-This is particularly useful when a layout calculation produces an unexpected result: the lowered source shows the folded constant directly.
+This is particularly useful when a layout calculation produces an unexpected result: the lowered source shows the computed value directly.
 
 **`--asm80` and register-care:**
 

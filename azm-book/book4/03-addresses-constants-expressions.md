@@ -247,7 +247,7 @@ Expressions in `.equ` compute in assembler-integer arithmetic (typically 32-bit)
 
 ## Expressions
 
-An expression in AZM is any combination of numeric literals, symbols, layout queries (`sizeof`, `offset`), and arithmetic operators that folds to an integer constant at assemble time. Expressions appear in instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands, and layout declarations.
+An expression in AZM is any combination of numeric literals, symbols, layout queries (`sizeof`, `offset`), and arithmetic operators that the assembler evaluates to an integer before writing the binary. Expressions appear in instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands, and layout declarations.
 
 ### Literals
 
@@ -318,7 +318,7 @@ In a `.equ` or data context, `$` resolves to the address *after* the last emitte
         bit  FLAG_BIT,a           ; bit index must be 0–7
 ```
 
-AZM substitutes the folded constant into the instruction encoding. Range checking follows.
+AZM evaluates the expression and substitutes the result into the instruction encoding. Range checking follows.
 
 ### Expressions in data directives
 
@@ -337,17 +337,19 @@ To split a 16-bit address into two bytes, use bitwise operators:
 .db (VECTOR_TABLE >> 8) & $FF ; high byte
 ```
 
-### Constant folding
+### Assembly-time evaluation
 
-AZM folds all expressions at assemble time. An expression whose value depends on a runtime register or flag cannot appear as an assembler expression — it would be a Z80 instruction sequence, not a constant.
+Every expression in AZM is evaluated by the assembler before anything runs on the Z80. The assembler computes the value and writes the result — a plain number — into the binary. The Z80 never sees the expression, only the bytes it produced.
 
 ```asm
-; These are compile-time constants:
-SIZE   .equ sizeof(Sprite) * 16
-OFFSET .equ offset(Sprite, flags)
+SIZE   .equ sizeof(Sprite) * 16   ; assembler computes this; the Z80 sees a number
+OFFSET .equ offset(Sprite, flags) ; same — a number by the time the binary is written
+```
 
-; This is an instruction, not an expression:
-        add  hl,bc           ; runtime addition
+Anything that depends on a register value or a runtime condition cannot be an assembler expression. That is ordinary Z80 code:
+
+```asm
+        add  hl,bc    ; Z80 runs this — the result depends on what HL and BC hold at runtime
 ```
 
 ### Range checks

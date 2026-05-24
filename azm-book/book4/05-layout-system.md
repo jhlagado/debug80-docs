@@ -535,7 +535,7 @@ ld   hl,SPRITES + offset(Sprite, flags)
 ld   hl,SPRITES + (3 * sizeof(Sprite)) + offset(Sprite, flags)
 ```
 
-These are ordinary expressions. They fold to constants at assemble time.
+These are ordinary expressions, evaluated by the assembler before the binary is written.
 
 ### Layout-cast syntax
 
@@ -579,7 +579,7 @@ ld   a,(<Sprite[16]>SPRITES[3].flags)   ; load byte at that address
 ld   hl,<Sprite[16]>SPRITES[3].flags    ; load the address itself into HL
 ```
 
-The outer parentheses are Z80 memory-dereference syntax, not part of the cast. After folding, `ld a,(SPRITES + 15)` is what the assembler emits.
+The outer parentheses are Z80 memory-dereference syntax, not part of the cast. The assembler evaluates the cast to a plain address — `ld a,(SPRITES + 15)` is what ends up in the binary.
 
 ### Compile-time indices only
 
@@ -664,13 +664,13 @@ TIMER:
         .ds Counter16
 
 ; Access the word view:
-ld   hl,<Counter16>TIMER.count      ; folds to TIMER + offset(Counter16, count)
+ld   hl,<Counter16>TIMER.count      ; assembler computes: TIMER + offset(Counter16, count)
 
 ; Access the low byte:
-ld   a,(<Counter16>TIMER.lo)        ; folds to (TIMER + offset(Counter16, lo))
+ld   a,(<Counter16>TIMER.lo)        ; assembler computes: (TIMER + offset(Counter16, lo))
 ```
 
-Both fields have offset 0, so both casts fold to the same address as the bare label. The cast records which view the code is using.
+Both fields have offset 0, so both casts resolve to the same address as the bare label. The cast records which view the code is using.
 
 When a union is nested inside a record, the path steps through both:
 
