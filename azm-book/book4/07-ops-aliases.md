@@ -288,25 +288,7 @@ Op declarations are about what you want to write. Aliases are about what existin
 
 ### The canonical directive set
 
-AZM teaches a small set of canonical directives, all lowercase and dotted:
-
-| Directive | Purpose |
-|-----------|---------|
-| `.org` | Set assembly address |
-| `.equ` | Named constant |
-| `.db` | Define bytes |
-| `.dw` | Define words |
-| `.ds` | Reserve storage |
-| `.include` | Include file |
-| `.end` | End source |
-| `.align` | Alignment padding |
-| `.cstr` | C-style string |
-| `.pstr` | Pascal-style string |
-| `.istr` | Inverted terminator string |
-| `.binfrom` | Binary range start |
-| `.binto` | Binary range end |
-
-New AZM source should use these spellings. The alias layer exists for compatibility, not as a preferred alternative — when writing from scratch, use the canonical forms throughout.
+AZM's canonical directives are lowercase and dotted: `.org`, `.equ`, `.db`, `.dw`, `.ds`, `.include`, `.end`, `.align`, `.cstr`, `.pstr`, `.istr`, `.binfrom`, `.binto`. See [Appendix A](appendix-a-directives.md) for the full directive reference. New AZM source should use these spellings. The alias layer exists for compatibility, not as a preferred alternative — when writing from scratch, use the canonical forms throughout.
 
 ### The built-in `azm` alias profile
 

@@ -275,21 +275,7 @@ TABLE_LEN .equ TABLE_END - TABLE      ; address arithmetic
 
 ### Arithmetic operators
 
-AZM supports symbolic operators only:
-
-| Operator | Meaning |
-|----------|---------|
-| `+` | addition |
-| `-` | subtraction (or unary negate) |
-| `*` | multiplication |
-| `/` | integer division |
-| `%` | modulo |
-| `&` | bitwise AND |
-| `\|` | bitwise OR |
-| `^` | bitwise XOR |
-| `~` | bitwise complement (unary) |
-| `<<` | left shift |
-| `>>` | right shift |
+AZM supports symbolic operators only: `+` `-` `*` `/` `%` `&` `|` `^` `~` `<<` `>>`. See [Appendix B](appendix-b-operators.md) for the full precedence table and numeric literal formats.
 
 Word-form operators (`MOD`, `AND`, `OR`, `XOR`, `NOT`, `SHL`, `SHR`) are not recognised. `%` has two roles: as a number prefix it introduces a binary literal (`%10101010`), and as an infix operator it is modulo. A `%` after an expression is modulo; a `%` at the start of a value is a binary literal.
 

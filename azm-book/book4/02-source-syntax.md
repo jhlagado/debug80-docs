@@ -71,20 +71,7 @@ Any assembler that does not know AZMDoc sees `;!` lines as ordinary comments. Th
 
 ## Number formats
 
-AZM accepts all the numeric literal forms that appear in common Z80 assembly literature. You can mix them freely in expressions — no need to convert numbers from one form to another.
-
-AZM accepts eight numeric literal forms across decimal, hexadecimal, binary, and ASCII:
-
-| Form | Example | Base | Notes |
-|------|---------|------|-------|
-| `$` prefix | `$FF`, `$0100`, `$2A` | hex | `$` alone is the current assembly address |
-| `0x` prefix | `0xFF`, `0x2A`, `0x1A` | hex | case-insensitive prefix |
-| Trailing `H`/`h` | `0FFH`, `02Ah`, `0100H` | hex | must start with a decimal digit |
-| `%` prefix | `%10101010`, `%1111` | binary | |
-| `0b` prefix | `0b10101010`, `0b1111` | binary | case-insensitive prefix |
-| Trailing `B`/`b` | `10101010B`, `10b` | binary | |
-| Plain decimal | `42`, `255`, `0` | decimal | |
-| Quoted character | `'A'`, `"Z"` | ASCII value | single character; valid in expressions |
+AZM accepts all the numeric literal forms that appear in common Z80 assembly literature: `$FF` and `0xFF` for hex, trailing-`H` (`0FFH`), `%10101010` and `0b10101010` for binary, trailing-`B`, plain decimal (`42`), and quoted ASCII character (`'A'`). You can mix them freely in any expression. See [Appendix B](appendix-b-operators.md) for the full table with all variants and base notes.
 
 For trailing-`H` hex, the token must start with a decimal digit. `0FFH` is hex 255, but `FFH` starts with a letter, so the parser reads it as a symbol name. Write `0FFH` to force hex interpretation.
 
