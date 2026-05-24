@@ -109,6 +109,26 @@ Multi-character string literals appear in `.db`, `.cstr`, `.pstr`, and `.istr` o
 .db "Hello",0        ; 6 bytes: H e l l o NUL
 ```
 
+The three string directives encode common string formats without making you
+write the terminator or length byte by hand:
+
+```asm
+Greeting:
+        .cstr "READY"        ; R E A D Y $00
+
+MenuTitle:
+        .pstr "MONITOR"      ; $07 M O N I T O R
+
+Prompt:
+        .istr "?"            ; '?' with bit 7 set
+```
+
+Use `.cstr` when a routine scans forward until it reads a zero byte. Use
+`.pstr` when the routine wants the byte count first. Use `.istr` for monitor or
+display code that marks the last character by setting bit 7 on that final byte.
+The source says which format the data uses; the emitted bytes are still ordinary
+bytes in the output image.
+
 `.dw` accepts word expressions, including single-character quoted values (`'A'` or `"A"` evaluate to the ASCII code as a 16-bit value). It does not accept multi-character string fragments.
 
 Single-character strings in expression context evaluate to the character's ASCII code:
