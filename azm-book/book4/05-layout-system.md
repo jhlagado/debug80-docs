@@ -9,7 +9,9 @@ nav_order: 5
 
 # Chapter 5 — The Layout System
 
-AZM's layout system describes memory structures at assemble time: how many bytes a record takes, where each field sits, how unions overlay the same region with multiple interpretations. This chapter covers the full system — scalar type names, `sizeof` and `offset`, record declarations with `.type`, union declarations with `.union`, and the compact cast syntax for accessing fields by name.
+If you have written Z80 programs with structured data — sprite tables, packet headers, hardware register maps — you have probably managed field offsets by hand: a set of `.equ` constants, or comments, or both, that track where each piece of a record lives in memory. AZM's layout system is a compile-time alternative. You declare what a record looks like, and the assembler computes the sizes and offsets for you. Your code accesses fields by name instead of by hardcoded byte offset.
+
+Of all AZM's features, the layout system will feel the least familiar to most Z80 programmers. Nothing here changes the Z80 instruction set or the bytes the assembler produces — layout types are purely a tool for computing constants. But the way those constants are derived, and the syntax for using them, takes a few sections to absorb. Work through this chapter in order the first time; the sections build on each other.
 
 ---
 
@@ -126,11 +128,15 @@ The equivalence is exact. The type form documents intent while still reserving a
 
 Layout types produce no runtime objects, no hidden loads or stores, and no tag bytes. The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
 
+AZM holds to this contract strictly: it never generates a load or a store you did not write. When you use `.ds Sprite[16]`, you are saying: reserve this many bytes, and here is the type name so that `sizeof` and `offset` can work with it. The memory accesses are your Z80 instructions, unchanged.
+
 ---
 
 ## Records with `.type`
 
 ### Declaring a record
+
+A `.type` block is where you describe a record layout. Think of it as a table of contents for a fixed-size region of memory: each field has a name, a size, and an offset that the assembler computes by summing the fields before it. Once the block is declared, `sizeof` and `offset` give you those numbers anywhere you need them.
 
 A `.type` block describes the fields of a record layout:
 
@@ -153,6 +159,8 @@ Field declarations inside `.type` use `.byte`, `.word`, `.addr`, or `.field`:
 | `name .field TypeExpr` | field of any layout size |
 
 `.byte`, `.word`, and `.addr` are shorthand for `.field byte`, `.field word`, and `.field addr`. They do not emit bytes; they describe the layout.
+
+All four field forms reserve the same kind of space. The difference is size: `.byte` is one byte, `.word` and `.addr` are each two bytes, and `.field` takes whatever size expression you give it. The assembler inserts no padding between fields — the layout is exactly as you declare it, packed.
 
 ### Fields with `.field`
 
@@ -196,7 +204,11 @@ SPRITE_PTR   .equ offset(Sprite, ptr)      ; 3
 
 These are ordinary integer constants. Put them in `.equ` lines when the name will appear in multiple places; use `sizeof` and `offset` directly in operands when the constant is used once.
 
+The `.equ` approach becomes especially valuable during refactoring. You have one canonical offset definition, derived from the layout declaration, and the rest of the code uses that name. When you add a field to the record, `SPRITE_FLAGS` and `SPRITE_PTR` update automatically — every instruction that uses them picks up the new offset without any edits.
+
 ### Nested record access with `offset`
+
+When a record embeds another record as a field, `offset` can reach through both layers with a dotted path. The assembler computes the arithmetic at assemble time: take the offset of the outer field, then add the offset of the inner field within its type.
 
 For a record that contains another record as a field:
 
@@ -270,6 +282,8 @@ For runtime indexing — when `n` is in a register — write the address arithme
 
 The layout declaration supplies `sizeof(Sprite)`; the instruction sequence is still yours.
 
+Runtime indexing follows this pattern throughout: the assembler gives you `sizeof(Sprite)`, and you multiply it by the index in a register using shifts and adds. The multiplication is ordinary Z80 arithmetic that you write, informed by the constant the layout system computed.
+
 ### Initialized records
 
 An initialized record is written as `.db` / `.dw` in field order:
@@ -319,6 +333,8 @@ data    .field byte[64]  ; 64-byte data field
 
 ### `sizeof` on arrays, and `offset` with array index paths
 
+When you have an array of records and need the total byte count — to pass as a block size, or to allocate storage — `sizeof` works with array expressions directly. You do not need to multiply yourself.
+
 `sizeof` accepts any type expression, including array forms:
 
 ```asm
@@ -352,9 +368,13 @@ ELEM2_FLAGS .equ offset(Sprite[16], [2].flags)
 
 The index inside an `offset` array path must be a numeric literal — a bare integer like `[2]`, not a symbol or expression. Layout-cast paths (`<Sprite[16]>TABLE[IDX].flags`) accept compile-time constant expressions in their brackets, but `offset()` paths do not. A register value or a symbol produces an error in both cases.
 
+These `offset` array paths are most useful for writing initialization tables or verification constants: you want the offset of a specific element's field as a compile-time constant, not as part of a runtime access pattern. For runtime element access, write the address arithmetic yourself.
+
 ---
 
 ## Unions and alternate views
+
+Z80 code often reads the same memory location through different-sized accesses. A timer counter might be read as a 16-bit word in some routines and as a low byte in others. A packet buffer might be interpreted as raw bytes at one level and as a structured header at another. Unions give both access patterns named fields and make the relationship between them explicit in the source.
 
 A union describes multiple overlapping views of the same bytes. All fields in a union start at offset zero. The union's total size is the size of its largest member. No bytes are shared in the sense of interleaving — every member covers the full span from zero to its own size.
 
@@ -399,11 +419,11 @@ word_view .word         ; 2 bytes
 ; sizeof(Status) = 2
 ```
 
-Because all members start at offset 0, a 1-byte member in a 2-byte union refers only to the low byte of that storage.
+Because all members start at offset 0, a 1-byte member in a 2-byte union refers only to the low byte of that storage. The size rule is what makes the storage reservation correct: `.ds Status` reserves two bytes, and both the byte view and the word view fit within those two bytes.
 
 ### Hardware register overlays
 
-A common use: a hardware peripheral register that can be accessed as a byte or a word depending on the operation:
+Hardware peripherals often expose the same register at both byte and word widths. A timer's low byte may be accessible for quick checks, while the full 16-bit count is read as a word for precision timing. A union gives both views named fields and makes the intent explicit. A common use: a hardware peripheral register that can be accessed as a byte or a word depending on the operation:
 
 ```asm
 .union TimerReg
@@ -435,6 +455,8 @@ TIMER_CNT .equ TIMER + 0    ; same address as LO, 16-bit access
 ```
 
 With a union, `sizeof` and `offset` stay correct regardless of future edits to the layout.
+
+The `.equ` alternative — bare address constants that duplicate each other's values — works until someone adds a field or moves the region. A union declaration captures the relationship in one place; the constants derive from it automatically.
 
 ### Word/byte view idiom
 
@@ -520,6 +542,8 @@ The exact syntax for embedded anonymous inline unions inside a `.type` is not ye
 
 ## Compact layout access syntax
 
+Everything described so far — `sizeof`, `offset`, manual expressions — is always valid and always explicit. Once you have declared types, there is a more compact syntax for building field-address expressions. It reads like a typed pointer dereference, and resolves to the same arithmetic that `sizeof` and `offset` would produce.
+
 The `sizeof` and `offset` forms above are always correct. Layout casts are shorter notation for the same constants.
 
 ### The long form
@@ -535,7 +559,7 @@ These are ordinary expressions, evaluated by the assembler before the binary is 
 
 ### Layout-cast syntax
 
-A layout cast writes the same constant more compactly:
+A layout cast writes the same constant more compactly. The long form is always correct; the cast is notation you can use when the field path is the interesting part and the arithmetic is noise.
 
 ```asm
 ld   hl,<Sprite>SPRITES.flags
@@ -613,6 +637,8 @@ ld   hl,PLAYER + offset(Actor, pos.x)
 
 ### When to use layout casts vs explicit arithmetic
 
+The boundary is clear: if the index is known at assemble time, either form works and the cast is shorter. If the index lives in a register at runtime, you write the arithmetic yourself.
+
 Use layout casts for constant-index access: initialization, debug checks, tables where the index is always a named constant.
 
 Use explicit arithmetic when the index is in a register:
@@ -627,6 +653,8 @@ Use explicit arithmetic when the index is in a register:
         ld   de,SPRITE_FLAGS
         add  hl,de           ; HL = address of flags field for sprite A
 ```
+
+AZM cannot generate runtime index computation from a cast expression — the cast is purely compile-time. When you need a runtime index, write the arithmetic yourself.
 
 ### Common mistakes
 

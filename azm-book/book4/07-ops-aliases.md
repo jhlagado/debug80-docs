@@ -9,13 +9,17 @@ nav_order: 7
 
 # Chapter 7 — Op Declarations and Aliases
 
-Two features extend the directive set covered so far: op declarations let you define reusable instruction idioms that expand inline at each call site, and directive aliases let legacy spellings like `DEFB` resolve to canonical AZM directives. This chapter covers both.
+The previous chapters covered everything you need to assemble Z80 programs with AZM. This chapter adds two features that make that process more convenient: op declarations, which let you name and reuse small instruction idioms without subroutine call overhead, and directive aliases, which let legacy spellings from other assemblers work transparently in AZM source.
+
+Both are optional. Op declarations are useful when you have a multi-instruction pattern that appears many times and you want it to read as a single named operation in source. Aliases are useful when you have existing source with `DEFB` or `DEFW` and want to assemble it without editing every line.
 
 ---
 
 ## Op declarations
 
 An op is a named instruction idiom that expands inline at each call site into ordinary Z80 instructions. At each expansion, the assembler parses and matches operands as structured assembly — no text substitution, no call overhead, no return address. The expanded instructions appear in the listing at the call site exactly as if you had typed them.
+
+The key difference from a subroutine is expansion, not behavior. When the assembler processes an op call site, it replaces it with the body instructions immediately — no `call`, no `ret`, no return address on the stack. From the CPU's perspective, those instructions were always there.
 
 ### Simple zero-operand ops
 
@@ -73,6 +77,8 @@ Expands to:
         ld   b,$FF
 ```
 
+The operand class `reg8` matches any 8-bit register. At the call site `load8 a,42`, the assembler matches `a` to `reg8` and `42` to `imm8`, then substitutes them into the body. The matching is structural — not text substitution — so the assembler knows `a` is a register, not a symbol named `a`.
+
 ### Operand classes
 
 Operand classes match categories of Z80 operands. The full set supported in AZM ops:
@@ -113,6 +119,8 @@ end
 ```
 
 If no overload matches, AZM reports an ambiguity or no-match diagnostic.
+
+Overloading lets you write a family of related idioms under one name. The assembler selects the right one by matching operand classes. If your op should work for both 8-bit and 16-bit registers, two overloads with `reg8` and `reg16` handle both without requiring different names at each call site.
 
 ### Exact-token operands
 
@@ -200,6 +208,8 @@ end
 
 AZM tracks the expansion stack and stops with an error when the same op appears in its own expansion chain. This protects against both direct recursion and mutual recursion between two ops.
 
+Deeply nested ops can be easier to write than to read. Because the listing shows fully expanded instructions at the call site, not the nested op calls, tracing what a call to a three-level nested op produces means reading back through the definitions. For ops that chain more than one level deep, keeping the nesting shallow makes the listing more useful.
+
 ### Diagnostics for ops
 
 Message wording is illustrative. AZM reports a shaped `AZMN_PARSE` diagnostic; exact text may vary.
@@ -268,9 +278,13 @@ Include it early in the main file:
 
 Choose op names that do not collide with Z80 mnemonics. `clear_a` is fine; `ld` is not. Op names that shadow mnemonics produce a parse error. Use underscore-separated lowercase names that read as instructions (`shift_left_4`, `negate_a`, `memcopy`) rather than function names.
 
+`clear_a` reads as an instruction even though it is not a Z80 built-in — you know at a glance what it does and that it expands inline. A name like `InitSprites` looks like a subroutine call, which implies a `call` instruction and a return address on the stack, neither of which an op uses. Instruction-style names set the right expectation.
+
 ---
 
 ## Aliases and compatibility syntax
+
+Op declarations are about what you want to write. Aliases are about what existing source already has. If you have Z80 source written for a different assembler — one that uses `DEFB`, `DEFW`, `RMB`, or other directive spellings — aliases let you assemble that source in AZM without changing a line.
 
 ### The canonical directive set
 
@@ -292,7 +306,7 @@ AZM teaches a small set of canonical directives, all lowercase and dotted:
 | `.binfrom` | Binary range start |
 | `.binto` | Binary range end |
 
-New AZM source should use these spellings.
+New AZM source should use these spellings. The alias layer exists for compatibility, not as a preferred alternative — when writing from scratch, use the canonical forms throughout.
 
 ### The built-in `azm` alias profile
 
@@ -366,6 +380,8 @@ DB   42           ; normalized to: .db 42
 The operands `"Hello",0` and `42` pass through unchanged.
 
 Aliases cannot rewrite instruction mnemonics. `MOV` does not map to `LD`. If you have source using `MOV` for `LD`, you need a source transformation pass before AZM can assemble it — directive aliases are not the right tool.
+
+Directive head normalization and op expansion together cover the vast majority of source compatibility needs. The one gap is instruction mnemonics: if your source uses non-standard opcode spellings, those lines need manual conversion before AZM will accept them.
 
 ### The difference between aliases and ops
 

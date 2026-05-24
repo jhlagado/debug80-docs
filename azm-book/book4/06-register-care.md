@@ -9,7 +9,9 @@ nav_order: 6
 
 # Chapter 6 — Register Care and Contracts
 
-AZM can infer what each subroutine does to registers and flags, check those inferences against call sites, and report conflicts. This chapter covers the `@` entry-label system that marks routine boundaries, the AZMDoc `;!` contract syntax that records what a routine reads and returns, and the full workflow from first audit to enforced CI checking.
+Register bugs are among the hardest to find in Z80 assembly. A loop counter survives twenty call sites and then silently gets clobbered on the twenty-first. A carry flag is meaningful for three instructions and then destroyed by a call to a routine that clears it as a side effect. The program runs correctly on most inputs and breaks on one specific path.
+
+AZM's register-care system addresses this by making the register contracts between routines explicit and machine-checkable. You mark routine boundaries with `@` labels, describe what each routine reads and returns in AZMDoc comment blocks, and choose how strictly the assembler enforces those contracts. This chapter explains each part of that system and how to adopt it incrementally.
 
 ---
 
@@ -18,6 +20,8 @@ AZM can infer what each subroutine does to registers and flags, check those infe
 Every `call` in Z80 assembly is a contract: the calling code hands certain register values to the callee and expects certain values back. The callee may destroy registers the caller still needs. In practice this produces subtle bugs — a loop counter, a pointer, or a carry flag survives across a call only because you remembered to save it, or wrote a callee that happens not to clobber it, or got lucky.
 
 AZM's register-care system makes those contracts explicit and checkable at assemble time. It infers what each routine does to registers and flags, checks that against what callers need, and reports conflicts. Register care is AZM's form of liveness analysis — the technique compilers use to track which values in registers are still needed at each program point. In a compiler, that analysis is invisible and automatic; in AZM, it surfaces as a check: the analyzer warns you when a call site leaves a live value in a register that the called routine will clobber.
+
+Running register-care for the first time on an existing codebase is often revealing. Most warnings will be real — values that survive across calls only because no one has triggered the path where they get clobbered — but some will be genuine bugs that have been dormant for a long time. A working binary today does not mean the register management is correct; it means the wrong path has not been executed yet.
 
 ## Routine boundaries: `@` entry labels
 
@@ -43,6 +47,8 @@ Only `@`-labeled routines get precise analysis. Running `--contracts` writes `;!
 
 Without any `@` labels, AZM falls back to a heuristic: a plain label after at least one instruction begins a new routine boundary. This can misfire — particularly when a push/pop routine has a branch label inside the body that splits the analysis span before the matching pop.
 
+Adding `@` labels to an existing source file is the first concrete step toward register-care checking. You do not need contracts yet — add `@` before each named routine entry and let the assembler infer what each routine does. The `--rc audit` mode does this without producing any diagnostics, so it is safe to run on any existing project.
+
 ## Plain labels inside `@` routines
 
 When a file has `@` labels, plain branch labels inside an `@` routine body are ordinary branch targets — they do not start new routines. AZM has no local-label namespace: plain labels are global symbols, unique across the entire translation unit.
@@ -59,6 +65,8 @@ ScanRowBitLoop:
 
 `ScanRowBitLoop` is a plain branch label inside `SCAN_ROW`. Register-care sees the whole body as one span. If `SCAN_ROW` pushed a register, the pop anywhere after `ScanRowBitLoop` would be found and the register counted as preserved. The next `@` label starts the next analyzed routine.
 
+Adding `@` labels throughout your source — rather than at a handful of well-known routines — gives the analyzer clean boundaries everywhere. Without a `@` boundary, a branch label inside a routine body could split the analysis at the wrong point and produce a false clobber report — or miss a genuine one.
+
 ## What does register-care infer?
 
 Given a routine body, AZM infers:
@@ -67,6 +75,8 @@ Given a routine body, AZM infers:
 - **Clobbers** (`clobbers`): registers written and not restored to the incoming value
 
 The inference follows the instruction stream through the control-flow graph of the routine body. At each `ret`, AZM compares the current register state (what tokens are in each register) against the entry state. A register that carries the entry token on all return paths is preserved. One that carries a different token is clobbered or an output.
+
+The inference is static — it follows the control-flow graph through the instruction stream. It handles push/pop pairs, straight-line code, and branch paths within the routine body. What it cannot track is anything that happens through indirect means: a callee's effect on RAM, or runtime-computed results. For those situations, you supply the contract manually through `;!` blocks.
 
 ## Caller-side conflict checking
 
@@ -104,7 +114,11 @@ azm --rc strict program.asm     # fail on any unresolved contract
 
 Default is `off` — no analysis.
 
+The four levels form a progression. Start with `audit` to see what the analyzer infers without affecting the build. Move to `warn` when you want to see conflicts during development. Move to `error` once you have resolved the conflicts you care about. `strict` is for projects where any unresolved contract is unacceptable — use it in CI pipelines after the project has been fully annotated.
+
 ## External contracts
+
+When you call a ROM monitor routine or a library routine whose source you cannot include, the analyzer has no instruction stream to infer from. Without a contract, it assumes the worst: the callee modifies all registers and flags. That produces a wall of spurious warnings at every ROM call site. External contracts give the analyzer real information, precisely as you would write a `;!` block for your own routines.
 
 For routines whose source is not assembled with yours (ROM monitor calls, library binaries), write contracts in an `.asmi` file:
 
@@ -129,7 +143,7 @@ Load with `--interface mon3.asmi`. The analyzer uses these contracts at call sit
 azm --reg-profile mon3 program.asm
 ```
 
-The `mon3` profile provides built-in register-care summaries for MON3 RST service calls. Without it, calls to ROM RST addresses appear as unknown targets and the analyzer assumes they modify all registers.
+The `mon3` profile provides built-in register-care summaries for MON3 RST service calls. Without it, calls to ROM RST addresses appear as unknown targets and the analyzer assumes they modify all registers. Using the profile is the quickest way to get accurate analysis on TEC-1 and MON3-based projects.
 
 ## Analysis scope and limits
 
@@ -144,7 +158,7 @@ It does not prove:
 - Interrupt handler effects
 - Self-modifying code
 
-For these, external contracts or manual annotations are the mechanism.
+For these, external contracts or manual annotations are the mechanism. Knowing the limits tells you what the analyzer can catch and what it cannot — a clean register-care report means no conflicts in the analyzable portions of your code, not a guarantee about interrupt handlers or indirect calls.
 
 ## Generating contracts from inference
 
@@ -158,7 +172,9 @@ azm --contracts --rc audit program.asm
 
 AZM infers register contracts for each `@` routine and inserts `;!` blocks directly above the entry labels. On subsequent runs, it replaces the generated block. Human prose comments above the `;!` block are preserved untouched — only the contiguous block of `;!` lines is tool-owned.
 
-Review generated contracts after the first run. Generated contracts are inferred — verify them before relying on them in production source. Inference works well for routines that push/pop symmetrically and have clear data-flow, but can misclassify intentional in/out transformations (a register read as input and returned modified) as clobbers. When AZM infers a clobber but the value is intentionally returned, use `--accept-out` to promote it:
+Review generated contracts after the first run. Generated contracts are inferred — verify them before relying on them in production source. The generated block is a starting point, not a final answer.
+
+Inference works well for routines that push/pop symmetrically and have clear data-flow, but can misclassify intentional in/out transformations (a register read as input and returned modified) as clobbers. When AZM infers a clobber but the value is intentionally returned, use `--accept-out` to promote it:
 
 ```sh
 azm --accept-out NORMALISE_COORD:DE --rc audit program.asm
@@ -173,6 +189,8 @@ azm --rc audit --reg-interface program.asm
 ```
 
 Writes `program.asmi` with `extern` contract records for every `@` routine. Other projects that link against your code can load this file with `--interface` to get analysis-quality call-site checking without your source.
+
+Publishing an `.asmi` file alongside a library binary is the Z80 equivalent of distributing a header file. The callers get the full register contract at every call site, without needing access to your source.
 
 ## Conservative autofix
 
@@ -193,9 +211,13 @@ After `--fix` runs:
 
 `--fix` is useful for an initial sweep on legacy source. It is not a substitute for designed register management.
 
+The distinction is worth keeping clear. `--fix` solves the mechanical problem: a register value that would survive across a call if you wrap the call in a push/pop. Designed register management solves the structural problem: callers pass values in registers the callee expects, the callee returns values in registers the caller reads, and both agree on what happens to the rest. `--fix` gets you to the first level quickly. Getting to the second requires reading the contracts that `--contracts` generates and deciding whether they describe the intended design.
+
 ---
 
 ## AZMDoc syntax
+
+The register-care analysis works from two sources: what it can infer from the instruction stream, and what you tell it explicitly. AZMDoc is the explicit layer. A `;!` block above a routine entry records the contract in a form both you and the analyzer can read — and keeps human prose comments separate from machine-readable annotations.
 
 AZMDoc is the comment format for machine-readable register contracts. The `;!` prefix (introduced in Chapter 2's discussion of comments) keeps contracts separate from human prose so the register-care analyzer never has to mine prose for meaning. AZMDoc metadata is parse-only; the assembled bytes are unaffected.
 
@@ -219,7 +241,7 @@ The `;!` lines must be directly above the entry label with no intervening blank 
 
 ### Contract keys
 
-Four keys are recognized:
+Four keys are recognized. Together they cover every possible register fate:
 
 | Key | Meaning |
 |-----|---------|
@@ -229,6 +251,8 @@ Four keys are recognized:
 | `preserves` | Registers/flags the routine restores to their entry value |
 
 `preserves` is typically omitted in generated contracts — unlisted carriers are assumed not part of the visible damage. Omitting `preserves` does not mean "clobbers everything"; it means the contract does not make an explicit promise about those registers.
+
+A register the routine reads before writing is an input (`in`). One that carries a meaningful value on exit is an output (`out`). One written during the routine and not restored is clobbered (`clobbers`). One pushed on entry and popped on exit is preserved (`preserves`). A register not mentioned in any key is not part of the contract.
 
 ### Carrier lists
 
@@ -288,6 +312,8 @@ For one-off call sites where the callee's contract is ambiguous or not yet writt
 
 `expects out DE` tells the analyzer that this call site intentionally consumes DE as a callee-produced output, suppressing the "pre-call DE may be destroyed" diagnostic for this one call. Hints are not the preferred mechanism — a callee contract is better — but they are useful when annotating legacy source incrementally.
 
+The practical reason hints exist is the migration path. When you enable register-care on a large existing project, you might have fifty call sites with conflicts. A callee contract fixes all of them at once; a hint fixes one. Hints let you silence the known-correct cases while you work through the ones that need attention, without having to fully annotate every callee before you can get a useful report.
+
 ### External interface files (`.asmi`)
 
 Contracts for routines whose source is not assembled with yours belong in `.asmi` files. `.asmi` is metadata only — not assembly source, not valid as an entry file:
@@ -325,6 +351,8 @@ Writes `program.asmi` with inferred extern records for every `@` routine. Other 
 
 ### AZMDoc and register-care analysis workflow
 
+The workflow below is a practical escalation path. Most projects start with no register documentation at all. The steps move from inference through warning review to enforced CI checking. Each step can be taken independently — you do not need to finish one before starting the next.
+
 A productive escalation path for a new project:
 
 **1. Start with audit mode — no build impact:**
@@ -359,6 +387,8 @@ azm --rc error program.asm
 ```
 
 At this level, any unresolved conflict fails the build. Use this mode once all register-care conflicts are resolved. Commit `--rc error` to your CI pipeline and keep it there.
+
+At this point, every new call site that violates a contract becomes a build failure. New routines without `@` labels still assemble correctly — they stay outside the analysis. You can annotate incrementally, routine by routine, without needing to annotate everything at once.
 
 ### Common diagnostic messages
 

@@ -9,13 +9,15 @@ nav_order: 9
 
 # Chapter 9 — Porting, Style, and Reference
 
-This chapter covers three practical aspects of working with AZM: migrating existing Z80 source to AZM step by step with binary verification at each stage, the style conventions used throughout this manual, and a complete worked reference program that applies most of the language surface in one readable example.
+This chapter is about using AZM on real projects. The first section covers migrating existing Z80 source to AZM — a process that moves from "can it assemble at all?" to "does it produce identical bytes?" to "how do I adopt the features that make the source better?" The second covers the style conventions that make AZM source consistent and readable. The third is a worked reference program: a small but complete example that uses most of what the manual covered, in one place you can read all at once.
 
 ---
 
 ## Porting Z80 source to AZM
 
 The migration strategy is: assemble first, then improve. Start by getting AZM to produce byte-identical output to your existing assembler. Only then add AZM features. Comparing binaries after each step catches unintended changes while they are still small.
+
+The steps below are ordered by risk. Steps 1 and 2 establish that AZM can assemble the source correctly without changing the binary. Steps 3 through 9 each add one AZM feature, and each one ends with a binary comparison. If the comparison fails, you know exactly which step introduced the discrepancy.
 
 ### Step 1 — Get it to assemble
 
@@ -107,6 +109,8 @@ The `.equ` lines are now derived from the declaration. Add a field to `Actor` an
 
 ### Step 6 — Add enums for states and commands
 
+After step 5, your source still produces byte-identical output. Nothing about the machine code has changed — only the source representation of the field offsets has improved. Steps 6 through 8 continue in the same spirit: each one adds a feature that improves the source without changing the binary, except for step 8 which may surface bugs as register-care warnings.
+
 Find groups of related constants that are values of the same conceptual type:
 
 ```asm
@@ -186,11 +190,15 @@ Binary-compare after each op introduction to confirm the expansion is byte-ident
 
 After every step, compare output against the reference binary. If they diverge, you introduced a change. The listing shows where addresses differ. Fix the discrepancy before continuing. Migrating in small steps with binary verification at each step catches mistakes when they are small and easy to isolate.
 
+The listing is a valuable companion to binary comparison. When two binaries differ, the listing shows where addresses diverge — often a single wrong offset or a label that resolved differently. Comparing the two listings side by side is usually faster than reading raw bytes from a hex dump.
+
 ---
 
 ## Style guide for AZM source
 
 These are conventions, not language rules. They collect the choices used throughout this manual so a project can stay consistent without rereading the earlier chapters.
+
+The conventions here are not enforced by the assembler. They are the choices that make AZM source consistent with the examples throughout this manual, and that keep listings readable.
 
 | Area | Convention |
 |------|------------|
@@ -214,13 +222,15 @@ A typical include order is:
 7. Application code
 8. RAM layout (storage blocks at their own `.org`)
 
-Each category belongs in its own file. Application code should not define hardware constants; hardware files should not include application code. The organizing test is the listing: after all naming, layout, contract, and op choices, you should still be able to read the emitted bytes and understand what the CPU will execute.
+Each category belongs in its own file. Application code should not define hardware constants; hardware files should not include application code. The organizing test is the listing: after all naming, layout, contract, and op choices, you should still be able to open the listing and understand what the CPU will execute without needing to hold anything in your head that is not on the page.
 
 ---
 
 ## Complete worked reference program
 
 This compact program shows the whole manual surface in one place: includes, constants, layout, enums, ops, contracts, entry labels, RAM storage, and listing verification. It manages a small sprite table, initializes it, sets up one sprite, and searches for a tile type.
+
+The program is not here to demonstrate Z80 technique — it is deliberately small. Its purpose is to show all the manual's features working together in one readable source, so you can see how the pieces compose and verify that nothing in the preceding chapters was described in isolation from how it actually fits.
 
 ---
 

@@ -9,13 +9,15 @@ nav_order: 8
 
 # Chapter 8 — Diagnostics, Listings, and Output
 
-This chapter covers what AZM produces and what it reports when something goes wrong. Diagnostics name errors and warnings with file, line, and a stable code. Listings show each source line paired with its assembled bytes and address. Output formats range from flat binary and Intel HEX to Debug80 source maps and register-care reports.
+By the time you reach this chapter, you have seen every feature of the language. This chapter covers the other half of the tool: what AZM tells you when something is wrong, how to read the listing it produces with every build, and how to control the output files it writes. These are the mechanics of using AZM day to day.
 
 ---
 
 ## Diagnostics and error handling
 
 AZM prints diagnostics with file name, line number, column, severity, and a diagnostic ID. A non-zero exit code means something went wrong. The listing and binary are not written when errors occur.
+
+The diagnostic ID — `AZMN_PARSE`, `AZMN_SYMBOL`, and so on — is the stable part. Message wording may change between AZM versions; the code stays the same. If you script against AZM output, match on the code rather than the message text.
 
 Diagnostic format:
 
@@ -122,6 +124,8 @@ warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9
 
 The diagnostic names the live register, the call site, and the callee's inferred clobber set. Resolution options are: save the register around the call, restructure so it is not live across the call, or add a callee contract. Chapter 6 covers each option in detail.
 
+Register-care diagnostics are the most actionable warnings AZM produces. Each one names a specific call site and a specific register. You can deal with them one at a time without needing to understand the whole program at once.
+
 ### Reducing a failing source file
 
 When a diagnostic is unclear, isolate the problem by removing code until the error disappears. The minimum failing case is usually smaller than the full program. Common steps:
@@ -176,6 +180,8 @@ When writing scripts that parse AZM output, match on the code rather than the me
 ### The listing file
 
 AZM writes a `.lst` file by default alongside every assembly run. The listing shows each source line correlated with its assembly address and the bytes it emitted. It is the primary tool for verifying that code landed where you intended.
+
+The listing is reliable for verifying two things: that code assembled where you expected, and that expressions computed the right values. If you write `ld hl,counter` and the listing shows `09 01` in the byte column, you know `counter` resolved to `$0109`. If an `.equ` using `sizeof(Sprite)` shows `04`, you know the layout declaration computed four bytes. The listing is a complete record of what the assembler decided.
 
 A typical listing excerpt:
 
@@ -309,6 +315,8 @@ The bytes column typically shows up to four bytes. For `.db` lines that emit man
 ---
 
 ## Output formats
+
+A single assembly run can produce up to seven output files. By default, AZM produces the standard set: binary, HEX, listing, and Debug80 map. The sections below describe each format and when to use suppression flags to trim the output to exactly what you need.
 
 AZM produces up to seven output artifacts from a single assembly run. All are written to the same base path as the source by default; the primary output can be redirected with `--output`.
 
@@ -477,6 +485,8 @@ HEX is the right choice when:
 - Using a serial bootloader or EPROM programmer
 - Working with hardware that expects Intel HEX
 - You want gap handling to be automatic
+
+When in doubt, produce both and compare. HEX and binary contain the same bytes; the difference is format. Running both for a new project lets you verify that gap handling is what you expect before committing to one output type.
 
 ### Suppression flags
 

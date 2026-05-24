@@ -9,7 +9,7 @@ nav_order: 4
 
 # Chapter 4 — Data, Storage, and Includes
 
-Data directives emit initialized bytes into the output image; storage directives reserve address space without writing anything. This chapter covers `.db` and `.dw` for initialized data, `.ds` for uninitialized storage, and `.include` for splitting source across multiple files and organizing a project.
+Every assembly program has two kinds of memory content: bytes you know at assemble time, and storage you initialize at runtime. AZM's data directives write known bytes directly into the binary. Its storage directive reserves address space that the program fills in when it runs. This chapter covers both, along with the include system that lets you split a program across multiple files.
 
 ---
 
@@ -44,6 +44,8 @@ MSG:
 
 This emits the same bytes as `.db "Hello, World",0` — labels and `.db` directives can interleave freely.
 
+Interleaving labels with data lines is how you build tables. A label at the top names the start, a label at the bottom names the end, and `$ - TABLE_START` gives the length as a compile-time constant. You will see this pattern throughout Z80 source.
+
 ## `.dw` — define words
 
 `.dw` emits one or more 16-bit little-endian values:
@@ -57,6 +59,8 @@ This emits the same bytes as `.db "Hello, World",0` — labels and `.db` directi
 The Z80 is little-endian: the low byte comes first. `$1234` emits `$34` then `$12`. Every 16-bit immediate and address in AZM follows this rule.
 
 `.dw` accepts any expression that fits in 16 bits (0–65535).
+
+Any address you want to store as a 16-bit pointer — a jump vector, a callback address, a table entry — goes into `.dw`. The little-endian byte order is handled for you; you write the address, and the two bytes come out low byte first.
 
 ## Labels inside data
 
@@ -126,6 +130,8 @@ CMD_COUNT .equ ($ - CMD_TABLE) / 2
 
 `CMD_COUNT` uses `$ - CMD_TABLE` divided by 2 because each `.dw` entry is two bytes.
 
+Dispatch tables are worth understanding because they are how structured dispatch works on the Z80. There is no function-pointer call syntax built into the instruction set; you build the table yourself, compute the index, load the address, and jump to it. The assembler gives you the addresses. You write the arithmetic.
+
 ## Mixed data structures
 
 `.db` and `.dw` can be mixed on the same label block when the layout demands it:
@@ -145,6 +151,8 @@ When you use `.type` declarations (Chapter 5), you know the field offsets and ca
 ---
 
 ## `.ds` — reserve storage
+
+The data directives above write bytes you know at assemble time. Storage is different: you reserve the space now, but the program fills it at runtime. The distinction is reflected in the output — `.db` and `.dw` appear in the binary as the bytes you wrote; `.ds` advances the address counter without writing anything.
 
 `.ds count` reserves address space without initialized bytes. `.ds count,fill` reserves the same space and writes the fill byte into the output image. The bytes at those addresses contain whatever is in memory when the program runs. Use `.ds` for variables, buffers, and workspace that the program initializes at runtime.
 
@@ -176,6 +184,8 @@ PAGE:
 
 Without a fill value, the content of the reserved region in the binary is undefined (typically zero in a flat binary starting from the origin, but this should not be relied upon). Use the fill byte when you need a known initial state in the binary image itself — for ROM initialization tables, for example.
 
+For most RAM variables, the fill byte is irrelevant — the program initializes them before reading them. The fill byte matters when the binary itself is the initialization: a ROM that copies its data section into RAM on startup needs the bytes to be there.
+
 ### Trailing `.ds` behavior
 
 A `.ds` that comes after all emitted bytes, at the end of a source file, advances the assembly address without extending the flat binary:
@@ -192,6 +202,8 @@ WORKSPACE:
 The binary is cropped at the last byte of real content — useful when your program loads into limited RAM and binary size matters.
 
 ### Type expressions in `.ds`
+
+Layout types (Chapter 5) extend `.ds` to accept structured size expressions. You do not need to read Chapter 5 to use `.ds` with ordinary byte counts, but the examples below show what becomes available once you have layout declarations in place.
 
 Chapter 5 introduces layout type expressions such as `byte[32]`, `addr`, and `Sprite[16]`. `.ds` accepts those expressions wherever it expects a byte count:
 
@@ -243,9 +255,13 @@ STACK_TOP:      .ds word    ; two bytes of reserved headroom
 
 Collecting storage blocks under one `.org` lets you verify that no areas overlap and that the total fits available RAM.
 
+A storage map section is also where bugs hide less often. When RAM layout is scattered throughout a source file, it is easy to accidentally place two variables at the same address, or reserve more storage than the hardware provides. Putting everything in one place lets you read the whole layout at once and catch those mistakes before assembly rather than at runtime.
+
 ---
 
 ## `.include` — file inclusion
+
+Most real programs are too large to live in a single file. AZM's include system is the mechanism for splitting source across files — not a module system with separate namespaces, but a way to write source text in separate files and pull them together at assembly time.
 
 `.include` inserts the contents of another source file at the point of the directive, as if you had typed that file's text inline:
 
@@ -292,6 +308,8 @@ AZM has no module system. All included files merge into a single translation uni
 - Every label must be globally unique across all included files
 - The order of includes can matter, since some expressions depend on earlier definitions
 - Including the same file twice defines its labels twice, which is a duplicate-symbol error
+
+The single-namespace rule means you need to manage name uniqueness across all files. For a small project this is straightforward. For a larger one, a naming convention helps: prefixing branch labels with the routine name keeps `ScanLoop` and `DrawLoop` from colliding across different source files.
 
 Avoid recursive includes — a file that includes itself will loop until the process runs out of resources.
 
@@ -379,6 +397,8 @@ Both `Sprite` and `Actor` are available to every file that includes `layout.asm`
 
 ## Library routines and contracts
 
+A well-organized subroutine file is more than source text with entry labels. The AZMDoc contracts above each `@` routine make the file self-documenting: you can read the `;!` block and know exactly what to put in each register before calling, what to expect back, and what the call will destroy. That information belongs in the source, not in separate documentation that can drift out of sync.
+
 Subroutine files should define `@` entry labels and include AZMDoc contracts:
 
 ```asm
@@ -392,7 +412,7 @@ Subroutine files should define `@` entry labels and include AZMDoc contracts:
         ret
 ```
 
-When the project builds with `--rc warn` or `--rc error`, the contracts are checked against call sites throughout the translation unit.
+When the project builds with `--rc warn` or `--rc error`, the contracts are checked against call sites throughout the translation unit. A routine without a contract is not an error by itself — it receives no register-care coverage at its call sites.
 
 For library routines whose source you cannot include — ROM monitors, third-party binaries — write their contracts in an `.asmi` file:
 

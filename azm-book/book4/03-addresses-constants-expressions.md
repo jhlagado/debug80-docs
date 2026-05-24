@@ -11,6 +11,8 @@ nav_order: 3
 
 Assembly programs need two kinds of names: names for places (where in memory does this code go?) and names for values (what does this number mean?). This chapter covers `.org` and `$` for controlling placement, `.equ` for binding names to constants, expressions for computing with those constants, and `enum` for grouping related integer constants into named sets.
 
+Together these give you compile-time arithmetic: any computation that can be done with fixed numbers, the assembler handles for you, leaving only runtime-dependent work for actual Z80 instructions.
+
 ---
 
 ## `.org` sets the assembly address
@@ -39,9 +41,13 @@ result:
 
 The code assembles at `$0100`. The storage assembles at `$8000`. Both land in the same output binary at their respective offsets.
 
+Separating code and storage this way is the standard pattern for Z80 programs. Your executable instructions live at a known ROM or load address; your RAM variables live elsewhere. The listing confirms both: the code section shows addresses starting at `$0100`, and the storage section shows addresses starting at `$8000`. When they overlap by accident, AZM warns you.
+
 ## What does `.org` affect?
 
 `.org` changes where AZM places the next bytes, emitting nothing itself. Your loader or boot ROM determines where the CPU begins executing — `.org` only tells the assembler where to position subsequent output. AZM warns when a new `.org` overlaps already-assembled bytes.
+
+A common mistake is expecting `.org` to set the CPU's starting address. It does not. `.org` tells the assembler where to count from. If your binary loads at the wrong address at runtime, `.org` did not cause it — the loader or hardware configuration did.
 
 ## Assembly address vs file offset
 
@@ -50,6 +56,8 @@ In a flat binary, the byte at address `$0100` lands at file offset `$0100` only 
 ## `$` — the current assembly address
 
 `$` is a special symbol that evaluates to the current assembly address at the point it appears. It is valid inside any expression where AZM is already processing a line.
+
+You will use it every time you want to know how many bytes sit between two points in your source. Since `$` evaluates to the current address at the point it appears, subtracting a label gives you the byte count of everything between that label and the current position — a compile-time constant, not a runtime calculation.
 
 **Table length:**
 
@@ -83,6 +91,8 @@ ENTRY_STRIDE .equ DISPATCH_B - DISPATCH_A   ; must be 3
 
 ## Gaps between origins
 
+When two `.org` directives leave a hole between them, the output format determines how that hole appears — or whether it appears at all.
+
 When you use two `.org` directives with a gap between them, the binary output may contain a hole depending on how the output is formed:
 
 - **Flat binary:** bytes are emitted in address order. If your first section ends at `$01FF` and the next `.org` is `$8000`, the binary fills the gap with zero bytes unless you use `.binfrom` / `.binto` to trim it.
@@ -107,9 +117,13 @@ The binary contains only the bytes between the two addresses. Any trailing `.ds`
 
 Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. The argument must be a positive integer. Use `.align` when hardware or lookup-table requirements demand address alignment.
 
+Jump tables are the most common reason. If you have a dispatch table where each entry must sit at a specific address boundary, `.align` guarantees that without manual counting and padding. The zero bytes inserted to reach the boundary appear in the binary, and the listing shows them.
+
 ---
 
 ## Constants with `.equ`
+
+`.org` and `$` tell the assembler where things go. The next problem is giving names to the values you will use throughout your code — port numbers, buffer sizes, tile counts, and all the other constants that would otherwise be bare numbers scattered across the source.
 
 `.equ` binds a name to a constant expression. It emits nothing. The name becomes a synonym for the value, usable in any expression context — instruction operands, data directives, storage counts, layout sizes, and other `.equ` expressions.
 
@@ -139,6 +153,8 @@ MON_PRTHL   .equ $0020
 ```
 
 When hardware changes or you port to a different board, one edit in the hardware-definition file propagates everywhere.
+
+Hardware constants belong in `.equ` rather than appearing directly in code because port addresses and ROM entry points are facts about your hardware, not facts about your program. When hardware changes, you want to change one file, not hunt through instruction operands. Mixing the two in the same lines means they change together when they should change independently.
 
 ### Address constants
 
@@ -187,6 +203,8 @@ ACTOR_SIZE  .equ 3
 
 Prefer `offset(Type, field)` and `sizeof(Type)` when using `.type` declarations — they update automatically when the layout changes.
 
+The manual approach above is what you would write before adopting layout types. It works, but adding a field to the record means updating every offset constant by hand. When offsets are derived from other offsets, a mistake in one number silently corrupts all the ones that follow it.
+
 ### Forward references in `.equ`
 
 A `.equ` expression may reference a label or another `.equ` that is defined later in the source:
@@ -210,7 +228,7 @@ COUNT   .equ 10
 COUNT   .equ 20   ; error: duplicate symbol
 ```
 
-If you need a name whose value changes based on a mode or configuration, structure the source so only one definition is included at a time (for example, via conditional includes — though AZM currently has no built-in conditional assembly). In practice, keep one canonical definition of each constant and express derived values from it.
+If you need a name whose value changes based on a mode or configuration, structure the source so only one definition is included at a time (for example, via conditional includes — though AZM currently has no built-in conditional assembly). In practice, keep one canonical definition of each constant and express derived values from it. If you need a name whose value varies with a compile-time configuration, structure your includes so only one definition is active at a time — giving both variants distinct names and picking the right one at the point of use is the simplest approach.
 
 ### Naming conventions
 
@@ -246,6 +264,8 @@ Expressions in `.equ` compute in assembler-integer arithmetic (typically 32-bit)
 ---
 
 ## Expressions
+
+Where constants give names to fixed values, expressions let you compute with them. Any combination of literals, symbols, and operators that resolves to an integer at assemble time is an expression. Expressions appear everywhere you can put a number: instruction operands, data directives, layout declarations, and `.equ` definitions.
 
 An expression in AZM is any combination of numeric literals, symbols, layout queries (`sizeof`, `offset`), and arithmetic operators that the assembler evaluates to an integer before writing the binary. Expressions appear in instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands, and layout declarations.
 
@@ -292,6 +312,8 @@ AZM supports symbolic operators only:
 | `>>` | right shift |
 
 Word-form operators (`MOD`, `AND`, `OR`, `XOR`, `NOT`, `SHL`, `SHR`) are not recognised. `%` has two roles: as a number prefix it introduces a binary literal (`%10101010`), and as an infix operator it is modulo. A `%` after an expression is modulo; a `%` at the start of a value is a binary literal.
+
+The bitwise operators — `&`, `|`, `^`, `~`, `<<`, `>>` — are particularly useful for packing flag values or extracting bytes from addresses. You will also reach for them when computing port bitmasks or splitting a 16-bit address into two bytes for `.db`.
 
 Operator precedence follows conventional arithmetic rules. Parentheses group sub-expressions:
 
@@ -346,6 +368,8 @@ SIZE   .equ sizeof(Sprite) * 16   ; assembler computes this; the Z80 sees a numb
 OFFSET .equ offset(Sprite, flags) ; same — a number by the time the binary is written
 ```
 
+The rule is clean: anything that depends on register values or memory contents at runtime stays in your Z80 instructions. Everything that can be computed from source-visible constants before the program runs belongs in an expression, and the assembler does that computation for you. A mistake in an expression surfaces as a range error or a wrong number in the listing — much easier to find than a runtime calculation going wrong.
+
 Anything that depends on a register value or a runtime condition cannot be an assembler expression. That is ordinary Z80 code:
 
 ```asm
@@ -383,6 +407,8 @@ Chapter 8 covers diagnostic messages.
 ---
 
 ## Enums as grouped constants
+
+The last naming tool in this chapter is the enum. Where `.equ` names an individual value, an enum names a whole group of related values — state codes, command identifiers, tile types, mode flags — and gives each member a qualified name that carries the group context wherever it is used.
 
 An enum declares a named group of integer constants. Each member gets a qualified name — the group name, a dot, and the member name. You refer to the constant as `Group.Member`, never as `Member` alone.
 
@@ -434,6 +460,8 @@ enum Key Left, Right, Up, Down, Fire
 
 `State.Dead` reads more clearly at a glance than `cp 3`. If you reorder the enum or add a state between existing ones, every use of `State.Dead` updates automatically.
 
+The other benefit is searchability. To find every place the program handles the dead state, searching for `State.Dead` finds them all. Searching for `cp 3` finds that comparison, but might match other uses of the number 3 that have nothing to do with state.
+
 ### Unqualified names are rejected
 
 Member names require the group qualifier:
@@ -449,7 +477,7 @@ Unqualified member names would become ambiguous as source grows and make listing
 
 ### Enums and collision avoidance
 
-Two enums can have members with the same name because the qualifier is always required:
+When your project grows to a dozen enums, name collisions become a real concern. Two enums can have members with the same name because the qualifier is always required:
 
 ```asm
 enum Color Red, Green, Blue
@@ -460,6 +488,8 @@ enum State Idle, Active, Dead
 ```
 
 ### Comparing enum values in Z80 code
+
+Since enum members are byte-sized integers, comparing them in Z80 code is exactly what you would expect: load the value, then use `cp` against the member constant.
 
 Z80 comparison instructions work on byte values. An enum member is a byte-sized integer, so all the usual patterns apply:
 
@@ -472,7 +502,7 @@ Z80 comparison instructions work on byte values. An enum member is a byte-sized 
         ; falls through: Mode.Read or unrecognized
 ```
 
-A jump table dispatch on an enum:
+For a handful of cases, the `cp` chain is readable and direct. When there are many values and performance matters, a jump table is more efficient — and enum members give you the indices for free:
 
 ```asm
 enum Cmd Draw, Move, Erase
@@ -494,6 +524,8 @@ CMD_TABLE:
 ### No runtime type checking
 
 Enums are purely compile-time. The output contains no range checks or tag bytes. A value loaded at runtime could be any byte — validate inputs before dispatching on them.
+
+This means the assembler cannot catch a wrong value being passed as an enum argument. If `A` holds 7 and you dispatch on it as a `Mode` value, you get whatever the jump table entry at position 7 points to. That validation is your responsibility, written as ordinary Z80 instructions before the dispatch.
 
 ---
 

@@ -9,7 +9,9 @@ nav_order: 1
 
 # Chapter 1 — Getting Started with AZM
 
-AZM is a Z80 assembler written in Node.js. You write `.asm` source files; AZM turns them into machine code and the files Debug80 needs to debug that code. This chapter gives you the smallest useful view of the tool: one source file, one assembly command, and the artifacts that appear afterward.
+If you have assembled Z80 source before, most of what AZM does will feel familiar. You write instruction mnemonics, directives, and labels in `.asm` files; AZM turns them into machine code. On top of that foundation, the tool adds structured tooling — layout types, register-care analysis, op declarations, and Debug80 source-map metadata — without hiding the bytes underneath. You can look at the listing after any assembly run and trace every byte back to the line that produced it.
+
+This chapter gets you to a working assembly command quickly. The rest of the manual takes each feature in turn.
 
 ---
 
@@ -17,7 +19,11 @@ AZM is a Z80 assembler written in Node.js. You write `.asm` source files; AZM tu
 
 Every instruction in your source becomes bytes in the output. When you write `ld a,42`, the assembled binary contains the two bytes for that load. When you write `call DRAW_SPRITE`, those three bytes appear where you put them. AZM adds no preamble, generated stack frame, or implicit register saves.
 
+That last point matters more than it sounds. When you write a Z80 program, you are managing eight or so usable registers and a flat 64K address space. A tool that moves bytes around without your knowledge breaks that contract. AZM leaves register management entirely to you — the directives and features it adds compute at assemble time and resolve to plain numbers before anything reaches the Z80.
+
 ## At a glance
+
+The rules that govern AZM as a whole are compact enough to summarize. Skim the table below now; the chapters that follow each take one row and explain it in full.
 
 A compact reference for AZM's core rules:
 
@@ -38,11 +44,15 @@ A compact reference for AZM's core rules:
 
 Debug80 is the companion debugging tool for this toolchain. It uses the `.d8.json` metadata file that AZM emits alongside each binary — a map of addresses, symbols, and source line positions that Debug80 reads to display source-correlated debug information. When Debug80 assembles a file, it calls AZM. When you run AZM from the command line, the `.d8.json` file is ready for Debug80 to consume.
 
+If you are assembling outside Debug80, the `.d8.json` file appears next to your binary and you can ignore it, or suppress it with `--nod8m`. If you are working inside Debug80, it is what makes source-level debugging possible — the debugger reads that file to map machine addresses back to source lines. Chapter 8 covers the full output set.
+
 ## Source file extensions
 
 AZM accepts `.asm` and `.z80` source extensions and parses them identically. Within the Debug80 toolchain, `.z80` files carry a specific meaning: Debug80 treats them as entry points or assembly targets. For new source outside that toolchain context, `.asm` is the conventional choice.
 
 `.asmi` files are register-care interface files, not source. They carry external contract records for library routines whose source is not assembled alongside your program. They are loaded with `--interface`, never with a bare entry path. The format is covered in Chapter 6.
+
+With the file conventions settled, the fastest way to understand AZM is to look at a small program and trace what it becomes.
 
 ---
 
@@ -71,9 +81,11 @@ counter:
 
 The source starts assembly at `$0100`, defines the constant `LIMIT`, marks `main` as the routine entry, loops eight times, and stores the counter byte after the code. The rest of the manual explains those forms in order: source syntax and labels in Chapter 2, addresses and constants in Chapter 3, data directives in Chapter 4, and register-care entry labels in Chapter 6.
 
+The structure is intentional: code first, data after. The byte at `counter` sits below `halt` at address `$0109`. Placing data after the final instruction keeps entry points at the top of the binary where a loader expects them. AZM resolves forward references, so `ld hl,counter` at the top can name a label defined further down — the assembler fills in its address on a second pass. The listing confirms that the address was resolved correctly.
+
 ### Reading the listing
 
-After running `azm counter.asm`, AZM writes `counter.lst` alongside the source. The listing looks like this:
+After running `azm counter.asm`, AZM writes `counter.lst` alongside the source. The listing is where source text and machine code meet: every symbolic name becomes an address, every directive becomes bytes or a gap. Learning to read it gives you a direct check on every assembly decision you make. The listing looks like this:
 
 ```
 0100            1           .org $0100
@@ -94,11 +106,13 @@ After running `azm counter.asm`, AZM writes `counter.lst` alongside the source. 
 
 The columns are: address (hex), emitted bytes (hex), source line number, source text. For `ld hl,counter`, the bytes `XX XX` show as the resolved address of `counter` at `$0109` — little-endian, low byte first: `09 01`. The listing is the best tool for verifying that code landed where you intended.
 
-Chapter 8 covers listings in detail. For now, read the listing as a check that source addresses and emitted bytes match what you intended.
+The address column tells you where each line assembled; the byte column tells you what bytes it produced. When something assembles wrong, the listing is where you find it. If `counter` had resolved to the wrong address, you would see it immediately in the byte column for line 7. Chapter 8 covers listings in full. For now, treat the listing as a post-assembly check: scan it after every build until reading it is a habit.
 
 ---
 
 ## Running AZM
+
+Running AZM means one command: pass the entry file as the last argument. The sections below cover installation, the basic invocation, and how Debug80 calls AZM internally. If you are using Debug80 as your IDE, it handles the invocation for you; this section is for command-line builds, CI pipelines, and projects outside the Debug80 environment.
 
 ### Installing AZM
 
