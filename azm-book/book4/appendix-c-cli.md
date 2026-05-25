@@ -21,7 +21,7 @@ azm [flags] source.asm
 azm source.asm
 ```
 
-Produces four output files next to the source: `source.bin`, `source.hex`, `source.lst`, `source.d8.json`.
+Produces three output files next to the source: `source.bin`, `source.hex`, `source.d8.json`.
 
 ---
 
@@ -29,11 +29,10 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--output` | `path` | Write primary output to `path` instead of the default location | 
+| `--output` | `path` | Write primary output to `path` instead of the default location |
 | `--type` | `bin` or `hex` | Primary output format; default is `hex` |
 | `--nobin` | — | Suppress `.bin` flat binary output |
 | `--nohex` | — | Suppress `.hex` Intel HEX output |
-| `--nolist` | — | Suppress `.lst` listing output |
 | `--nod8m` | — | Suppress `.d8.json` Debug80 source map |
 | `--source-root` | `path` | Write source paths in `.d8.json` relative to this root (for portable maps) |
 | `--asm80` | — | Write a `.z80` lowered-ASM80 source file alongside other artifacts |
@@ -52,7 +51,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 |------|----------|--------------|
 | `--rc` | `audit`, `warn`, `error` or `strict` | Register-care analysis level; default is `off` |
 | `--contracts` | — | Write inferred `;!` contract blocks above every `@`-labelled routine |
-| `--fix` | — | Apply conservative register-care source repairs (push/pop around clear conflicts) |
+| `--fix` | — | Apply conservative register-care source repairs |
 | `--reg-report` | — | Write `source.regcare.txt` with inferred contracts for every `@` routine |
 | `--reg-interface` | — | Write `source.asmi` with `extern` contract records for every `@` routine |
 | `--reg-profile` | `mon3` | Load a built-in register-care summary profile for known ROM environments |
@@ -62,7 +61,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--case-style` | `upper`, `lower`, `consistent`, `off` | Enforce case style for mnemonics and register names; `upper` requires all uppercase, `lower` all lowercase, `consistent` requires all instances match the first, `off` disables checking; emits `AZMN_CASE_STYLE` on violations |
+| `--case-style` | `upper`, `lower`, `consistent`, `off` | Enforce case style for mnemonics and register names; emits `AZMN_CASE_STYLE` on violations |
 
 ## Other flags
 

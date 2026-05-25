@@ -5,11 +5,11 @@ parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 101
 ---
-[← Porting, Style and Reference](09-porting-style-reference.md) | [Manual](index.md) | [Appendix B — Expression Operators →](appendix-b-operators.md)
+[← Diagnostics and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix B — Expression Operators →](appendix-b-operators.md)
 
 # Appendix A — Directive Reference
 
-All AZM directives in canonical lowercase dotted form. Directives are case-sensitive; only the spellings below are accepted by the parser. See Chapter 7 for the alias layer that normalises legacy undotted spellings.
+All AZM directives in canonical lowercase dotted form. Directives are case-sensitive; only the forms below are accepted by the parser. See Chapter 7 for the alias layer that normalises legacy undotted forms.
 
 | Directive | Syntax | What it does | Ch. |
 |-----------|--------|--------------|-----|
@@ -39,8 +39,26 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 
 ## Directive aliases
 
-Directive aliases are normalized before parsing. Common forms such as `DB`, `DW` and `ORG` are handled by the built-in alias layer automatically. Project-specific forms such as `DEFB`, `DEFW` and `RMB` require a project alias file loaded with `--aliases`. See Chapter 7.
+Common forms such as `DB`, `DW`, `ORG` and `EQU` are handled by the built-in alias layer automatically. Project-specific forms such as `DEFB`, `DEFW` and `RMB` require a project alias file loaded with `--aliases`. See Chapter 7.
+
+Built-in aliases (normalized before parsing):
+
+| Alias | Canonical |
+|-------|-----------|
+| `ORG` | `.org` |
+| `EQU` | `.equ` |
+| `DB` | `.db` |
+| `DW` | `.dw` |
+| `DS` | `.ds` |
+| `INCLUDE` | `.include` |
+| `END` | `.end` |
+| `ALIGN` | `.align` |
+| `CSTR` | `.cstr` |
+| `PSTR` | `.pstr` |
+| `ISTR` | `.istr` |
+| `BINFROM` | `.binfrom` |
+| `BINTO` | `.binto` |
 
 ---
 
-[← Porting, Style and Reference](09-porting-style-reference.md) | [Manual](index.md) | [Appendix B — Expression Operators →](appendix-b-operators.md)
+[← Diagnostics and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix B — Expression Operators →](appendix-b-operators.md)

@@ -15,7 +15,7 @@ Operators in precedence order, lowest to highest. Operators at the same preceden
 
 | Operator | Operation | Precedence |
 |----------|-----------|------------|
-| `\|` | bitwise OR | 1 (lowest) |
+| <code>&#124;</code> | bitwise OR | 1 (lowest) |
 | `^` | bitwise XOR | 2 |
 | `&` | bitwise AND | 3 |
 | `<<` | left shift | 4 |

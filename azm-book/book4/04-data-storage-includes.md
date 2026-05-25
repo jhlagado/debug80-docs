@@ -1,15 +1,15 @@
 ---
 layout: default
-title: "Chapter 4 — Data, Storage and Includes"
+title: "Chapter 4 — Raw Data, Storage and Strings"
 parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 4
 ---
 [← Addresses, Constants and Expressions](03-addresses-constants-expressions.md) | [Manual](index.md) | [The Layout System →](05-layout-system.md)
 
-# Chapter 4 — Data, Storage and Includes
+# Chapter 4 — Raw Data, Storage and Strings
 
-Every assembly program has two kinds of memory content: bytes you know at assemble time, and storage you initialize at runtime. AZM's data directives write known bytes directly into the binary. Its storage directive reserves address space that the program fills in when it runs. This chapter covers both, along with the include system that lets you split a program across multiple files.
+Every assembly program has two kinds of memory content: bytes you know at assemble time, and storage you fill at runtime. AZM's data directives write known bytes directly into the binary. Its storage directive reserves address space that the program fills when it runs.
 
 ---
 
@@ -33,7 +33,7 @@ String literals are also valid in `.db`:
 
 Each character in a double-quoted string contributes one byte at its ASCII value. The `0` at the end is a separate expression, not part of the string literal.
 
-Multiple operands can appear on one `.db` line, separated by commas or across multiple `.db` lines:
+Multiple operands can appear on one `.db` line, separated by commas, or across multiple `.db` lines:
 
 ```asm
 MSG:
@@ -42,13 +42,15 @@ MSG:
         .db " World",0
 ```
 
-This emits the same bytes as `.db "Hello, World",0` — labels and `.db` directives can interleave freely.
-
-Interleaving labels with data lines is how you build tables. A label at the top names the start, a label at the bottom names the end and `$ - TABLE_START` gives the length as a compile-time constant. You will see this pattern throughout Z80 source.
+This emits the same bytes as `.db "Hello, World",0`. Labels and `.db` directives can interleave freely.
 
 ## `.dw` — define words
 
-`.dw` emits one or more 16-bit little-endian values:
+`.dw` emits one or more 16-bit values in Z80 byte order.
+
+### Little-endian byte order
+
+The Z80 is little-endian: the low byte of a 16-bit value is stored at the lower address. `.dw $1234` writes `$34` at the current address and `$12` at the next address. Every 16-bit immediate and address in AZM follows this rule.
 
 ```asm
         .dw $1234         ; two bytes: $34 $12
@@ -56,11 +58,7 @@ Interleaving labels with data lines is how you build tables. A label at the top 
         .dw VECTOR_TABLE  ; address of the label, low byte first
 ```
 
-The Z80 is little-endian: the low byte comes first. `$1234` emits `$34` then `$12`. Every 16-bit immediate and address in AZM follows this rule.
-
-`.dw` accepts any expression that fits in 16 bits (0–65535).
-
-Any address you want to store as a 16-bit pointer — a jump vector, a callback address, a table entry — goes into `.dw`. The little-endian byte order is handled for you; you write the address, and the two bytes come out low byte first.
+`.dw` accepts any expression that fits in 16 bits (0–65535). When you store an address as a 16-bit pointer — a jump vector, a callback address, a table entry — `.dw` handles the byte order for you.
 
 ## Labels inside data
 
@@ -75,9 +73,11 @@ JUMP_TABLE_END:
 TABLE_LEN .equ JUMP_TABLE_END - JUMP_TABLE   ; = 6 bytes = 3 entries
 ```
 
+---
+
 ## String directives
 
-AZM provides three string-specific directives that set a termination policy explicitly:
+AZM provides three string-specific directives that set a termination policy explicitly.
 
 **`.cstr` — C-style string (NUL terminated):**
 
@@ -85,7 +85,7 @@ AZM provides three string-specific directives that set a termination policy expl
         .cstr "Hello"   ; emits: H e l l o $00
 ```
 
-Equivalent to `.db "Hello",0` but makes the termination policy explicit.
+Equivalent to `.db "Hello",0` but makes the termination policy explicit. Use `.cstr` when a routine scans forward until it reads a zero byte.
 
 **`.pstr` — Pascal-style string (length prefix):**
 
@@ -93,7 +93,7 @@ Equivalent to `.db "Hello",0` but makes the termination policy explicit.
         .pstr "Hello"   ; emits: $05 H e l l o
 ```
 
-The first byte is the string length (0–255). The string itself follows. The length byte supplies the boundary. Strings longer than 255 characters are a range error.
+The first byte is the string length (0–255). The string itself follows. Strings longer than 255 characters are a range error. Use `.pstr` when the routine wants the byte count first.
 
 **`.istr` — inverted terminator string:**
 
@@ -101,7 +101,11 @@ The first byte is the string length (0–255). The string itself follows. The le
         .istr "Hello"   ; emits: H e l l (o | $80)
 ```
 
-All bytes emit at their ASCII value except the last character, which has bit 7 set (`$6F | $80 = $EF` for lowercase `o`). Some older ROM routines use this encoding. The receiving loop checks for bit 7 to detect the final byte.
+All bytes emit at their ASCII value except the last character, which has bit 7 set (`$6F | $80 = $EF` for lowercase `o`). Some older ROM routines use this encoding; the receiving loop checks for bit 7 to detect the final byte.
+
+If none of these match your target routine's expected format, use `.db` directly.
+
+---
 
 ## Jump and call tables
 
@@ -130,31 +134,11 @@ CMD_COUNT .equ ($ - CMD_TABLE) / 2
 
 `CMD_COUNT` uses `$ - CMD_TABLE` divided by 2 because each `.dw` entry is two bytes.
 
-Dispatch tables are worth understanding because they are how structured dispatch works on the Z80. You build the table, compute the index, load the address and jump to it. The assembler gives you the addresses. You write the arithmetic.
-
-## Mixed data structures
-
-`.db` and `.dw` can be mixed on the same label block when the layout demands it:
-
-```asm
-; Hardcoded initialized Sprite record:
-; x: byte, y: byte, flags: byte, ptr: word
-INIT_SPRITE:
-        .db  10        ; x
-        .db  20        ; y
-        .db  %00000001 ; flags
-        .dw  SpriteGfx ; ptr
-```
-
-When you use `.type` declarations (Chapter 5), you know the field offsets and can verify this layout against the definition.
-
 ---
 
 ## `.ds` — reserve storage
 
-The data directives above write bytes you know at assemble time. Storage is different: you reserve the space now, but the program fills it at runtime. The distinction is reflected in the output — `.db` and `.dw` appear in the binary as the bytes you wrote; `.ds` advances the address counter for runtime-filled storage.
-
-`.db` and `.dw` always write initialized values. `.ds count` only advances the address counter; `.ds count,fill` also writes the fill byte across the reserved range.
+`.db` and `.dw` write bytes you know at assemble time. Storage is different: you reserve the space now, but the program fills it at runtime. `.ds count` advances the address counter without writing bytes. `.ds count,fill` also writes the fill byte across the reserved range.
 
 ### Basic syntax
 
@@ -180,11 +164,9 @@ PAGE:
         .ds 256,0      ; reserve 256 bytes filled with zero
 ```
 
-A fill value gives the reserved region a known initial state in the binary image itself — for ROM initialization tables, for example.
+A fill value gives the reserved region a known initial state in the binary image — for ROM initialization tables, for example.
 
-For most RAM variables, the fill byte is irrelevant — the program initializes them before reading them. The fill byte matters when the binary itself is the initialization: a ROM that copies its data section into RAM on startup needs the bytes to be there.
-
-### Trailing `.ds` behavior
+### Trailing `.ds` behaviour
 
 A `.ds` that comes after all emitted bytes, at the end of a source file, advances the assembly address outside the flat binary's emitted byte range:
 
@@ -194,16 +176,14 @@ A `.ds` that comes after all emitted bytes, at the end of a source file, advance
         halt
 
 WORKSPACE:
-        .ds 128        ; trailing workspace outside emitted bytes
+        .ds 128        ; address advances, no bytes in binary
 ```
 
-The binary is cropped at the last byte of real content — useful when your program loads into limited RAM and binary size matters.
+The binary is cropped at the last byte of real content. This is useful when your program loads into limited RAM and binary size matters.
 
 ### Type expressions in `.ds`
 
-Layout types (Chapter 5) extend `.ds` to accept structured size expressions. Ordinary byte counts work as shown above; layout declarations add named record and array sizes.
-
-Chapter 5 introduces layout type expressions such as `byte[32]`, `addr` and `Sprite[16]`. `.ds` accepts those expressions wherever it expects a byte count:
+Chapter 5 introduces layout type expressions such as `byte[32]` and `Sprite[16]`. `.ds` accepts those expressions wherever it expects a byte count:
 
 ```asm
 BYTE_BUF:  .ds byte[32]      ; 32 bytes
@@ -211,20 +191,7 @@ PLAYER:    .ds Sprite        ; sizeof(Sprite) bytes
 TABLE:     .ds Sprite[16]    ; sizeof(Sprite) * 16 bytes
 ```
 
-The storage rule stays the same: `.ds` reserves bytes. Layout types only compute the count.
-
-### Named counts
-
-When the size comes from a named constant, use it directly:
-
-```asm
-RING_CAP    .equ 8
-
-RING_BUF:
-        .ds RING_CAP          ; idiomatic when capacity is named
-```
-
-Use `RING_CAP` directly when the count is already named.
+The storage rule stays the same: `.ds` reserves bytes. Layout types compute the count.
 
 ### Storage maps
 
@@ -234,92 +201,31 @@ For programs with several independent storage areas, collect all `.ds` blocks un
 ; --- RAM layout: $8000–$8FFF ---
         .org $8000
 
-; ring buffer
-RING_BUF:       .ds RING_CAP
+RING_BUF:       .ds 8
 RING_HEAD:      .ds 1
 RING_TAIL:      .ds 1
 RING_COUNT:     .ds 1
 
-; display workspace
 FRAME_BUF:      .ds FRAME_W * FRAME_H
 
-; sprite table
-SPRITES:        .ds MAX_SPRITES * sizeof(Sprite)
-
-; stack (grows downward from top)
         .org $8FFE
-STACK_TOP:      .ds word    ; two bytes of reserved headroom
+STACK_TOP:      .ds 2
 ```
 
 Collecting storage blocks under one `.org` lets you verify that no areas overlap and that the total fits available RAM.
 
-A storage map section is also where bugs hide less often. When RAM layout is scattered throughout a source file, it is easy to accidentally place two variables at the same address or reserve more storage than the hardware provides. Putting everything in one place lets you read the whole layout at once and catch those mistakes before assembly rather than at runtime.
-
 ---
 
-## `.include` — file inclusion
+## File inclusion
 
-Most real programs are too large to live in a single file. AZM's include system lets you write source text in separate files and pull them together at assembly time.
-
-`.include` inserts the contents of another source file at the point of the directive, as if you had typed that file's text inline:
+`.include` inserts the contents of another source file at the point of the directive, as if you had typed that file's text inline. All included files merge into a single translation unit — every label and constant defined anywhere is visible everywhere.
 
 ```asm
         .include "hardware.asm"
         .include "sprites.asm"
 ```
 
-Paths are relative to the file containing the `.include` directive, not to the current working directory. Given this project layout:
-
-```
-project/
-  main.asm
-  lib/
-    strings.asm
-    sprites.asm
-```
-
-From `main.asm`:
-
-```asm
-        .include "lib/strings.asm"
-        .include "lib/sprites.asm"
-```
-
-Add search directories with `-I` when you want to include from a shared library path:
-
-```sh
-azm -I /path/to/shared/lib main.asm
-```
-
-Then in source:
-
-```asm
-        .include "mon3_contracts.asm"    ; found in -I search path
-```
-
-AZM searches the source file's directory first, then the `-I` paths in order.
-
-## Include and the translation unit
-
-All included files merge into a single translation unit — every label and constant defined anywhere is visible everywhere. This has three practical consequences:
-
-- Every label must be globally unique across all included files
-- The order of includes can matter, since some expressions depend on earlier definitions
-- Including the same file twice defines its labels twice, which is a duplicate-symbol error
-
-The single-namespace rule means you need to manage name uniqueness across all files. For a small project this is straightforward. For a larger one, a naming convention helps: prefixing branch labels with the routine name keeps `ScanLoop` and `DrawLoop` from colliding across different source files.
-
-Avoid recursive includes — a file that includes itself will loop until the process runs out of resources.
-
-## Project file organization
-
-Most AZM projects keep definitions and code in separate files: hardware constants, layout declarations, enum definitions, op declarations and subroutines each in their own file, all included from a single entry file. Definitions come before the code that uses them; storage reserves sit under their own `.org` at the end. Hardware constants belong in one file so porting means editing a single place.
-
-Subroutine files define `@` entry labels and AZMDoc contracts. For library routines assembled separately, write contracts in an `.asmi` file and load with `--interface`. Chapter 9 covers project organization in detail.
-
-## Avoiding include cycles
-
-Keep includes one-directional: `main.asm` includes everything; individual files include nothing. A file that includes itself, directly or indirectly, loops until the process runs out of resources. If a subroutine file needs layout constants, put those constants in a shared file that everything includes, rather than having subroutine files include each other.
+Paths are relative to the file containing the `.include` directive. Add search directories with `-I` for shared library paths. Every label must be globally unique across all included files; including the same file twice is a duplicate-symbol error.
 
 ---
 

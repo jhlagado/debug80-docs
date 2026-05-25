@@ -5,13 +5,13 @@ parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 3
 ---
-[← Source Syntax and Symbols](02-source-syntax.md) | [Manual](index.md) | [Data, Storage and Includes →](04-data-storage-includes.md)
+[← Source Syntax and Symbols](02-source-syntax.md) | [Manual](index.md) | [Raw Data, Storage and Strings →](04-data-storage-includes.md)
 
 # Chapter 3 — Addresses, Constants and Expressions
 
-Assembly programs need two kinds of names: names for places (where in memory does this code go?) and names for values (what does this number mean?). This chapter covers `.org` and `$` for controlling placement, `.equ` for binding names to constants, expressions for computing with those constants and `enum` for grouping related integer constants into named sets.
+Assembly programs need two kinds of names: names for places (where in memory does this code go?) and names for values (what does this number mean?). This chapter covers `.org` and `$` for controlling placement, `.equ` for binding names to constants, expressions for computing with those constants and enums for grouping related integer constants into named sets.
 
-Together these give you compile-time arithmetic: any computation that can be done with fixed numbers, the assembler handles for you, leaving only runtime-dependent work for actual Z80 instructions.
+Every computation in this chapter resolves to a plain integer before the binary is written. The Z80 sees only the resulting bytes.
 
 ---
 
@@ -41,23 +41,17 @@ result:
 
 The code assembles at `$0100`. The storage assembles at `$8000`. Both land in the same output binary at their respective offsets.
 
-Separating code and storage this way is the standard pattern for Z80 programs. Your executable instructions live at a known ROM or load address; your RAM variables live elsewhere. The listing confirms both: the code section shows addresses starting at `$0100`, and the storage section shows addresses starting at `$8000`. When they overlap by accident, AZM warns you.
-
-## What does `.org` affect?
-
-`.org` changes where AZM places the next bytes, emitting nothing itself. Your loader or boot ROM determines where the CPU begins executing; `.org` tells the assembler where to position subsequent output. AZM warns when a new `.org` overlaps already-assembled bytes.
-
-Runtime start address belongs to the loader or hardware configuration. Assembly address belongs to `.org`.
+`.org` changes where AZM places the next bytes, emitting nothing itself. AZM warns when a new `.org` overlaps already-assembled bytes.
 
 ## Assembly address vs file offset
 
-In a flat binary, the byte at address `$0100` lands at file offset `$0100` only if the binary starts at address `$0000`. If your code lives at `$8000` and your binary starts there, address `$8000` maps to file offset 0. AZM handles this correctly: the binary output contains the bytes in address order from the first assembled byte. The listing shows assembly addresses, not file offsets.
+In a flat binary, the byte at address `$0100` lands at file offset `$0100` only if the binary starts at address `$0000`. If your code lives at `$8000` and your binary starts there, address `$8000` maps to file offset 0. AZM handles this correctly: the binary output contains the bytes in address order from the first assembled byte.
 
 ## `$` — the current assembly address
 
-`$` is a special symbol that evaluates to the current assembly address at the point it appears. It is valid inside any expression where AZM is already processing a line.
+`$` evaluates to the current assembly address at the point it appears. Use it whenever you want to know how many bytes sit between two points in your source.
 
-You will use it every time you want to know how many bytes sit between two points in your source.
+`$` as a current-address expression is distinct from `$FF` as a hex literal. `$FF` starts with a hex digit and is a numeric literal (255). Bare `$`, or `$` followed by a non-hex character, is the current address.
 
 **Table length:**
 
@@ -67,21 +61,23 @@ TABLE:
 TABLE_LEN   .equ $ - TABLE
 ```
 
-After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ - TABLE` gives the number of bytes in the table as a compile-time constant.
+After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ - TABLE` gives the number of bytes in the table as an assembler-time constant.
 
 **Code size:**
 
 ```asm
-        .org $0000
+        .org $0100
+CODE_START:
         ; ... code ...
 CODE_END:
-CODE_SIZE   .equ $ - 0
+CODE_SIZE   .equ CODE_END - CODE_START
 ```
+
+`CODE_SIZE` evaluates to the byte count between the two labels. Use label subtraction rather than `$ - 0` so the intent is clear and the result stays correct when the code moves.
 
 **Jump table stride verification:**
 
 ```asm
-; Verify each dispatch entry is exactly 3 bytes
 DISPATCH_A:
         jp   HANDLER_A
 DISPATCH_B:
@@ -95,7 +91,6 @@ When you use two `.org` directives with a gap between them, the binary output ma
 
 - **Flat binary:** bytes are emitted in address order. If your first section ends at `$01FF` and the next `.org` is `$8000`, the binary fills the gap with zero bytes unless you use `.binfrom` / `.binto` to trim it.
 - **Intel HEX:** records are emitted only for the addresses that contain assembled bytes. Gaps in HEX are implicit.
-- **Listing:** shows only the bytes actually assembled; gaps are visible as address jumps.
 
 `.binfrom` and `.binto` mark the range of the flat binary that matters:
 
@@ -105,7 +100,7 @@ When you use two `.org` directives with a gap between them, the binary output ma
         .binto $0200
 ```
 
-The binary contains the bytes between the two addresses. Any trailing `.ds` after `.binto` advances the address counter outside the selected binary range.
+The binary contains the bytes between the two addresses.
 
 ## `.align`
 
@@ -113,50 +108,46 @@ The binary contains the bytes between the two addresses. Any trailing `.ds` afte
         .align 16
 ```
 
-Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. The argument must be a positive integer. Use `.align` when hardware or lookup-table requirements demand address alignment.
-
-Jump tables are the most common reason. If you have a dispatch table where each entry must sit at a specific address boundary, `.align` performs the counting and padding. The zero bytes inserted to reach the boundary appear in the binary, and the listing shows them.
+Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. Use `.align` when hardware or lookup-table requirements demand address alignment.
 
 ---
 
 ## Constants with `.equ`
 
-`.org` and `$` tell the assembler where things go. The next problem is giving names to the values you will use throughout your code — port numbers, buffer sizes, tile counts and all the other constants that would otherwise be bare numbers scattered across the source.
-
 `.equ` binds a name to a constant expression. It emits nothing. The name becomes a synonym for the value, usable in any expression context — instruction operands, data directives, storage counts, layout sizes and other `.equ` expressions.
 
-Two valid spellings:
+Two valid forms:
 
 ```asm
 MAX_COUNT   .equ 64
 MAX_COUNT:  .equ 64
 ```
 
-The colon form is accepted for ASM80 compatibility. Both produce the same constant. Canonical AZM style omits the colon, which avoids visual confusion between address labels and constant definitions.
+The colon form is accepted for compatibility. Canonical AZM style omits the colon, which avoids visual confusion between address labels and constant definitions.
+
+A name is global in the translation unit and can be defined once. Defining the same name twice is an error:
+
+```asm
+COUNT   .equ 10
+COUNT   .equ 20   ; error: duplicate symbol
+```
 
 ### Hardware constants
 
 Port addresses and memory-mapped I/O addresses belong as `.equ` constants:
 
 ```asm
-; TEC-1 hardware
-LCD_DATA    .equ $00        ; LCD data port
-LCD_CTRL    .equ $01        ; LCD control port
-KEY_PORT    .equ $00        ; keyboard input port
+LCD_DATA    .equ $00
+LCD_CTRL    .equ $01
+KEY_PORT    .equ $00
 
-; MON3 ROM entry points
 MON_PUTC    .equ $0008
 MON_GETC    .equ $000B
-MON_PRTHL   .equ $0020
 ```
 
-When hardware changes or you port to a different board, one edit in the hardware-definition file propagates everywhere.
-
-Hardware constants belong in `.equ` because port addresses and ROM entry points are facts about your hardware. When hardware changes, one edit in the hardware-definition file updates every instruction that uses the constant.
+When hardware changes, one edit in the hardware-definition file propagates everywhere.
 
 ### Address constants
-
-Named addresses for variables, buffers and workspace:
 
 ```asm
 WORK_BASE   .equ $8000
@@ -164,14 +155,12 @@ STACK_TOP   .equ $87FF
 SCREEN_RAM  .equ $4000
 ```
 
-These can be used as immediate values in instructions:
-
 ```asm
         ld   sp,STACK_TOP
         ld   hl,SCREEN_RAM
 ```
 
-### Size and offset constants
+### Size constants
 
 Deriving sizes from other constants keeps arithmetic in one place:
 
@@ -183,29 +172,11 @@ TILE_BYTES  .equ TILE_W * TILE_H
 SCREEN_W    .equ 128
 SCREEN_H    .equ 64
 SCREEN_ROWS .equ SCREEN_H / TILE_H
-
-TABLE_BASE  .equ $8100
-TABLE_END   .equ TABLE_BASE + 32
-TABLE_LEN   .equ TABLE_END - TABLE_BASE
 ```
-
-Layout offsets defined as `.equ` stay correct when the layout changes:
-
-```asm
-; Manual record layout when not using .type
-ACTOR_X     .equ 0    ; byte at offset 0
-ACTOR_Y     .equ 1    ; byte at offset 1
-ACTOR_FLAGS .equ 2    ; byte at offset 2
-ACTOR_SIZE  .equ 3
-```
-
-Prefer `offset(Type, field)` and `sizeof(Type)` when using `.type` declarations — they update automatically when the layout changes.
-
-The manual approach above is what you would write before adopting layout types. It works, but adding a field to the record means updating every offset constant by hand. When offsets are derived from other offsets, a mistake in one number silently corrupts all the ones that follow it.
 
 ### Forward references in `.equ`
 
-A `.equ` expression may reference a label or another `.equ` that is defined later in the source:
+A `.equ` expression may reference a label or another `.equ` defined later in the source:
 
 ```asm
 TABLE_LEN   .equ TABLE_END - TABLE_START
@@ -217,65 +188,17 @@ TABLE_END:
 
 AZM resolves forward references across passes. Circular references produce an error.
 
-### Re-definition
-
-`.equ` names are unique within the translation unit. Defining the same name twice is an error:
-
-```asm
-COUNT   .equ 10
-COUNT   .equ 20   ; error: duplicate symbol
-```
-
-If you need a name whose value changes based on a mode or configuration, structure the source so one definition is included for that build. In practice, keep one canonical definition of each constant and express derived values from it.
-
-### Naming conventions
-
-Common constant conventions in the Z80 ecosystem:
-
-- All-uppercase with underscores: `MAX_SPEED`, `LCD_DATA`
-- Mixed case with underscores: `Max_Speed`
-
-All-uppercase is the most common in Z80 source and the convention used throughout this manual. Enum members use qualified dotted names (`Mode.Read`) which look different from raw equates. Layout-derived constants from `sizeof` and `offset` are often named with the type name as a prefix: `SPRITE_SIZE`, `SPRITE_FLAGS`.
-
-`.equ` expressions compute in 32-bit assembler arithmetic. A value that exceeds 16 bits is valid in a `.equ` definition; the range is checked when that value is consumed by an instruction operand or data directive. See Range checks below.
-
 ---
 
 ## Expressions
 
-Where constants give names to fixed values, expressions let you compute with them. An expression is any combination of numeric literals, symbols, layout queries (`sizeof`, `offset`) and arithmetic operators that the assembler evaluates to an integer before writing the binary. Expressions appear everywhere you can put a number: instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands and layout declarations.
-
-### Literals
-
-```asm
-$FF             ; hex
-0FFH            ; hex (trailing-H form)
-255             ; decimal
-11111111B       ; binary
-```
-
-All four evaluate to the same integer, 255. Expressions can mix formats:
-
-```asm
-MASK .equ $F0 | 00001111B    ; $F0 OR $0F = $FF
-```
-
-### Symbols and `.equ` names
-
-Any previously defined label or `.equ` name is valid in an expression. Forward references are supported but must be resolvable by the end of assembly:
-
-```asm
-STRIDE    .equ sizeof(Sprite)         ; layout constant
-TABLE_LEN .equ TABLE_END - TABLE      ; address arithmetic
-```
+An expression is any combination of numeric literals, symbols and arithmetic operators that the assembler evaluates to an integer before writing the binary. Expressions appear everywhere you can put a number: instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands.
 
 ### Arithmetic operators
 
-AZM supports symbolic operators only: `+` `-` `*` `/` `%` `&` `|` `^` `~` `<<` `>>`. See [Appendix B](appendix-b-operators.md) for the full precedence table and numeric literal formats.
+AZM supports symbolic operators: `+` `-` `*` `/` `%` `&` `|` `^` `~` `<<` `>>`.
 
-AZM uses symbolic operators: `+` `-` `*` `/` `%` `&` `|` `^` `~` `<<` `>>`. `%` has two roles: as a number prefix it introduces a binary literal (`%10101010`), and as an infix operator it is modulo. A `%` after an expression is modulo; a `%` at the start of a value is a binary literal.
-
-The bitwise operators — `&`, `|`, `^`, `~`, `<<`, `>>` — are particularly useful for packing flag values or extracting bytes from addresses. You will also reach for them when computing port bitmasks or splitting a 16-bit address into two bytes for `.db`.
+`%` has two roles depending on context. `%10101010` at the start of a value is a binary literal prefix. `expr % divisor` between two expressions is the modulo operator. Context disambiguates them: a `%` following an expression is always modulo.
 
 Operator precedence follows conventional arithmetic rules. Parentheses group sub-expressions:
 
@@ -284,6 +207,8 @@ FRAME_SIZE  .equ (COLS * ROWS) + 2
 ENTRY_ADDR  .equ TABLE_BASE + (ENTRY_NUM * 3)
 ```
 
+See [Appendix B](appendix-b-operators.md) for the full precedence table.
+
 ### `$` in expressions
 
 ```asm
@@ -291,51 +216,41 @@ MSG:    .db "Hello"
 MSG_LEN .equ $ - MSG        ; byte count of "Hello"
 ```
 
-In a `.equ` or data context, `$` resolves to the address *after* the last emitted byte on the preceding line.
+In a `.equ` or data context, `$` resolves to the address after the last emitted byte on the preceding line.
 
 ### Expressions in instructions
 
 ```asm
-        ld   a,PORT_BASE + 1      ; immediate
-        ld   hl,BUFFER + OFFSET   ; 16-bit address
-        jr   TARGET - $ - 1       ; manual relative offset (rare)
-        bit  FLAG_BIT,a           ; bit index must be 0–7
+        ld   a,PORT_BASE + 1
+        ld   hl,BUFFER + OFFSET
+        bit  FLAG_BIT,a
 ```
-
-AZM evaluates the expression and substitutes the result into the instruction encoding. Range checking follows.
 
 ### Expressions in data directives
 
 ```asm
 .db MAX_VAL - 1
 .dw TABLE_BASE + STRIDE * 3
-.ds SPRITE_COUNT * sizeof(Sprite)
+.ds SPRITE_COUNT * 4
 ```
 
 `.db` accepts byte-range expressions (0–255 or −128–127 for signed). `.dw` accepts word-range expressions (0–65535). `.ds` accepts any non-negative count expression.
 
-To split a 16-bit address into two bytes, use bitwise operators:
+To split a 16-bit address into two bytes:
 
 ```asm
 .db VECTOR_TABLE & $FF       ; low byte
 .db (VECTOR_TABLE >> 8) & $FF ; high byte
 ```
 
-### Assembly-time evaluation
+### Assembler-time evaluation
 
-Every expression in AZM is evaluated by the assembler before anything runs on the Z80. The assembler computes the value and writes the result — a plain number — into the binary. The Z80 executes the bytes produced by that expression.
+Every expression in AZM is evaluated by the assembler before anything runs on the Z80. The assembler computes the value and writes the result — a plain number — into the binary.
 
-```asm
-SIZE   .equ sizeof(Sprite) * 16   ; assembler computes this; the Z80 sees a number
-OFFSET .equ offset(Sprite, flags) ; same — a number by the time the binary is written
-```
-
-The rule is clean: anything that depends on register values or memory contents at runtime stays in your Z80 instructions. Everything that can be computed from source-visible constants before the program runs belongs in an expression, and the assembler does that computation for you. A mistake in an expression surfaces as a range error or a wrong number in the listing — much easier to find than a runtime calculation going wrong.
-
-Runtime-dependent values belong in ordinary Z80 instructions:
+Runtime-dependent values belong in Z80 instructions:
 
 ```asm
-        add  hl,bc    ; Z80 runs this — the result depends on what HL and BC hold at runtime
+        add  hl,bc    ; result depends on HL and BC at runtime
 ```
 
 ### Range checks
@@ -352,17 +267,16 @@ AZM checks that expression values fit the encoding slot they fill:
 | 16-bit data (`.dw`) | 0–65535 |
 | Port number (`in a,(n)`) | 0–255 |
 
-When a value falls outside the valid range for its encoding, AZM reports a range error. The diagnostic names the value and the allowed range.
+When a value falls outside the valid range for its encoding, AZM reports a range error naming the value and the allowed range.
 
-### Invalid expression diagnostics
+### Expression errors
 
 Common expression errors:
 
-- **Unknown symbol**: a name that has no `.equ`, label or layout definition
+- **Unknown symbol**: a name with no `.equ`, label or layout definition
 - **Circular reference**: an `.equ` that transitively references itself
-- **Non-constant in expression**: a register name where a constant is required
 - **Division by zero**: `expr / 0`
-- **Range overflow**: a computed value outside the encoding range for its position
+- **Range overflow**: a computed value outside the encoding range
 
 Chapter 8 covers diagnostic messages.
 
@@ -378,9 +292,9 @@ GREEN .equ 1
 BLUE  .equ 2
 ```
 
-This works, but the values are yours to maintain. Insert `YELLOW` between `RED` and `GREEN` and you have to renumber `GREEN`, `BLUE` and everything that follows. With eight or ten values, keeping the sequence correct is tedious — a numbering slip is silent and the assembler accepts whatever you write.
+This works, but the values are yours to maintain. Insert `YELLOW` between `RED` and `GREEN` and you have to renumber `GREEN`, `BLUE` and everything that follows.
 
-An enum groups a set of related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second and so on. The word "enumerated" means listed one by one, each given its position in sequence — that is the whole mechanism.
+An enum groups a set of related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second and so on.
 
 ### Syntax
 
@@ -388,15 +302,13 @@ An enum groups a set of related constants under a single name and assigns their 
 enum Mode Read, Write, Append
 ```
 
-`enum` is the keyword; `Mode` is the group name; `Read`, `Write` and `Append` are the members. AZM assigns each member a qualified name — the group name, a dot and the member name — in sequence:
+`enum` is the keyword; `Mode` is the group name; `Read`, `Write` and `Append` are the members. AZM assigns each member a qualified name — the group name, a dot and the member name:
 
 | Name | Value |
 |------|-------|
 | `Mode.Read` | 0 |
 | `Mode.Write` | 1 |
 | `Mode.Append` | 2 |
-
-Values start at 0 and count up by 1: 0, 1, 2, … in the order the members appear. Use separate `.equ` constants for values that need specific numbers or gaps.
 
 The enum name and member names are case-sensitive.
 
@@ -405,39 +317,32 @@ The enum name and member names are case-sensitive.
 You refer to a member as `Mode.Read`. The qualifier is always required:
 
 ```asm
-enum Mode Read, Write, Append
-
         ld   a,Read      ; error: unknown symbol Read
         ld   a,Mode.Read ; correct
 ```
 
-A qualified name carries its group: `Mode.Read` in a listing tells you which enum and which member. When two enums share a word, the group name separates them:
+When two enums share a word, the group name separates them:
 
 ```asm
 enum Color Red, Green, Blue
 enum State Idle, Active, Dead
 
-; Both Red and Idle have value 0, but are different symbols:
-; Color.Red = 0, State.Idle = 0
+; Color.Red = 0, State.Idle = 0 — different symbols
 ```
-
-As your project grows to a dozen enums, shared member names become common. The qualifier keeps them apart.
 
 ### Using enum values
 
-Enum members are valid in any compile-time expression context:
+Enum members are valid in any assembler-time expression context:
 
 ```asm
 enum Mode Read, Write, Append
 
         ld   a,Mode.Write       ; load 1 into A
         cp   Mode.Append        ; compare A with 2
-
         .db Mode.Read           ; emit byte 0
-CURR_MODE .equ Mode.Read
 ```
 
-Comparing enum members works like comparing any integer constant: load the value into A, then `cp` against the member name. For a handful of states, a `cp` chain is readable and direct:
+For a handful of states, a `cp` chain is readable and direct:
 
 ```asm
         ld   a,(mode)
@@ -448,7 +353,7 @@ Comparing enum members works like comparing any integer constant: load the value
         ; falls through: Mode.Read or unrecognized
 ```
 
-When there are many values and performance matters, a jump table is more efficient — and enum members give you the indices for free:
+When there are many values and performance matters, a jump table is more efficient:
 
 ```asm
 enum Cmd Draw, Move, Erase
@@ -462,14 +367,14 @@ enum Cmd Draw, Move, Erase
         jp   (hl)
 
 CMD_TABLE:
-        jp   do_draw         ; 3 bytes
-        jp   do_move         ; 3 bytes
-        jp   do_erase        ; 3 bytes
+        jp   do_draw
+        jp   do_move
+        jp   do_erase
 ```
 
 ### When to use enums
 
-Enums work well for any small set of named states, command codes, token kinds or hardware-mode values where you want names in code instead of bare numbers:
+Enums work well for any small set of named states, command codes, token kinds or hardware-mode values where dense sequence values are what you want:
 
 ```asm
 enum State Idle, Moving, Attacking, Dead
@@ -477,24 +382,14 @@ enum TileKind Empty, Wall, Pill, Power, Ghost
 enum Key Left, Right, Up, Down, Fire
 ```
 
-```asm
-        ld   a,(player_state)
-        cp   State.Dead
-        jr   z,game_over
-```
+`State.Dead` reads more clearly than `cp 3`. Reorder the enum or add a state, and every use of `State.Dead` updates automatically.
 
-`State.Dead` reads more clearly than `cp 3`. Reorder the enum or add a state between existing ones, and every use of `State.Dead` updates automatically — no renumbering.
+For values that must be specific numbers — port addresses, bitmasks, hardware registers — use `.equ`.
 
-Searching for `State.Dead` finds every place your code handles the dead state. Searching for `cp 3` also finds unrelated uses of 3.
+### Enums are assembler-time only
 
-For values that must be specific numbers — port addresses, bitmasks, hardware registers — use `.equ`. Enums are for dense sequences where AZM can assign the numbers from source order and the names are what you want to see in code.
-
-### Runtime enum values
-
-Enums are purely compile-time. At runtime, an enum value in a register or memory location is an ordinary byte. Validate inputs before dispatching on them.
-
-If `A` holds 7 and you dispatch on it as a `Mode` value, execution uses the jump table entry at position 7. Write the range check as ordinary Z80 instructions before the dispatch.
+At runtime, an enum value in a register or memory location is an ordinary byte. Validate inputs before dispatching on them. If `A` holds 7 and you dispatch on it as a `Mode` value, execution uses the jump table entry at position 7. Write the range check as ordinary Z80 instructions before the dispatch.
 
 ---
 
-[← Source Syntax and Symbols](02-source-syntax.md) | [Manual](index.md) | [Data, Storage and Includes →](04-data-storage-includes.md)
+[← Source Syntax and Symbols](02-source-syntax.md) | [Manual](index.md) | [Raw Data, Storage and Strings →](04-data-storage-includes.md)

@@ -87,7 +87,7 @@ offset(Actor, pos.y)     ; 1
 offset(Actor, state)     ; 5
 ```
 
-**Array indices in `offset` paths must be numeric literals.** `offset(Table, rows[0].x)` is valid. Layout-cast path expressions (Chapter 5) accept compile-time expressions in index positions.
+**Array indices in `offset` paths must be numeric literals.** `offset(Table, rows[0].x)` is valid. Layout-cast path expressions (Chapter 5) accept assembler-time constant expressions in index positions.
 
 Chapter 5 covers the full layout system including field declarations, nested records, unions and cast-path syntax.
 
