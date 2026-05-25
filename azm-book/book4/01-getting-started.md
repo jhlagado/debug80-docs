@@ -106,10 +106,6 @@ By default, AZM writes three output files next to the source:
 
 Chapter 8 covers output selection, suppression flags, Debug80 source paths, exit status and artifact formats.
 
-### How does Debug80 invoke AZM?
-
-Debug80 calls AZM internally when assembling an open source file. It passes `--source-root` and `--output` with paths relative to the project root, producing a `.d8.json` alongside the binary. The CLI is for command-line builds and projects that run outside the Debug80 IDE.
-
 ---
 
 [← Preface](00-preface.md) | [Manual](index.md) | [Source Syntax and Symbols →](02-source-syntax.md)
