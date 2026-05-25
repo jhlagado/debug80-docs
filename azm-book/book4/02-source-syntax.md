@@ -228,11 +228,10 @@ COUNT:              ; address label
 AZM's canonical directive names start with a dot:
 
 ```asm
-.org    .equ    .db    .dw    .ds
-.cstr   .pstr   .istr  .include   .end
-.align  .binfrom  .binto
-.type   .endtype  .union  .endunion  .typealias  .enum
+.org    .equ    .db    .dw    .ds    .end
 ```
+
+The full directive list is in Appendix A.
 
 Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors.
 
@@ -263,9 +262,9 @@ AZM accepts all numeric literal forms common in Z80 assembly:
 | Plain decimal | `42`, `255` | decimal |
 | Quoted character | `'A'`, `"Z"` | ASCII value |
 
-**`$FF` versus bare `$`:** `$FF` starts with `$` followed by a hex digit, so the whole token is a hex literal (255). A bare `$`, or `$` followed by a non-hex character, is the current assembly address. These two uses are separate: numeric literals belong in the table above; the current-address use belongs in Chapter 3 under address arithmetic.
+`$` used alone is the current assembly address; that is covered in Chapter 3.
 
-**`%` as binary prefix:** `%10101010` at the start of a value is a binary literal. The `%` character has a second use as the modulo operator, covered in Chapter 3.
+`%` between two expressions is the modulo operator; that is covered in Chapter 3.
 
 **Trailing-`H` rule:** the token must start with a decimal digit. `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. Write `$FF` or `0FFH`.
 

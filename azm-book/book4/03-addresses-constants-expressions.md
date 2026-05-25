@@ -69,16 +69,6 @@ CODE_SIZE   .equ CODE_END - CODE_START
 
 `CODE_SIZE` evaluates to the byte count between the two labels. Use label subtraction rather than `$ - 0` so the intent is clear and the result stays correct when the code moves.
 
-**Jump table stride verification:**
-
-```asm
-DISPATCH_A:
-        jp   HANDLER_A
-DISPATCH_B:
-        jp   HANDLER_B
-ENTRY_STRIDE .equ DISPATCH_B - DISPATCH_A   ; must be 3
-```
-
 ## Gaps between origins
 
 When you use two `.org` directives with a gap between them, the binary output may contain a hole depending on how the output is formed:
@@ -164,6 +154,18 @@ SCREEN_W    .equ 128
 SCREEN_H    .equ 64
 SCREEN_ROWS .equ SCREEN_H / TILE_H
 ```
+
+Label subtraction records a layout assumption as an assembler-time constant:
+
+```asm
+DISPATCH_A:
+        jp   HANDLER_A
+DISPATCH_B:
+        jp   HANDLER_B
+ENTRY_STRIDE .equ DISPATCH_B - DISPATCH_A   ; 3: jp is a 3-byte instruction
+```
+
+Any code that dispatches through this table loads `ENTRY_STRIDE` by name rather than encoding the stride as a literal.
 
 ### Forward references in `.equ`
 
@@ -285,15 +287,13 @@ BLUE  .equ 2
 
 This works, but the values are yours to maintain. Insert `YELLOW` between `RED` and `GREEN` and you have to renumber `GREEN`, `BLUE` and everything that follows.
 
-An enum groups a set of related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second and so on.
-
-### Syntax
+An enum groups related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second and so on:
 
 ```asm
 Mode .enum Read, Write, Append
 ```
 
-The name comes first, then `.enum`, then a comma-separated member list. AZM assigns each member a qualified name — the group name, a dot and the member name:
+The name comes first, then `.enum`, then a comma-separated member list. Each member gets a qualified name — the group name, a dot and the member name:
 
 | Name | Value |
 |------|-------|
@@ -301,11 +301,7 @@ The name comes first, then `.enum`, then a comma-separated member list. AZM assi
 | `Mode.Write` | 1 |
 | `Mode.Append` | 2 |
 
-The enum name and member names are case-sensitive.
-
-### Qualified names
-
-You refer to a member as `Mode.Read`. The qualifier is always required:
+The qualifier is always required. `Read` alone is an error:
 
 ```asm
         ld   a,Read      ; error: unknown symbol Read
@@ -321,19 +317,15 @@ State .enum Idle, Active, Dead
 ; Color.Red = 0, State.Idle = 0 — different symbols
 ```
 
-### Using enum values
-
 Enum members are valid in any assembler-time expression context:
 
 ```asm
-Mode .enum Read, Write, Append
-
         ld   a,Mode.Write       ; load 1 into A
         cp   Mode.Append        ; compare A with 2
         .db Mode.Read           ; emit byte 0
 ```
 
-For a handful of states, a `cp` chain is readable and direct:
+For a handful of states, a `cp` chain is readable:
 
 ```asm
         ld   a,(mode)
@@ -365,21 +357,7 @@ CMD_TABLE:
 
 ### When to use enums
 
-Enums work well for any small set of named states, command codes, token kinds or hardware-mode values where dense sequence values are what you want:
-
-```asm
-State    .enum Idle, Moving, Attacking, Dead
-TileKind .enum Empty, Wall, Pill, Power, Ghost
-Key      .enum Left, Right, Up, Down, Fire
-```
-
-`State.Dead` reads more clearly than `cp 3`. Reorder the enum or add a state, and every use of `State.Dead` updates automatically.
-
-For values that must be specific numbers — port addresses, bitmasks, hardware registers — use `.equ`.
-
-### Enums are assembler-time only
-
-At runtime, an enum value in a register or memory location is an ordinary byte. Validate inputs before dispatching on them. If `A` holds 7 and you dispatch on it as a `Mode` value, execution uses the jump table entry at position 7. Write the range check as ordinary Z80 instructions before the dispatch.
+Use enums for any small set of named states, command codes, token kinds or hardware-mode values where a dense sequence is natural. `State.Dead` reads more clearly than `cp 3`; add or reorder members and every use updates automatically. For values that need specific numbers — port addresses, bitmasks, hardware registers — use `.equ`. At runtime, an enum value is an ordinary byte; validate inputs before dispatching on them.
 
 ---
 
