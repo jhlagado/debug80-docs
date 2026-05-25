@@ -36,10 +36,10 @@ code_start:
         .org $8000
 
 result:
-        .ds 1
+        .db 0
 ```
 
-The code assembles at `$0100`. The storage assembles at `$8000`. Both land in the same output binary at their respective offsets.
+The code assembles at `$0100`. The data byte assembles at `$8000`. Both land in the same output binary at their respective offsets.
 
 `.org` changes where AZM places the next bytes, emitting nothing itself. AZM warns when a new `.org` overlaps already-assembled bytes.
 
@@ -50,8 +50,6 @@ In a flat binary, the byte at address `$0100` lands at file offset `$0100` only 
 ## `$` — the current assembly address
 
 `$` evaluates to the current assembly address at the point it appears. Use it whenever you want to know how many bytes sit between two points in your source.
-
-`$` as a current-address expression is distinct from `$FF` as a hex literal. `$FF` starts with a hex digit and is a numeric literal (255). Bare `$`, or `$` followed by a non-hex character, is the current address.
 
 **Table length:**
 
@@ -92,7 +90,7 @@ When you use two `.org` directives with a gap between them, the binary output ma
 - **Flat binary:** bytes are emitted in address order. If your first section ends at `$01FF` and the next `.org` is `$8000`, the binary fills the gap with zero bytes unless you use `.binfrom` / `.binto` to trim it.
 - **Intel HEX:** records are emitted only for the addresses that contain assembled bytes. Gaps in HEX are implicit.
 
-`.binfrom` and `.binto` mark the range of the flat binary that matters:
+`.binfrom` and `.binto` mark the address range to include in the flat binary:
 
 ```asm
         .binfrom $0100
@@ -116,14 +114,11 @@ Advances the assembly address to the next multiple of 16, inserting zero bytes t
 
 `.equ` binds a name to a constant expression. It emits nothing. The name becomes a synonym for the value, usable in any expression context — instruction operands, data directives, storage counts, layout sizes and other `.equ` expressions.
 
-Two valid forms:
+The canonical form:
 
 ```asm
 MAX_COUNT   .equ 64
-MAX_COUNT:  .equ 64
 ```
-
-The colon form is accepted for compatibility. Canonical AZM style omits the colon, which avoids visual confusion between address labels and constant definitions.
 
 A name is global in the translation unit and can be defined once. Defining the same name twice is an error:
 
@@ -198,7 +193,7 @@ An expression is any combination of numeric literals, symbols and arithmetic ope
 
 AZM supports symbolic operators: `+` `-` `*` `/` `%` `&` `|` `^` `~` `<<` `>>`.
 
-`%` has two roles depending on context. `%10101010` at the start of a value is a binary literal prefix. `expr % divisor` between two expressions is the modulo operator. Context disambiguates them: a `%` following an expression is always modulo.
+The `%` operator between two expressions performs integer modulo. A `%` at the start of a value is a binary literal prefix, covered in Chapter 2.
 
 Operator precedence follows conventional arithmetic rules. Parentheses group sub-expressions:
 
@@ -299,10 +294,10 @@ An enum groups a set of related constants under a single name and assigns their 
 ### Syntax
 
 ```asm
-enum Mode Read, Write, Append
+Mode .enum Read, Write, Append
 ```
 
-`enum` is the keyword; `Mode` is the group name; `Read`, `Write` and `Append` are the members. AZM assigns each member a qualified name — the group name, a dot and the member name:
+The name comes first, then `.enum`, then a comma-separated member list. AZM assigns each member a qualified name — the group name, a dot and the member name:
 
 | Name | Value |
 |------|-------|
@@ -324,8 +319,8 @@ You refer to a member as `Mode.Read`. The qualifier is always required:
 When two enums share a word, the group name separates them:
 
 ```asm
-enum Color Red, Green, Blue
-enum State Idle, Active, Dead
+Color .enum Red, Green, Blue
+State .enum Idle, Active, Dead
 
 ; Color.Red = 0, State.Idle = 0 — different symbols
 ```
@@ -335,7 +330,7 @@ enum State Idle, Active, Dead
 Enum members are valid in any assembler-time expression context:
 
 ```asm
-enum Mode Read, Write, Append
+Mode .enum Read, Write, Append
 
         ld   a,Mode.Write       ; load 1 into A
         cp   Mode.Append        ; compare A with 2
@@ -356,7 +351,7 @@ For a handful of states, a `cp` chain is readable and direct:
 When there are many values and performance matters, a jump table is more efficient:
 
 ```asm
-enum Cmd Draw, Move, Erase
+Cmd .enum Draw, Move, Erase
 
 ; C = Cmd.* value, guaranteed 0–2
         ld   hl,CMD_TABLE
@@ -377,9 +372,9 @@ CMD_TABLE:
 Enums work well for any small set of named states, command codes, token kinds or hardware-mode values where dense sequence values are what you want:
 
 ```asm
-enum State Idle, Moving, Attacking, Dead
-enum TileKind Empty, Wall, Pill, Power, Ghost
-enum Key Left, Right, Up, Down, Fire
+State    .enum Idle, Moving, Attacking, Dead
+TileKind .enum Empty, Wall, Pill, Power, Ghost
+Key      .enum Left, Right, Up, Down, Fire
 ```
 
 `State.Dead` reads more clearly than `cp 3`. Reorder the enum or add a state, and every use of `State.Dead` updates automatically.

@@ -372,6 +372,12 @@ Current concern:
 
 `addr` is currently the same size as `word`: a 16-bit layout scalar. Its only distinction is semantic intent, suggesting that the field holds an address or pointer.
 
+Decision:
+
+`addr` / `ADDR` should be treated as deprecated. It appears to have remained because it had not been formally deprecated, not because it has a continuing role in the language.
+
+This is no longer only an open question. The current editorial direction is to deprecate it and remove it from the normal AZM teaching path.
+
 Reason to remove:
 
 - On the Z80, words and addresses are both 16-bit values and are used fluidly in register pairs.
@@ -382,8 +388,12 @@ Reason to remove:
 Potential change:
 
 - Deprecate `addr` in documentation and implementation.
+- Mark it as deprecated in implementation-facing notes and future changelog material.
+- Decide whether deprecated use should warn immediately or be accepted silently for one compatibility window.
 - Prefer `word` for all 16-bit layout fields.
 - If pointer intent needs documentation, use field names or comments rather than a separate scalar keyword.
+- Remove `addr` / `ADDR` from examples, main documentation and recommended syntax.
+- If it remains accepted for compatibility, keep it out of the normal teaching path and document it only in compatibility/reference material if necessary.
 
 Migration question:
 

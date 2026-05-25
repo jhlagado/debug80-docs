@@ -26,15 +26,15 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 | `.binfrom` | `.binfrom addr` | Marks the start address of the flat binary output range | 3 |
 | `.binto` | `.binto addr` | Marks the end address of the flat binary output range | 3 |
 | `.end` | `.end` | Marks the end of source; AZM stops assembling at this point | — |
-| `.type` | `.type Name` … `.endtype` | Opens a record layout declaration block | 5 |
+| `.type` | `Name .type` … `.endtype` | Opens a record layout declaration block | 5 |
 | `.endtype` | `.endtype` | Closes a `.type` block | 5 |
-| `.union` | `.union Name` … `.endunion` | Opens a union layout declaration block | 5 |
+| `.union` | `Name .union` … `.endunion` | Opens a union layout declaration block | 5 |
 | `.endunion` | `.endunion` | Closes a `.union` block | 5 |
 | `.field` | `name .field TypeExpr` | Declares a field of any type inside a `.type` or `.union` block | 5 |
 | `.byte` | `name .byte` | Declares a 1-byte field inside `.type` or `.union`; shorthand for `.field byte` | 5 |
 | `.word` | `name .word` | Declares a 2-byte field inside `.type` or `.union`; shorthand for `.field word` | 5 |
-| `.addr` | `name .addr` | Declares a 2-byte address-sized field inside `.type` or `.union` | 5 |
-| `enum` | `enum Name Member[,…]` | Declares a group of integer constants with qualified names (`Name.Member`) | 3 |
+| `.typealias` | `Name .typealias TypeExpr` | Transparent assembler-time alias for a layout type expression | 5 |
+| `.enum` | `Name .enum Member[,…]` | Declares a group of integer constants with qualified names (`Name.Member`) | 3 |
 | `op` / `end` | `op name(params)` … `end` | Declares an inline instruction-expansion op | 7 |
 
 ## Directive aliases
@@ -58,6 +58,23 @@ Built-in aliases (normalized before parsing):
 | `ISTR` | `.istr` |
 | `BINFROM` | `.binfrom` |
 | `BINTO` | `.binto` |
+
+---
+
+## AZMDoc carrier notation
+
+Carriers in `;!` contract blocks are comma-separated register names, flag names or register pair names. Register pairs expand to their constituent 8-bit registers during analysis:
+
+| Pair notation | Expands to |
+|--------------|------------|
+| `BC` | `B,C` |
+| `DE` | `D,E` |
+| `HL` | `H,L` |
+| `IX` | `IXH,IXL` |
+| `IY` | `IYH,IYL` |
+| `SP` | `SPH,SPL` |
+
+Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`. Use `carry` for the carry flag; `C` names register C. The full AZMDoc contract format is covered in Chapter 6.
 
 ---
 

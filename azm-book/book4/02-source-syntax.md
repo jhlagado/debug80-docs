@@ -46,7 +46,7 @@ One or more spaces or tabs separate tokens. Commas separate operand lists in `.d
 .db $48,$65,$6C,$6C,$6F   ; five bytes
 ```
 
-The two valid forms are `NAME .equ expr` and `NAME: .equ expr`. The name always comes first.
+The canonical form is `NAME .equ expr`. The name always comes first.
 
 ## Comments
 
@@ -77,10 +77,10 @@ A label names the assembly address at the point where it appears:
 
 ```asm
 BUFFER:
-        .ds 64
+        .db 0
 ```
 
-AZM records that `BUFFER` equals the current assembly address, then reserves 64 bytes. Any instruction or data that references `BUFFER` gets that address substituted in.
+AZM records that `BUFFER` equals the current assembly address. Any instruction or data that references `BUFFER` gets that address substituted in.
 
 Code labels work the same way:
 
@@ -192,6 +192,35 @@ Labels need globally unique names. Prefixing branch labels with their routine na
 
 ---
 
+## Declaration syntax
+
+Declarations put the declared name on the left, without a colon:
+
+```asm
+COUNT       .equ 8
+Colour      .enum Red, Green, Blue
+
+Sprite      .type
+x           .byte
+y           .byte
+            .endtype
+
+SpriteArray .typealias Sprite[2]
+```
+
+A colon marks an address label only — it names the current assembly address, not a constant or type:
+
+```asm
+COUNT   .equ 8      ; assemble-time constant
+
+COUNT:              ; address label
+        .db 8
+```
+
+`COUNT .equ 8` and `COUNT:` are different things. The first binds a name to the value 8. The second records the address of the `.db 8` byte that follows. AZM reports an error for `COUNT: .equ 8`.
+
+---
+
 ## Directives
 
 AZM's canonical directive names start with a dot:
@@ -200,12 +229,12 @@ AZM's canonical directive names start with a dot:
 .org    .equ    .db    .dw    .ds
 .cstr   .pstr   .istr  .include   .end
 .align  .binfrom  .binto
-.type   .endtype  .union  .endunion
+.type   .endtype  .union  .endunion  .typealias  .enum
 ```
 
 Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors.
 
-Undotted uppercase forms such as `DB`, `ORG` and `EQU` are accepted through the built-in alias layer. Chapter 7 covers the alias mechanism. New source should use the dotted lowercase forms throughout.
+New source uses the dotted lowercase forms throughout. Compatibility forms for other assembler source are covered in Chapter 7.
 
 ---
 
@@ -234,7 +263,7 @@ AZM accepts all numeric literal forms common in Z80 assembly:
 
 **`$FF` versus bare `$`:** `$FF` starts with `$` followed by a hex digit, so the whole token is a hex literal (255). A bare `$`, or `$` followed by a non-hex character, is the current assembly address. These two uses are separate: numeric literals belong in the table above; the current-address use belongs in Chapter 3 under address arithmetic.
 
-**`%` as binary prefix versus `%` as modulo:** `%10101010` at the start of a value is a binary literal. `expr % divisor` between two expressions is the modulo operator. Context distinguishes them — a `%` following an expression is always modulo.
+**`%` as binary prefix:** `%10101010` at the start of a value is a binary literal. The `%` character has a second use as the modulo operator, covered in Chapter 3.
 
 **Trailing-`H` rule:** the token must start with a decimal digit. `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. Write `$FF` or `0FFH`.
 
@@ -254,25 +283,7 @@ See [Appendix B](appendix-b-operators.md) for the full numeric literal table.
 
 ## String literals
 
-Multi-character string literals appear in `.db`, `.cstr`, `.pstr` and `.istr` operands. `.db` accepts string fragments directly:
-
-```asm
-.db "Hello"          ; 5 bytes: H e l l o
-.db "Hello",0        ; 6 bytes: H e l l o NUL
-```
-
-Each character in a double-quoted string contributes one byte at its ASCII value.
-
-Single-character strings in expression context evaluate to the character's ASCII code:
-
-```asm
-NEWLINE .equ $0A
-.db 'A'              ; byte $41
-```
-
-`.dw` accepts word expressions, including single-character quoted values (`'A'` or `"A"` evaluate to the ASCII code as a 16-bit value). Use `.db` for multi-character string fragments.
-
-The three string-specific directives and their uses are covered in Chapter 4, alongside the other data and storage directives.
+Quoted strings are character data. A single-character quoted value such as `'A'` is a numeric literal equal to the character's ASCII code, as shown in the numeric literals table above. Multi-character strings and the string directives (`.cstr`, `.pstr`, `.istr`) are covered in Chapter 4 alongside the data directives.
 
 ---
 

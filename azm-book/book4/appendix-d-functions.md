@@ -26,9 +26,8 @@ sizeof(TypeName[n])
 ```asm
 sizeof(byte)         ; 1
 sizeof(word)         ; 2
-sizeof(addr)         ; 2
 
-; Given: .type Sprite  (x:byte, y:byte, flags:byte, ptr:addr)
+; Given: Sprite .type (x .byte, y .byte, flags .byte, ptr .word)
 sizeof(Sprite)       ; 5
 sizeof(Sprite[16])   ; 80
 sizeof(byte[32])     ; 32
@@ -59,12 +58,12 @@ offset(TypeName[n], [index].fieldName)
 `offset` returns the byte distance from the start of a type to the named field. For simple fields the path is just the field name. For a field that is itself a record, the path is dot-separated. For an array field, the path includes a bracket index.
 
 ```asm
-.type Sprite
+Sprite  .type
 x       .byte      ; offset 0
 y       .byte      ; offset 1
 flags   .byte      ; offset 2
-ptr     .addr      ; offset 3
-.endtype
+ptr     .word      ; offset 3
+        .endtype
 
 offset(Sprite, x)       ; 0
 offset(Sprite, y)       ; 1
@@ -77,10 +76,10 @@ offset(Sprite[16], [3].flags)   ; offset of flags field in element 3
 Dot paths reach through nested record fields:
 
 ```asm
-.type Actor
+Actor   .type
 pos     .field Sprite    ; offsets 0–4
 state   .byte            ; offset 5
-.endtype
+        .endtype
 
 offset(Actor, pos.x)     ; 0
 offset(Actor, pos.y)     ; 1
@@ -139,9 +138,7 @@ For source ported from assemblers that used `LOW()` or `HIGH()`, replace those c
 
 ## Case sensitivity
 
-`sizeof` and `offset` are currently parsed case-insensitively: `SIZEOF`, `Sizeof` and `sizeof` all work. `LSB` and `MSB` are uppercase-only; the parser matches those exact tokens.
-
-Canonical style is lowercase `sizeof` and `offset`, uppercase `LSB` and `MSB`. Write them that way; the current parser is permissive for `sizeof` and `offset` but the canonical form is lowercase.
+All four functions are case-sensitive. The parser matches the exact tokens `sizeof`, `offset`, `LSB` and `MSB`. `SIZEOF`, `Sizeof`, `Offset`, `lsb` and `msb` are parse errors.
 
 ---
 

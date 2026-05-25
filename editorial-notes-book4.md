@@ -7,6 +7,10 @@ Consolidated rewrite brief:
 - See `book4-editorial-rewrite-brief.md` for the structured critique and instructions to the writing agent.
 - This file remains the chronological collection of author feedback.
 - The rewrite brief is the document to use when planning, executing and reviewing a major Book 4 rewrite.
+- The chronological order of this file is important. It captures the author's first impressions while reading the book in order, including the rising frustration when the book repeats itself or fails to progress.
+- Use this file as evidence during review: repeated complaints in these notes usually indicate repeated structural faults in the book, not redundant feedback.
+- During review of any rewrite, read this file in order and ask whether the rewritten book would still produce the same reaction at the same stage. If yes, the rewrite has not solved the structural problem.
+- When there is pushback against a note, clarify the author's intent or investigate the technical basis. Do not weaken the critique merely because a paragraph can be defended in isolation.
 
 ## Document-Wide Style and Terminology
 
@@ -22,6 +26,25 @@ Suggested direction:
 - Use "assembler-time" as an adjective if needed.
 - Avoid "compile time" unless quoting or deliberately contrasting with a compiler.
 - Sweep Book 4 for `compile-time`, `compile time`, `runtime`, `run time`, `assemble-time` and `assemble time` so terminology is consistent.
+
+### Deprecate `addr` / `ADDR`
+
+Current decision:
+
+`addr` / `ADDR` should be deprecated. It appears to have remained because it had not been officially deprecated, not because it should remain part of the main language path.
+
+This should be treated as an active deprecation direction, not merely a possible cleanup. The normal documentation path should move to `word` for 16-bit storage and avoid introducing `addr` as a separate concept.
+
+Editorial direction:
+
+- Remove `addr` / `ADDR` from main-flow Book 4 prose and examples.
+- Do not present `addr` / `ADDR` as current recommended syntax.
+- If it must be mentioned, put it in deprecated compatibility/reference material only.
+- Treat any ordinary use of `addr` / `ADDR` in the rewritten book as a review finding.
+
+Implementation note:
+
+The implementation notes now include a matching `addr` / `ADDR` deprecation item.
 
 ## Chapter 1 — Getting Started
 

@@ -166,33 +166,6 @@ PAGE:
 
 A fill value gives the reserved region a known initial state in the binary image — for ROM initialization tables, for example.
 
-### Trailing `.ds` behaviour
-
-A `.ds` that comes after all emitted bytes, at the end of a source file, advances the assembly address outside the flat binary's emitted byte range:
-
-```asm
-        .org $0100
-        ; ... code ...
-        halt
-
-WORKSPACE:
-        .ds 128        ; address advances, no bytes in binary
-```
-
-The binary is cropped at the last byte of real content. This is useful when your program loads into limited RAM and binary size matters.
-
-### Type expressions in `.ds`
-
-Chapter 5 introduces layout type expressions such as `byte[32]` and `Sprite[16]`. `.ds` accepts those expressions wherever it expects a byte count:
-
-```asm
-BYTE_BUF:  .ds byte[32]      ; 32 bytes
-PLAYER:    .ds Sprite        ; sizeof(Sprite) bytes
-TABLE:     .ds Sprite[16]    ; sizeof(Sprite) * 16 bytes
-```
-
-The storage rule stays the same: `.ds` reserves bytes. Layout types compute the count.
-
 ### Storage maps
 
 For programs with several independent storage areas, collect all `.ds` blocks under a dedicated `.org`:
@@ -218,15 +191,10 @@ Collecting storage blocks under one `.org` lets you verify that no areas overlap
 
 ## File inclusion
 
-`.include` inserts the contents of another source file at the point of the directive, as if you had typed that file's text inline. All included files merge into a single translation unit — every label and constant defined anywhere is visible everywhere.
-
-```asm
-        .include "hardware.asm"
-        .include "sprites.asm"
-```
-
-Paths are relative to the file containing the `.include` directive. Add search directories with `-I` for shared library paths. Every label must be globally unique across all included files; including the same file twice is a duplicate-symbol error.
+`.include "path"` inserts another source file inline at that point. All included files merge into one translation unit, so every label and constant is visible everywhere. Paths are relative to the including file; add search directories with `-I`. Every label must be globally unique across all included files. Op declarations and layout types are typically placed in dedicated include files, as shown in Chapter 7.
 
 ---
+
+`.ds` reserves bytes by count. Chapter 5 shows how layout types make those counts meaningful.
 
 [← Addresses, Constants and Expressions](03-addresses-constants-expressions.md) | [Manual](index.md) | [The Layout System →](05-layout-system.md)

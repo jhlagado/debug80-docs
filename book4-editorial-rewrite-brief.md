@@ -4,6 +4,12 @@ This document consolidates the author's feedback on AZM Book 4 into a rewrite br
 
 The rewrite must produce a shorter, sharper and more progressive book. "Progressive" means that facts arrive in the order the reader needs them. Each paragraph should add a new piece of understanding, prepare the next idea or ground an earlier idea in code. If a paragraph does none of those things, remove it.
 
+Use this brief as a severe acceptance standard for any rewrite. It is not only a planning document. After the rewrite, read the new book against this brief and the chronological notes in `editorial-notes-book4.md`. The chronological notes matter because they capture the author's first reaction while reading the book in order. The repeated frustration in those notes is evidence of the book's repeated failure to progress, not noise in the feedback.
+
+When there is pushback against a requested cut or restructure, do not dilute the critique. Clarify the objection with the author or investigate the underlying technical issue. The question is not whether a paragraph can be defended in isolation. The question is whether it improves the reader's ordered understanding at that exact point in the book.
+
+The temporal reading notes are primary evidence. They record the experience created by the book as it was read, not an abstract after-the-fact taxonomy. If those notes sound repetitive, that is because the book repeatedly created the same problem. Treat the author's rising irritation as a signal that the book failed to move forward. A rewrite that preserves the same pattern with smoother prose has failed.
+
 ## Core Verdict
 
 Book 4 is currently too long for the amount of knowledge it delivers. The problem is not that the manual contains too much content. The problem is that too much of the content is in the wrong order, repeated in several places or padded with prose that sounds like a generated explanation rather than a human technical manual.
@@ -19,6 +25,7 @@ The most serious structural failures are:
 - The diagnostics and aliases material is far longer than its teaching value justifies.
 - Chapter 9, the porting chapter, does not justify its existence and should be removed.
 - `.lst` listing output is deprecated as a documentation topic and should be removed from the book.
+- `addr` / `ADDR` should be treated as deprecated and should not appear as current syntax in the rewritten book.
 
 The rewrite should be ruthless. Do not try to polish the current book paragraph by paragraph. Use the existing material as raw material, then rebuild the sequence around the reader's learning path.
 
@@ -200,6 +207,45 @@ Then enforce this rule:
 - If an early mention is not needed, delete it.
 
 This audit should expose the current circularity around labels, constants, `.equ`, literals, `$`, naming conventions, aliases, `sizeof`, `offset`, data layout and output formats.
+
+### Temporal Reading Audit
+
+After the theme-tag audit, perform a second audit using `editorial-notes-book4.md` in chronological order.
+
+Read each note as a first-reader failure report. For each note, record:
+
+- where in the old book the reaction occurred;
+- what kind of failure it identified: repetition, premature concept, missing definition, weak prose, misplaced topic, deprecated feature, boring over-expansion or wrong emphasis;
+- whether the rewrite removes the cause, moves the topic, defines the missing concept earlier or deliberately rejects the note with a documented reason;
+- whether the reader would still be likely to have the same reaction when reading the rewritten book.
+
+Acceptance rule:
+
+If the rewritten book would plausibly provoke the same temporal reaction, the rewrite has not gone far enough.
+
+This audit should be harsh. Do not average the notes into a mild general impression. The value of the notes is that they preserve the sequence of irritation, confusion and loss of confidence as the book moved from one topic to the next. Use that sequence to judge whether the rewritten book now has real progression.
+
+When the notes show repeated complaints about the same topic, do not treat later complaints as duplicates. Later complaints show that the earlier problem was not isolated. They prove that the book kept returning to the same failure mode.
+
+### Pushback During Review
+
+If a writing agent, coding agent or reviewer argues that a section should remain despite the notes, require one of these justifications:
+
+- the section teaches a new concept that has no better home;
+- the section supplies a necessary bridge between two concepts;
+- the section verifies a technical behaviour that the reader must understand at that point;
+- the section is a compact reference pointer and does not interrupt the main flow.
+
+Reject these justifications:
+
+- the section is technically correct;
+- the material already exists and can be polished;
+- some readers might find it interesting;
+- it helps explain what AZM is not;
+- it preserves history from an earlier design;
+- it is useful somewhere, but not necessarily here.
+
+When in doubt, cut, move or compress.
 
 ## Chapter-Level Instructions
 
@@ -499,6 +545,15 @@ For each chapter, answer:
 
 If a chapter cannot answer those questions clearly, it is not structured enough.
 
+Then read the chapter as a first-time reader would. If the chapter creates the feeling that the book has returned to an already-covered idea, that is a structural failure even if each individual paragraph is technically correct. The rewrite must remove that sense of circling.
+
+Use the chronological notes as review evidence:
+
+- Where the notes show growing irritation, inspect the surrounding chapter for repetition, premature concepts or filler.
+- Where the notes ask "why is this here?", require the rewritten section to justify its place through the next useful idea it teaches.
+- Where the notes report confusion from out-of-order concepts, verify that the rewrite either moved the concept earlier or removed the premature mention.
+- Where the notes identify boring or overlong sections, check whether the rewrite cut the section substantially rather than merely smoothing the prose.
+
 ### Redundancy Check
 
 Search for repeated treatment of:
@@ -516,6 +571,7 @@ Search for repeated treatment of:
 - aliases;
 - listing output;
 - CI pipelines.
+- `addr` / `ADDR`.
 
 Each repeated section must either add a genuinely new point or be cut.
 
@@ -567,6 +623,17 @@ Particular verification targets:
 - type expressions, `sizeof`, `offset` and layout casts;
 - alias matching behaviour;
 - `--case-style` semantics.
+- absence or deprecation treatment of `addr` / `ADDR`.
+
+### Pushback Handling
+
+If a writing or coding agent pushes back on this brief, handle the pushback by returning to the author's underlying intent:
+
+- The book must teach AZM as a progressive sequence of ideas, not as a collection of reference fragments.
+- Temporal reading feedback is valuable because it records the experience the book created in order.
+- A technically correct section can still be a failed section if it arrives too early, repeats another section or forces the reader to carry an unnecessary concept.
+- The default remedy for a disputed paragraph is deletion unless the paragraph can be shown to advance understanding at that exact point.
+- Compatibility, deprecated syntax and historical design traces belong in reference material only when they remain operationally useful.
 
 ## Final Instruction To The Writing Agent
 

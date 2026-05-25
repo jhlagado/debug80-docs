@@ -60,6 +60,8 @@ The code at each call site looks correct. Neither routine has a bug when read in
 
 **preserves**: a register exits with the same value it had on entry. Preservation is an observable entry/exit property. Pushing on entry and popping on exit is one way to preserve a register; not writing the register at all is another. The contract says the register is unchanged on exit; how that is achieved is an implementation detail.
 
+**live**: a register is live at a point in the code if its value will be read before the next write to it. `B` is live at the `call RENDER_TILE` because `djnz` reads `B` after the call returns.
+
 ---
 
 ## The contract that exposes the clobber
@@ -244,18 +246,7 @@ Carriers appear in a comma-separated list after the key:
 ;!      clobbers  BC
 ```
 
-Register pairs expand to their constituent 8-bit registers for analysis:
-
-| Pair notation | Expands to |
-|--------------|------------|
-| `BC` | `B,C` |
-| `DE` | `D,E` |
-| `HL` | `H,L` |
-| `IX` | `IXH,IXL` |
-| `IY` | `IYH,IYL` |
-| `SP` | `SPH,SPL` |
-
-Flags are named individually:
+Register pair names expand to their constituent 8-bit registers for analysis — `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
 
 ```asm
 ;!      out       carry,zero
