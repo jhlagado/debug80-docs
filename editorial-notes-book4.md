@@ -1023,6 +1023,46 @@ Teaching point:
 
 `byte[16]` is not magic array storage by itself; in a layout context it is a type/size expression whose byte count is used by `.field` or `.ds`. The section should establish that before leaning on array notation.
 
+Updated concern after the native syntax rewrite:
+
+The layout chapter still launches into the first record example with shorthand field declarations:
+
+```asm
+Sprite  .type
+x       .byte
+y       .byte
+tile    .byte
+flags   .byte
+        .endtype
+```
+
+For a reader seeing a type declaration for the first time, this hides the main mechanism. `.byte` and `.word` are convenient shorthand forms, but the concept to teach first is that a record is made of fields, and that each field has a name plus a layout type expression.
+
+Preferred teaching order:
+
+1. Introduce the full field form first:
+
+```asm
+Sprite  .type
+x       .field byte
+y       .field byte
+tile    .field byte
+flags   .field byte
+        .endtype
+```
+
+2. Explain that `.field` declares a named field and the token after it is the field's layout type expression.
+3. Then introduce the shorthand:
+
+```asm
+x       .byte       ; shorthand for x .field byte
+ptr     .word       ; shorthand for ptr .field word
+```
+
+Reason:
+
+The reader needs the intuition that a `.type` body is a sequence of fields. The shorthand is fine once that model is established, but it should not be the first form they see.
+
 ### Clarify type expressions versus numeric expressions
 
 Current concern:
