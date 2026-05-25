@@ -239,4 +239,20 @@ Instruction mnemonic changes — for example, source using `MOV` for `LD` — ne
 
 ---
 
+## Including source files
+
+`.include "path"` inserts another source file inline at that point, as if you had typed its contents there. The file path is relative to the including file; add search directories with `-I`.
+
+All included files share one translation unit and one namespace. Every label and constant must be globally unique across the whole project. Duplicate symbols from two included files produce an assembly error.
+
+Op declarations and layout types typically live in dedicated include files, pulled in before the code that uses them:
+
+```asm
+        .include "hardware.asm"    ; port addresses and memory-mapped I/O
+        .include "layout.asm"      ; type declarations
+        .include "ops.asm"         ; op declarations
+```
+
+---
+
 [← Register Care and Contracts](06-register-care.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)

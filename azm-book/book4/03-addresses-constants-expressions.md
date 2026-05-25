@@ -41,11 +41,7 @@ result:
 
 The code assembles at `$0100`. The data byte assembles at `$8000`. Both land in the same output binary at their respective offsets.
 
-`.org` changes where AZM places the next bytes, emitting nothing itself. AZM warns when a new `.org` overlaps already-assembled bytes.
-
-## Assembly address vs file offset
-
-In a flat binary, the byte at address `$0100` lands at file offset `$0100` only if the binary starts at address `$0000`. If your code lives at `$8000` and your binary starts there, address `$8000` maps to file offset 0. AZM handles this correctly: the binary output contains the bytes in address order from the first assembled byte.
+`.org` sets the assembly address — the address assigned to the next byte — not the byte's position in the output file. `.org` changes where AZM places the next bytes, emitting nothing itself. AZM warns when a new `.org` overlaps already-assembled bytes.
 
 ## `$` — the current assembly address
 

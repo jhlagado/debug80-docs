@@ -182,11 +182,13 @@ Both `ENTRY_A` and `ENTRY_B` call into the same instruction. Consecutive `@` lab
 
 User symbols are case-sensitive. `START`, `start` and `Start` are three distinct symbols.
 
-These conventions appear throughout this manual and the Z80 ecosystem:
+The preferred AZM style:
 
-- **Constants** (`MAX_SPEED`, `LCD_DATA`, `SCREEN_WIDTH`): all-uppercase with underscores. The most common convention in Z80 source.
-- **Code labels and routines** (`ShiftRowLoop`, `DrawSprite`, `checkBounds`): PascalCase or camelCase. The choice between them matters less than consistency within a project.
-- **Entry labels** (`@SHIFT_ROW`, `@DRAW_SPRITE`): uppercase with underscores, marked with `@`.
+- **Constants** (`SCREEN_WIDTH`, `MAX_SPRITES`, `LCD_DATA`): uppercase with underscores.
+- **Entry labels** (`@DrawSprite:`, `@InitTimer:`): PascalCase after the `@`.
+- **Branch labels** (`Loop`, `DONE`, `SkipInit`): PascalCase or uppercase.
+
+The assembler enforces no naming policy; different projects may use their own conventions. These give a concrete starting point and match the style used throughout this manual.
 
 Labels need globally unique names. Prefixing branch labels with their routine name (`ShiftRowLoop` rather than `Loop`) prevents clashes when the same word appears in multiple routines.
 

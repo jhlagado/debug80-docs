@@ -189,12 +189,6 @@ Collecting storage blocks under one `.org` lets you verify that no areas overlap
 
 ---
 
-## File inclusion
-
-`.include "path"` inserts another source file inline at that point. All included files merge into one translation unit, so every label and constant is visible everywhere. Paths are relative to the including file; add search directories with `-I`. Every label must be globally unique across all included files. Op declarations and layout types are typically placed in dedicated include files, as shown in Chapter 7.
-
----
-
-`.ds` reserves bytes by count. Chapter 5 shows how layout types make those counts meaningful.
+`.ds` reserves storage by byte count. Chapter 5 shows how layout types give those counts structure.
 
 [← Addresses, Constants and Expressions](03-addresses-constants-expressions.md) | [Manual](index.md) | [The Layout System →](05-layout-system.md)

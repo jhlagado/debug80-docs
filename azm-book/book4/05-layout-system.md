@@ -59,7 +59,7 @@ Two scalar types are the building blocks for field sizes:
 | `byte` | 1 |
 | `word` | 2 |
 
-These names are valid in size positions — inside `.type` / `.union` declarations and as `.ds` operands. The parser also accepts `addr` as an alias for `word` but `word` is the preferred form for 16-bit fields.
+These names are valid in size positions — inside `.type` / `.union` declarations and as `.ds` operands.
 
 `sizeof(Type)` returns the exact packed byte count for a type. The result is an ordinary integer constant, valid anywhere an expression is valid:
 
@@ -303,9 +303,9 @@ The `sizeof` and `offset` forms are always correct and always clear; use whichev
 
 ## Unions and alternate views
 
-A union describes multiple overlapping views of the same bytes. This is an advanced feature for hardware registers and other cases where the same address range has more than one valid interpretation.
+Unions are an advanced feature. Most AZM programs do not need them.
 
-All union members start at offset zero; the union's size is the size of its largest member. Some hardware ports expose the same bytes as both a status byte and a 16-bit value:
+A union describes multiple overlapping views of the same bytes. All union members start at offset zero; the union's size is the size of its largest member. Hardware ports that expose the same address as both a status byte and a 16-bit value are a natural fit:
 
 ```asm
 PortValue .union
@@ -321,13 +321,11 @@ value   .field PortValue
 PORT:   .ds IoPort
 ```
 
-The cast syntax works with union types by the same rules as record types:
+Cast syntax reaches union members by the same rules as record fields:
 
 ```asm
 ld   a,(<IoPort>PORT.value.status)    ; read the status byte
 ld   hl,<IoPort>PORT.value.full       ; read the full word
-; Equivalent to:
-ld   hl,PORT + offset(IoPort, value) + offset(PortValue, full)
 ```
 
 ---

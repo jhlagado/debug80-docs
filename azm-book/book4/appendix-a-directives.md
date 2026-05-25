@@ -18,7 +18,7 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 | `.db` | `.db expr[,expr…]` | Emits one or more 8-bit values; accepts string literals | 4 |
 | `.dw` | `.dw expr[,expr…]` | Emits one or more 16-bit little-endian values | 4 |
 | `.ds` | `.ds count[,fill]` | Reserves `count` bytes; optional `fill` byte; accepts type expressions | 4, 5 |
-| `.include` | `.include "path"` | Inserts the named source file at this point | 4 |
+| `.include` | `.include "path"` | Inserts the named source file at this point | 7 |
 | `.align` | `.align n` | Advances the address to the next multiple of `n`, inserting zero bytes | 3 |
 | `.cstr` | `.cstr "text"` | Emits string bytes followed by a `$00` terminator (C-style) | 4 |
 | `.pstr` | `.pstr "text"` | Emits a length byte followed by string bytes (Pascal-style) | 4 |
