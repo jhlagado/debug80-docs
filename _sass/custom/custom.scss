@@ -103,22 +103,39 @@ html {
     font-weight: 400;
   }
 
-  // Block code — slight visual lift from page background
+  // Block code — make listings read as deliberate figures, not body text
+  pre,
   pre.highlight,
-  div.highlight,
   .highlighter-rouge pre.highlight {
-    background-color: #f2ede5;
-    border: 1px solid #cdc8be;
+    background:
+      linear-gradient(90deg, rgba(27, 94, 139, 0.08), rgba(27, 94, 139, 0) 4.5rem),
+      #f1ece3;
+    border: 1px solid #c9c1b4;
+    border-left: 5px solid #1b5e8b;
     border-radius: 6px;
-    margin-top: 0.25rem;
-    margin-bottom: 1.75rem;
+    box-shadow: 0 1px 0 rgba(26, 23, 20, 0.05);
+    margin-top: 0.35rem;
+    margin-bottom: 1.9rem;
+    padding: 1rem 1.125rem 1rem 1.25rem;
+    overflow-x: auto;
 
     code {
       background-color: transparent !important;
-      color: inherit;
+      color: #2f2b27;
       padding: 0;
       font-size: 0.875rem;
       line-height: 1.65;
+    }
+  }
+
+  div.highlight {
+    background-color: transparent;
+    margin-top: 0.35rem;
+    margin-bottom: 1.9rem;
+
+    pre {
+      margin-top: 0;
+      margin-bottom: 0;
     }
   }
 
