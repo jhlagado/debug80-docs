@@ -402,6 +402,61 @@ These `offset` array paths are most useful for writing initialization tables or 
 
 ---
 
+## Arrays of records as named types
+
+`Sprite[16]` is a valid TypeExpr wherever a size or type expression is accepted — `.ds`, `sizeof`, `offset`, and layout casts all take it:
+
+```asm
+.type Sprite
+x       .byte
+y       .byte
+tile    .byte
+flags   .byte
+.endtype
+
+SPRITES:
+        .ds Sprite[16]
+
+SIZE    .equ sizeof(Sprite[16])
+FLAGS   .equ offset(Sprite[16], [3].flags)
+
+        ld hl, <Sprite[16]>SPRITES[3].flags
+```
+
+`sizeof(Sprite[16])` gives the total byte count; `offset(Sprite[16], [3].flags)` gives the byte offset of `flags` in element 3.
+
+In a large codebase, you might want a single name for `Sprite[16]` so that `sizeof(SpriteArray)` appears throughout the source instead of the literal `sizeof(Sprite[16])`. The workaround is a wrapper record:
+
+```asm
+.type SpriteArray
+sprites .field Sprite[16]
+.endtype
+```
+
+`sizeof(SpriteArray)` gives the same value as `sizeof(Sprite[16])`. Access goes through the wrapper field:
+
+```asm
+offset(SpriteArray, sprites[3].flags)
+```
+
+rather than:
+
+```asm
+offset(Sprite[16], [3].flags)
+```
+
+The wrapper adds one named field level — `sprites` — between the type name and the array index. That is the tradeoff: a reusable name at the cost of an extra path step in every access expression.
+
+A direct alias:
+
+```asm
+SpriteArray .type Sprite[16]   ; not currently valid
+```
+
+is not implemented. AZM rejects it. Use the wrapper record.
+
+---
+
 ## Unions and alternate views
 
 Z80 code often reads the same memory location through different-sized accesses. A timer counter might be read as a 16-bit word in some routines and as a low byte in others. A packet buffer might be interpreted as raw bytes at one level and as a structured header at another. Unions give both access patterns named fields and make the relationship between them explicit in the source.
