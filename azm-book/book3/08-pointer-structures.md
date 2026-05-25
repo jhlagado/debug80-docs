@@ -13,7 +13,7 @@ Chapter 5 packed several fields into one record, but every byte still lived in a
 
 The CPU still only sees bytes. A pointer is a 16-bit address copied into a `.word` field. To reach the next node, you load that word into HL and use HL the same way you used a table base in Chapter 2 — except the “next index” is whatever address was stored, not `base + stride`.
 
-The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list.asm): a static three-node list, sum and find walks, and insert-at-head into a pre-allocated spare node.
+The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list.asm): a static three-node list, sum and find walks and insert-at-head into a pre-allocated spare node.
 
 ---
 
@@ -225,7 +225,7 @@ The demo searches for `$22` and expects `find_hit = 1` and `find_node` equal to 
 
 ## Insert at head: `list_push_head`
 
-**Insert at head** needs a free node address (here `node_spare`), a byte value in A, and the current head word:
+**Insert at head** needs a free node address (here `node_spare`), a byte value in A and the current head word:
 
 ```asm
 ; list_push_head: prepend node DE with value A; updates list_head
@@ -302,7 +302,7 @@ Pointer routines follow the same `@` entry and `;!` tags as the ring buffer and 
 | Tag | Role for lists |
 |-----|----------------|
 | `;! in` | HL = current node or head pointer; A or DE for push/find |
-| `;! out` | HL = sum, found node, or 0; carry for find |
+| `;! out` | HL = sum, found node or 0; carry for find |
 | `;! clobbers` | Include every register the link walk destroys |
 
 Document whether zero in HL means end-of-list or “not found” — here both use HL = 0 with carry distinguishing find success.
@@ -337,7 +337,7 @@ TREE_RIGHT .equ offset(TreeNode, right)
 ; This sketch assumes HL points at a node; use a separate root word in real code.
 ```
 
-The control flow is a loop, not a self-call — depth is bounded by tree height, and you avoid stack cost from Chapter 6 unless you deliberately choose recursive search later. A full BST companion would also need a static node pool and a `root` word; the linked-list program is enough for one assemble-and-halt exercise.
+The control flow is a loop, not a self-call — depth is bounded by tree height and you avoid stack cost from Chapter 6 unless you deliberately choose recursive search later. A full BST companion would also need a static node pool and a `root` word; the linked-list program is enough for one assemble-and-halt exercise.
 
 ---
 

@@ -9,9 +9,9 @@ nav_order: 10
 
 # Chapter 10 — A Complete Program
 
-You know enough Z80 to write real programs. This chapter builds one from scratch, using the full set of techniques from Chapters 3–9: a data table, a DJNZ loop, subroutines called from that loop, conditional branches, and push/pop register preservation.
+You know enough Z80 to write real programs. This chapter builds one from scratch, using the full set of techniques from Chapters 3–9: a data table, a DJNZ loop, subroutines called from that loop, conditional branches and push/pop register preservation.
 
-The result works, and is slightly uncomfortable to read back — deliberately so. The two subroutines expose friction that accumulates in flat Z80 code as programs grow: contracts live only in comments, register ownership has no names, repeated comparison patterns have no way to be named, and byte offsets in data structures must be counted by hand. That friction is real, and naming it is the point. Chapters 11–14 address it directly.
+The result works, and is slightly uncomfortable to read back — deliberately so. The two subroutines expose friction that accumulates in flat Z80 code as programs grow: contracts live only in comments, register ownership has no names, repeated comparison patterns have no way to be named and byte offsets in data structures must be counted by hand. That friction is real, and naming it is the point. Chapters 11–14 address it directly.
 
 ---
 
@@ -119,7 +119,7 @@ find_max_no_update:
 
 Apply the flag-before-branch check on `cp c` / `jr nc`: `cp c` establishes the flag, `jr nc` reads it immediately — nothing changes the flag between them. Carry clear after `cp c` means A ≥ C, so `jr nc` skips the update and the running maximum is left alone. `ld a, c` runs only when carry was set — meaning A was less than C and C is a new maximum. After eight iterations, A = 91 (`$5B`), the largest value in the table.
 
-The comment header documents "Clobbers: A, B, C, HL" — all four are modified by the time the subroutine returns. B is consumed by `djnz`, C holds the current element at each step, HL has walked past the last byte, and A holds the result. The caller is responsible for knowing this and reloading any register it needs before the next call.
+The comment header documents "Clobbers: A, B, C, HL" — all four are modified by the time the subroutine returns. B is consumed by `djnz`, C holds the current element at each step, HL has walked past the last byte and A holds the result. The caller is responsible for knowing this and reloading any register it needs before the next call.
 
 ---
 
@@ -145,7 +145,7 @@ count_above_skip:
   ret
 ```
 
-The subroutine needs a counter. It uses D, and D must be initialized to zero before the loop. Initializing D does not disturb B or C — `ld d, 0` only touches D. But the subroutine wraps the initialization in `push bc / ld d, 0 / pop bc` anyway. The programmer was not sure whether zeroing D would be safe, saved BC to protect it, and moved on.
+The subroutine needs a counter. It uses D, and D must be initialized to zero before the loop. Initializing D does not disturb B or C — `ld d, 0` only touches D. But the subroutine wraps the initialization in `push bc / ld d, 0 / pop bc` anyway. The programmer was not sure whether zeroing D would be safe, saved BC to protect it and moved on.
 
 Register-only code extracts this cost: with three inputs and a counter all living in registers, keeping a reliable mental model of which registers are safe to touch requires constant attention. When that attention lapses — even briefly — the instinct is to save everything, whether or not it was at risk. The push/pop pair is not wrong; it is a hedge against uncertainty. In a longer subroutine with more registers in flight, that hedge is often correct. Here it happens to be unnecessary.
 
@@ -157,7 +157,7 @@ The loop body uses one `cp c` and two conditional branches on the **same** flag 
 
 The program's strengths come from how explicit it is at every level.
 
-The data layout is under your control. You placed `values`, `max_val`, and `above_64` at `$8000`. The two subroutines receive a pointer and a count; they write to no address except the one passed in. Nothing is allocated behind your back.
+The data layout is under your control. You placed `values`, `max_val` and `above_64` at `$8000`. The two subroutines receive a pointer and a count; they write to no address except the one passed in. Nothing is allocated behind your back.
 
 The register usage is explicit. Tracing through `main`, you can follow exactly which registers carry which values at each line. The assembler adds nothing you did not write.
 
@@ -173,28 +173,28 @@ These four things become increasingly tedious as programs grow past a handful of
 
 **Comment-only contracts are not enforced.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. Nothing checks that the caller actually loads the right registers, or that the subroutine actually produces what it claims. A caller that loads the wrong register fails silently. A subroutine that clobbers a register it said it would preserve fails silently. Chapter 12 introduces AZMDoc `;!` contracts, which let the assembler verify these claims.
 
-**Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name — the register is D, and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. No declaration says "D is the counter." Chapter 11 covers the manual discipline for managing register ownership across subroutines; Chapter 12 shows how AZMDoc makes the contract explicit.
+**Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name — the register is D and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. No declaration says "D is the counter." Chapter 11 covers the manual discipline for managing register ownership across subroutines; Chapter 12 shows how AZMDoc makes the contract explicit.
 
 **Repeated comparison patterns have no name.** The `cp c` / `jr c` / `jr z` sequence in `count_above` implements "strictly greater than" — a concept with no single Z80 opcode. The same three-instruction pattern will appear every time you want a strict greater-than test. There is nothing to call that pattern, and no way to verify both branches are correct without re-reading them each time. Chapter 14 introduces `op` declarations, which give a name to a short instruction sequence and expand it inline wherever you write the name.
 
-**Byte offsets in data structures must be counted by hand.** This program has no compound data structures, but once you start grouping related bytes — a sprite with `x`, `y`, and `color` fields, for example — every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. Chapter 13 introduces AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant without counting.
+**Byte offsets in data structures must be counted by hand.** This program has no compound data structures, but once you start grouping related bytes — a sprite with `x`, `y` and `color` fields, for example — every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. Chapter 13 introduces AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant without counting.
 
 ---
 
 ## What the next chapters address
 
-Chapter 11 covers subroutine calling conventions in depth: how to pass arguments, which registers to save and restore, and the IX-frame pattern for subroutines that need local storage. Chapter 12 introduces AZMDoc, which turns the comment-only contracts above each subroutine into machine-checkable `;!` annotations — the assembler can verify that the caller sets the right registers and that the subroutine produces what it claims. Chapter 13 introduces layout types — scalar types, `.type` records, `sizeof`, `offset`, and `.ds` type expressions — so byte offsets in records are always named and never counted by hand. Chapter 14 introduces `op` declarations, which give names to short instruction sequences and expand them inline wherever you write the name.
+Chapter 11 covers subroutine calling conventions in depth: how to pass arguments, which registers to save and restore and the IX-frame pattern for subroutines that need local storage. Chapter 12 introduces AZMDoc, which turns the comment-only contracts above each subroutine into machine-checkable `;!` annotations — the assembler can verify that the caller sets the right registers and that the subroutine produces what it claims. Chapter 13 introduces layout types — scalar types, `.type` records, `sizeof`, `offset` and `.ds` type expressions — so byte offsets in records are always named and never counted by hand. Chapter 14 introduces `op` declarations, which give names to short instruction sequences and expand them inline wherever you write the name.
 
 ---
 
 ## Summary
 
-- A complete AZM program has a code section starting at `.org $0000`, data at one or more known addresses, a `main` label, and one or more helper subroutines.
+- A complete AZM program has a code section starting at `.org $0000`, data at one or more known addresses, a `main` label and one or more helper subroutines.
 - Subroutines receive inputs in registers and return results in registers. Document which registers each subroutine reads and which it modifies; nothing enforces these contracts.
 - The caller must reload any register that the subroutine modified before the next call.
 - The push/pop in `count_above` around `ld d, 0` protects BC while initializing D — it turns out to be unnecessary here, but the instinct to save registers when uncertain is reasonable in a longer subroutine.
 - One `cp c` plus two branches on the same flags implements "strictly greater than": skip if carry (A < C) or zero (A == C). The intent is not visible from the mnemonic sequence alone.
-- Chapters 11–14 — calling conventions, AZMDoc contracts, layout types, and ops — each address one of the friction points this program exposes.
+- Chapters 11–14 — calling conventions, AZMDoc contracts, layout types and ops — each address one of the friction points this program exposes.
 
 ---
 

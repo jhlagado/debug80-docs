@@ -9,11 +9,11 @@ nav_order: 12
 
 # Chapter 12 — Register Contracts with AZMDoc
 
-Chapter 11's comment block is the right idea: the subroutine declares what it reads, what it returns, and what it destroys; the caller reads that and writes code accordingly. But a semicolon comment can say anything, and nothing checks whether the comment still matches the code after the tenth edit.
+Chapter 11's comment block is the right idea: the subroutine declares what it reads, what it returns and what it destroys; the caller reads that and writes code accordingly. But a semicolon comment can say anything, and nothing checks whether the comment still matches the code after the tenth edit.
 
 AZMDoc is AZM's structured contract format — ordinary `;!` comment lines that the **register-care** analyzer reads. The syntax stays in comments, so other assemblers ignore it. AZM treats it as machine-checkable boundary information at every `call`. That is one of AZM's defining features: informal subroutine discipline becomes something the assembler can verify.
 
-This chapter is not a syntax appendix. It teaches the mental model — caller liveness, callee boundaries, flags as return values, `@` entry spans, external `.asmi` contracts, and the CLI workflow that makes register-care part of daily work.
+This chapter is not a syntax appendix. It teaches the mental model — caller liveness, callee boundaries, flags as return values, `@` entry spans, external `.asmi` contracts and the CLI workflow that makes register-care part of daily work.
 
 ---
 
@@ -48,7 +48,7 @@ source.asm:6: warning: HL is live across call to find_max, but find_max may clob
 
 The analyzer does not need to know what `table` means. It only needs to know: the caller had a value in HL, called something that may destroy HL, then used HL again. That is enough to flag a real bug.
 
-The fix is caller-side: reload HL, save it before the call, or stop using HL after the call:
+The fix is caller-side: reload HL, save it before the call or stop using HL after the call:
 
 ```asm
     ld hl, table
@@ -76,7 +76,7 @@ The callee contract answers:
 
 "No — HL may be different after return."
 
-The caller sees only the **external interface**: registers and flags that must be set on entry, registers and flags that carry results on exit, and registers the routine destroys without restoring. Everything that happens inside the body — scratch registers, loop counters, temporary pushes — matters only if it leaks across `ret`.
+The caller sees only the **external interface**: registers and flags that must be set on entry, registers and flags that carry results on exit and registers the routine destroys without restoring. Everything that happens inside the body — scratch registers, loop counters, temporary pushes — matters only if it leaks across `ret`.
 
 That caller-side **liveness** idea is the heart of register-care. The subroutine body can be long; the contract is short because it describes the door, not the room.
 
@@ -206,7 +206,7 @@ That declares an intentional transformation, not an accidental clobber.
 
 ## Flags are return values
 
-Book 3 uses carry for success and failure (`ring_push`, `ring_pop`, and others). Flags are first-class contract carriers, not an afterthought.
+Book 3 uses carry for success and failure (`ring_push`, `ring_pop` and others). Flags are first-class contract carriers, not an afterthought.
 
 ### Success on carry set
 
@@ -241,11 +241,11 @@ The human comment explains *meaning* (success vs empty). The contract names the 
     ret
 ```
 
-`or a` sets Z when A is zero. Callers test with `jr z`, `jr nz`, `ret z`, or `call nz` — those instructions are evidence the flag mattered.
+`or a` sets Z when A is zero. Callers test with `jr z`, `jr nz`, `ret z` or `call nz` — those instructions are evidence the flag mattered.
 
 ### Teaching point
 
-A flag can be the entire return value. You do not need a separate error code byte when carry or zero already communicates success, failure, or "found". Document the flag in `out`; put semantic wording in the plain `;` line above the contract:
+A flag can be the entire return value. You do not need a separate error code byte when carry or zero already communicates success, failure or "found". Document the flag in `out`; put semantic wording in the plain `;` line above the contract:
 
 ```asm
 ; ring_push: append byte in A; carry set on success, carry clear when full
@@ -360,7 +360,7 @@ Typical progression: run `--rc audit --reg-report` on legacy code, add `@` entri
 
 ## External code uses `.asmi`
 
-ROM routines, monitor calls, BIOS entry points, and Debug80 stubs have no AZM source to analyze. Register-care cannot inspect their bodies. **`.asmi`** files declare their boundaries — one record per external symbol, no comment syntax:
+ROM routines, monitor calls, BIOS entry points and Debug80 stubs have no AZM source to analyze. Register-care cannot inspect their bodies. **`.asmi`** files declare their boundaries — one record per external symbol, no comment syntax:
 
 ```
 extern MON_PRINT_CHAR
@@ -479,9 +479,9 @@ With `--rc error`, inferred effects that exceed the declared contract are flagge
 
 ---
 
-## What register-care does not prove
+## Register-care scope
 
-Register-care verifies **register and flag boundary consistency** at calls. It does not prove:
+Register-care verifies **register and flag boundary consistency** at calls. Keep these separate checks in your review:
 
 - Algorithm correctness (GCD, sort order, chess rules)
 - Memory aliasing (two pointers to the same buffer)
@@ -489,7 +489,7 @@ Register-care verifies **register and flag boundary consistency** at calls. It d
 - Interrupt safety or re-entrancy
 - Semantic meaning of values in registers (HL as string vs table vs node)
 
-Use it where informal discipline breaks down: live registers across `call`, documented clobbers vs actual code, and external routines described in `.asmi`. It turns comments into checkable promises at the boundary — AZM's killer feature for maintainable assembly, not a replacement for thinking about the algorithm.
+Use it where informal discipline breaks down: live registers across `call`, documented clobbers vs actual code and external routines described in `.asmi`. It turns comments into checkable promises at the boundary — AZM's killer feature for maintainable assembly, not a replacement for thinking about the algorithm.
 
 ---
 

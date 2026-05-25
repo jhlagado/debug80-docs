@@ -11,7 +11,7 @@ nav_order: 8
 
 Every program you have written so far is a single block of instructions that runs from top to bottom. That works for small tasks. But larger programs need to reuse logic — the same comparison, the same output routine, the same byte-copying sequence — called from a dozen different places. Without a way to jump away and come back, you would copy those instructions everywhere you needed them and maintain every copy separately.
 
-`call` and `ret` solve this. This chapter explains how they work, how the hardware stack supports them, and how to write subroutines that receive inputs through registers and hand results back to the caller.
+`call` and `ret` solve this. This chapter explains how they work, how the hardware stack supports them and how to write subroutines that receive inputs through registers and hand results back to the caller.
 
 ---
 
@@ -40,7 +40,7 @@ After the `call`, the CPU is executing instructions inside the subroutine. The s
 
 ## The `ret` instruction
 
-`ret` is equivalent to `pop pc` — if such an instruction existed. The CPU reads the top two bytes of the stack into the program counter, increments SP by two, and execution resumes at the instruction after the original `call`.
+`ret` is equivalent to `pop pc` — if such an instruction existed. The CPU reads the top two bytes of the stack into the program counter, increments SP by two and execution resumes at the instruction after the original `call`.
 
 If `ret` runs when the stack does not contain a valid return address — because of a push/pop mismatch, for example — the CPU jumps to whatever bytes are at the top of the stack, which is almost certainly not a valid instruction address.
 
@@ -48,7 +48,7 @@ If `ret` runs when the stack does not contain a valid return address — because
 
 ## The hardware stack
 
-The stack is a region of RAM. You decide where it lives by loading SP with a starting address before the program uses any `call`, `push`, or `pop` instructions. A common choice is the top of available RAM: `ld sp, $BFFF` (or whichever address marks the last byte of RAM on your target).
+The stack is a region of RAM. You decide where it lives by loading SP with a starting address before the program uses any `call`, `push` or `pop` instructions. A common choice is the top of available RAM: `ld sp, $BFFF` (or whichever address marks the last byte of RAM on your target).
 
 The stack grows downward. Each push decreases SP by two and writes a 16-bit value. Each pop reads two bytes and increases SP by two. SP always points to the most recent data pushed.
 
@@ -92,7 +92,7 @@ Every subroutine in AZM is a plain label followed by instructions, ending with `
 
 `pop hl` is the inverse: two bytes are read from the address in SP into HL, then SP is incremented by two — as if `ld hl, (sp)` were an instruction.
 
-The operand can be any of AF, BC, DE, HL, IX, or IY. Every push writes two bytes to RAM at SP; every pop reads them back. The stack tracks only position — not what the bytes mean or where they came from. All register pairs are saved to the same area of memory — the bytes at and below SP. The stack is the same RAM where your program and variables reside.
+The operand can be any of AF, BC, DE, HL, IX or IY. Every push writes two bytes to RAM at SP; every pop reads them back. The stack tracks only position — not what the bytes mean or where they came from. All register pairs are saved to the same area of memory — the bytes at and below SP. The stack is the same RAM where your program and variables reside.
 
 A subroutine uses `push` / `pop` to preserve registers it needs to modify internally. The pattern:
 
@@ -127,9 +127,9 @@ The stack is last-in-first-out: the pair pushed last is popped first. If you swa
 
 ## Shadow registers: saving state without the stack
 
-In a tight interrupt handler or innermost loop, saving BC, DE, and HL via `push` and `pop` costs six instructions — three pushes, three pops — and takes six bytes of stack space. `exx` does the same job in a single instruction: it swaps BC, DE, and HL with a second hidden set of registers (BC′, DE′, HL′) simultaneously. A second instruction, `ex af, af′`, swaps A and F with their shadow counterparts.
+In a tight interrupt handler or innermost loop, saving BC, DE and HL via `push` and `pop` costs six instructions — three pushes, three pops — and takes six bytes of stack space. `exx` does the same job in a single instruction: it swaps BC, DE and HL with a second hidden set of registers (BC′, DE′, HL′) simultaneously. A second instruction, `ex af, af′`, swaps A and F with their shadow counterparts.
 
-These are the **shadow registers** — a second, hidden copy of A, F, B, C, D, E, H, and L. You cannot use them directly in instructions; `exx` and `ex af, af′` are the only way in.
+These are the **shadow registers** — a second, hidden copy of A, F, B, C, D, E, H and L. You cannot use them directly in instructions; `exx` and `ex af, af′` are the only way in.
 
 The trade-off is that there is only one shadow set. If both your main code and an interrupt handler rely on `exx`, the interrupt can silently destroy the values the main code stored. `push` and `pop` work at any nesting depth; shadow registers do not. Use them when speed matters and you can guarantee that only one context uses them at a time.
 
@@ -137,7 +137,7 @@ The trade-off is that there is only one shadow set. If both your main code and a
 
 ## Conditional return: `ret cc`
 
-The Z80 also provides conditional return instructions: `ret z`, `ret nz`, `ret c`, `ret nc`, and so on. `ret z` pops the return address and returns only if Z is set; otherwise it falls through to the next instruction.
+The Z80 also provides conditional return instructions: `ret z`, `ret nz`, `ret c`, `ret nc` and so on. `ret z` pops the return address and returns only if Z is set; otherwise it falls through to the next instruction.
 
 This is useful for early-exit patterns:
 
@@ -187,7 +187,7 @@ add_bytes:
   ret
 ```
 
-`add_bytes` reads B and C, adds them, and leaves the result in A. The comment header documents that AF is clobbered and that A carries the result; the caller reads A after the call. The subroutine modifies only A, so BC, DE, and HL are naturally preserved. The caller passes 20 in B and 10 in C:
+`add_bytes` reads B and C, adds them and leaves the result in A. The comment header documents that AF is clobbered and that A carries the result; the caller reads A after the call. The subroutine modifies only A, so BC, DE and HL are naturally preserved. The caller passes 20 in B and 10 in C:
 
 ```asm
   ld b, $14
@@ -225,7 +225,7 @@ The `or a` before `sbc hl, de` clears the carry flag. `sbc hl, de` subtracts DE 
 
 After `sbc hl, de`, the carry flag indicates the comparison result:
 
-- **Carry clear** — HL was greater than or equal to DE (no unsigned borrow). HL now holds `original_HL - DE`, which is not the result we want. `add hl, de` restores HL to its original value, and the subroutine returns with that value.
+- **Carry clear** — HL was greater than or equal to DE (no unsigned borrow). HL now holds `original_HL - DE`, which is not the result we want. `add hl, de` restores HL to its original value and the subroutine returns with that value.
 - **Carry set** — HL was less than DE (unsigned borrow occurred). DE is the larger value. `ex de, hl` puts DE into HL and the second `ret` returns.
 
 The `or a / sbc hl, de / add hl, de` sequence is how you do an unsigned 16-bit comparison when you need the original HL back after the test. `sbc hl, de` is destructive; `add hl, de` undoes the subtraction when HL was the larger value.
@@ -267,7 +267,7 @@ No `ret` appears here, and that is fine. The only thing the stack requires is ba
 - `ret` pops the return address and jumps to it, returning to the call site.
 - The hardware stack is a region of RAM. SP points to the most recently pushed word; the stack grows downward.
 - Initialize SP before the first `call`. The standard first instruction in an AZM program is `ld sp, top_of_ram`.
-- Pass values into a subroutine in registers: A for a single byte, HL for a 16-bit word, BC and DE for secondary values. Document which registers carry inputs, which carry outputs, and which are clobbered.
+- Pass values into a subroutine in registers: A for a single byte, HL for a 16-bit word, BC and DE for secondary values. Document which registers carry inputs, which carry outputs and which are clobbered.
 - Every subroutine in AZM must end with an explicit `ret`. AZM inserts nothing.
 - `push rr` saves a register pair; `pop rr` restores it. Every push must have a matching pop before the subroutine returns.
 - Unbalanced push/pop causes `ret` to jump to garbage, because the wrong bytes are at the top of the stack when `ret` reads the return address.
@@ -319,9 +319,9 @@ skip:
 
 Write the corrected version.
 
-**3. Write a subroutine.** Write a subroutine called `double_byte` that receives a byte value in B and returns B × 2 in A. Include a comment header that documents the inputs, outputs, and which registers are clobbered. Then write the three lines in `main` that pass the value 15 to the subroutine, call it, and store the result in a variable named `doubled`.
+**3. Write a subroutine.** Write a subroutine called `double_byte` that receives a byte value in B and returns B × 2 in A. Include a comment header that documents the inputs, outputs and which registers are clobbered. Then write the three lines in `main` that pass the value 15 to the subroutine, call it and store the result in a variable named `doubled`.
 
-**4. The `or a / sbc hl, de` pattern.** The `max_word` subroutine uses `or a` immediately before `sbc hl, de`. Explain what `or a` does to the carry flag and why omitting it would produce wrong results. Then explain the `add hl, de` that follows on the carry-clear path — why is it needed, and what does HL hold after `sbc hl, de` on that path?
+**4. The `or a / sbc hl, de` pattern.** The `max_word` subroutine uses `or a` immediately before `sbc hl, de`. Explain what `or a` does to the carry flag and why omitting it would produce wrong results. Then explain the `add hl, de` that follows on the carry-clear path — why is it needed and what does HL hold after `sbc hl, de` on that path?
 
 ---
 

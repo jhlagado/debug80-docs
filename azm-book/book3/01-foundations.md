@@ -11,7 +11,7 @@ nav_order: 2
 
 You can scan a byte table and call subroutines with documented register effects. The next step is to treat those subroutines as **small routines with a fixed contract** and to use workspace RAM when an algorithm needs more live state than the register file holds.
 
-This chapter works through greatest common divisor (GCD) on 16-bit values, then 8-bit exponentiation. Both programs are complete, compilable, and halt when finished. The companion listing is [`examples/01_gcd.asm`](examples/01_gcd.asm).
+This chapter works through greatest common divisor (GCD) on 16-bit values, then 8-bit exponentiation. Both programs are complete, compilable and halt when finished. The companion listing is [`examples/01_gcd.asm`](examples/01_gcd.asm).
 
 ---
 
@@ -26,7 +26,7 @@ High-level languages call a library. On the Z80 you implement the algorithm your
 3. Otherwise swap the two values.
 4. Repeat from step 1.
 
-No division opcode is required — only compare, subtract, and swap. That fits the Book 3 theme: the algorithm is visible instruction by instruction.
+No division opcode is required — only compare, subtract and swap. That fits the Book 3 theme: the algorithm is visible instruction by instruction.
 
 ---
 
@@ -45,9 +45,9 @@ Book 1 established informal conventions: HL for addresses, A for byte results, c
 | Table base address | HL | Same as 16-bit arg — context disambiguates |
 | Table length | B | Element count for byte tables |
 
-**Callee-save:** if a routine uses BC, DE, HL, or IX internally as scratch, it must push before use and pop before every `ret`. Registers listed in `;! clobbers` are not restored.
+**Callee-save:** if a routine uses BC, DE, HL or IX internally as scratch, it must push before use and pop before every `ret`. Registers listed in `;! clobbers` are not restored.
 
-**Caller-save:** A, F, and any register passed as an input the routine is allowed to destroy.
+**Caller-save:** A, F and any register passed as an input the routine is allowed to destroy.
 
 Every subroutine in this book should document its contract with AZMDoc (Book 1 Chapter 12). The analyzer can then flag a caller that keeps HL live across a call to `gcd_u16`, which clobbers DE and returns a new HL.
 
@@ -92,7 +92,7 @@ GcdRightAnswer:
 
 ### Unsigned compare via `sbc hl, de`
 
-`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned). The routine pushes HL, subtracts in the scratch copy, pops the original HL, and branches to `GcdSwap` when carry is set.
+`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned). The routine pushes HL, subtracts in the scratch copy, pops the original HL and branches to `GcdSwap` when carry is set.
 
 If HL ≥ DE, the second `sbc hl, de` performs the Euclidean subtraction step and the loop repeats.
 
@@ -161,7 +161,7 @@ Rules used throughout Book 3:
 - One label per logical temporary (`key_byte`, not `temp4`).
 - Document in comments which routines touch which workspace labels.
 
-Chapter 2's insertion sort stores the current key in `key_byte` because C, B, and HL are busy playing index and base roles.
+Chapter 2's insertion sort stores the current key in `key_byte` because C, B and HL are busy playing index and base roles.
 
 ---
 

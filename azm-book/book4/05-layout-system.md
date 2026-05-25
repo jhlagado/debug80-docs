@@ -5,11 +5,11 @@ parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 5
 ---
-[← Data, Storage, and Includes](04-data-storage-includes.md) | [Manual](index.md) | [Register Care and Contracts →](06-register-care.md)
+[← Data, Storage and Includes](04-data-storage-includes.md) | [Manual](index.md) | [Register Care and Contracts →](06-register-care.md)
 
 # Chapter 5 — The Layout System
 
-If you have stored structured data in Z80 programs — sprite tables, packet headers, hardware register maps — you have written offset arithmetic: `.equ` constants for each field position, manual multiplication to reach a specific element in a table. That approach works until the layout changes. Insert a field, and every constant after the insertion is wrong, along with every access expression built on it.
+If you have stored structured data in Z80 programs — sprite tables, packet headers, hardware register maps — you have written offset arithmetic: `.equ` constants for each field position, manual multiplication to reach a specific element in a table. That approach works until the layout changes. Insert a field and every constant after the insertion is wrong, along with every access expression built on it.
 
 AZM's layout system replaces those constants with a declaration. You describe the shape of a record once in a `.type` block; `sizeof` and `offset` give you byte counts and field positions anywhere you need them, derived automatically from the field list. Work through this chapter in order the first time — the sections build on each other.
 
@@ -17,7 +17,7 @@ AZM's layout system replaces those constants with a declaration. You describe th
 
 ## Layout types: the core idea
 
-You are storing 16 sprites. Each sprite has an x position, a y position, a tile index, and a flags byte — four bytes per sprite. The standard Z80 approach is a set of `.equ` constants for the field offsets, a `.ds` to reserve the table, and arithmetic wherever you need to reach a specific field:
+You are storing 16 sprites. Each sprite has an x position, a y position, a tile index and a flags byte — four bytes per sprite. The standard Z80 approach is a set of `.equ` constants for the field offsets, a `.ds` to reserve the table and arithmetic wherever you need to reach a specific field:
 
 ```asm
 ; A sprite occupies 4 bytes in this order:
@@ -76,7 +76,7 @@ For access patterns where the index is a compile-time constant, AZM provides a c
 ld hl, <Sprite[16]>SPRITES[3].flags
 ```
 
-`<Sprite[16]>` names the type, `[3]` steps to element 3, and `.flags` names the field. The assembler computes `SPRITES + 3 * sizeof(Sprite) + offset(Sprite, flags)` and emits a plain number. Both lines assemble to the same bytes:
+`<Sprite[16]>` names the type, `[3]` steps to element 3 and `.flags` names the field. The assembler computes `SPRITES + 3 * sizeof(Sprite) + offset(Sprite, flags)` and emits a plain number. Both lines assemble to the same bytes:
 
 ```asm
 ld hl, SPRITES + 3 * sizeof(Sprite) + offset(Sprite, flags)
@@ -105,7 +105,7 @@ These names are valid in size positions — inside `.type` / `.union` declaratio
 .ds addr       ; 2 bytes
 ```
 
-They compute sizes only; they do not emit bytes.
+They compute sizes for storage and offset expressions.
 
 ### `sizeof`
 
@@ -137,7 +137,7 @@ word[8]      ; 16 bytes
 Sprite[16]   ; sizeof(Sprite) * 16 bytes
 ```
 
-The bracket form is a size expression, not a data declaration. `Sprite[16]` does not create sixteen named Sprite variables — it computes the number of bytes needed to store sixteen Sprite records.
+The bracket form is a size expression. `Sprite[16]` computes the number of bytes needed to store sixteen Sprite records.
 
 Array type expressions appear in:
 - `.ds` operands
@@ -158,9 +158,9 @@ The equivalence is exact. The type form documents intent while still reserving a
 
 ### Compile-time only
 
-Layout types produce no runtime objects, no hidden loads or stores, and no tag bytes. The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
+Layout types produce assemble-time numbers. The label `SPRITES` after `.ds Sprite[16]` is an ordinary address. Layout constants give you the numbers; you write the instructions.
 
-AZM holds to this contract strictly: it never generates a load or a store you did not write. When you use `.ds Sprite[16]`, you are saying: reserve this many bytes, and here is the type name so that `sizeof` and `offset` can work with it. The memory accesses are your Z80 instructions, unchanged.
+When you use `.ds Sprite[16]`, you are saying: reserve this many bytes and use this type name so that `sizeof` and `offset` can work with it. Memory access still happens through the Z80 instructions you write.
 
 ---
 
@@ -168,7 +168,7 @@ AZM holds to this contract strictly: it never generates a load or a store you di
 
 ### Declaring a record
 
-A `.type` block is where you describe a record layout. Think of it as a table of contents for a fixed-size region of memory: each field has a name, a size, and an offset that the assembler computes by summing the fields before it. Once the block is declared, `sizeof` and `offset` give you those numbers anywhere you need them.
+A `.type` block is where you describe a record layout. Think of it as a table of contents for a fixed-size region of memory: each field has a name, a size and an offset that the assembler computes by summing the fields before it. Once the block is declared, `sizeof` and `offset` give you those numbers anywhere you need them.
 
 A `.type` block describes the fields of a record layout:
 
@@ -181,7 +181,7 @@ ptr     .addr
 .endtype
 ```
 
-Field declarations inside `.type` use `.byte`, `.word`, `.addr`, or `.field`:
+Field declarations inside `.type` use `.byte`, `.word`, `.addr` or `.field`:
 
 | Declaration | Meaning |
 |-------------|---------|
@@ -190,9 +190,9 @@ Field declarations inside `.type` use `.byte`, `.word`, `.addr`, or `.field`:
 | `name .addr` | 2-byte address-sized field |
 | `name .field TypeExpr` | field of any layout size |
 
-`.byte`, `.word`, and `.addr` are shorthand for `.field byte`, `.field word`, and `.field addr`. They do not emit bytes; they describe the layout.
+`.byte`, `.word` and `.addr` are shorthand for `.field byte`, `.field word` and `.field addr`. They do not emit bytes; they describe the layout.
 
-All four field forms reserve the same kind of space. The difference is size: `.byte` is one byte, `.word` and `.addr` are each two bytes, and `.field` takes whatever size expression you give it. The assembler inserts no padding between fields — the layout is exactly as you declare it, packed.
+All four field forms reserve the same kind of space. The difference is size: `.byte` is one byte, `.word` and `.addr` are each two bytes and `.field` takes whatever size expression you give it. AZM uses the packed layout exactly as declared.
 
 ### Fields with `.field`
 
@@ -213,7 +213,7 @@ timer   .word
 .endtype
 ```
 
-The total size of a record is the sum of its field sizes. No padding or alignment is inserted — AZM uses exact packed layout.
+The total size of a record is the sum of its field sizes. AZM uses exact packed layout.
 
 ### `sizeof` and `offset`
 
@@ -236,7 +236,7 @@ SPRITE_PTR   .equ offset(Sprite, ptr)      ; 3
 
 These are ordinary integer constants. Put them in `.equ` lines when the name will appear in multiple places; use `sizeof` and `offset` directly in operands when the constant is used once.
 
-The `.equ` approach becomes especially valuable during refactoring. You have one canonical offset definition, derived from the layout declaration, and the rest of the code uses that name. When you add a field to the record, `SPRITE_FLAGS` and `SPRITE_PTR` update automatically — every instruction that uses them picks up the new offset without any edits.
+The `.equ` approach becomes especially valuable during refactoring. You have one canonical offset definition, derived from the layout declaration and the rest of the code uses that name. When you add a field to the record, `SPRITE_FLAGS` and `SPRITE_PTR` update automatically — every instruction that uses them picks up the new offset without any edits.
 
 ### Nested record access with `offset`
 
@@ -328,15 +328,9 @@ INIT_SPRITE:
 
 The `.type` declaration provides the field sizes and offsets for reference and verification.
 
-### Single-line type names are not supported
+### Naming small records
 
-`.type` is a block directive — it opens with `.type Name` and closes with `.endtype`. There is no single-line form:
-
-```asm
-.type Pair byte[2]    ; not valid AZM syntax
-```
-
-AZM does not support giving a new name to an existing type expression in one line. If you need a two-byte named record, write a block:
+`.type` is a block directive — it opens with `.type Name` and closes with `.endtype`. For a two-byte named record, write a block:
 
 ```asm
 .type Pair
@@ -363,7 +357,7 @@ data    .field byte[64]  ; 64-byte data field
 
 ### `sizeof` on arrays, and `offset` with array index paths
 
-When you have an array of records and need the total byte count — to pass as a block size, or to allocate storage — `sizeof` works with array expressions directly. You do not need to multiply yourself.
+When you have an array of records and need the total byte count — to pass as a block size, or to allocate storage — `sizeof` works with array expressions directly.
 
 `sizeof` accepts any type expression, including array forms:
 
@@ -396,15 +390,15 @@ ELEM2_FLAGS .equ offset(Sprite[16], [2].flags)
         ld   a,(hl)                    ; read flags of sprite 2
 ```
 
-The index inside an `offset` array path must be a numeric literal — a bare integer like `[2]`, not a symbol or expression. Layout-cast paths (`<Sprite[16]>TABLE[IDX].flags`) accept compile-time constant expressions in their brackets, but `offset()` paths do not. A register value or a symbol produces an error in both cases.
+The index inside an `offset` array path must be a numeric literal — a bare integer like `[2]`. Layout-cast paths (`<Sprite[16]>TABLE[IDX].flags`) accept compile-time constant expressions in their brackets. Runtime index values use explicit address arithmetic.
 
-These `offset` array paths are most useful for writing initialization tables or verification constants: you want the offset of a specific element's field as a compile-time constant, not as part of a runtime access pattern. For runtime element access, write the address arithmetic yourself.
+These `offset` array paths are most useful for writing initialization tables or verification constants: you want the offset of a specific element's field as a compile-time constant. For runtime element access, write the address arithmetic yourself.
 
 ---
 
 ## Wrapper records for array layouts
 
-`Sprite[16]` is a valid TypeExpr wherever a size or type expression is accepted — `.ds`, `sizeof`, `offset`, and layout casts all take it:
+`Sprite[16]` is a valid TypeExpr wherever a size or type expression is accepted — `.ds`, `sizeof`, `offset` and layout casts all take it:
 
 ```asm
 .type Sprite
@@ -517,7 +511,7 @@ TIMER:
 ; Read only the low byte:
         ld   a,(TIMER + offset(TimerReg, lo))
 
-; The high byte is at TIMER + 1 — no union field names the second byte of an overlaid word.
+; The high byte is at TIMER + 1.
 ```
 
 ### When a union is clearer than comments
@@ -613,7 +607,7 @@ PORT_VALUE_BYTE  .equ offset(IoPort, value) + offset(ByteOrWord, byte_view)
 
 Both constants resolve to the same byte offset from the start of `IoPort` — because `ByteOrWord` starts at `offset(IoPort, value)` and all of its own members start at zero within it.
 
-The exact syntax for embedded anonymous inline unions inside a `.type` is not yet stable. Use named union types as `.field` entries as shown above. Verify against current AZM source if your project needs deeply nested anonymous unions.
+Use named union types as `.field` entries as shown above. This keeps nested views explicit and gives every overlaid region a reusable type name.
 
 ---
 
@@ -636,7 +630,7 @@ These are ordinary expressions, evaluated by the assembler before the binary is 
 
 ### Layout-cast syntax
 
-A layout cast tells the assembler to interpret the base address through a layout while it computes an address. It does not read memory, write memory, or change any runtime value. The long form is always correct; the cast is notation you can use when the field path is the interesting part and the arithmetic is noise.
+A layout cast tells the assembler to interpret the base address through a layout while it computes an address. The long form is always correct; the cast is notation you can use when the field path is the interesting part and the arithmetic is noise.
 
 ```asm
 ld   hl,<Sprite>SPRITES.flags
@@ -669,14 +663,14 @@ The cast is syntax over the same constant-expression machinery.
 
 ### Memory dereference stays explicit
 
-The cast does not imply memory access. Parentheses are still required for load/store:
+Parentheses perform memory access:
 
 ```asm
 ld   a,(<Sprite[16]>SPRITES[3].flags)   ; load byte at that address
 ld   hl,<Sprite[16]>SPRITES[3].flags    ; load the address itself into HL
 ```
 
-The outer parentheses are Z80 memory-dereference syntax, not part of the cast. The assembler evaluates the cast to a plain address — `ld a,(SPRITES + 15)` is what ends up in the binary.
+The outer parentheses are Z80 memory-dereference syntax. The assembler evaluates the cast to a plain address — `ld a,(SPRITES + 15)` is what ends up in the binary.
 
 ### Compile-time indices only
 
@@ -734,7 +728,7 @@ Use explicit arithmetic when the index is in a register:
         add  hl,de           ; HL = address of flags field for sprite A
 ```
 
-AZM cannot generate runtime index computation from a cast expression — the cast is purely compile-time. When you need a runtime index, write the arithmetic yourself.
+Layout casts are compile-time address expressions. When you need a runtime index, write the arithmetic yourself.
 
 ### Union casts
 
@@ -802,4 +796,4 @@ The index inside the `offset` path must be a numeric literal. Layout-cast paths 
 
 ---
 
-[← Data, Storage, and Includes](04-data-storage-includes.md) | [Manual](index.md) | [Register Care and Contracts →](06-register-care.md)
+[← Data, Storage and Includes](04-data-storage-includes.md) | [Manual](index.md) | [Register Care and Contracts →](06-register-care.md)

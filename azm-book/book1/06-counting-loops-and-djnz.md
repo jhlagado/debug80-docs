@@ -11,7 +11,7 @@ nav_order: 6
 
 The `dec b / jp nz` loop from Chapter 5 uses two instructions where one would do.
 This chapter shows the single-instruction replacement, and the three loop forms
-you will reach for most often: counted, sentinel, and flag-exit.
+you will reach for most often: counted, sentinel and flag-exit.
 
 ---
 
@@ -80,11 +80,11 @@ number of iterations.
 exactly 5 times. But what happens if you write `ld b, 0`?
 
 On the Z80, DJNZ decrements B before testing. If B starts at 0, the decrement
-wraps to 255 (`$FF`), the result is non-zero, and the jump is taken. The loop
+wraps to 255 (`$FF`), the result is non-zero and the jump is taken. The loop
 continues from B = 255 and runs a further 255 times before B reaches zero again.
 Total: 256 iterations.
 
-`ld b, 0` before `djnz` is valid Z80 — it gives 256 iterations, and some
+`ld b, 0` before `djnz` is valid Z80 — it gives 256 iterations and some
 programs use it deliberately for exactly that reason. The danger is
 unintentional: expecting zero iterations and getting 256.
 
@@ -289,19 +289,19 @@ carry is clear, `jr nc` exits. `flagval` receives 20 ($14).
 
 ---
 
-## Choosing between DJNZ, sentinel, and flag-exit
+## Choosing between DJNZ, sentinel and flag-exit
 
 DJNZ is the right choice when you know exactly how many iterations to run before
 the loop starts. Load B with that count and use DJNZ.
 
 A sentinel loop is right when the stopping condition is "find this value." It
-exits on content, not count, and DJNZ serves only as an overrun guard.
+exits on content, not count and DJNZ serves only as an overrun guard.
 
 A flag-exit loop is right when the stopping condition is "some computed quantity
 has crossed a threshold." It exits on an arithmetic result, with DJNZ again
 serving only as the overrun guard.
 
-In practice, most Z80 loops are counted loops — DJNZ is compact, and the
+In practice, most Z80 loops are counted loops — DJNZ is compact and the
 iteration count is usually known before the loop starts. Reach for the sentinel
 or flag-exit forms when the data itself determines where to stop, not you.
 
@@ -314,7 +314,7 @@ or flag-exit forms when the data itself determines where to stop, not you.
 - `djnz` replaces `dec b / jp nz` in one instruction and is smaller: 2 bytes
   vs 3 for `dec b / jr nz`, or 4 for `dec b / jp nz`. Its reach is limited to
   roughly 128 bytes backward; use `dec b / jp nz` for longer loops.
-- A DJNZ loop has three parts: init (load B), body, and branch-back (djnz).
+- A DJNZ loop has three parts: init (load B), body and branch-back (djnz).
 - The zero-count hardware semantic: B = 0 before `djnz` gives 256 iterations,
   not zero. Guard against this when the count can be zero.
 - A sentinel loop uses `cp` and `jr z` as the primary exit, with DJNZ as an
@@ -326,7 +326,7 @@ or flag-exit forms when the data itself determines where to stop, not you.
 
 ## What Comes Next
 
-A counted loop over a register is useful for arithmetic. A counted loop over a table is useful for nearly everything else — scanning for a value, summing scores, copying a buffer, finding the end of a string. Chapter 7 covers the table structures that give DJNZ something worth walking over, and the indexed access instructions that let you reach into them precisely, without juggling HL every instruction.
+A counted loop over a register is useful for arithmetic. A counted loop over a table is useful for nearly everything else — scanning for a value, summing scores, copying a buffer, finding the end of a string. Chapter 7 covers the table structures that give DJNZ something worth walking over and the indexed access instructions that let you reach into them precisely, without juggling HL every instruction.
 
 ---
 

@@ -9,15 +9,15 @@ nav_order: 5
 
 # Chapter 4 — Bit Patterns
 
-Chapters 2 and 3 treated each byte as one number. Hardware status registers, UART flags, and packed record fields treat a byte as **eight switches in one box**. You set one switch without breaking the others with masks, `and` / `or` / `xor`, and shifts.
+Chapters 2 and 3 treated each byte as one number. Hardware status registers, UART flags and packed record fields treat a byte as **eight switches in one box**. You set one switch without breaking the others with masks, `and` / `or` / `xor` and shifts.
 
-This chapter works through a packed status byte: test a flag, set a flag, clear a flag, isolate one bit for a boolean result. Named `op` declarations from Book 1 Chapter 14 spell the repeated mask idioms. The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm).
+This chapter works through a packed status byte: test a flag, set a flag, clear a flag, isolate one bit for a boolean result. Named `op` declarations from Book 1 Chapter 14 capture the repeated mask idioms. The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm).
 
 ---
 
 ## The problem: eight flags, one byte
 
-A device reports ready, error, and busy in a single status register at `$8000`. Your code must:
+A device reports ready, error and busy in a single status register at `$8000`. Your code must:
 
 1. Light an LED if ready was set at startup.
 2. Record an error without clearing ready.
@@ -155,7 +155,7 @@ Logical shifts move bit positions for multiply/divide tricks and for isolation:
 
 `and FLAG_ERROR` clears all but bit 1 (`$02`). One `rr a` moves that bit into position 0. Result in `error_bit` should be `$01` when the error flag is set.
 
-For a general bit index `n`, loop `n` times with `srl a`, or use the Z80 `bit n, r` instruction (sets Z if bit clear) when you only need a branch, not a 0/1 byte in A.
+For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, r` instruction (sets Z if bit clear) when you only need a branch, not a 0/1 byte in A.
 
 ---
 

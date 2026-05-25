@@ -9,9 +9,9 @@ nav_order: 4
 
 # Chapter 3 — Strings
 
-Chapter 2 walked a byte table with a **fixed length** in B. Text in memory usually has no fixed length — you stop when you see a sentinel, not when a counter reaches eight. That one change drives how you hold pointers, how you copy, and how you compare.
+Chapter 2 walked a byte table with a **fixed length** in B. Text in memory usually has no fixed length — you stop when you see a sentinel, not when a counter reaches eight. That one change drives how you hold pointers, how you copy and how you compare.
 
-This chapter chooses a string representation, builds length, copy, and search on top of it, and documents every routine with AZMDoc. The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
+This chapter chooses a string representation, builds length, copy and search on top of it and documents every routine with AZMDoc. The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
 
 ---
 
@@ -222,7 +222,7 @@ StrCmpEqual:
     ret
 ```
 
-Order matters: compare characters **before** you decide both strings ended. If both bytes are zero, `cp b` sets Z, the `jr nz` to `StrCmpGreater` does not fire, and `StrCmpEqual` returns 0. If one string is a prefix of the other, the shorter one ends first on a later iteration — `cp` sees `0` against a non-zero byte and returns less or greater correctly.
+Order matters: compare characters **before** you decide both strings ended. If both bytes are zero, `cp b` sets Z, the `jr nz` to `StrCmpGreater` does not fire and `StrCmpEqual` returns 0. If one string is a prefix of the other, the shorter one ends first on a later iteration — `cp` sees `0` against a non-zero byte and returns less or greater correctly.
 
 The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$8009` should be `$01`.
 

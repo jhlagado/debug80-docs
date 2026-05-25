@@ -9,7 +9,7 @@ nav_order: 3
 
 # Chapter 2 — Arrays and Loops
 
-Chapter 1 kept every value in registers. Sorting and searching need **indexed storage**: many bytes in a row, one element selected by offset. This chapter treats a byte table as an array, states loop invariants in plain language, and implements insertion sort plus linear search in flat AZM.
+Chapter 1 kept every value in registers. Sorting and searching need **indexed storage**: many bytes in a row, one element selected by offset. This chapter treats a byte table as an array, states loop invariants in plain language and implements insertion sort plus linear search in flat AZM.
 
 The companion program is [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
 
@@ -30,7 +30,7 @@ Both depend on the same array layout.
 
 ## Array representation
 
-A byte array is a label, a length, and consecutive bytes in memory:
+A byte array is a label, a length and consecutive bytes in memory:
 
 ```asm
 ARRAY_LEN .equ 8

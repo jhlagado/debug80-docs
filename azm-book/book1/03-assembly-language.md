@@ -9,9 +9,9 @@ nav_order: 3
 
 # Chapter 3 — Assembly Language
 
-Chapter 2 showed you what a program looks like as raw bytes in memory. It also showed the problem: once a program is more than a toy, raw bytes are miserable to maintain. There are no names, every address has to be tracked by hand, and the code stops looking like something a human being can reason about.
+Chapter 2 showed you what a program looks like as raw bytes in memory. It also showed the problem: once a program is more than a toy, raw bytes are miserable to maintain. There are no names, every address has to be tracked by hand and the code stops looking like something a human being can reason about.
 
-Assembly solves exactly that problem. The CPU still runs the same machine code, but you get readable instruction names, names for addresses, and a source file you can actually inspect without decoding hex in your head. This chapter introduces that surface: `ld`, constants, named storage, and the first file layout rules you need in AZM.
+Assembly solves exactly that problem. The CPU still runs the same machine code, but you get readable instruction names, names for addresses and a source file you can actually inspect without decoding hex in your head. This chapter introduces that surface: `ld`, constants, named storage and the first file layout rules you need in AZM.
 
 ---
 
@@ -47,7 +47,7 @@ Now read the body. `ld a, 5` loads 5 into A. `ld b, a` copies A into B. `ld a, 3
 
 You just saw two constructs in that program that are not Z80 instructions: `.org` and `.db`. These are assembler directives. Before going further, it helps to be clear about what AZM adds on top of raw Z80 assembly.
 
-**Raw Z80 assembly** gives you instruction mnemonics (`ld`, `add`, `jp`, `call` …), labels for addresses, and directives for placing data (`db`, `dw`). That is all. Every classic Z80 assembler provides roughly this surface.
+**Raw Z80 assembly** gives you instruction mnemonics (`ld`, `add`, `jp`, `call` …), labels for addresses and directives for placing data (`db`, `dw`). That is all. Every classic Z80 assembler provides roughly this surface.
 
 **AZM adds** the following on top:
 
@@ -57,9 +57,9 @@ You just saw two constructs in that program that are not Z80 instructions: `.org
 - **`enum`** — named sets of values with no memory allocated
 - **AZMDoc** — formal `;!` register contracts on subroutines, verified by the assembler
 
-AZM does **not** add function declarations, local variables, structured control-flow keywords, or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`. Every program is flat Z80 instructions with labels.
+AZM does **not** add function declarations, local variables, structured control-flow keywords or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`. Every program is flat Z80 instructions with labels.
 
-If you look up `.org` or `.equ` in a Z80 reference you will find them — they are standard assembler directives, not AZM inventions. The Z80 mnemonics (`ld`, `add`, `cp`, `djnz`, `call`, `ret`) are always Z80 instructions, and any Z80 reference covers them.
+If you look up `.org` or `.equ` in a Z80 reference you will find them — they are standard assembler directives, not AZM inventions. The Z80 mnemonics (`ld`, `add`, `cp`, `djnz`, `call`, `ret`) are always Z80 instructions and any Z80 reference covers them.
 
 ---
 
@@ -92,9 +92,9 @@ The source-file order is for readability. The assembler emits each block where `
 ld destination, source
 ```
 
-`ld` is a pure copy. The destination receives the value, the source stays as it was, and the flags register is untouched.
+`ld` is a pure copy. The destination receives the value, the source stays as it was and the flags register is untouched.
 
-Every legal `ld` has a source and a destination. A source can be a register, an immediate constant encoded directly in the instruction, or a byte in memory. A destination can be a register or a byte in memory.
+Every legal `ld` has a source and a destination. A source can be a register, an immediate constant encoded directly in the instruction or a byte in memory. A destination can be a register or a byte in memory.
 
 ---
 
@@ -187,7 +187,7 @@ Word-size access (`ld hl, (scratch)`) and the full set of memory addressing form
 
 ---
 
-## ADD, INC, and DEC
+## ADD, INC and DEC
 
 `add a, b` adds B to A and **writes the result back into A**. The original value of A is gone after the instruction; the next instruction sees A's new value. If you need A's original value later, copy it to another register before the `add`.
 
@@ -235,7 +235,7 @@ Example `02_constants_and_labels.asm` demonstrates word-size memory access and i
 
 ## When Your Program Does the Wrong Thing
 
-You have compilable code now. At some point — probably soon — a program will produce the wrong result, or no result, or simply crash the emulator. Assembly gives you no runtime errors, no stack traces, and no error messages. The CPU silently executes whatever bytes are in memory. Here is how to find out what went wrong.
+You have compilable code now. At some point — probably soon — a program will produce the wrong result or no result or simply crash the emulator. Assembly gives you no runtime errors, no stack traces and no error messages. The CPU silently executes whatever bytes are in memory. Here is how to find out what went wrong.
 
 ### Step 1: Read the assembler listing
 
@@ -273,7 +273,7 @@ That four-step process — listing check, step mode, flag watch, memory inspecti
 
 - `.org $XXXX` tells the assembler where a block of code or data begins in memory; `.org $0000` places the entry point where the CPU starts after reset
 - `ld` copies a value from source to destination without affecting flags; the two forms used here are register-to-register and immediate — Chapter 4 covers the memory access forms and the complete forms table
-- Parentheses always mean "memory at this address" — whether in `(hl)`, `(count)`, or `($8000)`
+- Parentheses always mean "memory at this address" — whether in `(hl)`, `(count)` or `($8000)`
 - `.equ` names a fixed value substituted at assembly time; it produces no output bytes
 - `.db` places one byte at the current address; `.dw` places two bytes (a 16-bit word) in little-endian order
 - `ex de, hl` swaps the two register pairs in one instruction — introduced in Chapter 7 when both HL and DE are in use as pointers
@@ -294,7 +294,7 @@ add a, b
 ld c, a
 ```
 
-When you reach the end: what is in A? B? C? Has anything changed in HL? Now assemble the snippet (add `.org $0000`, a `main:` label, a `halt`, and a `.org $8000` data block for any storage you need) and confirm in the emulator.
+When you reach the end: what is in A? B? C? Has anything changed in HL? Now assemble the snippet (add `.org $0000`, a `main:` label, a `halt` and a `.org $8000` data block for any storage you need) and confirm in the emulator.
 
 **2. Copy HL into DE — without using `ld de, hl`.** There is no single Z80 instruction that copies one 16-bit register pair directly into another. Write the two `ld` instructions needed to move the value in HL into DE using only 8-bit register moves. Then write a second version that achieves the same result using the stack (`push` / `pop`) — a technique you will meet formally in Chapter 8.
 

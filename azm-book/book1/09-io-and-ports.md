@@ -9,7 +9,7 @@ nav_order: 9
 
 # Chapter 9 — I/O and Ports
 
-So far, every program in this course has been self-contained: it loads constants, processes data in memory, and produces a result that sits in RAM. Nothing comes in from outside. Nothing goes out. Real hardware doesn't work that way — a keyboard needs to send bytes to the CPU, a display needs to receive them, a timer needs to signal that something has happened.
+So far, every program in this course has been self-contained: it loads constants, processes data in memory and produces a result that sits in RAM. Nothing comes in from outside. Nothing goes out. Real hardware doesn't work that way — a keyboard needs to send bytes to the CPU, a display needs to receive them, a timer needs to signal that something has happened.
 
 The Z80 handles this through a separate **I/O space** of 256 numbered ports. The `in` and `out` instructions transfer bytes between CPU registers and these ports without touching memory at all. On real hardware, each port number selects a different peripheral. This chapter treats port numbers as abstract placeholders — the Z80 mechanism is what matters here; the mapping of numbers to devices varies by platform and is for your hardware documentation to define.
 
@@ -73,7 +73,7 @@ Unlike `out`, the `in` instruction **sets flags**. After `in r, (C)`:
 - H and N are reset.
 - C (carry) is unaffected.
 
-`in r, (C)` sets flags; the immediate form `in a, (n)` does not — an asymmetry the Z80 manual documents without explanation, and one that trips people up. If you read a port with the immediate form and then need to branch on the value, follow it with `or a` to set flags explicitly before the conditional jump.
+`in r, (C)` sets flags; the immediate form `in a, (n)` does not — an asymmetry the Z80 manual documents without explanation and one that trips people up. If you read a port with the immediate form and then need to branch on the value, follow it with `or a` to set flags explicitly before the conditional jump.
 
 ---
 
@@ -128,7 +128,7 @@ HL advances one byte per iteration. B counts down from the caller-supplied count
 
 ## The example: `learning/book1/examples/07_io_and_ports.asm`
 
-The example file demonstrates the three I/O patterns above: immediate-port output, register-port input, and a block send loop.
+The example file demonstrates the three I/O patterns above: immediate-port output, register-port input and a block send loop.
 
 ```asm
 ; learning/book1/examples/07_io_and_ports.asm
@@ -229,9 +229,9 @@ Walk through the key lines:
 
 Everything in this chapter uses `in` and `out` to poll a peripheral: the CPU loops checking the status port until the device is ready. This works but keeps the CPU busy the entire time it is waiting.
 
-The Z80 also supports **interrupts**: a hardware signal that tells the CPU to stop what it is doing, run a short handler routine, and then resume where it left off. Interrupt handlers typically use `in` and `out` to communicate with the device that raised the interrupt — the same instructions, the same port numbers. The difference is that the CPU does not sit in a loop; it only runs the I/O code when the hardware demands it.
+The Z80 also supports **interrupts**: a hardware signal that tells the CPU to stop what it is doing, run a short handler routine and then resume where it left off. Interrupt handlers typically use `in` and `out` to communicate with the device that raised the interrupt — the same instructions, the same port numbers. The difference is that the CPU does not sit in a loop; it only runs the I/O code when the hardware demands it.
 
-Interrupts involve the `di`, `ei`, `im`, and `reti` instructions, and they interact with the shadow registers and the stack in ways that need careful setup — the full treatment covers interrupt modes, ISR calling conventions, and re-entrancy, which is more than a section can carry. Book 1 uses polling throughout. When you are ready to take on interrupt-driven I/O, start with the Z80 interrupt mode documentation for your target platform and read the ISR conventions before writing a single line of a handler.
+Interrupts involve the `di`, `ei`, `im` and `reti` instructions and they interact with the shadow registers and the stack in ways that need careful setup — the full treatment covers interrupt modes, ISR calling conventions and re-entrancy, which is more than a section can carry. Book 1 uses polling throughout. When you are ready to take on interrupt-driven I/O, start with the Z80 interrupt mode documentation for your target platform and read the ISR conventions before writing a single line of a handler.
 
 ---
 
@@ -249,7 +249,7 @@ Interrupts involve the `di`, `ei`, `im`, and `reti` instructions, and they inter
 
 ## What Comes Next
 
-Chapter 10 brings everything together. It builds a complete program — data table, DJNZ loop, subroutines, conditional branches, register preservation — using the full set of techniques from Chapters 3–9. The program is deliberately designed to be slightly uncomfortable to read back: the friction it exposes is real, it accumulates as programs grow, and Chapters 11–14 are the answer to it.
+Chapter 10 brings everything together. It builds a complete program — data table, DJNZ loop, subroutines, conditional branches, register preservation — using the full set of techniques from Chapters 3–9. The program is deliberately designed to be slightly uncomfortable to read back: the friction it exposes is real, it accumulates as programs grow and Chapters 11–14 are the answer to it.
 
 ---
 

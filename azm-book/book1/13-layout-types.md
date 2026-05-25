@@ -11,7 +11,7 @@ nav_order: 13
 
 `find_max` and `count_above` work on a table where each entry is a single byte. Every entry is the same size, and the loop stepping is simple: `inc hl`.
 
-Now consider a table where each entry holds three pieces of data — an x coordinate, a y coordinate, and a color byte. Each entry is 3 bytes wide. The x is at offset 0 within the entry, y at offset 1, color at offset 2.
+Now consider a table where each entry holds three pieces of data — an x coordinate, a y coordinate and a color byte. Each entry is 3 bytes wide. The x is at offset 0 within the entry, y at offset 1, color at offset 2.
 
 You can write that:
 
@@ -39,11 +39,11 @@ AZM's layout type system closes that gap. You describe a record once, and the as
 
 ---
 
-## Scalar types: `byte`, `word`, and `addr`
+## Scalar types: `byte`, `word` and `addr`
 
 Before you define a record, you need names for the basic building blocks.
 
-In AZM, `byte`, `word`, and `addr` are layout type names:
+In AZM, `byte`, `word` and `addr` are layout type names:
 
 | Type  | Size   | Meaning                                      |
 | ----- | ------ | -------------------------------------------- |
@@ -102,7 +102,7 @@ color   .byte
 
 `.type Name` opens the block. `.endtype` closes it. Each line names a field and gives its type.
 
-Inside a layout block, `.byte`, `.word`, and `.addr` are shorthands:
+Inside a layout block, `.byte`, `.word` and `.addr` are shorthands:
 
 ```asm
 field .byte    ; same as: field .field byte
@@ -110,7 +110,7 @@ field .word    ; same as: field .field word
 field .addr    ; same as: field .field addr
 ```
 
-You can also spell out the size explicitly with `.field`:
+You can also write the size explicitly with `.field`:
 
 ```asm
 .type Bullet
@@ -124,7 +124,7 @@ blob    .field 3
 
 `.field 3` means three raw bytes with no scalar name. `.word` and `.field word` both contribute 2 bytes to the record.
 
-Field declarations do not allocate memory. A `.type` block is a layout description — it tells the assembler the shape of a record so it can compute offsets and sizes. Memory comes from `.db`, `.dw`, or `.ds`:
+Field declarations do not allocate memory. A `.type` block is a layout description — it tells the assembler the shape of a record so it can compute offsets and sizes. Memory comes from `.db`, `.dw` or `.ds`:
 
 ```asm
 sprite_table:
@@ -169,7 +169,7 @@ Two compile-time expressions derive constants from a layout.
 SpriteSize  .equ sizeof(Sprite)        ; = 3
 ```
 
-`sizeof` accepts scalar types, named records, unions, and arrays:
+`sizeof` accepts scalar types, named records, unions and arrays:
 
 ```asm
 sizeof(byte)
@@ -222,7 +222,7 @@ FlagsOffset .equ offset(Sprite[16], [2].flags)
 
 Both expressions fold to constants at assembly time. Add a field to `Sprite` and every `sizeof` and `offset` that refers to it updates automatically.
 
-`offset` is the only AZM spelling — there is no `offsetof` alias. Unknown types, unknown fields, and non-constant indexes are rejected.
+`offset` is the AZM form — there is no `offsetof` alias. Unknown types, unknown fields and non-constant indexes are rejected.
 
 ---
 
@@ -261,7 +261,7 @@ sprite_table:
     .ds Sprite[8]
 ```
 
-That reserves exactly `8 * sizeof(Sprite)` bytes. The equivalent spelling `.ds sizeof(Sprite[8])` means the same thing.
+That reserves exactly `8 * sizeof(Sprite)` bytes. The equivalent form `.ds sizeof(Sprite[8])` means the same thing.
 
 You can also put an array inside a record:
 
@@ -368,7 +368,7 @@ Unqualified names are rejected:
 
 The qualification requirement prevents accidental name collisions when two enums share a short name. `Direction.East` and `Axis.East` can coexist.
 
-Enums produce no memory allocation. Each member is a compile-time constant that can appear anywhere a constant is legal — instruction immediates, `.equ`, `.db`, `.dw`, and `.ds`:
+Enums produce no memory allocation. Each member is a compile-time constant that can appear anywhere a constant is legal — instruction immediates, `.equ`, `.db`, `.dw` and `.ds`:
 
 ```asm
 enum Tile Empty, Wall, Pill, Power
@@ -383,7 +383,7 @@ Member values are assigned sequentially from 0: `North = 0`, `South = 1`, `East 
 
 ### Enums as state and command names
 
-Enums are not high-level data types. They are **grouped constants with collision protection** — named states, command bytes, and token kinds that would otherwise be bare `$00`, `$01`, `$02`.
+Enums are not high-level data types. They are **grouped constants with collision protection** — named states, command bytes and token kinds that would otherwise be bare `$00`, `$01`, `$02`.
 
 Store a mode byte in RAM and branch on it:
 
@@ -467,7 +467,7 @@ A runtime register is not valid:
   ld hl, <Sprite>sprite_table[hl].color    ; invalid: HL is not a constant
 ```
 
-Layout casts fold to a **constant address** at assembly time. `<Sprite[8]>sprite_table[3].color` is not a typed pointer, not a load, and not runtime indexing — the assembler replaces the whole expression with one number (for example `sprite_table + 11`) that you could have written by hand. The CPU never sees `<Sprite>`; it only sees `ld hl, imm16` or `ld a, (imm16)`. If the index is not known until the program runs, you cannot use a layout cast; write the multiply-and-add in Z80 instructions yourself.
+Layout casts fold to a **constant address** at assembly time. `<Sprite[8]>sprite_table[3].color` is not a typed pointer, not a load and not runtime indexing — the assembler replaces the whole expression with one number (for example `sprite_table + 11`) that you could have written by hand. The CPU never sees `<Sprite>`; it only sees `ld hl, imm16` or `ld a, (imm16)`. If the index is not known until the program runs, you cannot use a layout cast; write the multiply-and-add in Z80 instructions yourself.
 
 Layout casts also work inside memory operands. The parentheses are ordinary Z80 dereference syntax — they mean "byte at address":
 
@@ -538,7 +538,7 @@ SumXLoop:
   ret
 ```
 
-Each iteration reads the byte at HL (which starts at `points` and steps by `POINT_SIZE` each time), accumulates it in A, and advances HL to the next entry.
+Each iteration reads the byte at HL (which starts at `points` and steps by `POINT_SIZE` each time), accumulates it in A and advances HL to the next entry.
 
 Reading the y coordinate instead of x requires adjusting the starting offset. Since `POINT_Y = 1`, add 1 to HL before the loop:
 
@@ -574,11 +574,11 @@ The assembler computes `points + 2 * sizeof(Point) + offset(Point, y)` = `points
 
 ## Summary
 
-- `byte`, `word`, and `addr` are scalar layout types. `sizeof(byte)` is 1; `sizeof(word)` is 2.
-- `.type Name` / `.endtype` declares a packed record layout. Fields use `.byte`, `.word`, `.addr`, or `.field N`. Field declarations do not allocate memory.
-- `.ds TypeExpr` reserves storage: `.ds byte`, `.ds word[8]`, `.ds Sprite`, `.ds Sprite[16]`, or `.ds Count * sizeof(Sprite)` for a named element count.
+- `byte`, `word` and `addr` are scalar layout types. `sizeof(byte)` is 1; `sizeof(word)` is 2.
+- `.type Name` / `.endtype` declares a packed record layout. Fields use `.byte`, `.word`, `.addr` or `.field N`. Field declarations do not allocate memory.
+- `.ds TypeExpr` reserves storage: `.ds byte`, `.ds word[8]`, `.ds Sprite`, `.ds Sprite[16]` or `.ds Count * sizeof(Sprite)` for a named element count.
 - `sizeof(Type)` returns the exact byte size. `sizeof(Sprite[16])` returns `16 * sizeof(Sprite)`.
-- `offset(Type, path)` returns a field's byte offset. Paths can nest (`pos.x`) and index arrays (`sprites[3].color`, or `offset(Sprite[16], [2].flags)`).
+- `offset(Type, path)` returns a field's byte offset. Paths can nest (`pos.x`) and index arrays (`sprites[3].color` or `offset(Sprite[16], [2].flags)`).
 - Use `.equ` to name these constants, then use the names in instructions and `.ds` directives.
 - Offsets that fit in a signed byte (0–127) can go directly into `(ix+d)` instructions.
 - `<TypeExpr>label[i].field` computes a constant field address. Indexes must be compile-time constants; runtime registers are rejected.
@@ -600,9 +600,9 @@ flags   .byte
 .endtype
 ```
 
-Without running AZM, compute `sizeof(Enemy)`, `offset(Enemy, x)`, `offset(Enemy, y)`, and `offset(Enemy, flags)`. Then write the `.equ` lines for each. Finally, write the `.ds` line that allocates space for 16 enemies using the array type form.
+Without running AZM, compute `sizeof(Enemy)`, `offset(Enemy, x)`, `offset(Enemy, y)` and `offset(Enemy, flags)`. Then write the `.equ` lines for each. Finally, write the `.ds` line that allocates space for 16 enemies using the array type form.
 
-**2. Read a field with IX.** A subroutine receives a pointer to an `Enemy` record in IX. Write the instructions to load the `hp` field into A, the `x` field into DE (low byte in E, high byte in D), and the `flags` field into C. Use the symbolic offset constants from Exercise 1, not hardcoded numbers.
+**2. Read a field with IX.** A subroutine receives a pointer to an `Enemy` record in IX. Write the instructions to load the `hp` field into A, the `x` field into DE (low byte in E, high byte in D) and the `flags` field into C. Use the symbolic offset constants from Exercise 1, not hardcoded numbers.
 
 **3. Write a layout cast.** Using the `Enemy` type from Exercise 1, write the instruction that loads the address of the `flags` field of `enemy_table[4]` into HL, where `enemy_table` is the base label. Verify your answer: what numeric offset from `enemy_table` does this expand to?
 

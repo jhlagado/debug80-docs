@@ -9,13 +9,13 @@ nav_order: 0
 
 # Preface
 
-This manual is for Z80 programmers who already know assembly language and want to know how AZM spells things. It assumes you can read Z80 source — labels, instructions, operands, directives — and that you understand registers, flags, and memory addressing well enough to write a working subroutine. Books 1, 2, and 3 in this series teach that foundation. This manual does not repeat it.
+This manual is for Z80 programmers who already know assembly language and want to use AZM effectively. It assumes you can read Z80 source — labels, instructions, operands and directives — and that you understand registers, flags and memory addressing well enough to write a working subroutine. Books 1, 2 and 3 in this series build that foundation.
 
-What this manual covers: AZM source syntax, the directive set, expression forms, layout types, register-care contracts, op declarations, directive aliases, diagnostics, listings, and output formats. Each chapter covers one area of the language or tool completely — syntax forms, options, and what each does — rather than building from a worked example. When code appears, it illustrates syntax, not a teaching progression.
+AZM is a modern Z80 assembler for the Debug80 toolchain. It keeps the emitted machine code visible while adding assembler-time support for larger programs: layout types, register-care contracts, op declarations, directive aliases, diagnostics, listings and Debug80 source maps.
 
-What this manual does not cover: Z80 instruction semantics, memory architecture, or programming technique. Those belong in the numbered books. If you find yourself asking why a Z80 instruction works the way it does, you are in the wrong document.
+The chapters describe AZM's features in a direct reference order: source syntax, placement, constants, data directives, layout declarations, register contracts, op declarations, compatibility features, diagnostics and output formats. Code examples show the exact syntax AZM accepts and the bytes or metadata it produces.
 
-AZM is the assembler used throughout the Debug80 toolchain. The three teaching books assume it. This manual describes the tool itself — the thing that turns `.asm` files into binary, listings, and Debug80 metadata. Read it when you need to know what a directive does, how a flag interacts with the others, or what the assembler actually checks.
+Use this manual when you need the precise rule for a directive, expression, layout form, register-care option or command-line flag. The goal is simple: make AZM predictable enough that you can write serious Z80 programs, inspect the listing and know exactly what the assembler checked on your behalf.
 
 ---
 

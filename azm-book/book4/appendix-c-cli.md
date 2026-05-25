@@ -50,7 +50,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--rc` | `audit`, `warn`, `error`, or `strict` | Register-care analysis level; default is `off` |
+| `--rc` | `audit`, `warn`, `error` or `strict` | Register-care analysis level; default is `off` |
 | `--contracts` | — | Write inferred `;!` contract blocks above every `@`-labelled routine |
 | `--fix` | — | Apply conservative register-care source repairs (push/pop around clear conflicts) |
 | `--reg-report` | — | Write `source.regcare.txt` with inferred contracts for every `@` routine |

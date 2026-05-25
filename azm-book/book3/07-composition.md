@@ -9,15 +9,15 @@ nav_order: 8
 
 # Chapter 7 — Composition
 
-Every chapter so far kept the whole program in one `.asm` file. That is fine while you are learning a single algorithm. Real projects outgrow one screen: string helpers, table drivers, and board-specific I/O stubs each deserve their own file — but AZM still produces **one flat listing** with no `import`, no modules, and no hidden linker.
+Every chapter so far kept the whole program in one `.asm` file. That is fine while you are learning a single algorithm. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each deserve their own file — but AZM still produces **one flat listing** with no `import`, no modules and no hidden linker.
 
-This chapter splits a tiny program across files with **`.include`**, pulls `strlen_u8` from a shared library, and states the **contracts** (AZMDoc, naming, register roles) that replace a module system. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
+This chapter splits a tiny program across files with **`.include`**, pulls `strlen_u8` from a shared library and states the **contracts** (AZMDoc, naming, register roles) that replace a module system. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
 
 ---
 
 ## The problem: one file stops scaling
 
-Chapter 3's `strlen_u8` is twenty lines. Add copy, compare, ring buffer helpers, and GCD from Chapter 1 — the listing scrolls, labels crowd together, and you cannot reuse the string walk on the next project without copy-paste.
+Chapter 3's `strlen_u8` is twenty lines. Add copy, compare, ring buffer helpers and GCD from Chapter 1 — the listing scrolls, labels crowd together and you cannot reuse the string walk on the next project without copy-paste.
 
 You need two things at once:
 
@@ -36,7 +36,7 @@ The directive:
 .include "lib/strings.asm"
 ```
 
-tells the assembler to read `lib/strings.asm` and treat its contents as if you had typed them at that exact line. There is no separate link step, no export table, and no namespace prefix on `call strlen_u8`.
+tells the assembler to read `lib/strings.asm` and treat its contents as if you had typed them at that exact line. There is no separate link step, no export table and no namespace prefix on `call strlen_u8`.
 
 Paths resolve **relative to the file that contains the `.include`**. In the companion tree, `07_include_demo.asm` lives in `examples/` and includes `lib/strings.asm` beside it:
 
@@ -133,7 +133,7 @@ Reload HL before each call if a routine clobbers HL — the library documents th
 
 ### Growing the library
 
-Add `strcpy_u8`, `strcmp_u8`, and `str_find_char` from Chapter 3 into the same `lib/strings.asm`. The main file only grows by more `call` sites and result stores. When two programs need the same walk, they both `.include` the same library path instead of duplicating twenty lines.
+Add `strcpy_u8`, `strcmp_u8` and `str_find_char` from Chapter 3 into the same `lib/strings.asm`. The main file only grows by more `call` sites and result stores. When two programs need the same walk, they both `.include` the same library path instead of duplicating twenty lines.
 
 Optional **constants header** — if several files need `CHAR_L` or `RING_CAP`, a tiny `lib/strings.equ` (or `constants.asm`) that only contains `.equ` lines can be included from both the app and the library. Constants do not need `@` labels; routines do.
 
@@ -157,7 +157,7 @@ Callers obey the contract the same way they obey Chapter 3's table: set HL, `cal
 
 ### Symbol collisions
 
-Because all included text shares one namespace, two files must not both define `buffer`, `count`, or `done` at global scope. Fixes:
+Because all included text shares one namespace, two files must not both define `buffer`, `count` or `done` at global scope. Fixes:
 
 - Prefix workspace labels: `demo_buffer`, `demo_str_len`.
 - Prefix library routines: `str_strlen_u8` if you ever link two libraries that both exported `strlen_u8` — rename once, update AZMDoc and all `call` sites.
@@ -169,7 +169,7 @@ When the assembler reports "duplicate label," search all `.include` branches —
 
 ## External code: `.asmi` interfaces (brief)
 
-Chapter 3's string routines live in **your** ROM image. Monitor ROM, BIOS, and emulator stubs live at fixed addresses in **someone else's** code. You still need register contracts for `--rc warn`, but there is no AZM source to paste with `.include`.
+Chapter 3's string routines live in **your** ROM image. Monitor ROM, BIOS and emulator stubs live at fixed addresses in **someone else's** code. You still need register contracts for `--rc warn`, but there is no AZM source to paste with `.include`.
 
 Book 1 Chapter 12 introduced **`.asmi`** files: contract records only, no instructions:
 
@@ -253,12 +253,12 @@ Step into `strlen_u8` once: confirm the library file's labels appear in the list
 ## Exercises
 
 1. Move `message` and `str_len` into `demo_data.asm`. Include it from `07_include_demo.asm` after the library include. Assemble and confirm `str_len` is still 5.
-2. Add `strcpy_u8` and `strcmp_u8` from Chapter 3 to `lib/strings.asm`. Extend the demo to copy into an 8-byte buffer, set a `copy_ok` byte like Chapter 3, and verify in the emulator.
+2. Add `strcpy_u8` and `strcmp_u8` from Chapter 3 to `lib/strings.asm`. Extend the demo to copy into an 8-byte buffer, set a `copy_ok` byte like Chapter 3 and verify in the emulator.
 3. Create `lib/strings.equ` with `CHAR_L .equ 'L'` and include it from both the library and main. Remove duplicate `.equ` lines from main.
 4. Deliberately define two global labels named `done` in different included files. Record the assembler error, then fix one label with a file-specific prefix.
 5. Write a one-routine `lib/math.asm` with `gcd_u16` from Chapter 1. Include it from a new `08_gcd_client.asm` that only calls GCD and stores the result — no string code in that binary.
-6. Sketch a `monitor.asmi` with two `extern` routines you might call on a machine with a character output routine in A and a key reader returning A. List `in`, `out`, and `clobbers` for each without writing Z80 bodies.
-7. Draw the include graph for a project with `main.asm` → `lib/strings.asm`, `lib/ring.asm`, and `constants.asm` included by both libraries. Which edges would create a cycle if `ring.asm` included `main.asm`?
+6. Sketch a `monitor.asmi` with two `extern` routines you might call on a machine with a character output routine in A and a key reader returning A. List `in`, `out` and `clobbers` for each without writing Z80 bodies.
+7. Draw the include graph for a project with `main.asm` → `lib/strings.asm`, `lib/ring.asm` and `constants.asm` included by both libraries. Which edges would create a cycle if `ring.asm` included `main.asm`?
 
 ---
 

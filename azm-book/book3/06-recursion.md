@@ -9,7 +9,7 @@ nav_order: 7
 
 # Chapter 6 — Recursion
 
-Chapter 5 kept all state in registers, workspace bytes, or a `RingState` record. The routines called other routines, but never themselves. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
+Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. The routines called other routines, but never themselves. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
 
 Recursion is not a separate Z80 feature. It is nested `call` with a finite base case, and the **hardware stack** holding one return address per active call. You must budget that stack at assembly time — the CPU will not warn you before it overwrites something else.
 

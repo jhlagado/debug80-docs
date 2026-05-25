@@ -7,7 +7,7 @@ has_children: true
 ---
 # AZM Book 3 — Algorithms and Data Structures
 
-**Prerequisite:** complete [AZM Book 1 — Z80 Fundamentals](../book1/index.md) through Chapter 14. You should be comfortable with raw Z80, subroutine conventions, AZMDoc contracts, layout types, and ops before starting here. [AZM Book 2 — Programming the TEC-1G](../book2/index.md) is useful but not required; this book is mostly target-neutral.
+**Prerequisite:** complete [AZM Book 1 — Z80 Fundamentals](../book1/index.md) through Chapter 14. You should be comfortable with raw Z80, subroutine conventions, AZMDoc contracts, layout types and ops before starting here. [AZM Book 2 — Programming the TEC-1G](../book2/index.md) is useful but not required; this book is mostly target-neutral.
 
 This book teaches classic algorithms and small data structures in **flat AZM assembly** — the same machine model as Book 1, with representation before algorithm (Wirth) and small complete programs with explicit invariants (K&R).
 
@@ -15,13 +15,13 @@ This book teaches classic algorithms and small data structures in **flat AZM ass
 
 ## What changes from Book 1
 
-Book 1 taught the Z80 and the AZM tooling that makes assembly maintainable. Book 3 applies that tooling to real problems: sorting, searching, strings, bit tricks, records, recursion, and pointer structures.
+Book 1 taught the Z80 and the AZM tooling that makes assembly maintainable. Book 3 applies that tooling to real problems: sorting, searching, strings, bit tricks, records, recursion and pointer structures.
 
 | Book 1 gave you | Book 3 uses it for |
 |-----------------|-------------------|
 | Register passing, callee-save discipline | Fixed calling conventions per algorithm family |
 | AZMDoc `;!` + `@ROUTINE:` | Machine-checkable subroutine specs |
-| `byte` / `word` / `addr`, `.type`, `sizeof`, `offset` | Arrays, records, and layout-aware indexing |
+| `byte` / `word` / `addr`, `.type`, `sizeof`, `offset` | Arrays, records and layout-aware indexing |
 | `.ds Type[N]` | Workspace RAM for algorithm-local state |
 | Ops | Named idioms inside hot loops |
 

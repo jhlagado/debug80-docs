@@ -9,11 +9,11 @@ nav_order: 10
 
 # Chapter 9 — Capstone
 
-You have sorted tables, walked strings, packed flags into bytes, built a ring buffer, called yourself on the stack, split files with `.include`, and followed `addr` fields through linked structures. This chapter ties those habits into one program: **eight queens** on an 8×8 board.
+You have sorted tables, walked strings, packed flags into bytes, built a ring buffer, called yourself on the stack, split files with `.include` and followed `addr` fields through linked structures. This chapter ties those habits into one program: **eight queens** on an 8×8 board.
 
-The puzzle: place eight queens so no two share a row, column, or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different — the companion program counts all of them and stores the total in RAM. No BIOS, no print routine — you inspect `solution_count` in the emulator after `halt`, the same way earlier chapters left results at named labels.
+The puzzle: place eight queens so no two share a row, column or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different — the companion program counts all of them and stores the total in RAM. No BIOS, no print routine — you inspect `solution_count` in the emulator after `halt`, the same way earlier chapters left results at named labels.
 
-The algorithm is **depth-first search with backtracking**: try a column on the current row, recurse to the next row, and if the search dead-ends, **unmark** the constraints you set and try the next column. Flat AZM has no `break`, no `continue`, and no `func` — only `call`, `ret`, branches, and bytes you can see in the listing.
+The algorithm is **depth-first search with backtracking**: try a column on the current row, recurse to the next row and if the search dead-ends, **unmark** the constraints you set and try the next column. Flat AZM has no `break`, no `continue` and no `func` — only `call`, `ret`, branches and bytes you can see in the listing.
 
 The companion build is [`examples/09_eight_queens.asm`](examples/09_eight_queens.asm).
 
@@ -21,7 +21,7 @@ The companion build is [`examples/09_eight_queens.asm`](examples/09_eight_queens
 
 ## The problem: one queen per row
 
-A queen attacks along its row, column, and both diagonals. On an 8×8 board with eight queens, each row must hold exactly one queen. That cuts the search space sharply: you are not choosing 64 squares independently; you are choosing **which column** on row 0, then row 1, and so on.
+A queen attacks along its row, column and both diagonals. On an 8×8 board with eight queens, each row must hold exactly one queen. That cuts the search space sharply: you are not choosing 64 squares independently; you are choosing **which column** on row 0, then row 1 and so on.
 
 If row `r` uses column `c`, you must remember:
 
@@ -29,7 +29,7 @@ If row `r` uses column `c`, you must remember:
 2. The **forward diagonal** (row + col constant) is threatened.
 3. The **backward diagonal** (row − col constant) is threatened.
 
-When all three checks pass for `(r, c)`, record the placement, recurse to row `r + 1`, and when that returns, **undo** the marks before trying the next column. That undo step is backtracking. Skip it and stale flags will make you think occupied squares are free.
+When all three checks pass for `(r, c)`, record the placement, recurse to row `r + 1` and when that returns, **undo** the marks before trying the next column. That undo step is backtracking. Skip it and stale flags will make you think occupied squares are free.
 
 ---
 
@@ -79,7 +79,7 @@ Layout types scale to whole workspace regions: one `.type`, one base label, cons
 
 ## Constraint checks as small routines
 
-Split the hot path into `@` subroutines with AZMDoc contracts — the same discipline as `gcd_u16`, `ring_push`, and `factorial_u8`.
+Split the hot path into `@` subroutines with AZMDoc contracts — the same discipline as `gcd_u16`, `ring_push` and `factorial_u8`.
 
 **Column free** — index `col_used` with `C`:
 
@@ -132,7 +132,7 @@ Each failed check jumps to `.next_col` in the row driver — the flat-ASM equiva
 
 ## Mark, recurse, unmark
 
-When all three tests pass, **mark** before `call place_row`, and **unmark** after it returns:
+When all three tests pass, **mark** before `call place_row` and **unmark** after it returns:
 
 ```asm
     push bc
@@ -149,7 +149,7 @@ When all three tests pass, **mark** before `call place_row`, and **unmark** afte
     pop bc
 ```
 
-`mark_constraints` sets `col_used[c]`, both diagonal bytes, and `queen_cols[row]`. `unmark_constraints` clears the flags but leaves `queen_cols` overwritten on the next successful mark — fine for counting.
+`mark_constraints` sets `col_used[c]`, both diagonal bytes and `queen_cols[row]`. `unmark_constraints` clears the flags but leaves `queen_cols` overwritten on the next successful mark — fine for counting.
 
 `push bc` around each helper preserves **B = row** and **C = column** across `call`s that clobber AF and HL. That repetition is the cost of small, checkable routines in flat AZM; Chapter 7's alternative is one larger routine with fewer calls.
 
@@ -201,7 +201,7 @@ STACK_TOP         .equ $9FFF
 
 ### Stopping at the first solution
 
-The companion counts **all** 92 solutions. To stop after the first, add a `found` byte in workspace, set it in `count_solution`, and after `call place_row` in the column loop load `found` and `ret` early from `place_row` when it is non-zero — propagating the flag up every return, because `ret` only exits one frame. In AZM you use explicit memory and branches for this early-exit state.
+The companion counts **all** 92 solutions. To stop after the first, add a `found` byte in workspace, set it in `count_solution` and after `call place_row` in the column loop load `found` and `ret` early from `place_row` when it is non-zero — propagating the flag up every return, because `ret` only exits one frame. In AZM you use explicit memory and branches for this early-exit state.
 
 ---
 
@@ -287,9 +287,9 @@ No port I/O — inspect RAM in the emulator.
 
 ## Exercises
 
-1. Trace `place_row` by hand for rows 0–2 when the first successful columns are 0, 2, and 4. Write the three entries in `queen_cols` and which `col_used` bytes are set before the recursion to row 3.
+1. Trace `place_row` by hand for rows 0–2 when the first successful columns are 0, 2 and 4. Write the three entries in `queen_cols` and which `col_used` bytes are set before the recursion to row 3.
 2. Remove the `call unmark_constraints` after the recursive `call place_row`. Run the program. Does `solution_count` stay 92? Explain what stale flags do to the column loop.
-3. Change the base case to stop after the first solution: add a `found` byte, set it in `count_solution`, and return early from every frame when `found` is non-zero. How many bytes does `solution_count` hold now?
+3. Change the base case to stop after the first solution: add a `found` byte, set it in `count_solution` and return early from every frame when `found` is non-zero. How many bytes does `solution_count` hold now?
 4. Pack `col_used` into one byte of eight bits (bitboard). Rewrite `col_free` and `mark_constraints` using `and` / `or` from Chapter 4. Does the listing get shorter or longer?
 5. Replace recursion with an explicit stack in workspace: push `(row, col)` trial state, loop until stack empty. Estimate workspace bytes for depth 8.
 6. Run `azm --rc warn` on a deliberate bug: call `col_free` without restoring `C` after a clobbering helper. Fix using the `;!` contract.
@@ -298,11 +298,11 @@ No port I/O — inspect RAM in the emulator.
 
 ## What you learned in Book 3
 
-You started Book 3 with arithmetic conventions and AZMDoc on small routines. You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition**, and **pointer layouts** — choosing the representation that fits each problem.
+You started Book 3 with arithmetic conventions and AZMDoc on small routines. You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts** — choosing the representation that fits each problem.
 
 Flat AZM never hid control flow behind syntax. Every `call` and every byte in `col_used` is in the listing you assemble. That is the trade this part teaches: more typing, full ownership.
 
-Book 1 gave you the CPU and the tooling. Book 3 showed how algorithms look when you own the data layout first. The next step is a project of your own — a buffer, a parser, a game board — where you pick the representation, write the `;!` lines, and let the emulator prove the invariant.
+Book 1 gave you the CPU and the tooling. Book 3 showed how algorithms look when you own the data layout first. The next step is a project of your own — a buffer, a parser, a game board — where you pick the representation, write the `;!` lines and let the emulator prove the invariant.
 
 ---
 

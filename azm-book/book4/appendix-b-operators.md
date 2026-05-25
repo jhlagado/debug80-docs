@@ -28,7 +28,7 @@ Operators in precedence order, lowest to highest. Operators at the same preceden
 
 Unary operators (highest precedence): `+` (identity), `-` (negate), `~` (bitwise NOT). Parentheses group sub-expressions and override precedence.
 
-All expressions are evaluated by the assembler before the binary is written. An expression that depends on a register or runtime value is not an assembler expression — it is a Z80 instruction.
+All expressions are evaluated by the assembler before the binary is written. Register-dependent and runtime-dependent values belong in Z80 instructions.
 
 ## Numeric literal formats
 
@@ -36,7 +36,7 @@ AZM accepts eight numeric literal forms. They can appear freely in any expressio
 
 | Form | Example | Base | Notes |
 |------|---------|------|-------|
-| `$` prefix | `$FF`, `$0100` | hex | `$` not followed by a hex digit is the current assembly address |
+| `$` prefix | `$FF`, `$0100` | hex | Bare `$`, or `$` before a non-hex character, is the current assembly address |
 | `0x` prefix | `0xFF`, `0x2A` | hex | prefix is case-insensitive |
 | Trailing `H`/`h` | `0FFH`, `02Ah` | hex | must start with a decimal digit; `FFH` parses as a symbol name |
 | `%` prefix | `%10101010`, `%1111` | binary | |
@@ -47,7 +47,7 @@ AZM accepts eight numeric literal forms. They can appear freely in any expressio
 
 **Trailing-`H` rule:** the token must begin with a decimal digit (`0`–`9`). `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name — write `$FF` or `0FFH` to force hex.
 
-**`$` ambiguity:** `$FF` starts with `$` followed by a hex digit, so the whole token is a hex literal (255). `$` not followed by a hex digit is the current assembly address — `$ - start` gives the byte distance from a label.
+**`$` ambiguity:** `$FF` starts with `$` followed by a hex digit, so the whole token is a hex literal (255). Bare `$`, or `$` before a non-hex character, is the current assembly address — `$ - start` gives the byte distance from a label.
 
 `%` has two roles: a `%` at the start of a value is a binary literal prefix; a `%` between two expressions is the modulo operator.
 

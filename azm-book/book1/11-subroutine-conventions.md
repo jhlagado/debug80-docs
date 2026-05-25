@@ -9,9 +9,9 @@ nav_order: 11
 
 # Chapter 11 — Subroutine Conventions
 
-Chapter 10's two subroutines worked. `find_max` received HL and B, returned A. `count_above` received HL, B, and C, returned A. Both got the right answers. But `count_above` used D as an internal running counter and clobbered it on exit — and nothing in the code said so. A caller that had a value in D before the call would find it gone afterward, with no warning and no error.
+Chapter 10's two subroutines worked. `find_max` received HL and B, returned A. `count_above` received HL, B and C, returned A. Both got the right answers. But `count_above` used D as an internal running counter and clobbered it on exit — and nothing in the code said so. A caller that had a value in D before the call would find it gone afterward, with no warning and no error.
 
-That is the problem this chapter names: in flat Z80 assembly, subroutines communicate their interface and side effects only through discipline and comments. Nothing else exists. This chapter describes that discipline — the conventions that make subroutines safe to call, read, and modify.
+That is the problem this chapter names: in flat Z80 assembly, subroutines communicate their interface and side effects only through discipline and comments. Nothing else exists. This chapter describes that discipline — the conventions that make subroutines safe to call, read and modify.
 
 ---
 
@@ -41,9 +41,9 @@ Every subroutine touches at least a few registers. The question is whether the c
 
 The convention divides registers into two groups.
 
-**Caller-save registers** are registers the caller accepts may be destroyed by the call. A, F, and any register the caller explicitly passes as an argument fall into this category. The caller is responsible for saving anything in those registers that it still needs — before the call, not after.
+**Caller-save registers** are registers the caller accepts may be destroyed by the call. A, F and any register the caller explicitly passes as an argument fall into this category. The caller is responsible for saving anything in those registers that it still needs — before the call, not after.
 
-**Callee-save registers** are registers the subroutine must restore before it returns, if it uses them internally. BC, DE, HL, IX, and IY are callee-save. If a subroutine uses any of those as scratch storage, it must push them at entry and pop them before returning.
+**Callee-save registers** are registers the subroutine must restore before it returns, if it uses them internally. BC, DE, HL, IX and IY are callee-save. If a subroutine uses any of those as scratch storage, it must push them at entry and pop them before returning.
 
 The mechanism is push and pop:
 
@@ -91,7 +91,7 @@ One timing issue: the pop must appear on every return path. A subroutine that ha
 
 Register passing works for a small number of arguments. When a subroutine needs more temporary storage than the remaining free registers can provide, the stack is the answer.
 
-The technique uses IX as a base pointer into the stack. The subroutine allocates a block of bytes on the stack at entry, accesses them through IX-relative addressing, and deallocates the block before returning.
+The technique uses IX as a base pointer into the stack. The subroutine allocates a block of bytes on the stack at entry, accesses them through IX-relative addressing and deallocates the block before returning.
 
 The prologue establishes the frame:
 
@@ -164,7 +164,7 @@ A caution: the index displacement in `(ix+d)` is a signed 8-bit value. For local
 
 The only way to communicate a subroutine's register interface in plain assembly is a comment block. Nothing else runs at assembly time.
 
-The comment block lives immediately before the subroutine label and declares every input, every output, and every register the subroutine leaves changed:
+The comment block lives immediately before the subroutine label and declares every input, every output and every register the subroutine leaves changed:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
@@ -296,12 +296,12 @@ The two reloads before `count_above` are not optional. `find_max` clobbered HL a
 
 ## Summary
 
-- The informal Z80 calling convention passes addresses in HL, counts in B or BC, single bytes in A or C, and a second address in DE. Byte results return in A; word results return in HL.
+- The informal Z80 calling convention passes addresses in HL, counts in B or BC, single bytes in A or C and a second address in DE. Byte results return in A; word results return in HL.
 - Callee-save registers (BC, DE, HL, IX, IY) must be pushed at entry and popped before return if the subroutine uses them as scratch storage. A and F are caller-save.
 - Pops must mirror pushes in reverse order. Every return path needs the matching pop sequence, or the stack alignment breaks and `ret` jumps to the wrong address.
-- The IX frame provides local storage on the stack. The prologue saves IX, sets IX = SP, and allocates bytes with `dec sp`. Locals sit at negative IX offsets. The epilogue restores SP with `ld sp, ix` and pops IX.
+- The IX frame provides local storage on the stack. The prologue saves IX, sets IX = SP and allocates bytes with `dec sp`. Locals sit at negative IX offsets. The epilogue restores SP with `ld sp, ix` and pops IX.
 - If the caller pushes arguments onto the stack before the `call`, they sit at IX+4 and above after the prologue.
-- A comment block declaring inputs, outputs, clobbers, and preserved registers is the only documentation mechanism in plain assembly. Nothing verifies it.
+- A comment block declaring inputs, outputs, clobbers and preserved registers is the only documentation mechanism in plain assembly. Nothing verifies it.
 
 ---
 
@@ -317,7 +317,7 @@ The two reloads before `count_above` are not optional. `find_max` clobbered HL a
 
 Write the correct epilogue (three pops in the right order). Then explain what happens if the order is reversed.
 
-**2. Identify what to save.** A subroutine receives HL as an input table pointer and B as a byte count. Internally, it uses C and D as scratch, and E as a second counter. Which registers need push/pop discipline? Which do not? Write the push sequence at entry and the matching pop sequence at exit.
+**2. Identify what to save.** A subroutine receives HL as an input table pointer and B as a byte count. Internally, it uses C and D as scratch and E as a second counter. Which registers need push/pop discipline? Which do not? Write the push sequence at entry and the matching pop sequence at exit.
 
 **3. Build an IX frame.** Write the prologue and epilogue for a subroutine that needs four bytes of local storage. Use `(ix-1)` through `(ix-4)` for the locals. Then write the two instructions that write the value 42 into the first local and read it back into A.
 

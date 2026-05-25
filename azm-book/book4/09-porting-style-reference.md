@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Chapter 9 — Porting, Style, and Reference"
+title: "Chapter 9 — Porting, Style and Reference"
 parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 9
 ---
-[← Diagnostics, Listings, and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix A — Directive Reference →](appendix-a-directives.md)
+[← Diagnostics, Listings and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix A — Directive Reference →](appendix-a-directives.md)
 
-# Chapter 9 — Porting, Style, and Reference
+# Chapter 9 — Porting, Style and Reference
 
 This chapter is about using AZM on real projects. The first section covers migrating existing Z80 source to AZM — a process that moves from "can it assemble at all?" to "does it produce identical bytes?" to "how do I adopt the features that make the source better?" The second covers the style conventions that make AZM source consistent and readable. The third is a worked reference program: a small but complete example that uses most of what the manual covered, in one place you can read all at once.
 
@@ -17,11 +17,11 @@ This chapter is about using AZM on real projects. The first section covers migra
 
 The migration strategy is: assemble first, then improve. Start by getting AZM to produce byte-identical output to your existing assembler. Only then add AZM features. Comparing binaries after each step catches unintended changes while they are still small.
 
-The steps below are ordered by risk. Steps 1 and 2 establish that AZM can assemble the source correctly without changing the binary. Steps 3 through 9 each add one AZM feature, and each one ends with a binary comparison. If the comparison fails, you know exactly which step introduced the discrepancy.
+The steps below are ordered by risk. Steps 1 and 2 establish that AZM can assemble the source correctly while preserving the binary. Steps 3 through 9 each add one AZM feature, and each one ends with a binary comparison. If the comparison fails, you know exactly which step introduced the discrepancy.
 
 ### Step 1 — Get it to assemble
 
-Most ASM80-family source assembles in AZM without changes. Try it:
+Most ASM80-family source assembles directly in AZM. Try it:
 
 ```sh
 azm --type bin --output azm.bin existing.z80
@@ -29,11 +29,11 @@ azm --type bin --output azm.bin existing.z80
 
 If AZM rejects the source, the diagnostics will name the exact line and problem. Common issues:
 
-- **Unknown directive**: `MACRO`, `REPT`, `ENDM` — AZM does not support text macros. Remove or rewrite them.
-- **Unsupported expression form**: Some older assembler expressions use forms AZM does not recognize. Replace with equivalent arithmetic.
+- **Unknown directive**: `MACRO`, `REPT`, `ENDM` — expand or rewrite text macros before assembling with AZM.
+- **Unsupported expression form**: Some older assembler expressions need equivalent symbolic arithmetic.
 - **Case issues**: AZM is case-sensitive for labels. Source that redefines `Loop` and `LOOP` as the same label will fail.
 
-For directives that differ only in spelling, load an alias file:
+For directives that differ only in form, load an alias file:
 
 ```sh
 azm --aliases project.aliases.json existing.z80
@@ -109,7 +109,7 @@ The `.equ` lines are now derived from the declaration. Add a field to `Actor` an
 
 ### Step 6 — Add enums for states and commands
 
-Steps 6 through 8 each add a feature that improves the source without changing the binary, except for step 8 which may surface bugs as register-care warnings.
+Steps 6 through 8 each add a feature that improves the source while preserving the binary. Step 8 may also surface register-care warnings.
 
 Find groups of related constants that are values of the same conceptual type:
 
@@ -158,7 +158,7 @@ Once contracts are in place:
 azm --rc warn existing.z80
 ```
 
-Review each warning. Decide whether the conflict is a real bug, a deliberate design, or a missing contract. Promote callee outputs where needed (`--accept-out`), save registers where needed, or add caller hints for one-off suppressions.
+Review each warning. Decide whether the conflict is a real bug, a deliberate design or a missing contract. Promote callee outputs where needed (`--accept-out`), save registers where needed or add caller hints for one-off suppressions.
 
 ### Step 9 — Replace repeated idioms with ops
 
@@ -196,13 +196,13 @@ The listing is a valuable companion to binary comparison. When two binaries diff
 
 ## Style guide for AZM source
 
-These are conventions, not language rules — the assembler does not enforce them. They collect the choices used throughout this manual so a project can stay consistent and keep listings readable.
+These conventions collect the choices used throughout this manual so a project can stay consistent and keep listings readable.
 
 | Area | Convention |
 |------|------------|
 | Directives | Use lowercase dotted forms: `.org`, `.equ`, `.db`, `.dw`, `.ds`, `.include` |
 | Labels | Use descriptive names; keep branch labels globally unique, often by prefixing them with the routine name |
-| Constants | Put hardware ports, ROM addresses, memory addresses, and repeated numeric meanings in `.equ` |
+| Constants | Put hardware ports, ROM addresses, memory addresses and repeated numeric meanings in `.equ` |
 | Enums | Use qualified enum names such as `State.Idle` instead of bare member names |
 | Public routines | Mark callable routine boundaries with `@` and put AZMDoc contracts immediately above them |
 | Layouts | Keep `.type` and `.union` declarations in a shared file included before code that uses them |
@@ -220,17 +220,17 @@ A typical include order is:
 7. Application code
 8. RAM layout (storage blocks at their own `.org`)
 
-Each category belongs in its own file. Application code should not define hardware constants; hardware files should not include application code. The organizing test is the listing: after all naming, layout, contract, and op choices, you should still be able to open the listing and understand what the CPU will execute without needing to hold anything in your head that is not on the page.
+Each category belongs in its own file. Put hardware constants in hardware files and application code in application files. The organizing test is the listing: after all naming, layout, contract and op choices, you should still be able to open the listing and understand what the CPU will execute with the relevant facts on the page.
 
-The underlying reason this consistency matters more in assembly than in most other languages is that the assembler enforces none of it. No type checker rejects a wrong field offset. No linter flags an inconsistent naming convention. No compiler error tells you when a routine receives the wrong value in a register. Convention is the only enforcement mechanism — and when it is applied consistently across a project, it is because the code has no other way to stay auditable as it grows.
+Consistency matters more in assembly than in most other languages because convention carries much of the design intent. Field offsets, naming patterns and register roles stay auditable when the project applies the same structure everywhere.
 
 ---
 
 ## Complete worked reference program
 
-This compact program shows the whole manual surface in one place: includes, constants, layout, enums, ops, contracts, entry labels, RAM storage, and listing verification. It manages a small sprite table, initializes it, sets up one sprite, and searches for a tile type.
+This compact program shows the whole manual surface in one place: includes, constants, layout, enums, ops, contracts, entry labels, RAM storage and listing verification. It manages a small sprite table, initializes it, sets up one sprite and searches for a tile type.
 
-The program is not here to demonstrate Z80 technique — it is deliberately small. Its purpose is to show all the manual's features working together in one readable source, so you can see how the pieces compose and verify that nothing in the preceding chapters was described in isolation from how it actually fits.
+The program is deliberately small. Its purpose is to show all the manual's features working together in one readable source, so you can see how the pieces compose.
 
 ---
 
@@ -257,7 +257,7 @@ worked/
 HALT_ADDR   .equ $0000    ; or board-specific
 ```
 
-A real hardware file would hold port addresses, ROM entry points, and board geometry.
+A real hardware file would hold port addresses, ROM entry points and board geometry.
 
 ---
 
@@ -508,8 +508,8 @@ Eight sprites at four bytes each place `found_at` at `$8020`.
 | RAM layout under its own `.org` | `main.asm` |
 | Listing verification of all of the above | `.lst` |
 
-The point of the example is not to introduce new rules. It is a final check that the rules compose without hiding the emitted machine code.
+The example is a final check that the rules compose while keeping the emitted machine code visible.
 
 ---
 
-[← Diagnostics, Listings, and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix A — Directive Reference →](appendix-a-directives.md)
+[← Diagnostics, Listings and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix A — Directive Reference →](appendix-a-directives.md)

@@ -5,11 +5,11 @@ parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 2
 ---
-[← Getting Started](01-getting-started.md) | [Manual](index.md) | [Addresses, Constants, and Expressions →](03-addresses-constants-expressions.md)
+[← Getting Started](01-getting-started.md) | [Manual](index.md) | [Addresses, Constants and Expressions →](03-addresses-constants-expressions.md)
 
 # Chapter 2 — Source Syntax and Symbols
 
-Every line in an AZM source file either emits bytes, names a location, or controls what comes next. Before any of the larger features — layouts, register contracts, op declarations — there are rules about how lines are formed, what numbers look like, and what distinguishes a label from a directive. This chapter covers those rules. They are mostly what you would expect from any Z80 assembler, with a few AZM-specific choices worth knowing about.
+Every line in an AZM source file either emits bytes, names a location or controls what comes next. Before any of the larger features — layouts, register contracts, op declarations — there are rules about how lines are formed, what numbers look like and what distinguishes a label from a directive. This chapter covers those rules. They are mostly what you would expect from any Z80 assembler, with a few AZM-specific choices worth knowing about.
 
 ---
 
@@ -18,7 +18,7 @@ Every line in an AZM source file either emits bytes, names a location, or contro
 Each line contains at most one of:
 
 - A label, optionally followed by an instruction or directive
-- An instruction or directive without a label
+- A standalone instruction or directive
 - A comment alone
 - A blank line
 
@@ -40,9 +40,9 @@ Both forms are valid. Labels on their own line are common for routines; labels o
 
 ## Whitespace and separators
 
-Whitespace before the label, between the label and the directive, between the directive and its operands, and between operands is flexible. AZM does not enforce specific column positions. One or more spaces or tabs separate tokens.
+Whitespace before the label, between the label and the directive, between the directive and its operands and between operands is flexible. AZM accepts flexible column positions. One or more spaces or tabs separate tokens.
 
-Commas separate operand lists in `.db`, `.dw`, and similar data directives:
+Commas separate operand lists in `.db`, `.dw` and similar data directives:
 
 ```asm
 .db $48,$65,$6C,$6C,$6F   ; five bytes
@@ -67,15 +67,15 @@ The `;!` prefix is the AZMDoc contract marker. It looks like a comment but is pa
 ;!      clobbers  BC
 ```
 
-Any assembler that does not know AZMDoc sees `;!` lines as ordinary comments. That compatibility is intentional: if you take an AZM source file to another Z80 assembler, the contract annotations disappear silently — they have no effect on the binary. The analyzer only activates when you run AZM with register-care enabled.
+Other Z80 assemblers treat `;!` lines as ordinary comments. AZM reads them as register-care contracts when analysis is enabled. The contract annotations are metadata; they leave the emitted binary unchanged.
 
 ## Number formats
 
-AZM accepts all the numeric literal forms that appear in common Z80 assembly literature: `$FF` and `0xFF` for hex, trailing-`H` (`0FFH`), `%10101010` and `0b10101010` for binary, trailing-`B`, plain decimal (`42`), and quoted ASCII character (`'A'`). You can mix them freely in any expression. See [Appendix B](appendix-b-operators.md) for the full table with all variants and base notes.
+AZM accepts all the numeric literal forms that appear in common Z80 assembly literature: `$FF` and `0xFF` for hex, trailing-`H` (`0FFH`), `%10101010` and `0b10101010` for binary, trailing-`B`, plain decimal (`42`) and quoted ASCII character (`'A'`). You can mix them freely in any expression. See [Appendix B](appendix-b-operators.md) for the full table with all variants and base notes.
 
 For trailing-`H` hex, the token must start with a decimal digit. `0FFH` is hex 255, but `FFH` starts with a letter, so the parser reads it as a symbol name. Write `0FFH` to force hex interpretation.
 
-`$` has two roles depending on what follows it. `$FF` starts with a hex digit, so the whole token is a hex literal (255). `$` not followed by a hex digit is the current assembly address — `$ - start` gives the byte distance from a label to the current position.
+`$` has two roles depending on what follows it. `$FF` starts with a hex digit, so the whole token is a hex literal (255). A bare `$`, or `$` followed by a non-hex character, is the current assembly address — `$ - start` gives the byte distance from a label to the current position.
 
 These forms can appear freely in any expression:
 
@@ -87,21 +87,20 @@ DOT     .equ 'A' + 1       ; ASCII + offset
 SIZE    .equ WIDTH * HEIGHT ; 1024
 ```
 
-All of `$2A`, `%101010`, `0b101010`, `0x2A`, `02AH`, and `101010B` assemble to 42.
+All of `$2A`, `%101010`, `0b101010`, `0x2A`, `02AH` and `101010B` assemble to 42.
 
-The reason so many forms exist is history: different Z80 assemblers used different conventions, and source files from the 1980s through today use all of them. AZM accepts the full range so that you can assemble existing source without converting it first.
+AZM accepts the numeric forms used across Z80 assembly literature, so existing source can assemble directly.
 
 ## String and character literals
 
-Multi-character string literals appear in `.db`, `.cstr`, `.pstr`, and `.istr` operands. `.db` accepts string fragments directly:
+Multi-character string literals appear in `.db`, `.cstr`, `.pstr` and `.istr` operands. `.db` accepts string fragments directly:
 
 ```asm
 .db "Hello"          ; 5 bytes: H e l l o
 .db "Hello",0        ; 6 bytes: H e l l o NUL
 ```
 
-The three string directives encode common string formats without making you
-write the terminator or length byte by hand:
+The three string directives encode common string formats and write the terminator or length byte for you:
 
 ```asm
 Greeting:
@@ -122,7 +121,7 @@ bytes in the output image.
 
 If none of these match your target routine's expected format, use `.db` directly and write the bytes you need. The three directives cover the most common conventions in the Z80 ecosystem.
 
-`.dw` accepts word expressions, including single-character quoted values (`'A'` or `"A"` evaluate to the ASCII code as a 16-bit value). It does not accept multi-character string fragments.
+`.dw` accepts word expressions, including single-character quoted values (`'A'` or `"A"` evaluate to the ASCII code as a 16-bit value). Use `.db` for multi-character string fragments.
 
 Single-character strings in expression context evaluate to the character's ASCII code:
 
@@ -148,19 +147,19 @@ Undotted forms (`ORG`, `EQU`, `DB`, `DW`, `DS`, …) are accepted through the bu
 
 ## Case rules
 
-AZM is case-sensitive for labels and symbol names. `START`, `start`, and `Start` are three distinct symbols. Pick one convention and stay with it.
+AZM is case-sensitive for labels and symbol names. `START`, `start` and `Start` are three distinct symbols. Pick one convention and stay with it.
 
-AZM is case-insensitive for Z80 instruction mnemonics and register names. `LD`, `ld`, and `Ld` all parse as the same instruction; `A`, `a`, `HL`, and `hl` all parse as the same register. Pick one case for mnemonics and stick with it — mixed case within a project makes listings harder to scan. The `--case-style` flag enforces consistency if you want machine help.
+AZM is case-insensitive for Z80 instruction mnemonics and register names. `LD`, `ld` and `Ld` all parse as the same instruction; `A`, `a`, `HL` and `hl` all parse as the same register. Pick one case for mnemonics and stick with it — mixed case within a project makes listings harder to scan. The `--case-style` flag enforces consistency if you want machine help.
 
-The case-sensitivity rule for labels is strict and catches real bugs. A loop label named `LoopStart` in one routine and `loopStart` in another are two different symbols — if you accidentally use one where you meant the other, AZM reports an unknown-symbol error rather than silently branching to the wrong place.
+The case-sensitivity rule for labels is strict and catches real bugs. A loop label named `LoopStart` in one routine and `loopStart` in another are two different symbols — if you accidentally use one where you meant the other, AZM reports an unknown-symbol error rather than silently branching to an unintended address.
 
-Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors. The alias layer that normalises `DB`, `ORG`, and similar undotted tokens to canonical dotted lowercase runs before the parser — but it applies only to undotted tokens. Once dotted, the case is fixed: `.db` only.
+Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors. The alias layer that normalises `DB`, `ORG` and similar undotted tokens to canonical dotted lowercase runs before the parser — but it applies only to undotted tokens. Once dotted, the case is fixed: `.db` only.
 
 ## Strict parsing
 
-AZM does not silently ignore unknown directives or malformed operands. When the parser cannot make sense of a line, it reports an error and stops that pass. Silent failures in older assemblers let wrong source produce wrong binary without any indication. Chapter 8 covers diagnostic messages and how to read them.
+AZM reports unknown directives and malformed operands immediately. When the parser cannot make sense of a line, it reports an error and stops that pass. Chapter 8 covers diagnostic messages and how to read them.
 
-For source ported from older tools, strict parsing means the first assembly run shows everything AZM does not recognize. That is usually a short list once you have loaded the right alias file, which Chapter 7 explains.
+For source ported from older tools, strict parsing makes the first assembly run a useful compatibility pass: load the right alias file, assemble once and review the remaining forms that need attention. Chapter 7 explains aliases.
 
 ---
 
@@ -190,7 +189,7 @@ READ_LOOP:
 
 ## Global labels
 
-AZM has no local-label namespace. Every plain label is a global symbol, unique across the entire translation unit — the source file plus all included files. If two labels share a name, AZM reports a duplicate-symbol error.
+Every plain label is a global symbol, unique across the entire translation unit — the source file plus all included files. If two labels share a name, AZM reports a duplicate-symbol error.
 
 The global namespace means branch labels inside routines must be unique too. Two routines that both need a loop label called `Loop` will clash at assembly time. The convention throughout this manual is to prefix branch labels with the routine name: `ShiftRowLoop`, `CopyRowLoop`, `ScanRowLoop`. The examples later in this chapter show that pattern in practice.
 
@@ -211,7 +210,7 @@ MY_LABEL:
 MY_LABEL: ld a,0
 ```
 
-Both forms are valid. The colon is required. Plain-label identifiers can contain letters, digits, and underscores, and must start with a letter. The parser accepts some compatibility forms, but new source should use the canonical style.
+Both forms are valid. The colon is required. Plain-label identifiers can contain letters, digits and underscores and must start with a letter. The parser accepts some compatibility forms, but new source should use the canonical style.
 
 An **entry label** begins with `@` followed by a plain identifier:
 
@@ -221,11 +220,11 @@ An **entry label** begins with `@` followed by a plain identifier:
 
 The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; `@SHIFT_ROW` is the source annotation. Both forms place a label at the current assembly address. The difference is what they tell register-care analysis — covered in the next section and in Chapter 6.
 
-The `@` is not part of the callable name. You write `@SHIFT_ROW:` in source, but call sites write `call SHIFT_ROW`.
+The callable name drops the `@`. You write `@SHIFT_ROW:` in source, and call sites write `call SHIFT_ROW`.
 
 ## The `@` entry prefix
 
-`@NAME:` marks `NAME` as a routine entry point. The callable symbol is `NAME`, without the `@`. Call sites write `call NAME`.
+`@NAME:` marks `NAME` as a routine entry point. The callable symbol is `NAME`; call sites write `call NAME`.
 
 Branch labels inside routines are still global symbols, so two routines that both need a loop label must use distinct names:
 
@@ -264,9 +263,9 @@ DATA_TABLE:
 TABLE_LEN .equ $ - DATA_TABLE
 ```
 
-Branch targets, data addresses, and `.equ` names all support forward references. Cyclic or unresolvable references produce an error.
+Branch targets, data addresses and `.equ` names all support forward references. Cyclic or unresolvable references produce an error.
 
-Forward references let you put data at the bottom of a source file, where it stays out of the way, and reference it from code near the top. AZM uses a two-pass strategy: the first pass assigns addresses to all labels; the second pass substitutes those addresses into instruction encodings. Any reference still unresolved after both passes is a genuine error — typically a typo in a label name.
+Forward references let you put data at the bottom of a source file, where it stays out of the way and reference it from code near the top. AZM uses a two-pass strategy: the first pass assigns addresses to all labels; the second pass substitutes those addresses into instruction encodings. Any reference still unresolved after both passes is a genuine error — typically a typo in a label name.
 
 ## Multiple labels at one address
 
@@ -296,10 +295,10 @@ Code labels name instructions:
 DRAW:     ld  a,(hl)
 ```
 
-Register-care analysis treats data labels as non-routine addresses and does not attach AZMDoc contracts to them. An AZMDoc `;!` block before a data label is an error.
+Register-care analysis treats data labels as ordinary addresses. AZMDoc `;!` blocks belong before `@` routine entries.
 
-The distinction matters in practice: if you want to document how a piece of code affects registers, it needs a `@` label and a `;!` block. If you want to name a storage address, a plain label is the right tool and no contract is involved.
+The distinction matters in practice: register contracts use a `@` label and a `;!` block; storage addresses use plain labels.
 
 ---
 
-[← Getting Started](01-getting-started.md) | [Manual](index.md) | [Addresses, Constants, and Expressions →](03-addresses-constants-expressions.md)
+[← Getting Started](01-getting-started.md) | [Manual](index.md) | [Addresses, Constants and Expressions →](03-addresses-constants-expressions.md)

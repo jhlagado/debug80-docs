@@ -28,7 +28,7 @@ scores: .db 10, 20, 30, 40, 50, 60
 
 This declares six bytes of initialized storage starting at address `$8000`.
 The assembler lays them out in memory in the order listed: `$8000` holds 10,
-`$8001` holds 20, `$8002` holds 30, and so on.
+`$8001` holds 20, `$8002` holds 30 and so on.
 
 The name `scores` refers to the address of the first byte in the array — the
 address `$8000`. It is not the value 10. This is the difference between a table
@@ -100,7 +100,7 @@ and uses `(hl)` to reach the values.
 
 ---
 
-## Labels, variables, and code share the same memory
+## Labels, variables and code share the same memory
 
 Assembly makes no distinction between a label that names a variable and one
 that marks a point in code. Both are memory addresses — plain 16-bit numbers. `scores` is the address where the
@@ -124,7 +124,7 @@ With HL you would increment between each read. With IX you load the base once
 and name each field by its offset.
 
 IX is a 16-bit index register. Its specific capability is the `(ix+d)`
-addressing mode: `d` is a signed byte offset, any value from -128 to +127, and
+addressing mode: `d` is a signed byte offset, any value from -128 to +127 and
 `ld a, (ix+d)` reads the byte at address IX + d without touching IX itself.
 
 Load IX to the base of a record once, and you can name every field by its
@@ -300,10 +300,10 @@ to A, and stops when it finds a match or exhausts BC bytes. After `cpir`, Z is
 set if a match was found, and HL points one past the matching byte. `cpdr` is
 the same scan in the decrementing direction.
 
-`ldir`, `lddr`, `cpir`, and `cpdr` are standard Z80 mnemonics. AZM assembles
+`ldir`, `lddr`, `cpir` and `cpdr` are standard Z80 mnemonics. AZM assembles
 them directly, like `djnz`.
 
-When both HL and DE are live pointers — as they are during any `ldir` sequence — you sometimes need to exchange them. After a copy, the destination you wrote may become the source for the next pass, or you need to hand that address to a routine that expects it in HL. Without a swap instruction, exchanging the two pairs takes six instructions and clobbers A. `ex de, hl` does it in one: afterward, DE holds what HL had and HL holds what DE had, and nothing else changes.
+When both HL and DE are live pointers — as they are during any `ldir` sequence — you sometimes need to exchange them. After a copy, the destination you wrote may become the source for the next pass or you need to hand that address to a routine that expects it in HL. Without a swap instruction, exchanging the two pairs takes six instructions and clobbers A. `ex de, hl` does it in one: afterward, DE holds what HL had and HL holds what DE had and nothing else changes.
 
 ```asm
 ld hl, source
@@ -331,7 +331,7 @@ ex de, hl         ; HL now points past dest; DE points past source
 - IX+d is useful for record-like access: load IX to the record base once, then
   name each field by its offset without moving IX.
 - To reach entry `n` at runtime, either load `table_base + n` into IX using
-  compile-time arithmetic, or add the index to HL with `add hl, de`.
+  compile-time arithmetic or add the index to HL with `add hl, de`.
 - `.db` emits raw bytes; `.dw` emits 16-bit words. Use them wherever you need
   to place initialized data, whether it has a name or not.
 
@@ -339,7 +339,7 @@ ex de, hl         ; HL now points past dest; DE points past source
 
 ## What Comes Next
 
-Everything so far has been a single block of code. Chapter 8 introduces the stack and the `call`/`ret` instructions that make reusable subroutines possible — code you can jump into from anywhere, run, and reliably return from. The same tables and loops from this chapter will start appearing inside named, callable routines, and the programs will start to look like programs.
+Everything so far has been a single block of code. Chapter 8 introduces the stack and the `call`/`ret` instructions that make reusable subroutines possible — code you can jump into from anywhere, run and reliably return from. The same tables and loops from this chapter will start appearing inside named, callable routines and the programs will start to look like programs.
 
 ---
 
@@ -356,7 +356,7 @@ ld a, (scores)     ; (b)
 
 Which instruction loads the number 10 (the first element of the table) into a register? Which loads the memory address where 10 is stored?
 
-**3. IX record access.** You have three three-byte records packed in memory, each with the layout: `id` at offset 0, `hi` at offset 1, `lo` at offset 2. The table starts at address `$8010`. Write the IX loads to read all three fields of the **third** record (index 2) into registers A, B, and C respectively. Start by computing the address you need to load into IX.
+**3. IX record access.** You have three three-byte records packed in memory, each with the layout: `id` at offset 0, `hi` at offset 1, `lo` at offset 2. The table starts at address `$8010`. Write the IX loads to read all three fields of the **third** record (index 2) into registers A, B and C respectively. Start by computing the address you need to load into IX.
 
 **4. Find the bug.** The following loop is meant to find the maximum score in the `scores` table, but it has a subtle error. Identify what goes wrong and explain what value `max_score` will hold at the end:
 

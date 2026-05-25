@@ -1,23 +1,23 @@
 ---
 layout: default
-title: "Chapter 8 — Diagnostics, Listings, and Output"
+title: "Chapter 8 — Diagnostics, Listings and Output"
 parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 8
 ---
-[← Op Declarations and Aliases](07-ops-aliases.md) | [Manual](index.md) | [Porting, Style, and Reference →](09-porting-style-reference.md)
+[← Op Declarations and Aliases](07-ops-aliases.md) | [Manual](index.md) | [Porting, Style and Reference →](09-porting-style-reference.md)
 
-# Chapter 8 — Diagnostics, Listings, and Output
+# Chapter 8 — Diagnostics, Listings and Output
 
-By the time you reach this chapter, you have seen every feature of the language. This chapter covers the other half of the tool: what AZM tells you when something is wrong, how to read the listing it produces with every build, and how to control the output files it writes. These are the mechanics of using AZM day to day.
+By the time you reach this chapter, you have seen every feature of the language. This chapter covers the other half of the tool: what AZM tells you when something is wrong, how to read the listing it produces with every build and how to control the output files it writes. These are the mechanics of using AZM day to day.
 
 ---
 
 ## Diagnostics and error handling
 
-AZM prints diagnostics with file name, line number, column, severity, and a diagnostic ID. A non-zero exit code means something went wrong. The listing and binary are not written when errors occur.
+AZM prints diagnostics with file name, line number, column, severity and a diagnostic ID. A non-zero exit code means assembly failed. Listings and binaries are written for successful assemblies.
 
-The diagnostic ID — `AZMN_PARSE`, `AZMN_SYMBOL`, and so on — is the stable part. Message wording may change between AZM versions; the code stays the same. If you script against AZM output, match on the code rather than the message text.
+The diagnostic ID — `AZMN_PARSE`, `AZMN_SYMBOL` and so on — is the stable part. Message wording may change between AZM versions; the code stays the same. If you script against AZM output, match on the code rather than the message text.
 
 Diagnostic format:
 
@@ -29,15 +29,15 @@ program.asm:31:8: warning AZMN_REGISTER_CARE: DE is live across CALL CHECK_FOO, 
 
 ### Parse errors
 
-Parse errors occur when a source line cannot be recognized as a valid label, instruction, directive, or comment.
+Parse errors occur when a source line cannot be recognized as a valid label, instruction, directive or comment.
 
 **Unknown directive:**
 
 ```asm
-.macro FOO    ; error: .macro is not an AZM directive
+.macro FOO    ; error: AZM directive expected
 ```
 
-AZM does not support text macros. If existing source depends on text macros, expand or rewrite them before assembling with AZM. For small reusable instruction idioms, use AZM `op` declarations, which are parsed, typed, and expanded as ordinary assembly instructions.
+For small reusable instruction idioms, use AZM `op` declarations, which are parsed, typed and expanded as ordinary assembly instructions.
 
 **Malformed operand:**
 
@@ -49,7 +49,7 @@ db   ,0        ; error: missing expression before comma
 **Unrecognized instruction:**
 
 ```asm
-mov  a,b      ; error: MOV is not a Z80 mnemonic — use LD
+mov  a,b      ; error: use the Z80 mnemonic LD
 ```
 
 ### Unknown labels and symbols
@@ -74,7 +74,7 @@ Includes the file name and line number of both definitions. Fix by renaming one 
 
 ### Range errors
 
-An expression value that does not fit the encoding slot:
+An expression value outside the encoding slot:
 
 ```asm
 ld   a,300          ; error: 300 > 255, out of range for ld a,n
@@ -82,7 +82,7 @@ bit  9,a            ; error: bit index 9 out of range 0..7
 jr   Target         ; error: branch offset > 127 (use jp instead)
 ```
 
-The diagnostic names the value, the context, and the allowed range. For branch range errors, check whether `jr` should be `jp`.
+The diagnostic names the value, the context and the allowed range. For branch range errors, check whether `jr` should be `jp`.
 
 ### Layout type errors
 
@@ -111,7 +111,7 @@ ld   hl,<Sprite[16]>TABLE[HL].flags  ; error: HL is not a constant
 error AZMN_PARSE: no overload of 'load8' matches operands (HL, imm8)
 ```
 
-AZM reports a parse-level diagnostic at the relevant source location for op errors — no-match, ambiguous overload, arity mismatch, or expansion cycle. Check that the operand classes in your op declaration match the operands at the call site.
+AZM reports a parse-level diagnostic at the relevant source location for op errors — no-match, ambiguous overload, arity mismatch or expansion cycle. Check that the operand classes in your op declaration match the operands at the call site.
 
 ### Register-care diagnostics
 
@@ -122,7 +122,7 @@ warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9
   but DRAW_FRAME may modify B (inferred clobbers: A,B,DE)
 ```
 
-The diagnostic names the live register, the call site, and the callee's inferred clobber set. Resolution options are: save the register around the call, restructure so it is not live across the call, or add a callee contract. Chapter 6 covers each option in detail.
+The diagnostic names the live register, the call site and the callee's inferred clobber set. Resolution options are: save the register around the call, restructure so it is not live across the call or add a callee contract. Chapter 6 covers each option in detail.
 
 Register-care diagnostics are the most actionable warnings AZM produces. Each one names a specific call site and a specific register. You can deal with them one at a time without needing to understand the whole program at once.
 
@@ -135,7 +135,7 @@ When a diagnostic is unclear, isolate the problem by removing code until the err
 
 ### Exit codes
 
-AZM exits 0 when assembly succeeds — no parse errors, no semantic errors, no range errors, and no register-care errors in `error` or `strict` mode. All requested artifacts are written.
+AZM exits 0 when assembly succeeds — no parse errors, no semantic errors, no range errors and no register-care errors in `error` or `strict` mode. All requested artifacts are written.
 
 AZM exits non-zero (1) when any of the following occur:
 - A parse error: source line cannot be recognized
@@ -158,12 +158,12 @@ Diagnostics carry a code of the form `AZMN_*` for programmatic identification. D
 
 | Code | Trigger |
 |------|---------|
-| `AZMN_PARSE` | Parse error: unrecognized line, malformed operand, range overflow, op overload failure, or any other syntax-level problem |
+| `AZMN_PARSE` | Parse error: unrecognized line, malformed operand, range overflow, op overload failure or any other syntax-level problem |
 | `AZMN_SYMBOL` | Symbol error: label or `.equ` name defined more than once, or referenced but never defined after all passes |
 | `AZMN_REGISTER_CARE` | Register-care conflict: a live pre-call value may be destroyed by the callee |
 | `AZMN_CASE_STYLE` | Case-style lint violation (requires `--case-style`) |
 | `AZMN_ASM80` | Feature cannot be lowered to ASM80 syntax in `--asm80` mode |
-| `AZMN_SOURCE` | Source file error: file not found, unreadable, or include cycle |
+| `AZMN_SOURCE` | Source file error: file not found, unreadable or include cycle |
 
 The diagnostic code appears after the severity in the output:
 
@@ -175,7 +175,7 @@ When writing scripts that parse AZM output, match on the code rather than the me
 
 ### Reading a failing build
 
-When a build fails, the diagnostic tells you the file, the line, the column, and the problem. Learning to read one quickly takes a single concrete example.
+When a build fails, the diagnostic tells you the file, the line, the column and the problem. Learning to read one quickly takes a single concrete example.
 
 Suppose you have a loop that branches forward around a handler block. The handler starts small, but grows. At 140 bytes between the `jr` and its target, running `azm scan.asm` stops immediately:
 
@@ -206,7 +206,7 @@ A `jr` encodes a signed 8-bit offset from the byte following the instruction: ma
         jp   nz,SKIP_HANDLER    ; jp carries a 16-bit target address
 ```
 
-Reassemble. Exit code is 0. Open the listing at line 6 and the two bytes for the `jr` (`20 XX`) are now three bytes for the `jp` (`C2 XX XX`), the last two showing the resolved address of `SKIP_HANDLER`. The diagnostic gave you the location and the problem; the listing confirms the fix was correct.
+Reassemble. Exit code is 0. Open the listing at line 6: the instruction is now three bytes for the `jp` (`C2 XX XX`), the last two showing the resolved address of `SKIP_HANDLER`. The diagnostic gave you the location and the problem; the listing confirms the fix was correct.
 
 ---
 
@@ -238,7 +238,7 @@ Columns:
 
 For `ld (RESULT),a` at address `$0102`, the bytes `32 08 01` represent the opcode ($32) and the address of `RESULT` ($0108) in little-endian order.
 
-Each column serves a different moment in debugging. The address column is the first thing to check when something lands at the wrong place — if code you expected at `$0100` shows up at `$0000`, an `.org` is missing or was placed after the first instruction. The bytes column is for verifying encoding: `ld a,42` showing `3E 2A` means the immediate assembled correctly; wrong bytes mean the operand expression is wrong or an instruction was misidentified. The line number points straight back to source without searching, useful when the listing runs long and an unexpected address gap tells you something is wrong but not where. The source text column matters most when tracing an expression that computed unexpectedly — both what you wrote and what the assembler saw appear on the same listing line, so you can catch the moment they diverged.
+Each column serves a different moment in debugging. The address column is the first thing to check when bytes land at an unexpected address — if code you expected at `$0100` shows up at `$0000`, an `.org` is missing or was placed after the first instruction. The bytes column is for verifying encoding: `ld a,42` showing `3E 2A` means the immediate assembled correctly; unexpected bytes point to the operand expression or instruction form. The line number points straight back to source without searching, useful when the listing runs long and an unexpected address gap tells you where to look. The source text column matters most when tracing an expression that computed unexpectedly — both what you wrote and what the assembler saw appear on the same listing line, so you can catch the moment they diverged.
 
 ### Suppressing the listing
 
@@ -246,7 +246,7 @@ Each column serves a different moment in debugging. The address column is the fi
 azm --nolist program.asm
 ```
 
-When you only want a binary or HEX file and the listing is not needed, `--nolist` skips writing `.lst`. The listing is always generated in memory during assembly; `--nolist` only suppresses writing it to disk.
+When you only want a binary or HEX file, `--nolist` skips writing `.lst`. The listing is still generated in memory during assembly; `--nolist` suppresses writing it to disk.
 
 ### Reading the listing for common tasks
 
@@ -299,9 +299,9 @@ Symbols:
 
 Constants and addresses appear together, sorted alphabetically. This is useful for verifying that the linker placed things where you expected and for locating labels when the listing is long.
 
-### There is no `--list` option
+### Listing is the default
 
-AZM generates the listing by default. There is no `--list` flag to enable it because listings are on unless you suppress them. The design assumption is that most assembly development benefits from a listing.
+AZM generates the listing by default. Suppress it with `--nolist` when you want a smaller artifact set.
 
 ### Listing for includes
 
@@ -355,7 +355,7 @@ Once the listing shows that everything assembled where you expected, the build's
 
 ## Output formats
 
-A single assembly run can produce up to seven output files. By default, AZM produces the standard set: binary, HEX, listing, and Debug80 map. The sections below describe each format and when to use suppression flags to trim the output to exactly what you need.
+A single assembly run can produce up to seven output files. By default, AZM produces the standard set: binary, HEX, listing and Debug80 map. The sections below describe each format and when to use suppression flags to trim the output to exactly what you need.
 
 All are written to the same base path as the source by default; the primary output can be redirected with `--output`.
 
@@ -382,7 +382,7 @@ The binary then contains only bytes between the two addresses.
 
 ### Intel HEX (`.hex`)
 
-Intel HEX records contain the same bytes as the binary, but organized as text records with address fields and checksums. HEX is the standard format for loading programs into hardware via serial bootloaders, EPROM programmers, and most Z80 development boards.
+Intel HEX records contain the same bytes as the binary, but organized as text records with address fields and checksums. HEX is the standard format for loading programs into hardware via serial bootloaders, EPROM programmers and most Z80 development boards.
 
 ```sh
 azm --type hex program.asm
@@ -413,7 +413,7 @@ azm --source-root . --output build/program.hex src/program.asm
 
 With `--source-root`, file paths in the map are written relative to the given root with `/` separators, making the map portable across machine boundaries.
 
-Without `--source-root`, absolute paths go into the map. This works when the Debug80 session runs on the same machine as the build, but breaks when moving files.
+With absolute paths in the map, Debug80 expects the same machine paths used during the build. Use `--source-root` for portable maps.
 
 Suppress with `--nod8m` when not using Debug80.
 
@@ -442,11 +442,11 @@ Writes a `.z80` file alongside the other artifacts. The `.z80` file is a lowered
 
 **Coverage:**
 
-`--asm80` is a compatibility output. It is covered by the current asm80 fixture and parity gates, but treat it as a generated verification aid rather than the primary production artifact. Prefer AZM's `.bin`, `.hex`, `.lst`, and `.d8.json` outputs for normal workflows. If AZM reports `AZMN_ASM80`, the AZM binary output may still be valid while the lowered ASM80 artifact needs attention.
+`--asm80` is a compatibility output. It is covered by the current asm80 fixture and parity gates, but treat it as a generated verification aid rather than the primary production artifact. Prefer AZM's `.bin`, `.hex`, `.lst` and `.d8.json` outputs for normal workflows. If AZM reports `AZMN_ASM80`, the AZM binary output may still be valid while the lowered ASM80 artifact needs attention.
 
 **The `AZMN_ASM80` diagnostic:**
 
-The `AZMN_ASM80` diagnostic appears when a feature cannot be lowered to ASM80. It identifies the file, line, and the feature that blocked lowering:
+The `AZMN_ASM80` diagnostic appears when a feature cannot be lowered to ASM80. It identifies the file, line and the feature that blocked lowering:
 
 ```
 program.asm:47:9: warning AZMN_ASM80: source construct cannot be lowered to ASM80-compatible form
@@ -466,7 +466,7 @@ Layout calculations are where the lowered source earns its keep: when a result i
 
 **`--asm80` and register-care:**
 
-AZMDoc `;!` lines are stripped in the lowered output — contracts do not survive into the `.z80` file. If the ASM80 workflow needs contract documentation, write it as ordinary prose `;` comments.
+AZMDoc `;!` lines are stripped in the lowered output. If the ASM80 workflow needs contract documentation, write it as ordinary prose `;` comments.
 
 **When to use `--asm80`:**
 
@@ -484,7 +484,7 @@ Two additional artifacts require at minimum `--rc audit`:
 azm --rc audit --reg-report program.asm
 ```
 
-Writes `program.regcare.txt` alongside the binary. The report lists every `@`-labeled routine with its inferred register contract: inputs, outputs, and clobbers. Use this to audit what AZM inferred before committing to a contract or escalating to `--rc warn`.
+Writes `program.regcare.txt` alongside the binary. The report lists every `@`-labeled routine with its inferred register contract: inputs, outputs and clobbers. Use this to audit what AZM inferred before committing to a contract or escalating to `--rc warn`.
 
 **`.asmi` (inferred register-care interface):**
 
@@ -492,7 +492,7 @@ Writes `program.regcare.txt` alongside the binary. The report lists every `@`-la
 azm --rc audit --reg-interface program.asm
 ```
 
-Writes `program.asmi` — an external interface file with `extern` contract records for every `@` routine. Other projects that call into your program can load this file with `--interface` without needing your source. The format is the same as hand-written `.asmi` files (see Chapter 6).
+Writes `program.asmi` — an external interface file with `extern` contract records for every `@` routine. Other projects that call into your program can load this file with `--interface`. The format is the same as hand-written `.asmi` files (see Chapter 6).
 
 ### Binary comparison workflow
 
@@ -509,7 +509,7 @@ asm80 program.asm --format binary --out asm80.bin
 cmp azm.bin asm80.bin && echo "PASS" || echo "FAIL"
 ```
 
-On macOS or Linux, `xxd azm.bin | diff - <(xxd asm80.bin)` shows byte-level differences when the binaries are not identical.
+On macOS or Linux, `xxd azm.bin | diff - <(xxd asm80.bin)` shows byte-level differences when the binaries differ.
 
 When they differ, compare the listing files from both assemblers to find the first address where they diverge. That address points to the source line responsible for the discrepancy.
 
@@ -518,7 +518,7 @@ When they differ, compare the listing files from both assemblers to find the fir
 The default primary output is HEX. Binary is the right choice when:
 - Loading directly into a RAM-based system with a byte-for-byte loader
 - Comparing output against a reference binary
-- The target tool expects raw bytes, not HEX records
+- The target tool expects raw bytes
 
 HEX is the right choice when:
 - Using a serial bootloader or EPROM programmer
@@ -538,7 +538,7 @@ azm --nobin               # no .bin
 azm --nohex               # no .hex
 ```
 
-Example — binary only, no listing, no map:
+Example — binary only:
 
 ```sh
 azm --type bin --nohex --nolist --nod8m --output out.bin program.asm
@@ -546,4 +546,4 @@ azm --type bin --nohex --nolist --nod8m --output out.bin program.asm
 
 ---
 
-[← Op Declarations and Aliases](07-ops-aliases.md) | [Manual](index.md) | [Porting, Style, and Reference →](09-porting-style-reference.md)
+[← Op Declarations and Aliases](07-ops-aliases.md) | [Manual](index.md) | [Porting, Style and Reference →](09-porting-style-reference.md)

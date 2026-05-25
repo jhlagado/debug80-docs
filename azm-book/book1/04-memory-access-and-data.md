@@ -9,9 +9,9 @@ nav_order: 4
 
 # Chapter 4 — Memory Access and Data Representation
 
-The programs in Chapter 3 could only talk to registers and a single named byte. That's enough to add two numbers, but not enough to scan a table, process a string, or read from hardware. All of those require reaching into memory — and the Z80 has several specific ways to do it, each suited to a different pattern.
+The programs in Chapter 3 could only talk to registers and a single named byte. That's enough to add two numbers, but not enough to scan a table, process a string or read from hardware. All of those require reaching into memory — and the Z80 has several specific ways to do it, each suited to a different pattern.
 
-This chapter covers all of them, collects them into a reference table, and explains something that will matter more and more as you go: how the same byte can mean completely different things depending on how you choose to read it.
+This chapter covers all of them, collects them into a reference table and explains something that will matter more and more as you go: how the same byte can mean completely different things depending on how you choose to read it.
 
 ---
 
@@ -159,7 +159,7 @@ scratch: .dw 0
 
 `ld hl, (scratch)` — reads the word back from `scratch`. After this instruction, HL holds `$1234` again. This uses the `reg16 ← (nn)` form.
 
-After the program runs: `$8000` holds `10` (`$0A`), and `$8001`–`$8002` hold `$1234` (little-endian: `$34` at `$8001`, `$12` at `$8002`).
+After the program runs: `$8000` holds `10` (`$0A`) and `$8001`–`$8002` hold `$1234` (little-endian: `$34` at `$8001`, `$12` at `$8002`).
 
 ---
 

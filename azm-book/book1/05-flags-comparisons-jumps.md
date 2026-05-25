@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Chapter 5 — Flags, Comparisons, and Jumps"
+title: "Chapter 5 — Flags, Comparisons and Jumps"
 parent: "AZM Book 1 — Z80 Fundamentals"
 grand_parent: "AZM Books"
 nav_order: 5
 ---
 [← Memory Access and Data](04-memory-access-and-data.md) | [Book 1](index.md) | [Counting Loops and DJNZ →](06-counting-loops-and-djnz.md)
 
-# Chapter 5 — Flags, Comparisons, and Jumps
+# Chapter 5 — Flags, Comparisons and Jumps
 
 Every program makes decisions. The Z80 makes them by recording the outcome of each operation in the flags register, then testing those flags to decide where execution goes next.
 
@@ -23,7 +23,7 @@ the flags register.
 
 F holds eight bits. Each bit is called a flag and records one specific outcome
 of the last instruction that changed flags. Instructions like `sub`, `cp`,
-`and`, `or`, `xor`, `inc`, and `dec` update them as a side effect. The flags
+`and`, `or`, `xor`, `inc` and `dec` update them as a side effect. The flags
 change; you observe them afterward.
 
 Not every instruction affects every flag, and some instructions affect no flags
@@ -73,7 +73,7 @@ For the full flags reference and all condition codes, see
 
 ## `sub` and `cp`: subtraction and comparison
 
-`sub n` subtracts `n` from A, writes the result back into A, and updates the
+`sub n` subtracts `n` from A, writes the result back into A and updates the
 flags to reflect what happened.
 
 ```asm
@@ -112,7 +112,7 @@ know the relationship — equal, less than, greater than — without changing A.
 
 ## Logical operations: `and`, `or`, `xor`
 
-Three instructions complete the core toolkit: `and`, `or`, and `xor`. Each applies a bitwise operation between a mask value and A, stores the result back in A, clears C, and sets Z if the result is zero. You reach for these whenever you need to work with individual bits: isolating a status flag from a hardware port byte, setting or clearing a single bit without disturbing the others, or testing whether a byte is zero without running a comparison.
+Three instructions complete the core toolkit: `and`, `or` and `xor`. Each applies a bitwise operation between a mask value and A, stores the result back in A, clears C and sets Z if the result is zero. You reach for these whenever you need to work with individual bits: isolating a status flag from a hardware port byte, setting or clearing a single bit without disturbing the others or testing whether a byte is zero without running a comparison.
 
 `and n` keeps only the bits where the mask has 1. Use it to isolate part of a
 byte:
@@ -159,7 +159,7 @@ state in both A and the carry, reach for `xor a`.
 xor a              ; A = 0; Z is set; C is clear
 ```
 
-All three instructions accept a register, an immediate byte, `(HL)`, or an
+All three instructions accept a register, an immediate byte, `(HL)` or an
 index register form. The quick reference for arithmetic and logical instruction
 forms is in [Appendix 3](../appendices/03-addressing-prefixes-and-instruction-forms.md).
 
@@ -219,7 +219,7 @@ The condition codes you will use most:
 | `c`  | Jump if C is set   |
 | `nc` | Jump if C is clear |
 
-`jp` also supports `m` (S set), `p` (S clear), `pe` (P/V set), and `po` (P/V
+`jp` also supports `m` (S set), `p` (S clear), `pe` (P/V set) and `po` (P/V
 clear) for signed arithmetic and parity tests. The full list is in
 [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
 
@@ -236,8 +236,8 @@ skip:
 
 `cp 5` subtracts 5 from A and sets Z if the result was zero — that is, if A
 was 5. `jp nz` then jumps if Z is clear, which means A was not 5. If A was 5,
-Z is set, `jp nz` falls through, and the body runs. If A was anything else, Z
-is clear, `jp nz` jumps to `skip`, and the body is skipped.
+Z is set, `jp nz` falls through and the body runs. If A was anything else, Z
+is clear, `jp nz` jumps to `skip` and the body is skipped.
 
 Getting the direction right is the part that trips everyone up at first. The
 condition on `jp` is the condition that causes the jump — not the condition
@@ -254,8 +254,8 @@ jp z, bit_clear    ; bit 2 was 0 — go to bit_clear
 ```
 
 `and $04` clears every bit except bit 2. If bit 2 was already 0 in A, the
-result is 0, Z is set, and `jp z` jumps. If bit 2 was 1, the result is
-non-zero, Z is clear, and execution falls through.
+result is 0, Z is set and `jp z` jumps. If bit 2 was 1, the result is
+non-zero, Z is clear and execution falls through.
 
 ---
 
@@ -299,7 +299,7 @@ reach to roughly 127 bytes forward or 128 bytes backward from the `jr`
 instruction itself, but the instruction is one byte shorter.
 
 `jr nz, label` jumps to `label` if Z is clear. The conditional forms support
-`z`, `nz`, `c`, and `nc` only — fewer conditions than `jp`.
+`z`, `nz`, `c` and `nc` only — fewer conditions than `jp`.
 
 |                      | `jp`                       | `jr`                               |
 | -------------------- | -------------------------- | ---------------------------------- |
@@ -416,7 +416,7 @@ enter or skip a consequence block, place an exit label after it. The only
 difference is that `or a` sets the flag here instead of `cp`.
 
 **Section C — counted loop with `dec` / `jp nz`.** `ld b, Limit` loads 5 into
-B. At `loop_top:`, the body reads `counter` from RAM, increments it, and stores
+B. At `loop_top:`, the body reads `counter` from RAM, increments it and stores
 it back. `dec b` decrements B and sets Z when B reaches zero. `jp nz, loop_top`
 jumps back to `loop_top:` while B is non-zero.
 
@@ -446,10 +446,10 @@ always 0. A is zeroed, Z is set, C is cleared, in one instruction.
 
 ## Summary
 
-- The Z, C, S, and P/V flags record the outcome of the last instruction that
+- The Z, C, S and P/V flags record the outcome of the last instruction that
   affected them. Most `ld` instructions do not affect flags; arithmetic,
   comparison, and logical instructions do.
-- `sub n` subtracts n from A, stores the result in A, and updates flags. Z is
+- `sub n` subtracts n from A, stores the result in A and updates flags. Z is
   set if the result is zero; C is set if A was less than n (unsigned borrow).
 - `cp n` does the same subtraction and sets the same flags, but discards the
   result — A is unchanged. Use it when you only need the relationship, not the
@@ -459,7 +459,7 @@ always 0. A is zeroed, Z is set, C is cleared, in one instruction.
 - `and n` keeps bits where the mask has 1 (clears others); `or n` sets bits
   where the mask has 1; `xor n` toggles bits where the mask has 1. All three
   clear C and update Z.
-- `xor a` zeroes A, sets Z, and clears C in one instruction. Prefer it over
+- `xor a` zeroes A, sets Z and clears C in one instruction. Prefer it over
   `ld a, 0` when you need a known flag state.
 - `jp label` puts the address of `label` into PC; execution continues from
   there. The jump always happens — the flags are not consulted.
@@ -481,7 +481,7 @@ always 0. A is zeroed, Z is set, C is cleared, in one instruction.
 
 ## What Comes Next
 
-Chapter 6 shows the single instruction the Z80 provides for exactly the loop pattern built at the end of this chapter — decrement a counter, branch if not zero, fall through when done. One instruction instead of two, shorter in every sense, and the foundation of a fuller loop vocabulary that covers counted, sentinel, and flag-exit forms.
+Chapter 6 shows the single instruction the Z80 provides for exactly the loop pattern built at the end of this chapter — decrement a counter, branch if not zero, fall through when done. One instruction instead of two, shorter in every sense and the foundation of a fuller loop vocabulary that covers counted, sentinel and flag-exit forms.
 
 ---
 

@@ -13,7 +13,7 @@ Chapter 2 indexed bytes in a table. Each element was one byte wide, so stride wa
 
 You can keep field offsets in comments and hope they stay correct. Wirth's advice is the opposite: fix the **representation** first, then write the algorithm against that layout. AZM's `.type` blocks are that representation. You describe the record once; `sizeof` and `offset` supply the numbers your instructions need.
 
-This chapter reviews layout types from Book 1 Chapter 13, applies them to field reads and writes through HL and IX, and builds a **ring buffer** — a fixed-size FIFO queue over a byte table — as the main worked example. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
+This chapter reviews layout types from Book 1 Chapter 13, applies them to field reads and writes through HL and IX and builds a **ring buffer** — a fixed-size FIFO queue over a byte table — as the main worked example. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
 
 ---
 
@@ -28,7 +28,7 @@ A FIFO queue (first in, first out) needs:
 
 Shifting the whole table on every pop is wasteful on a small machine. A **ring buffer** keeps indices in workspace RAM and only moves the indices. Storage is a fixed byte array; push writes at `head` and advances; pop reads at `tail` and advances. When an index reaches capacity, it wraps to 0.
 
-No allocator, no linked list nodes — just bytes, offsets, and compare/branch. That is the Book 3 sweet spot: representation before algorithm, with every memory access visible.
+No allocator, no linked list nodes — just bytes, offsets and compare/branch. That is the Book 3 sweet spot: representation before algorithm, with every memory access visible.
 
 ---
 
@@ -44,7 +44,7 @@ count   .byte
 .endtype
 ```
 
-Field lines do **not** allocate memory. They only describe shape. Storage still comes from `.ds`, `.db`, or `.dw`:
+Field lines do **not** allocate memory. They only describe shape. Storage still comes from `.ds`, `.db` or `.dw`:
 
 ```asm
 RING_CAP .equ 8
@@ -56,7 +56,7 @@ ring_state:
     .ds RingState
 ```
 
-`ring_buf` reserves eight data bytes. `ring_state` reserves `sizeof(RingState)` bytes — three bytes for `head`, `tail`, and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type-array form uses literal lengths in the current assembler, not named constants.
+`ring_buf` reserves eight data bytes. `ring_state` reserves `sizeof(RingState)` bytes — three bytes for `head`, `tail` and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type-array form uses literal lengths in the current assembler, not named constants.
 
 Name the compile-time constants you will use in instructions:
 
@@ -431,21 +431,21 @@ Single-step through `ring_push` once with the emulator: watch `head` and `count`
 
 - **`.type` / `.endtype`** describe packed layout; they do not emit bytes by themselves.
 - **`sizeof(Type)`** and **`offset(Type, field)`** are compile-time constants — name them with `.equ` and use them in code and `.ds`.
-- **`.ds byte[8]`**, **`.ds RING_CAP`**, **`.ds RingState`**, and literal record arrays such as **`.ds Record[4]`** reserve exact byte counts.
+- **`.ds byte[8]`**, **`.ds RING_CAP`**, **`.ds RingState`** and literal record arrays such as **`.ds Record[4]`** reserve exact byte counts.
 - **IX + offset constants** is the idiomatic in-record access; **HL + BC** handles `table + runtime_index`.
 - **Layout casts** `<Type>label.field` and `<Type[N]>table[i].field` fold constant addresses; runtime indices use explicit arithmetic.
-- A **ring buffer** implements a FIFO with head, tail, count, and wrap — no memory shifting.
+- A **ring buffer** implements a FIFO with head, tail, count and wrap — no memory shifting.
 - **AZMDoc** on `@` routines documents success/fail conventions (here, the carry flag) as well as register roles.
 
 ---
 
 ## Exercises
 
-1. Without assembling, compute `sizeof(RingState)`, `offset(RingState, tail)`, and `offset(RingState, count)` for the chapter's three-byte layout. Write the three `.equ` lines.
+1. Without assembling, compute `sizeof(RingState)`, `offset(RingState, tail)` and `offset(RingState, count)` for the chapter's three-byte layout. Write the three `.equ` lines.
 2. Add a `flags` byte to `RingState` after `count`. Which `.equ` lines change? Which push/pop code must change?
 3. Rewrite the `ring_buf[head]` address setup using DE as base and keeping the index in C. Keep the same contract on `ring_push`.
 4. Change `RING_CAP` to 16 and use `and 15` in `ring_advance_index` instead of `cp` / `xor`. Prove on paper that `head` never reaches 16.
-5. Write a `ring_peek` routine that returns the oldest byte in A without removing it. Document `;! in`, `;! out`, and `;! clobbers`; fail with carry clear when empty.
+5. Write a `ring_peek` routine that returns the oldest byte in A without removing it. Document `;! in`, `;! out` and `;! clobbers`; fail with carry clear when empty.
 6. Load the address of `ring_state.head` into HL using a layout cast, then using `ring_state + offset(RingState, head)`. Assemble both forms and confirm the same immediate.
 7. Reserve `Event` records with `.type Event` / `code .byte` / `param .word` / `.endtype` and `.ds Event[4]`. Write a loop that zeroes every `param` field using `sizeof(Event)` as stride.
 

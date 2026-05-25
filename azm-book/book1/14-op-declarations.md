@@ -21,7 +21,7 @@ These patterns appear constantly. None of them are complex. The problem is that 
 
 An op declaration gives a name to an instruction sequence. At every call site, the assembler places the body of the op directly into the instruction stream — as if you had typed those instructions at that location. The call is textually replaced with the expansion.
 
-This is not a subroutine call. A subroutine call emits `call target` at the call site, pushes a return address onto the stack, executes the body, and returns with `ret`. An op call emits the body instructions directly. No `call`, no `ret`, no stack effect, no branch.
+This is not a subroutine call. A subroutine call emits `call target` at the call site, pushes a return address onto the stack, executes the body and returns with `ret`. An op call emits the body instructions directly. No `call`, no `ret`, no stack effect, no branch.
 
 The machine code at a call site contains the expanded instructions, not a jump. Every op invocation is a separate copy of the body in the binary. That copy is exactly what a reader would see in a disassembly listing.
 
@@ -91,7 +91,7 @@ end
   pop de
 ```
 
-After the expansion, HL holds the original value of DE, and DE holds the original value of HL. Four instructions, one named intent: swap.
+After the expansion, HL holds the original value of DE and DE holds the original value of HL. Four instructions, one named intent: swap.
 
 ---
 
@@ -103,7 +103,7 @@ After the expansion, HL holds the original value of DE, and DE holds the origina
 | `reg16` | Any 16-bit register pair: HL, DE, BC, SP |
 | `imm8`  | A compile-time constant that fits in 8 bits (0–255) |
 | `imm16` | A compile-time constant or label that fits in 16 bits |
-| `ea`    | An effective address expression — a label, a field path, or an address constant |
+| `ea`    | An effective address expression — a label, a field path or an address constant |
 | `mem8`  | A byte-wide memory operand in parentheses: `(hl)`, `(my_var)` |
 | `mem16` | A word-wide memory operand in parentheses |
 | `cc`    | A Z80 condition code: Z, NZ, C, NC, M, P, PE, PO |
@@ -144,7 +144,7 @@ At K = 1, the op is smaller. At K = 2 and N > 4, the subroutine is smaller. For 
 
 There is also an overhead threshold on the subroutine side. A subroutine with a 2-instruction body and a 2-instruction call/ret pair doubles the instruction count in the binary for every call site. Calling a 2-instruction subroutine costs as much as the subroutine itself. For sequences that short, the inline expansion is almost always correct.
 
-The decision rule: if the body is short enough that the call overhead is a significant fraction of the work being done, use an op. If the body is long enough that call overhead is negligible, and if the subroutine is called from enough places that the single copy saves meaningful space, use a subroutine.
+The decision rule: if the body is short enough that the call overhead is a significant fraction of the work being done, use an op. If the body is long enough that call overhead is negligible and if the subroutine is called from enough places that the single copy saves meaningful space, use a subroutine.
 
 ---
 
@@ -319,7 +319,7 @@ The machine output is identical. The listing shows the same three instructions a
 - Multiple overloads of the same op name are resolved by specificity. Fixed-register matchers beat class matchers; `imm8` beats `imm16` for small values.
 - Use an op for short sequences where call overhead would be a significant fraction of the work. Use a subroutine when the body is long enough that a single copy saves meaningful space.
 - The listing (`.lst`) shows expanded instructions at each call site, not the op name. The analyzer sees the expanded sequence.
-- Pseudo-opcodes are ops that fill gaps in the Z80 instruction set: `ld hl, de` (two byte moves), `clear16 HL` (load immediate zero), and similar.
+- Pseudo-opcodes are ops that fill gaps in the Z80 instruction set: `ld hl, de` (two byte moves), `clear16 HL` (load immediate zero) and similar.
 
 ---
 
@@ -367,7 +367,7 @@ Which overload fires for each of these call sites? Explain why, using the specif
   load_a H
 ```
 
-**4. Identify the matcher type.** For each operand at the following call sites, state which matcher type it satisfies and whether it would match `reg8`, `reg16`, `imm8`, `imm16`, `ea`, `mem8`, or `cc`:
+**4. Identify the matcher type.** For each operand at the following call sites, state which matcher type it satisfies and whether it would match `reg8`, `reg16`, `imm8`, `imm16`, `ea`, `mem8` or `cc`:
 
 ```asm
   my_op HL            ; (a)
@@ -386,13 +386,13 @@ You have reached the end of Book 1.
 
 You can now:
 
-- write a complete AZM program with subroutines, loops, conditional branches, and data tables
+- write a complete AZM program with subroutines, loops, conditional branches and data tables
 - apply push/pop discipline to protect callers from register clobbering
 - document subroutine interfaces with AZMDoc contracts and verify them with register-care analysis
-- define named record types, reserve storage with `.ds TypeExpr`, and compute sizes and offsets at assembly time rather than by hand
+- define named record types, reserve storage with `.ds TypeExpr` and compute sizes and offsets at assembly time rather than by hand
 - name repeated instruction sequences with ops and read code that communicates intent rather than mechanics alone
 
-Book 3 builds on all of this. It covers arrays and runtime indexing, string handling, recursion, multi-file programs, and patterns for larger programs that exceed what a single file can hold clearly.
+Book 3 builds on all of this. It covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for larger programs that exceed what a single file can hold clearly.
 
 ---
 

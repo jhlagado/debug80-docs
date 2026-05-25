@@ -9,7 +9,7 @@ nav_order: 2
 
 # Chapter 2 — Machine Code
 
-A program is a sequence of bytes in memory. The CPU fetches one byte, executes the corresponding operation, advances PC, and fetches the next.
+A program is a sequence of bytes in memory. The CPU fetches one byte, executes the corresponding operation, advances PC and fetches the next.
 
 This chapter makes that concrete. You will decode a real hex program by hand — instruction by instruction, byte by byte — and by the end you will understand exactly why assembly was invented. Not as a vague answer, but as an obvious one: you will have just experienced what it feels like to maintain raw machine code yourself.
 
@@ -17,7 +17,7 @@ This chapter makes that concrete. You will decode a real hex program by hand —
 
 ## Opcodes
 
-The byte (or bytes) that represent an instruction are called its **opcode**. Each opcode is a fixed numeric code that the Z80's hardware decodes into an operation. Some instructions are one byte; others include one or more additional bytes carrying a constant value, a memory address, or an offset.
+The byte (or bytes) that represent an instruction are called its **opcode**. Each opcode is a fixed numeric code that the Z80's hardware decodes into an operation. Some instructions are one byte; others include one or more additional bytes carrying a constant value, a memory address or an offset.
 
 A few examples from the Z80 instruction set:
 
@@ -37,7 +37,7 @@ Address operands always follow the Z80's little-endian convention: low byte firs
 
 ## A Complete Hex Program
 
-Here is a complete Z80 program written entirely as bytes, placed in memory starting at address `$0000`. It loads the values 5 and 3 into registers, adds them, and stores the result at address `$8000`.
+Here is a complete Z80 program written entirely as bytes, placed in memory starting at address `$0000`. It loads the values 5 and 3 into registers, adds them and stores the result at address `$8000`.
 
 ```
 $0000:  3E 05        ; LD A, 5         — load 5 into A
@@ -54,7 +54,7 @@ Ten bytes, starting at `$0000`, ending at `$0009`.
 
 The CPU starts with PC = `$0000`.
 
-**PC = `$0000`:** The byte there is `$3E`. The Z80 recognises this as a two-byte instruction: "load the next byte into A." It reads the following byte, `$05`, and loads 5 into A. PC advances to `$0002`.
+**PC = `$0000`:** The byte there is `$3E`. The Z80 recognises this as a two-byte instruction: "load the next byte into A." It reads the following byte, `$05` and loads 5 into A. PC advances to `$0002`.
 
 **PC = `$0002`:** The byte is `$47`: "copy A into B." One byte, no operand. B becomes 5; A remains 5. PC advances to `$0003`.
 
@@ -70,7 +70,7 @@ The CPU starts with PC = `$0000`.
 
 ## Variables
 
-From the CPU's point of view, a variable is just a byte (or several bytes) of memory at some address. It has no name, no type, and no relationship to any other byte. The only way to refer to it is by its numeric address.
+From the CPU's point of view, a variable is just a byte (or several bytes) of memory at some address. It has no name, no type and no relationship to any other byte. The only way to refer to it is by its numeric address.
 
 In the program above, the result was written to the fixed address `$8000`. But `$8000` is embedded as raw bytes in the instruction at `$0006`. If you later decide the result should live at `$8100` instead, you must find that instruction and change bytes `$07` and `$08` by hand. If you have fifty instructions referencing the same address, you change fifty places.
 
@@ -87,7 +87,7 @@ Result:          ; the assembler records "Result" as the current address
 
 (`DB` stands for "define byte." `DW` defines a 16-bit word.) From this point on, writing `ld (Result), a` in the code is equivalent to writing `ld ($8000), a` — but you never have to know or write `$8000`. The assembler handles it.
 
-Labels also name positions within the code — the targets of jumps and branches. Instead of writing `jp $0034`, you write `jp loop_top`, and the assembler works out the address of `loop_top` itself.
+Labels also name positions within the code — the targets of jumps and branches. Instead of writing `jp $0034`, you write `jp loop_top` and the assembler works out the address of `loop_top` itself.
 
 Machine code is just bytes. Assembly adds names for addresses.
 
@@ -95,7 +95,7 @@ Machine code is just bytes. Assembly adds names for addresses.
 
 ## Why Raw Machine Code Is Impractical
 
-The program above was ten bytes. Real programs are thousands, and raw hex does not scale. Every address is a bare number — `$8000` could be your result variable, a display buffer, or a lookup table, and nothing in the code says which. Insert one instruction anywhere and every downstream address shifts; miss a single update and you get a silent wrong result with no error to point to. Reading the code directly is no help: `3E 05 47 3E 03 80 32 00 80 76` means nothing until you decode each byte by hand. And there are no structural building blocks — no subroutines, no loops, no conditionals, just bytes and jump targets calculated by hand.
+The program above was ten bytes. Real programs are thousands, and raw hex does not scale. Every address is a bare number — `$8000` could be your result variable, a display buffer or a lookup table and nothing in the code says which. Insert one instruction anywhere and every downstream address shifts; miss a single update and you get a silent wrong result with no error to point to. Reading the code directly is no help: `3E 05 47 3E 03 80 32 00 80 76` means nothing until you decode each byte by hand. And there are no structural building blocks — no subroutines, no loops, no conditionals, just bytes and jump targets calculated by hand.
 
 The CPU still sees bytes. The assembler changes what you write — not what it executes.
 
@@ -104,17 +104,17 @@ The CPU still sees bytes. The assembler changes what you write — not what it e
 ## Summary
 
 - Every Z80 instruction has a specific numeric opcode; the CPU reads this byte and carries out the corresponding operation
-- Multi-byte instructions include operand bytes after the opcode: constants, addresses, or offsets
+- Multi-byte instructions include operand bytes after the opcode: constants, addresses or offsets
 - Address operands are always little-endian: low byte first
 - The CPU steps through instructions one at a time by following PC; PC advances by the length of each instruction
-- Raw machine code has no names, no structure, and breaks silently whenever you move things around
+- Raw machine code has no names, no structure and breaks silently whenever you move things around
 - Labels — names for addresses — are the fundamental thing assembly adds over raw machine code
 
 ---
 
 ## What Comes Next
 
-The hex program you just decoded by hand appears again in Chapter 3 — this time written in AZM, with names where the numbers were. You will recognise every instruction; what changes is that you can read them without decoding, the assembler computes every address automatically, and a named variable can move without touching a single call site.
+The hex program you just decoded by hand appears again in Chapter 3 — this time written in AZM, with names where the numbers were. You will recognise every instruction; what changes is that you can read them without decoding, the assembler computes every address automatically and a named variable can move without touching a single call site.
 
 ---
 

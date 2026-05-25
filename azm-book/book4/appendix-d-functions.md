@@ -9,7 +9,7 @@ nav_order: 104
 
 # Appendix D — Built-in Functions
 
-AZM has four built-in functions you can use in any expression: `sizeof`, `offset`, `LSB`, and `MSB`. The assembler evaluates all four entirely at assemble time — the Z80 sees only the resulting integer, never the function call. `sizeof` and `offset` work with the layout type system; `LSB` and `MSB` extract byte lanes from 16-bit values.
+AZM has four built-in functions you can use in any expression: `sizeof`, `offset`, `LSB` and `MSB`. The assembler evaluates all four entirely at assemble time — the Z80 sees only the resulting integer, never the function call. `sizeof` and `offset` work with the layout type system; `LSB` and `MSB` extract byte lanes from 16-bit values.
 
 ---
 
@@ -21,7 +21,7 @@ sizeof(TypeName)
 sizeof(TypeName[n])
 ```
 
-`sizeof` returns the exact packed byte count for a layout type. For a record, that is the sum of its field sizes with no padding inserted. For a scalar type, it returns the built-in size. For an array form, it multiplies the element size by the count.
+`sizeof` returns the exact packed byte count for a layout type. For a record, that is the sum of its field sizes. For a scalar type, it returns the built-in size. For an array form, it multiplies the element size by the count.
 
 ```asm
 sizeof(byte)         ; 1
@@ -87,9 +87,9 @@ offset(Actor, pos.y)     ; 1
 offset(Actor, state)     ; 5
 ```
 
-**Array indices in `offset` paths must be numeric literals.** `offset(Table, rows[0].x)` is valid; `offset(Table, rows[IDX].x)` is not. Layout-cast path expressions (Chapter 5) accept compile-time expressions in index positions; `offset` path indices do not.
+**Array indices in `offset` paths must be numeric literals.** `offset(Table, rows[0].x)` is valid. Layout-cast path expressions (Chapter 5) accept compile-time expressions in index positions.
 
-Chapter 5 covers the full layout system including field declarations, nested records, unions, and cast-path syntax.
+Chapter 5 covers the full layout system including field declarations, nested records, unions and cast-path syntax.
 
 ---
 
@@ -101,7 +101,7 @@ LSB(expression)
 MSB(expression)
 ```
 
-`LSB` and `MSB` are acronyms — Least Significant Byte and Most Significant Byte — and must be written in uppercase. The parser matches the exact tokens `LSB` and `MSB`; `lsb`, `Lsb`, and other capitalisations are not recognised.
+`LSB` and `MSB` are acronyms — Least Significant Byte and Most Significant Byte — and are written in uppercase. The parser matches the exact tokens `LSB` and `MSB`.
 
 `LSB(expr)` returns the low byte of the value:
 
@@ -133,13 +133,13 @@ jump_table:
         .db LSB(routine_c), MSB(routine_c)
 ```
 
-AZM does not provide `LOW()` or `HIGH()`. If you are porting from an assembler that used those names, replace them with `LSB` and `MSB`.
+For source ported from assemblers that used `LOW()` or `HIGH()`, replace those calls with `LSB` and `MSB`.
 
 ---
 
 ## Case sensitivity
 
-`sizeof` and `offset` are currently parsed case-insensitively: `SIZEOF`, `Sizeof`, and `sizeof` all work. `LSB` and `MSB` are uppercase-only; the parser matches those exact tokens.
+`sizeof` and `offset` are currently parsed case-insensitively: `SIZEOF`, `Sizeof` and `sizeof` all work. `LSB` and `MSB` are uppercase-only; the parser matches those exact tokens.
 
 Canonical style is lowercase `sizeof` and `offset`, uppercase `LSB` and `MSB`. Write them that way; the current parser is permissive for `sizeof` and `offset` but the canonical form is lowercase.
 

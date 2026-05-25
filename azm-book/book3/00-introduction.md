@@ -9,7 +9,7 @@ nav_order: 1
 
 # Introduction to Book 3
 
-You finished Book 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, AZMDoc contracts, layout types, and ops. Book 3 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
+You finished Book 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, AZMDoc contracts, layout types and ops. Book 3 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
 
 ---
 
@@ -17,21 +17,21 @@ You finished Book 1 with a complete picture of the Z80 and the AZM surface that 
 
 The goal is not to learn a second language layered on top of the CPU. The goal is to learn how **representation and algorithm** fit together when you own every byte and every branch.
 
-Each chapter starts from a concrete problem (sort this table, find this value, walk this string), shows a complete AZM program or subroutine, then names the invariants and conventions that make the code trustworthy. You will see the same patterns repeat: a calling convention, a loop whose entry condition you can state in one sentence, workspace RAM when the register file runs out, and AZMDoc lines that tell the analyzer what the routine promised.
+Each chapter starts from a concrete problem (sort this table, find this value, walk this string), shows a complete AZM program or subroutine, then names the invariants and conventions that make the code trustworthy. You will see the same patterns repeat: a calling convention, a loop whose entry condition you can state in one sentence, workspace RAM when the register file runs out and AZMDoc lines that tell the analyzer what the routine promised.
 
-This book stays at the machine level: labels, registers, memory, branches, `call`, and `ret`. The algorithms are standard, but every step is spelled as flat assembly.
+This book stays at the machine level: labels, registers, memory, branches, `call` and `ret`. The algorithms are standard, but every step is written as flat assembly.
 
 ---
 
 ## Wirth: representation before algorithm
 
-Niklaus Wirth's programs are often taught as "algorithm + data structure." In assembly, those two collapse into one question: **how are the values laid out in memory, and how do you reach them?**
+Niklaus Wirth's programs are often taught as "algorithm + data structure." In assembly, those two collapse into one question: **how are the values laid out in memory and how do you reach them?**
 
 Before you write the sort loop, you decide:
 
 - Is the array a contiguous block of bytes starting at a label?
 - Is each element a plain `byte`, or a `Sprite` record with `sizeof(Sprite)` stride?
-- Does the index live in B, in L, or in a workspace byte?
+- Does the index live in B, in L or in a workspace byte?
 
 Book 3 Chapter 2 is the first place those questions drive the code. Chapter 5 (records) goes deeper: the layout type is the contract; the algorithm only adds offsets the assembler already computed.
 
@@ -74,7 +74,7 @@ workspace:
 Every nontrivial routine in this book should carry:
 
 - A one-line human comment (`; gcd_u16: ...`)
-- `;!` lines for `in`, `out`, `clobbers`, and `preserves`
+- `;!` lines for `in`, `out`, `clobbers` and `preserves`
 - An `@` entry label
 
 Callers depend on that contract. `azm --rc warn` compares callers to callees the same way Book 1 Chapter 12 demonstrated. Book 3 does not introduce a new documentation dialect.
@@ -102,9 +102,9 @@ Memorizing opcode sequences is not the point. The point is knowing **what proble
 
 ## What comes next
 
-[Chapter 1 — Foundations](01-foundations.md) works through GCD and digit counting on 16-bit values. No arrays yet — only the Book 3 calling convention, compare/subtract idioms, and the first workspace bytes. [Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables, insertion sort, and linear search.
+[Chapter 1 — Foundations](01-foundations.md) works through GCD and digit counting on 16-bit values. No arrays yet — only the Book 3 calling convention, compare/subtract idioms and the first workspace bytes. [Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables, insertion sort and linear search.
 
-Later chapters add strings, bits, records, recursion, multiple source files, pointers, and a capstone search. The [Book 3 index](index.md) lists which chapters are written versus outlined.
+Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search. The [Book 3 index](index.md) lists which chapters are written versus outlined.
 
 ---
 
