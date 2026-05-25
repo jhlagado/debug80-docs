@@ -447,14 +447,6 @@ offset(Sprite[16], [3].flags)
 
 The wrapper adds one named field level — `sprites` — between the type name and the array index. That is the tradeoff: a reusable name at the cost of an extra path step in every access expression.
 
-A direct alias:
-
-```asm
-SpriteArray .type Sprite[16]   ; not currently valid
-```
-
-is not implemented. AZM rejects it. Use the wrapper record.
-
 ---
 
 ## Unions and alternate views
