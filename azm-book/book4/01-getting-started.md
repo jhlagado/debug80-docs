@@ -54,7 +54,7 @@ counter:
 
 The source starts assembly at `$0100`, defines the constant `LIMIT`, marks `main` as the routine entry, loops eight times and stores the counter byte after the code.
 
-The structure is intentional: code first, data after. The byte at `counter` sits below `halt` at address `$0109`. Placing data after the final instruction keeps entry points at the top of the binary where a loader expects them. AZM resolves forward references, so `ld hl,counter` at the top can name a label defined further down.
+Code comes first, data after. The byte at `counter` sits below `halt` at address `$0109`. Placing data after the final instruction keeps entry points at the top of the binary where a loader expects them. AZM resolves forward references, so `ld hl,counter` at the top can name a label defined further down.
 
 To trace through the assembly: `ld b,LIMIT` assembles to `$06 $08` at `$0100`; `ld hl,counter` assembles to `$21 $09 $01` at `$0102` (the address `$0109`, little-endian); `inc (hl)` is `$34` at `$0105`; `djnz Loop` is `$10 $FD` at `$0106`; `halt` is `$76` at `$0108`; and `.db 0` places a zero byte at `$0109`.
 
