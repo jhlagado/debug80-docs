@@ -328,7 +328,7 @@ INIT_SPRITE:
 
 The `.type` declaration provides the field sizes and offsets for reference and verification.
 
-### Single-line type aliases are not supported
+### Single-line type names are not supported
 
 `.type` is a block directive — it opens with `.type Name` and closes with `.endtype`. There is no single-line form:
 
@@ -336,7 +336,7 @@ The `.type` declaration provides the field sizes and offsets for reference and v
 .type Pair byte[2]    ; not valid AZM syntax
 ```
 
-AZM does not support typedef-style renaming of existing types. If you need a two-byte named record, write a block:
+AZM does not support giving a new name to an existing type expression in one line. If you need a two-byte named record, write a block:
 
 ```asm
 .type Pair
@@ -402,7 +402,7 @@ These `offset` array paths are most useful for writing initialization tables or 
 
 ---
 
-## Arrays of records as named types
+## Wrapper records for array layouts
 
 `Sprite[16]` is a valid TypeExpr wherever a size or type expression is accepted — `.ds`, `sizeof`, `offset`, and layout casts all take it:
 
@@ -417,8 +417,8 @@ flags   .byte
 SPRITES:
         .ds Sprite[16]
 
-SIZE    .equ sizeof(Sprite[16])
-FLAGS   .equ offset(Sprite[16], [3].flags)
+SIZE            .equ sizeof(Sprite[16])
+SPRITE3_FLAGS   .equ offset(Sprite[16], [3].flags)
 
         ld hl, <Sprite[16]>SPRITES[3].flags
 ```
@@ -619,7 +619,7 @@ The exact syntax for embedded anonymous inline unions inside a `.type` is not ye
 
 ## Compact layout access syntax
 
-Everything described so far — `sizeof`, `offset`, manual expressions — is always valid and always explicit. Once you have declared types, there is a more compact syntax for building field-address expressions. It reads like a typed pointer dereference, and resolves to the same arithmetic that `sizeof` and `offset` would produce.
+Everything described so far — `sizeof`, `offset`, manual expressions — is always valid and always explicit. Once you have declared types, there is a more compact syntax for building field-address expressions. It writes the layout on the left of the address expression, and resolves to the same arithmetic that `sizeof` and `offset` would produce.
 
 The `sizeof` and `offset` forms above are always correct. Layout casts are shorter notation for the same constants.
 
@@ -636,7 +636,7 @@ These are ordinary expressions, evaluated by the assembler before the binary is 
 
 ### Layout-cast syntax
 
-A layout cast writes the same constant more compactly. The long form is always correct; the cast is notation you can use when the field path is the interesting part and the arithmetic is noise.
+A layout cast tells the assembler to interpret the base address through a layout while it computes an address. It does not read memory, write memory, or change any runtime value. The long form is always correct; the cast is notation you can use when the field path is the interesting part and the arithmetic is noise.
 
 ```asm
 ld   hl,<Sprite>SPRITES.flags
@@ -725,7 +725,10 @@ Use explicit arithmetic when the index is in a register:
         ld   hl,SPRITES
         ld   b,0
         ld   c,a
-        ; multiply C by sizeof(Sprite) — write this as shifts and adds
+        add  hl,bc
+        add  hl,bc
+        add  hl,bc
+        add  hl,bc
         add  hl,bc
         ld   de,SPRITE_FLAGS
         add  hl,de           ; HL = address of flags field for sprite A

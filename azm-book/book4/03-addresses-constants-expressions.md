@@ -453,7 +453,7 @@ When there are many values and performance matters, a jump table is more efficie
 ```asm
 enum Cmd Draw, Move, Erase
 
-; BC = Cmd.* value, guaranteed 0–2
+; C = Cmd.* value, guaranteed 0–2
         ld   hl,CMD_TABLE
         ld   b,0
         add  hl,bc
@@ -487,7 +487,7 @@ enum Key Left, Right, Up, Down, Fire
 
 Searching for `State.Dead` finds every place your code handles the dead state. Searching for `cp 3` finds that comparison but will also match other uses of 3 that have nothing to do with state.
 
-For values that must be specific numbers — port addresses, bitmasks, hardware registers — use `.equ`. Enums are for cases where the actual values do not matter; only the names do.
+For values that must be specific numbers — port addresses, bitmasks, hardware registers — use `.equ`. Enums are for dense sequences where AZM can assign the numbers from source order and the names are what you want to see in code.
 
 ### No runtime type checking
 
