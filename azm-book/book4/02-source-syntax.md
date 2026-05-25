@@ -260,10 +260,6 @@ AZM accepts all numeric literal forms common in Z80 assembly:
 | Plain decimal | `42`, `255` | decimal |
 | Quoted character | `'A'`, `"Z"` | ASCII value |
 
-`$` used alone is the current assembly address; that is covered in Chapter 3.
-
-`%` between two expressions is the modulo operator; that is covered in Chapter 3.
-
 **Trailing-`H` rule:** the token must start with a decimal digit. `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. Write `$FF` or `0FFH`.
 
 All numeric forms can appear freely in any expression and can be mixed within one expression:
