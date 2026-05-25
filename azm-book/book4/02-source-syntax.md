@@ -233,9 +233,7 @@ AZM's canonical directive names start with a dot:
 
 The full directive list is in Appendix A.
 
-Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors.
-
-New source uses the dotted lowercase forms throughout. Compatibility forms for other assembler source are covered in Chapter 7.
+Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors. Compatibility forms for other assembler source are covered in Chapter 7.
 
 ---
 
