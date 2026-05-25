@@ -370,7 +370,17 @@ Chapter 8 covers diagnostic messages.
 
 ## Enums as grouped constants
 
-The last naming tool in this chapter is the enum. Where `.equ` names an individual value, an enum names a whole group of related integer constants — state codes, command identifiers, tile types, mode flags. Each member gets a qualified name: the group name, a dot, and the member name. You refer to it as `Group.Member`, never `Member` alone.
+When you write a set of related constants with `.equ`, they often form a natural sequence:
+
+```asm
+RED   .equ 0
+GREEN .equ 1
+BLUE  .equ 2
+```
+
+This works, but the values are yours to maintain. Insert `YELLOW` between `RED` and `GREEN` and you have to renumber `GREEN`, `BLUE`, and everything that follows. With eight or ten values, keeping the sequence correct is tedious — a numbering slip is silent, and the assembler accepts whatever you write.
+
+An enum groups a set of related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second, and so on. The word "enumerated" means listed one by one, each given its position in sequence — that is the whole mechanism.
 
 ### Syntax
 
@@ -378,7 +388,7 @@ The last naming tool in this chapter is the enum. Where `.equ` names an individu
 enum Mode Read, Write, Append
 ```
 
-This creates three constants:
+`enum` is the keyword; `Mode` is the group name; `Read`, `Write`, and `Append` are the members. AZM assigns each member a qualified name — the group name, a dot, and the member name — in sequence:
 
 | Name | Value |
 |------|-------|
@@ -386,7 +396,32 @@ This creates three constants:
 | `Mode.Write` | 1 |
 | `Mode.Append` | 2 |
 
-Members are numbered from 0 and increment by 1. The enum name and member names are case-sensitive.
+Values start at 0 and count up by 1. AZM provides no way to set a starting value or skip a position — the sequence is always 0, 1, 2, … in the order the members appear. For values that do not follow this pattern, use separate `.equ` constants instead.
+
+The enum name and member names are case-sensitive.
+
+### Qualified names
+
+You refer to a member as `Mode.Read`, never `Read` alone. The qualifier is always required:
+
+```asm
+enum Mode Read, Write, Append
+
+        ld   a,Read      ; error: unknown symbol Read
+        ld   a,Mode.Read ; correct
+```
+
+A qualified name carries its group: `Mode.Read` in a listing tells you which enum and which member. When two enums share a word, the group name separates them:
+
+```asm
+enum Color Red, Green, Blue
+enum State Idle, Active, Dead
+
+; Both Red and Idle have value 0, but are different symbols:
+; Color.Red = 0, State.Idle = 0
+```
+
+As your project grows to a dozen enums, shared member names become common. The qualifier keeps them apart.
 
 ### Using enum values
 
@@ -402,54 +437,7 @@ enum Mode Read, Write, Append
 CURR_MODE .equ Mode.Read
 ```
 
-### When to use enums
-
-Enums work well for any small set of named states, command codes, token kinds, or hardware-mode values where you want the name to appear in code instead of a bare number:
-
-```asm
-enum State Idle, Moving, Attacking, Dead
-enum TileKind Empty, Wall, Pill, Power, Ghost
-enum Key Left, Right, Up, Down, Fire
-```
-
-```asm
-        ld   a,(player_state)
-        cp   State.Dead
-        jr   z,game_over
-```
-
-`State.Dead` reads more clearly at a glance than `cp 3`. If you reorder the enum or add a state between existing ones, every use of `State.Dead` updates automatically.
-
-The other benefit is searchability. To find every place the program handles the dead state, searching for `State.Dead` finds them all. Searching for `cp 3` finds that comparison, but might match other uses of the number 3 that have nothing to do with state.
-
-### Unqualified names are rejected
-
-Member names require the group qualifier:
-
-```asm
-enum Mode Read, Write, Append
-
-        ld   a,Read      ; error: unknown symbol Read
-        ld   a,Mode.Read ; correct
-```
-
-Unqualified member names would become ambiguous as source grows and make listings harder to read.
-
-### Enums and collision avoidance
-
-When your project grows to a dozen enums, name collisions become a real concern. Two enums can have members with the same name because the qualifier is always required:
-
-```asm
-enum Color Red, Green, Blue
-enum State Idle, Active, Dead
-
-; Both Red and Idle have value 0, but are different symbols:
-; Color.Red = 0, State.Idle = 0
-```
-
-### Comparing enum values in Z80 code
-
-Since enum members are byte-sized integers, comparing them in Z80 code is exactly what you would expect: load the value, then use `cp` against the member constant.
+Comparing enum members works like comparing any integer constant: load the value into A, then `cp` against the member name. For a handful of states, a `cp` chain is readable and direct:
 
 ```asm
         ld   a,(mode)
@@ -460,7 +448,7 @@ Since enum members are byte-sized integers, comparing them in Z80 code is exactl
         ; falls through: Mode.Read or unrecognized
 ```
 
-For a handful of cases, the `cp` chain is readable and direct. When there are many values and performance matters, a jump table is more efficient — and enum members give you the indices for free:
+When there are many values and performance matters, a jump table is more efficient — and enum members give you the indices for free:
 
 ```asm
 enum Cmd Draw, Move, Erase
@@ -479,11 +467,33 @@ CMD_TABLE:
         jp   do_erase        ; 3 bytes
 ```
 
+### When to use enums
+
+Enums work well for any small set of named states, command codes, token kinds, or hardware-mode values where you want names in code instead of bare numbers:
+
+```asm
+enum State Idle, Moving, Attacking, Dead
+enum TileKind Empty, Wall, Pill, Power, Ghost
+enum Key Left, Right, Up, Down, Fire
+```
+
+```asm
+        ld   a,(player_state)
+        cp   State.Dead
+        jr   z,game_over
+```
+
+`State.Dead` reads more clearly than `cp 3`. Reorder the enum or add a state between existing ones, and every use of `State.Dead` updates automatically — no renumbering.
+
+Searching for `State.Dead` finds every place your code handles the dead state. Searching for `cp 3` finds that comparison but will also match other uses of 3 that have nothing to do with state.
+
+For values that must be specific numbers — port addresses, bitmasks, hardware registers — use `.equ`. Enums are for cases where the actual values do not matter; only the names do.
+
 ### No runtime type checking
 
 Enums are purely compile-time. The output contains no range checks or tag bytes. A value loaded at runtime could be any byte — validate inputs before dispatching on them.
 
-This means the assembler cannot catch a wrong value being passed as an enum argument. If `A` holds 7 and you dispatch on it as a `Mode` value, you get whatever the jump table entry at position 7 points to. That validation is your responsibility, written as ordinary Z80 instructions before the dispatch.
+The assembler cannot catch a wrong value being passed as an enum argument. If `A` holds 7 and you dispatch on it as a `Mode` value, you get whatever the jump table entry at position 7 points to. That validation is your responsibility, written as ordinary Z80 instructions before the dispatch.
 
 ---
 
