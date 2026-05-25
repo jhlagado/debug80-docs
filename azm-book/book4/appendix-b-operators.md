@@ -47,7 +47,7 @@ AZM accepts eight numeric literal forms. They can appear freely in any expressio
 
 **Trailing-`H` rule:** the token must begin with a decimal digit (`0`–`9`). `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name — write `$FF` or `0FFH` to force hex.
 
-**`$` ambiguity:** `$FF` starts with `$` followed by a hex digit, so the whole token is a hex literal (255). Bare `$`, or `$` before a non-hex character, is the current assembly address — `$ - start` gives the byte distance from a label.
+In a numeric literal, `$` is a hex prefix (`$FF`). As a standalone token in an expression, `$` is the current assembly address.
 
 `%` has two roles: a `%` at the start of a value is a binary literal prefix; a `%` between two expressions is the modulo operator.
 

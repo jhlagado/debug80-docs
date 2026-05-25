@@ -186,7 +186,7 @@ The preferred AZM style:
 
 - **Constants** (`SCREEN_WIDTH`, `MAX_SPRITES`, `LCD_DATA`): uppercase with underscores.
 - **Entry labels** (`@DrawSprite:`, `@InitTimer:`): PascalCase after the `@`.
-- **Branch labels** (`Loop`, `DONE`, `SkipInit`): PascalCase or uppercase.
+- **Branch labels** (`ShiftRowLoop`, `SkipInit`, `DrawDone`): PascalCase, prefixed with the enclosing routine name where the name could clash.
 
 The assembler enforces no naming policy; different projects may use their own conventions. These give a concrete starting point and match the style used throughout this manual.
 

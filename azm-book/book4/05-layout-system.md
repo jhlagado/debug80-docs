@@ -303,7 +303,7 @@ The `sizeof` and `offset` forms are always correct and always clear; use whichev
 
 ## Unions and alternate views
 
-Unions are an advanced feature. Most AZM programs do not need them.
+Use unions for memory that has more than one valid layout view, such as a hardware register read as either a byte or a word.
 
 A union describes multiple overlapping views of the same bytes. All union members start at offset zero; the union's size is the size of its largest member. Hardware ports that expose the same address as both a status byte and a 16-bit value are a natural fit:
 
