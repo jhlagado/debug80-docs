@@ -9,49 +9,81 @@ nav_order: 5
 
 # Chapter 5 — The Layout System
 
-If you have written Z80 programs with structured data — sprite tables, packet headers, hardware register maps — you have probably managed field offsets by hand: a set of `.equ` constants, or comments, or both, that track where each piece of a record lives in memory. AZM's layout system is a compile-time alternative. You declare what a record looks like, and the assembler computes the sizes and offsets for you. Your code accesses fields by name instead of by hardcoded byte offset.
+If you have stored structured data in Z80 programs — sprite tables, packet headers, hardware register maps — you have written offset arithmetic: `.equ` constants for each field position, manual multiplication to reach a specific element in a table. That approach works until the layout changes. Insert a field, and every constant after the insertion is wrong, along with every access expression built on it.
 
-Of all AZM's features, the layout system will feel the least familiar to most Z80 programmers. Nothing here changes the Z80 instruction set or the bytes the assembler produces — layout types are purely a tool for computing constants. But the way those constants are derived, and the syntax for using them, takes a few sections to absorb. Work through this chapter in order the first time; the sections build on each other.
+AZM's layout system replaces those constants with a declaration. You describe the shape of a record once in a `.type` block; `sizeof` and `offset` give you byte counts and field positions anywhere you need them, derived automatically from the field list. Work through this chapter in order the first time — the sections build on each other.
 
 ---
 
 ## Layout types: the core idea
 
-AZM layout types are compile-time memory contracts. They describe how many bytes a data structure occupies and where its fields sit. They do not create runtime objects, attach type information to labels, or generate any machine code. Every instruction that touches a record still comes from you.
-
-### The problem they solve
-
-Assembly programs that handle structured data — sprite tables, hardware register blocks, packet formats, queue state — need byte counts and field offsets. Hand-coded numbers work, but they break silently when a field is added or reordered. AZM layout types keep those numbers correct automatically.
-
-Without layout types, you might write:
+You are storing 16 sprites. Each sprite has an x position, a y position, a tile index, and a flags byte — four bytes per sprite. The standard Z80 approach is a set of `.equ` constants for the field offsets, a `.ds` to reserve the table, and arithmetic wherever you need to reach a specific field:
 
 ```asm
-; Sprite record (manual, fragile):
-; offset 0: x (byte)
-; offset 1: y (byte)
-; offset 2: flags (byte)
-; offset 3..4: ptr (word)
-SPRITE_SIZE .equ 5
-SPRITE_X    .equ 0
-SPRITE_Y    .equ 1
-SPRITE_FLAGS .equ 2
-SPRITE_PTR  .equ 3
+; A sprite occupies 4 bytes in this order:
+; offset 0: x position (1 byte)
+; offset 1: y position (1 byte)
+; offset 2: tile index (1 byte)
+; offset 3: flags     (1 byte)
+
+SPRITE_X     .equ 0
+SPRITE_Y     .equ 1
+SPRITE_TILE  .equ 2
+SPRITE_FLAGS .equ 3
+SPRITE_SIZE  .equ 4
+
+SPRITES:
+    .ds 16 * SPRITE_SIZE  ; 16 sprites
+
+; To access sprite 3's flags:
+;   ld hl, SPRITES + 3 * SPRITE_SIZE + SPRITE_FLAGS
 ```
 
-Adding a field before `flags` breaks every use of `SPRITE_FLAGS` and `SPRITE_PTR`.
+For one sprite this is fine. For a table of 16, you compute `SPRITES + N * SPRITE_SIZE + SPRITE_FLAGS` by hand everywhere you need that field. Insert a field between `SPRITE_TILE` and `SPRITE_FLAGS` — say, an animation counter — and `SPRITE_FLAGS` and `SPRITE_SIZE` are both wrong. Every constant after the insertion needs a new value, and every access expression in the source that uses those constants needs checking. With complex layouts — records inside other records, multiple tables — the maintenance problem grows.
 
-With layout types:
+AZM's layout system replaces the manual constants with a type declaration. Describe the record once:
 
 ```asm
 .type Sprite
 x       .byte
 y       .byte
+tile    .byte
 flags   .byte
-ptr     .addr
 .endtype
+
+SPRITES:
+    .ds Sprite[16]   ; 16 sprites, sizeof(Sprite) bytes each
+
+SPRITE_COUNT .equ 16
 ```
 
-`sizeof(Sprite)` and `offset(Sprite, flags)` update automatically. The assembler also validates field names: `offset(Sprite, flagz)` catches the typo at assemble time, while the bare-number approach accepts the wrong offset silently.
+`sizeof(Sprite)` evaluates to 4 — the sum of the four `.byte` fields. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically; every expression that reads from them adjusts without any changes to the access code. If you mistype a field name — `offset(Sprite, flagz)` — the assembler rejects it at assemble time. With manual constants, the same typo assembles silently with the wrong value.
+
+With the declaration in place, accessing sprite 3's flags field explicitly looks like this:
+
+```asm
+ld hl, SPRITES
+ld de, 3 * sizeof(Sprite) + offset(Sprite, flags)
+add hl, de
+ld a, (hl)   ; A = sprite 3's flags
+```
+
+`sizeof(Sprite)` and `offset(Sprite, flags)` are compile-time constants. The assembler evaluates them before writing the binary, and the Z80 receives only the computed numbers. The arithmetic is the same as what you would write by hand; the values come from the declaration rather than from manually maintained `.equ` lines.
+
+For access patterns where the index is a compile-time constant, AZM provides a cast syntax that writes the same calculation inline:
+
+```asm
+ld hl, <Sprite[16]>SPRITES[3].flags
+```
+
+`<Sprite[16]>` names the type, `[3]` steps to element 3, and `.flags` names the field. The assembler computes `SPRITES + 3 * sizeof(Sprite) + offset(Sprite, flags)` and emits a plain number. Both lines assemble to the same bytes:
+
+```asm
+ld hl, SPRITES + 3 * sizeof(Sprite) + offset(Sprite, flags)
+ld hl, <Sprite[16]>SPRITES[3].flags
+```
+
+The cast is compact notation for an address calculation.
 
 ### Scalar layout types
 
