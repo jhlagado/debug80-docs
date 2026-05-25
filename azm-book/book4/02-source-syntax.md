@@ -276,9 +276,6 @@ See [Appendix B](appendix-b-operators.md) for the full numeric literal table.
 
 ---
 
-## Strict parsing
-
-AZM reports unknown directives and malformed operands immediately. When the parser cannot make sense of a line, it reports an error and stops that pass. Chapter 8 covers diagnostic messages and how to read them.
 
 ---
 
