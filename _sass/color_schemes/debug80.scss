@@ -41,9 +41,12 @@ $search-result-preview-color: #5c5750;
 
 $border-color:                #d8d3c8;  // warm gray border
 
-// --- Syntax highlighting -------------------------------------
-// OneLightJekyll tokens are warm-toned and read cleanly on the
-// cream code-block background set above.
-// Use the load-path form (no leading "./") so SASS resolves it
-// through the gem's _sass/ directory rather than our local path.
-@import "color_schemes/vendor/OneLightJekyll/syntax";
+// --- Base light scheme ---------------------------------------
+// All variables above are defined WITHOUT !default, so they take
+// precedence. light.scss's !default assignments are all skipped.
+// The only thing we actually want from light.scss is its internal
+// @import "./vendor/OneLightJekyll/syntax", which must resolve
+// relative to the gem's own file path — we cannot replicate that
+// from a local file. Importing light.scss here is the clean way
+// to pull in the syntax tokens.
+@import "color_schemes/light";
