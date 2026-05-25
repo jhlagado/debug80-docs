@@ -57,7 +57,7 @@ In a flat binary, the byte at address `$0100` lands at file offset `$0100` only 
 
 `$` is a special symbol that evaluates to the current assembly address at the point it appears. It is valid inside any expression where AZM is already processing a line.
 
-You will use it every time you want to know how many bytes sit between two points in your source. Since `$` evaluates to the current address at the point it appears, subtracting a label gives you the byte count of everything between that label and the current position — a compile-time constant, not a runtime calculation.
+You will use it every time you want to know how many bytes sit between two points in your source.
 
 **Table length:**
 
@@ -67,7 +67,7 @@ TABLE:
 TABLE_LEN   .equ $ - TABLE
 ```
 
-After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ - TABLE` gives the number of bytes in the table.
+After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ - TABLE` gives the number of bytes in the table — a compile-time constant, not a runtime calculation.
 
 **Code size:**
 
@@ -370,9 +370,7 @@ Chapter 8 covers diagnostic messages.
 
 ## Enums as grouped constants
 
-The last naming tool in this chapter is the enum. Where `.equ` names an individual value, an enum names a whole group of related values — state codes, command identifiers, tile types, mode flags — and gives each member a qualified name that carries the group context wherever it is used.
-
-An enum declares a named group of integer constants. Each member gets a qualified name — the group name, a dot, and the member name. You refer to the constant as `Group.Member`, never as `Member` alone.
+The last naming tool in this chapter is the enum. Where `.equ` names an individual value, an enum names a whole group of related integer constants — state codes, command identifiers, tile types, mode flags. Each member gets a qualified name: the group name, a dot, and the member name. You refer to it as `Group.Member`, never `Member` alone.
 
 ### Syntax
 

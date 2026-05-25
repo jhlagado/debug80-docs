@@ -352,7 +352,7 @@ azm --contracts --rc audit program.asm
 azm --rc warn program.asm
 ```
 
-Now AZM reports conflicts but does not fail the build. Review each warning. Decide whether the conflict is:
+Review each warning. Decide whether the conflict is:
 - A real bug: save the register, restructure the code, or add a callee contract
 - A false positive from missing contract: add an AZMDoc block or use `--accept-out`
 - A legitimate caller hint: add `; expects out REGISTER` before the call
@@ -363,7 +363,7 @@ Now AZM reports conflicts but does not fail the build. Review each warning. Deci
 azm --rc error program.asm
 ```
 
-At this level, any unresolved conflict fails the build. Use this mode once all register-care conflicts are resolved. Commit `--rc error` to your CI pipeline and keep it there.
+Commit `--rc error` to your CI pipeline and keep it there.
 
 At this point, every new call site that violates a contract becomes a build failure. New routines without `@` labels still assemble correctly — they stay outside the analysis. You can annotate incrementally, routine by routine, without needing to annotate everything at once.
 

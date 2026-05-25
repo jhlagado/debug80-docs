@@ -39,7 +39,7 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 
 ## Directive aliases
 
-Directive aliases (`DB`, `DEFB`, `DEFW`, `RMB`, etc.) are not built-in directives; they are normalised to canonical forms by the alias layer before parsing. See Chapter 7.
+Directive aliases are normalized before parsing. Common forms such as `DB`, `DW`, and `ORG` are handled by the built-in alias layer automatically. Project-specific forms such as `DEFB`, `DEFW`, and `RMB` require a project alias file loaded with `--aliases`. See Chapter 7.
 
 ---
 

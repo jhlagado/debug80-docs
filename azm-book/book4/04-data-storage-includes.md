@@ -315,7 +315,9 @@ Avoid recursive includes — a file that includes itself will loop until the pro
 
 ## Project file organization
 
-Most AZM projects keep definitions and code in separate files: hardware constants, layout declarations, enum definitions, op declarations, and subroutines each in their own file, all included from a single entry file. Definitions come before the code that uses them; storage reserves sit under their own `.org` at the end. Hardware constants belong in one file so porting means editing a single place. Subroutine files define `@` entry labels and AZMDoc contracts; for library routines whose source is not assembled with yours, write contracts in an `.asmi` file and load with `--interface`. Chapter 9 covers project organization in detail.
+Most AZM projects keep definitions and code in separate files: hardware constants, layout declarations, enum definitions, op declarations, and subroutines each in their own file, all included from a single entry file. Definitions come before the code that uses them; storage reserves sit under their own `.org` at the end. Hardware constants belong in one file so porting means editing a single place.
+
+Subroutine files define `@` entry labels and AZMDoc contracts. For library routines whose source is not assembled with yours, write contracts in an `.asmi` file and load with `--interface`. Chapter 9 covers project organization in detail.
 
 ## Avoiding include cycles
 
