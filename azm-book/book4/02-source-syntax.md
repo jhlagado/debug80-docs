@@ -203,8 +203,8 @@ COUNT       .equ 8
 Colour      .enum Red, Green, Blue
 
 Sprite      .type
-x           .byte
-y           .byte
+x           .field byte
+y           .field byte
             .endtype
 
 SpriteArray .typealias Sprite[2]

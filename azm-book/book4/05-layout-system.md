@@ -115,32 +115,19 @@ Each field has a name, a size and an offset the assembler computes by summing th
 | `name .field byte` | 1-byte field |
 | `name .field word` | 2-byte field |
 | `name .field TypeExpr` | field of any layout size |
-| `name .byte` | 1-byte field |
-| `name .word` | 2-byte field |
-
-`.byte` and `.word` are shorthand for `.field byte` and `.field word`:
-
-```asm
-Sprite  .type
-x       .byte       ; shorthand for x .field byte
-y       .byte
-flags   .byte
-ptr     .word       ; shorthand for ptr .field word
-        .endtype
-```
 
 Use `.field` when the size is a type expression — an array or a nested record type:
 
 ```asm
 Buffer  .type
 data    .field byte[256]    ; 256 bytes
-cursor  .word               ; 2 bytes
+cursor  .field word         ; 2 bytes
         .endtype
 
 Actor   .type
 pos     .field Sprite       ; nested record
-state   .byte
-timer   .word
+state   .field byte
+timer   .field word
         .endtype
 ```
 
@@ -206,7 +193,7 @@ When a record embeds another record, `offset` reaches through both layers with a
 ```asm
 Actor   .type
 pos     .field Sprite
-state   .byte
+state   .field byte
         .endtype
 
 ACTOR_POS_X  .equ offset(Actor, pos.x)     ; 0
@@ -322,12 +309,12 @@ A union describes multiple overlapping views of the same bytes. All union member
 
 ```asm
 PortValue .union
-status  .byte    ; byte-wide access
-full    .word    ; word-wide access
+status  .field byte    ; byte-wide access
+full    .field word    ; word-wide access
         .endunion
 
 IoPort  .type
-ptr     .word
+ptr     .field word
 value   .field PortValue
         .endtype
 

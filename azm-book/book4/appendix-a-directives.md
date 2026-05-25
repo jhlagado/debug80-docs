@@ -31,8 +31,6 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 | `.union` | `Name .union` … `.endunion` | Opens a union layout declaration block | 5 |
 | `.endunion` | `.endunion` | Closes a `.union` block | 5 |
 | `.field` | `name .field TypeExpr` | Declares a field of any type inside a `.type` or `.union` block | 5 |
-| `.byte` | `name .byte` | Declares a 1-byte field inside `.type` or `.union`; shorthand for `.field byte` | 5 |
-| `.word` | `name .word` | Declares a 2-byte field inside `.type` or `.union`; shorthand for `.field word` | 5 |
 | `.typealias` | `Name .typealias TypeExpr` | Transparent assembler-time alias for a layout type expression | 5 |
 | `.enum` | `Name .enum Member[,…]` | Declares a group of integer constants with qualified names (`Name.Member`) | 3 |
 | `op` / `end` | `op name(params)` … `end` | Declares an inline instruction-expansion op | 7 |

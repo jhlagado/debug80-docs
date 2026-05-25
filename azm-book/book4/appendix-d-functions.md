@@ -27,7 +27,7 @@ sizeof(TypeName[n])
 sizeof(byte)         ; 1
 sizeof(word)         ; 2
 
-; Given: Sprite .type (x .byte, y .byte, flags .byte, ptr .word)
+; Given: Sprite .type (x .field byte, y .field byte, flags .field byte, ptr .field word)
 sizeof(Sprite)       ; 5
 sizeof(Sprite[16])   ; 80
 sizeof(byte[32])     ; 32
@@ -59,10 +59,10 @@ offset(TypeName[n], [index].fieldName)
 
 ```asm
 Sprite  .type
-x       .byte      ; offset 0
-y       .byte      ; offset 1
-flags   .byte      ; offset 2
-ptr     .word      ; offset 3
+x       .field byte      ; offset 0
+y       .field byte      ; offset 1
+flags   .field byte      ; offset 2
+ptr     .field word      ; offset 3
         .endtype
 
 offset(Sprite, x)       ; 0
@@ -78,7 +78,7 @@ Dot paths reach through nested record fields:
 ```asm
 Actor   .type
 pos     .field Sprite    ; offsets 0–4
-state   .byte            ; offset 5
+state   .field byte      ; offset 5
         .endtype
 
 offset(Actor, pos.x)     ; 0
