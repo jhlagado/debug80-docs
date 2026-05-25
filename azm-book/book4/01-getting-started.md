@@ -40,15 +40,15 @@ Here is a small but complete AZM source file:
 
 LIMIT   .equ 8
 
-@main:
+@Main:
         ld      b,LIMIT
-        ld      hl,counter
+        ld      hl,Counter
 Loop:
         inc     (hl)
         djnz    Loop
         halt
 
-counter:
+Counter:
         .db 0
 ```
 

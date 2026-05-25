@@ -22,11 +22,11 @@ AZM's register-care system finds these collisions at assemble time by making the
 Here is a loop that processes eight tiles. `B` is the iteration counter; `HL` points to the current tile in memory:
 
 ```asm
-@SCAN_TILES:
+@ScanTiles:
         ld      b,8
 ScanLoop:
         ld      a,(hl)
-        call    RENDER_TILE
+        call    RenderTile
         inc     hl
         djnz    ScanLoop
         ret
@@ -35,7 +35,7 @@ ScanLoop:
 `RENDER_TILE` draws one tile. Inside, it uses `B` as the high byte of a 16-bit offset calculation:
 
 ```asm
-@RENDER_TILE:
+@RenderTile:
         ld      b,0             ; B = 0, high byte of BC
         ld      c,a
         add     hl,bc           ; HL += tile index (16-bit add)
@@ -70,7 +70,7 @@ AZM uses `;!` comment blocks to record what each routine does to registers. A co
 
 ```asm
 ;!      clobbers  B
-@RENDER_TILE:
+@RenderTile:
 ```
 
 With this contract in place and register-care enabled, AZM inspects every call to `RENDER_TILE`. At the call in `SCAN_TILES`, `B` holds the loop counter — a value the caller reads after the call returns. The contract says `RENDER_TILE` clobbers `B`. AZM reports the conflict:
@@ -89,12 +89,12 @@ Three ways to fix this collision:
 **Option 1 — save and restore in the caller:**
 
 ```asm
-@SCAN_TILES:
+@ScanTiles:
         ld      b,8
 ScanLoop:
         ld      a,(hl)
         push    bc          ; save B before the call
-        call    RENDER_TILE
+        call    RenderTile
         pop     bc          ; restore B
         inc     hl
         djnz    ScanLoop
@@ -105,7 +105,7 @@ ScanLoop:
 
 ```asm
 ;!      preserves B
-@RENDER_TILE:
+@RenderTile:
         push    bc
         ld      b,0
         ld      c,a
@@ -129,7 +129,7 @@ Move `B` to a RAM location or use a different register in one of the routines. W
 Register-care analysis works from routine boundaries. The `@` prefix marks those boundaries:
 
 ```asm
-@RENDER_TILE:
+@RenderTile:
         ; ... body ...
         ret
 ```
@@ -144,7 +144,7 @@ The callable symbol is `RENDER_TILE` — callers write `call RENDER_TILE`. The `
 Plain labels inside an `@` routine are ordinary branch targets:
 
 ```asm
-@SCAN_ROW:
+@ScanRow:
         ld      b,8
 ScanRowBitLoop:
         rl      (hl)
@@ -220,7 +220,7 @@ A source contract is a block of contiguous `;!` lines immediately before a routi
 ;!      in        DE
 ;!      out       carry
 ;!      clobbers  A
-@CHECK_COLLISION_AT_DE:
+@CheckCollisionAtDe:
 ```
 
 The `;!` lines must be directly above the entry label with no intervening blank lines or other statements. Human prose comments can precede the `;!` block.
@@ -264,7 +264,7 @@ A routine that transforms a register in place — reads it as input, returns it 
 ;!      in        DE
 ;!      out       DE
 ;!      clobbers  A
-@NORMALISE_DE:
+@NormaliseDe:
 ```
 
 ### Caller-site hints
@@ -273,7 +273,7 @@ For one-off call sites during annotation, place a narrow hint immediately before
 
 ```asm
         ; expects out DE
-        call    NORMALISE_DE
+        call    NormaliseDe
         ld      a,(de)
 ```
 

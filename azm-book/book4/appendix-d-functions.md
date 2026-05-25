@@ -126,7 +126,7 @@ TARGET  .equ $C432
         ; HL now holds $C432
 
 ; Stored as a little-endian address pair in a jump table:
-jump_table:
+JumpTable:
         .db LSB(routine_a), MSB(routine_a)
         .db LSB(routine_b), MSB(routine_b)
         .db LSB(routine_c), MSB(routine_c)

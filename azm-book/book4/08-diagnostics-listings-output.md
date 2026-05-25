@@ -36,16 +36,16 @@ A loop branches forward around a handler block. The handler starts small, but gr
 ```asm
         .org $0100
 
-SCAN_LOOP:
+ScanLoop:
         ld   a,(hl)
         cp   SENTINEL
-        jr   nz,SKIP_HANDLER
+        jr   nz,SkipHandler
 
         ; ... handler code, 140 bytes ...
 
-SKIP_HANDLER:
+SkipHandler:
         inc  hl
-        djnz SCAN_LOOP
+        djnz ScanLoop
 ```
 
 Running `azm scan.asm` stops immediately:
@@ -59,7 +59,7 @@ Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is th
 A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The fix is one line:
 
 ```asm
-        jp   nz,SKIP_HANDLER    ; jp carries a 16-bit target address
+        jp   nz,SkipHandler    ; jp carries a 16-bit target address
 ```
 
 Reassemble. Exit code is 0.

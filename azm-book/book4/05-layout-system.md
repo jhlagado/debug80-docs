@@ -26,7 +26,7 @@ SPRITE_TILE  .equ 2
 SPRITE_FLAGS .equ 3
 SPRITE_SIZE  .equ 4
 
-SPRITES:
+Sprites:
     .ds 16 * SPRITE_SIZE
 ```
 
@@ -42,7 +42,7 @@ tile    .byte
 flags   .byte
         .endtype
 
-SPRITES:
+Sprites:
     .ds Sprite[16]
 ```
 
@@ -148,10 +148,10 @@ These are ordinary integer constants. Use them in `.equ` lines when the name wil
 Allocate a single record with `.ds` and access its fields through offset constants:
 
 ```asm
-PLAYER:
+Player:
         .ds Sprite        ; sizeof(Sprite) bytes, uninitialized
 
-        ld   ix,PLAYER
+        ld   ix,Player
         ld   a,(ix + SPRITE_X)
         inc  a
         ld   (ix + SPRITE_X),a
@@ -160,7 +160,7 @@ PLAYER:
 Allocate an array of records the same way:
 
 ```asm
-SPRITE_TABLE:
+SpriteTable:
         .ds Sprite[16]
 ```
 
@@ -168,7 +168,7 @@ Accessing element `n` at assemble time — when `n` is a constant:
 
 ```asm
 N       .equ 3
-        ld   hl,SPRITE_TABLE + N * sizeof(Sprite) + SPRITE_FLAGS
+        ld   hl,SpriteTable + N * sizeof(Sprite) + SPRITE_FLAGS
         ld   a,(hl)
 ```
 
@@ -176,14 +176,14 @@ For runtime indexing — when `n` is in a register — write the address arithme
 
 ```asm
 ; A = sprite index (0..15)
-        ld   hl,SPRITE_TABLE
+        ld   hl,SpriteTable
         ld   b,0
         ld   c,a
         add  hl,bc
         add  hl,bc
         add  hl,bc
         add  hl,bc
-        add  hl,bc            ; HL = SPRITE_TABLE + A * 5
+        add  hl,bc            ; HL = SpriteTable + A * 5
 ```
 
 ### Nested fields and array paths
@@ -212,7 +212,7 @@ This returns the byte offset of the `flags` field of element 2: `2 * sizeof(Spri
 ```asm
 ELEM2_FLAGS .equ offset(Sprite[16], [2].flags)
 
-        ld   hl,SPRITES + ELEM2_FLAGS
+        ld   hl,Sprites + ELEM2_FLAGS
         ld   a,(hl)
 ```
 
@@ -231,13 +231,13 @@ SpriteArray .typealias Sprite[16]
 `SpriteArray` now works anywhere a type expression works:
 
 ```asm
-SPRITES:
+Sprites:
         .ds SpriteArray
 
 SIZE    .equ sizeof(SpriteArray)
 FLAGS   .equ offset(SpriteArray, [3].flags)
 
-        ld   hl,<SpriteArray>SPRITES[3].flags
+        ld   hl,<SpriteArray>Sprites[3].flags
 ```
 
 The alias is transparent: `sizeof(SpriteArray)` returns the same value as `sizeof(Sprite[16])`, and the cast path `<SpriteArray>SPRITES[3].flags` expands to `SPRITES + offset(Sprite[16], [3].flags)`.
@@ -263,38 +263,38 @@ Everything above — `sizeof`, `offset`, manual expressions — is always valid.
 A layout cast tells AZM to treat an address as a particular layout while it calculates field offsets. It does not change runtime memory; it is compact notation for the same constant-expression arithmetic:
 
 ```asm
-ld   hl,<Sprite>PLAYER.flags
-ld   hl,<Sprite[16]>SPRITES[3].flags
+ld   hl,<Sprite>Player.flags
+ld   hl,<Sprite[16]>Sprites[3].flags
 ```
 
 The structure is `<TypeExpr>base[index].field`, where `<TypeExpr>` is the layout to apply, `base` is a label or address expression, each `[index]` is an array step and each `.field` is a field name step. These two lines produce the same assembled bytes:
 
 ```asm
-ld   hl,SPRITES + (3 * sizeof(Sprite)) + offset(Sprite, flags)
-ld   hl,<Sprite[16]>SPRITES[3].flags
+ld   hl,Sprites + (3 * sizeof(Sprite)) + offset(Sprite, flags)
+ld   hl,<Sprite[16]>Sprites[3].flags
 ```
 
 Parentheses perform memory access; the cast path itself resolves to an address:
 
 ```asm
-ld   a,(<Sprite[16]>SPRITES[3].flags)   ; load byte at that address
-ld   hl,<Sprite[16]>SPRITES[3].flags    ; load the address itself into HL
+ld   a,(<Sprite[16]>Sprites[3].flags)   ; load byte at that address
+ld   hl,<Sprite[16]>Sprites[3].flags    ; load the address itself into HL
 ```
 
 Indices inside a cast path must be assembler-time constant expressions. Register values are rejected, because the address calculation happens at assemble time:
 
 ```asm
 .equ  IDX, 3
-ld   hl,<Sprite[16]>SPRITES[IDX].flags      ; valid: IDX is a constant
-ld   hl,<Sprite[16]>SPRITES[HL].flags       ; error: HL is not a constant
+ld   hl,<Sprite[16]>Sprites[IDX].flags      ; valid: IDX is a constant
+ld   hl,<Sprite[16]>Sprites[HL].flags       ; error: HL is not a constant
 ```
 
 When the index is in a register at runtime, write the address arithmetic as instructions. Dot notation reaches nested record fields by the same rules:
 
 ```asm
-ld   hl,<Actor>PLAYER.pos.x
+ld   hl,<Actor>Player.pos.x
 ; Equivalent to:
-ld   hl,PLAYER + offset(Actor, pos.x)
+ld   hl,Player + offset(Actor, pos.x)
 ```
 
 The `sizeof` and `offset` forms are always correct and always clear; use whichever makes the field path more readable at the call site.
@@ -318,14 +318,14 @@ ptr     .word
 value   .field PortValue
         .endtype
 
-PORT:   .ds IoPort
+Port:   .ds IoPort
 ```
 
 Cast syntax reaches union members by the same rules as record fields:
 
 ```asm
-ld   a,(<IoPort>PORT.value.status)    ; read the status byte
-ld   hl,<IoPort>PORT.value.full       ; read the full word
+ld   a,(<IoPort>Port.value.status)    ; read the status byte
+ld   hl,<IoPort>Port.value.full       ; read the full word
 ```
 
 ---

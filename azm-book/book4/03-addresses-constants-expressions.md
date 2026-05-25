@@ -28,14 +28,14 @@ You can use multiple `.org` directives in one source file to place different sec
 ```asm
         .org $0100
 
-code_start:
+CodeStart:
         ld   a,42
-        ld   (result),a
+        ld   (Result),a
         halt
 
         .org $8000
 
-result:
+Result:
         .db 0
 ```
 
@@ -50,9 +50,9 @@ The code assembles at `$0100`. The data byte assembles at `$8000`. Both land in 
 **Table length:**
 
 ```asm
-TABLE:
+Table:
         .db $01,$02,$03,$04,$08
-TABLE_LEN   .equ $ - TABLE
+TABLE_LEN   .equ $ - Table
 ```
 
 After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ - TABLE` gives the number of bytes in the table as an assembler-time constant.
@@ -61,10 +61,10 @@ After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ -
 
 ```asm
         .org $0100
-CODE_START:
+CodeStart:
         ; ... code ...
-CODE_END:
-CODE_SIZE   .equ CODE_END - CODE_START
+CodeEnd:
+CODE_SIZE   .equ CodeEnd - CodeStart
 ```
 
 `CODE_SIZE` evaluates to the byte count between the two labels. Use label subtraction rather than `$ - 0` so the intent is clear and the result stays correct when the code moves.
@@ -158,11 +158,11 @@ SCREEN_ROWS .equ SCREEN_H / TILE_H
 Label subtraction records a layout assumption as an assembler-time constant:
 
 ```asm
-DISPATCH_A:
+DispatchA:
         jp   HANDLER_A
-DISPATCH_B:
+DispatchB:
         jp   HANDLER_B
-ENTRY_STRIDE .equ DISPATCH_B - DISPATCH_A   ; 3: jp is a 3-byte instruction
+ENTRY_STRIDE .equ DispatchB - DispatchA   ; 3: jp is a 3-byte instruction
 ```
 
 Any code that dispatches through this table loads `ENTRY_STRIDE` by name rather than encoding the stride as a literal.
@@ -172,11 +172,11 @@ Any code that dispatches through this table loads `ENTRY_STRIDE` by name rather 
 A `.equ` expression may reference a label or another `.equ` defined later in the source:
 
 ```asm
-TABLE_LEN   .equ TABLE_END - TABLE_START
+TABLE_LEN   .equ TableEnd - TableStart
 
-TABLE_START:
+TableStart:
         .db 1,2,3,4
-TABLE_END:
+TableEnd:
 ```
 
 AZM resolves forward references across passes. Circular references produce an error.
@@ -205,8 +205,8 @@ See [Appendix B](appendix-b-operators.md) for the full precedence table.
 ### `$` in expressions
 
 ```asm
-MSG:    .db "Hello"
-MSG_LEN .equ $ - MSG        ; byte count of "Hello"
+Msg:    .db "Hello"
+MSG_LEN .equ $ - Msg        ; byte count of "Hello"
 ```
 
 In a `.equ` or data context, `$` resolves to the address after the last emitted byte on the preceding line.
@@ -342,14 +342,14 @@ When there are many values and performance matters, a jump table is more efficie
 Cmd .enum Draw, Move, Erase
 
 ; C = Cmd.* value, guaranteed 0–2
-        ld   hl,CMD_TABLE
+        ld   hl,CmdTable
         ld   b,0
         add  hl,bc
         add  hl,bc
-        add  hl,bc           ; HL = CMD_TABLE + cmd * 3
+        add  hl,bc           ; HL = CmdTable + cmd * 3
         jp   (hl)
 
-CMD_TABLE:
+CmdTable:
         jp   do_draw
         jp   do_move
         jp   do_erase

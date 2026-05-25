@@ -36,7 +36,7 @@ Each character in a double-quoted string contributes one byte at its ASCII value
 Multiple operands can appear on one `.db` line, separated by commas, or across multiple `.db` lines:
 
 ```asm
-MSG:
+Msg:
         .db "Hello"
         .db ","
         .db " World",0
@@ -65,12 +65,12 @@ The Z80 is little-endian: the low byte of a 16-bit value is stored at the lower 
 Labels can appear between or before any `.db` / `.dw` line:
 
 ```asm
-JUMP_TABLE:
+JumpTable:
         .dw HANDLER_A
         .dw HANDLER_B
         .dw HANDLER_C
-JUMP_TABLE_END:
-TABLE_LEN .equ JUMP_TABLE_END - JUMP_TABLE   ; = 6 bytes = 3 entries
+JumpTableEnd:
+TABLE_LEN .equ JumpTableEnd - JumpTable   ; = 6 bytes = 3 entries
 ```
 
 ---
@@ -112,19 +112,19 @@ If none of these match your target routine's expected format, use `.db` directly
 Dispatch tables are a natural use of `.dw`:
 
 ```asm
-CMD_TABLE:
+CmdTable:
         .dw do_draw     ; 0
         .dw do_move     ; 1
         .dw do_rotate   ; 2
         .dw do_erase    ; 3
-CMD_COUNT .equ ($ - CMD_TABLE) / 2
+CMD_COUNT .equ ($ - CmdTable) / 2
 
 ; Dispatch: A = command index (0 to CMD_COUNT-1)
-        ld   hl,CMD_TABLE
+        ld   hl,CmdTable
         ld   b,0
         ld   c,a
         add  hl,bc
-        add  hl,bc        ; HL = CMD_TABLE + A * 2
+        add  hl,bc        ; HL = CmdTable + A * 2
         ld   a,(hl)
         inc  hl
         ld   h,(hl)
@@ -143,13 +143,13 @@ CMD_COUNT .equ ($ - CMD_TABLE) / 2
 ### Basic syntax
 
 ```asm
-COUNTER:
+Counter:
         .ds 1          ; reserve 1 byte
 
-BUFFER:
+Buffer:
         .ds 64         ; reserve 64 bytes
 
-STACK:
+Stack:
         .ds 256        ; reserve 256 bytes
 ```
 
@@ -160,7 +160,7 @@ The operand is a byte count expression. Labels placed before `.ds` name the star
 A second operand specifies a fill value for the reserved region in the flat binary output:
 
 ```asm
-PAGE:
+Page:
         .ds 256,0      ; reserve 256 bytes filled with zero
 ```
 
@@ -174,15 +174,15 @@ For programs with several independent storage areas, collect all `.ds` blocks un
 ; --- RAM layout: $8000–$8FFF ---
         .org $8000
 
-RING_BUF:       .ds 8
-RING_HEAD:      .ds 1
-RING_TAIL:      .ds 1
-RING_COUNT:     .ds 1
+RingBuf:        .ds 8
+RingHead:       .ds 1
+RingTail:       .ds 1
+RingCount:      .ds 1
 
-FRAME_BUF:      .ds FRAME_W * FRAME_H
+FrameBuf:       .ds FRAME_W * FRAME_H
 
         .org $8FFE
-STACK_TOP:      .ds 2
+StackTop:       .ds 2
 ```
 
 Collecting storage blocks under one `.org` lets you verify that no areas overlap and that the total fits available RAM.

@@ -26,13 +26,13 @@ A label on the same line as an instruction:
 
 ```asm
 BUFFER_SIZE   .equ 256
-START:        ld   a,0
+Start:        ld   a,0
 ```
 
 A label on its own line, with the instruction on the next:
 
 ```asm
-START:
+Start:
               ld   a,0
 ```
 
@@ -76,7 +76,7 @@ Symbols are what let you write `djnz READ_LOOP` instead of `djnz $0105`. Every t
 A label names the assembly address at the point where it appears:
 
 ```asm
-BUFFER:
+Buffer:
         .db 0
 ```
 
@@ -85,10 +85,10 @@ AZM records that `BUFFER` equals the current assembly address. Any instruction o
 Code labels work the same way:
 
 ```asm
-READ_LOOP:
+ReadLoop:
         ld      a,(hl)
         inc     hl
-        djnz    READ_LOOP
+        djnz    ReadLoop
 ```
 
 `READ_LOOP` is the address of the `ld` instruction. `djnz READ_LOOP` becomes a relative branch to that address.
@@ -100,9 +100,9 @@ Every plain label is a global symbol, unique across the entire translation unit 
 Branch labels inside routines must be unique too. Two routines that both need a loop label called `Loop` will clash at assembly time. The convention throughout this manual is to prefix branch labels with the routine name: `ShiftRowLoop`, `CopyRowLoop`, `ScanRowLoop`.
 
 ```asm
-; error: two definitions of COUNT
-COUNT:  .db 0
-COUNT:  .db 0
+; error: two definitions of Count
+Count:  .db 0
+Count:  .db 0
 ```
 
 ### Label syntax
@@ -110,8 +110,8 @@ COUNT:  .db 0
 A **plain label** is an identifier followed by a colon, on a line by itself or before an instruction or directive:
 
 ```asm
-MY_LABEL:
-MY_LABEL: ld a,0
+MyLabel:
+MyLabel: ld a,0
 ```
 
 Both forms are valid. Identifiers can contain letters, digits and underscores and must start with a letter.
@@ -119,7 +119,7 @@ Both forms are valid. Identifiers can contain letters, digits and underscores an
 An **entry label** begins with `@` followed by a plain identifier:
 
 ```asm
-@SHIFT_ROW:
+@ShiftRow:
 ```
 
 The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; call sites write `call SHIFT_ROW`. The `@` prefix marks a routine boundary for register-care analysis, covered in Chapter 6.
@@ -129,7 +129,7 @@ The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; call
 `@NAME:` marks `NAME` as a routine entry point. Branch labels inside the body are still global symbols, so two routines that both need a loop label must use distinct names:
 
 ```asm
-@SHIFT_ROW:
+@ShiftRow:
         ld      b,8
 ShiftRowLoop:
         rl      (hl)
@@ -137,7 +137,7 @@ ShiftRowLoop:
         djnz    ShiftRowLoop
         ret
 
-@COPY_ROW:
+@CopyRow:
         ld      b,8
 CopyRowLoop:
         ld      a,(de)
@@ -153,12 +153,12 @@ CopyRowLoop:
 Labels may be used before they are defined:
 
 ```asm
-        ld      hl,DATA_TABLE
+        ld      hl,DataTable
         ld      b,TABLE_LEN
 
-DATA_TABLE:
+DataTable:
         .db 1,2,3,4
-TABLE_LEN .equ $ - DATA_TABLE
+TABLE_LEN .equ $ - DataTable
 ```
 
 AZM uses a two-pass strategy: the first pass assigns addresses to all labels; the second pass substitutes those addresses into instruction encodings. Any reference still unresolved after both passes is an error — typically a typo in a label name.
@@ -168,8 +168,8 @@ AZM uses a two-pass strategy: the first pass assigns addresses to all labels; th
 Two or more labels can name the same address:
 
 ```asm
-@ENTRY_A:
-@ENTRY_B:
+@EntryA:
+@EntryB:
         ld      a,(hl)
         ret
 ```
@@ -215,7 +215,7 @@ A colon marks an address label only — it names the current assembly address, n
 ```asm
 COUNT   .equ 8      ; assemble-time constant
 
-COUNT:              ; address label
+Count:              ; address label
         .db 8
 ```
 
