@@ -44,4 +44,6 @@ $border-color:                #d8d3c8;  // warm gray border
 // --- Syntax highlighting -------------------------------------
 // OneLightJekyll tokens are warm-toned and read cleanly on the
 // cream code-block background set above.
-@import "./vendor/OneLightJekyll/syntax";
+// Use the load-path form (no leading "./") so SASS resolves it
+// through the gem's _sass/ directory rather than our local path.
+@import "color_schemes/vendor/OneLightJekyll/syntax";
