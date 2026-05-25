@@ -15,23 +15,6 @@ On top of that foundation, AZM adds structured layout, register-care analysis an
 
 ---
 
-## At a glance
-
-The rules that govern AZM as a whole are compact enough to summarise here. The chapters that follow each take one row and explain it in full.
-
-| Property | Rule |
-|----------|------|
-| Labels | Global, case-sensitive, unique across all included files |
-| Entry labels | `@NAME:` marks a routine boundary; callable as `NAME` |
-| Opcodes and registers | Case-insensitive |
-| Directives | Lowercase, case-sensitive (`.db`, `.equ`, `.org`) |
-| Expressions | Assembler-time only; operators: `+ - * / % & | ^ ~ << >>` |
-| Layouts | Assembler-time size and offset constants |
-| Ops | Inline expansion at each call site |
-| Register-care | Detects register-use conflicts across routine calls; source repair with `--fix` |
-
----
-
 ## The Debug80 connection
 
 Debug80 is the companion debugging tool for this toolchain. It uses the `.d8.json` metadata file that AZM emits alongside each binary — a map of addresses, symbols and source line positions that Debug80 reads to display source-correlated debug information. When you run AZM from the command line, the `.d8.json` file is ready for Debug80 to consume.
