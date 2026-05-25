@@ -53,6 +53,7 @@ offset(TypeName, fieldName)
 offset(TypeName, outerField.innerField)
 offset(TypeName, arrayField[n])
 offset(TypeName, arrayField[n].innerField)
+offset(TypeName[n], [index].fieldName)
 ```
 
 `offset` returns the byte distance from the start of a type to the named field. For simple fields the path is just the field name. For a field that is itself a record, the path is dot-separated. For an array field, the path includes a bracket index.
@@ -69,6 +70,8 @@ offset(Sprite, x)       ; 0
 offset(Sprite, y)       ; 1
 offset(Sprite, flags)   ; 2
 offset(Sprite, ptr)     ; 3
+
+offset(Sprite[16], [3].flags)   ; offset of flags field in element 3
 ```
 
 Dot paths reach through nested record fields:

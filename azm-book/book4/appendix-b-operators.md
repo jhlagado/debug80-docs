@@ -5,7 +5,7 @@ parent: "AZM Book 4 — Assembler Manual"
 grand_parent: "AZM Books"
 nav_order: 102
 ---
-[← Appendix A: Directive Reference](appendix-a-directives.md) | [Manual](index.md) | [Appendix C: CLI Flag Reference →](appendix-c-cli.md)
+[← Appendix A — Directive Reference](appendix-a-directives.md) | [Manual](index.md) | [Appendix C — CLI Flag Reference →](appendix-c-cli.md)
 
 # Appendix B — Expression Operators
 
@@ -53,4 +53,4 @@ AZM accepts eight numeric literal forms. They can appear freely in any expressio
 
 ---
 
-[← Appendix A: Directive Reference](appendix-a-directives.md) | [Manual](index.md) | [Appendix C: CLI Flag Reference →](appendix-c-cli.md)
+[← Appendix A — Directive Reference](appendix-a-directives.md) | [Manual](index.md) | [Appendix C — CLI Flag Reference →](appendix-c-cli.md)

@@ -154,8 +154,6 @@ When you use `.type` declarations (Chapter 5), you know the field offsets and ca
 
 The data directives above write bytes you know at assemble time. Storage is different: you reserve the space now, but the program fills it at runtime. The distinction is reflected in the output — `.db` and `.dw` appear in the binary as the bytes you wrote; `.ds` advances the address counter without writing anything.
 
-`.ds count` reserves address space without initialized bytes. `.ds count,fill` reserves the same space and writes the fill byte into the output image. The bytes at those addresses contain whatever is in memory when the program runs. Use `.ds` for variables, buffers, and workspace that the program initializes at runtime.
-
 `.db` and `.dw` always write initialized values. `.ds count` only advances the address counter; `.ds count,fill` also writes the fill byte across the reserved range.
 
 ### Basic syntax
