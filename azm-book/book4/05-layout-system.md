@@ -36,10 +36,10 @@ A type declaration replaces the manual constants:
 
 ```asm
 Sprite  .type
-x       .byte
-y       .byte
-tile    .byte
-flags   .byte
+x       .field byte
+y       .field byte
+tile    .field byte
+flags   .field byte
         .endtype
 
 Sprites:
@@ -97,14 +97,14 @@ A record type is a `.type` layout with named fields. Declare a record once and A
 
 ### Field declarations
 
-A `.type` declaration uses the name-left form — the record name first, then `.type`:
+A `.type` declaration uses the name-left form — the record name first, then `.type`. Inside the block, `.field` declares one named field. The token after `.field` is the field's layout type expression:
 
 ```asm
 Sprite  .type
-x       .byte
-y       .byte
-flags   .byte
-ptr     .word
+x       .field byte
+y       .field byte
+flags   .field byte
+ptr     .field word
         .endtype
 ```
 
@@ -112,11 +112,24 @@ Each field has a name, a size and an offset the assembler computes by summing th
 
 | Declaration | Meaning |
 |-------------|---------|
+| `name .field byte` | 1-byte field |
+| `name .field word` | 2-byte field |
+| `name .field TypeExpr` | field of any layout size |
 | `name .byte` | 1-byte field |
 | `name .word` | 2-byte field |
-| `name .field TypeExpr` | field of any layout size |
 
-`.byte` and `.word` are shorthand for `.field byte` and `.field word`. Use `.field` when the size is a type expression — an array or a nested record type:
+`.byte` and `.word` are shorthand for `.field byte` and `.field word`:
+
+```asm
+Sprite  .type
+x       .byte       ; shorthand for x .field byte
+y       .byte
+flags   .byte
+ptr     .word       ; shorthand for ptr .field word
+        .endtype
+```
+
+Use `.field` when the size is a type expression — an array or a nested record type:
 
 ```asm
 Buffer  .type
