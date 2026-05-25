@@ -21,7 +21,7 @@ Every `call` in Z80 assembly is a contract: the calling code hands certain regis
 
 AZM's register-care system makes those contracts explicit and checkable at assemble time. It infers what each routine does to registers and flags, checks that against what callers need, and reports conflicts. Register care is AZM's form of liveness analysis — the technique compilers use to track which values in registers are still needed at each program point. In a compiler, that analysis is invisible and automatic; in AZM, it surfaces as a check: the analyzer warns you when a call site leaves a live value in a register that the called routine will clobber.
 
-Running register-care for the first time on an existing codebase is often revealing. Most warnings will be real — values that survive across calls only because no one has triggered the path where they get clobbered — but some will be genuine bugs that have been dormant for a long time. A working binary today does not mean the register management is correct; it means the wrong path has not been executed yet.
+Running register-care for the first time on an existing codebase is often revealing. Many warnings will point to real risks: values that survive across calls only because no tested path has clobbered them yet. Some will be bugs; others will be missing or incomplete contracts. A working binary today does not mean the register management is correct; it means the wrong path has not been executed yet.
 
 ## Routine boundaries: `@` entry labels
 
