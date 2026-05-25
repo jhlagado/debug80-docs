@@ -380,7 +380,7 @@ Aliases normalize spelling; ops expand instruction sequences.
 
 AZM's ASM80 compatibility baseline lets you assemble existing Z80 source with minimal changes. The built-in alias profile handles the most common directive spelling differences. For source that uses `DEFB`, `RMB`, or similar, add a project alias file.
 
-Directives in AZM are lowercase and case-sensitive. If existing source uses uppercase forms — `DB`, `ORG`, `EQU` — the built-in alias profile is the bridge: load it with `--aliases` and AZM assembles that source without a single source edit while you work through converting directive heads to canonical lowercase at your own pace.
+Directives in AZM are lowercase and case-sensitive. If existing source uses uppercase forms — `DB`, `ORG`, `EQU` — the built-in alias layer handles them automatically; AZM assembles that source without a single source edit while you work through converting directive heads to canonical lowercase at your own pace.
 
 The assembly address behavior, label handling, expression forms, and Z80 instruction encoding all match ASM80 behavior for the covered corpus. AZM is stricter than ASM80 about unknown directives and malformed operands — see Chapter 2.
 

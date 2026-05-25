@@ -104,9 +104,9 @@ After running `azm counter.asm`, AZM writes `counter.lst` alongside the source. 
 0109 00        14          .db 0
 ```
 
-The columns are: address (hex), emitted bytes (hex), source line number, source text. For `ld hl,counter`, the bytes `XX XX` show as the resolved address of `counter` at `$0109` — little-endian, low byte first: `09 01`. The listing is the best tool for verifying that code landed where you intended.
+The columns are: address (hex), emitted bytes (hex), source line number, source text. For `ld hl,counter`, the bytes `XX XX` show as the resolved address of `counter` at `$0109` — little-endian, low byte first: `09 01`.
 
-The address column tells you where each line assembled; the byte column tells you what bytes it produced. When something assembles wrong, the listing is where you find it. If `counter` had resolved to the wrong address, you would see it immediately in the byte column for line 7. Chapter 8 covers listings in full. For now, treat the listing as a post-assembly check: scan it after every build until reading it is a habit.
+Chapter 8 covers listings in full.
 
 ---
 

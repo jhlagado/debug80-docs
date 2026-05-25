@@ -62,7 +62,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--case-style` | — | Emit `AZMN_CASE_STYLE` lint warnings for inconsistent mnemonic or register case |
+| `--case-style` | `upper`, `lower`, `consistent`, `off` | Enforce case style for mnemonics and register names; `upper` requires all uppercase, `lower` all lowercase, `consistent` requires all instances match the first, `off` disables checking; emits `AZMN_CASE_STYLE` on violations |
 
 ## Other flags
 

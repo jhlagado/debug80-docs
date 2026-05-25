@@ -282,8 +282,6 @@ For runtime indexing — when `n` is in a register — write the address arithme
 
 The layout declaration supplies `sizeof(Sprite)`; the instruction sequence is still yours.
 
-Runtime indexing follows this pattern throughout: the assembler gives you `sizeof(Sprite)`, and you multiply it by the index in a register using shifts and adds. The multiplication is ordinary Z80 arithmetic that you write, informed by the constant the layout system computed.
-
 ### Initialized records
 
 An initialized record is written as `.db` / `.dw` in field order:

@@ -67,7 +67,7 @@ TABLE:
 TABLE_LEN   .equ $ - TABLE
 ```
 
-After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ - TABLE` gives the number of bytes in the table. This is a compile-time constant, not a runtime calculation.
+After the `.db` line, `$` is the address one past the last byte of `TABLE`. `$ - TABLE` gives the number of bytes in the table.
 
 **Code size:**
 
@@ -90,8 +90,6 @@ ENTRY_STRIDE .equ DISPATCH_B - DISPATCH_A   ; must be 3
 ```
 
 ## Gaps between origins
-
-When two `.org` directives leave a hole between them, the output format determines how that hole appears — or whether it appears at all.
 
 When you use two `.org` directives with a gap between them, the binary output may contain a hole depending on how the output is formed:
 
@@ -228,7 +226,7 @@ COUNT   .equ 10
 COUNT   .equ 20   ; error: duplicate symbol
 ```
 
-If you need a name whose value changes based on a mode or configuration, structure the source so only one definition is included at a time (for example, via conditional includes — though AZM currently has no built-in conditional assembly). In practice, keep one canonical definition of each constant and express derived values from it. If you need a name whose value varies with a compile-time configuration, structure your includes so only one definition is active at a time — giving both variants distinct names and picking the right one at the point of use is the simplest approach.
+If you need a name whose value changes based on a mode or configuration, structure the source so only one definition is included at a time (for example, via conditional includes — though AZM currently has no built-in conditional assembly). In practice, keep one canonical definition of each constant and express derived values from it.
 
 ### Naming conventions
 
@@ -245,9 +243,7 @@ All-uppercase is the most common in Z80 source and the convention used throughou
 
 ## Expressions
 
-Where constants give names to fixed values, expressions let you compute with them. Any combination of literals, symbols, and operators that resolves to an integer at assemble time is an expression. Expressions appear everywhere you can put a number: instruction operands, data directives, layout declarations, and `.equ` definitions.
-
-An expression in AZM is any combination of numeric literals, symbols, layout queries (`sizeof`, `offset`), and arithmetic operators that the assembler evaluates to an integer before writing the binary. Expressions appear in instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands, and layout declarations.
+Where constants give names to fixed values, expressions let you compute with them. An expression is any combination of numeric literals, symbols, layout queries (`sizeof`, `offset`), and arithmetic operators that the assembler evaluates to an integer before writing the binary. Expressions appear everywhere you can put a number: instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands, and layout declarations.
 
 ### Literals
 
@@ -456,8 +452,6 @@ enum State Idle, Active, Dead
 ### Comparing enum values in Z80 code
 
 Since enum members are byte-sized integers, comparing them in Z80 code is exactly what you would expect: load the value, then use `cp` against the member constant.
-
-Z80 comparison instructions work on byte values. An enum member is a byte-sized integer, so all the usual patterns apply:
 
 ```asm
         ld   a,(mode)

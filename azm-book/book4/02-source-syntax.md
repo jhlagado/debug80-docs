@@ -221,21 +221,11 @@ An **entry label** begins with `@` followed by a plain identifier:
 
 The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; `@SHIFT_ROW` is the source annotation. Both forms place a label at the current assembly address. The difference is what they tell register-care analysis — covered in the next section and in Chapter 6.
 
-The `@` is not part of the callable name. You write `@SHIFT_ROW:` in source, but call sites write `call SHIFT_ROW`. The distinction matters for register-care analysis, which tracks what happens inside each `@`-marked routine boundary.
+The `@` is not part of the callable name. You write `@SHIFT_ROW:` in source, but call sites write `call SHIFT_ROW`.
 
 ## The `@` entry prefix
 
-`@NAME:` marks `NAME` as a routine entry point for register-care analysis. The callable symbol is `NAME`, without the `@`. Call sites write `call NAME`.
-
-```asm
-;!      in        A,HL
-;!      out       carry
-;!      clobbers  BC
-@CHECK_BOUNDS:
-        ld      c,a
-        ; ... body ...
-        ret
-```
+`@NAME:` marks `NAME` as a routine entry point. The callable symbol is `NAME`, without the `@`. Call sites write `call NAME`.
 
 Branch labels inside routines are still global symbols, so two routines that both need a loop label must use distinct names:
 
@@ -259,7 +249,7 @@ CopyRowLoop:
         ret
 ```
 
-Chapter 6 explains how `@` labels define routine boundaries for register-care analysis.
+Chapter 6 explains how AZM uses these boundaries for register-care analysis.
 
 ## Forward references
 

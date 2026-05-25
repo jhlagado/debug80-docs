@@ -138,7 +138,7 @@ AZM does not provide `LOW()` or `HIGH()`. If you are porting from an assembler t
 
 `sizeof` and `offset` are currently parsed case-insensitively: `SIZEOF`, `Sizeof`, and `sizeof` all work. `LSB` and `MSB` are uppercase-only; the parser matches those exact tokens.
 
-The canonical style is lowercase `sizeof` and `offset`, uppercase `LSB` and `MSB`. The author intends to make `sizeof` and `offset` case-sensitive in a future release to match the `LSB`/`MSB` policy. For now, write them lowercase.
+Canonical style is lowercase `sizeof` and `offset`, uppercase `LSB` and `MSB`. Write them that way; the current parser is permissive for `sizeof` and `offset` but the canonical form is lowercase.
 
 ---
 

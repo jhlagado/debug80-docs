@@ -25,7 +25,7 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 | `.istr` | `.istr "text"` | Emits string bytes with bit 7 set on the final byte | 4 |
 | `.binfrom` | `.binfrom addr` | Marks the start address of the flat binary output range | 3 |
 | `.binto` | `.binto addr` | Marks the end address of the flat binary output range | 3 |
-| `.end` | `.end` | Stops source parsing; bytes after this point are ignored | 7 |
+| `.end` | `.end` | Marks the end of source; AZM stops assembling at this point | — |
 | `.type` | `.type Name` … `.endtype` | Opens a record layout declaration block | 5 |
 | `.endtype` | `.endtype` | Closes a `.type` block | 5 |
 | `.union` | `.union Name` … `.endunion` | Opens a union layout declaration block | 5 |

@@ -316,26 +316,7 @@ The practical reason hints exist is the migration path. When you enable register
 
 ### External interface files (`.asmi`)
 
-Contracts for routines whose source is not assembled with yours belong in `.asmi` files. `.asmi` is metadata only — not assembly source, not valid as an entry file:
-
-```asm
-extern MON_PRINT_CHAR
-in A
-clobbers A
-end
-
-extern MON_GET_KEY
-out A
-out zero
-clobbers carry
-end
-```
-
-`.asmi` syntax has no comment leaders. Every non-blank line must be part of an `extern` contract record. Load with `--interface`:
-
-```sh
-azm --interface mon3.asmi --rc error program.asm
-```
+`.asmi` files are the same format described in "External contracts" above. `.asmi` syntax has no comment leaders — every non-blank line must be part of an `extern` contract record. Load with `--interface mon3.asmi`.
 
 ### Generating contracts with `--contracts`
 
@@ -343,11 +324,7 @@ See "Generating contracts from inference" earlier in this chapter for the full `
 
 ### Generating `.asmi` with `--reg-interface`
 
-```sh
-azm --reg-interface program.asm
-```
-
-Writes `program.asmi` with inferred extern records for every `@` routine. Other projects that call into your program can load this file without having your source.
+See "Generating contracts from inference" earlier in this chapter — the `--reg-interface` flag writes the same inferred contracts in `.asmi` format for use by other projects.
 
 ### AZMDoc and register-care analysis workflow
 

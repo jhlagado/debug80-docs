@@ -76,9 +76,7 @@ SPRITE_FLAGS .equ 2
 ld   a,(ix+SPRITE_FLAGS)
 ```
 
-At this point the binary is still identical. You have replaced numbers with names.
-
-Steps 1 through 4 are safe by design — mechanical replacements that leave the binary identical and require no structural decisions. From here the work changes character. Step 5 introduces declarations that derive offsets from the layout automatically; step 7 adds contracts that commit to how registers flow between routines; step 8 may surface call sites that have been relying on register values surviving by accident. Each step still ends with a binary comparison, but by step 8 you will have a list of register-care conflicts — and resolving them one by one is where you learn which routines were quietly depending on values that only survived by chance.
+From here the work changes character. Step 5 introduces declarations that derive offsets from the layout automatically; step 7 adds contracts that commit to how registers flow between routines; step 8 may surface call sites that have been relying on register values surviving by accident. Each step still ends with a binary comparison, but by step 8 you will have a list of register-care conflicts — and resolving them one by one is where you learn which routines were quietly depending on values that only survived by chance.
 
 ### Step 5 — Introduce `.type` declarations for recurring layouts
 
@@ -111,7 +109,7 @@ The `.equ` lines are now derived from the declaration. Add a field to `Actor` an
 
 ### Step 6 — Add enums for states and commands
 
-After step 5, your source still produces byte-identical output. Nothing about the machine code has changed — only the source representation of the field offsets has improved. Steps 6 through 8 continue in the same spirit: each one adds a feature that improves the source without changing the binary, except for step 8 which may surface bugs as register-care warnings.
+Steps 6 through 8 each add a feature that improves the source without changing the binary, except for step 8 which may surface bugs as register-care warnings.
 
 Find groups of related constants that are values of the same conceptual type:
 
@@ -126,7 +124,7 @@ enum State Idle, Moving, Dead
 ; References update to State.Idle, State.Moving, State.Dead
 ```
 
-Grep for all uses of the old names and update them. Verify binary-identical output.
+Grep for all uses of the old names and update them.
 
 ### Step 7 — Add AZMDoc contracts to stable subroutines
 
