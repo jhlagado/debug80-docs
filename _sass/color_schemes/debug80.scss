@@ -1,0 +1,47 @@
+// =============================================================
+// debug80 "Manuscript" — warm light color scheme
+// Based on the just-the-docs light scheme; all variables from
+// _sass/support/_variables.scss can be overridden here.
+// =============================================================
+
+$color-scheme: light;
+
+// --- Typography ----------------------------------------------
+
+// Source Serif 4 is an optical-size-aware serif — excellent for
+// technical documentation at screen sizes. JetBrains Mono has
+// very clear glyph distinctions for assembly/code.
+$body-font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+$mono-font-family: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+
+$body-line-height:         1.6;
+$content-line-height:      1.8;
+$body-heading-line-height: 1.3;
+
+// --- Palette -------------------------------------------------
+//
+// Warm cream-white page, soft parchment sidebar, deep navy links.
+// All tones share the same warm cast so nothing feels jarring.
+
+$body-background-color:       #fdfaf5;  // warm cream white
+$body-heading-color:          #1a1714;  // near-black, warm
+$body-text-color:             #3d3935;  // dark warm gray
+$link-color:                  #1b5e8b;  // professional navy-teal
+$nav-child-link-color:        #5c5750;  // muted warm for nav items
+
+$sidebar-color:               #f3efe8;  // parchment sidebar
+$base-button-color:           #e9e4db;
+$btn-primary-color:           #1b5e8b;
+
+$code-background-color:       #f2ede5;  // warm cream — works with OneLight tokens
+$feedback-color:              #ece8e0;  // callout box backgrounds
+$table-background-color:      #fdfaf5;
+$search-background-color:     #fdfaf5;
+$search-result-preview-color: #5c5750;
+
+$border-color:                #d8d3c8;  // warm gray border
+
+// --- Syntax highlighting -------------------------------------
+// OneLightJekyll tokens are warm-toned and read cleanly on the
+// cream code-block background set above.
+@import "./vendor/OneLightJekyll/syntax";

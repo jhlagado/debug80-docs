@@ -1,0 +1,284 @@
+// =============================================================
+// debug80 custom styles — loaded after all theme CSS
+// Handles fine-grained typography, spacing, and component
+// details that SCSS variables alone cannot reach.
+// =============================================================
+
+
+// --- Base font size ------------------------------------------
+// Serif fonts benefit from a touch more room than system-ui.
+// 17 px is the sweet spot for Source Serif 4 on screen.
+
+html {
+  font-size: 17px;
+}
+
+
+// --- Main content typography ---------------------------------
+
+.main-content {
+  // Extra vertical breathing room at the top of each page
+  padding-top: 3rem;
+
+  p {
+    margin-bottom: 1.25rem;
+  }
+
+  // Headings — scaled for a book-like hierarchy
+  h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    margin-top: 3rem;
+    margin-bottom: 0.875rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #d8d3c8;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    margin-top: 2.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h4 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6e6861;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h5, h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.375rem;
+  }
+
+  // Lists — breathing room between items
+  ul, ol {
+    margin-bottom: 1.25rem;
+
+    li {
+      margin-bottom: 0.4rem;
+      line-height: 1.75;
+    }
+
+    li > p {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  // Inline code — warm highlight with a muted crimson for contrast
+  p code,
+  li code,
+  dt code,
+  td code,
+  th code,
+  h1 code,
+  h2 code,
+  h3 code,
+  h4 code {
+    background-color: #e9e4db;
+    color: #b03820;
+    border-radius: 3px;
+    padding: 0.1em 0.35em;
+    font-size: 0.875em;
+    font-weight: 400;
+  }
+
+  // Block code — slight visual lift from page background
+  pre.highlight,
+  div.highlight,
+  .highlighter-rouge pre.highlight {
+    background-color: #f2ede5;
+    border: 1px solid #cdc8be;
+    border-radius: 6px;
+    margin-top: 0.25rem;
+    margin-bottom: 1.75rem;
+
+    code {
+      background-color: transparent !important;
+      color: inherit;
+      padding: 0;
+      font-size: 0.875rem;
+      line-height: 1.65;
+    }
+  }
+
+  // Plain / unlanguaged code blocks (listing output, shell sessions)
+  code.language-text,
+  code.language-plaintext,
+  pre > code:not([class]) {
+    background-color: #f2ede5;
+    color: #3d3935;
+  }
+
+  // Horizontal rules — refined weight
+  hr {
+    border: none;
+    border-top: 1px solid #d8d3c8;
+    margin: 2.75rem 0;
+  }
+
+  // Blockquotes — editorial aside style
+  blockquote {
+    border-left: 3px solid #1b5e8b;
+    background-color: #f0ece4;
+    color: #5c5750;
+    padding: 0.875rem 1.375rem;
+    border-radius: 0 5px 5px 0;
+    font-style: italic;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1.25rem;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Tables — clean with alternating row tint
+  .table-wrapper {
+    margin-bottom: 1.5rem;
+  }
+
+  table {
+    font-size: 0.9rem;
+    border-collapse: collapse;
+
+    thead th {
+      background-color: #eae5dc;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-bottom: 2px solid #cdc8be;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f8f4ed;
+    }
+
+    th, td {
+      padding: 0.55rem 0.875rem;
+      border: 1px solid #ddd8ce;
+    }
+  }
+
+  // Links — clean, no underline by default; underline on hover
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+  }
+
+  // Navigation breadcrumb links inside content
+  .breadcrumb-nav a {
+    text-decoration: none;
+  }
+
+  // First paragraph after an h1 — slight lead-in treatment
+  h1 + p {
+    font-size: 1.0625rem;
+    color: #4a4643;
+  }
+}
+
+
+// --- Sidebar -------------------------------------------------
+
+.side-bar {
+  border-right: 1px solid #d8d3c8;
+
+  .site-title {
+    letter-spacing: -0.015em;
+    font-weight: 700;
+  }
+
+  // Slightly tighten nav item height for denser nav on mobile
+  .nav-list .nav-list-item .nav-list-link {
+    font-size: 0.875rem;
+  }
+}
+
+
+// --- Search --------------------------------------------------
+
+.search-input {
+  border-color: #cdc8be;
+
+  &:focus {
+    border-color: #1b5e8b;
+    box-shadow: 0 0 0 2px rgba(27, 94, 139, 0.15);
+  }
+}
+
+
+// --- Mobile --------------------------------------------------
+// At small viewports: reduce base size and tighten heading scale.
+
+@media (max-width: 50rem) {
+  html {
+    font-size: 16px;
+  }
+
+  .main-content {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+
+    h1 { font-size: 1.625rem; }
+    h2 { font-size: 1.25rem;  margin-top: 2.25rem; }
+    h3 { font-size: 1.0625rem; }
+
+    pre.highlight,
+    div.highlight {
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+
+// --- Print ---------------------------------------------------
+
+@media print {
+  .side-bar,
+  .site-header {
+    display: none;
+  }
+
+  .main-content {
+    max-width: 100%;
+    margin: 0;
+
+    pre.highlight,
+    div.highlight {
+      background: #f5f5f0 !important;
+      border: 1px solid #ccc !important;
+    }
+
+    a[href]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.8em;
+      color: #666;
+    }
+  }
+}
