@@ -276,12 +276,6 @@ See [Appendix B](appendix-b-operators.md) for the full numeric literal table.
 
 ---
 
-## String literals
-
-Quoted strings are character data. A single-character quoted value such as `'A'` is a numeric literal equal to the character's ASCII code, as shown in the numeric literals table above. Multi-character strings and the string directives (`.cstr`, `.pstr`, `.istr`) are covered in Chapter 4 alongside the data directives.
-
----
-
 ## Strict parsing
 
 AZM reports unknown directives and malformed operands immediately. When the parser cannot make sense of a line, it reports an error and stops that pass. Chapter 8 covers diagnostic messages and how to read them.
