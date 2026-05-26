@@ -78,3 +78,4 @@ This manual is updated against the codebase state through **2026-05-10**. The mo
 - [Appendix D — ROM Bundle Infrastructure](appendices/d-bundle-manifest.md)
 - [Appendix E — Release and Local VSIX Testing](appendices/e-release-and-local-vsix.md)
 - [Appendix F — Regression Gates](appendices/f-regression-gates.md)
+- [Appendix G — D8 Debug Map Format](appendices/g-d8-debug-map-format.md)

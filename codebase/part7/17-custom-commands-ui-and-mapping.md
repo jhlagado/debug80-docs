@@ -306,7 +306,7 @@ The current parser entry point is `parseMapping(content: string): MappingParseRe
 
 If your assembler can emit symbol and mapping data in a structured format, the cleanest path is to write a converter that produces a `D8DebugMap` JSON file. The mapper's D8 path is already optimised for HIGH-confidence data and validates input thoroughly. Writing a `myassembler-to-d8.ts` converter is far less work than extending the mapper itself.
 
-The `D8DebugMap` format is documented in Chapter 14. The minimum viable D8 file is:
+The `D8DebugMap` format is documented in [Appendix G — D8 Debug Map Format](../appendices/g-d8-debug-map-format.md). The minimum viable D8 file is:
 
 ```json
 {

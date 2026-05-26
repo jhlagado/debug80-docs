@@ -136,7 +136,7 @@ interface D8DebugMap {
 }
 ```
 
-The JSON schema lives at `schemas/d8-debug-map.schema.json`. Required fields are `format`, `version`, `arch`, `addressWidth`, `endianness`, and `files`.
+The full D8 format reference is [Appendix G — D8 Debug Map Format](../appendices/g-d8-debug-map-format.md). Required fields are `format`, `version`, `arch`, `addressWidth`, `endianness`, and `files`.
 
 File entries group segments and symbols under a source path key. The empty string key represents unknown source.
 

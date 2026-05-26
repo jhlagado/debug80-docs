@@ -27,7 +27,7 @@ During launch, Debug80 writes artifacts under the target's `outputDir` using `ar
 | `.hex` | Intel HEX program image loaded into Z80 memory. |
 | `.lst` | Listing file used for source mapping and inspection. |
 | `.bin` | Compact binary output when the target requests a binary range. |
-| `.d8.json` | D8 debug map used for higher-confidence source mapping. |
+| `.d8.json` | D8 debug map used for higher-confidence source mapping. The producer/consumer format is documented in the [D8 Debug Map Format reference](../codebase/appendices/g-d8-debug-map-format.md). |
 
 The exact set depends on the backend and target options.
 

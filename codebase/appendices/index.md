@@ -15,3 +15,4 @@ Quick-reference material for engineers working with the debug80 codebase.
 - [Appendix D — ROM Bundle Infrastructure](d-bundle-manifest.md)
 - [Appendix E — Release and Local VSIX Testing](e-release-and-local-vsix.md)
 - [Appendix F — Regression Gates](f-regression-gates.md)
+- [Appendix G — D8 Debug Map Format](g-d8-debug-map-format.md)
