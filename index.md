@@ -41,6 +41,17 @@ For engineers who need to understand, modify, or extend debug80.
 
 ---
 
+### [Understanding the AZM Codebase](azm-codebase/)
+
+A technical tour of the AZM assembler implementation. It covers the repository
+structure, source loading, parsing, assembler-time facts, byte emission, Z80
+encoding, ops, register care, public APIs, output artifacts, tests and
+maintenance rules.
+
+For engineers who need to understand, modify or extend AZM.
+
+---
+
 ## About debug80
 
 debug80 is a VS Code debugger extension for Z80 assembly programs targeting the TEC-1, TEC-1G, and compatible hardware. It provides full source-level debugging: breakpoints, step over/into/out, memory inspection, register editing, and platform-specific hardware emulation.
