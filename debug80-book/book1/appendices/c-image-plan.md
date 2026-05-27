@@ -22,7 +22,7 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | Image | Type | Chapter |
 |---|---|---|
 | Command Palette with **Debug80: Create Project** | Screenshot | Chapter 2 |
-| Project kit picker with **TEC-1G / MON-3** selected | Screenshot | Chapter 2 |
+| Platform/profile picker with **TEC-1G / MON-3** selected | Screenshot | Chapter 2 |
 | Fresh TEC-1G project in Explorer | Screenshot | Chapter 2 |
 | Project section after creation | Screenshot | Chapter 2 |
 | Starter `src/main.asm` | Screenshot | Chapter 2 |

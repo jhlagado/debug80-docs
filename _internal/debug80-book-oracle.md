@@ -12,7 +12,7 @@ Use the current extension source for:
 
 - command names and command availability
 - panel structure and control labels
-- project kits and scaffolded files
+- platform choices and scaffolded files
 - target discovery rules
 - `debug80.json` shape and defaults
 - platform behaviour
@@ -35,7 +35,6 @@ Introduce these terms before using them heavily:
 - Debug80 project
 - target
 - profile
-- project kit
 - source file
 - build artifact
 - Intel HEX
@@ -54,7 +53,7 @@ The main path should progress in this order:
 1. Install VS Code and Debug80.
 2. Open or create a folder.
 3. Create a Debug80 project.
-4. Choose the TEC-1G / MON-3 kit.
+4. Choose the TEC-1G / MON-3 platform.
 5. Open the starter source.
 6. Build and start a debug session.
 7. Stop at source and use VS Code debug controls.

@@ -6,7 +6,7 @@ nav_order: 2
 ---
 # Create A TEC-1G Project
 
-The project creator writes the Debug80 project file and gives you a starter program with the right memory address for the selected machine. Book 1 uses the TEC-1G / MON-3 kit because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
+The project creator writes the Debug80 project file and gives you a starter program with the right memory address for the selected machine. Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
 
 Open the Command Palette and run:
 
@@ -20,30 +20,28 @@ Choose:
 TEC-1G / MON-3
 ```
 
-That kit creates a TEC-1G project using the MON-3 monitor profile. The starter program is placed at `0x4000`, the normal user-code area for this profile.
+That choice creates a TEC-1G project using the MON-3 monitor profile. The starter program is placed at `0x4000`, the normal user-code area for this profile.
 
 > **Image placeholder:** Command Palette showing **Debug80: Create Project**.
 
-> **Image placeholder:** Project kit picker with **TEC-1G / MON-3** selected.
+> **Image placeholder:** Platform/profile picker with **TEC-1G / MON-3** selected.
 
-## Project Kits
+## Choose The Platform
 
-A project kit is a starting configuration. Debug80 currently provides these kits:
+Debug80's user-facing platforms are **TEC-1** and **TEC-1G**.
 
-| Kit | Platform | User code starts at |
+| Platform | Use it when | User code starts at |
 |---|---|---:|
-| Simple / Default | `simple` | `0x0900` |
-| TEC-1 / MON-1B | `tec1` | `0x0800` |
-| TEC-1 / Classic 2K | `tec1` | `0x0900` |
-| TEC-1G / MON-3 | `tec1g` | `0x4000` |
+| TEC-1 | You are working with the classic 1980s TEC-1 board and its monitor environment. | `0x0800` or `0x0900`, depending on the monitor profile |
+| TEC-1G | You are working with the modern TEC-1G board, which keeps TEC-1 compatibility and adds MON-3-oriented hardware features. | `0x4000` |
 
-The platform is the machine family Debug80 emulates for a target: Simple, TEC-1 or TEC-1G. A profile is a specific setup for a platform. **TEC-1G / MON-3** is a profile for the TEC-1G platform. It supplies the start address, ROM assets and platform settings for the MON-3 environment.
+Book 1 uses **TEC-1G / MON-3**. That profile supplies the start address, ROM assets and platform settings for the MON-3 environment.
 
-Choose **Simple / Default** for small Z80 programs that need CPU state, RAM and basic terminal-style I/O. Choose **TEC-1** profiles for classic TEC-1 monitor work. Choose **TEC-1G / MON-3** when you are targeting the TEC-1G hardware or the MON-3 monitor environment.
+Choose **TEC-1** when you are working with classic TEC-1 monitor behaviour. Choose **TEC-1G / MON-3** when you are targeting TEC-1G hardware or the MON-3 monitor environment.
 
-The kit choice decides the first shape of the project. It does not lock the folder forever. A project can later hold more targets, and a target can carry platform settings. Book 1 starts with one TEC-1G target so the early path stays focused.
+The platform choice decides the first shape of the project. It does not lock the folder forever. A project can later hold more targets, and a target can carry platform settings. Book 1 starts with one TEC-1G target so the early path stays focused.
 
-## Files Created By The Kit
+## Files Created
 
 After project creation, open the VS Code Explorer. A fresh TEC-1G project has these working pieces:
 
@@ -84,7 +82,7 @@ The important first-day values are:
 
 ## Open The Starter Source
 
-Open `src/main.asm`. The TEC-1G / MON-3 kit creates this starter source:
+Open `src/main.asm`. The TEC-1G / MON-3 project creator writes this starter source:
 
 ```asm
 ; Debug80 starter (TEC-1G / MON-3)

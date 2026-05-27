@@ -56,15 +56,11 @@ Firmware loaded into the emulated machine. The TEC-1G / MON-3 profile uses monit
 
 ## Platform
 
-The machine family Debug80 emulates for a target: Simple, TEC-1 or TEC-1G.
+The machine family Debug80 emulates for a target. Book 1 discusses TEC-1 and TEC-1G.
 
 ## Profile
 
 A named setup for a platform. **TEC-1G / MON-3** is a profile that supplies ROM assets, memory layout and user-code start address.
-
-## Project Kit
-
-A starter configuration that creates a project for a platform profile.
 
 ## Source Map
 

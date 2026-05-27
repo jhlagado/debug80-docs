@@ -12,7 +12,7 @@ Use this checklist before asking for review.
 
 - Command names match `debug80/package.json`.
 - Panel labels match the current `webview/` HTML.
-- Project kit labels and start addresses match `project-kits.ts`.
+- Platform labels and start addresses match the current Debug80 project creator.
 - Entry-source rules match `azm-source-extensions.ts`.
 - CoolTerm setup matches current source and real CoolTerm screenshots.
 - Artifact claims match the current AZM backend.

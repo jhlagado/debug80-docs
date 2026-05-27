@@ -126,17 +126,13 @@ If you accidentally bind the wrong source file, use **Debug80: Set Program File*
 
 ## Choose A Different Platform
 
-The platform controls the machine Debug80 emulates for a target. Book 1 used TEC-1G / MON-3. Debug80 also ships simpler profiles for other kinds of Z80 work.
+The platform controls the machine Debug80 emulates for a target. Book 1 used TEC-1G / MON-3.
 
-Choose **Simple / Default** for small Z80 programs that need RAM, CPU state and basic terminal-style I/O. The Simple kit starts user code at `0x0900`.
+Choose **TEC-1** when you are working with the classic 1980s TEC-1 board. TEC-1 profiles focus on the keypad, seven-segment display, speaker, serial path and memory inspection used by classic monitor workflows.
 
-Choose **TEC-1 / MON-1B** when you are working with classic TEC-1 monitor behaviour. This profile includes a monitor-first layout with user code at `0x0800`. Its panel focuses on the TEC-1 keypad, seven-segment display, speaker, serial path and memory inspection.
+Choose **TEC-1G / MON-3** for the main TEC-1G workflow. TEC-1G is compatible with the TEC-1 line but adds MON-3-oriented hardware: keypad, seven-segment display, LCD, GLCD, RGB matrix, matrix keyboard, serial path, memory protection and expansion behaviour.
 
-Choose **TEC-1 / Classic 2K** for classic TEC-1 RAM-program work at `0x0900`.
-
-Choose **TEC-1G / MON-3** for the main TEC-1G workflow. The profile places user code at `0x4000` and models the MON-3-oriented machine: keypad, seven-segment display, LCD, GLCD, RGB matrix, matrix keyboard, serial path, memory protection and expansion behaviour.
-
-Choose the platform that matches the assumptions in your program. A program that writes TEC-1G LCD ports needs the TEC-1G platform. A small CPU-only exercise may be clearer on the Simple platform.
+Choose the platform that matches the board your program expects. A program that writes TEC-1G LCD ports needs the TEC-1G platform. A classic TEC-1 monitor program should use a TEC-1 platform.
 
 ## Recover From Common Failures
 

@@ -112,14 +112,14 @@ ROM source is especially useful when your program calls a monitor routine. If a 
 
 ## Bundled Assets
 
-Debug80 ships bundled ROM assets for the built-in monitor profiles. The TEC-1G / MON-3 kit refers to paths such as:
+Debug80 ships bundled ROM assets for the built-in monitor profiles. The TEC-1G / MON-3 profile refers to paths such as:
 
 ```text
 roms/tec1g/mon3/mon3.bin
 roms/tec1g/mon3/mon3.lst
 ```
 
-The TEC-1 / MON-1B profile uses the same pattern:
+The TEC-1 platform uses the same pattern for MON-1B:
 
 ```text
 roms/tec1/mon1b/mon-1b.bin
