@@ -162,7 +162,7 @@ After the first successful board transfer, review the path from source to hardwa
 
 1. You edit AZM source in VS Code.
 2. Debug80 launches the active target.
-3. AZM writes `.hex`, `.lst` and source-map data.
+3. AZM writes `.hex` and source-map data.
 4. Debug80 loads the `.hex` into the emulator and uses the source map for source debugging, navigation, hovers and symbol views.
 5. CoolTerm sends the same `.hex` to the board.
 

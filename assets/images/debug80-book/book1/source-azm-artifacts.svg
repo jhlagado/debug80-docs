@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
   <title id="title">AZM build outputs</title>
-  <desc id="desc">AZM reads source and writes Intel HEX, listing and source map output.</desc>
+  <desc id="desc">AZM reads source and writes Intel HEX and source map output.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b5568"/>
@@ -23,13 +23,10 @@
   <text class="label" x="405" y="137">AZM</text>
   <text class="body" x="382" y="167">Assembler</text>
   <path class="arrow" d="M 515 150 H 600"/>
-  <rect class="artifact" x="625" y="35" width="240" height="64"/>
-  <text class="label" x="665" y="74">main.hex</text>
-  <rect class="artifact" x="625" y="118" width="240" height="64"/>
-  <text class="label" x="665" y="157">main.lst</text>
-  <rect class="artifact" x="625" y="201" width="240" height="64"/>
-  <text class="label" x="650" y="240">source map</text>
-  <path class="arrow" d="M 570 150 C 590 95 600 70 620 67"/>
-  <path class="arrow" d="M 570 150 H 620"/>
-  <path class="arrow" d="M 570 150 C 590 205 600 230 620 233"/>
+  <rect class="artifact" x="625" y="75" width="240" height="64"/>
+  <text class="label" x="665" y="114">main.hex</text>
+  <rect class="artifact" x="625" y="161" width="240" height="64"/>
+  <text class="label" x="650" y="200">source map</text>
+  <path class="arrow" d="M 570 150 C 590 105 600 110 620 107"/>
+  <path class="arrow" d="M 570 150 C 590 195 600 190 620 193"/>
 </svg>

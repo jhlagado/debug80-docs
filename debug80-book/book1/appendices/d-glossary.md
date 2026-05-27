@@ -24,7 +24,7 @@ A breakpoint with an expression attached. Debug80 stops when the expression is t
 
 ## Build Artifact
 
-A generated file written during launch. Book 1 uses `.hex`, `.lst` and source-map output.
+A generated file written during launch. Book 1 uses `.hex` and source-map output.
 
 ## CoolTerm
 
@@ -45,10 +45,6 @@ The source file used as the starting point for a target. Debug80 discovers likel
 ## Intel HEX
 
 A text format for program bytes and addresses. Debug80 loads `.hex` into the emulator and sends `.hex` to hardware through CoolTerm.
-
-## Listing
-
-An assembler output file used for inspection and fallback source-map lookup.
 
 ## Monitor ROM
 

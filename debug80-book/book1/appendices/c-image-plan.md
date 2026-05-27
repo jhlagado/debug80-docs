@@ -64,14 +64,13 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 
 | Image | Type | Chapter |
 |---|---|---|
-| Build folder with `.hex`, `.lst` and source-map output | Screenshot | Chapter 6 |
-| Source beside listing excerpt | Screenshot | Chapter 6 |
+| Build folder with `.hex` and source-map output | Screenshot | Chapter 6 |
 | Source map diagram | Generated diagram | Chapter 6 |
 | Go to Definition on an assembly symbol | Screenshot | Chapter 6 |
 | Workspace symbol picker with Debug80 symbols | Screenshot | Chapter 6 |
 | Symbol hover with address and source location | Screenshot | Chapter 6 |
 | **Debug80: Open ROM Source** command | Screenshot | Chapter 6 |
-| MON-3 source or listing beside user source | Screenshot | Chapter 6 |
+| MON-3 source beside user source | Screenshot | Chapter 6 |
 | Copied bundled assets in Explorer | Screenshot | Chapter 6 |
 
 ## Hardware Transfer
@@ -88,7 +87,7 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 ## Generated Diagrams
 
 - Folder -> Debug80 project -> target -> source file.
-- Source -> AZM -> `.hex`, `.lst` and source-map output.
+- Source -> AZM -> `.hex` and source-map output.
 - Source line -> source map -> Z80 address -> breakpoint.
 - Source map status -> build action -> editor/debugger feature availability.
 - Emulator serial path versus CoolTerm hardware path.

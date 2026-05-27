@@ -71,11 +71,6 @@ A profile records platform setup shared by targets. The TEC-1G / MON-3 profile i
         "bundleId": "tec1g/mon3/v1",
         "path": "mon3.bin",
         "destination": "roms/tec1g/mon3/mon3.bin"
-      },
-      "listing": {
-        "bundleId": "tec1g/mon3/v1",
-        "path": "mon3.lst",
-        "destination": "roms/tec1g/mon3/mon3.lst"
       }
     }
   }
@@ -100,17 +95,17 @@ A target is a named runnable program:
 }
 ```
 
-`sourceFile` is the file AZM assembles. `outputDir` receives generated artifacts. `artifactBase` becomes the file name base for files such as `.hex`, `.lst` and source-map output.
+`sourceFile` is the file AZM assembles. `outputDir` receives generated artifacts. `artifactBase` becomes the file name base for files such as `.hex` and source-map output.
 
 ## TEC-1G Platform Block
 
-Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM listing paths. Book 1 relies on the generated values.
+Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM paths. Book 1 relies on the generated values.
 
 The important user-level facts are:
 
 - TEC-1G / MON-3 user code starts at `0x4000`.
-- The ROM image and listing come from the bundled MON-3 profile unless you provide workspace copies.
-- `sourceRoots` helps Debug80 resolve source paths from generated maps and ROM listings.
+- The ROM image comes from the bundled MON-3 profile unless you provide a workspace copy.
+- `sourceRoots` helps Debug80 resolve source paths from generated maps and bundled source material.
 
 ## AZM Options
 

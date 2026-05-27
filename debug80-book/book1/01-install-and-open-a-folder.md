@@ -22,7 +22,7 @@ Install the extension published by `jhlagado`. After installation, VS Code may a
 
 > **Image placeholder:** VS Code Extensions view showing the Debug80 Marketplace entry, with the extension name, publisher and Install button visible.
 
-Debug80 adds syntax highlighting for `.asm`, `.z80`, `.asmi` and `.lst` files. It also adds a debugger type called `z80` and a Debug80 view in the **Run and Debug** sidebar.
+Debug80 adds syntax highlighting for `.asm` and `.z80` files. It also adds a debugger type called `z80` and a Debug80 view in the **Run and Debug** sidebar.
 
 ## Find The Debug80 Panel
 

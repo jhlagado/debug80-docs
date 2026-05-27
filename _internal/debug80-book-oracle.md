@@ -38,7 +38,6 @@ Introduce these terms before using them heavily:
 - source file
 - build artifact
 - Intel HEX
-- listing
 - source map
 - monitor ROM
 - platform panel
@@ -91,7 +90,7 @@ Use these expected teaching homes unless the chapter plan changes deliberately:
 | Source-map status | Panel chapter |
 | Source-map-backed editor features | Artifacts chapter |
 | ROM assets and monitor source | ROM chapter |
-| `.hex`, `.lst` and source map | Artifacts chapter |
+| `.hex` and source map | Artifacts chapter |
 | CoolTerm | Hardware transfer chapter |
 | Troubleshooting | Troubleshooting chapter |
 
