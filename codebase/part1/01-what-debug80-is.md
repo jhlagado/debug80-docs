@@ -256,7 +256,7 @@ This runs the full test suite via vitest. Tests cover:
 - Extension command and provider logic (`tests/extension/`)
 - Webview message handling (`tests/webview/`)
 
-Tests use a mock VS Code API (`tests/__mocks__/vscode.ts`) so they run without a VS Code instance.
+Tests use VS Code API mocks, including `tests/e2e/adapter/vscode-mock.ts`, so many paths can run without a live VS Code instance.
 
 Release and regression checks are broader than `npm test`:
 

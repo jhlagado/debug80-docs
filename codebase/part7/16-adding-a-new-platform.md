@@ -133,7 +133,7 @@ function queueUpdate(state: MyplatformState, callbacks: PlatformIoCallbacks): vo
 
 `sendUpdate()` assembles a payload and calls `callbacks.onMyplatformUpdate(payload)`. The extension host receives this as a DAP event and forwards it to the webview.
 
-If your platform has no hardware display, the `buildIoHandlers` implementation can use `buildPlatformIoHandlers` from `src/platforms/tec-common/provider.ts` directly, as the `simple` platform does.
+If your platform has no hardware display, the `buildIoHandlers` implementation can use the common helpers exported from `src/platforms/tec-common/index.ts`, as the `simple` platform does.
 
 ---
 
