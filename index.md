@@ -56,6 +56,4 @@ For engineers who need to understand, modify or extend AZM.
 
 debug80 is a VS Code debugger extension for Z80 assembly programs targeting the TEC-1, TEC-1G, and compatible hardware. It provides full source-level debugging: breakpoints, step over/into/out, memory inspection, register editing, and platform-specific hardware emulation.
 
-See [Docs Readiness](docs-readiness.md) for the publishing audit behind the Debug80 user manual.
-
 Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80)
