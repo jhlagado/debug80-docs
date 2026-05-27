@@ -17,7 +17,7 @@ Use this checklist before asking for review.
 - CoolTerm setup matches current source and real CoolTerm screenshots.
 - Artifact claims match the current AZM backend.
 - Source-map-backed features use "source map" in user-facing prose.
-- Watch expression syntax matches `watch-expression.ts`.
+- Debug expression syntax for Watches and conditional breakpoints matches `watch-expression.ts`.
 
 ## Structure Check
 

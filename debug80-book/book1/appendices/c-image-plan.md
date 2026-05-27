@@ -34,6 +34,7 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | Project section with **Stop on entry** and **Build** | Screenshot | Chapter 3 |
 | Source editor paused at `NOP` | Screenshot | Chapter 3 |
 | Breakpoint beside an instruction line | Screenshot | Chapter 3 |
+| Conditional breakpoint editor with a Debug80 expression | Screenshot | Chapter 3 |
 | VS Code debug toolbar annotated | Screenshot or diagram | Chapter 3 |
 
 ## Machine Inspection

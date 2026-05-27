@@ -56,6 +56,24 @@ A filled breakpoint has a concrete address. Debug80 can stop there because the s
 
 A hollow breakpoint has not been bound to an address. Move it to a real instruction line and rebuild. Labels, comments and directives can be important source lines, but the debugger needs a CPU instruction address to stop execution.
 
+## Conditional Breakpoints
+
+Use a conditional breakpoint when the program should stop only for a particular machine state. Right-click a breakpoint, choose **Edit Breakpoint** and enter a Debug80 expression.
+
+For example:
+
+```asm
+[PACMO_LIVES] eq 0
+zero and A eq $20
+[IX + 4] ne 0
+not carry
+PC eq MainLoop
+```
+
+When execution reaches the breakpoint, Debug80 evaluates the expression. A true or non-zero result stops execution. A false or zero result lets the program continue.
+
+If the expression cannot be evaluated, Debug80 stops at the breakpoint and writes the error to the Debug Console. Conditional breakpoints use the same expression language as the Watch panel. Appendix G lists the supported registers, flags, symbols, memory reads and operators.
+
 ## Continue And Pause
 
 The VS Code debug toolbar controls the emulated Z80. Use it the same way you use other VS Code debuggers: continue, pause, step, restart and stop.
@@ -124,5 +142,6 @@ You are ready for machine inspection when you can:
 
 - start the target with Stop on entry enabled
 - set a breakpoint on an instruction line
+- add a conditional expression to a breakpoint
 - step from `NOP` to `JR start`
 - restart after saving a source change

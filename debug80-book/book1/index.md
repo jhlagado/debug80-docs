@@ -28,4 +28,4 @@ This first draft establishes the full teaching path. The screenshot plan in Appe
 - [Appendix D — Glossary](appendices/d-glossary.md)
 - [Appendix E — TEC-1G Quick Reference](appendices/e-tec1g-quick-reference.md)
 - [Appendix F — Review Checklist](appendices/f-review-checklist.md)
-- [Appendix G — Watch Expressions](appendices/g-watch-expressions.md)
+- [Appendix G — Debug Expressions](appendices/g-watch-expressions.md)

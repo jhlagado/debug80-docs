@@ -18,6 +18,10 @@ The assembler used by the current Debug80 workflow. AZM turns `.asm` and `.z80` 
 
 A stop point set in the editor. Debug80 binds a source breakpoint to a generated Z80 address when source-map data is available.
 
+## Conditional Breakpoint
+
+A breakpoint with an expression attached. Debug80 stops when the expression is true or non-zero.
+
 ## Build Artifact
 
 A generated file written during launch. Book 1 uses `.hex`, `.lst` and source-map output.
@@ -74,9 +78,9 @@ The Project section line that reports whether the active target's source map is 
 
 A named runnable program inside a Debug80 project.
 
-## Watch Expression
+## Debug Expression
 
-A VS Code Watch expression evaluated by Debug80 while execution is paused. Debug80 Watch expressions can read Z80 registers, flags, source-map symbols and memory bytes.
+An expression evaluated by Debug80 for a Watch or conditional breakpoint. Debug expressions can read Z80 registers, flags, source-map symbols and memory bytes.
 
 ## Workspace Folder
 

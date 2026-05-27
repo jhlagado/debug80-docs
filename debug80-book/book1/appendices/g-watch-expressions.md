@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Appendix G — Watch Expressions"
+title: "Appendix G — Debug Expressions"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 107
 ---
-# Appendix G — Watch Expressions
+# Appendix G — Debug Expressions
 
-Debug80 supports Z80-focused expressions in the standard VS Code **Watch** panel. Add Watches while the program is paused.
+Debug80 supports Z80-focused expressions in the standard VS Code **Watch** panel and in conditional breakpoints. Add Watches while the program is paused. Add a breakpoint condition by right-clicking a breakpoint and choosing **Edit Breakpoint**.
 
 ## Examples
 
@@ -156,4 +156,4 @@ not [PLAYER_LIVES]
 carry or zero
 ```
 
-At the time of Book 1, this expression language is documented for Watches.
+Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. If the expression cannot be evaluated, Debug80 stops and reports the error in the Debug Console.

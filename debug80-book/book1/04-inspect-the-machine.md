@@ -53,7 +53,7 @@ Square brackets read one byte from memory at the address inside the brackets:
 [IX + 4]
 ```
 
-Use Watches when you want a small set of facts to stay visible while stepping. Appendix G lists the supported registers, flags and operators.
+Use Watches when you want a small set of facts to stay visible while stepping. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
 
 > **Image placeholder:** VS Code Watch panel showing Debug80 expressions such as `A`, `zero`, `[HL]` and `PC eq MainLoop`.
 
