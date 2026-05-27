@@ -26,6 +26,9 @@ These commands are handled by `AdapterRequestController` regardless of platform.
 | `debug80/romSources` | — | `{ sources: RomSourceEntry[] }` | Returns available ROM/listing sources for the project header |
 | `debug80/rebuildWarm` | — | `{ ok: boolean; summary: string; detail?: string; rebuiltPath?: string; location?: RebuildIssueLocation }` | Reassembles and hot-reloads the program without restarting the session |
 | `debug80/runToStackFrame` | `{ frameId: number }` | — | Runs to a selected mapped stack-return frame from the Call Stack context menu |
+| `debug80/memorySnapshot` | see below | see below | Returns memory/register/symbol data for the webview memory inspectors |
+| `debug80/registerWrite` | `{ register: string; value: string }` | — | Writes a supported Z80 register while paused; numeric values are hex strings, and flag registers accept the flag-string form used by the UI |
+| `debug80/memoryWrite` | `{ address: string \| number; value: string \| number; allowReadOnly?: boolean }` | — | Writes one byte of emulated memory while paused; string addresses/bytes are plain hex without a `0x` prefix |
 
 ---
 
@@ -39,7 +42,6 @@ Registered by `createTec1PlatformProvider` → `registerCommands`. Only present 
 | `debug80/tec1Reset` | — | — | Cold-resets the TEC-1 to the entry point |
 | `debug80/tec1Speed` | `{ mode: 'slow' \| 'fast' }` | — | Switches clock speed (slow ≈ 400 kHz, fast ≈ 4 MHz) |
 | `debug80/tec1SerialInput` | `{ text: string }` | — | Queues bytes for the 9600-baud bitbang serial receive line |
-| `debug80/tec1MemorySnapshot` | see below | see below | Returns a memory/register snapshot for the memory inspector |
 
 ---
 
@@ -55,13 +57,12 @@ Registered by `createTec1gPlatformProvider` → `registerCommands`. Only present
 | `debug80/tec1gReset` | — | — | Cold-resets the TEC-1G to the entry point |
 | `debug80/tec1gSpeed` | `{ mode: 'slow' \| 'fast' }` | — | Switches clock speed |
 | `debug80/tec1gSerialInput` | `{ text: string }` | — | Queues bytes for the 4800-baud serial receive line |
-| `debug80/tec1gMemorySnapshot` | see below | see below | Returns a memory/register snapshot for the memory inspector |
 
 ---
 
 ## Memory snapshot args and response
 
-Both `debug80/tec1MemorySnapshot` and `debug80/tec1gMemorySnapshot` take the same args and return the same shape.
+All platform memory panels use the generic `debug80/memorySnapshot` request. The platform UI manifest tells the webview which snapshot command to use; the built-in Simple, TEC-1 and TEC-1G panels all point at this shared command.
 
 **Args:**
 

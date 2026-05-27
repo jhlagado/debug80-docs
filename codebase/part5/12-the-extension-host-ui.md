@@ -86,7 +86,7 @@ interface PlatformUiModules<TUiState = unknown> {
   handleMessage(message: PlatformViewMessage, context: PlatformUiMessageContext): Promise<void>;
   buildUpdateMessage(state: TUiState, uiRevision: number): Record<string, unknown>;
   buildClearMessage(state: TUiState, uiRevision: number): Record<string, unknown>;
-  snapshotCommand: 'debug80/tec1MemorySnapshot' | 'debug80/tec1gMemorySnapshot';
+  snapshotCommand: 'debug80/memorySnapshot';
 }
 ```
 
@@ -312,7 +312,7 @@ When a platform-specific message arrives, `resolvePlatformAdapter()` returns the
 | `key` (TEC-1) | `debug80/tec1Key` |
 | `reset` (TEC-1) | `debug80/tec1Reset` |
 | `speed` (TEC-1) | `debug80/tec1Speed` |
-| `refresh` (TEC-1) | `debug80/tec1MemorySnapshot` |
+| `refresh` (all platforms) | `debug80/memorySnapshot` |
 | `registerEdit` | `debug80/registerWrite` |
 | `memoryEdit` | `debug80/memoryWrite` |
 | `key` (TEC-1G) | `debug80/tec1gKey` |
@@ -320,7 +320,6 @@ When a platform-specific message arrives, `resolvePlatformAdapter()` returns the
 | `matrixMode` (TEC-1G) | `debug80/tec1gMatrixMode` |
 | `reset` (TEC-1G) | `debug80/tec1gReset` |
 | `speed` (TEC-1G) | `debug80/tec1gSpeed` |
-| `refresh` (TEC-1G) | `debug80/tec1gMemorySnapshot` |
 
 All adapter requests go through `session.customRequest()` on the current `vscode.DebugSession`.
 
@@ -363,7 +362,7 @@ The memory inspector polls the adapter for live register and memory snapshots wh
 - Start polling when the memory tab becomes active.
 - Stop polling when the panel is hidden or the tab switches away.
 - Poll at 150 ms intervals.
-- On each poll, call `session.customRequest('debug80/tec1MemorySnapshot', snapshotPayload)` and post the result as a `snapshot` message.
+- On each poll, call `session.customRequest('debug80/memorySnapshot', snapshotPayload)` and post the result as a `snapshot` message.
 
 The snapshot payload describes which memory regions and views are currently displayed. The adapter reads those regions from the Z80 memory array and returns them in a single response.
 

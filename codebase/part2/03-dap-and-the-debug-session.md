@@ -304,12 +304,12 @@ These are registered in the session constructor and are available regardless of 
 |---------|---------|
 | `debug80/terminalInput` | Sends character input to the TEC-1G terminal emulation. |
 | `debug80/terminalBreak` | Sends a break signal to the terminal. |
-| `debug80/tec1MemorySnapshot` | Returns a snapshot of the Z80 memory for the webview's memory inspector. |
-| `debug80/tec1gMemorySnapshot` | Same, for TEC-1G sessions. |
+| `debug80/memorySnapshot` | Returns a snapshot of Z80 memory, registers and symbols for the webview memory inspectors. |
 | `debug80/registerWrite` | Modifies a CPU register value during a paused session. |
 | `debug80/memoryWrite` | Modifies a memory location during a paused session. |
 | `debug80/romSources` | Returns a list of ROM source files for the source manager. |
 | `debug80/rebuildWarm` | Reassembles the source file and reloads the binary without restarting the debug session. |
+| `debug80/runToStackFrame` | Runs to the return address represented by a selected mapped Call Stack frame. |
 
 ### Custom DAP events
 

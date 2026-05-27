@@ -489,7 +489,7 @@ When the memory tab is active, the panel calls `requestSnapshot()` periodically 
 { type: 'refresh', views: [{ mode, address }, ...] }
 ```
 
-The extension host forwards this to `debug80/tec1MemorySnapshot` (or `debug80/tec1gMemorySnapshot`). The adapter reads the requested memory regions and returns a snapshot that includes registers, stack, and the requested byte arrays.
+The extension host forwards this to the shared `debug80/memorySnapshot` custom request. The adapter reads the requested memory regions and returns a snapshot that includes registers, stack, symbols and the requested byte arrays.
 
 ### Snapshot rendering
 

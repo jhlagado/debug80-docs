@@ -350,7 +350,7 @@ The index provides the classic address-oriented symbol views:
 - **`lookupAnchors`** — symbols filtered to addresses within source-mapped ranges. This prevents symbols from unmapped regions (like ROM) from appearing in user-facing lookups.
 - **`list`** — a deduplicated name-to-address list for the symbol table.
 
-`buildSourceMapSymbols()` also preserves richer source-map symbols for editor and debugger UI features. F12 navigation, hover details, workspace symbols, the Variables panel, Watch expressions and conditional breakpoint expressions all use these active-target symbol records where possible.
+`readSourceMapSymbols()` also preserves richer source-map symbols for editor and debugger UI features. F12 navigation, hover details, workspace symbols, the Variables panel, Watch expressions and conditional breakpoint expressions all use these active-target symbol records where possible.
 
 ### Source file notification
 

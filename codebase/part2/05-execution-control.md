@@ -343,7 +343,14 @@ The flag is checked before anything else — before breakpoints, before stepping
 
 When the program is stopped, VS Code requests a stack trace. The `stackTraceRequest()` handler calls `buildStackFrames()` in `src/debug/mapping/stack-service.ts` with the current PC.
 
-The Z80 is a single-context machine — there is no reconstructed call chain. Debug80 returns a single stack frame named "main". The interesting part is resolving the source location.
+The Z80 is a single-context machine, so Debug80 cannot recover a guaranteed high-level call chain in the same way a native debugger can. It now builds a best-effort assembly call stack instead:
+
+1. Frame 0 is the current PC, labelled with the nearest source-map symbol when one is available.
+2. Up to eight following frames are read as little-endian words from the current `SP`.
+3. Each stack word is treated as a possible return address. If it maps to source, Debug80 returns it as a stack frame labelled with the nearest symbol plus offset, such as `MainLoop+3`.
+4. Unmapped words are labelled as raw hex and marked as likely data. Trailing likely-data entries are trimmed so normal call stacks stay compact.
+
+This is intentionally conservative. It is a view over the Z80 stack, not proof that every word is a return address. That tradeoff is still useful for typical Debug80 programs, which are mostly register-oriented and usually keep return addresses near the top of the stack.
 
 `resolveSourceForAddress()` tries three paths:
 
@@ -354,6 +361,8 @@ The Z80 is a single-context machine — there is no reconstructed call chain. De
 3. **Fallback** — the listing file's `addressToLine` table provides a coarser mapping. If neither source map nor alias resolves, the listing gives a line number in the listing file itself.
 
 The resolved source path is canonicalised before being returned — platform-specific separators and case are normalised so VS Code can match the path to an open editor.
+
+The Call Stack context menu action **Run to Here** is contributed as the VS Code command `debug80.runToSelectedStackFrame`. It sends the selected frame id to the adapter through `debug80/runToStackFrame`. The adapter accepts mapped stack-return frames only, installs the selected return address as a temporary run target, and continues until PC reaches it or another stop condition fires. It does not rewrite `SP`, `PC`, or memory.
 
 The diagnostics mode controlled by `setDiagnosticsEnabled()` logs every resolution step — which segment was found, which path was resolved, which alias was tried — to the Debug Console. This is invaluable for debugging source map problems.
 
