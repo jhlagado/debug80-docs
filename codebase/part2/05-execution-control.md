@@ -208,6 +208,15 @@ The evaluator receives the current runtime and active D8 source-map symbols. Zer
 
 Expression failures are deliberately treated as breakpoint hits. Debug80 writes the failure to the Debug Console and stops rather than silently running through a breakpoint the user expected to catch. This is safer during source-map staleness, typo and missing-symbol cases.
 
+The expression language is intentionally small and Z80-focused:
+
+- Registers include 8-bit, 16-bit and alternate sets: `A`, `F`, `AF`, `B`, `C`, `BC`, `D`, `E`, `DE`, `H`, `L`, `HL`, `IX`, `IXH`, `IXL`, `IY`, `IYH`, `IYL`, `SP`, `SPH`, `SPL`, `PC`, `I`, `R`, and the prime registers such as `AF'`.
+- Flags use AZM-style names: `carry`, `zero`, `sign`, `parity`, and `halfcarry`.
+- Symbols come from the active D8 source map. Address symbols evaluate to their address; value-only symbols evaluate to their value.
+- `[expr]` reads one byte of emulated memory.
+- Arithmetic supports `+`, `-`, `*`, `/`, `%`; bitwise operators are `&`, `|`, `^`, `~`; comparisons are `eq`, `ne`, `lt`, `le`, `gt`, `ge`; logical operators are `and`, `or`, `not`.
+- Parentheses group expressions. There is no logical XOR; `^` is bitwise XOR.
+
 ### Breakpoint skip logic
 
 When the execution loop stops at a breakpoint, pressing Continue immediately re-hits the same breakpoint. To prevent this, `updateBreakpointSkip()` is called before each Continue or Step Out:

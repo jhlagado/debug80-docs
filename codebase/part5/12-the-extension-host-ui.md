@@ -11,7 +11,7 @@ nav_order: 1
 
 The Debug80 sidebar panel is a VS Code `WebviewView` embedded in the built-in **Run & Debug** container (`"views": { "debug": [...] }` in `package.json`). It runs in a separate JavaScript context from the extension host and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
 
-The view is registered under `"views": { "debug": [...] }` in `package.json`, which places it as a collapsible subpanel alongside Variables, Watch, Call Stack, and Breakpoints. The extension activates as soon as the user expands the panel, via the `"onView:debug80.platformView"` activation event.
+The view is registered under `"views": { "debug": [...] }` in `package.json` with `visibility: "visible"`, which places it as a normal Run and Debug subpanel alongside Variables, Watch, Call Stack, and Breakpoints. The extension can activate through the view, through Z80 debug resolution, through a workspace containing `debug80.json`, or through supported assembly language activation events.
 
 This chapter covers the provider class: what state it holds, how the webview is created and destroyed, the complete message catalogue in both directions, how message routing is structured, and how the provider wires together the debug adapter, the workspace, and the UI.
 
@@ -32,7 +32,14 @@ Colour is driven by default `editor.tokenColorCustomizations` in `package.json`.
 
 `registerLanguageAssociations()` in `src/extension/language-association.ts` is a safety net for opened documents. Once VS Code knows the contributed languages, it assigns `.asm`, `.z80`, and `.asmi` documents to `z80-asm` for `file` and `untitled` documents. That keeps decorations and breakpoints aligned with the contributed language ids even when a file was opened before associations settled.
 
-The language-server design note in the source repository is still a future direction. The current implementation provides TextMate highlighting and file association, not LSP diagnostics, completion, hover, or semantic tokens.
+The language-server design note in the source repository is still a future direction. The current implementation is not an LSP, but it does provide several editor services from the last built D8 source map:
+
+- **Go to Definition / F12** via `registerD8DefinitionProvider()` in `src/extension/d8-definition-provider.ts`.
+- **Workspace Symbols** via `registerD8WorkspaceSymbolProvider()`, scoped to the active target's D8 map.
+- **Hover** via `registerD8HoverProvider()`, showing compact symbol kind/address/value/size/source information and any nearby AZMDoc register-care contract.
+- **Source-map freshness hints**, warning the user to build when source files appear newer than the active target's D8 map.
+
+These providers deliberately use the active build artifact as the source of truth. If no D8 map exists, the feature reports that the target needs to be built rather than attempting to parse the workspace live.
 
 ---
 
@@ -160,16 +167,13 @@ This is the method that actually populates the panel. It runs on every platform 
 
 ```
 1. Set webview.html to platform HTML (destroys old webview)
-2. Post projectStatus (workspace roots, targets, selected target, active platform)
+2. Post projectStatus (workspace roots, targets, selected target, active platform, AZM options, source-map status, CoolTerm status)
 3. Post sessionStatus (running/paused/not running)
 4. Post full update snapshot (hardware state for TEC-1/TEC-1G; empty for Simple)
-5. For TEC-1G: post compatibility `uiVisibility` state if older panel state/config requires it
-6. Post serialInit (full buffered serial/terminal text, if any)
-7. Post selectTab (active tab)
-8. Sync memory refresh (start polling if on memory tab)
+5. Post serialInit (full buffered serial/terminal text, if any)
+6. Post selectTab (active tab)
+7. Sync memory refresh (start polling if on memory tab)
 ```
-
-`mergeAndPostTec1gPanelVisibility()` remains as compatibility plumbing for older TEC-1G visibility state. The current TEC-1G panel keeps the main hardware sections visible and uses accordions for layout, so this message flow should not be treated as the primary user-facing panel model.
 
 When no debug session is active, the provider still renders a platform webview so the project header and setup card remain interactive. The selected platform identity comes from the remembered workspace/project state rather than from an active runtime.
 
@@ -183,8 +187,7 @@ Inbound messages from the webview are typed as `PlatformViewInboundMessage` — 
 
 `handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
 
-- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing additional pickers. `setStopOnEntry` is handled inline by the provider — it updates `this.stopOnEntry` and refreshes the `projectStatus` payload.
-- `saveTec1gPanelVisibility` (TEC-1G) is a legacy compatibility message for older section-toggle UI. When received, it updates `workspaceState` under `debug80.tec1g.uiVisibilityByTarget` and does not require an active `z80` session.
+- Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`, `sendHexViaCoolTerm`) are forwarded to the corresponding callback, which invokes a VS Code command or host-side action. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing additional pickers. `setStopOnEntry` and `setAzmOptions` are handled inline by the provider — they update session-scoped provider fields and refresh the `projectStatus` payload.
 - Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
 - `serialClear` calls `clearSerialBuffer` for the current platform.
 - Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
@@ -197,6 +200,19 @@ This function contains no provider state — it is a pure routing layer, which m
 
 - `handlePlatformSerialSendFile()` opens a file picker, reads the file, and sends each character individually as a `debug80/tec1SerialInput` or `debug80/tec1gSerialInput` custom request (2 ms between characters, 10 ms between lines, CR appended at each line end). A cancellable progress notification shows during the transfer.
 - `handlePlatformSerialSave()` opens a save dialog and writes the buffered serial text to a file. If the contents look like Intel HEX (all lines start with `:`), the default filter offers `.hex`.
+
+### CoolTerm hardware send
+
+Debug80 also has a host-side hardware send path through CoolTerm. The command `debug80.sendHexViaCoolTerm` is registered in `src/extension/commands.ts` and implemented by `src/extension/coolterm/`.
+
+This is not the same as emulated serial input. It sends the selected target's built HEX file to a real board by controlling a running CoolTerm instance over its Remote Control Socket:
+
+1. `resolveCoolTermHexArtifact()` reads the current `debug80.json`, selected target, `outputDir`, `artifactBase` and any explicit `hex` path to locate the HEX file.
+2. `CoolTermRemoteClient` opens a TCP socket to `127.0.0.1:51413`.
+3. `sendHexViaCoolTerm()` pings CoolTerm, opens the serial port, sends the HEX file with CoolTerm's `SEND_TEXTFILE` command, then polls output until the board replies `PASSED` or `FAILED`.
+4. Status is reported through VS Code notifications and the Debug80 project/status area.
+
+The user must configure CoolTerm with the correct serial port and enable its Remote Control Socket. Debug80 intentionally delegates native serial-port ownership to CoolTerm here, avoiding bundled native serial dependencies in the VSIX.
 
 ### Platform module dispatch
 
@@ -214,12 +230,11 @@ All messages are posted via `postMessage()`. The webview handles them in `window
 | `serial` | `text: string` | Incremental serial/terminal data |
 | `serialInit` | `text: string` | Full serial/terminal buffer on rehydration |
 | `serialClear` | — | Clear the serial/terminal display |
-| `projectStatus` | `roots[]`, `targets[]`, `rootName?`, `rootPath?`, `projectState?`, `hasProject?`, `targetName?`, `entrySource?`, `platform?`, `stopOnEntry?` | Workspace or project state changes |
+| `projectStatus` | `roots[]`, `targets[]`, project fields, AZM option fields, CoolTerm fields, source-map status fields | Workspace, project, target, hardware-send or source-map state changes |
 | `sessionStatus` | `status: 'starting' \| 'running' \| 'paused' \| 'not running'` | Debug session state changes |
 | `selectTab` | `tab: 'ui' \| 'memory'` | Tab should be selected |
 | `snapshot` | Register and memory dump | Memory inspector refresh completes |
 | `snapshotError` | `message?: string` | Memory snapshot request failed |
-| `uiVisibility` | `visibility: Record<string, boolean>`, `persist: boolean` | Legacy TEC-1G section visibility payload; retained for older state/config compatibility |
 
 The TEC-1G `update` message carries additional fields not present in TEC-1:
 
@@ -270,11 +285,12 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 | `saveProjectConfig` | `platform: string` | Write `projectPlatform` + per-target `platform` to `debug80.json`, then restart debug. This is now effectively a legacy path because the platform selector is hidden once a project is initialized. |
 | `selectTarget` | `rootPath`, `targetName` | Execute target selection |
 | `restartDebug` | — | Execute restart debug command |
+| `setAzmOptions` | `registerCareMode`, `contractUpdateMode` | Update session-scoped AZM options shown in the Project panel |
+| `sendHexViaCoolTerm` | optional `rootPath`, `targetName` | Send the selected target's HEX artifact to a real board through CoolTerm |
 | `setEntrySource` | — | Execute set entry source command |
 | `serialSendFile` | — | File picker → character-by-character send (TEC-1/TEC-1G) |
 | `serialSave` | `text` | Save dialog → write file |
 | `serialClear` | — | Clear serial/terminal buffer |
-| `saveTec1gPanelVisibility` | `visibility`, optional `targetName` | Legacy TEC-1G section-toggle persistence message |
 | `key` | `code: number` | Platform adapter → adapter custom request |
 | `reset` | — | Platform adapter → adapter custom request |
 | `speed` | `mode` | Platform adapter → adapter custom request |
@@ -315,8 +331,8 @@ All adapter requests go through `session.customRequest()` on the current `vscode
 The types shared between the extension host and webview are defined in `src/contracts/platform-view.ts`:
 
 - **`PlatformId`** — `'simple' | 'tec1' | 'tec1g'`; the canonical platform identifier used throughout the extension and webview.
-- **`ProjectStatusPayload`** — the shape of the `projectStatus` message body. The key field is `projectState?: 'noWorkspace' | 'uninitialized' | 'initialized'`, which drives control visibility in the webview. Other fields: `roots[]`, `targets[]`, `rootName`, `rootPath`, `hasProject` (legacy compat), `targetName`, `entrySource`, `platform`, and `stopOnEntry` (the current global stop-on-entry toggle value).
-- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `restartDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `setStopOnEntry`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`, `saveTec1gPanelVisibility`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message carries an optional `platform?: string` field that, when present, selects the default kit for that platform without showing pickers. The `setStopOnEntry` message carries `{ stopOnEntry: boolean }` and updates the provider's global toggle. The `saveTec1gPanelVisibility` message is retained for older TEC-1G section-toggle state.
+- **`ProjectStatusPayload`** — the shape of the `projectStatus` message body. The key field is `projectState?: 'noWorkspace' | 'uninitialized' | 'initialized'`, which drives control visibility in the webview. Other fields include workspace roots, targets, selected target, entry source, platform, `stopOnEntry`, AZM option fields, CoolTerm availability / inferred HEX path / hardware status text, and source-map status text/state.
+- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial/hardware-send control messages (`startDebug`, `restartDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `setStopOnEntry`, `setAzmOptions`, `selectTarget`, `sendHexViaCoolTerm`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message carries an optional `platform?: string` field that, when present, selects the default kit for that platform without showing pickers. The `setStopOnEntry` message carries `{ stopOnEntry: boolean }` and updates the provider's global toggle. `setAzmOptions` updates session-scoped AZM restart options.
 - **`PlatformViewInboundMessage`** — the full union of all messages the extension host can receive: `PlatformViewControlMessage | Tec1Message | Tec1gMessage | { type?: string; [key: string]: unknown }`.
 
 This file is the authoritative definition of the message boundary. Platform-view-messages.ts imports `PlatformViewInboundMessage` directly from it.
@@ -494,7 +510,7 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - The provider holds two parallel maps: `platformStates` (hardware state, serial buffer, tab) and `loadedModules` (behaviour — HTML generation, state serialization, message handling). Modules are loaded once at startup via `preloadAllPlatforms()` and cached permanently. `PlatformUiModules` in `platform-view-manifest.ts` is the interface every platform UI must satisfy.
 
-- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `projectState`, `platform`, `stopOnEntry`), `PlatformViewControlMessage` (includes `setStopOnEntry`, `saveProjectConfig`, `createProject` with optional `platform?`, and legacy `saveTec1gPanelVisibility`), and `PlatformViewInboundMessage`.
+- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `projectState`, `platform`, `stopOnEntry`, AZM option fields, CoolTerm status and source-map status), `PlatformViewControlMessage` (includes `setStopOnEntry`, `setAzmOptions`, `sendHexViaCoolTerm`, `saveProjectConfig`, and `createProject` with optional `platform?`), and `PlatformViewInboundMessage`.
 
 - `registerExtensionPlatform()` in `platform-extension-model.ts` is the unified API for registering both the runtime and UI concerns of a platform in a single call.
 

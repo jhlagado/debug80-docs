@@ -43,13 +43,13 @@ npm run package:check
 The generated file is written to the repository root, for example:
 
 ```text
-debug80-0.0.1.vsix
+debug80-<version>.vsix
 ```
 
 Install it into normal VS Code with:
 
 ```bash
-code --install-extension debug80-0.0.1.vsix --force
+code --install-extension debug80-<version>.vsix --force
 ```
 
 Restart VS Code after installation, then open a real Debug80 project workspace.
@@ -64,10 +64,15 @@ Before calling a VSIX candidate releasable, test:
 - an initialized project auto-starts;
 - TEC-1G MON3 launch works;
 - AZM target assembly works and produces a native source map;
+- source-map editor features work from the built D8 map: F12, hover, workspace symbols, Variables and Watches;
+- conditional breakpoints evaluate against registers, flags, symbols and memory reads;
 - restart works;
 - breakpoints work in included source files;
+- Call Stack shows mapped stack-return candidates and `Run to Here` works on a caller frame;
 - register editing works while paused;
 - memory editing works for RAM and ROM protection behavior is clear;
+- TEC-1G Displays and Machine accordions render GLCD, RGB matrix, LCD, seven-segment and keypad without needing visibility checkboxes;
+- CoolTerm hardware send can locate the selected target HEX and report a missing CoolTerm socket clearly;
 - audio starts muted and unmutes only after user interaction.
 
 ---

@@ -17,7 +17,7 @@ This chapter covers the webview's internal architecture: the common infrastructu
 
 ## Common infrastructure
 
-Most cross-platform UI lives under `webview/common/`. TEC-1 and TEC-1G share **serial** wiring (`common/serial-ui.ts`), **Web Audio** speaker plumbing (`common/audio-core.ts` + thin `tec1/audio.ts` / `tec1g/tec1g-audio.ts` wrappers), the **8×8 monochrome matrix** paint path (`common/matrix-renderer.ts`; TEC-1G keeps a separate `matrix-ui.ts` for RGB, brightness, and the matrix keyboard), **seven-segment digits** (`common/seven-seg-display.ts`), and **hex keycap keypads** (`common/tec-keypad.ts` + `common/tec-keypad-layout.ts`, wrapped by `tec1g/tec1g-keypad.ts` for SysCtrl LEDs). Shared **keypad focus and shift-latch** behaviour is centralised in `common/keypad-core.ts`. Layout tokens for matrix dot size, gaps, and padding are defined once in `common/styles.css` (TEC-1G adds RGB- and platform-specific overrides). All three platform panels still share the older small utilities below.
+Most cross-platform UI lives under `webview/common/`. TEC-1 and TEC-1G share **serial** wiring (`common/serial-ui.ts`), **Web Audio** speaker plumbing (`common/audio-core.ts` + thin `tec1/audio.ts` / `tec1g/tec1g-audio.ts` wrappers), the **8×8 monochrome matrix** paint path (`common/matrix-renderer.ts`; TEC-1G keeps a separate `matrix-ui.ts` for RGB, brightness, and the matrix keyboard), **seven-segment digits** (`common/seven-seg-display.ts`), **accordion layout** (`common/accordion-layout.ts`), **AZM option controls** (`common/azm-options-control.ts`), and **hex keycap keypads** (`common/tec-keypad.ts` + `common/tec-keypad-layout.ts`, wrapped by `tec1g/tec1g-keypad.ts` for SysCtrl LEDs). Shared **keypad focus and shift-latch** behaviour is centralised in `common/keypad-core.ts`. Layout tokens for matrix dot size, gaps, and padding are defined once in `common/styles.css` (TEC-1G adds RGB- and platform-specific overrides). All three platform panels still share the older small utilities below.
 
 ### VS Code API bridge (`common/vscode.ts`)
 
@@ -58,9 +58,15 @@ The status values are:
 | `'running'` | "Restart" | Clickable |
 | `'paused'` | "Restart" | Clickable |
 
+### Accordion layout (`common/accordion-layout.ts`)
+
+`wireAccordionPanels()` gives the platform HTML a compact VS Code-like accordion shell. It sets ARIA state on each header button, toggles the associated panel body, and lets panels start open or collapsed from their HTML attributes. TEC-1G uses this to keep **Project**, **Displays**, **Machine**, **Matrix Keyboard**, and **Serial** stacked without the old show/hide checkbox row.
+
 ### Seven-segment display (`common/seven-seg-display.ts`)
 
 `createSevenSegDisplay(container, count)` creates the digit column by calling the internal `createDigit()` helper for each segment polygon. The bitmask table matches the TEC-1 hardware (bit 0 = top, bit 7 = bottom). Platform `index.ts` files hold a `display` object and call `display.applyDigits(values)` on each update — they no longer hand-roll per-digit DOM loops.
+
+The display also supports `applySegmentIntensities(values)`, where each digit receives eight normalized segment intensities. This is used by the scan-duty rendering path: the platform runtime reports how long each segment was driven during the latest scan window, and the webview maps that duty cycle to segment opacity. The goal is to model multiplexed LED brightness instead of freezing the last latched digit value.
 
 ### Serial I/O helpers (`common/serial.ts`)
 
@@ -70,7 +76,18 @@ The status values are:
 
 `createProjectStatusUi(vscode, elements, platform)` wires up the project header for a platform panel: it handles `projectStatus` messages, populates the Target dropdown, sets the Platform selector value, shows or hides controls via `applyInitializedProjectControls()`, and wires the Initialize button, target change handler, and stop-on-entry checkbox. This function consolidates the setup-card/target-dropdown/project-root wiring that was previously duplicated across `simple/index.ts`, `tec1/index.ts`, and `tec1g/tec1g-project-status-ui.ts`. All three platform panels now call `createProjectStatusUi()` from this shared module.
 
+The same helper also renders source-map and hardware-send status lines when the provider includes `sourceMapStatusText` or `hardwareStatusText` in `projectStatus`. The hardware send button posts `sendHexViaCoolTerm`; it is enabled only when CoolTerm is reachable and the selected target has an inferred HEX artifact.
+
 `webview/tec1g/tec1g-project-status-ui.ts` re-exports from `webview/common/project-status-ui.ts` for backward compatibility rather than containing the implementation itself.
+
+### AZM options control (`common/azm-options-control.ts`)
+
+`wireAzmOptionsControl()` wires the small AZM controls in the Project accordion. The visible UI intentionally exposes only coarse session preferences:
+
+- **Register Care**: `Enforce`, `Audit`, or `Off`
+- **Contract Updates**: `Ask`, `Auto`, or `Never`
+
+Changing either select posts `{ type: 'setAzmOptions', registerCareMode, contractUpdateMode }` to the extension host. The values are session-scoped provider state, not persistent project config. On restart, `debug-session-actions.ts` maps `Enforce` to AZM `registerCare: 'error'` with `emitRegisterReport: true`, maps `Audit` to `registerCare: 'audit'`, and maps `Off` to `registerCare: 'off'`.
 
 ### Create project helper (`common/create-project.ts`)
 
@@ -90,11 +107,17 @@ webview/
     digits.ts           Internal helpers for seven-seg-display
     matrix-renderer.ts  Monochrome 8×8 matrix paint (TEC-1; TEC-1G RGB is separate)
     memory-panel.ts
+    project-controls.ts
+    project-root-button.ts
+    project-state.ts
     project-status-ui.ts
     serial-ui.ts        wireSerialUi() — TEC-1 and TEC-1G serial terminal wiring
     serial.ts
     session-status.ts
+    setup-card-state.ts
     seven-seg-display.ts
+    stop-on-entry-control.ts
+    tec-keyboard-shortcuts.ts
     tec-keypad.ts       Keycap button builder + tec-keypad-layout.ts
     tec-keypad-layout.ts
     keypad-core.ts      tabIndex, container/key focus, shift latch for hex keypads
@@ -103,11 +126,11 @@ webview/
   simple/
     index.html, index.ts, styles.css
   tec1/
-    index.html, index.ts, panel-layout.ts, lcd-renderer.ts, audio.ts, styles.css
+    index.html, index.ts, lcd-renderer.ts, audio.ts, styles.css
   tec1g/
-    index.html, index.ts, entry-types.ts, tec1g-platform-update.ts, tec1g-tab-memory.ts
+    index.html, index.ts, entry-types.ts, tec1g-platform-update.ts
     tec1g-audio.ts, tec1g-keypad.ts, tec1g-memory-views.ts, matrix-ui.ts
-    visibility-controller.ts, glcd-renderer.ts, lcd-renderer.ts, hd44780-a00.ts
+    glcd-renderer.ts, lcd-renderer.ts, hd44780-a00.ts
     st7920-font.bin, styles.css
 ```
 
@@ -219,7 +242,7 @@ The setup card state is recalculated on every `projectStatus` message by `resolv
 
 ## Tab switching
 
-`createPanelLayoutController()` in `webview/tec1/panel-layout.ts` manages tab state for the TEC-1 panel. The TEC-1G equivalent is `createTec1gTabMemory()` in `webview/tec1g/tec1g-tab-memory.ts`.
+Tab and accordion state are now handled by common panel helpers. The platform entry points apply the selected provider tab, update active CSS state, and notify the extension host when the provider tab changes. TEC-1G uses its panel layout controller to coordinate provider tabs, accordion bodies, register refresh, and memory-panel sizing.
 
 `setTab(tab, notify)`:
 - Applies the `active` CSS class to the selected tab button.
@@ -302,11 +325,9 @@ The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root
 | `entry-types.ts` | Shared types: `IncomingMessage`, `Tec1gUpdatePayload`, `Tec1gPanelTab`, `Tec1gSpeedMode` |
 | `tec1g-platform-update.ts` | `applyTec1gPlatformUpdate()` — applies a hardware update payload to all display components |
 | `tec1g-project-status-ui.ts` | Re-exports `createProjectStatusUi` from `webview/common/project-status-ui.ts` |
-| `tec1g-tab-memory.ts` | `createTec1gTabMemory()` — tab switching, active-tab tracking, memory row sizing |
 | `tec1g-audio.ts` | `createTec1gAudio()` — wraps `common/audio-core.ts`, mute and UI |
 | `tec1g-keypad.ts` | `createTec1gKeypad()` — `common/tec-keypad` + `keypad-core` + status LEDs / SysCtrl |
 | `tec1g-memory-views.ts` | `createTec1gMemoryViews()` — memory view section factory |
-| `visibility-controller.ts` | Legacy section visibility helper retained for compatibility with older panel-state messages |
 | `matrix-ui.ts` | `createMatrixUiController()` — RGB LED matrix display and matrix keyboard input |
 | `glcd-renderer.ts` | `createGlcdRenderer()` — ST7920 128×64 GLCD canvas renderer |
 | `lcd-renderer.ts` | `createLcdRenderer()` — HD44780 20×4 text LCD canvas renderer with CGRAM |
@@ -319,7 +340,7 @@ The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root
 
 ### Visibility controller
 
-Earlier TEC-1G builds exposed checkboxes for showing and hiding individual peripheral sections. The current panel keeps the core hardware visible permanently and uses accordions to manage vertical space instead. The old visibility controller and `tec1g.uiVisibility` config shape remain as compatibility surfaces for older state/config messages, but they are no longer the main user-facing layout model.
+Earlier TEC-1G builds exposed checkboxes for showing and hiding individual peripheral sections. The current panel keeps the core hardware visible permanently and uses accordions to manage vertical space instead. The `tec1g.uiVisibility` config shape remains readable as legacy project data, but it is no longer the main user-facing layout model.
 
 ### RGB LED matrix (`matrix-ui.ts`)
 
@@ -413,17 +434,15 @@ The TEC-1 `index.ts` installs a single `window.addEventListener('message', handl
 window.addEventListener('message', (event: MessageEvent<IncomingMessage | undefined>): void => {
   const message = event.data;
   if (!message) return;
-  if (message.type === 'projectStatus') { visibilityController.setProjectTargetName(message.targetName); projectStatusUi.applyProjectStatus(message); return; }
+  if (message.type === 'projectStatus') { projectStatusUi.applyProjectStatus(message); azmOptionsControl.applyProjectStatus(...); return; }
   if (message.type === 'sessionStatus') { sessionStatusController.setStatus(message.status); return; }
-  if (message.type === 'selectTab')     { tabMemory.setTab(message.tab, false); return; }
-  if (message.type === 'uiVisibility')  { visibilityController.applyOverride(message.visibility, ...); return; }
+  if (message.type === 'selectTab')     { panelLayout.setProviderTab(message.tab, false); return; }
   if (message.type === 'update') {
     if (typeof message.uiRevision === 'number') {
       if (message.uiRevision < uiRevision) return;  // stale
       uiRevision = message.uiRevision;
     }
     applyUpdateFromPayload(message);
-    if (tabMemory.getActiveTab() === 'memory') memoryPanelController?.requestSnapshot();
     return;
   }
   if (message.type === 'snapshot')      { memoryPanelController?.handleSnapshot(message); return; }

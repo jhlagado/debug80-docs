@@ -11,6 +11,8 @@ nav_order: 1
 
 All custom DAP requests use the `customRequest` method on the VS Code debug session. The command string follows the pattern `debug80/{name}`. All requests return an empty body on success unless the response body column says otherwise. On error, the adapter calls `sendErrorResponse` with error ID `1` and a plain-English message string.
 
+This appendix covers adapter custom requests, not ordinary VS Code extension commands. Commands such as `debug80.sendHexViaCoolTerm`, `debug80.selectTarget`, and `debug80.runToSelectedStackFrame` are registered through VS Code's command system; some of them call these adapter requests internally, while others run entirely in the extension host.
+
 ---
 
 ## Core adapter commands

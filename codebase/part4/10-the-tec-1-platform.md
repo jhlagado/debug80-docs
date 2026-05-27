@@ -39,6 +39,7 @@ The ROM source is resolved at launch: `tec1Config.romHex` points to a custom ROM
 ```typescript
 interface Tec1State {
   digits: number[];           // Current 7-segment values for 6 digits
+  segmentDuty: SevenSegmentDutyState; // Per-segment scan-duty integration
   matrix: number[];           // LED matrix row values
   digitLatch: number;         // Port 0x01 write latch
   segmentLatch: number;       // Port 0x02 write latch
@@ -89,7 +90,7 @@ Ports 0x04, 0x05, 0x06, and 0x84 are extensions added to the TEC-1 hardware for 
 
 The TEC-1 has six seven-segment digits. The monitor firmware drives them by multiplexing — rapidly cycling through each digit, asserting its segment pattern for a few microseconds before moving to the next.
 
-The emulator captures this without attempting to simulate the phosphor persistence. Instead, it records each digit latch write and uses the latest value for display:
+The emulator now models the multiplexed display as a scan-duty signal. Earlier versions held the latest digit value as a persistence shortcut; current code records segment-on time across the scan window and lets the webview render segment intensity from duty cycle.
 
 **Port 0x01 write (digit latch):**
 Bits 0–5 each select one of the six digits. The currently written segment pattern (from port 0x02) is applied to each selected digit:
@@ -108,7 +109,7 @@ segmentLatch = value
 
 The segment byte encodes the seven segments and decimal point: bits 0–6 correspond to segments A–G, bit 7 is the decimal point. A 1 bit illuminates the segment.
 
-After any digit update, a UI refresh is queued via `queueUpdate()`. The update throttle (default 16ms / 60fps) prevents sending a DAP event on every single port write.
+After digit activity, a UI refresh is queued via `queueUpdate()`. The update throttle prevents sending a DAP event on every single port write, while the payload still carries enough intensity information for the webview to show relative brightness. If a program spends longer on one digit than the others, that digit should appear brighter rather than merely on/off.
 
 ---
 

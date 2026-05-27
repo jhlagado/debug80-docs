@@ -34,12 +34,14 @@ resources/
           bundle.json      Manifest (schema version, file list, workspace layout)
           mon-1b.bin       ROM binary image
           mon-1b.lst       Assembler listing (symbols and source map)
+          mon-1b.asm       ROM source
     tec1g/
       mon3/
         v1/
           bundle.json      Manifest (schema version, file list, workspace layout)
           mon3.bin         ROM binary image
           mon3.lst         Assembler listing (symbols and source map)
+          *.z80            ROM source modules
           README.md        Human-readable notes about the firmware version
 ```
 
@@ -68,7 +70,7 @@ interface BundleManifestV1 {
 }
 
 interface BundleFileEntry {
-  role: 'rom' | 'listing' | 'source_tree';
+  role: 'rom' | 'listing' | 'source' | 'source_tree';
   path: string;               // Path relative to the bundle root directory
   sha256?: string;            // Optional SHA-256 hex for integrity verification
 }
@@ -97,6 +99,11 @@ The MON3 v1 `bundle.json`:
       "role": "listing",
       "path": "mon3.lst",
       "sha256": "f6f5032cc16dceed7e921efe863371d8f2773465860bd518c9d998d83a5b67bb"
+    },
+    {
+      "role": "source",
+      "path": "mon3.z80",
+      "sha256": "cc23b4115834e5ba71fc1e78bc4defc4330df962bf4394bf502e65d3196e96cf"
     }
   ],
   "workspaceLayout": {
@@ -124,6 +131,11 @@ The MON-1B v1 `bundle.json`:
       "role": "listing",
       "path": "mon-1b.lst",
       "sha256": "76bd761d226911b5aa0f53b7f0a4253a40e2d68154146c1506bf07ae7380ad89"
+    },
+    {
+      "role": "source",
+      "path": "mon-1b.asm",
+      "sha256": "69ceca17b6ff853d3eefe9876c5ec813a085680533d4294c43781e64048ae49e"
     }
   ],
   "workspaceLayout": {
@@ -257,8 +269,8 @@ The manifest validator (`isBundleManifestV1`) checks `schemaVersion === 1`. Futu
 | `src/extension/project-scaffolding.ts` | `createDefaultProjectConfig()` writes `bundledAssets` into profile from kit metadata |
 | `src/extension/commands.ts` | Registers `debug80.materializeBundledRom` command (thin shell; logic delegated to `bundle-asset-installer.ts`) |
 | `src/extension/bundle-asset-installer.ts` | `buildBundledAssetFallbackPlans()` and bundled asset install plan logic for the explicit install command |
-| `resources/bundles/tec1/mon1b/v1/` | Shipped MON-1B bundle: `bundle.json`, `mon-1b.bin`, `mon-1b.lst` |
-| `resources/bundles/tec1g/mon3/v1/` | Shipped MON3 bundle: `bundle.json`, `mon3.bin`, `mon3.lst` |
+| `resources/bundles/tec1/mon1b/v1/` | Shipped MON-1B bundle: `bundle.json`, `mon-1b.bin`, `mon-1b.lst`, `mon-1b.asm` |
+| `resources/bundles/tec1g/mon3/v1/` | Shipped MON3 bundle: `bundle.json`, `mon3.bin`, `mon3.lst`, MON3 `.z80` source modules |
 | `tests/extension/bundle-materialize.test.ts` | Unit tests for `materializeBundledRom()` and checksum mismatch handling |
 
 ---

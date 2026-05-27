@@ -84,7 +84,7 @@ display: {
   ledMatrixRedRows: number[];       // Per-row red plane values
   ledMatrixGreenRows: number[];
   ledMatrixBlueRows: number[];
-  ledMatrixBrightnessR: number[];   // 64-entry per-pixel brightness 0–255
+  ledMatrixBrightnessR: number[];   // 64-entry per-pixel duty brightness 0–255
   ledMatrixBrightnessG: number[];
   ledMatrixBrightnessB: number[];
   matrixStagingR: number[];         // Accumulation buffers (64 entries)
@@ -178,7 +178,7 @@ The **status port (0x03)** is a read-only register:
 
 ## The seven-segment display
 
-The TEC-1G shares the same 7-segment display interface as the TEC-1 — ports 0x01 and 0x02, same bit encoding, same multiplexing scheme. The `updateDisplayDigits()` shared utility handles both. Display data appears in the `Tec1gUpdatePayload` alongside the RGB matrix and GLCD data.
+The TEC-1G shares the same 7-segment display interface as the TEC-1 — ports 0x01 and 0x02, same bit encoding, same multiplexing scheme. The current implementation records segment duty over the scan window and sends per-segment intensities to the webview, so uneven scan timing produces visibly uneven brightness. In the TEC-1G styling, the four address digits are rendered as red LEDs and the two data digits as green LEDs, matching the hardware front panel.
 
 ---
 
@@ -193,21 +193,21 @@ The TEC-1G has an 8×8 RGB LED matrix — 64 individually addressable LEDs, each
 
 ### Staging and commit
 
-Programs drive the matrix by rapidly cycling through rows (multiplexing). The emulator cannot snapshot a single write — it needs to accumulate the full frame across all eight row-writes before displaying a stable image.
+Programs drive the matrix by rapidly cycling through rows (multiplexing). The emulator does not treat a single write as a complete frame. It integrates row/colour drive time over emulated cycles and publishes duty-cycle brightness for each RGB pixel.
 
 When port 0x05 or any colour port is written:
 
-1. `accumulateMatrixStagingFromRows()` runs for each selected row.
-2. For each row bit set in the row latch, the current colour latches are converted to per-pixel values (0 or 255) and accumulated into the staging buffers (`matrixStagingR/G/B`).
-3. `matrixRowsVisitedMask` records which rows have been written. When the mask reaches 0xFF (all eight rows written), the staging buffers are committed to the brightness arrays (`ledMatrixBrightnessR/G/B`), the visit mask is reset, and a UI update is queued.
+1. `handleMatrixPortWrite()` records the current cycle and watches row-select writes.
+2. `accumulateMatrixDuty()` adds the elapsed active row/column drive time into per-channel duty buckets (`matrixDutyR/G/B`).
+3. `matrixRowsVisitedMask` records which rows have been written. When a full scan boundary is detected, `collectMatrixDutyBrightness()` converts duty to 0-255 brightness arrays (`ledMatrixBrightnessR/G/B`), resets the duty window, and queues a UI update.
 
-The brightness arrays contain the final frame — 64 values per channel, ready for the webview to render.
+The brightness arrays contain the integrated scan result — 64 values per channel, ready for the webview to render. The webview applies a small LED emission curve so duty-cycle values read visually like bright LEDs rather than a dim linear opacity plot.
 
 The hardware column bits are mirrored when staging is converted into visible pixels. `matrixDisplayIndex(row, hardwareColumn)` maps a hardware column to `row * 8 + (7 - hardwareColumn)`, so bit 0 appears on the right edge of the visible row and bit 7 appears on the left edge. This correction lives in `src/platforms/tec1g/runtime-matrix.ts`; the webview renders the already-oriented brightness arrays.
 
 ### Idle flush
 
-If a program updates fewer than eight rows (partial refresh), the staging never commits via the mask. An idle flush fires after `TEC1G_MATRIX_IDLE_FLUSH_MS` (40ms) with no new port writes. It commits whatever staging has accumulated, ensuring partial updates reach the display.
+If a program updates fewer than eight rows or stops in the middle of a scan, the duty window would otherwise never publish. An idle flush fires after `TEC1G_MATRIX_IDLE_FLUSH_MS` (40ms) with no new matrix port writes. It collects whatever duty has accumulated, ensuring partial updates reach the display.
 
 ---
 

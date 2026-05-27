@@ -251,11 +251,11 @@ The `acquireVsCodeApi()` bridge, session status controller, and project header r
 
 ## Extending the source mapper
 
-Most platforms can use the existing mapper without modification. If you are adding a platform that uses a different assembler or a non-standard listing format, you may need to extend the parser.
+Most platforms can use the existing mapper without modification. Current Debug80 projects should prefer an assembler that emits native D8 JSON. Parser work should be treated as a compatibility path for legacy listings or for importing monitor/ROM artifacts that cannot yet produce D8 directly.
 
 ### Adding a listing format variant
 
-`parseMapping()` in `src/mapping/parser.ts` recognises the asm80 listing format. If your assembler produces a different format, add a parallel parser function:
+`parseMapping()` in `src/mapping/parser.ts` recognises the legacy asm80-style listing format. If you must support another legacy listing format, add a parallel parser function:
 
 ```typescript
 export function parseMyassemblerListing(

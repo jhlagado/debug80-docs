@@ -459,7 +459,7 @@ When a source file is selected or changed, the system infers the assembler from 
 - `.asm`, `.z80`, and `.inc` → use AZM
 - An explicit `assembler: "asm80"` is accepted as a compatibility alias, but it is not the current backend.
 
-Target discovery is independent of a mandatory `src/` folder. Debug80 looks for entry points by convention: files ending in `.z80`, files whose basename starts with `_`, and files ending in `.main.asm`. This lets a workspace become a Debug80 project with minimal setup while still allowing source trees to organize code below the top-level folder.
+Target discovery is independent of a mandatory `src/` folder. Debug80 looks for entry points by convention: files ending in `.z80` and files ending in `.main.asm`. This lets a workspace become a Debug80 project with minimal setup while still allowing source trees to organize code below the top-level folder.
 
 ---
 

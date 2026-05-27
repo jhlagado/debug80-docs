@@ -22,11 +22,11 @@ All configuration lives in `debug80.json` (or the `debug80` key of `package.json
 | `sourceFile` | `string` | — | Alias for `asm` |
 | `assembler` | `string` | inferred | Assembler backend identifier. AZM is the current backend; `asm80` is accepted as a compatibility alias. |
 | `hex` | `string` | derived | Path to the output Intel HEX file; derived from `asm` if omitted |
-| `listing` | `string` | derived | Path to the listing file; derived from `asm` if omitted |
+| `listing` | `string` | derived | Legacy listing/source-map handle; AZM targets should use the native `.d8.json` map |
 | `outputDir` | `string` | asm dir | Directory for build artifacts |
 | `artifactBase` | `string` | asm filename | Base name for `.hex` / `.lst` files |
 | `entry` | `number` | platform default | CPU entry address; overrides the platform block's `entry` |
-| `stopOnEntry` | `boolean` | `false` | Pause at the entry point before executing |
+| `stopOnEntry` | `boolean` | `true` in raw launch schema; panel toggle defaults off | Pause at the entry point before executing |
 | `projectConfig` | `string` | — | Explicit path to `debug80.json` or `package.json` |
 | `target` | `string` | — | Named build target (for multi-target projects) |
 | `assemble` | `boolean` | `true` | Run the assembler before starting the session |
@@ -34,6 +34,21 @@ All configuration lives in `debug80.json` (or the `debug80` key of `package.json
 | `stepOverMaxInstructions` | `number` | `0` | Instruction limit for step-over; `0` = unlimited |
 | `stepOutMaxInstructions` | `number` | `0` | Instruction limit for step-out; `0` = unlimited |
 | `diagnostics` | `boolean` | `false` | Emit verbose diagnostic messages to the debug console |
+| `azm` | `object` | — | AZM-specific compile options; see below |
+
+### AZM options
+
+Debug80's current assembler backend is AZM. Most users should rely on defaults, but launch config may pass a small `azm` object through to the linked compile API:
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `registerCare` | `'off' \| 'audit' \| 'warn' \| 'error' \| 'strict'` | `'off'` | AZM register-care mode |
+| `emitRegisterReport` | `boolean` | `false` | Write a `.regcare.txt` report artifact when register-care analysis runs |
+| `emitRegisterInterface` | `boolean` | `false` | Write an inferred `.asmi` interface artifact |
+| `registerCareProfile` | `'mon3'` | — | Built-in AZM register-care profile |
+| `registerCareInterfaces` | `string[]` | `[]` | External `.asmi` contract files to load |
+
+The TEC-1G Project accordion exposes simpler session-scoped controls: **Register Care** (`Enforce`, `Audit`, `Off`) and **Contract Updates** (`Ask`, `Auto`, `Never`). Those controls are not persisted directly into `debug80.json`; the extension maps them into launch-time `azm` options when the user restarts debugging.
 
 ---
 

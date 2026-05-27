@@ -56,7 +56,7 @@ The tables below list all flat fields on `SessionStateShape`, grouped by the dom
 | `mappingIndex` | `SourceMapIndex \| undefined` | Indexed source map used for all address↔location queries |
 | `symbolAnchors` | `SourceMapAnchor[]` | File-tracking anchors from the source map |
 | `symbolList` | `Array<{ name: string; address: number }>` | Flat address-symbol table used for nearest-symbol lookups and compatibility display |
-| `sourceMapSymbols` | `SourceMapSymbol[]` | Active D8-backed symbols and constants used by editor features, Variables, Watches and conditional breakpoints |
+| `sourceMapSymbols` | `SourceMapDebugSymbol[]` | Active D8-backed symbols and constants used by editor features, Variables, Watches and conditional breakpoints |
 | `sourceRoots` | `string[]` | Directories searched when resolving source file paths from listing |
 | `extraListingPaths` | `string[]` | Paths of additional listings loaded alongside the main one |
 
