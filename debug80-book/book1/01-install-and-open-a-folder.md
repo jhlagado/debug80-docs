@@ -48,31 +48,21 @@ At this point Debug80 can still help you start. The panel can add a folder to th
 
 Treat the panel as the home position for Debug80 work. VS Code has its own Run and Debug controls, but Debug80 adds the project and hardware context that a normal language debugger does not know about.
 
-## Add A Folder To The Workspace
+## Add Project Folders To The Workspace
 
 Debug80 works from folders in the VS Code workspace. A folder can hold source files, build output and the Debug80 project file that describes how to build and run the program.
 
-Add a folder with **File > Add Folder to Workspace**. If VS Code has no folder open yet, **File > Open Folder** is also fine. The important step is that the folder appears in the VS Code workspace.
+Add a project folder with **File > Add Folder to Workspace**. Choose the folder that should own the Z80 project. If your source files live in `/projects/blink`, add `blink`, not the parent `projects` folder.
 
 Debug80 sees each workspace folder as a possible project. At first, the folder may be uninitialized. That means Debug80 can see the folder, but the folder does not yet contain Debug80 configuration.
 
 A Debug80 project is just a folder with Debug80 initialization files. When you initialize the folder, Debug80 writes those files into the folder. After that, the folder becomes a first-class Debug80 project and appears in the Project selector as a project you can build, debug and send to hardware.
 
-> **Image placeholder:** Debug80 panel with one uninitialized folder selected in the Project row.
-
-## Choose The Project Folder
-
-Add the folder that should own the Z80 project. If your source files live in `/projects/blink`, add `blink`, not the parent `projects` folder.
-
-This matters because Debug80 stores project configuration inside the project folder. If you add the parent folder, Debug80 may show the parent as the selectable project, while the files you care about sit one level lower.
-
 For a new project, create an empty folder with a name you can recognize in the Debug80 panel. For an existing project, add the folder that already contains `debug80.json` or `.vscode/debug80.json`.
 
-## Add Another Folder
+Debug80 can work on multiple projects in the same workspace. To add another project, use **File > Add Folder to Workspace** again. Debug80 will see the added folder and show it in the Project selector.
 
-Debug80 can work on multiple projects in the same workspace.
-
-To add another project folder, choose **File > Add Folder to Workspace**. Debug80 will see the added folder and show it in the Project selector.
+> **Image placeholder:** Debug80 panel with one uninitialized folder selected in the Project row.
 
 ## Project Files
 
