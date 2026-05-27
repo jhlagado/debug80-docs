@@ -146,8 +146,6 @@ If the project is missing, check the Project selector in the Debug80 panel. Make
 
 If F5 starts the wrong target, check the **Target** selector in the Project section. You can also run **Debug80: Select Active Target**. If the project still starts another target, inspect `defaultTarget` in `debug80.json` and any VS Code launch configuration that names a target explicitly.
 
-If the source opens in the wrong editor column or the panel opens where you do not expect it, check `sourceColumn` and `panelColumn` in your launch configuration. Appendix B lists those options.
-
 If the build fails, read the first assembler diagnostic. Later messages often follow from the first failure. Check that the active target points at the source file you meant to assemble, then check include paths, included files and the output folder.
 
 Debug80 uses AZM for the current assembly workflow. Source written for another assembler may need syntax changes before AZM can assemble it.

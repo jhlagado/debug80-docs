@@ -102,29 +102,6 @@ A target is a named runnable program:
 
 `sourceFile` is the file AZM assembles. `outputDir` receives generated artifacts. `artifactBase` becomes the file name base for files such as `.hex`, `.lst` and source-map output.
 
-For small CPU-only programs, a Simple target can keep the platform setup minimal:
-
-```json
-"targets": {
-  "app": {
-    "sourceFile": "src/main.asm",
-    "outputDir": "build",
-    "artifactBase": "main",
-    "platform": "simple",
-    "simple": {
-      "regions": [
-        { "start": 0, "end": 2047, "kind": "rom" },
-        { "start": 2048, "end": 65535, "kind": "ram" }
-      ],
-      "appStart": 2304,
-      "entry": 0
-    }
-  }
-}
-```
-
-Use a Simple target when the program needs Z80 execution, memory, registers and basic I/O without a TEC monitor profile.
-
 ## TEC-1G Platform Block
 
 Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM listing paths. Book 1 relies on the generated values.
@@ -138,9 +115,3 @@ The important user-level facts are:
 ## AZM Options
 
 Debug80 uses AZM for the current assembly workflow. Targets may carry an `azm` object for register-care options and related launch behaviour. Leave generated options alone until you are deliberately configuring register-care.
-
-## Step Limits
-
-`stepOverMaxInstructions` and `stepOutMaxInstructions` can limit how many Z80 instructions Debug80 executes while trying to complete a Step Over or Step Out request.
-
-The default value is `0`, which means no cap. Set a positive value only when you need a guardrail for code that may not return in the way the debugger expects.
