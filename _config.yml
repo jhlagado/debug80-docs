@@ -1,7 +1,7 @@
 title: Debug80 Docs
 description: Technical documentation for the Debug80 Z80 debugger extension and the AZM assembler
-baseurl: "/debug80-docs"
-url: "https://jhlagado.github.io"
+baseurl: ""
+url: "https://debug80.com"
 
 theme: just-the-docs
 
