@@ -74,6 +74,10 @@ The Project section line that reports whether the active target's source map is 
 
 A named runnable program inside a Debug80 project.
 
+## Watch Expression
+
+A VS Code Watch expression evaluated by Debug80 while execution is paused. Debug80 Watch expressions can read Z80 registers, flags, source-map symbols and memory bytes.
+
 ## Workspace Folder
 
 A folder opened in the current VS Code window.

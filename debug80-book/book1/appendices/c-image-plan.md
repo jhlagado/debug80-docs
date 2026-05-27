@@ -41,6 +41,7 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | Image | Type | Chapter |
 |---|---|---|
 | Variables view with Symbols and Constants | Screenshot | Chapter 4 |
+| Watch panel with Z80 expressions | Screenshot | Chapter 4 |
 | Call Stack view with symbolic current frame | Screenshot | Chapter 4 |
 | Debug80 Registers section | Screenshot | Chapter 4 |
 | Memory section at `0x4000` | Screenshot | Chapter 4 |

@@ -20,6 +20,43 @@ These scopes use the source map from the last successful build. If symbols are m
 
 > **Image placeholder:** VS Code Variables view showing Symbols and Constants during a paused Debug80 session.
 
+## Watch Expressions
+
+Open the **Watch** panel while execution is paused. Debug80 evaluates Z80-focused Watch expressions against the current CPU state, memory and source-map symbols.
+
+Start with registers and flags:
+
+```asm
+A
+HL
+PC
+zero
+not carry
+```
+
+Register names read the current Z80 register value. Flag names use the same spelled-out style as AZM register-care contracts, so `carry` means the carry flag and `C` means the C register.
+
+Watches can also use symbols from the active source map:
+
+```asm
+PACMO_LIVES
+PC eq MainLoop
+```
+
+A symbol by itself evaluates to its address or constant value. If a symbol watch is missing or stale, build the active target again.
+
+Square brackets read one byte from memory at the address inside the brackets:
+
+```asm
+[HL]
+[PACMO_LIVES]
+[IX + 4]
+```
+
+Use Watches when you want a small set of facts to stay visible while stepping. Appendix G lists the supported registers, flags and operators.
+
+> **Image placeholder:** VS Code Watch panel showing Debug80 expressions such as `A`, `zero`, `[HL]` and `PC eq MainLoop`.
+
 ## Call Stack Naming
 
 Open the **Call Stack** view while the program is paused. Debug80 names the current Z80 execution frame from the nearest known symbol in the source map.
@@ -128,6 +165,7 @@ Use the screenshots in this chapter to confirm the current labels in your instal
 You are ready for the full panel tour when you can:
 
 - find source-map-backed Symbols and Constants in the Variables panel
+- add a Watch expression for a register, flag, symbol or memory byte
 - read the symbolic current location in the Call Stack view
 - open the Debug80 Registers section
 - inspect memory around PC
