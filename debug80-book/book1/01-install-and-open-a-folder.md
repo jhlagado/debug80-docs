@@ -70,9 +70,9 @@ For a new project, create an empty folder with a name you can recognize in the D
 
 ## Add Another Folder
 
-The `+` button beside the Project selector adds another folder to the workspace. Use it when you keep several Z80 projects open together.
+Debug80 can work on multiple projects in the same workspace.
 
-When several folders are in the workspace, choose the folder in the Debug80 Project selector before you build, debug or send a program to hardware. The active editor is not the project selector. A source file can be open from one folder while Debug80 is still pointed at another folder.
+To add another project folder, choose **File > Add Folder to Workspace**. Debug80 will see the added folder and show it in the Project selector.
 
 ## Project Files
 
