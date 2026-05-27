@@ -86,7 +86,7 @@ The Z80 starts with PC at `$0000` after a reset. Some instructions are one byte 
 
 Before going further, here is a concrete picture of what all this looks like. The following is a complete Z80 program — ten bytes of raw instructions starting at address `$0000`:
 
-```
+```asm
 $0000:  3E 05        ; load 5 into register A
 $0002:  47           ; copy A into register B
 $0003:  3E 03        ; load 3 into register A

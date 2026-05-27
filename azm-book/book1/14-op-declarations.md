@@ -227,7 +227,7 @@ end
 
 The listing at an invocation `jr_if_not_above C, .skip` shows:
 
-```
+```asm
   00: B9        cp c
   01: 38 06     jr c, .skip
   03: 28 04     jr z, .skip

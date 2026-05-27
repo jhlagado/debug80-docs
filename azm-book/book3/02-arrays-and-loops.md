@@ -110,10 +110,7 @@ for i from 1 to length-1:
 
 The inner loop moves HL along the table. If you only keep HL, you lose the base address. **DE holds the base** for the whole routine; HL is recomputed from DE and the current index.
 
-Length arrives in B but inner loops reuse B. Store it in workspace:
-
-```asm
-Place scratch bytes after the table in the same `.org $8000` block (AZM cannot place a later `org` below an earlier data segment):
+Length arrives in B but inner loops reuse B. Store it in workspace. Place scratch bytes after the table in the same `.org $8000` block (AZM cannot place a later `org` below an earlier data segment):
 
 ```asm
 found_index:
