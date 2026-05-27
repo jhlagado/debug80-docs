@@ -9,11 +9,13 @@ nav_order: 2
 
 # Chapter 15 — Parsing and Lookup
 
-This chapter follows the current source-mapping path from listing text or D8 JSON to breakpoint and stack-frame lookup.
+This chapter follows the current source-mapping path from native D8 JSON, with the older listing path described as compatibility support, to breakpoint, editor-navigation, Watch, Variables and stack-frame lookup.
 
 ---
 
 ## Parsing a Listing
+
+Listing parsing is no longer the normal active-project path. AZM emits a native `.d8.json` map, and Debug80 should use that map directly whenever it exists. The listing parser remains in the codebase for legacy artifacts, extra listings and ROM-related source mapping.
 
 `parseMapping()` in `src/mapping/parser.ts` reads an asm80-style listing. It collects two records:
 
@@ -152,9 +154,11 @@ Both functions return an array of addresses. A source line can map to more than 
 
 ## Stack Frames and Breakpoints
 
-Breakpoint handling calls source-to-address lookup during `setBreakpoints`. Addresses returned by `resolveExecutableLocation()` are registered with the breakpoint manager. If no executable address is found, VS Code receives an unverified breakpoint.
+Breakpoint handling calls source-to-address lookup during `setBreakpoints`. Addresses returned by `resolveExecutableLocation()` are registered with the breakpoint manager. If the VS Code breakpoint has a condition, the condition string is stored against the resolved address and evaluated later by the runtime loop. If no executable address is found, VS Code receives an unverified breakpoint.
 
-Stack-frame resolution calls `findSegmentForAddress()` for the program counter. If a mapped file and line are available, VS Code can open and highlight that location. If mapping is missing, the stack display falls back to the raw address.
+Stack-frame resolution calls `findSegmentForAddress()` for the program counter. If a mapped file and line are available, VS Code can open and highlight that location. Debug80 also reads up to eight words from the current `SP` and treats mapped words as best-effort return-address frames. If mapping is missing, the stack display falls back to the raw address or marks stack words as likely data.
+
+Editor features also consume this map. F12 / Go to Definition, hover details, workspace symbol search, the Variables panel, Watch expressions and conditional breakpoint expressions all use symbols from the active D8 map. If the map is missing or stale, user-facing messages should say "source map" or "build the target" rather than exposing the internal D8 name.
 
 ---
 
@@ -178,8 +182,8 @@ Extra listings, such as monitor ROM listings, are loaded through the same mappin
 - The listing parser reads address rows and symbol-table `DEFINED AT LINE` anchors.
 - Address ranges are exclusive at `end`; zero-width rows can provide context but not executable breakpoints.
 - Layer 2 matches listing text against source and repairs common include mis-attribution.
-- D8 maps use the current `d8-debug-map` schema and can be native or Debug80-generated.
-- Native D8 maps win over listing-derived caches.
+- D8 maps use the current `d8-debug-map` schema and can be native or Debug80-generated, but native AZM maps are the expected active-project path.
+- Native D8 maps win over listing-derived caches and feed editor navigation, hover, workspace symbols, Variables, Watches and conditional breakpoints.
 - Address lookup prefers valid source lines and narrow spans.
 - Breakpoint lookup uses executable-only source-to-address resolution.
 

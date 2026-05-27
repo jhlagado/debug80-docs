@@ -17,7 +17,7 @@ Once the launch pipeline finishes and the session state is populated, the debug 
 
 The main execution function is `runUntilStopAsync()` in `src/debug/session/runtime-control.ts`. It runs the Z80 emulator one instruction at a time until one of five conditions stops it:
 
-1. A breakpoint is hit.
+1. A breakpoint whose condition passes is hit.
 2. A pause is requested.
 3. An extra breakpoint (step target) is reached.
 4. A `halt` instruction executes.
@@ -38,7 +38,7 @@ while (true) {
     captureEntryCpuStateIfNeeded(context);
     if (context.getPauseRequested()) { ... stop ... }
     if (skipBreakpointOnce === pc) { skip, step }
-    if (context.isBreakpointAddress(pc)) { ... stop ... }
+    if (context.isBreakpointAddress(pc)) { ... maybe stop ... }
     if (extraBreakpoints?.has(pc)) { ... stop ... }
     const result = runtime.step({ trace });
     applyStepInfo(context, trace);
@@ -155,16 +155,19 @@ The baseline depth is captured at the moment Step Out is requested. When `callDe
 
 Both execution functions also check for breakpoints and pause requests during Step Out — the user can interrupt a long step-out with Pause or hit a breakpoint along the way.
 
+The Call Stack context menu also exposes **Run to Here** for mapped stack-return frames. This is implemented as a temporary run target, not as a stack mutation: Debug80 reads the selected return address from memory, verifies that it maps to source, and runs until the PC reaches that address unless another stop condition fires first.
+
 ---
 
 ## Breakpoints
 
 ### Storage
 
-`BreakpointManager` in `src/debug/mapping/breakpoint-manager.ts` maintains two data structures:
+`BreakpointManager` in `src/debug/mapping/breakpoint-manager.ts` maintains three data structures:
 
 - **`pendingBySource`** — a `Map<string, SourceBreakpoint[]>` keyed by source file path. This holds what the user has set, before verification against the source map.
 - **`active`** — a `Set<number>` of verified Z80 addresses. This is what the execution loop checks.
+- **`conditions`** — a `Map<number, string>` of non-empty conditional breakpoint expressions keyed by verified Z80 address.
 
 The two-tier structure lets breakpoints persist across multiple sessions. When the user sets a breakpoint before launching, it goes into `pendingBySource`. After launch, the source maps are available and `applyAll()` can verify it.
 
@@ -189,7 +192,21 @@ private resolveAlternateSourcePath(sourcePath: string): string | undefined {
 }
 ```
 
-After verification, `rebuild()` populates the `active` address set from all verified breakpoints. This set is what the execution loop checks — one `Set.has()` call per instruction per iteration.
+After verification, `rebuild()` populates the `active` address set from all verified breakpoints and records any non-empty condition strings. The execution loop asks the runtime-control context whether the current PC should stop; the adapter checks the active set, applies any TEC-1G shadow alias, then evaluates the condition if one is present.
+
+### Conditional breakpoints
+
+Debug80 advertises `supportsConditionalBreakpoints` during initialization, so VS Code shows its normal conditional breakpoint UI. Conditions use the same expression evaluator as the Watch panel:
+
+```text
+[PACMO_LIVES] eq 0
+zero and A eq $20
+([FLAGS] & $80) ne 0
+```
+
+The evaluator receives the current runtime and active D8 source-map symbols. Zero is false; any non-zero value is true. If the expression is false, `shouldStopAtBreakpoint()` returns false and execution continues past the address. If the expression is true, Debug80 stops with the normal breakpoint reason.
+
+Expression failures are deliberately treated as breakpoint hits. Debug80 writes the failure to the Debug Console and stops rather than silently running through a breakpoint the user expected to catch. This is safer during source-map staleness, typo and missing-symbol cases.
 
 ### Breakpoint skip logic
 
@@ -233,6 +250,8 @@ function isBreakpointAddress(address, options) {
 ```
 
 `getShadowAlias()` maps 0x0000–0x7FFF to 0x8000–0xFFFF (when shadow is enabled), and maps 0x8000–0xFFFF back to 0x0000–0x7FFF. This is computed by `(TEC1G_SHADOW_START + address) & ADDR_MASK`.
+
+Conditional breakpoint matching uses the same alias logic, but it must also identify which resolved address matched so it can load the correct condition string from the breakpoint manager.
 
 ---
 
@@ -408,7 +427,7 @@ The snapshot is taken exactly once — the first time the PC reaches the applica
 
 ## Summary
 
-- The execution loop (`runUntilStopAsync`) runs the Z80 in chunks of 1000 instructions, yielding between chunks. It stops on breakpoints, pause requests, extra breakpoints (step targets), halts, and instruction limits.
+- The execution loop (`runUntilStopAsync`) runs the Z80 in chunks of 1000 instructions, yielding between chunks. It stops on breakpoints whose conditions pass, pause requests, extra breakpoints (step targets), halts, and instruction limits.
 
 - Platform throttling applies cycle-accurate timing on TEC-1 and TEC-1G platforms, sleeping between chunks to match the configured clock speed.
 
@@ -416,18 +435,18 @@ The snapshot is taken exactly once — the first time the PC reaches the applica
 
 - `RuntimeControlContext` is a set of accessor functions over `SessionStateShape`. The execution functions receive it instead of the full session, keeping their dependencies minimal.
 
-- `BreakpointManager` maintains pending breakpoints by source file and active breakpoints by address. Verification resolves source lines to Z80 addresses through the listing file or source map. Shadow aliasing on TEC-1G ensures breakpoints fire at both the primary and aliased addresses.
+- `BreakpointManager` maintains pending breakpoints by source file, active breakpoints by address, and conditional expressions by resolved address. Verification resolves source lines to Z80 addresses through the listing file or source map. Shadow aliasing on TEC-1G ensures breakpoints fire at both the primary and aliased addresses.
 
 - The breakpoint-skip mechanism prevents a stopped-at-breakpoint Continue from immediately re-hitting the same address. The skip is consumed after exactly one step.
 
 - Step Over uses the runtime's trace output to detect taken calls, then runs to the return address as an extra breakpoint. Step Into uses opcode decoding to distinguish calls to mapped user code (step into) from calls to unmapped ROM (step over).
 
-- Step Out runs `runUntilReturnAsync()`, which stops when a `ret` instruction brings the call depth below the baseline.
+- Step Out runs `runUntilReturnAsync()`, which stops when a `ret` instruction brings the call depth below the baseline. The Call Stack `Run to Here` action uses a selected mapped stack-return frame as a temporary run target without rewriting `SP`, `PC`, or memory.
 - The Z80 runtime can complete a single **ED** block-repeat instruction in one step (not **DJNZ**), so the debugger does not appear “stuck” on the same source line while BC runs down.
 
-- The Variables pane is populated from the CPU state. Register pairs are assembled from 8-bit components; flags are shown as both a packed byte and a character string. Registers can be edited in-line.
+- The Variables pane is populated from active D8 source-map symbols and constants. Registers are handled by Debug80's dedicated Registers panel rather than duplicating them in Variables.
 
-- Stack trace resolution tries three paths: source map segment lookup, shadow alias lookup, and listing fallback. Diagnostics mode logs each resolution step to the Debug Console.
+- Stack trace resolution tries source map segment lookup, shadow alias lookup, and symbolic stack-return candidates read from `SP`. Diagnostics mode logs each resolution step to the Debug Console.
 
 - Memory and register write requests are validated for runtime existence and session-paused state before modifying CPU or memory. Memory writes use the hardware `memWrite` hook, which enforces ROM protection on platforms that define it.
 

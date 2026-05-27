@@ -38,7 +38,7 @@ Adapter  ←  continueResponse()
 Adapter  ←  StoppedEvent('breakpoint', threadId=1)
 ```
 
-DAP defines a standard set of requests: `initialize`, `launch`, `setBreakpoints`, `configurationDone`, `threads`, `continue`, `next` (step over), `stepIn`, `stepOut`, `pause`, `stackTrace`, `scopes`, `variables`, `setVariable`, `disconnect`. Debug80 implements all of these. It also defines custom requests outside the standard protocol, all prefixed with `debug80/` — these handle hardware-specific operations like memory snapshots and register writes.
+DAP defines a standard set of requests: `initialize`, `launch`, `setBreakpoints`, `configurationDone`, `threads`, `continue`, `next` (step over), `stepIn`, `stepOut`, `pause`, `gotoTargets`, `goto`, `stackTrace`, `scopes`, `variables`, `evaluate`, `setVariable`, `disconnect`. Debug80 implements these. It also defines custom requests outside the standard protocol, all prefixed with `debug80/` — these handle hardware-specific operations like memory snapshots, register writes, warm rebuilds and stack-return run targets.
 
 One important DAP concept: **threads**. DAP models concurrent execution as multiple threads, each with an ID. The Z80 is single-threaded, so debug80 always reports exactly one thread with ID 1. Every `StoppedEvent`, every `stackTraceRequest`, every stepping command uses this constant thread ID.
 
@@ -57,7 +57,7 @@ class Z80DebugSession extends DebugSession {
   private breakpointManager = new BreakpointManager();
   private sourceState = new SourceStateManager();
   private sessionState: SessionStateShape = createSessionState();
-  private variableHandles = new Handles<'registers'>();
+  private variableHandles = new Handles<string>();
   private variableService = new VariableService(this.variableHandles);
   private matrixHeldKeys = new Map<string, MatrixKeyCombo[]>();
   private commandRouter = new CommandRouter();
@@ -76,7 +76,7 @@ Each of these has a specific job:
 | `sourceState` | Tracks the main source file path and manages ROM source discovery. |
 | `sessionState` | All per-session mutable state: the Z80 runtime, source maps, platform runtimes, run state flags. The central data structure of every debug session. |
 | `variableHandles` | VS Code's handle registry for variable references. Maps integer handles to scope identifiers. |
-| `variableService` | Resolves variable requests into register and flag values. |
+| `variableService` | Resolves VS Code Variables scopes into source-map symbols and constants. Register display/editing now lives primarily in the Debug80 Registers panel. |
 | `matrixHeldKeys` | Tracks which matrix keyboard keys are currently held down (TEC-1G). |
 | `commandRouter` | Routes custom DAP requests (like `debug80/memoryWrite`) to their handlers. |
 | `platformRegistry` | Routes platform-specific custom requests registered by the active platform provider. |
@@ -105,7 +105,9 @@ protected stackTraceRequest(response, args) {
 }
 ```
 
-This pattern repeats for `setBreakPointsRequest`, `configurationDoneRequest`, `threadsRequest`, `stepInRequest`, `stepOutRequest`, `pauseRequest`, `scopesRequest`, `variablesRequest`, `setVariableRequest`, and `disconnectRequest`. The only method with real logic in the session class is `handleLaunchRequest`, which orchestrates the full launch pipeline (covered in Chapter 4).
+This pattern repeats for `setBreakPointsRequest`, `configurationDoneRequest`, `threadsRequest`, `stepInRequest`, `stepOutRequest`, `pauseRequest`, `gotoTargetsRequest`, `gotoRequest`, `scopesRequest`, `variablesRequest`, `evaluateRequest`, `setVariableRequest`, and `disconnectRequest`. The only method with real logic in the session class is `handleLaunchRequest`, which orchestrates the full launch pipeline (covered in Chapter 4).
+
+During `initializeRequest`, Debug80 advertises the capabilities VS Code needs for the current debugger UI: configuration-done sequencing, single-thread execution, set-variable support, Run to Cursor (`gotoTargets` / `goto`), Watch / hover evaluation, and conditional breakpoints.
 
 ### The adapter factory
 
@@ -165,6 +167,8 @@ For inspection requests (`stackTrace`, `variables`, `scopes`, `threads`), the wo
 
 This split is important. DAP requires the response to be sent before the program stops — the response says "I have started executing," and a `StoppedEvent` later says "I have stopped." If the adapter waited for the Z80 to hit a breakpoint before sending the response, VS Code's UI would freeze.
 
+`evaluateRequest` is an inspection request used by the VS Code Watch panel and hover evaluation. Debug80 evaluates the expression against the paused Z80 runtime plus active D8 source-map symbols. The same evaluator is reused by conditional breakpoints, so Watches and breakpoint conditions have one shared syntax.
+
 ### Custom request routing
 
 Custom requests arrive through `customRequest()`. The controller checks two routing layers:
@@ -208,6 +212,7 @@ interface SessionStateShape {
   mappingIndex: SourceMapIndex | undefined;
   symbolAnchors: SourceMapAnchor[];
   symbolList: Array<{ name: string; address: number }>;
+  sourceMapSymbols: SourceMapDebugSymbol[];
   sourceRoots: string[];
   baseDir: string;
 
@@ -237,7 +242,7 @@ The fields group into five categories:
 
 **The Z80 emulator.** The `runtime` field is the Z80Runtime instance — the CPU, memory, and I/O handlers. When `runtime` is `undefined`, no program is loaded and execution requests return errors.
 
-**Source mapping.** The `listing`, `mappingIndex`, and related fields map between source file lines and memory addresses. The breakpoint manager and stack trace builder both read these to resolve locations. Chapter 12 covers source mapping in detail.
+**Source mapping.** The `listing`, `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceMapSymbols` and related fields map between source file lines, symbols and memory addresses. The breakpoint manager, stack trace builder, editor navigation, Variables panel, Watch evaluator and conditional breakpoint evaluator all read these structures. Part VI covers source mapping in detail.
 
 **Platform runtimes.** The `tec1Runtime` and `tec1gRuntime` fields hold the platform-specific hardware emulation state. The `platformRuntime` field is a protocol-level alias — it points to whichever platform runtime is active and provides `recordCycles()` and `silenceSpeaker()` methods that the execution loop calls.
 
