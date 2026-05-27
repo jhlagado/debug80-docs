@@ -23,6 +23,10 @@ search:
 
 heading_anchors: true
 
+kramdown:
+  syntax_highlighter_opts:
+    disable: true
+
 aux_links:
   "debug80 on GitHub":
     - "https://github.com/jhlagado/debug80"
