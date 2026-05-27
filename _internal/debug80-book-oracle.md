@@ -89,6 +89,8 @@ Use these expected teaching homes unless the chapter plan changes deliberately:
 | Breakpoints and stepping | First debug session chapter |
 | Registers and memory | Debugging inspection chapter |
 | Debug80 accordion panel | Panel chapter |
+| Source-map status | Panel chapter |
+| Source-map-backed editor features | Artifacts chapter |
 | ROM assets and monitor source | ROM chapter |
 | `.hex`, `.lst` and source map | Artifacts chapter |
 | CoolTerm | Hardware transfer chapter |

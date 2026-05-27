@@ -1,5 +1,5 @@
-title: debug80 Docs
-description: Technical documentation for the debug80 Z80 debugger extension and the AZM assembler
+title: Debug80 Docs
+description: Technical documentation for the Debug80 Z80 debugger extension and the AZM assembler
 baseurl: "/debug80-docs"
 url: "https://jhlagado.github.io"
 
@@ -32,7 +32,7 @@ nav_sort: order   # use nav_order frontmatter
 
 color_scheme: debug80
 
-footer_content: 'debug80 &amp; AZM documentation &mdash; <a href="https://github.com/jhlagado/debug80">debug80</a>'
+footer_content: 'Debug80 &amp; AZM documentation'
 
 back_to_top: true
 back_to_top_text: "Back to top"
