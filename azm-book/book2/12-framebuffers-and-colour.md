@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 12 — Framebuffers and Colour"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 13
 ---
 [← The 8x8 RGB Add-On](11-rgb-display.md) | [Book 2](index.md) | [A Cooperative Runtime →](13-cooperative-runtime.md)

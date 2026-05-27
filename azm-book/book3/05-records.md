@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 5 — Records"
 parent: "AZM Book 3 — Algorithms and Data Structures"
-grand_parent: "AZM Books"
 nav_order: 6
 ---
 [← Bit Patterns](04-bit-patterns.md) | [Book 3](index.md) | [Recursion →](06-recursion.md)

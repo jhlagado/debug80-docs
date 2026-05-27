@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 10 — One-Bit Sound"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 11
 ---
 [← Direct Seven-Segment Scanning](09-direct-seven-segment.md) | [Book 2](index.md) | [The 8x8 RGB Add-On →](11-rgb-display.md)

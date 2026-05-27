@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Understanding the AZM Codebase"
-nav_order: 4
+title: "AZM Engineering Manual"
+nav_order: 91
 has_children: true
 ---
 # AZM Engineering Manual
@@ -9,8 +9,7 @@ has_children: true
 This book is a technical reference for engineers working on the AZM assembler.
 It explains the repository structure, the compile pipeline, the public APIs, the
 source parser, the assembly model, the Z80 encoder, register-care analysis,
-artifact writing and the verification lanes that keep the implementation
-stable.
+artifact writing and the verification lanes that support the implementation.
 
 This manual is updated against the AZM codebase state through **2026-05-27**.
 Use it as the map when planning changes. Use the TypeScript source and tests as
@@ -23,35 +22,14 @@ one step on that path or expose the path to the CLI, Debug80 or tests.
 
 ---
 
-## Part I - Orientation
+## Chapters
 
-- [Chapter 1 - What Is AZM?](part1/01-what-is-azm.md)
-- [Chapter 2 - Repository Layout](part1/02-repository-layout.md)
-
-## Part II - Loading and Parsing
-
-- [Chapter 3 - Source Loading and Logical Lines](part2/03-source-loading.md)
-- [Chapter 4 - Parsing Source Items](part2/04-parsing-source-items.md)
-
-## Part III - Assembly
-
-- [Chapter 5 - Assembler-Time Facts](part3/05-assembler-time-facts.md)
-- [Chapter 6 - Emission, Fixups and Z80 Encoding](part3/06-emission-fixups-z80.md)
-
-## Part IV - Language Extensions
-
-- [Chapter 7 - Ops and Visible Expansion](part4/07-ops-expansion.md)
-- [Chapter 8 - Register Care](part4/08-register-care.md)
-
-## Part V - Interfaces and Outputs
-
-- [Chapter 9 - CLI and Public APIs](part5/09-cli-and-public-apis.md)
-- [Chapter 10 - Output Artifacts](part5/10-output-artifacts.md)
-
-## Part VI - Verification and Maintenance
-
-- [Chapter 11 - Tests, Fixtures and Guardrails](part6/11-tests-fixtures-guardrails.md)
-- [Chapter 12 - Maintaining the Codebase](part6/12-maintaining-the-codebase.md)
+- [Chapter 1 - Orientation and Repository Layout](01-orientation-and-repository-layout.md)
+- [Chapter 2 - Source Loading and Parsing](02-source-loading-and-parsing.md)
+- [Chapter 3 - Assembly and Z80 Emission](03-assembly-and-z80-emission.md)
+- [Chapter 4 - Ops and Register Care](04-ops-and-register-care.md)
+- [Chapter 5 - Interfaces and Output Artifacts](05-interfaces-and-output-artifacts.md)
+- [Chapter 6 - Verification and Maintenance](06-verification-and-maintenance.md)
 
 ## Appendices
 

@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 6 — Counting Loops and DJNZ"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 6
 ---
 [← Flags, Comparisons, Jumps](05-flags-comparisons-jumps.md) | [Book 1](index.md) | [Data Tables and Indexed Access →](07-data-tables-and-indexed-access.md)

@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 15 — Tetro Case Study"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 16
 ---
 [← Shared Game Architecture](14-shared-game-architecture.md) | [Book 2](index.md) | [Pacmo Case Study →](16-pacmo-case-study.md)

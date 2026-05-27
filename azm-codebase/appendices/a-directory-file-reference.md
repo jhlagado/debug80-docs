@@ -2,10 +2,10 @@
 layout: default
 title: "Appendix A - Directory and File Reference"
 parent: "Appendices"
-grand_parent: "Understanding the AZM Codebase"
+grand_parent: "AZM Engineering Manual"
 nav_order: 1
 ---
-[<- Maintaining the Codebase](../part6/12-maintaining-the-codebase.md) | [Appendix B ->](b-compile-flow-reference.md)
+[<- Verification and Maintenance](../06-verification-and-maintenance.md) | [Appendix B ->](b-compile-flow-reference.md)
 
 # Appendix A - Directory and File Reference
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Part IV — Platform Runtimes"
-parent: "Understanding the debug80 Codebase"
+parent: "Debug80 Engineering Manual"
 nav_order: 4
 has_children: true
 ---

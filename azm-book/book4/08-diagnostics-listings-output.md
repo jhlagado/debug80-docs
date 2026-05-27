@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 8 — Diagnostics and Output"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 8
 ---
 [← Op Declarations and Aliases](07-ops-aliases.md) | [Manual](index.md) | [Appendix A — Directive Reference →](appendix-a-directives.md)

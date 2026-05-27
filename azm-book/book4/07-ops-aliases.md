@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 7 — Op Declarations and Aliases"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 7
 ---
 [← Register Care and Contracts](06-register-care.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)

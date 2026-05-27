@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 2 — Machine Code"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 2
 ---
 [← The Computer](01-the-computer.md) | [Book 1](index.md) | [Assembly Language →](03-assembly-language.md)

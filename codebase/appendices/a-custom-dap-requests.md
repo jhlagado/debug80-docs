@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix A — Custom DAP Request Reference"
 parent: "Appendices"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 1
 ---
 [Appendices](README.md)

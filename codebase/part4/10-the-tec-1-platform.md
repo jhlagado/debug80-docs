@@ -2,14 +2,14 @@
 layout: default
 title: "Chapter 10 — The TEC-1 Platform"
 parent: "Part IV — Platform Runtimes"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
 [← The Simple Platform](09-the-simple-platform.md) | [Part IV](README.md) | [The TEC-1G Platform →](11-the-tec-1g-platform.md)
 
 # Chapter 10 — The TEC-1 Platform
 
-The TEC-1 is a single-board Z80 computer designed in Australia in 1983. It has a six-digit seven-segment display, a 23-key hexadecimal keypad, a single-bit speaker, a small RAM expansion, and a bitbang serial port. The TEC-1 platform in debug80 simulates all of this hardware in sufficient detail to run TEC-1 programs at timing-accurate speed.
+The TEC-1 is a single-board Z80 computer designed in Australia in 1983. It has a six-digit seven-segment display, a 23-key hexadecimal keypad, a single-bit speaker, a small RAM expansion, and a bitbang serial port. The TEC-1 platform in Debug80 simulates all of this hardware in sufficient detail to run TEC-1 programs at timing-accurate speed.
 
 The platform lives in `src/platforms/tec1/`.
 

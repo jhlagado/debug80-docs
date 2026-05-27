@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 17 — Custom Commands, UI Panels, and Source Mapping"
 parent: "Part VII — Extending the Codebase"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
 [← Adding a New Platform](16-adding-a-new-platform.md) | [Part VII](README.md)

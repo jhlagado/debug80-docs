@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 8 — Scanning and Persistence of Vision"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 9
 ---
 [← Six-Digit Display](07-seven-segment-numbers.md) | [Book 2](index.md) | [Direct Seven-Segment Scanning →](09-direct-seven-segment.md)

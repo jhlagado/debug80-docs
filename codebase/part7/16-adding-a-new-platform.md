@@ -2,14 +2,14 @@
 layout: default
 title: "Chapter 16 — Adding a New Platform"
 parent: "Part VII — Extending the Codebase"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 1
 ---
 [Part VII](README.md) | [Custom Commands, UI Panels, and Source Mapping →](17-custom-commands-ui-and-mapping.md)
 
 # Chapter 16 — Adding a New Platform
 
-A platform in debug80 is a self-contained module that provides memory layout, I/O port handlers, optional hardware emulation, and the custom DAP commands the webview uses to drive it. This chapter walks through the full process of adding one.
+A platform in Debug80 is a self-contained module that provides memory layout, I/O port handlers, optional hardware emulation, and the custom DAP commands the webview uses to drive it. This chapter walks through the full process of adding one.
 
 The guide uses a placeholder name `myplatform` throughout. Replace it with your platform's actual identifier.
 

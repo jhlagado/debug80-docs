@@ -2,14 +2,14 @@
 layout: default
 title: "Chapter 11 — The TEC-1G Platform"
 parent: "Part IV — Platform Runtimes"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 3
 ---
 [← The TEC-1 Platform](10-the-tec-1-platform.md) | [Part IV](README.md)
 
 # Chapter 11 — The TEC-1G Platform
 
-The TEC-1G is an expanded successor to the TEC-1 with a much richer hardware set: an RGB LED matrix, a 128×64 graphics LCD (GLCD), a 4-row×20-column text LCD, a full matrix keyboard, memory banking with shadow RAM, a real-time clock, and an SD card interface. The TEC-1G platform in debug80 emulates all of these with sufficient fidelity to run the MON-3 monitor and user programs unmodified.
+The TEC-1G is an expanded successor to the TEC-1 with a much richer hardware set: an RGB LED matrix, a 128×64 graphics LCD (GLCD), a 4-row×20-column text LCD, a full matrix keyboard, memory banking with shadow RAM, a real-time clock, and an SD card interface. The TEC-1G platform in Debug80 emulates all of these with sufficient fidelity to run the MON-3 monitor and user programs unmodified.
 
 The platform lives in `src/platforms/tec1g/`.
 

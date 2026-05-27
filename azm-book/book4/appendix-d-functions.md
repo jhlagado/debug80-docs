@@ -2,7 +2,6 @@
 layout: default
 title: "Appendix D — Built-in Functions"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 104
 ---
 [← Appendix C — CLI Flag Reference](appendix-c-cli.md) | [Manual](index.md)

@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 7 — Instruction Decoding"
 parent: "Part III — The Z80 Emulator"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
 [← The Z80 Runtime](06-the-z80-runtime.md) | [Part III](README.md) | [Memory, I/O, and Interrupts →](08-memory-io-interrupts.md)

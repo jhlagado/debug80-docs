@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 4 — Memory Access and Data"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 4
 ---
 [← Assembly Language](03-assembly-language.md) | [Book 1](index.md) | [Flags, Comparisons, Jumps →](05-flags-comparisons-jumps.md)

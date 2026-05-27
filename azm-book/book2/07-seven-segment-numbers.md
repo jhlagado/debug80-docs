@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 7 — Numbers on the Six-Digit Display"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 8
 ---
 [← Text on the LCD](06-lcd-output.md) | [Book 2](index.md) | [Scanning and Persistence →](08-scanning-persistence.md)

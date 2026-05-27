@@ -2,7 +2,6 @@
 layout: default
 title: "Introduction"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 1
 ---
 [Book 2](index.md) | [The TEC-1G Reborn →](01-tec1g-reborn.md)

@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 4 — The Launch Pipeline"
 parent: "Part II — The Debug Adapter"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
 [← DAP and the Debug Session](03-dap-and-the-debug-session.md) | [Part II](README.md) | [Execution Control →](05-execution-control.md)

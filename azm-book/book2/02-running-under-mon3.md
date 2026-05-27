@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 2 — Running Under MON-3"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 3
 ---
 [← The TEC-1G Reborn](01-tec1g-reborn.md) | [Book 2](index.md) | [Debug80 Workflow →](03-debug80-workflow.md)

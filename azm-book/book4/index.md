@@ -1,8 +1,7 @@
 ---
 layout: default
 title: "AZM Book 4 — Assembler Manual"
-parent: "AZM Books"
-nav_order: 5
+nav_order: 7
 has_children: true
 ---
 # AZM Book 4 — Assembler Manual

@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 3 — Addresses, Constants and Expressions"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 3
 ---
 [← Source Syntax and Symbols](02-source-syntax.md) | [Manual](index.md) | [Raw Data, Storage and Strings →](04-data-storage-includes.md)

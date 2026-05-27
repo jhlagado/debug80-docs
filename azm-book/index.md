@@ -3,6 +3,7 @@ layout: default
 title: "AZM Books"
 nav_order: 6
 has_children: true
+nav_exclude: true
 ---
 # AZM Books
 

@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix B — Platform Configuration Reference"
 parent: "Appendices"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
 [Appendices](README.md)

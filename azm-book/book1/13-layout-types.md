@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 13 — Layout Types"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 13
 ---
 [← Register Contracts](12-register-contracts-azmdoc.md) | [Book 1](index.md) | [Op Declarations →](14-op-declarations.md)

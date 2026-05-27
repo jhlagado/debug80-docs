@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 6 — Recursion"
 parent: "AZM Book 3 — Algorithms and Data Structures"
-grand_parent: "AZM Books"
 nav_order: 7
 ---
 [← Records](05-records.md) | [Book 3](index.md) | [Composition →](07-composition.md)

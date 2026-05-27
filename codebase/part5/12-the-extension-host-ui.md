@@ -2,14 +2,14 @@
 layout: default
 title: "Chapter 12 — The Extension Host UI"
 parent: "Part V — The Extension UI"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 1
 ---
 [Part V](README.md) | [The Webview Panels →](13-the-webview-panels.md)
 
 # Chapter 12 — The Extension Host UI
 
-The debug80 sidebar panel is a VS Code `WebviewView` embedded in the built-in **Run & Debug** container (`"views": { "debug": [...] }` in `package.json`). It runs in a separate JavaScript context from the extension host and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
+The Debug80 sidebar panel is a VS Code `WebviewView` embedded in the built-in **Run & Debug** container (`"views": { "debug": [...] }` in `package.json`). It runs in a separate JavaScript context from the extension host and communicates with it entirely through message passing. The extension host side of this boundary is managed by `PlatformViewProvider` in `src/extension/platform-view-provider.ts`.
 
 The view is registered under `"views": { "debug": [...] }` in `package.json`, which places it as a collapsible subpanel alongside Variables, Watch, Call Stack, and Breakpoints. The extension activates as soon as the user expands the panel, via the `"onView:debug80.platformView"` activation event.
 

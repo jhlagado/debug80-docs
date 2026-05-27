@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix C - Public Surface Reference"
 parent: "Appendices"
-grand_parent: "Understanding the AZM Codebase"
+grand_parent: "AZM Engineering Manual"
 nav_order: 3
 ---
 [<- Appendix B](b-compile-flow-reference.md)

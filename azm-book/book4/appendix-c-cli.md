@@ -2,7 +2,6 @@
 layout: default
 title: "Appendix C — CLI Flag Reference"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 103
 ---
 [← Appendix B — Expression Operators](appendix-b-operators.md) | [Manual](index.md) | [Appendix D — Built-in Functions →](appendix-d-functions.md)

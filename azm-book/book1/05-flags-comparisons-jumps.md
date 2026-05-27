@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 5 — Flags, Comparisons and Jumps"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 5
 ---
 [← Memory Access and Data](04-memory-access-and-data.md) | [Book 1](index.md) | [Counting Loops and DJNZ →](06-counting-loops-and-djnz.md)

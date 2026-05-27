@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 9 — Direct Seven-Segment Scanning"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 10
 ---
 [← Scanning and Persistence](08-scanning-persistence.md) | [Book 2](index.md) | [One-Bit Sound →](10-one-bit-sound.md)

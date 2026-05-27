@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 8 — Stack and Subroutines"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 8
 ---
 [← Data Tables and Indexed Access](07-data-tables-and-indexed-access.md) | [Book 1](index.md) | [I/O and Ports →](09-io-and-ports.md)

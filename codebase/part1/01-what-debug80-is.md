@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Chapter 1 — What debug80 Is"
+title: "Chapter 1 — Debug80 Architecture"
 parent: "Part I — Orientation"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 1
 ---
 [Part I](README.md) | [The Project Configuration System →](02-project-configuration.md)
 
-# Chapter 1 — What Debug80 Is and How It Fits Together
+# Chapter 1 — Debug80 Architecture
 
 Debug80 is a VS Code extension that lets you debug Z80 assembly programs. You write Z80 source, assemble it, and step through it instruction by instruction — inspecting registers, memory, flags, and the I/O peripherals of emulated hardware — all inside VS Code's standard debugging interface.
 
@@ -17,7 +17,7 @@ This chapter maps the territory.
 
 ---
 
-## The problem debug80 solves
+## The problem Debug80 solves
 
 Z80 programs run on hardware that most developers do not have on their desk. Even when the hardware is available, instrumenting it for debugging — setting breakpoints, inspecting registers, single-stepping — requires specialised equipment. An emulator removes that barrier: the CPU executes in software, so the debugger has full visibility into every cycle.
 
@@ -45,7 +45,7 @@ Key files in this layer:
 
 ### The debug adapter
 
-The debug adapter speaks the Debug Adapter Protocol (DAP). VS Code sends it requests — "launch this program," "set a breakpoint at line 12," "what are the current register values?" — and it sends back responses and events. In debug80, the adapter runs in-process (not as a separate executable), but it operates as a logically separate component with its own state.
+The debug adapter speaks the Debug Adapter Protocol (DAP). VS Code sends it requests — "launch this program," "set a breakpoint at line 12," "what are the current register values?" — and it sends back responses and events. In Debug80, the adapter runs in-process (not as a separate executable), but it operates as a logically separate component with its own state.
 
 The adapter is where the Z80 emulator lives. When VS Code says "continue," the adapter runs the Z80 CPU in a loop until it hits a breakpoint or halts. When VS Code says "give me the variables," the adapter reads the emulated CPU's register file and formats the values.
 
@@ -239,7 +239,7 @@ This runs two steps: the TypeScript compiler (`tsc`) for the extension and adapt
 
 ### Running
 
-Open the debug80 project in VS Code and press F5 to launch an Extension Development Host — a second VS Code window running the extension from the compiled output. Open a workspace with a debug80 project (e.g., `debug80-tec1g-mon3`) and the extension activates.
+Open the Debug80 project in VS Code and press F5 to launch an Extension Development Host — a second VS Code window running the extension from the compiled output. Open a workspace with a Debug80 project (e.g., `debug80-tec1g-mon3`) and the extension activates.
 
 ### Testing
 

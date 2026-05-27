@@ -1,40 +1,18 @@
 ---
 layout: default
-title: "Understanding the debug80 Codebase"
-nav_order: 3
+title: "Debug80 Engineering Manual"
+nav_order: 90
 has_children: true
 ---
-# debug80 Engineering Manual
+# Debug80 Engineering Manual
 
-A technical reference for engineers working with the debug80 codebase.
+A technical reference for engineers working with the Debug80 codebase.
 
-This manual is updated against the codebase state through **2026-05-10**. The most important **recent** shifts are:
-
-- **Editor grammar:** Debug80 now owns TextMate syntax highlighting for Z80 assembly sources. `package.json` contributes `z80-asm` and `z80-lst` grammars, default file associations for `.asm`, `.z80`, `.a80`, and `.s`, and token colour customisations for comments, labels, directives, instructions, registers, conditions, strings, symbols, numbers, and routine-comment annotations.
-- **Assembler integration:** asm80 is linked directly into the extension host instead of being treated primarily as an external executable. The launch pipeline still writes the normal `.hex` / `.lst` / `.bin` artifacts, but backend invocation now happens through JavaScript APIs where available, reducing process-spawn and path-resolution fragility.
-- **Runtime performance:** `createZ80Runtime()` now keeps stable decoder callbacks whose implementations read the current hardware hooks dynamically. This preserves decoder-cache reuse even when a platform finalizes `memRead` / `memWrite` after runtime creation. Runtime-control also has starvation instrumentation so long chunks and yield delays can be observed during extension-host debugging.
-- **Webview audio:** speaker mute state is session-local. New webviews start muted because browsers and VS Code webviews require a real user gesture before reliable audio playback; the unmuted state is not persisted across reloads or extension restarts.
-- **Scaffold:** new projects can merge a standard **Debug80** `.gitignore` block (extension cache, `outputDir`, optional `.vscode/launch.json`, OS junk) via `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts`, invoked from `scaffoldProject()`.
-- **TEC-1G panel UI:** section checkboxes (7-seg, LCD, GLCD, 8×8, etc.) **persist** — merge order is built-in defaults → `debug80.json` `tec1g.uiVisibility` (from the active launch) → **workspace** `Memento` keyed by **debug target** (`debug80.tec1g.uiVisibilityByTarget`). The webview posts `saveTec1gPanelVisibility` when checkboxes change; the extension no longer re-broadcasts a stale launch-only override on every HTML rehydration in a way that clobbered user choices.
-- **Mapping / MON-style includes:** Layer2 **include-anchor remapping** and **propagation of mis-attributed include segments** fix stepping and stack frames when asm80 attributes bytes to the parent file but the real code lives in a sibling include (e.g. `glcd_library.z80`); the same remap runs on **native `.d8.json`** maps (not only listing-derived mapping).
-- **Z80 / debugger:** a single **Step** over the **ED** block-repeat instructions (LDIR, LDDR, CPIR, CPDR, INIR, INDR, OTIR, OTDR) runs the instruction to completion in one user-visible step; **DJNZ** is *not* treated as a block-repeat bulk op.
-- **ST7920 / GLCD and matrix display:** the emulator keeps a full **4-bit** GLCD column counter and derives the **upper/lower 64×64 chip bank** from it so routines such as `clearGrLCD` that rely on X auto-increment can clear the full 128×64 surface in one pass. The TEC-1G 8×8 RGB matrix now mirrors hardware column bits into left-to-right visible columns, so bit 0 appears at the right edge and bit 7 appears at the left edge in the displayed frame.
-- **Webview (TEC-1 + TEC-1G):** shared **common/** modules (serial UI, Web Audio core, matrix renderer, seven-seg display, keypad core, TEC keycap layout, styles) replaced large duplicated platform trees; panel **layout, focus, and keyboard shortcuts** were reworked (focus-gated keypad, panel click-to-focus, **Tab** for AD, **Space** for hex 0, Escape/Shift behaviour). Directional keys are documented as **◀**/**▶** (left/right) rather than “plus”/“minus” — see in-repo `src/platforms/tec1/README.md` and `src/platforms/tec1g/README.md` for binding tables; ROMs may still use K_PLUS/K_MINUS names for the same scancodes.
-- **Extension:** on open, **`.z80` / `.a80` / `.s`** are assigned the `z80-asm` language id so decorations and breakpoints align with `files.associations` in `package.json`.
-
-**Longer-standing** architecture notes:
-
-- the project manifest uses the version 2 model (`projectVersion`, `projectPlatform`, `profiles`, `defaultProfile`, `bundledAssets`)
-- project creation records bundled ROM asset references, and launch resolves missing workspace files from the extension bundle automatically
-- the panel lifecycle is three-state: `noWorkspace`, `uninitialized`, `initialized`
-- the project header owns project selection, target selection, stop-on-entry, restart, and workspace-folder addition
-- several debug/extension responsibilities were split or consolidated, notably memory snapshot handling and mapping-cache decisions
-
----
+The chapters begin with the repository shape and project model, then follow the runtime path from launch configuration through the debug adapter, emulator, platform runtimes, extension UI, source mapping and extension points.
 
 ## Part I — Orientation
 
-- [Chapter 1 — What debug80 Is](part1/01-what-debug80-is.md)
+- [Chapter 1 — Debug80 Architecture](part1/01-what-debug80-is.md)
 - [Chapter 2 — Project Configuration](part1/02-project-configuration.md)
 
 ## Part II — The Debug Adapter
@@ -79,3 +57,27 @@ This manual is updated against the codebase state through **2026-05-10**. The mo
 - [Appendix E — Release and Local VSIX Testing](appendices/e-release-and-local-vsix.md)
 - [Appendix F — Regression Gates](appendices/f-regression-gates.md)
 - [Appendix G — D8 Debug Map Format](appendices/g-d8-debug-map-format.md)
+
+## Current Codebase Notes
+
+This manual is updated against the codebase state through **2026-05-10**. These notes give maintainers a quick view of changes that affect several chapters:
+
+- **Editor grammar:** Debug80 owns TextMate syntax highlighting for Z80 assembly sources. `package.json` contributes `z80-asm` and `z80-lst` grammars, default file associations for `.asm`, `.z80`, `.a80` and `.s`, and token colour customisations for comments, labels, directives, instructions, registers, conditions, strings, symbols, numbers and routine-comment annotations.
+- **Assembler integration:** asm80 is linked directly into the extension host. The launch pipeline writes the normal `.hex`, `.lst` and `.bin` artifacts; backend invocation now uses JavaScript APIs where available.
+- **Runtime performance:** `createZ80Runtime()` keeps stable decoder callbacks whose implementations read the current hardware hooks dynamically. This preserves decoder-cache reuse when a platform finalizes `memRead` or `memWrite` after runtime creation. Runtime-control also records starvation data so long chunks and yield delays can be observed during extension-host debugging.
+- **Webview audio:** speaker mute state is session-local. New webviews start muted because browsers and VS Code webviews require a user gesture before reliable audio playback.
+- **Scaffold:** new projects can merge a standard **Debug80** `.gitignore` block via `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts`, invoked from `scaffoldProject()`.
+- **TEC-1G panel UI:** section checkboxes persist. Merge order is built-in defaults, `debug80.json` `tec1g.uiVisibility` from the active launch, then workspace `Memento` keyed by debug target (`debug80.tec1g.uiVisibilityByTarget`).
+- **Mapping and MON-style includes:** Layer 2 include-anchor remapping and propagation of mis-attributed include segments improve stepping and stack frames when asm80 attributes bytes to the parent file while the real code lives in a sibling include such as `glcd_library.z80`. The same remap runs on native `.d8.json` maps.
+- **Z80 debugger stepping:** a single **Step** over the ED block-repeat instructions (LDIR, LDDR, CPIR, CPDR, INIR, INDR, OTIR, OTDR) runs the instruction to completion in one user-visible step.
+- **ST7920 GLCD and matrix display:** the emulator keeps a full 4-bit GLCD column counter and derives the upper/lower 64x64 chip bank from it. The TEC-1G 8x8 RGB matrix mirrors hardware column bits into left-to-right visible columns.
+- **Webview modules:** shared `common/` modules cover serial UI, Web Audio, matrix rendering, seven-segment display, keypad handling, TEC keycap layout and styles. The TEC-1 and TEC-1G panels share more code and present consistent keyboard behaviour.
+- **Extension file handling:** `.z80`, `.a80` and `.s` files are assigned the `z80-asm` language id on open so decorations and breakpoints align with `files.associations` in `package.json`.
+
+Longer-standing architecture facts:
+
+- The project manifest uses the version 2 model: `projectVersion`, `projectPlatform`, `profiles`, `defaultProfile` and `bundledAssets`.
+- Project creation records bundled ROM asset references, and launch resolves missing workspace files from the extension bundle automatically.
+- The panel lifecycle has three states: `noWorkspace`, `uninitialized` and `initialized`.
+- The project header owns project selection, target selection, stop-on-entry, restart and workspace-folder addition.
+- Memory snapshot handling and mapping-cache decisions are split across debug and extension modules.

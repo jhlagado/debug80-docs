@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 13 — The Webview Panels"
 parent: "Part V — The Extension UI"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
 [← The Extension Host UI](12-the-extension-host-ui.md) | [Part V](README.md)
@@ -210,7 +210,7 @@ Below the project header, a setup card handles the not-yet-configured states:
 
 - **No workspace roots** → displays an empty-state message and an **Open Folder** action. The header itself is hidden in this state.
 - **Workspace available but no selected root** → displays a **Select Project** action.
-- **Selected root but no initialized debug80 project** → displays **Uninitialized Debug80 project**. In the current panel redesign the setup card hides its own button for the create-project case, because the active create action lives in the inline `platformInitButton` on the platform row.
+- **Selected root but no initialized Debug80 project** → displays **Uninitialized Debug80 project**. In the current panel redesign the setup card hides its own button for the create-project case, because the active create action lives in the inline `platformInitButton` on the platform row.
 - **Project exists** → the card is **hidden entirely**.
 
 The setup card state is recalculated on every `projectStatus` message by `resolveSetupCardState()` in `webview/common/setup-card-state.ts`, which returns `null` when a project exists (causing the card to be hidden).

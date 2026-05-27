@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 9 — The Simple Platform"
 parent: "Part IV — Platform Runtimes"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 1
 ---
 [Part IV](README.md) | [The TEC-1 Platform →](10-the-tec-1-platform.md)

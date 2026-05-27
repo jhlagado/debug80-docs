@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 7 — Data Tables and Indexed Access"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 7
 ---
 [← Counting Loops and DJNZ](06-counting-loops-and-djnz.md) | [Book 1](index.md) | [Stack and Subroutines →](08-stack-and-subroutines.md)

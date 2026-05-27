@@ -1,8 +1,7 @@
 ---
 layout: default
 title: "AZM Book 1 — Z80 Fundamentals"
-parent: "AZM Books"
-nav_order: 2
+nav_order: 4
 has_children: true
 ---
 # AZM Book 1 — Z80 Fundamentals

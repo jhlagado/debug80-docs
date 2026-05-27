@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Appendices"
-parent: "Understanding the AZM Codebase"
+parent: "AZM Engineering Manual"
 nav_order: 7
 has_children: true
 ---

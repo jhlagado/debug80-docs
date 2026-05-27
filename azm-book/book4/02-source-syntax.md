@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 2 — Source Syntax and Symbols"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 2
 ---
 [← Getting Started](01-getting-started.md) | [Manual](index.md) | [Addresses, Constants and Expressions →](03-addresses-constants-expressions.md)

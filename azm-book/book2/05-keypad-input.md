@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 5 — Keypad Input"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 6
 ---
 [← First Program](04-first-program.md) | [Book 2](index.md) | [Text on the LCD →](06-lcd-output.md)

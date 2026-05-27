@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 16 — Pacmo Case Study"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 17
 ---
 [← Tetro Case Study](15-tetro-case-study.md) | [Book 2](index.md) | [Beyond the Core →](17-beyond-core.md)

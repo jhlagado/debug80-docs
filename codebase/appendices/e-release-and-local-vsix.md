@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix E — Release and Local VSIX Testing"
 parent: "Appendices"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 5
 ---
 [← Appendix D](d-bundle-manifest.md) | [Appendices](index.md)

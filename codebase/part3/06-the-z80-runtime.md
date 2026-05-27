@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 6 — The Z80 Runtime"
 parent: "Part III — The Z80 Emulator"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 1
 ---
 [Part III](README.md) | [Instruction Decoding →](07-instruction-decoding.md)
@@ -152,7 +152,7 @@ Each flag is a separate number field (0 or 1) rather than a packed byte. This av
 (S << 7) | (Z << 6) | (Y << 5) | (H << 4) | (X << 3) | (P << 2) | (N << 1) | C
 ```
 
-The Y and X flags are "undocumented" — they copy bits 5 and 3 of the result. Most Z80 emulators ignore them; debug80 maintains them correctly because programs running on real hardware may depend on their values.
+The Y and X flags are "undocumented" — they copy bits 5 and 3 of the result. Most Z80 emulators ignore them; Debug80 maintains them correctly because programs running on real hardware may depend on their values.
 
 The P flag serves double duty: for logical operations (AND, OR, XOR) it holds parity (whether the number of set bits is even); for arithmetic operations (ADD, SUB, INC, DEC) it holds overflow (whether the result exceeded the signed 8-bit range).
 
@@ -350,7 +350,7 @@ while (true) {
 }
 ```
 
-This is not the primary execution path in debug80. The adapter's `runUntilStopAsync()` handles execution, checking breakpoints in TypeScript code with the full context of shadow aliases and skip-once logic. The runtime's `runUntilStop()` is a fallback — faster for contexts that do not need the full debugger machinery.
+This is not the primary execution path in Debug80. The adapter's `runUntilStopAsync()` handles execution, checking breakpoints in TypeScript code with the full context of shadow aliases and skip-once logic. The runtime's `runUntilStop()` is a fallback — faster for contexts that do not need the full debugger machinery.
 
 ---
 

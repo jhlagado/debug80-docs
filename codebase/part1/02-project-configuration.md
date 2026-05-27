@@ -2,14 +2,14 @@
 layout: default
 title: "Chapter 2 — Project Configuration"
 parent: "Part I — Orientation"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
-[← What Debug80 Is](01-what-debug80-is.md) | [Part I](README.md) | [Part II →](../part2/README.md)
+[← Debug80 Architecture](01-what-debug80-is.md) | [Part I](README.md) | [Part II →](../part2/README.md)
 
 # Chapter 2 — The Project Configuration System
 
-A debug80 project is defined by a JSON configuration file that tells the extension what to build, what platform to target, where to find source files and ROM images, and how to lay out memory. This chapter explains every part of that system: the config file format, how targets work, how multiple configuration sources are merged, and how the scaffolding flow creates a new project from scratch.
+A Debug80 project is defined by a JSON configuration file that tells the extension what to build, what platform to target, where to find source files and ROM images, and how to lay out memory. This chapter explains every part of that system: the config file format, how targets work, how multiple configuration sources are merged, and how the scaffolding flow creates a new project from scratch.
 
 If you are going to work on any part of debug80 that touches launching, target selection, or platform setup, you need to understand this chapter. The configuration system is the spine — every debug session begins by resolving a config into a fully populated set of launch arguments.
 
@@ -523,4 +523,4 @@ The watcher registration lives in `WorkspaceSelectionController.registerInfrastr
 
 ---
 
-[← What Debug80 Is](01-what-debug80-is.md) | [Part I](README.md) | [Part II →](../part2/README.md)
+[← Debug80 Architecture](01-what-debug80-is.md) | [Part I](README.md) | [Part II →](../part2/README.md)

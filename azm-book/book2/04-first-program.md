@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 4 — First Program at $4000"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 5
 ---
 [← Debug80 Workflow](03-debug80-workflow.md) | [Book 2](index.md) | [Keypad Input →](05-keypad-input.md)

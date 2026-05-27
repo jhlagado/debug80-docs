@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 14 — Op Declarations"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 14
 ---
 [← Layout Types](13-layout-types.md) | [Book 1](index.md)

@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 5 — Execution Control"
 parent: "Part II — The Debug Adapter"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 3
 ---
 [← The Launch Pipeline](04-the-launch-pipeline.md) | [Part II](README.md)

@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 10 — A Complete Program"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 10
 ---
 [← I/O and Ports](09-io-and-ports.md) | [Book 1](index.md) | [Subroutine Conventions →](11-subroutine-conventions.md)

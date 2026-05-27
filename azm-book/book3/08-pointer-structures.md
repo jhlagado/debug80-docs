@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 8 — Pointer Structures"
 parent: "AZM Book 3 — Algorithms and Data Structures"
-grand_parent: "AZM Books"
 nav_order: 9
 ---
 [← Composition](07-composition.md) | [Book 3](index.md) | [Capstone →](09-capstone.md)

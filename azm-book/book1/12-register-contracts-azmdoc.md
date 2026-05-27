@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 12 — Register Contracts with AZMDoc"
 parent: "AZM Book 1 — Z80 Fundamentals"
-grand_parent: "AZM Books"
 nav_order: 12
 ---
 [← Subroutine Conventions](11-subroutine-conventions.md) | [Book 1](index.md) | [Layout Types →](13-layout-types.md)

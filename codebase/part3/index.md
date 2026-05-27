@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Part III — The Z80 Emulator"
-parent: "Understanding the debug80 Codebase"
+parent: "Debug80 Engineering Manual"
 nav_order: 3
 has_children: true
 ---

@@ -2,7 +2,6 @@
 layout: default
 title: "Preface"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 0
 ---
 [Manual](index.md) | [Getting Started →](01-getting-started.md)

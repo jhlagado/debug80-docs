@@ -1,8 +1,7 @@
 ---
 layout: default
 title: "AZM Book 2 — Programming the TEC-1G"
-parent: "AZM Books"
-nav_order: 3
+nav_order: 5
 has_children: true
 ---
 # AZM Book 2 — Programming the TEC-1G

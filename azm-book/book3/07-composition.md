@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 7 — Composition"
 parent: "AZM Book 3 — Algorithms and Data Structures"
-grand_parent: "AZM Books"
 nav_order: 8
 ---
 [← Recursion](06-recursion.md) | [Book 3](index.md) | [Pointer Structures →](08-pointer-structures.md)

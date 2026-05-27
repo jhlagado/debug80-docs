@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 11 — The 8x8 RGB Add-On"
 parent: "AZM Book 2 — Programming the TEC-1G"
-grand_parent: "AZM Books"
 nav_order: 12
 ---
 [← One-Bit Sound](10-one-bit-sound.md) | [Book 2](index.md) | [Framebuffers and Colour →](12-framebuffers-and-colour.md)

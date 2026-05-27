@@ -2,14 +2,14 @@
 layout: default
 title: "Chapter 3 — DAP and the Debug Session"
 parent: "Part II — The Debug Adapter"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 1
 ---
 [← Project Configuration](../part1/02-project-configuration.md) | [Part II](README.md) | [The Launch Pipeline →](04-the-launch-pipeline.md)
 
 # Chapter 3 — DAP and the Debug Session
 
-VS Code does not debug programs itself. It delegates to a **debug adapter** — a separate component that speaks the Debug Adapter Protocol (DAP). The adapter receives requests ("launch this program," "set a breakpoint at line 12," "what are the current register values?") and sends back responses and events. In debug80, the adapter contains the Z80 emulator, the platform runtimes, the source maps, and all the execution logic. VS Code provides the UI; the adapter provides the machine.
+VS Code does not debug programs itself. It delegates to a **debug adapter** — a separate component that speaks the Debug Adapter Protocol (DAP). The adapter receives requests ("launch this program," "set a breakpoint at line 12," "what are the current register values?") and sends back responses and events. In Debug80, the adapter contains the Z80 emulator, the platform runtimes, the source maps, and all the execution logic. VS Code provides the UI; the adapter provides the machine.
 
 This chapter explains how the adapter is structured: the session class that connects to DAP, the request controller that handles the work, and the session state object that holds everything about a running debug session.
 
@@ -383,7 +383,7 @@ Note that the `breakpointManager` is not cleared here — breakpoints persist ac
 
 ## The halt protocol
 
-The Z80 `halt` instruction stops the CPU — PC stays at the same address and the CPU waits for an interrupt. In debug80, a halt is handled in two phases by `handleHaltStop()`:
+The Z80 `halt` instruction stops the CPU — PC stays at the same address and the CPU waits for an interrupt. In Debug80, a halt is handled in two phases by `handleHaltStop()`:
 
 **First halt.** The adapter sends a `StoppedEvent('halt')`. VS Code shows the program as paused. The user can inspect registers, memory, and the call stack. They can also press Continue, which resumes execution — but because the CPU is halted, the execution loop will hit halt again immediately.
 

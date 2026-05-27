@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix G — D8 Debug Map Format"
 parent: "Appendices"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 7
 ---
 [Appendices](index.md)

@@ -2,7 +2,7 @@
 layout: default
 title: "Chapter 15 — Parsing and Lookup"
 parent: "Part VI — Source Mapping"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 2
 ---
 [← Mapping Data Structures](14-mapping-data-structures.md) | [Part VI](index.md)

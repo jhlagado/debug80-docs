@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 5 — The Layout System"
 parent: "AZM Book 4 — Assembler Manual"
-grand_parent: "AZM Books"
 nav_order: 5
 ---
 [← Raw Data, Storage and Strings](04-data-storage-includes.md) | [Manual](index.md) | [Register Care and Contracts →](06-register-care.md)

@@ -2,14 +2,14 @@
 layout: default
 title: "Appendix D — ROM Bundle Infrastructure"
 parent: "Appendices"
-grand_parent: "Understanding the debug80 Codebase"
+grand_parent: "Debug80 Engineering Manual"
 nav_order: 4
 ---
 [← Appendix C](c-session-state.md) | [Appendices](index.md)
 
 # Appendix D — ROM Bundle Infrastructure
 
-The debug80 extension ships ROM firmware, listing files, and related assets for supported platforms directly inside the VSIX package. These assets are called **ROM bundles**. A monitor-backed project records stable workspace-relative ROM/listing paths and profile-level `bundledAssets` references in `debug80.json`. At launch, missing workspace files resolve to the copy inside the extension bundle. The explicit bundled-assets command can copy those files into the workspace when the user wants local files to inspect or override.
+The Debug80 extension ships ROM firmware, listing files, and related assets for supported platforms directly inside the VSIX package. These assets are called **ROM bundles**. A monitor-backed project records stable workspace-relative ROM/listing paths and profile-level `bundledAssets` references in `debug80.json`. At launch, missing workspace files resolve to the copy inside the extension bundle. The explicit bundled-assets command can copy those files into the workspace when the user wants local files to inspect or override.
 
 This appendix covers the bundle manifest schema, the materialization functions, the resource directory layout, and how bundles are wired into the project-kit scaffolding and command flows.
 

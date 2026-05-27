@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Part V — The Extension UI"
-parent: "Understanding the debug80 Codebase"
+parent: "Debug80 Engineering Manual"
 nav_order: 5
 has_children: true
 ---

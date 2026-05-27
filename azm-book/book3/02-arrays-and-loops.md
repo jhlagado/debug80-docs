@@ -2,7 +2,6 @@
 layout: default
 title: "Chapter 2 — Arrays and Loops"
 parent: "AZM Book 3 — Algorithms and Data Structures"
-grand_parent: "AZM Books"
 nav_order: 3
 ---
 [← Foundations](01-foundations.md) | [Book 3](index.md) | [Strings →](03-strings.md)
