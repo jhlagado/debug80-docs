@@ -3,7 +3,7 @@ layout: default
 title: "Docs Readiness"
 nav_order: 6
 ---
-# Debug80 Docs Readiness And VS Code User Manual Plan
+# Debug80 Docs Readiness And Book 1 Plan
 
 This note records the publishing view behind the user manual. It is an editorial audit, not a replacement for the codebase reference.
 
@@ -64,31 +64,30 @@ The engineering manual should remain separate and should be refreshed chapter by
 
 ---
 
-## Manual Plan
+## Book 1 Status
 
-The user manual is being built as `manual/` in this repo, separate from the codebase manual. It is aimed at Z80 hobbyists.
+The user manual has moved from the deprecated `manual/` publication to **Debug80 Book 1 — Getting Started** under `debug80-book/book1/`. The old manual was source material only and has been removed from the published site.
 
-### Chapter structure
+### Current structure
 
 | Chapter | Focus |
 |---|---|
-| 1. What Debug80 Is | Platforms, what F5 does, what the panel is |
-| 2. Install and Open a Project | Extension install, project discovery, workspace repos vs fresh projects |
-| 3. Create or Configure a Project | `Debug80: Create Project`, kits, `debug80.json` fields at user level |
-| 4. Debug in VS Code | F5, breakpoints, step controls, registers, Variables view, error messages |
-| 5. Use the Debug80 Panel | Project selector, target selector, platform panels per platform |
-| 6. ROMs, Bundled Assets, and Serial | Bundled ROM assets, `Copy Bundled Assets`, serial send/save |
-| 7. Assemblers and Source Mapping | asm80, generated files, approximate mapping and what to do |
-| 8. Troubleshooting | Top failure cases with recovery steps |
-| Appendix | Command palette cheat sheet, glossary, keyboard shortcut reference per platform |
+| 1. Install And Open A Folder | VS Code install, Marketplace install, Debug80 panel and project folder basics |
+| 2. Create A TEC-1G Project | `Debug80: Create Project`, TEC-1G / MON-3 kit, starter source and target model |
+| 3. Build And Step | F5, Build, breakpoints, debug controls and Run to Cursor |
+| 4. Inspect The Machine | Variables symbols, symbolic Call Stack names, Registers, Memory and Machine panel |
+| 5. Use The Debug80 Panel | Project controls, source-map status, Register Care, displays, keyboard and serial |
+| 6. Read Artifacts And ROM Source | `.hex`, `.lst`, source map, source navigation, ROM source and bundled assets |
+| 7. Send To Hardware And Keep Working | CoolTerm transfer, targets, platform choice and troubleshooting |
+| Appendices | Command reference, project configuration, image plan, glossary, TEC-1G reference and review checklist |
 
 ### Config examples to include
 
-One complete minimal config (Simple platform) and one TEC-1G config with MON-3 profile, both copy-pasteable.
+One Simple platform target and one TEC-1G / MON-3 configuration reference are included in Appendix B.
 
 ### Keyboard shortcuts
 
-Document `Tab → AD/ADDRESS`, `Space → 0`, `Enter → GO`, `Escape → Reset`, arrow keys for ◀/▶, and the Shift/FN latch. Each platform gets its own reference table. Mention K_PLUS/K_MINUS only as a note for users reading ROM source.
+Keyboard shortcuts remain a future screenshot-and-verification task. Document `Tab -> AD/ADDRESS`, `Space -> 0`, `Enter -> GO`, `Escape -> Reset`, arrow keys for left/right and the Shift/FN latch after checking the current panel code and hardware screenshots. Mention K_PLUS/K_MINUS only as a note for users reading ROM source.
 
 ---
 

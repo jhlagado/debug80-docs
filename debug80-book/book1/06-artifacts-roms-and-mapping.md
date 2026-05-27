@@ -119,6 +119,13 @@ roms/tec1g/mon3/mon3.bin
 roms/tec1g/mon3/mon3.lst
 ```
 
+The TEC-1 / MON-1B profile uses the same pattern:
+
+```text
+roms/tec1/mon1b/mon-1b.bin
+roms/tec1/mon1b/mon-1b.lst
+```
+
 If those files exist in your workspace, Debug80 uses them. If they are absent and the profile has a bundled asset entry, Debug80 uses the copy packaged with the extension.
 
 Run this command when you want local copies:

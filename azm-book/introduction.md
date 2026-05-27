@@ -42,7 +42,7 @@ And the Z80 has enough structure to be interesting. It has a proper set of regis
 
 AZM is an assembler for the Z80, written in the tradition of ASM80 — a flat, instruction-level assembler where the machine is always visible. Every line you write maps directly to Z80 instructions, and the output you get is exactly what you wrote.
 
-You can use AZM in two ways. Install the standalone Node.js CLI (`npm install -g @jhlagado/azm`) and run `azm file.asm` from a terminal. Or open the same `.asm` in VS Code with the **Debug80** extension: when you start debugging (F5), Debug80 assembles your source as part of the launch workflow—breakpoints, stepping, registers, and memory inspection use the generated listing and program image. See [Using Debug80 in VS Code](../manual/) for extension install and `debug80.json` project setup.
+You can use AZM in two ways. Install the standalone Node.js CLI (`npm install -g @jhlagado/azm`) and run `azm file.asm` from a terminal. Or open the same `.asm` in VS Code with the **Debug80** extension: when you start debugging (F5), Debug80 assembles your source as part of the launch workflow—breakpoints, stepping, registers, and memory inspection use the generated listing and program image. See [Debug80 Book 1 — Getting Started](../debug80-book/book1/) for extension install and `debug80.json` project setup.
 
 AZM does not turn subroutines into declarations or invent branches you did not write. Labels are addresses. `.db` places bytes. `call` and `ret` are what you write when you want a subroutine call. The machine is always present, never hidden.
 
@@ -108,7 +108,7 @@ You will need a way to **assemble** course examples and a way to **run** them to
 **Assemble**
 
 - **Terminal:** Node.js 20+ and the AZM CLI — `npm install -g @jhlagado/azm`, then `azm path/to/program.asm` (or build AZM from source with `npm run build` and use `npm run azm --` in the AZM repo).
-- **VS Code + Debug80:** Install the Debug80 extension, add a `debug80.json` target for your `.asm` file, and press **F5**. Debug80 assembles as part of starting a debug session; you do not need a separate `azm` step for day-to-day work in the editor. Setup is in [Using Debug80 in VS Code](../manual/).
+- **VS Code + Debug80:** Install the Debug80 extension, add a `debug80.json` target for your `.asm` file, and press **F5**. Debug80 assembles as part of starting a debug session; you do not need a separate `azm` step for day-to-day work in the editor. Setup is in [Debug80 Book 1 — Getting Started](../debug80-book/book1/).
 
 **Run and verify**
 

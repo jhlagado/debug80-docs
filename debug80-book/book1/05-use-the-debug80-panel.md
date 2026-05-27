@@ -104,6 +104,8 @@ This is separate from the hardware transfer in Chapter 7. The Serial section tal
 
 This distinction prevents a common mistake. Sending a file through the Serial section feeds the emulated machine. Sending a HEX file to the board uses CoolTerm and affects real hardware.
 
+File send is paced rather than injected as one instant block. Monitor software often expects input at human or device speed, so a paced send is more faithful to the serial path you will use on hardware.
+
 ## Registers And Memory
 
 The **Registers** and **Memory** sections expose the CPU state and RAM views described in Chapter 4. Keep them open when stepping through code. Close them when you need more space for display or serial work.

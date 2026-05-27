@@ -12,14 +12,6 @@ Technical documentation for the **Debug80** Z80 debugger extension and the **AZM
 
 ## Publications
 
-### [Using Debug80 in VS Code](manual/)
-
-A practical manual for Z80 hobbyists using Debug80 with VS Code. It covers project setup, TEC-1 and TEC-1G profile kits, F5 debugging, breakpoints, registers, memory, ROM bundles, serial workflows, assembler artifacts, source mapping, and the common failures you are likely to meet while bringing a project up.
-
-For users who want to run and debug Z80 code.
-
----
-
 ### [Debug80 Book 1 — Getting Started](debug80-book/book1/)
 
 A guided Debug80 book that starts from installation and walks through creating a TEC-1G project, building and stepping code, inspecting the machine, using the panel, reading artifacts, and sending HEX to hardware.

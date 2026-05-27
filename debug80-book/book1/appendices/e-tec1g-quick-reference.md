@@ -45,6 +45,8 @@ No parity
 
 Add the exact TEC-1G / MON-3 receive-mode sequence after hardware testing or author confirmation.
 
+Serial file send is paced. If monitor input appears truncated, send the file again and avoid interacting with the panel during transfer.
+
 ## Common Debugging Clues
 
 If the panel display changes while stepping, the program is writing the corresponding I/O ports.

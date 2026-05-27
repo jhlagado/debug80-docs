@@ -67,7 +67,7 @@ npm run azm -- examples/01_register_moves.asm
 
 **VS Code (Debug80)**
 
-Install the Debug80 extension, point a `debug80.json` target at the example `.asm` and press **F5**. Debug80 assembles as part of starting the session and writes the usual artifacts (`.hex`, `.lst` and related files) under the target's `outputDir`. See [Using Debug80 in VS Code](../../manual/) for install, project files and platform choice.
+Install the Debug80 extension, point a `debug80.json` target at the example `.asm` and press **F5**. Debug80 assembles as part of starting the session and writes the usual artifacts (`.hex`, `.lst` and related files) under the target's `outputDir`. See [Debug80 Book 1 — Getting Started](../../debug80-book/book1/) for install, project files and platform choice.
 
 ---
 
@@ -89,7 +89,7 @@ During a session you get:
 - **Breakpoints** — set breakpoints in `.asm` source before or during a run; resolved breakpoints map to the generated Z80 addresses.
 - **TEC-1 support** — for Chapter 9 port I/O, configure a **TEC-1** or **Simple** target in `debug80.json` so `in`/`out` examples see the expected port map; the TEC-1 panel can drive keypad and display behaviour where the chapter references hardware.
 
-Open or create a `debug80.json` project ([Using Debug80 in VS Code](../../manual/)), open your `.asm` and press **F5**—no separate terminal `azm` step is required for editor-based work. Chapters 1–8 and 10–14 need only a plain Z80 memory map; port-accurate behaviour matters mainly in Chapter 9.
+Open or create a `debug80.json` project ([Debug80 Book 1 — Getting Started](../../debug80-book/book1/)), open your `.asm` and press **F5**—no separate terminal `azm` step is required for editor-based work. Chapters 1–8 and 10–14 need only a plain Z80 memory map; port-accurate behaviour matters mainly in Chapter 9.
 
 The standalone **`azm`** CLI (`npm install -g @jhlagado/azm`) is the same assembler for terminal builds, CI or when you prefer to load `.hex` into another emulator yourself.
 
