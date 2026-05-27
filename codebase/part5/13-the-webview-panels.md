@@ -298,7 +298,7 @@ The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root
 
 | File | Responsibility |
 |------|---------------|
-| `index.ts` | Composition root — DOM queries, module wiring, message dispatcher; calls `visibilityController.setProjectTargetName(message.targetName)` on each `projectStatus` |
+| `index.ts` | Composition root — DOM queries, module wiring, accordion setup, message dispatcher and project/status wiring |
 | `entry-types.ts` | Shared types: `IncomingMessage`, `Tec1gUpdatePayload`, `Tec1gPanelTab`, `Tec1gSpeedMode` |
 | `tec1g-platform-update.ts` | `applyTec1gPlatformUpdate()` — applies a hardware update payload to all display components |
 | `tec1g-project-status-ui.ts` | Re-exports `createProjectStatusUi` from `webview/common/project-status-ui.ts` |
@@ -306,7 +306,7 @@ The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root
 | `tec1g-audio.ts` | `createTec1gAudio()` — wraps `common/audio-core.ts`, mute and UI |
 | `tec1g-keypad.ts` | `createTec1gKeypad()` — `common/tec-keypad` + `keypad-core` + status LEDs / SysCtrl |
 | `tec1g-memory-views.ts` | `createTec1gMemoryViews()` — memory view section factory |
-| `visibility-controller.ts` | `createVisibilityController()` — section show/hide, `getState` cache, and `saveTec1gPanelVisibility` posts |
+| `visibility-controller.ts` | Legacy section visibility helper retained for compatibility with older panel-state messages |
 | `matrix-ui.ts` | `createMatrixUiController()` — RGB LED matrix display and matrix keyboard input |
 | `glcd-renderer.ts` | `createGlcdRenderer()` — ST7920 128×64 GLCD canvas renderer |
 | `lcd-renderer.ts` | `createLcdRenderer()` — HD44780 20×4 text LCD canvas renderer with CGRAM |
@@ -315,18 +315,11 @@ The TEC-1G panel uses a modular structure. `index.ts` is a thin composition root
 | `../common/serial-ui.ts` | `wireSerialUi()` — used via `index.ts` (no separate `tec1g/serial-ui.ts` file) |
 | `st7920-font.bin` | ST7920 GLCD font (static asset) |
 
-**Layout (UI tab).** The left column stacks **text LCD → 7-segment → hex keypad** (full front panel). The right column has speed / mute / speaker / status LEDs, then **GLCD**, then the **RGB 8×8** matrix. Serial + matrix **keyboard** strip sits full width below. Checkbox order in the template follows that visual order. Container breakpoints and column widths were tuned for the wider GLCD + matrix column (~620px two-column layout).
+**Layout (UI tab).** The TEC-1G panel is now organized as compact VS Code-style accordion sections. The **Project** section holds project and target selection. **Displays** sits above **Machine** and holds the ST7920 GLCD and RGB 8×8 matrix side by side. **Machine** holds the front-panel status strip, text LCD, six seven-segment digits and keypad. Matrix keyboard and serial tools live in their own accordion sections below the machine controls.
 
 ### Visibility controller
 
-`createVisibilityController()` in `webview/tec1g/visibility-controller.ts` manages which UI sections are visible. Sections are identified by name (e.g., `'display'`, `'lcd'`, `'glcd'`, `'matrix'`, `'keypad'`). Defaults are shared with the extension through `src/tec1g/visibility-defaults.ts` (`TEC1G_DEFAULT_PANEL_VISIBILITY`).
-
-**Persistence** is two-layered:
-
-1. **Workspace `Memento`** (extension host) — on every checkbox change, the webview posts `{ type: 'saveTec1gPanelVisibility', targetName?, visibility }`. The provider stores a **per debug-target** object under `debug80.tec1g.uiVisibilityByTarget` (target name from the latest `projectStatus`, or a `__default__` key when none is named). The effective visibility for the active target is **merged** in the host as: defaults → `tec1g.uiVisibility` from the current launch (if any) → Memento, then sent back as a `uiVisibility` message with `persist: true` after re-renders that need it. This prevents the old behaviour where a **stale launch-only** snapshot was re-posted after HTML reload and overwrote the user's choices.
-2. **`vscode.getState` / `setState`** (webview) — still updated so the current session can recover quickly before host messages arrive.
-
-`tec1g.uiVisibility` in `debug80.json` therefore supplies **project defaults**; personal layout choices can live entirely in workspace state per target.
+Earlier TEC-1G builds exposed checkboxes for showing and hiding individual peripheral sections. The current panel keeps the core hardware visible permanently and uses accordions to manage vertical space instead. The old visibility controller and `tec1g.uiVisibility` config shape remain as compatibility surfaces for older state/config messages, but they are no longer the main user-facing layout model.
 
 ### RGB LED matrix (`matrix-ui.ts`)
 
@@ -501,7 +494,7 @@ The edit field accepts hex input without a `0x` prefix. Input is validated befor
 
 - Common infrastructure (`vscode.ts`, `session-status.ts`, `digits.ts`, `serial.ts`, `memory-panel.ts`) is shared by all three platform panels.
 
-- Every platform panel has the same outer shell: project header (Project button + `+` button, Target dropdown, Platform dropdown, Stop-on-entry checkbox), setup card, tab bar with Restart button, UI tab panel, and CPU/memory tab panel.
+- The hardware webviews use a shared project/status shell, with project controls now grouped into a **Project** accordion section instead of being spread across the top of the panel.
 
 - The **project header** is always visible. The `+` (Add folder) button is always present. The Target dropdown and Stop-on-entry checkbox are shown only when `projectState === 'initialized'`. The Platform dropdown is shown only when `projectState === 'uninitialized'` so the user can choose a platform before initializing — once a project exists it is hidden.
 
@@ -513,7 +506,7 @@ The edit field accepts hex input without a `0x` prefix. Input is validated befor
 
 - The **TEC-1** panel renders six SVG seven-segment digits, an 8×8 LED matrix, a 16×2 HD44780 canvas LCD, a hex keypad (shared `tec-keypad` + `keypad-core`), a speaker indicator with Web Audio output, and a serial terminal (`common/serial-ui`). Entry logic lives in `tec1/index.ts` with shared helpers from `webview/common/`.
 
-- The **TEC-1G** `index.ts` is a thin composition root. Feature logic is split across dedicated modules. The RGB LED matrix with per-pixel brightness, 128×64 ST7920 GLCD, 20×4 HD44780 LCD with CGRAM, and matrix keyboard mode are each handled by their dedicated module. **Section visibility** merges defaults, launch `tec1g.uiVisibility`, and **per-target workspace Memento**, and posts `saveTec1gPanelVisibility` when the user toggles checkboxes.
+- The **TEC-1G** `index.ts` is a thin composition root. Feature logic is split across dedicated modules. The RGB LED matrix with scanned-display brightness, 128×64 ST7920 GLCD, 20×4 HD44780 LCD with CGRAM, six seven-segment digits, keypad, serial UI and matrix keyboard mode are each handled by focused modules. The user-facing layout is accordion-based: Displays, Machine, Matrix Keyboard and Serial.
 
 - The `uiRevision` guard in the message handler rejects stale `update` messages from previous sessions.
 

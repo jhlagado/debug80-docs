@@ -21,16 +21,16 @@ This chapter covers the provider class: what state it holds, how the webview is 
 
 Debug80 also owns the editor-facing language contribution for Z80 assembly. In `package.json`, the extension contributes:
 
-- language id `z80-asm` for `.asm`, `.z80`, `.a80`, and `.s`
+- language id `z80-asm` for `.asm`, `.z80`, and `.asmi`
 - language id `z80-lst` for `.lst`
 - breakpoint support for common Z80 assembly language ids and listings
 - TextMate grammars at `syntaxes/z80-asm.tmLanguage.json` and `syntaxes/z80-lst.tmLanguage.json`
 
-The Z80 assembly grammar is deliberately lexical. It recognizes semicolon comments, strings, labels, local labels, directives, condition-bearing control instructions, Z80 mnemonics, registers, condition codes, number formats, symbols, operators, and routine-comment annotations such as `@routine`, `@in`, `@out`, `@clobbers`, and `@preserves`.
+The Z80 assembly grammar is deliberately lexical. It recognizes semicolon comments, AZMDoc comments, strings, labels, local labels, directives, condition-bearing control instructions, Z80 mnemonics, registers, condition codes, number formats, symbols, operators, layout types, enum/member syntax, layout casts, field declarations, `sizeof`/`offset`, and register-care contract annotations such as `in`, `out`, `clobbers`, and `preserves`.
 
 Colour is driven by default `editor.tokenColorCustomizations` in `package.json`. The current palette distinguishes comments, labels, symbols, directives, annotations, instructions, registers, conditions and flags, strings, function names, operators, and numeric literals. This is TextMate colouring, not semantic-token analysis.
 
-`registerLanguageAssociations()` in `src/extension/language-association.ts` is a safety net for opened documents. Once VS Code knows the contributed languages, it assigns `.asm`, `.z80`, `.a80`, and `.s` documents to `z80-asm` for `file` and `untitled` documents. That keeps decorations and breakpoints aligned with the contributed language ids even when a file was opened before associations settled.
+`registerLanguageAssociations()` in `src/extension/language-association.ts` is a safety net for opened documents. Once VS Code knows the contributed languages, it assigns `.asm`, `.z80`, and `.asmi` documents to `z80-asm` for `file` and `untitled` documents. That keeps decorations and breakpoints aligned with the contributed language ids even when a file was opened before associations settled.
 
 The language-server design note in the source repository is still a future direction. The current implementation provides TextMate highlighting and file association, not LSP diagnostics, completion, hover, or semantic tokens.
 
@@ -163,13 +163,13 @@ This is the method that actually populates the panel. It runs on every platform 
 2. Post projectStatus (workspace roots, targets, selected target, active platform)
 3. Post sessionStatus (running/paused/not running)
 4. Post full update snapshot (hardware state for TEC-1/TEC-1G; empty for Simple)
-5. For TEC-1G: merge and post `uiVisibility` (defaults → launch `tec1g.uiVisibility` if any → workspace Memento per target) with `persist: true` so the webview and `getState` stay aligned
+5. For TEC-1G: post compatibility `uiVisibility` state if older panel state/config requires it
 6. Post serialInit (full buffered serial/terminal text, if any)
 7. Post selectTab (active tab)
 8. Sync memory refresh (start polling if on memory tab)
 ```
 
-`mergeAndPostTec1gPanelVisibility()` is also invoked when `refreshProjectStatus()` reposts project metadata (e.g. after target change) and after `setTec1gAdapterVisibility()` runs from the `debug80/platform` custom event, but it is **not** tied to every lightweight `postProjectStatus()` (such as stop-on-entry toggles) to avoid spuriously overwriting the in-flight webview.
+`mergeAndPostTec1gPanelVisibility()` remains as compatibility plumbing for older TEC-1G visibility state. The current TEC-1G panel keeps the main hardware sections visible and uses accordions for layout, so this message flow should not be treated as the primary user-facing panel model.
 
 When no debug session is active, the provider still renders a platform webview so the project header and setup card remain interactive. The selected platform identity comes from the remembered workspace/project state rather than from an active runtime.
 
@@ -184,7 +184,7 @@ Inbound messages from the webview are typed as `PlatformViewInboundMessage` — 
 `handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
 
 - Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`) are forwarded to the corresponding callback, which invokes a VS Code command. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing additional pickers. `setStopOnEntry` is handled inline by the provider — it updates `this.stopOnEntry` and refreshes the `projectStatus` payload.
-- `saveTec1gPanelVisibility` (TEC-1G) carries `visibility` and optional `targetName` and is handled by the provider before the platform-adapter path — it updates `workspaceState` under `debug80.tec1g.uiVisibilityByTarget` and does not require an active `z80` session.
+- `saveTec1gPanelVisibility` (TEC-1G) is a legacy compatibility message for older section-toggle UI. When received, it updates `workspaceState` under `debug80.tec1g.uiVisibilityByTarget` and does not require an active `z80` session.
 - Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
 - `serialClear` calls `clearSerialBuffer` for the current platform.
 - Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
@@ -219,7 +219,7 @@ All messages are posted via `postMessage()`. The webview handles them in `window
 | `selectTab` | `tab: 'ui' \| 'memory'` | Tab should be selected |
 | `snapshot` | Register and memory dump | Memory inspector refresh completes |
 | `snapshotError` | `message?: string` | Memory snapshot request failed |
-| `uiVisibility` | `visibility: Record<string, boolean>`, `persist: boolean` | TEC-1G section visibility (merged payload; `persist: true` also mirrors into webview `setState` when the controller applies the message) |
+| `uiVisibility` | `visibility: Record<string, boolean>`, `persist: boolean` | Legacy TEC-1G section visibility payload; retained for older state/config compatibility |
 
 The TEC-1G `update` message carries additional fields not present in TEC-1:
 
@@ -274,7 +274,7 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 | `serialSendFile` | — | File picker → character-by-character send (TEC-1/TEC-1G) |
 | `serialSave` | `text` | Save dialog → write file |
 | `serialClear` | — | Clear serial/terminal buffer |
-| `saveTec1gPanelVisibility` | `visibility`, optional `targetName` | Provider persists TEC-1G section toggles to workspace Memento (see `platform-view-messages` bullet above) |
+| `saveTec1gPanelVisibility` | `visibility`, optional `targetName` | Legacy TEC-1G section-toggle persistence message |
 | `key` | `code: number` | Platform adapter → adapter custom request |
 | `reset` | — | Platform adapter → adapter custom request |
 | `speed` | `mode` | Platform adapter → adapter custom request |
@@ -316,7 +316,7 @@ The types shared between the extension host and webview are defined in `src/cont
 
 - **`PlatformId`** — `'simple' | 'tec1' | 'tec1g'`; the canonical platform identifier used throughout the extension and webview.
 - **`ProjectStatusPayload`** — the shape of the `projectStatus` message body. The key field is `projectState?: 'noWorkspace' | 'uninitialized' | 'initialized'`, which drives control visibility in the webview. Other fields: `roots[]`, `targets[]`, `rootName`, `rootPath`, `hasProject` (legacy compat), `targetName`, `entrySource`, `platform`, and `stopOnEntry` (the current global stop-on-entry toggle value).
-- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `restartDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `setStopOnEntry`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`, `saveTec1gPanelVisibility`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message carries an optional `platform?: string` field that, when present, selects the default kit for that platform without showing pickers. The `setStopOnEntry` message carries `{ stopOnEntry: boolean }` and updates the provider's global toggle. The `saveTec1gPanelVisibility` message carries the full section visibility object and an optional `targetName` to key workspace persistence.
+- **`PlatformViewControlMessage`** — a discriminated union of all project/session/serial control messages (`startDebug`, `restartDebug`, `createProject`, `openWorkspaceFolder`, `selectProject`, `configureProject`, `saveProjectConfig`, `setStopOnEntry`, `selectTarget`, `setEntrySource`, `serialSendFile`, `serialSave`, `serialClear`, `saveTec1gPanelVisibility`). The `saveProjectConfig` message carries `{ platform: string }` and triggers a config write + debug restart. The `createProject` message carries an optional `platform?: string` field that, when present, selects the default kit for that platform without showing pickers. The `setStopOnEntry` message carries `{ stopOnEntry: boolean }` and updates the provider's global toggle. The `saveTec1gPanelVisibility` message is retained for older TEC-1G section-toggle state.
 - **`PlatformViewInboundMessage`** — the full union of all messages the extension host can receive: `PlatformViewControlMessage | Tec1Message | Tec1gMessage | { type?: string; [key: string]: unknown }`.
 
 This file is the authoritative definition of the message boundary. Platform-view-messages.ts imports `PlatformViewInboundMessage` directly from it.
@@ -494,7 +494,7 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - The provider holds two parallel maps: `platformStates` (hardware state, serial buffer, tab) and `loadedModules` (behaviour — HTML generation, state serialization, message handling). Modules are loaded once at startup via `preloadAllPlatforms()` and cached permanently. `PlatformUiModules` in `platform-view-manifest.ts` is the interface every platform UI must satisfy.
 
-- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `projectState`, `platform`, `stopOnEntry`), `PlatformViewControlMessage` (includes `setStopOnEntry`, `saveProjectConfig`, `createProject` with optional `platform?`, `saveTec1gPanelVisibility` for TEC-1G section persistence), and `PlatformViewInboundMessage`.
+- The shared message contract is defined in `src/contracts/platform-view.ts`: `PlatformId`, `ProjectStatusPayload` (includes `projectState`, `platform`, `stopOnEntry`), `PlatformViewControlMessage` (includes `setStopOnEntry`, `saveProjectConfig`, `createProject` with optional `platform?`, and legacy `saveTec1gPanelVisibility`), and `PlatformViewInboundMessage`.
 
 - `registerExtensionPlatform()` in `platform-extension-model.ts` is the unified API for registering both the runtime and UI concerns of a platform in a single call.
 

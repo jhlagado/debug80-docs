@@ -19,14 +19,14 @@ D8 is not tied to AZM syntax. AZM is one producer. Debug80 is one consumer. Othe
 
 ## File Name
 
-A native D8 map should be written beside the listing file with the same base name and the suffix `.d8.json`:
+A native D8 map should be written beside the primary build artifact, or beside the compatibility listing path, with the same base name and the suffix `.d8.json`:
 
 ```text
 build/main.lst
 build/main.d8.json
 ```
 
-Debug80 looks for that sidecar map before it falls back to listing-only source mapping or generated cache maps.
+Debug80 treats the native sidecar map as the authoritative source map for active AZM targets. Listing-only source mapping and generated cache maps are compatibility fallbacks for older artifacts and ROM/extra-listing workflows.
 
 ---
 
@@ -307,6 +307,6 @@ Keep unknown future data additive. Producers may include extra fields, but requi
 
 Debug80 parses and validates D8 maps before importing them. Invalid JSON or schema-level failure makes Debug80 fall back to listing-derived mapping. Segment quality warnings do not necessarily abort launch.
 
-Native sidecar maps are preferred over Debug80-generated cache maps. If no usable D8 map exists, Debug80 can parse the listing, build a generated D8-style cache map, and import that through the same mapping path.
+Native sidecar maps are preferred over Debug80-generated cache maps. If no usable D8 map exists, older compatibility paths can parse a listing, build a generated D8-style cache map, and import that through the same mapping path. For current AZM targets, the expected fix for a missing source map is to build the target again.
 
 For breakpoint binding, Debug80 uses executable segments. Labels, constants, and directive-only rows may still help stack display or symbol lookup, but zero-width or non-executable mappings should not become active breakpoint addresses.

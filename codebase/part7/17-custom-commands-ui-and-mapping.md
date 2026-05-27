@@ -329,7 +329,7 @@ The `D8DebugMap` format is documented in [Appendix G — D8 Debug Map Format](..
 }
 ```
 
-Place it beside the listing as `<listing-basename>.d8.json`; for example, `build/main.d8.json` for `build/main.lst`. `SourceManager` will pick it up automatically over the listing-only path.
+Place it beside the primary build artifact or the compatibility listing path as `<basename>.d8.json`; for example, `build/main.d8.json` beside `build/main.hex`. `SourceManager` will pick up the native D8 map automatically over listing-derived compatibility paths.
 
 ---
 

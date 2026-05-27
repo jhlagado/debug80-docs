@@ -128,7 +128,7 @@ Debug80 has seven major subsystems. Each one owns a specific responsibility and 
 
 ### Source mapping
 
-**What it does:** Maps between source file lines and Z80 memory addresses. This is what makes breakpoints and "show me the current line" work. Two mapping sources are supported: listing files (`.lst`) produced by the assembler, and D8 debug maps (a JSON format with richer segment and symbol information).
+**What it does:** Maps between source file lines, symbols and Z80 memory addresses. This is what makes breakpoints, "show me the current line", F12 / Go to Definition, hovers, workspace symbols, Variables, Watches and conditional breakpoints work. The current active-project source of truth is the D8 debug map emitted by AZM; listing-derived maps remain compatibility infrastructure.
 
 **Where it lives:** `src/mapping/`
 
@@ -136,11 +136,11 @@ Debug80 has seven major subsystems. Each one owns a specific responsibility and 
 
 ### Assembly pipeline
 
-**What it does:** Assembles Z80 source files into loadable binaries. The documented backend is asm80, a traditional Z80 assembler. The pipeline also parses Intel HEX files to load program bytes into the emulated memory.
+**What it does:** Assembles Z80 source files into loadable binaries. The current backend is AZM, linked as the packaged `@jhlagado/azm` library. The pipeline asks AZM for HEX, BIN, lowered-source and D8 map artifacts, then parses Intel HEX files to load program bytes into emulated memory.
 
-**Where it lives:** `src/debug/launch/assembler.ts`, `src/debug/launch/asm80-backend.ts`, `src/z80/loaders.ts`
+**Where it lives:** `src/debug/launch/assembler.ts`, `src/debug/launch/azm-backend.ts`, `src/z80/loaders.ts`
 
-**Key flow:** Source file → assembler backend → Intel HEX binary + listing file + (optionally) D8 debug map → `parseHex()` → byte array loaded into Z80 memory.
+**Key flow:** Source file → AZM backend → Intel HEX binary + native D8 debug map + optional companion artifacts → `parseIntelHex()` → byte array loaded into Z80 memory.
 
 ### Extension shell
 
@@ -211,7 +211,7 @@ Here is what happens from the moment VS Code loads the extension to the moment a
    - Load the platform provider (lazy import)
    - Assemble the source if requested
    - Parse the Intel HEX binary into memory
-   - Parse the listing / D8 debug map for source mapping
+   - Load the D8 debug map for source mapping
    - Create the Z80 runtime with platform I/O handlers
    - Load ROM images (for TEC-1/TEC-1G)
    - Build the symbol index

@@ -352,32 +352,25 @@ The diagnostics mode controlled by `setDiagnosticsEnabled()` logs every resoluti
 
 VS Code's Variables pane is populated through two DAP requests:
 
-**`scopesRequest`** returns the list of variable groups. Debug80 returns one scope: "Registers". The scope has a `variablesReference` handle — an integer that VS Code sends back in the next request to identify which scope's variables it wants.
+**`scopesRequest`** returns the list of variable groups. Debug80 now returns a "Symbols" scope and, when the active D8 map contains value-only symbols, a "Constants" scope. Each scope has a `variablesReference` handle — an integer that VS Code sends back in the next request to identify which scope's variables it wants.
 
-**`variablesRequest`** returns the actual variable list. `VariableService.resolveVariables()` reads the CPU state and formats it:
+**`variablesRequest`** returns the actual variable list. `VariableService.resolveVariables()` reads active source-map symbols and the runtime memory to produce memory-backed symbol previews:
 
 ```typescript
-const regs = runtime.getRegisters();
-const flagsByte = flagsToByte(regs.flags);
-const flagsStr = flagsToString(regs.flags);
-
 return [
-  { name: 'Flags', value: flagsStr, ... },
-  { name: 'PC',    value: format16(regs.pc), ... },
-  { name: 'SP',    value: format16(regs.sp), ... },
-  { name: 'AF',    value: format16((regs.a << 8) | flagsByte), ... },
-  { name: 'BC',    value: format16((regs.b << 8) | regs.c), ... },
-  // ... DE, HL, AF', BC', DE', HL', IX, IY, I, R
+  { name: 'PACMO_LIVES', value: '0x4010 = 0x03', variablesReference: ... },
+  { name: 'MainLoop', value: '0x1234 = 0xcd', variablesReference: ... },
+  // constants appear in the Constants scope when the D8 map has value-only symbols
 ];
 ```
 
-Register pairs are assembled from their 8-bit components. The flags are presented two ways: as the packed byte value (in the AF register) and as a human-readable string in the Flags row, with uppercase letters for set flags and lowercase for clear: `SzHpnC` means Sign set, Zero clear, Half-carry set, Parity clear, Subtract clear, Carry set.
+Expandable memory symbols expose conservative details: address, kind, known size, first byte, a little-endian word when size suggests it, a short byte preview, printable ASCII where available, and source location. Registers are intentionally not duplicated here; the Debug80 webview has a dedicated Registers panel that is more useful for Z80 state.
 
 ### Register editing (`setVariableRequest`)
 
-VS Code lets users edit variable values directly in the Variables pane. The `setVariableRequest` handler validates that the edit target is the registers scope, maps the variable name to a register key, then calls `tryWriteRegisterByKey()`.
+VS Code lets debug adapters support direct variable editing. Debug80 keeps `setVariableRequest` support for register-scope handles used by its existing infrastructure, but the user-facing register workflow is the dedicated Registers panel and `debug80/registerWrite` custom request.
 
-The writable registers are a fixed whitelist: `bc`, `de`, `hl`, `bc'`, `de'`, `hl'`, `ix`, `iy`, `pc`, `sp`. Individual 8-bit registers and the flags are not writable through this interface. The value is parsed as a hex string (without `0x` prefix) and decomposed into 8-bit components before writing to the CPU.
+The writable registers are a fixed whitelist: `bc`, `de`, `hl`, `af`, `bc'`, `de'`, `hl'`, `af'`, `ix`, `iy`, `pc`, `sp`. The value is parsed as a hex string or numeric literal and decomposed into 8-bit components before writing to the CPU.
 
 ---
 

@@ -361,7 +361,7 @@ interface Tec1gPlatformConfig extends Tec1PlatformConfig {
   sdImagePath?: string;         // Path to SD card image file
   sdHighCapacity?: boolean;     // SDHC mode
 
-  // UI visibility (which sections to show in the panel)
+  // Legacy UI visibility defaults. Current TEC-1G core sections are always shown.
   uiVisibility?: {
     lcd?: boolean;
     display?: boolean;
@@ -374,7 +374,7 @@ interface Tec1gPlatformConfig extends Tec1PlatformConfig {
 }
 ```
 
-The `uiVisibility` field sets **defaults from config** for which hardware sections are shown in the TEC-1G webview. At run time, the extension **merges** that with the built-in default visibility map and with **per-target** preferences stored in workspace `Memento` under `debug80.tec1g.uiVisibilityByTarget` (see Chapter 12). Committing `uiVisibility` in `debug80.json` is therefore optional; personal layout choices can live entirely in workspace state, keyed by target name.
+The `uiVisibility` field is legacy configuration. The current TEC-1G panel keeps the main hardware surfaces visible and organizes them into accordion sections rather than expecting users to toggle sections on and off. Older configs that contain this field remain readable, but new project configuration should not rely on it for the normal front-panel layout.
 
 ---
 
@@ -456,9 +456,10 @@ For `simple/default` and `tec1/mon1b` the same structure is used, but with the k
 
 When a source file is selected or changed, the system infers the assembler from the file extension:
 
-- `.asm` → omit the `assembler` field and let asm80 remain the default
+- `.asm`, `.z80`, and `.inc` → use AZM
+- An explicit `assembler: "asm80"` is accepted as a compatibility alias, but it is not the current backend.
 
-This logic still matters when targets are retargeted later, but the new project-init path currently defaults straight to `src/main.asm` for the platform's default kit and does not prompt for an alternative entry source.
+Target discovery is independent of a mandatory `src/` folder. Debug80 looks for entry points by convention: files ending in `.z80`, files whose basename starts with `_`, and files ending in `.main.asm`. This lets a workspace become a Debug80 project with minimal setup while still allowing source trees to organize code below the top-level folder.
 
 ---
 

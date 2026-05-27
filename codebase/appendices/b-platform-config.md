@@ -20,7 +20,7 @@ All configuration lives in `debug80.json` (or the `debug80` key of `package.json
 | `platform` | `string` | `'simple'` | Platform to emulate: `'simple'`, `'tec1'`, or `'tec1g'` |
 | `asm` | `string` | — | Path to the main Z80 assembly source file |
 | `sourceFile` | `string` | — | Alias for `asm` |
-| `assembler` | `string` | `'asm80'` | Assembler backend identifier |
+| `assembler` | `string` | inferred | Assembler backend identifier. AZM is the current backend; `asm80` is accepted as a compatibility alias. |
 | `hex` | `string` | derived | Path to the output Intel HEX file; derived from `asm` if omitted |
 | `listing` | `string` | derived | Path to the listing file; derived from `asm` if omitted |
 | `outputDir` | `string` | asm dir | Directory for build artifacts |
@@ -92,7 +92,7 @@ Config block key: `tec1g`
 | `sdHighCapacity` | `boolean` | `true` | SD card operates in SDHC mode |
 | `gimpSignal` | `boolean` | `false` | Enable GIMP signal simulation for hardware diagnostics |
 | `extraListings` | `string[]` | — | Additional listing files |
-| `uiVisibility` | `object` | all visible | Per-panel visibility flags: `lcd`, `display`, `keypad`, `matrix`, `matrixKeyboard`, `glcd`, `serial` |
+| `uiVisibility` | `object` | all visible | Legacy per-panel visibility flags retained for old configs; the current TEC-1G UI keeps core hardware sections visible and uses accordions |
 
 ---
 

@@ -21,7 +21,7 @@ The module defines two ways to access the same data: **flat fields** and **domai
 
 | View | Interface | Fields exposed | Flat fields aliased |
 |------|-----------|----------------|---------------------|
-| `source` | `SessionSourceState` | `listing`, `listingPath`, `mapping`, `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceRoots`, `extraListingPaths` | Same names on the flat object |
+| `source` | `SessionSourceState` | `listing`, `listingPath`, `mapping`, `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceMapSymbols`, `sourceRoots`, `extraListingPaths` | Same names on the flat object |
 | `launch` | `SessionLaunchState` | `baseDir`, `loadedProgram`, `loadedEntry`, `restartCaptureAddress`, `entryCpuState`, `launchArgs` | Same names on the flat object |
 | `runtimeState` | `SessionRuntimeState` | `execution` | `runtime` |
 | `platform` | `SessionPlatformState` | `tec1Runtime`, `tec1gRuntime`, `platformRuntime`, `tec1gConfig` | Same names on the flat object |
@@ -55,7 +55,8 @@ The tables below list all flat fields on `SessionStateShape`, grouped by the dom
 | `mapping` | `MappingParseResult \| undefined` | Raw output of the source mapper parser |
 | `mappingIndex` | `SourceMapIndex \| undefined` | Indexed source map used for all address↔location queries |
 | `symbolAnchors` | `SourceMapAnchor[]` | File-tracking anchors from the source map |
-| `symbolList` | `Array<{ name: string; address: number }>` | Flat symbol table used for variable watches and the memory inspector |
+| `symbolList` | `Array<{ name: string; address: number }>` | Flat address-symbol table used for nearest-symbol lookups and compatibility display |
+| `sourceMapSymbols` | `SourceMapSymbol[]` | Active D8-backed symbols and constants used by editor features, Variables, Watches and conditional breakpoints |
 | `sourceRoots` | `string[]` | Directories searched when resolving source file paths from listing |
 | `extraListingPaths` | `string[]` | Paths of additional listings loaded alongside the main one |
 
