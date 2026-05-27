@@ -5,7 +5,7 @@ parent: "Part I - Orientation"
 grand_parent: "Understanding the AZM Codebase"
 nav_order: 2
 ---
-[<- What AZM Is](01-what-azm-is.md) | [Source Loading and Logical Lines ->](../part2/03-source-loading.md)
+[<- What Is AZM?](01-what-is-azm.md) | [Source Loading and Logical Lines ->](../part2/03-source-loading.md)
 
 # Chapter 2 - Repository Layout
 
@@ -141,8 +141,8 @@ are:
 - root scripts such as `check-source-file-sizes.mjs` and grammar generation.
 
 The package scripts in `package.json` are the normal entry points. Prefer
-running `npm run ...` commands instead of invoking script files directly unless
-you are debugging the script itself.
+running `npm run ...` commands for normal verification. Invoke script files
+directly while debugging the script itself.
 
 ## Generated and External Directories
 

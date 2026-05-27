@@ -16,6 +16,10 @@ directory is `src/outputs/`.
 The central types live in `src/outputs/types.ts`. `src/outputs/index.ts`
 collects the default writer set used by `compile()`.
 
+Artifact writing is the final compiler boundary. Earlier stages decide the
+program's meaning. Output writers decide how that meaning is represented for
+loaders, debuggers, comparison tools and package consumers.
+
 ## Artifact Types
 
 The output layer uses structured artifact objects:
@@ -30,6 +34,18 @@ The output layer uses structured artifact objects:
 
 The compile API returns these artifacts in memory. The CLI writes them to disk.
 
+Each artifact has a `kind` field. Callers can switch on `kind` to find the
+artifact they need:
+
+```ts
+const d8m = result.artifacts.find((artifact) => artifact.kind === 'd8m');
+const bin = result.artifacts.find((artifact) => artifact.kind === 'bin');
+```
+
+This shape keeps the compile API independent from output paths. A caller can
+write artifacts to disk, keep them in memory, send them to another process or
+compare them in a test.
+
 ## Byte Maps and Ranges
 
 Assembly produces an `EmittedByteMap`. It represents sparse output: addresses
@@ -42,12 +58,20 @@ written span.
 Writers use these helpers to serialize only the relevant ranges and to keep
 binary, HEX and D8 output consistent.
 
+The sparse map shape is important for `.org`. A program can emit bytes at
+several address ranges. `getWrittenSegments()` preserves those ranges. HEX can
+write separate records. BIN can flatten the selected range. D8 can describe the
+same ranges as source-correlated segments.
+
 ## BIN Output
 
 `src/outputs/write-bin.ts` writes flat binary. It chooses the written range,
-fills gaps as needed and returns a `Uint8Array` artifact. This is the simplest
-writer and the best place to inspect how sparse byte maps become contiguous
-file content.
+fills gaps as needed and returns a `Uint8Array` artifact. This writer is the
+shortest example of how sparse byte maps become contiguous file content.
+
+The BIN writer is also where padding policy becomes visible. Sparse addresses
+inside the selected range need a byte value in the flat array. Tests around BIN
+output should check both content and range selection.
 
 ## HEX Output
 
@@ -56,6 +80,10 @@ Intel HEX records, including record checksums and the end-of-file record.
 
 HEX output is useful for hardware loaders, emulators and debugger workflows
 that expect standard Intel HEX.
+
+The HEX writer serializes address records, data records and the end-of-file
+record. Checksum generation lives in the lower `hex.ts` helper, which keeps the
+artifact writer focused on selecting segments and symbols.
 
 ## D8 Debug Maps
 
@@ -75,6 +103,14 @@ clean map of source lines to emitted bytes.
 D8 maps are public integration data. Changes to `D8mJson`, `D8mSegment` or
 symbol shape should be coordinated with Debug80 and covered by tests.
 
+The D8 map distinguishes addressable symbols from constants. Labels and
+addressable data carry addresses. Constants carry values. Debug80 can then use
+addressable symbols for breakpoints and display constants as metadata.
+
+The writer groups symbols and segments under file entries. It also keeps a
+top-level symbol list. That gives consumers both a project-wide view and a
+file-oriented view.
+
 ## Lowered ASM80 Output
 
 `src/outputs/write-asm80.ts` serializes accepted AZM source items as
@@ -83,11 +119,17 @@ can be compared against ASM80 output.
 
 The writer has its own formatting and expression-evaluation helpers because it
 must turn structured source items back into text. It raises
-`UnsupportedAsm80LoweringError` when a source item or instruction form cannot
-be represented in the lowered output.
+`UnsupportedAsm80LoweringError` for a source item or instruction form outside
+the lowered output set.
 
 Lowered ASM80 output is a compatibility and verification aid. It should stay
 byte-faithful for supported forms.
+
+`write-asm80.ts` is larger than the other writers because it turns structured
+items back into source text. It must format instructions, data directives,
+branch targets, lowered layout constants and expressions. Unsupported forms are
+reported through an artifact diagnostic path so a successful assembly can still
+return BIN, HEX and D8 artifacts.
 
 ## Register-Care Artifacts
 
@@ -97,6 +139,10 @@ artifact objects still flow through the same compile result and CLI write path.
 
 The report is human-readable. The `.asmi` interface is metadata that can be
 loaded by later compile runs through `--interface`.
+
+Register-care artifacts share the artifact result path with the byte-oriented
+outputs. That lets the CLI write reports and interfaces with the same base-path
+logic used for binary artifacts.
 
 ## Writer Injection
 
@@ -108,6 +154,9 @@ loaded by later compile runs through `--interface`.
 
 This keeps writer selection explicit and testable. The default writer set is in
 `src/outputs/index.ts`.
+
+Tests can inject a writer set to isolate compile orchestration from writer
+formatting. The production path uses `defaultFormatWriters`.
 
 ## Maintenance Notes
 

@@ -18,6 +18,11 @@ The public tooling and compile APIs both enter loading through
 to `expandSourceForTooling()`, then passes the expanded logical lines to
 `parseNextSourceItems()`.
 
+The loader is deliberately practical. It receives a path from the CLI or a tool,
+finds the source text, expands textual includes and preserves enough provenance
+for every later diagnostic and artifact. It does this before the assembler
+knows whether a line is a label, directive or instruction.
+
 ## Entry Files
 
 `expandSourceForTooling()` accepts a `LoadProgramNextOptions` object:
@@ -40,12 +45,42 @@ extensions before parsing begins.
 the entry file only. Included files still come from disk. That keeps editor
 feedback responsive while preserving normal include semantics for dependencies.
 
+The `signal` option gives editor integrations a way to cancel stale work. An
+editor can start loading after each keystroke and abort an older request when a
+newer buffer arrives. The loader treats cancellation as part of the calling
+tool's control flow; the compiler stages after loading receive only completed
+source expansions.
+
+## Source Text Capture
+
+The loader keeps the full text of every loaded source file in `sourceTexts`.
+Later stages use the parsed source items for compiler logic, but some features
+need the original text:
+
+- register-care annotation needs exact source lines when rewriting comments
+- tooling needs source text for editor diagnostics and code actions
+- D8 map generation needs file names and line provenance
+- case-style linting reads original source lines to inspect token case
+
+Loading returns both logical lines and source text maps for that reason.
+Logical lines drive parsing. Source texts support tools that need to point back
+into the user's files.
+
 ## Include Expansion
 
 `.include` is textual inclusion. The loader reads the entry file, scans it into
 logical lines and recursively expands include directives. Include paths are
 resolved relative to the including source file first, then through the configured
 include directories.
+
+The "relative to the including source file first" rule matters for multi-file
+projects. A library can include a sibling file and keep working when the entry
+file is assembled from another directory. Include directories then act as a
+project-level search path for shared headers and vendor sources.
+
+Every included line keeps its original source name and line number. The flattened
+line stream is convenient for parsing, while each line's provenance keeps
+diagnostics and source maps accurate.
 
 The output is an `ExpandedNextSource`:
 
@@ -63,6 +98,11 @@ source stream for parsing. `sourceTexts` keeps the original file text for later
 tooling, register-care fixes and source maps. `sourceLineComments` keeps
 comments indexed by file and line so AZMDoc register-care comments can be read
 after the parser has built routine boundaries.
+
+The comment map exists because AZMDoc comments carry meaning for register care,
+while ordinary comments usually disappear during parsing. Keeping comments by
+file and line lets register care reconstruct the contract block that precedes a
+routine entry label.
 
 ## Logical Lines
 
@@ -84,6 +124,10 @@ decisions need the code part of a line while preserving semicolons inside string
 and character literals. Reuse this helper rather than adding ad hoc comment
 splitting.
 
+The helper is used in several places that look unrelated: include recognition,
+layout header parsing, field parsing, conditional assembly and single-line
+parsing. Shared comment handling keeps these paths consistent.
+
 ## Directive Alias Profiles
 
 Directive aliases are loaded during `loadProgramNext()`:
@@ -102,6 +146,11 @@ source-item kinds.
 
 Aliases are a syntax boundary. They affect directive recognition before parsing.
 The assembler-time model should receive canonical source items.
+
+Alias files are loaded before parsing begins, so the parser can treat alias
+handling as part of directive normalisation. The policy object is passed into
+`parseNextSourceItems()`, then down to `parseLogicalLine()` and op expansion
+where needed.
 
 ## Diagnostics at the Loading Boundary
 
@@ -122,3 +171,7 @@ information that later stages depend on.
 Keep loading free of assembly semantics. It should find text, expand includes,
 capture comments and produce logical lines. Parsing decides what those lines
 mean.
+
+When adding a source-level feature, keep this boundary in mind. A new directive
+may need loader support only if it affects file discovery or source provenance.
+Most directives belong in parsing and assembly rather than loading.

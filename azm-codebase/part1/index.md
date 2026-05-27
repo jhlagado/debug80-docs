@@ -7,8 +7,8 @@ has_children: true
 ---
 # Part I - Orientation
 
-Part I gives the high-level map. It explains what AZM is, where the major code
-boundaries sit and how the repository is arranged.
+Part I gives the high-level map. It explains AZM's role, the major code
+boundaries and the repository structure.
 
-- [Chapter 1 - What AZM Is](01-what-azm-is.md)
+- [Chapter 1 - What Is AZM?](01-what-is-azm.md)
 - [Chapter 2 - Repository Layout](02-repository-layout.md)

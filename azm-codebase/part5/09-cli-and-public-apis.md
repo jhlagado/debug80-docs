@@ -13,6 +13,11 @@ AZM has three public entry surfaces: the command-line binary, the compile API
 and the tooling API. They all use the same compiler pipeline. The CLI is a thin
 shell over `compile()`, and the package APIs expose structured data for tools.
 
+This chapter is about the boundary between the compiler and its callers. The
+internal compiler works with source items, byte maps and diagnostics. The public
+surfaces translate those structures into commands, package exports and stable
+TypeScript types.
+
 ## Package Exports
 
 `package.json` exposes:
@@ -30,6 +35,10 @@ shell over `compile()`, and the package APIs expose structured data for tools.
 
 Public consumers should import from package exports. A direct import from
 `dist/src/...` bypasses the package contract and can break when internals move.
+
+The root export gives consumers a convenient broad import. The `/compile` path
+is the build-system path. The `/tooling` path is the editor and analysis path.
+The `/cli` path backs the executable entry and is published for completeness.
 
 ## CLI Entry
 
@@ -55,6 +64,11 @@ The CLI returns:
 - `1` when diagnostics include an error
 - `2` for argument or unexpected runtime failures
 
+The CLI prints diagnostics to standard error and prints the primary output path
+to standard output when artifact writing succeeds. This behaviour lets shell
+scripts capture the produced file path while still seeing diagnostics in the
+normal error stream.
+
 ## Argument Parsing
 
 `src/cli/parse-args.ts` parses switches and validates the command shape. It
@@ -64,6 +78,12 @@ case-style linting, directive aliases and register-care options.
 The parsed result is an internal CLI shape. `src/cli/write-artifacts.ts` maps
 that shape into `CompileNextFunctionOptions` for the public compile API. This
 keeps argument parsing separate from compiler options.
+
+The parser owns user-facing command vocabulary: short options, long options,
+mode names and required arguments. The compile API owns compiler vocabulary:
+include directories, emitted artifact flags, register-care mode and source-root
+metadata. Keeping the two shapes separate lets the CLI evolve while package
+consumers keep the compile API naming.
 
 ## Disk Artifact Writing
 
@@ -79,6 +99,11 @@ That file owns CLI artifact paths:
 - deterministic diagnostic sorting for CLI output
 
 Output writer modules produce artifact objects. CLI code decides filenames.
+
+The base path calculation is central to CLI behaviour. If the user supplies
+`--output build/program.bin`, the primary artifact is written to that path and
+side artifacts use the same base. If the user supplies only `program.asm`, AZM
+writes outputs next to the entry source using the source stem.
 
 ## Compile API
 
@@ -119,6 +144,42 @@ Important options include:
 The dependency parameter injects format writers. Tests can use this to isolate
 compile behaviour from disk output or writer implementation details.
 
+`compile()` returns a `CompileNextResult`:
+
+```ts
+export interface CompileNextResult {
+  readonly diagnostics: readonly Diagnostic[];
+  readonly artifacts: readonly Artifact[];
+}
+```
+
+The result shape is deliberately small. Diagnostics describe every warning or
+error observed during loading, analysis, register care, assembly or artifact
+creation. Artifacts contain the in-memory outputs requested by options.
+
+## Compile API Walkthrough
+
+A build tool that wants bytes and a D8 map can call:
+
+```ts
+const result = await compile('/project/src/main.asm', {
+  includeDirs: ['/project/include'],
+  outputType: 'hex',
+  emitHex: true,
+  emitBin: true,
+  emitD8m: true,
+  sourceRoot: '/project',
+  d8mInputs: {
+    hex: '/project/build/main.hex',
+    bin: '/project/build/main.bin',
+  },
+});
+```
+
+The returned artifacts can then be written by the caller, passed to Debug80 or
+compared in tests. The compile API does the assembler work and leaves file
+placement decisions to the caller.
+
 ## Tooling API
 
 `src/tooling/api.ts` exports `loadProgramNext()` and `analyzeProgramNext()`.
@@ -133,10 +194,30 @@ code actions in a form suitable for editors.
 Tooling callers use this path when they need diagnostics, symbols or
 register-care facts in memory.
 
+## Tooling API Walkthrough
+
+An editor integration usually starts with `loadProgramNext()`:
+
+```ts
+const loaded = await loadProgramNext({
+  entryFile: '/project/src/main.asm',
+  includeDirs: ['/project/include'],
+  preloadedText: editorText,
+});
+```
+
+When `loaded.loadedProgram` is present, the editor can call
+`analyzeProgramNext()` for symbols and case-style diagnostics. It can also call
+`analyzeRegisterCareForTools()` for register-care candidate diagnostics and code
+actions.
+
+This split lets an editor load and parse once, then run several analyses over
+the same parsed program.
+
 ## API Compatibility
 
-The public API is defined by package exports and exported TypeScript types. Keep
-the following stable unless a major version is planned:
+The public API is defined by package exports and exported TypeScript types.
+Major-version planning is the point where these shapes can change:
 
 - exported function names
 - option object property names
@@ -149,6 +230,11 @@ the following stable unless a major version is planned:
 Internal files can move when the package exports stay stable. Public types in
 `src/index.ts`, `src/api-compile.ts`, `src/api-tooling.ts` and
 `src/outputs/types.ts` require more care.
+
+The type tests are the safety net for this boundary. When a public type changes,
+the change should be intentional and reflected in package documentation. When
+an internal refactor preserves the exported shape, downstream TypeScript
+consumers should keep compiling.
 
 ## Maintenance Notes
 

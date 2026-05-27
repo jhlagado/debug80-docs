@@ -26,6 +26,11 @@ export function buildAddressState(
 The returned `AddressState` contains symbol facts, equate records, layout
 records, enum names, diagnostics and placement information.
 
+This stage is where parsed syntax becomes assembler knowledge. A label item
+becomes an address. A type declaration becomes a layout record. A `.ds`
+directive becomes a byte count. An expression tree becomes a number if every
+name in it can be resolved.
+
 ## Placement
 
 `src/assembly/placement.ts` owns placement state. `.org` changes the active
@@ -36,6 +41,15 @@ space in the byte map according to the storage rules used during emission.
 Placement is separated from byte emission so the assembler can resolve symbols
 before every byte has been written. The first pass establishes addresses. The
 emission pass uses those addresses to encode references and fixups.
+
+Placement records the current address and the active placement kind. `.org`
+sets the address. An instruction advances by its encoded size. `.db` advances by
+the number of emitted bytes. `.dw` advances by two bytes per expression. `.ds`
+advances by the calculated storage size.
+
+Because placement is computed before final emission, forward references can be
+resolved. A branch to a later label can be encoded after address planning has
+seen the label definition.
 
 ## Labels and Constants
 
@@ -54,11 +68,31 @@ The code also checks case-insensitive collisions. AZM symbols are
 case-sensitive, but collision diagnostics help catch source that was written
 with older case-insensitive assembler habits.
 
+The duplicate checks live here because this stage sees all binding forms
+together. A name can come from a label, equate, enum or layout declaration.
+Address planning can compare those namespaces and report the conflict with the
+span that introduced it.
+
 ## Layout Records
 
 Record and union declarations become layout records. A record field advances the
 offset by its byte size. A union field starts at offset zero and the union size
 is the largest field size.
+
+For a record:
+
+```asm
+Sprite .type
+x      .field byte
+y      .field byte
+tile   .field byte
+flags  .field byte
+       .endtype
+```
+
+the layout record stores `x = 0`, `y = 1`, `tile = 2`, `flags = 3` and total
+size `4`. For a union, each field starts at offset `0`, and the final size is
+the largest field expression.
 
 Type aliases bind a name to another type expression:
 
@@ -85,14 +119,21 @@ assembler-time environment. It owns the rules for:
 
 The evaluator receives maps of labels, equates and layouts. It returns a number
 when an expression can be folded. It reports diagnostics when names are missing,
-layout paths are invalid or expressions cannot be used in the requested context.
+layout paths are invalid or the requested context needs a different expression
+kind.
+
+Expression evaluation is context-sensitive. A symbol in an instruction operand
+may be a label or constant. A type expression in `.ds Sprite[4]` resolves to a
+byte count. A layout cast such as `<SpriteArray>Sprites[3].flags` resolves to an
+address only when the base address, type alias, index and field path are all
+known at assembly time.
 
 ## Data and Storage Size
 
-Address planning must know how many bytes a directive will occupy. It therefore
-contains size helpers for `.db`, `.dw`, `.ds`, strings and alignment. The same
-string directive byte rules are reused during emission so planning and output
-stay aligned.
+Address planning needs the byte length of each directive. It contains size
+helpers for `.db`, `.dw`, `.ds`, strings and alignment. The same string
+directive byte rules are reused during emission so planning and output stay
+aligned.
 
 The important storage distinction is:
 
@@ -104,15 +145,25 @@ The important storage distinction is:
 Layout type expressions are byte-size expressions in storage and field-size
 positions.
 
+This rule keeps initialized data and reserved storage separate. `.db` and `.dw`
+write explicit values. `.ds` reserves space calculated from numbers or layout
+type expressions. The layout system helps calculate storage and field
+offsets while leaving emitted initialized bytes explicit in source.
+
 ## Fixed-Point Planning
 
 `buildAddressState()` may need more than one pass. Forward references,
 expression sizes and layout aliases can become resolvable only after later
 facts are known. The planning code repeats until the state signature stops
-changing or diagnostics prove the program cannot be resolved.
+changing or diagnostics prove the program has unresolved facts.
 
 This fixed-point approach keeps forward references usable while still producing
 stable final addresses.
+
+The state signature is the guardrail for this loop. After each pass, the planner
+summarises the facts that affect addresses and sizes. When the signature repeats,
+the planner has reached a stable environment and emission can proceed with those
+facts.
 
 ## Maintenance Notes
 

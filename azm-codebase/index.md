@@ -25,7 +25,7 @@ one step on that path or expose the path to the CLI, Debug80 or tests.
 
 ## Part I - Orientation
 
-- [Chapter 1 - What AZM Is](part1/01-what-azm-is.md)
+- [Chapter 1 - What Is AZM?](part1/01-what-is-azm.md)
 - [Chapter 2 - Repository Layout](part1/02-repository-layout.md)
 
 ## Part II - Loading and Parsing

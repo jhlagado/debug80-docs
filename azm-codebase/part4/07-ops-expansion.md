@@ -64,8 +64,8 @@ ordinary source text and parsed through the same line parser used for top-level
 source.
 
 The expansion code also rewrites local labels inside op bodies. A local label in
-an op expansion must become unique at the use site so two expansions cannot
-define the same generated label.
+an op expansion becomes unique at the use site so each expansion receives its
+own generated label.
 
 ## Diagnostics
 
@@ -79,9 +79,9 @@ use that generated the bad instruction.
 
 ## Interaction with Register Care
 
-Ops expand before register care builds routines. Register care therefore sees
-the expanded instructions. This is the correct model: an op is visible inline
-assembly, so its register effects belong to the caller.
+Ops expand before register care builds routines. Register care sees the
+expanded instructions. An op is visible inline assembly, so its register effects
+belong to the caller.
 
 When changing op expansion, run both op tests and register-care integration
 tests. A seemingly local op change can alter the instruction stream that
