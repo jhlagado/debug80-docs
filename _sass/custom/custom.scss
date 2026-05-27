@@ -103,10 +103,8 @@ html {
     font-weight: 400;
   }
 
-  // Block code — make listings read as deliberate figures, not body text
-  pre,
-  pre.highlight,
-  .highlighter-rouge pre.highlight {
+  // Block code — one site-wide listing frame for every fenced block
+  pre {
     background:
       linear-gradient(90deg, rgba(118, 86, 52, 0.10), rgba(118, 86, 52, 0) 4.5rem),
       #f1ece3;
@@ -128,23 +126,13 @@ html {
     }
   }
 
-  div.highlight {
-    background-color: transparent;
-    margin-top: 0.35rem;
-    margin-bottom: 1.9rem;
-
-    pre {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  // Plain / unlanguaged code blocks (listing output, shell sessions)
-  code.language-text,
-  code.language-plaintext,
-  pre > code:not([class]) {
-    background-color: #f2ede5;
-    color: #3d3935;
+  // Legacy Rouge wrappers should never create a second visible frame.
+  .highlight,
+  .highlighter-rouge {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
   }
 
   // Horizontal rules — refined weight
@@ -266,8 +254,7 @@ html {
     h2 { font-size: 1.25rem;  margin-top: 2.25rem; }
     h3 { font-size: 1.0625rem; }
 
-    pre.highlight,
-    div.highlight {
+    pre {
       font-size: 0.8125rem;
     }
   }
@@ -286,8 +273,7 @@ html {
     max-width: 100%;
     margin: 0;
 
-    pre.highlight,
-    div.highlight {
+    pre {
       background: #f5f5f0 !important;
       border: 1px solid #ccc !important;
     }
