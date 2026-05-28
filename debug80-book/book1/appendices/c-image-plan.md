@@ -82,8 +82,8 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 
 | Image | Type | Chapter |
 |---|---|---|
-| CoolTerm Remote Control Socket setting | Screenshot | Chapter 7 |
-| CoolTerm serial options | Screenshot | Chapter 7 |
+| CoolTerm Remote Control Socket setting | Screenshot | Chapter 7; added as `coolterm-remote-control-socket.png` |
+| CoolTerm serial options | Screenshot | Chapter 7; added as `coolterm-serial-options.png` |
 | **Send to Board** visible in Debug80 | Screenshot | Chapter 7 |
 | TEC-1G MON-3 Intel HEX Load mode | Hardware photo | Chapter 7 |
 | TEC-1G seven-segment display showing `PASS` after load | Hardware photo | Chapter 7 |

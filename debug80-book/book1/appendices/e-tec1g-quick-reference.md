@@ -43,6 +43,8 @@ No parity
 2 stop bits
 ```
 
+Enable CoolTerm's Remote Control Socket in **Preferences > Scripting** and keep the port set to `51413`. Debug80 uses that local socket to tell CoolTerm when to send the active target's HEX file.
+
 For TEC-1G / MON-3 hardware transfer, put the board into Intel HEX Load mode before pressing **Send to Board**. After the transfer, read the seven-segment display:
 
 ```text

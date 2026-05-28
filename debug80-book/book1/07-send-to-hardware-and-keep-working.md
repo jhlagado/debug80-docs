@@ -8,6 +8,8 @@ nav_order: 7
 
 Debug80 sends the active target's Intel HEX file to real hardware through CoolTerm. CoolTerm owns the serial port. Debug80 controls CoolTerm through its localhost Remote Control Socket.
 
+This means the hardware path has two parts. CoolTerm must be configured to talk to the TEC-1G serial port, and CoolTerm must also accept remote-control commands from Debug80.
+
 This chapter also covers the next step after the first successful transfer: adding more targets, choosing platforms and recovering from common failures.
 
 ## Install CoolTerm
@@ -18,11 +20,11 @@ Download CoolTerm from:
 
 On macOS, the first launch may require approval in **System Settings > Privacy & Security**. You can also right-click CoolTerm in Finder, choose **Open** and confirm the launch.
 
+Debug80 uses CoolTerm for board transfer. Install it before you try **Send to Board**. The emulator's Serial section can send data to the emulated machine, but hardware transfer uses CoolTerm and a real serial connection.
+
 ## Enable The Remote Control Socket
 
-In CoolTerm, open **Preferences > Scripting**.
-
-Enable **Remote Control Socket** and keep the port set to:
+In CoolTerm, open **Preferences > Scripting**. Enable **Remote Control Socket** and keep the port set to:
 
 ```text
 51413
@@ -34,15 +36,15 @@ Leave **HTTP Server** disabled. Debug80 connects to CoolTerm at:
 127.0.0.1:51413
 ```
 
-When CoolTerm is running with that socket enabled, Debug80 can detect it and show **Send to Board** in the Project section.
-
-> **Image placeholder:** CoolTerm Preferences > Scripting with Remote Control Socket enabled on port `51413`.
+![CoolTerm Remote Control Socket setting](../../assets/images/debug80-book/book1/coolterm-remote-control-socket.png)
 
 The socket is local to your computer. Debug80 is not taking over the serial device directly; it is asking CoolTerm to send the file through the connection CoolTerm owns.
 
+The local IP shown in CoolTerm is not the setting Debug80 needs. The important settings are **Enable Remote Control Socket** and port `51413`.
+
 ## Configure The Serial Port
 
-Open CoolTerm's connection options. Select the serial port for your USB serial adapter and use the TEC-1 monitor settings:
+Open **Connection > Options** in CoolTerm. Select the serial port for your USB serial adapter and use the TEC-1G monitor settings:
 
 ```text
 4800 baud
@@ -51,9 +53,13 @@ No parity
 2 stop bits
 ```
 
-If the board misses characters during transfer, adjust CoolTerm's transmit delay settings.
+![CoolTerm serial port options for TEC-1G transfer](../../assets/images/debug80-book/book1/coolterm-serial-options.png)
 
-> **Image placeholder:** CoolTerm serial connection options showing `4800`, 8 data bits, no parity and 2 stop bits.
+These settings describe the physical serial link to the board. The port name depends on your USB serial adapter and operating system, but the line settings are fixed for this workflow: `4800 8 N 2`.
+
+When CoolTerm is running with the Remote Control Socket enabled, Debug80 can detect it and show **Send to Board** in the Project section.
+
+If the board misses characters during transfer, adjust CoolTerm's transmit delay settings.
 
 Keep these settings with the hardware notes for your board. A wrong stop-bit or baud setting can look like a bad program because the monitor receives corrupted characters.
 
