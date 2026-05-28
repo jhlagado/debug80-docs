@@ -69,19 +69,3 @@ If the workspace contains more than one folder, use the Project selector to choo
 For an existing project, add the folder that already contains `debug80.json`.
 
 Debug80 can work on multiple projects in the same workspace. To add another project, use **File > Add Folder to Workspace** again. Debug80 will see the added folder and show it in the Project selector.
-
-## Project Files
-
-Debug80 project configuration lives in one file at the root of the project folder:
-
-```text
-debug80.json
-```
-
-The next chapter uses Debug80 to create `debug80.json`, a starter source file and a build folder.
-
-## Folder And Target
-
-The folder is the project container. It holds `debug80.json`, source files and build output.
-
-After initialization, Debug80 adds a target to the project. A target is the runnable program Debug80 builds and launches from that folder. The next chapter creates the starter target and shows how it appears in the panel.
