@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Inspect The Machine"
+title: "Inspect The Starter Program"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 4
 ---
-# Inspect The Machine
+# Inspect The Starter Program
 
-Paused execution gives you time to inspect the emulated machine. Start with the source-map-backed symbols in VS Code, then use Debug80's Registers and Memory sections when you need CPU state or bytes at an address.
+Paused execution gives you time to inspect the starter program from several angles. Start with the source-map-backed symbols in VS Code, then use Debug80's Registers, Memory and Machine sections to connect source lines with CPU state and visible TEC-1G output.
 
 ## Symbols And Constants In Variables
 
@@ -24,23 +24,26 @@ These scopes use the source map from the last successful build. Build the target
 
 Open the **Watch** panel while execution is paused. Debug80 evaluates Z80-focused Watch expressions against the current CPU state, memory and source-map symbols.
 
-Start with registers and flags:
+Start with registers and flags that matter while stepping the starter:
 
 ```asm
-A
-HL
 PC
-zero
-not carry
+SP
+C
+HL
+DE
 ```
 
 Register names read the current Z80 register value. Flag names use the same spelled-out style as AZM register-care contracts, so `carry` means the carry flag and `C` means the C register.
 
-Watches can also use symbols from the active source map:
+Watches can also use symbols from the active source map. The starter gives you useful names immediately:
 
 ```asm
-PACMO_LIVES
-PC eq MainLoop
+scan_hello
+lcd_line1
+seven_seg_hello
+PC eq scan_hello
+DE eq seven_seg_hello
 ```
 
 A symbol by itself evaluates to its address or constant value. Build the active target again when a symbol Watch needs to be generated or refreshed.
@@ -49,31 +52,32 @@ Square brackets read one byte from memory at the address inside the brackets:
 
 ```asm
 [HL]
-[PACMO_LIVES]
-[IX + 4]
+[DE]
+[lcd_line1]
+[seven_seg_hello]
 ```
 
-Use Watches when you want a small set of facts to stay visible while stepping. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
+Use Watches when you want a small set of facts to stay visible while stepping. For example, stop in `scan_hello` and watch `C`, `DE`, `seven_seg_hello` and `[DE]`. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
 
-> **Image placeholder:** VS Code Watch panel showing Debug80 expressions such as `A`, `zero`, `[HL]` and `PC eq MainLoop`.
+> **Image placeholder:** VS Code Watch panel showing Debug80 expressions such as `PC`, `DE`, `seven_seg_hello` and `[DE]`.
 
 ## Call Stack Naming
 
 Open the **Call Stack** view while the program is paused. Debug80 names the current Z80 execution frame from the nearest known symbol in the source map.
 
-You may see names such as:
+In the starter program, you may see names such as:
 
 ```text
-UpdatePlayer
-UpdatePlayer+6
-RenderSprite+12
+start
+scan_hello
+scan_hello+3
 ```
 
-The `+6` form means the current PC is six bytes after the named symbol. This symbolic name identifies the current execution location.
+The `+3` form means the current PC is three bytes after the named symbol. This symbolic name identifies the current execution location.
 
 Z80 programs expose execution through registers, memory and branch targets. Debug80 gives the current address a useful name when the source map contains a nearby label.
 
-> **Image placeholder:** VS Code Call Stack view showing a symbolic Debug80 frame name such as `UpdatePlayer+6`.
+> **Image placeholder:** VS Code Call Stack view showing a symbolic Debug80 frame name such as `scan_hello+3`.
 
 ## The Registers Section
 
@@ -87,11 +91,11 @@ SP is the stack pointer. It names the top of the Z80 stack.
 
 The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. This book introduces them where the workflow needs them; the Z80 course material explains the instruction set in detail.
 
-Step the starter program and watch PC change. With the starter loop, PC moves from `0x4000` to the jump instruction and then returns to `0x4000`.
+Step the starter program and watch PC change. It starts at `0x4000`, moves through the LCD setup code, then settles into the `scan_hello` loop.
 
 > **Image placeholder:** Debug80 Registers section with PC visible.
 
-The value is useful because it confirms what the editor is showing. When the editor highlights `NOP` and PC is `0x4000`, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
+The value is useful because it confirms what the editor is showing. When the editor highlights `ld sp,0x7fff` and PC is `0x4000`, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
 
 The panel register view also keeps your attention near the emulated hardware. When you are debugging display or keypad code, this matters more than it does in a normal desktop program: the code, CPU state and machine front panel all belong to the same moment.
 
@@ -118,7 +122,7 @@ Use **Absolute** when the address comes from the source or hardware manual. Use 
 
 ## Connect Source To Memory
 
-The starter source begins at `0x4000`. When PC is `0x4000`, the memory view around PC shows the bytes generated for the first instruction.
+The starter source begins at `0x4000`. When PC is `0x4000`, the memory view around PC shows the bytes generated for `ld sp,0x7fff`.
 
 That connection between source lines and memory addresses is what makes source-level debugging possible. Chapter 6 explains the source map that carries this relationship.
 
@@ -150,9 +154,9 @@ If you are unsure whether a key reached the emulator, use an on-screen key first
 
 ## LCD And Seven-Segment Output
 
-The LCD and seven-segment display update from the emulated I/O ports. If your program writes to the display ports, the panel changes while the emulator runs.
+The LCD and seven-segment display update from the emulated I/O ports. The starter program reaches those devices through MON-3 services.
 
-For the starter loop, the displays stay unchanged because the program leaves the display ports alone. When you run a program that writes to the LCD or seven-segment ports, this section shows the result.
+After the LCD setup calls run, the LCD shows the starter message. When execution reaches `scan_hello`, the repeated MON-3 scan call keeps the seven-segment display refreshed from `seven_seg_hello`.
 
 ## Speaker, Speed And Mute
 

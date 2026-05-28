@@ -74,8 +74,8 @@ The user manual has moved from the deprecated `manual/` publication to **Debug80
 |---|---|
 | 1. Install And Add A Folder | VS Code install, Marketplace install, Debug80 panel and project folder basics |
 | 2. Create A TEC-1G Project | `Debug80: Create Project`, TEC-1G / MON-3 kit, starter source and target model |
-| 3. Build And Step | F5, Build, breakpoints, debug controls and Run to Cursor |
-| 4. Inspect The Machine | Variables symbols, symbolic Call Stack names, Registers, Memory and Machine panel |
+| 3. Run The Starter Program | F5, Build, stepping, breakpoints, Run to Cursor and conditional breakpoints using the starter |
+| 4. Inspect The Starter Program | Variables symbols, Watches, symbolic Call Stack names, Registers, Memory and Machine panel using the starter |
 | 5. Use The Debug80 Panel | Project controls, source-map status, Register Care, displays, keyboard and serial |
 | 6. Read Artifacts And ROM Source | `.hex`, `.lst`, source map, source navigation, ROM source and bundled assets |
 | 7. Send To Hardware And Keep Working | CoolTerm transfer, targets, platform choice and troubleshooting |

@@ -14,8 +14,8 @@ This first draft establishes the full teaching path. The screenshot plan in Appe
 
 1. [Install And Add A Folder](01-install-and-add-a-folder.md)
 2. [Create A TEC-1G Project](02-create-a-tec1g-project.md)
-3. [Build And Step](03-build-and-step.md)
-4. [Inspect The Machine](04-inspect-the-machine.md)
+3. [Run The Starter Program](03-build-and-step.md)
+4. [Inspect The Starter Program](04-inspect-the-machine.md)
 5. [Use The Debug80 Panel](05-use-the-debug80-panel.md)
 6. [Read Artifacts And ROM Source](06-artifacts-roms-and-mapping.md)
 7. [Send To Hardware And Keep Working](07-send-to-hardware-and-keep-working.md)
