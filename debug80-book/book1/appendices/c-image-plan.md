@@ -31,6 +31,8 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | Fresh TEC-1G project in Explorer | Screenshot | Chapter 2; added as `explorer-initialized-project.png` |
 | Project section after creation | Screenshot | Chapter 2; added as `initialized-project-panel.png` |
 | Starter `src/main.asm` | Screenshot | Chapter 2; added as part of `initialized-project-panel.png` |
+| MON-3 address mode showing `4000` | Screenshot | Chapter 2; added as `monitor-edit-address-4000.png` |
+| Starter program running in Machine section | Screenshot | Chapter 2; added as `starter-running-output.png` |
 
 ## Build And Debug
 

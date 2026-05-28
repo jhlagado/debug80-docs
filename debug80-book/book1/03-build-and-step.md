@@ -6,6 +6,8 @@ nav_order: 3
 ---
 # Run The Starter Program
 
+You have already run the starter from MON-3. Now run the same program under the debugger.
+
 The starter program is small enough to understand in one sitting, and active enough to exercise real Debug80 features. It sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment display refresh routine.
 
 Use this chapter to run that program under the debugger. You will stop at entry, step through the first MON-3 calls, set a breakpoint in the refresh loop and watch the panel change.

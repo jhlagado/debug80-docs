@@ -146,6 +146,26 @@ After the LCD text is written, the program loops at `scan_hello:`. Each pass ask
 
 Save `src/main.asm`.
 
+## Run It From MON-3
+
+Build the target once before you start debugging. Debug80 assembles the program and loads it into the emulated TEC-1G memory at `0x4000`.
+
+The TEC-1G panel starts in the MON-3 monitor. Press **AD** to enter address mode, then enter:
+
+```text
+4000
+```
+
+The seven-segment display shows the address, and the LCD monitor view shows the bytes at that address.
+
+![MON-3 address mode showing 4000](../../assets/images/debug80-book/book1/monitor-edit-address-4000.png)
+
+Press **GO** to run the program at the displayed address. The LCD shows the starter message, and the seven-segment display is refreshed from `seven_seg_hello`.
+
+![Starter program running on the TEC-1G panel](../../assets/images/debug80-book/book1/starter-running-output.png)
+
+This first run proves the whole path before you start single-stepping: AZM assembled the source at `0x4000`, Debug80 loaded the HEX into the emulator, MON-3 jumped to the program, and the program produced visible TEC-1G output.
+
 ## Why The Starter Program Uses MON-3
 
 The starter program uses monitor services rather than raw port writes. That keeps the first source file compact while still giving visible output on the TEC-1G panel.
