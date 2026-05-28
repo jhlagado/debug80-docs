@@ -18,7 +18,7 @@ When you build or start debugging, Debug80 uses the selected target. It assemble
 
 Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
 
-Select the uninitialized folder in the Debug80 Project section. Choose **TEC-1G** from the Platform selector, then click **Initialize**.
+Select the uninitialized folder in the Debug80 Project section. Use the platform control to initialize it as a TEC-1G project.
 
 ![Platform selector with TEC-1G selected](../../assets/images/debug80-book/book1/select-tec1g-platform.png)
 
@@ -43,7 +43,7 @@ The platform choice decides the first shape of the project. Book 1 starts with o
 
 ## Files Created
 
-After initialization, open the VS Code Explorer. A fresh TEC-1G project has these working pieces:
+After initialization, open the VS Code Explorer. A fresh TEC-1G project has the project file, starter source and build folder:
 
 ```text
 debug80.json
@@ -51,7 +51,7 @@ src/main.asm
 build/
 ```
 
-`debug80.json` stores the Debug80 project and its targets. `src/main.asm` is the starter entry source for the first target. `build/` receives generated files after the first build. Debug80 may also create a `.debug80` folder for its own project support files.
+`debug80.json` stores the Debug80 project and its targets. The starter source is the first target's entry point. `build/` receives generated files after the first build. Debug80 may also create a `.debug80` folder for its own project support files.
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 

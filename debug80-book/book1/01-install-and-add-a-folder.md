@@ -12,13 +12,7 @@ Open <https://code.visualstudio.com/> and install the current VS Code build for 
 
 ## Install Debug80
 
-Open VS Code and choose **Extensions** from the Activity Bar. Search for:
-
-```text
-Debug80 IDE for Z80 Development
-```
-
-Install the extension published by `jhlagado`. After installation, VS Code may ask you to reload the window. Reloading starts the extension in the current VS Code session.
+Open VS Code and choose **Extensions** from the Activity Bar. Search for Debug80 and install the Marketplace extension published by `jhlagado`. After installation, VS Code may ask you to reload the window. Reloading starts the extension in the current VS Code session.
 
 ![Debug80 Marketplace entry in VS Code](../../assets/images/debug80-book/book1/marketplace-entry.png)
 
@@ -30,13 +24,7 @@ Open the **Run and Debug** sidebar. The Debug80 panel appears there because the 
 
 ![Debug80 view in the Run and Debug sidebar](../../assets/images/debug80-book/book1/run-debug-debug80-view.png)
 
-If the panel is hidden, open the Command Palette and run:
-
-```text
-Debug80: Open Debug80 View
-```
-
-You can also open the view from the VS Code menu. Choose **View > Open View...**, then search for **Debug80**.
+If the panel is hidden, open it from VS Code's view picker.
 
 ![View menu with Open View selected](../../assets/images/debug80-book/book1/open-view-menu.png)
 
@@ -56,15 +44,15 @@ Treat the panel as the home position for Debug80 work. VS Code has its own Run a
 
 Debug80 works from folders in the VS Code workspace. A folder can hold source files, build output and the `debug80.json` file that describes how to build and run the program.
 
-Add a project folder with **File > Add Folder to Workspace**. Choose the folder that should own the Z80 project. For source files in `/projects/blink`, add `blink` as the workspace folder.
+Add a project folder from the File menu. Choose the folder that should own the Z80 project. For source files in `/projects/blink`, add `blink` as the workspace folder.
 
 ![File menu with Add Folder to Workspace selected](../../assets/images/debug80-book/book1/add-folder-menu.png)
 
-For a new project, you can create the folder from the folder chooser. Name it clearly; the folder name is what you will see in the Debug80 Project selector.
+For a new project, you can create the folder from the folder chooser. The folder name is what you will see in the Debug80 Project selector.
 
 ![New folder dialog creating project1](../../assets/images/debug80-book/book1/create-project-folder-dialog.png)
 
-Select the new folder and click **Add**.
+Select the new folder and add it to the workspace.
 
 ![Folder chooser with project1 selected](../../assets/images/debug80-book/book1/add-project-folder-dialog.png)
 
