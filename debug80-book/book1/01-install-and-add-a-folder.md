@@ -92,11 +92,11 @@ debug80.json
 
 The next chapter uses Debug80 to create `debug80.json`, a starter source file and a build folder.
 
-## A Folder Is Not A Target
+## Folder And Target
 
-The folder is the project container. It may eventually hold several runnable programs.
+The folder is the project container. It holds `debug80.json`, source files and build output.
 
-Debug80 calls each runnable program a target. The target is introduced in the next chapter because it appears after project creation. For now, keep the distinction simple: the folder is where the project lives; the target is what Debug80 launches from that project.
+After initialization, Debug80 adds a target to the project. A target is the runnable program Debug80 builds and launches from that folder. The next chapter creates the starter target and shows how it appears in the panel.
 
 ## Before Moving On
 
