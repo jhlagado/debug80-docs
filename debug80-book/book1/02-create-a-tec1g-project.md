@@ -51,7 +51,7 @@ src/main.asm
 build/
 ```
 
-`debug80.json` stores the Debug80 project and its targets. The starter source is the first target's entry point. `build/` receives generated files after the first build. Debug80 may also create a `.debug80` folder for its own project support files.
+`debug80.json` stores the Debug80 project and its targets. The starter source is the first target's entry point. `build/` receives generated files after the first build.
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 
@@ -86,10 +86,44 @@ Open `src/main.asm`. The TEC-1G / MON-3 project creator writes this starter sour
 
 ```asm
 ; Debug80 starter (TEC-1G / MON-3)
+; Prints a message on the LCD, then continuously scans "HELLO" on the
+; six-digit seven-segment display.
+
+api_scan_segments       .equ 10
+api_string_to_lcd       .equ 13
+api_command_to_lcd      .equ 15
+
+lcd_clear               .equ 0x01
+lcd_row1                .equ 0x80
+
         ORG 0x4000
 
-start:  NOP
-        JR  start
+start:
+        ld      sp,0x7fff
+
+        ld      b,lcd_clear
+        ld      c,api_command_to_lcd
+        rst     0x10
+
+        ld      b,lcd_row1
+        ld      c,api_command_to_lcd
+        rst     0x10
+        ld      hl,lcd_line1
+        ld      c,api_string_to_lcd
+        rst     0x10
+
+scan_hello:
+        ld      de,seven_seg_hello
+        ld      c,api_scan_segments
+        rst     0x10
+        jr      scan_hello
+
+lcd_line1:
+        .db     "Debug80 TEC-1G",0
+
+; MON-3 seven-segment character codes for "HELLO ".
+seven_seg_hello:
+        .db     0x6e,0xc7,0xc2,0xc2,0xeb,0x00
 ```
 
 Debug80 assembles this file with AZM when you launch the target. AZM turns the source text into Z80 machine code and writes the files Debug80 needs for source-level debugging.
@@ -102,23 +136,20 @@ The monitor ROM still exists in the emulated machine. Your program lives in RAM 
 
 `start:` is a label. A label gives a name to an address.
 
-`NOP` is a Z80 instruction that advances the CPU while leaving registers and memory unchanged.
+The starter uses MON-3 calls through `RST 0x10`. The value in `C` selects the MON-3 service:
 
-`JR start` jumps back to the label. Together, the two instructions create a loop:
+- `api_command_to_lcd` sends LCD commands such as clear-screen and row positioning.
+- `api_string_to_lcd` prints the zero-terminated string at `HL`.
+- `api_scan_segments` refreshes the six-digit seven-segment display from the bytes at `DE`.
 
-```asm
-start:  NOP
-        JR  start
-```
+After the LCD text is written, the program loops at `scan_hello:`. Each pass asks MON-3 to scan the six bytes in `seven_seg_hello`, so the seven-segment display keeps showing `HELLO`.
 
-This program gives the debugger a stable loop. The first visible display result will come later, when you run a program that writes to the TEC-1G display ports.
+Save `src/main.asm`.
 
-Save `src/main.asm`. The next chapter builds the target and starts the first debug session.
+## Why The Starter Program Uses MON-3
 
-## Why The Starter Program Is So Small
+The starter program uses monitor services rather than raw port writes. That keeps the first source file compact while still giving visible output on the TEC-1G panel.
 
-The starter program exists to verify the toolchain before it verifies hardware behavior. It proves that the source file can be assembled, loaded into the emulator and mapped back to the editor.
+It also introduces a normal TEC-1G pattern: user code runs from RAM, calls MON-3 routines, and keeps display hardware refreshed in a loop.
 
-That order saves confusion. If the first program also tried to drive the LCD or keypad, a setup mistake and a programming mistake would look similar. The loop gives you a known baseline.
-
-Once the baseline works, replace the loop with a program that writes to a visible TEC-1G device. The same build and debug sequence will apply.
+The same build and debug sequence applies when you replace the starter with your own code.

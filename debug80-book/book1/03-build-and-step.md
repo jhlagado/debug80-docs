@@ -34,7 +34,7 @@ The first launch also creates the build artifacts. You will inspect them later. 
 
 ## The Program Counter
 
-The Z80 program counter, usually written as PC, holds the address of the next instruction. When the editor highlights the `NOP` at `start`, PC points at the address generated for that instruction.
+The Z80 program counter, usually written as PC, holds the address of the next instruction. When the editor highlights the first instruction at `start`, PC points at the address generated for that instruction.
 
 For the starter program, that address is `0x4000`.
 
@@ -46,7 +46,7 @@ Click in the editor gutter beside an instruction line. VS Code adds a red breakp
 
 A filled breakpoint means Debug80 matched the source line to a generated Z80 address. A breakpoint on a blank line, comment or label-only line may stay hollow because breakpoints bind to instruction addresses.
 
-Leave the breakpoint on `NOP` or `JR start` for now. The debug controls will move through the loop.
+For the starter program, a useful first breakpoint is inside `scan_hello`, on the MON-3 display-scan call. The debug controls will move through the startup code and then through the refresh loop.
 
 > **Image placeholder:** Breakpoint set beside an instruction line, with the current execution line highlighted.
 
@@ -78,7 +78,7 @@ When expression evaluation raises an error, Debug80 stops at the breakpoint and 
 
 The VS Code debug toolbar controls the emulated Z80. Use it the same way you use other VS Code debuggers: continue, pause, step, restart and stop.
 
-**Continue** runs the program from the current instruction. In the starter loop, execution repeats the same two instructions until you pause or stop it.
+**Continue** runs the program from the current instruction. In the starter program, execution writes the LCD text once and then repeats the `scan_hello` loop so the seven-segment display stays refreshed.
 
 **Pause** interrupts the running session and returns control to the debugger. The editor highlights the source line that matches the current PC when the source map can resolve it.
 
@@ -86,9 +86,9 @@ The VS Code debug toolbar controls the emulated Z80. Use it the same way you use
 
 ## Step Into
 
-**Step Into** executes the next source-level step. With the starter program, stepping alternates between `NOP` and `JR start`.
+**Step Into** executes the next source-level step. With the starter program, the first steps set the stack pointer, send commands to MON-3 with `RST 0x10`, and then enter the display refresh loop.
 
-Step once from `NOP`. PC advances to the jump instruction. Step again from `JR start`. PC returns to the `start` label.
+Step once from `ld sp,0x7fff`. PC advances to the next source instruction. Continue stepping and watch PC move through the LCD setup code toward `scan_hello`.
 
 This is the smallest useful debugging cycle: stop, inspect, step, inspect again.
 
@@ -100,7 +100,7 @@ The editor view and PC should move together. If the editor line changes but the 
 
 Step Over runs a call as a single source-level action when Debug80 can resolve the call boundary. Step Out runs until the current routine returns or until the configured instruction cap stops it.
 
-The starter loop contains straight-line code and a jump, so these controls behave like ordinary stepping for now. Use them later when your program contains `CALL` and `RET`.
+The starter uses `RST 0x10` monitor calls rather than ordinary `CALL` instructions. Step Over is still useful when you want to advance past a monitor call without following the ROM routine in detail. Use Step Out later when your own program contains `CALL` and `RET`.
 
 ## Run To Cursor
 
@@ -118,15 +118,15 @@ Run to Cursor depends on the last successful build. Build the target again when 
 
 ## Edit And Rebuild
 
-Change the `NOP` to another harmless instruction once you are comfortable stepping. Save the file and restart the target.
+Change the LCD message string once you are comfortable stepping. Save the file and restart the target.
 
 Debug80 rebuilds during launch. Normal editor-based work starts from VS Code. Assembly errors stop the launch with a diagnostic.
 
 ## When The First Program Becomes Visible
 
-The starter loop proves that launch, source-map lookup and stepping work. Display output begins when a program writes to the TEC-1G display ports.
+The starter program gives visible output immediately: the LCD shows the message string, and the seven-segment display is refreshed by the `scan_hello` loop.
 
-After you replace the starter loop with a small TEC-1G display program, use the same sequence:
+When you change the starter or replace it with your own TEC-1G program, use the same sequence:
 
 1. Save the source.
 2. Restart the target.
