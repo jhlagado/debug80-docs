@@ -201,7 +201,7 @@ When port 0x05 or any colour port is written:
 2. `accumulateMatrixDuty()` adds the elapsed active row/column drive time into per-channel duty buckets (`matrixDutyR/G/B`).
 3. `matrixRowsVisitedMask` records which rows have been written. When a full scan boundary is detected, `collectMatrixDutyBrightness()` converts duty to 0-255 brightness arrays (`ledMatrixBrightnessR/G/B`), resets the duty window, and queues a UI update.
 
-The brightness arrays contain the integrated scan result — 64 values per channel, ready for the webview to render. The webview applies a small LED emission curve so duty-cycle values read visually like bright LEDs rather than a dim linear opacity plot.
+The brightness arrays contain the integrated scan result — 64 values per channel, ready for the webview to render. The webview applies an LED emission curve so duty-cycle values read visually like bright LEDs rather than a dim linear opacity plot. The current rendering layer boosts that mapped intensity by another 30% over the previous curve. This is a display-layer change only: the emulator still calculates duty-cycle brightness the same way, and shorter active time should still render dimmer than longer active time.
 
 The hardware column bits are mirrored when staging is converted into visible pixels. `matrixDisplayIndex(row, hardwareColumn)` maps a hardware column to `row * 8 + (7 - hardwareColumn)`, so bit 0 appears on the right edge of the visible row and bit 7 appears on the left edge. This correction lives in `src/platforms/tec1g/runtime-matrix.ts`; the webview renders the already-oriented brightness arrays.
 

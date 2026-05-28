@@ -363,7 +363,7 @@ function applyMatrixBrightness(
 }
 ```
 
-The 64-entry brightness arrays (one per channel) come from the `matrixBrightnessR/G/B` fields of the TEC-1G update message. Each value is 0–255.
+The 64-entry brightness arrays (one per channel) come from the `matrixBrightnessR/G/B` fields of the TEC-1G update message. Each value is 0–255. `matrix-ui.ts` maps those duty-cycle values to stronger visible LED colours, currently with an extra 30% intensity boost over the previous display curve. This does not change the platform runtime's timing model; it only changes how the webview paints the already-calculated brightness so games such as Pacmo are easier to read while uneven scan timing remains visible.
 
 **Matrix keyboard input.** When matrix mode is enabled, the LED matrix area also acts as a clickable keyboard. Each dot element gets a click listener that sends:
 

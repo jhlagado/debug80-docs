@@ -209,10 +209,12 @@ This is not the same as emulated serial input. It sends the selected target's bu
 
 1. `resolveCoolTermHexArtifact()` reads the current `debug80.json`, selected target, `outputDir`, `artifactBase` and any explicit `hex` path to locate the HEX file.
 2. `CoolTermRemoteClient` opens a TCP socket to `127.0.0.1:51413`.
-3. `sendHexViaCoolTerm()` pings CoolTerm, opens the serial port, sends the HEX file with CoolTerm's `SEND_TEXTFILE` command, then polls output until the board replies `PASSED` or `FAILED`.
-4. Status is reported through VS Code notifications and the Debug80 project/status area.
+3. `sendHexViaCoolTerm()` pings CoolTerm, opens the serial port, and sends the HEX file with CoolTerm's `SEND_TEXTFILE` command.
+4. Status is reported through VS Code notifications and the Debug80 project/status area when CoolTerm has accepted and sent the file.
 
-The user must configure CoolTerm with the correct serial port and enable its Remote Control Socket. Debug80 intentionally delegates native serial-port ownership to CoolTerm here, avoiding bundled native serial dependencies in the VSIX.
+Debug80 does not wait for `PASSED` or `FAILED` text on the serial line. MON3's Intel HEX loader reports completion on the TEC-1G seven-segment display: `PASS` means the load was accepted, and `ERROR` means checksum or write verification failed. The serial startup message `TEC-1G Connected` belongs to MON3 boot, not to the HEX load result.
+
+The user must configure CoolTerm with the correct serial port and enable its Remote Control Socket on port 51413. Debug80 intentionally delegates native serial-port ownership to CoolTerm here, avoiding bundled native serial dependencies in the VSIX.
 
 ### Platform module dispatch
 
@@ -475,7 +477,7 @@ The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, ar
 - A `targets` section with one entry (`plan.targetName`) containing `sourceFile`, `outputDir`, `artifactBase`, `platform`, `profile`, and the platform-specific memory map block (`simple`, `tec1`, or `tec1g`). For kits with a `bundledProfile`, the target block also includes `romHex`, optional `extraListings`, and `sourceRoots`.
 - Top-level `projectVersion`, `projectPlatform`, `defaultProfile`, and `defaultTarget` fields.
 
-When the scaffold **creates** new files in this pass (`debug80.json` and/or a new `.vscode/launch.json`), it also calls `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` to create or append a standard **Debug80**-marked ignore block (see Chapter 2).
+When the scaffold creates or updates project files, it also calls `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` to create or append a standard **Debug80**-marked ignore block (see Chapter 2). The normal panel initialization path writes root `debug80.json` and does not create `.vscode/launch.json`; launch scaffolding is an explicit optional path.
 
 Bundled ROM files are **not copied during scaffolding**. The generated profile records `BundledAssetReference` entries. During launch, `resolveBundledAssetRuntimePath()` in `src/debug/launch-args.ts` checks the workspace path first; if that path is missing and corresponds to the bundled asset destination, it falls back to the copy inside the extension bundle. The explicit `debug80.materializeBundledRom` command copies local files when the user wants workspace copies.
 

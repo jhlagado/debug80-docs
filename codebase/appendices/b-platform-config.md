@@ -9,7 +9,7 @@ nav_order: 2
 
 # Appendix B — Platform Configuration Reference
 
-All configuration lives in `debug80.json` (or the `debug80` key of `package.json`). Top-level fields apply to every session. Platform-specific fields live inside a block keyed by the platform name.
+Project configuration lives in `debug80.json` at the workspace folder root. Top-level fields apply to every session. Platform-specific fields live inside a block keyed by the platform name.
 
 ---
 
@@ -24,10 +24,10 @@ All configuration lives in `debug80.json` (or the `debug80` key of `package.json
 | `hex` | `string` | derived | Path to the output Intel HEX file; derived from `asm` if omitted |
 | `listing` | `string` | derived | Legacy listing/source-map handle; AZM targets should use the native `.d8.json` map |
 | `outputDir` | `string` | asm dir | Directory for build artifacts |
-| `artifactBase` | `string` | asm filename | Base name for `.hex` / `.lst` files |
+| `artifactBase` | `string` | asm filename | Base name for generated artifacts such as `.hex`, `.d8.json`, and the compatibility `.lst` handle |
 | `entry` | `number` | platform default | CPU entry address; overrides the platform block's `entry` |
 | `stopOnEntry` | `boolean` | `true` in raw launch schema; panel toggle defaults off | Pause at the entry point before executing |
-| `projectConfig` | `string` | — | Explicit path to `debug80.json` or `package.json` |
+| `projectConfig` | `string` | — | Explicit path to a Debug80 project config, normally root `debug80.json` |
 | `target` | `string` | — | Named build target (for multi-target projects) |
 | `assemble` | `boolean` | `true` | Run the assembler before starting the session |
 | `sourceRoots` | `string[]` | `[]` | Directories to search when resolving source file paths |

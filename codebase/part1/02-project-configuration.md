@@ -17,17 +17,13 @@ If you are going to work on any part of debug80 that touches launching, target s
 
 ## Where the config file lives
 
-Debug80 looks for a project configuration file in three locations, checked in this order:
+The current project model uses one visible project marker: `debug80.json` at the workspace folder root.
 
-1. `debug80.json`
-2. `.vscode/debug80.json`
-3. `.debug80.json`
+The search starts from the selected workspace folder root. If `debug80.json` is absent, the panel treats the folder as uninitialized: no targets appear in the selector, and the setup card can initialize the folder by writing a new root `debug80.json`.
 
-The first file found wins. The search starts from the workspace folder root. If none of these files exist, the project has no debug80 configuration and the extension treats it as unconfigured — no targets appear in the selector, and launching a debug session requires either creating a project or providing explicit launch arguments.
+The discovery logic lives in `findProjectConfigPath()` in `src/extension/project-config.ts`. It takes a `WorkspaceFolder` and returns the absolute path to that folder's `debug80.json`, or `undefined`.
 
-The discovery logic lives in `findProjectConfigPath()` in `src/extension/project-config.ts`. It takes a `WorkspaceFolder` and returns the absolute path to the first matching config file, or `undefined`.
-
-The current preference for `debug80.json` at the workspace root is deliberate. It makes the project marker visible at the top level of the repo instead of hiding it under `.vscode/`.
+Older code paths may still accept historical config locations or explicit `projectConfig` launch arguments, but new scaffolding and user-facing project setup should use root `debug80.json`. Keeping the marker at the top level makes the project boundary visible in Explorer and keeps the panel's initialized/uninitialized state easy to reason about.
 
 ---
 
@@ -384,7 +380,7 @@ When a user creates a new project, the scaffolding system generates the config f
 
 ### The scaffolding steps
 
-1. **Check for existing config.** If a project config already exists in any of the supported locations, abort — do not overwrite.
+1. **Check for an existing root config.** If `debug80.json` already exists at the workspace root, abort — do not overwrite.
 
 2. **Resolve the kit.** If the caller already supplied a platform (the panel path), `getDefaultProjectKitForPlatform()` selects the default kit immediately. Otherwise `chooseProjectKit()` shows the kit picker.
 
@@ -394,7 +390,7 @@ When a user creates a new project, the scaffolding system generates the config f
    - the starter source file if it does not already exist
    - `debug80.json` at the workspace root
 
-5. **Merge `.gitignore`.** `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` appends a small, idempotent **Debug80**-marked block if one is not already present: `.debug80/` cache, the scaffold `outputDir` (e.g. `build/`), `out/` and `dist/`, `.vscode/launch.json` (local-only; the extension can still provide a default launch), and common OS files. The block does **not** ignore the entire `.vscode/` tree, so `debug80.json` can still live at `.vscode/debug80.json` if you prefer.
+5. **Merge `.gitignore`.** `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` appends a small, idempotent **Debug80**-marked block if one is not already present: `.debug80/` cache, the scaffold `outputDir` (e.g. `build/`), `out/` and `dist/`, `.vscode/launch.json` (local-only; the extension can still provide a default launch), and common OS files. The block does not ignore the entire `.vscode/` tree, but new Debug80 project configuration still belongs in root `debug80.json`.
 
 6. **Optionally write launch.json.** `.vscode/launch.json` is created only when the caller asked for launch scaffolding as well. The plain project-init path no longer creates an empty `.vscode` folder.
 
@@ -473,7 +469,7 @@ The provider intercepts the launch flow at two points:
 
 **Before variable substitution** (`resolveDebugConfiguration`):
 - If the user presses F5 with no `launch.json`, the provider creates a default config
-- If the config has no explicit source/hex/listing paths, it locates the project config file and injects `projectConfig` into the launch arguments
+- If the config has no explicit source/hex/listing paths, it locates root `debug80.json` and injects `projectConfig` into the launch arguments
 - If no project config exists, it offers to create one
 
 **After variable substitution** (`resolveDebugConfigurationWithSubstitutedVariables`):
@@ -489,9 +485,7 @@ This two-phase approach means the user never needs a `launch.json` file. Pressin
 The extension watches for changes to config files using VS Code's file system watcher. The watch patterns are:
 
 ```
-**/.vscode/debug80.json
 **/debug80.json
-**/.debug80.json
 ```
 
 When a config file is created or deleted, `WorkspaceSelectionController.updateHasProject()` fires, updating the panel's project status. This means adding a `debug80.json` to a workspace folder immediately makes it appear as a configured project in the root selector — no restart needed.
@@ -502,7 +496,7 @@ The watcher registration lives in `WorkspaceSelectionController.registerInfrastr
 
 ## Summary
 
-- Debug80 projects are defined by a JSON config file at `debug80.json`, `.vscode/debug80.json`, or `.debug80.json`. The first found wins, and the root-level `debug80.json` is now the preferred modern location.
+- Debug80 projects are defined by a root-level `debug80.json`. That file is the project marker the panel uses for initialized workspace folders.
 
 - The `ProjectConfig` type defines the file structure. The `targets` object holds named build configurations; root-level fields serve as defaults for all targets.
 
@@ -518,7 +512,7 @@ The watcher registration lives in `WorkspaceSelectionController.registerInfrastr
 
 - Project scaffolding is now kit-driven. Platform selection happens during initialization, and the scaffold writes a version 2 manifest with profile-level bundled-asset references for monitor-backed kits. Missing workspace assets resolve from the extension bundle at launch; the explicit bundled-assets command copies local files when requested.
 
-- The `Debug80ConfigurationProvider` enables F5-to-debug without a `launch.json` — it resolves the project config and target dynamically.
+- The `Debug80ConfigurationProvider` enables F5-to-debug without a `launch.json` — it resolves root `debug80.json` and the selected target dynamically.
 
 - File watchers detect config creation/deletion in real time, updating the panel immediately.
 
