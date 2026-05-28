@@ -72,7 +72,7 @@ The user manual has moved from the deprecated `manual/` publication to **Debug80
 
 | Chapter | Focus |
 |---|---|
-| 1. Install And Open A Folder | VS Code install, Marketplace install, Debug80 panel and project folder basics |
+| 1. Install And Add A Folder | VS Code install, Marketplace install, Debug80 panel and project folder basics |
 | 2. Create A TEC-1G Project | `Debug80: Create Project`, TEC-1G / MON-3 kit, starter source and target model |
 | 3. Build And Step | F5, Build, breakpoints, debug controls and Run to Cursor |
 | 4. Inspect The Machine | Variables symbols, symbolic Call Stack names, Registers, Memory and Machine panel |

@@ -1,10 +1,10 @@
 ---
 layout: default
-title: "Install And Open A Folder"
+title: "Install And Add A Folder"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 1
 ---
-# Install And Open A Folder
+# Install And Add A Folder
 
 Debug80 runs inside Visual Studio Code. The first job is to install VS Code, add the Debug80 extension and add a folder to the workspace for your Z80 project.
 
