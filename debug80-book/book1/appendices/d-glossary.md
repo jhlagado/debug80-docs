@@ -40,7 +40,7 @@ The running VS Code debugger session connected to the emulated Z80 machine.
 
 ## Entry Source
 
-The source file used as the starting point for a target. Debug80 discovers likely AZM entry sources from `.z80` and `.main.asm` filenames.
+The source file used as the starting point for a target. Debug80 discovers likely AZM entry sources from files ending in `.z80`, files ending in `.main.asm` and files named exactly `main.asm`.
 
 ## Intel HEX
 

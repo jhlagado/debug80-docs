@@ -90,14 +90,17 @@ A Debug80 project can hold more than one runnable program. Each runnable program
 
 The target records the source file, build folder, artifact base name and platform settings. The active target is the one launched by F5 and by the Project section's build button.
 
-Debug80 discovers likely AZM entry sources by filename. Current discovery rules look for:
+Debug80 discovers likely AZM entry sources by filename. A discovered entry source can become a target. Current discovery rules look for:
 
 ```text
 *.z80
 *.main.asm
+main.asm
 ```
 
-A regular `.asm` file can still be part of your program. It may be included by another source file or selected explicitly, but the discovery rule keeps ordinary helper files from becoming targets by accident.
+The exact name `main.asm` is treated as an entry source because it is the common starter-file name. A file ending in `.main.asm`, such as `display-test.main.asm`, is also treated as an entry source. Any `.z80` file is treated as an entry source.
+
+A regular `.asm` file can still be part of your program. It may be included by another source file or selected explicitly with **Debug80: Set Program File**, but target discovery does not promote every `.asm` helper file into the Target selector.
 
 Use the **Target** selector in the Project section to change the active target.
 

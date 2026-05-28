@@ -51,6 +51,8 @@ Open the Debug80 panel. The **Project** row should show your folder, and the **T
 
 ![Initialized TEC-1G project with target and starter source](../../assets/images/debug80-book/book1/initialized-project-panel.png)
 
+The starter file is named `main.asm`, so Debug80 can recognise it as an entry source. Chapter 7 explains the full target discovery rules after you have built and run the first target.
+
 ## Read The Target As A Sentence
 
 The target can be read as a sentence:
