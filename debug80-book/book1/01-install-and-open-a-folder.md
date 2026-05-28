@@ -42,23 +42,23 @@ The panel may say that no Debug80 project exists. That is the expected state bef
 
 ## Read The Empty State
 
-The empty state is not an error. It means VS Code is running Debug80, but Debug80 has not found an initialized project folder in the workspace.
+The empty state means VS Code is running Debug80, but the workspace does not yet contain an initialized Debug80 project.
 
-At this point Debug80 can still help you start. The panel can add a folder to the workspace or initialize a project once a folder is selected.
+Start by adding a folder to the workspace. Debug80 treats every workspace folder as a possible project. When you select a folder that has not been initialized, Debug80 can turn it into a Debug80 project by writing `debug80.json` at the root of that folder.
 
-Treat the panel as the home position for Debug80 work. VS Code has its own Run and Debug controls, but Debug80 adds the project and hardware context that a normal language debugger does not know about.
+Treat the panel as the home position for Debug80 work. VS Code has its own Run and Debug controls, but Debug80 adds the project and hardware context for the selected folder.
 
 ## Add Project Folders To The Workspace
 
-Debug80 works from folders in the VS Code workspace. A folder can hold source files, build output and the Debug80 project file that describes how to build and run the program.
+Debug80 works from folders in the VS Code workspace. A folder can hold source files, build output and the `debug80.json` file that describes how to build and run the program.
 
 Add a project folder with **File > Add Folder to Workspace**. Choose the folder that should own the Z80 project. If your source files live in `/projects/blink`, add `blink`, not the parent `projects` folder.
 
-Debug80 sees each workspace folder as a possible project. At first, the folder may be uninitialized. That means Debug80 can see the folder, but the folder does not yet contain Debug80 configuration.
+Debug80 sees each workspace folder as a possible project. At first, the folder may be uninitialized. That means Debug80 can see the folder, but the folder does not yet contain `debug80.json`.
 
-A Debug80 project is just a folder with Debug80 initialization files. When you initialize the folder, Debug80 writes those files into the folder. After that, the folder becomes a first-class Debug80 project and appears in the Project selector as a project you can build, debug and send to hardware.
+A Debug80 project is a folder with `debug80.json` at its root. When you initialize the folder, Debug80 writes that file into the folder. After that, the folder becomes a first-class Debug80 project and appears in the Project selector as a project you can build, debug and send to hardware.
 
-For a new project, create an empty folder with a name you can recognize in the Debug80 panel. For an existing project, add the folder that already contains `debug80.json` or `.vscode/debug80.json`.
+For a new project, create an empty folder with a name you can recognize in the Debug80 panel. For an existing project, add the folder that already contains `debug80.json`.
 
 Debug80 can work on multiple projects in the same workspace. To add another project, use **File > Add Folder to Workspace** again. Debug80 will see the added folder and show it in the Project selector.
 
@@ -66,18 +66,10 @@ Debug80 can work on multiple projects in the same workspace. To add another proj
 
 ## Project Files
 
-Debug80 looks for project configuration in a few locations. The common file is:
+Debug80 project configuration lives in one file at the root of the project folder:
 
 ```text
 debug80.json
-```
-
-It also accepts:
-
-```text
-.vscode/debug80.json
-.debug80.json
-package.json under a debug80 key
 ```
 
 The next chapter uses Debug80 to create `debug80.json`, a starter source file and a build folder.

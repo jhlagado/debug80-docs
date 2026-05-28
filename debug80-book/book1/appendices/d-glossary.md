@@ -32,7 +32,7 @@ A serial terminal program. Debug80 uses CoolTerm's Remote Control Socket to send
 
 ## Debug80 Project
 
-A folder with Debug80 configuration. The usual project file is `debug80.json`.
+A folder with `debug80.json` at its root.
 
 ## Debug Session
 

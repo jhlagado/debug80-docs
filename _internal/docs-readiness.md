@@ -98,7 +98,6 @@ Validate the manual against real workflows, not just code review:
 - Fresh workspace, run `Debug80: Create Project`, choose Simple, press F5.
 - Fresh TEC-1 project kit: verify launch, ROM source opening, keypad/display, memory panel.
 - Fresh TEC-1G MON-3 kit: verify launch, panel sections, serial, memory, and bundled assets.
-- Existing project with `.vscode/debug80.json`.
 - Existing project with root `debug80.json`.
 - AZM source project using `.asm`.
 - Breakpoint flow in source and listing fallback.

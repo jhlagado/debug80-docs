@@ -138,9 +138,9 @@ Choose the platform that matches the board your program expects. A program that 
 
 Most Debug80 failures name the missing file, target or build artifact. Start with the Debug Console message, then check the matching failure path.
 
-If the project is missing, check the Project selector in the Debug80 panel. Make sure it points at the folder that contains your Z80 source and Debug80 configuration. If the config file is in a child folder, open that child folder or add it to the VS Code window and select it in the panel.
+If the project is missing, check the Project selector in the Debug80 panel. Make sure the workspace contains the folder that owns the program and that `debug80.json` exists at the root of that folder. If the folder has not been initialized yet, select it in the Debug80 panel and initialize it.
 
-If F5 starts the wrong target, check the **Target** selector in the Project section. You can also run **Debug80: Select Active Target**. If the project still starts another target, inspect `defaultTarget` in `debug80.json` and any VS Code launch configuration that names a target explicitly.
+If F5 starts the wrong target, check the **Target** selector in the Project section. You can also run **Debug80: Select Active Target**. If the project still starts another target, inspect `defaultTarget` in `debug80.json`.
 
 If the build fails, read the first assembler diagnostic. Later messages often follow from the first failure. Check that the active target points at the source file you meant to assemble, then check include paths, included files and the output folder.
 

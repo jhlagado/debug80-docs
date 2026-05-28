@@ -8,18 +8,13 @@ nav_order: 102
 
 Debug80 stores project configuration in the project folder. Book 1 uses the generated file, but reading the main fields helps when you add targets or inspect a copied project.
 
-## File Locations
+## File Location
 
-Debug80 can read project configuration from:
+Debug80 project configuration lives at the root of the project folder:
 
 ```text
 debug80.json
-.vscode/debug80.json
-.debug80.json
-package.json under a debug80 key
 ```
-
-A VS Code launch configuration can also name a specific project file with `projectConfig`.
 
 ## Top-Level Shape
 
@@ -42,7 +37,7 @@ A generated TEC-1G project uses this general shape:
 
 Most users can launch through the Debug80 panel without a hand-written VS Code launch configuration. When a project needs one, launch options can override the project defaults for that session.
 
-Use `projectConfig` when the configuration file is not in one of the standard locations. Use `target` when a launch configuration should always start a specific target, even if the Project section currently selects another one.
+Use `target` when a launch configuration should always start a specific target, even if the Project section currently selects another one.
 
 Debug80 can also control where it opens files:
 
