@@ -159,15 +159,3 @@ For the starter loop, the displays stay unchanged because the program leaves the
 The TEC-1G panel includes speaker, speed and mute controls in the display area. Use **MUTED** to prevent sound while debugging. The speed control lets the panel request a different run mode from the emulator.
 
 Use the screenshots in this chapter to confirm the current labels in your installed extension.
-
-## Before Moving On
-
-You are ready for the full panel tour when you can:
-
-- find source-map-backed Symbols and Constants in the Variables panel
-- add a Watch expression for a register, flag, symbol or memory byte
-- read the symbolic current location in the Call Stack view
-- open the Debug80 Registers section
-- inspect memory around PC
-- focus the webview before sending keypad input
-- identify the LCD, seven-segment display and keypad in the Machine section

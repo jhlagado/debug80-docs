@@ -97,23 +97,3 @@ The next chapter uses Debug80 to create `debug80.json`, a starter source file an
 The folder is the project container. It holds `debug80.json`, source files and build output.
 
 After initialization, Debug80 adds a target to the project. A target is the runnable program Debug80 builds and launches from that folder. The next chapter creates the starter target and shows how it appears in the panel.
-
-## Before Moving On
-
-You are ready for the next chapter when three facts are true:
-
-- VS Code has the Debug80 extension installed.
-- The Debug80 panel is visible in the Run and Debug sidebar.
-- The folder you want to use is selected in the Project row.
-
-## Local VSIX Builds
-
-Most readers should use the Marketplace extension. If you are testing a local build from the `debug80` repository, package and install the VSIX from that repository:
-
-```bash
-npm ci
-npm run package:check
-code --install-extension debug80-0.0.1.vsix --force
-```
-
-Reload VS Code after replacing an installed VSIX.

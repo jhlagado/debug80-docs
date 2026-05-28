@@ -114,11 +114,3 @@ The starter program exists to verify the toolchain before it verifies hardware b
 That order saves confusion. If the first program also tried to drive the LCD or keypad, a setup mistake and a programming mistake would look similar. The loop gives you a known baseline.
 
 Once the baseline works, replace the loop with a program that writes to a visible TEC-1G device. The same build and debug sequence will apply.
-
-## Before Moving On
-
-You are ready to build when:
-
-- `debug80.json` exists in the project folder.
-- `src/main.asm` is open and saved.
-- The Debug80 panel shows the project folder and the starter target.

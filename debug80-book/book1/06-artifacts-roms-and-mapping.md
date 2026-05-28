@@ -124,7 +124,3 @@ Debug80: Copy Bundled Assets into Workspace
 Copy assets when you want to inspect monitor source, compare a ROM or keep a project self-contained. Ordinary debugging with a bundled profile can use the packaged assets.
 
 > **Image placeholder:** Explorer showing copied `roms/tec1g/mon3` assets.
-
-## Before Moving On
-
-You are ready for hardware transfer when you can identify the `.hex` file for the active target. The board transfer sends the generated HEX file.

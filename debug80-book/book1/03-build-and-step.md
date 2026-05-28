@@ -135,13 +135,3 @@ After you replace the starter loop with a small TEC-1G display program, use the 
 5. Continue and watch the panel.
 
 That pattern works for more interesting programs because Debug80 rebuilds the target at launch and keeps the source view tied to the generated Z80 addresses.
-
-## Before Moving On
-
-You are ready for machine inspection when you can:
-
-- start the target with Stop on entry enabled
-- set a breakpoint on an instruction line
-- add a conditional expression to a breakpoint
-- step from `NOP` to `JR start`
-- restart after saving a source change
