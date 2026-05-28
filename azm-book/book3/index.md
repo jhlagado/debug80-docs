@@ -1,110 +1,57 @@
 ---
 layout: default
-title: "AZM Book 3 — Algorithms and Data Structures"
-nav_order: 6
+title: "AZM Book 3 — Assembler Manual"
+nav_order: 7
 has_children: true
 ---
-# AZM Book 3 — Algorithms and Data Structures
+# AZM Book 3 — Assembler Manual
 
-**Prerequisite:** complete [AZM Book 1 — Z80 Fundamentals](../book1/index.md) through Chapter 14. You should be comfortable with raw Z80, subroutine conventions, AZMDoc contracts, layout types and ops before starting here. [AZM Book 2 — Programming the TEC-1G](../book2/index.md) is useful but not required; this book is mostly target-neutral.
+This manual is for programmers who already know assembly language and want to learn the AZM assembler itself. It assumes you can read ordinary Z80 code and focuses on AZM source syntax, directives, expressions, layout types, register contracts, op declarations, compatibility features, diagnostics and output formats.
 
-This book teaches classic algorithms and small data structures in **flat AZM assembly** — the same machine model as Book 1, with representation before algorithm (Wirth) and small complete programs with explicit invariants (K&R).
-
----
-
-## What changes from Book 1
-
-Book 1 taught the Z80 and the AZM tooling that makes assembly maintainable. Book 3 applies that tooling to real problems: sorting, searching, strings, bit tricks, records, recursion and pointer structures.
-
-| Book 1 gave you | Book 3 uses it for |
-|-----------------|-------------------|
-| Register passing, callee-save discipline | Fixed calling conventions per algorithm family |
-| AZMDoc `;!` + `@ROUTINE:` | Machine-checkable subroutine specs |
-| `byte` / `word` / `addr`, `.type`, `sizeof`, `offset` | Arrays, records and layout-aware indexing |
-| `.ds Type[N]` | Workspace RAM for algorithm-local state |
-| Ops | Named idioms inside hot loops |
-
-There is no hidden runtime: no `func`, no `:=`, no structured `if`/`while`, no `import`, no typed memory lowering. Every branch and every memory access is visible in the listing.
+The first two AZM books teach programming tracks. Book 3 teaches the assembler itself.
 
 ---
 
 ## Learning arc
 
-1. **Foundations** — arithmetic algorithms with a fixed 16-bit convention and workspace bytes when registers are not enough.
-2. **Arrays and loops** — contiguous storage, HL indexing, loop invariants, sorting and searching.
-3. **Strings** — sentinel-terminated bytes, length vs capacity, in-place transforms.
-4. **Bit patterns** — shifts, masks, parity, packed flags.
-5. **Records** — layout types as the single source of truth for field offsets; ring buffer as the pilot data structure.
-6. **Recursion** — stack frames, base cases, preserving return values across nested calls.
-7. **Composition** — `.include`, shared `lib/*.asm` routines with AZMDoc, files plus contracts (no `import`).
-8. **Pointer structures** — `addr` fields, linked lists, binary search trees.
-9. **Capstone** — eight queens (or equivalent backtracking search) tying the part together.
-
-Companion examples live in this book's `examples/` directory. Each full chapter cites a matching `.asm` file you can assemble and run to `halt`.
+1. **Getting started** — what AZM is, how it fits with Debug80, what a small program looks like and how to invoke the CLI.
+2. **Source syntax and symbols** — parser rules, labels, the `@` entry prefix, forward references, case rules and naming conventions.
+3. **Addresses, constants and expressions** — `.org`, `$`, `.equ`, expression operators, range checks and enums.
+4. **Raw data, storage and strings** — `.db`, `.dw`, little-endian byte order, string directives and `.ds`.
+5. **The layout system** — scalar types, `sizeof`, `offset`, records with `.type`, type aliases with `.typealias`, unions with `.union` and compact cast syntax.
+6. **Register care and contracts** — a concrete collision example, `@` entry labels, AZMDoc `;!` syntax, conflict checking and the audit-to-error workflow.
+7. **Ops and aliases** — inline op declarations, operand classes, overloads, directive compatibility and source file inclusion.
+8. **Diagnostics and output** — error codes, how to read a failing build, warnings vs errors and output artifacts.
 
 ---
 
 ## Chapter table
 
-| Ch | File | Status | What it covers |
-|----|------|--------|----------------|
-| — | [Introduction](00-introduction.md) | **Written** | Wirth/K&R approach, workspace pattern, AZMDoc as spec, how to use this part |
-| 1 | [Foundations](01-foundations.md) | **Written** | Euclidean GCD, 16-bit compare/subtract, calling convention, workspace RAM, digit count |
-| 2 | [Arrays and Loops](02-arrays-and-loops.md) | **Written** | Byte arrays, loop invariants, insertion sort, linear search |
-| 3 | [Strings](03-strings.md) | **Written** | Null-terminated strings, strlen/copy/compare, char search |
-| 4 | [Bit Patterns](04-bit-patterns.md) | **Written** | Masks, shifts, packed flags, `op` idioms |
-| 5 | [Records](05-records.md) | **Written** | `.type` records, `sizeof`/`offset`, layout casts, ring buffer FIFO |
-| 6 | [Recursion](06-recursion.md) | **Written** | Stack budget, factorial vs iterative, `sum_u8_rec`, AZMDoc on self-calls |
-| 7 | [Composition](07-composition.md) | **Written** | `.include`, `lib/strings.asm`, symbol discipline, `.asmi` sketch |
-| 8 | [Pointer Structures](08-pointer-structures.md) | **Written** | `.word` links, singly linked list traverse/find/head insert, optional BST sketch |
-| 9 | [Capstone](09-capstone.md) | **Written** | Eight queens backtracking |
+| Ch | File | What it covers |
+|----|------|----------------|
+| — | [Preface](00-preface.md) | Audience, assumptions and the purpose of the manual |
+| 1 | [Getting Started with AZM](01-getting-started.md) | Debug80 integration, source extensions, a first program and basic invocation |
+| 2 | [Source Syntax and Symbols](02-source-syntax.md) | Line structure, comments, labels, `@` entries, naming conventions, case rules and numeric literals |
+| 3 | [Addresses, Constants and Expressions](03-addresses-constants-expressions.md) | `.org`, `$`, `.equ`, expressions, range checks and enums |
+| 4 | [Raw Data, Storage and Strings](04-data-storage-includes.md) | `.db`, `.dw`, little-endian byte order, string directives and `.ds` |
+| 5 | [The Layout System](05-layout-system.md) | Scalar types, `sizeof`, `offset`, records, type aliases, unions and compact cast syntax |
+| 6 | [Register Care and Contracts](06-register-care.md) | Register collisions, `@` entry labels, AZMDoc `;!` syntax, conflict checking and the audit-to-error workflow |
+| 7 | [Op Declarations and Aliases](07-ops-aliases.md) | Inline op declarations, operand classes, overloads, directive compatibility and source file inclusion |
+| 8 | [Diagnostics and Output](08-diagnostics-listings-output.md) | Error codes, reading a failing build, warnings vs errors and output artifacts |
 
 ---
 
-## Examples
+## Appendices
 
-| File | Chapter | Program |
-|------|---------|---------|
-| [examples/01_gcd.asm](examples/01_gcd.asm) | 1 | `gcd_u16` + `digit_count_u16`, stores results, `halt` |
-| [examples/02_insertion_sort.asm](examples/02_insertion_sort.asm) | 2 | Insertion sort + linear search on a byte table |
-| [examples/03_string_length.asm](examples/03_string_length.asm) | 3 | `strlen`, `strcpy`, `strcmp`, `str_find_char`, then `halt` |
-| [examples/04_bit_flags.asm](examples/04_bit_flags.asm) | 4 | Set/test/clear flag bits with `op` helpers, then `halt` |
-| [examples/05_ring_buffer.asm](examples/05_ring_buffer.asm) | 5 | Ring buffer push/pop, full-ring fail, FIFO verify |
-| [examples/06_factorial.asm](examples/06_factorial.asm) | 6 | Recursive and iterative `5!`, recursive table sum |
-| [examples/07_include_demo.asm](examples/07_include_demo.asm) | 7 | `main` includes `lib/strings.asm`, calls shared `strlen_u8` |
-| [examples/08_linked_list.asm](examples/08_linked_list.asm) | 8 | List sum, find `$22`, insert `$40` at head |
-| [examples/09_eight_queens.asm](examples/09_eight_queens.asm) | 9 | Count all 8-queen solutions → `solution_count` = 92 |
+| Appendix | File | What it covers |
+|----------|------|----------------|
+| A | [Directive Reference](appendix-a-directives.md) | All directives with syntax, purpose and chapter reference; built-in alias table |
+| B | [Expression Operators](appendix-b-operators.md) | Operator table with precedence and numeric literal formats |
+| C | [CLI Flag Reference](appendix-c-cli.md) | All command-line flags grouped by category |
+| D | [Built-in Functions](appendix-d-functions.md) | `sizeof`, `offset`, `LSB` and `MSB` — syntax, return values and case rules |
+
+The general [AZM Books appendices](../appendices/index.md) cover number notation, registers, flags, addressing forms and Z80 instruction support.
 
 ---
 
-## How to compile the examples
-
-From the `azm-book/book3/` directory (or pass the full path):
-
-```sh
-azm examples/01_gcd.asm
-```
-
-From the AZM source tree:
-
-```sh
-npm run azm -- /path/to/azm-book/book3/examples/01_gcd.asm
-```
-
-Optional register-care check (Book 1 Chapter 12):
-
-```sh
-azm --rc warn examples/01_gcd.asm
-```
-
-Load the object code into your Z80 emulator, run to `halt`, then inspect RAM at the labels documented in each example (`result`, `sorted`, etc.).
-
----
-
-## Hardware
-
-Same memory map as Book 1: code at `$0000`, data and workspace at `$8000` and above unless an example comments otherwise. No port I/O is required for these examples.
-
----
-
-[← AZM Books](../index.md) | [Introduction →](00-introduction.md)
+[← AZM Books](../index.md) | [Preface →](00-preface.md)

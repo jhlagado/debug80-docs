@@ -18,16 +18,19 @@ A guided Debug80 book that starts from installation and walks through creating a
 
 For readers who want a book-shaped route through the Debug80 workflow.
 
+### [Debug80 Book 2 — Programming the TEC-1G](debug80-book/book2/)
+
+In development. A Debug80-oriented outline for programming the TEC-1G with MON-3, Debug80 projects and targets, display hardware, sound, and larger interactive examples.
+
 ---
 
 ### AZM Books and Manual
 
-A three-book course in Z80 assembly programming, plus a supplementary AZM assembler manual, using the AZM assembler (`@jhlagado/azm` from the terminal, or the same assembler when you assemble and debug `.asm` with Debug80 in VS Code).
+A two-book course in Z80 assembly programming, plus a supplementary AZM assembler manual, using the AZM assembler (`@jhlagado/azm` from the terminal, or the same assembler when you assemble and debug `.asm` with Debug80 in VS Code).
 
 - [AZM Book 1 — Z80 Fundamentals](azm-book/book1/) starts from no prior knowledge and covers the Z80 from bare machine code through ops, layout types, and register contracts.
-- [AZM Book 2 — Programming the TEC-1G](azm-book/book2/) is in development. It is currently a rough outline rather than a finished book.
-- [AZM Book 3 — Algorithms and Data Structures](azm-book/book3/) works through sorting, searching, recursion, composition, pointer structures, and larger AZM program design.
-- [AZM Book 4 — Assembler Manual](azm-book/book4/) is a supplementary reference-style book for experienced assembly programmers learning AZM syntax, directives, layout types, ops, diagnostics, and output formats.
+- [AZM Book 2 — Algorithms and Data Structures](azm-book/book2/) works through sorting, searching, recursion, composition, pointer structures, and larger AZM program design.
+- [AZM Book 3 — Assembler Manual](azm-book/book3/) is a supplementary reference-style book for experienced assembly programmers learning AZM syntax, directives, layout types, ops, diagnostics, and output formats.
 
 For programmers learning Z80 assembly or the AZM language.
 

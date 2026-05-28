@@ -205,7 +205,7 @@ That declares an intentional transformation, not an accidental clobber.
 
 ## Flags are return values
 
-Book 3 uses carry for success and failure (`ring_push`, `ring_pop` and others). Flags are first-class contract carriers, not an afterthought.
+AZM Book 2 uses carry for success and failure (`ring_push`, `ring_pop` and others). Flags are first-class contract carriers, not an afterthought.
 
 ### Success on carry set
 

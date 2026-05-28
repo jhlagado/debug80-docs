@@ -57,7 +57,7 @@ What AZM adds on top of plain assembly is practical:
 
 None of this adds instructions the CPU does not run. Every AZM construct compiles to Z80 bytes you can read in the listing and verify directly.
 
-These books teach raw Z80 assembly first — registers, flags, jumps, the stack, subroutines, I/O — then move to the TEC-1G as a concrete target, and then use AZM's additions for larger algorithms and data structures.
+These books teach raw Z80 assembly first — registers, flags, jumps, the stack, subroutines, I/O — then use AZM's additions for larger algorithms and data structures. The TEC-1G hardware path now lives in Debug80 Book 2.
 
 ---
 
@@ -73,13 +73,6 @@ By the end of Book 1 you will be able to:
 
 By the end of Book 2 you will be able to:
 
-- Configure and run a TEC-1G Debug80 project using AZM source
-- Understand the MON-3 workbench memory region and the TEC-1G I/O ports used by early programs
-- Drive the keypad, 8x8 RGB display, LCD, seven-segment display, and one-bit speaker from Z80 code
-- Structure a cooperative loop that keeps hardware refreshed while program logic runs
-
-By the end of Book 3 you will be able to:
-
 - Implement and reason about standard algorithms and data structures — sorting, searching, strings, recursion, records, linked structures — in a low-level language with no standard library
 - Read unfamiliar assembly code and understand what it is doing
 - Debug programs by tracing register state and flag state through a sequence of instructions
@@ -91,11 +84,9 @@ By the end of Book 3 you will be able to:
 
 **Book 1** starts with the bare machine: what a byte is, what a program looks like as raw hex in memory, why raw hex is unmanageable, and how assembly language solves that. It then builds the Z80 programming model instruction by instruction — loads, flags, jumps, loops, tables, the stack, subroutines, I/O — before introducing AZM's features in the final four chapters.
 
-**Book 2** moves to the TEC-1G. It shows how AZM and Debug80 fit the main hardware target for this site: MON-3, the `$4000` workbench region, keypad input, display output, sound, and small interactive programs.
+**Book 2** moves to algorithms and data structures. Each chapter works through a real, compilable AZM program that solves a non-trivial problem. These chapters assume everything in Book 1; Debug80 Book 2 is useful background when you want a concrete TEC-1G hardware target.
 
-**Book 3** moves to algorithms and data structures. Each chapter works through a real, compilable AZM program that solves a non-trivial problem. These chapters assume everything in Book 1; Book 2 is useful background when you want a hardware target.
-
-**The AZM Book 4 — Assembler Manual** is the reference for AZM's language and tooling. It documents AZM syntax, directives, expressions, layout types, op declarations, diagnostics, and output formats for programmers who already know Z80 assembly.
+**The AZM Book 3 — Assembler Manual** is the reference for AZM's language and tooling. It documents AZM syntax, directives, expressions, layout types, op declarations, diagnostics, and output formats for programmers who already know Z80 assembly.
 
 **Appendices** are reference material: number notation, ASCII, the full register set, flags and condition codes, and a searchable Z80 instruction table. Use them while reading any book in the series.
 

@@ -1,38 +1,46 @@
 ---
 layout: default
-title: "AZM Book 2 — Programming the TEC-1G"
-nav_order: 5
+title: "AZM Book 2 — Algorithms and Data Structures"
+nav_order: 6
 has_children: true
 ---
-# AZM Book 2 — Programming the TEC-1G
+# AZM Book 2 — Algorithms and Data Structures
 
-This book is being written now. The chapter pages are publishable stubs: they show the intended path through the TEC-1G, MON-3, Debug80, and the hardware features that make the machine worth programming.
+**Prerequisite:** complete [AZM Book 1 — Z80 Fundamentals](../book1/index.md) through Chapter 14. You should be comfortable with raw Z80, subroutine conventions, AZMDoc contracts, layout types and ops before starting here. [Debug80 Book 2 — Programming the TEC-1G](../../debug80-book/book2/index.md) is useful but not required; this book is mostly target-neutral.
 
-Book 1 taught the Z80 without tying you to one machine. Book 2 makes the machine concrete. It starts with the TEC-1G as a modern rebirth of a 1980s learning-computer idea, then uses MON-3 services and Debug80 before moving down to direct ports and timing-sensitive display work.
+This book teaches classic algorithms and small data structures in **flat AZM assembly** — the same machine model as Book 1, with representation before algorithm (Wirth) and small complete programs with explicit invariants (K&R).
 
-The 8x8 RGB matrix is an add-on rather than the core machine, but this book uses it as the main visual target once the basics are in place. It forces useful lessons: scanning, persistence of vision, bit-plane colour, framebuffers, and cooperative timing. Tetro and Pacmo become larger case studies after those ideas are earned.
+---
+
+## What changes from Book 1
+
+Book 1 taught the Z80 and the AZM tooling that makes assembly maintainable. Book 2 applies that tooling to real problems: sorting, searching, strings, bit tricks, records, recursion and pointer structures.
+
+| Book 1 gave you | Book 2 uses it for |
+|-----------------|-------------------|
+| Register passing, callee-save discipline | Fixed calling conventions per algorithm family |
+| AZMDoc `;!` + `@ROUTINE:` | Machine-checkable subroutine specs |
+| `byte` / `word` / `addr`, `.type`, `sizeof`, `offset` | Arrays, records and layout-aware indexing |
+| `.ds Type[N]` | Workspace RAM for algorithm-local state |
+| Ops | Named idioms inside hot loops |
+
+There is no hidden runtime: no `func`, no `:=`, no structured `if`/`while`, no `import`, no typed memory lowering. Every branch and every memory access is visible in the listing.
 
 ---
 
 ## Learning arc
 
-1. **The TEC-1G reborn** — the 1980s learning-computer idea, rebuilt around a Z80 with modern tooling and richer peripherals.
-2. **Running under MON-3** — the monitor as the first programming environment: API calls, `$4000`, keypad, LCD, seven-segment helpers, sound, serial, and GLCD support.
-3. **Debug80 workflow** — project files, profiles, targets, bundled monitor ROMs, source mapping, breakpoints, registers, memory, and listings.
-4. **First program at `$4000`** — user RAM, entry point, running from MON-3, and proving execution in Debug80.
-5. **Keypad input** — MON-3 key scanning, raw key codes, new press vs held key, and simple input state.
-6. **Text on the LCD** — write useful messages through MON-3 first, then understand the HD44780 command/data ports.
-7. **Numbers on the six-digit display** — segment glyphs, MON-3 conversion helpers, and the idea of scanned numeric output.
-8. **Scanning and persistence of vision** — why multiplexed displays work and why your program must keep refreshing them.
-9. **Direct seven-segment scanning** — digit masks, segment bytes, `PortDigits`, `PortSegs`, and timing mistakes.
-10. **One-bit sound** — MON-3 sound helpers, then direct speaker-bit toggling as timed output.
-11. **The 8x8 RGB add-on** — row scanning, red/green/blue bit planes, row select, and colour.
-12. **Framebuffers and colour** — compose pixels in RAM, then scan rows out without corrupting the display.
-13. **A cooperative runtime** — keep keypad, LCD, seven-segment scan, sound, matrix scan, and program logic moving without interrupts.
-14. **Shared game architecture** — the common Tetro/Pacmo hardware layer: scan tick, framebuffer helpers, LCD, HUD, sound, and include boundaries.
-15. **Tetro case study** — falling coloured tiles on an 8x8 matrix, with scoring, LCD state, sound cues, and pause/restart flow.
-16. **Pacmo case study** — a scrolling multicolour maze on an 8x8 viewport, with monsters, consumable paths, score, LCD, and sound.
-17. **Beyond the core** — GLCD, matrix keyboard, RTC, storage, serial workflows, and expansion topics for later chapters or a future book.
+1. **Foundations** — arithmetic algorithms with a fixed 16-bit convention and workspace bytes when registers are not enough.
+2. **Arrays and loops** — contiguous storage, HL indexing, loop invariants, sorting and searching.
+3. **Strings** — sentinel-terminated bytes, length vs capacity, in-place transforms.
+4. **Bit patterns** — shifts, masks, parity, packed flags.
+5. **Records** — layout types as the single source of truth for field offsets; ring buffer as the pilot data structure.
+6. **Recursion** — stack frames, base cases, preserving return values across nested calls.
+7. **Composition** — `.include`, shared `lib/*.asm` routines with AZMDoc, files plus contracts (no `import`).
+8. **Pointer structures** — `addr` fields, linked lists, binary search trees.
+9. **Capstone** — eight queens (or equivalent backtracking search) tying the part together.
+
+Companion examples live in this book's `examples/` directory. Each full chapter cites a matching `.asm` file you can assemble and run to `halt`.
 
 ---
 
@@ -40,30 +48,62 @@ The 8x8 RGB matrix is an add-on rather than the core machine, but this book uses
 
 | Ch | File | Status | What it covers |
 |----|------|--------|----------------|
-| — | [Introduction](00-introduction.md) | **Stub** | Why the TEC-1G book sits between fundamentals and algorithms |
-| 1 | [The TEC-1G Reborn](01-tec1g-reborn.md) | **Stub** | History, learning-computer purpose, Z80, MON-3, Debug80 |
-| 2 | [Running Under MON-3](02-running-under-mon3.md) | **Stub** | Monitor services, `RST 10H`, API call convention, `$4000` |
-| 3 | [Debug80 Workflow](03-debug80-workflow.md) | **Stub** | `debug80.json`, profiles, targets, bundled ROMs, listings |
-| 4 | [First Program at `$4000`](04-first-program.md) | **Stub** | User RAM, entry point, visible proof of execution |
-| 5 | [Keypad Input](05-keypad-input.md) | **Stub** | MON-3 API scanning, key constants, edge vs held input |
-| 6 | [Text on the LCD](06-lcd-output.md) | **Stub** | MON-3 LCD calls, HD44780 commands, strings |
-| 7 | [Numbers on the Six-Digit Display](07-seven-segment-numbers.md) | **Stub** | Segment glyphs, conversion helpers, scanned output |
-| 8 | [Scanning and Persistence of Vision](08-scanning-persistence.md) | **Stub** | Multiplexing, timing, display refresh as program work |
-| 9 | [Direct Seven-Segment Scanning](09-direct-seven-segment.md) | **Stub** | `PortDigits`, `PortSegs`, masks, scan loops |
-| 10 | [One-Bit Sound](10-one-bit-sound.md) | **Stub** | MON-3 sound calls, direct speaker-bit toggling |
-| 11 | [The 8x8 RGB Add-On](11-rgb-display.md) | **Stub** | Row scan, colour planes, matrix ports |
-| 12 | [Framebuffers and Colour](12-framebuffers-and-colour.md) | **Stub** | Back buffers, row layout, drawing cells and rows |
-| 13 | [A Cooperative Runtime](13-cooperative-runtime.md) | **Stub** | Scan tick, logic slices, hardware maintenance |
-| 14 | [Shared Game Architecture](14-shared-game-architecture.md) | **Stub** | Common Tetro/Pacmo hardware layer and boundaries |
-| 15 | [Tetro Case Study](15-tetro-case-study.md) | **Stub** | Falling-block program structure on the TEC-1G |
-| 16 | [Pacmo Case Study](16-pacmo-case-study.md) | **Stub** | Scrolling maze program structure on the TEC-1G |
-| 17 | [Beyond the Core](17-beyond-core.md) | **Stub** | GLCD, matrix keyboard, RTC, storage, serial, expansion |
+| — | [Introduction](00-introduction.md) | **Written** | Wirth/K&R approach, workspace pattern, AZMDoc as spec, how to use this part |
+| 1 | [Foundations](01-foundations.md) | **Written** | Euclidean GCD, 16-bit compare/subtract, calling convention, workspace RAM, digit count |
+| 2 | [Arrays and Loops](02-arrays-and-loops.md) | **Written** | Byte arrays, loop invariants, insertion sort, linear search |
+| 3 | [Strings](03-strings.md) | **Written** | Null-terminated strings, strlen/copy/compare, char search |
+| 4 | [Bit Patterns](04-bit-patterns.md) | **Written** | Masks, shifts, packed flags, `op` idioms |
+| 5 | [Records](05-records.md) | **Written** | `.type` records, `sizeof`/`offset`, layout casts, ring buffer FIFO |
+| 6 | [Recursion](06-recursion.md) | **Written** | Stack budget, factorial vs iterative, `sum_u8_rec`, AZMDoc on self-calls |
+| 7 | [Composition](07-composition.md) | **Written** | `.include`, `lib/strings.asm`, symbol discipline, `.asmi` sketch |
+| 8 | [Pointer Structures](08-pointer-structures.md) | **Written** | `.word` links, singly linked list traverse/find/head insert, optional BST sketch |
+| 9 | [Capstone](09-capstone.md) | **Written** | Eight queens backtracking |
 
 ---
 
-## Sources for this book
+## Examples
 
-The monitor-first chapters will use MON-3 API documentation and Debug80's TEC-1G platform support. The display and game chapters will use the Tetro repository as source material for real keypad, LCD, seven-segment, sound, framebuffer, and cooperative-loop patterns.
+| File | Chapter | Program |
+|------|---------|---------|
+| [examples/01_gcd.asm](examples/01_gcd.asm) | 1 | `gcd_u16` + `digit_count_u16`, stores results, `halt` |
+| [examples/02_insertion_sort.asm](examples/02_insertion_sort.asm) | 2 | Insertion sort + linear search on a byte table |
+| [examples/03_string_length.asm](examples/03_string_length.asm) | 3 | `strlen`, `strcpy`, `strcmp`, `str_find_char`, then `halt` |
+| [examples/04_bit_flags.asm](examples/04_bit_flags.asm) | 4 | Set/test/clear flag bits with `op` helpers, then `halt` |
+| [examples/05_ring_buffer.asm](examples/05_ring_buffer.asm) | 5 | Ring buffer push/pop, full-ring fail, FIFO verify |
+| [examples/06_factorial.asm](examples/06_factorial.asm) | 6 | Recursive and iterative `5!`, recursive table sum |
+| [examples/07_include_demo.asm](examples/07_include_demo.asm) | 7 | `main` includes `lib/strings.asm`, calls shared `strlen_u8` |
+| [examples/08_linked_list.asm](examples/08_linked_list.asm) | 8 | List sum, find `$22`, insert `$40` at head |
+| [examples/09_eight_queens.asm](examples/09_eight_queens.asm) | 9 | Count all 8-queen solutions → `solution_count` = 92 |
+
+---
+
+## How to compile the examples
+
+From the `azm-book/book2/` directory (or pass the full path):
+
+```sh
+azm examples/01_gcd.asm
+```
+
+From the AZM source tree:
+
+```sh
+npm run azm -- /path/to/azm-book/book2/examples/01_gcd.asm
+```
+
+Optional register-care check (Book 1 Chapter 12):
+
+```sh
+azm --rc warn examples/01_gcd.asm
+```
+
+Load the object code into your Z80 emulator, run to `halt`, then inspect RAM at the labels documented in each example (`result`, `sorted`, etc.).
+
+---
+
+## Hardware
+
+Same memory map as Book 1: code at `$0000`, data and workspace at `$8000` and above unless an example comments otherwise. No port I/O is required for these examples.
 
 ---
 

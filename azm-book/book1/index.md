@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "AZM Book 1 — Z80 Fundamentals"
-nav_order: 4
+nav_order: 5
 has_children: true
 ---
 # AZM Book 1 — Z80 Fundamentals
@@ -10,7 +10,7 @@ No prior knowledge of computers or programming assumed.
 
 The first two chapters describe the machine and what a program looks like as raw bytes. Chapter 3 introduces assembly language and the AZM program structure. Chapters 4–10 teach raw Z80 programming. Chapters 11–14 introduce AZM-specific features: subroutine conventions and register discipline, AZMDoc register contracts, layout types and op declarations.
 
-Continue with [AZM Book 2 — Programming the TEC-1G](../book2/index.md) when you are done, or jump to [AZM Book 3 — Algorithms and Data Structures](../book3/index.md) if you want the algorithm track.
+Continue with [Debug80 Book 2 — Programming the TEC-1G](../../debug80-book/book2/index.md) when you are done, or continue the AZM track with [AZM Book 2 — Algorithms and Data Structures](../book2/index.md).
 
 ---
 
