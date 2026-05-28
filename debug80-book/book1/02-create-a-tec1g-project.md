@@ -6,7 +6,17 @@ nav_order: 2
 ---
 # Create A TEC-1G Project
 
-Initialization writes the Debug80 project file and gives you a starter program with the right memory address for the selected machine. Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
+A Debug80 project is a folder with `debug80.json` at its root. That file turns an ordinary workspace folder into something Debug80 can build, launch and emulate.
+
+Inside a project, Debug80 runs **targets**. A target is an entry point into the project: a named program you can build and run. It tells Debug80 which assembly source file starts the program, where build output goes and which machine profile should run the result.
+
+One project can contain more than one target. That is normal. A folder might hold several small programs, experiments or examples, each with its own entry source. The target answers the daily question: which program in this project do you want to run now?
+
+Debug80 can discover likely targets from file names. Files named `main.asm`, files ending in `.main.asm` and files ending in `.z80` are treated as entry sources. The generated project starts with one target based on `src/main.asm`; later, you can add more entry files and select the target you want from the Debug80 panel.
+
+When you build or start debugging, Debug80 uses the selected target. It assembles the target's entry source with AZM, writes the artifacts under the target's build directory, loads the generated code into the emulator and shows the result on the selected platform panel.
+
+Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
 
 Select the uninitialized folder in the Debug80 Project section. Choose **TEC-1G** from the Platform selector, then click **Initialize**.
 
@@ -29,7 +39,7 @@ Book 1 uses **TEC-1G / MON-3**. That profile supplies the start address, ROM ass
 
 Choose **TEC-1** when you are working with classic TEC-1 monitor behaviour. Choose **TEC-1G / MON-3** when you are targeting TEC-1G hardware or the MON-3 monitor environment.
 
-The platform choice decides the first shape of the project. You can later add more targets, and a target can carry platform settings. Book 1 starts with one TEC-1G target so the early path stays focused.
+The platform choice decides the first shape of the project. Book 1 starts with one TEC-1G target so the early path stays focused.
 
 ## Files Created
 
@@ -41,17 +51,15 @@ src/main.asm
 build/
 ```
 
-`debug80.json` stores the Debug80 project. `src/main.asm` is the starter source file. `build/` receives generated files after the first build. Debug80 may also create a `.debug80` folder for its own project support files.
+`debug80.json` stores the Debug80 project and its targets. `src/main.asm` is the starter entry source for the first target. `build/` receives generated files after the first build. Debug80 may also create a `.debug80` folder for its own project support files.
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
-
-The project file contains a target. A target is a named runnable program. It tells Debug80 which source file to assemble, where to write build files and which platform to emulate.
 
 Open the Debug80 panel. The **Project** row should show your folder, and the **Target** selector should show the starter target. When a project has one target, Debug80 can select it automatically. Later, when a project has several targets, the selector becomes part of the daily workflow.
 
 ![Initialized TEC-1G project with target and starter source](../../assets/images/debug80-book/book1/initialized-project-panel.png)
 
-The starter file is named `main.asm`, so Debug80 can recognise it as an entry source. Chapter 7 explains the full target discovery rules after you have built and run the first target.
+The starter file is named `main.asm`, so Debug80 can recognise it as an entry source. Appendix B shows the target fields in `debug80.json` after you have built and run the first target.
 
 ## Read The Target As A Sentence
 
