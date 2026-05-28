@@ -6,25 +6,15 @@ nav_order: 2
 ---
 # Create A TEC-1G Project
 
-The project creator writes the Debug80 project file and gives you a starter program with the right memory address for the selected machine. Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
+Initialization writes the Debug80 project file and gives you a starter program with the right memory address for the selected machine. Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
 
-Open the Command Palette and run:
+Select the uninitialized folder in the Debug80 Project section. Choose **TEC-1G** from the Platform selector, then click **Initialize**.
 
-```text
-Debug80: Create Project
-```
-
-Choose:
-
-```text
-TEC-1G / MON-3
-```
+![Platform selector with TEC-1G selected](../../assets/images/debug80-book/book1/select-tec1g-platform.png)
 
 That choice creates a TEC-1G project using the MON-3 monitor profile. The starter program is placed at `0x4000`, the normal user-code area for this profile.
 
-> **Image placeholder:** Command Palette showing **Debug80: Create Project**.
-
-> **Image placeholder:** Platform/profile picker with **TEC-1G / MON-3** selected.
+You can also create a project from the Command Palette with **Debug80: Create Project**, but the panel is the clearest path for the first workflow because it shows the selected folder, platform and initialization state together.
 
 ## Choose The Platform
 
@@ -43,7 +33,7 @@ The platform choice decides the first shape of the project. It does not lock the
 
 ## Files Created
 
-After project creation, open the VS Code Explorer. A fresh TEC-1G project has these working pieces:
+After initialization, open the VS Code Explorer. A fresh TEC-1G project has these working pieces:
 
 ```text
 debug80.json
@@ -51,9 +41,9 @@ src/main.asm
 build/
 ```
 
-`debug80.json` stores the Debug80 project. `src/main.asm` is the starter source file. `build/` receives generated files after the first build.
+`debug80.json` stores the Debug80 project. `src/main.asm` is the starter source file. `build/` receives generated files after the first build. Debug80 may also create a `.debug80` folder for its own project support files.
 
-> **Image placeholder:** Explorer tree after project creation, showing `debug80.json`, `src/main.asm` and `build/`.
+![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 
 The project file contains a target. A target is a named runnable program. It tells Debug80 which source file to assemble, where to write build files and which platform to emulate.
 
