@@ -214,7 +214,7 @@ This is not the same as emulated serial input. It sends the selected target's bu
 
 Debug80 does not wait for `PASSED` or `FAILED` text on the serial line. MON3's Intel HEX loader reports completion on the TEC-1G seven-segment display: `PASS` means the load was accepted, and `ERROR` means checksum or write verification failed. The serial startup message `TEC-1G Connected` belongs to MON3 boot, not to the HEX load result.
 
-The user must configure CoolTerm with the correct serial port and enable its Remote Control Socket on port 51413. Debug80 intentionally delegates native serial-port ownership to CoolTerm here, avoiding bundled native serial dependencies in the VSIX.
+The user must configure CoolTerm with the TEC-1G monitor serial settings (`4800` baud, 8 data bits, no parity, 2 stop bits) and enable its Remote Control Socket on port 51413. Debug80 intentionally delegates native serial-port ownership to CoolTerm here, avoiding bundled native serial dependencies in the VSIX.
 
 ### Platform module dispatch
 
@@ -483,7 +483,7 @@ Bundled ROM files are **not copied during scaffolding**. The generated profile r
 
 ### Starter templates
 
-If the user chose to create a starter source file, `createStarterSourceContent()` reads the template from `resources/project-kits/<kit.starterTemplates[language]>` via `readProjectKitStarterTemplate()`. The file is written to the workspace before `debug80.json` is created. If the file already exists, it is not overwritten.
+If the user chose to create a starter source file, `createStarterSourceContent()` reads the template from `resources/project-kits/<kit.starterTemplates[language]>` via `readProjectKitStarterTemplate()`. The file is written to the workspace before `debug80.json` is created. If the file already exists, it is not overwritten. The current TEC-1G / MON-3 starter is not a bare loop: it sets `SP` to `0x7fff`, clears the LCD through MON-3 `RST 0x10` APIs, writes `Debug80 TEC-1G` on LCD row 1, then continuously calls the MON-3 segment-scan API so the six-digit display shows `HELLO`.
 
 ---
 

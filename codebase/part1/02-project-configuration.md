@@ -390,7 +390,7 @@ When a user creates a new project, the scaffolding system generates the config f
    - the starter source file if it does not already exist
    - `debug80.json` at the workspace root
 
-5. **Merge `.gitignore`.** `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` appends a small, idempotent **Debug80**-marked block if one is not already present: `.debug80/` cache, the scaffold `outputDir` (e.g. `build/`), `out/` and `dist/`, `.vscode/launch.json` (local-only; the extension can still provide a default launch), and common OS files. The block does not ignore the entire `.vscode/` tree, but new Debug80 project configuration still belongs in root `debug80.json`.
+5. **Merge `.gitignore`.** `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` appends a small, idempotent **Debug80**-marked block if one is not already present: the scaffold `outputDir` (e.g. `build/`), `out/` and `dist/`, materialized `roms/` bundle copies, `.vscode/launch.json` (local-only; the extension can still provide a default launch), and common OS files. The block does not ignore the entire `.vscode/` tree, but new Debug80 project configuration still belongs in root `debug80.json`.
 
 6. **Optionally write launch.json.** `.vscode/launch.json` is created only when the caller asked for launch scaffolding as well. The plain project-init path no longer creates an empty `.vscode` folder.
 
@@ -455,7 +455,7 @@ When a source file is selected or changed, the system infers the assembler from 
 - `.asm`, `.z80`, and `.inc` → use AZM
 - An explicit `assembler: "asm80"` is accepted as a compatibility alias, but it is not the current backend.
 
-Target discovery is independent of a mandatory `src/` folder. Debug80 looks for entry points by convention: files ending in `.z80` and files ending in `.main.asm`. This lets a workspace become a Debug80 project with minimal setup while still allowing source trees to organize code below the top-level folder.
+Target discovery is independent of a mandatory `src/` folder. Debug80 looks for entry points by convention: files named exactly `main.asm`, files ending in `.z80`, and files ending in `.main.asm`. The exact `main.asm` case matters because the project scaffolder creates `src/main.asm`; ordinary helper `.asm` files are still left out of automatic target discovery unless they are selected explicitly with **Debug80: Set Program File**.
 
 ---
 

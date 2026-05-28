@@ -191,17 +191,15 @@ Symbols with a source line become `SourceMapAnchor` entries during D8 import.
 
 Debug80 now treats the build-side native D8 map as the authoritative source map for active project targets. AZM emits this map directly, so Debug80 should not need to reconstruct project source maps from listing text during normal use.
 
-`buildMappingFromListing()` still prefers sidecar native maps before cached Debug80 maps. Candidate paths are:
+`buildMappingFromListing()` still prefers sidecar native maps before listing-derived compatibility work. Candidate paths are:
 
 1. `<listing basename>.d8.json` beside the listing.
-2. The cache path resolved for the target.
-3. The legacy cache path.
 
-Native maps win over generated listing caches and are not rejected because the listing has a newer mtime. Debug80-generated maps are checked for staleness against the listing.
+Native maps win over listing-derived fallback data and are not rejected because the listing is newer. Active project maps are expected at the build-side `<artifactBase>.d8.json` path emitted by AZM.
 
-If no usable map exists, Debug80 parses the listing, applies Layer 2 refinement, builds a D8 map with `generator: { name: 'debug80' }`, writes it to the cache path, then imports it through the same D8 path used for native maps.
+If no usable map exists, compatibility code can still parse the listing and apply Layer 2 refinement to build an in-memory mapping for the session. Debug80 no longer writes that generated mapping to a project-local `.debug80/cache` path.
 
-The architectural direction is to remove this generated-cache path from active project code once AZM-only assumptions are fully settled. The remaining listing path is still relevant for ROM/extra-listing support and for compatibility with older artifacts.
+The architectural direction is to remove listing-derived active-project mapping once AZM-only assumptions are fully settled. The remaining listing path is still relevant for ROM/extra-listing support and for compatibility with older artifacts.
 
 ---
 
@@ -212,7 +210,7 @@ The architectural direction is to remove this generated-cache path from active p
 - `SourceMapIndex` has three lookup structures: by address, by file/line, and by file anchors.
 - D8 v1 requires `format`, `version`, `arch`, `addressWidth`, `endianness`, and grouped `files`.
 - D8 segments use `start` and exclusive `end`, matching runtime `SourceMapSegment` ranges.
-- Native D8 maps are preferred over generated cache maps and are the source of truth for active AZM targets.
+- Native D8 maps are preferred over listing-derived compatibility maps and are the source of truth for active AZM targets.
 - Listing-derived maps remain legacy/compatibility infrastructure and should continue shrinking as AZM metadata covers more debugger needs.
 
 ---

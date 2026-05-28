@@ -101,7 +101,7 @@ When a D8 map is available, Debug80 parses and validates it with `parseD8DebugMa
 | `medium` | `MEDIUM` |
 | `low` | `LOW` |
 
-If a native D8 map is loaded, Debug80 logs the generator label. Native maps are preferred over generated cache maps even when the listing is newer.
+If a native D8 map is loaded, Debug80 logs the generator label. Native maps are preferred over listing-derived fallback data even when the listing is newer.
 
 ---
 
@@ -182,8 +182,8 @@ Extra listings, such as monitor ROM listings, are loaded through the same mappin
 - The listing parser reads address rows and symbol-table `DEFINED AT LINE` anchors.
 - Address ranges are exclusive at `end`; zero-width rows can provide context but not executable breakpoints.
 - Layer 2 matches listing text against source and repairs common include mis-attribution.
-- D8 maps use the current `d8-debug-map` schema and can be native or Debug80-generated, but native AZM maps are the expected active-project path.
-- Native D8 maps win over listing-derived caches and feed editor navigation, hover, workspace symbols, Variables, Watches and conditional breakpoints.
+- D8 maps use the current `d8-debug-map` schema. Native AZM maps are the expected active-project path; listing-derived mappings remain compatibility data built in memory rather than project-local cache artifacts.
+- Native D8 maps win over listing-derived compatibility maps and feed editor navigation, hover, workspace symbols, Variables, Watches and conditional breakpoints.
 - Address lookup prefers valid source lines and narrow spans.
 - Breakpoint lookup uses executable-only source-to-address resolution.
 

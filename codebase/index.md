@@ -64,7 +64,7 @@ This manual is updated against the codebase state through **2026-05-28**. These 
 
 - **AZM-first assembler integration:** Debug80 now treats AZM and its native `.d8.json` output as the normal build path. The old asm80/listing-derived mapping path is legacy compatibility infrastructure and is being phased out of active project behaviour. Active targets should be expected to build a HEX plus a native D8 source map.
 - **Editor grammar:** Debug80 owns TextMate syntax highlighting for Z80/AZM assembly sources. `package.json` contributes `z80-asm` and `z80-lst` grammars, default file associations for `.asm`, `.z80` and `.asmi`, and token colour customisations for comments, AZMDoc contract comments, labels, directives, instructions, registers, conditions, strings, symbols, constants, numbers and AZM layout syntax.
-- **Target discovery:** project targets are discovered across the workspace by explicit entry conventions: `.z80` files and files ending in `.main.asm`. A conventional `src/` root is no longer required.
+- **Target discovery:** project targets are discovered across the workspace by explicit entry conventions: files named exactly `main.asm`, files ending in `.z80`, and files ending in `.main.asm`. A conventional `src/` root is no longer required.
 - **Project initialization:** the panel now treats a Debug80 project as a workspace folder with `debug80.json` at its root. Scaffolding writes root `debug80.json`, optional starter source and the standard Debug80 `.gitignore` block; it does not create a `.vscode` directory unless launch scaffolding is explicitly requested.
 - **Runtime performance:** `createZ80Runtime()` keeps stable decoder callbacks whose implementations read the current hardware hooks dynamically. Runtime-control also records starvation data so long chunks and yield delays can be observed during extension-host debugging. TEC display rendering now models scanned seven-segment and RGB LED duty cycle more directly instead of relying on artificial persistence caches.
 - **Webview audio:** speaker mute state is session-local. New webviews start muted because browsers and VS Code webviews require a user gesture before reliable audio playback.
@@ -80,6 +80,7 @@ This manual is updated against the codebase state through **2026-05-28**. These 
 - **Hardware send workflow:** Debug80 can hand a built HEX artifact to a real board through CoolTerm's Remote Control Socket. It now treats CoolTerm transfer completion as the host-side endpoint and no longer waits for `PASSED` or `FAILED` text from MON3; the user reads `PASS` or `ERROR` from the TEC-1G seven-segment display. This lives in the extension host and is intentionally separate from the emulated serial terminal.
 - **Webview modules:** shared `common/` modules cover serial UI, Web Audio, matrix rendering, seven-segment display, keypad handling, TEC keycap layout and styles. The TEC-1 and TEC-1G panels share more code and present consistent keyboard behaviour.
 - **Extension file handling:** `.asm`, `.z80` and `.asmi` files are assigned the `z80-asm` language id on open so decorations and breakpoints align with `files.associations` in `package.json`.
+- **Source map cache removal:** Debug80 no longer writes project-local `.debug80/cache` D8 maps. Active target maps resolve to build-side `<artifactBase>.d8.json`; extra listing compatibility maps resolve beside their listing artifacts and are not written back by Debug80.
 
 Longer-standing architecture facts:
 
@@ -87,4 +88,4 @@ Longer-standing architecture facts:
 - Project creation records bundled ROM asset references, and launch resolves missing workspace files from the extension bundle automatically.
 - The panel lifecycle has three states: `noWorkspace`, `uninitialized` and `initialized`.
 - The project header owns project selection, target selection, stop-on-entry, restart and workspace-folder addition.
-- Memory snapshot handling and mapping-cache decisions are split across debug and extension modules.
+- Memory snapshot handling is split across debug and extension modules.
