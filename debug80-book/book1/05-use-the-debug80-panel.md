@@ -74,6 +74,8 @@ The RGB matrix updates when a program writes the matrix row and colour ports. Be
 
 Programs that scan a matrix often change outputs too quickly for a single port write to be meaningful by itself. The panel is designed to show the accumulated visible state, which is usually what you need while debugging a game, display test or animation.
 
+The TEC-1G RGB matrix view uses the emulator's duty-cycle calculation, then maps that brightness into a visible LED intensity in the panel. Pixels with more active scan time appear brighter, and pixels with less active scan time still appear dimmer. That makes games and display tests easier to see while preserving useful clues about uneven scan timing.
+
 ## Machine
 
 The **Machine** section shows the LCD, seven-segment display and keypad. Chapter 4 used this section for front-panel inspection. Use it whenever your program interacts with the visible TEC-1G controls.

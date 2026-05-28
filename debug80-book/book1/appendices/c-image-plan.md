@@ -80,8 +80,9 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | CoolTerm Remote Control Socket setting | Screenshot | Chapter 7 |
 | CoolTerm serial options | Screenshot | Chapter 7 |
 | **Send to Board** visible in Debug80 | Screenshot | Chapter 7 |
-| TEC-1G receive mode | Hardware photo | Chapter 7 |
-| Successful `PASSED` response | Screenshot or photo | Chapter 7 |
+| TEC-1G MON-3 Intel HEX Load mode | Hardware photo | Chapter 7 |
+| TEC-1G seven-segment display showing `PASS` after load | Hardware photo | Chapter 7 |
+| TEC-1G seven-segment display showing `ERROR` after failed load, if practical | Hardware photo | Chapter 7 |
 | Target selector with several targets | Screenshot | Chapter 7 |
 
 ## Generated Diagrams

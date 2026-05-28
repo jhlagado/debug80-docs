@@ -34,7 +34,7 @@ The emulator also models monitor ROM, RAM, expansion memory and system-control s
 
 ## Serial Settings For Hardware Transfer
 
-Use these CoolTerm settings for the TEC-1 monitor workflow:
+Use these CoolTerm settings for the TEC-1G / MON-3 hardware-transfer workflow:
 
 ```text
 4800 baud
@@ -43,7 +43,14 @@ No parity
 2 stop bits
 ```
 
-Add the exact TEC-1G / MON-3 receive-mode sequence after hardware testing or author confirmation.
+For TEC-1G / MON-3 hardware transfer, put the board into Intel HEX Load mode before pressing **Send to Board**. After the transfer, read the seven-segment display:
+
+```text
+PASS   load accepted
+ERROR  checksum or write verification failed
+```
+
+Add the exact TEC-1G / MON-3 Intel HEX Load key sequence after hardware testing or author confirmation.
 
 ## Common Debugging Clues
 

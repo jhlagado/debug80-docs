@@ -44,5 +44,5 @@ Before external review, record remaining gaps:
 
 - screenshots still missing
 - exact first visible tutorial program
-- exact TEC-1G / MON-3 receive-mode sequence
+- exact TEC-1G / MON-3 Intel HEX Load key sequence
 - any command or UI label that must be rechecked after the next Debug80 code change

@@ -61,21 +61,26 @@ Keep these settings with the hardware notes for your board. A wrong stop-bit or 
 
 Select the correct project and target in Debug80. Build the target so its `.hex` file exists in the build folder.
 
-Put the TEC-1G into MON-3 receive mode before sending. The final review needs the exact key sequence for the board shown in the screenshots.
+Put the TEC-1G into MON-3 Intel HEX Load mode before sending. The final review needs the exact key sequence for the board shown in the screenshots.
 
-Click **Send to Board** in the Project section. Debug80 sends the active target's HEX file through CoolTerm and waits for the board response:
+Click **Send to Board** in the Project section. Debug80 sends the active target's HEX file through CoolTerm and reports when the file has been sent.
+
+MON-3 reports the load result on the TEC-1G seven-segment display:
 
 ```text
-PASSED
+PASS   load accepted
+ERROR  checksum or write verification failed
 ```
+
+Debug80 does not wait for `PASSED` or `FAILED` text on the serial line. The useful result is the word shown on the TEC-1G display. The serial startup message `TEC-1G Connected` belongs to MON-3 startup, not to the Intel HEX load result.
 
 If the button is hidden, check that CoolTerm is running and the Remote Control Socket is enabled. If Debug80 reports that the HEX file is missing, build the target again.
 
 > **Image placeholder:** Debug80 Project section with **Send to Board** visible.
 
-> **Image placeholder:** TEC-1G in MON-3 receive mode.
+> **Image placeholder:** TEC-1G in MON-3 Intel HEX Load mode.
 
-> **Image placeholder:** Successful `PASSED` response after transfer.
+> **Image placeholder:** TEC-1G seven-segment display showing `PASS` after a successful load.
 
 After a successful transfer, run the program on the board and compare the result with the emulator. The emulator is the faster place to debug, and the board is the final check that the serial transfer and hardware assumptions match.
 
