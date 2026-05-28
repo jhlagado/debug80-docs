@@ -14,9 +14,9 @@ Open the **Run and Debug** sidebar and expand **Variables**. Debug80 uses this s
 
 After a successful build, Debug80 can show **Symbols** and **Constants** scopes. Constants show their assembled value. Memory-backed symbols show conservative raw memory information: address, first byte, a word value when the size suggests one, a short byte preview for larger data and printable ASCII where useful.
 
-Debug80 does not guess rich types. If the source map lacks type or storage metadata, the Variables panel shows raw memory.
+Debug80 shows source-map-backed memory conservatively. When type or storage metadata is absent, the Variables panel shows raw memory.
 
-These scopes use the source map from the last successful build. If symbols are missing or look stale, build the target again.
+These scopes use the source map from the last successful build. Build the target again when symbols need to be generated or refreshed.
 
 > **Image placeholder:** VS Code Variables view showing Symbols and Constants during a paused Debug80 session.
 
@@ -43,7 +43,7 @@ PACMO_LIVES
 PC eq MainLoop
 ```
 
-A symbol by itself evaluates to its address or constant value. If a symbol watch is missing or stale, build the active target again.
+A symbol by itself evaluates to its address or constant value. Build the active target again when a symbol Watch needs to be generated or refreshed.
 
 Square brackets read one byte from memory at the address inside the brackets:
 
@@ -69,9 +69,9 @@ UpdatePlayer+6
 RenderSprite+12
 ```
 
-The `+6` form means the current PC is six bytes after the named symbol. This is a symbolic name for the current execution location, not a full high-level call stack.
+The `+6` form means the current PC is six bytes after the named symbol. This symbolic name identifies the current execution location.
 
-Z80 programs do not naturally expose stack frames in the same way as a language runtime such as JavaScript or Python. Debug80 still gives the current address a useful name when the source map contains a nearby label.
+Z80 programs expose execution through registers, memory and branch targets. Debug80 gives the current address a useful name when the source map contains a nearby label.
 
 > **Image placeholder:** VS Code Call Stack view showing a symbolic Debug80 frame name such as `UpdatePlayer+6`.
 
@@ -85,13 +85,13 @@ PC is the program counter. It names the next instruction address.
 
 SP is the stack pointer. It names the top of the Z80 stack.
 
-The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. This book uses them only as needed; the Z80 course material explains the instruction set in detail.
+The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. This book introduces them where the workflow needs them; the Z80 course material explains the instruction set in detail.
 
 Step the starter program and watch PC change. With the starter loop, PC moves from `0x4000` to the jump instruction and then returns to `0x4000`.
 
 > **Image placeholder:** Debug80 Registers section with PC visible.
 
-The value is useful because it confirms what the editor is showing. If the editor highlights `NOP` and PC is `0x4000`, the source view and machine state agree. If the editor cannot find a source line for the current address, the raw PC still tells you where execution stopped.
+The value is useful because it confirms what the editor is showing. When the editor highlights `NOP` and PC is `0x4000`, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
 
 The panel register view also keeps your attention near the emulated hardware. When you are debugging display or keypad code, this matters more than it does in a normal desktop program: the code, CPU state and machine front panel all belong to the same moment.
 
@@ -152,7 +152,7 @@ If you are unsure whether a key reached the emulator, use an on-screen key first
 
 The LCD and seven-segment display update from the emulated I/O ports. If your program writes to the display ports, the panel changes while the emulator runs.
 
-For the starter loop, the displays do not change because the program writes no display data. When you run a program that writes to the LCD or seven-segment ports, this section shows the result.
+For the starter loop, the displays stay unchanged because the program leaves the display ports alone. When you run a program that writes to the LCD or seven-segment ports, this section shows the result.
 
 ## Speaker, Speed And Mute
 

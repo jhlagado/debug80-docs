@@ -10,7 +10,7 @@ Debug80 sends the active target's Intel HEX file to real hardware through CoolTe
 
 This means the hardware path has two parts. CoolTerm must be configured to talk to the TEC-1G serial port, and CoolTerm must also accept remote-control commands from Debug80.
 
-This chapter also covers the next step after the first successful transfer: adding more targets, choosing platforms and recovering from common failures.
+This chapter also covers the next step after the first successful transfer: adding more targets, choosing platforms and recovering from setup problems.
 
 ## Install CoolTerm
 
@@ -38,9 +38,9 @@ Leave **HTTP Server** disabled. Debug80 connects to CoolTerm at:
 
 ![CoolTerm Remote Control Socket setting](../../assets/images/debug80-book/book1/coolterm-remote-control-socket.png)
 
-The socket is local to your computer. Debug80 is not taking over the serial device directly; it is asking CoolTerm to send the file through the connection CoolTerm owns.
+The socket is local to your computer. Debug80 sends commands to CoolTerm, and CoolTerm sends the file through the serial connection it owns.
 
-The local IP shown in CoolTerm is not the setting Debug80 needs. The important settings are **Enable Remote Control Socket** and port `51413`.
+Debug80 needs **Enable Remote Control Socket** and port `51413`. The local IP shown in CoolTerm is informational.
 
 ## Configure The Serial Port
 
@@ -61,7 +61,7 @@ When CoolTerm is running with the Remote Control Socket enabled, Debug80 can det
 
 If the board misses characters during transfer, adjust CoolTerm's transmit delay settings.
 
-Keep these settings with the hardware notes for your board. A wrong stop-bit or baud setting can look like a bad program because the monitor receives corrupted characters.
+Keep these settings with the hardware notes for your board. The monitor needs matching stop-bit and baud settings to receive characters correctly.
 
 ## Build And Send
 
@@ -78,9 +78,9 @@ PASS   load accepted
 ERROR  checksum or write verification failed
 ```
 
-Debug80 does not wait for `PASSED` or `FAILED` text on the serial line. The useful result is the word shown on the TEC-1G display. The serial startup message `TEC-1G Connected` belongs to MON-3 startup, not to the Intel HEX load result.
+Debug80 reports that CoolTerm sent the file. MON-3 reports the load result on the TEC-1G display. The serial startup message `TEC-1G Connected` belongs to MON-3 startup.
 
-If the button is hidden, check that CoolTerm is running and the Remote Control Socket is enabled. If Debug80 reports that the HEX file is missing, build the target again.
+When **Send to Board** is hidden, start CoolTerm and enable the Remote Control Socket. When Debug80 asks for a HEX file, build the target again.
 
 > **Image placeholder:** Debug80 Project section with **Send to Board** visible.
 
@@ -106,7 +106,7 @@ main.asm
 
 The exact name `main.asm` is treated as an entry source because it is the common starter-file name. A file ending in `.main.asm`, such as `display-test.main.asm`, is also treated as an entry source. Any `.z80` file is treated as an entry source.
 
-A regular `.asm` file can still be part of your program. It may be included by another source file or selected explicitly with **Debug80: Set Program File**, but target discovery does not promote every `.asm` helper file into the Target selector.
+A regular `.asm` file can still be part of your program. It may be included by another source file or selected explicitly with **Debug80: Set Program File**. Target discovery keeps helper files out of the Target selector.
 
 Use the **Target** selector in the Project section to change the active target.
 
@@ -132,11 +132,11 @@ Debug80: Set Program File
 
 Debug80 updates the project configuration so the target points at that source file.
 
-`debug80.json` can name a `defaultTarget`. Debug80 uses it when there is no remembered target selection for the current project.
+`debug80.json` can name a `defaultTarget`. Debug80 uses it as the fallback target for the current project.
 
 Keep the default target pointed at the program you normally want to launch first. Use the panel selector for day-to-day switching.
 
-If you accidentally bind the wrong source file, use **Debug80: Set Program File** again on the intended file. The project file stores the latest selection.
+To change a target's source file, run **Debug80: Set Program File** again on the intended file. The project file stores the latest selection.
 
 ## Choose A Different Platform
 
@@ -148,27 +148,27 @@ Choose **TEC-1G / MON-3** for the main TEC-1G workflow. TEC-1G is compatible wit
 
 Choose the platform that matches the board your program expects. A program that writes TEC-1G LCD ports needs the TEC-1G platform. A classic TEC-1 monitor program should use a TEC-1 platform.
 
-## Recover From Common Failures
+## Recover From Setup Problems
 
-Most Debug80 failures name the missing file, target or build artifact. Start with the Debug Console message, then check the matching failure path.
+Most Debug80 diagnostics name the file, target or build artifact that needs attention. Start with the Debug Console message, then check the matching setup path.
 
-If the project is missing, check the Project selector in the Debug80 panel. Make sure the workspace contains the folder that owns the program and that `debug80.json` exists at the root of that folder. If the folder has not been initialized yet, select it in the Debug80 panel and initialize it.
+For project selection problems, check the Project selector in the Debug80 panel. Make sure the workspace contains the folder that owns the program and that `debug80.json` exists at the root of that folder. Select an uninitialized folder in the Debug80 panel to initialize it.
 
-If F5 starts the wrong target, check the **Target** selector in the Project section. You can also run **Debug80: Select Active Target**. If the project still starts another target, inspect `defaultTarget` in `debug80.json`.
+For target selection problems, check the **Target** selector in the Project section. You can also run **Debug80: Select Active Target**. The `defaultTarget` field in `debug80.json` controls the fallback target.
 
-If the build fails, read the first assembler diagnostic. Later messages often follow from the first failure. Check that the active target points at the source file you meant to assemble, then check include paths, included files and the output folder.
+For build problems, read the first assembler diagnostic. Later messages often follow from the first diagnostic. Check that the active target points at the intended source file, then check include paths, included files and the output folder.
 
 Debug80 uses AZM for the current assembly workflow. Source written for another assembler may need syntax changes before AZM can assemble it.
 
-If a breakpoint is hollow, move it to an instruction line and rebuild. A source line that contains only a comment, a blank line or a label may not have generated code at that exact line. Debug80 needs a generated address before it can bind the breakpoint.
+For hollow breakpoints, move the breakpoint to an instruction line and rebuild. Comments, blank lines and label-only lines may share their generated address with a nearby instruction, while Debug80 binds breakpoints to generated instruction addresses.
 
-If Go to Definition, hover, workspace symbols or Variables-panel symbols are missing, build the active target. These features use the source map from the last successful build. If they look stale, build again so Debug80 can read the current source-map data.
+For Go to Definition, hover, workspace symbols or Variables-panel symbols, build the active target. These features use the source map from the last successful build. Build again so Debug80 can read current source-map data.
 
-If the panel does not update, pause the session and open the relevant accordion section. Memory views and register views are easiest to read while paused. Keyboard input requires focus inside the webview, so click the panel before typing.
+For panel update questions, pause the session and open the relevant accordion section. Memory views and register views are easiest to read while paused. Keyboard input requires focus inside the webview, so click the panel before typing.
 
 ![Emulator serial path versus CoolTerm hardware path](../../assets/images/debug80-book/book1/emulator-vs-coolterm-serial.svg)
 
-If CoolTerm is not detected, open CoolTerm and check **Preferences > Scripting**. The Remote Control Socket must be enabled on port `51413`. CoolTerm must be running while Debug80 checks for it.
+For CoolTerm detection, open CoolTerm and check **Preferences > Scripting**. Enable the Remote Control Socket on port `51413` and keep CoolTerm running while Debug80 checks for it.
 
 ## What To Review Next
 

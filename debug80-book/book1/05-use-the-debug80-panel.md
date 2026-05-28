@@ -14,7 +14,7 @@ The Debug80 panel keeps the project controls and TEC-1G hardware views in one ac
 
 The **Project** section controls the Debug80 context for the current VS Code window. It names the folder, the active target and the launch options used by the next build.
 
-This section is the place to check before asking why the wrong program ran. The selected folder and selected target define the next launch.
+The selected folder and selected target define the next launch. Check this section before building or pressing F5.
 
 The **Project** row selects the folder. In a single-folder window, it usually stays fixed. In a multi-folder window, choose the folder before you build.
 
@@ -27,12 +27,12 @@ The Project section also reports source-map status. The source map is generated 
 Read this line before using source-map-backed features:
 
 - `Source map: current.` means the selected target has a readable source map and it appears up to date.
-- `Source map: missing, build the selected target.` means Debug80 cannot find the source map for the selected target.
+- `Source map: missing, build the selected target.` means the selected target needs a successful build before source-map features are available.
 - `Source map: stale, build recommended.` means one or more mapped source files appear newer than the source map.
-- `Source map: invalid, rebuild the selected target.` means Debug80 found a source map but could not parse it correctly.
-- `Source map: select a target and build.` means Debug80 does not yet know which target should supply the source map.
+- `Source map: invalid, rebuild the selected target.` means Debug80 needs a fresh source map for the selected target.
+- `Source map: select a target and build.` means source-map features start after target selection and a successful build.
 
-If Go to Definition, hover text, source breakpoints, Run to Cursor or symbol views seem wrong, press **Build** for the active target.
+Build the active target when Go to Definition, hover text, source breakpoints, Run to Cursor or symbol views need fresh information.
 
 ![Source-map status leading to build and source-map-backed features](../../assets/images/debug80-book/book1/source-map-status-features.svg)
 
@@ -60,7 +60,7 @@ The **Contract Updates** selector controls whether Debug80 may apply AZMDoc cont
 
 Leave this on **Ask** while learning the workflow.
 
-The safest habit is to change these options only when you know why a launch is blocked or why AZM wants to update a contract. They are useful controls, but they are not required for the first Debug80 workflow.
+Change these options when you understand the launch diagnostic or the AZM contract update being offered. The first Debug80 workflow can use the default settings.
 
 ## Displays
 
@@ -104,9 +104,9 @@ This is separate from the hardware transfer in Chapter 7. The Serial section tal
 
 > **Image placeholder:** Serial section showing output area, input field, SEND FILE, SAVE and CLEAR.
 
-This distinction prevents a common mistake. Sending a file through the Serial section feeds the emulated machine. Sending a HEX file to the board uses CoolTerm and affects real hardware.
+Keep the two serial paths separate. Sending a file through the Serial section feeds the emulated machine. Sending a HEX file to the board uses CoolTerm and affects real hardware.
 
-File send is paced rather than injected as one instant block. Monitor software often expects input at human or device speed, so a paced send is more faithful to the serial path you will use on hardware.
+File send is paced as a timed stream. Monitor software often expects input at human or device speed, so a paced send is more faithful to the serial path you will use on hardware.
 
 ## Registers And Memory
 

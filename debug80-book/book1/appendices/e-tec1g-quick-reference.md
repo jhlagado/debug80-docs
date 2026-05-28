@@ -6,7 +6,7 @@ nav_order: 105
 ---
 # Appendix E — TEC-1G Quick Reference
 
-This appendix collects the TEC-1G facts used in Book 1. It is a quick reference for the Debug80 panel and MON-3 profile, not a full hardware manual.
+This appendix collects the TEC-1G facts used in Book 1. It is a quick reference for the Debug80 panel and MON-3 profile.
 
 ## MON-3 Memory Shape
 

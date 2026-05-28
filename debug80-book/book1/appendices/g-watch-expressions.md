@@ -98,7 +98,7 @@ PACMO_LIVES
 PC eq MainLoop
 ```
 
-Build the active target again if a symbol Watch is missing or appears stale.
+Build the active target again when a symbol Watch needs to be generated or refreshed.
 
 ## Memory Reads
 
@@ -156,4 +156,4 @@ not [PLAYER_LIVES]
 carry or zero
 ```
 
-Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. If the expression cannot be evaluated, Debug80 stops and reports the error in the Debug Console.
+Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors stop the program and appear in the Debug Console.

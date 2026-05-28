@@ -24,7 +24,7 @@ Use this checklist before asking for review.
 - Each chapter has one job.
 - Each major term has one main teaching home.
 - Early chapters use only terms they have defined or briefly introduced.
-- Later chapters refer back instead of re-teaching.
+- Later chapters refer back and avoid re-teaching.
 - Reference detail sits in appendices unless the task needs it immediately.
 - Chapter image placeholders match Appendix C.
 
@@ -36,13 +36,13 @@ Use this checklist before asking for review.
 - Empty reassurance and sales language have been removed.
 - Negative framing has been removed unless it teaches a concrete contrast.
 - Serial commas before the final `and` or `or` have been removed.
-- Banned words from the oracle do not appear in book prose.
+- Book prose follows the oracle's banned-word rules.
 
 ## Review State
 
 Before external review, record remaining gaps:
 
-- screenshots still missing
+- screenshots still required
 - exact first visible tutorial program
 - exact TEC-1G / MON-3 Intel HEX Load key sequence
 - any command or UI label that must be rechecked after the next Debug80 code change

@@ -87,7 +87,7 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | **Send to Board** visible in Debug80 | Screenshot | Chapter 7 |
 | TEC-1G MON-3 Intel HEX Load mode | Hardware photo | Chapter 7 |
 | TEC-1G seven-segment display showing `PASS` after load | Hardware photo | Chapter 7 |
-| TEC-1G seven-segment display showing `ERROR` after failed load, if practical | Hardware photo | Chapter 7 |
+| TEC-1G seven-segment display showing `ERROR` after a rejected load, if practical | Hardware photo | Chapter 7 |
 | Target selector with several targets | Screenshot | Chapter 7 |
 
 ## Generated Diagrams

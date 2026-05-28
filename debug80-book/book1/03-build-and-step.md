@@ -30,7 +30,7 @@ When **Stop on entry** is enabled, the session pauses before the first instructi
 
 > **Image placeholder:** Source editor paused at the first instruction in `src/main.asm`.
 
-The first launch also creates the build artifacts. You do not need to inspect them yet, but knowing that they exist explains why a launch can fail before the emulator starts: AZM must assemble the source before Debug80 can load and debug the program.
+The first launch also creates the build artifacts. You will inspect them later. For now, remember the launch order: AZM assembles the source before Debug80 loads and debugs the program.
 
 ## The Program Counter
 
@@ -44,7 +44,7 @@ The PC gives the debugger its position in the emulated machine. The source map g
 
 Click in the editor gutter beside an instruction line. VS Code adds a red breakpoint marker.
 
-A filled breakpoint means Debug80 matched the source line to a generated Z80 address. A breakpoint on a blank line, comment or label-only line may stay hollow because no instruction starts there.
+A filled breakpoint means Debug80 matched the source line to a generated Z80 address. A breakpoint on a blank line, comment or label-only line may stay hollow because breakpoints bind to instruction addresses.
 
 Leave the breakpoint on `NOP` or `JR start` for now. The debug controls will move through the loop.
 
@@ -54,11 +54,11 @@ Leave the breakpoint on `NOP` or `JR start` for now. The debug controls will mov
 
 A filled breakpoint has a concrete address. Debug80 can stop there because the source map found the generated instruction.
 
-A hollow breakpoint has not been bound to an address. Move it to a real instruction line and rebuild. Labels, comments and directives can be important source lines, but the debugger needs a CPU instruction address to stop execution.
+A hollow breakpoint is waiting for a generated address. Move it to a real instruction line and rebuild. Labels, comments and directives can be important source lines, and the debugger stops on CPU instruction addresses.
 
 ## Conditional Breakpoints
 
-Use a conditional breakpoint when the program should stop only for a particular machine state. Right-click a breakpoint, choose **Edit Breakpoint** and enter a Debug80 expression.
+Use a conditional breakpoint when the program should stop for a specific machine state. Right-click a breakpoint, choose **Edit Breakpoint** and enter a Debug80 expression.
 
 For example:
 
@@ -72,7 +72,7 @@ PC eq MainLoop
 
 When execution reaches the breakpoint, Debug80 evaluates the expression. A true or non-zero result stops execution. A false or zero result lets the program continue.
 
-If the expression cannot be evaluated, Debug80 stops at the breakpoint and writes the error to the Debug Console. Conditional breakpoints use the same expression language as the Watch panel. Appendix G lists the supported registers, flags, symbols, memory reads and operators.
+When expression evaluation raises an error, Debug80 stops at the breakpoint and writes the error to the Debug Console. Conditional breakpoints use the same expression language as the Watch panel. Appendix G lists the supported registers, flags, symbols, memory reads and operators.
 
 ## Continue And Pause
 
@@ -100,15 +100,15 @@ The editor view and PC should move together. If the editor line changes but the 
 
 Step Over runs a call as a single source-level action when Debug80 can resolve the call boundary. Step Out runs until the current routine returns or until the configured instruction cap stops it.
 
-The starter loop has no call instruction, so these controls behave like ordinary stepping for now. Use them later when your program contains `CALL` and `RET`.
+The starter loop contains straight-line code and a jump, so these controls behave like ordinary stepping for now. Use them later when your program contains `CALL` and `RET`.
 
 ## Run To Cursor
 
 VS Code also provides **Run to Cursor** from the editor context menu and debug controls. During a Debug80 session, place the cursor on an instruction line and use the normal VS Code action.
 
-Debug80 resolves that source line through the source map, runs to the matching machine address and stops there. No separate Debug80 button is needed.
+Debug80 resolves that source line through the source map, runs to the matching machine address and stops there. Use the standard VS Code action for this command.
 
-Run to Cursor depends on the last successful build. If it cannot resolve the source line, build the target again and place the cursor on an instruction line.
+Run to Cursor depends on the last successful build. Build the target again when source-line resolution needs fresh source-map data, then place the cursor on an instruction line.
 
 ## Restart And Stop
 
@@ -120,11 +120,11 @@ Run to Cursor depends on the last successful build. If it cannot resolve the sou
 
 Change the `NOP` to another harmless instruction once you are comfortable stepping. Save the file and restart the target.
 
-Debug80 rebuilds during launch. You do not need to run AZM separately for normal editor-based work. If the source contains an assembly error, the launch stops with a diagnostic instead of starting a stale program.
+Debug80 rebuilds during launch. Normal editor-based work starts from VS Code. Assembly errors stop the launch with a diagnostic.
 
 ## When The First Program Becomes Visible
 
-The starter loop proves that launch, source-map lookup and stepping work. It does not prove display output because it writes no display ports.
+The starter loop proves that launch, source-map lookup and stepping work. Display output begins when a program writes to the TEC-1G display ports.
 
 After you replace the starter loop with a small TEC-1G display program, use the same sequence:
 

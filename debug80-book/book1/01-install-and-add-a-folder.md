@@ -42,13 +42,13 @@ You can also open the view from the VS Code menu. Choose **View > Open View...**
 
 ![Open View picker showing Debug80](../../assets/images/debug80-book/book1/open-view-debug80-picker.png)
 
-The panel may say that no Debug80 project exists. That is the expected state before you add and initialize a project folder.
+The panel may ask for a Debug80 project. That is the expected state before you add and initialize a project folder.
 
-## Start Without A Project
+## Start With A Workspace Folder
 
-The empty state means VS Code is running Debug80, but the workspace does not yet contain an initialized Debug80 project.
+The empty state means VS Code is running Debug80 and is waiting for an initialized Debug80 project.
 
-Start by adding a folder to the workspace. Debug80 treats every workspace folder as a possible project. When you select a folder that has not been initialized, Debug80 can turn it into a Debug80 project by writing `debug80.json` at the root of that folder.
+Start by adding a folder to the workspace. Debug80 treats every workspace folder as a possible project. When you select an uninitialized folder, Debug80 can turn it into a Debug80 project by writing `debug80.json` at the root of that folder.
 
 Treat the panel as the home position for Debug80 work. VS Code has its own Run and Debug controls, but Debug80 adds the project and hardware context for the selected folder.
 
@@ -56,7 +56,7 @@ Treat the panel as the home position for Debug80 work. VS Code has its own Run a
 
 Debug80 works from folders in the VS Code workspace. A folder can hold source files, build output and the `debug80.json` file that describes how to build and run the program.
 
-Add a project folder with **File > Add Folder to Workspace**. Choose the folder that should own the Z80 project. If your source files live in `/projects/blink`, add `blink`, not the parent `projects` folder.
+Add a project folder with **File > Add Folder to Workspace**. Choose the folder that should own the Z80 project. For source files in `/projects/blink`, add `blink` as the workspace folder.
 
 ![File menu with Add Folder to Workspace selected](../../assets/images/debug80-book/book1/add-folder-menu.png)
 
@@ -68,7 +68,7 @@ Select the new folder and click **Add**.
 
 ![Folder chooser with project1 selected](../../assets/images/debug80-book/book1/add-project-folder-dialog.png)
 
-Debug80 sees each workspace folder as a possible project. At first, the folder may be uninitialized. That means Debug80 can see the folder, but the folder does not yet contain `debug80.json`.
+Debug80 sees each workspace folder as a possible project. At first, the folder may be uninitialized. An uninitialized folder is visible to Debug80 and ready for a generated `debug80.json`.
 
 ![Uninitialized Debug80 project in the Project section](../../assets/images/debug80-book/book1/uninitialized-project-panel.png)
 

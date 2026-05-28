@@ -6,7 +6,7 @@ nav_order: 6
 ---
 # Read Artifacts And ROM Source
 
-Debug80 writes build artifacts during launch and loads monitor assets for monitor-backed profiles. You do not need to inspect these files every time you debug, but knowing their roles makes breakpoints, ROM source and hardware transfer easier to understand.
+Debug80 writes build artifacts during launch and loads monitor assets for monitor-backed profiles. Their roles explain breakpoints, ROM source and hardware transfer.
 
 ## The Build Folder
 
@@ -21,7 +21,7 @@ source-map output
 
 > **Image placeholder:** Explorer showing `build/main.hex` and the generated source-map file.
 
-These files are generated output. Keep editing the source, not the artifacts. Rebuild when you want the artifacts to change.
+These files are generated output. Edit the source files, then rebuild to generate fresh artifacts.
 
 ![Source through AZM to HEX and source-map output](../../assets/images/debug80-book/book1/source-azm-artifacts.svg)
 
@@ -39,7 +39,7 @@ The source map records source files, generated address ranges and symbols in a f
 
 When you set a breakpoint in source, Debug80 needs an address for that source line. When execution stops at an address, Debug80 needs a source line to show in the editor. The source map supplies that relationship.
 
-You do not need to understand the file format during normal debugging. Keep the operating rule simple: if navigation, symbols or breakpoints look stale, build the target again.
+Normal debugging uses the source map through Debug80. Keep the operating rule simple: build the target again when navigation, symbols or breakpoints need fresh address data.
 
 ![Source line through source map to Z80 address and breakpoint](../../assets/images/debug80-book/book1/source-line-map-address-breakpoint.svg)
 
@@ -51,9 +51,9 @@ After a successful build, Debug80 can navigate from a symbol reference to the sy
 
 Place the cursor on a symbol in a `.asm` or `.z80` file and press F12, or run VS Code's **Go to Definition** command. Debug80 uses the source map from the last successful build and opens the definition location.
 
-The last successful build is the source of truth. Debug80 does not continuously parse the file you are editing for this feature. Build again after changing labels, constants or include files.
+The last successful build is the source of truth. Build again after changing labels, constants or include files so Debug80 can use the current source map.
 
-If the source map is missing, Debug80 asks you to build the target first. If the source map may be stale, Debug80 warns that rebuilding may improve accuracy.
+When source-map data needs to be generated or refreshed, Debug80 asks for a build before using the navigation result.
 
 > **Image placeholder:** Source editor with cursor on a symbol and the definition target shown after F12.
 
@@ -61,7 +61,7 @@ If the source map is missing, Debug80 asks you to build the target first. If the
 
 VS Code's **Go to Symbol in Workspace** command can search symbols contributed by Debug80. Debug80 contributes labels, constants, routines and data symbols from the active target.
 
-Only the active Debug80 target is used. This is target-based symbol lookup, not whole-workspace semantic indexing. If you change targets, build the new target before relying on symbol search.
+Workspace symbol search uses the active Debug80 target. Build the active target after changing targets, then use symbol search for labels, constants, routines and data symbols in that target.
 
 > **Image placeholder:** VS Code workspace symbol picker showing Debug80 symbols from the active target.
 
@@ -75,7 +75,7 @@ For routines with nearby AZMDoc register-care comments, Debug80 can also show a 
 in: A,HL    out: carry    clobbers: B,C    preserves: DE,IX
 ```
 
-Hover appears only for symbols that resolve through the source map. Build the target if hover is missing for a symbol you expect Debug80 to know.
+Hover appears for symbols that resolve through the source map. Build the target when hover needs current symbol data.
 
 > **Image placeholder:** Symbol hover showing name, kind, address and source location.
 
@@ -97,7 +97,7 @@ Use this when a monitor call does something unexpected or when the call stack sh
 
 > **Image placeholder:** MON-3 source open beside user source.
 
-ROM source is especially useful when your program calls a monitor routine. If a call changes registers you expected to preserve, or if control returns somewhere unexpected, opening the ROM source gives you the surrounding monitor code instead of leaving you at an unexplained address.
+ROM source is especially useful when your program calls a monitor routine. If a call changes registers you expected to preserve, or if control returns somewhere unexpected, opening the ROM source gives you the surrounding monitor code for the current address.
 
 ## Bundled Assets
 
@@ -121,10 +121,10 @@ Run this command when you want local copies:
 Debug80: Copy Bundled Assets into Workspace
 ```
 
-Copy assets when you want to inspect monitor source, compare a ROM or keep a project self-contained. You do not need local copies for ordinary debugging with a bundled profile.
+Copy assets when you want to inspect monitor source, compare a ROM or keep a project self-contained. Ordinary debugging with a bundled profile can use the packaged assets.
 
 > **Image placeholder:** Explorer showing copied `roms/tec1g/mon3` assets.
 
 ## Before Moving On
 
-You are ready for hardware transfer when you can identify the `.hex` file for the active target. The board transfer sends that file, not the source file and not the source map.
+You are ready for hardware transfer when you can identify the `.hex` file for the active target. The board transfer sends the generated HEX file.

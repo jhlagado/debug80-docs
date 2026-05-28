@@ -31,11 +31,11 @@ A generated TEC-1G project uses this general shape:
 }
 ```
 
-`projectPlatform` names the default platform family. `defaultProfile` names the profile used unless a target says otherwise. `defaultTarget` is the target Debug80 can choose when no remembered selection exists.
+`projectPlatform` names the default platform family. `defaultProfile` names the profile used unless a target says otherwise. `defaultTarget` is the fallback target Debug80 can choose for the project.
 
 ## Launch Overrides
 
-Most users can launch through the Debug80 panel without a hand-written VS Code launch configuration. When a project needs one, launch options can override the project defaults for that session.
+Most users can launch through the Debug80 panel. When a project needs a hand-written VS Code launch configuration, launch options can override the project defaults for that session.
 
 Use `target` when a launch configuration should always start a specific target, even if the Project section currently selects another one.
 

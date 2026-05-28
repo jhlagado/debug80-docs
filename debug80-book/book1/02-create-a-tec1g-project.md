@@ -29,7 +29,7 @@ Book 1 uses **TEC-1G / MON-3**. That profile supplies the start address, ROM ass
 
 Choose **TEC-1** when you are working with classic TEC-1 monitor behaviour. Choose **TEC-1G / MON-3** when you are targeting TEC-1G hardware or the MON-3 monitor environment.
 
-The platform choice decides the first shape of the project. It does not lock the folder forever. A project can later hold more targets, and a target can carry platform settings. Book 1 starts with one TEC-1G target so the early path stays focused.
+The platform choice decides the first shape of the project. You can later add more targets, and a target can carry platform settings. Book 1 starts with one TEC-1G target so the early path stays focused.
 
 ## Files Created
 
@@ -94,7 +94,7 @@ The monitor ROM still exists in the emulated machine. Your program lives in RAM 
 
 `start:` is a label. A label gives a name to an address.
 
-`NOP` is a Z80 instruction that advances the CPU without changing registers or memory.
+`NOP` is a Z80 instruction that advances the CPU while leaving registers and memory unchanged.
 
 `JR start` jumps back to the label. Together, the two instructions create a loop:
 
@@ -103,7 +103,7 @@ start:  NOP
         JR  start
 ```
 
-This program gives the debugger a stable loop. It changes no display state, so the first visible result will come later, when you run a program that writes to the TEC-1G display ports.
+This program gives the debugger a stable loop. The first visible display result will come later, when you run a program that writes to the TEC-1G display ports.
 
 Save `src/main.asm`. The next chapter builds the target and starts the first debug session.
 
