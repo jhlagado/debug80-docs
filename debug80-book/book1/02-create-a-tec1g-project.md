@@ -59,7 +59,7 @@ The project file contains a target. A target is a named runnable program. It tel
 
 Open the Debug80 panel. The **Project** row should show your folder, and the **Target** selector should show the starter target. When a project has one target, Debug80 can select it automatically. Later, when a project has several targets, the selector becomes part of the daily workflow.
 
-> **Image placeholder:** Project section after project creation, with folder and target selected.
+![Initialized TEC-1G project with target and starter source](../../assets/images/debug80-book/book1/initialized-project-panel.png)
 
 ## Read The Target As A Sentence
 
@@ -93,8 +93,6 @@ start:  NOP
 ```
 
 Debug80 assembles this file with AZM when you launch the target. AZM turns the source text into Z80 machine code and writes the files Debug80 needs for source-level debugging.
-
-> **Image placeholder:** `src/main.asm` open in VS Code with syntax highlighting.
 
 ## The Origin Address
 

@@ -28,17 +28,21 @@ Debug80 adds syntax highlighting for `.asm` and `.z80` files. It also adds a deb
 
 Open the **Run and Debug** sidebar. The Debug80 panel appears there because the extension contributes a view named **Debug80** to the debug view.
 
+![Debug80 view in the Run and Debug sidebar](../../assets/images/debug80-book/book1/run-debug-debug80-view.png)
+
 If the panel is hidden, open the Command Palette and run:
 
 ```text
 Debug80: Open Debug80 View
 ```
 
+You can also open the view from the VS Code menu. Choose **View > Open View...**, then search for **Debug80**.
+
+![View menu with Open View selected](../../assets/images/debug80-book/book1/open-view-menu.png)
+
+![Open View picker showing Debug80](../../assets/images/debug80-book/book1/open-view-debug80-picker.png)
+
 The panel may say that no Debug80 project exists. That is the expected state before you add and initialize a project folder.
-
-> **Image placeholder:** Run and Debug sidebar with the Debug80 panel visible and no project configured.
-
-> **Image placeholder:** Debug80 panel empty state before a project folder has been opened.
 
 ## Read The Empty State
 
@@ -56,13 +60,13 @@ Add a project folder with **File > Add Folder to Workspace**. Choose the folder 
 
 Debug80 sees each workspace folder as a possible project. At first, the folder may be uninitialized. That means Debug80 can see the folder, but the folder does not yet contain `debug80.json`.
 
+![Uninitialized Debug80 project in the Project section](../../assets/images/debug80-book/book1/uninitialized-project-panel.png)
+
 A Debug80 project is a folder with `debug80.json` at its root. When you initialize the folder, Debug80 writes that file into the folder. After that, the folder becomes a first-class Debug80 project and appears in the Project selector as a project you can build, debug and send to hardware.
 
 For a new project, create an empty folder with a name you can recognize in the Debug80 panel. For an existing project, add the folder that already contains `debug80.json`.
 
 Debug80 can work on multiple projects in the same workspace. To add another project, use **File > Add Folder to Workspace** again. Debug80 will see the added folder and show it in the Project selector.
-
-> **Image placeholder:** Debug80 panel with one uninitialized folder selected in the Project row.
 
 ## Project Files
 

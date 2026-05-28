@@ -13,9 +13,11 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | Image | Type | Chapter |
 |---|---|---|
 | Debug80 in the VS Code Marketplace | Screenshot | Chapter 1 |
-| Run and Debug sidebar with Debug80 visible | Screenshot | Chapter 1 |
-| Debug80 panel with no project configured | Screenshot | Chapter 1 |
-| Debug80 panel with an uninitialized folder selected | Screenshot | Chapter 1 |
+| Run and Debug sidebar with Debug80 visible | Screenshot | Chapter 1; added as `run-debug-debug80-view.png` |
+| View > Open View menu item | Screenshot | Chapter 1; added as `open-view-menu.png` |
+| Open View picker showing Debug80 | Screenshot | Chapter 1; added as `open-view-debug80-picker.png` |
+| Debug80 panel with an uninitialized folder selected | Screenshot | Chapter 1; added as `uninitialized-project-panel.png` |
+| File > Add Folder to Workspace | Screenshot | Chapter 1 |
 
 ## Project Creation
 
@@ -24,8 +26,8 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | Command Palette with **Debug80: Create Project** | Screenshot | Chapter 2 |
 | Platform/profile picker with **TEC-1G / MON-3** selected | Screenshot | Chapter 2 |
 | Fresh TEC-1G project in Explorer | Screenshot | Chapter 2 |
-| Project section after creation | Screenshot | Chapter 2 |
-| Starter `src/main.asm` | Screenshot | Chapter 2 |
+| Project section after creation | Screenshot | Chapter 2; added as part of `initialized-project-panel.png` |
+| Starter `src/main.asm` | Screenshot | Chapter 2; added as part of `initialized-project-panel.png` |
 
 ## Build And Debug
 
