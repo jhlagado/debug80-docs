@@ -44,7 +44,7 @@ You can also open the view from the VS Code menu. Choose **View > Open View...**
 
 The panel may say that no Debug80 project exists. That is the expected state before you add and initialize a project folder.
 
-## Read The Empty State
+## Start Without A Project
 
 The empty state means VS Code is running Debug80, but the workspace does not yet contain an initialized Debug80 project.
 
