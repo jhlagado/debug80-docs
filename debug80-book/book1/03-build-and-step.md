@@ -88,12 +88,6 @@ The debug controls will move through the startup code and then stop in the refre
 
 ![Breakpoint in the starter program's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
-## Filled And Hollow Breakpoints
-
-A filled breakpoint has a concrete address. Debug80 can stop there because the source map found the generated instruction.
-
-A hollow breakpoint is waiting for a generated address. Move it to a real instruction line and rebuild. Labels, comments and directives can be important source lines, and the debugger stops on CPU instruction addresses.
-
 ## Continue And Pause
 
 The VS Code debug toolbar controls the emulated Z80. Use it the same way you use other VS Code debuggers: continue, pause, step, restart and stop.
