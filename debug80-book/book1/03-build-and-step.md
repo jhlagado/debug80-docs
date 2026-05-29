@@ -11,7 +11,7 @@ nav_order: 3
 
 You have already run the starter target from MON-3. Now run the same program under the debugger, where you can stop it mid-flight and watch the Z80 work.
 
-The starter target is small enough to hold in your head and busy enough to exercise the features that matter: it calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine.
+The starter target is simple. It writes a message to the LCD, then refreshes the seven-segment display in a loop.
 
 ## Build The Target
 
