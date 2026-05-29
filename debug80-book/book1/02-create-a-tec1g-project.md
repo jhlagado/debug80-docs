@@ -58,7 +58,7 @@ build/
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 
-Now open the Debug80 panel. The **Project** row shows your folder, and the **Target** selector shows the starter target named `main`. With one target, Debug80 selects it for you; once a project grows several targets, this selector becomes part of the daily workflow. Below the controls, the panel reports `Source map: missing, build the selected target.` — expected before the first build, and the next chapter clears it.
+Now open the Debug80 panel. The **Project** row shows your folder, and the **Target** selector shows the starter target named `main`. With one target, Debug80 selects it for you; once a project grows several targets, this selector becomes part of the daily workflow. Before the first build, the panel reports `Source map: missing, build the selected target.`
 
 ![Initialized TEC-1G project showing the project, target and machine](../../assets/images/debug80-book/book1/initialized-project-panel.png)
 
@@ -151,7 +151,7 @@ Save `src/main.asm`.
 
 ## Run It From MON-3
 
-Click **Build** in the Project section. Debug80 assembles the program with AZM and loads it into the emulated TEC-1G at `0x4000`. Before single-stepping in the next chapter, run it the way you would on the bare board, straight from the monitor.
+Click **Build** in the Project section. Debug80 assembles the program with AZM and loads it into the emulated TEC-1G at `0x4000`. Run it the way you would on the bare board, straight from the monitor.
 
 The panel comes up in the MON-3 monitor. Press **AD** to enter address mode, then key in:
 

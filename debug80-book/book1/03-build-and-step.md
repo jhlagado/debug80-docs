@@ -11,7 +11,7 @@ nav_order: 3
 
 You have already run the starter from MON-3. Now run the same program under the debugger, where you can stop it mid-flight and watch the Z80 work.
 
-The starter is small enough to hold in your head and busy enough to exercise the features that matter: it sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine. Over this chapter you will pause it at the reset entry, step through the first MON-3 calls, drop a breakpoint into the refresh loop and watch the panel respond.
+The starter is small enough to hold in your head and busy enough to exercise the features that matter: it sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine.
 
 ## Build The Target
 
@@ -21,7 +21,7 @@ In the Project section, tick **Stop on entry**, then click **Build**. Debug80 re
 
 **Stop on entry** decides what happens the instant the machine starts. Cleared, the program runs straight away. Ticked, Debug80 halts at the first instruction the Z80 executes: address `$0000` in the MON-3 ROM, not your program. The yellow arrow marks the reset entry point in the monitor source, and the panel reports `Source map: current.` once the build succeeds.
 
-This launch also writes the build artifacts. Chapter 6 covers those files; for now the order is what matters: AZM assembles the source, then Debug80 loads and debugs the result.
+This launch also writes the build artifacts. The order is what matters here: AZM assembles the source, then Debug80 loads and debugs the result.
 
 ## The Program Counter
 
