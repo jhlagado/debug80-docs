@@ -5,10 +5,6 @@ nav_order: 3
 has_children: true
 ---
 
-[Install And Add A Folder →](01-install-and-add-a-folder.md)
-
-[Install And Add A Folder →](01-install-and-add-a-folder.md)
-
 # Debug80 Book 1 — Getting Started
 
 Debug80 turns Visual Studio Code into a Z80 development environment. You write assembly, run it in an emulated TEC-1G, step through it with source-level breakpoints, and send the same program to a real board over a serial cable.
@@ -36,7 +32,3 @@ By the end you will know how to take a Z80 program all the way to hardware, and 
 - [Appendix E — TEC-1G Quick Reference](appendices/e-tec1g-quick-reference.md)
 - [Appendix F — Review Checklist](appendices/f-review-checklist.md)
 - [Appendix G — Debug Expressions](appendices/g-watch-expressions.md)
-
-[Install And Add A Folder →](01-install-and-add-a-folder.md)
-
-[Install And Add A Folder →](01-install-and-add-a-folder.md)
