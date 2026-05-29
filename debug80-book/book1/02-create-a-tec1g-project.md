@@ -144,12 +144,4 @@ Press **GO** to run the program at the displayed address. The LCD shows the targ
 
 This first run proves the whole path before you start single-stepping: AZM assembled the source at `0x4000`, Debug80 loaded the HEX into the emulator, MON-3 jumped to the program, and the program produced visible TEC-1G output.
 
-## Why The Target Uses MON-3
-
-The target uses monitor services rather than raw port writes. That keeps the first target compact while still giving visible output on the TEC-1G panel.
-
-It also introduces a normal TEC-1G pattern: user code runs from RAM, calls MON-3 routines, and keeps display hardware refreshed in a loop.
-
-The same build and debug sequence applies when you replace the starter target with your own code.
-
 [← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Starter Target →](03-build-and-step.md)
