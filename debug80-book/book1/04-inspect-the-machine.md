@@ -17,11 +17,11 @@ Open the **Run and Debug** sidebar and expand **Variables**. Debug80 uses this s
 
 After a successful build, Debug80 can show **Symbols** and **Constants** scopes. Constants show their assembled value. Memory-backed symbols show conservative raw memory information: address, first byte, a word value when the size suggests one, a short byte preview for larger data and printable ASCII where useful.
 
-Debug80 shows source-map-backed memory conservatively. When type or storage metadata is absent, the Variables panel shows raw memory.
+In the example below, `LcdLine1` expands into the address, byte and word values, a short byte preview, printable ASCII and source location. Debug80 shows source-map-backed memory conservatively. When type or storage metadata is absent, the Variables panel shows raw memory.
 
 These scopes use the source map from the last successful build. Build the target again when symbols need to be generated or refreshed.
 
-> **Image placeholder:** VS Code Variables view showing Symbols and Constants during a paused Debug80 session.
+![Variables panel showing source-map-backed symbols](../../assets/images/debug80-book/book1/chapter4-variables-symbols.png)
 
 ## Watch Expressions
 
@@ -45,8 +45,8 @@ Watches can also use symbols from the active source map:
 ScanHello
 LcdLine1
 SevenSegHello
-PC eq ScanHello
-DE eq SevenSegHello
+PC = ScanHello
+DE = SevenSegHello
 ```
 
 A symbol by itself evaluates to its address or constant value. Build the active target again when a symbol Watch needs to be generated or refreshed.
@@ -60,9 +60,9 @@ Square brackets read one byte from memory at the address inside the brackets:
 [SevenSegHello]
 ```
 
-Use Watches when you want a small set of facts to stay visible while stepping. For example, stop in a display loop and watch the service register, a pointer register, the symbol it points at and the byte at that address. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
+Use Watches when you want a small set of facts to stay visible while stepping. In the example below, the watched values show the current PC, the service register, a pointer register, symbols from the source map and a byte read through `DE`. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
 
-> **Image placeholder:** VS Code Watch panel showing Debug80 expressions such as `PC`, `DE`, `SevenSegHello` and `[DE]`.
+![Watch panel showing Debug80 expressions](../../assets/images/debug80-book/book1/chapter4-watch-expressions.png)
 
 ## Call Stack Naming
 
@@ -80,7 +80,7 @@ The `+3` form means the current PC is three bytes after the named symbol. This s
 
 Z80 programs expose execution through registers, memory and branch targets. Debug80 gives the current address a useful name when the source map contains a nearby label.
 
-> **Image placeholder:** VS Code Call Stack view showing a symbolic Debug80 frame name such as `ScanHello+3`.
+![Call Stack with symbolic Debug80 frame names](../../assets/images/debug80-book/book1/chapter4-call-stack-symbols.png)
 
 ## The Registers Section
 
@@ -96,9 +96,9 @@ The register pairs AF, BC, DE, HL, IX and IY are the main working registers you 
 
 Step a target and watch PC change. It starts at the target's load address, then moves through each instruction as the Z80 executes it.
 
-> **Image placeholder:** Debug80 Registers section with PC visible.
+![Debug80 Registers section](../../assets/images/debug80-book/book1/chapter4-registers.png)
 
-The value is useful because it confirms what the editor is showing. When the highlighted source line and PC describe the same instruction, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
+The PC value is useful because it confirms what the editor is showing. When the highlighted source line and PC describe the same instruction, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
 
 The panel register view also keeps your attention near the emulated hardware. When you are debugging display or keypad code, this matters more than it does in a normal desktop program: the code, CPU state and machine front panel all belong to the same moment.
 
@@ -117,9 +117,9 @@ Open the **Memory** section while the session is paused. The memory panel can sh
 
 Choose **PC** to see the bytes at the current instruction. Choose **Absolute** when you want to type an address yourself.
 
-> **Image placeholder:** Memory section showing bytes around PC at `0x4000`.
+![Memory section showing bytes around PC and pointer registers](../../assets/images/debug80-book/book1/chapter4-memory.png)
 
-The memory panel refreshes when it is visible and the debug session is in a state where Debug80 can safely read memory. If the program is running, pause it before you expect a stable memory view.
+The memory panel refreshes when it is visible and the debug session is paused. In the example, the PC view shows instruction bytes, while HL and DE point at the seven-segment data. The ASCII column makes strings and readable bytes easy to spot.
 
 Use **Absolute** when the address comes from the source or hardware manual. Use a register-relative view when the address comes from the CPU state. For example, use PC to inspect instructions, SP to inspect the stack and HL when a routine uses HL as a pointer.
 
@@ -135,31 +135,37 @@ The **Machine** section shows the front-panel parts of the TEC-1G that you touch
 
 Open the **Machine** section in the Debug80 panel. You should see the LCD at the top left, the six-digit seven-segment display below it and the keypad on the right.
 
-> **Image placeholder:** Machine section open, showing LCD, seven-segment display and keypad.
+![Machine section with LCD, seven-segment display and keypad](../../assets/images/debug80-book/book1/chapter4-machine-section.png)
 
 The Machine section is where the emulator starts to feel like the target board. A normal debugger can show variables and stack frames. Debug80 also shows the devices your Z80 program is driving.
 
-## Click The Panel Before Typing
+## Panel Focus And Keypad Input
 
 VS Code sends key presses to the editor until the webview has focus. Click inside the Machine section before using keyboard shortcuts for the keypad.
 
 If input goes to the source editor, click the keypad area and try again. The on-screen keys work even when keyboard focus is unclear.
 
-> **Image placeholder:** Edited screenshot showing the panel area to click before typing.
-
-## Keypad Input
-
 The keypad sends input to the emulated TEC-1G runtime. Programs that read the keypad see the same kind of input they would receive from the hardware keypad.
 
 The exact key meanings depend on the monitor or program that is currently running. When you are debugging your own program, stop at the code that reads the keypad and watch the relevant register or memory location.
 
-If you are unsure whether a key reached the emulator, use an on-screen key first. Then switch to keyboard shortcuts after the panel has focus and the program is reading input as expected.
+Use an on-screen key first. Then switch to keyboard shortcuts after the panel has focus and the program is reading input as expected.
 
 ## LCD And Seven-Segment Output
 
 The LCD and seven-segment display update from the emulated I/O ports. TEC-1G programs often reach those devices through MON-3 services.
 
 When a program writes to the LCD, the panel shows the result. When a program refreshes the seven-segment display in a loop, the panel shows the current display state while the CPU continues to run.
+
+## Displays Section
+
+The **Displays** section contains TEC-1G display hardware beyond the front-panel LCD and seven-segment digits. It includes the GLCD, the 8x8 RGB LED matrix, speed controls and display-state toggles.
+
+![Displays section with GLCD and RGB matrix](../../assets/images/debug80-book/book1/chapter4-displays-tetro.png)
+
+The RGB matrix is useful for programs that scan LEDs over time. Debug80 renders the duty-cycle brightness, so a dim pixel and a bright pixel can indicate different timing in the program.
+
+![8x8 RGB LED matrix output](../../assets/images/debug80-book/book1/chapter4-rgb-matrix.png)
 
 ## Speaker, Speed And Mute
 

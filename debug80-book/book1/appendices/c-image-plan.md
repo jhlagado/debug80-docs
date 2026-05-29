@@ -53,13 +53,14 @@ This appendix tracks this book's image set as a production checklist.
 
 | Image | Type | Chapter |
 |---|---|---|
-| Variables view with Symbols and Constants | Screenshot | Chapter 4 |
-| Watch panel with Z80 expressions | Screenshot | Chapter 4 |
-| Call Stack view with symbolic current frame | Screenshot | Chapter 4 |
-| Debug80 Registers section | Screenshot | Chapter 4 |
-| Memory section at `0x4000` | Screenshot | Chapter 4 |
-| Machine section showing LCD, seven-segment display and keypad | Screenshot | Chapter 4 |
-| Keypad focus annotation | Edited screenshot | Chapter 4 |
+| Variables view with Symbols and Constants | Screenshot | Chapter 4; added as `chapter4-variables-symbols.png` |
+| Watch panel with Z80 expressions | Screenshot | Chapter 4; added as `chapter4-watch-expressions.png` |
+| Call Stack view with symbolic current frame | Screenshot | Chapter 4; added as `chapter4-call-stack-symbols.png` |
+| Debug80 Registers section | Screenshot | Chapter 4; added as `chapter4-registers.png` |
+| Memory section with PC and pointer-register views | Screenshot | Chapter 4; added as `chapter4-memory.png` |
+| Machine section showing LCD, seven-segment display and keypad | Screenshot | Chapter 4; added as `chapter4-machine-section.png` |
+| Displays section with GLCD and RGB matrix | Screenshot | Chapter 4; added as `chapter4-displays-tetro.png` |
+| 8x8 RGB LED matrix output | Screenshot | Chapter 4; added as `chapter4-rgb-matrix.png` |
 
 ## Panel Walkthrough
 
