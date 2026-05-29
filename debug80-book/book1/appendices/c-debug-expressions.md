@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix G — Debug Expressions"
+title: "Appendix C — Debug Expressions"
 parent: "Debug80 Book 1 — Getting Started"
-nav_order: 107
+nav_order: 103
 ---
 
-[← Appendix F — Review Checklist](f-review-checklist.md) | [Book 1](../index.md)
+[← Appendix B — Project Configuration Reference](b-project-configuration.md) | [Book 1](../index.md)
 
-# Appendix G — Debug Expressions
+# Appendix C — Debug Expressions
 
 Debug80 supports Z80-focused expressions in the standard VS Code **Watch** panel and in conditional breakpoints. Add Watches while the program is paused. Add a breakpoint condition by right-clicking a breakpoint and choosing **Edit Breakpoint**.
 
@@ -161,4 +161,4 @@ carry or zero
 
 Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors stop the program and appear in the Debug Console.
 
-[← Appendix F — Review Checklist](f-review-checklist.md) | [Book 1](../index.md)
+[← Appendix B — Project Configuration Reference](b-project-configuration.md) | [Book 1](../index.md)

@@ -50,12 +50,12 @@ When execution enters monitor code, the current PC may point outside your source
 Run:
 
 ```text
-Debug80: Open ROM Source
+Debug80: Open Auxiliary Source
 ```
 
 Use this when a monitor call does something unexpected or when the Call Stack shows an address inside ROM.
 
-> **Image placeholder:** Command Palette showing **Debug80: Open ROM Source**.
+> **Image placeholder:** Command Palette showing **Debug80: Open Auxiliary Source**.
 
 > **Image placeholder:** MON-3 source open beside user source.
 

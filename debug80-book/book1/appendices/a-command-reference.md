@@ -27,7 +27,9 @@ This appendix lists the Debug80 commands used here. Command titles are taken fro
 | Command | Use |
 |---|---|
 | **Debug80: Start Debugging** | Build and start the selected target. |
+| **Debug80: Build Current Target** | Build the selected target from the command palette. |
 | **Debug80: Open Debug80 View** | Reveal the Debug80 panel in the Run and Debug sidebar. |
+| **Run to Here** | Continue execution to the selected stack frame location. |
 
 ## Platform Panels
 
@@ -35,15 +37,18 @@ This appendix lists the Debug80 commands used here. Command titles are taken fro
 |---|---|
 | **Debug80: Show Terminal Panel** | Open the terminal panel. |
 | **Debug80: Send Terminal Input** | Send text to the terminal path. |
-| **Debug80: Show TEC-1 Panel** | Open the TEC-1 panel. |
-| **Debug80: Show TEC-1 Memory Panel** | Open the TEC-1 memory panel. |
+| **Debug80: Show Platform Panel** | Open the active platform panel. |
+| **Debug80: Show Platform Memory Panel** | Open the active platform memory panel. |
+| **Debug80: Open Source File** | Open a source file known to Debug80. |
+| **Debug80: Show Source Map Status** | Show the source-map status for the active target. |
 
 ## ROM And Hardware
 
 | Command | Use |
 |---|---|
-| **Debug80: Open ROM Source** | Open bundled or workspace ROM source material for the active platform. |
+| **Debug80: Open Auxiliary Source** | Open bundled or workspace auxiliary source material for the active platform. |
 | **Debug80: Copy Bundled Assets into Workspace** | Copy bundled ROM and source assets into the project folder. |
+| **Debug80: Test CoolTerm Connection** | Check whether Debug80 can reach CoolTerm's Remote Control Socket. |
 | **Debug80: Send HEX to Board via CoolTerm** | Send the active target's HEX file to hardware through CoolTerm. |
 
 [← Send To Hardware And Keep Working](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Project Configuration Reference →](b-project-configuration.md)

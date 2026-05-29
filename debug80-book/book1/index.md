@@ -27,8 +27,4 @@ By the end you will know how to take a Z80 program all the way to hardware, and 
 
 - [Appendix A — Command Reference](appendices/a-command-reference.md)
 - [Appendix B — Project Configuration Reference](appendices/b-project-configuration.md)
-- [Appendix C — Image And Screenshot Plan](appendices/c-image-plan.md)
-- [Appendix D — Glossary](appendices/d-glossary.md)
-- [Appendix E — TEC-1G Quick Reference](appendices/e-tec1g-quick-reference.md)
-- [Appendix F — Review Checklist](appendices/f-review-checklist.md)
-- [Appendix G — Debug Expressions](appendices/g-watch-expressions.md)
+- [Appendix C — Debug Expressions](appendices/c-debug-expressions.md)

@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 102
 ---
 
-[← Appendix A — Command Reference](a-command-reference.md) | [Book 1](../index.md) | [Appendix C — Image And Screenshot Plan →](c-image-plan.md)
+[← Appendix A — Command Reference](a-command-reference.md) | [Book 1](../index.md) | [Appendix C — Debug Expressions →](c-debug-expressions.md)
 
 # Appendix B — Project Configuration Reference
 
@@ -109,4 +109,4 @@ The important user-level facts are:
 
 Debug80 uses AZM for the current assembly workflow. Targets may carry an `azm` object for register-care options and related launch behaviour. Leave generated options alone until you are deliberately configuring register-care.
 
-[← Appendix A — Command Reference](a-command-reference.md) | [Book 1](../index.md) | [Appendix C — Image And Screenshot Plan →](c-image-plan.md)
+[← Appendix A — Command Reference](a-command-reference.md) | [Book 1](../index.md) | [Appendix C — Debug Expressions →](c-debug-expressions.md)

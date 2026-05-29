@@ -94,6 +94,6 @@ Type a Debug80 expression into the inline editor. The condition can use register
 
 Each time execution reaches the line, Debug80 evaluates the expression. A true or non-zero result stops the program; a false or zero result lets it run on. If the expression itself errors, Debug80 stops at the breakpoint and writes the error to the Debug Console.
 
-Conditional breakpoints share the expression language with the Watch panel. Appendix G lists the registers, flags, symbols, memory reads and operators you can use.
+Conditional breakpoints share the expression language with the Watch panel. Appendix C lists the registers, flags, symbols, memory reads and operators you can use.
 
 [← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect A Running Program →](04-inspect-the-machine.md)
