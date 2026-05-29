@@ -9,11 +9,11 @@ nav_order: 6
 
 # Source Navigation And ROM Source
 
-A successful build gives Debug80 a current source map. Once that map exists, VS Code can navigate assembly symbols and Debug80 can relate monitor execution back to source files.
+A successful build gives Debug80 a current source map. VS Code can then navigate assembly symbols, and Debug80 can relate monitor execution back to source files.
 
 ## Go To Definition
 
-Place the cursor on a symbol in a `.asm` or `.z80` file and press F12, or run VS Code's **Go to Definition** command. Debug80 uses the source map from the last successful build and opens the symbol definition.
+Place the cursor on a symbol in a `.asm` or `.z80` file and press F12, or run VS Code's **Go to Definition** command. Debug80 opens the definition recorded in the last successful build.
 
 The last successful build is the source of truth. Build again after changing labels, constants or include files.
 
@@ -21,7 +21,7 @@ The last successful build is the source of truth. Build again after changing lab
 
 ## Workspace Symbol Search
 
-VS Code's **Go to Symbol in Workspace** command can search symbols contributed by Debug80. Debug80 contributes labels, constants, routines and data symbols from the active target.
+VS Code's **Go to Symbol in Workspace** command can search labels, constants, routines and data symbols contributed by Debug80.
 
 This is target-based search. Select the Debug80 target you want, build it, then use the workspace symbol picker for symbols from that target.
 
@@ -29,7 +29,7 @@ This is target-based search. Select the Debug80 target you want, build it, then 
 
 ## Symbol Hover
 
-Hover over a known assembly symbol to see a compact source-map summary. The hover can include the symbol name, kind, address or value, source file and line.
+Hover over a known assembly symbol to see a compact source-map summary: name, kind, address or value, source file and line.
 
 For routines with nearby AZMDoc register-care comments, Debug80 can also show a one-line contract summary:
 
@@ -53,13 +53,13 @@ Run:
 Debug80: Open Auxiliary Source
 ```
 
-Use this when a monitor call does something unexpected or when the Call Stack shows an address inside ROM.
+Use this when a monitor call changes registers unexpectedly or when the Call Stack shows an address inside ROM.
 
 > **Image placeholder:** Command Palette showing **Debug80: Open Auxiliary Source**.
 
 > **Image placeholder:** MON-3 source open beside user source.
 
-ROM source is especially useful when your program calls a monitor routine. If a call changes registers you expected to preserve, or if control returns somewhere unexpected, opening the ROM source gives you the surrounding monitor code for the current address.
+Opening ROM source gives you the surrounding monitor code for the current address.
 
 ## Bundled Assets
 
@@ -69,7 +69,7 @@ Debug80 ships bundled ROM assets for the built-in platforms. The TEC-1G / MON-3 
 roms/tec1g/mon3/mon3.bin
 ```
 
-If those files exist in your workspace, Debug80 uses them. If they are absent and the platform has a bundled asset entry, Debug80 uses the copy packaged with the extension.
+If those files exist in your workspace, Debug80 uses them. Otherwise it uses the copy packaged with the extension.
 
 Run this command when you want local copies:
 

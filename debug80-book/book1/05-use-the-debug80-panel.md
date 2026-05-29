@@ -9,11 +9,11 @@ nav_order: 5
 
 # Build Options And Source Maps
 
-The **Project** section is the control centre for a Debug80 build. It decides which folder is active, which target will run, which platform will receive the result, and how strictly Debug80 should check the program before launch.
+The **Project** section controls the next build: project, target, platform and register-care settings.
 
 ## Project And Target
 
-The **Project** row selects the workspace folder. In a single-folder window it usually stays fixed. In a multi-folder window, choose the folder before you build.
+The **Project** row selects the workspace folder. In a multi-folder window, choose the folder before you build.
 
 The **Target** row selects the runnable program inside that folder. The selected target controls the source file, build output and platform settings used by **Build** and F5.
 
@@ -27,9 +27,9 @@ When you click **Build**, Debug80 asks AZM to assemble the active target. AZM wr
 
 ![Build folder after a successful target build](../../assets/images/debug80-book/book1/chapter5-build-folder.png)
 
-The `.hex` file contains the program bytes in Intel HEX format. Debug80 loads those bytes into the emulator, and later sends the same file to a real TEC-1G through CoolTerm. The `.bin` file contains the same program bytes as a raw binary image.
+The `.hex` file is the important user-facing artifact: Debug80 loads it into the emulator and can send the same file to a real TEC-1G through CoolTerm. The `.bin` file is the same program as a raw binary image.
 
-The JSON source-map file is Debug80's own mapping format. AZM generates it, and Debug80 reads it after a successful build.
+The JSON source-map file connects source lines, symbols and generated addresses.
 
 The `main.regcare.txt` file records register-care diagnostics from the build. It is most useful when Register Care is in **Audit** mode, because you can inspect the findings without blocking the build.
 

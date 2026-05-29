@@ -15,9 +15,7 @@ Paused execution gives you time to inspect a program from several angles. Start 
 
 Open the **Run and Debug** sidebar and expand **Variables**. Debug80 uses this standard VS Code panel for source-map-backed symbols and constants.
 
-After a successful build, Debug80 can show **Symbols** and **Constants** scopes. Constants show their assembled value. Memory-backed symbols show conservative raw memory information.
-
-In the example below, `LcdLine1` expands into the address, byte and word values, a short byte preview, printable ASCII and source location. This is enough to check what lives at a label while staying faithful to the raw assembly data.
+After a successful build, Debug80 can show **Symbols** and **Constants** scopes. Constants show their assembled value. Memory-backed symbols show conservative raw memory information: address, current bytes, readable ASCII where possible and source location.
 
 These scopes use the source map from the last successful build. Build the target again when symbols need to be generated or refreshed.
 
@@ -43,21 +41,11 @@ In the screenshot, `ScanHello+3` means the current PC is three bytes after the `
 
 ## The Registers Section
 
-Registers live in Debug80's dedicated **Registers** section. That keeps CPU state close to the memory and hardware views.
-
-Open the **Registers** section in the Debug80 panel. It shows CPU state in the panel, close to the hardware views.
-
-PC is the program counter. It names the next instruction address.
-
-SP is the stack pointer. It names the top of the Z80 stack.
-
-The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. Step a target and watch PC change as the Z80 executes each instruction.
+Registers live in Debug80's dedicated **Registers** section, close to the memory and hardware views. PC names the next instruction address. SP names the top of the Z80 stack. The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs.
 
 ![Debug80 Registers section](../../assets/images/debug80-book/book1/chapter4-registers.png)
 
-The PC value is useful because it confirms what the editor is showing. When the highlighted source line and PC describe the same instruction, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
-
-The panel register view also keeps your attention near the emulated hardware. When you are debugging display or keypad code, this matters more than it does in a normal desktop program: the code, CPU state and machine front panel all belong to the same moment.
+Step a target and watch PC change as the Z80 executes each instruction. When the highlighted source line and PC describe the same instruction, the source view and machine state agree.
 
 ## The Memory Section
 
@@ -76,21 +64,17 @@ Choose **PC** to see the bytes at the current instruction. Choose **Absolute** w
 
 ![Memory section showing bytes around PC and pointer registers](../../assets/images/debug80-book/book1/chapter4-memory.png)
 
-The memory panel refreshes when it is visible and the debug session is paused. In the example, the PC view shows instruction bytes, while HL and DE point at the seven-segment data. The ASCII column makes strings and readable bytes easy to spot.
+The memory panel refreshes while the debug session is paused. In the example, the PC view shows instruction bytes, while HL and DE point at the seven-segment data. The ASCII column makes strings and readable bytes easy to spot.
 
 Use **Absolute** when the address comes from the source or hardware manual. Use a register-relative view when the address comes from the CPU state. For example, use PC to inspect instructions, SP to inspect the stack and HL when a routine uses HL as a pointer.
-
-When PC is at a target address, the memory view around PC shows the bytes generated for the highlighted instruction. The source map carries that relationship between source lines and memory addresses.
 
 ## The Machine Section
 
 The **Machine** section shows the front-panel parts of the TEC-1G that you touch most often: LCD, seven-segment display and keypad.
 
-Open the **Machine** section in the Debug80 panel. You should see the LCD at the top left, the six-digit seven-segment display below it and the keypad on the right.
-
 ![Machine section with LCD, seven-segment display and keypad](../../assets/images/debug80-book/book1/chapter4-machine-section.png)
 
-The Machine section shows the devices your Z80 program is driving alongside the usual debugger state.
+This view keeps visible output beside the usual debugger state, so you can connect a source line with the device it drives.
 
 ## Panel Focus And Keypad Input
 
@@ -112,7 +96,7 @@ When a program writes to the LCD, the panel shows the result. When a program ref
 
 ## Displays Section
 
-The **Displays** section contains TEC-1G display hardware beyond the front-panel LCD and seven-segment digits. It includes the GLCD, the 8x8 RGB LED matrix, speed controls and display-state toggles.
+The **Displays** section contains TEC-1G display hardware beyond the front-panel LCD and seven-segment digits.
 
 ![Displays section with GLCD and RGB matrix](../../assets/images/debug80-book/book1/chapter4-displays-tetro.png)
 

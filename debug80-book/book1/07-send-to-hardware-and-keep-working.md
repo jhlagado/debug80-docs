@@ -11,8 +11,6 @@ nav_order: 7
 
 Debug80 sends the active target's Intel HEX file to real hardware through CoolTerm. CoolTerm owns the serial port. Debug80 controls CoolTerm through its localhost Remote Control Socket.
 
-This means the hardware path has two parts. CoolTerm must be configured to talk to the TEC-1G serial port, and CoolTerm must also accept remote-control commands from Debug80.
-
 ## Install CoolTerm
 
 Download CoolTerm from:
@@ -21,63 +19,37 @@ Download CoolTerm from:
 
 On macOS, the first launch may require approval in **System Settings > Privacy & Security**. You can also right-click CoolTerm in Finder, choose **Open** and confirm the launch.
 
-Debug80 uses CoolTerm for board transfer. Install it before you try **Send to TEC-1G**. The emulator's Serial section can send data to the emulated machine, but hardware transfer uses CoolTerm and a real serial connection.
+Install CoolTerm before you try **Send to TEC-1G**. The emulator's Serial section talks to the emulated machine; hardware transfer uses CoolTerm and a real serial connection.
 
 ## Enable The Remote Control Socket
 
-In CoolTerm, open **Preferences > Scripting**. Enable **Remote Control Socket** and keep the port set to:
-
-```text
-51413
-```
-
-Leave **HTTP Server** disabled. Debug80 connects to CoolTerm at:
-
-```text
-127.0.0.1:51413
-```
+In CoolTerm, open **Preferences > Scripting**. Enable **Remote Control Socket** and keep the port set to `51413`.
 
 ![CoolTerm Remote Control Socket setting](../../assets/images/debug80-book/book1/coolterm-remote-control-socket.png)
 
-The socket is local to your computer. Debug80 sends commands to CoolTerm, and CoolTerm sends the file through the serial connection it owns.
-
-Debug80 needs **Enable Remote Control Socket** and port `51413`. The local IP shown in CoolTerm is informational.
+The socket is local to your computer. Debug80 sends commands to CoolTerm, and CoolTerm sends the file through the serial connection it owns. The local IP shown in CoolTerm is informational.
 
 ## Configure The Serial Port
 
-Open **Connection > Options** in CoolTerm. Select the serial port for your USB serial adapter and use the TEC-1G monitor settings:
-
-```text
-4800 baud
-8 data bits
-No parity
-2 stop bits
-```
+Open **Connection > Options** in CoolTerm. Select the serial port for your USB serial adapter and use the TEC-1G monitor settings shown below.
 
 ![CoolTerm serial port options for TEC-1G transfer](../../assets/images/debug80-book/book1/coolterm-serial-options.png)
 
-These settings describe the physical serial link to the board. The port name depends on your USB serial adapter and operating system, but the line settings are fixed for this workflow: `4800 8 N 2`.
+The port name depends on your USB serial adapter and operating system. The line settings are fixed for this workflow: `4800 8 N 2`.
 
 When CoolTerm is running with the Remote Control Socket enabled, Debug80 can detect it and show the send button in the Project section. The button name follows the selected platform. For a TEC-1G target, it appears as **Send to TEC-1G**.
 
 If the board misses characters during transfer, adjust CoolTerm's transmit delay settings.
 
-Keep these settings with the hardware notes for your board. The monitor needs matching stop-bit and baud settings to receive characters correctly.
-
 ## Build And Send
 
-Select the correct project and target in Debug80. Build the target so its `.hex` file exists in the build folder.
+Select the correct project and target in Debug80. Build the target so its `.hex` file exists.
 
-Put the TEC-1G into MON-3 Intel HEX Load mode before sending. The final review needs the exact key sequence for the board shown in the screenshots.
+Put the TEC-1G into MON-3 Intel HEX Load mode before sending.
 
 Click **Send to TEC-1G** in the Project section. Debug80 sends the active target's HEX file through CoolTerm and reports when the file has been sent.
 
-MON-3 reports the load result on the TEC-1G seven-segment display:
-
-```text
-PASS   load accepted
-ERROR  checksum or write verification failed
-```
+MON-3 reports the load result on the TEC-1G seven-segment display: `PASS` for an accepted load or `ERROR` for a checksum or write verification failure.
 
 Debug80 reports that CoolTerm sent the file. MON-3 reports the load result on the TEC-1G display. The serial startup message `TEC-1G Connected` belongs to MON-3 startup.
 
@@ -109,15 +81,7 @@ The exact name `main.asm` is treated as a target because it is the common starte
 
 A regular `.asm` file can still be part of your program. It may be included by another source file or selected explicitly with **Debug80: Set Program File**. Target discovery keeps helper files out of the Target selector.
 
-Use the **Target** selector in the Project section to change the active target.
-
-You can also run:
-
-```text
-Debug80: Select Active Target
-```
-
-After selection, F5 and **Build** use that target.
+Use the **Target** selector in the Project section to change the active target. After selection, F5 and **Build** use that target.
 
 > **Image placeholder:** Target selector showing several targets.
 
@@ -125,13 +89,7 @@ Use separate targets for separate entry programs. Use includes for shared suppor
 
 ## Set The Program File
 
-To bind a file to the current target, right-click an `.asm` or `.z80` file in the Explorer or editor and run:
-
-```text
-Debug80: Set Program File
-```
-
-Debug80 updates the project configuration so the target points at that file.
+To bind a file to the current target, right-click an `.asm` or `.z80` file in the Explorer or editor and run **Debug80: Set Program File**. Debug80 updates the project configuration so the target points at that file.
 
 `debug80.json` can name a `defaultTarget`. Debug80 uses it as the fallback target for the current project.
 
@@ -170,17 +128,5 @@ For panel update questions, pause the session and open the relevant accordion se
 ![Emulator serial path versus CoolTerm hardware path](../../assets/images/debug80-book/book1/emulator-vs-coolterm-serial.svg)
 
 For CoolTerm detection, open CoolTerm and check **Preferences > Scripting**. Enable the Remote Control Socket on port `51413` and keep CoolTerm running while Debug80 checks for it.
-
-## What To Review Next
-
-After the first successful board transfer, review the path from source to hardware:
-
-1. You edit AZM source in VS Code.
-2. Debug80 launches the active target.
-3. AZM writes `.hex` and source-map data.
-4. Debug80 loads the `.hex` into the emulator and uses the source map for source debugging, navigation, hovers and symbol views.
-5. CoolTerm sends the same `.hex` to the board.
-
-That path is the core Debug80 workflow. Later work adds richer programs, more targets and more hardware features, but it follows the same sequence.
 
 [← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Command Reference →](appendices/a-command-reference.md)
