@@ -4,6 +4,9 @@ title: "Appendix D — Glossary"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 104
 ---
+
+[← Appendix C — Image And Screenshot Plan](c-image-plan.md) | [Book 1](../index.md) | [Appendix E — TEC-1G Quick Reference →](e-tec1g-quick-reference.md)
+
 # Appendix D — Glossary
 
 ## Active Target
@@ -77,3 +80,5 @@ An expression evaluated by Debug80 for a Watch or conditional breakpoint. Debug 
 ## Workspace Folder
 
 A folder opened in the current VS Code window.
+
+[← Appendix C — Image And Screenshot Plan](c-image-plan.md) | [Book 1](../index.md) | [Appendix E — TEC-1G Quick Reference →](e-tec1g-quick-reference.md)

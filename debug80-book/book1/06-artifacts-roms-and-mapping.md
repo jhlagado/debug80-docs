@@ -4,6 +4,9 @@ title: "Read Artifacts And ROM Source"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 6
 ---
+
+[← Use The Debug80 Panel](05-use-the-debug80-panel.md) | [Book 1](index.md) | [Send To Hardware And Keep Working →](07-send-to-hardware-and-keep-working.md)
+
 # Read Artifacts And ROM Source
 
 Debug80 writes build artifacts during launch and loads monitor assets for monitor-backed profiles. Their roles explain breakpoints, ROM source and hardware transfer.
@@ -124,3 +127,5 @@ Debug80: Copy Bundled Assets into Workspace
 Copy assets when you want to inspect monitor source, compare a ROM or keep a project self-contained. Ordinary debugging with a bundled profile can use the packaged assets.
 
 > **Image placeholder:** Explorer showing copied `roms/tec1g/mon3` assets.
+
+[← Use The Debug80 Panel](05-use-the-debug80-panel.md) | [Book 1](index.md) | [Send To Hardware And Keep Working →](07-send-to-hardware-and-keep-working.md)

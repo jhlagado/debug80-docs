@@ -4,6 +4,9 @@ title: "Install And Add A Folder"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 1
 ---
+
+[Book 1](index.md) | [Create A TEC-1G Project →](02-create-a-tec1g-project.md)
+
 # Install And Add A Folder
 
 Debug80 runs inside Visual Studio Code. The first job is to install VS Code, add the Debug80 extension and add a folder to the workspace for your Z80 project.
@@ -69,3 +72,5 @@ If the workspace contains more than one folder, use the Project selector to choo
 For an existing project, add the folder that already contains `debug80.json`.
 
 Debug80 can work on multiple projects in the same workspace. To add another project, use **File > Add Folder to Workspace** again. Debug80 will see the added folder and show it in the Project selector.
+
+[Book 1](index.md) | [Create A TEC-1G Project →](02-create-a-tec1g-project.md)

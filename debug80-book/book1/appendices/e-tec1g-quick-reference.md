@@ -4,6 +4,9 @@ title: "Appendix E — TEC-1G Quick Reference"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 105
 ---
+
+[← Appendix D — Glossary](d-glossary.md) | [Book 1](../index.md) | [Appendix F — Review Checklist →](f-review-checklist.md)
+
 # Appendix E — TEC-1G Quick Reference
 
 This appendix collects the TEC-1G facts used in Book 1. It is a quick reference for the Debug80 panel and MON-3 profile.
@@ -61,3 +64,5 @@ If the panel display changes while stepping, the program is writing the correspo
 If the editor highlights ROM source, execution has entered monitor code.
 
 If a memory write appears to vanish, check whether the program is writing a ROM-protected region or whether the visible panel state depends on a banked memory setting.
+
+[← Appendix D — Glossary](d-glossary.md) | [Book 1](../index.md) | [Appendix F — Review Checklist →](f-review-checklist.md)

@@ -4,6 +4,11 @@ title: "Debug80 Book 1 — Getting Started"
 nav_order: 3
 has_children: true
 ---
+
+[Install And Add A Folder →](01-install-and-add-a-folder.md)
+
+[Install And Add A Folder →](01-install-and-add-a-folder.md)
+
 # Debug80 Book 1 — Getting Started
 
 Book 1 teaches the first complete Debug80 workflow: install the extension, create a TEC-1G project, run it in the debugger, read the panel, inspect state and send the generated HEX file to a TEC-1G through CoolTerm.
@@ -29,3 +34,7 @@ This first draft establishes the full teaching path. The screenshot plan in Appe
 - [Appendix E — TEC-1G Quick Reference](appendices/e-tec1g-quick-reference.md)
 - [Appendix F — Review Checklist](appendices/f-review-checklist.md)
 - [Appendix G — Debug Expressions](appendices/g-watch-expressions.md)
+
+[Install And Add A Folder →](01-install-and-add-a-folder.md)
+
+[Install And Add A Folder →](01-install-and-add-a-folder.md)

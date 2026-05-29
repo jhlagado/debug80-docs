@@ -4,6 +4,9 @@ title: "Appendix A — Command Reference"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 101
 ---
+
+[← Send To Hardware And Keep Working](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Project Configuration Reference →](b-project-configuration.md)
+
 # Appendix A — Command Reference
 
 This appendix lists the Debug80 commands used in Book 1. Command titles are taken from the current Debug80 extension manifest.
@@ -42,3 +45,5 @@ This appendix lists the Debug80 commands used in Book 1. Command titles are take
 | **Debug80: Open ROM Source** | Open bundled or workspace ROM source material for the active profile. |
 | **Debug80: Copy Bundled Assets into Workspace** | Copy bundled ROM and source assets into the project folder. |
 | **Debug80: Send HEX to Board via CoolTerm** | Send the active target's HEX file to hardware through CoolTerm. |
+
+[← Send To Hardware And Keep Working](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Project Configuration Reference →](b-project-configuration.md)

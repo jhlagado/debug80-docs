@@ -4,6 +4,9 @@ title: "Appendix F — Review Checklist"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 106
 ---
+
+[← Appendix E — TEC-1G Quick Reference](e-tec1g-quick-reference.md) | [Book 1](../index.md) | [Appendix G — Debug Expressions →](g-watch-expressions.md)
+
 # Appendix F — Review Checklist
 
 Use this checklist before asking for review.
@@ -46,3 +49,5 @@ Before external review, record remaining gaps:
 - exact first visible tutorial program
 - exact TEC-1G / MON-3 Intel HEX Load key sequence
 - any command or UI label that must be rechecked after the next Debug80 code change
+
+[← Appendix E — TEC-1G Quick Reference](e-tec1g-quick-reference.md) | [Book 1](../index.md) | [Appendix G — Debug Expressions →](g-watch-expressions.md)

@@ -4,6 +4,9 @@ title: "Create A TEC-1G Project"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 2
 ---
+
+[← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Starter Program →](03-build-and-step.md)
+
 # Create A TEC-1G Project
 
 A Debug80 project is a folder with `debug80.json` at its root. That file turns an ordinary workspace folder into something Debug80 can build, launch and emulate.
@@ -173,3 +176,5 @@ The starter program uses monitor services rather than raw port writes. That keep
 It also introduces a normal TEC-1G pattern: user code runs from RAM, calls MON-3 routines, and keeps display hardware refreshed in a loop.
 
 The same build and debug sequence applies when you replace the starter with your own code.
+
+[← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Starter Program →](03-build-and-step.md)

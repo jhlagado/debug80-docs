@@ -4,6 +4,9 @@ title: "Appendix C — Image And Screenshot Plan"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 103
 ---
+
+[← Appendix B — Project Configuration Reference](b-project-configuration.md) | [Book 1](../index.md) | [Appendix D — Glossary →](d-glossary.md)
+
 # Appendix C — Image And Screenshot Plan
 
 Book 1 now carries visible image placeholders in the chapter text. This appendix tracks the same image set as a production checklist.
@@ -102,3 +105,5 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 - Source map status -> build action -> editor/debugger feature availability.
 - Emulator serial path versus CoolTerm hardware path.
 - TEC-1G memory map for the MON-3 profile.
+
+[← Appendix B — Project Configuration Reference](b-project-configuration.md) | [Book 1](../index.md) | [Appendix D — Glossary →](d-glossary.md)

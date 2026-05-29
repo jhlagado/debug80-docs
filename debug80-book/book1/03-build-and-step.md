@@ -4,6 +4,9 @@ title: "Run The Starter Program"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 3
 ---
+
+[← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Program →](04-inspect-the-machine.md)
+
 # Run The Starter Program
 
 You have already run the starter from MON-3. Now run the same program under the debugger.
@@ -144,3 +147,5 @@ lcd_line1:
 Save the file, then click **Build** in the Debug80 panel. Debug80 assembles the code again, loads the new program into the emulator and starts the target.
 
 The LCD shows the changed message after the program runs. The seven-segment display is refreshed by the `scan_hello` loop.
+
+[← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Program →](04-inspect-the-machine.md)

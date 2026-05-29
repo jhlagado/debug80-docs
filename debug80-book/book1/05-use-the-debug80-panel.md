@@ -4,6 +4,9 @@ title: "Use The Debug80 Panel"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 5
 ---
+
+[← Inspect The Starter Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)
+
 # Use The Debug80 Panel
 
 The Debug80 panel keeps the project controls and TEC-1G hardware views in one accordion. By this point you have already used several controls. This chapter puts the panel together as a whole.
@@ -121,3 +124,5 @@ For early programs, keep **Project**, **Machine**, **Registers** and **Memory** 
 For display-heavy programs, open **Displays** and close **Memory** until you need it. For serial workflows, open **Serial** and keep **Project** visible so you can build quickly.
 
 The panel remembers open accordion sections in the webview state. If your view looks different from a screenshot, open the section named in the text and continue.
+
+[← Inspect The Starter Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)

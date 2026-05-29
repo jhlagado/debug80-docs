@@ -4,6 +4,9 @@ title: "Inspect The Starter Program"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 4
 ---
+
+[← Run The Starter Program](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
+
 # Inspect The Starter Program
 
 Paused execution gives you time to inspect the starter program from several angles. Start with the source-map-backed symbols in VS Code, then use Debug80's Registers, Memory and Machine sections to connect source lines with CPU state and visible TEC-1G output.
@@ -163,3 +166,5 @@ After the LCD setup calls run, the LCD shows the starter message. When execution
 The TEC-1G panel includes speaker, speed and mute controls in the display area. Use **MUTED** to prevent sound while debugging. The speed control lets the panel request a different run mode from the emulator.
 
 Use the screenshots in this chapter to confirm the current labels in your installed extension.
+
+[← Run The Starter Program](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
