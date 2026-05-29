@@ -88,25 +88,25 @@ The debug controls will move through the startup code and then stop in the refre
 
 ![Breakpoint in the starter program's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
-## Use The Debug Toolbar
+## Run, Pause And Step
 
-The VS Code debug toolbar controls the emulated Z80 while the session is paused or running.
+The VS Code debug toolbar controls the emulated Z80 while the session is running or paused.
 
 ![VS Code debug toolbar during a Debug80 session](../../assets/images/debug80-book/book1/chapter3-debug-toolbar.png)
 
-The first button changes state. When the program is paused, **Continue** runs from the current instruction. When the program is running, **Pause** interrupts execution and returns control to the debugger.
+The first button changes state. When the program is paused, it runs from the current instruction. When the program is running, the same position becomes **Pause**, which interrupts execution and returns control to the debugger.
 
-**Step Over** is F10. It executes the current instruction and stops at the next instruction in the current flow. If the current instruction calls a routine, Step Over runs that routine and stops after it returns.
+**Step Over** is F10. It executes one instruction and stops at the next instruction in the current flow. If the instruction calls a routine, Step Over runs that routine and stops after it returns.
 
-**Step Into** is F11. It follows execution into routines. In Z80 code, that includes `CALL` instructions and `RST` software interrupts.
+**Step Into** is F11. It follows execution into routines. In Z80 code, that includes ordinary `CALL` instructions and `RST` software interrupts such as `RST 0x10`.
 
 **Step Out** is Shift-F11. It runs the current routine until it returns to its caller. Use it after F11 has taken you into a routine and you want to get back to the code that called it.
 
-**Restart** rebuilds and relaunches the active target.
+**Restart** starts the debug session again for the active target.
 
 **Stop** ends the debug session.
 
-In the starter program, Continue writes the LCD text once and then repeats the `scan_hello` loop so the seven-segment display stays refreshed.
+In the starter program, running the code writes the LCD text once and then repeats the `scan_hello` loop so the seven-segment display stays refreshed.
 
 ## Run To Cursor
 
