@@ -19,7 +19,7 @@ Debug80 can discover likely targets from file names. Files named `main.asm`, fil
 
 When you build or start debugging, Debug80 uses the selected target. It assembles the target's source file with AZM, writes the artifacts under the target's build directory, loads the generated code into the emulator and shows the result on the selected platform panel.
 
-Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
+The TEC-1G platform exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
 
 Select the uninitialized folder in the Debug80 Project section, choose **TEC-1G** in the platform selector, then click **Initialize**.
 
@@ -31,7 +31,7 @@ If you prefer the keyboard, **Debug80: Create Project** in the Command Palette d
 
 ## Choose The Platform
 
-The platform selector is where you choose the machine Debug80 should model. Book 1 uses **TEC-1G**, and the other user-facing platform is **TEC-1**.
+The platform selector is where you choose the machine Debug80 should model. Use **TEC-1G** for this first project. Use **TEC-1** when you are working with the classic board.
 
 | Platform | Use it when | User code starts at |
 |---|---|---:|
@@ -40,7 +40,7 @@ The platform selector is where you choose the machine Debug80 should model. Book
 
 Picking **TEC-1G** selects the MON-3 platform settings: start address, ROM assets and hardware behaviour. Reach for **TEC-1** instead when you are working with classic TEC-1 monitor behaviour.
 
-Your platform choice sets the first shape of the project. Book 1 starts with a single TEC-1G target so the early path stays short.
+Your platform choice sets the first shape of the project. The generated TEC-1G project starts with a single target.
 
 ## Files Created
 

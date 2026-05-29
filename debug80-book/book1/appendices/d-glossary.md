@@ -27,7 +27,7 @@ A breakpoint with an expression attached. Debug80 stops when the expression is t
 
 ## Build Artifact
 
-A generated file written during launch. Book 1 uses `.hex` and source-map output.
+A generated file written during launch. This book uses `.hex` and source-map output.
 
 ## CoolTerm
 
@@ -55,7 +55,7 @@ Firmware loaded into the emulated machine. The TEC-1G / MON-3 profile uses monit
 
 ## Platform
 
-The machine family Debug80 emulates for a target. Book 1 discusses TEC-1 and TEC-1G.
+The machine family Debug80 emulates for a target. This book discusses TEC-1 and TEC-1G.
 
 ## Profile
 

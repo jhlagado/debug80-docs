@@ -9,7 +9,7 @@ nav_order: 103
 
 # Appendix C — Image And Screenshot Plan
 
-Book 1 now carries visible image placeholders in the chapter text. This appendix tracks the same image set as a production checklist.
+This appendix tracks this book's image set as a production checklist.
 
 ## Installation And Folder Setup
 

@@ -51,7 +51,7 @@ The **Register Care** selector controls how AZM register-care diagnostics affect
 - **Audit** lets you inspect the diagnostics as advisory information.
 - **Off** disables the register-care check for launch.
 
-Book 1 treats register care as a launch option. AZM's register-care system has its own explanation in the AZM material.
+Treat register care as a launch option here. AZM's register-care system has its own explanation in the AZM material.
 
 ## Contract Updates
 

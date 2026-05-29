@@ -9,7 +9,7 @@ nav_order: 102
 
 # Appendix B — Project Configuration Reference
 
-Debug80 stores project configuration in the project folder. Book 1 uses the generated file, but reading the main fields helps when you add targets or inspect a copied project.
+Debug80 stores project configuration in the project folder. The generated file is enough for the first workflow, but reading the main fields helps when you add targets or inspect a copied project.
 
 ## File Location
 
@@ -97,7 +97,7 @@ A target is a named runnable program:
 
 ## TEC-1G Platform Block
 
-Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM paths. Book 1 relies on the generated values.
+Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM paths. The first workflow uses the generated values.
 
 The important user-level facts are:
 

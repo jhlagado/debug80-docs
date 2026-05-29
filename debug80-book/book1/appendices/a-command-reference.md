@@ -9,7 +9,7 @@ nav_order: 101
 
 # Appendix A — Command Reference
 
-This appendix lists the Debug80 commands used in Book 1. Command titles are taken from the current Debug80 extension manifest.
+This appendix lists the Debug80 commands used here. Command titles are taken from the current Debug80 extension manifest.
 
 ## Project Setup
 

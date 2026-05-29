@@ -141,7 +141,7 @@ To change a target's source file, run **Debug80: Set Program File** again on the
 
 ## Choose A Different Platform
 
-The platform controls the machine Debug80 emulates for a target. Book 1 used TEC-1G / MON-3.
+The platform controls the machine Debug80 emulates for a target. The project you created uses TEC-1G / MON-3.
 
 Choose **TEC-1** when you are working with the classic 1980s TEC-1 board. TEC-1 profiles focus on the keypad, seven-segment display, speaker, serial path and memory inspection used by classic monitor workflows.
 
