@@ -1,15 +1,15 @@
 ---
 layout: default
-title: "Inspect The Starter Target"
+title: "Inspect A Running Program"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 4
 ---
 
 [← Run The Debugger](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
 
-# Inspect The Starter Target
+# Inspect A Running Program
 
-Paused execution gives you time to inspect the starter target from several angles. Start with the source-map-backed symbols in VS Code, then use Debug80's Registers, Memory and Machine sections to connect source lines with CPU state and visible TEC-1G output.
+Paused execution gives you time to inspect a program from several angles. Start with the source-map-backed symbols in VS Code, then use Debug80's Registers, Memory and Machine sections to connect source lines with CPU state and visible TEC-1G output.
 
 ## Symbols And Constants In Variables
 
@@ -27,7 +27,7 @@ These scopes use the source map from the last successful build. Build the target
 
 Open the **Watch** panel while execution is paused. Debug80 evaluates Z80-focused Watch expressions against the current CPU state, memory and source-map symbols.
 
-Start with registers and flags that matter while stepping the starter target:
+Start with the registers that usually matter while stepping:
 
 ```asm
 PC
@@ -39,7 +39,7 @@ DE
 
 Register names read the current Z80 register value. Flag names use the same spelled-out style as AZM register-care contracts, so `carry` means the carry flag and `C` means the C register.
 
-Watches can also use symbols from the active source map. The starter target gives you useful names immediately:
+Watches can also use symbols from the active source map:
 
 ```asm
 ScanHello
@@ -60,7 +60,7 @@ Square brackets read one byte from memory at the address inside the brackets:
 [SevenSegHello]
 ```
 
-Use Watches when you want a small set of facts to stay visible while stepping. For example, stop in `ScanHello` and watch `C`, `DE`, `SevenSegHello` and `[DE]`. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
+Use Watches when you want a small set of facts to stay visible while stepping. For example, stop in a display loop and watch the service register, a pointer register, the symbol it points at and the byte at that address. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
 
 > **Image placeholder:** VS Code Watch panel showing Debug80 expressions such as `PC`, `DE`, `SevenSegHello` and `[DE]`.
 
@@ -68,7 +68,7 @@ Use Watches when you want a small set of facts to stay visible while stepping. F
 
 Open the **Call Stack** view while the program is paused. Debug80 names the current Z80 execution frame from the nearest known symbol in the source map.
 
-In the starter target, you may see names such as:
+For a target with labels in the source map, you may see names such as:
 
 ```text
 Start
@@ -94,11 +94,11 @@ SP is the stack pointer. It names the top of the Z80 stack.
 
 The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. The Z80 course material explains the instruction set in detail.
 
-Step the starter target and watch PC change. It starts at `0x4000`, moves through the LCD setup code, then settles into the `ScanHello` loop.
+Step a target and watch PC change. It starts at the target's load address, then moves through each instruction as the Z80 executes it.
 
 > **Image placeholder:** Debug80 Registers section with PC visible.
 
-The value is useful because it confirms what the editor is showing. When the editor highlights `LD B,LCD_CLEAR` and PC is `0x4000`, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
+The value is useful because it confirms what the editor is showing. When the highlighted source line and PC describe the same instruction, the source view and machine state agree. When source-map data resolves to raw address view, the PC still tells you where execution stopped.
 
 The panel register view also keeps your attention near the emulated hardware. When you are debugging display or keypad code, this matters more than it does in a normal desktop program: the code, CPU state and machine front panel all belong to the same moment.
 
@@ -125,7 +125,7 @@ Use **Absolute** when the address comes from the source or hardware manual. Use 
 
 ## Connect Source To Memory
 
-The starter target begins at `0x4000`. When PC is `0x4000`, the memory view around PC shows the bytes generated for `LD B,LCD_CLEAR`.
+When PC is at a target address, the memory view around PC shows the bytes generated for the highlighted instruction.
 
 That connection between source lines and memory addresses is what makes source-level debugging possible. The source map carries this relationship.
 
@@ -157,9 +157,9 @@ If you are unsure whether a key reached the emulator, use an on-screen key first
 
 ## LCD And Seven-Segment Output
 
-The LCD and seven-segment display update from the emulated I/O ports. The starter target reaches those devices through MON-3 services.
+The LCD and seven-segment display update from the emulated I/O ports. TEC-1G programs often reach those devices through MON-3 services.
 
-After the LCD setup calls run, the LCD shows the target message. When execution reaches `ScanHello`, the repeated MON-3 scan call keeps the seven-segment display refreshed from `SevenSegHello`.
+When a program writes to the LCD, the panel shows the result. When a program refreshes the seven-segment display in a loop, the panel shows the current display state while the CPU continues to run.
 
 ## Speaker, Speed And Mute
 
