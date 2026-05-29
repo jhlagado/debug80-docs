@@ -13,7 +13,7 @@ has_children: true
 
 Debug80 turns Visual Studio Code into a Z80 development environment. You write assembly, run it in an emulated TEC-1G, step through it with source-level breakpoints, and send the same program to a real board over a serial cable.
 
-This book walks that whole path once, from an empty folder to running hardware. You will install the extension, create a TEC-1G project, build and step through a starter target, read the panel that shows the emulated machine, find the files each build produces, and send the generated HEX file to a TEC-1G through CoolTerm.
+This book walks that whole path once, from an empty folder to running hardware. You will install the extension, create a TEC-1G project, use the debugger, read the panel that shows the emulated machine, find the files each build produces, and send the generated HEX file to a TEC-1G through CoolTerm.
 
 By the end you will know how to take a Z80 program all the way to hardware, and which part of Debug80 to reach for at each step.
 
@@ -21,7 +21,7 @@ By the end you will know how to take a Z80 program all the way to hardware, and 
 
 1. [Install And Add A Folder](01-install-and-add-a-folder.md)
 2. [Create A TEC-1G Project](02-create-a-tec1g-project.md)
-3. [Run The Starter Target](03-build-and-step.md)
+3. [Run The Debugger](03-build-and-step.md)
 4. [Inspect The Starter Target](04-inspect-the-machine.md)
 5. [Use The Debug80 Panel](05-use-the-debug80-panel.md)
 6. [Read Artifacts And ROM Source](06-artifacts-roms-and-mapping.md)

@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 2
 ---
 
-[← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Starter Target →](03-build-and-step.md)
+[← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Debugger →](03-build-and-step.md)
 
 # Create A TEC-1G Project
 
@@ -144,4 +144,4 @@ Press **GO** to run the program at the displayed address. The LCD shows the targ
 
 This first run proves the whole path before you start single-stepping: AZM assembled the source at `0x4000`, Debug80 loaded the HEX into the emulator, MON-3 jumped to the program, and the program produced visible TEC-1G output.
 
-[← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Starter Target →](03-build-and-step.md)
+[← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Debugger →](03-build-and-step.md)
