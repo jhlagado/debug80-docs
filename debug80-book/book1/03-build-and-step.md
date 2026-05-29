@@ -12,27 +12,17 @@ The starter program is small enough to understand in one sitting, and active eno
 
 Use this chapter to run that program under the debugger. You will stop at entry, step through the first MON-3 calls, set a breakpoint in the refresh loop and watch the panel change.
 
-## Stop At The First Instruction
+## Build The Target
 
-Open the Debug80 panel and tick **Stop on entry**. Then click **Build** in the Project section, or press F5.
-
-You can also start from the Command Palette:
-
-```text
-Debug80: Start Debugging
-```
+Select the target in the Debug80 panel. Then click **Build** in the Project section.
 
 ![Debug80 paused after launch, with Stop on entry enabled and the Build button visible](../../assets/images/debug80-book/book1/chapter3-stop-on-entry-build-paused.png)
 
-The Build button starts the same kind of launch as F5. Use the button when your attention is already in the Debug80 panel. Use F5 when your attention is in the editor.
-
-## Build The Target
-
 Debug80 reads the active target from `debug80.json`. For the starter project, that target points to `src/main.asm`.
 
-During launch, Debug80 asks AZM to assemble the source. The generated program is loaded into the emulated Z80 memory, the TEC-1G profile starts, and VS Code opens a debug session.
+Build starts the debug session for the selected target. Debug80 asks AZM to assemble the source, loads the generated program into the emulated Z80 memory and starts the TEC-1G profile.
 
-When **Stop on entry** is enabled, the session pauses before the program runs freely. The yellow arrow in the editor marks the next instruction. Depending on the launch point, the first pause may show your source file or MON-3 startup source; the same arrow follows execution when control reaches `main.asm`.
+With **Stop on entry** clear, the program runs immediately. With **Stop on entry** ticked, Debug80 pauses as soon as the Z80 starts at address `$0000`. The first pause is in the TEC-1G ROM source, MON-3. The yellow arrow in the editor marks the next ROM instruction at the reset entry point.
 
 The first launch also creates the build artifacts. Chapter 6 explains those generated files. For now, remember the launch order: AZM assembles the source before Debug80 loads and debugs the program.
 
