@@ -17,8 +17,8 @@ html {
 // --- Main content typography ---------------------------------
 
 .main-content {
-  // Extra vertical breathing room at the top of each page
-  padding-top: 3rem;
+  // Keep the first content block close to the breadcrumb without crowding it.
+  padding-top: 1.5rem;
 
   p {
     margin-bottom: 1.25rem;
@@ -362,6 +362,7 @@ body.has-image-lightbox {
   }
 
   .main-content {
+    padding-top: 1rem;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
 
