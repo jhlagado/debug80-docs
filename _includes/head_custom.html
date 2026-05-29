@@ -45,28 +45,34 @@
       const caption = lightbox.querySelector('.image-lightbox__caption');
       const closeButton = lightbox.querySelector('.image-lightbox__close');
       let lastFocused = null;
+      let previousScrollY = 0;
 
       function closeLightbox() {
         lightbox.hidden = true;
         document.documentElement.classList.remove('has-image-lightbox');
+        document.body.classList.remove('has-image-lightbox');
+        document.body.style.top = '';
         previewImage.removeAttribute('src');
         previewImage.alt = '';
         caption.textContent = '';
         if (lastFocused) {
-          lastFocused.focus();
+          lastFocused.focus({ preventScroll: true });
           lastFocused = null;
         }
+        window.scrollTo(0, previousScrollY);
       }
 
       function openLightbox(img) {
         lastFocused = document.activeElement;
+        previousScrollY = window.scrollY || window.pageYOffset || 0;
         previewImage.src = img.currentSrc || img.src;
         previewImage.alt = img.alt || '';
         caption.textContent = img.alt || '';
         caption.hidden = !img.alt;
+        document.body.style.top = '-' + previousScrollY + 'px';
         lightbox.hidden = false;
         document.documentElement.classList.add('has-image-lightbox');
-        closeButton.focus();
+        document.body.classList.add('has-image-lightbox');
       }
 
       contentImages.forEach(function (img) {
