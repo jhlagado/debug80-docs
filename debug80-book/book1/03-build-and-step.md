@@ -96,8 +96,4 @@ Each time execution reaches the line, Debug80 evaluates the expression. A true o
 
 Conditional breakpoints share the expression language with the Watch panel. Appendix G lists the registers, flags, symbols, memory reads and operators you can use.
 
-## Edit And Build
-
-After changing source, save the file and click **Build** in the Debug80 panel. Debug80 assembles the target again, reloads the program and starts a fresh debug session.
-
 [← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect A Running Program →](04-inspect-the-machine.md)

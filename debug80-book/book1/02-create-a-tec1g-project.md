@@ -144,4 +144,22 @@ Press **GO** to run the program at the displayed address. The LCD shows the targ
 
 This first run proves the whole path before you start single-stepping: AZM assembled the source at `0x4000`, Debug80 loaded the HEX into the emulator, MON-3 jumped to the program, and the program produced visible TEC-1G output.
 
+## Change The LCD Message
+
+Open `src/main.asm` again and find the string at `LcdLine1`:
+
+```asm
+LcdLine1:
+        .db     "Debug80 TEC-1G",0
+```
+
+Change the text between the quotes:
+
+```asm
+LcdLine1:
+        .db     "Hello from Z80",0
+```
+
+Save the file, then click **Build**. Debug80 assembles the target again and loads the new program into the TEC-1G emulator. Run it from `0x4000` as before; the LCD shows the new message.
+
 [← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Debugger →](03-build-and-step.md)
