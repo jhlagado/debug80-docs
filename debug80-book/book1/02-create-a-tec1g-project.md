@@ -61,30 +61,13 @@ Now open the Debug80 panel. The **Project** row shows your folder, and the **Tar
 
 ![Initialized TEC-1G project showing the project, target and machine](../../assets/images/debug80-book/book1/initialized-project-panel.png)
 
-The starter target is named `main.asm`, so Debug80 can recognise it from the target naming convention. Appendix B shows the target fields in `debug80.json` after you have built and run the first target.
-
-## Read The Target As A Sentence
-
-The target can be read as a sentence:
-
-```text
-Assemble src/main.asm, write artifacts under build, run the result as TEC-1G / MON-3.
-```
+The starter target is named `main.asm`, so Debug80 can recognise it from the target naming convention.
 
 ![Folder to Debug80 project to target to source file](../../assets/images/debug80-book/book1/folder-project-target-source.svg)
 
-That sentence is more useful than memorizing every `debug80.json` field on the first day. You will inspect the configuration in Appendix B after the workflow is clear.
-
-The important first-day values are:
-
-- `sourceFile`: the target Debug80 gives to AZM.
-- `outputDir`: the directory that receives generated files.
-- `artifactBase`: the base name used for generated files.
-- `platform`: the platform Debug80 runs.
-
 ## Open The Starter Target
 
-Open `src/main.asm`. The TEC-1G project creator writes this starter target:
+Open `src/main.asm`. This is the source file for the `main` target. The TEC-1G project creator writes:
 
 ```asm
 ; Debug80 starter (TEC-1G / MON-3)
