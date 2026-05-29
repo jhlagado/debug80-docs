@@ -21,7 +21,7 @@ Download CoolTerm from:
 
 On macOS, the first launch may require approval in **System Settings > Privacy & Security**. You can also right-click CoolTerm in Finder, choose **Open** and confirm the launch.
 
-Debug80 uses CoolTerm for board transfer. Install it before you try **Send to Board**. The emulator's Serial section can send data to the emulated machine, but hardware transfer uses CoolTerm and a real serial connection.
+Debug80 uses CoolTerm for board transfer. Install it before you try **Send to TEC-1G**. The emulator's Serial section can send data to the emulated machine, but hardware transfer uses CoolTerm and a real serial connection.
 
 ## Enable The Remote Control Socket
 
@@ -58,7 +58,7 @@ No parity
 
 These settings describe the physical serial link to the board. The port name depends on your USB serial adapter and operating system, but the line settings are fixed for this workflow: `4800 8 N 2`.
 
-When CoolTerm is running with the Remote Control Socket enabled, Debug80 can detect it and show **Send to Board** in the Project section.
+When CoolTerm is running with the Remote Control Socket enabled, Debug80 can detect it and show the send button in the Project section. The button name follows the selected platform. For a TEC-1G target, it appears as **Send to TEC-1G**.
 
 If the board misses characters during transfer, adjust CoolTerm's transmit delay settings.
 
@@ -70,7 +70,7 @@ Select the correct project and target in Debug80. Build the target so its `.hex`
 
 Put the TEC-1G into MON-3 Intel HEX Load mode before sending. The final review needs the exact key sequence for the board shown in the screenshots.
 
-Click **Send to Board** in the Project section. Debug80 sends the active target's HEX file through CoolTerm and reports when the file has been sent.
+Click **Send to TEC-1G** in the Project section. Debug80 sends the active target's HEX file through CoolTerm and reports when the file has been sent.
 
 MON-3 reports the load result on the TEC-1G seven-segment display:
 
@@ -81,9 +81,9 @@ ERROR  checksum or write verification failed
 
 Debug80 reports that CoolTerm sent the file. MON-3 reports the load result on the TEC-1G display. The serial startup message `TEC-1G Connected` belongs to MON-3 startup.
 
-When **Send to Board** is hidden, start CoolTerm and enable the Remote Control Socket. When Debug80 asks for a HEX file, build the target again.
+When **Send to TEC-1G** is hidden, start CoolTerm and enable the Remote Control Socket. When Debug80 asks for a HEX file, build the target again.
 
-> **Image placeholder:** Debug80 Project section with **Send to Board** visible.
+> **Image placeholder:** Debug80 Project section with **Send to TEC-1G** visible.
 
 > **Image placeholder:** TEC-1G in MON-3 Intel HEX Load mode.
 

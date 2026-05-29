@@ -11,6 +11,8 @@ nav_order: 101
 
 This appendix lists the Debug80 commands used here. Command titles are taken from the current Debug80 extension manifest.
 
+Open the VS Code Command Palette to run these commands directly. On macOS, press **Shift-Command-P**. On Windows and Linux, press **Shift-Control-P**.
+
 ## Project Setup
 
 | Command | Use |
