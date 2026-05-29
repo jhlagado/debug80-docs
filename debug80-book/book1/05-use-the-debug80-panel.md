@@ -25,15 +25,6 @@ The **Target** row selects the runnable program inside that folder. The selected
 
 When you click **Build**, Debug80 asks AZM to assemble the active target. AZM writes the generated files under the target's build directory.
 
-In the generated TEC-1G project, the build folder contains:
-
-```text
-build/main.bin
-build/main.hex
-build/main.d8.json
-build/main.regcare.txt
-```
-
 ![Build folder after a successful target build](../../assets/images/debug80-book/book1/chapter5-build-folder.png)
 
 The `.hex` file contains the program bytes in Intel HEX format. Debug80 loads those bytes into the emulator, and later sends the same file to a real TEC-1G through CoolTerm. The `.bin` file contains the same program bytes as a raw binary image.
