@@ -38,11 +38,13 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 
 | Image | Type | Chapter |
 |---|---|---|
-| Project section with **Stop on entry** and **Build** | Screenshot | Chapter 3 |
-| Source editor paused at `ld sp,0x7fff` | Screenshot | Chapter 3 |
-| Breakpoint beside an instruction line | Screenshot | Chapter 3 |
-| Conditional breakpoint editor with a Debug80 expression | Screenshot | Chapter 3 |
-| VS Code debug toolbar annotated | Screenshot or diagram | Chapter 3 |
+| Project section with **Stop on entry** and **Build** during a paused launch | Screenshot | Chapter 3; added as `chapter3-stop-on-entry-build-paused.png` |
+| Source editor paused at `ld sp,0x7fff` | Screenshot | Chapter 3; still useful as a tighter retake if available |
+| Breakpoint beside an instruction line | Screenshot | Chapter 3; added as `chapter3-breakpoint-scan-hello.png` |
+| **Run to Cursor** from the editor context menu | Screenshot | Chapter 3; added as `chapter3-run-to-cursor-menu.png` |
+| Breakpoint gutter menu showing **Edit Breakpoint** | Screenshot | Chapter 3; added as `chapter3-edit-breakpoint-menu.png` |
+| Conditional breakpoint editor with a Debug80 expression using `eq` syntax | Screenshot | Chapter 3; retake needed |
+| VS Code debug toolbar | Screenshot | Chapter 3; added as `chapter3-debug-toolbar.png` |
 
 ## Machine Inspection
 

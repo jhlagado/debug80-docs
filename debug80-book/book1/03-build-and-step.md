@@ -22,7 +22,7 @@ You can also start from the Command Palette:
 Debug80: Start Debugging
 ```
 
-> **Image placeholder:** Project section with **Stop on entry** ticked and **Build** visible.
+![Debug80 paused after launch, with Stop on entry enabled and the Build button visible](../../assets/images/debug80-book/book1/chapter3-stop-on-entry-build-paused.png)
 
 The Build button starts the same kind of launch as F5. Use the button when your attention is already in the Debug80 panel. Use F5 when your attention is in the editor.
 
@@ -32,9 +32,7 @@ Debug80 reads the active target from `debug80.json`. For the starter project, th
 
 During launch, Debug80 asks AZM to assemble the source. The generated program is loaded into the emulated Z80 memory, the TEC-1G profile starts, and VS Code opens a debug session.
 
-When **Stop on entry** is enabled, the session pauses before the first instruction runs. The current source line is highlighted in the editor.
-
-> **Image placeholder:** Source editor paused at the first instruction in `src/main.asm`.
+When **Stop on entry** is enabled, the session pauses before the program runs freely. The yellow arrow in the editor marks the next instruction. Depending on the launch point, the first pause may show your source file or MON-3 startup source; the same arrow follows execution when control reaches `main.asm`.
 
 The first launch also creates the build artifacts. Chapter 6 explains those generated files. For now, remember the launch order: AZM assembles the source before Debug80 loads and debugs the program.
 
@@ -92,7 +90,7 @@ For the starter program, a useful first breakpoint is inside `scan_hello`, on th
 
 The debug controls will move through the startup code and then stop in the refresh loop.
 
-> **Image placeholder:** Breakpoint set beside an instruction line, with the current execution line highlighted.
+![Breakpoint in the starter program's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
 ## Filled And Hollow Breakpoints
 
@@ -108,7 +106,7 @@ The VS Code debug toolbar controls the emulated Z80. Use it the same way you use
 
 **Pause** interrupts the running session and returns control to the debugger. The editor highlights the source line that matches the current PC when the source map can resolve it.
 
-> **Image placeholder:** VS Code debug toolbar annotated with Continue, Pause, Step Into, Step Over, Step Out, Restart and Stop.
+![VS Code debug toolbar during a Debug80 session](../../assets/images/debug80-book/book1/chapter3-debug-toolbar.png)
 
 ## Run To Cursor
 
@@ -118,11 +116,15 @@ Debug80 resolves that source line through the source map, runs to the matching m
 
 For the starter program, place the cursor on the `scan_hello:` loop and use **Run to Cursor**. Debug80 runs through the LCD setup and stops at the loop that refreshes the seven-segment display.
 
+![Run to Cursor from the editor context menu](../../assets/images/debug80-book/book1/chapter3-run-to-cursor-menu.png)
+
 Run to Cursor depends on the last successful build. Build the target again when source-line resolution needs fresh source-map data, then place the cursor on an instruction line.
 
 ## Conditional Breakpoints
 
 Use a conditional breakpoint when the program should stop for a specific machine state. Right-click a breakpoint, choose **Edit Breakpoint** and enter a Debug80 expression.
+
+![Edit Breakpoint from the editor gutter menu](../../assets/images/debug80-book/book1/chapter3-edit-breakpoint-menu.png)
 
 Examples for the starter program:
 
