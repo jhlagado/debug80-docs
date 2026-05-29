@@ -44,7 +44,13 @@ That instruction sets the Z80 stack pointer near the top of RAM. The starter doe
 
 ## Step Through Startup
 
-**Step Into** executes the next source-level step. With the starter program, the first steps set the stack pointer, send commands to MON-3 with `RST 0x10`, and then enter the display refresh loop.
+The two stepping keys you will use most are F10 and F11.
+
+F10 is **Step Over**. It executes the current instruction and stops at the next instruction in the current flow. When the current instruction calls a subroutine, F10 runs that routine as one action and stops after the call returns.
+
+F11 is **Step Into**. It follows execution into subroutines. In Z80 code, it also follows software interrupts, so stepping into `RST 0x10` takes you into the MON-3 service routine.
+
+With the starter program, the first steps set the stack pointer, send commands to MON-3 with `RST 0x10`, and then enter the display refresh loop. Use F10 when you want to move over the MON-3 calls and stay with the starter source. Use F11 when you want to trace into the monitor code and see how the service runs.
 
 Step once from `ld sp,0x7fff`. PC advances to the next source instruction. Continue stepping and watch PC move through the LCD setup code toward `scan_hello`.
 
@@ -128,13 +134,11 @@ When execution reaches the breakpoint, Debug80 evaluates the expression. A true 
 
 When expression evaluation raises an error, Debug80 stops at the breakpoint and writes the error to the Debug Console. Conditional breakpoints use the same expression language as the Watch panel. Appendix G lists the supported registers, flags, symbols, memory reads and operators.
 
-## Step Over And Step Out
+## Step Out
 
-**Step Over** and **Step Out** matter once a program calls subroutines.
+**Step Out** runs until the current routine returns or until the configured instruction cap stops it. Use it after F11 has taken you into a subroutine and you want to return to the caller.
 
-Step Over runs a call as a single source-level action when Debug80 can resolve the call boundary. Step Out runs until the current routine returns or until the configured instruction cap stops it.
-
-The starter uses `RST 0x10` monitor calls rather than ordinary `CALL` instructions. Step Over is useful when you want to advance past a monitor call while leaving ROM details for later. Use Step Out later when your own program contains `CALL` and `RET`.
+The starter uses `RST 0x10` monitor calls before it reaches the display loop. When you step into one of those calls, Step Out is the quickest way back toward the starter program.
 
 ## Restart And Stop
 
