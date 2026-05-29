@@ -48,13 +48,12 @@ After initialization, open the VS Code Explorer. A fresh TEC-1G project looks li
 
 ```text
 debug80.json
-.debug80/
 .gitignore
 src/main.asm
 build/
 ```
 
-`debug80.json` stores the project and its targets, and is the file that makes the folder a Debug80 project. `src/main.asm` is the source file for the starter target. `build/` receives generated files after the first build. The `.debug80/` folder holds Debug80's own working data, and `.gitignore` keeps the generated output out of version control. You can leave both alone.
+`debug80.json` stores the project and its targets, and is the file that makes the folder a Debug80 project. `src/main.asm` is the source file for the starter target. `build/` receives generated files after the first build. `.gitignore` keeps generated output out of version control.
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 
