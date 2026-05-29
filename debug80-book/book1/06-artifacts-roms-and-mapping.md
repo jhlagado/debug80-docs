@@ -32,7 +32,7 @@ These files are generated output. Edit the source files, then build the target t
 
 The `.hex` file contains the generated program bytes in Intel HEX format. Debug80 loads those bytes into the emulated Z80 memory when it starts the session.
 
-The same `.hex` file is the file Debug80 sends to a real board through CoolTerm. Chapter 7 uses it for the hardware transfer.
+The same `.hex` file is the file Debug80 sends to a real board through CoolTerm.
 
 This gives the emulator and the board a shared program image. You debug the program in VS Code, then send the generated HEX file to the real machine.
 

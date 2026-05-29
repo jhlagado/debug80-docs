@@ -9,7 +9,7 @@ nav_order: 5
 
 # Use The Debug80 Panel
 
-The Debug80 panel keeps the project controls and TEC-1G hardware views in one accordion. By this point you have already used several controls. This chapter puts the panel together as a whole.
+The Debug80 panel keeps the project controls and TEC-1G hardware views in one accordion.
 
 > **Image placeholder:** Full TEC-1G Debug80 accordion showing Project, Displays, Machine, Matrix Keyboard, Serial, Registers and Memory.
 
@@ -81,7 +81,7 @@ The TEC-1G RGB matrix view uses the emulator's duty-cycle calculation, then maps
 
 ## Machine
 
-The **Machine** section shows the LCD, seven-segment display and keypad. Chapter 4 used this section for front-panel inspection. Use it whenever your program interacts with the visible TEC-1G controls.
+The **Machine** section shows the LCD, seven-segment display and keypad. Use it whenever your program interacts with the visible TEC-1G controls.
 
 The Machine section is the best section to keep open while writing early TEC-1G examples. It gives immediate feedback for code that writes characters, scans keys or updates the seven-segment display.
 
@@ -103,7 +103,7 @@ The **Serial** section gives you an emulated serial terminal for the active plat
 
 Use the text field to send a line of serial input to the emulator. Use **SEND FILE** when a monitor or program expects a text or HEX stream through the emulated serial input.
 
-This is separate from the hardware transfer in Chapter 7. The Serial section talks to the emulator. **Send to Board** talks to CoolTerm, which talks to the physical TEC-1G.
+The Serial section talks to the emulator. **Send to Board** talks to CoolTerm, which talks to the physical TEC-1G.
 
 > **Image placeholder:** Serial section showing output area, input field, SEND FILE, SAVE and CLEAR.
 
@@ -113,7 +113,7 @@ File send is paced as a timed stream. Monitor software often expects input at hu
 
 ## Registers And Memory
 
-The **Registers** and **Memory** sections expose the CPU state and RAM views described in Chapter 4. Keep them open when stepping through code. Close them when you need more space for display or serial work.
+The **Registers** and **Memory** sections expose CPU state and RAM. Keep them open when stepping through code. Close them when you need more space for display or serial work.
 
 The memory view is most useful while paused. If the program is running, pause it before reading memory around PC, SP or an absolute address.
 

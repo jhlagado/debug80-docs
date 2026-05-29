@@ -13,8 +13,6 @@ Debug80 sends the active target's Intel HEX file to real hardware through CoolTe
 
 This means the hardware path has two parts. CoolTerm must be configured to talk to the TEC-1G serial port, and CoolTerm must also accept remote-control commands from Debug80.
 
-This chapter also covers the next step after the first successful transfer: adding more targets, choosing platforms and recovering from setup problems.
-
 ## Install CoolTerm
 
 Download CoolTerm from:

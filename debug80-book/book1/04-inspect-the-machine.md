@@ -127,7 +127,7 @@ Use **Absolute** when the address comes from the source or hardware manual. Use 
 
 The starter source begins at `0x4000`. When PC is `0x4000`, the memory view around PC shows the bytes generated for `ld sp,0x7fff`.
 
-That connection between source lines and memory addresses is what makes source-level debugging possible. Chapter 6 explains the source map that carries this relationship.
+That connection between source lines and memory addresses is what makes source-level debugging possible. The source map carries this relationship.
 
 ## The Machine Section
 
