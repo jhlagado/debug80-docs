@@ -9,7 +9,7 @@ nav_order: 6
 
 # Read Artifacts And ROM Source
 
-Debug80 writes build artifacts during launch and loads monitor assets for monitor-backed profiles. Their roles explain breakpoints, ROM source and hardware transfer.
+Debug80 writes build artifacts during launch and loads monitor assets for monitor-backed platforms. Their roles explain breakpoints, ROM source and hardware transfer.
 
 ## The Build Folder
 
@@ -86,7 +86,7 @@ Hover appears for symbols that resolve through the source map. Build the target 
 
 The TEC-1G / MON-3 project runs with monitor ROM in the emulated machine. Your program starts at `0x4000`, while reset code and monitor routines live in ROM.
 
-When execution enters monitor code, the current PC may point outside your source file. Debug80 can open the monitor source material for the active platform profile.
+When execution enters monitor code, the current PC may point outside your source file. Debug80 can open the monitor source material for the active platform.
 
 Run:
 
@@ -104,7 +104,7 @@ ROM source is especially useful when your program calls a monitor routine. If a 
 
 ## Bundled Assets
 
-Debug80 ships bundled ROM assets for the built-in monitor profiles. The TEC-1G / MON-3 profile refers to paths such as:
+Debug80 ships bundled ROM assets for the built-in platforms. The TEC-1G / MON-3 platform refers to paths such as:
 
 ```text
 roms/tec1g/mon3/mon3.bin
@@ -116,7 +116,7 @@ The TEC-1 platform uses the same pattern for MON-1B:
 roms/tec1/mon1b/mon-1b.bin
 ```
 
-If those files exist in your workspace, Debug80 uses them. If they are absent and the profile has a bundled asset entry, Debug80 uses the copy packaged with the extension.
+If those files exist in your workspace, Debug80 uses them. If they are absent and the platform has a bundled asset entry, Debug80 uses the copy packaged with the extension.
 
 Run this command when you want local copies:
 
@@ -124,7 +124,7 @@ Run this command when you want local copies:
 Debug80: Copy Bundled Assets into Workspace
 ```
 
-Copy assets when you want to inspect monitor source, compare a ROM or keep a project self-contained. Ordinary debugging with a bundled profile can use the packaged assets.
+Copy assets when you want to inspect monitor source, compare a ROM or keep a project self-contained. Ordinary debugging with bundled platform assets can use the packaged copies.
 
 > **Image placeholder:** Explorer showing copied `roms/tec1g/mon3` assets.
 

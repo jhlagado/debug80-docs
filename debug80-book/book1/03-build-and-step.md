@@ -1,21 +1,21 @@
 ---
 layout: default
-title: "Run The Starter Program"
+title: "Run The Starter Target"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 3
 ---
 
-[← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Program →](04-inspect-the-machine.md)
+[← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Target →](04-inspect-the-machine.md)
 
-# Run The Starter Program
+# Run The Starter Target
 
 You have already run the starter from MON-3. Now run the same program under the debugger, where you can stop it mid-flight and watch the Z80 work.
 
-The starter is small enough to hold in your head and busy enough to exercise the features that matter: it sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine.
+The starter target is small enough to hold in your head and busy enough to exercise the features that matter: it sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine.
 
 ## Build The Target
 
-In the Project section, tick **Stop on entry**, then click **Build**. Debug80 reads the active target from `debug80.json` — `src/main.asm` for the starter project — hands it to AZM, loads the assembled program into the emulated Z80 and launches the TEC-1G profile.
+In the Project section, tick **Stop on entry**, then click **Build**. Debug80 reads the active target from `debug80.json` — `src/main.asm` for the starter project — hands it to AZM, loads the assembled program into the emulated Z80 and launches the TEC-1G platform.
 
 ![Debug80 paused after launch, with Stop on entry enabled and the Build button visible](../../assets/images/debug80-book/book1/chapter3-stop-on-entry-build-paused.png)
 
@@ -47,7 +47,7 @@ F10 is **Step Over**. It executes the current instruction and stops at the next 
 
 F11 is **Step Into**. It follows execution into subroutines. In Z80 code, it also follows software interrupts, so stepping into `RST 0x10` takes you into the MON-3 service routine.
 
-With the starter program, the first steps set the stack pointer, send commands to MON-3 with `RST 0x10`, and then enter the display refresh loop. Use F10 when you want to move over the MON-3 calls and stay with the starter source. Use F11 when you want to trace into the monitor code and see how the service runs.
+With the starter target, the first steps set the stack pointer, send commands to MON-3 with `RST 0x10`, and then enter the display refresh loop. Use F10 when you want to move over the MON-3 calls and stay with the target. Use F11 when you want to trace into the monitor code and see how the service runs.
 
 Step once from `ld sp,0x7fff`. PC advances to the next source instruction. Continue stepping and watch PC move through the LCD setup code toward `scan_hello`.
 
@@ -75,7 +75,7 @@ Click in the editor gutter beside an instruction line. VS Code adds a red marker
 
 Breakpoints bind to instruction addresses, so a marker on a blank line, a comment or a bare label snaps to the nearest real instruction — or stays hollow if there is none nearby. Drop one beside `scan_hello:` and it binds to the first instruction of the loop, `ld de,seven_seg_hello`. Let the program run, and it stops there with the yellow arrow resting on that line.
 
-![Breakpoint in the starter program's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
+![Breakpoint in the starter target's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
 ## Run, Pause And Step
 
@@ -129,4 +129,4 @@ lcd_line1:
 
 Save, then click **Build** in the Debug80 panel. Debug80 assembles the source, loads the new program and starts the target. The LCD shows your new message, and the `scan_hello` loop keeps the seven-segment display refreshed as before.
 
-[← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Program →](04-inspect-the-machine.md)
+[← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Target →](04-inspect-the-machine.md)

@@ -15,10 +15,10 @@ This appendix lists the Debug80 commands used here. Command titles are taken fro
 
 | Command | Use |
 |---|---|
-| **Debug80: Create Project** | Create `debug80.json`, starter source and build setup for the selected folder. |
+| **Debug80: Create Project** | Create `debug80.json`, starter target and build setup for the selected folder. |
 | **Debug80: Select Workspace Folder** | Choose the folder Debug80 should treat as the active project. |
 | **Debug80: Select Active Target** | Choose the target launched by F5 and the panel build button. |
-| **Debug80: Set Program File** | Bind an `.asm` or `.z80` source file to the current target. |
+| **Debug80: Set Program File** | Bind an `.asm` or `.z80` file to the current target. |
 | **Debug80: Configure Project** | Change project settings through the extension command flow. |
 | **Debug80: Open Project Configuration Panel** | Open the project configuration panel for the active folder. |
 
@@ -42,7 +42,7 @@ This appendix lists the Debug80 commands used here. Command titles are taken fro
 
 | Command | Use |
 |---|---|
-| **Debug80: Open ROM Source** | Open bundled or workspace ROM source material for the active profile. |
+| **Debug80: Open ROM Source** | Open bundled or workspace ROM source material for the active platform. |
 | **Debug80: Copy Bundled Assets into Workspace** | Copy bundled ROM and source assets into the project folder. |
 | **Debug80: Send HEX to Board via CoolTerm** | Send the active target's HEX file to hardware through CoolTerm. |
 

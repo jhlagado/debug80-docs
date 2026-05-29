@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 5
 ---
 
-[← Inspect The Starter Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)
+[← Inspect The Starter Target](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)
 
 # Use The Debug80 Panel
 
@@ -125,4 +125,4 @@ For display-heavy programs, open **Displays** and close **Memory** until you nee
 
 The panel remembers open accordion sections in the webview state. If your view looks different from a screenshot, open the section named in the text and continue.
 
-[← Inspect The Starter Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)
+[← Inspect The Starter Target](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)

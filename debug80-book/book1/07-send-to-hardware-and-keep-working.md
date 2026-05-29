@@ -97,7 +97,7 @@ A Debug80 project can hold more than one runnable program. Each runnable program
 
 The target records the source file, build folder, artifact base name and platform settings. The active target is the one launched by F5 and by the Project section's build button.
 
-Debug80 discovers likely AZM entry sources by filename. A discovered entry source can become a target. Current discovery rules look for:
+Debug80 discovers likely targets by filename. Current discovery rules look for:
 
 ```text
 *.z80
@@ -105,7 +105,7 @@ Debug80 discovers likely AZM entry sources by filename. A discovered entry sourc
 main.asm
 ```
 
-The exact name `main.asm` is treated as an entry source because it is the common starter-file name. A file ending in `.main.asm`, such as `display-test.main.asm`, is also treated as an entry source. Any `.z80` file is treated as an entry source.
+The exact name `main.asm` is treated as a target because it is the common starter target name. A file ending in `.main.asm`, such as `display-test.main.asm`, is also treated as a target. Any `.z80` file is treated as a target.
 
 A regular `.asm` file can still be part of your program. It may be included by another source file or selected explicitly with **Debug80: Set Program File**. Target discovery keeps helper files out of the Target selector.
 
@@ -125,25 +125,25 @@ Use separate targets for separate entry programs. Use includes for shared suppor
 
 ## Set The Program File
 
-To bind a source file to the current target, right-click an `.asm` or `.z80` file in the Explorer or editor and run:
+To bind a file to the current target, right-click an `.asm` or `.z80` file in the Explorer or editor and run:
 
 ```text
 Debug80: Set Program File
 ```
 
-Debug80 updates the project configuration so the target points at that source file.
+Debug80 updates the project configuration so the target points at that file.
 
 `debug80.json` can name a `defaultTarget`. Debug80 uses it as the fallback target for the current project.
 
 Keep the default target pointed at the program you normally want to launch first. Use the panel selector for day-to-day switching.
 
-To change a target's source file, run **Debug80: Set Program File** again on the intended file. The project file stores the latest selection.
+To change a target, run **Debug80: Set Program File** again on the intended file. The project file stores the latest selection.
 
 ## Choose A Different Platform
 
 The platform controls the machine Debug80 emulates for a target. The project you created uses TEC-1G / MON-3.
 
-Choose **TEC-1** when you are working with the classic 1980s TEC-1 board. TEC-1 profiles focus on the keypad, seven-segment display, speaker, serial path and memory inspection used by classic monitor workflows.
+Choose **TEC-1** when you are working with the classic 1980s TEC-1 board. TEC-1 platform settings focus on the keypad, seven-segment display, speaker, serial path and memory inspection used by classic monitor workflows.
 
 Choose **TEC-1G / MON-3** for the main TEC-1G workflow. TEC-1G is compatible with the TEC-1 line but adds MON-3-oriented hardware: keypad, seven-segment display, LCD, GLCD, RGB matrix, matrix keyboard, serial path, memory protection and expansion behaviour.
 
@@ -157,7 +157,7 @@ For project selection problems, check the Project selector in the Debug80 panel.
 
 For target selection problems, check the **Target** selector in the Project section. You can also run **Debug80: Select Active Target**. The `defaultTarget` field in `debug80.json` controls the fallback target.
 
-For build problems, read the first assembler diagnostic. Later messages often follow from the first diagnostic. Check that the active target points at the intended source file, then check include paths, included files and the output folder.
+For build problems, read the first assembler diagnostic. Later messages often follow from the first diagnostic. Check that the active target points at the intended file, then check include paths, included files and the output folder.
 
 Debug80 uses AZM for the current assembly workflow. Source written for another assembler may need syntax changes before AZM can assemble it.
 

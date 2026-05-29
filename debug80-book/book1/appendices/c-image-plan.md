@@ -30,12 +30,12 @@ This appendix tracks this book's image set as a production checklist.
 | Image | Type | Chapter |
 |---|---|---|
 | Command Palette with **Debug80: Create Project** | Screenshot | Chapter 2; lower priority because the panel path is now primary |
-| Platform/profile picker with **TEC-1G / MON-3** selected | Screenshot | Chapter 2; added as `select-tec1g-platform.png` |
+| Platform picker with **TEC-1G / MON-3** selected | Screenshot | Chapter 2; added as `select-tec1g-platform.png` |
 | Fresh TEC-1G project in Explorer | Screenshot | Chapter 2; added as `explorer-initialized-project.png` |
 | Project section after creation | Screenshot | Chapter 2; added as `initialized-project-panel.png` |
 | Starter `src/main.asm` | Screenshot | Chapter 2; added as part of `initialized-project-panel.png` |
 | MON-3 address mode showing `4000` | Screenshot | Chapter 2; added as `monitor-edit-address-4000.png` |
-| Starter program running in Machine section | Screenshot | Chapter 2; added as `starter-running-output.png` |
+| Starter target running in Machine section | Screenshot | Chapter 2; added as `starter-running-output.png` |
 
 ## Build And Debug
 
@@ -104,6 +104,6 @@ This appendix tracks this book's image set as a production checklist.
 - Source line -> source map -> Z80 address -> breakpoint.
 - Source map status -> build action -> editor/debugger feature availability.
 - Emulator serial path versus CoolTerm hardware path.
-- TEC-1G memory map for the MON-3 profile.
+- TEC-1G memory map for the MON-3 platform.
 
 [← Appendix B — Project Configuration Reference](b-project-configuration.md) | [Book 1](../index.md) | [Appendix D — Glossary →](d-glossary.md)

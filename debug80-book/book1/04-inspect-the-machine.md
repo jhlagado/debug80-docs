@@ -1,15 +1,15 @@
 ---
 layout: default
-title: "Inspect The Starter Program"
+title: "Inspect The Starter Target"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 4
 ---
 
-[← Run The Starter Program](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
+[← Run The Starter Target](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
 
-# Inspect The Starter Program
+# Inspect The Starter Target
 
-Paused execution gives you time to inspect the starter program from several angles. Start with the source-map-backed symbols in VS Code, then use Debug80's Registers, Memory and Machine sections to connect source lines with CPU state and visible TEC-1G output.
+Paused execution gives you time to inspect the starter target from several angles. Start with the source-map-backed symbols in VS Code, then use Debug80's Registers, Memory and Machine sections to connect source lines with CPU state and visible TEC-1G output.
 
 ## Symbols And Constants In Variables
 
@@ -68,7 +68,7 @@ Use Watches when you want a small set of facts to stay visible while stepping. F
 
 Open the **Call Stack** view while the program is paused. Debug80 names the current Z80 execution frame from the nearest known symbol in the source map.
 
-In the starter program, you may see names such as:
+In the starter target, you may see names such as:
 
 ```text
 start
@@ -94,7 +94,7 @@ SP is the stack pointer. It names the top of the Z80 stack.
 
 The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. This book introduces them where the workflow needs them; the Z80 course material explains the instruction set in detail.
 
-Step the starter program and watch PC change. It starts at `0x4000`, moves through the LCD setup code, then settles into the `scan_hello` loop.
+Step the starter target and watch PC change. It starts at `0x4000`, moves through the LCD setup code, then settles into the `scan_hello` loop.
 
 > **Image placeholder:** Debug80 Registers section with PC visible.
 
@@ -125,7 +125,7 @@ Use **Absolute** when the address comes from the source or hardware manual. Use 
 
 ## Connect Source To Memory
 
-The starter source begins at `0x4000`. When PC is `0x4000`, the memory view around PC shows the bytes generated for `ld sp,0x7fff`.
+The starter target begins at `0x4000`. When PC is `0x4000`, the memory view around PC shows the bytes generated for `ld sp,0x7fff`.
 
 That connection between source lines and memory addresses is what makes source-level debugging possible. The source map carries this relationship.
 
@@ -157,7 +157,7 @@ If you are unsure whether a key reached the emulator, use an on-screen key first
 
 ## LCD And Seven-Segment Output
 
-The LCD and seven-segment display update from the emulated I/O ports. The starter program reaches those devices through MON-3 services.
+The LCD and seven-segment display update from the emulated I/O ports. The starter target reaches those devices through MON-3 services.
 
 After the LCD setup calls run, the LCD shows the starter message. When execution reaches `scan_hello`, the repeated MON-3 scan call keeps the seven-segment display refreshed from `seven_seg_hello`.
 
@@ -165,4 +165,4 @@ After the LCD setup calls run, the LCD shows the starter message. When execution
 
 The TEC-1G panel includes speaker, speed and mute controls in the display area. Use **MUTED** to prevent sound while debugging. The speed control lets the panel request a different run mode from the emulator.
 
-[← Run The Starter Program](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
+[← Run The Starter Target](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)

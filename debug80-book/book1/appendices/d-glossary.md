@@ -41,25 +41,17 @@ A folder with `debug80.json` at its root.
 
 The running VS Code debugger session connected to the emulated Z80 machine.
 
-## Entry Source
-
-The source file used as the starting point for a target. Debug80 discovers likely AZM entry sources from files ending in `.z80`, files ending in `.main.asm` and files named exactly `main.asm`.
-
 ## Intel HEX
 
 A text format for program bytes and addresses. Debug80 loads `.hex` into the emulator and sends `.hex` to hardware through CoolTerm.
 
 ## Monitor ROM
 
-Firmware loaded into the emulated machine. The TEC-1G / MON-3 profile uses monitor ROM while your user program runs from RAM at `0x4000`.
+Firmware loaded into the emulated machine. The TEC-1G / MON-3 platform uses monitor ROM while your user program runs from RAM at `0x4000`.
 
 ## Platform
 
 The machine family Debug80 emulates for a target. This book discusses TEC-1 and TEC-1G.
-
-## Profile
-
-A named setup for a platform. **TEC-1G / MON-3** is a profile that supplies ROM assets, memory layout and user-code start address.
 
 ## Source Map
 

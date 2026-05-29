@@ -9,11 +9,11 @@ nav_order: 105
 
 # Appendix E — TEC-1G Quick Reference
 
-This appendix collects the TEC-1G facts used here. It is a quick reference for the Debug80 panel and MON-3 profile.
+This appendix collects the TEC-1G facts used here. It is a quick reference for the Debug80 panel and MON-3 platform.
 
 ## MON-3 Memory Shape
 
-The TEC-1G / MON-3 profile places user code at:
+The TEC-1G / MON-3 platform places user code at:
 
 ```text
 0x4000
