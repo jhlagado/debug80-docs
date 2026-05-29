@@ -11,13 +11,13 @@ nav_order: 2
 
 A Debug80 project is a folder with `debug80.json` at its root. That file turns an ordinary workspace folder into something Debug80 can build, launch and emulate.
 
-Inside a project, Debug80 runs **targets**. A target is an entry point into the project: a named program you can build and run. It tells Debug80 which assembly source file starts the program, where build output goes and which machine profile should run the result.
+Inside a project, Debug80 runs **targets**. A target is the program entry point Debug80 can build and run. It names the assembly source file, the build output location and the platform that should run the result.
 
-One project can hold several targets. A folder might gather a few small programs, experiments or examples, each with its own entry source, and the target answers the daily question: which one do you want to run now?
+One project can hold several targets. A folder might gather a few small programs, experiments or examples, each with its own target. The target answers the daily question: which program do you want to run now?
 
-Debug80 can discover likely targets from file names. Files named `main.asm`, files ending in `.main.asm` and files ending in `.z80` are treated as entry sources. The generated project starts with one target based on `src/main.asm`; later, you can add more entry files and select the target you want from the Debug80 panel.
+Debug80 can discover likely targets from file names. Files named `main.asm`, files ending in `.main.asm` and files ending in `.z80` are target source files. The generated project starts with one target based on `src/main.asm`; later, you can add more target files and select the target you want from the Debug80 panel.
 
-When you build or start debugging, Debug80 uses the selected target. It assembles the target's entry source with AZM, writes the artifacts under the target's build directory, loads the generated code into the emulator and shows the result on the selected platform panel.
+When you build or start debugging, Debug80 uses the selected target. It assembles the target's source file with AZM, writes the artifacts under the target's build directory, loads the generated code into the emulator and shows the result on the selected platform panel.
 
 Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
 
@@ -25,7 +25,7 @@ Select the uninitialized folder in the Debug80 Project section, choose **TEC-1G*
 
 ![Platform selector with TEC-1G selected](../../assets/images/debug80-book/book1/select-tec1g-platform.png)
 
-That creates a TEC-1G project using the MON-3 monitor profile, with the starter program placed at `0x4000`, the user-code area for this profile.
+That creates a TEC-1G project for the MON-3 platform, with the starter program placed at `0x4000`, the user-code area for that platform.
 
 If you prefer the keyboard, **Debug80: Create Project** in the Command Palette does the same job. The panel is the clearer path for a first project, because it shows the selected folder, the platform and the initialization state in one place.
 
@@ -35,10 +35,10 @@ The platform selector is where you choose the machine Debug80 should model. Book
 
 | Platform | Use it when | User code starts at |
 |---|---|---:|
-| TEC-1 | You are working with the classic 1980s TEC-1 board and its monitor environment. | `0x0800` or `0x0900`, depending on the monitor profile |
+| TEC-1 | You are working with the classic 1980s TEC-1 board and its monitor environment. | `0x0800` or `0x0900`, depending on the platform settings |
 | TEC-1G | You are working with the modern TEC-1G board, which keeps TEC-1 compatibility and adds MON-3-oriented hardware features. | `0x4000` |
 
-Picking **TEC-1G** selects the MON-3 profile, which supplies the start address, ROM assets and hardware settings for the MON-3 environment. Reach for **TEC-1** instead when you are working with classic TEC-1 monitor behaviour.
+Picking **TEC-1G** selects the MON-3 platform settings: start address, ROM assets and hardware behaviour. Reach for **TEC-1** instead when you are working with classic TEC-1 monitor behaviour.
 
 Your platform choice sets the first shape of the project. Book 1 starts with a single TEC-1G target so the early path stays short.
 
@@ -54,7 +54,7 @@ src/main.asm
 build/
 ```
 
-`debug80.json` stores the project and its targets, and is the file that makes the folder a Debug80 project. `src/main.asm` is the starter source, the first target's entry point. `build/` receives generated files after the first build. The `.debug80/` folder holds Debug80's own working data, and `.gitignore` keeps the generated output out of version control. You can leave both alone.
+`debug80.json` stores the project and its targets, and is the file that makes the folder a Debug80 project. `src/main.asm` is the source file for the starter target. `build/` receives generated files after the first build. The `.debug80/` folder holds Debug80's own working data, and `.gitignore` keeps the generated output out of version control. You can leave both alone.
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 
@@ -62,7 +62,7 @@ Now open the Debug80 panel. The **Project** row shows your folder, and the **Tar
 
 ![Initialized TEC-1G project showing the project, target and machine](../../assets/images/debug80-book/book1/initialized-project-panel.png)
 
-The starter file is named `main.asm`, so Debug80 can recognise it as an entry source. Appendix B shows the target fields in `debug80.json` after you have built and run the first target.
+The starter file is named `main.asm`, so Debug80 can recognise it as a target source file. Appendix B shows the target fields in `debug80.json` after you have built and run the first target.
 
 ## Read The Target As A Sentence
 
@@ -81,11 +81,11 @@ The important first-day values are:
 - `sourceFile`: the source file Debug80 gives to AZM.
 - `outputDir`: the directory that receives generated files.
 - `artifactBase`: the base name used for generated files.
-- `platform` and `profile`: the emulated machine setup.
+- `platform`: the platform Debug80 runs.
 
-## Open The Starter Source
+## Open The Starter Program
 
-Open `src/main.asm`. The TEC-1G / MON-3 project creator writes this starter source:
+Open `src/main.asm`. The TEC-1G project creator writes this starter program:
 
 ```asm
 ; Debug80 starter (TEC-1G / MON-3)
@@ -133,7 +133,7 @@ Debug80 assembles this file with AZM when you launch the target. AZM turns the s
 
 ## The Origin Address
 
-`ORG 0x4000` tells AZM where to place the following bytes in Z80 memory. In the TEC-1G / MON-3 profile, `0x4000` is the start address for user programs.
+`ORG 0x4000` tells AZM where to place the following bytes in Z80 memory. On the TEC-1G platform, `0x4000` is the start address for MON-3 user programs.
 
 The monitor ROM still exists in the emulated machine. Your program lives in RAM at `0x4000`, while MON-3 provides the monitor environment around it.
 
