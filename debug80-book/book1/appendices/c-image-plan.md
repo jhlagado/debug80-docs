@@ -62,23 +62,17 @@ This appendix tracks this book's image set as a production checklist.
 | Displays section with GLCD and RGB matrix | Screenshot | Chapter 4; added as `chapter4-displays-tetro.png` |
 | 8x8 RGB LED matrix output | Screenshot | Chapter 4; added as `chapter4-rgb-matrix.png` |
 
-## Panel Walkthrough
+## Build Options And Source Maps
 
 | Image | Type | Chapter |
 |---|---|---|
-| Full TEC-1G accordion overview | Screenshot | Chapter 5 |
 | Project section close-up | Screenshot | Chapter 5 |
 | Project section source-map status line | Screenshot | Chapter 5 |
-| Displays section | Screenshot | Chapter 5 |
-| Matrix Keyboard section | Screenshot | Chapter 5 |
-| Serial section | Screenshot | Chapter 5 |
 
-## Artifacts And ROMs
+## Source Navigation And ROM Source
 
 | Image | Type | Chapter |
 |---|---|---|
-| Build folder with `.hex` and source-map output | Screenshot | Chapter 6 |
-| Source map diagram | Generated diagram | Chapter 6 |
 | Go to Definition on an assembly symbol | Screenshot | Chapter 6 |
 | Workspace symbol picker with Debug80 symbols | Screenshot | Chapter 6 |
 | Symbol hover with address and source location | Screenshot | Chapter 6 |

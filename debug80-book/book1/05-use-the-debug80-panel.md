@@ -1,128 +1,85 @@
 ---
 layout: default
-title: "Use The Debug80 Panel"
+title: "Build Options And Source Maps"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 5
 ---
 
-[← Inspect A Running Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)
+[← Inspect A Running Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Source Navigation And ROM Source →](06-artifacts-roms-and-mapping.md)
 
-# Use The Debug80 Panel
+# Build Options And Source Maps
 
-The Debug80 panel keeps the project controls and TEC-1G hardware views in one accordion.
+The **Project** section is the control centre for a Debug80 build. It decides which folder is active, which target will run, which platform will receive the result, and how strictly Debug80 should check the program before launch.
 
-> **Image placeholder:** Full TEC-1G Debug80 accordion showing Project, Displays, Machine, Matrix Keyboard, Serial, Registers and Memory.
+## Project And Target
 
-## Project
+The **Project** row selects the workspace folder. In a single-folder window it usually stays fixed. In a multi-folder window, choose the folder before you build.
 
-The **Project** section controls the Debug80 context for the current VS Code window. It names the folder, the active target and the launch options used by the next build.
+The **Target** row selects the runnable program inside that folder. The selected target controls the source file, build output and platform settings used by **Build** and F5.
 
-The selected folder and selected target define the next launch. Check this section before building or pressing F5.
+**Stop on entry** pauses the next launch at the first instruction the Z80 executes. Use it when you want a controlled start from reset. Leave it clear when you want the target to run immediately.
 
-The **Project** row selects the folder. In a single-folder window, it usually stays fixed. In a multi-folder window, choose the folder before you build.
+## Build Output
 
-The **Target** row selects the runnable program inside that folder. The TEC-1G starter project has one target. Later, when you add another program, this selector decides which program F5 and **Build** will launch.
+When you click **Build**, Debug80 asks AZM to assemble the active target. AZM writes the generated files under the target's build directory.
 
-**Stop on entry** pauses the next explicit launch at the first instruction. It is a panel setting for the current VS Code window. Use it when you want a controlled start after changing source.
+In the generated TEC-1G project, the important output is:
 
-The Project section also reports source-map status. The source map is generated during a successful build and gives Debug80 the symbol and source-line information used by editor navigation, hover text, source breakpoints and debugger symbol views.
+```text
+build/main.hex
+build/main.d8.json
+```
 
-Read this line before using source-map-backed features:
+The `.hex` file contains the program bytes in Intel HEX format. Debug80 loads those bytes into the emulator, and later sends the same file to a real TEC-1G through CoolTerm.
+
+The JSON source-map file is Debug80's own mapping format. AZM generates it, and Debug80 reads it after a successful build.
+
+![Source through AZM to HEX and source-map output](../../assets/images/debug80-book/book1/source-azm-artifacts.svg)
+
+These files are generated output. Edit the source files, then build the target again.
+
+## Source Map Status
+
+The Project section reports the source-map status for the active target. The source map connects source files, labels and generated Z80 addresses. Debug80 uses it for source breakpoints, stepping, Run to Cursor, Variables symbols, Watches, symbolic Call Stack names, Go to Definition, symbol hover and workspace symbol search.
+
+Read the status line before using source-map-backed features:
 
 - `Source map: current.` means the selected target has a readable source map and it appears up to date.
-- `Source map: missing, build the selected target.` means the selected target needs a successful build before source-map features are available.
+- `Source map: missing, build the selected target.` means the target needs a successful build before source-map features are available.
 - `Source map: stale, build recommended.` means one or more mapped source files appear newer than the source map.
 - `Source map: invalid, rebuild the selected target.` means Debug80 needs a fresh source map for the selected target.
 - `Source map: select a target and build.` means source-map features start after target selection and a successful build.
 
-Build the active target when Go to Definition, hover text, source breakpoints, Run to Cursor or symbol views need fresh information.
-
 ![Source-map status leading to build and source-map-backed features](../../assets/images/debug80-book/book1/source-map-status-features.svg)
 
-> **Image placeholder:** Project section close-up with Project, Target, Stop on entry, Register Care, Contract Updates and Build visible.
-
-> **Image placeholder:** Project section source-map status line showing `Source map: current.`
+Build the active target when navigation, symbols, source breakpoints or Run to Cursor need fresh address data.
 
 ## Register Care
 
-The **Register Care** selector controls how AZM register-care diagnostics affect launch.
+**Register Care** controls how strictly Debug80 treats AZM register-care diagnostics during launch.
+
+Register care checks whether routines use registers according to their AZMDoc contracts. A contract can say which registers a routine expects as input, which registers it returns as output, which registers it clobbers and which registers it preserves. Those checks catch common assembly mistakes: a routine overwrites a register the caller still needs, a caller fails to prepare an input register, or a documented return value no longer matches the code.
+
+The selector has three modes:
 
 - **Enforce** treats register-care problems as launch-blocking diagnostics.
-- **Audit** lets you inspect the diagnostics as advisory information.
-- **Off** disables the register-care check for launch.
+- **Audit** reports register-care findings as advisory diagnostics while allowing the workflow to continue.
+- **Off** skips the register-care check for launch.
 
-Treat register care as a launch option here. AZM's register-care system has its own explanation in the AZM material.
+Use **Enforce** when you want contracts to protect the build. Use **Audit** when you are introducing contracts to existing code and want a list of issues before making them blocking.
 
 ## Contract Updates
 
-The **Contract Updates** selector controls whether Debug80 may apply AZMDoc contract updates while launching.
+**Contract Updates** controls whether Debug80 may update AZMDoc register-care comments while launching.
 
 - **Ask** lets Debug80 prompt before applying updates.
 - **Auto** allows automatic updates.
 - **Never** keeps launch read-only for contract updates.
 
-Leave this on **Ask** while learning the workflow.
+Leave this on **Ask** while learning the workflow. Change it after you are comfortable reviewing the contract update being offered.
 
-Change these options when you understand the launch diagnostic or the AZM contract update being offered. The first Debug80 workflow can use the default settings.
+## Build Controls And Machine State
 
-## Displays
+Use the Project section for controls that affect the next build. Use Variables, Watch, Call Stack, Registers, Memory, Machine and Displays for the state of the running machine.
 
-The **Displays** section shows the 128 by 64 graphics LCD, the 8 by 8 RGB LED matrix, system status LEDs and memory expansion indicators.
-
-The status LEDs report TEC-1G system state such as shadow, protect, expand and caps. Read them as hardware state indicators while debugging. Appendix E gives the compact memory and port reference for these names.
-
-The RGB matrix updates when a program writes the matrix row and colour ports. Because matrix programs often refresh rows quickly, the panel gives you a stable picture of the frame the emulator has accumulated.
-
-> **Image placeholder:** Displays section showing GLCD, RGB matrix, system status LEDs and memory expansion indicators.
-
-Programs that scan a matrix often change outputs too quickly for a single port write to be meaningful by itself. The panel is designed to show the accumulated visible state, which is usually what you need while debugging a game, display test or animation.
-
-The TEC-1G RGB matrix view uses the emulator's duty-cycle calculation, then maps that brightness into a visible LED intensity in the panel. Pixels with more active scan time appear brighter, and pixels with less active scan time still appear dimmer. That makes games and display tests easier to see while preserving useful clues about uneven scan timing.
-
-## Machine
-
-The **Machine** section shows the LCD, seven-segment display and keypad. Use it whenever your program interacts with the visible TEC-1G controls.
-
-The Machine section is the best section to keep open while writing early TEC-1G examples. It gives immediate feedback for code that writes characters, scans keys or updates the seven-segment display.
-
-## Matrix Keyboard
-
-The **Matrix Keyboard** section shows the larger keyboard interface. It includes **MATRIX MODE**, Shift, Ctrl, Alt and Caps state.
-
-Click inside the section before typing. You can also click keys directly in the panel. This follows the same focus rule as the front-panel keypad.
-
-> **Image placeholder:** Matrix Keyboard section with Matrix Mode and modifier controls visible.
-
-## Serial
-
-The **Serial** section gives you an emulated serial terminal for the active platform. It contains an output area, a text input and three file controls:
-
-- **SEND FILE**
-- **SAVE**
-- **CLEAR**
-
-Use the text field to send a line of serial input to the emulator. Use **SEND FILE** when a monitor or program expects a text or HEX stream through the emulated serial input.
-
-The Serial section talks to the emulator. **Send to Board** talks to CoolTerm, which talks to the physical TEC-1G.
-
-> **Image placeholder:** Serial section showing output area, input field, SEND FILE, SAVE and CLEAR.
-
-Keep the two serial paths separate. Sending a file through the Serial section feeds the emulated machine. Sending a HEX file to the board uses CoolTerm and affects real hardware.
-
-File send is paced as a timed stream. Monitor software often expects input at human or device speed, so a paced send is more faithful to the serial path you will use on hardware.
-
-## Registers And Memory
-
-The **Registers** and **Memory** sections expose CPU state and RAM. Keep them open when stepping through code. Close them when you need more space for display or serial work.
-
-The memory view is most useful while paused. If the program is running, pause it before reading memory around PC, SP or an absolute address.
-
-## A Practical Panel Layout
-
-For early programs, keep **Project**, **Machine**, **Registers** and **Memory** open. That gives you launch control, visible hardware output, CPU state and memory state.
-
-For display-heavy programs, open **Displays** and close **Memory** until you need it. For serial workflows, open **Serial** and keep **Project** visible so you can build quickly.
-
-The panel remembers open accordion sections in the webview state. If your view looks different from a screenshot, open the section named in the text and continue.
-
-[← Inspect A Running Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Read Artifacts And ROM Source →](06-artifacts-roms-and-mapping.md)
+[← Inspect A Running Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Source Navigation And ROM Source →](06-artifacts-roms-and-mapping.md)

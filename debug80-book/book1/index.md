@@ -23,8 +23,8 @@ By the end you will know how to take a Z80 program all the way to hardware, and 
 2. [Create A TEC-1G Project](02-create-a-tec1g-project.md)
 3. [Run The Debugger](03-build-and-step.md)
 4. [Inspect A Running Program](04-inspect-the-machine.md)
-5. [Use The Debug80 Panel](05-use-the-debug80-panel.md)
-6. [Read Artifacts And ROM Source](06-artifacts-roms-and-mapping.md)
+5. [Build Options And Source Maps](05-use-the-debug80-panel.md)
+6. [Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md)
 7. [Send To Hardware And Keep Working](07-send-to-hardware-and-keep-working.md)
 
 ## Appendices

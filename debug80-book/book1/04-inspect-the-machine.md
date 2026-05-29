@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 4
 ---
 
-[← Run The Debugger](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
+[← Run The Debugger](03-build-and-step.md) | [Book 1](index.md) | [Build Options And Source Maps →](05-use-the-debug80-panel.md)
 
 # Inspect A Running Program
 
@@ -124,4 +124,4 @@ The RGB matrix is useful for programs that scan LEDs over time. Debug80 renders 
 
 The TEC-1G panel includes speaker, speed and mute controls in the display area. Use **MUTED** to prevent sound while debugging. The speed control lets the panel request a different run mode from the emulator.
 
-[← Run The Debugger](03-build-and-step.md) | [Book 1](index.md) | [Use The Debug80 Panel →](05-use-the-debug80-panel.md)
+[← Run The Debugger](03-build-and-step.md) | [Book 1](index.md) | [Build Options And Source Maps →](05-use-the-debug80-panel.md)

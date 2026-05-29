@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 7
 ---
 
-[← Read Artifacts And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Command Reference →](appendices/a-command-reference.md)
+[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Command Reference →](appendices/a-command-reference.md)
 
 # Send To Hardware And Keep Working
 
@@ -183,4 +183,4 @@ After the first successful board transfer, review the path from source to hardwa
 
 That path is the core Debug80 workflow. Later work adds richer programs, more targets and more hardware features, but it follows the same sequence.
 
-[← Read Artifacts And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Command Reference →](appendices/a-command-reference.md)
+[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Command Reference →](appendices/a-command-reference.md)
