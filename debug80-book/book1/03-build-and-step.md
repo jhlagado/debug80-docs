@@ -19,7 +19,7 @@ In the Project section, tick **Stop on entry**, then click **Build**. Debug80 ha
 
 ![Debug80 paused after launch, with Stop on entry enabled and the Build button visible](../../assets/images/debug80-book/book1/chapter3-stop-on-entry-build-paused.png)
 
-**Stop on entry** decides what happens the instant the machine starts. Cleared, the program runs straight away. Ticked, Debug80 halts at the first instruction the Z80 executes: address `$0000` in the MON-3 ROM, not your program. The yellow arrow marks the reset entry point in the monitor source, and the panel reports `Source map: current.` once the build succeeds.
+**Stop on entry** decides what happens the instant the machine starts. Cleared, the program runs straight away. Ticked, Debug80 halts at the first instruction the Z80 executes: address `$0000` in the MON-3 ROM, not your program.
 
 This launch also writes the build artifacts. The order is what matters here: AZM assembles the source, then Debug80 loads and debugs the result.
 
