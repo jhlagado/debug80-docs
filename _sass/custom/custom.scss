@@ -206,6 +206,91 @@ html {
     font-size: 1.0625rem;
     color: #4a4643;
   }
+
+  img.js-lightbox-image {
+    cursor: zoom-in;
+    transition: filter 120ms ease, transform 120ms ease;
+
+    &:hover,
+    &:focus {
+      filter: brightness(0.97);
+    }
+
+    &:focus {
+      outline: 2px solid #1b5e8b;
+      outline-offset: 4px;
+    }
+  }
+}
+
+
+// --- Image lightbox --------------------------------------------
+
+.has-image-lightbox {
+  overflow: hidden;
+}
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(18, 16, 14, 0.86);
+}
+
+.image-lightbox[hidden] {
+  display: none;
+}
+
+.image-lightbox__figure {
+  max-width: min(96vw, 96rem);
+  max-height: 92vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.image-lightbox__image {
+  max-width: 100%;
+  max-height: calc(92vh - 3rem);
+  object-fit: contain;
+  background: #f6f2eb;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.45);
+}
+
+.image-lightbox__caption {
+  max-width: 72rem;
+  color: #f5efe6;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.image-lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background: rgba(0, 0, 0, 0.7);
+  }
 }
 
 
