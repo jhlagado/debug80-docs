@@ -13,7 +13,7 @@ A Debug80 project is a folder with `debug80.json` at its root. That file turns a
 
 Inside a project, Debug80 runs **targets**. A target is an entry point into the project: a named program you can build and run. It tells Debug80 which assembly source file starts the program, where build output goes and which machine profile should run the result.
 
-One project can contain more than one target. That is normal. A folder might hold several small programs, experiments or examples, each with its own entry source. The target answers the daily question: which program in this project do you want to run now?
+One project can hold several targets. A folder might gather a few small programs, experiments or examples, each with its own entry source, and the target answers the daily question: which one do you want to run now?
 
 Debug80 can discover likely targets from file names. Files named `main.asm`, files ending in `.main.asm` and files ending in `.z80` are treated as entry sources. The generated project starts with one target based on `src/main.asm`; later, you can add more entry files and select the target you want from the Debug80 panel.
 
@@ -21,46 +21,46 @@ When you build or start debugging, Debug80 uses the selected target. It assemble
 
 Book 1 uses the TEC-1G platform because it exercises the main Debug80 workflow: AZM source, monitor ROM, emulator panel, serial workflow and CoolTerm hardware transfer.
 
-Select the uninitialized folder in the Debug80 Project section. Use the platform control to initialize it as a TEC-1G project.
+Select the uninitialized folder in the Debug80 Project section, choose **TEC-1G** in the platform selector, then click **Initialize**.
 
 ![Platform selector with TEC-1G selected](../../assets/images/debug80-book/book1/select-tec1g-platform.png)
 
-That choice creates a TEC-1G project using the MON-3 monitor profile. The starter program is placed at `0x4000`, the normal user-code area for this profile.
+That creates a TEC-1G project using the MON-3 monitor profile, with the starter program placed at `0x4000`, the user-code area for this profile.
 
-You can also create a project from the Command Palette with **Debug80: Create Project**, but the panel is the clearest path for the first workflow because it shows the selected folder, platform and initialization state together.
+If you prefer the keyboard, **Debug80: Create Project** in the Command Palette does the same job. The panel is the clearer path for a first project, because it shows the selected folder, the platform and the initialization state in one place.
 
 ## Choose The Platform
 
-Debug80's user-facing platforms are **TEC-1** and **TEC-1G**.
+The platform selector is where you choose the machine Debug80 should model. Book 1 uses **TEC-1G**, and the other user-facing platform is **TEC-1**.
 
 | Platform | Use it when | User code starts at |
 |---|---|---:|
 | TEC-1 | You are working with the classic 1980s TEC-1 board and its monitor environment. | `0x0800` or `0x0900`, depending on the monitor profile |
 | TEC-1G | You are working with the modern TEC-1G board, which keeps TEC-1 compatibility and adds MON-3-oriented hardware features. | `0x4000` |
 
-Book 1 uses **TEC-1G / MON-3**. That profile supplies the start address, ROM assets and platform settings for the MON-3 environment.
+Picking **TEC-1G** selects the MON-3 profile, which supplies the start address, ROM assets and hardware settings for the MON-3 environment. Reach for **TEC-1** instead when you are working with classic TEC-1 monitor behaviour.
 
-Choose **TEC-1** when you are working with classic TEC-1 monitor behaviour. Choose **TEC-1G / MON-3** when you are targeting TEC-1G hardware or the MON-3 monitor environment.
-
-The platform choice decides the first shape of the project. Book 1 starts with one TEC-1G target so the early path stays focused.
+Your platform choice sets the first shape of the project. Book 1 starts with a single TEC-1G target so the early path stays short.
 
 ## Files Created
 
-After initialization, open the VS Code Explorer. A fresh TEC-1G project has the project file, starter source and build folder:
+After initialization, open the VS Code Explorer. A fresh TEC-1G project looks like this:
 
 ```text
 debug80.json
+.debug80/
+.gitignore
 src/main.asm
 build/
 ```
 
-`debug80.json` stores the Debug80 project and its targets. The starter source is the first target's entry point. `build/` receives generated files after the first build.
+`debug80.json` stores the project and its targets, and is the file that makes the folder a Debug80 project. `src/main.asm` is the starter source, the first target's entry point. `build/` receives generated files after the first build. The `.debug80/` folder holds Debug80's own working data, and `.gitignore` keeps the generated output out of version control. You can leave both alone.
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 
-Open the Debug80 panel. The **Project** row should show your folder, and the **Target** selector should show the starter target. When a project has one target, Debug80 can select it automatically. Later, when a project has several targets, the selector becomes part of the daily workflow.
+Now open the Debug80 panel. The **Project** row shows your folder, and the **Target** selector shows the starter target named `main`. With one target, Debug80 selects it for you; once a project grows several targets, this selector becomes part of the daily workflow. Below the controls, the panel reports `Source map: missing, build the selected target.` — expected before the first build, and the next chapter clears it.
 
-![Initialized TEC-1G project with target and starter source](../../assets/images/debug80-book/book1/initialized-project-panel.png)
+![Initialized TEC-1G project showing the project, target and machine](../../assets/images/debug80-book/book1/initialized-project-panel.png)
 
 The starter file is named `main.asm`, so Debug80 can recognise it as an entry source. Appendix B shows the target fields in `debug80.json` after you have built and run the first target.
 
@@ -151,9 +151,9 @@ Save `src/main.asm`.
 
 ## Run It From MON-3
 
-Build the target once before you start debugging. Debug80 assembles the program and loads it into the emulated TEC-1G memory at `0x4000`.
+Click **Build** in the Project section. Debug80 assembles the program with AZM and loads it into the emulated TEC-1G at `0x4000`. Before single-stepping in the next chapter, run it the way you would on the bare board, straight from the monitor.
 
-The TEC-1G panel starts in the MON-3 monitor. Press **AD** to enter address mode, then enter:
+The panel comes up in the MON-3 monitor. Press **AD** to enter address mode, then key in:
 
 ```text
 4000

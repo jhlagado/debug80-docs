@@ -9,33 +9,27 @@ nav_order: 3
 
 # Run The Starter Program
 
-You have already run the starter from MON-3. Now run the same program under the debugger.
+You have already run the starter from MON-3. Now run the same program under the debugger, where you can stop it mid-flight and watch the Z80 work.
 
-The starter program is small enough to understand in one sitting, and active enough to exercise real Debug80 features. It sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment display refresh routine.
-
-Use this chapter to run that program under the debugger. You will stop at entry, step through the first MON-3 calls, set a breakpoint in the refresh loop and watch the panel change.
+The starter is small enough to hold in your head and busy enough to exercise the features that matter: it sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine. Over this chapter you will pause it at the reset entry, step through the first MON-3 calls, drop a breakpoint into the refresh loop and watch the panel respond.
 
 ## Build The Target
 
-Select the target in the Debug80 panel. Then click **Build** in the Project section.
+In the Project section, tick **Stop on entry**, then click **Build**. Debug80 reads the active target from `debug80.json` — `src/main.asm` for the starter project — hands it to AZM, loads the assembled program into the emulated Z80 and launches the TEC-1G profile.
 
 ![Debug80 paused after launch, with Stop on entry enabled and the Build button visible](../../assets/images/debug80-book/book1/chapter3-stop-on-entry-build-paused.png)
 
-Debug80 reads the active target from `debug80.json`. For the starter project, that target points to `src/main.asm`.
+**Stop on entry** decides what happens the instant the machine starts. Cleared, the program runs straight away. Ticked, Debug80 halts at the first instruction the Z80 executes: address `$0000` in the MON-3 ROM, not your program. The yellow arrow marks the reset entry point in the monitor source, and the panel reports `Source map: current.` once the build succeeds.
 
-Build starts the debug session for the selected target. Debug80 asks AZM to assemble the source, loads the generated program into the emulated Z80 memory and starts the TEC-1G profile.
-
-With **Stop on entry** clear, the program runs immediately. With **Stop on entry** ticked, Debug80 pauses as soon as the Z80 starts at address `$0000`. The first pause is in the TEC-1G ROM source, MON-3. The yellow arrow in the editor marks the next ROM instruction at the reset entry point.
-
-The first launch also creates the build artifacts. Chapter 6 explains those generated files. For now, remember the launch order: AZM assembles the source before Debug80 loads and debugs the program.
+This launch also writes the build artifacts. Chapter 6 covers those files; for now the order is what matters: AZM assembles the source, then Debug80 loads and debugs the result.
 
 ## The Program Counter
 
-The Z80 program counter, usually written as PC, holds the address of the next instruction. When the editor highlights the first instruction at `start`, PC points at the address generated for that instruction.
+The Z80 program counter, usually written as PC, holds the address of the next instruction. At the reset pause, PC is `$0000` and the editor sits in the MON-3 ROM, not in your file. That is the machine starting from cold, exactly as the hardware does.
 
-For the starter program, that address is `0x4000`.
+To stop on your own first instruction, set a source breakpoint at `start` — the next section covers the click — and let the program run to it. When execution stops there, the editor highlights `ld sp,0x7fff` and PC reads `0x4000`, the address AZM generated for that line.
 
-The PC gives the debugger its position in the emulated machine. The source map gives Debug80 the matching position in your source file. The editor shows the instruction in human form, and the register view shows the address the Z80 will execute.
+Those two facts are the whole trick of source-level debugging. PC gives the debugger its position in the emulated machine; the source map gives it the matching line in your file. The editor shows the instruction in readable form, and the register view shows the address the Z80 will execute next.
 
 The first instruction is:
 
@@ -43,7 +37,7 @@ The first instruction is:
         ld      sp,0x7fff
 ```
 
-That instruction sets the Z80 stack pointer near the top of RAM. The starter does this before calling MON-3 services, because monitor calls can use the stack while they run.
+It sets the stack pointer near the top of RAM. The starter does this before any MON-3 call, because the monitor routines push and pop on the stack while they run, and they need somewhere to put it.
 
 ## Step Through Startup
 
@@ -77,75 +71,62 @@ This is the smallest useful debugging cycle: stop, inspect, step, inspect again.
 
 ## Set A Breakpoint
 
-Click in the editor gutter beside an instruction line. VS Code adds a red breakpoint marker.
+Click in the editor gutter beside an instruction line. VS Code adds a red marker, and Debug80 binds it to the Z80 address generated for that line.
 
-A filled breakpoint means Debug80 matched the source line to a generated Z80 address. A breakpoint on a blank line, comment or label-only line may stay hollow because breakpoints bind to instruction addresses.
-
-For the starter program, a useful first breakpoint is inside `scan_hello`, on the MON-3 display-scan call:
-
-```asm
-        rst     0x10
-```
-
-The debug controls will move through the startup code and then stop in the refresh loop.
+Breakpoints bind to instruction addresses, so a marker on a blank line, a comment or a bare label snaps to the nearest real instruction — or stays hollow if there is none nearby. Drop one beside `scan_hello:` and it binds to the first instruction of the loop, `ld de,seven_seg_hello`. Let the program run, and it stops there with the yellow arrow resting on that line.
 
 ![Breakpoint in the starter program's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
 ## Run, Pause And Step
 
-The VS Code debug toolbar controls the emulated Z80 while the session is running or paused.
+The VS Code debug toolbar drives the emulated Z80 whenever a session is running or paused.
 
 ![VS Code debug toolbar during a Debug80 session](../../assets/images/debug80-book/book1/chapter3-debug-toolbar.png)
 
-The first button changes state. When the program is paused, it runs from the current instruction. When the program is running, the same position becomes **Pause**, which interrupts execution and returns control to the debugger.
+Left to right:
 
-**Step Over** is F10. It executes one instruction and stops at the next instruction in the current flow. If the instruction calls a routine, Step Over runs that routine and stops after it returns.
+- **Continue / Pause** — the first button toggles. Paused, it runs from the current instruction; running, it becomes **Pause** and returns control to the debugger.
+- **Step Over** (F10) — run one instruction, treating a `CALL` or `RST` as a single step.
+- **Step Into** (F11) — follow execution into routines, including `RST 0x10` into MON-3.
+- **Step Out** (Shift-F11) — run the current routine to its return. Use it to climb back out after F11 took you into the monitor.
+- **Build** — use the Project section's Build button when you want a fresh assembled run of the active target.
+- **Stop** — end the debug session.
 
-**Step Into** is F11. It follows execution into routines. In Z80 code, that includes ordinary `CALL` instructions and `RST` software interrupts such as `RST 0x10`.
-
-**Step Out** is Shift-F11. It runs the current routine until it returns to its caller. Use it after F11 has taken you into a routine and you want to get back to the code that called it.
-
-The circular arrow starts the debug session again for the active target.
-
-**Stop** ends the debug session.
-
-In the starter program, running the code writes the LCD text once and then repeats the `scan_hello` loop so the seven-segment display stays refreshed.
+Continue the starter and it writes the LCD text once, then spins in the `scan_hello` loop, keeping the seven-segment display refreshed.
 
 ## Run To Cursor
 
-VS Code also provides **Run to Cursor** from the editor context menu and debug controls. During a Debug80 session, place the cursor on an instruction line and use the normal VS Code action.
-
-Debug80 resolves that source line through the source map, runs to the matching machine address and stops there. Use the standard VS Code action for this command.
-
-For the starter program, place the cursor on the `scan_hello:` loop and use **Run to Cursor**. Debug80 runs through the LCD setup and stops at the loop that refreshes the seven-segment display.
+**Run to Cursor** reaches one spot without leaving a breakpoint behind. During a session, right-click an instruction line and choose it from the editor menu.
 
 ![Run to Cursor from the editor context menu](../../assets/images/debug80-book/book1/chapter3-run-to-cursor-menu.png)
 
-Run to Cursor depends on the last successful build. Build the target again when source-line resolution needs fresh source-map data, then place the cursor on an instruction line.
+Debug80 resolves the line through the source map, runs to the matching machine address and stops there. Try it on the `scan_hello:` loop: Debug80 runs through the LCD setup and halts where the seven-segment refresh begins.
+
+Like every source-line feature, this leans on the last successful build. If a line will not resolve, build the target again to refresh the source map, then place the cursor and retry.
 
 ## Conditional Breakpoints
 
-Use a conditional breakpoint when the program should stop for a specific machine state. Right-click a breakpoint, choose **Edit Breakpoint** and enter a Debug80 expression.
+A plain breakpoint stops every time it is hit. A conditional one stops only when the machine is in a state you care about. Right-click a breakpoint and choose **Edit Breakpoint**.
 
 ![Edit Breakpoint from the editor gutter menu](../../assets/images/debug80-book/book1/chapter3-edit-breakpoint-menu.png)
 
+Type a Debug80 expression into the inline editor. The condition shown, `C = api_scan_segments` on the `rst 0x10` inside `scan_hello`, fires the breakpoint only when register `C` holds the segment-scan service number. The same idea lets you stop when a counter reaches zero, a pointer lands on an address, or a key value appears, instead of breaking on every pass.
+
 ![Conditional breakpoint expression in the editor](../../assets/images/debug80-book/book1/chapter3-conditional-breakpoint-expression.png)
 
-When execution reaches the breakpoint, Debug80 evaluates the expression. A true or non-zero result stops execution. A false or zero result lets the program continue.
+Each time execution reaches the line, Debug80 evaluates the expression. A true or non-zero result stops the program; a false or zero result lets it run on. If the expression itself errors, Debug80 stops at the breakpoint and writes the error to the Debug Console.
 
-When expression evaluation raises an error, Debug80 stops at the breakpoint and writes the error to the Debug Console. Conditional breakpoints use the same expression language as the Watch panel. Appendix G lists the supported registers, flags, symbols, memory reads and operators.
+Conditional breakpoints share the expression language with the Watch panel. Appendix G lists the registers, flags, symbols, memory reads and operators you can use.
 
 ## Edit And Build
 
-Change the LCD message string:
+Change something visible and watch it survive the round trip to the emulator. Edit `lcd_line1`, swapping the text between the quotes for your own:
 
 ```asm
 lcd_line1:
-        .db     "Debug80 TEC-1G",0
+        .db     "Hello from Z80",0
 ```
 
-Save the file, then click **Build** in the Debug80 panel. Debug80 assembles the code again, loads the new program into the emulator and starts the target.
-
-The LCD shows the changed message after the program runs. The seven-segment display is refreshed by the `scan_hello` loop.
+Save, then click **Build** in the Debug80 panel. Debug80 assembles the source, loads the new program and starts the target. The LCD shows your new message, and the `scan_hello` loop keeps the seven-segment display refreshed as before.
 
 [← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Program →](04-inspect-the-machine.md)

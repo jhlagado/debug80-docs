@@ -11,9 +11,11 @@ has_children: true
 
 # Debug80 Book 1 — Getting Started
 
-Book 1 teaches the first complete Debug80 workflow: install the extension, create a TEC-1G project, run it in the debugger, read the panel, inspect state and send the generated HEX file to a TEC-1G through CoolTerm.
+Debug80 turns Visual Studio Code into a Z80 development environment. You write assembly, run it in an emulated TEC-1G, step through it with source-level breakpoints, and send the same program to a real board over a serial cable.
 
-This first draft establishes the full teaching path. The screenshot plan in Appendix C tracks the images needed for the review pass.
+Book 1 walks that whole path once, from an empty folder to running hardware. You will install the extension, create a TEC-1G project, build and step through a starter program, read the panel that shows the emulated machine, find the files each build produces, and send the generated HEX file to a TEC-1G through CoolTerm.
+
+By the end you will know how to take a Z80 program all the way to hardware, and which part of Debug80 to reach for at each step.
 
 ## Main Path
 
