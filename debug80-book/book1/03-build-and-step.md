@@ -88,15 +88,25 @@ The debug controls will move through the startup code and then stop in the refre
 
 ![Breakpoint in the starter program's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
-## Continue And Pause
+## Use The Debug Toolbar
 
-The VS Code debug toolbar controls the emulated Z80. Use it the same way you use other VS Code debuggers: continue, pause, step, restart and stop.
-
-**Continue** runs the program from the current instruction. In the starter program, execution writes the LCD text once and then repeats the `scan_hello` loop so the seven-segment display stays refreshed.
-
-**Pause** interrupts the running session and returns control to the debugger. The editor highlights the source line that matches the current PC when the source map can resolve it.
+The VS Code debug toolbar controls the emulated Z80 while the session is paused or running.
 
 ![VS Code debug toolbar during a Debug80 session](../../assets/images/debug80-book/book1/chapter3-debug-toolbar.png)
+
+The first button changes state. When the program is paused, **Continue** runs from the current instruction. When the program is running, **Pause** interrupts execution and returns control to the debugger.
+
+**Step Over** is F10. It executes the current instruction and stops at the next instruction in the current flow. If the current instruction calls a routine, Step Over runs that routine and stops after it returns.
+
+**Step Into** is F11. It follows execution into routines. In Z80 code, that includes `CALL` instructions and `RST` software interrupts.
+
+**Step Out** is Shift-F11. It runs the current routine until it returns to its caller. Use it after F11 has taken you into a routine and you want to get back to the code that called it.
+
+**Restart** rebuilds and relaunches the active target.
+
+**Stop** ends the debug session.
+
+In the starter program, Continue writes the LCD text once and then repeats the `scan_hello` loop so the seven-segment display stays refreshed.
 
 ## Run To Cursor
 
@@ -127,18 +137,6 @@ DE eq seven_seg_hello
 When execution reaches the breakpoint, Debug80 evaluates the expression. A true or non-zero result stops execution. A false or zero result lets the program continue.
 
 When expression evaluation raises an error, Debug80 stops at the breakpoint and writes the error to the Debug Console. Conditional breakpoints use the same expression language as the Watch panel. Appendix G lists the supported registers, flags, symbols, memory reads and operators.
-
-## Step Out
-
-**Step Out** runs until the current routine returns or until the configured instruction cap stops it. Use it after F11 has taken you into a subroutine and you want to return to the caller.
-
-The starter uses `RST 0x10` monitor calls before it reaches the display loop. When you step into one of those calls, Step Out is the quickest way back toward the starter program.
-
-## Restart And Stop
-
-**Restart** rebuilds and relaunches the active target. Use it after changing source.
-
-**Stop** ends the debug session. The project remains selected, so the next F5 or **Build** starts the same target again.
 
 ## Edit And Rebuild
 
