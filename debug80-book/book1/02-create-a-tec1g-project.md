@@ -53,7 +53,7 @@ src/main.asm
 build/
 ```
 
-`debug80.json` stores the project and its targets, and is the file that makes the folder a Debug80 project. `src/main.asm` is the starter target. `build/` receives generated files after the first build. `.gitignore` keeps generated output out of version control.
+`debug80.json` stores the project and its targets. `src/main.asm` is the starter target. `build/` receives generated files after the first build. `.gitignore` keeps generated output out of version control.
 
 ![Explorer after initializing project1](../../assets/images/debug80-book/book1/explorer-initialized-project.png)
 
@@ -71,63 +71,56 @@ Open `src/main.asm`. This is the source file for the `main` target. The TEC-1G p
 
 ```asm
 ; Debug80 starter (TEC-1G / MON-3)
-; Prints a message on the LCD, then continuously scans "HELLO" on the
+; Prints a message on the LCD, then continuously scans "HELLO " on the
 ; six-digit seven-segment display.
 
-api_scan_segments       .equ 10
-api_string_to_lcd       .equ 13
-api_command_to_lcd      .equ 15
+API_SCAN_SEGMENTS       .equ 10
+API_STRING_TO_LCD       .equ 13
+API_COMMAND_TO_LCD      .equ 15
 
-lcd_clear               .equ 0x01
-lcd_row1                .equ 0x80
+LCD_CLEAR               .equ 0x01
+LCD_ROW1                .equ 0x80
 
-        ORG 0x4000
+        .org    0x4000
 
-start:
-        ld      sp,0x7fff
+Start:
+        LD      B,LCD_CLEAR
+        LD      C,API_COMMAND_TO_LCD
+        RST     0x10
 
-        ld      b,lcd_clear
-        ld      c,api_command_to_lcd
-        rst     0x10
+        LD      B,LCD_ROW1
+        LD      C,API_COMMAND_TO_LCD
+        RST     0x10
 
-        ld      b,lcd_row1
-        ld      c,api_command_to_lcd
-        rst     0x10
-        ld      hl,lcd_line1
-        ld      c,api_string_to_lcd
-        rst     0x10
+        LD      HL,LcdLine1
+        LD      C,API_STRING_TO_LCD
+        RST     0x10
 
-scan_hello:
-        ld      de,seven_seg_hello
-        ld      c,api_scan_segments
-        rst     0x10
-        jr      scan_hello
+ScanHello:
+        LD      DE,SevenSegHello
+        LD      C,API_SCAN_SEGMENTS
+        RST     0x10
+        JR      ScanHello
 
-lcd_line1:
+LcdLine1:
         .db     "Debug80 TEC-1G",0
 
 ; MON-3 seven-segment character codes for "HELLO ".
-seven_seg_hello:
+SevenSegHello:
         .db     0x6e,0xc7,0xc2,0xc2,0xeb,0x00
 ```
 
 Debug80 assembles the target with AZM when you launch it. AZM turns the source text into Z80 machine code and writes the files Debug80 needs for source-level debugging.
 
-## The Origin Address
+## What The Target Does
 
-`ORG 0x4000` tells AZM where to place the following bytes in Z80 memory. On the TEC-1G platform, `0x4000` is the start address for MON-3 user programs.
+The `.org 0x4000` line places the target in the MON-3 user program area. MON-3 remains in ROM; your target lives in RAM at `0x4000`.
 
-The monitor ROM still exists in the emulated machine. Your program lives in RAM at `0x4000`, while MON-3 provides the monitor environment around it.
+The first two MON-3 calls prepare the LCD. `API_COMMAND_TO_LCD` tells MON-3 that register `B` holds an LCD command. The target sends `LCD_CLEAR`, then `LCD_ROW1`, so the LCD is clear and positioned at the first row.
 
-`start:` is a label. A label gives a name to an address.
+The next MON-3 call prints the message. `HL` points at `LcdLine1`, and `API_STRING_TO_LCD` tells MON-3 to copy the zero-terminated string to the LCD.
 
-The target uses MON-3 calls through `RST 0x10`. The value in `C` selects the MON-3 service:
-
-- `api_command_to_lcd` sends LCD commands such as clear-screen and row positioning.
-- `api_string_to_lcd` prints the zero-terminated string at `HL`.
-- `api_scan_segments` refreshes the six-digit seven-segment display from the bytes at `DE`.
-
-After the LCD text is written, the program loops at `scan_hello:`. Each pass asks MON-3 to scan the six bytes in `seven_seg_hello`, so the seven-segment display keeps showing `HELLO`.
+After the LCD text is written, execution stays in `ScanHello`. Each pass points `DE` at `SevenSegHello` and calls `API_SCAN_SEGMENTS`. The display is scanned repeatedly because the six-digit seven-segment display must be refreshed continuously to stay visible.
 
 Save `src/main.asm`.
 
@@ -145,7 +138,7 @@ The seven-segment display shows the address, and the LCD monitor view shows the 
 
 ![MON-3 address mode showing 4000](../../assets/images/debug80-book/book1/monitor-edit-address-4000.png)
 
-Press **GO** to run the program at the displayed address. The LCD shows the target message, and the seven-segment display is refreshed from `seven_seg_hello`.
+Press **GO** to run the program at the displayed address. The LCD shows the target message, and the seven-segment display is refreshed from `SevenSegHello`.
 
 ![Starter target running on the TEC-1G panel](../../assets/images/debug80-book/book1/starter-running-output.png)
 
@@ -157,6 +150,6 @@ The target uses monitor services rather than raw port writes. That keeps the fir
 
 It also introduces a normal TEC-1G pattern: user code runs from RAM, calls MON-3 routines, and keeps display hardware refreshed in a loop.
 
-The same build and debug sequence applies when you replace the starter with your own code.
+The same build and debug sequence applies when you replace the starter target with your own code.
 
 [← Install And Add A Folder](01-install-and-add-a-folder.md) | [Book 1](index.md) | [Run The Starter Target →](03-build-and-step.md)

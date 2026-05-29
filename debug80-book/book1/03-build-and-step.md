@@ -9,13 +9,13 @@ nav_order: 3
 
 # Run The Starter Target
 
-You have already run the starter from MON-3. Now run the same program under the debugger, where you can stop it mid-flight and watch the Z80 work.
+You have already run the starter target from MON-3. Now run the same program under the debugger, where you can stop it mid-flight and watch the Z80 work.
 
-The starter target is small enough to hold in your head and busy enough to exercise the features that matter: it sets the stack pointer, calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine.
+The starter target is small enough to hold in your head and busy enough to exercise the features that matter: it calls MON-3 to write to the LCD, then loops through a seven-segment refresh routine.
 
 ## Build The Target
 
-In the Project section, tick **Stop on entry**, then click **Build**. Debug80 reads the active target from `debug80.json` — `src/main.asm` for the starter project — hands it to AZM, loads the assembled program into the emulated Z80 and launches the TEC-1G platform.
+In the Project section, tick **Stop on entry**, then click **Build**. Debug80 hands the active target to AZM, loads the assembled program into the emulated Z80 and launches the TEC-1G platform.
 
 ![Debug80 paused after launch, with Stop on entry enabled and the Build button visible](../../assets/images/debug80-book/book1/chapter3-stop-on-entry-build-paused.png)
 
@@ -27,17 +27,17 @@ This launch also writes the build artifacts. The order is what matters here: AZM
 
 The Z80 program counter, usually written as PC, holds the address of the next instruction. At the reset pause, PC is `$0000` and the editor sits in the MON-3 ROM, not in your file. That is the machine starting from cold, exactly as the hardware does.
 
-To stop on your own first instruction, set a source breakpoint at `start` — the next section covers the click — and let the program run to it. When execution stops there, the editor highlights `ld sp,0x7fff` and PC reads `0x4000`, the address AZM generated for that line.
+To stop on your own first instruction, set a source breakpoint at `Start` and let the program run to it. When execution stops there, the editor highlights `LD B,LCD_CLEAR` and PC reads `0x4000`, the address AZM generated for that line.
 
 Those two facts are the whole trick of source-level debugging. PC gives the debugger its position in the emulated machine; the source map gives it the matching line in your file. The editor shows the instruction in readable form, and the register view shows the address the Z80 will execute next.
 
-The first instruction is:
+The first instruction prepares the first MON-3 LCD command:
 
 ```asm
-        ld      sp,0x7fff
+        LD      B,LCD_CLEAR
 ```
 
-It sets the stack pointer near the top of RAM. The starter does this before any MON-3 call, because the monitor routines push and pop on the stack while they run, and they need somewhere to put it.
+The following instruction loads `API_COMMAND_TO_LCD` into `C`, then `RST 0x10` asks MON-3 to run that service. The first service clears the LCD.
 
 ## Step Through Startup
 
@@ -47,22 +47,22 @@ F10 is **Step Over**. It executes the current instruction and stops at the next 
 
 F11 is **Step Into**. It follows execution into subroutines. In Z80 code, it also follows software interrupts, so stepping into `RST 0x10` takes you into the MON-3 service routine.
 
-With the starter target, the first steps set the stack pointer, send commands to MON-3 with `RST 0x10`, and then enter the display refresh loop. Use F10 when you want to move over the MON-3 calls and stay with the target. Use F11 when you want to trace into the monitor code and see how the service runs.
+With the starter target, the first steps send commands to MON-3 with `RST 0x10`, write the LCD text, and then enter the display refresh loop. Use F10 when you want to move over the MON-3 calls and stay with the target. Use F11 when you want to trace into the monitor code and see how the service runs.
 
-Step once from `ld sp,0x7fff`. PC advances to the next source instruction. Continue stepping and watch PC move through the LCD setup code toward `scan_hello`.
+Step once from `LD B,LCD_CLEAR`. PC advances to the next source instruction. Continue stepping and watch PC move through the LCD setup code toward `ScanHello`.
 
 The repeated pattern is:
 
 ```asm
-        ld      c,api_command_to_lcd
-        rst     0x10
+        LD      C,API_COMMAND_TO_LCD
+        RST     0x10
 ```
 
 or:
 
 ```asm
-        ld      c,api_string_to_lcd
-        rst     0x10
+        LD      C,API_STRING_TO_LCD
+        RST     0x10
 ```
 
 The value in `C` chooses the MON-3 service. The value in `B`, `HL` or `DE` supplies the data for that service.
@@ -73,9 +73,9 @@ This is the smallest useful debugging cycle: stop, inspect, step, inspect again.
 
 Click in the editor gutter beside an instruction line. VS Code adds a red marker, and Debug80 binds it to the Z80 address generated for that line.
 
-Breakpoints bind to instruction addresses, so a marker on a blank line, a comment or a bare label snaps to the nearest real instruction — or stays hollow if there is none nearby. Drop one beside `scan_hello:` and it binds to the first instruction of the loop, `ld de,seven_seg_hello`. Let the program run, and it stops there with the yellow arrow resting on that line.
+Breakpoints bind to instruction addresses, so a marker on a blank line, a comment or a bare label snaps to the nearest real instruction — or stays hollow if there is none nearby. Drop one beside `ScanHello:` and it binds to the first instruction of the loop, `LD DE,SevenSegHello`. Let the program run, and it stops there with the yellow arrow resting on that line.
 
-![Breakpoint in the starter target's scan_hello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
+![Breakpoint in the starter target's ScanHello loop](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
 ## Run, Pause And Step
 
@@ -92,7 +92,7 @@ Left to right:
 - **Build** — use the Project section's Build button when you want a fresh assembled run of the active target.
 - **Stop** — end the debug session.
 
-Continue the starter and it writes the LCD text once, then spins in the `scan_hello` loop, keeping the seven-segment display refreshed.
+Continue the starter target and it writes the LCD text once, then spins in the `ScanHello` loop, keeping the seven-segment display refreshed.
 
 ## Run To Cursor
 
@@ -100,7 +100,7 @@ Continue the starter and it writes the LCD text once, then spins in the `scan_he
 
 ![Run to Cursor from the editor context menu](../../assets/images/debug80-book/book1/chapter3-run-to-cursor-menu.png)
 
-Debug80 resolves the line through the source map, runs to the matching machine address and stops there. Try it on the `scan_hello:` loop: Debug80 runs through the LCD setup and halts where the seven-segment refresh begins.
+Debug80 resolves the line through the source map, runs to the matching machine address and stops there. Try it on the `ScanHello:` loop: Debug80 runs through the LCD setup and halts where the seven-segment refresh begins.
 
 Like every source-line feature, this leans on the last successful build. If a line will not resolve, build the target again to refresh the source map, then place the cursor and retry.
 
@@ -110,7 +110,7 @@ A plain breakpoint stops every time it is hit. A conditional one stops only when
 
 ![Edit Breakpoint from the editor gutter menu](../../assets/images/debug80-book/book1/chapter3-edit-breakpoint-menu.png)
 
-Type a Debug80 expression into the inline editor. The condition shown, `C = api_scan_segments` on the `rst 0x10` inside `scan_hello`, fires the breakpoint only when register `C` holds the segment-scan service number. The same idea lets you stop when a counter reaches zero, a pointer lands on an address, or a key value appears, instead of breaking on every pass.
+Type a Debug80 expression into the inline editor. A condition such as `C = API_SCAN_SEGMENTS` on the `RST 0x10` inside `ScanHello` fires the breakpoint only when register `C` holds the segment-scan service number. The same idea lets you stop when a counter reaches zero, a pointer lands on an address, or a key value appears, instead of breaking on every pass.
 
 ![Conditional breakpoint expression in the editor](../../assets/images/debug80-book/book1/chapter3-conditional-breakpoint-expression.png)
 
@@ -120,13 +120,13 @@ Conditional breakpoints share the expression language with the Watch panel. Appe
 
 ## Edit And Build
 
-Change something visible and watch it survive the round trip to the emulator. Edit `lcd_line1`, swapping the text between the quotes for your own:
+Change something visible and watch it survive the round trip to the emulator. Edit `LcdLine1`, swapping the text between the quotes for your own:
 
 ```asm
-lcd_line1:
+LcdLine1:
         .db     "Hello from Z80",0
 ```
 
-Save, then click **Build** in the Debug80 panel. Debug80 assembles the source, loads the new program and starts the target. The LCD shows your new message, and the `scan_hello` loop keeps the seven-segment display refreshed as before.
+Save, then click **Build** in the Debug80 panel. Debug80 assembles the source, loads the new program and starts the target. The LCD shows your new message, and the `ScanHello` loop keeps the seven-segment display refreshed as before.
 
 [← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect The Starter Target →](04-inspect-the-machine.md)

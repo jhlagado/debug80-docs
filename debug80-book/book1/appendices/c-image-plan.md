@@ -42,7 +42,7 @@ This appendix tracks this book's image set as a production checklist.
 | Image | Type | Chapter |
 |---|---|---|
 | Project section with **Stop on entry** and **Build** during a paused launch | Screenshot | Chapter 3; added as `chapter3-stop-on-entry-build-paused.png` |
-| Source editor paused at `ld sp,0x7fff` | Screenshot | Chapter 3; still useful as a tighter retake if available |
+| Source editor paused at `LD B,LCD_CLEAR` | Screenshot | Chapter 3; still useful as a tighter retake if available |
 | Breakpoint beside an instruction line | Screenshot | Chapter 3; added as `chapter3-breakpoint-scan-hello.png` |
 | **Run to Cursor** from the editor context menu | Screenshot | Chapter 3; added as `chapter3-run-to-cursor-menu.png` |
 | Breakpoint gutter menu showing **Edit Breakpoint** | Screenshot | Chapter 3; added as `chapter3-edit-breakpoint-menu.png` |
