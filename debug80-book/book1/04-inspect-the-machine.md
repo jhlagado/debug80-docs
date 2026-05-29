@@ -15,9 +15,9 @@ Paused execution gives you time to inspect a program from several angles. Start 
 
 Open the **Run and Debug** sidebar and expand **Variables**. Debug80 uses this standard VS Code panel for source-map-backed symbols and constants.
 
-After a successful build, Debug80 can show **Symbols** and **Constants** scopes. Constants show their assembled value. Memory-backed symbols show conservative raw memory information: address, first byte, a word value when the size suggests one, a short byte preview for larger data and printable ASCII where useful.
+After a successful build, Debug80 can show **Symbols** and **Constants** scopes. Constants show their assembled value. Memory-backed symbols show conservative raw memory information.
 
-In the example below, `LcdLine1` expands into the address, byte and word values, a short byte preview, printable ASCII and source location. Debug80 shows source-map-backed memory conservatively. When type or storage metadata is absent, the Variables panel shows raw memory.
+In the example below, `LcdLine1` expands into the address, byte and word values, a short byte preview, printable ASCII and source location. This is enough to check what lives at a label while staying faithful to the raw assembly data.
 
 These scopes use the source map from the last successful build. Build the target again when symbols need to be generated or refreshed.
 
@@ -27,58 +27,17 @@ These scopes use the source map from the last successful build. Build the target
 
 Open the **Watch** panel while execution is paused. Debug80 evaluates Z80-focused Watch expressions against the current CPU state, memory and source-map symbols.
 
-Start with the registers that usually matter while stepping:
-
-```asm
-PC
-SP
-C
-HL
-DE
-```
-
-Register names read the current Z80 register value. Flag names use the same spelled-out style as AZM register-care contracts, so `carry` means the carry flag and `C` means the C register.
-
-Watches can also use symbols from the active source map:
-
-```asm
-ScanHello
-LcdLine1
-SevenSegHello
-PC = ScanHello
-DE = SevenSegHello
-```
-
-A symbol by itself evaluates to its address or constant value. Build the active target again when a symbol Watch needs to be generated or refreshed.
-
-Square brackets read one byte from memory at the address inside the brackets:
-
-```asm
-[HL]
-[DE]
-[LcdLine1]
-[SevenSegHello]
-```
-
-Use Watches when you want a small set of facts to stay visible while stepping. In the example below, the watched values show the current PC, the service register, a pointer register, symbols from the source map and a byte read through `DE`. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
+Use Watches when you want a small set of facts to stay visible while stepping. The example shows direct register reads, source-map symbols, comparisons and a byte read through `DE`. A symbol by itself evaluates to its address or constant value; square brackets read one byte from memory.
 
 ![Watch panel showing Debug80 expressions](../../assets/images/debug80-book/book1/chapter4-watch-expressions.png)
+
+Build the active target again when a symbol Watch needs to be generated or refreshed. Appendix G lists the shared expression language used by Watches and conditional breakpoints.
 
 ## Call Stack Naming
 
 Open the **Call Stack** view while the program is paused. Debug80 names the current Z80 execution frame from the nearest known symbol in the source map.
 
-For a target with labels in the source map, you may see names such as:
-
-```text
-Start
-ScanHello
-ScanHello+3
-```
-
-The `+3` form means the current PC is three bytes after the named symbol. This symbolic name identifies the current execution location.
-
-Z80 programs expose execution through registers, memory and branch targets. Debug80 gives the current address a useful name when the source map contains a nearby label.
+In the screenshot, `ScanHello+3` means the current PC is three bytes after the `ScanHello` label. The following frames come from the monitor and library source. This is symbolic naming for execution locations, based on the source map.
 
 ![Call Stack with symbolic Debug80 frame names](../../assets/images/debug80-book/book1/chapter4-call-stack-symbols.png)
 
@@ -92,9 +51,7 @@ PC is the program counter. It names the next instruction address.
 
 SP is the stack pointer. It names the top of the Z80 stack.
 
-The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. The Z80 course material explains the instruction set in detail.
-
-Step a target and watch PC change. It starts at the target's load address, then moves through each instruction as the Z80 executes it.
+The register pairs AF, BC, DE, HL, IX and IY are the main working registers you will inspect while debugging Z80 programs. Step a target and watch PC change as the Z80 executes each instruction.
 
 ![Debug80 Registers section](../../assets/images/debug80-book/book1/chapter4-registers.png)
 
@@ -123,11 +80,7 @@ The memory panel refreshes when it is visible and the debug session is paused. I
 
 Use **Absolute** when the address comes from the source or hardware manual. Use a register-relative view when the address comes from the CPU state. For example, use PC to inspect instructions, SP to inspect the stack and HL when a routine uses HL as a pointer.
 
-## Connect Source To Memory
-
-When PC is at a target address, the memory view around PC shows the bytes generated for the highlighted instruction.
-
-That connection between source lines and memory addresses is what makes source-level debugging possible. The source map carries this relationship.
+When PC is at a target address, the memory view around PC shows the bytes generated for the highlighted instruction. The source map carries that relationship between source lines and memory addresses.
 
 ## The Machine Section
 
@@ -137,7 +90,7 @@ Open the **Machine** section in the Debug80 panel. You should see the LCD at the
 
 ![Machine section with LCD, seven-segment display and keypad](../../assets/images/debug80-book/book1/chapter4-machine-section.png)
 
-The Machine section is where the emulator starts to feel like the target board. A normal debugger can show variables and stack frames. Debug80 also shows the devices your Z80 program is driving.
+The Machine section shows the devices your Z80 program is driving alongside the usual debugger state.
 
 ## Panel Focus And Keypad Input
 
