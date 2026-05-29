@@ -59,7 +59,7 @@
           lastFocused.focus({ preventScroll: true });
           lastFocused = null;
         }
-        window.scrollTo(0, previousScrollY);
+        window.scrollTo({ top: previousScrollY, left: 0, behavior: 'instant' });
       }
 
       function openLightbox(img) {
