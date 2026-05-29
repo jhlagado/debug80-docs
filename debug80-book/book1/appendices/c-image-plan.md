@@ -66,8 +66,9 @@ This appendix tracks this book's image set as a production checklist.
 
 | Image | Type | Chapter |
 |---|---|---|
-| Project section close-up | Screenshot | Chapter 5 |
+| Project section close-up | Screenshot | Chapter 5; reused as `initialized-project-panel.png` |
 | Project section source-map status line | Screenshot | Chapter 5 |
+| Build folder after successful target build | Screenshot | Chapter 5; added as `chapter5-build-folder.png` |
 
 ## Source Navigation And ROM Source
 

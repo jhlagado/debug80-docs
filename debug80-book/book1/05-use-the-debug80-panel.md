@@ -19,20 +19,28 @@ The **Target** row selects the runnable program inside that folder. The selected
 
 **Stop on entry** pauses the next launch at the first instruction the Z80 executes. Use it when you want a controlled start from reset. Leave it clear when you want the target to run immediately.
 
+![Project section with target, build and source-map status](../../assets/images/debug80-book/book1/initialized-project-panel.png)
+
 ## Build Output
 
 When you click **Build**, Debug80 asks AZM to assemble the active target. AZM writes the generated files under the target's build directory.
 
-In the generated TEC-1G project, the important output is:
+In the generated TEC-1G project, the build folder contains:
 
 ```text
+build/main.bin
 build/main.hex
 build/main.d8.json
+build/main.regcare.txt
 ```
 
-The `.hex` file contains the program bytes in Intel HEX format. Debug80 loads those bytes into the emulator, and later sends the same file to a real TEC-1G through CoolTerm.
+![Build folder after a successful target build](../../assets/images/debug80-book/book1/chapter5-build-folder.png)
+
+The `.hex` file contains the program bytes in Intel HEX format. Debug80 loads those bytes into the emulator, and later sends the same file to a real TEC-1G through CoolTerm. The `.bin` file contains the same program bytes as a raw binary image.
 
 The JSON source-map file is Debug80's own mapping format. AZM generates it, and Debug80 reads it after a successful build.
+
+The `main.regcare.txt` file records register-care diagnostics from the build. It is most useful when Register Care is in **Audit** mode, because you can inspect the findings without blocking the build.
 
 ![Source through AZM to HEX and source-map output](../../assets/images/debug80-book/book1/source-azm-artifacts.svg)
 
