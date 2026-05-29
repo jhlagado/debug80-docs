@@ -22,9 +22,8 @@ This chapter covers the provider class: what state it holds, how the webview is 
 Debug80 also owns the editor-facing language contribution for Z80 assembly. In `package.json`, the extension contributes:
 
 - language id `z80-asm` for `.asm`, `.z80`, and `.asmi`
-- language id `z80-lst` for `.lst`
-- breakpoint support for common Z80 assembly language ids and listings
-- TextMate grammars at `syntaxes/z80-asm.tmLanguage.json` and `syntaxes/z80-lst.tmLanguage.json`
+- breakpoint support for common Z80 assembly language ids
+- TextMate grammar at `syntaxes/z80-asm.tmLanguage.json`
 
 The Z80 assembly grammar is deliberately lexical. It recognizes semicolon comments, AZMDoc comments, strings, labels, local labels, directives, condition-bearing control instructions, Z80 mnemonics, registers, condition codes, number formats, symbols, operators, layout types, enum/member syntax, layout casts, field declarations, `sizeof`/`offset`, and register-care contract annotations such as `in`, `out`, `clobbers`, and `preserves`.
 
@@ -435,7 +434,8 @@ type ProjectKit = {
   bundledProfile?: {
     bundleRelPath: string;         // versioned bundle dir path, e.g. 'tec1/mon1b/v1'
     romPath: string;               // workspace-relative ROM destination
-    listingPath?: string;
+    debugMapPath?: string;
+    sourcePath?: string;
     sourceRoots: string[];
   };
 };
@@ -473,8 +473,8 @@ The result is a `ScaffoldPlan` — `{ kit, targetName, sourceFile, outputDir, ar
 
 `createDefaultProjectConfig(plan)` assembles the `debug80.json` structure from the plan:
 
-- A `profiles` section with one entry (`plan.kit.profileName`) containing the platform, description, and — if the kit has a `bundledProfile` — a `bundledAssets` map with `romHex` and optionally `listing` entries (each a `BundledAssetReference`).
-- A `targets` section with one entry (`plan.targetName`) containing `sourceFile`, `outputDir`, `artifactBase`, `platform`, `profile`, and the platform-specific memory map block (`simple`, `tec1`, or `tec1g`). For kits with a `bundledProfile`, the target block also includes `romHex`, optional `extraListings`, and `sourceRoots`.
+- A `profiles` section with one entry (`plan.kit.profileName`) containing the platform, description, and — if the kit has a `bundledProfile` — a `bundledAssets` map with `romHex`, optional `debugMap`, and optional `source` entries (each a `BundledAssetReference`).
+- A `targets` section with one entry (`plan.targetName`) containing `sourceFile`, `outputDir`, `artifactBase`, `platform`, `profile`, and the platform-specific memory map block (`simple`, `tec1`, or `tec1g`). For kits with a `bundledProfile`, the target block also includes `romHex` and `sourceRoots`.
 - Top-level `projectVersion`, `projectPlatform`, `defaultProfile`, and `defaultTarget` fields.
 
 When the scaffold creates or updates project files, it also calls `ensureDebug80Gitignore()` in `src/extension/project-gitignore.ts` to create or append a standard **Debug80**-marked ignore block (see Chapter 2). The normal panel initialization path writes root `debug80.json` and does not create `.vscode/launch.json`; launch scaffolding is an explicit optional path.

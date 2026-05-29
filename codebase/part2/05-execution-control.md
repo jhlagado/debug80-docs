@@ -173,13 +173,11 @@ The two-tier structure lets breakpoints persist across multiple sessions. When t
 
 ### Verification
 
-When breakpoints are set or when a new session launches, the manager verifies pending breakpoints against the source map. The address resolution has three paths:
+When breakpoints are set or when a new session launches, the manager verifies pending breakpoints against the D8 source map. The address resolution has two paths:
 
-1. **Listing file** — if the source file is the listing file itself, `resolveListingLineAddress()` searches the listing's `lineToAddress` table. It tries the requested line, then the next line, then scans forward for the first line at or after the target. This handles blank lines and comments that have no assembly output.
+1. **Source map** — if the source file is a mapped source, `resolveSourceBreakpoint()` looks up the (file, line) pair in the `SourceMapIndex`.
 
-2. **Source map** — if the source file is a mapped source, `resolveSourceBreakpoint()` looks up the (file, line) pair in the `SourceMapIndex`.
-
-3. **Alternate path** — if the source map lookup fails, the manager tries an alternate path form. Some assembler flows generate both `program.asm` and `program.source.asm`. The user may have either one open. The manager tries both.
+2. **Alternate path** — if the source map lookup fails, the manager tries an alternate path form. Some assembler flows generate both `program.asm` and `program.source.asm`. The user may have either one open. The manager tries both.
 
 ```typescript
 private resolveAlternateSourcePath(sourcePath: string): string | undefined {
@@ -358,7 +356,7 @@ This is intentionally conservative. It is a view over the Z80 stack, not proof t
 
 2. **Address aliases** — if the direct address fails, each shadow alias is tried. A PC of 0x9042 might map to the same source line as 0x1042 if shadow RAM is active.
 
-3. **Fallback** — the listing file's `addressToLine` table provides a coarser mapping. If neither source map nor alias resolves, the listing gives a line number in the listing file itself.
+If neither source-map nor alias lookup resolves, Debug80 returns the best symbolic label it has, but it does not fall back to a listing file.
 
 The resolved source path is canonicalised before being returned — platform-specific separators and case are normalised so VS Code can match the path to an open editor.
 
@@ -446,7 +444,7 @@ The snapshot is taken exactly once — the first time the PC reaches the applica
 
 - `RuntimeControlContext` is a set of accessor functions over `SessionStateShape`. The execution functions receive it instead of the full session, keeping their dependencies minimal.
 
-- `BreakpointManager` maintains pending breakpoints by source file, active breakpoints by address, and conditional expressions by resolved address. Verification resolves source lines to Z80 addresses through the listing file or source map. Shadow aliasing on TEC-1G ensures breakpoints fire at both the primary and aliased addresses.
+- `BreakpointManager` maintains pending breakpoints by source file, active breakpoints by address, and conditional expressions by resolved address. Verification resolves source lines to Z80 addresses through the D8 source map. Shadow aliasing on TEC-1G ensures breakpoints fire at both the primary and aliased addresses.
 
 - The breakpoint-skip mechanism prevents a stopped-at-breakpoint Continue from immediately re-hitting the same address. The skip is consumed after exactly one step.
 

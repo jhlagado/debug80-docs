@@ -128,7 +128,7 @@ Debug80 has seven major subsystems. Each one owns a specific responsibility and 
 
 ### Source mapping
 
-**What it does:** Maps between source file lines, symbols and Z80 memory addresses. This is what makes breakpoints, "show me the current line", F12 / Go to Definition, hovers, workspace symbols, Variables, Watches and conditional breakpoints work. The current active-project source of truth is the D8 debug map emitted by AZM; listing-derived maps remain compatibility infrastructure.
+**What it does:** Maps between source file lines, symbols and Z80 memory addresses. This is what makes breakpoints, "show me the current line", F12 / Go to Definition, hovers, workspace symbols, Variables, Watches and conditional breakpoints work. The current active-project source of truth is the D8 debug map emitted by AZM.
 
 **Where it lives:** `src/mapping/`
 
@@ -252,7 +252,7 @@ This runs the full test suite via vitest. Tests cover:
 - Z80 instruction decoding and execution (`tests/z80/`)
 - Debug adapter request handling (`tests/debug/`)
 - Platform state management (`tests/platforms/`)
-- Source mapping and listing parsing (`tests/mapping/`)
+- Source mapping and D8 import (`tests/mapping/`)
 - Extension command and provider logic (`tests/extension/`)
 - Webview message handling (`tests/webview/`)
 
@@ -272,7 +272,7 @@ debug80/
 │   ├── extension/       Extension host code (commands, providers, lifecycle)
 │   ├── debug/           Debug adapter (DAP, launch, execution, inspection)
 │   ├── z80/             Z80 CPU emulator (decode, execute, memory)
-│   ├── mapping/         Source mapping (listings, D8 debug maps, symbols)
+│   ├── mapping/         Source mapping (D8 debug maps, symbols)
 │   ├── platforms/       Platform runtimes (simple, tec1, tec1g)
 │   └── util/            Shared utilities (logging)
 ├── webview/

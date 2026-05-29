@@ -264,28 +264,9 @@ Intel HEX is a line-oriented format. Each line starts with `:`, followed by:
 
 The parser scans each line, decodes the fields, and writes data bytes into a 64KB memory array at the specified addresses. It tracks `startAddress` (the lowest written address) and `writeRanges` (contiguous written regions). The write ranges are used by the platform memory builders to distinguish program code from empty memory.
 
-### Listing parser
+### Source maps
 
-`parseListing()` reads an assembler listing file and returns a `ListingInfo`:
-
-```typescript
-interface ListingInfo {
-  entries: Array<{ line: number; address: number; length: number }>;
-  lineToAddress: Map<number, number>;
-  addressToLine: Map<number, number>;
-}
-```
-
-The listing format has one line per assembly statement:
-
-```
-0000  3E 42        LD A,42h
-0003  06 10        LD B,10h
-```
-
-The parser reads the address and byte count from each line and builds the two maps. `lineToAddress` maps source line numbers to Z80 addresses — used by the breakpoint manager to verify breakpoints. `addressToLine` maps addresses to source lines — used by the stack trace builder to resolve a PC to a source location.
-
-The parser skips lines that do not have at least one hex byte — directives, comments, blank lines — so that the maps only contain executable addresses.
+The runtime loader does not parse assembler listings. Source locations, symbols, breakpoint addresses and stack-frame labels come from the D8 source map emitted by AZM and imported by the source-mapping layer.
 
 ---
 

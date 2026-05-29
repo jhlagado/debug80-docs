@@ -11,13 +11,13 @@ nav_order: 1
 
 Source mapping is the bridge between the Z80 program counter and the file open in VS Code. When execution stops at an address, Debug80 asks the mapping index for a source location. When the user sets a breakpoint, Debug80 asks the same index which address belongs to that source line.
 
-The core mapping types live in `src/mapping/parser.ts`, `src/mapping/source-map.ts`, and `src/mapping/d8-map.ts`.
+The core mapping types live in `src/mapping/types.ts`, `src/mapping/source-map.ts`, and `src/mapping/d8-map.ts`.
 
 ---
 
-## Listing Parse Result
+## Runtime Mapping Result
 
-The listing parser returns a `MappingParseResult`:
+The D8 loader returns a `MappingParseResult`:
 
 ```typescript
 interface MappingParseResult {
@@ -26,9 +26,7 @@ interface MappingParseResult {
 }
 ```
 
-The parser does not keep a separate listing metadata object. Listing file path, source-root resolution, extra listings, and D8 map decisions are handled by the debug-layer mapping service in `src/debug/mapping/mapping-service.ts` and `src/debug/mapping/source-manager.ts`.
-
-This listing-derived path is now legacy support. Active AZM targets are expected to produce a native D8 map beside the build artifact, and most modern debugger features use that map directly.
+`MappingParseResult` is now an internal runtime shape, not evidence that Debug80 still parses `.lst` files. AZM emits the native D8 map, `buildMappingFromD8DebugMap()` converts that D8 map into `segments` and `anchors`, and `src/debug/mapping/source-manager.ts` builds the indexed runtime state from it.
 
 ---
 
@@ -45,8 +43,8 @@ interface SourceMapSegment {
     line: number | null;  // 1-based source line, if known
   };
   lst: {
-    line: number;         // 1-based listing line
-    text: string;         // Assembly text captured from the listing
+    line: number;         // Assembler source-context line
+    text: string;         // Assembler source-context text
   };
   confidence: 'HIGH' | 'MEDIUM' | 'LOW';
 }
@@ -54,16 +52,16 @@ interface SourceMapSegment {
 
 `start` and `end` use JavaScript slice-style ranges: `start` is included, `end` is excluded. A normal three-byte instruction at `0x0800` has `start: 0x0800` and `end: 0x0803`.
 
-Some listing rows produce zero-width segments where `start === end`. Those rows can still provide useful source context for stack display or symbol lookup, but `resolveExecutableLocation()` filters them out when binding breakpoints.
+Some D8 segments are zero-width where `start === end`. Those segments can still provide useful source context for stack display or symbol lookup, but `resolveExecutableLocation()` filters them out when binding breakpoints.
 
-`loc.file` and `loc.line` may be `null`. That happens when the listing has no usable symbol anchor yet, a source path cannot be resolved, or a D8 segment intentionally carries no source line.
+`loc.file` and `loc.line` may be `null`. That happens when a source path cannot be resolved or a D8 segment intentionally carries no source line.
 
 ### Confidence
 
 | Value | Meaning |
 |---|---|
-| `HIGH` | The segment is tied to a symbol anchor or native D8 data with high confidence. |
-| `MEDIUM` | The segment was inferred between known anchors or came from duplicate-address conditions. |
+| `HIGH` | The segment is tied to native D8 data with high confidence. |
+| `MEDIUM` | The segment is usable but less exact, for example duplicate-address conditions. |
 | `LOW` | The segment has weak or missing source attribution. |
 
 The current address lookup prefers the narrowest segment with a valid source line. It does not sort by confidence at lookup time. Confidence still matters for diagnostics and for understanding why a map may be approximate.
@@ -72,13 +70,7 @@ The current address lookup prefers the narrowest segment with a valid source lin
 
 ## SourceMapAnchor
 
-Anchors come from asm80-style symbol table lines, not from file/line comments in the listing body. The parser recognizes lines shaped like:
-
-```text
-SYMBOL: 0800 DEFINED AT LINE 42 IN src/main.asm
-```
-
-Each match becomes:
+Anchors come from D8 `symbols` entries. Each symbol with an address and source line becomes:
 
 ```typescript
 interface SourceMapAnchor {
@@ -89,9 +81,9 @@ interface SourceMapAnchor {
 }
 ```
 
-Anchors give the mapper a known file and source line for a specific address. During `attachAnchors()`, each segment at an anchor address receives that exact source location. Later segments inherit the most recent current file and advance line numbers by listing-line distance.
+Anchors give Debug80 a known file and source line for a specific address. They power nearest-symbol lookup, stack-frame names, Go to Definition, workspace symbols, hovers, Variables, Watch expressions and conditional breakpoint symbol resolution.
 
-Duplicate anchor addresses lower confidence because several symbols point at the same address. `USED AT LINE` symbol-table rows are ignored; Debug80 only treats definitions as anchors.
+Duplicate anchor addresses are allowed because labels, constants and data symbols can share an address.
 
 ---
 
@@ -107,7 +99,7 @@ interface SourceMapIndex {
 }
 ```
 
-`segmentsByAddress` is sorted by `start`, then listing line. Address lookup scans this ordered array until the requested address is before the next segment.
+`segmentsByAddress` is sorted by `start`, then the D8 source-context line. Address lookup scans this ordered array until the requested address is before the next segment.
 
 `segmentsByFileLine` groups segments by normalized absolute file path and 1-based source line. Only segments with a resolved file and line are indexed here. Each line list is sorted by address.
 
@@ -191,15 +183,9 @@ Symbols with a source line become `SourceMapAnchor` entries during D8 import.
 
 Debug80 now treats the build-side native D8 map as the authoritative source map for active project targets. AZM emits this map directly, so Debug80 should not need to reconstruct project source maps from listing text during normal use.
 
-`buildMappingFromListing()` still prefers sidecar native maps before listing-derived compatibility work. Candidate paths are:
+`buildMappingFromDebugMap()` resolves `<artifactBase>.d8.json` beside the selected target's build artifact. Native maps are not rejected just because a source file appears newer; stale checks are advisory UI signals rather than alternate mapping paths.
 
-1. `<listing basename>.d8.json` beside the listing.
-
-Native maps win over listing-derived fallback data and are not rejected because the listing is newer. Active project maps are expected at the build-side `<artifactBase>.d8.json` path emitted by AZM.
-
-If no usable map exists, compatibility code can still parse the listing and apply Layer 2 refinement to build an in-memory mapping for the session. Debug80 no longer writes that generated mapping to a project-local `.debug80/cache` path.
-
-The architectural direction is to remove listing-derived active-project mapping once AZM-only assumptions are fully settled. The remaining listing path is still relevant for ROM/extra-listing support and for compatibility with older artifacts.
+If no usable map exists, Debug80 returns an empty mapping and logs a build-required message. It does not parse `.lst` files, generate compatibility maps, or write project-local `.debug80/cache` files.
 
 ---
 
@@ -210,8 +196,8 @@ The architectural direction is to remove listing-derived active-project mapping 
 - `SourceMapIndex` has three lookup structures: by address, by file/line, and by file anchors.
 - D8 v1 requires `format`, `version`, `arch`, `addressWidth`, `endianness`, and grouped `files`.
 - D8 segments use `start` and exclusive `end`, matching runtime `SourceMapSegment` ranges.
-- Native D8 maps are preferred over listing-derived compatibility maps and are the source of truth for active AZM targets.
-- Listing-derived maps remain legacy/compatibility infrastructure and should continue shrinking as AZM metadata covers more debugger needs.
+- Native D8 maps are the source of truth for active AZM targets.
+- Listing-derived maps and ASM80 parser compatibility have been removed from the active Debug80 codebase.
 
 ---
 

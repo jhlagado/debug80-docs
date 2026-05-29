@@ -154,7 +154,6 @@ export function createMyplatformPlatformProvider(
   return {
     id: 'myplatform',
     payload: { id: 'myplatform' },
-    extraListings: [],
     runtimeOptions: { romRanges: config.romRanges },
 
     registerCommands(registry, context) {
@@ -283,7 +282,7 @@ The `src/platforms/tec-common/` package provides utilities shared by TEC-1 and T
 
 ## Summary
 
-- A platform is a `ResolvedPlatformProvider` with six required fields: `id`, `payload`, `extraListings`, `runtimeOptions`, `registerCommands`, `buildIoHandlers`, and `resolveEntry`. `finalizeRuntime` is optional.
+- A platform is a `ResolvedPlatformProvider` with required fields such as `id`, `payload`, `runtimeOptions`, `registerCommands`, `buildIoHandlers`, and `resolveEntry`. `finalizeRuntime` is optional.
 - Config is defined in two shapes: raw (all optional, from `debug80.json`) and normalised (all required, with defaults applied). The normalised form derives `romRanges` from regions marked `kind: 'rom'`.
 - I/O handlers implement `ioRead`/`ioWrite` callbacks. Hardware state is private to the platform; the only output channel is `callbacks.onMyplatformUpdate()`.
 - Register the platform in `manifest.ts` with a dynamic import so it is loaded only when needed.

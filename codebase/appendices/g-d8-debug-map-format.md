@@ -19,14 +19,14 @@ D8 is not tied to AZM syntax. AZM is one producer. Debug80 is one consumer. Othe
 
 ## File Name
 
-A native D8 map should be written beside the primary build artifact, or beside the compatibility listing path, with the same base name and the suffix `.d8.json`:
+A native D8 map should be written beside the primary build artifact with the same base name and the suffix `.d8.json`:
 
 ```text
-build/main.lst
+build/main.hex
 build/main.d8.json
 ```
 
-Debug80 treats the native sidecar map as the authoritative source map for active AZM targets. Listing-only source mapping remains a compatibility fallback for older artifacts and ROM/extra-listing workflows, but Debug80 no longer writes generated maps to a project-local `.debug80/cache` path.
+Debug80 treats the native sidecar map as the authoritative source map for active AZM targets. Debug80 no longer writes generated maps to a project-local `.debug80/cache` path and does not fall back to parsing listing files during active launches.
 
 ---
 
@@ -305,8 +305,8 @@ Keep unknown future data additive. Producers may include extra fields, but requi
 
 ## Debug80 Consumer Behavior
 
-Debug80 parses and validates D8 maps before importing them. Invalid JSON or schema-level failure makes Debug80 fall back to listing-derived mapping. Segment quality warnings do not necessarily abort launch.
+Debug80 parses and validates D8 maps before importing them. Invalid JSON or schema-level failure disables source-map-backed features until the target is built again. Segment quality warnings do not necessarily abort launch.
 
-Native sidecar maps are preferred over listing-derived compatibility maps. If no usable D8 map exists, older compatibility paths can parse a listing and build an in-memory mapping for the session. For current AZM targets, the expected fix for a missing source map is to build the target again.
+If no usable D8 map exists, the expected fix is to build the target again with AZM so a fresh source map is emitted beside the HEX artifact.
 
 For breakpoint binding, Debug80 uses executable segments. Labels, constants, and directive-only rows may still help stack display or symbol lookup, but zero-width or non-executable mappings should not become active breakpoint addresses.

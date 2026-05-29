@@ -23,7 +23,7 @@ These commands are handled by `AdapterRequestController` regardless of platform.
 |---------|------|---------------|-------------|
 | `debug80/terminalInput` | `{ text: string }` | — | Sends text to the terminal emulator |
 | `debug80/terminalBreak` | — | — | Signals BREAK (Ctrl+C) to the terminal |
-| `debug80/romSources` | — | `{ sources: RomSourceEntry[] }` | Returns available ROM/listing sources for the project header |
+| `debug80/romSources` | — | `{ sources: RomSourceEntry[] }` | Returns available ROM/source-map sources for the project header |
 | `debug80/rebuildWarm` | — | `{ ok: boolean; summary: string; detail?: string; rebuiltPath?: string; location?: RebuildIssueLocation }` | Reassembles and hot-reloads the program without restarting the session |
 | `debug80/runToStackFrame` | `{ frameId: number }` | — | Runs to a selected mapped stack-return frame from the Call Stack context menu |
 | `debug80/memorySnapshot` | see below | see below | Returns memory/register/symbol data for the webview memory inspectors |

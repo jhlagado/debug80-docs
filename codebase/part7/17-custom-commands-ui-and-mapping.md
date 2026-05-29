@@ -251,60 +251,11 @@ The `acquireVsCodeApi()` bridge, session status controller, and project header r
 
 ## Extending the source mapper
 
-Most platforms can use the existing mapper without modification. Current Debug80 projects should prefer an assembler that emits native D8 JSON. Parser work should be treated as a compatibility path for legacy listings or for importing monitor/ROM artifacts that cannot yet produce D8 directly.
-
-### Adding a listing format variant
-
-`parseMapping()` in `src/mapping/parser.ts` recognises the legacy asm80-style listing format. If you must support another legacy listing format, add a parallel parser function:
-
-```typescript
-export function parseMyassemblerListing(
-  listingContent: string
-): MappingParseResult {
-  // Parse your listing format
-  // Return the same MappingParseResult shape
-  const segments: SourceMapSegment[] = [];
-  const anchors: SourceMapAnchor[] = [];
-
-  for (const [lineIndex, line] of listingContent.split('\n').entries()) {
-    const match = MY_LISTING_REGEX.exec(line);
-    if (!match) continue;
-
-    const address = parseInt(match[1], 16);
-    const byteCount = parseBytes(match[2]).length;
-    segments.push({
-      start: address,
-      end: address + byteCount,
-      loc: { file: null, line: null },
-      lst: { line: lineIndex + 1, text: line },
-      confidence: 'MEDIUM',
-    });
-  }
-
-  return { segments, anchors };
-}
-```
-
-Call `buildSourceMapIndex()` on the result as normal. Layer 2 and the index structure are format-agnostic once the custom parser produces `SourceMapSegment` and `SourceMapAnchor` records in the current shape.
-
-### Plugging in a custom parser
-
-`SourceManager.buildState()` in `src/debug/mapping/source-manager.ts` is where source-state construction is orchestrated, but the parser call currently sits inside `buildMappingFromListing()` in `src/debug/mapping/mapping-service.ts`. Debug80 does not currently expose a parser plug-in option. To add one, thread a parser callback through `SourceManager.buildState()` and into `buildMappingFromListing()`:
-
-```typescript
-buildState({
-  listingContent,
-  listingPath,
-  parser: parseMyassemblerListing,   // Override the default
-  // ...
-})
-```
-
-The current parser entry point is `parseMapping(content: string): MappingParseResult`, so a custom parser should return the same `segments` and `anchors` shape.
+Most platforms can use the existing mapper without modification. Current Debug80 projects use AZM's native D8 JSON output; platform work should normally focus on correct ROM loading, source roots, and bundled source-map assets rather than parser variants.
 
 ### Providing a custom D8 map
 
-If your assembler can emit symbol and mapping data in a structured format, the cleanest path is to write a converter that produces a `D8DebugMap` JSON file. The mapper's D8 path is already optimised for HIGH-confidence data and validates input thoroughly. Writing a `myassembler-to-d8.ts` converter is far less work than extending the mapper itself.
+If a future assembler or monitor build system needs to feed source information into Debug80, the clean path is to emit a `D8DebugMap` JSON file. The mapper's D8 path is already optimised for HIGH-confidence data and validates input thoroughly.
 
 The `D8DebugMap` format is documented in [Appendix G — D8 Debug Map Format](../appendices/g-d8-debug-map-format.md). The minimum viable D8 file is:
 
@@ -329,7 +280,7 @@ The `D8DebugMap` format is documented in [Appendix G — D8 Debug Map Format](..
 }
 ```
 
-Place it beside the primary build artifact or the compatibility listing path as `<basename>.d8.json`; for example, `build/main.d8.json` beside `build/main.hex`. `SourceManager` will pick up the native D8 map automatically over listing-derived compatibility paths.
+Place it beside the primary build artifact as `<basename>.d8.json`; for example, `build/main.d8.json` beside `build/main.hex`. `SourceManager` will pick up the native D8 map automatically.
 
 ---
 
@@ -338,7 +289,7 @@ Place it beside the primary build artifact or the compatibility listing path as 
 - Custom DAP commands are registered in `registerCommands` via `registry.register({ id, commands })`. Name them `debug80/{platformId}{Verb}`. Handlers receive the raw response object and must call `sendResponse` or `sendErrorResponse` exactly once.
 - A sidebar UI panel requires six files: three on the extension host side (html, state, messages) and three on the webview side (index.html, index.ts, styles.css). Register the panel in `extension.ts` by adding a `PlatformUiEntry` to the UI registry.
 - The extension host side holds all hardware display state as a plain object. On every hardware update, `buildUpdateMessage` serialises it into a `postMessage` payload. On sidebar hide/show, `renderCurrentView` rehydrates the webview from the buffered state.
-- To extend the source mapper for a non-standard listing format, write a parallel parser that returns `MappingParseResult`, then add an explicit parser hook through `SourceManager.buildState()` and `buildMappingFromListing()`. Alternatively, write a converter to D8 JSON — the D8 path is already high-confidence and fully integrated.
+- To extend source mapping, emit or convert to D8 JSON. The legacy listing-parser path has been removed from the active Debug80 architecture.
 
 ---
 

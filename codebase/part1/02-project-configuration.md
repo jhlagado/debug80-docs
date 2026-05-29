@@ -46,13 +46,12 @@ interface ProjectConfig {
     Partial<LaunchRequestArguments> & { source?: string; profile?: string }
   >;
 
-  // Legacy / root-level defaults still supported
+  // Root-level defaults still supported
   asm?: string;
   sourceFile?: string;
   source?: string;
   assembler?: string;
   hex?: string;
-  listing?: string;
   outputDir?: string;
   artifactBase?: string;
   entry?: number;
@@ -77,7 +76,7 @@ The current scaffolding path writes a **version 2** manifest. The important addi
 - `projectPlatform` records the project's baseline platform identity
 - `profiles` define reusable platform-and-bundle baselines
 - `defaultProfile` selects the profile used when a target does not override it
-- `bundledAssets` and profile-level `bundledAssets` can point at extension-shipped ROM/listing/source bundles
+- `bundledAssets` and profile-level `bundledAssets` can point at extension-shipped ROM, D8 source-map, and source bundles
 
 In practice, the v2 manifest lets the scaffolder create monitor-first projects without hard-coding absolute paths into the starter config. Instead, the config can describe a bundled asset reference and the launch resolver can fall back to the extension-bundled file when the workspace copy is absent.
 
@@ -93,7 +92,7 @@ interface BundledAssetReference {
 }
 ```
 
-Bundled assets are used mainly for monitor ROMs, listings, and ROM source files. The current project kits use them to seed:
+Bundled assets are used mainly for monitor ROMs, D8 source maps, and ROM source files. The current project kits use them to seed:
 
 - `TEC-1 / MON-1B`
 - `TEC-1G / MON-3`
@@ -299,7 +298,6 @@ interface SimplePlatformConfig {
   entry?: number;                   // Execution entry point
   binFrom?: number;                 // Binary export range (optional)
   binTo?: number;
-  extraListings?: string[];         // Additional listing files for symbols
 }
 
 interface SimpleMemoryRegion {
@@ -322,7 +320,6 @@ interface Tec1PlatformConfig {
   regions?: SimpleMemoryRegion[];
   appStart?: number;
   entry?: number;
-  extraListings?: string[];
 
   // TEC-1 specific
   romHex?: string;          // Path to monitor ROM image
@@ -413,11 +410,6 @@ The generated config now depends on the selected **project kit**. The common sha
           "bundleId": "tec1g/mon3/v1",
           "path": "mon3.bin",
           "destination": "roms/tec1g/mon3/mon3.bin"
-        },
-        "listing": {
-          "bundleId": "tec1g/mon3/v1",
-          "path": "mon3.lst",
-          "destination": "roms/tec1g/mon3/mon3.lst"
         }
       }
     }
@@ -438,7 +430,6 @@ The generated config now depends on the selected **project kit**. The common sha
         "appStart": 16384,
         "entry": 0,
         "romHex": "roms/tec1g/mon3/mon3.bin",
-        "extraListings": ["roms/tec1g/mon3/mon3.lst"],
         "sourceRoots": ["src", "roms/tec1g/mon3"]
       }
     }
@@ -453,7 +444,6 @@ For `simple/default` and `tec1/mon1b` the same structure is used, but with the k
 When a source file is selected or changed, the system infers the assembler from the file extension:
 
 - `.asm`, `.z80`, and `.inc` → use AZM
-- An explicit `assembler: "asm80"` is accepted as a compatibility alias, but it is not the current backend.
 
 Target discovery is independent of a mandatory `src/` folder. Debug80 looks for entry points by convention: files named exactly `main.asm`, files ending in `.z80`, and files ending in `.main.asm`. The exact `main.asm` case matters because the project scaffolder creates `src/main.asm`; ordinary helper `.asm` files are still left out of automatic target discovery unless they are selected explicitly with **Debug80: Set Program File**.
 
@@ -469,7 +459,7 @@ The provider intercepts the launch flow at two points:
 
 **Before variable substitution** (`resolveDebugConfiguration`):
 - If the user presses F5 with no `launch.json`, the provider creates a default config
-- If the config has no explicit source/hex/listing paths, it locates root `debug80.json` and injects `projectConfig` into the launch arguments
+- If the config has no explicit source or HEX paths, it locates root `debug80.json` and injects `projectConfig` into the launch arguments
 - If no project config exists, it offers to create one
 
 **After variable substitution** (`resolveDebugConfigurationWithSubstitutedVariables`):

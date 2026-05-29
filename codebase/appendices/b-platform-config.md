@@ -20,11 +20,10 @@ Project configuration lives in `debug80.json` at the workspace folder root. Top-
 | `platform` | `string` | `'simple'` | Platform to emulate: `'simple'`, `'tec1'`, or `'tec1g'` |
 | `asm` | `string` | — | Path to the main Z80 assembly source file |
 | `sourceFile` | `string` | — | Alias for `asm` |
-| `assembler` | `string` | inferred | Assembler backend identifier. AZM is the current backend; `asm80` is accepted as a compatibility alias. |
+| `assembler` | `string` | inferred | Assembler backend identifier. AZM is the supported backend. |
 | `hex` | `string` | derived | Path to the output Intel HEX file; derived from `asm` if omitted |
-| `listing` | `string` | derived | Legacy listing/source-map handle; AZM targets should use the native `.d8.json` map |
 | `outputDir` | `string` | asm dir | Directory for build artifacts |
-| `artifactBase` | `string` | asm filename | Base name for generated artifacts such as `.hex`, `.d8.json`, and the compatibility `.lst` handle |
+| `artifactBase` | `string` | asm filename | Base name for generated artifacts such as `.hex`, `.bin`, `.d8.json`, and AZM reports |
 | `entry` | `number` | platform default | CPU entry address; overrides the platform block's `entry` |
 | `stopOnEntry` | `boolean` | `true` in raw launch schema; panel toggle defaults off | Pause at the entry point before executing |
 | `projectConfig` | `string` | — | Explicit path to a Debug80 project config, normally root `debug80.json` |
@@ -63,7 +62,6 @@ Config block key: `simple`
 | `appStart` | `number` | `0x0900` | Application start address (used by assembler directives) |
 | `binFrom` | `number` | — | Start address for binary output |
 | `binTo` | `number` | — | End address for binary output |
-| `extraListings` | `string[]` | — | Additional listing files for symbol resolution |
 
 ---
 
@@ -80,7 +78,6 @@ Config block key: `tec1`
 | `ramInitHex` | `string` | — | Path to a HEX file loaded into RAM at startup |
 | `updateMs` | `number` | `16` | UI refresh interval in milliseconds |
 | `yieldMs` | `number` | `0` | Yield to the event loop every N ms; `0` = no yield |
-| `extraListings` | `string[]` | — | Additional listing files |
 
 ---
 
@@ -106,7 +103,6 @@ Config block key: `tec1g`
 | `sdImagePath` | `string` | — | Path to the SD card image file |
 | `sdHighCapacity` | `boolean` | `true` | SD card operates in SDHC mode |
 | `gimpSignal` | `boolean` | `false` | Enable GIMP signal simulation for hardware diagnostics |
-| `extraListings` | `string[]` | — | Additional listing files |
 | `uiVisibility` | `object` | all visible | Legacy per-panel visibility flags retained for old configs; the current TEC-1G UI keeps core hardware sections visible and uses accordions |
 
 ---

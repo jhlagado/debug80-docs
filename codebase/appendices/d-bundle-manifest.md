@@ -9,7 +9,7 @@ nav_order: 4
 
 # Appendix D — ROM Bundle Infrastructure
 
-The Debug80 extension ships ROM firmware, listing files, and related assets for supported platforms directly inside the VSIX package. These assets are called **ROM bundles**. A monitor-backed project records stable workspace-relative ROM/listing paths and profile-level `bundledAssets` references in `debug80.json`. At launch, missing workspace files resolve to the copy inside the extension bundle. The explicit bundled-assets command can copy those files into the workspace when the user wants local files to inspect or override.
+The Debug80 extension ships ROM firmware, D8 source maps, and related assets for supported platforms directly inside the VSIX package. These assets are called **ROM bundles**. A monitor-backed project records stable workspace-relative ROM/source-map paths and profile-level `bundledAssets` references in `debug80.json`. At launch, missing workspace files resolve to the copy inside the extension bundle. The explicit bundled-assets command can copy those files into the workspace when the user wants local files to inspect or override.
 
 This appendix covers the bundle manifest schema, the materialization functions, the resource directory layout, and how bundles are wired into the project-kit scaffolding and command flows.
 
@@ -17,7 +17,7 @@ This appendix covers the bundle manifest schema, the materialization functions, 
 
 ## Why bundles?
 
-Shipping firmware inside the extension means users get a working TEC-1G project immediately, without needing to source a ROM image separately. The bundle approach also allows the extension to verify file integrity via SHA-256 checksums, and to map files to named roles (ROM, listing, source tree) rather than relying on naming conventions.
+Shipping firmware inside the extension means users get a working TEC-1G project immediately, without needing to source a ROM image separately. The bundle approach also allows the extension to verify file integrity via SHA-256 checksums, and to map files to named roles (ROM, debug map, source tree) rather than relying on naming conventions.
 
 ---
 
@@ -33,14 +33,13 @@ resources/
         v1/
           bundle.json      Manifest (schema version, file list, workspace layout)
           mon-1b.bin       ROM binary image
-          mon-1b.lst       Assembler listing (symbols and source map)
           mon-1b.asm       ROM source
     tec1g/
       mon3/
         v1/
           bundle.json      Manifest (schema version, file list, workspace layout)
           mon3.bin         ROM binary image
-          mon3.lst         Assembler listing (symbols and source map)
+          mon3.d8.json     D8 source map (symbols and source map)
           *.z80            ROM source modules
           README.md        Human-readable notes about the firmware version
 ```
@@ -70,7 +69,7 @@ interface BundleManifestV1 {
 }
 
 interface BundleFileEntry {
-  role: 'rom' | 'listing' | 'source' | 'source_tree';
+  role: 'rom' | 'debug_map' | 'source' | 'source_tree';
   path: string;               // Path relative to the bundle root directory
   sha256?: string;            // Optional SHA-256 hex for integrity verification
 }
@@ -96,9 +95,9 @@ The MON3 v1 `bundle.json`:
       "sha256": "754555aa4029fc496352fbb4a7de91e67c7c7e58de76c7dc5fba2e85e4705401"
     },
     {
-      "role": "listing",
-      "path": "mon3.lst",
-      "sha256": "f6f5032cc16dceed7e921efe863371d8f2773465860bd518c9d998d83a5b67bb"
+      "role": "debug_map",
+      "path": "mon3.d8.json",
+      "sha256": "a3d164350710285c4dac05c193f07eeff4ba64c548ad36ae9626b29d453e1380"
     },
     {
       "role": "source",
@@ -126,11 +125,6 @@ The MON-1B v1 `bundle.json`:
       "role": "rom",
       "path": "mon-1b.bin",
       "sha256": "f3e39203ecf134c737e307a5f7ef82f3c4b62b979da0fb883b56b632ab3b1596"
-    },
-    {
-      "role": "listing",
-      "path": "mon-1b.lst",
-      "sha256": "76bd761d226911b5aa0f53b7f0a4253a40e2d68154146c1506bf07ae7380ad89"
     },
     {
       "role": "source",
@@ -171,13 +165,13 @@ function materializeBundledAsset(
 2. Locates the matching entry in `manifest.files` by `path`.
 3. Resolves the destination — using `reference.destination` if set, otherwise falling back to `manifest.workspaceLayout.destination/<basename>`.
 4. Validates the destination is workspace-relative and does not escape the workspace root.
-5. Verifies the source file's SHA-256 (with CRLF normalization for `listing` role files).
+5. Verifies the source file's SHA-256.
 6. Copies the file unless it already exists and `overwrite` is false.
 7. Returns `{ ok: true, destinationRelative, materializedRelativePath }` on success.
 
 ### `materializeBundledRom()` — whole-bundle copy
 
-This function copies *all* files in a bundle into the destination directory declared by the manifest. It is available for whole-bundle installation workflows when the workspace needs local copies of ROM, listing, and source files:
+This function copies *all* files in a bundle into the destination directory declared by the manifest. It is available for whole-bundle installation workflows when the workspace needs local copies of ROM, D8 source-map, and source files:
 
 ```typescript
 function materializeBundledRom(
@@ -197,9 +191,9 @@ function materializeBundledRom(
    - If `sha256` is specified, compute the SHA-256 of the source file and compare. Return `{ ok: false }` on mismatch.
    - If the destination file already exists and `overwrite` is not true, skip the copy (but still record the path).
    - Otherwise copy with `fs.copyFileSync()`.
-4. Return `{ ok: true, destinationRelative, romRelativePath, listingRelativePath? }`.
+4. Return `{ ok: true, destinationRelative, romRelativePath, debugMapRelativePath? }`.
 
-On success, `romRelativePath` and `listingRelativePath` are workspace-relative paths (using `/` separators) that can be written directly into `debug80.json` as `romHex` and `extraListings` entries.
+On success, `romRelativePath` and `debugMapRelativePath` are workspace-relative paths (using `/` separators) that can be written directly into `debug80.json` as ROM and source-map bundle references.
 
 The `overwrite: false` default means subsequent calls on the same workspace are idempotent — files already present are not clobbered, but their paths are still resolved and returned.
 
@@ -215,7 +209,7 @@ Bundle metadata is embedded in `ProjectKit.bundledProfile` (defined in `src/exte
 bundledProfile: {
   bundleRelPath: string;   // versioned bundle dir path, e.g. 'tec1/mon1b/v1'
   romPath: string;         // workspace-relative destination, e.g. 'roms/tec1/mon1b/mon-1b.bin'
-  listingPath?: string;    // e.g. 'roms/tec1/mon1b/mon-1b.lst'
+  debugMapPath?: string;   // e.g. 'roms/tec1g/mon3/mon3.d8.json'
   sourceRoots: string[];   // source root directories for the debug adapter
 }
 ```
@@ -241,7 +235,7 @@ The `debug80.materializeBundledRom` VS Code command (registered in `src/extensio
 4. Asks whether to overwrite existing files or skip them.
 5. Reports success or failure via `vscode.window.showInformationMessage()`.
 
-This is useful if a user wants local ROM/listing files for inspection or replacement. Normal launch does not require this step.
+This is useful if a user wants local ROM/source-map files for inspection or replacement. Normal launch does not require this step.
 
 ---
 
@@ -269,8 +263,8 @@ The manifest validator (`isBundleManifestV1`) checks `schemaVersion === 1`. Futu
 | `src/extension/project-scaffolding.ts` | `createDefaultProjectConfig()` writes `bundledAssets` into profile from kit metadata |
 | `src/extension/commands.ts` | Registers `debug80.materializeBundledRom` command (thin shell; logic delegated to `bundle-asset-installer.ts`) |
 | `src/extension/bundle-asset-installer.ts` | `buildBundledAssetFallbackPlans()` and bundled asset install plan logic for the explicit install command |
-| `resources/bundles/tec1/mon1b/v1/` | Shipped MON-1B bundle: `bundle.json`, `mon-1b.bin`, `mon-1b.lst`, `mon-1b.asm` |
-| `resources/bundles/tec1g/mon3/v1/` | Shipped MON3 bundle: `bundle.json`, `mon3.bin`, `mon3.lst`, MON3 `.z80` source modules |
+| `resources/bundles/tec1/mon1b/v1/` | Shipped MON-1B bundle: `bundle.json`, `mon-1b.bin`, `mon-1b.asm` |
+| `resources/bundles/tec1g/mon3/v1/` | Shipped MON3 bundle: `bundle.json`, `mon3.bin`, `mon3.d8.json`, MON3 `.z80` source modules |
 | `tests/extension/bundle-materialize.test.ts` | Unit tests for `materializeBundledRom()` and checksum mismatch handling |
 
 ---

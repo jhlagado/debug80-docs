@@ -26,7 +26,6 @@ interface SimplePlatformConfig {
   entry?: number;
   binFrom?: number;
   binTo?: number;
-  extraListings?: string[];
 }
 ```
 
@@ -64,20 +63,11 @@ The simple platform registers no custom platform commands in the `PlatformRegist
 
 ---
 
-## Extra listings
-
-The `extraListings` field accepts additional assembly listing file paths to include in source mapping. This is how a project that links against a library can make the library's source visible to the debugger — by including the library's listing alongside the main program listing.
-
-Extra listings are resolved during the launch pipeline and added to the source manager. The breakpoint manager and stack trace builder can then resolve addresses from any of the listed source files.
-
----
-
 ## Provider
 
 `createSimplePlatformProvider()` in `src/platforms/simple/provider.ts` constructs the `ResolvedPlatformProvider`:
 
 - `id`: `'simple'`
-- `extraListings`: Resolved from `simpleConfig.extraListings`
 - `runtimeOptions`: ROM ranges derived from the configured regions
 - `registerCommands`: No-op
 - `buildIoHandlers`: Delegates to the shared platform I/O builder with terminal callbacks

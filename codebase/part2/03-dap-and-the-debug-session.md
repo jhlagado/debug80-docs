@@ -206,8 +206,6 @@ interface SessionStateShape {
   runtime: Z80Runtime | undefined;
 
   // Source mapping
-  listing: ListingInfo | undefined;
-  listingPath: string | undefined;
   mapping: MappingParseResult | undefined;
   mappingIndex: SourceMapIndex | undefined;
   symbolAnchors: SourceMapAnchor[];
@@ -231,7 +229,6 @@ interface SessionStateShape {
 
   // Configuration
   launchArgs: LaunchRequestArguments | undefined;
-  extraListingPaths: string[];
 
   // Execution control
   runState: RunState;
@@ -242,7 +239,7 @@ The fields group into five categories:
 
 **The Z80 emulator.** The `runtime` field is the Z80Runtime instance — the CPU, memory, and I/O handlers. When `runtime` is `undefined`, no program is loaded and execution requests return errors.
 
-**Source mapping.** The `listing`, `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceMapSymbols` and related fields map between source file lines, symbols and memory addresses. The breakpoint manager, stack trace builder, editor navigation, Variables panel, Watch evaluator and conditional breakpoint evaluator all read these structures. Part VI covers source mapping in detail.
+**Source mapping.** The `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceMapSymbols` and related fields map between source file lines, symbols and memory addresses. The breakpoint manager, stack trace builder, editor navigation, Variables panel, Watch evaluator and conditional breakpoint evaluator all read these structures. Part VI covers source mapping in detail.
 
 **Platform runtimes.** The `tec1Runtime` and `tec1gRuntime` fields hold the platform-specific hardware emulation state. The `platformRuntime` field is a protocol-level alias — it points to whichever platform runtime is active and provides `recordCycles()` and `silenceSpeaker()` methods that the execution loop calls.
 

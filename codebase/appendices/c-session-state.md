@@ -11,7 +11,7 @@ nav_order: 3
 
 `SessionStateShape` in `src/debug/session/session-state.ts` is the central mutable store for a debug session. One instance is created per session and reset on each launch. All adapter logic that needs to share state reads and writes it directly.
 
-The module defines two ways to access the same data: **flat fields** and **domain views**. The flat fields (`runtime`, `listing`, `loadedProgram`, etc.) are the original surface and remain fully accessible for backward compatibility. The five domain-view interfaces (`source`, `launch`, `runtimeState`, `platform`, `ui`) are get/set proxies built by `createSessionState()` that close over the same underlying slots. Writing to `state.source.listing` and writing to `state.listing` affect the same value. New code should prefer the domain views to reduce coupling to the full flat shape.
+The module defines two ways to access the same data: **flat fields** and **domain views**. The flat fields (`runtime`, `mapping`, `loadedProgram`, etc.) are the original surface and remain fully accessible for compatibility inside the adapter. The five domain-view interfaces (`source`, `launch`, `runtimeState`, `platform`, `ui`) are get/set proxies built by `createSessionState()` that close over the same underlying slots. Writing to `state.source.mapping` and writing to `state.mapping` affect the same value. New code should prefer the domain views to reduce coupling to the full flat shape.
 
 ---
 
@@ -21,7 +21,7 @@ The module defines two ways to access the same data: **flat fields** and **domai
 
 | View | Interface | Fields exposed | Flat fields aliased |
 |------|-----------|----------------|---------------------|
-| `source` | `SessionSourceState` | `listing`, `listingPath`, `mapping`, `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceMapSymbols`, `sourceRoots`, `extraListingPaths` | Same names on the flat object |
+| `source` | `SessionSourceState` | `mapping`, `mappingIndex`, `symbolAnchors`, `symbolList`, `sourceMapSymbols`, `sourceRoots` | Same names on the flat object |
 | `launch` | `SessionLaunchState` | `baseDir`, `loadedProgram`, `loadedEntry`, `restartCaptureAddress`, `entryCpuState`, `launchArgs` | Same names on the flat object |
 | `runtimeState` | `SessionRuntimeState` | `execution` | `runtime` |
 | `platform` | `SessionPlatformState` | `tec1Runtime`, `tec1gRuntime`, `platformRuntime`, `tec1gConfig` | Same names on the flat object |
@@ -50,15 +50,12 @@ The tables below list all flat fields on `SessionStateShape`, grouped by the dom
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `listing` | `ListingInfo \| undefined` | Parsed assembly listing with bidirectional line↔address maps |
-| `listingPath` | `string \| undefined` | Absolute path to the listing file |
-| `mapping` | `MappingParseResult \| undefined` | Raw output of the source mapper parser |
+| `mapping` | `MappingParseResult \| undefined` | Raw D8-derived source map state |
 | `mappingIndex` | `SourceMapIndex \| undefined` | Indexed source map used for all address↔location queries |
 | `symbolAnchors` | `SourceMapAnchor[]` | File-tracking anchors from the source map |
 | `symbolList` | `Array<{ name: string; address: number }>` | Flat address-symbol table used for nearest-symbol lookups and compatibility display |
 | `sourceMapSymbols` | `SourceMapDebugSymbol[]` | Active D8-backed symbols and constants used by editor features, Variables, Watches and conditional breakpoints |
-| `sourceRoots` | `string[]` | Directories searched when resolving source file paths from listing |
-| `extraListingPaths` | `string[]` | Paths of additional listings loaded alongside the main one |
+| `sourceRoots` | `string[]` | Directories searched when resolving D8 source paths |
 
 ### Runtime (`runtimeState` view)
 
@@ -106,7 +103,7 @@ The tables below list all flat fields on `SessionStateShape`, grouped by the dom
 
 ## Reset behaviour
 
-`resetSessionState(target)` resets all flat fields by creating a fresh state object via `createSessionState()` and copying each field individually onto the existing target. The domain views are **not** reassigned — they are get/set proxies that close over the same backing slots as the flat fields, so they automatically reflect every reset value without being touched. After `resetSessionState()` returns, reading `target.source.listing` and reading `target.listing` both return `undefined`, because both paths read the same underlying slot.
+`resetSessionState(target)` resets all flat fields by creating a fresh state object via `createSessionState()` and copying each field individually onto the existing target. The domain views are **not** reassigned — they are get/set proxies that close over the same backing slots as the flat fields, so they automatically reflect every reset value without being touched. After `resetSessionState()` returns, reading `target.source.mapping` and reading `target.mapping` both return `undefined`, because both paths read the same underlying slot.
 
 ---
 

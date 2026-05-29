@@ -29,13 +29,13 @@ launchRequest arrives
     │     Lazy-load the platform provider → ResolvedPlatformProvider
     │
     ├─ 3. Artifact path resolution    (launch-args.ts, mapping/path-resolver.ts)
-    │     Derive source, .hex, placeholder .lst and D8 paths → absolute file paths
+    │     Derive source, .hex and D8 source-map paths → absolute file paths
     │
     ├─ 4. Assembly                    (launch-pipeline.ts, launch/assembler.ts)
     │     Run linked AZM backend → .hex + .d8.json artifacts on disk
     │
     ├─ 5. Program loading             (launch/program-loader.ts)
-    │     Parse HEX, build memory image → HexProgram + ListingInfo
+    │     Parse HEX, build memory image → HexProgram
     │
     ├─ 6. Source mapping              (launch/launch-source-state.ts)
     │     Load native D8 map → MappingIndex + source-map symbol lists
@@ -89,7 +89,7 @@ The TEC-1G platform has an additional inheritance rule: `resolveTec1gBaseForMerg
 After merging, `populateFromConfig()` resolves each field individually:
 
 - `asm` and `sourceFile` — resolved to absolute paths relative to the base directory.
-- `hex` and `listing` — resolved or derived from the assembly path (same basename, different extensions). The listing path still exists as a compatibility handle; AZM's native D8 map is the preferred source-map artifact.
+- `hex` — resolved or derived from the assembly path and output directory.
 - `platform` — normalized to lowercase, defaulting to `'simple'`.
 - `entry` — parsed as a number (hex if prefixed with `0x`).
 - `assembler` — left as-is or inferred from the source file extension.
@@ -123,7 +123,6 @@ interface ResolvedPlatformProvider {
   simpleConfig?: SimplePlatformConfig;
   tec1Config?: Tec1PlatformConfig;
   tec1gConfig?: Tec1gPlatformConfigNormalized;
-  extraListings: string[];                 // Additional listing files (e.g., ROM listing)
   runtimeOptions?: { romRanges: ... };     // Address ranges that are read-only
   registerCommands(registry, context): void;
   buildIoHandlers(callbacks): Promise<PlatformIoBuildResult>;
@@ -150,20 +149,20 @@ Custom platforms can be registered at runtime via `registerPlatform()`, which ad
 
 ## Stage 3: Artifact path resolution
 
-The pipeline needs an assembly source path, a primary Intel HEX output path, and a legacy listing path used as a compatibility handle. `resolveArtifacts()` derives any missing paths from the ones that are present:
+The pipeline needs an assembly source path and a primary Intel HEX output path. `resolveArtifacts()` derives any missing paths from the ones that are present:
 
 ```typescript
-const { hexPath, listingPath, asmPath } = resolveArtifacts(merged, baseDir, { ... });
+const { hexPath, asmPath } = resolveArtifacts(merged, baseDir);
 ```
 
 The resolution rules:
 
-- If `hex` and `listing` are both specified, use them directly.
-- If only `asm` is specified, derive `hex` and the compatibility listing path from the same basename in the output directory: `program.asm` → `program.hex` + `program.lst`.
+- If `hex` is specified, use it directly.
+- If only `asm` is specified, derive `hex` from the same basename in the output directory: `program.asm` → `program.hex`.
 - If an output directory is configured, artifacts go there. Otherwise they sit next to the source.
 - All paths are resolved to absolute.
 
-For current AZM targets, the important source-map artifact is the native D8 map written beside the build output, normally `program.d8.json`. The `.lst` path remains in the launch shape because older mapping and ROM/extra-listing code still accepts listing-like inputs.
+The source-map artifact is the native D8 map written beside the build output, normally `program.d8.json`. The D8 path is resolved later by `resolveDebugMapPath()` from the HEX path, optional `artifactBase`, optional `outputDir`, and source path.
 
 The base directory (`baseDir`) is resolved from the workspace root or the project config file's parent directory. Path resolution functions live in two files: `src/debug/launch-args.ts` for the pure logic (testable without VS Code) and `src/debug/mapping/path-resolver.ts` for the VS Code-aware version (uses `vscode.workspace.workspaceFolders`).
 
@@ -179,7 +178,6 @@ assembleIfRequested({
   args: merged,
   asmPath,
   hexPath,
-  listingPath,
   platform,
   sendEvent: (event) => context.emitEvent(event),
 });
@@ -193,7 +191,7 @@ assembleIfRequested({
 |-----------|---------|
 | `.asm`, `.inc`, `.z80` | AZM |
 
-For compatibility, an explicit backend id of `asm80` is currently accepted as an alias for AZM. Debug80 no longer exposes ZAX as a backend.
+Debug80 now supports AZM as its assembler backend. ZAX has been removed, and the old listing-derived mapping path is retired from active launch behavior.
 
 The backend conforms to the `AssemblerBackend` interface:
 
@@ -202,11 +200,10 @@ interface AssemblerBackend {
   id: string;
   assemble(options: AssembleOptions): AssembleResult;
   assembleBin?(options: AssembleBinOptions): AssembleResult;
-  compileMappingInProcess?(sourcePath, baseDir): MappingParseResult | undefined;
 }
 ```
 
-`assemble()` produces the primary build artifacts, now normally HEX plus native D8 source map. `assembleBin()` is optional — the simple platform uses it to produce raw binary output for custom memory regions (configured via `binFrom`/`binTo`). `compileMappingInProcess()` is an optional optimization for backends that can produce source mappings without writing files to disk.
+`assemble()` produces the primary build artifacts, normally HEX plus native D8 source map. `assembleBin()` is optional — the simple platform uses it to produce raw binary output for custom memory regions (configured via `binFrom`/`binTo`).
 
 ### The AZM invocation
 
@@ -224,7 +221,7 @@ compile(asmPath, {
 })
 ```
 
-The successful path writes the HEX output, BIN output when present, a native D8 map beside the HEX artifact, and a second D8 copy beside the compatibility listing path when those bases differ. If AZM does not emit a traditional listing, Debug80 writes a small placeholder listing that points maintainers at the native D8 map used for source mapping.
+The successful path writes the HEX output, BIN output when present, and a native D8 map beside the HEX artifact. Debug80 no longer writes placeholder listings or generated source-map cache files.
 
 On failure, the backend converts AZM diagnostics into a structured `AssemblyDiagnostic` with file path, line number, column, and source line when available. This diagnostic is formatted and sent to both the Debug Console and the extension host (as a `debug80/assemblyFailed` event).
 
@@ -251,11 +248,11 @@ The assembly error is shown in three places: the Debug Console (full detail), th
 
 ## Stage 5: Program loading
 
-With the `.hex` file and compatibility listing handle resolved, `loadProgramArtifacts()` in `src/debug/launch/program-loader.ts` reads the executable program and any listing text still needed by compatibility mapping paths:
+With the `.hex` file resolved, `loadProgramArtifacts()` in `src/debug/launch/program-loader.ts` reads the executable program:
 
 ```typescript
-const { program, listingInfo, listingContent } = loadProgramArtifacts({
-  platform, baseDir, hexPath, listingPath,
+const { program } = loadProgramArtifacts({
+  platform, baseDir, hexPath,
   resolveRelative, resolveBundledTec1Rom, logger,
   ...(tec1Config ? { tec1Config } : {}),
   ...(tec1gConfig ? { tec1gConfig } : {}),
@@ -281,12 +278,6 @@ Similar to TEC-1 but with different ROM loading logic — TEC-1G ROMs can be loa
 
 The overlay order matters. The user's program is applied last, so it can overwrite ROM areas if needed. This is how programs that include their own monitor code work.
 
-### Listing compatibility
-
-The loader still returns a `ListingInfo` and raw listing content because the wider source-mapping service can consume older listing-derived mappings and extra ROM listings. For active AZM-built projects, the native D8 map is the source of truth for source locations and symbols; a generated or placeholder listing is not expected to carry the main project mapping.
-
----
-
 ## Stage 6: Source mapping
 
 Source mapping connects memory addresses to source file locations. This is what makes "set a breakpoint on line 12" work — the breakpoint manager needs to know which memory address corresponds to line 12.
@@ -301,30 +292,27 @@ The function:
 
 1. **Resolves source roots** — walks `args.sourceRoots` and the assembly source directory to build the initial root list.
 2. **Instantiates `SourceManager`** — creates the manager with path-resolution callbacks for the current session and injects it into the `SourceStateManager`.
-3. **Calls `sourceState.build()`** — triggers source-map discovery, D8 map detection, listing compatibility handling, and `buildSourceMapIndex()` invocation via the manager.
+3. **Calls `sourceState.build()`** — triggers D8 source-map discovery and `buildSourceMapIndex()` invocation via the manager.
 4. **Builds the symbol index** — calls `buildSymbolIndex()` from `src/debug/mapping/symbol-service.ts` and applies the lookup anchors back to `sourceState`.
-5. **Returns** a `LaunchSourceBuildResult` containing `sourceRoots`, `extraListingPaths`, `mapping`, `mappingIndex`, `symbolAnchors`, and `symbolList`.
+5. **Returns** a `LaunchSourceBuildResult` containing `sourceRoots`, `mapping`, `mappingIndex`, `symbolAnchors`, `symbolList`, and D8-backed source-map symbols.
 
 ### The SourceManager
 
 `SourceManager` in `src/debug/mapping/source-manager.ts` orchestrates source state construction. It is instantiated inside `buildLaunchSourceState()` and injected into the `SourceStateManager` wrapper. The manager's `buildState()` method coordinates the work:
 
-1. **Resolve the main source file** — prioritizes the ASM path, falls back to `sourceFile`, then derives from the listing path.
-2. **Resolve source roots** — directories where source files live, used to map relative paths in listings to absolute paths on disk.
-3. **Resolve extra listings** — platform-provided listing files (e.g., ROM listings). These are validated for existence and deduplicated against the primary listing.
-4. **Extend source roots** — adds the directories of extra listings to the source root list, so ROM source references resolve correctly.
-5. **Build the mapping** — prefers the native D8 map, then falls back through compatibility listing paths when required, to create a `MappingParseResult` and a `SourceMapIndex`.
+1. **Resolve the main source file** — prioritizes the ASM path, then falls back to `sourceFile`.
+2. **Resolve source roots** — directories where source files live, used to map D8 relative paths to absolute paths on disk.
+3. **Build the mapping** — loads the native D8 map and creates a `MappingParseResult` plus `SourceMapIndex`.
 
-The result is a `SourceManagerState` containing the resolved source file, source roots, extra listing paths, and the complete mapping index.
+The result is a `SourceManagerState` containing the resolved source file, source roots, and the complete mapping index.
 
 ### The native D8 source map
 
 The mapping between source lines and addresses now normally comes from a native D8 JSON file:
 
 - **Native D8 map** — AZM emits a `.d8.json` source map beside the build artifact. This is the authoritative active-project source map.
-- **Listing compatibility** — older listing-derived mapping remains available for ROM listings, extra listings and historical artifacts. It should not be the normal path for newly built AZM targets.
 
-When both native and generated maps exist, native D8 wins. User-facing messages should call this a "source map" and tell the user to build the target if the map is missing or stale.
+User-facing messages should call this a "source map" and tell the user to build the target if the map is missing or stale.
 
 ### The symbol index
 
@@ -333,16 +321,10 @@ When both native and generated maps exist, native D8 wins. User-facing messages 
 ```typescript
 const symbolIndex = buildSymbolIndex({
   mapping: builtSourceState.mapping,
-  listingContent,
-  sourceFile: context.sourceState.file,
 });
 ```
 
-Symbols come from the active D8 mapping data when available. Compatibility paths can still extract labels from listing text by regex-matching lines like:
-
-```
-LOOP:  0x0042  DEFINED AT LINE 15 IN FILE program.asm
-```
+Symbols come from the active D8 mapping data.
 
 The index provides the classic address-oriented symbol views:
 
@@ -431,14 +413,12 @@ interface LaunchSessionArtifacts {
   platform: PlatformKind;
 
   // Source mapping
-  listing: ListingInfo;
-  listingPath: string;
   mapping: MappingParseResult;
   mappingIndex: SourceMapIndex;
   sourceRoots: string[];
-  extraListingPaths: string[];
   symbolAnchors: SourceMapAnchor[];
   symbolList: Array<{ name: string; address: number }>;
+  sourceMapSymbols: SourceMapDebugSymbol[];
 
   // Program
   loadedProgram: HexProgram;
@@ -482,9 +462,9 @@ The session is now live. The execution loop (Chapter 5) takes over from here.
 
 The launch pipeline has three distinct error paths:
 
-**Missing launch inputs.** If no `asm`, `hex`, or `listing` is specified and no config file is found, `respondToMissingLaunchInputs()` prompts the user to create a `debug80.json` via the project scaffolding command. If the user creates one, they get a message to configure it and re-run. If they cancel, they get an error explaining what is needed.
+**Missing launch inputs.** If no `asm` or `hex` is specified and no config file is found, `respondToMissingLaunchInputs()` prompts the user to create a `debug80.json` via the project scaffolding command. If the user creates one, they get a message to configure it and re-run. If they cancel, they get an error explaining what is needed.
 
-**Missing artifacts.** If assembly succeeds (or is skipped) but required artifacts such as the `.hex` or source-map/listing handle do not exist on disk, a `MissingLaunchArtifactsError` is thrown. This typically means the user needs to build their project first. The handler prompts for config creation as a recovery path.
+**Missing artifacts.** If assembly succeeds (or is skipped) but the required `.hex` artifact does not exist on disk, a `MissingLaunchArtifactsError` is thrown. If the D8 source map is missing, source-level features degrade until the user builds the selected target with AZM.
 
 **Assembly failure.** If AZM reports diagnostics that prevent assembly, an `AssembleFailureError` is thrown with the parsed diagnostic. The error is sent to three destinations: the Debug Console (full assembler output), the extension host (structured diagnostic for the webview), and the VS Code error notification (one-line summary).
 
@@ -500,9 +480,9 @@ All three paths send an error response to VS Code, which shows the error and cle
 
 - Platforms are lazy-loaded via dynamic imports. Each platform provides a `ResolvedPlatformProvider` that supplies I/O handlers, custom commands, ROM configurations, and entry point resolution.
 
-- The assembler backend is selected from the target configuration and source file extension. AZM is the current backend for `.asm`, `.inc` and `.z80`; explicit `asm80` is treated as a compatibility alias. Assembly is optional and conditional on the `assemble` flag.
+- The assembler backend is selected from the target configuration and source file extension. AZM is the supported backend for `.asm`, `.inc` and `.z80`. Assembly is optional and conditional on the `assemble` flag.
 
-- Program loading builds a platform-specific memory image: plain for simple, ROM + RAM overlay for TEC-1/TEC-1G. Source mapping and symbols come from the native D8 map when available; listing parsing is compatibility infrastructure.
+- Program loading builds a platform-specific memory image: plain for simple, ROM + RAM overlay for TEC-1/TEC-1G. Source mapping and symbols come from the native D8 map emitted by AZM.
 
 - Source mapping is handled by `buildLaunchSourceState()` in `src/debug/launch/launch-source-state.ts`. This function owns source-root resolution, D8 map detection, `buildSourceMapIndex()` invocation, and source-map symbol construction. It was extracted from `launch-sequence.ts` to give source-state setup a single testable entry point.
 
