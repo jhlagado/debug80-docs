@@ -160,7 +160,7 @@ For build problems, read the first assembler diagnostic. Later messages often fo
 
 Debug80 uses AZM for the current assembly workflow. Source written for another assembler may need syntax changes before AZM can assemble it.
 
-For hollow breakpoints, move the breakpoint to an instruction line and rebuild. Comments, blank lines and label-only lines may share their generated address with a nearby instruction, while Debug80 binds breakpoints to generated instruction addresses.
+For hollow breakpoints, move the breakpoint to an instruction line and build the target. Comments, blank lines and label-only lines may share their generated address with a nearby instruction, while Debug80 binds breakpoints to generated instruction addresses.
 
 For Go to Definition, hover, workspace symbols or Variables-panel symbols, build the active target. These features use the source map from the last successful build. Build again so Debug80 can read current source-map data.
 

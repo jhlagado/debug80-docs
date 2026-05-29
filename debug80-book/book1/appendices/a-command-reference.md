@@ -24,7 +24,6 @@ This appendix lists the Debug80 commands used in Book 1. Command titles are take
 | Command | Use |
 |---|---|
 | **Debug80: Start Debugging** | Build and start the selected target. |
-| **Debug80: Restart Debugging (Current Target)** | Rebuild and relaunch the active target. |
 | **Debug80: Open Debug80 View** | Reveal the Debug80 panel in the Run and Debug sidebar. |
 
 ## Platform Panels

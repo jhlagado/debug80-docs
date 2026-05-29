@@ -42,7 +42,7 @@ Build the active target when Go to Definition, hover text, source breakpoints, R
 
 ## Register Care
 
-The **Register Care** selector controls how AZM register-care diagnostics affect restart.
+The **Register Care** selector controls how AZM register-care diagnostics affect launch.
 
 - **Enforce** treats register-care problems as launch-blocking diagnostics.
 - **Audit** lets you inspect the diagnostics as advisory information.
@@ -118,6 +118,6 @@ The memory view is most useful while paused. If the program is running, pause it
 
 For early programs, keep **Project**, **Machine**, **Registers** and **Memory** open. That gives you launch control, visible hardware output, CPU state and memory state.
 
-For display-heavy programs, open **Displays** and close **Memory** until you need it. For serial workflows, open **Serial** and keep **Project** visible so you can rebuild quickly.
+For display-heavy programs, open **Displays** and close **Memory** until you need it. For serial workflows, open **Serial** and keep **Project** visible so you can build quickly.
 
 The panel remembers open accordion sections in the webview state. If your view looks different from a screenshot, open the section named in the text and continue.

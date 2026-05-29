@@ -102,7 +102,7 @@ The first button changes state. When the program is paused, it runs from the cur
 
 **Step Out** is Shift-F11. It runs the current routine until it returns to its caller. Use it after F11 has taken you into a routine and you want to get back to the code that called it.
 
-**Restart** starts the debug session again for the active target.
+The circular arrow starts the debug session again for the active target.
 
 **Stop** ends the debug session.
 
@@ -132,21 +132,15 @@ When execution reaches the breakpoint, Debug80 evaluates the expression. A true 
 
 When expression evaluation raises an error, Debug80 stops at the breakpoint and writes the error to the Debug Console. Conditional breakpoints use the same expression language as the Watch panel. Appendix G lists the supported registers, flags, symbols, memory reads and operators.
 
-## Edit And Rebuild
+## Edit And Build
 
-Change the LCD message string once you are comfortable stepping:
+Change the LCD message string:
 
 ```asm
 lcd_line1:
         .db     "Debug80 TEC-1G",0
 ```
 
-Save the file and restart the target.
+Save the file, then click **Build** in the Debug80 panel. Debug80 assembles the code again, loads the new program into the emulator and starts the target.
 
-Debug80 rebuilds during launch. Normal editor-based work starts from VS Code. Assembly errors stop the launch with a diagnostic.
-
-## What To Inspect Next
-
-The starter program gives visible output immediately: the LCD shows the message string, and the seven-segment display is refreshed by the `scan_hello` loop.
-
-The same small program also has useful symbols, constants, register values, memory bytes and display output. Chapter 4 uses those values to introduce Variables, Watches, Call Stack naming, Registers, Memory and the Machine panel.
+The LCD shows the changed message after the program runs. The seven-segment display is refreshed by the `scan_hello` loop.

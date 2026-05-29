@@ -21,7 +21,7 @@ source-map output
 
 > **Image placeholder:** Explorer showing `build/main.hex` and the generated source-map file.
 
-These files are generated output. Edit the source files, then rebuild to generate fresh artifacts.
+These files are generated output. Edit the source files, then build the target to generate fresh artifacts.
 
 ![Source through AZM to HEX and source-map output](../../assets/images/debug80-book/book1/source-azm-artifacts.svg)
 
