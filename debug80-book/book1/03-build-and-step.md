@@ -126,13 +126,7 @@ Use a conditional breakpoint when the program should stop for a specific machine
 
 ![Edit Breakpoint from the editor gutter menu](../../assets/images/debug80-book/book1/chapter3-edit-breakpoint-menu.png)
 
-Examples for the starter program:
-
-```asm
-PC eq scan_hello
-C eq api_scan_segments
-DE eq seven_seg_hello
-```
+![Conditional breakpoint expression in the editor](../../assets/images/debug80-book/book1/chapter3-conditional-breakpoint-expression.png)
 
 When execution reaches the breakpoint, Debug80 evaluates the expression. A true or non-zero result stops execution. A false or zero result lets the program continue.
 

@@ -43,7 +43,7 @@ Book 1 now carries visible image placeholders in the chapter text. This appendix
 | Breakpoint beside an instruction line | Screenshot | Chapter 3; added as `chapter3-breakpoint-scan-hello.png` |
 | **Run to Cursor** from the editor context menu | Screenshot | Chapter 3; added as `chapter3-run-to-cursor-menu.png` |
 | Breakpoint gutter menu showing **Edit Breakpoint** | Screenshot | Chapter 3; added as `chapter3-edit-breakpoint-menu.png` |
-| Conditional breakpoint editor with a Debug80 expression using `eq` syntax | Screenshot | Chapter 3; retake needed |
+| Conditional breakpoint editor with a Debug80 expression | Screenshot | Chapter 3; added as `chapter3-conditional-breakpoint-expression.png` |
 | VS Code debug toolbar | Screenshot | Chapter 3; added as `chapter3-debug-toolbar.png` |
 
 ## Machine Inspection
