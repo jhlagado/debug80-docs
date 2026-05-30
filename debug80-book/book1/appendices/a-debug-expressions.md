@@ -134,9 +134,12 @@ Bitwise operators:
 & | ^ ~
 ```
 
+`&` is bitwise AND. `|` is bitwise OR. `^` is bitwise XOR. `~` is bitwise invert.
+
 Comparison operators:
 
 ```asm
+= == <> < <= > >=
 eq ne lt le gt ge
 ```
 
@@ -145,8 +148,6 @@ Logical operators:
 ```asm
 and or not
 ```
-
-The `^` operator is bitwise XOR.
 
 ## Truth Values
 
