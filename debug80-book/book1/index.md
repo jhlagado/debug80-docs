@@ -26,6 +26,6 @@ By the end you will know how to take a Z80 program all the way to hardware, and 
 
 ## Appendices
 
-- [Appendix A — Command Reference](appendices/a-command-reference.md)
-- [Appendix B — Project Configuration Reference](appendices/b-project-configuration.md)
-- [Appendix C — Debug Expressions](appendices/c-debug-expressions.md)
+- [Appendix A — Debug Expressions](appendices/a-debug-expressions.md)
+- [Appendix B — Command Reference](appendices/b-command-reference.md)
+- [Appendix C — Project Configuration Reference](appendices/c-project-configuration.md)

@@ -29,7 +29,7 @@ Use Watches when you want a small set of facts to stay visible while stepping. T
 
 ![Watch panel showing Debug80 expressions](../../assets/images/debug80-book/book1/chapter4-watch-expressions.png)
 
-Build the active target again when a symbol Watch needs to be generated or refreshed. Appendix C lists the shared expression language used by Watches and conditional breakpoints.
+Build the active target again when a symbol Watch needs to be generated or refreshed. Appendix A lists the shared expression language used by Watches and conditional breakpoints.
 
 ## Call Stack Naming
 

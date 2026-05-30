@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix A — Command Reference"
+title: "Appendix B — Command Reference"
 parent: "Debug80 Book 1 — Getting Started"
-nav_order: 101
+nav_order: 102
 ---
 
-[← Send To Hardware And Keep Working](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Project Configuration Reference →](b-project-configuration.md)
+[← Appendix A — Debug Expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Project Configuration Reference →](c-project-configuration.md)
 
-# Appendix A — Command Reference
+# Appendix B — Command Reference
 
 This appendix lists the Debug80 commands used here. Command titles are taken from the current Debug80 extension manifest.
 
@@ -17,7 +17,7 @@ Open the VS Code Command Palette to run these commands directly. On macOS, press
 
 | Command | Use |
 |---|---|
-| **Debug80: Create Project** | Create `debug80.json`, starter target and build setup for the selected folder. |
+| **Debug80: Create Project** | Create project settings, the first target and build setup for the selected folder. |
 | **Debug80: Select Workspace Folder** | Choose the folder Debug80 should treat as the active project. |
 | **Debug80: Select Active Target** | Choose the target launched by F5 and the panel build button. |
 | **Debug80: Set Program File** | Bind an `.asm` or `.z80` file to the current target. |
@@ -54,4 +54,4 @@ Open the VS Code Command Palette to run these commands directly. On macOS, press
 | **Debug80: Test CoolTerm Connection** | Check whether Debug80 can reach CoolTerm's Remote Control Socket. |
 | **Debug80: Send HEX to Board via CoolTerm** | Send the active target's HEX file to hardware through CoolTerm. |
 
-[← Send To Hardware And Keep Working](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Project Configuration Reference →](b-project-configuration.md)
+[← Appendix A — Debug Expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Project Configuration Reference →](c-project-configuration.md)

@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 7
 ---
 
-[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Command Reference →](appendices/a-command-reference.md)
+[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Debug Expressions →](appendices/a-debug-expressions.md)
 
 # Send To Hardware And Keep Working
 
@@ -129,4 +129,4 @@ For panel update questions, pause the session and open the relevant accordion se
 
 For CoolTerm detection, open CoolTerm and check **Preferences > Scripting**. Enable the Remote Control Socket on port `51413` and keep CoolTerm running while Debug80 checks for it.
 
-[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Command Reference →](appendices/a-command-reference.md)
+[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Debug Expressions →](appendices/a-debug-expressions.md)

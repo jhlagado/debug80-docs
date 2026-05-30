@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix B — Project Configuration Reference"
+title: "Appendix C — Project Configuration Reference"
 parent: "Debug80 Book 1 — Getting Started"
-nav_order: 102
+nav_order: 103
 ---
 
-[← Appendix A — Command Reference](a-command-reference.md) | [Book 1](../index.md) | [Appendix C — Debug Expressions →](c-debug-expressions.md)
+[← Appendix B — Command Reference](b-command-reference.md) | [Book 1](../index.md)
 
-# Appendix B — Project Configuration Reference
+# Appendix C — Project Configuration Reference
 
 Debug80 stores project configuration in the project folder. The generated file is enough for the first workflow, but reading the main fields helps when you add targets or inspect a copied project.
 
@@ -109,4 +109,4 @@ The important user-level facts are:
 
 Debug80 uses AZM for the current assembly workflow. Targets may carry an `azm` object for register-care options and related launch behaviour. Leave generated options alone until you are deliberately configuring register-care.
 
-[← Appendix A — Command Reference](a-command-reference.md) | [Book 1](../index.md) | [Appendix C — Debug Expressions →](c-debug-expressions.md)
+[← Appendix B — Command Reference](b-command-reference.md) | [Book 1](../index.md)

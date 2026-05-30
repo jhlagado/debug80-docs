@@ -23,20 +23,18 @@ This launch also writes the build artifacts. The order is what matters here: AZM
 
 ## The Debug Toolbar
 
-The VS Code debug toolbar controls the emulated Z80 while a debug session is running.
+The VS Code debug toolbar controls the emulated Z80 while a debug session is running. Use the buttons when you are learning the workflow; use the shortcuts once the controls become familiar.
 
 ![VS Code debug toolbar during a Debug80 session](../../assets/images/debug80-book/book1/chapter3-debug-toolbar.png)
 
 Left to right:
 
 - **Continue / Pause** — continue from the current instruction. While the program is running, the same button becomes **Pause**.
-- **Step Over** — execute the current instruction and stop at the next instruction in the current flow.
-- **Step Into** — execute the current instruction and follow into a subroutine or monitor service when the instruction transfers control.
-- **Step Out** — run until the current routine returns to its caller.
+- **Step Over** — press **F10** to execute the current instruction and stop at the next instruction in the current flow. When the current instruction calls a subroutine, F10 runs that routine as one action and stops after the call returns.
+- **Step Into** — press **F11** to follow execution into a subroutine. In Z80 code, this also follows software interrupts, so stepping into `RST 0x10` takes you into the MON-3 service routine.
+- **Step Out** — press **Shift-F11** to run until the current routine returns to its caller.
 - **Restart** — restart the debug session.
 - **Stop** — end the debug session.
-
-The toolbar buttons are useful while you are learning. The keyboard shortcuts become faster once the workflow is familiar.
 
 ## The Program Counter
 
@@ -46,17 +44,11 @@ Source-level debugging connects that address back to your assembly source. The s
 
 When **Stop on entry** is ticked, the first pause is at `$0000` in the monitor ROM. Set a breakpoint in your own source when you want the debugger to run from reset to your program.
 
-## Step Over And Step Into
-
-The two stepping keys you will use most are **F10** and **F11**.
-
-F10 is **Step Over**. It executes the current instruction and stops at the next instruction in the current flow. When the current instruction calls a subroutine, F10 runs that routine as one action and stops after the call returns.
-
-F11 is **Step Into**. It follows execution into subroutines. In Z80 code, it also follows software interrupts, so stepping into `RST 0x10` takes you into the MON-3 service routine.
+## Step, Then Inspect
 
 Use F10 when you want to stay in your program and move past calls as single operations. Use F11 when the called code matters and you want to see the instructions inside it.
 
-This is the smallest useful debugging cycle: stop, inspect, step, inspect again.
+Use Shift-F11 after F11 has taken you into a routine and you have seen enough detail there. This is the smallest useful debugging cycle: stop, inspect, step, inspect again.
 
 ## Set A Breakpoint
 
@@ -67,10 +59,6 @@ Breakpoints bind to instruction addresses. Place them on executable source lines
 ![Breakpoint set on an instruction line](../../assets/images/debug80-book/book1/chapter3-breakpoint-scan-hello.png)
 
 Use **Continue** to run from the current pause to the next breakpoint. Use **Pause** when a program is running and you want to inspect its current state.
-
-## Step Out
-
-**Step Out** runs until the current routine returns. Its shortcut is **Shift-F11**. Use it after Step Into has taken you into a routine and you have seen enough detail there.
 
 ## Run To Cursor
 
@@ -94,6 +82,6 @@ Type a Debug80 expression into the inline editor. The condition can use register
 
 Each time execution reaches the line, Debug80 evaluates the expression. A true or non-zero result stops the program; a false or zero result lets it run on. If the expression itself errors, Debug80 stops at the breakpoint and writes the error to the Debug Console.
 
-Conditional breakpoints share the expression language with the Watch panel. Appendix C lists the registers, flags, symbols, memory reads and operators you can use.
+Conditional breakpoints share the expression language with the Watch panel. Appendix A lists the registers, flags, symbols, memory reads and operators you can use.
 
 [← Create A TEC-1G Project](02-create-a-tec1g-project.md) | [Book 1](index.md) | [Inspect A Running Program →](04-inspect-the-machine.md)
