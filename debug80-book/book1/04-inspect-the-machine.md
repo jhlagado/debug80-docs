@@ -21,7 +21,7 @@ These scopes use the source map from the last successful build. Build the target
 
 ## Watch Expressions
 
-The **Watch** panel evaluates Z80-focused expressions while execution is paused. Use Watches when you want a small set of facts to stay visible while stepping. A symbol by itself evaluates to its address or constant value; square brackets read one byte from memory.
+The **Watch** panel evaluates Z80-focused expressions while execution is paused. Use Watches when you want a small set of facts to stay visible while stepping. A symbol by itself evaluates to its address or constant value; square brackets read one byte from memory. Comparisons can use symbolic operators such as `=`, `!=`, `<>`, `<`, `<=`, `>` and `>=`, or the word forms listed in Appendix A.
 
 ![Watch panel showing Debug80 expressions](../../assets/images/debug80-book/book1/chapter4-watch-expressions.png)
 
