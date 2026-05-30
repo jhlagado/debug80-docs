@@ -21,7 +21,7 @@ The last successful build is the source of truth. Build again after changing lab
 
 ## Workspace Symbol Search
 
-VS Code's **Go to Symbol in Workspace** command can search labels, constants, routines and data symbols contributed by Debug80.
+Run **Debug80: Search Workspace Symbols**, or press **Command-T** on macOS or **Control-T** on Windows and Linux. VS Code opens the workspace symbol picker with labels, constants, routines and data symbols contributed by Debug80.
 
 This is target-based search. Select the Debug80 target you want, build it, then use the workspace symbol picker for symbols from that target.
 

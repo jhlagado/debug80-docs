@@ -31,6 +31,7 @@ Open the VS Code Command Palette to run these commands directly. On macOS, press
 | **Debug80: Start Debugging** | Build and start the selected target. |
 | **Debug80: Build Current Target** | Build the selected target from the command palette. |
 | **Debug80: Open Debug80 View** | Reveal the Debug80 panel in the Run and Debug sidebar. |
+| **Debug80: Search Workspace Symbols** | Open VS Code's workspace symbol picker for Debug80 source-map symbols. |
 | **Run to Here** | Continue execution to the selected stack frame location. |
 
 ## Platform Panels
