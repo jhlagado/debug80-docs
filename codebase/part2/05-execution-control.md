@@ -200,6 +200,9 @@ Debug80 advertises `supportsConditionalBreakpoints` during initialization, so VS
 [PACMO_LIVES] eq 0
 zero and A eq $20
 ([FLAGS] & $80) ne 0
+PC = MainLoop
+BC <> $1001
+A >= $20
 ```
 
 The evaluator receives the current runtime and active D8 source-map symbols. Zero is false; any non-zero value is true. If the expression is false, `shouldStopAtBreakpoint()` returns false and execution continues past the address. If the expression is true, Debug80 stops with the normal breakpoint reason.
@@ -212,7 +215,7 @@ The expression language is intentionally small and Z80-focused:
 - Flags use AZM-style names: `carry`, `zero`, `sign`, `parity`, and `halfcarry`.
 - Symbols come from the active D8 source map. Address symbols evaluate to their address; value-only symbols evaluate to their value.
 - `[expr]` reads one byte of emulated memory.
-- Arithmetic supports `+`, `-`, `*`, `/`, `%`; bitwise operators are `&`, `|`, `^`, `~`; comparisons are `eq`, `ne`, `lt`, `le`, `gt`, `ge`; logical operators are `and`, `or`, `not`.
+- Arithmetic supports `+`, `-`, `*`, `/`, `%`; bitwise operators are `&`, `|`, `^`, `~`; comparisons are `eq`, `ne`, `lt`, `le`, `gt`, `ge` and their symbolic aliases `=`, `==`, `<>`, `!=`, `<`, `<=`, `>`, `>=`; logical operators are `and`, `or`, `not`.
 - Parentheses group expressions. There is no logical XOR; `^` is bitwise XOR.
 
 ### Breakpoint skip logic

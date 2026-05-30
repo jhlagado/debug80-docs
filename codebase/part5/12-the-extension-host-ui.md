@@ -35,6 +35,7 @@ The language-server design note in the source repository is still a future direc
 
 - **Go to Definition / F12** via `registerD8DefinitionProvider()` in `src/extension/d8-definition-provider.ts`.
 - **Workspace Symbols** via `registerD8WorkspaceSymbolProvider()`, scoped to the active target's D8 map.
+- **Debug80: Search Workspace Symbols** via `debug80.searchWorkspaceSymbols`, a visible command that delegates to VS Code's `workbench.action.showAllSymbols` while using the same active-target D8 symbol provider.
 - **Hover** via `registerD8HoverProvider()`, showing compact symbol kind/address/value/size/source information and any nearby AZMDoc register-care contract.
 - **Source-map freshness hints**, warning the user to build when source files appear newer than the active target's D8 map.
 
@@ -214,6 +215,8 @@ This is not the same as emulated serial input. It sends the selected target's bu
 Debug80 does not wait for `PASSED` or `FAILED` text on the serial line. MON3's Intel HEX loader reports completion on the TEC-1G seven-segment display: `PASS` means the load was accepted, and `ERROR` means checksum or write verification failed. The serial startup message `TEC-1G Connected` belongs to MON3 boot, not to the HEX load result.
 
 The user must configure CoolTerm with the TEC-1G monitor serial settings (`4800` baud, 8 data bits, no parity, 2 stop bits) and enable its Remote Control Socket on port 51413. Debug80 intentionally delegates native serial-port ownership to CoolTerm here, avoiding bundled native serial dependencies in the VSIX.
+
+The Debug80 source repository also includes `tec-1g.CoolTermSettings` as a CoolTerm settings preset for the TEC-1G defaults. It captures the 4800 8N2 raw-transfer setup, but the user still chooses the real serial port and enables the Remote Control Socket for their local CoolTerm installation.
 
 ### Platform module dispatch
 
