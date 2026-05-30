@@ -4,6 +4,7 @@ title: "Appendices"
 parent: "Debug80 Engineering Manual"
 nav_order: 8
 has_children: true
+has_toc: false
 ---
 # Appendices
 

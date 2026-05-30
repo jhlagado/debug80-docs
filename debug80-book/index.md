@@ -3,6 +3,7 @@ layout: default
 title: "Debug80 Books"
 nav_order: 3
 has_children: true
+has_toc: false
 nav_exclude: true
 ---
 # Debug80 Books

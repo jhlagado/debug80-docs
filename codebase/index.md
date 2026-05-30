@@ -3,6 +3,7 @@ layout: default
 title: "Debug80 Engineering Manual"
 nav_order: 90
 has_children: true
+has_toc: false
 ---
 # Debug80 Engineering Manual
 

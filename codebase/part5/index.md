@@ -4,6 +4,7 @@ title: "Part V — The Extension UI"
 parent: "Debug80 Engineering Manual"
 nav_order: 5
 has_children: true
+has_toc: false
 ---
 # Part V — The Webview and UI
 

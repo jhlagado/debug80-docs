@@ -3,6 +3,7 @@ layout: default
 title: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 6
 has_children: true
+has_toc: false
 ---
 # AZM Book 2 — Algorithms and Data Structures
 

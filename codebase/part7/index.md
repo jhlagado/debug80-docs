@@ -4,6 +4,7 @@ title: "Part VII — Extending the Codebase"
 parent: "Debug80 Engineering Manual"
 nav_order: 7
 has_children: true
+has_toc: false
 ---
 # Part VII — Extending the Codebase
 

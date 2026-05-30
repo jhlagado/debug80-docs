@@ -3,6 +3,7 @@ layout: default
 title: "Debug80 Book 2 — Programming the TEC-1G"
 nav_order: 4
 has_children: true
+has_toc: false
 ---
 # Debug80 Book 2 — Programming the TEC-1G
 

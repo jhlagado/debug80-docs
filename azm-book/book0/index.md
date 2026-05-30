@@ -3,6 +3,7 @@ layout: default
 title: "AZM Book 0 — Assembler Manual"
 nav_order: 4
 has_children: true
+has_toc: false
 ---
 # AZM Book 0 — Assembler Manual
 

@@ -4,6 +4,7 @@ title: "Part IV — Platform Runtimes"
 parent: "Debug80 Engineering Manual"
 nav_order: 4
 has_children: true
+has_toc: false
 ---
 # Part IV — Platform Runtimes
 

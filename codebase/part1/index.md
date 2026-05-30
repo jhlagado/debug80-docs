@@ -4,6 +4,7 @@ title: "Part I — Orientation"
 parent: "Debug80 Engineering Manual"
 nav_order: 1
 has_children: true
+has_toc: false
 ---
 # Part I — Orientation
 
