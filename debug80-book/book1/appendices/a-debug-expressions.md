@@ -139,7 +139,7 @@ Bitwise operators:
 Comparison operators:
 
 ```asm
-= == <> < <= > >=
+= == != <> < <= > >=
 eq ne lt le gt ge
 ```
 
