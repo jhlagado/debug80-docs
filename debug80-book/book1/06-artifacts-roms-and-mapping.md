@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 6
 ---
 
-[← Build Options And Source Maps](05-use-the-debug80-panel.md) | [Book 1](index.md) | [Send To Hardware And Keep Working →](07-send-to-hardware-and-keep-working.md)
+[← Build Options And Source Maps](05-use-the-debug80-panel.md) | [Book 1](index.md) | [Send To TEC-1G Hardware →](07-send-to-hardware-and-keep-working.md)
 
 # Source Navigation And ROM Source
 
@@ -55,4 +55,4 @@ When execution enters monitor code, the current PC may point outside your source
 
 Opening auxiliary source gives you the monitor code around routines such as MON-3 display, disk, clock and sound support.
 
-[← Build Options And Source Maps](05-use-the-debug80-panel.md) | [Book 1](index.md) | [Send To Hardware And Keep Working →](07-send-to-hardware-and-keep-working.md)
+[← Build Options And Source Maps](05-use-the-debug80-panel.md) | [Book 1](index.md) | [Send To TEC-1G Hardware →](07-send-to-hardware-and-keep-working.md)

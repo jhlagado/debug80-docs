@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 101
 ---
 
-[← Send To Hardware And Keep Working](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Command Reference →](b-command-reference.md)
+[← Send To TEC-1G Hardware](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Command Reference →](b-command-reference.md)
 
 # Appendix A — Debug Expressions
 
@@ -161,4 +161,4 @@ carry or zero
 
 Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors stop the program and appear in the Debug Console.
 
-[← Send To Hardware And Keep Working](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Command Reference →](b-command-reference.md)
+[← Send To TEC-1G Hardware](../07-send-to-hardware-and-keep-working.md) | [Book 1](../index.md) | [Appendix B — Command Reference →](b-command-reference.md)
