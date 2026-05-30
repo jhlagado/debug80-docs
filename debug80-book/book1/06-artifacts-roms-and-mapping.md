@@ -17,15 +17,17 @@ Place the cursor on a symbol in a `.asm` or `.z80` file and press F12, or run VS
 
 The last successful build is the source of truth. Build again after changing labels, constants or include files.
 
-> **Image placeholder:** Source editor with cursor on a symbol and the definition target shown after F12.
+![Go to Definition on an assembly symbol](../../assets/images/debug80-book/book1/chapter6-go-to-definition.png)
 
 ## Workspace Symbol Search
 
 Run **Debug80: Search Workspace Symbols**, or press **Command-T** on macOS or **Control-T** on Windows and Linux. VS Code opens the workspace symbol picker with labels, constants, routines and data symbols contributed by Debug80.
 
+![Command Palette entry for Debug80 workspace symbol search](../../assets/images/debug80-book/book1/chapter6-search-workspace-symbols-command.png)
+
 This is target-based search. Select the Debug80 target you want, build it, then use the workspace symbol picker for symbols from that target.
 
-> **Image placeholder:** VS Code workspace symbol picker showing Debug80 symbols from the active target.
+![Workspace symbol picker showing a Debug80 symbol](../../assets/images/debug80-book/book1/chapter6-workspace-symbol-result.png)
 
 ## Symbol Hover
 
@@ -39,7 +41,7 @@ in: A,HL    out: carry    clobbers: B,C    preserves: DE,IX
 
 Hover appears for symbols that resolve through the source map. Build the target when hover needs current symbol data.
 
-> **Image placeholder:** Symbol hover showing name, kind, address and source location.
+![Symbol hover showing source-map details](../../assets/images/debug80-book/book1/chapter6-symbol-hover.png)
 
 ## ROM Source
 
@@ -55,9 +57,11 @@ Debug80: Open Auxiliary Source
 
 Use this when a monitor call changes registers unexpectedly or when the Call Stack shows an address inside ROM.
 
-> **Image placeholder:** Command Palette showing **Debug80: Open Auxiliary Source**.
+![Command Palette entry for Open Auxiliary Source](../../assets/images/debug80-book/book1/chapter6-open-auxiliary-source-command.png)
 
-> **Image placeholder:** MON-3 source open beside user source.
+Debug80 then shows the auxiliary source files available for the active debug session.
+
+![Auxiliary source picker showing MON-3 source files](../../assets/images/debug80-book/book1/chapter6-auxiliary-source-picker.png)
 
 Opening ROM source gives you the surrounding monitor code for the current address.
 
