@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 102
 ---
 
-[← Appendix A — Debug Expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Project Configuration Reference →](c-project-configuration.md)
+[← Appendix A — Debug Expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Debug80 File Formats →](c-project-configuration.md)
 
 # Appendix B — Command Reference
 
@@ -54,4 +54,4 @@ Open the VS Code Command Palette to run these commands directly. On macOS, press
 | **Debug80: Test CoolTerm Connection** | Check whether Debug80 can reach CoolTerm's Remote Control Socket. |
 | **Debug80: Send HEX to Board via CoolTerm** | Send the active target's HEX file to hardware through CoolTerm. |
 
-[← Appendix A — Debug Expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Project Configuration Reference →](c-project-configuration.md)
+[← Appendix A — Debug Expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Debug80 File Formats →](c-project-configuration.md)
