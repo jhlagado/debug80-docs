@@ -142,11 +142,7 @@ Comparison operators:
 = == != <> < <= > >=
 ```
 
-The word forms are also accepted:
-
-```asm
-eq ne lt le gt ge
-```
+`=` and `==` test equality. `!=` and `<>` test inequality. `<` tests less than. `<=` tests less than or equal. `>` tests greater than. `>=` tests greater than or equal.
 
 Logical operators:
 
