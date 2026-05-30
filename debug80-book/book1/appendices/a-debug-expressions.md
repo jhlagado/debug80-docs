@@ -113,11 +113,12 @@ Square brackets read one byte from memory at the address inside the brackets:
 [IX + 4]
 ```
 
-Parentheses group expressions:
+Z80 assembly normally uses parentheses for indirect references, as in `(HL)`. Debug80 expressions use square brackets for memory reads so parentheses can keep their ordinary expression-grouping role.
 
 ```asm
 (A + 1) = $21
 ([FLAGS] & $80) != 0
+([PACMO_LIVES] = 3) or carry
 ```
 
 ## Operators
