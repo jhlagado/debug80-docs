@@ -73,10 +73,19 @@ html {
 
   code,
   pre,
+  pre code,
+  .highlight,
+  .highlight code,
+  .highlighter-rouge,
+  .highlighter-rouge code,
+  .language-plaintext,
+  .language-asm,
   kbd,
   samp {
-    font-variant-ligatures: none;
-    font-feature-settings: "liga" 0, "calt" 0;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace !important;
+    font-variant-ligatures: none !important;
+    font-feature-settings: "liga" 0, "calt" 0, "clig" 0, "dlig" 0 !important;
+    text-rendering: optimizeSpeed;
   }
 
   // Lists — breathing room between items
