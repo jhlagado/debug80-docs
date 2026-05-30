@@ -41,6 +41,8 @@ The port name depends on your USB serial adapter and operating system. The line 
 
 When CoolTerm is running with the Remote Control Socket enabled, Debug80 can detect it and show the send button in the Project section. For a TEC-1G target, it appears as **Send to TEC-1G**.
 
+![Debug80 Project section ready to send a HEX file through CoolTerm](../../assets/images/debug80-book/book1/chapter7-project-ready-to-send.png)
+
 If the board misses characters during transfer, adjust CoolTerm's transmit delay settings.
 
 ## Build And Send
@@ -49,6 +51,12 @@ Select the correct project and target in Debug80. Build the target so its `.hex`
 
 Put the TEC-1G into MON-3 Intel HEX Load mode before sending.
 
+![TEC-1G MON-3 menu with Intel HEX Load selected](../../assets/images/debug80-book/book1/chapter7-tec1g-intel-hex-menu.png)
+
+The TEC-1G display shows the loader state while it waits for incoming data.
+
+![TEC-1G Intel HEX loader running](../../assets/images/debug80-book/book1/chapter7-tec1g-intel-hex-running.png)
+
 Click **Send to TEC-1G** in the Project section. Debug80 sends the active target's HEX file through CoolTerm and reports when the file has been sent.
 
 MON-3 reports the load result on the TEC-1G seven-segment display: `PASS` for an accepted load or `ERROR` for a checksum or write verification failure.
@@ -56,12 +64,6 @@ MON-3 reports the load result on the TEC-1G seven-segment display: `PASS` for an
 Debug80 reports that CoolTerm sent the file. The final load result comes from the TEC-1G display, not from serial text. The serial startup message `TEC-1G Connected` belongs to MON-3 startup.
 
 When **Send to TEC-1G** is hidden, start CoolTerm and enable the Remote Control Socket. When Debug80 asks for a HEX file, build the target again.
-
-> **Image placeholder:** Debug80 Project section with **Send to TEC-1G** visible.
-
-> **Image placeholder:** TEC-1G in MON-3 Intel HEX Load mode.
-
-> **Image placeholder:** TEC-1G seven-segment display showing `PASS` after a successful load.
 
 After a successful transfer, run the program on the board and compare the result with the emulator. The emulator is the faster place to debug, and the board is the final check that the serial transfer and hardware assumptions match.
 
