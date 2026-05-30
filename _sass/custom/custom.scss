@@ -71,6 +71,14 @@ html {
     margin-bottom: 0.375rem;
   }
 
+  code,
+  pre,
+  kbd,
+  samp {
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+  }
+
   // Lists — breathing room between items
   ul, ol {
     margin-bottom: 1.25rem;

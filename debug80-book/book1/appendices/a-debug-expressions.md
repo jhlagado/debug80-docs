@@ -25,10 +25,10 @@ PACMO_LIVES
 [PACMO_LIVES]
 [HL]
 [IX + 4]
-PC eq MainLoop
-[PACMO_LIVES] eq 0
-zero and A eq 0
-(A ^ $ff) eq $df
+PC = MainLoop
+[PACMO_LIVES] = 0
+zero and A = 0
+(A ^ $ff) = $df
 ```
 
 ## Registers
@@ -88,7 +88,7 @@ This keeps `carry` separate from the `C` register.
 ```asm
 zero
 not carry
-zero and A eq 0
+zero and A = 0
 ```
 
 ## Symbols
@@ -98,7 +98,7 @@ Symbols from the active source map can be used by name. A symbol by itself evalu
 ```asm
 MainLoop
 PACMO_LIVES
-PC eq MainLoop
+PC = MainLoop
 ```
 
 Build the active target again when a symbol Watch needs to be generated or refreshed.
@@ -116,8 +116,8 @@ Square brackets read one byte from memory at the address inside the brackets:
 Parentheses group expressions:
 
 ```asm
-(A + 1) eq $21
-([FLAGS] & $80) ne 0
+(A + 1) = $21
+([FLAGS] & $80) != 0
 ```
 
 ## Operators
@@ -140,6 +140,11 @@ Comparison operators:
 
 ```asm
 = == != <> < <= > >=
+```
+
+The word forms are also accepted:
+
+```asm
 eq ne lt le gt ge
 ```
 
