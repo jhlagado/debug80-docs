@@ -23,6 +23,8 @@ Build again after changing labels, constants or include files.
 
 Workspace symbol search lists symbols from the active target: labels, constants, routines and data symbols.
 
+Open the VS Code Command Palette with **Shift-Command-P** on macOS or **Shift-Control-P** on Windows and Linux, then run **Debug80: Search Workspace Symbols**. You can also press **Command-T** on macOS or **Control-T** on Windows and Linux to open VS Code's symbol picker directly.
+
 ![Command Palette entry for Debug80 workspace symbol search](../../assets/images/debug80-book/book1/chapter6-search-workspace-symbols-command.png)
 
 ![Workspace symbol picker showing a Debug80 symbol](../../assets/images/debug80-book/book1/chapter6-workspace-symbol-result.png)
@@ -47,7 +49,7 @@ Hover appears for symbols that resolve through the source map. Build the target 
 
 The TEC-1G / MON-3 platform runs with monitor ROM in the emulated machine. User programs normally start at `0x4000`; reset code and monitor routines live in ROM.
 
-When execution enters monitor code, the current PC may point outside your source file. Use auxiliary source when a monitor call changes registers unexpectedly or when the Call Stack shows an address inside ROM.
+When execution enters monitor code, the current PC may point outside your source file. Use **Debug80: Open Auxiliary Source** from the Command Palette when a monitor call changes registers unexpectedly or when the Call Stack shows an address inside ROM.
 
 ![Command Palette entry for Open Auxiliary Source](../../assets/images/debug80-book/book1/chapter6-open-auxiliary-source-command.png)
 
