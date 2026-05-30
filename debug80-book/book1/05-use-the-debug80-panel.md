@@ -9,11 +9,11 @@ nav_order: 5
 
 # Build Options And Source Maps
 
-The **Project** section controls the next build: project, target, platform, source-map state and register-care settings.
+The **Project** section is the build control point. It selects the project folder, target and platform, then shows whether the active target has usable build output and source-map data.
 
 ## Project And Target
 
-The **Project** row selects the workspace folder. The **Target** row selects the runnable program inside that folder. In a multi-folder workspace, choose both before you build.
+The **Project** row selects a workspace folder. The **Target** row selects the runnable program inside that folder.
 
 **Stop on entry** pauses the next launch at the first instruction the Z80 executes. Use it for a controlled start from reset. Leave it clear when you want the target to run immediately.
 
@@ -21,25 +21,26 @@ The **Project** row selects the workspace folder. The **Target** row selects the
 
 ## Build Output
 
-**Build** asks AZM to assemble the active target and write generated files under the target's build directory.
+**Build** assembles the active target with AZM and writes generated files under `build/`.
 
 ![Build folder after a successful target build](../../assets/images/debug80-book/book1/chapter5-build-folder.png)
 
-The `.hex` file is the important user-facing artifact: Debug80 loads it into the emulator and can send the same file to a real TEC-1G through CoolTerm.
+The image shows the usual files after a successful build. The two files to understand first are:
 
-The `.d8.json` file is Debug80's source map. It connects source lines, symbols and generated addresses using Debug80's own D8 JSON mapping format. Appendix C gives the file-format details for readers who want to inspect the generated map or write tooling around it.
+- `main.hex`, the Intel HEX file Debug80 loads into the emulator and can send to a TEC-1G through CoolTerm.
+- `main.d8.json`, the source map Debug80 uses to connect source lines, symbols and generated addresses.
 
-The register-care report records contract diagnostics from the build. It is most useful in **Audit** mode, because you can inspect the findings without blocking the build.
+The source map uses Debug80's D8 JSON mapping format. Appendix C gives the file-format details for readers who want to inspect the map or write tooling around it.
 
 ![Source through AZM to HEX and source-map output](../../assets/images/debug80-book/book1/source-azm-artifacts.svg)
 
-Edit source files, then build the target again. Treat everything in `build/` as generated output.
+Treat the build folder as generated output. Edit the source files, then build the target again.
 
 ## Source Map Status
 
-The Project section reports the source-map status for the active target. Debug80 uses the source map for source breakpoints, stepping, Run to Cursor, Variables symbols, Watches, symbolic Call Stack names, Go to Definition, symbol hover and workspace symbol search.
+Debug80 uses the active target's source map for source breakpoints, stepping, Run to Cursor, Variables symbols, Watches, symbolic Call Stack names, Go to Definition, symbol hover and workspace symbol search.
 
-Read the status line before using source-map-backed features:
+The status line tells you whether that map is ready:
 
 - `Source map: current.` means the selected target has a readable source map and it appears up to date.
 - `Source map: missing, build the selected target.` means the target needs a successful build before source-map features are available.
@@ -49,11 +50,11 @@ Read the status line before using source-map-backed features:
 
 ![Source-map status leading to build and source-map-backed features](../../assets/images/debug80-book/book1/source-map-status-features.svg)
 
-Build the active target when source-map-backed features need fresh address data.
+Build the active target when source-level features need fresh address data.
 
 ## Register Care
 
-**Register Care** controls how strictly Debug80 treats AZM register-care diagnostics during launch. Register care checks whether routines use registers according to their AZMDoc contracts: inputs, outputs, clobbered registers and preserved registers.
+**Register Care** checks routine calls against AZMDoc register contracts: inputs, outputs, clobbered registers and preserved registers.
 
 The selector has three modes:
 
@@ -61,7 +62,7 @@ The selector has three modes:
 - **Audit** reports register-care findings as advisory diagnostics while allowing the workflow to continue.
 - **Off** skips the register-care check for launch.
 
-Use **Enforce** when contracts should protect the build. Use **Audit** when you are introducing contracts to existing code and want a list of issues before making them blocking.
+Use **Enforce** when contracts should protect the build. Use **Audit** when you want diagnostics without blocking the workflow.
 
 ## Contract Updates
 
@@ -75,6 +76,6 @@ Leave this on **Ask** while learning the workflow.
 
 ## Build Controls And Machine State
 
-Use the Project section for controls that affect the next build. Use Variables, Watch, Call Stack, Registers, Memory, Machine and Displays for the running machine.
+Use the Project section for build-facing decisions. Use Variables, Watch, Call Stack, Registers, Memory, Machine and Displays for the running machine.
 
 [← Inspect A Running Program](04-inspect-the-machine.md) | [Book 1](index.md) | [Source Navigation And ROM Source →](06-artifacts-roms-and-mapping.md)
