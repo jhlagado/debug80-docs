@@ -4,7 +4,7 @@ title: "Chapter 3 — Strings"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 4
 ---
-[← Arrays and Loops](02-arrays-and-loops.md) | [Book 3](index.md) | [Bit Patterns →](04-bit-patterns.md)
+[← Arrays and Loops](02-arrays-and-loops.md) | [Book 2](index.md) | [Bit Patterns →](04-bit-patterns.md)
 
 # Chapter 3 — Strings
 
@@ -66,7 +66,7 @@ You could: byte 0 holds the count, bytes 1..n hold text. That saves a scan for l
 
 ## String calling convention
 
-Unless a routine says otherwise, Book 3 string routines use:
+Unless a routine says otherwise, Book 2 string routines use:
 
 | Role | Register | Notes |
 |------|----------|--------|
@@ -235,7 +235,7 @@ Sketch of the invariant for decimal output into a byte buffer at DE:
 
 > HL (or DE) points at the next free byte rightward; the digits emitted so far sit to the left; when the value reaches zero, write `$00` and you are done.
 
-You do not need a print port for Book 3 — storing `"42", 0` in RAM and inspecting bytes after `halt` is enough proof.
+You do not need a print port for Book 2 — storing `"42", 0` in RAM and inspecting bytes after `halt` is enough proof.
 
 ---
 
@@ -316,4 +316,4 @@ Single-step through `strlen_u8` once: watch B increment only on non-zero bytes, 
 
 ---
 
-[← Arrays and Loops](02-arrays-and-loops.md) | [Book 3](index.md) | [Bit Patterns →](04-bit-patterns.md)
+[← Arrays and Loops](02-arrays-and-loops.md) | [Book 2](index.md) | [Bit Patterns →](04-bit-patterns.md)

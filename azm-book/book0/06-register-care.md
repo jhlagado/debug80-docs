@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Chapter 6 — Register Care and Contracts"
-parent: "AZM Book 3 — Assembler Manual"
+parent: "AZM Book 0 — Assembler Manual"
 nav_order: 6
 ---
 [← The Layout System](05-layout-system.md) | [Manual](index.md) | [Op Declarations and Aliases →](07-ops-aliases.md)

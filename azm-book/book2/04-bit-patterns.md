@@ -4,7 +4,7 @@ title: "Chapter 4 — Bit Patterns"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 5
 ---
-[← Strings](03-strings.md) | [Book 3](index.md) | [Records →](05-records.md)
+[← Strings](03-strings.md) | [Book 2](index.md) | [Records →](05-records.md)
 
 # Chapter 4 — Bit Patterns
 
@@ -259,4 +259,4 @@ AZM writes `examples/04_bit_flags.lst` by default. Open that listing to confirm 
 
 ---
 
-[← Strings](03-strings.md) | [Book 3](index.md) | [Records →](05-records.md)
+[← Strings](03-strings.md) | [Book 2](index.md) | [Records →](05-records.md)

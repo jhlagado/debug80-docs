@@ -4,7 +4,7 @@ title: "Chapter 1 — Foundations"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 2
 ---
-[← Introduction](00-introduction.md) | [Book 3](index.md) | [Arrays and Loops →](02-arrays-and-loops.md)
+[← Introduction](00-introduction.md) | [Book 2](index.md) | [Arrays and Loops →](02-arrays-and-loops.md)
 
 # Chapter 1 — Foundations
 
@@ -25,13 +25,13 @@ High-level languages call a library. On the Z80 you implement the algorithm your
 3. Otherwise swap the two values.
 4. Repeat from step 1.
 
-No division opcode is required — only compare, subtract and swap. That fits the Book 3 theme: the algorithm is visible instruction by instruction.
+No division opcode is required — only compare, subtract and swap. That fits the Book 2 theme: the algorithm is visible instruction by instruction.
 
 ---
 
-## Book 3 calling convention (16-bit)
+## Book 2 calling convention (16-bit)
 
-Book 1 established informal conventions: HL for addresses, A for byte results, callee-save for BC/DE/HL when used as scratch. Book 3 adds a **16-bit family** used in this chapter and reused later unless a chapter says otherwise.
+Book 1 established informal conventions: HL for addresses, A for byte results, callee-save for BC/DE/HL when used as scratch. Book 2 adds a **16-bit family** used in this chapter and reused later unless a chapter says otherwise.
 
 | Role | Register | Notes |
 |------|----------|--------|
@@ -153,7 +153,7 @@ sort_len:
     .ds byte
 ```
 
-Rules used throughout Book 3:
+Rules used throughout Book 2:
 
 - Place workspace in RAM, not ROM (`$8000` region or a dedicated high page like `$7F00`).
 - `.ds` reserves without initializing — the program must write before read.
@@ -223,7 +223,7 @@ A byte-only variant fits entirely in registers; a word variant should save the q
 |------|----------------|
 | [`examples/01_gcd.asm`](examples/01_gcd.asm) | `gcd_result` = 6, `power_result` = 81, then `halt` |
 
-Assemble from `book3/`:
+Assemble from `book2/`:
 
 ```sh
 azm examples/01_gcd.asm
@@ -252,4 +252,4 @@ azm --rc warn examples/01_gcd.asm
 
 ---
 
-[← Introduction](00-introduction.md) | [Book 3](index.md) | [Arrays and Loops →](02-arrays-and-loops.md)
+[← Introduction](00-introduction.md) | [Book 2](index.md) | [Arrays and Loops →](02-arrays-and-loops.md)

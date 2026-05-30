@@ -4,7 +4,7 @@ title: "Chapter 6 — Recursion"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 7
 ---
-[← Records](05-records.md) | [Book 3](index.md) | [Composition →](07-composition.md)
+[← Records](05-records.md) | [Book 2](index.md) | [Composition →](07-composition.md)
 
 # Chapter 6 — Recursion
 
@@ -155,7 +155,7 @@ FactIterOne:
 
 The inner `call factorial_u8` returns \((n-1)!\) in **A**. The outer level still needs **B** = \(n\) for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `;!` block.
 
-If you made a second recursive call before storing the first result, you would have the same problem with **HL** — the register used for 16-bit results in Book 3. Pattern:
+If you made a second recursive call before storing the first result, you would have the same problem with **HL** — the register used for 16-bit results in Book 2. Pattern:
 
 ```asm
     call first_rec
@@ -259,7 +259,7 @@ Symptoms you might see in the emulator:
 - `halt` never reached because PC jumped into data
 - workspace or table bytes changing while stepping through unrelated code
 
-Defenses that fit Book 3:
+Defenses that fit Book 2:
 
 - cap inputs with `.equ` and document the cap in comments
 - keep stack top away from `.org $8000` data (init SP to `$9FFF` or your board's RAM top)
@@ -359,4 +359,4 @@ Step into `factorial_u8` with `FACT_N = 3` first: count pushes on the way down, 
 
 ---
 
-[← Records](05-records.md) | [Book 3](index.md) | [Composition →](07-composition.md)
+[← Records](05-records.md) | [Book 2](index.md) | [Composition →](07-composition.md)

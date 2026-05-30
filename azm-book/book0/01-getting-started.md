@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Chapter 1 — Getting Started with AZM"
-parent: "AZM Book 3 — Assembler Manual"
+parent: "AZM Book 0 — Assembler Manual"
 nav_order: 1
 ---
 [← Preface](00-preface.md) | [Manual](index.md) | [Source Syntax and Symbols →](02-source-syntax.md)

@@ -4,7 +4,7 @@ title: "Chapter 8 — Pointer Structures"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 9
 ---
-[← Composition](07-composition.md) | [Book 3](index.md) | [Capstone →](09-capstone.md)
+[← Composition](07-composition.md) | [Book 2](index.md) | [Capstone →](09-capstone.md)
 
 # Chapter 8 — Pointer Structures
 
@@ -57,7 +57,7 @@ NODE_SIZE   .equ sizeof(ListNode)
 
 ## Static nodes in fixed RAM
 
-Book 3 does not use a heap allocator. You **name** nodes as labels and connect them at assembly time or in `main`:
+Book 2 does not use a heap allocator. You **name** nodes as labels and connect them at assembly time or in `main`:
 
 ```asm
 node_a:
@@ -411,4 +411,4 @@ Single-step `list_sum_u16` once: watch HL jump from `node_a` to `node_b` to `nod
 
 ---
 
-[← Composition](07-composition.md) | [Book 3](index.md) | [Capstone →](09-capstone.md)
+[← Composition](07-composition.md) | [Book 2](index.md) | [Capstone →](09-capstone.md)

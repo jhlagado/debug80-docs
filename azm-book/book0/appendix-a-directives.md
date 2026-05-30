@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Appendix A — Directive Reference"
-parent: "AZM Book 3 — Assembler Manual"
+parent: "AZM Book 0 — Assembler Manual"
 nav_order: 101
 ---
 [← Diagnostics and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix B — Expression Operators →](appendix-b-operators.md)

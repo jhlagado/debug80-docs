@@ -1,14 +1,14 @@
 ---
 layout: default
-title: "AZM Book 3 — Assembler Manual"
-nav_order: 7
+title: "AZM Book 0 — Assembler Manual"
+nav_order: 4
 has_children: true
 ---
-# AZM Book 3 — Assembler Manual
+# AZM Book 0 — Assembler Manual
 
-This manual is for programmers who already know assembly language and want to learn the AZM assembler itself. It assumes you can read ordinary Z80 code and focuses on AZM source syntax, directives, expressions, layout types, register contracts, op declarations, compatibility features, diagnostics and output formats.
+This is the definitive reference for the AZM assembler format and tooling. It documents the source syntax, directives, expressions, layout types, register contracts, op declarations, compatibility features, diagnostics and output formats that define AZM source files.
 
-The first two AZM books teach programming tracks. Book 3 teaches the assembler itself.
+Read this first when you want the assembler rules directly. If you want a guided introduction to Z80 programming before using the reference, start with [AZM Book 1 — Z80 Fundamentals](../book1/index.md).
 
 ---
 

@@ -1,14 +1,16 @@
 ---
 layout: default
 title: "Preface"
-parent: "AZM Book 3 — Assembler Manual"
+parent: "AZM Book 0 — Assembler Manual"
 nav_order: 0
 ---
 [Manual](index.md) | [Getting Started →](01-getting-started.md)
 
 # Preface
 
-This manual is for Z80 programmers who already know assembly language and want to use AZM effectively. It assumes you can read Z80 source — labels, instructions, operands and directives — and that you understand registers, flags and memory addressing well enough to write a working subroutine. Books 1, 2 and 3 in this series build that foundation.
+This manual is the definitive reference for programmers who want to use AZM effectively. It documents AZM source syntax, directives, expressions, layout types, register-care contracts, op declarations, diagnostics and output artifacts in a direct reference order.
+
+If you already know Z80 assembly, you can start here. If you want a guided introduction to the machine first, use [AZM Book 1 — Z80 Fundamentals](../book1/index.md), then return to this manual when you need the exact assembler rule.
 
 AZM is a modern Z80 assembler for the Debug80 toolchain. It keeps the emitted machine code visible while adding assembler-time support for larger programs: layout types, register-care contracts, op declarations, directive aliases, diagnostics, output artifacts and Debug80 source maps.
 

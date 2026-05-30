@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Chapter 4 — Raw Data, Storage and Strings"
-parent: "AZM Book 3 — Assembler Manual"
+parent: "AZM Book 0 — Assembler Manual"
 nav_order: 4
 ---
 [← Addresses, Constants and Expressions](03-addresses-constants-expressions.md) | [Manual](index.md) | [The Layout System →](05-layout-system.md)

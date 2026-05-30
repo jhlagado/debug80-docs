@@ -4,7 +4,7 @@ title: "Chapter 7 — Composition"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 8
 ---
-[← Recursion](06-recursion.md) | [Book 3](index.md) | [Pointer Structures →](08-pointer-structures.md)
+[← Recursion](06-recursion.md) | [Book 2](index.md) | [Pointer Structures →](08-pointer-structures.md)
 
 # Chapter 7 — Composition
 
@@ -103,8 +103,8 @@ StrLenDone:
 Rules that keep libraries boring and reliable:
 
 1. **No `main` and no `halt`** in the library — only subroutines and maybe private helpers (`ring_advance_index` style).
-2. **No `.org` in the library** unless you are deliberately placing code at a fixed address (unusual in Book 3).
-3. **Every exported routine gets AZMDoc** — same as Book 1 Chapter 12 and Book 3 Chapters 1–3.
+2. **No `.org` in the library** unless you are deliberately placing code at a fixed address (unusual in Book 2).
+3. **Every exported routine gets AZMDoc** — same as Book 1 Chapter 12 and Book 2 Chapters 1–3.
 4. **Entry labels use `@name:`** on routines the register-care analyzer should treat as callable bodies.
 
 The application file stays short:
@@ -201,7 +201,7 @@ Contrast:
 | Code in output | Yes — your bytes | No — you supply address binding separately |
 | Typical use | Your reusable subroutines | ROM / monitor / third-party binary |
 
-Book 3 examples stay self-contained in RAM; `.asmi` matters when you wire the same libraries into hardware later.
+Book 2 examples stay self-contained in RAM; `.asmi` matters when you wire the same libraries into hardware later.
 
 ---
 
@@ -261,4 +261,4 @@ Step into `strlen_u8` once: confirm the library file's labels appear in the list
 
 ---
 
-[← Recursion](06-recursion.md) | [Book 3](index.md) | [Pointer Structures →](08-pointer-structures.md)
+[← Recursion](06-recursion.md) | [Book 2](index.md) | [Pointer Structures →](08-pointer-structures.md)

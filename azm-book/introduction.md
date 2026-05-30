@@ -86,7 +86,7 @@ By the end of Book 2 you will be able to:
 
 **Book 2** moves to algorithms and data structures. Each chapter works through a real, compilable AZM program that solves a non-trivial problem. These chapters assume everything in Book 1; Debug80 Book 2 is useful background when you want a concrete TEC-1G hardware target.
 
-**The AZM Book 3 — Assembler Manual** is the reference for AZM's language and tooling. It documents AZM syntax, directives, expressions, layout types, op declarations, diagnostics, and output formats for programmers who already know Z80 assembly.
+**AZM Book 0 — Assembler Manual** is the definitive reference for AZM's language and tooling. It documents AZM syntax, directives, expressions, layout types, op declarations, diagnostics, and output formats for programmers who want the assembler rules directly.
 
 **Appendices** are reference material: number notation, ASCII, the full register set, flags and condition codes, and a searchable Z80 instruction table. Use them while reading any book in the series.
 

@@ -391,7 +391,7 @@ AZM cannot see inside ROM. `.asmi` is how you teach the analyzer what the extern
 
 If a project calls many system routines, one `.asmi` file holds all declarations. Update it when platform documentation changes; source files stay unchanged.
 
-Book 3 Chapter 7 revisits `.include` and library layout; the external boundary story lives here in Book 1.
+Book 2 Chapter 7 revisits `.include` and library layout; the external boundary story lives here in Book 1.
 
 ---
 

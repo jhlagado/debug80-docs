@@ -391,7 +391,7 @@ You can now:
 - define named record types, reserve storage with `.ds TypeExpr` and compute sizes and offsets at assembly time rather than by hand
 - name repeated instruction sequences with ops and read code that communicates intent rather than mechanics alone
 
-Book 3 builds on all of this. It covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for larger programs that exceed what a single file can hold clearly.
+Book 2 builds on all of this. It covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for larger programs that exceed what a single file can hold clearly.
 
 ---
 

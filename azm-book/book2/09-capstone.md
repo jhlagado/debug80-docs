@@ -4,7 +4,7 @@ title: "Chapter 9 — Capstone"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 10
 ---
-[← Pointer Structures](08-pointer-structures.md) | [Book 3](index.md)
+[← Pointer Structures](08-pointer-structures.md) | [Book 2](index.md)
 
 # Chapter 9 — Capstone
 
@@ -238,7 +238,7 @@ Run to `halt`, then read `solution_count`. If you see `$005C`, the search finish
 
 ---
 
-## How this chapter uses the rest of Book 3
+## How this chapter uses the rest of Book 2
 
 | Earlier idea | Here |
 |--------------|------|
@@ -295,14 +295,14 @@ No port I/O — inspect RAM in the emulator.
 
 ---
 
-## What you learned in Book 3
+## What you learned in Book 2
 
-You started Book 3 with arithmetic conventions and AZMDoc on small routines. You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts** — choosing the representation that fits each problem.
+You started Book 2 with arithmetic conventions and AZMDoc on small routines. You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts** — choosing the representation that fits each problem.
 
 Flat AZM never hid control flow behind syntax. Every `call` and every byte in `col_used` is in the listing you assemble. That is the trade this part teaches: more typing, full ownership.
 
-Book 1 gave you the CPU and the tooling. Book 3 showed how algorithms look when you own the data layout first. The next step is a project of your own — a buffer, a parser, a game board — where you pick the representation, write the `;!` lines and let the emulator prove the invariant.
+Book 1 gave you the CPU and the tooling. Book 2 showed how algorithms look when you own the data layout first. The next step is a project of your own — a buffer, a parser, a game board — where you pick the representation, write the `;!` lines and let the emulator prove the invariant.
 
 ---
 
-[← Pointer Structures](08-pointer-structures.md) | [Book 3](index.md)
+[← Pointer Structures](08-pointer-structures.md) | [Book 2](index.md)

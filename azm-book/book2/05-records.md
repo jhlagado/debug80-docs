@@ -4,7 +4,7 @@ title: "Chapter 5 — Records"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 6
 ---
-[← Bit Patterns](04-bit-patterns.md) | [Book 3](index.md) | [Recursion →](06-recursion.md)
+[← Bit Patterns](04-bit-patterns.md) | [Book 2](index.md) | [Recursion →](06-recursion.md)
 
 # Chapter 5 — Records
 
@@ -27,7 +27,7 @@ A FIFO queue (first in, first out) needs:
 
 Shifting the whole table on every pop is wasteful on a small machine. A **ring buffer** keeps indices in workspace RAM and only moves the indices. Storage is a fixed byte array; push writes at `head` and advances; pop reads at `tail` and advances. When an index reaches capacity, it wraps to 0.
 
-No allocator, no linked list nodes — just bytes, offsets and compare/branch. That is the Book 3 sweet spot: representation before algorithm, with every memory access visible.
+No allocator, no linked list nodes — just bytes, offsets and compare/branch. That is the Book 2 sweet spot: representation before algorithm, with every memory access visible.
 
 ---
 
@@ -347,7 +347,7 @@ FIFO order: bytes leave in the same order they arrived because `tail` chases `he
 
 ## AZMDoc on routines
 
-Book 1 Chapter 12 introduced AZMDoc: semicolon comments with `;!` tags for register contracts. Book 3 algorithm routines should always carry them.
+Book 1 Chapter 12 introduced AZMDoc: semicolon comments with `;!` tags for register contracts. Book 2 algorithm routines should always carry them.
 
 | Tag | Meaning |
 |-----|---------|
@@ -450,4 +450,4 @@ Single-step through `ring_push` once with the emulator: watch `head` and `count`
 
 ---
 
-[← Bit Patterns](04-bit-patterns.md) | [Book 3](index.md) | [Recursion →](06-recursion.md)
+[← Bit Patterns](04-bit-patterns.md) | [Book 2](index.md) | [Recursion →](06-recursion.md)

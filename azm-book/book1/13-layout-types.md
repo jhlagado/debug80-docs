@@ -143,7 +143,7 @@ sprite_table:
     .ds NumSprites * sizeof(Sprite)   ; same bytes as .ds Sprite[16]
 ```
 
-Use `.ds Sprite[16]` when the count is written as a literal in source. Use `.ds Count * sizeof(Sprite)` when the count lives in a `.equ`. Book 3's ring buffer uses the same idea for scalar buffers: `.ds RING_CAP` alongside `.ds byte[8]` for a fixed width.
+Use `.ds Sprite[16]` when the count is written as a literal in source. Use `.ds Count * sizeof(Sprite)` when the count lives in a `.equ`. Book 2's ring buffer uses the same idea for scalar buffers: `.ds RING_CAP` alongside `.ds byte[8]` for a fixed width.
 
 A `.type` block must list fields. One-line aliases such as `.type Pair byte[2]` are rejected — if you need a pair of bytes, write the fields:
 
@@ -330,7 +330,7 @@ WORD_LO .equ offset(WordView, bytes.lo)
 WORD_HI .equ offset(WordView, bytes.hi)
 ```
 
-`sizeof(WordView)` is 2. `offset(WordView, raw)` and `offset(WordView, bytes.lo)` are both 0; `offset(WordView, bytes.hi)` is 1. At run time you still use plain `ld` / `ld (hl)` — the union only documents that the low byte of the word and `bytes.lo` share the same offset. Book 3's bit-pattern chapter treats a status byte as flags; a union could also name `raw` vs `flags` views of one hardware register when you want both spellings in layout constants.
+`sizeof(WordView)` is 2. `offset(WordView, raw)` and `offset(WordView, bytes.lo)` are both 0; `offset(WordView, bytes.hi)` is 1. At run time you still use plain `ld` / `ld (hl)` — the union only documents that the low byte of the word and `bytes.lo` share the same offset. Book 2's bit-pattern chapter treats a status byte as flags; a union could also name `raw` vs `flags` views of one hardware register when you want both spellings in layout constants.
 
 Unions nest inside records:
 

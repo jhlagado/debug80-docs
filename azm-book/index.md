@@ -7,13 +7,21 @@ nav_exclude: true
 ---
 # AZM Books
 
-Two teaching books and one assembler manual for working with **AZM**, the assembler used by the Debug80 environment. Start with the machine, then use AZM's larger-program features for algorithms and data structures. Use the manual when you already know assembly and want the AZM language and tool behavior directly.
+One core assembler manual and two teaching books for working with **AZM**, the assembler used by the Debug80 environment. Start with the manual when you want the AZM language rules directly. Start with Book 1 when you want a guided introduction to Z80 programming before using the reference.
 
 ---
 
 ## [Introduction](introduction.md)
 
 Why assembly language, why AZM, why the Z80 — and what you'll be able to do after each book.
+
+---
+
+## [AZM Book 0 — Assembler Manual](book0/)
+
+The definitive reference for the AZM assembler format and tooling. Covers AZM syntax, directives, expressions, labels, enums, storage, layout types, register contracts, op declarations, aliases, diagnostics, listings, output formats, ASM80-compatible output, porting, and source style.
+
+This is the direct route into the assembler itself.
 
 ---
 
@@ -30,14 +38,6 @@ Fourteen chapters from bare machine code through ops, layout types, and register
 For readers who know the Z80 basics. Works through real algorithms — sorting, searching, strings, bit manipulation, recursion, composition, pointer structures — using the full AZM surface as each construct appears naturally.
 
 Ten chapters from foundations to a complete eight-queens capstone.
-
----
-
-## [AZM Book 3 — Assembler Manual](book3/)
-
-The AZM assembler manual. Covers AZM syntax, directives, expressions, labels, enums, storage, layout types, register contracts, op declarations, aliases, diagnostics, listings, output formats, ASM80-compatible output, porting, and source style.
-
-This is the direct route into the assembler itself, not a beginner Z80 course.
 
 ---
 

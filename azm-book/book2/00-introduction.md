@@ -4,11 +4,11 @@ title: "Introduction"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 1
 ---
-[Book 3](index.md) | [Foundations →](01-foundations.md)
+[Book 2](index.md) | [Foundations →](01-foundations.md)
 
-# Introduction to Book 3
+# Introduction to Book 2
 
-You finished Book 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, AZMDoc contracts, layout types and ops. Book 3 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
+You finished Book 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, AZMDoc contracts, layout types and ops. Book 2 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
 
 ---
 
@@ -32,7 +32,7 @@ Before you write the sort loop, you decide:
 - Is each element a plain `byte`, or a `Sprite` record with `sizeof(Sprite)` stride?
 - Does the index live in B, in L or in a workspace byte?
 
-Book 3 Chapter 2 is the first place those questions drive the code. Chapter 5 (records) goes deeper: the layout type is the contract; the algorithm only adds offsets the assembler already computed.
+Book 2 Chapter 2 is the first place those questions drive the code. Chapter 5 (records) goes deeper: the layout type is the contract; the algorithm only adds offsets the assembler already computed.
 
 ---
 
@@ -44,7 +44,7 @@ The examples stay small enough to read in one sitting. Each loop should have a i
 - "HL points at the next byte to examine."
 - "Everything before index i is sorted."
 
-When something breaks, you check the invariant first, then the instruction sequence. That is the debugging habit Book 1 started; Book 3 assumes you will use it on every chapter.
+When something breaks, you check the invariant first, then the instruction sequence. That is the debugging habit Book 1 started; Book 2 assumes you will use it on every chapter.
 
 ---
 
@@ -52,7 +52,7 @@ When something breaks, you check the invariant first, then the instruction seque
 
 Book 1 used registers for almost everything. Algorithms with more than a few live values need scratch space that survives across calls or nested loops.
 
-The pattern used throughout Book 3:
+The pattern used throughout Book 2:
 
 ```asm
 .org $8000
@@ -76,7 +76,7 @@ Every nontrivial routine in this book should carry:
 - `;!` lines for `in`, `out`, `clobbers` and `preserves`
 - An `@` entry label
 
-Callers depend on that contract. `azm --rc warn` compares callers to callees the same way Book 1 Chapter 12 demonstrated. Book 3 does not introduce a new documentation dialect.
+Callers depend on that contract. `azm --rc warn` compares callers to callees the same way Book 1 Chapter 12 demonstrated. Book 2 does not introduce a new documentation dialect.
 
 ---
 
@@ -101,10 +101,10 @@ Memorizing opcode sequences is not the point. The point is knowing **what proble
 
 ## What comes next
 
-[Chapter 1 — Foundations](01-foundations.md) works through GCD and digit counting on 16-bit values. No arrays yet — only the Book 3 calling convention, compare/subtract idioms and the first workspace bytes. [Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables, insertion sort and linear search.
+[Chapter 1 — Foundations](01-foundations.md) works through GCD and digit counting on 16-bit values. No arrays yet — only the Book 2 calling convention, compare/subtract idioms and the first workspace bytes. [Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables, insertion sort and linear search.
 
-Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search. The [Book 3 index](index.md) lists which chapters are written versus outlined.
+Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search. The [Book 2 index](index.md) lists which chapters are written versus outlined.
 
 ---
 
-[Book 3](index.md) | [Foundations →](01-foundations.md)
+[Book 2](index.md) | [Foundations →](01-foundations.md)

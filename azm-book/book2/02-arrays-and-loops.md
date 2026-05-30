@@ -4,7 +4,7 @@ title: "Chapter 2 — Arrays and Loops"
 parent: "AZM Book 2 — Algorithms and Data Structures"
 nav_order: 3
 ---
-[← Foundations](01-foundations.md) | [Book 3](index.md) | [Strings →](03-strings.md)
+[← Foundations](01-foundations.md) | [Book 2](index.md) | [Strings →](03-strings.md)
 
 # Chapter 2 — Arrays and Loops
 
@@ -289,4 +289,4 @@ Single-step through one outer iteration in the emulator: watch `key_byte` and co
 
 ---
 
-[← Foundations](01-foundations.md) | [Book 3](index.md) | [Strings →](03-strings.md)
+[← Foundations](01-foundations.md) | [Book 2](index.md) | [Strings →](03-strings.md)
