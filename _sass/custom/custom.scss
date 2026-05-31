@@ -7,10 +7,10 @@
 
 // --- Base font size ------------------------------------------
 // Serif fonts benefit from a touch more room than system-ui.
-// 17 px is the sweet spot for Source Serif 4 on screen.
+// Source Serif 4 reads better for long-form docs when it is not too fine.
 
 html {
-  font-size: 17px;
+  font-size: 18px;
 }
 
 
@@ -375,7 +375,7 @@ body.has-image-lightbox {
 
 @media (max-width: 50rem) {
   html {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .main-content {
