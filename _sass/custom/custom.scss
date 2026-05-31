@@ -15,6 +15,7 @@ html {
 
 :root {
   --debug80-chrome-font-size: 0.95rem;
+  --debug80-chrome-font-weight: 500;
 }
 
 
@@ -422,8 +423,9 @@ body.has-image-lightbox {
 .site-header,
 .breadcrumb-nav,
 .search-input,
-.aux-nav {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+.aux-nav,
+.main-content > main > .table-wrapper:first-child {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
 }
 
 .search-input,
@@ -432,11 +434,13 @@ body.has-image-lightbox {
 .breadcrumb-nav-list-item,
 .main-content > main > .table-wrapper:first-child {
   font-size: var(--debug80-chrome-font-size) !important;
+  font-weight: var(--debug80-chrome-font-weight) !important;
   line-height: 1.35;
 }
 
 .main-content > main > .table-wrapper:first-child table {
   font-size: inherit;
+  font-weight: inherit;
 }
 
 
