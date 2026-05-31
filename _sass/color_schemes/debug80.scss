@@ -8,10 +8,9 @@ $color-scheme: light;
 
 // --- Typography ----------------------------------------------
 
-// Source Serif 4 is an optical-size-aware serif — excellent for
-// technical documentation at screen sizes. Code blocks use
-// system monospace fonts so ASCII operators render literally.
-$body-font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+// Merriweather gives the docs a sturdier long-form reading texture.
+// Code blocks use system monospace fonts so ASCII operators render literally.
+$body-font-family: "Merriweather", Georgia, "Times New Roman", serif;
 $mono-font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 
 $body-line-height:         1.6;
