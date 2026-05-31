@@ -46,21 +46,12 @@ For readers who know the Z80 basics and want to build more substantial AZM progr
 
 ## Engineering Manuals
 
-These manuals are for contributors working on the TypeScript implementations rather than readers learning Z80, AZM, or the Debug80 user workflow.
+For readers interested in the TypeScript implementations of Debug80 and AZM.
 
-### [Debug80 Engineering Manual](codebase/)
+- [Debug80 Engineering Manual](codebase/) — Debug adapter, launch pipeline, Z80 emulator, platform runtimes, extension UI, source mapping, and extension points.
+- [AZM Engineering Manual](azm-codebase/) — AZM repository layout, parsing, assembly, Z80 emission, ops, register-care analysis, artifacts, APIs, and verification.
 
-A seventeen-chapter engineering reference covering every layer of the Debug80 codebase: the DAP session model, the launch pipeline, the Z80 CPU emulator, all three platform runtimes, the extension UI and webview panels, source mapping, and a practical guide to extending the debugger.
-
-For engineers who need to understand, modify, or extend Debug80.
-
----
-
-### [AZM Engineering Manual](azm-codebase/)
-
-A technical reference for engineers working on the AZM assembler implementation: repository layout, source loading, parsing, assembly, Z80 emission, ops, register-care analysis, artifact writing, public APIs, and verification.
-
-For engineers who need to understand, modify, or extend AZM.
+These are implementation references, not general Z80 or Debug80 user guides.
 
 ---
 
