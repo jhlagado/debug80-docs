@@ -60,3 +60,11 @@ These are implementation references, not general Z80 or Debug80 user guides.
 Debug80 is a VS Code debugger extension for Z80 assembly programs targeting the TEC-1, TEC-1G, and compatible hardware. It provides full source-level debugging: breakpoints, step over/into/out, memory inspection, register editing, and platform-specific hardware emulation.
 
 Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80)
+
+## About TEC-1G
+
+The TEC-1G is a modern Z80 single-board learning computer designed by Mark Jelic. It is a direct descendant of the original Talking Electronics TEC-1, a 1980s Australian kit computer created to teach how microprocessors work from the machine-code level upward.
+
+The TEC-1G keeps that educational purpose and TEC-1 compatibility, while expanding the machine with a 4 MHz Z80A, more RAM and ROM, a 20x4 LCD, keypad and keyboard options, serial transfer, expansion connectors, and modern add-on hardware. Debug80 includes TEC-1G emulation so you can assemble and debug programs in VS Code, then send the same HEX output to real hardware.
+
+To learn about the hardware, see Mark Jelic's [TEC-1G project page on Hackaday](https://hackaday.io/project/193968-tec-1g-40-year-anniversary-z80-sbc) and the [TEC-1G source and assembly documentation on GitHub](https://github.com/MarkJelic/TEC-1G). Kits and add-ons are available from [TEC-1 Inc. on Tindie](https://www.tindie.com/products/tec1/tec-1g-z80-single-board-computer-kit/) when stock is available.
