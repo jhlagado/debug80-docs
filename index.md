@@ -24,15 +24,23 @@ In development. A Debug80-oriented outline for programming the TEC-1G with MON-3
 
 ---
 
-### AZM Books and Manual
+### [AZM Book 0 — Assembler Manual](azm-book/book0/)
 
-A core AZM assembler reference, plus two teaching books in Z80 assembly programming, using the AZM assembler (`@jhlagado/azm` from the terminal, or the same assembler when you assemble and debug `.asm` with Debug80 in VS Code).
+The definitive reference for AZM, an enhanced Z80 assembler with modern programming features. Covers AZM source format, syntax, directives, layout types, ops, diagnostics, and output formats.
 
-- [AZM Book 0 — Assembler Manual](azm-book/book0/) is the definitive reference for the AZM assembler format, syntax, directives, layout types, ops, diagnostics, and output formats.
-- [AZM Book 1 — Z80 Fundamentals](azm-book/book1/) starts from no prior knowledge and covers the Z80 from bare machine code through ops, layout types, and register contracts.
-- [AZM Book 2 — Algorithms and Data Structures](azm-book/book2/) works through sorting, searching, recursion, composition, pointer structures, and larger AZM program design.
+For programmers who want the exact assembler rules and the supported programming features in one place.
 
-For programmers learning Z80 assembly or the AZM language.
+### [AZM Book 1 — Z80 Fundamentals](azm-book/book1/)
+
+A teaching book that starts from no prior knowledge and covers the Z80 from bare machine code through assembly language, ops, layout types, and register contracts.
+
+For readers learning Z80 assembly programming with AZM.
+
+### [AZM Book 2 — Algorithms and Data Structures](azm-book/book2/)
+
+A follow-on AZM book about sorting, searching, recursion, composition, pointer structures, and larger assembly program design.
+
+For readers who know the Z80 basics and want to build more substantial AZM programs.
 
 ---
 
