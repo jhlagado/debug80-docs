@@ -19,6 +19,7 @@ ordinary implementation changes.
 @jhlagado/azm/compile
 @jhlagado/azm/tooling
 @jhlagado/azm/cli
+@jhlagado/azm/package.json
 ```
 
 ## Root Exports
@@ -65,6 +66,12 @@ The user-facing command is the package binary:
 ```sh
 azm [options] <entry.asm|entry.z80>
 ```
+
+## Package Metadata Export
+
+`@jhlagado/azm/package.json` exposes package metadata for tools that need the
+installed package version or package fields without importing implementation
+modules.
 
 ## Public Data Shapes
 

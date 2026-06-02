@@ -24,15 +24,20 @@ exports, CLI flow, public TypeScript APIs and artifact shapes.
 @jhlagado/azm/compile
 @jhlagado/azm/tooling
 @jhlagado/azm/cli
+@jhlagado/azm/package.json
 ```
 
 `src/index.ts` re-exports the stable public surface. `src/api-compile.ts` backs
-`@jhlagado/azm/compile`. `src/api-tooling.ts` backs
-`@jhlagado/azm/tooling`. `src/cli.ts` is the executable entry.
+`@jhlagado/azm/compile`. `src/api-artifacts.ts` isolates assembly artifact
+creation for the compile API. `src/api-register-care.ts` isolates register-care
+analysis, interface loading and register-care artifact creation.
+`src/api-tooling.ts` backs `@jhlagado/azm/tooling`. `src/cli.ts` is the
+executable entry.
 
 The root export gives consumers a broad import. The `/compile` path is the
 build-system path. The `/tooling` path is the editor and analysis path. The
-`/cli` path backs the executable entry.
+`/cli` path backs the executable entry. The `/package.json` path exposes package
+metadata for tools that need the installed version.
 
 ## CLI Flow
 
@@ -57,16 +62,18 @@ error and `2` for argument or unexpected runtime failures. Diagnostics are
 printed to standard error. The primary output path is printed to standard output
 when artifact writing succeeds.
 
-`src/cli/parse-args.ts` parses switches and validates the command shape. It
-recognises output selection, artifact suppression, include paths, source-root,
-case-style linting, directive aliases and register-care options.
+`src/cli/parse-args.ts` parses switches and validates the command shape.
+`src/cli/usage.ts` owns help text. The parser recognises output selection,
+artifact suppression, include paths, source-root, case-style linting, directive
+aliases and register-care options.
 
 `src/cli/write-artifacts.ts` maps parsed options into
-`CompileNextFunctionOptions` and writes in-memory artifacts to disk. The base
-path calculation is central to CLI behaviour. If the user supplies
-`--output build/program.bin`, the primary artifact is written to that path and
-side artifacts use the same base. If the user supplies only `program.asm`, AZM
-writes outputs next to the entry source using the source stem.
+`CompileNextFunctionOptions` and calculates the output stem.
+`src/cli/artifact-files.ts` writes in-memory artifacts to disk. If the user
+supplies `--output build/program.bin`, the primary artifact is written to that
+path and side artifacts use the same base. If the user supplies only
+`program.asm`, AZM writes outputs next to the entry source using the source
+stem.
 
 ## Compile API
 
@@ -177,9 +184,9 @@ contiguous written address ranges. `getWrittenRange()` returns the overall
 written span.
 
 `src/outputs/write-bin.ts` writes flat binary. It chooses the written range,
-fills gaps as needed and returns a `Uint8Array` artifact. `src/outputs/write-
-hex.ts` wraps `src/outputs/hex.ts`, which writes Intel HEX records and
-checksums.
+fills gaps as needed and returns a `Uint8Array` artifact.
+`src/outputs/write-hex.ts` wraps `src/outputs/hex.ts`, which writes Intel HEX
+records and checksums.
 
 ## D8 Debug Maps
 
@@ -202,10 +209,12 @@ ASM80-compatible `.z80` text. It lowers supported AZM constructs into forms that
 can be compared against ASM80 output. The writer is larger than the other
 writers because it turns structured items back into source text.
 
-Register-care report and interface artifacts are created by
-`analyzeRegisterCare()` and flow through the same compile result and CLI write
-path. The report is human-readable. The `.asmi` interface is metadata that can
-be loaded by later compile runs through `--interface`.
+Register-care report, interface and annotation artifacts are created through
+`runRegisterCare()` in `src/api-register-care.ts` and flow through the same
+compile result and CLI write path. The report is human-readable. The `.asmi`
+interface is metadata that can be loaded by later compile runs through
+`--interface`. Annotation artifacts write source files when `--contracts` or
+`--fix` is used.
 
 ## Public API Compatibility
 

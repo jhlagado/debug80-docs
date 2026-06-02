@@ -92,13 +92,18 @@ npm run typecheck
 npm run lint
 npm run test:azm:alpha
 npm run test:azm:corpus
+npm run next:guardrails:core
+npm run next:guardrails:package
+npm run next:guardrails:quality
+npm run next:guardrails
 npm test
 ```
 
 Additional guardrails live under `scripts/ci/` and `scripts/dev/`. They answer
-larger questions: does the fixture suite still cover the known issue map, does
-the package work after build output is generated, does lowered ASM80 still cover
-the intended source set and do source files remain within the size budget.
+larger questions: does the alpha lane still pass, does ASM80 parity still hold,
+does the package work after build output is generated, does lowered ASM80 still
+cover the intended source set, do source files remain within the size budget and
+does the corpus still match the accepted compatibility baseline.
 
 Use this map when choosing a verification lane:
 
@@ -112,6 +117,8 @@ Use this map when choosing a verification lane:
 | CLI options | `test/cli/**`. |
 | Output artifacts | `test/unit/outputs/**`, CLI artifact tests. |
 | Public API | type tests, public API surface tests and tooling API tests. |
+| ASM80 lowering or parity | `check:asm80-coverage`, `test:ci:asm80-parity`, corpus guardrails. |
+| Package export surface | `test:package`, public API surface tests. |
 
 For subtle compiler changes, use a narrow test that names the broken layer and
 a broader test that proves the public behaviour. That combination makes failures

@@ -67,7 +67,8 @@ with several entry points.
 The implementation has six main layers:
 
 1. **Public entry points** in `src/index.ts`, `src/api-compile.ts`,
-   `src/api-tooling.ts` and `src/cli.ts`.
+   `src/api-artifacts.ts`, `src/api-register-care.ts`, `src/api-tooling.ts`
+   and `src/cli.ts`.
 2. **Loading and parsing** in `src/node/`, `src/source/`, `src/syntax/` and
    `src/core/compile.ts`.
 3. **Assembler-time analysis** in `src/assembly/` and `src/semantics/`.
@@ -119,19 +120,19 @@ consumers.
 | Directory | Responsibility |
 | --- | --- |
 | `assembly/` | Address planning, placement, byte emission and fixups. |
-| `cli/` | Argument parsing, CLI option mapping and disk artifact writing. |
-| `core/` | In-memory compile helpers and source-item parsing orchestration. |
+| `cli/` | Argument parsing, usage text, artifact path calculation and disk artifact writing. |
+| `core/` | In-memory compile helpers, conditional assembly and source-item parsing orchestration. |
 | `diagnostics/` | Diagnostic text formatting. |
-| `expansion/` | Visible `op` collection, overload selection and expansion. |
+| `expansion/` | Visible `op` collection, operand modelling, overload selection and expansion. |
 | `model/` | Shared data types used across layers. |
 | `node/` | File-backed source loading and include expansion. |
-| `outputs/` | BIN, HEX, D8 map and lowered ASM80 artifact writers. |
-| `register-care/` | Routine modelling, liveness, summaries, reports and fixes. |
-| `semantics/` | Expression and layout evaluation. |
-| `source/` | Source files, spans, logical line scanning and comment stripping. |
-| `syntax/` | Line parsing, expression parsing and directive aliases. |
+| `outputs/` | BIN, HEX, D8 map, lowered ASM80 and artifact helper writers. |
+| `register-care/` | Routine modelling, instruction shape helpers, liveness, summaries, reports, interfaces and fixes. |
+| `semantics/` | Expression evaluation, constant operators, byte functions and layout evaluation. |
+| `source/` | Source files, spans, logical line scanning, comment scanning and comment stripping. |
+| `syntax/` | Line parsing, directive parsing, expression tokenizing, token expression parsing, layout parsing and directive aliases. |
 | `tooling/` | Editor/tooling APIs and source-style checks. |
-| `z80/` | Z80 instruction model, parser, encoder and register effects. |
+| `z80/` | Z80 instruction model, operand splitting, parser families, encoder families and register effects. |
 
 The root files expose public entry points. The subdirectories hold the compiler
 pipeline. A change usually belongs to the directory that owns the data it
@@ -172,6 +173,7 @@ while debugging the script itself.
 @jhlagado/azm/compile
 @jhlagado/azm/tooling
 @jhlagado/azm/cli
+@jhlagado/azm/package.json
 ```
 
 Public consumers import from those paths. Internal files under `src/` and

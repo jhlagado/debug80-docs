@@ -20,7 +20,9 @@ reads source items.
 
 Ops are named inline instruction idioms. They let source define a small
 operation once and expand it visibly at each use site. The implementation lives
-in `src/expansion/op-expansion.ts`.
+in `src/expansion/`. `op-expansion.ts` coordinates the subsystem. Operand
+splitting, overload selection, selected expansion, instruction instantiation
+and local-label rewriting live in focused helper modules.
 
 An op is closer to a typed inline template than to a text macro. The op parser
 understands operands, chooses an overload and parses the expanded body back
@@ -66,7 +68,7 @@ it before ordinary line parsing.
 
 ## Overloads and Templates
 
-Ops support overloads. `selectOpOverload()` compares invocation operands against
+Ops support overloads. `op-selection.ts` compares invocation operands against
 each candidate signature. It prefers the most specific matching overload and
 emits diagnostics for arity errors, unsupported operands, ambiguous matches and
 invalid expansions.
@@ -77,14 +79,14 @@ operand model, so op dispatch and instruction parsing describe operands in the
 same terms.
 
 An op body template is parsed into template items. During expansion, operands
-from the call site are substituted into the template. The result is formatted as
-ordinary source text and parsed through the same line parser used for top-level
-source.
+from the call site are substituted into the template by
+`op-instruction-instantiation.ts`. The result is formatted as ordinary source
+text and parsed through the same line parser used for top-level source.
 
-Local label rewriting is part of expansion. A local label in an op expansion
-becomes unique at the use site so each expansion receives its own generated
-label. Once the rewritten labels become source items, address planning defines
-and resolves them through the ordinary symbol path.
+Local label rewriting lives in `op-local-labels.ts`. A local label in an op
+expansion becomes unique at the use site so each expansion receives its own
+generated label. Once the rewritten labels become source items, address planning
+defines and resolves them through the ordinary symbol path.
 
 ## Op Diagnostics and Register Care
 
@@ -141,13 +143,16 @@ the boundary.
 ## Routine Model and Contracts
 
 `src/register-care/programModel.ts` builds the program model from parsed source
-items. It finds routine boundaries, direct calls, labels and instructions.
-Routine entry labels use `@` in source and become callable public routine names
-after the marker is removed.
+items. Routine-specific extraction is split into
+`programModel-boundaries.ts` and `programModel-routines.ts`. Together they find
+routine boundaries, direct calls, labels and instructions. Routine entry labels
+use `@` in source and become callable public routine names after the marker is
+removed.
 
 `src/register-care/smartComments.ts` reads AZMDoc comments from the comment maps
-captured during loading. It builds routine contracts from `;!` lines and from
-external `.asmi` interfaces.
+captured during loading. Comment-block splitting and token parsing live in
+`smartCommentBlocks.ts` and `smartCommentParsing.ts`. External `.asmi`
+contracts are parsed in `interfaceContracts.ts`.
 
 Contracts can describe:
 
@@ -164,15 +169,18 @@ routine contract. Source comments attach to routines in the current program.
 ## Effects, Summaries and Liveness
 
 Register care depends on `src/z80/effects.ts`. Effects describe which registers
-and flags an instruction reads, writes or preserves. `instruction-shape.ts` and
-`carriers.ts` translate between Z80 instruction shapes and register-care units
-such as `A`, `HL`, `carry` and register pairs.
+and flags an instruction reads, writes or preserves. `instruction-head.ts`,
+`instruction-operands.ts`, `instruction-predicates.ts` and
+`operand-register-name.ts` translate between Z80 instruction shapes and
+register-care units such as `A`, `HL`, `carry` and register pairs.
 
-`src/register-care/summary.ts` infers a summary for a single routine.
-`routine-summaries.ts` and `summaries.ts` combine routine summaries, external
-contracts and profile summaries into lookup tables. A summary records the
-observable contract of a routine: the units it reads, writes, preserves,
-clobbers and returns as outputs.
+`src/register-care/summary.ts` infers a summary for a single routine. Boundary,
+contract, result, state and token-transfer logic now lives in
+`summary-boundary.ts`, `summary-contract.ts`, `summary-result.ts`,
+`summary-state.ts` and `summary-token-transfer.ts`. `routine-summaries.ts` and
+`summaries.ts` combine routine summaries, external contracts and profile
+summaries into lookup tables. A summary records the observable contract of a
+routine: the units it reads, writes, preserves, clobbers and returns as outputs.
 
 `src/register-care/liveness.ts` performs the caller-side analysis. It works
 backwards through each routine. At a call, it compares the live-after set with
@@ -201,13 +209,15 @@ editor actions for accepted fixes.
 
 ## Changing Ops or Register Care
 
-Op changes belong in `op-expansion.ts`, with tests under
+Op changes belong in `src/expansion/`, with tests under
 `test/unit/expansion/` and integration tests for source-level behaviour.
 Register-care changes usually begin in one of these files:
 
 - Routine boundaries and calls: `programModel.ts`
-- AZMDoc parsing: `smartComments.ts`
-- Instruction effects: `z80/effects.ts`, `instruction-shape.ts`
+- AZMDoc parsing: `smartComments.ts`, `smartCommentBlocks.ts`,
+  `smartCommentParsing.ts`, `interfaceContracts.ts`
+- Instruction effects: `z80/effects.ts`, `instruction-head.ts`,
+  `instruction-operands.ts`, `instruction-predicates.ts`
 - Summary inference: `summary.ts`
 - Caller liveness: `liveness.ts`
 - Output text: `report.ts`

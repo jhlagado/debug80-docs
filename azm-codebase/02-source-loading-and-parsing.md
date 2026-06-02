@@ -14,8 +14,9 @@ tooling and register care consume.
 
 The loading boundary lives in `src/node/source-host.ts`. The parser is
 orchestrated by `parseNextSourceItems()` in `src/core/compile.ts`, with
-single-line parsing in `src/syntax/parse-line.ts` and expression parsing in
-`src/syntax/parse-expression.ts`.
+single-line parsing in `src/syntax/parse-line.ts`. Expression and declaration
+parsing is split across tokenizer, token-expression, directive and layout
+modules in `src/syntax/`.
 
 ## Entry Files and Source Text
 
@@ -93,7 +94,8 @@ The source helpers are small and important:
 | `source-file.ts` | Wraps source text with a source name. |
 | `logical-lines.ts` | Splits text into line records. |
 | `source-span.ts` | Defines the common span shape. |
-| `strip-line-comment.ts` | Removes semicolon comments while respecting quotes. |
+| `line-comment-scanner.ts` | Finds line comments while respecting quoted text. |
+| `strip-line-comment.ts` | Removes semicolon comments through the shared scanner. |
 
 `strip-line-comment.ts` is used by include recognition, layout parsing,
 conditional assembly and single-line parsing. Shared comment handling prevents
@@ -144,7 +146,8 @@ to files and lines.
 
 `parseNextSourceItems()` handles structural forms before ordinary line parsing:
 
-1. Conditional assembly filters the logical line stream.
+1. `applyConditionalAssembly()` in `src/core/conditional-assembly.ts` filters
+   the logical line stream.
 2. `collectOps()` records top-level `op` definitions and marks their body lines.
 3. Name-left `.typealias` declarations are parsed.
 4. Record and union headers collect `.field` declarations until `.endtype` or
@@ -202,10 +205,13 @@ assembler-time value based on expression evaluation.
 
 ## Expressions and Conditionals
 
-`src/syntax/parse-expression.ts` parses numeric expressions, names, unary and
-binary operators, function calls, layout casts and type expressions. It is used
-by `.equ`, data directives, instruction operands, layout functions, `.ds` and
-layout fields.
+`src/syntax/expression-tokenizer.ts` tokenizes expression text.
+`parse-token-expression.ts` builds expression trees from tokens.
+`parse-expression.ts` is the public syntax wrapper used by line parsing.
+`parse-layout-expression.ts` parses layout type expressions used by `.ds`,
+`.field`, `.typealias`, `sizeof(...)`, `offset(...)` and layout casts.
+`parse-directive-statement.ts` parses directive statements that need more than
+single-token recognition.
 
 The parser produces expression trees from `src/model/expression.ts`.
 `src/semantics/expression-evaluation.ts` evaluates those trees when the

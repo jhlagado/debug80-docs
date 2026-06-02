@@ -18,6 +18,8 @@ you need to find the owner of a behaviour quickly.
 | --- | --- |
 | `src/index.ts` | Main package export surface. Re-exports compile, tooling, diagnostics, register-care and D8 map types. |
 | `src/api-compile.ts` | File-backed public compile API. Coordinates loading, analysis, register care, assembly and artifact writers. |
+| `src/api-artifacts.ts` | Assembly artifact helper for the compile API. Builds BIN, HEX, D8 and lowered ASM80 artifacts from assembled output. |
+| `src/api-register-care.ts` | Register-care helper for the compile API. Loads `.asmi` interfaces, runs analysis and converts results to artifacts. |
 | `src/api-tooling.ts` | Public tooling API re-export layer. Keeps editor-facing imports stable. |
 | `src/cli.ts` | CLI executable entry. Calls `runCli()` and sets process exit code. |
 
@@ -27,6 +29,7 @@ you need to find the owner of a behaviour quickly.
 | --- | --- |
 | `assemble-program.ts` | Assembly coordinator. Builds address state, emits program image and returns assembled result data. |
 | `address-planning.ts` | Defines labels, equates, enum members, layouts and type aliases; calculates directive and instruction sizes. |
+| `address-symbols.ts` | Symbol-definition helpers for labels, equates and enums. |
 | `placement.ts` | Tracks placement state plus origin and address movement for code and data. |
 | `program-emission.ts` | Writes bytes into the emitted image and records source segments. |
 | `fixup-emission.ts` | Resolves symbolic instruction fragments such as ABS16, IMM8 and REL8. |
@@ -35,16 +38,19 @@ you need to find the owner of a behaviour quickly.
 
 | File | Role |
 | --- | --- |
+| `artifact-files.ts` | Writes in-memory artifacts to disk paths. |
 | `parse-args.ts` | Parses CLI switches and validates command shape. |
 | `run.ts` | Runs the CLI: parse args, compile, print diagnostics, write artifacts and return status. |
-| `write-artifacts.ts` | Maps parsed options to compile options and writes in-memory artifacts to disk paths. |
+| `usage.ts` | CLI help text. |
+| `write-artifacts.ts` | Maps parsed options to compile options and calculates output stems. |
 
 ## `src/core/`
 
 | File | Role |
 | --- | --- |
-| `compile.ts` | In-memory source-item parsing path, conditional assembly handling and legacy compile helpers. |
+| `compile.ts` | In-memory source-item parsing path and legacy compile helpers. |
 | `compile-artifacts.ts` | Artifact-oriented compile helpers used by older or lower-level callers. |
+| `conditional-assembly.ts` | `.if` / `.else` / `.endif` filtering before final source-item parsing. |
 
 ## `src/diagnostics/`
 
@@ -56,7 +62,14 @@ you need to find the owner of a behaviour quickly.
 
 | File | Role |
 | --- | --- |
-| `op-expansion.ts` | Collects op definitions, parses invocations, selects overloads, substitutes operands, rewrites generated labels and returns expanded source items. |
+| `op-expansion.ts` | Coordinates op collection, invocation parsing and expansion. |
+| `op-operands.ts` | Op parameter and operand model. |
+| `op-operand-splitting.ts` | Splits invocation operands for overload matching. |
+| `op-selection.ts` | Selects the matching op overload. |
+| `op-expand-selected.ts` | Expands the selected overload. |
+| `op-instruction-instantiation.ts` | Substitutes operands into op body instructions. |
+| `op-local-labels.ts` | Rewrites expansion-local labels to unique generated labels. |
+| `op-constant-expression.ts` | Constant-expression support for op expansion. |
 
 ## `src/model/`
 
@@ -86,20 +99,42 @@ you need to find the owner of a behaviour quickly.
 | `write-hex.ts` | HEX artifact writer around `hex.ts`. |
 | `write-d8.ts` | Debug80 map writer and source segment grouping. |
 | `write-asm80.ts` | Lowered ASM80-compatible source writer. |
+| `d8-files.ts` | D8 source-file and path helpers. |
+| `d8-helpers.ts` | D8 segment and symbol helpers. |
+| `asm80-expressions.ts` | ASM80 expression lowering helpers. |
+| `asm80-expression-evaluation.ts` | ASM80-side constant evaluation for lowering. |
+| `asm80-instruction-operands.ts` | ASM80 instruction operand lowering helpers. |
+| `asm80-instructions.ts` | ASM80 instruction lowering helpers. |
+| `asm80-ld-operands.ts` | ASM80 `ld` operand lowering helpers. |
+| `asm80-strings.ts` | ASM80 string rendering helpers. |
 
 ## `src/register-care/`
 
 | File | Role |
 | --- | --- |
 | `analyze.ts` | Main register-care analysis coordinator. |
+| `analyze-helpers.ts` | Shared helpers for analysis orchestration. |
 | `programModel.ts` | Builds routines, labels, instructions and direct call boundaries from source items. |
+| `programModel-boundaries.ts` | Routine-boundary detection helpers. |
+| `programModel-routines.ts` | Routine construction helpers. |
 | `smartComments.ts` | Parses AZMDoc comments and `.asmi` interface contracts. |
+| `smartCommentBlocks.ts` | Groups generated and hand-written smart-comment blocks. |
+| `smartCommentParsing.ts` | Parses smart-comment tokens into contract facts. |
+| `interfaceContracts.ts` | Parses external `.asmi` interface contracts. |
 | `summary.ts` | Infers a routine summary from instruction effects and contracts. |
+| `summary-boundary.ts` | Summary behaviour at routine boundaries. |
+| `summary-contract.ts` | Contract-to-summary helpers. |
+| `summary-result.ts` | Summary result construction. |
+| `summary-state.ts` | Mutable summary state helpers. |
+| `summary-token-transfer.ts` | Token transfer helpers used during summary inference. |
 | `routine-summaries.ts` | Computes routine summaries to a fixed point and applies external contracts. |
 | `summaries.ts` | Builds summary lookup tables, profile summaries, unknown-boundary diagnostics and candidate fixability. |
 | `liveness.ts` | Computes live register-care units and detects caller/callee conflicts. |
-| `effects.ts` | Register-care effect helpers layered over Z80 instruction effects. |
-| `instruction-shape.ts` | Extracts instruction heads, operands and special cases for analysis. |
+| `constants.ts` | Shared register-care constants. |
+| `instruction-head.ts` | Extracts instruction heads for analysis. |
+| `instruction-operands.ts` | Extracts operands for analysis. |
+| `instruction-predicates.ts` | Instruction shape predicates used by analysis. |
+| `operand-register-name.ts` | Converts operand names into register-care register names. |
 | `carriers.ts` | Normalizes register-care carrier names and expands register pairs. |
 | `controlFlow.ts` | Successor logic for routine instruction flow. |
 | `profiles.ts` | Built-in external routine profiles such as MON-3. |
@@ -117,7 +152,16 @@ you need to find the owner of a behaviour quickly.
 
 | File | Role |
 | --- | --- |
-| `expression-evaluation.ts` | Evaluates constants, symbols, layout expressions, `sizeof`, `offset`, layout casts, `LSB` and `MSB`. |
+| `expression-evaluation.ts` | Coordinates expression evaluation against the assembler-time environment. |
+| `binary-operators.ts` | Binary arithmetic, bitwise, comparison and logical operators. |
+| `unary-operators.ts` | Unary numeric operators. |
+| `constant-operator-types.ts` | Shared constant-operator typing. |
+| `constant-operators.ts` | Constant-operator dispatch. |
+| `byte-functions.ts` | Byte extraction helpers such as `LSB` and `MSB`. |
+| `layout-evaluation.ts` | Layout type expression, `sizeof` and `offset` evaluation. |
+| `layout-format.ts` | Layout name formatting for diagnostics. |
+| `layout-path.ts` | Field and array path evaluation for layout casts. |
+| `diagnostics.ts` | Shared semantic diagnostics. |
 
 ## `src/source/`
 
@@ -126,6 +170,7 @@ you need to find the owner of a behaviour quickly.
 | `source-file.ts` | Creates source file records from name and text. |
 | `logical-lines.ts` | Splits source text into logical line records. |
 | `source-span.ts` | Defines source span shape. |
+| `line-comment-scanner.ts` | Finds semicolon comments while respecting quoted text. |
 | `strip-line-comment.ts` | Removes semicolon comments while respecting quoted text. |
 
 ## `src/syntax/`
@@ -133,7 +178,12 @@ you need to find the owner of a behaviour quickly.
 | File | Role |
 | --- | --- |
 | `parse-line.ts` | Parses single logical lines into source items. |
-| `parse-expression.ts` | Parses expression ASTs and layout type expressions. |
+| `expression-tokenizer.ts` | Tokenizes expression text. |
+| `parse-token-expression.ts` | Parses tokenized expressions into ASTs. |
+| `parse-expression.ts` | Public expression parse wrapper. |
+| `parse-directive-statement.ts` | Parses directive statements with structured operands. |
+| `parse-layout-declarations.ts` | Parses layout declaration forms. |
+| `parse-layout-expression.ts` | Parses layout type expressions. |
 | `parse-diagnostics.ts` | Shared parse diagnostic helpers. |
 | `directive-aliases.ts` | Built-in and project directive alias policy. |
 
@@ -149,9 +199,24 @@ you need to find the owner of a behaviour quickly.
 | File | Role |
 | --- | --- |
 | `instruction.ts` | Z80 instruction and operand type model. |
-| `parse-instruction.ts` | Parses Z80 instruction text into typed instruction objects and diagnostics. |
-| `encode.ts` | Encodes typed Z80 instructions into byte and fixup fragments. |
+| `parse-instruction.ts` | Dispatches instruction parsing by instruction family. |
+| `parse-basic.ts` | Parses basic one-head instruction forms. |
+| `parse-branch.ts` | Parses branch and call forms. |
+| `parse-conditions.ts` | Parses condition-code operands. |
+| `parse-exchange.ts` | Parses exchange forms. |
+| `parse-io-control.ts` | Parses I/O and control forms. |
+| `parse-ld.ts` | Parses `ld` forms. |
+| `parse-operands.ts` | Parses and classifies instruction operands. |
+| `operand-split.ts` | Splits operands while respecting parentheses, strings and expressions. |
+| `operand-split-state.ts` | State machine helpers for operand splitting. |
+| `ld-support.ts` | Shared `ld` form support. |
+| `encode.ts` | Dispatches encoding by instruction family. |
+| `encode-core.ts` | Core encoder helpers. |
+| `encode-ld.ts` | `ld` encoder. |
+| `encode-ld-helpers.ts` | Shared `ld` encoder helpers. |
 | `effects.ts` | Describes register and flag effects for Z80 instructions. |
+| `effect-groups.ts` | Shared effect groups. |
+| `effect-units.ts` | Effect unit definitions. |
 
 ## `test/`
 
@@ -186,5 +251,5 @@ you need to find the owner of a behaviour quickly.
 | Directory | Role |
 | --- | --- |
 | `scripts/ci/` | CI checks and policy scripts. |
-| `scripts/dev/` | Developer utilities for corpus checks, ASM80 parity, package smoke tests and coverage. |
+| `scripts/dev/` | Developer utilities for alpha guardrails, corpus checks, ASM80 parity, binary mismatch analysis, package smoke tests and coverage. |
 | `scripts/` root | General maintenance scripts such as source-size checks and grammar generation. |

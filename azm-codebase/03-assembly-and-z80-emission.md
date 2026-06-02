@@ -16,11 +16,14 @@ sizes, then emission writes bytes using those facts.
 The central files are:
 
 - `src/assembly/address-planning.ts`
+- `src/assembly/address-symbols.ts`
 - `src/assembly/placement.ts`
 - `src/assembly/program-emission.ts`
 - `src/assembly/fixup-emission.ts`
 - `src/assembly/assemble-program.ts`
 - `src/semantics/expression-evaluation.ts`
+- `src/semantics/constant-operators.ts`
+- `src/semantics/layout-evaluation.ts`
 - `src/z80/parse-instruction.ts`
 - `src/z80/instruction.ts`
 - `src/z80/encode.ts`
@@ -69,9 +72,9 @@ after address planning has seen the label definition.
 ## Symbols and Layouts
 
 Labels define addresses. `.equ` declarations define assembler-time values.
-Enums define qualified constants. `defineLabel()`, `defineEquate()` and
-`defineEnumMembers()` enforce duplicate rules and record spans for diagnostics
-and output metadata.
+Enums define qualified constants. `src/assembly/address-symbols.ts` contains
+the symbol helpers that define labels, equates and enum members, enforce
+duplicate rules and record spans for diagnostics and output metadata.
 
 Record and union declarations become layout records. A record field advances the
 offset by its byte size. A union field starts at offset zero and the union size
@@ -103,9 +106,22 @@ with the same field paths as the underlying array expression.
 ## Expression Evaluation
 
 `src/semantics/expression-evaluation.ts` evaluates expression trees against the
-assembler-time environment. It owns the rules for literal arithmetic, symbol
-lookup, `sizeof(...)`, `offset(...)`, `LSB(...)`, `MSB(...)` and layout casts
-that fold to constant addresses.
+assembler-time environment. It coordinates literal arithmetic, symbol lookup,
+constant operators, byte functions, layout functions and layout casts that fold
+to constant addresses.
+
+The operator and layout rules live in focused modules:
+
+| File | Role |
+| --- | --- |
+| `constant-operators.ts` | Binary and unary constant-operator dispatch. |
+| `binary-operators.ts` | Binary arithmetic, bitwise, comparison and logical operators. |
+| `unary-operators.ts` | Unary numeric operators. |
+| `byte-functions.ts` | `LSB(...)`, `MSB(...)` and related byte extraction helpers. |
+| `layout-evaluation.ts` | `sizeof(...)`, `offset(...)` and layout type expression evaluation. |
+| `layout-path.ts` | Field and array path resolution for layout casts. |
+| `layout-format.ts` | Human-readable layout names for diagnostics. |
+| `diagnostics.ts` | Shared semantic diagnostic construction. |
 
 Expression evaluation is context-sensitive. A symbol in an instruction operand
 may be a label or constant. A type expression in `.ds Sprite[4]` resolves to a
@@ -178,17 +194,19 @@ emitted them.
 ## Z80 Instruction Model
 
 `src/z80/instruction.ts` defines the instruction and operand types.
-`src/z80/parse-instruction.ts` parses instruction text into that model.
-`src/z80/encode.ts` turns the model into encoded fragments.
+`src/z80/parse-instruction.ts` dispatches instruction text into parser families.
+`src/z80/encode.ts` dispatches typed instructions into encoder families.
 `src/z80/effects.ts` describes register and flag effects for register care.
 
 The parser and encoder work as a pair:
 
 | File | Question |
 | --- | --- |
-| `parse-instruction.ts` | Which instruction form did the source request? |
+| `parse-instruction.ts` | Which parser family should handle this instruction head? |
+| `parse-basic.ts`, `parse-branch.ts`, `parse-exchange.ts`, `parse-io-control.ts`, `parse-ld.ts` | Parse specific instruction families. |
+| `parse-operands.ts`, `parse-conditions.ts`, `operand-split.ts` | Split operands and classify conditions, registers, indexed operands and expression operands. |
 | `instruction.ts` | How is that form represented as TypeScript data? |
-| `encode.ts` | Which bytes and fixup fragments represent that form? |
+| `encode.ts`, `encode-core.ts`, `encode-ld.ts`, `encode-ld-helpers.ts` | Which bytes and fixup fragments represent that form? |
 | `effects.ts` | Which registers and flags does that form read or write? |
 
 The instruction model keeps overloaded Z80 mnemonics manageable. `ld` has many

@@ -26,14 +26,16 @@ compile(entryFile, options, deps)
     read directive alias profiles
     build directive alias policy
     parseNextSourceItems()
-      apply conditional assembly
+      applyConditionalAssembly()
       collect op definitions
+      tokenize and parse expressions
       parse layouts, aliases, enums, directives and instructions
       expand op invocations
   analyzeProgramNext()
     assembleProgram() for symbols
     lintCaseStyleNext()
-  optionally analyzeRegisterCare()
+  optionally runRegisterCare()
+    load .asmi interfaces
     build program model
     read AZMDoc and .asmi contracts
     infer summaries
@@ -42,7 +44,7 @@ compile(entryFile, options, deps)
   assembleProgram()
     buildAddressState()
     emitProgramImage()
-  call selected format writers
+  emitAssemblyArtifacts()
     writeBin()
     writeHex()
     writeD8m()
@@ -61,6 +63,7 @@ cli.ts
     compile()
     format diagnostics
     writeArtifacts()
+      writeArtifactFiles()
     return exit code
 ```
 
