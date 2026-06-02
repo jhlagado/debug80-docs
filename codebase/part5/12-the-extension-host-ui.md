@@ -185,14 +185,22 @@ Inbound messages from the webview are typed as `PlatformViewInboundMessage` — 
 
 ### `platform-view-messages.ts`
 
-`handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It dispatches on `msg.type`:
+`handlePlatformViewMessage()` receives the message and a dependency object (`PlatformViewMessageDependencies`) that provides callback functions for each action. It is now a thin composition layer:
+
+1. `handleProjectViewMessage()` handles project/session actions.
+2. `handleSerialViewMessage()` handles serial-buffer actions.
+3. `handleActivePlatformViewMessage()` forwards remaining messages to the active platform adapter.
+
+The project and serial handlers are split into `src/extension/platform-view-project-messages.ts` and `src/extension/platform-view-serial-messages.ts`; active-platform dispatch lives in `src/extension/platform-view-platform-messages.ts`.
+
+The message families are:
 
 - Project and session commands (`createProject`, `selectProject`, `openWorkspaceFolder`, `configureProject`, `selectTarget`, `restartDebug`, `setEntrySource`, `startDebug`, `sendHexViaCoolTerm`) are forwarded to the corresponding callback, which invokes a VS Code command or host-side action. The `createProject` path passes an optional `platform` string to `debug80.createProject`; when present the command resolves the default kit for that platform via `getDefaultProjectKitForPlatform()` and scaffolds without showing additional pickers. `setStopOnEntry` and `setAzmOptions` are handled inline by the provider — they update session-scoped provider fields and refresh the `projectStatus` payload.
 - Serial commands (`serialSendFile`, `serialSave`) are forwarded to their callbacks.
 - `serialClear` calls `clearSerialBuffer` for the current platform.
 - Any unrecognised type falls through to `handlePlatformMessage`, which dispatches to the platform-specific adapter.
 
-This function contains no provider state — it is a pure routing layer, which makes it independently testable.
+The routing functions contain no provider state — they are pure dispatch layers with dependencies supplied by the provider, which keeps them independently testable.
 
 ### Serial actions — `platform-view-serial-actions.ts`
 
@@ -221,6 +229,8 @@ The Debug80 source repository also includes `tec-1g.CoolTermSettings` as a CoolT
 ### Platform module dispatch
 
 Platform-specific messages (hardware input, memory inspector, tab changes) are routed through the `PlatformUiModules` object retrieved from `loadedModules`. Calling `modules.handleMessage(msg, context)` delegates to the platform's own message handler, which translates webview messages into debug adapter custom requests. There is no platform-specific branching in `platform-view-messages.ts` itself — all platform variation lives behind the `PlatformUiModules` interface.
+
+Shared TEC-1/TEC-1G panel message handling has the same shape. `handleCommonPanelMessage()` in `src/platforms/panel-messages.ts` composes layout messages (`panel-tab-messages.ts`), edit messages (`panel-edit-messages.ts`) and runtime messages (`panel-runtime-messages.ts`) instead of keeping the full switch table in one file.
 
 ---
 
@@ -502,7 +512,7 @@ If the user chose to create a starter source file, `createStarterSourceContent()
 
 - The `uiRevision` counter only ever increments — it is never reset, not even when the webview HTML is replaced. The webview's own counter resets when new HTML is set; the host counter does not.
 
-- Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch calls `modules.handleMessage()` via the `PlatformUiModules` interface — no platform branching in the routing layer.
+- Message routing is handled by `handlePlatformViewMessage()` in `platform-view-messages.ts`, composed from project, serial and active-platform routing helpers. Serial file workflows are in `platform-view-serial-actions.ts`. Platform-specific dispatch calls `modules.handleMessage()` via the `PlatformUiModules` interface — no platform branching in the routing layer.
 
 - `ProjectStatusPayload` carries a `projectState` field with three explicit values: `'noWorkspace'`, `'uninitialized'`, and `'initialized'`. The webview uses `resolveProjectViewState()` from `webview/common/project-state.ts` to map this to rendering decisions. `applyInitializedProjectControls()` from `webview/common/project-controls.ts` shows or hides each control depending on the state — the Platform selector is visible only while uninitialized; all debug controls are visible only once initialized.
 

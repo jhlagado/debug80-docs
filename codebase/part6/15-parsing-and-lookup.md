@@ -30,9 +30,9 @@ Debug80 no longer reconstructs source maps from `.lst` files. AZM is the support
 <outputDir>/<artifactBase>.d8.json
 ```
 
-It then parses and validates the file with `parseD8DebugMap()` and `validateD8DebugMap()`. Invalid or missing maps do not trigger a listing fallback. Debug80 logs that the source map is missing or invalid and returns an empty mapping; the user needs to build the selected target with AZM.
+It then parses and validates the file with `parseD8DebugMap()` and `validateD8Segments()`. Invalid, missing or non-native maps do not trigger a listing or cache fallback. Debug80 logs a source-map diagnostic that names the relative target map when possible, tells the user to build the selected target with AZM, and returns an empty mapping.
 
-`validateD8Segments()` performs quality checks and logs warnings. Warnings do not abort mapping.
+`validateD8Segments()` performs quality checks and logs warnings as `D8 quality warning` messages. Warnings do not abort mapping.
 
 ---
 

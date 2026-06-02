@@ -15,7 +15,7 @@ Once the launch pipeline finishes and the session state is populated, the debug 
 
 ## The execution loop
 
-The main execution function is `runUntilStopAsync()` in `src/debug/session/runtime-control.ts`. It runs the Z80 emulator one instruction at a time until one of five conditions stops it:
+The main execution function is `runUntilStopAsync()` in `src/debug/session/runtime-control.ts`. It is the shared run-loop primitive used by Continue, Step Over, Step Out, Run to Here and other temporary run-target flows. It runs the Z80 emulator one instruction at a time until one of five conditions stops it:
 
 1. A breakpoint whose condition passes is hit.
 2. A pause is requested.
@@ -25,7 +25,7 @@ The main execution function is `runUntilStopAsync()` in `src/debug/session/runti
 
 The function is `async` because it must yield to the Node.js event loop between batches of instructions — the adapter runs inline with the extension host, so a tight synchronous loop would freeze VS Code. Between each batch of 1000 instructions, `runUntilStopAsync()` awaits a minimal delay and then continues.
 
-The loop is performance-sensitive because it shares the VS Code extension-host process with webview message handling, file watching, and DAP requests. Recent runtime work added starvation instrumentation around the chunk/yield boundary: long synchronous chunks and excessive event-loop delay can be logged, and `DEBUG80_PERF=1` enables periodic summaries while debugging the extension. This is intended as a regression guard, not as a user-facing feature.
+The loop is performance-sensitive because it shares the VS Code extension-host process with webview message handling, file watching, and DAP requests. Runtime-control centralises the common instruction loop so the stop checks, cycle accounting, speaker silence handling, entry-state capture and running/stopped events stay consistent across Continue and stepping modes. Starvation instrumentation around the chunk/yield boundary can log long synchronous chunks and excessive event-loop delay, and `DEBUG80_PERF=1` enables periodic summaries while debugging the extension. This is intended as a regression guard, not as a user-facing feature.
 
 ### The instruction chunk
 
@@ -439,7 +439,7 @@ The snapshot is taken exactly once — the first time the PC reaches the applica
 
 ## Summary
 
-- The execution loop (`runUntilStopAsync`) runs the Z80 in chunks of 1000 instructions, yielding between chunks. It stops on breakpoints whose conditions pass, pause requests, extra breakpoints (step targets), halts, and instruction limits.
+- The execution loop (`runUntilStopAsync`) runs the Z80 in chunks of 1000 instructions, yielding between chunks. It is the shared loop for Continue, stepping and temporary run targets, and it stops on breakpoints whose conditions pass, pause requests, extra breakpoints, halts and instruction limits.
 
 - Platform throttling applies cycle-accurate timing on TEC-1 and TEC-1G platforms, sleeping between chunks to match the configured clock speed.
 
