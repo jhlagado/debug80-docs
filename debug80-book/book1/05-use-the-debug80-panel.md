@@ -52,21 +52,21 @@ The status line tells you whether that map is ready:
 
 Build the active target when source-level features need fresh address data.
 
-## Register Care
+## Register Contracts
 
 **Register Care** checks routine calls against AZMDoc register contracts: inputs, outputs, clobbered registers and preserved registers.
 
 The selector has three modes:
 
-- **Enforce** treats register-care problems as launch-blocking diagnostics.
-- **Audit** reports register-care findings as advisory diagnostics while allowing the workflow to continue.
-- **Off** skips the register-care check for launch.
+- **Enforce** treats register contract problems as launch-blocking diagnostics.
+- **Audit** reports register contract findings as advisory diagnostics while allowing the workflow to continue.
+- **Off** skips the register contract check for launch.
 
 Use **Enforce** when contracts should protect the build. Use **Audit** when you want diagnostics without blocking the workflow.
 
 ## Contract Updates
 
-**Contract Updates** controls whether Debug80 may update AZMDoc register-care comments while launching.
+**Contract Updates** controls whether Debug80 may update AZMDoc register contract comments while launching.
 
 - **Ask** lets Debug80 prompt before applying updates.
 - **Auto** allows automatic updates.

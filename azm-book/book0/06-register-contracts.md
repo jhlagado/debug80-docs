@@ -1,18 +1,18 @@
 ---
 layout: default
-title: "Chapter 6 — Register Care and Contracts"
+title: "Chapter 6 — Register Contracts"
 parent: "AZM Book 0 — Assembler Manual"
 nav_order: 6
 ---
 [← The Layout System](05-layout-system.md) | [Manual](index.md) | [Op Declarations and Aliases →](07-ops-aliases.md)
 
-# Chapter 6 — Register Care and Contracts
+# Chapter 6 — Register Contracts
 
 `B` holds your loop counter. The loop calls a subroutine. The subroutine finishes and returns. `djnz` decrements `B` and branches back — but `B` now holds whatever the subroutine left there, not the value it had before the call. The loop runs the wrong number of iterations. The binary assembles without error.
 
 This is a register collision. The assembler has no way to know what value `B` should hold at any given instruction. The program may pass all your tests and break on an input you did not try.
 
-AZM's register-care system finds these collisions at assemble time by making the register contracts between routines explicit and machine-checkable.
+AZM's register contracts find these collisions at assemble time by making the register use between routines explicit and machine-checkable. They are deliberately stricter than casual assembly style: they ask you to write routine boundaries, register effects and external calls in a form the assembler can prove.
 
 ---
 
@@ -72,7 +72,7 @@ AZM uses `;!` comment blocks to record what each routine does to registers. A co
 @RenderTile:
 ```
 
-With this contract in place and register-care enabled, AZM inspects every call to `RENDER_TILE`. At the call in `SCAN_TILES`, `B` holds the loop counter — a value the caller reads after the call returns. The contract says `RENDER_TILE` clobbers `B`. AZM reports the conflict:
+With this contract in place and register contracts enabled, AZM inspects every call to `RENDER_TILE`. At the call in `SCAN_TILES`, `B` holds the loop counter — a value the caller reads after the call returns. The contract says `RENDER_TILE` clobbers `B`. AZM reports the conflict:
 
 ```
 scan.asm:7:9: warning AZMN_REGISTER_CARE: B is live across CALL RENDER_TILE,
@@ -125,7 +125,7 @@ Move `B` to a RAM location or use a different register in one of the routines. W
 
 ## Routine boundaries: `@` entry labels
 
-Register-care analysis works from routine boundaries. The `@` prefix marks those boundaries:
+Register contract analysis proves facts inside routine regions. The `@` prefix marks those regions:
 
 ```asm
 @RenderTile:
@@ -133,10 +133,10 @@ Register-care analysis works from routine boundaries. The `@` prefix marks those
         ret
 ```
 
-The callable symbol is `RENDER_TILE` — callers write `call RENDER_TILE`. The `@` is AZM's source marker for analysis.
+The callable symbol is `RENDER_TILE` — callers write `call RENDER_TILE`. The `@` is AZM's source marker for analysis, not part of the symbol name.
 
 - `@Name:` starts a new routine named `Name`
-- Plain branch labels inside the body stay within that routine
+- Plain branch labels inside the body stay within that routine region
 - The next `@OtherName:` ends the current routine and starts a new one
 - Consecutive `@` labels before the first instruction are aliases for the same routine entry
 
@@ -152,15 +152,32 @@ ScanRowBitLoop:
         ret
 ```
 
-`ScanRowBitLoop` is a branch label inside `SCAN_ROW`. Register-care sees the whole body as one span.
+`ScanRowBitLoop` is a branch label inside `SCAN_ROW`. AZM sees the whole body as one span.
+
+Plain labels are still global assembler symbols. They are not local labels, and they must be unique across the whole translation unit:
+
+```asm
+@ShiftRow:
+ShiftLoop:
+        ; ...
+        ret
+
+@CopyRow:
+CopyLoop:
+        ; ...
+        ret
+```
+
+Use routine boundaries to match the units whose register and stack effects you want AZM to prove. Legal Z80 assembly can jump anywhere in the final address space, but cross-boundary control flow is hard for register contracts to reason about. Keep ordinary branches inside the current `@` routine. Use `call` when you want to enter another routine with its own contract.
 
 ---
 
-## Enabling register-care
+## Enabling register contracts
 
-Register-care analysis is controlled by `--rc`:
+Register contract analysis is controlled by `--rc`:
 
 ```sh
+azm --rc off program.asm        # no register contract analysis
 azm --rc audit program.asm      # infer, no diagnostics
 azm --rc warn program.asm       # warn on conflicts
 azm --rc error program.asm      # fail on conflicts
@@ -169,11 +186,21 @@ azm --rc strict program.asm     # fail on any unresolved contract
 
 Default is `off`.
 
-Start with `audit` to see what the assembler infers. Move to `warn` when you want to see conflicts during development. Move to `error` once you have resolved the conflicts you care about.
+Use the modes as a ladder:
+
+| Mode | Use it when |
+|------|-------------|
+| `off` | You want ordinary assembly only |
+| `audit` | You want inferred reports, generated contracts or `.asmi` interfaces without diagnostics |
+| `warn` | You want conflicts reported during development while the build still succeeds |
+| `error` | You want proven register conflicts to fail the build |
+| `strict` | You want unresolved calls, unknown boundaries and unbalanced or unknown stack effects to fail the build |
+
+For a Debug80 edit-and-restart loop, use `audit` or `warn` while exploring a messy port. Use `strict` for deliberate rebuilds once the routine boundaries and external interfaces are in place.
 
 ---
 
-## What does register-care infer?
+## What AZM infers
 
 Given a routine body, AZM infers:
 
@@ -204,6 +231,60 @@ CheckLoop:
 
 ---
 
+## Stack discipline
+
+Register preservation on the Z80 often uses the stack. AZM can check that discipline when the save and restore happen inside the same routine region:
+
+```asm
+;!      preserves BC
+@DrawRows:
+        push    bc
+        ; ... uses B and C temporarily ...
+        pop     bc
+        ret
+```
+
+Keep `push`/`pop` save-restore pairs inside the same `@` routine region. If a routine has more than one exit path, each path must restore the stack before `ret`.
+
+This shape is awkward for register contracts:
+
+```asm
+@CopyName:
+        push    bc
+        jr      z,SharedFail
+        pop     bc
+        ret
+
+@LoadConfig:
+        ; ...
+SharedFail:
+        pop     bc
+        ret
+```
+
+`COPY_NAME` pushes `BC`, then branches to a label that lives after the `@LoadConfig:` boundary. The source is legal assembly, but the routine boundary no longer matches the stack behaviour AZM is trying to prove.
+
+Keep the shared exit inside the same routine region:
+
+```asm
+@CopyName:
+        push    bc
+        jr      z,CopyNameFail
+        pop     bc
+        ret
+CopyNameFail:
+        pop     bc
+        ret
+
+@LoadConfig:
+        ; separate routine region
+        ret
+```
+
+If two routines genuinely share a larger cleanup sequence, make that sequence a real callable routine with its own `@` boundary and contract. The goal is not to ban shared code. The goal is to make routine boundaries match the units whose register and stack effects AZM can check.
+
+---
+
 ## AZMDoc syntax
 
 AZMDoc is the comment format for machine-readable register contracts. The `;!` prefix keeps contracts separate from human prose. AZMDoc metadata is parse-only; the assembled bytes are unaffected.
@@ -226,14 +307,23 @@ The `;!` lines must be directly above the entry label with no intervening blank 
 
 ### Contract keys
 
-Four keys are recognized:
+Five keys are recognized:
 
 | Key | Meaning |
 |-----|---------|
 | `in` | Registers/flags whose incoming value the routine reads |
 | `out` | Registers/flags that carry meaningful returned values |
+| `maybe-out` | Inferred output candidates that need review before promotion |
 | `clobbers` | Registers/flags the routine destroys (no restore) |
 | `preserves` | Registers/flags the routine restores to their entry value |
+
+Read those keys from the caller's point of view:
+
+- `in` means the caller must provide this carrier before the call
+- `out` means the caller may intentionally consume this carrier after the call
+- `maybe-out` means AZM saw a written value that might be an output, but you still need to review it
+- `clobbers` means the caller must not expect the incoming value to survive
+- `preserves` means the incoming value survives the call
 
 ### Carrier lists
 
@@ -253,6 +343,24 @@ Register pair names expand to their constituent 8-bit registers for analysis —
 ```
 
 Use `carry` for the carry flag; `C` names register C. Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`.
+
+Prefer individual flag names when a routine returns status in flags:
+
+```asm
+;!      in        A,HL
+;!      out       carry
+;!      clobbers  BC
+@CheckTile:
+```
+
+Prefer register pairs when the routine treats the pair as one value:
+
+```asm
+;!      in        DE
+;!      out       HL
+;!      clobbers  A
+@FindRecord:
+```
 
 ### Inputs and outputs on the same carrier
 
@@ -292,11 +400,22 @@ AZM infers register contracts for each `@` routine and inserts `;!` blocks direc
 
 After the first run, read the generated contract for each routine. AZM inferred those contracts from the instruction stream, so treat them as a starting point and check that they match the routine's intended interface.
 
-When AZM infers a clobber but the value is intentionally returned, use `--accept-out` to promote it:
+When AZM infers a written value that could be either a clobber or an output, it may write `maybe-out`:
+
+```asm
+;!      in        A
+;!      maybe-out A
+;!      clobbers  B
+@MaskA:
+```
+
+Review every `maybe-out`. If the value is intentionally returned, promote it with `--accept-out`:
 
 ```sh
-azm --accept-out NORMALISE_COORD:DE --rc audit program.asm
+azm --accept-out MASKA:A --rc audit program.asm
 ```
+
+If the value is not part of the routine interface, leave it as a clobber or rewrite the routine so the effect is clear.
 
 You can also hand-write or hand-edit `;!` blocks directly. The tool-generated block is overwritten on the next `--contracts` run; a hand-authored block is yours to maintain separately.
 
@@ -323,23 +442,43 @@ end
 extern MON_GETC
 out A
 out zero
-clobbers A
 end
 ```
 
 Load with `--interface mon3.asmi`. The analyzer uses these contracts at call sites to `MON_PUTC` and `MON_GETC`.
 
 ```sh
+azm --interface mon3.asmi --rc strict program.asm
+```
+
+Strict mode treats missing routine bodies and missing external contracts as build failures. If the assembler cannot see a direct-call target, load an `.asmi` file for it or add the missing source to the translation unit.
+
+```sh
 azm --reg-profile mon3 program.asm
 ```
 
-The `mon3` profile provides built-in register-care summaries for MON3 RST service calls on TEC-1 and MON3-based projects.
+The `mon3` profile provides built-in register contract summaries for MON3 RST service calls on TEC-1 and MON3-based projects.
+
+---
+
+## A practical workflow
+
+Use register contracts as part of editing, not only as a report generator:
+
+1. Write or edit the routine.
+2. Run `azm --rc audit --reg-report program.asm` to inspect inferred effects.
+3. Add or regenerate `;!` contracts.
+4. Load external `.asmi` interfaces for ROM and separately assembled library calls.
+5. Run `azm --rc strict --reg-report program.asm`.
+6. Fix routine structure, contracts or interfaces until strict mode passes.
+
+If strict mode makes a piece of assembly uncomfortable, look first at the routine boundary. Shared exits, cross-boundary jumps and hidden monitor calls are often the code shapes that need to become explicit.
 
 ---
 
 ## Conservative autofix
 
-`--fix` applies conservative source repairs for clear register-care conflicts:
+`--fix` applies conservative source repairs for clear register contract conflicts:
 
 ```sh
 azm --fix --rc warn program.asm
@@ -353,11 +492,10 @@ After `--fix` runs, inspect the diff. Every inserted `push`/`pop` is a behaviour
 
 ## Analysis scope and limits
 
-Register-care analysis tracks:
+Register contract analysis tracks:
 
 - Register and flag values through straight-line code and simple loops
 - Push/pop preservation pairs on all return paths
-- Known-symbol save/restore through named RAM cells
 
 Handle these cases with external contracts, manual annotations or separate review:
 
@@ -370,7 +508,7 @@ Handle these cases with external contracts, manual annotations or separate revie
 
 ## Common diagnostic messages
 
-**Register-care conflict:**
+**Register contract conflict:**
 
 ```
 warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9,

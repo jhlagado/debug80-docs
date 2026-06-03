@@ -113,7 +113,7 @@ The important user-level facts are:
 
 ### AZM Options
 
-Debug80 uses AZM for the current assembly workflow. Targets may carry an `azm` object for register-care options and related launch behaviour. Leave generated options alone until you are deliberately configuring register-care.
+Debug80 uses AZM for the current assembly workflow. Targets may carry an `azm` object for register contract options and related launch behaviour. Leave generated options alone until you are deliberately configuring register contracts.
 
 ## Source Map Format
 

@@ -16,10 +16,10 @@ you need to find the owner of a behaviour quickly.
 
 | File | Role |
 | --- | --- |
-| `src/index.ts` | Main package export surface. Re-exports compile, tooling, diagnostics, register-care and D8 map types. |
-| `src/api-compile.ts` | File-backed public compile API. Coordinates loading, analysis, register care, assembly and artifact writers. |
+| `src/index.ts` | Main package export surface. Re-exports compile, tooling, diagnostics, register contract and D8 map types. |
+| `src/api-compile.ts` | File-backed public compile API. Coordinates loading, analysis, register contracts, assembly and artifact writers. |
 | `src/api-artifacts.ts` | Assembly artifact helper for the compile API. Builds BIN, HEX, D8 and lowered ASM80 artifacts from assembled output. |
-| `src/api-register-care.ts` | Register-care helper for the compile API. Loads `.asmi` interfaces, runs analysis and converts results to artifacts. |
+| `src/api-register-care.ts` | Register contract helper for the compile API. Loads `.asmi` interfaces, runs analysis and converts results to artifacts. |
 | `src/api-tooling.ts` | Public tooling API re-export layer. Keeps editor-facing imports stable. |
 | `src/cli.ts` | CLI executable entry. Calls `runCli()` and sets process exit code. |
 
@@ -78,7 +78,7 @@ you need to find the owner of a behaviour quickly.
 | `diagnostic.ts` | Diagnostic severity, IDs and common diagnostic shape. |
 | `expression.ts` | Expression and type-expression AST types. |
 | `fixup.ts` | Fixup fragment model for symbolic byte emission. |
-| `source-item.ts` | Parsed source item model shared by parser, assembly, outputs and register care. |
+| `source-item.ts` | Parsed source item model shared by parser, assembly, outputs and register contracts. |
 | `symbol.ts` | Symbol table type. |
 
 ## `src/node/`
@@ -112,7 +112,7 @@ you need to find the owner of a behaviour quickly.
 
 | File | Role |
 | --- | --- |
-| `analyze.ts` | Main register-care analysis coordinator. |
+| `analyze.ts` | Main register contract analysis coordinator. |
 | `analyze-helpers.ts` | Shared helpers for analysis orchestration. |
 | `programModel.ts` | Builds routines, labels, instructions and direct call boundaries from source items. |
 | `programModel-boundaries.ts` | Routine-boundary detection helpers. |
@@ -129,13 +129,13 @@ you need to find the owner of a behaviour quickly.
 | `summary-token-transfer.ts` | Token transfer helpers used during summary inference. |
 | `routine-summaries.ts` | Computes routine summaries to a fixed point and applies external contracts. |
 | `summaries.ts` | Builds summary lookup tables, profile summaries, unknown-boundary diagnostics and candidate fixability. |
-| `liveness.ts` | Computes live register-care units and detects caller/callee conflicts. |
-| `constants.ts` | Shared register-care constants. |
+| `liveness.ts` | Computes live register contract units and detects caller/callee conflicts. |
+| `constants.ts` | Shared register contract constants. |
 | `instruction-head.ts` | Extracts instruction heads for analysis. |
 | `instruction-operands.ts` | Extracts operands for analysis. |
 | `instruction-predicates.ts` | Instruction shape predicates used by analysis. |
-| `operand-register-name.ts` | Converts operand names into register-care register names. |
-| `carriers.ts` | Normalizes register-care carrier names and expands register pairs. |
+| `operand-register-name.ts` | Converts operand names into register contract register names. |
+| `carriers.ts` | Normalizes register contract carrier names and expands register pairs. |
 | `controlFlow.ts` | Successor logic for routine instruction flow. |
 | `profiles.ts` | Built-in external routine profiles such as MON-3. |
 | `report.ts` | Renders `.regcare.txt`, `.asmi` and compact source contract blocks. |
@@ -143,8 +143,8 @@ you need to find the owner of a behaviour quickly.
 | `annotations.ts` | Builds source annotation artifact data. |
 | `fix.ts` | Finds and applies conservative expected-output fixes. |
 | `accept-output.ts` | Parses user-accepted output candidate options. |
-| `tooling.ts` | Editor-friendly register-care diagnostics and code actions. |
-| `types.ts` | Register-care unit, routine, effect, summary, contract and report types. |
+| `tooling.ts` | Editor-friendly register contract diagnostics and code actions. |
+| `types.ts` | Register contract unit, routine, effect, summary, contract and report types. |
 | `sourceText.ts` | Source line splitting and joining helpers for text edits. |
 | `boundaryHints.ts` | Small helpers for naming external service boundaries. |
 
@@ -227,9 +227,9 @@ you need to find the owner of a behaviour quickly.
 | `test/unit/z80/` | Z80 parser and encoder tests. |
 | `test/unit/outputs/` | Artifact writer tests. |
 | `test/unit/expansion/` | Op expansion tests. |
-| `test/unit/register-care/` | Register-care analysis units. |
+| `test/unit/register-care/` | Register contract analysis units. |
 | `test/integration/` | Cross-stage compiler tests. |
-| `test/integration/register-care/` | End-to-end register-care tests. |
+| `test/integration/register-care/` | End-to-end register contract tests. |
 | `test/cli/` | CLI option, artifact and exit-code contracts. |
 | `test/asm80/` | ASM80 compatibility and real-program acceptance. |
 | `test/differential/` | Differential comparison fixtures and runners. |

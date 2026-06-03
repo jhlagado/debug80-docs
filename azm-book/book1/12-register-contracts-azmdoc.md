@@ -10,9 +10,9 @@ nav_order: 12
 
 Chapter 11's comment block is the right idea: the subroutine declares what it reads, what it returns and what it destroys; the caller reads that and writes code accordingly. But a semicolon comment can say anything, and nothing checks whether the comment still matches the code after the tenth edit.
 
-AZMDoc is AZM's structured contract format — ordinary `;!` comment lines that the **register-care** analyzer reads. The syntax stays in comments, so other assemblers ignore it. AZM treats it as machine-checkable boundary information at every `call`. That is one of AZM's defining features: informal subroutine discipline becomes something the assembler can verify.
+AZMDoc is AZM's structured contract format — ordinary `;!` comment lines that the **register contract** analyzer reads. The syntax stays in comments, so other assemblers ignore it. AZM treats it as machine-checkable boundary information at every `call`. That is one of AZM's defining features: informal subroutine discipline becomes something the assembler can verify.
 
-This chapter is not a syntax appendix. It teaches the mental model — caller liveness, callee boundaries, flags as return values, `@` entry spans, external `.asmi` contracts and the CLI workflow that makes register-care part of daily work.
+This chapter is not a syntax appendix. It teaches the mental model — caller liveness, callee boundaries, flags as return values, `@` entry spans, external `.asmi` contracts and the CLI workflow that makes register contracts part of daily work.
 
 ---
 
@@ -29,7 +29,7 @@ Consider a caller that keeps HL live across a call:
 
 If `find_max` walks HL through the table and does not restore it, HL now points past the end. The next `ld a, (hl)` reads the wrong byte. The assembler still accepts the program; the CPU runs it; the bug is silent.
 
-AZMDoc plus register-care closes that gap. A contract on `find_max` might say:
+AZMDoc plus register contracts close that gap. A contract on `find_max` might say:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
@@ -57,7 +57,7 @@ The fix is caller-side: reload HL, save it before the call or stop using HL afte
     ld a, (hl)
 ```
 
-Register-care is not linting for style. It is **boundary checking** at subroutine calls — turning "I thought HL was still valid" into a diagnostic with a line number.
+Register contracts are not linting for style. They are **boundary checking** at subroutine calls — turning "I thought HL was still valid" into a diagnostic with a line number.
 
 ---
 
@@ -77,7 +77,7 @@ The callee contract answers:
 
 The caller sees only the **external interface**: registers and flags that must be set on entry, registers and flags that carry results on exit and registers the routine destroys without restoring. Everything that happens inside the body — scratch registers, loop counters, temporary pushes — matters only if it leaks across `ret`.
 
-That caller-side **liveness** idea is the heart of register-care. The subroutine body can be long; the contract is short because it describes the door, not the room.
+That caller-side **liveness** idea is the heart of register contracts. The subroutine body can be long; the contract is short because it describes the door, not the room.
 
 ---
 
@@ -96,7 +96,7 @@ CopyBytesLoop:
     ret
 ```
 
-The caller does not read B after return. B was scratch inside the routine. You do **not** write `out B` unless the caller is supposed to use B as a result. Register-care cares whether the caller's B was preserved, not whether B changed inside the callee.
+The caller does not read B after return. B was scratch inside the routine. You do **not** write `out B` unless the caller is supposed to use B as a result. Register contracts care whether the caller's B was preserved, not whether B changed inside the callee.
 
 ### `push` / `pop` means preserved, not `out`
 
@@ -270,13 +270,13 @@ Rule: **`out` describes what the caller may rely on after `ret`; `clobbers` list
 @ring_pop:
 ```
 
-Register-care treats `out` as authoritative at the return boundary. Internal use of A or flags mid-routine does not require listing A in `clobbers` when the contract promises a defined A and carry on exit.
+Register contracts treat `out` as authoritative at the return boundary. Internal use of A or flags mid-routine does not require listing A in `clobbers` when the contract promises a defined A and carry on exit.
 
 ---
 
 ## Mark real entries with `@`
 
-The `@` prefix marks an explicit routine entry for register-care:
+The `@` prefix marks an explicit routine entry for register contract analysis:
 
 ```asm
 ;!      in        HL, B
@@ -329,11 +329,11 @@ Multiple `@` labels before the first instruction declare aliases for the same bo
 
 ## AZMDoc syntax reference
 
-Lines starting with `;!` immediately before `@entry` carry the contract. Register-care modes:
+Lines starting with `;!` immediately before `@entry` carry the contract. Register contract modes:
 
 | Command | Effect |
 |---------|--------|
-| `azm --rc audit source.asm` | Report conflicts; build succeeds |
+| `azm --rc audit source.asm` | Infer contracts and write requested artifacts; no register contract diagnostics |
 | `azm --rc warn source.asm` | Warnings on conflicts; build succeeds |
 | `azm --rc error source.asm` | Errors on conflicts; build fails |
 
@@ -348,7 +348,7 @@ azm --rc error --interface monitor.asmi source.asm
 
 | Flag | Role |
 |------|------|
-| `--reg-report` | Inspect what register-care inferred per routine |
+| `--reg-report` | Inspect what AZM inferred per routine |
 | `--contracts` | Generate or upgrade `;!` blocks from inference |
 | `--reg-interface` | Export `.asmi` contracts from annotated source |
 | `--interface file.asmi` | Import contracts for code you cannot inspect |
@@ -359,7 +359,7 @@ Typical progression: run `--rc audit --reg-report` on legacy code, add `@` entri
 
 ## External code uses `.asmi`
 
-ROM routines, monitor calls, BIOS entry points and Debug80 stubs have no AZM source to analyze. Register-care cannot inspect their bodies. **`.asmi`** files declare their boundaries — one record per external symbol, no comment syntax:
+ROM routines, monitor calls, BIOS entry points and Debug80 stubs have no AZM source to analyze. Register contract analysis cannot inspect their bodies. **`.asmi`** files declare their boundaries — one record per external symbol, no comment syntax:
 
 ```
 extern MON_PRINT_CHAR
@@ -462,7 +462,7 @@ D does not appear in `clobbers` because push/pop preserves DE for the caller. Th
 azm --rc warn source.asm
 ```
 
-If `main` reloads HL before each call (Chapter 10), checks pass. If `main` uses HL after `find_max` without reloading, register-care reports the conflict against `clobbers HL`.
+If `main` reloads HL before each call (Chapter 10), checks pass. If `main` uses HL after `find_max` without reloading, register contracts report the conflict against `clobbers HL`.
 
 **Step 4 — catch a lying contract.**
 
@@ -478,9 +478,9 @@ With `--rc error`, inferred effects that exceed the declared contract are flagge
 
 ---
 
-## Register-care scope
+## Register contract scope
 
-Register-care verifies **register and flag boundary consistency** at calls. Keep these separate checks in your review:
+Register contracts verify **register and flag boundary consistency** at calls. Keep these separate checks in your review:
 
 - Algorithm correctness (GCD, sort order, chess rules)
 - Memory aliasing (two pointers to the same buffer)

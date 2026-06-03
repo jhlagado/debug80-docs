@@ -10,7 +10,7 @@ nav_order: 2
 
 Source loading and parsing turn entry files into typed source items. This
 chapter follows the path from a filename to the structured data that assembly,
-tooling and register care consume.
+tooling and register contracts consume.
 
 The loading boundary lives in `src/node/source-host.ts`. The parser is
 orchestrated by `parseNextSourceItems()` in `src/core/compile.ts`, with
@@ -45,7 +45,7 @@ The loader keeps the full text of every loaded source file in `sourceTexts`.
 Later stages use parsed source items for compiler logic, but several features
 need original text:
 
-- register-care annotation rewrites exact source lines
+- register contract annotation rewrites exact source lines
 - tooling reads source text for diagnostics and code actions
 - D8 map generation needs file names and line provenance
 - case-style linting inspects original token case
@@ -78,7 +78,7 @@ export interface ExpandedNextSource {
 
 `lines` is the flattened source stream for parsing. `sourceTexts` keeps the
 original file text. `sourceLineComments` keeps comments indexed by file and line
-so register care can reconstruct AZMDoc contract blocks after routines have
+so register contract analysis can reconstruct AZMDoc contract blocks after routines have
 been identified.
 
 ## Logical Lines and Comments
@@ -138,7 +138,7 @@ line is a label, instruction, directive, layout declaration or comment item.
 - comments
 
 Each item carries a source span where appropriate. Assembly uses item kind to
-decide size and emission. Register care uses instruction, label and comment
+decide size and emission. Register contract analysis uses instruction, label and comment
 items to build routines. D8 map output uses spans to connect emitted bytes back
 to files and lines.
 
@@ -229,6 +229,6 @@ adding parse failures so source positions, severity and code shape stay
 consistent.
 
 Parser recovery matters for editor tooling. A user may have a half-written line
-while typing. Tooling still needs symbols, diagnostics and register-care hints
+while typing. Tooling still needs symbols, diagnostics and register contract hints
 for surrounding source, so parse errors should usually report a diagnostic and
 let parsing continue.

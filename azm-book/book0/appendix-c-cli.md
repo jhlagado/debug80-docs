@@ -42,18 +42,18 @@ Produces three output files next to the source: `source.bin`, `source.hex`, `sou
 |------|----------|--------------|
 | `-I` | `dir` | Add `dir` to the include search path; repeatable |
 | `--aliases` | `file` | Load a JSON alias profile; repeatable for multiple files |
-| `--interface` | `file` | Load an `.asmi` external register-care contract file; repeatable |
+| `--interface` | `file` | Load an `.asmi` external register contract file; repeatable |
 
-## Register-care flags
+## Register contract flags
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--rc` | `audit`, `warn`, `error` or `strict` | Register-care analysis level; default is `off` |
+| `--rc` | `off`, `audit`, `warn`, `error` or `strict` | Register contract analysis level; default is `off` |
 | `--contracts` | — | Write inferred `;!` contract blocks above every `@`-labelled routine |
-| `--fix` | — | Apply conservative register-care source repairs |
+| `--fix` | — | Apply conservative register contract source repairs |
 | `--reg-report` | — | Write `source.regcare.txt` with inferred contracts for every `@` routine |
 | `--reg-interface` | — | Write `source.asmi` with `extern` contract records for every `@` routine |
-| `--reg-profile` | `mon3` | Load a built-in register-care summary profile for known ROM environments |
+| `--reg-profile` | `mon3` | Load a built-in register contract summary profile for known ROM environments |
 | `--accept-out` | `NAME:REG` | Promote an inferred clobber of `REG` in routine `NAME` to an intentional output |
 
 ## Case and compatibility flags
@@ -74,11 +74,11 @@ Produces three output files next to the source: `source.bin`, `source.hex`, `sou
 
 | Level | Effect |
 |-------|--------|
-| `off` | No register-care analysis (default) |
-| `audit` | Infer contracts; write no diagnostics; safe to run on any project |
-| `warn` | Report conflicts as warnings; build succeeds |
-| `error` | Fail the build on any unresolved conflict |
-| `strict` | Fail on any unresolved contract, not just conflicts |
+| `off` | No register contract analysis (default) |
+| `audit` | Infer contracts and write requested register contract artifacts; emit no register contract diagnostics |
+| `warn` | Report register contract conflicts as warnings; build succeeds |
+| `error` | Fail the build on proven register contract conflicts |
+| `strict` | Fail on unresolved calls, unknown boundaries, unbalanced or unknown stack effects and other register contract issues AZM cannot prove safe |
 
 ---
 

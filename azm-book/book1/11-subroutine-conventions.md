@@ -216,7 +216,7 @@ CountAboveSkip:
 
 The problem is that these comments have no enforcement. A wrong comment, a callee that was modified after the comment was written, a caller that misread the convention — all fail silently. The assembler passes the code. The CPU runs it. The bug appears at runtime, sometimes far from its origin.
 
-Chapter 12 shows what AZM provides beyond comments: a structured declaration syntax that the register-care analyzer can read and verify.
+Chapter 12 shows what AZM provides beyond comments: a structured declaration syntax that the register contract analyzer can read and verify.
 
 ---
 

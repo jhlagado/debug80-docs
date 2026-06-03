@@ -25,7 +25,7 @@ Debug80 also owns the editor-facing language contribution for Z80 assembly. In `
 - breakpoint support for common Z80 assembly language ids
 - TextMate grammar at `syntaxes/z80-asm.tmLanguage.json`
 
-The Z80 assembly grammar is deliberately lexical. It recognizes semicolon comments, AZMDoc comments, strings, labels, local labels, directives, condition-bearing control instructions, Z80 mnemonics, registers, condition codes, number formats, symbols, operators, layout types, enum/member syntax, layout casts, field declarations, `sizeof`/`offset`, and register-care contract annotations such as `in`, `out`, `clobbers`, and `preserves`.
+The Z80 assembly grammar is deliberately lexical. It recognizes semicolon comments, AZMDoc comments, strings, labels, local labels, directives, condition-bearing control instructions, Z80 mnemonics, registers, condition codes, number formats, symbols, operators, layout types, enum/member syntax, layout casts, field declarations, `sizeof`/`offset`, and register contract annotations such as `in`, `out`, `clobbers`, and `preserves`.
 
 Colour is driven by default `editor.tokenColorCustomizations` in `package.json`. The current palette distinguishes comments, labels, symbols, directives, annotations, instructions, registers, conditions and flags, strings, function names, operators, and numeric literals. This is TextMate colouring, not semantic-token analysis.
 
@@ -36,7 +36,7 @@ The language-server design note in the source repository is still a future direc
 - **Go to Definition / F12** via `registerD8DefinitionProvider()` in `src/extension/d8-definition-provider.ts`.
 - **Workspace Symbols** via `registerD8WorkspaceSymbolProvider()`, scoped to the active target's D8 map.
 - **Debug80: Search Workspace Symbols** via `debug80.searchWorkspaceSymbols`, a visible command that delegates to VS Code's `workbench.action.showAllSymbols` while using the same active-target D8 symbol provider.
-- **Hover** via `registerD8HoverProvider()`, showing compact symbol kind/address/value/size/source information and any nearby AZMDoc register-care contract.
+- **Hover** via `registerD8HoverProvider()`, showing compact symbol kind/address/value/size/source information and any nearby AZMDoc register contract.
 - **Source-map freshness hints**, warning the user to build when source files appear newer than the active target's D8 map.
 
 These providers deliberately use the active build artifact as the source of truth. If no D8 map exists, the feature reports that the target needs to be built rather than attempting to parse the workspace live.

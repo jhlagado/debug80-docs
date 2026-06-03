@@ -41,21 +41,21 @@ Unit tests live under `test/unit/` and mirror implementation directories:
 | `unit/z80/` | Instruction parsing, diagnostics and encoding. |
 | `unit/outputs/` | Artifact writer behaviour. |
 | `unit/expansion/` | Op collection and expansion. |
-| `unit/register-care/` | Carriers, summaries, liveness, reports and fixes. |
+| `unit/register-care/` | Register contract carriers, summaries, liveness, reports and fixes. |
 
 Unit tests are small and direct. A new indexed operand form belongs in
 `test/unit/z80/` before it appears in a full source fixture. The unit test proves
 the instruction parser and encoder agree on that one form.
 
 Integration tests under `test/integration/` assemble real source snippets
-through multiple compiler stages. Layout features, ops and register-care
+through multiple compiler stages. Layout features, ops and register contracts
 interactions usually need this level of test because the behaviour exists
 between modules rather than inside one helper.
 
 ## CLI, ASM80 and Differential Tests
 
 `test/cli/` verifies the command-line contract: options, artifact writing,
-failure modes, determinism, case-style linting and register-care switches.
+failure modes, determinism, case-style linting and register contract switches.
 Users experience the command-line behaviour through argument parsing,
 diagnostics, output paths and exit status.
 
@@ -113,7 +113,7 @@ Use this map when choosing a verification lane:
 | Z80 instruction support | `test/unit/z80/**`, diagnostic matrices, ASM80 parity when relevant. |
 | Layout semantics | layout integration tests and output tests. |
 | Ops | `test/unit/expansion/**`, op integration tests. |
-| Register care | register-care unit, integration and CLI tests. |
+| Register contracts | register contract unit, integration and CLI tests. |
 | CLI options | `test/cli/**`. |
 | Output artifacts | `test/unit/outputs/**`, CLI artifact tests. |
 | Public API | type tests, public API surface tests and tooling API tests. |
@@ -129,7 +129,7 @@ easy to diagnose.
 AZM is stable enough that changes should preserve the existing boundaries. A
 maintainer can usually decide where a change belongs before editing code:
 source loading, parsing, expression evaluation, address planning, Z80 encoding,
-op expansion, register care, artifact writing, CLI or public API.
+op expansion, register contracts, artifact writing, CLI or public API.
 
 Ask what kind of fact the change affects:
 

@@ -105,7 +105,7 @@ Rules that keep libraries boring and reliable:
 1. **No `main` and no `halt`** in the library — only subroutines and maybe private helpers (`ring_advance_index` style).
 2. **No `.org` in the library** unless you are deliberately placing code at a fixed address (unusual in Book 2).
 3. **Every exported routine gets AZMDoc** — same as Book 1 Chapter 12 and Book 2 Chapters 1–3.
-4. **Entry labels use `@name:`** on routines the register-care analyzer should treat as callable bodies.
+4. **Entry labels use `@name:`** on routines the register contract analyzer should treat as callable bodies.
 
 The application file stays short:
 

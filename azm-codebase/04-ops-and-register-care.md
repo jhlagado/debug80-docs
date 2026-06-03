@@ -1,19 +1,19 @@
 ---
 layout: default
-title: "Chapter 4 - Ops and Register Care"
+title: "Chapter 4 - Ops and Register Contracts"
 parent: "AZM Engineering Manual"
 nav_order: 4
 ---
 [<- Assembly and Z80 Emission](03-assembly-and-z80-emission.md) | [Interfaces and Output Artifacts ->](05-interfaces-and-output-artifacts.md)
 
-# Chapter 4 - Ops and Register Care
+# Chapter 4 - Ops and Register Contracts
 
-Ops and register care are the two AZM-specific subsystems that sit above plain
+Ops and register contracts are the two AZM-specific subsystems that sit above plain
 Z80 instruction assembly. Ops expand source into visible inline assembly.
-Register care analyses the resulting routines and calls.
+Register contract analysis checks the resulting routines and calls.
 
 These features belong together in the codebase tour because they meet at the
-same boundary: parsed source items. Ops produce source items. Register care
+same boundary: parsed source items. Ops produce source items. Register contract analysis
 reads source items.
 
 ## Ops as Visible Expansion
@@ -27,7 +27,7 @@ and local-label rewriting live in focused helper modules.
 An op is closer to a typed inline template than to a text macro. The op parser
 understands operands, chooses an overload and parses the expanded body back
 through the normal AZM parser. The result is visible assembly with the same
-diagnostic and register-care behaviour as handwritten source.
+diagnostic and register contract behaviour as handwritten source.
 
 For example:
 
@@ -88,31 +88,31 @@ expansion becomes unique at the use site so each expansion receives its own
 generated label. Once the rewritten labels become source items, address planning
 defines and resolves them through the ordinary symbol path.
 
-## Op Diagnostics and Register Care
+## Op Diagnostics and Register Contracts
 
 Op diagnostics point at the call site while explaining the definition that
 matched or failed. Invalid expanded instructions are reported as op expansion
 failures with the underlying Z80 parser diagnostic included.
 
-Ops expand before register care builds routines. Register care sees the
+Ops expand before register contract analysis builds routines. AZM sees the
 expanded instructions. An op is visible inline assembly, so its register effects
 belong to the caller.
 
-## Register-Care Analysis
+## Register Contract Analysis
 
-Register care analyses how routines use Z80 registers. It reads routine
+Register contract analysis checks how routines use Z80 registers. It reads routine
 boundaries, instruction effects and AZMDoc contract comments, then reports
 conflicts where a caller still needs a register value that a callee may change.
 
 The implementation lives in `src/register-care/`. The public analysis entry
 point is `analyzeRegisterCare()` in `src/register-care/analyze.ts`.
 
-Register care is a data-flow analysis over assembled source structure. It works
+Register contract analysis is a data-flow analysis over assembled source structure. It works
 with routines, calls, instruction effects and contracts. It analyses the source
 structure to find values live across a call and callee summaries that can change
 those values.
 
-## A Register-Care Conflict
+## A Register Contract Conflict
 
 This source shape captures the problem:
 
@@ -132,12 +132,12 @@ Loop:
 
 `Caller` uses `B` as the `djnz` counter. `Worker` declares that it clobbers
 `B`. Liveness sees that `B` is still needed after the call because `djnz Loop`
-reads it. The register-care conflict is at the call site: `Caller` passes
+reads it. The register contract conflict is at the call site: `Caller` passes
 through a routine boundary that may change a live unit.
 
 The programmer can preserve `B`, choose a different counter register, change
 `Worker` so it leaves `B` unchanged or update the calling sequence. Register
-care identifies the conflict and the source location where the caller crosses
+contract analysis identifies the conflict and the source location where the caller crosses
 the boundary.
 
 ## Routine Model and Contracts
@@ -168,11 +168,11 @@ routine contract. Source comments attach to routines in the current program.
 
 ## Effects, Summaries and Liveness
 
-Register care depends on `src/z80/effects.ts`. Effects describe which registers
+Register contract analysis depends on `src/z80/effects.ts`. Effects describe which registers
 and flags an instruction reads, writes or preserves. `instruction-head.ts`,
 `instruction-operands.ts`, `instruction-predicates.ts` and
 `operand-register-name.ts` translate between Z80 instruction shapes and
-register-care units such as `A`, `HL`, `carry` and register pairs.
+register contract units such as `A`, `HL`, `carry` and register pairs.
 
 `src/register-care/summary.ts` infers a summary for a single routine. Boundary,
 contract, result, state and token-transfer logic now lives in
@@ -204,14 +204,14 @@ The CLI can request these behaviours through:
 `src/register-care/tooling.ts` exposes editor-friendly diagnostics and code
 actions through `analyzeRegisterCareForTools()`. Tooling diagnostics carry file,
 line, column, message, fixability and optional text edits. An editor can show
-the same register-care information that the CLI reports while using normal
+the same register contract information that the CLI reports while using normal
 editor actions for accepted fixes.
 
-## Changing Ops or Register Care
+## Changing Ops or Register Contracts
 
 Op changes belong in `src/expansion/`, with tests under
 `test/unit/expansion/` and integration tests for source-level behaviour.
-Register-care changes usually begin in one of these files:
+Register contract changes usually begin in one of these files:
 
 - Routine boundaries and calls: `programModel.ts`
 - AZMDoc parsing: `smartComments.ts`, `smartCommentBlocks.ts`,

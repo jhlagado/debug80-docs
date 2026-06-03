@@ -41,10 +41,10 @@ Debug80's current assembler backend is AZM. Most users should rely on defaults, 
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `registerCare` | `'off' \| 'audit' \| 'warn' \| 'error' \| 'strict'` | `'off'` | AZM register-care mode |
-| `emitRegisterReport` | `boolean` | `false` | Write a `.regcare.txt` report artifact when register-care analysis runs |
+| `registerCare` | `'off' \| 'audit' \| 'warn' \| 'error' \| 'strict'` | `'off'` | AZM register contract mode |
+| `emitRegisterReport` | `boolean` | `false` | Write a `.regcare.txt` report artifact when register contract analysis runs |
 | `emitRegisterInterface` | `boolean` | `false` | Write an inferred `.asmi` interface artifact |
-| `registerCareProfile` | `'mon3'` | — | Built-in AZM register-care profile |
+| `registerCareProfile` | `'mon3'` | — | Built-in AZM register contract profile |
 | `registerCareInterfaces` | `string[]` | `[]` | External `.asmi` contract files to load |
 
 The TEC-1G Project accordion exposes simpler session-scoped controls: **Register Care** (`Enforce`, `Audit`, `Off`) and **Contract Updates** (`Ask`, `Auto`, `Never`). Those controls are not persisted directly into `debug80.json`; the extension maps them into launch-time `azm` options when the user restarts debugging.

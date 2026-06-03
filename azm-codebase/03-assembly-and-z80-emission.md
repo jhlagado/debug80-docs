@@ -4,7 +4,7 @@ title: "Chapter 3 - Assembly and Z80 Emission"
 parent: "AZM Engineering Manual"
 nav_order: 3
 ---
-[<- Source Loading and Parsing](02-source-loading-and-parsing.md) | [Ops and Register Care ->](04-ops-and-register-care.md)
+[<- Source Loading and Parsing](02-source-loading-and-parsing.md) | [Ops and Register Contracts ->](04-ops-and-register-care.md)
 
 # Chapter 3 - Assembly and Z80 Emission
 
@@ -196,7 +196,7 @@ emitted them.
 `src/z80/instruction.ts` defines the instruction and operand types.
 `src/z80/parse-instruction.ts` dispatches instruction text into parser families.
 `src/z80/encode.ts` dispatches typed instructions into encoder families.
-`src/z80/effects.ts` describes register and flag effects for register care.
+`src/z80/effects.ts` describes register and flag effects for register contracts.
 
 The parser and encoder work as a pair:
 

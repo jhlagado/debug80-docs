@@ -81,7 +81,7 @@ analyzeProgramNext(loaded)
   return diagnostics and symbol environment
 
 analyzeRegisterCareForTools(loaded)
-  run register-care analysis in audit-oriented tooling mode
+  run register contract analysis in audit-oriented tooling mode
   return candidate diagnostics and code actions
 ```
 
@@ -92,7 +92,7 @@ analyzeRegisterCareForTools(loaded)
 | Source loading | entry path | logical lines, source texts, comments |
 | Parsing | logical lines | source items |
 | Analysis | source items | diagnostics, symbols |
-| Register care | loaded program | summaries, conflicts, reports |
+| Register contracts | loaded program | summaries, conflicts, reports |
 | Assembly | source items | byte map, symbols, source segments |
 | Outputs | byte map and symbols | artifacts |
 | CLI | artifacts | files on disk |

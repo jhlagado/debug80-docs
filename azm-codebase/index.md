@@ -9,7 +9,7 @@ has_toc: false
 
 This book is a technical reference for engineers working on the AZM assembler.
 It explains the repository structure, the compile pipeline, the public APIs, the
-source parser, the assembly model, the Z80 encoder, register-care analysis,
+source parser, the assembly model, the Z80 encoder, register contract analysis,
 artifact writing and the verification lanes that support the implementation.
 
 This manual is updated against the AZM codebase state through **2026-06-03**.
@@ -23,7 +23,7 @@ one step on that path or expose the path to the CLI, Debug80 or tests.
 
 Recent implementation work split several broad modules into smaller files. The
 public path is unchanged, but parsing, expression evaluation, Z80 encoding,
-ASM80 lowering, D8 map writing, register-care summaries and CLI artifact writing
+ASM80 lowering, D8 map writing, register contract summaries and CLI artifact writing
 now have dedicated helper modules. The directory appendix is the current file
 map for those modules.
 
@@ -34,7 +34,7 @@ map for those modules.
 - [Chapter 1 - Orientation and Repository Layout](01-orientation-and-repository-layout.md)
 - [Chapter 2 - Source Loading and Parsing](02-source-loading-and-parsing.md)
 - [Chapter 3 - Assembly and Z80 Emission](03-assembly-and-z80-emission.md)
-- [Chapter 4 - Ops and Register Care](04-ops-and-register-care.md)
+- [Chapter 4 - Ops and Register Contracts](04-ops-and-register-care.md)
 - [Chapter 5 - Interfaces and Output Artifacts](05-interfaces-and-output-artifacts.md)
 - [Chapter 6 - Verification and Maintenance](06-verification-and-maintenance.md)
 

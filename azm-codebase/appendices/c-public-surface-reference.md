@@ -25,7 +25,7 @@ ordinary implementation changes.
 ## Root Exports
 
 `@jhlagado/azm` re-exports the stable compile, tooling, diagnostic,
-register-care and output types. It is the broad package entry for consumers that
+register contract and output types. It is the broad package entry for consumers that
 want one import path.
 
 ## Compile Exports
@@ -54,7 +54,7 @@ or artifacts.
 - `analyzeRegisterCareForTools`
 - diagnostic types
 - case-style mode types
-- register-care tooling result types
+- register contract tooling result types
 
 Use this path for editors, linters and language tooling.
 

@@ -53,7 +53,7 @@ What AZM adds on top of plain assembly is practical:
 - **Layout types** (`byte`, `word`, `type`, `union`, `sizeof`, `offset`) name memory layout at assembly time — allocation and constants, not hidden loads or stores — so you never count struct offsets by hand
 - **Enums** name states and command bytes as grouped constants (`GameMode.Playing`), not runtime types
 - **AZMDoc** lets you write formal register contracts for your subroutines — documenting what goes in, what comes out, and what gets clobbered — and have the assembler verify callers and callees agree
-- **Register-care analysis** uses those contracts to warn you when a subroutine's actual register usage contradicts what its documentation claims
+- **Register contract analysis** uses those contracts to warn you when a subroutine's actual register usage contradicts what its documentation claims
 
 None of this adds instructions the CPU does not run. Every AZM construct compiles to Z80 bytes you can read in the listing and verify directly.
 

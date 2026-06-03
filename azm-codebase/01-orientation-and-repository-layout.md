@@ -10,7 +10,7 @@ nav_order: 1
 
 AZM is a Z80 assembler and tooling package. It turns `.asm` and `.z80` source
 files into bytes, Intel HEX, flat binary output, Debug80 maps, lowered ASM80
-source and register-care metadata. The same implementation serves the command
+source and register contract metadata. The same implementation serves the command
 line, package consumers, Debug80 integration and the test suite.
 
 The codebase follows the same path as an assembly run. A source file is loaded,
@@ -20,7 +20,7 @@ instructions, assembler-time facts are collected, instructions and data emit
 bytes, symbolic fixups are resolved and output writers serialize the result.
 
 AZM's extensions are assembler-time features. Layout types, enums, type
-aliases, AZMDoc comments and register-care contracts help the assembler
+aliases, AZMDoc comments and register contracts help the assembler
 calculate addresses, check contracts and produce metadata. Runtime behaviour
 still comes from the Z80 instructions and bytes that AZM emits.
 
@@ -90,7 +90,7 @@ instructions and data. At runtime the CPU executes normal Z80 operations:
 loads, stores, branches, calls, returns and port I/O.
 
 This boundary explains where major features live. Layout code belongs to the
-assembler because it calculates byte offsets. Register care belongs to the
+assembler because it calculates byte offsets. Register contracts belong to the
 assembler because it analyses visible calls and register effects. Output writers
 belong at the edge because they serialize already-assembled facts.
 
@@ -127,7 +127,7 @@ consumers.
 | `model/` | Shared data types used across layers. |
 | `node/` | File-backed source loading and include expansion. |
 | `outputs/` | BIN, HEX, D8 map, lowered ASM80 and artifact helper writers. |
-| `register-care/` | Routine modelling, instruction shape helpers, liveness, summaries, reports, interfaces and fixes. |
+| `register-care/` | Register contract routine modelling, instruction shape helpers, liveness, summaries, reports, interfaces and fixes. |
 | `semantics/` | Expression evaluation, constant operators, byte functions and layout evaluation. |
 | `source/` | Source files, spans, logical line scanning, comment scanning and comment stripping. |
 | `syntax/` | Line parsing, directive parsing, expression tokenizing, token expression parsing, layout parsing and directive aliases. |
@@ -158,7 +158,7 @@ docs/
 `docs/reference/source-overview.md` is the compact live map of the source tree.
 `docs/reference/cli.md` and `docs/reference/tooling-api.md` document the current
 user-facing and package-facing interfaces. `docs/spec/azmdoc.md` documents
-register-care comment metadata. `docs/design/` holds active design notes.
+register contract comment metadata. `docs/design/` holds active design notes.
 
 `scripts/` contains verification and maintenance utilities. The package scripts
 in `package.json` are the normal entry points. Invoke script files directly

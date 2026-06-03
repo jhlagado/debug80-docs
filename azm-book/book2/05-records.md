@@ -355,7 +355,7 @@ Book 1 Chapter 12 introduced AZMDoc: semicolon comments with `;!` tags for regis
 | `;! out` | Registers guaranteed on success |
 | `;! clobbers` | Registers destroyed (not restored) |
 
-Callable entries use `@name:` so the register-care analyzer knows where a routine body starts (AZM assembly baseline). Call sites still say `call ring_push`, not `call @ring_push`.
+Callable entries use `@name:` so the register contract analyzer knows where a routine body starts (AZM assembly baseline). Call sites still say `call ring_push`, not `call @ring_push`.
 
 For `ring_push` and `ring_pop`, put success/failure meaning in the human `;` line and name the carrier in `;! out` as `carry` (not `F.C`). Carry clear means full or empty respectively. Callers that ignore carry after a failed pop will see garbage in A — the routine does not define A on failure.
 

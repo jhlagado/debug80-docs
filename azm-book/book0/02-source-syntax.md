@@ -56,7 +56,7 @@ A semicolon starts a comment that runs to the end of the line:
         ld a,0   ; inline comment
 ```
 
-The `;!` prefix is the AZMDoc contract marker. It looks like a comment but is parsed by the register-care analyzer:
+The `;!` prefix is the AZMDoc contract marker. It looks like a comment but is parsed by the register contract analyzer:
 
 ```asm
 ;!      in        A,HL
@@ -64,7 +64,7 @@ The `;!` prefix is the AZMDoc contract marker. It looks like a comment but is pa
 ;!      clobbers  BC
 ```
 
-Other Z80 assemblers treat `;!` lines as ordinary comments. AZM reads them as register-care contracts when analysis is enabled. Chapter 6 covers the full workflow.
+Other Z80 assemblers treat `;!` lines as ordinary comments. AZM reads them as register contracts when analysis is enabled. Chapter 6 covers the full workflow.
 
 ---
 
@@ -121,7 +121,7 @@ An **entry label** begins with `@` followed by a plain identifier:
 @ShiftRow:
 ```
 
-The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; call sites write `call SHIFT_ROW`. The `@` prefix marks a routine boundary for register-care analysis, covered in Chapter 6.
+The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; call sites write `call SHIFT_ROW`. The `@` prefix marks a routine boundary for register contract analysis, covered in Chapter 6.
 
 ### The `@` entry prefix
 

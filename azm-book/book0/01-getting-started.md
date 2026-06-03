@@ -10,7 +10,7 @@ nav_order: 1
 
 AZM is a modern Z80 assembler for the Debug80 toolchain. An assembler turns assembly source into machine-code bytes. AZM also produces metadata that helps Debug80 connect source to generated code.
 
-On top of that foundation, AZM adds structured layout, register-care analysis and op declarations while keeping every emitted byte explicit and every assemble-time computation traceable.
+On top of that foundation, AZM adds structured layout, register contract analysis and op declarations while keeping every emitted byte explicit and every assemble-time computation traceable.
 
 ---
 
@@ -24,7 +24,7 @@ If you are assembling outside Debug80, the `.d8.json` file appears next to your 
 
 AZM accepts `.asm` and `.z80` source extensions and parses them identically. Within the Debug80 toolchain, `.z80` files carry a specific meaning: Debug80 treats them as entry points or assembly targets. For new source outside that toolchain context, `.asm` is the conventional choice.
 
-`.asmi` files carry external register-care contract records for library routines whose source is assembled separately. Load them with `--interface`. The format is covered in Chapter 6.
+`.asmi` files carry external register contract records for library routines whose source is assembled separately. Load them with `--interface`. The format is covered in Chapter 6.
 
 ---
 
@@ -57,7 +57,7 @@ Code comes first, data after. The byte at `counter` sits below `halt` at address
 
 To trace through the assembly: `ld b,LIMIT` assembles to `$06 $08` at `$0100`; `ld hl,counter` assembles to `$21 $09 $01` at `$0102` (the address `$0109`, little-endian); `inc (hl)` is `$34` at `$0105`; `djnz Loop` is `$10 $FD` at `$0106`; `halt` is `$76` at `$0108`; and `.db 0` places a zero byte at `$0109`.
 
-The rest of the manual explains those forms in order: source syntax and labels in Chapter 2, addresses and constants in Chapter 3, data directives in Chapter 4 and register-care entry labels in Chapter 6.
+The rest of the manual explains those forms in order: source syntax and labels in Chapter 2, addresses and constants in Chapter 3, data directives in Chapter 4 and register contract entry labels in Chapter 6.
 
 ---
 

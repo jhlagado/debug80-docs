@@ -4,7 +4,7 @@ title: "Chapter 7 — Op Declarations and Aliases"
 parent: "AZM Book 0 — Assembler Manual"
 nav_order: 7
 ---
-[← Register Care and Contracts](06-register-care.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)
+[← Register Contracts](06-register-contracts.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)
 
 # Chapter 7 — Op Declarations and Aliases
 
@@ -38,7 +38,7 @@ Using them:
         nop_pair
 ```
 
-Register-care analysis sees the expanded instructions: `clear_a` is analyzed as `xor a`, including its flag effects.
+Register contract analysis sees the expanded instructions: `clear_a` is analyzed as `xor a`, including its flag effects.
 
 ### Parameterized ops
 
@@ -254,4 +254,4 @@ Op declarations and layout types typically live in dedicated include files, pull
 
 ---
 
-[← Register Care and Contracts](06-register-care.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)
+[← Register Contracts](06-register-contracts.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)

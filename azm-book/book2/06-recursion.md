@@ -243,7 +243,7 @@ Add two extra habits for self-calls:
 1. **Say it is recursive** in the human comment (`; Self-call; ...`) so a reader knows stack math applies.
 2. **Document stack budget** in `.equ` constants (`FACT_FRAME_BYTES`, `FACT_MAX_DEPTH`) or in the comment block, not in a magic number buried in `main`.
 
-Register-care (`azm --rc warn`) still checks each `call` site against the callee contract. It does not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it — same rule as Chapter 11.
+Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it — same rule as Chapter 11.
 
 Internal labels stay dotted (`.one`, `.zero`). Only the entry that external code (or the same routine via `call`) uses gets `@`.
 

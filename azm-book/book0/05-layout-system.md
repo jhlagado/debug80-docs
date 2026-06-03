@@ -4,7 +4,7 @@ title: "Chapter 5 — The Layout System"
 parent: "AZM Book 0 — Assembler Manual"
 nav_order: 5
 ---
-[← Raw Data, Storage and Strings](04-data-storage-includes.md) | [Manual](index.md) | [Register Care and Contracts →](06-register-care.md)
+[← Raw Data, Storage and Strings](04-data-storage-includes.md) | [Manual](index.md) | [Register Contracts →](06-register-contracts.md)
 
 # Chapter 5 — The Layout System
 
@@ -329,4 +329,4 @@ ld   hl,<IoPort>Port.value.full       ; read the full word
 
 ---
 
-[← Raw Data, Storage and Strings](04-data-storage-includes.md) | [Manual](index.md) | [Register Care and Contracts →](06-register-care.md)
+[← Raw Data, Storage and Strings](04-data-storage-includes.md) | [Manual](index.md) | [Register Contracts →](06-register-contracts.md)

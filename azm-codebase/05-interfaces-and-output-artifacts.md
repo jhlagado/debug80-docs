@@ -4,7 +4,7 @@ title: "Chapter 5 - Interfaces and Output Artifacts"
 parent: "AZM Engineering Manual"
 nav_order: 5
 ---
-[<- Ops and Register Care](04-ops-and-register-care.md) | [Verification and Maintenance ->](06-verification-and-maintenance.md)
+[<- Ops and Register Contracts](04-ops-and-register-care.md) | [Verification and Maintenance ->](06-verification-and-maintenance.md)
 
 # Chapter 5 - Interfaces and Output Artifacts
 
@@ -29,8 +29,8 @@ exports, CLI flow, public TypeScript APIs and artifact shapes.
 
 `src/index.ts` re-exports the stable public surface. `src/api-compile.ts` backs
 `@jhlagado/azm/compile`. `src/api-artifacts.ts` isolates assembly artifact
-creation for the compile API. `src/api-register-care.ts` isolates register-care
-analysis, interface loading and register-care artifact creation.
+creation for the compile API. `src/api-register-care.ts` isolates register contract
+analysis, interface loading and register contract artifact creation.
 `src/api-tooling.ts` backs `@jhlagado/azm/tooling`. `src/cli.ts` is the
 executable entry.
 
@@ -65,7 +65,7 @@ when artifact writing succeeds.
 `src/cli/parse-args.ts` parses switches and validates the command shape.
 `src/cli/usage.ts` owns help text. The parser recognises output selection,
 artifact suppression, include paths, source-root, case-style linting, directive
-aliases and register-care options.
+aliases and register contract options.
 
 `src/cli/write-artifacts.ts` maps parsed options into
 `CompileNextFunctionOptions` and calculates the output stem.
@@ -101,7 +101,7 @@ Important options include:
 | `sourceRoot` | Root used for portable D8 map paths. |
 | `d8mInputs` | Artifact paths recorded in D8 metadata. |
 | `emitBin`, `emitHex`, `emitD8m`, `emitAsm80` | Artifact selection. |
-| `registerCare` | Register-care mode. |
+| `registerCare` | Register contract mode. |
 | `emitRegisterReport` | Emit `.regcare.txt` artifact. |
 | `emitRegisterInterface` | Emit `.asmi` artifact. |
 | `emitRegisterAnnotations` | Emit source annotation artifact. |
@@ -121,18 +121,18 @@ export interface CompileNextResult {
 ```
 
 Diagnostics describe every warning or error observed during loading, analysis,
-register care, assembly or artifact creation. Artifacts contain the in-memory
+register contract analysis, assembly or artifact creation. Artifacts contain the in-memory
 outputs requested by options.
 
 ## Tooling API
 
 `src/tooling/api.ts` exports `loadProgramNext()` and `analyzeProgramNext()`.
-`src/api-tooling.ts` re-exports those functions with register-care tooling
+`src/api-tooling.ts` re-exports those functions with register contract tooling
 helpers.
 
 `loadProgramNext()` returns a loaded program with source items, source texts and
 source line comments. `analyzeProgramNext()` runs semantic checks and returns
-symbols. `analyzeRegisterCareForTools()` returns register-care diagnostics and
+symbols. `analyzeRegisterCareForTools()` returns register contract diagnostics and
 code actions in a form suitable for editors.
 
 An editor integration usually starts with:
@@ -147,7 +147,7 @@ const loaded = await loadProgramNext({
 
 When `loaded.loadedProgram` is present, the editor can call
 `analyzeProgramNext()` for symbols and case-style diagnostics. It can also call
-`analyzeRegisterCareForTools()` for register-care candidate diagnostics and code
+`analyzeRegisterCareForTools()` for register contract candidate diagnostics and code
 actions.
 
 ## Artifact Types
@@ -209,7 +209,7 @@ ASM80-compatible `.z80` text. It lowers supported AZM constructs into forms that
 can be compared against ASM80 output. The writer is larger than the other
 writers because it turns structured items back into source text.
 
-Register-care report, interface and annotation artifacts are created through
+Register contract report, interface and annotation artifacts are created through
 `runRegisterCare()` in `src/api-register-care.ts` and flow through the same
 compile result and CLI write path. The report is human-readable. The `.asmi`
 interface is metadata that can be loaded by later compile runs through
@@ -227,7 +227,7 @@ Major-version planning is the point where these shapes can change:
 - artifact kinds
 - diagnostic object shape
 - D8 map type exports
-- register-care tooling result shapes
+- register contract tooling result shapes
 
 The type tests are the safety net for this boundary. When a public type changes,
 the change should be intentional and reflected in package documentation.

@@ -235,7 +235,7 @@ The listing at an invocation `jr_if_not_above C, .skip` shows:
 
 The op name does not appear. The CPU only knows the expanded instructions. A reader with a listing or a disassembler sees those three instructions and can trace the logic directly.
 
-This also means the register-care analyzer sees the expanded instructions. An op has no call boundary and no contract of its own. Whatever registers and flags the expansion touches are the registers and flags the caller's instruction stream touches — exactly as if you had written those instructions there.
+This also means the register contract analyzer sees the expanded instructions. An op has no call boundary and no contract of its own. Whatever registers and flags the expansion touches are the registers and flags the caller's instruction stream touches — exactly as if you had written those instructions there.
 
 ---
 
@@ -387,7 +387,7 @@ You can now:
 
 - write a complete AZM program with subroutines, loops, conditional branches and data tables
 - apply push/pop discipline to protect callers from register clobbering
-- document subroutine interfaces with AZMDoc contracts and verify them with register-care analysis
+- document subroutine interfaces with AZMDoc contracts and verify them with register contract analysis
 - define named record types, reserve storage with `.ds TypeExpr` and compute sizes and offsets at assembly time rather than by hand
 - name repeated instruction sequences with ops and read code that communicates intent rather than mechanics alone
 

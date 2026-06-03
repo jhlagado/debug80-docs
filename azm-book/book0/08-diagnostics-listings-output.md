@@ -67,17 +67,17 @@ Reassemble. Exit code is 0.
 
 ## Warnings vs errors
 
-AZM exits 0 when assembly succeeds — no parse errors, no semantic errors, no range errors and no register-care errors in `error` or `strict` mode.
+AZM exits 0 when assembly succeeds — no parse errors, no semantic errors, no range errors and no register contract errors in `error` or `strict` mode.
 
 AZM exits non-zero (1) when any error occurs:
 
 - A parse error: source line cannot be recognized
 - A semantic error: unknown symbol, duplicate symbol, type error
 - A range error: value does not fit the encoding slot
-- A register-care error in `--rc error` or `--rc strict` mode
+- A register contract error in `--rc error` or `--rc strict` mode
 - An artifact-writing failure: output path not writable
 
-Warnings (including register-care warnings in `--rc warn` mode) do not affect the exit code.
+Warnings (including register contract warnings in `--rc warn` mode) do not affect the exit code.
 
 ---
 
@@ -140,11 +140,11 @@ Example — binary only:
 azm --type bin --nohex --nod8m --output out.bin program.asm
 ```
 
-### Register-care artifacts
+### Register contract artifacts
 
 Two additional artifacts require at minimum `--rc audit`:
 
-**`.regcare.txt` (register-care report):**
+**`.regcare.txt` (register contract report):**
 
 ```sh
 azm --rc audit --reg-report program.asm
@@ -152,7 +152,7 @@ azm --rc audit --reg-report program.asm
 
 Lists every `@`-labelled routine with its inferred register contract: inputs, outputs and clobbers.
 
-**`.asmi` (inferred register-care interface):**
+**`.asmi` (inferred register contract interface):**
 
 ```sh
 azm --rc audit --reg-interface program.asm

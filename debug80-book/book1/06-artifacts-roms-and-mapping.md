@@ -35,7 +35,7 @@ This is target-based search. Select the target, build it, then search the symbol
 
 Hover over a known assembly symbol to see its source-map summary: name, kind, address or value, source file and line.
 
-For routines with nearby AZMDoc register-care comments, Debug80 can also show a one-line contract summary:
+For routines with nearby AZMDoc register contract comments, Debug80 can also show a one-line contract summary:
 
 ```text
 in: A,HL    out: carry    clobbers: B,C    preserves: DE,IX
