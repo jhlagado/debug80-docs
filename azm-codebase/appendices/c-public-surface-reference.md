@@ -51,12 +51,14 @@ or artifacts.
 - `loadProgramNext`
 - `analyzeProgram`
 - `analyzeProgramNext`
-- `analyzeRegisterCareForTools`
+- `analyzeRegisterContractsForTools`
 - diagnostic types
 - case-style mode types
 - register contract tooling result types
 
 Use this path for editors, linters and language tooling.
+
+`analyzeRegisterCareForTools` remains as a deprecated compatibility export.
 
 ## CLI Export
 
@@ -87,8 +89,8 @@ Treat these as public contracts:
 - `D8mSymbol`
 - `LoadedProgramNext`
 - `AnalyzeProgramNextResult`
-- `RegisterCareCandidateDiagnostic`
-- `RegisterCareCodeAction`
+- `RegisterContractsCandidateDiagnostic`
+- `RegisterContractsCodeAction`
 
 When these shapes change, update package tests, TypeScript type tests, README
 examples, repo-local reference docs and this manual.

@@ -104,13 +104,13 @@ Register contract analysis checks how routines use Z80 registers. It reads routi
 boundaries, instruction effects and AZMDoc contract comments, then reports
 conflicts where a caller still needs a register value that a callee may change.
 
-The implementation lives in `src/register-care/`. The public analysis entry
-point is `analyzeRegisterCare()` in `src/register-care/analyze.ts`.
+The implementation lives in `src/register-contracts/`. The public analysis entry
+point is `analyzeRegisterContracts()` in `src/register-contracts/analyze.ts`.
 
-Register contract analysis is a data-flow analysis over assembled source structure. It works
-with routines, calls, instruction effects and contracts. It analyses the source
-structure to find values live across a call and callee summaries that can change
-those values.
+Register contract analysis is a data-flow analysis over assembled source
+structure. It works with routines, calls, instruction effects and contracts. It
+analyses the source structure to find values live across a call and callee
+summaries that can change those values.
 
 ## A Register Contract Conflict
 
@@ -137,19 +137,19 @@ through a routine boundary that may change a live unit.
 
 The programmer can preserve `B`, choose a different counter register, change
 `Worker` so it leaves `B` unchanged or update the calling sequence. Register
-contract analysis identifies the conflict and the source location where the caller crosses
-the boundary.
+contract analysis identifies the conflict and the source location where the
+caller crosses the boundary.
 
 ## Routine Model and Contracts
 
-`src/register-care/programModel.ts` builds the program model from parsed source
+`src/register-contracts/programModel.ts` builds the program model from parsed source
 items. Routine-specific extraction is split into
 `programModel-boundaries.ts` and `programModel-routines.ts`. Together they find
 routine boundaries, direct calls, labels and instructions. Routine entry labels
 use `@` in source and become callable public routine names after the marker is
 removed.
 
-`src/register-care/smartComments.ts` reads AZMDoc comments from the comment maps
+`src/register-contracts/smartComments.ts` reads AZMDoc comments from the comment maps
 captured during loading. Comment-block splitting and token parsing live in
 `smartCommentBlocks.ts` and `smartCommentParsing.ts`. External `.asmi`
 contracts are parsed in `interfaceContracts.ts`.
@@ -174,7 +174,7 @@ and flags an instruction reads, writes or preserves. `instruction-head.ts`,
 `operand-register-name.ts` translate between Z80 instruction shapes and
 register contract units such as `A`, `HL`, `carry` and register pairs.
 
-`src/register-care/summary.ts` infers a summary for a single routine. Boundary,
+`src/register-contracts/summary.ts` infers a summary for a single routine. Boundary,
 contract, result, state and token-transfer logic now lives in
 `summary-boundary.ts`, `summary-contract.ts`, `summary-result.ts`,
 `summary-state.ts` and `summary-token-transfer.ts`. `routine-summaries.ts` and
@@ -182,10 +182,17 @@ contract, result, state and token-transfer logic now lives in
 summaries into lookup tables. A summary records the observable contract of a
 routine: the units it reads, writes, preserves, clobbers and returns as outputs.
 
-`src/register-care/liveness.ts` performs the caller-side analysis. It works
+`src/register-contracts/liveness.ts` performs the caller-side analysis. It works
 backwards through each routine. At a call, it compares the live-after set with
 the callee summary. A live unit that the callee clobbers becomes a conflict. A
 unit produced by the callee and read by the caller becomes an output candidate.
+
+Stack behaviour is part of routine summaries. `summary.ts` tracks push, pop,
+exchange-top and unknown stack effects. `routine-summaries.ts` infers summaries
+to a fixed point so internal routine calls can see optimistic boundary
+summaries before the final pass. Strict mode uses `stackBalanced` and
+`hasUnknownStackEffect` to distinguish balanced stack use from a routine whose
+boundary may leave the stack in an unknown state.
 
 ## Reports, Interfaces and Tooling
 
@@ -201,11 +208,11 @@ The CLI can request these behaviours through:
 - `--fix`
 - `--accept-out`
 
-`src/register-care/tooling.ts` exposes editor-friendly diagnostics and code
-actions through `analyzeRegisterCareForTools()`. Tooling diagnostics carry file,
-line, column, message, fixability and optional text edits. An editor can show
-the same register contract information that the CLI reports while using normal
-editor actions for accepted fixes.
+`src/register-contracts/tooling.ts` exposes editor-friendly diagnostics and code
+actions through `analyzeRegisterContractsForTools()`. Tooling diagnostics carry
+file, line, column, message, fixability and optional text edits. An editor can
+show the same register contract information that the CLI reports while using
+normal editor actions for accepted fixes.
 
 ## Changing Ops or Register Contracts
 
@@ -224,6 +231,6 @@ Register contract changes usually begin in one of these files:
 - Source edits: `annotate.ts`, `fix.ts`, `annotations.ts`
 - Tooling surface: `tooling.ts`
 
-Run unit tests under `test/unit/register-care/`, integration tests under
-`test/integration/register-care/` and CLI tests in
-`test/cli/register_care_cli.test.ts`.
+Run unit tests under `test/unit/register-contracts/`, integration tests under
+`test/integration/register-contracts/` and CLI tests in
+`test/cli/register_contracts_cli.test.ts`.

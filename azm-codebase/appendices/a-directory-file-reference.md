@@ -19,7 +19,7 @@ you need to find the owner of a behaviour quickly.
 | `src/index.ts` | Main package export surface. Re-exports compile, tooling, diagnostics, register contract and D8 map types. |
 | `src/api-compile.ts` | File-backed public compile API. Coordinates loading, analysis, register contracts, assembly and artifact writers. |
 | `src/api-artifacts.ts` | Assembly artifact helper for the compile API. Builds BIN, HEX, D8 and lowered ASM80 artifacts from assembled output. |
-| `src/api-register-care.ts` | Register contract helper for the compile API. Loads `.asmi` interfaces, runs analysis and converts results to artifacts. |
+| `src/api-register-contracts.ts` | Register contract helper for the compile API. Loads `.asmi` interfaces, runs analysis and converts results to artifacts. |
 | `src/api-tooling.ts` | Public tooling API re-export layer. Keeps editor-facing imports stable. |
 | `src/cli.ts` | CLI executable entry. Calls `runCli()` and sets process exit code. |
 
@@ -108,7 +108,7 @@ you need to find the owner of a behaviour quickly.
 | `asm80-ld-operands.ts` | ASM80 `ld` operand lowering helpers. |
 | `asm80-strings.ts` | ASM80 string rendering helpers. |
 
-## `src/register-care/`
+## `src/register-contracts/`
 
 | File | Role |
 | --- | --- |
@@ -227,9 +227,9 @@ you need to find the owner of a behaviour quickly.
 | `test/unit/z80/` | Z80 parser and encoder tests. |
 | `test/unit/outputs/` | Artifact writer tests. |
 | `test/unit/expansion/` | Op expansion tests. |
-| `test/unit/register-care/` | Register contract analysis units. |
+| `test/unit/register-contracts/` | Register contract analysis units. |
 | `test/integration/` | Cross-stage compiler tests. |
-| `test/integration/register-care/` | End-to-end register contract tests. |
+| `test/integration/register-contracts/` | End-to-end register contract tests. |
 | `test/cli/` | CLI option, artifact and exit-code contracts. |
 | `test/asm80/` | ASM80 compatibility and real-program acceptance. |
 | `test/differential/` | Differential comparison fixtures and runners. |

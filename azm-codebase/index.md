@@ -12,7 +12,7 @@ It explains the repository structure, the compile pipeline, the public APIs, the
 source parser, the assembly model, the Z80 encoder, register contract analysis,
 artifact writing and the verification lanes that support the implementation.
 
-This manual is updated against the AZM codebase state through **2026-06-03**.
+This manual is updated against the AZM codebase state through **2026-06-04**.
 Use it as the map when planning changes. Use the TypeScript source and tests as
 the final authority when a detail has changed.
 
@@ -21,11 +21,11 @@ load source, parse it into source items, expand visible ops, build assembler-tim
 facts, emit bytes, resolve fixups and write artifacts. Most files either support
 one step on that path or expose the path to the CLI, Debug80 or tests.
 
-Recent implementation work split several broad modules into smaller files. The
-public path is unchanged, but parsing, expression evaluation, Z80 encoding,
-ASM80 lowering, D8 map writing, register contract summaries and CLI artifact writing
-now have dedicated helper modules. The directory appendix is the current file
-map for those modules.
+Recent implementation work split several broad modules into smaller files and
+renamed the register contract subsystem around the `register-contracts` term.
+Parsing, expression evaluation, Z80 encoding, ASM80 lowering, D8 map writing,
+register contract summaries and CLI artifact writing now have dedicated helper
+modules. The directory appendix is the current file map for those modules.
 
 ---
 

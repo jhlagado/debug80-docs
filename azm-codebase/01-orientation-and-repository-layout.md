@@ -67,13 +67,13 @@ with several entry points.
 The implementation has six main layers:
 
 1. **Public entry points** in `src/index.ts`, `src/api-compile.ts`,
-   `src/api-artifacts.ts`, `src/api-register-care.ts`, `src/api-tooling.ts`
+   `src/api-artifacts.ts`, `src/api-register-contracts.ts`, `src/api-tooling.ts`
    and `src/cli.ts`.
 2. **Loading and parsing** in `src/node/`, `src/source/`, `src/syntax/` and
    `src/core/compile.ts`.
 3. **Assembler-time analysis** in `src/assembly/` and `src/semantics/`.
 4. **Z80 parsing and encoding** in `src/z80/`.
-5. **Language services** in `src/expansion/`, `src/register-care/` and
+5. **Language services** in `src/expansion/`, `src/register-contracts/` and
    `src/tooling/`.
 6. **Artifact writers** in `src/outputs/`.
 
@@ -127,7 +127,7 @@ consumers.
 | `model/` | Shared data types used across layers. |
 | `node/` | File-backed source loading and include expansion. |
 | `outputs/` | BIN, HEX, D8 map, lowered ASM80 and artifact helper writers. |
-| `register-care/` | Register contract routine modelling, instruction shape helpers, liveness, summaries, reports, interfaces and fixes. |
+| `register-contracts/` | Register contract routine modelling, instruction shape helpers, liveness, summaries, reports, interfaces and fixes. |
 | `semantics/` | Expression evaluation, constant operators, byte functions and layout evaluation. |
 | `source/` | Source files, spans, logical line scanning, comment scanning and comment stripping. |
 | `syntax/` | Line parsing, directive parsing, expression tokenizing, token expression parsing, layout parsing and directive aliases. |

@@ -34,7 +34,7 @@ compile(entryFile, options, deps)
   analyzeProgramNext()
     assembleProgram() for symbols
     lintCaseStyleNext()
-  optionally runRegisterCare()
+  optionally runRegisterContracts()
     load .asmi interfaces
     build program model
     read AZMDoc and .asmi contracts
@@ -80,10 +80,13 @@ analyzeProgramNext(loaded)
   run case-style lint
   return diagnostics and symbol environment
 
-analyzeRegisterCareForTools(loaded)
+analyzeRegisterContractsForTools(loaded)
   run register contract analysis in audit-oriented tooling mode
   return candidate diagnostics and code actions
 ```
+
+`analyzeRegisterCareForTools()` remains as a deprecated compatibility export for
+tooling integrations that still use the older name.
 
 ## Data Handoffs
 

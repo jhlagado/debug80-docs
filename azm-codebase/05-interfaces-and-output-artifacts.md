@@ -29,7 +29,7 @@ exports, CLI flow, public TypeScript APIs and artifact shapes.
 
 `src/index.ts` re-exports the stable public surface. `src/api-compile.ts` backs
 `@jhlagado/azm/compile`. `src/api-artifacts.ts` isolates assembly artifact
-creation for the compile API. `src/api-register-care.ts` isolates register contract
+creation for the compile API. `src/api-register-contracts.ts` isolates register contract
 analysis, interface loading and register contract artifact creation.
 `src/api-tooling.ts` backs `@jhlagado/azm/tooling`. `src/cli.ts` is the
 executable entry.
@@ -101,14 +101,14 @@ Important options include:
 | `sourceRoot` | Root used for portable D8 map paths. |
 | `d8mInputs` | Artifact paths recorded in D8 metadata. |
 | `emitBin`, `emitHex`, `emitD8m`, `emitAsm80` | Artifact selection. |
-| `registerCare` | Register contract mode. |
+| `registerContracts` | Register contract mode. |
 | `emitRegisterReport` | Emit `.regcontracts.txt` artifact. |
 | `emitRegisterInterface` | Emit `.asmi` artifact. |
 | `emitRegisterAnnotations` | Emit source annotation artifact. |
 | `fixRegisterContracts` | Apply conservative source fixes. |
 | `acceptRegisterOutputCandidates` | Promote selected output candidates. |
-| `registerCareProfile` | Built-in external contract profile. |
-| `registerCareInterfaces` | External `.asmi` contract files. |
+| `registerContractsProfile` | Built-in external contract profile. |
+| `registerContractsInterfaces` | External `.asmi` contract files. |
 | `skipAssembly` | Run loading and analysis only. |
 
 `compile()` returns:
@@ -121,8 +121,12 @@ export interface CompileNextResult {
 ```
 
 Diagnostics describe every warning or error observed during loading, analysis,
-register contract analysis, assembly or artifact creation. Artifacts contain the in-memory
-outputs requested by options.
+register contract analysis, assembly or artifact creation. Artifacts contain the
+in-memory outputs requested by options.
+
+The older option names `registerCare`, `registerCareProfile` and
+`registerCareInterfaces` remain as deprecated aliases for package consumers.
+New callers should use the `registerContracts...` names.
 
 ## Tooling API
 
@@ -132,8 +136,8 @@ helpers.
 
 `loadProgramNext()` returns a loaded program with source items, source texts and
 source line comments. `analyzeProgramNext()` runs semantic checks and returns
-symbols. `analyzeRegisterCareForTools()` returns register contract diagnostics and
-code actions in a form suitable for editors.
+symbols. `analyzeRegisterContractsForTools()` returns register contract
+diagnostics and code actions in a form suitable for editors.
 
 An editor integration usually starts with:
 
@@ -147,8 +151,8 @@ const loaded = await loadProgramNext({
 
 When `loaded.loadedProgram` is present, the editor can call
 `analyzeProgramNext()` for symbols and case-style diagnostics. It can also call
-`analyzeRegisterCareForTools()` for register contract candidate diagnostics and code
-actions.
+`analyzeRegisterContractsForTools()` for register contract candidate diagnostics
+and code actions.
 
 ## Artifact Types
 
@@ -158,9 +162,9 @@ The output layer uses structured artifact objects from `src/outputs/types.ts`:
 - `HexArtifact`
 - `D8mArtifact`
 - `Asm80Artifact`
-- `RegisterCareReportArtifact`
-- `RegisterCareInterfaceArtifact`
-- `RegisterCareAnnotationsArtifact`
+- `RegisterContractsReportArtifact`
+- `RegisterContractsInterfaceArtifact`
+- `RegisterContractsAnnotationsArtifact`
 
 Each artifact has a `kind` field. Callers can switch on `kind` to find the
 artifact they need:
@@ -202,7 +206,7 @@ The D8 map distinguishes addressable symbols from constants. Labels and
 addressable data carry addresses. Constants carry values. Debug80 can then use
 addressable symbols for breakpoints and display constants as metadata.
 
-## Lowered ASM80 and Register-Care Artifacts
+## Lowered ASM80 and Register Contract Artifacts
 
 `src/outputs/write-asm80.ts` serializes accepted AZM source items as
 ASM80-compatible `.z80` text. It lowers supported AZM constructs into forms that
@@ -210,8 +214,8 @@ can be compared against ASM80 output. The writer is larger than the other
 writers because it turns structured items back into source text.
 
 Register contract report, interface and annotation artifacts are created through
-`runRegisterCare()` in `src/api-register-care.ts` and flow through the same
-compile result and CLI write path. The report is human-readable. The `.asmi`
+`runRegisterContracts()` in `src/api-register-contracts.ts` and flow through
+the same compile result and CLI write path. The report is human-readable. The `.asmi`
 interface is metadata that can be loaded by later compile runs through
 `--interface`. Annotation artifacts write source files when `--contracts` or
 `--fix` is used.

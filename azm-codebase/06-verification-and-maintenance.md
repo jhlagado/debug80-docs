@@ -41,7 +41,7 @@ Unit tests live under `test/unit/` and mirror implementation directories:
 | `unit/z80/` | Instruction parsing, diagnostics and encoding. |
 | `unit/outputs/` | Artifact writer behaviour. |
 | `unit/expansion/` | Op collection and expansion. |
-| `unit/register-care/` | Register contract carriers, summaries, liveness, reports and fixes. |
+| `unit/register-contracts/` | Register contract carriers, summaries, liveness, reports and fixes. |
 
 Unit tests are small and direct. A new indexed operand form belongs in
 `test/unit/z80/` before it appears in a full source fixture. The unit test proves
@@ -139,7 +139,7 @@ Ask what kind of fact the change affects:
 - Assembler-time facts belong in `assembly/` and `semantics/`.
 - Instruction forms belong in `z80/`.
 - Inline source generation belongs in `expansion/`.
-- Routine contracts and liveness belong in `register-care/`.
+- Routine contracts and liveness belong in `register-contracts/`.
 - Artifact shape belongs in `outputs/`.
 - User commands belong in `cli/`.
 - Package consumers belong in `api-compile.ts`, `api-tooling.ts` and
