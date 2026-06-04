@@ -51,7 +51,7 @@ Produces three output files next to the source: `source.bin`, `source.hex`, `sou
 | `--rc` | `off`, `audit`, `warn`, `error` or `strict` | Register contract analysis level; default is `off` |
 | `--contracts` | — | Write inferred `;!` contract blocks above every `@`-labelled routine |
 | `--fix` | — | Apply conservative register contract source repairs |
-| `--reg-report` | — | Write `source.regcare.txt` with inferred contracts for every `@` routine |
+| `--reg-report` | — | Write `source.regcontracts.txt` with inferred contracts for every `@` routine |
 | `--reg-interface` | — | Write `source.asmi` with `extern` contract records for every `@` routine |
 | `--reg-profile` | `mon3` | Load a built-in register contract summary profile for known ROM environments |
 | `--accept-out` | `NAME:REG` | Promote an inferred clobber of `REG` in routine `NAME` to an intentional output |
@@ -75,10 +75,10 @@ Produces three output files next to the source: `source.bin`, `source.hex`, `sou
 | Level | Effect |
 |-------|--------|
 | `off` | No register contract analysis (default) |
-| `audit` | Infer contracts and write requested register contract artifacts; emit no register contract diagnostics |
-| `warn` | Report register contract conflicts as warnings; build succeeds |
+| `audit` | Analyze contracts without failing the build; useful while editing |
+| `warn` | Print register contract warnings; build succeeds |
 | `error` | Fail the build on proven register contract conflicts |
-| `strict` | Fail on unresolved calls, unknown boundaries, unbalanced or unknown stack effects and other register contract issues AZM cannot prove safe |
+| `strict` | Fail on anything AZM cannot prove safe, including unknown routine boundaries and stack effects |
 
 ---
 

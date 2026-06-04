@@ -102,7 +102,7 @@ Important options include:
 | `d8mInputs` | Artifact paths recorded in D8 metadata. |
 | `emitBin`, `emitHex`, `emitD8m`, `emitAsm80` | Artifact selection. |
 | `registerCare` | Register contract mode. |
-| `emitRegisterReport` | Emit `.regcare.txt` artifact. |
+| `emitRegisterReport` | Emit `.regcontracts.txt` artifact. |
 | `emitRegisterInterface` | Emit `.asmi` artifact. |
 | `emitRegisterAnnotations` | Emit source annotation artifact. |
 | `fixRegisterContracts` | Apply conservative source fixes. |

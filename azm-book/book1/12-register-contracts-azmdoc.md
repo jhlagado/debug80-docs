@@ -333,27 +333,28 @@ Lines starting with `;!` immediately before `@entry` carry the contract. Registe
 
 | Command | Effect |
 |---------|--------|
-| `azm --rc audit source.asm` | Infer contracts and write requested artifacts; no register contract diagnostics |
-| `azm --rc warn source.asm` | Warnings on conflicts; build succeeds |
-| `azm --rc error source.asm` | Errors on conflicts; build fails |
+| `azm --rc audit source.asm` | Analyze contracts without failing the build; useful while editing |
+| `azm --rc warn source.asm` | Print warnings but still build |
+| `azm --rc error source.asm` | Fail on proven register contract conflicts |
+| `azm --rc strict source.asm` | Fail on anything AZM cannot prove safe |
 
-Practical workflow beyond audit/warn/error:
+Practical workflow:
 
 ```sh
-azm --rc audit --reg-report source.asm
+azm --rc audit source.asm
 azm --contracts --rc audit source.asm
-azm --reg-interface source.asm
-azm --rc error --interface monitor.asmi source.asm
+azm --rc error source.asm
+azm --rc strict source.asm
 ```
 
 | Flag | Role |
 |------|------|
-| `--reg-report` | Inspect what AZM inferred per routine |
 | `--contracts` | Generate or upgrade `;!` blocks from inference |
 | `--reg-interface` | Export `.asmi` contracts from annotated source |
 | `--interface file.asmi` | Import contracts for code you cannot inspect |
+| `--reg-report` | Advanced text report for debugging, CI evidence or large audit sessions |
 
-Typical progression: run `--rc audit --reg-report` on legacy code, add `@` entries and `;!` lines (or `--contracts` as a draft), fix call sites, then enforce with `--rc warn` or `--rc error`.
+Typical progression: run `--rc audit` on legacy code, add `@` entries and `;!` lines (or `--contracts` as a draft), fix call sites, then enforce with `--rc error` and `--rc strict`.
 
 ---
 
@@ -430,7 +431,7 @@ CountAboveSkip:
   ret
 ```
 
-`azm --rc audit --reg-report source.asm` shows inferred summaries and any call-site conflicts visible without contracts.
+`azm --rc audit source.asm` analyzes the routine boundaries while you are still shaping the code.
 
 **Step 2 — add contracts from intended behavior.**
 
@@ -499,7 +500,7 @@ Use it where informal discipline breaks down: live registers across `call`, docu
 - **Flags** (`carry`, `zero`, …) are first-class returns; put meaning in human `;` lines, carriers in `;! out`.
 - **`@name:`** marks routine entries; plain labels inside an `@` body are branch targets, not new routines.
 - **`.asmi`** describes ROM/monitor/external code; **`--interface`** imports it.
-- Workflow: **`--reg-report`**, **`--contracts`**, **`--reg-interface`**, then **`--rc warn`** or **`--rc error`**.
+- Workflow: start with **`--rc audit`**, use **`--contracts`** for source annotations, then enforce with **`--rc error`** or **`--rc strict`**.
 
 ---
 

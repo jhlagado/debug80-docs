@@ -138,7 +138,7 @@ you need to find the owner of a behaviour quickly.
 | `carriers.ts` | Normalizes register contract carrier names and expands register pairs. |
 | `controlFlow.ts` | Successor logic for routine instruction flow. |
 | `profiles.ts` | Built-in external routine profiles such as MON-3. |
-| `report.ts` | Renders `.regcare.txt`, `.asmi` and compact source contract blocks. |
+| `report.ts` | Renders `.regcontracts.txt`, `.asmi` and compact source contract blocks. |
 | `annotate.ts` | Inserts or replaces generated contract blocks near routine labels. |
 | `annotations.ts` | Builds source annotation artifact data. |
 | `fix.ts` | Finds and applies conservative expected-output fixes. |

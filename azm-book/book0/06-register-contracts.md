@@ -174,14 +174,16 @@ Use routine boundaries to match the units whose register and stack effects you w
 
 ## Enabling register contracts
 
+Register contracts are checked by the assembler and reported as compiler diagnostics. In ordinary use, run AZM with `--rc audit`, `--rc warn`, `--rc error` or `--rc strict` and read the warnings or errors printed by the compiler.
+
 Register contract analysis is controlled by `--rc`:
 
 ```sh
 azm --rc off program.asm        # no register contract analysis
-azm --rc audit program.asm      # infer, no diagnostics
-azm --rc warn program.asm       # warn on conflicts
-azm --rc error program.asm      # fail on conflicts
-azm --rc strict program.asm     # fail on any unresolved contract
+azm --rc audit program.asm      # analyze contracts without failing the build
+azm --rc warn program.asm       # print warnings but still build
+azm --rc error program.asm      # fail on proven conflicts
+azm --rc strict program.asm     # fail on anything AZM cannot prove safe
 ```
 
 Default is `off`.
@@ -191,10 +193,10 @@ Use the modes as a ladder:
 | Mode | Use it when |
 |------|-------------|
 | `off` | You want ordinary assembly only |
-| `audit` | You want inferred reports, generated contracts or `.asmi` interfaces without diagnostics |
-| `warn` | You want conflicts reported during development while the build still succeeds |
-| `error` | You want proven register conflicts to fail the build |
-| `strict` | You want unresolved calls, unknown boundaries and unbalanced or unknown stack effects to fail the build |
+| `audit` | You want AZM to analyze contracts without failing the build; useful while editing |
+| `warn` | You want warnings printed while the build still succeeds |
+| `error` | You want proven register contract conflicts to fail the build |
+| `strict` | You want anything AZM cannot prove safe to fail the build, including unknown routine boundaries and stack effects |
 
 For a Debug80 edit-and-restart loop, use `audit` or `warn` while exploring a messy port. Use `strict` for deliberate rebuilds once the routine boundaries and external interfaces are in place.
 
@@ -463,16 +465,26 @@ The `mon3` profile provides built-in register contract summaries for MON3 RST se
 
 ## A practical workflow
 
-Use register contracts as part of editing, not only as a report generator:
+Use register contracts as part of editing:
 
 1. Write or edit the routine.
-2. Run `azm --rc audit --reg-report program.asm` to inspect inferred effects.
-3. Add or regenerate `;!` contracts.
-4. Load external `.asmi` interfaces for ROM and separately assembled library calls.
-5. Run `azm --rc strict --reg-report program.asm`.
+2. Run `azm --rc audit program.asm` while the code is still moving.
+3. Add or regenerate `;!` contracts with `azm --contracts --rc audit program.asm`.
+4. Run `azm --rc error program.asm` to fail on proven conflicts.
+5. Run `azm --rc strict program.asm` once routine boundaries and external interfaces are in place.
 6. Fix routine structure, contracts or interfaces until strict mode passes.
 
 If strict mode makes a piece of assembly uncomfortable, look first at the routine boundary. Shared exits, cross-boundary jumps and hidden monitor calls are often the code shapes that need to become explicit.
+
+---
+
+## Text reports
+
+AZM can also write a text report with `--reg-report`, producing `program.regcontracts.txt`. This is mainly for debugging, CI evidence or large audit sessions. It is not required for normal development and should not be checked into source control.
+
+```sh
+azm --rc audit --reg-report program.asm
+```
 
 ---
 

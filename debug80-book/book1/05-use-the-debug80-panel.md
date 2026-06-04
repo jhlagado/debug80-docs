@@ -59,10 +59,10 @@ Build the active target when source-level features need fresh address data.
 The selector has three modes:
 
 - **Enforce** treats register contract problems as launch-blocking diagnostics.
-- **Audit** reports register contract findings as advisory diagnostics while allowing the workflow to continue.
+- **Audit** analyzes register contracts without blocking the workflow.
 - **Off** skips the register contract check for launch.
 
-Use **Enforce** when contracts should protect the build. Use **Audit** when you want diagnostics without blocking the workflow.
+Use **Enforce** when contracts should protect the build. Use **Audit** while contracts are still being added or reviewed.
 
 ## Contract Updates
 

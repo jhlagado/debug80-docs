@@ -42,7 +42,7 @@ Debug80's current assembler backend is AZM. Most users should rely on defaults, 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `registerCare` | `'off' \| 'audit' \| 'warn' \| 'error' \| 'strict'` | `'off'` | AZM register contract mode |
-| `emitRegisterReport` | `boolean` | `false` | Write a `.regcare.txt` report artifact when register contract analysis runs |
+| `emitRegisterReport` | `boolean` | `false` | Write a `.regcontracts.txt` report artifact when register contract analysis runs |
 | `emitRegisterInterface` | `boolean` | `false` | Write an inferred `.asmi` interface artifact |
 | `registerCareProfile` | `'mon3'` | — | Built-in AZM register contract profile |
 | `registerCareInterfaces` | `string[]` | `[]` | External `.asmi` contract files to load |

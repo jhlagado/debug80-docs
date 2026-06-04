@@ -142,15 +142,15 @@ azm --type bin --nohex --nod8m --output out.bin program.asm
 
 ### Register contract artifacts
 
-Two additional artifacts require at minimum `--rc audit`:
+Register contracts are normally read through compiler diagnostics from `--rc warn`, `--rc error` and `--rc strict`. Two optional artifacts require at minimum `--rc audit`:
 
-**`.regcare.txt` (register contract report):**
+**`.regcontracts.txt` (register contract report):**
 
 ```sh
 azm --rc audit --reg-report program.asm
 ```
 
-Lists every `@`-labelled routine with its inferred register contract: inputs, outputs and clobbers.
+Writes `program.regcontracts.txt`, listing every `@`-labelled routine with its inferred register contract: inputs, outputs and clobbers. Use this for debugging, CI evidence or large audit sessions; it is not required for normal development.
 
 **`.asmi` (inferred register contract interface):**
 

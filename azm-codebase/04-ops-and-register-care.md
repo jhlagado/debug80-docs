@@ -189,7 +189,7 @@ unit produced by the callee and read by the caller becomes an output candidate.
 
 ## Reports, Interfaces and Tooling
 
-`report.ts` renders human-readable `.regcare.txt` reports and `.asmi` interface
+`report.ts` renders human-readable `.regcontracts.txt` reports and `.asmi` interface
 metadata. `annotate.ts`, `annotations.ts`, `fix.ts` and `sourceText.ts` support
 source updates for generated AZMDoc comments and conservative fixes.
 
