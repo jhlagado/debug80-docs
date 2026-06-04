@@ -84,10 +84,10 @@ The same helper also renders source-map and hardware-send status lines when the 
 
 `wireAzmOptionsControl()` wires the small AZM controls in the Project accordion. The visible UI intentionally exposes only coarse session preferences:
 
-- **Register Care**: `Enforce`, `Audit`, or `Off`
+- **Register Contracts**: `Enforce`, `Audit`, or `Off`
 - **Contract Updates**: `Ask`, `Auto`, or `Never`
 
-Changing either select posts `{ type: 'setAzmOptions', registerCareMode, contractUpdateMode }` to the extension host. The values are session-scoped provider state, not persistent project config. On restart, `debug-session-actions.ts` maps `Enforce` to AZM `registerCare: 'error'` with `emitRegisterReport: true`, maps `Audit` to `registerCare: 'audit'`, and maps `Off` to `registerCare: 'off'`.
+Changing either select posts `{ type: 'setAzmOptions', registerContractsMode, contractUpdateMode }` to the extension host. The values are session-scoped provider state, not persistent project config. On restart, `debug-session-actions.ts` maps `Enforce` to AZM `registerContracts: 'error'` with `emitRegisterReport: true`, maps `Audit` to `registerContracts: 'audit'`, and maps `Off` to `registerContracts: 'off'`. Debug80 also passes `registerContractsProfile: 'mon3'` for the enforcing and audit modes.
 
 ### Create project helper (`common/create-project.ts`)
 

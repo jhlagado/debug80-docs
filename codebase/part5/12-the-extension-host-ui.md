@@ -299,7 +299,7 @@ These arrive in `onDidReceiveMessage` and are dispatched as described above.
 | `saveProjectConfig` | `platform: string` | Write `projectPlatform` + per-target `platform` to `debug80.json`, then restart debug. This is now effectively a legacy path because the platform selector is hidden once a project is initialized. |
 | `selectTarget` | `rootPath`, `targetName` | Execute target selection |
 | `restartDebug` | — | Execute restart debug command |
-| `setAzmOptions` | `registerCareMode`, `contractUpdateMode` | Update session-scoped AZM options shown in the Project panel |
+| `setAzmOptions` | `registerContractsMode`, `contractUpdateMode` | Update session-scoped AZM options shown in the Project panel |
 | `sendHexViaCoolTerm` | optional `rootPath`, `targetName` | Send the selected target's HEX artifact to a real board through CoolTerm |
 | `setEntrySource` | — | Execute set entry source command |
 | `serialSendFile` | — | File picker → character-by-character send (TEC-1/TEC-1G) |

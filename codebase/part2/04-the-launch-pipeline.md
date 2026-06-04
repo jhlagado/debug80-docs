@@ -217,15 +217,19 @@ compile(asmPath, {
   emitD8m: true,
   emitAsm80: true,
   sourceRoot,
+  registerContracts,
+  emitRegisterReport,
+  registerContractsProfile,
+  registerContractsInterfaces,
   ...
 })
 ```
 
-The successful path writes the HEX output, BIN output when present, and a native D8 map beside the HEX artifact. Debug80 no longer writes placeholder listings or generated source-map cache files.
+The successful path writes the HEX output, BIN output when present, a native D8 map, and any requested register-contract artifacts beside the HEX artifact. Register-contract reports are written as `.regcontracts.txt`; inferred interfaces are written as `.asmi`. Debug80 no longer writes placeholder listings or generated source-map cache files.
 
 The backend validates AZM's returned artifacts before treating assembly as successful. A compile result without a HEX artifact, without a D8 source map, or with a HEX artifact that contains no Intel HEX data records is reported as assembly failure. This prevents an empty or unusable HEX output from being written and then loaded as if it were a valid target.
 
-On failure, the backend converts AZM diagnostics into a structured `AssemblyDiagnostic` with file path, line number, column, and source line when available. Relative diagnostic paths are resolved against the launch `sourceRoot`, and the backend reads the referenced source line from disk when it can. This diagnostic is formatted and sent to both the Debug Console and the extension host (as a `debug80/assemblyFailed` event). The extension host resolves any relative diagnostic path against the session workspace folder before publishing it to VS Code's diagnostic collection, and it also updates project status plus the user-facing build-failed notification.
+On failure, the backend converts AZM diagnostics into a structured `AssemblyDiagnostic` with file path, line number, column, and source line when available. Relative diagnostic paths are resolved against the launch `sourceRoot`, and the backend reads the referenced source line from disk when it can. This includes register-contract diagnostics such as strict-mode stack-discipline failures. The diagnostic is formatted and sent to both the Debug Console and the extension host (as a `debug80/assemblyFailed` event). The extension host resolves any relative diagnostic path against the session workspace folder before publishing it to VS Code's diagnostic collection, and it also updates project status plus the user-facing build-failed notification.
 
 Assembler diagnostics are emitted through `OutputEvent`, so errors and warnings appear in the Debug Console even though the normal successful path is in-process and quiet.
 
