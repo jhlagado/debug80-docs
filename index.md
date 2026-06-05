@@ -8,9 +8,7 @@ nav_order: 1
 
 Technical documentation for the **Debug80** Z80 debugger extension and the **AZM** assembler for Visual Studio Code.
 
----
-
-## Publications
+## Debug80
 
 ### [Debug80 Book 1 — Getting Started](debug80-book/book1/)
 
@@ -23,6 +21,18 @@ For readers who want a book-shaped route through the Debug80 workflow.
 In development. A Debug80-oriented outline for programming the TEC-1G with MON-3, Debug80 projects and targets, display hardware, sound, and larger interactive examples.
 
 ---
+
+## About Debug80
+
+Debug80 is a VS Code debugger extension for Z80 assembly programs targeting the TEC-1, TEC-1G, and compatible hardware. It turns an assembly project into a source-level debugging session: build the active target, run it in an emulated machine, set breakpoints, step through instructions, inspect registers and memory, and watch platform hardware update as the program runs.
+
+For TEC-1G work, Debug80 includes a MON-3-oriented project path and an emulator panel for the machine's displays, keypad, serial behaviour and memory state. The same build artifacts can be used with real hardware: assemble in VS Code, debug the program, then send the generated HEX file to a board when you are ready to test outside the emulator.
+
+Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80)
+
+---
+
+## AZM
 
 ### [AZM Book 0 — Assembler Manual](azm-book/book0/)
 
@@ -42,11 +52,15 @@ A follow-on AZM book about sorting, searching, recursion, composition, pointer s
 
 For readers who know the Z80 basics and want to build more substantial AZM programs.
 
-## About Debug80
+---
 
-Debug80 is a VS Code debugger extension for Z80 assembly programs targeting the TEC-1, TEC-1G, and compatible hardware. It provides full source-level debugging: breakpoints, step over/into/out, memory inspection, register editing, and platform-specific hardware emulation.
+## About AZM
 
-Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80)
+AZM is an enhanced Z80 assembler with modern programming features. It keeps the generated machine code explicit, while adding assembler-time structure for larger programs: layout types, register contracts, op declarations, directive aliases, diagnostics, listings, Intel HEX output and Debug80 source maps.
+
+You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debug80 when you build and debug `.asm` files in VS Code. The assembler output is meant to serve both paths: readable listings for the programmer, binary and HEX artifacts for machines, and `.d8.json` metadata for source-level debugging.
+
+---
 
 ## About TEC-1G
 
