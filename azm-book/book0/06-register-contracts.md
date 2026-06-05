@@ -14,6 +14,12 @@ This is a register collision. The assembler has no way to know what value `B` sh
 
 AZM's register contracts find these collisions at assemble time by making the register use between routines explicit and machine-checkable. They are deliberately stricter than casual assembly style: they ask you to write routine boundaries, register effects and external calls in a form the assembler can prove.
 
+The benefit is strongest in sizeable Z80 programs made of many small routines. Those programs carry a lot of implicit register state: loop counters, pointers, status flags, scratch pairs and monitor-call arguments. A call can look harmless while still destroying a value the caller will use a few instructions later. Register contracts move that assumption into source and let AZM stop the build at the call site.
+
+This changes the development style in useful ways. `@` entry labels make routine boundaries explicit. `;!` contracts make helper interfaces visible, including routines that intentionally return values in carriers such as `HL` or `carry`. Strict checking also applies to proof code, tests and scaffolding, so temporary helpers cannot quietly rely on stale register assumptions.
+
+The friction is real. Strict mode is unforgiving when a helper's true output contract has not been written yet, and code that jumps across routine-shaped regions is harder for AZM to prove. That pressure is part of the value: routines tend to become smaller, more local and easier to reason about before the program reaches Debug80 or hardware.
+
 ---
 
 ## A concrete collision
