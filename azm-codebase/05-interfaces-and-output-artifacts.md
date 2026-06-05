@@ -4,7 +4,7 @@ title: "Chapter 5 - Interfaces and Output Artifacts"
 parent: "AZM Engineering Manual"
 nav_order: 5
 ---
-[<- Ops and Register Contracts](04-ops-and-register-care.md) | [Verification and Maintenance ->](06-verification-and-maintenance.md)
+[<- Ops and Register Contracts](04-ops-and-register-contracts.md) | [Verification and Maintenance ->](06-verification-and-maintenance.md)
 
 # Chapter 5 - Interfaces and Output Artifacts
 

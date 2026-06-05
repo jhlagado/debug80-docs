@@ -4,7 +4,7 @@ title: "Chapter 3 - Assembly and Z80 Emission"
 parent: "AZM Engineering Manual"
 nav_order: 3
 ---
-[<- Source Loading and Parsing](02-source-loading-and-parsing.md) | [Ops and Register Contracts ->](04-ops-and-register-care.md)
+[<- Source Loading and Parsing](02-source-loading-and-parsing.md) | [Ops and Register Contracts ->](04-ops-and-register-contracts.md)
 
 # Chapter 3 - Assembly and Z80 Emission
 

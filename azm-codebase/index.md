@@ -34,7 +34,7 @@ modules. The directory appendix is the current file map for those modules.
 - [Chapter 1 - Orientation and Repository Layout](01-orientation-and-repository-layout.md)
 - [Chapter 2 - Source Loading and Parsing](02-source-loading-and-parsing.md)
 - [Chapter 3 - Assembly and Z80 Emission](03-assembly-and-z80-emission.md)
-- [Chapter 4 - Ops and Register Contracts](04-ops-and-register-care.md)
+- [Chapter 4 - Ops and Register Contracts](04-ops-and-register-contracts.md)
 - [Chapter 5 - Interfaces and Output Artifacts](05-interfaces-and-output-artifacts.md)
 - [Chapter 6 - Verification and Maintenance](06-verification-and-maintenance.md)
 
