@@ -6,7 +6,7 @@ nav_order: 1
 
 # Debug80 Documentation
 
-Technical documentation for the **Debug80** Z80 debugger extension and the **AZM** assembler for Visual Studio Code. The reader-facing Debug80 and AZM books come first. Engineering manuals for the TypeScript codebases are collected separately below.
+Technical documentation for the **Debug80** Z80 debugger extension and the **AZM** assembler for Visual Studio Code.
 
 ---
 
@@ -41,19 +41,6 @@ For readers learning Z80 assembly programming with AZM.
 A follow-on AZM book about sorting, searching, recursion, composition, pointer structures, and larger assembly program design.
 
 For readers who know the Z80 basics and want to build more substantial AZM programs.
-
----
-
-## Engineering Manuals
-
-For readers interested in the TypeScript implementations of Debug80 and AZM.
-
-- [Debug80 Engineering Manual](codebase/) — Debug adapter, launch pipeline, Z80 emulator, platform runtimes, extension UI, source mapping, and extension points.
-- [AZM Engineering Manual](azm-codebase/) — AZM repository layout, parsing, assembly, Z80 emission, ops, register contract analysis, artifacts, APIs, and verification.
-
-These are implementation references, not general Z80 or Debug80 user guides.
-
----
 
 ## About Debug80
 

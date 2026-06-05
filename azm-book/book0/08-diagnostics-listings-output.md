@@ -116,7 +116,7 @@ HEX handles gaps naturally: records are emitted only for address ranges that con
 
 ### Debug80 map (`.d8.json`)
 
-The `.d8.json` file is a JSON metadata file that Debug80 reads to correlate binary addresses with source lines. It records source paths, address ranges, listing rows, and symbols. The producer/consumer format is documented in the [D8 Debug Map Format reference](../../codebase/appendices/g-d8-debug-map-format.md).
+The `.d8.json` file is a JSON metadata file that Debug80 reads to correlate binary addresses with source lines. It records source paths, address ranges, listing rows, and symbols. The producer/consumer format is documented in the [Debug80 source map format reference](../../debug80-book/book1/appendices/c-project-configuration.md#source-map-format).
 
 ```sh
 azm --source-root . --output build/program.hex src/program.asm
