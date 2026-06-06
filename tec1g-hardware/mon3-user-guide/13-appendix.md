@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Quick Start Programs](12-quick-start-programs.md) | [Guide](index.md) | [Useful Links →](14-useful-links.md)
+
 # Appendix
 
 ### Ports
@@ -200,3 +202,5 @@ loop2:
 ![Extracted figure from MON-3 User Guide page 90](../../assets/images/tec1g-hardware/mon3-user-guide/page-90-figure-1.png)
 
 ![Extracted figure from MON-3 User Guide page 90](../../assets/images/tec1g-hardware/mon3-user-guide/page-90-figure-2.png)
+
+[← Quick Start Programs](12-quick-start-programs.md) | [Guide](index.md) | [Useful Links →](14-useful-links.md)

@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Terminal Monitor](08-terminal-monitor.md) | [Guide](index.md) | [Advanced Programming →](10-advanced-programming.md)
+
 # TEC Magazine Code on the TEC-1G
 
 A great way to learn how to use the TEC-1G is to key in programs presented
@@ -55,3 +57,5 @@ LD A,I           LD C,10H            A LD A,I by itself is 'polling' for a key p
 ```
 
 ![Extracted figure from MON-3 User Guide page 27](../../assets/images/tec1g-hardware/mon3-user-guide/page-27-figure-1.png)
+
+[← Terminal Monitor](08-terminal-monitor.md) | [Guide](index.md) | [Advanced Programming →](10-advanced-programming.md)

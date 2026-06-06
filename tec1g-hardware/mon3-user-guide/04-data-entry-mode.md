@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Memory Map](03-memory-map.md) | [Guide](index.md) | [Matrix Keyboard →](05-matrix-keyboard.md)
+
 # Data Entry Mode
 
 ### Basic Operation
@@ -160,3 +162,5 @@ The routines attached to the Function Key are:
 ```
 
 ![Extracted figure from MON-3 User Guide page 16](../../assets/images/tec1g-hardware/mon3-user-guide/page-16-figure-1.png)
+
+[← Memory Map](03-memory-map.md) | [Guide](index.md) | [Matrix Keyboard →](05-matrix-keyboard.md)

@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Debugging Programs](06-debugging-programs.md) | [Guide](index.md) | [Terminal Monitor →](08-terminal-monitor.md)
+
 # Tiny Basic
 
 Tiny Basic has been removed from Mon3 as of v1.6 but it can be loaded
@@ -92,3 +94,5 @@ Print All ASCII Characters
 30 PRINT #1,&I+32,$32,$I+32,$32,
 40 IF (I+1)/10*10=(I+1) PRINT
 50 NEXT I
+
+[← Debugging Programs](06-debugging-programs.md) | [Guide](index.md) | [Terminal Monitor →](08-terminal-monitor.md)

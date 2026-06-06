@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Main Menu](02-main-menu.md) | [Guide](index.md) | [Data Entry Mode →](04-data-entry-mode.md)
+
 # Memory Map
 
 The table below outlines how the full 64Kb of address space is allocated on
@@ -53,3 +55,5 @@ Some things to be considered are:
        Shadow mode will be active by default and will be indicated by an
        illuminated LED segment on the system latch BAR component.
 ```
+
+[← Main Menu](02-main-menu.md) | [Guide](index.md) | [Data Entry Mode →](04-data-entry-mode.md)

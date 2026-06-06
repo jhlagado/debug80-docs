@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Data Entry Mode](04-data-entry-mode.md) | [Guide](index.md) | [Debugging Programs →](06-debugging-programs.md)
+
 # Matrix Keyboard
 
 Mon3 will work with the TEC QWERTY or Mechanical Matrix Keyboard
@@ -30,3 +32,5 @@ The full range of keys can be accessed and converted when developing
 programs via the matrixScan and matrixToASCII API routines.
 
 ![Extracted figure from MON-3 User Guide page 17](../../assets/images/tec1g-hardware/mon3-user-guide/page-17-figure-1.jpg)
+
+[← Data Entry Mode](04-data-entry-mode.md) | [Guide](index.md) | [Debugging Programs →](06-debugging-programs.md)

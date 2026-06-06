@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Advanced Programming](10-advanced-programming.md) | [Guide](index.md) | [Quick Start Programs →](12-quick-start-programs.md)
+
 # Hard Drive Access
 
 Mon3 has the ability to read and write to files from certain Hard Drives and
@@ -243,3 +245,5 @@ be called to save the modifications back to the file.
 
 This example will read a sector first, make some modifications and then
 write it back to the file.
+
+[← Advanced Programming](10-advanced-programming.md) | [Guide](index.md) | [Quick Start Programs →](12-quick-start-programs.md)

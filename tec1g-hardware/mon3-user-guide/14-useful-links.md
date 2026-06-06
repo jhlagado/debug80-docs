@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Appendix](13-appendix.md) | [Guide](index.md)
+
 # Useful Links
 
 TEC-1G GitHub Repository
@@ -71,3 +73,5 @@ https://www.talkingelectronics.com/te_interactive_index.html
 ![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-6.png)
 
 ![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-7.png)
+
+[← Appendix](13-appendix.md) | [Guide](index.md)

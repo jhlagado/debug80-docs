@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Tiny Basic](07-tiny-basic.md) | [Guide](index.md) | [TEC Magazine Code on the TEC-1G →](09-tec-magazine-code-on-the-tec-1g.md)
+
 # Terminal Monitor
 
 ### Starting up TMON
@@ -238,3 +240,5 @@ PRINT your-text-here
 your-text-here is echoed back to the serial terminal.
 
 ![Extracted figure from MON-3 User Guide page 26](../../assets/images/tec1g-hardware/mon3-user-guide/page-26-figure-1.png)
+
+[← Tiny Basic](07-tiny-basic.md) | [Guide](index.md) | [TEC Magazine Code on the TEC-1G →](09-tec-magazine-code-on-the-tec-1g.md)

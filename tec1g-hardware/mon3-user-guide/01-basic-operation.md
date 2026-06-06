@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Introduction](00-introduction.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)
+
 # Basic Operation
 
 ### Cold Reset
@@ -41,3 +43,5 @@ reset returns the TEC to its initial editing location on a Cold Reset.  It's a
 quick way to go back to the start of a code block or break code execution.
 
 ![Extracted figure from MON-3 User Guide page 4](../../assets/images/tec1g-hardware/mon3-user-guide/page-04-figure-1.png)
+
+[← Introduction](00-introduction.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)

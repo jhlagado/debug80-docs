@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Basic Operation](01-basic-operation.md) | [Guide](index.md) | [Memory Map →](03-memory-map.md)
+
 # Main Menu
 
 A menu is provided on the LCD screen to help navigate some of the
@@ -289,3 +291,5 @@ Display the people who developed and tested the TEC-1G
    -   John Hardy & Ken Stone - The original designers
 
 ![Extracted figure from MON-3 User Guide page 11](../../assets/images/tec1g-hardware/mon3-user-guide/page-11-figure-1.png)
+
+[← Basic Operation](01-basic-operation.md) | [Guide](index.md) | [Memory Map →](03-memory-map.md)

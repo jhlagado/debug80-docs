@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← Hard Drive Access](11-hard-drive-access.md) | [Guide](index.md) | [Appendix →](13-appendix.md)
+
 # Quick Start Programs
 
 Who wants the TEC-1G to say Hello?  Here are three ways TEC can do this.
@@ -339,3 +341,5 @@ DISP_BUFF        .EQU 2000H        ;7 Segment Display Buffer
 4037 20 CD       JR NZ,4006        ;No, Loop Main Display
 4039 C9          RET               ;Exit back to Monitor
 ```
+
+[← Hard Drive Access](11-hard-drive-access.md) | [Guide](index.md) | [Appendix →](13-appendix.md)

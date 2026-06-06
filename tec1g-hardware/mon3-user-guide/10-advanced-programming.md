@@ -8,6 +8,8 @@ has_toc: false
 nav_exclude: true
 ---
 
+[← TEC Magazine Code on the TEC-1G](09-tec-magazine-code-on-the-tec-1g.md) | [Guide](index.md) | [Hard Drive Access →](11-hard-drive-access.md)
+
 # Advanced Programming
 
 ### RST (Restart) commands
@@ -1805,3 +1807,5 @@ Some easy-to-type examples have also been provided in the Quick Start
 Programs chapter below.
 
 ![Extracted figure from MON-3 User Guide page 72](../../assets/images/tec1g-hardware/mon3-user-guide/page-72-figure-1.jpg)
+
+[← TEC Magazine Code on the TEC-1G](09-tec-magazine-code-on-the-tec-1g.md) | [Guide](index.md) | [Hard Drive Access →](11-hard-drive-access.md)
