@@ -134,10 +134,9 @@ This code will sound a bell tone in the speaker when an NMI occurs.  The
 TEC-1G has an NMI jumper that can set NMI to trigger on a Keypad press, a
 HALT instruction or externally (no jumper).
 
-
-                                                                        Credit: Ken Stone
-
 ![Extracted figure from MON-3 User Guide page 30](../../assets/images/tec1g-hardware/mon3-user-guide/page-30-figure-1.png)
+
+*Cartoon credit: Ken Stone, TE Issue 10, 1983.*
 
 ### API (Application Programming Interface) commands.
 

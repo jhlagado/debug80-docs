@@ -51,6 +51,7 @@ for the TEC-1G.  Here is a list of language additions.
 
 Here are some Tiny Basic Example programs
 
+```text
 Display the first 22 Fibonacci Numbers
  5 REM ** FIBONACCI SEQUENCE **
 10 PRINT "FIBONACCI SEQUENCE"
@@ -94,5 +95,6 @@ Print All ASCII Characters
 30 PRINT #1,&I+32,$32,$I+32,$32,
 40 IF (I+1)/10*10=(I+1) PRINT
 50 NEXT I
+```
 
 [← Debugging Programs](06-debugging-programs.md) | [Guide](index.md) | [Terminal Monitor →](08-terminal-monitor.md)
