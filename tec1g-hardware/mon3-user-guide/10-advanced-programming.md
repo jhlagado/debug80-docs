@@ -1680,11 +1680,11 @@ picture:
 
 This example displays the image from the current cursor position.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-67-figure-1.png)
+
 Here is the complete list of ASCII characters 00H-FFH that can be displayed.
 Each character is up to 6 x 6 pixels and is numbered left to right, top to
 bottom.  The characters align with the standard ASCII Table.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-67-figure-1.png)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-67-figure-2.png)
 
