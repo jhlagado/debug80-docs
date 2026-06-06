@@ -1263,7 +1263,7 @@ Exit back to RTC Setup.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-56-figure-1.png)
 
-*Image credit: Andrew McRae.*
+*A TEC-1G with various add-on boards. Credit: Andrew McRae.*
 
 ## Graphical LCD Add-On Interface
 

@@ -245,7 +245,7 @@ The following page contains examples tunes that can be typed in a played
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-10-figure-1.jpg)
 
-*Image credit: Gerald M Eberhardt.*
+*TEC-1G with 3D printed stand and supports. Credit: Gerald M Eberhardt.*
 
 ## Settings
 
