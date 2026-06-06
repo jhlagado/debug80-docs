@@ -993,15 +993,36 @@ Mon3 will automatically utilise the internal PRAM to retain some settings
 when the TEC-1G is powered down. 14 free bytes are available to be used by
 the user. The reserved Mon3 PRAM slots are:
 
-
-| Slot | Reserved for |
-| --- | --- |
-| `0-5` | Quick Jump Addresses |
-| `6-11` | Start/End/Dest Addresses |
-| `12-13` | Baud Rate |
-| `14-15` | Addr. Inc. / Beep |
-| `16-29` | User Free RAM |
-| `30` | Mon3 Checksum |
+<table class="mon3-emphasis-table">
+  <thead>
+    <tr>
+      <th>Slot</th>
+      <th>Reserved for</th>
+      <th>Slot</th>
+      <th>Reserved for</th>
+      <th>Slot</th>
+      <th>Reserved for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>0-5</code></td>
+      <td>Quick Jump Addresses</td>
+      <td><code>12-13</code></td>
+      <td>Baud Rate</td>
+      <td class="mon3-user-range"><code>16-29</code></td>
+      <td class="mon3-user-range">User Free RAM</td>
+    </tr>
+    <tr>
+      <td><code>6-11</code></td>
+      <td>Start/End/Dest Addresses</td>
+      <td><code>14-15</code></td>
+      <td>Addr. Inc. / Beep</td>
+      <td><code>30</code></td>
+      <td>Mon3 Checksum</td>
+    </tr>
+  </tbody>
+</table>
 
 
 When the RTC board is first used, TEC-1G settings are saved to the PRAM

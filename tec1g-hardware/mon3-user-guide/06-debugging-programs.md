@@ -32,10 +32,11 @@ Flags that are set are in Capitals.  To continue code execution press the GO
 key and to quit execution and return to the Monitor press the AD key.
 Finally, to remove an inserted Breakpoint press Fn-Minus at the address
 where the Breakpoint is.  This will remove the breakpoint and adjust the
-code to its original state.  Note: Breakpoints will be ignored if a connection
-is made between the + and the D5 pins on the G.IMP header.  Warning: Do
-not connect the + to the - pin on the G.IMP header!!! This will short out the
-TEC!
+code to its original state.
+
+<div class="mon3-warning" markdown="1">
+**Warning:** Breakpoints will be ignored if a connection is made between the `+` and `D5` pins on the G.IMP header. Do not connect the `+` pin to the `-` pin on the G.IMP header. This will short out the TEC.
+</div>
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-18-figure-1.jpg)
 

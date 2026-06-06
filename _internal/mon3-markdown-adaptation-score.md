@@ -38,3 +38,9 @@ Rationale:
 - Render the Jekyll site locally or through CI and inspect the page TOCs in the browser.
 - Compare rendered HTML pages against PDF screenshots for image order and section breaks. Use `/Users/johnhardy/projects/TEC-1G/ROMs/MON3/MON3_User_Guide_v1.6.pdf` as the source PDF.
 - Review the Advanced Programming page for whether any API groups should be split into separate pages if the page TOC becomes too long.
+
+## Formatting-Significant PDF Details
+
+- Page 49 uses an arrow/caption to connect the RGB matrix image with the `RGBDATA` listing. The web version now places the image and caption immediately before that listing.
+- Page 50 uses a red background on the `16-29 User Free RAM` PRAM slot range. The web version now renders the PRAM slots as a three-across HTML table and preserves that range with a red highlight.
+- Pages 18 and 26 include safety-sensitive warning/caution text. The web version now renders those as visible MON-3 warning callouts instead of inline prose.
