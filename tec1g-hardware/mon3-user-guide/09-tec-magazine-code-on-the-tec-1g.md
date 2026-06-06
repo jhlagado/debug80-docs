@@ -3,7 +3,7 @@ layout: default
 title: "TEC Magazine Code on the TEC-1G"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 10
+nav_order: 9
 has_toc: false
 nav_exclude: true
 ---

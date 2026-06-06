@@ -3,7 +3,7 @@ layout: default
 title: "Tiny Basic"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 8
+nav_order: 7
 has_toc: false
 nav_exclude: true
 ---

@@ -3,7 +3,7 @@ layout: default
 title: "Main Menu"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 3
+nav_order: 2
 has_toc: false
 nav_exclude: true
 ---

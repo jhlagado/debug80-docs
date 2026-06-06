@@ -3,7 +3,7 @@ layout: default
 title: "Terminal Monitor"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 9
+nav_order: 8
 has_toc: false
 nav_exclude: true
 ---

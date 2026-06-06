@@ -3,12 +3,12 @@ layout: default
 title: "Basic Operation"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 2
+nav_order: 1
 has_toc: false
 nav_exclude: true
 ---
 
-[← Introduction](00-introduction.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)
+[← MON-3 User Guide](index.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)
 
 # Basic Operation
 
@@ -40,4 +40,4 @@ A Warm Reset occurs when pressing and releasing the RESET key.  A warm
 reset returns the TEC to its initial editing location on a Cold Reset.  It's a
 quick way to go back to the start of a code block or break code execution.
 
-[← Introduction](00-introduction.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)
+[← MON-3 User Guide](index.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)

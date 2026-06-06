@@ -3,7 +3,7 @@ layout: default
 title: "Data Entry Mode"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 5
+nav_order: 4
 has_toc: false
 nav_exclude: true
 ---

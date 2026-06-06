@@ -3,7 +3,7 @@ layout: default
 title: "Memory Map"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 4
+nav_order: 3
 has_toc: false
 nav_exclude: true
 ---

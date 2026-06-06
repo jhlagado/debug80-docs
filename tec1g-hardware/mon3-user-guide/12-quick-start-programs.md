@@ -3,7 +3,7 @@ layout: default
 title: "Quick Start Programs"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 13
+nav_order: 12
 has_toc: false
 nav_exclude: true
 ---

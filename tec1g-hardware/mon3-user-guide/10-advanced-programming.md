@@ -3,7 +3,7 @@ layout: default
 title: "Advanced Programming"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 11
+nav_order: 10
 has_toc: false
 nav_exclude: true
 ---

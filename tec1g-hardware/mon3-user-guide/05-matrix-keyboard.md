@@ -3,7 +3,7 @@ layout: default
 title: "Matrix Keyboard"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 6
+nav_order: 5
 has_toc: false
 nav_exclude: true
 ---

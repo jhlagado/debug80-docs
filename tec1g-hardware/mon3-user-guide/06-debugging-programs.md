@@ -3,7 +3,7 @@ layout: default
 title: "Debugging Programs"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 7
+nav_order: 6
 has_toc: false
 nav_exclude: true
 ---
