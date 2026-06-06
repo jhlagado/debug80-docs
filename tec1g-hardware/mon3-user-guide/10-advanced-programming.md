@@ -1783,8 +1783,8 @@ ld de,text      ;Text to display
 ld c,0          ;terminate on zero
 ld a,25         ;sendStringToLCD
 rst 18H
-```
 text: .db "Hello TEC-1G!",0
+```
 
 **sendRegToLCD #26 (1AH)**
 Display a byte or register in ASCII on the GLCD at the current cursor

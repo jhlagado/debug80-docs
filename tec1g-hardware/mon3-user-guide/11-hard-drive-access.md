@@ -159,9 +159,9 @@ and must match exactly.  The file must already be existing on the drive.
 ld hl,filename     ;address of file text
 ld c,59            ;openFile
 rst 10H
-```
 
 filename: .db "TBASIC.HEX",0
+```
 
 ### readSector #60 (3CH)
 Load a sector from the opened file.  Requires openFile to be called prior
