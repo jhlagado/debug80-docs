@@ -12,15 +12,13 @@ nav_exclude: true
 
 # Basic Operation
 
-### Cold Reset
-### Warm Reset
-
 With the monitor loaded into the ROM socket and all the jumpers set
 correctly for the ROM used.  Turn the TEC on.  If it loads,  a welcome banner
 will be displayed on the LCD, and a short tune will be heard.
 
+![Extracted figure from MON-3 User Guide page 4](../../assets/images/tec1g-hardware/mon3-user-guide/page-04-figure-1.png)
 
-Cold Reset
+## Cold Reset
 
 When the TEC turns on after being powered down, a Cold Reset occurs.  A
 Cold Reset signified with the display of the welcome banner and a short
@@ -36,12 +34,10 @@ distinctive LCD Banner and music tone will indicate that the Cold Reset
 was successful.  A manual Cold Reset on the HexPad will still work if the
 Matrix Keyboard is in use.
 
-Warm Reset
+## Warm Reset
 
 A Warm Reset occurs when pressing and releasing the RESET key.  A warm
 reset returns the TEC to its initial editing location on a Cold Reset.  It's a
 quick way to go back to the start of a code block or break code execution.
-
-![Extracted figure from MON-3 User Guide page 4](../../assets/images/tec1g-hardware/mon3-user-guide/page-04-figure-1.png)
 
 [← Introduction](00-introduction.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)

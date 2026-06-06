@@ -14,8 +14,6 @@ nav_exclude: true
 
 ### Ports
 
-Ports
-
 ```asm
  Port          Direction       Description
 

@@ -87,7 +87,6 @@ where the file is to be loaded at.
 See the Useful Links section below on how to load your drive with ready to
 run TEC-1G files.
 
-Save / Load Session
 The entire contents of RAM can be saved to a file and loaded back to the
 TEC.  This is an equivalent to saving/restoring a session.   It replaces any
 need to use Non-Volitile RAM.  It can be used prior to powering down to
@@ -125,7 +124,6 @@ access in Data Entry mode by pressing Fn-7.
 While the drive is being accessed, the LCD will display the current progress.
 
 
-Error Messages
 If any errors occur while accessing the drive, an error message will be
 displayed on the LCD and the code will exit after a key is pressed.
 

@@ -140,12 +140,13 @@ HALT instruction or externally (no jumper).
 ![Extracted figure from MON-3 User Guide page 30](../../assets/images/tec1g-hardware/mon3-user-guide/page-30-figure-1.png)
 
 ### API (Application Programming Interface) commands.
-#### General conventions
 
 The API on Mon3 exposes routines used by Mon3 which can be used in
 your own programs.  No need to rewrite the world!  But more importantly,
 it makes writing code quicker and easier with most of the complicated
 stuff removed.
+
+#### General conventions
 
 The register C holds the API Call number.  All other registers except the IX
 register can be used as parameters if needed.  Executing a RST 10H or D7

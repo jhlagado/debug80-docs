@@ -12,16 +12,13 @@ nav_exclude: true
 
 # Terminal Monitor
 
-### Starting up TMON
-### Using TMON
-
 TMON has been removed from Mon3 as of v1.5 but it can be loaded as a
 stand-alone program.  See the GitHub for source files.
 The Terminal Monitor (TMON) is a complete serial port-based monitor for
 the TEG-1G, designed for users who prefer to interact with the TEC-1G via a
 terminal.
 
-Starting up TMON
+## Starting up TMON
 
 Connect a serial terminal to the TEC-1G via the FTDI to USB connector.
 Then, select Terminal Monitor from the main menu by pressing GO and
@@ -36,7 +33,7 @@ look at the serial terminal.
 ```
 
 
-Using TMON
+## Using TMON
 
 TMON is an interactive tool that works with a serial terminal e.g. PuTTY or
 Tera Term on a PC, or a 'real' VT100 serial terminal such as a Wyse WY-60.
@@ -57,10 +54,11 @@ The above text is the default display when TMON first starts.  TMON is now
 awaiting input and commands from the Available Commands list can be
 entered.
 
-### The Command Prompt
-### DATA mode
+## The Command Prompt
 
+```text
  1000 >
+```
 
 
 The 1000 represents the CURRENT ADDRESS in HEX. Many commands
@@ -80,7 +78,7 @@ Backspace is supported, to correct typos.
 All data entered at all times is assumed to be HEX - 4 bytes for addresses, 2
 bytes for data. Invalid data input is ignored.
 
-DATA mode
+## DATA mode
 
 When the DATA command is given, TMON switches to interactive data
 entry mode. This is signified by the prompt changing as follows:
@@ -93,7 +91,6 @@ XXXX continues to represent the CURRENT ADDRESS however the nn
 represents the HEX byte stored at that address, which you are presently
 editing.
    -   Enter a HEX byte and it will be written to memory at CADDR;
-```asm
        CURRENT ADDR is then incremented by one.
    -   ENTER increments CURRENT ADDRESS by one and leaves the
        existing value as-is. This way, any bytes that don't need altering are
@@ -102,16 +99,13 @@ editing.
        correcting input errors by going back one address after erroneous
        input.
    -   Q exits data entry mode.
-```
 
-### TMON Commands
+## TMON Commands
 
 Invalid entries will be ignored.
 
 The DATA entry system is very simple and will continue to be improved in
 future versions.
-
-TMON Commands
 
 ```asm
  HELP                         ?                             EXIT
