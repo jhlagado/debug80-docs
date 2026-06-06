@@ -1,0 +1,55 @@
+---
+layout: default
+title: "Memory Map"
+parent: "MON-3 User Guide"
+grand_parent: "TEC-1G Hardware"
+nav_order: 4
+has_toc: false
+nav_exclude: true
+---
+
+# Memory Map
+
+The table below outlines how the full 64Kb of address space is allocated on
+the TEC-1G.
+
+```asm
+ Address               Contents                                     Type
+ 0000H-00FFH           Reserved for Z80 instructions                RAM
+
+ 0100H-07FFH           PATA/SD Drive area or Free RAM               RAM
+
+ 0800H-087FH           Reserved for Hardware Stack                  RAM
+ 0880H-0FFFH           Reserved for Monitor RAM                     RAM
+
+ 1000H-3FFFH           Free RAM                                     RAM
+
+ 4000H-7FFFH           Free RAM (Protected)                         RAM
+ 8000H-BFFFH           Expansion Socket                             RAM/ROM
+
+ C000H-FFFFH           Monitor ROM                                  ROM
+```
+
+Some things to be considered are:
+   -   Any RAM location can be updated, but it is highly recommended not
+```asm
+       to update Monitor Reserved RAM locations.  This can/will cause
+       undesirable effects on the running of the TEC.  A Cold Reset will
+       restore the TEC to its default running state (hopefully).
+   -   The address range between 4000H-7FFFH is a special area that can
+       be made READ ONLY.  This is called a Protected area.  Protect mode
+       can be switched on using the configuration 3-DIP switch.   If protect
+       is enabled and code is being executed.  No RAM update can be done
+       in this range.  This feature is designed to protect keyed-in code from
+       being inadvertently erased by a rogue routine.
+   -   The Expansion Socket on the TEC can have a 32Kb ROM or RAM
+       inserted.  Only 16Kb can be accessed at one time.  To switch between
+       high and low memory use the Expand switch on the configuration
+       3-DIP switch.  The switch can also be overridden in software by
+       toggling the Expand flag in the Settings menu or pressing Fn-E.
+   -   If the monitor ROM is a legacy monitor, IE: Mon1, Mon2, JMon or
+       BMon, The address range 0000H-07FFH will be READ ONLY and will
+       emulate the same addressing that is used for that particular ROM.
+       Shadow mode will be active by default and will be indicated by an
+       illuminated LED segment on the system latch BAR component.
+```
