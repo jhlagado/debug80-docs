@@ -4,35 +4,28 @@ title: "Memory Map"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 3
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Main Menu](02-main-menu.md) | [Guide](index.md) | [Data Entry Mode →](04-data-entry-mode.md)
 
 # Memory Map
 
-![Extracted figure from MON-3 User Guide page 11](../../assets/images/tec1g-hardware/mon3-user-guide/page-11-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-11-figure-1.png)
 
 The table below outlines how the full 64Kb of address space is allocated on
 the TEC-1G.
 
-```asm
- Address               Contents                                     Type
- 0000H-00FFH           Reserved for Z80 instructions                RAM
-
- 0100H-07FFH           PATA/SD Drive area or Free RAM               RAM
-
- 0800H-087FH           Reserved for Hardware Stack                  RAM
- 0880H-0FFFH           Reserved for Monitor RAM                     RAM
-
- 1000H-3FFFH           Free RAM                                     RAM
-
- 4000H-7FFFH           Free RAM (Protected)                         RAM
- 8000H-BFFFH           Expansion Socket                             RAM/ROM
-
- C000H-FFFFH           Monitor ROM                                  ROM
-```
+| Address | Contents | Type |
+| --- | --- | --- |
+| `0000H-00FFH` | Reserved for Z80 instructions | RAM |
+| `0100H-07FFH` | PATA/SD Drive area or free RAM | RAM |
+| `0800H-087FH` | Reserved for hardware stack | RAM |
+| `0880H-0FFFH` | Reserved for monitor RAM | RAM |
+| `1000H-3FFFH` | Free RAM | RAM |
+| `4000H-7FFFH` | Free RAM (protected) | RAM |
+| `8000H-BFFFH` | Expansion socket | RAM/ROM |
+| `C000H-FFFFH` | Monitor ROM | ROM |
 
 Some things to be considered are:
 

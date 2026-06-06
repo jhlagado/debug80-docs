@@ -4,8 +4,7 @@ title: "Hard Drive Access"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 11
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Advanced Programming](10-advanced-programming.md) | [Guide](index.md) | [Quick Start Programs →](12-quick-start-programs.md)
@@ -22,9 +21,9 @@ and uses the TEC Deck connector.
 With FAT32, files can be seamlessly copied from your PC/MAC to the drive.
 A USB to drive reader is required, which can be easily found.
 
-![Extracted figure from MON-3 User Guide page 73](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-1.jpg)
 
-![Extracted figure from MON-3 User Guide page 73](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-2.jpg)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-2.jpg)
 
 In terms of the particular medium used to store files, there are a few things to note:
 
@@ -62,9 +61,9 @@ file is in Intel Hex format and it will automatically convert the file to binary
 prior to loading.  Any other extension will ask for a Start Address as to
 where the file is to be loaded at.
 
-![Extracted figure from MON-3 User Guide page 74](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-1.png)
 
-![Extracted figure from MON-3 User Guide page 74](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-2.png)
 
 #### Save / Load Session
 
@@ -82,13 +81,10 @@ The filename must be called "MYDATA.TEC" and be exactly 64 Kb in size.
 The file can be easily created using the following command line
 statements.
 
-```text
- O/S                 Command
-
- MS Windows          >fsutil file createnew MYDATA.TEC 65536
-
- MAC OSX             $dd if=/dev/zero of=MYDATA.TEC bs=65536 count=1
-```
+| O/S | Command |
+| --- | --- |
+| MS Windows | `>fsutil file createnew MYDATA.TEC 65536` |
+| macOS | `$dd if=/dev/zero of=MYDATA.TEC bs=65536 count=1` |
 
 A File Not Found error will appear if Mon3 can't find the MYDATA.TEC file
 on your drive.
@@ -101,7 +97,7 @@ Load Session does the reverse of Save Session.  It will ask to Confirm this
 task as it will overwrite all existing RAM data.  Load Session can also be
 access in Data Entry mode by pressing Fn-7.
 
-![Extracted figure from MON-3 User Guide page 75](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
 
 #### Error Messages
 
@@ -113,41 +109,25 @@ displayed on the LCD and the code will exit after a key is pressed.
 
 Error messages descriptions are below:
 
-```asm
- Message                  Description
+| Message | Description |
+| --- | --- |
+| Disk Timeout | No communication with PATA drive. |
+| Data Not Ready | Read data request failed. |
+| IDE ERR IO Bad | Data transfer error. |
+| Can't read MBR | Could not read sector 0 of drive. |
+| MBR Illegal | Malformed MBR record. |
+| BPB Read Fail | BIOS parameter block of FAT32 not found. |
+| Byt/Sec != 512 | FAT32 bytes per sector is not 512. |
+| Root Dir Read | FAT lookup of sector failed. |
+| File Not Found | File selected not found in menu configuration. |
+| Bad Checksum | HEX file is corrupt. |
+| No SD Card | SD card not found. |
+| OCR Read Fail | SD addressing mode illegal. |
+| Invalid SDCard | SD card cannot be used. |
+| CMD16 Failed | SD block size cannot be set to 512. |
+| Addr. Too Big | Read sector address greater than file size. |
 
- Disk Timeout             No Communication with PATA drive
-
- Data Not Ready           Read data request failed
-
- IDE ERR IO Bad           Data transfer error
-
- Can't read MBR           Couldn't read sector 0 of drive
-
- MBR Illegal              Malformed MBR record
-
- BPB Read Fail            Bios Parameter Block of FAT32 not found
-
- Byt/Sec != 512           FAT32 Bytes per Sector is not 512
-
- Root Dir Read            FAT lookup of sector failed
-
- File Not Found           File selected not found in menu configuration
-
- Bad Checksum             HEX file is corrupt
-
- No SD Card               SD Card not found
-
- OCR Read Fail            SD Addressing mode illegal
-
- Invalid SDCard           SD Card can't be used
-
- CMD16 Failed             SD Block size can't be set to 512
-
- Addr. Too Big            Read Sector address greater then file size
-```
-
-![Extracted figure from MON-3 User Guide page 76](../../assets/images/tec1g-hardware/mon3-user-guide/page-76-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-76-figure-1.png)
 
 ### Drive Access API Calls
 
@@ -163,8 +143,8 @@ Fn-F from data entry mode.
    -   Destroy: ALL
 
 ```asm
-    ld c,58         ;loadFromDisk
-    rst 10H
+ld c,58         ;loadFromDisk
+rst 10H
 ```
 
 openFile #59 (3BH)
@@ -176,9 +156,9 @@ and must match exactly.  The file must already be existing on the drive.
    -   Destroy: ALL
 
 ```asm
-    ld hl,filename     ;address of file text
-    ld c,59            ;openFile
-    rst 10H
+ld hl,filename     ;address of file text
+ld c,59            ;openFile
+rst 10H
 ```
 
 filename: .db "TBASIC.HEX",0
@@ -194,10 +174,10 @@ bigger than actual file size.
    -   Destroy: ALL
 
 ```asm
-    ld hl,0001H     ;upper byte
-    ld de,2575H             ;lower byte
-    ld c,60         ;readSector
-    rst 10H
+ld hl,0001H     ;upper byte
+ld de,2575H             ;lower byte
+ld c,60         ;readSector
+rst 10H
 ```
 
 This example will read the sector that contains the byte 12575H and place

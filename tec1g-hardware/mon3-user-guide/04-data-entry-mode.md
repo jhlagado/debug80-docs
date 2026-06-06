@@ -4,8 +4,7 @@ title: "Data Entry Mode"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 4
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Memory Map](03-memory-map.md) | [Guide](index.md) | [Matrix Keyboard →](05-matrix-keyboard.md)
@@ -20,7 +19,7 @@ key.  In this mode, the 4 left seven-segment displays will show the current
 editing address, and the 2 right segments will display the byte at that
 address.
 
-![Extracted figure from MON-3 User Guide page 13](../../assets/images/tec1g-hardware/mon3-user-guide/page-13-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-13-figure-1.jpg)
 
 *The four red displays on the left show the address. The two green displays on the right show the data byte at that address.*
 
@@ -80,7 +79,7 @@ shown.  This can be useful to see what instruction is currently being keyed.
 By displaying a range of bytes on the LCD, the user can check if the correct
 bytes have been entered without individually moving to each address.
 
-![Extracted figure from MON-3 User Guide page 14](../../assets/images/tec1g-hardware/mon3-user-guide/page-14-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-14-figure-1.png)
 
 ### Function Keys
 
@@ -88,70 +87,29 @@ Various extra options can be selected via the Function Key.  To use these
 functions, hold the Fn key down and press any other key.
 
 The routines attached to the Function Key are:
--   Fn-AD - Display the Main Menu
 
--   Fn-0 - Save Current Address.  Press 1,2 or 3 to save the current editing
-    address in RAM to quickly jump to this location later.  Three
-    addresses can be saved.  This is useful if your code is in a location
-    other than 4000H and the Reset button has been pressed.  Press AD
-    to exit the routine.   The initial default address is 4000H.
+| Shortcut | Routine | Description |
+| --- | --- | --- |
+| `Fn-AD` | Main Menu | Display the Main Menu. |
+| `Fn-0` | Save Current Address | Press `1`, `2` or `3` to save the current editing address in RAM so you can quickly jump to this location later. Three addresses can be saved. This is useful if your code is in a location other than `4000H` and the Reset button has been pressed. Press `AD` to exit the routine. The initial default address is `4000H`. |
+| `Fn-1`, `Fn-2`, `Fn-3` | Quick jump to Address | Move the monitor's current editing location to the saved address set by `Fn-0`. |
+| `Fn-4` | Intel Hex Load | Shortcut to the Main Menu routine. |
+| `Fn-5` | Toggle GLCD Term | Use the GLCD as a terminal. |
+| `Fn-6` | Save Session | Save all RAM to disk. Requires the PATA Drive or Micro SD Card Expansion boards. See Hard Drive Access for more information. |
+| `Fn-7` | Restore Session | Load session from disk. Requires the PATA Drive or Micro SD Card Expansion boards. See Hard Drive Access for more information. |
+| `Fn-8` | Fill with NOPs | Fill a selected area of memory with NOP instruction `00H`. Provide a from and to address and confirm by pressing `C`. |
+| `Fn-A` | Restore from Backup | Reverse of the `Fn-B` routine. Defaults the To/From/Dest addresses to copy back from backup. Values can still be modified if necessary. |
+| `Fn-B` | Block Backup | Shortcut to the Main Menu routine. |
+| `Fn-C` | Smart Block Copy | Shortcut to the Main Menu routine. |
+| `Fn-D` | Disassembly View | Switch between Data Entry View and Disassembly View. Disassembly View displays the next 4 assembly instructions. To move through the instructions, press the Plus or Minus keys. Data entry can still be done in this mode if desired. |
+| `Fn-E` | Toggle Expand | Toggle the Expansion Socket Expand flag. This switches between the upper and lower memory of the 32Kb ROM/RAM in the expansion socket. |
+| `Fn-F` | Catalog | Catalog the Drive and list files for loading. Requires the PATA Drive or Micro SD Card Expansion boards. |
+| `Fn-Plus` | Insert Byte | Insert an NOP instruction at the current editing location and move all bytes up to max RAM by one address upwards. It will also do a Smart Block Copy to all moved bytes. This routine can add a Breakpoint (`F7`) or missing opcodes to an existing program. |
+| `Fn-Minus` | Delete Byte | Delete a byte from the current editing location and move all bytes down by one address. It will also do a Smart Block Copy to all moved bytes. |
+| `Fn-Reset` | Cold Reset | Perform a Cold Reset. This resets the TEC to its default state. |
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-15-figure-1.png)
 
--   Fn-1,2,3 - Quick jump to Address.  This will move the monitor's
-    current editing location to the saved address set by  Fn-0 above.
-
--   Fn-4 - Intel Hex Load.  This is a shortcut to the Main Menu routine.
-
--   Fn-5 - Toggle GLCD Term.  Use the GLCD as a terminal.
-
--   Fn-6 - Save session.  Save all RAM to disk. Requires the PATA Drive or
-    Micro SD Card Expansion boards.  See Hard Drive Access for more
-    information.
-
--   Fn-7 - Restore Session.  Load session from disk.  Requires the PATA
-    Drive or Micro SD Card Expansion boards.  See Hard Drive Access for
-    more information.
-
--   Fn-8 - Fill with NOP's  Fill a selected area of memory with NOP
-    instruction 00H.  Provide a from and to address and confirm by
-    pressing 'C'.
-
-![Extracted figure from MON-3 User Guide page 15](../../assets/images/tec1g-hardware/mon3-user-guide/page-15-figure-1.png)
-
--   Fn-A - Restore from Backup.  This is the reverse of Fn-B routine and
-    defaults the To/From/Dest addresses to copy back from backup.
-    Values can still be modified if necessary.
-
--   Fn-B - Block Backup.  This is a shortcut to the Main Menu routine.
-
--   Fn-C - Smart Block Copy.  This is a shortcut to the Main Menu routine.
-
-
--   Fn-D - Switch between Data Entry View and Disassembly View.
-    Disassembly View displays the next 4 Assembly instructions.  To
-    move through the instructions press the Plus or Minus keys.  Data
-    entry can still be done in this mode if desired.
-
-
--   Fn-E - Toggle the Expansion Socket Expand flag.  This will switch
-    between the upper and lower memory of the 32Kb ROM/RAM in the
-    expansion socket.
-
--   Fn-F - Catalog the Drive and list files for loading.  Requires the PATA
-    Drive or Micro SD Card Expansion boards.
-
--   Fn-Plus - Insert an NOP instruction at the current editing location
-    AND move all bytes up to max RAM by one address upwards.  It will
-    also do a Smart Block Copy to all moved bytes.  This routine can add
-    a Breakpoint (F7) or missing opcodes to an existing program.
-
--   Fn-Minus - Delete a byte from the current editing location AND
-    move all bytes down by one address.  It will also do a Smart Block
-    Copy to all moved bytes.
-
--   Fn-Reset - Perform a Cold Reset.  This will reset the TEC to its default
-    state.
-
-![Extracted figure from MON-3 User Guide page 16](../../assets/images/tec1g-hardware/mon3-user-guide/page-16-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-16-figure-1.png)
 
 [← Memory Map](03-memory-map.md) | [Guide](index.md) | [Matrix Keyboard →](05-matrix-keyboard.md)

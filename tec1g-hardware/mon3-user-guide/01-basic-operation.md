@@ -4,8 +4,7 @@ title: "Basic Operation"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 1
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← MON-3 User Guide](index.md) | [Guide](index.md) | [Main Menu →](02-main-menu.md)
@@ -16,7 +15,7 @@ With the monitor loaded into the ROM socket and all the jumpers set
 correctly for the ROM used.  Turn the TEC on.  If it loads,  a welcome banner
 will be displayed on the LCD, and a short tune will be heard.
 
-![Extracted figure from MON-3 User Guide page 4](../../assets/images/tec1g-hardware/mon3-user-guide/page-04-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-04-figure-1.png)
 
 ## Cold Reset
 

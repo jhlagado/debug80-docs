@@ -4,8 +4,7 @@ title: "Quick Start Programs"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 12
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Hard Drive Access](11-hard-drive-access.md) | [Guide](index.md) | [Appendix →](13-appendix.md)
@@ -17,45 +16,71 @@ Only a summary of the programs has been provided, making the examples
 a good exercise for learning how they work.  The programs utilise Mon3 API
 routines as discussed in the Advanced Programming chapter.
 
+## Seven Segment HELLO, Direct Data
+
+This routine is the shortest. It displays the data at `4009` using `RST 20`
+to multiplex and key scan. If the `AD` key is pressed the routine exits.
+Data at `4009` is hardcoded to display `HELLO` on the seven segments.
+
 ```asm
- This routine is the shortest.  It will    This routine will convert the ASCII
- display the data at 4009 using RST        "HELLO!" to seven segment code
- 20 to multiplex and key scan.  If the     using the ASCIItoSegment routine.
- AD key is pressed the routine will        Then it will use RST 20 to multiplex
- exit.  Data at 4009 is hardcoded to       and key scan.  Change the ASCII at
- display HELLO on the seven                401A to display something
- segments                                  different.
- 4000 11 09 40    LD DE,4009               4000 21 1A 40    LD HL,401A
- 4003 E7          RST 20                   4003 11 20 20    LD DE,2020
- 4004 FE 13       CP 13                    4006 06 06       LD B,06
- 4006 20 F8       JR NZ,4000               4008 0E 06       LD C,06
- 4008 C9          RET                      400A 7E          LD A,(HL)
- 4009 6E C7 C2    .db 6E C7 C2             400B D7          RST 10
- 400B C2 EB 18    .db C2 EB 18             400C 12          LD (DE),A
-                                           400D 23          INC HL
-
- This routine will display HELLO on        400E 13          INC DE
- the LCD Screen.  It first clears the       400F 10 F9       DJNZ 400A
- LCD by calling commandToLCD and           4011 11 20 20    LD DE,2020
- then calling stringToLCD to display       4014 E7          RST 20
- a zero-terminated ASCII string.           4015 FE 13       CP 13
- Press the AD key to exit.                 4017 20 F8       JR NZ,4011
-
- 4000 06 01       LD B,01                  4019 C9          RET
- 4002 0E 0F       LD C,0F                  401A 48 45 4C    .db "HEL"
- 4004 D7          RST 10                   401D 4C 4F 21    .db "LO!"
- 4005 21 11 40    LD HL,4011
- 4008 0E 0D       LD C,0D
- 400A D7          RST 10
- 400B CF          RST 08
- 400C FE 13       CP 13
- 400E 20 FB       JR NZ,400B
- 4010 C9          RET
- 4011 48 45 4C    .db "HEL"
- 4014 4C 4F 21 00 .db "LO!",0
+4000 11 09 40    LD DE,4009
+4003 E7          RST 20
+4004 FE 13       CP 13
+4006 20 F8       JR NZ,4000
+4008 C9          RET
+4009 6E C7 C2    .db 6E C7 C2
+400B C2 EB 18    .db C2 EB 18
 ```
 
-Matrix Keyboard echo to the Serial Terminal
+## Seven Segment HELLO, ASCII Conversion
+
+This routine converts the ASCII `"HELLO!"` to seven-segment code using
+the `ASCIItoSegment` routine. Then it uses `RST 20` to multiplex and key
+scan. Change the ASCII at `401A` to display something different.
+
+```asm
+4000 21 1A 40    LD HL,401A
+4003 11 20 20    LD DE,2020
+4006 06 06       LD B,06
+4008 0E 06       LD C,06
+400A 7E          LD A,(HL)
+400B D7          RST 10
+400C 12          LD (DE),A
+400D 23          INC HL
+400E 13          INC DE
+400F 10 F9       DJNZ 400A
+4011 11 20 20    LD DE,2020
+4014 E7          RST 20
+4015 FE 13       CP 13
+4017 20 F8       JR NZ,4011
+4019 C9          RET
+401A 48 45 4C    .db "HEL"
+401D 4C 4F 21    .db "LO!"
+```
+
+## LCD HELLO
+
+This routine displays `HELLO` on the LCD screen. It first clears the LCD
+by calling `commandToLCD`, then calls `stringToLCD` to display a
+zero-terminated ASCII string. Press the `AD` key to exit.
+
+```asm
+4000 06 01       LD B,01
+4002 0E 0F       LD C,0F
+4004 D7          RST 10
+4005 21 11 40    LD HL,4011
+4008 0E 0D       LD C,0D
+400A D7          RST 10
+400B CF          RST 08
+400C FE 13       CP 13
+400E 20 FB       JR NZ,400B
+4010 C9          RET
+4011 48 45 4C    .db "HEL"
+4014 4C 4F 21 00 .db "LO!",0
+```
+
+## Matrix Keyboard Echo to the Serial Terminal
+
 This program demonstrates how to read in key presses from the Matrix
 Keyboard, convert the keys to ASCII, handle key bounce and send the ASCII
 to a serial terminal.  Interestingly, lines 4006 to 4028 can be replaced with
@@ -67,9 +92,7 @@ MATRIXSCAN       .EQU 12H
 SERIALENABLE     .EQU 14H
 TXBYTE           .EQU 16H
 TOGGLECAPS       .EQU 30H
-```
 MATRIXSCANASCII  .EQU 35H
-```asm
 KEY_VALUE        .EQU 2000H        ;RAM location of key value
 
 4000 0E 14       LD C,SERIALENABLE ;set serial to send bytes
@@ -100,7 +123,8 @@ KEY_VALUE        .EQU 2000H        ;RAM location of key value
 402C 18 D5       JR 4003           ;loop back to matrixScan
 ```
 
-Seven Segment Scroller via the Serial Terminal
+## Seven Segment Scroller via the Serial Terminal
+
 This program reads in text from the serial terminal and scrolls the text on
 the Seven Segment Displays.  Pressing Enter (Carriage Return) will start
 the scroll.  It uses ASCIITOSEGMENT to convert ASCII to Seven Segment
@@ -134,9 +158,7 @@ ASCII_STR        .EQU 2002H        ;RAM location of ASCII text
 401A 21 02 20    LD HL,ASCII_STR   ;scroll loop starts here
 401D 22 00 20    LD (START_STR),HL ;reset to start of string
 4020 26 00       LD H,00H          ;set timer to zero
-```
 4022 ED 5B 00 20 LD DE,(START_STR) ;point to start of string
-```asm
 4026 E7          RST 20H           ;scan segments & scan keys
 4027 C8          RET Z             ;if key is pressed, exit
 4028 25          DEC H             ;delay for full 256 bytes
@@ -153,7 +175,8 @@ Three GLCD demos are provided to demonstrate how to use the GLCD API
 calls.  They are a circle animation that uses graphics mode, a font
 demonstration in text mode and a terminal display example.
 
-Making Bubbles
+## Making Bubbles
+
 This program first sets up the LCD to use Graphics and ensures that on
 every plotToLCD the internal graphics buffer is cleared.  This makes the
 circle animate.  Then a circle is expanded until it reaches the end of the
@@ -169,34 +192,35 @@ SETBUFCLEAR     .EQU 17
 BEEP            .EQU 3
 TIMEDELAY       .EQU 33
 
-4000 3E 00       LD A,INITLCD                 ;Initialise the GLCD
+4000 3E 00       LD A,INITLCD      ;Initialise the GLCD
 4002 DF          RST 18H
-4003 3E 04       LD A,SETGRMODE               ;Set Graphics Mode
+4003 3E 04       LD A,SETGRMODE    ;Set Graphics Mode
 4005 DF          RST 18H
-4006 3E 11       LD A,SETBUFCLEAR             ;Set Gr Buffer to Clear
+4006 3E 11       LD A,SETBUFCLEAR  ;Set Gr Buffer to Clear
 4008 DF          RST 18H
-4009 0E 03       LD C,BEEP                    ;Play a Beep
+4009 0E 03       LD C,BEEP         ;Play a Beep
 400B D7          RST 10H
-400C 1E 01       LD E,1                       ;Set initial radius to 1
-400E 01 20 40    LD BC,4020H                  ;Set X,Y to mid screen
-4011 C5          PUSH BC                      ;Save BC/DE
+400C 1E 01       LD E,1            ;Set initial radius to 1
+400E 01 20 40    LD BC,4020H       ;Set X,Y to mid screen
+4011 C5          PUSH BC           ;Save BC/DE
 4012 D5          PUSH DE
-4013 3E 08       LD A,DRAWCIRCLE              ;Draw Circle
+4013 3E 08       LD A,DRAWCIRCLE   ;Draw Circle
 4015 DF          RST 18H
-4016 3E 0C       LD A,PLOTTOLCD               ;Output to LCD
+4016 3E 0C       LD A,PLOTTOLCD    ;Output to LCD
 4018 DF          RST 18H
-4019 0E 21       LD C,TIMEDELAY               ;Wait a bit
+4019 0E 21       LD C,TIMEDELAY    ;Wait a bit
 401B 21 00 40    LD HL,4000H
 401E D7          RST 10H
-401F D1          POP DE                       ;Restore BC/DE
+401F D1          POP DE            ;Restore BC/DE
 4020 C1          POP BC
-4021 1C          INC E                        ;Increase radius by 1
-4022 CB 6B       BIT 5,E                      ;Check if bubble hits edge
+4021 1C          INC E             ;Increase radius by 1
+4022 CB 6B       BIT 5,E           ;Check if bubble hits edge
 4024 20 E3       JR NZ,4009        ;Yes, reset radius
 4026 18 E9       JR 4011           ;No, redraw circle
 ```
 
-GLCD Font Display
+## GLCD Font Display
+
 This program cycles through all stored fonts on the GLCD.  Characters on the GLCD are
 stored in the Character Generator ROM (CGROM).   The program sets up the LCD for text
 mode and displays characters on the screen.  Press any key to continue.  The code also
@@ -215,12 +239,10 @@ DELAYUS         .EQU 15
 4005 DF          RST 18H
 4006 3E 0D       LD A,PRINTSTRING ;Display Text
 4008 DF          RST 18H
-```
 4009 20 50 72 65 .DB " Press Any Key",0
 400D 73 73 20 41
 4011 6E 79 20 4B
 4015 65 79 00
-```asm
 4018 0E 00       LD C,0           ;Character Counter
 401A CF          RST 08H          ;Wait for key press
 401B 06 40       LD B,40H         ;64 Characters per screen
@@ -253,16 +275,17 @@ DELAYUS         .EQU 15
 4050 C9          RET
 ```
 
-Use the GLCD as a serial terminal
+## Use the GLCD as a Serial Terminal
+
 This program turns the GLCD into a text terminal.  Characters entered are
 displayed on the GLCD and standard keyboard commands like carriage
 return and backspace also work.  To scroll press left and right arrows on the
 keyboard.  Ctrl-A will turn the cursor on, Ctrl-B turn the cursor off,  Ctrl-C
 will inverse the characters typed and Ctrl-D will exit.
 
+```asm
 MATRIXSCAN       .EQU 12H
 PARSEMATRIXSCAN  .EQU 36H
-```asm
 INVGRAPHIC       .EQU 16H
 INITTERMINAL     .EQU 17H
 SENDCHARTOLCD    .EQU 18H

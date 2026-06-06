@@ -4,8 +4,7 @@ title: "Tiny Basic"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 7
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Debugging Programs](06-debugging-programs.md) | [Guide](index.md) | [Terminal Monitor →](08-terminal-monitor.md)
@@ -25,29 +24,13 @@ hardware.  Tiny Basic will use RAM address 0900H-3FFFH
 Functionality has been added to the Mon3 version to make it more useful
 for the TEC-1G.  Here is a list of language additions.
 
-```asm
- Syntax            Description
-
- PEEK(n)           Return the contents of memory at location `n`.  Value is in
-                   decimal
-
- OUT p,n           Output `n` to Port `p` on the TEC
-
- XOFF, XON         Turn the Serial terminal output off and on.  Used if outputting
-                   to the Seven Segments
-
- PRINT             Placed in `PRINT` statements and preceding a number:
- extensions        IE: PRINT &255,%12,$65 outputs 'FF   .   A'
-
-                      -   `&` - Output number as Hexadecimal.  Works for all
-                          numbers.
-                      -   `%` - Output number as an ASCII character (Print `.` for
-                          non-printable characters)
-                      -   `$` - Output number as an ASCII character (Print all
-                          characters)
-
- Ctrl-D Exits back to monitor and Ctrl-Z clears the whole line
-```
+| Syntax | Description |
+| --- | --- |
+| `PEEK(n)` | Return the contents of memory at location `n`. Value is in decimal. |
+| `OUT p,n` | Output `n` to port `p` on the TEC. |
+| `XOFF`, `XON` | Turn the serial terminal output off and on. Used if outputting to the seven segments. |
+| `PRINT` extensions | Placed in `PRINT` statements and preceding a number. For example, `PRINT &255,%12,$65` outputs `FF   .   A`.<br>`&` outputs a number as hexadecimal.<br>`%` outputs a number as an ASCII character, printing `.` for non-printable characters.<br>`$` outputs a number as an ASCII character, printing all characters. |
+| `Ctrl-D`, `Ctrl-Z` | `Ctrl-D` exits back to the monitor. `Ctrl-Z` clears the whole line. |
 
 Here are some Tiny Basic Example programs
 

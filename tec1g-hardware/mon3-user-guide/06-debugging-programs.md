@@ -4,8 +4,7 @@ title: "Debugging Programs"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 6
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Matrix Keyboard](05-matrix-keyboard.md) | [Guide](index.md) | [Tiny Basic →](07-tiny-basic.md)
@@ -35,6 +34,6 @@ is made between the + and the D5 pins on the G.IMP header.  Warning: Do
 not connect the + to the - pin on the G.IMP header!!! This will short out the
 TEC!
 
-![Extracted figure from MON-3 User Guide page 18](../../assets/images/tec1g-hardware/mon3-user-guide/page-18-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-18-figure-1.jpg)
 
 [← Matrix Keyboard](05-matrix-keyboard.md) | [Guide](index.md) | [Tiny Basic →](07-tiny-basic.md)

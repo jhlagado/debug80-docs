@@ -4,8 +4,7 @@ title: "Main Menu"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 2
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Basic Operation](01-basic-operation.md) | [Guide](index.md) | [Memory Map →](03-memory-map.md)
@@ -40,7 +39,7 @@ The current items on the menu are:
 | Settings | Update monitor settings. |
 | Credits | Display the people who made the TEC-1G. |
 
-![Extracted figure from MON-3 User Guide page 5](../../assets/images/tec1g-hardware/mon3-user-guide/page-05-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-05-figure-1.png)
 
 ## Intel HEX Load
 
@@ -77,14 +76,24 @@ Minus keys to change the selected parameter.  Press GO to run the routine.
 
 Here is an example of copying 4000H-4009H to location 2000H
 
-```asm
- Original                                   After Copy
+Original:
 
- 4000 11 09 40      LD DE,4009              2000 11 09 20      LD DE,2009
- 4003 E7            RST 20                  2003 E7            RST 20
- 4004 FE 13         CP 13                   2004 FE 13         CP 13
- 4006 C2 00 40      JP NZ,4000              2006 C2 00 20      JP NZ,2000
- 4009 C9            RET                     2009 C9            RET
+```asm
+4000 11 09 40      LD DE,4009
+4003 E7            RST 20
+4004 FE 13         CP 13
+4006 C2 00 40      JP NZ,4000
+4009 C9            RET
+```
+
+After copy:
+
+```asm
+2000 11 09 20      LD DE,2009
+2003 E7            RST 20
+2004 FE 13         CP 13
+2006 C2 00 20      JP NZ,2000
+2009 C9            RET
 ```
 
 ## Block Backup
@@ -99,14 +108,24 @@ Minus keys to change the selected parameter.  Press GO to run the routine.
 
 Here is an example of copying 4000H-4009H to location 2000H
 
-```asm
- Original                                   After Copy
+Original:
 
- 4000 11 09 40      LD DE,4009              2000 11 09 40      LD DE,4009
- 4003 E7            RST 20                  2003 E7            RST 20
- 4004 FE 13         CP 13                   2004 FE 13         CP 13
- 4006 C2 00 40      JP NZ,4000              2006 C2 00 40      JP NZ,4000
- 4009 C9            RET                     2009 C9            RET
+```asm
+4000 11 09 40      LD DE,4009
+4003 E7            RST 20
+4004 FE 13         CP 13
+4006 C2 00 40      JP NZ,4000
+4009 C9            RET
+```
+
+After copy:
+
+```asm
+2000 11 09 40      LD DE,4009
+2003 E7            RST 20
+2004 FE 13         CP 13
+2006 C2 00 40      JP NZ,4000
+2009 C9            RET
 ```
 
 ## Export Z80 Assembly
@@ -122,12 +141,12 @@ change the selected parameter.  Press GO to run the routine.
 
 Here is an example of its output.
 ```asm
- 4000 3E 3F         LD A,3F
- 4002 D3 01         OUT (02),A
- 4004 3E 04         LD A,04
- 4006 D3 02         OUT (02),A
- 4008 CF            RST 08
- 4009 C9            RET
+4000 3E 3F         LD A,3F
+4002 D3 01         OUT (02),A
+4004 3E 04         LD A,04
+4006 D3 02         OUT (02),A
+4008 CF            RST 08
+4009 C9            RET
 ```
 
 ## Export Raw Data
@@ -153,11 +172,11 @@ change the selected parameter.  Press GO to run the routine.
 Here is an example of its output.
 
 ```asm
-      C100: 31 80 08 21 00 40 CD FC C5 AF D3 05 D3 06 DB 03
-      C110: 47 E6 10 C2 00 80 3A 9F 08 E6 04 0E 01 B1 D3 FF
-      C120: 32 9D 08 78 E6 02 32 9E 08 3A 9D 08 E6 01 28 0B
-      C130: 21 00 C0 11 00 00 01 00 01 ED B0 21 00 40 22 86
-      C140: 08 22 A0 08 DB 03 0F 38 06 DB 00 E6 20 18 08 CD
+C100: 31 80 08 21 00 40 CD FC C5 AF D3 05 D3 06 DB 03
+C110: 47 E6 10 C2 00 80 3A 9F 08 E6 04 0E 01 B1 D3 FF
+C120: 32 9D 08 78 E6 02 32 9E 08 3A 9D 08 E6 01 28 0B
+C130: 21 00 C0 11 00 00 01 00 01 ED B0 21 00 40 22 86
+C140: 08 22 A0 08 DB 03 0F 38 06 DB 00 E6 20 18 08 CD
 ```
 
 ## Import Binary File
@@ -187,21 +206,14 @@ Two octaves are playable.  Here is a reference to the note code and its
 musical note.  A Pause is represented by 00, and any other note code that
 isn't listed will exit the routine.
 
-```text
-  Note        Code        Note       Code        Note       Code        Note        Code
-
-    G          01          C#          07          G          0D          C#         13
-
-    G#         02           D          08         G#          0E          D          14
-
-    A          03          D#          09          A          0F         D#          15
-
-    A#         04           E          0A         A#          10          E          16
-
-    B          05           F          0B          B          11          F          17
-
-    C          06          F#          0C          C          12          F#         18
-```
+| Note | Code | Note | Code | Note | Code | Note | Code |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| G | `01` | C# | `07` | G | `0D` | C# | `13` |
+| G# | `02` | D | `08` | G# | `0E` | D | `14` |
+| A | `03` | D# | `09` | A | `0F` | D# | `15` |
+| A# | `04` | E | `0A` | A# | `10` | E | `16` |
+| B | `05` | F | `0B` | B | `11` | F | `17` |
+| C | `06` | F# | `0C` | C | `12` | F# | `18` |
 
 The following page contains examples tunes that can be typed in a played
 
@@ -231,7 +243,7 @@ The following page contains examples tunes that can be typed in a played
 ```
 
 
-![Extracted figure from MON-3 User Guide page 10](../../assets/images/tec1g-hardware/mon3-user-guide/page-10-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-10-figure-1.jpg)
 
 *Image credit: Gerald M Eberhardt.*
 

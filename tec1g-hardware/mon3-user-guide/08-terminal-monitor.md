@@ -4,8 +4,7 @@ title: "Terminal Monitor"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 8
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Tiny Basic](07-tiny-basic.md) | [Guide](index.md) | [TEC Magazine Code on the TEC-1G →](09-tec-magazine-code-on-the-tec-1g.md)
@@ -26,10 +25,10 @@ look at the serial terminal.
 
 
 ```asm
- TMON for TEC-1G Version 1.0
- MON-3 Version: 2023.11
- RAM Found between 0000h and 3FFFh - 16384 bytes
- 1000 >
+TMON for TEC-1G Version 1.0
+MON-3 Version: 2023.11
+RAM Found between 0000h and 3FFFh - 16384 bytes
+1000 >
 ```
 
 
@@ -57,7 +56,7 @@ entered.
 ## The Command Prompt
 
 ```text
- 1000 >
+1000 >
 ```
 
 
@@ -83,8 +82,9 @@ bytes for data. Invalid data input is ignored.
 When the DATA command is given, TMON switches to interactive data
 entry mode. This is signified by the prompt changing as follows:
 
-
- XXXX nn :
+```text
+XXXX nn :
+```
 
 
 XXXX continues to represent the CURRENT ADDRESS however the nn
@@ -107,133 +107,96 @@ Invalid entries will be ignored.
 The DATA entry system is very simple and will continue to be improved in
 future versions.
 
-```asm
- HELP                         ?                             EXIT
-
- INTEL                        BEEP                          BELL
-
- VER                          STATE                         CLS
-
- RAMCHK                       GO [xxxx]                     DUMP [xxxx]
-
- ADDR [xxxx]                  DATA [xxxx]                   INC
-
- 7SEG                         SMON                          HALT
-
- DEBUG                        KEYTEST                       FILL xxxx yyyy nn
-
- PRINT
-```
+| Command | Command | Command |
+| --- | --- | --- |
+| `HELP` | `?` | `EXIT` |
+| `INTEL` | `BEEP` | `BELL` |
+| `VER` | `STATE` | `CLS` |
+| `RAMCHK` | `GO [xxxx]` | `DUMP [xxxx]` |
+| `ADDR [xxxx]` | `DATA [xxxx]` | `INC` |
+| `7SEG` | `SMON` | `HALT` |
+| `DEBUG` | `KEYTEST` | `FILL xxxx yyyy nn` |
+| `PRINT` | | |
 
 Parameters marked with square brackets e.g. \[xxxx\] are optional.
 
-HELP
-Displays help text
+`HELP`
+: Displays help text.
 
-?
-Display the list of commands
+`?`
+: Displays the list of commands.
 
-EXIT
-Reboots the 1G back to MON3
+`EXIT`
+: Reboots the 1G back to MON3.
 
-INTEL
-Calls the Intel Hex file transfer routine built into MON-3
+`INTEL`
+: Calls the Intel Hex file transfer routine built into MON-3.
 
-BEEP
-Beeps the 1G speaker
+`BEEP`
+: Beeps the 1G speaker.
 
-BELL
-Sends the BELL command to the remote console
+`BELL`
+: Sends the BELL command to the remote console.
 
-VER
-Displays the version number of TMON and MON-3
+`VER`
+: Displays the version number of TMON and MON-3.
 
-STATE
-Displays the state of the 1G system - SHADOW, PROTECT, EXPAND, CAPS
-LOCK
+`STATE`
+: Displays the state of the 1G system: SHADOW, PROTECT, EXPAND and CAPS LOCK.
 
-CLS
-Sends a clear screen sequence to the remote console
+`CLS`
+: Sends a clear-screen sequence to the remote console.
 
-RAMCHK
-Runs a simple test to determine how much RAM is installed, and at what
-memory address(es).  Uses whichever bank EXPAND is set to, but does
-not alter the EXPAND state.  Supports multiple discontinuous RAM blocks,
-if fitted.
+`RAMCHK`
+: Runs a simple test to determine how much RAM is installed, and at what memory address or addresses. Uses whichever bank EXPAND is set to, but does not alter the EXPAND state. Supports multiple discontinuous RAM blocks, if fitted.
 
-GO xxxx
-Executes code from the CURRENT ADDRESS, or from xxxx if supplied.
+`GO xxxx`
+: Executes code from the CURRENT ADDRESS, or from `xxxx` if supplied.
 
-DUMP xxxx
-DUMP the contents of 64 bytes of memory; provides HEX and ASCII
-outputs so memory can be examined.
+`DUMP xxxx`
+: Dumps the contents of 64 bytes of memory. It provides HEX and ASCII output so memory can be examined.
 
-DUMP pauses at completion - space repeats the command (CADDR
-continues to increment if auto-increment is on; otherwise the same block
-repeats). This allows you to quickly run through larger blocks without
-needing to type commands repeatedly.
+: DUMP pauses at completion. Space repeats the command. CADDR continues to increment if auto-increment is on; otherwise the same block repeats. This lets you quickly run through larger blocks without typing the command repeatedly.
 
-Q quits and returns to the command prompt.
+: Q quits and returns to the command prompt.
 
-ADDR xxxx
-Set the CURRENT ADDRESS. If no address is supplied, display the CADDR
-instead.
+`ADDR xxxx`
+: Sets the CURRENT ADDRESS. If no address is supplied, displays the CADDR instead.
 
-DATA xxxx
-Interactively Input data into memory. Input one hex byte at a time; the
-value input is stored in the CADDR memory location.
+`DATA xxxx`
+: Interactively inputs data into memory, one hex byte at a time. The value input is stored in the CADDR memory location.
 
-Enter Q to quit input mode. See full description of DATA mode, above.
+: Enter Q to quit input mode. See the full description of DATA mode above.
 
-INC ON/OFF
-Set auto-increment mode of CADDR. No parameter supplied = Display the
-current auto-increment mode. Sometimes turning auto-increment off is
-helpful for debugging or monitoring.
+`INC ON/OFF`
+: Sets auto-increment mode of CADDR. With no parameter supplied, displays the current auto-increment mode. Turning auto-increment off can be helpful for debugging or monitoring.
 
-7SEG
-Displays CADDR and memory byte on TEC 7-seg displays. + and - keys
-increment/decrement CADDR.  Pressing the ADDR key exits to TMON.
+`7SEG`
+: Displays CADDR and the memory byte on TEC 7-segment displays. The `+` and `-` keys increment or decrement CADDR. Pressing the ADDR key exits to TMON.
 
-SMON
-Serial data stream monitor. Accepts serial input from the terminal and
-displays the HEX bytes received on screen. Great for debugging terminal
-comms and understanding control codes received from the PC (e.g. VT100
-sequences). This is a crude implementation but does display the
-limitations of the bit-bang serial in not being able to adequately buffer
-incoming bytes in real time (try pressing an arrow key or a PC function
-key).
+`SMON`
+: Serial data stream monitor. Accepts serial input from the terminal and displays the HEX bytes received on screen. This is useful for debugging terminal communications and understanding control codes received from the PC, such as VT100 sequences. It also demonstrates the limitations of bit-bang serial because it cannot adequately buffer incoming bytes in real time. Try pressing an arrow key or a PC function key.
 
-Enter Q (capital) to exit SMON back to TMON.
+: Enter Q (capital) to exit SMON back to TMON.
 
-If a terminal program such as Tera Term is used to add a small delay (e.g
-20ms) between bytes transmitted from the PC, SMON can accurately show
-VT100 control codes such as a PC arrow or function key. Without the delay,
-the bit-bang serial normally gets the first byte only, or perhaps the first and
-fourth or fifth byte, hence demonstrating the limitations of the bit-bang
-interface.
+: If a terminal program such as Tera Term is used to add a small delay, such as 20ms, between bytes transmitted from the PC, SMON can accurately show VT100 control codes such as a PC arrow or function key. Without the delay, bit-bang serial normally gets the first byte only, or perhaps the first and fourth or fifth byte.
 
-HALT
-Executes a CPU HALT instruction - on TEC-1F, press any key to resume.
+`HALT`
+: Executes a CPU HALT instruction. On TEC-1F, press any key to resume.
 
-DEBUG
-Calls the MON-3 debugger/breakpoint tool to examine register contents.
+`DEBUG`
+: Calls the MON-3 debugger/breakpoint tool to examine register contents.
 
-KEYTEST
-Tests the selected keyboard - the last pressed key's scancode will appear
-on the 7-segment displays. Fn is displayed with bit 5 set. Matrix keypad
-keys supported by MON3 (NOT the full matrix keyset) will be returned if
-MATRIX mode is enabled.  Pressing the ADDR key exits to TMON.
+`KEYTEST`
+: Tests the selected keyboard. The last pressed key's scancode appears on the 7-segment displays. Fn is displayed with bit 5 set. Matrix keypad keys supported by MON3, not the full matrix keyset, are returned if MATRIX mode is enabled. Pressing the ADDR key exits to TMON.
 
-FILL xxxx yyyy nn
-Fill memory between address xxxx and yyyy with data nn. note: Fill range
-must be at least 2 bytes long. No checks for safety are done - use with
-caution, as any area of memory, including the stack, program code or data
-could be overwritten.  This does not apply if Protect Mode is on.
+`FILL xxxx yyyy nn`
+: Fills memory between address `xxxx` and `yyyy` with data `nn`. The fill range must be at least 2 bytes long. No safety checks are done, so any area of memory, including the stack, program code or data, could be overwritten. This does not apply if Protect Mode is on.
 
-PRINT your-text-here
-your-text-here is echoed back to the serial terminal.
+`PRINT your-text-here`
+: Echoes `your-text-here` back to the serial terminal.
 
-![Extracted figure from MON-3 User Guide page 26](../../assets/images/tec1g-hardware/mon3-user-guide/page-26-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-26-figure-1.png)
 
 *Cartoon credit: John Hardy and Ken Stone, TE Issue 10, 1983.*
 

@@ -207,6 +207,79 @@ html {
     }
   }
 
+  // Intel HEX field diagram used in the MON-3 guide. This keeps the
+  // original colour-coded structure without relying on syntax highlighting.
+  .intel-hex-diagram {
+    display: inline-block;
+    max-width: 100%;
+    margin: 0.75rem 0 1.5rem;
+    overflow-x: auto;
+    border: 1px solid #c9c1b4;
+    border-radius: 6px;
+    background: #f1ece3;
+    box-shadow: 0 1px 0 rgba(26, 23, 20, 0.05);
+  }
+
+  .intel-hex-diagram__labels,
+  .intel-hex-diagram__record {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .intel-hex-diagram__labels {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #2f2b27;
+  }
+
+  .intel-hex-diagram__record {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .intel-hex-diagram__cell {
+    display: inline-block;
+    padding: 0.35rem 0.55rem;
+    border-right: 1px solid rgba(47, 43, 39, 0.18);
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  .intel-hex-diagram__cell--mark {
+    background: #f4d06f;
+  }
+
+  .intel-hex-diagram__cell--length {
+    background: #f28c8c;
+  }
+
+  .intel-hex-diagram__cell--address {
+    background: #82c4f8;
+  }
+
+  .intel-hex-diagram__cell--type {
+    background: #a8d98d;
+  }
+
+  .intel-hex-diagram__cell--data {
+    background: #d9c2f0;
+  }
+
+  .intel-hex-diagram__cell--checksum {
+    background: #f4a261;
+  }
+
   // Links — clean, no underline by default; underline on hover
   a {
     text-decoration: none;

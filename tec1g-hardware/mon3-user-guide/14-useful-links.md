@@ -4,8 +4,7 @@ title: "Useful Links"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
 nav_order: 14
-has_toc: false
-nav_exclude: true
+has_toc: true
 ---
 
 [← Appendix](13-appendix.md) | [Guide](index.md)
@@ -50,28 +49,21 @@ https://www.talkingelectronics.com/te_interactive_index.html
 
 ### I/O Connectors
 
-```text
-           Expander Socket                           General Purpose I/O
+The connector diagrams below cover the Expander Socket, General Purpose
+I/O, Z80 Bus Connector and TEC Deck Connectors. Note: pin 28 is `RD`.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-1.png)
 
-          Z80 Bus Connector                          TEC Deck Connectors
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-2.png)
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-3.png)
 
-                                    Note: pin 28 is RD
-```
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-4.png)
 
-![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-5.png)
 
-![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-6.png)
 
-![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-3.png)
-
-![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-4.png)
-
-![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-5.png)
-
-![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-6.png)
-
-![Extracted figure from MON-3 User Guide page 92](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-7.png)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-7.png)
 
 [← Appendix](13-appendix.md) | [Guide](index.md)
