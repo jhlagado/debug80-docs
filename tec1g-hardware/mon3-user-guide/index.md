@@ -4,7 +4,7 @@ title: "MON-3 User Guide"
 parent: "TEC-1G Hardware"
 nav_order: 1
 has_children: true
-has_toc: true
+has_toc: false
 ---
 
 # MON-3 User Guide
@@ -21,7 +21,7 @@ The version of this document matches the monitor's binary file version. For exam
 
 MON-3 provides the operating environment for the TEC-1G: reset behaviour, the main menu, data entry mode, debugging support, terminal monitor, API calls, add-on interfaces, drive access, quick-start programs, and hardware reference material.
 
-## Chapters
+## Main Path
 
 1. [Basic Operation](01-basic-operation.md)
 2. [Main Menu](02-main-menu.md)
