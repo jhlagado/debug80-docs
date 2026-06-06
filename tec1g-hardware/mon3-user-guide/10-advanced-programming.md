@@ -951,6 +951,10 @@ be called in a loop.  The Row data is from top to bottom.
 
 - Input: `IY` = 24 bytes of row data: 8 red, 8 green, 8 blue
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-49-figure-1.jpg)
+
+*This is what's displayed with the data below.*
+
 ```asm
 LOOP:
     ld iy,RGBDATA
@@ -962,8 +966,6 @@ RGBDATA:  .db 00h,00h,24h,00h,18h,00h,00h,00h    ; RED Data
           .db 24h,3Ch,5Ah,0FFh,0FFh,0BDh,42h,24h ; GREEN Data
           .db 00h,00h,00h,00h,18h,00h,00h,00h    ; BLUE Data
 ```
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-49-figure-1.jpg)
 
 ## Real Time Clock (RTC) Add-On Interface
 
