@@ -982,6 +982,14 @@ clock modes, a 100 year calendar
 and 31 bytes of general purpose nonvolatile RAM.  The TEC Designers have
 called the NVRAM, "Parameter RAM" or PRAM.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-50-figure-1.jpg)
+
+*RTC add-on board connected to the TEC-1G GPIO port.*
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-50-figure-2.png)
+
+*RTC setup display.*
+
 To initially set the RTC, a convenient RTC Setup routine has been provided
 in the Settings item in the Main Menu.  Select "Configure RTC".  Press the
 following keys to update the time/date: 0 = Hour, 1 = Minute, 2 = Second, 3 =
@@ -1029,10 +1037,6 @@ When the RTC board is first used, TEC-1G settings are saved to the PRAM
 during power on.  Manual resetting of the PRAM can also be achieved by
 selecting the "Reset RTC & PRAM" option in the Settings item in the Main
 Menu.  This will reset the time/date and Mon3 reserved values.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-50-figure-1.jpg)
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-50-figure-2.png)
 
 ### RTC API Calls
 
