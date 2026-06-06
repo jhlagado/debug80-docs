@@ -15,7 +15,7 @@ Inside a project, Debug80 runs **targets**. A target is the program entry point 
 
 One project can hold several targets. A folder might gather a few small programs, experiments or examples, each with its own target.
 
-Debug80 discovers targets from file names. Files named `main.asm`, files ending in `.main.asm` and files ending in `.z80` are targets. The generated project starts with one target based on `src/main.asm`.
+Debug80 discovers targets from file names. A target source is either named `main.asm` or ends in `.main.asm`. The generated project starts with one target based on `src/main.asm`.
 
 When you build or start debugging, Debug80 uses the selected target. It assembles the target's source file with AZM, writes the artifacts under the target's build directory, loads the generated code into the emulator and shows the result on the selected platform panel.
 
