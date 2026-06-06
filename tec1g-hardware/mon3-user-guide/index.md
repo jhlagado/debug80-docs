@@ -10,15 +10,9 @@ nav_exclude: true
 
 # MON-3 User Guide
 
-This is a first-pass Markdown import of **MON3 User Guide v1.6** by Brian Chiha. MON-3 is the monitor ROM for the TEC-1G single-board Z80 computer.
+**MON3 User Guide v1.6 by Brian Chiha** documents the MON-3 monitor ROM for the TEC-1G single-board Z80 computer.
 
-The source PDF was extracted from:
-
-```text
-/Users/johnhardy/projects/TEC-1G/MON3_User_Guide_v1-6.pdf
-```
-
-The conversion preserves the document's main bookmark structure, extracted text, many code-like blocks, and embedded figures. Tables and heavily aligned reference material still need editorial cleanup against the PDF.
+MON-3 provides the operating environment for the TEC-1G: reset behaviour, the main menu, data entry mode, debugging support, terminal monitor, API calls, add-on interfaces, drive access, quick-start programs and hardware reference material.
 
 ## Chapters
 
@@ -37,11 +31,3 @@ The conversion preserves the document's main bookmark structure, extracted text,
 13. [Quick Start Programs](12-quick-start-programs.md)
 14. [Appendix](13-appendix.md)
 15. [Useful Links](14-useful-links.md)
-
-## Conversion Notes
-
-- Page numbers from the PDF were not retained as visible document structure.
-- The generated table of contents should replace the original PDF table of contents.
-- Extracted figures are stored under `assets/images/tec1g-hardware/mon3-user-guide/`.
-- Some tables remain as preformatted alignment blocks and should be converted to Markdown tables by hand where readability improves.
-- Emphasis is only partially preserved; the PDF text layer exposes font families and sizes, but not a clean semantic Markdown structure.
