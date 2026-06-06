@@ -11,6 +11,8 @@ has_toc: true
 
 # Tiny Basic
 
+## Overview
+
 Tiny Basic has been removed from Mon3 as of v1.6 but it can be loaded
 as a stand-alone program.  See the GitHub for source files.
 
@@ -24,6 +26,8 @@ hardware.  Tiny Basic will use RAM address 0900H-3FFFH
 Functionality has been added to the Mon3 version to make it more useful
 for the TEC-1G.  Here is a list of language additions.
 
+## Language Additions
+
 | Syntax | Description |
 | --- | --- |
 | `PEEK(n)` | Return the contents of memory at location `n`. Value is in decimal. |
@@ -31,6 +35,8 @@ for the TEC-1G.  Here is a list of language additions.
 | `XOFF`, `XON` | Turn the serial terminal output off and on. Used if outputting to the seven segments. |
 | `PRINT` extensions | Placed in `PRINT` statements and preceding a number. For example, `PRINT &255,%12,$65` outputs `FF   .   A`.<br>`&` outputs a number as hexadecimal.<br>`%` outputs a number as an ASCII character, printing `.` for non-printable characters.<br>`$` outputs a number as an ASCII character, printing all characters. |
 | `Ctrl-D`, `Ctrl-Z` | `Ctrl-D` exits back to the monitor. `Ctrl-Z` clears the whole line. |
+
+## Example Programs
 
 Here are some Tiny Basic Example programs
 

@@ -11,6 +11,8 @@ has_toc: true
 
 # Debugging Programs
 
+## Breakpoints
+
 Breakpoints can be inserted within a program which can help with viewing
 the state of the CPU registers.  To break the execution of your code, insert
 RST 30H or  F7 at the current address where the break should occur.
@@ -22,6 +24,7 @@ byte to F7.
 When the execution of code is interrupted with a breakpoint, the TEC will
 pause and display register information on the LCD screen.
 
+## Register Display
 
 The contents of the Z80 CPU registers AF, HL, BC, DE, IX, IY, the Program
 Counter and Stack Pointer are displayed.  CPU Flags are also displayed.

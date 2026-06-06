@@ -11,7 +11,7 @@ has_toc: true
 
 # Advanced Programming
 
-### RST (Restart) commands
+## RST (Restart) commands
 
 To assist when developing Z80 programs, Mon3 contains built-in
 functionality that makes it easy to interface with the TEC-1G hardware.
@@ -28,7 +28,7 @@ outlines the routines.
 | `RST 18H` | `DF` | API 2 entry call. Graphical LCD routine entry. See the GLCD section below for details. |
 | `RST 20H` | `E7` | Scan Seven Segments and Keys. Multiplexes the seven-segment displays and checks for a key press. It can be used to display information on the seven segments and check for a key to be pressed. It must be called in a loop until a key is pressed to maintain seven-segment persistence. Returns Zero flag set when a key is pressed and register `A` with the key value. Register `DE` points to the seven-segment data. See the first program in the Quick Start Programs chapter for an example. Registers `DE`, `A`, and `B` are modified. |
 
-### Interrupts
+## Interrupts
 
 | Command | Op Code | Description |
 | --- | --- | --- |
@@ -60,7 +60,7 @@ myINT:
 
 This code will sound a bell tone in the speaker when an interrupt occurs.
 
-### NMI (Non-Maskable Interrupts)
+## NMI (Non-Maskable Interrupts)
 
 Non-Maskable Interrupts occur when the NMI line on the CPU goes low.
 These interrupts will always trigger.  Mon3 ignores the NMI line, but a
@@ -87,27 +87,27 @@ HALT instruction or externally (no jumper).
 
 *Cartoon credit: Ken Stone, TE Issue 10, 1983.*
 
-### API (Application Programming Interface) commands
+## API (Application Programming Interface) commands
 
 The API on Mon3 exposes routines used by Mon3 which can be used in
 your own programs. It makes writing code quicker and easier by exposing
 monitor services through a small call interface.
 
-#### General conventions
+### General conventions
 
 The register C holds the API Call number.  All other registers except the IX
 register can be used as parameters if needed.  Executing a RST 10H or D7
 calls the API.
 
 
-#### General Interface
+### General Interface
 
 ```asm
 ld c,[API Call Number]
 rst 10H
 ```
 
-#### Some Examples
+### Some Examples
 
 ```asm
           ;Produce a short Beep from the speaker
@@ -132,7 +132,7 @@ use with your own code.
 
 See https://github.com/MarkJelic/TEC-1G/tree/main/ROMs/MON3/source
 
-#### API Call List
+### API Call List
 
 **Utility Calls**
 
@@ -237,7 +237,7 @@ See https://github.com/MarkJelic/TEC-1G/tree/main/ROMs/MON3/source
 | `playTune` | 35 | 23 |
 | `playTuneMenu` | 36 | 24 |
 
-#### API Utility Calls
+## API Utility Calls
 
 **softwareID #0 (00H)**
 Get Software ID String
@@ -323,7 +323,7 @@ Check start and end address differences.
 - Output: Carry = set if end is less than start
 - Destroys: `DE`
 
-#### API LCD Calls
+## API LCD Calls
 
 **LCDBusy #12 (0CH)**
 LCD busy check.  Checks the LCD busy flag and loops until LCD isn't busy
@@ -367,7 +367,7 @@ ld b,01  ;clear LCD
   rst 10h
 ```
 
-#### API Input Calls
+## API Input Calls
 
 **scanKeys #16 (10H)**
 Universal Key input detection routine. Supports HexPad and Matrix.  The
@@ -481,7 +481,7 @@ scan_loop:
     rst 10h       ;API call
 ```
 
-#### API Serial Data Transfer Calls
+## API Serial Data Transfer Calls
 
 **serialEnable #20 (14H)**
 Enable BitBang serial port for serial transmit.  Disco LED's glow blue to
@@ -599,7 +599,7 @@ TEXT: .db "HELLO TEC!",0
        rst 10h
 ```
 
-#### API Menu & Parameter Calls
+## API Menu & Parameter Calls
 
 **menuDriver #31 (1FH)**
 Menu driver for user programs.  Creates a selectable custom menu/list.
@@ -804,7 +804,7 @@ paramCFG:
     .dw PARAM4
 ```
 
-#### API Sound Calls
+## API Sound Calls
 
 **playNote #34 (22H)**
 Play a note.  Play a note with a given frequency and wavelength
@@ -837,7 +837,7 @@ first note is selected via a parameter menu.
 - Input: none
 - Destroy: A,B,DE,HL
 
-#### API System Latch Calls
+## API System Latch Calls
 
 **getCaps #37 (25H)**
 Get Caps lock state
@@ -879,7 +879,7 @@ Set Expand state
 - Input: A = Desired expand state; 0 = off, 04H = on
 - Destroy: A
 
-#### Miscellaneous Calls
+## Miscellaneous Calls
 
 **toggleCaps #48 (30H)**
 Toggle Caps Lock state. On/Off or vice versa
@@ -965,7 +965,7 @@ RGBDATA:  .db 00h,00h,24h,00h,18h,00h,00h,00h    ; RED Data
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-49-figure-1.jpg)
 
-### Real Time Clock (RTC) Add-On Interface
+## Real Time Clock (RTC) Add-On Interface
 
 A RTC add-on board that connects to
 the General Purpose IO port on the
@@ -1011,13 +1011,13 @@ Menu.  This will reset the time/date and Mon3 reserved values.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-50-figure-2.png)
 
-#### RTC API Calls
+### RTC API Calls
 
 The RTC API uses the standard `RST 10H` call with the addition of the B
 register to specify which RTC API function is required. This way, all RTC
 functions only occupy a single Mon3 API call.
 
-##### General Interface
+#### General Interface
 
 ```asm
 ld c,2EH       ;RTC API call number
@@ -1025,7 +1025,7 @@ ld b,[RTC Call Number]
 rst 10H
 ```
 
-##### Examples
+#### Examples
 
 ```asm
           ;Get the current time
@@ -1044,7 +1044,7 @@ D7        rst 10H
 D7        rst 10H
 ```
 
-##### RTC Routine List
+#### RTC Routine List
 
 | Routine | # | 0x |
 | --- | ---: | --- |
@@ -1238,7 +1238,7 @@ Exit back to RTC Setup.
 
 *Image credit: Andrew McRae.*
 
-### Graphical LCD Add-On Interface
+## Graphical LCD Add-On Interface
 
 Mon3 includes a Graphical LCD (GLCD) library that will work with the
 TEC-DECK Graphical LCD PCB Add-On.  If the Graphical LCD is installed on
@@ -1391,7 +1391,7 @@ It only needs to be called once if multiple text routines are used.
 - Input: nothing
 - Destroy: AF,DE
 
-### GLCD API Graphics Calls
+## GLCD API Graphics Calls
 
 **drawBox #6 (06H)**
 Draws a single-line rectangle between two points X1, Y1 and X2, Y2.
@@ -1482,7 +1482,7 @@ ld a,11        ;fillCircle
 rst 18H
 ```
 
-### GLCD API Text Calls
+## GLCD API Text Calls
 
 **plotToLCD #12 (0CH)**
 This routine draws the Graphics Buffer or GBUF to the Graphics LCD
@@ -1513,7 +1513,7 @@ Alphanumeric characters align with the ASCII table.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-63-figure-1.png)
 
-### GLCD API Utility Calls
+## GLCD API Utility Calls
 
 **printChars #14 (0EH)**
 Print Characters on the screen in a given row and column.  This routine is
@@ -1598,7 +1598,7 @@ ld a,19         ;clearPixel
 rst 18H
 ```
 
-### GLCD API Drawing Calls
+## GLCD API Drawing Calls
 
 **flipPixel #20 (14H)**
 Inverts a single Pixel.  If the Pixel is on, it will turn off. If the Pixel is off, it will
@@ -1685,7 +1685,7 @@ routine.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-68-figure-1.png)
 
-### GLCD API Terminal Emulator Calls
+## GLCD API Terminal Emulator Calls
 
 **initTerminal #23 (17H)**
 Initialise the GLCD for terminal emulation.  This routine is to be called
@@ -1805,7 +1805,7 @@ Turn the cursor ON or OFF.  Default is Cursor ON
 - Input: C = 0, Turn cursor on, C=non zero, turn cursor off
 - Destroy: ALL
 
-### GLCD Examples
+## GLCD Examples
 
 Provided in the TEC-1G GitHub repository are three GLCD programs.  The
 programs have already been converted to Intel Hex files and are ready to

@@ -65,7 +65,7 @@ where the file is to be loaded at.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-2.png)
 
-#### Save / Load Session
+### Save / Load Session
 
 See the Useful Links section below on how to load your drive with ready to
 run TEC-1G files.
@@ -99,7 +99,7 @@ access in Data Entry mode by pressing Fn-7.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
 
-#### Error Messages
+### Error Messages
 
 While the drive is being accessed, the LCD will display the current progress.
 
@@ -129,13 +129,13 @@ Error messages descriptions are below:
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-76-figure-1.png)
 
-### Drive Access API Calls
+## Drive Access API Calls
 
 Special API calls have been created to help with opening, reading and
 writing to files within your own code.  The details of these calls and their
 limitations are described below.
 
-loadFromDisk #58 (3AH)
+### loadFromDisk #58 (3AH)
 Catalog the files on the disk and display them on the LCD Display for
 loading.  This is the same as selecting CATALOG from the main menu or
 Fn-F from data entry mode.
@@ -147,7 +147,7 @@ ld c,58         ;loadFromDisk
 rst 10H
 ```
 
-openFile #59 (3BH)
+### openFile #59 (3BH)
 Open a file for reading or writing.   The routine will exit cleanly if success or
 an error will be displayed if file isn't found.  The filename is case sensitive
 and must match exactly.  The file must already be existing on the drive.
@@ -163,7 +163,7 @@ rst 10H
 
 filename: .db "TBASIC.HEX",0
 
-readSector #60 (3CH)
+### readSector #60 (3CH)
 Load a sector from the opened file.  Requires openFile to be called prior
 but only once.  A sector, which is 512 bytes, will be loaded at address
 0600H-07FFH.   The input is the byte address in the file.  The entire sector
@@ -183,7 +183,7 @@ rst 10H
 This example will read the sector that contains the byte 12575H and place
 that sector in address 0600H-07FFH.
 
-writeSector #61 (3DH)
+### writeSector #61 (3DH)
 Write a sector to an opened file.  Requires a readSector to be called first.
 The sector will be saved back to the same position in the file from the
 readSector routine.   To use this routine, firstly call the readSector routine.

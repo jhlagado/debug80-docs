@@ -11,6 +11,8 @@ has_toc: true
 
 # Matrix Keyboard
 
+## Keyboard Connection
+
 Mon3 will work with the TEC QWERTY or Mechanical Matrix Keyboard
 Add-on.  The Keyboard is connected to the Keyboard Socket on the lower
 left of the PCB.  How your Keyboard PCB is designed might affect which
@@ -18,10 +20,14 @@ pins can be connected.  Please view the TEC-1G Schematic for information
 on pin configuration.
 
 
+## Activation
+
 To activate the Keyboard, The Matrix switch on the 3-DIP switch is to be
 turned on.  This activates the Matrix Keyboard and disables the onboard
 Hex Keypad (except Reset).  Mon3 only maps keys present on the TEC-1G to
 the Matrix Keyboard.
+
+## Key Mapping
 
 The Keyboard map to Hex Keypad is as follows:
 

@@ -47,7 +47,7 @@ https://github.com/tec1group/
 Talking Electronics Website including original TEC related magazines
 https://www.talkingelectronics.com/te_interactive_index.html
 
-### I/O Connectors
+## I/O Connectors
 
 The connector diagrams below cover the Expander Socket, General Purpose
 I/O, Z80 Bus Connector and TEC Deck Connectors. Note: pin 28 is `RD`.

@@ -11,7 +11,7 @@ has_toc: true
 
 # Data Entry Mode
 
-### Basic Operation
+## Basic Operation
 
 Data Entry Mode allows the user to enter Z80 Op Codes directly into the
 TEC.  To access Data Entry Mode from the Main Menu, simply press the AD
@@ -47,7 +47,7 @@ and press the GO key.  Protect mode will be honoured if switched on.  If the
 code ends with a RET instruction (C9), execution will cleanly exit back to the
 monitor.  The LCD screen will display the code start address while running.
 
-### LCD Screen
+## LCD Screen
 
 One thing to note is that while data is being entered, the decimal place
 LED on the data segments will change from displaying two lights to one.
@@ -81,7 +81,7 @@ bytes have been entered without individually moving to each address.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-14-figure-1.png)
 
-### Function Keys
+## Function Keys
 
 Various extra options can be selected via the Function Key.  To use these
 functions, hold the Fn key down and press any other key.

@@ -11,7 +11,7 @@ has_toc: true
 
 # Appendix
 
-### Ports
+## Ports
 
 | Port | Direction | Description |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ has_toc: true
 | `FEH` | In | Matrix Keyboard |
 | `FFH` | Out | System Latch<br>Bit 0: Shadow (active low)<br>Bit 1: Protect<br>Bit 2: Expand<br>Bit 3: FF-D3 (Mem Bus)<br>Bit 4: FF-D4 (Mem Bus)<br>Bit 5: FF-D5 (Mem Bus)<br>Bit 6: FF-D6 (Mem Bus)<br>Caps Lock: Matrix Keyboard |
 
-### Serial Connection
+## Serial Connection
 
 | Constant | Value |
 | --- | --- |
@@ -42,7 +42,7 @@ has_toc: true
 
 The baud rate value can be modified, but the other constants are the same.
 
-### Function Key Shortcuts
+## Function Key Shortcuts
 
 | Key | Shortcut | Key | Shortcut | Key | Shortcut | Key | Shortcut |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -51,7 +51,7 @@ The baud rate value can be modified, but the other constants are the same.
 | `B` | Backup Blk. | `C` | Smart Copy | `D` | Diss. View | `E` | Expand |
 | `F` | Catalog | `AD` | Main Menu | `+` | Insert Byte | `-` | Delete Byte |
 
-### LCD Cheatsheet
+## LCD Cheatsheet
 
 Z80 instructions to communicate with the LCD screen are given as direct
 commands.  IE: OUT (04),A. Mon3 also provides API routines that do the
@@ -69,13 +69,13 @@ For IN A,(04), If Bit 7 is set, then LCD is Busy. Other bits are the current Add
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-3.jpg)
 
-### Character Table
+## Character Table
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-89-figure-1.png)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-89-figure-2.jpg)
 
-### Example Using CGRAM and DDRAM
+## Example Using CGRAM and DDRAM
 
 ```asm
 _stringToLCD   .equ  13

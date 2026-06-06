@@ -11,12 +11,16 @@ has_toc: true
 
 # TEC Magazine Code on the TEC-1G
 
+## Address Changes
+
 A great way to learn how to use the TEC-1G is to key in programs presented
 in the TE Magazines Issues 10 to 15. If the programs are keyed in directly,
 they probably won't work. This is because they usually start at addresses
 0800H or 0900H. These addresses are reserved for Mon3. To get the code
 working, simply update all 2-byte address references to match the address
 location of the code on the 1G.
+
+## Keypad Changes
 
 Keypad interactions are a bit more complicated. The old monitors use the
 register I and the NMI (Non-Maskable Interrupt) to trigger and save a
@@ -30,6 +34,8 @@ when a keypad press is required.
 | --- | --- | --- |
 | `HALT` | `RST 08H` | `RST 08H` simulates a `HALT` command and sets register A with the key value pressed. |
 | `LD A,I` | `LD C,10H`<br>`RST 10H` | `LD A,I` by itself polls for a key press. Call the `scanKey` API routine (`10H`), which sets register A with the key value pressed. If `LD A,I` immediately follows a `HALT` instruction, use `RST 08H` instead. |
+
+## Conversion Example
 
 Here is an example of magazine code at 0800H with key input converted to
 use Mon3 at RAM address 4000H. The code in RED has been modified.
