@@ -68,4 +68,6 @@ The TEC-1G is a modern Z80 single-board learning computer designed by Mark Jelic
 
 The TEC-1G keeps that educational purpose and TEC-1 compatibility, while expanding the machine with a 4 MHz Z80A, more RAM and ROM, a 20x4 LCD, keypad and keyboard options, serial transfer, expansion connectors, and modern add-on hardware. Debug80 includes TEC-1G emulation so you can assemble and debug programs in VS Code, then send the same HEX output to real hardware.
 
+For the monitor ROM documentation, see the [MON-3 User Guide](tec1g-hardware/mon3-user-guide/), Brian Chiha's guide to the TEC-1G MON-3 operating environment, menus, data entry mode, debugging support, terminal monitor, API calls, drive access and hardware reference material.
+
 To learn about the hardware, see Mark Jelic's [TEC-1G project page on Hackaday](https://hackaday.io/project/193968-tec-1g-40-year-anniversary-z80-sbc) and the [TEC-1G source and assembly documentation on GitHub](https://github.com/MarkJelic/TEC-1G). Kits and add-ons are available from [TEC-1 Inc. on Tindie](https://www.tindie.com/products/tec1/tec-1g-z80-single-board-computer-kit/) when stock is available.

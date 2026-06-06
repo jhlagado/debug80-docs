@@ -59,9 +59,6 @@ nav_exclude: true
  84H           In/Out          LCD Data
 ```
 
-### Serial Connection
-### Function Key Shortcuts
-
 ```asm
  Port          Direction       Description
 
@@ -92,7 +89,7 @@ nav_exclude: true
                                   -   Caps Lock (Matrix Keyboard)
 ```
 
-Serial Connection
+### Serial Connection
 
 ```text
  Constant                                    Value
@@ -100,10 +97,10 @@ Serial Connection
  FTDI to USB Serial Transmission             4800-8-N-2
                                                  -  Baud 4800, 8 Packet Bits
  Baud rate value can be modified                  -  No Parity, 2 Stop bits
- but other constants are the same.
+but other constants are the same.
 ```
 
-Function Key Shortcuts
+### Function Key Shortcuts
 
 ```text
  0  Quick Links       1-3    Addr. Jump        4   Intel Load        5   GLCD Term
@@ -133,13 +130,13 @@ For IN A,(04), If Bit 7 is set, then LCD is Busy. Other bits are the current Add
 
 ![Extracted figure from MON-3 User Guide page 88](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-3.jpg)
 
-Character Table
+### Character Table
 
 ![Extracted figure from MON-3 User Guide page 89](../../assets/images/tec1g-hardware/mon3-user-guide/page-89-figure-1.png)
 
 ![Extracted figure from MON-3 User Guide page 89](../../assets/images/tec1g-hardware/mon3-user-guide/page-89-figure-2.jpg)
 
-Example Using CGRAM and DDRAM
+### Example Using CGRAM and DDRAM
 
 ```asm
 _stringToLCD   .equ  13

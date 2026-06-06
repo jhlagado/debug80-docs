@@ -19,26 +19,6 @@ board connects a Micro SD card and uses the General Purpose IO port.  The
 PATA board connects a PATA laptop hard drive or a Compact Flash card
 and uses the TEC Deck connector.
 
-
-```asm
-                                           In terms of the particular medium used
-                                           to store files, there are a few things to
-                                           note:
-                                               -   FAT32 (File Allocation Table) is the
-                                           only file system Mon3 recognises.  The
-                                           drive must be formatted using FAT32
-                                           and be on the first MBR Partition.
-                                               -   Mon3 looks at the Root (top level)
-                                           directory for files.  A maximum of 49
-                                           files can read from the drive.
-                                               -   Only short name files are
-                                           displayed.  Short file names use up to 8
-                                           characters for the file name and 3 for
-                                           the extension.  IE: "INVADERS.HEX".  If a
-                                           file has a longer name, the FAT32
-       system automatically creates a shortened version.
-```
-
 With FAT32, files can be seamlessly copied from your PC/MAC to the drive.
 A USB to drive reader is required, which can be easily found.
 
@@ -46,8 +26,11 @@ A USB to drive reader is required, which can be easily found.
 
 ![Extracted figure from MON-3 User Guide page 73](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-2.jpg)
 
-### Access to the Drive
-#### Catalog
+In terms of the particular medium used to store files, there are a few things to note:
+
+- FAT32 (File Allocation Table) is the only file system Mon3 recognises. The drive must be formatted using FAT32 and be on the first MBR partition.
+- Mon3 looks at the root directory for files. A maximum of 49 files can be read from the drive.
+- Only short name files are displayed. Short file names use up to 8 characters for the file name and 3 for the extension. For example, `INVADERS.HEX`. If a file has a longer name, the FAT32 system automatically creates a shortened version.
 
 If both GPIO and PATA boards are connected to the TEC, Mon3 will
 prioritise the GPIO board then the PATA board.  Details of the Add-on
@@ -59,14 +42,15 @@ drive, first, use the EXPORT RAW DATA menu option to transfer the code
 via Serial to your PC/MAC.  Then copy the binary from  your PC/MAC to the
 drive via a USB to SD/PATA/CF adaptor.
 
-Access to the Drive
+## Access to the Drive
 
 In the Main Menu, select DRIVE ACCESS.  A menu will be displayed with
 three options.  Catalog, Save Session and Load Session.   These options also
 have shortcuts in Data Entry mode.
 
 
-Catalog
+### Catalog
+
 Catalog will display a list of readable files in the root directory of the drive.
 Catalog can also be access by from Data Entry mode by pressing Fn-F.  If
 Mon3 finds files on the drive, they will be displayed on the LCD screen.

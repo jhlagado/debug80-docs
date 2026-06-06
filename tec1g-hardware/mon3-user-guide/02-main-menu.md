@@ -26,49 +26,23 @@ will exit to the parent menu or enter Data Entry mode if at the main menu.
 
 The current items on the menu are:
 
-```asm
- Menu Text                       Description
-
- Intel HEX Load                  Receive data in Intel Hex File format via the
-                                 FTDI connector
-
- Drive Access                    Catalog and load files from PATA or SD Card
-                                 Expansion boards.  Save and restore the
-                                 session.
-
- Smart Block Copy                Move a block of code AND update all 2-byte
-                                 addresses that are within the block
-
- Block Backup                    Move a block of code
-
- Export Z80 Assembly             Display Z80 Assembly to a Serial terminal via
-                                 the FTDI connector
-
- Export Raw Data                 Send binary data via the FTDI connector
-```
+| Menu Text | Description |
+| --- | --- |
+| Intel HEX Load | Receive data in Intel HEX file format via the FTDI connector. |
+| Drive Access | Catalog and load files from PATA or SD Card expansion boards. Save and restore the session. |
+| Smart Block Copy | Move a block of code and update all 2-byte addresses that are within the block. |
+| Block Backup | Move a block of code. |
+| Export Z80 Assembly | Display Z80 assembly to a serial terminal via the FTDI connector. |
+| Export Raw Data | Send binary data via the FTDI connector. |
+| Export Hex Dump | Display a 16-byte per line HEX dump to a serial terminal via the FTDI connector. |
+| Import Binary File | Receive data in binary format via the FTDI connector. |
+| Music Routine | Play musical notes at a given address. |
+| Settings | Update monitor settings. |
+| Credits | Display the people who made the TEC-1G. |
 
 ![Extracted figure from MON-3 User Guide page 5](../../assets/images/tec1g-hardware/mon3-user-guide/page-05-figure-1.png)
 
-### Intel HEX Load
-### Drive Access
-### Smart Block Copy
-
-```asm
- Export Hex Dump                  Display a 16-byte per line HEX dump to a Serial
-                                  terminal via the FTDI connector
-
- Import Binary File               Receive data in binary format via the FTDI
-                                  connector
-
- Music Routine                    Play musical notes at a given address
-
- Settings                         Update monitor settings
-
- Credits                          Display the people who made the TEC-1G
-```
-
-
-Intel HEX Load
+## Intel HEX Load
 
 Intel created a text file format that contains information on loading bytes
 into memory.  When this routine is run, the TEC seven segments will go
@@ -80,13 +54,13 @@ means that the load was successful.  Press any key to exit.  If the segments
 display the word "FAIL", then there is something wrong with the file or your
 serial connection.
 
-Drive Access
+## Drive Access
 
 With a PATA drive or Micro SD card expansion boards installed, access the
 files on the drive and load them to the TEC.  For more information refer to
 the Hard Drive Access section for detailed usage information.
 
-Smart Block Copy
+## Smart Block Copy
 
 This clever routine shifts a program from one memory location to another
 and changes all absolute jumps and calls.  Memory pointers are also
@@ -96,9 +70,6 @@ end range is not altered.
 
 The block copy treats Data bytes as instructions and might change data
 bytes.  IE: .db C3, 23, 01 could be seen as a JP 0123 instruction.
-
-### Block Backup
-### Export Z80 Assembly
 
 When this routine is run, it will ask for a START, END and DESTINATION
 address.  Type in the 16-bit address via the HEX PAD and use the Plus or
@@ -116,7 +87,7 @@ Here is an example of copying 4000H-4009H to location 2000H
  4009 C9            RET                     2009 C9            RET
 ```
 
-Block Backup
+## Block Backup
 
 This routine simply copies a data block from one address location to
 another.   No bytes are altered during this copy routine..  This routine is
@@ -138,14 +109,12 @@ Here is an example of copying 4000H-4009H to location 2000H
  4009 C9            RET                     2009 C9            RET
 ```
 
-Export Z80 Assembly
+## Export Z80 Assembly
+
 If the TEC is connected to a serial terminal via an FTDI to USB adaptor, code
 that is stored or written on the TEC can be disassembled and sent to the
 terminal.  This is a great way to view the code that is on the TEC in a
 readable format and could be passed into a Z80 compiler on a PC.
-
-### Export Raw Data
-### Export Hex Dump
 
 When this routine is run, it will ask for a START and END address.  Type in
 the 16-bit address via the HEX PAD and use the Plus or Minus keys to
@@ -161,7 +130,7 @@ Here is an example of its output.
  4009 C9            RET
 ```
 
-Export Raw Data
+## Export Raw Data
 
 This routine will send TEC binary data to a serial connection.  It's a way to
 save code written on the TEC to a PC.  As binary data is being sent, the data
@@ -172,7 +141,7 @@ When this routine is run, it will ask for a START and END address.  Type in
 the 16-bit address via the HEX PAD and use the Plus or Minus keys to
 change the selected parameter.  Press GO to run the routine.
 
-Export Hex Dump
+## Export Hex Dump
 
 This routine displays binary data in a readable format to a serial terminal
 connected via an FTDI to USB adaptor.  It will display up to 16 bytes per line.
@@ -191,8 +160,7 @@ Here is an example of its output.
       C140: 08 22 A0 08 DB 03 0F 38 06 DB 00 E6 20 18 08 CD
 ```
 
-### Import Binary File
-### Music Routine
+## Import Binary File
 
 This routine will upload a binary file from a PC onto the TEC via an FTDI to
 USB adaptor.  This is the opposite of the Export Raw Data routine and will
@@ -205,7 +173,7 @@ change the selected parameter.  Press GO to run the routine.  The TEC will
 wait for data to be received and will end when END-START+1 bytes are
 received.
 
-Music Routine
+## Music Routine
 
 Use this routine to play some notes to the TEC speaker.  It is based on John
 Hardy's Mon1 routine adjusted for a 4 MHz clock speed.  The routine uses
@@ -237,13 +205,18 @@ isn't listed will exit the routine.
 
 The following page contains examples tunes that can be typed in a played
 
-Bealach
+### Bealach
+
+```text
 06, 06, 0A, 0D, 06, 0D, 0A, 0D, 12, 16, 14, 12, 0F, 11, 12, 0F
 0D, 0D, 0D, 0A, 12, 0F, 0D, 0A, 08, 06, 08, 0A, 0F, 0A, 0D, 0F
 06, 06, 0A, 0D, 06, 0D, 0A, 0D, 12, 16, 14, 12, 0F, 11, 12, 0F
 0D, 0D, 0D, 0A, 12, 0F, 0D, 0A, 08, 06, 08, 0A, 06, 12, 00, 1F
+```
 
-Angels On High
+### Angels On High
+
+```text
 0F, 0F, 0F, 0F, 0F, 0F, 12, 12, 12, 12, 12, 10, 0F, 0F, 0F, 0F
 0F, 0F, 0D, 0D, 0F, 0F, 12, 12, 0F, 0F, 0F, 0D, 0B, 0B, 0B, 0B
 0F, 0F, 0F, 0F, 0F, 0F, 12, 12, 12, 12, 12, 10, 0F, 0F, 0F, 0F
@@ -255,14 +228,14 @@ Angels On High
 0D, 0F, 0F, 0F, 0F, 10, 0F, 0D, 0B, 0D, 0D, 0D, 06, 06, 06, 06
 06, 0B, 0B, 0D, 0D, 0F, 0F, 10, 10, 0F, 0F, 0F, 0F, 0D, 0D, 0D
 0D, 0B, 0B, 0B, 0B, 0B, 0B, 0B, 0B, 00, 00, 00, 00, 00, 00, 1F
+```
 
-
-  TEC-1G with 3D printed stand and supports.  Credit: Gerald M Eberhardt
 
 ![Extracted figure from MON-3 User Guide page 10](../../assets/images/tec1g-hardware/mon3-user-guide/page-10-figure-1.jpg)
 
-### Settings
-### Credits
+*Image credit: Gerald M Eberhardt.*
+
+## Settings
 
 The settings allow the user to configure the monitor.  Powering off the TEC
 will return these settings to their default state.  Some settings will be
@@ -272,15 +245,13 @@ retained if an RTC Add-on board is connected with battery backup.
    -   Set Baud Rate - Modify the Baud rate for serial transmission.
    -   Toggle GLCD Term - Use the GLCD (if fitted) as a terminal
    -   Toggle Address Inc - Turn the automatic address increase after a byte
-```asm
        has been keyed on or off.
    -   Configure RTC - Set Time/Date of RTC (if RTC Add-on is connected).
    -   Reset RTC & PRAM - Reset RTC for initial use and initialise NVRAM.
    -   Toggle EXPAND - software controlled the expansion socket to toggle
        between lower and upper 16Kb memory for a 32Kb ROM/RAM chip.
-```
 
-Credits
+## Credits
 
 Display the people who developed and tested the TEC-1G
    -   Mark Jelic - Designer of the TEC-1G
@@ -289,7 +260,5 @@ Display the people who developed and tested the TEC-1G
    -   Ian McLean - Tester and QA
    -   James Elphick - Tester and QA
    -   John Hardy & Ken Stone - The original designers
-
-![Extracted figure from MON-3 User Guide page 11](../../assets/images/tec1g-hardware/mon3-user-guide/page-11-figure-1.png)
 
 [← Basic Operation](01-basic-operation.md) | [Guide](index.md) | [Memory Map →](03-memory-map.md)

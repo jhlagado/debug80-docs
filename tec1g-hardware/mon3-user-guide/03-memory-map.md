@@ -12,6 +12,8 @@ nav_exclude: true
 
 # Memory Map
 
+![Extracted figure from MON-3 User Guide page 11](../../assets/images/tec1g-hardware/mon3-user-guide/page-11-figure-1.png)
+
 The table below outlines how the full 64Kb of address space is allocated on
 the TEC-1G.
 

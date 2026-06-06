@@ -837,7 +837,6 @@ Toggle Caps Lock state. On/Off or vice versa
    -  Destroy: A
 
 
-Miscellaneous Calls
 **timeDelay #33 (21H)**
 A 16-bit delay routine.  An input delay of 2000H is approximately 50ms.
    -  Input: HL = delay amount
@@ -917,9 +916,6 @@ RGBDATA:  .db 00h,00h,24h,00h,18h,00h,00h,00h    ; RED Data
 ![Extracted figure from MON-3 User Guide page 49](../../assets/images/tec1g-hardware/mon3-user-guide/page-49-figure-1.jpg)
 
 ### Real Time Clock (RTC) Add-On Interface
-
-Real Time Clock (RTC)
-Add-On Interface
 
 A RTC add-on board that connects to
 the General Purpose IO port on the
@@ -1204,10 +1200,9 @@ Keys: 0 = Hour, 1 = Minute, 2 = Second, 3 = 12/24h, 4 = Day of week, 5 = Day, 6
 When viewing RTC RAM data, Plus = Move Down, Minus = Move Up, AD =
 Exit back to RTC Setup.
 
-
-         A TEC-1G with various add-on boards.  Credit: Andrew McRae
-
 ![Extracted figure from MON-3 User Guide page 56](../../assets/images/tec1g-hardware/mon3-user-guide/page-56-figure-1.png)
+
+*Image credit: Andrew McRae.*
 
 ### Graphical LCD Add-On Interface
 
@@ -1315,7 +1310,6 @@ the screen.  The above example adheres to these principles.
 ```
 
 
-GLCD API Configure Calls
 **initLCD #0 (00H)**
 Initialise the LCD Screen.  This routine is to be called before any other
 routine.
@@ -1459,7 +1453,6 @@ plotting the GBUF is cleared.  Use setBufNoClear to retain the GBUF.
    -   Input: nothing
    -   Destroy: All
 
-GLCD API Text Calls
 **printString #13 (0DH)**
 Prints ASCII text on a given row.   There are 4 text rows on the LCD screen.
 The text is to be defined directly after the RST 18H routine and is to be
@@ -1508,7 +1501,6 @@ the character.
 ```
 
 
-GLCD API Utility Calls
 **delayUS #15 (0FH)**
 Delay loop for LCD to complete its instruction.  Every time a command is
 sent to the LDC, it requires a small amount of time to complete that
@@ -1582,7 +1574,6 @@ turn on.
     rst 18H
 ```
 
-GLCD API Drawing Calls
 **drawGraphic #21 (15H)**
 Draw an ASCII character or Sprite to the GLCD at the current cursor.  ASCII
 characters are 6x6 or 5x5 Pixels and most have a gap to the right and
