@@ -15,7 +15,7 @@ nav_exclude: true
 TMON has been removed from Mon3 as of v1.5 but it can be loaded as a
 stand-alone program.  See the GitHub for source files.
 The Terminal Monitor (TMON) is a complete serial port-based monitor for
-the TEG-1G, designed for users who prefer to interact with the TEC-1G via a
+the TEC-1G, designed for users who prefer to interact with the TEC-1G via a
 terminal.
 
 ## Starting up TMON
@@ -143,7 +143,7 @@ BEEP
 Beeps the 1G speaker
 
 BELL
-Sents the BELL command to the remote console
+Sends the BELL command to the remote console
 
 VER
 Displays the version number of TMON and MON-3
@@ -153,11 +153,11 @@ Displays the state of the 1G system - SHADOW, PROTECT, EXPAND, CAPS
 LOCK
 
 CLS
-Sens a clear screen sequence to the remote console
+Sends a clear screen sequence to the remote console
 
 RAMCHK
 Runs a simple test to determine how much RAM is installed, and at what
-momentary address(e)s.  Uses whichever bank EXPAND is set to, but does
+memory address(es).  Uses whichever bank EXPAND is set to, but does
 not alter the EXPAND state.  Supports multiple discontinuous RAM blocks,
 if fitted.
 
@@ -234,5 +234,7 @@ PRINT your-text-here
 your-text-here is echoed back to the serial terminal.
 
 ![Extracted figure from MON-3 User Guide page 26](../../assets/images/tec1g-hardware/mon3-user-guide/page-26-figure-1.png)
+
+*Cartoon credit: John Hardy and Ken Stone, TE Issue 10, 1983.*
 
 [← Tiny Basic](07-tiny-basic.md) | [Guide](index.md) | [TEC Magazine Code on the TEC-1G →](09-tec-magazine-code-on-the-tec-1g.md)

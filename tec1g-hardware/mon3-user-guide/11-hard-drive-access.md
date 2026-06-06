@@ -89,7 +89,7 @@ run TEC-1G files.
 
 The entire contents of RAM can be saved to a file and loaded back to the
 TEC.  This is an equivalent to saving/restoring a session.   It replaces any
-need to use Non-Volitile RAM.  It can be used prior to powering down to
+need to use Non-Volatile RAM.  It can be used prior to powering down to
 save any unfinished work.  Then be able to access the same machine state
 later on.
 

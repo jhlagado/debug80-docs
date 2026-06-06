@@ -170,7 +170,7 @@ loop1:
        ld hl,4034H                401C  21 34 40       ;ASCII text
        ld c,_stringToLCD          401F  0E 0D          ;LCD String API routine
        rst 10H                    4021  D7             ;call API routine
-       ; Display customer characters
+       ; Display custom characters
        ld c,_commandToLCD    4022  0E 0F               ;LCD Instruction API routine
        ld b,0C0H                  4024  06 C0          ;Move Cursor to Row 2, Col 1
        rst 10H                    4026  D7             ;call API routine
@@ -182,7 +182,7 @@ loop2:
        ld a,20H                   402D  3E 20          ;space character
        rst 10H                    402F  D7             ;call API routine
        djnz loop2                 4030  10 F9          ;continue for all 8 characters
-       ; All Done, what for key press and exit
+       ; All Done, wait for key press and exit
        rst 08H                    4032  CF             ;key wait and press (HALT)
        ret                  4033  C9       ;exit
 
