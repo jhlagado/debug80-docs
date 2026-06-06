@@ -1623,8 +1623,6 @@ ld a,19         ;clearPixel
 rst 18H
 ```
 
-## GLCD API Drawing Calls
-
 **flipPixel #20 (14H)**
 Inverts a single Pixel.  If the Pixel is on, it will turn off. If the Pixel is off, it will
 turn on.
@@ -1637,6 +1635,8 @@ ld bc,4020H     ;X,Y
 ld a,20         ;flipPixel
 rst 18H
 ```
+
+## GLCD API Drawing Calls
 
 **drawGraphic #21 (15H)**
 Draw an ASCII character or Sprite to the GLCD at the current cursor.  ASCII
