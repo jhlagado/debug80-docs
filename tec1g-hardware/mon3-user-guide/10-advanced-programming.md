@@ -1253,14 +1253,14 @@ shapes and lines. These include text, lines, rectangles, circles and pixels.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-57-figure-2.png)
 
-### GLCD General Conventions
+## GLCD General Conventions
 
 The register A holds the API Call number.  All other registers except the IX
 register can be used as parameters if needed.  Executing a RST 18H or DF
 calls the GLCD API.
 
 
-#### General Interface
+### General Interface
 
 ```asm
 ld a,[API Call Number]
@@ -1302,7 +1302,7 @@ same time.  These modes must be selected before the drawing or text
 routine.  Also, plotToLCD must be called to display any graphics drawn to
 the screen.  The above example adheres to these principles.
 
-### GLCD API Call List
+## GLCD API Call List
 
 **Core GLCD Calls**
 
@@ -1348,6 +1348,8 @@ the screen.  The above example adheres to these principles.
 | `underline` | 32 | 20 |
 | `plotAlways` | 33 | 21 |
 
+
+## GLCD API Configure Calls
 
 **initLCD #0 (00H)**
 Initialise the LCD Screen.  This routine is to be called before any other
