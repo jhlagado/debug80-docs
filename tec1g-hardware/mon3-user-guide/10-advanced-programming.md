@@ -1664,21 +1664,21 @@ ld a,12         ;plotToLCD
 rst 18H
 ```
 
-<cont...>
+Graphic data for `picture`:
 
-picture:
 ```asm
-.db 10000011b,11000001b
-.db 10000100b,00100001b
-.db 10001010b,01010001b
-.db 10001000b,00010001b
-.db 10001010b,01010001b
-.db 10001001b,10010001b
-.db 10000100b,00100001b
-.db 10000011b,11000001b
+picture:
+    .db 10000011b,11000001b
+    .db 10000100b,00100001b
+    .db 10001010b,01010001b
+    .db 10001000b,00010001b
+    .db 10001010b,01010001b
+    .db 10001001b,10010001b
+    .db 10000100b,00100001b
+    .db 10000011b,11000001b
 ```
 
-This example will display this image from the current cursor position
+This example displays the image from the current cursor position.
 
 Here is the complete list of ASCII characters 00H-FFH that can be displayed.
 Each character is up to 6 x 6 pixels and is numbered left to right, top to
@@ -1705,10 +1705,9 @@ routine.
 - Output: none
 - Destroy: A
 
-
-          The TEC Frogger game uses the GLCD and its API routines.
-
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-68-figure-1.png)
+
+*The TEC Frogger game uses the GLCD and its API routines.*
 
 ## GLCD API Terminal Emulator Calls
 
