@@ -205,14 +205,24 @@ Two octaves are playable.  Here is a reference to the note code and its
 musical note.  A Pause is represented by 00, and any other note code that
 isn't listed will exit the routine.
 
-| Note | Code | Note | Code | Note | Code | Note | Code |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| G | `01` | C# | `07` | G | `0D` | C# | `13` |
-| G# | `02` | D | `08` | G# | `0E` | D | `14` |
-| A | `03` | D# | `09` | A | `0F` | D# | `15` |
-| A# | `04` | E | `0A` | A# | `10` | E | `16` |
-| B | `05` | F | `0B` | B | `11` | F | `17` |
-| C | `06` | F# | `0C` | C | `12` | F# | `18` |
+<table class="mon3-compact-table">
+  <thead>
+    <tr>
+      <th>Note</th><th>Code</th>
+      <th>Note</th><th>Code</th>
+      <th>Note</th><th>Code</th>
+      <th>Note</th><th>Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>G</td><td><code>01</code></td><td>C#</td><td><code>07</code></td><td>G</td><td><code>0D</code></td><td>C#</td><td><code>13</code></td></tr>
+    <tr><td>G#</td><td><code>02</code></td><td>D</td><td><code>08</code></td><td>G#</td><td><code>0E</code></td><td>D</td><td><code>14</code></td></tr>
+    <tr><td>A</td><td><code>03</code></td><td>D#</td><td><code>09</code></td><td>A</td><td><code>0F</code></td><td>D#</td><td><code>15</code></td></tr>
+    <tr><td>A#</td><td><code>04</code></td><td>E</td><td><code>0A</code></td><td>A#</td><td><code>10</code></td><td>E</td><td><code>16</code></td></tr>
+    <tr><td>B</td><td><code>05</code></td><td>F</td><td><code>0B</code></td><td>B</td><td><code>11</code></td><td>F</td><td><code>17</code></td></tr>
+    <tr><td>C</td><td><code>06</code></td><td>F#</td><td><code>0C</code></td><td>C</td><td><code>12</code></td><td>F#</td><td><code>18</code></td></tr>
+  </tbody>
+</table>
 
 The following page contains examples tunes that can be typed in a played
 

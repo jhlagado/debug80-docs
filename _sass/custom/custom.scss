@@ -222,6 +222,25 @@ html {
     }
   }
 
+  table.mon3-compact-table {
+    width: auto;
+    max-width: 100%;
+    table-layout: auto;
+
+    th,
+    td {
+      min-width: 2.75rem;
+      padding: 0.25rem 0.45rem;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    code {
+      padding: 0.05rem 0.2rem;
+      font-size: 0.9em;
+    }
+  }
+
   .mon3-key-emphasis {
     color: #d71920;
     font-weight: 500;
