@@ -78,6 +78,8 @@ The example code provided uses the API routines.
 
 ## Example Using CGRAM and DDRAM
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-90-figure-2.png)
+
 ```asm
 _stringToLCD   .equ  13
 _charToLCD     .equ  14
@@ -144,7 +146,5 @@ CHAR TABLE:
 ```
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-90-figure-1.png)
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-90-figure-2.png)
 
 [← Quick Start Programs](12-quick-start-programs.md) | [Guide](index.md) | [Useful Links →](14-useful-links.md)
