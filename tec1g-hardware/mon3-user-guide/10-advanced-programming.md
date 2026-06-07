@@ -235,13 +235,13 @@ See the [MON-3 source in the TEC-1G repository](https://github.com/MarkJelic/TEC
 
 ## API Utility Calls
 
-**softwareID #0 (00H)**
+### softwareID #0 (00H)
 Get Software ID String
 - Input: nothing
 - Return: HL = Pointer to SOFTWARE ASCII String
 - Destroy: none
 
-**versionID #1 (01H)**
+### versionID #1 (01H)
 Get Version Number and Version String
 - Input: nothing
 - Return: `HL` = pointer to release ASCII string
@@ -249,35 +249,35 @@ Get Version Number and Version String
 - Return: `DE` = release minor version number
 - Destroys: none
 
-**preInit #2 (02H)**
+### preInit #2 (02H)
 Performs a cold reset as if the TEC-1G had just been powered on. Returns to
 MON3 to its default state.
 
-**beep #3 (03H)**
+### beep #3 (03H)
 Makes a short beep tone to the TEC Speaker
 - Input: nothing
 - Destroys: A
 
-**convAToSeg #4 (04H)**
+### convAToSeg #4 (04H)
 Convert register A to Seven Segment display format
 - Inputs: `A` = byte to convert
 - Inputs: `DE` = address to store segment values (2 bytes)
 - Destroys: `BC`
 
-**regAToASCII #5 (05H)**
+### regAToASCII #5 (05H)
 Convert register A to ASCII. IE: 2CH -> "2C"
 - Input: A = byte to convert
 - Output: HL = two-byte ASCII string
 - Destroys: A
 
-**ASCIItoSegment #6 (06H)**
+### ASCIItoSegment #6 (06H)
 ASCII to Segment.  Converts an ASCII character to Seven Segment display
 format
 - Input: A = ASCII character
 - Return: A = Segment character or 0 if out of range
 - Destroys: none
 
-**stringCompare #7 (07H)**
+### stringCompare #7 (07H)
 Compare two string
 - Input: `HL` = source pointer
 - Input: `DE` = target pointer
@@ -285,32 +285,32 @@ Compare two string
 - Output: Zero Flag Set = compare match
 - Destroys: `HL`, `DE`, `A`, `BC`
 
-**HLToString #8 (08H)**
+### HLToString #8 (08H)
 Convert HL to ASCII string. IE: <span class="mon3-address-emphasis">2C0FH</span> -> "2C0F"
 - Input: `HL` = value to convert
 - Input: `DE` = address of string destination (4 bytes)
 - Output: `DE` = address one after last ASCII entry
 - Destroys: `A`
 
-**AToString #9 (09H)**
+### AToString #9 (09H)
 Convert register A to ASCII string. IE: 2CH -> "2C"
 - Input: `A` = byte to convert
 - Input: `DE` = address of string destination (2 bytes)
 - Output: `DE` = address one after last ASCII entry
 - Destroys: `A`
 
-**scanSegments #10 (0AH)**
+### scanSegments #10 (0AH)
 Multiplex the Seven Segment displays with the contents of DE.  Must be
 called repetitively for segments to stay persistent.
 - Inputs: DE = pointer to 6-byte location of segment data
 - Destroys: A, B, DE = DE + 6
 
-**displayError #11 (0BH)**
+### displayError #11 (0BH)
 Display ERROR on the Seven Segments and wait for keypress
 - Input: none
 - Destroys: all
 
-**checkStartEnd #30 (1EH)**
+### checkStartEnd #30 (1EH)
 Check start and end address differences.
 - Input: `HL` = address location of START value
 - Input: `HL+2` = address location of END value
@@ -321,12 +321,12 @@ Check start and end address differences.
 
 ## API LCD Calls
 
-**LCDBusy #12 (0CH)**
+### LCDBusy #12 (0CH)
 LCD busy check.  Checks the LCD busy flag and loops until LCD isn't busy
 - Input: nothing
 - Destroys: none
 
-**stringToLCD #13 (0DH)**
+### stringToLCD #13 (0DH)
 ASCII string to LCD.  Writes a string (text) to the current cursor location on
 the LCD
 - Input: HL = ASCII string terminated with a zero byte
@@ -340,7 +340,7 @@ TEXT: .db "HELLO TEC!",0
        rst 10h
 ```
 
-**charToLCD #14 (0EH)**
+### charToLCD #14 (0EH)
 ASCII character to LCD.  Writes one character to the LCD at the current
 cursor location
 - Input: A = ASCII character
@@ -352,7 +352,7 @@ ld c,14
 rst 10h
 ```
 
-**commandToLCD #15 (0FH)**
+### commandToLCD #15 (0FH)
 Command to LCD.  Sends an LCD instruction to the LCD
 - Input: B = Instruction byte
 - Destroy: none
@@ -365,7 +365,7 @@ ld b,01  ;clear LCD
 
 ## API Input Calls
 
-**scanKeys #16 (10H)**
+### scanKeys #16 (10H)
 Universal Key input detection routine. Supports HexPad and Matrix.  The
 routine does not wait for a key press the returns immediately.  Only Hexpad
 keys are detected if using the Matrix Keyboard.
@@ -385,7 +385,7 @@ Key mapping returned in register `A`:
 | GO | `12` | Fn-GO | `32` |
 | AD | `13` | Fn-AD | `33` |
 
-**scanKeysWait #17 (11H)**
+### scanKeysWait #17 (11H)
 Generic Key input detection routine. Supports HexPad and Matrix. Waits
 until a key is pressed.  The routine will only detect a key if all keys are
 released first.  Only Hexpad keys are detected if using the Matrix Keyboard.
@@ -394,7 +394,7 @@ released first.  Only Hexpad keys are detected if using the Matrix Keyboard.
 - Destroys: DE if using Matrix Keyboard
 See table above for return values in register A
 
-**joystickScan #19 (13H)**
+### joystickScan #19 (13H)
 Joystick port scan routines.  This routine will return a value based on the
 movement/button of the joystick or any combination: IE: UP+DOWN = 03H,
 Routine must be called repetitively.
@@ -410,7 +410,7 @@ Routine must be called repetitively.
 | `04H` | Left | `40H` | Fire 1 |
 | `08H` | Right | `80H` | Fire 3 |
 
-**matrixScan #18 (12H)**
+### matrixScan #18 (12H)
 Key scan routine for the Matrix Keyboard.  This routine detects up to two
 key presses at the same time.  Key values stored in DE.  The routine must
 be called repetitively.
@@ -435,7 +435,7 @@ Key mapping returned in register `E`; some gaps are present.
 | Tab | `09` | 2 | `15` | B | `25` | M | `30` | X | `3B` | | |
 | Enter | `0A` | 3 | `16` | C | `26` | N | `31` | Y | `3C` | | |
 
-**matrixScanASCII #53 (35H)**
+### matrixScanASCII #53 (35H)
 Convert the output of the matrixScan routine to ASCII.  matrixScan returns
 values between 0 and 63 (3Fh). These represent key presses on the
 keyboard.  This routine will convert the output of matrixScan DE, to the
@@ -451,7 +451,7 @@ return the control code.  IE: Ctrl-C will return 03.
 Example code on using matrixScanASCII can be found in the Quick Start
 Programs chapter below.
 
-**parseMatrixScan #54 (36H)**
+### parseMatrixScan #54 (36H)
 Parse matrix keyboard input.  This routine checks the key(s) pressed on the
 Matrix Keyboard and either returns the key pressed in ASCII or handles
 special cases.  The special cases are Key Bounce/Repeat and Caps lock.
@@ -479,25 +479,25 @@ scan_loop:
 
 ## API Serial Data Transfer Calls
 
-**serialEnable #20 (14H)**
+### serialEnable #20 (14H)
 Enable BitBang serial port for serial transmit.  Disco LED's glow blue to
 indicate ready status.
 - Input: none
 - Destroy: A
 
-**serialDisable #21 (15H)**
+### serialDisable #21 (15H)
 Disable BitBang serial port for serial transmit.  Disco LEDs turn off.
 - Input: none
 - Destroy: A
 
-**txByte #22 (16H)**
+### txByte #22 (16H)
 Bit Bang FTDI USB transmit routine.  Send one byte over FTDI USB serial
 connection.  It assumes a UART connection of 4800-8-N-2.
 - Input: A = byte to transmit
 - Output: nothing
 - Destroy: none
 
-**rxByte #23 (17H)**
+### rxByte #23 (17H)
 Bit Bang FTDI USB receive routine.  Receive one byte via the FTDI USB
 serial connection.  It assumes a UART connection of 4800-8-N-2.  Note
 routine will wait until a bit is detected.
@@ -505,7 +505,7 @@ routine will wait until a bit is detected.
 - Return: A = byte received
 - Destroy: none
 
-**intelHexLoad #24 (18H)**
+### intelHexLoad #24 (18H)
 Load an Intel Hex file via the FTDI USB serial connection.  Displays file
 progress on the segments and PASS or FAIL at the end of the load.  Intel
 Hex file format is a string of ASCII with the following parts:
@@ -534,7 +534,7 @@ CHECKSUM is the addition of all bytes in one line.
 - Output: nothing
 - Destroy: HL,DE,BC,A
 
-**sendToSerial #25 (19H)**
+### sendToSerial #25 (19H)
 SIO Binary Dump.  Transfer TEC data to a serial terminal.  From address and
 Length of data is needed for input.  Use checkStartEnd to get length if
 using From/To address.
@@ -542,7 +542,7 @@ using From/To address.
 - Input: `DE` = length in bytes of data to send
 - Destroys: `A`, `HL`, `DE`, `BC`
 
-**receiveFromSerial #26 (1AH)**
+### receiveFromSerial #26 (1AH)
 SIO receives binary data.  Receive binary data from FTDI.  From address
 and Length of data is needed for input.  Use checkStartEnd to get length
 if using From/To address.
@@ -550,7 +550,7 @@ if using From/To address.
 - Input: `DE` = length in bytes of data to receive
 - Destroys: `A`, `HL`, `DE`, `BC`
 
-**sendAssembly #27 (1BH)**
+### sendAssembly #27 (1BH)
 Send Assembly instructions to the serial port.  Print out the disassembled
 code that is on the TEC in readable assembly language on the serial
 terminal.  From address and Length of data is needed for input.  Use
@@ -559,7 +559,7 @@ checkStartEnd to get length if using From/To address.
 - Input: `DE` = length in bytes of data to disassemble
 - Destroys: `A`, `HL`, `DE`, `BC`
 
-**sendHex #28 (1CH)**
+### sendHex #28 (1CH)
 Send a traditional HEX dump as text to the serial terminal.  Up to 16 bytes
 are displayed per line.    From address and Length of data is needed for
 input.  Use checkStartEnd to get length if using From/To address.
@@ -567,7 +567,7 @@ input.  Use checkStartEnd to get length if using From/To address.
 - Input: `DE` = length in bytes of data to send as hex
 - Destroys: `A`, `HL`, `DE`, `BC`
 
-**genDataDump #29 (1DH)**
+### genDataDump #29 (1DH)
 Generate data dump in ASCII.  Print the Address and then B number of
 bytes.  This routine is a subroutine in the _sendHex routine.
 - Input: `B` = number of bytes to display
@@ -577,7 +577,7 @@ bytes.  This routine is a subroutine in the _sendHex routine.
   entry i.e. `"4000: 23 34 45 56 78 9A BC DE",0`
 - Destroys: `A`, `HL`; `HL` moves to the next address after the last byte
 
-**stringToSerial #45 (2DH)**
+### stringToSerial #45 (2DH)
 ASCII string to FTDI Serial Port.  Writes a string (text) to the serial port
 - Input: HL = ASCII string terminated with a zero byte
 - Destroy: A, HL (moves to end of the list)
@@ -592,7 +592,7 @@ TEXT: .db "HELLO TEC!",0
 
 ## API Menu & Parameter Calls
 
-**menuDriver #31 (1FH)**
+### menuDriver #31 (1FH)
 Menu driver for user programs.  Creates a selectable custom menu/list.
 Keys: <span class="mon3-key-emphasis">Go</span> = Select menu item, <span class="mon3-key-emphasis">AD</span> = Exit Menu, <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> = Navigate menu.
 If a menu item is selected by pressing <span class="mon3-key-emphasis">Go</span>, a jump is performed to the
@@ -629,7 +629,7 @@ of exactly 6 bytes.  Menu configuration is as follows.
       .dw maze
 ```
 
-**paramDriver #32 (20H)**
+### paramDriver #32 (20H)
 Parameter data entry driver.  Creates a list of editable two-byte parameters.
 Keys: <span class="mon3-key-emphasis">Go</span> = Continue, <span class="mon3-key-emphasis">AD</span> = Exit, <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> = Navigate, <span class="mon3-key-emphasis">0-F</span> = enter values
 - Input: HL = Pointer to Parameter configuration.
@@ -658,7 +658,7 @@ Text>, [<Param Text Label>, <Param RAM Address>]+
       .dw RAM_LOC_3
 ```
 
-**menuPop #47 (2FH)**
+### menuPop #47 (2FH)
 Replace the current menu with its parent menu if any.  If menus have been
 nested, the parent menu will become the active menu.  This is the same as
 pressing the <span class="mon3-key-emphasis">AD</span> key but done in software.  If no parent menu exists then
@@ -797,13 +797,13 @@ paramCFG:
 
 ## API Sound Calls
 
-**playNote #34 (22H)**
+### playNote #34 (22H)
 Play a note.  Play a note with a given frequency and wavelength
 - Input: `HL` = frequency (`01-7F`)
 - Input: `B` = wavelength (`00-FF`)
 - Destroys: `HL`, `BC`, `A`
 
-**playTune #35 (23H)**
+### playTune #35 (23H)
 Play a series of notes.  To play a note use a reference between 01H and 18H.
 Where 01H is the lowest frequency and 18H is the highest frequency.  Use
 00H for a pause and any value above 18H to exit.  A single pause can be
@@ -822,7 +822,7 @@ Note reference table is as follows:
 - Input: `DE` = address of first note
 - Destroy: `A`, `B`, `DE`, `HL`
 
-**playTuneMenu #36 (24H)**
+### playTuneMenu #36 (24H)
 Play a series of notes with the _playTune routine, but the address of the
 first note is selected via a parameter menu.
 - Input: none
@@ -830,113 +830,113 @@ first note is selected via a parameter menu.
 
 ## API System Latch Calls
 
-**getCaps #37 (25H)**
+### getCaps #37 (25H)
 Get Caps lock state
 - Input: none
 - Output: A = caps lock state; 0 = off, 80H = on
 
-**getShadow #38 (26H)**
+### getShadow #38 (26H)
 Get SHADOW state
 - Input: none
 - Output: A = shadow state; 0 = off, 01H = on
 
-**getProtect #39 (27H)**
+### getProtect #39 (27H)
 Get PROTECT state
 - Input: none
 - Output: A = protect state; 0 = off, 02H = on
 
-**getExpand #40 (28H)**
+### getExpand #40 (28H)
 Get EXPAND state
 - Input: none
 - Output: A = expand state; 0 = off, 04H = on
 
-**setCaps #41 (29H)**
+### setCaps #41 (29H)
 Set Caps lock state
 - Input: A = Desired caps lock state; 0 = off, 80H = on
 - Destroy: A
 
-**setShadow #42 (2AH)**
+### setShadow #42 (2AH)
 Set Shadow state
 - Input: A = Desired shadow state; 0 = off, 01H = on
 - Destroy: A
 
-**setProtect #43 (2BH)**
+### setProtect #43 (2BH)
 Set Protect state
 - Input: A = Desired protect state; 0 = off, 02H = on
 - Destroy: A
 
-**setExpand #44 (2CH)**
+### setExpand #44 (2CH)
 Set Expand state
 - Input: A = Desired expand state; 0 = off, 04H = on
 - Destroy: A
 
 ## Miscellaneous Calls
 
-**toggleCaps #48 (30H)**
+### toggleCaps #48 (30H)
 Toggle Caps Lock state. On/Off or vice versa
 - Input: none
 - Destroy: A
 
 
-**timeDelay #33 (21H)**
+### timeDelay #33 (21H)
 A 16-bit delay routine.  An input delay of <span class="mon3-address-emphasis">2000H</span> is approximately 50ms.
 - Input: HL = delay amount
 - Destroys: none
 
-**random #49 (31H)**
+### random #49 (31H)
 Random number generator.  Return a random number between 00H-FFH
 - Input: none
 - Output: A = pseudo-random number
 - Destroy: B
 
-**setDisStart #50 (32H)**
+### setDisStart #50 (32H)
 Set Disassembly start address.  Set the first address for disassembly output
 - Input: HL = start address
 - Output: none
 - Destroy: none
 
-**getDisNext #51 (33H)**
+### getDisNext #51 (33H)
 Get Disassembly next address.  The new start address for the next output.
 - Input: none
 - Output: HL = start address
 - Destroy: none
 
-**getDisassembly #52 (34H)**
+### getDisassembly #52 (34H)
 Generate Disassembly line.  Must call setDisStart prior.  Only need to call
 setDisStart once as the next address is automatically increased.
 - Input: none
 - Output: `HL` = pointer to zero-terminated disassembly ASCII
 - Destroy: none
 
-**RTCAPI #46 (2EH)**
+### RTCAPI #46 (2EH)
 Call a Real Time Clock (RTI) routine for the RTC add on board.  See the RTC
 chapter below for details on this add-on.
 
 - Input: `B` = RTC routine number
 - Other inputs depend on the RTC routine.
 
-**LCDConfirm #55 (37H)**
+### LCDConfirm #55 (37H)
 Ask a confirmation message on the LCD before proceeding.  Press 'C' to
 confirm or any other key to not confirm.
 - Input: none
 - Output: Zero Flag = set == confirmed or 'C' pressed
 - Destroy: A,HL
 
-**getGLCDTerm #56 (38H)**
+### getGLCDTerm #56 (38H)
 Get GLCDTERM state.  Check if using the GLCD as a Terminal
 - Input: none
 - Output: A = GLCD Terminal state; 0 = off, FF = on
 
-**setGLCDTerm #57 (39H)**
+### setGLCDTerm #57 (39H)
 Set GLCD Terminal state
 - Input: A = Desired GLCD Terminal state; 0 = off, FF = on
 - Destroy: A
 
 loadFromDisk #58 (3AH), openFile #59 (3BH), readFile #60 (3CH),
-**writeFile #61 (3DH)**
+### writeFile #61 (3DH)
 See the Hard Drive Access section for details of these routines.
 
-**RGBScan #62 (3EH)**
+### RGBScan #62 (3EH)
 Multiplex the 8x8 RGB Board with 3 colours, Red, Green and Blue.  Need to
 be called in a loop.  The Row data is from top to bottom.
 
@@ -1086,14 +1086,14 @@ D7        rst 10H
 | `formatDate` | 17 | 11 |
 | `RTCSetup` | 18 | 12 |
 
-**checkDS1302 #0 (00H)**
+### checkDS1302 #0 (00H)
 Check if a DS1302 is detectable, by verifying that the DS1302's registers
 return expected results.
 - Input: none
 - Output: Carry flag set = no RTC add-on board present
 - Destroy: A
 
-**resetDS1302 #1 (01H)**
+### resetDS1302 #1 (01H)
 Resets the DS1302 to a known state - clears existing Time and Calendar.
 Does not clear RTC RAM.  Sets DS1302 to 01:00.00 AM, 01/01/2000.
 - Input: none
@@ -1102,7 +1102,7 @@ Note: To be used only when the RTC requires a settings reset e.g. if it's not
 "ticking". Use checkDS1302 to "reset" the DS1302 to a ready state, as part of
 program initialization.
 
-**getTime #2 (02H)**
+### getTime #2 (02H)
 Get time from RTC. Time is formatted in either 12 or 24 hour mode,
 depending on selected mode.
 - Input: none
@@ -1114,7 +1114,7 @@ depending on selected mode.
 Note that all returned registers are BCD coded, so 10:24:36 results in
 HL=1024h, D=36h
 
-**setTime #3 (03H)**
+### setTime #3 (03H)
 Sets the time in the RTC chip. Time is formatted in either 12 or 24 hour
 mode, depending on selected mode.
 - Input: `H` = hour, bit 5=am/pm flag (in 12hr mode). 1=PM
@@ -1125,7 +1125,7 @@ mode, depending on selected mode.
 The 12/24 hour mode flag is preserved.  Note that all registers are BCD
 coded, so 10:24:36 is formatted as HL=1024h, D=36h
 
-**getDate #4 (04H)**
+### getDate #4 (04H)
 Returns the present Calendar date, month, year.
 - Input: none
 - Output: `H` = date
@@ -1135,7 +1135,7 @@ Returns the present Calendar date, month, year.
 
 Note that values returned are BCD coded.
 
-**setDate #5 (05H)**
+### setDate #5 (05H)
 Sets the Calendar to a specified date/month/year.  Invalid dates may be
 accepted e.g. 30 February as the DS1302 does not validate dates as
 programmed; it simply rolls over at midnight.
@@ -1146,7 +1146,7 @@ programmed; it simply rolls over at midnight.
 
 Note that values returned are BCD coded.
 
-**getDay #6 (06H)**
+### getDay #6 (06H)
 Gets the Day of the week i.e. "Monday", "Tuesday", etc. 01 = Monday, 07 =
 Sunday.
 - Input: none
@@ -1157,66 +1157,66 @@ Sunday.
 The names of the days of the week are stored in the Mon3 ROM; HL points
 to the correct string for that day.
 
-**setDay #7 (07H)**
+### setDay #7 (07H)
 Sets the Day of the week. 01 = Monday, 07 = Sunday.
 - Input: D = 01-07 (Day of week)
 - Output: Carry Flag set = invalid value supplied
 - Destroy: A
 
-**get1224Mode #8 (08H)**
+### get1224Mode #8 (08H)
 Reports if the RTC is currently in 12 or 24 hour mode.
 - Input: none
 - Output: A = 00H (24hr), 80H (12hr), Zero flag set
 - Destroy: none
 
-**set12HrMode #9 (09H)**
+### set12HrMode #9 (09H)
 Set RTC to 12 hour mode. That is, the hour is subsequently returned as
 01-12, and an AM/PM flag.
 - Input: none
 - Output: Carry Flag set = already in 12 hr mode
 - Destroy: A,D
 
-**set24HrMode #10 (0AH)**
+### set24HrMode #10 (0AH)
 Set RTC to 24 hour mode (also known as Military Time). That is, the hour is
 subsequently returned as 00-23.
 - Input: none
 - Output: Carry Flag set = already in 24 hr mode
 - Destroy: A,D
 
-**readRTCByte #11 (0BH)**
+### readRTCByte #11 (0BH)
 Reads a byte from the RTC PRAM.
 - Input: D = memory slot to return 0-30
 - Output: A = value stored in memory
 - Destroy: none
 
-**writeRTCByte #12 (0CH)**
+### writeRTCByte #12 (0CH)
 Writes a byte to the RTC PRAM.
 - Input: `D` = memory slot to write to 0-30
 - Input: `E` = value to store
 - Destroy: `A`
 
-**burstRTCRead #13 (0DH)**
+### burstRTCRead #13 (0DH)
 Reads all 31 RTC PRAM bytes and fills a user-supplied buffer with that data.
 The user buffer should be 31 bytes long.
 - Input: HL = location to write to (31 bytes)
 - Output: HL = moved to address after last byte
 - Destroy: A
 
-**binToBcd #14 (0EH)**
+### binToBcd #14 (0EH)
 Converts the value in register A from BCD encoded, to binary. i.e. "23h"
 becomes "23" decimal.
 - Input: A = BCD Value to convert
 - Output: A = Binary value of BCD
 - Destroy: none
 
-**bcdToBin #15 (0FH)**
+### bcdToBin #15 (0FH)
 Converts the value in register A from binary to BCD. i.e. "52" decimal
 becomes "52h".
 - Input: A = Binary Value to convert
 - Output: A = BCD value of Binary
 - Destroy: none
 
-**formatTime #16 (10H)**
+### formatTime #16 (10H)
 Takes a time and fills a user-supplied buffer with an ASCIIZ string
 formatted as human-readable text.  The user-supplied buffer should be at
 least 12 bytes long.
@@ -1230,7 +1230,7 @@ timestamp - AM or PM is appended accordingly.
 - Output: `IY` = moved to address after last byte
 - Destroy: `A`
 
-**formatDate #17 (11H)**
+### formatDate #17 (11H)
 Takes a date and fills a user-supplied buffer with an ASCIIZ string
 formatted as human-readable text.  The user-supplied buffer should be at
 least 11 bytes long.
@@ -1242,7 +1242,7 @@ Dates are output as DD/MM/YYYY
 - Output: `IY` = moved to address after last byte
 - Destroy: `A`
 
-**RTCSetup #18 (12H)**
+### RTCSetup #18 (12H)
 Standalone application that assists with configuring the RTC for initial use.
 The LCD displays the current RTC time and date with the instructions.
 
@@ -1369,13 +1369,13 @@ the screen.  The above example adheres to these principles.
 
 ## GLCD API Configure Calls
 
-**initLCD #0 (00H)**
+### initLCD #0 (00H)
 Initialise the LCD Screen.  This routine is to be called before any other
 routine.
 - Input: nothing
 - Destroy: All
 
-**clearGBUF #1 (01H)**
+### clearGBUF #1 (01H)
 Clear the Graphics Buffer.  The Graphics Buffer or GBUF is the internal
 memory area that contains pixel data for the LCD.  The drawing routines
 write data to the GBUF.  Once all pixels are set, this buffer is then plotted to
@@ -1384,19 +1384,19 @@ ensure the pixel area is empty.
 - Input: nothing
 - Destroy: All
 
-**clearGrLCD #2 (02H)**
+### clearGrLCD #2 (02H)
 Clear the Graphics LCD Screen.  This routine clears the GDRAM or Graphics
 screen on the LCD.
 - Input: nothing
 - Destroy: All
 
-**clearTxtLCD #3 (03H)**
+### clearTxtLCD #3 (03H)
 Clear the Text LCD Screen.  This routine clears the DDRAM or Text screen
 on the LCD.
 - Input: nothing
 - Destroy: All
 
-**setGrMode #4 (04H)**
+### setGrMode #4 (04H)
 Set the LCD to Graphics Mode.  This routine puts the LCD in Graphics mode
 (Extended Instructions). Any further instructions to the LCD will be for the
 graphics screen.  It only needs to be called once if multiple graphics
@@ -1404,7 +1404,7 @@ routines are used.
 - Input: nothing
 - Destroy: AF,DE
 
-**setTxtMode #5 (05H)**
+### setTxtMode #5 (05H)
 Set the LCD to Text Mode.  This routine puts the LCD in Text mode (Basic
 Instructions). Any further instructions to the LCD will be for the text screen.
 It only needs to be called once if multiple text routines are used.
@@ -1413,7 +1413,7 @@ It only needs to be called once if multiple text routines are used.
 
 ## GLCD API Graphics Calls
 
-**drawBox #6 (06H)**
+### drawBox #6 (06H)
 Draws a single-line rectangle between two points X1, Y1 and X2, Y2.
 - Input: `B` = X1-coordinate (0-127)
 - Input: `C` = Y1-coordinate (0-63)
@@ -1428,7 +1428,7 @@ ld a,6         ;drawBox
 rst 18H
 ```
 
-**drawLine #7 (07H)**
+### drawLine #7 (07H)
 Draws a straight line between X1, Y1 and X2, Y2.  Uses the Bresenham Line
 drawing algorithm. http://members.chello.at/~easyfilter/bresenham.html
 - Input: `B` = X1-coordinate (0-127)
@@ -1444,7 +1444,7 @@ ld a,7         ;drawLine
 rst 18H
 ```
 
-**drawCircle #8 (08H)**
+### drawCircle #8 (08H)
 Draw a circle from midpoint to radius.
 - Input: `B` = Mid-X-coordinate (0-127)
 - Input: `C` = Mid-Y-coordinate (0-63)
@@ -1458,7 +1458,7 @@ ld a,8         ;drawCircle
 rst 18H
 ```
 
-**drawPixel #9 (09H)**
+### drawPixel #9 (09H)
 Draws a single Pixel.
 - Input: `B` = X-coordinate (0-127)
 - Input: `C` = Y-coordinate (0-63)
@@ -1470,7 +1470,7 @@ ld a,9         ;drawPixel
 rst 18H
 ```
 
-**fillBox #10 (0AH)**
+### fillBox #10 (0AH)
 Draws a filled rectangle between X1, Y1 and X2, Y2.
 - Input: `B` = X1-coordinate (0-127)
 - Input: `C` = Y1-coordinate (0-63)
@@ -1485,7 +1485,7 @@ ld a,10        ;fillBox
 rst 18H
 ```
 
-**fillCircle #11 (0BH)**
+### fillCircle #11 (0BH)
 Draws a filled circle from a midpoint to a radius.  This routine iteratively
 calls the drawCircle routine increasing the radius until it equals the
 register E.  There might be gaps in the filled circle, but hey it looks just like
@@ -1504,7 +1504,7 @@ rst 18H
 
 ## GLCD API Text Calls
 
-**plotToLCD #12 (0CH)**
+### plotToLCD #12 (0CH)
 This routine draws the Graphics Buffer or GBUF to the Graphics LCD
 screen.  It is usually called after one of the drawing routines is called.  This
 routine must be called for any graphics to appear on the GLCD.  After
@@ -1512,7 +1512,7 @@ plotting the GBUF is cleared.  Use setBufNoClear to retain the GBUF.
 - Input: nothing
 - Destroy: All
 
-**printString #13 (0DH)**
+### printString #13 (0DH)
 Prints ASCII text on a given row.   There are 4 text rows on the LCD screen.
 The text is to be defined directly after the RST 18H routine and is to be
 terminated with a zero.
@@ -1535,7 +1535,7 @@ Alphanumeric characters align with the ASCII table.
 
 ## GLCD API Utility Calls
 
-**printChars #14 (0EH)**
+### printChars #14 (0EH)
 Print Characters on the screen in a given row and column.  This routine is
 similar to the one above but character row and column placement can be
 made.  Characters to be printed are to be terminated with a zero.
@@ -1560,7 +1560,7 @@ TEXT_DATA:
 ```
 
 
-**delayUS #15 (0FH)**
+### delayUS #15 (0FH)
 Delay loop for LCD to complete its instruction.  Every time a command is
 sent to the LDC, it requires a small amount of time to complete that
 operation.  IE: setting extended instruction mode.  The time needed for
@@ -1577,7 +1577,7 @@ ld a,15     ;delayUS
 rst 18H
 ```
 
-**delayMS #16 (10H)**
+### delayMS #16 (10H)
 This is the same as the above routine, but the delay can be software
 controlled.
 - Input: DE = delay value
@@ -1591,7 +1591,7 @@ ld a,16     ;delayMS
 rst 18H
 ```
 
-**setBufClear #17 (11H)**
+### setBufClear #17 (11H)
 On every plotToLCD call, clear the graphics buffer GBUF.  Calling this
 routine will clear the graphics buffer on every draw to the LCD.  This is
 useful if doing animation that requires a new drawing to be displayed on
@@ -1599,14 +1599,14 @@ every plot or frame.
 - Input: none
 - Destroy: AF
 
-**setBufNoClear #18 (12H)**
+### setBufNoClear #18 (12H)
 Do not clear the graphics buffer on every plotToLCD.  Calling this routine
 will not clear the graphics buffer on every draw to LCD.  This is useful for
 adding graphics data to an existing drawing.
 - Input: none
 - Destroy: AF
 
-**clearPixel #19 (13H)**
+### clearPixel #19 (13H)
 Removes or clears a single Pixel from the LCD.
 - Input: `B` = X-coordinate (0-127)
 - Input: `C` = Y-coordinate (0-63)
@@ -1618,7 +1618,7 @@ ld a,19         ;clearPixel
 rst 18H
 ```
 
-**flipPixel #20 (14H)**
+### flipPixel #20 (14H)
 Inverts a single Pixel.  If the Pixel is on, it will turn off. If the Pixel is off, it will
 turn on.
 - Input: `B` = X-coordinate (0-127)
@@ -1633,7 +1633,7 @@ rst 18H
 
 ## GLCD API Drawing Calls
 
-**drawGraphic #21 (15H)**
+### drawGraphic #21 (15H)
 Draw an ASCII character or Sprite to the GLCD at the current cursor.  ASCII
 characters are 6x6 or 5x5 Pixels and most have a gap to the right and
 bottom for spacing. plotToLCD is still required to be called after all
@@ -1683,7 +1683,7 @@ bottom.  The characters align with the standard ASCII Table.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-67-figure-2.png)
 
-**invGraphic #22 (16H)**
+### invGraphic #22 (16H)
 Inverse graphics printing.  Calling this routine will TOGGLE the inverse
 drawing flag.  The initial state is normal.  If in inverse mode, a pixel drawn
 using the drawGraphic routine is displayed if a BIT is not set.
@@ -1691,7 +1691,7 @@ using the drawGraphic routine is displayed if a BIT is not set.
 - Output: none
 - Destroy: A
 
-**underline #32 (20H)**
+### underline #32 (20H)
 Underline the graphics printing.  Calling this routine will TOGGLE the
 underline drawing flag.  The initial state is off.  If in underline mode, the last
 pixel row will be set as on.  Only applicable when using the drawGraphic
@@ -1706,7 +1706,7 @@ routine.
 
 ## GLCD API Terminal Emulator Calls
 
-**initTerminal #23 (17H)**
+### initTerminal #23 (17H)
 Initialise the GLCD for terminal emulation.  This routine is to be called
 before any TERMINAL routine is called.  It will set graphics and scroll
 buffers.  It also Clears the GBUF, sets the cursor to top left and displays the
@@ -1715,7 +1715,7 @@ cursor.  This routine will also call initLCD.
 - Output: none
 - Destroy: All
 
-**autoLF #31 (1FH)**
+### autoLF #31 (1FH)
 Automatic Line Feed when the cursor reaches the end of the row.  When
 the cursor passes the last column, character entered via the
 sendCharToLCD will either wrap around, or start on a new line.
@@ -1723,7 +1723,7 @@ sendCharToLCD will either wrap around, or start on a new line.
 - Output: none
 - Destroy: A
 
-**plotAlways #33 (21H)**
+### plotAlways #33 (21H)
 When sendCharToLCD is called, determine if the character should be sent
 immediately to the GLCD or be held in a buffer.  If held in a buffer, call
 plotToLCD to update the GLCD.  The default is ON and characters will be
@@ -1735,7 +1735,7 @@ this flag should be set ON.
 - Output: none
 - Destroy: A
 
-**sendCharToLCD #24 (18H)**
+### sendCharToLCD #24 (18H)
 Send or handle ASCII characters to the GLCD screen.  This routine displays
 ASCII characters to the GLCD screen and handles some special control
 characters.  It also handles scrolling history of 10 lines.  Characters are
@@ -1761,7 +1761,7 @@ ld a,24         ;sendCharToLCD
 rst 18H
 ```
 
-**sendStringToLCD #25 (19H)**
+### sendStringToLCD #25 (19H)
 Send a string of characters to the GLCD.  Prints a string pointed by DE at
 the current cursor.   It stops printing and returns when either a CR is
 printed or when the next byte is the same as what is in register C.
@@ -1777,7 +1777,7 @@ rst 18H
 text: .db "Hello TEC-1G!",0
 ```
 
-**sendRegToLCD #26 (1AH)**
+### sendRegToLCD #26 (1AH)
 Display a byte or register in ASCII on the GLCD at the current cursor
 - Input: C = byte to convert and display
 - Destroy: ALL
@@ -1789,7 +1789,7 @@ ld c,7BH        ;display '7B'
 ld a,26         ;sendRegToLCD
 rst 18H
 ```
-**sendHLToLCD #27 (1BH)**
+### sendHLToLCD #27 (1BH)
 Display the register HL in ASCII on the GLCD at the current cursor
 - Input: HL = 2-byte register to convert and display
 - Destroy: ALL
@@ -1799,7 +1799,7 @@ ld hl,0A6CH     ;display '0A6C'
 ld a,27         ;sendHLToLCD
 rst 18H
 ```
-**setCursor #28 (1CH)**
+### setCursor #28 (1CH)
 Set the Graphic cursor position for Terminal Emulation.  Update is ignored
 if either X,Y input is out of bounds.
 - Input: `B` = X position in pixels (0-127)
@@ -1812,14 +1812,14 @@ ld a,28         ;setCursor
 rst 18H
 ```
 
-**getCursor #29 (1DH)**
+### getCursor #29 (1DH)
 Get the current cursor position
 
 - Input: none
 - Output: `B` = X position in pixels (0-127)
 - Output: `C` = Y position in pixels (0-63)
 
-**displayCursor #30 (1EH)**
+### displayCursor #30 (1EH)
 Turn the cursor ON or OFF.  Default is Cursor ON
 - Input: C = 0, Turn cursor on, C=non zero, turn cursor off
 - Destroy: ALL
