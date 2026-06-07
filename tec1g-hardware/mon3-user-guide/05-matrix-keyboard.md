@@ -19,6 +19,7 @@ left of the PCB.  How your Keyboard PCB is designed might affect which
 pins can be connected.  Please view the TEC-1G Schematic for information
 on pin configuration.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-17-figure-1.jpg)
 
 ## Activation
 
@@ -39,7 +40,5 @@ The Keyboard map to Hex Keypad is as follows:
 
 The full range of keys can be accessed and converted when developing
 programs via the matrixScan and matrixToASCII API routines.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-17-figure-1.jpg)
 
 [← Data Entry Mode](04-data-entry-mode.md) | [Guide](index.md) | [Debugging Programs →](06-debugging-programs.md)
