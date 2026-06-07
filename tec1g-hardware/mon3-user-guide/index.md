@@ -26,7 +26,7 @@ The version of this document matches the monitor's binary file version. For exam
 
 MON-3 provides the operating environment for the TEC-1G: reset behaviour, the main menu, data entry mode, debugging support, terminal monitor, API calls, add-on interfaces, drive access, quick-start programs, and hardware reference material.
 
-## Detailed Contents
+## Table of Contents
 
 1. [Basic Operation](01-basic-operation.md)
    - [Cold Reset](01-basic-operation.md#cold-reset)
