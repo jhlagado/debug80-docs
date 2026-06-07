@@ -1247,11 +1247,10 @@ TEC-DECK Graphical LCD PCB Add-On.  If the Graphical LCD is installed on
 the TEC-1G via the TEC-DECK headers, special GLCD API calls can be used
 to interface with the GLCD.  The library is for GLCDs with the ST7920 chip.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-57-figure-1.jpg)
 
 The GLCD library contains a variety of routines that can produce simple
 shapes and lines. These include text, lines, rectangles, circles and pixels.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-57-figure-1.jpg)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-57-figure-2.png)
 
