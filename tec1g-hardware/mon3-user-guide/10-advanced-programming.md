@@ -1309,8 +1309,6 @@ the screen.  The above example adheres to these principles.
 
 ## GLCD API Call List
 
-**Core GLCD Calls**
-
 | Routine | # | 0x |
 | --- | ---: | --- |
 | `initLCD` | 0 | 0 |
@@ -1330,11 +1328,6 @@ the screen.  The above example adheres to these principles.
 | `printChars` | 14 | 0E |
 | `delayUS` | 15 | 0F |
 | `delayMS` | 16 | 10 |
-
-**Additional GLCD Calls**
-
-| Routine | # | 0x |
-| --- | ---: | --- |
 | `setBufClear` | 17 | 11 |
 | `setBufNoClear` | 18 | 12 |
 | `clearPixel` | 19 | 13 |
