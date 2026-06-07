@@ -573,14 +573,9 @@ bytes.  This routine is a subroutine in the _sendHex routine.
 - Input: `B` = number of bytes to display
 - Input: `HL` = start address of data dump
 - Input: `DE` = address of string destination
-- Output: `DE` = zero-terminated address one after the last ASCII entry
+- Output: `DE` = zero-terminated address one after the last ASCII
+  entry i.e. `"4000: 23 34 45 56 78 9A BC DE",0`
 - Destroys: `A`, `HL`; `HL` moves to the next address after the last byte
-
-Example output string:
-
-```text
-"4000: 23 34 45 56 78 9A BC DE",0
-```
 
 **stringToSerial #45 (2DH)**
 ASCII string to FTDI Serial Port.  Writes a string (text) to the serial port
