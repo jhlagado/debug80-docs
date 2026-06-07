@@ -191,11 +191,10 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 : Tests the selected keyboard. The last pressed key's scancode appears on the 7-segment displays. Fn is displayed with bit 5 set. Matrix keypad keys supported by MON3, not the full matrix keyset, are returned if MATRIX mode is enabled. Pressing the <span class="mon3-key-emphasis">ADDR</span> key exits to TMON.
 
 `FILL xxxx yyyy nn`
-: Fills memory between address `xxxx` and `yyyy` with data `nn`. The fill range must be at least 2 bytes long.
-
-<div class="mon3-warning" markdown="1">
-**Caution:** No safety checks are done by `FILL`. Any area of memory, including the stack, program code or data, could be overwritten. This does not apply if Protect Mode is on.
-</div>
+: Fill memory between address `xxxx` and `yyyy` with data `nn`. **note:** Fill range
+  must be at least 2 bytes long. No checks for safety are done - use with
+  caution, as any area of memory, including the stack, program code or data
+  could be overwritten. This does not apply if Protect Mode is on.
 
 `PRINT your-text-here`
 : Echoes `your-text-here` back to the serial terminal.
