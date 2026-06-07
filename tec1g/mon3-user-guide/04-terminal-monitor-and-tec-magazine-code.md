@@ -2,7 +2,7 @@
 layout: default
 title: "Terminal Monitor and TEC Magazine Code"
 parent: "MON-3 User Guide"
-grand_parent: "TEC-1G Hardware"
+grand_parent: "TEC-1G"
 nav_order: 4
 has_toc: true
 ---
@@ -201,7 +201,7 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 `PRINT your-text-here`
 : Echoes `your-text-here` back to the serial terminal.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-26-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-26-figure-1.png)
 
 *Cartoon credit: John Hardy and Ken Stone, TE Issue 10, 1983.*
 
@@ -236,7 +236,7 @@ when a keypad press is required.
 Here is an example of magazine code at <span class="mon3-address-emphasis">0800H</span> with key input converted to
 use Mon3 at RAM address <span class="mon3-address-emphasis">4000H</span>. The code in RED has been modified.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-27-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-27-figure-1.png)
 
 ```asm
 LD A,80H      4000     3E 80

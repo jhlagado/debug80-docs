@@ -1,16 +1,16 @@
 ---
 layout: default
 title: "MON-3 User Guide"
-parent: "TEC-1G Hardware"
+parent: "TEC-1G"
 nav_order: 1
 has_children: true
 has_toc: false
 author: "Brian Chiha"
 ---
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-01-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-01-figure-1.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-01-figure-2.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-01-figure-2.jpg)
 
 # MON-3 User Guide
 

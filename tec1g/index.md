@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "TEC-1G Hardware"
+title: "TEC-1G"
 nav_order: 8
 has_children: true
 has_toc: true
 ---
 
-# TEC-1G Hardware
+# TEC-1G
 
 This section collects documentation for the TEC-1G hardware platform: the board, monitor ROM, front-panel devices, expansion hardware, transfer workflow, and reference material that supports programming the machine directly.
 

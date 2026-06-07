@@ -2,7 +2,7 @@
 layout: default
 title: "Hard Drive Access"
 parent: "MON-3 User Guide"
-grand_parent: "TEC-1G Hardware"
+grand_parent: "TEC-1G"
 nav_order: 6
 has_toc: true
 ---
@@ -18,7 +18,7 @@ board connects a Micro SD card and uses the General Purpose IO port.  The
 PATA board connects a PATA laptop hard drive or a Compact Flash card
 and uses the TEC Deck connector.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-73-figure-1.jpg)
 
 In terms of the particular medium used to store files, there are a few things to note:
 
@@ -26,7 +26,7 @@ In terms of the particular medium used to store files, there are a few things to
 - Mon3 looks at the root directory for files. A maximum of 49 files can be read from the drive.
 - Only short name files are displayed. Short file names use up to 8 characters for the file name and 3 for the extension. For example, `INVADERS.HEX`. If a file has a longer name, the FAT32 system automatically creates a shortened version.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-2.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-73-figure-2.jpg)
 
 With FAT32, files can be seamlessly copied from your PC/MAC to the drive.
 A USB to drive reader is required, which can be easily found.
@@ -47,7 +47,7 @@ In the Main Menu, select DRIVE ACCESS.  A menu will be displayed with
 three options.  Catalog, Save Session and Load Session.   These options also
 have shortcuts in Data Entry mode.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-74-figure-1.png)
 
 ### Catalog
 
@@ -55,7 +55,7 @@ Catalog will display a list of readable files in the root directory of the drive
 Catalog can also be access by from Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-F</span>.  If
 Mon3 finds files on the drive, they will be displayed on the LCD screen.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-74-figure-2.png)
 
 Use <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> to select the file to load and <span class="mon3-key-emphasis">GO</span> to load the file.  <span class="mon3-key-emphasis">AD</span> will exit
 back to the Menu.  If the file has the extension *.HEX, it is assumed that this
@@ -63,7 +63,7 @@ file is in Intel Hex format and it will automatically convert the file to binary
 prior to loading.  Any other extension will ask for a Start Address as to
 where the file is to be loaded at.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-75-figure-1.png)
 
 See the Useful Links section below on how to load your drive with ready to
 run TEC-1G files.
@@ -99,7 +99,7 @@ access in Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-7</span
 
 While the drive is being accessed, the LCD will display the current progress.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-76-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-76-figure-1.png)
 
 ### Error Messages
 

@@ -2,7 +2,7 @@
 layout: default
 title: "Appendix and Useful Links"
 parent: "MON-3 User Guide"
-grand_parent: "TEC-1G Hardware"
+grand_parent: "TEC-1G"
 nav_order: 8
 has_toc: true
 ---
@@ -59,21 +59,21 @@ same but also check for the LCD busy state.  If using direct port
 instructions, the LCD busy flag is to be checked prior to the instruction call.
 The example code provided uses the API routines.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-88-figure-1.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-2.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-88-figure-2.jpg)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-3.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-88-figure-3.jpg)
 
 ## Character Table
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-89-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-89-figure-1.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-89-figure-2.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-89-figure-2.jpg)
 
 ## Example Using CGRAM and DDRAM
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-90-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-90-figure-2.png)
 
 ```asm
 _stringToLCD   .equ  13
@@ -177,18 +177,18 @@ CHAR TABLE:
 The connector diagrams below cover the Expander Socket, General Purpose
 I/O, Z80 Bus Connector and TEC Deck Connectors. Note: pin 28 is `RD`.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-92-figure-1.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-92-figure-2.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-3.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-92-figure-3.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-4.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-92-figure-4.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-5.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-92-figure-5.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-6.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-92-figure-6.png)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-92-figure-7.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-92-figure-7.png)
 
 [← Quick Start Programs](07-quick-start-programs.md) | [Guide](index.md)

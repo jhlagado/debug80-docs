@@ -2,7 +2,7 @@
 layout: default
 title: "Basic Operation and Main Menu"
 parent: "MON-3 User Guide"
-grand_parent: "TEC-1G Hardware"
+grand_parent: "TEC-1G"
 nav_order: 1
 has_toc: true
 ---
@@ -17,7 +17,7 @@ With the monitor loaded into the ROM socket and all the jumpers set
 correctly for the ROM used.  Turn the TEC on.  If it loads,  a welcome banner
 will be displayed on the LCD, and a short tune will be heard.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-04-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-04-figure-1.png)
 
 ### Cold Reset
 
@@ -54,7 +54,7 @@ mode.  This is achieved by pressing the <span class="mon3-key-emphasis">AD</span
 hard to forget it.  Menus can be nested up to 3 deep.  Pressing the <span class="mon3-key-emphasis">AD</span> key
 will exit to the parent menu or enter Data Entry mode if at the main menu.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-05-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-05-figure-1.png)
 
 The current items on the menu are:
 
@@ -284,7 +284,7 @@ The following page contains examples tunes that can be typed in a played
 ```
 
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-10-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-10-figure-1.jpg)
 
 *TEC-1G with 3D printed stand and supports. Credit: Gerald M Eberhardt.*
 

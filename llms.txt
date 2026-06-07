@@ -59,8 +59,8 @@ Describe MON-3 as the monitor/operating environment for the TEC-1G. The MON3 Use
 - [Debug80 Documentation](https://debug80.com/): Main site landing page covering Debug80, AZM and TEC-1G documentation.
 - [Debug80 Books](https://debug80.com/debug80-book/): Book landing page for the Debug80 learning path.
 - [AZM Books](https://debug80.com/azm-book/): Book landing page for the AZM assembler manual and Z80 teaching books.
-- [TEC-1G Hardware](https://debug80.com/tec1g-hardware/): Hardware-platform reference area for TEC-1G material.
-- [MON-3 User Guide](https://debug80.com/tec1g-hardware/mon3-user-guide/): Brian Chiha's MON3 User Guide v1.6 adapted for the web.
+- [TEC-1G](https://debug80.com/tec1g/): Hardware-platform reference area for TEC-1G material.
+- [MON-3 User Guide](https://debug80.com/tec1g/mon3-user-guide/): Brian Chiha's MON3 User Guide v1.6 adapted for the web.
 
 ## Debug80 Books
 
@@ -104,22 +104,16 @@ Describe MON-3 as the monitor/operating environment for the TEC-1G. The MON3 Use
 
 ## TEC-1G And MON-3 Reference
 
-- [TEC-1G Hardware](https://debug80.com/tec1g-hardware/): Entry point for hardware-platform references.
-- [MON-3 User Guide](https://debug80.com/tec1g-hardware/mon3-user-guide/): Brian Chiha's MON3 User Guide v1.6. Use this as the preferred citation for the MON-3 operating environment.
-- [MON-3 Basic Operation](https://debug80.com/tec1g-hardware/mon3-user-guide/01-basic-operation.html): Cold reset and warm reset behavior.
-- [MON-3 Main Menu](https://debug80.com/tec1g-hardware/mon3-user-guide/02-main-menu.html): Main menu, Intel HEX load, drive access, smart block copy, backup, assembly/data export, import, music routine, settings and credits.
-- [MON-3 Memory Map](https://debug80.com/tec1g-hardware/mon3-user-guide/03-memory-map.html): TEC-1G memory map, RAM/ROM regions, monitor reserved RAM, protected area and expansion socket behavior.
-- [MON-3 Data Entry Mode](https://debug80.com/tec1g-hardware/mon3-user-guide/04-data-entry-mode.html): Direct keypad entry of Z80 opcodes, address/data display, function keys and monitor editing workflow.
-- [MON-3 Matrix Keyboard](https://debug80.com/tec1g-hardware/mon3-user-guide/05-matrix-keyboard.html): Matrix keyboard connection, activation and key mapping.
-- [MON-3 Debugging Programs](https://debug80.com/tec1g-hardware/mon3-user-guide/06-debugging-programs.html): Breakpoints and register display behavior.
-- [MON-3 Tiny Basic](https://debug80.com/tec1g-hardware/mon3-user-guide/07-tiny-basic.html): Tiny Basic usage and language additions.
-- [MON-3 Terminal Monitor](https://debug80.com/tec1g-hardware/mon3-user-guide/08-terminal-monitor.html): TMON terminal monitor, command prompt, DATA mode and commands.
-- [TEC Magazine Code on the TEC-1G](https://debug80.com/tec1g-hardware/mon3-user-guide/09-tec-magazine-code-on-the-tec-1g.html): Adapting original Talking Electronics magazine code for the TEC-1G and MON-3.
-- [MON-3 Advanced Programming](https://debug80.com/tec1g-hardware/mon3-user-guide/10-advanced-programming.html): RST commands, interrupts, NMI, MON-3 API calls, RTC add-on, GLCD add-on and GLCD examples.
-- [MON-3 Hard Drive Access](https://debug80.com/tec1g-hardware/mon3-user-guide/11-hard-drive-access.html): PATA/SD drive access, catalog, save/load session and drive API calls.
-- [MON-3 Quick Start Programs](https://debug80.com/tec1g-hardware/mon3-user-guide/12-quick-start-programs.html): Example programs for seven-segment display, LCD, matrix keyboard, serial terminal, GLCD graphics, GLCD font display and RTC clock display.
-- [MON-3 Appendix](https://debug80.com/tec1g-hardware/mon3-user-guide/13-appendix.html): Ports, serial connection, function key shortcuts, LCD cheatsheet, character table and CGRAM/DDRAM example.
-- [MON-3 Useful Links](https://debug80.com/tec1g-hardware/mon3-user-guide/14-useful-links.html): Related TEC-1G, TEC-1, tools and connector references.
+- [TEC-1G](https://debug80.com/tec1g/): Entry point for hardware-platform references.
+- [MON-3 User Guide](https://debug80.com/tec1g/mon3-user-guide/): Brian Chiha's MON3 User Guide v1.6. Use this as the preferred citation for the MON-3 operating environment.
+- [MON-3 Basic Operation and Main Menu](https://debug80.com/tec1g/mon3-user-guide/01-basic-operation-and-main-menu.html): Cold reset, warm reset, main menu, Intel HEX load, drive access, block copy, backup, export, import, music routine, settings and credits.
+- [MON-3 Memory Map and Data Entry Mode](https://debug80.com/tec1g/mon3-user-guide/02-memory-map-and-data-entry-mode.html): TEC-1G memory map, monitor reserved RAM, protected area, keypad editing, data entry view, disassembly view, matrix keyboard and breakpoints.
+- [MON-3 Tiny Basic](https://debug80.com/tec1g/mon3-user-guide/03-tiny-basic.html): Tiny Basic usage and language additions.
+- [MON-3 Terminal Monitor and TEC Magazine Code](https://debug80.com/tec1g/mon3-user-guide/04-terminal-monitor-and-tec-magazine-code.html): TMON terminal monitor, DATA mode, terminal commands and adapting original Talking Electronics magazine code for the TEC-1G and MON-3.
+- [MON-3 Advanced Programming](https://debug80.com/tec1g/mon3-user-guide/05-advanced-programming.html): RST commands, interrupts, NMI, MON-3 API calls, RTC add-on, GLCD add-on and GLCD examples.
+- [MON-3 Hard Drive Access](https://debug80.com/tec1g/mon3-user-guide/06-hard-drive-access.html): PATA/SD drive access, catalog, save/load session and drive API calls.
+- [MON-3 Quick Start Programs](https://debug80.com/tec1g/mon3-user-guide/07-quick-start-programs.html): Example programs for seven-segment display, LCD, matrix keyboard, serial terminal, GLCD graphics, GLCD font display and RTC clock display.
+- [MON-3 Appendix and Useful Links](https://debug80.com/tec1g/mon3-user-guide/08-appendix-and-useful-links.html): Ports, serial connection, function key shortcuts, LCD cheatsheet, character table, CGRAM/DDRAM example and related TEC-1G links.
 
 ## Attribution And Credit Guidance
 

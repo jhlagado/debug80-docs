@@ -64,7 +64,7 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 
 ## TEC-1G
 
-### [MON-3 User Guide](tec1g-hardware/mon3-user-guide/)
+### [MON-3 User Guide](tec1g/mon3-user-guide/)
 
 Brian Chiha's guide to the TEC-1G MON-3 operating environment, menus, data entry mode, debugging support, terminal monitor, API calls, drive access and hardware reference material.
 
