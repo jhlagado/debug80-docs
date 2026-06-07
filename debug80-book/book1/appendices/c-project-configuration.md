@@ -63,7 +63,7 @@ Debug80 can also control where it opens files:
 
 ### Profiles
 
-A profile records platform setup shared by targets. The TEC-1G / MON-3 profile identifies the platform and bundled ROM assets:
+A profile records platform setup shared by targets. The TEC-1G / MON-3 profile identifies the platform and bundled monitor assets:
 
 ```json
 "profiles": {
@@ -81,7 +81,7 @@ A profile records platform setup shared by targets. The TEC-1G / MON-3 profile i
 }
 ```
 
-If the destination file exists in the workspace, Debug80 uses it. If it is absent, Debug80 can use the bundled copy from the extension.
+Ordinary TEC-1 and TEC-1G projects use the monitor ROM supplied by Debug80. Monitor development uses a local `*.rom.asm` entry file copied by **Debug80: Copy Monitor ROM into Project**.
 
 ### Targets
 
@@ -108,7 +108,8 @@ Generated TEC-1G targets include a `tec1g` block with memory regions, applicatio
 The important user-level facts are:
 
 - TEC-1G / MON-3 user code starts at `0x4000`.
-- The ROM image comes from the bundled MON-3 profile unless you provide a workspace copy.
+- The monitor ROM comes from Debug80's bundled platform assets for ordinary projects.
+- A local monitor entry file such as `roms/tec1g/mon3/mon3.rom.asm` makes Debug80 build and load the project-local ROM source.
 - `sourceRoots` helps Debug80 resolve source paths from generated maps and bundled source material.
 
 ### AZM Options

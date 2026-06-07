@@ -47,7 +47,7 @@ Hover appears for symbols that resolve through the source map. Build the target 
 
 ## ROM Source
 
-The TEC-1G / MON-3 platform runs with monitor ROM in the emulated machine. User programs normally start at `0x4000`; reset code and monitor routines live in ROM.
+The TEC-1G / MON-3 platform runs with monitor ROM in the emulated machine. User programs normally start at `0x4000`; reset code and monitor routines live in ROM. Debug80 supplies the platform monitor ROM internally for ordinary TEC-1 and TEC-1G projects.
 
 When execution enters monitor code, the current PC may point outside your source file. Use **Debug80: Open Auxiliary Source** from the Command Palette when a monitor call changes registers unexpectedly or when the Call Stack shows an address inside ROM.
 
@@ -56,5 +56,7 @@ When execution enters monitor code, the current PC may point outside your source
 ![Auxiliary source picker showing MON-3 source files](../../assets/images/debug80-book/book1/chapter6-auxiliary-source-picker.png)
 
 Opening auxiliary source gives you the monitor code around routines such as MON-3 display, disk, clock and sound support.
+
+When you want to edit or debug the monitor itself, copy the monitor ROM source into the project. [Copy Monitor ROM Source](08-copy-monitor-rom.md) describes that workflow.
 
 [← Build Options And Source Maps](05-use-the-debug80-panel.md) | [Book 1](index.md) | [Send To TEC-1G Hardware →](07-send-to-hardware-and-keep-working.md)

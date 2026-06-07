@@ -23,6 +23,7 @@ By the end you will know how to take a Z80 program all the way to hardware, and 
 5. [Build Options And Source Maps](05-use-the-debug80-panel.md)
 6. [Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md)
 7. [Send To TEC-1G Hardware](07-send-to-hardware-and-keep-working.md)
+8. [Copy Monitor ROM Source](08-copy-monitor-rom.md)
 
 ## Appendices
 

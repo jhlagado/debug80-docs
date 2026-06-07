@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 7
 ---
 
-[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Debug Expressions →](appendices/a-debug-expressions.md)
+[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Copy Monitor ROM Source →](08-copy-monitor-rom.md)
 
 # Send To TEC-1G Hardware
 
@@ -76,4 +76,4 @@ Start with the part of the path that failed:
 - If the TEC-1G displays `ERROR`, check that the board is in Intel HEX Load mode and try the transfer again.
 - If characters appear to be missed, add transmit delay in CoolTerm.
 
-[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Appendix A — Debug Expressions →](appendices/a-debug-expressions.md)
+[← Source Navigation And ROM Source](06-artifacts-roms-and-mapping.md) | [Book 1](index.md) | [Copy Monitor ROM Source →](08-copy-monitor-rom.md)
