@@ -4,6 +4,7 @@ title: "MON-3 User Guide"
 parent: "TEC-1G"
 nav_order: 1
 has_children: true
+nav_exclude: true
 has_toc: false
 author: "Brian Chiha"
 ---

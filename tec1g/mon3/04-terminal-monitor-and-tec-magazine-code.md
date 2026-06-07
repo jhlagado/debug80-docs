@@ -4,6 +4,7 @@ title: "Terminal Monitor and TEC Magazine Code"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G"
 nav_order: 4
+nav_exclude: true
 has_toc: true
 ---
 

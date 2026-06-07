@@ -4,6 +4,7 @@ title: "Quick Start Programs"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G"
 nav_order: 9
+nav_exclude: true
 has_toc: true
 ---
 

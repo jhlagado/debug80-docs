@@ -4,6 +4,7 @@ title: "Graphical LCD Add-On"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G"
 nav_order: 7
+nav_exclude: true
 has_toc: true
 ---
 

@@ -4,6 +4,7 @@ title: "Memory Map and Data Entry Mode"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G"
 nav_order: 2
+nav_exclude: true
 has_toc: true
 ---
 

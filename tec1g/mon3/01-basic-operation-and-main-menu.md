@@ -4,6 +4,7 @@ title: "Basic Operation and Main Menu"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G"
 nav_order: 1
+nav_exclude: true
 has_toc: true
 ---
 

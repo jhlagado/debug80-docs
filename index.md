@@ -62,14 +62,6 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 
 ---
 
-## TEC-1G
-
-### [MON-3 User Guide](tec1g/mon3/)
-
-Brian Chiha's guide to the TEC-1G MON-3 operating environment, menus, data entry mode, debugging support, terminal monitor, API calls, drive access and hardware reference material.
-
----
-
 ## About TEC-1G
 
 The TEC-1G is a modern Z80 single-board learning computer designed by Mark Jelic. It is a direct descendant of the original Talking Electronics TEC-1, a 1980s Australian kit computer created to teach how microprocessors work from the machine-code level upward.
