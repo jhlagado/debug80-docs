@@ -21,8 +21,6 @@ on pin configuration.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-17-figure-1.jpg)
 
-## Activation
-
 To activate the Keyboard, The Matrix switch on the 3-DIP switch is to be
 turned on.  This activates the Matrix Keyboard and disables the onboard
 Hex Keypad (except Reset).  Mon3 only maps keys present on the TEC-1G to
