@@ -70,10 +70,10 @@ The block copy treats Data bytes as instructions and might change data
 bytes.  IE: .db C3, 23, 01 could be seen as a JP 0123 instruction.
 
 When this routine is run, it will ask for a START, END and DESTINATION
-address.  Type in the 16-bit address via the HEX PAD and use the Plus or
-Minus keys to change the selected parameter.  Press GO to run the routine.
+address.  Type in the 16-bit address via the HEX PAD and use the <span class="mon3-key-emphasis">Plus</span> or
+<span class="mon3-key-emphasis">Minus</span> keys to change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> to run the routine.
 
-Here is an example of copying 4000H-4009H to location 2000H
+Here is an example of copying <span class="mon3-address-emphasis">4000H-4009H</span> to location <span class="mon3-address-emphasis">2000H</span>
 
 Original:
 
