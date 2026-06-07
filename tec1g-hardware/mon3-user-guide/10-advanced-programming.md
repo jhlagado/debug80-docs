@@ -1485,8 +1485,6 @@ ld a,11        ;fillCircle
 rst 18H
 ```
 
-## GLCD API Text Calls
-
 ### plotToLCD #12 (0CH)
 This routine draws the Graphics Buffer or GBUF to the Graphics LCD
 screen.  It is usually called after one of the drawing routines is called.  This
@@ -1494,6 +1492,8 @@ routine must be called for any graphics to appear on the GLCD.  After
 plotting the GBUF is cleared.  Use setBufNoClear to retain the GBUF.
 - Input: nothing
 - Destroy: All
+
+## GLCD API Text Calls
 
 ### printString #13 (0DH)
 Prints ASCII text on a given row.   There are 4 text rows on the LCD screen.
