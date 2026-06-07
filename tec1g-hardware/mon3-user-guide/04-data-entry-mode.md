@@ -90,6 +90,11 @@ The routines attached to the Function Key are:
 | --- | --- | --- |
 | `Fn-AD` | Main Menu | Display the Main Menu. |
 | `Fn-0` | Save Current Address | Press `1`, `2` or `3` to save the current editing address in RAM so you can quickly jump to this location later. Three addresses can be saved. This is useful if your code is in a location other than `4000H` and the Reset button has been pressed. Press `AD` to exit the routine. The initial default address is `4000H`. |
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-15-figure-1.png)
+
+| Shortcut | Routine | Description |
+| --- | --- | --- |
 | `Fn-1`, `Fn-2`, `Fn-3` | Quick jump to Address | Move the monitor's current editing location to the saved address set by `Fn-0`. |
 | `Fn-4` | Intel Hex Load | Shortcut to the Main Menu routine. |
 | `Fn-5` | Toggle GLCD Term | Use the GLCD as a terminal. |
@@ -105,8 +110,6 @@ The routines attached to the Function Key are:
 | `Fn-Plus` | Insert Byte | Insert an NOP instruction at the current editing location and move all bytes up to max RAM by one address upwards. It will also do a Smart Block Copy to all moved bytes. This routine can add a Breakpoint (`F7`) or missing opcodes to an existing program. |
 | `Fn-Minus` | Delete Byte | Delete a byte from the current editing location and move all bytes down by one address. It will also do a Smart Block Copy to all moved bytes. |
 | `Fn-Reset` | Cold Reset | Perform a Cold Reset. This resets the TEC to its default state. |
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-15-figure-1.png)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-16-figure-1.png)
 
