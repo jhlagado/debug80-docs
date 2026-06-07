@@ -667,7 +667,7 @@ as a Select List where execution of code is to be continued.
 - Input: none.
 - Destroys: A
 
-Menu and Parameter Driver Example
+### Menu and Parameter Driver Example
 Create a Menu with 3 items.  The first item jumps to a routine which is the
 standard way to use the menu.  The second item displays a selectable list
 that saves a value in RAM and returns to the menu.  The last item will
