@@ -1258,7 +1258,7 @@ shapes and lines. These include text, lines, rectangles, circles and pixels.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-57-figure-2.png)
 
-## GLCD General Conventions
+## General Conventions
 
 The register A holds the API Call number.  All other registers except the IX
 register can be used as parameters if needed.  Executing a RST 18H or DF

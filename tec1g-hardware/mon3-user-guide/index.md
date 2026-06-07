@@ -84,7 +84,7 @@ MON-3 provides the operating environment for the TEC-1G: reset behaviour, the ma
    - [Miscellaneous Calls](10-advanced-programming.md#miscellaneous-calls)
    - [Real Time Clock (RTC) Add-On Interface](10-advanced-programming.md#real-time-clock-rtc-add-on-interface)
    - [Graphical LCD Add-On Interface](10-advanced-programming.md#graphical-lcd-add-on-interface)
-   - [GLCD General Conventions](10-advanced-programming.md#glcd-general-conventions)
+   - [General Conventions](10-advanced-programming.md#general-conventions)
    - [GLCD API Call List](10-advanced-programming.md#glcd-api-call-list)
    - [GLCD API Configure Calls](10-advanced-programming.md#glcd-api-configure-calls)
    - [GLCD API Graphics Calls](10-advanced-programming.md#glcd-api-graphics-calls)
