@@ -19,7 +19,7 @@ key.  In this mode, the 4 left seven-segment displays will show the current
 editing address, and the 2 right segments will display the byte at that
 address.
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-13-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-13-figure-1.png)
 
 The decimal place LED on the segments indicates which part, Address or
 Data, is currently enabled for direct updates.   In the picture above, the dots
