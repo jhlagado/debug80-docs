@@ -980,26 +980,30 @@ the user. The reserved Mon3 PRAM slots are:
     <tr>
       <th>Slot</th>
       <th>Reserved for</th>
-      <th>Slot</th>
-      <th>Reserved for</th>
-      <th>Slot</th>
-      <th>Reserved for</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>0-5</code></td>
       <td>Quick Jump Addresses</td>
-      <td><code>12-13</code></td>
-      <td>Baud Rate</td>
-      <td class="mon3-user-range"><code>16-29</code></td>
-      <td class="mon3-user-range">User Free RAM</td>
     </tr>
     <tr>
       <td><code>6-11</code></td>
       <td>Start/End/Dest Addresses</td>
+    </tr>
+    <tr>
+      <td><code>12-13</code></td>
+      <td>Baud Rate</td>
+    </tr>
+    <tr>
       <td><code>14-15</code></td>
       <td>Addr. Inc. / Beep</td>
+    </tr>
+    <tr class="mon3-user-range">
+      <td><code>16-29</code></td>
+      <td>User Free RAM</td>
+    </tr>
+    <tr>
       <td><code>30</code></td>
       <td>Mon3 Checksum</td>
     </tr>
