@@ -20,7 +20,7 @@ terminal.
 ## Starting up TMON
 
 Connect a serial terminal to the TEC-1G via the FTDI to USB connector.
-Then, select Terminal Monitor from the main menu by pressing GO and
+Then, select Terminal Monitor from the main menu by pressing <span class="mon3-key-emphasis">GO</span> and
 look at the serial terminal.
 
 
@@ -46,7 +46,7 @@ commands interactively and the results are displayed on the terminal.
 All interactions with TMON use HEX format - so a byte is 00 to FF, etc. The
 "h" or "0x" is omitted for brevity.
 
-Typically, the ADDR key exits any interactive command, or by entering "Q"
+Typically, the <span class="mon3-key-emphasis">ADDR</span> key exits any interactive command, or by entering "Q"
 from the terminal.
 
 The above text is the default display when TMON first starts.  TMON is now
@@ -172,7 +172,7 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 : Sets auto-increment mode of CADDR. With no parameter supplied, displays the current auto-increment mode. Turning auto-increment off can be helpful for debugging or monitoring.
 
 `7SEG`
-: Displays CADDR and the memory byte on TEC 7-segment displays. The `+` and `-` keys increment or decrement CADDR. Pressing the ADDR key exits to TMON.
+: Displays CADDR and the memory byte on TEC 7-segment displays. The `+` and `-` keys increment or decrement CADDR. Pressing the <span class="mon3-key-emphasis">ADDR</span> key exits to TMON.
 
 `SMON`
 : Serial data stream monitor. Accepts serial input from the terminal and displays the HEX bytes received on screen. This is useful for debugging terminal communications and understanding control codes received from the PC, such as VT100 sequences. It also demonstrates the limitations of bit-bang serial because it cannot adequately buffer incoming bytes in real time. Try pressing an arrow key or a PC function key.
@@ -188,7 +188,7 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 : Calls the MON-3 debugger/breakpoint tool to examine register contents.
 
 `KEYTEST`
-: Tests the selected keyboard. The last pressed key's scancode appears on the 7-segment displays. Fn is displayed with bit 5 set. Matrix keypad keys supported by MON3, not the full matrix keyset, are returned if MATRIX mode is enabled. Pressing the ADDR key exits to TMON.
+: Tests the selected keyboard. The last pressed key's scancode appears on the 7-segment displays. Fn is displayed with bit 5 set. Matrix keypad keys supported by MON3, not the full matrix keyset, are returned if MATRIX mode is enabled. Pressing the <span class="mon3-key-emphasis">ADDR</span> key exits to TMON.
 
 `FILL xxxx yyyy nn`
 : Fills memory between address `xxxx` and `yyyy` with data `nn`. The fill range must be at least 2 bytes long.

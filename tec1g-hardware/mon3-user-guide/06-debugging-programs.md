@@ -17,7 +17,7 @@ Breakpoints can be inserted within a program which can help with viewing
 the state of the CPU registers.  To break the execution of your code, insert
 RST 30H or  F7 at the current address where the break should occur.
 
-An easy way to insert a byte into an existing program is to press Fn-Plus.
+An easy way to insert a byte into an existing program is to press <span class="mon3-key-emphasis">Fn-Plus</span>.
 This will insert a NOP instruction at the current address.  Then change this
 byte to F7.
 
@@ -28,9 +28,9 @@ pause and display register information on the LCD screen.
 
 The contents of the Z80 CPU registers AF, HL, BC, DE, IX, IY, the Program
 Counter and Stack Pointer are displayed.  CPU Flags are also displayed.
-Flags that are set are in Capitals.  To continue code execution press the GO
-key and to quit execution and return to the Monitor press the AD key.
-Finally, to remove an inserted Breakpoint press Fn-Minus at the address
+Flags that are set are in Capitals.  To continue code execution press the <span class="mon3-key-emphasis">GO</span>
+key and to quit execution and return to the Monitor press the <span class="mon3-key-emphasis">AD</span> key.
+Finally, to remove an inserted Breakpoint press <span class="mon3-key-emphasis">Fn-Minus</span> at the address
 where the Breakpoint is.  This will remove the breakpoint and adjust the
 code to its original state.
 

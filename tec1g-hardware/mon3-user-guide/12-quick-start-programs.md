@@ -322,7 +322,7 @@ Display a Clock on the Seven Segments
 This program requires the RTC Add-on board and will display the current
 time set on the RTC Board on the Seven Segments..  A check for 12/24 hour
 mode is done to determine how the Hours are displayed.  If in 12 hour
-mode, Bit 5 is cleared and a decimal point is inserted.  Pressing AD will quit
+mode, Bit 5 is cleared and a decimal point is inserted.  Pressing <span class="mon3-key-emphasis">AD</span> will quit
 the program.
 ```asm
 RTCPRESENT       .EQU 00H

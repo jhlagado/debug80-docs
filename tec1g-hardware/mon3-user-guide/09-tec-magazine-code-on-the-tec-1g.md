@@ -16,7 +16,7 @@ has_toc: true
 A great way to learn how to use the TEC-1G is to key in programs presented
 in the TE Magazines Issues 10 to 15. If the programs are keyed in directly,
 they probably won't work. This is because they usually start at addresses
-0800H or 0900H. These addresses are reserved for Mon3. To get the code
+<span class="mon3-address-emphasis">0800H</span> or <span class="mon3-address-emphasis">0900H</span>. These addresses are reserved for Mon3. To get the code
 working, simply update all 2-byte address references to match the address
 location of the code on the 1G.
 
@@ -37,8 +37,8 @@ when a keypad press is required.
 
 ## Conversion Example
 
-Here is an example of magazine code at 0800H with key input converted to
-use Mon3 at RAM address 4000H. The code in RED has been modified.
+Here is an example of magazine code at <span class="mon3-address-emphasis">0800H</span> with key input converted to
+use Mon3 at RAM address <span class="mon3-address-emphasis">4000H</span>. The code in RED has been modified.
 
 ```asm
 LD A,80H      4000     3E 80

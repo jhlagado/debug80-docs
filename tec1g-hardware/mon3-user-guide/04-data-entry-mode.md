@@ -14,7 +14,7 @@ has_toc: true
 ## Basic Operation
 
 Data Entry Mode allows the user to enter Z80 Op Codes directly into the
-TEC.  To access Data Entry Mode from the Main Menu, simply press the AD
+TEC.  To access Data Entry Mode from the Main Menu, simply press the <span class="mon3-key-emphasis">AD</span>
 key.  In this mode, the 4 left seven-segment displays will show the current
 editing address, and the 2 right segments will display the byte at that
 address.
@@ -25,23 +25,23 @@ The decimal place LED on the segments indicates which part, Address or
 Data, is currently enabled for direct updates.   In the picture above, the dots
 are on the Data segments.
 
-The initial starting address is 4000H.   This address was chosen as it's within
+The initial starting address is <span class="mon3-address-emphasis">4000H</span>.   This address was chosen as it's within
 the Protect RAM area.
 
-To update a byte at an address, simply use the 0-F keys on the keypad.
+To update a byte at an address, simply use the <span class="mon3-key-emphasis">0-F</span> keys on the keypad.
 After the byte has been entered, by default when the next byte is keyed,
 the current editing address will automatically move to the next address
-location.  This saves the user from pressing the Plus key after each byte is
+location.  This saves the user from pressing the <span class="mon3-key-emphasis">Plus</span> key after each byte is
 added.  This option can be switched off in the Settings menu.
 
-To navigate to another address, press the Plus or Minus key.  Or press the
-AD key.  When using the AD key, the decimal place dots will move to the
+To navigate to another address, press the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> key.  Or press the
+<span class="mon3-key-emphasis">AD</span> key.  When using the <span class="mon3-key-emphasis">AD</span> key, the decimal place dots will move to the
 address segments, indicating that the address field is updatable.  Key a
-new 16-bit address using the 0-F keys.  Press the AD key to move back to
+new 16-bit address using the <span class="mon3-key-emphasis">0-F</span> keys.  Press the <span class="mon3-key-emphasis">AD</span> key to move back to
 data updating mode.
 
 And finally, to execute code, navigate to the address where the code starts
-and press the GO key.  Protect mode will be honoured if switched on.  If the
+and press the <span class="mon3-key-emphasis">GO</span> key.  Protect mode will be honoured if switched on.  If the
 code ends with a RET instruction (C9), execution will cleanly exit back to the
 monitor.  The LCD screen will display the code start address while running.
 
@@ -53,11 +53,11 @@ The one light will indicate which Nibble (half byte) has been entered.   This
 will help know if the whole byte has been entered or not.
 
 If a mistake is made during data entry and the byte is to be re-entered.  To
-stop the address from automatically incrementing, press the AD key twice.
+stop the address from automatically incrementing, press the <span class="mon3-key-emphasis">AD</span> key twice.
 This will reset the Nibble counter and allow a new byte to be entered.
 
 If any key is held down, after a short period, the key will automatically
-repeat.  This is mostly useful while holding down the Plus or Minus key to
+repeat.  This is mostly useful while holding down the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> key to
 quickly move to a new address.  But can also be used to populate memory
 with 00 or FF or anything else.
 

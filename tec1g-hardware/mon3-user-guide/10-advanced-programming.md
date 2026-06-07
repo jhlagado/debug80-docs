@@ -42,7 +42,7 @@ interrupt and then resume code execution.  This is done in software with
 Interrupts Enabled (EI) and Interrupt Mode 1 (IM 1) and by hardware when
 the INT line on the CPU goes low.  Mon3 ignores interrupts, but a
 user-defined routine can be provided to handle the interrupt.  To do this,
-the address of the interrupt routine is to be placed at RAM address 0892H.
+the address of the interrupt routine is to be placed at RAM address <span class="mon3-address-emphasis">0892H</span>.
 
 ```asm
        ei                 ; Enable interrupts
@@ -65,7 +65,7 @@ This code will sound a bell tone in the speaker when an interrupt occurs.
 Non-Maskable Interrupts occur when the NMI line on the CPU goes low.
 These interrupts will always trigger.  Mon3 ignores the NMI line, but a
 user-defined routine can be provided to handle the interrupt.  To do this,
-the address of the interrupt routine is to be placed at RAM address 0894H.
+the address of the interrupt routine is to be placed at RAM address <span class="mon3-address-emphasis">0894H</span>.
 
 ```asm
      ld hl,myNMI            ; NMI routine
@@ -290,7 +290,7 @@ Compare two string
 - Destroys: `HL`, `DE`, `A`, `BC`
 
 **HLToString #8 (08H)**
-Convert HL to ASCII string. IE: 2C0FH -> "2C0F"
+Convert HL to ASCII string. IE: <span class="mon3-address-emphasis">2C0FH</span> -> "2C0F"
 - Input: `HL` = value to convert
 - Input: `DE` = address of string destination (4 bytes)
 - Output: `DE` = address one after last ASCII entry
@@ -603,15 +603,15 @@ TEXT: .db "HELLO TEC!",0
 
 **menuDriver #31 (1FH)**
 Menu driver for user programs.  Creates a selectable custom menu/list.
-Keys: Go = Select menu item, AD = Exit Menu, Plus/Minus = Navigate menu.
-If a menu item is selected by pressing Go, a jump is performed to the
+Keys: <span class="mon3-key-emphasis">Go</span> = Select menu item, <span class="mon3-key-emphasis">AD</span> = Exit Menu, <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> = Navigate menu.
+If a menu item is selected by pressing <span class="mon3-key-emphasis">Go</span>, a jump is performed to the
 menu routine address (see example below).  If the user routine ends with a
 RET instruction, control will be brought back to the menu.  There is no need
 to call the menuDriver again after the routine returns.
 
 When an item is selected, the routine that is associated with the menu
 entry will be called.  The selected menu item number will be stored at RAM
-address 0897H.  Items start from 0.
+address <span class="mon3-address-emphasis">0897H</span>.  Items start from 0.
 
 If after the RET the menu is to be removed or popped off, then call the
 menuPop routine prior to the RET.  This will return control to the previous
@@ -640,10 +640,10 @@ of exactly 6 bytes.  Menu configuration is as follows.
 
 **paramDriver #32 (20H)**
 Parameter data entry driver.  Creates a list of editable two-byte parameters.
-Keys: Go = Continue, AD = Exit, Plus/Minus = Navigate, 0-F = enter values
+Keys: <span class="mon3-key-emphasis">Go</span> = Continue, <span class="mon3-key-emphasis">AD</span> = Exit, <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> = Navigate, <span class="mon3-key-emphasis">0-F</span> = enter values
 - Input: HL = Pointer to Parameter configuration.
 
-Once the Go key is pressed, code will continue after the API call.  The
+Once the <span class="mon3-key-emphasis">Go</span> key is pressed, code will continue after the API call.  The
 parameter view on the LCD will automatically be removed and the LCD will
 display the prior view to the parameter call.  There is no need to call
 menuPop to restore the previous LCD view.
@@ -670,7 +670,7 @@ Text>, [<Param Text Label>, <Param RAM Address>]+
 **menuPop #47 (2FH)**
 Replace the current menu with its parent menu if any.  If menus have been
 nested, the parent menu will become the active menu.  This is the same as
-pressing the AD key but done in software.  If no parent menu exists then
+pressing the <span class="mon3-key-emphasis">AD</span> key but done in software.  If no parent menu exists then
 the Monitor mode is changed to Data Entry View.  Useful if using the menu
 as a Select List where execution of code is to be continued.
 - Input: none.
@@ -888,7 +888,7 @@ Toggle Caps Lock state. On/Off or vice versa
 
 
 **timeDelay #33 (21H)**
-A 16-bit delay routine.  An input delay of 2000H is approximately 50ms.
+A 16-bit delay routine.  An input delay of <span class="mon3-address-emphasis">2000H</span> is approximately 50ms.
 - Input: HL = delay amount
 - Destroys: none
 
@@ -994,8 +994,8 @@ To initially set the RTC, a convenient RTC Setup routine has been provided
 in the Settings item in the Main Menu.  Select "Configure RTC".  Press the
 following keys to update the time/date: 0 = Hour, 1 = Minute, 2 = Second, 3 =
 12/24h, 4 = Day of week, 5 = Day, 6 = Month, 7 = Year, 8 = View RTC PRAM, F =
-Reset RTC, AD = Exit.  When viewing RTC PRAM data, Plus = Move Down,
-Minus = Move Up, AD = Exit back to RTC Setup.
+Reset RTC, <span class="mon3-key-emphasis">AD</span> = Exit.  When viewing RTC PRAM data, <span class="mon3-key-emphasis">Plus</span> = Move Down,
+<span class="mon3-key-emphasis">Minus</span> = Move Up, <span class="mon3-key-emphasis">AD</span> = Exit back to RTC Setup.
 
 Mon3 will automatically utilise the internal PRAM to retain some settings
 when the TEC-1G is powered down. 14 free bytes are available to be used by
@@ -1256,9 +1256,9 @@ Standalone application that assists with configuring the RTC for initial use.
 The LCD displays the current RTC time and date with the instructions.
 
 Keys: 0 = Hour, 1 = Minute, 2 = Second, 3 = 12/24h, 4 = Day of week, 5 = Day, 6
-= Month, 7 = Year, 8 = View RTC PRAM, F = Reset RTC, AD = Exit.
+= Month, 7 = Year, 8 = View RTC PRAM, F = Reset RTC, <span class="mon3-key-emphasis">AD</span> = Exit.
 
-When viewing RTC RAM data, Plus = Move Down, Minus = Move Up, AD =
+When viewing RTC RAM data, <span class="mon3-key-emphasis">Plus</span> = Move Down, <span class="mon3-key-emphasis">Minus</span> = Move Up, <span class="mon3-key-emphasis">AD</span> =
 Exit back to RTC Setup.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-56-figure-1.png)
@@ -1837,7 +1837,7 @@ Turn the cursor ON or OFF.  Default is Cursor ON
 
 Provided in the TEC-1G GitHub repository are three GLCD programs.  The
 programs have already been converted to Intel Hex files and are ready to
-load onto the TEC.  All programs start at address 2000H.  Source code for all
+load onto the TEC.  All programs start at address <span class="mon3-address-emphasis">2000H</span>.  Source code for all
 programs are provided and can be changed and studied.
 
 The TEC-1G GitHub account is here: https://github.com/MarkJelic/TEC-1G
@@ -1846,14 +1846,14 @@ and the GLCD examples are in the TEC-Deck/Graphical_LCD directory.
 lcd_3d_demo
 Draw 3D wireframe graphics and rotate them.  This program requires
 keypad input to rotate the objects.  Buttons 4,8 and C rotate the object in
-the 3-axis.  Plus and Minus will zoom the object in and out.  0 will return to
-the main menu.  Pressing GO will exit the program
+the 3-axis.  <span class="mon3-key-emphasis">Plus</span> and <span class="mon3-key-emphasis">Minus</span> will zoom the object in and out.  0 will return to
+the main menu.  Pressing <span class="mon3-key-emphasis">GO</span> will exit the program
 
 lcd_mad_program
 Draw Alfred E. Neuman's face.  This program draws lines between two
 points and creates the face of the Mad Magazine mascot.  It draws one line
 at a time, similar to how it would display on an Apple ][.  But if the program
-is run at 2022H it will generate instantly.  https://meatfighter.com/mad/
+is run at <span class="mon3-address-emphasis">2022H</span> it will generate instantly.  https://meatfighter.com/mad/
 
 lcd_maze_gen
 Create a maze.  This program generates a maze using a recursive

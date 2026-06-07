@@ -21,7 +21,7 @@ default uses the FTDI to USB serial terminal connection.  If a GLCD Add-On
 board is installed, the GLCD can be used as a terminal along with a Matrix
 Keyboard.  Go to Settings -> Toggle GLCD Term to enable.  Some
 additional commands have been implemented to interact with the TEC-1G
-hardware.  Tiny Basic will use RAM address 0900H-3FFFH
+hardware.  Tiny Basic will use RAM address <span class="mon3-address-emphasis">0900H-3FFFH</span>
 
 Functionality has been added to the Mon3 version to make it more useful
 for the TEC-1G.  Here is a list of language additions.

@@ -14,12 +14,12 @@ has_toc: true
 A menu is provided on the LCD screen to help navigate some of the
 built-in routines within the monitor.  The menu will appear on a Cold Reset.
 
-Navigating the menu should be intuitive.  Press the Plus or Minus keys to
-scroll down and up.  Press GO to run the selected routine.  A right-facing
+Navigating the menu should be intuitive.  Press the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> keys to
+scroll down and up.  Press <span class="mon3-key-emphasis">GO</span> to run the selected routine.  A right-facing
 Arrow indicates which menu item is currently selected.  Something that
 might not be obvious is how to exit the menu and change into Data Entry
-mode.  This is achieved by pressing the AD key.  Once this is known, it's
-hard to forget it.  Menus can be nested up to 3 deep.  Pressing the AD key
+mode.  This is achieved by pressing the <span class="mon3-key-emphasis">AD</span> key.  Once this is known, it's
+hard to forget it.  Menus can be nested up to 3 deep.  Pressing the <span class="mon3-key-emphasis">AD</span> key
 will exit to the parent menu or enter Data Entry mode if at the main menu.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-05-figure-1.png)
@@ -102,10 +102,10 @@ another.   No bytes are altered during this copy routine..  This routine is
 useful to copy data reference tables, like music data, for the music routine.
 
 When this routine is run, it will ask for a START, END and DESTINATION
-address.  Type in the 16-bit address via the HEX PAD and use the Plus or
-Minus keys to change the selected parameter.  Press GO to run the routine.
+address.  Type in the 16-bit address via the HEX PAD and use the <span class="mon3-key-emphasis">Plus</span> or
+<span class="mon3-key-emphasis">Minus</span> keys to change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> to run the routine.
 
-Here is an example of copying 4000H-4009H to location 2000H
+Here is an example of copying <span class="mon3-address-emphasis">4000H-4009H</span> to location <span class="mon3-address-emphasis">2000H</span>
 
 Original:
 
@@ -135,8 +135,8 @@ terminal.  This is a great way to view the code that is on the TEC in a
 readable format and could be passed into a Z80 compiler on a PC.
 
 When this routine is run, it will ask for a START and END address.  Type in
-the 16-bit address via the HEX PAD and use the Plus or Minus keys to
-change the selected parameter.  Press GO to run the routine.
+the 16-bit address via the HEX PAD and use the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> keys to
+change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> to run the routine.
 
 Here is an example of its output.
 ```asm
@@ -156,8 +156,8 @@ can only be properly viewed through a HEX file viewer or HEX dump
 routine.
 
 When this routine is run, it will ask for a START and END address.  Type in
-the 16-bit address via the HEX PAD and use the Plus or Minus keys to
-change the selected parameter.  Press GO to run the routine.
+the 16-bit address via the HEX PAD and use the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> keys to
+change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> to run the routine.
 
 ## Export Hex Dump
 
@@ -165,8 +165,8 @@ This routine displays binary data in a readable format to a serial terminal
 connected via an FTDI to USB adaptor.  It will display up to 16 bytes per line.
 
 When this routine is run, it will ask for a START and END address.  Type in
-the 16-bit address via the HEX PAD and use the Plus or Minus keys to
-change the selected parameter.  Press GO to run the routine.
+the 16-bit address via the HEX PAD and use the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> keys to
+change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> to run the routine.
 
 Here is an example of its output.
 
@@ -186,8 +186,8 @@ load binary data to a given address on the TEC.
 
 When this routine is executed, it will ask for a START and END address.  This
 address range must match the size of the binary file being sent.  Type in
-the 16-bit address via the HEX PAD and use the Plus or Minus keys to
-change the selected parameter.  Press GO to run the routine.  The TEC will
+the 16-bit address via the HEX PAD and use the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> keys to
+change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> to run the routine.  The TEC will
 wait for data to be received and will end when END-START+1 bytes are
 received.
 
@@ -198,7 +198,7 @@ Hardy's Mon1 routine adjusted for a 4 MHz clock speed.  The routine uses
 similar input codes, making it suitable for existing tunes to be used.
 
 When this routine is executed, it will ask for a START address of the music
-data-type in the 16-bit address via the HEX PAD.  Press GO to run the
+data-type in the 16-bit address via the HEX PAD.  Press <span class="mon3-key-emphasis">GO</span> to run the
 routine.
 
 Two octaves are playable.  Here is a reference to the note code and its

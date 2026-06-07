@@ -51,11 +51,11 @@ have shortcuts in Data Entry mode.
 ### Catalog
 
 Catalog will display a list of readable files in the root directory of the drive.
-Catalog can also be access by from Data Entry mode by pressing Fn-F.  If
+Catalog can also be access by from Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-F</span>.  If
 Mon3 finds files on the drive, they will be displayed on the LCD screen.
 
 
-Use Plus/Minus to select the file to load and GO to load the file.  AD will exit
+Use <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> to select the file to load and <span class="mon3-key-emphasis">GO</span> to load the file.  <span class="mon3-key-emphasis">AD</span> will exit
 back to the Menu.  If the file has the extension *.HEX, it is assumed that this
 file is in Intel Hex format and it will automatically convert the file to binary
 prior to loading.  Any other extension will ask for a Start Address as to
@@ -89,13 +89,13 @@ statements.
 A File Not Found error will appear if Mon3 can't find the MYDATA.TEC file
 on your drive.
 
-Save Session will save normal RAM between 0000H-BFFFH and Expansion
-RAM if any between 8000H-BFFFH.  Save Session can also be access in Data
-Entry mode by pressing Fn-6.
+Save Session will save normal RAM between <span class="mon3-address-emphasis">0000H-BFFFH</span> and Expansion
+RAM if any between <span class="mon3-address-emphasis">8000H-BFFFH</span>.  Save Session can also be access in Data
+Entry mode by pressing <span class="mon3-key-emphasis">Fn-6</span>.
 
 Load Session does the reverse of Save Session.  It will ask to Confirm this
 task as it will overwrite all existing RAM data.  Load Session can also be
-access in Data Entry mode by pressing Fn-7.
+access in Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-7</span>.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
 
@@ -138,7 +138,7 @@ limitations are described below.
 ### loadFromDisk #58 (3AH)
 Catalog the files on the disk and display them on the LCD Display for
 loading.  This is the same as selecting CATALOG from the main menu or
-Fn-F from data entry mode.
+<span class="mon3-key-emphasis">Fn-F</span> from data entry mode.
    -   Input: None
    -   Destroy: ALL
 
@@ -166,7 +166,7 @@ filename: .db "TBASIC.HEX",0
 ### readSector #60 (3CH)
 Load a sector from the opened file.  Requires openFile to be called prior
 but only once.  A sector, which is 512 bytes, will be loaded at address
-0600H-07FFH.   The input is the byte address in the file.  The entire sector
+<span class="mon3-address-emphasis">0600H-07FFH</span>.   The input is the byte address in the file.  The entire sector
 where that byte is will be returned.  An error will display if the input byte is
 bigger than actual file size.
 
@@ -181,13 +181,13 @@ rst 10H
 ```
 
 This example will read the sector that contains the byte 12575H and place
-that sector in address 0600H-07FFH.
+that sector in address <span class="mon3-address-emphasis">0600H-07FFH</span>.
 
 ### writeSector #61 (3DH)
 Write a sector to an opened file.  Requires a readSector to be called first.
 The sector will be saved back to the same position in the file from the
 readSector routine.   To use this routine, firstly call the readSector routine.
-Data at address 0600H-07FFH can then be altered and a writeSector can
+Data at address <span class="mon3-address-emphasis">0600H-07FFH</span> can then be altered and a writeSector can
 be called to save the modifications back to the file.
 
    -   Input: None
