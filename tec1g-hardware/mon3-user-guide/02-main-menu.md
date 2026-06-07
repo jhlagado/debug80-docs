@@ -226,7 +226,7 @@ isn't listed will exit the routine.
 
 The following page contains examples tunes that can be typed in a played
 
-### Bealach
+### "Bealach an Doirin"—which means "The Way of the Little Oak."
 
 ```text
 06, 06, 0A, 0D, 06, 0D, 0A, 0D, 12, 16, 14, 12, 0F, 11, 12, 0F
