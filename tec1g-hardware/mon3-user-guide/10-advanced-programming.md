@@ -894,22 +894,30 @@ chapter below for details on this add-on.
 Ask a confirmation message on the LCD before proceeding.  Press 'C' to
 confirm or any other key to not confirm.
 - Input: none
-- Output: Zero Flag = set == confirmed or 'C' pressed
-- Destroy: A,HL
+- Output: `Zero Flag` = set == confirmed or 'C' pressed
+- Destroy: `A`, `HL`
 
 ### getGLCDTerm #56 (38H)
 Get GLCDTERM state.  Check if using the GLCD as a Terminal
 - Input: none
-- Output: A = GLCD Terminal state; 0 = off, FF = on
+- Output: `A` = GLCD Terminal state; 0 = off, FF = on
 
 ### setGLCDTerm #57 (39H)
 Set GLCD Terminal state
-- Input: A = Desired GLCD Terminal state; 0 = off, FF = on
-- Destroy: A
+- Input: `A` = Desired GLCD Terminal state; 0 = off, FF = on
+- Destroy: `A`
 
-loadFromDisk #58 (3AH), openFile #59 (3BH), readFile #60 (3CH),
+### loadFromDisk #58 (3AH)
+See the Hard Drive Access section for details of this routine.
+
+### openFile #59 (3BH)
+See the Hard Drive Access section for details of this routine.
+
+### readFile #60 (3CH)
+See the Hard Drive Access section for details of this routine.
+
 ### writeFile #61 (3DH)
-See the Hard Drive Access section for details of these routines.
+See the Hard Drive Access section for details of this routine.
 
 ### RGBScan #62 (3EH)
 Multiplex the 8x8 RGB Board with 3 colours, Red, Green and Blue.  Need to
@@ -1041,7 +1049,7 @@ D7        rst 10H
 
 | Routine | # | 0x |
 | --- | ---: | --- |
-| `checkDS1302` | 0 | 0 |
+| `checkDS1302` | 0 | 00 |
 | `resetDS1302` | 1 | 01 |
 | `getTime` | 2 | 02 |
 | `setTime` | 3 | 03 |
@@ -1065,16 +1073,17 @@ D7        rst 10H
 Check if a DS1302 is detectable, by verifying that the DS1302's registers
 return expected results.
 - Input: none
-- Output: Carry flag set = no RTC add-on board present
-- Destroy: A
+- Output: `Carry flag` set = no RTC add-on board present
+- Destroy: `A`
 
 ### resetDS1302 #1 (01H)
 Resets the DS1302 to a known state - clears existing Time and Calendar.
 Does not clear RTC RAM.  Sets DS1302 to 01:00.00 AM, 01/01/2000.
 - Input: none
 - Destroy: none
+
 Note: To be used only when the RTC requires a settings reset e.g. if it's not
-"ticking". Use checkDS1302 to "reset" the DS1302 to a ready state, as part of
+"ticking". Use `checkDS1302` to "reset" the DS1302 to a ready state, as part of
 program initialization.
 
 ### getTime #2 (02H)
@@ -1087,7 +1096,7 @@ depending on selected mode.
 - Destroy: `A`
 
 Note that all returned registers are BCD coded, so 10:24:36 results in
-HL=1024h, D=36h
+`HL` = `1024h`, `D` = `36h`.
 
 ### setTime #3 (03H)
 Sets the time in the RTC chip. Time is formatted in either 12 or 24 hour
@@ -1098,7 +1107,7 @@ mode, depending on selected mode.
 - Destroy: `A`, `E`
 
 The 12/24 hour mode flag is preserved.  Note that all registers are BCD
-coded, so 10:24:36 is formatted as HL=1024h, D=36h
+coded, so 10:24:36 is formatted as `HL` = `1024h`, `D` = `36h`.
 
 ### getDate #4 (04H)
 Returns the present Calendar date, month, year.
@@ -1116,7 +1125,7 @@ accepted e.g. 30 February as the DS1302 does not validate dates as
 programmed; it simply rolls over at midnight.
 - Input: `H` = date
 - Input: `L` = month
-- Input: `DE` = year 2000-2099, D is assumed to be 20h
+- Input: `DE` = year 2000-2099, `D` is assumed to be `20h`
 - Destroy: `A`
 
 Note that values returned are BCD coded.
@@ -1134,34 +1143,34 @@ to the correct string for that day.
 
 ### setDay #7 (07H)
 Sets the Day of the week. 01 = Monday, 07 = Sunday.
-- Input: D = 01-07 (Day of week)
-- Output: Carry Flag set = invalid value supplied
-- Destroy: A
+- Input: `D` = 01-07 (Day of week)
+- Output: `Carry Flag` set = invalid value supplied
+- Destroy: `A`
 
 ### get1224Mode #8 (08H)
 Reports if the RTC is currently in 12 or 24 hour mode.
 - Input: none
-- Output: A = 00H (24hr), 80H (12hr), Zero flag set
+- Output: `A` = 00H (24hr), 80H (12hr), `Zero flag` set
 - Destroy: none
 
 ### set12HrMode #9 (09H)
 Set RTC to 12 hour mode. That is, the hour is subsequently returned as
 01-12, and an AM/PM flag.
 - Input: none
-- Output: Carry Flag set = already in 12 hr mode
-- Destroy: A,D
+- Output: `Carry Flag` set = already in 12 hr mode
+- Destroy: `A`, `D`
 
 ### set24HrMode #10 (0AH)
 Set RTC to 24 hour mode (also known as Military Time). That is, the hour is
 subsequently returned as 00-23.
 - Input: none
-- Output: Carry Flag set = already in 24 hr mode
-- Destroy: A,D
+- Output: `Carry Flag` set = already in 24 hr mode
+- Destroy: `A`, `D`
 
 ### readRTCByte #11 (0BH)
 Reads a byte from the RTC PRAM.
-- Input: D = memory slot to return 0-30
-- Output: A = value stored in memory
+- Input: `D` = memory slot to return 0-30
+- Output: `A` = value stored in memory
 - Destroy: none
 
 ### writeRTCByte #12 (0CH)
@@ -1173,22 +1182,22 @@ Writes a byte to the RTC PRAM.
 ### burstRTCRead #13 (0DH)
 Reads all 31 RTC PRAM bytes and fills a user-supplied buffer with that data.
 The user buffer should be 31 bytes long.
-- Input: HL = location to write to (31 bytes)
-- Output: HL = moved to address after last byte
-- Destroy: A
+- Input: `HL` = location to write to (31 bytes)
+- Output: `HL` = moved to address after last byte
+- Destroy: `A`
 
-### binToBcd #14 (0EH)
-Converts the value in register A from BCD encoded, to binary. i.e. "23h"
-becomes "23" decimal.
-- Input: A = BCD Value to convert
-- Output: A = Binary value of BCD
+### BCDToBin #14 (0EH)
+Converts the value in register `A` from BCD encoded, to binary. i.e. `23h`
+becomes `23` decimal.
+- Input: `A` = BCD Value to convert
+- Output: `A` = Binary value of BCD
 - Destroy: none
 
-### bcdToBin #15 (0FH)
-Converts the value in register A from binary to BCD. i.e. "52" decimal
-becomes "52h".
-- Input: A = Binary Value to convert
-- Output: A = BCD value of Binary
+### binToBCD #15 (0FH)
+Converts the value in register `A` from binary to BCD. i.e. `52` decimal
+becomes `52h`.
+- Input: `A` = Binary Value to convert
+- Output: `A` = BCD value of Binary
 - Destroy: none
 
 ### formatTime #16 (10H)
