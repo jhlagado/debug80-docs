@@ -18,9 +18,6 @@ board connects a Micro SD card and uses the General Purpose IO port.  The
 PATA board connects a PATA laptop hard drive or a Compact Flash card
 and uses the TEC Deck connector.
 
-With FAT32, files can be seamlessly copied from your PC/MAC to the drive.
-A USB to drive reader is required, which can be easily found.
-
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-1.jpg)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-2.jpg)
@@ -30,6 +27,9 @@ In terms of the particular medium used to store files, there are a few things to
 - FAT32 (File Allocation Table) is the only file system Mon3 recognises. The drive must be formatted using FAT32 and be on the first MBR partition.
 - Mon3 looks at the root directory for files. A maximum of 49 files can be read from the drive.
 - Only short name files are displayed. Short file names use up to 8 characters for the file name and 3 for the extension. For example, `INVADERS.HEX`. If a file has a longer name, the FAT32 system automatically creates a shortened version.
+
+With FAT32, files can be seamlessly copied from your PC/MAC to the drive.
+A USB to drive reader is required, which can be easily found.
 
 If both GPIO and PATA boards are connected to the TEC, Mon3 will
 prioritise the GPIO board then the PATA board.  Details of the Add-on
@@ -47,6 +47,7 @@ In the Main Menu, select DRIVE ACCESS.  A menu will be displayed with
 three options.  Catalog, Save Session and Load Session.   These options also
 have shortcuts in Data Entry mode.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-1.png)
 
 ### Catalog
 
@@ -54,14 +55,11 @@ Catalog will display a list of readable files in the root directory of the drive
 Catalog can also be access by from Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-F</span>.  If
 Mon3 finds files on the drive, they will be displayed on the LCD screen.
 
-
 Use <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> to select the file to load and <span class="mon3-key-emphasis">GO</span> to load the file.  <span class="mon3-key-emphasis">AD</span> will exit
 back to the Menu.  If the file has the extension *.HEX, it is assumed that this
 file is in Intel Hex format and it will automatically convert the file to binary
 prior to loading.  Any other extension will ask for a Start Address as to
 where the file is to be loaded at.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-1.png)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-2.png)
 
