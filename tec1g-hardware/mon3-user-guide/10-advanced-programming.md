@@ -1412,8 +1412,8 @@ rst 18H
 ```
 
 ### drawLine #7 (07H)
-Draws a straight line between X1, Y1 and X2, Y2.  Uses the Bresenham Line
-drawing algorithm. http://members.chello.at/~easyfilter/bresenham.html
+Draws a straight line between X1, Y1 and X2, Y2.  Uses the
+[Bresenham Line drawing algorithm](http://members.chello.at/~easyfilter/bresenham.html).
 - Input: `B` = X1-coordinate (0-127)
 - Input: `C` = Y1-coordinate (0-63)
 - Input: `D` = X2-coordinate (0-127)
@@ -1812,7 +1812,7 @@ programs have already been converted to Intel Hex files and are ready to
 load onto the TEC.  All programs start at address <span class="mon3-address-emphasis">2000H</span>.  Source code for all
 programs are provided and can be changed and studied.
 
-The TEC-1G GitHub account is here: [https://github.com/MarkJelic/TEC-1G](https://github.com/MarkJelic/TEC-1G)
+The TEC-1G GitHub account is here: [TEC-1G GitHub repository](https://github.com/MarkJelic/TEC-1G)
 and the GLCD examples are in the TEC-Deck/Graphical_LCD directory.
 
 ### lcd_3d_demo
@@ -1825,7 +1825,7 @@ the main menu.  Pressing <span class="mon3-key-emphasis">GO</span> will exit the
 Draw Alfred E. Neuman's face.  This program draws lines between two
 points and creates the face of the Mad Magazine mascot.  It draws one line
 at a time, similar to how it would display on an Apple ][.  But if the program
-is run at <span class="mon3-address-emphasis">2022H</span> it will generate instantly.  [https://meatfighter.com/mad/](https://meatfighter.com/mad/)
+is run at <span class="mon3-address-emphasis">2022H</span> it will generate instantly.  See [Meat Fighter's Mad Magazine demo notes](https://meatfighter.com/mad/).
 
 ### lcd_maze_gen
 Create a maze.  This program generates a maze using a recursive
