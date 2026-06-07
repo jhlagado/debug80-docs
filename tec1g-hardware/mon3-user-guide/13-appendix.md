@@ -59,15 +59,16 @@ same but also check for the LCD busy state.  If using direct port
 instructions, the LCD busy flag is to be checked prior to the instruction call.
 The example code provided uses the API routines.
 
-
-To move the cursor to Row 2, Column 10 do LD A,0xC9  /  OUT (04),A
-For IN A,(04), If Bit 7 is set, then LCD is Busy. Other bits are the current Address Counter
-
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-1.png)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-2.jpg)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-88-figure-3.jpg)
+
+<div class="mon3-note">
+  <p>To move the cursor to Row 2, Column 10 do <code>LD A,0xC9</code> / <code>OUT (04),A</code>.</p>
+  <p>For <code>IN A,(04)</code>, if Bit 7 is set, then LCD is Busy. Other bits are the current Address Counter.</p>
+</div>
 
 ## Character Table
 
