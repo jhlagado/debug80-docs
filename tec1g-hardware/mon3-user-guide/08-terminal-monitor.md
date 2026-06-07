@@ -100,12 +100,12 @@ editing.
        input.
    -   Q exits data entry mode.
 
-## TMON Commands
-
 Invalid entries will be ignored.
 
 The DATA entry system is very simple and will continue to be improved in
 future versions.
+
+## TMON Commands
 
 | Command | Command | Command |
 | --- | --- | --- |
