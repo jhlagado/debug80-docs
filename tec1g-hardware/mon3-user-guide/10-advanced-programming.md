@@ -11,10 +11,10 @@ has_toc: true
 
 # Advanced Programming
 
-## RST (Restart) commands
-
 To assist when developing Z80 programs, Mon3 contains built-in
 functionality that makes it easy to interface with the TEC-1G hardware.
+
+## RST (Restart) commands
 
 RST commands on the Z80 are one-byte call commands that execute code
 at certain address locations defined by the Z80.  The following table
