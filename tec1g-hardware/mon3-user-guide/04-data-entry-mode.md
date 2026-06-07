@@ -105,12 +105,15 @@ The routines attached to the Function Key are:
 | `Fn-B` | Block Backup | Shortcut to the Main Menu routine. |
 | `Fn-C` | Smart Block Copy | Shortcut to the Main Menu routine. |
 | `Fn-D` | Disassembly View | Switch between Data Entry View and Disassembly View. Disassembly View displays the next 4 assembly instructions. To move through the instructions, press the Plus or Minus keys. Data entry can still be done in this mode if desired. |
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-16-figure-1.png)
+
+| Shortcut | Routine | Description |
+| --- | --- | --- |
 | `Fn-E` | Toggle Expand | Toggle the Expansion Socket Expand flag. This switches between the upper and lower memory of the 32Kb ROM/RAM in the expansion socket. |
 | `Fn-F` | Catalog | Catalog the Drive and list files for loading. Requires the PATA Drive or Micro SD Card Expansion boards. |
 | `Fn-Plus` | Insert Byte | Insert an NOP instruction at the current editing location and move all bytes up to max RAM by one address upwards. It will also do a Smart Block Copy to all moved bytes. This routine can add a Breakpoint (`F7`) or missing opcodes to an existing program. |
 | `Fn-Minus` | Delete Byte | Delete a byte from the current editing location and move all bytes down by one address. It will also do a Smart Block Copy to all moved bytes. |
 | `Fn-Reset` | Cold Reset | Perform a Cold Reset. This resets the TEC to its default state. |
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-16-figure-1.png)
 
 [← Memory Map](03-memory-map.md) | [Guide](index.md) | [Matrix Keyboard →](05-matrix-keyboard.md)
