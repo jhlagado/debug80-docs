@@ -11,8 +11,6 @@ has_toc: true
 
 # Data Entry Mode
 
-## Basic Operation
-
 Data Entry Mode allows the user to enter Z80 Op Codes directly into the
 TEC.  To access Data Entry Mode from the Main Menu, simply press the <span class="mon3-key-emphasis">AD</span>
 key.  In this mode, the 4 left seven-segment displays will show the current
@@ -27,6 +25,8 @@ are on the Data segments.
 
 The initial starting address is <span class="mon3-address-emphasis">4000H</span>.   This address was chosen as it's within
 the Protect RAM area.
+
+## Basic Operation
 
 To update a byte at an address, simply use the <span class="mon3-key-emphasis">0-F</span> keys on the keypad.
 After the byte has been entered, by default when the next byte is keyed,
