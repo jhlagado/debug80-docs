@@ -55,13 +55,13 @@ Catalog will display a list of readable files in the root directory of the drive
 Catalog can also be access by from Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-F</span>.  If
 Mon3 finds files on the drive, they will be displayed on the LCD screen.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-2.png)
+
 Use <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> to select the file to load and <span class="mon3-key-emphasis">GO</span> to load the file.  <span class="mon3-key-emphasis">AD</span> will exit
 back to the Menu.  If the file has the extension *.HEX, it is assumed that this
 file is in Intel Hex format and it will automatically convert the file to binary
 prior to loading.  Any other extension will ask for a Start Address as to
 where the file is to be loaded at.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-74-figure-2.png)
 
 ### Save / Load Session
 
