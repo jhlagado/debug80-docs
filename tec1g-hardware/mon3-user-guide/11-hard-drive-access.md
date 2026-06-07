@@ -63,6 +63,8 @@ file is in Intel Hex format and it will automatically convert the file to binary
 prior to loading.  Any other extension will ask for a Start Address as to
 where the file is to be loaded at.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
+
 ### Save / Load Session
 
 See the Useful Links section below on how to load your drive with ready to
@@ -94,8 +96,6 @@ Entry mode by pressing <span class="mon3-key-emphasis">Fn-6</span>.
 Load Session does the reverse of Save Session.  It will ask to Confirm this
 task as it will overwrite all existing RAM data.  Load Session can also be
 access in Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-7</span>.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
 
 ### Error Messages
 
