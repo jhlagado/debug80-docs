@@ -130,7 +130,11 @@ loop2:
 ; All done, wait for key press and exit
 4032 CF       rst 08H             ;key wait and press (HALT)
 4033 C9       ret                 ;exit
+```
 
+<div class="mon3-data-box" markdown="1">
+
+```asm
 TEXT TABLE:
 4034 48 45 4C 4C 4F 20 54 45 43 21 00  ; "HELLO TEC!"
 
@@ -144,6 +148,8 @@ CHAR TABLE:
 406F 00 0E 15 1B 0E 0E 00 00  ; Skull
 4077 0E 11 11 1F 1B 1B 1F 00  ; Lock
 ```
+
+</div>
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-90-figure-1.png)
 
