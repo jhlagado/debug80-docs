@@ -126,7 +126,7 @@ To assist with API call number references, the file api_includes.z80, in the
 GitHub repository, contains the API Call Number with its Text equivalent for
 use with your own code.
 
-See https://github.com/MarkJelic/TEC-1G/tree/main/ROMs/MON3/source
+See the [MON-3 source in the TEC-1G repository](https://github.com/MarkJelic/TEC-1G/tree/main/ROMs/MON3/source).
 
 ### API Call List
 
