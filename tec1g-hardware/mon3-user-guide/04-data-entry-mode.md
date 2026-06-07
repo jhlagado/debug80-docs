@@ -45,8 +45,6 @@ and press the <span class="mon3-key-emphasis">GO</span> key.  Protect mode will 
 code ends with a RET instruction (C9), execution will cleanly exit back to the
 monitor.  The LCD screen will display the code start address while running.
 
-## LCD Screen
-
 One thing to note is that while data is being entered, the decimal place
 LED on the data segments will change from displaying two lights to one.
 The one light will indicate which Nibble (half byte) has been entered.   This
@@ -60,6 +58,8 @@ If any key is held down, after a short period, the key will automatically
 repeat.  This is mostly useful while holding down the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> key to
 quickly move to a new address.  But can also be used to populate memory
 with 00 or FF or anything else.
+
+## LCD Screen
 
 In Data Entry Mode, the LCD Screen will display 12 bytes of data.  4 bytes
 before the current editing location and 8 bytes from the current editing
