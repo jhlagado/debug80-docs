@@ -13,8 +13,6 @@ has_toc: true
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-11-figure-1.png)
 
-## Address Space
-
 The table below outlines how the full 64Kb of address space is allocated on
 the TEC-1G.
 
@@ -28,8 +26,6 @@ the TEC-1G.
 | `4000H-7FFFH` | Free RAM (protected) | RAM |
 | `8000H-BFFFH` | Expansion socket | RAM/ROM |
 | `C000H-FFFFH` | Monitor ROM | ROM |
-
-## Notes
 
 Some things to be considered are:
 

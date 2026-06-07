@@ -44,8 +44,6 @@ MON-3 provides the operating environment for the TEC-1G: reset behaviour, the ma
    - [Settings](02-main-menu.md#settings)
    - [Credits](02-main-menu.md#credits)
 3. [Memory Map](03-memory-map.md)
-   - [Address Space](03-memory-map.md#address-space)
-   - [Notes](03-memory-map.md#notes)
 4. [Data Entry Mode](04-data-entry-mode.md)
    - [Basic Operation](04-data-entry-mode.md#basic-operation)
    - [LCD Screen](04-data-entry-mode.md#lcd-screen)
