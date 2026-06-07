@@ -793,6 +793,8 @@ Note reference table is as follows:
 | A# | `04H` | E | `0AH` | A# | `10H` | E | `16H` |
 | B | `05H` | F | `0BH` | B | `11H` | F | `17H` |
 | C | `06H` | F# | `0CH` | C | `12H` | F# | `18H` |
+{: .mon3-compact-table }
+
 - Input: `DE` = address of first note
 - Destroy: `A`, `B`, `DE`, `HL`
 
