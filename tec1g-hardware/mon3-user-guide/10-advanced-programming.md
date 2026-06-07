@@ -1515,8 +1515,6 @@ rst 18H
 There are 128 characters that are available from 00H-7FH.  Conveniently,
 Alphanumeric characters align with the ASCII table.
 
-## GLCD API Utility Calls
-
 ### printChars #14 (0EH)
 Print Characters on the screen in a given row and column.  This routine is
 similar to the one above but character row and column placement can be
@@ -1541,6 +1539,7 @@ TEXT_DATA:
 .db "Hello!",0
 ```
 
+## GLCD API Utility Calls
 
 ### delayUS #15 (0FH)
 Delay loop for LCD to complete its instruction.  Every time a command is
