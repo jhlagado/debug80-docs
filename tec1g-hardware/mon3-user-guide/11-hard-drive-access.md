@@ -20,13 +20,13 @@ and uses the TEC Deck connector.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-1.jpg)
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-2.jpg)
-
 In terms of the particular medium used to store files, there are a few things to note:
 
 - FAT32 (File Allocation Table) is the only file system Mon3 recognises. The drive must be formatted using FAT32 and be on the first MBR partition.
 - Mon3 looks at the root directory for files. A maximum of 49 files can be read from the drive.
 - Only short name files are displayed. Short file names use up to 8 characters for the file name and 3 for the extension. For example, `INVADERS.HEX`. If a file has a longer name, the FAT32 system automatically creates a shortened version.
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-73-figure-2.jpg)
 
 With FAT32, files can be seamlessly copied from your PC/MAC to the drive.
 A USB to drive reader is required, which can be easily found.
