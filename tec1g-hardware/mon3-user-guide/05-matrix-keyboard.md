@@ -26,8 +26,6 @@ turned on.  This activates the Matrix Keyboard and disables the onboard
 Hex Keypad (except Reset).  Mon3 only maps keys present on the TEC-1G to
 the Matrix Keyboard.
 
-## Key Mapping
-
 The Keyboard map to Hex Keypad is as follows:
 
 | Hex Keypad | Matrix Keyboard | Hex Keypad | Matrix Keyboard |
