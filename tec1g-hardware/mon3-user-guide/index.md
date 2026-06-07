@@ -10,6 +10,8 @@ author: "Brian Chiha"
 
 # MON-3 User Guide
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-01-figure-1.png)
+
 **MON3 User Guide v1.6** is Brian Chiha's guide to the MON-3 monitor ROM for the TEC-1G single-board Z80 computer.
 
 ## Attribution
@@ -17,8 +19,6 @@ author: "Brian Chiha"
 This web edition is adapted from the original PDF title page credit: **User Guide By Brian Chiha v1.6**. Brian Chiha is the author of this text and should be credited as the author wherever this guide is referenced.
 
 Mon3 (Talking Electronics Computer Monitor version 3) is custom-built for the TEC-1G Single Board Z80 Computer. Mon3 is the heart of the TEC-1G. It brings the hardware to life. Consider it an operating system that provides the ability to program the TEC. The monitor is designed for beginners who are just learning to code Z80 and rich enough for the advanced software developer.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-01-figure-1.png)
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-01-figure-2.jpg)
 
