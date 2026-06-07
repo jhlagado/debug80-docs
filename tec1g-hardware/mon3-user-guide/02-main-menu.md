@@ -22,6 +22,7 @@ mode.  This is achieved by pressing the AD key.  Once this is known, it's
 hard to forget it.  Menus can be nested up to 3 deep.  Pressing the AD key
 will exit to the parent menu or enter Data Entry mode if at the main menu.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-05-figure-1.png)
 
 The current items on the menu are:
 
@@ -38,8 +39,6 @@ The current items on the menu are:
 | Music Routine | Play musical notes at a given address. |
 | Settings | Update monitor settings. |
 | Credits | Display the people who made the TEC-1G. |
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-05-figure-1.png)
 
 ## Intel HEX Load
 
