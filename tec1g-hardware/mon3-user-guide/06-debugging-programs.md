@@ -24,6 +24,8 @@ byte to F7.
 When the execution of code is interrupted with a breakpoint, the TEC will
 pause and display register information on the LCD screen.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-18-figure-1.jpg)
+
 ## Register Display
 
 The contents of the Z80 CPU registers AF, HL, BC, DE, IX, IY, the Program
@@ -37,7 +39,5 @@ code to its original state.
 <div class="mon3-warning" markdown="1">
 **Warning:** Breakpoints will be ignored if a connection is made between the `+` and `D5` pins on the G.IMP header. Do not connect the `+` pin to the `-` pin on the G.IMP header. This will short out the TEC.
 </div>
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-18-figure-1.jpg)
 
 [← Matrix Keyboard](05-matrix-keyboard.md) | [Guide](index.md) | [Tiny Basic →](07-tiny-basic.md)
