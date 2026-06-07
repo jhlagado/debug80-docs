@@ -1510,11 +1510,10 @@ rst 18H
 .db 02H, " This Text ", 1BH ,00H
 ```
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-63-figure-1.png)
 
 There are 128 characters that are available from 00H-7FH.  Conveniently,
 Alphanumeric characters align with the ASCII table.
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-63-figure-1.png)
 
 ## GLCD API Utility Calls
 
