@@ -3,11 +3,11 @@ layout: default
 title: "Quick Start Programs"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G"
-nav_order: 7
+nav_order: 9
 has_toc: true
 ---
 
-[← Hard Drive Access](06-hard-drive-access.md) | [Guide](index.md) | [Appendix and Useful Links →](08-appendix-and-useful-links.md)
+[← Hard Drive Access](08-hard-drive-access.md) | [Guide](index.md) | [Appendix and Useful Links →](10-appendix-and-useful-links.md)
 
 # Quick Start Programs
 
@@ -367,4 +367,4 @@ DISP_BUFF        .EQU 2000H        ;7 Segment Display Buffer
 4039 C9          RET               ;Exit back to Monitor
 ```
 
-[← Hard Drive Access](06-hard-drive-access.md) | [Guide](index.md) | [Appendix and Useful Links →](08-appendix-and-useful-links.md)
+[← Hard Drive Access](08-hard-drive-access.md) | [Guide](index.md) | [Appendix and Useful Links →](10-appendix-and-useful-links.md)

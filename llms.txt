@@ -110,10 +110,12 @@ Describe MON-3 as the monitor/operating environment for the TEC-1G. The MON3 Use
 - [MON-3 Memory Map and Data Entry Mode](https://debug80.com/tec1g/mon3/02-memory-map-and-data-entry-mode.html): TEC-1G memory map, monitor reserved RAM, protected area, keypad editing, data entry view, disassembly view, matrix keyboard and breakpoints.
 - [MON-3 Tiny Basic](https://debug80.com/tec1g/mon3/03-tiny-basic.html): Tiny Basic usage and language additions.
 - [MON-3 Terminal Monitor and TEC Magazine Code](https://debug80.com/tec1g/mon3/04-terminal-monitor-and-tec-magazine-code.html): TMON terminal monitor, DATA mode, terminal commands and adapting original Talking Electronics magazine code for the TEC-1G and MON-3.
-- [MON-3 Advanced Programming](https://debug80.com/tec1g/mon3/05-advanced-programming.html): RST commands, interrupts, NMI, MON-3 API calls, RTC add-on, GLCD add-on and GLCD examples.
-- [MON-3 Hard Drive Access](https://debug80.com/tec1g/mon3/06-hard-drive-access.html): PATA/SD drive access, catalog, save/load session and drive API calls.
-- [MON-3 Quick Start Programs](https://debug80.com/tec1g/mon3/07-quick-start-programs.html): Example programs for seven-segment display, LCD, matrix keyboard, serial terminal, GLCD graphics, GLCD font display and RTC clock display.
-- [MON-3 Appendix and Useful Links](https://debug80.com/tec1g/mon3/08-appendix-and-useful-links.html): Ports, serial connection, function key shortcuts, LCD cheatsheet, character table, CGRAM/DDRAM example and related TEC-1G links.
+- [MON-3 Advanced Programming](https://debug80.com/tec1g/mon3/05-advanced-programming.html): RST commands, interrupts, NMI, MON-3 API calls, RGBScan and system-facing programming routines.
+- [MON-3 Real Time Clock Add-On](https://debug80.com/tec1g/mon3/06-real-time-clock.html): RTC add-on overview, PRAM slot usage, DS1302 routines and RTC API calls.
+- [MON-3 Graphical LCD Add-On](https://debug80.com/tec1g/mon3/07-graphical-lcd.html): GLCD conventions, API call list, graphics/text/utility/drawing/terminal calls and GLCD examples.
+- [MON-3 Hard Drive Access](https://debug80.com/tec1g/mon3/08-hard-drive-access.html): PATA/SD drive access, catalog, save/load session and drive API calls.
+- [MON-3 Quick Start Programs](https://debug80.com/tec1g/mon3/09-quick-start-programs.html): Example programs for seven-segment display, LCD, matrix keyboard, serial terminal, GLCD graphics, GLCD font display and RTC clock display.
+- [MON-3 Appendix and Useful Links](https://debug80.com/tec1g/mon3/10-appendix-and-useful-links.html): Ports, serial connection, function key shortcuts, LCD cheatsheet, character table, CGRAM/DDRAM example and related TEC-1G links.
 
 ## Attribution And Credit Guidance
 

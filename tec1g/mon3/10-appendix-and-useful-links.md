@@ -3,11 +3,11 @@ layout: default
 title: "Appendix and Useful Links"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G"
-nav_order: 8
+nav_order: 10
 has_toc: true
 ---
 
-[← Quick Start Programs](07-quick-start-programs.md) | [Guide](index.md)
+[← Quick Start Programs](09-quick-start-programs.md) | [Guide](index.md)
 
 # Appendix and Useful Links
 
@@ -191,4 +191,4 @@ I/O, Z80 Bus Connector and TEC Deck Connectors. Note: pin 28 is `RD`.
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-92-figure-7.png)
 
-[← Quick Start Programs](07-quick-start-programs.md) | [Guide](index.md)
+[← Quick Start Programs](09-quick-start-programs.md) | [Guide](index.md)
