@@ -13,7 +13,7 @@ has_toc: true
 
 ## Memory Map
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-11-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-11-figure-1.png)
 
 The table below outlines how the full 64Kb of address space is allocated on
 the TEC-1G.
@@ -44,7 +44,7 @@ key.  In this mode, the 4 left seven-segment displays will show the current
 editing address, and the 2 right segments will display the byte at that
 address.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-13-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-13-figure-1.png)
 
 The decimal place LED on the segments indicates which part, Address or
 Data, is currently enabled for direct updates.   In the picture above, the dots
@@ -104,7 +104,7 @@ shown.  This can be useful to see what instruction is currently being keyed.
 By displaying a range of bytes on the LCD, the user can check if the correct
 bytes have been entered without individually moving to each address.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-14-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-14-figure-1.png)
 
 ### Function Keys
 
@@ -118,7 +118,7 @@ The routines attached to the Function Key are:
 | `Fn-AD` | Main Menu | Display the Main Menu. |
 | `Fn-0` | Save Current Address | Press `1`, `2` or `3` to save the current editing address in RAM so you can quickly jump to this location later. Three addresses can be saved. This is useful if your code is in a location other than `4000H` and the Reset button has been pressed. Press `AD` to exit the routine. The initial default address is `4000H`. |
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-15-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-15-figure-1.png)
 
 | Shortcut | Routine | Description |
 | --- | --- | --- |
@@ -133,7 +133,7 @@ The routines attached to the Function Key are:
 | `Fn-C` | Smart Block Copy | Shortcut to the Main Menu routine. |
 | `Fn-D` | Disassembly View | Switch between Data Entry View and Disassembly View. Disassembly View displays the next 4 assembly instructions. To move through the instructions, press the Plus or Minus keys. Data entry can still be done in this mode if desired. |
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-16-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-16-figure-1.png)
 
 | Shortcut | Routine | Description |
 | --- | --- | --- |
@@ -153,7 +153,7 @@ left of the PCB.  How your Keyboard PCB is designed might affect which
 pins can be connected.  Please view the TEC-1G Schematic for information
 on pin configuration.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-17-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-17-figure-1.jpg)
 
 To activate the Keyboard, The Matrix switch on the 3-DIP switch is to be
 turned on.  This activates the Matrix Keyboard and disables the onboard
@@ -186,7 +186,7 @@ byte to F7.
 When the execution of code is interrupted with a breakpoint, the TEC will
 pause and display register information on the LCD screen.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-18-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-18-figure-1.jpg)
 
 ### Register Display
 

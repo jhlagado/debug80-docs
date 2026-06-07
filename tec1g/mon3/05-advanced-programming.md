@@ -79,7 +79,7 @@ This code will sound a bell tone in the speaker when an NMI occurs.  The
 TEC-1G has an NMI jumper that can set NMI to trigger on a Keypad press, a
 HALT instruction or externally (no jumper).
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-30-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-30-figure-1.png)
 
 *Cartoon credit: Ken Stone, TE Issue 10, 1983.*
 
@@ -925,7 +925,7 @@ be called in a loop.  The Row data is from top to bottom.
 
 - Input: `IY` = 24 bytes of row data: 8 red, 8 green, 8 blue
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-49-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-49-figure-1.jpg)
 
 *This is what's displayed with the data below.*
 
@@ -956,7 +956,7 @@ clock modes, a 100 year calendar
 and 31 bytes of general purpose nonvolatile RAM.  The TEC Designers have
 called the NVRAM, "Parameter RAM" or PRAM.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-50-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-50-figure-1.jpg)
 
 *RTC add-on board connected to the TEC-1G GPIO port.*
 
@@ -967,7 +967,7 @@ following keys to update the time/date: 0 = Hour, 1 = Minute, 2 = Second, 3 =
 Reset RTC, <span class="mon3-key-emphasis">AD</span> = Exit.  When viewing RTC PRAM data, <span class="mon3-key-emphasis">Plus</span> = Move Down,
 <span class="mon3-key-emphasis">Minus</span> = Move Up, <span class="mon3-key-emphasis">AD</span> = Exit back to RTC Setup.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-50-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-50-figure-2.png)
 
 *RTC setup display.*
 
@@ -1240,7 +1240,7 @@ Keys: 0 = Hour, 1 = Minute, 2 = Second, 3 = 12/24h, 4 = Day of week, 5 = Day, 6
 When viewing RTC RAM data, <span class="mon3-key-emphasis">Plus</span> = Move Down, <span class="mon3-key-emphasis">Minus</span> = Move Up, <span class="mon3-key-emphasis">AD</span> =
 Exit back to RTC Setup.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-56-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-56-figure-1.png)
 
 *A TEC-1G with various add-on boards. Credit: Andrew McRae.*
 
@@ -1251,12 +1251,12 @@ TEC-DECK Graphical LCD PCB Add-On.  If the Graphical LCD is installed on
 the TEC-1G via the TEC-DECK headers, special GLCD API calls can be used
 to interface with the GLCD.  The library is for GLCDs with the **ST7920** chip.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-57-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-57-figure-1.jpg)
 
 The GLCD library contains a variety of routines that can produce simple
 shapes and lines. These include text, lines, rectangles, circles and pixels.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-57-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-57-figure-2.png)
 
 ## General Conventions
 
@@ -1507,7 +1507,7 @@ rst 18H
 .db 02H, " This Text ", 1BH ,00H
 ```
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-63-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-63-figure-1.png)
 
 There are 128 characters that are available from 00H-7FH.  Conveniently,
 Alphanumeric characters align with the ASCII table.
@@ -1653,13 +1653,13 @@ picture:
 
 This example displays the image from the current cursor position.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-67-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-67-figure-1.png)
 
 Here is the complete list of ASCII characters 00H-FFH that can be displayed.
 Each character is up to 6 x 6 pixels and is numbered left to right, top to
 bottom.  The characters align with the standard ASCII Table.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-67-figure-2.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-67-figure-2.png)
 
 ### invGraphic #22 (16H)
 Inverse graphics printing.  Calling this routine will TOGGLE the inverse
@@ -1678,7 +1678,7 @@ routine.
 - Output: none
 - Destroy: A
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-68-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-68-figure-1.png)
 
 *The TEC Frogger game uses the GLCD and its API routines.*
 
@@ -1831,6 +1831,6 @@ backtracking algorithm.  Watch the maze slowly generate before your eyes.
 Some easy-to-type examples have also been provided in the Quick Start
 Programs chapter below.
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-72-figure-1.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-72-figure-1.jpg)
 
 [← Terminal Monitor and TEC Magazine Code](04-terminal-monitor-and-tec-magazine-code.md) | [Guide](index.md) | [Hard Drive Access →](06-hard-drive-access.md)

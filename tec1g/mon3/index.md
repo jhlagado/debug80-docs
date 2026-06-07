@@ -8,9 +8,9 @@ has_toc: false
 author: "Brian Chiha"
 ---
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-01-figure-1.png)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-01-figure-1.png)
 
-![MON-3 illustration](../../assets/images/tec1g/mon3-user-guide/page-01-figure-2.jpg)
+![MON-3 illustration](../../assets/images/tec1g/mon3/page-01-figure-2.jpg)
 
 # MON-3 User Guide
 

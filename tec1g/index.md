@@ -14,4 +14,4 @@ Debug80 Book 1 and Book 2 use the TEC-1G as a working target. This section is fo
 
 ## Books And References
 
-- [MON-3 User Guide](mon3-user-guide/)
+- [MON-3 User Guide](mon3/)
