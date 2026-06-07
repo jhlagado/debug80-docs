@@ -3,11 +3,11 @@ layout: default
 title: "Advanced Programming"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 10
+nav_order: 5
 has_toc: true
 ---
 
-[← TEC Magazine Code on the TEC-1G](09-tec-magazine-code-on-the-tec-1g.md) | [Guide](index.md) | [Hard Drive Access →](11-hard-drive-access.md)
+[← Terminal Monitor and TEC Magazine Code](04-terminal-monitor-and-tec-magazine-code.md) | [Guide](index.md) | [Hard Drive Access →](06-hard-drive-access.md)
 
 # Advanced Programming
 
@@ -28,7 +28,7 @@ outlines the routines.
 | `RST 18H` | `DF` | API 2 entry call. Graphical LCD routine entry. See the GLCD section below for details. |
 | `RST 20H` | `E7` | Scan Seven Segments and Keys. Multiplexes the seven-segment displays and checks for a key press. It can be used to display information on the seven segments and check for a key to be pressed. It must be called in a loop until a key is pressed to maintain seven-segment persistence. Returns Zero flag set when a key is pressed and register `A` with the key value. Register `DE` points to the seven-segment data. See the first program in the Quick Start Programs chapter for an example. Registers `DE`, `A`, and `B` are modified. |
 | `RST 28H` | `EF` | LCD Busy Check. Call before sending a command to the LCD when directly communicating with the LCD. The routine only exits when the LCD Busy flag is not set.<br><br>`RST 28H` checks the LCD busy flag.<br>`LD A,01H` loads `A` with a clear-screen instruction.<br>`OUT (04),A` sends the instruction to the LCD. |
-| `RST 30H` | `F7` | Breakpoint entry. Breaks code execution at the current address location. See the Debugging Programs chapter for details. |
+| `RST 30H` | `F7` | Breakpoint entry. Breaks code execution at the current address location. See the Debugging Programs section for details. |
 | `RST 38H` | `FF` | Maskable interrupt handler. Jumps here with Interrupts Enabled (`EI`), Interrupt Mode 1 (`IM 1`), and when the `INT` pin on the CPU goes low. Mon3 does nothing when this happens, but a user-defined routine can be used. See the Interrupt section below. |
 
 ## Interrupts
@@ -1833,4 +1833,4 @@ Programs chapter below.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-72-figure-1.jpg)
 
-[← TEC Magazine Code on the TEC-1G](09-tec-magazine-code-on-the-tec-1g.md) | [Guide](index.md) | [Hard Drive Access →](11-hard-drive-access.md)
+[← Terminal Monitor and TEC Magazine Code](04-terminal-monitor-and-tec-magazine-code.md) | [Guide](index.md) | [Hard Drive Access →](06-hard-drive-access.md)

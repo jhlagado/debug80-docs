@@ -3,11 +3,11 @@ layout: default
 title: "Tiny Basic"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 7
+nav_order: 3
 has_toc: true
 ---
 
-[← Debugging Programs](06-debugging-programs.md) | [Guide](index.md) | [Terminal Monitor →](08-terminal-monitor.md)
+[← Memory Map and Data Entry Mode](02-memory-map-and-data-entry-mode.md) | [Guide](index.md) | [Terminal Monitor and TEC Magazine Code →](04-terminal-monitor-and-tec-magazine-code.md)
 
 # Tiny Basic
 
@@ -86,4 +86,4 @@ Print All ASCII Characters
 50 NEXT I
 ```
 
-[← Debugging Programs](06-debugging-programs.md) | [Guide](index.md) | [Terminal Monitor →](08-terminal-monitor.md)
+[← Memory Map and Data Entry Mode](02-memory-map-and-data-entry-mode.md) | [Guide](index.md) | [Terminal Monitor and TEC Magazine Code →](04-terminal-monitor-and-tec-magazine-code.md)

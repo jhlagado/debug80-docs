@@ -1,15 +1,47 @@
 ---
 layout: default
-title: "Main Menu"
+title: "Basic Operation and Main Menu"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 2
+nav_order: 1
 has_toc: true
 ---
 
-[← Basic Operation](01-basic-operation.md) | [Guide](index.md) | [Memory Map →](03-memory-map.md)
+[← MON-3 User Guide](index.md) | [Guide](index.md) | [Memory Map and Data Entry Mode →](02-memory-map-and-data-entry-mode.md)
 
-# Main Menu
+# Basic Operation and Main Menu
+
+## Basic Operation
+
+With the monitor loaded into the ROM socket and all the jumpers set
+correctly for the ROM used.  Turn the TEC on.  If it loads,  a welcome banner
+will be displayed on the LCD, and a short tune will be heard.
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-04-figure-1.png)
+
+### Cold Reset
+
+When the TEC turns on after being powered down, a Cold Reset occurs.  A
+Cold Reset signified with the display of the welcome banner and a short
+tune.  A Cold Reset will configure the Monitor for first-time use after
+powering it on.  It will default Monitor variables and configure the LCD for
+first use.
+
+If the TEC isn't responding normally or something "weird" is occurring, a
+manual Cold Reset can be performed.   Programs loaded in RAM will be
+retained when a manual Cold Reset is done. To do a manual Cold Reset,
+while pressing and releasing the RESET key, hold the Fn key down.  The
+distinctive LCD Banner and music tone will indicate that the Cold Reset
+was successful.  A manual Cold Reset on the HexPad will still work if the
+Matrix Keyboard is in use.
+
+### Warm Reset
+
+A Warm Reset occurs when pressing and releasing the RESET key.  A warm
+reset returns the TEC to its initial editing location on a Cold Reset.  It's a
+quick way to go back to the start of a code block or break code execution.
+
+## Main Menu
 
 A menu is provided on the LCD screen to help navigate some of the
 built-in routines within the monitor.  The menu will appear on a Cold Reset.
@@ -40,7 +72,7 @@ The current items on the menu are:
 | Settings | Update monitor settings. |
 | Credits | Display the people who made the TEC-1G. |
 
-## Intel HEX Load
+### Intel HEX Load
 
 Intel created a text file format that contains information on loading bytes
 into memory.  When this routine is run, the TEC seven segments will go
@@ -52,13 +84,13 @@ means that the load was successful.  Press any key to exit.  If the segments
 display the word "FAIL", then there is something wrong with the file or your
 serial connection.
 
-## Drive Access
+### Drive Access
 
 With a PATA drive or Micro SD card expansion boards installed, access the
 files on the drive and load them to the TEC.  For more information refer to
 the Hard Drive Access section for detailed usage information.
 
-## Smart Block Copy
+### Smart Block Copy
 
 This clever routine shifts a program from one memory location to another
 and changes all absolute jumps and calls.  Memory pointers are also
@@ -95,7 +127,7 @@ After copy:
 2009 C9            RET
 ```
 
-## Block Backup
+### Block Backup
 
 This routine simply copies a data block from one address location to
 another.   No bytes are altered during this copy routine..  This routine is
@@ -127,7 +159,7 @@ After copy:
 2009 C9            RET
 ```
 
-## Export Z80 Assembly
+### Export Z80 Assembly
 
 If the TEC is connected to a serial terminal via an FTDI to USB adaptor, code
 that is stored or written on the TEC can be disassembled and sent to the
@@ -148,7 +180,7 @@ Here is an example of its output.
 4009 C9            RET
 ```
 
-## Export Raw Data
+### Export Raw Data
 
 This routine will send TEC binary data to a serial connection.  It's a way to
 save code written on the TEC to a PC.  As binary data is being sent, the data
@@ -159,7 +191,7 @@ When this routine is run, it will ask for a START and END address.  Type in
 the 16-bit address via the HEX PAD and use the <span class="mon3-key-emphasis">Plus</span> or <span class="mon3-key-emphasis">Minus</span> keys to
 change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> to run the routine.
 
-## Export Hex Dump
+### Export Hex Dump
 
 This routine displays binary data in a readable format to a serial terminal
 connected via an FTDI to USB adaptor.  It will display up to 16 bytes per line.
@@ -178,7 +210,7 @@ C130: 21 00 C0 11 00 00 01 00 01 ED B0 21 00 40 22 86
 C140: 08 22 A0 08 DB 03 0F 38 06 DB 00 E6 20 18 08 CD
 ```
 
-## Import Binary File
+### Import Binary File
 
 This routine will upload a binary file from a PC onto the TEC via an FTDI to
 USB adaptor.  This is the opposite of the Export Raw Data routine and will
@@ -191,7 +223,7 @@ change the selected parameter.  Press <span class="mon3-key-emphasis">GO</span> 
 wait for data to be received and will end when END-START+1 bytes are
 received.
 
-## Music Routine
+### Music Routine
 
 Use this routine to play some notes to the TEC speaker.  It is based on John
 Hardy's Mon1 routine adjusted for a 4 MHz clock speed.  The routine uses
@@ -226,7 +258,7 @@ isn't listed will exit the routine.
 
 The following page contains examples tunes that can be typed in a played
 
-### "Bealach an Doirin"—which means "The Way of the Little Oak."
+#### "Bealach an Doirin"—which means "The Way of the Little Oak."
 
 ```text
 06, 06, 0A, 0D, 06, 0D, 0A, 0D, 12, 16, 14, 12, 0F, 11, 12, 0F
@@ -235,7 +267,7 @@ The following page contains examples tunes that can be typed in a played
 0D, 0D, 0D, 0A, 12, 0F, 0D, 0A, 08, 06, 08, 0A, 06, 12, 00, 1F
 ```
 
-### Angels On High
+#### Angels On High
 
 ```text
 0F, 0F, 0F, 0F, 0F, 0F, 12, 12, 12, 12, 12, 10, 0F, 0F, 0F, 0F
@@ -256,7 +288,7 @@ The following page contains examples tunes that can be typed in a played
 
 *TEC-1G with 3D printed stand and supports. Credit: Gerald M Eberhardt.*
 
-## Settings
+### Settings
 
 The settings allow the user to configure the monitor.  Powering off the TEC
 will return these settings to their default state.  Some settings will be
@@ -272,7 +304,7 @@ retained if an RTC Add-on board is connected with battery backup.
    -   Toggle EXPAND - software controlled the expansion socket to toggle
        between lower and upper 16Kb memory for a 32Kb ROM/RAM chip.
 
-## Credits
+### Credits
 
 Display the people who developed and tested the TEC-1G
    -   Mark Jelic - Designer of the TEC-1G
@@ -282,4 +314,4 @@ Display the people who developed and tested the TEC-1G
    -   James Elphick - Tester and QA
    -   John Hardy & Ken Stone - The original designers
 
-[← Basic Operation](01-basic-operation.md) | [Guide](index.md) | [Memory Map →](03-memory-map.md)
+[← MON-3 User Guide](index.md) | [Guide](index.md) | [Memory Map and Data Entry Mode →](02-memory-map-and-data-entry-mode.md)

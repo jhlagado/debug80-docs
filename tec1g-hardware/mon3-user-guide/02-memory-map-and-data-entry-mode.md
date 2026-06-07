@@ -1,15 +1,42 @@
 ---
 layout: default
-title: "Data Entry Mode"
+title: "Memory Map and Data Entry Mode"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 4
+nav_order: 2
 has_toc: true
 ---
 
-[← Memory Map](03-memory-map.md) | [Guide](index.md) | [Matrix Keyboard →](05-matrix-keyboard.md)
+[← Basic Operation and Main Menu](01-basic-operation-and-main-menu.md) | [Guide](index.md) | [Tiny Basic →](03-tiny-basic.md)
 
-# Data Entry Mode
+# Memory Map and Data Entry Mode
+
+## Memory Map
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-11-figure-1.png)
+
+The table below outlines how the full 64Kb of address space is allocated on
+the TEC-1G.
+
+| Address | Contents | Type |
+| --- | --- | --- |
+| `0000H-00FFH` | Reserved for Z80 instructions | RAM |
+| `0100H-07FFH` | PATA/SD Drive area or free RAM | RAM |
+| `0800H-087FH` | Reserved for hardware stack | RAM |
+| `0880H-0FFFH` | Reserved for monitor RAM | RAM |
+| `1000H-3FFFH` | Free RAM | RAM |
+| `4000H-7FFFH` | Free RAM (protected) | RAM |
+| `8000H-BFFFH` | Expansion socket | RAM/ROM |
+| `C000H-FFFFH` | Monitor ROM | ROM |
+
+Some things to be considered are:
+
+- Any RAM location can be updated, but it is highly recommended not to update Monitor Reserved RAM locations. This can/will cause undesirable effects on the running of the TEC. A Cold Reset will restore the TEC to its default running state (hopefully).
+- The address range between <span class="mon3-address-emphasis">4000H-7FFFH</span> is a special area that can be made READ ONLY. This is called a Protected area. Protect mode can be switched on using the configuration 3-DIP switch. If protect is enabled and code is being executed. No RAM update can be done in this range. This feature is designed to protect keyed-in code from being inadvertently erased by a rogue routine.
+- The Expansion Socket on the TEC can have a 32Kb ROM or RAM inserted. Only 16Kb can be accessed at one time. To switch between high and low memory use the Expand switch on the configuration 3-DIP switch. The switch can also be overridden in software by toggling the Expand flag in the Settings menu or pressing <span class="mon3-key-emphasis">Fn-E</span>.
+- If the monitor ROM is a legacy monitor, IE: Mon1, Mon2, JMon or BMon, The address range <span class="mon3-address-emphasis">0000H-07FFH</span> will be READ ONLY and will emulate the same addressing that is used for that particular ROM. Shadow mode will be active by default and will be indicated by an illuminated LED segment on the system latch BAR component.
+
+## Data Entry Mode
 
 Data Entry Mode allows the user to enter Z80 Op Codes directly into the
 TEC.  To access Data Entry Mode from the Main Menu, simply press the <span class="mon3-key-emphasis">AD</span>
@@ -26,7 +53,7 @@ are on the Data segments.
 The initial starting address is <span class="mon3-address-emphasis">4000H</span>.   This address was chosen as it's within
 the Protect RAM area.
 
-## Basic Operation
+### Basic Operation
 
 To update a byte at an address, simply use the <span class="mon3-key-emphasis">0-F</span> keys on the keypad.
 After the byte has been entered, by default when the next byte is keyed,
@@ -59,7 +86,7 @@ repeat.  This is mostly useful while holding down the <span class="mon3-key-emph
 quickly move to a new address.  But can also be used to populate memory
 with 00 or FF or anything else.
 
-## LCD Screen
+### LCD Screen
 
 In Data Entry Mode, the LCD Screen will display 12 bytes of data.  4 bytes
 before the current editing location and 8 bytes from the current editing
@@ -79,7 +106,7 @@ bytes have been entered without individually moving to each address.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-14-figure-1.png)
 
-## Function Keys
+### Function Keys
 
 Various extra options can be selected via the Function Key.  To use these
 functions, hold the Fn key down and press any other key.
@@ -116,4 +143,63 @@ The routines attached to the Function Key are:
 | `Fn-Minus` | Delete Byte | Delete a byte from the current editing location and move all bytes down by one address. It will also do a Smart Block Copy to all moved bytes. |
 | `Fn-Reset` | Cold Reset | Perform a Cold Reset. This resets the TEC to its default state. |
 
-[← Memory Map](03-memory-map.md) | [Guide](index.md) | [Matrix Keyboard →](05-matrix-keyboard.md)
+## Matrix Keyboard
+
+### Keyboard Connection
+
+Mon3 will work with the TEC QWERTY or Mechanical Matrix Keyboard
+Add-on.  The Keyboard is connected to the Keyboard Socket on the lower
+left of the PCB.  How your Keyboard PCB is designed might affect which
+pins can be connected.  Please view the TEC-1G Schematic for information
+on pin configuration.
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-17-figure-1.jpg)
+
+To activate the Keyboard, The Matrix switch on the 3-DIP switch is to be
+turned on.  This activates the Matrix Keyboard and disables the onboard
+Hex Keypad (except Reset).  Mon3 only maps keys present on the TEC-1G to
+the Matrix Keyboard.
+
+The Keyboard map to Hex Keypad is as follows:
+
+| Hex Keypad | Matrix Keyboard | Hex Keypad | Matrix Keyboard |
+| --- | --- | --- | --- |
+| `AD` | `Esc` | `GO` | `Enter` |
+| `Plus` | Right Arrow | `Minus` | Left Arrow |
+| `0-F`, `Fn` | `0-F`, `Fn` keys | `Reset` | Reset key, if connected |
+
+The full range of keys can be accessed and converted when developing
+programs via the matrixScan and matrixToASCII API routines.
+
+## Debugging Programs
+
+### Breakpoints
+
+Breakpoints can be inserted within a program which can help with viewing
+the state of the CPU registers.  To break the execution of your code, insert
+RST 30H or  F7 at the current address where the break should occur.
+
+An easy way to insert a byte into an existing program is to press <span class="mon3-key-emphasis">Fn-Plus</span>.
+This will insert a NOP instruction at the current address.  Then change this
+byte to F7.
+
+When the execution of code is interrupted with a breakpoint, the TEC will
+pause and display register information on the LCD screen.
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-18-figure-1.jpg)
+
+### Register Display
+
+The contents of the Z80 CPU registers AF, HL, BC, DE, IX, IY, the Program
+Counter and Stack Pointer are displayed.  CPU Flags are also displayed.
+Flags that are set are in Capitals.  To continue code execution press the <span class="mon3-key-emphasis">GO</span>
+key and to quit execution and return to the Monitor press the <span class="mon3-key-emphasis">AD</span> key.
+Finally, to remove an inserted Breakpoint press <span class="mon3-key-emphasis">Fn-Minus</span> at the address
+where the Breakpoint is.  This will remove the breakpoint and adjust the
+code to its original state.
+
+<div class="mon3-warning" markdown="1">
+**Warning:** Breakpoints will be ignored if a connection is made between the `+` and `D5` pins on the G.IMP header. Do not connect the `+` pin to the `-` pin on the G.IMP header. This will short out the TEC.
+</div>
+
+[← Basic Operation and Main Menu](01-basic-operation-and-main-menu.md) | [Guide](index.md) | [Tiny Basic →](03-tiny-basic.md)

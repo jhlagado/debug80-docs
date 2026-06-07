@@ -3,11 +3,11 @@ layout: default
 title: "Hard Drive Access"
 parent: "MON-3 User Guide"
 grand_parent: "TEC-1G Hardware"
-nav_order: 11
+nav_order: 6
 has_toc: true
 ---
 
-[← Advanced Programming](10-advanced-programming.md) | [Guide](index.md) | [Quick Start Programs →](12-quick-start-programs.md)
+[← Advanced Programming](05-advanced-programming.md) | [Guide](index.md) | [Quick Start Programs →](07-quick-start-programs.md)
 
 # Hard Drive Access
 
@@ -205,4 +205,4 @@ be called to save the modifications back to the file.
 This example will read a sector first, make some modifications and then
 write it back to the file.
 
-[← Advanced Programming](10-advanced-programming.md) | [Guide](index.md) | [Quick Start Programs →](12-quick-start-programs.md)
+[← Advanced Programming](05-advanced-programming.md) | [Guide](index.md) | [Quick Start Programs →](07-quick-start-programs.md)
