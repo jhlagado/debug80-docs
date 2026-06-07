@@ -101,6 +101,7 @@ access in Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-7</span
 
 While the drive is being accessed, the LCD will display the current progress.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-76-figure-1.png)
 
 If any errors occur while accessing the drive, an error message will be
 displayed on the LCD and the code will exit after a key is pressed.
@@ -124,8 +125,6 @@ Error messages descriptions are below:
 | Invalid SDCard | SD card cannot be used. |
 | CMD16 Failed | SD block size cannot be set to 512. |
 | Addr. Too Big | Read sector address greater than file size. |
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-76-figure-1.png)
 
 ## Drive Access API Calls
 
