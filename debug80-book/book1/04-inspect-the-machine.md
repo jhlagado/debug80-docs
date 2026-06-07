@@ -11,6 +11,10 @@ nav_order: 4
 
 Paused execution gives you time to inspect a program from several angles. Use the source map to connect labels and source lines with the CPU state, memory and visible TEC-1G output.
 
+The Debug80 view groups the project controls, display hardware, machine front panel and keyboard state in one place. This chapter breaks those areas down so you know where to look while a target is running or paused.
+
+![Debug80 panel with project controls, displays, machine controls and matrix keyboard](../../assets/images/debug80-book/book1/chapter4-debug80-panel-overview.png)
+
 ## Symbols And Constants In Variables
 
 The **Variables** panel shows source-map-backed **Symbols** and **Constants** after a successful build. Constants show their assembled value. Memory-backed symbols show conservative raw memory information: address, current bytes, readable ASCII where possible and source location.
