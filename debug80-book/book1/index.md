@@ -28,5 +28,5 @@ By the end you will know how to take a Z80 program all the way to hardware, and 
 ## Appendices
 
 - [Appendix A — Debug Expressions](appendices/a-debug-expressions.md)
-- [Appendix B — Command Reference](appendices/b-command-reference.md)
+- [Appendix B — Common Command Palette Commands](appendices/b-command-reference.md)
 - [Appendix C — Debug80 File Formats](appendices/c-project-configuration.md)

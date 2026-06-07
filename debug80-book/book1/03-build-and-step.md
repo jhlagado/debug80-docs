@@ -80,7 +80,7 @@ Type a Debug80 expression into the inline editor. The condition can use register
 
 ![Conditional breakpoint expression in the editor](../../assets/images/debug80-book/book1/chapter3-conditional-breakpoint-expression.png)
 
-Each time execution reaches the line, Debug80 evaluates the expression. A true or non-zero result stops the program; a false or zero result lets it run on. If the expression itself errors, Debug80 stops at the breakpoint and writes the error to the Debug Console.
+Each time execution reaches the line, Debug80 evaluates the expression. A true or non-zero result stops the program; a false or zero result lets it run on. If the expression itself errors, Debug80 writes the error to the Debug Console and treats the condition as false.
 
 Conditional breakpoints share the expression language with the Watch panel. Appendix A lists the registers, flags, symbols, memory reads and operators you can use.
 

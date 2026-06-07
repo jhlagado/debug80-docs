@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 103
 ---
 
-[← Appendix B — Command Reference](b-command-reference.md) | [Book 1](../index.md)
+[← Appendix B — Common Command Palette Commands](b-command-reference.md) | [Book 1](../index.md)
 
 # Appendix C — Debug80 File Formats
 
@@ -75,6 +75,11 @@ A profile records platform setup shared by targets. The TEC-1G / MON-3 profile i
         "bundleId": "tec1g/mon3/v1",
         "path": "mon3.bin",
         "destination": "roms/tec1g/mon3/mon3.bin"
+      },
+      "debugMap": {
+        "bundleId": "tec1g/mon3/v1",
+        "path": "mon3.d8.json",
+        "destination": "roms/tec1g/mon3/mon3.d8.json"
       }
     }
   }
@@ -249,4 +254,4 @@ This is a minimal source map for a one-byte instruction at `$0800`, tied to line
 
 Debug80 validates the file before importing it. Invalid JSON or an unsupported D8 version leaves source-map-backed features unavailable until the target builds successfully again.
 
-[← Appendix B — Command Reference](b-command-reference.md) | [Book 1](../index.md)
+[← Appendix B — Common Command Palette Commands](b-command-reference.md) | [Book 1](../index.md)

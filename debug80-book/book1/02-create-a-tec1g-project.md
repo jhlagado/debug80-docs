@@ -31,6 +31,8 @@ That creates a TEC-1G / MON-3 project. Its first target is placed at `0x4000`, t
 
 The platform selector chooses the machine Debug80 should model. Use **TEC-1G** for this first project. Use **TEC-1** when you are working with the classic board.
 
+The selector may also show **Simple** for minimal emulator work. The hardware path in this book uses TEC-1G, with TEC-1 as the classic-board option.
+
 | Platform | Use it when | User code starts at |
 |---|---|---:|
 | TEC-1 | You are working with the classic 1980s TEC-1 board and its monitor environment. | `0x0800` or `0x0900`, depending on the platform settings |

@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting Started"
 nav_order: 101
 ---
 
-[← Copy Monitor ROM Source](../08-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Command Reference →](b-command-reference.md)
+[← Copy Monitor ROM Source](../08-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
 
 # Appendix A — Debug Expressions
 
@@ -39,9 +39,15 @@ Watch expressions can refer directly to Z80 registers:
 A
 B
 C
+D
+E
+F
+H
+L
 BC
 DE
 HL
+AF
 IX
 IY
 SP
@@ -54,6 +60,13 @@ Alternate registers are supported:
 
 ```asm
 A'
+B'
+C'
+D'
+E'
+F'
+H'
+L'
 BC'
 DE'
 HL'
@@ -145,6 +158,8 @@ Comparison operators:
 
 `=` and `==` test equality. `!=` and `<>` test inequality. `<` tests less than. `<=` tests less than or equal. `>` tests greater than. `>=` tests greater than or equal.
 
+The word forms `eq`, `ne`, `lt`, `le`, `gt` and `ge` are also accepted. They mean the same thing as `=`, `!=`, `<`, `<=`, `>` and `>=`.
+
 Logical operators:
 
 ```asm
@@ -162,6 +177,6 @@ not [PLAYER_LIVES]
 carry or zero
 ```
 
-Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors stop the program and appear in the Debug Console.
+Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors appear in the Debug Console and the condition is treated as false.
 
-[← Copy Monitor ROM Source](../08-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Command Reference →](b-command-reference.md)
+[← Copy Monitor ROM Source](../08-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)

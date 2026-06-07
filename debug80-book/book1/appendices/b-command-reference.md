@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix B — Command Reference"
+title: "Appendix B — Common Command Palette Commands"
 parent: "Debug80 Book 1 — Getting Started"
 nav_order: 102
 ---
 
 [← Appendix A — Debug Expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Debug80 File Formats →](c-project-configuration.md)
 
-# Appendix B — Command Reference
+# Appendix B — Common Command Palette Commands
 
 Most Debug80 work is done from the Debug80 panel: project selection, target selection, building, CoolTerm testing and sending HEX files to hardware. Use the Command Palette for commands that are easier to reach from the keyboard, open source-navigation tools or set up monitor ROM development.
 

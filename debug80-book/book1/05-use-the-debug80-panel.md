@@ -45,6 +45,7 @@ The status line tells you whether that map is ready:
 - `Source map: current.` means the selected target has a readable source map and it appears up to date.
 - `Source map: missing, build the selected target.` means the target needs a successful build before source-map features are available.
 - `Source map: stale, build recommended.` means one or more mapped source files appear newer than the source map.
+- `Source map: unreadable, rebuild the selected target.` means Debug80 found a source map file but could not read it.
 - `Source map: invalid, rebuild the selected target.` means Debug80 needs a fresh source map for the selected target.
 - `Source map: select a target and build.` means source-map features start after target selection and a successful build.
 

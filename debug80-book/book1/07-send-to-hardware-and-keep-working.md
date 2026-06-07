@@ -39,7 +39,7 @@ Open **Connection > Options** in CoolTerm. Select the serial port for your USB s
 
 The port name depends on your USB serial adapter and operating system. The line settings are fixed for this workflow: `4800 8 N 2`.
 
-When CoolTerm is running with the Remote Control Socket enabled, Debug80 can detect it and show the send button in the Project section. For a TEC-1G target, it appears as **Send to TEC-1G**.
+For a TEC-1G target, the Project section shows **Send to TEC-1G**. That button sends the active target's HEX file through CoolTerm.
 
 ![Debug80 Project section ready to send a HEX file through CoolTerm](../../assets/images/debug80-book/book1/chapter7-project-ready-to-send.png)
 
@@ -63,7 +63,7 @@ MON-3 reports the load result on the TEC-1G seven-segment display: `PASS` for an
 
 Debug80 reports that CoolTerm sent the file. The final load result comes from the TEC-1G display, not from serial text. The serial startup message `TEC-1G Connected` belongs to MON-3 startup.
 
-When **Send to TEC-1G** is hidden, start CoolTerm and enable the Remote Control Socket. When Debug80 asks for a HEX file, build the target again.
+If sending fails before the transfer begins, start CoolTerm and check that the Remote Control Socket is enabled. When Debug80 asks for a HEX file, build the target again.
 
 After a successful transfer, run the program on the board and compare the result with the emulator. The emulator is the faster place to debug, and the board is the final check that the serial transfer and hardware assumptions match.
 
@@ -71,7 +71,7 @@ After a successful transfer, run the program on the board and compare the result
 
 Start with the part of the path that failed:
 
-- If **Send to TEC-1G** is missing, open CoolTerm and check that the Remote Control Socket is enabled on port `51413`.
+- If Debug80 cannot connect to CoolTerm, open CoolTerm and check that the Remote Control Socket is enabled on port `51413`.
 - If Debug80 asks for a HEX file, build the active target.
 - If the TEC-1G displays `ERROR`, check that the board is in Intel HEX Load mode and try the transfer again.
 - If characters appear to be missed, add transmit delay in CoolTerm.
