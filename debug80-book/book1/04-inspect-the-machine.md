@@ -82,6 +82,8 @@ VS Code sends key presses to the editor until the webview has focus. Click insid
 
 The keypad sends input to the emulated TEC-1G runtime. Programs that read the keypad receive hardware-style key input.
 
+On macOS, some Control key combinations are reserved by the operating system. Debug80 accepts the Mac Command key as the TEC-1G matrix keyboard's Control modifier, so **Command-C** behaves like matrix **Control-C**, and **Command-Up** behaves like matrix **Control-Up**. This only affects the emulated matrix keyboard; MON-3 and the Z80 keyboard API still receive the same key state.
+
 The exact key meanings depend on the monitor or program that is running. When you debug keypad code, stop at the input routine and watch the register or memory location that receives the key.
 
 ## LCD And Seven-Segment Output
