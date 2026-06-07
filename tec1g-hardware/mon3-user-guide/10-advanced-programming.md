@@ -673,8 +673,6 @@ standard way to use the menu.  The second item displays a selectable list
 that saves a value in RAM and returns to the menu.  The last item will
 create a parameter entry list of four 2-byte items.
 
-Constants and RAM locations:
-
 ```asm
 MENUDRIVER  .EQU 1FH  ;Menu API
 PARAMDRIVER .EQU 20H  ;Param API
@@ -682,25 +680,55 @@ MENUPOP     .EQU 2FH  ;Menu Pop API
 
 PROGRAM1    .EQU 1000H ;Program 1
 BAUD        .EQU 2008H ;Baud value
-PARAM1      .EQU 2000H ;two bytes per param
-PARAM2      .EQU 2002H
+PARAM1      .EQU 2000H ;two bytes
+PARAM2      .EQU 2002H ;per param
 PARAM3      .EQU 2004H
 PARAM4      .EQU 2006H
-```
 
-Create the main menu:
-
-```asm
-0E 1F     ld c,MENUDRIVER
-21 00 30  ld hl,menuCFG ;config
-D7        rst 10H ;API call
-
+;Create Menu
+0E 1F      ld c,MENUDRIVER
+21 00 30   ld hl,menuCFG ;config
+D7         rst 10H ;API call
 ;Code continues in menu routines
-```
 
-Main menu configuration:
+;Create Selectable List
+setBaud:
+0E 1F      ld c,MENUDRIVER
+21 00 30   ld hl,baudCFG ;config
+D7         rst 10H ;API call
+;Code continues in menu routines
 
-```asm
+;Baud rate saving code
+baud12:
+21 00 12   ld hl,1200H ;baud rate
+18 0D      jr saveBaud ;cont..
+
+baud24:
+21 00 24   ld hl,2400H ;baud rate
+18 08      jr saveBaud ;cont..
+
+baud48:
+21 00 48   ld hl,4800H ;baud rate
+18 03      jr saveBaud ;cont..
+
+baud96:
+21 00 96   ld hl,9600H ;baud rate
+
+saveBaud:
+22 08 20   ld (BAUD),hl ;save baud
+0E 2F      ld c,MENUPOP
+D7         rst 10H ;API call
+C9         ret ;Return to Main Menu
+
+;Create Parameter Entry
+createParam:
+0E 20      ld c,PARAMDRIVER
+21 80 30   ld hl,paramCFG ;config
+D7         rst 10H ;API call
+;Parameter code continues
+C9         ret ;Return to Main Menu
+
+;Main Menu Configuration
 menuCFG:
     .db 3   ;three entries
     .db "-Menu-"
@@ -711,22 +739,8 @@ menuCFG:
     .dw setBaud
     .db "Parameters",0
     .dw createParam
-```
 
-Create a selectable list:
-
-```asm
-setBaud:
-0E 1F     ld c,MENUDRIVER
-21 00 30  ld hl,baudCFG ;config
-D7        rst 10H ;API call
-
-;Code continues in menu routines
-```
-
-Selectable list configuration:
-
-```asm
+;Selectable List Configuration
 baudCFG:
     .db 4   ;four entries
     .db "BAUDrt"
@@ -739,48 +753,8 @@ baudCFG:
     .dw baud48
     .db "9600",0
     .dw baud96
-```
 
-Baud rate saving code:
-
-```asm
-baud12:
-21 00 12  ld hl,1200H ;baud rate
-18 0D     jr saveBaud ;cont..
-
-baud24:
-21 00 24  ld hl,2400H ;baud rate
-18 08     jr saveBaud ;cont..
-
-baud48:
-21 00 48  ld hl,4800H ;baud rate
-18 03     jr saveBaud ;cont..
-
-baud96:
-21 00 96  ld hl,9600H ;baud rate
-
-saveBaud:
-22 08 20  ld (BAUD),hl ;save baud
-0E 2F     ld c,MENUPOP
-D7        rst 10H ;API call
-C9        ret ;Return to Main Menu
-```
-
-Create parameter entry:
-
-```asm
-createParam:
-0E 20     ld c,PARAMDRIVER
-21 80 30  ld hl,paramCFG ;config
-D7        rst 10H ;API call
-
-;Parameter code continues
-C9        ret ;Return to Main Menu
-```
-
-Parameter entry configuration:
-
-```asm
+;Parameter Entry Configuration
 paramCFG:
     .db 4   ;four entries
     .db "Input "
