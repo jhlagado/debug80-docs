@@ -846,13 +846,12 @@ Set Expand state
 - Input: A = Desired expand state; 0 = off, 04H = on
 - Destroy: A
 
-## Miscellaneous Calls
-
 ### toggleCaps #48 (30H)
 Toggle Caps Lock state. On/Off or vice versa
 - Input: none
 - Destroy: A
 
+## Miscellaneous Calls
 
 ### timeDelay #33 (21H)
 A 16-bit delay routine.  An input delay of <span class="mon3-address-emphasis">2000H</span> is approximately 50ms.
