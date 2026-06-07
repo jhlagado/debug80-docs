@@ -41,23 +41,23 @@ If the panel is hidden, open it from VS Code's view picker.
 
 Debug80 works from folders in the VS Code workspace. Create one project folder for each TEC-1G application or program you want to build. Each workspace folder is a candidate project: a place for source files, build output and project settings. A folder becomes a Debug80 project after it is initialized.
 
-Open the **File** menu and choose **Add Folder to Workspace**.
+Click the **+** button in the Debug80 Project section. Debug80 opens a folder picker, adds the selected folder to the VS Code workspace and selects that folder in the Project section.
 
-![File menu with Add Folder to Workspace selected](../../assets/images/debug80-book/book1/add-folder-menu.png)
-
-You can add an existing folder that already holds your source, or create a fresh one from the folder chooser. This example creates a new folder called `project1`. The folder name appears in the Debug80 Project selector.
+You can add an existing folder that already holds your source, or create a fresh one from the folder picker. This example creates a new folder called `project1`.
 
 ![New folder dialog creating project1](../../assets/images/debug80-book/book1/create-project-folder-dialog.png)
 
-Select the new folder and add it to the workspace.
+Select the new folder and add it.
 
 ![Folder chooser with project1 selected](../../assets/images/debug80-book/book1/add-project-folder-dialog.png)
 
-A new folder appears in Debug80 as an uninitialized project. It is visible and selectable, but it still needs Debug80 project settings before it can build a target.
+A folder that already contains Debug80 project settings opens as the active project. A new folder appears as an uninitialized project, with the platform selector and **Initialize** action visible.
 
 ![Uninitialized Debug80 project in the Project section](../../assets/images/debug80-book/book1/uninitialized-project-panel.png)
 
-Choose the platform for the folder, then click **Initialize**.
+When Debug80 asks whether to initialize the selected folder, choose **Initialize** to create the starter project files. Choose **Not Now** when you want to leave the folder selected and initialize it later.
+
+You can also choose the platform in the Project section, then click **Initialize** yourself.
 
 ![Uninitialized Debug80 project with the Initialize button](../../assets/images/debug80-book/book1/uninitialized-project-initialize-button-wide.png)
 
@@ -75,6 +75,6 @@ When the workspace holds more than one folder, the Project selector chooses whic
 
 ![Project selector showing an uninitialized project1 folder](../../assets/images/debug80-book/book1/select-project-folder-picker.png)
 
-To work on several projects at once, run **File > Add Folder to Workspace** again for each one. Every added folder appears in the Project selector.
+VS Code's **File > Add Folder to Workspace** command still works. The Debug80 **+** button is the direct route when you are adding a folder for Debug80 work.
 
 [Book 1](index.md) | [Create A TEC-1G Project →](02-create-a-tec1g-project.md)

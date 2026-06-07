@@ -21,13 +21,11 @@ When you build or start debugging, Debug80 uses the selected target. It assemble
 
 The TEC-1G platform gives the first project a practical shape: AZM source, MON-3, emulator panel and the later CoolTerm transfer path.
 
-Select the uninitialized folder in the Debug80 Project section, choose **TEC-1G** and click **Initialize**.
+For a new folder, choose **TEC-1G** in the Project section before initialization. If you added the folder with the **+** button, the initialization prompt uses the platform selected in the Project section. You can also leave the folder uninitialized, choose the platform yourself and click **Initialize**.
 
 ![Platform selector with TEC-1G selected](../../assets/images/debug80-book/book1/select-tec1g-platform.png)
 
 That creates a TEC-1G / MON-3 project. Its first target is placed at `0x4000`, the user-code area for that platform.
-
-The Command Palette command **Debug80: Create Project** does the same job. Open the palette with **Shift-Command-P** on macOS or **Shift-Control-P** on Windows and Linux. The panel is clearer for a first project because it shows the folder, platform and initialization state together.
 
 ## Choose The Platform
 
