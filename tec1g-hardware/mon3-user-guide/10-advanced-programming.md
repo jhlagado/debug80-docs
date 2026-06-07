@@ -952,16 +952,16 @@ called the NVRAM, "Parameter RAM" or PRAM.
 
 *RTC add-on board connected to the TEC-1G GPIO port.*
 
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-50-figure-2.png)
-
-*RTC setup display.*
-
 To initially set the RTC, a convenient RTC Setup routine has been provided
 in the Settings item in the Main Menu.  Select "Configure RTC".  Press the
 following keys to update the time/date: 0 = Hour, 1 = Minute, 2 = Second, 3 =
 12/24h, 4 = Day of week, 5 = Day, 6 = Month, 7 = Year, 8 = View RTC PRAM, F =
 Reset RTC, <span class="mon3-key-emphasis">AD</span> = Exit.  When viewing RTC PRAM data, <span class="mon3-key-emphasis">Plus</span> = Move Down,
 <span class="mon3-key-emphasis">Minus</span> = Move Up, <span class="mon3-key-emphasis">AD</span> = Exit back to RTC Setup.
+
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-50-figure-2.png)
+
+*RTC setup display.*
 
 Mon3 will automatically utilise the internal PRAM to retain some settings
 when the TEC-1G is powered down. 14 free bytes are available to be used by
