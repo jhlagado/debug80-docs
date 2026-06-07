@@ -40,6 +40,8 @@ when a keypad press is required.
 Here is an example of magazine code at <span class="mon3-address-emphasis">0800H</span> with key input converted to
 use Mon3 at RAM address <span class="mon3-address-emphasis">4000H</span>. The code in RED has been modified.
 
+![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-27-figure-1.png)
+
 ```asm
 LD A,80H      4000     3E 80
 OUT (2),A     4002     D3 02
@@ -56,7 +58,5 @@ JP NZ,4009H   4016     C2 09 40
 RRC B         4019     CB 08
 JP 4006H      401B     C3 06 40
 ```
-
-![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-27-figure-1.png)
 
 [← Terminal Monitor](08-terminal-monitor.md) | [Guide](index.md) | [Advanced Programming →](10-advanced-programming.md)
