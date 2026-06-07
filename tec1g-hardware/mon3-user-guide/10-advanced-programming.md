@@ -1812,22 +1812,22 @@ programs have already been converted to Intel Hex files and are ready to
 load onto the TEC.  All programs start at address <span class="mon3-address-emphasis">2000H</span>.  Source code for all
 programs are provided and can be changed and studied.
 
-The TEC-1G GitHub account is here: https://github.com/MarkJelic/TEC-1G
+The TEC-1G GitHub account is here: [https://github.com/MarkJelic/TEC-1G](https://github.com/MarkJelic/TEC-1G)
 and the GLCD examples are in the TEC-Deck/Graphical_LCD directory.
 
-lcd_3d_demo
+### lcd_3d_demo
 Draw 3D wireframe graphics and rotate them.  This program requires
 keypad input to rotate the objects.  Buttons 4,8 and C rotate the object in
 the 3-axis.  <span class="mon3-key-emphasis">Plus</span> and <span class="mon3-key-emphasis">Minus</span> will zoom the object in and out.  0 will return to
 the main menu.  Pressing <span class="mon3-key-emphasis">GO</span> will exit the program
 
-lcd_mad_program
+### lcd_mad_program
 Draw Alfred E. Neuman's face.  This program draws lines between two
 points and creates the face of the Mad Magazine mascot.  It draws one line
 at a time, similar to how it would display on an Apple ][.  But if the program
-is run at <span class="mon3-address-emphasis">2022H</span> it will generate instantly.  https://meatfighter.com/mad/
+is run at <span class="mon3-address-emphasis">2022H</span> it will generate instantly.  [https://meatfighter.com/mad/](https://meatfighter.com/mad/)
 
-lcd_maze_gen
+### lcd_maze_gen
 Create a maze.  This program generates a maze using a recursive
 backtracking algorithm.  Watch the maze slowly generate before your eyes.
 
