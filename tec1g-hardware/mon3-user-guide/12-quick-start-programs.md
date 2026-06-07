@@ -318,7 +318,7 @@ DISPLAYCURSOR    .EQU 1EH
 4026 18 DB       JR 4003           ;Done, check for new key
 ```
 
-### Display a Clock on the Seven Segments
+## Display a Clock on the Seven Segments
 
 This program requires the RTC Add-on board and will display the current
 time set on the RTC Board on the Seven Segments..  A check for 12/24 hour

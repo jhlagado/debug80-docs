@@ -65,10 +65,10 @@ where the file is to be loaded at.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-75-figure-1.png)
 
-### Save / Load Session
-
 See the Useful Links section below on how to load your drive with ready to
 run TEC-1G files.
+
+### Save / Load Session
 
 The entire contents of RAM can be saved to a file and loaded back to the
 TEC.  This is an equivalent to saving/restoring a session.   It replaces any
@@ -97,11 +97,11 @@ Load Session does the reverse of Save Session.  It will ask to Confirm this
 task as it will overwrite all existing RAM data.  Load Session can also be
 access in Data Entry mode by pressing <span class="mon3-key-emphasis">Fn-7</span>.
 
-### Error Messages
-
 While the drive is being accessed, the LCD will display the current progress.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-76-figure-1.png)
+
+### Error Messages
 
 If any errors occur while accessing the drive, an error message will be
 displayed on the LCD and the code will exit after a key is pressed.

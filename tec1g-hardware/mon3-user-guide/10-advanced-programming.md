@@ -1082,7 +1082,7 @@ Does not clear RTC RAM.  Sets DS1302 to 01:00.00 AM, 01/01/2000.
 - Input: none
 - Destroy: none
 
-Note: To be used only when the RTC requires a settings reset e.g. if it's not
+Note: To be used **only** when the RTC requires a settings reset e.g. if it's not
 "ticking". Use `checkDS1302` to "reset" the DS1302 to a ready state, as part of
 program initialization.
 
@@ -1121,7 +1121,7 @@ Note that values returned are BCD coded.
 
 ### setDate #5 (05H)
 Sets the Calendar to a specified date/month/year.  Invalid dates may be
-accepted e.g. 30 February as the DS1302 does not validate dates as
+accepted e.g. **30 February** as the **DS1302** does not validate dates as
 programmed; it simply rolls over at midnight.
 - Input: `H` = date
 - Input: `L` = month
@@ -1245,7 +1245,7 @@ Exit back to RTC Setup.
 Mon3 includes a Graphical LCD (GLCD) library that will work with the
 TEC-DECK Graphical LCD PCB Add-On.  If the Graphical LCD is installed on
 the TEC-1G via the TEC-DECK headers, special GLCD API calls can be used
-to interface with the GLCD.  The library is for GLCDs with the ST7920 chip.
+to interface with the GLCD.  The library is for GLCDs with the **ST7920** chip.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-57-figure-1.jpg)
 
