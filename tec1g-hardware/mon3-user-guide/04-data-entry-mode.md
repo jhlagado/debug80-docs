@@ -21,8 +21,6 @@ address.
 
 ![MON-3 illustration](../../assets/images/tec1g-hardware/mon3-user-guide/page-13-figure-1.jpg)
 
-*The four red displays on the left show the address. The two green displays on the right show the data byte at that address.*
-
 The decimal place LED on the segments indicates which part, Address or
 Data, is currently enabled for direct updates.   In the picture above, the dots
 are on the Data segments.
