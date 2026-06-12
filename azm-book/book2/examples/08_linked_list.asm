@@ -42,9 +42,7 @@ main:
     halt
 
 ; list_sum_u16: sum value bytes along list starting at HL (null = 0)
-;!      in        HL
-;!      out       HL
-;!      clobbers  AF, BC, DE, HL
+;! in HL; out HL; clobbers AF,BC,DE,HL
 @list_sum_u16:
     ld de, 0
 .sum_loop:
@@ -71,9 +69,7 @@ main:
     ret
 
 ; list_find_u8: find first node with value A; HL = node or 0, carry set if found
-;!      in        HL, A
-;!      out       HL, carry
-;!      clobbers  AF, BC, DE
+;! in HL,A; out HL,carry; clobbers A,BC,DE
 @list_find_u8:
     ld b, a
 .find_loop:
@@ -101,9 +97,7 @@ main:
     ret
 
 ; list_push_head: prepend node DE with value A; updates list_head
-;!      in        A, DE
-;!      out       (list_head) = DE
-;!      clobbers  AF, BC, HL
+;! in A,DE; clobbers BC,DE,HL
 @list_push_head:
     push af
     ld hl, list_head

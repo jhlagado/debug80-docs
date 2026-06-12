@@ -21,7 +21,7 @@ Use this book when you want the exact assembler rules. If you want a guided intr
 5. [Raw Data, Storage and Strings](04-data-storage-includes.md)
 6. [The Layout System](05-layout-system.md)
 7. [Register Contracts](06-register-contracts.md)
-8. [Op Declarations and Aliases](07-ops-aliases.md)
+8. [Ops, Aliases and Source Composition](07-ops-aliases.md)
 9. [Diagnostics and Output](08-diagnostics-listings-output.md)
 
 ## Appendices

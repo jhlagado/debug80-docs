@@ -33,9 +33,7 @@ AZMDoc plus register contracts close that gap. A contract on `find_max` might sa
 
 ```asm
 ; find_max: scan a byte table and return the largest value
-;!      in        HL, B
-;!      out       A
-;!      clobbers  B, HL
+;! in HL,B; out A; clobbers B,HL
 @find_max:
 ```
 
@@ -70,7 +68,7 @@ The caller asks one question about every register it still plans to use after `c
 The callee contract answers:
 
 ```asm
-;!      clobbers  HL
+;! clobbers HL
 ```
 
 "No — HL may be different after return."
@@ -116,8 +114,7 @@ CopyBytesLoop:
 BC is restored before `ret`. The caller's BC is intact. Correct contract:
 
 ```asm
-;!      in        HL, DE, B
-;!      clobbers  A, HL, DE
+;! in HL,DE,B; clobbers A,HL,DE
 ```
 
 BC does not appear in `clobbers` because the push/pop pair preserved it. Writing `out BC` would wrongly suggest the caller should read BC as a return value.
@@ -164,9 +161,7 @@ A complete contract for `find_max`:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
-;!      in        HL, B
-;!      out       A
-;!      clobbers  B, HL
+;! in HL,B; out A; clobbers B,HL
 @find_max:
   ld a, 0
 FindMaxLoop:
@@ -184,9 +179,7 @@ The human-readable `;` line stays for prose. The `;!` lines are what the analyze
 Carrier lists use comma-separated names:
 
 ```asm
-;!      in        A, DE, HL
-;!      out       carry
-;!      clobbers  BC
+;! in A,DE,HL; out carry; clobbers BC
 ```
 
 Register pairs are shorthand: `BC` means B and C. Flags are named individually: `carry`, `zero`, `sign`, `parity`, `halfCarry`. Use `carry` for the carry flag and `C` for register C — both are short names; the distinction matters.
@@ -194,9 +187,7 @@ Register pairs are shorthand: `BC` means B and C. Flags are named individually: 
 A carrier that transforms in place can appear in both `in` and `out`:
 
 ```asm
-;!      in        DE
-;!      out       DE
-;!      clobbers  A
+;! in DE; out DE; clobbers A
 ```
 
 That declares an intentional transformation, not an accidental clobber.
@@ -211,9 +202,7 @@ AZM Book 2 uses carry for success and failure (`ring_push`, `ring_pop` and other
 
 ```asm
 ; try_read: read one byte into A; carry set on success
-;!      in        HL
-;!      out       A, carry
-;!      clobbers  BC, HL
+;! in HL; out A,carry; clobbers BC,HL
 @try_read:
     ...
     scf
@@ -226,14 +215,14 @@ TryReadEmpty:
 The human comment explains *meaning* (success vs empty). The contract names the **carrier**:
 
 ```asm
-;!      out       carry
+;! out carry
 ```
 
 ### Empty test on zero
 
 ```asm
 ; is_empty: return whether count byte is zero
-;!      out       zero
+;! out zero
 @is_empty:
     ld a, (count)
     or a
@@ -248,9 +237,7 @@ A flag can be the entire return value. You do not need a separate error code byt
 
 ```asm
 ; ring_push: append byte in A; carry set on success, carry clear when full
-;!      in        A, IX
-;!      out       carry
-;!      clobbers  BC, DE, HL
+;! in A,IX; out carry; clobbers BC,DE,HL
 @ring_push:
 ```
 
@@ -264,9 +251,7 @@ Rule: **`out` describes what the caller may rely on after `ret`; `clobbers` list
 
 ```asm
 ; ring_pop: oldest byte in A; carry set on success, carry clear when empty
-;!      in        IX
-;!      out       A, carry
-;!      clobbers  BC, DE, HL
+;! in IX; out A,carry; clobbers BC,DE,HL
 @ring_pop:
 ```
 
@@ -279,9 +264,7 @@ Register contracts treat `out` as authoritative at the return boundary. Internal
 The `@` prefix marks an explicit routine entry for register contract analysis:
 
 ```asm
-;!      in        HL, B
-;!      out       A
-;!      clobbers  B, HL
+;! in HL,B; out A; clobbers B,HL
 @find_max:
 ```
 
@@ -437,16 +420,12 @@ CountAboveSkip:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
-;!      in        HL, B
-;!      out       A
-;!      clobbers  B, HL
+;! in HL,B; out A; clobbers B,HL
 @find_max:
   ...
 
 ; count_above: count bytes strictly above threshold in C
-;!      in        HL, B, C
-;!      out       A
-;!      clobbers  B, HL
+;! in HL,B,C; out A; clobbers B,HL
 @count_above:
   push de
   ld d, 0
@@ -470,7 +449,7 @@ If `main` reloads HL before each call (Chapter 10), checks pass. If `main` uses 
 If `find_max` later uses DE internally but the contract still omits DE:
 
 ```asm
-;!      clobbers  B, HL   ; stale — body now uses DE
+;! clobbers B,HL   ; stale — body now uses DE
 @find_max:
   ...
 ```
@@ -540,9 +519,7 @@ source.asm:18: warning: HL is live across call to find_max, but find_max may clo
 
 ```asm
 ; normalize: clamp A to range 0-127
-;!      in        A
-;!      out       A
-;!      clobbers  B
+;! in A; out A; clobbers B
 @normalize:
   cp $80
   jr c, NormalizeDone

@@ -56,9 +56,7 @@ Every subroutine in this book should document its contract with AZMDoc (Book 1 C
 
 ```asm
 ; gcd_u16: greatest common divisor (Euclidean, subtractive)
-;!      in        HL, DE
-;!      out       HL
-;!      clobbers  AF, DE
+;! in HL,DE; out HL; clobbers AF,DE
 @gcd_u16:
 GcdLoop:
     ld a, h
@@ -172,9 +170,7 @@ Binary exponentiation is a natural follow-on (used heavily in crypto and fixed-p
 
 ```asm
 ; power_u8: unsigned C^B into A (B may be 0 → 1)
-;!      in        B, C
-;!      out       A
-;!      clobbers  AF, BC, DE
+;! in B,C; out A; clobbers F,BC,DE
 @power_u8:
     ld e, 1
 PowerLoop:

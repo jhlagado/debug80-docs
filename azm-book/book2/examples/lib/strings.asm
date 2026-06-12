@@ -3,9 +3,7 @@
 ; Contract: Chapter 3 string convention — HL in, A out for length/search.
 
 ; strlen_u8: count bytes before null (terminator not counted)
-;!      in        HL
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL; out A; clobbers F,B,HL
 @strlen_u8:
     ld b, 0
 .loop:

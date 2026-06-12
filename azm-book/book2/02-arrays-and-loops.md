@@ -189,9 +189,7 @@ After sorting, find the first index where `values[i] >= C`:
 
 ```asm
 ; find_byte_ge: first index where values[i] >= C, or $FF if none
-;!      in        HL, C
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL,C; out A; clobbers F,B,HL
 @find_byte_ge:
     ld b, 0
 FindByteScan:

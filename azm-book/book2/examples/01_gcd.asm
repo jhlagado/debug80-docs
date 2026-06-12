@@ -23,9 +23,7 @@ main:
     halt
 
 ; gcd_u16: greatest common divisor (Euclidean, subtractive)
-;!      in        HL, DE
-;!      out       HL
-;!      clobbers  AF, DE
+;! in HL,DE; out HL; clobbers AF,DE
 @gcd_u16:
 .loop:
     ld a, h
@@ -52,9 +50,7 @@ main:
     ret
 
 ; power_u8: unsigned C^B into A (B may be 0 → 1)
-;!      in        B, C
-;!      out       A
-;!      clobbers  AF, BC, DE, E
+;! in B,C; out A; clobbers F,BC,DE
 @power_u8:
     ld e, 1
 .pow_loop:
@@ -71,9 +67,7 @@ main:
     ret
 
 ; mul8_a_by_c: A := A * C (8-bit, small operands only)
-;!      in        A, C
-;!      out       A
-;!      clobbers  AF, BC, DE
+;! in A,C; out A; clobbers F,BC,DE
 @mul8_a_by_c:
     ld b, a
     ld a, 0

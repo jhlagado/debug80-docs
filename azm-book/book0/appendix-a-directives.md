@@ -18,6 +18,7 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 | `.dw` | `.dw expr[,expr…]` | Emits one or more 16-bit little-endian values | 4 |
 | `.ds` | `.ds count[,fill]` | Reserves `count` bytes; optional `fill` byte; accepts type expressions | 4, 5 |
 | `.include` | `.include "path"` | Inserts the named source file at this point | 7 |
+| `.import` | `.import "path"` | Loads the named source file as a module-like unit with public `@` labels | 7 |
 | `.align` | `.align n` | Advances the address to the next multiple of `n`, inserting zero bytes | 3 |
 | `.cstr` | `.cstr "text"` | Emits string bytes followed by a `$00` terminator (C-style) | 4 |
 | `.pstr` | `.pstr "text"` | Emits a length byte followed by string bytes (Pascal-style) | 4 |

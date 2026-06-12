@@ -66,9 +66,7 @@ main:
     halt
 
 ; ring_push: append one byte; carry set on success, carry clear when full
-;!      in        A, IX
-;!      out       carry
-;!      clobbers  BC, DE, HL
+;! in A,IX; out carry; clobbers BC,DE,HL
 @ring_push:
     ld e, a
     ld a, (ix + RING_COUNT)
@@ -94,9 +92,7 @@ main:
     ret
 
 ; ring_pop: remove oldest byte; carry set on success, carry clear when empty
-;!      in        IX
-;!      out       A, carry
-;!      clobbers  BC, DE, HL
+;! in IX; out A,carry; clobbers BC,DE,HL
 @ring_pop:
     ld a, (ix + RING_COUNT)
     or a
@@ -121,9 +117,7 @@ main:
     ret
 
 ; ring_advance_index: A := (A + 1) mod RING_CAP
-;!      in        A
-;!      out       A
-;!      clobbers  F
+;! in A; out A; clobbers F
 @ring_advance_index:
     inc a
     cp RING_CAP

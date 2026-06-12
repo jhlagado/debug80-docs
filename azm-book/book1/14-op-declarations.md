@@ -266,9 +266,7 @@ end
 The rewritten `count_above`:
 
 ```asm
-;!      in        HL, B, C
-;!      out       A
-;!      clobbers  B, HL
+;! in HL,B,C; out A; clobbers B,HL
 @count_above:
   push de
   ld d, 0

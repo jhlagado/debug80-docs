@@ -48,9 +48,7 @@ main:
     halt
 
 ; extract_bit_u8: isolate bit 1 of A into A as 0 or 1
-;!      in        A
-;!      out       A
-;!      clobbers  F
+;! in A; out A; clobbers F
 @extract_bit_u8:
     and FLAG_ERROR
     rr a

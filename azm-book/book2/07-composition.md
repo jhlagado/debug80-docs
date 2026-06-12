@@ -8,9 +8,9 @@ nav_order: 8
 
 # Chapter 7 — Composition
 
-Every chapter so far kept the whole program in one `.asm` file. That is fine while you are learning a single algorithm. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each deserve their own file — but AZM still produces **one flat listing** with no `import`, no modules and no hidden linker.
+Every chapter so far kept the whole program in one `.asm` file. That is fine while you are learning a single algorithm. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each deserve their own file. AZM still produces one output program with no hidden linker.
 
-This chapter splits a tiny program across files with **`.include`**, pulls `strlen_u8` from a shared library and states the **contracts** (AZMDoc, naming, register roles) that replace a module system. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
+This chapter splits a tiny program across files with **`.include`**, pulls `strlen_u8` from a shared library and states the **contracts** (AZMDoc, naming, register roles) that keep the file boundary readable. AZM 0.2.9 also adds **`.import`** for module-style routine files with public `@` labels; Book 0 covers that reference workflow. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
 
 ---
 
@@ -83,9 +83,7 @@ Treat a library file as **implementation you paste in**, plus a header comment t
 
 ```asm
 ; strlen_u8: count bytes before null (terminator not counted)
-;!      in        HL
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL; out A; clobbers F,B,HL
 @strlen_u8:
     ld b, 0
 StrLenLoop:
@@ -138,7 +136,7 @@ Optional **constants header** — if several files need `CHAR_L` or `RING_CAP`, 
 
 ---
 
-## Files + contracts (no modules)
+## Files and contracts
 
 Without `import`, **the contract is documentation plus naming discipline**:
 
@@ -241,7 +239,7 @@ Step into `strlen_u8` once: confirm the library file's labels appear in the list
 ## Summary
 
 - **`.include "path"`** pastes another `.asm` file into the current unit; paths are relative to the including file.
-- There is **no module system** — one address space, global labels, **files + AZMDoc contracts** instead of `import`.
+- **`.import "path"`** is available in AZM 0.2.9 and later for module-style routine files with public `@` labels and private helper labels. This chapter keeps using `.include` because the companion example is a text-composition example.
 - **Library files** hold subroutines (and optional `.equ` headers), not `main`, not stray `.org`.
 - **`@routine:`** and `;!` tags stay mandatory so `--rc warn` can check callers across file boundaries.
 - **Prefix names** and dotted loop labels avoid duplicate global symbols when includes multiply.

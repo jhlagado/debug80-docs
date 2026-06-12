@@ -19,9 +19,7 @@ main:
     halt
 
 ; insertion_sort: sort byte table ascending (insertion sort)
-;!      in        HL, B
-;!      out       HL
-;!      clobbers  AF, BC, DE, HL
+;! in HL,B; out HL; clobbers AF,BC,DE,HL
 @insertion_sort:
     ld hl, sort_len
     ld (hl), b
@@ -81,9 +79,7 @@ main:
     ret
 
 ; find_byte_ge: first index where values[i] >= C, or $FF if none
-;!      in        HL, C
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL,C; out A; clobbers F,B,HL
 @find_byte_ge:
     ld b, 0
 .scan:

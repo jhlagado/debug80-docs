@@ -36,11 +36,11 @@ Produces three output files next to the source: `source.bin`, `source.hex`, `sou
 | `--source-root` | `path` | Write source paths in `.d8.json` relative to this root (for portable maps) |
 | `--asm80` | — | Write a `.z80` lowered-ASM80 source file alongside other artifacts |
 
-## Source and include flags
+## Source, include and import flags
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `-I` | `dir` | Add `dir` to the include search path; repeatable |
+| `-I` | `dir` | Add `dir` to the `.include` / `.import` search path; repeatable |
 | `--aliases` | `file` | Load a JSON alias profile; repeatable for multiple files |
 | `--interface` | `file` | Load an `.asmi` external register contract file; repeatable |
 

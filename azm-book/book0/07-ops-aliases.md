@@ -1,14 +1,14 @@
 ---
 layout: default
-title: "Chapter 7 — Op Declarations and Aliases"
+title: "Chapter 7 — Ops, Aliases and Source Composition"
 parent: "AZM Book 0 — Assembler Manual"
 nav_order: 7
 ---
 [← Register Contracts](06-register-contracts.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)
 
-# Chapter 7 — Op Declarations and Aliases
+# Chapter 7 — Ops, Aliases and Source Composition
 
-This chapter adds two features: op declarations, which let you name and reuse small instruction idioms, and directive aliases, which map legacy directive forms to canonical AZM directives.
+This chapter adds three source-organization features: op declarations, which let you name and reuse small instruction idioms; directive aliases, which map legacy directive forms to canonical AZM directives; and source composition with `.include` and `.import`.
 
 ---
 
@@ -238,7 +238,11 @@ Instruction mnemonic changes — for example, source using `MOV` for `LD` — ne
 
 ---
 
-## Including source files
+## Source files and composition
+
+Use `.include` when you want text copied into the current source file. Use `.import` when you want another source file to behave like a small module with public `@` routines and private helper labels.
+
+### `.include`
 
 `.include "path"` inserts another source file inline at that point, as if you had typed its contents there. The file path is relative to the including file; add search directories with `-I`.
 
@@ -251,6 +255,109 @@ Op declarations and layout types typically live in dedicated include files, pull
         .include "layout.asm"      ; type declarations
         .include "ops.asm"         ; op declarations
 ```
+
+Use `.include` for constants, hardware port definitions, shared layout declarations, enum declarations, small text fragments, legacy compatibility source and code that is intentionally part of the including file.
+
+### `.import`
+
+AZM 0.2.9 and later supports `.import`:
+
+```asm
+.import "math.asm"
+```
+
+`.import` loads another source file as a module-like unit. The imported file still assembles into the same output program, and its bytes are emitted at the point where the `.import` appears. The difference from `.include` is visibility: imported files expose their public `@` labels to other files, while plain labels inside the imported file are private helper labels.
+
+Use `.import` for reusable routine files, library-style source files and files that should expose a small public surface.
+
+```asm
+; main.asm
+        .org    $4000
+        .import "math.asm"
+
+@Start:
+        ld      a,10
+        call    DoubleA
+        ret
+```
+
+```asm
+; math.asm
+;! in A; out A; clobbers F
+@DoubleA:
+        add     a,a
+        ret
+
+ClampA:
+        cp      100
+        ret     c
+        ld      a,100
+        ret
+```
+
+`DoubleA` is public because it is declared as `@DoubleA:`. Code in `main.asm` calls it as `DoubleA`, without the `@`. `ClampA` is private to `math.asm`: it can be used inside `math.asm`, but code outside that imported file should not call it directly.
+
+The `@` prefix has both meanings here. It marks `DoubleA` as a public imported label, and it marks a register contract routine boundary. Under `--rc strict`, AZM treats `DoubleA` as a known internal routine and checks calls to it through its `;!` contract.
+
+If outside code tries to reference a private imported label, AZM reports a visibility diagnostic. Keep the call inside the imported file, or make the helper public only when it is genuinely part of the file's interface:
+
+```asm
+@ClampA:
+        cp      100
+        ret     c
+        ld      a,100
+        ret
+```
+
+### Import order and paths
+
+Imported source assembles at the point where `.import` appears:
+
+```asm
+        .org    $4000
+        .import "module.asm"
+
+@Start:
+        ret
+```
+
+The bytes from `module.asm` are emitted before `@Start`. `.import` is not only a declaration; it contributes source at that point in the program.
+
+`.import` resolves paths the same way as `.include`: first relative to the file that contains the directive, then through include search paths passed with `-I`.
+
+```sh
+azm -I include src/main.asm
+```
+
+Repeated imports of the same resolved file are idempotent. The file is loaded and emitted once:
+
+```asm
+.import "keyboard.asm"
+.import "keyboard.asm"      ; same resolved file, emitted once
+```
+
+Repeated includes are still textual and repeatable:
+
+```asm
+.include "constants.asm"
+.include "constants.asm"    ; expanded twice
+```
+
+Recursive include/import chains are rejected with a source diagnostic.
+
+### First-release limits
+
+`.import` is deliberately small in AZM 0.2.9:
+
+- `.import "file.asm"` is the only supported import syntax
+- There is no `as Name` namespace syntax
+- There is no `Module.Symbol` reference syntax
+- There is no re-export syntax
+- Privacy currently applies to labels, not to constants, enums, layout types, type aliases, ops or directive aliases
+- Private imported labels are hidden from outside code, but duplicate private labels across imported files are not yet guaranteed to be allowed
+- `.include` behaviour is unchanged
+
+Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. ASM80-compatible lowered `.z80` output does not currently support `.import`; if a program uses `.import` and you request `--asm80`, AZM reports an explicit `AZMN_ASM80` diagnostic.
 
 ---
 

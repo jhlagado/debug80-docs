@@ -33,9 +33,7 @@ main:
 CHAR_L .equ 'L'
 
 ; strlen_u8: bytes before null terminator (HL → string)
-;!      in        HL
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL; out A; clobbers F,B,HL
 @strlen_u8:
     ld b, 0
 .slen_loop:
@@ -50,9 +48,7 @@ CHAR_L .equ 'L'
     ret
 
 ; strcpy_u8: copy null-terminated string HL → DE (terminator included)
-;!      in        HL, DE
-;!      out       DE
-;!      clobbers  AF, HL, DE
+;! in HL,DE; out DE; clobbers AF,HL,DE
 @strcpy_u8:
 .copy:
     ld a, (hl)
@@ -64,9 +60,7 @@ CHAR_L .equ 'L'
     ret
 
 ; strcmp_u8: lexicographic compare; 0 equal, 1 HL>DE, $FF HL<DE
-;!      in        HL, DE
-;!      out       A
-;!      clobbers  AF, HL, DE
+;! in HL,DE; out A; clobbers F,HL,DE
 @strcmp_u8:
 .cmp_loop:
     ld a, (hl)
@@ -92,9 +86,7 @@ CHAR_L .equ 'L'
     ret
 
 ; str_find_char: index of first C in string, or $FF if absent
-;!      in        HL, C
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL,C; out A; clobbers F,B,HL
 @str_find_char:
     ld b, 0
 .scan:

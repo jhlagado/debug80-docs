@@ -104,9 +104,7 @@ When output is wrong, check that HL still satisfies the invariant — not every 
 
 ```asm
 ; strlen_u8: count bytes before null (does not include terminator)
-;!      in        HL
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL; out A; clobbers F,B,HL
 @strlen_u8:
     ld b, 0
 StrLenLoop:
@@ -133,9 +131,7 @@ Copying uses **two pointers**: HL reads, DE writes. Each iteration moves one byt
 
 ```asm
 ; strcpy_u8: copy null-terminated string HL → DE (terminator included)
-;!      in        HL, DE
-;!      out       DE
-;!      clobbers  AF, HL, DE
+;! in HL,DE; out DE; clobbers AF,HL,DE
 @strcpy_u8:
 StrCopyLoop:
     ld a, (hl)
@@ -159,9 +155,7 @@ Chapter 2's `find_byte_ge` returned the first index where `values[i] >= C`. Stri
 
 ```asm
 ; str_find_char: index of first C in string, or $FF if absent
-;!      in        HL, C
-;!      out       A
-;!      clobbers  AF, B, HL
+;! in HL,C; out A; clobbers F,B,HL
 @str_find_char:
     ld b, 0
 FindCharScan:
@@ -193,9 +187,7 @@ Lexicographic compare reads one byte from each string until bytes differ or both
 
 ```asm
 ; strcmp_u8: 0 if equal, 1 if HL string greater, $FF if less
-;!      in        HL, DE
-;!      out       A
-;!      clobbers  AF, HL, DE
+;! in HL,DE; out A; clobbers F,HL,DE
 @strcmp_u8:
 StrCmpLoop:
     ld a, (hl)

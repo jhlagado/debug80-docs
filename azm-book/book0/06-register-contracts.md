@@ -4,7 +4,7 @@ title: "Chapter 6 — Register Contracts"
 parent: "AZM Book 0 — Assembler Manual"
 nav_order: 6
 ---
-[← The Layout System](05-layout-system.md) | [Manual](index.md) | [Op Declarations and Aliases →](07-ops-aliases.md)
+[← The Layout System](05-layout-system.md) | [Manual](index.md) | [Ops, Aliases and Source Composition →](07-ops-aliases.md)
 
 # Chapter 6 — Register Contracts
 
@@ -74,7 +74,7 @@ The code at each call site looks correct. Neither routine has a bug when read in
 AZM uses `;!` comment blocks to record what each routine does to registers. A contract above `RENDER_TILE` makes the clobber explicit:
 
 ```asm
-;!      clobbers  B
+;! clobbers B
 @RenderTile:
 ```
 
@@ -109,7 +109,7 @@ ScanLoop:
 **Option 2 — have the callee preserve B:**
 
 ```asm
-;!      preserves B
+;! preserves B
 @RenderTile:
         push    bc
         ld      b,0
@@ -244,7 +244,7 @@ CheckLoop:
 Register preservation on the Z80 often uses the stack. AZM can check that discipline when the save and restore happen inside the same routine region:
 
 ```asm
-;!      preserves BC
+;! preserves BC
 @DrawRows:
         push    bc
         ; ... uses B and C temporarily ...
@@ -299,19 +299,48 @@ AZMDoc is the comment format for machine-readable register contracts. The `;!` p
 
 ### Source contract syntax
 
-A source contract is a block of contiguous `;!` lines immediately before a routine entry label:
+A source contract is one or more contiguous `;!` lines immediately before a routine entry label. Each `;!` line contains one or more clauses. Clauses are separated by semicolons, and register lists inside a clause are separated by commas.
+
+Prefer the compact single-line form for new code:
 
 ```asm
 ; Tests candidate piece placement against walls, floor and board rows.
 ; D contains candidate x coordinate, E contains candidate y coordinate.
 ; Carry returned set when placement is blocked.
-;!      in        DE
-;!      out       carry
-;!      clobbers  A
+;! in DE; out carry; clobbers A
 @CheckCollisionAtDe:
 ```
 
 The `;!` lines must be directly above the entry label with no intervening blank lines or other statements. Human prose comments can precede the `;!` block.
+
+The older one-clause-per-line form is still accepted for compatibility:
+
+```asm
+; old style, accepted but not preferred
+;! in DE
+;! out carry
+;! clobbers A
+@CheckCollisionAtDe:
+```
+
+If a compact contract becomes too long, split it across two `;!` lines:
+
+```asm
+;! in A,HL,DE; out carry
+;! preserves IX,IY; clobbers BC,F
+@CheckCollision:
+```
+
+Do not pad columns for alignment, do not write space-separated register lists, and do not use semicolons between registers:
+
+```asm
+; wrong
+;! in A HL
+;! in A;HL
+
+; right
+;! in A,HL; out A; clobbers F
+```
 
 ### Contract keys
 
@@ -338,35 +367,28 @@ Read those keys from the caller's point of view:
 Carriers appear in a comma-separated list after the key:
 
 ```asm
-;!      in        A,DE,HL
-;!      out       carry
-;!      clobbers  BC
+;! in A,DE,HL; out carry; clobbers BC
 ```
 
 Register pair names expand to their constituent 8-bit registers for analysis — `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
 
 ```asm
-;!      out       carry,zero
-;!      clobbers  A,carry
+;! out carry,zero; clobbers A,carry
 ```
 
-Use `carry` for the carry flag; `C` names register C. Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`.
+Use `carry` for the carry flag; `C` names register C. Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`. `F` may be used as shorthand for the flag set.
 
 Prefer individual flag names when a routine returns status in flags:
 
 ```asm
-;!      in        A,HL
-;!      out       carry
-;!      clobbers  BC
+;! in A,HL; out carry; clobbers BC
 @CheckTile:
 ```
 
 Prefer register pairs when the routine treats the pair as one value:
 
 ```asm
-;!      in        DE
-;!      out       HL
-;!      clobbers  A
+;! in DE; out HL; clobbers A
 @FindRecord:
 ```
 
@@ -376,9 +398,7 @@ A routine that transforms a register in place — reads it as input, returns it 
 
 ```asm
 ; Normalises the coordinate pair in DE.
-;!      in        DE
-;!      out       DE
-;!      clobbers  A
+;! in DE; out DE; clobbers A
 @NormaliseDe:
 ```
 
@@ -411,9 +431,7 @@ After the first run, read the generated contract for each routine. AZM inferred 
 When AZM infers a written value that could be either a clobber or an output, it may write `maybe-out`:
 
 ```asm
-;!      in        A
-;!      maybe-out A
-;!      clobbers  B
+;! in A; maybe-out A; clobbers B
 @MaskA:
 ```
 
@@ -546,4 +564,4 @@ This fires when a routine reads and writes the same register and the analyzer ne
 
 ---
 
-[← The Layout System](05-layout-system.md) | [Manual](index.md) | [Op Declarations and Aliases →](07-ops-aliases.md)
+[← The Layout System](05-layout-system.md) | [Manual](index.md) | [Ops, Aliases and Source Composition →](07-ops-aliases.md)

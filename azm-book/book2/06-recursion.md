@@ -77,9 +77,7 @@ Wirth's programs are often shown twice: a recursive definition and an equivalent
 ```asm
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
 ; Self-call; max depth FACT_MAX_DEPTH; frame FACT_FRAME_BYTES bytes.
-;!      in        B
-;!      out       A
-;!      clobbers  AF, BC, DE
+;! in B; out A; clobbers F,BC,DE
 @factorial_u8:
     ld a, b
     or a
@@ -108,9 +106,7 @@ Same contract, no self-call:
 
 ```asm
 ; factorial_iter_u8: same contract as factorial_u8, iterative
-;!      in        B
-;!      out       A
-;!      clobbers  AF, BC, DE
+;! in B; out A; clobbers F,BC,DE
 @factorial_iter_u8:
     ld a, b
     or a
@@ -186,9 +182,7 @@ demo_nums:
 ```asm
 ; sum_u8_rec: sum bytes table[0 .. A-1] into HL (A = count on entry)
 ; Self-call; one return address per tail index; no extra pushes in body.
-;!      in        HL, A
-;!      out       HL
-;!      clobbers  AF, BC, DE, HL
+;! in HL,A; out HL; clobbers AF,BC,DE,HL
 @sum_u8_rec:
     or a
     jr z, SumRecZero

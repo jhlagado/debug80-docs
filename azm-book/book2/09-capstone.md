@@ -84,9 +84,7 @@ Split the hot path into `@` subroutines with AZMDoc contracts — the same disci
 
 ```asm
 ; col_free: is column C unused?
-;!      in        C
-;!      out       Z set if column is free
-;!      clobbers  AF, HL
+;! in C; out zero; clobbers A,B,HL
 @col_free:
     ld hl, col_used
     ld b, 0
@@ -100,9 +98,7 @@ Split the hot path into `@` subroutines with AZMDoc contracts — the same disci
 
 ```asm
 ; diag_sum_free: is forward diagonal (row+col) unused?
-;!      in        B, C
-;!      out       Z set if free
-;!      clobbers  AF, DE, HL
+;! in B,C; out zero; clobbers A,DE,HL
 @diag_sum_free:
     ld a, b
     add a, c
@@ -161,9 +157,7 @@ When all three tests pass, **mark** before `call place_row` and **unmark** after
 ```asm
 ; place_row: assign a queen to row B; count solutions at row BOARD_SIZE
 ; Self-call; max depth PLACE_MAX_DEPTH; frame PLACE_FRAME_BYTES bytes.
-;!      in        B
-;!      out
-;!      clobbers  AF, BC, DE, HL
+;! in B; clobbers AF,BC,DE,HL
 @place_row:
     ld a, b
     cp BOARD_SIZE
