@@ -14,7 +14,7 @@ Every line in an AZM source file either emits bytes, names a location or control
 
 ## Line structure
 
-Each line contains at most one of:
+Each ordinary source line contains one of:
 
 - A label, optionally followed by an instruction or directive
 - A standalone instruction or directive
@@ -36,6 +36,34 @@ Start:
 ```
 
 Both forms are valid. Labels on their own line are common for routines; labels on the same line are common for constants.
+
+### Chained instruction lines
+
+Short instruction runs can share one physical line when the instructions are separated by a spaced backslash:
+
+```asm
+main: ld a,b \ inc a \ ret
+```
+
+AZM assembles that line exactly as if you had written the instructions on separate lines:
+
+```asm
+main:
+        ld      a,b
+        inc     a
+        ret
+```
+
+Use the chain form for very small runs where the source stays easier to scan on one line. The backslash must be readable as a separator: put whitespace on both sides. A backslash inside a quoted string is still part of the string, not an instruction separator.
+
+Only instructions and op invocations belong in a chain. Directives and declarations still use their own lines. A label may appear before the first instruction in the chain, but not before a later segment:
+
+```asm
+Start:  xor a \ ld b,a \ ret     ; valid
+
+        ld a,1 \ .db 2           ; error: directive in a chain
+        ld a,1 \ Next: inc a     ; error: later label in a chain
+```
 
 ## Whitespace and separators
 
@@ -113,6 +141,8 @@ MyLabel: ld a,0
 
 Both forms are valid. Identifiers can contain letters, digits and underscores and must start with a letter.
 
+Do not use `$` as a namespace separator in source labels. `$` has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import` and `@` exports, not through `$`-qualified labels.
+
 An **entry label** begins with `@` followed by a plain identifier:
 
 ```asm
@@ -187,7 +217,7 @@ The preferred AZM style:
 
 The assembler enforces no naming policy; different projects may use their own conventions. These give a concrete starting point and match the style used throughout this manual.
 
-Labels need globally unique names. Prefixing branch labels with their routine name (`ShiftRowLoop` rather than `Loop`) prevents clashes when the same word appears in multiple routines.
+Labels need globally unique names. Prefixing branch labels with their routine name (`ShiftRowLoop` rather than `Loop`) prevents clashes when the same word appears in multiple routines. In imported files, plain labels are private to that imported source unit, but in the current implementation they still need globally unique names across the assembled program.
 
 ---
 

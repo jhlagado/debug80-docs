@@ -40,6 +40,22 @@ Using them:
 
 Register contract analysis sees the expanded instructions: `clear_a` is analyzed as `xor a`, including its flag effects.
 
+Op invocations can also appear inside a chained instruction line:
+
+```asm
+        clear_a \ ret
+```
+
+Op bodies accept the same form:
+
+```asm
+op clear_and_return()
+  xor a \ ret
+end
+```
+
+The chain is still source shorthand. The expanded output is the same sequence of ordinary instructions.
+
 ### Parameterized ops
 
 Ops can take operands matched by class:
@@ -309,6 +325,8 @@ If outside code tries to reference a private imported label, AZM reports a visib
         ret
 ```
 
+Do not write `$`-qualified helper names such as `math$ClampA` or `Routine$done` in AZM source. `$` is source syntax for the current assembly address and for hexadecimal numbers. `.import` privacy is tracked by source ownership: public labels are marked with `@`, and plain labels in the imported file are private to that source unit. Future AZM versions may internally qualify private symbols so duplicate private labels can exist in different imported files, but that internal representation is not user-facing source syntax.
+
 ### Import order and paths
 
 Imported source assembles at the point where `.import` appears:
@@ -355,6 +373,7 @@ Recursive include/import chains are rejected with a source diagnostic.
 - There is no re-export syntax
 - Privacy currently applies to labels, not to constants, enums, layout types, type aliases, ops or directive aliases
 - Private imported labels are hidden from outside code, but duplicate private labels across imported files are not yet guaranteed to be allowed
+- `$`-qualified private names are not source syntax; keep private helper labels readable and globally unique for now
 - `.include` behaviour is unchanged
 
 Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. ASM80-compatible lowered `.z80` output does not currently support `.import`; if a program uses `.import` and you request `--asm80`, AZM reports an explicit `AZMN_ASM80` diagnostic.
