@@ -31,7 +31,7 @@ Drafting is in progress; chapter links appear here as each one lands.
 1. [Preface](00-preface.md)
 2. [The Shape of a Game](01-the-shape-of-a-game.md)
 3. [First Light](02-first-light.md)
-4. State
+4. [State](03-state.md)
 5. Pulses and Bindings
 6. Compute, Effect, Render
 7. The Matrix Profile
