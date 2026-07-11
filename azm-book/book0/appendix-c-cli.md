@@ -49,10 +49,10 @@ Produces three output files next to the source: `source.bin`, `source.hex`, `sou
 | Flag | Argument | What it does |
 |------|----------|--------------|
 | `--rc` | `off`, `audit`, `warn`, `error` or `strict` | Register contract analysis level; default is `off` |
-| `--contracts` | — | Write inferred `;!` contract blocks above every `@`-labelled routine |
+| `--contracts` | — | Insert or update inferred `.routine` directives |
 | `--fix` | — | Apply conservative register contract source repairs |
-| `--reg-report` | — | Write `source.regcontracts.txt` with inferred contracts for every `@` routine |
-| `--reg-interface` | — | Write `source.asmi` with `extern` contract records for every `@` routine |
+| `--reg-report` | — | Write `source.regcontracts.txt` with inferred routine contracts |
+| `--reg-interface` | — | Write `source.asmi` with inferred `extern` contract records |
 | `--reg-profile` | `mon3` | Load a built-in register contract summary profile for known ROM environments |
 | `--accept-out` | `NAME:REG` | Promote an inferred clobber of `REG` in routine `NAME` to an intentional output |
 

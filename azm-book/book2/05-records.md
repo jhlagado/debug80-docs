@@ -36,7 +36,7 @@ No allocator, no linked list nodes — just bytes, offsets and compare/branch. T
 A record is a packed field list inside `.type` / `.endtype`:
 
 ```asm
-.type RingState
+RingState .type
 head    .byte
 tail    .byte
 count   .byte
@@ -206,7 +206,7 @@ The long form and the cast must agree:
 Separate **data** (the ring) from **control** (indices and count):
 
 ```asm
-.type RingState
+RingState .type
 head    .byte       ; next write index
 tail    .byte       ; next read index
 count   .byte       ; bytes currently stored
@@ -226,7 +226,7 @@ ring_state:
 - the oldest byte is at `ring_buf[tail]` when `count > 0`
 - the next free slot for push is `ring_buf[head]` when `count < RING_CAP`
 
-Push fails closed when `count == RING_CAP` (returns with carry clear). Pop fails when `count == 0`. The companion program documents that policy in AZMDoc.
+Push fails closed when `count == RING_CAP` (returns with carry clear). Pop fails when `count == 0`. The companion program documents that policy in register contracts.
 
 ### Memory diagram
 
@@ -262,7 +262,7 @@ flowchart LR
 When `head` or `tail` would become `RING_CAP`, wrap to 0:
 
 ```asm
-@ring_advance_index:
+ring_advance_index:
     inc a
     cp RING_CAP
     ret c                 ; still in range
@@ -280,12 +280,12 @@ If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` w
 
 ```asm
 ; ring_push: append one byte; carry set on success, carry clear when full
-;! in A,IX; out carry; clobbers BC,DE,HL
-@ring_push:
+.routine in A,IX out carry clobbers BC,DE,HL
+ring_push:
     ld e, a
     ld a, (ix + RING_COUNT)
     cp RING_CAP
-    jr nc, .full
+    jr nc, _full
     ld a, (ix + RING_HEAD)
     ld hl, ring_buf
     ld b, 0
@@ -301,7 +301,7 @@ If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` w
     ld (ix + RING_COUNT), a
     scf
     ret
-RingPushFull:
+_full:
     or a
     ret
 ```
@@ -312,11 +312,11 @@ The byte to store starts in A; the routine moves it to E while using A for compa
 
 ```asm
 ; ring_pop: remove oldest byte; carry set on success, carry clear when empty
-;! in IX; out A,carry; clobbers BC,DE,HL
-@ring_pop:
+.routine in IX out A,carry clobbers BC,DE,HL
+ring_pop:
     ld a, (ix + RING_COUNT)
     or a
-    jr z, .empty
+    jr z, _empty
     ld a, (ix + RING_TAIL)
     ld hl, ring_buf
     ld b, 0
@@ -332,7 +332,7 @@ The byte to store starts in A; the routine moves it to E while using A for compa
     ld a, e
     scf
     ret
-RingPopEmpty:
+_empty:
     or a
     ret
 ```
@@ -341,19 +341,19 @@ FIFO order: bytes leave in the same order they arrived because `tail` chases `he
 
 ---
 
-## AZMDoc on routines
+## Register contracts on routines
 
-Book 1 Chapter 12 introduced AZMDoc: semicolon comments with `;!` tags for register contracts. Book 2 algorithm routines should always carry them.
+Book 1 Chapter 12 introduced the `.routine` directive and register contracts. Book 2 algorithm routines should carry them.
 
 | Tag | Meaning |
 |-----|---------|
-| `;! in` | Registers the caller must set before `call` |
-| `;! out` | Registers guaranteed on success |
-| `;! clobbers` | Registers destroyed (not restored) |
+| `.routine in` | Registers the caller must set before `call` |
+| `.routine out` | Registers and flags that carry meaningful values across returning exits |
+| `.routine clobbers` | Registers destroyed (not restored) |
 
-Callable entries use `@name:` so the register contract analyzer knows where a routine body starts (AZM assembly baseline). Call sites still say `call ring_push`, not `call @ring_push`.
+Place `.routine` immediately before the callable entry. Use `@name:` only when the source unit exports that symbol; call sites always use the plain symbol name, such as `call ring_push`.
 
-For `ring_push` and `ring_pop`, put success/failure meaning in the human `;` line and name the carrier in `;! out` as `carry` (not `F.C`). Carry clear means full or empty respectively. Callers that ignore carry after a failed pop will see garbage in A — the routine does not define A on failure.
+For `ring_push` and `ring_pop`, put success/failure meaning in the human `;` line and name the carrier in `.routine out` as `carry` (not `F.C`). Carry clear means full or empty respectively. The shown `ring_pop` returns A = 0 on its empty path, but callers still must test carry before treating A as a popped byte.
 
 Run the checker when you want machine verification:
 
@@ -388,12 +388,12 @@ After `halt`, inspect:
 When a field is itself a layout, use `.field`:
 
 ```asm
-.type Pos
+Pos .type
 x       .byte
 y       .byte
 .endtype
 
-.type Actor
+Actor .type
 tile    .byte
 pos     .field Pos
 .endtype
@@ -430,7 +430,7 @@ Single-step through `ring_push` once with the emulator: watch `head` and `count`
 - **IX + offset constants** is the idiomatic in-record access; **HL + BC** handles `table + runtime_index`.
 - **Layout casts** `<Type>label.field` and `<Type[N]>table[i].field` fold constant addresses; runtime indices use explicit arithmetic.
 - A **ring buffer** implements a FIFO with head, tail, count and wrap — no memory shifting.
-- **AZMDoc** on `@` routines documents success/fail conventions (here, the carry flag) as well as register roles.
+- **Register contracts** on `.routine` entries document success/fail conventions (here, the carry flag) as well as register roles.
 
 ---
 
@@ -440,9 +440,9 @@ Single-step through `ring_push` once with the emulator: watch `head` and `count`
 2. Add a `flags` byte to `RingState` after `count`. Which `.equ` lines change? Which push/pop code must change?
 3. Rewrite the `ring_buf[head]` address setup using DE as base and keeping the index in C. Keep the same contract on `ring_push`.
 4. Change `RING_CAP` to 16 and use `and 15` in `ring_advance_index` instead of `cp` / `xor`. Prove on paper that `head` never reaches 16.
-5. Write a `ring_peek` routine that returns the oldest byte in A without removing it. Document `;! in`, `;! out` and `;! clobbers`; fail with carry clear when empty.
+5. Write a `ring_peek` routine that returns the oldest byte in A without removing it. Document `.routine in`, `.routine out` and `.routine clobbers`; fail with carry clear when empty.
 6. Load the address of `ring_state.head` into HL using a layout cast, then using `ring_state + offset(RingState, head)`. Assemble both forms and confirm the same immediate.
-7. Reserve `Event` records with `.type Event` / `code .byte` / `param .word` / `.endtype` and `.ds Event[4]`. Write a loop that zeroes every `param` field using `sizeof(Event)` as stride.
+7. Reserve `Event` records with `Event .type` / `code .byte` / `param .word` / `.endtype` and `.ds Event[4]`. Write a loop that zeroes every `param` field using `sizeof(Event)` as stride.
 
 ---
 

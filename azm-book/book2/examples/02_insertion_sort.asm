@@ -19,19 +19,22 @@ main:
     halt
 
 ; insertion_sort: sort byte table ascending (insertion sort)
-;! in HL,B; out HL; clobbers AF,BC,DE,HL
-@insertion_sort:
+.routine in HL,B out HL clobbers AF,BC,DE
+insertion_sort:
+    push hl
+    pop de
     ld hl, sort_len
     ld (hl), b
-    ld de, hl
     ld c, 1
-.outer:
+_outer:
     ld a, c
+    ld (sort_index), a
     ld hl, sort_len
     ld b, (hl)
     cp b
-    jr nc, .done
-    ld hl, de
+    jr nc, _done
+    push de
+    pop hl
     ld b, 0
     add hl, bc
     ld a, (hl)
@@ -40,60 +43,65 @@ main:
     pop af
     ld (hl), a
     ld b, c
-.inner:
+_inner:
     dec b
     ld a, b
     cp $FF
-    jr z, .place
-    ld hl, de
+    jr z, _place
+    push de
+    pop hl
     ld a, b
     ld c, a
     ld b, 0
     add hl, bc
-    ld a, (hl)
-    ld e, a
+    push hl
     ld hl, key_byte
     ld a, (hl)
-    cp e
-    jr nc, .place
-    ld a, e
+    pop hl
+    cp (hl)
+    jr nc, _place
+    ld a, (hl)
     inc hl
     ld (hl), a
-    dec hl
-    dec hl
-    jr .inner
-.place:
-    ld hl, de
+    jr _inner
+_place:
+    push de
+    pop hl
     inc b
     ld a, b
     ld c, a
     ld b, 0
     add hl, bc
+    push hl
     ld hl, key_byte
     ld a, (hl)
+    pop hl
     ld (hl), a
+    ld a, (sort_index)
+    ld c, a
     inc c
-    jr .outer
-.done:
-    ld hl, de
+    jr _outer
+_done:
+    push de
+    pop hl
     ret
 
 ; find_byte_ge: first index where values[i] >= C, or $FF if none
-;! in HL,C; out A; clobbers F,B,HL
-@find_byte_ge:
+.routine in HL,C out A clobbers F,B,HL
+find_byte_ge:
     ld b, 0
-.scan:
+_scan:
     ld a, (hl)
     cp c
-    jr nc, .found
+    jr nc, _found
     inc hl
     inc b
     ld a, b
     cp ARRAY_LEN
-    jr c, .scan
+    jr c, _scan
     ld a, $FF
     ret
-.found:
+_found:
     ld a, b
     ret
 
@@ -103,6 +111,8 @@ values:
 found_index:
     .ds byte
 key_byte:
+    .ds byte
+sort_index:
     .ds byte
 sort_len:
     .ds byte

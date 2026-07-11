@@ -35,11 +35,11 @@ main:
 
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
 ; Self-call; max depth FACT_MAX_DEPTH; frame FACT_FRAME_BYTES bytes.
-;! in B; out A; clobbers F,BC,DE
-@factorial_u8:
+.routine in B out A clobbers F,BC,DE
+factorial_u8:
     ld a, b
     or a
-    jr z, .fact_one
+    jr z, _fact_one
     push bc
     dec b
     call factorial_u8
@@ -47,58 +47,54 @@ main:
     ld c, b
     call mul8_a_by_c
     ret
-.fact_one:
+_fact_one:
     ld a, 1
     ret
 
 ; factorial_iter_u8: same contract as factorial_u8, iterative
-;! in B; out A; clobbers F,BC,DE
-@factorial_iter_u8:
+.routine in B out A clobbers F,BC,DE
+factorial_iter_u8:
     ld a, b
     or a
-    jr z, .iter_one
+    jr z, _iter_one
     ld e, 1
     ld c, b
-.iter_loop:
+_iter_loop:
     ld a, c
     or a
-    jr z, .iter_done
+    jr z, _iter_done
     ld a, e
     push bc
     call mul8_a_by_c
     ld e, a
     pop bc
     dec c
-    jr .iter_loop
-.iter_done:
+    jr _iter_loop
+_iter_done:
     ld a, e
     ret
-.iter_one:
+_iter_one:
     ld a, 1
     ret
 
 ; mul8_a_by_c: A := A * C (8-bit, demo sizes only)
-;! in A,C; out A; clobbers F,BC,DE
-@mul8_a_by_c:
-    ld e, a
-    ld a, 0
-    ld b, c
-.acc:
-    ld a, b
+.routine in A,C out A clobbers F,B
+mul8_a_by_c:
     or a
-    jr z, .mul_done
-    dec b
-    add a, e
-    jr .acc
-.mul_done:
+    ret z
+    ld b, a
+    xor a
+_loop:
+    add a, c
+    djnz _loop
     ret
 
 ; sum_u8_rec: sum bytes demo_nums[0 .. A-1] into HL (A = count on entry)
 ; Self-call; one return address per tail index; no extra pushes in body.
-;! in HL,A; out HL; clobbers AF,BC,DE,HL
-@sum_u8_rec:
+.routine in HL,A out HL clobbers AF,BC,DE
+sum_u8_rec:
     or a
-    jr z, .zero
+    jr z, _zero
     push af
     ld b, a
     ld a, (hl)
@@ -113,7 +109,7 @@ main:
     add hl, de
     pop af
     ret
-.zero:
+_zero:
     ld hl, 0
     ret
 

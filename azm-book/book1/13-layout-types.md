@@ -34,7 +34,7 @@ That works as long as the layout never changes. Add a field before color and eve
 
 AZM's layout type system closes that gap. You describe a record once, and the assembler computes every size and offset from that description at assembly time. The CPU still performs the actual address arithmetic at run time — AZM does not generate hidden indexing code. It gives you named constants so the layout lives in one place.
 
-**AZM does not add hidden data access. It gives names to layout facts.** Layout types are not runtime types — they are **compile-time memory contracts**, the same way AZMDoc documents register boundaries at subroutine calls. One names what crosses a `call`; the other names what sits at each byte offset in a record. Both keep intent explicit while the emitted machine code stays visible.
+**AZM does not add hidden data access. It gives names to layout facts.** Layout types are not runtime types — they are **compile-time memory contracts**, much as register contracts document register boundaries at subroutine calls. One names what crosses a `call`; the other names what sits at each byte offset in a record. Both keep intent explicit while the emitted machine code stays visible.
 
 ---
 
@@ -92,14 +92,14 @@ You can still write `.ds sizeof(byte[32])` if you prefer the explicit form. Both
 A record groups named fields into one layout. Declare it in a block:
 
 ```asm
-.type Sprite
+Sprite .type
 x       .byte
 y       .byte
 color   .byte
 .endtype
 ```
 
-`.type Name` opens the block. `.endtype` closes it. Each line names a field and gives its type.
+`Name .type` opens the block. `.endtype` closes it. Each line names a field and gives its type.
 
 Inside a layout block, `.byte`, `.word` and `.addr` are shorthands:
 
@@ -112,7 +112,7 @@ field .addr    ; same as: field .field addr
 You can also write the size explicitly with `.field`:
 
 ```asm
-.type Bullet
+Bullet .type
 x       .field 1
 y       .field 1
 timer   .word
@@ -145,10 +145,10 @@ sprite_table:
 
 Use `.ds Sprite[16]` when the count is written as a literal in source. Use `.ds Count * sizeof(Sprite)` when the count lives in a `.equ`. Book 2's ring buffer uses the same idea for scalar buffers: `.ds RING_CAP` alongside `.ds byte[8]` for a fixed width.
 
-A `.type` block must list fields. One-line aliases such as `.type Pair byte[2]` are rejected — if you need a pair of bytes, write the fields:
+A `.type` block must list fields. One-line aliases such as `Pair .type byte[2]` are rejected — if you need a pair of bytes, write the fields:
 
 ```asm
-.type Pair
+Pair .type
 lo      .byte
 hi      .byte
 .endtype
@@ -188,12 +188,12 @@ SpriteColor .equ offset(Sprite, color)   ; = 2
 For a field inside a nested record, continue the path with dots:
 
 ```asm
-.type Pos
+Pos .type
 x       .byte
 y       .byte
 .endtype
 
-.type Actor
+Actor .type
 tile    .byte
 pos     .field Pos
 .endtype
@@ -204,7 +204,7 @@ ActorTileX  .equ offset(Actor, pos.x)    ; = 1
 For an array field inside a record, put the index in brackets:
 
 ```asm
-.type Scene
+Scene .type
 header  .word
 sprites .field Sprite[4]
 .endtype
@@ -265,7 +265,7 @@ That reserves exactly `8 * sizeof(Sprite)` bytes. The equivalent form `.ds sizeo
 You can also put an array inside a record:
 
 ```asm
-.type Row
+Row .type
 cells   .field byte[16]
 score   .word
 .endtype
@@ -283,7 +283,7 @@ Array stride is always `sizeof(element)`. A record whose fields do not add up to
 A union declares overlapping fields that share the same memory. The union's total size is the size of its largest member:
 
 ```asm
-.union Payload
+Payload .union
 asByte  .byte
 asWord  .word
 .endunion
@@ -294,12 +294,12 @@ asWord  .word
 Unions can hold named types:
 
 ```asm
-.type Pair
+Pair .type
 lo      .byte
 hi      .byte
 .endtype
 
-.union Cell
+Cell .union
 raw     .word
 pair    .field Pair
 tag     .byte
@@ -316,12 +316,12 @@ offset(Cell, pair.hi)         ; = 1
 Unions matter when the **same address** should be described two ways — as a 16-bit quantity or as low/high bytes, as a raw port byte or as flag bits:
 
 ```asm
-.type Pair
+Pair .type
 lo      .byte
 hi      .byte
 .endtype
 
-.union WordView
+WordView .union
 raw     .word
 bytes   .field Pair
 .endunion
@@ -335,7 +335,7 @@ WORD_HI .equ offset(WordView, bytes.hi)
 Unions nest inside records:
 
 ```asm
-.type Packet
+Packet .type
 header  .byte
 data    .field Payload
 .endtype
@@ -350,7 +350,7 @@ data    .field Payload
 An enum declares a set of named integer constants grouped under a common name:
 
 ```asm
-enum Direction North, South, East, West
+Direction .enum North, South, East, West
 ```
 
 Members are accessed with qualified syntax:
@@ -370,7 +370,7 @@ The qualification requirement prevents accidental name collisions when two enums
 Enums produce no memory allocation. Each member is a compile-time constant that can appear anywhere a constant is legal — instruction immediates, `.equ`, `.db`, `.dw` and `.ds`:
 
 ```asm
-enum Tile Empty, Wall, Pill, Power
+Tile .enum Empty, Wall, Pill, Power
 
 StartTile  .equ Tile.Pill
 
@@ -387,7 +387,7 @@ Enums are not high-level data types. They are **grouped constants with collision
 Store a mode byte in RAM and branch on it:
 
 ```asm
-enum GameMode Title, Playing, Paused, GameOver
+GameMode .enum Title, Playing, Paused, GameOver
 
 game_mode:
     .db GameMode.Title
@@ -405,7 +405,7 @@ game_mode:
 Command dispatch uses the same pattern:
 
 ```asm
-enum Command MoveLeft, MoveRight, Rotate, Drop
+Command .enum MoveLeft, MoveRight, Rotate, Drop
 
 pending:
     .db Command.Rotate
@@ -492,7 +492,7 @@ Both assemble to the same constant. Use whichever reads more clearly at the call
 Define a record for a 2D point with integer coordinates:
 
 ```asm
-.type Point
+Point .type
 x   .byte
 y   .byte
 .endtype
@@ -574,15 +574,15 @@ The assembler computes `points + 2 * sizeof(Point) + offset(Point, y)` = `points
 ## Summary
 
 - `byte`, `word` and `addr` are scalar layout types. `sizeof(byte)` is 1; `sizeof(word)` is 2.
-- `.type Name` / `.endtype` declares a packed record layout. Fields use `.byte`, `.word`, `.addr` or `.field N`. Field declarations do not allocate memory.
+- `Name .type` / `.endtype` declares a packed record layout. Fields use `.byte`, `.word`, `.addr` or `.field N`. Field declarations do not allocate memory.
 - `.ds TypeExpr` reserves storage: `.ds byte`, `.ds word[8]`, `.ds Sprite`, `.ds Sprite[16]` or `.ds Count * sizeof(Sprite)` for a named element count.
 - `sizeof(Type)` returns the exact byte size. `sizeof(Sprite[16])` returns `16 * sizeof(Sprite)`.
 - `offset(Type, path)` returns a field's byte offset. Paths can nest (`pos.x`) and index arrays (`sprites[3].color` or `offset(Sprite[16], [2].flags)`).
 - Use `.equ` to name these constants, then use the names in instructions and `.ds` directives.
 - Offsets that fit in a signed byte (0–127) can go directly into `(ix+d)` instructions.
 - `<TypeExpr>label[i].field` computes a constant field address. Indexes must be compile-time constants; runtime registers are rejected.
-- `.union Name` / `.endunion` declares overlapping fields. The union's size is the size of its largest member.
-- `enum Name Member1, Member2, ...` defines qualified integer constants. Access them as `Name.Member`. Enums do not emit bytes.
+- `Name .union` / `.endunion` declares overlapping fields. The union's size is the size of its largest member.
+- `Name .enum Member1, Member2, ...` defines qualified integer constants. Access them as `Name.Member`. Enums do not emit bytes.
 
 ---
 
@@ -591,7 +591,7 @@ The assembler computes `points + 2 * sizeof(Point) + offset(Point, y)` = `points
 **1. Compute sizes and offsets by hand.** Given this type:
 
 ```asm
-.type Enemy
+Enemy .type
 hp      .byte
 x       .word
 y       .word

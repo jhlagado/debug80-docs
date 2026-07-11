@@ -10,7 +10,7 @@ has_toc: false
 
 This book starts from no prior knowledge of computers or programming. It introduces the Z80 from the bare machine upward: memory, registers, machine code, assembly language, flags, loops, tables, the stack, subroutines and port I/O.
 
-The later chapters introduce the AZM features that make assembly programming more maintainable: subroutine conventions, AZMDoc register contracts, layout types and op declarations.
+The later chapters introduce the AZM features that make assembly programming more maintainable: subroutine conventions, register contracts, layout types and op declarations.
 
 ## Main Path
 
@@ -25,6 +25,6 @@ The later chapters introduce the AZM features that make assembly programming mor
 9. [I/O and Ports](09-io-and-ports.md)
 10. [A Complete Program](10-a-complete-program.md)
 11. [Subroutine Conventions](11-subroutine-conventions.md)
-12. [Register Contracts with AZMDoc](12-register-contracts-azmdoc.md)
+12. [Register Contracts](12-register-contracts-azmdoc.md)
 13. [Layout Types](13-layout-types.md)
 14. [Op Declarations](14-op-declarations.md)

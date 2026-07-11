@@ -76,15 +76,15 @@ For sequential scans, `inc hl` after each read is cheaper than recomputing base 
 
 An invariant is a statement that stays true every time control reaches a particular label. Naming it is how you know the loop is still correct after you edit it.
 
-**Insertion sort outer loop** (label `.outer`, index in C):
+**Insertion sort outer loop** (label `_outer`, index in C):
 
 > Before each outer iteration, bytes `values[0 .. c-1]` are sorted ascending.
 
-**Inner shift loop** (label `.inner`, index in B = j):
+**Inner shift loop** (label `_inner`, index in B = j):
 
 > The key byte sits in `key_byte`. Bytes `values[j+1 .. c]` equal the old `values[j .. c-1]` from before this inner pass. Bytes `values[0 .. j]` are unchanged and still sorted.
 
-**Linear search** (label `.scan`):
+**Linear search** (label `_scan`):
 
 > If the loop has run k times, no element among `values[0 .. k-1]` satisfies `>= threshold`.
 
@@ -117,6 +117,8 @@ found_index:
     .ds byte
 key_byte:
     .ds byte
+sort_index:
+    .ds byte
 sort_len:
     .ds byte
 ```
@@ -124,17 +126,23 @@ sort_len:
 Entry (store length through HL — `ld (sort_len), b` is not a supported AZM form):
 
 ```asm
-@insertion_sort:
+insertion_sort:
+    push hl
+    pop de
     ld hl, sort_len
     ld (hl), b
-    ld de, hl
     ld c, 1
 ```
+
+Z80 has no `ld de,hl` instruction. The `push hl` / `pop de` pair copies the incoming table pointer before HL is reused for workspace.
 
 ### Load the key
 
 ```asm
-    ld hl, de
+    ld a, c
+    ld (sort_index), a
+    push de
+    pop hl
     ld b, 0
     add hl, bc          ; HL = base + i (C = i)
     ld a, (hl)
@@ -143,7 +151,6 @@ Entry (store length through HL — `ld (sort_len), b` is not a supported AZM for
     pop af
     ld (hl), a
     ld b, c
-    dec b               ; B = j = i - 1
 ```
 
 ### Inner shift
@@ -151,27 +158,34 @@ Entry (store length through HL — `ld (sort_len), b` is not a supported AZM for
 Compare `values[j]` to `key_byte`. While the element is greater, shift it right by one index:
 
 ```asm
-InsertInner:
+_inner:
+    dec b
     ld a, b
-    or a
-    jr z, InsertPlace
-    ld hl, de
+    cp $FF
+    jr z, _place
+    push de
+    pop hl
     ld a, b
     ld c, a
     ld b, 0
     add hl, bc          ; HL = &values[j]
-    ld a, (hl)
-    ...
+    push hl
     ld hl, key_byte
     ld a, (hl)
-    cp e                ; E holds values[j] from ld a,(hl) above
+    pop hl
+    cp (hl)
+    jr nc, _place
+    ld a, (hl)
+    inc hl
+    ld (hl), a
+    jr _inner
 ```
 
-The listing uses `ld a, (hl)` then `cp` against the key loaded into A from `(key_byte)`. If the element is greater, copy it to `values[j+1]`, decrement j, repeat.
+The listing reloads the key into A and compares it directly with `(hl)`. If the key is smaller, the element at `(hl)` shifts one byte to the right and the loop decrements j again.
 
 ### Place the key
 
-When j < 0 or `values[j] <= key`, write `key_byte` at `values[j+1]` (implemented as base + j + 1 with careful index handling at `InsertPlace`).
+When j < 0 or `values[j] <= key`, write `key_byte` at `values[j+1]`. `sort_index` restores the outer-loop index after C has been reused for address arithmetic.
 
 Full source: see [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
 
@@ -189,21 +203,21 @@ After sorting, find the first index where `values[i] >= C`:
 
 ```asm
 ; find_byte_ge: first index where values[i] >= C, or $FF if none
-;! in HL,C; out A; clobbers F,B,HL
-@find_byte_ge:
+.routine in HL,C out A clobbers F,B,HL
+find_byte_ge:
     ld b, 0
-FindByteScan:
+_scan:
     ld a, (hl)
     cp c
-    jr nc, FindByteFound
+    jr nc, _found
     inc hl
     inc b
     ld a, b
     cp ARRAY_LEN
-    jr c, FindByteScan
+    jr c, _scan
     ld a, $FF
     ret
-FindByteFound:
+_found:
     ld a, b
     ret
 ```
@@ -239,7 +253,7 @@ Reload HL before the second call — `insertion_sort` returns HL equal to the ba
 This chapter uses plain `.db` because each element is one byte. When elements are records:
 
 ```asm
-.type Score
+Score .type
 value   .byte
 name    .field byte[16]
 .endtype

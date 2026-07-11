@@ -39,25 +39,26 @@ Here is a small but complete AZM source file:
 
 LIMIT   .equ 8
 
-@Main:
+.routine clobbers B,HL
+Main:
         ld      b,LIMIT
         ld      hl,Counter
-Loop:
+_loop:
         inc     (hl)
-        djnz    Loop
+        djnz    _loop
         halt
 
 Counter:
         .db 0
 ```
 
-The source starts assembly at `$0100`, defines the constant `LIMIT`, marks `main` as the routine entry, loops eight times and stores the counter byte after the code.
+The source starts assembly at `$0100`, defines the constant `LIMIT`, marks `Main` as the routine entry, loops eight times and stores the counter byte after the code.
 
-Code comes first, data after. The byte at `counter` sits below `halt` at address `$0109`. Placing data after the final instruction keeps entry points at the top of the binary where a loader expects them. AZM resolves forward references, so `ld hl,counter` at the top can name a label defined further down.
+Code comes first, data after. The byte at `Counter` sits below `halt` at address `$0109`. Placing data after the final instruction keeps entry points at the top of the binary where a loader expects them. AZM resolves forward references, so `ld hl,Counter` at the top can name a label defined further down.
 
-To trace through the assembly: `ld b,LIMIT` assembles to `$06 $08` at `$0100`; `ld hl,counter` assembles to `$21 $09 $01` at `$0102` (the address `$0109`, little-endian); `inc (hl)` is `$34` at `$0105`; `djnz Loop` is `$10 $FD` at `$0106`; `halt` is `$76` at `$0108`; and `.db 0` places a zero byte at `$0109`.
+To trace through the assembly: `ld b,LIMIT` assembles to `$06 $08` at `$0100`; `ld hl,Counter` assembles to `$21 $09 $01` at `$0102` (the address `$0109`, little-endian); `inc (hl)` is `$34` at `$0105`; `djnz _loop` is `$10 $FD` at `$0106`; `halt` is `$76` at `$0108`; and `.db 0` places a zero byte at `$0109`.
 
-The rest of the manual explains those forms in order: source syntax and labels in Chapter 2, addresses and constants in Chapter 3, data directives in Chapter 4 and register contract entry labels in Chapter 6.
+The rest of the manual explains those forms in order: source syntax and labels in Chapter 2, addresses and constants in Chapter 3, data directives in Chapter 4 and `.routine` register contracts in Chapter 6.
 
 ---
 

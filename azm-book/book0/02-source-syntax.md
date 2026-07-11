@@ -84,13 +84,15 @@ A semicolon starts a comment that runs to the end of the line:
         ld a,0   ; inline comment
 ```
 
-The `;!` prefix is the AZMDoc contract marker. It looks like a comment but is parsed by the register contract analyzer:
+Register contracts use the `.routine` directive immediately before a routine label:
 
 ```asm
-;! in A,HL; out carry; clobbers BC
+.routine in A,HL out carry clobbers BC
+ReadKey:
+        ret
 ```
 
-Other Z80 assemblers treat `;!` lines as ordinary comments. AZM reads them as register contracts when analysis is enabled. Chapter 6 covers the full workflow.
+The directive emits no bytes. Chapter 6 covers routine boundaries and contract analysis.
 
 ---
 
@@ -118,11 +120,9 @@ ReadLoop:
 
 `READ_LOOP` is the address of the `ld` instruction. `djnz READ_LOOP` becomes a relative branch to that address.
 
-### Global labels
+### Non-local labels
 
-Every plain label is a global symbol, unique across the entire translation unit — the source file plus all included files. If two labels share a name, AZM reports a duplicate-symbol error.
-
-Branch labels inside routines must be unique too. Two routines that both need a loop label called `Loop` will clash at assembly time. The convention throughout this manual is to prefix branch labels with the routine name: `ShiftRowLoop`, `CopyRowLoop`, `ScanRowLoop`.
+A plain label declares a non-local symbol. Calls, jumps, expressions and data declarations in the same assembled source unit can refer to it directly. Two non-local labels in that source unit cannot share a name.
 
 ```asm
 ; error: two definitions of Count
@@ -139,41 +139,56 @@ MyLabel:
 MyLabel: ld a,0
 ```
 
-Both forms are valid. Identifiers can contain letters, digits and underscores and must start with a letter.
+Both forms are valid. Non-local identifiers contain letters, digits and underscores and must start with a letter.
 
 Do not use `$` as a namespace separator in source labels. `$` has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import` and `@` exports, not through `$`-qualified labels.
 
-An **entry label** begins with `@` followed by a plain identifier:
+### Exported labels
+
+An exported label begins with `@` followed by a plain identifier:
 
 ```asm
 @ShiftRow:
 ```
 
-The `@` is stripped from the symbol name. `SHIFT_ROW` is the callable name; call sites write `call SHIFT_ROW`. The `@` prefix marks a routine boundary for register contract analysis, covered in Chapter 6. In files loaded with `.import`, it also marks the label as public to other files; `.import` is covered in Chapter 7.
+The symbol name is `ShiftRow`, so call sites write `call ShiftRow`. The `@` marks the declaration as visible outside an imported source unit. It has no register-contract meaning; `.routine` declares a routine boundary.
 
-### The `@` entry prefix
-
-`@NAME:` marks `NAME` as a routine entry point. Branch labels inside the body are still global symbols, so two routines that both need a loop label must use distinct names:
+Export and routine declarations are independent:
 
 ```asm
-@ShiftRow:
+.routine in HL out A
+@ReadByte:
+        ld      a,(hl)
+        ret
+```
+
+### Owner-local labels
+
+A label beginning with one underscore belongs to the nearest preceding non-local label. The same local spelling can be reused under another owner:
+
+```asm
+.routine in HL
+ShiftRow:
         ld      b,8
-ShiftRowLoop:
+_loop:
         rl      (hl)
         inc     hl
-        djnz    ShiftRowLoop
+        djnz    _loop
         ret
 
-@CopyRow:
+.routine in HL,DE
+CopyRow:
         ld      b,8
-CopyRowLoop:
+_loop:
         ld      a,(de)
         ld      (hl),a
         inc     de
         inc     hl
-        djnz    CopyRowLoop
+        djnz    _loop
         ret
 ```
+
+`ShiftRow._loop` and `CopyRow._loop` have distinct identities in AZM output and Debug80 maps. Source code uses the short `_loop` spelling. A local label cannot be exported, so `@_loop:` is an error. Equates, enum members, type names and op names cannot begin with `_`. Names beginning with `__` are reserved for assembler-generated symbols.
 
 ### Forward references
 
@@ -195,13 +210,13 @@ AZM uses a two-pass strategy: the first pass assigns addresses to all labels; th
 Two or more labels can name the same address:
 
 ```asm
-@EntryA:
-@EntryB:
+EntryA:
+EntryB:
         ld      a,(hl)
         ret
 ```
 
-Both `ENTRY_A` and `ENTRY_B` call into the same instruction. Consecutive `@` labels before the first instruction are treated as entries for the same routine body.
+Both `EntryA` and `EntryB` call into the same instruction. When a `.routine` directive precedes consecutive non-local labels, AZM treats them as aliases for the same routine body.
 
 ---
 
@@ -212,12 +227,13 @@ User symbols are case-sensitive. `START`, `start` and `Start` are three distinct
 The preferred AZM style:
 
 - **Constants** (`SCREEN_WIDTH`, `MAX_SPRITES`, `LCD_DATA`): uppercase with underscores.
-- **Entry labels** (`@DrawSprite:`, `@InitTimer:`): PascalCase after the `@`.
-- **Branch labels** (`ShiftRowLoop`, `SkipInit`, `DrawDone`): PascalCase, prefixed with the enclosing routine name where the name could clash.
+- **Routine and data labels** (`DrawSprite:`, `InitTimer:`, `SpriteTable:`): PascalCase.
+- **Owner-local labels** (`_loop:`, `_skipInit:`, `_done:`): a leading underscore followed by short camelCase.
+- **Exported labels** (`@ReadKey:`, `@DrawSprite:`): PascalCase after the `@`.
 
 The assembler enforces no naming policy; different projects may use their own conventions. These give a concrete starting point and match the style used throughout this manual.
 
-Labels need globally unique names. Prefixing branch labels with their routine name (`ShiftRowLoop` rather than `Loop`) prevents clashes when the same word appears in multiple routines. In imported files, plain labels are private to that imported source unit, but in the current implementation they still need globally unique names across the assembled program.
+Keep non-local labels distinct within their source unit. Owner-local labels can reuse familiar names such as `_loop` and `_done` because the owner supplies their identity. Use `@` only for declarations that form an imported module's public interface.
 
 ---
 

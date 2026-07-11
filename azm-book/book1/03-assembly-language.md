@@ -54,7 +54,7 @@ You just saw two constructs in that program that are not Z80 instructions: `.org
 - **`op`** — defines an inline instruction sequence that expands at each call site, with no call overhead
 - **`type` / `union`** — named record layouts with scalar types (`byte`, `word`, `addr`); `sizeof` and `offset` compute byte sizes and field positions as compile-time constants; `.ds` accepts type expressions such as `.ds Sprite[16]`
 - **`enum`** — named sets of values with no memory allocated
-- **AZMDoc** — formal `;!` register contracts on subroutines, verified by the assembler
+- **register contracts** — formal `.routine` register contracts on subroutines, verified by the assembler
 
 AZM does **not** add function declarations, local variables, structured control-flow keywords or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`. Every program is flat Z80 instructions with labels.
 

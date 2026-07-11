@@ -57,7 +57,7 @@ This is not a 64-cell chess diagram in RAM. You do not need one byte per square 
 The companion keeps separate `.ds` labels for teaching clarity. In a larger project you can fold the workspace into one record and name every field offset once — the same idiom as the ring buffer in Chapter 5:
 
 ```asm
-.type QueenWorkspace
+QueenWorkspace .type
 solution_count .word
 queen_cols     .field byte[8]
 col_used       .field byte[8]
@@ -78,14 +78,14 @@ Layout types scale to whole workspace regions: one `.type`, one base label, cons
 
 ## Constraint checks as small routines
 
-Split the hot path into `@` subroutines with AZMDoc contracts — the same discipline as `gcd_u16`, `ring_push` and `factorial_u8`.
+Split the hot path into routines with explicit `.routine` contracts — the same discipline as `gcd_u16`, `ring_push` and `factorial_u8`.
 
 **Column free** — index `col_used` with `C`:
 
 ```asm
 ; col_free: is column C unused?
-;! in C; out zero; clobbers A,B,HL
-@col_free:
+.routine in C out zero clobbers A,B,HL
+col_free:
     ld hl, col_used
     ld b, 0
     add hl, bc
@@ -98,8 +98,8 @@ Split the hot path into `@` subroutines with AZMDoc contracts — the same disci
 
 ```asm
 ; diag_sum_free: is forward diagonal (row+col) unused?
-;! in B,C; out zero; clobbers A,DE,HL
-@diag_sum_free:
+.routine in B,C out zero clobbers A,DE,HL
+diag_sum_free:
     ld a, b
     add a, c
     ld e, a
@@ -121,7 +121,7 @@ Split the hot path into `@` subroutines with AZMDoc contracts — the same disci
 
 That value selects a slot in `diag_diff_used`.
 
-Each failed check jumps to `.next_col` in the row driver — the flat-ASM equivalent of “try the next column” without a `continue` keyword.
+Each failed check jumps to `_next_col` in the row driver — the flat-ASM equivalent of “try the next column” without a `continue` keyword.
 
 ---
 
@@ -157,24 +157,24 @@ When all three tests pass, **mark** before `call place_row` and **unmark** after
 ```asm
 ; place_row: assign a queen to row B; count solutions at row BOARD_SIZE
 ; Self-call; max depth PLACE_MAX_DEPTH; frame PLACE_FRAME_BYTES bytes.
-;! in B; clobbers AF,BC,DE,HL
-@place_row:
+.routine in B clobbers AF,BC,DE,HL
+place_row:
     ld a, b
     cp BOARD_SIZE
-    jr nz, PlaceRowTryCols
+    jr nz, _try_cols
     call count_solution
     ret
-PlaceRowTryCols:
+_try_cols:
     ld c, 0
-PlaceRowColLoop:
+_col_loop:
     ld a, c
     cp BOARD_SIZE
-    jr nc, PlaceRowDone
+    jr nc, _done
     ; ... col_free, diag_sum_free, diag_diff_free ...
     ; ... mark, inc b, call place_row, unmark ...
     inc c
-    jr PlaceRowColLoop
-PlaceRowDone:
+    jr _col_loop
+_done:
     ret
 ```
 
@@ -240,7 +240,7 @@ Run to `halt`, then read `solution_count`. If you see `$005C`, the search finish
 | Bit thinking (Ch. 4) | Optional bitboard exercise |
 | Records / workspace (Ch. 5) | Fixed layout at `$8000` |
 | Recursion + stack (Ch. 6) | `place_row` self-call, SP init |
-| Small `@` routines + `;!` (Ch. 1, 7) | `col_free`, `mark_constraints`, … |
+| Small routines with `.routine` contracts (Ch. 1, 7) | `col_free`, `mark_constraints`, … |
 | Pointers (Ch. 8) | Not required — pure tables |
 
 ---
@@ -274,7 +274,7 @@ No port I/O — inspect RAM in the emulator.
 - **Byte tables** index columns and diagonals; `queen_cols` stores the placement per row.
 - **`place_row`** is depth-first recursion with base case `row == BOARD_SIZE` and a column loop on each level.
 - **`solution_count`** in RAM replaces console output when you have no print routine.
-- Decompose checks into **`@` routines** with AZMDoc so callers know register roles and clobbers.
+- Decompose checks into routines with **`.routine` contracts** so callers know register roles and clobbers.
 
 ---
 
@@ -285,17 +285,17 @@ No port I/O — inspect RAM in the emulator.
 3. Change the base case to stop after the first solution: add a `found` byte, set it in `count_solution` and return early from every frame when `found` is non-zero. How many bytes does `solution_count` hold now?
 4. Pack `col_used` into one byte of eight bits (bitboard). Rewrite `col_free` and `mark_constraints` using `and` / `or` from Chapter 4. Does the listing get shorter or longer?
 5. Replace recursion with an explicit stack in workspace: push `(row, col)` trial state, loop until stack empty. Estimate workspace bytes for depth 8.
-6. Run `azm --rc warn` on a deliberate bug: call `col_free` without restoring `C` after a clobbering helper. Fix using the `;!` contract.
+6. Run `azm --rc warn` on a deliberate bug: call `col_free` without restoring `C` after a clobbering helper. Fix using the `.routine` contract.
 
 ---
 
 ## What you learned in Book 2
 
-You started Book 2 with arithmetic conventions and AZMDoc on small routines. You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts** — choosing the representation that fits each problem.
+You started Book 2 with arithmetic conventions and register contracts on small routines. You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts** — choosing the representation that fits each problem.
 
 Flat AZM never hid control flow behind syntax. Every `call` and every byte in `col_used` is in the listing you assemble. That is the trade this part teaches: more typing, full ownership.
 
-Book 1 gave you the CPU and the tooling. Book 2 showed how algorithms look when you own the data layout first. The next step is a project of your own — a buffer, a parser, a game board — where you pick the representation, write the `;!` lines and let the emulator prove the invariant.
+Book 1 gave you the CPU and the tooling. Book 2 showed how algorithms look when you own the data layout first. The next step is a project of your own — a buffer, a parser, a game board — where you pick the representation, write the `.routine` lines and let the emulator prove the invariant.
 
 ---
 

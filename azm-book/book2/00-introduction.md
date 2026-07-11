@@ -8,7 +8,7 @@ nav_order: 1
 
 # Introduction to Book 2
 
-You finished Book 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, AZMDoc contracts, layout types and ops. Book 2 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
+You finished Book 1 with a complete picture of the Z80 and the AZM surface that keeps assembly honest: register conventions, register contracts, layout types and ops. Book 2 puts that toolkit to work on algorithms and small data structures — the programs you would write in a systems or embedded course, but without leaving flat assembly.
 
 ---
 
@@ -16,7 +16,7 @@ You finished Book 1 with a complete picture of the Z80 and the AZM surface that 
 
 The goal is not to learn a second language layered on top of the CPU. The goal is to learn how **representation and algorithm** fit together when you own every byte and every branch.
 
-Each chapter starts from a concrete problem (sort this table, find this value, walk this string), shows a complete AZM program or subroutine, then names the invariants and conventions that make the code trustworthy. You will see the same patterns repeat: a calling convention, a loop whose entry condition you can state in one sentence, workspace RAM when the register file runs out and AZMDoc lines that tell the analyzer what the routine promised.
+Each chapter starts from a concrete problem (sort this table, find this value, walk this string), shows a complete AZM program or subroutine, then names the invariants and conventions that make the code trustworthy. You will see the same patterns repeat: a calling convention, a loop whose entry condition you can state in one sentence, workspace RAM when the register file runs out and `.routine` directives that tell the analyzer what the routine promised.
 
 This book stays at the machine level: labels, registers, memory, branches, `call` and `ret`. The algorithms are standard, but every step is written as flat assembly.
 
@@ -68,13 +68,13 @@ workspace:
 
 ---
 
-## AZMDoc as the subroutine spec
+## Register contracts as the subroutine spec
 
 Every nontrivial routine in this book should carry:
 
 - A one-line human comment (`; gcd_u16: ...`)
-- `;!` lines for `in`, `out`, `clobbers` and `preserves`
-- An `@` entry label
+- A `.routine` directive for `in`, `out`, `maybe-out`, `clobbers` and `preserves`
+- A non-local entry label; prefix it with `@` only when another source unit imports it
 
 Callers depend on that contract. `azm --rc warn` compares callers to callees the same way Book 1 Chapter 12 demonstrated. Book 2 does not introduce a new documentation dialect.
 

@@ -10,7 +10,7 @@ nav_order: 4
 
 Chapter 2 walked a byte table with a **fixed length** in B. Text in memory usually has no fixed length — you stop when you see a sentinel, not when a counter reaches eight. That one change drives how you hold pointers, how you copy and how you compare.
 
-This chapter chooses a string representation, builds length, copy and search on top of it and documents every routine with AZMDoc. The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
+This chapter chooses a string representation, builds length, copy and search on top of it and documents every routine with register contracts. The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
 
 ---
 
@@ -76,9 +76,9 @@ Unless a routine says otherwise, Book 2 string routines use:
 | Length or index result | A | 0–255 in the demo sizes |
 | Not found sentinel | A = `$FF` | Same idea as Chapter 2 search |
 
-**Callee-save:** push BC/DE/HL if you use them as scratch and the `;!` block does not list them under `clobbers`.
+**Callee-save:** push BC/DE/HL if you use them as scratch and the `.routine` block does not list them under `clobbers`.
 
-**Invariant for traversal** (label `.loop` or `.scan`):
+**Invariant for traversal** (owner-local label `_loop` or `_scan`):
 
 > HL points at the next byte to examine. All bytes before HL in this string have already been processed.
 
@@ -104,22 +104,22 @@ When output is wrong, check that HL still satisfies the invariant — not every 
 
 ```asm
 ; strlen_u8: count bytes before null (does not include terminator)
-;! in HL; out A; clobbers F,B,HL
-@strlen_u8:
+.routine in HL out A clobbers F,B,HL
+strlen_u8:
     ld b, 0
-StrLenLoop:
+_loop:
     ld a, (hl)
     or a
-    jr z, StrLenDone
+    jr z, _done
     inc hl
     inc b
-    jr StrLenLoop
-StrLenDone:
+    jr _loop
+_done:
     ld a, b
     ret
 ```
 
-B is the running length. The loop invariant: at `StrLenLoop`, B equals the number of non-null bytes already passed.
+B is the running length. The loop invariant: at `_loop`, B equals the number of non-null bytes already passed.
 
 For `message` above, `str_len` at `$8008` should hold `$05` after `halt`.
 
@@ -131,15 +131,15 @@ Copying uses **two pointers**: HL reads, DE writes. Each iteration moves one byt
 
 ```asm
 ; strcpy_u8: copy null-terminated string HL → DE (terminator included)
-;! in HL,DE; out DE; clobbers AF,HL,DE
-@strcpy_u8:
-StrCopyLoop:
+.routine in HL,DE out DE clobbers AF,HL
+strcpy_u8:
+_copy:
     ld a, (hl)
     ld (de), a
     inc hl
     inc de
     or a
-    jr nz, StrCopyLoop
+    jr nz, _copy
     ret
 ```
 
@@ -155,27 +155,27 @@ Chapter 2's `find_byte_ge` returned the first index where `values[i] >= C`. Stri
 
 ```asm
 ; str_find_char: index of first C in string, or $FF if absent
-;! in HL,C; out A; clobbers F,B,HL
-@str_find_char:
+.routine in HL,C out A clobbers F,B,HL
+str_find_char:
     ld b, 0
-FindCharScan:
+_scan:
     ld a, (hl)
     or a
-    jr z, FindCharMissing
+    jr z, _missing
     cp c
-    jr z, FindCharFound
+    jr z, _found
     inc hl
     inc b
-    jr FindCharScan
-FindCharFound:
+    jr _scan
+_found:
     ld a, b
     ret
-FindCharMissing:
+_missing:
     ld a, $FF
     ret
 ```
 
-Invariant at `FindCharScan`: no byte at index `< B` equals C.
+Invariant at `_scan`: no byte at index `< B` equals C.
 
 For `'L'` in `"HELLO"`, `find_index` should be `$02` (0-based).
 
@@ -187,33 +187,33 @@ Lexicographic compare reads one byte from each string until bytes differ or both
 
 ```asm
 ; strcmp_u8: 0 if equal, 1 if HL string greater, $FF if less
-;! in HL,DE; out A; clobbers F,HL,DE
-@strcmp_u8:
-StrCmpLoop:
+.routine in HL,DE out A clobbers F,HL,DE
+strcmp_u8:
+_loop:
     ld a, (hl)
     push af
     ld a, (de)
     pop bc
     cp c
-    jr c, StrCmpLess
-    jr nz, StrCmpGreater
+    jr c, _greater
+    jr nz, _less
     or a
-    jr z, StrCmpEqual
+    jr z, _equal
     inc hl
     inc de
-    jr StrCmpLoop
-StrCmpLess:
+    jr _loop
+_less:
     ld a, $FF
     ret
-StrCmpGreater:
+_greater:
     ld a, 1
     ret
-StrCmpEqual:
+_equal:
     xor a
     ret
 ```
 
-Order matters: compare characters **before** you decide both strings ended. If both bytes are zero, `cp b` sets Z, the `jr nz` to `StrCmpGreater` does not fire and `StrCmpEqual` returns 0. If one string is a prefix of the other, the shorter one ends first on a later iteration — `cp` sees `0` against a non-zero byte and returns less or greater correctly.
+Order matters: compare characters **before** you decide both strings ended. A holds the DE character and C holds the HL character, so `cp c` computes DE - HL. Carry therefore means the HL string is greater. If both bytes are zero, Z remains set and `_equal` returns 0. If one string is a prefix of the other, the zero byte orders the shorter string before the longer one.
 
 The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$8009` should be `$01`.
 
@@ -293,7 +293,7 @@ Single-step through `strlen_u8` once: watch B increment only on non-zero bytes, 
 - **HL** (and **DE** for copy/compare) is the pointer; advance with `inc hl` / `inc de`.
 - **`or a` after `ld a,(hl)`** tests the terminator without changing A.
 - **`strcpy_u8`** copies through the null; **`strcmp_u8`** and **`str_find_char`** reuse the same walk with different exit tests.
-- **AZMDoc** on every string routine keeps pointer roles checkable with `--rc warn`.
+- **Register contracts** on every string routine keep pointer roles checkable with `--rc warn`.
 
 ---
 

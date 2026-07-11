@@ -31,7 +31,7 @@ The trade is explicit: you pay an extra two bytes per node for the link, and you
 Describe the shape once with `.type`:
 
 ```asm
-.type ListNode
+ListNode .type
 value   .byte
 next    .word
 .endtype
@@ -41,7 +41,7 @@ LIST_NEXT   .equ offset(ListNode, next)
 NODE_SIZE   .equ sizeof(ListNode)
 ```
 
-`sizeof(ListNode)` is 3: one data byte, then a little-endian 16-bit link. The link field uses `.word` because it holds a full address — the same width as `word` and `addr` in Book 1 Chapter 13. AZM also offers `.addr` when you want the layout name to say “this field is a pointer”; for flat AZM listings, `.word` is enough as long as you treat it as an address in comments and AZMDoc.
+`sizeof(ListNode)` is 3: one data byte, then a little-endian 16-bit link. The link field uses `.word` because it holds a full address — the same width as `word` and `addr` in Book 1 Chapter 13. AZM also offers `.addr` when you want the layout name to say “this field is a pointer”; for flat AZM listings, `.word` is enough as long as you treat it as an address in comments and register contracts.
 
 **Null** is the address **0**. A missing next node is stored as `.dw 0`. At run time you test the pointer in HL with:
 
@@ -143,19 +143,19 @@ Summing the list is a `while`-shaped loop (Chapter 2’s invariant style): HL is
 
 ```asm
 ; list_sum_u16: sum value bytes along list starting at HL (null = 0)
-;! in HL; out HL; clobbers AF,BC,DE,HL
-@list_sum_u16:
+.routine in HL out HL clobbers AF,BC,DE
+list_sum_u16:
     ld de, 0
-ListSumLoop:
+_sum_loop:
     ld a, h
     or l
-    jr z, ListSumDone
+    jr z, _sum_done
     ld a, (hl)
     add a, e
     ld e, a
-    jr nc, ListSumNoCarry
+    jr nc, _sum_no_carry
     inc d
-ListSumNoCarry:
+_sum_no_carry:
     ld bc, LIST_NEXT
     add hl, bc
     ld a, (hl)
@@ -164,13 +164,13 @@ ListSumNoCarry:
     ld a, (hl)
     ld h, a
     ld l, c
-    jr ListSumLoop
-ListSumDone:
+    jr _sum_loop
+_sum_done:
     ex de, hl
     ret
 ```
 
-**Invariant at `ListSumLoop`:** DE is the sum of all `value` bytes in nodes strictly before the node HL points at (if any). When HL is null, DE is the full sum returned in HL via `ex de, hl`.
+**Invariant at `_sum_loop`:** DE is the sum of all `value` bytes in nodes strictly before the node HL points at (if any). When HL is null, DE is the full sum returned in HL via `ex de, hl`.
 
 For the static chain `$10`, `$22`, `$30`, the result is `$003C` (60). The companion stores it in `list_sum`.
 
@@ -184,16 +184,16 @@ Search reuses the same advance pattern, comparing `(hl)` to the target byte in B
 
 ```asm
 ; list_find_u8: find first node with value A; HL = node or 0, carry set if found
-;! in HL,A; out HL,carry; clobbers A,BC,DE
-@list_find_u8:
+.routine in HL,A out HL,carry clobbers A,BC,DE
+list_find_u8:
     ld b, a
-ListFindLoop:
+_find_loop:
     ld a, h
     or l
-    jr z, ListFindMissing
+    jr z, _missing
     ld a, (hl)
     cp b
-    jr z, ListFindFound
+    jr z, _found
     ld bc, LIST_NEXT
     add hl, bc
     ld a, (hl)
@@ -202,11 +202,11 @@ ListFindLoop:
     ld a, (hl)
     ld h, a
     ld l, c
-    jr ListFindLoop
-ListFindFound:
+    jr _find_loop
+_found:
     scf
     ret
-ListFindMissing:
+_missing:
     ld hl, 0
     or a
     ret
@@ -224,8 +224,8 @@ The demo searches for `$22` and expects `find_hit = 1` and `find_node` equal to 
 
 ```asm
 ; list_push_head: prepend node DE with value A; updates list_head
-;! in A,DE; clobbers BC,DE,HL
-@list_push_head:
+.routine in A,DE clobbers BC,DE,HL
+list_push_head:
     push af
     ld hl, list_head
     ld a, (hl)
@@ -288,15 +288,15 @@ Runtime traversal cannot put HL inside brackets — use explicit `add hl, bc` wi
 
 ---
 
-## AZMDoc on pointer routines
+## Register contracts on pointer routines
 
-Pointer routines follow the same `@` entry and `;!` tags as the ring buffer and factorial helpers:
+Pointer routines follow the same `.routine` declarations as the ring buffer and factorial helpers:
 
 | Tag | Role for lists |
 |-----|----------------|
-| `;! in` | HL = current node or head pointer; A or DE for push/find |
-| `;! out` | HL = sum, found node or 0; carry for find |
-| `;! clobbers` | Include every register the link walk destroys |
+| `.routine in` | HL = current node or head pointer; A or DE for push/find |
+| `.routine out` | HL = sum, found node or 0; carry for find |
+| `.routine clobbers` | Include every register the link walk destroys |
 
 Document whether zero in HL means end-of-list or “not found” — here both use HL = 0 with carry distinguishing find success.
 
@@ -311,7 +311,7 @@ azm --rc warn examples/08_linked_list.asm
 A **binary search tree** adds a second link per node: left and right children, each a `.word` (zero if absent).
 
 ```asm
-.type TreeNode
+TreeNode .type
 value   .byte
 left    .word
 right   .word
@@ -397,7 +397,7 @@ Single-step `list_sum_u16` once: watch HL jump from `node_a` to `node_b` to `nod
 
 1. Draw the memory diagram after inserting `$40` at the head of the chapter list. Which node does `list_head` point at? What is `node_a.next`?
 2. Without assembling, write the null test for DE instead of HL. Why does `or e` alone fail to test a 16-bit pointer?
-3. Add `list_count_u8`: return the number of nodes in A. Document `;! in` / `;! out` / `;! clobbers`. Empty list should return 0.
+3. Add `list_count_u8`: return the number of nodes in A. Document `.routine in` / `.routine out` / `.routine clobbers`. Empty list should return 0.
 4. Implement **insert at tail** using a spare node and a walk to the last link. How many memory reads does tail insert cost versus head insert?
 5. Change `next` to `.addr` in the layout only. Does any instruction encoding change? What changes in the reader’s understanding?
 6. Write `list_get_u8`: given zero-based index B, return the value byte in A (carry clear if index out of range). Do not use multiplication; advance B times.

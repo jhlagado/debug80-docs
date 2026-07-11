@@ -6,7 +6,7 @@
 ;   find_node at $800F — address of node_b when found
 ;   sum_after at $8011 — sum after push $40 at head → $0064 (100)
 
-.type ListNode
+ListNode .type
 value   .byte
 next    .word
 .endtype
@@ -26,10 +26,10 @@ main:
     ld (find_node), hl
     ld a, 0
     ld (find_hit), a
-    jr nc, .after_find
+    jr nc, _after_find
     inc a
     ld (find_hit), a
-.after_find:
+_after_find:
 
     ld de, node_spare
     ld a, $40
@@ -42,19 +42,19 @@ main:
     halt
 
 ; list_sum_u16: sum value bytes along list starting at HL (null = 0)
-;! in HL; out HL; clobbers AF,BC,DE,HL
-@list_sum_u16:
+.routine in HL out HL clobbers AF,BC,DE
+list_sum_u16:
     ld de, 0
-.sum_loop:
+_sum_loop:
     ld a, h
     or l
-    jr z, .sum_done
+    jr z, _sum_done
     ld a, (hl)
     add a, e
     ld e, a
-    jr nc, .sum_no_carry
+    jr nc, _sum_no_carry
     inc d
-.sum_no_carry:
+_sum_no_carry:
     ld bc, LIST_NEXT
     add hl, bc
     ld a, (hl)
@@ -63,22 +63,22 @@ main:
     ld a, (hl)
     ld h, a
     ld l, c
-    jr .sum_loop
-.sum_done:
+    jr _sum_loop
+_sum_done:
     ex de, hl
     ret
 
 ; list_find_u8: find first node with value A; HL = node or 0, carry set if found
-;! in HL,A; out HL,carry; clobbers A,BC,DE
-@list_find_u8:
+.routine in HL,A out HL,carry clobbers A,BC,DE
+list_find_u8:
     ld b, a
-.find_loop:
+_find_loop:
     ld a, h
     or l
-    jr z, .not_found
+    jr z, _not_found
     ld a, (hl)
     cp b
-    jr z, .found
+    jr z, _found
     ld bc, LIST_NEXT
     add hl, bc
     ld a, (hl)
@@ -87,18 +87,18 @@ main:
     ld a, (hl)
     ld h, a
     ld l, c
-    jr .find_loop
-.found:
+    jr _find_loop
+_found:
     scf
     ret
-.not_found:
+_not_found:
     ld hl, 0
     or a
     ret
 
 ; list_push_head: prepend node DE with value A; updates list_head
-;! in A,DE; clobbers BC,DE,HL
-@list_push_head:
+.routine in A,DE clobbers BC,DE,HL
+list_push_head:
     push af
     ld hl, list_head
     ld a, (hl)

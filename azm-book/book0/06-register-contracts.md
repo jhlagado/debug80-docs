@@ -16,7 +16,7 @@ AZM's register contracts find these collisions at assemble time by making the re
 
 The benefit is strongest in sizeable Z80 programs made of many small routines. Those programs carry a lot of implicit register state: loop counters, pointers, status flags, scratch pairs and monitor-call arguments. A call can look harmless while still destroying a value the caller will use a few instructions later. Register contracts move that assumption into source and let AZM stop the build at the call site.
 
-This changes the development style in useful ways. `@` entry labels make routine boundaries explicit. `;!` contracts make helper interfaces visible, including routines that intentionally return values in carriers such as `HL` or `carry`. Strict checking also applies to proof code, tests and scaffolding, so temporary helpers cannot quietly rely on stale register assumptions.
+The `.routine` directive makes each analysis boundary explicit and records the routine's inputs, outputs, clobbers and preserved carriers. The label on the following line remains an ordinary callable symbol. Add `@` only when an imported source unit must export that symbol.
 
 The friction is real. Strict mode is unforgiving when a helper's true output contract has not been written yet, and code that jumps across routine-shaped regions is harder for AZM to prove. That pressure is part of the value: routines tend to become smaller, more local and easier to reason about before the program reaches Debug80 or hardware.
 
@@ -27,7 +27,7 @@ The friction is real. Strict mode is unforgiving when a helper's true output con
 Here is a loop that processes eight tiles. `B` is the iteration counter; `HL` points to the current tile in memory:
 
 ```asm
-@ScanTiles:
+ScanTiles:
         ld      b,8
 ScanLoop:
         ld      a,(hl)
@@ -40,7 +40,7 @@ ScanLoop:
 `RENDER_TILE` draws one tile. Inside, it uses `B` as the high byte of a 16-bit offset calculation:
 
 ```asm
-@RenderTile:
+RenderTile:
         ld      b,0             ; B = 0, high byte of BC
         ld      c,a
         add     hl,bc           ; HL += tile index (16-bit add)
@@ -71,11 +71,11 @@ The code at each call site looks correct. Neither routine has a bug when read in
 
 ## The contract that exposes the clobber
 
-AZM uses `;!` comment blocks to record what each routine does to registers. A contract above `RENDER_TILE` makes the clobber explicit:
+AZM uses `.routine` directives to record what each routine does to registers. A contract above `RenderTile` makes the clobber explicit:
 
 ```asm
-;! clobbers B
-@RenderTile:
+.routine clobbers B
+RenderTile:
 ```
 
 With this contract in place and register contracts enabled, AZM inspects every call to `RENDER_TILE`. At the call in `SCAN_TILES`, `B` holds the loop counter — a value the caller reads after the call returns. The contract says `RENDER_TILE` clobbers `B`. AZM reports the conflict:
@@ -94,7 +94,7 @@ Three ways to fix this collision:
 **Option 1 — save and restore in the caller:**
 
 ```asm
-@ScanTiles:
+ScanTiles:
         ld      b,8
 ScanLoop:
         ld      a,(hl)
@@ -109,8 +109,8 @@ ScanLoop:
 **Option 2 — have the callee preserve B:**
 
 ```asm
-;! preserves B
-@RenderTile:
+.routine preserves B
+RenderTile:
         push    bc
         ld      b,0
         ld      c,a
@@ -129,52 +129,51 @@ Move `B` to a RAM location or use a different register in one of the routines. W
 
 ---
 
-## Routine boundaries: `@` entry labels
+## Routine boundaries: `.routine`
 
-Register contract analysis proves facts inside routine regions. The `@` prefix marks those regions:
+Register contract analysis proves facts inside routine regions. Place `.routine` before the entry label:
 
 ```asm
-@RenderTile:
+.routine clobbers A,B
+RenderTile:
         ; ... body ...
         ret
 ```
 
-The callable symbol is `RENDER_TILE` — callers write `call RENDER_TILE`. The `@` is AZM's source marker for analysis, not part of the symbol name.
+Callers write `call RenderTile`. The directive emits no bytes and does not change the label's visibility.
 
-- `@Name:` starts a new routine named `Name`
-- Plain branch labels inside the body stay within that routine region
-- The next `@OtherName:` ends the current routine and starts a new one
-- Consecutive `@` labels before the first instruction are aliases for the same routine entry
+- `.routine` applies to the next non-local label and starts its body
+- The next `.routine` closes the current body and starts another
+- Consecutive non-local labels before the first instruction are aliases for one routine
+- A later non-local label closes the routine and begins ordinary code or data
 
-Plain labels inside an `@` routine are ordinary branch targets:
+Use leading-underscore labels for branches owned by the routine:
 
 ```asm
-@ScanRow:
+.routine in HL clobbers B
+ScanRow:
         ld      b,8
-ScanRowBitLoop:
+_bitLoop:
         rl      (hl)
         inc     hl
-        djnz    ScanRowBitLoop
+        djnz    _bitLoop
         ret
 ```
 
-`ScanRowBitLoop` is a branch label inside `SCAN_ROW`. AZM sees the whole body as one span.
+`_bitLoop` belongs to `ScanRow`. Another routine may also declare `_bitLoop`; AZM gives each declaration a distinct owner-qualified identity in debug metadata.
 
-Plain labels are still global assembler symbols. They are not local labels, and they must be unique across the whole translation unit:
+Export is independent from routine analysis:
 
 ```asm
-@ShiftRow:
-ShiftLoop:
-        ; ...
-        ret
-
-@CopyRow:
-CopyLoop:
-        ; ...
+.routine in A out A clobbers F
+@NormaliseByte:
+        and     $7f
         ret
 ```
 
-Use routine boundaries to match the units whose register and stack effects you want AZM to prove. Legal Z80 assembly can jump anywhere in the final address space, but cross-boundary control flow is hard for register contracts to reason about. Keep ordinary branches inside the current `@` routine. Use `call` when you want to enter another routine with its own contract.
+`@NormaliseByte:` exports `NormaliseByte` from an imported source unit. The same routine could use a plain `NormaliseByte:` label when it is only needed inside its source unit.
+
+Keep owner-local branches inside their routine. Direct `JP`, `JP cc`, `JR` and `JR cc` transfers to another declared routine are analyzed as tail calls. Use `call` when control returns to the caller and a tail jump when the callee returns directly to the original caller.
 
 ---
 
@@ -206,6 +205,27 @@ Use the modes as a ladder:
 
 For a Debug80 edit-and-restart loop, use `audit` or `warn` while exploring a messy port. Use `strict` for deliberate rebuilds once the routine boundaries and external interfaces are in place.
 
+### Source policy directives
+
+`.contracts` changes policy for the source file that contains it:
+
+```asm
+.contracts audit
+```
+
+Accepted modes are `strict`, `audit` and `off`. In a translation unit built from `.include` files, AZM applies the directive to routines and diagnostics owned by that included file, not only to the root entry file. Project configuration can also assign policies with file globs; the most specific matching rule wins.
+
+Use `.rcignore` immediately before the finding it suppresses and include a reason:
+
+```asm
+.routine in HL
+Dispatch:
+        .rcignore unknown_control_flow "legacy dispatcher jumps through HL"
+        jp      (hl)
+```
+
+The finding name must match the reported register-contract finding kind. A suppression without reason text is rejected.
+
 ---
 
 ## What AZM infers
@@ -216,7 +236,7 @@ Given a routine body, AZM infers:
 - **Outputs** (`out`): registers and flags that carry meaningful return values on all exit paths
 - **Clobbers** (`clobbers`): registers written and not restored to the incoming value
 
-The inference follows the instruction stream through the control-flow graph of the routine body. It handles push/pop pairs, straight-line code and branch paths within the routine body. Indirect effects — a callee's effect on RAM or runtime-computed results — need explicit contracts through `;!` blocks.
+The inference follows the routine's control-flow graph. It handles push/pop pairs, branch paths, cross-routine tail calls and nonreturning cycles. ROM services and separately assembled code need explicit `.asmi` or profile contracts.
 
 ## Caller-side conflict checking
 
@@ -244,102 +264,92 @@ CheckLoop:
 Register preservation on the Z80 often uses the stack. AZM can check that discipline when the save and restore happen inside the same routine region:
 
 ```asm
-;! preserves BC
-@DrawRows:
+.routine preserves BC
+DrawRows:
         push    bc
         ; ... uses B and C temporarily ...
         pop     bc
         ret
 ```
 
-Keep `push`/`pop` save-restore pairs inside the same `@` routine region. If a routine has more than one exit path, each path must restore the stack before `ret`.
+Keep `push`/`pop` save-restore pairs inside the same `.routine` region. Each returning path must restore the stack before `ret`.
 
 This shape is awkward for register contracts:
 
 ```asm
-@CopyName:
+.routine preserves BC
+CopyName:
         push    bc
-        jr      z,SharedFail
+        jr      z,_sharedFail
         pop     bc
         ret
 
-@LoadConfig:
+.routine
+LoadConfig:
         ; ...
-SharedFail:
+_sharedFail:
         pop     bc
         ret
 ```
 
-`COPY_NAME` pushes `BC`, then branches to a label that lives after the `@LoadConfig:` boundary. The source is legal assembly, but the routine boundary no longer matches the stack behaviour AZM is trying to prove.
+`CopyName` pushes `BC`, then branches to `_sharedFail`, which is owned by `LoadConfig`. AZM reports the cross-owner local reference before register-contract analysis.
 
 Keep the shared exit inside the same routine region:
 
 ```asm
-@CopyName:
+.routine preserves BC
+CopyName:
         push    bc
-        jr      z,CopyNameFail
+        jr      z,_fail
         pop     bc
         ret
-CopyNameFail:
+_fail:
         pop     bc
         ret
 
-@LoadConfig:
+.routine
+LoadConfig:
         ; separate routine region
         ret
 ```
 
-If two routines genuinely share a larger cleanup sequence, make that sequence a real callable routine with its own `@` boundary and contract. The goal is not to ban shared code. The goal is to make routine boundaries match the units whose register and stack effects AZM can check.
+If two routines share a larger cleanup sequence, declare that sequence as a callable `.routine` with its own contract. Routine boundaries then match the units whose register and stack effects AZM checks.
 
 ---
 
-## AZMDoc syntax
+## Source contract syntax
 
-AZMDoc is the comment format for machine-readable register contracts. The `;!` prefix keeps contracts separate from human prose. AZMDoc metadata is parse-only; the assembled bytes are unaffected.
+`.routine` is the source directive for a machine-readable register contract. It occupies one source line and emits no bytes. Blank lines and ordinary comments may appear before its associated entry label.
 
-### Source contract syntax
-
-A source contract is one or more contiguous `;!` lines immediately before a routine entry label. Each `;!` line contains one or more clauses. Clauses are separated by semicolons, and register lists inside a clause are separated by commas.
-
-Prefer the compact single-line form for new code:
+A source contract contains zero or more clauses on the same directive line. Register lists inside a clause are comma-separated:
 
 ```asm
 ; Tests candidate piece placement against walls, floor and board rows.
 ; D contains candidate x coordinate, E contains candidate y coordinate.
 ; Carry returned set when placement is blocked.
-;! in DE; out carry; clobbers A
-@CheckCollisionAtDe:
+.routine in DE out carry clobbers A
+CheckCollisionAtDe:
 ```
 
-The `;!` lines must be directly above the entry label with no intervening blank lines or other statements. Human prose comments can precede the `;!` block.
-
-The older one-clause-per-line form is still accepted for compatibility:
+The directive applies to the next non-local entry label. Blank lines and ordinary comments may appear between the directive and label:
 
 ```asm
-; old style, accepted but not preferred
-;! in DE
-;! out carry
-;! clobbers A
-@CheckCollisionAtDe:
+; Tests candidate placement and returns carry set when blocked.
+.routine in DE out carry clobbers A
+CheckCollisionAtDe:
 ```
 
-If a compact contract becomes too long, split it across two `;!` lines:
+One routine has one `.routine` directive. Continue a long source line only with the editor's normal wrapping; a second `.routine` starts a second routine.
 
-```asm
-;! in A,HL,DE; out carry
-;! preserves IX,IY; clobbers BC,F
-@CheckCollision:
-```
-
-Do not pad columns for alignment, do not write space-separated register lists, and do not use semicolons between registers:
+Malformed carrier lists are rejected:
 
 ```asm
 ; wrong
-;! in A HL
-;! in A;HL
+.routine in A HL
+.routine in A,NOT_A_REGISTER
 
 ; right
-;! in A,HL; out A; clobbers F
+.routine in A,HL out A clobbers F
 ```
 
 ### Contract keys
@@ -367,13 +377,13 @@ Read those keys from the caller's point of view:
 Carriers appear in a comma-separated list after the key:
 
 ```asm
-;! in A,DE,HL; out carry; clobbers BC
+.routine in A,DE,HL out carry clobbers BC
 ```
 
 Register pair names expand to their constituent 8-bit registers for analysis — `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
 
 ```asm
-;! out carry,zero; clobbers A,carry
+.routine out carry,zero clobbers A
 ```
 
 Use `carry` for the carry flag; `C` names register C. Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`. `F` may be used as shorthand for the flag set.
@@ -381,15 +391,15 @@ Use `carry` for the carry flag; `C` names register C. Individual flag names: `ca
 Prefer individual flag names when a routine returns status in flags:
 
 ```asm
-;! in A,HL; out carry; clobbers BC
-@CheckTile:
+.routine in A,HL out carry clobbers BC
+CheckTile:
 ```
 
 Prefer register pairs when the routine treats the pair as one value:
 
 ```asm
-;! in DE; out HL; clobbers A
-@FindRecord:
+.routine in DE out HL clobbers A
+FindRecord:
 ```
 
 ### Inputs and outputs on the same carrier
@@ -398,41 +408,41 @@ A routine that transforms a register in place — reads it as input, returns it 
 
 ```asm
 ; Normalises the coordinate pair in DE.
-;! in DE; out DE; clobbers A
-@NormaliseDe:
+.routine in DE out DE clobbers A
+NormaliseDe:
 ```
 
 ### Caller-site hints
 
-For one-off call sites during annotation, place a narrow hint immediately before the call:
+For one call site that intentionally consumes inferred outputs, place `.expectout` immediately before the call:
 
 ```asm
-        ; expects out DE
+        .expectout DE
         call    NormaliseDe
         ld      a,(de)
 ```
 
-`expects out DE` tells the analyzer that this call site intentionally consumes DE as a callee-produced output, suppressing the conflict diagnostic for this one call.
+`.expectout DE` tells the analyzer that the next emitted instruction intentionally consumes DE as a callee-produced output. The instruction must be in the same physical source file; place the directive immediately before the intended `call`.
 
 ---
 
 ## Generating contracts from inference
 
-Once you have `@` labels in place, AZM can infer contracts and write them back into source:
+Once routine labels are in place, AZM can infer contracts and write them back into source:
 
 ```sh
 azm --contracts --rc audit program.asm
 ```
 
-AZM infers register contracts for each `@` routine and inserts `;!` blocks directly above the entry labels. On subsequent runs, it replaces the generated block. Human prose comments above the `;!` block are preserved untouched.
+AZM infers a contract for each declared routine and inserts or updates its `.routine` directive. Human prose comments above the directive remain in place.
 
 After the first run, read the generated contract for each routine. AZM inferred those contracts from the instruction stream, so treat them as a starting point and check that they match the routine's intended interface.
 
 When AZM infers a written value that could be either a clobber or an output, it may write `maybe-out`:
 
 ```asm
-;! in A; maybe-out A; clobbers B
-@MaskA:
+.routine in A maybe-out A clobbers B
+MaskA:
 ```
 
 Review every `maybe-out`. If the value is intentionally returned, promote it with `--accept-out`:
@@ -443,7 +453,7 @@ azm --accept-out MASKA:A --rc audit program.asm
 
 If the value is not part of the routine interface, leave it as a clobber or rewrite the routine so the effect is clear.
 
-You can also hand-write or hand-edit `;!` blocks directly. The tool-generated block is overwritten on the next `--contracts` run; a hand-authored block is yours to maintain separately.
+You can hand-write or edit `.routine` directives directly. A later `--contracts` run updates the directive from current inference.
 
 ### Generating `.asmi` interface files
 
@@ -451,7 +461,7 @@ You can also hand-write or hand-edit `;!` blocks directly. The tool-generated bl
 azm --rc audit --reg-interface program.asm
 ```
 
-Writes `program.asmi` with `extern` contract records for every `@` routine. Other projects that call into your code can load this file with `--interface` to get analysis-quality call-site checking.
+Writes `program.asmi` with `extern` contract records for declared routines. Other projects that call into your code can load this file with `--interface`.
 
 ---
 
@@ -493,7 +503,7 @@ Use register contracts as part of editing:
 
 1. Write or edit the routine.
 2. Run `azm --rc audit program.asm` while the code is still moving.
-3. Add or regenerate `;!` contracts with `azm --contracts --rc audit program.asm`.
+3. Add or regenerate `.routine` contracts with `azm --contracts --rc audit program.asm`.
 4. Run `azm --rc error program.asm` to fail on proven conflicts.
 5. Run `azm --rc strict program.asm` once routine boundaries and external interfaces are in place.
 6. Fix routine structure, contracts or interfaces until strict mode passes.
@@ -520,7 +530,7 @@ azm --rc audit --reg-report program.asm
 azm --fix --rc warn program.asm
 ```
 
-AZM identifies call sites where a live register is clearly destroyed by the callee and inserts `push`/`pop` pairs where the save/restore is unambiguous. It also updates the `;!` contract blocks to reflect the repair.
+AZM identifies call sites where a live register is clearly destroyed by the callee and inserts `push`/`pop` pairs where the save/restore is unambiguous. It also updates the `.routine` directives to reflect the repair.
 
 After `--fix` runs, inspect the diff. Every inserted `push`/`pop` is a behaviour change in memory and register state. If a repair looks wrong, add a callee contract instead of keeping the inserted save.
 

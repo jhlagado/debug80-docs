@@ -19,9 +19,9 @@ main:
     ld de, message
     call strcmp_u8
     ld a, 0
-    jr nz, .copy_bad
+    jr nz, _copy_bad
     ld a, 1
-.copy_bad:
+_copy_bad:
     ld (copy_ok), a
 
     ld hl, message
@@ -33,75 +33,75 @@ main:
 CHAR_L .equ 'L'
 
 ; strlen_u8: bytes before null terminator (HL → string)
-;! in HL; out A; clobbers F,B,HL
-@strlen_u8:
+.routine in HL out A clobbers F,B,HL
+strlen_u8:
     ld b, 0
-.slen_loop:
+_slen_loop:
     ld a, (hl)
     or a
-    jr z, .done
+    jr z, _done
     inc hl
     inc b
-    jr .slen_loop
-.done:
+    jr _slen_loop
+_done:
     ld a, b
     ret
 
 ; strcpy_u8: copy null-terminated string HL → DE (terminator included)
-;! in HL,DE; out DE; clobbers AF,HL,DE
-@strcpy_u8:
-.copy:
+.routine in HL,DE out DE clobbers AF,HL
+strcpy_u8:
+_copy:
     ld a, (hl)
     ld (de), a
     inc hl
     inc de
     or a
-    jr nz, .copy
+    jr nz, _copy
     ret
 
 ; strcmp_u8: lexicographic compare; 0 equal, 1 HL>DE, $FF HL<DE
-;! in HL,DE; out A; clobbers F,HL,DE
-@strcmp_u8:
-.cmp_loop:
+.routine in HL,DE out A clobbers F,HL,DE
+strcmp_u8:
+_cmp_loop:
     ld a, (hl)
     push af
     ld a, (de)
     pop bc
     cp c
-    jr c, .less
-    jr nz, .greater
+    jr c, _greater
+    jr nz, _less
     or a
-    jr z, .equal
+    jr z, _equal
     inc hl
     inc de
-    jr .cmp_loop
-.less:
+    jr _cmp_loop
+_less:
     ld a, $FF
     ret
-.greater:
+_greater:
     ld a, 1
     ret
-.equal:
+_equal:
     xor a
     ret
 
 ; str_find_char: index of first C in string, or $FF if absent
-;! in HL,C; out A; clobbers F,B,HL
-@str_find_char:
+.routine in HL,C out A clobbers F,B,HL
+str_find_char:
     ld b, 0
-.scan:
+_scan:
     ld a, (hl)
     or a
-    jr z, .missing
+    jr z, _missing
     cp c
-    jr z, .found
+    jr z, _found
     inc hl
     inc b
-    jr .scan
-.found:
+    jr _scan
+_found:
     ld a, b
     ret
-.missing:
+_missing:
     ld a, $FF
     ret
 

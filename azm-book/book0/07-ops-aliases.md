@@ -137,7 +137,7 @@ Use an op when:
 Use a subroutine when:
 
 - The body is several instructions long and is called many times (code size matters)
-- The routine needs its own register contract documented via AZMDoc
+- The routine needs its own register contract documented via register contracts
 - You want callee-side register preservation
 
 ### Nested ops and cycle detection
@@ -256,13 +256,13 @@ Instruction mnemonic changes — for example, source using `MOV` for `LD` — ne
 
 ## Source files and composition
 
-Use `.include` when you want text copied into the current source file. Use `.import` when you want another source file to behave like a small module with public `@` routines and private helper labels.
+Use `.include` when you want text copied into the current source unit. Use `.import` when another source file should expose selected `@` declarations and keep its other non-local declarations private.
 
 ### `.include`
 
 `.include "path"` inserts another source file inline at that point, as if you had typed its contents there. The file path is relative to the including file; add search directories with `-I`.
 
-All included files share one translation unit and one namespace. Every label and constant must be globally unique across the whole project. Duplicate symbols from two included files produce an assembly error.
+All included files share one source unit. Non-local labels and constants must be unique in that unit. Owner-local labels can repeat under different non-local owners.
 
 Op declarations and layout types typically live in dedicated include files, pulled in before the code that uses them:
 
@@ -276,13 +276,13 @@ Use `.include` for constants, hardware port definitions, shared layout declarati
 
 ### `.import`
 
-AZM 0.2.9 and later supports `.import`:
+AZM 0.3.2 supports `.import` with explicit exports:
 
 ```asm
 .import "math.asm"
 ```
 
-`.import` loads another source file as a module-like unit. The imported file still assembles into the same output program, and its bytes are emitted at the point where the `.import` appears. The difference from `.include` is visibility: imported files expose their public `@` labels to other files, while plain labels inside the imported file are private helper labels.
+`.import` loads another source file as a module-like unit. Its bytes are emitted at the import point. Declarations beginning with `@` are visible to the importing unit; plain non-local declarations remain inside the imported unit.
 
 Use `.import` for reusable routine files, library-style source files and files that should expose a small public surface.
 
@@ -291,7 +291,7 @@ Use `.import` for reusable routine files, library-style source files and files t
         .org    $4000
         .import "math.asm"
 
-@Start:
+Start:
         ld      a,10
         call    DoubleA
         ret
@@ -299,11 +299,12 @@ Use `.import` for reusable routine files, library-style source files and files t
 
 ```asm
 ; math.asm
-;! in A; out A; clobbers F
+.routine in A out A clobbers F
 @DoubleA:
         add     a,a
         ret
 
+.routine in A out A clobbers F
 ClampA:
         cp      100
         ret     c
@@ -311,21 +312,22 @@ ClampA:
         ret
 ```
 
-`DoubleA` is public because it is declared as `@DoubleA:`. Code in `main.asm` calls it as `DoubleA`, without the `@`. `ClampA` is private to `math.asm`: it can be used inside `math.asm`, but code outside that imported file should not call it directly.
+`DoubleA` is exported because it is declared as `@DoubleA:`. Code in `main.asm` calls it as `DoubleA`. `ClampA` remains private to `math.asm`.
 
-The `@` prefix has both meanings here. It marks `DoubleA` as a public imported label, and it marks a register contract routine boundary. Under `--rc strict`, AZM treats `DoubleA` as a known internal routine and checks calls to it through its `;!` contract.
+The two markers are independent. `.routine` declares the analysis boundary and contract. `@` exports the following label.
 
 If outside code tries to reference a private imported label, AZM reports a visibility diagnostic. Keep the call inside the imported file, or make the helper public only when it is genuinely part of the file's interface:
 
 ```asm
-@ClampA:
+.routine in A out A clobbers F
+ClampA:
         cp      100
         ret     c
         ld      a,100
         ret
 ```
 
-Do not write `$`-qualified helper names such as `math$ClampA` or `Routine$done` in AZM source. `$` is source syntax for the current assembly address and for hexadecimal numbers. `.import` privacy is tracked by source ownership: public labels are marked with `@`, and plain labels in the imported file are private to that source unit. Future AZM versions may internally qualify private symbols so duplicate private labels can exist in different imported files, but that internal representation is not user-facing source syntax.
+Use source labels rather than `$`-qualified helper names such as `math$ClampA`. `$` is the current assembly address by itself and starts hexadecimal literals such as `$4000`. AZM tracks imported declarations by source-unit identity and emits that identity in D8 metadata.
 
 ### Import order and paths
 
@@ -335,11 +337,11 @@ Imported source assembles at the point where `.import` appears:
         .org    $4000
         .import "module.asm"
 
-@Start:
+Start:
         ret
 ```
 
-The bytes from `module.asm` are emitted before `@Start`. `.import` is not only a declaration; it contributes source at that point in the program.
+The bytes from `module.asm` are emitted before `Start`. `.import` is not only a declaration; it contributes source at that point in the program.
 
 `.import` resolves paths the same way as `.include`: first relative to the file that contains the directive, then through include search paths passed with `-I`.
 
@@ -363,17 +365,17 @@ Repeated includes are still textual and repeatable:
 
 Recursive include/import chains are rejected with a source diagnostic.
 
-### First-release limits
+### Import limits
 
-`.import` is deliberately small in AZM 0.2.9:
+`.import` remains deliberately small in AZM 0.3.2:
 
 - `.import "file.asm"` is the only supported import syntax
 - There is no `as Name` namespace syntax
 - There is no `Module.Symbol` reference syntax
 - There is no re-export syntax
-- Privacy currently applies to labels, not to constants, enums, layout types, type aliases, ops or directive aliases
-- Private imported labels are hidden from outside code, but duplicate private labels across imported files are not yet guaranteed to be allowed
-- `$`-qualified private names are not source syntax; keep private helper labels readable and globally unique for now
+- Plain declarations in an imported source unit are private to that unit; `@` exports labels, equates, enums, layout types, type aliases and ops
+- Different imported source units may reuse the same private declaration names
+- `$`-qualified private names are internal debug-map display names, not source syntax
 - `.include` behaviour is unchanged
 
 Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. ASM80-compatible lowered `.z80` output does not currently support `.import`; if a program uses `.import` and you request `--asm80`, AZM reports an explicit `AZMN_ASM80` diagnostic.

@@ -29,9 +29,9 @@ main:
     ld a, (device_flags)
     bit_test FLAG_READY
     ld a, 0
-    jr z, .ready_clear
+    jr z, _ready_clear
     ld a, 1
-.ready_clear:
+_ready_clear:
     ld (ready_lit), a
 
     ld a, (device_flags)
@@ -48,8 +48,8 @@ main:
     halt
 
 ; extract_bit_u8: isolate bit 1 of A into A as 0 or 1
-;! in A; out A; clobbers F
-@extract_bit_u8:
+.routine in A out A clobbers F
+extract_bit_u8:
     and FLAG_ERROR
     rr a
     ret

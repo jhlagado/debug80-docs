@@ -266,23 +266,23 @@ end
 The rewritten `count_above`:
 
 ```asm
-;! in HL,B,C; out A; clobbers B,HL
-@count_above:
+.routine in HL,B,C out A clobbers B,HL
+count_above:
   push de
   ld d, 0
-CountAboveLoop:
+_loop:
   ld a, (hl)
-  jr_if_not_above C, CountAboveSkip    ; expands to three instructions
+  jr_if_not_above C, _skip    ; expands to three instructions
   inc d
-CountAboveSkip:
+_skip:
   inc hl
-  djnz CountAboveLoop
+  djnz _loop
   ld a, d
   pop de
   ret
 ```
 
-The call site now reads: if A is not above C, skip to `CountAboveSkip`. The jump destination and the threshold both appear on the same line. The two-jump structure is an implementation detail of the Z80 flag set; the op name says what the code does.
+The call site now reads: if A is not above C, skip to `_skip`. The jump destination and the threshold both appear on the same line. The two-jump structure is an implementation detail of the Z80 flag set; the op name says what the code does.
 
 Compare the two versions side by side:
 
@@ -290,18 +290,18 @@ Compare the two versions side by side:
 ```asm
   ld a, (hl)
   cp c
-  jr c, CountAboveSkip
-  jr z, CountAboveSkip
+  jr c, _skip
+  jr z, _skip
   inc d
-CountAboveSkip:
+_skip:
 ```
 
 **With op:**
 ```asm
   ld a, (hl)
-  jr_if_not_above C, CountAboveSkip
+  jr_if_not_above C, _skip
   inc d
-CountAboveSkip:
+_skip:
 ```
 
 The machine output is identical. The listing shows the same three instructions at the `jr_if_not_above` site. The only difference is what the source communicates.
@@ -385,7 +385,7 @@ You can now:
 
 - write a complete AZM program with subroutines, loops, conditional branches and data tables
 - apply push/pop discipline to protect callers from register clobbering
-- document subroutine interfaces with AZMDoc contracts and verify them with register contract analysis
+- document subroutine interfaces with register contracts and verify them with register contract analysis
 - define named record types, reserve storage with `.ds TypeExpr` and compute sizes and offsets at assembly time rather than by hand
 - name repeated instruction sequences with ops and read code that communicates intent rather than mechanics alone
 

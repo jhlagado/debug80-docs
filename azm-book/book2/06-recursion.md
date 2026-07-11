@@ -77,11 +77,11 @@ Wirth's programs are often shown twice: a recursive definition and an equivalent
 ```asm
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
 ; Self-call; max depth FACT_MAX_DEPTH; frame FACT_FRAME_BYTES bytes.
-;! in B; out A; clobbers F,BC,DE
-@factorial_u8:
+.routine in B out A clobbers F,BC,DE
+factorial_u8:
     ld a, b
     or a
-    jr z, FactOne
+    jr z, _one
     push bc
     dec b
     call factorial_u8
@@ -89,7 +89,7 @@ Wirth's programs are often shown twice: a recursive definition and an equivalent
     ld c, b
     call mul8_a_by_c
     ret
-FactOne:
+_one:
     ld a, 1
     ret
 ```
@@ -106,28 +106,28 @@ Same contract, no self-call:
 
 ```asm
 ; factorial_iter_u8: same contract as factorial_u8, iterative
-;! in B; out A; clobbers F,BC,DE
-@factorial_iter_u8:
+.routine in B out A clobbers F,BC,DE
+factorial_iter_u8:
     ld a, b
     or a
-    jr z, FactIterOne
+    jr z, _iter_one
     ld e, 1
     ld c, b
-FactIterLoop:
+_iter_loop:
     ld a, c
     or a
-    jr z, FactIterDone
+    jr z, _iter_done
     ld a, e
     push bc
     call mul8_a_by_c
     ld e, a
     pop bc
     dec c
-    jr FactIterLoop
-FactIterDone:
+    jr _iter_loop
+_iter_done:
     ld a, e
     ret
-FactIterOne:
+_iter_one:
     ld a, 1
     ret
 ```
@@ -149,7 +149,7 @@ FactIterOne:
 
 ## Preserving results across inner calls
 
-The inner `call factorial_u8` returns \((n-1)!\) in **A**. The outer level still needs **B** = \(n\) for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `;!` block.
+The inner `call factorial_u8` returns \((n-1)!\) in **A**. The outer level still needs **B** = \(n\) for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `.routine` block.
 
 If you made a second recursive call before storing the first result, you would have the same problem with **HL** — the register used for 16-bit results in Book 2. Pattern:
 
@@ -182,10 +182,10 @@ demo_nums:
 ```asm
 ; sum_u8_rec: sum bytes table[0 .. A-1] into HL (A = count on entry)
 ; Self-call; one return address per tail index; no extra pushes in body.
-;! in HL,A; out HL; clobbers AF,BC,DE,HL
-@sum_u8_rec:
+.routine in HL,A out HL clobbers AF,BC,DE
+sum_u8_rec:
     or a
-    jr z, SumRecZero
+    jr z, _zero
     push af
     ld b, a
     ld a, (hl)
@@ -200,7 +200,7 @@ demo_nums:
     add hl, de
     pop af
     ret
-SumRecZero:
+_zero:
     ld hl, 0
     ret
 ```
@@ -224,13 +224,13 @@ From `main`:
 
 ---
 
-## AZMDoc on recursive entries
+## Register contracts on recursive entries
 
-Recursive routines use the same AZMDoc shape as every other `@` entry (Book 1 Chapter 12):
+Recursive routines use the same register contract shape as every other routine (Book 1 Chapter 12):
 
 - human `;` line stating the job
-- `;! in` / `;! out` / `;! clobbers`
-- `@label:` on the entry
+- one `.routine` directive with `in`, `out`, `maybe-out`, `clobbers` or `preserves` as needed
+- a non-local entry label, exported with `@` only when another source unit imports it
 
 Add two extra habits for self-calls:
 
@@ -239,7 +239,7 @@ Add two extra habits for self-calls:
 
 Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it — same rule as Chapter 11.
 
-Internal labels stay dotted (`.one`, `.zero`). Only the entry that external code (or the same routine via `call`) uses gets `@`.
+Internal labels use owner-local names such as `_one` and `_zero`. Use `@` only for a symbol that another source unit imports.
 
 ---
 
@@ -337,7 +337,7 @@ Step into `factorial_u8` with `FACT_N = 3` first: count pushes on the way down, 
 - The **stack** holds return addresses and any `push` / IX locals; budget `max_depth × frame_bytes` at compile time and init SP before the first call.
 - **`factorial_u8`** and **`factorial_iter_u8`** share a contract; comparing them shows depth vs constant stack use.
 - **`sum_u8_rec`** walks a byte table with accumulation on unwind; promote bytes into DE before `add hl, de`.
-- **AZMDoc** on `@` entries documents register roles; add human notes for self-call and stack limits.
+- **Register contracts** on `.routine` entries document register roles; add human notes for self-call and stack limits.
 - **Stack overflow** corrupts RAM silently — cap depth or use iteration when input size is not bounded.
 
 ---

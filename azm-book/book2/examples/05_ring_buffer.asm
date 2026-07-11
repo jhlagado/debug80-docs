@@ -8,7 +8,7 @@
 
 RING_CAP .equ 8
 
-.type RingState
+RingState .type
 head    .byte
 tail    .byte
 count   .byte
@@ -59,19 +59,19 @@ main:
     call ring_push
     xor a
     ld (push_ok), a
-    jr nc, .after_full_test
+    jr nc, _after_full_test
     inc a
     ld (push_ok), a
-.after_full_test:
+_after_full_test:
     halt
 
 ; ring_push: append one byte; carry set on success, carry clear when full
-;! in A,IX; out carry; clobbers BC,DE,HL
-@ring_push:
+.routine in A,IX out carry clobbers BC,DE,HL
+ring_push:
     ld e, a
     ld a, (ix + RING_COUNT)
     cp RING_CAP
-    jr nc, .full
+    jr nc, _full
     ld a, (ix + RING_HEAD)
     ld hl, ring_buf
     ld b, 0
@@ -87,16 +87,16 @@ main:
     ld (ix + RING_COUNT), a
     scf
     ret
-.full:
+_full:
     or a
     ret
 
 ; ring_pop: remove oldest byte; carry set on success, carry clear when empty
-;! in IX; out A,carry; clobbers BC,DE,HL
-@ring_pop:
+.routine in IX out A,carry clobbers BC,DE,HL
+ring_pop:
     ld a, (ix + RING_COUNT)
     or a
-    jr z, .empty
+    jr z, _empty
     ld a, (ix + RING_TAIL)
     ld hl, ring_buf
     ld b, 0
@@ -112,13 +112,13 @@ main:
     ld a, e
     scf
     ret
-.empty:
+_empty:
     or a
     ret
 
 ; ring_advance_index: A := (A + 1) mod RING_CAP
-;! in A; out A; clobbers F
-@ring_advance_index:
+.routine in A out A clobbers F
+ring_advance_index:
     inc a
     cp RING_CAP
     ret c

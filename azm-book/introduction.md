@@ -52,7 +52,7 @@ What AZM adds on top of plain assembly is practical:
 - **`op` declarations** let you give a short instruction sequence a name and expand it inline wherever you use it — without introducing a call boundary or any hidden overhead
 - **Layout types** (`byte`, `word`, `type`, `union`, `sizeof`, `offset`) name memory layout at assembly time — allocation and constants, not hidden loads or stores — so you never count struct offsets by hand
 - **Enums** name states and command bytes as grouped constants (`GameMode.Playing`), not runtime types
-- **AZMDoc** lets you write formal register contracts for your subroutines — documenting what goes in, what comes out, and what gets clobbered — and have the assembler verify callers and callees agree
+- **Register contracts** let you write formal register contracts for your subroutines — documenting what goes in, what comes out, and what gets clobbered — and have the assembler verify callers and callees agree
 - **Register contract analysis** uses those contracts to warn you when a subroutine's actual register usage contradicts what its documentation claims
 
 None of this adds instructions the CPU does not run. Every AZM construct compiles to Z80 bytes you can read in the listing and verify directly.
@@ -68,7 +68,7 @@ By the end of Book 1 you will be able to:
 - Read and write any raw Z80 program: move data between registers and memory, test flags and branch, loop with DJNZ, call subroutines and return correctly
 - Understand what the CPU is doing at every step, because you placed every byte
 - Use AZM directives to lay out programs cleanly with named constants, typed data definitions, and file inclusion
-- Name and inline short instruction sequences with `op`, define record layouts with `type`, and document subroutine contracts with AZMDoc
+- Name and inline short instruction sequences with `op`, define record layouts with `type`, and document subroutine contracts with register contracts
 - Recognise the difference between code that runs correctly by design and code that runs correctly by accident
 
 By the end of Book 2 you will be able to:

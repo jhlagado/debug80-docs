@@ -44,11 +44,11 @@ Book 1 established informal conventions: HL for addresses, A for byte results, c
 | Table base address | HL | Same as 16-bit arg — context disambiguates |
 | Table length | B | Element count for byte tables |
 
-**Callee-save:** if a routine uses BC, DE, HL or IX internally as scratch, it must push before use and pop before every `ret`. Registers listed in `;! clobbers` are not restored.
+**Callee-save:** if a routine uses BC, DE, HL or IX internally as scratch, it must push before use and pop before every `ret`. Registers listed in `.routine clobbers` are not restored.
 
 **Caller-save:** A, F and any register passed as an input the routine is allowed to destroy.
 
-Every subroutine in this book should document its contract with AZMDoc (Book 1 Chapter 12). The analyzer can then flag a caller that keeps HL live across a call to `gcd_u16`, which clobbers DE and returns a new HL.
+Every subroutine in this book should document its contract with register contracts (Book 1 Chapter 12). The analyzer can then flag a caller that keeps HL live across a call to `gcd_u16`, which clobbers DE and returns a new HL.
 
 ---
 
@@ -56,29 +56,29 @@ Every subroutine in this book should document its contract with AZMDoc (Book 1 C
 
 ```asm
 ; gcd_u16: greatest common divisor (Euclidean, subtractive)
-;! in HL,DE; out HL; clobbers AF,DE
-@gcd_u16:
-GcdLoop:
+.routine in HL,DE out HL clobbers AF,DE
+gcd_u16:
+_loop:
     ld a, h
     or l
-    jr z, GcdRightAnswer
+    jr z, _right_answer
     ld a, d
     or e
-    jr z, GcdLeftAnswer
+    jr z, _left_answer
     push hl
     or a
     sbc hl, de
     pop hl
-    jr c, GcdSwap
+    jr c, _swap
     or a
     sbc hl, de
-    jr GcdLoop
-GcdSwap:
+    jr _loop
+_swap:
     ex de, hl
-    jr GcdLoop
-GcdLeftAnswer:
+    jr _loop
+_left_answer:
     ret
-GcdRightAnswer:
+_right_answer:
     ex de, hl
     ret
 ```
@@ -89,7 +89,7 @@ GcdRightAnswer:
 
 ### Unsigned compare via `sbc hl, de`
 
-`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned). The routine pushes HL, subtracts in the scratch copy, pops the original HL and branches to `GcdSwap` when carry is set.
+`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned). The routine pushes HL, subtracts in the scratch copy, pops the original HL and branches to `_swap` when carry is set.
 
 If HL ≥ DE, the second `sbc hl, de` performs the Euclidean subtraction step and the loop repeats.
 
@@ -170,19 +170,21 @@ Binary exponentiation is a natural follow-on (used heavily in crypto and fixed-p
 
 ```asm
 ; power_u8: unsigned C^B into A (B may be 0 → 1)
-;! in B,C; out A; clobbers F,BC,DE
-@power_u8:
+.routine in B,C out A clobbers F,BC,DE
+power_u8:
     ld e, 1
-PowerLoop:
+_loop:
     ld a, b
     or a
-    jr z, PowerDone
+    jr z, _done
     dec b
     ld a, e
+    push bc
     call mul8_a_by_c
+    pop bc
     ld e, a
-    jr PowerLoop
-PowerDone:
+    jr _loop
+_done:
     ld a, e
     ret
 ```
@@ -231,7 +233,7 @@ azm --rc warn examples/01_gcd.asm
 ## Summary
 
 - Book 2 uses an explicit **16-bit convention** (HL, DE, return in HL) on top of Book 1 byte conventions.
-- **AZMDoc** documents every algorithm routine; callers must respect `clobbers`.
+- **Register contracts** document every algorithm routine; callers must respect `clobbers`.
 - **Euclidean GCD** uses subtract and swap — no hardware divide.
 - **Workspace** `.ds` labels hold scratch bytes when registers are full.
 - **`power_u8`** shows the same contract style on 8-bit operands.
@@ -243,7 +245,7 @@ azm --rc warn examples/01_gcd.asm
 1. Change `GCD_A` and `GCD_B` to 270 and 192. Trace the first five loop iterations by hand, then run the program and confirm `gcd_result`.
 2. Add `gcd_u16` calls for (0, 5) and (5, 0). What should each return? Test in the emulator.
 3. Implement `digit_count_u16` with HL in and A out. Hint: loop while HL ≠ 0, subtract 10 until HL < 10, count iterations, then set HL to the quotient for the next digit. Use one workspace byte if needed.
-4. Rewrite `mul8_a_by_c` with a shift-and-add multiply (faster for larger products). Keep the same `;!` contract.
+4. Rewrite `mul8_a_by_c` with a shift-and-add multiply (faster for larger products). Keep the same `.routine` contract.
 5. Run `azm --rc warn` on a deliberate bug: use HL after `call gcd_u16` without reloading. Read the warning and fix the caller.
 
 ---

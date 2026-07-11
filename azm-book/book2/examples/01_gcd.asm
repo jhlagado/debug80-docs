@@ -23,61 +23,62 @@ main:
     halt
 
 ; gcd_u16: greatest common divisor (Euclidean, subtractive)
-;! in HL,DE; out HL; clobbers AF,DE
-@gcd_u16:
-.loop:
+.routine in HL,DE out HL clobbers AF,DE
+gcd_u16:
+_loop:
     ld a, h
     or l
-    jr z, .right_is_answer
+    jr z, _right_is_answer
     ld a, d
     or e
-    jr z, .left_is_answer
+    jr z, _left_is_answer
     push hl
     or a
     sbc hl, de
     pop hl
-    jr c, .swap
+    jr c, _swap
     or a
     sbc hl, de
-    jr .loop
-.swap:
+    jr _loop
+_swap:
     ex de, hl
-    jr .loop
-.left_is_answer:
+    jr _loop
+_left_is_answer:
     ret
-.right_is_answer:
+_right_is_answer:
     ex de, hl
     ret
 
 ; power_u8: unsigned C^B into A (B may be 0 → 1)
-;! in B,C; out A; clobbers F,BC,DE
-@power_u8:
+.routine in B,C out A clobbers F,BC,DE
+power_u8:
     ld e, 1
-.pow_loop:
+_pow_loop:
     ld a, b
     or a
-    jr z, .done
+    jr z, _done
     dec b
     ld a, e
+    push bc
     call mul8_a_by_c
+    pop bc
     ld e, a
-    jr .pow_loop
-.done:
+    jr _pow_loop
+_done:
     ld a, e
     ret
 
 ; mul8_a_by_c: A := A * C (8-bit, small operands only)
-;! in A,C; out A; clobbers F,BC,DE
-@mul8_a_by_c:
-    ld b, a
-    ld a, 0
-.mul_loop:
-    ld a, b
+.routine in A,C out A clobbers F,B
+mul8_a_by_c:
     or a
     ret z
-    dec b
+    ld b, a
+    xor a
+_mul_loop:
     add a, c
-    jr .mul_loop
+    djnz _mul_loop
+    ret
 
 .org $8000
 gcd_result:

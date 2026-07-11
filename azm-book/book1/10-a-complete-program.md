@@ -170,9 +170,9 @@ For a short, performance-sensitive routine — a counted loop over a small table
 
 These four things become increasingly tedious as programs grow past a handful of subroutines.
 
-**Comment-only contracts are not enforced.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. Nothing checks that the caller actually loads the right registers, or that the subroutine actually produces what it claims. A caller that loads the wrong register fails silently. A subroutine that clobbers a register it said it would preserve fails silently. Chapter 12 introduces AZMDoc `;!` contracts, which let the assembler verify these claims.
+**Comment-only contracts are not enforced.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. Nothing checks that the caller actually loads the right registers, or that the subroutine actually produces what it claims. A caller that loads the wrong register fails silently. A subroutine that clobbers a register it said it would preserve fails silently. Chapter 12 introduces `.routine` register contracts, which let the assembler verify these claims.
 
-**Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name — the register is D and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. No declaration says "D is the counter." Chapter 11 covers the manual discipline for managing register ownership across subroutines; Chapter 12 shows how AZMDoc makes the contract explicit.
+**Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name — the register is D and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. No declaration says "D is the counter." Chapter 11 covers the manual discipline for managing register ownership across subroutines; Chapter 12 shows how register contracts make the contract explicit.
 
 **Repeated comparison patterns have no name.** The `cp c` / `jr c` / `jr z` sequence in `count_above` implements "strictly greater than" — a concept with no single Z80 opcode. The same three-instruction pattern will appear every time you want a strict greater-than test. There is nothing to call that pattern, and no way to verify both branches are correct without re-reading them each time. Chapter 14 introduces `op` declarations, which give a name to a short instruction sequence and expand it inline wherever you write the name.
 
@@ -182,7 +182,7 @@ These four things become increasingly tedious as programs grow past a handful of
 
 ## What the next chapters address
 
-Chapter 11 covers subroutine calling conventions in depth: how to pass arguments, which registers to save and restore and the IX-frame pattern for subroutines that need local storage. Chapter 12 introduces AZMDoc, which turns the comment-only contracts above each subroutine into machine-checkable `;!` annotations — the assembler can verify that the caller sets the right registers and that the subroutine produces what it claims. Chapter 13 introduces layout types — scalar types, `.type` records, `sizeof`, `offset` and `.ds` type expressions — so byte offsets in records are always named and never counted by hand. Chapter 14 introduces `op` declarations, which give names to short instruction sequences and expand them inline wherever you write the name.
+Chapter 11 covers subroutine calling conventions in depth: how to pass arguments, which registers to save and restore and the IX-frame pattern for subroutines that need local storage. Chapter 12 introduces register contracts, which turn the comment-only contracts above each subroutine into machine-checkable `.routine` directives — the assembler can verify that the caller sets the right registers and that the subroutine produces what it claims. Chapter 13 introduces layout types — scalar types, record declarations, `sizeof`, `offset` and `.ds` type expressions — so byte offsets in records are always named and never counted by hand. Chapter 14 introduces `op` declarations, which give names to short instruction sequences and expand them inline wherever you write the name.
 
 ---
 
@@ -193,7 +193,7 @@ Chapter 11 covers subroutine calling conventions in depth: how to pass arguments
 - The caller must reload any register that the subroutine modified before the next call.
 - The push/pop in `count_above` around `ld d, 0` protects BC while initializing D — it turns out to be unnecessary here, but the instinct to save registers when uncertain is reasonable in a longer subroutine.
 - One `cp c` plus two branches on the same flags implements "strictly greater than": skip if carry (A < C) or zero (A == C). The intent is not visible from the mnemonic sequence alone.
-- Chapters 11–14 — calling conventions, AZMDoc contracts, layout types and ops — each address one of the friction points this program exposes.
+- Chapters 11–14 — calling conventions, register contracts, layout types and ops — each address one of the friction points this program exposes.
 
 ---
 

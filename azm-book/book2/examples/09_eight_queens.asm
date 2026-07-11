@@ -26,24 +26,24 @@ main:
     halt
 
 ; clear_constraints: zero col_used and both diagonal tables
-;! clobbers AF,BC,DE,HL
-@clear_constraints:
+.routine clobbers AF,BC,DE,HL
+clear_constraints:
     ld hl, col_used
     ld bc, DIAG_SUM_LEN + DIAG_DIFF_LEN + BOARD_SIZE
     xor a
     ld b, a
-.zero_loop:
+_zero_loop:
     ld (hl), b
     inc hl
     dec bc
     ld a, b
     or c
-    jr nz, .zero_loop
+    jr nz, _zero_loop
     ret
 
 ; col_free: is column C unused?
-;! in C; out zero; clobbers A,B,HL
-@col_free:
+.routine in C out zero clobbers A,B,HL
+col_free:
     ld hl, col_used
     ld b, 0
     add hl, bc
@@ -52,8 +52,8 @@ main:
     ret
 
 ; diag_sum_free: is forward diagonal (row+col) unused?
-;! in B,C; out zero; clobbers A,DE,HL
-@diag_sum_free:
+.routine in B,C out zero clobbers A,DE,HL
+diag_sum_free:
     ld a, b
     add a, c
     ld e, a
@@ -65,8 +65,8 @@ main:
     ret
 
 ; diag_diff_free: is backward diagonal (row-col+DIAG_BIAS) unused?
-;! in B,C; out zero; clobbers A,DE,HL
-@diag_diff_free:
+.routine in B,C out zero clobbers A,DE,HL
+diag_diff_free:
     ld a, b
     add a, DIAG_BIAS
     sub c
@@ -79,8 +79,8 @@ main:
     ret
 
 ; mark_constraints: occupy column C on row B and both diagonals
-;! in B,C; clobbers AF,DE,HL
-@mark_constraints:
+.routine in B,C clobbers AF,DE,HL
+mark_constraints:
     ld hl, col_used
     ld d, 0
     ld e, c
@@ -116,8 +116,8 @@ main:
     ret
 
 ; unmark_constraints: release column C on row B and both diagonals
-;! in B,C; clobbers AF,DE,HL
-@unmark_constraints:
+.routine in B,C clobbers AF,DE,HL
+unmark_constraints:
     ld hl, col_used
     ld d, 0
     ld e, c
@@ -147,34 +147,34 @@ main:
 
 ; place_row: assign a queen to row B; count solutions at row BOARD_SIZE
 ; Self-call; max depth PLACE_MAX_DEPTH; frame PLACE_FRAME_BYTES bytes.
-;! in B; clobbers AF,BC,DE,HL
-@place_row:
+.routine in B clobbers AF,BC,DE,HL
+place_row:
     ld a, b
     cp BOARD_SIZE
-    jr nz, .try_cols
+    jr nz, _try_cols
     call count_solution
     ret
-.try_cols:
+_try_cols:
     ld c, 0
-.col_loop:
+_col_loop:
     ld a, c
     cp BOARD_SIZE
-    jr nc, .row_done
+    jr nc, _row_done
 
     push bc
     call col_free
     pop bc
-    jr nz, .next_col
+    jr nz, _next_col
 
     push bc
     call diag_sum_free
     pop bc
-    jr nz, .next_col
+    jr nz, _next_col
 
     push bc
     call diag_diff_free
     pop bc
-    jr nz, .next_col
+    jr nz, _next_col
 
     push bc
     call mark_constraints
@@ -189,23 +189,23 @@ main:
     call unmark_constraints
     pop bc
 
-.next_col:
+_next_col:
     inc c
-    jr .col_loop
-.row_done:
+    jr _col_loop
+_row_done:
     ret
 
 ; count_solution: solution_count++
-;! clobbers AF,HL
-@count_solution:
+.routine clobbers AF,HL
+count_solution:
     ld hl, solution_count
     ld a, (hl)
     inc a
     ld (hl), a
-    jr nz, .count_done
+    jr nz, _count_done
     inc hl
     inc (hl)
-.count_done:
+_count_done:
     ret
 
 .org $8000

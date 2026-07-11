@@ -18,7 +18,11 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 | `.dw` | `.dw expr[,expr…]` | Emits one or more 16-bit little-endian values | 4 |
 | `.ds` | `.ds count[,fill]` | Reserves `count` bytes; optional `fill` byte; accepts type expressions | 4, 5 |
 | `.include` | `.include "path"` | Inserts the named source file at this point | 7 |
-| `.import` | `.import "path"` | Loads the named source file as a module-like unit with public `@` labels | 7 |
+| `.import` | `.import "path"` | Loads a source unit and exposes declarations marked with `@` | 7 |
+| `.routine` | `.routine [in ...] [out ...] [maybe-out ...] [clobbers ...] [preserves ...]` | Starts a routine and declares its register contract | 6 |
+| `.contracts` | `.contracts strict|audit|off` | Sets register-contract policy for the containing source file | 6 |
+| `.rcignore` | `.rcignore finding "reason"` | Suppresses one local finding with required reason text | 6 |
+| `.expectout` | `.expectout carriers` | Marks outputs intentionally consumed from the next emitted instruction in the same file | 6 |
 | `.align` | `.align n` | Advances the address to the next multiple of `n`, inserting zero bytes | 3 |
 | `.cstr` | `.cstr "text"` | Emits string bytes followed by a `$00` terminator (C-style) | 4 |
 | `.pstr` | `.pstr "text"` | Emits a length byte followed by string bytes (Pascal-style) | 4 |
@@ -59,9 +63,9 @@ Built-in aliases (normalized before parsing):
 
 ---
 
-## AZMDoc carrier notation
+## Register contract carrier notation
 
-Carriers in `;!` contract blocks are comma-separated register names, flag names or register pair names. Register pairs expand to their constituent 8-bit registers during analysis:
+Carriers in a `.routine` directive are comma-separated register names, flag names or register pair names. Register pairs expand to their constituent 8-bit registers during analysis:
 
 | Pair notation | Expands to |
 |--------------|------------|
@@ -72,7 +76,7 @@ Carriers in `;!` contract blocks are comma-separated register names, flag names 
 | `IY` | `IYH,IYL` |
 | `SP` | `SPH,SPL` |
 
-Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`. Use `carry` for the carry flag; `C` names register C. The full AZMDoc contract format is covered in Chapter 6.
+Individual flag names are `carry`, `zero`, `sign`, `parity` and `halfCarry`. `C` names register C. Chapter 6 describes the complete contract format.
 
 ---
 

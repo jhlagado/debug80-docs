@@ -143,8 +143,8 @@ Logical shifts move bit positions for multiply/divide tricks and for isolation:
 
 ```asm
 ; extract_bit_u8: error bit as 0 or 1 in A
-;! in A; out A; clobbers F
-@extract_bit_u8:
+.routine in A out A clobbers F
+extract_bit_u8:
     and FLAG_ERROR
     rr a
     ret

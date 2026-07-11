@@ -150,7 +150,7 @@ Register contracts are normally read through compiler diagnostics from `--rc war
 azm --rc audit --reg-report program.asm
 ```
 
-Writes `program.regcontracts.txt`, listing every `@`-labelled routine with its inferred register contract: inputs, outputs and clobbers. Use this for debugging, CI evidence or large audit sessions; it is not required for normal development.
+Writes `program.regcontracts.txt`, listing declared routines with inferred inputs, outputs and clobbers. Use it for debugging, CI evidence or an audit session.
 
 **`.asmi` (inferred register contract interface):**
 
@@ -158,7 +158,7 @@ Writes `program.regcontracts.txt`, listing every `@`-labelled routine with its i
 azm --rc audit --reg-interface program.asm
 ```
 
-Writes `program.asmi` with `extern` contract records for every `@` routine. Other projects that call into your code can load this file with `--interface`.
+Writes `program.asmi` with inferred `extern` contract records. Other projects that call into your code can load this file with `--interface`.
 
 ### Lowered ASM80 source (`.z80`)
 

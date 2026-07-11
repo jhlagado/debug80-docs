@@ -10,7 +10,7 @@ nav_order: 8
 
 Every chapter so far kept the whole program in one `.asm` file. That is fine while you are learning a single algorithm. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each deserve their own file. AZM still produces one output program with no hidden linker.
 
-This chapter splits a tiny program across files with **`.include`**, pulls `strlen_u8` from a shared library and states the **contracts** (AZMDoc, naming, register roles) that keep the file boundary readable. AZM 0.2.9 also adds **`.import`** for module-style routine files with public `@` labels; Book 0 covers that reference workflow. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
+This chapter splits a tiny program across files with **`.include`**, pulls `strlen_u8` from a shared library and states the **contracts** (register contracts, naming, register roles) that keep the file boundary readable. AZM 0.3.2 also supports **`.import`** for module-style source files with explicit `@` exports; Book 0 covers that reference workflow. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
 
 ---
 
@@ -71,9 +71,9 @@ Put `.include` where the library code should land — often after `main` and bef
 
 ### Include scope
 
-- Not a library with a private symbol table — every label in the included file is global unless you discipline names yourself.
-- Not a substitute for AZMDoc — contracts stay in `;!` comments on `@` routines.
-- Not circular-safe — if `a.asm` includes `b.asm` and `b.asm` includes `a.asm`, the assembler loops until you stop it. Keep a directed acyclic graph: application includes libraries; libraries do not include the application.
+- Not a separate private symbol table — non-local declarations join the including source unit, while `_name` labels remain local to their nearest non-local owner.
+- Not a substitute for register contracts; contracts stay in `.routine` directives on callable entries.
+- Recursive include/import chains are rejected with a source diagnostic. Keep a directed acyclic graph: application includes libraries; libraries do not include the application.
 
 ---
 
@@ -83,17 +83,17 @@ Treat a library file as **implementation you paste in**, plus a header comment t
 
 ```asm
 ; strlen_u8: count bytes before null (terminator not counted)
-;! in HL; out A; clobbers F,B,HL
-@strlen_u8:
+.routine in HL out A clobbers F,B,HL
+strlen_u8:
     ld b, 0
-StrLenLoop:
+_loop:
     ld a, (hl)
     or a
-    jr z, StrLenDone
+    jr z, _done
     inc hl
     inc b
-    jr StrLenLoop
-StrLenDone:
+    jr _loop
+_done:
     ld a, b
     ret
 ```
@@ -102,8 +102,8 @@ Rules that keep libraries boring and reliable:
 
 1. **No `main` and no `halt`** in the library — only subroutines and maybe private helpers (`ring_advance_index` style).
 2. **No `.org` in the library** unless you are deliberately placing code at a fixed address (unusual in Book 2).
-3. **Every exported routine gets AZMDoc** — same as Book 1 Chapter 12 and Book 2 Chapters 1–3.
-4. **Entry labels use `@name:`** on routines the register contract analyzer should treat as callable bodies.
+3. **Every exported routine gets register contracts** — same as Book 1 Chapter 12 and Book 2 Chapters 1–3.
+4. **Routine entries have `.routine` directives.** Prefix a label with `@` only when the library exports it for `.import`.
 
 The application file stays short:
 
@@ -132,7 +132,7 @@ Reload HL before each call if a routine clobbers HL — the library documents th
 
 Add `strcpy_u8`, `strcmp_u8` and `str_find_char` from Chapter 3 into the same `lib/strings.asm`. The main file only grows by more `call` sites and result stores. When two programs need the same walk, they both `.include` the same library path instead of duplicating twenty lines.
 
-Optional **constants header** — if several files need `CHAR_L` or `RING_CAP`, a tiny `lib/strings.equ` (or `constants.asm`) that only contains `.equ` lines can be included from both the app and the library. Constants do not need `@` labels; routines do.
+Optional **constants header** — if several files need `CHAR_L` or `RING_CAP`, a tiny `lib/strings.equ` (or `constants.asm`) that only contains `.equ` lines can be included from both the app and the library. Constants and routines need `@` only when they are exported from an imported source unit.
 
 ---
 
@@ -142,23 +142,23 @@ Without `import`, **the contract is documentation plus naming discipline**:
 
 | Mechanism | What it guarantees |
 |-----------|-------------------|
-| `;! in` / `;! out` / `;! clobbers` | Register roles at `call` and `ret` |
-| `@routine:` | Analyzer entry point for `--rc warn` |
+| `.routine in` / `.routine out` / `.routine clobbers` | Register roles at `call` and `ret` |
+| `.routine` immediately before a label | Analyzer entry point for `--rc warn` |
 | Prefix on globals | `str_` on string routines, `ring_` on buffer helpers — reduces label collisions |
 | `.equ` in one included header | Single source for buffer size and field offsets |
 | Comment block at top of `lib/*.asm` | Human-readable summary: "String convention: HL pointer, A length" |
 
 Callers obey the contract the same way they obey Chapter 3's table: set HL, `call`, read A, assume everything in `clobbers` is garbage unless you saved it.
 
-**Private helpers** stay local by convention: avoid `@` on helpers that are not meant to be called from outside the library file. For branch labels inside a routine body, use prefixed names (`str_loop`, `str_done`) so they stay unique across the translation unit — all labels are global to the assembler. If a helper must be shared between two routines in the same library, give it a prefixed name (`str_advance`) and document it as internal in the file header.
+**Private helpers** use ordinary non-local names when several routines in the source unit call them. Branch labels inside a routine use owner-local names such as `_loop` and `_done`; each non-local owner gets a separate local namespace. Add `@` only to symbols exported from an imported source unit.
 
 ### Symbol collisions
 
-Because all included text shares one namespace, two files must not both define `buffer`, `count` or `done` at global scope. Fixes:
+Because included text shares one source-unit namespace, two files must not both define `buffer` or `count` as non-local labels. Fixes:
 
 - Prefix workspace labels: `demo_buffer`, `demo_str_len`.
-- Prefix library routines: `str_strlen_u8` if you ever link two libraries that both exported `strlen_u8` — rename once, update AZMDoc and all `call` sites.
-- Keep branch labels **unique** by prefixing them with the routine name (`StrLenLoop`, `FindScan`).
+- Prefix library routines: `str_strlen_u8` if two included libraries both define `strlen_u8`; rename once, update register contracts and all `call` sites.
+- Use owner-local branch labels such as `_loop` and `_found`; another routine may reuse those spellings under its own owner.
 
 When the assembler reports "duplicate label," search all `.include` branches — the second definition wins silently in some tools; in AZM treat it as an error to fix immediately.
 
@@ -224,7 +224,7 @@ Same result as Chapter 3's single-file demo — proof that the include did not c
 | File | Role |
 |------|------|
 | [`examples/07_include_demo.asm`](examples/07_include_demo.asm) | `main` + `.include` + data/results |
-| [`examples/lib/strings.asm`](examples/lib/strings.asm) | Shared `strlen_u8` with AZMDoc |
+| [`examples/lib/strings.asm`](examples/lib/strings.asm) | Shared `strlen_u8` with register contracts |
 
 ```sh
 cd azm-book/book2/examples
@@ -239,10 +239,10 @@ Step into `strlen_u8` once: confirm the library file's labels appear in the list
 ## Summary
 
 - **`.include "path"`** pastes another `.asm` file into the current unit; paths are relative to the including file.
-- **`.import "path"`** is available in AZM 0.2.9 and later for module-style routine files with public `@` labels and private helper labels. This chapter keeps using `.include` because the companion example is a text-composition example.
+- **`.import "path"`** loads module-style source with exported `@` labels. This chapter keeps using `.include` because the companion example is a text-composition example.
 - **Library files** hold subroutines (and optional `.equ` headers), not `main`, not stray `.org`.
-- **`@routine:`** and `;!` tags stay mandatory so `--rc warn` can check callers across file boundaries.
-- **Prefix names** and dotted loop labels avoid duplicate global symbols when includes multiply.
+- **`.routine` directives** mark callable boundaries so `--rc warn` can check callers across file boundaries; `@` is needed only for imported exports.
+- **Prefixed non-local names** and owner-local `_loop` labels avoid duplicate symbols when includes multiply.
 - **`.asmi`** documents external ROM/monitor routines for the analyzer; it does not paste implementation.
 
 ---
