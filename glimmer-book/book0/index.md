@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Glimmer Book - Reactive Games for the Z80"
+title: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 7
 has_children: true
 has_toc: false
 ---
 
-# Glimmer Book - Reactive Games for the Z80
+# Glimmer Book: Reactive Games for the Z80
 
 Glimmer lets you write a Z80 game as a set of declarations: this is the
 state, these are the inputs, these rules run when these facts change. The
@@ -21,7 +21,7 @@ on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video
 display processor. The final chapter compares how each display shapes the
 program you write.
 
-The book teaches Glimmer 0.4.0. Every complete program in it is built with
+The book teaches Glimmer 0.5.2. Every complete program in it is built with
 `glimmer build`.
 
 ## Chapters

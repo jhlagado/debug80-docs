@@ -16,7 +16,7 @@ source.
 
 ## Books
 
-- [Glimmer Book - Reactive Games for the Z80](book0/) - the guided course.
+- [Glimmer Book: Reactive Games for the Z80](book0/) - the guided course.
   Starting from Z80 assembly alone, build up the whole Glimmer language,
   construct by construct, and finish with two complete games: one on the
   TEC-1G's 8x8 LED matrix, one on the TMS9918 video display processor.
