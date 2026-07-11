@@ -21,6 +21,18 @@ them; you write the rules and the pictures as small blocks of Z80
 assembly; and Glimmer builds the running program around your
 declarations.
 
+And Glimmer keeps you close to the machine while you do it. The
+language inside every block is Z80 assembly itself: the real
+instruction set, the real registers, the real flags. The declarations
+around the blocks form a thin layer in front of the assembler. They say
+what state to reserve, which inputs to poll, and when each block of
+your assembly runs; from them Glimmer writes out one ordinary
+assembly-language source file with your blocks inside it, and the
+assembler takes it from there. Whenever you are curious, you can open
+that file and read what every declaration became. Learning Glimmer is
+learning a way of organising Z80 assembly you already know how to
+write.
+
 This chapter teaches the shape of a Glimmer game through three tiny
 programs, each one step up from the last. You will read them here and run
 them in chapter 2, once the tools are installed.

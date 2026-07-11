@@ -62,6 +62,24 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 
 ---
 
+## Glimmer
+
+### [Glimmer Book — Reactive Games for the Z80](glimmer-book/book0/)
+
+The guided Glimmer course, in progress and published as chapters land. Starting from Z80 assembly alone, it builds up the whole Glimmer language one construct at a time and finishes with complete games on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video display processor.
+
+For readers who can read Z80 assembly and want to write games with it.
+
+---
+
+## About Glimmer
+
+Glimmer is a reactive framework for Z80 games, built as a thin layer in front of the AZM assembler. You declare a program's state, inputs, and rules; you write the behaviour in small blocks of real Z80 assembly; and Glimmer generates the running program around them as one readable AZM source file — the main loop, the input polling, the change tracking, and the display glue.
+
+Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G emulation, with breakpoints and stepping landing in `.glim` source.
+
+---
+
 ## About TEC-1G
 
 The TEC-1G is a modern Z80 single-board learning computer designed by Mark Jelic. It is a direct descendant of the original Talking Electronics TEC-1, a 1980s Australian kit computer created to teach how microprocessors work from the machine-code level upward.

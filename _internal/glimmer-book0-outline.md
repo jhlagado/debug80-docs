@@ -32,6 +32,13 @@ Use the course-writing skill for every chapter draft and review pass.
 Rules that matter most for this book:
 
 - State what Glimmer is and what it does.
+- Positioning (John, 2026-07-11): Glimmer is a front layer on the assembler,
+  the way early C++ began as a front layer on C. The language inside blocks
+  is Z80 itself; the reader stays close to the machine the whole way, and
+  the generated assembly file is always there to read. Set this stage once,
+  at a high level, in chapter 1's introduction; keep the mechanism detail
+  ("preprocessor", passes, artifacts) out of the early prose. The C++
+  parallel is for the authors; the chapters say it plainly instead.
 - Glimmer is the reader's first and only view of game programming. Start each
   concept at hello-world scale in Glimmer and build upward from the reactive
   side. Hand-written game loops never appear as a foil; the ease of the
