@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 3
 ---
 
-[← First Light](02-first-light.md) | [Book](index.md)
+[← First Light](02-first-light.md) | [Book](index.md) | [Pulses and Bindings →](04-pulses-and-bindings.md)
 
 # Chapter 3 - State
 
@@ -239,4 +239,4 @@ key can fire one.
 
 ---
 
-[← First Light](02-first-light.md) | [Book](index.md)
+[← First Light](02-first-light.md) | [Book](index.md) | [Pulses and Bindings →](04-pulses-and-bindings.md)
