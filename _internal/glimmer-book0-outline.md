@@ -153,8 +153,12 @@ Each chapter should record:
 - **Builds:** `mover.glim` in three read-along steps: a dot appears (state +
   render), the dot responds (pulse + bind + effect), the dot steers (held
   bindings, both directions). All three verified with `glimmer build`.
-- **Generated AZM focus:** prose only: the `.glim` file compiles to one
-  readable AZM program. Listings of generated code begin in chapter 2.
+- **Generated AZM focus:** three excerpts from the generated file close the
+  chapter (state storage + Changed0, the runtime loop, one wrapped block
+  with its verbatim body), demonstrating that Glimmer's output is ordinary
+  Z80 assembly. Excerpts are from Glimmer 0.5.1 output (AZM 0.3 syntax:
+  `.routine`, Glim-prefixed runtime symbols). The full guided tour of the
+  file stays in chapter 2.
 - **Exit knowledge:** the reader can read a small `.glim` file aloud,
   predict which blocks run on which frames, and say what Glimmer owns (the
   loop) and what they own (the behaviour).

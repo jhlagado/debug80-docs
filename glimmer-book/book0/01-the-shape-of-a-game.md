@@ -296,14 +296,80 @@ Glimmer supplies the return.
 
 ## The program behind the program
 
-A `.glim` file is source code, and Glimmer is its compiler. From
-`mover.glim` it writes one ordinary AZM assembly file containing the
-whole running program: the frame loop, the keypad polling, the held-key
-timing, the change tracking that decides which blocks run, and your
-blocks inside it, byte for byte. That file assembles to the bytes the
-Z80 executes, and it reads as naturally as the assembly you write - you
-can open it, follow it, and step through it with a debugger. Chapter 2
-does all three.
+A `.glim` file is source code, and Glimmer is its compiler - a compiler
+whose output is assembly language. From the 47 lines of `mover.glim` it
+writes one ordinary AZM assembly file of 487 lines, containing
+everything the running game needs: the frame loop, the keypad polling,
+the held-key timing, the change tracking, and your blocks inside it.
+Three excerpts from that file show what the declarations became.
+
+The state:
+
+```asm
+; --- state storage ---
+DotX:             .db 3
+Left:             .db 0
+Right:            .db 0
+Changed0:         .db %00000001   ; flags dispatch tests
+```
+
+`state DotX : byte = 3` became a labelled byte holding 3, and each
+pulse became a byte of its own. `Changed0` is the change tracking
+itself: one bit per fact, and bit 0 - DotX's bit - starts set. That is
+the word `changed` from the declaration, doing its work before the
+first frame.
+
+The loop:
+
+```asm
+; --- runtime loop ---
+Start:
+        call    FbClear
+        call    HudBlankDig
+MainLoop:
+        call    ScanFrame            ; show one full frame, then blank
+        call    GlimPollBindings     ; game work runs in the blank window
+        call    GlimRunLogicEffects
+        call    GlimMergeRaised
+        call    GlimRunRenderEffects
+        call    GlimEndFrame
+        jp      MainLoop
+```
+
+Read it top to bottom and it is this chapter's frame, spelled out: show
+the picture, poll the keys, run the rules whose facts changed, draw
+what changed, tidy up, go again. Every routine it calls is further down
+in the same file, in the same plain assembly.
+
+And your own code:
+
+```asm
+; --- logic block MoveRight ---
+.routine
+Glim_MoveRight:
+    ld a,(DotX)
+    cp 7
+    jr nc,_stop     ; at the right edge: stay
+    inc a
+    ld (DotX),a
+_stop:
+        ld      a,(Raised0)          ; deliver to later phases this frame
+        or      CHG_DOTX
+        ld      (Raised0),a
+        ret
+```
+
+The body you wrote sits at the centre, spacing and comments exactly as
+you typed them. Around it, the wrapping: a label so the dispatcher can
+call the block, and after `_stop:`, three generated instructions that
+set DotX's change bit - the line `updates DotX`, compiled. The
+`.routine` directive above the label hands the block to AZM's
+register-contract checking, a safety net the book returns to when
+programs grow larger.
+
+This file assembles to the bytes the Z80 executes, and you can open
+it, follow it, and step through it with a debugger whenever you want
+to see a declaration's whole story. Chapter 2 does all three.
 
 So the division of labour, for this program and for every program in
 this book: **Glimmer owns the loop, and you own the behaviour.** The
