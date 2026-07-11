@@ -33,7 +33,7 @@ Drafting is in progress; chapter links appear here as each one lands.
 3. [First Light](02-first-light.md)
 4. [State](03-state.md)
 5. [Pulses and Bindings](04-pulses-and-bindings.md)
-6. Compute, Effect, Render
+6. [Compute, Effect, Render](05-compute-effect-render.md)
 7. The Matrix Profile
 8. Time
 9. Motion Curves
