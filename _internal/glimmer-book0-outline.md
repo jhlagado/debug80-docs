@@ -192,8 +192,8 @@ Each chapter should record:
   pulse cleanup and MON-3 key names.
 - **Builds:** *Rover*: a dot moved with 2/4/6/8, held autorepeat and GO as a
   separate action.
-- **Generated AZM focus:** `__PollBindings`, held-key repeat state and pulse
-  clearing in `__EndFrame`.
+- **Generated AZM focus:** `GlimPollBindings`, held-key repeat state and pulse
+  clearing in `GlimEndFrame`.
 - **Exit knowledge:** the reader can choose rising, held and any-key bindings
   for game controls.
 
@@ -227,7 +227,7 @@ Each chapter should record:
   timers and ramps.
 - **Builds:** *Drip*: a falling drop, a blink, an arrival pulse and a speed
   change.
-- **Generated AZM focus:** `__TickTimers`, hidden countdowns and ramp raises.
+- **Generated AZM focus:** `GlimTickTimers`, hidden countdowns and ramp raises.
 - **Exit knowledge:** the reader can make a Glimmer program act on its own
   schedule.
 
@@ -273,8 +273,8 @@ Each chapter should record:
   from `.glim` into generated AZM.
 - **Builds:** *Canvas* with one deliberate update-warning exercise, then the
   corrected program.
-- **Generated AZM focus:** inferred `;!` contracts around `@Glim_*` blocks and
-  mapped body lines.
+- **Generated AZM focus:** `.routine` boundaries around `Glim_*` blocks,
+  `.contracts` policy and mapped body lines.
 - **Exit knowledge:** the reader can use the toolchain to check the reactive
   graph and debug a block.
 
@@ -335,7 +335,7 @@ Each chapter should record:
   shadow, sprite-attribute shadow, `NamePut`, `SpriteSet`, `SpriteInit`,
   `sprite`, `tile`, `sprite_at`, `tile_at` and VDP colours.
 - **Builds:** *Grove*: one sprite moving over a small tiled scene.
-- **Generated AZM focus:** `__Commit`, dirty rows, `LoadResourcesVram` and VDP
+- **Generated AZM focus:** `GlimCommit`, dirty rows, `LoadResourcesVram` and VDP
   helper routines.
 - **Exit knowledge:** the reader can draw with sprites and tiles on the VDP
   profile.
@@ -373,8 +373,9 @@ Each chapter should record:
   colours, sprite and tile resources, generated ops and profile routines.
 - **Appendix D - Build And Debug:** CLI, artifacts, Debug80 native `.glim`
   targets, source mapping, generated AZM tour and common diagnostics.
-- **Appendix E - AZM Touchpoints:** `@` routines, register contracts, layout
-  types, `.import` modules and `op` definitions used by Glimmer.
+- **Appendix E - AZM Touchpoints:** `.routine` boundaries, register contracts,
+  owner-local labels, layout types, `.import` modules and `op` definitions used
+  by Glimmer.
 
 ## Improvements Suggested By The Glimmer Repo Review
 
