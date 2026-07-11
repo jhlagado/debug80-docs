@@ -21,16 +21,16 @@ on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video
 display processor. The final chapter compares how each display shapes the
 program you write.
 
-The book teaches Glimmer 0.5.2. Every complete program in it is built with
+The book teaches Glimmer 0.5.3. Every complete program in it is built with
 `glimmer build`.
 
 ## Chapters
 
 Drafting is in progress; chapter links appear here as each one lands.
 
-1. Preface
+1. [Preface](00-preface.md)
 2. [The Shape of a Game](01-the-shape-of-a-game.md)
-3. First Light
+3. [First Light](02-first-light.md)
 4. State
 5. Pulses and Bindings
 6. Compute, Effect, Render

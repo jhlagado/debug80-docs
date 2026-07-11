@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 1
 ---
 
-[Book](index.md)
+[← Preface](00-preface.md) | [Book](index.md) | [First Light →](02-first-light.md)
 
 # Chapter 1 - The Shape of a Game
 
@@ -395,8 +395,9 @@ few lines with one job and a declared reason to run.
 - Glimmer compiles the whole program to one readable AZM assembly file,
   with your blocks inside byte for byte.
 
-Next, you install the tools, build this program, and steer the dot yourself.
+Next, you install the tools and run programs of your own - including
+this one: [First Light](02-first-light.md).
 
 ---
 
-[Book](index.md)
+[← Preface](00-preface.md) | [Book](index.md) | [First Light →](02-first-light.md)
