@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 21
 ---
 
-[Book](index.md)
+[← Appendix B](appendix-b-matrix-profile.md) | [Book](index.md) | [Appendix D →](appendix-d-build-and-debug.md)
 
 # Appendix C - The TMS9918 Profile
 
@@ -248,4 +248,4 @@ lines.
 
 ---
 
-[Book](index.md)
+[← Appendix B](appendix-b-matrix-profile.md) | [Book](index.md) | [Appendix D →](appendix-d-build-and-debug.md)

@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 20
 ---
 
-[Book](index.md)
+[← Appendix A](appendix-a-declarations.md) | [Book](index.md) | [Appendix C →](appendix-c-tms9918-profile.md)
 
 # Appendix B - The Matrix Profile
 
@@ -294,4 +294,4 @@ ShapeRotCount     .equ 1
 
 ---
 
-[Book](index.md)
+[← Appendix A](appendix-a-declarations.md) | [Book](index.md) | [Appendix C →](appendix-c-tms9918-profile.md)

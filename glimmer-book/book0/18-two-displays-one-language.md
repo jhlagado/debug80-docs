@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 18
 ---
 
-[Book](index.md)
+[← A VDP Game](17-a-vdp-game.md) | [Book](index.md)
 
 # Chapter 18 - Two Displays, One Language
 
@@ -286,4 +286,4 @@ picture, and a connection between them.
 
 ---
 
-[Book](index.md)
+[← A VDP Game](17-a-vdp-game.md) | [Book](index.md)

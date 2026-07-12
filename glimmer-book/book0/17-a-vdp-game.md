@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 17
 ---
 
-[Book](index.md)
+[← The TMS9918 Profile](16-the-tms9918-profile.md) | [Book](index.md) | [Two Displays, One Language →](18-two-displays-one-language.md)
 
 # Chapter 17 - A VDP Game
 
@@ -547,4 +547,4 @@ last chapter reads them side by side.
 
 ---
 
-[Book](index.md)
+[← The TMS9918 Profile](16-the-tms9918-profile.md) | [Book](index.md) | [Two Displays, One Language →](18-two-displays-one-language.md)

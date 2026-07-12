@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 16
 ---
 
-[← Reading Tetro](15-reading-tetro.md) | [Book](index.md)
+[← Reading Tetro](15-reading-tetro.md) | [Book](index.md) | [A VDP Game →](17-a-vdp-game.md)
 
 # Chapter 16 - The TMS9918 Profile
 
@@ -533,4 +533,4 @@ the tile grid, and cards on the VDP.
 
 ---
 
-[← Reading Tetro](15-reading-tetro.md) | [Book](index.md)
+[← Reading Tetro](15-reading-tetro.md) | [Book](index.md) | [A VDP Game →](17-a-vdp-game.md)

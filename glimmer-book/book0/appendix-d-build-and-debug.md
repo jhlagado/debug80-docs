@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 22
 ---
 
-[Book](index.md)
+[← Appendix C](appendix-c-tms9918-profile.md) | [Book](index.md) | [Appendix E →](appendix-e-azm-touchpoints.md)
 
 # Appendix D - Build and Debug
 
@@ -230,4 +230,4 @@ that cell sleeps through it.
 
 ---
 
-[Book](index.md)
+[← Appendix C](appendix-c-tms9918-profile.md) | [Book](index.md) | [Appendix E →](appendix-e-azm-touchpoints.md)

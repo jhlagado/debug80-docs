@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 19
 ---
 
-[Book](index.md)
+[Book](index.md) | [Appendix B →](appendix-b-matrix-profile.md)
 
 # Appendix A - Declaration Reference
 
@@ -534,4 +534,4 @@ with the module's exported routine written in ordinary AZM:
 
 ---
 
-[Book](index.md)
+[Book](index.md) | [Appendix B →](appendix-b-matrix-profile.md)

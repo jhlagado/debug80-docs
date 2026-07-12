@@ -26,8 +26,6 @@ The book teaches Glimmer 0.5.3. Every complete program in it is built with
 
 ## Chapters
 
-Drafting is in progress; chapter links appear here as each one lands.
-
 1. [Preface](00-preface.md)
 2. [The Shape of a Game](01-the-shape-of-a-game.md)
 3. [First Light](02-first-light.md)
@@ -45,13 +43,13 @@ Drafting is in progress; chapter links appear here as each one lands.
 15. [A Small Matrix Game](14-a-small-matrix-game.md)
 16. [Reading Tetro](15-reading-tetro.md)
 17. [The TMS9918 Profile](16-the-tms9918-profile.md)
-18. A VDP Game
-19. Two Displays, One Language
+18. [A VDP Game](17-a-vdp-game.md)
+19. [Two Displays, One Language](18-two-displays-one-language.md)
 
 ## Appendices
 
-- Appendix A - Declaration Reference
-- Appendix B - The Matrix Profile
-- Appendix C - The TMS9918 Profile
-- Appendix D - Build and Debug
-- Appendix E - AZM Touchpoints
+- [Appendix A - Declaration Reference](appendix-a-declarations.md)
+- [Appendix B - The Matrix Profile](appendix-b-matrix-profile.md)
+- [Appendix C - The TMS9918 Profile](appendix-c-tms9918-profile.md)
+- [Appendix D - Build and Debug](appendix-d-build-and-debug.md)
+- [Appendix E - AZM Touchpoints](appendix-e-azm-touchpoints.md)
