@@ -10,15 +10,23 @@ nav_order: 5
 # Chapter 5 - Compute, Effect, Render
 
 Rover's blocks do two different jobs: five of them change facts, one
-of them draws. Games have a third job,
-quieter than either - facts computed *from other facts*. A score
-implies a difficulty. A count implies a bar length. A position
-implies which board cell the player occupies. These are not rules,
-and they are not pictures; they are consequences, and they need
-somewhere to live. Glimmer gives each of the three jobs its own block
-keyword and runs them in a fixed order every frame, and that order -
-together with the delivery rules that make it dependable - is what I
-am going to teach you now. It is the last piece of the reactive core:
+of them draws. Games have a third job, quieter than either - facts
+computed *from other facts*. A score implies a difficulty. A count
+implies a bar length. A position implies which board cell the player
+occupies.
+
+Pause on that third job, because it sharpens a word this book has
+used since chapter 1. A rule is what the game does when a moment
+arrives, and the mark of a rule is that it *decides* something: move
+or stay at the wall, score or miss, wrap or clamp. A derived fact
+involves no decision at all. The bar length is always the count
+divided by eight - nothing is chosen, no moment is consumed; it is
+the same information restated, a definition the program keeps
+current. Rules decide, derivations restate, and pictures depict.
+Glimmer gives each of those three jobs its own block keyword and runs
+them in a fixed order every frame, and that order - together with the
+delivery rules that make it dependable - is what I am going to teach
+you now. It is the last piece of the reactive core:
 after this chapter, every construct still ahead delivers its work
 through machinery you already understand.
 

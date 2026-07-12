@@ -14,8 +14,8 @@ small language built around one idea: a game is easiest to write when
 you describe it as facts, events, and rules. The facts are what the
 game remembers, such as where the player is and what the score says.
 The events are the things that happen, such as a key going down or a
-timer running out. The rules say what follows: when this event
-happens, change that fact. You write the rules yourself, in real Z80
+timer running out. The rules are the game's decisions: when this
+event happens, change that fact. You write the rules yourself, in real Z80
 assembly, a few lines each. Glimmer builds the rest of the running
 program around them.
 
