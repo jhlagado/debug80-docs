@@ -29,12 +29,15 @@ than a glance. This is the chapter where your game stops being a dot
 on a dark board and becomes a production: it gains a face, a voice,
 and a scoreboard.
 
-I am going to teach you one pattern four times over, because it is
+I am going to teach you one pattern three times over, because it is
 the same pattern each time and I want it in your hands, not your
 notes. You declare a resource in the `.glim` file - a shape, a sound
 cue, a text string - and Glimmer generates the data plus something
 callable to go with it. Your blocks call what was generated, and the
-declaration reads like the resource it describes. It is the same deal
+declaration reads like the resource it describes. The scoreboard is
+the odd one out, and I will say so when we reach it: the six-digit
+seven-segment display is a service the profile library carries, two
+routines and no declaration. It is the same deal
 chapter 1 offered you and every chapter since has kept: nothing
 hidden, everything compiled into a file you can open and read - and
 at the end of this chapter, we will go and read it.
@@ -242,14 +245,16 @@ ticks per frame, and taps it on schedule. `len` counts those ticks -
 `len 8` sounds for about one frame - and `div` sets the pitch as a
 divider, with smaller values higher.
 
-You might read that arrangement as a limitation, and I want to talk
-you out of it. Cues served by the scan are short and rhythmic by
-nature - clicks, chirps, buzzes - and that is precisely the
-vocabulary a board game's feedback speaks: with a long low
-`len 200 div 9` about as mournful as the speaker gets, this
-instrument was never going to play melodies, and your games never
-needed it to. What they need is a sound at the moment something
-happens, and that this speaker does beautifully.
+Know what this instrument is, and what it costs. The board carries
+no sound chip, so every note is CPU time, and the scan service buys
+you the property a game needs most: sound that never blocks. A cue
+plays while the frames keep coming, and its vocabulary is short and
+rhythmic by nature - clicks, chirps, buzzes, down to a long low
+`len 200 div 9` at the mournful end of the range. Melody is a
+different trade: MON-3 can play a tune, but it holds the CPU for the
+duration, and the game stands still to sing. For feedback - a sound
+at the moment something happens - the non-blocking cue is the right
+tool, and this speaker does it well.
 
 Each cue compiles to a routine named `Snd_<Name>`, and calling it is
 the entire interface:

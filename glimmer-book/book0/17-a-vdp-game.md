@@ -283,8 +283,10 @@ steps toward the fly, and the fly's own clamps fence the space, so
 the hunter can never reach a wall its prey is not already pressed
 against. The stride is `Pace`. At the opening period of 8 the wasp
 drifts, and every gathered lantern will shrink the period, all the
-way down to 1 - a step every frame, the fly's own speed, both axes in
-a single tick. Past the first few lanterns, only cornering saves you,
+way down to 1 - a step every frame on both axes at once, which is
+faster than you: the keypad moves the fly one axis at a time, and the
+wasp corners diagonally. Past the first few lanterns, only turning
+sharper than the wasp saves you,
 and that is exactly the game I want it to be.
 
 ## Gathering from the grid
@@ -365,6 +367,21 @@ and on round entry, when `StartRound`'s re-raise gives the first
 lantern its first draw. Two more renders, Grove's `PlaceMoth` twice
 over, place the movers: `sprite_at Fly, FlyX, FlyY` in `PlaceFly`,
 and the same shape for the wasp in `PlaceWasp`.
+
+One cost in this design is worth naming, because you will meet it in
+your own games. The `updates` line raises all four flags every time
+`Gather` runs - the misses included, and with `on FlyX, FlyY`,
+`Gather` runs on every step the fly takes. So a frame where the fly
+merely moved also re-runs `PlaceLantern` and `ShowScore`: the
+lantern's name-table row goes back through the commit, and the LCD is
+rewritten with the score it already shows. Nothing breaks - a render
+redraws from current facts, and redrawing the same picture is a
+correct redraw - but bytes move that carried no news. The refinement,
+when a game needs it, is to split the work: let the movement-triggered
+block do the cheap test alone and raise a pulse only on a catch, then
+hang the four-flag effect on that pulse. Lanternfly keeps the simple
+shape because it can afford it, and knowing why it can afford it is
+part of the lesson.
 
 ## Colliding with the wasp
 
@@ -460,6 +477,13 @@ deliberate one, because it means no register has to survive the first
 API call. The eight spaces of `MsgPad` cover the tail of the splash
 card's invitation, so the row reads `LAMPS 07` and nothing else:
 whole row owned, every time the score changes.
+
+The counted digits stop at two, and that limit is worth stating: past
+99 the tens character would step beyond `'9'` into the character
+set's punctuation. Treat 99 as this scoreboard's ceiling - at the
+pace the wasp closes in, a two-digit game is a long one - and a
+version built to run richer wants either a cap where the digits end
+or a hundreds pass in the same counting style.
 
 ## Game over, gated
 
@@ -570,7 +594,8 @@ the target; every technique in it is now yours.
 Here is what Lanternfly leaves in your hands:
 
 - Sprite collision is state arithmetic: absolute pixel difference
-  per axis, each under a tolerance. 8 means bounding boxes touch;
+  per axis, each under a tolerance. A tolerance of 8 detects any
+  pixel overlap between 8-pixel sprites;
   smaller tolerances demand overlap.
 - Tile-grid pickups compare cells: centre the sprite (+4), divide
   by eight (three shifts), and match the pickup's cell state. Fixed

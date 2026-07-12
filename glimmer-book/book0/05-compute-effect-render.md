@@ -12,9 +12,12 @@ nav_order: 5
 Let me tell you what this chapter is before we start, because it has
 earned the introduction: it is the last chapter of the book's first
 movement. When you reach the bottom of it you will hold the complete
-mental model, and everything after it is instruments and games -
-displays and sound to learn, programs to build, but no new rules
-about how a Glimmer program thinks. The model finishes here.
+reactive core: the three phases, and the rules that carry a change
+from the block that made it to every block that depends on it. Later
+chapters add constructs on top of that core - timers with schedules,
+cards with their own dispatch, displays with their own pacing - but
+they all deliver their work through the machinery you finish learning
+here. This is the part everything else stands on.
 
 Here is the gap it closes. Rover's blocks do two different jobs: five
 of them change facts, one of them draws. Games have a third job,
@@ -302,8 +305,9 @@ the debugger opens. Chapter 11 builds a debugging practice on it.
 - `glimmer --deps` prints the reactive graph: every fact's raisers and
   dependents, straight from the declarations.
 
-That is the model, all of it, and from here on we spend it rather
-than extend it. Next, the display gets a chapter of its own: what
+That is the reactive core complete, and every construct still ahead
+of us delivers its work through it. Next, the display gets a chapter
+of its own: what
 [the 8x8 matrix profile](06-the-matrix-profile.md) builds, and every
 way to put light on it.
 

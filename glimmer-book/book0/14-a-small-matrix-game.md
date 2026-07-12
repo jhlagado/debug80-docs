@@ -33,11 +33,14 @@ falling again.
 We are not opening the editor yet, though, because this chapter's
 deepest lesson comes before the first block. A game this size is
 designed, not discovered, and Glimmer gives you a place to do the
-designing: the declarations. A Glimmer game's declarations *are* its
-design - the facts, the moments, the schedules, the resources, the
-screens. Settle those on paper and the design is done, and every block
-that remains is a small Z80 exercise with one job you have already
-named. Sit with me at the design table for one section; it is the
+designing: the declarations. A Glimmer game's declarations carry its
+structure - the facts, the moments, the schedules, the resources, the
+screens. Settle those on paper and the skeleton of the game stands,
+and every block that remains is a small Z80 exercise with one job you
+have already named. The rest of the design - the collision rules, the
+balance numbers, how the game feels under the thumb - lives inside
+those blocks and those numbers, and we will make each of those calls
+as we come to it. Sit with me at the design table for one section; it is the
 habit that makes games this size comfortable.
 
 ## The game on paper

@@ -283,8 +283,10 @@ Here is the input story, folded small:
   autorepeat from two bytes of state; pulses raised there are visible
   to every phase of that frame.
 
-Rover obeys your thumb, and you now know everything about how a moment
-gets into a program. Next I owe you the full picture of what a frame
+Rover obeys your thumb, and you now know every way the keypad can put
+a moment into a program. Moments have other sources - chapter 7 gives
+the machine clocks that fire pulses of their own - but the keypad
+story is complete. Next I owe you the full picture of what a frame
 does once the moments are in: the three kinds of block, and the order
 a frame runs them in - [Compute, Effect,
 Render](05-compute-effect-render.md).

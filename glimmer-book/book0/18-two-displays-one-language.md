@@ -23,15 +23,16 @@ one-shot guarding the restart, `ApiRandom` masked for every respawn,
 and a game-over card the second game took from the first keystroke
 for keystroke.
 
-Read them as programs, though, and they part company at a single
-line. `display matrix8x8` against `display tms9918` decided what a
-render writes to, what collision costs, how motion travels to the
-screen, and how large a world each game could afford. That is a lot
-of consequence for one declaration, and tracing it is the best last
-lesson I have to give you. So in this closing chapter we read your
-two games side by side - every difference traced back to that one
-line, and every sameness back to the language around it - and then I
-will show you where the road goes from here.
+Read them as programs, though, and their paths separate at one early
+line. `display matrix8x8` against `display tms9918` set the prices:
+what a render writes to, what collision costs, how motion travels to
+the screen, how large a world a game can afford. The declaration
+never forced a design - you and I made every choice in those two
+games - but both games followed its prices, the way water follows a
+slope. So in this closing chapter we read your two games side by
+side - the differences read against the prices each display sets,
+the samenesses traced to the language that holds under both - and
+then I will show you where the road goes from here.
 
 ## The two loops
 
@@ -96,8 +97,8 @@ of VRAM over and over without any help from you, `VdpWaitVBlank`
 catches the rest between two paintings, and `GlimCommit` spends that
 rest moving the previous frame's changes into VRAM. One display is
 something the CPU does; the other is something the CPU writes to.
-Hold onto that sentence, because every difference we are about to
-trace falls out of it.
+Hold onto that sentence; the differences we are about to trace all
+lean on it.
 
 ## The board the program is
 
@@ -161,15 +162,18 @@ lines, once, in an `enter` block; the commit carried them to VRAM;
 and the VDP has repainted them in every picture since without
 another instruction spent. That is the reversal in one image. An 8x8
 matrix render repaints its whole layer whenever a fact changes; a
-VDP program writes each cell once and writes again only what
-differs.
+VDP program writes each cell once and writes again only where a
+fact changed.
 
 Your renders wrote that difference into shadow tables - ordinary RAM
 mirroring the VRAM the VDP reads - and the commit moves only the
 marked portions during the blank: all 128 sprite-attribute bytes if
 any sprite moved, and 32 bytes for each grid row whose dirty bit
-stands. On a frame where only the fly moved, the traffic is one
-table; on a still frame, none. Motion becomes cheap in exactly the
+stands. On a frame where only the fly moved, the commit carries the
+sprite table - and the lantern's grid row besides, because `Gather`
+runs on every fly step and its `updates` re-mark the row it redraws;
+chapter 17 names that cost and the refinement that removes it. On a
+still frame, the traffic is none. Motion becomes cheap in exactly the
 way whole-scene redraws were cheap on the 8x8: moving the fly is two
 shadow bytes, wherever it stands on a 256x192 screen.
 
@@ -200,7 +204,7 @@ Here is the whole divergence in one table:
 | | Skyfall, 8x8 matrix | Lanternfly, VDP |
 |---|---|---|
 | The scene | 32 bytes, redrawn on change | 768 cells + 32 sprites, persistent in VRAM |
-| A render writes | the whole framebuffer | the shadow bytes that changed |
+| A render writes | the whole framebuffer | shadow cells, committed by dirty group |
 | Who shows it | `ScanFrame`, every frame | the VDP, from VRAM, on its own |
 | Positions | cells on an 8x8 board | pixels on 256x192; grid cells, 32x24 |
 | Collision | one subtract, one compare | pixel distance per axis, under a tolerance |
@@ -229,12 +233,12 @@ print their design with `glimmer --deps` in the same report shape,
 raisers and triggers per fact. Skyfall spends 12 of the 32
 change-flag cells, Lanternfly 16, on the same budget.
 
-So here is the deepest thing I have to teach you, and the two loops
-drew its dividing line for us back at the top of the chapter. The
+The two loops drew the dividing line back at the top of the chapter,
+and it is the line this book was written to show you. The
 profile owns the loop: everything about *showing* - scan or commit,
 framebuffer or shadow, `FbPlot` or `SpriteSet` - came from one
 declaration and lives above the identical tail. The language owns
-the model: everything you actually learned - facts, moments, rules,
+the model: everything you learned - facts, moments, rules,
 pictures, phases, cards - moved across two opposite display
 architectures without changing shape. One display where the CPU
 makes the picture, one where the CPU describes it, and your
@@ -307,8 +311,7 @@ For the last time, then:
 
 A game is facts, moments, rules, and pictures. Eighteen chapters ago
 you could read a `ld a,(hl)`; today you can build a game from an
-empty file on either display the TEC-1G offers, and I have nothing
-left to teach you that your next game will not teach you better.
+empty file on either display the TEC-1G offers.
 Every game you write from here starts the way Mover did: one fact,
 one picture, and a connection between them. Go and write one.
 
