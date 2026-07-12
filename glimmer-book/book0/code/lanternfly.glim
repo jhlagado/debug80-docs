@@ -1,0 +1,380 @@
+; Lanternfly - gather the lanterns before the wasp finds you.
+
+program Lanternfly
+
+platform tec1g-mon3
+display tms9918
+
+sprite Fly color white
+  "X......X"
+  ".X....X."
+  "..XXXX.."
+  ".XXXXXX."
+  ".XXXXXX."
+  "..XXXX.."
+  "...XX..."
+  "........"
+end
+
+sprite Wasp color darkyellow
+  "X......X"
+  ".X.XX.X."
+  "..XXXX.."
+  ".XXXXXX."
+  "..XXXX.."
+  ".X.XX.X."
+  "X......X"
+  "........"
+end
+
+tile Lantern color lightyellow on black
+  "...XX..."
+  "..XXXX.."
+  ".X.XX.X."
+  ".XXXXXX."
+  ".XXXXXX."
+  "..XXXX.."
+  "...XX..."
+  "........"
+end
+
+tile Reed color medgreen on black
+  "..X....."
+  "..X..X.."
+  ".XX..X.."
+  "..X.XX.."
+  "..X..X.."
+  "..XX.X.."
+  "..X..X.."
+  "..X..X.."
+end
+
+state FlyX    : byte = 124      ; the fly's top-left pixel
+state FlyY    : byte = 92
+state WaspX   : byte = 8        ; the wasp's top-left pixel
+state WaspY   : byte = 8
+state LampCol : byte = 24       ; the lantern's grid cell
+state LampRow : byte = 6
+state Score   : byte            ; lanterns gathered
+state Armed   : byte            ; game-over gate open: restart allowed
+
+pulse UpP
+pulse DownP
+pulse LeftP
+pulse RightP
+pulse ChaseTick
+pulse AnyKeyP
+pulse GateP
+
+timer Pace : byte = 8 -> ChaseTick   ; the wasp's stride; lanterns shrink it
+timer Wait : word = 0 -> GateP once  ; armed on game over
+
+bind key KEY_2 held period 1 -> UpP
+bind key KEY_8 held period 1 -> DownP
+bind key KEY_4 held period 1 -> LeftP
+bind key KEY_6 held period 1 -> RightP
+bind key any   rising -> AnyKeyP
+
+text MsgTitle "LANTERNFLY      "
+text MsgRun   "GATHER THE LAMPS"
+text MsgOver  "THE WASP GOT YOU"
+text MsgAny   "PRESS ANY KEY   "
+text MsgScore "LAMPS "
+text MsgPad   "        "
+
+card Splash
+
+enter SplashShow
+begin
+    lcd_row MsgTitle, LcdRow1
+    lcd_row MsgAny,   LcdRow2
+    tile_at Reed, 3, 2
+    tile_at Reed, 11, 21
+    tile_at Reed, 17, 2
+    tile_at Reed, 24, 22
+    tile_at Reed, 29, 21
+    ld a,(LampCol)      ; take the last round's lantern off the grid
+    ld d,a
+    ld a,(LampRow)
+    ld e,a
+    xor a
+    call NamePut
+    xor a               ; hide slot 0: sprite scanning stops there
+    ld d,0
+    ld e,$D1
+    call SpriteSet
+end
+
+effect StartGame
+    on AnyKeyP
+    goto Playing
+end
+
+card Playing
+
+; Entry re-raises every cell this card's renders draw from; the body
+; gives those cells their round-start values first.
+enter StartRound
+    updates FlyX, FlyY, WaspX, WaspY, LampCol, LampRow, Score, Pace
+begin
+    lcd_row MsgRun, LcdRow1
+    ld a,124
+    ld (FlyX),a
+    ld a,92
+    ld (FlyY),a
+    ld a,8
+    ld (WaspX),a
+    ld (WaspY),a
+    ld a,24
+    ld (LampCol),a
+    ld a,6
+    ld (LampRow),a
+    xor a
+    ld (Score),a
+    ld a,8
+    ld (Pace),a         ; the wasp starts at a stroll
+end
+
+effect MoveUp
+    on UpP
+    updates FlyY
+begin
+    ld a,(FlyY)
+    or a
+    jr z,_stop      ; at the top edge: stay
+    dec a
+    ld (FlyY),a
+_stop:
+end
+
+effect MoveDown
+    on DownP
+    updates FlyY
+begin
+    ld a,(FlyY)
+    cp 184          ; bottom clamp: 192 - sprite height
+    jr nc,_stop
+    inc a
+    ld (FlyY),a
+_stop:
+end
+
+effect MoveLeft
+    on LeftP
+    updates FlyX
+begin
+    ld a,(FlyX)
+    or a
+    jr z,_stop      ; at the left edge: stay
+    dec a
+    ld (FlyX),a
+_stop:
+end
+
+effect MoveRight
+    on RightP
+    updates FlyX
+begin
+    ld a,(FlyX)
+    cp 248          ; right clamp: 256 - sprite width
+    jr nc,_stop
+    inc a
+    ld (FlyX),a
+_stop:
+end
+
+effect ChaseStep
+    on ChaseTick
+    updates WaspX, WaspY
+begin
+    ld a,(FlyX)
+    ld b,a
+    ld a,(WaspX)
+    cp b
+    jr z,_vert          ; level: no sideways step
+    jr c,_right         ; left of the fly: step right
+    dec a
+    jr _wx
+_right:
+    inc a
+_wx:
+    ld (WaspX),a
+_vert:
+    ld a,(FlyY)
+    ld b,a
+    ld a,(WaspY)
+    cp b
+    jr z,_done
+    jr c,_down
+    dec a
+    jr _wy
+_down:
+    inc a
+_wy:
+    ld (WaspY),a
+_done:
+end
+
+effect Gather
+    on FlyX, FlyY
+    updates Score, LampCol, LampRow, Pace
+begin
+    ld a,(FlyX)         ; the grid cell under the fly's centre
+    add a,4
+    srl a
+    srl a
+    srl a
+    ld b,a
+    ld a,(LampCol)
+    cp b
+    jr nz,_done
+    ld a,(FlyY)
+    add a,4
+    srl a
+    srl a
+    srl a
+    ld b,a
+    ld a,(LampRow)
+    cp b
+    jr nz,_done
+    ld a,(LampCol)      ; gathered: take the lantern off the grid
+    ld d,a
+    ld a,(LampRow)
+    ld e,a
+    xor a
+    call NamePut
+    ld a,(Score)
+    inc a
+    ld (Score),a
+    ld a,(Pace)         ; quicken the wasp, floor at one frame
+    cp 2
+    jr c,_respawn
+    dec a
+    ld (Pace),a
+_respawn:
+    ld c,ApiRandom
+    rst $10
+    and %00011111       ; column 0..31
+    ld (LampCol),a
+    ld c,ApiRandom
+    rst $10
+    and %00001111
+    add a,4             ; row 4..19: clear of the reeds
+    ld (LampRow),a
+_done:
+end
+
+effect Caught
+    on FlyX, FlyY, WaspX, WaspY
+    updates CurrentCard
+begin
+    ld a,(FlyX)
+    ld b,a
+    ld a,(WaspX)
+    sub b
+    jr nc,_ax
+    neg
+_ax:
+    cp 6                ; tolerance: the bodies really overlap
+    jr nc,_done
+    ld a,(FlyY)
+    ld b,a
+    ld a,(WaspY)
+    sub b
+    jr nc,_ay
+    neg
+_ay:
+    cp 6
+    jr nc,_done
+    ld a,Card.GameOver  ; conditional navigation, as in Skyfall
+    ld (CurrentCard),a
+_done:
+end
+
+render PlaceFly
+    on FlyX, FlyY
+begin
+    sprite_at Fly, FlyX, FlyY
+end
+
+render PlaceWasp
+    on WaspX, WaspY
+begin
+    sprite_at Wasp, WaspX, WaspY
+end
+
+render PlaceLantern
+    on LampCol, LampRow
+begin
+    ld a,(LampCol)
+    ld d,a
+    ld a,(LampRow)
+    ld e,a
+    ld a,Lantern
+    call NamePut
+end
+
+render ShowScore
+    on Score
+begin
+    lcd_row MsgScore, LcdRow2
+    ld a,(Score)
+    ld b,'0'            ; tens digit, counted up in ASCII
+_tens:
+    cp 10
+    jr c,_tdone
+    sub 10
+    inc b
+    jr _tens
+_tdone:
+    ld a,b
+    ld c,ApiCharToLcd
+    rst $10
+    ld a,(Score)        ; ones digit: reduce the score again
+_ones:
+    cp 10
+    jr c,_odone
+    sub 10
+    jr _ones
+_odone:
+    add a,'0'
+    ld c,ApiCharToLcd
+    rst $10
+    ld hl,MsgPad        ; cover the tail of the old row-2 message
+    ld c,ApiStringToLcd
+    rst $10
+end
+
+card GameOver
+
+enter GameOverShow
+    updates Armed, Wait
+begin
+    lcd_row MsgOver, LcdRow1
+    xor a
+    ld (Armed),a        ; close the gate
+    ld hl,90            ; a second and a half before restart arms
+    ld (Wait),hl
+end
+
+effect OpenGate
+    on GateP
+    updates Armed
+begin
+    lcd_row MsgAny, LcdRow2
+    ld a,1
+    ld (Armed),a
+end
+
+; Conditional navigation: restart only once the gate is open.
+effect Restart
+    on AnyKeyP
+    updates CurrentCard
+begin
+    ld a,(Armed)
+    or a
+    jr z,_wait
+    ld a,Card.Splash
+    ld (CurrentCard),a
+_wait:
+end

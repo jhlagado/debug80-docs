@@ -1,0 +1,179 @@
+; Skyfall's rules - a part of skyfall.glim.
+
+; A = a random column, 0..7. Both spawns call it.
+routine RandCol
+begin
+    ld c,ApiRandom
+    rst $10             ; A = random byte, destroys B
+    and %00000111
+end
+
+card Splash
+
+enter SplashShow
+begin
+    call FbClear
+    call HudBlankDig
+    lcd_row MsgTitle, LcdRow1
+    lcd_row MsgAny,   LcdRow2
+end
+
+effect StartGame
+    on AnyKeyP
+    goto Playing
+end
+
+card Playing
+
+enter StartRound
+    updates Score, Lives, PadX, DropX, DropY, Gravity
+begin
+    lcd_row MsgRun, LcdRow1
+    ld hl,0
+    ld (Score),hl
+    ld a,3
+    ld (Lives),a
+    ld (PadX),a         ; 3: the paddle starts centred
+    ld a,18
+    ld (Gravity),a      ; the pace every round climbs from
+    call RandCol        ; first drop: random column, top row
+    ld (DropX),a
+    xor a
+    ld (DropY),a
+end
+
+effect SlideLeft
+    on LeftP
+    updates PadX
+begin
+    ld a,(PadX)
+    or a
+    jr z,_stop          ; at the left edge: stay
+    dec a
+    ld (PadX),a
+_stop:
+end
+
+effect SlideRight
+    on RightP
+    updates PadX
+begin
+    ld a,(PadX)
+    cp 5
+    jr nc,_stop         ; column 5 puts the right edge at 7: stay
+    inc a
+    ld (PadX),a
+_stop:
+end
+
+effect Fall
+    on FallTick
+    updates DropY, DropX, Score, Lives, Gravity, CurrentCard
+begin
+    ld a,(DropY)
+    inc a
+    cp 7
+    jr c,_store         ; rows 1..6: keep falling
+    ; row 7 is the paddle's row: resolve the landing
+    ld a,(PadX)
+    ld b,a
+    ld a,(DropX)
+    sub b               ; how far right of the paddle's left edge?
+    cp 3
+    jr nc,_miss         ; 3 or more - or underflowed: beside the paddle
+    ld hl,(Score)
+    inc hl
+    ld (Score),hl
+    call Snd_Catch
+    ld a,(Gravity)      ; every catch quickens the fall, floor at 6
+    cp 7
+    jr c,_next
+    dec a
+    ld (Gravity),a
+    jr _next
+_miss:
+    call Snd_Miss
+    ld a,(Lives)
+    dec a
+    ld (Lives),a
+    jr nz,_next
+    ld a,Card.GameOver  ; the last life: leave the board
+    ld (CurrentCard),a
+_next:
+    call RandCol        ; a fresh drop at the top
+    ld (DropX),a
+    xor a               ; back to the top row
+_store:
+    ld (DropY),a
+end
+
+render DrawBoard
+    on PadX, DropX, DropY
+begin
+    call FbClear
+    ld a,(DropX)
+    ld b,a              ; B = x
+    ld a,(DropY)
+    ld c,a              ; C = y
+    ld a,COLOR_YELLOW
+    call FbPlot
+    ld a,(PadX)
+    ld b,a
+    ld c,7              ; the bottom row
+    ld hl,Shape_Paddle
+    call ShapeDraw
+end
+
+render ShowScore
+    on Score
+begin
+    ld hl,(Score)
+    call HudWriteU16
+end
+
+render ShowLives
+    on Lives
+begin
+    lcd_row MsgLives, LcdRow2
+    ld a,(Lives)        ; the cursor sits after the string: add the digit
+    add a,'0'
+    ld c,ApiCharToLcd
+    rst $10
+    ld hl,MsgPad        ; blank the rest of the old row-2 message
+    ld c,ApiStringToLcd
+    rst $10
+end
+
+card GameOver
+
+enter GameOverShow
+    updates Armed, Wait
+begin
+    lcd_row MsgOver, LcdRow1
+    xor a
+    ld (Armed),a        ; close the gate
+    ld hl,90            ; a second and a half before restart arms
+    ld (Wait),hl
+end
+
+effect OpenGate
+    on GateP
+    updates Armed
+begin
+    lcd_row MsgAny, LcdRow2
+    ld a,1
+    ld (Armed),a
+end
+
+; Conditional navigation: restart only once the gate is open.
+effect Restart
+    on AnyKeyP
+    updates CurrentCard
+begin
+    ld a,(Armed)
+    or a
+    jr z,_wait
+    ld a,Card.Splash
+    ld (CurrentCard),a
+_wait:
+end

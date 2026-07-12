@@ -25,7 +25,13 @@ get picked up by something floating above it?
 Both answers turn out to be comparisons on state - collision becomes
 arithmetic on distances instead of tests on cells, and the arithmetic
 is nothing Skyfall did not already teach you. This chapter builds a
-complete game around those two questions: *Lanternfly*. You are a
+complete game around those two questions: *Lanternfly*. The full
+source - every declaration, block, and card in place, 380 lines -
+ships with this book as [lanternfly.glim](code/lanternfly.glim);
+keep it open beside the chapter, because the chapter walks the
+load-bearing parts and trusts you with the mirrors and repeats (the
+four movement effects are Grove's with new names, and the GameOver
+card is Skyfall's keystroke for keystroke). You are a
 white fly over a night garden, steered with 2/4/6/8, one pixel per
 frame. A lantern glows somewhere in the grid; reach its cell and you
 gather it, the score climbs on the LCD, and a fresh lantern appears
@@ -502,7 +508,8 @@ strikes the lantern.
 
 ## Inside the generated file
 
-Build the game and open `lanternfly.main.asm` at the render blocks,
+Build the full source - `glimmer build lanternfly.glim` with the
+companion file - and open `lanternfly.main.asm` at the render blocks,
 because a small surprise is waiting there:
 
 ```asm

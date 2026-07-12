@@ -40,7 +40,11 @@ and every block that remains is a small Z80 exercise with one job you
 have already named. The rest of the design - the collision rules, the
 balance numbers, how the game feels under the thumb - lives inside
 those blocks and those numbers, and we will make each of those calls
-as we come to it. Sit with me at the design table for one section; it is the
+as we come to it. The finished source also ships with the book -
+[skyfall.glim](code/skyfall.glim) and
+[skyfall-rules.glim](code/skyfall-rules.glim) - for the day you want
+the game without the typing. Sit with me at the design table for one
+section; it is the
 habit that makes games this size comfortable.
 
 ## The game on paper
