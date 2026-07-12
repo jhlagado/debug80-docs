@@ -23,13 +23,13 @@ and the plumbing is nearly the same in every game you will ever write.
 Glimmer starts from one observation about that heap: almost everything
 a game does is a *reaction*. A key goes down, so the player moves. A
 timer runs out, so the block drops. The score changes, so the display
-updates. So Glimmer lets you write the game as reactions. You declare
-the facts your game remembers, you name the moments it must respond
-to, and you write each rule as a few lines of real Z80 with a label
-saying when it should run. Then Glimmer builds the machinery around
-your rules - the loop, the key scanning, the timing, the
-change-tracking - and calls your code at exactly the moments you
-declared. That inversion is the whole trick. You stop orchestrating
+updates. So Glimmer lets you write the game as reactions, in the
+preface's four words. You declare the facts your game remembers, you
+name the moments it must respond to, and you write the rules and the
+pictures as a few lines of real Z80 each, with a label saying when
+they should run. Then Glimmer builds the machinery around them - the
+loop, the key scanning, the timing, the change-tracking - and calls
+your code at exactly the moments you declared. That inversion is the whole trick. You stop orchestrating
 and start declaring, and the plumbing stops being your problem.
 
 Now, I know what a Z80 programmer thinks when someone offers to
@@ -217,9 +217,9 @@ the whole book: a rule is a decision the game makes when a moment
 arrives. The `effect` block is where rules live. Its header answers two questions this
 time: `on Right` - run on any frame where `Right` fired - and
 `updates DotX` - this block *changes* that fact, so everyone watching
-`DotX` should hear about it. The body is your Z80 again. Notice
-something about it: the edge of the world is in there.
-`cp 7`, and at column 7 we stay put. The rule about where the dot may
+`DotX` should hear about it. The body is your Z80 again, and the
+edge of the world is in there with it: `cp 7`, and at column 7 we
+stay put. The rule about where the dot may
 go lives inside the rule that moves it, written by you, in
 instructions you can count. Glimmer decides *when* your code runs; it
 never decides *what* your code does.
@@ -229,9 +229,8 @@ guess: the dot moves now, so each redraw starts from a clean
 framebuffer and plots the dot where it currently is. Old position
 gone, new position lit.
 
-Now watch what we have actually built here, because this is the moment
-the whole model clicks. Trace a single press of key 6 through the
-program:
+Now comes the moment the whole model clicks. Follow one press of
+key 6 with me, through the program:
 
 ```mermaid
 flowchart LR
@@ -423,8 +422,8 @@ _stop:
         ret
 ```
 
-Look at the middle of that. Your body, your spacing, your comment -
-copied in byte for byte, down to the indentation. Around it, Glimmer's
+In the middle of that sits your own work: your body, your spacing,
+your comment - copied in byte for byte, down to the indentation. Around it, Glimmer's
 wrapping: a label so the dispatcher can call your rule, and after
 `_stop:`, three generated instructions that set DotX's change bit.
 That is the line `updates DotX`, compiled - you declared what the

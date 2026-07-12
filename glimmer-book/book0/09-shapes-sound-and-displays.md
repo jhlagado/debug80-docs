@@ -266,7 +266,7 @@ a fresh wall hit restarts the chirp from the top, which is exactly
 the feedback a fresh hit deserves.
 
 Where the call sits is the real lesson of `Move`; carry it into
-every game after this one. Sound accompanies an event,
+every game after this one. Sound accompanies a moment,
 and the event lives inside a rule, behind a conditional - so
 `call Snd_Bounce` sits inside the effect, on the branch where the
 wall hit happened, and the quiet path steps past it. The player feels
@@ -449,7 +449,7 @@ Four instruments, one pattern:
 - A `sound` cue compiles to `Snd_<Name>`; one call starts it and the
   scan plays it out. `len` counts row ticks (8 per frame), `div` sets
   pitch (smaller is higher), and a new cue replaces the active one.
-  Call cues inside rules, on the branch where the event happened.
+  Call cues inside rules, on the branch where the moment happened.
 - The seven-segment HUD shows a value with `HudWriteU16` (HL = value,
   five decimal digits) and clears with `HudBlankDig`.
 - A `text` is a zero-terminated LCD string; `lcd_row Msg, LcdRowN`

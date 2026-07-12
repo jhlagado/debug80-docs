@@ -539,7 +539,7 @@ One line of `Quicken`'s wrapper closes the circle. Its header says
 ```
 
 With no flag behind `Fall`, `updates Fall` compiles to nothing here;
-the store inside the body is the entire event, and the header line
+the store inside the body is the whole of the act, and the header line
 documents it - for the dependency report, and for you.
 
 One last economy to appreciate. `GlimTickTimers` is generated only

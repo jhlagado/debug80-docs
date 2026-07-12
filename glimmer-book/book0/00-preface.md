@@ -11,13 +11,16 @@ nav_order: 0
 
 This book teaches you to write games for the Z80 using Glimmer, a
 small language built around one idea: a game is easiest to write when
-you describe it as facts, events, and rules. The facts are what the
-game remembers, such as where the player is and what the score says.
-The events are the things that happen, such as a key going down or a
-timer running out. The rules are the game's decisions: when this
-event happens, change that fact. You write the rules yourself, in real Z80
-assembly, a few lines each. Glimmer builds the rest of the running
-program around them.
+you describe it as facts, moments, rules, and pictures. The facts are
+what the game remembers, such as where the player is and what the
+score says. The moments are the things that happen, such as a key
+going down or a timer running out. The rules are the game's
+decisions: when this moment arrives, change that fact. And the
+pictures are what the player sees, drawn from the facts. You write
+the rules and the pictures yourself, in real Z80 assembly, a few
+lines each. Glimmer builds the rest of the running program around
+them. Those four words - fact, moment, rule, picture - carry their
+meanings through the whole book.
 
 You will get the most from the book if you can already read Z80
 assembly: registers, flags, memory access, a short routine with
