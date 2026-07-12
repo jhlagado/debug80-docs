@@ -14,7 +14,7 @@ and checks it. Reading that file, and writing modules of your own,
 goes faster once you know the assembler features Glimmer leans on.
 Each entry below says what the feature is, where Glimmer relies on
 it, shows one excerpt from a real build, and points into
-[← Appendix D](appendix-d-build-and-debug.md) | [Book](index.md)
+[AZM Book 0](../../azm-book/book0/), where each feature has a
 chapter of its own. The excerpts come from generated files of this
 book's programs: Canvas (chapter 10), Tetro (chapter 15), Sprite
 Chase (chapter 17).

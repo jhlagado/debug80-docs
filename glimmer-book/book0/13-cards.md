@@ -193,7 +193,7 @@ so does every later arrival, so each trip back from the game-over
 screen repaints a fresh splash. Setup that runs once per arrival is
 exactly what a title screen wants, and exactly what a new round wants,
 and it is the behaviour you would have hand-built with a DidInit flag
-and a guard. Here it is what `enter` means. The generated code that
+and a guard. That pairing is what `enter` means. The generated code that
 detects the edge closes this chapter.
 
 ## Leaving a card

@@ -15,7 +15,7 @@ declarations it generates the whole running program as readable AZM source:
 the main loop, the input polling, the change tracking, and the display glue.
 
 This book is the guided course. You bring some Z80 assembly; everything else
-is taught here, one construct at a time, with each chapter ending in a
+is taught here, one construct at a time, and most chapters end in a
 program you build and run in Debug80. The course closes with complete games
 on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video
 display processor. The final chapter compares how each display shapes the

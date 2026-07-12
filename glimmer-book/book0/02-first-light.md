@@ -141,7 +141,7 @@ with a message, instead of failing the game an hour into play.
 
 Open the folder in VS Code and initialize it as a TEC-1G project from
 the Debug80 panel - two clicks, and [Debug80 Book
-1](../../debug80-book/book1/02-create-a-tec1g-project.html) walks
+1](../../debug80-book/book1/02-create-a-tec1g-project.md) walks
 through them with pictures if you want company. Debug80 finds your
 program by its name: a file called `main.glim`, or ending in
 `.main.glim`, whose first declaration is `program`, is a target it

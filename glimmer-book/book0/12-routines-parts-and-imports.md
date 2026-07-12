@@ -9,7 +9,7 @@ nav_order: 12
 
 # Chapter 12 - Routines, Parts and Imports
 
-Canvas came out of chapter 11 in good shape: 147 lines, one file, and
+Canvas came out of chapter 11 in good shape: 126 lines, one file, and
 a debugger that can answer questions about it. This chapter is about
 what happens to that file next, because programs that get used are
 programs that grow, and growth is where one long file starts to cost
