@@ -74,7 +74,7 @@ For readers who can read Z80 assembly and want to write games with it.
 
 ## About Glimmer
 
-Glimmer is a reactive game language that compiles to readable AZM, built as a thin layer in front of the assembler. You declare a program's state, inputs, and rules; you write the behaviour in small blocks of real Z80 assembly; and Glimmer generates the running program around them as one readable AZM source file: the main loop, the input polling, the change tracking and the display glue.
+Glimmer is a reactive game language that compiles to readable Z80 assembly, built as a thin layer in front of the assembler. You declare a program's state, inputs, and rules; you write the behaviour in small blocks of real Z80 assembly; and Glimmer generates the running program around them as one readable AZM source file: the main loop, the input polling, the change tracking and the display glue.
 
 Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G emulation, with breakpoints and stepping landing in `.glim` source.
 
