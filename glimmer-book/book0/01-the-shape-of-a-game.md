@@ -355,7 +355,7 @@ the return, so you write the work and skip the ceremony.
 
 ## The program behind the program
 
-I keep telling you nothing is hidden, so let me prove it. A `.glim`
+A `.glim`
 file is source code, and Glimmer is its compiler - a compiler whose
 output is assembly language. From the 47 lines of `mover.glim` it
 writes one ordinary AZM assembly file of 487 lines that contains the
@@ -461,8 +461,7 @@ one job and a declared reason to run. Your evenings go to the game.
   the output updates - is readable straight off the page, from `bind`
   to `on` to `updates` to `on`.
 - Glimmer compiles the whole program to one readable assembly file,
-  your blocks inside byte for byte. Nothing is hidden; it is
-  organised.
+  your blocks inside byte for byte.
 
 Enough reading over my shoulder. In the next chapter you install the
 tools, build a program of your own, and press its keys yourself:

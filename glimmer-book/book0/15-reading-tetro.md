@@ -303,8 +303,12 @@ games. Everything on the declaration side of the line - the shape
 tables, the timers, the key bindings, the change tracking, the card
 gating - was plumbing and data, the kind of code that looks the same
 in every game, and the language absorbed all of it. What remains in
-this module is the part no language can absorb, because it is what
-makes Tetro *Tetro*: the board algebra. Moving, rotating, and falling
+this module is the part the language has no reason to absorb, because
+it is specific to this one game - the board algebra that makes Tetro
+*Tetro*. A library could package board operations, and some day one
+may; the engineering call here is that code reused by every game
+belongs to the language, and code owned by one game belongs to that
+game, written where its author can shape it. Moving, rotating, and falling
 all ask the same question - does the piece fit *there*? - and one
 routine answers it for all three:
 

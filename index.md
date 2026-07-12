@@ -66,7 +66,7 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 
 ### [Glimmer Book: Reactive Games for the Z80](glimmer-book/book0/)
 
-The guided Glimmer course, in progress and published as chapters land. Starting from Z80 assembly alone, it builds up the whole Glimmer language one construct at a time and finishes with complete games on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video display processor.
+The guided Glimmer course. Starting from Z80 assembly alone, it builds up the whole Glimmer language one construct at a time and finishes with complete games on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video display processor.
 
 For readers who can read Z80 assembly and want to write games with it.
 
@@ -74,7 +74,7 @@ For readers who can read Z80 assembly and want to write games with it.
 
 ## About Glimmer
 
-Glimmer is a reactive framework for Z80 games, built as a thin layer in front of the AZM assembler. You declare a program's state, inputs, and rules; you write the behaviour in small blocks of real Z80 assembly; and Glimmer generates the running program around them as one readable AZM source file: the main loop, the input polling, the change tracking and the display glue.
+Glimmer is a reactive game language that compiles to readable AZM, built as a thin layer in front of the assembler. You declare a program's state, inputs, and rules; you write the behaviour in small blocks of real Z80 assembly; and Glimmer generates the running program around them as one readable AZM source file: the main loop, the input polling, the change tracking and the display glue.
 
 Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G emulation, with breakpoints and stepping landing in `.glim` source.
 

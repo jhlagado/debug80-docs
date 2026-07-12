@@ -406,7 +406,7 @@ begin
     jr nc,_ax
     neg
 _ax:
-    cp 6                ; tolerance: the bodies really overlap
+    cp 6                ; tolerance: boxes overlap deeply
     jr nc,_done
     ld a,(FlyY)
     ld b,a
@@ -428,10 +428,19 @@ conditional `neg` produce the absolute pixel difference on one axis,
 and both differences under a tolerance means caught. Skyfall resolved
 a landing with one subtraction; sprites spend one per axis, folded
 absolute before the compare - the same arithmetic, grown a dimension.
-The tolerance is where you get to be a designer. Two 8-pixel bodies
-touch edges at a difference of 8, so `cp 8` would end the game the
-frame the boxes met, while 6 waits for real overlap and gives the
-player the near miss they will swear they earned. The ending writes
+Name the technique precisely, because you will meet it in every
+sprite game you ever read: this is axis-aligned bounding-box
+collision. Each sprite owns an 8x8 box, the differences compare the
+boxes' top-left corners, and at a difference of 8 the boxes sit edge
+to edge - so `cp 8` fires on any box overlap, and 6 demands the boxes
+share at least a three-pixel band on each axis. The boxes are what
+collide, and that matters for sparse patterns: two thin sprites can
+overlap boxes without a single opaque pixel touching. Pixel-perfect
+collision would go on to compare the patterns themselves; for a fly
+and a wasp with full bodies, deep box overlap reads as contact, and
+the tolerance is where you get to be a designer - 8 ends the game the
+frame the boxes meet, 6 waits for closeness and gives the player the
+near miss they will swear they earned. The ending writes
 `CurrentCard` directly - a transition that depends on a runtime test,
 which is chapter 13's rule for exactly this case.
 
@@ -597,10 +606,11 @@ the target; every technique in it is now yours.
 
 What Lanternfly leaves in your hands:
 
-- Sprite collision is state arithmetic: absolute pixel difference
-  per axis, each under a tolerance. A tolerance of 8 detects any
-  pixel overlap between 8-pixel sprites;
-  smaller tolerances demand overlap.
+- Sprite collision here is axis-aligned bounding-box collision:
+  absolute pixel difference per axis, each under a tolerance. 8
+  detects any box overlap between 8-pixel sprites; smaller tolerances
+  demand deeper overlap; pixel-perfect collision would go on to
+  compare the sprite patterns.
 - Tile-grid pickups compare cells: centre the sprite (+4), divide
   by eight (three shifts), and match the pickup's cell state. Fixed
   scenery takes `tile_at` immediates; a moving pickup takes

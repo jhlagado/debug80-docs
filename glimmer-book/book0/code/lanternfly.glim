@@ -275,7 +275,7 @@ begin
     jr nc,_ax
     neg
 _ax:
-    cp 6                ; tolerance: the bodies really overlap
+    cp 6                ; tolerance: boxes overlap deeply
     jr nc,_done
     ld a,(FlyY)
     ld b,a

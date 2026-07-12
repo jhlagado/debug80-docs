@@ -41,9 +41,10 @@ under one declaration. This chapter's program needs both.
 Canvas is a painting program. Keys 2, 4, 6, and 8 steer a white
 cursor around the 8x8 RGB LED matrix; GO stamps a green pixel where
 the cursor stands; the stamped pixels stay put while the cursor moves
-on. That last clause is a first for this book: every program you have
-built until now forgot you the moment you let go of the keys. Canvas keeps what you
-give it. The picture is state, so it outlives your touch, and there
+on. That last clause is a first for this book: every program until now
+kept its facts - a position, a colour, a score - but redrew its whole
+picture from them each time, so nothing you saw outlived the facts
+behind it. Canvas keeps what you give it. The picture is state, so it outlives your touch, and there
 is a quiet pleasure in steering the cursor away and finding your work
 still there. The picture lives in an eight-byte array, and the cursor
 lives in a two-field layout called `Point`.

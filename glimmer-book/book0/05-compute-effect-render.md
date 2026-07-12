@@ -9,18 +9,8 @@ nav_order: 5
 
 # Chapter 5 - Compute, Effect, Render
 
-Let me tell you what this chapter is before we start, because it has
-earned the introduction: it is the last chapter of the book's first
-movement. When you reach the bottom of it you will hold the complete
-reactive core: the three phases, and the rules that carry a change
-from the block that made it to every block that depends on it. Later
-chapters add constructs on top of that core - timers with schedules,
-cards with their own dispatch, displays with their own pacing - but
-they all deliver their work through the machinery you finish learning
-here. This is the part everything else stands on.
-
-The gap it closes shows in Rover, whose blocks do two different jobs:
-five of them change facts, one of them draws. Games have a third job,
+Rover's blocks do two different jobs: five of them change facts, one
+of them draws. Games have a third job,
 quieter than either - facts computed *from other facts*. A score
 implies a difficulty. A count implies a bar length. A position
 implies which board cell the player occupies. These are not rules,
@@ -28,7 +18,9 @@ and they are not pictures; they are consequences, and they need
 somewhere to live. Glimmer gives each of the three jobs its own block
 keyword and runs them in a fixed order every frame, and that order -
 together with the delivery rules that make it dependable - is what I
-am going to teach you now.
+am going to teach you now. It is the last piece of the reactive core:
+after this chapter, every construct still ahead delivers its work
+through machinery you already understand.
 
 ## Meter
 

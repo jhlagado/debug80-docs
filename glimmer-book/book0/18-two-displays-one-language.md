@@ -248,13 +248,15 @@ game *is* stays yours.
 
 So when the next idea arrives, choose its display by the world it
 needs. A game whose world is a board of cells that change together -
-pieces locking, lines clearing, a body growing - belongs on the 8x8
-matrix, where the whole scene is 32 bytes and cell arithmetic
-answers everything. A game whose world is a place - standing
-scenery, a few movers gliding over it, room to travel - belongs on
-the VDP, where persistence and size cost nothing and motion is two
-bytes. Either way, the declarations you write first - chapter 14's
-habit - will read almost the same.
+pieces locking, lines clearing, a body growing - is a natural fit
+for the 8x8 matrix, where the whole scene is 32 bytes and cell
+arithmetic answers most questions. A game whose world is a place -
+standing scenery, a few movers gliding over it, room to travel -
+favours the VDP, where persistence and size are comparatively cheap
+and a mover is two shadow bytes. Both displays keep their own limits
+- sixty-four pixels on one side, sprite counts and colour rules on
+the other - and either way, the declarations you write first,
+chapter 14's habit, will read almost the same.
 
 ## Where the road goes
 
@@ -285,29 +287,6 @@ the emulator - the same bytes, the same scan or the same commit,
 with actual LEDs doing the glowing. If a board is within reach,
 Skyfall on real hardware is one transfer away, and the paddle feels
 different when the light is real.
-
-## Summary
-
-For the last time, then:
-
-- The two profiles differ in the loop's head and agree in its tail:
-  `ScanFrame` produces the 8x8 matrix picture and the game runs in
-  the blank that follows; `VdpWaitVBlank` and `GlimCommit` pace the
-  VDP game and flush shadows while the VDP rests. Poll, latch, tick,
-  phases, and rollover are identical.
-- The 8x8 matrix makes whole scenes cheap: 32 bytes, `FbClear` and
-  repaint, positions as cells, collision as byte arithmetic - the
-  shape of Skyfall, Snake, and Tetro.
-- The VDP makes persistence and motion cheap: scenery written once,
-  movers as two shadow bytes, positions as pixels, collision as
-  distance under a tolerance, erasing done explicitly - the shape of
-  Lanternfly and Sprite Chase.
-- State, pulses, bindings, timers, phases, delivery, and cards are
-  identical under both displays; Lanternfly reuses Skyfall's GameOver
-  card verbatim. The profile owns the loop; you own the behaviour.
-- Choose the display by the world the game needs: a board of cells
-  that change together, or a place with movers over standing
-  scenery.
 
 A game is facts, moments, rules, and pictures. Eighteen chapters ago
 you could read a `ld a,(hl)`; today you can build a game from an
