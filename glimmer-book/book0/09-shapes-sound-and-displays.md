@@ -36,10 +36,9 @@ cue, a text string - and Glimmer generates the data plus something
 callable to go with it. Your blocks call what was generated, and the
 declaration reads like the resource it describes. The scoreboard is
 the odd one out: the six-digit seven-segment display is a service the
-profile library carries, two routines and no declaration. It is the same deal
-chapter 1 offered you and every chapter since has kept: nothing
-hidden, everything compiled into a file you can open and read - and
-at the end of this chapter, we will go and read it.
+profile library carries, two routines and no declaration. All of it
+compiles into the generated file, and at the end of this chapter we
+will go and read what the declarations became.
 
 ## Fanfare
 

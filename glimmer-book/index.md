@@ -11,8 +11,8 @@ nav_exclude: true
 Glimmer is a reactive game language that compiles to readable Z80 assembly: you declare a program's state,
 inputs, and rules, write the behaviour in small blocks of real assembly, and
 Glimmer generates the running program around them - the loop, the input
-polling, the change tracking, and the display glue, all as readable AZM
-source.
+polling, the change tracking, and the display glue - in one assembly
+file you can open and read.
 
 ## Books
 

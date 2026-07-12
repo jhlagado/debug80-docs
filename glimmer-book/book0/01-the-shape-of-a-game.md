@@ -446,8 +446,7 @@ one job and a declared reason to run. Your evenings go to the game.
 ## Summary
 
 - A game is a loop of **frames**: read input, apply rules, show the
-  result, repeat. Glimmer generates the loop; you declare what it
-  carries.
+  result, repeat.
 - Facts are `state` cells; moments are `pulse`s; `bind` wires a key to
   a pulse; `effect` blocks hold the rules; `render` blocks turn facts
   into light.
@@ -460,8 +459,6 @@ one job and a declared reason to run. Your evenings go to the game.
 - The reactive chain - something changed, the dependent block runs,
   the output updates - is readable straight off the page, from `bind`
   to `on` to `updates` to `on`.
-- Glimmer compiles the whole program to one readable assembly file,
-  your blocks inside byte for byte.
 
 Enough reading over my shoulder. In the next chapter you install the
 tools, build a program of your own, and press its keys yourself:

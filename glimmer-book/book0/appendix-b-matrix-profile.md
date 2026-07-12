@@ -36,8 +36,9 @@ MainLoop:
 
 - `ScanFrame` lights all eight rows with a fixed dwell, services sound
   and the HUD once per row, and returns with the matrix blank. Every
-  phase after it runs in the blank window, so block work never changes
-  visible brightness.
+  phase after it runs in the blank window. Brief block work leaves
+  brightness steady; heavy blank-window work lowers the sweep rate and
+  with it average brightness - treat the gap as the frame's budget.
 - `GlimPollBindings` reads the keypad through MON-3 `_scanKeys` and
   raises bound pulses; the phase dispatchers then test change flags
   and call your blocks.

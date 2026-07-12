@@ -45,8 +45,9 @@ x, its y, and its colour as facts and have the movement rule update
 all three - and that design rots, because it keeps three cells that
 must always agree and trusts every future rule to keep them agreeing.
 Compass stores *one* byte, a position on the rim, and derives
-everything the screen wants from it. A fact you compute cannot fall
-out of step with the fact it came from. That is chapter 5's compute
+everything the screen wants from it. A fact you compute stays true
+to its source, because the rule that derives it re-runs whenever the
+source changes - there is no second copy for a future rule to forget. That is chapter 5's compute
 phase doing exactly the work it was made for, and you are about to
 watch it carry a whole game.
 
@@ -241,9 +242,13 @@ time each row stayed lit depended on how much game work a frame
 happened to do, brightness would wobble with your logic - the display
 flickering because the game thought harder this frame. Instead each
 row shines for the same count on every frame, so brightness stays
-even across rows and across laps of the loop; a frame heavy with game
-work differs from an idle one only in the length of the dark gap
-between scans, far below what the eye can catch. And since the scan
+even across the rows of any one sweep. The dark gap between sweeps is
+where your game runs, and it is a budget: a longer gap means fewer
+sweeps a second, and the LEDs spend a smaller share of their time
+lit. The few dozen instructions this book's blocks spend per frame
+move that share by amounts no eye will find; fill the blank window
+with heavy work and the display itself will tell you, dimming before
+anything else complains. And since the scan
 is by far the frame's largest cost, it paces the frame - which is
 what has let me treat the frame as the unit of game time since
 chapter 1.

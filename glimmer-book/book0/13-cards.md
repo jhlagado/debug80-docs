@@ -14,8 +14,8 @@ that drew you over - the attract screen, blinking its invitation - is
 a little program of its own: it keeps no score, obeys no joystick, and
 knows nothing about what happens after the coin drops. Put the coin in
 and a different program takes over: rules, clock, score. Lose, and a
-third one shows you the damage and waits to offer another round. Every
-real game is at least three programs wearing one cabinet, and at any
+third one shows you the damage and waits to offer another round. Most
+finished games are at least three programs wearing one cabinet, and at any
 instant exactly one of the three is running. Until today, you have had
 no way to say so.
 
@@ -33,11 +33,19 @@ down in the bodies, in assembly, thirteen times.
 
 Glimmer's word for a screen or mode is a **card**, borrowed from
 HyperCard, which built whole applications out of stacks of them.
-Exactly one card is active at a time. You declare a card in one line,
-every declaration after that line belongs to it, and blocks in a
-card's section run only while their card is active. The mode test
-does not get shortened; it leaves the bodies entirely and moves into
+Exactly one card is active at a time. A `card` line starts a
+block-dispatch section: the blocks after it run only while that card
+is active. Dispatch is all a card claims - state, pulses, timers and
+resources stay program-wide wherever you write them, so put them at
+the top of the file where the design lives, and let the card sections
+hold blocks. The mode test leaves the bodies entirely and moves into
 the shape of the file.
+
+Cards are also a choice, and the choosing rule is short: reach for
+them when groups of blocks belong to mutually exclusive modes -
+screens, a pause, a round structure. A one-screen program is better
+off cardless, and every program before this chapter was exactly
+that.
 
 ## Gate
 
@@ -60,8 +68,8 @@ flowchart LR
 ```
 
 The whole game is one file, `gate.glim`, and we are going to walk it
-top to bottom. It opens above any `card` line, and everything declared
-up there is global - owned by no card, alive on all of them:
+top to bottom. It opens above any `card` line with the program-wide
+declarations - the facts, moments, and schedules every card shares:
 
 ```text
 program Gate
@@ -560,9 +568,10 @@ walks past every enter block in the file.
 
 ## Summary
 
-- A `card` line starts a section: one line, and everything after it
-  belongs to that card until the next `card` line or the end of the
-  file. Declarations before the first card are global.
+- A `card` line starts a dispatch section: every block after it
+  dispatches under that card until the next `card` line or the end of
+  the file. Other declarations stay program-wide wherever they sit;
+  the convention is to write them above the first card.
 - Cards compile to a `Card` enum and a built-in `CurrentCard` cell,
   legal in `on` and `updates`. The first card is the start card, and
   `CurrentCard` starts marked changed, so frame one enters it.

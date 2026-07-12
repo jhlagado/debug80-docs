@@ -128,26 +128,31 @@ now I can tell you what the frame does with that word: it runs the
 jobs in a fixed order, the same order in every Glimmer program.
 
 1. **compute** blocks run first: state derived from other state, so
-   every fact that follows from other facts is current before anything
+   a derivation triggered this frame lands before any rule or render
    uses it.
 2. **effect** blocks run second: the game's rules, changing facts in
    response to moments.
 3. **render** blocks run last: facts turned into pictures, after all
    the frame's changes have settled.
 
-Each keyword also enforces its nature, and that is a kindness. A `render` block takes no `updates` line - depicting the
-world is its whole job, and the compiler holds it to that. A
+Each keyword also enforces its nature, and that is a kindness. A
+`render` block takes no `updates` line - depicting the world is its
+whole job, and the compiler holds it to that. A
 `compute` block requires one - producing a fact is its purpose. An
 `effect` sits in the middle and does what rules do: consumes moments,
 changes facts.
 
 The order exists to make a guarantee, and I am handing it to you now
-to keep for the rest of the book: **when a render runs,
-the world it draws is finished.** Every rule has fired, every derived
-fact is consistent with its sources, and nothing you draw can ever be
-half of one frame and half of another. You will never write a line of
-code to arrange this; the phase order arranges it for every program
-you will ever compile.
+to keep for the rest of the book: **when a render runs, this frame's
+work is finished.** Every block the frame triggered has run, each at
+most once, and every change was delivered whole - all of a fact's
+dependents hear the news together, never split across a frame
+boundary. One edge to know about: a chain of derivations, a compute
+feeding a compute, advances one step per frame, so a two-stage
+consequence reaches the screen two frames after its cause. Glimmer
+schedules triggers; it keeps no snapshot of your state. What it does
+promise, it enforces for every program you will ever compile, with no
+line of code from you.
 
 The frame you toured in chapter 2 has grown its full shape. From
 `meter.main.asm`:
@@ -236,16 +241,19 @@ logic feeding a compute - advances one step per frame instead of
 tangling. A frame is one forward pass, and every block runs at most
 once per frame.
 
-The rule buys you something unusual: **the
-order you declare blocks in never changes what a program does.** Move `DeriveBar` to the bottom of the file and every delivery
-lands on the same frames as before. You can organise your source for
-the person reading it - rules together, renders together, whatever
-tells the story best - and the program's behaviour will not shift by
-a single frame. A hand-rolled game loop never grants you that
-freedom: there, moving a call *is* changing the program. This is
-chapter 1's spreadsheet keeping its word. You never told the sheet
-what order to recompute its formulas in, and you never tell Glimmer
-either.
+The rule buys you something unusual: **declaration order does not
+control when an update is delivered.** Move `DeriveBar` to the bottom
+of the file and every delivery lands on the same frames as before,
+so you can organise your source for the person reading it - rules
+together, renders together, whatever tells the story best. Know the
+boundary of the promise, though: it covers triggers. Bodies are real
+Z80 working on live memory, and within one phase the dispatchers call
+blocks in file order, so two same-phase blocks that read and write
+the same cell directly can still see each other's work. The craft
+that follows is simple to hold: keep one gameplay invariant inside
+one effect, or inside a routine it calls, and the boundary never
+bites. This is chapter 1's spreadsheet keeping its word about *when*
+formulas recompute; what your code does while it runs stays yours.
 
 ## The program, as a report
 
@@ -284,14 +292,16 @@ the debugger opens. Chapter 11 builds a debugging practice on it.
 
 - Three block kinds for three jobs: `compute` derives facts from
   facts, `effect` applies rules to moments, `render` draws. The frame
-  runs them in that order, so renders always draw a settled world.
+  runs them in that order, so renders run after every block the
+  frame triggered.
 - `render` takes no `updates`; `compute` requires one. The keyword
   enforces the job.
 - Delivery is exactly once: changes reach later phases the same frame,
   and otherwise wait - whole - for the next frame's start. `Raised0`
   and `Next0` are the two staging bytes that implement the rule.
-- Declaration order never affects behaviour. Backward chains advance
-  one step per frame.
+- Declaration order does not control delivery. Bodies run on live
+  memory in dispatch order, so keep one gameplay invariant inside one
+  effect. Backward chains advance one step per frame.
 - `glimmer --deps` prints the reactive graph: every fact's raisers and
   dependents, straight from the declarations.
 

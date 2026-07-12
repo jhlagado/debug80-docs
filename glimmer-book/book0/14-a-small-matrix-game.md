@@ -619,8 +619,7 @@ lit bit.
   column and `cp` the width, and underflow sends both misses to the
   same branch.
 - Cards need no `changed` modifiers: each card's `enter` block
-  re-raises what its renders need, and boot itself is one set bit -
-  `CurrentCard`'s - in the change flags.
+  re-raises what its renders need.
 - A one-shot timer and a gate fact turn "press any key" into "read
   the screen, then press any key".
 
