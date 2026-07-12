@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 5
 ---
 
-[Book](index.md) | [The Matrix Profile →](06-the-matrix-profile.md)
+[Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)
 
 # Chapter 5 - Compute, Effect, Render
 
@@ -309,4 +309,4 @@ way to put light on it.
 
 ---
 
-[Book](index.md) | [The Matrix Profile →](06-the-matrix-profile.md)
+[Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)

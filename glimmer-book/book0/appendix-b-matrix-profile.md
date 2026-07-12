@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix B - The Matrix Profile"
+title: "Appendix B - The 8x8 Matrix Profile"
 parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 20
 ---
 
 [← Appendix A](appendix-a-declarations.md) | [Book](index.md) | [Appendix C →](appendix-c-tms9918-profile.md)
 
-# Appendix B - The Matrix Profile
+# Appendix B - The 8x8 Matrix Profile
 
 Everything `platform tec1g-mon3` with `display matrix8x8` contributes
 to a generated program: the scan-shaped loop, the framebuffer, the

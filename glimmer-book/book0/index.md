@@ -32,7 +32,7 @@ The book teaches Glimmer 0.5.3. Every complete program in it is built with
 4. [State](03-state.md)
 5. [Pulses and Bindings](04-pulses-and-bindings.md)
 6. [Compute, Effect, Render](05-compute-effect-render.md)
-7. [The Matrix Profile](06-the-matrix-profile.md)
+7. [The 8x8 Matrix Profile](06-the-matrix-profile.md)
 8. [Time](07-time.md)
 9. [Motion Curves](08-motion-curves.md)
 10. [Shapes, Sound and Displays on the Board](09-shapes-sound-and-displays.md)
@@ -49,7 +49,7 @@ The book teaches Glimmer 0.5.3. Every complete program in it is built with
 ## Appendices
 
 - [Appendix A - Declaration Reference](appendix-a-declarations.md)
-- [Appendix B - The Matrix Profile](appendix-b-matrix-profile.md)
+- [Appendix B - The 8x8 Matrix Profile](appendix-b-matrix-profile.md)
 - [Appendix C - The TMS9918 Profile](appendix-c-tms9918-profile.md)
 - [Appendix D - Build and Debug](appendix-d-build-and-debug.md)
 - [Appendix E - AZM Touchpoints](appendix-e-azm-touchpoints.md)
