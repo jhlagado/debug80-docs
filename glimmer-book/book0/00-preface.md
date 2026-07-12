@@ -9,56 +9,60 @@ nav_order: 0
 
 # Preface
 
-You can write a Z80 game as a set of facts, moments, and rules: declare
-what the program remembers, name the events that arrive from the player,
-and write what follows from each one as a few lines of assembly. Glimmer
-is a language built on that idea, and this book teaches it from the
-first lit pixel to complete, playable games.
+This book teaches you to write games for the Z80 using Glimmer, a
+small language built around one idea: a game is easiest to write when
+you describe it as facts, events, and rules. The facts are what the
+game remembers, such as where the player is and what the score says.
+The events are the things that happen, such as a key going down or a
+timer running out. The rules say what follows: when this event
+happens, change that fact. You write the rules yourself, in real Z80
+assembly, a few lines each. Glimmer builds the rest of the running
+program around them.
 
-The book is for you if you can read Z80 assembly: registers, flags,
-memory access, a short routine with labels and branches. Everything
-else is taught in place - what a game frame is, how game state works,
-how a reactive program decides what runs, and every tool you touch. If
-the Z80 itself is new to you, [AZM Book 1 - Z80
-Fundamentals](../../azm-book/book1/) starts from nothing and leads
-here.
+You will get the most from the book if you can already read Z80
+assembly: registers, flags, memory access, a short routine with
+labels and branches. Nothing else is assumed. Games, reactive
+programming, and every tool in the workflow are taught as you meet
+them. If the Z80 itself is new to you, start with [AZM Book 1 - Z80
+Fundamentals](../../azm-book/book1/), which begins from nothing and
+leads here.
 
-Three tools share the work, and the book introduces each one where you
-first need it:
+Three tools do the work, and the book introduces each one at the
+point you first need it:
 
-- **Glimmer** is the language and its compiler. A `.glim` file holds
-  your declarations and your assembly blocks; the compiler turns it
-  into one readable assembly-language program.
-- **AZM** is the assembler, and the name of the assembly dialect it reads;
-  after this page the book mostly says plain assembly, because that is
-  what it is. Glimmer's output is ordinary Z80 assembly source,
-  and AZM assembles it into the bytes the machine runs - checking
-  register use across every routine as it goes. The [AZM
-  books](../../azm-book/) hold the assembler's own story.
-- **Debug80** is the workshop: a VS Code extension that builds your
-  program, runs it on an emulated TEC-1G, and steps through it at
-  source level - in your `.glim` file, for the code you wrote. [Debug80
-  Book 1](../../debug80-book/book1/) covers the environment in depth.
+- **Glimmer** is the language and its compiler. You write a `.glim`
+  file holding your declarations and your assembly. The compiler
+  turns that file into a complete assembly-language program you can
+  read.
+- **AZM** is the assembler. It turns the generated program into bytes
+  the Z80 can run, and it checks register use across every routine
+  while it does. AZM is also the name of the assembly dialect
+  involved; after this page the book calls it plain assembly. The
+  [AZM books](../../azm-book/) describe the assembler itself.
+- **Debug80** is a VS Code extension that runs the result. It
+  contains a full emulation of the target computer, and it gives you
+  breakpoints and single-stepping in your own `.glim` source.
+  [Debug80 Book 1](../../debug80-book/book1/) covers it in depth.
 
-The machine is the TEC-1G, a Z80 single-board computer, and every
-program in the book runs in Debug80's emulation of it. The same HEX
-file the build produces runs on a real board, so a physical TEC-1G
-turns every exercise into blinking hardware - the emulator route and
-the hardware route share every step but the last one.
+The target computer is the TEC-1G, a Z80 single-board machine with a
+hex keypad, an 8x8 RGB LED matrix, and other displays you will meet
+along the way. You need no hardware to follow the book: every program
+runs in Debug80's emulation. If you do own a TEC-1G, the build
+produces a HEX file you can send to the board, and the same program
+runs on the real thing.
 
-The course moves in four stages. Chapters 1 through 5 build the mental
-model: state, pulses, bindings, and the three phases a frame runs.
-Chapters 6 through 11 add the instruments of the TEC-1G's 8x8 LED
-matrix: drawing, timers, motion curves, shapes, sound, and structured
-data. Chapters 12 through 14 give programs their grown-up shape:
-helper routines, multiple files, and cards - the screens and modes of
-a real game. The rest of the book spends everything you have learned
-on complete games, first on the 8x8 RGB LED matrix, then on the
-TMS9918 video display processor, and closes by comparing how those two
-very different displays shape the games written for them.
+The course runs in four stages. Chapters 1 to 5 teach the core model:
+state, pulses, bindings, and the three phases every frame runs.
+Chapters 6 to 11 teach the tools of the 8x8 matrix: drawing, timing,
+motion, shapes, sound, and structured data. Chapters 12 and 13 teach
+how to organise a growing program and how to give a game its screens.
+From chapter 14 the book turns to complete games - building one on
+the 8x8 matrix, reading a larger one, then building another on the
+TMS9918 video display processor - and the final chapter compares how
+the two displays shape the games written for them.
 
-The book teaches Glimmer 0.5.3. Every complete program in it was built
-with `glimmer build` and runs.
+The book teaches Glimmer 0.5.3. Every complete program in it was
+built with `glimmer build` and runs.
 
 ---
 
