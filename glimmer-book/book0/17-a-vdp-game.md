@@ -355,7 +355,7 @@ end
 Adding 4 picks the pixel at the fly's centre, and three shifts divide
 by eight: pixel position to grid cell in four instructions. Either
 the cell matches the lantern's column and row or the block leaves. On
-a match, I want you to read the order of what follows carefully. The
+a match, read the order of what follows carefully. The
 old cell goes blank through `NamePut` first, and it must go blank
 *here*, inside the effect: four lines later the respawn overwrites
 `LampCol` and `LampRow`, and after that no render will ever again
@@ -507,7 +507,7 @@ to row one, closes the gate with `Armed`, and arms `Wait` at 90
 frames; `OpenGate` fires on `GateP`, writes `MsgAny` to row two, and
 opens the gate; `Restart` tests `Armed` before writing `Card.Splash`.
 What the player sees while the gate holds is new, and I find it
-quietly satisfying. Card gating stops the move and chase blocks, so
+satisfying. Card gating stops the move and chase blocks, so
 no shadow changes, no commit carries anything, and VRAM keeps the
 final scene exactly as it stood: the wasp frozen on top of the fly
 among the reeds, the score on the LCD naming the run. A restart walks

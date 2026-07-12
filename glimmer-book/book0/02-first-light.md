@@ -129,8 +129,8 @@ means here:
   `main.glim` - your block bodies - and that little fact is about to
   make your debugger feel like a magic trick.
 
-One more thing happened during that build, quietly, and I want you to
-know it is there working for you. AZM ran its register-contract
+One more thing happened during that build, and you should know it is
+there working for you. AZM ran its register-contract
 checking over the whole program: every routine in the generated file
 declares which registers it uses, and the assembler proves every call
 against those declarations. The classic Z80 bug - a helper quietly
@@ -158,7 +158,7 @@ touched anything. That dot is your declaration, made light.
 
 Now click GO on the panel's keypad. Green. Again: yellow. Keep going -
 red, green, yellow, blue, magenta, cyan, white - and round again to
-red. Seven presses, seven colours, one wrap rule doing its quiet work.
+red. Seven presses, seven colours, one wrap rule doing its work.
 And between your presses, notice what the program is doing: nothing.
 The scan keeps the pixel lit while both of your blocks wait for their
 facts to change. An idle Glimmer program is genuinely idle, and that

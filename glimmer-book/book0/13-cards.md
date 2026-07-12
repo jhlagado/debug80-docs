@@ -184,7 +184,7 @@ to the render phase the same frame - the chapter 5 rule - so the
 prompt is lit on the very first frame of the card, with the blink
 timer taking over from there.
 
-I said "runs once", and I want to make that precise, because the
+I said "runs once", and I mean it precisely, because the
 precision is the feature. Entry is edge-triggered: an enter block runs
 when the program *changes* to its card, not while the program sits on
 it. Frame one counts - the start card is entered like any other - and
@@ -361,7 +361,7 @@ _done:
 end
 ```
 
-The last card is where the program earns its name, and it exists
+The last card is where the program lives up to its name, and it exists
 because of something you would discover in your first minute of
 playtesting: a player mashing GO at the end of a round sails straight
 past the result screen without ever seeing it. So restart waits
@@ -385,8 +385,8 @@ only when the card actually changed to its card - so marking
 
 ## Facts that changed while you were away
 
-There is a subtler problem hiding on this card, and I want you to see
-it before I show you the cure. `FinalBar` draws the score, and it
+There is a subtler problem hiding on this card, and it is worth
+seeing before I show you the cure. `FinalBar` draws the score, and it
 depends on `Score` - a fact whose last change happened during the
 round, frames before this card existed on screen. Now recall chapter
 5's delivery rule: exactly-once. Each of those changes was delivered

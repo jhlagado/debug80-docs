@@ -43,7 +43,7 @@ at the end of this chapter, we will go and read it.
 
 ## Fanfare
 
-Fanfare is a small celebration, and it earns its name. A cyan spark,
+Fanfare is a small celebration, and it lives up to the name. A cyan spark,
 two pixels square, bounces around the 8x8 matrix on its own timer.
 Every wall hit reverses its direction, beeps the speaker, and adds
 one to a score on the six-digit seven-segment display. The 20x4 LCD announces the program from the
@@ -266,8 +266,8 @@ active at a time, and starting a new cue replaces the current one -
 a fresh wall hit restarts the chirp from the top, which is exactly
 the feedback a fresh hit deserves.
 
-Where the call sits is the real lesson of `Move`, and I want you to
-carry it into every game after this one. Sound accompanies an event,
+Where the call sits is the real lesson of `Move`; carry it into
+every game after this one. Sound accompanies an event,
 and the event lives inside a rule, behind a conditional - so
 `call Snd_Bounce` sits inside the effect, on the branch where the
 wall hit happened, and the quiet path steps past it. The player feels
@@ -322,7 +322,7 @@ text MsgHello "FANFARE"
 A `text` declares a zero-terminated string for the TEC-1G's 20x4
 LCD. The LCD is board hardware, alongside the keypad rather than part
 of any display profile, and that placement buys you something
-quietly useful: text resources work the same on the 8x8 matrix and,
+useful: text resources work the same on the 8x8 matrix and,
 later in the book, on the TMS9918. Writing a string to a row is one
 line in a block:
 

@@ -93,7 +93,7 @@ state DotX : byte = 3 changed
 ```
 
 This is our first *fact*: a named variable that the program remembers.
-One habit I want you to pick up immediately, because it will serve you
+Pick up one habit immediately, because it will serve you
 for the whole book: Glimmer declarations are built to be read aloud.
 Try this one - "DotX is a byte, starting at 3, already changed." Every
 declaration in the language passes that test, and whenever you are
@@ -216,8 +216,8 @@ And here is the rule that gives the moment its meaning. An `effect`
 block is where game logic lives. Its header answers two questions this
 time: `on Right` - run on any frame where `Right` fired - and
 `updates DotX` - this block *changes* that fact, so everyone watching
-`DotX` should hear about it. The body is your Z80 again, and I want
-you to notice something about it: the edge of the world is in there.
+`DotX` should hear about it. The body is your Z80 again. Notice
+something about it: the edge of the world is in there.
 `cp 7`, and at column 7 we stay put. The rule about where the dot may
 go lives inside the rule that moves it, written by you, in
 instructions you can count. Glimmer decides *when* your code runs; it
@@ -347,7 +347,7 @@ design; the blocks are the craft. Show the headers to someone who has
 never seen a Z80 and they could tell you what this game does. Show any
 single block to a Z80 programmer and they know everything it touches.
 
-Two small mechanical notes about those blocks, and then the payoff.
+Two small mechanical notes about those blocks, and then the best part.
 Labels that start with an underscore, like `_stop`, are local to their
 block - both movement rules own a `_stop` of their own without
 quarrelling. And blocks fall off their last line - Glimmer supplies

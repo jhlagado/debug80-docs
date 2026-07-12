@@ -389,8 +389,8 @@ with row bits instead of change flags.
 Those eight `tile_at` lines touch eight different grid rows, so frame
 1 ends with eight dirty bits standing, and frame 2's commit streams
 eight rows into VRAM. From then on the garden is the VDP's to paint,
-picture after picture, and the program never redraws it. I want you
-to feel the difference in your fingers: an 8x8 matrix render repaints
+picture after picture, and the program never redraws it. Feel the
+difference in your fingers: an 8x8 matrix render repaints
 its layer whenever a fact changes; a VDP program writes each cell
 once and writes again only what differs. `MothX` and `MothY` are
 declared `changed` for the same startup reason: on frame 1,
@@ -535,8 +535,8 @@ bank gets its single byte, foreground times sixteen plus background.
 
 Before any of this runs, `VdpInit` programs the VDP's eight registers
 from a small table, clears the pattern and name tables, and hides all
-32 sprites by writing `$D1` into every shadow y. That value earns its
-keep twice: a sprite whose y is `$D1` is off-screen, and the VDP
+32 sprites by writing `$D1` into every shadow y. That value does two
+jobs: a sprite whose y is `$D1` is off-screen, and the VDP
 stops processing sprites at the first slot holding it. Declaration
 order keeps your live sprites contiguous from slot 0, so the
 terminator always sits right after them.

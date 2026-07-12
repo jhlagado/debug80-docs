@@ -9,7 +9,7 @@ nav_order: 7
 
 # Chapter 7 - Time
 
-I want you to notice something about every program you have written so
+Notice something about every program you have written so
 far: none of them can act without you. Mover's dot sits wherever your
 last press left it. Meter's bar holds its level until you lean on plus
 or minus. Take your hands off the keypad and frame after frame goes by
@@ -221,7 +221,7 @@ firing:
     ld (Grace),hl
 ```
 
-`word` earns its keep here: a byte cell tops out at a 255-frame delay,
+`word` is the point here: a byte cell tops out at a 255-frame delay,
 and a word countdown runs to 65535. Drip has no use for a one-shot;
 the delayed restart in chapter 13's card game is the shape of moment
 they are for, and I mention them now so you know all three phrasings
@@ -252,7 +252,7 @@ there it idles. Writing the cell sets it moving again: write 0 and the
 full climb runs from the start. Drip spends only the arrival; chapter
 8 spends the journey.
 
-One wrinkle before the payoff. A freshly started program's ramp sits
+One wrinkle before it all comes together. A freshly started program's ramp sits
 at its terminal value, idle, so the first climb needs a push - and a
 familiar word supplies the moment to push from:
 
@@ -364,7 +364,7 @@ Read `Quicken`'s body and watch difficulty turn out to be ordinary:
 any state, and the timer's next reload counts from the new period. The
 game is changing its own tempo from an ordinary `updates` line.
 Difficulty is data - pause on that for a second, because it is the
-quiet thrill of this chapter. The `cp 8` holds a floor - periods run
+thrill of this chapter. The `cp 8` holds a floor - periods run
 24, 20, 16, 12, 8, then settle at 4 - and the final store rewinds
 `Heat` to begin the next 250-frame climb.
 

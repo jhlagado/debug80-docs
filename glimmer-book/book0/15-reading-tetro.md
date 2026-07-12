@@ -11,7 +11,7 @@ nav_order: 15
 
 You built Skyfall in the last chapter, from an empty file to a finished
 game, and I hope you are still a little pleased with yourself about it.
-So today I want to teach you something different, and I want to name it
+So today I am going to teach you something different, and I want to name it
 as a skill before we start, because nobody ever put it on a syllabus
 for me and I wish they had: reading someone else's code. Writing
 teaches you what the language can say; reading a program bigger than
@@ -99,7 +99,7 @@ way.
 Now look at the board: four `byte[8]` arrays, one bit per cell of the
 8x8 matrix, eight rows, MSB-left. `BoardRows` records occupancy - the
 single question collision cares about - and the three colour planes
-remember what colour each settled cell keeps. I want you to notice
+remember what colour each settled cell keeps. Notice
 that this is the framebuffer's own shape: chapter 6's `Framebuffer`
 stores each row as red, green, and blue bitmask bytes, so a settled
 board row lands on screen as one `or` of plane byte into framebuffer
@@ -118,7 +118,7 @@ timer GOverGate : word = 0   -> GateOpenP once  ; armed on game over
 `Gravity` is chapter 7's oscillator with a writable period: every 32
 frames, one `GravityFire`, and a compute block further down halves
 that period as the score climbs. The two `once` timers deserve a
-moment, because their starting value is doing quiet work: a one-shot
+moment, because their starting value is a decision: a one-shot
 that starts at 0 is asleep, and it fires only after some block writes
 a count into it. `ClearHold` times the line-clear flash, `GOverGate`
 times the restart gate, and each gets armed by exactly the block that
@@ -286,7 +286,7 @@ ShiftCount:
 ```
 
 These labels carry no `@`, so they stay private to the file - chapter
-12's rule, earning its keep in a real program. Blocks reach the engine
+12's rule at work in a real program. Blocks reach the engine
 only through the routines it publishes, and those routines cover the
 board work: `SetCurPiece` you have met; `CheckCollAt` probes a
 placement; `LockPiece` blits the piece into all four planes;
@@ -297,7 +297,7 @@ preview, rolls a new one, and probes the spawn point; `InitGame`
 resets a round; `DrawBoardFb` rebuilds the framebuffer from the planes
 and overlays the falling piece.
 
-I want to give you my reasoning about why the boundary sits exactly
+Let me give you my reasoning about why the boundary sits exactly
 here, because drawing it is a judgement you will make in your own
 games. Everything on the declaration side of the line - the shape
 tables, the timers, the key bindings, the change tracking, the card
@@ -401,7 +401,7 @@ square below; free means fall, blocked means the piece has landed.
 Landing runs the engine in sequence - lock the piece into the planes,
 sound the cue, scan for full rows.
 
-Full rows begin the flash, and I want you to watch how little this
+Full rows begin the flash; watch how little this
 block does to start it. It writes the row bitmask into `ClearMask` and
 stops there. `ClearMask` sits in `DrawBoard`'s `on` list, so the next
 render repaints, and `DrawBoardFb` forces every masked row white on
@@ -441,7 +441,7 @@ the same on `PauseP`, flipping between Playing and Paused.
 
 When the exit has a condition, the block writes `CurrentCard` itself,
 and the blocked spawn is the one place in this game where that pattern
-earns its keep. You saw it twice above: `SpawnPiece` returns carry set
+is necessary. You saw it twice above: `SpawnPiece` returns carry set
 when the spawn placement is blocked, and both `ApplyGravity` and
 `FinishClear` respond with `ld a,Card.GameOver` into `CurrentCard`
 behind a branch. The comment inside `ApplyGravity` states the
@@ -530,7 +530,7 @@ wrapper the blocks call by name.
 
 ## Card seams in the generated file
 
-One structural payoff is left in `tetro.main.asm`, and it is worth the
+One structural reward is left in `tetro.main.asm`, and it is worth the
 scroll. The four cards became `Card .enum Splash, Playing, Paused,
 GameOver`, and every block from `tetro-rules.glim` became a flat
 `Glim_*` routine, dispatched with its card's gate in front. Here is

@@ -135,8 +135,7 @@ jobs in a fixed order, the same order in every Glimmer program.
 3. **render** blocks run last: facts turned into pictures, after all
    the frame's changes have settled.
 
-Each keyword also enforces its nature, and I want you to hear that as
-a kindness. A `render` block takes no `updates` line - depicting the
+Each keyword also enforces its nature, and that is a kindness. A `render` block takes no `updates` line - depicting the
 world is its whole job, and the compiler holds it to that. A
 `compute` block requires one - producing a fact is its purpose. An
 `effect` sits in the middle and does what rules do: consumes moments,
@@ -237,7 +236,7 @@ logic feeding a compute - advances one step per frame instead of
 tangling. A frame is one forward pass, and every block runs at most
 once per frame.
 
-The rule buys you something unusual, and I want you to feel it: **the
+The rule buys you something unusual: **the
 order you declare blocks in never changes what a program does.** Move `DeriveBar` to the bottom of the file and every delivery
 lands on the same frames as before. You can organise your source for
 the person reading it - rules together, renders together, whatever

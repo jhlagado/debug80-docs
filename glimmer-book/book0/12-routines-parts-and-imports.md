@@ -31,8 +31,8 @@ counted - set bits across eight bytes. That is loop work with a
 register interface and no facts of its own: library code in
 everything but name, and it deserves to live like library code.
 
-So this chapter is about a program growing up, and I want to hand you
-Glimmer's three tools for it as three sizes of the same instinct -
+So this chapter is about a program growing up, and Glimmer's three
+tools for it arrive as three sizes of the same instinct -
 put each thing in the one place it belongs. A `routine` holds shared
 code once, where every block can call it. A `part` moves declarations
 into a second `.glim` file that belongs to the same program. An
@@ -109,8 +109,8 @@ Wrote canvas.main.asm (register contracts checked by AZM)
 Wrote canvas.main.d8.json (47 block segments attributed to .glim source)
 ```
 
-One build, one program, one generated file. I want to be plain about
-what the split did and did not do: it moved source between files, and
+One build, one program, one generated file. Here is exactly what the
+split did and did not do: it moved source between files, and
 it changed nothing the Z80 will see. The rest of the chapter takes
 the three declarations in turn, smallest first.
 
@@ -180,7 +180,7 @@ part "canvas-rules.glim"
 ```
 
 A `part` names another `.glim` file whose declarations join the
-program. I want you to get the model right on first meeting, because
+program. Get the model right on first meeting, because
 it is easy to carry in habits from other languages that do not apply
 here. A part is not a module with walls of its own. The entry file -
 the one you hand to `glimmer build` - declares `program`, `platform`

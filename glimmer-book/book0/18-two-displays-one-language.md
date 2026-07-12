@@ -191,8 +191,8 @@ overwrites `LampCol` and `LampRow` and no render would ever again
 know which cell to clear. A persistent scene remembers what you
 drew, including what you meant to remove.
 
-The commit pacing sets this profile's motion cost, and I want you to
-know it cold: a held key reaches the screen two frames later -
+The commit pacing sets this profile's motion cost. Know it
+cold: a held key reaches the screen two frames later -
 defer, shadow write, commit - at full rate, sixty-odd pixels a
 second. Skyfall's paddle reaches the next scan one frame after its
 pulse. Both games feel immediate under your thumbs; the difference

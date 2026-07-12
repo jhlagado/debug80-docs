@@ -215,8 +215,8 @@ banks tests each one.
 
 ## The first frame, predicted
 
-Time for the challenge I promised you, and for the discipline I want
-you to take from it: predict before you build; then build and watch.
+Time for the challenge I promised you, and for the discipline it
+teaches: predict before you build; then build and watch.
 Your prediction needs one last piece of information. `Changed0` begins
 life as the sum of every `changed` in the source:
 

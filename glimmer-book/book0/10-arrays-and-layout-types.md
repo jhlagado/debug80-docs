@@ -45,7 +45,7 @@ on. That last clause is a first for this book: every program until now
 kept its facts - a position, a colour, a score - but redrew its whole
 picture from them each time, so nothing you saw outlived the facts
 behind it. Canvas keeps what you give it. The picture is state, so it outlives your touch, and there
-is a quiet pleasure in steering the cursor away and finding your work
+is a particular pleasure in steering the cursor away and finding your work
 still there. The picture lives in an eight-byte array, and the cursor
 lives in a two-field layout called `Point`.
 
@@ -222,7 +222,7 @@ begin
 end
 ```
 
-I want you to notice whose code this is. The addressing is the Z80
+Notice whose code this is. The addressing is the Z80
 you already know: `Picture` is a label, the row number goes in DE,
 `add hl,de` lands HL on the row's byte, and OR folds the new pixel
 into whatever the row already held. Glimmer supplies the label, the

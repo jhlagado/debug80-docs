@@ -89,7 +89,7 @@ consumes it:
 | `GateP` | a one-shot timer | opening the restart gate |
 
 Two schedules drive them. `Gravity` is an oscillator with period 18,
-and I want you to see that number for what it is: the difficulty of
+and see that number for what it is: the difficulty of
 the game, stored where a fact belongs. Eighteen frames a row is a
 stroll - the opening drop spends 126 frames crossing the board - and
 every catch will write the period smaller, the move
@@ -224,8 +224,8 @@ effect StartGame
 end
 ```
 
-`RandCol` is where the sky gets its randomness, and it earns its place
-as a routine because two different blocks will want it: the round's
+`RandCol` is where the sky gets its randomness, and it is a routine
+because two different blocks will want it: the round's
 first drop and every respawn after a landing both need a fresh column.
 MON-3's API dispatcher sits behind `rst $10` with the call number in
 C, the same doorway the `lcd_row` op walks through, and `ApiRandom` is
@@ -503,7 +503,7 @@ invitation on row two and opens the gate; until then, `Restart`
 swallows every press at `jr z,_wait`.
 
 Follow the press that finally restarts, because the frame discipline
-you learned in chapters 5 and 13 is doing quiet work here. It fires
+you learned in chapters 5 and 13 is at work here. It fires
 `AnyKeyP` once. Card switches land at the next frame start and pulses
 clear at frame end, so Splash wakes to a quiet keypad and waits for a
 press of its own - three distinct presses walk the loop from game over
@@ -520,7 +520,7 @@ the 90.
 
 ## The design, printed
 
-We began this chapter with the design as pencil tables. I want to end
+We began this chapter with the design as pencil tables. We will end
 it with a small ceremony: asking the toolchain to print the same
 design back, computed from the program itself.
 

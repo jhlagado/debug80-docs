@@ -156,8 +156,8 @@ and the hardware.
 
 ## Rising or held
 
-Every binding chooses one of two shapes, and I want you to hear this
-as a game design decision before you hear it as a technical one:
+Every binding chooses one of two shapes, and the choice is a game
+design decision before it is a technical one:
 
 - `rising` fires once, on the frame the key goes down. Press again to
   fire again. Choose it for *actions*: fire, rotate, pause, start.
@@ -176,7 +176,7 @@ choices for the same reasons - held compass keys, rising GO - and both
 are one-line decisions. Tuning the feel of your entire control scheme
 is editing a digit.
 
-There is one property of the keypad I want to state plainly, because
+One property of the keypad needs stating plainly, because
 you should design with it rather than discover it: MON-3 reports a
 single pressed key at a time. Held movement runs one direction at
 once, and a fresh press takes over the autorepeat from the key before

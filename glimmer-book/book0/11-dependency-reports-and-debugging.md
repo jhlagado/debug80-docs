@@ -9,7 +9,7 @@ nav_order: 11
 
 # Chapter 11 - Dependency Reports and Debugging
 
-Before the programs get any bigger, I want to hand you your toolbox.
+Before the programs get any bigger, it is time to hand you your toolbox.
 Canvas left chapter 10 as the largest program in the book: a `Point`
 cursor, an eight-byte picture, five pulses, and six blocks connecting
 them. The chapters ahead are going to double that, and I would rather
@@ -156,7 +156,7 @@ lines - the connections you have read off block headers since chapter
 information; what is new is that you no longer have to hold it all in
 your head.
 
-I want to teach you how to read it, because the reading is the skill.
+Let me teach you how to read it, because the reading is the skill.
 When something misbehaves in a reactive program, your first question
 is always the one I opened the chapter with: which fact failed to
 change? The report answers it from your chair, in both directions,
@@ -184,8 +184,8 @@ begin
 
 The body still stores to `Marks`; the header has stopped saying so.
 This is the classic reactive slip - you will make it yourself the day
-you add a store to a block and forget to tell the header - so I want
-you to meet it here, on purpose, before it meets you by accident.
+you add a store to a block and forget to tell the header - so meet
+it here, on purpose, before it meets you by accident.
 Rebuild, and watch what the tool says:
 
 ```text
@@ -218,11 +218,10 @@ A fact with a dependent and no raiser: that pattern is this whole
 class of bug, drawn in two lines. The generated file agrees - the
 wrapper after `PaintPixel`'s body, which raised `CHG_PICTURE +
 CHG_MARKS` before the edit, now raises `CHG_PICTURE` alone. Put
-`Marks` back in the header and the build runs quiet.
+`Marks` back in the header and the build runs clean.
 
-Before you lean on that warning, I want to be straight with you about
-its limits, because a tool trusted past its limits is worse than no
-tool. The scan reads stores that name their cell in the instruction
+Before you lean on that warning, know its limits, because a tool
+trusted past its limits is worse than no tool. The scan reads stores that name their cell in the instruction
 itself: `ld (Marks),a` names `Marks`, so the header can be checked
 against it. `PaintPixel`'s other write travels through a pointer -
 `ld (hl),a`, with HL aimed into `Picture` by arithmetic - and a
@@ -309,7 +308,7 @@ A,B,DE,HL` and the flags: any of those may hold anything on return.
 A register absent from a declared contract counts as preserved, and
 AZM checks the routine's body against that promise too. C's absence from the clobbers list is
 a verified guarantee that y survives the call - proven on every
-build, and about to earn its keep.
+build, and about to matter.
 
 ## A trampled register
 

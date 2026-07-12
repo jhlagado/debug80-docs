@@ -29,7 +29,7 @@ end
 ```
 
 Sixty-four frames, eight columns, eight frames on each: the crossing
-is perfectly even, and I want you to watch it long enough to see what
+is perfectly even. Watch it long enough to see what
 it lacks. The dot goes exactly where it is told, on schedule, and that
 is how it reads: a position being updated. The difference between
 position and motion is the difference between a slide rule and a
@@ -127,7 +127,7 @@ positions it passes through into the program as a table of bytes named
 cell, carries no change flag, and adds no work to the frame. It is
 geometry your blocks consult, sitting in memory waiting to be read.
 
-`TrackComet` is where the table earns its place. Each frame of a
+`TrackComet` is where the table gets put to work. Each frame of a
 flight the ramp steps, `Travel` is marked changed, and the compute
 runs. Its body indexes the table with the current step:
 

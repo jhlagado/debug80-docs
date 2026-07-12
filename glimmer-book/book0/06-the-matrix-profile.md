@@ -12,7 +12,7 @@ nav_order: 6
 I have been keeping something from you since chapter 1, and this is
 the chapter where I finally get to show it to you. The TEC-1G has no
 video chip. Nothing sits between the processor and the 8x8 RGB LED
-matrix, quietly refreshing pixels while your program thinks about
+matrix, refreshing pixels while your program thinks about
 other things. The display is eight rows of eight RGB LEDs, and the
 hardware can light exactly one row at a time. Three ports carry a
 row's red, green, and blue column data; a fourth selects the row that
@@ -28,7 +28,7 @@ doing two jobs at once. One is the game. The other is being the
 display controller - and chapter 1 warned you about it, when I called
 showing the current picture the program's own job, every frame,
 forever. Every program you have built since has done that job without
-a line of your code asking for it, and today I want to open the
+a line of your code asking for it, and today I am going to open the
 machinery and show you where: the scan that keeps the 8x8 matrix lit,
 the loop shape it forces on the frame, the 32 bytes of memory your
 renders have been writing all along, and the library routines that
@@ -161,8 +161,8 @@ same with y. Every arm leaves its quadrant's colour in A and falls
 into the shared store at `_colour`.
 
 The header line `updates DotX, DotY, Colour` declares all three
-products, and `DrawDot` depends on all three. Here is the payoff of
-storing one fact and deriving the rest: those three cells change
+products, and `DrawDot` depends on all three. Here is what storing
+one fact and deriving the rest buys you: those three cells change
 together because one block writes them together, so the render always
 reads a settled trio. The geometry sits in the compute, the rule in
 the effect, the picture in the render - each block one job, connected
@@ -310,7 +310,7 @@ FbPlot:
         ld      b,a
 ```
 
-And here the aux byte earns its keep. At four bytes a row, the row's
+And here is what the aux byte is for. At four bytes a row, the row's
 address is `Framebuffer + y * 4`, and multiplying by four is two
 `add a,a` instructions - a padding byte bought a fast address. The
 rest of the routine shifts the colour bits out of D one at a time,
