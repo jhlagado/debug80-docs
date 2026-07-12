@@ -29,6 +29,23 @@ sequence, example strategy and drafting rules.
 
 Use the course-writing skill for every chapter draft and review pass.
 
+**The voice (John, 2026-07-12, overriding everything below when they
+conflict):** the narrator is a human teacher - an expert who likes this
+machine and this system, speaking in first person to one student they want
+to help. The teacher has motives and shares them: why Glimmer exists (it
+inverts control - you declare when code runs and the machinery calls you;
+it removes the plumbing that eats evenings; it stays close to the metal
+with no architecture between), why each chapter's program was chosen, why
+a construct is shaped the way it is. Reasons before facts, intention
+everywhere ("we are making a game", "I want you to notice"), active voice,
+and no disembodied clipped declaratives ("A game listens.", "Three new
+declarations arrived.") - if no human teacher would say the sentence to a
+student, it does not go in. The banned-pattern list is a guardrail, never
+the voice. Chapters 1 and 2 as rewritten 2026-07-12 are the voice
+exemplars. Chapters 3-18 and the appendices still carry the old flat voice
+and need the same treatment (structure and verified listings kept, prose
+redone).
+
 Rules that matter most for this book:
 
 - State what Glimmer is and what it does.
