@@ -599,9 +599,9 @@ Twelve flag cells fill bank 0 and spill into bank 1, and at boot every
 bit is clear except one: bit 3 of `Changed1`, which is
 `CurrentCard`'s. The whole game unfolds from that single set bit -
 `SplashShow` runs on the first frame, the title appears, and
-everything after follows from presses and ticks. Keep that image with
-you: a complete game, its design one printed page, its beginning one
-lit bit.
+everything after follows from presses and ticks. That is the image I
+would have you take away from this chapter: a complete game, its
+design one printed page, its beginning one lit bit.
 
 ## Summary
 

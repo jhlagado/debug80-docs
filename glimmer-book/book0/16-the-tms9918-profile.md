@@ -275,8 +275,8 @@ SpriteDirty:      .db 0
 sprite - y, x, pattern, colour - for all 32 slots. Beside each shadow
 sits its own bookkeeping, sized to its table: three bytes of
 `NameDirtyRows` carry one bit per grid row, and the single
-`SpriteDirty` byte covers the whole sprite table. Hold onto the word
-*dirty* - it is about to become the hinge of the whole profile.
+`SpriteDirty` byte covers the whole sprite table. The word *dirty*
+is about to become the hinge of the whole profile.
 
 Three profile routines write the shadows for you, and each declares
 its register interface in the generated file, the way chapter 11

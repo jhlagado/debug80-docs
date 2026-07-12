@@ -15,18 +15,17 @@ computed *from other facts*. A score implies a difficulty. A count
 implies a bar length. A position implies which board cell the player
 occupies.
 
-Pause on that third job, because it sharpens a word this book has
-used since chapter 1. A rule is what the game does when a moment
-arrives, and the mark of a rule is that it *decides* something: move
-or stay at the wall, score or miss, wrap or clamp. A derived fact
-involves no decision at all. The bar length is always the count
-divided by eight - nothing is chosen, no moment is consumed; it is
-the same information restated, a definition the program keeps
-current. Rules decide, derivations restate, and pictures depict.
-Glimmer gives each of those three jobs its own block keyword and runs
-them in a fixed order every frame, and that order - together with the
-delivery rules that make it dependable - is what I am going to teach
-you now. It is the last piece of the reactive core:
+That third job differs in kind from the rules you have been writing.
+A rule, as chapter 1 defined it, is a decision the game makes when a
+moment arrives: move or stay at the wall, score or miss. A derived
+fact involves no decision. The bar length is always the count divided
+by eight - chosen by nobody, waiting on no moment - the same
+information restated, a definition the program keeps current. So the
+three jobs of a game come apart cleanly: rules decide, derivations
+restate, and pictures depict. Glimmer gives each one its own block
+keyword and runs them in a fixed order every frame, and that order -
+together with the delivery model that makes it dependable - is what I
+am going to teach you now. It is the last piece of the reactive core:
 after this chapter, every construct still ahead delivers its work
 through machinery you already understand.
 

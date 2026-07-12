@@ -133,8 +133,7 @@ holds still, so `DrawDot` rests. The pixel stays lit because keeping
 the display alive is the machinery's job, not yours.
 
 One fact, one rule, and one declared connection between them: `on
-DotX`. Hold onto that connection. It is the seed the entire language
-grows from.
+DotX`. That connection is the seed the entire language grows from.
 
 ## The dot responds
 
@@ -212,8 +211,10 @@ effect MoveRight
     updates DotX
 ```
 
-And here is the rule that gives the moment its meaning. An `effect`
-block is where game logic lives. Its header answers two questions this
+And here is the rule that gives the moment its meaning. When I say
+rule, I mean something specific, and the word keeps this meaning for
+the whole book: a rule is a decision the game makes when a moment
+arrives. The `effect` block is where rules live. Its header answers two questions this
 time: `on Right` - run on any frame where `Right` fired - and
 `updates DotX` - this block *changes* that fact, so everyone watching
 `DotX` should hear about it. The body is your Z80 again. Notice

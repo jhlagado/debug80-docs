@@ -97,8 +97,7 @@ of VRAM over and over without any help from you, `VdpWaitVBlank`
 catches the rest between two paintings, and `GlimCommit` spends that
 rest moving the previous frame's changes into VRAM. One display is
 something the CPU does; the other is something the CPU writes to.
-Hold onto that sentence; the differences we are about to trace all
-lean on it.
+Everything we are about to trace leans on that one sentence.
 
 ## The board the program is
 
