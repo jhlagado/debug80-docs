@@ -13,17 +13,16 @@ Every game you have written so far has kept its whole world in a
 handful of named bytes. Nine chapters of dots, comets, and bouncing
 shapes, and each one ran on facts that fit in a byte or a word: a
 position, a count, a colour, a bar length. Today the world itself
-becomes data. Think about what games are actually made of - the
-picture in a painting program, the wall of settled pieces in a
-falling-block game, the body of a snake. Each of those is many
-related bytes that persist together, change together, and redraw
-together: one fact that happens to be sixty-four pixels wide.
+becomes data. The picture in a painting program, the wall of settled
+pieces in a falling-block game, the body of a snake - each of those
+is many related bytes that persist together, change together, and
+redraw together: one fact that happens to be sixty-four pixels wide.
 
 Back in chapter 3 you made the first great design decision a game
 asks of its author: choosing which facts it remembers. This chapter
 hands you the second: choosing the *shape* those facts take in
-memory. Before I give you the new declarations, I want you to see why
-the old ones cannot stretch this far. You could try declaring
+memory. Before the new declarations, consider why the old ones cannot
+stretch this far. You could try declaring
 sixty-four separate cells, and the model would push back before your
 patience did: chapter 3 set the limit of 32 flag-carrying cells, so a
 board of one-byte facts would overflow the change banks before the
@@ -35,17 +34,15 @@ So this chapter adds the two declarations that model group facts.
 Array state reserves a run of bytes under one name and one flag.
 Layout types name an arrangement of fields, so that bytes which
 belong together - an x and a y, a piece's origin and colour - travel
-under one declaration. I chose this chapter's program because it
-needs both.
+under one declaration. This chapter's program needs both.
 
 ## Canvas
 
 Canvas is a painting program. Keys 2, 4, 6, and 8 steer a white
 cursor around the 8x8 RGB LED matrix; GO stamps a green pixel where
 the cursor stands; the stamped pixels stay put while the cursor moves
-on. Pause on that last clause before you read a line of code, because
-it is a first for this book: every program you have built until now
-forgot you the moment you let go of the keys. Canvas keeps what you
+on. That last clause is a first for this book: every program you have
+built until now forgot you the moment you let go of the keys. Canvas keeps what you
 give it. The picture is state, so it outlives your touch, and there
 is a quiet pleasure in steering the cursor away and finding your work
 still there. The picture lives in an eight-byte array, and the cursor
@@ -167,8 +164,7 @@ _row:
 end
 ```
 
-Build it, run it under Debug80, and draw something. Then come back,
-and we will take the two new declarations one at a time.
+Build it, run it under Debug80, and draw something.
 
 ## One fact, eight bytes
 
@@ -204,7 +200,7 @@ and returns the column's mask in A, clobbering B on the way.
 ## Painting a pixel
 
 Stamping a pixel means finding one byte in the array and setting one
-bit in it. Here is `PaintPixel` again, doing both:
+bit in it. `PaintPixel` does both:
 
 ```text
 effect PaintPixel
@@ -286,9 +282,8 @@ state Cursor : Point changed
 ```
 
 A `type` declaration names an arrangement of bytes: `Point` is two
-byte fields, `x` at the start and `y` after it. Read the two lines
-carefully and you will see the division of work between them. The
-type reserves no storage by itself; it is a name for a shape. Storage
+byte fields, `x` at the start and `y` after it. The type reserves no
+storage by itself; it is a name for a shape. Storage
 arrives with the state line, which reads *Cursor is a Point, already
 changed* and reserves two zero-filled bytes in that shape.
 
@@ -429,8 +424,7 @@ in its corner.
 
 ## Summary
 
-Here is what the two new declarations gave you, gathered in one
-place:
+The two new declarations, gathered in one place:
 
 - `state Name : byte[N]` declares array state, N from 1 to 256:
   zero-filled, no initializer, one change flag for the whole run, and

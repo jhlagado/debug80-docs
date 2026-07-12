@@ -35,20 +35,18 @@ notes. You declare a resource in the `.glim` file - a shape, a sound
 cue, a text string - and Glimmer generates the data plus something
 callable to go with it. Your blocks call what was generated, and the
 declaration reads like the resource it describes. The scoreboard is
-the odd one out, and I will say so when we reach it: the six-digit
-seven-segment display is a service the profile library carries, two
-routines and no declaration. It is the same deal
+the odd one out: the six-digit seven-segment display is a service the
+profile library carries, two routines and no declaration. It is the same deal
 chapter 1 offered you and every chapter since has kept: nothing
 hidden, everything compiled into a file you can open and read - and
 at the end of this chapter, we will go and read it.
 
 ## Fanfare
 
-The program I picked for this chapter is a small celebration, and it
-earns its name. A cyan spark, two pixels square, bounces around the
-8x8 matrix on its own timer. Every wall hit reverses its direction,
-beeps the speaker, and adds one to a score on the six-digit
-seven-segment display. The 20x4 LCD announces the program from the
+Fanfare is a small celebration, and it earns its name. A cyan spark,
+two pixels square, bounces around the 8x8 matrix on its own timer.
+Every wall hit reverses its direction, beeps the speaker, and adds
+one to a score on the six-digit seven-segment display. The 20x4 LCD announces the program from the
 first frame.
 
 ```text
@@ -147,17 +145,16 @@ begin
 end
 ```
 
-Before you read another word from me, build this and let it run.
-Watch, and listen. The spark ricochets, each wall hit chirps, and the
-digits climb - twice in quick succession when it rounds a corner.
-That is the whole program the way a player meets it: eyes, ears, and
-a number. Now let us take it apart.
+Build this and let it run. Watch, and listen. The spark ricochets,
+each wall hit chirps, and the digits climb - twice in quick
+succession when it rounds a corner. That is the whole program the way
+a player meets it: eyes, ears, and a number.
 
 Only three declarations at the top are new - `shape`, `sound`, and
 `text` - and each gets its own section below. The machinery around
 them is chapter 7's: a timer fires `Tick` every 6 frames, and `Move`
-runs on `Tick`. But I want you to notice one idea riding in the state
-before we move on: velocity as a fact. `VelX` holds 1 when the spark
+runs on `Tick`. But notice one idea riding in the state before we
+move on: velocity as a fact. `VelX` holds 1 when the spark
 travels right and `$FF` when it travels left, and because adding
 `$FF` to a byte steps it down by one, a single `add` moves the spark
 whichever way it is going. After the step, a spark at column 0 or
@@ -235,9 +232,9 @@ arguments last, the way `DrawSpark` does.
 sound Bounce len 8 div 3
 ```
 
-A `sound` declares a cue: a short, non-blocking beep. Before I
-explain the two numbers, let me tell you how this board makes sound
-at all, because there is no sound chip to hand the job to. The
+A `sound` declares a cue: a short, non-blocking beep. The two numbers
+can wait: first, how this board makes sound at all, because there is
+no sound chip to hand the job to. The
 speaker is a port bit, and the only musician available is the CPU. So
 Glimmer folds sound into the work the CPU is already doing: the scan
 loop that keeps the 8x8 matrix lit visits the speaker once per row, 8
@@ -306,8 +303,8 @@ declared `changed`, so `ShowScore` runs on frame one and the score
 opens at zero rather than blank. Your player never faces an empty
 scoreboard.
 
-There is one consequence of `Move`'s header I want you to trace,
-because it teaches you how to think about `updates`. The header lists
+One consequence of `Move`'s header teaches you how to think about
+`updates`. The header lists
 every fact the block may change, and each listed fact is marked
 changed whenever the block runs - so `ShowScore` repaints its digits
 every step, quiet ticks included. Should that worry you? Count the
@@ -442,7 +439,7 @@ always see the invocation and what it costs, in the same file.
 
 ## Summary
 
-Four instruments, one pattern. Here is the chapter in your pocket:
+Four instruments, one pattern:
 
 - A `shape` is a named bitmap: quoted rows of `X` and `.`, 1x1 up to
   8x8, in one of seven colours. Glimmer emits a `Shape_<Name>` table
@@ -463,10 +460,9 @@ Four instruments, one pattern. Here is the chapter in your pocket:
 - A state cell that starts `changed` and appears in no `updates` is a
   run-once startup hook.
 
-Fanfare's whole world is one spark and one number, and your game now
-has a face, a voice, and a scoreboard. Next, the board itself becomes
-data: arrays and layout types, for games whose state is many related
-bytes - [Arrays and Layout Types](10-arrays-and-layout-types.md).
+Next, the board itself becomes data: arrays and layout types, for
+games whose state is many related bytes -
+[Arrays and Layout Types](10-arrays-and-layout-types.md).
 
 ---
 
