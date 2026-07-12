@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 5
 ---
 
-[← Pulses and Bindings](04-pulses-and-bindings.md) | [Book](index.md)
+[Book](index.md) | [The Matrix Profile →](06-the-matrix-profile.md)
 
 # Chapter 5 - Compute, Effect, Render
 
@@ -265,4 +265,4 @@ the matrix profile builds, and every way to put light on it.
 
 ---
 
-[← Pulses and Bindings](04-pulses-and-bindings.md) | [Book](index.md)
+[Book](index.md) | [The Matrix Profile →](06-the-matrix-profile.md)

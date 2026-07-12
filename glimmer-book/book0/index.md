@@ -34,17 +34,17 @@ Drafting is in progress; chapter links appear here as each one lands.
 4. [State](03-state.md)
 5. [Pulses and Bindings](04-pulses-and-bindings.md)
 6. [Compute, Effect, Render](05-compute-effect-render.md)
-7. The Matrix Profile
-8. Time
-9. Motion Curves
-10. Shapes, Sound and Displays on the Board
-11. Arrays and Layout Types
-12. Dependency Reports and Debugging
-13. Routines, Parts and Imports
-14. Cards
-15. A Small Matrix Game
-16. Reading Tetro
-17. The TMS9918 Profile
+7. [The Matrix Profile](06-the-matrix-profile.md)
+8. [Time](07-time.md)
+9. [Motion Curves](08-motion-curves.md)
+10. [Shapes, Sound and Displays on the Board](09-shapes-sound-and-displays.md)
+11. [Arrays and Layout Types](10-arrays-and-layout-types.md)
+12. [Dependency Reports and Debugging](11-dependency-reports-and-debugging.md)
+13. [Routines, Parts and Imports](12-routines-parts-and-imports.md)
+14. [Cards](13-cards.md)
+15. [A Small Matrix Game](14-a-small-matrix-game.md)
+16. [Reading Tetro](15-reading-tetro.md)
+17. [The TMS9918 Profile](16-the-tms9918-profile.md)
 18. A VDP Game
 19. Two Displays, One Language
 
