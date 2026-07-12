@@ -130,7 +130,7 @@ means here:
   make your debugger feel like a magic trick.
 
 One more thing happened during that build, and you should know it is
-there working for you. AZM ran its register-contract
+there working for you. the assembler ran its register-contract
 checking over the whole program: every routine in the generated file
 declares which registers it uses, and the assembler proves every call
 against those declarations. The classic Z80 bug - a helper quietly

@@ -358,7 +358,7 @@ the return, so you write the work and skip the ceremony.
 A `.glim`
 file is source code, and Glimmer is its compiler - a compiler whose
 output is assembly language. From the 47 lines of `mover.glim` it
-writes one ordinary AZM assembly file of 487 lines that contains the
+writes one ordinary Z80 assembly file of 487 lines that contains the
 entire running game: the frame loop, the keypad polling, the held-key
 timing, the change tracking, and your blocks inside it. Here are three
 excerpts from that file, so you can see your own declarations looking

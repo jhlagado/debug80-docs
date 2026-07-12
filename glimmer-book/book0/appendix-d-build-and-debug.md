@@ -41,8 +41,8 @@ Two commands share that surface:
 
 | Invocation | Work performed |
 |---|---|
-| `glimmer game.glim` | Generates `game.main.asm` and register-contract checks it with AZM. Stops there. |
-| `glimmer build game.glim` | The same generation and check, then AZM assembles the file and the Debug80 map is rewritten so block bodies step in `.glim` source. |
+| `glimmer game.glim` | Generates `game.main.asm` and register-contract checks it with the assembler. Stops there. |
+| `glimmer build game.glim` | The same generation and check, then the assembler assembles the file and the Debug80 map is rewritten so block bodies step in `.glim` source. |
 
 Each prints what it wrote:
 
@@ -70,9 +70,9 @@ Wrote demo.main.d8.json (11 block segments attributed to .glim source)
 
 | Flag | Effect |
 |---|---|
-| `-o, --output <file>` | Where the generated AZM goes. The default, `<entry>.main.asm`, is the name Debug80 discovers as an entry point; pick another name only for output you will wire up yourself. |
+| `-o, --output <file>` | Where the generated assembly goes. The default, `<entry>.main.asm`, is the name Debug80 discovers as an entry point; pick another name only for output you will wire up yourself. |
 | `--org <addr>` | Assembly origin. The default `$4000` is where MON-3 expects user code; `--org $6000` moves the generated `.org` line and everything after it. |
-| `--no-check` | Generate only; the AZM register-contract check is skipped. Generation-only runs print `Wrote demo.main.asm` without the check note. |
+| `--no-check` | Generate only; the register-contract check is skipped. Generation-only runs print `Wrote demo.main.asm` without the check note. |
 | `--deps` | Print the dependency report and exit. Nothing is written. |
 | `-V, --version` | The package version: `0.5.3`. |
 | `-h, --help` | The usage text above. |
@@ -103,10 +103,10 @@ A `build` of `demo.glim` leaves four files beside the source:
 
 | File | Holds |
 |---|---|
-| `demo.main.asm` | The generated AZM program: your block bodies wrapped in the runtime - loop, dispatch, change flags, profile library - as one readable file. The other three files are derived from this one. |
+| `demo.main.asm` | The generated assembly program: your block bodies wrapped in the runtime - loop, dispatch, change flags, profile library - as one readable file. The other three files are derived from this one. |
 | `demo.main.hex` | The assembled bytes as Intel HEX records, the transfer format for loading onto hardware. |
 | `demo.main.bin` | The same bytes as a raw binary image, starting at the origin. |
-| `demo.main.d8.json` | The Debug80 map: address segments attributed to source files, the symbol table (`DotX`, `Glim_MoveRight`, every label with its address), and a generator record naming the AZM version and inputs. |
+| `demo.main.d8.json` | The Debug80 map: address segments attributed to source files, the symbol table (`DotX`, `Glim_MoveRight`, every label with its address), and a generator record naming the assembler version and inputs. |
 
 The map's file list names both sources: `demo.main.asm` for the
 generated glue and `demo.glim` for the block bodies. The eleven

@@ -61,7 +61,7 @@ You met both composition tools in chapter 12; here they are side by
 side, each doing a real job. The `part` file is more Glimmer source
 sharing the program's namespace: its cards and blocks compile as if
 they were written right here, and diagnostics still point at the right
-file when something goes wrong. The `import` file is AZM: its `@`
+file when something goes wrong. The `import` file is plain Z80 assembly: its `@`
 labels become program-wide names the blocks can call, and everything
 else in it stays private to the module. Hold that difference in mind
 as we walk, because the whole architecture of this game turns on it.
@@ -322,7 +322,7 @@ routine answers it for all three:
 Inside is a four-row loop: shift each piece row right by the candidate
 X, check the floor, and `and` the shifted mask against the occupancy
 plane. Irreducible game logic, wanted by three rules at three
-different moments, with a register contract AZM checks at every call
+different moments, with a register contract the assembler checks at every call
 site. The reactive side decides *when*; the engine computes *what*.
 
 Nowhere does that division show more sharply than in the board render,
@@ -578,7 +578,7 @@ What to carry out of the workshop:
 
 - Tetro splits a real game three ways: declarations in
   `tetro.glim`, cards and blocks in a `part` file, and a board
-  engine in an imported AZM module. Read them in that order.
+  engine in an imported assembly module. Read them in that order.
 - The rotational `shape` form declares `rot0`..`rot3` bitmap
   groups, with `rotN = rotM` aliases and cycling for pieces with
   fewer distinct rotations; declaration order assigns `ShapeId_`

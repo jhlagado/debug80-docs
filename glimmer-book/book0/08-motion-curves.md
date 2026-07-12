@@ -418,7 +418,7 @@ What this chapter puts in your hands:
   `ease_in_out`, `sine`, `overshoot`, `anticipation`; `steps` runs 2
   to 256; `from` and `to` default to 0 and `steps - 1`.
 - A curve is a resource: no cell, no change flag, no frame work. The
-  name compiles to a page-aligned AZM table `Curve_<Name>`, emitted as
+  name compiles to a page-aligned table `Curve_<Name>`, emitted as
   `.align 256` and `.db` rows you can read the motion from.
 - The ramp is the clock, the curve is the path: a compute block joins
   them with one table read per step. Matching `steps` counts line the

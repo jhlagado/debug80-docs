@@ -14,7 +14,7 @@ to a generated program: the scan-shaped loop, the framebuffer, the
 colour and key equates, the library routines with their register
 contracts, and the sound, HUD, and LCD services. Every listing and
 value here is copied from a program built with `glimmer build`; the
-register interfaces are the `.routine` lines AZM checks at strict
+register interfaces are the `.routine` lines the assembler checks at strict
 strength.
 
 ## The loop
@@ -130,7 +130,7 @@ plain shape; `Snd_<Name>` wrappers appear per sound cue.
 | `MxMask` | `in A out A clobbers B,carry,zero,sign,parity,halfCarry` |
 | `ShapeDraw` | `in B,C,HL clobbers A,BC,DE,HL,carry,zero,sign,parity,halfCarry` |
 | `SndStart` | `in A,C clobbers A,carry,zero,sign,parity,halfCarry` |
-| `Snd_<Name>` | bare `.routine`; AZM infers the contract from the body |
+| `Snd_<Name>` | bare `.routine`; contract inferred from the body |
 | `HudWriteU16` | `in HL out BC,HL clobbers A,DE,carry,zero,sign,parity,halfCarry` |
 | `HudBlankDig` | `clobbers A,B,HL,carry,zero,sign,parity,halfCarry` |
 

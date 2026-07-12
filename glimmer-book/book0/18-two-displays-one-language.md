@@ -268,7 +268,7 @@ know. `counter`, `dot`, `slide`, and `trail` are single-idea
 warm-ups you could write yourself this afternoon. `snake.glim` is
 the 8x8 under a different pressure than Skyfall's: a growing body in
 a 64-byte ring buffer, with its body-scan and draw loops in an
-imported AZM engine. You read `tetro.glim` in chapter 15 and
+imported assembly engine. You read `tetro.glim` in chapter 15 and
 `sprite-chase.glim` in 17, and both reward a second visit now as
 *yours to change* - a new piece, a smarter fleeing target. Bending a
 working game teaches what building one began.

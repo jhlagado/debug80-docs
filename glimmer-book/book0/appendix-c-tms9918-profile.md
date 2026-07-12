@@ -15,7 +15,7 @@ the two ports, the shadow tables render blocks write, the sprite and
 tile resources with their generated ops, and the library routines
 with their register contracts. Every listing and value here is copied
 from a program built with `glimmer build`; the register interfaces
-are the `.routine` lines AZM checks at strict strength.
+are the `.routine` lines the assembler checks at strict strength.
 
 ## The loop
 
@@ -176,7 +176,7 @@ Brick             .equ 1   ; tile index
 
 ## The ops
 
-A sprite or tile declaration also generates AZM ops; block bodies
+A sprite or tile declaration also generates assembler ops; block bodies
 invoke them as ordinary statements and they expand inline.
 
 ```asm
@@ -239,7 +239,7 @@ sprite or a tile.
   0-23) to VRAM; `GlimCommit` calls it per marked row.
 - Pattern and colour uploads beyond the declared resources are
   one-time init work: call the `Vdp*` routines from an `enter` block,
-  with the tables in an imported AZM module.
+  with the tables in an imported assembly module.
 
 The LCD slice, its `Api*ToLcd` equates, `text` string data, and the
 `lcd_row` op are board hardware shared with the matrix profile;

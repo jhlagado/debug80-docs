@@ -163,7 +163,7 @@ twice.
 
 Now the detail I most want you to appreciate. Chapter 11's contract
 checking covers this routine without you writing a line of contract.
-AZM reads the body and works out for itself what your helper touches:
+The assembler reads the body and works out for itself what your helper touches:
 B and HL come out carrying the mask and the row address, A, DE and
 the flags are clobbered, and C passes through untouched. Every `call
 CursorSpot` is then proven against that inferred contract at strict
@@ -300,10 +300,10 @@ _skip:
 ```
 
 You have been reading this dialect all book: the module is written in
-the same AZM you find in every generated file. Each callable opens
+the same assembly you find in every generated file. Each callable opens
 with a `.routine` contract line of the kind you read on `FbPlot` in
 chapter 11, with one difference that matters - in a module you
-declare the contract yourself, and AZM holds every caller to what you
+declare the contract yourself, and the assembler holds every caller to what you
 declared. The module reads the program's names directly, too: `Paint`
 and `Framebuffer` are the same labels your blocks use.
 
@@ -380,7 +380,7 @@ A `.routine` boundary, your body verbatim, and the appended `ret`
 closing the fall-through. Look at the label: plain `CursorSpot`,
 exactly as declared, because your code calls it by name, while block
 labels wear the `Glim_` prefix because only dispatchers call them.
-And the bare `.routine` line is where AZM's inference attaches - the
+And the bare `.routine` line is where the assembler's inference attaches - the
 contract it works out from this body is what every call site is
 checked against.
 
@@ -427,7 +427,7 @@ code, written by you.
 - `routine Name begin ... end` declares a callable helper: no
   triggers, no dispatch, called with plain `call Name`. The body
   falls through and Glimmer appends the `ret`; conditional early
-  returns are legal. AZM infers the register contract and proves
+  returns are legal. The assembler infers the register contract and proves
   every call site against it.
 - `part "file.glim"` joins another file's declarations to the same
   program and namespace: cells declared in one file are written and
@@ -435,7 +435,7 @@ code, written by you.
   `platform` and `display`; paths resolve relative to it.
 - Diagnostics and breakpoints name the file they belong to, so a
   typo in a part is reported - and stepped - in that part.
-- `import "module.asm"` brings hand-written AZM into the program.
+- `import "module.asm"` brings hand-written assembly into the program.
   `@` labels are the public API, callable from any block without the
   `@`; plain labels stay private to the module; each callable
   carries its own `.routine` contract line.

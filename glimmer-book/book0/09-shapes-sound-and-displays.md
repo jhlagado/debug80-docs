@@ -339,7 +339,7 @@ replaces it with its body, arguments substituted in. So `lcd_row`
 reads like an instruction and costs what its body costs, with no call
 and no routine behind it. Glimmer emits the `lcd_row` op whenever a
 program declares text; your blocks invoke it. In chapter 12 you will
-define ops of your own in hand-written AZM modules, and they will
+define ops of your own in hand-written assembly modules, and they will
 feel familiar because you used this one first. Here it packages the
 two MON-3 calls that position the LCD cursor and stream a string,
 taking the message label and a row constant: `LcdRow1` through
@@ -454,7 +454,7 @@ Four instruments, one pattern:
 - The seven-segment HUD shows a value with `HudWriteU16` (HL = value,
   five decimal digits) and clears with `HudBlankDig`.
 - A `text` is a zero-terminated LCD string; `lcd_row Msg, LcdRowN`
-  writes it to a row. An AZM op is an assembler-owned macro: Glimmer
+  writes it to a row. An op is an assembler-owned macro: Glimmer
   emits the definition, you invoke it like an instruction, and the
   assembler expands it inline.
 - A state cell that starts `changed` and appears in no `updates` is a

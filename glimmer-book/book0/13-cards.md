@@ -161,7 +161,7 @@ clears at frame end like any pulse. The block's position in the file
 is its entire mode test. You wrote no guard, and none is missing.
 
 The three `card` lines also hand you two names you can use in code.
-`Card` is an AZM enum - `Card.Splash`, `Card.Playing`,
+`Card` is an assembler enum - `Card.Splash`, `Card.Playing`,
 `Card.GameOver` - and `CurrentCard` is a built-in byte cell, a fact
 like any other, legal in `on` and `updates`. It starts at the first
 declared card, which is how Splash becomes the start card, and it
@@ -373,7 +373,7 @@ one-shot chapter 7 promised - and only then does a key press travel.
 on a runtime test. `goto` is unconditional once its block runs, so a
 conditional transition writes `CurrentCard` itself: declare
 `updates CurrentCard`, and store a `Card` value on the branch that
-leaves. The enum members are ordinary AZM constants, so
+leaves. The enum members are ordinary assembler constants, so
 `ld a,Card.Splash` is plain Z80 with a generated name in it.
 
 Before you move on, look closely at what `Restart` does when the gate

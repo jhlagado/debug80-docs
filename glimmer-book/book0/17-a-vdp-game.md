@@ -529,7 +529,7 @@ Glim_PlaceFly:
 ```
 
 The line stands in the generated file exactly as you wrote it, and
-that is not an omission - `sprite_at` is an AZM op, so the assembler
+that is not an omission - `sprite_at` is an op, so the assembler
 substitutes its body at each call site. This one line assembles as
 the six instructions from chapter 16's op definition with this site's
 arguments folded in: `FlyX` and `FlyY` read into D and E, `Fly`

@@ -17,7 +17,7 @@ enforces.
 Rules that apply everywhere:
 
 - Every statement starts with a keyword; `;` starts a comment, in
-  `.glim` and AZM alike.
+  `.glim` and assembly alike.
 - Three symbols, one meaning each: `:` reads "is a", `=` reads
   "starting at", `->` reads "fires".
 - All declared names share one namespace and must be unique. The
@@ -120,7 +120,7 @@ type Pair = Point[2]
 
 - Field types: `byte`, `word`, `addr`, a raw byte count, or another
   layout, including arrays of layouts; recursion is a parse error.
-- The block form compiles to an AZM `.type` record, the alias form to
+- The block form compiles to an assembler `.type` record, the alias form to
   `.typealias`; `sizeof`, `offset`, and layout casts work on the name
   inside block bodies.
 
@@ -211,7 +211,7 @@ Constraints shared by every block kind:
   because entry is its trigger.
 - `on` names must be flag-carrying cells, `updates` names writable
   runtime cells; an array or typed cell is one flag.
-- Bodies are verbatim AZM and fall through: the generated wrapper
+- Bodies are verbatim assembly and fall through: the generated wrapper
   appends the flag bookkeeping and the `ret`. `end` terminates a body
   when it is the only word on the line.
 - `_name` labels are local to the block; a plain label is a file-level
@@ -321,7 +321,7 @@ end
 - No triggers, no dispatch: blocks call it with an ordinary
   `call ClampX`.
 - Emitted as a `.routine` boundary followed by `ClampX:`, with its
-  register contract inferred by AZM.
+  register contract inferred by the assembler.
 - The body falls through and the generator appends the final `ret`;
   conditional early returns are fine.
 
@@ -515,7 +515,7 @@ import-decl     ::= "import" string
 import "double.asm"
 ```
 
-with the module's exported routine written in ordinary AZM:
+with the module's exported routine written in ordinary assembly:
 
 ```asm
 .routine in HL out HL clobbers carry,zero,sign,parity,halfCarry

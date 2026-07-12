@@ -29,7 +29,9 @@ first need it:
 - **Glimmer** is the language and its compiler. A `.glim` file holds
   your declarations and your assembly blocks; the compiler turns it
   into one readable assembly-language program.
-- **AZM** is the assembler. Glimmer's output is ordinary AZM source,
+- **AZM** is the assembler, and the name of the assembly dialect it reads;
+  after this page the book mostly says plain assembly, because that is
+  what it is. Glimmer's output is ordinary Z80 assembly source,
   and AZM assembles it into the bytes the machine runs - checking
   register use across every routine as it goes. The [AZM
   books](../../azm-book/) hold the assembler's own story.

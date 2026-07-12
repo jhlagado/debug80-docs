@@ -272,8 +272,8 @@ Glim_DrawCanvas:
 
 The `.routine` line is the boundary. It applies to the label below it
 and opens a region that the next `.routine` closes, and it hands that
-region to AZM as one unit: `Glim_PaintPixel` is a callable routine,
-and because the directive carries no clauses, AZM infers the
+region to the assembler as one unit: `Glim_PaintPixel` is a callable routine,
+and because the directive carries no clauses, the assembler infers the
 routine's register behaviour - what it reads on entry, what it may
 destroy - from the body itself. Your code sits inside verbatim; the
 wrapper closes the region with the compiled `updates` line and the
@@ -290,7 +290,7 @@ enforcement:
         .contracts strict
 ```
 
-Under `strict`, AZM proves every `call` in the file against the
+Under `strict`, the assembler proves every `call` in the file against the
 contract of the routine it calls - the inferred contracts of your
 blocks and the declared contracts of the library alike. `FbPlot`'s
 declaration sits in the profile library:
@@ -306,7 +306,7 @@ Read the contract line the way you read a block header. `in A,B,C`:
 the routine consumes those three on entry - colour, x, y. `clobbers
 A,B,DE,HL` and the flags: any of those may hold anything on return.
 A register absent from a declared contract counts as preserved, and
-AZM checks the routine's body against that promise too. C's absence from the clobbers list is
+The assembler checks the routine's body against that promise too. C's absence from the clobbers list is
 a verified guarantee that y survives the call - proven on every
 build, and about to matter.
 
@@ -338,7 +338,7 @@ canvas.glim:116:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, bu
 
 An error this time, and the build stops: the generated assembly is on
 disk for reading, and nothing downstream of it - no hex, no binary,
-no debug map. AZM followed the code past the first call, found `inc
+no debug map. The assembler followed the code past the first call, found `inc
 b` consuming B's pre-call value, checked B against `FbPlot`'s
 clobbers list, and refused. On the board, this bug is a second pixel
 landing wherever `FbPlot` happened to leave B, and an evening of
@@ -418,7 +418,7 @@ Here is the toolbox, packed for the road ahead:
   line stays your declaration of intent for every write in a block.
 - Each block wrapper stands behind a bare `.routine` boundary, its
   register contract inferred from the body. `.contracts strict` has
-  AZM prove every call against its callee's contract, and a register
+  the assembler prove every call against its callee's contract, and a register
   trampled across a call stops the build.
 - Library contract lines read like block headers: `in` is what the
   routine consumes, `clobbers` is what it may destroy, and a register

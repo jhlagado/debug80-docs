@@ -382,11 +382,11 @@ Point .type
 .endtype
 ```
 
-`type Point` compiled to an AZM `.type` record, field names and byte
+`type Point` compiled to an assembler `.type` record, field names and byte
 widths carried straight through, and the generated comment names the
-division of labour: Glimmer names the layout, AZM owns the type
+division of labour: Glimmer names the layout, the assembler owns the type
 system. `sizeof` and `offset` work inside your blocks because they
-are AZM expressions, evaluated over this record when the generated
+are assembler expressions, evaluated over this record when the generated
 file assembles. The alias form compiles to the matching
 directive - from the Board example's generated file:
 
@@ -441,8 +441,8 @@ The two new declarations, gathered in one place:
   carries one change flag, exactly like an array.
 - `sizeof(Name)` and `offset(Type, field)` are assemble-time
   constants, usable in any block body; nested fields chain offsets by
-  addition. The declarations compile to AZM `.type` and `.typealias`
-  records, and AZM owns the type system.
+  addition. The declarations compile to assembler `.type` and `.typealias`
+  records, and the assembler owns the type system.
 - In the generated file, typed and array state appear as `.ds Point,
   0` and `.ds 8, 0`: a label and a zero-filled reservation, each
   behind one `CHG_` bit.

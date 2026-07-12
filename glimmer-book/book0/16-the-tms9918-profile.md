@@ -296,7 +296,7 @@ NamePut:
 - `SpriteInit` - A = slot, D = pattern number, E = colour. Gives a
   slot its look; the generated startup calls it once per sprite.
 
-For the two common calls, Glimmer generates a pair of AZM ops, so a
+For the two common calls, Glimmer generates a pair of assembler ops, so a
 block body reads as a sentence:
 
 ```asm
