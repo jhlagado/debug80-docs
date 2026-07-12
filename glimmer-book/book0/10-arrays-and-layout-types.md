@@ -9,33 +9,47 @@ nav_order: 10
 
 # Chapter 10 - Arrays and Layout Types
 
-A dot is one cell. Nine chapters of dots, comets, and bouncing shapes
-have run on facts that fit in a byte or a word: a position, a count, a
-colour, a bar length. A board is many related bytes: the picture in a
-painting program, the wall of settled pieces in a falling-block game,
-the body of a snake. The bytes persist together, change together, and
-redraw together - one fact that happens to be sixty-four pixels wide.
+Every game you have written so far has kept its whole world in a
+handful of named bytes. Nine chapters of dots, comets, and bouncing
+shapes, and each one ran on facts that fit in a byte or a word: a
+position, a count, a colour, a bar length. Today the world itself
+becomes data. Think about what games are actually made of - the
+picture in a painting program, the wall of settled pieces in a
+falling-block game, the body of a snake. Each of those is many
+related bytes that persist together, change together, and redraw
+together: one fact that happens to be sixty-four pixels wide.
 
-Declaring sixty-four separate cells would collide with the model
-before it collided with your patience. Chapter 3 set the limit of 32
-flag-carrying cells, and a board of one-byte facts would overflow the
-change banks before the program drew a pixel. The deeper mismatch is
-meaning: stamp one pixel and *the picture* changed. A render that
-draws the picture wants one name to watch and one flag to test.
+Back in chapter 3 you made the first great design decision a game
+asks of its author: choosing which facts it remembers. This chapter
+hands you the second: choosing the *shape* those facts take in
+memory. Before I give you the new declarations, I want you to see why
+the old ones cannot stretch this far. You could try declaring
+sixty-four separate cells, and the model would push back before your
+patience did: chapter 3 set the limit of 32 flag-carrying cells, so a
+board of one-byte facts would overflow the change banks before the
+program drew a pixel. But the deeper mismatch is one of meaning. When
+you stamp one pixel, *the picture* changed. A render that draws the
+picture wants one name to watch and one flag to test.
 
-This chapter adds the two declarations that model group facts. Array
-state reserves a run of bytes under one name and one flag. Layout
-types name an arrangement of fields, so that bytes which belong
-together - an x and a y, a piece's origin and colour - travel under
-one declaration. The chapter program needs both.
+So this chapter adds the two declarations that model group facts.
+Array state reserves a run of bytes under one name and one flag.
+Layout types name an arrangement of fields, so that bytes which
+belong together - an x and a y, a piece's origin and colour - travel
+under one declaration. I chose this chapter's program because it
+needs both.
 
 ## Canvas
 
 Canvas is a painting program. Keys 2, 4, 6, and 8 steer a white
-cursor around the matrix; GO stamps a green pixel where the cursor
-stands; the stamped pixels stay put while the cursor moves on. The
-picture lives in an eight-byte array, and the cursor lives in a
-two-field layout called `Point`.
+cursor around the 8x8 RGB LED matrix; GO stamps a green pixel where
+the cursor stands; the stamped pixels stay put while the cursor moves
+on. Pause on that last clause before you read a line of code, because
+it is a first for this book: every program you have built until now
+forgot you the moment you let go of the keys. Canvas keeps what you
+give it. The picture is state, so it outlives your touch, and there
+is a quiet pleasure in steering the cursor away and finding your work
+still there. The picture lives in an eight-byte array, and the cursor
+lives in a two-field layout called `Point`.
 
 ```text
 program Canvas
@@ -153,8 +167,8 @@ _row:
 end
 ```
 
-Build it, run it under Debug80, and draw something. The rest of the
-chapter takes the two new declarations one at a time.
+Build it, run it under Debug80, and draw something. Then come back,
+and we will take the two new declarations one at a time.
 
 ## One fact, eight bytes
 
@@ -163,26 +177,34 @@ state Picture : byte[8] changed
 ```
 
 `byte[N]` reserves N bytes of state under one name, with N anywhere
-from 1 to 256. An array starts zero-filled and takes no initializer:
-the declaration reads *Picture is eight bytes, already changed*, and
-the eight bytes begin as a blank picture.
+from 1 to 256. An array starts zero-filled and takes no initializer,
+so the declaration reads the way chapter 1 taught you to read them:
+*Picture is eight bytes, already changed*. The eight bytes begin as a
+blank picture.
 
-One change flag covers the whole run. `updates Picture` raises that
-flag whichever byte a block wrote; `on Picture` fires when any byte
-did. The array name is legal exactly where a byte cell's name is
-legal - in `on` lines, in `updates` lines - and it spends one bit of
-`Changed0`, leaving the banks as roomy as before.
+One change flag covers the whole run, and I want to defend that
+choice out loud, because it looks like a compromise and it is a
+design decision. Ask yourself what changed when you stamped that
+pixel. Not byte three of some array - the picture. A board changes
+*as a thing*, and the render that watches it asks one question: do I
+need to redraw? Per-cell flags would spend your whole flag budget on
+bookkeeping the game never wanted - sixty-four bits of "which byte
+moved" answering a question no block asks. So `updates Picture`
+raises the one flag whichever byte a block wrote, and `on Picture`
+fires when any byte did. The array name is legal exactly where a byte
+cell's name is legal - in `on` lines, in `updates` lines - and it
+spends one bit of `Changed0`, leaving the banks as roomy as before.
 
 Eight bytes hold sixty-four pixels because each byte is a **row
-mask**: one matrix row, one bit per column, bit 7 the leftmost. You
-met this convention in chapter 6, along with the library helper that
-serves it: `MxMask` takes a column number in A and returns the
-column's mask in A, clobbering B on the way.
+mask**: one row of the 8x8 matrix, one bit per column, bit 7 the
+leftmost. You met this convention in chapter 6, along with the
+library helper that serves it: `MxMask` takes a column number in A
+and returns the column's mask in A, clobbering B on the way.
 
 ## Painting a pixel
 
 Stamping a pixel means finding one byte in the array and setting one
-bit in it. `PaintPixel` does both:
+bit in it. Here is `PaintPixel` again, doing both:
 
 ```text
 effect PaintPixel
@@ -203,12 +225,14 @@ begin
 end
 ```
 
-The addressing is the Z80 you already know: `Picture` is a label,
-the row number goes in DE, `add hl,de` lands HL on the row's byte,
-and OR folds the new pixel into whatever the row already held.
-Glimmer supplies the label, the storage behind it, and the flag that
-`updates Picture` raises; the arithmetic between them is yours,
-instruction by instruction.
+I want you to notice whose code this is. The addressing is the Z80
+you already know: `Picture` is a label, the row number goes in DE,
+`add hl,de` lands HL on the row's byte, and OR folds the new pixel
+into whatever the row already held. Glimmer supplies the label, the
+storage behind it, and the flag that `updates Picture` raises; the
+arithmetic between them is yours, instruction by instruction. An
+array gives you a name and a flag, and it never takes the indexing
+away from you.
 
 Delivery follows chapter 5's rule with nothing new to learn. GO fires
 `Paint`, the logic phase runs `PaintPixel`, and `Picture`'s change is
@@ -241,15 +265,16 @@ aux byte - so the loop drops each of Picture's row masks into the
 green plane and steps DE by four to reach the next row. Because
 `Picture` and the framebuffer share the row-mask convention, the
 whole painting transfers in one eight-pass loop. The cursor goes on
-top afterwards, white, through `FbPlot`. When the cursor sits on a
-painted pixel it shows white; steer away, and the next redraw
-restores the green underneath, because the picture is state and every
-redraw starts from it.
+top afterwards, white, through `FbPlot`. Steer the cursor onto a
+painted pixel and it shows white; steer away, and the next redraw
+restores the green underneath. No line of code remembers to repaint
+that pixel: the picture is state, and every redraw starts from it.
 
 ## Two bytes that travel together
 
-The cursor is one fact with two parts. Glimmer models it with a
-layout type and a typed state cell:
+The cursor is one fact with two parts: an x and a y that move
+together, change together, and mean nothing apart. Glimmer models it
+with a layout type and a typed state cell:
 
 ```text
 type Point
@@ -261,10 +286,11 @@ state Cursor : Point changed
 ```
 
 A `type` declaration names an arrangement of bytes: `Point` is two
-byte fields, `x` at the start and `y` after it. The declaration
-reserves no storage by itself. Storage arrives with the state line,
-which reads *Cursor is a Point, already changed* and reserves two
-zero-filled bytes in that shape.
+byte fields, `x` at the start and `y` after it. Read the two lines
+carefully and you will see the division of work between them. The
+type reserves no storage by itself; it is a name for a shape. Storage
+arrives with the state line, which reads *Cursor is a Point, already
+changed* and reserves two zero-filled bytes in that shape.
 
 Typed state follows the array rules: zero-filled, no initializer, one
 change flag for the whole cell. Zero-filled has a visible consequence
@@ -284,10 +310,16 @@ shape:
 `offset(Point, y)` is a constant computed at assemble time - 1, since
 `y` sits one byte into the layout - so the whole operand folds to a
 fixed address and the instruction is the plain absolute load you have
-written since chapter 1. `Cursor + 1` reaches the same byte today;
-`offset(Point, y)` keeps reaching it after the layout grows a field,
-because the assembler recomputes the constant from the record on
-every build.
+written since chapter 1. Now, you could write `Cursor + 1` and reach
+the same byte today, and I understand the temptation, because I
+counted offsets into records by hand for years. I also carry the scar
+every assembly programmer carries from that habit: the field added at
+the top of a structure that silently shifted every hand-counted
+offset below it, and an evening lost to a bug that pointed nowhere
+near its cause. `offset(Point, y)` is that same arithmetic done by
+the assembler instead of on paper, recomputed from the record on
+every build. Grow the layout next month, and every offset in the
+program moves with it.
 
 ## What a layout can hold
 
@@ -310,7 +342,8 @@ number reserves that many raw bytes, so `frames : 4` is a four-byte
 scratch run with one name. And a field can be another type: `pos :
 Point` nests the whole two-byte layout inside this one.
 
-Two functions read a layout's measurements inside any block body.
+Two functions read a layout's measurements inside any block body, and
+between them they retire the last of the paper arithmetic.
 `sizeof(Name)` is the layout's full size - `sizeof(Point)` is 2,
 `sizeof(Sprite)` is 11 - which is what you multiply by to step
 through a table of records. `offset(Type, field)` is a field's
@@ -338,8 +371,10 @@ state like any other: zero-filled, one flag.
 
 ## The declarations, compiled
 
-Open `canvas.main.asm` and the two new declarations tell their whole
-story in two short sections. First the layout:
+You know my habit by now: when the language hands us something new,
+we go and see what it cost. Open `canvas.main.asm` and the two new
+declarations tell their whole story in two short sections. First the
+layout:
 
 ```asm
 ; --- layout types ---
@@ -372,11 +407,11 @@ Picture:          .ds 8, 0   ; byte array
 ```
 
 `.ds Point, 0` reserves `sizeof(Point)` bytes of zeroes; `.ds 8, 0`
-reserves the array. Beside the byte-and-word `.db` lines you have
-read since chapter 1, these are the same storage idea at a larger
-size: a label, a reservation, zero-filled.
+reserves the array. Set these beside the byte-and-word `.db` lines
+you have read since chapter 1 and you are looking at the same storage
+idea at a larger size: a label, a reservation, zero-filled.
 
-The change tracking confirms what the declarations promised. Two
+And the change tracking confirms what the declarations promised. Two
 cells, two bits:
 
 ```asm
@@ -394,12 +429,16 @@ in its corner.
 
 ## Summary
 
+Here is what the two new declarations gave you, gathered in one
+place:
+
 - `state Name : byte[N]` declares array state, N from 1 to 256:
   zero-filled, no initializer, one change flag for the whole run, and
   the name legal in `on` and `updates`. Indexing inside blocks is
   ordinary Z80: base label plus index.
-- A row mask packs one matrix row into a byte, bit 7 leftmost.
-  `MxMask` converts x in A to the column's mask in A, clobbering B.
+- A row mask packs one row of the 8x8 matrix into a byte, bit 7
+  leftmost. `MxMask` converts x in A to the column's mask in A,
+  clobbering B.
 - `type Name ... end` declares a layout. Fields are `byte`, `word`,
   `addr`, a raw byte count, or another type. `type Name = Expr`
   aliases an existing shape.
@@ -413,9 +452,11 @@ in its corner.
   0` and `.ds 8, 0`: a label and a zero-filled reservation, each
   behind one `CHG_` bit.
 
-Canvas is now the largest program in the book, and the next chapter
-points the toolchain at it: the dependency report, the warnings, and
-a debugging practice for reactive programs.
+Canvas is now the largest program in the book, which makes it the
+right patient for what comes next: we point the toolchain at it and
+learn to read the dependency report, heed the warnings, and debug a
+reactive program methodically: [Dependency Reports and
+Debugging](11-dependency-reports-and-debugging.md).
 
 ---
 
