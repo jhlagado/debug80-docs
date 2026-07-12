@@ -51,9 +51,9 @@ matrix: drawing, timers, motion curves, shapes, sound, and structured
 data. Chapters 12 through 14 give programs their grown-up shape:
 helper routines, multiple files, and cards - the screens and modes of
 a real game. The rest of the book spends everything you have learned
-on complete games, first on the matrix, then on the TMS9918 video
-display processor, and closes by comparing how those two very
-different displays shape the games written for them.
+on complete games, first on the 8x8 Matrix display, then on the
+TMS9918 video display processor, and closes by comparing how those two
+very different displays shape the games written for them.
 
 The book teaches Glimmer 0.5.3. Every complete program in it was built
 with `glimmer build` and runs.
