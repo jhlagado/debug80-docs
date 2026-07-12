@@ -4,6 +4,7 @@ title: "TEC-1G"
 nav_order: 8
 has_children: true
 has_toc: true
+nav_exclude: true
 ---
 
 # TEC-1G
