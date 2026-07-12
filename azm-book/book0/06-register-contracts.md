@@ -238,6 +238,28 @@ Given a routine body, AZM infers:
 
 The inference follows the routine's control-flow graph. It handles push/pop pairs, branch paths, cross-routine tail calls and nonreturning cycles. ROM services and separately assembled code need explicit `.asmi` or profile contracts.
 
+When a `.routine` directive declares contract clauses, AZM also checks that declaration against the routine body. A register omitted from the contract is treated as preserved for callers. If the body may write that register, AZM reports `declaration_contract_mismatch`:
+
+```asm
+.routine out A
+Worker:
+        ld      a,1
+        ld      b,2          ; B was not declared as out or clobbered
+        ret
+```
+
+Fix the contract or the body:
+
+```asm
+.routine out A clobbers B
+Worker:
+        ld      a,1
+        ld      b,2
+        ret
+```
+
+Bare `.routine` has no explicit assertions. AZM infers the body summary and can update the directive when you run `--contracts`.
+
 ## Caller-side conflict checking
 
 At each `call` site, AZM intersects:
@@ -495,6 +517,27 @@ azm --reg-profile mon3 program.asm
 
 The `mon3` profile provides built-in register contract summaries for MON3 RST service calls on TEC-1 and MON3-based projects.
 
+`.asmi` files can also describe `RST` services selected through register C:
+
+```text
+service rst $10 C $53 MON_BANK_CALL
+in C
+clobbers B,C,D,E,H,L
+end
+```
+
+For a project-owned service range, use `>=`:
+
+```text
+service rst $10 C >= $60 TECMATE_EXPANSION_SERVICE
+in C
+out A,carry
+clobbers B,C,D,E,H,L,zero,sign,parity,halfCarry
+end
+```
+
+The exact-service form applies when AZM can prove the selector value in `C`. The range form applies when the proven selector is at or above the configured lower bound.
+
 ---
 
 ## A practical workflow
@@ -514,11 +557,26 @@ If strict mode makes a piece of assembly uncomfortable, look first at the routin
 
 ## Text reports
 
-AZM can also write a text report with `--reg-report`, producing `program.regcontracts.txt`. This is mainly for debugging, CI evidence or large audit sessions. It is not required for normal development and should not be checked into source control.
+AZM can also write a report with `--reg-report`, producing `program.regcontracts.txt` by default. This is mainly for debugging, CI evidence or large audit sessions. It is not required for normal development and should not be checked into source control.
 
 ```sh
 azm --rc audit --reg-report program.asm
 ```
+
+Use JSON when a tool or CI job needs structured findings:
+
+```sh
+azm --rc audit --reg-report --reg-report-format json program.asm
+```
+
+JSON reports can become baselines. A ratchet build compares the current findings with a previous JSON report and fails if new or changed findings appear:
+
+```sh
+azm --rc audit --reg-report --reg-report-format json program.asm
+azm --rc audit --reg-baseline baseline.regcontracts.json --reg-ratchet program.asm
+```
+
+Use this for evidence and regression control, not as the ordinary edit-loop interface.
 
 ---
 

@@ -142,7 +142,7 @@ azm --type bin --nohex --nod8m --output out.bin program.asm
 
 ### Register contract artifacts
 
-Register contracts are normally read through compiler diagnostics from `--rc warn`, `--rc error` and `--rc strict`. Two optional artifacts require at minimum `--rc audit`:
+Register contracts are normally read through compiler diagnostics from `--rc warn`, `--rc error` and `--rc strict`. Optional artifacts require at minimum `--rc audit`:
 
 **`.regcontracts.txt` (register contract report):**
 
@@ -150,7 +150,19 @@ Register contracts are normally read through compiler diagnostics from `--rc war
 azm --rc audit --reg-report program.asm
 ```
 
-Writes `program.regcontracts.txt`, listing declared routines with inferred inputs, outputs and clobbers. Use it for debugging, CI evidence or an audit session.
+Writes `program.regcontracts.txt`, listing declared routines with inferred inputs, outputs, clobbers and findings. Use it for debugging, CI evidence or an audit session. Add `--reg-report-format json` when a tool needs structured findings:
+
+```sh
+azm --rc audit --reg-report --reg-report-format json program.asm
+```
+
+JSON reports can be used as baselines:
+
+```sh
+azm --rc audit --reg-baseline baseline.regcontracts.json --reg-ratchet program.asm
+```
+
+Ratchet mode fails when current register-contract findings are new or changed relative to the baseline.
 
 **`.asmi` (inferred register contract interface):**
 

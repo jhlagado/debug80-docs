@@ -243,7 +243,7 @@ Every fact, who raises it, what it triggers, and each dependent's
 phase: the program's whole design, computed from the `on`, `updates`,
 and `bind` lines. When a program misbehaves, this report and the
 question *which fact failed to change?* find most bugs before the
-debugger opens. Chapter 12 builds a debugging practice on it.
+debugger opens. Chapter 11 builds a debugging practice on it.
 
 ## Summary
 

@@ -52,6 +52,9 @@ Produces three output files next to the source: `source.bin`, `source.hex`, `sou
 | `--contracts` | — | Insert or update inferred `.routine` directives |
 | `--fix` | — | Apply conservative register contract source repairs |
 | `--reg-report` | — | Write `source.regcontracts.txt` with inferred routine contracts |
+| `--reg-report-format` | `text` or `json` | Select register contract report format; default is `text` |
+| `--reg-baseline` | `file` | Compare against a JSON register contract report baseline |
+| `--reg-ratchet` | — | Fail when register contract findings are new or changed relative to the baseline |
 | `--reg-interface` | — | Write `source.asmi` with inferred `extern` contract records |
 | `--reg-profile` | `mon3` | Load a built-in register contract summary profile for known ROM environments |
 | `--accept-out` | `NAME:REG` | Promote an inferred clobber of `REG` in routine `NAME` to an intentional output |

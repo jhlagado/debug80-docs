@@ -276,7 +276,7 @@ Use `.include` for constants, hardware port definitions, shared layout declarati
 
 ### `.import`
 
-AZM 0.3.2 supports `.import` with explicit exports:
+AZM 0.3.2 and later supports `.import` with explicit exports:
 
 ```asm
 .import "math.asm"
@@ -367,7 +367,7 @@ Recursive include/import chains are rejected with a source diagnostic.
 
 ### Import limits
 
-`.import` remains deliberately small in AZM 0.3.2:
+`.import` remains deliberately small:
 
 - `.import "file.asm"` is the only supported import syntax
 - There is no `as Name` namespace syntax
