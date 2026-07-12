@@ -19,7 +19,7 @@ you have done with your own hands, and everything else in this book
 becomes a matter of doing it again with more ambition.
 
 The program I have chosen for the occasion is called *Beacon*: one
-pixel in the middle of the matrix, and every press of the GO key steps
+pixel in the middle of the 8x8 matrix, and every press of the GO key steps
 it to the next colour. I picked it deliberately. It is small enough to
 type in five minutes, and it still exercises the entire reactive chain
 - one fact, one moment, one rule, one picture - with you at the
@@ -95,7 +95,7 @@ what is genuinely new. `KEY_GO` names the GO key - the big one on the
 TEC-1G's pad. MON-3 gives every key a name, and bind lines use the
 names directly, so your source says GO where you mean GO. The other
 novelty is the idea at the heart of this little program: *the colour
-itself is a fact*. The matrix mixes red, green and blue per pixel, so
+itself is a fact*. The 8x8 matrix mixes red, green and blue per pixel, so
 the values 1 through 7 are its seven visible colours, and
 `NextColour`'s wrap keeps the cell inside that range. `DrawBeacon`
 never knows or cares which colour is current - it reads the fact and
@@ -151,7 +151,7 @@ Press F5.
 
 Debug80 builds the target through Glimmer, loads the MON-3 ROM and
 your program, and runs. The platform panel opens on the TEC-1G, and
-there on the matrix is a single red pixel. Pause on it for a second,
+there on the 8x8 matrix is a single red pixel. Pause on it for a second,
 because you earned it: `Colour` started at 1, which is red, and the
 word `changed` in your declaration is why it drew itself before you
 touched anything. That dot is your declaration, made light.

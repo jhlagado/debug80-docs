@@ -50,14 +50,14 @@ mixing red, green and blue. Small, yes. But I promise you that by the end of
 this book those sixty-four pixels will be running complete games, and
 you will move on from them to a proper video chip with sprites. In
 this chapter we start where every journey on new hardware should
-start: we are going to put one dot on that matrix and make it obey
+start: we are going to put one dot on the 8x8 matrix and make it obey
 you. I will show you the program in three small steps, and you will
 run all three yourself in chapter 2, once we have the tools installed.
 
 ## A dot appears
 
 Here is a complete Glimmer program - the whole file, nothing left out.
-It lights one white pixel in the middle of the matrix.
+It lights one white pixel in the middle of the 8x8 matrix.
 
 ```text
 program Mover
@@ -238,7 +238,7 @@ flowchart LR
     R -->|on| MR["MoveRight runs"]
     MR -->|updates| DX["DotX changed"]
     DX -->|on| DD["DrawDot runs"]
-    DD --> M["matrix updates"]
+    DD --> M["8x8 matrix updates"]
 ```
 
 Something changed; the code that depends on it ran; the output
@@ -338,7 +338,7 @@ end
 
 Before we look under the hood, do one thing for me. Read this file
 from the top, out loud, the way I showed you: "Mover, on the TEC-1G,
-drawing on the matrix. DotX is a byte, starting at 3, already changed.
+drawing on the 8x8 matrix. DotX is a byte, starting at 3, already changed.
 Two moments, Left and Right. Key 4 held fires Left every 8 frames; key
 6 held fires Right. On Left, MoveLeft updates DotX. On Right,
 MoveRight updates DotX. On DotX, DrawDot." You have recited the
