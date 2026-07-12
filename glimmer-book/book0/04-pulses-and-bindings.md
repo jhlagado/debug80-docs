@@ -18,8 +18,8 @@ at all. Glimmer gives moments their own declaration, the pulse, and
 back in chapter 1 I handed you one pulse and one bind line and hurried
 on, because I wanted you at the keypad. Now we can take the whole
 input story properly: every key name, both shapes a key can fire in,
-and what the generated polling does with the keypad sixty-odd times a
-second.
+and what the generated polling does with the keypad, frame after
+frame.
 
 I have been looking forward to this chapter's program. *Rover* is a
 white dot you steer around the whole 8x8 RGB LED matrix with 2, 4, 6,

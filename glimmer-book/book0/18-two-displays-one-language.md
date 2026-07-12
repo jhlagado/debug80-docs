@@ -135,10 +135,9 @@ arithmetic, and a game's hardest questions take a handful of
 instructions to answer.
 
 The board also sets the budget. Every rule and render shares the
-blank window between scans, and the scan paces the game at its
-sixty-odd frames a second - which is why Skyfall's difficulty lives
-in a timer period, counted in frames, rather than in how much work a
-frame does.
+blank window between scans, and the scan paces the game - which is
+why Skyfall's difficulty lives in a timer period, counted in frames,
+rather than in how much work a frame does.
 
 ## The scene the program describes
 

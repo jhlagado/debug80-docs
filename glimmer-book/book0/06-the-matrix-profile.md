@@ -177,9 +177,8 @@ wrapper after `Advance`'s body stages it in `Next0`, and the dot you
 see moves on the frame after the pulse. One frame behind, every step,
 whatever order the source declares - the rule holds with no
 exceptions to memorise. Do the arithmetic on a lap and you get the
-game's tempo: 28 steps at 4 frames each is 112 frames, around two
-seconds at the scan's sixty-odd frames a second. Halve the period and
-you halve the lap.
+game's tempo: 28 steps at 4 frames each is 112 frames a lap. Halve
+the period and you halve the lap.
 
 Build it, run it, and hold GO: the dot sets off along the top in red
 and changes uniform at every corner. Release anywhere and it waits,
@@ -437,7 +436,7 @@ the 8x8. Chapter 9 builds on both services.
 Step through a pass under Debug80 whenever you like: a breakpoint on
 `ScanFrame` in `compass.main.asm` catches the frame at its start. The
 display you have been drawing to since chapter 1 is this one routine,
-reading those 32 bytes, sixty-odd times a second - and now you have
+reading those 32 bytes, every frame without fail - and now you have
 read it to the last instruction.
 
 ## Summary
