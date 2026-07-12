@@ -122,9 +122,8 @@ end
 Half of this file is chapter 1's Mover with a mirror held up to it,
 and the second axis costs exactly what you would expect it to cost:
 one more state cell, two more pulses, two more rules with the clamp
-turned sideways. I want you to look at `GoHome` for a second, because
-it shows an effect at its simplest - two constant stores, no branch,
-no ceremony. Not every rule needs to be clever. And `DrawDot` now
+turned sideways. Look at `GoHome` for a second: it shows an effect at
+its simplest - two constant stores, no branch, no ceremony. Not every rule needs to be clever. And `DrawDot` now
 draws from both facts - `on DotX, DotY`, the comma you learned in
 chapter 3 - so movement on either axis redraws the dot.
 
@@ -206,12 +205,11 @@ machine*. Title screens wait on it. When you build one in chapter 13,
 
 ## What polling looks like
 
-I keep telling you nothing is hidden, and this chapter has earned its
-proof. All five of Rover's pulses come out of one generated routine,
-and inside it is the repeat clock you did not have to write - the
-timer I mentioned in chapter 1, the one you would have hand-built in
-any other system. Let us go and look at it. Here is the top of the
-routine, from `rover.main.asm`:
+All five of Rover's pulses come out of one generated routine, and
+inside it is the repeat clock you did not have to write - the timer I
+mentioned in chapter 1, the one you would have hand-built in any
+other system. Let us go and look at it. The top of the routine, from
+`rover.main.asm`:
 
 ```asm
 ; --- input polling (MON-3 _scanKeys) ---
@@ -266,7 +264,7 @@ in `Changed0`, triggering whatever declared `on` it.
 
 ## Summary
 
-Here is the input story, folded small:
+The input story, folded small:
 
 - A pulse is a moment made declarable: it fires, triggers its
   dependents for one frame, and clears at frame end.
@@ -283,13 +281,11 @@ Here is the input story, folded small:
   autorepeat from two bytes of state; pulses raised there are visible
   to every phase of that frame.
 
-Rover obeys your thumb, and you now know every way the keypad can put
-a moment into a program. Moments have other sources - chapter 7 gives
-the machine clocks that fire pulses of their own - but the keypad
-story is complete. Next I owe you the full picture of what a frame
-does once the moments are in: the three kinds of block, and the order
-a frame runs them in - [Compute, Effect,
-Render](05-compute-effect-render.md).
+Moments have other sources - chapter 7 gives the machine clocks that
+fire pulses of their own - but the keypad story is complete. Next I
+owe you the full picture of what a frame does once the moments are
+in: the three kinds of block, and the order a frame runs them in -
+[Compute, Effect, Render](05-compute-effect-render.md).
 
 ---
 

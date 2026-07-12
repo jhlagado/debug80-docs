@@ -34,7 +34,7 @@ the loop shape it forces on the frame, the 32 bytes of memory your
 renders have been writing all along, and the library routines that
 write them.
 
-The program I have chosen for the occasion is *Compass*. Hold GO and
+The program for the occasion is *Compass*. Hold GO and
 a dot runs clockwise around the rim of the 8x8, coloured by the
 quadrant it is crossing: red along the top, green down the right
 side, blue along the bottom, yellow climbing the left - north, east,
@@ -52,7 +52,7 @@ watch it carry a whole game.
 
 ## Compass
 
-Here is the whole program.
+The whole program:
 
 ```text
 program Compass
@@ -141,9 +141,9 @@ begin
 end
 ```
 
-One fact drives the whole picture, and I want you to see how much it
-carries. The rim of the 8x8 matrix is 28 pixels, and `Position`
-numbers them 0 to 27, clockwise from the top-left corner. Look at how
+One fact drives the whole picture. The rim of the 8x8 matrix is 28
+pixels, and `Position` numbers them 0 to 27, clockwise from the
+top-left corner. Look at how
 small that makes `Advance`: step forward, and past 27 wrap to 0. That
 is the entire movement rule of the game. Held GO fires `Step` every 4
 frames - the binding you learned in chapter 1, doing its arcade job -
@@ -206,7 +206,7 @@ itself. Chapter 16 puts `tms9918` on that line and gets a loop built
 around a video chip; the reactive core - state, flags, dispatch,
 rollover - stays the same.
 
-Here is what `matrix8x8` builds, from `compass.main.asm`:
+What `matrix8x8` builds, from `compass.main.asm`:
 
 ```asm
 ; --- runtime loop ---
@@ -235,8 +235,8 @@ dark, and the next scan presents their combined result, which is why
 the player only ever sees finished pictures. The game runs in the
 gaps between sweeps of the light.
 
-I want you to appreciate the fixed dwell, because it is the profile's
-answer to a problem you would otherwise meet the hard way. If the
+The fixed dwell is the profile's answer to a problem you would
+otherwise meet the hard way. If the
 time each row stayed lit depended on how much game work a frame
 happened to do, brightness would wobble with your logic - the display
 flickering because the game thought harder this frame. Instead each
@@ -292,8 +292,8 @@ A colour is a set of plane bits, and the compound colours are sums.
 That is the A register you have loaded before every `FbPlot` since
 chapter 1 - it never held a colour code, it held a recipe.
 
-`FbPlot` turns x, y, and colour into plane-byte writes. Here is its
-head, from the profile library:
+`FbPlot` turns x, y, and colour into plane-byte writes. Its head,
+from the profile library:
 
 ```asm
 ; Set one pixel. B = x (0-7), C = y (0-7), A = colour bits

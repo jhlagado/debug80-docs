@@ -14,9 +14,8 @@ book since chapter 6 has come from the 8x8 RGB LED matrix, and that
 display shows only what the CPU is actively pushing: the profile loop
 spends most of each frame driving the LED rows from the framebuffer,
 and your blocks do their work in the blank that follows. You have
-lived so comfortably inside that arrangement that I want you to look
-at it squarely for a moment, because this chapter turns it inside
-out. On the 8x8 matrix, the Z80 *is* the display. Stop feeding the
+lived comfortably inside that arrangement, and this chapter turns it
+inside out. On the 8x8 matrix, the Z80 *is* the display. Stop feeding the
 rows and the picture dies.
 
 This chapter's display paints itself. The TEC-Deck expansion card
@@ -544,8 +543,8 @@ terminator always sits right after them.
 
 ## Summary
 
-You have delegated the display. Here is the new arrangement in one
-place, ready for the game we build on it next:
+You have delegated the display. The new arrangement in one place,
+ready for the game we build on it next:
 
 - `display tms9918` selects the TEC-Deck VDP: a processor with 16 KiB
   of private VRAM, reached through the control port `$BF` and data
@@ -571,9 +570,9 @@ place, ready for the game we build on it next:
 - Sprite slots stay contiguous from 0: y = `$D1` hides a sprite and
   ends sprite processing at the first unused slot.
 
-The moth flies; the garden keeps itself. In the next chapter the
-profile carries a full game - sprite collision, scoring on the tile
-grid, and cards on the VDP: [A VDP Game](17-a-vdp-game.md).
+In the next chapter the profile carries a full game - sprite
+collision, scoring on the tile grid, and cards on the VDP:
+[A VDP Game](17-a-vdp-game.md).
 
 ---
 

@@ -20,7 +20,7 @@ cooperating, and today we spend everything: you and I are going to
 build a complete game, beginning to end, and every line of it will be
 made of things you already know.
 
-Let me tell you the game before we make it. It is called *Skyfall*.
+The game first. It is called *Skyfall*.
 Blocks fall from the top row of the 8x8 matrix in random columns, and
 you slide a three-pixel paddle along the bottom with held 4 and 6,
 trying to be underneath when they arrive. Catch a block and the score
@@ -386,8 +386,8 @@ A miss buzzes and spends a life, and the last life writes
 `Card.GameOver` into `CurrentCard` - conditional navigation, chapter
 13's rule for transitions that depend on a runtime test. Either way
 the block falls into `_next`: a fresh drop spawns at the top of a
-random column, and `_store` files the row. One timing detail is worth
-holding onto: the switch to GameOver lands at the next frame start, so
+random column, and `_store` files the row. One timing detail: the
+switch to GameOver lands at the next frame start, so
 this frame's renders still run and the final board reaches the screen.
 
 ## Pictures and numbers
@@ -443,7 +443,7 @@ load after the drop is plotted - the register hygiene chapter 9
 attached to these calls.
 
 `ShowScore` you have written before. `ShowLives` extends the `lcd_row`
-idiom by one step, and I want you to watch how. The op positions the
+idiom by one step. The op positions the
 LCD cursor and streams its string, and the cursor advances with every
 character written - so when `MsgLives` ends, the cursor rests exactly
 where the digit belongs. One `ApiCharToLcd` call drops it in, and

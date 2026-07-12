@@ -23,9 +23,8 @@ So today Beacon grows. By the end of the chapter it will remember
 three facts - a position, a colour, and a score - and in teaching it
 those three you will meet everything a `state` declaration can say,
 along with the change tracking that makes state the engine of the
-whole program. And I have a small challenge waiting for you near the
-end: I am going to ask you to predict a program's first frame from its
-source alone, before you build it - and then build it and watch
+whole program. And a small challenge waits near the end: predict a
+program's first frame from its source alone, then build it and watch
 yourself be right.
 
 ## Beacon, grown
@@ -196,8 +195,8 @@ the changed byte against that mask, so *any* fact in the list sets the
 block running. One block, several reasons to run, one instruction to
 test them all.
 
-Now stay with me here for a minute, because the next idea is the one I
-most want you to carry out of this chapter. The masks gate the blocks;
+The next idea is the one I most want you to carry out of this
+chapter. The masks gate the blocks;
 the cells feed them. When DrawBeacon runs because you moved, its body
 still reads `Colour` and plots the current colour - a body always
 works from the facts as they are now, whichever bit woke it. Say it as
@@ -262,8 +261,6 @@ reactive model paying its rent.
 
 ## Summary
 
-Here is the chapter in your pocket:
-
 - `state Name : type = initial changed`: type is `byte` or `word`,
   the initial value defaults to 0, and `changed` sets the fact's flag
   before the first frame.
@@ -279,8 +276,8 @@ Here is the chapter in your pocket:
 - On frame one, only blocks whose masks overlap the declared `changed`
   bits run. Predict it from the source; verify it with a breakpoint.
 
-Beacon remembers everything we ask it to. Next we turn to the moments
-themselves - where pulses come from, and every way a key can fire one:
+Next we turn to the moments themselves - where pulses come from, and
+every way a key can fire one:
 [Pulses and Bindings](04-pulses-and-bindings.md).
 
 ---

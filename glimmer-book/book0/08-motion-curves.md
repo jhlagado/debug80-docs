@@ -157,7 +157,7 @@ shape, from a compute block seven instructions long.
 
 ## What a curve declares
 
-Here is the full form, so you can see every dial at once:
+The full form, every dial at once:
 
 ```text
 curve <Name> <preset> steps <N> from <A> to <B>
@@ -242,8 +242,8 @@ front of you - 64 bytes of data.
 `.align 256`, the line above the label, moves the assembler to the
 next 256-byte page boundary before laying the table down, so
 `Curve_Glide` starts at an address whose low byte is zero: a
-page-aligned table. That alignment buys you an idiom worth keeping in
-your pocket. A curve holds at most 256 bytes, every entry lives in the
+page-aligned table. That alignment buys you an idiom. A curve holds
+at most 256 bytes, every entry lives in the
 base's own page, and the base's low byte is zero - so *base plus step*
 collapses into writing the step straight into L:
 
@@ -433,8 +433,8 @@ What this chapter puts in your hands:
 - A state cell choosing between table bases switches motion at
   runtime, by name.
 
-The comet flies well. Next it earns a body, a voice, and a scoreboard:
-shapes, sound, and the board's displays.
+Next the comet earns a body, a voice, and a scoreboard: shapes,
+sound, and the board's displays.
 
 ---
 

@@ -28,7 +28,7 @@ Tetro is three files, about 900 lines together. `tetro.glim` holds
 the declarations. `tetro-rules.glim`, brought in with `part`, holds
 the cards and blocks. `tetro-lib.asm`, brought in with `import`,
 holds the board engine: collision, locking, line clearing, and the
-board draw. I want you to read them in that order, because it is the
+board draw. Read them in that order, because it is the
 order a larger Glimmer game answers questions in: the declarations say
 what exists, the blocks say what happens, and the engine says how the
 heavy work gets done.
@@ -237,8 +237,8 @@ probe checks first - then `ShapeRotColorTbl`, one colour byte per
 piece, and the `ShapeId_PieceI .equ 0` through `ShapeId_PieceL .equ 6`
 identity equates.
 
-The whole family indexes by `id*4 + rotation`. Here is the engine
-routine that consumes it, from `tetro-lib.asm`:
+The whole family indexes by `id*4 + rotation`. The engine routine
+that consumes it, from `tetro-lib.asm`:
 
 ```asm
 ; Recompute the piece pointer, right bound, and colour bits from the
@@ -570,7 +570,7 @@ bigger game of your own, this is the shape to reach for.
 
 ## Summary
 
-Here is what I want you to carry out of the workshop:
+What to carry out of the workshop:
 
 - Tetro splits a real game three ways: declarations in
   `tetro.glim`, cards and blocks in a `part` file, and a board
@@ -597,8 +597,7 @@ Here is what I want you to carry out of the workshop:
   contracts, private scratch, and an `@` API, called from blocks
   that stay a few lines each.
 
-The 8x8 matrix half of the book is complete, and you have now read a
-game at full scale. Next I hand you a different machine to draw with:
+Next I hand you a different machine to draw with:
 the TMS9918 video display processor, where the program describes a
 scene and the chip keeps it on screen:
 [The TMS9918 Profile](16-the-tms9918-profile.md).

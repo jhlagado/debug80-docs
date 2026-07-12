@@ -44,8 +44,8 @@ three rooms you can find things in.
 
 ## Canvas, in three files
 
-Let me show you the destination first and earn it afterwards. Here is
-the entry file after the split, complete:
+The destination first, the reasons after. The entry file after the
+split, complete:
 
 ```text
 program Canvas
@@ -221,8 +221,8 @@ end
 
 The other three movement effects follow, then the painting rules and
 the renders: 90 lines, six effects and two renders, one file with one
-kind of content. That last phrase is the test I want you to carry out
-of this section: a good part answers to a topic.
+kind of content. That last phrase is the test: a good part answers
+to a topic.
 
 Diagnostics know which file they are standing in. Misspell the label
 in `MoveDown`'s guard - `jr nc,_sotp` - and rebuild:

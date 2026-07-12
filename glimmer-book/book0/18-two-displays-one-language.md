@@ -36,10 +36,10 @@ then I will show you where the road goes from here.
 
 ## The two loops
 
-Build either game and open its generated file at the runtime loop. I
-want you to do this with the real files in front of you rather than
-take my word for it, because the whole argument of this chapter sits
-in two short listings. From `skyfall.main.asm`:
+Build either game and open its generated file at the runtime loop.
+Do this with the real files in front of you rather than take my word
+for it, because the whole argument of this chapter sits in two short
+listings. From `skyfall.main.asm`:
 
 ```asm
 ; --- runtime loop ---

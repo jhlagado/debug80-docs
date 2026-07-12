@@ -140,7 +140,7 @@ text MsgScore "LAMPS "
 text MsgPad   "        "
 ```
 
-Two things I want you to catch before we go on. No fact carries
+Two things to catch before we go on. No fact carries
 `changed` - the cards own startup, exactly as they did in Skyfall -
 and every row-one message is padded to sixteen characters so that
 each card's writing covers whatever the previous card left behind.
@@ -484,9 +484,8 @@ API call. The eight spaces of `MsgPad` cover the tail of the splash
 card's invitation, so the row reads `LAMPS 07` and nothing else:
 whole row owned, every time the score changes.
 
-The counted digits stop at two, and that limit is worth stating: past
-99 the tens character would step beyond `'9'` into the character
-set's punctuation. Treat 99 as this scoreboard's ceiling - at the
+The counted digits stop at two: past 99 the tens character would
+step beyond `'9'` into the character set's punctuation. Treat 99 as this scoreboard's ceiling - at the
 pace the wasp closes in, a two-digit game is a long one - and a
 version built to run richer wants either a cap where the digits end
 or a hundreds pass in the same counting style.
@@ -529,8 +528,7 @@ becoming `ld a,0`, then `call SpriteSet`. `Glim_SplashShow` reads the
 same way - five `tile_at` lines, one op, five expansions, each with
 its own reed's coordinates as immediate loads.
 
-The enter block's wrapper is the chapter's second lesson in delivery,
-so go and find it:
+The enter block's wrapper is the chapter's second lesson in delivery:
 
 ```asm
         ld      a,(Raised0)          ; deliver to later phases this frame
@@ -553,9 +551,8 @@ and the fly and wasp take the stage one frame later. A sixtieth of a
 second the eye cannot find, spent keeping every consumer's view of
 the world whole.
 
-The same staging sets what motion costs, and I want you to trace it
-once with me, because after this the pipeline will never puzzle you
-again. Hold key 6. Frame N: `MoveRight` steps `FlyX`, and the change
+The same staging sets what motion costs. Trace it once with me,
+because after this the pipeline will never puzzle you again. Hold key 6. Frame N: `MoveRight` steps `FlyX`, and the change
 defers, because `Gather` and `Caught` sit in the same phase. Frame
 N+1: the two effects test the new position, `PlaceFly` runs, and
 `SpriteSet` files two shadow bytes - y, then x - and sets
@@ -598,7 +595,7 @@ the target; every technique in it is now yours.
 
 ## Summary
 
-Here is what Lanternfly leaves in your hands:
+What Lanternfly leaves in your hands:
 
 - Sprite collision is state arithmetic: absolute pixel difference
   per axis, each under a tolerance. A tolerance of 8 detects any
@@ -620,10 +617,9 @@ Here is what Lanternfly leaves in your hands:
   cursor, repeated subtraction makes ASCII digits for
   `ApiCharToLcd`, and a padding string owns the rest of the row.
 
-Two complete games now stand finished, one on each display, and they
-have more to say to each other than one chapter of asides could
-carry. In the last chapter we read them side by side:
-[Two Displays, One Language](18-two-displays-one-language.md).
+The two games have more to say to each other than one chapter of
+asides could carry, and in the last chapter we read them side by
+side: [Two Displays, One Language](18-two-displays-one-language.md).
 
 ---
 

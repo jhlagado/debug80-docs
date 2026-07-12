@@ -19,8 +19,8 @@ cards with their own dispatch, displays with their own pacing - but
 they all deliver their work through the machinery you finish learning
 here. This is the part everything else stands on.
 
-Here is the gap it closes. Rover's blocks do two different jobs: five
-of them change facts, one of them draws. Games have a third job,
+The gap it closes shows in Rover, whose blocks do two different jobs:
+five of them change facts, one of them draws. Games have a third job,
 quieter than either - facts computed *from other facts*. A score
 implies a difficulty. A count implies a bar length. A position
 implies which board cell the player occupies. These are not rules,
@@ -124,8 +124,8 @@ One keyword in that file is new to you: `compute`. Look at what
 `DeriveBar` does. It holds no game rule and it draws no picture - its
 whole job is to maintain a fact that follows from another fact, the
 bar length that `Count` implies, so that the fact is always there and
-always current for whoever needs it. And I want you to notice that
-`BarLen` is ordinary state: `DrawBar` depends on it exactly as any
+always current for whoever needs it. And notice that `BarLen` is
+ordinary state: `DrawBar` depends on it exactly as any
 render depends on any fact, with no idea and no care that the fact is
 derived rather than set by a rule.
 
@@ -150,8 +150,8 @@ world is its whole job, and the compiler holds it to that. A
 `effect` sits in the middle and does what rules do: consumes moments,
 changes facts.
 
-And here is why the order exists. It is a guarantee, and I am handing
-it to you now to keep for the rest of the book: **when a render runs,
+The order exists to make a guarantee, and I am handing it to you now
+to keep for the rest of the book: **when a render runs,
 the world it draws is finished.** Every rule has fired, every derived
 fact is consistent with its sources, and nothing you draw can ever be
 half of one frame and half of another. You will never write a line of
@@ -245,9 +245,8 @@ logic feeding a compute - advances one step per frame instead of
 tangling. A frame is one forward pass, and every block runs at most
 once per frame.
 
-Here is what the rule buys you, and I want you to feel how unusual it
-is: **the order you declare blocks in never changes what a program
-does.** Move `DeriveBar` to the bottom of the file and every delivery
+The rule buys you something unusual, and I want you to feel it: **the
+order you declare blocks in never changes what a program does.** Move `DeriveBar` to the bottom of the file and every delivery
 lands on the same frames as before. You can organise your source for
 the person reading it - rules together, renders together, whatever
 tells the story best - and the program's behaviour will not shift by
@@ -305,9 +304,7 @@ the debugger opens. Chapter 11 builds a debugging practice on it.
 - `glimmer --deps` prints the reactive graph: every fact's raisers and
   dependents, straight from the declarations.
 
-That is the reactive core complete, and every construct still ahead
-of us delivers its work through it. Next, the display gets a chapter
-of its own: what
+Next, the display gets a chapter of its own: what
 [the 8x8 matrix profile](06-the-matrix-profile.md) builds, and every
 way to put light on it.
 

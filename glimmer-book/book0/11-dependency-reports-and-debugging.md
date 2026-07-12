@@ -166,7 +166,7 @@ trigger, `ShowMarks (render)`, so exactly one block draws the count.
 Upstream: `Marks` is raised by `PaintPixel`, which runs on `Paint`,
 which `key KEY_GO (rising)` fires. Four lines of report put the whole
 suspect chain in front of you, keypad to display. That walk is the
-practice I want you to carry out of this chapter: name the fact that
+practice to carry out of this chapter: name the fact that
 should have changed, walk up to its raisers, walk down to its
 triggers, and put your first breakpoint where the chain is thinnest.
 
@@ -306,9 +306,8 @@ FbPlot:
 Read the contract line the way you read a block header. `in A,B,C`:
 the routine consumes those three on entry - colour, x, y. `clobbers
 A,B,DE,HL` and the flags: any of those may hold anything on return.
-And here is the part I want you to hold onto: a register absent from
-a declared contract counts as preserved, and AZM checks the routine's
-body against that promise too. C's absence from the clobbers list is
+A register absent from a declared contract counts as preserved, and
+AZM checks the routine's body against that promise too. C's absence from the clobbers list is
 a verified guarantee that y survives the call - proven on every
 build, and about to earn its keep.
 
@@ -361,8 +360,8 @@ call; C, promised safe, carries y straight through:
 ```
 
 That version builds clean. Canvas keeps its one-pixel cursor for the
-chapters ahead; what I want you to keep is the habit of reading a
-callee's clobbers line before reusing a register across the call.
+chapters ahead; the habit to keep is reading a callee's clobbers line
+before reusing a register across the call.
 
 Give the diagnostic's address a second look before we move on:
 `canvas.glim:116:5`. The faulty call sits in a block body, and

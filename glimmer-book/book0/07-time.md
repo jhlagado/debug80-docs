@@ -33,14 +33,14 @@ built-in frame counter, timers, and ramps - and each answers a
 different question about time. I will give you the plain phrasing for
 each as we meet it. Our program is *Drip*: a drop that falls on its
 own schedule, blinks as it falls, and falls faster the longer the
-program runs. Before we start, I want you to appreciate one line Drip
-does not have: there is no `bind` in it. Nothing in this program
+program runs. Before we start, appreciate one line Drip does not
+have: there is no `bind` in it. Nothing in this program
 answers to the keypad, and it plays anyway.
 
 ## Every frame
 
-Let me start with the smallest schedule there is: a block that runs on
-every single frame.
+Start with the smallest schedule there is: a block that runs on every
+single frame.
 
 ```text
 program Ticks
@@ -85,7 +85,7 @@ where this chapter is headed.
 
 ## A drop on a schedule
 
-Here is Drip's first cut: a drop that falls one row at a time, and
+Drip's first cut: a drop that falls one row at a time, and
 starts over from the top after it leaves the bottom.
 
 ```text
@@ -140,9 +140,9 @@ reloads from `Fall` to begin the next cycle. `FallTick` fires on frame
 24, frame 48, frame 72 - every 24 frames, for as long as the program
 runs.
 
-I want you to look twice at what the timer fires, because `FallTick`
-is a pulse exactly like the ones your keys fire - declared with the
-same word, consumed the same way. `Descend` reads as every rule you
+Look twice at what the timer fires: `FallTick` is a pulse exactly
+like the ones your keys fire - declared with the same word, consumed
+the same way. `Descend` reads as every rule you
 have written: on a moment, change a fact. Point a `bind` line at
 `FallTick` instead and the same block would run per keypress. A rule
 never knows where its moment comes from, and that ignorance is a
@@ -378,7 +378,7 @@ none of the three knows the others exist.
 ## The program, as a report
 
 Drip is the first program whose moments come from three different
-places, so its dependency report is worth a read:
+places, and its dependency report shows all three:
 
 ```sh
 glimmer --deps drip.glim
@@ -569,10 +569,9 @@ have had.
 - A state declared `changed` that nothing updates is a first-frame
   moment: one rule, run once, at startup.
 
-Drip's drop falls in equal steps, one row at a time, and equal steps
-are the plainest motion there is. In the next chapter we shape steps
-into something worth watching - curves, and the ramp-driven pattern
-that plays them back: [Motion Curves](08-motion-curves.md).
+Drip's drop falls in equal steps, the plainest motion there is; next
+chapter we shape those steps into curves, and meet the ramp-driven
+pattern that plays them back: [Motion Curves](08-motion-curves.md).
 
 ---
 

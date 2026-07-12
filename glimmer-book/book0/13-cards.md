@@ -92,8 +92,7 @@ chapter 4 and chapter 7 material. `Blink` is an oscillator, ticking
 every 16 frames for the life of the program. `PlayClock` and
 `RestartGate` are one-shot timers holding zero: idle until a block
 writes them, and the blocks that write them arrive with their cards.
-The one thing I want you to notice is the overlap in the bindings,
-because it is deliberate: a press of GO fires both `HitP` and
+The overlap in the bindings is deliberate: a press of GO fires both `HitP` and
 `AnyKeyP`, exactly as chapter 4 said `bind key any` would. In any
 previous chapter that overlap would be a problem to untangle. Here,
 the cards below sort out who listens, and you will watch them do it.
@@ -431,11 +430,11 @@ while the card was away, list those facts in the enter block's
 Time to pay the debt from the splash. `StartGame` runs in the middle
 of a frame, in the logic phase, with Splash's other blocks still
 mid-frame around it - so when does Splash stop and Playing start? The
-generated file answers with two pieces, and I want you to see both,
-because together they hand you a guarantee you never had to ask for.
+generated file answers with two pieces, and together they hand you a
+guarantee you never had to ask for.
 
-First, `CurrentCard` is the *next-card* register. Here is what
-`goto Playing` became, from `gate.main.asm`:
+First, `CurrentCard` is the *next-card* register. What `goto Playing`
+became, from `gate.main.asm`:
 
 ```asm
 Glim_StartGame:
@@ -502,8 +501,7 @@ GlimPrevCard:     .db $FF          ; enter edge detector ($FF = before any card)
 `CurrentCard` is where gotos and conditional stores write.
 `GlimActiveCard` is the latched copy every gate tests. `GlimPrevCard`
 starts at $FF, a value matching no card, which is how frame one
-registers as an entry to Splash. And here is a small milestone in
-passing: Gate's three states and five pulses fill all eight bits of
+registers as an entry to Splash. And a small milestone in passing: Gate's three states and five pulses fill all eight bits of
 `Changed0`, so `CurrentCard`'s flag opens the second bank - and
 starts set:
 
@@ -532,9 +530,8 @@ instructions in front of the familiar dispatch are the entire price
 of the section machinery - that is what each block pays for living in
 a card.
 
-An enter dispatch adds the edge. Here is `ShowFinal`'s, together with
-the two instructions that follow the last enter dispatch in the
-phase:
+An enter dispatch adds the edge. `ShowFinal`'s, together with the two
+instructions that follow the last enter dispatch in the phase:
 
 ```asm
         ld      a,(GlimActiveCard)
@@ -587,10 +584,9 @@ walks past every enter block in the file.
   inactive. An enter block's `updates` re-raises the facts the card's
   renders need - stores or no stores.
 
-Facts, moments, rules, pictures, and now modes: the whole toolkit is
-on the table. The cabinet is built and its machinery is proven, and
-in the next chapter we put a game inside it - one complete game,
-spending everything you have learned: [A Small Matrix
+The cabinet is built and its machinery is proven, and in the next
+chapter we put a game inside it - one complete game, spending
+everything you have learned: [A Small Matrix
 Game](14-a-small-matrix-game.md).
 
 ---
