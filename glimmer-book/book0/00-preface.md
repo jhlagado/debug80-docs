@@ -51,7 +51,7 @@ matrix: drawing, timers, motion curves, shapes, sound, and structured
 data. Chapters 12 through 14 give programs their grown-up shape:
 helper routines, multiple files, and cards - the screens and modes of
 a real game. The rest of the book spends everything you have learned
-on complete games, first on the 8x8 Matrix display, then on the
+on complete games, first on the 8x8 RGB LED matrix, then on the
 TMS9918 video display processor, and closes by comparing how those two
 very different displays shape the games written for them.
 
