@@ -9,36 +9,45 @@ nav_order: 11
 
 # Chapter 11 - Dependency Reports and Debugging
 
+Before the programs get any bigger, I want to hand you your toolbox.
 Canvas left chapter 10 as the largest program in the book: a `Point`
-cursor, an eight-byte picture, five pulses, and six blocks
-connecting them. Growth changes debugging. A misdrawn pixel in Canvas
-might trace to the painting rule, the redraw, a movement effect, or a
-binding - and the question that finds bugs in a reactive program,
-*which fact failed to change?*, now has eight candidate answers.
+cursor, an eight-byte picture, five pulses, and six blocks connecting
+them. The chapters ahead are going to double that, and I would rather
+teach you the tools now, on a program you know by heart, than later,
+when you are hunting a real bug through a file twice this size.
+Growth changes debugging. A misdrawn pixel in Canvas might trace to
+the painting rule, the redraw, a movement effect, or a binding - and
+the question that finds bugs in a reactive program, *which fact
+failed to change?*, now has eight candidate answers.
 
-The toolchain has been preparing for this since the first chapter.
-Every block you have built sits behind a `.routine` boundary - the
-safety net chapter 1 promised the book would return to. Every build
-proves register contracts across the whole generated file, every
-debug map lands breakpoints in your source, and the dependency report
-from chapter 5 prints the reactive graph on request. This chapter
-assembles those pieces into a debugging practice. You will extend
-Canvas with a counter, break the program twice on purpose - once for
-a warning, once for a hard error - and finish with the debugger
-stopped inside a running rule.
+The good news is that the toolchain has been preparing for this since
+the first chapter. Every block you have built sits behind a
+`.routine` boundary - the safety net chapter 1 promised the book
+would return to, and this is the chapter where we collect. Every
+build proves register contracts across the whole generated file,
+every debug map lands breakpoints in your source, and the dependency
+report from chapter 5 prints the reactive graph on request. Today we
+assemble those pieces into a debugging practice. You will extend
+Canvas with a counter, and then I am going to break the program in
+front of you, twice, on purpose - once for a warning, once for a hard
+error - because watching a good diagnostic catch a bug you understand
+teaches more than pages of description ever could. We finish with the
+debugger stopped inside a running rule.
 
 ## A count of marks
 
-The extension first. A painting program can report on the painter:
-one byte counts every pixel painted, and the seven-segment display
-shows the tally. One declaration joins the state:
+The extension first, because we need something worth breaking. A
+painting program can report on the painter: one byte counts every
+pixel painted, and the seven-segment display shows the tally. One
+declaration joins the state:
 
 ```text
 state Marks   : byte = 0 changed
 ```
 
-*Marks is a byte, starting at zero, already changed* - so the display
-reads 00000 on the first frame.
+Read it aloud, the way you have since chapter 1: *Marks is a byte,
+starting at zero, already changed* - so the display reads 00000 on
+the first frame.
 
 The painting rule gains a second job. It still sets the cursor's bit
 in the cursor's row; now it counts as well:
@@ -65,11 +74,12 @@ begin
 end
 ```
 
-The first eleven body lines are chapter 10's: mask the column, point
-HL at the row, OR the pixel in. The three lines at the tail are the
-counter. The header names both facts the block writes - `updates
-Picture, Marks` - and when the block runs, both change flags rise
-together.
+The first eleven body lines are chapter 10's, untouched: mask the
+column, point HL at the row, OR the pixel in. The three lines at the
+tail are the counter. Before you move on, look at the header once
+more - it names both facts the block writes, `updates Picture,
+Marks`, and when the block runs, both change flags rise together.
+That comma is about to matter.
 
 One render is new, and chapter 9 supplied everything in it:
 
@@ -102,7 +112,8 @@ pixel and lifts the count.
 ## The report at scale
 
 Chapter 5 printed the dependency report for a program with four
-facts. Canvas has eight, and this is the scale where the report
+facts, and back then it told you little you could not see at a
+glance. Canvas has eight, and this is the scale where the report
 starts paying for itself:
 
 ```sh
@@ -141,22 +152,28 @@ Each fact owns a stanza: its kind and type, the blocks that raise it,
 and the blocks it triggers, every dependent tagged with its phase.
 Glimmer computes the report from your `bind`, `on`, and `updates`
 lines - the connections you have read off block headers since chapter
-1, gathered into one place and sorted by fact.
+1, gathered into one place and sorted by fact. Nothing here is new
+information; what is new is that you no longer have to hold it all in
+your head.
 
-Read it by symptom, in both directions. Suppose the count on the
-display sits still while pixels keep landing. Downstream from
-`Marks`: one trigger, `ShowMarks (render)`, so exactly one block
-draws the count. Upstream: `Marks` is raised by `PaintPixel`, which
-runs on `Paint`, which `key KEY_GO (rising)` fires. Four lines of
-report put the whole suspect chain in front of you, keypad to
-display. That walk is the practice: name the fact that should have
-changed, walk up to its raisers, walk down to its triggers, and put
-your first breakpoint where the chain is thinnest.
+I want to teach you how to read it, because the reading is the skill.
+When something misbehaves in a reactive program, your first question
+is always the one I opened the chapter with: which fact failed to
+change? The report answers it from your chair, in both directions,
+before you touch a debugger. Suppose the count on the display sits
+still while pixels keep landing. Downstream from `Marks`: one
+trigger, `ShowMarks (render)`, so exactly one block draws the count.
+Upstream: `Marks` is raised by `PaintPixel`, which runs on `Paint`,
+which `key KEY_GO (rising)` fires. Four lines of report put the whole
+suspect chain in front of you, keypad to display. That walk is the
+practice I want you to carry out of this chapter: name the fact that
+should have changed, walk up to its raisers, walk down to its
+triggers, and put your first breakpoint where the chain is thinnest.
 
 ## A write without its declaration
 
-Now break it, and make that stuck count real. In `PaintPixel`'s
-header, cut `Marks` from the updates list:
+Now watch me break it, and make that stuck count real. In
+`PaintPixel`'s header, cut `Marks` from the updates list:
 
 ```text
 effect PaintPixel
@@ -166,7 +183,10 @@ begin
 ```
 
 The body still stores to `Marks`; the header has stopped saying so.
-Rebuild:
+This is the classic reactive slip - you will make it yourself the day
+you add a store to a block and forget to tell the header - so I want
+you to meet it here, on purpose, before it meets you by accident.
+Rebuild, and watch what the tool says:
 
 ```text
 canvas.glim:75: [GLIM] warning: PaintPixel writes Marks but does not declare "updates Marks": the change flag will not be raised and dependent blocks will not run.
@@ -179,7 +199,8 @@ and reported the gap - naming the block, the missing declaration, and
 the consequence, at line 75, the block's header line. A warning
 leaves the build standing: both artifacts were written, so run the
 program and watch the consequence play out. Pixels paint, the board
-redraws, and the count reads 00000 however many marks pile up. The
+redraws, and the count reads 00000 no matter how many marks pile
+up. The
 store still executes on every press, and `Marks` climbs in memory;
 its change flag stays down, so `ShowMarks` - triggered `on Marks` -
 waits for an announcement that never arrives.
@@ -193,29 +214,34 @@ The report tells the same story from the declarations' side. Run
     triggers:  ShowMarks (render)
 ```
 
-A fact with a dependent and no raiser: this whole class of bug, drawn
-in two lines. The generated file agrees - the wrapper after
-`PaintPixel`'s body, which raised `CHG_PICTURE + CHG_MARKS` before
-the edit, now raises `CHG_PICTURE` alone. Put `Marks` back in the
-header and the build runs quiet.
+A fact with a dependent and no raiser: that pattern is this whole
+class of bug, drawn in two lines. The generated file agrees - the
+wrapper after `PaintPixel`'s body, which raised `CHG_PICTURE +
+CHG_MARKS` before the edit, now raises `CHG_PICTURE` alone. Put
+`Marks` back in the header and the build runs quiet.
 
-The scan behind the warning reads stores that name their cell in the
-instruction itself: `ld (Marks),a` names `Marks`, so the header can
-be checked against it. `PaintPixel`'s other write travels through a
-pointer - `ld (hl),a`, with HL aimed into `Picture` by arithmetic -
-and a build-time scan cannot know where HL will point at run time.
-Cut `updates Picture` from the header instead and the build stays
-silent while the board freezes the same way. So the `updates` line
-remains your declaration of intent: the one place that records where
-a block's writes land, whatever route they take. The warning is a net
-under the slips the scan can see; a complete `updates` line is the
-habit every tool in this chapter leans on.
+Before you lean on that warning, I want to be straight with you about
+its limits, because a tool trusted past its limits is worse than no
+tool. The scan reads stores that name their cell in the instruction
+itself: `ld (Marks),a` names `Marks`, so the header can be checked
+against it. `PaintPixel`'s other write travels through a pointer -
+`ld (hl),a`, with HL aimed into `Picture` by arithmetic - and a
+build-time scan cannot know where HL will point at run time. No scan
+can; on a machine whose pointers are computed, that knowledge exists
+only while the program runs. Cut `updates Picture` from the header
+instead and the build stays silent while the board freezes the same
+way. So the `updates` line remains your declaration of intent: the
+one place that records where a block's writes land, whatever route
+they take. The warning is a net under the slips the scan can see; a
+complete `updates` line is the habit every tool in this chapter leans
+on.
 
 ## The boundary around a block
 
-The register checking promised in chapter 2 lives in the generated
-file, and its unit of account is the block. Open `canvas.main.asm` at
-the painting rule:
+One warning down, one error to go - and the error needs a piece of
+groundwork first. The register checking promised in chapter 2 lives
+in the generated file, and its unit of account is the block. Open
+`canvas.main.asm` at the painting rule:
 
 ```asm
 ; --- logic block PaintPixel ---
@@ -280,12 +306,18 @@ FbPlot:
 Read the contract line the way you read a block header. `in A,B,C`:
 the routine consumes those three on entry - colour, x, y. `clobbers
 A,B,DE,HL` and the flags: any of those may hold anything on return.
-A register absent from a declared contract counts as preserved, and
-AZM checks the routine's body against that promise too - so C's
-absence from the clobbers list is a verified guarantee that y
-survives the call.
+And here is the part I want you to hold onto: a register absent from
+a declared contract counts as preserved, and AZM checks the routine's
+body against that promise too. C's absence from the clobbers list is
+a verified guarantee that y survives the call - proven on every
+build, and about to earn its keep.
 
 ## A trampled register
+
+Time to break the program again, and this time the bug I am staging
+is the oldest one on the Z80: trusting a register across a call that
+quietly destroys it. Every assembly programmer has lost an evening to
+this bug. I want you to watch it lose to the assembler instead.
 
 `DrawCanvas` ends by plotting the cursor over the picture: x into B,
 y into C, white into A, `call FbPlot`. Suppose you widen the cursor
@@ -300,7 +332,7 @@ for the shortest edit: after the plot, nudge B along and plot again.
     call FbPlot
 ```
 
-Rebuild:
+Rebuild, and again, watch what the tool says:
 
 ```text
 canvas.glim:116:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, but the pre-call value is used later.
@@ -329,15 +361,16 @@ call; C, promised safe, carries y straight through:
 ```
 
 That version builds clean. Canvas keeps its one-pixel cursor for the
-chapters ahead; what stays is the habit of reading a callee's
-clobbers line before reusing a register across the call.
+chapters ahead; what I want you to keep is the habit of reading a
+callee's clobbers line before reusing a register across the call.
 
-The diagnostic's address deserves a second look: `canvas.glim:116:5`.
-The faulty call sits in a block body, and Glimmer carries every body
-line's origin through to the assembler, so the error arrives with
-your file, your line, and your column attached. Every body diagnostic
-lands this way. Misspell the counter's name inside `ShowMarks` and
-the assembler answers in the same coordinates:
+Give the diagnostic's address a second look before we move on:
+`canvas.glim:116:5`. The faulty call sits in a block body, and
+Glimmer carries every body line's origin through to the assembler, so
+the error arrives with your file, your line, and your column
+attached. Every body diagnostic lands this way. Misspell the
+counter's name inside `ShowMarks` and the assembler answers in the
+same coordinates:
 
 ```text
 canvas.glim:122:5: [AZMN_SYMBOL] error: Unresolved symbol "Marsk" in 16-bit fixup.
@@ -348,10 +381,12 @@ everyday Glimmer work - and they reach you on the line you typed.
 
 ## Stepping where the bug lives
 
-The same coordinates work while the program runs. Set a breakpoint on
-the `or b` line inside `PaintPixel` and press F5. The board runs, the
-cursor steers - and the moment you press GO, the debugger halts on
-your line in `canvas.glim`. The registers panel holds the story so
+The same coordinates keep working while the program runs, and this is
+where the practice closes its loop: the report told you where to put
+the breakpoint, and the debug map makes the breakpoint land. Set one
+on the `or b` line inside `PaintPixel` and press F5. The board runs,
+the cursor steers - and the moment you press GO, the debugger halts
+on your line in `canvas.glim`. The registers panel holds the story so
 far: HL points into `Picture` at the cursor's row, B carries the
 column mask `MxMask` built, and A holds the row's current bits. Step,
 and the new pixel merges into A; step again, and the store lands in
@@ -368,6 +403,8 @@ assembly chapter 2 toured. Bodies stop in `.glim`; everything around
 them steps in the generated file.
 
 ## Summary
+
+Here is the toolbox, packed for the road ahead:
 
 - `glimmer --deps` prints one stanza per fact: kind, raisers, and
   triggers with their phases. Debug by symptom: name the fact that
@@ -393,10 +430,13 @@ them steps in the generated file.
   with line and column; wrappers, dispatchers, and the profile
   library step in the generated assembly.
 
-Canvas is healthy again at 126 lines, and one pattern now appears in
-six of its seven blocks: the cursor's `offset` arithmetic, retyped
-wherever a rule needs the cursor. The next chapter writes it once -
-routines, parts, and imports, the structure a growing program needs.
+Canvas is healthy again at 126 lines, and while you were debugging it
+you may have noticed a pattern: the cursor's `offset` arithmetic
+appears in six of its seven blocks, retyped wherever a rule needs the
+cursor. You have typed it often enough to resent it, which is exactly
+when a language should offer relief. The next chapter writes it once:
+[Routines, Parts and Imports](12-routines-parts-and-imports.md), the
+structure a growing program needs.
 
 ---
 
