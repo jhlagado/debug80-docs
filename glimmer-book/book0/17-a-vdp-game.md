@@ -224,8 +224,7 @@ end
 ```
 
 You met the entry re-raise in chapter 13; here it carries a whole
-game. Remember why it exists: a card-gated render never sees flags
-raised while its card slept, so when the card wakes, its renders have
+game. Its reason is the one chapter 13 gave: a card-gated render never sees flags raised while its card slept, so when the card wakes, its renders have
 missed everything. The `updates` line is the sleeping card catching
 up on the news - it names every cell the Playing renders read, and
 entry marks them all, so the first frame of play repaints the whole
@@ -284,7 +283,7 @@ end
 Every `ChaseTick`, one compare per axis points the wasp at the fly.
 Carry out of `cp b` means the wasp sits left of - or above - its
 target, so it steps toward; no carry steps the other way; equal skips
-the axis. Notice what the wasp does not carry: clamps. It only ever
+the axis. The wasp needs no clamps of its own: it only ever
 steps toward the fly, and the fly's own clamps fence the space, so
 the hunter can never reach a wall its prey is not already pressed
 against. The stride is `Pace`. At the opening period of 8 the wasp

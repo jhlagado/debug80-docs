@@ -63,8 +63,7 @@ sharing the program's namespace: its cards and blocks compile as if
 they were written right here, and diagnostics still point at the right
 file when something goes wrong. The `import` file is plain Z80 assembly: its `@`
 labels become program-wide names the blocks can call, and everything
-else in it stays private to the module. Hold that difference in mind
-as we walk, because the whole architecture of this game turns on it.
+else in it stays private to the module. That difference is the one our walk keeps returning to, because the whole architecture of this game turns on it.
 
 ## The facts on the board
 
@@ -99,8 +98,7 @@ way.
 Now look at the board: four `byte[8]` arrays, one bit per cell of the
 8x8 matrix, eight rows, MSB-left. `BoardRows` records occupancy - the
 single question collision cares about - and the three colour planes
-remember what colour each settled cell keeps. Notice
-that this is the framebuffer's own shape: chapter 6's `Framebuffer`
+remember what colour each settled cell keeps. This is the framebuffer's own shape: chapter 6's `Framebuffer`
 stores each row as red, green, and blue bitmask bytes, so a settled
 board row lands on screen as one `or` of plane byte into framebuffer
 byte, and a full row announces itself as a plane byte reading `$FF`.
@@ -122,8 +120,7 @@ moment, because their starting value is a decision: a one-shot
 that starts at 0 is asleep, and it fires only after some block writes
 a count into it. `ClearHold` times the line-clear flash, `GOverGate`
 times the restart gate, and each gets armed by exactly the block that
-needs it. Keep that pattern in your pocket - a sleeping timer a rule
-can arm - because you will reach for it in games of your own.
+needs it. That pattern - a sleeping timer a rule can arm - returns in your own games more often than you would guess; you will reach for it in games of your own.
 
 Seven lines put the whole control scheme on the page:
 
@@ -257,9 +254,7 @@ that consumes it, from `tetro-lib.asm`:
 
 From that index the routine fetches the right bound, the bitmap
 pointer (doubling the index, because the pointer table holds words),
-and the colour byte, all into the module's own scratch. Look closely
-at what you are seeing, because this is the seam between the two
-files, close up: the shape declarations in `tetro.glim` emit the
+and the colour byte, all into the module's own scratch. What you are seeing here is the seam between the two files, close up: the shape declarations in `tetro.glim` emit the
 tables, the imported module addresses them by name, and the two sides
 stay compatible because both agree on `id*4 + rotation`.
 

@@ -381,9 +381,7 @@ frame, tiles and sprites alike.
 `PlantScene` runs exactly once, and the trigger is a mechanism you
 have owned since chapter 3: `Init` is a byte declared `changed`, so
 its flag is up before the first frame; the effect fires on frame 1,
-places eight tiles, and `Init` never changes again. Notice what the
-block does not carry: there is no `updates` line, because it changes
-no cell. Its work lands in the name shadow, which the profile tracks
+places eight tiles, and `Init` never changes again. One line you have always written is absent: `updates`, because this block changes no cell. Its work lands in the name shadow, which the profile tracks
 with row bits instead of change flags.
 
 Those eight `tile_at` lines touch eight different grid rows, so frame

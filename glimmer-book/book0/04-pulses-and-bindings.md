@@ -180,7 +180,7 @@ One property of the keypad needs stating plainly, because
 you should design with it rather than discover it: MON-3 reports a
 single pressed key at a time. Held movement runs one direction at
 once, and a fresh press takes over the autorepeat from the key before
-it. Read that as a design constraint, not a defect - Rover's controls,
+it. That is part of the keypad's character, something to design with - Rover's controls,
 and every game later in this book, are built on single-key movement,
 and the keypad's compass layout suits it well. You have already felt
 how cleanly the takeover plays: that was your thumb on 6 and 2 a page

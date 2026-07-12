@@ -574,8 +574,7 @@ program Skyfall
     triggers:  SplashShow (logic), StartRound (logic), GameOverShow (logic)
 ```
 
-That is the game's entire design on one page. Read it against the
-tables from the start of the chapter and the match is line for line -
+That is the game's entire design on one page. It matches the tables from the start of the chapter line for line -
 every fact, every moment, every raiser. What you settled with a
 pencil, the compiler now states as checked fact, and if the two ever
 drift apart, the report is the one telling the truth.

@@ -199,8 +199,7 @@ The next idea is the one I most want you to carry out of this
 chapter. The masks gate the blocks;
 the cells feed them. When DrawBeacon runs because you moved, its body
 still reads `Colour` and plots the current colour - a body always
-works from the facts as they are now, whichever bit woke it. Say it as
-a rule, and say it aloud: **flags decide who runs; values decide what
+works from the facts as they are now, whichever bit woke it. Say it with me, because it is the sentence this book stands on: **flags decide who runs; values decide what
 happens.** Nearly every confusing frame you will ever debug in a
 reactive program comes from blurring those two together, and nearly
 every one untangles the moment you pull them apart again. Keep them

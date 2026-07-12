@@ -80,8 +80,7 @@ one row per frame falls off an eight-row board in eight frames.
 Chapter 1 called one step every eight frames a playable pace; eight
 steps in eight frames is a flash. Game tempo lives at *every N
 frames*, with N yours to choose - and, since games change difficulty,
-yours to change while the program runs. Hold that last thought; it is
-where this chapter is headed.
+yours to change while the program runs. That last thought is where this chapter is headed.
 
 ## A drop on a schedule
 
@@ -491,8 +490,7 @@ _next_Fall:
 ```
 
 Decrement, store, and on the zero frame: reload from `Fall`, set the
-pulse byte, and OR the pulse's flag straight into `Changed0`. Compare
-that last move with the blocks you write, which raise through
+pulse byte, and OR the pulse's flag straight into `Changed0`. That last move sets the tick apart from the blocks you write, which raise through
 `Raised0` or `Next0` because some consumers may already have run. The
 tick runs before all of them, so it can deliver directly, and the
 exactly-once rule from chapter 5 holds untouched.

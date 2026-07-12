@@ -99,7 +99,7 @@ itself is a fact*. The 8x8 matrix mixes red, green and blue per pixel, so
 the values 1 through 7 are its seven visible colours, and
 `NextColour`'s wrap keeps the cell inside that range. `DrawBeacon`
 never knows or cares which colour is current - it reads the fact and
-plots it. Say the chain aloud once before we build: "GO fires Step; on
+plots it. Let's say the chain aloud once before we build: "GO fires Step; on
 Step, NextColour updates Colour; on Colour, DrawBeacon."
 
 ## Build it
@@ -151,8 +151,7 @@ Press F5.
 
 Debug80 builds the target through Glimmer, loads the MON-3 ROM and
 your program, and runs. The platform panel opens on the TEC-1G, and
-there on the 8x8 matrix is a single red pixel. Pause on it for a second,
-because you earned it: `Colour` started at 1, which is red, and the
+there on the 8x8 matrix is a single red pixel. Let it glow for a second, because you earned it: `Colour` started at 1, which is red, and the
 word `changed` in your declaration is why it drew itself before you
 touched anything. That dot is your declaration, made light.
 

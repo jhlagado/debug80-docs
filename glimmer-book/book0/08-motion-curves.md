@@ -142,8 +142,7 @@ runs. Its body indexes the table with the current step:
 ```
 
 The step goes into DE, the table's base into HL, and the sum points at
-the byte holding this step's column. Pause on what is missing from
-that body: no squares, no roots, no fractions. The whole ease-out
+the byte holding this step's column. Missing from that body is everything expensive: no squares, no roots, no fractions. The whole ease-out
 calculation finished before the program ever ran; the frame pays for
 one load.
 
