@@ -222,7 +222,7 @@ GlimPollBindings:
         ld      (Glim_HeldKey),a
         ret
 _keydown:
-        ld      b,a                  ; B = key code
+        ld      b,a                  ; B = key code (DE unsafe: matrix kbd)
         jr      c,_newpress
         ld      a,(Glim_HeldKey)     ; held: autorepeat armed for this key?
         cp      b

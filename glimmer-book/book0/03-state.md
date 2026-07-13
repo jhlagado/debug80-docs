@@ -174,6 +174,12 @@ with states first:
 
 ```asm
 ; --- change flags ---
+CHG_DOTX_BIT      .equ 0
+CHG_COLOUR_BIT    .equ 1
+CHG_SCORE_BIT     .equ 2
+CHG_LEFT_BIT      .equ 3
+CHG_RIGHT_BIT     .equ 4
+CHG_STEP_BIT      .equ 5
 CHG_DOTX          .equ %00000001
 CHG_COLOUR        .equ %00000010
 CHG_SCORE         .equ %00000100
@@ -182,6 +188,9 @@ CHG_RIGHT         .equ %00010000
 CHG_STEP          .equ %00100000
 
 ; --- block trigger masks ---
+GlimDep_MoveLeft__B0 .equ CHG_LEFT
+GlimDep_MoveRight__B0 .equ CHG_RIGHT
+GlimDep_NextColour__B0 .equ CHG_STEP
 GlimDep_DrawBeacon__B0 .equ CHG_DOTX + CHG_COLOUR
 GlimDep_ShowScore__B0 .equ CHG_SCORE
 ```

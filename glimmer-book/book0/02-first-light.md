@@ -193,6 +193,8 @@ First stop - the bookkeeping your declarations became:
 
 ```asm
 ; --- change flags ---
+CHG_COLOUR_BIT    .equ 0
+CHG_STEP_BIT      .equ 1
 CHG_COLOUR        .equ %00000001
 CHG_STEP          .equ %00000010
 

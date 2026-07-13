@@ -371,11 +371,15 @@ The state:
 DotX:             .db 3
 Left:             .db 0
 Right:            .db 0
+Glim_HeldKey:     .db $FF
+Glim_HeldCount:   .db 0
 Changed0:         .db %00000001   ; flags dispatch tests
 ```
 
 There is `state DotX : byte = 3` - a labelled byte holding 3, exactly
-what you would have written yourself. Each pulse is a byte too. And
+what you would have written yourself. Each pulse is a byte too, and
+the two `Glim_` cells under them are the held-key repeat clock,
+written for you. And
 `Changed0` is the change tracking we have been talking about all
 chapter, revealed as one humble byte: one bit per fact, and bit 0 -
 DotX's bit - starts set. That is the word `changed` from your
