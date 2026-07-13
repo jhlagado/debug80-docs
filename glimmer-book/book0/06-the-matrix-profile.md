@@ -373,8 +373,8 @@ four ports it drives are equates from the top of the generated file:
 routine, whole, from the profile library:
 
 ```asm
-; Scan all 8 rows with fixed dwell, then blank the matrix so
-; block work never changes visible row brightness. Sound and the
+; Scan all 8 rows with equal dwell, then blank the matrix for game
+; work. Excessive work lengthens the dark gap and can reduce brightness.
 ; seven-segment HUD are serviced once per row (8 ticks per frame).
 .routine clobbers A,BC,DE,HL,carry,zero,sign,parity,halfCarry
 ScanFrame:

@@ -64,7 +64,7 @@ the 8x8 matrix, reading a larger one, then building another on the
 TMS9918 video display processor - and the final chapter compares how
 the two displays shape the games written for them.
 
-The book teaches Glimmer 0.5.3. Every complete program in it was
+The book teaches Glimmer 0.6. Every complete program in it was
 built with `glimmer build` and runs.
 
 ---

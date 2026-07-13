@@ -11,7 +11,7 @@ sequence, example strategy and drafting rules.
   shape used by the AZM and Debug80 books.
 - **Role:** the first guided Glimmer course. The book takes a reader who can
   read small Z80 routines and teaches how to write complete Glimmer games.
-- **Language version:** Glimmer 0.5.3, the current published package (with AZM 0.3.4). The
+- **Language version:** Glimmer 0.6 (with AZM 0.3). The
   book teaches current syntax: state, pulses, bindings, timers,
   ramps, curves, resources, layout types, routines, parts, imports, cards,
   matrix profile, TMS9918 profile and Debug80 source stepping.
@@ -153,7 +153,7 @@ Each chapter should record:
 
 - **Opens with:** you can write a Z80 game as a set of facts, events and rules.
 - **Introduces:** what the course builds, what the reader needs, how Debug80,
-  AZM and Glimmer fit together, and the Glimmer 0.5.3 target.
+  AZM and Glimmer fit together, and the Glimmer 0.6 target.
 - **Builds:** no program.
 - **Generated AZM focus:** none.
 - **Exit knowledge:** the reader knows the route through the book and the two
@@ -173,7 +173,7 @@ Each chapter should record:
 - **Generated AZM focus:** three excerpts from the generated file close the
   chapter (state storage + Changed0, the runtime loop, one wrapped block
   with its verbatim body), demonstrating that Glimmer's output is ordinary
-  Z80 assembly. Excerpts are from Glimmer 0.5.2 output (AZM 0.3 syntax:
+  Z80 assembly. Excerpts are from Glimmer 0.6 output (AZM 0.3 syntax:
   `.routine`, Glim-prefixed runtime symbols). The full guided tour of the
   file stays in chapter 2.
 - **Exit knowledge:** the reader can read a small `.glim` file aloud,

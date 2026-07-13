@@ -122,11 +122,11 @@ end
 One keyword in that file is new to you: `compute`. Look at what
 `DeriveBar` does. It holds no game rule and it draws no picture - its
 whole job is to maintain a fact that follows from another fact, the
-bar length that `Count` implies, so that the fact is always there and
-always current for whoever needs it. And notice that `BarLen` is
-ordinary state: `DrawBar` depends on it exactly as any
-render depends on any fact, with no idea and no care that the fact is
-derived rather than set by a rule.
+bar length that `Count` implies. When Count's change reaches the
+compute phase, `DeriveBar` recalculates `BarLen` before the render
+phase begins. `BarLen` is ordinary state: `DrawBar` depends on it as
+it would any other fact, without needing to know whether a rule or a
+derivation wrote it.
 
 ## Three jobs, three keywords, one order
 
@@ -134,13 +134,12 @@ Every block you have written declares its job in its first word, and
 now I can tell you what the frame does with that word: it runs the
 jobs in a fixed order, the same order in every Glimmer program.
 
-1. **compute** blocks run first: state derived from other state, so
-   a derivation triggered this frame lands before any rule or render
-   uses it.
+1. **compute** blocks run first: state derived from changes available
+   at the start of the phase, with updates ready for later phases.
 2. **effect** blocks run second: the game's rules, changing facts in
    response to moments.
-3. **render** blocks run last: facts turned into pictures, after all
-   the frame's changes have settled.
+3. **render** blocks run last: facts turned into pictures after the
+   frame's compute and effect passes.
 
 Each keyword also enforces its nature, and that is a kindness. A
 `render` block takes no `updates` line - depicting the world is its
@@ -149,17 +148,15 @@ whole job, and the compiler holds it to that. A
 `effect` sits in the middle and does what rules do: consumes moments,
 changes facts.
 
-The order exists to make a guarantee, and I am handing it to you now
-to keep for the rest of the book: **when a render runs, this frame's
-work is finished.** Every block the frame triggered has run, each at
-most once, and every change was delivered whole - all of a fact's
-dependents hear the news together, never split across a frame
-boundary. One edge to know about: a chain of derivations, a compute
-feeding a compute, advances one step per frame, so a two-stage
-consequence reaches the screen two frames after its cause. Glimmer
-schedules triggers; it keeps no snapshot of your state. What it does
-promise, it enforces for every program you will ever compile, with no
-line of code from you.
+The order gives you a scheduling guarantee: **each block runs at most
+once per frame, and one change reaches all its dependents together.**
+When every dependent is in a later phase, they receive it this frame;
+otherwise they receive it at the next frame's start. A render runs
+after the compute and effect passes, but it reads live memory rather
+than a snapshot. A chain of derivations, a compute feeding a compute,
+therefore advances one step per frame, so a two-stage consequence
+reaches the screen two frames after its cause. Glimmer promises the
+trigger schedule; the Z80 bodies still determine the values.
 
 The frame you toured in chapter 2 has grown its full shape. From
 `meter.main.asm`:
@@ -299,8 +296,8 @@ the debugger opens. Chapter 11 builds a debugging practice on it.
 
 - Three block kinds for three jobs: `compute` derives facts from
   facts, `effect` applies rules to moments, `render` draws. The frame
-  runs them in that order, so renders run after every block the
-  frame triggered.
+  runs them in that order, so render dispatch follows the compute and
+  effect passes.
 - `render` takes no `updates`; `compute` requires one. The keyword
   enforces the job.
 - Delivery is exactly once: changes reach later phases the same frame,

@@ -226,11 +226,12 @@ or a conditional write to `CurrentCard`. You moved the whole
 GameOver card between profiles without a single edit.
 
 The phases carried over too, with their delivery rule intact. Both
-games trust that a render draws a settled world; both stage changes
-through `Raised0` and `Next0` by the same exactly-once rule; both
-print their design with `glimmer --deps` in the same report shape,
-raisers and triggers per fact. Skyfall spends 12 of the 32
-change-flag cells, Lanternfly 16, on the same budget.
+games run compute, effect and render in that order; both stage changes
+through `Raised0` and `Next0` so one change reaches its dependents
+together, in a later phase or at the next frame's start; both print
+their design with `glimmer --deps` in the same report shape, raisers
+and triggers per fact. Skyfall spends 12 of the 32 change-flag cells,
+Lanternfly 16, on the same budget.
 
 The two loops drew the dividing line back at the top of the chapter,
 and it is the line this book was written to show you. The

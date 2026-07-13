@@ -21,7 +21,7 @@ on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video
 display processor. The final chapter compares how each display shapes the
 program you write.
 
-The book teaches Glimmer 0.5.3. Every complete program in it is built with
+The book teaches Glimmer 0.6. Every complete program in it is built with
 `glimmer build`.
 
 ## Chapters

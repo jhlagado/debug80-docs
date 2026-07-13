@@ -13,7 +13,7 @@ The toolchain in one place: the CLI's two commands and their options,
 the four files a build writes, the conventions that let Debug80 treat
 a `.glim` file as a runnable target, and the diagnostics the compiler
 reports. Every usage line, output line and message here is copied
-from real runs of Glimmer 0.5.3.
+from real runs of Glimmer 0.6.
 
 ## The command line
 
@@ -74,7 +74,7 @@ Wrote demo.main.d8.json (11 block segments attributed to .glim source)
 | `--org <addr>` | Assembly origin. The default `$4000` is where MON-3 expects user code; `--org $6000` moves the generated `.org` line and everything after it. |
 | `--no-check` | Generate only; the register-contract check is skipped. Generation-only runs print `Wrote demo.main.asm` without the check note. |
 | `--deps` | Print the dependency report and exit. Nothing is written. |
-| `-V, --version` | The package version: `0.5.3`. |
+| `-V, --version` | Print the installed Glimmer package version. |
 | `-h, --help` | The usage text above. |
 
 `--no-check` belongs to the default command. Combining it with
