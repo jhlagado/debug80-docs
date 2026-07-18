@@ -9,12 +9,15 @@ nav_order: 1
 
 # Chapter 1 - The Shape of a Game
 
-I want to teach you to write games for the Z80, and I want to do it in
-a way you probably have not seen before. You already read assembly -
-you can follow a `ld a,(hl)` and a conditional jump without slowing
-down - so you know the pleasure of this machine: nothing between you
-and the metal, every byte where you put it. You also know, or you can
-guess, where the pain lives. A game never stops asking things of you.
+Glimmer is a new way to write games for an old machine. You describe
+the game - what it remembers, what it responds to, what follows, and
+what it shows - and Glimmer builds the running program around your
+description. That is the subject of this book, and before we start,
+here is what I assume about you: you already read assembly. You can
+follow a `ld a,(hl)` and a conditional jump without slowing down, so
+you know the pleasure of this machine - nothing between you and the
+metal, every byte where you put it. And you know, or you can guess,
+where the pain lives. A game never stops asking things of you.
 Watch the keys. Keep the display alive. Move that, count this, redraw
 the other, every frame, in the right order, forever. The game itself -
 the rules, the fun part - ends up buried inside a heap of plumbing,
