@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 4
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Tiny Basic](03-tiny-basic.md) | [Guide](index.md) | [Advanced Programming →](05-advanced-programming.md)

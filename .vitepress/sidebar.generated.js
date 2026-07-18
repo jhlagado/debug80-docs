@@ -415,53 +415,5 @@ export const sidebars = {
         }
       ]
     }
-  ],
-  "/tec1g/": [
-    {
-      "text": "MON-3 User Guide",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "Basic Operation and Main Menu",
-          "link": "/tec1g/mon3/01-basic-operation-and-main-menu.html"
-        },
-        {
-          "text": "Memory Map and Data Entry Mode",
-          "link": "/tec1g/mon3/02-memory-map-and-data-entry-mode.html"
-        },
-        {
-          "text": "Tiny Basic",
-          "link": "/tec1g/mon3/03-tiny-basic.html"
-        },
-        {
-          "text": "Terminal Monitor and TEC Magazine Code",
-          "link": "/tec1g/mon3/04-terminal-monitor-and-tec-magazine-code.html"
-        },
-        {
-          "text": "Advanced Programming",
-          "link": "/tec1g/mon3/05-advanced-programming.html"
-        },
-        {
-          "text": "Real Time Clock Add-On",
-          "link": "/tec1g/mon3/06-real-time-clock.html"
-        },
-        {
-          "text": "Graphical LCD Add-On",
-          "link": "/tec1g/mon3/07-graphical-lcd.html"
-        },
-        {
-          "text": "Hard Drive Access",
-          "link": "/tec1g/mon3/08-hard-drive-access.html"
-        },
-        {
-          "text": "Quick Start Programs",
-          "link": "/tec1g/mon3/09-quick-start-programs.html"
-        },
-        {
-          "text": "Appendix and Useful Links",
-          "link": "/tec1g/mon3/10-appendix-and-useful-links.html"
-        }
-      ]
-    }
   ]
 };

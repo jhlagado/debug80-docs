@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 8
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Graphical LCD Add-On](07-graphical-lcd.md) | [Guide](index.md) | [Quick Start Programs →](09-quick-start-programs.md)

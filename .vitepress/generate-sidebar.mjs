@@ -7,7 +7,7 @@ import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BOOK_DIRS = ['debug80-book', 'azm-book', 'glimmer-book', 'tec1g'];
+const BOOK_DIRS = ['debug80-book', 'azm-book', 'glimmer-book'];
 
 function frontMatter(filePath) {
   const text = readFileSync(filePath, 'utf8');

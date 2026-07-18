@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 5
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Terminal Monitor and TEC Magazine Code](04-terminal-monitor-and-tec-magazine-code.md) | [Guide](index.md) | [Real Time Clock Add-On →](06-real-time-clock.md)

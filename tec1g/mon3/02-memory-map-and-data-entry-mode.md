@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 2
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Basic Operation and Main Menu](01-basic-operation-and-main-menu.md) | [Guide](index.md) | [Tiny Basic →](03-tiny-basic.md)

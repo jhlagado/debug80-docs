@@ -29,12 +29,6 @@ nav_order: 1
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — built up one construct at a time, ending in complete games.</span>
     <span class="volume__enter">react →</span>
   </a>
-  <a class="volume volume--tec1g" href="/tec1g/mon3/01-basic-operation-and-main-menu.html">
-    <span class="volume__tag">Vol $03 · user guide</span>
-    <span class="volume__title">TEC-1G / MON-3</span>
-    <span class="volume__desc">The single-board Z80 learning computer and its monitor — operation, memory map, Tiny Basic, and advanced programming.</span>
-    <span class="volume__enter">boot →</span>
-  </a>
 </nav>
 
 ## Debug80

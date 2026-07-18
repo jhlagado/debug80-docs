@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 3
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Memory Map and Data Entry Mode](02-memory-map-and-data-entry-mode.md) | [Guide](index.md) | [Terminal Monitor and TEC Magazine Code →](04-terminal-monitor-and-tec-magazine-code.md)

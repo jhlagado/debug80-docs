@@ -12,7 +12,12 @@ export default defineConfig({
   // preserves all 120 live URLs verbatim.
   cleanUrls: false,
 
-  sitemap: { hostname: 'https://debug80.com' },
+  sitemap: {
+    hostname: 'https://debug80.com',
+    transformItems(items) {
+      return items.filter((item) => !item.url.startsWith('tec1g/'));
+    },
+  },
 
   // The Manuscript scheme is a deliberate light design, matching the
   // Jekyll site exactly; no dark mode toggle.
@@ -44,7 +49,6 @@ export default defineConfig({
       { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-and-add-a-folder.html' },
       { text: 'AZM Book', link: '/azm-book/book0/00-preface.html' },
       { text: 'Glimmer Book', link: '/glimmer-book/book0/00-preface.html' },
-      { text: 'TEC-1G / MON-3', link: '/tec1g/mon3/01-basic-operation-and-main-menu.html' },
     ],
     sidebar: sidebars,
     search: { provider: 'local' },
@@ -62,6 +66,9 @@ export default defineConfig({
     const layout = pageData.frontmatter.layout;
     if (layout === 'default' || layout === 'home') {
       delete pageData.frontmatter.layout;
+    }
+    if (pageData.relativePath.startsWith('tec1g/')) {
+      pageData.frontmatter.search = false;
     }
   },
 });

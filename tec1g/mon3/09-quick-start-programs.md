@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 9
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Hard Drive Access](08-hard-drive-access.md) | [Guide](index.md) | [Appendix and Useful Links →](10-appendix-and-useful-links.md)

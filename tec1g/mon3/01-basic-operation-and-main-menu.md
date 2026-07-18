@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 1
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← MON-3 User Guide](index.md) | [Guide](index.md) | [Memory Map and Data Entry Mode →](02-memory-map-and-data-entry-mode.md)

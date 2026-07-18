@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 6
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Advanced Programming](05-advanced-programming.md) | [Guide](index.md) | [Graphical LCD Add-On →](07-graphical-lcd.md)

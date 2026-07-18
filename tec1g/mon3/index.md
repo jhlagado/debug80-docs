@@ -6,6 +6,7 @@ nav_order: 1
 has_children: true
 nav_exclude: true
 has_toc: false
+search: false
 author: "Brian Chiha"
 ---
 

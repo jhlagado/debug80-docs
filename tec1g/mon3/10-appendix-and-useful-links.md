@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 10
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Quick Start Programs](09-quick-start-programs.md) | [Guide](index.md)

@@ -6,6 +6,7 @@ grand_parent: "TEC-1G"
 nav_order: 7
 nav_exclude: true
 has_toc: true
+search: false
 ---
 
 [← Real Time Clock Add-On](06-real-time-clock.md) | [Guide](index.md) | [Hard Drive Access →](08-hard-drive-access.md)

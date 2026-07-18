@@ -5,6 +5,7 @@ nav_order: 8
 has_children: true
 has_toc: true
 nav_exclude: true
+search: false
 ---
 
 # TEC-1G
