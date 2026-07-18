@@ -22,6 +22,8 @@ export default defineConfig({
     // The books fence Z80 listings as ```z80; Shiki has no Z80 grammar, so
     // reuse the generic assembler grammar rather than falling back to txt.
     languageAlias: { z80: 'asm' },
+    // Warm-toned dark syntax theme to match the Nocturne palette.
+    theme: 'vitesse-dark',
   },
 
   head: [
@@ -32,7 +34,7 @@ export default defineConfig({
       'link',
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap',
       },
     ],
   ],

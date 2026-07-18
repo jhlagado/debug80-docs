@@ -1,93 +1,126 @@
 /* ============================================================
-   debug80 "Manuscript" theme — warm light scheme ported from
-   the Jekyll just-the-docs color scheme + custom.scss.
+   debug80 "Nocturne" theme — a candlelit reading room.
+   Warm near-black umber page, cream serif text, candle-gold
+   accents, bronze-edged listing panels. Evolved from the light
+   Manuscript scheme; same bones, inverted mood.
    ============================================================ */
 
 :root {
-  /* Palette */
-  --vp-c-bg: #fdfaf5;
-  --vp-c-bg-alt: #f3efe8;
-  --vp-c-bg-soft: #f1ece3;
-  --vp-c-bg-elv: #fdfaf5;
-  --vp-c-text-1: #3d3935;
-  --vp-c-text-2: #5c5750;
-  --vp-c-text-3: #6e6861;
-  --vp-c-divider: #d8d3c8;
-  --vp-c-border: #c9c1b4;
-  --vp-c-gutter: #d8d3c8;
+  /* Palette — warm darks, no cold grays */
+  --vp-c-bg: #211b15;
+  --vp-c-bg-alt: #1a1510;
+  --vp-c-bg-soft: #2a231b;
+  --vp-c-bg-elv: #2a231b;
+  --vp-c-text-1: #eae2d2;
+  --vp-c-text-2: #b8ad9b;
+  --vp-c-text-3: #8f8573;
+  --vp-c-divider: #3a3226;
+  --vp-c-border: #4a4033;
+  --vp-c-gutter: #3a3226;
 
-  --vp-c-brand-1: #1b5e8b;
-  --vp-c-brand-2: #1b5e8b;
-  --vp-c-brand-3: #1b5e8b;
-  --vp-c-brand-soft: rgba(27, 94, 139, 0.14);
+  /* Candle-gold brand: links, active nav, focus */
+  --vp-c-brand-1: #d9a95f;
+  --vp-c-brand-2: #e5bc7a;
+  --vp-c-brand-3: #c99a4e;
+  --vp-c-brand-soft: rgba(217, 169, 95, 0.16);
 
   /* Typography */
   --vp-font-family-base: 'Merriweather', Georgia, 'Times New Roman', serif;
   --vp-font-family-mono: Menlo, Monaco, Consolas, 'Courier New', monospace;
 
-  /* Inline code — warm highlight with muted crimson */
-  --vp-code-color: #b03820;
-  --vp-code-bg: #e9e4db;
+  /* Inline code — warm ember on dark leather */
+  --vp-code-color: #e8926f;
+  --vp-code-bg: #332a20;
   --vp-code-font-size: 0.875em;
 
   /* Block code */
-  --vp-code-block-bg: #f1ece3;
-  --vp-code-block-color: #2f2b27;
+  --vp-code-block-bg: #1a1510;
+  --vp-code-block-color: #d8cfbe;
 
   /* Sidebar / nav chrome */
-  --vp-sidebar-bg-color: #f3efe8;
-  --vp-nav-bg-color: #fdfaf5;
+  --vp-sidebar-bg-color: #1a1510;
+  --vp-nav-bg-color: #211b15;
 
-  --vp-c-warning-1: #b7372f;
-  --vp-c-warning-soft: #f7e1dd;
+  --vp-c-warning-1: #d97862;
+  --vp-c-warning-soft: rgba(183, 55, 47, 0.18);
+
+  /* Local search panel */
+  --vp-local-search-bg: #2a231b;
+  --vp-local-search-highlight-bg: #d9a95f;
+  --vp-local-search-highlight-text: #211b15;
 }
 
 /* Serif long-form reading size */
 html {
   font-size: 18px;
+  background: #211b15;
 }
 
-/* --- Content typography (VitePress renders content in .vp-doc) --- */
+/* Headings set in Fraunces — a display serif with bookish character */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h5,
+.vp-doc h6,
+.VPNavBarTitle .title,
+.VPSidebarItem.level-0 > .item .text {
+  font-family: 'Fraunces', 'Merriweather', Georgia, serif;
+}
+
+/* --- Content typography --- */
 
 .vp-doc p {
   margin-bottom: 1.25rem;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
 .vp-doc h1 {
-  font-size: 1.875rem;
+  font-size: 2.125rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
   margin-bottom: 1rem;
+  color: #f2ead9;
+}
+
+/* A candle-gold kicker rule above each chapter title */
+.vp-doc h1::before {
+  content: '';
+  display: block;
+  width: 3.5rem;
+  height: 3px;
+  margin-bottom: 1.1rem;
+  background: linear-gradient(90deg, #d9a95f, rgba(217, 169, 95, 0));
+  border-radius: 2px;
 }
 
 .vp-doc h2 {
-  font-size: 1.375rem;
+  font-size: 1.4375rem;
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   line-height: 1.3;
   margin-top: 3rem;
   margin-bottom: 0.875rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid #d8d3c8;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid #3a3226;
+  color: #f2ead9;
 }
 
 .vp-doc h3 {
-  font-size: 1.125rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
   line-height: 1.4;
   margin-top: 2.25rem;
   margin-bottom: 0.5rem;
+  color: #ecdfc8;
 }
 
 .vp-doc h4 {
   font-size: 0.8125rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #6e6861;
+  letter-spacing: 0.09em;
+  color: #a89a7e;
   margin-top: 2rem;
   margin-bottom: 0.5rem;
 }
@@ -102,7 +135,7 @@ html {
 
 .vp-doc h1 + p {
   font-size: 1.0625rem;
-  color: #4a4643;
+  color: #cdc2ad;
 }
 
 .vp-doc ul,
@@ -135,15 +168,17 @@ html {
   font-weight: 400;
 }
 
-/* Block code — the site-wide "listing frame" */
+/* Block code — bronze-edged listing panels, like plates in a workshop manual */
 .vp-doc div[class*='language-'] {
   background:
-    linear-gradient(90deg, rgba(118, 86, 52, 0.1), rgba(118, 86, 52, 0) 4.5rem),
-    #f1ece3;
-  border: 1px solid #c9c1b4;
-  border-left: 5px solid #8a6742;
+    linear-gradient(90deg, rgba(217, 169, 95, 0.07), rgba(217, 169, 95, 0) 5rem),
+    #1a1510;
+  border: 1px solid #3a3226;
+  border-left: 5px solid #a87d4a;
   border-radius: 6px;
-  box-shadow: 0 1px 0 rgba(26, 23, 20, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(242, 234, 217, 0.04),
+    0 2px 10px rgba(0, 0, 0, 0.35);
   margin: 0.5rem 0 2rem;
 }
 
@@ -153,23 +188,35 @@ html {
 }
 
 .vp-doc div[class*='language-'] code {
-  color: #2f2b27;
   font-size: 0.875rem;
   line-height: 1.65;
 }
 
-/* Horizontal rules */
-.vp-doc hr {
-  border: none;
-  border-top: 1px solid #d8d3c8;
-  margin: 2.75rem 0;
+/* Language badge in the listing corner — small bronze tab */
+.vp-doc [class*='language-'] > span.lang {
+  color: #a87d4a;
+  font-weight: 600;
 }
 
-/* Blockquotes — editorial aside */
+/* Horizontal rules — a centered gold ornament */
+.vp-doc hr {
+  border: none;
+  height: 1px;
+  margin: 2.75rem auto;
+  max-width: 16rem;
+  background: linear-gradient(
+    90deg,
+    rgba(217, 169, 95, 0),
+    rgba(217, 169, 95, 0.55),
+    rgba(217, 169, 95, 0)
+  );
+}
+
+/* Blockquotes — candlelit aside */
 .vp-doc blockquote {
-  border-left: 3px solid #1b5e8b;
-  background-color: #f0ece4;
-  color: #5c5750;
+  border-left: 3px solid #d9a95f;
+  background-color: #2a231b;
+  color: #c5b9a3;
   padding: 0.875rem 1.375rem;
   border-radius: 0 5px 5px 0;
   font-style: italic;
@@ -185,7 +232,7 @@ html {
   margin-bottom: 0;
 }
 
-/* Tables — clean with alternating row tint */
+/* Tables — dark ledger with warm rules */
 .vp-doc table {
   font-size: 0.9rem;
   border-collapse: collapse;
@@ -193,26 +240,27 @@ html {
 }
 
 .vp-doc thead th {
-  background-color: #eae5dc;
+  background-color: #2e2820;
   font-weight: 600;
   letter-spacing: 0.02em;
-  border-bottom: 2px solid #cdc8be;
+  border-bottom: 2px solid #4a4033;
+  color: #e5dcc8;
 }
 
 .vp-doc tbody tr:nth-child(even) {
-  background-color: #f8f4ed;
+  background-color: #262019;
 }
 
 .vp-doc th,
 .vp-doc td {
   padding: 0.55rem 0.875rem;
-  border: 1px solid #ddd8ce;
+  border: 1px solid #3a3226;
 }
 
 /* --- MON-3 content classes (raw HTML in the guide markdown) --- */
 
 .vp-doc table.mon3-emphasis-table .mon3-user-range {
-  background-color: #d94b3f;
+  background-color: #b23a2e;
   color: #fff;
   font-weight: 700;
 }
@@ -242,19 +290,19 @@ html {
 }
 
 .vp-doc .mon3-key-emphasis {
-  color: #d71920;
+  color: #f07a70;
   font-weight: 500;
 }
 
 .vp-doc .mon3-address-emphasis {
-  color: #b38300;
+  color: #d9b45f;
   font-weight: 700;
 }
 
 .vp-doc .mon3-warning {
-  border-left: 5px solid #b7372f;
-  background-color: #f7e1dd;
-  color: #4b2722;
+  border-left: 5px solid #c05a4c;
+  background-color: #35231f;
+  color: #e8c9c0;
   border-radius: 0 5px 5px 0;
   padding: 0.85rem 1.1rem;
   margin: 1rem 0 1.5rem;
@@ -266,13 +314,13 @@ html {
 }
 
 .vp-doc .mon3-warning strong {
-  color: #8f261f;
+  color: #f0938a;
 }
 
 .vp-doc .mon3-data-box {
-  border: 1px solid #7ea8d8;
-  border-left: 5px solid #2f6fb0;
-  background-color: #dcecff;
+  border: 1px solid #3d5a78;
+  border-left: 5px solid #5c8cb8;
+  background-color: #1e2833;
   border-radius: 0 5px 5px 0;
   margin: 1rem 0 1.5rem;
   padding: 0.85rem 1.1rem;
@@ -287,17 +335,19 @@ html {
   padding: 0;
 }
 
-/* --- Intel HEX field diagram (MON-3 guide) --- */
+/* --- Intel HEX field diagram (MON-3 guide) ---
+   The colour chips stay saturated; dark ink on the chips keeps them
+   readable against the dark page. */
 
 .vp-doc .intel-hex-diagram {
   display: inline-block;
   max-width: 100%;
   margin: 0.75rem 0 1.5rem;
   overflow-x: auto;
-  border: 1px solid #c9c1b4;
+  border: 1px solid #4a4033;
   border-radius: 6px;
-  background: #f1ece3;
-  box-shadow: 0 1px 0 rgba(26, 23, 20, 0.05);
+  background: #1a1510;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .vp-doc .intel-hex-diagram__labels,
@@ -313,7 +363,7 @@ html {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #2f2b27;
+  color: #cdc2ad;
 }
 
 .vp-doc .intel-hex-diagram__record {
@@ -330,7 +380,8 @@ html {
 .vp-doc .intel-hex-diagram__cell {
   display: inline-block;
   padding: 0.35rem 0.55rem;
-  border-right: 1px solid rgba(47, 43, 39, 0.18);
+  border-right: 1px solid rgba(26, 21, 16, 0.4);
+  color: #211b15;
 }
 
 .vp-doc .intel-hex-diagram__cell:last-child {
@@ -343,6 +394,18 @@ html {
 .vp-doc .intel-hex-diagram__cell--type { background: #a8d98d; }
 .vp-doc .intel-hex-diagram__cell--data { background: #d9c2f0; }
 .vp-doc .intel-hex-diagram__cell--checksum { background: #f4a261; }
+
+/* --- Sidebar refinements --- */
+
+.VPSidebarItem.level-0 > .item .text {
+  color: #d9c8a8;
+  letter-spacing: 0.01em;
+}
+
+.VPSidebarItem .item .text {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
 
 /* --- Image lightbox --- */
 
@@ -364,7 +427,7 @@ body.has-image-lightbox {
   justify-content: center;
   box-sizing: border-box;
   padding: 4rem 1.5rem 1.5rem;
-  background: rgba(18, 16, 14, 0.86);
+  background: rgba(12, 10, 8, 0.9);
   overflow: auto;
 }
 
@@ -387,9 +450,9 @@ body.has-image-lightbox {
   max-height: calc(100vh - 7rem);
   object-fit: contain;
   background: #f6f2eb;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(217, 169, 95, 0.4);
   border-radius: 6px;
-  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.45);
+  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.55);
 }
 
 .image-lightbox__caption {
@@ -406,10 +469,10 @@ body.has-image-lightbox {
   right: 1rem;
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(217, 169, 95, 0.45);
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.45);
-  color: #fff;
+  color: #eee;
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
@@ -427,12 +490,19 @@ img.js-lightbox-image {
 
 img.js-lightbox-image:hover,
 img.js-lightbox-image:focus {
-  filter: brightness(0.97);
+  filter: brightness(1.03);
 }
 
 img.js-lightbox-image:focus {
-  outline: 2px solid #1b5e8b;
+  outline: 2px solid #d9a95f;
   outline-offset: 4px;
+}
+
+/* Content images sit on light card so screenshots/scans stay readable */
+.vp-doc img {
+  background: #f6f2eb;
+  border: 1px solid #4a4033;
+  border-radius: 6px;
 }
 
 @media (max-width: 50rem) {
