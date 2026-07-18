@@ -9,11 +9,14 @@ nav_order: 1
 
 # Chapter 1 - The Shape of a Game
 
-Glimmer is a new way to write games for an old machine. You describe
-the game - what it remembers, what it responds to, what follows, and
-what it shows - and Glimmer builds the running program around your
-description. That is the subject of this book, and before we start,
-here is what I assume about you: you already read assembly. You can
+Glimmer is a new way to write games for old machines. It takes
+techniques from reactive programming, a school of thought the
+computing world needed forty years to arrive at, and time-travels
+them back to the age of the Z80. You describe the game - what it
+remembers, what it responds to, what follows, and what it shows - and
+Glimmer builds the running program around your description. That is
+the subject of this book, and before we start, here is what I assume
+about you: you already read assembly. You can
 follow a `ld a,(hl)` and a conditional jump without slowing down, so
 you know the pleasure of this machine - nothing between you and the
 metal, every byte where you put it. And you know, or you can guess,
@@ -23,10 +26,25 @@ the other, every frame, in the right order, forever. The game itself -
 the rules, the fun part - ends up buried inside a heap of plumbing,
 and the plumbing is nearly the same in every game you will ever write.
 
-Glimmer starts from one observation about that heap: almost everything
-a game does is a *reaction*. A key goes down, so the player moves. A
-timer runs out, so the block drops. The score changes, so the display
-updates. So Glimmer lets you write the game as reactions, in the
+The pain has a name. The way we have always programmed these machines
+is called *imperative*: the program is a list of orders - do this,
+then this, then check that - and seeing that every order lands at the
+right moment, frame after frame, is your job and nobody else's.
+Reactive programming turns the arrangement around. You write down how
+the program should respond when things happen, and machinery does the
+watching. The idea took four decades of user interfaces and games to
+take shape, generation after generation discovering the same truth:
+almost everything an interactive program does is a *reaction*. A key
+goes down, so the player moves. A timer runs out, so the block drops.
+The score changes, so the display updates. These are ideas from the
+future of this machine - they had to be discovered elsewhere, slowly,
+before anyone could carry them home to it - and none of them is
+exotic. If you have ever used a spreadsheet, changed one cell and
+watched every formula that mentions it follow, you have felt the
+model in your hands. That feeling is most of the theory, and the rest
+is small enough for one chapter.
+
+So Glimmer lets you write the game as reactions, in the
 preface's four words. You declare the facts your game remembers, you
 name the moments it must respond to, and you write the rules and the
 pictures as a few lines of real Z80 each, with a label saying when
@@ -245,13 +263,14 @@ flowchart LR
 ```
 
 Something changed; the code that depends on it ran; the output
-updated. You have seen this machine before - it is a spreadsheet.
-Change one cell and the formulas that reference it recompute, and the
-sheet in front of you updates. You never call a formula; you write it,
-and the spreadsheet works out when it must run. A program built this
-way is called **reactive**, and the reason I am teaching you Glimmer
-rather than any other way of building Z80 games is sitting right there
-in the source: the whole chain is readable off the page. `bind ... ->
+updated. This is the spreadsheet from the start of the chapter,
+caught in the act. Change one cell and the formulas that reference it
+recompute, and the sheet in front of you updates. You never call a
+formula; you write it, and the spreadsheet works out when it must
+run. Here the same idea is running on a Z80, and the reason I am
+teaching you Glimmer rather than any other way of building Z80 games
+is sitting right there in the source: the whole chain is readable off
+the page. `bind ... ->
 Right`, `on Right`, `updates DotX`, `on DotX`. Four declarations, and
 you can trace the route from keypress to pixel with a finger.
 
