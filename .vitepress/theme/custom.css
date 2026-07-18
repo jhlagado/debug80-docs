@@ -521,3 +521,222 @@ img.js-lightbox-image:focus {
     font-size: 16px;
   }
 }
+
+/* ============================================================
+   The Machine Library — each book is its own illuminated volume.
+   The route sets data-book on <html>; the accent follows.
+   ============================================================ */
+
+:root {
+  --book-accent: #d9a95f;
+  --book-accent-bright: #e5bc7a;
+  --book-accent-dim: #a87d4a;
+  --book-accent-soft: rgba(217, 169, 95, 0.16);
+}
+
+html[data-book='glimmer'] {
+  --book-accent: #8fe388;
+  --book-accent-bright: #aef2a7;
+  --book-accent-dim: #55965a;
+  --book-accent-soft: rgba(143, 227, 136, 0.14);
+}
+
+html[data-book='debug80'] {
+  --book-accent: #6fc3df;
+  --book-accent-bright: #93d7ee;
+  --book-accent-dim: #4a8ba3;
+  --book-accent-soft: rgba(111, 195, 223, 0.14);
+}
+
+html[data-book='tec1g'] {
+  --book-accent: #f0655a;
+  --book-accent-bright: #ff8a7d;
+  --book-accent-dim: #a8463f;
+  --book-accent-soft: rgba(240, 101, 90, 0.14);
+}
+
+/* The brand channel rides the book accent everywhere VitePress uses it:
+   links, active nav, focus rings, search highlights. */
+html[data-book] {
+  --vp-c-brand-1: var(--book-accent);
+  --vp-c-brand-2: var(--book-accent-bright);
+  --vp-c-brand-3: var(--book-accent-dim);
+  --vp-c-brand-soft: var(--book-accent-soft);
+}
+
+/* Chapter kicker, ornaments, and listing edges take the volume's light */
+.vp-doc h1::before {
+  background: linear-gradient(90deg, var(--book-accent), rgba(0, 0, 0, 0));
+}
+
+.vp-doc hr {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--book-accent) 55%, transparent),
+    transparent
+  );
+}
+
+.vp-doc blockquote {
+  border-left-color: var(--book-accent);
+}
+
+.vp-doc div[class*='language-'] {
+  border-left-color: var(--book-accent-dim);
+  box-shadow:
+    inset 0 1px 0 rgba(242, 234, 217, 0.04),
+    0 2px 10px rgba(0, 0, 0, 0.35),
+    -6px 0 18px -12px var(--book-accent);
+}
+
+.vp-doc [class*='language-'] > span.lang {
+  color: var(--book-accent-dim);
+}
+
+/* --- Chapter openers: oversized Fraunces + a drop cap on the lead --- */
+
+.vp-doc h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.vp-doc h1 + p:not(.library-hall__tagline)::first-letter {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 3.3em;
+  font-weight: 700;
+  float: left;
+  line-height: 0.82;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--book-accent);
+}
+
+/* --- The Hall: home page hero --- */
+
+.library-hall {
+  margin: 1.5rem 0 2.5rem;
+  text-align: center;
+}
+
+.library-hall__eyebrow {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  color: #8f8573;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.library-hall__title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #f2ead9;
+  margin: 0 0 1rem;
+  border: none;
+}
+
+.vp-doc .library-hall__title::before {
+  content: none;
+}
+
+.library-hall__tagline {
+  font-style: italic;
+  color: #b8ad9b;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+/* --- The Shelf: four glowing volumes --- */
+
+.library-shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1.25rem;
+  margin: 0 0 3rem;
+}
+
+.library-shelf .volume {
+  --spine: var(--vol-accent, #d9a95f);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.4rem 1.4rem 1.2rem 1.65rem;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--spine) 9%, #1a1510), #1a1510 55%);
+  border: 1px solid #3a3226;
+  border-left: 7px solid var(--spine);
+  border-radius: 8px;
+  text-decoration: none !important;
+  overflow: hidden;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Faint CRT scanlines across each volume face */
+.library-shelf .volume::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.16) 0,
+    rgba(0, 0, 0, 0.16) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.5;
+}
+
+.library-shelf .volume:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--spine) 45%, #3a3226);
+  box-shadow:
+    0 6px 22px rgba(0, 0, 0, 0.5),
+    0 0 26px -6px color-mix(in srgb, var(--spine) 55%, transparent);
+}
+
+.library-shelf .volume__tag {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  color: var(--spine);
+  text-transform: uppercase;
+}
+
+.library-shelf .volume__title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f2ead9;
+  line-height: 1.15;
+}
+
+.library-shelf .volume__desc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #b8ad9b;
+}
+
+.library-shelf .volume__enter {
+  margin-top: auto;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--spine);
+}
+
+.volume--debug80 { --vol-accent: #6fc3df; }
+.volume--azm { --vol-accent: #d9a95f; }
+.volume--glimmer { --vol-accent: #8fe388; }
+.volume--tec1g { --vol-accent: #f0655a; }
+
+
+/* The hall gets a wider stage: home has no sidebar or outline */
+html[data-book='hall'] .VPDoc .content-container {
+  max-width: 62rem !important;
+}

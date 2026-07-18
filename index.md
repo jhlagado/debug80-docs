@@ -4,9 +4,38 @@ title: Home
 nav_order: 1
 ---
 
-# Debug80 Documentation
+<div class="library-hall">
+  <p class="library-hall__eyebrow">$0000 · cold boot</p>
+  <h1 class="library-hall__title">The Debug80 Library</h1>
+  <p class="library-hall__tagline">Books on the Z80 — a debugger, an assembler, a game language, and the machine they serve.</p>
+</div>
 
-Technical documentation for the **Debug80** Z80 debugger extension and the **AZM** assembler for Visual Studio Code.
+<nav class="library-shelf">
+  <a class="volume volume--debug80" href="/debug80-book/book1/01-install-and-add-a-folder.html">
+    <span class="volume__tag">Vol $00 · 2 books</span>
+    <span class="volume__title">Debug80</span>
+    <span class="volume__desc">Source-level Z80 debugging in VS Code — from installation to stepping real hardware projects and sending HEX to the board.</span>
+    <span class="volume__enter">run →</span>
+  </a>
+  <a class="volume volume--azm" href="/azm-book/book0/00-preface.html">
+    <span class="volume__tag">Vol $01 · 3 books</span>
+    <span class="volume__title">AZM</span>
+    <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
+    <span class="volume__enter">assemble →</span>
+  </a>
+  <a class="volume volume--glimmer" href="/glimmer-book/book0/00-preface.html">
+    <span class="volume__tag">Vol $02 · 1 book</span>
+    <span class="volume__title">Glimmer</span>
+    <span class="volume__desc">A reactive game language that compiles to readable Z80 — built up one construct at a time, ending in complete games.</span>
+    <span class="volume__enter">react →</span>
+  </a>
+  <a class="volume volume--tec1g" href="/tec1g/mon3/01-basic-operation-and-main-menu.html">
+    <span class="volume__tag">Vol $03 · user guide</span>
+    <span class="volume__title">TEC-1G / MON-3</span>
+    <span class="volume__desc">The single-board Z80 learning computer and its monitor — operation, memory map, Tiny Basic, and advanced programming.</span>
+    <span class="volume__enter">boot →</span>
+  </a>
+</nav>
 
 ## Debug80
 
