@@ -11,7 +11,7 @@ nav_order: 1
 
 Debug80 runs inside Visual Studio Code. Start with VS Code, the Debug80 extension and a workspace folder for your Z80 project.
 
-Open [Visual Studio Code](https://code.visualstudio.com/){:target="_blank" rel="noopener"} and install the current VS Code build for your operating system. Debug80 declares support for VS Code `1.92.0` and later.
+Open [Visual Studio Code](https://code.visualstudio.com/) and install the current VS Code build for your operating system. Debug80 declares support for VS Code `1.92.0` and later.
 
 ## Install Debug80
 

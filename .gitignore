@@ -10,3 +10,6 @@ azm-book/**/*.bin
 azm-book/**/*.hex
 azm-book/**/*.lst
 azm-book/**/*.d8.json
+node_modules/
+.vitepress/dist/
+.vitepress/cache/
