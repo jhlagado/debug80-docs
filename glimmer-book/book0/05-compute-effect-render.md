@@ -262,8 +262,10 @@ formulas recompute; what your code does while it runs stays yours.
 ## The program, as a report
 
 The chain you have been tracing by eye all chapter, Glimmer will
-print for you on request - and I am closing the chapter with it
-because it is a gift you will use for the rest of the book:
+print for you on request. The request comes from Glimmer's command
+line - the first time this book has needed it, and Appendix D covers
+getting it in one line - and I am closing the chapter with it because
+it is a gift you will use for the rest of the book:
 
 ```sh
 glimmer --deps meter.glim

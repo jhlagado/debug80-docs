@@ -34,8 +34,9 @@ what exists, the blocks say what happens, and the engine says how the
 heavy work gets done.
 
 Before we set off, get the code where you can touch it. Copy the three files from
-`examples/` in the Glimmer repository into a working directory, run
-`glimmer build tetro.glim`, and keep all three files open in your
+`examples/` in the Glimmer repository into a working directory, build
+the entry file (`glimmer build tetro.glim` on Appendix D's command
+line), and keep all three files open in your
 editor while you read - this walk works best when you can look up from
 the page and touch what I am pointing at. Every generated excerpt in
 this chapter comes from the `tetro.main.asm` that build writes - 1392

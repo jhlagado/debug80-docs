@@ -15,6 +15,19 @@ a `.glim` file as a runnable target, and the diagnostics the compiler
 reports. Every usage line, output line and message here is copied
 from real runs of Glimmer 0.6.
 
+## Getting the command line
+
+The book's workflow never needs it: Debug80 carries the compiler
+inside the extension. For scripts, automation, or working outside VS
+Code, the CLI installs with Node 20 or newer:
+
+```sh
+npm install -g @jhlagado/glimmer
+```
+
+That provides the `glimmer` command, with the assembler included as a
+dependency.
+
 ## The command line
 
 `glimmer -h` prints the whole surface:

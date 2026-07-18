@@ -27,32 +27,31 @@ keypad supplying the moments.
 
 ## The tools
 
-Two installs and we are in business.
-
-Glimmer's compiler is a Node.js package. With Node 20 or newer on your
-machine:
-
-```sh
-npm install -g @jhlagado/glimmer
-```
-
-That gives you the `glimmer` command, and it brings the AZM assembler
-along as a dependency - one install covers the whole build chain, from
-your `.glim` file down to bytes.
-
-For running and debugging we use **Debug80**, a VS Code extension that
-carries a full TEC-1G inside it: install VS Code, open the Extensions
-marketplace, and search for Debug80. If you want the guided tour of
-the extension itself - every panel, every button - that is [Debug80
-Book 1](../../debug80-book/book1/), and it is worth an evening. Here I
-will show you exactly the parts we need and no more, because I want to
-get you to the pixel.
+One install and we are in business. Everything this book needs lives
+inside **Debug80**, a VS Code extension: the Glimmer compiler, the
+assembler, and a full emulated TEC-1G, keypad and all. Install VS
+Code, open the Extensions marketplace, and add Debug80. If you want
+the guided tour of the extension itself - every panel, every button -
+that is [Debug80 Book 1](../../debug80-book/book1/), and it is worth
+an evening. Here I will show you exactly the parts we need and no
+more, because I want to get you to the pixel. (Glimmer also has a
+command line, for scripts and for the curious; Appendix D covers it.
+You will not need it in this book's workflow.)
 
 ## Beacon
 
-Create a folder for the project, and in it a file named `main.glim`.
-Type it in - actually type it, because the reading-aloud habit from
-chapter 1 works through the fingers too:
+Open VS Code, add an empty folder, and initialize it as a TEC-1G
+project from the Debug80 panel - two clicks, and [Debug80 Book
+1](../../debug80-book/book1/02-create-a-tec1g-project.md) walks
+through them with pictures if you want company. Then create a file in
+the project named `main.glim`. That name is doing real work: a file
+called `main.glim`, or ending in `.main.glim`, whose first
+declaration is `program`, is one Debug80 recognises as a Glimmer
+program and knows how to build. The name is the whole arrangement -
+there is nothing to configure.
+
+Type the program in - actually type it, because the reading-aloud
+habit from chapter 1 works through the fingers too:
 
 ```text
 program Beacon
@@ -102,54 +101,13 @@ never knows or cares which colour is current - it reads the fact and
 plots it. Let's say the chain aloud once before we build: "GO fires Step; on
 Step, NextColour updates Colour; on Colour, DrawBeacon."
 
-## Build it
-
-Open a terminal in the project folder and hand your file to the
-compiler:
-
-```sh
-glimmer build main.glim
-```
-
-```text
-Wrote main.main.asm (register contracts checked by AZM)
-Wrote main.main.d8.json (11 block segments attributed to .glim source)
-```
-
-Four files have appeared beside your source, and each one is worth a
-sentence, because together they tell you what a build means here:
-
-- `main.main.asm` - the generated assembly program: your blocks and
-  the machinery around them, one readable file. We tour it below.
-- `main.main.hex` and `main.main.bin` - the assembled bytes, as Intel
-  HEX for sending to hardware and as a raw binary image.
-- `main.main.d8.json` - the debug map: a record of which addresses
-  came from which source lines. Eleven of its entries point back into
-  `main.glim` - your block bodies - and that little fact is about to
-  make your debugger feel like a magic trick.
-
-One more thing happened during that build, and you should know it is
-there working for you. The assembler ran its register-contract
-checking over the whole program: every routine in the generated file
-declares which registers it uses, and the assembler proves every call
-against those declarations. The classic Z80 bug - a helper quietly
-trampling a register your loop was counting on - fails the build here,
-with a message, instead of failing the game an hour into play.
-
 ## Run it
-
-Open the folder in VS Code and initialize it as a TEC-1G project from
-the Debug80 panel - two clicks, and [Debug80 Book
-1](../../debug80-book/book1/02-create-a-tec1g-project.md) walks
-through them with pictures if you want company. Debug80 finds your
-program by its name: a file called `main.glim`, or ending in
-`.main.glim`, whose first declaration is `program`, is a target it
-knows how to build.
 
 Press F5.
 
-Debug80 builds the target through Glimmer, loads the MON-3 ROM and
-your program, and runs. The platform panel opens on the TEC-1G, and
+That is the build system. Debug80 hands your file to the Glimmer
+compiler, assembles the result, checks it, loads the MON-3 ROM and
+your program into the emulated TEC-1G, and runs. The platform panel opens on the TEC-1G, and
 there on the 8x8 matrix is a single red pixel. Let it glow for a second, because you earned it: `Colour` started at 1, which is red, and the
 word `changed` in your declaration is why it drew itself before you
 touched anything. That dot is your declaration, made light.
@@ -162,11 +120,26 @@ The scan keeps the pixel lit while both of your blocks wait for their
 facts to change. An idle Glimmer program is genuinely idle, and that
 is the reactive model working exactly as designed.
 
+The build also left things for us in the project's `build` folder.
+`main.main.asm` is the generated assembly program - your blocks and
+the machinery around them, one readable file, and the subject of the
+next section. Beside it sit the assembled bytes as Intel HEX, which
+is what will travel to a real TEC-1G one day, and the debug map,
+which records the source line every address came from and is about
+to make your debugger feel like a magic trick. And one more thing
+happened during that build, quietly working for you: the assembler
+ran its register-contract checking over the whole program - every
+routine in the generated file declares which registers it uses, and
+every call is proven against those declarations. The classic Z80 bug,
+a helper quietly trampling a register your loop was counting on,
+fails the build with a message instead of failing the game an hour
+into play.
+
 ## The file Glimmer wrote
 
 While it runs, let us go and see what Glimmer actually built for you.
-Open `main.main.asm`. The file reads top to bottom in a fixed order,
-and its section comments are a table of contents:
+Open `build/main.main.asm`. The file reads top to bottom in a fixed
+order, and its section comments are a table of contents:
 
 ```text
 ; --- TEC-1G / MON-3 platform ---        equates: ports, API calls
@@ -293,13 +266,14 @@ F5, and steer the dot with keys 4 and 6.
 
 ## Summary
 
-- One install (`npm install -g @jhlagado/glimmer`) provides the
-  compiler and the assembler; Debug80 in VS Code provides the machine.
-- `glimmer build` produces the generated assembly, the HEX and binary
-  images, and the debug map, with register contracts proven on every
-  build.
-- Debug80 discovers a `main.glim` (or `*.main.glim`) file as a target;
-  F5 builds and runs it on the emulated TEC-1G.
+- Debug80 in VS Code is the whole toolchain: the Glimmer compiler,
+  the assembler, and the emulated TEC-1G travel inside the extension.
+- The file name is the arrangement: Debug80 recognises `main.glim`
+  (or `*.main.glim`) as a Glimmer program, and F5 builds and runs it.
+- A build leaves the generated assembly, the HEX image for real
+  hardware, and the debug map in the project's `build` folder, with
+  register contracts proven every time. (The command line lives in
+  Appendix D, for scripts and the curious.)
 - The generated file reads top to bottom - equates, flags and masks,
   state, loop, polling, dispatch, your wrapped blocks, rollover,
   library - and answers every cost question in Z80.
