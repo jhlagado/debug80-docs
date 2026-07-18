@@ -117,8 +117,7 @@ Wrote main.main.d8.json (11 block segments attributed to .glim source)
 ```
 
 Four files have appeared beside your source, and each one is worth a
-sentence, because together they are the whole story of what a build
-means here:
+sentence, because together they tell you what a build means here:
 
 - `main.main.asm` - the generated assembly program: your blocks and
   the machinery around them, one readable file. We tour it below.
@@ -130,7 +129,7 @@ means here:
   make your debugger feel like a magic trick.
 
 One more thing happened during that build, and you should know it is
-there working for you. the assembler ran its register-contract
+there working for you. The assembler ran its register-contract
 checking over the whole program: every routine in the generated file
 declares which registers it uses, and the assembler proves every call
 against those declarations. The classic Z80 bug - a helper quietly

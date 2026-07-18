@@ -306,7 +306,7 @@ Read the contract line the way you read a block header. `in A,B,C`:
 the routine consumes those three on entry - colour, x, y. `clobbers
 A,B,DE,HL` and the flags: any of those may hold anything on return.
 A register absent from a declared contract counts as preserved, and
-The assembler checks the routine's body against that promise too. C's absence from the clobbers list is
+the assembler checks the routine's body against that promise too. C's absence from the clobbers list is
 a verified guarantee that y survives the call - proven on every
 build, and about to matter.
 

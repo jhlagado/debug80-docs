@@ -261,8 +261,8 @@ The point of naming a motion is choosing between motions, and a choice
 of motions is something you feel at the keypad, not something you read
 in a paragraph. So here is the full Comet - three curves over the same
 run, a `Preset` fact naming the current one, and PLUS cycling through
-them - and before you read a word of my walkthrough, do one thing for
-me: type it in, build it, and fly all three. GO to launch, PLUS to
+them. Before you read a word of my walkthrough, type it in, build
+it, and fly all three. GO to launch, PLUS to
 switch, GO again. Flick between the presets until you can tell them
 apart with your eyes alone. Thirty seconds of that will teach you what
 motion character means better than anything I write below.

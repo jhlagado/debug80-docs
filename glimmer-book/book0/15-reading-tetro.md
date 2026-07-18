@@ -33,7 +33,7 @@ order a larger Glimmer game answers questions in: the declarations say
 what exists, the blocks say what happens, and the engine says how the
 heavy work gets done.
 
-Before we set off, do one thing for me. Copy the three files from
+Before we set off, get the code where you can touch it. Copy the three files from
 `examples/` in the Glimmer repository into a working directory, run
 `glimmer build tetro.glim`, and keep all three files open in your
 editor while you read - this walk works best when you can look up from
@@ -120,7 +120,7 @@ moment, because their starting value is a decision: a one-shot
 that starts at 0 is asleep, and it fires only after some block writes
 a count into it. `ClearHold` times the line-clear flash, `GOverGate`
 times the restart gate, and each gets armed by exactly the block that
-needs it. That pattern - a sleeping timer a rule can arm - returns in your own games more often than you would guess; you will reach for it in games of your own.
+needs it. That pattern - a sleeping timer a rule can arm - returns in your own games more often than you would guess.
 
 Seven lines put the whole control scheme on the page:
 
@@ -553,7 +553,7 @@ _skip_Unpause:
 
 The `cp Card.Playing` flips to `cp Card.Paused` and that is the whole
 seam: a card in the source is a gate on each of its blocks in the
-dispatcher, nothing more. Enter blocks dispatch first, then every
+dispatcher. Enter blocks dispatch first, then every
 other block in source order, each behind its own card test - thirteen
 entries in one readable column of test-and-call.
 

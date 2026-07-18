@@ -56,7 +56,7 @@ is 512 frames on a clock drawn as a shrinking green bar, and every
 press of GO scores a point on the seven-segment display. When the
 clock drains, the score appears as a red bar, and after a ninety-frame
 pause any key returns to the splash. Press GO, number goes up - no
-arcade would take it. I built it that way on purpose. This chapter
+arcade would take it. That thinness is the point. This chapter
 builds the cabinet; the next one puts the game in it, and the cabinet
 deserves your full attention once, with no game in the way.
 
@@ -393,11 +393,11 @@ only when the card actually changed to its card - so marking
 
 ## Facts that changed while you were away
 
-There is a subtler problem hiding on this card, and it is worth
-seeing before I show you the cure. `FinalBar` draws the score, and it
-depends on `Score` - a fact whose last change happened during the
-round, frames before this card existed on screen. Now recall chapter
-5's delivery rule: exactly-once. Each of those changes was delivered
+A subtler problem hides on this card, and the cure will make more
+sense once you have seen the disease. `FinalBar` draws the score, and
+it depends on `Score` - a fact whose last change happened during the
+round, frames before this card existed on screen. Chapter 5's
+delivery rule was exactly-once. Each of those changes was delivered
 in its own frame, to the blocks active at the time, and the flag
 dropped at that frame's end. **A card-gated block never sees flags
 raised while its card was inactive.** A card that was asleep missed

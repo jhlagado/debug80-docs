@@ -22,8 +22,8 @@ has been sitting here all book with three instruments we have never
 touched: a speaker, the six-digit seven-segment display, and the 20x4
 LCD, all mounted beside the 8x8 RGB LED matrix and all reachable from
 a block. When your character hits a wall, the player should hear it -
-a beep placed on an event is feedback, and players feel feedback
-before they think about it. When the score changes, the player should
+a beep placed at the right instant is feedback, the kind a player
+responds to without thinking. When the score changes, the player should
 be able to read it without taking their eyes off the game for more
 than a glance. This is the chapter where your game stops being a dot
 on a dark board and becomes a production: it gains a face, a voice,
@@ -190,7 +190,7 @@ end
 ```
 
 The picture lives in your source at the same zoom you designed it at,
-which is the whole point: six months from now you will open this file
+which is the point: six months from now you will open this file
 and see a cross, not decode one.
 
 From each shape Glimmer emits a data table named `Shape_<Name>`, and

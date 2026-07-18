@@ -48,8 +48,8 @@ traffic also has a best moment. After painting the last line of a
 picture the VDP rests before starting the next - the vertical blank -
 and raises a flag in its status register to say so. The profile paces
 the whole program on that flag, and it moves your VRAM traffic into
-that resting window. Here is the part I most want you to hear before
-we look at any code: your blocks keep writing plain RAM, exactly as
+that resting window. One point belongs ahead of any code, because it
+shapes everything after: your blocks keep writing plain RAM, exactly as
 they always have. The ports belong to the generated library, and you
 will not touch them once in this chapter.
 

@@ -31,12 +31,12 @@ through machinery you already understand.
 
 ## Meter
 
-The program I picked for the occasion is a level meter. Plus and
+The chapter's program is a level meter. Plus and
 minus raise and lower a count from 0 to 64; the count appears on the
 seven-segment display; and a green bar across the 8x8 RGB LED matrix
-shows the level, one pixel per eight counts. I will tell you up front
-that I designed Meter deliberately, and before the chapter ends I
-will show you exactly what I built it to demonstrate.
+shows the level, one pixel per eight counts. Meter is built to
+demonstrate something particular, and before the chapter ends I will
+show you exactly what.
 
 ```text
 program Meter
@@ -206,8 +206,8 @@ whole change waits. Every dependent of `Count` sees it at the start
 of the next frame: once, together.
 
 You can read both halves of the rule straight out of the generated
-wrappers, and here is the admission I promised you at the top: I
-built Meter so that both variants would appear in one file. After
+wrappers, and here is what I promised you at the top: Meter is built
+so that both variants appear in one file. After
 `DeriveBar`'s body:
 
 ```asm

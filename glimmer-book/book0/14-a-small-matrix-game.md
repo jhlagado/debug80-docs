@@ -109,8 +109,7 @@ check. Facts, moments, and `CurrentCard` each take one of the
 program's 32 change-flag cells. Count ours: six facts, five moments,
 one card cell - twelve, with room to spare. Timer cells carry no flag,
 and `FrameCount` costs nothing in a program that never names it.
-Skyfall fits, on paper, before any block exists. That sentence is the
-whole point of this section.
+Skyfall fits, on paper, before any block exists.
 
 ## The entry file
 

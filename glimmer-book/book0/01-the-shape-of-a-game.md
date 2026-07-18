@@ -252,8 +252,8 @@ in the source: the whole chain is readable off the page. `bind ... ->
 Right`, `on Right`, `updates DotX`, `on DotX`. Four declarations, and
 you can trace the route from keypress to pixel with a finger.
 
-There is a quieter consequence too, and it will matter more and more
-as our programs grow. `MoveRight` never mentions drawing. `DrawDot`
+A quieter consequence follows, and it will matter more and more as
+our programs grow. `MoveRight` never mentions drawing. `DrawDot`
 never mentions keys. Each block minds its own business, and the
 declarations do the connecting. That means you can read any block on
 its own and understand it completely - and you can read a program's

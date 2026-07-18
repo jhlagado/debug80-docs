@@ -38,9 +38,9 @@ The program for the occasion is *Compass*. Hold GO and
 a dot runs clockwise around the rim of the 8x8, coloured by the
 quadrant it is crossing: red along the top, green down the right
 side, blue along the bottom, yellow climbing the left - north, east,
-south, west. Let go and it parks where it is. I picked it
-deliberately, because it forces a design choice I want you to feel in
-your hands. The obvious way to build this game is to store the dot's
+south, west. Let go and it parks where it is. Compass is here
+because it forces a design choice best felt in the hands before it
+is argued on the page. The obvious way to build this game is to store the dot's
 x, its y, and its colour as facts and have the movement rule update
 all three - and that design rots, because it keeps three cells that
 must always agree and trusts every future rule to keep them agreeing.

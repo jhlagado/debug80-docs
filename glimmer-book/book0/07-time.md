@@ -153,7 +153,7 @@ poll, before any phase runs - the generated loop below shows the call.
 So a pulse fired by a timer is seen by every block in the same frame,
 and clears at the end of the frame like every pulse.
 
-Now the part I most want you to hold onto. The cell named `Fall` is
+Now the detail the timer turns on. The cell named `Fall` is
 the period, and it is ordinary writable state: a block that lists
 `updates Fall` and stores a new value has changed the tempo from the
 next reload on. One distinction to keep straight: a timer's cell
@@ -537,7 +537,7 @@ One line of `Quicken`'s wrapper closes the circle. Its header says
 ```
 
 With no flag behind `Fall`, `updates Fall` compiles to nothing here;
-the store inside the body is the whole of the act, and the header line
+the store inside the body is the act itself, and the header line
 documents it - for the dependency report, and for you.
 
 One last economy to appreciate. `GlimTickTimers` is generated only

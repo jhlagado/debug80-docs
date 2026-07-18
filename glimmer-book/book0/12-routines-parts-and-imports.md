@@ -158,10 +158,9 @@ end
 Stamp ORs the mask in; erase complements it and ANDs, clearing
 exactly one bit. The dozen shared instructions live in one place now,
 and the next change to the addressing reaches both rules by touching
-neither. That sentence is the whole argument for routines, so read it
-twice.
+neither. That sentence is the argument for routines.
 
-Now the detail I most want you to appreciate. Chapter 11's contract
+Now the best detail of the arrangement. Chapter 11's contract
 checking covers this routine without you writing a line of contract.
 The assembler reads the body and works out for itself what your helper touches:
 B and HL come out carrying the mask and the row address, A, DE and
