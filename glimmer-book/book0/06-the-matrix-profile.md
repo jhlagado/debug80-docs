@@ -34,7 +34,7 @@ the loop shape it forces on the frame, the 32 bytes of memory your
 renders have been writing all along, and the library routines that
 write them.
 
-The program for the occasion is *Compass*. Hold GO and
+The chapters program is *Compass*. Hold GO and
 a dot runs clockwise around the rim of the 8x8, coloured by the
 quadrant it is crossing: red along the top, green down the right
 side, blue along the bottom, yellow climbing the left - north, east,
