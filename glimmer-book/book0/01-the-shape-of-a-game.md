@@ -50,31 +50,31 @@ name the moments it must respond to, and you write the rules and the
 pictures as a few lines of real Z80 each, with a label saying when
 they should run. Then Glimmer builds the machinery around them - the
 loop, the key scanning, the timing, the change tracking - and calls
-your code at exactly the moments you declared. That inversion is the whole trick. You stop orchestrating
-and start declaring, and the plumbing stops being your problem.
+your code at exactly the moments you declared. That inversion is the
+whole trick. You stop orchestrating and start declaring, and the
+plumbing stops being your problem.
 
-Now, I know what a Z80 programmer thinks when someone offers to
-generate code for them, because I think it too: *what is this thing
-hiding from me?* Here is Glimmer's answer, and it is the reason I like
-the system enough to write a book about it. The language inside every
-rule is Z80 assembly itself - the real instruction set, the real
-registers, the real flags. The declarations are a thin layer in front
-of the assembler, and what comes out is one ordinary assembly-language
-source file with your code inside it, which you can open, read, and
-step through whenever you want to know what a declaration cost you.
-Nothing is hidden; it is only *organised*. Everything you know about
-the Z80 carries straight in.
+Now, I know why a Z80 programmer wants to see the code a compiler
+writes, because I want to see it too: the costs matter. Here is
+Glimmer's answer, and it is the reason I like the system enough to
+write a book about it. The language inside every rule is Z80 assembly
+itself - the real instruction set, the real registers, the real flags.
+The declarations are a thin layer in front of the assembler, and what
+comes out is one ordinary assembly-language source file with your code
+inside it, which you can open, read and step through whenever you want
+to know what a declaration cost you. The organisation is visible.
+Everything you know about the Z80 carries straight in.
 
 Our machine is the TEC-1G, a Z80 single-board computer with a hex
-keypad and an 8x8 RGB LED matrix - sixty-four pixels, each one
-mixing red, green and blue. Small, yes. But I promise you that by the end of
-this book those sixty-four pixels will be running complete games, and
-from there you will move to the TMS9918 video display processor, where
-sprites and video memory shape the game in a different way. In
-this chapter we start where every journey on new hardware should
-start: we are going to put one dot on the 8x8 matrix and make it obey
-you. I will show you the program in three small steps, and you will
-run all three yourself in chapter 2, once we have the tools installed.
+keypad and an 8x8 RGB LED matrix - sixty-four pixels, each one mixing
+red, green and blue. Small, yes. By the end of this book those
+sixty-four pixels will be running complete games, and from there you
+will move to the TMS9918 video display processor, where sprites and
+video memory shape the game in a different way. In this chapter we
+start where every journey on new hardware should start: we are going
+to put one dot on the 8x8 matrix and make it obey you. I will show you
+the program in three small steps, and you will run all three yourself
+in chapter 2, once we have the tools installed.
 
 ## A dot appears
 
@@ -139,8 +139,8 @@ on any frame where `DotX` changed. Between `begin` and `end` you are
 back on home ground: load the x position into B, the row into C, the
 colour into A, and call `FbPlot`, one of those helpers the display
 choice gave us. Everything between `begin` and `end` is real assembly,
-passed through untouched. Glimmer adds no syntax of its own inside a
-block - that space belongs to you and the Z80.
+passed through untouched. Inside a block, that space belongs to you
+and the Z80.
 
 So what actually happens when this program runs? A Glimmer program
 lives its life in **frames**. Every frame, the machinery checks which
@@ -209,8 +209,7 @@ pulse Right
 
 A keypress is a different kind of thing from a position. `DotX` is a
 fact that persists - it outlives every frame that draws it. A press of
-key 6 is a *moment*: it happens, and then it is gone, and if the
-program does not catch it, it never happened at all. Glimmer gives
+key 6 is a *moment*: it happens, and then it is gone. Glimmer gives
 moments their own declaration, the **pulse**. A pulse is a fact that
 holds for exactly one frame and then clears itself. Where a state cell
 remembers, a pulse announces.
@@ -243,8 +242,8 @@ time: `on Right` - run on any frame where `Right` fired - and
 edge of the world is in there with it: `cp 7`, and at column 7 we
 stay put. The rule about where the dot may
 go lives inside the rule that moves it, written by you, in
-instructions you can count. Glimmer decides *when* your code runs; it
-never decides *what* your code does.
+instructions you can count. Glimmer decides *when* your code runs; you
+decide *what* your code does.
 
 `DrawDot` picked up one new line, `call FbClear`, for a reason you can
 guess: the dot moves now, so each redraw starts from a clean
@@ -302,9 +301,8 @@ then fires again every 8 frames for as long as the key stays down.
 That period is the *feel* of your controls - drop it to 4 and the dot
 sprints, raise it to 15 and the dot trudges - and tuning it is editing
 one digit. The repeat machinery you would have hand-built is still
-there, of course; Glimmer writes it for you, and later in this chapter
-I will show you exactly where it lives so you can see there is no
-magic in it.
+there too; Glimmer writes it for you, and later in this chapter I will
+show you exactly where it lives.
 
 Add the mirror-image key and rule for leftward travel, and our little
 program is complete:
@@ -378,14 +376,13 @@ the return, so you write the work and skip the ceremony.
 
 ## The program behind the program
 
-A `.glim`
-file is source code, and Glimmer is its compiler - a compiler whose
-output is assembly language. From the 47 lines of `mover.glim` it
-writes one ordinary Z80 assembly file of 487 lines that contains the
-entire running game: the frame loop, the keypad polling, the held-key
-timing, the change tracking, and your blocks inside it. Here are three
-excerpts from that file, so you can see your own declarations looking
-back at you.
+A `.glim` file is source code, and Glimmer is its compiler - a
+compiler whose output is assembly language. From the 47 lines of
+`mover.glim` it writes one ordinary Z80 assembly file, about five
+hundred lines long, that contains the entire running game: the frame
+loop, the keypad polling, the held-key timing, the change tracking
+and your blocks inside it. Here are three excerpts from that file, so
+you can see your own declarations looking back at you.
 
 The state:
 
@@ -402,11 +399,10 @@ Changed0:         .db %00000001   ; flags dispatch tests
 There is `state DotX : byte = 3` - a labelled byte holding 3, exactly
 what you would have written yourself. Each pulse is a byte too, and
 the two `Glim_` cells under them are the held-key repeat clock,
-written for you. And
-`Changed0` is the change tracking we have been talking about all
-chapter, revealed as one humble byte: one bit per fact, and bit 0 -
-DotX's bit - starts set. That is the word `changed` from your
-declaration, compiled into a single 1.
+written for you. And `Changed0` is the change tracking we have been
+talking about all chapter, revealed as one humble byte: one bit per
+fact, and bit 0 - DotX's bit - starts set. That is the word `changed`
+from your declaration, compiled into a single 1.
 
 The loop:
 
@@ -450,9 +446,10 @@ _stop:
 ```
 
 In the middle of that sits your own work: your body, your spacing,
-your comment - copied in, byte for byte, down to the indentation. Around
-it, Glimmer's wrapping: a label so the dispatcher can call your rule, and after
-`_stop:`, three generated instructions that set DotX's change bit.
+your comment - copied in, byte for byte, down to the indentation.
+Around it, Glimmer's wrapping: a label so the dispatcher can call your
+rule, and after `_stop:`, three generated instructions that set DotX's
+change bit.
 That is the line `updates DotX`, compiled - you declared what the
 block changes, and this is the machinery telling everyone who watches
 `DotX` that news arrived. The `.routine` directive above it enrols the
