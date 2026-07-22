@@ -18,13 +18,12 @@ pieces in a falling-block game, the body of a snake - each of those
 is many related bytes that persist together, change together, and
 redraw together: one fact that happens to be sixty-four pixels wide.
 
-Back in chapter 3 you made the first great design decision a game
-asks of its author: choosing which facts it remembers. This chapter
-hands you the second: choosing the *shape* those facts take in
-memory. Before the new declarations, consider why the old ones cannot
-stretch this far. You could try declaring
-sixty-four separate cells, and the model would push back before your
-patience did: chapter 3 set the limit of 32 flag-carrying cells, so a
+Back in chapter 3 you made the first design decision a game asks of
+its author: choosing which facts it remembers. This chapter hands you
+the second: choosing the *shape* those facts take in memory. The old
+declarations cannot stretch this far. You could declare sixty-four
+separate cells, but the model stops you: chapter 3 set the limit of 32
+flag-carrying cells, so a
 board of one-byte facts would overflow the change banks before the
 program drew a pixel. But the deeper mismatch is one of meaning. When
 you stamp one pixel, *the picture* changed. A render that draws the
@@ -44,10 +43,10 @@ the cursor stands; the stamped pixels stay put while the cursor moves
 on. That last clause is a first for this book: every program until now
 kept its facts - a position, a colour, a score - but redrew its whole
 picture from them each time, so nothing you saw outlived the facts
-behind it. Canvas keeps what you give it. The picture is state, so it outlives your touch, and there
-is a particular pleasure in steering the cursor away and finding your work
-still there. The picture lives in an eight-byte array, and the cursor
-lives in a two-field layout called `Point`.
+behind it. Canvas keeps what you give it. The picture is state, so it
+outlives your touch: steer the cursor away and your work stays. The
+picture is an eight-byte array, and the cursor is a two-field layout
+called `Point`.
 
 ```text
 program Canvas
@@ -179,12 +178,11 @@ so the declaration reads the way chapter 1 taught you to read them:
 *Picture is eight bytes, already changed*. The eight bytes begin as a
 blank picture.
 
-One change flag covers the whole run, and I want to defend that
-choice out loud, because it looks like a compromise and it is a
-design decision. Ask yourself what changed when you stamped that
-pixel. Not byte three of some array - the picture. A board changes
-*as a thing*, and the render that watches it asks one question: do I
-need to redraw? Per-cell flags would spend your whole flag budget on
+One change flag covers the whole run. That looks like a compromise; it
+is a design decision. What changed when you stamped that pixel? Not
+byte three of some array - the picture. A board changes *as a thing*,
+and the render that watches it asks one question: do I need to
+redraw? Per-cell flags would spend your whole flag budget on
 bookkeeping the game never wanted - sixty-four bits of "which byte
 moved" answering a question no block asks. So `updates Picture`
 raises the one flag whichever byte a block wrote, and `on Picture`
@@ -222,8 +220,8 @@ begin
 end
 ```
 
-Notice whose code this is. The addressing is the Z80
-you already know: `Picture` is a label, the row number goes in DE,
+This addressing is the Z80 you already know: `Picture` is a label, the
+row number goes in DE,
 `add hl,de` lands HL on the row's byte, and OR folds the new pixel
 into whatever the row already held. Glimmer supplies the label, the
 storage behind it, and the flag that `updates Picture` raises; the
@@ -306,16 +304,13 @@ shape:
 `offset(Point, y)` is a constant computed at assemble time - 1, since
 `y` sits one byte into the layout - so the whole operand folds to a
 fixed address and the instruction is the plain absolute load you have
-written since chapter 1. Now, you could write `Cursor + 1` and reach
-the same byte today, and I understand the temptation, because I
-counted offsets into records by hand for years. I also carry the scar
-every assembly programmer carries from that habit: the field added at
-the top of a structure that silently shifted every hand-counted
-offset below it, and an evening lost to a bug that pointed nowhere
-near its cause. `offset(Point, y)` is that same arithmetic done by
-the assembler instead of on paper, recomputed from the record on
-every build. Grow the layout next month, and every offset in the
-program moves with it.
+written since chapter 1. You could write `Cursor + 1` and reach the
+same byte today. The reason not to is concrete: add a field at the top
+of the layout, and every hand-counted offset below it shifts silently,
+and the bug that follows points nowhere near its cause.
+`offset(Point, y)` is that arithmetic done by the assembler instead of
+on paper, recomputed from the record on every build. Grow the layout
+next month, and every offset in the program moves with it.
 
 ## What a layout can hold
 
@@ -338,8 +333,7 @@ number reserves that many raw bytes, so `frames : 4` is a four-byte
 scratch run with one name. And a field can be another type: `pos :
 Point` nests the whole two-byte layout inside this one.
 
-Two functions read a layout's measurements inside any block body, and
-between them they retire the last of the paper arithmetic.
+Two functions read a layout's measurements inside any block body.
 `sizeof(Name)` is the layout's full size - `sizeof(Point)` is 2,
 `sizeof(Sprite)` is 11 - which is what you multiply by to step
 through a table of records. `offset(Type, field)` is a field's
@@ -367,9 +361,8 @@ state like any other: zero-filled, one flag.
 
 ## The declarations, compiled
 
-You know my habit by now: when the language hands us something new,
-we go and see what it cost. Open `canvas.main.asm` and the two new
-declarations tell their whole story in two short sections. First the
+Open `canvas.main.asm` and the two new declarations tell their whole
+story in two short sections. First the
 layout:
 
 ```asm
@@ -447,10 +440,9 @@ The two new declarations, gathered in one place:
   0` and `.ds 8, 0`: a label and a zero-filled reservation, each
   behind one `CHG_` bit.
 
-Canvas is now the largest program in the book, which makes it the
-right patient for what comes next: we point the toolchain at it and
-learn to read the dependency report, heed the warnings, and debug a
-reactive program methodically: [Dependency Reports and
+Canvas is now the largest program in the book, a good subject for what
+comes next: reading the dependency report, heeding the warnings, and
+debugging a reactive program methodically: [Dependency Reports and
 Debugging](11-dependency-reports-and-debugging.md).
 
 ---
