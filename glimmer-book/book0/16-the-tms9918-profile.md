@@ -14,15 +14,14 @@ book since chapter 6 has come from the 8x8 RGB LED matrix, and that
 display shows only what the CPU is actively pushing: the profile loop
 spends most of each frame driving the LED rows from the framebuffer,
 and your blocks do their work in the blank that follows. You have
-lived comfortably inside that arrangement, and this chapter turns it
-inside out. On the 8x8 matrix, the Z80 *is* the display. Stop feeding the
+worked inside that arrangement, and this chapter turns it inside out. On the 8x8 matrix, the Z80 *is* the display. Stop feeding the
 rows and the picture dies.
 
 This chapter's display paints itself. The TEC-Deck expansion card
-adds a TMS9918 video display processor to the TEC-1G, and I want to
-introduce it with some ceremony, because you have almost certainly
-seen its work: this is the chip family that drew the MSX machines and
-the ColecoVision, the sprite chip of a whole era of games. It sits
+adds a TMS9918 video display processor to the TEC-1G, and you have
+almost certainly seen its work: this is the chip family that drew the
+MSX machines and the ColecoVision, the sprite chip of a whole era of
+games. It sits
 beside the Z80 as a second chip with 16 KiB of video RAM of its own,
 painting a 256x192 picture from that memory over and over, whether
 the Z80 is busy or idle. The picture holds steady while your code
@@ -36,9 +35,8 @@ rows, each cell showing one 8x8-pixel tile pattern; a table of one
 byte per cell, the name table, says which pattern each cell wears. In
 front of the grid stand sprites: 32 small patterns, each at a pixel
 position of its own, and moving one costs the rewrite of two bytes.
-The division of labour you will use in every VDP game is already
-visible in that description: scenery belongs in tiles; anything that
-glides belongs in sprites.
+The division of labour is already there: scenery belongs in tiles;
+anything that glides belongs in sprites.
 
 And where does the Z80 fit? It reaches the VDP's memory through two
 ports: control at `$BF`, data at `$BE`. Two control-port writes set a
@@ -48,10 +46,10 @@ traffic also has a best moment. After painting the last line of a
 picture the VDP rests before starting the next - the vertical blank -
 and raises a flag in its status register to say so. The profile paces
 the whole program on that flag, and it moves your VRAM traffic into
-that resting window. One point belongs ahead of any code, because it
-shapes everything after: your blocks keep writing plain RAM, exactly as
-they always have. The ports belong to the generated library, and you
-will not touch them once in this chapter.
+that resting window. One thing before any code: your blocks keep
+writing plain RAM, exactly as they always have. The ports belong to
+the generated library, and
+you will not touch them once in this chapter.
 
 Selecting all of this costs one changed line: `display tms9918`, with
 the platform line as before. The keypad, the LCD, and `text`
@@ -63,11 +61,11 @@ matrix profile.
 
 The chapter program is *Grove*: a white moth over a night garden.
 Ferns and blooms stand still in the tile grid; the moth is a sprite,
-steered with 2/4/6/8, one pixel per frame while a key is held. I
-chose it to make the smallest round trip the new hardware allows - a
-few tiles, one sprite, and the commit that carries both to the
-screen - because once you have walked that loop end to end, the full
-game of chapter 17 is more of the same.
+steered with 2/4/6/8, one pixel per frame while a key is held. It
+makes the smallest round trip the new hardware allows - a few tiles,
+one sprite, and the commit that carries both to the screen - so once
+you have walked that loop end to end, the full game of chapter 17 is
+more of the same.
 
 ```text
 program Grove
@@ -190,14 +188,13 @@ begin
 end
 ```
 
-Read the middle of the file first, because you will find an old
-friend there: this is Rover with pixel coordinates. Four pulses, four
-held bindings at period 1, four clamped move effects. The clamps say
-248 and 184 now because positions name the sprite's top-left pixel on
-a 256x192 screen and the pattern is 8 pixels square. Everything
-genuinely new sits at the two ends: three resource declarations at
-the top, and two block bodies - `PlantScene` and `PlaceMoth` - whose
-lines mention them. Let me take the new material in order.
+Read the middle of the file first: it is Rover with pixel
+coordinates. Four pulses, four held bindings at period 1, four clamped
+move effects. The clamps say 248 and 184 now because positions name
+the sprite's top-left pixel on a 256x192 screen and the pattern is 8
+pixels square. Everything genuinely new sits at the two ends: three
+resource declarations at the top, and two block bodies - `PlantScene`
+and `PlaceMoth` - whose lines mention them.
 
 ## Sprites and tiles are declarations
 
@@ -212,7 +209,7 @@ the sixteen VDP colours - `transparent`, `black`, `medgreen`,
 the same sixteen names exist as `VC_*` equates, so your assembly
 talks about colour in the same vocabulary as your declarations.
 
-You will notice there is no number anywhere in the declaration.
+There is no number anywhere in the declaration.
 Declaration order does the numbering: the first `sprite` in the file
 is slot 0 and pattern 0, the second is slot 1, and so on, up to 31
 sprites in a program. In the generated file the pattern rows become
@@ -236,7 +233,7 @@ Cover the labels and you can still read the moth in the binary: each
 
 A `tile` carries two colours, foreground `on` background, and its
 rows read the same way. Its numbering is the one place the hardware
-leans on you, so take this part slowly. Graphics I colours patterns
+leans on you. Graphics I colours patterns
 in banks of eight: one colour byte covers patterns 0..7, the next
 8..15, and onward through 32 banks. Tiles that share an (fg, bg) pair
 fill a bank together, and a new pair opens a new bank. Index 0 stays
@@ -276,7 +273,7 @@ sprite - y, x, pattern, colour - for all 32 slots. Beside each shadow
 sits its own bookkeeping, sized to its table: three bytes of
 `NameDirtyRows` carry one bit per grid row, and the single
 `SpriteDirty` byte covers the whole sprite table. The word *dirty*
-is about to become the hinge of the whole profile.
+is the hinge of this profile.
 
 Three profile routines write the shadows for you, and each declares
 its register interface in the generated file, the way chapter 11
@@ -347,7 +344,7 @@ MainLoop:
 ```
 
 From `GlimPollBindings` down, this is the frame you have known since
-chapter 2. The profile's whole character lives in the two calls above
+chapter 2. The profile's whole character is in the two calls above
 it. On the 8x8 matrix, `ScanFrame` produced the picture; here,
 `VdpWaitVBlank` waits for one. The routine polls the status register
 until the vblank flag comes up - reading the register clears it,
@@ -366,9 +363,8 @@ streams only what differs to the chip that does the painting - the
 same reactive model you have used all book, with a new pair of hands
 at the end of it.
 
-Follow a held key 6 through one frame, because the timing deserves to
-be exact in your head. The poll fires `Right`; `MoveRight` steps
-`MothX`; render is a later phase, so the change arrives the same
+Follow a held key 6 through one frame. The poll fires `Right`;
+`MoveRight` steps `MothX`; render is a later phase, so the change arrives the same
 frame, `PlaceMoth` runs, and `sprite_at` writes the new x into
 `SpriteShadow` and sets `SpriteDirty`. The screen still shows the old
 position. The next frame opens in the blank: `GlimCommit` streams the
@@ -381,16 +377,18 @@ frame, tiles and sprites alike.
 `PlantScene` runs exactly once, and the trigger is a mechanism you
 have owned since chapter 3: `Init` is a byte declared `changed`, so
 its flag is up before the first frame; the effect fires on frame 1,
-places eight tiles, and `Init` never changes again. One line you have always written is absent: `updates`, because this block changes no cell. Its work lands in the name shadow, which the profile tracks
-with row bits instead of change flags.
+places eight tiles, and `Init` never changes again. One line you have
+always written is absent: `updates`, because this block changes no
+cell. Its work lands in the name shadow, which the profile tracks with
+row bits instead of change flags.
 
 Those eight `tile_at` lines touch eight different grid rows, so frame
 1 ends with eight dirty bits standing, and frame 2's commit streams
 eight rows into VRAM. From then on the garden is the VDP's to paint,
-picture after picture, and the program never redraws it. Feel the
-difference in your fingers: an 8x8 matrix render repaints
-its layer whenever a fact changes; a VDP program writes each cell
-once and writes again only what differs. `MothX` and `MothY` are
+picture after picture, and the program never redraws it. The
+difference: an 8x8 matrix render repaints its layer whenever a fact
+changes; a VDP program writes each cell once and writes again only
+what differs. `MothX` and `MothY` are
 declared `changed` for the same startup reason: on frame 1,
 `PlaceMoth` puts the moth into the sprite shadow alongside the
 garden, and the first picture arrives whole.
@@ -402,9 +400,8 @@ tools already on the table.
 
 ## Inside the generated file
 
-Two generated routines carry this chapter's machinery, and both
-reward a slow read. First the commit. Its sprite half is four
-decisions long:
+Two generated routines carry this chapter's machinery. First the
+commit. Its sprite half is four decisions long:
 
 ```asm
 ; --- commit: flush dirty shadows to VRAM ---
@@ -481,8 +478,7 @@ bit - and `CommitNameRow` turns the row number into `row*32`, points
 the VDP at `VRAM_NAME` plus that offset, and streams 32 shadow bytes
 through the data port. On a Grove frame where only the moth moved,
 the whole commit reads one flag, sends 128 bytes, reads three group
-bytes, and is done. That is the budget your games will live inside,
-and it is a generous one.
+bytes, and is done. That is a generous budget for your games.
 
 The second routine is the one-time upload that `Start` calls before
 the loop begins:
