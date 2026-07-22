@@ -39,16 +39,14 @@ that makes this game the game it is - end up threaded all through it.
 There is a name for the usual way of arranging all this. We call it
 *imperative*: the program is a list of orders - do this, then this,
 then check that - and making sure every order lands at the right
-moment, frame after frame, is your job and nobody else's. Reactive
+moment, frame after frame, is your job. Reactive
 programming turns the arrangement around. You write down how the
 program should respond when things happen, and machinery does the
 watching. Generation after generation of user interfaces and games
 arrived at the same truth: almost everything an interactive program
 does is a *reaction*. A key goes down, so the player moves. A timer
 runs out, so the block drops. The score changes, so the display
-updates. These are ideas from the future of this machine - they had
-to be discovered
-elsewhere, slowly, before anyone could carry them home to it - and
+updates. These ideas were worked out elsewhere, over many years, and
 none of them is exotic. If you have ever used a spreadsheet, changed
 one cell and watched every formula that mentions it follow, you have
 felt the model in your hands. That feeling is most of the theory, and
@@ -110,7 +108,7 @@ begin
 end
 ```
 
-Twelve lines that matter, and you can already read half of them. Let
+Twelve lines, and you can already read half of them. Let
 me walk you through the other half, top to bottom.
 
 `program Mover` names the program. `platform tec1g-mon3` and
@@ -130,8 +128,8 @@ for the whole book: Glimmer declarations are built to be read aloud.
 Try this one - "DotX is a byte, starting at 3, already changed." Every
 declaration in the language passes that test, and whenever you are
 unsure what a line means, saying it out loud is the fastest way to
-find out. That word `changed` at the end is doing something important,
-and I will come back to it in a moment.
+find out. I will come back to that word `changed` at the end in a
+moment.
 
 ```text
 render DrawDot
@@ -142,7 +140,7 @@ end
 ```
 
 And here is our first *rule* - Glimmer calls them blocks. A `render`
-block is where we turn memory into light. Its header carries two
+block turns memory into light. Its header carries two
 things: a name, and the line `on DotX`, which answers the question
 every block must answer - *when should this code run?* This one runs
 on any frame where `DotX` changed. Between `begin` and `end` you are
@@ -153,11 +151,11 @@ passed through untouched. Inside a block, that space belongs to you
 and the Z80.
 
 So what actually happens when this program runs? A Glimmer program
-lives its life in **frames**. Every frame, the machinery checks which
+advances one **frame** at a time. Every frame, the machinery checks which
 facts changed and runs the blocks that declared an interest in them,
-then shows the result and goes round again. That is where `changed`
-earns its keep: it marks `DotX` as already changed *before the first
-frame*, so `DrawDot` runs once at startup and our pixel appears.
+then shows the result and goes round again. That is what `changed`
+does: it marks `DotX` as already changed *before the first frame*, so
+`DrawDot` runs once at startup and our pixel appears.
 Without it, the program would sit there with a dark screen, politely
 waiting for a change that never comes - a mistake you will make
 exactly once, and then never again. From the second frame on, `DotX`
@@ -165,7 +163,7 @@ holds still, so `DrawDot` rests. The pixel stays lit because keeping
 the display alive is the machinery's job, not yours.
 
 One fact, one rule, and one declared connection between them: `on
-DotX`. That connection is the seed the entire language grows from.
+DotX`. The rest of the language is built from that one connection.
 
 ## The dot responds
 
@@ -242,26 +240,24 @@ effect MoveRight
     updates DotX
 ```
 
-And here is the rule that gives the moment its meaning. When I say
+And here is the rule that runs when the moment arrives. When I say
 rule, I mean something specific, and the word keeps this meaning for
 the whole book: a rule is a decision the game makes when a moment
-arrives. The `effect` block is where rules live. Its header answers two questions this
-time: `on Right` - run on any frame where `Right` fired - and
-`updates DotX` - this block *changes* that fact, so everyone watching
-`DotX` should hear about it. The body is your Z80 again, and the
-edge of the world is in there with it: `cp 7`, and at column 7 we
-stay put. The rule about where the dot may
-go lives inside the rule that moves it, written by you, in
-instructions you can count. Glimmer decides *when* your code runs; you
-decide *what* your code does.
+arrives. The `effect` block holds the rule. Its header answers two
+questions this time: `on Right` - run on any frame where `Right` fired
+- and `updates DotX` - this block *changes* that fact, so everyone
+watching `DotX` should hear about it. The body is your Z80 again, and
+the screen's edge is in there with it: `cp 7`, and at column 7 we stay
+put. The limit on where the dot can go is part of the block that moves
+it, written by you, in instructions you can count. Glimmer decides
+*when* your code runs; you decide *what* your code does.
 
 `DrawDot` picked up one new line, `call FbClear`, for a reason you can
 guess: the dot moves now, so each redraw starts from a clean
 framebuffer and plots the dot where it currently is. Old position
 gone, new position lit.
 
-Now comes the moment the whole model clicks. Follow one press of
-key 6 with me, through the program:
+Follow one press of key 6 through the program, from key to pixel:
 
 ```mermaid
 flowchart LR
@@ -277,21 +273,17 @@ updated. This is the spreadsheet from the start of the chapter,
 caught in the act. Change one cell and the formulas that reference it
 recompute, and the sheet in front of you updates. You never call a
 formula; you write it, and the spreadsheet works out when it must
-run. Here the same idea is running on a Z80, and the reason I am
-teaching you Glimmer rather than any other way of building Z80 games
-is sitting right there in the source: the whole chain is readable off
-the page. `bind ... ->
-Right`, `on Right`, `updates DotX`, `on DotX`. Four declarations, and
-you can trace the route from keypress to pixel with a finger.
+run. Here the same idea is running on a Z80, and the whole chain is
+readable off the page: `bind ... -> Right`, `on Right`, `updates
+DotX`, `on DotX`. Four declarations, and you can trace the route from
+keypress to pixel with a finger.
 
-A quieter consequence follows, and it will matter more and more as
-our programs grow. `MoveRight` never mentions drawing. `DrawDot`
-never mentions keys. Each block minds its own business, and the
-declarations do the connecting. That means you can read any block on
-its own and understand it completely - and you can read a program's
-whole design from its headers without touching a line of assembly.
-When we get to programs with thirty blocks, that property is the
-difference between a codebase and a haystack.
+There is a quieter consequence too. `MoveRight` never mentions
+drawing. `DrawDot` never mentions keys. Each block minds its own
+business, and the declarations do the connecting. You can read any
+block on its own, and you can read a program's whole design from its
+headers without touching a line of assembly. At thirty blocks, you can
+still read each block on its own.
 
 ## Holding a key down
 
@@ -312,7 +304,7 @@ That period is the *feel* of your controls - drop it to 4 and the dot
 sprints, raise it to 15 and the dot trudges - and tuning it is editing
 one digit. The repeat machinery you would have hand-built is still
 there too; Glimmer writes it for you, and later in this chapter I will
-show you exactly where it lives.
+show you it in the generated assembly.
 
 Add the mirror-image key and rule for leftward travel, and our little
 program is complete:
@@ -373,12 +365,13 @@ drawing on the 8x8 matrix. DotX is a byte, starting at 3, already changed.
 Two moments, Left and Right. Key 4 held fires Left every 8 frames; key
 6 held fires Right. On Left, MoveLeft updates DotX. On Right,
 MoveRight updates DotX. On DotX, DrawDot." You have recited the
-entire design of a working piece of software. The declarations are the
-design; the blocks are the craft. Show the headers to someone who has
-never seen a Z80 and they could tell you what this game does. Show any
+entire design of a working piece of software. Show the headers to
+someone who has never seen a Z80 and they could tell you what this
+game does. Show any
 single block to a Z80 programmer and they know everything it touches.
 
-Two small mechanical notes about those blocks, and then the best part.
+Two small mechanical notes about those blocks, and then the generated
+assembly.
 Labels that start with an underscore, like `_stop`, are local to their
 block - both movement rules own a `_stop` of their own without
 quarrelling. And blocks fall off their last line - Glimmer supplies
