@@ -11,21 +11,17 @@ nav_order: 3
 
 In the last chapter you built Beacon, pressed GO, and watched one
 remembered fact - a colour - become light on the 8x8 RGB LED matrix.
-One fact was enough for first light. It is not enough for a game, and
-I want to open this chapter with a claim I will keep coming back to
-for the rest of the book: a game *is* its facts. Where the player is.
-What colour things are. How well you are doing. Choosing those facts -
-deciding what the program must remember, and what it can afford to
-forget - is the first design act of every game you will ever write,
-and it happens before a single rule exists.
+One fact was enough for first light. A game needs more, because a game
+*is* its facts: where the player is, what colour things are, how well
+you are doing. Choosing those facts - what the program must remember,
+and what it can afford to forget - comes before any rule you write.
 
 So today Beacon grows. By the end of the chapter it will remember
 three facts - a position, a colour, and a score - and in teaching it
 those three you will meet everything a `state` declaration can say,
-along with the change tracking that makes state the engine of the
-whole program. And a small challenge waits near the end: predict a
-program's first frame from its source alone, then build it and watch
-yourself be right.
+along with the change tracking that goes with it. Near the end, a
+challenge: predict a program's first frame from its source alone, then
+build it and check.
 
 ## Beacon, grown
 
@@ -33,7 +29,7 @@ Here is where we are headed. The new Beacon steers along its row with
 keys 4 and 6, held for movement the way Mover was. GO still steps the
 colour, and every step now scores a point, shown on the TEC-1G's
 six-digit seven-segment display. Position, colour, score: the three
-kinds of fact almost every game keeps, in miniature.
+kinds of fact almost every game keeps.
 
 ```text
 program Beacon
@@ -112,9 +108,9 @@ begin
 end
 ```
 
-Read the headers aloud before we go any further, the way you did with
-Mover - you still can, and that is the point. Two list forms appear
-here for the first time, and both say what you would guess. `updates
+Read the headers aloud, the way you did with Mover - you still can. Two
+list forms appear here for the first time, and both say what you would
+guess. `updates
 Colour, Score` - NextColour changes two facts, so it declares both of
 them. `on DotX, Colour` - DrawBeacon depicts two facts, so a change to
 either one redraws. Commas separate names, in headers as everywhere in
@@ -140,12 +136,12 @@ The full shape is `state Name : type = initial changed`, and the last
 two parts are optional. The type is `byte` or `word`. The initial
 value defaults to 0, and `Score` leans on that default. And `changed`
 - the word you met in chapter 1 - marks the fact as already changed
-when the program starts. `DotX` carries it; the other two go without;
-and which facts carry it is going to matter shortly, so keep an eye on
-it.
+when the program starts. `DotX` carries it; the other two go without.
+Which facts carry it changes what happens on the first frame, as you
+will see shortly.
 
-The one genuine newcomer is `word`, and it should hold no fear for
-you. A `word` cell is 16 bits, and your Z80 handles it with the Z80's
+The one new thing here is `word`. A `word` cell is 16 bits, and your
+Z80 handles it with the Z80's
 own 16-bit moves - look at the score lines in `NextColour`:
 
 ```asm
@@ -197,22 +193,18 @@ GlimDep_ShowScore__B0 .equ CHG_SCORE
 
 Every fact owns one bit of `Changed0`, pulses included - a pulse is a
 fact that holds for one frame, remember, and it is tracked the same
-way as its longer-lived siblings. And DrawBeacon's mask answers a
-question you may have been holding since `on DotX, Colour`: the
-two-fact trigger compiled to the sum of two bits. The dispatcher ANDs
-the changed byte against that mask, so *any* fact in the list sets the
+way as its longer-lived siblings. DrawBeacon's mask shows what a
+two-fact trigger becomes: the sum of two bits. The dispatcher ANDs the
+changed byte against that mask, so *any* fact in the list sets the
 block running. One block, several reasons to run, one instruction to
 test them all.
 
-The next idea is the one I most want you to carry out of this
-chapter. The masks gate the blocks;
-the cells feed them. When DrawBeacon runs because you moved, its body
-still reads `Colour` and plots the current colour - a body always
-works from the facts as they are now, whichever bit woke it. Say it with me, because it is the sentence this book stands on: **flags decide who runs; values decide what
-happens.** Nearly every confusing frame you will ever debug in a
-reactive program comes from blurring those two together, and nearly
-every one untangles the moment you pull them apart again. Keep them
-separate and everything this book builds from here will stay clear.
+The masks gate the blocks; the cells feed them. When DrawBeacon runs
+because you moved, its body still reads `Colour` and plots the current
+colour: a body always works from the facts as they are now, whichever
+bit woke it. **Flags decide who runs; values decide what happens.**
+Keep those two apart and the frames in this book stay clear; blur them
+and they get confusing.
 
 One byte holds eight facts, and a program can declare up to 32
 flag-carrying facts: they fill `Changed0` through `Changed3`, eight
@@ -223,8 +215,7 @@ banks tests each one.
 
 ## The first frame, predicted
 
-Time for the challenge I promised you, and for the discipline it
-teaches: predict before you build; then build and watch.
+Now the challenge: predict before you build, then build and watch.
 Your prediction needs one last piece of information. `Changed0` begins
 life as the sum of every `changed` in the source:
 
@@ -240,8 +231,8 @@ what happens. ShowScore's mask is `CHG_SCORE`, and that bit is clear,
 so ShowScore rests - and the six-digit seven-segment display stays
 dark.
 
-A dark display looks like a bug the first time you meet it, so solve
-the mystery from the source before you reach for the debugger: no fact
+A dark display looks like a bug the first time you meet it, so work it
+out from the source before you reach for the debugger: no fact
 ShowScore watches has changed, so ShowScore has never run, and a
 render that has never run has never drawn. The display stays dark
 until the first press of GO, when `updates Colour, Score` raises both
@@ -256,16 +247,13 @@ state Score  : word changed
 ```
 
 With that one edit, frame one runs both renders, and the display shows
-`000000` before you have pressed anything. This is the whole craft of
-`changed`: put it on every fact whose picture should exist before any
-event has happened.
+`000000` before you have pressed anything. That is the rule for
+`changed`: put it on every fact whose picture should exist before
+anything happens.
 
-Now go and collect your payoff. Build the program, try both versions,
-and watch the prediction hold. Then set a breakpoint inside
-`ShowScore` and confirm the debugger stops there on the frame you
-predicted - and on no other. Reading a program's behaviour straight
-off its declarations, and having the machine agree with you, is the
-reactive model paying its rent.
+Build the program, try both versions, and watch the prediction hold.
+Then set a breakpoint inside `ShowScore` and confirm the debugger
+stops there on the frame you predicted, and on no other.
 
 ## Summary
 
