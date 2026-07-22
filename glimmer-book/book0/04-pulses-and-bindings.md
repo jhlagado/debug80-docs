@@ -10,23 +10,19 @@ nav_order: 4
 # Chapter 4 - Pulses and Bindings
 
 Chapter 3 was about the things a game remembers. This chapter is about
-the things it must catch. The distinction matters enough to say twice:
-a fact persists - the beacon's position outlives every frame that
-draws it - but a moment passes. The instant GO goes down exists
-exactly once, and if your program does not catch it, it never happened
-at all. Glimmer gives moments their own declaration, the pulse, and
-back in chapter 1 I handed you one pulse and one bind line and hurried
-on, because I wanted you at the keypad. Now we can take the whole
-input story properly: every key name, both shapes a key can fire in,
-and what the generated polling does with the keypad, frame after
-frame.
+the things it must catch: a fact persists - the beacon's position
+outlives every frame that draws it - but a moment passes. The instant
+GO goes down exists exactly once, and if your program does not catch
+it, it never happened at all. Glimmer gives moments their own
+declaration, the pulse. Back in chapter 1 I gave you one pulse and one
+bind line and hurried on. Now we can take the whole input story
+properly: every key name, both shapes a key can fire in, and what the
+generated polling does with the keypad, frame after frame.
 
-I have been looking forward to this chapter's program. *Rover* is a
-white dot you steer around the whole 8x8 RGB LED matrix with 2, 4, 6,
-and 8 - the keypad's compass points - and GO recalls it to the centre.
-There is nothing to chase yet and no way to lose, and it still feels
-like a game character the moment you hold a key: for the first time in
-this book, something on that display is under your thumb.
+*Rover* is a white dot you steer around the whole 8x8 RGB LED matrix
+with 2, 4, 6, and 8 - the keypad's compass points - and GO recalls it
+to the centre. There is nothing to chase yet and no way to lose, but
+it feels like a game character the moment you hold a key.
 
 ```text
 program Rover
@@ -119,19 +115,17 @@ begin
 end
 ```
 
-Half of this file is chapter 1's Mover with a mirror held up to it,
-and the second axis costs exactly what you would expect it to cost:
-one more state cell, two more pulses, two more rules with the clamp
-turned sideways. Look at `GoHome` for a second: it shows an effect at
-its simplest - two constant stores, no branch, no ceremony. Not every rule needs to be clever. And `DrawDot` now
-draws from both facts - `on DotX, DotY`, the comma you learned in
-chapter 3 - so movement on either axis redraws the dot.
+Half of this file is chapter 1's Mover, and the second axis costs what
+you would expect: one more state cell, two more pulses, two more rules
+with the clamp turned sideways. `GoHome` shows an effect at its
+simplest: two constant stores and no branch. And `DrawDot` now draws
+from both facts - `on DotX, DotY`, the comma you learned in chapter 3
+- so movement on either axis redraws the dot.
 
 Build it, run it, and then do one thing for me: hold 6 while tapping
 2. The dot runs right, steps up on each tap, and carries on running
-right. Keep your thumb there a moment. That is what this chapter is
-teaching you to design - not which code runs, but how the controls
-*feel* in a player's hands.
+right. That feel - steady run, single steps mixed in - is what
+`rising` and `held` let you design.
 
 ## The keypad, by name
 
@@ -146,13 +140,12 @@ monitor gives every key a name, and `bind` uses those names directly:
 | AD (address) | `KEY_AD` |
 
 Twenty keys, four of them off the hex pad. When you lay out a game's
-controls, the digits are where the action lives: 2, 4, 6, 8 make a
-compass, and 5 sits in the middle of it, in easy reach, ready to be
-fire or rotate. GO and AD do good service as start and menu keys. The
-names compile to MON-3's key codes in the generated file, so the
-binding `bind key KEY_2 ...` in your source and the 2 key on the panel
-mean the same physical thing - no magic numbers between your intention
-and the hardware.
+controls, the digits do the work: 2, 4, 6, 8 make a compass, and 5
+sits in the middle, in easy reach for fire or rotate. GO and AD serve
+as start and menu keys. The names compile to MON-3's key codes in the
+generated file, so the binding `bind key KEY_2 ...` in your source and
+the 2 key on the panel mean the same physical thing - no magic numbers
+in between.
 
 ## Rising or held
 
@@ -168,7 +161,7 @@ design decision before it is a technical one:
 Think about it from the player's side, thumbs on the pad. In a
 falling-blocks game, the rotate key under your thumb wants one press,
 one quarter turn - give it autorepeat and the piece spins out of
-control while the player watches in dismay. The move-left key beside
+control. The move-left key beside
 it wants the opposite: press and lean, and the piece keeps sliding
 until you let go. Two adjacent keys under the same thumb, two shapes,
 and between them they are the feel of the game. Rover makes the same
@@ -176,15 +169,12 @@ choices for the same reasons - held compass keys, rising GO - and both
 are one-line decisions. Tuning the feel of your entire control scheme
 is editing a digit.
 
-One property of the keypad needs stating plainly, because
-you should design with it rather than discover it: MON-3 reports a
-single pressed key at a time. Held movement runs one direction at
+One property of the keypad shapes every control scheme: MON-3 reports
+a single pressed key at a time. Held movement runs one direction at
 once, and a fresh press takes over the autorepeat from the key before
-it. That is part of the keypad's character, something to design with - Rover's controls,
-and every game later in this book, are built on single-key movement,
-and the keypad's compass layout suits it well. You have already felt
-how cleanly the takeover plays: that was your thumb on 6 and 2 a page
-ago.
+it. Rover's controls, and every game later in this book, are built on
+single-key movement, and the keypad's compass layout suits it. You
+already felt the takeover: your thumb on 6 and 2 a page ago.
 
 ## Any key at all
 
@@ -198,9 +188,9 @@ bind key any rising -> Wake
 
 `any` fires its pulse on every new press, whichever key it is, and it
 fires alongside the named bindings - press GO and both `Home` and
-`Wake` fire in the same frame. It comes in the rising shape only, and
-the reason is in what it exists to catch: *the player touched the
-machine*. Title screens wait on it. When you build one in chapter 13,
+`Wake` fire in the same frame. It comes in the rising shape only; what
+it catches is *the player touched the machine*. Title screens wait on
+it. When you build one in chapter 13,
 "press any key" will be exactly this line and a card transition.
 
 ## What polling looks like
@@ -258,7 +248,7 @@ byte and sets its change bit directly, and because polling runs before
 any block, every phase of the frame sees the moment.
 
 At the other end of the frame, `GlimEndFrame` clears every pulse byte
-- the cleanup you read with your own eyes in chapter 2. Between those
+- the cleanup you read in chapter 2. Between those
 two points, a moment is a fact like any other: one frame wide, one bit
 in `Changed0`, triggering whatever declared `on` it.
 
@@ -282,9 +272,9 @@ The input story, folded small:
   to every phase of that frame.
 
 Moments have other sources - chapter 7 gives the machine clocks that
-fire pulses of their own - but the keypad story is complete. Next I
-owe you the full picture of what a frame does once the moments are
-in: the three kinds of block, and the order a frame runs them in -
+fire pulses of their own - but the keypad story is complete. Next
+comes the full picture of what a frame does once the moments are in:
+the three kinds of block, and the order a frame runs them in -
 [Compute, Effect, Render](05-compute-effect-render.md).
 
 ---
