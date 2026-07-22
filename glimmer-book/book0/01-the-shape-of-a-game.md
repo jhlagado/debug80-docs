@@ -13,11 +13,10 @@ Glimmer is a new way to write games for old machines, and its purpose
 is to make that job smaller. A game written out by hand is a large
 program; the same game in Glimmer is a small one, and it stays
 readable as it grows. Two things buy you that. The first is a borrowed
-idea: Glimmer takes reactive programming - a modern technique the
-computing world needed forty years to arrive at - and time-travels it
-back those forty years, to the age of the Z80. You describe the game -
-what it remembers, what it responds to, what follows, and what it
-shows - and Glimmer builds the running program around your
+idea: Glimmer takes reactive programming, a modern technique, and
+time-travels it back forty years to the age of the Z80. You describe
+the game - what it remembers, what it responds to, what follows, and
+what it shows - and Glimmer builds the running program around your
 description. The second is abstraction: the machinery every game needs
 is generated for you rather than written by you, so the program you
 work on stays short.
@@ -43,11 +42,12 @@ then check that - and making sure every order lands at the right
 moment, frame after frame, is your job and nobody else's. Reactive
 programming turns the arrangement around. You write down how the
 program should respond when things happen, and machinery does the
-watching. Four decades of user interfaces and games arrived at the
-same truth: almost everything an interactive program does is a
-*reaction*. A key goes down, so the player moves. A timer runs out, so
-the block drops. The score changes, so the display updates. These are
-ideas from the future of this machine - they had to be discovered
+watching. Generation after generation of user interfaces and games
+arrived at the same truth: almost everything an interactive program
+does is a *reaction*. A key goes down, so the player moves. A timer
+runs out, so the block drops. The score changes, so the display
+updates. These are ideas from the future of this machine - they had
+to be discovered
 elsewhere, slowly, before anyone could carry them home to it - and
 none of them is exotic. If you have ever used a spreadsheet, changed
 one cell and watched every formula that mentions it follow, you have
