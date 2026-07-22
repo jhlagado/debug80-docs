@@ -9,32 +9,26 @@ nav_order: 2
 
 # Chapter 2 - First Light
 
-Astronomers have a name for the first time a new telescope is pointed
-at the sky: first light. This chapter is ours. You have read a Glimmer
-program; now you are going to build one, watch it light up an emulated
-TEC-1G, and - my favourite part - freeze it mid-thought with a
-breakpoint set in your own source. By the end of the chapter the whole
-round trip from your intention to a glowing pixel will be something
-you have done with your own hands, and everything else in this book
-becomes a matter of doing it again with more ambition.
+You have read a Glimmer program. Now you build one, run it on an
+emulated TEC-1G, and set a breakpoint in your own source to stop it
+mid-run. By the end of the chapter you will have taken a program from
+source to a lit pixel with your own hands.
 
-The program I have chosen for the occasion is called *Beacon*: one
-pixel in the middle of the 8x8 RGB LED matrix, and every press of the
-GO key steps it to the next colour. I picked it deliberately. It is small enough to
-type in five minutes, and it still exercises the entire reactive chain
-- one fact, one moment, one rule, one picture - with you at the
-keypad supplying the moments.
+The program is called *Beacon*: one pixel in the middle of the 8x8 RGB
+LED matrix, and every press of the GO key steps it to the next colour.
+It is small enough to type in five minutes, and it still exercises the
+whole reactive chain - one fact, one moment, one rule, one picture -
+with you at the keypad supplying the moments.
 
 ## The tools
 
-One install and we are in business. Everything this book needs lives
-inside **Debug80**, a VS Code extension: the Glimmer compiler, the
-assembler, and a full emulated TEC-1G, keypad and all. Install VS
-Code, open the Extensions marketplace, and add Debug80. If you want
+Everything this book needs is in one VS Code extension, **Debug80**:
+the Glimmer compiler, the assembler, and a full emulated TEC-1G,
+keypad and all. Install VS Code, open the Extensions marketplace, and
+add Debug80. If you want
 the guided tour of the extension itself - every panel, every button -
 that is [Debug80 Book 1](../../debug80-book/book1/), and it is worth
-an evening. Here I will show you exactly the parts we need and no
-more, because I want to get you to the pixel. (Glimmer also has a
+an evening. Here I will show you only the parts we need. (Glimmer also has a
 command line, for scripts and for the curious; Appendix D covers it.
 You will not need it in this book's workflow.)
 
@@ -44,14 +38,12 @@ Open VS Code, add an empty folder, and initialize it as a TEC-1G
 project from the Debug80 panel - two clicks, and [Debug80 Book
 1](../../debug80-book/book1/02-create-a-tec1g-project.md) walks
 through them with pictures if you want company. Then create a file in
-the project named `main.glim`. That name is doing real work: a file
-called `main.glim`, or ending in `.main.glim`, whose first
-declaration is `program`, is one Debug80 recognises as a Glimmer
-program and knows how to build. The name is the whole arrangement -
-there is nothing to configure.
+the project named `main.glim`. The name is what Debug80 looks for: a
+file called `main.glim`, or ending in `.main.glim`, whose first
+declaration is `program`, is recognised as a Glimmer program and
+built. There is nothing else to configure.
 
-Type the program in - actually type it, because the reading-aloud
-habit from chapter 1 works through the fingers too:
+Type the program in - actually type it, not paste it:
 
 ```text
 program Beacon
@@ -93,13 +85,13 @@ You know every construct here from chapter 1, so let me point out only
 what is genuinely new. `KEY_GO` names the GO key - the big one on the
 TEC-1G's pad. MON-3 gives every key a name, and bind lines use the
 names directly, so your source says GO where you mean GO. The other
-novelty is the idea at the heart of this little program: *the colour
-itself is a fact*. The 8x8 matrix mixes red, green and blue per pixel, so
-the values 1 through 7 are its seven visible colours, and
-`NextColour`'s wrap keeps the cell inside that range. `DrawBeacon`
-never knows or cares which colour is current - it reads the fact and
-plots it. Let's say the chain aloud once before we build: "GO fires Step; on
-Step, NextColour updates Colour; on Colour, DrawBeacon."
+new thing is that *the colour itself is a fact*. The 8x8 matrix mixes
+red, green and blue per pixel, so the values 1 through 7 are its seven
+visible colours, and `NextColour`'s wrap keeps the cell inside that
+range. `DrawBeacon` never knows or cares which colour is current - it
+reads the fact and plots it. Say the chain aloud once before we build:
+"GO fires Step; on Step, NextColour updates Colour; on Colour,
+DrawBeacon."
 
 ## Run it
 
@@ -107,27 +99,25 @@ Click the **Run** button in the Debug80 panel.
 
 That is the build system. Debug80 hands your file to the Glimmer
 compiler, assembles the result, checks it, loads the MON-3 ROM and
-your program into the emulated TEC-1G, and runs. The platform panel opens on the TEC-1G, and
-there on the 8x8 matrix is a single red pixel. Let it glow for a second, because you earned it: `Colour` started at 1, which is red, and the
-word `changed` in your declaration is why it drew itself before you
-touched anything. That dot is your declaration, made light.
+your program into the emulated TEC-1G, and runs. The platform panel
+opens on the TEC-1G, and there on the 8x8 matrix is a single red
+pixel. `Colour` started at 1, which is red, and the word `changed` in
+your declaration is why it drew itself before you touched anything.
 
 Now click GO on the panel's keypad. Green. Again: yellow. Keep going -
 red, green, yellow, blue, magenta, cyan, white - and round again to
 red. Seven presses, seven colours, one wrap rule doing its work.
-And between your presses, what is the program doing? Nothing.
-The scan keeps the pixel lit while both of your blocks wait for their
-facts to change. An idle Glimmer program is genuinely idle, and that
-is the reactive model working exactly as designed.
+And between your presses, what is the program doing? Nothing. The scan
+keeps the pixel lit while both of your blocks wait for their facts to
+change. An idle Glimmer program is genuinely idle.
 
 The build also left things for us in the project's `build` folder.
 `main.main.asm` is the generated assembly program - your blocks and
 the machinery around them, one readable file, and the subject of the
 next section. Beside it sit the assembled bytes as Intel HEX, which
 is what will travel to a real TEC-1G one day, and the debug map,
-which records the source line every address came from and is about
-to make your debugger feel like a magic trick. And one more thing
-happened during that build, quietly working for you: the assembler
+which records the source line every address came from. And one more
+thing happened during that build: the assembler
 ran its register-contract checking over the whole program - every
 routine in the generated file declares which registers it uses, and
 every call is proven against those declarations. The classic Z80 bug,
@@ -158,8 +148,8 @@ order, and its section comments are a table of contents:
 ; --- matrix8x8 profile library ---      ScanFrame, FbClear, FbPlot
 ```
 
-Three stops on the tour, chosen because each one turns something you
-have taken on faith into something you can point at.
+Three stops on the tour, each showing something from chapter 1 as
+real code.
 
 First stop - the bookkeeping your declarations became:
 
@@ -176,9 +166,8 @@ GlimDep_DrawBeacon__B0 .equ CHG_COLOUR
 ```
 
 Each fact owns one bit; each block owns a mask built from its `on`
-line. This is what the reactive model costs at runtime: the entire
-nervous system of your program is a few bytes and some AND
-instructions.
+line. This is what the reactive model costs at runtime: a few bytes
+and some AND instructions.
 
 Second stop - a dispatcher, the code that asks *did anything this
 block cares about change?*:
@@ -197,8 +186,7 @@ _skip_NextColour:
 
 Load the changed bits, mask them against the block's triggers, skip or
 call. That is your `on Step`, compiled: three instructions and a
-branch. I promised you could always find out what a declaration costs
-- now you know how to look.
+branch.
 
 Third stop - the end of every frame:
 
@@ -225,19 +213,17 @@ mechanism precise in chapter 5, when you have a program that needs it.
 Wander further whenever you like. Your two blocks sit wrapped under
 `Glim_NextColour` and `Glim_DrawBeacon`, bodies exactly as you typed
 them, and at the bottom of the file the profile library spells out
-`ScanFrame`, `FbClear` and `FbPlot` as plain, readable routines. This
-file is worth an idle half hour with a coffee; every question you ask
-of it, it answers in Z80.
+`ScanFrame`, `FbClear` and `FbPlot` as plain, readable routines. The
+whole file is readable Z80, top to bottom.
 
 ## Stopping the world
 
-Now for the trick I promised. Back in `main.glim` - your source, the
-one you typed - set a breakpoint on the `inc a` line inside
-`NextColour`, and click Run.
+Back in `main.glim` - your source, the one you typed - set a
+breakpoint on the `inc a` line inside `NextColour`, and click Run.
 
-The program runs. The beacon glows. And nothing stops, which is the
-first lesson: `NextColour` has not run, because `Step` has not fired,
-because you have not pressed GO. A breakpoint in a reactive program is
+The program runs. The beacon glows. And nothing stops: `NextColour`
+has not run, because `Step` has not fired, because you have not
+pressed GO. A breakpoint in a reactive program is
 a question - *when does this rule actually run?* - and right now the
 answer is: not yet.
 
@@ -249,20 +235,18 @@ above. Step once and watch the increment happen. Step again through
 the compare and the store. Continue, and the beacon shows its next
 colour, and the machine goes back to waiting for you.
 
-Take a moment with this, because what you are looking at is unusual on
-any 8-bit toolchain: you set a breakpoint in a declarative source
-file, on a line of assembly inside a rule, and a full-speed emulated
-Z80 stopped there and offered you its registers. The debug map made
+You set a breakpoint in a declarative source file, on a line of
+assembly inside a rule, and a full-speed emulated Z80 stopped there
+and offered you its registers. The debug map made
 that happen - block-body lines belong to `main.glim`, so breakpoints
 and stepping land in your source, and when you step past the end of
 your block, the debugger continues into `main.main.asm`, the
 generated file you now know your way around. Your code and the
-machinery are one program, and you can watch either side of it think.
+machinery are one program, and you can step through either side.
 
-Chapter 1's Mover runs the same way, and it is worth two minutes to
-prove it to yourself: save it in the project as `mover.main.glim` and
-it appears as a second target in the Debug80 panel; select it, click
-Run, and steer the dot with keys 4 and 6.
+Chapter 1's Mover runs the same way. Save it in the project as
+`mover.main.glim` and it appears as a second target in the Debug80
+panel; select it, click Run, and steer the dot with keys 4 and 6.
 
 ## Summary
 
@@ -281,9 +265,8 @@ Run, and steer the dot with keys 4 and 6.
 - Breakpoints set in `.glim` block bodies stop in `.glim` source;
   stepping past your block continues into readable generated assembly.
 
-You have a machine that lights up when you talk to it. Time to give it
-more to remember: in the next chapter Beacon grows a position and a
-score, and you learn everything a fact can be: [State](03-state.md).
+In the next chapter, Beacon grows a position and a score, and you
+learn everything a fact can be: [State](03-state.md).
 
 ---
 
