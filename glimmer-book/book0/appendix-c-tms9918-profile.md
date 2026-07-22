@@ -157,7 +157,7 @@ that constraint.
   seven tiles; later groups hold eight. A pair whose group is full
   spills into a new group.
 - The first pair's background is the screen background: empty name
-  table cells show tile 0, which lives in group 0 and takes its
+  table cells show tile 0, which sits in group 0 and takes its
   colours from the first pair. `VdpInit` fills the colour table with
   `$F1` (white on black) before `LoadResourcesVram` writes the
   declared pairs.
