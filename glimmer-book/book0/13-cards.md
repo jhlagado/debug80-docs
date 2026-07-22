@@ -9,8 +9,8 @@ nav_order: 13
 
 # Chapter 13 - Cards
 
-Picture any arcade machine you have ever stood in front of. The screen
-that drew you over - the attract screen, blinking its invitation - is
+Picture an arcade machine. The screen that drew you over - the attract
+screen, blinking its invitation - is
 a little program of its own: it keeps no score, obeys no joystick, and
 knows nothing about what happens after the coin drops. Put the coin in
 and a different program takes over: rules, clock, score. Lose, and a
@@ -49,16 +49,15 @@ that.
 
 ## Gate
 
-The chapter's game is Gate, and I will be straight with you about it:
-as a game, it is a shell. At the splash, two pixels blink in the
-middle of the 8x8 RGB LED matrix, and any key starts a round. A round
+The chapter's game is Gate, and as a game it is a shell. At the
+splash, two pixels blink in the middle of the 8x8 RGB LED matrix, and
+any key starts a round. A round
 is 512 frames on a clock drawn as a shrinking green bar, and every
 press of GO scores a point on the seven-segment display. When the
 clock drains, the score appears as a red bar, and after a ninety-frame
 pause any key returns to the splash. Press GO, number goes up - no
-arcade would take it. That thinness is the point. This chapter
-builds the cabinet; the next one puts the game in it, and the cabinet
-deserves your full attention once, with no game in the way.
+arcade would take it. That thinness is the point. This chapter builds
+the cabinet; the next one puts the game in it.
 
 ```mermaid
 flowchart LR
@@ -100,10 +99,10 @@ chapter 4 and chapter 7 material. `Blink` is an oscillator, ticking
 every 16 frames for the life of the program. `PlayClock` and
 `RestartGate` are one-shot timers holding zero: idle until a block
 writes them, and the blocks that write them arrive with their cards.
-The overlap in the bindings is deliberate: a press of GO fires both `HitP` and
-`AnyKeyP`, exactly as chapter 4 said `bind key any` would. In any
-previous chapter that overlap would be a problem to untangle. Here,
-the cards below sort out who listens, and you will watch them do it.
+The overlap in the bindings is deliberate: a press of GO fires both
+`HitP` and `AnyKeyP`, exactly as chapter 4 said `bind key any` would.
+In any previous chapter that overlap would be a problem to untangle.
+Here, the cards below sort out who listens.
 
 ## A card is a section
 
@@ -161,8 +160,8 @@ runs until the next `card` line, or the end of the file for the last
 card.
 
 Every block in the section is **card-gated**: it dispatches only
-while Splash is the active card. Watch what that buys you with the
-blink. `BlinkTick` fires every 16 frames forever - it is a global,
+while Splash is the active card. The blink shows what that does.
+`BlinkTick` fires every 16 frames forever - it is a global,
 nothing stops it - and `BlinkPrompt` answers it only at the splash.
 During a round the same tick fires, finds no active listener, and
 clears at frame end like any pulse. The block's position in the file
@@ -179,8 +178,8 @@ delivery? The block at the top of the section, and it is new.
 ## Arriving on a card
 
 `ShowSplash` is an `enter` block: it runs once, on the frame its card
-becomes active. Look at what its header does not carry - there is no
-`on` line, because arriving *is* the trigger. It dispatches ahead of
+becomes active. Its header carries no `on` line, because arriving *is*
+the trigger. It dispatches ahead of
 the card's other blocks in its phase, so the card is set up before any
 of its rules run. It takes `updates`, and, as you will see in a
 moment, it may take `goto`.
@@ -192,8 +191,7 @@ to the render phase the same frame - the chapter 5 rule - so the
 prompt is lit on the very first frame of the card, with the blink
 timer taking over from there.
 
-I said "runs once", and I mean it precisely, because the
-precision is the feature. Entry is edge-triggered: an enter block runs
+"Runs once" is exact. Entry is edge-triggered: an enter block runs
 when the program *changes* to its card, not while the program sits on
 it. Frame one counts - the start card is entered like any other - and
 so does every later arrival, so each trip back from the game-over
@@ -219,9 +217,9 @@ optional - a header-only routing block closes directly with `end`.
 Three lines of header are the whole "press any key" pattern chapter 4
 promised you: a `bind key any`, a pulse, and a card transition.
 
-A `goto` compiles to an update of `CurrentCard`, and the question of
-exactly *when* the switch lands is a good one - good enough that I am
-saving it for its own section, once all three cards are on the page.
+A `goto` compiles to an update of `CurrentCard`. When exactly the
+switch lands has its own section, once all three cards are on the
+page.
 
 ## The round
 
@@ -285,14 +283,14 @@ effect EndRound
 end
 ```
 
-`StartRound` zeroes the score and arms the clock, and arming on entry
-is the point, so let me argue for it by showing you the alternative.
-Declare `PlayClock : word = 512` instead, and the countdown starts
-spending itself the moment the program boots - while the splash is
-still blinking. `TimeUp` fires into a frame where no active block
-listens, the clock settles at zero, and the round that eventually
-starts has no end. Armed by the enter block, the countdown begins when
-the round begins: the timer lives inside the card that owns it.
+`StartRound` zeroes the score and arms the clock, and it must arm on
+entry. The alternative shows why: declare `PlayClock : word = 512`
+instead, and the countdown starts spending itself the moment the
+program boots - while the splash is still blinking. `TimeUp` fires
+into a frame where no active block listens, the clock settles at zero,
+and the round that eventually starts has no end. Armed by the enter
+block, the countdown begins when the round begins: the timer belongs
+to the card that owns it.
 
 `DrawClock` reads the timer cell directly. A one-shot's cell *is* the
 countdown - chapter 7's rule - so `PlayClock` is the frames
@@ -369,10 +367,9 @@ _done:
 end
 ```
 
-The last card is where the program lives up to its name, and it exists
-because of something you would discover in your first minute of
-playtesting: a player mashing GO at the end of a round sails straight
-past the result screen without ever seeing it. So restart waits
+The last card exists because of something you would discover in your
+first minute of playtesting: a player mashing GO at the end of a round
+sails straight past the result screen without ever seeing it. So restart waits
 behind a gate. `ShowFinal` closes it and arms `RestartGate`; ninety
 frames later `GateOpenP` fires and `OpenGate` opens it - the delayed
 one-shot chapter 7 promised - and only then does a key press travel.
@@ -384,17 +381,16 @@ conditional transition writes `CurrentCard` itself: declare
 leaves. The enum members are ordinary assembler constants, so
 `ld a,Card.Splash` is plain Z80 with a generated name in it.
 
-Before you move on, look closely at what `Restart` does when the gate
-is shut, because it looks like a bug and is not. The body stores
-nothing, yet `updates CurrentCard` still marks the cell changed. That
+What `Restart` does when the gate is shut looks like a bug and is not.
+The body stores nothing, yet `updates CurrentCard` still marks the
+cell changed. That
 is harmless by design. Entry is edge-triggered - an enter block runs
 only when the card actually changed to its card - so marking
 `CurrentCard` changed while staying on GameOver re-runs nothing.
 
 ## Facts that changed while you were away
 
-A subtler problem hides on this card, and the cure will make more
-sense once you have seen the disease. `FinalBar` draws the score, and
+A subtler problem hides on this card. `FinalBar` draws the score, and
 it depends on `Score` - a fact whose last change happened during the
 round, frames before this card existed on screen. Chapter 5's
 delivery rule was exactly-once. Each of those changes was delivered
@@ -405,8 +401,8 @@ the news. Left to itself, `FinalBar` would wait forever on a flag
 that already came and went, and the game-over screen would show you a
 blank 8x8 matrix.
 
-The cure sits in the enter block's header, and you have already read
-past it once:
+The fix is in the enter block's header, which you already read past
+once:
 
 ```text
 enter ShowFinal
@@ -429,17 +425,16 @@ One of those two raises is a **re-raise**: `Score` holds the value it
 held a moment ago, and its flag goes up again, so `FinalBar` runs on
 the card's first frame and paints the result. The card slept through
 the announcement, so its enter block re-announces it on arrival. The
-rule to carry: when a card's renders depend on facts that changed
+rule: when a card's renders depend on facts that changed
 while the card was away, list those facts in the enter block's
 `updates`.
 
 ## Transitions land at frame boundaries
 
-Time to pay the debt from the splash. `StartGame` runs in the middle
-of a frame, in the logic phase, with Splash's other blocks still
-mid-frame around it - so when does Splash stop and Playing start? The
-generated file answers with two pieces, and together they hand you a
-guarantee you never had to ask for.
+Now the deferred question from the splash. `StartGame` runs in the
+middle of a frame, in the logic phase, with Splash's other blocks
+still mid-frame around it - so when does Splash stop and Playing
+start? The generated file answers with two pieces.
 
 First, `CurrentCard` is the *next-card* register. What `goto Playing`
 became, from `gate.main.asm`:
@@ -474,20 +469,18 @@ MainLoop:
 So every card switch lands at a frame boundary. The frame that
 decides to leave finishes as the old card: its blocks complete their
 phases, its pulses clear at frame end. The destination activates at
-the next frame's start, enter blocks first. Make it concrete: the
-press that leaves the splash raises `AnyKeyP` - and `HitP` too, when
+the next frame's start, enter blocks first. The press that leaves the
+splash raises `AnyKeyP` - and `HitP` too, when
 the key is GO - but that frame's active card is still Splash, so
 `ScorePoint` is gated off, and both pulses are gone before Playing
 wakes. A goto cannot leak its frame's triggers into the destination
 card, which means every round starts with a zero score, whichever key
-started it. You did not design that guarantee and you wrote no code
-toward it; it is the kind of correctness a declared transition gives
-you without being asked.
+started it. You wrote no code toward it; a declared transition gives
+it for free.
 
 ## The card machinery
 
-I have made a lot of claims about gates and edges this chapter, so
-let us go and point at them. Build the file and open the output:
+Build the file and open the output:
 
 ```sh
 glimmer build gate.glim
@@ -509,9 +502,9 @@ GlimPrevCard:     .db $FF          ; enter edge detector ($FF = before any card)
 `CurrentCard` is where gotos and conditional stores write.
 `GlimActiveCard` is the latched copy every gate tests. `GlimPrevCard`
 starts at $FF, a value matching no card, which is how frame one
-registers as an entry to Splash. And a small milestone in passing: Gate's three states and five pulses fill all eight bits of
-`Changed0`, so `CurrentCard`'s flag opens the second bank - and
-starts set:
+registers as an entry to Splash. Gate's three states and five pulses
+fill all eight bits of `Changed0`, so `CurrentCard`'s flag opens the
+second bank, and starts set:
 
 ```asm
 Changed0:         .db %00000000   ; flags dispatch tests
@@ -535,8 +528,7 @@ _skip_ScorePoint:
 
 Wrong card, skip; right card, the flag test proceeds as ever. Three
 instructions in front of the familiar dispatch are the entire price
-of the section machinery - that is what each block pays for living in
-a card.
+of the section machinery: what each block pays to belong to a card.
 
 An enter dispatch adds the edge. `ShowFinal`'s, together with the two
 instructions that follow the last enter dispatch in the phase:
