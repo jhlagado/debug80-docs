@@ -29,8 +29,8 @@ end
 ```
 
 Sixty-four frames, eight columns, eight frames on each: the crossing
-is perfectly even. Watch it long enough to see what
-it lacks. The dot goes exactly where it is told, on schedule, and that
+is perfectly even. It also lacks something. The dot goes exactly where
+it is told, on schedule, and that
 is how it reads: a position being updated. The difference between
 position and motion is the difference between a slide rule and a
 thrown ball. The slider moves because a hand pushes it, at whatever
@@ -38,18 +38,17 @@ pace the hand keeps. The ball leaves your hand fast and slows as it
 climbs; a landing bird glides in; a released spring shoots past its
 rest point and settles back. Motion in the world accelerates and
 eases, and your eye has spent a lifetime learning its shapes. On the
-8x8 matrix the columns are fixed, so all of that character has to live
-in the timing: how many frames the dot dwells on each column before
-moving on. Equal steps show position. Shaped steps show motion. And on
-sixty-four pixels, with no room for detail to carry the illusion, that
-polish is most of what separates a demo from a game.
+8x8 matrix the columns are fixed, so all of that character comes from
+the timing: how many frames the dot dwells on each column before
+moving on. Equal steps show position. Shaped steps show motion. On
+sixty-four pixels, with no room for detail to carry the illusion, the
+timing is all you have.
 
 Shaping the steps by hand means arithmetic every frame - squares,
 roots, eight-bit fractions - inside a frame that also has input and
-drawing to run. Glimmer refuses to spend your frame on that, and the
-trade it makes instead is one of my favourite things in the whole
-system, so let me spell it out. A `curve` declaration names a motion
-shape, and the compiler turns it into a table of bytes inside the
+drawing to run. Glimmer refuses to spend your frame on that. A `curve`
+declaration names a motion shape, and the compiler turns it into a
+table of bytes inside the
 generated program. The expensive mathematics happens once, at build
 time, on your desk, where cycles cost nothing. The Z80 pays one table
 read per frame. You buy the flight of a thrown ball for the price of a
@@ -57,8 +56,8 @@ load.
 
 ## Comet
 
-This chapter's program is Comet, and its whole job is to make that
-flight something you can launch on demand. The dot rests at the left
+This chapter's program is Comet: a flight you can launch on demand.
+The dot rests at the left
 edge of the middle row. GO launches it across the row: quick off the
 pad, slowing all the way, gliding in to land near the right edge. GO
 again - anytime, even mid-flight - launches it again.
@@ -113,7 +112,7 @@ begin
 end
 ```
 
-One declaration is new, and it is the reason this chapter exists:
+One declaration is new:
 
 ```text
 curve Glide ease_out steps 64 from 0 to 6
@@ -142,9 +141,10 @@ runs. Its body indexes the table with the current step:
 ```
 
 The step goes into DE, the table's base into HL, and the sum points at
-the byte holding this step's column. Missing from that body is everything expensive: no squares, no roots, no fractions. The whole ease-out
-calculation finished before the program ever ran; the frame pays for
-one load.
+the byte holding this step's column. Missing from that body is
+everything expensive: no squares, no roots, no fractions. The whole
+ease-out calculation finished before the program ever ran; the frame
+pays for one load.
 
 Every ramp names an arrival pulse, so `Landed` fires as the flight
 ends. Comet lands quietly for now; chapter 9 puts sound on moments
@@ -186,9 +186,8 @@ more curves over the same run, and one of them springs.
 
 ## The ramp is the clock, the curve is the path
 
-I want to slow down here, because Comet's motion is built on an idiom
-you will use in every game from now on. Look at the two declarations,
-sized to each other:
+Comet's motion is built on an idiom you will use in every game from
+here. The two declarations are sized to each other:
 
 ```text
 ramp Travel : byte steps 64 -> Landed
@@ -209,8 +208,7 @@ index sixty-four table entries; the final step reads the final byte,
 so the dot stands on its landing column on the very frame `Landed`
 fires.
 
-The pairing hands you two independent dials, and you will reach for
-both the first time you tune a game's feel. Duration is the steps
+The pairing hands you two independent dials. Duration is the steps
 count in frames: raise both numbers to 128 and the same glide takes
 twice as long. Feel is the preset name: change `ease_out` to `sine`
 and rebuild, and the same 64-frame flight arrives with a different
@@ -218,9 +216,7 @@ character. Either way, the block joining them stays untouched.
 
 ## The table in the generated file
 
-You know my habit by now: when I tell you something is cheap, we go
-and look at the price tag. Open `comet.main.asm` and find the resource
-the declaration became:
+Open `comet.main.asm` and find the resource the declaration became:
 
 ```asm
 ; --- curve resources ---
@@ -235,16 +231,16 @@ Curve_Glide:
 Sixty-four bytes, one per ramp step, and you can read the ease-out
 straight off the rows: the dot spends three frames on column 0 and
 nineteen on column 6, each dwell longer than the last, give or take a
-rounding step. The declaration's whole runtime cost is sitting in
-front of you - 64 bytes of data.
+rounding step. The declaration's whole runtime cost is 64 bytes of
+data.
 
 `.align 256`, the line above the label, moves the assembler to the
 next 256-byte page boundary before laying the table down, so
 `Curve_Glide` starts at an address whose low byte is zero: a
-page-aligned table. That alignment buys you an idiom. A curve holds
-at most 256 bytes, every entry lives in the
-base's own page, and the base's low byte is zero - so *base plus step*
-collapses into writing the step straight into L:
+page-aligned table. That alignment enables an idiom. A curve holds at
+most 256 bytes, every entry is in the base's own page, and the base's
+low byte is zero - so *base plus step* collapses into writing the step
+straight into L:
 
 ```asm
     ld a,(Travel)
@@ -257,15 +253,13 @@ untouched. The final version of Comet leans on this.
 
 ## Switching curves in flight
 
-The point of naming a motion is choosing between motions, and a choice
-of motions is something you feel at the keypad, not something you read
-in a paragraph. So here is the full Comet - three curves over the same
-run, a `Preset` fact naming the current one, and PLUS cycling through
-them. Before you read a word of my walkthrough, type it in, build
-it, and fly all three. GO to launch, PLUS to
-switch, GO again. Flick between the presets until you can tell them
-apart with your eyes alone. Thirty seconds of that will teach you what
-motion character means better than anything I write below.
+Naming a motion is for choosing between motions, and a choice of
+motions is something you feel at the keypad. So here is the full Comet
+- three curves over the same run, a `Preset` fact naming the current
+one, and PLUS cycling through them. Before you read the walkthrough,
+type it in, build it, and fly all three. GO to launch, PLUS to switch,
+GO again. Flick between the presets until you can tell them apart with
+your eyes alone.
 
 ```text
 program Comet
@@ -351,8 +345,7 @@ begin
 end
 ```
 
-Welcome back. Now let me show you where what you felt comes from. The
-three curve lines differ in one word each: `Straight` is the
+The three curve lines differ in one word each: `Straight` is the
 reference, `Glide` the soft arrival, `Spring` the overshoot. `Preset`
 is an ordinary fact holding 0, 1 or 2, and `changed` puts its number
 on the seven-segment display from the first frame; `NextPreset` cycles
@@ -379,8 +372,7 @@ the job. Every curve table is page-aligned, so one `ld l,a` serves all
 three; picking a motion at runtime costs the frame a few loads and
 branches before the same single table read.
 
-`Spring` is worth reading in the generated file, because by now you
-have felt it and the numbers explain the feel:
+Here is `Spring` in the generated file, the numbers behind the feel:
 
 ```asm
         .align  256
@@ -396,7 +388,7 @@ column the headroom rule kept free - holds it for thirteen frames,
 then settles back onto 6 for the landing. All three tables end on 6,
 so pressing PLUS while the comet rests redraws it where it stands.
 
-Two behaviours you may have noticed at the keypad deserve their
+Two behaviours you may have noticed at the keypad have simple
 explanations. On the very first frame, `Preset` is already changed, so
 `TrackComet` runs before any launch, reads the idle ramp's final step,
 and the dot appears on its landing column, waiting for GO. And
