@@ -9,50 +9,60 @@ nav_order: 1
 
 # Chapter 1 - The Shape of a Game
 
-Glimmer is a new way to write games for old machines. It takes
-techniques from reactive programming, a school of thought the
-computing world needed forty years to arrive at, and time-travels
-them back to the age of the Z80. You describe the game - what it
-remembers, what it responds to, what follows, and what it shows - and
-Glimmer builds the running program around your description. That is
-the subject of this book, and before we start, here is what I assume
-about you: you already read assembly. You can
-follow a `ld a,(hl)` and a conditional jump without slowing down, so
-you know the pleasure of this machine - nothing between you and the
-metal, every byte where you put it. And you know, or you can guess,
-where the pain lives. A game never stops asking things of you.
-Watch the keys. Keep the display alive. Move that, count this, redraw
-the other, every frame, in the right order, forever. The game itself -
-the rules, the fun part - ends up buried inside a heap of plumbing,
-and the plumbing is nearly the same in every game you will ever write.
+Glimmer is a new way to write games for old machines, and its purpose
+is to make that job smaller. A game written out by hand is a large
+program; the same game in Glimmer is a small one, and it stays
+readable as it grows. Two things buy you that. The first is a borrowed
+idea: Glimmer takes reactive programming - a modern technique the
+computing world needed forty years to arrive at - and time-travels it
+back those forty years, to the age of the Z80. You describe the game -
+what it remembers, what it responds to, what follows, and what it
+shows - and Glimmer builds the running program around your
+description. The second is abstraction: the machinery every game needs
+is generated for you rather than written by you, so the program you
+work on stays short.
+And a short program is one you can hold in your head, change with
+confidence, and debug quickly.
 
-The pain has a name. The way we have always programmed these machines
-is called *imperative*: the program is a list of orders - do this,
-then this, then check that - and seeing that every order lands at the
-right moment, frame after frame, is your job and nobody else's.
-Reactive programming turns the arrangement around. You write down how
-the program should respond when things happen, and machinery does the
-watching. The idea took four decades of user interfaces and games to
-take shape, generation after generation discovering the same truth:
-almost everything an interactive program does is a *reaction*. A key
-goes down, so the player moves. A timer runs out, so the block drops.
-The score changes, so the display updates. These are ideas from the
-future of this machine - they had to be discovered elsewhere, slowly,
-before anyone could carry them home to it - and none of them is
-exotic. If you have ever used a spreadsheet, changed one cell and
-watched every formula that mentions it follow, you have felt the
-model in your hands. That feeling is most of the theory, and the rest
-is small enough for one chapter.
+Before we start, here is what I assume about you: you already read
+assembly. You can follow a `ld a,(hl)` and a conditional jump without
+slowing down, so you know the pleasure of this machine - nothing
+between you and the metal, every byte where you put it. Assembly is
+not the obstacle here, and I will not pretend it is; you are reading
+this because you like working this close to the machine. The obstacle
+is how much a game has to do at once. A game is never only its rules.
+The keys have to be watched, the display kept alive, time kept, and
+all of it has to happen every frame, in the right order, without a
+missed beat. That supporting work is most of the code in any game, and
+it is nearly the same from one game to the next. The rules - the part
+that makes this game the game it is - end up threaded all through it.
 
-So Glimmer lets you write the game as reactions, in the
-preface's four words. You declare the facts your game remembers, you
-name the moments it must respond to, and you write the rules and the
-pictures as a few lines of real Z80 each, with a label saying when
-they should run. Then Glimmer builds the machinery around them - the
-loop, the key scanning, the timing, the change tracking - and calls
-your code at exactly the moments you declared. That inversion is the
-whole trick. You stop orchestrating and start declaring, and the
-plumbing stops being your problem.
+There is a name for the usual way of arranging all this. We call it
+*imperative*: the program is a list of orders - do this, then this,
+then check that - and making sure every order lands at the right
+moment, frame after frame, is your job and nobody else's. Reactive
+programming turns the arrangement around. You write down how the
+program should respond when things happen, and machinery does the
+watching. Four decades of user interfaces and games arrived at the
+same truth: almost everything an interactive program does is a
+*reaction*. A key goes down, so the player moves. A timer runs out, so
+the block drops. The score changes, so the display updates. These are
+ideas from the future of this machine - they had to be discovered
+elsewhere, slowly, before anyone could carry them home to it - and
+none of them is exotic. If you have ever used a spreadsheet, changed
+one cell and watched every formula that mentions it follow, you have
+felt the model in your hands. That feeling is most of the theory, and
+the rest is small enough for one chapter.
+
+So Glimmer lets you write the game as reactions, in the preface's four
+words. You declare the facts your game remembers, you name the moments
+it must respond to, and you write the rules and the pictures as a few
+lines of real Z80 each, with a label saying when they should run. Then
+Glimmer builds the machinery around them - the loop, the key scanning,
+the timing, the change tracking - and calls your code at exactly the
+moments you declared. You stop orchestrating and start declaring. The
+supporting work is generated now, not written by hand, and what stays
+in front of you is short: it reads like a description of the game.
 
 Now, I know why a Z80 programmer wants to see the code a compiler
 writes, because I want to see it too: the costs matter. Here is
