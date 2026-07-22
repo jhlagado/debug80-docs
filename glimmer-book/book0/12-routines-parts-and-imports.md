@@ -17,8 +17,8 @@ you. The feature I have picked to force the issue is one a painting
 program owes its painter: an eraser. AD sits unused beside GO on the
 keypad, and the rule is `StampPixel`'s mirror image - find the
 cursor's row byte, build the column's mask, and clear the bit instead
-of setting it. Write it out and watch what happens: the eraser opens
-with a dozen instructions copied whole from `StampPixel` before you
+of setting it. Write it out: the eraser opens with a dozen
+instructions copied whole from `StampPixel` before you
 reach the first line that differs. Twelve duplicated instructions are
 twelve places for the next change to miss one, and every copy you
 make of working code is a fresh chance to be wrong with it.
@@ -26,21 +26,19 @@ make of working code is a fresh chance to be wrong with it.
 The eraser breaks something quieter, too. `Marks` counts stamps laid:
 stamp ten pixels, erase all ten, and the count reads ten over a blank
 board. The number worth showing is how many pixels the picture holds
-right now, and that fact lives in `Paint` itself, waiting to be
-counted - set bits across eight bytes. That is loop work with a
-register interface and no facts of its own: library code in
-everything but name, and it deserves to live like library code.
+right now, and that fact is in `Paint` itself, waiting to be counted -
+set bits across eight bytes. That is loop work with a register
+interface and no facts of its own: library code in everything but
+name.
 
-So this chapter is about a program growing up, and Glimmer's three
-tools for it arrive as three sizes of the same instinct -
-put each thing in the one place it belongs. A `routine` holds shared
-code once, where every block can call it. A `part` moves declarations
-into a second `.glim` file that belongs to the same program. An
-`import` brings in a file of hand-written assembly. None of them
-changes what the Z80 executes; what they change is what you find when
-you come back in a month. Structure is a kindness you do your future
-self, and the Canvas that was one long file leaves this chapter as
-three rooms you can find things in.
+Glimmer has three tools for a growing program, three sizes of the same
+idea: put each thing in the one place it belongs. A `routine` holds
+shared code once, where every block can call it. A `part` moves
+declarations into a second `.glim` file that belongs to the same
+program. An `import` brings in a file of hand-written assembly. None
+of them changes what the Z80 executes; they change what you find when
+you come back in a month. The Canvas that was one long file leaves
+this chapter as three files, each with one job.
 
 ## Canvas, in three files
 
@@ -109,9 +107,8 @@ Wrote canvas.main.asm (register contracts checked by AZM)
 Wrote canvas.main.d8.json (47 block segments attributed to .glim source)
 ```
 
-One build, one program, one generated file. Here is exactly what the
-split did and did not do: it moved source between files, and
-it changed nothing the Z80 will see. The rest of the chapter takes
+One build, one program, one generated file. The split moved source
+between files and changed nothing the Z80 will see. The rest of the chapter takes
 the three declarations in turn, smallest first.
 
 ## One copy of the arithmetic
@@ -124,10 +121,10 @@ local to the body, and a fall-through ending with Glimmer appending
 the final `ret`. A conditional early return like `ret c` is legal
 anywhere inside.
 
-Scroll back up to `CursorSpot` in the entry file and reread it,
-because it is the answer to the eraser's duplication: the stamp
-arithmetic, written once and tightened. `MxMask` from chapter 10
-turns x into the column's mask, y indexes `Paint`, and the routine
+`CursorSpot` in the entry file is the answer to the eraser's
+duplication: the stamp arithmetic, written once and tightened.
+`MxMask` from chapter 10 turns x into the column's mask, y indexes
+`Paint`, and the routine
 hands back B holding the mask and HL aimed at the cursor's row byte.
 With the arithmetic in one place, both painting rules shrink to their
 verbs:
@@ -156,13 +153,13 @@ end
 ```
 
 Stamp ORs the mask in; erase complements it and ANDs, clearing
-exactly one bit. The dozen shared instructions live in one place now,
+exactly one bit. The dozen shared instructions are in one place now,
 and the next change to the addressing reaches both rules by touching
-neither. That sentence is the argument for routines.
+neither.
 
-Now the best detail of the arrangement. Chapter 11's contract
-checking covers this routine without you writing a line of contract.
-The assembler reads the body and works out for itself what your helper touches:
+Chapter 11's contract checking covers this routine without you writing
+a line of contract. The assembler reads the body and works out for
+itself what your helper touches:
 B and HL come out carrying the mask and the row address, A, DE and
 the flags are clobbered, and C passes through untouched. Every `call
 CursorSpot` is then proven against that inferred contract at strict
@@ -179,9 +176,7 @@ part "canvas-rules.glim"
 ```
 
 A `part` names another `.glim` file whose declarations join the
-program. Get the model right on first meeting, because
-it is easy to carry in habits from other languages that do not apply
-here. A part is not a module with walls of its own. The entry file -
+program. A part is not a module with walls of its own. The entry file -
 the one you hand to `glimmer build` - declares `program`, `platform`
 and `display`, and each part contributes cells, resources, bindings
 and blocks to that same program. One namespace, one program. The
@@ -220,8 +215,7 @@ end
 
 The other three movement effects follow, then the painting rules and
 the renders: 90 lines, six effects and two renders, one file with one
-kind of content. That last phrase is the test: a good part answers
-to a topic.
+kind of content. A good part answers to a topic.
 
 Diagnostics know which file they are standing in. Misspell the label
 in `MoveDown`'s guard - `jr nc,_sotp` - and rebuild:
@@ -350,15 +344,13 @@ end
 now, fresh on every redraw: `CountLit` returns it in HL, which is
 where `HudWriteU16` wants its value. Stamp, and the count climbs;
 erase, and it falls; the display and the board can never disagree,
-because they draw from the same eight bytes. Deleting a cell to fix a
-bug is a pleasure I hope you get plenty of.
+because they draw from the same eight bytes.
 
 ## The generated file
 
-I end most chapters in `canvas.main.asm`, and this one especially,
-because I told you the split changed nothing the Z80 sees, and you
-should not take that on faith. Open the file and each of the three
-declarations has left its signature. The routine first:
+The split changed nothing the Z80 sees. Open `canvas.main.asm` and
+each of the three declarations has left its signature. The routine
+first:
 
 ```asm
 ; --- routine CursorSpot ---
@@ -376,8 +368,8 @@ CursorSpot:
 ```
 
 A `.routine` boundary, your body verbatim, and the appended `ret`
-closing the fall-through. Look at the label: plain `CursorSpot`,
-exactly as declared, because your code calls it by name, while block
+closing the fall-through. The label is plain `CursorSpot`, exactly as
+declared, because your code calls it by name, while block
 labels wear the `Glim_` prefix because only dispatchers call them.
 And the bare `.routine` line is where the assembler's inference attaches - the
 contract it works out from this body is what every call site is
@@ -402,7 +394,7 @@ Glim_StampPixel:
 Same wrapper, same change-flag raise, same boundary. The file a
 declaration came from survives in the debug map, where each body's
 lines are attributed to their own `.glim` source; the assembly is one
-program, exactly as I promised.
+program.
 
 The import lands past the frame machinery, after `GlimEndFrame` and
 before the profile library:
