@@ -25,14 +25,12 @@ a block. When your character hits a wall, the player should hear it -
 a beep placed at the right instant is feedback, the kind a player
 responds to without thinking. When the score changes, the player should
 be able to read it without taking their eyes off the game for more
-than a glance. This is the chapter where your game stops being a dot
-on a dark board and becomes a production: it gains a face, a voice,
-and a scoreboard.
+than a glance. This chapter gives your game a face, a voice, and a
+scoreboard.
 
-I am going to teach you one pattern three times over, because it is
-the same pattern each time and I want it in your hands, not your
-notes. You declare a resource in the `.glim` file - a shape, a sound
-cue, a text string - and Glimmer generates the data plus something
+The same pattern appears three times in this chapter. You declare a
+resource in the `.glim` file - a shape, a sound cue, a text string -
+and Glimmer generates the data plus something
 callable to go with it. Your blocks call what was generated, and the
 declaration reads like the resource it describes. The scoreboard is
 the odd one out: the six-digit seven-segment display is a service the
@@ -42,11 +40,11 @@ will go and read what the declarations became.
 
 ## Fanfare
 
-Fanfare is a small celebration, and it lives up to the name. A cyan spark,
-two pixels square, bounces around the 8x8 matrix on its own timer.
+Fanfare is a small celebration. A cyan spark, two pixels square,
+bounces around the 8x8 matrix on its own timer.
 Every wall hit reverses its direction, beeps the speaker, and adds
-one to a score on the six-digit seven-segment display. The 20x4 LCD announces the program from the
-first frame.
+one to a score on the six-digit seven-segment display. The 20x4 LCD
+announces the program from the first frame.
 
 ```text
 program Fanfare
@@ -152,9 +150,9 @@ a player meets it: eyes, ears, and a number.
 Only three declarations at the top are new - `shape`, `sound`, and
 `text` - and each gets its own section below. The machinery around
 them is chapter 7's: a timer fires `Tick` every 6 frames, and `Move`
-runs on `Tick`. But notice one idea riding in the state before we
-move on: velocity as a fact. `VelX` holds 1 when the spark
-travels right and `$FF` when it travels left, and because adding
+runs on `Tick`. One idea rides in the state: velocity as a fact.
+`VelX` holds 1 when the spark travels right and `$FF` when it travels
+left, and because adding
 `$FF` to a byte steps it down by one, a single `add` moves the spark
 whichever way it is going. After the step, a spark at column 0 or
 column 6 has an edge against a wall (the shape is 2 wide, so 6 is as
@@ -189,9 +187,9 @@ shape Cross color red
 end
 ```
 
-The picture lives in your source at the same zoom you designed it at,
-which is the point: six months from now you will open this file
-and see a cross, not decode one.
+The picture sits in your source at the same zoom you designed it at:
+six months from now you will open this file and see a cross, not
+decode one.
 
 From each shape Glimmer emits a data table named `Shape_<Name>`, and
 because at least one shape exists in the program, the profile library
@@ -213,15 +211,14 @@ each other. `DrawSpark` starts with `FbClear` for the same reason as
 every moving picture since chapter 1: a moving shape redraws from a
 clean board.
 
-Now for the part I need you to respect. Placement is entirely your
-responsibility: `ShapeDraw` plots every lit pixel at x plus column, y
-plus row, straight into the framebuffer, and a row that hangs off the
-board writes into whatever memory follows it. Keep the whole shape
-inside the 8x8 matrix - for the 2x2 spark that means x and y each
-stay in 0..6, which is exactly the range `Move` enforces with its
-bounce tests. The game rule and the safety rule turn out to be the
-same rule, and that is worth arranging on purpose in every game you
-write. Register hygiene matters here too: the generated contract line
+Placement is entirely your responsibility: `ShapeDraw` plots every lit
+pixel at x plus column, y plus row, straight into the framebuffer, and
+a row that hangs off the board writes into whatever memory follows it.
+Keep the whole shape inside the 8x8 matrix - for the 2x2 spark that
+means x and y each stay in 0..6, which is exactly the range `Move`
+enforces with its bounce tests. The game rule and the safety rule turn
+out to be the same rule, worth arranging on purpose. Register hygiene
+matters here too: the generated contract line
 declares that `ShapeDraw` clobbers A, BC, DE, and HL, so load its
 arguments last, the way `DrawSpark` does.
 
@@ -241,9 +238,9 @@ ticks per frame, and taps it on schedule. `len` counts those ticks -
 `len 8` sounds for about one frame - and `div` sets the pitch as a
 divider, with smaller values higher.
 
-Know what this instrument is, and what it costs. The board carries
-no sound chip, so every note is CPU time, and the scan service buys
-you the property a game needs most: sound that never blocks. A cue
+The board carries no sound chip, so every note is CPU time, and the
+scan service gives you what a game needs most: sound that never
+blocks. A cue
 plays while the frames keep coming, and its vocabulary is short and
 rhythmic by nature - clicks, chirps, buzzes, down to a long low
 `len 200 div 9` at the mournful end of the range. Melody is a
@@ -265,13 +262,11 @@ active at a time, and starting a new cue replaces the current one -
 a fresh wall hit restarts the chirp from the top, which is exactly
 the feedback a fresh hit deserves.
 
-Where the call sits is the real lesson of `Move`; carry it into
-every game after this one. Sound accompanies a moment,
-and the event lives inside a rule, behind a conditional - so
-`call Snd_Bounce` sits inside the effect, on the branch where the
-wall hit happened, and the quiet path steps past it. The player feels
-that chirp before they think about it. Feedback is one line, in the
-rule that knows.
+Where the call sits matters. Sound accompanies a moment, and the
+moment sits inside a rule, behind a conditional - so `call Snd_Bounce`
+sits inside the effect, on the branch where the wall hit happened, and
+the quiet path steps past it. The player feels that chirp before
+thinking about it. Feedback is one line, in the rule that knows.
 
 ## The score, on the seven-segment display
 
@@ -302,14 +297,13 @@ declared `changed`, so `ShowScore` runs on frame one and the score
 opens at zero rather than blank. Your player never faces an empty
 scoreboard.
 
-One consequence of `Move`'s header teaches you how to think about
-`updates`. The header lists
-every fact the block may change, and each listed fact is marked
-changed whenever the block runs - so `ShowScore` repaints its digits
-every step, quiet ticks included. Should that worry you? Count the
-cost: the repaint writes the same six glyph bytes and spends a few
-dozen cycles in the blank window. When a score changes rarely and its
-redraw is heavy, split the rule; when the redraw is `HudWriteU16`,
+`Move`'s header has one consequence. The header lists every fact the
+block may change, and each listed fact is marked changed whenever the
+block runs - so `ShowScore` repaints its digits every step, quiet
+ticks included. Should that worry you? The repaint writes the same six
+glyph bytes and spends a few dozen cycles in the blank window. When a
+score changes rarely and its redraw is heavy, split the rule; when the
+redraw is `HudWriteU16`,
 the broad `updates` reads better, and readable wins.
 
 ## Words on the LCD
@@ -319,19 +313,18 @@ text MsgHello "FANFARE"
 ```
 
 A `text` declares a zero-terminated string for the TEC-1G's 20x4
-LCD. The LCD is board hardware, alongside the keypad rather than part
-of any display profile, and that placement buys you something
-useful: text resources work the same on the 8x8 matrix and,
-later in the book, on the TMS9918. Writing a string to a row is one
+LCD. The LCD is board hardware, alongside the keypad rather than part of
+any display profile, so text resources work the same on the 8x8 matrix
+and, later in the book, on the TMS9918. Writing a string to a row is one
 line in a block:
 
 ```text
     lcd_row MsgHello, LcdRow1
 ```
 
-That one line deserves a paragraph to itself, because it is your
-first meeting with an AZM **op**. An op is a macro that the assembler
-owns: a named instruction sequence, defined once in the generated
+That one line is your first meeting with an AZM **op**. An op is a
+macro that the assembler owns: a named instruction sequence, defined
+once in the generated
 file and expanded inline wherever it is invoked. You write it the way
 you write an instruction - name, then arguments - and the assembler
 replaces it with its body, arguments substituted in. So `lcd_row`
@@ -344,9 +337,9 @@ two MON-3 calls that position the LCD cursor and stream a string,
 taking the message label and a row constant: `LcdRow1` through
 `LcdRow4` come with it.
 
-`Greet` shows you a pattern worth stealing: the run-once startup
-hook. `Banner` starts `changed` and appears in no block's `updates`,
-so it changes exactly once, before the first frame - `Greet` runs on
+`Greet` uses the run-once startup hook. `Banner` starts `changed` and
+appears in no block's `updates`, so it changes exactly once, before the
+first frame - `Greet` runs on
 frame one, writes FANFARE to the top row, and rests for the rest of
 the program's life. Whenever you want something done once at startup
 - a title, a border, a greeting - declare a fact that starts changed
@@ -355,10 +348,8 @@ and the machinery does the remembering.
 
 ## The file, resource by resource
 
-I keep promising you that every declaration has a readable other
-half, and resources are the clearest case yet, because each one
-leaves a mark you can find by name. Open `fanfare.main.asm` and let
-us go collecting.
+Every resource leaves a mark you can find by name in the generated
+file. Open `fanfare.main.asm`.
 
 The text resource is its bytes, terminator included:
 
