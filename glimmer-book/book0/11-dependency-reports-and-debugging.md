@@ -382,7 +382,7 @@ everyday Glimmer work - and they reach you on the line you typed.
 The same coordinates keep working while the program runs, and this is
 where the practice closes its loop: the report told you where to put
 the breakpoint, and the debug map makes the breakpoint land. Set one
-on the `or b` line inside `PaintPixel` and press F5. The board runs,
+on the `or b` line inside `PaintPixel` and click Run. The board runs,
 the cursor steers - and the moment you press GO, the debugger halts
 on your line in `canvas.glim`. The registers panel holds the story so
 far: HL points into `Picture` at the cursor's row, B carries the

@@ -132,7 +132,7 @@ Debug80 finds Glimmer programs two ways.
 
 **By convention.** A file named `main.glim`, or ending in
 `.main.glim`, whose first declaration is `program`, is discovered as
-a target - press F5 and Debug80 builds it through Glimmer and runs
+a target - click Run and Debug80 builds it through Glimmer and runs
 the result. Part files open with their own declarations (`effect`,
 `state`), so the `program` check keeps them out of the target list.
 

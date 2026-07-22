@@ -394,7 +394,7 @@ this frame's renders still run and the final board reaches the screen.
 Three renders, one per instrument: the 8x8 matrix, the seven-segment
 display, the LCD. This is also where Skyfall starts to look like a
 game - if you have been typing along, you are one card away from
-pressing F5.
+clicking Run.
 
 ```text
 render DrawBoard

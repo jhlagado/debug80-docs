@@ -103,7 +103,7 @@ Step, NextColour updates Colour; on Colour, DrawBeacon."
 
 ## Run it
 
-Press F5.
+Click the **Run** button in the Debug80 panel.
 
 That is the build system. Debug80 hands your file to the Glimmer
 compiler, assembles the result, checks it, loads the MON-3 ROM and
@@ -115,7 +115,7 @@ touched anything. That dot is your declaration, made light.
 Now click GO on the panel's keypad. Green. Again: yellow. Keep going -
 red, green, yellow, blue, magenta, cyan, white - and round again to
 red. Seven presses, seven colours, one wrap rule doing its work.
-And between your presses, notice what the program is doing: nothing.
+And between your presses, what is the program doing? Nothing.
 The scan keeps the pixel lit while both of your blocks wait for their
 facts to change. An idle Glimmer program is genuinely idle, and that
 is the reactive model working exactly as designed.
@@ -233,7 +233,7 @@ of it, it answers in Z80.
 
 Now for the trick I promised. Back in `main.glim` - your source, the
 one you typed - set a breakpoint on the `inc a` line inside
-`NextColour`, and press F5.
+`NextColour`, and click Run.
 
 The program runs. The beacon glows. And nothing stops, which is the
 first lesson: `NextColour` has not run, because `Step` has not fired,
@@ -261,15 +261,16 @@ machinery are one program, and you can watch either side of it think.
 
 Chapter 1's Mover runs the same way, and it is worth two minutes to
 prove it to yourself: save it in the project as `mover.main.glim` and
-it appears as a second target in the Debug80 panel; select it, press
-F5, and steer the dot with keys 4 and 6.
+it appears as a second target in the Debug80 panel; select it, click
+Run, and steer the dot with keys 4 and 6.
 
 ## Summary
 
 - Debug80 in VS Code is the whole toolchain: the Glimmer compiler,
   the assembler, and the emulated TEC-1G travel inside the extension.
 - The file name is the arrangement: Debug80 recognises `main.glim`
-  (or `*.main.glim`) as a Glimmer program, and F5 builds and runs it.
+  (or `*.main.glim`) as a Glimmer program, and the Run button builds
+  and runs it.
 - A build leaves the generated assembly, the HEX image for real
   hardware, and the debug map in the project's `build` folder, with
   register contracts proven every time. (The command line lives in
