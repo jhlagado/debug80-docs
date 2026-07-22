@@ -9,11 +9,9 @@ nav_order: 6
 
 # Chapter 6 - The 8x8 Matrix Profile
 
-I have been keeping something from you since chapter 1, and this is
-the chapter where I finally get to show it to you. The TEC-1G has no
-video chip. Nothing sits between the processor and the 8x8 RGB LED
-matrix, refreshing pixels while your program thinks about
-other things. The display is eight rows of eight RGB LEDs, and the
+The TEC-1G has no video chip. Nothing sits between the processor and
+the 8x8 RGB LED matrix, refreshing pixels while your program thinks
+about other things. The display is eight rows of eight RGB LEDs, and the
 hardware can light exactly one row at a time. Three ports carry a
 row's red, green, and blue column data; a fourth selects the row that
 shows it. The thing sweeping those rows is the Z80 itself. It paints
@@ -28,8 +26,8 @@ doing two jobs at once. One is the game. The other is being the
 display controller - and chapter 1 warned you about it, when I called
 showing the current picture the program's own job, every frame,
 forever. Every program you have built since has done that job without
-a line of your code asking for it, and today I am going to open the
-machinery and show you where: the scan that keeps the 8x8 matrix lit,
+a line of your code asking for it. This chapter opens the machinery
+that does it: the scan that keeps the 8x8 matrix lit,
 the loop shape it forces on the frame, the 32 bytes of memory your
 renders have been writing all along, and the library routines that
 write them.
@@ -38,18 +36,16 @@ The chapters program is *Compass*. Hold GO and
 a dot runs clockwise around the rim of the 8x8, coloured by the
 quadrant it is crossing: red along the top, green down the right
 side, blue along the bottom, yellow climbing the left - north, east,
-south, west. Let go and it parks where it is. Compass is here
-because it forces a design choice best felt in the hands before it
-is argued on the page. The obvious way to build this game is to store the dot's
-x, its y, and its colour as facts and have the movement rule update
-all three - and that design rots, because it keeps three cells that
-must always agree and trusts every future rule to keep them agreeing.
+south, west. Let go and it parks where it is. Compass is built around one design
+choice. The obvious way to build this game is to store the dot's x,
+its y, and its colour as facts and have the movement rule update all
+three - and that design rots, because it keeps three cells that must
+always agree and trusts every future rule to keep them agreeing.
 Compass stores *one* byte, a position on the rim, and derives
-everything the screen wants from it. A fact you compute stays true
-to its source, because the rule that derives it re-runs whenever the
-source changes - there is no second copy for a future rule to forget. That is chapter 5's compute
-phase doing exactly the work it was made for, and you are about to
-watch it carry a whole game.
+everything the screen wants from it. A fact you compute stays true to
+its source, because the rule that derives it re-runs whenever the
+source changes - there is no second copy for a future rule to forget.
+That is chapter 5's compute phase carrying a whole game.
 
 ## Compass
 
@@ -144,13 +140,12 @@ end
 
 One fact drives the whole picture. The rim of the 8x8 matrix is 28
 pixels, and `Position` numbers them 0 to 27, clockwise from the
-top-left corner. Look at how
-small that makes `Advance`: step forward, and past 27 wrap to 0. That
-is the entire movement rule of the game. Held GO fires `Step` every 4
+top-left corner. `Advance` is small: step forward, and past 27 wrap to
+0. That is the entire movement rule of the game. Held GO fires `Step` every 4
 frames - the binding you learned in chapter 1, doing its arcade job -
 so the dot orbits for as long as the key stays down.
 
-`PlaceDot` is where the geometry lives, and nowhere else. `Position`
+`PlaceDot` holds the geometry, and nothing else does. `Position`
 is the fact the game reasons about; the screen wants an x, a y, and a
 colour; the compute derives all three in one place. A threshold
 ladder splits the rim into its quadrants - positions 0 to 6 lie on
@@ -162,13 +157,11 @@ same with y. Every arm leaves its quadrant's colour in A and falls
 into the shared store at `_colour`.
 
 The header line `updates DotX, DotY, Colour` declares all three
-products, and `DrawDot` depends on all three. Here is what storing
-one fact and deriving the rest buys you: those three cells change
-together because one block writes them together, so the render always
-reads a settled trio. The geometry sits in the compute, the rule in
-the effect, the picture in the render - each block one job, connected
-only by the headers, the way I have been promising you programs would
-keep reading as they grow.
+products, and `DrawDot` depends on all three. Storing one fact and
+deriving the rest means those three cells change together, because one
+block writes them together, so the render always reads a settled trio.
+The geometry sits in the compute, the rule in the effect, the picture
+in the render - each block one job, connected only by the headers.
 
 Chapter 5's delivery rule runs straight through the middle of this
 program, so let us trace it once. `Advance` sits in the logic phase,
@@ -187,8 +180,7 @@ lit, in the colour of its quadrant.
 
 ## The scan-shaped loop
 
-Every program in this book has opened with the same two lines, and I
-have been asking you to take them on faith:
+Every program in this book has opened with the same two lines:
 
 ```text
 platform tec1g-mon3
@@ -201,9 +193,8 @@ key codes, the polling routine, the shape of the runtime loop, and
 the library at the bottom of the file all come from this one choice.
 `platform` names the board and monitor, which is where `KEY_GO` and
 the `_scanKeys` polling come from. `display` names the output device,
-and it is the stronger choice of the two, because - now that you know
-who is really lighting the pixels - the display decides the loop
-itself. Chapter 16 puts `tms9918` on that line and gets a loop built
+and it decides the loop itself, because the CPU is what lights the
+pixels. Chapter 16 puts `tms9918` on that line and gets a loop built
 around a video chip; the reactive core - state, flags, dispatch,
 rollover - stays the same.
 
@@ -227,19 +218,17 @@ MainLoop:
 ```
 
 At `Start` the profile clears its canvas and display once; then the
-loop begins, and look who leads it. `ScanFrame` is the CPU doing its
-display job: one complete pass over the 8x8 matrix, all eight rows,
-each lit for a fixed dwell, returning with the board dark. Everything
-else - polling, your three phases, the rollover - runs in that blank
-window, while nothing is showing. Your renders write memory in the
-dark, and the next scan presents their combined result, which is why
-the player only ever sees finished pictures. The game runs in the
-gaps between sweeps of the light.
+loop begins. `ScanFrame` leads it, the CPU doing its display job: one
+complete pass over the 8x8 matrix, all eight rows, each lit for a
+fixed dwell, returning with the board dark. Everything else - polling,
+your three phases, the rollover - runs in that blank window, while
+nothing is showing. Your renders write memory in the dark, and the
+next scan presents their combined result, which is why the player only
+ever sees finished pictures.
 
-The fixed dwell is the profile's answer to a problem you would
-otherwise meet the hard way. If the
-time each row stayed lit depended on how much game work a frame
-happened to do, brightness would wobble with your logic - the display
+The fixed dwell solves a problem. If the time each row stayed lit
+depended on how much game work a frame happened to do, brightness
+would wobble with your logic - the display
 flickering because the game thought harder this frame. Instead each
 row shines for the same count on every frame, so brightness stays
 even across the rows of any one sweep. The dark gap between sweeps is
@@ -295,7 +284,7 @@ COLOR_WHITE       .equ $07
 
 A colour is a set of plane bits, and the compound colours are sums.
 That is the A register you have loaded before every `FbPlot` since
-chapter 1 - it never held a colour code, it held a recipe.
+chapter 1: a set of plane bits, not a colour-table index.
 
 `FbPlot` turns x, y, and colour into plane-byte writes. Its head,
 from the profile library:
@@ -322,14 +311,14 @@ rest of the routine shifts the colour bits out of D one at a time,
 ORing the pixel mask into each plane byte whose bit is set. ORing
 means `FbPlot` adds light: plot red and then green at the same
 coordinates and that pixel shows yellow. A clean picture starts from
-`FbClear`, which zeroes the 32 bytes - now you know what the call
-that has opened every redrawing render in this book actually does.
+`FbClear`, which zeroes the 32 bytes - the call that has opened every
+redrawing render in this book.
 
-Give the `.routine` line above the label a moment too, because you
-will need it the first time a library call eats a register of yours.
-It is the register interface, declared in the generated file and
-checked on every build: `FbPlot` consumes A, B, and C, and clobbers
-A, B, DE, and HL. C survives the call. Chapter 5's `DrawBar` kept its
+The `.routine` line above the label is the register interface, and you
+will meet it the first time a library call eats a register of yours.
+It is declared in the generated file and checked on every build:
+`FbPlot` consumes A, B, and C, and clobbers A, B, DE, and HL. C
+survives the call. Chapter 5's `DrawBar` kept its
 loop counter in B, a clobbered register, which is why it pushed BC
 around the call - and when a block of yours misuses a library
 routine's registers, the build fails with the contract, and these
@@ -357,16 +346,13 @@ like the 8x8 itself. `MxMask` is callable from your own blocks too,
 for the day a render builds whole row masks instead of plotting pixel
 by pixel.
 
-Here is what this section buys you. Any fact you can turn into an x,
-a y, and three colour bits, you can draw. The compute is yours; the
-plot is one call.
+Any fact you can turn into an x, a y, and three colour bits, you can
+draw. The compute is yours; the plot is one call.
 
 ## ScanFrame, top to bottom
 
-I told you in chapter 1 that nothing is hidden, and this chapter has
-been leaning on that promise harder than any before it - so let us
-collect on it. The scanner, the routine that *is* your display, is
-twenty-nine instructions, and you are going to read every one. The
+The scanner, the routine that *is* your display, is twenty-nine
+instructions, and you are going to read every one. The
 four ports it drives are equates from the top of the generated file:
 `PortRow` at `$05` selects the row, and `PortRed`, `PortGreen`, and
 `PortBlue` at `$06`, `$F8`, and `$F9` take the plane bytes. The
@@ -418,16 +404,14 @@ switches the row on. `rlc c` slides the select bit up one row; after
 the eighth rotate the bit falls into carry, the loop exits, and a
 final blank leaves the 8x8 matrix dark for the game work to come.
 
-That blank at the top of the pass has a reason, and it is the kind of
-detail you learn to look for on hardware like this. The colour ports
+That blank at the top of the pass has a reason. The colour ports
 feed whichever row is enabled, so the previous row must go dark
 before its data changes hands; skip that blank and each row would
 flash its neighbour's colours for an instant, every row, every frame
 - a ghost of the picture smeared one row over. Then the dwell:
 `djnz` spinning B down from `ScanDwellPeriod`, 255, the wait that
 sets how long a row shines and, eight times over, how long a frame
-lasts. That unglamorous countdown is the metronome of every game in
-this book.
+lasts. That countdown paces every game in this book.
 
 In the middle of every pass sit two calls, `SndService` and
 `HudScanDig`, and they are there because the scan is the steadiest
@@ -441,8 +425,7 @@ the 8x8. Chapter 9 builds on both services.
 Step through a pass under Debug80 whenever you like: a breakpoint on
 `ScanFrame` in `compass.main.asm` catches the frame at its start. The
 display you have been drawing to since chapter 1 is this one routine,
-reading those 32 bytes, every frame without fail - and now you have
-read it to the last instruction.
+reading those 32 bytes every frame.
 
 ## Summary
 
