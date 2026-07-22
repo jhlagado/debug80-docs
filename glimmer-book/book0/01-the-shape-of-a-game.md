@@ -21,8 +21,8 @@ shows - and Glimmer builds the running program around your
 description. The second is abstraction: the machinery every game needs
 is generated for you rather than written by you, so the program you
 work on stays short.
-And a short program is one you can hold in your head, change with
-confidence, and debug quickly.
+And a short program is one you can hold in your head, change and
+debug quickly.
 
 Before we start, here is what I assume about you: you already read
 assembly. You can follow a `ld a,(hl)` and a conditional jump without
