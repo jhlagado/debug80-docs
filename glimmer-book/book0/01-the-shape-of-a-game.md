@@ -49,7 +49,7 @@ preface's four words. You declare the facts your game remembers, you
 name the moments it must respond to, and you write the rules and the
 pictures as a few lines of real Z80 each, with a label saying when
 they should run. Then Glimmer builds the machinery around them - the
-loop, the key scanning, the timing, the change-tracking - and calls
+loop, the key scanning, the timing, the change tracking - and calls
 your code at exactly the moments you declared. That inversion is the whole trick. You stop orchestrating
 and start declaring, and the plumbing stops being your problem.
 
@@ -69,7 +69,8 @@ Our machine is the TEC-1G, a Z80 single-board computer with a hex
 keypad and an 8x8 RGB LED matrix - sixty-four pixels, each one
 mixing red, green and blue. Small, yes. But I promise you that by the end of
 this book those sixty-four pixels will be running complete games, and
-you will move on from them to a proper video chip with sprites. In
+from there you will move to the TMS9918 video display processor, where
+sprites and video memory shape the game in a different way. In
 this chapter we start where every journey on new hardware should
 start: we are going to put one dot on the 8x8 matrix and make it obey
 you. I will show you the program in three small steps, and you will
@@ -449,8 +450,8 @@ _stop:
 ```
 
 In the middle of that sits your own work: your body, your spacing,
-your comment - copied in byte for byte, down to the indentation. Around it, Glimmer's
-wrapping: a label so the dispatcher can call your rule, and after
+your comment - copied in, byte for byte, down to the indentation. Around
+it, Glimmer's wrapping: a label so the dispatcher can call your rule, and after
 `_stop:`, three generated instructions that set DotX's change bit.
 That is the line `updates DotX`, compiled - you declared what the
 block changes, and this is the machinery telling everyone who watches
