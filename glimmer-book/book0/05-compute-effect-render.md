@@ -23,20 +23,16 @@ by eight - chosen by nobody, waiting on no moment - the same
 information restated, a definition the program keeps current. So the
 three jobs of a game come apart cleanly: rules decide, derivations
 restate, and pictures depict. Glimmer gives each one its own block
-keyword and runs them in a fixed order every frame, and that order -
-together with the delivery model that makes it dependable - is what I
-am going to teach you now. It is the last piece of the reactive core:
-after this chapter, every construct still ahead delivers its work
-through machinery you already understand.
+keyword and runs them in a fixed order every frame. This chapter
+covers that order and the delivery model behind it. After it, the
+constructs still ahead build on machinery you already understand.
 
 ## Meter
 
 The chapter's program is a level meter. Plus and
 minus raise and lower a count from 0 to 64; the count appears on the
 seven-segment display; and a green bar across the 8x8 RGB LED matrix
-shows the level, one pixel per eight counts. Meter is built to
-demonstrate something particular, and before the chapter ends I will
-show you exactly what.
+shows the level, one pixel per eight counts.
 
 ```text
 program Meter
@@ -141,9 +137,9 @@ jobs in a fixed order, the same order in every Glimmer program.
 3. **render** blocks run last: facts turned into pictures after the
    frame's compute and effect passes.
 
-Each keyword also enforces its nature, and that is a kindness. A
-`render` block takes no `updates` line - depicting the world is its
-whole job, and the compiler holds it to that. A
+Each keyword also enforces its job. A `render` block takes no
+`updates` line - depicting the world is its whole job, and the
+compiler holds it to that. A
 `compute` block requires one - producing a fact is its purpose. An
 `effect` sits in the middle and does what rules do: consumes moments,
 changes facts.
@@ -174,8 +170,8 @@ MainLoop:
         jp      MainLoop
 ```
 
-Three dispatchers, one per phase, in job order - and between them,
-the merge calls whose purpose is the next section's whole subject.
+Three dispatchers, one per phase, in job order, and between them the
+merge calls the next section is about.
 
 ## How a change travels
 
@@ -194,9 +190,8 @@ a later phase. So the change is delivered the same frame: raise the
 bar with plus, and the compute that resizes it and the render that
 draws it happen in one frame.
 
-The second half is the one genuinely subtle rule in the whole model,
-so I am going to slow down and walk it twice. First, from inside the
-frame. `Increase` updates `Count`, and Count has two dependents:
+The second half is subtler, and worth two walks. First, from inside
+the frame. `Increase` updates `Count`, and Count has two dependents:
 `ShowCount`, a render, which runs later this frame - and `DeriveBar`,
 a compute, which ran *before* the logic phase this frame. One of the
 dependents has already had its turn. Deliver to the render now and to
@@ -206,8 +201,7 @@ whole change waits. Every dependent of `Count` sees it at the start
 of the next frame: once, together.
 
 You can read both halves of the rule straight out of the generated
-wrappers, and here is what I promised you at the top: Meter is built
-so that both variants appear in one file. After
+wrappers; Meter is built so both variants appear in one file. After
 `DeriveBar`'s body:
 
 ```asm
@@ -240,32 +234,29 @@ the change is in `Changed0` from the start: `DeriveBar` runs and
 resizes `BarLen` - a same-frame delivery to a later phase - so
 `DrawBar` redraws the bar, and `ShowCount` rewrites the digits.
 Digits and bar move together, one frame after the pulse, every time.
-That is the shape worth remembering: a chain that points backward -
-logic feeding a compute - advances one step per frame instead of
-tangling. A frame is one forward pass, and every block runs at most
-once per frame.
+A chain that points backward - logic feeding a compute - advances one
+step per frame instead of tangling. A frame is one forward pass, and
+every block runs at most once per frame.
 
-The rule buys you something unusual: **declaration order does not
-control when an update is delivered.** Move `DeriveBar` to the bottom
-of the file and every delivery lands on the same frames as before,
-so you can organise your source for the person reading it - rules
-together, renders together, whatever tells the story best. Know the
-boundary of the promise, though: it covers triggers. Bodies are real
-Z80 working on live memory, and within one phase the dispatchers call
-blocks in file order, so two same-phase blocks that read and write
-the same cell directly can still see each other's work. The craft
-that follows is simple to hold: keep one gameplay invariant inside
+The rule means **declaration order does not control when an update is
+delivered.** Move `DeriveBar` to the bottom of the file and every
+delivery lands on the same frames as before, so you can organise your
+source for the person reading it - rules together, renders together,
+whatever tells the story best. The promise has a boundary, though: it
+covers triggers. Bodies are real Z80 working on live memory, and
+within one phase the dispatchers call blocks in file order, so two
+same-phase blocks that read and write the same cell directly can still
+see each other's work. In practice: keep one gameplay invariant inside
 one effect, or inside a routine it calls, and the boundary never
-bites. This is chapter 1's spreadsheet keeping its word about *when*
-formulas recompute; what your code does while it runs stays yours.
+bites. This is chapter 1's spreadsheet again: it fixes *when* formulas
+recompute; what your code does while it runs stays yours.
 
 ## The program, as a report
 
 The chain you have been tracing by eye all chapter, Glimmer will
 print for you on request. The request comes from Glimmer's command
 line - the first time this book has needed it, and Appendix D covers
-getting it in one line - and I am closing the chapter with it because
-it is a gift you will use for the rest of the book:
+getting it in one line:
 
 ```sh
 glimmer --deps meter.glim
