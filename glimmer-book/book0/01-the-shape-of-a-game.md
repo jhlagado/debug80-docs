@@ -9,80 +9,65 @@ nav_order: 1
 
 # Chapter 1 - The Shape of a Game
 
-Glimmer is a new way to write games for old machines, and its purpose
-is to make that job smaller. A game written out by hand is a large
-program; the same game in Glimmer is a small one, and it stays
-readable as it grows. Two things buy you that. The first is a borrowed
-idea: Glimmer takes reactive programming, a modern technique, and
-time-travels it back forty years to the age of the Z80. You describe
-the game - what it remembers, what it responds to, what follows, and
-what it shows - and Glimmer builds the running program around your
-description. The second is abstraction: the machinery every game needs
-is generated for you rather than written by you, so the program you
-work on stays short.
-And a short program is one you can hold in your head, change and
-debug quickly.
+Glimmer is a new way to write games for old machines. A game written
+out by hand is a large program; the same game in Glimmer is a small
+one. It gets there in two ways. The first is a borrowed idea: Glimmer
+takes reactive programming, a modern technique, and time-travels it
+back forty years to the age of the Z80. You describe the game - what
+it remembers, what it responds to, what follows, and what it shows -
+and Glimmer builds the running program around your description. The
+second is abstraction: the machinery every game needs is generated for
+you, not written by you. A short program is one you can hold in your
+head, change and debug quickly.
 
 Before we start, here is what I assume about you: you already read
 assembly. You can follow a `ld a,(hl)` and a conditional jump without
 slowing down, so you know the pleasure of this machine - nothing
 between you and the metal, every byte where you put it. Assembly is
-not the obstacle here, and I will not pretend it is; you are reading
-this because you like working this close to the machine. The obstacle
-is how much a game has to do at once. A game is never only its rules.
+not the obstacle here. The obstacle is how much a game has to do at
+once. A game is never only its rules.
 The keys have to be watched, the display kept alive, time kept, and
 all of it has to happen every frame, in the right order, without a
 missed beat. That supporting work is most of the code in any game, and
 it is nearly the same from one game to the next. The rules - the part
 that makes this game the game it is - end up threaded all through it.
 
-There is a name for the usual way of arranging all this. We call it
-*imperative*: the program is a list of orders - do this, then this,
-then check that - and making sure every order lands at the right
-moment, frame after frame, is your job. Reactive
-programming turns the arrangement around. You write down how the
-program should respond when things happen, and machinery does the
-watching. Generation after generation of user interfaces and games
-arrived at the same truth: almost everything an interactive program
-does is a *reaction*. A key goes down, so the player moves. A timer
-runs out, so the block drops. The score changes, so the display
-updates. These ideas were worked out elsewhere, over many years, and
-none of them is exotic. If you have ever used a spreadsheet, changed
-one cell and watched every formula that mentions it follow, you have
-felt the model in your hands. That feeling is most of the theory, and
-the rest is small enough for one chapter.
+There is a name for the usual way of arranging all this: *imperative*.
+The program is a list of orders - do this, then this, then check that
+- and making sure every order lands at the right moment, frame after
+frame, is your job. Reactive programming turns that around. You write
+down how the program should respond when things happen, and the
+machinery does the watching. Almost everything an interactive program
+does is a *reaction*: a key goes down, so the player moves; a timer
+runs out, so the block drops; the score changes, so the display
+updates. If you have ever used a spreadsheet - changed one cell and
+watched every formula that mentions it recompute - you have already
+seen this model work.
 
-So Glimmer lets you write the game as reactions, in the preface's four
-words. You declare the facts your game remembers, you name the moments
-it must respond to, and you write the rules and the pictures as a few
-lines of real Z80 each, with a label saying when they should run. Then
-Glimmer builds the machinery around them - the loop, the key scanning,
-the timing, the change tracking - and calls your code at exactly the
-moments you declared. You stop orchestrating and start declaring. The
-supporting work is generated now, not written by hand, and what stays
-in front of you is short: it reads like a description of the game.
+So in Glimmer you declare the facts your game remembers, name the
+moments it responds to, and write the rules and the pictures as a few
+lines of real Z80 each, with a label saying when they run. Glimmer
+supplies the machinery around them - the loop, the key scanning, the
+timing, the change tracking - and calls your code at the moments you
+declared. You stop orchestrating and start declaring.
 
-Now, I know why a Z80 programmer wants to see the code a compiler
-writes, because I want to see it too: the costs matter. Here is
-Glimmer's answer, and it is the reason I like the system enough to
-write a book about it. The language inside every rule is Z80 assembly
-itself - the real instruction set, the real registers, the real flags.
-The declarations are a thin layer in front of the assembler, and what
-comes out is one ordinary assembly-language source file with your code
-inside it, which you can open, read and step through whenever you want
-to know what a declaration cost you. The organisation is visible.
-Everything you know about the Z80 carries straight in.
+The language inside every rule is Z80 assembly itself - the real
+instruction set, the real registers, the real flags. The declarations
+are a thin layer in front of the assembler. What comes out is one
+ordinary assembly-language source file with your code inside it, which
+you can open, read and step through whenever you want to know what a
+declaration cost you. Everything you know about the Z80 carries
+straight in.
 
 Our machine is the TEC-1G, a Z80 single-board computer with a hex
 keypad and an 8x8 RGB LED matrix - sixty-four pixels, each one mixing
-red, green and blue. Small, yes. By the end of this book those
-sixty-four pixels will be running complete games, and from there you
-will move to the TMS9918 video display processor, where sprites and
-video memory shape the game in a different way. In this chapter we
-start where every journey on new hardware should start: we are going
-to put one dot on the 8x8 matrix and make it obey you. I will show you
-the program in three small steps, and you will run all three yourself
-in chapter 2, once we have the tools installed.
+red, green and blue. By the end of this book those sixty-four pixels
+will be running complete games, and from there you will move to the
+TMS9918 video display processor, where sprites and video memory shape
+the game in a different way. In this chapter we start small: we are
+going to put one dot on the 8x8 matrix and make it move. I will show
+you the program in three small steps, and you will run all three
+yourself in chapter 2, once we have the tools installed.
 
 ## A dot appears
 
@@ -155,11 +140,10 @@ advances one **frame** at a time. Every frame, the machinery checks which
 facts changed and runs the blocks that declared an interest in them,
 then shows the result and goes round again. That is what `changed`
 does: it marks `DotX` as already changed *before the first frame*, so
-`DrawDot` runs once at startup and our pixel appears.
-Without it, the program would sit there with a dark screen, politely
-waiting for a change that never comes - a mistake you will make
-exactly once, and then never again. From the second frame on, `DotX`
-holds still, so `DrawDot` rests. The pixel stays lit because keeping
+`DrawDot` runs once at startup and our pixel appears. Without it, the
+program would sit there with a dark screen, waiting for a change that
+never comes. From the second frame on, `DotX` holds still, so
+`DrawDot` rests. The pixel stays lit because keeping
 the display alive is the machinery's job, not yours.
 
 One fact, one rule, and one declared connection between them: `on
@@ -167,8 +151,8 @@ DotX`. The rest of the language is built from that one connection.
 
 ## The dot responds
 
-A pixel that ignores you is scenery. We are making a game, so the next
-step is obvious: when you press key 6, the dot should move right. Here
+So far the pixel just sits there. We are making a game, so the next
+step is to make it respond: press key 6, and the dot moves right. Here
 is the program again with that ability added - three new declarations
 and one new block.
 
@@ -269,8 +253,8 @@ flowchart LR
 ```
 
 Something changed; the code that depends on it ran; the output
-updated. This is the spreadsheet from the start of the chapter,
-caught in the act. Change one cell and the formulas that reference it
+updated. This is the spreadsheet from the start of the chapter. Change
+one cell and the formulas that reference it
 recompute, and the sheet in front of you updates. You never call a
 formula; you write it, and the spreadsheet works out when it must
 run. Here the same idea is running on a Z80, and the whole chain is
@@ -280,10 +264,8 @@ keypress to pixel with a finger.
 
 There is a quieter consequence too. `MoveRight` never mentions
 drawing. `DrawDot` never mentions keys. Each block minds its own
-business, and the declarations do the connecting. You can read any
-block on its own, and you can read a program's whole design from its
-headers without touching a line of assembly. At thirty blocks, you can
-still read each block on its own.
+business; the declarations do the connecting. You can read any one
+block on its own, whether the program has three of them or thirty.
 
 ## Holding a key down
 
@@ -463,12 +445,11 @@ This file assembles to the bytes the Z80 executes. You can open it,
 follow it, and step through it with a debugger whenever you want the
 whole story of a declaration - and in the next chapter, you will.
 
-So here is the deal Glimmer offers, and it holds for every program in
-this book: **Glimmer owns the loop, and you own the behaviour.** The
-frames, the polling, the timing and the bookkeeping are generated from
-your declarations, in the open, where you can audit every byte. The
-rules and the pictures are yours, in real Z80, each a few lines with
-one job and a declared reason to run. Your evenings go to the game.
+This holds for every program in the book: **Glimmer owns the loop, and
+you own the behaviour.** The frames, the polling, the timing and the
+bookkeeping are generated from your declarations, where you can read
+every byte. The rules and the pictures are yours, in real Z80, each a
+few lines with one job and a declared reason to run.
 
 ## Summary
 
@@ -487,8 +468,8 @@ one job and a declared reason to run. Your evenings go to the game.
   the output updates - is readable straight off the page, from `bind`
   to `on` to `updates` to `on`.
 
-Enough reading over my shoulder. In the next chapter you install the
-tools, build a program of your own, and press its keys yourself:
+In the next chapter you install the tools, build a program of your
+own, and press its keys yourself:
 [First Light](02-first-light.md).
 
 ---
