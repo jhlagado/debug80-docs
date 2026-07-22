@@ -19,8 +19,8 @@ you have done with your own hands, and everything else in this book
 becomes a matter of doing it again with more ambition.
 
 The program I have chosen for the occasion is called *Beacon*: one
-pixel in the middle of the 8x8 matrix, and every press of the GO key steps
-it to the next colour. I picked it deliberately. It is small enough to
+pixel in the middle of the 8x8 RGB LED matrix, and every press of the
+GO key steps it to the next colour. I picked it deliberately. It is small enough to
 type in five minutes, and it still exercises the entire reactive chain
 - one fact, one moment, one rule, one picture - with you at the
 keypad supplying the moments.
@@ -176,9 +176,9 @@ GlimDep_DrawBeacon__B0 .equ CHG_COLOUR
 ```
 
 Each fact owns one bit; each block owns a mask built from its `on`
-line. When I told you in chapter 1 that the reactive model was cheap,
-this is what I meant: the entire nervous system of your program is a
-few bytes and some AND instructions.
+line. This is what the reactive model costs at runtime: the entire
+nervous system of your program is a few bytes and some AND
+instructions.
 
 Second stop - a dispatcher, the code that asks *did anything this
 block cares about change?*:
