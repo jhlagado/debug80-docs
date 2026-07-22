@@ -432,8 +432,9 @@ is necessary. You saw it twice above: `SpawnPiece` returns carry set
 when the spawn placement is blocked, and both `ApplyGravity` and
 `FinishClear` respond with `ld a,Card.GameOver` into `CurrentCard`
 behind a branch. The comment inside `ApplyGravity` states the
-reasoning: `goto` fires whenever its block runs, so a transition with a condition belongs in the body, on
-`CurrentCard` directly, with `CurrentCard` declared in `updates`. The
+reasoning: `goto` fires whenever its block runs, so a transition with
+a condition belongs in the body, on `CurrentCard` directly, with
+`CurrentCard` declared in `updates`. The
 `updates` mark lands every run, including runs where the branch skips
 the write - and enter blocks are edge-triggered, keyed to the card
 actually changing, so the extra marks re-run nothing.
