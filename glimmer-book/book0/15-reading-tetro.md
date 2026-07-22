@@ -9,20 +9,16 @@ nav_order: 15
 
 # Chapter 15 - Reading Tetro
 
-You built Skyfall in the last chapter, from an empty file to a finished
-game, and I hope you are still a little pleased with yourself about it.
-So today I am going to teach you something different, and I want to name it
-as a skill before we start, because nobody ever put it on a syllabus
-for me and I wish they had: reading someone else's code. Writing
-teaches you what the language can say; reading a program bigger than
-any you have written teaches you what the language looks like under
-real pressure. Tetro is the largest example for the 8x8 RGB LED matrix
-in the Glimmer repository: seven pieces that rotate, a board that
+You built Skyfall in the last chapter, from an empty file to a
+finished game. This chapter teaches a different skill: reading someone
+else's code. Writing teaches you what the language can say; reading a
+program bigger than any you have written teaches you what the language
+looks like under real pressure. Tetro is the largest example for the
+8x8 RGB LED matrix in the Glimmer repository: seven pieces that rotate, a board that
 remembers colour, line clears that flash before they collapse, a piece
 preview on the LCD, and a game over that guards its own restart key.
-This chapter adds no new program. We are going to walk through a
-finished one together, the way you would walk through another builder's
-workshop, and the route I take you on is the lesson.
+This chapter adds no new program. We walk through a finished one, and
+the route through it is the lesson.
 
 Tetro is three files, about 900 lines together. `tetro.glim` holds
 the declarations. `tetro-rules.glim`, brought in with `part`, holds
@@ -33,20 +29,19 @@ order a larger Glimmer game answers questions in: the declarations say
 what exists, the blocks say what happens, and the engine says how the
 heavy work gets done.
 
-Before we set off, get the code where you can touch it. Copy the three files from
+Get the code where you can work with it. Copy the three files from
 `examples/` in the Glimmer repository into a working directory, build
 the entry file (`glimmer build tetro.glim` on Appendix D's command
-line), and keep all three files open in your
-editor while you read - this walk works best when you can look up from
-the page and touch what I am pointing at. Every generated excerpt in
-this chapter comes from the `tetro.main.asm` that build writes - 1392
+line), and keep all three files open in your editor while you read.
+Every generated excerpt in this chapter comes from the
+`tetro.main.asm` that build writes - 1392
 lines with the whole game inside. Comments citing "corpus" refer to
 the earlier Tetro this example was adapted from, kept as
 cross-references.
 
 ## Three files, one program
 
-Push open the door of `tetro.glim` first. The top of the file:
+Open `tetro.glim` first. The top of the file:
 
 ```text
 program Tetro
@@ -62,15 +57,15 @@ You met both composition tools in chapter 12; here they are side by
 side, each doing a real job. The `part` file is more Glimmer source
 sharing the program's namespace: its cards and blocks compile as if
 they were written right here, and diagnostics still point at the right
-file when something goes wrong. The `import` file is plain Z80 assembly: its `@`
-labels become program-wide names the blocks can call, and everything
-else in it stays private to the module. That difference is the one our walk keeps returning to, because the whole architecture of this game turns on it.
+file when something goes wrong. The `import` file is plain Z80 assembly: its `@` labels become
+program-wide names the blocks can call, and everything else in it
+stays private to the module. That difference shapes the whole
+architecture of this game.
 
 ## The facts on the board
 
-When I open a program I have never seen before, I read the state
-declarations first, because they carry most of the design. Tetro's
-repay a slow read:
+In a program you have never seen, read the state declarations first:
+they carry most of the design. Tetro's repay a slow read:
 
 ```text
 state PlayerX        : byte
@@ -92,15 +87,15 @@ Start with the falling piece: four cells of state. Where it is
 (`PlayerX`, `PlayerY`), which of the seven pieces it is
 (`CurPieceIndex`), and which of four rotations it shows
 (`CurRotation`). `NextPieceIndex` is the preview. `ClearMask` and
-`Armed` are flow control, and I will give each its own section,
-because each one solves a problem you would otherwise meet the hard
-way.
+`Armed` are flow control; each solves a problem you would otherwise
+meet the hard way.
 
-Now look at the board: four `byte[8]` arrays, one bit per cell of the
-8x8 matrix, eight rows, MSB-left. `BoardRows` records occupancy - the
+The board is four `byte[8]` arrays, one bit per cell of the 8x8
+matrix, eight rows, MSB-left. `BoardRows` records occupancy - the
 single question collision cares about - and the three colour planes
-remember what colour each settled cell keeps. This is the framebuffer's own shape: chapter 6's `Framebuffer`
-stores each row as red, green, and blue bitmask bytes, so a settled
+remember what colour each settled cell keeps. This is the
+framebuffer's own shape: chapter 6's `Framebuffer` stores each row as
+red, green, and blue bitmask bytes, so a settled
 board row lands on screen as one `or` of plane byte into framebuffer
 byte, and a full row announces itself as a plane byte reading `$FF`.
 Whoever laid out this state chose it so the two hardest jobs in the
@@ -116,12 +111,12 @@ timer GOverGate : word = 0   -> GateOpenP once  ; armed on game over
 
 `Gravity` is chapter 7's oscillator with a writable period: every 32
 frames, one `GravityFire`, and a compute block further down halves
-that period as the score climbs. The two `once` timers deserve a
-moment, because their starting value is a decision: a one-shot
-that starts at 0 is asleep, and it fires only after some block writes
-a count into it. `ClearHold` times the line-clear flash, `GOverGate`
-times the restart gate, and each gets armed by exactly the block that
-needs it. That pattern - a sleeping timer a rule can arm - returns in your own games more often than you would guess.
+that period as the score climbs. The two `once` timers start at 0 by
+design: a one-shot at 0 is asleep, and it fires only after some block
+writes a count into it. `ClearHold`
+times the line-clear flash, `GOverGate` times the restart gate, and
+each gets armed by exactly the block that needs it. That pattern - a
+sleeping timer a rule can arm - recurs often.
 
 Seven lines put the whole control scheme on the page:
 
@@ -143,8 +138,7 @@ will see why the restart needs a guard in front of it.
 
 ## Seven pieces, declared
 
-Here is the corner of the workshop I most wanted to show you. Chapter
-9's shapes had one bitmap each. A tetromino has up to four, one per
+Chapter 9's shapes had one bitmap each. A tetromino has up to four, one per
 quarter turn, and the rotational form of `shape` declares them as
 `rot0`..`rot3` groups:
 
@@ -171,25 +165,24 @@ positions. Rotating in play is `CurRotation + 1`, masked to two bits
 - the cycling lives in the generated tables, so the rule that rotates
 never has to care how many distinct forms a piece has.
 
-Pause here and think about what did *not* get written. In most
-projects in this family of games there is a data file: a few hundred
-lines of hand-maintained bitmap tables with pointer tables over them,
-where one slip of the editor becomes a piece that draws wrong or
-collides wrong. Tetro has seven declarations you can read as pictures.
-The tables still exist - we are about to go and look at them - but the
-language absorbed the part that was drudgery.
+Compare that to the usual approach. In most projects in this family of
+games there is a data file: a few hundred lines of hand-maintained
+bitmap tables with pointer tables over them, where one slip of the
+editor becomes a piece that draws wrong or collides wrong. Tetro has
+seven declarations you can read as pictures. The tables still exist -
+we look at them next - but the language absorbed the part that was
+drudgery.
 
-One more thing to see before we open the generated file: declaration
-order is piece identity. `PieceI` first through `PieceL` seventh gives
+One more thing: declaration order is piece identity. `PieceI` first through `PieceL` seventh gives
 each shape a `ShapeId_<Name>` equate from 0 to 6, and that same order
 runs through every table below and through the preview letters in
 `text PieceNames "IOTSZJL"`.
 
 ## The tables the shapes became
 
-Now open `tetro.main.asm` at `; --- rotational shape resources ---`
-and look at what those declarations bought. Each distinct rotation
-became four bitmap rows, MSB-left, padded to four rows. The S piece:
+Open `tetro.main.asm` at `; --- rotational shape resources ---`. Each
+distinct rotation became four bitmap rows, MSB-left, padded to four
+rows. The S piece:
 
 ```asm
 ShapeRot_PieceS_0:
@@ -255,15 +248,17 @@ that consumes it, from `tetro-lib.asm`:
 
 From that index the routine fetches the right bound, the bitmap
 pointer (doubling the index, because the pointer table holds words),
-and the colour byte, all into the module's own scratch. What you are seeing here is the seam between the two files, close up: the shape declarations in `tetro.glim` emit the
-tables, the imported module addresses them by name, and the two sides
-stay compatible because both agree on `id*4 + rotation`.
+and the colour byte, all into the module's own scratch. This is the
+seam between the two files, close up: the shape declarations in
+`tetro.glim` emit the tables, the imported module addresses them by
+name, and the two sides stay compatible because both agree on
+`id*4 + rotation`.
 
 ## The imported engine
 
-Now we cross the boundary I most wanted you to stand on: the place
-where declarations end and hand-written assembly begins.
-`tetro-lib.asm` opens with data that belongs to the module alone:
+Now cross the boundary: the place where declarations end and
+hand-written assembly begins. `tetro-lib.asm` opens with data that
+belongs to the module alone:
 
 ```asm
 ; The four board planes, for the collapse loop.
@@ -293,10 +288,10 @@ preview, rolls a new one, and probes the spawn point; `InitGame`
 resets a round; `DrawBoardFb` rebuilds the framebuffer from the planes
 and overlays the falling piece.
 
-Let me give you my reasoning about why the boundary sits exactly
-here, because drawing it is a judgement you will make in your own
-games. Everything on the declaration side of the line - the shape
-tables, the timers, the key bindings, the change tracking, the card
+The boundary sits exactly here for a reason, and drawing it is a
+judgement you will make in your own games. Everything on the
+declaration side of the line - the shape tables, the timers, the key
+bindings, the change tracking, the card
 gating - was plumbing and data, the kind of code that looks the same
 in every game, and the language absorbed all of it. What remains in
 this module is the part the language has no reason to absorb, because
@@ -335,14 +330,12 @@ end
 Six facts in the header, one call in the body. Everything that can
 change the picture is declared where you can read it; the 100-line
 rebuild - planes into framebuffer, piece overlaid in its colour, flash
-rows forced white - lives in the engine, where its loops can sprawl
+rows forced white - is in the engine, where its loops can sprawl
 without cluttering a single rule.
 
 ## Gravity, lock, flash
 
-Now the game's central rule, and I am going to show it to you whole,
-because reading a real block at full length is part of what you came
-for:
+Now the game's central rule, shown whole:
 
 ```text
 effect ApplyGravity
@@ -390,23 +383,22 @@ _done:
 end
 ```
 
-Two pulses share this block, and the sharing is the point: the timer's
-`GravityFire` and the player's `SoftDropP` both mean "try to descend",
-so they run the same rule. The probe asks `CheckCollAt` about the
+Two pulses share this block. The timer's `GravityFire` and the
+player's `SoftDropP` both mean "try to descend", so they run the same
+rule. The probe asks `CheckCollAt` about the
 square below; free means fall, blocked means the piece has landed.
 Landing runs the engine in sequence - lock the piece into the planes,
 sound the cue, scan for full rows.
 
-Full rows begin the flash; watch how little this
-block does to start it. It writes the row bitmask into `ClearMask` and
-stops there. `ClearMask` sits in `DrawBoard`'s `on` list, so the next
+Full rows begin the flash, and this block does little to start it. It
+writes the row bitmask into `ClearMask` and stops there. `ClearMask` sits in `DrawBoard`'s `on` list, so the next
 render repaints, and `DrawBoardFb` forces every masked row white on
 all three planes. And the first line of this very block reads
 `ClearMask` too: while any row is mid-flash, gravity returns at once,
-so the board holds still and lit. Parking `PlayerY` at 200 is the one
-move you might puzzle over on your own: it keeps the locked piece's
-overlay off the picture, because row 200 sits outside every drawn row,
-so only the planes show.
+so the board holds still and lit. Parking `PlayerY` at 200 keeps the
+locked piece's overlay off the picture, because row 200 sits outside
+every drawn row, so only the
+planes show.
 
 The flash lasts exactly as long as the `once` timer says. `ld a,24`
 into `ClearHold` arms it: at zero a one-shot sleeps, a written count
@@ -423,13 +415,12 @@ half declares everything it touches.
 The score feeds back into pace through the writable timer period.
 `DifficultyCurve`, a compute on `Score` with `updates Gravity`, writes
 16 into the `Gravity` period cell once the score passes 2000: past
-that, pieces fall twice as fast. Difficulty is a derived fact, and I
-like that line of design more every time I read it.
+that, pieces fall twice as fast. Difficulty is a derived fact.
 
 ## Two ways out of a card
 
-Tetro leaves its cards both ways chapter 13 taught, and reading it is
-your chance to see which way earns its place where. When the exit is
+Tetro leaves its cards both ways chapter 13 taught, and you can see
+which way fits where. When the exit is
 unconditional, the header says so: `SplashExit` is four lines, `on
 AnyKeyP` and `goto Playing` with no body at all, so any key on the
 splash screen starts the game. The `Pause` and `Unpause` effects do
@@ -441,8 +432,7 @@ is necessary. You saw it twice above: `SpawnPiece` returns carry set
 when the spawn placement is blocked, and both `ApplyGravity` and
 `FinishClear` respond with `ld a,Card.GameOver` into `CurrentCard`
 behind a branch. The comment inside `ApplyGravity` states the
-reasoning, and it repays a slow read: `goto` fires whenever its block
-runs, so a transition with a condition belongs in the body, on
+reasoning: `goto` fires whenever its block runs, so a transition with a condition belongs in the body, on
 `CurrentCard` directly, with `CurrentCard` declared in `updates`. The
 `updates` mark lands every run, including runs where the branch skips
 the write - and enter blocks are edge-triggered, keyed to the card
@@ -526,9 +516,9 @@ wrapper the blocks call by name.
 
 ## Card seams in the generated file
 
-One structural reward is left in `tetro.main.asm`, and it is worth the
-scroll. The four cards became `Card .enum Splash, Playing, Paused,
-GameOver`, and every block from `tetro-rules.glim` became a flat
+One structural point is left in `tetro.main.asm`. The four cards
+became `Card .enum Splash, Playing, Paused, GameOver`, and every block
+from `tetro-rules.glim` became a flat
 `Glim_*` routine, dispatched with its card's gate in front. Here is
 the logic dispatcher exactly where the Playing card's blocks end and
 the Paused card's begin:
@@ -597,9 +587,9 @@ What to carry out of the workshop:
   contracts, private scratch, and an `@` API, called from blocks
   that stay a few lines each.
 
-Next I hand you a different machine to draw with:
-the TMS9918 video display processor, where the program describes a
-scene and the chip keeps it on screen:
+Next, a different machine to draw with: the TMS9918 video display
+processor, where the program describes a scene and the chip keeps it
+on screen:
 [The TMS9918 Profile](16-the-tms9918-profile.md).
 
 ---
