@@ -9,8 +9,8 @@ nav_order: 7
 
 # Chapter 7 - Time
 
-Notice something about every program you have written so
-far: none of them can act without you. Mover's dot sits wherever your
+Every program you have written so far has one thing in common: none
+of them can act without you. Mover's dot sits wherever your
 last press left it. Meter's bar holds its level until you lean on plus
 or minus. Take your hands off the keypad and frame after frame goes by
 with every change flag clear and every block at rest - the machine is
@@ -30,12 +30,11 @@ and comes around again for as long as the power holds. Every turn of
 that loop is a beat, and this chapter is about declaring moments
 against those beats. Glimmer gives you three ways to do it - a
 built-in frame counter, timers, and ramps - and each answers a
-different question about time. I will give you the plain phrasing for
-each as we meet it. Our program is *Drip*: a drop that falls on its
-own schedule, blinks as it falls, and falls faster the longer the
-program runs. Before we start, appreciate one line Drip does not
-have: there is no `bind` in it. Nothing in this program
-answers to the keypad, and it plays anyway.
+different question about time. Our program is *Drip*: a drop that
+falls on its own schedule, blinks as it falls, and falls faster the
+longer the program runs. One line Drip does not have: there is no
+`bind` in it. Nothing in this program answers to the keypad, and it
+plays anyway.
 
 ## Every frame
 
@@ -64,11 +63,10 @@ increments it and marks it changed, so a block with `on FrameCount`
 runs every frame, reading a value that climbs 0, 1, 2, and wraps past
 255 back to 0.
 
-Build and run this, and the seven-segment display counts the frames as
-they happen. Watch the pace of those digits for a moment, because each
-count is one full turn of the loop - one scan of the 8x8 matrix, one
-poll, one pass through your blocks. That pace is the fastest schedule
-a Glimmer program has.
+Build and run this, and the seven-segment display counts the frames.
+Each count is one full turn of the loop - one scan of the 8x8 matrix,
+one poll, one pass through your blocks. That pace is the fastest
+schedule a Glimmer program has.
 
 One cost to know before you reach for it. Flag bits are a budget - a
 program holds up to 32 flag-carrying cells - and `FrameCount` takes a
@@ -78,9 +76,9 @@ which never mentions `FrameCount`, pays nothing for it.
 And for motion, the every-frame schedule runs too hot. A drop stepping
 one row per frame falls off an eight-row board in eight frames.
 Chapter 1 called one step every eight frames a playable pace; eight
-steps in eight frames is a flash. Game tempo lives at *every N
-frames*, with N yours to choose - and, since games change difficulty,
-yours to change while the program runs. That last thought is where this chapter is headed.
+steps in eight frames is a flash. Game tempo is *every N frames*, with
+N yours to choose - and, since games change difficulty, yours to
+change while the program runs.
 
 ## A drop on a schedule
 
@@ -139,34 +137,31 @@ reloads from `Fall` to begin the next cycle. `FallTick` fires on frame
 24, frame 48, frame 72 - every 24 frames, for as long as the program
 runs.
 
-Look twice at what the timer fires: `FallTick` is a pulse exactly
-like the ones your keys fire - declared with the same word, consumed
-the same way. `Descend` reads as every rule you
-have written: on a moment, change a fact. Point a `bind` line at
-`FallTick` instead and the same block would run per keypress. A rule
-never knows where its moment comes from, and that ignorance is a
-feature: you can retune a game's entire schedule without touching a
-single rule.
+The timer fires a pulse. `FallTick` is exactly like the ones your keys
+fire - declared with the same word, consumed the same way. `Descend`
+reads as every rule you have written: on a moment, change a fact.
+Point a `bind` line at `FallTick` instead and the same block would run
+per keypress. A rule never knows where its moment comes from, and that
+lets you retune a game's entire schedule without touching a single
+rule.
 
 Where in the frame does the ticking happen? Right after the keypad
 poll, before any phase runs - the generated loop below shows the call.
 So a pulse fired by a timer is seen by every block in the same frame,
 and clears at the end of the frame like every pulse.
 
-Now the detail the timer turns on. The cell named `Fall` is
-the period, and it is ordinary writable state: a block that lists
-`updates Fall` and stores a new value has changed the tempo from the
-next reload on. One distinction to keep straight: a timer's cell
-carries no change flag - the pulse is its announcement. So `Fall` may
-stand in `updates` lines, and `on` lines take `FallTick`. Drip's last
-section spends that writable period, and it is the best moment in the
-chapter.
+One more detail. The cell named `Fall` is the period, and it is
+ordinary writable state: a block that lists `updates Fall` and stores
+a new value has changed the tempo from the next reload on. One
+distinction to keep straight: a timer's cell carries no change flag -
+the pulse is its announcement. So `Fall` may stand in `updates` lines,
+and `on` lines take `FallTick`. Drip's last section spends that
+writable period.
 
 ## A blink
 
-One steady pixel reads as furniture. I want the drop to read as alive,
-and a blink buys that for the price of one more timer and one more
-fact:
+One steady pixel reads as furniture. A blink makes the drop read as
+alive, and it costs one more timer and one more fact:
 
 ```text
 state Visible : byte = 1
@@ -223,13 +218,12 @@ firing:
 `word` is the point here: a byte cell tops out at a 255-frame delay,
 and a word countdown runs to 65535. Drip has no use for a one-shot;
 the delayed restart in chapter 13's card game is the shape of moment
-they are for, and I mention them now so you know all three phrasings
-before we finish the game.
+they are for.
 
 ## The climb
 
-Drip has one problem left, and it is the most interesting one: it
-plays its hundredth descent at the pace of its first. A game grows
+Drip has one problem left: it plays its hundredth descent at the pace
+of its first. A game grows
 harder, and on this board that means one concrete thing - the fall
 period should shrink as time passes. 24, then 20, then 16, down to a
 floor. Two needs hide in that sentence: a long, patient schedule to
@@ -251,9 +245,9 @@ there it idles. Writing the cell sets it moving again: write 0 and the
 full climb runs from the start. Drip spends only the arrival; chapter
 8 spends the journey.
 
-One wrinkle before it all comes together. A freshly started program's ramp sits
-at its terminal value, idle, so the first climb needs a push - and a
-familiar word supplies the moment to push from:
+One wrinkle. A freshly started program's ramp sits at its terminal
+value, idle, so the first climb needs a push, and a familiar word
+supplies it:
 
 ```text
 state Boot    : byte = 0 changed
@@ -272,11 +266,10 @@ end
 `Boot` begins changed, and no block ever updates it, so `Ignite` runs
 exactly once, on the first frame. The word `changed` has drawn
 first-frame pictures for you since chapter 1; here it fires a
-first-frame rule instead, and the trick is worth keeping - every
-program that needs a hand on startup can use it.
+first-frame rule instead. Every program that needs a hand on startup
+can use it.
 
-When the climb arrives, `Quicken` collects it, and this is the moment
-I have been steering the whole chapter toward. Here is the complete
+When the climb arrives, `Quicken` collects it. Here is the complete
 program:
 
 ```text
@@ -358,21 +351,20 @@ _done:
 end
 ```
 
-Read `Quicken`'s body and watch difficulty turn out to be ordinary:
-`sub 4` and a store into `Fall`, the same write any effect makes to
-any state, and the timer's next reload counts from the new period. The
-game is changing its own tempo from an ordinary `updates` line.
-Difficulty is data - pause on that for a second, because it is the
-thrill of this chapter. The `cp 8` holds a floor - periods run
-24, 20, 16, 12, 8, then settle at 4 - and the final store rewinds
-`Heat` to begin the next 250-frame climb.
+Read `Quicken`'s body and difficulty turns out to be ordinary: `sub 4`
+and a store into `Fall`, the same write any effect makes to any state,
+and the timer's next reload counts from the new period. The game is
+changing its own tempo from an ordinary `updates` line. Difficulty is
+data. The `cp 8` holds a floor - periods run 24, 20, 16, 12, 8, then
+settle at 4 - and the final store rewinds `Heat` to begin the next
+250-frame climb.
 
 Run it. The drop crawls down the middle column, blinking as it goes,
 and wraps back to the top. Around its second descent the pace picks
 up, then again at the top of every climb, until it settles into a
-quick steady drip. Now stand back from what you typed: speed, blink,
-and difficulty each cost you one declaration and one small rule, and
-none of the three knows the others exist.
+quick steady drip. Speed, blink, and difficulty each cost one
+declaration and one small rule, and none of the three knows the others
+exist.
 
 ## The program, as a report
 
@@ -425,10 +417,8 @@ purely because a declaration marked it changed.
 
 ## Inside GlimTickTimers
 
-I have spent this chapter talking about a *hidden* countdown, and
-after everything I promised you in chapter 1, that word ought to itch.
-Nothing stays hidden once you open the generated file, so let us go
-and find it. From `drip.main.asm`, the storage:
+The *hidden* countdown is not hidden in the generated file. From
+`drip.main.asm`, the storage:
 
 ```asm
 ; --- state storage ---
@@ -446,9 +436,9 @@ Heat:             .db 249   ; ramp progress, idle at terminal
 Changed0:         .db %00000101   ; flags dispatch tests
 ```
 
-There it is: the hidden countdown has a name after all.
-`Glim_Fall_cnt` is one byte sitting beside the period it reloads from,
-and `Blink` gets a countdown of its own. `Heat` begins at 249, its
+The hidden countdown has a name after all. `Glim_Fall_cnt` is one byte
+sitting beside the period it reloads from, and `Blink` gets a countdown
+of its own. `Heat` begins at 249, its
 terminal, idle until `Ignite` writes it. And `Changed0` starts at
 `%00000101` - bits 0 and 2, the two cells you declared `changed`:
 `DropY` for the first picture, `Boot` for the first climb.
@@ -490,8 +480,10 @@ _next_Fall:
 ```
 
 Decrement, store, and on the zero frame: reload from `Fall`, set the
-pulse byte, and OR the pulse's flag straight into `Changed0`. That last move sets the tick apart from the blocks you write, which raise through
-`Raised0` or `Next0` because some consumers may already have run. The
+pulse byte, and OR the pulse's flag straight into `Changed0`. That
+last move sets the tick apart from the blocks you write, which raise
+through `Raised0` or `Next0` because some consumers may already have
+run. The
 tick runs before all of them, so it can deliver directly, and the
 exactly-once rule from chapter 5 holds untouched.
 
@@ -540,7 +532,7 @@ With no flag behind `Fall`, `updates Fall` compiles to nothing here;
 the store inside the body is the act itself, and the header line
 documents it - for the dependency report, and for you.
 
-One last economy to appreciate. `GlimTickTimers` is generated only
+One last economy. `GlimTickTimers` is generated only
 when a program declares a timer or a ramp or names `FrameCount` - look
 back at Meter's loop in chapter 5 and you will find no such call. A
 program that declares no schedules pays nothing for the ones it could
