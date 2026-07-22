@@ -9,16 +9,15 @@ nav_order: 14
 
 # Chapter 14 - A Small Matrix Game
 
-Thirteen chapters, and every one of them was for this. Since chapter 6
-I have been handing you instruments one at a time: the drawing profile
+Since chapter 6 the book has handed you instruments one at a time: the
+drawing profile
 for the 8x8 RGB LED matrix, timers and ramps to keep time, shapes and
 sounds and the LCD to announce things, arrays to hold a board, parts
 to split a growing file, cards to give a program screens. Each arrived
 in a program built small on purpose, so you could watch it work alone.
 A game extends no such courtesy. A game wants all of them at once,
-cooperating, and today we spend everything: you and I are going to
-build a complete game, beginning to end, and every line of it will be
-made of things you already know.
+cooperating. Today we build a complete game, beginning to end, and
+every line of it is made of things you already know.
 
 The game first. It is called *Skyfall*.
 Blocks fall from the top row of the 8x8 matrix in random columns, and
@@ -30,22 +29,19 @@ lives. A splash card waits for any key, a game-over card names the
 ending on the LCD, and after a short pause any key starts the sky
 falling again.
 
-We are not opening the editor yet, though, because this chapter's
-deepest lesson comes before the first block. A game this size is
-designed, not discovered, and Glimmer gives you a place to do the
-designing: the declarations. A Glimmer game's declarations carry its
+We are not opening the editor yet. A game this size is designed, not
+discovered, and Glimmer gives you a place to do the designing: the
+declarations. A Glimmer game's declarations carry its
 structure - the facts, the moments, the schedules, the resources, the
 screens. Settle those on paper and the skeleton of the game stands,
 and every block that remains is a small Z80 exercise with one job you
 have already named. The rest of the design - the collision rules, the
-balance numbers, how the game feels under the thumb - lives inside
-those blocks and those numbers, and we will make each of those calls
-as we come to it. The finished source also ships with the book -
-[skyfall.glim](code/skyfall.glim) and
-[skyfall-rules.glim](code/skyfall-rules.glim) - for the day you want
-the game without the typing. Sit with me at the design table for one
-section; it is the
-habit that makes games this size comfortable.
+balance numbers, how the game feels under the thumb - is in those
+blocks and those numbers,
+and we will make each of those calls as we come to it. The finished
+source also ships with the book - [skyfall.glim](code/skyfall.glim)
+and [skyfall-rules.glim](code/skyfall-rules.glim) - for the day you
+want the game without the typing.
 
 ## The game on paper
 
@@ -61,7 +57,7 @@ between frames?
 | `Lives` | byte | misses left, shown on the LCD |
 | `Armed` | byte | game-over gate: restart allowed |
 
-Every row of that table is a decision, so let me make them out loud.
+Every row of that table is a decision.
 The paddle is three pixels wide, and that is a choice about kindness:
 on an eight-column board a single-pixel catcher would demand
 perfection, while three columns forgive a near miss - and, a bonus we
@@ -88,10 +84,10 @@ consumes it:
 | `AnyKeyP` | any key | leaving Splash; restarting from GameOver |
 | `GateP` | a one-shot timer | opening the restart gate |
 
-Two schedules drive them. `Gravity` is an oscillator with period 18,
-and see that number for what it is: the difficulty of
-the game, stored where a fact belongs. Eighteen frames a row is a
-stroll - the opening drop spends 126 frames crossing the board - and
+Two schedules drive them. `Gravity` is an oscillator with period 18 -
+the difficulty of the game, stored where a fact belongs. Eighteen
+frames a row is a stroll - the opening drop spends 126 frames crossing
+the board - and
 every catch will write the period smaller, the move
 chapter 7 taught you. The game gets harder because a number shrinks.
 `Wait` is a one-shot word timer, idle at zero until the game-over card
@@ -104,9 +100,8 @@ the paddle, a high `sound` for catches, a low one for misses, and six
 last life leaves Playing, and an armed press leaves GameOver for
 Splash again.
 
-I end every design pass the same way, and so should you: the budget
-check. Facts, moments, and `CurrentCard` each take one of the
-program's 32 change-flag cells. Count ours: six facts, five moments,
+One design step remains: the budget check. Facts, moments, and
+`CurrentCard` each take one of the program's 32 change-flag cells. Count ours: six facts, five moments,
 one card cell - twelve, with room to spare. Timer cells carry no flag,
 and `FrameCount` costs nothing in a program that never names it.
 Skyfall fits, on paper, before any block exists.
@@ -175,7 +170,7 @@ text MsgPad   "      "
 ```
 
 Fifty lines, and you have already read them once as tables. Two
-details reward a closer look before we move to the rules file.
+details before the rules file:
 
 No fact carries the `changed` modifier - this is the first program in
 the book where that is true. Every program so far used `changed` to
@@ -323,7 +318,7 @@ speed.
 Now the block the whole game hangs on. Every `FallTick`, the drop
 moves down a row; on the frame it would enter row 7, the paddle's row,
 the landing resolves instead. Catch, miss, life, game over, respawn -
-one rule carries all of it, so take this one slowly.
+one rule carries all of it.
 
 ```text
 effect Fall
@@ -378,8 +373,7 @@ A catch scores, chirps, and turns the difficulty screw: `dec a` and a
 store into `Gravity`, the timer's next reload counting from the new
 period, with `cp 7` holding a floor of 6 so the game gets hard rather
 than impossible. Pacing is the same ordinary write it was in Drip -
-here it answers the score instead of a ramp, and that is much of the
-difference between a demo and a game.
+here it answers the score instead of a ramp.
 
 A miss buzzes and spends a life, and the last life writes
 `Card.GameOver` into `CurrentCard` - conditional navigation, chapter
@@ -447,15 +441,15 @@ LCD cursor and streams its string, and the cursor advances with every
 character written - so when `MsgLives` ends, the cursor rests exactly
 where the digit belongs. One `ApiCharToLcd` call drops it in, and
 `MsgPad` streams six spaces over whatever the previous card left
-behind. The rule underneath is worth keeping: a render that owns a row
-writes the whole row.
+behind. The rule underneath: a render that owns a row writes the whole
+row.
 
 ## Game over, gated
 
-One card to go, and it carries the chapter's last new idea - a fact
-that exists purely for feel. Here is the problem `Armed` solves, the
-one I promised at the design table. The player who loses the last life
-is, at that instant, mashing 4 and 6 as fast as they can, and `bind
+One card to go. It carries a fact that exists purely for feel. Here is
+the problem `Armed` solves, the one promised at the design table. The
+player who loses the last life is, at that instant, mashing 4 and 6 as
+fast as they can, and `bind
 key any` hears all of it: an ungated game-over screen would flash past
 unread. The fix is a gate that opens on a delay.
 
@@ -501,9 +495,7 @@ feel like punishment. When `GateP` arrives, `OpenGate` writes the
 invitation on row two and opens the gate; until then, `Restart`
 swallows every press at `jr z,_wait`.
 
-Follow the press that finally restarts, because the frame discipline
-you learned in chapters 5 and 13 is at work here. It fires
-`AnyKeyP` once. Card switches land at the next frame start and pulses
+Follow the press that finally restarts. It fires `AnyKeyP` once. Card switches land at the next frame start and pulses
 clear at frame end, so Splash wakes to a quiet keypad and waits for a
 press of its own - three distinct presses walk the loop from game over
 to falling blocks, and each card hears exactly one.
@@ -519,9 +511,9 @@ the 90.
 
 ## The design, printed
 
-We began this chapter with the design as pencil tables. We will end
-it with a small ceremony: asking the toolchain to print the same
-design back, computed from the program itself.
+We began this chapter with the design as pencil tables. Now the
+toolchain prints the same design back, computed from the program
+itself.
 
 ```sh
 glimmer --deps skyfall.glim
@@ -573,12 +565,13 @@ program Skyfall
     triggers:  SplashShow (logic), StartRound (logic), GameOverShow (logic)
 ```
 
-That is the game's entire design on one page. It matches the tables from the start of the chapter line for line -
-every fact, every moment, every raiser. What you settled with a
+That is the game's entire design on one page. It matches the tables
+from the start of the chapter line for line - every fact, every
+moment, every raiser. What you settled with a
 pencil, the compiler now states as checked fact, and if the two ever
 drift apart, the report is the one telling the truth.
 
-A few entries teach on their own. `AnyKeyP` triggers two blocks in two
+A few entries stand out. `AnyKeyP` triggers two blocks in two
 different cards, and card gating keeps them from ever both running.
 `Gravity` shows `triggers: (nothing)` even though the whole game
 dances to it: the hidden countdown is its only consumer, and
@@ -597,9 +590,7 @@ Twelve flag cells fill bank 0 and spill into bank 1, and at boot every
 bit is clear except one: bit 3 of `Changed1`, which is
 `CurrentCard`'s. The whole game unfolds from that single set bit -
 `SplashShow` runs on the first frame, the title appears, and
-everything after follows from presses and ticks. That is the image I
-would have you take away from this chapter: a complete game, its
-design one printed page, its beginning one lit bit.
+everything after follows from presses and ticks.
 
 ## Summary
 
@@ -622,9 +613,9 @@ design one printed page, its beginning one lit bit.
   the screen, then press any key".
 
 Skyfall is a complete Glimmer game, and it is yours to bend: a wider
-paddle, a faster floor, two drops at once. In the next chapter I stop
-asking you to build and start asking you to read - Tetro, the largest
-of the repository's games for the 8x8 matrix, with the same
+paddle, a faster floor, two drops at once. The next chapter shifts
+from building to reading: Tetro, the largest of the repository's games
+for the 8x8 matrix, with the same
 instruments under real pressure: [Reading Tetro](15-reading-tetro.md).
 
 ---
