@@ -10,10 +10,8 @@ nav_order: 18
 # Chapter 18 - Two Displays, One Language
 
 We began this book with one white pixel in the middle of the 8x8 RGB
-LED matrix, and I promised you that those sixty-four pixels would be
-running complete games before we finished, and that you would move on
-from them to a proper video chip with sprites. Both promises are kept,
-and you kept them - look at what stands behind you. Skyfall drops
+LED matrix. Those sixty-four pixels now run complete games, and you
+have moved from them to a video chip with sprites. Skyfall drops
 blocks down the 8x8 board toward a paddle you slide along the bottom
 row; Lanternfly steers a white sprite through a night garden with a
 wasp on its tail. You built both with your own hands, and read as
@@ -27,19 +25,18 @@ Read them as programs, though, and their paths separate at one early
 line. `display matrix8x8` against `display tms9918` set the prices:
 what a render writes to, what collision costs, how motion travels to
 the screen, how large a world a game can afford. The declaration
-never forced a design - you and I made every choice in those two
-games - but both games followed its prices, the way water follows a
-slope. So in this closing chapter we read your two games side by
-side - the differences read against the prices each display sets,
-the samenesses traced to the language that holds under both - and
-then I will show you where the road goes from here.
+never forced a design - you made every choice in those two games - but
+both games followed its prices, the way water follows a slope. This
+closing chapter reads your two games side by side - the differences
+read against the prices each display sets, the samenesses traced to
+the language that holds under both - and then looks at where the road
+goes from here.
 
 ## The two loops
 
 Build either game and open its generated file at the runtime loop.
-Do this with the real files in front of you rather than take my word
-for it, because the whole argument of this chapter sits in two short
-listings. From `skyfall.main.asm`:
+The whole argument of this chapter sits in two short listings. From
+`skyfall.main.asm`:
 
 ```asm
 ; --- runtime loop ---
@@ -96,13 +93,13 @@ for* its picture: the VDP paints 256x192 pixels from its own 16 KiB
 of VRAM over and over without any help from you, `VdpWaitVBlank`
 catches the rest between two paintings, and `GlimCommit` spends that
 rest moving the previous frame's changes into VRAM. One display is
-something the CPU does; the other is something the CPU writes to.
-Everything we are about to trace leans on that one sentence.
+something the CPU does; the other is something the CPU writes to. The
+rest of this chapter leans on that.
 
 ## The board the program is
 
 On the 8x8 matrix, the scene is 32 bytes of program RAM, and
-Skyfall's whole visible world - drop, paddle - lives in them. A
+Skyfall's whole visible world - drop, paddle - is in them. A
 render writes the framebuffer; the next scan shows it; and because
 the CPU re-presents those bytes every frame, the picture persists
 exactly as long as the bytes do.
@@ -155,11 +152,11 @@ rather than in how much work a frame does.
 
 ## The scene the program describes
 
-On the VDP, the scene outlives the frame that drew it. Think back to
-Lanternfly's splash card: you planted five reeds with five `tile_at`
+On the VDP, the scene outlives the frame that drew it. In
+Lanternfly's splash card, you planted five reeds with five `tile_at`
 lines, once, in an `enter` block; the commit carried them to VRAM;
 and the VDP has repainted them in every picture since without
-another instruction spent. That is the reversal in one image. An 8x8
+another instruction spent. That is the reversal. An 8x8
 matrix render repaints its whole layer whenever a fact changes; a
 VDP program writes each cell once and writes again only where a
 fact changed.
@@ -190,11 +187,11 @@ overwrites `LampCol` and `LampRow` and no render would ever again
 know which cell to clear. A persistent scene remembers what you
 drew, including what you meant to remove.
 
-The commit pacing sets this profile's motion cost. Know it
-cold: a held key reaches the screen two frames later -
-defer, shadow write, commit - at full rate, sixty-odd pixels a
-second. Skyfall's paddle reaches the next scan one frame after its
-pulse. Both games feel immediate under your thumbs; the difference
+The commit pacing sets this profile's motion cost: a held key reaches
+the screen two frames later - defer, shadow write, commit - at full
+rate, sixty-odd pixels a second. Skyfall's paddle reaches the next
+scan one frame after its pulse. Both games feel immediate under your
+thumbs; the difference
 matters the day you count frames in the debugger and find the
 pipeline exactly where these chapters said it would be.
 
@@ -212,9 +209,8 @@ Here is the whole divergence in one table:
 
 ## One language
 
-Now read what the `display` line left alone, because this is the
-part I have been waiting the whole book to show you. Skyfall and
-Lanternfly declare their games in interchangeable sentences: `state`
+Now read what the `display` line left alone. Skyfall and Lanternfly
+declare their games in interchangeable sentences: `state`
 bytes and words for facts, pulses for moments, `bind key ... held`
 for steering and `bind key any rising` for the restart key, a
 writable oscillator as the difficulty screw - `Gravity` at 18
@@ -233,9 +229,8 @@ their design with `glimmer --deps` in the same report shape, raisers
 and triggers per fact. Skyfall spends 12 of the 32 change-flag cells,
 Lanternfly 16, on the same budget.
 
-The two loops drew the dividing line back at the top of the chapter,
-and it is the line this book was written to show you. The
-profile owns the loop: everything about *showing* - scan or commit,
+The two loops drew the dividing line back at the top of the chapter.
+The profile owns the loop: everything about *showing* - scan or commit,
 framebuffer or shadow, `FbPlot` or `SpriteSet` - came from one
 declaration and lives above the identical tail. The language owns
 the model: everything you learned - facts, moments, rules,
@@ -260,7 +255,7 @@ chapter 14's habit, will read almost the same.
 
 ## Where the road goes
 
-Which brings us to the last question a teacher answers: what now?
+One last question: what now?
 
 The Glimmer repository's `examples/` directory holds seven built,
 running programs, and every one of them is readable with what you
@@ -280,8 +275,8 @@ system Glimmer's output leans on. [Debug80 Book
 1](../../debug80-book/book1/) covers the workshop end to end, from
 project setup to sending a build to a physical board.
 
-And the board is the last stop I want to name, because it is my
-favourite. Every program in this book produced a HEX file beside its
+And the board is the last stop. Every program in this book produced a
+HEX file beside its
 assembly, and that file runs on a real TEC-1G exactly as it ran in
 the emulator - the same bytes, the same scan or the same commit,
 with actual LEDs doing the glowing. If a board is within reach,
