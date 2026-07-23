@@ -175,9 +175,9 @@ merge calls the next section is about.
 
 ## How a change travels
 
-Back in chapter 2 I showed you `GlimEndFrame` handing `Next0` into
-`Changed0`, and I promised to make the mechanism precise once you had
-a program that needed it. Meter is that program. A block's `updates`
+Chapter 2 left one thing unfinished: `GlimEndFrame` handed `Next0`
+into `Changed0`, with the reason held back for a program that needed
+it. Meter is that program. A block's `updates`
 line marks facts changed; the question is *when* the dependents see
 the change, and the answer is one rule:
 
