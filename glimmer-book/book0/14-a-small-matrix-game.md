@@ -101,8 +101,9 @@ last life leaves Playing, and an armed press leaves GameOver for
 Splash again.
 
 One design step remains: the budget check. Facts, moments, and
-`CurrentCard` each take one of the program's 32 change-flag cells. Count ours: six facts, five moments,
-one card cell - twelve, with room to spare. Timer cells carry no flag,
+`CurrentCard` each take one of the program's 32 change-flag cells.
+Count ours: six facts, five moments, one card cell - twelve, with room
+to spare. Timer cells carry no flag,
 and `FrameCount` costs nothing in a program that never names it.
 Skyfall fits, on paper, before any block exists.
 
@@ -495,8 +496,9 @@ feel like punishment. When `GateP` arrives, `OpenGate` writes the
 invitation on row two and opens the gate; until then, `Restart`
 swallows every press at `jr z,_wait`.
 
-Follow the press that finally restarts. It fires `AnyKeyP` once. Card switches land at the next frame start and pulses
-clear at frame end, so Splash wakes to a quiet keypad and waits for a
+Follow the press that finally restarts. It fires `AnyKeyP` once. Card
+switches land at the next frame start and pulses clear at frame end, so
+Splash wakes to a quiet keypad and waits for a
 press of its own - three distinct presses walk the loop from game over
 to falling blocks, and each card hears exactly one.
 
