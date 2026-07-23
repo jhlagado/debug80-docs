@@ -196,10 +196,10 @@ it. When you build one in chapter 13,
 ## What polling looks like
 
 All five of Rover's pulses come out of one generated routine, and
-inside it is the repeat clock you did not have to write - the timer I
-mentioned in chapter 1, the one you would have hand-built in any
-other system. Let us go and look at it. The top of the routine, from
-`rover.main.asm`:
+inside it is the repeat clock you did not have to write. In chapter 1
+you wrote that clock out by hand - the counter, the reload, and the
+release edge that resets on letting go. Here Glimmer writes it for
+you. The top of the routine, from `rover.main.asm`:
 
 ```asm
 ; --- input polling (MON-3 _scanKeys) ---
@@ -240,12 +240,12 @@ Glim_HeldCount:   .db 0
 ```
 
 Two bytes of storage run the whole autorepeat - which key is armed,
-and how many frames remain until it repeats. That is the counter you
-would have armed, decremented, tested and reloaded yourself, edge
-cases and all, written out for you in the open where you can set a
-breakpoint on it. When a pulse fires here, the poll writes the pulse's
-byte and sets its change bit directly, and because polling runs before
-any block, every phase of the frame sees the moment.
+and how many frames remain until it repeats. The routine above and
+these two bytes are chapter 1's hand-written clock - counter, reload,
+and release edge - generated for you and left in the open, where you
+can set a breakpoint on it. When a pulse fires here, the poll writes
+the pulse's byte and sets its change bit directly, and because polling
+runs before any block, every phase of the frame sees the moment.
 
 At the other end of the frame, `GlimEndFrame` clears every pulse byte
 - the cleanup you read in chapter 2. Between those
