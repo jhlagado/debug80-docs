@@ -203,8 +203,14 @@ The masks gate the blocks; the cells feed them. When DrawBeacon runs
 because you moved, its body still reads `Colour` and plots the current
 colour: a body always works from the facts as they are now, whichever
 bit woke it. **Flags decide who runs; values decide what happens.**
-Keep those two apart and the frames in this book stay clear; blur them
-and they get confusing.
+
+By hand, keeping the picture current is one of two chores: redraw
+everything every frame whether or not it moved, or keep a dirty flag
+per fact and set it in every code path that writes that fact. The
+flags here are the second chore, done for you: you declare `updates`
+once in a block's header, and the generated wrapper sets the bit, the
+dispatcher tests it, and `GlimEndFrame` clears it - a flag you never
+set or clear yourself.
 
 One byte holds eight facts, and a program can declare up to 32
 flag-carrying facts: they fill `Changed0` through `Changed3`, eight
