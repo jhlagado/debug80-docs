@@ -28,7 +28,7 @@ keypad and all. Install VS Code, open the Extensions marketplace, and
 add Debug80. If you want
 the guided tour of the extension itself - every panel, every button -
 that is [Debug80 Book 1](../../debug80-book/book1/), and it is worth
-an evening. Here I will show you only the parts we need. (Glimmer also has a
+an evening. Here we use only the parts we need. (Glimmer also has a
 command line, for scripts and for the curious; Appendix D covers it.
 You will not need it in this book's workflow.)
 
@@ -207,8 +207,8 @@ GlimEndFrame:
 Those first two stores are a promise from chapter 1, kept in code: a
 pulse holds for exactly one frame, and here is `Step` being cleared at
 the frame's end. The `Next0` handoff below it carries changes that
-arrived too late for this frame into the next one - I will make that
-mechanism precise in chapter 5, when you have a program that needs it.
+arrived too late for this frame into the next one - the mechanism gets
+its full treatment in chapter 5, when you have a program that needs it.
 
 Wander further whenever you like. Your two blocks sit wrapped under
 `Glim_NextColour` and `Glim_DrawBeacon`, bodies exactly as you typed
