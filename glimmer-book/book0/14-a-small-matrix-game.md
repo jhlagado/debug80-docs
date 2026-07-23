@@ -72,7 +72,7 @@ single rule, and one you could lift later with chapter 10's arrays.
 makes every slip fatal, five makes misses free, three keeps a miss
 expensive without ending the evening. And `Armed`, the odd one out - a
 gate for the game-over screen - answers a problem you only meet in
-playtesting, and I will justify it when we get there.
+playtesting; the game-over card is where it earns its place.
 
 Next, the moments, and for each one, where it comes from and who
 consumes it:
@@ -363,8 +363,8 @@ _store:
 end
 ```
 
-The catch test is the three instructions I promised at the design
-table. After `sub b`, A holds the drop's offset from the paddle's left
+The catch test is the three instructions the design table counted on.
+After `sub b`, A holds the drop's offset from the paddle's left
 edge, and the paddle covers offsets 0, 1, and 2. A drop left of the
 paddle underflows to 253 or higher, so the one unsigned `cp 3` sorts
 every landing, both sides of the paddle included: carry means caught.
