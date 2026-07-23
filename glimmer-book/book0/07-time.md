@@ -128,8 +128,8 @@ One declaration is new:
 timer Fall : byte = 24 -> FallTick
 ```
 
-Read it aloud, the way I taught you in chapter 1: *Fall is a byte
-timer with period 24, firing FallTick.* A `timer` is an oscillator,
+Read it aloud: *Fall is a byte timer with period 24, firing
+FallTick.* A `timer` is an oscillator,
 and its answer to the question of time is *every N frames, forever*.
 Behind the name sits a hidden countdown that loses one on every frame;
 the frame it reaches zero, the timer fires its pulse and the countdown
