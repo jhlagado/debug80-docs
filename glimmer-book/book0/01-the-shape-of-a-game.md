@@ -271,10 +271,34 @@ block on its own, whether the program has three of them or thirty.
 
 Play the game we have so far in your head. To cross the screen, you
 press key 6 seven times. That is data entry, not steering. What we
-want is the arcade behaviour: hold the key, the dot keeps moving. In
-most systems that means writing a repeat timer - a counter you arm,
-decrement, test and reload, with edge cases on press and release. In
-Glimmer, look at what it costs:
+want is the arcade behaviour: hold the key, the dot keeps moving.
+
+By hand, that behaviour is a small state machine you run every frame:
+keep a counter, act when it reaches zero, reload it, and - the edge
+people forget - reset it on release so the next press fires at once.
+
+```asm
+        call    Key6Down         ; Z if key 6 is down this frame
+        jr      nz,_up           ; released
+        ld      a,(RepCount)
+        or      a
+        jr      z,_fire          ; zero: a fresh press, or the wait elapsed
+        dec     a
+        ld      (RepCount),a
+        jr      _done
+_fire:
+        call    MoveRight
+        ld      a,8              ; wait, then repeat
+        ld      (RepCount),a
+        jr      _done
+_up:
+        xor     a                ; reset, so the next press fires at once
+        ld      (RepCount),a
+_done:
+```
+
+That is one key's movement: a byte of storage and a branch you can get
+subtly wrong. In Glimmer the same behaviour is one line:
 
 ```text
 bind key KEY_6 held period 8 -> Right
@@ -284,9 +308,9 @@ One word and one number. A `held` binding fires on the first press,
 then fires again every 8 frames for as long as the key stays down.
 That period is the *feel* of your controls - drop it to 4 and the dot
 sprints, raise it to 15 and the dot trudges - and tuning it is editing
-one digit. The repeat machinery you would have hand-built is still
-there too; Glimmer writes it for you, and later in this chapter I will
-show you it in the generated assembly.
+one digit. Glimmer writes the counter and its edges for you; you will
+meet the two bytes it uses in the generated assembly later in this
+chapter.
 
 Add the mirror-image key and rule for leftward travel, and our little
 program is complete:
@@ -362,12 +386,13 @@ the return, so you write the work and skip the ceremony.
 ## The program behind the program
 
 A `.glim` file is source code, and Glimmer is its compiler - a
-compiler whose output is assembly language. From the 47 lines of
-`mover.glim` it writes one ordinary Z80 assembly file, about five
-hundred lines long, that contains the entire running game: the frame
-loop, the keypad polling, the held-key timing, the change tracking
-and your blocks inside it. Here are three excerpts from that file, so
-you can see your own declarations looking back at you.
+compiler whose output is assembly language. Mover is 47 lines. The
+assembly file it compiles to is about five hundred: the frame loop,
+the keypad polling, the held-key timing, the change tracking, and your
+blocks inside it. That five-hundred-line program is the one you would
+have written by hand - you wrote forty-seven lines of it, and Glimmer
+wrote the rest. Here are three excerpts, so you can see which lines
+are which.
 
 The state:
 
