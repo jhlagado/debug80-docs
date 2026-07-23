@@ -56,8 +56,8 @@ is 512 frames on a clock drawn as a shrinking green bar, and every
 press of GO scores a point on the seven-segment display. When the
 clock drains, the score appears as a red bar, and after a ninety-frame
 pause any key returns to the splash. Press GO, number goes up - no
-arcade would take it. That thinness is the point. This chapter builds
-the cabinet; the next one puts the game in it.
+arcade would take it. This chapter builds the cabinet; the next one
+puts the game in it.
 
 ```mermaid
 flowchart LR
