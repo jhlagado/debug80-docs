@@ -498,6 +498,58 @@ img.js-lightbox-image:focus {
   outline-offset: 4px;
 }
 
+/* Mermaid diagrams need their own light reading surface inside Nocturne. */
+.vp-doc .mermaid {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  overflow-x: auto;
+  background: #f6f2eb;
+  border: 1px solid rgba(217, 169, 95, 0.45);
+  border-radius: 8px;
+}
+
+.vp-doc .mermaid svg {
+  display: block;
+  min-width: 42rem;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background: #f6f2eb;
+}
+
+.vp-doc .mermaid .node rect,
+.vp-doc .mermaid .node polygon,
+.vp-doc .mermaid .node circle,
+.vp-doc .mermaid .node ellipse {
+  fill: #fffefa !important;
+  stroke: #6f55c7 !important;
+}
+
+.vp-doc .mermaid .nodeLabel,
+.vp-doc .mermaid .label,
+.vp-doc .mermaid .edgeLabel,
+.vp-doc .mermaid .edgeLabel span,
+.vp-doc .mermaid text {
+  color: #211b15 !important;
+  fill: #211b15 !important;
+}
+
+.vp-doc .mermaid .edgeLabel,
+.vp-doc .mermaid .edgeLabel span,
+.vp-doc .mermaid .labelBkg {
+  background: #f6f2eb !important;
+  fill: #f6f2eb !important;
+}
+
+.vp-doc .mermaid .flowchart-link {
+  stroke: #5b5146 !important;
+}
+
+.vp-doc .mermaid marker path {
+  fill: #5b5146 !important;
+  stroke: #5b5146 !important;
+}
+
 /* Content images sit on light card so screenshots/scans stay readable */
 .vp-doc img {
   background: #f6f2eb;
