@@ -23,10 +23,10 @@ eye fuses them into a steady picture. If it ever stops sweeping, the
 
 Which means every program you have written in this book has been
 doing two jobs at once. One is the game. The other is being the
-display controller - and chapter 1 warned you about it, when I called
-showing the current picture the program's own job, every frame,
-forever. Every program you have built since has done that job without
-a line of your code asking for it. This chapter opens the machinery
+display controller - the job chapter 1 named yours: showing the
+current picture, every frame, forever. Every program you have built
+since has done that job without a line of your code asking for it.
+This chapter opens the machinery
 that does it: the scan that keeps the 8x8 matrix lit,
 the loop shape it forces on the frame, the 32 bytes of memory your
 renders have been writing all along, and the library routines that
@@ -36,9 +36,10 @@ The chapters program is *Compass*. Hold GO and
 a dot runs clockwise around the rim of the 8x8, coloured by the
 quadrant it is crossing: red along the top, green down the right
 side, blue along the bottom, yellow climbing the left - north, east,
-south, west. Let go and it parks where it is. Compass is built around one design
-choice. The obvious way to build this game is to store the dot's x,
-its y, and its colour as facts and have the movement rule update all
+south, west. Let go and it parks where it is. Compass is built
+around one design choice. The obvious way to build this game is to
+store the dot's x, its y, and its colour as facts and have the
+movement rule update all
 three - and that design rots, because it keeps three cells that must
 always agree and trusts every future rule to keep them agreeing.
 Compass stores *one* byte, a position on the rim, and derives
