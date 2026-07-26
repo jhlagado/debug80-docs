@@ -94,13 +94,32 @@ html {
 }
 
 /* The mark sits on the baseline of the wordmark, at text weight rather than
-   as a badge beside it. */
-.VPNavBarTitle .logo {
-  height: 20px;
+   as a badge beside it. Its body is ink; its one accent takes the book's
+   signal, so the mark changes colour as well as shape between books. */
+.book-mark {
   width: 20px;
+  height: 20px;
+  flex: none;
   margin-right: 10px;
   position: relative;
   top: 1px;
+  color: var(--ink);
+}
+
+.book-mark text {
+  fill: var(--signal);
+  font-family: var(--vp-font-family-mono);
+}
+
+.book-mark path:not([stroke]) {
+  fill: var(--signal);
+}
+
+.book-mark .mark-accent-stroke {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.6;
+  stroke-linecap: square;
 }
 
 .VPNavBarTitle .title {

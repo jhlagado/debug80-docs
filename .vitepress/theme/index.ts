@@ -3,6 +3,7 @@ import DefaultTheme from 'vitepress/theme';
 import { inBrowser, useRoute } from 'vitepress';
 import { enhancePage } from './page-enhancements.js';
 import PageEyebrow from './PageEyebrow.vue';
+import BookMark from './BookMark.vue';
 import './custom.css';
 
 /** Each book is its own illuminated volume; the accent follows the route. */
@@ -34,6 +35,7 @@ const Layout = defineComponent({
     return () =>
       h(DefaultTheme.Layout, null, {
         'doc-before': () => h(PageEyebrow),
+        'nav-bar-title-before': () => h(BookMark),
       });
   },
 });

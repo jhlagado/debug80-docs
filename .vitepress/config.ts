@@ -45,9 +45,6 @@ export default defineConfig({
   ],
 
   themeConfig: {
-    // The chip from the favicon, so the mark is present on every page
-    // rather than only in the browser tab.
-    logo: '/logo.svg',
     nav: [
       // A series with several books points at its hub, because that is the
       // only page listing the siblings now that each book has its own
