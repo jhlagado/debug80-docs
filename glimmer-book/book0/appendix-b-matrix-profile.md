@@ -35,10 +35,9 @@ MainLoop:
 ```
 
 - `ScanFrame` lights all eight rows with a fixed dwell, services sound
-  and the HUD once per row, and returns with the matrix blank. Every
-  phase after it runs in the blank window. Brief block work leaves
+  and the HUD once per row, and returns with the matrix blank. Brief block work leaves
   brightness steady; heavy blank-window work lowers the sweep rate and
-  with it average brightness - treat the gap as the frame's budget.
+  with it average brightness; treat the gap as the frame's budget.
 - `GlimPollBindings` reads the keypad through MON-3 `_scanKeys` and
   raises bound pulses; the phase dispatchers then test change flags
   and call your blocks.
@@ -71,12 +70,10 @@ Framebuffer:      .ds 32           ; 8 rows x R,G,B,aux
 | `y*4 + 2` | blue plane |
 | `y*4 + 3` | aux, skipped by the scanner |
 
-- Bit 7 is column 0, the leftmost; bit 0 is column 7. `MxMask`
-  converts an x coordinate to this convention.
+- Bit 7 is column 0, the leftmost; bit 0 is column 7.
 - The aux byte pads each row to four bytes, so a row's address is
   `Framebuffer + y * 4`: two `add a,a` instructions.
-- The scanner reads the framebuffer every frame. Whatever renders
-  leave there is the picture.
+- The scanner reads the framebuffer every frame.
 
 ## Colours
 
@@ -135,8 +132,7 @@ plain shape; `Snd_<Name>` wrappers appear per sound cue.
 | `HudWriteU16` | `in HL out BC,HL clobbers A,DE,carry,zero,sign,parity,halfCarry` |
 | `HudBlankDig` | `clobbers A,B,HL,carry,zero,sign,parity,halfCarry` |
 
-- `ScanFrame` scans the whole matrix, then blanks it. The loop calls
-  it at frame start; blocks leave it alone.
+- The loop calls `ScanFrame` at frame start; blocks leave it alone.
 - `FbClear` zeroes all 32 framebuffer bytes.
 - `FbPlot` sets one pixel: B = x (0-7), C = y (0-7), A = colour bits,
   OR-combined. It ORs into the framebuffer; C survives the call.

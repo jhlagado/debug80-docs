@@ -8,15 +8,15 @@ nav_order: 7
 
 # Chapter 7 — Ops, Aliases and Source Composition
 
-None of the three features in this chapter changes what the program does. They change how the source is written: op declarations name an instruction idiom so it can be reused, directive aliases let AZM read directive spellings from other assemblers, and `.include` and `.import` build one program out of several files.
+Op declarations name an instruction idiom so it can be reused, directive aliases let AZM read directive spellings from other assemblers, and `.include` and `.import` build one program out of several files.
 
 ---
 
 ## Op declarations
 
-An op is a named instruction idiom that expands inline at each call site into ordinary Z80 instructions. The expanded instructions appear at the call site exactly as if you had typed them.
+An op is a named instruction idiom that expands inline at each call site into ordinary Z80 instructions.
 
-The difference from a subroutine: when the assembler processes an op call site, it replaces it with the body instructions immediately. The CPU sees those instructions directly — there is no call overhead and no register contract for the op itself.
+There is no call overhead and no register contract for the op itself.
 
 ### Simple zero-operand ops
 
@@ -54,8 +54,6 @@ op clear_and_return()
 end
 ```
 
-The chain is still source shorthand. The expanded output is the same sequence of ordinary instructions.
-
 ### Parameterized ops
 
 Ops can take operands matched by class:
@@ -87,7 +85,7 @@ At the call site `load8 a,42`, the assembler matches `a` to `reg8` and `42` to `
 | `mem8` | Memory dereference for byte-form op overloads |
 | `mem16` | Memory dereference for word-form op overloads |
 
-Tokens outside this list are fixed tokens — exact literals the call site must reproduce verbatim.
+Tokens outside this list are fixed tokens, exact literals the call site must reproduce verbatim.
 
 ### Overloaded ops
 
@@ -124,8 +122,6 @@ DivSkip:
 end
 ```
 
-Each expansion gets its own unique version of `DivSkip`. Two invocations of `safe_div` in the same source file will not clash.
-
 ### Ops vs subroutines
 
 Use an op when:
@@ -152,7 +148,7 @@ op loop_forever()
 end
 ```
 
-AZM tracks the expansion stack and stops with an error when the same op appears in its own expansion chain — both direct recursion and mutual recursion between two ops.
+AZM detects mutual recursion between two ops as well as direct recursion.
 
 ### Op diagnostics
 
@@ -171,8 +167,6 @@ error AZMN_PARSE: no overload of 'load8' matches operands (HL, imm8)
 error AZMN_PARSE: op expansion cycle detected: loop_op → helper → loop_op
 ```
 
-Refactor the ops to break the cycle.
-
 **Arity mismatch:**
 
 ```
@@ -181,7 +175,7 @@ error AZMN_PARSE: 'load8' expects 2 operands, got 1
 
 ### Op declarations in include files
 
-Op names are global — they share the namespace with labels and `.equ` constants. Declare ops in a dedicated file included before any code that uses them:
+Op names are global; they share the namespace with labels and `.equ` constants. Declare ops in a dedicated file included before any code that uses them:
 
 ```asm
         .include "hardware.asm"
@@ -189,13 +183,13 @@ Op names are global — they share the namespace with labels and `.equ` constant
         .include "ops.asm"
 ```
 
-Choose op names that avoid Z80 mnemonics. `clear_a` is fine; `ld` produces a parse error. Use underscore-separated lowercase names that read as instructions (`shift_left_4`, `negate_a`, `memcopy`) — a name like `clear_a` sets the expectation that it expands inline.
+Choose op names that avoid Z80 mnemonics. `clear_a` is fine; `ld` produces a parse error. Use underscore-separated lowercase names that read as instructions (`shift_left_4`, `negate_a`, `memcopy`).
 
 ---
 
 ## Aliases and compatibility
 
-Aliases map legacy directive heads to canonical AZM directives. If you have Z80 source written for a different assembler — one that uses `DEFB`, `DEFW`, `RMB` or other directive heads — aliases let those heads work without modifying every line.
+Aliases map legacy directive heads to canonical AZM directives. If you have Z80 source written for a different assembler (one that uses `DEFB`, `DEFW`, `RMB` or other directive heads), aliases let those heads work without modifying every line.
 
 ### The built-in alias profile
 
@@ -242,7 +236,7 @@ Aliases normalize the **directive head**: the first token of a statement after a
 DEFB "Hello",0    ; normalized to: .db "Hello",0
 ```
 
-Instruction mnemonic changes — for example, source using `MOV` for `LD` — need a source transformation pass before assembly.
+Instruction mnemonic changes, such as source using `MOV` for `LD`, need a source transformation pass before assembly.
 
 ---
 
@@ -264,8 +258,6 @@ Op declarations and layout types typically live in dedicated include files, pull
         .include "ops.asm"         ; op declarations
 ```
 
-Use `.include` for constants, hardware port definitions, shared layout declarations, enum declarations, small text fragments, legacy compatibility source and code that is intentionally part of the including file.
-
 ### `.import`
 
 AZM 0.3.2 and later supports `.import` with explicit exports:
@@ -275,8 +267,6 @@ AZM 0.3.2 and later supports `.import` with explicit exports:
 ```
 
 `.import` loads another source file as a module-like unit. Its bytes are emitted at the import point. Declarations beginning with `@` are visible to the importing unit; plain non-local declarations remain inside the imported unit.
-
-Use `.import` for reusable routine files, library-style source files and files that should expose a small public surface.
 
 ```asm
 ; main.asm
@@ -306,7 +296,7 @@ ClampA:
 
 `DoubleA` is exported because it is declared as `@DoubleA:`. Code in `main.asm` calls it as `DoubleA`. `ClampA` remains private to `math.asm`.
 
-The two markers are independent. `.routine` declares the analysis boundary and contract. `@` exports the following label.
+`.routine` declares the analysis boundary and contract. `@` exports the following label.
 
 If outside code tries to reference a private imported label, AZM reports a visibility diagnostic. Keep the call inside the imported file, or make the helper public only when it is genuinely part of the file's interface:
 
@@ -333,15 +323,13 @@ Start:
         ret
 ```
 
-The bytes from `module.asm` are emitted before `Start`. `.import` is not only a declaration; it contributes source at that point in the program.
-
 `.import` resolves paths the same way as `.include`: first relative to the file that contains the directive, then through include search paths passed with `-I`.
 
 ```sh
 azm -I include src/main.asm
 ```
 
-Repeated imports of the same resolved file are idempotent. The file is loaded and emitted once:
+Repeated imports of the same resolved file are loaded and emitted once:
 
 ```asm
 .import "keyboard.asm"

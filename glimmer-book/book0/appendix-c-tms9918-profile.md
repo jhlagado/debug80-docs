@@ -149,8 +149,7 @@ end
 ```
 
 Graphics I colours patterns in groups of eight: one colour-table byte
-covers pattern indexes `g*8` to `g*8+7`. Tile indexes follow from
-that constraint.
+covers pattern indexes `g*8` to `g*8+7`.
 
 - Tiles sharing a (fg, bg) pair share a group. Tile index 0 stays the
   blank tile, so the first pair fills group 0 from index 1 and holds

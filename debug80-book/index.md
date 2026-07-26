@@ -12,8 +12,6 @@ nav_exclude: true
 
 The Debug80 books teach the Debug80 workflow for Z80 and TEC-1G development in VS Code.
 
-Book 1 takes you from installation through to debugging a TEC-1G program and sending the generated HEX file to hardware.
-
 ## Books
 
 - [Debug80 Book 1 — Getting started](book1/)

@@ -15,8 +15,6 @@ Two generated formats are worth understanding: `debug80.json` and `.d8.json`.
 
 `.d8.json` is the source map written by AZM after a successful build. It tells Debug80 how generated machine addresses connect back to source files, source lines and symbols.
 
-Other build outputs matter for particular tasks, especially `.hex` when sending a program to hardware, but these two JSON formats explain most of Debug80's project and source-level debugging behaviour.
-
 ## Project configuration
 
 Debug80 project configuration lives at the root of the project folder:
@@ -47,11 +45,11 @@ A generated TEC-1G project uses this general shape:
 
 `projectPlatform` names the default platform family. `defaultProfile` names the profile used unless a target says otherwise. `defaultTarget` is the fallback target Debug80 can choose for the project.
 
-A project with no targets is valid. Initialization writes `"targets": {}` and omits `defaultTarget` when you choose **No target yet**, and adds a top-level `outputDir` instead.
+Initialization writes `"targets": {}` and omits `defaultTarget` when you choose **No target yet**, and adds a top-level `outputDir` instead.
 
 ### Launch overrides
 
-Most users can launch through the Debug80 panel. When a project needs a hand-written VS Code launch configuration, launch options can override the project defaults for that session.
+When a project needs a hand-written VS Code launch configuration, launch options can override the project defaults for that session.
 
 Use `target` when a launch configuration should always start a specific target, even if the Project section currently selects another one.
 
@@ -115,7 +113,7 @@ A target is a named runnable program:
 
 ### TEC-1G platform block
 
-Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM paths. The first workflow uses the generated values.
+Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM paths.
 
 The important user-level facts are:
 
@@ -126,7 +124,7 @@ The important user-level facts are:
 
 ### AZM options
 
-Debug80 uses AZM for the current assembly workflow. An `azm` object carries assembler options, at the project root or on an individual target.
+An `azm` object carries assembler options, at the project root or on an individual target.
 
 | Key | Values | Meaning |
 |---|---|---|
@@ -137,7 +135,7 @@ Debug80 uses AZM for the current assembly workflow. An `azm` object carries asse
 
 `symbolCase` is the one you will meet without going looking for it: the **Strict labels** checkbox in the panel writes it, and it is the only panel control that changes `debug80.json` as you click it. Scaffolding sets `strict` for new projects. Turn it off for legacy source with inconsistent capitalization.
 
-The remaining register-contract options are generated with sensible defaults. Leave them alone until you are deliberately configuring contracts.
+The remaining register-contract options are generated with sensible defaults.
 
 One trap: a `registerContracts` value written here is overridden by the panel's **Register Contracts** dropdown for any build started from the panel, so the file is not the last word it appears to be. [Appendix D](d-azm-options-row.md) covers that row and what survives a restart.
 
@@ -150,7 +148,7 @@ build/main.hex
 build/main.d8.json
 ```
 
-The `.d8.json` file is useful when you need to understand why Debug80 navigated to a line, named a call-stack frame, found a symbol, or bound a source breakpoint to a machine address. Most users read it indirectly through Debug80's editor and debugger features. Use the source-map status in the Project section and build the target when Debug80 needs fresh mapping data.
+The `.d8.json` file is useful when you need to understand why Debug80 navigated to a line, named a call-stack frame, found a symbol, or bound a source breakpoint to a machine address. Use the source-map status in the Project section and build the target when Debug80 needs fresh mapping data.
 
 A D8 v1 file is a JSON object with this root shape:
 

@@ -9,7 +9,7 @@ nav_order: 8
 
 # Video, input and serial
 
-The Machine and Displays sections cover the TEC-1G as it comes. The rest of the panel covers what you can plug into it: a video card, a joystick, a full keyboard and a serial line. Each lives in its own collapsible section, and one of them changes the emulated hardware by being open.
+The Machine and Displays sections cover the TEC-1G as it comes. The rest of the panel covers what you can plug into it: a video card, a joystick, a full keyboard and a serial line.
 
 ## The sections, and their order
 
@@ -21,13 +21,13 @@ Every header carries **↑** and **↓** buttons to move a section up or down, a
 
 **Debug80: Reset Panel Layout** puts the default order and open state back. It does nothing on the Simple platform, which has no accordion.
 
-Sections other than Project stay hidden until a debug session is running. An idle panel shows the project controls and nothing else.
+Sections other than Project stay hidden until a debug session is running.
 
 ## TMS9918 Video
 
 The **TMS9918 Video** section emulates the video card on the TEC-Deck expansion, which gives the TEC-1G a 256x192 display with sprites, driven from its own 16 KiB of video RAM.
 
-Opening the section attaches the card at ports `0xBE` and `0xBF`. Closing it detaches. This is the one section whose open state is not merely cosmetic - a program that probes for the video card will find it only while the section is open, so leave it open when you are working on video code and closed when you want a stock machine.
+Opening the section attaches the card at ports `0xBE` and `0xBF`. Closing it detaches.
 
 ![The TMS9918 Video section](../../assets/images/debug80-book/book1/section-tms9918.svg)
 
@@ -41,7 +41,7 @@ The **Joystick** section emulates the TEC-1G joystick as a D-pad with **Fire 1**
 
 The arrow keys switch role with the **Move** and **Fire** toggle: in Move mode they steer, and in Fire mode they map to the four fire buttons. Switching modes drops any arrow key you are holding, so a held direction cannot leak through as a fire press.
 
-When several input surfaces are eligible, the joystick outranks the hex keypad. Leave Joystick open and your physical keys go to the joystick until you click the keypad. Dead keypad input usually means an open Joystick section.
+When several input surfaces are eligible, the joystick outranks the hex keypad. Dead keypad input usually means an open Joystick section.
 
 ## Matrix Keyboard
 
@@ -49,7 +49,7 @@ The **Matrix Keyboard** section emulates the TEC-1G's full keyboard as a five-ro
 
 ![The Matrix Keyboard section](../../assets/images/debug80-book/book1/section-matrix-keyboard.svg)
 
-While the matrix is attached the hex keypad is dimmed and does not accept clicks - with one exception, **RESET**, which stays live so you can always reset the machine.
+While the matrix is attached the hex keypad is dimmed and does not accept clicks, with one exception: **RESET**, which stays live so you can always reset the machine.
 
 A pill above the keypad tells you who currently owns physical keys and what to do about it:
 
@@ -59,17 +59,17 @@ Keyboard captured / click outside to release
 
 It also reports when the joystick has taken over, and when the keyboard has been released back to VS Code. **Ctrl-Escape** releases the matrix without reaching for the mouse.
 
-Two modifier rules matter on macOS. Command chords are deliberately not routed, so **Command-S** and **Command-P** stay VS Code shortcuts while the emulator has focus. Option chords are read from the physical key rather than the character macOS produces, so **Option-S** reaches the matrix as `S` rather than as `ß`.
+On macOS, Command chords are deliberately not routed, so **Command-S** and **Command-P** stay VS Code shortcuts while the emulator has focus. Option chords are read from the physical key rather than the character macOS produces, so **Option-S** reaches the matrix as `S` rather than as `ß`.
 
 ## Serial
 
-The **Serial** section is the emulated bit-banged UART - 4800 baud on the TEC-1G, 9600 on the TEC-1. It shows what the running program has sent.
+The **Serial** section is the emulated bit-banged UART (4800 baud on the TEC-1G, 9600 on the TEC-1). It shows what the running program has sent.
 
 ![The Serial section](../../assets/images/debug80-book/book1/section-serial.svg)
 
 **SEND FILE** feeds a file into the emulated machine one character at a time, pacing itself so a program polling the port can keep up, and it can be cancelled while it runs. **SAVE** writes the captured buffer out, choosing a `.hex` extension when every line looks like Intel HEX.
 
-Keep this separate from the hardware transfer in the next chapter. This section talks to the *emulated* machine and never touches a physical port. Sending a HEX file to a real board is a different mechanism entirely, and it goes through CoolTerm.
+This section talks to the *emulated* machine and never touches a physical port.
 
 ## Reset, and what survives it
 
@@ -78,15 +78,6 @@ Keep this separate from the hardware transfer in the next chapter. This section 
 Holding **FN** while pressing RESET latches the function key for the first keypad read after reset. That reproduces holding a key down while a real board boots, which is how MON-3's startup options are selected.
 
 There is no NMI button. Non-maskable interrupts happen as a consequence of input: pressing a key raises one, and the video card raises one at vertical blank while it is attached. Releasing an input cancels an NMI that has not yet been taken.
-
-## Summary
-
-- Nine sections, reorderable with **↑** and **↓**, with the layout remembered. **Debug80: Reset Panel Layout** restores the default.
-- Opening **TMS9918 Video** attaches the video card at ports `0xBE`/`0xBF`; closing it detaches. PAL 50 and NTSC 60 change the frame rate.
-- The joystick takes physical keys ahead of the keypad. An open Joystick section is the usual reason keypad keys do nothing.
-- The matrix keyboard dims the keypad except **RESET**, and releases on **Ctrl-Escape**. Command chords stay with VS Code; Option chords are read by physical key.
-- The Serial section is the emulated UART. **SEND FILE** and **SAVE** never touch real hardware.
-- RESET releases held inputs and preserves MON-3 state. **FN** held across reset latches for the first read. NMIs come from input and vblank, not a button.
 
 ---
 

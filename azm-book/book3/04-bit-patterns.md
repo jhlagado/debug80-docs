@@ -8,9 +8,9 @@ nav_order: 5
 
 # Chapter 4 — Bit Patterns
 
-Chapters 2 and 3 treated each byte as one number. Hardware status registers, UART flags and packed record fields treat a byte as **eight switches in one box**. You set one switch without breaking the others with masks, `and` / `or` / `xor` and shifts.
+Chapters 2 and 3 treated each byte as one number. Hardware status registers, UART flags and packed record fields treat a byte as **eight switches in one box**.
 
-The worked example is a packed status byte: test a flag, set a flag, clear a flag, isolate one bit for a boolean result. Named `op` declarations from Book 2 Chapter 14 capture the repeated mask idioms. The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm).
+The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm).
 
 ---
 
@@ -23,7 +23,7 @@ A device reports ready, error and busy in a single status register at `$8000`. Y
 3. Clear busy after the operation finishes.
 4. Store whether the error bit is on as `$00` or `$01` in a separate byte for a later test.
 
-You could use eight bytes of RAM — wasteful on a small machine. One byte with named bit masks is the usual trade.
+You could use eight bytes of RAM, which is wasteful on a small machine. One byte with named bit masks is the usual trade.
 
 ---
 
@@ -37,7 +37,7 @@ FLAG_ERROR .equ $02    ; bit 1
 FLAG_BUSY  .equ $04    ; bit 2
 ```
 
-`FLAG_READY` is not a memory address — it is the value `$01` substituted wherever it appears. Combining flags at assembly time is `or`:
+`FLAG_READY` is not a memory address; it is the value `$01` substituted wherever it appears. Combining flags at assembly time is `or`:
 
 ```asm
 INITIAL .equ FLAG_READY | FLAG_BUSY    ; $05
@@ -87,15 +87,13 @@ When the mask is not a compile-time constant in A, invert through a scratch regi
     and b
 ```
 
-`cpl` complements A (`$04` → `$FB`). Then `and b` clears only that bit in the saved value.
-
-**Toggle** a bit: `xor mask`.
+`cpl` complements A (`$04` → `$FB`).
 
 ---
 
 ## `op` for flag idioms
 
-Book 2 Chapter 14: short sequences that repeat in one file are good `op` candidates — no `call` overhead, intent visible at the call site.
+Book 2 Chapter 14: short sequences that repeat in one file are good `op` candidates: no `call` overhead, intent visible at the call site.
 
 ```asm
 op bit_set(reg reg8, mask imm8)
@@ -122,9 +120,7 @@ Load the status byte into A first, then test:
     jr z, .not_ready
 ```
 
-`bit_test` expands to a single `and mask` — A must already hold the byte under test. The Z80 has no `ld a, a`, so the op deliberately does not reload A.
-
-`bit_clr` saves `reg` into B, complements the mask in A, then `and b` — the general pattern when you cannot write `and $FB` literally because the mask arrived in a register.
+`bit_test` expands to a single `and mask`. A must already hold the byte under test. The Z80 has no `ld a, a`, so the op deliberately does not reload A.
 
 ---
 
@@ -150,7 +146,7 @@ extract_bit_u8:
     ret
 ```
 
-`and FLAG_ERROR` clears all but bit 1 (`$02`). One `rr a` moves that bit into position 0. Result in `error_bit` should be `$01` when the error flag is set.
+One `rr a` moves that bit into position 0. Result in `error_bit` should be `$01` when the error flag is set.
 
 For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, r` instruction (sets Z if bit clear) when you only need a branch, not a 0/1 byte in A.
 
@@ -164,7 +160,7 @@ For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, 
     jr nz, .still_busy
 ```
 
-`bit` does not change A; it only sets flags. Use it when you will branch immediately. Use `and mask` when you need a numeric 0/1 in A for storage.
+`bit` does not change A; it only sets flags. Use `and mask` when you need a numeric 0/1 in A for storage.
 
 ---
 
@@ -192,7 +188,7 @@ Chapter 5 stores structs as bytes. A status nibble and a type nibble can share o
        [  type  ][flags]
 ```
 
-The same `and` / `or` / shift tools apply; `offset` and `sizeof` tell you **which** byte, not how to twiddle bits inside it.
+`offset` and `sizeof` tell you **which** byte, not how to twiddle bits inside it.
 
 ---
 
@@ -235,25 +231,14 @@ AZM writes `examples/04_bit_flags.lst` by default. Open that listing to confirm 
 
 ---
 
-## Summary
-
-- A **mask** names which bits an instruction touches; define masks with `.equ`.
-- **`or`** sets, **`and`** clears or tests, **`xor`** toggles.
-- **Clear one bit** with `and` and the inverted mask (`cpl` on the mask byte when needed).
-- **`op`** names flag idioms when the same 2–4 instructions repeat in one file.
-- **Shifts** and **`bit n, r`** move or test bit positions; choose based on whether you need a branch or a stored 0/1.
-- Chapter 5 reuses these skills inside **record** layouts.
-
----
-
 ## Exercises
 
 1. Start from `$05`. Predict `(device_flags)` after only `bit_set A, FLAG_ERROR` without clearing busy.
 2. Add `FLAG_FAULT .equ $08`. Write `main` so a fault sets bit 3 and forces busy clear in one pass through A.
 3. Implement `popcount_u8`: count set bits in A with a loop (`and 1`, `srl`, increment counter). Return count in A.
 4. Implement `parity_u8`: return 1 if odd number of set bits, 0 if even. One compact approach is to toggle a workspace byte each time you find a set bit.
-5. Replace `extract_bit_u8` with eight `bit n, a` / `jr` branches — when is the shift loop smaller?
-6. Define an `op` `rot_right(reg reg8)` that expands to `rra` with A loaded from `reg` — use it in a 16-bit shift across A and a workspace byte.
+5. Replace `extract_bit_u8` with eight `bit n, a` / `jr` branches. When is the shift loop smaller?
+6. Define an `op` `rot_right(reg reg8)` that expands to `rra` with A loaded from `reg`. Use it in a 16-bit shift across A and a workspace byte.
 
 ---
 

@@ -10,14 +10,14 @@ nav_order: 3
 # Chapter 3 - State
 
 In the last chapter you built Beacon, pressed GO, and watched one
-remembered fact - a colour - become light on the 8x8 RGB LED matrix.
-One fact was enough for first light. A game needs more, because a game
+remembered fact, a colour, become light on the 8x8 RGB LED matrix.
+A game needs more, because a game
 *is* its facts: where the player is, what colour things are, how well
-you are doing. Choosing those facts - what the program must remember,
-and what it can afford to forget - comes before any rule you write.
+you are doing. Choosing those facts (what the program must remember,
+and what it can afford to forget) comes before any rule you write.
 
 So today Beacon grows. By the end of the chapter it will remember
-three facts - a position, a colour, and a score - and in teaching it
+three facts (a position, a colour, and a score), and in teaching it
 those three you will meet everything a `state` declaration can say,
 along with the change tracking that goes with it. Near the end, a
 challenge: predict a program's first frame from its source alone, then
@@ -25,7 +25,7 @@ build it and check.
 
 ## Beacon, grown
 
-Here is where we are headed. The new Beacon steers along its row with
+The new Beacon steers along its row with
 keys 4 and 6, held for movement the way Mover was. GO still steps the
 colour, and every step now scores a point, shown on the TEC-1G's
 six-digit seven-segment display. Position, colour, score: the three
@@ -108,12 +108,10 @@ begin
 end
 ```
 
-Read the headers aloud, the way you did with Mover - you still can. Two
-list forms appear here for the first time, and both say what you would
-guess. `updates
-Colour, Score` - NextColour changes two facts, so it declares both of
-them. `on DotX, Colour` - DrawBeacon depicts two facts, so a change to
-either one redraws. Commas separate names, in headers as everywhere in
+Read the headers aloud, the way you did with Mover; you still can.
+`updates Colour, Score` says NextColour changes two facts, so it
+declares both of them. `on DotX, Colour` means DrawBeacon depicts two
+facts, so a change to either one redraws. Commas separate names, in headers as everywhere in
 Glimmer.
 
 `HudWriteU16` is another routine from the profile library, a sibling
@@ -134,15 +132,13 @@ state Score  : word
 
 The full shape is `state Name : type = initial changed`, and the last
 two parts are optional. The type is `byte` or `word`. The initial
-value defaults to 0, and `Score` leans on that default. And `changed`
-- the word you met in chapter 1 - marks the fact as already changed
-when the program starts. `DotX` carries it; the other two go without.
-Which facts carry it changes what happens on the first frame, as you
-will see shortly.
+value defaults to 0, and `Score` leans on that default. And
+`changed`, the word you met in chapter 1, marks the fact as already
+changed when the program starts. `DotX` carries it; the other two go without.
 
 The one new thing here is `word`. A `word` cell is 16 bits, and your
-Z80 handles it with the Z80's
-own 16-bit moves - look at the score lines in `NextColour`:
+code moves it with the Z80's
+own 16-bit instructions. Look at the score lines in `NextColour`:
 
 ```asm
     ld hl,(Score)
@@ -150,8 +146,6 @@ own 16-bit moves - look at the score lines in `NextColour`:
     ld (Score),hl
 ```
 
-Load the pair, increment, store the pair - the instructions you would
-write for any 16-bit counter, because that is exactly what this is.
 The declaration reserved two bytes instead of one, and in the
 generated file that difference amounts to a single directive:
 
@@ -164,8 +158,8 @@ Score:            .dw 0
 
 ## One bit per fact
 
-Chapter 2 showed you the bookkeeping for two facts. Here it is for six
-- three states and three pulses, one bit each, in declaration order
+Chapter 2 showed you the bookkeeping for two facts. Here it is for
+six, three states and three pulses, one bit each, in declaration order
 with states first:
 
 ```asm
@@ -191,50 +185,48 @@ GlimDep_DrawBeacon__B0 .equ CHG_DOTX + CHG_COLOUR
 GlimDep_ShowScore__B0 .equ CHG_SCORE
 ```
 
-Every fact owns one bit of `Changed0`, pulses included - a pulse is a
+Every fact owns one bit of `Changed0`, pulses included: a pulse is a
 fact that holds for one frame, remember, and it is tracked the same
 way as its longer-lived siblings. DrawBeacon's mask shows what a
 two-fact trigger becomes: the sum of two bits. The dispatcher ANDs the
 changed byte against that mask, so *any* fact in the list sets the
-block running. One block, several reasons to run, one instruction to
-test them all.
+block running.
 
-The masks gate the blocks; the cells feed them. When DrawBeacon runs
+When DrawBeacon runs
 because you moved, its body still reads `Colour` and plots the current
 colour: a body always works from the facts as they are now, whichever
 bit woke it. **Flags decide who runs; values decide what happens.**
 
-By hand, keeping the picture current is one of two chores: redraw
+By hand, keeping the picture current costs you one of two chores:
+redraw
 everything every frame whether or not it moved, or keep a dirty flag
 per fact and set it in every code path that writes that fact. The
-flags here are the second chore, done for you: you declare `updates`
-once in a block's header, and the generated wrapper sets the bit, the
-dispatcher tests it, and `GlimEndFrame` clears it - a flag you never
-set or clear yourself.
+flags here are the second chore, done for you. You declare `updates`
+once in a block's header; the generated wrapper sets the bit, the
+dispatcher tests it, and `GlimEndFrame` clears it, so it is a flag
+you never touch.
 
 One byte holds eight facts, and a program can declare up to 32
 flag-carrying facts: they fill `Changed0` through `Changed3`, eight
-bits a bank, states first and pulses after them. Beacon uses six bits
-of the first bank. The dispatch masks carry the bank in their name -
-the `__B0` suffix you can see above - and a block whose triggers span
-banks tests each one.
+bits a bank, states first and pulses after them. The dispatch masks
+carry the bank in their name (the `__B0` suffix you can see above),
+and a block whose triggers span banks tests each one.
 
 ## The first frame, predicted
 
 Now the challenge: predict before you build, then build and watch.
-Your prediction needs one last piece of information. `Changed0` begins
+`Changed0` begins
 life as the sum of every `changed` in the source:
 
 ```asm
 Changed0:         .db %00000001   ; flags dispatch tests
 ```
 
-One bit: `DotX`'s. Now predict frame one with me. DrawBeacon's mask
-includes that bit, so the beacon appears - and it appears with both
+One bit: `DotX`'s. DrawBeacon's mask
+includes that bit, so the beacon appears, and it appears with both
 its position and its colour correct, because the body reads both cells
-regardless of which bit woke it. Flags decide who runs; values decide
-what happens. ShowScore's mask is `CHG_SCORE`, and that bit is clear,
-so ShowScore rests - and the six-digit seven-segment display stays
+regardless of which bit woke it. ShowScore's mask is `CHG_SCORE`, and that bit is clear,
+so ShowScore rests, and the six-digit seven-segment display stays
 dark.
 
 A dark display looks like a bug the first time you meet it, so work it
@@ -261,24 +253,7 @@ Build the program, try both versions, and watch the prediction hold.
 Then set a breakpoint inside `ShowScore` and confirm the debugger
 stops there on the frame you predicted, and on no other.
 
-## Summary
-
-- `state Name : type = initial changed`: type is `byte` or `word`,
-  the initial value defaults to 0, and `changed` sets the fact's flag
-  before the first frame.
-- `word` cells reserve two bytes (`.dw`); block bodies handle them
-  with ordinary 16-bit loads and stores.
-- `on` and `updates` take comma-separated lists. A multi-fact trigger
-  compiles to a mask that is the sum of the facts' bits: any one of
-  them runs the block.
-- Flags decide who runs; values decide what happens. A block's body
-  reads the current cells no matter which trigger woke it.
-- Up to 32 facts carry flags, filling banks `Changed0` to `Changed3`,
-  states first, pulses after.
-- On frame one, only blocks whose masks overlap the declared `changed`
-  bits run. Predict it from the source; verify it with a breakpoint.
-
-Next we turn to the moments themselves - where pulses come from, and
+Next we turn to the moments themselves, where pulses come from, and
 every way a key can fire one:
 [Pulses and Bindings](04-pulses-and-bindings.md).
 

@@ -8,7 +8,7 @@ nav_order: 3
 
 # Chapter 2 — Arrays and Loops
 
-Chapter 1 kept every value in registers. Sorting and searching need **indexed storage**: many bytes in a row, one element selected by offset. Treated as an array, a byte table is many bytes in a row with one element picked out by offset. Insertion sort and linear search follow, in flat AZM, each with its loop invariant stated in plain language before the code.
+Chapter 1 kept every value in registers. Sorting and searching need **indexed storage**: many bytes in a row, one element selected by offset.
 
 The companion program is [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
 
@@ -20,10 +20,8 @@ You have eight scores in RAM, in arbitrary order. You need them ascending for di
 
 Two separate algorithms, one representation:
 
-1. **Insertion sort** — build a sorted prefix; insert each new element into its place.
-2. **Linear search** — walk from index 0 until `values[i] >= threshold` or you run out.
-
-Both depend on the same array layout.
+1. **Insertion sort**: build a sorted prefix; insert each new element into its place.
+2. **Linear search**: walk from index 0 until `values[i] >= threshold` or you run out.
 
 ---
 
@@ -39,7 +37,7 @@ values:
     .db 9, 4, 6, 2, 8, 1, 7, 3
 ```
 
-`values` is the **base address** — the address of `values[0]`, not the first element's numeric value. `ARRAY_LEN` is a compile-time constant from `.equ`.
+`values` is the **base address**, the address of `values[0]`, not the first element's numeric value. `ARRAY_LEN` is a compile-time constant from `.equ`.
 
 Reserve uninitialized storage with layout types when you want self-documenting size (Book 2 Chapter 13):
 
@@ -56,8 +54,8 @@ To read `values[i]` when `i` is small and fits in one byte:
 
 1. Load the base into HL (or DE if HL is busy).
 2. Form offset `i` in BC with B = 0 and C = i.
-3. `add hl, bc` — HL now points at element i.
-4. `ld a, (hl)` — A holds the element.
+3. `add hl, bc`. HL now points at element i.
+4. `ld a, (hl)`. A holds the element.
 
 ```
   values + 0   values + 1   values + 2
@@ -68,13 +66,13 @@ To read `values[i]` when `i` is small and fits in one byte:
     HL when i = 0
 ```
 
-For sequential scans, `inc hl` after each read is cheaper than recomputing base + i. Random access by index uses `add hl, bc`.
+For sequential scans, `inc hl` after each read is cheaper than recomputing base + i.
 
 ---
 
 ## Loop invariants
 
-An invariant is a statement that stays true every time control reaches a particular label. Naming it is how you know the loop is still correct after you edit it.
+An invariant is a statement that stays true every time control reaches a particular label.
 
 **Insertion sort outer loop** (label `_outer`, index in C):
 
@@ -87,8 +85,6 @@ An invariant is a statement that stays true every time control reaches a particu
 **Linear search** (label `_scan`):
 
 > If the loop has run k times, no element among `values[0 .. k-1]` satisfies `>= threshold`.
-
-When output is wrong, check the invariant first — not every opcode.
 
 ---
 
@@ -108,7 +104,7 @@ for i from 1 to length-1:
 
 ### Keeping the base in DE
 
-The inner loop moves HL along the table. If you only keep HL, you lose the base address. **DE holds the base** for the whole routine; HL is recomputed from DE and the current index.
+If you only keep HL, you lose the base address. **DE holds the base** for the whole routine; HL is recomputed from DE and the current index.
 
 Length arrives in B but inner loops reuse B. Store it in workspace. Place scratch bytes after the table in the same `.org $8000` block (AZM cannot place a later `org` below an earlier data segment):
 
@@ -123,7 +119,7 @@ sort_len:
     .ds byte
 ```
 
-Entry (store length through HL — `ld (sort_len), b` is not a supported AZM form):
+Entry (store length through HL, since `ld (sort_len), b` is not a supported AZM form):
 
 ```asm
 insertion_sort:
@@ -134,7 +130,7 @@ insertion_sort:
     ld c, 1
 ```
 
-Z80 has no `ld de,hl` instruction. The `push hl` / `pop de` pair copies the incoming table pointer before HL is reused for workspace.
+Z80 has no `ld de,hl` instruction.
 
 ### Load the key
 
@@ -181,8 +177,6 @@ _inner:
     jr _inner
 ```
 
-The listing reloads the key into A and compares it directly with `(hl)`. If the key is smaller, the element at `(hl)` shifts one byte to the right and the loop decrements j again.
-
 ### Place the key
 
 When j < 0 or `values[j] <= key`, write `key_byte` at `values[j+1]`. `sort_index` restores the outer-loop index after C has been reused for address arithmetic.
@@ -222,7 +216,7 @@ _found:
     ret
 ```
 
-`cp c` / `jr nc` uses the unsigned sense from Book 2: carry set means A ≥ C. B doubles as the running index. `$FF` means not found — a sentinel index, not a valid offset for an 8-element table.
+`cp c` / `jr nc` uses the unsigned sense from Book 2: carry set means A ≥ C. `$FF` means not found: a sentinel index, not a valid offset for an 8-element table.
 
 With threshold 5 on the sorted table, the first match is 5 at index 4. `found_index` at `$8008` should hold `$04`.
 
@@ -244,7 +238,7 @@ main:
     halt
 ```
 
-Reload HL before the second call — `insertion_sort` returns HL equal to the base (in DE), but treating reload as mandatory habit matches Book 2's lesson about clobbered pointers.
+Reload HL before the second call. `insertion_sort` returns HL equal to the base (in DE), but treating reload as mandatory habit matches Book 2's lesson about clobbered pointers.
 
 ---
 
@@ -262,7 +256,7 @@ leaderboard:
     .ds Score[8]
 ```
 
-Stride becomes `sizeof(Score)` and field offsets use `offset(Score, value)` — the subject of Chapter 5. The indexing pattern (base + index × stride) is the same; only the stride changes.
+Stride becomes `sizeof(Score)` and field offsets use `offset(Score, value)`, the subject of Chapter 5.
 
 ---
 
@@ -277,16 +271,6 @@ azm examples/02_insertion_sort.asm
 ```
 
 Single-step through one outer iteration in the emulator: watch `key_byte` and confirm the sorted prefix grows.
-
----
-
-## Summary
-
-- A **byte array** is a base label plus `.equ` length; index with `add hl, bc` or sequential `inc hl`.
-- **DE = base** is a practical invariant when HL walks inside the table.
-- **Workspace** holds `key_byte` and `sort_len` when B/C/HL are dedicated to indices.
-- **Insertion sort** maintains "prefix sorted" as its outer invariant.
-- **Linear search** returns an index or `$FF`; flags come from `cp` immediately before the branch.
 
 ---
 

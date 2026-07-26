@@ -12,8 +12,6 @@ has_toc: false
 
 This book starts from no prior knowledge of computers or programming. It introduces the Z80 from the bare machine upward: memory, registers, machine code, assembly language, flags, loops, tables, the stack, subroutines and port I/O.
 
-The later chapters introduce the AZM features that make assembly programming more maintainable: subroutine conventions, register contracts, layout types and op declarations.
-
 ## Main Path
 
 1. [The Computer](01-the-computer.md)

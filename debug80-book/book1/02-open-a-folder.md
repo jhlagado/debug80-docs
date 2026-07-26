@@ -9,19 +9,19 @@ nav_order: 2
 
 # Open a folder, make a project
 
-Debug80 works on an ordinary folder. Open one and the panel tells you where you stand: no folder, a folder that is not yet a project, or a project. Each of those states offers one obvious next action.
+Debug80 works on an ordinary folder. Open one and the panel tells you where you stand: no folder, a folder that is not yet a project, or a project.
 
 ## Open a folder
 
 Click **Open Folder** in the panel, or use VS Code's own **File > Open Folder**, and choose an empty folder. This chapter calls it `project1`.
 
-The panel changes. The header row now names the folder, and beside it sit a **+** to add another folder to the workspace and a **−** to remove one. Below the header a card reads:
+The header row now names the folder, and beside it sit a **+** to add another folder to the workspace and a **−** to remove one. Below the header a card reads:
 
 ```text
 Uninitialized Debug80 project
 ```
 
-A folder is not yet a project. Debug80 decides that by looking for a file called `debug80.json`, at the folder root or under `.vscode/`. There is none yet, so there is nothing to build and nothing to run, and the panel shows only what you need to change that.
+A folder is not yet a project. Debug80 decides that by looking for a file called `debug80.json`, at the folder root or under `.vscode/`.
 
 ## Choose a platform and initialize
 
@@ -43,7 +43,7 @@ with two standing options. **Create ASM starter** writes `src/main.asm` with a s
 
 Choose **Create ASM starter**.
 
-If you would rather choose from all five profile kits rather than a platform - `Simple / Default`, `TEC-1 / MON-1B`, `TEC-1 / Classic 2K`, `TEC-1G / MON-3` and `TEC-1G / Custom` - run **Debug80: Create Project** from the Command Palette instead of using the panel. The panel's Platform dropdown picks the default kit for the platform you chose, which for TEC-1G is `TEC-1G / MON-3`.
+If you would rather choose from all five profile kits rather than a platform (`Simple / Default`, `TEC-1 / MON-1B`, `TEC-1 / Classic 2K`, `TEC-1G / MON-3` and `TEC-1G / Custom`), run **Debug80: Create Project** from the Command Palette instead of using the panel. The panel's Platform dropdown picks the default kit for the platform you chose, which for TEC-1G is `TEC-1G / MON-3`.
 
 ## What initialization writes
 
@@ -59,7 +59,7 @@ project1/
 
 ![The project folder after initialization](../../assets/images/debug80-book/book1/explorer-after-init.svg)
 
-`debug80.json` is the project. Everything Debug80 knows about your program is in it, and it is an ordinary file you can read and edit:
+Everything Debug80 knows about your program is in `debug80.json`, and it is an ordinary file you can read and edit:
 
 ```json
 {
@@ -86,7 +86,7 @@ project1/
 }
 ```
 
-Two parts matter now; the rest can wait. `profiles` describes the machine - TEC-1G running the MON-3 monitor, with your code at `0x4000`. `targets` describes what to build. Appendix C documents every field.
+`profiles` describes the machine: TEC-1G running the MON-3 monitor, with your code at `0x4000`. `targets` describes what to build. Appendix C documents every field.
 
 The generated file is longer than the extract above; it also records the memory map, the monitor ROM the profile brings with it, and the source roots the assembler searches.
 
@@ -137,22 +137,13 @@ SevenSegHello:
         .db     0x6e,0xc7,0xc2,0xc2,0xeb,0x00
 ```
 
-The program clears the LCD, writes a line to it, then loops forever handing a six-byte pattern to the monitor's segment scanner. Every service it uses comes from MON-3 through `RST 0x10`, with the call number in C. The `.org 0x4000` is where TEC-1G user code lives, and it matches the `appStart` the profile wrote into `debug80.json`.
+Every service the program uses comes from MON-3 through `RST 0x10`, with the call number in C. The `.org 0x4000` is where TEC-1G user code lives, and it matches the `appStart` the profile wrote into `debug80.json`.
 
 ## Several folders at once
 
-A VS Code workspace can hold more than one folder, and Debug80 handles that. The **+** beside the folder name adds one, and Debug80 offers to initialize it if it is not already a project. The **−** removes the selected folder from the workspace without touching anything on disk, and it is disabled when only one folder is open.
+The **+** beside the folder name adds a folder, and Debug80 offers to initialize it if it is not already a project. The **−** removes the selected folder from the workspace without touching anything on disk, and it is disabled when only one folder is open.
 
-With several folders open, the folder-name button becomes a picker: click it to choose which one Debug80 is working on. With a single folder open there is nothing to choose and Debug80 uses it.
-
-## Summary
-
-- Debug80 works on a folder. A folder becomes a project when `debug80.json` exists at its root or under `.vscode/`.
-- The panel has three states - no folder, uninitialized, initialized - and each offers one next action.
-- Choose a platform, click **Initialize**, then answer the program-file question. **Create ASM starter** writes `src/main.asm`.
-- Initialization writes `debug80.json`, a `.gitignore`, the starter source and an empty `build/` folder.
-- **Debug80: Create Project** from the Command Palette offers all five profile kits; the panel's dropdown takes the default kit for the platform.
-- **+** and **−** beside the folder name add and remove workspace folders; **−** is disabled when only one folder is open.
+With several folders open, the folder-name button becomes a picker: click it to choose which one Debug80 is working on.
 
 ---
 

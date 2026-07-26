@@ -24,11 +24,11 @@ It does **not** include:
 
 Status values used below:
 
-- `documented` — part of the standard documented Z80 set
-- `documented prefix family` — standard, but lives in `CB`, `ED`, `DD`, `FD`,
+- `documented` is part of the standard documented Z80 set
+- `documented prefix family` is standard, but lives in `CB`, `ED`, `DD`, `FD`,
   `DDCB`, or `FDCB`
-- `undocumented but classic` — not in the original documented set, but widely
-  supported and commonly treated as standard practice
+- `undocumented but classic` is not in the original documented set, but is
+  widely supported and commonly treated as standard practice
 
 ---
 
@@ -107,24 +107,14 @@ Status values used below:
 
 ## Notes On The Undocumented Forms Included Here
 
-The undocumented forms included in this appendix are the ones most likely to be
-treated by real Z80 programmers as part of the practical machine:
-
 - `IXH`, `IXL`, `IYH`, `IYL` in many 8-bit `LD`, `INC`, `DEC`, and ALU forms
 - `SLL` / `SLS`
 - `DDCB` / `FDCB` indexed rotate/shift/bit-result-copy forms such as
   `rlc (ix+3),b`
 
-These are exactly the sorts of forms that make a searchable appendix useful.
-They are also exactly the forms that justify checking a table rather than
-trusting your memory.
-
 ---
 
 ## Rotate and Shift Instructions in Detail
-
-The Z80 has three families of rotate and shift instructions. The diagrams below
-show exactly what happens to each bit on every operation.
 
 ---
 
@@ -145,16 +135,12 @@ RRC / RRCA  (circular rotate right)
   (bit 0 wraps to bit 7; C receives a copy of b0)
 ```
 
-Nothing is lost in a circular rotate. All eight original bits are still present
-in the result; they have just moved. C ends up equal to the bit that wrapped.
-
 ---
 
 ### Through-carry rotates: RL / RLA and RR / RRA
 
-The carry flag acts as a ninth bit. The byte and the carry together form a
-9-bit ring. The displaced bit exits through carry; the old carry enters on the
-other side.
+The carry flag acts as a ninth bit. The displaced bit exits through carry; the
+old carry enters on the other side.
 
 ```
 RL / RLA  (rotate left through carry)
@@ -168,11 +154,10 @@ RR / RRA  (rotate right through carry)
   (old C enters bit 7; bit 0 exits to new C)
 ```
 
-Nothing is lost here either. The old carry is the bit that entered. If you
-rotate left through carry and then rotate right through carry, you recover the
-original byte and the original carry. This makes RL/RR the right tool for
-shifting multi-byte values: carry shuttles the overflow bit between adjacent
-bytes.
+If you rotate left through carry and then rotate right through carry, you
+recover the original byte and the original carry. This makes RL/RR the right
+tool for shifting multi-byte values: carry shuttles the overflow bit between
+adjacent bytes.
 
 ---
 
@@ -204,7 +189,7 @@ SRL  (shift right logical)
 ```
 
 SRA and SRL differ in exactly one way: SRA copies bit 7 into itself, preserving
-the sign. SRL clears bit 7. For signed values, SRA divides by 2 correctly —
+the sign. SRL clears bit 7. For signed values, SRA divides by 2 correctly, so
 −4 (= `$FC`) shifted right arithmetically gives −2 (= `$FE`). SRL would give
 126 (= `$7E`), which is wrong for a signed interpretation.
 
@@ -212,26 +197,18 @@ the sign. SRL clears bit 7. For signed values, SRA divides by 2 correctly —
 
 ### Accumulator forms vs CB-prefix forms
 
-Every rotate instruction has two variants. The difference in which flags they
-update is easy to miss.
-
 | Form | Example | Flags updated |
 |------|---------|---------------|
 | Accumulator-only | `RLCA`, `RRCA`, `RLA`, `RRA` | C only |
 | CB-prefix (any register) | `RLC r`, `RRC r`, `RL r`, `RR r` | S, Z, P/V, C |
 
-`RLCA`, `RRCA`, `RLA`, and `RRA` are single-byte base instructions — fast and
-compact. But they only update carry. S, Z, and P/V are left in their previous
-state after them.
+`RLCA`, `RRCA`, `RLA`, and `RRA` are single-byte base instructions, fast and
+compact.
 
-`RLC r`, `RRC r`, `RL r`, and `RR r` are CB-prefix forms. They rotate by the
-same amount but update all four flags. If you need to test whether a register
-is zero after a rotate — for example, to detect when all bits have been shifted
-out — use the CB-prefix form, not the accumulator shorthand.
-
-This is one of the Z80's genuine inconsistencies: two mnemonics that look like
-the same operation but behave differently. The table entries above flag this
-explicitly.
+`RLC r`, `RRC r`, `RL r`, and `RR r` are CB-prefix forms. If you need to test
+whether a register is zero after a rotate (for example, to detect when all
+bits have been shifted out), use the CB-prefix form, not the accumulator
+shorthand.
 
 ---
 

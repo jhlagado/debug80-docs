@@ -8,23 +8,19 @@ nav_order: 6
 
 # Chapter 6 — Register Contracts
 
-`B` holds your loop counter. The loop calls a subroutine. The subroutine finishes and returns. `djnz` decrements `B` and branches back — but `B` now holds whatever the subroutine left there, not the value it had before the call. The loop runs the wrong number of iterations. The binary assembles without error.
+`B` holds your loop counter. The loop calls a subroutine. `djnz` decrements `B` and branches back. But `B` now holds whatever the subroutine left there, not the value it had before the call. The loop runs the wrong number of iterations. The binary assembles without error.
 
-This is a register collision. The assembler has no way to know what value `B` should hold at any given instruction. The program may pass all your tests and break on an input you did not try.
+This is a register collision.
 
 AZM's register contracts find these collisions at assemble time by making the register use between routines explicit and machine-checkable. They are deliberately stricter than casual assembly style: they ask you to write routine boundaries, register effects and external calls in a form the assembler can prove.
 
-The benefit is strongest in sizeable Z80 programs made of many small routines. Those programs carry a lot of implicit register state: loop counters, pointers, status flags, scratch pairs and monitor-call arguments. Register contracts move that assumption into source and let AZM stop the build at the call site.
-
-The `.routine` directive makes each analysis boundary explicit and records the routine's inputs, outputs, clobbers and preserved carriers. The label on the following line remains an ordinary callable symbol. Add `@` only when an imported source unit must export that symbol.
-
-The friction is real. Strict mode is unforgiving when a helper's true output contract has not been written yet, and code that jumps across routine-shaped regions is harder for AZM to prove. Routines written under it tend to become smaller and more local, and the collisions surface before the program reaches Debug80 or hardware.
+The `.routine` directive makes each analysis boundary explicit and records the routine's inputs, outputs, clobbers and preserved carriers.
 
 ---
 
 ## A concrete collision
 
-Here is a loop that processes eight tiles. `B` is the iteration counter; `HL` points to the current tile in memory:
+`B` is the iteration counter; `HL` points to the current tile in memory:
 
 ```asm
 ScanTiles:
@@ -51,7 +47,7 @@ RenderTile:
 
 After `call RenderTile` returns, `B` holds 0. `djnz ScanLoop` decrements that 0, which wraps to 255, and branches back. The loop runs 256 times instead of 8.
 
-The code at each call site looks correct. Neither routine has a bug when read in isolation. The bug lives in the interface: `ScanTiles` assumes `RenderTile` leaves `B` unchanged. `RenderTile` makes no such promise.
+Neither routine has a bug when read in isolation. The bug lives in the interface: `ScanTiles` assumes `RenderTile` leaves `B` unchanged.
 
 ---
 
@@ -63,7 +59,7 @@ The code at each call site looks correct. Neither routine has a bug when read in
 
 **clobber**: to overwrite a register value the caller still needed. `RenderTile` clobbers `B` because `ScanTiles` reads `B` after the call returns.
 
-**preserves**: a register exits with the same value it had on entry. Preservation is an observable entry/exit property. Pushing on entry and popping on exit is one way to preserve a register; not writing the register at all is another. The contract says the register is unchanged on exit; how that is achieved is an implementation detail.
+**preserves**: a register exits with the same value it had on entry. Pushing on entry and popping on exit is one way to preserve a register; not writing the register at all is another.
 
 **live**: a register is live at a point in the code if its value will be read before the next write to it. `B` is live at the `call RenderTile` because `djnz` reads `B` after the call returns.
 
@@ -71,14 +67,14 @@ The code at each call site looks correct. Neither routine has a bug when read in
 
 ## The contract that exposes the clobber
 
-AZM uses `.routine` directives to record what each routine does to registers. A contract above `RenderTile` makes the clobber explicit:
+A contract above `RenderTile` makes the clobber explicit:
 
 ```asm
 .routine clobbers B
 RenderTile:
 ```
 
-With this contract in place and register contracts enabled, AZM inspects every call to `RenderTile`. At the call in `ScanTiles`, `B` holds the loop counter — a value the caller reads after the call returns. The contract says `RenderTile` clobbers `B`. AZM reports the conflict:
+With this contract in place and register contracts enabled, AZM inspects every call to `RenderTile`. At the call in `ScanTiles`, `B` holds the loop counter, a value the caller reads after the call returns. AZM reports the conflict:
 
 ```
 scan.asm:7:9: warning AZMN_REGISTER_CARE: B is live across CALL RenderTile,
@@ -91,7 +87,7 @@ scan.asm:7:9: warning AZMN_REGISTER_CARE: B is live across CALL RenderTile,
 
 Three ways to fix this collision:
 
-**Option 1 — save and restore in the caller:**
+**Option 1: save and restore in the caller**
 
 ```asm
 ScanTiles:
@@ -106,7 +102,7 @@ ScanLoop:
         ret
 ```
 
-**Option 2 — have the callee preserve B:**
+**Option 2: have the callee preserve B**
 
 ```asm
 .routine preserves B
@@ -121,11 +117,9 @@ RenderTile:
         ret
 ```
 
-The contract now states `B` is preserved. The warning disappears because `RenderTile` no longer clobbers a register the caller needs.
+**Option 3: restructure so the values do not collide**
 
-**Option 3 — restructure so the values do not collide:**
-
-Move `B` to a RAM location or use a different register in one of the routines. When the live value and the clobber are in different registers, there is no conflict.
+Move `B` to a RAM location or use a different register in one of the routines.
 
 ---
 
@@ -160,7 +154,7 @@ _bitLoop:
         ret
 ```
 
-`_bitLoop` belongs to `ScanRow`. Another routine may also declare `_bitLoop`; AZM gives each declaration a distinct owner-qualified identity in debug metadata.
+Another routine may also declare `_bitLoop`; AZM gives each declaration a distinct owner-qualified identity in debug metadata.
 
 Export is independent from routine analysis:
 
@@ -178,8 +172,6 @@ Keep owner-local branches inside their routine. Direct `JP`, `JP cc`, `JR` and `
 ---
 
 ## Enabling register contracts
-
-Register contracts are checked by the assembler and reported as compiler diagnostics. In ordinary use, run AZM with `--rc audit`, `--rc warn`, `--rc error` or `--rc strict` and read the warnings or errors printed by the compiler.
 
 Register contract analysis is controlled by `--rc`:
 
@@ -205,7 +197,7 @@ Use the modes as a ladder:
 
 For a Debug80 edit-and-restart loop, use `audit` or `warn` while exploring a messy port. Use `strict` for deliberate rebuilds once the routine boundaries and external interfaces are in place.
 
-Debug80's own **Register Contracts** dropdown offers three of these five: Off, Audit, and Enforce, which is `error`. Reaching `warn` or `strict` from Debug80 means setting `registerContracts` in `debug80.json` — and note that the dropdown overrides that value for any build started from the panel.
+Debug80's own **Register Contracts** dropdown offers three of these five: Off, Audit, and Enforce, which is `error`. Reaching `warn` or `strict` from Debug80 means setting `registerContracts` in `debug80.json`. Note that the dropdown overrides that value for any build started from the panel.
 
 ### Source policy directives
 
@@ -285,7 +277,7 @@ CheckLoop:
 
 ## Stack discipline
 
-Register preservation on the Z80 often uses the stack. AZM can check that discipline when the save and restore happen inside the same routine region:
+AZM can check that discipline when the save and restore happen inside the same routine region:
 
 ```asm
 .routine preserves BC
@@ -337,13 +329,13 @@ LoadConfig:
         ret
 ```
 
-If two routines share a larger cleanup sequence, declare that sequence as a callable `.routine` with its own contract. Routine boundaries then match the units whose register and stack effects AZM checks.
+If two routines share a larger cleanup sequence, declare that sequence as a callable `.routine` with its own contract.
 
 ---
 
 ## Source contract syntax
 
-`.routine` is the source directive for a machine-readable register contract. It occupies one source line and emits no bytes. Blank lines and ordinary comments may appear before its associated entry label.
+`.routine` is the source directive for a machine-readable register contract.
 
 A source contract contains zero or more clauses on the same directive line. Register lists inside a clause are comma-separated:
 
@@ -355,7 +347,7 @@ A source contract contains zero or more clauses on the same directive line. Regi
 CheckCollisionAtDe:
 ```
 
-The directive applies to the next non-local entry label. Blank lines and ordinary comments may appear between the directive and label:
+Blank lines and ordinary comments may appear between the directive and label:
 
 ```asm
 ; Tests candidate placement and returns carry set when blocked.
@@ -398,13 +390,11 @@ Read those keys from the caller's point of view:
 
 ### Carrier lists
 
-Carriers appear in a comma-separated list after the key:
-
 ```asm
 .routine in A,DE,HL out carry clobbers BC
 ```
 
-Register pair names expand to their constituent 8-bit registers for analysis — `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
+Register pair names expand to their constituent 8-bit registers for analysis: `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
 
 ```asm
 .routine out carry,zero clobbers A
@@ -428,7 +418,7 @@ FindRecord:
 
 ### Inputs and outputs on the same carrier
 
-A routine that transforms a register in place — reads it as input, returns it modified — lists it in both `in` and `out`:
+A routine that transforms a register in place (reads it as input, returns it modified) lists it in both `in` and `out`:
 
 ```asm
 ; Normalises the coordinate pair in DE.
@@ -446,7 +436,7 @@ For one call site that intentionally consumes inferred outputs, place `.expectou
         ld      a,(de)
 ```
 
-`.expectout DE` tells the analyzer that the next emitted instruction intentionally consumes DE as a callee-produced output. The instruction must be in the same physical source file; place the directive immediately before the intended `call`.
+`.expectout DE` tells the analyzer that the next emitted instruction intentionally consumes DE as a callee-produced output. The instruction must be in the same physical source file.
 
 ---
 
@@ -460,7 +450,7 @@ azm --contracts --rc audit program.asm
 
 AZM infers a contract for each declared routine and inserts or updates its `.routine` directive. Human prose comments above the directive remain in place.
 
-After the first run, read the generated contract for each routine. AZM inferred those contracts from the instruction stream, so treat them as a starting point and check that they match the routine's intended interface.
+AZM inferred those contracts from the instruction stream, so treat them as a starting point and check that they match the routine's intended interface.
 
 When AZM infers a written value that could be either a clobber or an output, it may write `maybe-out`:
 
@@ -504,8 +494,6 @@ out A
 out zero
 end
 ```
-
-Load with `--interface mon3.asmi`. The analyzer uses these contracts at call sites to `MON_PUTC` and `MON_GETC`.
 
 ```sh
 azm --interface mon3.asmi --rc strict program.asm
@@ -559,7 +547,7 @@ If strict mode makes a piece of assembly uncomfortable, look first at the routin
 
 ## Text reports
 
-AZM can also write a report with `--reg-report`, producing `program.regcontracts.txt` by default. This is mainly for debugging, CI evidence or large audit sessions. It is not required for normal development and should not be checked into source control.
+AZM can also write a report with `--reg-report`, producing `program.regcontracts.txt` by default. Do not check it into source control.
 
 ```sh
 azm --rc audit --reg-report program.asm
@@ -578,8 +566,6 @@ azm --rc audit --reg-report --reg-report-format json program.asm
 azm --rc audit --reg-baseline baseline.regcontracts.json --reg-ratchet program.asm
 ```
 
-Use this for evidence and regression control, not as the ordinary edit-loop interface.
-
 ---
 
 ## Conservative autofix
@@ -592,7 +578,7 @@ azm --fix --rc warn program.asm
 
 AZM identifies call sites where the callee clearly returns a register the caller goes on to use, and inserts an `.expectout` directive above the call to record it. It also rewrites the `.routine` directives from what it inferred, promoting a `maybe-out` to an `out` where the evidence is unambiguous.
 
-The repairs are annotations, not code. `--fix` does not insert `push`/`pop` pairs or change a single instruction, so the assembled output is unchanged; what changes is what AZM knows about the program, and therefore what it can check on the next build.
+`--fix` does not insert `push`/`pop` pairs or change a single instruction, so the assembled output is unchanged.
 
 After `--fix` runs, inspect the diff anyway. An inferred contract records what the code does today, which is not always what you meant it to do. Where the two differ, write the contract you intended and let the next build tell you the code disagrees.
 
@@ -623,7 +609,7 @@ warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9
   but DRAW_FRAME may modify B (inferred clobbers: A,B,DE)
 ```
 
-Register `B` holds a pre-call value that is read after the call returns, but `DRAW_FRAME`'s inferred contract says it may modify `B`. Options: save around the call, restructure so `B` is not live across the call, or fix the contract if `DRAW_FRAME` actually preserves `B`.
+Options: save around the call, restructure so `B` is not live across the call, or fix the contract if `DRAW_FRAME` actually preserves `B`.
 
 **Inferred clobbers mismatch:**
 

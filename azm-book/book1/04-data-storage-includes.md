@@ -8,7 +8,7 @@ nav_order: 4
 
 # Chapter 4 — Raw Data, Storage and Strings
 
-Every assembly program has two kinds of memory content: bytes you know at assemble time, and storage you fill at runtime. AZM's data directives write known bytes directly into the binary. Its storage directive reserves address space that the program fills when it runs.
+Every assembly program has two kinds of memory content: bytes you know at assemble time, and storage you fill at runtime.
 
 ---
 
@@ -41,7 +41,7 @@ Msg:
         .db " World",0
 ```
 
-This emits the same bytes as `.db "Hello, World",0`. Labels and `.db` directives can interleave freely.
+This emits the same bytes as `.db "Hello, World",0`.
 
 ## `.dw` — define words
 
@@ -49,7 +49,7 @@ This emits the same bytes as `.db "Hello, World",0`. Labels and `.db` directives
 
 ### Little-endian byte order
 
-The Z80 is little-endian: the low byte of a 16-bit value is stored at the lower address. `.dw $1234` writes `$34` at the current address and `$12` at the next address. Every 16-bit immediate and address in AZM follows this rule.
+The Z80 is little-endian: the low byte of a 16-bit value is stored at the lower address. Every 16-bit immediate and address in AZM follows this rule.
 
 ```asm
         .dw $1234         ; two bytes: $34 $12
@@ -57,7 +57,7 @@ The Z80 is little-endian: the low byte of a 16-bit value is stored at the lower 
         .dw VECTOR_TABLE  ; address of the label, low byte first
 ```
 
-`.dw` accepts any expression that fits in 16 bits (0–65535). When you store an address as a 16-bit pointer — a jump vector, a callback address, a table entry — `.dw` handles the byte order for you.
+`.dw` accepts any expression that fits in 16 bits (0–65535).
 
 ## Labels inside data
 
@@ -78,7 +78,7 @@ TABLE_LEN .equ JumpTableEnd - JumpTable   ; = 6 bytes = 3 entries
 
 AZM provides three string-specific directives that set a termination policy explicitly.
 
-**`.cstr` — C-style string (NUL terminated):**
+**`.cstr` (C-style string, NUL terminated):**
 
 ```asm
         .cstr "Hello"   ; emits: H e l l o $00
@@ -86,15 +86,15 @@ AZM provides three string-specific directives that set a termination policy expl
 
 Equivalent to `.db "Hello",0` but makes the termination policy explicit. Use `.cstr` when a routine scans forward until it reads a zero byte.
 
-**`.pstr` — Pascal-style string (length prefix):**
+**`.pstr` (Pascal-style string, length prefix):**
 
 ```asm
         .pstr "Hello"   ; emits: $05 H e l l o
 ```
 
-The first byte is the string length (0–255). The string itself follows. Strings longer than 255 characters are a range error. Use `.pstr` when the routine wants the byte count first.
+The first byte is the string length (0–255). Strings longer than 255 characters are a range error. Use `.pstr` when the routine wants the byte count first.
 
-**`.istr` — inverted terminator string:**
+**`.istr` (inverted terminator string):**
 
 ```asm
         .istr "Hello"   ; emits: H e l l (o | $80)
@@ -107,8 +107,6 @@ If none of these match your target routine's expected format, use `.db` directly
 ---
 
 ## Jump and call tables
-
-Dispatch tables are a natural use of `.dw`:
 
 ```asm
 CmdTable:
@@ -137,7 +135,7 @@ CMD_COUNT .equ ($ - CmdTable) / 2
 
 ## `.ds` — reserve storage
 
-`.db` and `.dw` write bytes you know at assemble time. Storage is different: you reserve the space now, but the program fills it at runtime. `.ds count` advances the address counter without writing bytes. `.ds count,fill` also writes the fill byte across the reserved range.
+`.ds count` advances the address counter without writing bytes.
 
 ### Basic syntax
 
@@ -163,8 +161,6 @@ Page:
         .ds 256,0      ; reserve 256 bytes filled with zero
 ```
 
-A fill value gives the reserved region a known initial state in the binary image — for ROM initialization tables, for example.
-
 ### Storage maps
 
 For programs with several independent storage areas, collect all `.ds` blocks under a dedicated `.org`:
@@ -183,8 +179,6 @@ FrameBuf:       .ds FRAME_W * FRAME_H
         .org $8FFE
 StackTop:       .ds 2
 ```
-
-Collecting storage blocks under one `.org` lets you verify that no areas overlap and that the total fits available RAM.
 
 ---
 

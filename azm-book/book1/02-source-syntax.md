@@ -8,8 +8,6 @@ nav_order: 2
 
 # Chapter 2 — Source Syntax and Symbols
 
-Every line in an AZM source file either emits bytes, names a location or controls what comes next.
-
 ---
 
 ## Line structure
@@ -35,7 +33,7 @@ Start:
               ld   a,0
 ```
 
-Both forms are valid. Labels on their own line are common for routines; labels on the same line are common for constants.
+Labels on their own line are common for routines; labels on the same line are common for constants.
 
 Some directives take a line of their own and emit nothing. `.routine` is one: it attaches a register contract to the label that follows it.
 
@@ -64,9 +62,9 @@ main:
         ret
 ```
 
-Use the chain form for very small runs where the source stays easier to scan on one line. The backslash must be readable as a separator: put whitespace on both sides. A backslash inside a quoted string is still part of the string, not an instruction separator.
+The backslash must be readable as a separator: put whitespace on both sides. A backslash inside a quoted string is still part of the string, not an instruction separator.
 
-Only instructions and op invocations belong in a chain. Directives and declarations still use their own lines. A label may appear before the first instruction in the chain, but not before a later segment:
+Only instructions and op invocations belong in a chain. A label may appear before the first instruction in the chain, but not before a later segment:
 
 ```asm
 Start:  xor a \ ld b,a \ ret     ; valid
@@ -96,7 +94,7 @@ A semicolon starts a comment that runs to the end of the line:
 
 ## Labels
 
-Symbols are what let you write `djnz ReadLoop` instead of `djnz $0105`. Every time you write a label in source, AZM records the current assembly address under that name. Every time you reference that name in an operand or expression, AZM substitutes the address. By the time the binary is written, all the names are gone — only bytes remain.
+Symbols are what let you write `djnz ReadLoop` instead of `djnz $0105`. Every time you reference a label in an operand or expression, AZM substitutes the address. By the time the binary is written, all the names are gone; only bytes remain.
 
 A label names the assembly address at the point where it appears:
 
@@ -104,8 +102,6 @@ A label names the assembly address at the point where it appears:
 Buffer:
         .db 0
 ```
-
-AZM records that `Buffer` equals the current assembly address. Any instruction or data that references `Buffer` gets that address substituted in.
 
 Code labels work the same way:
 
@@ -137,7 +133,7 @@ MyLabel:
 MyLabel: ld a,0
 ```
 
-Both forms are valid. Non-local identifiers contain letters, digits and underscores and must start with a letter.
+Non-local identifiers contain letters, digits and underscores and must start with a letter.
 
 Do not use `$` as a namespace separator in source labels. `$` has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import` and `@` exports, not through `$`-qualified labels.
 
@@ -201,7 +197,7 @@ DataTable:
 TABLE_LEN .equ $ - DataTable
 ```
 
-AZM uses a two-pass strategy: the first pass assigns addresses to all labels; the second pass substitutes those addresses into instruction encodings. Any reference still unresolved after both passes is an error — typically a typo in a label name.
+AZM uses a two-pass strategy: the first pass assigns addresses to all labels; the second pass substitutes those addresses into instruction encodings. Any reference still unresolved after both passes is an error, typically a typo in a label name.
 
 ### Multiple labels at one address
 
@@ -214,7 +210,7 @@ EntryB:
         ret
 ```
 
-Both `EntryA` and `EntryB` call into the same instruction. When a `.routine` directive precedes consecutive non-local labels, AZM treats them as aliases for the same routine body.
+When a `.routine` directive precedes consecutive non-local labels, AZM treats them as aliases for the same routine body.
 
 ---
 
@@ -229,9 +225,9 @@ The preferred AZM style:
 - **Owner-local labels** (`_loop:`, `_skipInit:`, `_done:`): a leading underscore followed by short camelCase.
 - **Exported labels** (`@ReadKey:`, `@DrawSprite:`): PascalCase after the `@`.
 
-The assembler enforces no naming policy; different projects may use their own conventions. These give a concrete starting point and match the style used throughout this manual.
+The assembler enforces no naming policy; different projects may use their own conventions.
 
-Keep non-local labels distinct within their source unit. Owner-local labels can reuse familiar names such as `_loop` and `_done` because the owner supplies their identity. Use `@` only for declarations that form an imported module's public interface.
+Use `@` only for declarations that form an imported module's public interface.
 
 ---
 
@@ -251,7 +247,7 @@ y           .field byte
 SpriteArray .typealias Sprite[2]
 ```
 
-A colon marks an address label only — it names the current assembly address, not a constant or type:
+A colon marks an address label only. It names the current assembly address, not a constant or type:
 
 ```asm
 COUNT   .equ 8      ; assemble-time constant
@@ -260,7 +256,7 @@ Count:              ; address label
         .db 8
 ```
 
-`COUNT .equ 8` and `COUNT:` do different jobs. The first binds a name to the value 8. The second records the address of the `.db 8` byte that follows. AZM reports an error for `COUNT: .equ 8`.
+AZM reports an error for `COUNT: .equ 8`.
 
 ---
 

@@ -8,9 +8,7 @@ nav_order: 2
 
 # Chapter 1 — Foundations
 
-You can scan a byte table and call subroutines with documented register effects. The next step is to treat those subroutines as **small routines with a fixed contract** and to use workspace RAM when an algorithm needs more live state than the register file holds.
-
-Greatest common divisor on 16-bit values comes first, then 8-bit exponentiation. Both programs are complete, compilable and halt when finished. The companion listing is [`examples/01_gcd.asm`](examples/01_gcd.asm).
+Greatest common divisor on 16-bit values comes first, then 8-bit exponentiation. The companion listing is [`examples/01_gcd.asm`](examples/01_gcd.asm).
 
 ---
 
@@ -18,20 +16,18 @@ Greatest common divisor on 16-bit values comes first, then 8-bit exponentiation.
 
 The greatest common divisor of two integers is the largest value that divides both without remainder. For 48 and 18, the answer is 6.
 
-High-level languages call a library. On the Z80 you implement the algorithm yourself. Euclid's method gets there with subtraction alone:
+Euclid's method gets there with subtraction alone:
 
 1. If the right value is zero, the left value is the answer.
 2. If the left is greater than or equal to the right, subtract the right from the left.
 3. Otherwise swap the two values.
 4. Repeat from step 1.
 
-You need no division opcode — only compare, subtract and swap, every step of it visible in the listing.
-
 ---
 
 ## Book 3 calling convention (16-bit)
 
-Book 2 established informal conventions: HL for addresses, A for byte results, callee-save for BC/DE/HL when used as scratch. Book 3 adds a **16-bit family** used in this chapter and reused later unless a chapter says otherwise.
+Book 3 adds a **16-bit family** used in this chapter and reused later unless a chapter says otherwise.
 
 | Role | Register | Notes |
 |------|----------|--------|
@@ -48,7 +44,7 @@ Book 2 established informal conventions: HL for addresses, A for byte results, c
 
 **Caller-save:** A, F and any register passed as an input the routine is allowed to destroy.
 
-Every subroutine in this book should document its contract with register contracts (Book 2 Chapter 12). The analyzer can then flag a caller that keeps HL live across a call to `gcd_u16`, which clobbers DE and returns a new HL.
+Every subroutine in this book should document its contract with register contracts (Book 2 Chapter 12).
 
 ---
 
@@ -85,15 +81,15 @@ _right_answer:
 
 ### Zero tests
 
-`ld a, h` / `or l` sets Z when HL is zero. The same pattern tests DE. These are the base cases: if either argument is zero, the other register pair holds the GCD (once you account for which branch runs).
+`ld a, h` / `or l` sets Z when HL is zero. These are the base cases: if either argument is zero, the other register pair holds the GCD (once you account for which branch runs).
 
 ### Unsigned compare via `sbc hl, de`
 
-`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned). The routine pushes HL, subtracts in the scratch copy, pops the original HL and branches to `_swap` when carry is set.
+`or a` clears carry. `sbc hl, de` computes HL − DE with borrow. If carry is **set** afterward, HL was **less than** DE (unsigned).
 
 If HL ≥ DE, the second `sbc hl, de` performs the Euclidean subtraction step and the loop repeats.
 
-`ex de, hl` swaps the two 16-bit arguments without touching memory. After a swap, the smaller value is in HL and the larger in DE, matching the algorithm's "otherwise swap" step.
+`ex de, hl` swaps the two 16-bit arguments without touching memory.
 
 ### Trace: GCD(48, 18)
 
@@ -126,7 +122,7 @@ gcd_result:
     .ds word
 ```
 
-`ld (gcd_result), hl` stores a 16-bit little-endian value: low byte first, high byte second. After the program halts, inspect `$8000` and `$8001` in the emulator — you should see `$06` and `$00`.
+`ld (gcd_result), hl` stores a 16-bit little-endian value: low byte first, high byte second. After the program halts, inspect `$8000` and `$8001` in the emulator; you should see `$06` and `$00`.
 
 Named constants keep the call site readable:
 
@@ -141,7 +137,7 @@ GCD_B .equ 18
 
 ## Workspace RAM
 
-`gcd_u16` needs only HL and DE. Longer algorithms spill into **workspace** bytes reserved with `.ds`:
+Longer algorithms spill into **workspace** bytes reserved with `.ds`:
 
 ```asm
 .org $7F00
@@ -154,7 +150,7 @@ sort_len:
 Rules used throughout Book 3:
 
 - Place workspace in RAM, not ROM (`$8000` region or a dedicated high page like `$7F00`).
-- `.ds` reserves without initializing — the program must write before read.
+- `.ds` reserves without initializing, so the program must write before read.
 - One label per logical temporary (`key_byte`, not `temp4`).
 - Document in comments which routines touch which workspace labels.
 
@@ -164,7 +160,7 @@ Chapter 2's insertion sort stores the current key in `key_byte` because C, B and
 
 ## Second algorithm: `power_u8`
 
-Binary exponentiation is a natural follow-on (used heavily in crypto and fixed-point math). For small 8-bit operands, repeated multiplication is enough:
+For small 8-bit operands, repeated multiplication is enough:
 
 **Contract:** B = exponent, C = base, A = result (C^B). Zero exponent yields 1.
 
@@ -189,7 +185,7 @@ _done:
     ret
 ```
 
-`mul8_a_by_c` multiplies the accumulator in A by C using repeated addition — correct for the demo sizes (3^4 = 81), not a general fast multiply.
+`mul8_a_by_c` multiplies the accumulator in A by C using repeated addition, correct for the demo sizes (3^4 = 81), not a general fast multiply.
 
 The companion program stores the byte result at `power_result`. After `halt`, `$8002` should hold `$51` (81 decimal).
 
@@ -197,7 +193,7 @@ The companion program stores the byte result at `power_result`. After `halt`, `$
 
 ## Digit count (exercise direction)
 
-How many decimal digits does it take to print a 16-bit value? Four, for 1000. You divide by 10 and count until the value reaches zero. The Z80 has no divide instruction, so you build that division out of repeated subtraction, or out of a shift-and-subtract routine — worth writing yourself once you have finished the exercises below.
+How many decimal digits does it take to print a 16-bit value? Four, for 1000. You divide by 10 and count until the value reaches zero. The Z80 has no divide instruction, so you build that division out of repeated subtraction, or out of a shift-and-subtract routine.
 
 A byte-only variant fits entirely in registers; a word variant should save the quotient in HL and keep the digit count in B, then return the count in A. Use workspace for a remainder byte if the divide step needs it.
 
@@ -227,16 +223,6 @@ Assemble from `book3/`:
 azm examples/01_gcd.asm
 azm --rc warn examples/01_gcd.asm
 ```
-
----
-
-## Summary
-
-- Book 3 uses an explicit **16-bit convention** (HL, DE, return in HL) on top of Book 2 byte conventions.
-- **Register contracts** document every algorithm routine; callers must respect `clobbers`.
-- **Euclidean GCD** uses subtract and swap — no hardware divide.
-- **Workspace** `.ds` labels hold scratch bytes when registers are full.
-- **`power_u8`** shows the same contract style on 8-bit operands.
 
 ---
 

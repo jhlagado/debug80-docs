@@ -15,9 +15,9 @@ A game written out by hand is a large program. The same game in
 Glimmer is a small one. Glimmer gets there by borrowing an idea:
 reactive programming, a modern technique, time-travelled back forty
 years to the age of the Z80. You describe the game rather than
-orchestrating it, and the machinery every game needs - the frame
-loop, the key scanning, the timing, the change tracking - is
-generated for you instead of written by you.
+orchestrating it, and the machinery every game needs is generated for
+you instead of written by you: the frame loop, the key scanning, the
+timing, the change tracking.
 
 What you describe is four things: facts, moments, rules, and pictures.
 The facts are what the game remembers, such as where the player is and
@@ -26,13 +26,11 @@ key going down or a timer running out. The rules are the game's
 decisions: when this moment arrives, change that fact. And the pictures
 are what the player sees, drawn from the facts. You write the rules and
 the pictures yourself, in real Z80 assembly, a few lines each. Glimmer
-builds the rest of the running program around them. Those four words -
-fact, moment, rule, picture - carry their meanings through the whole
-book.
+builds the rest of the running program around them.
 
 You will get the most from the book if you can already read Z80
 assembly: registers, flags, memory access, a short routine with
-labels and branches. Nothing else is assumed. Games, reactive
+labels and branches. Games, reactive
 programming, and every tool in the workflow are taught as you meet
 them. If the Z80 itself is new to you, start with [AZM Book 2 - Z80
 Fundamentals](../../azm-book/book2/), which begins from nothing and
@@ -62,14 +60,14 @@ runs in Debug80's emulation. If you do own a TEC-1G, the build
 produces a HEX file you can send to the board, and the same program
 runs on the real thing.
 
-The course runs in four stages. Chapters 1 to 5 teach the core model:
+Chapters 1 to 5 teach the core model:
 state, pulses, bindings, and the three phases every frame runs.
 Chapters 6 to 11 teach the tools of the 8x8 matrix: drawing, timing,
 motion, shapes, sound, and structured data. Chapters 12 and 13 teach
 how to organise a growing program and how to give a game its screens.
-From chapter 14 the book turns to complete games - building one on
+From chapter 14 the book turns to complete games: building one on
 the 8x8 matrix, reading a larger one, then building another on the
-TMS9918 video display processor - and the final chapter compares how
+TMS9918 video display processor. The final chapter compares how
 the two displays shape the games written for them.
 
 The book teaches Glimmer 0.6. Every complete program in it was

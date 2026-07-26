@@ -8,7 +8,7 @@ nav_order: 5
 
 # Chapter 5 — The Layout System
 
-You have stored a sprite table as raw bytes. Each sprite occupies four bytes — an x position, a y position, a tile index and a flags byte — and you have `.equ` constants for each field offset. You insert a new field. Every constant after the insertion is now wrong, along with every access expression built on it. With sixteen sprites and a dozen routines touching the table, updating them all by hand is where bugs enter.
+You have stored a sprite table as raw bytes. Each sprite occupies four bytes (an x position, a y position, a tile index and a flags byte), and you have `.equ` constants for each field offset. You insert a new field. Every constant after the insertion is now wrong, along with every access expression built on it.
 
 AZM's layout system replaces those manual constants with a declaration. Describe the record once; `sizeof` and `offset` give you byte counts and field positions anywhere you need them, derived automatically from the field list.
 
@@ -45,7 +45,7 @@ Sprites:
     .ds Sprite[16]
 ```
 
-`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically. If you mistype a field name — `offset(Sprite, flagz)` — the assembler rejects it at assemble time. With manual constants, the same typo assembles silently with the wrong value.
+`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically. If you mistype a field name, say `offset(Sprite, flagz)`, the assembler rejects it at assemble time. With manual constants, the same typo assembles silently with the wrong value.
 
 ---
 
@@ -58,7 +58,7 @@ Two scalar types are the building blocks for field sizes:
 | `byte` | 1 |
 | `word` | 2 |
 
-These names are valid in size positions — inside `.type` / `.union` declarations and as `.ds` operands.
+These names are valid in size positions: inside `.type` / `.union` declarations and as `.ds` operands.
 
 `sizeof(Type)` returns the exact packed byte count for a type. The result is an ordinary integer constant, valid anywhere an expression is valid:
 
@@ -79,24 +79,24 @@ word[8]      ; 16 bytes
 Sprite[16]   ; sizeof(Sprite) * 16 bytes
 ```
 
-Array type expressions appear in `.ds` operands, `.field` declarations and `sizeof` / `offset` arguments. `.ds` accepts a type expression wherever it needs a byte count:
+Array type expressions appear in `.ds` operands, `.field` declarations and `sizeof` / `offset` arguments:
 
 ```asm
 .ds byte[32]    ; same as .ds 32
 .ds Sprite[16]  ; same as .ds sizeof(Sprite) * 16
 ```
 
-`byte[32]` is a type expression. `.ds byte[32]` consumes it directly as a byte count. When you need that count as a numeric constant — for a `.equ`, for example — use `sizeof`: `SIZE .equ sizeof(byte[32])`. `.equ` needs a numeric value, not a type expression.
+When you need that count as a numeric constant (for a `.equ`, for example), use `sizeof`: `SIZE .equ sizeof(byte[32])`. `.equ` needs a numeric value, not a type expression.
 
 ---
 
 ## Records with `.type`
 
-A record type is a `.type` layout with named fields. Declare a record once and AZM computes every field's byte offset from the declaration.
+A record type is a `.type` layout with named fields.
 
 ### Field declarations
 
-A `.type` declaration uses the name-left form — the record name first, then `.type`. Inside the block, `.field` declares one named field. The token after `.field` is the field's layout type expression:
+A `.type` declaration uses the name-left form, with the record name first, then `.type`. Inside the block, `.field` declares one named field. The token after `.field` is the field's layout type expression:
 
 ```asm
 Sprite  .type
@@ -115,7 +115,7 @@ Each field has a name, a size and an offset the assembler computes by summing th
 | `name .field word` | 2-byte field |
 | `name .field TypeExpr` | field of any layout size |
 
-Use `.field` when the size is a type expression — an array or a nested record type:
+Use `.field` when the size is a type expression, such as an array or a nested record type:
 
 ```asm
 Buffer  .type
@@ -140,7 +140,7 @@ SPRITE_TILE  .equ offset(Sprite, tile)     ; 2
 SPRITE_FLAGS .equ offset(Sprite, flags)    ; 3
 ```
 
-These are ordinary integer constants. Use them in `.equ` lines when the name will appear in multiple places; use `sizeof` and `offset` directly in operands when the constant is used once.
+Use `.equ` lines when the name will appear in multiple places; use `sizeof` and `offset` directly in operands when the constant is used once.
 
 ### Allocating and accessing records
 
@@ -163,7 +163,7 @@ SpriteTable:
         .ds Sprite[16]
 ```
 
-Accessing element `N` at assemble time — when `N` is a constant:
+Accessing element `N` at assemble time, when `N` is a constant:
 
 ```asm
 N       .equ 3
@@ -171,7 +171,7 @@ N       .equ 3
         ld   a,(hl)
 ```
 
-For runtime indexing — when the index is in a register — write the address arithmetic explicitly:
+For runtime indexing, when the index is in a register, write the address arithmetic explicitly:
 
 ```asm
 ; A = sprite index (0..15)
@@ -220,8 +220,6 @@ ELEM2_FLAGS .equ offset(Sprite[16], [2].flags)
 
 A `.typealias` declaration gives a name to any layout type expression. The declared name is a transparent assembler-time alias: the assembler substitutes the full type expression at every use.
 
-The primary use is naming an array of records:
-
 ```asm
 SpriteArray .typealias Sprite[16]
 ```
@@ -238,7 +236,7 @@ FLAGS   .equ offset(SpriteArray, [3].flags)
         ld   hl,<SpriteArray>Sprites[3].flags
 ```
 
-The alias is transparent: `sizeof(SpriteArray)` returns the same value as `sizeof(Sprite[16])`, and the cast path `<SpriteArray>Sprites[3].flags` expands to `Sprites + offset(Sprite[16], [3].flags)`.
+`sizeof(SpriteArray)` returns the same value as `sizeof(Sprite[16])`, and the cast path `<SpriteArray>Sprites[3].flags` expands to `Sprites + offset(Sprite[16], [3].flags)`.
 
 A `.typealias` does not add a wrapper field. With `SpriteArray .typealias Sprite[16]`, the correct cast path to element 3's `flags` field is `[3].flags`. A wrapper record with a `.field` declaration adds an extra path level:
 
@@ -248,17 +246,13 @@ sprites     .field Sprite[16]
             .endtype
 ```
 
-With that declaration, the same field requires `.sprites[3].flags` — the `.sprites` step is part of the type structure. `.typealias` introduces no such level.
-
-Type aliases are assembler-time layout facts. They do not create constructors, runtime type checks or hidden operations.
+With that declaration, the same field requires `.sprites[3].flags`; the `.sprites` step is part of the type structure.
 
 ---
 
 ## Cast syntax
 
-Everything above — `sizeof`, `offset`, manual expressions — is always valid. Once you have declared types, there is a more compact syntax for building field-address expressions.
-
-A layout cast tells AZM to treat an address as a particular layout while it calculates field offsets. It does not change runtime memory; it is compact notation for the same constant-expression arithmetic:
+A layout cast tells AZM to treat an address as a particular layout while it calculates field offsets. It does not change runtime memory:
 
 ```asm
 ld   hl,<Sprite>Player.flags
@@ -279,7 +273,7 @@ ld   a,(<Sprite[16]>Sprites[3].flags)   ; load byte at that address
 ld   hl,<Sprite[16]>Sprites[3].flags    ; load the address itself into HL
 ```
 
-Indices inside a cast path must be assembler-time constant expressions. Register values are rejected, because the address calculation happens at assemble time:
+Indices inside a cast path must be assembler-time constant expressions:
 
 ```asm
 IDX .equ 3
@@ -287,7 +281,7 @@ ld   hl,<Sprite[16]>Sprites[IDX].flags      ; valid: IDX is a constant
 ld   hl,<Sprite[16]>Sprites[HL].flags       ; error: HL is not a constant
 ```
 
-When the index is in a register at runtime, write the address arithmetic as instructions. Dot notation reaches nested record fields by the same rules:
+Dot notation reaches nested record fields by the same rules:
 
 ```asm
 ld   hl,<Actor>Player.pos.x
@@ -295,13 +289,9 @@ ld   hl,<Actor>Player.pos.x
 ld   hl,Player + offset(Actor, pos.x)
 ```
 
-The `sizeof` and `offset` forms are always correct and always clear; use whichever makes the field path more readable at the call site.
-
 ---
 
 ## Unions and alternate views
-
-Use unions for memory that has more than one valid layout view, such as a hardware register read as either a byte or a word.
 
 A union describes multiple overlapping views of the same bytes. All union members start at offset zero; the union's size is the size of its largest member. Hardware ports that expose the same address as both a status byte and a 16-bit value are a natural fit:
 

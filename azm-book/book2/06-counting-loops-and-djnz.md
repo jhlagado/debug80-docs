@@ -26,11 +26,6 @@ loop_top:
   jp nz, loop_top
 ```
 
-`dec b` decrements B and sets the Z flag when B reaches zero. `jp nz` branches
-back while B is non-zero. Two instructions for one conceptual operation.
-
-The Z80 has a single instruction that fuses those two operations.
-
 ---
 
 ## DJNZ: decrement B and jump if not zero
@@ -43,7 +38,7 @@ The Z80 has a single instruction that fuses those two operations.
 
 The single instruction replaces `dec b / jp nz, label`. It is one byte smaller
 than the `dec b / jr nz` form (2 bytes vs 3) and two bytes smaller than
-`dec b / jp nz` (2 bytes vs 4). On a tight Z80, that matters.
+`dec b / jp nz` (2 bytes vs 4).
 
 `djnz` is a relative jump, like `jr`. Its target must be within approximately
 128 bytes backward or 127 bytes forward. If the loop body is too long for that
@@ -67,29 +62,25 @@ loop_top:
 ```
 
 The label `loop_top` sits at the first instruction of the body, not before the
-`ld b` initializer. B's starting value is yours to set — `djnz` reads whatever B holds when it
-first runs. Forget the `ld b` init and the loop runs for an unpredictable
+`ld b` initializer. Forget the `ld b` init and the loop runs for an unpredictable
 number of iterations.
 
 ---
 
 ## The zero-count hardware semantic
 
-`djnz` uses B as an 8-bit counter. When you write `ld b, 5`, the loop runs
-exactly 5 times. But what happens if you write `ld b, 0`?
+`djnz` uses B as an 8-bit counter. But what happens if you write `ld b, 0`?
 
 On the Z80, DJNZ decrements B before testing. If B starts at 0, the decrement
 wraps to 255 (`$FF`), the result is non-zero and the jump is taken. The loop
 continues from B = 255 and runs a further 255 times before B reaches zero again.
 Total: 256 iterations.
 
-`ld b, 0` before `djnz` is valid Z80 — it gives 256 iterations and some
-programs use it deliberately for exactly that reason. The danger is
-unintentional: expecting zero iterations and getting 256.
+`ld b, 0` before `djnz` is valid Z80; it gives 256 iterations and some
+programs use it deliberately for exactly that reason.
 
-The consequence for you as a programmer: **never call a DJNZ loop with B = 0
-when you intend zero iterations.** If the iteration count can be zero, test for
-it before the loop:
+**Never call a DJNZ loop with B = 0 when you intend zero iterations.** If the
+iteration count can be zero, test for it before the loop:
 
 ```asm
 ld a, count_value
@@ -109,7 +100,7 @@ pre-test is needed.
 
 ## What the registers hold after a loop
 
-After a loop exits, all three registers it touched have changed. Consider the
+Consider the
 counted loop from Section A of the example below, which sums the five bytes
 `3, 7, 2, 8, 5`:
 
@@ -125,15 +116,13 @@ ld (total), a
 ```
 
 When the loop exits: **B is zero** (that was the exit condition). **A holds 25**
-(the accumulated sum). **HL points one byte past the last element** — it was
+(the accumulated sum). **HL points one byte past the last element**: it was
 incremented after reading each entry, so after five elements it has advanced
 five positions beyond the base.
 
-That last point matters. If another variable is stored immediately after the
-table, HL now points at it. A stray `ld (hl), a` at this point would silently
-overwrite that variable. The Z80 has no array bounds, no memory protection, no
-runtime error. Write past the end of a table and you corrupt whatever is there. The price of assembly's freedom is
-responsibility — you must track where your pointers end up.
+If another variable is stored immediately after the table, HL now points at it.
+A stray `ld (hl), a` at this point would silently overwrite that variable. The
+Z80 has no array bounds, no memory protection, no runtime error.
 
 ---
 
@@ -172,11 +161,8 @@ sentinel_loop:
 found:
 ```
 
-Now the loop exits when the sentinel is found, or when all TableLen entries have
-been checked without a match. The role of DJNZ here is purely a safety bound,
+The role of DJNZ here is purely a safety bound,
 not the primary exit condition.
-
-The third loop form uses the same structure — DJNZ as a guard, a separate condition as the real exit — but the exit condition is arithmetic rather than a value match.
 
 ---
 
@@ -197,8 +183,7 @@ flag_loop:
 done:
 ```
 
-The exit here is driven by `cp threshold / jr nc`, not by DJNZ. DJNZ again
-provides the overrun guard. The two conditions are independent: whichever fires
+The exit here is driven by `cp threshold / jr nc`, not by DJNZ. The two conditions are independent: whichever fires
 first ends the loop.
 
 ---
@@ -217,11 +202,11 @@ flagval: .db 0
 addends: .db 3, 7, 2, 8, 5
 ```
 
-`.org $8010` places `addends` at address `$8010`. Where that falls in the memory map — ROM or RAM — depends on your hardware, not on the assembler. `.org` sets the next address; the distinction between mutable storage and constant data is yours to enforce by choosing appropriate addresses.
+Where `$8010` falls in the memory map (ROM or RAM) depends on your hardware, not on the assembler.
 
 The program runs three loop forms side by side over the same five-element table.
 
-**Section A — DJNZ counted loop.**
+**Section A: DJNZ counted loop.**
 
 ```asm
 ld hl, addends
@@ -235,11 +220,10 @@ ld (total), a
 ```
 
 `ld hl, addends` sets HL to the address of the first entry. `ld b, TableLen`
-sets B to 5. The body adds the current byte at HL to A and increments HL. DJNZ
-decrements B and loops back while B is non-zero. After 5 iterations B = 0, the
+sets B to 5. The body adds the current byte at HL to A and increments HL. After 5 iterations B = 0, the
 loop exits, and `total` receives 25 ($19): the sum of 3 + 7 + 2 + 8 + 5.
 
-**Section B — sentinel loop (cp / jr z).**
+**Section B: sentinel loop (cp / jr z).**
 
 ```asm
 ld hl, addends
@@ -264,7 +248,7 @@ matched byte. DJNZ provides the overrun guard: if 8 were not present, the loop
 would exhaust all five entries and fall through to `ld a, $FF`. Because 8 is
 the fourth entry, `scanval` receives 8.
 
-**Section C — flag-exit loop.**
+**Section C: flag-exit loop.**
 
 ```asm
 ld hl, addends
@@ -281,9 +265,9 @@ flag_done:
 ```
 
 The loop accumulates bytes until the sum reaches or exceeds 16 (`$10`). After
-adding 3, the sum is 3 — `cp $10` sets carry (3 < 16), so `jr nc` does not
-branch. After adding 7, the sum is 10 — still less than 16. After adding 2, the
-sum is 12 — still less. After adding 8, the sum is 20 — `cp $10` finds 20 >= 16,
+adding 3, the sum is 3: `cp $10` sets carry (3 < 16), so `jr nc` does not
+branch. After adding 7, the sum is 10, still less than 16. After adding 2, the
+sum is 12, still less. After adding 8, the sum is 20; `cp $10` finds 20 >= 16,
 carry is clear, `jr nc` exits. `flagval` receives 20 ($14).
 
 ---
@@ -291,41 +275,21 @@ carry is clear, `jr nc` exits. `flagval` receives 20 ($14).
 ## Choosing between DJNZ, sentinel and flag-exit
 
 DJNZ is the right choice when you know exactly how many iterations to run before
-the loop starts. Load B with that count and use DJNZ.
+the loop starts.
 
-A sentinel loop is right when the stopping condition is "find this value." It
-exits on content, not count and DJNZ serves only as an overrun guard.
+A sentinel loop is right when the stopping condition is "find this value."
 
 A flag-exit loop is right when the stopping condition is "some computed quantity
-has crossed a threshold." It exits on an arithmetic result, with DJNZ again
-serving only as the overrun guard.
+has crossed a threshold."
 
-In practice, most Z80 loops are counted loops — DJNZ is compact and the
-iteration count is usually known before the loop starts. Reach for the sentinel
-or flag-exit forms when the data itself determines where to stop, not you.
-
----
-
-## Summary
-
-- `djnz label` decrements B and jumps to `label` if B is non-zero; it falls
-  through when B reaches zero.
-- `djnz` replaces `dec b / jp nz` in one instruction and is smaller: 2 bytes
-  vs 3 for `dec b / jr nz`, or 4 for `dec b / jp nz`. Its reach is limited to
-  roughly 128 bytes backward; use `dec b / jp nz` for longer loops.
-- A DJNZ loop has three parts: init (load B), body and branch-back (djnz).
-- The zero-count hardware semantic: B = 0 before `djnz` gives 256 iterations,
-  not zero. Guard against this when the count can be zero.
-- A sentinel loop uses `cp` and `jr z` as the primary exit, with DJNZ as an
-  overrun guard.
-- A flag-exit loop uses a flag condition as the primary exit, with DJNZ again
-  as the overrun guard.
+In practice, most Z80 loops are counted loops, since DJNZ is compact and the
+iteration count is usually known before the loop starts.
 
 ---
 
 ## What Comes Next
 
-A counted loop over a register is useful for arithmetic. A counted loop over a table is useful for nearly everything else — scanning for a value, summing scores, copying a buffer, finding the end of a string. Chapter 7 covers the table structures that give DJNZ something worth walking over and the indexed access instructions that let you reach into them precisely, without juggling HL every instruction.
+Chapter 7 covers the table structures that give DJNZ something worth walking over and the indexed access instructions that let you reach into them precisely, without juggling HL every instruction.
 
 ---
 
@@ -345,14 +309,14 @@ Write the corrected version that skips the loop entirely when `count_value` is z
 
 **2. Modify the sum loop.** The DJNZ sum loop from the chapter accumulates all five entries in `addends: .db 3, 7, 2, 8, 5`. Change the loop so that it finds the **minimum** value instead of the sum. The result should be stored in a variable named `minimum`. _(Hint: start `minimum` at 255 and update it whenever the current byte is smaller. Chapter 5's `cp` and `jr nc` are the tools.)_
 
-**3. Sentinel loop — find the zero.** A table of bytes ends with a zero sentinel:
+**3. Sentinel loop: find the zero.** A table of bytes ends with a zero sentinel:
 
 ```asm
 .org $8010
 message: .db $41, $42, $43, $00, $44, $45
 ```
 
-Write a sentinel loop that scans `message` and stores the **index** (0-based position) of the first zero byte into a variable named `zero_pos`. The loop must also handle the case where no zero is found within the first six bytes — store `$FF` in `zero_pos` in that case.
+Write a sentinel loop that scans `message` and stores the **index** (0-based position) of the first zero byte into a variable named `zero_pos`. The loop must also handle the case where no zero is found within the first six bytes: store `$FF` in `zero_pos` in that case.
 
 **4. Loop analysis.** The flag-exit loop in the chapter example exits when the accumulated sum reaches or exceeds `$10` (16). The data is `3, 7, 2, 8, 5`. Trace through the loop iteration by iteration:
 
@@ -363,7 +327,7 @@ Write a sentinel loop that scans `message` and stores the **index** (0-based pos
 | 3         | 2          | ?           | ?                 | ?     |
 | 4         | 8          | ?           | ?                 | ?     |
 
-Fill in the table. After the loop exits, what value is stored in `flagval`? Now change the threshold from `$10` to `$0C` (12) and redo the trace — does the loop exit one iteration earlier?
+Fill in the table. After the loop exits, what value is stored in `flagval`? Now change the threshold from `$10` to `$0C` (12) and redo the trace. Does the loop exit one iteration earlier?
 
 ---
 

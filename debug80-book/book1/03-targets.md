@@ -31,7 +31,7 @@ Your project has one target, named `main`:
 
 ![A folder holds a project, the project selects a target, the target names a source file](../../assets/images/debug80-book/book1/folder-project-target-source.svg)
 
-`sourceFile` is the entry point - the file handed to the assembler. `outputDir` and `artifactBase` decide where the output lands and what it is called, so this target produces `build/main.hex`. `platform` and `profile` say which machine it runs on.
+`sourceFile` is the entry point, the file handed to the assembler. `outputDir` and `artifactBase` decide where the output lands and what it is called, so this target produces `build/main.hex`. `platform` and `profile` say which machine it runs on.
 
 The target's name is the key, `main`. Debug80 derives it from the source file name, dropping the extension and a trailing `.main` if there is one, so `game.main.asm` yields a target called `game`. If that name is taken it appends `-2`.
 
@@ -41,13 +41,11 @@ Debug80 will consider three kinds of file: `.asm`, `.z80` and `.glim`. A Glimmer
 
 Among those, two names are treated as suggestions: `main.asm` and `main.z80`. A file with either name is marked **suggested** when Debug80 offers you a list.
 
-The convention marks a file in a list; it does not decide anything.
-
 ## Add a target
 
 The **+** beside the **Target** dropdown adds one. Debug80 lists every eligible program file that is not already a target, annotating the ones that match the naming convention, and you choose.
 
-Add a second program to see it work. Create `src/blink.asm`:
+Create `src/blink.asm`:
 
 ```asm
 ; A second program, so the project has something to choose between.
@@ -66,7 +64,7 @@ Pattern:
         .db     0x7d,0x00,0x7d,0x00,0x7d,0x00
 ```
 
-Click **+** beside **Target**, choose `src/blink.asm`, and a second target named `blink` appears in the dropdown. It inherits its settings from the existing target - same platform, same profile, same output folder - with only the source file and artifact name changed.
+Click **+** beside **Target**, choose `src/blink.asm`, and a second target named `blink` appears in the dropdown. It inherits its settings from the existing target (same platform, same profile, same output folder), with only the source file and artifact name changed.
 
 You can also right-click any `.asm`, `.z80` or `.glim` file in the Explorer and choose **Debug80: Set Program File** to point the current target at it instead.
 
@@ -94,11 +92,11 @@ Remove target blink from this project? Its source files and build artifacts will
 
 ![Confirming target removal](../../assets/images/debug80-book/book1/modal-remove-target.svg)
 
-Removing a target edits `debug80.json` and nothing else. Your source file stays exactly where it is. The button is disabled when the selected entry is a discovered file rather than a configured target, because there is nothing to remove.
+The button is disabled when the selected entry is a discovered file rather than a configured target, because there is nothing to remove.
 
 ## A project with no targets
 
-Remove every target and the project is still a project. This is a legitimate state, not a broken one, and it is what **No target yet** produces during initialization.
+Remove every target and the project is still a project. It is what **No target yet** produces during initialization.
 
 ![The panel for a project with no targets](../../assets/images/debug80-book/book1/panel-state-no-targets.svg)
 
@@ -107,8 +105,6 @@ The dropdown then reads `No targets available` if nothing eligible is on disk, o
 ```text
 Debug80: This project has no targets yet. Pick a program file from the target dropdown first.
 ```
-
-A project with no targets is useful while a codebase is still only includes and fragments.
 
 ## Targets whose files have gone
 
@@ -126,16 +122,6 @@ Every action in this chapter has a Command Palette equivalent, which is what mak
 | Point a target at a file | **Debug80: Set Program File** |
 | Add a workspace folder | **Debug80: Add Workspace Folder** |
 | Remove a workspace folder | **Debug80: Remove Workspace Folder** |
-
-## Summary
-
-- A target records one program: `sourceFile`, `outputDir`, `artifactBase`, `platform` and `profile`.
-- `debug80.json` is the truth. `main.asm` and `main.z80` are only marked **suggested** in a list.
-- Eligible program files are `.asm`, `.z80` and `.glim`; a `.glim` file needs a top-level `program` declaration.
-- **+** adds a target, **−** removes it without touching source files, and the dropdown selects the active one.
-- Discovered files appear in the dropdown prefixed with `+`; choosing one adds and selects it.
-- Zero targets is a legitimate state. Build and Run say so plainly instead of failing.
-- Every one of these actions is also a Command Palette command.
 
 ---
 

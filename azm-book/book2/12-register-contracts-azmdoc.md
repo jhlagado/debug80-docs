@@ -10,7 +10,7 @@ nav_order: 12
 
 Chapter 11's contract is the right idea: the subroutine declares what it reads, what it returns and what it destroys; the caller reads that and writes code accordingly. An ordinary comment can drift away from the code after repeated edits.
 
-The `.routine` directive is AZM's structured contract format. It marks the next non-local label as a routine entry and gives the **register contract** analyzer machine-checkable boundary information for every call. Informal subroutine discipline becomes something the assembler can verify.
+The `.routine` directive is AZM's structured contract format.
 
 ---
 
@@ -27,7 +27,7 @@ Consider a caller that keeps HL live across a call:
 
 If `find_max` walks HL through the table and does not restore it, HL now points past the end. The next `ld a, (hl)` reads the wrong byte. The assembler still accepts the program; the CPU runs it; the bug is silent.
 
-Register contracts close that gap. A contract on `find_max` might say:
+A contract on `find_max` might say:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
@@ -41,7 +41,7 @@ Running `azm --rc warn source.asm` can then report:
 source.asm:6: warning: HL is live across call to find_max, but find_max may clobber H, L
 ```
 
-The analyzer does not need to know what `table` means. It only needs to know: the caller had a value in HL, called something that may destroy HL, then used HL again. That is enough to flag a real bug.
+The analyzer does not need to know what `table` means. It only needs to know: the caller had a value in HL, called something that may destroy HL, then used HL again.
 
 The fix is caller-side: reload HL, save it before the call or stop using HL after the call:
 
@@ -53,7 +53,7 @@ The fix is caller-side: reload HL, save it before the call or stop using HL afte
     ld a, (hl)
 ```
 
-Register contracts are not linting for style. They are **boundary checking** at subroutine calls — turning "I thought HL was still valid" into a diagnostic with a line number.
+Register contracts are **boundary checking** at subroutine calls, turning "I thought HL was still valid" into a diagnostic with a line number.
 
 ---
 
@@ -69,11 +69,9 @@ The callee contract answers:
 .routine clobbers HL
 ```
 
-"No — HL may be different after return."
+"No: HL may be different after return."
 
-The caller sees only the **external interface**: registers and flags that must be set on entry, registers and flags that carry results on exit and registers the routine destroys without restoring. Everything that happens inside the body — scratch registers, loop counters, temporary pushes — matters only if it leaks across `ret`.
-
-That caller-side **liveness** idea is the heart of register contracts. The subroutine body can be long; the contract is short because it describes the door, not the room.
+The caller sees only the **external interface**: registers and flags that must be set on entry, registers and flags that carry results on exit and registers the routine destroys without restoring. Everything that happens inside the body (scratch registers, loop counters, temporary pushes) matters only if it leaks across `ret`.
 
 ---
 
@@ -92,7 +90,7 @@ _loop:
     ret
 ```
 
-The caller does not read B after return. B was scratch inside the routine. You do **not** write `out B` unless the caller is supposed to use B as a result. Register contracts care whether the caller's B was preserved, not whether B changed inside the callee.
+You do **not** write `out B` unless the caller is supposed to use B as a result.
 
 ### `push` / `pop` means preserved, not `out`
 
@@ -109,7 +107,7 @@ _loop:
     ret
 ```
 
-BC is restored before `ret`. The caller's BC is intact. Correct contract:
+The caller's BC is intact. Correct contract:
 
 ```asm
 .routine in HL,DE,B clobbers A,HL,DE
@@ -138,9 +136,9 @@ _loop:
 ret
 ```
 
-does **not** mean `out B` unless the caller is meant to read B after return. B was an internal loop counter.
+does **not** mean `out B` unless the caller is meant to read B after return.
 
-This distinction is the bug pattern behind many real projects: a tool or human sees `ld b, …` inside a routine and assumes B is an output. The contract should describe what the **caller** may rely on, not every register touched along the way.
+The contract should describe what the **caller** may rely on, not every register touched along the way.
 
 ---
 
@@ -173,7 +171,7 @@ _skip:
   ret
 ```
 
-The human-readable `;` line stays for prose. The `.routine` lines are what the analyzer parses.
+The human-readable `;` line stays for prose.
 
 Carrier lists use comma-separated names:
 
@@ -181,7 +179,7 @@ Carrier lists use comma-separated names:
 .routine in A,DE,HL out carry clobbers BC
 ```
 
-Register pairs are shorthand: `BC` means B and C. Flags are named individually: `carry`, `zero`, `sign`, `parity`, `halfCarry`. Use `carry` for the carry flag and `C` for register C — both are short names; the distinction matters.
+Register pairs are shorthand: `BC` means B and C. Flags are named individually: `carry`, `zero`, `sign`, `parity`, `halfCarry`. Use `carry` for the carry flag and `C` for register C.
 
 A carrier that transforms in place can appear in both `in` and `out`:
 
@@ -189,13 +187,11 @@ A carrier that transforms in place can appear in both `in` and `out`:
 .routine in DE out DE clobbers A
 ```
 
-That declares an intentional transformation, not an accidental clobber.
-
 ---
 
 ## Flags are return values
 
-AZM Book 3 uses carry for success and failure (`ring_push`, `ring_pop` and others). Flags are first-class contract carriers, not an afterthought.
+AZM Book 3 uses carry for success and failure (`ring_push`, `ring_pop` and others).
 
 ### Success on carry set
 
@@ -228,11 +224,11 @@ is_empty:
     ret
 ```
 
-`or a` sets Z when A is zero. Callers test with `jr z`, `jr nz`, `ret z` or `call nz` — those instructions are evidence the flag mattered.
+`or a` sets Z when A is zero. Callers test with `jr z`, `jr nz`, `ret z` or `call nz`; those instructions are evidence the flag mattered.
 
 ### Teaching point
 
-A flag can be the entire return value. You do not need a separate error code byte when carry or zero already communicates success, failure or "found". Document the flag in `out`; put semantic wording in the plain `;` line above the contract:
+A flag can be the entire return value. Document the flag in `out`; put semantic wording in the plain `;` line above the contract:
 
 ```asm
 ; ring_push: append byte in A; carry set on success, carry clear when full
@@ -244,7 +240,7 @@ Avoid embedding flag syntax in the machine line (`out F.C`) when `out carry` is 
 
 ### `out` and `clobbers` must not contradict
 
-Register pairs in `clobbers` expand to their parts: `AF` means A and F together. If A or a flag is an **`out`**, do not also list that carrier inside a broad `clobbers AF` line — beginners read that as “return A, but destroy A.”
+Register pairs in `clobbers` expand to their parts: `AF` means A and F together. If A or a flag is an **`out`**, do not also list that carrier inside a broad `clobbers AF` line, since beginners read that as “return A, but destroy A.”
 
 Rule: **`out` describes what the caller may rely on after `ret`; `clobbers` lists everything else destroyed without restore.** When A and carry are outputs, name them in `out` and list only the other scratch registers in `clobbers`:
 
@@ -254,7 +250,7 @@ Rule: **`out` describes what the caller may rely on after `ret`; `clobbers` list
 ring_pop:
 ```
 
-Register contracts treat `out` as authoritative at the return boundary. Internal use of A or flags mid-routine does not require listing A in `clobbers` when the contract promises a defined A and carry on exit.
+Internal use of A or flags mid-routine does not require listing A in `clobbers` when the contract promises a defined A and carry on exit.
 
 ---
 
@@ -298,7 +294,7 @@ _done:
     ret
 ```
 
-The next `.routine` starts another routine boundary. AZM has no `.endroutine`; data and ordinary labels after a routine remain ordinary declarations unless another `.routine` marks a new callable entry.
+AZM has no `.endroutine`; data and ordinary labels after a routine remain ordinary declarations unless another `.routine` marks a new callable entry.
 
 The `@` prefix has one separate job: it exports a symbol from a source unit. It does not mark a routine and has no register-contract effect:
 
@@ -314,7 +310,7 @@ Callers still write `call find_max`; `@` is declaration syntax and is not part o
 
 ## Register contract syntax reference
 
-Place `.routine` immediately before the non-local entry label. Register contract modes:
+Register contract modes:
 
 | Command | Effect |
 |---------|--------|
@@ -345,7 +341,7 @@ Typical progression: run `--rc audit` on legacy code, add `.routine` directives 
 
 ## External code uses `.asmi`
 
-ROM routines, monitor calls, BIOS entry points and Debug80 stubs have no AZM source to analyze. Register contract analysis cannot inspect their bodies. **`.asmi`** files declare their boundaries — one record per external symbol, no comment syntax:
+ROM routines, monitor calls, BIOS entry points and Debug80 stubs have no AZM source to analyze. **`.asmi`** files declare their boundaries, one record per external symbol, no comment syntax:
 
 ```
 extern MON_PRINT_CHAR
@@ -373,11 +369,9 @@ Caller in source:
     call MON_PRINT_CHAR
 ```
 
-AZM cannot see inside ROM. `.asmi` is how you teach the analyzer what the external routine does — the same `in` / `out` / `clobbers` vocabulary as `.routine` blocks, stored in a separate file you can share across projects (MON3, platform ROM tables, emulator integration).
+`.asmi` is how you teach the analyzer what the external routine does, using the same `in` / `out` / `clobbers` vocabulary as `.routine` blocks, stored in a separate file you can share across projects (MON3, platform ROM tables, emulator integration).
 
-If a project calls many system routines, one `.asmi` file holds all declarations. Update it when platform documentation changes; source files stay unchanged.
-
-Book 3 Chapter 7 revisits `.include` and library layout; the external boundary story lives here in Book 2.
+Update it when platform documentation changes; source files stay unchanged.
 
 ---
 
@@ -385,7 +379,7 @@ Book 3 Chapter 7 revisits `.include` and library layout; the external boundary s
 
 From Chapter 10's subroutines:
 
-**Step 1 — identify the callable entries.**
+**Step 1: identify the callable entries.**
 
 ```asm
 find_max:
@@ -418,7 +412,7 @@ _skip:
 
 `azm --rc audit source.asm` reports what still needs an explicit contract while you are shaping the code.
 
-**Step 2 — add contracts from intended behavior.**
+**Step 2: add contracts from intended behavior.**
 
 ```asm
 ; find_max: scan a byte table and return the largest value
@@ -436,9 +430,9 @@ count_above:
   ret
 ```
 
-D does not appear in `clobbers` because push/pop preserves DE for the caller. The contract describes the door: caller's DE is intact; internal use of D is invisible.
+D does not appear in `clobbers` because push/pop preserves DE for the caller.
 
-**Step 3 — verify.**
+**Step 3: verify.**
 
 ```sh
 azm --rc warn source.asm
@@ -446,7 +440,7 @@ azm --rc warn source.asm
 
 If `main` reloads HL before each call (Chapter 10), checks pass. If `main` uses HL after `find_max` without reloading, register contracts report the conflict against `clobbers HL`.
 
-**Step 4 — catch a lying contract.**
+**Step 4: catch a lying contract.**
 
 If `find_max` later uses DE internally but the contract still omits DE:
 
@@ -457,7 +451,7 @@ find_max:
   ...
 ```
 
-With `--rc error`, inferred effects that exceed the declared contract are flagged. Callers that relied on DE across the call had a latent bug; the stale contract hid it.
+With `--rc error`, inferred effects that exceed the declared contract are flagged.
 
 ---
 
@@ -470,20 +464,6 @@ Register contracts verify **register and flag boundary consistency** at calls. K
 - Stack depth or overflow
 - Interrupt safety or re-entrancy
 - Semantic meaning of values in registers (HL as string vs table vs node)
-
-Use it where informal discipline breaks down: live registers across `call`, documented clobbers vs actual code and external routines described in `.asmi`. It turns comments into checkable promises at the boundary — AZM's killer feature for maintainable assembly, not a replacement for thinking about the algorithm.
-
----
-
-## Summary
-
-- A contract is checked at the **call site**: caller liveness vs callee `in` / `out` / `clobbers`.
-- **Internal scratch** and **push/pop preservation** are not `out` values; preserved registers usually omit `clobbers`.
-- **Flags** (`carry`, `zero`, …) are first-class returns; put meaning in human `;` lines, carriers in `.routine out`.
-- **`.routine`** marks a routine entry; **`@name:`** exports a symbol and has no contract meaning.
-- **`_name:`** is owner-local to the nearest preceding non-local label and is suitable for branch targets inside a routine.
-- **`.asmi`** describes ROM/monitor/external code; **`--interface`** imports it.
-- Workflow: start with **`--rc audit`**, use **`--contracts`** for source annotations, then enforce with **`--rc error`** or **`--rc strict`**.
 
 ---
 

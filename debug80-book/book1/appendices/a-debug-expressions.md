@@ -177,6 +177,6 @@ not [PLAYER_LIVES]
 carry or zero
 ```
 
-Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors appear in the Debug Console and the condition is treated as false.
+When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors appear in the Debug Console and the condition is treated as false.
 
 [← Copy monitor ROM source](../10-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)

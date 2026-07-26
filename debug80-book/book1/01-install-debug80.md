@@ -9,9 +9,9 @@ nav_order: 1
 
 # Install Debug80
 
-Debug80 is a Z80 development environment that runs inside VS Code. You write assembly, it assembles the code, loads it into an emulated TEC-1G, and lets you step through your own source while the emulated machine runs. When you are ready for real hardware, the same build produces a HEX file you can send to a board.
+Debug80 is a Z80 development environment that runs inside VS Code. You write assembly, it assembles the code, loads it into an emulated TEC-1G, and lets you step through your own source while the emulated machine runs.
 
-One install gets all of it. The extension carries the AZM assembler, the Glimmer compiler and the TEC-1 and TEC-1G emulation inside itself. There is no toolchain to download, no path to configure and no separate emulator to launch.
+The extension carries the AZM assembler, the Glimmer compiler and the TEC-1 and TEC-1G emulation inside itself.
 
 ## Install VS Code
 
@@ -33,11 +33,7 @@ Open the Run and Debug sidebar, look to the bottom of the list, and click **DEBU
 
 ![Clicking DEBUG80 expands it from a shut section into the Project section, showing the Add projects or folders message and an Open Folder button](../../assets/images/debug80-book/book1/panel-sidebar-location.svg)
 
-The sections above Debug80 belong to VS Code's own debugger, not to Debug80. Collapse them if you want the room; nothing is lost by leaving them open.
-
-That one section is where the rest of this book happens. Everything Debug80 does happens inside it — choosing a project, picking what to build, building it, running it, watching the emulated machine — and it grows as you go. Once a program is running, the same section holds the machine, its displays, the registers and memory, each as a section of its own. Chapter 8 goes through all nine.
-
-The book calls it **the Debug80 panel** from here on. That is the whole of it: one section in the Run and Debug sidebar.
+The book calls it **the Debug80 panel** from here on.
 
 If DEBUG80 is not in the list at all, the extension has not activated. Use VS Code's **View > Open View…** picker and choose Debug80 from the list.
 
@@ -51,27 +47,15 @@ Add projects or folders to the workspace to start with Debug80.
 
 and one button, **Open Folder**.
 
-![The Project section at full width, with the Add projects or folders card and the Open Folder button](../../assets/images/debug80-book/book1/panel-state-no-folder.svg) The panel has nothing more to offer until a folder exists, because Debug80 works on folders. There is no separate "new project" wizard and nothing to name before you begin.
+![The Project section at full width, with the Add projects or folders card and the Open Folder button](../../assets/images/debug80-book/book1/panel-state-no-folder.svg)
 
 ## What it becomes
 
-Everything above is the panel with nothing in it. This is the same section
-several chapters from now, with a project open and a program running:
+This is the same section several chapters from now, with a project open and a program running:
 
 ![The Debug80 section expanded inside the Run and Debug sidebar, holding the Project, Machine, Displays and Matrix Keyboard sections, with TMS9918 Video, Joystick, Registers, Memory and Serial collapsed](../../assets/images/debug80-book/book1/debug80-panel-in-vscode.png)
 
-Variables, Watch, Call Stack and Breakpoints are still at the top, still
-VS Code's. Everything below `DEBUG80` belongs to Debug80: the project row you
-have already met, then the emulated machine, its displays, a keyboard, and
-further sections for registers, memory and the serial line. They arrive as you
-need them, and none of them exist yet on your screen — you have no folder open.
-
-## Summary
-
-- Debug80 requires VS Code **1.100.0** or later and installs from the marketplace as **Debug80 IDE for Z80 Development**.
-- The assembler, the Glimmer compiler and the TEC-1 and TEC-1G emulation all ship inside the extension. Nothing else to install.
-- The panel lives in the **Run and Debug** sidebar, collapsed at the bottom on a fresh install. Expand **DEBUG80** and collapse **Run**.
-- With no folder open the panel offers **Open Folder** and nothing else.
+Everything below `DEBUG80` belongs to Debug80: the project row you have already met, then the emulated machine, its displays, a keyboard, and further sections for registers, memory and the serial line.
 
 ---
 

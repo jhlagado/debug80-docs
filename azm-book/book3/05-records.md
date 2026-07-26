@@ -8,11 +8,11 @@ nav_order: 6
 
 # Chapter 5 — Records
 
-Chapter 2 indexed bytes in a table. Each element was one byte wide, so stride was always 1 and offsets were obvious. Real programs store **records**: several fields packed together — coordinates, queue indices, flags — with a stride larger than 1.
+Chapter 2 indexed bytes in a table. Real programs store **records**: several fields packed together (coordinates, queue indices, flags) with a stride larger than 1.
 
-You can keep field offsets in comments and hope they stay correct. Wirth's advice is the opposite: fix the **representation** first, then write the algorithm against that layout. AZM's `.type` blocks are that representation. You describe the record once; `sizeof` and `offset` supply the numbers your instructions need.
+You can keep field offsets in comments and hope they stay correct. Wirth's advice is the opposite: fix the **representation** first, then write the algorithm against that layout. AZM's `.type` blocks are that representation.
 
-Layout types from Book 2 Chapter 13 come back here, driving field reads and writes through HL and IX and then building a **ring buffer** — a fixed-size FIFO queue over a byte table. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
+Layout types from Book 2 Chapter 13 come back here, driving field reads and writes through HL and IX and then building a **ring buffer**, a fixed-size FIFO queue over a byte table. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
 
 ---
 
@@ -26,8 +26,6 @@ A FIFO queue (first in, first out) needs:
 - a count of how many elements are valid (or equivalent logic)
 
 Shifting the whole table on every pop is wasteful on a small machine. A **ring buffer** keeps indices in workspace RAM and only moves the indices. Storage is a fixed byte array; push writes at `head` and advances; pop reads at `tail` and advances. When an index reaches capacity, it wraps to 0.
-
-No allocator, no linked list nodes — just bytes, offsets and compare/branch. That is the Book 3 sweet spot: representation before algorithm, with every memory access visible.
 
 ---
 
@@ -43,7 +41,7 @@ count   .byte
 .endtype
 ```
 
-Field lines do **not** allocate memory. They only describe shape. Storage still comes from `.ds`, `.db` or `.dw`:
+Field lines do **not** allocate memory. Storage still comes from `.ds`, `.db` or `.dw`:
 
 ```asm
 RING_CAP .equ 8
@@ -55,7 +53,7 @@ ring_state:
     .ds RingState
 ```
 
-`ring_buf` reserves eight data bytes. `ring_state` reserves `sizeof(RingState)` bytes — three bytes for `head`, `tail` and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type-array form uses literal lengths in the current assembler, not named constants.
+`ring_state` reserves `sizeof(RingState)` bytes: three bytes for `head`, `tail` and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type-array form uses literal lengths in the current assembler, not named constants.
 
 Name the compile-time constants you will use in instructions:
 
@@ -66,7 +64,7 @@ RING_COUNT  .equ offset(RingState, count)
 STATE_SIZE  .equ sizeof(RingState)
 ```
 
-If you add a field to `RingState`, reassemble and every `.equ` that uses `offset` updates. The algorithm code keeps symbolic names instead of hardcoded 0, 1, 2.
+If you add a field to `RingState`, reassemble and every `.equ` that uses `offset` updates.
 
 ---
 
@@ -104,7 +102,7 @@ ring_state:
 
 These forms are equivalent to `.ds 8` and `.ds 3` here. With a literal length you can also write `.ds byte[8]`; that documents element width when capacity is fixed in source. Initialized data still uses `.db` / `.dw`; `.ds` only reserves space.
 
-Labels stay **untyped**. `ring_state` is an address, not a permanent `RingState` variable. You pass that address in a register and use `offset(RingState, field)` constants at the access site — same rule as in the AZM layout design docs.
+Labels stay **untyped**. `ring_state` is an address, not a permanent `RingState` variable. You pass that address in a register and use `offset(RingState, field)` constants at the access site.
 
 ---
 
@@ -132,9 +130,7 @@ Load the record base into IX once, then use symbolic displacements:
   ld (ix + RING_COUNT), a
 ```
 
-`RING_HEAD` is the constant 0; `RING_TAIL` is 1; `RING_COUNT` is 2. The assembler substitutes the numeric displacement; the Z80 encodes `(ix + 0)` as `(ix + 0)` and so on.
-
-This is the pattern queue routines use: IX holds `ring_state` for the whole push/pop; HL walks `ring_buf` when the routine needs `base + index`.
+`RING_HEAD` is the constant 0; `RING_TAIL` is 1; `RING_COUNT` is 2.
 
 ### Run-time index into the byte table
 
@@ -150,7 +146,7 @@ This is the pattern queue routines use: IX holds `ring_state` for the whole push
   ld (hl), a
 ```
 
-AZM does not emit multiply/add for runtime indices. Layout types give you field offsets and record sizes; index × stride and table base + offset remain ordinary Z80 instructions — by design, so the machine stays visible.
+AZM does not emit multiply/add for runtime indices.
 
 ---
 
@@ -164,9 +160,9 @@ When the index and field path are known at assembly time, a **layout cast** fold
 
 Parts:
 
-- `<RingState>` — layout to apply
-- `ring_state` — base label
-- `.count` — field path (no `[i]` when accessing a single record)
+- `<RingState>`: layout to apply
+- `ring_state`: base label
+- `.count`: field path (no `[i]` when accessing a single record)
 
 The assembler computes `ring_state + offset(RingState, count)` and emits `ld hl, imm16`.
 
@@ -226,7 +222,7 @@ ring_state:
 - the oldest byte is at `ring_buf[tail]` when `count > 0`
 - the next free slot for push is `ring_buf[head]` when `count < RING_CAP`
 
-Push fails closed when `count == RING_CAP` (returns with carry clear). Pop fails when `count == 0`. The companion program documents that policy in register contracts.
+Push fails closed when `count == RING_CAP` (returns with carry clear). Pop fails when `count == 0`.
 
 ### Memory diagram
 
@@ -270,7 +266,7 @@ ring_advance_index:
     ret
 ```
 
-If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` with `and RING_CAP - 1` after `inc a` — one instruction wrap. The compare form works for any capacity and is what the example uses.
+If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` with `and RING_CAP - 1` after `inc a`, a one instruction wrap. The compare form works for any capacity and is what the example uses.
 
 ---
 
@@ -306,7 +302,7 @@ _full:
     ret
 ```
 
-The byte to store starts in A; the routine moves it to E while using A for comparisons and loads. Carry flag is the success/fail signal — no separate error code byte unless the caller wants one in workspace.
+Carry flag is the success/fail signal: no separate error code byte unless the caller wants one in workspace.
 
 ### Pop
 
@@ -343,7 +339,7 @@ FIFO order: bytes leave in the same order they arrived because `tail` chases `he
 
 ## Register contracts on routines
 
-Book 2 Chapter 12 introduced the `.routine` directive and register contracts. Book 3 algorithm routines should carry them.
+Book 2 Chapter 12 introduced the `.routine` directive and register contracts.
 
 | Tag | Meaning |
 |-----|---------|
@@ -353,7 +349,7 @@ Book 2 Chapter 12 introduced the `.routine` directive and register contracts. Bo
 
 Place `.routine` immediately before the callable entry. Use `@name:` only when the source unit exports that symbol; call sites always use the plain symbol name, such as `call ring_push`.
 
-For `ring_push` and `ring_pop`, put success/failure meaning in the human `;` line and name the carrier in `.routine out` as `carry` (not `F.C`). Carry clear means full or empty respectively. The shown `ring_pop` returns A = 0 on its empty path, but callers still must test carry before treating A as a popped byte.
+For `ring_push` and `ring_pop`, put success/failure meaning in the human `;` line and name the carrier in `.routine out` as `carry` (not `F.C`). The shown `ring_pop` returns A = 0 on its empty path, but callers still must test carry before treating A as a popped byte.
 
 Run the checker when you want machine verification:
 
@@ -369,7 +365,7 @@ The companion program:
 
 1. Clears `ring_state` through IX.
 2. Pushes `$11`, `$22`, `$33`, then pops three times (FIFO).
-3. Stores the last pop in `pop_result` — expect `$33`.
+3. Stores the last pop in `pop_result` (expect `$33`).
 4. Pushes eight more bytes to fill the ring, then attempts a ninth push with `$CC`.
 5. Stores `push_ok` = 0 if that push failed (carry clear), 1 if it incorrectly succeeded.
 
@@ -403,7 +399,7 @@ POS_X .equ offset(Actor, pos.x)
 
 Nested paths work in `offset` and in layout casts: `<Actor>player.pos.x`. Arrays inside records use bracket indices with compile-time values: `offset(Scene, sprites[2].color)`.
 
-Unions (`.union` / `.endunion`) share the same offset rules; the union's size is the largest member. Chapter 4's packed flags fit naturally as a `byte` or small union inside a larger record — same machinery, no new access path.
+Unions (`.union` / `.endunion`) share the same offset rules; the union's size is the largest member.
 
 ---
 
@@ -419,18 +415,6 @@ azm --rc warn examples/05_ring_buffer.asm
 ```
 
 Single-step through `ring_push` once with the emulator: watch `head` and `count` update via `(ix + RING_HEAD)` and confirm HL targets the expected cell in `ring_buf`.
-
----
-
-## Summary
-
-- **`.type` / `.endtype`** describe packed layout; they do not emit bytes by themselves.
-- **`sizeof(Type)`** and **`offset(Type, field)`** are compile-time constants — name them with `.equ` and use them in code and `.ds`.
-- **`.ds byte[8]`**, **`.ds RING_CAP`**, **`.ds RingState`** and literal record arrays such as **`.ds Record[4]`** reserve exact byte counts.
-- **IX + offset constants** is the idiomatic in-record access; **HL + BC** handles `table + runtime_index`.
-- **Layout casts** `<Type>label.field` and `<Type[N]>table[i].field` fold constant addresses; runtime indices use explicit arithmetic.
-- A **ring buffer** implements a FIFO with head, tail, count and wrap — no memory shifting.
-- **Register contracts** on `.routine` entries document success/fail conventions (here, the carry flag) as well as register roles.
 
 ---
 

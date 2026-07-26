@@ -7,9 +7,6 @@ nav_order: 2
 ---
 # Appendix 2 — Registers, Flags, and Conditions
 
-This appendix collects the machine-state tables you look up often while reading
-or writing Z80 code.
-
 ---
 
 ## Main Registers
@@ -61,8 +58,7 @@ forms.
 | 1 | `N` | last arithmetic op was subtraction | mostly internal / BCD support |
 | 0 | `C` | carry out or borrow | unsigned comparisons, rotates, shifts |
 
-Not every instruction updates every flag. Always check the instruction's own
-rules.
+Not every instruction updates every flag.
 
 ---
 

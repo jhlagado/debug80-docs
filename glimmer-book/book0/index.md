@@ -16,12 +16,11 @@ behaviour itself lives in small blocks of real assembly. From those
 declarations it generates the whole running program as readable Z80 assembly source:
 the main loop, the input polling, the change tracking, and the display glue.
 
-This book is the guided course. You bring some Z80 assembly; everything else
+You bring some Z80 assembly; everything else
 is taught here, one construct at a time, and most chapters end in a
 program you build and run in Debug80. The course closes with complete games
 on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video
-display processor. The final chapter compares how each display shapes the
-program you write.
+display processor.
 
 The book teaches Glimmer 0.6. Every complete program in it is built with
 `glimmer build`.

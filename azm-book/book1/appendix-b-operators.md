@@ -27,11 +27,11 @@ Operators in precedence order, lowest to highest. Operators at the same preceden
 
 Unary operators (highest precedence): `+` (identity), `-` (negate), `~` (bitwise NOT). Parentheses group sub-expressions and override precedence.
 
-All expressions are evaluated by the assembler before the binary is written. Register-dependent and runtime-dependent values belong in Z80 instructions.
+All expressions are evaluated by the assembler before the binary is written.
 
 ## Numeric literal formats
 
-AZM accepts eight numeric literal forms. They can appear freely in any expression and can be mixed within one expression.
+AZM accepts eight numeric literal forms. They can be mixed within one expression.
 
 | Form | Example | Base | Notes |
 |------|---------|------|-------|
@@ -44,9 +44,7 @@ AZM accepts eight numeric literal forms. They can appear freely in any expressio
 | Plain decimal | `42`, `255`, `0` | decimal | |
 | Quoted character | `'A'`, `"Z"` | ASCII value | single character; valid in any expression context |
 
-**Trailing-`H` rule:** the token must begin with a decimal digit (`0`–`9`). `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name — write `$FF` or `0FFH` to force hex.
-
-In a numeric literal, `$` is a hex prefix (`$FF`). As a standalone token in an expression, `$` is the current assembly address.
+**Trailing-`H` rule:** the token must begin with a decimal digit (`0`–`9`). `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. Write `$FF` or `0FFH` to force hex.
 
 `%` has two roles: a `%` at the start of a value is a binary literal prefix; a `%` between two expressions is the modulo operator.
 

@@ -8,7 +8,7 @@ nav_order: 104
 
 # Appendix D — Built-in Functions
 
-AZM has four built-in functions you can use in any expression: `sizeof`, `offset`, `LSB` and `MSB`. The assembler evaluates all four entirely at assemble time — the Z80 sees only the resulting integer, never the function call. `sizeof` and `offset` work with the layout type system; `LSB` and `MSB` extract byte lanes from 16-bit values.
+AZM has four built-in functions you can use in any expression: `sizeof`, `offset`, `LSB` and `MSB`. The assembler evaluates all four entirely at assemble time; the Z80 sees only the resulting integer, never the function call.
 
 ---
 
@@ -32,7 +32,7 @@ sizeof(Sprite[16])   ; 80
 sizeof(byte[32])     ; 32
 ```
 
-`sizeof(TypeName)` in an expression is equivalent to using the type name directly as a `.ds` size operand — both resolve to the same integer. The function form is useful when you need the constant outside a `.ds` context, or when the name alone would be ambiguous:
+`sizeof(TypeName)` in an expression is equivalent to using the type name directly as a `.ds` size operand. The function form is useful when you need the constant outside a `.ds` context, or when the name alone would be ambiguous:
 
 ```asm
 SPRITE_SIZE  .equ sizeof(Sprite)
@@ -54,7 +54,7 @@ offset(TypeName, arrayField[n].innerField)
 offset(TypeName[n], [index].fieldName)
 ```
 
-`offset` returns the byte distance from the start of a type to the named field. For simple fields the path is just the field name. For a field that is itself a record, the path is dot-separated. For an array field, the path includes a bracket index.
+`offset` returns the byte distance from the start of a type to the named field.
 
 ```asm
 Sprite  .type
@@ -87,8 +87,6 @@ offset(Actor, state)     ; 5
 
 **Array indices in `offset` paths must be numeric literals.** `offset(Table, rows[0].x)` is valid. Layout-cast path expressions (Chapter 5) accept assembler-time constant expressions in index positions.
 
-Chapter 5 covers the full layout system including field declarations, nested records, unions and cast-path syntax.
-
 ---
 
 ## `LSB(expr)` and `MSB(expr)`
@@ -99,7 +97,7 @@ LSB(expression)
 MSB(expression)
 ```
 
-`LSB` and `MSB` are acronyms — Least Significant Byte and Most Significant Byte — and are written in uppercase. The parser matches the exact tokens `LSB` and `MSB`.
+`LSB` and `MSB` are acronyms (Least Significant Byte and Most Significant Byte) and are written in uppercase.
 
 `LSB(expr)` returns the low byte of the value:
 
@@ -137,7 +135,7 @@ For source ported from assemblers that used `LOW()` or `HIGH()`, replace those c
 
 ## Case sensitivity
 
-All four functions are case-sensitive. The parser matches the exact tokens `sizeof`, `offset`, `LSB` and `MSB`. `SIZEOF`, `Sizeof`, `Offset`, `lsb` and `msb` are parse errors.
+All four functions are case-sensitive. `SIZEOF`, `Sizeof`, `Offset`, `lsb` and `msb` are parse errors.
 
 ---
 

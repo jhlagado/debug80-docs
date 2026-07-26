@@ -10,9 +10,9 @@ nav_order: 10
 
 You have sorted tables, walked strings, packed flags into bytes, built a ring buffer, called yourself on the stack, split files with `.include` and followed `addr` fields through linked structures. This chapter ties those habits into one program: **eight queens** on an 8×8 board.
 
-The puzzle: place eight queens so no two share a row, column or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different — the companion program counts all of them and stores the total in RAM. No BIOS, no print routine — you inspect `solution_count` in the emulator after `halt`, the same way earlier chapters left results at named labels.
+The puzzle: place eight queens so no two share a row, column or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different; the companion program counts all of them and stores the total in RAM.
 
-The algorithm is **depth-first search with backtracking**: try a column on the current row, recurse to the next row and if the search dead-ends, **unmark** the constraints you set and try the next column. Flat AZM has no `break`, no `continue` and no `func` — only `call`, `ret`, branches and bytes you can see in the listing.
+Flat AZM has no `break`, no `continue` and no `func`: only `call`, `ret` and branches.
 
 The companion build is [`examples/09_eight_queens.asm`](examples/09_eight_queens.asm).
 
@@ -24,7 +24,7 @@ A queen attacks along its row, column and both diagonals. On an 8×8 board with 
 
 If row `r` uses column `c`, you must remember:
 
-1. Column `c` is taken — no other row may use it.
+1. Column `c` is taken; no other row may use it.
 2. The **forward diagonal** (row + col constant) is threatened.
 3. The **backward diagonal** (row − col constant) is threatened.
 
@@ -52,9 +52,9 @@ DIAG_SUM_LEN  .equ 15
 DIAG_DIFF_LEN .equ 15
 ```
 
-This is not a 64-cell chess diagram in RAM. You do not need one byte per square to **search** — you need fast answers to “is this column or diagonal already taken?” Byte tables indexed by column or by diagonal id are enough. Chapter 4's masks would pack each `col_used` row into one bit per column (a **bitboard** per row); the companion uses whole bytes for clarity so every test is `ld a, (hl)` / `or a` / `jr nz`.
+You do not need one byte per square to **search**; you need fast answers to “is this column or diagonal already taken?” Chapter 4's masks would pack each `col_used` row into one bit per column (a **bitboard** per row); the companion uses whole bytes for clarity so every test is `ld a, (hl)` / `or a` / `jr nz`.
 
-The companion keeps separate `.ds` labels for teaching clarity. In a larger project you can fold the workspace into one record and name every field offset once — the same idiom as the ring buffer in Chapter 5:
+The companion keeps separate `.ds` labels for teaching clarity. In a larger project you can fold the workspace into one record and name every field offset once, the same idiom as the ring buffer in Chapter 5:
 
 ```asm
 QueenWorkspace .type
@@ -70,17 +70,15 @@ QS_COLS     .equ offset(QueenWorkspace, queen_cols)
 ; ... then (ix + QS_COLS) instead of a global queen_cols label
 ```
 
-Layout types scale to whole workspace regions: one `.type`, one base label, constants for every inner field — still plain Z80 in the listing.
-
-`queen_cols` updates whenever you commit a placement so the last completed board is visible when the count finishes. Counting all solutions does not require printing the board.
+`queen_cols` updates whenever you commit a placement so the last completed board is visible when the count finishes.
 
 ---
 
 ## Constraint checks as small routines
 
-Split the hot path into routines with explicit `.routine` contracts — the same discipline as `gcd_u16`, `ring_push` and `factorial_u8`.
+Split the hot path into routines with explicit `.routine` contracts, the same discipline as `gcd_u16`, `ring_push` and `factorial_u8`.
 
-**Column free** — index `col_used` with `C`:
+**Column free** (index `col_used` with `C`):
 
 ```asm
 ; col_free: is column C unused?
@@ -94,7 +92,7 @@ col_free:
     ret
 ```
 
-**Forward diagonal** — index `row + col` into `diag_sum_used`:
+**Forward diagonal** (index `row + col` into `diag_sum_used`):
 
 ```asm
 ; diag_sum_free: is forward diagonal (row+col) unused?
@@ -111,7 +109,7 @@ diag_sum_free:
     ret
 ```
 
-**Backward diagonal** — use `row - col + DIAG_BIAS` so the index stays in range without signed arithmetic drama:
+**Backward diagonal** (use `row - col + DIAG_BIAS` so the index stays in range without signed arithmetic drama):
 
 ```asm
     ld a, b
@@ -119,9 +117,7 @@ diag_sum_free:
     sub c
 ```
 
-That value selects a slot in `diag_diff_used`.
-
-Each failed check jumps to `_next_col` in the row driver — the flat-ASM equivalent of “try the next column” without a `continue` keyword.
+Each failed check jumps to `_next_col` in the row driver, the flat-ASM equivalent of “try the next column” without a `continue` keyword.
 
 ---
 
@@ -144,15 +140,15 @@ When all three tests pass, **mark** before `call place_row` and **unmark** after
     pop bc
 ```
 
-`mark_constraints` sets `col_used[c]`, both diagonal bytes and `queen_cols[row]`. `unmark_constraints` clears the flags but leaves `queen_cols` overwritten on the next successful mark — fine for counting.
+`mark_constraints` sets `col_used[c]`, both diagonal bytes and `queen_cols[row]`. `unmark_constraints` clears the flags but leaves `queen_cols` overwritten on the next successful mark, fine for counting.
 
-`push bc` around each helper preserves **B = row** and **C = column** across `call`s that clobber AF and HL. That repetition is the cost of small, checkable routines in flat AZM; Chapter 7's alternative is one larger routine with fewer calls.
+`push bc` around each helper preserves **B = row** and **C = column** across `call`s that clobber AF and HL.
 
 ---
 
 ## Recursive `place_row`
 
-**Contract:** B = current row (0..7). At row `BOARD_SIZE`, a full placement was found — increment the global counter. Otherwise try every column on this row.
+**Contract:** B = current row (0..7). At row `BOARD_SIZE`, a full placement was found; increment the global counter. Otherwise try every column on this row.
 
 ```asm
 ; place_row: assign a queen to row B; count solutions at row BOARD_SIZE
@@ -178,7 +174,7 @@ _done:
     ret
 ```
 
-**Base case:** `b == 8` — all rows assigned. `count_solution` bumps the 16-bit `solution_count` at `$8000`.
+**Base case:** `b == 8`, all rows assigned. `count_solution` bumps the 16-bit `solution_count` at `$8000`.
 
 **Recursive step:** valid column → mark → `inc b` → `call place_row` → unmark → next column.
 
@@ -190,11 +186,9 @@ PLACE_MAX_DEPTH   .equ BOARD_SIZE + 1
 STACK_TOP         .equ $9FFF
 ```
 
-`main` sets `ld sp, STACK_TOP` before the first `call`, as in Chapter 6. Nine levels × four bytes is trivial on a 64K map; the habit matters when depth grows.
-
 ### Stopping at the first solution
 
-The companion counts **all** 92 solutions. To stop after the first, add a `found` byte in workspace, set it in `count_solution` and after `call place_row` in the column loop load `found` and `ret` early from `place_row` when it is non-zero — propagating the flag up every return, because `ret` only exits one frame. In AZM you use explicit memory and branches for this early-exit state.
+To stop after the first, add a `found` byte in workspace, set it in `count_solution` and after `call place_row` in the column loop load `found` and `ret` early from `place_row` when it is non-zero, propagating the flag up every return, because `ret` only exits one frame.
 
 ---
 
@@ -263,19 +257,6 @@ From the AZM source tree:
 npm run azm -- /path/to/azm-book/book3/examples/09_eight_queens.asm
 ```
 
-No port I/O — inspect RAM in the emulator.
-
----
-
-## Summary
-
-- **Eight queens** with one queen per row becomes a search over column choices with three constraint tables.
-- **Backtracking** requires symmetric **mark** and **unmark** around each recursive `call`.
-- **Byte tables** index columns and diagonals; `queen_cols` stores the placement per row.
-- **`place_row`** is depth-first recursion with base case `row == BOARD_SIZE` and a column loop on each level.
-- **`solution_count`** in RAM replaces console output when you have no print routine.
-- Decompose checks into routines with **`.routine` contracts** so callers know register roles and clobbers.
-
 ---
 
 ## Exercises
@@ -291,11 +272,9 @@ No port I/O — inspect RAM in the emulator.
 
 ## What you learned in Book 3
 
-You started Book 3 with arithmetic conventions and register contracts on small routines. You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts** — choosing the representation that fits each problem.
+You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts**, choosing the representation that fits each problem.
 
-Flat AZM never hid control flow behind syntax. Every `call` and every byte in `col_used` is in the listing you assemble. That is the trade this part teaches: more typing, full ownership.
-
-Book 2 gave you the CPU and the tooling. Book 3 showed how algorithms look when you own the data layout first. The next step is a project of your own — a buffer, a parser, a game board — where you pick the representation, write the `.routine` lines and let the emulator prove the invariant.
+The next step is a project of your own (a buffer, a parser, a game board) where you pick the representation, write the `.routine` lines and let the emulator prove the invariant.
 
 ---
 

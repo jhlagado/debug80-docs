@@ -9,15 +9,13 @@ nav_order: 6
 
 # Inspect a running program
 
-You can examine a paused program from several angles at once. VS Code contributes the panels you already know - Variables, Watch and Call Stack - and Debug80 adds its own Registers, Memory, Machine and Displays sections, which show the Z80 and the board rather than the abstractions above them.
+VS Code contributes the panels you already know (Variables, Watch and Call Stack) and Debug80 adds its own Registers, Memory, Machine and Displays sections, which show the Z80 and the board rather than the abstractions above them.
 
 ## Symbols and Constants in Variables
 
 The **Variables** panel shows source-map-backed **Symbols** and **Constants** after a successful build. Constants show their assembled value. Memory-backed symbols show their address, current bytes, readable ASCII where there is any, and source location.
 
 ![Symbols and Constants in the Variables panel](../../assets/images/debug80-book/book1/variables-symbols.svg)
-
-Both scopes come from the last successful build, so they are as current as your source map is.
 
 ## Watch expressions
 
@@ -29,8 +27,6 @@ Appendix A lists the full expression language, which Watch shares with condition
 
 The **Call Stack** view names the current Z80 frame from the nearest known symbol in the source map. `ScanHello+3` means the PC is three bytes past the `ScanHello` label. Frames below it come from the monitor and library source.
 
-Right-click any frame and choose **Run to Here** to continue until execution returns to it.
-
 ## Registers
 
 Debug80 keeps the CPU registers in their own **Registers** section: the pairs `BC`, `DE`, `HL`, `AF`, `IX`, `IY`, the shadow set `BC'`, `DE'`, `HL'`, `AF'`, and `PC` and `SP`. The interrupt and refresh registers `I` and `R` are shown but not editable.
@@ -39,11 +35,11 @@ Debug80 keeps the CPU registers in their own **Registers** section: the pairs `B
 
 Step the program and watch PC move.
 
-These fields are editable while the program is paused. Click one, type a new value, and press **Enter** to commit or **Escape** to revert. The flag strings beside the pairs are editable the same way, so you can set or clear a flag and continue to see which branch the program takes. Changing a register mid-run is a quick way to reach a state that would otherwise take a long path to reproduce.
+These fields are editable while the program is paused. Click one, type a new value, and press **Enter** to commit or **Escape** to revert. The flag strings beside the pairs are editable the same way, so you can set or clear a flag and continue to see which branch the program takes.
 
 ## Memory
 
-The **Memory** section is four independent views, labelled **A** to **D**, which default to following `PC`, `SP`, `HL` and `DE`. Four at once means you can watch the instruction stream, the stack and two data pointers without constantly retyping addresses.
+The **Memory** section is four independent views, labelled **A** to **D**, which default to following `PC`, `SP`, `HL` and `DE`.
 
 ![The four memory views, each with its own anchor](../../assets/images/debug80-book/book1/panel-memory-views.svg)
 
@@ -51,7 +47,7 @@ Each view has an anchor box that accepts three kinds of thing:
 
 - a register name, so the view follows that register as it changes
 - a symbol from the source map, such as `SevenSegHello`
-- an absolute address - plain hex, `0x`-prefixed, or `d:` followed by a decimal number
+- an absolute address: plain hex, `0x`-prefixed, or `d:` followed by a decimal number
 
 Beside the anchor, Debug80 shows the resolved address and the nearest symbol with an offset.
 
@@ -73,8 +69,6 @@ Read-only memory locked
 
 The **Machine** section shows the front-panel parts of the TEC-1G: the 20x4 LCD, the six seven-segment digits and the hex keypad.
 
-Programs usually reach these through MON-3 services, so LCD writes and seven-segment scan loops show up here as the program runs.
-
 ## Displays
 
 The **Displays** section holds the rest of the TEC-1G's output: the speed and mute controls, the status and memory-bank indicators, the 128x64 GLCD and the 8x8 RGB LED matrix.
@@ -95,18 +89,7 @@ When the Matrix Keyboard section is open, a small pill tells you which surface c
 
 Leave the Joystick section open and the joystick takes physical keys ahead of the keypad. When keypad keys seem to do nothing, that is usually the reason: collapse Joystick, or click the keypad first.
 
-On macOS, Command chords are deliberately left alone. The matrix keyboard ignores them, so **Command-S** and **Command-P** stay VS Code shortcuts while the emulator has focus. Control-letter chords do route to the matrix, which is how a TEC-1G program sees them.
-
-## Summary
-
-- Variables, Watch and Call Stack are source-map backed; they are only as current as the last build.
-- Register pairs, the shadow set, PC, SP and the flag strings are **editable while paused**. `I` and `R` are read-only.
-- Memory is **four independent views**, A to D, defaulting to PC, SP, HL and DE.
-- An anchor accepts a register, a symbol, or an address as hex, `0x…` or `d:` decimal.
-- Memory bytes are editable while paused. ROM refuses edits unless **Unlock read-only memory** is ticked.
-- The Machine and Displays sections show the LCD, seven-segment digits, keypad, GLCD and RGB matrix, with duty-cycle brightness.
-- One surface owns the keyboard at a time; **Ctrl-Escape** releases the matrix, and an open Joystick section outranks the keypad.
-- macOS Command chords stay with VS Code; Control-letter chords reach the matrix.
+On macOS the matrix keyboard ignores Command chords, so **Command-S** and **Command-P** stay VS Code shortcuts while the emulator has focus. Control-letter chords do route to the matrix, which is how a TEC-1G program sees them.
 
 ---
 

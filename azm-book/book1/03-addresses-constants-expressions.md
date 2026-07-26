@@ -10,8 +10,6 @@ nav_order: 3
 
 Assembly programs need two kinds of names: names for places (where in memory does this code go?) and names for values (what does this number mean?).
 
-Every computation in this chapter resolves to a plain integer before the binary is written. The Z80 sees only the resulting bytes.
-
 ---
 
 ## `.org` sets the assembly address
@@ -38,13 +36,13 @@ Result:
         .db 0
 ```
 
-The code assembles at `$0100`. The data byte assembles at `$8000`. Both land in the same output binary at their respective offsets.
+The code and the data byte land in the same output binary at their respective offsets.
 
-`.org` sets the assembly address — the address assigned to the next byte — not the byte's position in the output file. It emits nothing itself. AZM warns when a new `.org` overlaps already-assembled bytes.
+`.org` sets the assembly address (the address assigned to the next byte), not the byte's position in the output file. It emits nothing itself. AZM warns when a new `.org` overlaps already-assembled bytes.
 
 ## `$` — the current assembly address
 
-`$` evaluates to the current assembly address at the point it appears. Use it whenever you want to know how many bytes sit between two points in your source.
+`$` evaluates to the current assembly address at the point it appears.
 
 **Table length:**
 
@@ -66,7 +64,7 @@ CodeEnd:
 CODE_SIZE   .equ CodeEnd - CodeStart
 ```
 
-`CODE_SIZE` evaluates to the byte count between the two labels. Use label subtraction rather than `$ - 0` so the intent is clear and the result stays correct when the code moves.
+Use label subtraction rather than `$ - 0` so the intent is clear and the result stays correct when the code moves.
 
 ## Gaps between origins
 
@@ -83,8 +81,6 @@ When you use two `.org` directives with a gap between them, the binary output ma
         .binto $0200
 ```
 
-The binary contains the bytes between the two addresses.
-
 ## `.align`
 
 ```asm
@@ -97,7 +93,7 @@ Advances the assembly address to the next multiple of 16, inserting zero bytes t
 
 ## Constants with `.equ`
 
-`.equ` binds a name to a constant expression. It emits nothing. The name becomes a synonym for the value, usable in any expression context — instruction operands, data directives, storage counts, layout sizes and other `.equ` expressions.
+`.equ` binds a name to a constant expression. It emits nothing. The name becomes a synonym for the value, usable in any expression context: instruction operands, data directives, storage counts, layout sizes and other `.equ` expressions.
 
 The canonical form:
 
@@ -284,7 +280,7 @@ GREEN .equ 1
 BLUE  .equ 2
 ```
 
-This works, but the values are yours to maintain. Insert `YELLOW` between `RED` and `GREEN` and you have to renumber `GREEN`, `BLUE` and everything that follows.
+Insert `YELLOW` between `RED` and `GREEN` and you have to renumber `GREEN`, `BLUE` and everything that follows.
 
 An enum groups related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second and so on:
 
@@ -292,7 +288,7 @@ An enum groups related constants under a single name and assigns their values au
 Mode .enum Read, Write, Append
 ```
 
-The name comes first, then `.enum`, then a comma-separated member list. Each member gets a qualified name — the group name, a dot and the member name:
+The name comes first, then `.enum`, then a comma-separated member list. Each member gets a qualified name, formed from the group name, a dot and the member name:
 
 | Name | Value |
 |------|-------|
@@ -356,7 +352,7 @@ CmdTable:
 
 ### When to use enums
 
-Use enums for any small set of named states, command codes, token kinds or hardware-mode values where a dense sequence is natural. `State.Dead` reads more clearly than `cp 3`; add or reorder members and every use updates automatically. For values that need specific numbers — port addresses, bitmasks, hardware registers — use `.equ`. At runtime, an enum value is an ordinary byte; validate inputs before dispatching on them.
+Use enums for any small set of named states, command codes, token kinds or hardware-mode values where a dense sequence is natural. `State.Dead` reads more clearly than `cp 3`. For values that need specific numbers (port addresses, bitmasks, hardware registers), use `.equ`. At runtime, an enum value is an ordinary byte; validate inputs before dispatching on them.
 
 ---
 

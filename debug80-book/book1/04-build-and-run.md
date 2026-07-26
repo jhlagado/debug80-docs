@@ -9,13 +9,13 @@ nav_order: 4
 
 # Build and run
 
-The panel has two buttons that look similar and do different things. **Build** assembles your program. **Run** assembles it and starts the emulated machine. A successful build looks like nothing happening, so the difference is easy to miss until you know it.
+**Build** assembles your program. **Run** assembles it and starts the emulated machine.
 
 ## Build
 
 Select the `main` target and click **Build**.
 
-Debug80 hands your entry file to the assembler, writes the output into the target's `outputDir`, and stops. No emulator opens. The panel reports what happened on its own line:
+Debug80 hands your entry file to the assembler, writes the output into the target's `outputDir`, and stops. The panel reports what happened on its own line:
 
 ```text
 Build succeeded: build/main.hex
@@ -38,9 +38,9 @@ build/
 
 ![The assembler reads source and writes a hex file and a source map](../../assets/images/debug80-book/book1/source-azm-artifacts.svg)
 
-Two of these matter immediately. `main.hex` is what runs, on the emulator and on real hardware alike. `main.d8.json` is the **source map**, and it is what makes source-level debugging possible: it records which addresses came from which lines of which files. Without it Debug80 can still run your program but cannot show you where it is.
+`main.hex` is what runs, on the emulator and on real hardware alike. `main.d8.json` is the **source map**, and it is what makes source-level debugging possible: it records which addresses came from which lines of which files.
 
-A Glimmer target produces a slightly different set. It emits the generated assembly as `main.asm` alongside the hex, binary and source map, and no listing or contracts report.
+A Glimmer target emits the generated assembly as `main.asm` alongside the hex, binary and source map, and no listing or contracts report.
 
 ## The source map status line
 
@@ -66,15 +66,13 @@ Anything other than `current` means breakpoints and stepping may land in the wro
 
 Now click **Run**.
 
-Debug80 builds the target, then launches it: it loads the monitor ROM and your program into an emulated TEC-1G and starts a debug session. The panel fills with the machine - an LCD, six seven-segment digits, a hex keypad, and below them the displays section with the 8x8 RGB matrix.
-
-The starter program writes `Debug80 TEC-1G` to the LCD and scans `HELLO` across the seven-segment display.
+Debug80 builds the target, then launches it: it loads the monitor ROM and your program into an emulated TEC-1G and starts a debug session.
 
 ![The panel after a successful build](../../assets/images/debug80-book/book1/panel-state-ready.svg)
 
 ![The emulated TEC-1G running the starter program](../../assets/images/debug80-book/book1/machine-running.svg)
 
-**Run** is also the session indicator. It changes colour rather than label: grey when nothing is running, amber while starting, green while running, blue when paused at a breakpoint. Both buttons are disabled while a session is starting.
+**Run** changes colour rather than label: grey when nothing is running, amber while starting, green while running, blue when paused at a breakpoint. Both buttons are disabled while a session is starting.
 
 If a session is already running, **Run** stops it and starts again, so after an edit one press gets you the new build on a fresh machine.
 
@@ -82,46 +80,33 @@ If a session is already running, **Run** stops it and starts again, so after an 
 
 ## Build or run
 
-Use **Run** while you are writing a program. It builds and shows you the result.
+Use **Run** while you are writing a program.
 
-Use **Build** when you want the artifacts and not the machine - before sending a HEX file to real hardware, when you only want to know whether the code assembles, or when you are working on a target that is not the one you are currently debugging.
+Use **Build** when you want the artifacts and not the machine: before sending a HEX file to real hardware, when you only want to know whether the code assembles, or when you are working on a target that is not the one you are currently debugging.
 
 ## Rebuild on save
 
 While a session is running, saving any `.asm`, `.z80`, `.inc` or `.glim` file in the project triggers a rebuild automatically, a moment after you stop typing. Errors appear in the Problems panel as they would from a manual build.
 
-This keeps the source map honest, so the debugger keeps landing on the right lines.
-
 ## Stop on entry
 
-The **Stop on entry** checkbox pauses the program at its entry point instead of letting it run. It is useful when you want to step from the very first instruction.
+The **Stop on entry** checkbox pauses the program at its entry point instead of letting it run.
 
-It applies to this VS Code window for as long as it is open. Debug80 does not write it into `debug80.json`, because it is a debugging preference rather than a property of the project.
+It applies to this VS Code window for as long as it is open.
 
 ## The other three controls
 
-The row below **Stop on entry** holds **Register Contracts**, **Contract Updates** and **Strict labels**. They are assembler settings.
+The row below **Stop on entry** holds **Register Contracts**, **Contract Updates** and **Strict labels**.
 
-One is worth knowing now. **Register Contracts** defaults to Enforce, which means AZM checks how your routines use registers and fails the build when it proves a conflict. If a build fails complaining about registers rather than syntax, that is the control responsible, and setting it to Audit reports the problem without stopping you. It is also why a build writes `main.regcontracts.txt`.
+**Register Contracts** defaults to Enforce, which means AZM checks how your routines use registers and fails the build when it proves a conflict. If a build fails complaining about registers rather than syntax, that is the control responsible, and setting it to Audit reports the problem without stopping you. It is also why a build writes `main.regcontracts.txt`.
 
 [Appendix D](appendices/d-azm-options-row.md) covers all three: what they change, which of them can rewrite your source, and which one is saved into `debug80.json`.
 
 ## Reading the state as data
 
-Everything the panel shows is also available as data. Run **Debug80: Copy Project Status (JSON)** from the Command Palette and the panel's full view of the project - its state, the target list, the selected target, and the build, source map and hardware status - goes to your clipboard as JSON.
+Run **Debug80: Copy Project Status (JSON)** from the Command Palette and the panel's full view of the project (its state, the target list, the selected target, and the build, source map and hardware status) goes to your clipboard as JSON.
 
-That is mostly there for scripts and tests. It is also the fastest way to answer "what does Debug80 actually think is going on" when something looks wrong.
-
-## Summary
-
-- **Build** assembles and stops. **Run** assembles, loads and starts the emulated machine. **F5** is **Run**.
-- A build writes `.hex`, `.bin`, `.d8.json`, `.lst` and a contracts report into the target's output folder.
-- `main.d8.json` is the source map, and source-level debugging depends on it.
-- The source-map status line has five states; anything but `current` means stepping may mislead you.
-- **Run** doubles as the session light: grey, amber, green, blue.
-- Saving a source file during a session rebuilds automatically.
-- **Stop on entry** pauses at the entry point and lasts for the window, not the project.
-- **Debug80: Copy Project Status (JSON)** puts the panel's whole state on the clipboard.
+It is the fastest way to answer "what does Debug80 actually think is going on" when something looks wrong.
 
 ---
 

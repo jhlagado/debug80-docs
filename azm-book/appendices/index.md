@@ -10,10 +10,6 @@ has_toc: false
 
 Use these appendices as lookup material for the whole AZM book series.
 
-The books should still be read in order when you are learning from scratch. The
-appendices are not another teaching volume. They are the tables and reference
-pages you flip back to when you need a quick answer.
-
 ---
 
 ## Appendix Table
@@ -29,14 +25,8 @@ pages you flip back to when you need a quick answer.
 
 ## Scope
 
-These appendices are course-wide. They are meant to help with:
+These appendices help with:
 
 - fast lookup while reading any AZM book
 - checking a mnemonic or operand form without leaving the book
 - remembering the small exceptions the Z80 instruction set is full of
-
-The last appendix is intentionally searchable by mnemonic. It is not a
-cycle-count reference and it is not a dump of every emulator- or firmware-
-specific opcode alias. It is a course-side reference for the **classic Z80**
-instruction set, including the undocumented forms that are commonly treated as
-part of that classic machine model.

@@ -5,27 +5,24 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 5
 ---
 
-[Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)
+[← Pulses and Bindings](04-pulses-and-bindings.md) | [Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)
 
 # Chapter 5 - Compute, Effect, Render
 
 Rover's blocks do two different jobs: five of them change facts, one
-of them draws. Games have a third job, quieter than either - facts
+of them draws. Games have a third job, quieter than either: facts
 computed *from other facts*. A score implies a difficulty. A count
 implies a bar length. A position implies which board cell the player
 occupies.
 
-That third job differs in kind from the rules you have been writing.
 A rule, as chapter 1 defined it, is a decision the game makes when a
-moment arrives: move or stay at the wall, score or miss. A derived
-fact involves no decision. The bar length is always the count divided
-by eight - chosen by nobody, waiting on no moment - the same
-information restated, a definition the program keeps current. So the
+moment arrives: move or stay at the wall, score or miss. A derivation
+is not a decision at all. The bar length is always the count divided
+by eight, chosen by nobody and waiting on no moment: the same
+information restated in the form the screen wants. So the
 three jobs of a game come apart cleanly: rules decide, derivations
 restate, and pictures depict. Glimmer gives each one its own block
-keyword and runs them in a fixed order every frame. This chapter
-covers that order and the delivery model behind it. After it, the
-constructs still ahead build on machinery you already understand.
+keyword and runs them in a fixed order every frame.
 
 ## Meter
 
@@ -115,8 +112,8 @@ begin
 end
 ```
 
-One keyword in that file is new to you: `compute`. Look at what
-`DeriveBar` does. It holds no game rule and it draws no picture - its
+One keyword in that file is new to you: `compute`. `DeriveBar` holds
+no game rule and it draws no picture; its
 whole job is to maintain a fact that follows from another fact, the
 bar length that `Count` implies. When Count's change reaches the
 compute phase, `DeriveBar` recalculates `BarLen` before the render
@@ -137,21 +134,22 @@ jobs in a fixed order, the same order in every Glimmer program.
 3. **render** blocks run last: facts turned into pictures after the
    frame's compute and effect passes.
 
-Each keyword also enforces its job. A `render` block takes no
-`updates` line - depicting the world is its whole job, and the
-compiler holds it to that. A
-`compute` block requires one - producing a fact is its purpose. An
+A `render` block takes no
+`updates` line, since depicting the world is its whole job, and the
+compiler holds it to that; a `compute` block is required to have one,
+because producing a fact is its purpose. An
 `effect` sits in the middle and does what rules do: consumes moments,
 changes facts.
 
 The order gives you a scheduling guarantee: **each block runs at most
 once per frame, and one change reaches all its dependents together.**
 When every dependent is in a later phase, they receive it this frame;
-otherwise they receive it at the next frame's start. A render runs
-after the compute and effect passes, but it reads live memory rather
-than a snapshot. A chain of derivations, a compute feeding a compute,
+otherwise they receive it at the next frame's start. A chain of
+derivations, a compute feeding a compute,
 therefore advances one step per frame, so a two-stage consequence
-reaches the screen two frames after its cause. Glimmer promises the
+reaches the screen two frames after its cause. A render runs after
+the compute and effect passes, and it reads live memory rather than a
+snapshot. Glimmer promises the
 trigger schedule; the Z80 bodies still determine the values.
 
 The frame you toured in chapter 2 has grown its full shape. From
@@ -177,27 +175,28 @@ merge calls the next section is about.
 
 Chapter 2 left one thing unfinished: `GlimEndFrame` handed `Next0`
 into `Changed0`, with the reason held back for a program that needed
-it. Meter is that program. A block's `updates`
+it. A block's `updates`
 line marks facts changed; the question is *when* the dependents see
 the change, and the answer is one rule:
 
-**A change is delivered exactly once - to later phases in the same
+**A change is delivered exactly once: to later phases in the same
 frame, otherwise in the next frame.**
 
-The first half of the rule is the comfortable half. `DeriveBar`
-updates `BarLen`, and BarLen's one dependent is `DrawBar`, a render -
-a later phase. So the change is delivered the same frame: raise the
+`DeriveBar`
+updates `BarLen`, and BarLen's one dependent is `DrawBar`, a render,
+which is a later phase. So the change is delivered the same frame: raise the
 bar with plus, and the compute that resizes it and the render that
 draws it happen in one frame.
 
 The second half is subtler, and worth two walks. First, from inside
 the frame. `Increase` updates `Count`, and Count has two dependents:
-`ShowCount`, a render, which runs later this frame - and `DeriveBar`,
-a compute, which ran *before* the logic phase this frame. One of the
-dependents has already had its turn. Deliver to the render now and to
-the compute next frame, and you have split one change in two - digits
-showing the new count above a bar still sized for the old one. So the
-whole change waits. Every dependent of `Count` sees it at the start
+`ShowCount`, a render, which runs later this frame, and `DeriveBar`,
+a compute, which ran *before* the logic phase this frame. Deliver to
+the render now and to
+the compute next frame, and you have split one change in two: digits
+showing the new count above a bar still sized for the old one. So
+Glimmer defers the whole change. Every
+dependent of `Count` sees it at the start
 of the next frame: once, together.
 
 You can read both halves of the rule straight out of the generated
@@ -224,38 +223,35 @@ Two staging bytes stand beside `Changed0`. `Raised0` holds same-frame
 deliveries, and the `GlimMergeRaised` calls between phases fold it
 into `Changed0` so the next phase sees it. `Next0` holds deferred
 deliveries, and `GlimEndFrame` rolls it into `Changed0` as the next
-frame begins - the handoff you saw in chapter 2, now with its reason
+frame begins, the handoff you saw in chapter 2, now with its reason
 attached.
 
 Now the second walk, from the keypad this time, one frame at a time.
 You press plus. On that frame `IncP` fires, `Increase` runs, and
 Count's change goes into `Next0` and waits. On the following frame
 the change is in `Changed0` from the start: `DeriveBar` runs and
-resizes `BarLen` - a same-frame delivery to a later phase - so
+resizes `BarLen` (a same-frame delivery to a later phase), so
 `DrawBar` redraws the bar, and `ShowCount` rewrites the digits.
-Digits and bar move together, one frame after the pulse, every time.
-A chain that points backward - logic feeding a compute - advances one
-step per frame instead of tangling. A frame is one forward pass, and
-every block runs at most once per frame.
+A chain that points backward, logic feeding a compute, advances one
+step per frame instead of tangling.
 
 The rule means **declaration order does not control when an update is
 delivered.** Move `DeriveBar` to the bottom of the file and every
 delivery lands on the same frames as before, so you can organise your
-source for the person reading it - rules together, renders together,
+source for the person reading it: rules together, renders together,
 whatever tells the story best. The promise has a boundary, though: it
 covers triggers. Bodies are real Z80 working on live memory, and
 within one phase the dispatchers call blocks in file order, so two
 same-phase blocks that read and write the same cell directly can still
 see each other's work. In practice: keep one gameplay invariant inside
 one effect, or inside a routine it calls, and the boundary never
-bites. This is chapter 1's spreadsheet again: it fixes *when* formulas
-recompute; what your code does while it runs stays yours.
+bites.
 
 ## The program, as a report
 
 The chain you have been tracing by eye all chapter, Glimmer will
 print for you on request. The request comes from Glimmer's command
-line - the first time this book has needed it, and Appendix D covers
+line (the first time this book has needed it), and Appendix D covers
 getting it in one line:
 
 ```sh
@@ -280,27 +276,9 @@ program Meter
 
 Every fact, who raises it, what it triggers, and each dependent's
 phase: the program's whole design, computed from the `on`, `updates`,
-and `bind` lines you already wrote. There is nothing to maintain and
-nothing to drift out of date. When a program misbehaves, this report
+and `bind` lines you already wrote. When a program misbehaves, this report
 and the question *which fact failed to change?* find most bugs before
 the debugger opens. Chapter 11 builds a debugging practice on it.
-
-## Summary
-
-- Three block kinds for three jobs: `compute` derives facts from
-  facts, `effect` applies rules to moments, `render` draws. The frame
-  runs them in that order, so render dispatch follows the compute and
-  effect passes.
-- `render` takes no `updates`; `compute` requires one. The keyword
-  enforces the job.
-- Delivery is exactly once: changes reach later phases the same frame,
-  and otherwise wait - whole - for the next frame's start. `Raised0`
-  and `Next0` are the two staging bytes that implement the rule.
-- Declaration order does not control delivery. Bodies run on live
-  memory in dispatch order, so keep one gameplay invariant inside one
-  effect. Backward chains advance one step per frame.
-- `glimmer --deps` prints the reactive graph: every fact's raisers and
-  dependents, straight from the declarations.
 
 Next, the display gets a chapter of its own: what
 [the 8x8 matrix profile](06-the-matrix-profile.md) builds, and every
@@ -308,4 +286,4 @@ way to put light on it.
 
 ---
 
-[Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)
+[← Pulses and Bindings](04-pulses-and-bindings.md) | [Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)

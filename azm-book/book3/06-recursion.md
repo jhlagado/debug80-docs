@@ -8,9 +8,9 @@ nav_order: 7
 
 # Chapter 6 — Recursion
 
-Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. The routines called other routines, but never themselves. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
+Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
 
-Recursion is not a separate Z80 feature. It is nested `call` with a finite base case, and the **hardware stack** holding one return address per active call. You must budget that stack at assembly time — the CPU will not warn you before it overwrites something else.
+It is nested `call` with a finite base case, and the **hardware stack** holding one return address per active call. You must budget that stack at assembly time; the CPU will not warn you before it overwrites something else.
 
 The companion listing is [`examples/06_factorial.asm`](examples/06_factorial.asm).
 
@@ -26,22 +26,18 @@ Many definitions refer to themselves:
 
 Each case splits the input into a smaller instance of the same problem plus a small amount of local work. The **base case** is the size where you return immediately without another `call`.
 
-Iterative loops from Chapters 1–2 already do this with registers and workspace. Recursion makes the "smaller problem" explicit as another `call`. The trade is stack space and call overhead in exchange for a definition that mirrors the math.
+Iterative loops from Chapters 1–2 already do this with registers and workspace. Recursion makes the "smaller problem" explicit as another `call`.
 
 ---
 
 ## The stack as an explicit resource
 
-Book 2 Chapter 8 introduced the stack for `call` / `ret` and for `push` / `pop`. Book 2 Chapter 11 added the **IX frame** when a routine needs stack-backed locals that survive nested calls.
-
 For recursion, treat the stack like any other fixed resource:
 
 1. **Initialize SP** before the first `call` (`ld sp, STACK_TOP`).
-2. **Count bytes per frame** — return address (2), plus any `push` / IX frame / `dec sp` locals you add on entry.
-3. **Bound depth at compile time** — the largest argument your demo passes, or a named `.equ` limit you refuse to exceed.
+2. **Count bytes per frame**: return address (2), plus any `push` / IX frame / `dec sp` locals you add on entry.
+3. **Bound depth at compile time**: the largest argument your demo passes, or a named `.equ` limit you refuse to exceed.
 4. **Compare** `max_depth × frame_bytes` to the RAM below `STACK_TOP` and above your workspace and data.
-
-The Z80 has no stack-overflow trap. When SP walks into `values` or `ring_state`, the program keeps running; the failure shows up as wrong data, not as a clean error.
 
 ### Frame size example: `factorial_u8`
 
@@ -62,13 +58,11 @@ FACT_MAX_DEPTH   .equ FACT_N + 1
 STACK_TOP        .equ $9FFF
 ```
 
-Before calling `factorial_u8` from `main`, set `ld sp, STACK_TOP`. On paper, `FACT_MAX_DEPTH × FACT_FRAME_BYTES` must fit in the stack region you reserved. Chapter 6's demo uses `FACT_N = 5` → six frames → 24 bytes of stack traffic, which is trivial on a 64K map; the habit matters when depth reaches dozens in later chapters.
+Chapter 6's demo uses `FACT_N = 5` → six frames → 24 bytes of stack traffic.
 
 ---
 
 ## Recursive factorial and its iterative twin
-
-Wirth's programs are often shown twice: a recursive definition and an equivalent loop. Comparing them in AZM makes the costs visible.
 
 ### Recursive version
 
@@ -132,7 +126,7 @@ _iter_one:
     ret
 ```
 
-`E` holds the running product; `C` counts down from `n`. Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
+Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
 
 ### Compare
 
@@ -149,9 +143,9 @@ _iter_one:
 
 ## Preserving results across inner calls
 
-The inner `call factorial_u8` returns \((n-1)!\) in **A**. The outer level still needs **B** = \(n\) for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `.routine` block.
+The outer level still needs **B** = \(n\) for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `.routine` block.
 
-If you made a second recursive call before storing the first result, you would have the same problem with **HL** — the register used for 16-bit results in Book 3. Pattern:
+If you made a second recursive call before storing the first result, you would have the same problem with **HL**, the register used for 16-bit results in Book 3. Pattern:
 
 ```asm
     call first_rec
@@ -161,7 +155,7 @@ If you made a second recursive call before storing the first result, you would h
     ; reload first result before combining
 ```
 
-The IX frame from Book 2 Chapter 11 is the structured way to hold those slots when a routine needs several locals that must survive multiple `call`s — for example, Towers of Hanoi with two recursive counts before combining. This chapter's factorial only needs one saved register pair; `push bc` is enough.
+The IX frame from Book 2 Chapter 11 is the structured way to hold those slots when a routine needs several locals that must survive multiple `call`s (for example, Towers of Hanoi with two recursive counts before combining). This chapter's factorial only needs one saved register pair; `push bc` is enough.
 
 ---
 
@@ -237,9 +231,9 @@ Add two extra habits for self-calls:
 1. **Say it is recursive** in the human comment (`; Self-call; ...`) so a reader knows stack math applies.
 2. **Document stack budget** in `.equ` constants (`FACT_FRAME_BYTES`, `FACT_MAX_DEPTH`) or in the comment block, not in a magic number buried in `main`.
 
-Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it — same rule as Chapter 11.
+Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it, same rule as Chapter 11.
 
-Internal labels use owner-local names such as `_one` and `_zero`. Use `@` only for a symbol that another source unit imports.
+Internal labels use owner-local names such as `_one` and `_zero`.
 
 ---
 
@@ -259,8 +253,6 @@ Defenses that fit Book 3:
 - keep stack top away from `.org $8000` data (init SP to `$9FFF` or your board's RAM top)
 - prefer an iterative version when depth is unbounded (input-driven length, user data)
 - count frames on paper before embedding deep recursion in the capstone
-
-If \(n\) is only known at runtime, the iterative factorial is the safe default; recursion is for when depth is provably small.
 
 ---
 
@@ -283,9 +275,9 @@ If \(n\) is only known at runtime, the iterative factorial is the safe default; 
   lower addresses  ← SP near the bottom after pushes
 ```
 
-Each `call` pushes a return address (not shown separately from the frames above). Each active `push bc` adds two bytes. Unwind pops one frame per `ret` from the inner calls until `main` regains control.
+Each `call` pushes a return address (not shown separately from the frames above).
 
-Data at `$8000` does not move; only SP walks. That separation is why `ld sp, STACK_TOP` in `main` matters before the first recursive entry.
+Data at `$8000` does not move; only SP walks.
 
 ---
 
@@ -312,8 +304,6 @@ main:
     halt
 ```
 
-Three algorithms, one stack pointer initialization, three result labels in RAM.
-
 ---
 
 ## Examples
@@ -328,17 +318,6 @@ azm --rc warn examples/06_factorial.asm
 ```
 
 Step into `factorial_u8` with `FACT_N = 3` first: count pushes on the way down, multiplies on the way up. Then run the full file to `halt`.
-
----
-
-## Summary
-
-- **Recursion** is a subroutine that `call`s itself; the base case must return without another `call`.
-- The **stack** holds return addresses and any `push` / IX locals; budget `max_depth × frame_bytes` at compile time and init SP before the first call.
-- **`factorial_u8`** and **`factorial_iter_u8`** share a contract; comparing them shows depth vs constant stack use.
-- **`sum_u8_rec`** walks a byte table with accumulation on unwind; promote bytes into DE before `add hl, de`.
-- **Register contracts** on `.routine` entries document register roles; add human notes for self-call and stack limits.
-- **Stack overflow** corrupts RAM silently — cap depth or use iteration when input size is not bounded.
 
 ---
 

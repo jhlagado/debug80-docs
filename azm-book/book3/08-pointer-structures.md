@@ -8,9 +8,9 @@ nav_order: 9
 
 # Chapter 8 — Pointer Structures
 
-Chapter 5 packed several fields into one record, but every byte still lived in a table you indexed by number. Chapter 6 walked a byte table recursively by advancing HL. This chapter chains **nodes** through **stored addresses**: each record holds data plus a `.word` link to the next node (or zero for “none”).
+Chapter 5 packed several fields into one record, but every byte still lived in a table you indexed by number. This chapter chains **nodes** through **stored addresses**: each record holds data plus a `.word` link to the next node (or zero for “none”).
 
-The CPU still only sees bytes. A pointer is a 16-bit address copied into a `.word` field. To reach the next node, you load that word into HL and use HL the same way you used a table base in Chapter 2 — except the “next index” is whatever address was stored, not `base + stride`.
+A pointer is a 16-bit address copied into a `.word` field.
 
 The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list.asm): a static three-node list, sum and find walks and insert-at-head into a pre-allocated spare node.
 
@@ -18,9 +18,9 @@ The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list
 
 ## The problem: variable shape without shifting memory
 
-A ring buffer (Chapter 5) keeps all elements in one byte array and moves **indices**. Inserting in the middle of a plain array means copying bytes — expensive on a small machine.
+A ring buffer (Chapter 5) keeps all elements in one byte array and moves **indices**. Inserting in the middle of a plain array means copying bytes, expensive on a small machine.
 
-A **singly linked list** stores each element in its own small record. One field holds the payload; another holds the address of the next record. Insert at the **head** is a few stores: wire the new node’s link to the old head, then store the new node’s address in `list_head`. No block copy.
+A **singly linked list** stores each element in its own small record. Insert at the **head** is a few stores: wire the new node’s link to the old head, then store the new node’s address in `list_head`.
 
 The trade is explicit: you pay an extra two bytes per node for the link, and you cannot jump to “element 4” in one arithmetic step. You follow links from the head until you arrive or hit **null**.
 
@@ -41,7 +41,7 @@ LIST_NEXT   .equ offset(ListNode, next)
 NODE_SIZE   .equ sizeof(ListNode)
 ```
 
-`sizeof(ListNode)` is 3: one data byte, then a little-endian 16-bit link. The link field uses `.word` because it holds a full address — the same width as `word` and `addr` in Book 2 Chapter 13. AZM also offers `.addr` when you want the layout name to say “this field is a pointer”; for flat AZM listings, `.word` is enough as long as you treat it as an address in comments and register contracts.
+`sizeof(ListNode)` is 3: one data byte, then a little-endian 16-bit link. The link field uses `.word` because it holds a full address, the same width as `word` and `addr` in Book 2 Chapter 13. AZM also offers `.addr` when you want the layout name to say “this field is a pointer”; for flat AZM listings, `.word` is enough as long as you treat it as an address in comments and register contracts.
 
 **Null** is the address **0**. A missing next node is stored as `.dw 0`. At run time you test the pointer in HL with:
 
@@ -51,7 +51,7 @@ NODE_SIZE   .equ sizeof(ListNode)
     jr z, .at_end
 ```
 
-`or l` sets Z only when both H and L are zero — the same 16-bit zero test used throughout the course, without a 16-bit compare instruction.
+`or l` sets Z only when both H and L are zero: the same 16-bit zero test used throughout the course, without a 16-bit compare instruction.
 
 ---
 
@@ -83,8 +83,6 @@ node_spare:
     .ds ListNode
 ```
 
-Chapter 8’s demo pushes `$40` into `node_spare` at the head after the static chain is built.
-
 ### Memory diagram
 
 After assembly, RAM might look like this (addresses illustrative):
@@ -97,8 +95,6 @@ After assembly, RAM might look like this (addresses illustrative):
        │                         value  next          value  next         value  next
        └─────────────────────────┘
 ```
-
-Traversal starts by loading the word at `list_head` into HL, not by loading the address of `list_head` unless you intend to walk from a pointer variable.
 
 ```mermaid
 flowchart LR
@@ -114,7 +110,7 @@ flowchart LR
 
 ## Load the head pointer into HL
 
-`list_head` holds a word at a known label. Book 2 Chapter 4’s absolute word load applies:
+Book 2 Chapter 4’s absolute word load applies:
 
 ```asm
     ld hl, (list_head)
@@ -133,7 +129,7 @@ To read **only** the link field of the node currently in HL:
     ex de, hl          ; HL = next node address
 ```
 
-Low byte first, then high byte — Z80 little-endian order. After `ex de, hl`, HL is ready for another null test or another field access at offset 0.
+Low byte first, then high byte. That is Z80 little-endian order.
 
 ---
 
@@ -174,7 +170,7 @@ _sum_done:
 
 For the static chain `$10`, `$22`, `$30`, the result is `$003C` (60). The companion stores it in `list_sum`.
 
-This is the part that catches people coming from arrays: HL is not an index; it is a full address that changes to unrelated addresses as you follow `next`.
+HL is not an index; it is a full address that changes to unrelated addresses as you follow `next`.
 
 ---
 
@@ -212,7 +208,7 @@ _missing:
     ret
 ```
 
-Carry set means HL points at a node whose `value` matches. Carry clear means HL is 0 — including the empty list case when `list_head` was 0.
+Carry set means HL points at a node whose `value` matches. Carry clear means HL is 0, including the empty list case when `list_head` was 0.
 
 The demo searches for `$22` and expects `find_hit = 1` and `find_node` equal to the address of `node_b`.
 
@@ -262,8 +258,6 @@ After `ld de, node_spare` / `ld a, $40` / `call list_push_head`, the list order 
     call list_push_head
 ```
 
-A linear list needs no recursion; a loop mirrors the data shape. Chapter 6’s recursive table walk is the alternative when you want unwind semantics, at the cost of stack depth.
-
 ---
 
 ## Layout casts for node fields
@@ -284,7 +278,7 @@ For the head variable:
     ld hl, <word>list_head
 ```
 
-Runtime traversal cannot put HL inside brackets — use explicit `add hl, bc` with `LIST_NEXT` as the chapter routines do.
+Runtime traversal cannot put HL inside brackets; use explicit `add hl, bc` with `LIST_NEXT` as the chapter routines do.
 
 ---
 
@@ -298,7 +292,7 @@ Pointer routines follow the same `.routine` declarations as the ring buffer and 
 | `.routine out` | HL = sum, found node or 0; carry for find |
 | `.routine clobbers` | Include every register the link walk destroys |
 
-Document whether zero in HL means end-of-list or “not found” — here both use HL = 0 with carry distinguishing find success.
+Document whether zero in HL means end-of-list or “not found”. Here both use HL = 0 with carry distinguishing find success.
 
 ```sh
 azm --rc warn examples/08_linked_list.asm
@@ -318,7 +312,7 @@ right   .word
 .endtype
 ```
 
-**Insert only** (no search routine in the companion file): walk from the root in HL. If HL is null, you are done — in a static demo you pre-allocate the node and store its address from the parent. If HL is non-null, compare the new key with `(hl)` and descend to `left` or `right` using the same little-endian load as `next`, until you reach a null child slot and store the new node’s address there.
+**Insert only** (no search routine in the companion file): walk from the root in HL. If HL is null, you are done; in a static demo you pre-allocate the node and store its address from the parent. If HL is non-null, compare the new key with `(hl)` and descend to `left` or `right` using the same little-endian load as `next`, until you reach a null child slot and store the new node’s address there.
 
 ```asm
 TREE_VALUE .equ offset(TreeNode, value)
@@ -330,7 +324,7 @@ TREE_RIGHT .equ offset(TreeNode, right)
 ; This sketch assumes HL points at a node; use a separate root word in real code.
 ```
 
-The control flow is a loop, not a self-call — depth is bounded by tree height and you avoid stack cost from Chapter 6 unless you deliberately choose recursive search later. A full BST companion would also need a static node pool and a `root` word; the linked-list program is enough for one assemble-and-halt exercise.
+The control flow is a loop, not a self-call: depth is bounded by tree height and you avoid stack cost from Chapter 6 unless you deliberately choose recursive search later. A full BST companion would also need a static node pool and a `root` word.
 
 ---
 
@@ -379,17 +373,6 @@ azm --rc warn 08_linked_list.asm
 ```
 
 Single-step `list_sum_u16` once: watch HL jump from `node_a` to `node_b` to `node_c` by loading `next`, not by adding a stride to a table base.
-
----
-
-## Summary
-
-- A **pointer** in flat AZM is a 16-bit address stored in a **`.word`** field; **null** is 0, tested with `ld a, h` / `or l` / `jr z`.
-- **`.type`** describes node shape (`value` + `next`); `offset` and `sizeof` name field displacements and record size.
-- **`list_head`** holds the head address; **`ld hl, (list_head)`** loads it; link fields load with little-endian byte reads at `LIST_NEXT`.
-- **Traverse** and **find** are loops that advance HL through `next`; **insert at head** writes the new node’s link to the old head, then updates `list_head`.
-- **Static pools** (`node_a`, `node_spare`) replace a heap; wiring is your responsibility in data or init code.
-- **BST** nodes extend the same `.word` link idea with `left` and `right`; insert walks down comparisons until a null child slot accepts an address.
 
 ---
 

@@ -11,7 +11,7 @@ nav_order: 102
 
 Every command Debug80 contributes. Open the Command Palette with **Shift-Command-P** on macOS or **Shift-Control-P** on Windows and Linux, then type part of the title.
 
-Everything the panel can do is also a command. That is deliberate: it keeps the panel reachable from the keyboard, and it lets scripts and tests drive Debug80 without a mouse.
+Everything the panel can do is also a command.
 
 ## Projects and workspace folders
 
@@ -63,7 +63,7 @@ Everything the panel can do is also a command. That is deliberate: it keeps the 
 
 ## Not reachable from the palette
 
-These are registered but hidden, either because something else drives them or because they are left over from earlier work. They are listed for completeness; nothing in this book asks you to run them.
+These are registered but hidden, either because something else drives them or because they are left over from earlier work.
 
 | Command | Note |
 |---|---|
@@ -75,7 +75,7 @@ These are registered but hidden, either because something else drives them or be
 
 ## Keyboard shortcuts
 
-Debug80 contributes exactly one keybinding of its own: **F5** starts a debug session when the workspace holds a project and no session is running. Everything else uses VS Code's own debug shortcuts - **F10**, **F11**, **Shift-F11** and **F12**.
+Debug80 contributes exactly one keybinding of its own: **F5** starts a debug session when the workspace holds a project and no session is running. Everything else uses VS Code's own debug shortcuts (**F10**, **F11**, **Shift-F11** and **F12**).
 
 ---
 

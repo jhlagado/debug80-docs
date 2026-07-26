@@ -9,9 +9,7 @@ nav_order: 7
 # Chapter 7 — Data Tables and Indexed Access
 
 Once your data lives in a table, you need two things: a way to process every
-entry in order, and a way to reach one specific entry directly. HL handles the
-first — load the base, read, advance, repeat. IX handles the second — load the
-base once and name any entry by its offset from there.
+entry in order, and a way to reach one specific entry directly.
 
 ---
 
@@ -25,14 +23,11 @@ sequence of byte values:
 scores: .db 10, 20, 30, 40, 50, 60
 ```
 
-This declares six bytes of initialized storage starting at address `$8000`.
 The assembler lays them out in memory in the order listed: `$8000` holds 10,
 `$8001` holds 20, `$8002` holds 30 and so on.
 
-The name `scores` refers to the address of the first byte in the array — the
-address `$8000`. It is not the value 10. This is the difference between a table
-address and a table value: `scores` is the address where the table begins;
-`(scores)` is the first byte stored there.
+The name `scores` refers to the address of the first byte in the array, which is
+the address `$8000`. It is not the value 10. `(scores)` is the first byte stored there.
 
 Word tables work the same way, with two bytes per entry in little-endian order:
 
@@ -42,15 +37,14 @@ widths: .dw 100, 200, 300, 400
 ```
 
 `$8010` and `$8011` together hold 100 (low byte `$64` at `$8010`, high byte
-`$00` at `$8011`). Each subsequent word occupies the next two bytes.
+`$00` at `$8011`).
 
 ---
 
 ## HL-based sequential access
 
 HL holds an address. `ld a, (hl)` reads the byte at that address. `inc hl`
-advances HL to the next byte. Repeating those two operations steps through a
-byte table one entry at a time.
+advances HL to the next byte.
 
 A DJNZ loop over a byte table looks like this:
 
@@ -64,7 +58,7 @@ loop_top:
   djnz loop_top    ; repeat for all entries
 ```
 
-After the loop, HL points one byte past the last entry. The order matters: read
+The order matters: read
 the entry first (`ld a, (hl)`), process it, then advance (`inc hl`). If you
 advance before reading, you skip the first entry.
 
@@ -86,48 +80,31 @@ word_loop:
 
 ## The address vs value distinction
 
-`ld hl, scores` loads the address of the table into HL. HL now holds `$8000`,
-the memory location where the table begins. HL does not hold 10 (the first
-element's value).
+`ld hl, scores` loads the address of the table into HL. HL does not hold 10
+(the first element's value).
 
-`ld a, (hl)` reads the byte at the address in HL. Only this instruction
-produces the value stored in the table.
-
-This distinction matters most when a subroutine receives a table to process. The
-subroutine receives the address — loaded into HL or another pair by the caller —
-and uses `(hl)` to reach the values.
+Only `ld a, (hl)` produces the value stored in the table.
 
 ---
 
 ## Labels, variables and code share the same memory
 
 Assembly makes no distinction between a label that names a variable and one
-that marks a point in code. Both are memory addresses — plain 16-bit numbers. `scores` is the address where the
-table starts. `loop_top` is the address where the loop body starts. To the CPU,
-both are just numbers. You could load data from a code address, and you could
-jump to a data address. The CPU would blindly obey, attempting to execute your
-data bytes as instructions (almost certainly crashing) or overwriting your
-instructions with data values.
-
-This is one reason why testing on an emulator before running on hardware is
-sensible practice. A stray pointer that writes into the code region can corrupt
-instructions in ways that are difficult to diagnose. The Z80 has no hardware
-separation between code and data — everything is bytes in the same 64K address
-space, and it is your job to keep them organised.
+that marks a point in code. Both are memory addresses, plain 16-bit numbers. You could
+load data from a code address, and you could jump to a data address. The CPU
+would blindly obey, attempting to execute your data bytes as instructions
+(almost certainly crashing) or overwriting your instructions with data values.
 
 ---
 
 ## IX-based displaced access
-
-With HL you would increment between each read. With IX you load the base once
-and name each field by its offset.
 
 IX is a 16-bit index register. Its specific capability is the `(ix+d)`
 addressing mode: `d` is a signed byte offset, any value from -128 to +127 and
 `ld a, (ix+d)` reads the byte at address IX + d without touching IX itself.
 
 Load IX to the base of a record once, and you can name every field by its
-offset — no incrementing between reads:
+offset, with no incrementing between reads:
 
 ```asm
 ; A three-byte record: offset 0 = id, offset 1 = high byte, offset 2 = low byte
@@ -138,8 +115,8 @@ ld c, (ix+2)         ; C = low byte field
 ; IX is unchanged throughout — all three fields read from one base address
 ```
 
-The displacement `d` is a byte-sized signed offset. Offsets larger than 127 or
-smaller than -128 are not encodable and will cause an assembler error.
+Offsets larger than 127 or smaller than -128 are not encodable and will cause
+an assembler error.
 
 ---
 
@@ -163,8 +140,7 @@ add hl, de           ; HL = scores + 3
 ld a, (hl)           ; A = entry 3 = 40
 ```
 
-`add hl, de` adds the 16-bit value in DE to HL. After the add, `(hl)` points
-to entry 3. This form does not check bounds; if the index exceeds the table
+`add hl, de` adds the 16-bit value in DE to HL. This form does not check bounds; if the index exceeds the table
 length, the read will access whatever bytes follow the table in memory.
 
 ---
@@ -188,7 +164,7 @@ rec1_id:   .db 0
 rec1_lo:   .db 0
 ```
 
-**Section A — sequential HL loop, accumulating a sum.**
+**Section A: sequential HL loop, accumulating a sum.**
 
 ```asm
 ld hl, scores
@@ -201,11 +177,11 @@ hl_loop:
 ld (sum), a
 ```
 
-HL walks the six score bytes. Each `add a, (hl)` adds the current byte to A.
+HL walks the six score bytes.
 After six iterations, A = 10 + 20 + 30 + 40 + 50 + 60 = 210 (`$D2`), which is
 stored in `sum`.
 
-**Section B — sequential HL loop, finding the maximum.**
+**Section B: sequential HL loop, finding the maximum.**
 
 ```asm
 ld hl, scores
@@ -222,14 +198,13 @@ no_new_max:
 ld (max_score), a
 ```
 
-A holds the running maximum. Each iteration loads the current byte into C and
-compares A with C using `cp c`. Apply the flag-before-branch check: `cp c` is
+A holds the running maximum. Apply the flag-before-branch check: `cp c` is
 the instruction that sets the flag; `jr nc` reads it immediately after with
 nothing in between; carry being clear means A ≥ C, so `jr nc` skips the update
 and the running maximum is unchanged. `ld a, c` runs only when `cp c` found A
-less than C — a new maximum. After six entries, `max_score` holds 60 (`$3C`).
+less than C, which is a new maximum. After six entries, `max_score` holds 60 (`$3C`).
 
-**Section C — IX+d access on a packed record table.**
+**Section C: IX+d access on a packed record table.**
 
 ```asm
 ld ix, records + RecSize    ; IX = base of record 1
@@ -243,8 +218,7 @@ ld (rec1_lo), a
 assembler computes `address_of_records + 3` before emitting any code. IX is
 loaded with that address in a single `ld ix, imm16` instruction.
 
-Once IX holds the base of record 1, `(ix+0)` is the id field and `(ix+2)` is
-the lo field. No `inc` instructions appear between reads: the displacement
+No `inc` instructions appear between reads: the displacement
 encodes the offset directly. `rec1_id` receives `$02` (the id byte of record 1)
 and `rec1_lo` receives `$B0`.
 
@@ -257,8 +231,7 @@ most useful is `ldir`.
 
 `ldir` copies BC bytes from the address in HL to the address in DE. After each
 byte is copied, HL and DE are both incremented and BC is decremented. The
-instruction repeats until BC reaches zero. One `ldir` replaces an entire copy
-loop.
+instruction repeats until BC reaches zero.
 
 Compare the two forms for copying 4 bytes:
 
@@ -281,28 +254,25 @@ ld bc, 4          ; BC = byte count (note: BC, not just B)
 ldir              ; copy 4 bytes, HL and DE advance, BC reaches 0
 ```
 
-Both forms copy 4 bytes from `source` to `dest`. After `ldir`, HL points one
-byte past the last source byte, DE points one byte past the last destination
-byte, and BC holds zero.
+After `ldir`, HL points one byte past the last source byte, DE points one byte
+past the last destination byte, and BC holds zero.
 
 `ldir` uses BC as a 16-bit counter, so it can copy up to 65535 bytes in one
 instruction. The loop form above used B (8-bit), which would need a different
 structure for counts larger than 255.
 
-Three related instructions exist. `lddr` copies in the decrementing direction —
-HL and DE are decremented after each byte rather than incremented. This is
-useful when source and destination overlap and copying forward would overwrite
-source bytes before they are read.
+`lddr` copies in the decrementing direction: HL and DE are decremented after
+each byte rather than incremented. This is useful when source and destination
+overlap and copying forward would overwrite source bytes before they are read.
 
 `cpir` scans memory for a byte value. It reads bytes from (HL), compares each
 to A, and stops when it finds a match or exhausts BC bytes. After `cpir`, Z is
 set if a match was found, and HL points one past the matching byte. `cpdr` is
 the same scan in the decrementing direction.
 
-`ldir`, `lddr`, `cpir` and `cpdr` are standard Z80 mnemonics. AZM assembles
-them directly, like `djnz`.
+AZM assembles `ldir`, `lddr`, `cpir` and `cpdr` directly, like `djnz`.
 
-When both HL and DE are live pointers — as they are during any `ldir` sequence — you sometimes need to exchange them. After a copy, the destination you wrote may become the source for the next pass or you need to hand that address to a routine that expects it in HL. Without a swap instruction, exchanging the two pairs takes six instructions and clobbers A. `ex de, hl` does it in one: afterward, DE holds what HL had and HL holds what DE had and nothing else changes.
+When both HL and DE are live pointers, as they are during any `ldir` sequence, you sometimes need to exchange them. Without a swap instruction, exchanging the two pairs takes six instructions and clobbers A. `ex de, hl` does it in one: afterward, DE holds what HL had and HL holds what DE had and nothing else changes.
 
 ```asm
 ld hl, source
@@ -312,33 +282,13 @@ ldir              ; copy 64 bytes; HL and DE now point past the copied region
 ex de, hl         ; HL now points past dest; DE points past source
 ```
 
-`ldir` and `ex de, hl` are tools for when you need to move data in bulk. For element-by-element work on a single table, the DJNZ-over-HL pattern from the first section is usually clearer.
-
----
-
-## Summary
-
-- `.db val, val, ...` lays out bytes of initialized storage at the current
-  address; `.dw val, val, ...` lays out 16-bit words in little-endian order.
-- The table name refers to the address of the first element, not to its value.
-  Use `(hl)` or `(ix+d)` to read the values stored there.
-- `ld a, (hl)` reads the byte at the current address; `inc hl` advances to the
-  next byte. Together they step through a table entry by entry.
-- For word tables, advance HL by two between entries.
-- IX+d addressed access (`ld a, (ix+d)`) reads a byte at a fixed byte offset
-  from the base in IX. The displacement must fit in a signed byte (-128 to 127).
-- IX+d is useful for record-like access: load IX to the record base once, then
-  name each field by its offset without moving IX.
-- To reach entry `n` at runtime, either load `table_base + n` into IX using
-  compile-time arithmetic or add the index to HL with `add hl, de`.
-- `.db` emits raw bytes; `.dw` emits 16-bit words. Use them wherever you need
-  to place initialized data, whether it has a name or not.
+For element-by-element work on a single table, the DJNZ-over-HL pattern from the first section is usually clearer.
 
 ---
 
 ## What Comes Next
 
-Everything so far has been a single block of code. Chapter 8 introduces the stack and the `call`/`ret` instructions that make reusable subroutines possible — code you can jump into from anywhere, run and reliably return from. The same tables and loops from this chapter will start appearing inside named, callable routines and the programs will start to look like programs.
+Everything so far has been a single block of code. Chapter 8 introduces the stack and the `call`/`ret` instructions that make reusable subroutines possible: code you can jump into from anywhere, run and reliably return from.
 
 ---
 

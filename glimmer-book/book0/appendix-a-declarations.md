@@ -9,7 +9,7 @@ nav_order: 19
 
 # Appendix A - Declaration Reference
 
-Every Glimmer declaration in one place. Each entry gives the grammar
+Each entry gives the grammar
 production from the Glim grammar reference, then one example from a
 program built with `glimmer build`, then the constraints the compiler
 enforces.
@@ -23,8 +23,8 @@ Rules that apply everywhere:
 - All declared names share one namespace and must be unique. The
   `Glim`, `Snd_`, `Curve_`, `Shape_`, `CHG_`, and `__` prefixes and the
   runtime and profile names are reserved.
-- Flag-carrying cells are allocated by category order - states, then
-  pulses, then ramps, then `FrameCount` - into up to four change-flag
+- Flag-carrying cells are allocated by category order (states, then
+  pulses, then ramps, then `FrameCount`) into up to four change-flag
   banks; the current cap is 32 cells.
 - Two built-in cells need no declaration: `FrameCount` increments every
   frame and is legal in `on`; `CurrentCard` arrives with the first card.
@@ -173,7 +173,7 @@ timer Gate : word = 384 -> Opened once
   and reloads from the cell each time it runs out.
 - `once`: the cell is the countdown itself; it fires a single time at
   zero and stays idle until code writes it again.
-- Timer cells carry no change flag - trigger on the pulse - so they
+- Timer cells carry no change flag (trigger on the pulse), so they
   are legal in `updates` and absent from `on`.
 
 ### ramp

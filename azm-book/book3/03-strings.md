@@ -8,9 +8,9 @@ nav_order: 4
 
 # Chapter 3 — Strings
 
-Chapter 2 walked a byte table with a **fixed length** in B. Text in memory usually has no fixed length — you stop when you see a sentinel, not when a counter reaches eight. That one change drives how you hold pointers, how you copy and how you compare.
+Chapter 2 walked a byte table with a **fixed length** in B. Text in memory usually has no fixed length: you stop when you see a sentinel, not when a counter reaches eight.
 
-The representation comes first; length, copy and search are built on top of it, each documented with a register contract. The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
+The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
 
 ---
 
@@ -18,13 +18,9 @@ The representation comes first; length, copy and search are built on top of it, 
 
 You need to know how many characters are in a message before formatting a screen line. You need to copy a label into a buffer. You need to find the first `'/'` in a path.
 
-None of those questions mention "array of eight bytes." They mention **text that ends somewhere**. In assembly you answer that by picking a representation first, then writing the walk.
-
 ---
 
 ## Representation: null-terminated bytes
-
-Wirth's order still applies: **decide layout, then write the algorithm.**
 
 A **null-terminated string** (C-style) is a sequence of byte values followed by a zero byte `$00`. The zero is not part of the visible text; it marks the end.
 
@@ -36,7 +32,7 @@ buffer:
     .ds byte[8]
 ```
 
-`message` points at `'H'`. Each `inc hl` moves to the next character until `(hl)` is zero.
+`message` points at `'H'`.
 
 AZM also accepts a string directive that appends the terminator for you (Book 2 Chapter 3):
 
@@ -56,11 +52,11 @@ Two different numbers confuse beginners:
 | **Length** | Characters before the null — five for `"HELLO"`. |
 | **Capacity** | Bytes reserved in RAM — eight in `buffer` above. |
 
-`strlen` counts length. `strcpy` must not write past capacity if the source is longer than the destination buffer — this chapter copies into a buffer sized for the demo; Chapter 5's records are a natural place to store `(capacity)` beside `(data)`.
+`strcpy` must not write past capacity if the source is longer than the destination buffer. This chapter copies into a buffer sized for the demo; Chapter 5's records are a natural place to store `(capacity)` beside `(data)`.
 
 ### Why not store length in byte zero?
 
-You could: byte 0 holds the count, bytes 1..n hold text. That saves a scan for length but shifts every pointer (`HL` must skip the count byte). Null-terminated layout is the convention in this book because the walk is uniform — every algorithm uses the same `ld a,(hl)` / `or a` / `jr z` spine.
+You could: byte 0 holds the count, bytes 1..n hold text. That saves a scan for length but shifts every pointer (`HL` must skip the count byte). Null-terminated layout is the convention in this book because the walk is uniform; every algorithm uses the same `ld a,(hl)` / `or a` / `jr z` spine.
 
 ---
 
@@ -82,8 +78,6 @@ Unless a routine says otherwise, Book 3 string routines use:
 
 > HL points at the next byte to examine. All bytes before HL in this string have already been processed.
 
-When output is wrong, check that HL still satisfies the invariant — not every `inc` in the listing.
-
 ---
 
 ## The core loop: test for zero without destroying the byte
@@ -96,7 +90,7 @@ When output is wrong, check that HL still satisfies the invariant — not every 
     inc hl
 ```
 
-`or a` sets the Zero flag from A's value without changing A. That is the standard Z80 idiom for "is this byte zero?" — same role `cp 0` would play, but `or a` is one byte cheaper and appears in every listing below.
+`or a` sets the Zero flag from A's value without changing A. That is the standard Z80 idiom for "is this byte zero?" It plays the same role as `cp 0`, but `or a` is one byte cheaper.
 
 ---
 
@@ -119,7 +113,7 @@ _done:
     ret
 ```
 
-B is the running length. The loop invariant: at `_loop`, B equals the number of non-null bytes already passed.
+The loop invariant: at `_loop`, B equals the number of non-null bytes already passed.
 
 For `message` above, `str_len` at `$8008` should hold `$05` after `halt`.
 
@@ -127,7 +121,7 @@ For `message` above, `str_len` at `$8008` should hold `$05` after `halt`.
 
 ## `strcpy_u8`: copy byte-by-byte through the null
 
-Copying uses **two pointers**: HL reads, DE writes. Each iteration moves one byte and advances both.
+Copying uses **two pointers**: HL reads, DE writes.
 
 ```asm
 ; strcpy_u8: copy null-terminated string HL → DE (terminator included)
@@ -143,7 +137,7 @@ _copy:
     ret
 ```
 
-The last iteration copies the zero terminator. That matters if later code scans `buffer` with the same null-terminated walk — the copy is a faithful duplicate.
+The last iteration copies the zero terminator. That matters if later code scans `buffer` with the same null-terminated walk.
 
 After `call strcpy_u8`, DE points one past the null. Reload HL from `message` before another pass; do not assume DE still equals the source base.
 
@@ -227,7 +221,7 @@ Sketch of the invariant for decimal output into a byte buffer at DE:
 
 > HL (or DE) points at the next free byte rightward; the digits emitted so far sit to the left; when the value reaches zero, write `$00` and you are done.
 
-You do not need a print port for Book 3 — storing `"42", 0` in RAM and inspecting bytes after `halt` is enough proof.
+You do not need a print port for Book 3. Storing `"42", 0` in RAM and inspecting bytes after `halt` is enough proof.
 
 ---
 
@@ -254,8 +248,6 @@ main:
     ld (find_index), a
     halt
 ```
-
-Reload HL (and DE when needed) before each call — the string routines advance pointers as documented.
 
 ---
 
@@ -286,22 +278,11 @@ Single-step through `strlen_u8` once: watch B increment only on non-zero bytes, 
 
 ---
 
-## Summary
-
-- Pick **representation first**: null-terminated bytes end with `$00`.
-- **Length** is how many characters precede the null; **capacity** is how much RAM you reserved.
-- **HL** (and **DE** for copy/compare) is the pointer; advance with `inc hl` / `inc de`.
-- **`or a` after `ld a,(hl)`** tests the terminator without changing A.
-- **`strcpy_u8`** copies through the null; **`strcmp_u8`** and **`str_find_char`** reuse the same walk with different exit tests.
-- **Register contracts** on every string routine keep pointer roles checkable with `--rc warn`.
-
----
-
 ## Exercises
 
 1. Change `message` to `.db "AZM", 0`. Predict `str_len` and `find_index` for `'M'` before running the program.
 2. Add `strchr` that returns HL pointing at the match (or HL = 0 / a sentinel label meaning not found). Document `in`/`out`/`clobbers`.
-3. Implement `strcat_u8`: HL destination, DE source — scan HL to its null, then `strcpy` from DE into that position.
+3. Implement `strcat_u8`: HL destination, DE source. Scan HL to its null, then `strcpy` from DE into that position.
 4. Bounded copy: `strncpy_u8` with B = max bytes to write; stop early if source ends, but never write more than B bytes (pad with null if required).
 5. Hand-trace `strcmp_u8` on `"AB"` vs `"A"`. Which return code should you get?
 6. Store the decimal string for `str_len` into a 4-byte workspace after computing length (exercise direction from "print prep").

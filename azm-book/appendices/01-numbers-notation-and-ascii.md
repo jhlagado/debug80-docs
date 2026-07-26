@@ -7,9 +7,6 @@ nav_order: 1
 ---
 # Appendix 1 — Numbers, Notation, and ASCII
 
-This appendix collects the number and character tables you reach for often in
-Z80 work.
-
 ---
 
 ## Number Prefixes Used In This Course

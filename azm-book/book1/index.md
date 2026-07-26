@@ -10,9 +10,7 @@ has_toc: false
 
 # AZM Book 1 — Assembler Manual
 
-This is the reference for AZM, an enhanced Z80 assembler with modern programming features.
-
-Use this book when you want the exact assembler rules. If you want a guided introduction to Z80 programming first, start with [AZM Book 2 — Z80 Fundamentals](../book2/index.md).
+If you want a guided introduction to Z80 programming first, start with [AZM Book 2 — Z80 Fundamentals](../book2/index.md).
 
 ## Main Path
 

@@ -10,8 +10,8 @@ nav_order: 4
 # Chapter 4 - Pulses and Bindings
 
 Chapter 3 was about the things a game remembers. This chapter is about
-the things it must catch: a fact persists - the beacon's position
-outlives every frame that draws it - but a moment passes. The instant
+the things it must catch: a fact persists, the beacon's position
+outliving every frame that draws it, but a moment passes. The instant
 GO goes down exists exactly once, and if your program does not catch
 it, it never happened at all. Glimmer gives moments their own
 declaration, the pulse. Back in chapter 1 I gave you one pulse and one
@@ -20,7 +20,7 @@ properly: every key name, both shapes a key can fire in, and what the
 generated polling does with the keypad, frame after frame.
 
 *Rover* is a white dot you steer around the whole 8x8 RGB LED matrix
-with 2, 4, 6, and 8 - the keypad's compass points - and GO recalls it
+with 2, 4, 6, and 8 (the keypad's compass points), and GO recalls it
 to the centre. There is nothing to chase yet and no way to lose, but
 it feels like a game character the moment you hold a key.
 
@@ -119,17 +119,17 @@ Half of this file is chapter 1's Mover, and the second axis costs what
 you would expect: one more state cell, two more pulses, two more rules
 with the clamp turned sideways. `GoHome` shows an effect at its
 simplest: two constant stores and no branch. And `DrawDot` now draws
-from both facts - `on DotX, DotY`, the comma you learned in chapter 3
-- so movement on either axis redraws the dot.
+from both facts (`on DotX, DotY`, the comma you learned in chapter
+3), so movement on either axis redraws the dot.
 
 Build it, run it, and then do one thing for me: hold 6 while tapping
 2. The dot runs right, steps up on each tap, and carries on running
-right. That feel - steady run, single steps mixed in - is what
+right. That feel of a steady run with single steps mixed in is what
 `rising` and `held` let you design.
 
 ## The keypad, by name
 
-Before we choose how keys fire, let us name them. The TEC-1G's MON-3
+The TEC-1G's MON-3
 monitor gives every key a name, and `bind` uses those names directly:
 
 | Keys | Names |
@@ -144,7 +144,7 @@ controls, the digits do the work: 2, 4, 6, 8 make a compass, and 5
 sits in the middle, in easy reach for fire or rotate. GO and AD serve
 as start and menu keys. The names compile to MON-3's key codes in the
 generated file, so the binding `bind key KEY_2 ...` in your source and
-the 2 key on the panel mean the same physical thing - no magic numbers
+the 2 key on the panel mean the same physical thing: no magic numbers
 in between.
 
 ## Rising or held
@@ -158,16 +158,14 @@ design decision before it is a technical one:
   the key stays down. Choose it for *movement*, and tune N to taste: a
   small period is a fast walk, a large one a deliberate step.
 
-Think about it from the player's side, thumbs on the pad. In a
+In a
 falling-blocks game, the rotate key under your thumb wants one press,
-one quarter turn - give it autorepeat and the piece spins out of
+one quarter turn; give it autorepeat and the piece spins out of
 control. The move-left key beside
 it wants the opposite: press and lean, and the piece keeps sliding
-until you let go. Two adjacent keys under the same thumb, two shapes,
-and between them they are the feel of the game. Rover makes the same
-choices for the same reasons - held compass keys, rising GO - and both
-are one-line decisions. Tuning the feel of your entire control scheme
-is editing a digit.
+until you let go. Rover makes the same
+choices for the same reasons (held compass keys, rising GO), and both
+are one-line decisions.
 
 One property of the keypad shapes every control scheme: MON-3 reports
 a single pressed key at a time. Held movement runs one direction at
@@ -187,19 +185,18 @@ bind key any rising -> Wake
 ```
 
 `any` fires its pulse on every new press, whichever key it is, and it
-fires alongside the named bindings - press GO and both `Home` and
+fires alongside the named bindings. Press GO and both `Home` and
 `Wake` fire in the same frame. It comes in the rising shape only; what
 it catches is *the player touched the machine*. Title screens wait on
-it. When you build one in chapter 13,
-"press any key" will be exactly this line and a card transition.
+it.
 
 ## What polling looks like
 
 All five of Rover's pulses come out of one generated routine, and
 inside it is the repeat clock you did not have to write. In chapter 1
-you wrote that clock out by hand - the counter, the reload, and the
-release edge that resets on letting go. Here Glimmer writes it for
-you. The top of the routine, from `rover.main.asm`:
+you wrote that clock out by hand: the counter, the reload, and the
+release edge that resets on letting go. The top of the routine, from
+`rover.main.asm`:
 
 ```asm
 ; --- input polling (MON-3 _scanKeys) ---
@@ -225,12 +222,12 @@ _keydown:
 ```
 
 Once per frame, the routine asks MON-3 about the keypad. `_scanKeys`
-answers in the flags - zero set means a key is down, carry set means
-the press is new this frame - and from those two flags the routine
+answers in the flags (zero set means a key is down, carry set means
+the press is new this frame), and from those two flags the routine
 sorts out the three cases you have been designing with all chapter.
 Silence disarms the autorepeat. A held key counts its repeat clock
 down and fires its pulse when the count runs out, reloading the period
-from your `bind` line - your `period 8` lives down here as the reload
+from your `bind` line; your `period 8` lives down here as the reload
 value. A new press fires its pulse at once and arms the clock. And
 here is the clock itself, in its entirety:
 
@@ -239,42 +236,20 @@ Glim_HeldKey:     .db $FF
 Glim_HeldCount:   .db 0
 ```
 
-Two bytes of storage run the whole autorepeat - which key is armed,
-and how many frames remain until it repeats. The routine above and
-these two bytes are chapter 1's hand-written clock - counter, reload,
-and release edge - generated for you and left in the open, where you
-can set a breakpoint on it. When a pulse fires here, the poll writes
+Two bytes of storage run the whole autorepeat: which key is armed,
+and how many frames remain until it repeats. When a pulse fires here, the poll writes
 the pulse's byte and sets its change bit directly, and because polling
 runs before any block, every phase of the frame sees the moment.
 
-At the other end of the frame, `GlimEndFrame` clears every pulse byte
-- the cleanup you read in chapter 2. Between those
+At the other end of the frame, `GlimEndFrame` clears every pulse
+byte, the cleanup you read in chapter 2. Between those
 two points, a moment is a fact like any other: one frame wide, one bit
 in `Changed0`, triggering whatever declared `on` it.
 
-## Summary
-
-The input story, folded small:
-
-- A pulse is a moment made declarable: it fires, triggers its
-  dependents for one frame, and clears at frame end.
-- `bind key <NAME> rising -> Pulse` fires once per press; `held period
-  N` autorepeats every N frames while the key stays down. Actions take
-  rising; movement takes held.
-- MON-3 names the twenty keys: `KEY_0`..`KEY_F`, `KEY_PLUS`,
-  `KEY_MINUS`, `KEY_GO`, `KEY_AD`.
-- `bind key any rising` fires on every new press, alongside the named
-  bindings - the "press any key" moment.
-- The keypad reports one key at a time; a new press takes over the
-  autorepeat. Design controls on single-key movement.
-- Generated polling reads `_scanKeys` once per frame and runs the
-  autorepeat from two bytes of state; pulses raised there are visible
-  to every phase of that frame.
-
-Moments have other sources - chapter 7 gives the machine clocks that
-fire pulses of their own - but the keypad story is complete. Next
+Moments have other sources (chapter 7 gives the machine clocks that
+fire pulses of their own) but the keypad story is complete. Next
 comes the full picture of what a frame does once the moments are in:
-the three kinds of block, and the order a frame runs them in -
+the three kinds of block, and the order a frame runs them in,
 [Compute, Effect, Render](05-compute-effect-render.md).
 
 ---

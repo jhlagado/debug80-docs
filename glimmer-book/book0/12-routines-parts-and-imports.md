@@ -14,8 +14,10 @@ a debugger that can answer questions about it. This chapter is about
 what happens to that file next, because programs that get used are
 programs that grow, and growth is where one long file starts to cost
 you. The feature I have picked to force the issue is one a painting
-program owes its painter: an eraser. AD sits unused beside GO on the
-keypad, and the rule is `StampPixel`'s mirror image - find the
+program owes its painter: an eraser. With two painting rules to name,
+chapter 10's `PaintPixel` becomes `StampPixel` on a `Stamp` pulse, and
+the picture it writes becomes `Paint`. AD sits unused beside GO on the
+keypad, and the rule is `StampPixel`'s mirror image: find the
 cursor's row byte, build the column's mask, and clear the bit instead
 of setting it. Write it out: the eraser opens with a dozen
 instructions copied whole from `StampPixel` before you
@@ -23,10 +25,10 @@ reach the first line that differs. Twelve duplicated instructions are
 twelve places for the next change to miss one, and every copy you
 make of working code is a fresh chance to be wrong with it.
 
-The eraser breaks something quieter, too. `Marks` counts stamps laid:
+The eraser breaks the tally too. `Marks` counts stamps laid:
 stamp ten pixels, erase all ten, and the count reads ten over a blank
 board. The number worth showing is how many pixels the picture holds
-right now, and that fact is in `Paint` itself, waiting to be counted -
+right now, and that fact is in `Paint` itself, waiting to be counted:
 set bits across eight bytes. That is loop work with a register
 interface and no facts of its own: library code in everything but
 name.
@@ -37,8 +39,7 @@ shared code once, where every block can call it. A `part` moves
 declarations into a second `.glim` file that belongs to the same
 program. An `import` brings in a file of hand-written assembly. None
 of them changes what the Z80 executes; they change what you find when
-you come back in a month. The Canvas that was one long file leaves
-this chapter as three files, each with one job.
+you come back in a month.
 
 ## Canvas, in three files
 
@@ -91,7 +92,7 @@ part "canvas-rules.glim"
 ```
 
 Forty-two lines, and every block is gone. The facts, the moments and
-the bindings all stay - joined by `Erase`, fired by AD - and framing
+the bindings all stay (joined by `Erase`, fired by AD) and framing
 them are the three new declarations: `import` near the top, `routine`
 in the middle, `part` at the end. The blocks now live in
 `canvas-rules.glim`; the drawing and counting loops live in
@@ -107,14 +108,14 @@ Wrote canvas.main.asm (register contracts checked by AZM)
 Wrote canvas.main.d8.json (47 block segments attributed to .glim source)
 ```
 
-One build, one program, one generated file. The split moved source
+The split moved source
 between files and changed nothing the Z80 will see. The rest of the chapter takes
 the three declarations in turn, smallest first.
 
 ## One copy of the arithmetic
 
 A `routine` declares a callable helper. The header carries a name and
-nothing else - no `on` line schedules it, no phase dispatches it -
+nothing else (no `on` line schedules it, no phase dispatches it)
 and it runs when a block calls it, the way `FbPlot` runs. Inside, the
 body follows the block rules you already know: real Z80, `_` labels
 local to the body, and a fall-through ending with Glimmer appending
@@ -154,8 +155,8 @@ end
 
 Stamp ORs the mask in; erase complements it and ANDs, clearing
 exactly one bit. The dozen shared instructions are in one place now,
-and the next change to the addressing reaches both rules by touching
-neither.
+and the next change to the addressing reaches both rules though you
+touch neither.
 
 Chapter 11's contract checking covers this routine without you writing
 a line of contract. The assembler reads the body and works out for
@@ -163,9 +164,8 @@ itself what your helper touches:
 B and HL come out carrying the mask and the row address, A, DE and
 the flags are clobbered, and C passes through untouched. Every `call
 CursorSpot` is then proven against that inferred contract at strict
-strength - the same proof each call to `FbPlot` gets against its
-declared one. You wrote a helper; the assembler wrote its contract
-and holds every caller to it. If a future edit teaches `CursorSpot`
+strength, the same proof each call to `FbPlot` gets against its
+declared one. If a future edit teaches `CursorSpot`
 to use C, a caller that was counting on C fails the build with a
 message, not the game with a mystery.
 
@@ -176,21 +176,20 @@ part "canvas-rules.glim"
 ```
 
 A `part` names another `.glim` file whose declarations join the
-program. A part is not a module with walls of its own. The entry file -
-the one you hand to `glimmer build` - declares `program`, `platform`
+program. A part is not a module with walls of its own. The entry
+file, the one you hand to `glimmer build`, declares `program`, `platform`
 and `display`, and each part contributes cells, resources, bindings
-and blocks to that same program. One namespace, one program. The
-compilation unit is the project; the files are storage. You split a
+and blocks to that same program. You split a
 program into parts by topic, the way you would split a chapter into
-sections: so you can find things, not to hide them from each other.
+sections: to find things, not to hide them from each other.
 
-Shared means shared all the way down. `Cursor` is declared in
+`Cursor` is declared in
 `canvas.glim` and written by `MoveLeft` in `canvas-rules.glim`;
 `CursorSpot` is declared in the entry file and called from the part;
 the part's effects trigger on pulses the entry file bound. One rule
 keeps the arrangement single-headed: a part may declare no `program`,
 `platform`, `display` or parts of its own. Identity and hardware
-belong to the entry file, and paths - the part's, and the import's -
+belong to the entry file, and paths (the part's, and the import's)
 resolve relative to it, whatever directory you build from.
 
 A part needs no preamble of its own; ours opens with a comment and
@@ -215,10 +214,10 @@ end
 
 The other three movement effects follow, then the painting rules and
 the renders: 90 lines, six effects and two renders, one file with one
-kind of content. A good part answers to a topic.
+kind of content.
 
 Diagnostics know which file they are standing in. Misspell the label
-in `MoveDown`'s guard - `jr nc,_sotp` - and rebuild:
+in `MoveDown`'s guard, `jr nc,_sotp`, and rebuild:
 
 ```text
 canvas-rules.glim:45:5: [AZMN_SYMBOL] error: Unresolved symbol "_sotp" in rel8 jr nc fixup.
@@ -227,14 +226,13 @@ canvas-rules.glim:45:5: [AZMN_SYMBOL] error: Unresolved symbol "_sotp" in rel8 j
 The coordinates work exactly as chapter 11 taught, with the file name
 choosing the file: line 45 of the part, where the typo sits.
 Breakpoints ride the same map, so a breakpoint inside `StampPixel`
-stops Debug80 in `canvas-rules.glim`. Splitting the program cost you
-nothing in the debugger.
+stops Debug80 in `canvas-rules.glim`.
 
 ## A module of your own
 
 Two jobs remain that own no facts and answer no pulses. Drawing the
 board is a copy loop, eight row masks into the framebuffer's green
-plane - chapter 10 wrote it inside `DrawCanvas`. Counting lit pixels
+plane; chapter 10 wrote it inside `DrawCanvas`. Counting lit pixels
 is a bit-counting loop over the same eight bytes. Both are plain
 assembly with a register interface at the top and a `ret` at the
 bottom: library code in everything but the file it lives in. `import`
@@ -295,7 +293,7 @@ _skip:
 You have been reading this dialect all book: the module is written in
 the same assembly you find in every generated file. Each callable opens
 with a `.routine` contract line of the kind you read on `FbPlot` in
-chapter 11, with one difference that matters - in a module you
+chapter 11, with one difference that matters: in a module you
 declare the contract yourself, and the assembler holds every caller to what you
 declared. The module reads the program's names directly, too: `Paint`
 and `Framebuffer` are the same labels your blocks use.
@@ -304,10 +302,10 @@ An import is the border between Glimmer and hand-written assembly,
 and `@` marks the doors. A label wearing `@` is exported: `ShowPaint`
 and `CountLit` are the module's public API, callable from any block
 in any file, and references omit the `@`. `CountByte` carries no `@`,
-so it stays private - callable anywhere inside `paint-lib.asm` and
+so it stays private, callable anywhere inside `paint-lib.asm` and
 nowhere outside it. The `_row`, `_byte` and `_bit` labels are local
 to their routines, exactly as in your blocks. Try walking through a
-wall instead of a door - `call CountByte` from `ShowCount` - and the
+wall instead of a door (`call CountByte` from `ShowCount`) and the
 build refuses with the rule spelled out:
 
 ```text
@@ -339,7 +337,7 @@ end
 ```
 
 `DrawCanvas` keeps the cursor and hands the board to `ShowPaint`.
-`ShowCount` replaces chapter 11's `ShowMarks` - and retires the
+`ShowCount` replaces chapter 11's `ShowMarks`, and retires the
 `Marks` cell with it, because the count is computed from the picture
 now, fresh on every redraw: `CountLit` returns it in HL, which is
 where `HudWriteU16` wants its value. Stamp, and the count climbs;
@@ -348,7 +346,7 @@ because they draw from the same eight bytes.
 
 ## The generated file
 
-The split changed nothing the Z80 sees. Open `canvas.main.asm` and
+Open `canvas.main.asm` and
 each of the three declarations has left its signature. The routine
 first:
 
@@ -371,7 +369,7 @@ A `.routine` boundary, your body verbatim, and the appended `ret`
 closing the fall-through. The label is plain `CursorSpot`, exactly as
 declared, because your code calls it by name, while block
 labels wear the `Glim_` prefix because only dispatchers call them.
-And the bare `.routine` line is where the assembler's inference attaches - the
+And the bare `.routine` line is where the assembler's inference attaches: the
 contract it works out from this body is what every call site is
 checked against.
 
@@ -410,32 +408,10 @@ before the profile library:
 carries meaning, and Glimmer chooses the spot where the profile
 library already lives: a region no code falls through into, reached
 only by the calls that name it. Your module sits beside `FbPlot` and
-`MxMask` in the memory map - which is what it has become: library
+`MxMask` in the memory map, which is what it has become: library
 code, written by you.
 
-## Summary
-
-- `routine Name begin ... end` declares a callable helper: no
-  triggers, no dispatch, called with plain `call Name`. The body
-  falls through and Glimmer appends the `ret`; conditional early
-  returns are legal. The assembler infers the register contract and proves
-  every call site against it.
-- `part "file.glim"` joins another file's declarations to the same
-  program and namespace: cells declared in one file are written and
-  watched from another. The entry file alone declares `program`,
-  `platform` and `display`; paths resolve relative to it.
-- Diagnostics and breakpoints name the file they belong to, so a
-  typo in a part is reported - and stepped - in that part.
-- `import "module.asm"` brings hand-written assembly into the program.
-  `@` labels are the public API, callable from any block without the
-  `@`; plain labels stay private to the module; each callable
-  carries its own `.routine` contract line.
-- In the generated file, a routine emits as a `.routine` boundary,
-  your label, and an appended `ret`; part blocks emit exactly like
-  entry-file blocks; `.import` lands the module's bytes outside
-  every execution path.
-
-Canvas has room to grow again - and the next chapter spends that
+Canvas has room to grow again, and the next chapter spends that
 room on what every finished game needs: a title screen, a playing
 screen and a game-over screen, declared as cards:
 [Cards](13-cards.md).

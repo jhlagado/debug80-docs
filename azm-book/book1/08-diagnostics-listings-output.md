@@ -8,7 +8,7 @@ nav_order: 8
 
 # Chapter 8 — Diagnostics and Output
 
-An assembly run ends one of two ways. If it fails, AZM prints diagnostics and writes nothing. If it succeeds, it writes the output artifacts and exits 0. There is no partial result to inspect.
+If assembly fails, AZM prints diagnostics and writes nothing. If it succeeds, it writes the output artifacts and exits 0.
 
 ---
 
@@ -22,17 +22,13 @@ program.asm:23:1: error AZMN_SYMBOL: duplicate symbol COUNT
 program.asm:31:8: warning AZMN_REGISTER_CARE: DE is live across CALL CHECK_FOO, but CHECK_FOO may modify D,E
 ```
 
-The diagnostic ID — `AZMN_PARSE`, `AZMN_SYMBOL` and so on — is the stable part. Message wording may change between AZM versions; the code stays the same. If you script against AZM output, match on the code rather than the message text.
-
-A non-zero exit code means assembly failed. Output artifacts are written only for successful assemblies.
+The diagnostic ID (`AZMN_PARSE`, `AZMN_SYMBOL` and so on) is the stable part. If you script against AZM output, match on the code rather than the message text.
 
 ---
 
 ## Reading a failing build
 
-When a build fails, the diagnostic gives you the file, the line, the column and the problem.
-
-A loop branches forward around a handler block. The handler starts small, but grows. At 140 bytes between the `jr` and its target:
+A loop branches forward around a handler block. At 140 bytes between the `jr` and its target:
 
 ```asm
         .org $0100
@@ -55,7 +51,7 @@ Running `azm scan.asm` stops immediately:
 scan.asm:6:9: error AZMN_PARSE: branch offset 140 out of range -128..127
 ```
 
-Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is the column, pointing at the `jr nz`. The severity `error` means no binary was written. `AZMN_PARSE` is the code. The message names the actual value (140) and the allowed range (−128 to 127).
+Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is the column, pointing at the `jr nz`. The severity `error` means no binary was written.
 
 A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The fix is one line:
 
@@ -63,13 +59,11 @@ A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The fi
         jp   nz,SkipHandler    ; jp carries a 16-bit target address
 ```
 
-Reassemble. Exit code is 0.
-
 ---
 
 ## Warnings vs errors
 
-AZM exits 0 when assembly succeeds — no parse errors, no semantic errors, no range errors and no register contract errors in `error` or `strict` mode.
+AZM exits 0 when assembly succeeds: no parse errors, no semantic errors, no range errors and no register contract errors in `error` or `strict` mode.
 
 AZM exits non-zero (1) when any error occurs:
 
@@ -104,7 +98,7 @@ When two `.org` directives have a gap between them, the binary fills the gap wit
         .binto $0200
 ```
 
-A `.ds` block at the very end of a source file does not extend the binary. The binary is cropped at the last byte of real content.
+A `.ds` block at the very end of a source file does not extend the binary.
 
 ### Intel HEX (`.hex`)
 
@@ -128,7 +122,7 @@ With `--source-root`, file paths in the map are written relative to the given ro
 
 ### Assembler listing (`.lst`)
 
-The listing shows every source line next to the address and bytes it assembled to, in the classic asm80 layout. It is the file to open when you want to see what the assembler actually did — how a line encoded, where a label landed, what an op expanded to.
+The listing shows every source line next to the address and bytes it assembled to, in the classic asm80 layout.
 
 ```
                             .org $8000
@@ -155,7 +149,7 @@ main        8000
 message     8008
 ```
 
-Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing — blank lines, comments, `.equ` definitions, labels on their own line — appear with an empty gutter. A `.ds` reservation prints its address but no bytes, because it occupies space without writing any. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on address-only rows below it.
+Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter. A `.ds` reservation prints its address but no bytes, because it occupies space without writing any. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on address-only rows below it.
 
 Included and imported files are listed inline at their inclusion point, so the listing reads in the same order the assembler consumed the program. After the last source line comes a symbol table: every label and constant with its value, sorted by name.
 
@@ -172,7 +166,7 @@ azm --nohex               # no .hex
 azm --nolst               # no .lst
 ```
 
-Example — binary only:
+Example (binary only):
 
 ```sh
 azm --type bin --nohex --nod8m --output out.bin program.asm
@@ -188,7 +182,7 @@ Register contracts are normally read through compiler diagnostics from `--rc war
 azm --rc audit --reg-report program.asm
 ```
 
-Writes `program.regcontracts.txt`, listing declared routines with inferred inputs, outputs, clobbers and findings. Use it for debugging, CI evidence or an audit session. Add `--reg-report-format json` when a tool needs structured findings:
+Writes `program.regcontracts.txt`, listing declared routines with inferred inputs, outputs, clobbers and findings. Add `--reg-report-format json` when a tool needs structured findings:
 
 ```sh
 azm --rc audit --reg-report --reg-report-format json program.asm
@@ -216,7 +210,7 @@ Writes `program.asmi` with inferred `extern` contract records. Other projects th
 azm --asm80 program.asm
 ```
 
-Writes a `.z80` file with AZM-specific features translated to plain ASM80 syntax. Useful for verifying AZM produces byte-identical output to ASM80 or for sharing source with a collaborator who only has ASM80. Treat it as a generated verification aid rather than a primary output.
+Writes a `.z80` file with AZM-specific features translated to plain ASM80 syntax. Useful for verifying AZM produces byte-identical output to ASM80 or for sharing source with a collaborator who only has ASM80.
 
 ASM80-compatible lowered output does not currently support `.import`. If a program uses `.import` and you request `--asm80`, AZM reports an `AZMN_ASM80` diagnostic instead of flattening the import boundary.
 

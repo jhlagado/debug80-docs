@@ -8,21 +8,17 @@ nav_order: 14
 
 # Chapter 14 — Op Declarations
 
-The Z80 instruction set has gaps. `ld hl, de` does not exist — copying HL into DE requires two separate byte moves. Testing whether A is strictly greater than a threshold takes a `cp` and two conditional jumps. Zeroing a register pair means loading the immediate zero, not a dedicated clear instruction.
+The Z80 instruction set has gaps. `ld hl, de` does not exist, so copying HL into DE requires two separate byte moves. Testing whether A is strictly greater than a threshold takes a `cp` and two conditional jumps. Zeroing a register pair means loading the immediate zero, not a dedicated clear instruction.
 
-These patterns appear constantly. None of them are complex. The problem is that writing `cp c / jr c, .skip / jr z, .skip` does not communicate "skip unless A is strictly above C" — it communicates three separate Z80 instructions that a reader must trace to understand the intent. The meaning is buried in the mechanics.
+The problem is that writing `cp c / jr c, .skip / jr z, .skip` does not communicate "skip unless A is strictly above C"; it communicates three separate Z80 instructions that a reader must trace to understand the intent.
 
-`op` is the AZM mechanism for naming a short instruction sequence and placing it inline at every call site. No `call`, no return address, no stack frame. The named sequence is pasted into the output as if you had written the instructions there yourself.
+`op` is the AZM mechanism for naming a short instruction sequence and placing it inline at every call site.
 
 ---
 
 ## Op declarations
 
-An op declaration gives a name to an instruction sequence. At every call site, the assembler places the body of the op directly into the instruction stream — as if you had typed those instructions at that location. The call is textually replaced with the expansion.
-
-A subroutine call would emit `call target`, push a return address onto the stack and come back through `ret`. An op leaves none of that behind: the body is simply there, at every call site.
-
-The machine code at a call site contains the expanded instructions, not a jump. Every op invocation is a separate copy of the body in the binary. That copy is exactly what a reader would see in a disassembly listing.
+Every op invocation is a separate copy of the body in the binary. That copy is exactly what a reader would see in a disassembly listing.
 
 ---
 
@@ -44,15 +40,13 @@ main:
   ret
 ```
 
-The body is one instruction. `clear_a` expands to `xor a` at each call site. The call site is replaced with the expansion in the assembled output.
-
-Empty parentheses `()` are required for a no-parameter op declaration. The call, however, omits them — `clear_a`, not `clear_a()`.
+Empty parentheses `()` are required for a no-parameter op declaration. The call, however, omits them: `clear_a`, not `clear_a()`.
 
 ---
 
 ## Parameterized ops
 
-Parameters let a single op declaration cover multiple operand variants. A parameter has a name and a matcher type that constrains what the call site may supply.
+A parameter has a name and a matcher type that constrains what the call site may supply.
 
 ```asm
 op load8(dst reg8, val imm8)
@@ -67,8 +61,6 @@ end
   load8 B, $FF      ; emits: ld b, $FF
   load8 C, 0        ; emits: ld c, 0
 ```
-
-Each invocation emits exactly one `ld` instruction. The op is a named shorthand; the expansion is an ordinary Z80 load.
 
 A more useful example: swap the contents of two register pairs through the stack.
 
@@ -90,7 +82,7 @@ end
   pop de
 ```
 
-After the expansion, HL holds the original value of DE and DE holds the original value of HL. Four instructions, one named intent: swap.
+After the expansion, HL holds the original value of DE and DE holds the original value of HL.
 
 ---
 
@@ -107,9 +99,9 @@ After the expansion, HL holds the original value of DE and DE holds the original
 | `mem16` | A word-wide memory operand in parentheses |
 | `cc`    | A Z80 condition code: Z, NZ, C, NC, M, P, PE, PO |
 
-`mem8` and `mem16` include the parentheses in the substitution. An op with `src mem8` that writes `ld a, src` in its body expands `src` as `(hl)` when called with `(hl)` — the result is `ld a, (hl)`.
+`mem8` and `mem16` include the parentheses in the substitution. An op with `src mem8` that writes `ld a, src` in its body expands `src` as `(hl)` when called with `(hl)`, and the result is `ld a, (hl)`.
 
-`ea` matches the address itself, without parentheses. An op that writes `ld hl, addr` in its body expands `addr` to the raw label or constant when called with an `ea` operand.
+`ea` matches the address itself, without parentheses.
 
 A condition-code parameter lets an op abstract over conditional branches:
 
@@ -128,20 +120,18 @@ When two overloads of the same op name have different parameter signatures, the 
 
 ## Op vs subroutine
 
-The cost difference is straightforward.
-
 A `call` to a subroutine emits the `call` instruction (3 bytes), which pushes a 2-byte return address and jumps. The subroutine body runs, ending with `ret` (1 byte), which pops the return address and jumps back. Minimum overhead for a subroutine call: 4 bytes of instructions and 2 bytes of stack.
 
-An op call emits the body instructions directly. No `call`, no `ret`, no stack push or pop. If the body is 2 instructions, the call site is 2 instructions.
+An op call emits the body instructions directly. No `call`, no `ret`, no stack push or pop.
 
 For a body of N instructions called in K places:
 
 - **Subroutine**: N instructions in memory once, plus K call/ret pairs = N + 2K instructions total.
 - **Op**: N instructions at each of K call sites = N × K instructions total.
 
-At K = 1, the op is smaller. At K = 2 and N > 4, the subroutine is smaller. For short bodies (2–3 instructions) called a handful of times, the op typically wins on code size. For longer bodies called from many places, the subroutine wins — the single copy pays for itself.
+At K = 1, the op is smaller. At K = 2 and N > 4, the subroutine is smaller.
 
-There is also an overhead threshold on the subroutine side. A subroutine with a 2-instruction body and a 2-instruction call/ret pair doubles the instruction count in the binary for every call site. Calling a 2-instruction subroutine costs as much as the subroutine itself. For sequences that short, the inline expansion is almost always correct.
+A subroutine with a 2-instruction body and a 2-instruction call/ret pair doubles the instruction count in the binary for every call site.
 
 The decision rule: if the body is short enough that the call overhead is a significant fraction of the work being done, use an op. If the body is long enough that call overhead is negligible and if the subroutine is called from enough places that the single copy saves meaningful space, use a subroutine.
 
@@ -149,9 +139,9 @@ The decision rule: if the body is short enough that the call overhead is a signi
 
 ## Pseudo-opcodes: filling Z80 instruction gaps
 
-Some Z80 instruction gaps appear so often that the language fills them with named ops. These are called pseudo-opcodes — they look like instructions, but the Z80 CPU has no such opcode. The assembler expands each one to the actual instructions that achieve the same effect.
+Some Z80 instruction gaps appear so often that the language fills them with named ops. These are called pseudo-opcodes: they look like instructions, but the Z80 CPU has no such opcode.
 
-The most common gap is 16-bit register copies. The Z80 has no `ld hl, de` instruction. Copying DE into HL requires two 8-bit loads:
+The most common gap is 16-bit register copies. Copying DE into HL requires two 8-bit loads:
 
 ```asm
   ld h, d
@@ -213,7 +203,7 @@ end
 
 ## Op expansion is visible in the listing
 
-When you run `azm source.asm`, AZM writes a `.lst` file by default. That listing shows the expanded instructions at each call site — not the op name. This is deliberate: the listing reflects the actual machine output.
+When you run `azm source.asm`, AZM writes a `.lst` file by default. That listing shows the expanded instructions at each call site, not the op name.
 
 For `count_above` from Chapter 10, if the strictly-above check were wrapped in an op:
 
@@ -233,9 +223,7 @@ The listing at an invocation `jr_if_not_above C, .skip` shows:
   03: 28 04     jr z, .skip
 ```
 
-The op name does not appear. The CPU only knows the expanded instructions. A reader with a listing or a disassembler sees those three instructions and can trace the logic directly.
-
-This also means the register contract analyzer sees the expanded instructions. An op has no call boundary and no contract of its own. Whatever registers and flags the expansion touches are the registers and flags the caller's instruction stream touches — exactly as if you had written those instructions there.
+This also means the register contract analyzer sees the expanded instructions. An op has no call boundary and no contract of its own.
 
 ---
 
@@ -248,8 +236,6 @@ This also means the register contract analyzer sees the expanded instructions. A
   jr c, .skip     ; A < C: skip
   jr z, .skip     ; A = C: skip
 ```
-
-Three instructions, two conditional jumps, one intent: "if A is not above threshold, skip." A reader must decode the Z80 flag semantics to understand what the two jumps together mean.
 
 Define an op that names the intent:
 
@@ -282,7 +268,7 @@ _skip:
   ret
 ```
 
-The call site now reads: if A is not above C, skip to `_skip`. The jump destination and the threshold both appear on the same line. The two-jump structure is an implementation detail of the Z80 flag set; the op name says what the code does.
+The call site now reads: if A is not above C, skip to `_skip`.
 
 Compare the two versions side by side:
 
@@ -304,19 +290,7 @@ _skip:
 _skip:
 ```
 
-The machine output is identical. The listing shows the same three instructions at the `jr_if_not_above` site. The only difference is what the source communicates.
-
----
-
-## Summary
-
-- `op` defines an inline instruction expansion. The body is placed at each call site — no `call`, no `ret`, no stack push. The machine sees the expanded instructions.
-- A no-parameter op uses `op name()` and is called without parentheses: `name`.
-- Parameterized ops substitute matched operands into the body. Matcher types: `reg8` (A–L), `reg16` (HL/DE/BC/SP), `imm8` (8-bit immediate), `imm16` (16-bit immediate or label), `ea` (effective address), `mem8`/`mem16` (memory operand with parentheses), `cc` (condition code).
-- Multiple overloads of the same op name are resolved by specificity. Fixed-register matchers beat class matchers; `imm8` beats `imm16` for small values.
-- Use an op for short sequences where call overhead would be a significant fraction of the work. Use a subroutine when the body is long enough that a single copy saves meaningful space.
-- The listing (`.lst`) shows expanded instructions at each call site, not the op name. The analyzer sees the expanded sequence.
-- Pseudo-opcodes are ops that fill gaps in the Z80 instruction set: `ld hl, de` (two byte moves), `clear16 HL` (load immediate zero) and similar.
+The machine output is identical.
 
 ---
 
@@ -379,8 +353,6 @@ Which overload fires for each of these call sites? Explain why, using the specif
 
 ## Book 2 complete
 
-You have reached the end of Book 2.
-
 You can now:
 
 - write a complete AZM program with subroutines, loops, conditional branches and data tables
@@ -389,7 +361,7 @@ You can now:
 - define named record types, reserve storage with `.ds TypeExpr` and compute sizes and offsets at assembly time rather than by hand
 - name repeated instruction sequences with ops and read code that communicates intent rather than mechanics alone
 
-Book 3 builds on all of this. It covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for larger programs that exceed what a single file can hold clearly.
+Book 3 covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for larger programs that exceed what a single file can hold clearly.
 
 ---
 

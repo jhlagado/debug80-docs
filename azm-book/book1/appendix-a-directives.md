@@ -41,7 +41,7 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 
 ## Directive aliases
 
-Common forms such as `DB`, `DW`, `ORG` and `EQU` are handled by the built-in alias layer automatically. Project-specific forms such as `DEFB`, `DEFW` and `RMB` require a project alias file loaded with `--aliases`. See Chapter 7.
+Project-specific forms such as `DEFB`, `DEFW` and `RMB` require a project alias file loaded with `--aliases`. See Chapter 7.
 
 Built-in aliases (normalized before parsing):
 

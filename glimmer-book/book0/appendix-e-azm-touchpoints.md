@@ -10,8 +10,7 @@ nav_order: 23
 # Appendix E - AZM Touchpoints
 
 Every Glimmer build writes one AZM assembly file, and AZM assembles
-and checks it. Reading that file, and writing modules of your own,
-goes faster once you know the assembler features Glimmer leans on.
+and checks it.
 Each entry below says what the feature is, where Glimmer relies on
 it, shows one excerpt from a real build, and points into
 [AZM Book 1](../../azm-book/book1/), where each feature has a
@@ -21,7 +20,7 @@ Chase (chapter 17).
 
 ## Labels and local labels
 
-A label names an address. A label beginning with one underscore is
+A label beginning with one underscore is
 local: it belongs to the nearest non-local label above it, its
 owner, and AZM tracks it as `Owner._name`, so the same spelling can
 recur under different owners.
@@ -52,8 +51,7 @@ Glim_MoveDown:
 
 The first `_stop` is `Glim_MoveUp._stop` and the second
 `Glim_MoveDown._stop`: distinct symbols, one spelling, and Debug80's
-symbol table shows the qualified names. Every block in the book
-names its own `_stop` or `_done` on this rule.
+symbol table shows the qualified names.
 Full treatment: [Source Syntax and
 Symbols](../../azm-book/book1/02-source-syntax.md).
 
@@ -84,7 +82,7 @@ and Source Composition](../../azm-book/book1/07-ops-aliases.md).
 
 `.routine` on the line above a label declares that label a routine
 and a boundary for register-contract analysis. The clauses on the
-same line - `in`, `out`, `clobbers`, `preserves` - are the contract,
+same line (`in`, `out`, `clobbers`, `preserves`) are the contract,
 and a register the line leaves unmentioned counts as preserved.
 
 A bare `.routine` asks AZM to infer the contract from the body, and
@@ -99,7 +97,7 @@ profile library declares its contracts in full:
 FbPlot:
 ```
 
-The checker proves the contract from both sides. Declared clauses
+Declared clauses
 are checked against the routine's own body, so a `preserves` promise
 the body breaks fails the build; and every call site is checked
 against the callee's contract, so a caller reusing a clobbered
@@ -121,7 +119,7 @@ Contracts](../../azm-book/book1/06-register-contracts.md).
 ## `.contracts strict`
 
 `.contracts` is a file-level policy line selecting the checking
-strength - `strict`, `audit` or `off` - for the whole physical file,
+strength (`strict`, `audit` or `off`) for the whole physical file,
 one directive per file.
 
 Glimmer writes the strictest setting near the top of every generated
@@ -134,8 +132,8 @@ file, from `tetro.main.asm`:
 ```
 
 Under `strict`, every `call` and executable tail jump must land on a
-declared routine, so the entire program - runtime, library, imported
-modules and your bodies - passes through the checker on every build.
+declared routine, so the entire program (runtime, library, imported
+modules and your bodies) passes through the checker on every build.
 Full treatment: [Register
 Contracts](../../azm-book/book1/06-register-contracts.md).
 
@@ -177,8 +175,7 @@ Functions](../../azm-book/book1/appendix-d-functions.md).
 
 `.import` loads another source file as a module: its bytes are
 emitted at the import point, its `@` declarations become visible to
-the importer, and its plain declarations stay inside. This is the
-boundary that gives `@` its meaning.
+the importer, and its plain declarations stay inside.
 
 A Glimmer `import "file.asm"` line becomes exactly this directive,
 placed after the runtime, from `tetro.main.asm`:
@@ -239,8 +236,7 @@ Composition](../../azm-book/book1/07-ops-aliases.md).
 
 `.equ` binds a name to a constant expression; `.enum` groups related
 constants under one name, numbering the members from 0, each
-referenced as `Group.Member`. Between them they name nearly every
-number in a generated file.
+referenced as `Group.Member`.
 
 The file opens with `.equ` blocks for the platform: key codes,
 ports, colours, LCD rows. From `tetro.main.asm`:

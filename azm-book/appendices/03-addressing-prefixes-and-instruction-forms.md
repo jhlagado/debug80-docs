@@ -7,9 +7,6 @@ nav_order: 3
 ---
 # Appendix 3 — Addressing, Prefixes, and Instruction Forms
 
-This appendix gives the compact machine-side tables that help when you need to
-recognise a form quickly.
-
 ---
 
 ## Addressing Shapes
@@ -40,8 +37,7 @@ recognise a form quickly.
 | `DD CB d` | indexed bit/shift family | operate on `(IX+d)` |
 | `FD CB d` | indexed bit/shift family | operate on `(IY+d)` |
 
-Important caution: `DD` and `FD` do **not** magically legalise every `HL`
-instruction. The Z80 has many exceptions.
+`DD` and `FD` do **not** magically legalise every `HL` instruction.
 
 ---
 

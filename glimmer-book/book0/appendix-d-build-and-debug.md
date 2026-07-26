@@ -116,7 +116,7 @@ A `build` of `demo.glim` leaves four files beside the source:
 
 | File | Holds |
 |---|---|
-| `demo.main.asm` | The generated assembly program: your block bodies wrapped in the runtime - loop, dispatch, change flags, profile library - as one readable file. The other three files are derived from this one. |
+| `demo.main.asm` | The generated assembly program: your block bodies wrapped in the runtime (loop, dispatch, change flags, profile library) as one readable file. The other three files are derived from this one. |
 | `demo.main.hex` | The assembled bytes as Intel HEX records, the transfer format for loading onto hardware. |
 | `demo.main.bin` | The same bytes as a raw binary image, starting at the origin. |
 | `demo.main.d8.json` | The Debug80 map: address segments attributed to source files, the symbol table (`DotX`, `Glim_MoveRight`, every label with its address), and a generator record naming the assembler version and inputs. |
@@ -132,7 +132,7 @@ Debug80 finds Glimmer programs two ways.
 
 **By convention.** A file named `main.glim`, or ending in
 `.main.glim`, whose first declaration is `program`, is discovered as
-a target - click Run and Debug80 builds it through Glimmer and runs
+a target: click Run and Debug80 builds it through Glimmer and runs
 the result. Part files open with their own declarations (`effect`,
 `state`), so the `program` check keeps them out of the target list.
 
@@ -187,11 +187,10 @@ edit, so the fix is one keystroke away from the report.
 
 Compiler messages carry a file, a line, a `[GLIM]` tag and a
 severity. An error stops the build and nothing is written; a warning
-prints and the build finishes. Each message below is the real output
-of a real broken program.
+prints and the build finishes.
 
-**Duplicate name.** Two declarations named `Score` - states, pulses
-and blocks all draw from one pool of names:
+**Duplicate name.** Two declarations named `Score` (states, pulses
+and blocks all draw from one pool of names):
 
 ```text
 dup.glim:7: [GLIM] error: Duplicate name "Score": all declared names share one namespace.
@@ -205,7 +204,7 @@ reserved.glim:6: [GLIM] error: Reserved name "GlimScore": it belongs to the gene
 ```
 
 **Undeclared cell.** A block triggers `on Points` with no `Points`
-anywhere in the program - a typo for `Score`, caught at the header:
+anywhere in the program, a typo for `Score`, caught at the header:
 
 ```text
 undeclared.glim:8: [GLIM] error: Effect DrawScore triggers on undeclared cell "Points".
@@ -227,8 +226,8 @@ noprog.glim: [GLIM] error: Missing program declaration.
 ```
 
 **Missing updates (warning).** An effect stores to `Score` while its
-header declares no `updates Score`. The build finishes - both
-`Wrote` lines follow the warning - and the program runs with the
+header declares no `updates Score`. The build finishes (both
+`Wrote` lines follow the warning) and the program runs with the
 consequence the message spells out:
 
 ```text

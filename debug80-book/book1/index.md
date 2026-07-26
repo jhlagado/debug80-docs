@@ -12,8 +12,6 @@ has_toc: false
 
 Debug80 turns Visual Studio Code into a Z80 development environment. You write assembly, run it in an emulated TEC-1G, step through it with source-level breakpoints, and send the same program to a real board over a serial cable.
 
-This book walks that whole path once, from an empty folder to running hardware.
-
 ## Chapters
 
 1. [Install Debug80](01-install-debug80.md)
