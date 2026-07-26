@@ -308,8 +308,9 @@ ClampA:
 If outside code tries to reference a private imported label, AZM reports a visibility diagnostic. Keep the call inside the imported file, or make the helper public only when it is genuinely part of the file's interface:
 
 ```asm
+; math.asm — ClampA is now part of the module's interface
 .routine in A out A clobbers F
-ClampA:
+@ClampA:
         cp      100
         ret     c
         ld      a,100

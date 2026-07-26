@@ -68,7 +68,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--case-style` | `upper`, `lower`, `consistent`, `off` | Enforce case style for mnemonics and register names; emits `AZMN_CASE_STYLE` on violations |
+| `--case-style` | `upper`, `lower`, `consistent`, `off` | Enforce case style for mnemonics and register names; emits `AZMN_CASE_STYLE` on violations. Default is `off` |
 | `--symbol-case` | `strict` or `insensitive` | Select symbol lookup mode; default is `strict` |
 
 ## Other flags

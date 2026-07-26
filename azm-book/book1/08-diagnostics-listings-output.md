@@ -51,7 +51,7 @@ Running `azm scan.asm` stops immediately:
 scan.asm:6:9: error: [AZMN_SYMBOL] jr nz target out of range for rel8 branch (140, expected -128..127).
 ```
 
-Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is the column, pointing at the `jr nz`. The severity `error` means the assembly did not produce a successful binary.
+The column, `9`, points at the `jr nz` rather than its operand.
 
 A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The fix is one line:
 

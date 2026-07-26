@@ -222,7 +222,7 @@ In a `.equ` or data context, `$` resolves to the address after the last emitted 
 .ds SPRITE_COUNT * 4
 ```
 
-Use 0–255 for unsigned byte data or −128–127 for signed byte data. Numeric `.db` expressions currently emit their low eight bits without a range diagnostic, so values outside those ranges wrap. `.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767) and reports values outside those ranges. Negative values are encoded in two's-complement form. Use a non-negative count for `.ds`.
+Use 0–255 for unsigned byte data or −128–127 for signed byte data. `.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767) and reports values outside those ranges. Negative values are encoded in two's-complement form. Use a non-negative count for `.ds`.
 
 To split a 16-bit address into two bytes:
 
@@ -242,8 +242,6 @@ Runtime-dependent values belong in Z80 instructions:
 ```
 
 ### Range checks
-
-The table separates the signed and unsigned interpretations and records where AZM enforces them:
 
 | Context | Signed and unsigned range | Enforcement |
 |---------|---------------------------|-------------|

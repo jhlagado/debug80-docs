@@ -190,7 +190,7 @@ Debug80's own **Register Contracts** dropdown offers three of these five: Off, A
 .contracts audit
 ```
 
-Accepted modes are `strict`, `audit` and `off`. In a translation unit built from `.include` files, AZM applies the directive to routines and diagnostics owned by that included file, not only to the root entry file. Project configuration can also assign policies with file globs; the most specific matching rule wins.
+Accepted modes are `strict`, `audit` and `off`. In a translation unit built from `.include` files, AZM applies the directive to routines and diagnostics owned by that included file, not only to the root entry file. Project configuration can also assign policies with file globs; the most specific matching rule wins. A glob beats the `.contracts` directive, which in turn beats `--rc`. `.contracts` may appear only once in each physical file, and a file carrying a mode other than `off` runs the analysis even when no `--rc` flag is given.
 
 Use `.rcignore` immediately before the finding it suppresses and include a reason:
 
@@ -333,8 +333,9 @@ CheckCollisionAtDe:
 Blank lines and ordinary comments may appear between the directive and label:
 
 ```asm
-; Tests candidate placement and returns carry set when blocked.
 .routine in DE out carry clobbers A
+
+; Carry is returned set when the placement is blocked.
 CheckCollisionAtDe:
 ```
 

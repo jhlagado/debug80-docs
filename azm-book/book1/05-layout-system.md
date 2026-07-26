@@ -45,7 +45,7 @@ Sprites:
     .ds Sprite[16]
 ```
 
-`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically. If you mistype a field name, say `offset(Sprite, flagz)`, the assembler rejects it at assemble time. Manual offset constants provide no such connection to the declaration, so an offset can become stale when a field is inserted or resized.
+`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically. If you mistype a field name, say `offset(Sprite, flagz)`, the assembler rejects it at assemble time.
 
 ---
 
