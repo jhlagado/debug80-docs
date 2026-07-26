@@ -84,7 +84,7 @@ meet the hard way.
 
 The board is four `byte[8]` arrays, one bit per cell of the 8x8
 matrix, eight rows, MSB-left. `BoardRows` records occupancy (the
-single question collision cares about), and the three colour planes
+one question collision asks), and the three colour planes
 remember what colour each settled cell keeps. This matches the
 framebuffer: `Framebuffer` stores each row as
 red, green, and blue bitmask bytes, so a settled
@@ -153,7 +153,7 @@ declared cycle: the I piece declares two and gets `rot2` and `rot3` as
 repeats, while the O piece declares one and shows it in all four
 positions. Rotating in play is `CurRotation + 1`, masked to two bits;
 the cycling lives in the generated tables, so the rule that rotates
-never has to care how many distinct forms a piece has.
+never has to know how many distinct forms a piece has.
 
 In most projects in this family of
 games there is a data file: a few hundred lines of hand-maintained

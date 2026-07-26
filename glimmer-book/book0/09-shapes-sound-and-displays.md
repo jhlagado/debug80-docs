@@ -250,8 +250,7 @@ the entire interface:
 The call starts the cue and returns at once; the scan plays it out
 over the following frames while your blocks keep running. One cue is
 active at a time, and starting a new cue replaces the current one;
-a fresh wall hit restarts the chirp from the top, which is exactly
-the feedback a fresh hit deserves.
+a fresh wall hit restarts the chirp from the top.
 
 Sound accompanies a moment, and the
 moment sits inside a rule, behind a conditional, so `call Snd_Bounce`

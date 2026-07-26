@@ -80,7 +80,7 @@ begin
 end
 ```
 
-Twelve lines, and you can already read half of them. Let
+Thirteen lines, and you can already read half of them. Let
 me walk you through the other half, top to bottom.
 
 `program Mover` names the program. `platform tec1g-mon3` and

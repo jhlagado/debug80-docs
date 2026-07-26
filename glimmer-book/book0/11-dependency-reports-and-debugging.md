@@ -17,7 +17,7 @@ file twice this size.
 A misdrawn pixel in Canvas might trace to
 the painting rule, the redraw, a movement effect, or a binding. The
 question that finds bugs in a reactive program (*which fact failed to
-change?*) now has eight candidate answers.
+change?*) now has seven candidate answers.
 
 Every block you have built sits behind a
 `.routine` boundary for register-contract checking. Every

@@ -212,7 +212,7 @@ end
 ```
 
 `RandCol` is where the sky gets its randomness, and it is a routine
-because two different blocks will want it: the round's
+because two different blocks call it: the round's
 first drop and every respawn after a landing both need a fresh column.
 MON-3's API dispatcher sits behind `rst $10` with the call number in
 C, the same doorway the `lcd_row` op walks through, and `ApiRandom` is

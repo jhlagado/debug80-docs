@@ -86,7 +86,7 @@ end
 A second sprite, `Wasp color darkyellow`, and a second tile, `Reed
 color medgreen on black`, follow in the same shape. Their rows are
 yours to draw; any eight strings of `X` and `.` will serve. The build
-cares about the order and the colour pairs, not the artwork:
+depends on the order and the colour pairs, not the artwork:
 the sprites take slots 0 and 1, Lantern's pair comes first so that
 black is the screen background, and Reed's pair opens the next bank.
 The generated equates read `Lantern .equ 1`, `Reed .equ 8`. The rest
@@ -473,7 +473,7 @@ The counted digits stop at two: past 99 the tens character would
 step beyond `'9'` into the character set's punctuation. Treat 99 as
 this scoreboard's ceiling (at the pace the wasp closes in, a two-digit
 game is a long one), and a
-version built to run richer wants either a cap where the digits end
+version built to run richer needs either a cap where the digits end
 or a hundreds pass in the same counting style.
 
 ## Game over, gated

@@ -16,10 +16,10 @@ the cost of keeping everything there: an eraser. With two painting rules to name
 the picture it writes becomes `Paint`. AD sits unused beside GO on the
 keypad, and the rule is `StampPixel`'s mirror image: find the
 cursor's row byte, build the column's mask, and clear the bit instead
-of setting it. Write it out: the eraser opens with a dozen
+of setting it. Write it out: the eraser opens with eight
 instructions copied whole from `StampPixel` before you
-reach the first line that differs. Twelve duplicated instructions are
-twelve places for the next change to miss one, and every copy you
+reach the first line that differs. Eight duplicated instructions are
+eight places for the next change to miss one, and every copy you
 make of working code is a fresh chance to be wrong with it.
 
 The eraser breaks the tally too. `Marks` counts stamps laid:
@@ -336,7 +336,7 @@ end
 `ShowCount` replaces `ShowMarks` and retires the
 `Marks` cell with it, because the count is computed from the picture
 now, fresh on every redraw: `CountLit` returns it in HL, which is
-where `HudWriteU16` wants its value. Stamp, and the count climbs;
+where `HudWriteU16` expects its value. Stamp, and the count climbs;
 erase, and it falls; the display and the board can never disagree,
 because they draw from the same eight bytes.
 

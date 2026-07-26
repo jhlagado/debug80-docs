@@ -528,8 +528,8 @@ test is what makes the re-raise idiom and `Restart`'s every-run
 change mark safe: a raised flag alone, with both card bytes equal,
 walks past every enter block in the file.
 
-The card machinery is now visible in both source and generated code.
-The next chapter puts a complete game inside it: [A Small Matrix
+The next chapter puts a complete game inside the card machinery:
+[A Small Matrix
 Game](14-a-small-matrix-game.md).
 
 ---
