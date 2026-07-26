@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">Source map status and feature availability</title>
+  <desc id="desc">The source-map status line guides whether the user should build before using source-map-backed features.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b5568"/>
+    </marker>
+    <style>
+      .box { fill: #f7fbff; stroke: #2f5d7c; stroke-width: 2; rx: 8; }
+      .build { fill: #fff8e8; stroke: #9a6a12; stroke-width: 2; rx: 8; }
+      .feature { fill: #eef8ef; stroke: #3d7a44; stroke-width: 2; rx: 8; }
+      .label { font: 700 22px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #17212b; }
+      .body { font: 16px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #304050; }
+      .arrow { stroke: #3b5568; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="960" height="360" fill="#ffffff"/>
+  <rect class="box" x="50" y="125" width="250" height="110"/>
+  <text class="label" x="85" y="166">Project status line</text>
+  <text class="body" x="80" y="196">Current, missing, stale</text>
+  <text class="body" x="80" y="218">invalid or no target</text>
+  <path class="arrow" d="M 305 180 H 390"/>
+  <rect class="build" x="395" y="125" width="170" height="110"/>
+  <text class="label" x="450" y="166">Build</text>
+  <text class="body" x="430" y="196">Refresh source</text>
+  <text class="body" x="445" y="218">map data</text>
+  <path class="arrow" d="M 570 180 H 640"/>
+  <rect class="feature" x="665" y="35" width="240" height="64"/>
+  <text class="body" x="705" y="74">Go to Definition</text>
+  <rect class="feature" x="665" y="111" width="240" height="64"/>
+  <text class="body" x="707" y="150">Hover summaries</text>
+  <rect class="feature" x="665" y="187" width="240" height="64"/>
+  <text class="body" x="705" y="226">Run to Cursor</text>
+  <rect class="feature" x="665" y="263" width="240" height="64"/>
+  <text class="body" x="697" y="302">Symbols and constants</text>
+  <path class="arrow" d="M 612 180 C 635 75 640 68 660 67"/>
+  <path class="arrow" d="M 612 180 C 635 140 640 143 660 143"/>
+  <path class="arrow" d="M 612 180 C 635 220 640 219 660 219"/>
+  <path class="arrow" d="M 612 180 C 635 285 640 295 660 295"/>
+</svg>

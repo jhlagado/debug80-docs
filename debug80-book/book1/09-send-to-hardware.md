@@ -1,0 +1,83 @@
+---
+layout: default
+title: "Send to TEC-1G hardware"
+parent: "Debug80 Book 1 — Getting started"
+nav_order: 9
+---
+
+[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)
+
+# Send to TEC-1G hardware
+
+Debug80 sends the active target's Intel HEX file to real hardware through CoolTerm. CoolTerm owns the serial port. Debug80 controls CoolTerm through its localhost Remote Control Socket.
+
+## Install CoolTerm
+
+Download CoolTerm from:
+
+<https://freeware.the-meiers.org>
+
+On macOS, the first launch may require approval in **System Settings > Privacy & Security**. You can also right-click CoolTerm in Finder, choose **Open** and confirm the launch.
+
+Install CoolTerm before you try **Send to TEC-1G**.
+
+![Emulator serial path versus CoolTerm hardware path](../../assets/images/debug80-book/book1/emulator-vs-coolterm-serial.svg)
+
+## Enable the Remote Control Socket
+
+In CoolTerm, open **Preferences > Scripting**. Enable **Remote Control Socket** and keep the port set to `51413`.
+
+Debug80 sends commands to CoolTerm, and CoolTerm sends the file through the serial connection it owns. The local IP shown in CoolTerm is informational.
+
+## Configure the serial port
+
+Open **Connection > Options** in CoolTerm. Select the serial port for your USB serial adapter and use the TEC-1G monitor settings shown below.
+
+The port name depends on your USB serial adapter and operating system. The line settings are fixed for this workflow: `4800 8 N 2`.
+
+If the board misses characters during transfer, adjust CoolTerm's transmit delay settings.
+
+## Build and send
+
+Select the correct project and target in Debug80, then click **Build** so its `.hex` file exists. **Build** rather than **Run**: you want the artifact, not the emulator.
+
+Before sending, click **Test CoolTerm**. It pings CoolTerm's remote control socket and nothing else - no port is opened and no build is needed - so it separates "CoolTerm is not reachable" from "the transfer failed". On success Debug80 reports:
+
+```text
+Debug80: Connected to CoolTerm remote socket.
+```
+
+Put the TEC-1G into MON-3 Intel HEX Load mode before sending.
+
+The TEC-1G display shows the loader state while it waits for incoming data.
+
+Click **Send to TEC-1G** in the Project section. Debug80 sends the active target's HEX file through CoolTerm and reports when the file has been sent.
+
+The button's label follows the platform, so a TEC-1 project reads **Send to TEC-1** and anything else reads **Send to Board**. It is enabled once a target is selected and a HEX file exists; the panel's hardware status line says which of those is missing:
+
+```text
+Ready to send main.hex via CoolTerm.
+```
+
+Debug80 does not read anything back from the board. MON-3 reports the load result on the TEC-1G seven-segment display: `PASS` for an accepted load, `ERROR` for a checksum or write verification failure.
+
+One caution about where the HEX comes from. If your target has no `outputDir`, the send path looks for the HEX beside `debug80.json` rather than in `build/`. Scaffolded projects always set `outputDir`, so this only bites hand-edited configs.
+
+The serial startup message `TEC-1G Connected` belongs to MON-3 startup, not to the transfer.
+
+If sending fails before the transfer begins, start CoolTerm and check that the Remote Control Socket is enabled. When Debug80 asks for a HEX file, build the target again.
+
+After a successful transfer, run the program on the board and compare the result with the emulator.
+
+## If transfer fails
+
+Start with the part of the path that failed:
+
+- If Debug80 cannot connect to CoolTerm, open CoolTerm and check that the Remote Control Socket is enabled on port `51413`.
+- If Debug80 asks for a HEX file, build the active target.
+- If the TEC-1G displays `ERROR`, check that the board is in Intel HEX Load mode and try the transfer again.
+- If characters appear to be missed, add transmit delay in CoolTerm.
+
+---
+
+[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)

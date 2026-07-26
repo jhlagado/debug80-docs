@@ -1,0 +1,53 @@
+; Skyfall - catch the falling blocks.
+; Declarations here; the cards and blocks live in skyfall-rules.glim.
+
+program Skyfall
+
+platform tec1g-mon3
+display matrix8x8
+
+part "skyfall-rules.glim"
+
+; --- facts ---
+
+state PadX  : byte = 3          ; paddle's left column, 0..5
+state DropX : byte              ; falling block's column
+state DropY : byte              ; falling block's row
+state Score : word              ; catches so far
+state Lives : byte              ; misses left before game over
+state Armed : byte              ; game-over gate open: restart allowed
+
+; --- moments ---
+
+pulse LeftP
+pulse RightP
+pulse FallTick
+pulse AnyKeyP
+pulse GateP
+
+; --- schedules ---
+
+timer Gravity : byte = 18 -> FallTick     ; writable: catches quicken it
+timer Wait    : word = 0  -> GateP once   ; armed on game over
+
+; --- input ---
+
+bind key KEY_4 held period 4 -> LeftP
+bind key KEY_6 held period 4 -> RightP
+bind key any   rising -> AnyKeyP
+
+; --- resources ---
+
+shape Paddle color green
+  "XXX"
+end
+
+sound Catch len 8  div 2
+sound Miss  len 40 div 10
+
+text MsgTitle "SKYFALL         "
+text MsgRun   "CATCH THE BLOCKS"
+text MsgOver  "GAME OVER       "
+text MsgAny   "PRESS ANY KEY"
+text MsgLives "LIVES "
+text MsgPad   "      "

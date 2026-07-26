@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="156" viewBox="0 0 720 156" role="img" aria-labelledby="t d">
+  <title id="t">Writing to read-only memory</title>
+  <desc id="d">The Unlock read-only memory checkbox, and the message shown when a ROM byte is edited without it.</desc>
+  <defs><style>
+  .pnl   { fill: #ffffff; stroke: #2f5d7c; stroke-width: 2; }
+  .bar   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 2; }
+  .ctl   { fill: #f7fbff; stroke: #7d97ab; }
+  .field { fill: #f7fbff; stroke: #7d97ab; stroke-width: 1.5; }
+  .btn   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 1.5; }
+  .prim  { fill: #2f5d7c; stroke: #2f5d7c; stroke-width: 1.5; }
+  .card  { fill: #fff8e8; stroke: #9a6a12; stroke-width: 1.5; }
+  .off   { fill: #f2f4f6; stroke: #b9c4cd; stroke-width: 1.5; }
+  .lbl   { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; letter-spacing: .06em; }
+  .val   { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .valm  { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #17212b; }
+  .btxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .ptxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #ffffff; }
+  .dim   { font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #8797a5; }
+  .stat  { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; }
+  .ok    { fill: #1a7f37; }
+  .head  { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2f5d7c; letter-spacing: .1em; }
+  .note  { font: italic 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9a6a12; }
+</style></defs>
+  <rect width="720" height="156" fill="#ffffff"/>
+  <rect class="pnl" x="10" y="10" width="700" height="136" rx="6"/>
+  <rect class="bar" x="11" y="11" width="698" height="26" rx="5"/>
+  <text class="head" x="24" y="28" text-anchor="start">MEMORY</text>
+  <text class="head" x="696" y="28" text-anchor="end">▾  ↑  ↓</text>
+  <text class="lbl" x="26" y="58" text-anchor="start">A</text>
+  <rect class="field" x="44" y="46" width="150" height="24" rx="5"/>
+  <text class="val" x="53" y="62" text-anchor="start">PC</text>
+  <rect class="off" x="210" y="46" width="300" height="24" rx="5"/>
+  <text class="valm" x="220" y="62" text-anchor="start">C3 40 00 6E C7 C2 C2 EB</text>
+  <rect class="field" x="26" y="86" width="14" height="14" rx="3"/>
+  <text class="lbl" x="48" y="100" text-anchor="start">UNLOCK READ-ONLY MEMORY</text>
+  <text class="stat" x="26" y="130" fill="#cf222e">Read-only memory locked</text>
+</svg>

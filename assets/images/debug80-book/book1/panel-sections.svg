@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="276" viewBox="0 0 720 276" role="img" aria-labelledby="t d">
+  <title id="t">The Debug80 panel sections</title>
+  <desc id="d">Nine collapsible sections: Project, Machine, Displays, TMS9918 Video, Joystick, Matrix Keyboard, Registers, Memory and Serial. Four are open by default.</desc>
+  <defs><style>
+  .pnl   { fill: #ffffff; stroke: #2f5d7c; stroke-width: 2; }
+  .bar   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 2; }
+  .ctl   { fill: #f7fbff; stroke: #7d97ab; }
+  .field { fill: #f7fbff; stroke: #7d97ab; stroke-width: 1.5; }
+  .btn   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 1.5; }
+  .prim  { fill: #2f5d7c; stroke: #2f5d7c; stroke-width: 1.5; }
+  .card  { fill: #fff8e8; stroke: #9a6a12; stroke-width: 1.5; }
+  .off   { fill: #f2f4f6; stroke: #b9c4cd; stroke-width: 1.5; }
+  .lbl   { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; letter-spacing: .06em; }
+  .val   { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .valm  { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #17212b; }
+  .btxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .ptxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #ffffff; }
+  .dim   { font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #8797a5; }
+  .stat  { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; }
+  .ok    { fill: #1a7f37; }
+  .head  { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2f5d7c; letter-spacing: .1em; }
+  .note  { font: italic 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9a6a12; }
+</style></defs>
+  <rect width="720" height="276" fill="#ffffff"/>
+  <rect class="pnl" x="10" y="10" width="700" height="256" rx="6"/>
+  <rect class="bar" x="22" y="24" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="39" text-anchor="start">▾  PROJECT</text>
+  <text class="dim" x="680" y="39" text-anchor="end">↑ ↓</text>
+  <rect class="bar" x="22" y="50" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="65" text-anchor="start">▾  MACHINE</text>
+  <text class="dim" x="680" y="65" text-anchor="end">↑ ↓</text>
+  <rect class="bar" x="22" y="76" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="91" text-anchor="start">▾  DISPLAYS</text>
+  <text class="dim" x="680" y="91" text-anchor="end">↑ ↓</text>
+  <rect class="off" x="22" y="102" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="117" text-anchor="start">▸  TMS9918 VIDEO</text>
+  <text class="dim" x="680" y="117" text-anchor="end">↑ ↓</text>
+  <rect class="off" x="22" y="128" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="143" text-anchor="start">▸  JOYSTICK</text>
+  <text class="dim" x="680" y="143" text-anchor="end">↑ ↓</text>
+  <rect class="off" x="22" y="154" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="169" text-anchor="start">▸  MATRIX KEYBOARD</text>
+  <text class="dim" x="680" y="169" text-anchor="end">↑ ↓</text>
+  <rect class="bar" x="22" y="180" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="195" text-anchor="start">▾  REGISTERS</text>
+  <text class="dim" x="680" y="195" text-anchor="end">↑ ↓</text>
+  <rect class="off" x="22" y="206" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="221" text-anchor="start">▸  MEMORY</text>
+  <text class="dim" x="680" y="221" text-anchor="end">↑ ↓</text>
+  <rect class="off" x="22" y="232" width="676" height="22" rx="4"/>
+  <text class="head" x="36" y="247" text-anchor="start">▸  SERIAL</text>
+  <text class="dim" x="680" y="247" text-anchor="end">↑ ↓</text>
+  <text class="note" x="36" y="250" text-anchor="start">Open by default: Project, Machine, Displays, Registers.</text>
+</svg>

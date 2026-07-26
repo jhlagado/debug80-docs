@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="306" viewBox="0 0 720 306" role="img" aria-labelledby="t d">
+  <title id="t">The Machine section</title>
+  <desc id="d">Two columns. The LCD sits above the six-digit seven-segment display on the left. On the right, the keyboard routing cue sits above the hex keypad in its own bordered well.</desc>
+  <defs><style>
+  .pnl   { fill: #ffffff; stroke: #2f5d7c; stroke-width: 2; }
+  .bar   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 2; }
+  .ctl   { fill: #f7fbff; stroke: #7d97ab; }
+  .field { fill: #f7fbff; stroke: #7d97ab; stroke-width: 1.5; }
+  .btn   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 1.5; }
+  .prim  { fill: #2f5d7c; stroke: #2f5d7c; stroke-width: 1.5; }
+  .card  { fill: #fff8e8; stroke: #9a6a12; stroke-width: 1.5; }
+  .off   { fill: #f2f4f6; stroke: #b9c4cd; stroke-width: 1.5; }
+  .lbl   { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; letter-spacing: .06em; }
+  .val   { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .valm  { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #17212b; }
+  .btxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .ptxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #ffffff; }
+  .dim   { font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #8797a5; }
+  .stat  { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; }
+  .ok    { fill: #1a7f37; }
+  .head  { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2f5d7c; letter-spacing: .1em; }
+  .note  { font: italic 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9a6a12; }
+</style></defs>
+  <rect width="720" height="306" fill="#ffffff"/>
+  <rect class="pnl" x="10" y="10" width="700" height="286" rx="6"/>
+  <rect class="bar" x="11" y="11" width="698" height="26" rx="5"/>
+  <text class="head" x="24" y="28" text-anchor="start">MACHINE</text>
+  <text class="head" x="696" y="28" text-anchor="end">▾  ↑  ↓</text>
+  <text class="lbl" x="26" y="58" text-anchor="start">LCD (HD44780 A00)</text>
+  <rect x="26" y="66" width="300" height="98" rx="6" fill="#eef3ea" stroke="#5c7f5c" stroke-width="1.5"/>
+  <text class="valm" x="40" y="92" fill="#2f5d3a">= TEC-1G Main Menu =</text>
+  <text class="valm" x="40" y="112" fill="#2f5d3a">→Intel HEX Load</text>
+  <text class="valm" x="40" y="132" fill="#2f5d3a">  Drive Access</text>
+  <text class="valm" x="40" y="152" fill="#2f5d3a">  Smart Block Copy</text>
+  <rect class="field" x="26" y="176" width="309" height="70" rx="6"/>
+  <g transform="translate(0,211) skewX(-6) translate(0,-211)">
+    <polygon points="46.5,188 49,185.5 65,185.5 67.5,188 65,190.5 49,190.5" fill="#e3e8ed"/>
+    <polygon points="46.5,211 49,208.5 65,208.5 67.5,211 65,213.5 49,213.5" fill="#c0392b"/>
+    <polygon points="46.5,234 49,231.5 65,231.5 67.5,234 65,236.5 49,236.5" fill="#c0392b"/>
+    <polygon points="44,190.5 46.5,193 46.5,206 44,208.5 41.5,206 41.5,193" fill="#c0392b"/>
+    <polygon points="70,190.5 72.5,193 72.5,206 70,208.5 67.5,206 67.5,193" fill="#e3e8ed"/>
+    <polygon points="44,213.5 46.5,216 46.5,229 44,231.5 41.5,229 41.5,216" fill="#c0392b"/>
+    <polygon points="70,213.5 72.5,216 72.5,229 70,231.5 67.5,229 67.5,216" fill="#e3e8ed"/>
+    <circle cx="79" cy="234" r="2.6" fill="#e3e8ed"/>
+    <polygon points="90.5,188 93,185.5 109,185.5 111.5,188 109,190.5 93,190.5" fill="#c0392b"/>
+    <polygon points="90.5,211 93,208.5 109,208.5 111.5,211 109,213.5 93,213.5" fill="#c0392b"/>
+    <polygon points="90.5,234 93,231.5 109,231.5 111.5,234 109,236.5 93,236.5" fill="#c0392b"/>
+    <polygon points="88,190.5 90.5,193 90.5,206 88,208.5 85.5,206 85.5,193" fill="#c0392b"/>
+    <polygon points="114,190.5 116.5,193 116.5,206 114,208.5 111.5,206 111.5,193" fill="#e3e8ed"/>
+    <polygon points="88,213.5 90.5,216 90.5,229 88,231.5 85.5,229 85.5,216" fill="#c0392b"/>
+    <polygon points="114,213.5 116.5,216 116.5,229 114,231.5 111.5,229 111.5,216" fill="#e3e8ed"/>
+    <circle cx="123" cy="234" r="2.6" fill="#e3e8ed"/>
+    <polygon points="134.5,188 137,185.5 153,185.5 155.5,188 153,190.5 137,190.5" fill="#c0392b"/>
+    <polygon points="134.5,211 137,208.5 153,208.5 155.5,211 153,213.5 137,213.5" fill="#e3e8ed"/>
+    <polygon points="134.5,234 137,231.5 153,231.5 155.5,234 153,236.5 137,236.5" fill="#c0392b"/>
+    <polygon points="132,190.5 134.5,193 134.5,206 132,208.5 129.5,206 129.5,193" fill="#c0392b"/>
+    <polygon points="158,190.5 160.5,193 160.5,206 158,208.5 155.5,206 155.5,193" fill="#e3e8ed"/>
+    <polygon points="132,213.5 134.5,216 134.5,229 132,231.5 129.5,229 129.5,216" fill="#c0392b"/>
+    <polygon points="158,213.5 160.5,216 160.5,229 158,231.5 155.5,229 155.5,216" fill="#e3e8ed"/>
+    <circle cx="167" cy="234" r="2.6" fill="#e3e8ed"/>
+    <polygon points="178.5,188 181,185.5 197,185.5 199.5,188 197,190.5 181,190.5" fill="#e3e8ed"/>
+    <polygon points="178.5,211 181,208.5 197,208.5 199.5,211 197,213.5 181,213.5" fill="#c0392b"/>
+    <polygon points="178.5,234 181,231.5 197,231.5 199.5,234 197,236.5 181,236.5" fill="#e3e8ed"/>
+    <polygon points="176,190.5 178.5,193 178.5,206 176,208.5 173.5,206 173.5,193" fill="#e3e8ed"/>
+    <polygon points="202,190.5 204.5,193 204.5,206 202,208.5 199.5,206 199.5,193" fill="#e3e8ed"/>
+    <polygon points="176,213.5 178.5,216 178.5,229 176,231.5 173.5,229 173.5,216" fill="#e3e8ed"/>
+    <polygon points="202,213.5 204.5,216 204.5,229 202,231.5 199.5,229 199.5,216" fill="#e3e8ed"/>
+    <circle cx="211" cy="234" r="2.6" fill="#e3e8ed"/>
+    <polygon points="240.5,188 243,185.5 259,185.5 261.5,188 259,190.5 243,190.5" fill="#e3e8ed"/>
+    <polygon points="240.5,211 243,208.5 259,208.5 261.5,211 259,213.5 243,213.5" fill="#e3e8ed"/>
+    <polygon points="240.5,234 243,231.5 259,231.5 261.5,234 259,236.5 243,236.5" fill="#e3e8ed"/>
+    <polygon points="238,190.5 240.5,193 240.5,206 238,208.5 235.5,206 235.5,193" fill="#e3e8ed"/>
+    <polygon points="264,190.5 266.5,193 266.5,206 264,208.5 261.5,206 261.5,193" fill="#2f855a"/>
+    <polygon points="238,213.5 240.5,216 240.5,229 238,231.5 235.5,229 235.5,216" fill="#e3e8ed"/>
+    <polygon points="264,213.5 266.5,216 266.5,229 264,231.5 261.5,229 261.5,216" fill="#2f855a"/>
+    <circle cx="273" cy="234" r="2.6" fill="#e3e8ed"/>
+    <polygon points="284.5,188 287,185.5 303,185.5 305.5,188 303,190.5 287,190.5" fill="#2f855a"/>
+    <polygon points="284.5,211 287,208.5 303,208.5 305.5,211 303,213.5 287,213.5" fill="#e3e8ed"/>
+    <polygon points="284.5,234 287,231.5 303,231.5 305.5,234 303,236.5 287,236.5" fill="#2f855a"/>
+    <polygon points="282,190.5 284.5,193 284.5,206 282,208.5 279.5,206 279.5,193" fill="#2f855a"/>
+    <polygon points="308,190.5 310.5,193 310.5,206 308,208.5 305.5,206 305.5,193" fill="#e3e8ed"/>
+    <polygon points="282,213.5 284.5,216 284.5,229 282,231.5 279.5,229 279.5,216" fill="#2f855a"/>
+    <polygon points="308,213.5 310.5,216 310.5,229 308,231.5 305.5,229 305.5,216" fill="#2f855a"/>
+    <circle cx="317" cy="234" r="2.6" fill="#e3e8ed"/>
+  </g>
+  <text class="lbl" x="44" y="262" text-anchor="start">ADDRESS</text>
+  <text class="lbl" x="238" y="262" text-anchor="start">DATA</text>
+  <rect class="card" x="360" y="44" width="320" height="26" rx="13"/>
+  <circle cx="378" cy="57" r="4" fill="#9a6a12"/>
+  <text class="lbl" x="392" y="61" text-anchor="start">KEYBOARD RELEASED</text>
+  <text class="dim" x="666" y="61" text-anchor="end">CLICK EMULATOR TO CAPTURE</text>
+  <rect class="field" x="360" y="96" width="320" height="186" rx="6"/>
+  <rect class="btn" x="374" y="110" width="46" height="30" rx="5"/>
+  <text class="btxt" x="397" y="130" text-anchor="middle">RESET</text>
+  <rect class="btn" x="374" y="218" width="46" height="30" rx="5"/>
+  <text class="btxt" x="397" y="238" text-anchor="middle">FN</text>
+  <rect class="btn" x="426" y="110" width="46" height="30" rx="5"/>
+  <text class="btxt" x="449" y="130" text-anchor="middle">AD</text>
+  <rect class="btn" x="426" y="146" width="46" height="30" rx="5"/>
+  <text class="btxt" x="449" y="166" text-anchor="middle">GO</text>
+  <rect class="btn" x="426" y="182" width="46" height="30" rx="5"/>
+  <text class="btxt" x="449" y="202" text-anchor="middle">◀</text>
+  <rect class="btn" x="426" y="218" width="46" height="30" rx="5"/>
+  <text class="btxt" x="449" y="238" text-anchor="middle">▶</text>
+  <rect class="btn" x="478" y="110" width="46" height="30" rx="5"/>
+  <text class="btxt" x="501" y="130" text-anchor="middle">C</text>
+  <rect class="btn" x="530" y="110" width="46" height="30" rx="5"/>
+  <text class="btxt" x="553" y="130" text-anchor="middle">D</text>
+  <rect class="btn" x="582" y="110" width="46" height="30" rx="5"/>
+  <text class="btxt" x="605" y="130" text-anchor="middle">E</text>
+  <rect class="btn" x="634" y="110" width="46" height="30" rx="5"/>
+  <text class="btxt" x="657" y="130" text-anchor="middle">F</text>
+  <rect class="btn" x="478" y="146" width="46" height="30" rx="5"/>
+  <text class="btxt" x="501" y="166" text-anchor="middle">8</text>
+  <rect class="btn" x="530" y="146" width="46" height="30" rx="5"/>
+  <text class="btxt" x="553" y="166" text-anchor="middle">9</text>
+  <rect class="btn" x="582" y="146" width="46" height="30" rx="5"/>
+  <text class="btxt" x="605" y="166" text-anchor="middle">A</text>
+  <rect class="btn" x="634" y="146" width="46" height="30" rx="5"/>
+  <text class="btxt" x="657" y="166" text-anchor="middle">B</text>
+  <rect class="btn" x="478" y="182" width="46" height="30" rx="5"/>
+  <text class="btxt" x="501" y="202" text-anchor="middle">4</text>
+  <rect class="btn" x="530" y="182" width="46" height="30" rx="5"/>
+  <text class="btxt" x="553" y="202" text-anchor="middle">5</text>
+  <rect class="btn" x="582" y="182" width="46" height="30" rx="5"/>
+  <text class="btxt" x="605" y="202" text-anchor="middle">6</text>
+  <rect class="btn" x="634" y="182" width="46" height="30" rx="5"/>
+  <text class="btxt" x="657" y="202" text-anchor="middle">7</text>
+  <rect class="btn" x="478" y="218" width="46" height="30" rx="5"/>
+  <text class="btxt" x="501" y="238" text-anchor="middle">0</text>
+  <rect class="btn" x="530" y="218" width="46" height="30" rx="5"/>
+  <text class="btxt" x="553" y="238" text-anchor="middle">1</text>
+  <rect class="btn" x="582" y="218" width="46" height="30" rx="5"/>
+  <text class="btxt" x="605" y="238" text-anchor="middle">2</text>
+  <rect class="btn" x="634" y="218" width="46" height="30" rx="5"/>
+  <text class="btxt" x="657" y="238" text-anchor="middle">3</text>
+</svg>

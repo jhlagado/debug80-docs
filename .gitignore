@@ -1,0 +1,15 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+Gemfile.lock
+
+# AZM example build outputs are generated from tracked .asm sources.
+azm-book/**/*.bin
+azm-book/**/*.hex
+azm-book/**/*.lst
+azm-book/**/*.d8.json
+node_modules/
+.vitepress/dist/
+.vitepress/cache/

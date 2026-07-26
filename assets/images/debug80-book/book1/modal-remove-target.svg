@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="174" viewBox="0 0 720 174" role="img" aria-labelledby="t d">
+  <title id="t">Confirming target removal</title>
+  <desc id="d">A modal reading "Remove target blink from this project? Its source files and build artifacts will not be deleted." with a Remove Target button.</desc>
+  <defs><style>
+  .pnl   { fill: #ffffff; stroke: #2f5d7c; stroke-width: 2; }
+  .bar   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 2; }
+  .ctl   { fill: #f7fbff; stroke: #7d97ab; }
+  .field { fill: #f7fbff; stroke: #7d97ab; stroke-width: 1.5; }
+  .btn   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 1.5; }
+  .prim  { fill: #2f5d7c; stroke: #2f5d7c; stroke-width: 1.5; }
+  .card  { fill: #fff8e8; stroke: #9a6a12; stroke-width: 1.5; }
+  .off   { fill: #f2f4f6; stroke: #b9c4cd; stroke-width: 1.5; }
+  .lbl   { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; letter-spacing: .06em; }
+  .val   { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .valm  { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #17212b; }
+  .btxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .ptxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #ffffff; }
+  .dim   { font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #8797a5; }
+  .stat  { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; }
+  .ok    { fill: #1a7f37; }
+  .head  { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2f5d7c; letter-spacing: .1em; }
+  .note  { font: italic 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9a6a12; }
+</style></defs>
+  <rect width="720" height="174" fill="#ffffff"/>
+  <rect class="pnl" x="120" y="24" width="480" height="126" rx="8"/>
+  <text class="val" x="148" y="58" text-anchor="start">Remove target blink from this project? Its source files</text>
+  <text class="val" x="148" y="78" text-anchor="start">and build artifacts will not be deleted.</text>
+  <rect class="btn" x="442" y="106" width="130" height="24" rx="5"/>
+  <text class="btxt" x="507" y="122" text-anchor="middle">Remove Target</text>
+  <rect class="btn" x="358" y="106" width="74" height="24" rx="5"/>
+  <text class="btxt" x="395" y="122" text-anchor="middle">Cancel</text>
+</svg>

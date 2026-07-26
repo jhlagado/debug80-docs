@@ -1,0 +1,32 @@
+---
+layout: default
+title: "AZM Book 1 — Assembler Manual"
+nav_order: 4
+has_children: true
+has_toc: false
+---
+
+# AZM Book 1 — Assembler Manual
+
+This is the reference for AZM, an enhanced Z80 assembler with modern programming features.
+
+Use this book when you want the exact assembler rules. If you want a guided introduction to Z80 programming first, start with [AZM Book 2 — Z80 Fundamentals](../book2/index.md).
+
+## Main Path
+
+1. [Preface](00-preface.md)
+2. [Getting Started with AZM](01-getting-started.md)
+3. [Source Syntax and Symbols](02-source-syntax.md)
+4. [Addresses, Constants and Expressions](03-addresses-constants-expressions.md)
+5. [Raw Data, Storage and Strings](04-data-storage-includes.md)
+6. [The Layout System](05-layout-system.md)
+7. [Register Contracts](06-register-contracts.md)
+8. [Ops, Aliases and Source Composition](07-ops-aliases.md)
+9. [Diagnostics and Output](08-diagnostics-listings-output.md)
+
+## Appendices
+
+- [Appendix A — Directive Reference](appendix-a-directives.md)
+- [Appendix B — Expression Operators](appendix-b-operators.md)
+- [Appendix C — CLI Flag Reference](appendix-c-cli.md)
+- [Appendix D — Built-in Functions](appendix-d-functions.md)

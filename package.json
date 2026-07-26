@@ -1,0 +1,19 @@
+{
+  "name": "debug80-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "sidebar": "node .vitepress/generate-sidebar.mjs",
+    "verify:debug80": "node scripts/verify-debug80-claims.mjs",
+    "diagrams": "node scripts/generate-book-diagrams.mjs",
+    "links": "node scripts/check-links.mjs",
+    "symbols": "node scripts/check-symbols.mjs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}

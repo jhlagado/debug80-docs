@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="404" viewBox="0 0 720 404" role="img" aria-labelledby="t d">
+  <title id="t">The Displays section</title>
+  <desc id="d">Two columns. Speed, mute and speaker controls with the status and memory-bank indicators sit above the GLCD on the left; the 8x8 RGB LED matrix and its scan readout occupy the right.</desc>
+  <defs><style>
+  .pnl   { fill: #ffffff; stroke: #2f5d7c; stroke-width: 2; }
+  .bar   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 2; }
+  .ctl   { fill: #f7fbff; stroke: #7d97ab; }
+  .field { fill: #f7fbff; stroke: #7d97ab; stroke-width: 1.5; }
+  .btn   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 1.5; }
+  .prim  { fill: #2f5d7c; stroke: #2f5d7c; stroke-width: 1.5; }
+  .card  { fill: #fff8e8; stroke: #9a6a12; stroke-width: 1.5; }
+  .off   { fill: #f2f4f6; stroke: #b9c4cd; stroke-width: 1.5; }
+  .lbl   { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; letter-spacing: .06em; }
+  .val   { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .valm  { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #17212b; }
+  .btxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #17212b; }
+  .ptxt  { font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #ffffff; }
+  .dim   { font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #8797a5; }
+  .stat  { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #55677a; }
+  .ok    { fill: #1a7f37; }
+  .head  { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2f5d7c; letter-spacing: .1em; }
+  .note  { font: italic 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9a6a12; }
+</style></defs>
+  <rect width="720" height="404" fill="#ffffff"/>
+  <rect class="pnl" x="10" y="10" width="700" height="384" rx="6"/>
+  <rect class="bar" x="11" y="11" width="698" height="26" rx="5"/>
+  <text class="head" x="24" y="28" text-anchor="start">DISPLAYS</text>
+  <text class="head" x="696" y="28" text-anchor="end">▾  ↑  ↓</text>
+  <rect class="field" x="26" y="50" width="376" height="102" rx="6"/>
+  <rect class="off" x="40" y="62" width="100" height="24" rx="12"/>
+  <text class="dim" x="90" y="78" text-anchor="middle">FAST</text>
+  <rect class="btn" x="164" y="62" width="100" height="24" rx="12"/>
+  <text class="btxt" x="214" y="78" text-anchor="middle">MUTED</text>
+  <rect class="off" x="288" y="62" width="100" height="24" rx="12"/>
+  <text class="dim" x="338" y="78" text-anchor="middle">SPEAKER</text>
+  <rect class="off" x="40" y="96" width="348" height="22" rx="11"/>
+  <circle cx="54" cy="107" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="64" y="111" text-anchor="start">SHADOW</text>
+  <circle cx="141" cy="107" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="151" y="111" text-anchor="start">PROTECT</text>
+  <circle cx="228" cy="107" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="238" y="111" text-anchor="start">EXPAND</text>
+  <circle cx="315" cy="107" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="325" y="111" text-anchor="start">CAPS</text>
+  <rect class="off" x="40" y="124" width="348" height="22" rx="11"/>
+  <circle cx="54" cy="135" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="64" y="139" text-anchor="start">MEM 3</text>
+  <circle cx="141" cy="135" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="151" y="139" text-anchor="start">MEM 2</text>
+  <circle cx="228" cy="135" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="238" y="139" text-anchor="start">MEM 1</text>
+  <circle cx="315" cy="135" r="4" fill="#c8cfd5"/>
+  <text class="lbl" x="325" y="139" text-anchor="start">MEM 0</text>
+  <rect x="26" y="164" width="376" height="216" rx="6" fill="#eef3e9" stroke="#5c7f5c" stroke-width="1.5"/>
+  <text class="lbl" x="42" y="186" text-anchor="start">GLCD (128X64)</text>
+  <rect x="42" y="194" width="344" height="172" rx="4" fill="#dbe6c4" stroke="#8ba36a" stroke-width="1.5"/>
+  <rect class="field" x="422" y="50" width="272" height="330" rx="6"/>
+  <text class="lbl" x="438" y="74" text-anchor="start">8X8 RGB LED MATRIX</text>
+  <rect x="436" y="84" width="244" height="244" rx="4" fill="#f4f6f8" stroke="#c3ccd4"/>
+  <circle cx="453" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="101" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="453" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="131" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="453" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="161" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="453" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="191" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="453" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="221" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="453" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="251" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="453" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="281" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="453" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="483" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="513" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="543" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="573" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="603" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="633" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <circle cx="663" cy="311" r="11" fill="#eceff2" stroke="#c3ccd4"/>
+  <text class="stat" x="436" y="348" font-size="10.5">SCAN 911.6 Hz | CPU 3.44 MHz</text>
+  <text class="stat" x="436" y="364" font-size="10.5">buffer 0 ms | dropped 0</text>
+</svg>

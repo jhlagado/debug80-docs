@@ -1,0 +1,182 @@
+---
+layout: default
+title: "Appendix A — Debug expressions"
+parent: "Debug80 Book 1 — Getting started"
+nav_order: 101
+---
+
+[← Copy monitor ROM source](../10-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
+
+# Appendix A — Debug expressions
+
+Debug80 supports Z80-focused expressions in the standard VS Code **Watch** panel and in conditional breakpoints. Add Watches while the program is paused. Add a breakpoint condition by right-clicking a breakpoint and choosing **Edit Breakpoint**.
+
+## Examples
+
+These examples show the shape of the expression language:
+
+```asm
+A
+HL
+PC
+zero
+not carry
+PACMO_LIVES
+[PACMO_LIVES]
+[HL]
+[IX + 4]
+PC = MainLoop
+[PACMO_LIVES] = 0
+zero and A = 0
+(A ^ $ff) = $df
+```
+
+## Registers
+
+Watch expressions can refer directly to Z80 registers:
+
+```asm
+A
+B
+C
+D
+E
+F
+H
+L
+BC
+DE
+HL
+AF
+IX
+IY
+SP
+PC
+I
+R
+```
+
+Alternate registers are supported:
+
+```asm
+A'
+B'
+C'
+D'
+E'
+F'
+H'
+L'
+BC'
+DE'
+HL'
+AF'
+```
+
+Index-register and stack-pointer halves are supported:
+
+```asm
+IXH
+IXL
+IYH
+IYL
+SPH
+SPL
+```
+
+## Flags
+
+Flags use spelled-out names:
+
+```asm
+zero
+carry
+sign
+parity
+halfCarry
+```
+
+This keeps `carry` separate from the `C` register.
+
+```asm
+zero
+not carry
+zero and A = 0
+```
+
+## Symbols
+
+Symbols from the active source map can be used by name. A symbol by itself evaluates to its address or constant value.
+
+```asm
+MainLoop
+PACMO_LIVES
+PC = MainLoop
+```
+
+Build the active target again when a symbol Watch needs to be generated or refreshed.
+
+## Memory reads
+
+Square brackets read one byte from memory at the address inside the brackets:
+
+```asm
+[HL]
+[PACMO_LIVES]
+[IX + 4]
+```
+
+Z80 assembly normally uses parentheses for indirect references, as in `(HL)`. Debug80 expressions use square brackets for memory reads so parentheses can keep their ordinary expression-grouping role.
+
+```asm
+(A + 1) = $21
+([FLAGS] & $80) != 0
+([PACMO_LIVES] = 3) or carry
+```
+
+## Operators
+
+Arithmetic operators:
+
+```asm
++ - * / %
+```
+
+Bitwise operators:
+
+```asm
+& | ^ ~
+```
+
+`&` is bitwise AND. `|` is bitwise OR. `^` is bitwise XOR. `~` is bitwise invert.
+
+Comparison operators:
+
+```asm
+= == != <> < <= > >=
+```
+
+`=` and `==` test equality. `!=` and `<>` test inequality. `<` tests less than. `<=` tests less than or equal. `>` tests greater than. `>=` tests greater than or equal.
+
+The word forms `eq`, `ne`, `lt`, `le`, `gt` and `ge` are also accepted. They mean the same thing as `=`, `!=`, `<`, `<=`, `>` and `>=`.
+
+Logical operators:
+
+```asm
+and or not
+```
+
+## Truth values
+
+Debug80 treats zero as false and any non-zero value as true:
+
+```asm
+A
+[PLAYER_LIVES]
+not [PLAYER_LIVES]
+carry or zero
+```
+
+Conditional breakpoints use the same syntax. When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors appear in the Debug Console and the condition is treated as false.
+
+[← Copy monitor ROM source](../10-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
