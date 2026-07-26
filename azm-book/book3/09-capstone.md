@@ -8,7 +8,7 @@ nav_order: 10
 
 # Chapter 9 — Capstone
 
-You have sorted tables, walked strings, packed flags into bytes, built a ring buffer, called yourself on the stack, split files with `.include` and followed `addr` fields through linked structures. This chapter ties those habits into one program: **eight queens** on an 8x8 board.
+You have sorted tables, walked strings, packed flags into bytes, built a ring buffer, called yourself on the stack, split files with `.include` and followed `.word` link fields through linked structures. This chapter ties those habits into one program: **eight queens** on an 8x8 board.
 
 The puzzle: place eight queens so no two share a row, column or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different; the companion program counts all of them and stores the total in RAM.
 

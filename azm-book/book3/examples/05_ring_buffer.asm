@@ -57,7 +57,7 @@ main:
 
     ld a, $CC
     call ring_push
-    xor a
+    ld a, 0             ; ld does not touch carry; xor a would clear it
     ld (push_ok), a
     jr nc, _after_full_test
     inc a

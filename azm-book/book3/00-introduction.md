@@ -54,8 +54,6 @@ The pattern used throughout Book 3:
 .org $8000
 values:
     .db 9, 4, 6, 2, 8, 1, 7, 3
-
-.org $7F00
 workspace:
     .ds byte[4]       ; algorithm-local scratch (uninitialized)
 ```

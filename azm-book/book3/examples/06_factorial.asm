@@ -1,5 +1,5 @@
 ; 06_factorial.asm — Chapter 6 companion
-; Assemble: azm examples/06_factorial.asm
+; Assemble: azm 06_factorial.asm
 ; Run to halt, then inspect:
 ;   (fact_rec)  at $8000 — 5! via recursion → $78 (120)
 ;   (fact_iter) at $8001 — 5! via loop     → $78 (120)
@@ -90,7 +90,7 @@ _loop:
     ret
 
 ; sum_u8_rec: sum bytes demo_nums[0 .. A-1] into HL (A = count on entry)
-; Self-call; one return address per tail index; no extra pushes in body.
+; Self-call; six bytes per level: two push af pairs and the return address.
 .routine in HL,A out HL clobbers AF,BC,DE
 sum_u8_rec:
     or a

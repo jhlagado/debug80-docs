@@ -140,7 +140,9 @@ GCD_B .equ 18
 Longer algorithms spill into **workspace** bytes reserved with `.ds`:
 
 ```asm
-.org $7F00
+.org $8000
+values:
+    .db 9, 4, 6, 2, 8, 1, 7, 3
 key_byte:
     .ds byte
 sort_len:
@@ -149,12 +151,12 @@ sort_len:
 
 Rules used throughout Book 3:
 
-- Place workspace in RAM, not ROM (`$8000` region or a dedicated high page like `$7F00`).
+- Place workspace in RAM, not ROM, and continue the same `.org` block as the data. A later `.org` below an earlier one is ignored, as Chapter 2 explains.
 - `.ds` reserves without initializing, so the program must write before read.
 - One label per logical temporary (`key_byte`, not `temp4`).
 - Document in comments which routines touch which workspace labels.
 
-Chapter 2's insertion sort stores the current key in `key_byte` because C, B and HL are busy playing index and base roles.
+Chapter 2's insertion sort stores the current key in `key_byte`, placed after its table, because C, B and HL are busy playing index and base roles.
 
 ---
 

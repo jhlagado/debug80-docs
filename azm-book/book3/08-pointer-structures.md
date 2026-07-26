@@ -223,23 +223,19 @@ The demo searches for `$22` and expects `find_hit = 1` and `find_node` equal to 
 .routine in A,DE clobbers BC,DE,HL
 list_push_head:
     push af
-    ld hl, list_head
-    ld a, (hl)
-    ld c, a
-    inc hl
-    ld a, (hl)
-    ld b, a
+    ld hl, (list_head)
+    ld c, l
+    ld b, h              ; BC = old head
     pop af
-    ld (de), a
-    ex de, hl
-    ld (hl), c
+    ld (de), a           ; new node's value field
+    ex de, hl            ; HL = new node
+    push hl
     inc hl
-    ld (hl), b
-    ex de, hl
-    ld hl, list_head
-    ld (hl), e
+    ld (hl), c           ; next, low byte
     inc hl
-    ld (hl), d
+    ld (hl), b           ; next, high byte
+    pop hl               ; HL = new node base again
+    ld (list_head), hl
     ret
 ```
 
@@ -250,7 +246,7 @@ Steps in plain terms:
 3. `pop af` and store the payload at `(de)`; store BC into `next` via `ex de, hl`.
 4. Store DE into `list_head`.
 
-After `ld de, node_spare` / `ld a, $40` / `call list_push_head`, the list order is spare → a → b → c. The new sum is `$0064` (100).
+After `ld de, node_spare` / `ld a, $40` / `call list_push_head`, the list order is spare → a → b → c. The new sum is `$00A2` (162).
 
 ```asm
     ld de, node_spare
@@ -364,7 +360,7 @@ The control flow is a loop, not a self-call: depth is bounded by tree height and
 
 | File | What to verify |
 |------|----------------|
-| [`examples/08_linked_list.asm`](examples/08_linked_list.asm) | Sum 60, find `$22`, sum 100 after head insert |
+| [`examples/08_linked_list.asm`](examples/08_linked_list.asm) | Sum 98 (`$0062`), find `$22`, sum 162 (`$00A2`) after head insert |
 
 ```sh
 cd azm-book/book3/examples

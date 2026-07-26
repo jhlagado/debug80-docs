@@ -139,7 +139,7 @@ _copy:
 
 The last iteration copies the zero terminator. That matters if later code scans `buffer` with the same null-terminated walk.
 
-After `call strcpy_u8`, DE points one past the null. Reload HL from `message` before another pass; do not assume DE still equals the source base.
+After `call strcpy_u8`, DE points one past the null. Reload HL from `message` before another pass; do not assume DE still equals the destination base.
 
 ---
 
@@ -181,14 +181,14 @@ Lexicographic compare reads one byte from each string until bytes differ or both
 
 ```asm
 ; strcmp_u8: 0 if equal, 1 if HL string greater, $FF if less
-.routine in HL,DE out A clobbers F,HL,DE
+.routine in HL,DE out A clobbers F,BC,HL,DE
 strcmp_u8:
 _loop:
     ld a, (hl)
     push af
     ld a, (de)
     pop bc
-    cp c
+    cp b
     jr c, _greater
     jr nz, _less
     or a
@@ -207,7 +207,7 @@ _equal:
     ret
 ```
 
-Order matters: compare characters **before** you decide both strings ended. A holds the DE character and C holds the HL character, so `cp c` computes DE - HL. Carry therefore means the HL string is greater. If both bytes are zero, Z remains set and `_equal` returns 0. If one string is a prefix of the other, the zero byte orders the shorter string before the longer one.
+Order matters: compare characters **before** you decide both strings ended. A holds the DE character and B holds the HL character, so `cp b` computes DE - HL. Carry therefore means the HL string is greater. If both bytes are zero, Z remains set and `_equal` returns 0. If one string is a prefix of the other, the zero byte orders the shorter string before the longer one.
 
 The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$800F` should be `$01`.
 
@@ -215,11 +215,11 @@ The companion program copies `message` into `buffer`, then compares the two buff
 
 ## Preparing for print: digits and terminators
 
-Display routines want ASCII, not raw small integers. The digit loop from Chapter 1 still applies: divide the value by 10, add `'0'` to each remainder, store backward into a small buffer, null-terminate.
+Display routines need ASCII, not raw small integers. The digit loop from Chapter 1 still applies: divide the value by 10, add `'0'` to each remainder, store backward into a small buffer, null-terminate.
 
 Sketch of the invariant for decimal output into a byte buffer at DE:
 
-> HL (or DE) points at the next free byte rightward; the digits emitted so far sit to the left; when the value reaches zero, write `$00` and you are done.
+> HL (or DE) points at the next free byte leftward; the digits emitted so far sit to the right; when the value reaches zero, the digits are complete.
 
 You do not need a print port for Book 3. Storing `"42", 0` in RAM and inspecting bytes after `halt` is enough proof.
 

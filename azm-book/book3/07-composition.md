@@ -8,7 +8,7 @@ nav_order: 8
 
 # Chapter 7 — Composition
 
-Every chapter so far kept the whole program in one `.asm` file. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each deserve their own file.
+Every chapter so far kept the whole program in one `.asm` file. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each belong in their own file.
 
 AZM supports **`.import`** for module-style source files with explicit `@` exports; Book 1 covers that reference workflow. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
 

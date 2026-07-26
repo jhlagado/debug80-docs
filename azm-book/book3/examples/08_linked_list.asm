@@ -2,9 +2,9 @@
 ; Assemble: azm 08_linked_list.asm
 ; Run to halt, then inspect:
 ;   list_sum at $800E — sum of $10+$22+$30 → $0062 (98)
-;   find_hit at $8010 — $01 if $22 was found
-;   find_node at $800F — address of node_b when found
-;   sum_after at $8011 — sum after push $40 at head → $00A2 (162)
+;   find_node at $8010 — address of node_b when found
+;   find_hit at $8012 — $01 if $22 was found
+;   sum_after at $8013 — sum after push $40 at head → $00A2 (162)
 
 ListNode .type
 value   .byte
@@ -100,23 +100,19 @@ _not_found:
 .routine in A,DE clobbers BC,DE,HL
 list_push_head:
     push af
-    ld hl, list_head
-    ld a, (hl)
-    ld c, a
-    inc hl
-    ld a, (hl)
-    ld b, a
+    ld hl, (list_head)
+    ld c, l
+    ld b, h              ; BC = old head
     pop af
-    ld (de), a
-    ex de, hl
-    ld (hl), c
+    ld (de), a           ; new node's value field
+    ex de, hl            ; HL = new node
+    push hl
     inc hl
-    ld (hl), b
-    ex de, hl
-    ld hl, list_head
-    ld (hl), e
+    ld (hl), c           ; next, low byte
     inc hl
-    ld (hl), d
+    ld (hl), b           ; next, high byte
+    pop hl               ; HL = new node base again
+    ld (list_head), hl
     ret
 
 .org $8000

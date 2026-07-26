@@ -1,9 +1,9 @@
 ; 03_string_length.asm — Chapter 3 companion
 ; Assemble: azm 03_string_length.asm
 ; Run to halt, then inspect:
-;   (str_len)     at $8008 — length of message ("HELLO" → 5)
-;   (copy_ok)     at $8009 — $01 if buffer matches source
-;   (find_index)  at $800A — index of 'L' in message → 2
+;   (str_len)     at $800E — length of message ("HELLO" → 5)
+;   (copy_ok)     at $800F — $01 if buffer matches source
+;   (find_index)  at $8010 — index of 'L' in message → 2
 
 .org $0000
 main:
@@ -60,14 +60,14 @@ _copy:
     ret
 
 ; strcmp_u8: lexicographic compare; 0 equal, 1 HL>DE, $FF HL<DE
-.routine in HL,DE out A clobbers F,HL,DE
+.routine in HL,DE out A clobbers F,BC,HL,DE
 strcmp_u8:
 _cmp_loop:
     ld a, (hl)
     push af
     ld a, (de)
     pop bc
-    cp c
+    cp b
     jr c, _greater
     jr nz, _less
     or a

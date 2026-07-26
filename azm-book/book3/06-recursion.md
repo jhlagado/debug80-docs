@@ -10,7 +10,7 @@ nav_order: 7
 
 Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
 
-It is nested `call` with a finite base case, and the **hardware stack** holding one return address per active call. You must budget that stack at assembly time; the CPU will not warn you before it overwrites something else.
+The **hardware stack** holds one return address per active call. You must budget that stack at assembly time; the CPU will not warn you before it overwrites something else.
 
 The companion listing is [`examples/06_factorial.asm`](examples/06_factorial.asm).
 
