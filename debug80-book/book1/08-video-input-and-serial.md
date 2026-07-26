@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 9
 ---
 
-[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
+[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Sending to TEC-1G hardware →](09-send-to-hardware.md)
 
 # Video, input and serial
 
@@ -35,7 +35,11 @@ A selector switches between **PAL 50** and **NTSC 60**, changing the vertical-bl
 
 ## Joystick
 
-The **Joystick** section emulates the TEC-1G joystick as a D-pad with **Fire 1**, **Fire 2**, **Fire 3** and an auxiliary button. Click them, or use the keyboard: `W`, `S`, `A` and `D` for the directions, `J` or `Space` for Fire 1, `I` for Fire 2, `K` for Aux, and `L` for Fire 3.
+The **Joystick** section emulates the TEC-1G joystick as a D-pad with
+**Fire 1**, **Fire 2**, **Fire 3** and an auxiliary button. The
+on-screen buttons and keyboard both drive it: `W`, `S`, `A` and `D`
+for directions, `J` or `Space` for Fire 1, `I` for Fire 2, `K` for
+Aux, and `L` for Fire 3.
 
 ![The Joystick section](../../assets/images/debug80-book/book1/section-joystick.svg)
 
@@ -45,7 +49,9 @@ When several input surfaces are eligible, the joystick outranks the hex keypad. 
 
 ## Matrix Keyboard
 
-The **Matrix Keyboard** section emulates the TEC-1G's full keyboard as a five-row QWERTY matrix. Click keys, or type once the matrix owns the keyboard.
+The **Matrix Keyboard** section emulates the TEC-1G's full keyboard as
+a five-row QWERTY matrix. Its on-screen keys work directly; physical
+typing reaches it once the matrix owns keyboard focus.
 
 ![The Matrix Keyboard section](../../assets/images/debug80-book/book1/section-matrix-keyboard.svg)
 
@@ -81,4 +87,4 @@ There is no NMI button. Non-maskable interrupts happen as a consequence of input
 
 ---
 
-[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
+[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Sending to TEC-1G hardware →](09-send-to-hardware.md)

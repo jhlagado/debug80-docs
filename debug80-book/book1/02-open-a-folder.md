@@ -1,19 +1,23 @@
 ---
 layout: default
-title: "Open a folder, make a project"
+title: "Opening a folder and creating a project"
 parent: "Debug80 Book 1 — Getting started"
 nav_order: 2
 ---
 
-[← Install Debug80](01-install-debug80.md) | [Book 1](index.md) | [Targets →](03-targets.md)
+[← Debug80 installation](01-install-debug80.md) | [Book 1](index.md) | [Targets →](03-targets.md)
 
-# Open a folder, make a project
+# Opening a folder and creating a project
 
-Debug80 works on an ordinary folder. Open one and the panel shows one of three states: no folder, a folder that is not yet a project, or a project.
+Debug80 works on an ordinary folder. Once one is open, the panel shows
+one of three states: no folder, a folder that is not yet a project, or
+a project.
 
-## Open a folder
+## The project folder
 
-Click **Open Folder** in the panel, or use VS Code's own **File > Open Folder**, and choose an empty folder. We will call it `project1`.
+The **Open Folder** button in the panel and VS Code's **File > Open
+Folder** command both select the folder. The example uses an empty
+folder called `project1`.
 
 The header row now names the folder, and beside it sit a **+** to add another folder to the workspace and a **−** to remove one. Below the header a card reads:
 
@@ -23,13 +27,15 @@ Uninitialized Debug80 project
 
 A folder becomes a Debug80 project when it contains `debug80.json`, either at the folder root or under `.vscode/`.
 
-## Choose a platform and initialize
+## Platform selection and initialization
 
 The uninitialized state adds two controls to the header row: a **Platform** dropdown and an **Initialize** button.
 
 ![The panel showing an uninitialized project](../../assets/images/debug80-book/book1/panel-state-uninitialized.svg)
 
-The dropdown offers **Simple**, **TEC-1** and **TEC-1G**. The examples throughout this book use **TEC-1G**. Choose it, then click **Initialize**.
+The dropdown offers **Simple**, **TEC-1** and **TEC-1G**. The examples
+throughout this book use **TEC-1G**; selecting it and then
+**Initialize** begins project creation.
 
 Debug80 asks one more question, in a picker at the top of the window:
 
@@ -41,9 +47,13 @@ Create a starter source file for this Debug80 project
 
 with two standing options. **Create ASM starter** writes `src/main.asm` with a small working program. **No target yet** creates the project without one, and you pick a program file later. If the folder already holds assembly files they are listed above those two, so you can adopt an existing file instead.
 
-Choose **Create ASM starter**.
+For this example, **Create ASM starter** supplies the first runnable
+target.
 
-To choose from all five profile kits rather than a platform (`Simple / Default`, `TEC-1 / MON-1B`, `TEC-1 / Classic 2K`, `TEC-1G / MON-3` and `TEC-1G / Custom`), run **Debug80: Create Project** from the Command Palette instead of using the panel. The panel's Platform dropdown picks the default kit for the platform you chose, which for TEC-1G is `TEC-1G / MON-3`.
+The **Debug80: Create Project** command exposes all five profile kits
+(`Simple / Default`, `TEC-1 / MON-1B`, `TEC-1 / Classic 2K`, `TEC-1G
+/ MON-3` and `TEC-1G / Custom`). The panel's Platform dropdown instead
+uses the platform's default kit, which for TEC-1G is `TEC-1G / MON-3`.
 
 ## The project files
 
@@ -90,11 +100,12 @@ The project's Debug80 configuration is stored in `debug80.json`, an ordinary fil
 
 The generated file is longer than the extract above; it also records the memory map, the monitor ROM the profile brings with it, and the source roots the assembler searches.
 
-No JSON schema ships for `debug80.json`, so editing it by hand gets no autocomplete. Prefer the panel and the commands for routine changes.
+No JSON schema ships for `debug80.json`, so editing it by hand gets no
+autocomplete. The panel and commands are safer for routine changes.
 
 ## The starter program
 
-Open `src/main.asm`:
+The generated `src/main.asm` contains:
 
 ```asm
 ; Debug80 starter (TEC-1G / MON-3)
@@ -143,8 +154,9 @@ Every service the program uses comes from MON-3 through `RST 0x10`, with the cal
 
 The **+** beside the folder name adds a folder, and Debug80 offers to initialize it if it is not already a project. The **−** removes the selected folder from the workspace without touching anything on disk, and it is disabled when only one folder is open.
 
-With several folders open, the folder-name button becomes a picker: click it to choose which one Debug80 is working on.
+With several folders open, the folder-name button becomes a picker
+that selects which one Debug80 is working on.
 
 ---
 
-[← Install Debug80](01-install-debug80.md) | [Book 1](index.md) | [Targets →](03-targets.md)
+[← Debug80 installation](01-install-debug80.md) | [Book 1](index.md) | [Targets →](03-targets.md)

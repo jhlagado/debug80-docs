@@ -11,8 +11,8 @@ nav_order: 8
 
 The ramp gives a program a clock of its own: a byte that
 walks from 0 to its last step, once per frame, marked changed the
-whole way. Point a compute block at it and a position starts moving.
-Divide a 64-step ramp by eight and a dot crosses the 8x8 RGB LED
+whole way. When a compute block reads it, a position starts moving.
+Dividing a 64-step ramp by eight makes a dot cross the 8x8 RGB LED
 matrix:
 
 ```text
@@ -115,7 +115,7 @@ One declaration is new:
 curve Glide ease_out steps 64 from 0 to 6
 ```
 
-Read it aloud, the way we always do: *Glide is an ease-out curve, 64
+Spoken aloud, the declaration says: *Glide is an ease-out curve, 64
 steps, running from 0 to 6.* At build time, Glimmer traces an ease-out
 path (fast at first, slowing toward the end) and writes the 64
 positions it passes through into the program as a table of bytes named
@@ -140,7 +140,7 @@ Every ramp names an arrival pulse, so `Landed` fires as the flight
 ends. Comet lands quietly for now; a sound cue can later respond to
 the same moment.
 
-Build it and press GO. The launch is brisk and the landing is soft,
+In a running build, GO produces a brisk launch and a soft landing,
 and between the two the dot slows column by column: motion with a
 shape, from a compute block seven instructions long.
 
@@ -203,14 +203,14 @@ so the dot stands on its landing column on the very frame `Landed`
 fires.
 
 Duration is the steps
-count in frames: raise both numbers to 128 and the same glide takes
-twice as long. Feel is the preset name: change `ease_out` to `sine`
-and rebuild, and the same 64-frame flight arrives with a different
-character. Either way, the block joining them stays untouched.
+count in frames: setting both numbers to 128 makes the same glide take
+twice as long. The preset name controls its character; changing
+`ease_out` to `sine` and rebuilding gives the same 64-frame flight a
+different motion. Either way, the block joining them stays untouched.
 
 ## The table in the generated file
 
-Open `comet.main.asm` and find the resource the declaration became:
+In `comet.main.asm`, the declaration has become this resource:
 
 ```asm
 ; --- curve resources ---
@@ -249,10 +249,10 @@ untouched.
 You name a motion so you can choose between motions, and that choice
 is something you feel at the keypad. So here is the full
 Comet: three curves over the same run, a `Preset` fact naming the
-current one, and PLUS cycling through them. Before you read the walkthrough,
-type it in, build it, and fly all three. GO to launch, PLUS to switch,
-GO again. Flick between the presets until you can tell them apart with
-your eyes alone.
+current one, and PLUS cycling through them. Running the complete
+program before the walkthrough makes the three motions concrete: GO
+launches, PLUS switches presets, and another GO launches again. A few
+switches make their different paths visible.
 
 ```text
 program Comet
@@ -385,7 +385,7 @@ On the very first frame, `Preset` is already changed, so
 `TrackComet` runs before any launch, reads the idle ramp's final step,
 and the dot appears on its landing column, waiting for GO. And
 `TrackComet` triggers `on Travel, Preset`, so a switch lands
-on the next update: press PLUS during a flight and the dot jumps to
+on the next update. A press of PLUS during a flight makes the dot jump to
 the new path's position at the same step, then finishes the journey on
 the new curve. Launch under preset 1 and you are watching this chapter's
 opening motion again, equal dwell on every column. Preset 2 glides in;

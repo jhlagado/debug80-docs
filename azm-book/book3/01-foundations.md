@@ -21,7 +21,7 @@ Euclid's method gets there with subtraction alone:
 1. If the right value is zero, the left value is the answer.
 2. If the left is greater than or equal to the right, subtract the right from the left.
 3. Otherwise swap the two values.
-4. Repeat from step 1.
+4. Control returns to step 1.
 
 ---
 
@@ -48,7 +48,8 @@ contract says the routine consumes or clobbers it.
 its incoming value. A routine that uses one as scratch must restore it before
 every `ret`.
 
-Every subroutine in this book should document its contract with register contracts (Book 2 Chapter 12).
+Every subroutine in this book documents its contract with the register-contract
+notation introduced in Book 2 Chapter 12.
 
 ---
 
@@ -128,7 +129,9 @@ gcd_result:
     .ds word
 ```
 
-`ld (gcd_result), hl` stores a 16-bit little-endian value: low byte first, high byte second. After the program halts, inspect `$8000` and `$8001` in the emulator; you should see `$06` and `$00`.
+`ld (gcd_result), hl` stores a 16-bit little-endian value: low byte first, high
+byte second. After the program halts, the emulator shows `$06` at `$8000` and
+`$00` at `$8001`.
 
 Named constants keep the call site readable:
 
@@ -155,12 +158,15 @@ sort_len:
     .ds byte
 ```
 
-Rules used throughout Book 3:
+Book 3 follows four workspace rules:
 
-- Place workspace in RAM, not ROM, and continue the same `.org` block as the data. A later `.org` below an earlier one is ignored, as Chapter 2 explains.
-- `.ds` reserves without initializing, so the program must write before read.
-- One label per logical temporary (`key_byte`, not `temp4`).
-- Document in comments which routines touch which workspace labels.
+- Workspace belongs in RAM rather than ROM and continues in the same `.org`
+  block as the data. A later `.org` below an earlier one is ignored, as Chapter
+  2 explains.
+- `.ds` reserves without initializing, so each byte must be written before it is
+  read.
+- Each logical temporary has its own label (`key_byte`, not `temp4`).
+- Comments identify which routines touch each workspace label.
 
 Chapter 2's insertion sort stores the current key in `key_byte`, placed after
 its table, because C, B and HL already hold indices, counts and addresses.
@@ -218,7 +224,8 @@ The companion program stores the byte result at `power_result`. After `halt`, `$
 |------|----------------|
 | [`examples/01_gcd.asm`](examples/01_gcd.asm) | `gcd_result` = 6, `power_result` = 81, then `halt` |
 
-Assemble from `book3/`:
+These commands assemble the example from `book3/`, with the second form also
+checking register contracts:
 
 ```sh
 azm examples/01_gcd.asm
@@ -229,15 +236,20 @@ azm --rc warn examples/01_gcd.asm
 
 ## Exercises
 
-1. Change `GCD_A` and `GCD_B` to 270 and 192. Trace the first five loop iterations by hand, then run the program and confirm `gcd_result`.
-2. Add `gcd_u16` calls for (0, 5) and (5, 0). What should each return? Test in the emulator.
-3. Implement `digit_count_u8` with A in and A out. Return 1 for values 0–9,
-2 for 10–99 and 3 for 100–255. Two `cp` instructions against 10 and 100 are
-enough; no division is needed.
-4. Rewrite `mul8_a_by_c` with a shift-and-add multiply (faster for larger products). Keep the same `.routine` contract.
-5. Run `azm --rc warn` on a deliberate bug: put a later-needed address in DE,
-call `gcd_u16`, then dereference DE without reloading it. Read the warning about
-the declared DE clobber and fix the caller.
+1. The first exercise sets `GCD_A` to 270 and `GCD_B` to 192, traces the first
+   five loop iterations by hand, and compares the trace with `gcd_result` after
+   the program runs.
+2. Two additional `gcd_u16` calls, for (0, 5) and (5, 0), test the routine's
+   zero handling. Their expected results can be checked in the emulator.
+3. A `digit_count_u8` routine uses A for both input and output. It returns 1 for
+   values 0–9, 2 for 10–99 and 3 for 100–255. Two `cp` instructions against 10
+   and 100 are enough; no division is needed.
+4. A shift-and-add version of `mul8_a_by_c` provides a faster implementation
+   for larger products while retaining the existing `.routine` contract.
+5. A deliberate register-contract error leaves a later-needed address in DE,
+   calls `gcd_u16`, and then dereferences DE without reloading it. `azm --rc
+   warn` should report the declared DE clobber; reloading the address at the
+   caller resolves the warning.
 
 ---
 

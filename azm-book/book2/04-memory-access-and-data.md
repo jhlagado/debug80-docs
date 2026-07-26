@@ -35,7 +35,7 @@ IX and IY support displaced addressing: `(ix+d)` reads the byte at address IX + 
 > `ld a, (hl)` reads the _byte at the address held in HL_ from memory.
 >
 > Adding or removing parentheses may select a different legal instruction.
-> Check the intended addressing mode whenever memory is involved. Parentheses
+> The intended addressing mode therefore needs verification whenever memory is involved. Parentheses
 > can mean something else in indirect jump and I/O forms.
 
 ---
@@ -70,7 +70,7 @@ When you write `ld a, (count)`, the assembler substitutes the address that `coun
 
 ## Two memory locations cannot be combined
 
-There is no instruction that copies one memory address directly to another. You must go through a register:
+There is no instruction that copies one memory address directly to another. A register must carry the value between them:
 
 ```asm
 ; No such instruction: ld ($8001), ($8000)
@@ -117,9 +117,10 @@ As an **unsigned** value, the byte holds 0 to 255. The bit pattern `$FF` is 255.
 
 As a **signed** value using two's complement, bit 7 is the sign bit. If bit 7 is 0 the value is positive (0 to 127). If bit 7 is 1 the value is negative (−128 to −1). The bit pattern `$FF` is −1. The bit pattern `$80` is −128.
 
-To compute the two's complement of a positive value: invert all bits and add one. The two's complement of `$01` (`%00000001`) is `%11111110 + 1 = %11111111 = $FF`, which is −1.
+Two's complement negation inverts every bit and adds one. The two's complement
+of `$01` (`%00000001`) is `%11111110 + 1 = %11111111 = $FF`, which is −1.
 
-`add a, b` performs the same bitwise addition regardless. The result byte is identical whether you treat the inputs as signed or unsigned. Where the difference surfaces: `$80 + $01` gives `$81`. Read as unsigned that is 128 + 1 = 129. Read as signed that is −128 + 1 = −127. The bug appears when one part of your program writes a value intending it as signed and another reads it as unsigned. The common landmark values (`$00`, `$7F`, `$80`, `$FF`) and their signed and unsigned meanings are in
+`add a, b` performs the same bitwise addition regardless. The result byte is identical whether the inputs are treated as signed or unsigned. The difference surfaces with `$80 + $01`, which gives `$81`: its unsigned meaning is 128 + 1 = 129, while its signed meaning is −128 + 1 = −127. The bug appears when one part of a program writes a value as signed and another reads it as unsigned. The common landmark values (`$00`, `$7F`, `$80`, `$FF`) and their signed and unsigned meanings are in
 [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
 
 ---
@@ -168,7 +169,7 @@ branches based on zero, ordering and carry conditions.
 
 ## Exercises
 
-**1. Memory form identification.** Classify each instruction below using the LD forms table: identify the row it belongs to and state whether the instruction reads from or writes to memory.
+**1. Memory form identification.** The task is to classify each instruction with the LD forms table, identify its row and state whether it reads from or writes to memory.
 
 ```asm
 ld a, (hl)
@@ -178,7 +179,7 @@ ld ($8010), a
 ld de, ($8020)
 ```
 
-**2. Spot the illegal instruction.** Four of these five `ld` instructions will assemble without error. One will not; the assembler will reject it. Identify the illegal form and explain why it is rejected:
+**2. The illegal instruction.** Four of these five `ld` instructions assemble without error. The answer should identify the rejected form and explain the restriction:
 
 ```asm
 ld a, (hl)
@@ -190,7 +191,7 @@ ld b, $FF
 
 _(Hint: re-read the two-memory-locations section and the note about what `ld` cannot do.)_
 
-**3. Signed or unsigned?** For each byte value below, give both the unsigned interpretation (0–255) and the signed two's complement interpretation (−128 to +127):
+**3. Signed or unsigned?** Each byte below needs both its unsigned interpretation (0–255) and its signed two's-complement interpretation (−128 to +127):
 
 - `$00`
 - `$7F`
@@ -199,7 +200,7 @@ _(Hint: re-read the two-memory-locations section and the note about what `ld` ca
 
 Which of these values has the same meaning under both interpretations? Which has the most dramatically different meanings?
 
-**4. Trace the word store.** Given the sequence:
+**4. Word-store trace.** The following sequence determines the bytes at `$8050` and `$8051`:
 
 ```asm
 ld hl, $ABCD

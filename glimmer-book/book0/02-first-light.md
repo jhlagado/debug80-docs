@@ -23,23 +23,23 @@ with you at the keypad supplying the moments.
 
 Everything this book needs is in one VS Code extension, **Debug80**:
 the Glimmer compiler, the assembler, and a full emulated TEC-1G,
-keypad and all. Install VS Code, open the Extensions marketplace, and
-add Debug80. [Debug80 Book 1](../../debug80-book/book1/) provides a
+keypad and all. The setup consists of installing VS Code and adding
+Debug80 from the Extensions marketplace. [Debug80 Book 1](../../debug80-book/book1/) provides a
 guided tour of the extension itself. Glimmer also has a command line
 for scripts and work outside VS Code; Appendix D covers it.
 
 ## Beacon
 
-Open VS Code, add an empty folder, and initialize it as a TEC-1G
-project from the Debug80 panel: two clicks, and [Debug80 Book
+The first project begins as an empty folder in VS Code, initialized as
+a TEC-1G project from the Debug80 panel. [Debug80 Book
 1](../../debug80-book/book1/02-open-a-folder.md) walks
-through them with pictures if you want company. Then create a file in
-the project named `main.glim`. The name is what Debug80 looks for: a
+through the two clicks with pictures. A file named `main.glim` then
+provides the program entry point. The name is what Debug80 looks for: a
 file called `main.glim`, or ending in `.main.glim`, whose first
 declaration is `program`, is recognised as a Glimmer program and
 built.
 
-Type or paste the program into the file:
+The file contains this program:
 
 ```text
 program Beacon
@@ -85,13 +85,13 @@ new thing is that *the colour itself is a fact*. The 8x8 matrix mixes
 red, green and blue per pixel, so the values 1 through 7 are its seven
 visible colours, and `NextColour`'s wrap keeps the cell inside that
 range. `DrawBeacon` never knows or cares which colour is current; it
-reads the fact and plots it. Say the chain aloud once before we build:
-"GO fires Step; on Step, NextColour updates Colour; on Colour,
+reads the fact and plots it. Spoken aloud, the chain is: "GO fires Step;
+on Step, NextColour updates Colour; on Colour,
 DrawBeacon."
 
-## Run it
+## The first run
 
-Click the **Run** button in the Debug80 panel.
+The **Run** button in the Debug80 panel starts the build and launch.
 
 Debug80 hands your file to the Glimmer
 compiler, assembles the result, checks it, loads the MON-3 ROM and
@@ -100,9 +100,9 @@ opens on the TEC-1G, and there on the 8x8 matrix is a single red
 pixel. `Colour` started at 1, which is red, and the word `changed` in
 your declaration is why it drew itself before you touched anything.
 
-Now click GO on the panel's keypad. Green. Again: yellow. Keep going
-(red, green, yellow, blue, magenta, cyan, white) and round again to
-red. Between presses, the scan keeps the pixel lit and the keypad poll
+Each click of GO on the panel's keypad advances the colour: green,
+yellow, blue, magenta, cyan, white, then round again to red. Between
+presses, the scan keeps the pixel lit and the keypad poll
 keeps checking while both reactive blocks wait for their facts to
 change.
 
@@ -124,7 +124,7 @@ into play.
 
 ## The file Glimmer wrote
 
-Open `build/main.main.asm`. The file reads top to bottom in a fixed
+The generated `build/main.main.asm` reads top to bottom in a fixed
 order, and its section comments are a table of contents:
 
 ```text
@@ -211,8 +211,9 @@ them, and at the bottom of the file the profile library spells out
 
 ## Stopping the world
 
-Back in `main.glim` (your source, the one you typed), set a
-breakpoint on the `inc a` line inside `NextColour`, and click Run.
+A breakpoint on the `inc a` line inside `NextColour` in `main.glim` shows
+where the reactive chain reaches that rule. With the breakpoint set before
+the next Run, the program starts without reaching it.
 
 The beacon glows. And nothing stops: `NextColour`
 has not run, because `Step` has not fired, because you have not
@@ -220,13 +221,12 @@ pressed GO. A breakpoint in a reactive program is
 a question (*when does this rule actually run?*) and right now the
 answer is: not yet.
 
-Click GO.
+Pressing the GO key now fires `Step` and reaches the breakpoint.
 
-The debugger halts, on your line, in your file. Look at the registers
-panel: there is A, holding the colour your block loaded on the line
-above. Step once and watch the increment happen. Step again through
-the compare and the store. Continue, and the beacon shows its next
-colour, and the machine goes back to waiting for you.
+The debugger halts on the source line. In the registers panel, A holds
+the colour loaded on the line above. One step executes the increment;
+the next steps pass through the compare and store. Continuing lets the
+beacon show its next colour before the machine returns to waiting.
 
 You set a breakpoint in a declarative source file, on a line of
 assembly inside a rule, and a full-speed emulated Z80 stopped there
@@ -236,9 +236,9 @@ and stepping land in your source, and when you step past the end of
 your block, the debugger continues into `main.main.asm`, the
 generated file you now know your way around.
 
-Mover runs the same way. Save it in the project as
-`mover.main.glim` and it appears as a second target in the Debug80
-panel; select it, click Run, and steer the dot with keys 4 and 6.
+Mover runs the same way. Saved in the project as `mover.main.glim`, it
+appears as a second target in the Debug80 panel. Running that target
+lets keys 4 and 6 steer the dot.
 
 In the next chapter, Beacon grows a position and a score, and you
 learn everything a fact can be: [State](03-state.md).

@@ -121,14 +121,14 @@ Two bookkeeping entries are on the stack already, and any arguments the caller p
 
 You never read IX+0 through IX+3 directly; those slots belong to the bookkeeping.
 
-To allocate local storage, decrement SP once per byte needed:
+Local storage decrements SP once for each required byte:
 
 ```asm
   dec sp
   dec sp             ; allocate 2 bytes of local storage
 ```
 
-The two bytes are now at IX−1 and IX−2. Access them with indexed addressing:
+The two bytes are now at IX−1 and IX−2, where indexed addressing reaches them:
 
 ```asm
   ld (ix-1), a       ; write first local
@@ -285,7 +285,7 @@ Every caller of `find_max` must either not need HL and B afterward, or reload th
 
 ## Exercises
 
-**1. Trace push/pop order.** A subroutine has this entry sequence:
+**1. Push/pop order.** A subroutine has this entry sequence:
 
 ```asm
   push bc
@@ -293,13 +293,13 @@ Every caller of `find_max` must either not need HL and B afterward, or reload th
   push af
 ```
 
-Write the correct epilogue (three pops in the right order). Then explain what happens if the order is reversed.
+The answer requires the matching three-pop epilogue and an explanation of what happens when the order is reversed.
 
-**2. Identify what to save.** A subroutine receives HL as an input table pointer and B as a byte count. Internally, it uses C and D as scratch and E as a second counter. Which registers need push/pop discipline? Which do not? Write the push sequence at entry and the matching pop sequence at exit.
+**2. Registers that need saving.** A subroutine receives HL as an input table pointer and B as a byte count. Internally, it uses C and D as scratch and E as a second counter. The task is to determine which registers need push/pop discipline and provide the matching entry and exit sequences.
 
-**3. Build an IX frame.** Write the prologue and epilogue for a subroutine that needs four bytes of local storage. Use `(ix-1)` through `(ix-4)` for the locals. Then write the two instructions that write the value 42 into the first local and read it back into A.
+**3. An IX frame.** The required prologue and epilogue allocate four bytes of local storage at `(ix-1)` through `(ix-4)`. Two further instructions store 42 in the first local and read it back into A.
 
-**4. Spot the bug.** The following subroutine has a return path that misses a pop:
+**4. A missing pop.** The following subroutine has a return path that misses a pop:
 
 ```asm
 sum_bytes:
@@ -316,7 +316,7 @@ SumBytesLoop:
   ret
 ```
 
-If `b` is loaded with 0 before the call, `djnz` will execute 256 times (the Z80's zero-count behaviour). Suppose instead that a separate error path is added that returns early when a zero byte is found:
+If `b` is loaded with 0 before the call, `djnz` executes 256 times (the Z80's zero-count behaviour). A separate error path may instead return early when a zero byte is found:
 
 ```asm
   ld a, (hl)
@@ -334,7 +334,7 @@ SumEarlyExit:
   ret                ; BUG: missing pop
 ```
 
-Explain exactly what happens to the caller's BC and to the stack when the early exit fires. Write the corrected version.
+The explanation must account for the caller's BC and the stack when the early exit fires, followed by a corrected version.
 
 ---
 

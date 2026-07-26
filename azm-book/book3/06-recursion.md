@@ -10,7 +10,9 @@ nav_order: 7
 
 Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
 
-The **hardware stack** holds one return address per active call. You must budget that stack at assembly time; the CPU will not warn you before it overwrites something else.
+The **hardware stack** holds one return address per active call. Its capacity
+must be budgeted at assembly time because the CPU gives no warning before an
+overflow overwrites other data.
 
 The companion listing is [`examples/06_factorial.asm`](examples/06_factorial.asm).
 
@@ -32,14 +34,16 @@ Iterative loops from Chapters 1–2 already do this with registers and workspace
 
 ## The stack as an explicit resource
 
-For recursion, treat the stack like any other fixed resource:
+For recursion, the stack is managed like any other fixed resource:
 
-1. **Initialize SP** before the first `call` (`ld sp, STACK_TOP`).
-2. **Count bytes per active level**: return address (2), plus any `push` / IX frame / `dec sp` locals that level adds.
-3. **Bound depth at compile time**: the largest argument your demo passes, or a named `.equ` limit you refuse to exceed.
-4. **Compare** the exact sum, or a conservative
-`max_depth × largest_frame_bytes` bound, to the RAM below `STACK_TOP` and above
-your workspace and data.
+1. **SP initialization** occurs before the first `call` (`ld sp, STACK_TOP`).
+2. **Bytes per active level** include the return address (2), plus any `push`,
+   IX frame or `dec sp` locals added by that level.
+3. **A compile-time depth bound** records the largest argument the program is
+   designed to receive.
+4. **The resulting total**, either exact or the conservative
+   `max_depth × largest_frame_bytes` bound, must fit below `STACK_TOP` and above
+   the program's workspace and data.
 
 ### Stack budget for `factorial_u8`
 
@@ -54,7 +58,7 @@ Each recursive step (for n > 0) does:
 
 Each non-base level therefore adds four bytes: two for saved BC and two for the
 next recursive return address. The base call adds only its two-byte return
-address because it does not push BC. Name both parts in source:
+address because it does not push BC. Source constants name both parts:
 
 ```asm
 FACT_STEP_BYTES      .equ 4
@@ -75,7 +79,8 @@ case has no saved BC.
 
 ### Recursive version
 
-**Contract:** B = n (unsigned), A = n!. Define 0! = 1. For 8-bit A, keep n ≤ 5 in demos (6! = 720 does not fit).
+**Contract:** B = n (unsigned), A = n!, with 0! defined as 1. An 8-bit result
+limits the demos to n ≤ 5 because 6! = 720 does not fit.
 
 ```asm
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
@@ -137,7 +142,7 @@ _iter_one:
 
 Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
 
-### Compare
+### Recursive and iterative forms
 
 | Aspect | `factorial_u8` | `factorial_iter_u8` |
 |--------|----------------|---------------------|
@@ -156,7 +161,9 @@ Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
 
 The outer level still needs **B** = n for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `.routine` block.
 
-If you made a second recursive call before storing the first result, you would have the same problem with **HL**, the register used for 16-bit results in Book 3. Pattern:
+A routine making a second recursive call before storing the first result has
+the same problem with **HL**, the register used for 16-bit results in Book 3.
+One storage pattern is:
 
 ```asm
     call first_rec
@@ -227,7 +234,8 @@ From `main`:
     ld (sum_rec), hl
 ```
 
-`sum_rec` at `$8002` should hold `$001A` (26). The companion file includes this routine so you can single-step the unwind and watch HL grow after each `ret`.
+`sum_rec` at `$8002` should hold `$001A` (26). A single-step trace of the
+companion routine shows HL growing after each `ret` during the unwind.
 
 ---
 
@@ -239,12 +247,13 @@ Recursive routines use the same register contract shape as every other routine (
 - one `.routine` directive with `in`, `out`, `maybe-out`, `clobbers` or `preserves` as needed
 - a non-local entry label, exported with `@` only when another source unit imports it
 
-Add two extra habits for self-calls:
+Self-calls add two documentation requirements:
 
-1. **Say it is recursive** in the human comment (`; Self-call; ...`) so a reader knows stack math applies.
-2. **Document stack budget** in `.equ` constants (`FACT_STEP_BYTES`,
-`FACT_BASE_BYTES`, `FACT_MAX_DEPTH`) or in the comment block, not in a magic
-number buried in `main`.
+1. **The human comment identifies recursion** (`; Self-call; ...`), making the
+   need for stack arithmetic explicit.
+2. **The stack budget appears in `.equ` constants** (`FACT_STEP_BYTES`,
+   `FACT_BASE_BYTES`, `FACT_MAX_DEPTH`) or in the comment block rather than as
+   a magic number buried in `main`.
 
 Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it, same rule as Chapter 11.
 
@@ -262,12 +271,13 @@ Symptoms you might see in the emulator:
 - `halt` never reached because PC jumped into data
 - workspace or table bytes changing while stepping through unrelated code
 
-Defenses that fit Book 3:
+Book 3 uses four defenses:
 
-- cap inputs with `.equ` and document the cap in comments
-- keep stack top away from `.org $8000` data (init SP to `$9FFF` or your board's RAM top)
-- prefer an iterative version when depth is unbounded (input-driven length, user data)
-- count frames on paper before embedding deep recursion in the capstone
+- input caps expressed with `.equ` and explained in comments
+- a stack top kept away from `.org $8000` data, such as `$9FFF` or the board's
+  RAM limit
+- an iterative version when input-driven data makes depth unbounded
+- a frame count established before deep recursion is used in the capstone
 
 ---
 
@@ -317,21 +327,29 @@ azm examples/06_factorial.asm
 azm --rc warn examples/06_factorial.asm
 ```
 
-Step into `factorial_u8` with `FACT_N = 3` first: count pushes on the way down, multiplies on the way up. Then run the full file to `halt`.
+A trace of `factorial_u8` with `FACT_N = 3` exposes the pushes on the way down
+and the multiplies on the way up. The complete file can then run to `halt`.
 
 ---
 
 ## Exercises
 
-1. Change `FACT_N` to 6 in the example. Does `fact_rec` still match `fact_iter` in an 8-bit result byte? What should you change if you need 6! exactly?
-2. Hand-count stack bytes for `factorial_u8(5)` at the deepest point. Confirm
-`FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES`.
-3. Rewrite `sum_u8_rec` to recurse on the head index in workspace instead of advancing HL before the call. Does the sum change? Does stack use change?
-4. Add `hanoi_moves_u16` with B in and HL out, using H(0)=0 and
-H(n)=2H(n-1)+1. Make one recursive call for H(n-1), then double HL and add one.
-Estimate the stack bytes per level.
-5. Run `azm --rc warn` on a deliberate bug: call `factorial_u8` and then use B without reloading. Fix using the contract comment.
-6. Lower `STACK_TOP` to `$8010` while keeping data at `$8000`. Run `FACT_N = 5` and describe what fails first.
+1. With `FACT_N` set to 6, the comparison should determine whether `fact_rec`
+   still matches `fact_iter` in an eight-bit result and what representation is
+   required for an exact 6!.
+2. A hand count of stack bytes at the deepest point of `factorial_u8(5)` should
+   be checked against `FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES`.
+3. A `sum_u8_rec` variant should recurse on a head index in workspace instead
+   of advancing HL before the call. Its sum and stack use can then be compared
+   with the original.
+4. A `hanoi_moves_u16` routine uses B as input and HL as output, with H(0)=0
+   and H(n)=2H(n-1)+1. It should make one recursive call for H(n-1), double HL,
+   add one and include an estimate of stack bytes per level.
+5. A deliberate contract error calls `factorial_u8` and then uses B without
+   reloading it. `azm --rc warn` should expose the error, and the contract
+   comment provides the basis for correcting it.
+6. A constrained-stack case lowers `STACK_TOP` to `$8010`, retains data at
+   `$8000` and sets `FACT_N = 5`; its purpose is to identify the first failure.
 
 ---
 

@@ -14,19 +14,19 @@ AZM is a modern Z80 assembler for the Debug80 toolchain. An assembler turns asse
 
 ## Installing AZM
 
-AZM requires Node.js 20 or later. Install it globally:
+AZM requires Node.js 20 or later. A global installation makes the `azm` command available from any project:
 
 ```sh
 npm install -g @jhlagado/azm
 ```
 
-Verify the installation:
+The version command confirms that the installation is available:
 
 ```sh
 azm --version
 ```
 
-From a source checkout, build and run the local CLI directly:
+From a source checkout, the following commands build and run the local CLI directly:
 
 ```sh
 npm ci
@@ -60,7 +60,7 @@ Counter:
         .db 0
 ```
 
-### Assemble it
+### Assembly
 
 The entry file is always the last argument:
 
@@ -93,7 +93,7 @@ Placing data after the final instruction keeps the executable entry near the sta
 
 AZM accepts `.asm` and `.z80` source extensions and parses them identically. Debug80 can discover either extension as a target source file; files named `main.asm` or `main.z80` are suggested as likely entry points. For new source, `.asm` is the conventional choice, while `.z80` is also useful for source shared with ASM80-compatible tools.
 
-`.asmi` files carry external register contract records for library routines whose source is assembled separately. Load them with `--interface`. The format is covered in Chapter 6.
+`.asmi` files carry external register contract records for library routines whose source is assembled separately. The `--interface` option loads them. Chapter 6 covers the format.
 
 ---
 
@@ -101,7 +101,7 @@ AZM accepts `.asm` and `.z80` source extensions and parses them identically. Deb
 
 Debug80 is the companion debugging tool for this toolchain. It reads the `.d8.json` file that AZM emits alongside each binary (a map of addresses, symbols and source line positions) and uses it to show you source-correlated debug information: which line the program counter is on, what a symbol resolves to, where a routine was defined.
 
-If you are assembling outside Debug80, the `.d8.json` file still appears next to your binary. Suppress it with `--nod8m` if you do not need it.
+When assembly takes place outside Debug80, the `.d8.json` file still appears next to the binary. The `--nod8m` option suppresses it when no source map is required.
 
 ---
 

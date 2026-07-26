@@ -100,7 +100,7 @@ Splash again.
 
 One design step remains: the budget check. Facts, moments, and
 `CurrentCard` each take one of the program's 32 change-flag cells.
-Count ours: six facts, five moments, and one card cell make twelve,
+Skyfall uses six facts, five moments, and one card cell: twelve flags,
 with room to spare. Timer cells carry no flag,
 and `FrameCount` costs nothing in a program that never names it.
 
@@ -470,16 +470,16 @@ feel like punishment. When `GateP` arrives, `OpenGate` writes the
 invitation on row two and opens the gate; until then, `Restart`
 swallows every press at `jr z,_wait`.
 
-Follow the press that finally restarts. It fires `AnyKeyP` once. Card
+The press that finally restarts fires `AnyKeyP` once. Card
 switches land at the next frame start and pulses clear at frame end, so
 Splash wakes to a quiet keypad and waits for a
 press of its own. Two distinct presses move from game over to falling
 blocks, one to each card.
 
-Build it, run it under Debug80, and play a
-few rounds before you read on, including a run that reaches GameOver. The
-first drop falls at a stroll; ten catches in, the pace is markedly
-faster; a few more and survival hangs on the paddle's top speed.
+Playing a few rounds in a Debug80 build, including one that reaches
+GameOver, makes the pacing visible. The first drop falls at a stroll;
+ten catches in, the pace is markedly faster; a few more and survival
+hangs on the paddle's top speed.
 Every part of that feel is a number you wrote: the 18, the 4, the 6,
 the 90.
 

@@ -62,7 +62,7 @@ main:
         ret
 ```
 
-The backslash must be readable as a separator: put whitespace on both sides. A backslash inside a quoted string is still part of the string, not an instruction separator.
+The backslash must be readable as a separator, with whitespace on both sides. A backslash inside a quoted string is still part of the string, not an instruction separator.
 
 Only instructions and op invocations belong in a chain. A label may appear before the first instruction in the chain, but not before a later segment:
 
@@ -137,7 +137,7 @@ MyLabel: ld a,0
 
 Non-local identifiers contain letters, digits and underscores and must start with a letter.
 
-Do not use `$` as a namespace separator in source labels. `$` has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import` and `@` exports, not through `$`-qualified labels.
+`$` cannot serve as a namespace separator in source labels. It has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import` and `@` exports, not through `$`-qualified labels.
 
 ### Exported labels
 
@@ -231,7 +231,7 @@ The preferred AZM style:
 
 The assembler enforces no naming policy; different projects may use their own conventions.
 
-Use `@` only for declarations that form an imported module's public interface.
+The `@` prefix is reserved for declarations that form an imported module's public interface.
 
 ![Only an @ declaration leaves an imported source unit; plain and owner-local labels stay inside it](../../assets/images/azm-book/book1/export-boundary.svg)
 
@@ -282,7 +282,10 @@ Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` 
 
 ## Opcode and register case
 
-AZM is case-insensitive for Z80 instruction mnemonics and register names. `LD`, `ld` and `Ld` all parse as the same instruction; `A`, `a`, `HL` and `hl` all name the same register. Pick one case for mnemonics and stay with it throughout the project.
+AZM is case-insensitive for Z80 instruction mnemonics and register names.
+`LD`, `ld` and `Ld` all parse as the same instruction; `A`, `a`, `HL` and `hl`
+all name the same register. A consistent mnemonic case makes the project
+easier to read.
 
 The `--case-style` flag enforces consistency if you want the assembler to flag mixed casing.
 
@@ -303,7 +306,9 @@ AZM accepts all numeric literal forms common in Z80 assembly:
 | Plain decimal | `42`, `255` | decimal |
 | Quoted character | `'A'`, `"Z"` | ASCII value |
 
-**Trailing-`H` rule:** the token must start with a decimal digit. `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. Write `$FF` or `0FFH`.
+**Trailing-`H` rule:** the token must start with a decimal digit. `0FFH` is hex
+255. `FFH` starts with a letter, so the parser reads it as a symbol name. The
+unambiguous forms are `$FF` and `0FFH`.
 
 All numeric forms can appear freely in any expression and can be mixed within one expression:
 

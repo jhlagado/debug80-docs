@@ -10,7 +10,9 @@ nav_order: 5
 
 You have stored a sprite table as raw bytes. Each sprite occupies four bytes (an x position, a y position, a tile index and a flags byte), and you have `.equ` constants for each field offset. You insert a new field. Every constant after the insertion is now wrong, along with every access expression built on it.
 
-AZM's layout system replaces those manual constants with a declaration. Describe the record once; `sizeof` and `offset` give you byte counts and field positions anywhere you need them, derived automatically from the field list.
+AZM's layout system replaces those manual constants with one record
+declaration. `sizeof` and `offset` then derive byte counts and field positions
+from its field list.
 
 ---
 
@@ -29,7 +31,7 @@ Sprites:
     .ds 16 * SPRITE_SIZE
 ```
 
-Insert a field between `SPRITE_TILE` and `SPRITE_FLAGS` and both `SPRITE_FLAGS` and `SPRITE_SIZE` are wrong.
+Adding a field between `SPRITE_TILE` and `SPRITE_FLAGS` makes both `SPRITE_FLAGS` and `SPRITE_SIZE` wrong.
 
 A type declaration replaces the manual constants:
 
@@ -45,7 +47,9 @@ Sprites:
     .ds Sprite[16]
 ```
 
-`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically. If you mistype a field name, say `offset(Sprite, flagz)`, the assembler rejects it at assemble time.
+`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. A new
+field between `tile` and `flags` updates both values automatically. A mistyped
+field name such as `offset(Sprite, flagz)` is rejected at assembly time.
 
 ---
 
@@ -87,7 +91,9 @@ Array type expressions appear in `.ds` operands, `.field` declarations and `size
 .ds Sprite[16]  ; same as .ds sizeof(Sprite) * 16
 ```
 
-When you need that count as a numeric constant (for a `.equ`, for example), use `sizeof`: `SIZE .equ sizeof(byte[32])`. `.equ` needs a numeric value, not a type expression.
+When the count is needed as a numeric constant (for a `.equ`, for example),
+`sizeof` provides it: `SIZE .equ sizeof(byte[32])`. `.equ` needs a numeric
+value, not a type expression.
 
 ---
 
@@ -124,7 +130,7 @@ AZM also provides concise forms for the three scalar field sizes:
 | `name .word` | `name .field word` |
 | `name .addr` | `name .field addr` |
 
-Use `.field` when the size is a type expression, such as an array or a nested record type:
+The explicit `.field` form is required when the size is a type expression, such as an array or a nested record type:
 
 ```asm
 Buffer  .type
@@ -149,11 +155,11 @@ SPRITE_TILE  .equ offset(Sprite, tile)     ; 2
 SPRITE_FLAGS .equ offset(Sprite, flags)    ; 3
 ```
 
-Use `.equ` lines when the name will appear in multiple places; use `sizeof` and `offset` directly in operands when the constant is used once.
+An `.equ` line is useful when a name appears in multiple places. A one-off constant can remain a direct `sizeof` or `offset` expression in its operand.
 
 ### Allocating and accessing records
 
-Allocate a single record with `.ds` and access its fields through offset constants:
+A `.ds` declaration allocates a single record, whose fields are accessed through offset constants:
 
 ```asm
 Player:
@@ -165,7 +171,7 @@ Player:
         ld   (ix + SPRITE_X),a
 ```
 
-Allocate an array of records the same way:
+Multiplying the record size allocates an array of records:
 
 ```asm
 SpriteTable:

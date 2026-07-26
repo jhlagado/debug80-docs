@@ -15,7 +15,7 @@ indexed access for reaching one entry directly.
 
 ## Declaring a byte table
 
-Place `.org` before a label to set its address, then use `.db` to declare a
+An `.org` before a label sets its address, and `.db` then declares a
 sequence of byte values:
 
 ```asm
@@ -58,13 +58,13 @@ loop_top:
   djnz loop_top    ; repeat for all entries
 ```
 
-The order matters: read
-the entry first (`ld a, (hl)`), process it, then advance (`inc hl`). If you
-advance before reading, you skip the first entry.
+The order matters: the body reads
+the entry first (`ld a, (hl)`), processes it, then advances (`inc hl`). An
+increment before the read would skip the first entry.
 
 ![HL walking a byte table one entry at a time.](../../assets/images/azm-book/book2/hl-walking.svg)
 
-Word entries are two bytes wide, so advance HL by two between them:
+Word entries are two bytes wide, so HL advances by two between them:
 
 ```asm
 ld hl, widths
@@ -105,7 +105,7 @@ IX is a 16-bit index register. Its specific capability is the `(ix+d)`
 addressing mode: `d` is a signed byte offset, any value from -128 to +127 and
 `ld a, (ix+d)` reads the byte at address IX + d without touching IX itself.
 
-Load IX to the base of a record once, and you can name every field by its
+Once IX holds the base of a record, every field can be named by its
 offset, with no incrementing between reads:
 
 ```asm
@@ -126,8 +126,8 @@ an assembler error.
 
 ## Accessing a specific table entry by index
 
-To reach entry `n` in a byte table, you need the address `table_base + n`. For
-small, known-at-compile-time indices, you can write the offset directly:
+Entry `n` in a byte table is at `table_base + n`. Small indices known at
+assembly time can appear directly as offsets:
 
 ```asm
 ld ix, scores        ; IX = base of scores table
@@ -202,7 +202,7 @@ no_new_max:
 ld (max_score), a
 ```
 
-A holds the running maximum. Apply the flag-before-branch check: `cp c` is
+A holds the running maximum. The flag-before-branch check shows that `cp c` is
 the instruction that sets the flag; `jr nc` reads it immediately after with
 nothing in between; carry being clear means A ≥ C, so `jr nc` skips the update
 and the running maximum is unchanged. `ld a, c` runs only when `cp c` found A
@@ -237,7 +237,7 @@ most useful is `ldir`.
 byte is copied, HL and DE are both incremented and BC is decremented. The
 instruction repeats until BC reaches zero.
 
-Compare the two forms for copying 4 bytes:
+The manual and block-instruction forms for copying four bytes show the difference:
 
 ```asm
 ; Without ldir: a manual copy loop
@@ -310,7 +310,7 @@ return to their callers.
 
 **1. Post-loop pointer value.** The HL sum loop in the chapter starts with `ld hl, scores` where `scores` is at address `$8000` and contains six entries. After the loop completes all six iterations, what address does HL hold? What byte would `ld a, (hl)` read at that point? Is that byte part of `scores`?
 
-**2. Address versus value.** Explain the difference in effect between these two instructions:
+**2. Address versus value.** The explanation must distinguish the effects of these two instructions:
 
 ```asm
 ld hl, scores      ; (a)
@@ -319,9 +319,9 @@ ld a, (scores)     ; (b)
 
 Which instruction loads the number 10 (the first element of the table) into a register? Which loads the memory address where 10 is stored?
 
-**3. IX record access.** You have three three-byte records packed in memory, each with the layout: `id` at offset 0, `hi` at offset 1, `lo` at offset 2. The table starts at address `$8010`. Write the IX loads to read all three fields of the **third** record (index 2) into registers A, B and C respectively. Start by computing the address you need to load into IX.
+**3. IX record access.** Three three-byte records are packed in memory, with `id` at offset 0, `hi` at offset 1 and `lo` at offset 2. The table starts at address `$8010`. The required IX loads read all three fields of the **third** record (index 2) into A, B and C respectively; computing the address loaded into IX establishes the base.
 
-**4. Find the bug.** The following loop is meant to find the maximum score in the `scores` table, but it has a subtle error. Identify what goes wrong and explain what value `max_score` will hold at the end:
+**4. The missing increment.** The following loop is meant to find the maximum score in the `scores` table, but it has a subtle error. The answer should identify what goes wrong and explain the final value in `max_score`:
 
 ```asm
 ld hl, scores

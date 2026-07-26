@@ -43,7 +43,7 @@ So `$75` is the byte `%0111 0101`, a `7` (0111) followed by a `5` (0101). And `$
 
 ## Memory
 
-The Z80 can address 65,536 bytes of memory. Think of it as a flat array of 65,536 numbered slots, each holding one byte. The number that identifies a slot is its **address**.
+The Z80 can address 65,536 bytes of memory, arranged as a flat array of 65,536 numbered slots that each hold one byte. The number that identifies a slot is its **address**.
 
 The full address range runs from `$0000` to `$FFFF`, address zero to address 65,535.
 

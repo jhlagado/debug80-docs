@@ -18,8 +18,8 @@ and conditional branches.
 
 The program solves two related problems on the same byte table:
 
-1. Find the maximum value in the table.
-2. Count how many entries are strictly greater than 64.
+1. The maximum value in the table.
+2. The number of entries strictly greater than 64.
 
 The structure (a data table, subroutines that receive a pointer and a length, results stored to named RAM, a `main` that orchestrates the calls) is what a complete flat Z80 program looks like.
 
@@ -119,7 +119,7 @@ find_max_no_update:
   ret
 ```
 
-Apply the flag-before-branch check on `cp c` / `jr nc`: `cp c` establishes the flag, `jr nc` reads it immediately, and nothing changes the flag between them. Carry clear after `cp c` means A ≥ C, so `jr nc` skips the update and the running maximum is left alone. `ld a, c` runs only when carry was set, meaning A was less than C and C is a new maximum. After eight iterations, A = 91 (`$5B`), the largest value in the table.
+The flag-before-branch check on `cp c` / `jr nc` shows that `cp c` establishes the flag, `jr nc` reads it immediately, and nothing changes the flag between them. Carry clear after `cp c` means A ≥ C, so `jr nc` skips the update and the running maximum is left alone. `ld a, c` runs only when carry was set, meaning A was less than C and C is a new maximum. After eight iterations, A = 91 (`$5B`), the largest value in the table.
 
 The comment header documents "Clobbers: B, C, F, HL". B is consumed by
 `djnz`, C holds the current element, comparisons modify F, HL advances past the
@@ -188,7 +188,7 @@ naming such a sequence and expanding it inline.
 
 ## Exercises
 
-**1. Trace `find_max` by hand.** The table is `{ 23, 47, 91, 5, 67, 12, 88, 34 }`. Step through `find_max` iteration by iteration, recording the value of A (the running maximum) and C (the current element) after each `ld c, (hl)`. Fill in the table:
+**1. A `find_max` trace.** The following table records `find_max` iteration by iteration over `{ 23, 47, 91, 5, 67, 12, 88, 34 }`, including A as the running maximum and C as the current element after each `ld c, (hl)`:
 
 | Iteration | C (current) | A before cp | Update A? | A after |
 | --------- | ----------- | ----------- | --------- | ------- |
@@ -205,12 +205,12 @@ not reload it? Identify the eight addresses that `count_above` would scan from
 that position. The source defines only the first two bytes there; can the final
 value stored in `above_64` be determined from this program alone?
 
-**3. Trace the flags.** The `count_above` loop runs `cp c` once, then `jr c`
-and `jr z` before `inc d`. Explain what each branch tests and why a second
-comparison is not needed. What would break if `inc d` appeared between `cp c`
-and the first branch?
+**3. Flag trace.** The `count_above` loop runs `cp c` once, then `jr c`
+and `jr z` before `inc d`. The explanation should state what each branch tests,
+why a second comparison is unnecessary, and what would break if `inc d`
+appeared between `cp c` and the first branch.
 
-**4. Add a third task.** Extend the program to also count entries strictly less than 32, storing the count in a new variable named `below_32`. Write the additional subroutine and the three lines in `main` that call it. Document which registers carry each argument and what you must reload before the call.
+**4. A third task.** The extended program also counts entries strictly less than 32 and stores the count in `below_32`. The answer requires an additional subroutine, the three calling lines in `main`, and documentation of the argument registers and values that must be reloaded.
 
 ---
 

@@ -92,7 +92,7 @@ Unlike `out`, the `in` instruction **sets flags**. After `in r, (C)`:
 - H and N are reset.
 - C (carry) is unaffected.
 
-`in r, (C)` sets flags; the immediate form `in a, (n)` does not. If you read a port with the immediate form and then need to branch on the value, follow it with `or a` to set flags explicitly before the conditional jump.
+`in r, (C)` sets flags; the immediate form `in a, (n)` does not. When code must branch on a value read with the immediate form, a following `or a` sets the flags explicitly before the conditional jump.
 
 ---
 
@@ -228,7 +228,7 @@ main:
 payload: .db $10, $20, $30, $40
 ```
 
-Walk through the key lines:
+The key lines work as follows:
 
 **`out (OUT_PORT), a`** is the immediate port form. `OUT_PORT` is defined as `$10` with `.equ`; the assembler substitutes `$10` at compile time.
 
@@ -268,25 +268,25 @@ Chapter 10 puts the whole of Chapters 3 to 9 into one program.
 
 ## Exercises
 
-**1. Flag behaviour of `in`.** Explain the difference in flag behaviour between these two forms:
+**1. Flag behaviour of `in`.** The explanation must distinguish the flag behaviour of these two forms:
 
 ```asm
 in a, (IN_PORT)   ; form A
 in a, (C)         ; form B
 ```
 
-After which form can you safely write `jr z, handle_zero` without any additional instruction? After which form must you add `or a` first? Write the minimum correct version for each case that branches to a label `is_zero` if the byte read was zero.
+The answer should identify which form can feed `jr z, handle_zero` directly, which requires `or a`, and the minimum correct sequence that branches to `is_zero` when the byte read was zero.
 
-**2. Modify the ready-check loop.** The `poll_and_recv` subroutine in the chapter waits for bit 0 of the status port. Change it to wait for bit 3 instead. Write the modified subroutine. _(Hint: you need to change exactly one value, the mask in the `and` instruction. What is the bit-3 mask in hex?)_
+**2. A bit-3 ready check.** This version of `poll_and_recv` must wait for bit 3 rather than bit 0. Only the mask in the `and` instruction changes; the task includes deriving that mask in hexadecimal.
 
-**3. Write a receive loop.** The chapter shows `send_block` but not its
-counterpart. Write `recv_block` to read B bytes from the fixed `IN_PORT` into
-memory starting at HL. Document the inputs and clobbered registers. Use the
-same DJNZ structure with `in a, (IN_PORT)` instead of `out`.
+**3. A receive loop.** The counterpart to `send_block` is a `recv_block`
+routine that reads B bytes from the fixed `IN_PORT` into memory starting at HL.
+Its interface needs documented inputs and clobbered registers, and its body uses
+the same DJNZ structure with `in a, (IN_PORT)` instead of `out`.
 
-**4. Register-addressed output.** In `out (C), d`, which register supplies the
-data and which supplies the 8-bit port number? Which register also appears on
-the upper address pins? Write the three instructions needed to send `$7F` from
+**4. Register-addressed output.** The answer identifies the data register, the
+8-bit port-number register and the register that appears on the upper address
+pins in `out (C), d`. It then gives the three instructions that send `$7F` from
 D to port `$20`.
 
 ---

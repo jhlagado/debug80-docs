@@ -16,8 +16,8 @@ the cost of keeping everything there: an eraser. With two painting rules to name
 the picture it writes becomes `Paint`. AD sits unused beside GO on the
 keypad, and the rule is `StampPixel`'s mirror image: find the
 cursor's row byte, build the column's mask, and clear the bit instead
-of setting it. Write it out: the eraser opens with eight
-instructions copied whole from `StampPixel` before you
+of setting it. Written out, the eraser opens with eight instructions
+copied whole from `StampPixel` before you
 reach the first line that differs. Eight duplicated instructions are
 eight places for the next change to miss one, and every copy you
 make of working code is a fresh chance to be wrong with it.
@@ -214,8 +214,9 @@ The other three movement effects follow, then the painting rules and
 the renders: six effects and two renders in a file with one kind of
 content.
 
-Diagnostics know which file they are standing in. Misspell the label
-in `MoveDown`'s guard, `jr nc,_sotp`, and rebuild:
+Diagnostics know which file they are standing in. If the label in
+`MoveDown`'s guard is misspelled as `jr nc,_sotp`, the next build
+reports:
 
 ```text
 canvas-rules.glim:45:5: [AZMN_SYMBOL] error: Unresolved symbol "_sotp" in rel8 jr nc fixup.
@@ -291,9 +292,8 @@ _skip:
 You have been reading this dialect all book: the module is written in
 the same assembly you find in every generated file. Each callable opens
 with a `.routine` contract line like the one on `FbPlot`, with one
-difference that matters: in a module you
-declare the contract yourself, and the assembler holds every caller to what you
-declared. The module reads the program's names directly, too: `Paint`
+difference that matters: a module's author declares the contract, and
+the assembler holds every caller to that declaration. The module reads the program's names directly, too: `Paint`
 and `Framebuffer` are the same labels your blocks use.
 
 An import is the border between Glimmer and hand-written assembly,
@@ -302,9 +302,9 @@ and `CountLit` are the module's public API, callable from any block
 in any file, and references omit the `@`. `CountByte` carries no `@`,
 so it stays private, callable anywhere inside `paint-lib.asm` and
 nowhere outside it. The `_row`, `_byte` and `_bit` labels are local
-to their routines, exactly as in your blocks. Try walking through a
-wall instead of a door (`call CountByte` from `ShowCount`) and the
-build refuses with the rule spelled out:
+to their routines, exactly as in your blocks. A call to the private
+`CountByte` from `ShowCount` tries to cross the module boundary, and
+the build refuses with the rule spelled out:
 
 ```text
 canvas-rules.glim:88:5: [AZMN_SYMBOL] error: symbol "CountByte" is private to paint-lib.asm; export it with @CountByte or keep the reference inside that file
@@ -344,7 +344,7 @@ because they draw from the same eight bytes.
 
 ## The generated file
 
-Open `canvas.main.asm` and
+In `canvas.main.asm`,
 each of the three declarations has left its signature. The routine
 first:
 

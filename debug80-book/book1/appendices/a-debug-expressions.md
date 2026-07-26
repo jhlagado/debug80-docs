@@ -5,11 +5,14 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 101
 ---
 
-[← Send to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)
+[← Sending to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)
 
 # Appendix A — Debug expressions
 
-Debug80 supports Z80-focused expressions in the standard VS Code **Watch** panel and in conditional breakpoints. Add Watches while the program is paused. Add a breakpoint condition by right-clicking a breakpoint and choosing **Edit Breakpoint**.
+Debug80 supports Z80-focused expressions in the standard VS Code
+**Watch** panel and in conditional breakpoints. Watches can be added
+while the program is paused. **Edit Breakpoint** in a breakpoint's
+context menu adds a condition.
 
 ## Examples
 
@@ -183,4 +186,4 @@ When execution reaches a conditional breakpoint, a true or non-zero expression s
 
 ---
 
-[← Send to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)
+[← Sending to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)

@@ -11,8 +11,8 @@ nav_order: 9
 
 Every picture so far has been built from single calls to `FbPlot`: a
 dot, a drop, a bar of pixels in a loop.
-Give a game's character a body, two pixels by two
-or a whole 8x8 figure, and plotting it point by point inside
+Once a game's character has a body, two pixels by two
+or a whole 8x8 figure, plotting it point by point inside
 every render block drowns the picture in the code that draws it. A
 picture belongs in data, laid out where you can see its shape.
 
@@ -141,7 +141,7 @@ begin
 end
 ```
 
-Build this and let it run. The spark ricochets, each wall contact
+In a running build, the spark ricochets and each wall contact
 raises the score and starts or restarts the chirp. A corner raises the
 score twice, but the second sound call replaces the first, leaving one
 active cue.
@@ -212,12 +212,12 @@ redraws from a clean board.
 Placement is entirely your responsibility: `ShapeDraw` plots every lit
 pixel at x plus column, y plus row, straight into the framebuffer, and
 a row that hangs off the board writes into whatever memory follows it.
-Keep the whole shape inside the 8x8 matrix: for the 2x2 spark that
+The whole shape must stay inside the 8x8 matrix. For the 2x2 spark that
 means x and y each stay in 0..6, which is exactly the range `Move`
 enforces with its bounce tests. Register hygiene
 matters here too: the generated contract line
-declares that `ShapeDraw` clobbers A, BC, DE, and HL, so load its
-arguments last, the way `DrawSpark` does.
+declares that `ShapeDraw` clobbers A, BC, DE, and HL. `DrawSpark`
+therefore loads its arguments immediately before the call.
 
 ## Sound that keeps out of the way
 
@@ -328,14 +328,14 @@ taking the message label and a row constant: `LcdRow1` through
 appears in no block's `updates`, so it changes exactly once, before the
 first frame; `Greet` runs on
 frame one, writes FANFARE to the top row, and rests for the rest of
-the program's life. Whenever you want something done once at startup
-(a title, a border, a greeting), declare a fact that starts changed
-and never changes again, and hang a block on it.
+the program's life. A title, border, greeting, or other one-time
+startup action can use a fact that starts changed and never changes
+again, with a block attached to it.
 
 ## The file, resource by resource
 
-Every resource leaves a mark you can find by name in the generated
-file. Open `fanfare.main.asm`.
+Every resource leaves a mark that can be found by name in the
+generated `fanfare.main.asm`.
 
 The text resource is its bytes, terminator included:
 
@@ -378,8 +378,8 @@ Snd_Bounce:
 
 Your `len` and `div` became the two loads, and `SndStart` is the
 library routine that arms the scan's speaker service, A carrying
-the duration in ticks, C the divider. Declare a second cue and you
-get a second wrapper over the same `SndStart`.
+the duration in ticks, C the divider. A second cue generates a second
+wrapper over the same `SndStart`.
 
 And the op, defined once near the end of the file:
 

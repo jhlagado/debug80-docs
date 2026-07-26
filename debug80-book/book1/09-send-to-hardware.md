@@ -1,19 +1,19 @@
 ---
 layout: default
-title: "Send to TEC-1G hardware"
+title: "Sending to TEC-1G hardware"
 parent: "Debug80 Book 1 — Getting started"
 nav_order: 10
 ---
 
 [← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Appendix A — Debug expressions →](appendices/a-debug-expressions.md)
 
-# Send to TEC-1G hardware
+# Sending to TEC-1G hardware
 
 Debug80 sends the active target's Intel HEX file to real hardware through CoolTerm. CoolTerm owns the serial port. Debug80 controls CoolTerm through its localhost Remote Control Socket.
 
-## Install CoolTerm
+## CoolTerm installation
 
-Download CoolTerm from:
+CoolTerm is available from:
 
 <https://freeware.the-meiers.org>
 
@@ -21,29 +21,37 @@ On macOS, the first launch may require approval in **System Settings > Privacy &
 
 ![Emulator serial path versus CoolTerm hardware path](../../assets/images/debug80-book/book1/emulator-vs-coolterm-serial.svg)
 
-## Enable the Remote Control Socket
+## The Remote Control Socket
 
-In CoolTerm, open **Preferences > Scripting**. Enable **Remote Control Socket** and keep the port set to `51413`.
+Under CoolTerm's **Preferences > Scripting**, **Remote Control Socket**
+must be enabled on port `51413`.
 
 The local IP shown in CoolTerm is informational.
 
-## Configure the serial port
+## Serial port configuration
 
-Open **Connection > Options** in CoolTerm. Select the serial port for your USB serial adapter, whose name depends on the adapter and the operating system, and set the line settings this workflow requires: `4800 8 N 2`.
+CoolTerm's **Connection > Options** selects the serial port for the USB
+adapter, whose name depends on the adapter and operating system. This
+workflow requires line settings of `4800 8 N 2`.
 
-## Build and send
+## Building and sending
 
-Select the correct project and target in Debug80, then click **Build** so its `.hex` file exists. **Build** rather than **Run**: you want the artifact, not the emulator.
+With the correct project and target selected, **Build** creates the
+required `.hex` file. This stage uses **Build** rather than **Run**
+because the artifact, not the emulator, is required.
 
-Before sending, click **Test CoolTerm**. It pings CoolTerm's remote control socket and nothing else (no port is opened and no build is needed), so it separates "CoolTerm is not reachable" from "the transfer failed". On success Debug80 reports:
+The **Test CoolTerm** action checks CoolTerm's remote control socket before a
+transfer. It does nothing else: no port is opened and no build is needed. The
+test therefore separates "CoolTerm is not reachable" from "the transfer
+failed". On success Debug80 reports:
 
 ```text
 Debug80: Connected to CoolTerm remote socket.
 ```
 
-Put the TEC-1G into MON-3 Intel HEX Load mode before sending.
+The TEC-1G must be in MON-3 Intel HEX Load mode before transmission.
 
-Click **Send to TEC-1G** in the Project section.
+**Send to TEC-1G** in the Project section starts the transmission.
 
 The button's label follows the platform, so a TEC-1 project reads **Send to TEC-1** and anything else reads **Send to Board**. It is enabled once a target is selected and a HEX file exists; the panel's hardware status line displays any missing requirement:
 
@@ -57,9 +65,9 @@ If your target has no `outputDir`, the send path looks for the HEX beside `debug
 
 The serial startup message `TEC-1G Connected` belongs to MON-3 startup, not to the transfer.
 
-## If transfer fails
+## Transfer failures
 
-Start with the part of the path that failed:
+The observed failure identifies which part of the path to inspect:
 
 - If Debug80 cannot connect to CoolTerm, open CoolTerm and check that the Remote Control Socket is enabled on port `51413`.
 - If Debug80 asks for a HEX file, build the active target.

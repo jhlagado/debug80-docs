@@ -20,8 +20,8 @@ So today Beacon grows. By the end of the chapter it will remember
 three facts (a position, a colour, and a score), and in teaching it
 those three you will meet everything a `state` declaration can say,
 along with the change tracking that goes with it. Near the end, a
-challenge: predict a program's first frame from its source alone, then
-build it and check.
+first-frame prediction made from the source can be checked against a
+running build.
 
 ## Beacon, grown
 
@@ -108,8 +108,8 @@ begin
 end
 ```
 
-Read the headers aloud, the way you did with Mover; you still can.
-`updates Colour, Score` says NextColour changes two facts, so it
+Spoken aloud, the headers remain straightforward. `updates Colour,
+Score` says NextColour changes two facts, so it
 declares both of them. `on DotX, Colour` means DrawBeacon depicts two
 facts, so a change to either one redraws. Commas separate names, in headers as everywhere in
 Glimmer.
@@ -138,7 +138,8 @@ changed when the program starts. `DotX` carries it; the other two go without.
 
 The one new thing here is `word`. A `word` cell is 16 bits, and your
 code moves it with the Z80's
-own 16-bit instructions. Look at the score lines in `NextColour`:
+own 16-bit instructions. The score lines in `NextColour` show the
+difference:
 
 ```asm
     ld hl,(Score)
@@ -216,7 +217,8 @@ and a block whose triggers span banks tests each one.
 
 ## The first frame, predicted
 
-Now the challenge: predict before you build, then build and watch.
+The challenge is to predict the first frame before building, then compare that
+prediction with the running program.
 `Changed0` begins
 life as the sum of every `changed` in the source:
 
@@ -248,14 +250,13 @@ state Score  : word changed
 
 With that one edit, frame one runs both renders, and the display shows
 `000000` before you have pressed anything. That is the rule for
-`changed`: put it on every fact whose picture should exist before
+`changed`: it belongs on every fact whose picture should exist before
 anything happens.
 
-Build the program, try both versions, and watch the prediction hold.
-Then set a breakpoint inside `ShowScore`. With `Score` unchanged, it
-does not stop on frame one; with `Score changed`, it stops there before
-the first key press. In either version, each later score change reaches
-the breakpoint again.
+Building both versions confirms the prediction. A breakpoint inside
+`ShowScore` does not stop on frame one with `Score` unchanged; with
+`Score changed`, it stops there before the first key press. In either
+version, each later score change reaches the breakpoint again.
 
 Next we turn to the moments themselves, where pulses come from, and
 every way a key can fire one:

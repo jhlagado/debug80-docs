@@ -23,9 +23,9 @@ terminal.
 
 ### Starting up TMON
 
-Connect a serial terminal to the TEC-1G via the FTDI to USB connector.
-Then, select Terminal Monitor from the main menu by pressing <span class="mon3-key-emphasis">GO</span> and
-look at the serial terminal.
+TMON requires a serial terminal connected to the TEC-1G through the FTDI
+to USB connector. Selecting Terminal Monitor in the main menu and pressing
+<span class="mon3-key-emphasis">GO</span> transfers the interface to that terminal.
 
 
 ```asm
@@ -91,18 +91,15 @@ XXXX nn :
 ```
 
 
-XXXX continues to represent the CURRENT ADDRESS however the nn
-represents the HEX byte stored at that address, which you are presently
-editing.
-   -   Enter a HEX byte and it will be written to memory at CADDR;
-       CURRENT ADDR is then incremented by one.
-   -   ENTER increments CURRENT ADDRESS by one and leaves the
-       existing value as-is. This way, any bytes that don't need altering are
-       skipped over.
-   -   - decrements the CURRENT ADDRESS by one. This allows for
-       correcting input errors by going back one address after erroneous
-       input.
-   -   Q exits data entry mode.
+XXXX continues to represent the CURRENT ADDRESS, while nn is the HEX byte
+stored at the address being edited.
+
+- A HEX byte is written to memory at CADDR, after which CURRENT ADDRESS
+  increments by one.
+- ENTER increments CURRENT ADDRESS without changing the existing byte, which
+  allows unchanged bytes to be skipped.
+- `-` decrements CURRENT ADDRESS, allowing an input error to be revisited.
+- Q exits data entry mode.
 
 Invalid entries will be ignored.
 
@@ -160,7 +157,7 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 `DUMP xxxx`
 : Dumps the contents of 64 bytes of memory. It provides HEX and ASCII output so memory can be examined.
 
-: DUMP pauses at completion. Space repeats the command. CADDR continues to increment if auto-increment is on; otherwise the same block repeats. This lets you quickly run through larger blocks without typing the command repeatedly.
+: DUMP pauses at completion. Space repeats the command. CADDR continues to increment if auto-increment is on; otherwise the same block repeats. This provides rapid movement through larger blocks without retyping the command.
 
 : Q quits and returns to the command prompt.
 
@@ -170,7 +167,7 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 `DATA xxxx`
 : Interactively inputs data into memory, one hex byte at a time. The value input is stored in the CADDR memory location.
 
-: Enter Q to quit input mode. See the full description of DATA mode above.
+: Q quits input mode. The full DATA-mode description appears above.
 
 `INC ON/OFF`
 : Sets auto-increment mode of CADDR. With no parameter supplied, displays the current auto-increment mode. Turning auto-increment off can be helpful for debugging or monitoring.
@@ -179,14 +176,14 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 : Displays CADDR and the memory byte on TEC 7-segment displays. The `+` and `-` keys increment or decrement CADDR. Pressing the <span class="mon3-key-emphasis">ADDR</span> key exits to TMON.
 
 `SMON`
-: Serial data stream monitor. Accepts serial input from the terminal and displays the HEX bytes received on screen. This is useful for debugging terminal communications and understanding control codes received from the PC, such as VT100 sequences. It also demonstrates the limitations of bit-bang serial because it cannot adequately buffer incoming bytes in real time. Try pressing an arrow key or a PC function key.
+: Serial data stream monitor. Accepts serial input from the terminal and displays the HEX bytes received on screen. This is useful for debugging terminal communications and understanding control codes received from the PC, such as VT100 sequences. It also demonstrates the limitations of bit-bang serial because it cannot adequately buffer incoming bytes in real time. An arrow or PC function key provides a useful multi-byte test sequence.
 
-: Enter Q (capital) to exit SMON back to TMON.
+: A capital Q exits SMON and returns to TMON.
 
 : If a terminal program such as Tera Term is used to add a small delay, such as 20ms, between bytes transmitted from the PC, SMON can accurately show VT100 control codes such as a PC arrow or function key. Without the delay, bit-bang serial normally gets the first byte only, or perhaps the first and fourth or fifth byte.
 
 `HALT`
-: Executes a CPU HALT instruction. On TEC-1F, press any key to resume.
+: Executes a CPU HALT instruction. On TEC-1F, any key resumes execution.
 
 `DEBUG`
 : Calls the MON-3 debugger/breakpoint tool to examine register contents.
@@ -195,7 +192,7 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 : Tests the selected keyboard. The last pressed key's scancode appears on the 7-segment displays. Fn is displayed with bit 5 set. Matrix keypad keys supported by MON3, not the full matrix keyset, are returned if MATRIX mode is enabled. Pressing the <span class="mon3-key-emphasis">ADDR</span> key exits to TMON.
 
 `FILL xxxx yyyy nn`
-: Fill memory between address `xxxx` and `yyyy` with data `nn`. **note:** Fill range
+: Fills memory between address `xxxx` and `yyyy` with data `nn`. **Note:** The range
   must be at least 2 bytes long. No checks for safety are done - use with
   caution, as any area of memory, including the stack, program code or data
   could be overwritten. This does not apply if Protect Mode is on.
@@ -214,9 +211,9 @@ Parameters marked with square brackets e.g. \[xxxx\] are optional.
 A great way to learn how to use the TEC-1G is to key in programs presented
 in the TE Magazines Issues 10 to 15. If the programs are keyed in directly,
 they probably won't work. This is because they usually start at addresses
-<span class="mon3-address-emphasis">0800H</span> or <span class="mon3-address-emphasis">0900H</span>. These addresses are reserved for Mon3. To get the code
-working, simply update all 2-byte address references to match the address
-location of the code on the 1G.
+<span class="mon3-address-emphasis">0800H</span> or <span class="mon3-address-emphasis">0900H</span>. These addresses are reserved for Mon3. A working
+conversion updates every two-byte address reference to the program's new
+location on the TEC-1G.
 
 ### Keypad Changes
 
@@ -231,7 +228,7 @@ when a keypad press is required.
 | Old Command | Mon3 Replacement | Reason |
 | --- | --- | --- |
 | `HALT` | `RST 08H` | `RST 08H` simulates a `HALT` command and sets register A with the key value pressed. |
-| `LD A,I` | `LD C,10H`<br>`RST 10H` | `LD A,I` by itself polls for a key press. Call the `scanKey` API routine (`10H`), which sets register A with the key value pressed. If `LD A,I` immediately follows a `HALT` instruction, use `RST 08H` instead. |
+| `LD A,I` | `LD C,10H`<br>`RST 10H` | `LD A,I` by itself polls for a key press. The `scanKey` API routine (`10H`) sets register A to the key value. When `LD A,I` immediately follows a `HALT` instruction, `RST 08H` provides the equivalent MON-3 operation. |
 
 ### Conversion Example
 

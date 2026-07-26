@@ -9,12 +9,12 @@ nav_order: 13
 
 # Chapter 13 - Cards
 
-Picture an arcade machine. The screen that drew you over (the attract
-screen, blinking its invitation) is
-a little program of its own: it keeps no score, obeys no joystick, and
-knows nothing about what happens after the coin drops. Put the coin in
-and a different program takes over: rules, clock, score. Lose, and a
-third one shows you the damage and waits to offer another round. Most
+An arcade machine begins with the screen that drew you over: the
+attract screen, blinking its invitation. It is a little program of its
+own: it keeps no score, obeys no joystick, and knows nothing about
+what happens after the coin drops. Once the coin goes in, a different
+program takes over: rules, clock, score. A loss hands control to a
+third one that shows you the damage and waits to offer another round. Most
 finished games are at least three programs wearing one cabinet, and at any
 instant exactly one of the three is running. Until today, you have had
 no way to say so.
@@ -34,12 +34,12 @@ HyperCard, which built whole applications out of stacks of them.
 Exactly one card is active at a time. A `card` line starts a
 block-dispatch section: the blocks after it run only while that card
 is active. A card gates dispatch; it does not create a separate scope.
-State, pulses, timers and resources stay program-wide wherever you write them, so put them at
-the top of the file where the design lives, and let the card sections
-hold blocks.
+State, pulses, timers and resources stay program-wide wherever you
+write them. Keeping them at the top of the file leaves the design in
+one place, while the card sections hold blocks.
 
-Cards are also a choice, and the choosing rule is short: reach for
-them when groups of blocks belong to mutually exclusive modes
+Cards are also a choice, and the choosing rule is short: they suit
+groups of blocks that belong to mutually exclusive modes
 (screens, a pause, a round structure). A one-screen program is better
 off cardless, and every program before this chapter was exactly
 that.
@@ -261,8 +261,8 @@ end
 ```
 
 `StartRound` zeroes the score and arms the clock, and it must arm on
-entry. The alternative shows why: declare `PlayClock : word = 512`
-instead, and the countdown starts spending itself the moment the
+entry. The alternative shows why. With `PlayClock : word = 512`
+declared instead, the countdown starts spending itself the moment the
 program boots, while the splash is still blinking. `TimeUp` fires
 into a frame where no active block listens, the clock settles at zero,
 and the round that eventually starts has no end.
@@ -350,9 +350,9 @@ does a key press travel.
 
 `Restart` is the travel, and it is our first transition that depends
 on a runtime test. `goto` is unconditional once its block runs, so a
-conditional transition writes `CurrentCard` itself: declare
-`updates CurrentCard`, and store a `Card` value on the branch that
-leaves. The enum members are ordinary assembler constants, so
+conditional transition writes `CurrentCard` itself. Its header
+declares `updates CurrentCard`, and the branch that leaves stores a
+`Card` value. The enum members are ordinary assembler constants, so
 `ld a,Card.Splash` is plain Z80 with a generated name in it.
 
 `Restart` may look wrong when the gate is shut. The body stores
@@ -449,7 +449,7 @@ started it.
 
 ## The card machinery
 
-Build the file and open the output:
+Building the file produces the output examined below:
 
 ```sh
 glimmer build gate.glim
@@ -518,7 +518,7 @@ _skip_ShowFinal:
         ld      (GlimPrevCard),a
 ```
 
-Read the three tests in order: the active card is GameOver; the
+In order, the three tests say that the active card is GameOver; the
 previous card was anything else, which is your edge; and
 `CurrentCard`'s flag is up. Then, once every enter block has had its
 chance, `GlimPrevCard` catches up with the present, and the edge

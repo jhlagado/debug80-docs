@@ -8,7 +8,8 @@ nav_order: 4
 
 # Chapter 3 — Strings
 
-Chapter 2 walked a byte table with a **fixed length** in B. Text in memory usually has no fixed length: you stop when you see a sentinel, not when a counter reaches eight.
+Chapter 2 walked a byte table with a **fixed length** in B. Text in memory
+usually has no fixed length: a sentinel ends the walk instead of a counter.
 
 The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
 
@@ -16,7 +17,9 @@ The companion program is [`examples/03_string_length.asm`](examples/03_string_le
 
 ## The problem: text without a length field
 
-You need to know how many characters are in a message before formatting a screen line. You need to copy a label into a buffer. You need to find the first `'/'` in a path.
+The examples cover three common operations: finding a message length before
+formatting a screen line, copying a label into a buffer, and locating the first
+`'/'` in a path.
 
 ---
 
@@ -34,7 +37,8 @@ buffer:
 
 `message` points at `'H'`.
 
-AZM also accepts a string directive that appends the terminator for you (Book 2 Chapter 3):
+AZM also accepts a string directive that appends the terminator automatically
+(Book 2 Chapter 3):
 
 ```asm
 message:
@@ -148,7 +152,9 @@ The last iteration copies the zero terminator. That matters if later code scans 
 
 ![HL reads and DE writes in step, and the loop only exits once the terminator has been written](../../assets/images/azm-book/book3/two-pointer-copy.svg)
 
-After `call strcpy_u8`, DE points one past the null. Reload HL from `message` before another pass; do not assume DE still equals the destination base.
+After `call strcpy_u8`, DE points one byte past the null. Another pass reloads
+HL from `message`, and no later code relies on DE still containing the
+destination base.
 
 ---
 
@@ -226,13 +232,16 @@ The companion program copies `message` into `buffer`, then compares the two buff
 
 ## Preparing for print: digits and terminators
 
-Display routines need ASCII, not raw small integers. The digit loop from Chapter 1 still applies: divide the value by 10, add `'0'` to each remainder, store backward into a small buffer, null-terminate.
+Display routines need ASCII rather than raw small integers. Chapter 1's digit
+loop divides the value by 10, adds `'0'` to each remainder, stores the digits
+backward into a small buffer and appends a null terminator.
 
 Sketch of the invariant for decimal output into a byte buffer at DE:
 
 > HL (or DE) points at the next free byte leftward; the digits emitted so far sit to the right; when the value reaches zero, the digits are complete.
 
-You do not need a print port for Book 3. Storing `"42", 0` in RAM and inspecting bytes after `halt` is enough proof.
+Book 3 does not require a print port. Storing `"42", 0` in RAM provides a result
+that can be verified after `halt`.
 
 ---
 
@@ -295,20 +304,27 @@ azm examples/03_string_length.asm
 azm --rc warn examples/03_string_length.asm
 ```
 
-Single-step through `strlen_u8` once: watch B increment only on non-zero bytes, then confirm HL stops on the null.
+A single-step trace of `strlen_u8` shows B incrementing only for non-zero bytes
+and HL stopping on the null.
 
 ---
 
 ## Exercises
 
-1. Change `message` to `.db "AZM", 0`. Predict `str_len` and `find_index` for `'M'` before running the program.
-2. Add `strchr` that returns HL pointing at the match with carry set, or HL = 0
-with carry clear when the character is absent. Document
-`in`/`out`/`clobbers`.
-3. Implement `strcat_u8`: HL destination, DE source. Scan HL to its null, then `strcpy` from DE into that position.
-4. Bounded copy: `strncpy_u8` with B = max bytes to write; stop early if source ends, but never write more than B bytes (pad with null if required).
-5. Hand-trace `strcmp_u8` on `"AB"` vs `"A"`. Which return code should you get?
-6. Store the decimal string for `str_len` into a 4-byte workspace after computing length (exercise direction from "print prep").
+1. In the first exercise, `message` becomes `.db "AZM", 0`; the predicted
+   `str_len` and `find_index` for `'M'` can then be compared with execution.
+2. A `strchr` routine should return HL pointing at the match with carry set, or
+   HL = 0 with carry clear when the character is absent. Its contract includes
+   `in`, `out` and `clobbers`.
+3. A `strcat_u8` routine uses HL as destination and DE as source. It scans HL
+   to the null before copying from DE into that position.
+4. A bounded `strncpy_u8` uses B as the maximum number of bytes to write. It
+   stops early when the source ends, never exceeds B bytes, and pads with null
+   when required.
+5. A hand trace of `strcmp_u8` on `"AB"` and `"A"` should include the expected
+   return code.
+6. A four-byte workspace should contain the decimal string for `str_len` after
+   the length calculation.
 
 ---
 

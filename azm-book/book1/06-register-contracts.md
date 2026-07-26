@@ -112,13 +112,13 @@ _row:
 
 **Option 3: restructure so the values do not collide**
 
-Move `B` to a RAM location or use a different register in one of the routines.
+The collision disappears if `B` moves to RAM or one of the routines uses a different register.
 
 ---
 
 ## Routine boundaries: `.routine`
 
-Register contract analysis proves facts inside routine regions. Place `.routine` before the entry label:
+Register contract analysis proves facts inside routine regions. A `.routine` directive before the entry label establishes the region:
 
 ```asm
 .routine clobbers A,B
@@ -134,7 +134,7 @@ Callers write `call RenderTile`. The directive emits no bytes and does not chang
 - Consecutive non-local labels before the first instruction are aliases for one routine
 - A later non-local label closes the routine and begins ordinary code or data
 
-Use leading-underscore labels for branches owned by the routine:
+Leading-underscore labels identify branches owned by the routine:
 
 ```asm
 .routine in HL clobbers B
@@ -160,7 +160,7 @@ Export is independent from routine analysis:
 
 `@NormaliseByte:` exports `NormaliseByte` from an imported source unit. The same routine could use a plain `NormaliseByte:` label when it is only needed inside its source unit.
 
-Keep owner-local branches inside their routine. Direct `JP`, `JP cc`, `JR` and `JR cc` transfers to another declared routine are analyzed as tail calls. Use `call` when control returns to the caller and a tail jump when the callee returns directly to the original caller.
+Owner-local branches must remain inside their routine. Direct `JP`, `JP cc`, `JR` and `JR cc` transfers to another declared routine are analyzed as tail calls. A `call` is appropriate when control returns to the caller; a tail jump applies when the callee returns directly to the original caller.
 
 ---
 
@@ -178,9 +178,12 @@ azm --rc strict program.asm     # fail on anything AZM cannot prove safe
 
 The default mode is `off`. `strict` goes beyond `error` by failing on anything AZM cannot prove safe, including unknown routine boundaries and stack effects.
 
-For a Debug80 edit-and-restart loop, use `audit` or `warn` while exploring a messy port. Use `strict` for deliberate rebuilds once the routine boundaries and external interfaces are in place.
+For a Debug80 edit-and-restart loop, `audit` or `warn` allows exploration of a messy port without stopping the build. `strict` is appropriate for deliberate rebuilds once the routine boundaries and external interfaces are in place.
 
-Debug80's own **Register Contracts** dropdown offers three of these five: Off, Audit, and Enforce, which is `error`. Reaching `warn` or `strict` from Debug80 means setting `registerContracts` in `debug80.json`. Note that the dropdown overrides that value for any build started from the panel.
+Debug80's own **Register Contracts** dropdown offers three of these five: Off,
+Audit and Enforce, which is `error`. Reaching `warn` or `strict` from Debug80
+means setting `registerContracts` in `debug80.json`. The dropdown overrides
+that value for any build started from the panel.
 
 ### Source policy directives
 
@@ -192,7 +195,7 @@ Debug80's own **Register Contracts** dropdown offers three of these five: Off, A
 
 Accepted modes are `strict`, `audit` and `off`. In a translation unit built from `.include` files, AZM applies the directive to routines and diagnostics owned by that included file, not only to the root entry file. Project configuration can also assign policies with file globs; the most specific matching rule wins. A glob beats the `.contracts` directive, which in turn beats `--rc`. `.contracts` may appear only once in each physical file, and a file carrying a mode other than `off` runs the analysis even when no `--rc` flag is given.
 
-Use `.rcignore` immediately before the finding it suppresses and include a reason:
+An `.rcignore` directive immediately before a finding suppresses it and records the reason:
 
 ```asm
 .routine in HL
@@ -225,7 +228,7 @@ Worker:
         ret
 ```
 
-Fix the contract or the body:
+The mismatch can be resolved by declaring `B` as a clobber or by removing the write from the body. Here the contract records the clobber:
 
 ```asm
 .routine out A clobbers B
@@ -273,7 +276,7 @@ DrawRows:
         ret
 ```
 
-Keep `push`/`pop` save-restore pairs inside the same `.routine` region. Each returning path must restore the stack before `ret`.
+A `push`/`pop` save-restore pair must remain inside the same `.routine` region. Each returning path must restore the stack before `ret`.
 
 ![A contract binds every returning path, not only the last one in the body](../../assets/images/azm-book/book1/return-paths.svg)
 
@@ -297,7 +300,7 @@ _sharedFail:
 
 `CopyName` pushes `BC`, then branches to `_sharedFail`, which is owned by `LoadConfig`. AZM reports the cross-owner local reference before register-contract analysis.
 
-Keep the shared exit inside the same routine region:
+Moving the shared exit inside the same routine region gives the analyzer a complete stack path:
 
 ```asm
 .routine preserves BC
@@ -343,7 +346,8 @@ Blank lines and ordinary comments may appear between the directive and label:
 CheckCollisionAtDe:
 ```
 
-One routine has one `.routine` directive. Continue a long source line only with the editor's normal wrapping; a second `.routine` starts a second routine.
+One routine has one `.routine` directive. Long source lines rely on the editor's
+normal wrapping because a second `.routine` starts a second routine.
 
 Malformed carrier lists are rejected:
 
@@ -369,7 +373,7 @@ Six contract keys are recognized:
 | `clobbers` | Registers/flags the routine destroys (no restore) |
 | `preserves` | Registers/flags the routine restores to their entry value |
 
-Read those keys from the caller's point of view:
+The keys describe the boundary from the caller's point of view:
 
 - `in` means the caller must provide this carrier before the call
 - `out` means the caller may intentionally consume this carrier after the call
@@ -388,18 +392,18 @@ Register pair names expand to their constituent 8-bit registers for analysis: `B
 .routine out carry,zero clobbers A
 ```
 
-Use `carry` for the carry flag; `C` names register C. Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`. `F` may be used as shorthand for the flag set.
+`carry` names the carry flag, whereas `C` names register C. The individual flag names are `carry`, `zero`, `sign`, `parity` and `halfCarry`. `F` may be used as shorthand for the flag set.
 
 ![Pair and flag-set carriers expand to the individual registers and flags the analyzer tracks](../../assets/images/azm-book/book1/carrier-expansion.svg)
 
-Prefer individual flag names when a routine returns status in flags:
+Individual flag names state precisely which status a routine returns:
 
 ```asm
 .routine in A,HL out carry clobbers BC
 CheckTile:
 ```
 
-Prefer register pairs when the routine treats the pair as one value:
+A register pair expresses a value that the routine treats as a unit:
 
 ```asm
 .routine in DE out HL clobbers A
@@ -440,7 +444,7 @@ azm --contracts --rc audit program.asm
 
 AZM infers a contract for each declared routine and inserts or updates its `.routine` directive. Human prose comments above the directive remain in place.
 
-AZM inferred those contracts from the instruction stream, so treat them as a starting point and check that they match the routine's intended interface.
+Because AZM infers these contracts from the instruction stream, they are a starting point that must be checked against the routine's intended interface.
 
 When AZM infers a written value that could be either a clobber or an output, it may write `maybe-out`:
 
@@ -449,13 +453,13 @@ When AZM infers a written value that could be either a clobber or an output, it 
 MaskA:
 ```
 
-Review every `maybe-out`. If the value is intentionally returned, promote it with `--accept-out`:
+Every `maybe-out` requires a decision. When the value is intentionally returned, `--accept-out` promotes it:
 
 ```sh
 azm --accept-out MaskA:A --rc audit program.asm
 ```
 
-If the value is not part of the routine interface, leave it as a clobber or rewrite the routine so the effect is clear.
+When the value is not part of the routine interface, it remains a clobber; alternatively, the routine can be rewritten to make the effect clear.
 
 You can hand-write or edit `.routine` directives directly. A later `--contracts` run updates the directive from current inference.
 
@@ -489,7 +493,7 @@ end
 azm --interface mon3.asmi --rc strict program.asm
 ```
 
-Strict mode treats missing routine bodies and missing external contracts as build failures. If the assembler cannot see a direct-call target, load an `.asmi` file for it or add the missing source to the translation unit.
+Strict mode treats missing routine bodies and missing external contracts as build failures. A direct-call target that is not visible to the assembler requires either an `.asmi` file or the missing source in the translation unit.
 
 ```sh
 azm --reg-profile mon3 program.asm
@@ -506,7 +510,7 @@ clobbers B,C,D,E,H,L
 end
 ```
 
-For a project-owned service range, use `>=`:
+The `>=` form describes a project-owned service range:
 
 ```text
 service rst $10 C >= $60 TECMATE_EXPANSION_SERVICE
@@ -522,16 +526,16 @@ The exact-service form applies when AZM can prove the selector value in `C`. The
 
 ## A practical workflow
 
-Use register contracts as part of editing:
+Register contracts fit into an editing cycle:
 
-1. Write or edit the routine.
-2. Run `azm --rc audit program.asm` while the code is still moving.
-3. Add or regenerate `.routine` contracts with `azm --contracts --rc audit program.asm`.
-4. Run `azm --rc error program.asm` to fail on proven conflicts.
-5. Run `azm --rc strict program.asm` once routine boundaries and external interfaces are in place.
-6. Fix routine structure, contracts or interfaces until strict mode passes.
+1. A routine is written or edited.
+2. While the code is still moving, `azm --rc audit program.asm` reports findings without stopping the build.
+3. `azm --contracts --rc audit program.asm` adds or regenerates `.routine` contracts.
+4. `azm --rc error program.asm` makes proven conflicts fail the build.
+5. Once routine boundaries and external interfaces are in place, `azm --rc strict program.asm` also fails on anything AZM cannot prove safe.
+6. Routine structure, contracts and interfaces are then corrected until strict mode passes.
 
-If strict mode produces many findings in one area, inspect the routine boundaries first. Shared exits, cross-boundary jumps and unrecorded monitor calls often need explicit boundaries or external contracts.
+When strict mode produces many findings in one area, the routine boundaries are the first place to investigate. Shared exits, cross-boundary jumps and unrecorded monitor calls often need explicit boundaries or external contracts.
 
 ---
 
@@ -543,7 +547,7 @@ AZM can also write a report with `--reg-report`, producing `program.regcontracts
 azm --rc audit --reg-report program.asm
 ```
 
-Use JSON when a tool or CI job needs structured findings:
+JSON supplies structured findings to tools and CI jobs:
 
 ```sh
 azm --rc audit --reg-report --reg-report-format json program.asm
@@ -570,7 +574,7 @@ AZM identifies call sites where the callee clearly returns a register the caller
 
 `--fix` does not insert `push`/`pop` pairs or change a single instruction, so the assembled output is unchanged.
 
-After `--fix` runs, inspect the diff anyway. An inferred contract records what the code does today, which may differ from the intended interface. Where they differ, write the intended contract; the next build will report any mismatch between that declaration and the routine body.
+After `--fix` runs, the diff still requires inspection. An inferred contract records what the code does today, which may differ from the intended interface. Where they differ, the intended contract should replace the inference; the next build will report any mismatch between that declaration and the routine body.
 
 ---
 
@@ -581,7 +585,7 @@ Register contract analysis tracks:
 - Register and flag values through straight-line code and simple loops
 - Push/pop preservation pairs on all return paths
 
-Handle these cases with external contracts, manual annotations or separate review:
+The following cases require external contracts, manual annotations or separate review:
 
 - RAM aliasing (what another call might overwrite in your storage)
 - Indirect call targets (call through register)
@@ -610,7 +614,7 @@ With `--require-expectout`, an inferred output dependency that has not been conf
 program.asm:58:9: error: [AZMN_REGISTER_CONTRACTS] CALL NORMALISE_COORD writes D,E and caller reads it later, but NORMALISE_COORD does not declare D,E as output; add `.expectout {D,E}` above the call to confirm the dependency and promote the callee output.
 ```
 
-This fires when a routine reads and writes the same registers but AZM cannot prove whether the pre-call values must survive or the post-call values are intentional results. Confirm this call site with `.expectout {D,E}`. If the routine is deliberately a transform at every call site, use `--accept-out NORMALISE_COORD:D,E` or declare `.routine in DE out DE`.
+This fires when a routine reads and writes the same registers but AZM cannot prove whether the pre-call values must survive or the post-call values are intentional results. An `.expectout {D,E}` directive confirms this call site. If the routine is deliberately a transform at every call site, `--accept-out NORMALISE_COORD:D,E` or `.routine in DE out DE` records that interface.
 
 ---
 

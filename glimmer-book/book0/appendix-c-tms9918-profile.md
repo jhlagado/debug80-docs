@@ -160,8 +160,8 @@ covers pattern indexes `g*8` to `g*8+7`.
   `$F1` (white on black) before `LoadResourcesVram` writes the
   declared pairs.
 - The colour table holds 32 groups. A program that needs more raises
-  a build diagnostic naming the count; reuse (fg, bg) pairs to bring
-  it down.
+  a build diagnostic naming the count. Reusing (fg, bg) pairs reduces
+  the count.
 
 ```asm
 GlimTilePats:
@@ -236,8 +236,8 @@ sprite or a tile.
   and marks the row. `CommitNameRow` flushes one shadow row (A =
   0-23) to VRAM; `GlimCommit` calls it per marked row.
 - Pattern and colour uploads beyond the declared resources are
-  one-time init work: call the `Vdp*` routines from an `enter` block,
-  with the tables in an imported assembly module.
+  one-time init work. An `enter` block can call the `Vdp*` routines,
+  with the tables held in an imported assembly module.
 
 The LCD slice, its `Api*ToLcd` equates, `text` string data, and the
 `lcd_row` op are board hardware shared with the matrix profile;

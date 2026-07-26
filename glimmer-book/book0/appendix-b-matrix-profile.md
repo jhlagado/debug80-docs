@@ -138,8 +138,8 @@ plain shape; `Snd_<Name>` wrappers appear per sound cue.
 - `MxMask` converts x in A (0 = leftmost) to the matrix bit
   convention, `%10000000` for column 0.
 - `ShapeDraw` draws a plain shape: HL = `Shape_<Name>`, B = x, C = y.
-  It plots with no clipping, so keep the whole shape inside the 8x8
-  matrix.
+  It plots with no clipping, so the whole shape must remain inside the
+  8x8 matrix.
 - `SndStart` (re)starts a cue: A = duration in row ticks, C = divider
   half-period. `Snd_<Name>` loads both from the declaration and jumps
   into it.
@@ -280,7 +280,7 @@ ShapeRotCount     .equ 1
   aliases repeat pointers in `ShapeRotPtrTable` instead of repeating
   bitmaps.
 - `ShapeRotPtrTable` and `ShapeRotRightTbl` hold four entries per
-  shape: index an entry by `id*4 + rotation`, with `id` from the
+  shape. An entry is indexed by `id*4 + rotation`, with `id` from the
   `ShapeId_<Name>` equate. `ShapeRotColorTbl` holds one colour byte
   per shape, indexed by `id` alone.
 - `ShapeRotRightTbl` records each rotation's rightmost occupied

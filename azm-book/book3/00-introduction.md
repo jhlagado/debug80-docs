@@ -23,11 +23,10 @@ Each chapter starts from a concrete problem (sort this table, find this value, w
 ## Representation before algorithm
 
 Niklaus Wirth's title *Algorithms + Data Structures = Programs* captures a
-constraint that becomes unavoidable in assembly: before choosing instructions,
-you must decide how values are laid out in memory and how the code will reach
-them.
+constraint that becomes unavoidable in assembly: instruction choice depends on
+how values are laid out in memory and how the code will reach them.
 
-Before you write the sort loop, you decide:
+A sort loop therefore begins with three representation decisions:
 
 - Is the array a contiguous block of bytes starting at a label?
 - Is each element a plain `byte`, or a `Sprite` record with `sizeof(Sprite)` stride?
@@ -40,13 +39,14 @@ algorithm uses those constants to form addresses.
 
 ## K&R: small programs, explicit invariants
 
-Each loop should have an invariant you can say out loud:
+Each loop needs an invariant that can be stated plainly:
 
 - "B counts elements remaining."
 - "HL points at the next byte to examine."
 - "Everything before index i is sorted."
 
-When something breaks, you check the invariant first, then the instruction sequence.
+When a loop fails, its invariant provides the first point of comparison. The
+instruction sequence can then be checked against that invariant.
 
 ---
 
@@ -64,13 +64,14 @@ workspace:
     .ds byte[4]       ; algorithm-local scratch (uninitialized)
 ```
 
-`.ds` reserves bytes without initializing them. That is fine for temporaries you overwrite before reading.
+`.ds` reserves bytes without initializing them. It is suitable for temporaries
+that the algorithm writes before reading.
 
 ---
 
 ## Register contracts as the subroutine spec
 
-Every nontrivial routine in this book should carry:
+Every nontrivial routine in this book uses:
 
 - A one-line human comment (`; gcd_u16: ...`)
 - A `.routine` directive for `in`, `out`, `maybe-out`, `clobbers` and `preserves`
@@ -90,10 +91,11 @@ the program only when you write the corresponding instructions.
 
 ## Reading and running the chapters
 
-1. Read the chapter prose for the problem and the invariant.
-2. Open the cited file under this book's `examples/` directory.
-3. Assemble it, run to `halt`, inspect the documented RAM locations.
-4. Do the exercises with pencil and emulator before peeking at hints.
+Each chapter first defines the problem and its invariant. The corresponding file
+under this book's `examples/` directory provides the complete program. Its
+documented RAM locations show the result after assembly and execution to
+`halt`. The exercises are designed for working through with pencil and emulator
+before consulting any hints.
 
 ---
 

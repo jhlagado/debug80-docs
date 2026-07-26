@@ -89,8 +89,8 @@ ld a, 3
 cp 5      ; subtracts 5; C is set (borrow); A stays 3
 ```
 
-Use `sub` when you need the computed difference. Use `cp` when you only need to
-know the relationship (equal, less than, greater than) without changing A.
+`sub` supplies the computed difference. `cp` supplies only the relationship
+(equal, less than, greater than) without changing A.
 
 ---
 
@@ -98,7 +98,7 @@ know the relationship (equal, less than, greater than) without changing A.
 
 `and`, `or` and `xor` each apply a bitwise operation between a mask value and A, store the result back in A, clear C and set Z if the result is zero.
 
-`and n` keeps only the bits where the mask has 1. Use it to isolate part of a
+`and n` keeps only the bits where the mask has 1, which isolates part of a
 byte:
 
 ```asm
@@ -135,8 +135,8 @@ xor $0F            ; A = %11110000 — lower four bits flipped
 
 The most-used form is `xor a`. A XOR'd against itself is always zero; every
 bit cancels. `ld a, 0`
-also zeros A but leaves the flags unchanged; when you need a guaranteed clean
-state in both A and the carry, reach for `xor a`.
+also zeros A but leaves the flags unchanged. `xor a` guarantees a clean
+state in both A and carry.
 
 ```asm
 xor a              ; A = 0; Z is set; C is clear
@@ -160,7 +160,7 @@ to the following instruction.
 jp $8010      ; PC becomes $8010; next instruction comes from $8010
 ```
 
-You will almost always target a label rather than a raw address:
+A label normally provides the target instead of a raw address:
 
 ```asm
 jp done
@@ -207,9 +207,8 @@ interpretation of S. The `pe` and `po` conditions test P/V; that flag represents
 parity after some instructions and signed overflow after others. The full list
 is in [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
 
-You set a flag with `cp`
-or a logical instruction, then use a conditional `jp` to skip over the block
-you do not want to execute:
+A `cp` or logical instruction sets a flag, after which a conditional `jp`
+can skip the block that does not apply:
 
 ```asm
 cp 5
@@ -240,11 +239,10 @@ non-zero, Z is clear and execution falls through.
 
 > **The Flag-Before-Branch Check**
 >
-> Every time you write a conditional jump (`jp cc`, `jr cc`), apply this
-> three-step check.
+> A conditional jump (`jp cc`, `jr cc`) can be checked in three steps.
 >
 > **Step 1: Which instruction set the flag you're testing?**
-> Scan backward from the jump until you find the instruction that last modified
+> The scan starts at the jump and moves backward to the instruction that last modified
 > the flag. Common candidates for Z include `cp`, `sub`, `and`, `or`, `xor`,
 > `inc`, `dec`, `add`, `sbc` and `in r,(C)`. Common candidates for C include
 > `cp`, `sub`, `add`, `adc`, `sbc`, `and`, `or`, `xor`, `rl*` and `rr*`.
@@ -294,7 +292,7 @@ the related `djnz` instruction (Chapter 6) are in
 
 ## Detecting a negative number: the `cp $80` technique
 
-Suppose A holds a signed value and you need its absolute value. A signed byte stores values from −128 to 127. Negative values have bit 7 set, which means their unsigned interpretation
+A signed value in A may need conversion to its absolute value. A signed byte stores values from −128 to 127. Negative values have bit 7 set, which means their unsigned interpretation
 is 128 or greater. You can test which half A falls in by comparing it against
 128 as an unsigned value:
 
@@ -417,7 +415,7 @@ Chapter 6 shows the single instruction the Z80 provides for exactly the loop pat
 
 ## Exercises
 
-**1. Flag prediction.** For each instruction or short sequence below, state whether Z is set or clear and whether C is set or clear after execution. Do not run the code yet; work it out on paper:
+**1. Flag prediction.** This exercise predicts whether Z and C are set or clear after each instruction or short sequence before checking the result in an emulator:
 
 ```asm
 ld a, 5
@@ -434,11 +432,11 @@ xor a       ; establish Z set and C clear
 dec a       ; Z = ? C = ?
 ```
 
-Once you have your answers, confirm them in the emulator using step mode and the register display.
+Step mode and the register display provide the observed result for comparison with the prediction.
 
-**2. Apply the flag-before-branch check.** The following snippet is meant to
+**2. The flag-before-branch check.** The following snippet is meant to
 load 10 into `count` only when A holds the value 5, and do nothing otherwise.
-Find the bug:
+The exercise is to locate the bug:
 
 ```asm
 ld a, 5
@@ -450,14 +448,13 @@ ld (count), a
 skip:
 ```
 
-Apply the three-question flag-before-branch check: (1) which instruction last set the flag before `jp nz`? (2) does anything between that instruction and the jump modify that flag? (3) does the condition mean what the author intended? State what the code actually does, then write the corrected version.
+The three questions are: (1) which instruction last set the flag before `jp nz`? (2) does anything between that instruction and the jump modify that flag? (3) does the condition mean what the author intended? The answer should state what the code actually does and provide a corrected version.
 
-**3. Count down with flags.** Write a loop that starts with A = 10 and decrements A until A reaches zero. The loop body should store A to a named variable `last_a` on every iteration. Use `dec a` and a conditional jump, not DJNZ (that comes in Chapter 6). After the loop exits, what value is in A? What value is in `last_a`?
+**3. Count down with flags.** The required loop starts with A = 10, decrements A until it reaches zero, and stores A in a named variable `last_a` on every iteration. It uses `dec a` and a conditional jump rather than DJNZ, which comes in Chapter 6. The final trace should give the values in A and `last_a`.
 
 **4. Bit test.** A already holds a status byte whose bit 2 is a "ready" flag.
 The instruction `bit 2, a` leaves A unchanged and sets Z when bit 2 is clear.
-Write the two instructions needed to test bit 2 and jump to `not_ready` if the
-bit is clear.
+The answer consists of the two instructions that test bit 2 and jump to `not_ready` when it is clear.
 
 ---
 

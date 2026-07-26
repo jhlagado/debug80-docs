@@ -23,7 +23,7 @@ Assembly programs commonly contain bytes fixed at assemble time and storage fill
         .db $48,$65,$6C,$6C,$6F   ; "Hello" in hex
 ```
 
-Use 0–255 for unsigned data or −128–127 for signed data. AZM currently writes the low eight bits of a numeric `.db` expression without a range diagnostic, so larger or more negative values wrap.
+Unsigned data belongs in the range 0–255 and signed data in the range −128–127. AZM currently writes the low eight bits of a numeric `.db` expression without a range diagnostic, so larger or more negative values wrap.
 
 String literals are also valid in `.db`:
 
@@ -86,7 +86,8 @@ AZM provides three string-specific directives that set a termination policy expl
         .cstr "Hello"   ; emits: H e l l o $00
 ```
 
-Equivalent to `.db "Hello",0` but makes the termination policy explicit. Use `.cstr` when a routine scans forward until it reads a zero byte.
+This is equivalent to `.db "Hello",0` but makes the termination policy
+explicit. `.cstr` suits routines that scan forward until they read a zero byte.
 
 **`.pstr` (Pascal-style string, length prefix):**
 
@@ -94,7 +95,10 @@ Equivalent to `.db "Hello",0` but makes the termination policy explicit. Use `.c
         .pstr "Hello"   ; emits: $05 H e l l o
 ```
 
-The first byte stores the string length modulo 256. Keep `.pstr` strings at 255 characters or fewer; AZM currently does not report longer strings and their length prefix wraps. Use `.pstr` when the receiving routine reads a leading byte count.
+The first byte stores the string length modulo 256. `.pstr` strings should
+contain no more than 255 characters; AZM currently gives no diagnostic for a
+longer string, and the length prefix wraps. The format suits routines that read
+a leading byte count.
 
 **`.istr` (inverted terminator string):**
 
@@ -104,7 +108,7 @@ The first byte stores the string length modulo 256. Keep `.pstr` strings at 255 
 
 All bytes emit at their ASCII value except the last character, which has bit 7 set (`$6F | $80 = $EF` for lowercase `o`). Some older ROM routines use this encoding; the receiving loop checks for bit 7 to detect the final byte.
 
-If none of these match your target routine's expected format, use `.db` directly.
+Target routines that expect another format require a direct `.db` definition.
 
 ---
 
@@ -152,7 +156,9 @@ Stack:
         .ds 256        ; reserve 256 bytes
 ```
 
-The operand is a byte count expression. Use a non-negative count. AZM currently does not diagnose a negative count, which can move the assembly address backwards. Labels placed before `.ds` name the start of the reserved block.
+The operand is a non-negative byte-count expression. AZM currently does not
+diagnose negative counts, which can move the assembly address backwards.
+Labels placed before `.ds` name the start of the reserved block.
 
 ### Optional fill byte
 

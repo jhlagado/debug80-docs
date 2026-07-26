@@ -25,7 +25,10 @@ debug80.json
 
 Debug80 also accepts it at `.vscode/debug80.json`, and looks for the root copy first.
 
-No JSON schema ships for this file, so editing it by hand gets no completion or validation in the editor. Prefer the panel and the Debug80 commands for routine changes, and use this appendix when you need to read or hand-edit something they do not cover.
+No JSON schema ships for this file, so editing it by hand gets no
+completion or validation in the editor. The panel and Debug80 commands
+are preferable for routine changes; this appendix covers fields that
+need to be read or edited by hand.
 
 ### Top-level shape
 
@@ -51,7 +54,8 @@ Initialization writes `"targets": {}` and omits `defaultTarget` when you choose 
 
 When a project needs a hand-written VS Code launch configuration, launch options can override the project defaults for that session. These keys go in a `.vscode/launch.json` entry with `"type": "z80"`.
 
-Use `target` when a launch configuration should always start a specific target, even if the Project section currently selects another one.
+The `target` key makes a launch configuration start a specific target,
+even if the Project section currently selects another one.
 
 Debug80 can also control where it opens files:
 
@@ -133,7 +137,11 @@ An `azm` object carries assembler options, at the project root or on an individu
 | `emitRegisterReport` | boolean | Write the `.regcontracts.txt` report beside the other artifacts. |
 | `emitRegisterInterface` | boolean | Write the `.asmi` interface file. |
 
-`symbolCase` is the one you will meet without going looking for it: the **Strict labels** checkbox in the panel writes it, and it is the only panel control that changes `debug80.json` as you click it. Scaffolding sets `strict` for new projects. Turn it off for legacy source with inconsistent capitalization.
+`symbolCase` is the one you will meet without going looking for it:
+the **Strict labels** checkbox in the panel writes it, and it is the
+only panel control that changes `debug80.json` as you click it.
+Scaffolding sets `strict` for new projects; legacy source with
+inconsistent capitalization may require it to be disabled.
 
 The remaining register-contract options are generated with sensible defaults.
 
@@ -148,7 +156,10 @@ build/main.hex
 build/main.d8.json
 ```
 
-The `.d8.json` file is useful when you need to understand why Debug80 navigated to a line, named a call-stack frame, found a symbol, or bound a source breakpoint to a machine address. Use the source-map status in the Project section and build the target when Debug80 needs fresh mapping data.
+The `.d8.json` file is useful when you need to understand why Debug80
+navigated to a line, named a call-stack frame, found a symbol, or bound
+a source breakpoint to a machine address. The source-map status in the
+Project section shows when a fresh build is needed.
 
 A D8 v1 file is a JSON object with this root shape:
 

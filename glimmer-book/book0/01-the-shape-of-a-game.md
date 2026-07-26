@@ -82,8 +82,8 @@ begin
 end
 ```
 
-Thirteen lines, and you can already read half of them. Let
-me walk you through the other half, top to bottom.
+Thirteen lines, and you can already read half of them. The other half
+becomes clear when we work through it from top to bottom.
 
 `program Mover` names the program. `platform tec1g-mon3` and
 `display matrix8x8` tell Glimmer what hardware we are aiming at: a
@@ -97,9 +97,9 @@ state DotX : byte = 3 changed
 ```
 
 This is our first *fact*: a named variable that the program remembers.
-Pick up one habit immediately, because it will serve you
-for the whole book: Glimmer declarations are built to be read aloud.
-Try this one: "DotX is a byte, starting at 3, already changed." Every
+One reading habit will serve throughout the book: Glimmer declarations
+are built to be read aloud. This one reads: "DotX is a byte, starting
+at 3, already changed." Every
 declaration in the language passes that test, and whenever you are
 unsure what a line means, saying it out loud is the fastest way to
 find out.
@@ -136,7 +136,7 @@ declares their connection: a change to the fact schedules the rule.
 ## The dot responds
 
 We are making a game, so the next
-step is to make it respond: press key 6, and the dot moves right. Here
+step is to make it respond. A press of key 6 will move the dot right. Here
 is the program again with that ability added: three new declarations
 and one new block.
 
@@ -176,8 +176,8 @@ begin
 end
 ```
 
-Let me introduce the newcomers in the order they appear, because each
-one exists to answer a question the previous one raises.
+The new declarations make most sense in source order because each one
+answers a question raised by the previous one.
 
 ```text
 pulse Right
@@ -194,8 +194,8 @@ bind key KEY_6 rising -> Right
 ```
 
 The **bind** line is the wire from the physical world to your pulse.
-Read the arrow the way it points: key 6, on a new press, fires
-`Right`. The word `rising` means the pulse fires on the frame the key
+Following the arrow from left to right gives its meaning: key 6, on a
+new press, fires `Right`. The word `rising` means the pulse fires on the frame the key
 first goes down: one press, one pulse, however long you hold the key.
 We will want a different behaviour for movement soon, and Glimmer has
 one waiting, but rising is the shape to learn first because it is the
@@ -221,7 +221,8 @@ put.
 guess: the dot moves now, so each redraw starts from a clean
 framebuffer and plots the dot where it currently is.
 
-Follow one press of key 6 through the program, from key to pixel:
+The following diagram traces one press of key 6 through the program,
+from key to pixel:
 
 ![One press of key 6, from the declarations that describe it to the pixel it lights.](../../assets/images/glimmer-book/book0/reactive-chain.svg)
 
@@ -237,13 +238,13 @@ block on its own, whether the program has three of them or thirty.
 
 ## Holding a key down
 
-To cross the screen, you
-press key 6 seven times. We want the
-arcade behaviour: hold the key, the dot keeps moving.
+Crossing the screen with `rising` takes seven separate presses of key
+6. Arcade movement usually continues while the key is held.
 
-By hand, that behaviour is a small state machine you run every frame:
-keep a counter, act when it reaches zero, reload it, and (the edge
-people forget) reset it on release so the next press fires at once.
+By hand, that behaviour is a small state machine run every frame. It
+keeps a counter, acts when the counter reaches zero, reloads it, and
+(the edge people forget) resets it on release so the next press fires
+at once.
 
 ```asm
         call    Key6Down         ; Z if key 6 is down this frame
@@ -280,8 +281,8 @@ one digit. Glimmer writes the counter and its edges for you; you will
 meet the two bytes it uses in the generated assembly later in this
 chapter.
 
-Add the mirror-image key and rule for leftward travel, and our little
-program is complete:
+The mirror-image key and rule for leftward travel complete the
+program:
 
 ```text
 program Mover
@@ -333,15 +334,13 @@ begin
 end
 ```
 
-Read this file
-from the top, out loud, the way I showed you: "Mover, on the TEC-1G,
+When read aloud from the top, the file describes itself as: "Mover, on the TEC-1G,
 drawing on the 8x8 matrix. DotX is a byte, starting at 3, already changed.
 Two moments, Left and Right. Key 4 held fires Left every 8 frames; key
 6 held fires Right. On Left, MoveLeft updates DotX. On Right,
-MoveRight updates DotX. On DotX, DrawDot." Show the headers to
-someone who has never seen a Z80 and they could tell you what this
-game does. Show any
-single block to a Z80 programmer and they know everything it touches.
+MoveRight updates DotX. On DotX, DrawDot."
+The headers alone tell someone who has never seen a Z80 what this game
+does. Any single block tells a Z80 programmer everything it touches.
 
 Labels that start with an underscore, like `_stop`, are local to their
 block, so both movement rules own a `_stop` of their own without
@@ -394,8 +393,8 @@ MainLoop:
         jp      MainLoop
 ```
 
-Read it top to bottom and you are reading this chapter again, in
-assembly: show the picture, poll the keys, run the rules whose facts
+From top to bottom, the loop restates this chapter in assembly: show
+the picture, poll the keys, run the rules whose facts
 changed, draw what changed, tidy up, go round again. Every routine it
 calls sits further down in this same file, in this same plain style,
 and you can follow any of them to the end.

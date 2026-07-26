@@ -44,7 +44,7 @@ AZM accepts eight numeric literal forms. They can be mixed within one expression
 | Plain decimal | `42`, `255`, `0` | decimal | |
 | Quoted character | `'A'`, `"Z"` | ASCII value | single character; valid in any expression context |
 
-**Trailing-`H` rule:** the token must begin with a decimal digit (`0`–`9`). `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. Write `$FF` or `0FFH` to force hex.
+**Trailing-`H` rule:** the token must begin with a decimal digit (`0`–`9`). `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. The forms `$FF` and `0FFH` force hexadecimal interpretation.
 
 `%` has two roles: a `%` at the start of a value is a binary literal prefix; a `%` between two expressions is the modulo operator.
 

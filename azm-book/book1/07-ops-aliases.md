@@ -126,13 +126,13 @@ end
 
 ### Ops vs subroutines
 
-Use an op when:
+An op is appropriate when:
 
 - The idiom is small enough that call overhead is significant relative to the body
 - The register and flag effects must be exactly as if you had typed the instructions
 - You want the expansion visible in the output
 
-Use a subroutine when:
+A subroutine is appropriate when:
 
 - The body is several instructions long and is called many times (code size matters)
 - The routine needs its own register contract, declared with `.routine`
@@ -163,7 +163,7 @@ available overloads:
   - load8(dst reg8, val imm8) (program.asm:1) ; dst: expects reg8, got HL
 ```
 
-`HL` is a 16-bit register; `reg8` requires an 8-bit register. Change either the call site or add a `reg16` overload.
+`HL` is a 16-bit register; `reg8` requires an 8-bit register. The mismatch can be resolved by changing the call site or adding a `reg16` overload.
 
 **Expansion cycle:**
 
@@ -182,7 +182,7 @@ available overloads:
 
 ### Op declarations in include files
 
-Op names are global; they share the namespace with labels and `.equ` constants. Declare ops in a dedicated file included before any code that uses them:
+Op names are global; they share the namespace with labels and `.equ` constants. A dedicated op file, included before any code that uses it, keeps these declarations together:
 
 ```asm
         .include "hardware.asm"
@@ -190,7 +190,7 @@ Op names are global; they share the namespace with labels and `.equ` constants. 
         .include "ops.asm"
 ```
 
-Choose op names that avoid Z80 mnemonics. `clear_a` is fine; `ld` produces a parse error. Use underscore-separated lowercase names that read as instructions (`shift_left_4`, `negate_a`, `memcopy`).
+Op names must avoid Z80 mnemonics. `clear_a` is valid; `ld` produces a parse error. Underscore-separated lowercase names read naturally as instructions (`shift_left_4`, `negate_a`, `memcopy`).
 
 ---
 
@@ -229,7 +229,7 @@ Directive forms beyond the built-in set belong in a project JSON file:
 }
 ```
 
-`"extends": "azm"` loads the built-in profile as the base. Load with `--aliases`:
+`"extends": "azm"` loads the built-in profile as the base. The `--aliases` option then loads the project file:
 
 ```sh
 azm --aliases project.aliases.json program.asm
@@ -249,13 +249,13 @@ Instruction mnemonic changes, such as source using `MOV` for `LD`, need a source
 
 ## Source files and composition
 
-Use `.include` when you want text copied into the current source unit. Use `.import` when another source file should expose selected `@` declarations and keep its other non-local declarations private.
+`.include` copies text into the current source unit. `.import` instead exposes selected `@` declarations from another source file while keeping its other non-local declarations private.
 
 ![What each of the three composition mechanisms puts in the output](../../assets/images/azm-book/book1/bringing-in-code.svg)
 
 ### `.include`
 
-`.include "path"` inserts another source file inline at that point, as if you had typed its contents there. The file path is relative to the including file; add search directories with `-I`.
+`.include "path"` inserts another source file inline at that point, as if its contents had been written there. The file path is relative to the including file; `-I` adds further search directories.
 
 All included files share one source unit. Non-local labels and constants must be unique in that unit. Owner-local labels can repeat under different non-local owners.
 
@@ -307,7 +307,7 @@ ClampA:
 
 `.routine` declares the analysis boundary and contract. `@` exports the following label.
 
-If outside code tries to reference a private imported label, AZM reports a visibility diagnostic. Keep the call inside the imported file, or make the helper public only when it is genuinely part of the file's interface:
+If outside code tries to reference a private imported label, AZM reports a visibility diagnostic. The call can remain inside the imported file, or the helper can become public when it genuinely forms part of the file's interface:
 
 ```asm
 ; math.asm — ClampA is now part of the module's interface
@@ -319,7 +319,7 @@ If outside code tries to reference a private imported label, AZM reports a visib
         ret
 ```
 
-Use source labels rather than `$`-qualified helper names such as `math$ClampA`. `$` is the current assembly address by itself and starts hexadecimal literals such as `$4000`. AZM tracks imported declarations by source-unit identity and emits that identity in D8 metadata.
+Source labels replace `$`-qualified helper names such as `math$ClampA`. `$` is the current assembly address by itself and starts hexadecimal literals such as `$4000`. AZM tracks imported declarations by source-unit identity and emits that identity in D8 metadata.
 
 ### Import order and paths
 

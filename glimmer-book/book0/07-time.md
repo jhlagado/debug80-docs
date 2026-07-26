@@ -12,12 +12,12 @@ nav_order: 7
 Every program you have written so far has one thing in common: none
 of them can act without you. Mover's dot sits wherever your
 last press left it. Meter's bar holds its level until you lean on plus
-or minus. Take your hands off the keypad and frame after frame goes by
+or minus. With no hand on the keypad, frame after frame goes by
 with every change flag clear and every reactive block at rest. The
 profile still scans the display and polls the keypad.
 
-Take your hands off a real
-game for ten seconds and something still moves: a drop falls, a ghost
+In a real game, ten seconds without input still leaves something
+moving: a drop falls, a ghost
 patrols, a fuse burns down. This is where challenge comes from: a
 game that acts while you hesitate is a game you can lose. Until now
 your programs have had exactly one source of moments, the keypad,
@@ -37,8 +37,7 @@ its own schedule rather than the keypad.
 
 ## Every frame
 
-Start with the smallest schedule there is: a block that runs on every
-single frame.
+The smallest schedule is a block that runs on every single frame.
 
 ```text
 program Ticks
@@ -62,7 +61,7 @@ increments it and marks it changed, so a block with `on FrameCount`
 runs every frame, reading a value that climbs 0, 1, 2, and wraps past
 255 back to 0.
 
-Build and run this, and the seven-segment display counts the frames.
+In a running build, the seven-segment display counts the frames.
 Each count is one full turn of the loop: one scan of the 8x8 matrix,
 one poll, one pass through your blocks. That pace is the fastest
 schedule a Glimmer program has.
@@ -127,7 +126,7 @@ One declaration is new:
 timer Fall : byte = 24 -> FallTick
 ```
 
-Read it aloud: *Fall is a byte timer with period 24, firing
+Spoken aloud, the declaration says: *Fall is a byte timer with period 24, firing
 FallTick.* A `timer` is an oscillator,
 and its answer to the question of time is *every N frames, forever*.
 Behind the name sits a hidden countdown that loses one on every frame;
@@ -137,8 +136,8 @@ reloads from `Fall` to begin the next cycle.
 `FallTick` is exactly like the ones your keys
 fire, declared with the same word, consumed the same way. `Descend`
 reads as every rule you have written: on a moment, change a fact.
-Point a `bind` line at `FallTick` instead and the same block would run
-per keypress. A rule never knows where its moment comes from, and that
+If a `bind` line pointed at `FallTick` instead, the same block would
+run per keypress. A rule never knows where its moment comes from, and that
 lets you retune a game's entire schedule without touching a single
 rule.
 
@@ -229,7 +228,7 @@ due. The schedule is the last of this chapter's declarations, the
 ramp Heat : byte steps 250 -> HeatUp
 ```
 
-Say it aloud: *Heat is a ramp over 250 steps, firing HeatUp.* Where a
+Spoken aloud, it says: *Heat is a ramp over 250 steps, firing HeatUp.* Where a
 timer answers *every N frames, forever*, a ramp answers *progress from
 here to there, step by step*. Each frame, a ramp steps its cell one
 closer to `steps - 1`, marking it changed at every step; this is a
@@ -345,13 +344,13 @@ _done:
 end
 ```
 
-Read `Quicken`'s body and difficulty turns out to be ordinary: `sub 4`
+In `Quicken`'s body, difficulty is an ordinary `sub 4`
 and a store into `Fall`, the same write any effect makes to any state,
 and the timer's next reload counts from the new period. The `cp 8` holds a floor (periods run 24, 20, 16, 12, 8, then
 settle at 4), and the final store rewinds `Heat` to begin the next
 250-frame climb.
 
-Run it. The drop crawls down the middle column, blinking as it goes,
+In a running build, the drop crawls down the middle column, blinking as it goes,
 and wraps back to the top. Around its second descent the pace picks
 up, then again at the top of every climb, until it settles into a
 quick steady drip. Speed, blink, and difficulty each cost one
@@ -471,8 +470,9 @@ GlimTickTimers:
 _next_Fall:
 ```
 
-Decrement, store, and on the zero frame: reload from `Fall`, set the
-pulse byte, and OR the pulse's flag straight into `Changed0`. That
+The counter decrements and is stored. On the zero frame, the code reloads
+it from `Fall`, sets the pulse byte and ORs the pulse's flag straight into
+`Changed0`. That
 last move sets the tick apart from the blocks you write, which raise
 through `Raised0` or `Next0` because some consumers may already have
 run. The

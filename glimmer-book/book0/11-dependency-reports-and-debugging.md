@@ -39,7 +39,7 @@ declaration joins the state:
 state Marks   : byte = 0 changed
 ```
 
-Read it aloud: *Marks is a byte,
+Spoken aloud, the declaration says: *Marks is a byte,
 starting at zero, already changed*, so the display reads 00000 on
 the first frame.
 
@@ -99,8 +99,8 @@ Wrote canvas.main.asm (register contracts checked by AZM)
 Wrote canvas.main.d8.json (56 block segments attributed to .glim source)
 ```
 
-Run it under Debug80 and paint something: every press of GO sets a
-pixel and lifts the count.
+In a running Debug80 build, every press of GO sets a pixel and lifts
+the count.
 
 ## The report at scale
 
@@ -148,19 +148,19 @@ connections, gathered into one place and sorted by fact.
 When something misbehaves in a reactive program, your first question
 is the one this chapter opened with: which fact failed to change? The
 report answers it from your chair, in both directions, before you
-touch a debugger. Suppose the count on the display sits
-still while pixels keep landing. Downstream from `Marks`: one
-trigger, `ShowMarks (render)`, so exactly one block draws the count.
+touch a debugger. Suppose the count on the display sits still while pixels
+keep landing. Downstream from `Marks` is one trigger, `ShowMarks (render)`, so
+exactly one block draws the count.
 Upstream: `Marks` is raised by `PaintPixel`, which runs on `Paint`,
-which `key KEY_GO (rising)` fires. The walk is always
-the same: name the fact that should have changed, walk up to its
-raisers, walk down to its triggers, and put your first breakpoint
-where the chain is thinnest.
+which `key KEY_GO (rising)` fires. The investigation starts with the
+fact that should have changed, follows its raisers upstream and its
+triggers downstream, then places the first breakpoint where the chain
+is thinnest.
 
 ## A write without its declaration
 
-Break it now, to make that stuck count real. In `PaintPixel`'s header,
-cut `Marks` from the updates list:
+The next version deliberately removes `Marks` from `PaintPixel`'s
+updates list so the stuck count can be observed:
 
 ```text
 effect PaintPixel
@@ -171,7 +171,7 @@ begin
 
 The body still stores to `Marks`; the header has stopped saying so.
 This is a common reactive error: a store added to a block without
-updating the header to match. Rebuild, and watch what the tool says:
+updating the header to match. On the next build, the tool reports:
 
 ```text
 canvas.glim:75: [GLIM] warning: PaintPixel writes Marks but does not declare "updates Marks": the change flag will not be raised and dependent blocks will not run.
@@ -182,16 +182,16 @@ Wrote canvas.main.d8.json (56 block segments attributed to .glim source)
 Glimmer scanned the body, found `ld (Marks),a`, checked the header,
 and reported the gap, naming the block, the missing declaration, and
 the consequence, at line 75, the block's header line. A warning
-leaves the build standing: both artifacts were written, so run the
-program and watch the consequence play out. Pixels paint, the board
+leaves the build standing: both artifacts were written. In the running
+program, the consequence is visible. Pixels paint, the board
 redraws, and the count reads 00000 no matter how many marks pile
 up. The
 store still executes on every press, and `Marks` climbs in memory;
 its change flag stays down, so `ShowMarks`, triggered `on Marks`,
 waits for an announcement that never arrives.
 
-The report tells the same story from the declarations' side. Run
-`--deps` on the broken program and the `Marks` stanza reads:
+The report tells the same story from the declarations' side. With
+`--deps`, the broken program's `Marks` stanza reads:
 
 ```text
   Marks : state byte
@@ -202,25 +202,24 @@ The report tells the same story from the declarations' side. Run
 A fact with a dependent and no raiser: that pattern is this whole
 class of bug, drawn in two lines. The generated file shows the same gap: the
 wrapper after `PaintPixel`'s body, which raised `CHG_PICTURE +
-CHG_MARKS` before the edit, now raises `CHG_PICTURE` alone. Put
-`Marks` back in the header and the build runs clean.
+CHG_MARKS` before the edit, now raises `CHG_PICTURE` alone. Restoring
+`Marks` to the header gives a clean build.
 
 The scan behind that warning reads only stores that name their cell in
 the instruction itself: `ld (Marks),a` names `Marks`, so the header
 can be checked against it. `PaintPixel`'s other write travels through
 a pointer (`ld (hl),a`, with HL aimed into `Picture` by arithmetic)
 and a build-time scan cannot determine where HL will point at run
-time. Cut `updates Picture` from the header
-instead and the build stays silent while the board freezes the same
-way. So the `updates` line remains your declaration of intent: the
+time. Removing `updates Picture` from the header instead leaves the
+build silent while the board freezes in the same way. The `updates`
+line therefore remains your declaration of intent: the
 one place that records where a block's writes land, whatever route
 they take.
 
 ## The boundary around a block
 
 Register checking happens in the generated file, and its unit of
-account is the block. Open
-`canvas.main.asm` at the painting rule:
+account is the block. The painting rule in `canvas.main.asm` begins:
 
 ```asm
 ; --- logic block PaintPixel ---
@@ -282,7 +281,7 @@ declaration sits in the profile library:
 FbPlot:
 ```
 
-Read the contract line the way you read a block header. `in A,B,C`:
+As a block header, the contract line says `in A,B,C`:
 the routine consumes those three on entry (colour, x, y). `clobbers
 A,B,DE,HL` and the flags: any of those may hold anything on return.
 A register absent from a declared contract counts as preserved, and
@@ -298,7 +297,7 @@ destroys it. The assembler catches the stale-register use before the
 first byte runs.
 
 `DrawCanvas` ends by plotting the cursor over the picture: x into B,
-y into C, white into A, `call FbPlot`. Suppose you widen the cursor
+y into C, white into A, `call FbPlot`. If the cursor is widened
 to two pixels (the cursor and the column to its right) and reach
 for the shortest edit: after the plot, nudge B along and plot again.
 
@@ -310,7 +309,7 @@ for the shortest edit: after the plot, nudge B along and plot again.
     call FbPlot
 ```
 
-Rebuild, and again, watch what the tool says:
+The next build reports the contract violation:
 
 ```text
 canvas.glim:116:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, but the pre-call value is used later.
@@ -344,13 +343,12 @@ before reusing a register across the call.
 
 ![Canvas as a graph, with the chapter's two bugs marked where the tools found them.](../../assets/images/glimmer-book/book0/dependency-graph.svg)
 
-Look again at the diagnostic's address: `canvas.glim:116:5`. The
-faulty call sits in a block body, and
+The diagnostic's address, `canvas.glim:116:5`, points at the faulty
+call in a block body, and
 Glimmer carries every body line's origin through to the assembler, so
 the error arrives with your file, your line, and your column
-attached. Misspell the
-counter's name inside `ShowMarks` and the assembler answers in the
-same coordinates:
+attached. A misspelling of the counter's name inside `ShowMarks`
+produces an assembler answer in the same coordinates:
 
 ```text
 canvas.glim:122:5: [AZMN_SYMBOL] error: Unresolved symbol "Marsk" in 16-bit fixup.
@@ -362,23 +360,21 @@ everyday Glimmer work, and they reach you on the line you typed.
 ## Stepping where the bug lives
 
 The same coordinates keep working while the program runs: the report
-told you where to put the breakpoint, and the debug map makes it land.
-Set one
-on the `or b` line inside `PaintPixel` and click Run. The board runs,
-the cursor steers, and the moment you press GO, the debugger halts
-on your line in `canvas.glim`. The registers panel holds the story so
-far: HL points into `Picture` at the cursor's row, B carries the
-column mask `MxMask` built, and A holds the row's current bits. Step,
-and the new pixel merges into A; step again, and the store lands in
-the picture; three steps more walk the counter up by one.
+identifies where the breakpoint belongs, and the debug map makes it
+land. A breakpoint on the `or b` line inside `PaintPixel` halts on
+that source line when GO fires `Paint`. The registers panel holds the
+story so far: HL points into `Picture` at the cursor's row, B carries
+the column mask `MxMask` built, and A holds the row's current bits.
+The next step merges the new pixel into A; the following step stores
+it in the picture; three more steps advance the counter by one.
 
 Past the body's last line, the
 debugger continues in `canvas.main.asm`, inside the wrapper you read
 two sections ago: `ld a,(Raised0)`, then `or CHG_PICTURE +
 CHG_MARKS`, the `updates` declaration executing, watchable
 instruction by instruction. The crossing works in the other direction
-too: stop on `DrawCanvas`'s `call FbPlot`, step in, and you land in
-the labelled and commented profile library.
+too: stepping into `DrawCanvas`'s `call FbPlot` lands in the labelled
+and commented profile library.
 
 Canvas is healthy again, and while debugging it you may have noticed a
 pattern: the cursor's `offset` arithmetic appears in

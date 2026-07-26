@@ -68,8 +68,8 @@ end
 ```
 
 A stack-based swap is useful, but a generic `reg16` version would also accept
-SP, which cannot be used with `push` or `pop`. Define the supported pair
-explicitly:
+SP, which cannot be used with `push` or `pop`. An explicit declaration avoids
+that unsupported pair:
 
 ```asm
 op swap_hl_de()
@@ -159,7 +159,7 @@ This count compares instruction encodings, not bytes: Z80 instructions vary
 from one to four bytes. At run time, each subroutine invocation also executes
 one `call` and one `ret`; an op executes only its expanded body.
 
-The decision rule: if the body is short enough that the call overhead is a significant fraction of the work being done, use an op. If the body is long enough that call overhead is negligible and if the subroutine is called from enough places that the single copy saves meaningful space, use a subroutine.
+The decision depends on the cost of the body. An op suits a body short enough that call overhead forms a significant fraction of the work. A subroutine suits a longer body called from enough places for one shared copy to save meaningful space.
 
 ---
 
@@ -189,8 +189,8 @@ Calling `ld_hl_de` is clearer than reading `ld h, d / ld l, e` and mentally asse
 
 A generic `reg16` parameter does not expose the high and low halves of the
 matched pair. A true 16-bit copy therefore cannot derive `d` and `e` from a
-generic destination or `h` and `l` from a generic source. Define the supported
-pairings explicitly:
+generic destination or `h` and `l` from a generic source. The supported
+pairings therefore need explicit declarations:
 
 ```asm
 op ld_hl_de()
@@ -265,7 +265,7 @@ of its own.
   jr z, _skip     ; A = C: skip
 ```
 
-Define an op that names the intent:
+An op gives the sequence a name that states its intent:
 
 ```asm
 ; jr_if_not_above: skip to label unless A is strictly above threshold
@@ -298,7 +298,7 @@ _skip:
 
 The call site now reads: if A is not above C, skip to `_skip`.
 
-Compare the two versions side by side:
+The two versions differ only in their source expression:
 
 **Original:**
 ```asm
@@ -324,10 +324,9 @@ The machine output is identical.
 
 ## Exercises
 
-**1. Write an op.** The two-instruction sequence `ld a, r / or a` establishes
-Z from a register's value. Define `test_reg` with a `reg8` parameter, invoke it
-once for each loop below and show the two instructions produced by each
-expansion:
+**1. A `test_reg` op.** The two-instruction sequence `ld a, r / or a`
+establishes Z from a register's value. The required `test_reg` op has a `reg8`
+parameter and is invoked once for each loop below:
 
 ```asm
   ; loop driven by B
@@ -341,7 +340,7 @@ expansion:
   ;   dec c
 ```
 
-Show the exact two instructions each invocation expands to.
+The answer should include the exact two instructions emitted by each invocation.
 
 **2. Op vs subroutine size.** A reusable body contains 5 instructions and
 appears at 4 call sites. A subroutine stores the body once, one `ret`, and one
@@ -364,7 +363,7 @@ op load_a(src A)
 end
 ```
 
-Which overload fires for each of these call sites? Explain why, using the specificity rule:
+The answer should identify the overload selected at each call site and explain the selection with the specificity rule:
 
 ```asm
   load_a B
@@ -372,8 +371,8 @@ Which overload fires for each of these call sites? Explain why, using the specif
   load_a H
 ```
 
-**4. Identify the matcher types.** For each operand at the following call sites,
-state every matcher it satisfies among `reg8`, `reg16`, `imm8`, `imm16`, `ea`,
+**4. Matcher types.** For each operand at the following call sites, the answer
+must list every matcher it satisfies among `reg8`, `reg16`, `imm8`, `imm16`, `ea`,
 `mem8`, `mem16` and `cc`:
 
 ```asm

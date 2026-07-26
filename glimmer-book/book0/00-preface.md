@@ -27,9 +27,9 @@ You will get the most from the book if you can already read Z80
 assembly: registers, flags, memory access, a short routine with
 labels and branches. Games, reactive
 programming, and every tool in the workflow are taught as you meet
-them. If the Z80 itself is new to you, start with [AZM Book 2 - Z80
-Fundamentals](../../azm-book/book2/), which begins from nothing and
-leads here.
+them. Readers new to the Z80 can begin with [AZM Book 2 - Z80
+Fundamentals](../../azm-book/book2/), which starts from no prior
+knowledge and leads here.
 
 Three tools do the work, and the book introduces each one at the
 point you first need it:

@@ -160,7 +160,8 @@ _row:
 end
 ```
 
-Build it, run it under Debug80, and draw something.
+A running Debug80 build provides a canvas on which GO paints at the
+current cursor position.
 
 ## One fact, eight bytes
 
@@ -221,8 +222,8 @@ into whatever the row already held. Glimmer supplies the label, the
 storage behind it, and the flag that `updates Picture` raises; the
 arithmetic between them is yours, instruction by instruction. GO fires
 `Paint`, the logic phase runs `PaintPixel`, and `Picture`'s change is
-delivered to the render phase later the same frame: press GO, see the
-pixel, one frame.
+delivered to the render phase later the same frame. One press of GO
+therefore produces one visible pixel in one frame.
 
 ## Redrawing the picture
 
@@ -250,9 +251,9 @@ aux byte) so the loop drops each of Picture's row masks into the
 green plane and steps DE by four to reach the next row. Because
 `Picture` and the framebuffer share the row-mask convention, the
 whole painting transfers in one eight-pass loop. The cursor goes on
-top afterwards, white, through `FbPlot`. Steer the cursor onto a
-painted pixel and it shows white; steer away, and the next redraw
-restores the green underneath.
+top afterwards, white, through `FbPlot`. On a painted pixel the cursor
+shows white; after it moves away, the next redraw restores the green
+underneath.
 
 ## Two bytes that travel together
 
@@ -294,12 +295,11 @@ shape:
 `y` sits one byte into the layout), so the whole operand folds to a
 fixed address and the instruction is a plain absolute load. You could
 write `Cursor + 1` and reach the
-same byte today. The reason not to is concrete: add a field at the top
-of the layout, and every hand-counted offset below it shifts silently,
-and the bug that follows points nowhere near its cause. Written as
-`offset`, they follow the definition instead: grow the layout next
-month and every one of them moves with it, without your touching a
-line.
+same byte today. The reason not to is concrete: adding a field at the top
+of the layout silently shifts every hand-counted offset below it, and the bug
+that follows points nowhere near its cause. Written as `offset`, the addresses
+follow the definition instead: when the layout grows, every one of them moves
+with it without requiring changes to the instructions.
 
 ## Layout fields
 
@@ -352,8 +352,8 @@ state like any other: zero-filled, one flag.
 
 ## The declarations, compiled
 
-Open `canvas.main.asm` and the two new declarations tell their whole
-story in two short sections. First the
+In `canvas.main.asm`, the two new declarations tell their whole story
+in two short sections. First the
 layout:
 
 ```asm

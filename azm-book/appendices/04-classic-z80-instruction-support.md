@@ -154,10 +154,10 @@ RR / RRA  (rotate right through carry)
   (old C enters bit 7; bit 0 exits to new C)
 ```
 
-If you rotate left through carry and then rotate right through carry, you
-recover the original byte and the original carry. This makes RL/RR the right
-tool for shifting multi-byte values: carry shuttles the overflow bit between
-adjacent bytes.
+A left rotation through carry followed by a right rotation through carry
+recovers the original byte and carry. This makes RL/RR suitable for shifting
+multi-byte values because carry transfers the overflow bit between adjacent
+bytes.
 
 ---
 
@@ -205,10 +205,9 @@ the sign. SRL clears bit 7. For signed values, SRA divides by 2 correctly, so
 `RLCA`, `RRCA`, `RLA`, and `RRA` are single-byte base instructions, fast and
 compact.
 
-`RLC r`, `RRC r`, `RL r`, and `RR r` are CB-prefix forms. If you need to test
-whether a register is zero after a rotate (for example, to detect when all
-bits have been shifted out), use the CB-prefix form, not the accumulator
-shorthand.
+`RLC r`, `RRC r`, `RL r`, and `RR r` are CB-prefix forms. A zero test after a
+rotation, such as detecting when all bits have shifted out, requires the
+CB-prefix form rather than the accumulator shorthand.
 
 ---
 

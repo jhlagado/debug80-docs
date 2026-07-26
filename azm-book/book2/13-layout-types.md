@@ -28,9 +28,10 @@ You can write that:
   ld a, (hl)           ; read color
 ```
 
-To move to the next entry, add 3 to HL. To read x from entry N, the address is `sprite_table + N * 3`. To read color, it is `sprite_table + N * 3 + 2`.
+Adding 3 to HL advances to the next entry. The address of x in entry N is
+`sprite_table + N * 3`, while color is at `sprite_table + N * 3 + 2`.
 
-Add a field before color and every offset below it is wrong. Rename a field and every comment referring to it is stale. The code and the layout exist in two separate places (the bytes in memory, and the mental model in your head and comments) with no mechanism to keep them in sync.
+Adding a field before color makes every later offset wrong. Renaming a field makes every comment referring to it stale. The code and the layout exist in two separate places (the bytes in memory, and the mental model in comments) with no mechanism to keep them in sync.
 
 AZM's layout type system closes that gap. You describe a record once, and the assembler computes every size and offset from that description at assembly time. The CPU still performs the actual address arithmetic at run time; AZM does not generate hidden indexing code.
 
@@ -85,7 +86,7 @@ You can still write `.ds sizeof(byte[32])` if you prefer the explicit form.
 
 ## Defining a record with `.type`
 
-A record groups named fields into one layout. Declare it in a block:
+A record groups named fields into one layout, declared as a block:
 
 ```asm
 Sprite .type
@@ -97,7 +98,7 @@ color   .byte
 
 Each line names a field and gives its type.
 
-![One description, and every offset and size computed from it. Add a field and they all update.](../../assets/images/azm-book/book2/record-layout.svg)
+![One description lets every offset and size be computed from it, including updates after a field is added.](../../assets/images/azm-book/book2/record-layout.svg)
 
 Inside a layout block, `.byte`, `.word` and `.addr` are shorthands:
 
@@ -212,7 +213,7 @@ You can also index from the array type directly:
 ThirdColorOffset .equ offset(Sprite[16], [2].color)
 ```
 
-Both expressions fold to constants at assembly time. Add a field to `Sprite` and every `sizeof` and `offset` that refers to it updates automatically.
+Both expressions fold to constants at assembly time. Adding a field to `Sprite` automatically updates every `sizeof` and `offset` that refers to it.
 
 `offset` is the AZM form, and there is no `offsetof` alias. In the current
 assembler, an array index inside an `offset` path must be a non-negative decimal
@@ -245,13 +246,13 @@ This works because `SpriteColor` is the constant 2, and `(ix+d)` accepts any sig
 
 The offset of a later field in a larger type might exceed 127. In that case, IX-relative access fails and you need the `add hl, de` form instead.
 
-For run-time indexing ("give me the Nth sprite" where N is not known until the program runs), you write the Z80 instructions that compute the address. Load the stride into DE, multiply the index by the stride, add the base address, add the field offset.
+For run-time indexing ("the Nth sprite" where N is not known until the program runs), Z80 instructions must compute the address. The calculation loads the stride into DE, multiplies the index by the stride, and adds the base address and field offset.
 
 ---
 
 ## Arrays of records
 
-To reserve space for N records, use an array type expression with `.ds`:
+An array type expression with `.ds` reserves space for N records:
 
 ```asm
 sprite_table:
@@ -382,7 +383,7 @@ Member values are assigned sequentially from 0: `North = 0`, `South = 1`, `East 
 
 Enums are **grouped constants with collision protection**: named states, command bytes and token kinds that would otherwise be bare `$00`, `$01`, `$02`.
 
-Store a mode byte in RAM and branch on it:
+A mode byte in RAM can select a branch:
 
 ```asm
 GameMode .enum Title, Playing, Paused, GameOver
@@ -479,13 +480,13 @@ ld hl, sprite_table + (3 * sizeof(Sprite)) + offset(Sprite, color)
 ld hl, <Sprite[8]>sprite_table[3].color
 ```
 
-Use whichever reads more clearly at the call site.
+Either form is valid; the clearer form depends on the call site.
 
 ---
 
 ## A worked example: a table of 2D points
 
-Define a record for a 2D point with integer coordinates:
+A record describes a 2D point with integer coordinates:
 
 ```asm
 Point .type
@@ -503,8 +504,8 @@ points:
     .ds NumPoints * sizeof(Point)   ; 8 bytes: space for 4 points
 ```
 
-To initialize the table instead of reserving uninitialized storage, replace the
-`points` declaration above with:
+An initialized table uses this declaration in place of the uninitialized
+`points` reservation above:
 
 ```asm
 points:
@@ -567,7 +568,7 @@ The assembler computes `points + 2 * sizeof(Point) + offset(Point, y)` = `points
 
 ## Exercises
 
-**1. Compute sizes and offsets by hand.** Given this type:
+**1. Sizes and offsets by hand.** The following type supplies the layout:
 
 ```asm
 Enemy .type
@@ -578,15 +579,15 @@ flags   .byte
 .endtype
 ```
 
-Without running AZM, compute `sizeof(Enemy)`, `offset(Enemy, x)`, `offset(Enemy, y)` and `offset(Enemy, flags)`. Then write the `.equ` lines for each. Finally, write the `.ds` line that allocates space for 16 enemies using the array type form.
+Without running AZM, the task is to derive `sizeof(Enemy)`, `offset(Enemy, x)`, `offset(Enemy, y)` and `offset(Enemy, flags)`, express each as an `.equ`, and allocate 16 enemies with the array type form of `.ds`.
 
-**2. Read a field with IX.** A subroutine receives a pointer to an `Enemy` record in IX. Write the instructions to load the `hp` field into A, the `x` field into DE (low byte in E, high byte in D) and the `flags` field into C. Use the symbolic offset constants from Exercise 1, not hardcoded numbers.
+**2. Field access with IX.** A subroutine receives a pointer to an `Enemy` record in IX. The required instructions load `hp` into A, `x` into DE (low byte in E, high byte in D) and `flags` into C, using the symbolic offset constants from Exercise 1 rather than hardcoded numbers.
 
-**3. Write a layout cast.** Using the `Enemy` type from Exercise 1, write the instruction that loads the address of the `flags` field of `enemy_table[4]` into HL, where `enemy_table` is the base label. Verify your answer: what numeric offset from `enemy_table` does this expand to?
+**3. A layout cast.** Using the `Enemy` type from Exercise 1, the required instruction loads the address of `enemy_table[4].flags` into HL. Its expanded numeric offset from the `enemy_table` base provides a check on the answer.
 
-**4. Enum in a dispatch.** Define an enum `Command` with members `Move`, `Attack`, `Wait`, `Retreat`. Write the instruction that loads the value of `Command.Attack` into A. Then write a comment explaining why `ld a, Attack` would fail to assemble.
+**4. Enum in a dispatch.** The task is to define `Command` with members `Move`, `Attack`, `Wait` and `Retreat`, load `Command.Attack` into A, and explain in a comment why `ld a, Attack` fails to assemble.
 
-**5. Union offsets.** Given `WordView` from this chapter (`raw` as `.word`, `bytes` as `.field Pair`), write `.equ` lines for `WORD_LO` and `WORD_HI` using `offset`. What is `sizeof(WordView)`? Why are `offset(WordView, raw)` and `offset(WordView, bytes.lo)` both 0?
+**5. Union offsets.** Given `WordView` from this chapter (`raw` as `.word`, `bytes` as `.field Pair`), the answer needs `.equ` lines for `WORD_LO` and `WORD_HI`, the value of `sizeof(WordView)`, and the reason `offset(WordView, raw)` and `offset(WordView, bytes.lo)` are both 0.
 
 ---
 

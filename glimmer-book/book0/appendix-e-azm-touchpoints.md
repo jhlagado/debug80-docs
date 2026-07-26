@@ -101,9 +101,8 @@ Declared clauses
 are checked against the routine's own body, so a `preserves` promise
 the body breaks fails the build; and every call site is checked
 against the callee's contract, so a caller reusing a clobbered
-register fails too. Add an `inc b` after Canvas's `call FbPlot` to
-plot a second pixel one column over, and the build stops on the
-call:
+register fails too. Adding an `inc b` after Canvas's `call FbPlot` to
+plot a second pixel one column over makes the build stop on the call:
 
 ```text
 canvas.glim:116:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, but the pre-call value is used later.

@@ -68,11 +68,11 @@ DF        rst 18H
 ```
 
 
-initLCD must be called at the start of every program.  The GLCD has two
-modes, Text and Graphics.  Both Text and Graphics can be displayed at the
-same time.  These modes must be selected before the drawing or text
-routine.  Also, plotToLCD must be called to display any graphics drawn to
-the screen.  The above example adheres to these principles.
+Every GLCD program begins with an `initLCD` call. The GLCD has two modes,
+Text and Graphics. Both can be displayed at the same time, but the
+appropriate mode is selected before its drawing or text routine.
+`plotToLCD` transfers completed graphics to the screen. The example above
+follows that sequence.
 
 ## GLCD API Call List
 
@@ -117,13 +117,12 @@ the screen.  The above example adheres to these principles.
 ## GLCD API Configure Calls
 
 ### initLCD #0 (00H)
-Initialise the LCD Screen.  This routine is to be called before any other
-routine.
+Initialises the LCD screen and precedes every other GLCD routine.
 - Input: nothing
 - Destroy: All
 
 ### clearGBUF #1 (01H)
-Clear the Graphics Buffer.  The Graphics Buffer or GBUF is the internal
+Clears the Graphics Buffer. The Graphics Buffer, or GBUF, is the internal
 memory area that contains pixel data for the LCD.  The drawing routines
 write data to the GBUF.  Once all pixels are set, this buffer is then plotted to
 the LCD with the plotToLCD Routine.  Clearing the GBUF is a good way to
@@ -132,19 +131,17 @@ ensure the pixel area is empty.
 - Destroy: All
 
 ### clearGrLCD #2 (02H)
-Clear the Graphics LCD Screen.  This routine clears the GDRAM or Graphics
-screen on the LCD.
+Clears the Graphics LCD screen by clearing its GDRAM.
 - Input: nothing
 - Destroy: All
 
 ### clearTxtLCD #3 (03H)
-Clear the Text LCD Screen.  This routine clears the DDRAM or Text screen
-on the LCD.
+Clears the Text LCD screen by clearing its DDRAM.
 - Input: nothing
 - Destroy: All
 
 ### setGrMode #4 (04H)
-Set the LCD to Graphics Mode.  This routine puts the LCD in Graphics mode
+Sets the LCD to Graphics mode
 (Extended Instructions). Any further instructions to the LCD will be for the
 graphics screen.  It only needs to be called once if multiple graphics
 routines are used.
@@ -152,7 +149,7 @@ routines are used.
 - Destroy: AF,DE
 
 ### setTxtMode #5 (05H)
-Set the LCD to Text Mode.  This routine puts the LCD in Text mode (Basic
+Sets the LCD to Text mode (Basic
 Instructions). Any further instructions to the LCD will be for the text screen.
 It only needs to be called once if multiple text routines are used.
 - Input: nothing
@@ -192,7 +189,7 @@ rst 18H
 ```
 
 ### drawCircle #8 (08H)
-Draw a circle from midpoint to radius.
+Draws a circle from a midpoint and radius.
 - Input: `B` = Mid-X-coordinate (0-127)
 - Input: `C` = Mid-Y-coordinate (0-63)
 - Input: `E` = radius (1-63)
@@ -235,8 +232,8 @@ rst 18H
 ### fillCircle #11 (0BH)
 Draws a filled circle from a midpoint to a radius.  This routine iteratively
 calls the drawCircle routine increasing the radius until it equals the
-register E.  There might be gaps in the filled circle, but hey it looks just like
-what you get on a BASIC program.
+register E. The resulting filled circle can contain the same small gaps often
+seen in a BASIC implementation.
 - Input: `B` = Mid-X-coordinate (0-127)
 - Input: `C` = Mid-Y-coordinate (0-63)
 - Input: `E` = radius (1-63)
@@ -250,10 +247,10 @@ rst 18H
 ```
 
 ### plotToLCD #12 (0CH)
-This routine draws the Graphics Buffer or GBUF to the Graphics LCD
-screen.  It is usually called after one of the drawing routines is called.  This
-routine must be called for any graphics to appear on the GLCD.  After
-plotting the GBUF is cleared.  Use setBufNoClear to retain the GBUF.
+This routine draws the Graphics Buffer, or GBUF, to the Graphics LCD
+screen. It normally follows the drawing routines and is required before
+graphics appear on the GLCD. After
+plotting the GBUF is cleared. `setBufNoClear` retains it between plots.
 - Input: nothing
 - Destroy: All
 
@@ -280,14 +277,13 @@ There are 128 characters that are available from 00H-7FH.  Conveniently,
 Alphanumeric characters align with the ASCII table.
 
 ### printChars #14 (0EH)
-Print Characters on the screen in a given row and column.  This routine is
+Prints characters on the screen at a given row and column. This routine is
 similar to the one above but character row and column placement can be
 made.  Characters to be printed are to be terminated with a zero.
 
 Even though there are 16 columns, only every second column can be
-written to and two characters are to be printed.  IE: if one character is to be
-printed in column 2, then set B=0 and print " x", putting a space before
-the character.
+written to, and each operation prints two characters. For example, one
+character in column 2 uses B=0 and the string `" x"`, with a leading space.
 - Input: `B` = column (0-7)
 - Input: `C` = row (0-3)
 - Input: `HL` = start address of text data
@@ -379,7 +375,7 @@ rst 18H
 ## GLCD API Drawing Calls
 
 ### drawGraphic #21 (15H)
-Draw an ASCII character or Sprite to the GLCD at the current cursor.  ASCII
+Draws an ASCII character or sprite at the current GLCD cursor. ASCII
 characters are 6x6 or 5x5 Pixels and most have a gap to the right and
 bottom for spacing. plotToLCD is still required to be called after all
 graphics have been drawn.
@@ -452,8 +448,8 @@ routine.
 ## GLCD API Terminal Emulator Calls
 
 ### initTerminal #23 (17H)
-Initialise the GLCD for terminal emulation.  This routine is to be called
-before any TERMINAL routine is called.  It will set graphics and scroll
+Initialises the GLCD for terminal emulation before any terminal routine. It
+sets graphics and scroll
 buffers.  It also Clears the GBUF, sets the cursor to top left and displays the
 cursor.  This routine will also call initLCD.
 - Input: none
@@ -469,19 +465,18 @@ sendCharToLCD will either wrap around, or start on a new line.
 - Destroy: A
 
 ### plotAlways #33 (21H)
-When sendCharToLCD is called, determine if the character should be sent
+When `sendCharToLCD` is called, this setting determines whether the character is sent
 immediately to the GLCD or be held in a buffer.  If held in a buffer, call
 plotToLCD to update the GLCD.  The default is ON and characters will be
 sent immediately.  Turning this flag OFF can speed up the output if
-multiple characters are sent to the screen.  Once sent, characters can be
-plotted all at once.  If displaying characters directly from a keyboard input,
-this flag should be set ON.
+multiple characters are sent to the screen. Once sent, characters can be
+plotted all at once. Direct keyboard input normally keeps this flag on.
 - Input: C = 0, Plot Always set, C non zero, not set
 - Output: none
 - Destroy: A
 
 ### sendCharToLCD #24 (18H)
-Send or handle ASCII characters to the GLCD screen.  This routine displays
+Sends and handles ASCII characters on the GLCD screen. This routine displays
 ASCII characters to the GLCD screen and handles some special control
 characters.  It also handles scrolling history of 10 lines.  Characters are
 drawn at the current cursor position.  The Cursor will increment when a
@@ -507,7 +502,7 @@ rst 18H
 ```
 
 ### sendStringToLCD #25 (19H)
-Send a string of characters to the GLCD.  Prints a string pointed by DE at
+Sends a string of characters to the GLCD from the address in DE at
 the current cursor.   It stops printing and returns when either a CR is
 printed or when the next byte is the same as what is in register C.
 - Input: `C` = character to stop printing string
@@ -523,7 +518,7 @@ text: .db "Hello TEC-1G!",0
 ```
 
 ### sendRegToLCD #26 (1AH)
-Display a byte or register in ASCII on the GLCD at the current cursor
+Displays a byte or register as ASCII at the current GLCD cursor.
 - Input: C = byte to convert and display
 - Destroy: ALL
 ```asm
@@ -535,7 +530,7 @@ ld a,26         ;sendRegToLCD
 rst 18H
 ```
 ### sendHLToLCD #27 (1BH)
-Display the register HL in ASCII on the GLCD at the current cursor
+Displays register HL as ASCII at the current GLCD cursor.
 - Input: HL = 2-byte register to convert and display
 - Destroy: ALL
 
@@ -545,7 +540,7 @@ ld a,27         ;sendHLToLCD
 rst 18H
 ```
 ### setCursor #28 (1CH)
-Set the Graphic cursor position for Terminal Emulation.  Update is ignored
+Sets the graphics cursor position for terminal emulation. The update is ignored
 if either X,Y input is out of bounds.
 - Input: `B` = X position in pixels (0-127)
 - Input: `C` = Y position in pixels (0-63)
@@ -558,14 +553,14 @@ rst 18H
 ```
 
 ### getCursor #29 (1DH)
-Get the current cursor position
+Returns the current cursor position.
 
 - Input: none
 - Output: `B` = X position in pixels (0-127)
 - Output: `C` = Y position in pixels (0-63)
 
 ### displayCursor #30 (1EH)
-Turn the cursor ON or OFF.  Default is Cursor ON
+Turns the cursor on or off. The default is on.
 - Input: C = 0, Turn cursor on, C=non zero, turn cursor off
 - Destroy: ALL
 
@@ -580,20 +575,20 @@ The TEC-1G GitHub account is here: [TEC-1G GitHub repository](https://github.com
 and the GLCD examples are in the TEC-Deck/Graphical_LCD directory.
 
 ### lcd_3d_demo
-Draw 3D wireframe graphics and rotate them.  This program requires
+This program draws and rotates 3D wireframe graphics. It requires
 keypad input to rotate the objects.  Buttons 4,8 and C rotate the object in
 the 3-axis.  <span class="mon3-key-emphasis">Plus</span> and <span class="mon3-key-emphasis">Minus</span> will zoom the object in and out.  0 will return to
 the main menu.  Pressing <span class="mon3-key-emphasis">GO</span> will exit the program
 
 ### lcd_mad_program
-Draw Alfred E. Neuman's face.  This program draws lines between two
+This program draws Alfred E. Neuman's face with lines between two
 points and creates the face of the Mad Magazine mascot.  It draws one line
 at a time, similar to how it would display on an Apple ][.  But if the program
 is run at <span class="mon3-address-emphasis">2022H</span> it will generate instantly.  See [Meat Fighter's Mad Magazine demo notes](https://meatfighter.com/mad/).
 
 ### lcd_maze_gen
-Create a maze.  This program generates a maze using a recursive
-backtracking algorithm.  Watch the maze slowly generate before your eyes.
+This program generates a maze with a recursive backtracking algorithm, so
+the construction appears progressively on screen.
 
 Some easy-to-type examples have also been provided in the Quick Start
 Programs chapter below.

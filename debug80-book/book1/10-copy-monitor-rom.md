@@ -1,28 +1,30 @@
 ---
 layout: default
-title: "Appendix E — Copy monitor ROM source"
+title: "Appendix E — Local monitor ROM source"
 parent: "Debug80 Book 1 — Getting started"
 nav_order: 105
 ---
 
 [← Appendix D — The AZM options row](appendices/d-azm-options-row.md) | [Book 1](index.md)
 
-# Appendix E — Copy monitor ROM source
+# Appendix E — Local monitor ROM source
 
 Debug80 supplies the platform monitor ROM for ordinary TEC-1 and TEC-1G projects, so copy it into a project only when you want to study, edit or debug the monitor itself. Debug80 then assembles the copied files with AZM and uses their source map when execution enters monitor code.
 
-## Run the command
+## The copy command
 
-Open the VS Code Command Palette:
+The VS Code Command Palette opens with:
 
 - macOS: **Shift-Command-P**
 - Windows and Linux: **Shift-Control-P**
 
-Run **Debug80: Copy Monitor ROM into Project**.
+**Debug80: Copy Monitor ROM into Project** starts the copy.
 
 Debug80 asks which workspace folder should receive the monitor source.
 
-If Debug80 asks how to handle existing files, choose **Skip existing files** when you want to preserve local edits. Choose **Overwrite existing files** only when you want a fresh copy of the shipped monitor source.
+When files already exist, **Skip existing files** preserves local
+edits. **Overwrite existing files** replaces them with a fresh copy of
+the shipped monitor source.
 
 ## Files created
 
@@ -46,9 +48,12 @@ The TEC-1G entry file includes the copied MON-3 source:
 
 The copied source files live under the same `roms/tec1g/mon3/` folder.
 
-## Build the local ROM
+## Building the local ROM
 
-Edit the copied ROM source, then click **Run**. Debug80 assembles the local ROM with AZM, writes the generated ROM artifacts under `build/roms/`, and starts the machine on that ROM instead of the bundled one. **Build** alone assembles it without launching.
+After the copied ROM source is edited, **Run** assembles it with AZM,
+writes the generated artifacts under `build/roms/`, and starts the
+machine on that ROM instead of the bundled one. **Build** alone
+assembles it without launching.
 
 Once a `*.rom.asm` file exists, *every* launch builds it and points the platform at the result, whatever ROM `debug80.json` names. When a project behaves unexpectedly, a forgotten monitor source in `roms/` is worth checking: it is quietly replacing the monitor.
 
@@ -61,15 +66,17 @@ build/roms/tec1g/mon3/mon3.d8.json
 
 The `.d8.json` file is the source map for the local monitor build. Debug80 uses it for source breakpoints, stepping and source navigation inside the copied monitor files.
 
-## Debug monitor code
+## Debugging monitor code
 
-Set breakpoints in the copied ROM source files as you would in your own program.
+Breakpoints in copied ROM source files behave like breakpoints in the
+program source.
 
 Stepping into monitor services now opens project-local files under `roms/tec1g/mon3/` instead of the bundled source files from the extension.
 
-## Return to the bundled ROM
+## Returning to the bundled ROM
 
-Remove or rename the platform's local `*.rom.asm` entry file and the project goes back to the bundled monitor ROM. For TEC-1G / MON-3 that file is:
+Without the platform's local `*.rom.asm` entry file, the project
+returns to the bundled monitor ROM. For TEC-1G / MON-3 that file is:
 
 ```text
 roms/tec1g/mon3/mon3.rom.asm

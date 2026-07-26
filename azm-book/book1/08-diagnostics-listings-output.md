@@ -22,7 +22,7 @@ program.asm:23:1: error: [AZMN_SYMBOL] duplicate symbol: COUNT
 program.asm:31:8: warning: [AZMN_REGISTER_CONTRACTS] CALL CHECK_FOO may modify D,E, but the pre-call value is used later.
 ```
 
-The diagnostic ID (`AZMN_PARSE`, `AZMN_SYMBOL` and so on) is the stable part. If you script against AZM output, match on the code rather than the message text.
+The diagnostic ID (`AZMN_PARSE`, `AZMN_SYMBOL` and so on) is the stable part. Scripts that consume AZM output should match the code rather than the message text.
 
 ![The six fields of a diagnostic, and the one worth matching on](../../assets/images/azm-book/book1/diagnostic-line.svg)
 
@@ -94,7 +94,7 @@ azm --type bin program.asm
 azm --type bin --output build/program.bin program.asm
 ```
 
-When two `.org` directives have a gap between them, the binary fills the gap with zero bytes. Use `.binfrom` / `.binto` to trim the binary to a relevant range:
+When two `.org` directives have a gap between them, the binary fills the gap with zero bytes. `.binfrom` and `.binto` trim the binary to a relevant range:
 
 ```asm
         .binfrom $0100
@@ -122,7 +122,7 @@ The `.d8.json` file is a JSON metadata file that Debug80 reads to correlate bina
 azm --source-root . --output build/program.hex src/program.asm
 ```
 
-With `--source-root`, file paths in the map are written relative to the given root, making the map portable across machines. Suppress with `--nod8m` when not using Debug80.
+With `--source-root`, file paths in the map are written relative to the given root, making the map portable across machines. The `--nod8m` option suppresses the map when Debug80 is not in use.
 
 ### Assembler listing (`.lst`)
 
@@ -159,7 +159,7 @@ Reading a row: the four hex digits on the left are the address, the byte tokens 
 
 Included and imported files are listed inline at their inclusion point, so the listing reads in the same order the assembler consumed the program. After the last source line comes a symbol table: every label and constant with its value, sorted by name.
 
-The listing is written by default. Suppress it with `--nolst`.
+The listing is written by default. The `--nolst` option suppresses it.
 
 ### Suppression flags
 
@@ -188,7 +188,7 @@ Register contracts are normally read through compiler diagnostics from `--rc war
 azm --rc audit --reg-report program.asm
 ```
 
-Writes `program.regcontracts.txt`, listing declared routines with inferred inputs, outputs, clobbers and findings. Add `--reg-report-format json` when a tool needs structured findings:
+Writes `program.regcontracts.txt`, listing declared routines with inferred inputs, outputs, clobbers and findings. The `--reg-report-format json` option supplies structured findings to other tools:
 
 ```sh
 azm --rc audit --reg-report --reg-report-format json program.asm
@@ -208,7 +208,7 @@ Ratchet mode fails when current register-contract findings are new or changed re
 azm --rc audit --reg-interface program.asm
 ```
 
-Writes `program.asmi` with inferred `extern` contract records. Other projects that call into your code can load this file with `--interface`.
+Writes `program.asmi` with inferred `extern` contract records. Other projects that call into the code can load this file with `--interface`.
 
 ### Lowered ASM80 source (`.z80`)
 

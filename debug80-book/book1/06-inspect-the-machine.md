@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Inspect a running program"
+title: "Inspecting a running program"
 parent: "Debug80 Book 1 — Getting started"
 nav_order: 6
 ---
 
-[← Run the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)
+[← Running the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)
 
-# Inspect a running program
+# Inspecting a running program
 
 VS Code contributes the panels you already know (Variables, Watch and Call Stack) and Debug80 adds its own Registers, Memory, Machine and Displays sections, which show the Z80 and the board rather than the abstractions above them.
 
@@ -33,9 +33,12 @@ Debug80 keeps the CPU registers in their own **Registers** section: the pairs `B
 
 ![The Registers section](../../assets/images/debug80-book/book1/registers-editable.svg)
 
-Step the program and watch PC move.
+Each debugger step advances PC to the next instruction.
 
-These fields are editable while the program is paused. Click one, type a new value, and press **Enter** to commit or **Escape** to revert. The flag strings beside the pairs are editable the same way, so you can set or clear a flag and continue to see which branch the program takes.
+These fields are editable while the program is paused. Selecting a
+field and typing a value prepares the edit; **Enter** commits it and
+**Escape** reverts it. The flag strings beside the pairs work the same
+way, allowing a branch to be tested with a flag set or clear.
 
 ## Memory
 
@@ -55,7 +58,9 @@ A view shows sixteen bytes either side of its anchor, row-aligned, with an ASCII
 
 ### Editing memory
 
-Every byte in a memory view is an editable field. Click one, type a new value and press **Enter** to commit, or **Escape** to revert. Editing works only while the program is paused.
+Every byte in a memory view is an editable field. Selecting one and
+typing a value prepares the edit; **Enter** commits it and **Escape**
+reverts it. Editing works only while the program is paused.
 
 ![Writing to read-only memory](../../assets/images/debug80-book/book1/memory-unlock.svg)
 
@@ -81,10 +86,12 @@ Debug80 renders the RGB matrix with duty-cycle brightness, so pixel brightness i
 
 ## Keyboard focus
 
-The hex keypad, matrix keyboard and joystick can compete for physical key input. Click the surface you intend to use; the on-screen controls continue to work regardless of keyboard focus.
+The hex keypad, matrix keyboard and joystick can compete for physical
+key input. Clicking a surface gives it keyboard focus; the on-screen
+controls continue to work regardless of that focus.
 
 [Video, input and serial](08-video-input-and-serial.md) explains the input priority, focus indicator, release command and macOS key handling.
 
 ---
 
-[← Run the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)
+[← Running the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)

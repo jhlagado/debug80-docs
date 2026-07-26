@@ -16,12 +16,13 @@ The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm
 
 ## The problem: eight flags, one byte
 
-A device reports ready, error and busy in a single status register at `$8000`. Your code must:
+A device reports ready, error and busy in a single status register at `$8000`.
+The example has four requirements:
 
-1. Light an LED if ready was set at startup.
-2. Record an error without clearing ready.
-3. Clear busy after the operation finishes.
-4. Store whether the error bit is on as `$00` or `$01` in a separate byte for a later test.
+1. An LED reflects whether ready was set at startup.
+2. An error can be recorded without clearing ready.
+3. Busy clears after the operation finishes.
+4. A separate byte stores the error bit as `$00` or `$01` for a later test.
 
 You could use eight bytes of RAM, which is wasteful on a small machine. One byte with named bit masks is the usual trade.
 
@@ -29,7 +30,7 @@ You could use eight bytes of RAM, which is wasteful on a small machine. One byte
 
 ## Bit masks as `.equ` names
 
-Give each bit a name at assemble time:
+Each bit receives an assemble-time name:
 
 ```asm
 FLAG_READY .equ $01    ; bit 0
@@ -73,7 +74,8 @@ At run time you still load the live byte from `(device_flags)` into A.
     ; Z set → ready bit was clear
 ```
 
-**Clear bit 2 (busy):** you need `and` with the **inverted** mask. For `FLAG_BUSY` (`$04`), the clear mask is `$FB`:
+**Clear bit 2 (busy):** clearing requires `and` with the **inverted** mask. For
+`FLAG_BUSY` (`$04`), the clear mask is `$FB`:
 
 ```asm
     ld a, (device_flags)
@@ -115,7 +117,7 @@ op bit_test(mask imm8)
 end
 ```
 
-Load the status byte into A first, then test:
+The status byte must be in A before the test:
 
 ```asm
     ld a, (device_flags)
@@ -165,13 +167,14 @@ For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, 
     jr nz, _still_busy
 ```
 
-`bit` does not change A; it only sets flags. Use `and mask` when you need a numeric 0/1 in A for storage.
+`bit` does not change A; it only sets flags. `and mask` is the appropriate form
+when storage requires a numeric 0/1 in A.
 
 ---
 
 ## Trace: flags from `$05` to `$03`
 
-Start: `$05` = ready + busy (`$01 | $04`).
+Initial value: `$05` = ready + busy (`$01 | $04`).
 
 | Step | A | Action |
 |------|---|--------|
@@ -242,17 +245,20 @@ shown beside it. There is no `call` instruction.
 
 ## Exercises
 
-1. Start from `$05`. Predict `(device_flags)` after only
-`bit_set FLAG_ERROR` without clearing busy.
-2. Add `FLAG_FAULT .equ $08`. Write `main` so a fault sets bit 3 and forces busy clear in one pass through A.
-3. Implement `popcount_u8`: copy A to a shifting register, run `srl` eight times
-and increment a counter whenever carry is set. Return the count in A.
-4. Implement `parity_u8`: return 1 if odd number of set bits, 0 if even. One compact approach is to toggle a workspace byte each time you find a set bit.
-5. Compare `and FLAG_ERROR` / `rr a` with `bit 1, a` followed by a branch. Which
-form is appropriate when the caller needs a numeric 0/1 result, and which when
-it needs only control flow?
-6. Define an op `shift_right_pair(hi reg8, lo reg8)` that expands to `srl hi`
-followed by `rr lo`. Use it to shift the 16-bit value in B:C right by one bit.
+1. Starting from `$05`, the predicted `(device_flags)` value after
+   `bit_set FLAG_ERROR` should be recorded without clearing busy.
+2. A `FLAG_FAULT .equ $08` definition extends `main` so that a fault sets bit 3
+   and clears busy in one pass through A.
+3. A `popcount_u8` routine should copy A to a shifting register, perform eight
+   `srl` operations, increment a counter for each set carry, and return the
+   count in A.
+4. A `parity_u8` routine should return 1 for an odd number of set bits and 0
+   for an even number. One compact implementation toggles a workspace byte for
+   every set bit.
+5. A comparison between `and FLAG_ERROR` / `rr a` and `bit 1, a` followed by a
+   branch should distinguish a stored numeric result from control flow alone.
+6. An op named `shift_right_pair(hi reg8, lo reg8)` should expand to `srl hi`
+   followed by `rr lo`, shifting the 16-bit value in B:C right by one bit.
 
 ---
 

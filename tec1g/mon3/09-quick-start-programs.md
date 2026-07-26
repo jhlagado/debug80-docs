@@ -37,8 +37,8 @@ Data at `4009` is hardcoded to display `HELLO` on the seven segments.
 ## Seven Segment HELLO, ASCII Conversion
 
 This routine converts the ASCII `"HELLO!"` to seven-segment code using
-the `ASCIItoSegment` routine. Then it uses `RST 20` to multiplex and key
-scan. Change the ASCII at `401A` to display something different.
+the `ASCIItoSegment` routine. Then it uses `RST 20` to multiplex and scan
+the keypad. The bytes at `401A` determine the displayed text.
 
 ```asm
 4000 21 1A 40    LD HL,401A
@@ -64,7 +64,7 @@ scan. Change the ASCII at `401A` to display something different.
 
 This routine displays `HELLO` on the LCD screen. It first clears the LCD
 by calling `commandToLCD`, then calls `stringToLCD` to display a
-zero-terminated ASCII string. Press the `AD` key to exit.
+zero-terminated ASCII string. The `AD` key exits.
 
 ```asm
 4000 06 01       LD B,01
@@ -85,9 +85,9 @@ zero-terminated ASCII string. Press the `AD` key to exit.
 
 This program demonstrates how to read in key presses from the Matrix
 Keyboard, convert the keys to ASCII, handle key bounce and send the ASCII
-to a serial terminal.  Interestingly, lines 4006 to 4028 can be replaced with
-the PARSEMATRIXSCAN API call.   Fun Task: Modify the program to display
-on the LCD.
+to a serial terminal. Lines 4006 to 4028 can be replaced with the
+PARSEMATRIXSCAN API call. An extension of the example could direct the
+same characters to the LCD.
 
 ```asm
 MATRIXSCAN       .EQU 12H
@@ -130,8 +130,8 @@ KEY_VALUE        .EQU 2000H        ;RAM location of key value
 This program reads in text from the serial terminal and scrolls the text on
 the Seven Segment Displays.  Pressing Enter (Carriage Return) will start
 the scroll.  It uses ASCIITOSEGMENT to convert ASCII to Seven Segment
-Display format.  This routine only works using the TEC-1G Hex Keypad. Fun
-Task: Modify the program to display text on the LCD.
+Display format. This routine only works with the TEC-1G Hex Keypad. An
+extension of the example could display the text on the LCD.
 
 ```asm
 ASCIITOSEGMENT   .EQU 06H
@@ -181,9 +181,9 @@ demonstration in text mode and a terminal display example.
 
 This program first sets up the LCD to use Graphics and ensures that on
 every plotToLCD the internal graphics buffer is cleared.  This makes the
-circle animate.  Then a circle is expanded until it reaches the end of the
-screen.  A beep is played and the code is repeated.  Fun Task: Modify the
-time delay to change the speed of the growing bubble.
+circle animate. A circle then expands until it reaches the edge of the
+screen, a beep plays and the sequence repeats. The time-delay value
+controls the speed of the growing bubble.
 
 ```asm
 INITLCD         .EQU 0
@@ -225,7 +225,7 @@ TIMEDELAY       .EQU 33
 
 This program cycles through all stored fonts on the GLCD.  Characters on the GLCD are
 stored in the Character Generator ROM (CGROM).   The program sets up the LCD for text
-mode and displays characters on the screen.  Press any key to continue.  The code also
+mode and displays characters on the screen. Any key advances to the next page. The code also
 uses the GLCD ports directly, skipping the API.  This is perfectly fine to do.  See the ST7920
 manual on how to send instructions directly to the GLCD. This routine only works using
 the TEC-1G Hex Keypad.
@@ -277,13 +277,13 @@ DELAYUS         .EQU 15
 4050 C9          RET
 ```
 
-## Use the GLCD as a Serial Terminal
+## GLCD Serial Terminal
 
 This program turns the GLCD into a text terminal.  Characters entered are
-displayed on the GLCD and standard keyboard commands like carriage
-return and backspace also work.  To scroll press left and right arrows on the
-keyboard.  Ctrl-A will turn the cursor on, Ctrl-B turn the cursor off,  Ctrl-C
-will inverse the characters typed and Ctrl-D will exit.
+displayed on the GLCD, and standard keyboard commands such as carriage
+return and backspace also work. The left and right arrows scroll the display.
+Ctrl-A turns the cursor on, Ctrl-B turns it off, Ctrl-C toggles inverse text
+and Ctrl-D exits.
 
 ```asm
 MATRIXSCAN       .EQU 12H
@@ -320,7 +320,7 @@ DISPLAYCURSOR    .EQU 1EH
 4026 18 DB       JR 4003           ;Done, check for new key
 ```
 
-## Display a Clock on the Seven Segments
+## Seven-Segment Clock
 
 This program requires the RTC Add-on board and will display the current
 time set on the RTC Board on the Seven Segments..  A check for 12/24 hour

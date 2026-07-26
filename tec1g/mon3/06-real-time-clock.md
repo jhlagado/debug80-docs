@@ -30,12 +30,12 @@ called the NVRAM, "Parameter RAM" or PRAM.
 
 *RTC add-on board connected to the TEC-1G GPIO port.*
 
-To initially set the RTC, a convenient RTC Setup routine has been provided
-in the Settings item in the Main Menu.  Select "Configure RTC".  Press the
-following keys to update the time/date: 0 = Hour, 1 = Minute, 2 = Second, 3 =
-12/24h, 4 = Day of week, 5 = Day, 6 = Month, 7 = Year, 8 = View RTC PRAM, F =
-Reset RTC, <span class="mon3-key-emphasis">AD</span> = Exit.  When viewing RTC PRAM data, <span class="mon3-key-emphasis">Plus</span> = Move Down,
-<span class="mon3-key-emphasis">Minus</span> = Move Up, <span class="mon3-key-emphasis">AD</span> = Exit back to RTC Setup.
+The Main Menu's Settings item provides a **Configure RTC** routine for
+initial setup. Its keys are: 0 = Hour, 1 = Minute, 2 = Second, 3 = 12/24h,
+4 = Day of week, 5 = Day, 6 = Month, 7 = Year, 8 = View RTC PRAM, F =
+Reset RTC and <span class="mon3-key-emphasis">AD</span> = Exit. In the RTC PRAM view,
+<span class="mon3-key-emphasis">Plus</span> moves down, <span class="mon3-key-emphasis">Minus</span> moves up and
+<span class="mon3-key-emphasis">AD</span> returns to RTC Setup.
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-50-figure-2.png)
 
@@ -144,8 +144,8 @@ D7        rst 10H
 | `RTCSetup` | 18 | 12 |
 
 ### checkDS1302 #0 (00H)
-Check if a DS1302 is detectable, by verifying that the DS1302's registers
-return expected results.
+Checks whether a DS1302 is present by verifying that its registers return
+the expected results.
 - Input: none
 - Output: `Carry flag` set = no RTC add-on board present
 - Destroy: `A`
@@ -156,12 +156,12 @@ Does not clear RTC RAM.  Sets DS1302 to 01:00.00 AM, 01/01/2000.
 - Input: none
 - Destroy: none
 
-Note: To be used **only** when the RTC requires a settings reset e.g. if it's not
-"ticking". Use `checkDS1302` to "reset" the DS1302 to a ready state, as part of
-program initialization.
+This routine is intended **only** for an RTC that requires a settings reset,
+such as a clock that is no longer ticking. Normal program initialization uses
+`checkDS1302` to verify that the DS1302 is present and responding.
 
 ### getTime #2 (02H)
-Get time from RTC. Time is formatted in either 12 or 24 hour mode,
+Returns the RTC time in either 12- or 24-hour mode,
 depending on selected mode.
 - Input: none
 - Output: `H` = hour, bit 5=am/pm flag (in 12hr mode). 1=PM
@@ -169,7 +169,7 @@ depending on selected mode.
 - Output: `D` = second
 - Destroy: `A`
 
-Note that all returned registers are BCD coded, so 10:24:36 results in
+All returned registers are BCD coded, so 10:24:36 results in
 `HL` = `1024h`, `D` = `36h`.
 
 ### setTime #3 (03H)
@@ -180,7 +180,7 @@ mode, depending on selected mode.
 - Input: `D` = second
 - Destroy: `A`, `E`
 
-The 12/24 hour mode flag is preserved.  Note that all registers are BCD
+The 12/24 hour mode flag is preserved. All registers are BCD
 coded, so 10:24:36 is formatted as `HL` = `1024h`, `D` = `36h`.
 
 ### getDate #4 (04H)
@@ -191,7 +191,7 @@ Returns the present Calendar date, month, year.
 - Output: `DE` = year
 - Destroy: `A`
 
-Note that values returned are BCD coded.
+Returned values are BCD coded.
 
 ### setDate #5 (05H)
 Sets the Calendar to a specified date/month/year.  Invalid dates may be
@@ -202,7 +202,7 @@ programmed; it simply rolls over at midnight.
 - Input: `DE` = year 2000-2099, `D` is assumed to be `20h`
 - Destroy: `A`
 
-Note that values returned are BCD coded.
+Returned values are BCD coded.
 
 ### getDay #6 (06H)
 Gets the Day of the week i.e. "Monday", "Tuesday", etc. 01 = Monday, 07 =
@@ -228,14 +228,14 @@ Reports if the RTC is currently in 12 or 24 hour mode.
 - Destroy: none
 
 ### set12HrMode #9 (09H)
-Set RTC to 12 hour mode. That is, the hour is subsequently returned as
+Sets the RTC to 12-hour mode, so the hour is subsequently returned as
 01-12, and an AM/PM flag.
 - Input: none
 - Output: `Carry Flag` set = already in 12 hr mode
 - Destroy: `A`, `D`
 
 ### set24HrMode #10 (0AH)
-Set RTC to 24 hour mode (also known as Military Time). That is, the hour is
+Sets the RTC to 24-hour mode, so the hour is
 subsequently returned as 00-23.
 - Input: none
 - Output: `Carry Flag` set = already in 24 hr mode
@@ -255,7 +255,7 @@ Writes a byte to the RTC PRAM.
 
 ### burstRTCRead #13 (0DH)
 Reads all 31 RTC PRAM bytes and fills a user-supplied buffer with that data.
-The user buffer should be 31 bytes long.
+The destination buffer requires 31 bytes.
 - Input: `HL` = location to write to (31 bytes)
 - Output: `HL` = moved to address after last byte
 - Destroy: `A`
@@ -276,8 +276,8 @@ becomes `52h`.
 
 ### formatTime #16 (10H)
 Takes a time and fills a user-supplied buffer with an ASCIIZ string
-formatted as human-readable text.  The user-supplied buffer should be at
-least 12 bytes long.
+formatted as human-readable text. The destination buffer requires at least
+12 bytes.
 
 Bits 7 and 5 of the hour is used to format the time, if it is a 12hr mode
 timestamp - AM or PM is appended accordingly.
@@ -290,8 +290,8 @@ timestamp - AM or PM is appended accordingly.
 
 ### formatDate #17 (11H)
 Takes a date and fills a user-supplied buffer with an ASCIIZ string
-formatted as human-readable text.  The user-supplied buffer should be at
-least 11 bytes long.
+formatted as human-readable text. The destination buffer requires at least
+11 bytes.
 Dates are output as DD/MM/YYYY
 - Input: `H` = date
 - Input: `L` = month

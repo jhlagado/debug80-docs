@@ -72,8 +72,8 @@ interrupt or reset. Address `$8000` now contains `$08`.
 
 The program above was ten bytes. Real programs are thousands. Every address is
 a bare number. `$8000` could be a result variable, a display buffer or a lookup
-table, and nothing in the byte stream says which. Insert one instruction and
-downstream addresses may shift; miss one manual update and the program uses the
+table, and nothing in the byte stream says which. Inserting one instruction may
+shift downstream addresses; a missed manual update makes the program use the
 wrong address without producing an error. The sequence
 `3E 05 47 3E 03 80 32 00 80 76` means nothing until you decode each byte.
 

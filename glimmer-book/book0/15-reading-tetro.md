@@ -21,21 +21,21 @@ Tetro is three files, about 900 lines together. `tetro.glim` holds
 the declarations. `tetro-rules.glim`, brought in with `part`, holds
 the cards and blocks. `tetro-lib.asm`, brought in with `import`,
 holds the board engine: collision, locking, line clearing, and the
-board draw. Read them in that order, because it is the
-order a larger Glimmer game answers questions in: the declarations say
-what exists, the blocks say what happens, and the engine says how the
-heavy work gets done.
+board draw. That order matches the questions a larger Glimmer game
+answers:
+the declarations say what exists, the blocks say what happens, and the engine
+says how the heavy work gets done.
 
-Copy the three files from
-`examples/` in the Glimmer repository into a working directory, build
+For hands-on reading, the three files can be copied from `examples/`
+in the Glimmer repository into a working directory and built through
 the entry file (`glimmer build tetro.glim` on Appendix D's command
-line), and keep all three files open in your editor while you read.
+line). Keeping all three open makes the boundaries visible.
 Every generated excerpt in this chapter comes from the
 `tetro.main.asm` that build writes, with the whole game inside.
 
 ## Three files, one program
 
-Open `tetro.glim` first. The top of the file:
+The reading begins at the top of `tetro.glim`:
 
 ```text
 program Tetro
@@ -75,7 +75,7 @@ state BoardGreen     : byte[8]
 state BoardBlue      : byte[8]
 ```
 
-Start with the falling piece: four cells of state. Where it is
+The falling piece occupies four cells of state: where it is
 (`PlayerX`, `PlayerY`), which of the seven pieces it is
 (`CurPieceIndex`), and which of four rotations it shows
 (`CurRotation`). `NextPieceIndex` is the preview. `ClearMask` and
@@ -175,9 +175,9 @@ runs through every table below and through the preview letters in
 
 ## The tables the shapes became
 
-Open `tetro.main.asm` at `; --- rotational shape resources ---`. Each
-distinct rotation became four bitmap rows, MSB-left, padded to four
-rows. The S piece:
+In `tetro.main.asm`, the section `; --- rotational shape resources
+---` holds each distinct rotation as four bitmap rows, MSB-left and
+padded to four rows. The S piece:
 
 ```asm
 ShapeRot_PieceS_0:
@@ -197,10 +197,10 @@ ShapeRot_PieceS_2:
         .db     %00000000
 ```
 
-Read the first bitmap against `"XX."`: bit 7 is column 0, so the two
-pixels sit at the top left, ready to shift right by `PlayerX` at draw
-time. And count the bitmaps: three, for a piece with three distinct
-rotations. The fourth comes from the pointer table:
+Compared with `"XX."`, the first bitmap puts bit 7 at column 0, so
+the two pixels sit at the top left, ready to shift right by `PlayerX`
+at draw time. The three bitmaps represent the piece's three distinct
+rotations; the fourth comes from the pointer table:
 
 ```asm
 ShapeRotPtrTable:

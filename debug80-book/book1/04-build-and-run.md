@@ -1,19 +1,20 @@
 ---
 layout: default
-title: "Build and run"
+title: "Building and running"
 parent: "Debug80 Book 1 — Getting started"
 nav_order: 4
 ---
 
-[← Targets](03-targets.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
+[← Targets](03-targets.md) | [Book 1](index.md) | [Running the debugger →](05-build-and-step.md)
 
-# Build and run
+# Building and running
 
 **Build** assembles your program. **Run** assembles it and starts the emulated machine.
 
-## Build
+## A build
 
-Select the `main` target and click **Build**.
+With `main` selected, **Build** assembles that target without
+launching it.
 
 Debug80 hands your entry file to the assembler, writes the output into the target's `outputDir`, and stops. The panel reports what happened on its own line:
 
@@ -25,7 +26,7 @@ If the build fails, that line turns red with a warning mark, a red `!` indicator
 
 ![The panel after a failed build](../../assets/images/debug80-book/book1/panel-state-build-failed.svg)
 
-Look in `build/`:
+The `build/` directory now contains:
 
 ```text
 build/
@@ -62,9 +63,9 @@ Five other messages are possible, and each includes the required remedy:
 
 A stale map can send breakpoints and stepping to old locations. A missing, unreadable or invalid map disables the editor and debugger features that depend on it. When debugging behaves oddly, read this line before anything else.
 
-## Run
+## A run
 
-Now click **Run**.
+The **Run** action performs the next stage.
 
 Debug80 builds the target, then launches it: it loads the monitor ROM and your program into an emulated TEC-1G and starts a debug session.
 
@@ -78,9 +79,12 @@ If a session is already running, **Run** stops it and starts again, so after an 
 
 There is no `launch.json` to write; Debug80 supplies the debug configuration.
 
-## Build or run
+## Choosing between Build and Run
 
-Use **Run** while you are writing a program, and **Build** when you want the artifacts and not the machine: before sending a HEX file to real hardware, when you only want to know whether the code assembles, or when you are working on a target that is not the one you are currently debugging.
+**Run** suits the edit-and-test cycle. **Build** suits work that needs
+the artifacts but not the machine: sending a HEX file to real
+hardware, checking whether code assembles, or building a target other
+than the one currently being debugged.
 
 ## Stop on entry
 
@@ -96,8 +100,11 @@ The row below **Stop on entry** holds **Register Contracts**, **Contract Updates
 
 ## Reading the state as data
 
-Run **Debug80: Copy Project Status (JSON)** from the Command Palette to copy the panel's full view of the project as JSON. The result records the project state, target list, selected target, build, source map and hardware status, which helps when the visible state does not explain what Debug80 is doing.
+**Debug80: Copy Project Status (JSON)** copies the panel's full view
+of the project as JSON. The result records the project state, target
+list, selected target, build, source map and hardware status, which
+helps when the visible state does not explain what Debug80 is doing.
 
 ---
 
-[← Targets](03-targets.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
+[← Targets](03-targets.md) | [Book 1](index.md) | [Running the debugger →](05-build-and-step.md)

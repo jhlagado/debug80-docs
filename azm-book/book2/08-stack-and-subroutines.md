@@ -43,7 +43,7 @@ The hardware stack is a region of RAM used as a last-in-first-out buffer. When `
 
 ## The hardware stack
 
-You decide where the stack lives by loading SP with a starting address before the program uses any `call`, `push` or `pop` instructions. A common choice is the top of available RAM: `ld sp, $BFFF` (or whichever address marks the last byte of RAM on your target).
+The program determines where the stack lives by loading SP with a starting address before any `call`, `push` or `pop` instruction. A common choice is the top of available RAM: `ld sp, $BFFF` (or whichever address marks the last byte of RAM on the target).
 
 Each push decreases SP by two and writes a 16-bit value. Each pop reads two bytes and increases SP by two.
 
@@ -128,7 +128,7 @@ In a tight interrupt handler or innermost loop, saving BC, DE and HL via `push` 
 
 These are the **shadow registers**: a second, hidden copy of A, F, B, C, D, E, H and L. You cannot use them directly in instructions; `exx` and `ex af, af′` are the only way in.
 
-The trade-off is that there is only one shadow set. If both your main code and an interrupt handler rely on `exx`, the interrupt can silently destroy the values the main code stored. Use them when speed matters and you can guarantee that only one context uses them at a time.
+The trade-off is that there is only one shadow set. If both the main code and an interrupt handler rely on `exx`, the interrupt can silently destroy the values stored by the main code. Shadow registers are therefore suitable only when speed matters and one context has exclusive use of them.
 
 ---
 
@@ -277,7 +277,7 @@ introduces the Z80 port instructions used by those drivers.
 
 ## Exercises
 
-**1. Stack trace.** Work through these four instructions by hand, tracking the stack and register values at each step. Assume SP starts at `$C000` and that the values in the registers before the sequence are: AF = `$1234`, BC = `$5678`.
+**1. Stack trace.** This exercise tracks the stack and register values through four instructions, starting with SP at `$C000`, AF at `$1234` and BC at `$5678`.
 
 ```asm
 push af
@@ -288,7 +288,7 @@ pop hl
 
 After all four instructions: what is in DE? What is in HL? What is SP? _(Remember: the stack is last-in-first-out: the pair pushed last is the first to be popped.)_
 
-**2. Spot the push/pop mismatch.** This subroutine has a stack-balance bug. Identify it and explain precisely what will happen when `ret` executes:
+**2. The push/pop mismatch.** This subroutine has a stack-balance bug. The answer should identify it and explain precisely what happens when `ret` executes:
 
 ```asm
 count_nonzero:
@@ -309,11 +309,11 @@ skip:
   ret
 ```
 
-Write the corrected version.
+The answer also needs a corrected version.
 
-**3. Write a subroutine.** Write a subroutine called `double_byte` that receives a byte value in B and returns B × 2 in A. Include a comment header that documents the inputs, outputs and which registers are clobbered. Then write the three lines in `main` that pass the value 15 to the subroutine, call it and store the result in a variable named `doubled`.
+**3. A byte-doubling subroutine.** The required `double_byte` subroutine receives a byte in B and returns B × 2 in A. Its comment header must document inputs, outputs and clobbered registers. Three lines in `main` then pass 15, call the subroutine and store the result in a variable named `doubled`.
 
-**4. The `or a / sbc hl, de` pattern.** The `max_word` subroutine uses `or a` immediately before `sbc hl, de`. Explain what `or a` does to the carry flag and why omitting it would produce wrong results. Then explain the `add hl, de` that follows on the carry-clear path. Why is it needed and what does HL hold after `sbc hl, de` on that path?
+**4. The `or a / sbc hl, de` pattern.** The explanation should cover what `or a` does to carry, why omitting it gives wrong results, and why `add hl, de` follows on the carry-clear path. It should also identify the value in HL after `sbc hl, de` on that path.
 
 ---
 

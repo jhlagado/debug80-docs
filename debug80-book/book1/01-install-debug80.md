@@ -1,27 +1,28 @@
 ---
 layout: default
-title: "Install Debug80"
+title: "Debug80 installation"
 parent: "Debug80 Book 1 — Getting started"
 nav_order: 1
 ---
 
-[Book 1](index.md) | [Open a folder, make a project →](02-open-a-folder.md)
+[Book 1](index.md) | [Opening a folder and creating a project →](02-open-a-folder.md)
 
-# Install Debug80
+# Debug80 installation
 
 Debug80 is a Z80 development environment that runs inside VS Code. You write assembly, it assembles the code, loads it into an emulated TEC-1G, and lets you step through your own source while the emulated machine runs.
 
 The extension carries the AZM assembler, the Glimmer compiler and the TEC-1 and TEC-1G emulation inside itself.
 
-## Install VS Code
+## VS Code
 
-Debug80 needs VS Code **1.100.0** or later. Download it from [code.visualstudio.com](https://code.visualstudio.com/).
+Debug80 needs VS Code **1.100.0** or later, available from
+[code.visualstudio.com](https://code.visualstudio.com/).
 
-## Install the extension
+## The Debug80 extension
 
-Open the **Extensions** view from the Activity Bar down the left edge of the window.
-
-Search for `debug80` and install **Debug80 IDE for Z80 Development**, published by `jhlagado`.
+The **Extensions** view in the Activity Bar provides the installation
+route. A search for `debug80` finds **Debug80 IDE for Z80
+Development**, published by `jhlagado`.
 
 The extension takes over `.asm`, `.z80` and `.asmi` files for syntax highlighting, and `.glim` files for Glimmer. If you already have another Z80 assembly extension installed you do not need it, and Debug80 will set the language mode on those files itself.
 
@@ -29,13 +30,15 @@ The extension takes over `.asm`, `.z80` and `.asmi` files for syntax highlightin
 
 Debug80 has no icon of its own in the activity bar. It lives inside VS Code's **Run and Debug** sidebar, as one section among the several VS Code puts there itself: Variables, Watch, Call Stack, Breakpoints. Debug80 is the last of them, and it starts shut.
 
-Open the Run and Debug sidebar, look to the bottom of the list, and click **DEBUG80**.
+In the Run and Debug sidebar, expanding **DEBUG80** at the bottom of
+the list reveals the panel.
 
 ![Clicking DEBUG80 expands it from a shut section into the Project section, showing the Add projects or folders message and an Open Folder button](../../assets/images/debug80-book/book1/panel-sidebar-location.svg)
 
 The book calls it **the Debug80 panel** from here on.
 
-If DEBUG80 is not in the list at all, the extension has not activated. Use VS Code's **View > Open View…** picker and choose Debug80 from the list.
+If DEBUG80 is not in the list at all, the extension has not activated.
+VS Code's **View > Open View…** picker can reveal Debug80 directly.
 
 ## The empty state
 
@@ -59,4 +62,4 @@ Everything below `DEBUG80` belongs to Debug80: the project row you have already 
 
 ---
 
-[Book 1](index.md) | [Open a folder, make a project →](02-open-a-folder.md)
+[Book 1](index.md) | [Opening a folder and creating a project →](02-open-a-folder.md)

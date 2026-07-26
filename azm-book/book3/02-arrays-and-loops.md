@@ -16,7 +16,9 @@ The companion program is [`examples/02_insertion_sort.asm`](examples/02_insertio
 
 ## The problem: sort and find
 
-You have eight scores in RAM, in arbitrary order. You need them ascending for display, then you need the index of the first score at least 5.
+The example starts with eight scores in RAM in arbitrary order. Displaying them
+requires ascending order, followed by the index of the first score that is at
+least 5.
 
 Two separate algorithms, one representation:
 
@@ -39,23 +41,25 @@ values:
 
 `values` is the **base address**, the address of `values[0]`, not the first element's numeric value. `ARRAY_LEN` is a compile-time constant from `.equ`.
 
-Reserve uninitialized storage with layout types when you want self-documenting size (Book 2 Chapter 13):
+Layout types provide self-documenting sizes when an array needs uninitialized
+storage (Book 2 Chapter 13):
 
 ```asm
 values:
     .ds byte[8]
 ```
 
-The sort example uses `.db` with initial data so you can see wrong order before `halt`.
+The sort example uses `.db` with initial data, making the original unsorted
+order visible before execution reaches `halt`.
 
 ### Indexing with HL
 
-To read `values[i]` when `i` is small and fits in one byte:
+Reading `values[i]` when `i` fits in one byte takes four steps:
 
-1. Load the base into HL (or DE if HL is busy).
-2. Form offset `i` in BC with B = 0 and C = i.
-3. `add hl, bc`. HL now points at element i.
-4. `ld a, (hl)`. A holds the element.
+1. The base address goes into HL, or into DE when HL is already in use.
+2. BC holds offset `i`, with B = 0 and C = i.
+3. `add hl, bc` advances HL to element i.
+4. `ld a, (hl)` loads the element into A.
 
 ```
   values + 0   values + 1   values + 2
@@ -110,10 +114,10 @@ for i from 1 to length-1:
 
 If you only keep HL, you lose the base address. **DE holds the base** for the whole routine; HL is recomputed from DE and the current index.
 
-Length arrives in B but inner loops reuse B. Store it in workspace. Place
-scratch bytes after the table in the same `.org $8000` block. AZM maintains a
-forward-only placement cursor for each segment, so a later data `.org` cannot
-move back over bytes already placed:
+Length arrives in B, but the inner loops also need B, so the routine stores the
+length in workspace. Its scratch bytes follow the table in the same `.org
+$8000` block. AZM maintains a forward-only placement cursor for each segment,
+so a later data `.org` cannot move back over bytes already placed:
 
 ```asm
 found_index:
@@ -141,7 +145,7 @@ insertion_sort:
 
 Z80 has no `ld de,hl` instruction.
 
-### Load the key
+### Loading the key
 
 ```asm
     ld a, c
@@ -161,7 +165,8 @@ Z80 has no `ld de,hl` instruction.
 
 ### Inner shift
 
-Compare `values[j]` to `key_byte`. While the element is greater, shift it right by one index:
+The inner loop compares `values[j]` with `key_byte`. An element greater than the
+key moves right by one index:
 
 ```asm
 _inner:
@@ -187,7 +192,7 @@ _inner:
     jr _inner
 ```
 
-### Place the key
+### Placing the key
 
 `sort_j` preserves j while B and C form a 16-bit table offset. When j < 0 or
 `values[j] <= key`, write `key_byte` at `values[j+1]`. `sort_index` then
@@ -254,9 +259,9 @@ main:
     halt
 ```
 
-Reload HL before the second call because the `insertion_sort` contract lists HL
-as clobbered. The caller must not depend on whichever address the current
-implementation happens to leave there.
+The second call reloads HL because the `insertion_sort` contract lists it as
+clobbered. The caller therefore does not depend on whichever address the
+current implementation happens to leave there.
 
 ---
 
@@ -288,18 +293,24 @@ Stride becomes `sizeof(Score)` and field offsets use `offset(Score, value)`, the
 azm examples/02_insertion_sort.asm
 ```
 
-Single-step through one outer iteration in the emulator: watch `key_byte` and confirm the sorted prefix grows.
+One outer iteration in the emulator shows `key_byte` holding the selected value
+while the sorted prefix grows.
 
 ---
 
 ## Exercises
 
-1. Hand-trace insertion sort for the first three outer iterations (i = 1, 2, 3). Write the table contents after each.
-2. Change one `.db` value to 0 and rerun. Does the sort still terminate correctly? Why?
-3. Implement descending sort by changing one comparison in the inner loop.
-4. Add `find_byte_eq` that returns the index of the first element equal to C, or `$FF`.
-5. Replace insertion sort with bubble sort using nested `djnz` loops. State the outer loop invariant in one sentence.
-6. Reserve the table with `.ds byte[8]` and initialize it in `main` with eight `ld (hl), a` stores instead of `.db`.
+1. A hand trace should cover the first three outer iterations (i = 1, 2, 3)
+   and record the table contents after each iteration.
+2. Changing one `.db` value to 0 provides a case for determining whether the
+   sort still terminates correctly and why.
+3. Changing one comparison in the inner loop should produce a descending sort.
+4. A `find_byte_eq` routine should return the index of the first element equal
+   to C, or `$FF`.
+5. A bubble sort can use nested `djnz` loops and should include a one-sentence
+   outer-loop invariant.
+6. An alternative table uses `.ds byte[8]` for its reservation and eight `ld
+   (hl), a` stores in `main` for initialization instead of `.db`.
 
 ---
 

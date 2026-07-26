@@ -21,9 +21,11 @@ covers that workflow. The companion build is
 
 ## The problem: one file stops scaling
 
-Chapter 3's `strlen_u8` is twenty lines. Add copy, compare, ring buffer helpers and GCD from Chapter 1. The listing scrolls, labels crowd together and you cannot reuse the string walk on the next project without copy-paste.
+Chapter 3's `strlen_u8` is twenty lines. Once copy, compare, ring-buffer helpers
+and Chapter 1's GCD join it, the listing becomes difficult to navigate and the
+string walk cannot be reused without duplication.
 
-You need two things at once:
+The growing program needs two forms of structure:
 
 1. **Physical split**: edit strings in one file, main flow in another.
 2. **Logical contract**: callers still know which registers to set before `call`.
@@ -41,7 +43,9 @@ The directive:
 .include "lib/strings.asm"
 ```
 
-tells the assembler to read `lib/strings.asm` and treat its contents as if you had typed them at that exact line. There is no separate link step, no export table and no namespace prefix on `call strlen_u8`.
+tells the assembler to read `lib/strings.asm` and treat its contents as source
+at that exact line. There is no separate link step, no export table and no
+namespace prefix on `call strlen_u8`.
 
 Paths resolve **relative to the file that contains the `.include`**, then
 through any directories supplied with `-I`. In the companion tree,
@@ -65,7 +69,8 @@ working directory.
 
 ### One assembly unit
 
-After expansion, the project is a **single program**: one address space, one set of global labels, one `.org` sequence you are responsible for coordinating.
+After expansion, the project is a **single program**: one address space, one set
+of global labels and one coordinated `.org` sequence.
 
 ![.include pastes text into one namespace; .import keeps a module's private labels behind the wall](../../assets/images/azm-book/book3/include-vs-import.svg)
 
@@ -77,19 +82,26 @@ Typical layout:
 | `lib/strings.asm` | Subroutines only — no second `main` and normally no `.org` |
 | `constants.asm` (optional) | `.equ` shared by several includes |
 
-Put `.include` where the library code should land (often after `main` and before data, or at the bottom of the code section). Forward references work: `call strlen_u8` in `main` is legal even when the `.include` line appears later in the source.
+The `.include` directive appears where the library code should land, often
+after `main` and before data or at the bottom of the code section. Forward
+references work: `call strlen_u8` in `main` is legal even when the `.include`
+line appears later in the source.
 
 ### Include scope
 
 - Not a separate private symbol table: non-local declarations join the including source unit, while `_name` labels remain local to their nearest non-local owner.
 - Not a substitute for register contracts; contracts stay in `.routine` directives on callable entries.
-- Recursive include/import chains are rejected with a source diagnostic. Keep a directed acyclic graph: application includes libraries; libraries do not include the application.
+- Recursive include/import chains are rejected with a source diagnostic. A
+  directed acyclic graph avoids them: the application includes libraries, and
+  libraries do not include the application.
 
 ---
 
 ## Shared library pattern: `lib/strings.asm`
 
-Treat a library file as **implementation you paste in**, plus a header comment that states the calling convention. The companion library holds Chapter 3's length walk:
+A library file combines **included implementation** with a header comment that
+states the calling convention. The companion library holds Chapter 3's length
+walk:
 
 ```asm
 ; strlen_u8: count bytes before null (terminator not counted)
@@ -108,7 +120,7 @@ _done:
     ret
 ```
 
-Rules that keep libraries boring and reliable:
+Four rules keep libraries predictable:
 
 1. **No `main` and no `halt`** in the library, only subroutines and maybe private helpers (`ring_advance_index` style).
 2. **No `.org` in the library** unless you are deliberately placing code at a fixed address (unusual in Book 3).
@@ -138,7 +150,9 @@ str_len:
 
 ### Growing the library
 
-Add `strcpy_u8`, `strcmp_u8` and `str_find_char` from Chapter 3 into the same `lib/strings.asm`. When two programs need the same walk, they both `.include` the same library path instead of duplicating twenty lines.
+The same `lib/strings.asm` can also contain Chapter 3's `strcpy_u8`,
+`strcmp_u8` and `str_find_char`. Programs then include one library path instead
+of duplicating each walk.
 
 Optional **constants header**: if several files need `CHAR_L` or `RING_CAP`, a tiny `lib/strings.equ` (or `constants.asm`) that only contains `.equ` lines can be included from both the app and the library.
 
@@ -156,20 +170,26 @@ With `.include`, **the contract is documentation plus naming discipline**:
 | `.equ` in one included header | Single source for buffer size and field offsets |
 | Comment block at top of `lib/*.asm` | Human-readable summary: "String convention: HL pointer, A length" |
 
-Callers obey the contract the same way they obey Chapter 3's table: set HL, `call`, read A, assume everything in `clobbers` is garbage unless you saved it.
+The contract defines the caller's sequence: HL receives the input, `call`
+enters the routine, A carries the result, and every register in `clobbers` is
+treated as destroyed unless the caller preserved it.
 
 **Private helpers** use ordinary non-local names when several routines in the source unit call them.
 
 ### Symbol collisions
 
-Because included text shares one source-unit namespace, two files must not both define `buffer` or `count` as non-local labels. Fixes:
+Because included text shares one source-unit namespace, two files cannot both
+define `buffer` or `count` as non-local labels. The usual remedies are:
 
-- Prefix workspace labels: `demo_buffer`, `demo_str_len`.
-- Prefix library routines: `str_strlen_u8` if two included libraries both define `strlen_u8`; rename once, update register contracts and all `call` sites.
-- Use owner-local branch labels such as `_loop` and `_found`; another routine may reuse those spellings under its own owner.
+- Workspace labels can carry a prefix: `demo_buffer`, `demo_str_len`.
+- Library routines can carry a prefix such as `str_strlen_u8` if two included
+  libraries both define `strlen_u8`. A rename also requires updates to register
+  contracts and every `call` site.
+- Owner-local branch labels such as `_loop` and `_found` let another routine
+  reuse those spellings under its own owner.
 
-When AZM reports a duplicate label, search all `.include` branches and rename
-one of the non-local declarations.
+When AZM reports a duplicate label, the conflicting declaration can be found
+across the `.include` branches and given a unique non-local name.
 
 ---
 
@@ -177,7 +197,8 @@ one of the non-local declarations.
 
 Chapter 3's string routines live in **your** ROM image. Monitor ROM, BIOS and emulator stubs live at fixed addresses in **someone else's** code. You still need register contracts for `--rc warn`, but there is no AZM source to paste with `.include`.
 
-Book 2 Chapter 12 introduced **`.asmi`** files: contract records only, no instructions:
+Book 2 Chapter 12 introduced **`.asmi`** files, which contain contract records
+but no instructions:
 
 ```
 extern MON_PRINT_CHAR
@@ -192,13 +213,16 @@ clobbers carry
 end
 ```
 
-Assemble with the interface loaded:
+The interface is loaded during assembly:
 
 ```sh
 azm --interface monitor.asmi --rc warn main.asm
 ```
 
-Your program `call`s `MON_PRINT_CHAR` like any other label; the analyzer checks that you do not keep A live across the call if `clobbers A` says otherwise. Update the `.asmi` when the platform manual changes; the call sites stay the same.
+The program `call`s `MON_PRINT_CHAR` like any other label. The analyzer checks
+that A is not kept live across a call whose contract says `clobbers A`. A
+platform-manual change requires an update to the `.asmi`, while call sites
+remain unchanged.
 
 The interface supplies contracts, not machine addresses. The source still
 needs bindings from the platform manual:
@@ -208,8 +232,8 @@ MON_PRINT_CHAR .equ $0010
 MON_GET_KEY    .equ $0018
 ```
 
-Those sample addresses are placeholders; use the entry points documented by
-the target monitor.
+Those sample addresses are placeholders. A real program uses the entry points
+documented by its target monitor.
 
 Contrast:
 
@@ -251,24 +275,34 @@ azm examples/07_include_demo.asm
 azm --rc warn examples/07_include_demo.asm
 ```
 
-Step into `strlen_u8` once: confirm the library file's labels appear in the listing at the include point, and that `str_len` is 5 at `$8008`.
+A trace through `strlen_u8` shows the library labels at the include point in the
+listing and leaves `str_len` equal to 5 at `$8008`.
 
 ---
 
 ## Exercises
 
-1. Move `message` and `str_len` into `demo_data.asm`. Include it from `07_include_demo.asm` after the library include. Assemble and confirm `str_len` is still 5.
-2. Add `strcpy_u8` and `strcmp_u8` from Chapter 3 to `lib/strings.asm`. Extend the demo to copy into an 8-byte buffer, set a `copy_ok` byte like Chapter 3 and verify in the emulator.
-3. Create `lib/strings.equ` with `CHAR_L .equ 'L'`. Include it once from
-`07_include_demo.asm`, before `lib/strings.asm`, so both main and library can use
-the constant without defining it twice.
-4. Deliberately define two global labels named `done` in different included files. Record the assembler error, then fix one label with a file-specific prefix.
-5. Write a one-routine `lib/math.asm` with `gcd_u16` from Chapter 1. Include it from a new `08_gcd_client.asm` that only calls GCD and stores the result. No string code in that binary.
-6. Sketch a `monitor.asmi` with two `extern` routines you might call on a machine with a character output routine in A and a key reader returning A. List `in`, `out` and `clobbers` for each without writing Z80 bodies.
-7. Draw the include graph for a project where `main.asm` includes
-`constants.asm`, `lib/strings.asm` and `lib/ring.asm` once each. The libraries
-use the constants already present in the shared source unit. Which edge creates
-a cycle if `ring.asm` includes `main.asm`?
+1. A `demo_data.asm` file should contain `message` and `str_len` and be included
+   from `07_include_demo.asm` after the library. Assembly should still leave
+   `str_len` equal to 5.
+2. Chapter 3's `strcpy_u8` and `strcmp_u8` can be added to `lib/strings.asm`.
+   The extended demo should copy into an eight-byte buffer and set a `copy_ok`
+   byte for emulator verification.
+3. A `lib/strings.equ` file contains `CHAR_L .equ 'L'` and is included once
+   from `07_include_demo.asm` before `lib/strings.asm`. Main and library can
+   then share the constant without defining it twice.
+4. Two deliberately conflicting global labels named `done` in separate
+   included files should produce an assembler diagnostic. A file-specific
+   prefix provides the correction.
+5. A one-routine `lib/math.asm` contains Chapter 1's `gcd_u16`. A new
+   `08_gcd_client.asm` should include it, call GCD and store the result without
+   including string code.
+6. A `monitor.asmi` sketch defines two `extern` routines: character output
+   through A and key input returning A. Each record lists `in`, `out` and
+   `clobbers` without providing a Z80 body.
+7. An include graph should show `main.asm` including `constants.asm`,
+   `lib/strings.asm` and `lib/ring.asm` once each, and identify the cycle
+   introduced if `ring.asm` includes `main.asm`.
 
 ---
 

@@ -526,7 +526,7 @@ with the module's exported routine written in ordinary assembly:
 
 - `@`-exported names become callable from any block (references omit
   the `@`); plain labels stay private to the module.
-- Give each callable a `.routine` contract line; the generated program
+- Each callable needs a `.routine` contract line; the generated program
   checks register contracts strictly, and a call into a routine with
   no declared or inferable contract fails to assemble.
 - Glimmer places the `.import` in a dedicated section outside every

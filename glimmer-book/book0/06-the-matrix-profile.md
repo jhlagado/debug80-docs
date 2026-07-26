@@ -28,11 +28,11 @@ the loop shape it forces on the frame, the 32 bytes of memory your
 renders have been writing all along, and the library routines that
 write them.
 
-The chapter's program is *Compass*. Hold GO and
+The chapter's program is *Compass*. While GO is held,
 a dot runs clockwise around the rim of the 8x8, coloured by the
 quadrant it is crossing: red along the top, green down the right
 side, blue along the bottom, yellow climbing the left (north, east,
-south, west). Let go and it parks where it is. The obvious way to build this game is to
+south, west). Releasing GO leaves the dot where it is. The obvious way to build this game is to
 store the dot's x, its y, and its colour as facts, and have the
 movement rule update all
 three. That design rots: it keeps three cells that must
@@ -144,8 +144,8 @@ is the fact the game reasons about; drawing takes an x, a y and a
 colour; the compute derives all three in one place. A threshold
 ladder splits the rim into its quadrants: positions 0 to 6 lie on
 the top edge, 7 to 13 on the right, 14 to 20 on the bottom, 21 to 27
-on the left. Each arm converts `Position` to coordinates. Read
-the arms and you can see the dot going round: the top edge counts x
+on the left. In sequence, the arms show the dot going round:
+the top edge counts x
 upward, the bottom edge counts it back down, and the sides do the
 same with y. Every arm leaves its quadrant's colour in A and falls
 into the shared store at `_colour`.
@@ -159,13 +159,13 @@ block writes them together, so the render always reads a settled trio.
 and its consumer `PlaceDot` is a compute, an earlier phase, already
 finished for this frame. So the change to `Position` defers: the
 wrapper after `Advance`'s body stages it in `Next0`, and the dot you
-see moves on the frame after the pulse. Do the arithmetic on a lap and you get the
-game's tempo: 28 steps at 4 frames each is 112 frames a lap. Halve
-the period and you halve the lap.
+see moves on the frame after the pulse. The lap arithmetic gives the
+game's tempo: 28 steps at 4 frames each is 112 frames a lap. Halving
+the period halves the lap.
 
-Build it, run it, and hold GO: the dot sets off along the top in red
-and changes uniform at every corner. Release anywhere and it waits,
-lit, in the colour of its quadrant.
+In a running build, holding GO sends the dot along the top in red and
+changes its colour at every corner. Releasing GO leaves it waiting in
+the colour of its quadrant.
 
 ## The scan-shaped loop
 
@@ -224,8 +224,8 @@ even across the rows of any one sweep. The dark gap between sweeps is
 where your game runs, and it is a budget: a longer gap means fewer
 sweeps a second, and the LEDs spend a smaller share of their time
 lit. The few dozen instructions this book's blocks spend per frame
-move that share by amounts no eye will find; fill the blank window
-with heavy work and the display itself will tell you, dimming before
+move that share by amounts no eye will find. Heavy work that fills the
+blank window makes the display itself dim before
 anything else complains. And since the scan
 is by far the frame's largest cost, it paces the frame and makes the
 frame a useful unit of game time.
@@ -397,7 +397,7 @@ final blank leaves the 8x8 matrix dark for the game work to come.
 
 The colour ports
 feed whichever row is enabled, so the previous row must go dark
-before its data changes hands; skip that blank and each row would
+before its data changes hands. Without that blank, each row would
 flash its neighbour's colours for an instant, every row, every frame,
 a ghost of the picture smeared one row over. Then the dwell:
 `djnz` spinning B down from `ScanDwellPeriod`, 255, the wait that
@@ -413,8 +413,8 @@ digit is strobed here per beat. A value written through `HudWriteU16`
 therefore stays lit by the same trick as the 8x8. Sound and display
 resources build on both services.
 
-Step through a pass under Debug80 whenever you like: a breakpoint on
-`ScanFrame` in `compass.main.asm` catches the frame at its start.
+A breakpoint on `ScanFrame` in `compass.main.asm` catches the frame at
+its start, making a step-through of one scan pass possible in Debug80.
 
 Compass moves while GO is held and rests the moment it lifts; next
 chapter the program gets a clock of its own and moves while the

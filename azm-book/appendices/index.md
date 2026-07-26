@@ -8,7 +8,7 @@ has_toc: false
 ---
 # Appendices — Global Reference
 
-Use these appendices as lookup material for the whole AZM book series.
+These appendices provide lookup material for the whole AZM book series.
 
 ---
 

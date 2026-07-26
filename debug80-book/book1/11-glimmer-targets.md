@@ -15,11 +15,15 @@ Debug80 builds one other kind of program: Glimmer, a reactive game language that
 
 A `.glim` file becomes a target the same way an assembly file does, with one extra condition: it must contain a top-level `program` declaration.
 
-Add one with **+** beside the **Target** dropdown, or run **Debug80: Add Target**. Everything from the Targets chapter applies unchanged: the same dropdown, the same **−** to remove, and the same authoritative `debug80.json` configuration.
+The **+** beside the **Target** dropdown and **Debug80: Add Target**
+both add a Glimmer target. Everything from the Targets chapter applies
+unchanged: the same dropdown, the same **−** to remove, and the same
+authoritative `debug80.json` configuration.
 
 ## Glimmer build output
 
-Select a Glimmer target and click **Build**. The output differs slightly from an assembly build:
+With a Glimmer target selected, **Build** produces output that differs
+slightly from an assembly build:
 
 ```text
 build/
@@ -37,9 +41,11 @@ The pipeline does not emit a separate `.lst` listing or register-contracts repor
 
 ## Debugging Glimmer
 
-Set a breakpoint inside a block body and the debugger stops there, in your Glimmer source, with the registers and memory views showing the Z80 underneath.
+A breakpoint inside a block body stops in the Glimmer source, with the
+registers and memory views showing the Z80 underneath.
 
-Step past the end of a block and you continue into the generated assembly, which is how you see the machinery a declaration produced.
+Stepping past the end of a block continues into the generated
+assembly, exposing the machinery produced by the declaration.
 
 The editor features from the source-navigation chapter cover `.glim` too: Go to Definition, hover and workspace symbol search all work once a build is current.
 

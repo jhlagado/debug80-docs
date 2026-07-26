@@ -14,16 +14,16 @@ Debug80 turns Visual Studio Code into a Z80 development environment. You write a
 
 ## Chapters
 
-1. [Install Debug80](01-install-debug80.md)
-2. [Open a folder, make a project](02-open-a-folder.md)
+1. [Debug80 installation](01-install-debug80.md)
+2. [Opening a folder and creating a project](02-open-a-folder.md)
 3. [Targets](03-targets.md)
-4. [Build and run](04-build-and-run.md)
-5. [Run the debugger](05-build-and-step.md)
-6. [Inspect a running program](06-inspect-the-machine.md)
+4. [Building and running](04-build-and-run.md)
+5. [Running the debugger](05-build-and-step.md)
+6. [Inspecting a running program](06-inspect-the-machine.md)
 7. [Source navigation and ROM source](07-source-navigation.md)
 8. [Glimmer targets](11-glimmer-targets.md)
 9. [Video, input and serial](08-video-input-and-serial.md)
-10. [Send to TEC-1G hardware](09-send-to-hardware.md)
+10. [Sending to TEC-1G hardware](09-send-to-hardware.md)
 
 ## Appendices
 
@@ -31,4 +31,4 @@ Debug80 turns Visual Studio Code into a Z80 development environment. You write a
 - [Appendix B — Command reference](appendices/b-command-reference.md)
 - [Appendix C — Debug80 file formats](appendices/c-project-configuration.md)
 - [Appendix D — The AZM options row](appendices/d-azm-options-row.md)
-- [Appendix E — Copy monitor ROM source](10-copy-monitor-rom.md)
+- [Appendix E — Local monitor ROM source](10-copy-monitor-rom.md)

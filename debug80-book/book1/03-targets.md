@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 3
 ---
 
-[← Open a folder, make a project](02-open-a-folder.md) | [Book 1](index.md) | [Build and run →](04-build-and-run.md)
+[← Opening a folder and creating a project](02-open-a-folder.md) | [Book 1](index.md) | [Building and running →](04-build-and-run.md)
 
 # Targets
 
@@ -41,11 +41,11 @@ Eligible program files use the `.asm`, `.z80` or `.glim` extension. A Glimmer fi
 
 Among those, two names are treated as suggestions: `main.asm` and `main.z80`. A file with either name is marked **suggested** when Debug80 offers you a list.
 
-## Add a target
+## Adding a target
 
 The **+** beside the **Target** dropdown adds one. Debug80 lists every eligible program file that is not already a target, annotating the ones that match the naming convention, and you choose.
 
-Create `src/blink.asm`:
+The second target begins with `src/blink.asm`:
 
 ```asm
 ; A second program, so the project has something to choose between.
@@ -64,11 +64,16 @@ Pattern:
         .db     0x7d,0x00,0x7d,0x00,0x7d,0x00
 ```
 
-Click **+** beside **Target**, choose `src/blink.asm`, and a second target named `blink` appears in the dropdown. It inherits its settings from the existing target (same platform, same profile, same output folder), with only the source file and artifact name changed.
+The **+** beside **Target** opens the eligible-file list. Selecting
+`src/blink.asm` adds a target named `blink` to the dropdown. It
+inherits the existing target's platform, profile and output folder,
+with only the source file and artifact name changed.
 
-You can also right-click any `.asm`, `.z80` or `.glim` file in the Explorer and choose **Debug80: Set Program File** to point the current target at it instead.
+The Explorer context menu provides another route:
+**Debug80: Set Program File** points the current target at the selected
+`.asm`, `.z80` or `.glim` file.
 
-## Choose the active target
+## Selecting the active target
 
 The **Target** dropdown selects which one Build and Run act on. The choice is stored per project.
 
@@ -82,7 +87,7 @@ If you change the target while a debug session is running, Debug80 reports the c
 Debug80: Selected target blink. Press Build to apply it to the current session.
 ```
 
-## Remove a target
+## Removing a target
 
 The **−** beside the dropdown removes the selected target. Debug80 confirms first, and is explicit about what removal means:
 
@@ -96,7 +101,8 @@ The button is disabled when the selected entry is a discovered file rather than 
 
 ## A project with no targets
 
-Remove every target and the project is still a project, the state **No target yet** produces during initialization.
+A project remains valid after its last target is removed; this is the
+same state produced by **No target yet** during initialization.
 
 ![The panel for a project with no targets](../../assets/images/debug80-book/book1/panel-state-no-targets.svg)
 
@@ -125,4 +131,4 @@ Most actions in this chapter have a Command Palette equivalent. **Set Program Fi
 
 ---
 
-[← Open a folder, make a project](02-open-a-folder.md) | [Book 1](index.md) | [Build and run →](04-build-and-run.md)
+[← Opening a folder and creating a project](02-open-a-folder.md) | [Book 1](index.md) | [Building and running →](04-build-and-run.md)

@@ -122,10 +122,10 @@ simplest: two constant stores and no branch. `DrawDot` now draws from
 both facts (`on DotX, DotY`), so movement on either axis redraws the
 dot.
 
-Build it, run it, and then do one thing for me: hold 6 while tapping
-2. The dot runs right, steps up on each tap, and carries on running
-right. That feel of a steady run with single steps mixed in is what
-`rising` and `held` let you design.
+Running Rover while holding 6 and tapping 2 demonstrates the
+difference. The dot runs right, steps up on each tap, and carries on
+running right. That feel of a steady run with single steps mixed in is
+what `rising` and `held` let you design.
 
 ## The keypad, by name
 
@@ -152,10 +152,10 @@ in between.
 Every binding chooses one of two shapes, and the choice is a game
 design decision before it is a technical one:
 
-- `rising` fires once, on the frame the key goes down. Press again to
-  fire again. Choose it for *actions*: fire, rotate, pause, start.
+- `rising` fires once, on the frame the key goes down. Another press
+  fires it again, which suits *actions*: fire, rotate, pause, start.
 - `held period N` fires on the press, then again every N frames while
-  the key stays down. Choose it for *movement*, and tune N to taste: a
+  the key stays down. It suits *movement*, with N setting the pace: a
   small period is a fast walk, a large one a deliberate step.
 
 In a
@@ -187,8 +187,8 @@ bind key any rising -> Wake
 ```
 
 `any` fires its pulse on every new press, whichever key it is, and it
-fires alongside the named bindings. Press GO and both `Home` and
-`Wake` fire in the same frame. It comes in the rising shape only, and
+fires alongside the named bindings. A press of GO therefore fires
+both `Home` and `Wake` in the same frame. It comes in the rising shape only, and
 it catches one thing: *the player touched the machine*. Title screens
 wait on it.
 

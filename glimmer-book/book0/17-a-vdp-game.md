@@ -22,14 +22,15 @@ get picked up by something floating above it?
 This chapter builds a
 complete game around those two questions: *Lanternfly*. You are a
 white fly over a night garden, steered with 2/4/6/8, one pixel per
-frame. A lantern glows somewhere in the grid; reach its cell and you
-gather it, the score climbs on the LCD, and a fresh lantern appears
+frame. A lantern glows somewhere in the grid; when the fly reaches its
+cell, the lantern is gathered, the score climbs on the LCD, and a fresh one appears
 somewhere else. A wasp hunts you the whole time, and every lantern
 you take quickens its stride. When it reaches you, the game ends.
 Around all of it stand the splash, playing and game-over cards, now
 running over VRAM shadows. The complete source ships with this book as
-[lanternfly.glim](code/lanternfly.glim). Keep it open beside the
-chapter: the text concentrates on the parts specific to this game,
+[lanternfly.glim](code/lanternfly.glim). Keeping it open beside the
+chapter connects the discussion to the complete source. The text
+concentrates on the parts specific to this game,
 while the four movement effects follow Grove and the GameOver card
 follows Skyfall.
 
@@ -37,8 +38,8 @@ follows Skyfall.
 
 ## Lanternfly on paper
 
-Start with the design in Glimmer's terms before writing any block.
-For Lanternfly, the facts
+Before any block is written, the design can be stated in Glimmer's
+terms. For Lanternfly, the facts
 split into two coordinate systems, and that split is the whole
 chapter in miniature. Sprites glide, so `FlyX`/`FlyY` and
 `WaspX`/`WaspY` hold the two movers' top-left pixels. The lantern
@@ -51,8 +52,9 @@ wasp, `AnyKeyP` starts and restarts, and `GateP` opens the restart
 gate. Two schedules drive `ChaseTick` and `GateP`: `Pace`, a writable
 oscillator that is at once the wasp's stride and the game's difficulty, and
 `Wait`, the game-over one-shot. These timers serve the same roles as
-Skyfall's, and the three cards form the same loop. Run the budget check: eight facts,
-seven moments, and `CurrentCard` spend 16 of the 32 change-flag
+Skyfall's, and the three cards form the same loop. The budget check
+counts eight facts, seven moments, and `CurrentCard`, which spend 16
+of the 32 change-flag
 cells.
 
 ## The scene and the declarations
@@ -474,8 +476,9 @@ card's invitation, so the row reads `LAMPS 07` and nothing else:
 whole row owned, every time the score changes.
 
 The counted digits stop at two: past 99 the tens character would
-step beyond `'9'` into the character set's punctuation. Treat 99 as
-this scoreboard's ceiling (at the pace the wasp closes in, a two-digit
+step beyond `'9'` into the character set's punctuation. This
+scoreboard therefore treats 99 as its ceiling (at the pace the wasp
+closes in, a two-digit
 game is a long one), and a
 version built to run richer needs either a cap where the digits end
 or a hundreds pass in the same counting style.
@@ -494,8 +497,9 @@ strikes the lantern.
 
 ## Inside the generated file
 
-Build the full source (`glimmer build lanternfly.glim` with the
-companion file) and open `lanternfly.main.asm` at the render blocks:
+Building the full source (`glimmer build lanternfly.glim` with the
+companion file) produces these render blocks in
+`lanternfly.main.asm`:
 
 ```asm
 ; --- render block PlaceFly ---
@@ -535,8 +539,8 @@ sprite cells also feed `Gather` and `Caught` (logic blocks whose
 phase has already run), so that whole change defers through `Next0`,
 and the fly and wasp take the stage one frame later.
 
-The same staging sets what motion costs. Hold key 6. Frame N:
-`MoveRight` steps `FlyX`, and the change
+The same staging sets what motion costs. With key 6 held, frame N runs
+`MoveRight`, which steps `FlyX`, and the change
 defers, because `Gather` and `Caught` sit in the same phase. Frame
 N+1: the two effects test the new position, `PlaceFly` runs, and
 `SpriteSet` files two shadow bytes (y, then x) and sets

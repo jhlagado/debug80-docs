@@ -84,7 +84,7 @@ Wrote demo.main.d8.json (11 block segments attributed to .glim source)
 
 | Flag | Effect |
 |---|---|
-| `-o, --output <file>` | Where the generated assembly goes. The default, `<entry>.main.asm`, is the name Debug80 discovers as an entry point; pick another name only for output you will wire up yourself. |
+| `-o, --output <file>` | Where the generated assembly goes. The default, `<entry>.main.asm`, is the name Debug80 discovers as an entry point; another name requires explicit integration. |
 | `--org <addr>` | Assembly origin. The default `$4000` is where MON-3 expects user code; `--org $6000` moves the generated `.org` line and everything after it. |
 | `--no-check` | Generate only; the register-contract check is skipped. Generation-only runs print `Wrote demo.main.asm` without the check note. |
 | `--deps` | Print the dependency report and exit. Nothing is written. |
@@ -132,8 +132,8 @@ Debug80 finds Glimmer programs two ways.
 
 **By convention.** A file named `main.glim`, or ending in
 `.main.glim`, whose first declaration is `program`, is discovered as
-a target: click Run and Debug80 builds it through Glimmer and runs
-the result. Part files open with their own declarations (`effect`,
+a target. The Run action makes Debug80 build it through Glimmer and
+launch the result. Part files open with their own declarations (`effect`,
 `state`), so the `program` check keeps them out of the target list.
 
 **By explicit entry.** A `debug80.json` target names any `.glim`

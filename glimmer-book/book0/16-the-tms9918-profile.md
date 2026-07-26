@@ -183,8 +183,8 @@ begin
 end
 ```
 
-Read the middle of the file first: it is Rover with pixel
-coordinates. The clamps say 248 and 184 now because positions name
+The middle of the file is Rover with pixel coordinates. The clamps
+say 248 and 184 now because positions name
 the sprite's top-left pixel on a 256x192 screen and the pattern is 8
 pixels square. Everything genuinely new sits at the two ends: three
 resource declarations at the top, and two block bodies, `PlantScene`
@@ -221,7 +221,7 @@ GlimSpritePats:
 Moth              .equ 0   ; sprite slot + pattern
 ```
 
-Cover the labels and you can still read the moth in the binary: each
+Even without the labels, the moth remains visible in the binary: each
 `X` became a 1, each dot a 0.
 
 A `tile` carries two colours, foreground `on` background, and its
@@ -305,14 +305,13 @@ end
 An op expands inline where it is written, so `sprite_at Moth, MothX,
 MothY` in `PlaceMoth` becomes those six instructions: read the two
 cells into D and E, load the slot, call `SpriteSet`. `tile_at` takes
-immediate coordinates, which suits placing a scene; when a column or
-row arrives in a register at runtime, load A, D, and E yourself and
-call `NamePut` directly.
+immediate coordinates, which suits placing a scene. When a column or
+row arrives in a register at runtime, the block loads A, D, and E and
+calls `NamePut` directly.
 
 ## The commit-shaped loop
 
-Build Grove and open `grove.main.asm`
-at the loop:
+The loop in Grove's generated `grove.main.asm` begins:
 
 ```asm
 ; --- runtime loop ---
@@ -343,7 +342,7 @@ set, and each name-table row whose dirty bit is marked. Only after
 the shadows are flushed does the frame poll keys and run your phases,
 whose renders write the shadows anew.
 
-Follow a held key 6 through one frame. The poll fires `Right`;
+During one frame with key 6 held, the poll fires `Right`;
 `MoveRight` steps `MothX`; render is a later phase, so the change arrives the same
 frame, `PlaceMoth` runs, and `sprite_at` writes the new x into
 `SpriteShadow` and sets `SpriteDirty`. The screen still shows the old

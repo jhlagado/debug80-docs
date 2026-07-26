@@ -129,7 +129,7 @@ JumpTable:
         .db LSB(routine_c), MSB(routine_c)
 ```
 
-For source ported from assemblers that used `LOW()` or `HIGH()`, replace those calls with `LSB` and `MSB`.
+Source ported from assemblers that used `LOW()` or `HIGH()` requires the AZM names `LSB` and `MSB`.
 
 ---
 

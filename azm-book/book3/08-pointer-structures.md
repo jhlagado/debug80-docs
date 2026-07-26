@@ -8,7 +8,10 @@ nav_order: 9
 
 # Chapter 8 — Pointer Structures
 
-Chapter 5 packed several fields into one record, but every byte still lived in a table you indexed by number. This chapter chains **nodes** through **stored addresses**: each record holds data plus a `.word` link to the next node (or zero for "none").
+Chapter 5 packed several fields into one record, but every byte still lived in
+a table indexed by number. This chapter chains **nodes** through **stored
+addresses**: each record holds data plus a `.word` link to the next node, or
+zero for "none".
 
 A pointer is a 16-bit address copied into a `.word` field.
 
@@ -20,15 +23,19 @@ The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list
 
 A ring buffer (Chapter 5) keeps all elements in one byte array and moves **indices**. Inserting in the middle of a plain array means copying bytes, expensive on a small machine.
 
-A **singly linked list** stores each element in its own small record. Insert at the **head** is a few stores: wire the new node's link to the old head, then store the new node's address in `list_head`.
+A **singly linked list** stores each element in its own small record. Insertion
+at the **head** takes only a few stores: the new node links to the old head,
+and `list_head` receives the new node's address.
 
-The trade is explicit: you pay an extra two bytes per node for the link, and you cannot jump to "element 4" in one arithmetic step. You follow links from the head until you arrive or hit **null**.
+The trade is explicit: each node costs an extra two bytes for the link, and
+"element 4" cannot be reached in one arithmetic step. Traversal follows links
+from the head until it reaches the requested node or **null**.
 
 ---
 
 ## Node layout: data plus link
 
-Describe the shape once with `.type`:
+The `.type` declaration describes the shape once:
 
 ```asm
 ListNode .type
@@ -91,7 +98,7 @@ After assembly, RAM holds this:
 
 ---
 
-## Load the head pointer into HL
+## Loading the head pointer into HL
 
 Book 2 Chapter 4's absolute word load applies:
 
@@ -101,7 +108,8 @@ Book 2 Chapter 4's absolute word load applies:
 
 That expands to a read of the little-endian word at `list_head`. HL now points at `node_a`'s first byte (the `value` field at offset 0).
 
-To read **only** the link field of the node currently in HL:
+Reading **only** the link field of the node currently in HL requires the
+field offset:
 
 ```asm
     ld bc, LIST_NEXT
@@ -198,7 +206,7 @@ The demo searches for `$22` and expects `find_hit = 1` and `find_node` equal to 
 
 ---
 
-## Insert at head: `list_push_head`
+## Head insertion: `list_push_head`
 
 **Insert at head** needs a free node address (here `node_spare`), a byte value in A and the current head word:
 
@@ -223,12 +231,13 @@ list_push_head:
     ret
 ```
 
-Steps in plain terms:
+The insertion consists of four steps:
 
-1. `push af` holds the incoming value while you read the old head.
-2. Read the old head link into BC (low byte in C, high in B).
-3. `pop af` and store the payload at `(de)`; store BC into `next` via `ex de, hl`.
-4. Store HL, which now holds the new node address, into `list_head`.
+1. `push af` holds the incoming value while the old head is read.
+2. BC receives the old head link, with the low byte in C and the high byte in B.
+3. `pop af` restores the payload for storage at `(de)`, and `ex de, hl` makes
+   the new node available for storing BC into `next`.
+4. HL now holds the new node address and is stored in `list_head`.
 
 After `ld de, node_spare` / `ld a, $40` / `call list_push_head`, the list order is spare → a → b → c. The new sum is `$00A2` (162).
 
@@ -260,7 +269,8 @@ For the head variable:
     ld hl, <word>list_head
 ```
 
-Runtime traversal cannot put HL inside brackets; use explicit `add hl, bc` with `LIST_NEXT` as the chapter routines do.
+Runtime traversal cannot put HL inside brackets, so the chapter routines use
+explicit `add hl, bc` with `LIST_NEXT`.
 
 ---
 
@@ -274,7 +284,8 @@ Pointer routines follow the same `.routine` declarations as the ring buffer and 
 | `.routine out` | HL = sum, found node or 0; carry for find |
 | `.routine clobbers` | Include every register the link walk destroys |
 
-Document whether zero in HL means end-of-list or "not found". Here both use HL = 0 with carry distinguishing find success.
+The contract documents whether zero in HL means end-of-list or "not found".
+Here both use HL = 0, with carry distinguishing a successful find.
 
 ```sh
 azm --rc warn examples/08_linked_list.asm
@@ -295,10 +306,10 @@ right   .word
 ```
 
 An insertion routine needs the **address of a link word**, not merely the node
-address. Start HL at the address of the root word. Each iteration loads the node
-address stored there. A zero word is an empty slot, so the routine writes the
-new node address into that link. Otherwise it compares the key and changes HL
-to the address of the existing node's `left` or `right` word.
+address. HL starts at the address of the root word. Each iteration loads the
+node address stored there. A zero word is an empty slot, so the routine writes
+the new node address into that link. Otherwise it compares the key and changes
+HL to the address of the existing node's `left` or `right` word.
 
 ![HL holds the address of a link word, never the address of a node, so one pair of stores attaches a node anywhere in the tree](../../assets/images/azm-book/book3/bst-insert.svg)
 
@@ -392,21 +403,34 @@ azm examples/08_linked_list.asm
 azm --rc warn examples/08_linked_list.asm
 ```
 
-Single-step `list_sum_u16` once: watch HL jump from `node_a` to `node_b` to `node_c` by loading `next`, not by adding a stride to a table base.
+A single-step trace of `list_sum_u16` shows HL jumping from `node_a` to
+`node_b` to `node_c` by loading `next`, rather than by adding a stride to a
+table base.
 
 ---
 
 ## Exercises
 
-1. Draw the memory diagram after inserting `$40` at the head of the chapter list. Which node does `list_head` point at? What is `node_a.next`?
-2. Without assembling, write the null test for DE instead of HL. Why does `or e` alone fail to test a 16-bit pointer?
-3. Add `list_count_u8`: return the number of nodes in A. Document `.routine in` / `.routine out` / `.routine clobbers`. Empty list should return 0.
-4. Implement **insert at tail** using a spare node and a walk to the last link. How many memory reads does tail insert cost versus head insert?
-5. Change `next` to `.addr` in the layout only. Does any instruction encoding change? What changes in the reader's understanding?
-6. Write `list_get_u8`: given zero-based index B, return the value byte in A (carry clear if index out of range). Do not use multiplication; advance B times.
-7. For a three-node `TreeNode` pool, initialize the nodes for keys `5`, `3` and
-`8`, then pass the address of a `root` word to `bst_insert_u8` for each node.
-Draw the tree boxes and `.word` arrows on paper.
+1. A memory diagram should show the list after `$40` is inserted at its head,
+   identifying the node addressed by `list_head` and the value of
+   `node_a.next`.
+2. The null test should use DE rather than HL and be written without
+   assembling. Its explanation should show why `or e` alone cannot test a
+   16-bit pointer.
+3. A `list_count_u8` routine returns the number of nodes in A and includes
+   `.routine in`, `.routine out` and `.routine clobbers`. An empty list returns
+   0.
+4. An **insert at tail** routine uses a spare node and walks to the final link.
+   Its memory reads can then be compared with those required for head
+   insertion.
+5. A layout-only change from `next` to `.addr` should preserve the instruction
+   encoding while making the field's meaning clearer.
+6. A `list_get_u8` routine accepts a zero-based index in B and returns the value
+   byte in A, with carry clear when the index is out of range. It advances B
+   times rather than using multiplication.
+7. A three-node `TreeNode` pool uses keys `5`, `3` and `8`, with each node
+   inserted through the address of a `root` word. A paper diagram should record
+   the resulting tree boxes and `.word` links.
 
 ---
 

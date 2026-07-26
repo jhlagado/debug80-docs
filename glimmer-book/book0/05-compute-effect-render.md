@@ -243,9 +243,8 @@ whatever tells the story best. The promise has a boundary, though: it
 covers triggers. Bodies are real Z80 working on live memory, and
 within one phase the dispatchers call blocks in file order, so two
 same-phase blocks that read and write the same cell directly can still
-see each other's work. In practice: keep one gameplay invariant inside
-one effect, or inside a routine it calls, and the boundary never
-bites.
+see each other's work. Keeping one gameplay invariant inside one
+effect, or inside a routine it calls, avoids that order dependency.
 
 ## The program, as a report
 

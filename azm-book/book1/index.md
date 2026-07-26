@@ -10,7 +10,7 @@ has_toc: false
 
 # AZM Book 1 — Assembler Manual
 
-If you want a guided introduction to Z80 programming first, start with [AZM Book 2 — Z80 Fundamentals](../book2/index.md).
+[AZM Book 2 — Z80 Fundamentals](../book2/index.md) provides a guided introduction to Z80 programming before the reference material in this manual.
 
 ## Main Path
 

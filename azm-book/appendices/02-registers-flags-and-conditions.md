@@ -105,4 +105,4 @@ Useful byte landmarks:
 | `JR cc,target` | `-128` to `+127` bytes from the next instruction |
 | `DJNZ target` | `-128` to `+127` bytes from the next instruction |
 
-If the target is farther away, use `JP` instead.
+Targets outside that range require `JP`.

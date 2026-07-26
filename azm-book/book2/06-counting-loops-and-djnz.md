@@ -32,7 +32,7 @@ loop_top:
 
 `djnz label` does exactly what its name says:
 
-1. Decrement B by one.
+1. B decreases by one.
 2. If B is now non-zero, jump to `label`.
 3. If B is now zero, fall through to the next instruction.
 
@@ -43,7 +43,7 @@ than the `dec b / jr nz` form (2 bytes vs 3) and two bytes smaller than
 `djnz` is a relative jump, like `jr`. Its signed displacement is measured from
 the address after the instruction, giving a target range of 128 bytes backward
 to 127 bytes forward from that address. If the loop body is too long, the
-assembler reports an error and you must use `dec b / jp nz` instead.
+assembler reports an error and the loop requires `dec b / jp nz` instead.
 
 ---
 
@@ -82,8 +82,8 @@ Total: 256 iterations.
 `ld b, 0` before `djnz` is valid Z80; it gives 256 iterations and some
 programs use it deliberately for exactly that reason.
 
-**Never call a DJNZ loop with B = 0 when you intend zero iterations.** If the
-iteration count can be zero, test for it before the loop:
+**A DJNZ loop must not receive B = 0 when zero iterations are intended.** A
+runtime count that may be zero requires a test before the loop:
 
 ```asm
 ld a, (count_value)
@@ -103,8 +103,7 @@ pre-test is needed.
 
 ## Register State After a Loop
 
-Consider the
-counted loop from Section A of the example below, which sums the five bytes
+The counted loop from Section A of the example below sums the five bytes
 `3, 7, 2, 8, 5`:
 
 ```asm
@@ -300,7 +299,7 @@ reaching fields without changing HL before every load.
 
 ## Exercises
 
-**1. The zero-count trap.** Explain what happens when this code runs. How many times does the loop body execute? Why?
+**1. The zero-count trap.** The explanation should state how many times this loop body executes and why:
 
 ```asm
 ld a, (count_value)   ; suppose count_value holds 0 at runtime
@@ -310,9 +309,9 @@ loop_top:
   djnz loop_top
 ```
 
-Write the corrected version that skips the loop entirely when `count_value` is zero.
+The corrected version must skip the loop entirely when `count_value` is zero.
 
-**2. Modify the sum loop.** The DJNZ sum loop from the chapter accumulates all five entries in `addends: .db 3, 7, 2, 8, 5`. Change the loop so that it finds the **minimum** value instead of the sum. The result should be stored in a variable named `minimum`. _(Hint: start `minimum` at 255 and update it whenever the current byte is smaller. Chapter 5's `cp` and `jr nc` are the tools.)_
+**2. A minimum loop.** The DJNZ sum loop from the chapter accumulates all five entries in `addends: .db 3, 7, 2, 8, 5`. This version must instead find the **minimum** value and store it in a variable named `minimum`. A starting value of 255 allows each smaller byte to replace the current minimum; Chapter 5's `cp` and `jr nc` provide the comparison.
 
 **3. Sentinel loop: find the zero.** A table of bytes ends with a zero sentinel:
 
@@ -321,9 +320,9 @@ Write the corrected version that skips the loop entirely when `count_value` is z
 message: .db $41, $42, $43, $00, $44, $45
 ```
 
-Write a sentinel loop that scans `message` and stores the **index** (0-based position) of the first zero byte into a variable named `zero_pos`. The loop must also handle the case where no zero is found within the first six bytes: store `$FF` in `zero_pos` in that case.
+The required sentinel loop scans `message` and stores the **index** (0-based position) of the first zero byte in a variable named `zero_pos`. When no zero appears in the first six bytes, `zero_pos` must receive `$FF`.
 
-**4. Loop analysis.** The flag-exit loop in the chapter example exits when the accumulated sum reaches or exceeds `$10` (16). The data is `3, 7, 2, 8, 5`. Trace through the loop iteration by iteration:
+**4. Loop analysis.** The flag-exit loop in the chapter example exits when the accumulated sum reaches or exceeds `$10` (16). The following table records an iteration-by-iteration trace over `3, 7, 2, 8, 5`:
 
 | Iteration | Byte added | A after add | `cp $10` → C set? | Exit? |
 | --------- | ---------- | ----------- | ----------------- | ----- |
@@ -332,7 +331,7 @@ Write a sentinel loop that scans `message` and stores the **index** (0-based pos
 | 3         | 2          | ?           | ?                 | ?     |
 | 4         | 8          | ?           | ?                 | ?     |
 
-Fill in the table. After the loop exits, what value is stored in `flagval`? Now change the threshold from `$10` to `$0C` (12) and redo the trace. Does the loop exit one iteration earlier?
+Completing the table establishes the value stored in `flagval`. Repeating the trace with a threshold of `$0C` (12) shows whether the loop exits one iteration earlier.
 
 ---
 

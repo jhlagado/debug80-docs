@@ -26,7 +26,9 @@ Writing in assembly means you decide what goes in every register, what address e
 
 The Z80 is a real CPU from 1976, still in production, and used in millions of devices.
 
-The Z80 has a small instruction set. There are a few hundred instructions, and only a few dozen that appear in everyday programming. Compare that to a modern x86 processor, which has thousands.
+The Z80 has a small instruction set. There are a few hundred instructions, and
+only a few dozen that appear in everyday programming. A modern x86 processor
+has thousands.
 
 The Z80 has a clean memory model. A 16-bit address bus gives 65,536 bytes of addressable space. Everything (code, data, the stack) lives in that flat array. There is no virtual memory, no protected mode, no operating system in the way.
 
@@ -38,7 +40,14 @@ The Z80 has a proper set of registers, an index register for structured data acc
 
 AZM is an assembler for the Z80, written in the tradition of ASM80: a flat, instruction-level assembler where the machine is always visible.
 
-You can use AZM in two ways. Install the standalone Node.js CLI (`npm install -g @jhlagado/azm`) and run `azm file.asm` from a terminal. Or open the same `.asm` in VS Code with the **Debug80** extension: when you start debugging (F5), Debug80 assembles your source as part of the launch workflow. Breakpoints, stepping, registers, and memory inspection use the generated listing and program image. See [Debug80 Book 1 — Getting Started](../debug80-book/book1/) for extension install and `debug80.json` project setup.
+AZM supports two workflows. The standalone Node.js CLI is installed with
+`npm install -g @jhlagado/azm` and assembles a source file with `azm file.asm`.
+The same `.asm` file can instead run through the **Debug80** extension in VS
+Code. Starting a Debug80 session assembles the source as part of the launch
+workflow, and the generated listing and program image support breakpoints,
+stepping, register display and memory inspection. [Debug80 Book 1 — Getting
+Started](../debug80-book/book1/) covers extension installation and
+`debug80.json` project setup.
 
 AZM does not turn subroutines into declarations or invent branches you did not write. Labels are addresses. `.db` places bytes. `call` and `ret` are what you write when you want a subroutine call.
 
@@ -94,17 +103,26 @@ You will need a way to **assemble** course examples and a way to **run** them to
 
 **Assemble**
 
-- **Terminal:** Node.js 20+ and the AZM CLI: `npm install -g @jhlagado/azm`, then `azm path/to/program.asm` (or build AZM from source with `npm run build` and use `npm run azm --` in the AZM repo).
-- **VS Code + Debug80:** Install the Debug80 extension, add a `debug80.json` target for your `.asm` file, and press **F5**. Debug80 assembles as part of starting a debug session; you do not need a separate `azm` step for day-to-day work in the editor. Setup is in [Debug80 Book 1 — Getting Started](../debug80-book/book1/).
+- **Terminal:** This path requires Node.js 20+ and the AZM CLI.
+  `npm install -g @jhlagado/azm` installs it, and `azm
+  path/to/program.asm` assembles a program. A source checkout of AZM provides
+  the alternative `npm run build` followed by `npm run azm --`.
+- **VS Code + Debug80:** This path uses the Debug80 extension and a
+  `debug80.json` target for the `.asm` file. The Debug80 Run action assembles
+  the target as part of starting a debug session, so day-to-day editor work
+  needs no separate `azm` step. Setup is covered in [Debug80 Book 1 — Getting
+  Started](../debug80-book/book1/).
 
 **Run and verify**
 
-- With Debug80, F5 also loads the program into the emulated Z80 and opens the debugger (step mode, registers, memory, breakpoints on source lines).
-- Without VS Code, assemble with `azm`, then load the `.hex` (or binary) into a desktop emulator such as FUSE or ZEsarUX.
+- With Debug80, the Run action also loads the program into the emulated Z80 and
+  opens the debugger, including step mode, registers, memory and source
+  breakpoints.
+- Without VS Code, `azm` produces the `.hex` or binary image accepted by a
+  desktop emulator such as FUSE or ZEsarUX.
 
 A text editor is enough for the CLI path.
 
 You do not need prior programming experience.
 
-Start with [Book 2, Chapter 1](book2/01-the-computer.md).
-
+[Book 2, Chapter 1](book2/01-the-computer.md) begins the course.

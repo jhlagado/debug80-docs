@@ -10,7 +10,9 @@ nav_order: 6
 
 Chapter 2 indexed bytes in a table. Real programs store **records**: several fields packed together (coordinates, queue indices, flags) with a stride larger than 1.
 
-You can keep field offsets in comments and hope they stay correct. Wirth's advice is the opposite: fix the **representation** first, then write the algorithm against that layout. AZM's `.type` blocks are that representation.
+Field offsets kept only in comments can drift away from the data they describe.
+Wirth's alternative fixes the **representation** first, then expresses the
+algorithm against that layout. AZM's `.type` blocks provide that representation.
 
 Layout types from Book 2 Chapter 13 come back here, driving field reads and writes through HL and IX and then building a **ring buffer**, a fixed-size FIFO queue over a byte table. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
 
@@ -29,7 +31,7 @@ Shifting the whole table on every pop is wasteful on a small machine. A **ring b
 
 ---
 
-## Define the layout once
+## Defining the layout once
 
 A record is a packed field list inside `.type` / `.endtype`:
 
@@ -57,7 +59,7 @@ ring_state:
 
 ![Three control bytes beside the eight they control, and the offset constants that name them](../../assets/images/azm-book/book3/ring-state-layout.svg)
 
-Name the compile-time constants you will use in instructions:
+Named compile-time constants make field offsets usable in instructions:
 
 ```asm
 RING_HEAD   .equ offset(RingState, head)
@@ -66,7 +68,8 @@ RING_COUNT  .equ offset(RingState, count)
 STATE_SIZE  .equ sizeof(RingState)
 ```
 
-If you add a field to `RingState`, reassemble and every `.equ` that uses `offset` updates.
+Adding a field to `RingState` causes every `.equ` based on `offset` to update at
+the next assembly.
 
 ---
 
@@ -104,7 +107,9 @@ ring_state:
 
 These forms are equivalent to `.ds 8` and `.ds 3` here. With a literal length you can also write `.ds byte[8]`; that documents element width when capacity is fixed in source. Initialized data still uses `.db` / `.dw`; `.ds` only reserves space.
 
-Labels stay **untyped**. `ring_state` is an address, not a permanent `RingState` variable. You pass that address in a register and use `offset(RingState, field)` constants at the access site.
+Labels stay **untyped**. `ring_state` is an address, not a permanent `RingState`
+variable. A routine passes that address in a register and uses
+`offset(RingState, field)` constants at the access site.
 
 ---
 
@@ -124,7 +129,8 @@ For offsets 0–127, the constant fits in `(ix + d)` form, which is usually shor
 
 ### IX-relative access
 
-Load the record base into IX once, then use symbolic displacements:
+Loading the record base into IX once allows each field access to use a symbolic
+displacement:
 
 ```asm
   ld ix, ring_state
@@ -136,7 +142,8 @@ Load the record base into IX once, then use symbolic displacements:
 
 ### Run-time index into the byte table
 
-`head` and `tail` are dynamic indices (0 .. RING_CAP−1). To address `ring_buf[head]`:
+`head` and `tail` are dynamic indices (0 .. RING_CAP−1). The address of
+`ring_buf[head]` is formed at runtime:
 
 ```asm
   ld a, (ix + RING_HEAD)
@@ -188,7 +195,9 @@ Runtime registers are rejected inside the brackets:
   ld hl, <byte[8]>ring_buf[hl]    ; error: HL is not a constant
 ```
 
-Use layout casts at call sites where the index is fixed (initialization, debug checks, table-driven dispatch with `.equ` indices). Use HL/BC arithmetic when the index lives in a register during push/pop.
+Layout casts suit call sites with fixed indices, including initialization,
+debug checks and table-driven dispatch with `.equ` indices. HL/BC arithmetic is
+required when a push or pop keeps the index in a register.
 
 The long form and the cast must agree:
 
@@ -232,7 +241,7 @@ After pushing `$11`, `$22`, `$33` and then popping all three, the buffer may sti
 
 ![Four states of the same eight bytes, including the popped bytes that are still in RAM and no longer in the queue](../../assets/images/azm-book/book3/ring-buffer.svg)
 
-When `head` or `tail` would become `RING_CAP`, wrap to 0:
+When `head` or `tail` would become `RING_CAP`, the index wraps to 0:
 
 ```asm
 ring_advance_index:
@@ -243,7 +252,9 @@ ring_advance_index:
     ret
 ```
 
-If `RING_CAP` is a power of two (8, 16, 32, …), you can replace `cp` / `xor` with `and RING_CAP - 1` after `inc a`, a one instruction wrap. The compare form works for any capacity and is what the example uses.
+When `RING_CAP` is a power of two (8, 16, 32, …), `and RING_CAP - 1` after
+`inc a` can replace `cp` / `xor`, reducing the wrap to one instruction. The
+compare form works for any capacity and is what the example uses.
 
 ---
 
@@ -324,11 +335,16 @@ Book 2 Chapter 12 introduced the `.routine` directive and register contracts.
 | `.routine out` | Registers and flags that carry meaningful values across returning exits |
 | `.routine clobbers` | Registers destroyed (not restored) |
 
-Place `.routine` immediately before the callable entry. Use `@name:` only when the source unit exports that symbol; call sites always use the plain symbol name, such as `call ring_push`.
+The `.routine` directive appears immediately before the callable entry.
+`@name:` is reserved for symbols exported from a source unit; call sites use the
+plain symbol name, such as `call ring_push`.
 
-For `ring_push` and `ring_pop`, put success/failure meaning in the human `;` line and name the carrier in `.routine out` as `carry` (not `F.C`). The shown `ring_pop` returns A = 0 on its empty path, but callers still must test carry before treating A as a popped byte.
+For `ring_push` and `ring_pop`, the human `;` line states the meaning of success
+and failure, while `.routine out` names the carrier as `carry` rather than
+`F.C`. The shown `ring_pop` returns A = 0 on its empty path, but carry still
+determines whether A contains a popped byte.
 
-Run the checker when you want machine verification:
+The register-contract checker provides machine verification:
 
 ```sh
 azm --rc warn examples/05_ring_buffer.asm
@@ -346,7 +362,7 @@ The companion program:
 4. Pushes eight more bytes to fill the ring, then attempts a ninth push with `$CC`.
 5. Stores `push_ok` = 0 if that push failed (carry clear), 1 if it incorrectly succeeded.
 
-After `halt`, inspect:
+After `halt`, the expected values are:
 
 | Label | Address | Expected |
 |-------|---------|----------|
@@ -358,7 +374,7 @@ After `halt`, inspect:
 
 ## Records inside records
 
-When a field is itself a layout, use `.field`:
+When a field is itself a layout, `.field` embeds it:
 
 ```asm
 Pos .type
@@ -399,19 +415,31 @@ azm examples/05_ring_buffer.asm
 azm --rc warn examples/05_ring_buffer.asm
 ```
 
-Single-step through `ring_push` once with the emulator: watch `head` and `count` update via `(ix + RING_HEAD)` and confirm HL targets the expected cell in `ring_buf`.
+A single-step trace of `ring_push` shows `head` and `count` changing through
+`(ix + RING_HEAD)` while HL targets the corresponding cell in `ring_buf`.
 
 ---
 
 ## Exercises
 
-1. Without assembling, compute `sizeof(RingState)`, `offset(RingState, tail)` and `offset(RingState, count)` for the chapter's three-byte layout. Write the three `.equ` lines.
-2. Add a `flags` byte to `RingState` after `count`. Which `.equ` lines change? Which push/pop code must change?
-3. Rewrite the `ring_buf[head]` address setup using DE as base and keeping the index in C. Keep the same contract on `ring_push`.
-4. Change `RING_CAP` to 16 and use `and 15` in `ring_advance_index` instead of `cp` / `xor`. Prove on paper that `head` never reaches 16.
-5. Write a `ring_peek` routine that returns the oldest byte in A without removing it. Document `.routine in`, `.routine out` and `.routine clobbers`; fail with carry clear when empty.
-6. Load the address of `ring_state.head` into HL using a layout cast, then using `ring_state + offset(RingState, head)`. Assemble both forms and confirm the same immediate.
-7. Reserve `Event` records with `Event .type` / `code .byte` / `param .word` / `.endtype` and `.ds Event[4]`. Write a loop that zeroes every `param` field using `sizeof(Event)` as stride.
+1. The first exercise calculates three `.equ` values without assembling:
+   `sizeof(RingState)`, `offset(RingState, tail)` and
+   `offset(RingState, count)` for the chapter's three-byte layout.
+2. Adding a `flags` byte after `count` should be followed by an account of which
+   `.equ` lines and which push/pop instructions change.
+3. An alternative `ring_buf[head]` address calculation uses DE as the base and
+   C as the index while retaining the existing `ring_push` contract.
+4. A capacity of 16 can use `and 15` in `ring_advance_index` instead of `cp` /
+   `xor`; a paper proof should show that `head` never reaches 16.
+5. A `ring_peek` routine should return the oldest byte in A without removing it
+   and report an empty ring with carry clear. Its contract documents
+   `.routine in`, `.routine out` and `.routine clobbers`.
+6. Two forms should load the address of `ring_state.head` into HL: a layout
+   cast and `ring_state + offset(RingState, head)`. Assembly should produce the
+   same immediate for both.
+7. Four reserved `Event` records use `Event .type`, `code .byte`, `param
+   .word`, `.endtype` and `.ds Event[4]`. A loop should zero every `param` field
+   using `sizeof(Event)` as its stride.
 
 ---
 

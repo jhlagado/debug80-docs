@@ -177,7 +177,7 @@ CHAR TABLE:
 ## I/O Connectors
 
 The connector diagrams below cover the Expander Socket, General Purpose
-I/O, Z80 Bus Connector and TEC Deck Connectors. Note: pin 28 is `RD`.
+I/O, Z80 Bus Connector and TEC Deck Connectors. Pin 28 is `RD`.
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-92-figure-1.png)
 

@@ -68,7 +68,7 @@ CodeEnd:
 CODE_SIZE   .equ CodeEnd - CodeStart
 ```
 
-Use label subtraction rather than `$ - $0100` so the intent is clear and the result stays correct when the code moves.
+Label subtraction, rather than `$ - $0100`, makes the intent clear and keeps the result correct when the code moves.
 
 ## Gaps between origins
 
@@ -93,7 +93,7 @@ When you use two `.org` directives with a gap between them, the binary output ma
         .align 16
 ```
 
-Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. Use `.align` when hardware or lookup-table requirements demand address alignment.
+Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. The directive supplies address alignment required by hardware or lookup tables.
 
 ---
 
@@ -228,9 +228,9 @@ In a `.equ` or data context, `$` resolves to the address after the last emitted 
 .ds SPRITE_COUNT * 4
 ```
 
-Use 0–255 for unsigned byte data or −128–127 for signed byte data. `.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767) and reports values outside those ranges. Negative values are encoded in two's-complement form. Use a non-negative count for `.ds`.
+Byte data belongs in the unsigned range 0–255 or the signed range −128–127. `.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767) and reports values outside those ranges. Negative values are encoded in two's-complement form. A `.ds` count must be non-negative.
 
-To split a 16-bit address into two bytes:
+A 16-bit address splits into two bytes as follows:
 
 ```asm
 .db VECTOR_TABLE & $FF       ; low byte
@@ -304,7 +304,7 @@ GREEN .equ 1
 BLUE  .equ 2
 ```
 
-Insert `YELLOW` between `RED` and `GREEN` and you have to renumber `GREEN`, `BLUE` and everything that follows.
+Adding `YELLOW` between `RED` and `GREEN` requires renumbering `GREEN`, `BLUE` and everything that follows.
 
 An enum groups related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second and so on:
 
@@ -376,7 +376,7 @@ CmdTable:
 
 ### Choosing enums
 
-Use enums for any small set of named states, command codes, token kinds or hardware-mode values where a dense sequence is natural. `State.Dead` reads more clearly than `cp 3`. For values that need specific numbers (port addresses, bitmasks, hardware registers), use `.equ`. At runtime, an enum value is an ordinary byte; validate inputs before dispatching on them.
+Enums suit small sets of named states, command codes, token kinds or hardware-mode values where a dense sequence is natural. `State.Dead` reads more clearly than `cp 3`. Values that require specific numbers, such as port addresses, bitmasks and hardware registers, belong in `.equ` definitions. At runtime, an enum value is an ordinary byte, so input validation must occur before dispatch.
 
 ---
 

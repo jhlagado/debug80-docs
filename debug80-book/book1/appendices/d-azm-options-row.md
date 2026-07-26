@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 104
 ---
 
-[← Appendix C — Debug80 file formats](c-project-configuration.md) | [Book 1](../index.md) | [Appendix E — Copy monitor ROM source →](../10-copy-monitor-rom.md)
+[← Appendix C — Debug80 file formats](c-project-configuration.md) | [Book 1](../index.md) | [Appendix E — Local monitor ROM source →](../10-copy-monitor-rom.md)
 
 # Appendix D — The AZM options row
 
@@ -41,7 +41,10 @@ Three values: **Enforce**, **Audit**, **Off**.
 | Audit | Analyses and reports | The build succeeds |
 | Off | Does not analyse | The build runs without contract analysis |
 
-**Enforce is the default**. If a build fails with a message about a register conflict, and the code assembles fine everywhere else, this control is why. The error usually identifies a real conflict, but if you are mid-experiment and want the program to run first and be correct later, drop to Audit.
+**Enforce is the default**. If a build fails with a message about a
+register conflict, and the code assembles fine everywhere else, this
+control is why. The error usually identifies a real conflict; Audit
+keeps an experiment running while still reporting it.
 
 Enforce and Audit both write the report listed among the [chapter 4](../04-build-and-run.md) build outputs:
 
@@ -75,7 +78,11 @@ A checkbox, ticked by default.
 
 Ticked, a label must be referenced with the capitalization used in its definition; `scanhello` does not resolve to `ScanHello`. Unticked, capitalization is ignored.
 
-Leave it on for new assembly code; the strictness catches typos that would otherwise resolve to the wrong symbol or fail late. Turn it off when you are assembling older source that is inconsistent about case and that you would rather not rewrite. Glimmer builds currently use their own label handling and do not read this checkbox.
+For new assembly code, leaving it on catches typos that would
+otherwise resolve to the wrong symbol or fail late. Older source with
+inconsistent capitalization may require it to be disabled. Glimmer
+builds currently use their own label handling and do not read this
+checkbox.
 
 ## Persistence across restarts
 
@@ -97,4 +104,4 @@ If you want a project-wide contracts policy that sticks, the file-scoped `regist
 
 ---
 
-[← Appendix C — Debug80 file formats](c-project-configuration.md) | [Book 1](../index.md) | [Appendix E — Copy monitor ROM source →](../10-copy-monitor-rom.md)
+[← Appendix C — Debug80 file formats](c-project-configuration.md) | [Book 1](../index.md) | [Appendix E — Local monitor ROM source →](../10-copy-monitor-rom.md)

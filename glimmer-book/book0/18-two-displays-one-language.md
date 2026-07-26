@@ -15,13 +15,13 @@ have moved from them to a video chip with sprites. Skyfall drops
 blocks down the 8x8 board toward a paddle you slide along the bottom
 row; Lanternfly steers a white sprite through a night garden with a
 wasp on its tail. You built Skyfall and worked through Lanternfly's
-design. Read side by side, they are near twins: three cards joined in
+design. Side by side, they are near twins: three cards joined in
 the same loop, a writable timer whose period is the difficulty, a
 one-shot guarding the restart, `ApiRandom` masked for every respawn
 and the same delayed game-over gate.
 
-Read them as programs, though, and their paths separate at one early
-line. `display matrix8x8` against `display tms9918` set the prices:
+As programs, though, their paths separate at one early line.
+`display matrix8x8` against `display tms9918` set the prices:
 what a render writes to, what collision costs, how motion travels to
 the screen, how large a world a game can afford. The declaration
 never forced a design (you made every choice in those two games), but
@@ -29,8 +29,8 @@ both games followed its prices, the way water follows a slope.
 
 ## The two loops
 
-Build either game and open its generated file at the runtime loop.
-From `skyfall.main.asm`:
+The generated runtime loops make the comparison concrete. From
+`skyfall.main.asm`:
 
 ```asm
 ; --- runtime loop ---
@@ -71,8 +71,8 @@ MainLoop:
         jp      MainLoop
 ```
 
-Put a finger on `GlimPollBindings` in each listing and read downward.
-From there the two loops run the same nine instructions: poll, latch
+From `GlimPollBindings` downward, the two loops run the same nine
+instructions: poll, latch
 the card, tick the timers, run the phases, roll the frame over. That
 identical tail is the language's reactive frame, unchanged under
 either display.
@@ -196,7 +196,7 @@ Here is the whole divergence in one table:
 
 ## One language
 
-Now read what the `display` line left alone. Skyfall and Lanternfly
+The `display` line leaves the game model alone. Skyfall and Lanternfly
 declare their games in interchangeable sentences: `state`
 bytes and words for facts, pulses for moments, `bind key ... held`
 for steering and `bind key any rising` for the restart key, a
@@ -223,8 +223,8 @@ the model: everything you learned (facts, moments, rules,
 pictures, phases, cards) moved across two opposite display
 architectures without changing shape.
 
-So when the next idea arrives, choose its display by the world it
-needs. A game whose world is a board of cells that change together
+The world required by the next idea determines its display. A game
+whose world is a board of cells that change together
 (pieces locking, lines clearing, a body growing) is a natural fit
 for the 8x8 matrix, where the whole scene is 32 bytes and cell
 arithmetic answers most questions. A game whose world is a place
