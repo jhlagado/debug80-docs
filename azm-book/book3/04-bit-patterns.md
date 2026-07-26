@@ -120,7 +120,7 @@ Load the status byte into A first, then test:
     jr z, _not_ready
 ```
 
-`bit_test` expands to a single `and mask`. A must already hold the byte under test. The Z80 has no `ld a, a`, so the op deliberately does not reload A.
+`bit_test` expands to a single `and mask`. It takes no register parameter, so A must already hold the byte under test.
 
 ---
 
@@ -130,8 +130,8 @@ Logical shifts move bit positions for multiply/divide tricks and for isolation:
 
 | Instruction | What moves |
 |-------------|------------|
-| `rlca` / `rrca` | Rotate A through carry (8-bit, fast) |
-| `rla` / `rra` | Rotate A through carry including previous carry |
+| `rlca` / `rrca` | Rotate A circularly; the bit that wraps is also copied into carry |
+| `rla` / `rra` | Rotate A through carry: A and the carry form a 9-bit ring |
 | `sla r` | Shift left; bit 0 ← 0; high bit → carry |
 | `srl r` | Shift right; high bit ← 0; low bit → carry |
 
