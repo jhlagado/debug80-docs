@@ -52,7 +52,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 | `--rc` | `off`, `audit`, `warn`, `error` or `strict` | Register contract analysis level; default is `off` |
 | `--register-contracts` | `off`, `audit`, `warn`, `error` or `strict` | Long form of `--rc` |
 | `--contracts` | — | Insert or update inferred `.routine` directives |
-| `--fix` | — | Apply conservative register contract source repairs |
+| `--fix` | — | Apply conservative register contract source repairs; implies `--contracts`, so inferred `.routine` directives are rewritten too |
 | `--require-expectout` | — | Fail on caller dependencies on inferred outputs that lack `.expectout` |
 | `--reg-report` | — | Write `source.regcontracts.txt` with inferred routine contracts |
 | `--reg-report-format` | `text` or `json` | Select register contract report format; default is `text` |
