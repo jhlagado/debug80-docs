@@ -49,7 +49,7 @@ and one button, **Open Folder**.
 
 ![The Project section at full width, with the Add projects or folders card and the Open Folder button](../../assets/images/debug80-book/book1/panel-state-no-folder.svg)
 
-## What it becomes
+## The panel with a program running
 
 This is the same section several chapters from now, with a project open and a program running:
 

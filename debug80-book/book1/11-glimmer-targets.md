@@ -19,7 +19,7 @@ A `.glim` file becomes a target the same way an assembly file does, with one ext
 
 Add one with **+** beside the **Target** dropdown, or run **Debug80: Add Target**. Everything from the Targets chapter applies unchanged: the same dropdown, the same **−** to remove, the same rule that `debug80.json` is the truth.
 
-## What a Glimmer build produces
+## Glimmer build output
 
 Select a Glimmer target and click **Build**. The output differs slightly from an assembly build:
 

@@ -79,7 +79,7 @@ Debug80 renders the RGB matrix with duty-cycle brightness, so a dim pixel and a 
 
 **SLOW** and **FAST** switch the emulated clock. **MUTED** and **SOUND** control the speaker, which starts muted; audio unlocks on your first click or key press in the panel.
 
-## Who gets your keystrokes
+## Keyboard focus
 
 The panel contains more than one thing that wants the keyboard: the hex keypad, and on the TEC-1G the matrix keyboard and the joystick. Only one owns physical key input at a time.
 

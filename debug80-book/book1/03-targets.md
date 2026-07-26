@@ -13,7 +13,7 @@ A folder can hold many assembly files. Only some of them are programs; the rest 
 
 **`debug80.json` is the truth. File names only ever make suggestions.**
 
-## What a target records
+## Inside a target
 
 Your project has one target, named `main`:
 
@@ -35,7 +35,7 @@ Your project has one target, named `main`:
 
 The target's name is the key, `main`. Debug80 derives it from the source file name, dropping the extension and a trailing `.main` if there is one, so `game.main.asm` yields a target called `game`. If that name is taken it appends `-2`.
 
-## What counts as a program file
+## Eligible program files
 
 Debug80 will consider three kinds of file: `.asm`, `.z80` and `.glim`. A Glimmer file only qualifies if it contains a top-level `program` declaration, because a `.glim` file without one is a part of a program rather than a program.
 

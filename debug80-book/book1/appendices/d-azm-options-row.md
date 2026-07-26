@@ -15,7 +15,7 @@ The Project section has a row of three controls that the rest of this book walks
 
 All three are AZM settings. The underlying feature is documented in full in [AZM Book 1, Chapter 6](../../../azm-book/book1/06-register-contracts.md), which explains register contracts as a language feature.
 
-## What a register contract is, briefly
+## Register contracts, briefly
 
 A routine uses registers. Some it reads, some it writes, some it destroys along the way. A *register contract* writes that down:
 
@@ -79,7 +79,7 @@ Ticked, a label must be referenced with the capitalization it was defined with; 
 
 Leave it on for new code; the strictness catches typos that would otherwise resolve to the wrong symbol or fail late. Turn it off when you are assembling older source that is inconsistent about case and that you would rather not rewrite. It applies to Glimmer-generated assembly too, which [chapter 11](../11-glimmer-targets.md) covers.
 
-## Where each setting is kept
+## Persistence across restarts
 
 The three controls are not stored alike, which is easy to miss because they sit in one row:
 

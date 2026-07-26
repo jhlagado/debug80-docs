@@ -45,7 +45,7 @@ Choose **Create ASM starter**.
 
 If you would rather choose from all five profile kits rather than a platform (`Simple / Default`, `TEC-1 / MON-1B`, `TEC-1 / Classic 2K`, `TEC-1G / MON-3` and `TEC-1G / Custom`), run **Debug80: Create Project** from the Command Palette instead of using the panel. The panel's Platform dropdown picks the default kit for the platform you chose, which for TEC-1G is `TEC-1G / MON-3`.
 
-## What initialization writes
+## The project files
 
 Four things appear in the folder:
 
