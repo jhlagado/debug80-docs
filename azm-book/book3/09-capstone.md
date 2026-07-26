@@ -28,7 +28,10 @@ If row `r` uses column `c`, you must remember:
 2. The **forward diagonal** (row + col constant) is threatened.
 3. The **backward diagonal** (row − col constant) is threatened.
 
-When all three checks pass for `(r, c)`, record the placement, recurse to row `r + 1` and when that returns, **undo** the marks before trying the next column. That undo step is backtracking. Skip it and stale flags will make you think occupied squares are free.
+When all three checks pass for `(r, c)`, record the placement, recurse to row
+`r + 1` and when that returns, **undo** the marks before trying the next column.
+That undo step is backtracking. Skip it and stale flags make available squares
+appear occupied, pruning valid branches from the search.
 
 ---
 
@@ -52,7 +55,10 @@ DIAG_SUM_LEN  .equ 15
 DIAG_DIFF_LEN .equ 15
 ```
 
-You do not need one byte per square to **search**; you need fast answers to "is this column or diagonal already taken?" Chapter 4's masks would pack each `col_used` row into one bit per column (a **bitboard** per row); the companion uses whole bytes for clarity so every test is `ld a, (hl)` / `or a` / `jr nz`.
+You do not need one byte per square to **search**; you need fast answers to "is
+this column or diagonal already taken?" Chapter 4's masks could pack all eight
+column flags into one byte. The companion instead uses one byte per column so
+every test is `ld a, (hl)` / `or a` / `jr nz`.
 
 The companion keeps separate `.ds` labels for teaching clarity. In a larger project you can fold the workspace into one record and name every field offset once, the same idiom as the ring buffer in Chapter 5:
 
@@ -67,7 +73,7 @@ diag_diff_used .field byte[15]
 
 QS_SOLUTION .equ offset(QueenWorkspace, solution_count)
 QS_COLS     .equ offset(QueenWorkspace, queen_cols)
-; ... then (ix + QS_COLS) instead of a global queen_cols label
+; ... then use (ix + QS_COLS) as the base of the queen_cols field
 ```
 
 `queen_cols` updates whenever you commit a placement so the last completed board is visible when the count finishes.
@@ -82,7 +88,7 @@ Split the hot path into routines with explicit `.routine` contracts, the same di
 
 ```asm
 ; col_free: is column C unused?
-.routine in C out zero clobbers A,B,HL
+.routine in C out zero clobbers A,B,HL,sign,parity,halfCarry,carry
 col_free:
     ld hl, col_used
     ld b, 0
@@ -96,7 +102,7 @@ col_free:
 
 ```asm
 ; diag_sum_free: is forward diagonal (row+col) unused?
-.routine in B,C out zero clobbers A,DE,HL
+.routine in B,C out zero clobbers A,DE,HL,sign,parity,halfCarry,carry
 diag_sum_free:
     ld a, b
     add a, c
@@ -109,7 +115,8 @@ diag_sum_free:
     ret
 ```
 
-**Backward diagonal** (use `row - col + DIAG_BIAS` so the index stays in range without signed arithmetic drama):
+**Backward diagonal** (use `row - col + DIAG_BIAS` so the index stays in the
+range 0–14):
 
 ```asm
     ld a, b
@@ -152,7 +159,7 @@ When all three tests pass, **mark** before `call place_row` and **unmark** after
 
 ```asm
 ; place_row: assign a queen to row B; count solutions at row BOARD_SIZE
-; Self-call; max depth PLACE_MAX_DEPTH; frame PLACE_FRAME_BYTES bytes.
+; Self-call; max depth PLACE_MAX_DEPTH; max stack PLACE_MAX_STACK_BYTES bytes.
 .routine in B clobbers AF,BC,DE,HL
 place_row:
     ld a, b
@@ -178,13 +185,19 @@ _done:
 
 **Recursive step:** valid column → mark → `inc b` → `call place_row` → unmark → next column.
 
-Depth is at most nine frames (rows 0..8), each saving `bc` once in the trial path plus the CPU's return address. Name the budget:
+Depth is at most nine calls (rows 0..8). Each of the eight trial rows keeps a
+saved BC pair while the next row runs; the row-8 base call has only its return
+address. Name the exact budget:
 
 ```asm
-PLACE_FRAME_BYTES .equ 4
-PLACE_MAX_DEPTH   .equ BOARD_SIZE + 1
-STACK_TOP         .equ $9FFF
+PLACE_STEP_BYTES      .equ 4
+PLACE_BASE_BYTES      .equ 2
+PLACE_MAX_DEPTH       .equ BOARD_SIZE + 1
+PLACE_MAX_STACK_BYTES .equ BOARD_SIZE * PLACE_STEP_BYTES + PLACE_BASE_BYTES
+STACK_TOP             .equ $9FFF
 ```
+
+For an 8x8 board, the deepest path occupies `8 × 4 + 2 = 34` bytes.
 
 ### Stopping at the first solution
 
@@ -226,7 +239,7 @@ Run to `halt`, then read `solution_count`. If you see `$005C`, the search finish
 
 ---
 
-## How this chapter uses the rest of Book 3
+## Book 3 techniques in the capstone
 
 | Earlier idea | Here |
 |--------------|------|
@@ -246,15 +259,8 @@ Run to `halt`, then read `solution_count`. If you see `$005C`, the search finish
 | [`examples/09_eight_queens.asm`](examples/09_eight_queens.asm) | `solution_count` = `$005C` (92); `queen_cols` holds one complete placement |
 
 ```sh
-cd azm-book/book3/examples
-azm 09_eight_queens.asm
-azm --rc warn 09_eight_queens.asm
-```
-
-From the AZM source tree:
-
-```sh
-npm run azm -- /path/to/azm-book/book3/examples/09_eight_queens.asm
+azm examples/09_eight_queens.asm
+azm --rc warn examples/09_eight_queens.asm
 ```
 
 ---
@@ -263,18 +269,22 @@ npm run azm -- /path/to/azm-book/book3/examples/09_eight_queens.asm
 
 1. Trace `place_row` by hand for rows 0–2 when the first successful columns are 0, 2 and 4. Write the three entries in `queen_cols` and which `col_used` bytes are set before the recursion to row 3.
 2. Remove the `call unmark_constraints` after the recursive `call place_row`. Run the program. Does `solution_count` stay 92? Explain what stale flags do to the column loop.
-3. Change the base case to stop after the first solution: add a `found` byte, set it in `count_solution` and return early from every frame when `found` is non-zero. How many bytes does `solution_count` hold now?
+3. Change the base case to stop after the first solution: add a `found` byte,
+set it in `count_solution` and return early from every frame when `found` is
+non-zero. What value does `solution_count` hold now?
 4. Pack `col_used` into one byte of eight bits (bitboard). Rewrite `col_free` and `mark_constraints` using `and` / `or` from Chapter 4. Does the listing get shorter or longer?
 5. Replace recursion with an explicit stack in workspace: push `(row, col)` trial state, loop until stack empty. Estimate workspace bytes for depth 8.
 6. Run `azm --rc warn` on a deliberate bug: call `col_free` without restoring `C` after a clobbering helper. Fix using the `.routine` contract.
 
 ---
 
-## What you learned in Book 3
+## Book 3 in practice
 
 You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts**, choosing the representation that fits each problem.
 
-The next step is a project of your own (a buffer, a parser, a game board) where you pick the representation, write the `.routine` lines and let the emulator prove the invariant.
+The next step is a project of your own, such as a buffer, parser or game board.
+Choose the representation, write the `.routine` contracts and use the emulator
+to test whether the implementation preserves each invariant.
 
 ---
 

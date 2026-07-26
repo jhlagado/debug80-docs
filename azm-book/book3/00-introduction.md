@@ -8,7 +8,9 @@ nav_order: 1
 
 # Introduction to Book 3
 
-You finished Book 2 with the Z80 and the AZM surface: register conventions, register contracts, layout types and ops. Book 3 puts that toolkit to work on algorithms and small data structures, the programs you would write in a systems or embedded course, but without leaving flat assembly.
+You finished Book 2 with the Z80 programming model and AZM's register
+contracts, layout types and ops. Book 3 applies those tools to algorithms and
+small data structures in flat assembly.
 
 ---
 
@@ -18,9 +20,12 @@ Each chapter starts from a concrete problem (sort this table, find this value, w
 
 ---
 
-## Wirth: representation before algorithm
+## Representation before algorithm
 
-Niklaus Wirth's programs are often taught as "algorithm + data structure." In assembly, those two collapse into one question: **how are the values laid out in memory and how do you reach them?**
+Niklaus Wirth's title *Algorithms + Data Structures = Programs* captures a
+constraint that becomes unavoidable in assembly: before choosing instructions,
+you must decide how values are laid out in memory and how the code will reach
+them.
 
 Before you write the sort loop, you decide:
 
@@ -28,7 +33,8 @@ Before you write the sort loop, you decide:
 - Is each element a plain `byte`, or a `Sprite` record with `sizeof(Sprite)` stride?
 - Does the index live in B, in L or in a workspace byte?
 
-Chapter 5 (records) goes deeper: the layout type is the contract; the algorithm only adds offsets the assembler already computed.
+Chapter 5 goes deeper. A layout type supplies field sizes and offsets; the
+algorithm uses those constants to form addresses.
 
 ---
 
@@ -74,13 +80,15 @@ Every nontrivial routine in this book should carry:
 
 ---
 
-## No hidden runtime
+## Execution model
 
-There is no garbage collector, no stdlib, no generated frame setup. Layout types fold to constants at assemble time; they do not emit indexing instructions unless you write them.
+AZM supplies no garbage collector, standard library or generated frame setup.
+Layout types fold to constants at assembly time; address arithmetic appears in
+the program only when you write the corresponding instructions.
 
 ---
 
-## How to use the chapters
+## Reading and running the chapters
 
 1. Read the chapter prose for the problem and the invariant.
 2. Open the cited file under this book's `examples/` directory.
@@ -89,9 +97,13 @@ There is no garbage collector, no stdlib, no generated frame setup. Layout types
 
 ---
 
-## What comes next
+## The next chapters
 
-[Chapter 1 — Foundations](01-foundations.md) works through GCD and digit counting on 16-bit values. No arrays yet: only the Book 3 calling convention, compare/subtract idioms and the first workspace bytes. [Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables, insertion sort and linear search.
+[Chapter 1 — Foundations](01-foundations.md) works through 16-bit GCD and 8-bit
+exponentiation. No arrays yet: only the Book 3 calling convention,
+compare/subtract idioms and the first workspace bytes.
+[Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables,
+insertion sort and linear search.
 
 Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search.
 

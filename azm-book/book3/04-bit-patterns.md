@@ -96,12 +96,12 @@ When the mask is not a compile-time constant in A, invert through a scratch regi
 Book 2 Chapter 14: short sequences that repeat in one file are good `op` candidates: no `call` overhead, intent visible at the call site.
 
 ```asm
-op bit_set(reg reg8, mask imm8)
+op bit_set(mask imm8)
   or mask
 end
 
-op bit_clr(reg reg8, mask imm8)
-  ld b, reg
+op bit_clr(mask imm8)
+  ld b, a
   ld a, mask
   cpl
   and b
@@ -202,11 +202,11 @@ main:
     ...
 
     ld a, (device_flags)
-    bit_set A, FLAG_ERROR
+    bit_set FLAG_ERROR
     ld (device_flags), a
 
     ld a, (device_flags)
-    bit_clr A, FLAG_BUSY
+    bit_clr FLAG_BUSY
     ld (device_flags), a
 
     ld a, (device_flags)
@@ -227,18 +227,24 @@ main:
 azm examples/04_bit_flags.asm
 ```
 
-AZM writes `examples/04_bit_flags.lst` by default. Open that listing to confirm `bit_set` expanded to `or` at the call site, not a subroutine call.
+AZM writes `examples/04_bit_flags.lst` by default. The `bit_set` invocation
+remains visible as the source line, with the bytes emitted by its `or` expansion
+shown beside it. There is no `call` instruction.
 
 ---
 
 ## Exercises
 
-1. Start from `$05`. Predict `(device_flags)` after only `bit_set A, FLAG_ERROR` without clearing busy.
+1. Start from `$05`. Predict `(device_flags)` after only
+`bit_set FLAG_ERROR` without clearing busy.
 2. Add `FLAG_FAULT .equ $08`. Write `main` so a fault sets bit 3 and forces busy clear in one pass through A.
 3. Implement `popcount_u8`: count set bits in A with a loop (`and 1`, `srl`, increment counter). Return count in A.
 4. Implement `parity_u8`: return 1 if odd number of set bits, 0 if even. One compact approach is to toggle a workspace byte each time you find a set bit.
-5. Replace `extract_bit_u8` with eight `bit n, a` / `jr` branches. When is the shift loop smaller?
-6. Define an `op` `rot_right(reg reg8)` that expands to `rra` with A loaded from `reg`. Use it in a 16-bit shift across A and a workspace byte.
+5. Compare `and FLAG_ERROR` / `rr a` with `bit 1, a` followed by a branch. Which
+form is appropriate when the caller needs a numeric 0/1 result, and which when
+it needs only control flow?
+6. Define an op `shift_right_pair(hi reg8, lo reg8)` that expands to `srl hi`
+followed by `rr lo`. Use it to shift the 16-bit value in B:C right by one bit.
 
 ---
 

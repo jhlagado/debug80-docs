@@ -66,7 +66,7 @@ _after_full_test:
     halt
 
 ; ring_push: append one byte; carry set on success, carry clear when full
-.routine in A,IX out carry clobbers BC,DE,HL
+.routine in A,IX out carry clobbers A,zero,sign,parity,halfCarry,BC,DE,HL
 ring_push:
     ld e, a
     ld a, (ix + RING_COUNT)
@@ -92,7 +92,7 @@ _full:
     ret
 
 ; ring_pop: remove oldest byte; carry set on success, carry clear when empty
-.routine in IX out A,carry clobbers BC,DE,HL
+.routine in IX out A,carry clobbers zero,sign,parity,halfCarry,BC,DE,HL
 ring_pop:
     ld a, (ix + RING_COUNT)
     or a

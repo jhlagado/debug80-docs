@@ -69,7 +69,7 @@ _sum_done:
     ret
 
 ; list_find_u8: find first node with value A; HL = node or 0, carry set if found
-.routine in HL,A out HL,carry clobbers A,BC,DE
+.routine in HL,A out HL,carry clobbers A,zero,sign,parity,halfCarry,BC,DE
 list_find_u8:
     ld b, a
 _find_loop:

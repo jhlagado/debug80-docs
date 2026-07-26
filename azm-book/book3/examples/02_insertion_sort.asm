@@ -19,7 +19,7 @@ main:
     halt
 
 ; insertion_sort: sort byte table ascending (insertion sort)
-.routine in HL,B out HL clobbers AF,BC,DE
+.routine in HL,B clobbers AF,BC,DE,HL
 insertion_sort:
     push hl
     pop de
@@ -82,8 +82,6 @@ _place:
     inc c
     jr _outer
 _done:
-    push de
-    pop hl
     ret
 
 ; find_byte_ge: first index where values[i] >= C, or $FF if none

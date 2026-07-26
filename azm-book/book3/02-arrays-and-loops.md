@@ -106,7 +106,10 @@ for i from 1 to length-1:
 
 If you only keep HL, you lose the base address. **DE holds the base** for the whole routine; HL is recomputed from DE and the current index.
 
-Length arrives in B but inner loops reuse B. Store it in workspace. Place scratch bytes after the table in the same `.org $8000` block (AZM cannot place a later `org` below an earlier data segment):
+Length arrives in B but inner loops reuse B. Store it in workspace. Place
+scratch bytes after the table in the same `.org $8000` block. AZM maintains a
+forward-only placement cursor for each segment, so a later data `.org` cannot
+move back over bytes already placed:
 
 ```asm
 found_index:
@@ -238,7 +241,9 @@ main:
     halt
 ```
 
-Reload HL before the second call. `insertion_sort` returns HL equal to the base (in DE), but treating reload as mandatory habit matches Book 2's lesson about clobbered pointers.
+Reload HL before the second call because the `insertion_sort` contract lists HL
+as clobbered. The caller must not depend on whichever address the current
+implementation happens to leave there.
 
 ---
 

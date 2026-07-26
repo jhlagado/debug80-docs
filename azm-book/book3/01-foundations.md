@@ -40,9 +40,13 @@ Book 3 adds a **16-bit family** used in this chapter and reused later unless a c
 | Table base address | HL | Same as 16-bit arg — context disambiguates |
 | Table length | B | Element count for byte tables |
 
-**Callee-save:** if a routine uses BC, DE, HL or IX internally as scratch, it must push before use and pop before every `ret`. Registers listed in `.routine clobbers` are not restored.
+**Caller-save:** A, F, declared outputs and registers listed in `.routine
+clobbers` may change across the call. An input is also caller-save when the
+contract says the routine consumes or clobbers it.
 
-**Caller-save:** A, F and any register passed as an input the routine is allowed to destroy.
+**Callee-save:** every register not declared as an output or clobber must retain
+its incoming value. A routine that uses one as scratch must restore it before
+every `ret`.
 
 Every subroutine in this book should document its contract with register contracts (Book 2 Chapter 12).
 
@@ -156,7 +160,8 @@ Rules used throughout Book 3:
 - One label per logical temporary (`key_byte`, not `temp4`).
 - Document in comments which routines touch which workspace labels.
 
-Chapter 2's insertion sort stores the current key in `key_byte`, placed after its table, because C, B and HL are busy playing index and base roles.
+Chapter 2's insertion sort stores the current key in `key_byte`, placed after
+its table, because C, B and HL already hold indices, counts and addresses.
 
 ---
 
@@ -168,7 +173,7 @@ For small 8-bit operands, repeated multiplication is enough:
 
 ```asm
 ; power_u8: unsigned C^B into A (B may be 0 → 1)
-.routine in B,C out A clobbers F,BC,DE
+.routine in B,C out A clobbers F,B,E
 power_u8:
     ld e, 1
 _loop:
@@ -190,14 +195,6 @@ _done:
 `mul8_a_by_c` multiplies the accumulator in A by C using repeated addition, correct for the demo sizes (3^4 = 81), not a general fast multiply.
 
 The companion program stores the byte result at `power_result`. After `halt`, `$8002` should hold `$51` (81 decimal).
-
----
-
-## Digit count (exercise direction)
-
-Printing a 16-bit value takes up to five decimal digits, and 1000 takes four. You divide by 10 and count until the value reaches zero. The Z80 has no divide instruction, so you build that division out of repeated subtraction, or out of a shift-and-subtract routine.
-
-A byte-only variant fits entirely in registers; a word variant should save the quotient in HL and keep the digit count in B, then return the count in A. Use workspace for a remainder byte if the divide step needs it.
 
 ---
 
@@ -232,7 +229,9 @@ azm --rc warn examples/01_gcd.asm
 
 1. Change `GCD_A` and `GCD_B` to 270 and 192. Trace the first five loop iterations by hand, then run the program and confirm `gcd_result`.
 2. Add `gcd_u16` calls for (0, 5) and (5, 0). What should each return? Test in the emulator.
-3. Implement `digit_count_u16` with HL in and A out. Hint: loop while HL ≠ 0, subtract 10 until HL < 10, count iterations, then set HL to the quotient for the next digit. Use one workspace byte if needed.
+3. Implement `digit_count_u8` with A in and A out. Return 1 for values 0–9,
+2 for 10–99 and 3 for 100–255. Two `cp` instructions against 10 and 100 are
+enough; no division is needed.
 4. Rewrite `mul8_a_by_c` with a shift-and-add multiply (faster for larger products). Keep the same `.routine` contract.
 5. Run `azm --rc warn` on a deliberate bug: use HL after `call gcd_u16` without reloading. Read the warning and fix the caller.
 

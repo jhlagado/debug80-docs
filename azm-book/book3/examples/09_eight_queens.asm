@@ -9,10 +9,14 @@ DIAG_BIAS    .equ 7
 DIAG_SUM_LEN .equ 15
 DIAG_DIFF_LEN .equ 15
 
-; Recursive place_row: push bc (2) + return address (2) per active row try
-PLACE_FRAME_BYTES .equ 4
-PLACE_MAX_DEPTH   .equ BOARD_SIZE + 1
-STACK_TOP         .equ $9FFF
+; Recursive place_row stack budget:
+;   each trial row: saved BC (2) + recursive return address (2)
+;   row-8 base call: return address only (2)
+PLACE_STEP_BYTES      .equ 4
+PLACE_BASE_BYTES      .equ 2
+PLACE_MAX_DEPTH       .equ BOARD_SIZE + 1
+PLACE_MAX_STACK_BYTES .equ BOARD_SIZE * PLACE_STEP_BYTES + PLACE_BASE_BYTES
+STACK_TOP             .equ $9FFF
 
 .org $0000
 main:
@@ -42,7 +46,7 @@ _zero_loop:
     ret
 
 ; col_free: is column C unused?
-.routine in C out zero clobbers A,B,HL
+.routine in C out zero clobbers A,B,HL,sign,parity,halfCarry,carry
 col_free:
     ld hl, col_used
     ld b, 0
@@ -52,7 +56,7 @@ col_free:
     ret
 
 ; diag_sum_free: is forward diagonal (row+col) unused?
-.routine in B,C out zero clobbers A,DE,HL
+.routine in B,C out zero clobbers A,DE,HL,sign,parity,halfCarry,carry
 diag_sum_free:
     ld a, b
     add a, c
@@ -65,7 +69,7 @@ diag_sum_free:
     ret
 
 ; diag_diff_free: is backward diagonal (row-col+DIAG_BIAS) unused?
-.routine in B,C out zero clobbers A,DE,HL
+.routine in B,C out zero clobbers A,DE,HL,sign,parity,halfCarry,carry
 diag_diff_free:
     ld a, b
     add a, DIAG_BIAS
@@ -146,7 +150,7 @@ unmark_constraints:
     ret
 
 ; place_row: assign a queen to row B; count solutions at row BOARD_SIZE
-; Self-call; max depth PLACE_MAX_DEPTH; frame PLACE_FRAME_BYTES bytes.
+; Self-call; max depth PLACE_MAX_DEPTH; max stack PLACE_MAX_STACK_BYTES bytes.
 .routine in B clobbers AF,BC,DE,HL
 place_row:
     ld a, b

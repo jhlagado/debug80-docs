@@ -180,7 +180,7 @@ Search reuses the same advance pattern, comparing `(hl)` to the target byte in B
 
 ```asm
 ; list_find_u8: find first node with value A; HL = node or 0, carry set if found
-.routine in HL,A out HL,carry clobbers A,BC,DE
+.routine in HL,A out HL,carry clobbers A,zero,sign,parity,halfCarry,BC,DE
 list_find_u8:
     ld b, a
 _find_loop:
@@ -244,7 +244,7 @@ Steps in plain terms:
 1. `push af` holds the incoming value while you read the old head.
 2. Read the old head link into BC (low byte in C, high in B).
 3. `pop af` and store the payload at `(de)`; store BC into `next` via `ex de, hl`.
-4. Store DE into `list_head`.
+4. Store HL, which now holds the new node address, into `list_head`.
 
 After `ld de, node_spare` / `ld a, $40` / `call list_push_head`, the list order is spare → a → b → c. The new sum is `$00A2` (162).
 
@@ -363,9 +363,8 @@ The control flow is a loop, not a self-call: depth is bounded by tree height and
 | [`examples/08_linked_list.asm`](examples/08_linked_list.asm) | Sum 98 (`$0062`), find `$22`, sum 162 (`$00A2`) after head insert |
 
 ```sh
-cd azm-book/book3/examples
-azm 08_linked_list.asm
-azm --rc warn 08_linked_list.asm
+azm examples/08_linked_list.asm
+azm --rc warn examples/08_linked_list.asm
 ```
 
 Single-step `list_sum_u16` once: watch HL jump from `node_a` to `node_b` to `node_c` by loading `next`, not by adding a stride to a table base.

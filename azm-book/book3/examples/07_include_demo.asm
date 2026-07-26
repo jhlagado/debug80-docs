@@ -1,6 +1,6 @@
 ; 07_include_demo.asm — Chapter 7 companion
-; Assemble from book3/examples:
-;   azm 07_include_demo.asm
+; Assemble from book3:
+;   azm examples/07_include_demo.asm
 ; Run to halt, then inspect:
 ;   (str_len) at $8008 — length of message ("HELLO" → 5)
 

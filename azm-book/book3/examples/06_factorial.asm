@@ -8,11 +8,14 @@
 FACT_N .equ 5
 NUMS_LEN .equ 5
 
-; Stack budget for factorial_u8 (compile-time check on paper):
-;   each active frame: return address (2) + push bc (2) = 4 bytes
-FACT_FRAME_BYTES .equ 4
-FACT_MAX_DEPTH   .equ FACT_N + 1
-STACK_TOP        .equ $9FFF
+; Stack budget for factorial_u8:
+;   each non-base level: saved BC (2) + recursive return address (2)
+;   base call: return address only (2)
+FACT_STEP_BYTES      .equ 4
+FACT_BASE_BYTES      .equ 2
+FACT_MAX_DEPTH       .equ FACT_N + 1
+FACT_MAX_STACK_BYTES .equ FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES
+STACK_TOP            .equ $9FFF
 
 .org $0000
 main:
@@ -34,7 +37,7 @@ main:
     halt
 
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
-; Self-call; max depth FACT_MAX_DEPTH; frame FACT_FRAME_BYTES bytes.
+; Self-call; max depth FACT_MAX_DEPTH; max stack FACT_MAX_STACK_BYTES bytes.
 .routine in B out A clobbers F,BC,DE
 factorial_u8:
     ld a, b
@@ -90,12 +93,11 @@ _loop:
     ret
 
 ; sum_u8_rec: sum bytes demo_nums[0 .. A-1] into HL (A = count on entry)
-; Self-call; six bytes per level: two push af pairs and the return address.
+; Self-call; four bytes per non-base level plus a two-byte base return address.
 .routine in HL,A out HL clobbers AF,BC,DE
 sum_u8_rec:
     or a
     jr z, _zero
-    push af
     ld b, a
     ld a, (hl)
     push af
@@ -107,7 +109,6 @@ sum_u8_rec:
     ld e, a
     ld d, 0
     add hl, de
-    pop af
     ret
 _zero:
     ld hl, 0

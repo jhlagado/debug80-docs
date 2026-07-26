@@ -10,7 +10,12 @@ nav_order: 8
 
 Every chapter so far kept the whole program in one `.asm` file. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each belong in their own file.
 
-AZM supports **`.import`** for module-style source files with explicit `@` exports; Book 1 covers that reference workflow. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
+This chapter starts with textual **`.include`**, the simplest way to share
+source, and briefly contrasts it with interface files for external code. AZM
+also supports module-style `.import` files with explicit `@` exports; Book 1
+covers that workflow. The companion build is
+[`examples/07_include_demo.asm`](examples/07_include_demo.asm) with
+[`examples/lib/strings.asm`](examples/lib/strings.asm).
 
 ---
 
@@ -23,7 +28,8 @@ You need two things at once:
 1. **Physical split**: edit strings in one file, main flow in another.
 2. **Logical contract**: callers still know which registers to set before `call`.
 
-AZM answers the physical split with **`.include`** plus documented globals.
+AZM provides **`.include`** for the physical split; register contracts document
+the shared routines.
 
 ---
 
@@ -37,7 +43,9 @@ The directive:
 
 tells the assembler to read `lib/strings.asm` and treat its contents as if you had typed them at that exact line. There is no separate link step, no export table and no namespace prefix on `call strlen_u8`.
 
-Paths resolve **relative to the file that contains the `.include`**. In the companion tree, `07_include_demo.asm` lives in `examples/` and includes `lib/strings.asm` beside it:
+Paths resolve **relative to the file that contains the `.include`**, then
+through any directories supplied with `-I`. In the companion tree,
+`07_include_demo.asm` lives in `examples/` and includes `lib/strings.asm`:
 
 ```
 book3/examples/
@@ -46,12 +54,14 @@ book3/examples/
     strings.asm
 ```
 
-Assemble from `examples/` so the relative path matches:
+From the `book3/` directory:
 
 ```sh
-cd azm-book/book3/examples
-azm 07_include_demo.asm
+azm examples/07_include_demo.asm
 ```
+
+The include still resolves relative to `07_include_demo.asm`, not to the shell's
+working directory.
 
 ### One assembly unit
 
@@ -134,7 +144,7 @@ Optional **constants header**: if several files need `CHAR_L` or `RING_CAP`, a t
 
 ## Files and contracts
 
-Without `import`, **the contract is documentation plus naming discipline**:
+With `.include`, **the contract is documentation plus naming discipline**:
 
 | Mechanism | What it guarantees |
 |-----------|-------------------|
@@ -156,7 +166,8 @@ Because included text shares one source-unit namespace, two files must not both 
 - Prefix library routines: `str_strlen_u8` if two included libraries both define `strlen_u8`; rename once, update register contracts and all `call` sites.
 - Use owner-local branch labels such as `_loop` and `_found`; another routine may reuse those spellings under its own owner.
 
-When the assembler reports "duplicate label," search all `.include` branches. The second definition wins silently in some tools; in AZM treat it as an error to fix immediately.
+When AZM reports a duplicate label, search all `.include` branches and rename
+one of the non-local declarations.
 
 ---
 
@@ -221,9 +232,8 @@ Same result as Chapter 3's single-file demo.
 | [`examples/lib/strings.asm`](examples/lib/strings.asm) | Shared `strlen_u8` with register contracts |
 
 ```sh
-cd azm-book/book3/examples
-azm 07_include_demo.asm
-azm --rc warn 07_include_demo.asm
+azm examples/07_include_demo.asm
+azm --rc warn examples/07_include_demo.asm
 ```
 
 Step into `strlen_u8` once: confirm the library file's labels appear in the listing at the include point, and that `str_len` is 5 at `$8008`.
@@ -238,7 +248,10 @@ Step into `strlen_u8` once: confirm the library file's labels appear in the list
 4. Deliberately define two global labels named `done` in different included files. Record the assembler error, then fix one label with a file-specific prefix.
 5. Write a one-routine `lib/math.asm` with `gcd_u16` from Chapter 1. Include it from a new `08_gcd_client.asm` that only calls GCD and stores the result. No string code in that binary.
 6. Sketch a `monitor.asmi` with two `extern` routines you might call on a machine with a character output routine in A and a key reader returning A. List `in`, `out` and `clobbers` for each without writing Z80 bodies.
-7. Draw the include graph for a project with `main.asm` → `lib/strings.asm`, `lib/ring.asm` and `constants.asm` included by both libraries. Which edges would create a cycle if `ring.asm` included `main.asm`?
+7. Draw the include graph for a project where `main.asm` includes
+`constants.asm`, `lib/strings.asm` and `lib/ring.asm` once each. The libraries
+use the constants already present in the shared source unit. Which edge creates
+a cycle if `ring.asm` includes `main.asm`?
 
 ---
 

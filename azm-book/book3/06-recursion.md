@@ -35,11 +35,13 @@ Iterative loops from Chapters 1–2 already do this with registers and workspace
 For recursion, treat the stack like any other fixed resource:
 
 1. **Initialize SP** before the first `call` (`ld sp, STACK_TOP`).
-2. **Count bytes per frame**: return address (2), plus any `push` / IX frame / `dec sp` locals you add on entry.
+2. **Count bytes per active level**: return address (2), plus any `push` / IX frame / `dec sp` locals that level adds.
 3. **Bound depth at compile time**: the largest argument your demo passes, or a named `.equ` limit you refuse to exceed.
-4. **Compare** `max_depth × frame_bytes` to the RAM below `STACK_TOP` and above your workspace and data.
+4. **Compare** the exact sum, or a conservative
+`max_depth × largest_frame_bytes` bound, to the RAM below `STACK_TOP` and above
+your workspace and data.
 
-### Frame size example: `factorial_u8`
+### Stack budget for `factorial_u8`
 
 Each recursive step (for n > 0) does:
 
@@ -50,15 +52,22 @@ Each recursive step (for n > 0) does:
     pop bc
 ```
 
-Plus the return address the CPU pushes on `call` (2 bytes). Active depth for input `FACT_N` is `FACT_N + 1` (down to the 0! = 1 base). Name the budget in source:
+Each non-base level therefore adds four bytes: two for saved BC and two for the
+next recursive return address. The base call adds only its two-byte return
+address because it does not push BC. Name both parts in source:
 
 ```asm
-FACT_FRAME_BYTES .equ 4
-FACT_MAX_DEPTH   .equ FACT_N + 1
-STACK_TOP        .equ $9FFF
+FACT_STEP_BYTES      .equ 4
+FACT_BASE_BYTES      .equ 2
+FACT_MAX_DEPTH       .equ FACT_N + 1
+FACT_MAX_STACK_BYTES .equ FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES
+STACK_TOP            .equ $9FFF
 ```
 
-Chapter 6's demo uses `FACT_N = 5` → six frames → 24 bytes of stack traffic.
+The demo uses `FACT_N = 5`: five non-base levels and one base call occupy 22
+bytes at the deepest point. `FACT_MAX_DEPTH` is six, but multiplying six by a
+uniform four-byte frame would overstate the exact requirement because the base
+case has no saved BC.
 
 ---
 
@@ -70,7 +79,7 @@ Chapter 6's demo uses `FACT_N = 5` → six frames → 24 bytes of stack traffic.
 
 ```asm
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
-; Self-call; max depth FACT_MAX_DEPTH; frame FACT_FRAME_BYTES bytes.
+; Self-call; max depth FACT_MAX_DEPTH; max stack FACT_MAX_STACK_BYTES bytes.
 .routine in B out A clobbers F,BC,DE
 factorial_u8:
     ld a, b
@@ -175,12 +184,11 @@ demo_nums:
 
 ```asm
 ; sum_u8_rec: sum bytes table[0 .. A-1] into HL (A = count on entry)
-; Self-call; six bytes per level: two push af pairs and the return address.
+; Self-call; four bytes per non-base level plus a two-byte base return address.
 .routine in HL,A out HL clobbers AF,BC,DE
 sum_u8_rec:
     or a
     jr z, _zero
-    push af
     ld b, a
     ld a, (hl)
     push af
@@ -192,7 +200,6 @@ sum_u8_rec:
     ld e, a
     ld d, 0
     add hl, de
-    pop af
     ret
 _zero:
     ld hl, 0
@@ -201,9 +208,13 @@ _zero:
 
 **Base case:** `A = 0` → HL = 0.
 
-**Recursive step:** read the head byte, `push af` to hold it while the tail sum runs in HL, recurse with `A - 1`, then pop the head into A and promote into DE (`ld e, a` / `ld d, 0`) before `add hl, de`.
+**Recursive step:** read the head byte, `push af` to hold it while the tail sum
+runs in HL, recurse with `A - 1`, then pop the head into A and promote it into DE
+(`ld e, a` / `ld d, 0`) before `add hl, de`.
 
-The outer `push af` saves the element count; the inner `push af` saves the head byte. Both must be popped in reverse order after the inner `call`. Each level therefore costs six bytes, four for the two pushes and two for the return address, and the depth equals `NUMS_LEN` for a full table.
+Each non-base level keeps one two-byte AF value and has one two-byte recursive
+return address. The base call adds its return address but no saved AF. For
+`NUMS_LEN = 5`, maximum occupancy is therefore `5 × 4 + 2 = 22` bytes.
 
 From `main`:
 
@@ -229,7 +240,9 @@ Recursive routines use the same register contract shape as every other routine (
 Add two extra habits for self-calls:
 
 1. **Say it is recursive** in the human comment (`; Self-call; ...`) so a reader knows stack math applies.
-2. **Document stack budget** in `.equ` constants (`FACT_FRAME_BYTES`, `FACT_MAX_DEPTH`) or in the comment block, not in a magic number buried in `main`.
+2. **Document stack budget** in `.equ` constants (`FACT_STEP_BYTES`,
+`FACT_BASE_BYTES`, `FACT_MAX_DEPTH`) or in the comment block, not in a magic
+number buried in `main`.
 
 Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it, same rule as Chapter 11.
 
@@ -274,8 +287,6 @@ Defenses that fit Book 3:
   └──────────────────────────────────────────────┘
   lower addresses  ← SP near the bottom after pushes
 ```
-
-Each `call` pushes a return address (not shown separately from the frames above).
 
 Data at `$8000` does not move; only SP walks.
 
@@ -324,7 +335,8 @@ Step into `factorial_u8` with `FACT_N = 3` first: count pushes on the way down, 
 ## Exercises
 
 1. Change `FACT_N` to 6 in the example. Does `fact_rec` still match `fact_iter` in an 8-bit result byte? What should you change if you need 6! exactly?
-2. Hand-count stack bytes for `factorial_u8(5)` at the deepest point. Compare to `FACT_MAX_DEPTH × FACT_FRAME_BYTES`.
+2. Hand-count stack bytes for `factorial_u8(5)` at the deepest point. Confirm
+`FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES`.
 3. Rewrite `sum_u8_rec` to recurse on the head index in workspace instead of advancing HL before the call. Does the sum change? Does stack use change?
 4. Add `hanoi_moves_u8` for n ≤ 4 using the recurrence H(0)=0, H(n)=2H(n-1)+1. Use two workspace words to store the first recursive result in HL before the second call. Estimate frame bytes per level.
 5. Run `azm --rc warn` on a deliberate bug: call `factorial_u8` and then use B without reloading. Fix using the contract comment.

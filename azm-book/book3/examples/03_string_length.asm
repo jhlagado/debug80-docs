@@ -18,10 +18,13 @@ main:
     ld hl, buffer
     ld de, message
     call strcmp_u8
-    ld a, 0
+    or a
     jr nz, _copy_bad
     ld a, 1
+    jr _store_copy_ok
 _copy_bad:
+    xor a
+_store_copy_ok:
     ld (copy_ok), a
 
     ld hl, message

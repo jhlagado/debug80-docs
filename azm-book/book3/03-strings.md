@@ -41,7 +41,7 @@ message:
     .cstr "HELLO"
 ```
 
-Both forms emit the same bytes in ROM: `48 45 4C 4C 4F 00`.
+Both forms emit the same bytes: `48 45 4C 4C 4F 00`.
 
 ### Length vs capacity
 
@@ -69,7 +69,7 @@ Unless a routine says otherwise, Book 3 string routines use:
 | Current / source pointer | HL | Points at next byte to read |
 | Destination pointer | DE | Used by copy and compare |
 | Search character | C | Compared with `cp c` |
-| Length or index result | A | 0–255 in the demo sizes |
+| Length or index result | A | 0–255; these routines require strings no longer than 255 bytes |
 | Not found sentinel | A = `$FF` | Same idea as Chapter 2 search |
 
 **Callee-save:** push BC/DE/HL if you use them as scratch and the `.routine` block does not list them under `clobbers`.
@@ -114,6 +114,9 @@ _done:
 ```
 
 The loop invariant: at `_loop`, B equals the number of non-null bytes already passed.
+
+The 8-bit result limits this routine to strings of at most 255 bytes. Longer
+strings make B wrap to zero before the terminator.
 
 For `message` above, `str_len` at `$800E` should hold `$05` after `halt`.
 
@@ -241,7 +244,15 @@ main:
     ld hl, buffer
     ld de, message
     call strcmp_u8
-    ...
+    or a
+    jr nz, _copy_bad
+    ld a, 1
+    jr _store_copy_ok
+_copy_bad:
+    xor a
+_store_copy_ok:
+    ld (copy_ok), a
+
     ld hl, message
     ld c, CHAR_L
     call str_find_char
@@ -283,7 +294,9 @@ Single-step through `strlen_u8` once: watch B increment only on non-zero bytes, 
 ## Exercises
 
 1. Change `message` to `.db "AZM", 0`. Predict `str_len` and `find_index` for `'M'` before running the program.
-2. Add `strchr` that returns HL pointing at the match (or HL = 0 / a sentinel label meaning not found). Document `in`/`out`/`clobbers`.
+2. Add `strchr` that returns HL pointing at the match with carry set, or HL = 0
+with carry clear when the character is absent. Document
+`in`/`out`/`clobbers`.
 3. Implement `strcat_u8`: HL destination, DE source. Scan HL to its null, then `strcpy` from DE into that position.
 4. Bounded copy: `strncpy_u8` with B = max bytes to write; stop early if source ends, but never write more than B bytes (pad with null if required).
 5. Hand-trace `strcmp_u8` on `"AB"` vs `"A"`. Which return code should you get?

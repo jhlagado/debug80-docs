@@ -9,12 +9,12 @@ FLAG_READY .equ $01
 FLAG_ERROR .equ $02
 FLAG_BUSY  .equ $04
 
-op bit_set(reg reg8, mask imm8)
+op bit_set(mask imm8)
   or mask
 end
 
-op bit_clr(reg reg8, mask imm8)
-  ld b, reg
+op bit_clr(mask imm8)
+  ld b, a
   ld a, mask
   cpl
   and b
@@ -35,11 +35,11 @@ _ready_clear:
     ld (ready_lit), a
 
     ld a, (device_flags)
-    bit_set A, FLAG_ERROR
+    bit_set FLAG_ERROR
     ld (device_flags), a
 
     ld a, (device_flags)
-    bit_clr A, FLAG_BUSY
+    bit_clr FLAG_BUSY
     ld (device_flags), a
 
     ld a, (device_flags)
