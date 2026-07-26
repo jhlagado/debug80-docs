@@ -240,7 +240,7 @@ Wrote warn.main.d8.json (4 block segments attributed to .glim source)
 ```
 
 In a running program, the store still executes and the cell changes
-in memory, but every block waiting `on` that cell sleeps through it.
+in memory, but no block waiting `on` that cell ever runs.
 
 ---
 

@@ -10,7 +10,7 @@ nav_order: 17
 # Chapter 17 - A VDP Game
 
 Skyfall
-never asked whether two shapes had met. It never had to: the paddle
+never tested whether two shapes had met. It never had to: the paddle
 and the drop shared the same eight columns, because the 8x8 RGB LED
 matrix is a board, and on a board a landing is one subtraction
 against a column number. The VDP takes that certainty away. Sprites stand
@@ -409,7 +409,7 @@ The technique has a name you will meet in every sprite game:
 axis-aligned bounding-box collision. Each sprite owns an 8x8 box, the
 differences compare the boxes' top-left corners, and at a difference
 of 8 the boxes sit edge
-to edge, so `cp 8` fires on any box overlap, and 6 demands the boxes
+to edge, so `cp 8` fires on any box overlap, while at 6 the boxes must
 share at least a three-pixel band on each axis. Boxes collide, not
 pixels, and that matters for sparse patterns: two thin sprites can
 overlap boxes without a single opaque pixel touching. Pixel-perfect

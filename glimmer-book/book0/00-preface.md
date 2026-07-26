@@ -59,8 +59,8 @@ The book first builds the reactive model from state, pulses, bindings
 and compute/effect/render blocks. It then adds matrix drawing, time,
 motion, resources, structured data and debugging before organising
 those parts into complete games. The final chapters move from the 8x8
-matrix to the TMS9918 video display processor and compare what each
-display asks of a game.
+matrix to the TMS9918 video display processor and compare the demands
+each display places on a game.
 
 ---
 

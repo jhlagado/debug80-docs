@@ -140,7 +140,7 @@ top-left corner. `Advance` is small: step forward, and past 27 wrap to
 as the key stays down.
 
 `Position`
-is the fact the game reasons about; the screen wants an x, a y, and a
+is the fact the game reasons about; drawing takes an x, a y and a
 colour; the compute derives all three in one place. A threshold
 ladder splits the rim into its quadrants: positions 0 to 6 lie on
 the top edge, 7 to 13 on the right, 14 to 20 on the bottom, 21 to 27

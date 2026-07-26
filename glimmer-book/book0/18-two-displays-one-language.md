@@ -166,8 +166,8 @@ the next commit sends the 128-byte sprite table.
 That scale rewrote your rules. Positions are pixels now, so
 Lanternfly's collision is the distance between two facts (absolute
 pixel difference per axis, each under a tolerance of 6), and the
-tolerance itself was a design decision Skyfall never asked of you:
-how much overlap counts as touching. The lantern pickup crosses the
+tolerance itself was a design decision Skyfall did not have: how
+much overlap counts as touching. The lantern pickup crosses the
 two coordinate systems on purpose: the fly lives in pixels, the
 lantern in grid cells, so `Gather` centres the fly (+4), divides by
 eight (three shifts), and compares cells. When `Gather` takes a lantern, it blanks the old grid cell
@@ -186,7 +186,7 @@ Here is the whole divergence in one table:
 |---|---|---|
 | The scene | 32 bytes, redrawn on change | 768 cells + 32 sprites, persistent in VRAM |
 | A render writes | the whole framebuffer | shadow cells, committed by dirty group |
-| Who shows it | `ScanFrame`, every frame | the VDP, from VRAM, on its own |
+| What shows it | `ScanFrame`, every frame | the VDP, from VRAM, on its own |
 | Positions | cells on an 8x8 board | pixels on 256x192; grid cells, 32x24 |
 | Collision | one subtract, one compare | pixel distance per axis, under a tolerance |
 | Erasing | `FbClear` opens each redraw | an explicit blank of the old cell |
