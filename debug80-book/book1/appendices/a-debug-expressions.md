@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 101
 ---
 
-[← Copy monitor ROM source](../10-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
+[← Glimmer targets](../11-glimmer-targets.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
 
 # Appendix A — Debug expressions
 
@@ -179,4 +179,6 @@ carry or zero
 
 When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors appear in the Debug Console and the condition is treated as false.
 
-[← Copy monitor ROM source](../10-copy-monitor-rom.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
+---
+
+[← Glimmer targets](../11-glimmer-targets.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)

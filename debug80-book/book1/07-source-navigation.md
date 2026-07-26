@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 7
 ---
 
-[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
+[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)
 
 # Source navigation and ROM source
 
@@ -49,4 +49,4 @@ When you want to edit or debug the monitor itself, copy the monitor ROM source i
 
 ---
 
-[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
+[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)

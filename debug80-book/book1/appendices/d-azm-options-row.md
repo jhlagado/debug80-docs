@@ -97,4 +97,6 @@ If you set `azm.registerContracts` by hand in `debug80.json`, the panel dropdown
 
 If you want a project-wide contracts policy that sticks, the file-scoped `registerContractsPolicy` described in [AZM Book 1](../../../azm-book/book1/06-register-contracts.md) is the mechanism that survives.
 
+---
+
 [← Appendix C — Debug80 file formats](c-project-configuration.md) | [Book 1](../index.md)

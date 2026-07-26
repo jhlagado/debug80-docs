@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 9
 ---
 
-[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)
+[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)
 
 # Send to TEC-1G hardware
 
@@ -70,4 +70,4 @@ Start with the part of the path that failed:
 
 ---
 
-[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)
+[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)

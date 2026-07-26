@@ -9,9 +9,7 @@ nav_order: 10
 
 # Copy monitor ROM source
 
-Debug80 supplies the platform monitor ROM for ordinary TEC-1 and TEC-1G projects.
-
-Copy the monitor ROM into a project when you want to study, edit or debug the monitor itself. Debug80 assembles the copied files with AZM and uses their source map when execution enters monitor code.
+Debug80 supplies the platform monitor ROM for ordinary TEC-1 and TEC-1G projects, so copy it into a project only when you want to study, edit or debug the monitor itself. Debug80 then assembles the copied files with AZM and uses their source map when execution enters monitor code.
 
 ## Run the command
 

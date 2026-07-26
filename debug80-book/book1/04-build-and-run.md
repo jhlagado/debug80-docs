@@ -80,9 +80,7 @@ If a session is already running, **Run** stops it and starts again, so after an 
 
 ## Build or run
 
-Use **Run** while you are writing a program.
-
-Use **Build** when you want the artifacts and not the machine: before sending a HEX file to real hardware, when you only want to know whether the code assembles, or when you are working on a target that is not the one you are currently debugging.
+Use **Run** while you are writing a program, and **Build** when you want the artifacts and not the machine: before sending a HEX file to real hardware, when you only want to know whether the code assembles, or when you are working on a target that is not the one you are currently debugging.
 
 ## Rebuild on save
 
@@ -90,9 +88,7 @@ While a session is running, saving any `.asm`, `.z80`, `.inc` or `.glim` file in
 
 ## Stop on entry
 
-The **Stop on entry** checkbox pauses the program at its entry point instead of letting it run.
-
-It applies to this VS Code window for as long as it is open.
+The **Stop on entry** checkbox pauses the program at its entry point instead of letting it run, and applies to this VS Code window for as long as it is open.
 
 ## The other three controls
 

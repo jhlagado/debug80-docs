@@ -42,7 +42,7 @@ If the source-map status line from the last chapter does not read `current`, the
 
 ## Step, then inspect
 
-Use F10 to stay in your program and move past calls as single operations. Use F11 when the called code matters and you want the instructions inside it. Use Shift-F11 once F11 has taken you somewhere you have seen enough of.
+F10 keeps you in your program, moving past calls as single operations. Reach for F11 when the called code matters and you want the instructions inside it, and for Shift-F11 once F11 has taken you somewhere you have seen enough of.
 
 ## Set a breakpoint
 
