@@ -44,7 +44,7 @@ timing, the change tracking) and calls your code at the moments you
 declared.
 
 The language inside every rule is Z80 assembly itself: the real
-instruction set, the real registers, the real flags. What comes out is one
+instruction set, the real registers, the real flags. Glimmer emits one
 ordinary assembly-language source file with your code inside it, which
 you can open, read and step through whenever you want to know what a
 declaration cost you.
