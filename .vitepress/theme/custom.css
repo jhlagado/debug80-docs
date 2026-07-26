@@ -137,6 +137,18 @@ html {
   letter-spacing: 0.02em;
 }
 
+/* No keyboard hint on the search button. The shortcut still fires for
+   anyone whose browser lets the page have the key, but Chrome and Safari
+   both claim Cmd-K for the address bar, so advertising it promises
+   something that does not happen for most readers. The button is the
+   reliable way in.
+
+   The selector names the button as well as the keys because VitePress sets
+   display:flex on the two-class form, which outranks a bare class. */
+.DocSearch-Button .DocSearch-Button-Keys {
+  display: none;
+}
+
 .VPSidebar {
   border-right: 1px solid var(--rule);
   padding-top: 22px;
