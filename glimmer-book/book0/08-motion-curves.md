@@ -9,7 +9,7 @@ nav_order: 8
 
 # Chapter 8 - Motion Curves
 
-Chapter 7 gave your program a clock of its own: the ramp, a byte that
+The ramp gives a program a clock of its own: a byte that
 walks from 0 to its last step, once per frame, marked changed the
 whole way. Point a compute block at it and a position starts moving.
 Divide a 64-step ramp by eight and a dot crosses the 8x8 RGB LED
@@ -140,14 +140,14 @@ Missing from that body is
 everything expensive: no squares, no roots, no fractions.
 
 Every ramp names an arrival pulse, so `Landed` fires as the flight
-ends. Comet lands quietly for now; chapter 9 puts sound on moments
-like this one.
+ends. Comet lands quietly for now; a sound cue can later respond to
+the same moment.
 
 Build it and press GO. The launch is brisk and the landing is soft,
 and between the two the dot slows column by column: motion with a
 shape, from a compute block seven instructions long.
 
-## What a curve declares
+## Curve declarations
 
 The full form, every dial at once:
 
@@ -224,8 +224,8 @@ Curve_Glide:
 Sixty-four bytes, one per ramp step, and you can read the ease-out
 straight off the rows: the dot spends three frames on column 0 and
 nineteen on column 6, each dwell longer than the last, give or take a
-rounding step. The declaration's whole runtime cost is 64 bytes of
-data.
+rounding step. The table occupies 64 bytes and requires no per-frame
+interpolation.
 
 `.align 256`, the line above the label, moves the assembler to the
 next 256-byte page boundary before laying the table down, so
@@ -385,9 +385,9 @@ On the very first frame, `Preset` is already changed, so
 `TrackComet` runs before any launch, reads the idle ramp's final step,
 and the dot appears on its landing column, waiting for GO. And
 `TrackComet` triggers `on Travel, Preset`, so a switch lands
-immediately: press PLUS during a flight and the dot jumps to the new
-path's position at the same step, then finishes the journey on the new
-curve. Launch under preset 1 and you are watching this chapter's
+on the next update: press PLUS during a flight and the dot jumps to
+the new path's position at the same step, then finishes the journey on
+the new curve. Launch under preset 1 and you are watching this chapter's
 opening motion again, equal dwell on every column. Preset 2 glides in;
 preset 3 springs past and settles.
 

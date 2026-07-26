@@ -26,21 +26,17 @@ frame. A lantern glows somewhere in the grid; reach its cell and you
 gather it, the score climbs on the LCD, and a fresh lantern appears
 somewhere else. A wasp hunts you the whole time, and every lantern
 you take quickens its stride. When it reaches you, the game ends.
-Around all of it stand the splash,
-playing, and game-over cards, the loop Skyfall taught you, now
-running over VRAM shadows. The full
-source (every declaration, block, and card in place, 380 lines)
-ships with this book as [lanternfly.glim](code/lanternfly.glim);
-keep it open beside the chapter, because the chapter walks the
-load-bearing parts and trusts you with the mirrors and repeats (the
-four movement effects are Grove's with new names, and the GameOver
-card is Skyfall's keystroke for keystroke).
+Around all of it stand the splash, playing and game-over cards, now
+running over VRAM shadows. The complete source ships with this book as
+[lanternfly.glim](code/lanternfly.glim). Keep it open beside the
+chapter: the text concentrates on the parts specific to this game,
+while the four movement effects follow Grove and the GameOver card
+follows Skyfall.
 
 ## Lanternfly on paper
 
-Chapter 14 gave you a habit: the design in Glimmer's terms, on paper,
-before any block gets written.
-Do it for Lanternfly and the first thing you notice is that the facts
+Start with the design in Glimmer's terms before writing any block.
+For Lanternfly, the facts
 split into two coordinate systems, and that split is the whole
 chapter in miniature. Sprites glide, so `FlyX`/`FlyY` and
 `WaspX`/`WaspY` hold the two movers' top-left pixels. The lantern
@@ -52,9 +48,8 @@ The moments: four held pulses steer the fly, `ChaseTick` moves the
 wasp, `AnyKeyP` starts and restarts, and `GateP` opens the restart
 gate. Two schedules drive `ChaseTick` and `GateP`: `Pace`, a writable
 oscillator that is at once the wasp's stride and the game's difficulty, and
-`Wait`, the game-over one-shot. Both are jobs Skyfall's timers
-already did, and the cards are Skyfall's three, joined in the same
-three-press loop. Run the budget check: eight facts,
+`Wait`, the game-over one-shot. These timers serve the same roles as
+Skyfall's, and the three cards form the same loop. Run the budget check: eight facts,
 seven moments, and `CurrentCard` spend 16 of the 32 change-flag
 cells.
 
@@ -142,8 +137,8 @@ corner, lantern at cell (24, 6).
 
 ## The splash card plants the garden
 
-Chapter 16 planted Grove's scene with a changed cell; a card does the
-same job with an `enter` block:
+Grove planted its scene with a changed cell; a card can do the same
+job with an `enter` block:
 
 ```text
 enter SplashShow
@@ -173,14 +168,13 @@ written as immediates because the reeds never move. The two calls
 after them clear the stage. The first knows the lantern only through
 state: wherever the last round left it, `LampCol` and `LampRow` still
 say so, and the block loads them into D and E and writes the blank
-tile through `NamePut`, the runtime-coordinate path chapter 16
-pointed you at. The second
-parks sprite slot 0 at y = `$D1`, the terminator value from chapter
-16's startup: the VDP stops processing sprites at the first slot
+tile through `NamePut`, the runtime-coordinate path. The second parks
+sprite slot 0 at y = `$D1`, the terminator value used at startup: the
+VDP stops processing sprites at the first slot
 holding it, so one write hides the fly and the wasp together. On the
 very first frame both calls touch cells already blank and a sprite
 already hidden, and no harm comes of either. The card's one effect,
-`StartGame`, is chapter 13's opening move: `on AnyKeyP`,
+`StartGame`, is the opening move: `on AnyKeyP`,
 `goto Playing`.
 
 ## Entering play
@@ -212,8 +206,8 @@ begin
 end
 ```
 
-The entry re-raise is here for the reason chapter 13 gave: a
-card-gated render never sees flags raised while its card slept, so
+The entry re-raise is needed because a card-gated render never sees
+flags raised while its card slept, so
 when the card wakes, its renders have missed everything. The `updates` line is the sleeping
 card catching
 up on the news: it names every cell the Playing renders read, and
@@ -226,8 +220,8 @@ fresh values, with no separate reset path to write or get wrong.
 cell carries no flag, so its entry documents the write and compiles
 to nothing.
 
-Four move effects steer the fly. They are Grove's four moves from
-chapter 16, with the moth's cells and pulses renamed for the fly, so
+Four move effects steer the fly. They are Grove's four moves with the
+moth's cells and pulses renamed for the fly, so
 they are not printed here. Up and left stop at zero, down at 184,
 right at 248, each on its own held pulse at period 1.
 
@@ -426,7 +420,7 @@ the tolerance is where you get to be a designer: 8 ends the game the
 frame the boxes meet, 6 waits for closeness and gives the player the
 near miss they will swear they earned. The ending writes
 `CurrentCard` directly, a transition that depends on a runtime test,
-which is chapter 13's rule for exactly this case.
+the form required for a transition that depends on a runtime test.
 
 ## The score on the LCD
 
@@ -485,12 +479,10 @@ or a hundreds pass in the same counting style.
 
 ## Game over, gated
 
-The GameOver card is Skyfall's, keystroke for keystroke: `GameOverShow`
-writes `MsgOver` to row one, closes the gate with `Armed`, and arms
-`Wait` at 90 frames; `OpenGate` fires on `GateP`, writes `MsgAny` to
-row two, and opens the gate; `Restart` tests `Armed` before writing
-`Card.Splash`. Card
-gating stops the move and chase blocks, so
+Lanternfly reuses Skyfall's delayed restart gate. `GameOverShow`
+closes `Armed` and starts `Wait`; `OpenGate` later writes `MsgAny` and
+opens the gate; `Restart` tests `Armed` before writing `Card.Splash`.
+Card gating stops the move and chase blocks, so
 no shadow changes, no commit carries anything, and VRAM keeps the
 final scene exactly as it stood: the wasp frozen on top of the fly
 among the reeds, the score on the LCD naming the run. A restart walks
@@ -513,7 +505,7 @@ Glim_PlaceFly:
 The line stands in the generated file exactly as you wrote it, and
 that is not an omission: `sprite_at` is an op, so the assembler
 substitutes its body at each call site. This one line assembles as
-the six instructions from chapter 16's op definition with this site's
+the six instructions from the op definition with this site's
 arguments folded in: `FlyX` and `FlyY` read into D and E, `Fly`
 becoming `ld a,0`, then `call SpriteSet`. `Glim_SplashShow` reads the
 same way, five `tile_at` lines, one op, five expansions, each with
@@ -532,7 +524,7 @@ The enter block's wrapper shows delivery again:
 ```
 
 `StartRound` names eight cells, and Glimmer stages them in two
-groups, obeying chapter 5's exactly-once rule. `LampCol`, `LampRow`,
+groups, obeying the scheduler's exactly-once rule. `LampCol`, `LampRow`,
 and `Score` have render consumers only, so they travel through
 `Raised0` and reach `PlaceLantern` and `ShowScore` in the same frame:
 the lantern and the score appear the instant play begins. The four
@@ -549,8 +541,8 @@ N+1: the two effects test the new position, `PlaceFly` runs, and
 sees the flag and streams all 128 sprite-attribute bytes to VRAM, and
 the fly stands one pixel to the right. Two frames of latency from
 pulse to picture, then, and no cost in rate: the pipeline refills every
-frame, so the held key still crosses the screen at sixty-odd pixels a
-second. A gather frame adds up to two dirty name rows, 32 bytes each;
+frame, so a held key still moves the sprite by one pixel per refresh.
+A gather frame adds up to two dirty name rows, 32 bytes each;
 a still frame costs the commit one clear flag and three clear group
 bytes, and the VDP paints the standing scene without any help from
 you.

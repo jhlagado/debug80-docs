@@ -16,11 +16,10 @@ pieces in a falling-block game, the body of a snake: each of those
 is many related bytes that persist together, change together, and
 redraw together: one fact that happens to be sixty-four pixels wide.
 
-Back in chapter 3 you made the first design decision a game asks of
-its author: choosing which facts it remembers. This chapter hands you
-the second: choosing the *shape* those facts take in memory. You could declare sixty-four
-separate cells, but the model stops you: chapter 3 set the limit of 32
-flag-carrying cells, so a
+Choosing which facts a game remembers is one design decision. This
+chapter introduces another: choosing the *shape* those facts take in
+memory. You could declare sixty-four separate cells, but Glimmer's
+limit of 32 flag-carrying cells means a
 board of one-byte facts would overflow the change banks before the
 program drew a pixel. But the deeper mismatch is one of meaning. When
 you stamp one pixel, *the picture* changed. A render that draws the
@@ -171,11 +170,11 @@ state Picture : byte[8] changed
 
 `byte[N]` reserves N bytes of state under one name, with N anywhere
 from 1 to 256. An array starts zero-filled and takes no initializer,
-so the declaration reads the way chapter 1 taught you to read them:
+so the declaration reads directly:
 *Picture is eight bytes, already changed*.
 
 One change flag covers the whole run. What changed when you stamped that pixel? Not
-byte three of some array, but the picture. A board changes *as a thing*,
+byte three of some array, but the picture. A board changes *as a unit*,
 and the render that watches it asks one question: do I need to
 redraw? Per-cell flags would spend your whole flag budget on
 bookkeeping the game never wanted, sixty-four bits of "which byte
@@ -187,8 +186,7 @@ spends one bit of `Changed0`, leaving the banks as roomy as before.
 
 Eight bytes hold sixty-four pixels because each byte is a **row
 mask**: one row of the 8x8 matrix, one bit per column, bit 7 the
-leftmost. You met this convention in chapter 6, along with the
-library helper that serves it: `MxMask` takes a column number in A
+leftmost. The `MxMask` library helper takes a column number in A
 and returns the column's mask in A, clobbering B on the way.
 
 ## Painting a pixel
@@ -293,8 +291,8 @@ shape:
 
 `offset(Point, y)` is a constant computed at assemble time (1, since
 `y` sits one byte into the layout), so the whole operand folds to a
-fixed address and the instruction is the plain absolute load you have
-written since chapter 1. You could write `Cursor + 1` and reach the
+fixed address and the instruction is a plain absolute load. You could
+write `Cursor + 1` and reach the
 same byte today. The reason not to is concrete: add a field at the top
 of the layout, and every hand-counted offset below it shifts silently,
 and the bug that follows points nowhere near its cause. Written as
@@ -302,7 +300,7 @@ and the bug that follows points nowhere near its cause. Written as
 month and every one of them moves with it, without your touching a
 line.
 
-## What a layout can hold
+## Layout fields
 
 Point is the smallest useful layout. Fields come in five kinds, and a
 game piece shows them all:
@@ -386,9 +384,8 @@ Picture:          .ds 8, 0   ; byte array
 ```
 
 `.ds Point, 0` reserves `sizeof(Point)` bytes of zeroes; `.ds 8, 0`
-reserves the array. Set these beside the byte-and-word `.db` lines
-you have read since chapter 1 and you are looking at the same storage
-idea at a larger size: a label, a reservation, zero-filled.
+reserves the array. These are the same storage idea at a larger size:
+a label, a reservation and zero-filled bytes.
 
 And the change tracking confirms what the declarations promised. Two
 cells, two bits:
@@ -402,7 +399,7 @@ CHG_PICTURE       .equ %00000010
 Changed0:         .db %00000011   ; flags dispatch tests
 ```
 
-Ten bytes of storage, two flags, and both marked `changed` so
+Ten bytes of program state, two flags, and both marked `changed` so
 `DrawCanvas` paints the opening frame: the blank picture, the cursor
 in its corner.
 

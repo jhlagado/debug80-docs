@@ -33,8 +33,8 @@ Glimmer's word for a screen or mode is a **card**, borrowed from
 HyperCard, which built whole applications out of stacks of them.
 Exactly one card is active at a time. A `card` line starts a
 block-dispatch section: the blocks after it run only while that card
-is active. Dispatch is all a card claims. State, pulses, timers and
-resources stay program-wide wherever you write them, so put them at
+is active. A card gates dispatch; it does not create a separate scope.
+State, pulses, timers and resources stay program-wide wherever you write them, so put them at
 the top of the file where the design lives, and let the card sections
 hold blocks.
 
@@ -92,8 +92,8 @@ bind key KEY_GO rising -> HitP
 `PlayClock` and `RestartGate` are one-shot timers holding zero: idle
 until a block writes them, and the blocks that write them arrive with
 their cards. The overlap in the bindings is deliberate: a press of GO
-fires both `HitP` and `AnyKeyP`, exactly as chapter 4 said `bind key
-any` would.
+fires both `HitP` and `AnyKeyP` because `any` runs alongside a matching
+named binding.
 
 ## A card is a section
 
@@ -176,7 +176,7 @@ moment, it may take `goto`.
 The body prepares a clean screen: clear the framebuffer, blank the
 seven-segment digits (`HudBlankDig` is the display's counterpart to
 `FbClear`), and set `PromptOn`. The `updates` line delivers `PromptOn`
-to the render phase the same frame, by the chapter 5 rule, so the
+to the render phase in the same frame, so the
 prompt is lit on the very first frame of the card, with the blink
 timer taking over from there.
 
@@ -272,8 +272,8 @@ program boots, while the splash is still blinking. `TimeUp` fires
 into a frame where no active block listens, the clock settles at zero,
 and the round that eventually starts has no end.
 
-`DrawClock` reads the timer cell directly. Chapter 7's rule says a
-one-shot's cell *is* the countdown, so `PlayClock` is the frames
+`DrawClock` reads the timer cell directly. A one-shot's cell *is* the
+countdown, so `PlayClock` is the frames
 remaining, and the two `add hl,hl` put frames-remaining divided by 64
 into H: a bar of eight pixels down to none, one pixel per 64 frames
 left. Running `on FrameCount`, the block redraws every frame of the
@@ -350,8 +350,8 @@ The last card exists because of something you would discover in your
 first minute of playtesting: a player mashing GO at the end of a round
 sails straight past the result screen without ever seeing it. So restart waits
 behind a gate. `ShowFinal` closes it and arms `RestartGate`; ninety
-frames later `GateOpenP` fires and `OpenGate` opens it (the delayed
-one-shot chapter 7 promised), and only then does a key press travel.
+frames later `GateOpenP` fires and `OpenGate` opens it, and only then
+does a key press travel.
 
 `Restart` is the travel, and it is our first transition that depends
 on a runtime test. `goto` is unconditional once its block runs, so a
@@ -360,8 +360,8 @@ conditional transition writes `CurrentCard` itself: declare
 leaves. The enum members are ordinary assembler constants, so
 `ld a,Card.Splash` is plain Z80 with a generated name in it.
 
-What `Restart` does when the gate is shut looks like a bug and is not.
-The body stores nothing, yet `updates CurrentCard` still marks the
+`Restart` may look wrong when the gate is shut. The body stores
+nothing, yet `updates CurrentCard` still marks the
 cell changed. Entry is edge-triggered: an enter block runs
 only when the program actually changed to its card. Marking
 `CurrentCard` changed while staying on GameOver therefore re-runs
@@ -372,8 +372,8 @@ nothing.
 `FinalBar` draws the score, and
 it depends on `Score`, a fact whose last change happened during the
 round, frames before this card existed on screen. `Score` changed
-many times in that round, and chapter 5's delivery rule was
-exactly-once: each change was delivered in its own frame, to the
+many times in that round, and each change was delivered exactly once
+in its own frame, to the
 blocks active at the time, and the flag dropped at that frame's end. **A card-gated block never sees flags
 raised while its card was inactive.** Left to itself, `FinalBar` would
 wait forever on a flag that already came and went, and the game-over
@@ -400,15 +400,15 @@ stores or no stores. From `gate.main.asm`:
 
 One of those two raises is a **re-raise**: `Score` holds the value it
 held a moment ago, and its flag goes up again, so `FinalBar` runs on
-the card's first frame and paints the result. The rule: when a card's
-renders depend on facts that changed while the card was away, list
-those facts in the enter block's `updates`.
+the card's first frame and paints the result. When a card's renders
+depend on facts that changed while the card was away, list those facts
+in the enter block's `updates`.
 
 ## Transitions land at frame boundaries
 
 `StartGame` runs in the middle of a frame, in the logic phase, with
-Splash's other blocks still mid-frame around it. So when does Splash
-stop and Playing start?
+Splash's other blocks still mid-frame around it. Splash remains active
+for the rest of that frame; Playing starts on the next.
 
 First, `CurrentCard` is the *next-card* register. What `goto Playing`
 became, from `gate.main.asm`:
@@ -481,8 +481,8 @@ Changed0:         .db %00000000   ; flags dispatch tests
 Changed1:         .db %00000001   ; flags dispatch tests
 ```
 
-A card gate is the dispatch test you have been reading since chapter
-3, with one comparison in front. Here is `ScorePoint`'s, from the
+A card gate is the familiar change-flag dispatch test with one
+comparison in front. Here is `ScorePoint`'s, from the
 logic dispatcher:
 
 ```asm
@@ -528,9 +528,8 @@ test is what makes the re-raise idiom and `Restart`'s every-run
 change mark safe: a raised flag alone, with both card bytes equal,
 walks past every enter block in the file.
 
-The cabinet is built and its machinery is proven, and in the next
-chapter we put a game inside it, one complete game spending
-everything you have learned: [A Small Matrix
+The card machinery is now visible in both source and generated code.
+The next chapter puts a complete game inside it: [A Small Matrix
 Game](14-a-small-matrix-game.md).
 
 ---

@@ -12,17 +12,16 @@ nav_order: 6
 The TEC-1G has no video chip. The display is eight rows of eight RGB LEDs, and the
 hardware can light exactly one row at a time. Three ports carry a
 row's red, green, and blue column data; a fourth selects the row that
-shows it. The thing sweeping those rows is the Z80 itself. It paints
+shows it. The Z80 itself sweeps those rows. It paints
 row 0, holds it lit a moment, paints row 1, and so on around the
 board, and if it sweeps all eight quickly enough, over and over, your
 eye fuses them into a steady picture. If it ever stops sweeping, the
 8x8 matrix goes dark. The CPU
 *is* the display.
 
-Which means every program you have written in this book has been
-doing two jobs at once. One is the game. The other is being the
-display controller, the job chapter 1 named yours: showing the
-current picture, every frame, forever.
+Every program you have written in this book has therefore been doing
+two jobs at once. One is the game. The other is the generated display
+controller, which shows the current picture every frame.
 This chapter opens the machinery
 that does it: the scan that keeps the 8x8 matrix lit,
 the loop shape it forces on the frame, the 32 bytes of memory your
@@ -137,9 +136,8 @@ end
 The rim of the 8x8 matrix is 28
 pixels, and `Position` numbers them 0 to 27, clockwise from the
 top-left corner. `Advance` is small: step forward, and past 27 wrap to
-0. Held GO fires `Step` every 4
-frames (the binding you learned in chapter 1, doing its arcade job),
-so the dot orbits for as long as the key stays down.
+0. Held GO fires `Step` every 4 frames, so the dot orbits for as long
+as the key stays down.
 
 `Position`
 is the fact the game reasons about; the screen wants an x, a y, and a
@@ -185,11 +183,11 @@ the library at the bottom of the file all come from this one choice.
 `platform` names the board and monitor, which is where `KEY_GO` and
 the `_scanKeys` polling come from. `display` names the output device,
 and it decides the loop itself, because the CPU is what lights the
-pixels. Chapter 16 puts `tms9918` on that line and gets a loop built
-around a video chip; the reactive core (state, flags, dispatch,
-rollover) stays the same.
+pixels. The `tms9918` display instead builds a loop around a video
+chip while leaving the reactive core (state, flags, dispatch,
+rollover) unchanged.
 
-What `matrix8x8` builds, from `compass.main.asm`:
+The generated `matrix8x8` runtime, from `compass.main.asm`:
 
 ```asm
 ; --- runtime loop ---
@@ -229,9 +227,8 @@ lit. The few dozen instructions this book's blocks spend per frame
 move that share by amounts no eye will find; fill the blank window
 with heavy work and the display itself will tell you, dimming before
 anything else complains. And since the scan
-is by far the frame's largest cost, it paces the frame, which is
-what has let me treat the frame as the unit of game time since
-chapter 1.
+is by far the frame's largest cost, it paces the frame and makes the
+frame a useful unit of game time.
 
 ## The framebuffer
 
@@ -259,9 +256,9 @@ Thirty-two bytes hold the whole picture: eight rows of four bytes
 Each of the three plane bytes carries one bit per column. A pixel is
 one column bit, present in up to three planes: set it in the red byte
 alone and the pixel glows red; set it in red and green both and the
-pixel glows yellow. The seven visible colours you cycled through in
-chapter 2 are the seven ways to occupy one, two, or three planes, and
-the profile's constants spell that out:
+pixel glows yellow. The seven visible colours are the seven ways to
+occupy one, two, or three planes, and the profile's constants spell
+that out:
 
 ```asm
 COLOR_RED         .equ $01
@@ -273,8 +270,8 @@ COLOR_MAGENTA     .equ COLOR_RED + COLOR_BLUE
 COLOR_WHITE       .equ $07
 ```
 
-That is the A register you have loaded before every `FbPlot` since
-chapter 1: a set of plane bits, not a colour-table index.
+The A value passed to `FbPlot` is therefore a set of plane bits, not a
+colour-table index.
 
 `FbPlot` turns x, y, and colour into plane-byte writes. Its head,
 from the profile library:
@@ -308,7 +305,7 @@ The `.routine` line above the label is the register interface, and you
 will meet it the first time a library call eats a register of yours.
 It is declared in the generated file and checked on every build:
 `FbPlot` consumes A, B, and C, and clobbers A, B, DE, and HL.
-Chapter 5's `DrawBar` kept its
+`DrawBar` kept its
 loop counter in B, a clobbered register, which is why it pushed BC
 around the call. When a block of yours misuses a library
 routine's registers, the build fails with the contract, and these
@@ -406,9 +403,9 @@ In the middle of every pass sit two calls, `SndService` and
 thing the program does. Eight beats a frame, evenly spaced, at full
 speed, so the profile hangs its other board services on it: an
 active sound cue toggles the speaker here, and one seven-segment
-digit is strobed here per beat, which is how the score display
-chapter 3 wrote through `HudWriteU16` stays lit by the same trick as
-the 8x8. Chapter 9 builds on both services.
+digit is strobed here per beat. A value written through `HudWriteU16`
+therefore stays lit by the same trick as the 8x8. Sound and display
+resources build on both services.
 
 Step through a pass under Debug80 whenever you like: a breakpoint on
 `ScanFrame` in `compass.main.asm` catches the frame at its start.

@@ -9,13 +9,12 @@ nav_order: 21
 
 # Appendix C - The TMS9918 Profile
 
-Everything `platform tec1g-mon3` with `display tms9918` contributes
-to a generated program: the commit-shaped loop, the VRAM map behind
-the two ports, the shadow tables render blocks write, the sprite and
-tile resources with their generated ops, and the library routines
-with their register contracts. Every listing and value here is copied
-from a program built with `glimmer build`; the register interfaces
-are the `.routine` lines the assembler checks at strict strength.
+The combination of `platform tec1g-mon3` and `display tms9918`
+contributes the commit-shaped loop, VRAM map, shadow tables, sprite and
+tile resources, generated ops and library routines. Every listing and
+value here is copied from a program built with `glimmer build`; the
+register interfaces are the `.routine` lines the assembler checks
+under strict contract checking.
 
 ## The loop
 

@@ -13,8 +13,8 @@ Every program you have written so far has one thing in common: none
 of them can act without you. Mover's dot sits wherever your
 last press left it. Meter's bar holds its level until you lean on plus
 or minus. Take your hands off the keypad and frame after frame goes by
-with every change flag clear and every block at rest, the machine
-running but nothing happening.
+with every change flag clear and every reactive block at rest. The
+profile still scans the display and polls the keypad.
 
 Take your hands off a real
 game for ten seconds and something still moves: a drop falls, a ghost
@@ -24,17 +24,16 @@ your programs have had exactly one source of moments, the keypad,
 which means the player has held all the initiative. This chapter gives
 the machine some initiative of its own.
 
-The frame you toured in chapter 6
-scans the 8x8 RGB LED matrix, polls the keypad, runs whatever changed,
+The runtime frame scans the 8x8 RGB LED matrix, polls the keypad, runs
+whatever changed,
 and comes around again for as long as the power holds. Every turn of
 that loop is a beat, and this chapter is about declaring moments
 against those beats. Glimmer gives you three ways to do it (a
 built-in frame counter, timers, and ramps), and each answers a
 different question about time. Our program is *Drip*: a drop that
 falls on its own schedule, blinks as it falls, and falls faster the
-longer the program runs. One line Drip does not have: there is no
-`bind` in it. Nothing in this program answers to the keypad, and it
-plays anyway.
+longer the program runs. Drip contains no `bind` because it answers to
+its own schedule rather than the keypad.
 
 ## Every frame
 
@@ -75,8 +74,8 @@ which never mentions `FrameCount`, pays nothing for it.
 
 For motion, though, the every-frame schedule runs too hot. A drop stepping
 one row per frame falls off an eight-row board in eight frames.
-Chapter 1 called one step every eight frames a playable pace; eight
-steps in eight frames is a flash. Game tempo is *every N frames*, with
+Mover stepped once every eight frames; eight steps in eight frames is
+a flash. Game tempo is *every N frames*, with
 N yours to choose and, since games change difficulty, yours to
 change while the program runs.
 
@@ -143,8 +142,8 @@ per keypress. A rule never knows where its moment comes from, and that
 lets you retune a game's entire schedule without touching a single
 rule.
 
-Where in the frame does the ticking happen? Right after the keypad
-poll, before any phase runs, so a pulse fired by a timer is seen by
+Timer ticking happens immediately after the keypad poll and before any
+phase runs, so a pulse fired by a timer is seen by
 every block in the same frame, and clears at the end of the frame
 like every pulse.
 
@@ -212,9 +211,8 @@ firing:
 ```
 
 `word` is the point here: a byte cell tops out at a 255-frame delay,
-and a word countdown runs to 65535. Drip has no use for a one-shot;
-the delayed restart in chapter 13's card game is the shape of moment
-it is for.
+and a word countdown runs to 65535. Drip has no use for a one-shot,
+but delayed restarts and title screens do.
 
 ## The climb
 
@@ -238,8 +236,8 @@ closer to `steps - 1`, marking it changed at every step; this is a
 fact in motion, and a block with `on Heat` could watch the whole
 journey go by. On the step that reaches 249 it fires its pulse, and
 there it idles. Writing the cell sets it moving again: write 0 and the
-full climb runs from the start. Drip spends only the arrival; chapter
-8 spends the journey.
+full climb runs from the start. Drip spends only the arrival; motion
+curves use the journey.
 
 A freshly started program's ramp sits at its terminal
 value, idle, so the first climb needs a push, and a familiar word
@@ -260,9 +258,8 @@ end
 ```
 
 `Boot` begins changed, and no block ever updates it, so `Ignite` runs
-exactly once, on the first frame. The word `changed` has drawn
-first-frame pictures for you since chapter 1; here it fires a
-first-frame rule instead.
+exactly once, on the first frame. The same modifier that draws a
+first-frame picture can also fire a first-frame rule.
 
 When the climb arrives, `Quicken` collects it. Here is the complete
 program:
@@ -477,8 +474,8 @@ pulse byte, and OR the pulse's flag straight into `Changed0`. That
 last move sets the tick apart from the blocks you write, which raise
 through `Raised0` or `Next0` because some consumers may already have
 run. The
-tick runs before all of them, so it can deliver directly, and the
-exactly-once rule from chapter 5 holds untouched.
+tick runs before all of them, so it can deliver directly without
+breaking the exactly-once rule.
 
 Further down, the ramp:
 
@@ -525,9 +522,9 @@ With no flag behind `Fall`, `updates Fall` compiles to nothing here;
 the store inside the body is the act itself, and the header line
 documents it for the dependency report and for you.
 
-`GlimTickTimers` is generated only
-when a program declares a timer or a ramp or names `FrameCount`; look
-back at Meter's loop in chapter 5 and you will find no such call.
+`GlimTickTimers` is generated only when a program declares a timer or
+a ramp or names `FrameCount`; programs without those declarations
+have no such call.
 
 Drip's drop falls in equal steps, the plainest motion there is; next
 chapter we shape those steps into curves, and meet the ramp-driven

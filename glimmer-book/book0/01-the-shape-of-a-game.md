@@ -117,8 +117,8 @@ every block must answer: *when should this code run?* This one runs
 on any frame where `DotX` changed. Everything between `begin` and `end`
 is real assembly, passed through untouched.
 
-So what actually happens when this program runs? A Glimmer program
-advances one **frame** at a time. Every frame, the machinery checks which
+The generated program advances one **frame** at a time. Every frame,
+the machinery checks which
 facts changed and runs the blocks that declared an interest in them,
 then shows the result and goes round again. That is what `changed`
 does: it marks `DotX` as already changed *before the first frame*, so
@@ -128,8 +128,8 @@ never comes. From the second frame on, `DotX` holds still, so
 `DrawDot` rests. The pixel stays lit because keeping
 the display alive is the machinery's job, not yours.
 
-One fact, one rule, and one declared connection between them: `on
-DotX`.
+`DotX`, `DrawDot` and `on DotX` form the fact, rule and declared
+connection.
 
 ## The dot responds
 
@@ -356,13 +356,11 @@ the return, so you write the work and skip the ceremony.
 ## The program behind the program
 
 A `.glim` file is source code, and Glimmer is its compiler, a
-compiler whose output is assembly language. Mover is 47 lines. The
-assembly file it compiles to is about five hundred: the frame loop,
-the keypad polling, the held-key timing, the change tracking, and your
-blocks inside it. That five-hundred-line program is the one you would
-have written by hand; you wrote forty-seven lines of it, and Glimmer
-wrote the rest. Here are three excerpts, so you can see which lines
-are which.
+compiler whose output is assembly language. Mover's compact source
+becomes a much larger assembly file containing the frame loop, keypad
+polling, held-key timing, change tracking and your blocks. Here are
+three excerpts, so you can see which lines came from you and which
+came from Glimmer.
 
 The state:
 

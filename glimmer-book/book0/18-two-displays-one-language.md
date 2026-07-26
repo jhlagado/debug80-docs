@@ -14,12 +14,11 @@ LED matrix. Those sixty-four pixels now run complete games, and you
 have moved from them to a video chip with sprites. Skyfall drops
 blocks down the 8x8 board toward a paddle you slide along the bottom
 row; Lanternfly steers a white sprite through a night garden with a
-wasp on its tail. You built both with your own hands, and read as
-designs they are near twins: three cards joined in the same
-three-press loop, a writable timer whose period is the difficulty, a
-one-shot guarding the restart, `ApiRandom` masked for every respawn,
-and a game-over card the second game took from the first keystroke
-for keystroke.
+wasp on its tail. You built Skyfall and worked through Lanternfly's
+design. Read side by side, they are near twins: three cards joined in
+the same loop, a writable timer whose period is the difficulty, a
+one-shot guarding the restart, `ApiRandom` masked for every respawn
+and the same delayed game-over gate.
 
 Read them as programs, though, and their paths separate at one early
 line. `display matrix8x8` against `display tms9918` set the prices:
@@ -75,8 +74,8 @@ MainLoop:
 Put a finger on `GlimPollBindings` in each listing and read downward.
 From there the two loops run the same nine instructions: poll, latch
 the card, tick the timers, run the phases, roll the frame over. That
-identical tail is the language, the frame you have known since
-chapter 2, unchanged under either display.
+identical tail is the language's reactive frame, unchanged under
+either display.
 
 Everything above your finger is the profile, and the two heads
 describe two different relationships with a screen. Skyfall's frame
@@ -158,11 +157,11 @@ marked portions during the blank: all 128 sprite-attribute bytes if
 any sprite moved, and 32 bytes for each grid row whose dirty bit
 stands. On a frame where only the fly moved, the commit carries the
 sprite table, and the lantern's grid row besides, because `Gather`
-runs on every fly step and its `updates` re-mark the row it redraws;
-chapter 17 names that cost and the refinement that removes it. On a
-still frame, the traffic is none. Motion becomes cheap in exactly the
-way whole-scene redraws were cheap on the 8x8: moving the fly is two
-shadow bytes, wherever it stands on a 256x192 screen.
+runs on every fly step and its `updates` re-mark the row it redraws.
+Splitting the test from the catch response removes that extra row.
+On a still frame there is no VRAM traffic, although the commit still
+checks its dirty markers. Moving the fly writes two shadow bytes, then
+the next commit sends the 128-byte sprite table.
 
 That scale rewrote your rules. Positions are pixels now, so
 Lanternfly's collision is the distance between two facts (absolute
@@ -231,19 +230,18 @@ arithmetic answers most questions. A game whose world is a place
 favours the VDP, where persistence and size are comparatively cheap
 and a mover is two shadow bytes. Both displays keep their own limits
 (sixty-four pixels on one side, sprite counts and colour rules on
-the other), and either way, the declarations you write first,
-chapter 14's habit, will read almost the same.
+the other), and either way, the declarations you write first will
+read almost the same.
 
-## Where the road goes
+## Further projects
 
-The Glimmer repository's `examples/` directory holds seven built,
-running programs, and every one of them is readable with what you
-know. `counter`, `dot`, `slide`, and `trail` are single-idea
-warm-ups you could write yourself this afternoon. `snake.glim` is
+The Glimmer repository's `examples/` directory contains more programs
+readable with the model developed here. `counter`, `dot`, `slide` and
+`trail` are single-idea warm-ups. `snake.glim` is
 the 8x8 under a different pressure than Skyfall's: a growing body in
 a 64-byte ring buffer, with its body-scan and draw loops in an
-imported assembly engine. You read `tetro.glim` in chapter 15 and
-`sprite-chase.glim` in 17, and both reward a second visit now as
+imported assembly engine. You have also read `tetro.glim` and
+`sprite-chase.glim`; both reward a second visit as
 *yours to change*: a new piece, a smarter fleeing target.
 
 When the engine files you import grow past helpers into modules of
@@ -253,19 +251,14 @@ system Glimmer's output leans on. [Debug80 Book
 1](../../debug80-book/book1/) covers the workshop end to end, from
 project setup to sending a build to a physical board.
 
-Every program in this book produced a
-HEX file beside its
-assembly, and that file runs on a real TEC-1G exactly as it ran in
-the emulator, the same bytes, the same scan or the same commit,
-with actual LEDs doing the glowing. If a board is within reach,
-Skyfall on real hardware is one transfer away, and the paddle feels
-different when the light is real.
+Every program in this book produced a HEX file containing the same
+assembled bytes that Debug80 runs. That file can be transferred to a
+real TEC-1G. If a board is within reach, Skyfall is one transfer away.
 
-Eighteen chapters ago
-you could read a `ld a,(hl)`; today you can build a game from an
-empty file on either display the TEC-1G offers.
-Every game you write from here starts the way Mover did: one fact,
-one picture, and a connection between them. Go and write one.
+The book began with the ability to read `ld a,(hl)`. You can now read,
+modify and extend complete Glimmer games on either display the TEC-1G
+offers. A new game can begin as Mover did: one fact, one picture and a
+connection between them.
 
 ---
 

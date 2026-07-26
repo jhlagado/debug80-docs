@@ -17,9 +17,10 @@ from real runs of Glimmer 0.6.
 
 ## Getting the command line
 
-The book's workflow never needs it: Debug80 carries the compiler
-inside the extension. For scripts, automation, or working outside VS
-Code, the CLI installs with Node 20 or newer:
+Debug80 carries the compiler inside the extension, so the CLI is
+optional for the normal edit-build-debug workflow. It is useful for
+dependency reports, scripts, automation and work outside VS Code. The
+CLI installs with Node 20 or newer:
 
 ```sh
 npm install -g @jhlagado/glimmer
@@ -97,8 +98,7 @@ Wrote demo.main.d8.json (11 block segments attributed to .glim source)
 build always runs the AZM check; --no-check is not supported with build.
 ```
 
-`--deps` prints one stanza per cell, writers above readers, the same
-report chapter 11 works through:
+`--deps` prints one stanza per cell, writers above readers:
 
 ```text
 program Demo
@@ -162,7 +162,7 @@ names. The full entry in the repository adds a `tec1g` section
 mapping the memory regions (ROM to `$07FF`, RAM to `$7FFF`, ROM from
 `$C000`) and the `$4000` application start.
 
-## Where the debugger stops
+## Debugger source mapping
 
 The rewritten map splits the program along the `begin`/`end`
 boundary:
@@ -186,8 +186,9 @@ edit, so the fix is one keystroke away from the report.
 ## Diagnostics
 
 Compiler messages carry a file, a line, a `[GLIM]` tag and a
-severity. An error stops the build and nothing is written; a warning
-prints and the build finishes.
+severity. An error stops the current build before it writes new
+artifacts; output from an earlier successful build may still remain
+on disk. A warning prints and the build finishes.
 
 **Duplicate name.** Two declarations named `Score` (states, pulses
 and blocks all draw from one pool of names):
@@ -236,9 +237,8 @@ Wrote warn.main.asm (register contracts checked by AZM)
 Wrote warn.main.d8.json (4 block segments attributed to .glim source)
 ```
 
-Chapter 11 walks this warning through a running program: the store
-executes, the cell climbs in memory, and every block waiting `on`
-that cell sleeps through it.
+In a running program, the store still executes and the cell changes
+in memory, but every block waiting `on` that cell sleeps through it.
 
 ---
 

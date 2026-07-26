@@ -28,7 +28,7 @@ build it and check.
 The new Beacon steers along its row with
 keys 4 and 6, held for movement the way Mover was. GO still steps the
 colour, and every step now scores a point, shown on the TEC-1G's
-six-digit seven-segment display. Position, colour, score: the three
+six-position seven-segment display. Position, colour, score: the three
 kinds of fact almost every game keeps.
 
 ```text
@@ -115,11 +115,11 @@ facts, so a change to either one redraws. Commas separate names, in headers as e
 Glimmer.
 
 `HudWriteU16` is another routine from the profile library, a sibling
-of `FbPlot`: give it a value in HL and it writes it to the six-digit
-seven-segment display as a decimal number. The display gets its own
-treatment in chapter 9; one call is all we need today.
+of `FbPlot`: give it a value in HL and it writes five decimal digits
+after the display's fixed leading zero. One call is all we need today;
+the full display service comes later.
 
-## What a state declaration can say
+## State declaration syntax
 
 Three declarations, and between them they exercise every part of the
 syntax:
@@ -132,8 +132,8 @@ state Score  : word
 
 The full shape is `state Name : type = initial changed`, and the last
 two parts are optional. The type is `byte` or `word`. The initial
-value defaults to 0, and `Score` leans on that default. And
-`changed`, the word you met in chapter 1, marks the fact as already
+value defaults to 0, and `Score` leans on that default. The
+`changed` modifier marks the fact as already
 changed when the program starts. `DotX` carries it; the other two go without.
 
 The one new thing here is `word`. A `word` cell is 16 bits, and your
@@ -158,8 +158,8 @@ Score:            .dw 0
 
 ## One bit per fact
 
-Chapter 2 showed you the bookkeeping for two facts. Here it is for
-six, three states and three pulses, one bit each, in declaration order
+The generated bookkeeping now covers six facts: three states and
+three pulses, one bit each, in declaration order
 with states first:
 
 ```asm
@@ -226,7 +226,7 @@ One bit: `DotX`'s. DrawBeacon's mask
 includes that bit, so the beacon appears, and it appears with both
 its position and its colour correct, because the body reads both cells
 regardless of which bit woke it. ShowScore's mask is `CHG_SCORE`, and that bit is clear,
-so ShowScore rests, and the six-digit seven-segment display stays
+so ShowScore rests, and the six-position seven-segment display stays
 dark.
 
 A dark display looks like a bug the first time you meet it, so work it
@@ -250,8 +250,10 @@ With that one edit, frame one runs both renders, and the display shows
 anything happens.
 
 Build the program, try both versions, and watch the prediction hold.
-Then set a breakpoint inside `ShowScore` and confirm the debugger
-stops there on the frame you predicted, and on no other.
+Then set a breakpoint inside `ShowScore`. With `Score` unchanged, it
+does not stop on frame one; with `Score changed`, it stops there before
+the first key press. In either version, each later score change reaches
+the breakpoint again.
 
 Next we turn to the moments themselves, where pulses come from, and
 every way a key can fire one:

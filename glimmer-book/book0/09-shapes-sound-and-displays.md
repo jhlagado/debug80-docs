@@ -9,8 +9,8 @@ nav_order: 9
 
 # Chapter 9 - Shapes, Sound and Displays on the Board
 
-Every picture you have drawn since chapter 1 has been built from
-single calls to `FbPlot`: a dot, a drop, a bar of pixels in a loop.
+Every picture so far has been built from single calls to `FbPlot`: a
+dot, a drop, a bar of pixels in a loop.
 A game's character deserves a body, two pixels by two
 or a whole 8x8 figure, and plotting one point by point inside
 every render block drowns the picture in the code that draws it. A
@@ -139,14 +139,15 @@ begin
 end
 ```
 
-Build this and let it run. The spark ricochets,
-each wall hit chirps, and the digits climb, twice in quick
-succession when it rounds a corner.
+Build this and let it run. The spark ricochets, each wall contact
+raises the score and starts or restarts the chirp. A corner raises the
+score twice, but the second sound call replaces the first, leaving one
+active cue.
 
 Only three declarations at the top are new (`shape`, `sound`, and
-`text`) and each gets its own section below. The machinery around
-them is chapter 7's: a timer fires `Tick` every 6 frames, and `Move`
-runs on `Tick`. One idea rides in the state: velocity as a fact.
+`text`) and each gets its own section below. A timer fires `Tick`
+every 6 frames, and `Move` runs on `Tick`. One idea rides in the
+state: velocity as a fact.
 `VelX` holds 1 when the spark travels right and `$FF` when it travels
 left, and because adding
 `$FF` to a byte steps it down by one, a single `add` moves the spark
@@ -203,9 +204,8 @@ call ShapeDraw
 ORs each lit pixel's colour bits into the framebuffer, so lit pixels
 land on top of whatever is already there and empty pixels leave it
 alone; two overlapping shapes combine rather than punch holes in
-each other. `DrawSpark` starts with `FbClear` for the same reason as
-every moving picture since chapter 1: a moving shape redraws from a
-clean board.
+each other. `DrawSpark` starts with `FbClear` because a moving shape
+redraws from a clean board.
 
 Placement is entirely your responsibility: `ShapeDraw` plots every lit
 pixel at x plus column, y plus row, straight into the framebuffer, and
@@ -265,8 +265,8 @@ and the same scan that serves the speaker serves it too: one digit
 per row tick, refreshed forever. The profile library drives it with
 two routines:
 
-- `HudWriteU16`: HL = value, shown as five decimal digits, 0 to
-  65535.
+- `HudWriteU16`: HL = value, shown as five decimal digits after a
+  fixed leading zero, 0 to 65535.
 - `HudBlankDig`: clear all six digits.
 
 `Score` is a word, so `ShowScore` loads all sixteen bits and hands
@@ -293,8 +293,8 @@ ticks included. The repaint writes the same six
 glyph bytes and spends a few dozen cycles in the blank window. When a
 score changes rarely and its redraw is heavy, move the heavy fact
 into an effect of its own so the quiet ticks never raise it; when the
-redraw is `HudWriteU16`,
-the broad `updates` reads better, and readable wins.
+redraw is `HudWriteU16`, the broad `updates` makes the dependency
+easier to read.
 
 ## Words on the LCD
 

@@ -9,7 +9,7 @@ nav_order: 11
 
 # Chapter 11 - Dependency Reports and Debugging
 
-Canvas left chapter 10 as the largest program in the book: a `Point`
+Canvas is the largest program in the book so far: a `Point`
 cursor, an eight-byte picture, five pulses, and six blocks connecting
 them. The chapters ahead double that, so the tools come now, on a
 program you know by heart, before you are hunting a real bug through a
@@ -20,10 +20,10 @@ question that finds bugs in a reactive program (*which fact failed to
 change?*) now has eight candidate answers.
 
 Every block you have built sits behind a
-`.routine` boundary, the safety net chapter 1 promised. Every
+`.routine` boundary for register-contract checking. Every
 build proves register contracts across the whole generated file,
 every debug map lands breakpoints in your source, and the dependency
-report from chapter 5 prints the reactive graph on request. You will extend
+report prints the reactive graph on request. You will extend
 Canvas with a counter, then break it twice on purpose (once for a
 warning, once for a hard error) to watch a good diagnostic catch a
 bug you understand.
@@ -39,7 +39,7 @@ declaration joins the state:
 state Marks   : byte = 0 changed
 ```
 
-Read it aloud, the way you have since chapter 1: *Marks is a byte,
+Read it aloud: *Marks is a byte,
 starting at zero, already changed*, so the display reads 00000 on
 the first frame.
 
@@ -68,13 +68,13 @@ begin
 end
 ```
 
-The first eleven body lines are chapter 10's, untouched: mask the
+The first eleven body lines are unchanged: mask the
 column, point HL at the row, OR the pixel in. The header names both
 facts the block writes,
 `updates Picture, Marks`, and when the block runs, both change flags
 rise together.
 
-One render is new, and chapter 9 supplied everything in it:
+One render is new, using the existing HUD routine:
 
 ```text
 render ShowMarks
@@ -87,8 +87,8 @@ begin
 end
 ```
 
-The cursor, the movement effects, and `DrawCanvas` ride along
-unchanged. The whole file now runs to 126 lines, and it builds clean:
+The cursor, movement effects and `DrawCanvas` remain unchanged. The
+file builds clean:
 
 ```sh
 glimmer build canvas.glim
@@ -104,9 +104,8 @@ pixel and lifts the count.
 
 ## The report at scale
 
-Chapter 5 printed the dependency report for a program with four
-facts, and back then it told you little you could not see at a
-glance. Canvas has eight, and this is the scale where the report
+The earlier four-fact dependency report told you little you could not
+see at a glance. Canvas has eight facts, and this is the scale where the report
 starts paying for itself:
 
 ```sh
@@ -143,9 +142,8 @@ program Canvas
 
 Each fact owns a stanza: its kind and type, the blocks that raise it,
 and the blocks it triggers, every dependent tagged with its phase.
-Glimmer computes the report from your `bind`, `on`, and `updates`
-lines, the connections you have read off block headers since chapter
-1, gathered into one place and sorted by fact.
+Glimmer computes the report from your `bind`, `on` and `updates`
+connections, gathered into one place and sorted by fact.
 
 When something misbehaves in a reactive program, your first question
 is the one this chapter opened with: which fact failed to change? The
@@ -172,7 +170,7 @@ begin
 ```
 
 The body still stores to `Marks`; the header has stopped saying so.
-This is the classic reactive slip: a store added to a block without
+This is a common reactive error: a store added to a block without
 updating the header to match. Rebuild, and watch what the tool says:
 
 ```text
@@ -211,10 +209,8 @@ The scan behind that warning reads only stores that name their cell in
 the instruction itself: `ld (Marks),a` names `Marks`, so the header
 can be checked against it. `PaintPixel`'s other write travels through
 a pointer (`ld (hl),a`, with HL aimed into `Picture` by arithmetic)
-and a
-build-time scan cannot know where HL will point at run time. No scan
-can; on a machine whose pointers are computed, that knowledge exists
-only while the program runs. Cut `updates Picture` from the header
+and a build-time scan cannot determine where HL will point at run
+time. Cut `updates Picture` from the header
 instead and the build stays silent while the board freezes the same
 way. So the `updates` line remains your declaration of intent: the
 one place that records where a block's writes land, whatever route
@@ -222,8 +218,8 @@ they take.
 
 ## The boundary around a block
 
-The register checking promised in chapter 2 is in
-the generated file, and its unit of account is the block. Open
+Register checking happens in the generated file, and its unit of
+account is the block. Open
 `canvas.main.asm` at the painting rule:
 
 ```asm
@@ -297,10 +293,9 @@ build, and about to matter.
 
 ## A trampled register
 
-This time the bug is the oldest one
-on the Z80: trusting a register across a call that quietly destroys
-it. Every assembly programmer has lost an evening to this bug. Here it
-loses to the assembler instead.
+This time the bug is trusting a register across a call that quietly
+destroys it. The assembler catches the stale-register use before the
+first byte runs.
 
 `DrawCanvas` ends by plotting the cursor over the picture: x into B,
 y into C, white into A, `call FbPlot`. Suppose you widen the cursor
@@ -381,11 +376,10 @@ two sections ago: `ld a,(Raised0)`, then `or CHG_PICTURE +
 CHG_MARKS`, the `updates` declaration executing, watchable
 instruction by instruction. The crossing works in the other direction
 too: stop on `DrawCanvas`'s `call FbPlot`, step in, and you land in
-the profile library, labelled and commented, the same readable
-assembly chapter 2 toured.
+the labelled and commented profile library.
 
-Canvas is healthy again at 126 lines, and while debugging it you may
-have noticed a pattern: the cursor's `offset` arithmetic appears in
+Canvas is healthy again, and while debugging it you may have noticed a
+pattern: the cursor's `offset` arithmetic appears in
 six of its seven blocks, retyped wherever a rule needs the cursor. The
 next chapter writes it once:
 [Routines, Parts and Imports](12-routines-parts-and-imports.md), the

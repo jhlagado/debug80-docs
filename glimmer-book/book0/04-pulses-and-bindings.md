@@ -9,20 +9,20 @@ nav_order: 4
 
 # Chapter 4 - Pulses and Bindings
 
-Chapter 3 was about the things a game remembers. This chapter is about
+State describes the things a game remembers. This chapter is about
 the things it must catch: a fact persists, the beacon's position
 outliving every frame that draws it, but a moment passes. The instant
 GO goes down exists exactly once, and if your program does not catch
 it, it never happened at all. Glimmer gives moments their own
-declaration, the pulse. Back in chapter 1 I gave you one pulse and one
-bind line and hurried on. Now we can take the whole input story
+declaration, the pulse. Mover introduced one pulse and one bind line.
+Now we can take the whole input story
 properly: every key name, both shapes a key can fire in, and what the
 generated polling does with the keypad, frame after frame.
 
 *Rover* is a white dot you steer around the whole 8x8 RGB LED matrix
 with 2, 4, 6, and 8 (the keypad's compass points), and GO recalls it
-to the centre. There is nothing to chase yet and no way to lose, but
-it feels like a game character the moment you hold a key.
+to the centre. It feels like a game character the moment you hold a
+key.
 
 ```text
 program Rover
@@ -115,12 +115,12 @@ begin
 end
 ```
 
-Half of this file is chapter 1's Mover, and the second axis costs what
+Half of this file is Mover, and the second axis costs what
 you would expect: one more state cell, two more pulses, two more rules
 with the clamp turned sideways. `GoHome` shows an effect at its
-simplest: two constant stores and no branch. And `DrawDot` now draws
-from both facts (`on DotX, DotY`, the comma you learned in chapter
-3), so movement on either axis redraws the dot.
+simplest: two constant stores and no branch. `DrawDot` now draws from
+both facts (`on DotX, DotY`), so movement on either axis redraws the
+dot.
 
 Build it, run it, and then do one thing for me: hold 6 while tapping
 2. The dot runs right, steps up on each tap, and carries on running
@@ -190,11 +190,11 @@ fires alongside the named bindings. Press GO and both `Home` and
 it catches is *the player touched the machine*. Title screens wait on
 it.
 
-## What polling looks like
+## Generated polling
 
 All five of Rover's pulses come out of one generated routine, and
-inside it is the repeat clock you did not have to write. In chapter 1
-you wrote that clock out by hand: the counter, the reload, and the
+inside it is the repeat clock you did not have to write. The
+hand-written version needed the counter, the reload and the
 release edge that resets on letting go. The top of the routine, from
 `rover.main.asm`:
 
@@ -242,12 +242,12 @@ the pulse's byte and sets its change bit directly, and because polling
 runs before any block, every phase of the frame sees the moment.
 
 At the other end of the frame, `GlimEndFrame` clears every pulse
-byte, the cleanup you read in chapter 2. Between those
+byte. Between those
 two points, a moment is a fact like any other: one frame wide, one bit
 in `Changed0`, triggering whatever declared `on` it.
 
-Moments have other sources (chapter 7 gives the machine clocks that
-fire pulses of their own) but the keypad story is complete. Next
+Moments also come from machine clocks introduced later, but the keypad
+story is complete. Next
 comes the full picture of what a frame does once the moments are in:
 the three kinds of block, and the order a frame runs them in,
 [Compute, Effect, Render](05-compute-effect-render.md).

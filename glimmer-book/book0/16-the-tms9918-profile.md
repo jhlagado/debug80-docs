@@ -9,8 +9,8 @@ nav_order: 16
 
 # Chapter 16 - The TMS9918 Profile
 
-For fifteen chapters, you have been the display. Every picture in this
-book since chapter 6 has come from the 8x8 RGB LED matrix, and that
+Until now, every picture has come from the 8x8 RGB LED matrix,
+and that
 display shows only what the CPU is actively pushing: the profile loop
 spends most of each frame driving the LED rows from the framebuffer,
 and your blocks do their work in the blank that follows.
@@ -26,17 +26,18 @@ the Z80 is busy or idle. The CPU
 stops being the display and becomes its director: from here on, your
 work is not showing the scene but describing it.
 
-So what does a described scene look like? In the VDP's Graphics I
-mode, it has two layers. The background is a grid, 32 columns by 24
+A described scene has two layers in the VDP's Graphics I mode. The
+background is a grid, 32 columns by 24
 rows, each cell showing one 8x8-pixel tile pattern; a table of one
 byte per cell, the name table, says which pattern each cell wears. In
-front of the grid stand sprites: 32 small patterns, each at a pixel
-position of its own, and moving one costs the rewrite of two bytes.
+front of the grid are up to 32 sprite entries, each at a pixel
+position of its own. Moving one changes two position bytes in the
+shadow table; the profile later commits the table to VRAM.
 The division of labour is already there: scenery belongs in tiles;
 anything that glides belongs in sprites.
 
-And where does the Z80 fit? It reaches the VDP's memory through two
-ports: control at `$BF`, data at `$BE`. Two control-port writes set a
+The Z80 reaches the VDP's memory through two ports: control at `$BF`
+and data at `$BE`. Two control-port writes set a
 VRAM address, and the data port then streams bytes to consecutive
 addresses: the VDP walks its own pointer forward for you. After painting the last line of a
 picture the VDP rests before starting the next (the vertical blank)
@@ -242,7 +243,7 @@ pair is new, so it opens bank 1 at index 8. Six more ferns and seven
 more blooms would cost nothing; a sixteenth distinct colour pair
 would open bank 15, sixteenth of the 32 the colour table holds.
 
-## Where a render writes
+## Shadow-table writes
 
 On the 8x8 matrix, renders drew into a framebuffer and the scan
 turned it into light. Here a render writes two **shadow tables**:
@@ -262,8 +263,7 @@ sits its own bookkeeping, sized to its table: three bytes of
 `SpriteDirty` byte covers the whole sprite table.
 
 Three profile routines write the shadows for you, and each declares
-its register interface in the generated file, the way chapter 11
-taught you to read:
+its register interface in the generated file:
 
 ```asm
 ; Put tile A at column D, row E of the name-table shadow and mark
@@ -328,12 +328,12 @@ MainLoop:
         jp      MainLoop
 ```
 
-From `GlimPollBindings` down, this is the frame you have known since
-chapter 2. On the 8x8 matrix, `ScanFrame` produced the picture; here,
+From `GlimPollBindings` down, this is the familiar reactive frame. On
+the 8x8 matrix, `ScanFrame` produced the picture; here,
 `VdpWaitVBlank` waits for one. The routine polls the status register
 until the vblank flag comes up (reading the register clears it,
 arming the next frame), so the program takes exactly one trip around
-`MainLoop` per picture the VDP paints, sixty-odd frames a second.
+`MainLoop` per VDP refresh.
 
 `GlimCommit` then spends the blank window moving the previous frame's
 shadow writes into VRAM: the whole sprite table if `SpriteDirty` is
@@ -352,8 +352,8 @@ frame, tiles and sprites alike.
 
 ## A scene planted once
 
-`PlantScene` runs exactly once, and the trigger is a mechanism you
-have owned since chapter 3: `Init` is a byte declared `changed`, so
+`PlantScene` runs exactly once because `Init` is a byte declared
+`changed`, so
 its flag is up before the first frame; the effect fires on frame 1,
 places eight tiles, and `Init` never changes again. One line you have
 always written is absent: `updates`, because this block changes no
@@ -373,7 +373,7 @@ on frame 1, `PlaceMoth` puts the moth into the sprite shadow
 alongside the garden, and the first picture arrives whole.
 
 When a program has cards, an `enter` block is the natural home for
-scene placement, and chapter 17 plants its scene that way. Grove has
+scene placement. Grove has
 one screen, so a changed cell provides the run-once trigger with the
 tools already on the table.
 

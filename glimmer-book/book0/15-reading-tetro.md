@@ -31,10 +31,7 @@ Copy the three files from
 the entry file (`glimmer build tetro.glim` on Appendix D's command
 line), and keep all three files open in your editor while you read.
 Every generated excerpt in this chapter comes from the
-`tetro.main.asm` that build writes, 1392
-lines with the whole game inside. Comments citing "corpus" refer to
-the earlier Tetro this example was adapted from, kept as
-cross-references.
+`tetro.main.asm` that build writes, with the whole game inside.
 
 ## Three files, one program
 
@@ -88,11 +85,12 @@ meet the hard way.
 The board is four `byte[8]` arrays, one bit per cell of the 8x8
 matrix, eight rows, MSB-left. `BoardRows` records occupancy (the
 single question collision cares about), and the three colour planes
-remember what colour each settled cell keeps. This is the
-framebuffer's own shape: chapter 6's `Framebuffer` stores each row as
+remember what colour each settled cell keeps. This matches the
+framebuffer: `Framebuffer` stores each row as
 red, green, and blue bitmask bytes, so a settled
 board row lands on screen as one `or` of plane byte into framebuffer
-byte, and a full row announces itself as a plane byte reading `$FF`.
+byte. A full row announces itself in the separate `BoardRows`
+occupancy byte, which reads `$FF` regardless of the row's colours.
 
 Three timers put the game on its own schedule:
 
@@ -102,7 +100,7 @@ timer ClearHold : byte = 0   -> ClearTick once  ; armed by a line clear
 timer GOverGate : word = 0   -> GateOpenP once  ; armed on game over
 ```
 
-`Gravity` is chapter 7's oscillator with a writable period: every 32
+`Gravity` is an oscillator with a writable period: every 32
 frames, one `GravityFire`, and a compute block further down halves
 that period as the score climbs. The two `once` timers start at 0 by
 design: a one-shot at 0 is asleep, and it fires only after some block
@@ -122,15 +120,15 @@ bind key KEY_0  rising -> PauseP
 bind key any    rising -> AnyKeyP
 ```
 
-Horizontal movement repeats every 10 frames held, soft drop three
-times as fast, and rotation is rising only: one press, one quarter
+Horizontal movement repeats every 10 frames held, soft drop about
+three times as fast, and rotation is rising only: one press, one quarter
 turn, from either of two keys feeding the same pulse. `bind key any`
 serves the splash screen and the restart, and later in the chapter you
 will see why the restart needs a guard in front of it.
 
 ## Seven pieces, declared
 
-Chapter 9's shapes had one bitmap each. A tetromino has up to four, one per
+The earlier shapes had one bitmap each. A tetromino has up to four, one per
 quarter turn, and the rotational form of `shape` declares them as
 `rot0`..`rot3` groups:
 
@@ -268,8 +266,8 @@ ShiftCount:
         .db     0
 ```
 
-These labels carry no `@`, so they stay private to the file, chapter
-12's rule at work in a real program. Blocks reach the engine
+These labels carry no `@`, so they stay private to the file. Blocks
+reach the engine
 only through the routines it publishes, and those routines cover the
 board work: `SetCurPiece` you have met; `CheckCollAt` probes a
 placement; `LockPiece` blits the piece into all four planes;
@@ -359,7 +357,7 @@ _lock:
     ld (ClearMask),a     ; flash first; FinishClear collapses on the tick
     ld a,200
     ld (PlayerY),a       ; park the locked piece off the draw overlay
-    ld a,24              ; arm the hold timer (corpus LineClearHold)
+    ld a,24              ; arm the line-clear hold timer
     ld (ClearHold),a
     call Snd_Clear
     jp _done
@@ -395,8 +393,8 @@ planes show.
 
 `ld a,24`
 into `ClearHold` arms it: at zero a one-shot sleeps, a written count
-ticks down once per frame, and arrival fires `ClearTick`, chapter 7's
-mechanism, driven from inside a rule. The block that catches the tick,
+ticks down once per frame, and arrival fires `ClearTick`. The block
+that catches the tick,
 `FinishClear`, completes what the lock started: it zeroes `ClearMask`,
 calls `ClearFullRows` to collapse the flashed rows, adds the count to
 `LinesCleared`, converts it to points with `ScoreForClears`, adds
@@ -410,8 +408,8 @@ that, pieces fall twice as fast.
 
 ## Two ways out of a card
 
-Tetro leaves its cards both ways chapter 13 taught, and you can see
-which way fits where. When the exit is
+Tetro leaves its cards in two ways, and you can see which form fits
+where. When the exit is
 unconditional, the header says so: `SplashExit` is four lines, `on
 AnyKeyP` and `goto Playing` with no body at all, so any key on the
 splash screen starts the game. The `Pause` and `Unpause` effects do
@@ -424,38 +422,15 @@ when the spawn placement is blocked, and both `ApplyGravity` and
 `FinishClear` respond with `ld a,Card.GameOver` into `CurrentCard`
 behind a branch.
 
-The GameOver card guards its own exit with a fact and a timer, and the
-reason is a human one: a player who tops out is usually still pressing
-keys, and `bind key any` would turn the last of those presses into an
-instant restart. So the card's `enter` block, `GameOverShow`, closes
-the gate: it writes `Armed` to 0 and loads 384 into `GOverGate`, the
-word-sized `once` timer from the declarations. When `GateOpenP` fires,
-the `OpenGate` effect writes `PRESS ANY KEY` to the LCD's second row
-and sets `Armed` to 1. The restart key checks the fact:
-
-```text
-; Conditional navigation: restart only once the gate is open.
-effect Restart
-    on AnyKeyP
-    updates CurrentCard
-begin
-    ld a,(Armed)
-    or a
-    jr z,_done
-    ld a,Card.Splash
-    ld (CurrentCard),a
-_done:
-end
-```
-
-Presses during the closed gate run
-this block and fall straight through, and the player never notices the
-protection working.
+The GameOver card uses the delayed restart gate already seen in
+Skyfall. `GameOverShow` clears `Armed` and loads 384 into `GOverGate`;
+`OpenGate` later writes `PRESS ANY KEY` and sets `Armed`. Until then,
+`Restart` ignores `AnyKeyP`, preventing the player's final movement
+press from becoming an immediate restart.
 
 ## Words on the LCD
 
-The messages are chapter 9 text
-resources:
+The messages are text resources:
 
 ```text
 text MsgSplash "TETRO (PRESS A KEY)"

@@ -24,11 +24,9 @@ with you at the keypad supplying the moments.
 Everything this book needs is in one VS Code extension, **Debug80**:
 the Glimmer compiler, the assembler, and a full emulated TEC-1G,
 keypad and all. Install VS Code, open the Extensions marketplace, and
-add Debug80. If you want
-the guided tour of the extension itself (every panel, every button),
-that is [Debug80 Book 1](../../debug80-book/book1/), and it is worth
-an evening. (Glimmer also has a
-command line, for scripts and for the curious; Appendix D covers it.)
+add Debug80. [Debug80 Book 1](../../debug80-book/book1/) provides a
+guided tour of the extension itself. Glimmer also has a command line
+for scripts and work outside VS Code; Appendix D covers it.
 
 ## Beacon
 
@@ -41,7 +39,7 @@ file called `main.glim`, or ending in `.main.glim`, whose first
 declaration is `program`, is recognised as a Glimmer program and
 built.
 
-Type the program in (actually type it, not paste it):
+Type or paste the program into the file:
 
 ```text
 program Beacon
@@ -79,8 +77,8 @@ begin
 end
 ```
 
-You know every construct here from chapter 1, so let me point out only
-what is genuinely new. `KEY_GO` names the GO key, the big one on the
+The program uses only constructs already introduced, so the new
+details are easy to isolate. `KEY_GO` names the GO key, the big one on the
 TEC-1G's pad. MON-3 gives every key a name, and bind lines use the
 names directly, so your source says GO where you mean GO. The other
 new thing is that *the colour itself is a fact*. The 8x8 matrix mixes
@@ -104,9 +102,8 @@ your declaration is why it drew itself before you touched anything.
 
 Now click GO on the panel's keypad. Green. Again: yellow. Keep going
 (red, green, yellow, blue, magenta, cyan, white) and round again to
-red.
-And between your presses, what is the program doing? Nothing. The scan
-keeps the pixel lit while both of your blocks wait for their facts to
+red. Between presses, the scan keeps the pixel lit and the keypad poll
+keeps checking while both reactive blocks wait for their facts to
 change.
 
 The build also left things for us in the project's `build` folder.
@@ -145,8 +142,7 @@ order, and its section comments are a table of contents:
 ; --- matrix8x8 profile library ---      ScanFrame, FbClear, FbPlot
 ```
 
-Three stops on the tour, each showing something from chapter 1 as
-real code.
+Three sections show the source model as real code.
 
 First stop, the bookkeeping your declarations became:
 
@@ -200,13 +196,13 @@ GlimEndFrame:
         ret
 ```
 
-Those first two stores are a promise from chapter 1, kept in code: a
+Those first two stores implement the startup promise: a
 pulse holds for exactly one frame, and here is `Step` being cleared at
 the frame's end. The `Next0` handoff below it carries changes that
-arrived too late for this frame into the next one; the mechanism gets
-its full treatment in chapter 5, when you have a program that needs it.
+arrived too late for this frame into the next one; its purpose becomes
+clear when a program has more than one phase.
 
-Wander further whenever you like. Your two blocks sit wrapped under
+Your two blocks sit wrapped under
 `Glim_NextColour` and `Glim_DrawBeacon`, bodies exactly as you typed
 them, and at the bottom of the file the profile library spells out
 `ScanFrame`, `FbClear` and `FbPlot` as plain, readable routines.
@@ -238,7 +234,7 @@ and stepping land in your source, and when you step past the end of
 your block, the debugger continues into `main.main.asm`, the
 generated file you now know your way around.
 
-Chapter 1's Mover runs the same way. Save it in the project as
+Mover runs the same way. Save it in the project as
 `mover.main.glim` and it appears as a second target in the Debug80
 panel; select it, click Run, and steer the dot with keys 4 and 6.
 

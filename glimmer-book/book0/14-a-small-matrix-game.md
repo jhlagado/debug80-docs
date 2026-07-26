@@ -9,7 +9,7 @@ nav_order: 14
 
 # Chapter 14 - A Small Matrix Game
 
-Since chapter 6 the book has handed you instruments one at a time: the
+The book has handed you instruments one at a time: the
 drawing profile
 for the 8x8 RGB LED matrix, timers and ramps to keep time, shapes and
 sounds and the LCD to announce things, arrays to hold a board, parts
@@ -65,7 +65,7 @@ wide also means `PadX`, the left column, runs 0..5 rather than 0..7,
 and you will meet that 5 again in the steering rule. One `DropX` and
 one `DropY`, not an array of them, because Skyfall drops one block at
 a time, a deliberate simplification that keeps the whole sky in a
-single rule, and one you could lift later with chapter 10's arrays.
+single rule, a simplification you could later lift with an array.
 `Score` is a word because I have watched people get good at this game.
 `Lives` is three because that is the arcade's oldest tuning: one life
 makes every slip fatal, five makes misses free, three keeps a miss
@@ -87,10 +87,9 @@ Two schedules drive them. `Gravity` is an oscillator with period 18,
 the difficulty of the game, stored where a fact belongs. Eighteen
 frames a row is a stroll (the opening drop spends 126 frames crossing
 the board), and
-every catch will write the period smaller, the move
-chapter 7 taught you.
+every catch will write the period smaller.
 `Wait` is a one-shot word timer, idle at zero until the game-over card
-arms it: chapter 7's delayed moment, spent at last.
+arms it as a delayed moment.
 
 The resources cost a line of thought each: one green 3x1 `shape` for
 the paddle, a high `sound` for catches, a low one for misses, and six
@@ -107,8 +106,8 @@ and `FrameCount` costs nothing in a program that never names it.
 
 ## The entry file
 
-Skyfall follows the shape chapter 12 taught: an entry file holding the
-declarations, and one part holding the cards and blocks, the design
+Skyfall uses an entry file for declarations and one part for cards and
+blocks, keeping the design
 in one file, the craft in the other.
 
 ```text
@@ -170,8 +169,8 @@ text MsgPad   "      "
 No fact carries the `changed` modifier, and this is the first program
 in the book where that is true. Every program so far used `changed` to
 draw its first picture. Skyfall's screens all belong to cards, and
-each card's `enter` block re-raises what its renders need, the
-pattern chapter 13 taught, so startup takes care of itself.
+each card's `enter` block re-raises what its renders need, so startup
+takes care of itself.
 
 And the row-one messages are all padded to sixteen characters. The LCD
 keeps whatever was last written, and three cards take turns with the
@@ -253,7 +252,7 @@ The `updates` marks reach the card's renders the same frame, so the
 board, the score, and the lives readout all appear the moment play
 begins, on the first round and on every replay.
 
-`Gravity` in that list echoes chapter 7: a timer cell carries no
+`Gravity` in that list documents the write: a timer cell carries no
 change flag, so its entry compiles to nothing, and the line stands as
 the block's declaration that it writes the pace, for the dependency
 report waiting at the end of this chapter, and for you, six months
@@ -287,7 +286,7 @@ _stop:
 end
 ```
 
-These are Mover's rules from chapter 1 with one number moved: the
+These are Mover's rules with one number changed: the
 right stop is 5, the ceiling we chose at the design table when we made
 the paddle three wide. Its right edge reaches column 7, so every
 column a block can fall in is catchable. The held period of 4 is the
@@ -355,8 +354,8 @@ than impossible. Pacing is the same ordinary write it was in Drip;
 here it answers the score instead of a ramp.
 
 A miss buzzes and spends a life, and the last life writes
-`Card.GameOver` into `CurrentCard` (conditional navigation, chapter
-13's rule for transitions that depend on a runtime test). Either way
+`Card.GameOver` into `CurrentCard`, the conditional form of a
+transition. Either way
 the block falls into `_next`: a fresh drop spawns at the top of a
 random column, and `_store` files the row. One timing detail: the
 switch to GameOver lands at the next frame start, so
@@ -409,8 +408,8 @@ end
 `DrawBoard` repaints the whole scene whenever anything on it moved:
 clear, plot the drop, draw the paddle shape. `FbPlot` clobbers B, DE,
 and HL, so the paddle's arguments
-load after the drop is plotted, the register hygiene chapter 9
-attached to these calls.
+load after the drop is plotted, as required by the calls' register
+contracts.
 
 `ShowLives` extends the `lcd_row`
 idiom by one step. The op positions the
@@ -473,13 +472,13 @@ swallows every press at `jr z,_wait`.
 Follow the press that finally restarts. It fires `AnyKeyP` once. Card
 switches land at the next frame start and pulses clear at frame end, so
 Splash wakes to a quiet keypad and waits for a
-press of its own: three distinct presses walk the loop from game over
-to falling blocks, and each card hears exactly one.
+press of its own. Two distinct presses move from game over to falling
+blocks, and each card hears exactly one.
 
 Build it, run it under Debug80, and play a
-few rounds before you read on; play properly, until you lose. The
-first drop falls at a stroll; ten catches in, the sky has an opinion;
-a few more and survival hangs on the paddle's top speed.
+few rounds before you read on, including a run that reaches GameOver. The
+first drop falls at a stroll; ten catches in, the pace is markedly
+faster; a few more and survival hangs on the paddle's top speed.
 Every part of that feel is a number you wrote: the 18, the 4, the 6,
 the 90.
 
@@ -540,9 +539,9 @@ program Skyfall
 
 The report matches the tables
 from the start of the chapter line for line: every fact, every
-moment, every raiser. What you settled with a
-pencil, the compiler now states as checked fact, and if the two ever
-drift apart, the report is the one telling the truth.
+moment, every raiser. It is generated from the declarations, so a
+difference from the design tables tells you exactly which connection
+needs review.
 
 `AnyKeyP` triggers two blocks in two
 different cards, and card gating keeps them from ever both running.

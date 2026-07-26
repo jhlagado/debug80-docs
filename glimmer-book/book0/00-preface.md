@@ -9,17 +9,12 @@ nav_order: 0
 
 # Preface
 
-This book teaches you to write games for the Z80 using Glimmer.
+This book teaches you to write Z80 games with Glimmer. Glimmer applies
+reactive programming to a forty-year-old processor: you describe the
+game while the compiler generates the frame loop, key scanning, timing
+and change tracking that every game needs.
 
-A game written out by hand is a large program. The same game in
-Glimmer is a small one. Glimmer gets there by borrowing an idea:
-reactive programming, a modern technique, time-travelled back forty
-years to the age of the Z80. You describe the game rather than
-orchestrating it, and the machinery every game needs is generated for
-you instead of written by you: the frame loop, the key scanning, the
-timing, the change tracking.
-
-What you describe is four things: facts, moments, rules, and pictures.
+A Glimmer program describes four things: facts, moments, rules and pictures.
 The facts are what the game remembers, such as where the player is and
 what the score says. The moments are the things that happen, such as a
 key going down or a timer running out. The rules are the game's
@@ -54,24 +49,15 @@ point you first need it:
   [Debug80 Book 1](../../debug80-book/book1/) covers it in depth.
 
 The target computer is the TEC-1G, a Z80 single-board machine with a
-hex keypad, an 8x8 RGB LED matrix, and other displays you will meet
+hex keypad, an 8x8 RGB LED matrix and other displays you will meet
 along the way. You need no hardware to follow the book: every program
 runs in Debug80's emulation. If you do own a TEC-1G, the build
 produces a HEX file you can send to the board, and the same program
 runs on the real thing.
 
-Chapters 1 to 5 teach the core model:
-state, pulses, bindings, and the three phases every frame runs.
-Chapters 6 to 11 teach the tools of the 8x8 matrix: drawing, timing,
-motion, shapes, sound, and structured data. Chapters 12 and 13 teach
-how to organise a growing program and how to give a game its screens.
-From chapter 14 the book turns to complete games: building one on
-the 8x8 matrix, reading a larger one, then building another on the
-TMS9918 video display processor. The final chapter compares how
-the two displays shape the games written for them.
-
-The book teaches Glimmer 0.6. Every complete program in it was
-built with `glimmer build` and runs.
+The chapters introduce one construct at a time before bringing them
+together in complete games for the 8x8 matrix and the TMS9918 video
+display processor.
 
 ---
 

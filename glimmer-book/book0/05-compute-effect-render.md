@@ -15,7 +15,7 @@ computed *from other facts*. A score implies a difficulty. A count
 implies a bar length. A position implies which board cell the player
 occupies.
 
-A rule, as chapter 1 defined it, is a decision the game makes when a
+An effect is a decision the game makes when a
 moment arrives: move or stay at the wall, score or miss. A derivation
 is not a decision at all. The bar length is always the count divided
 by eight, chosen by nobody and waiting on no moment: the same
@@ -152,7 +152,7 @@ the compute and effect passes, and it reads live memory rather than a
 snapshot. Glimmer promises the
 trigger schedule; the Z80 bodies still determine the values.
 
-The frame you toured in chapter 2 has grown its full shape. From
+The runtime frame now has its full shape. From
 `meter.main.asm`:
 
 ```asm
@@ -171,11 +171,10 @@ MainLoop:
 Three dispatchers, one per phase, in job order, and between them the
 merge calls the next section is about.
 
-## How a change travels
+## Change propagation
 
-Chapter 2 left one thing unfinished: `GlimEndFrame` handed `Next0`
-into `Changed0`, with the reason held back for a program that needed
-it. A block's `updates`
+The earlier generated loop handed `Next0` into `Changed0`, with the
+reason held back for a program that needed it. A block's `updates`
 line marks facts changed; the question is *when* the dependents see
 the change, and the answer is one rule:
 
@@ -223,8 +222,7 @@ Two staging bytes stand beside `Changed0`. `Raised0` holds same-frame
 deliveries, and the `GlimMergeRaised` calls between phases fold it
 into `Changed0` so the next phase sees it. `Next0` holds deferred
 deliveries, and `GlimEndFrame` rolls it into `Changed0` as the next
-frame begins, the handoff you saw in chapter 2, now with its reason
-attached.
+frame begins.
 
 Now the second walk, from the keypad this time, one frame at a time.
 You press plus. On that frame `IncP` fires, `Increase` runs, and
@@ -278,7 +276,7 @@ Every fact, who raises it, what it triggers, and each dependent's
 phase: the program's whole design, computed from the `on`, `updates`,
 and `bind` lines you already wrote. When a program misbehaves, this report
 and the question *which fact failed to change?* find most bugs before
-the debugger opens. Chapter 11 builds a debugging practice on it.
+the debugger opens. A later chapter builds a debugging practice on it.
 
 Next, the display gets a chapter of its own: what
 [the 8x8 matrix profile](06-the-matrix-profile.md) builds, and every

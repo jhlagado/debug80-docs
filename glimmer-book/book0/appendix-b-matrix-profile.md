@@ -9,13 +9,12 @@ nav_order: 20
 
 # Appendix B - The 8x8 Matrix Profile
 
-Everything `platform tec1g-mon3` with `display matrix8x8` contributes
-to a generated program: the scan-shaped loop, the framebuffer, the
-colour and key equates, the library routines with their register
-contracts, and the sound, HUD, and LCD services. Every listing and
-value here is copied from a program built with `glimmer build`; the
-register interfaces are the `.routine` lines the assembler checks at strict
-strength.
+The combination of `platform tec1g-mon3` and `display matrix8x8`
+contributes the scan-shaped loop, framebuffer, colour and key equates,
+library routines, sound, HUD and LCD services. Every listing and value
+here is copied from a program built with `glimmer build`; the register
+interfaces are the `.routine` lines the assembler checks under strict
+contract checking.
 
 ## The loop
 
@@ -286,8 +285,8 @@ ShapeRotCount     .equ 1
   per shape, indexed by `id` alone.
 - `ShapeRotRightTbl` records each rotation's rightmost occupied
   column, the X bound a collision probe checks first.
-- Your own code walks these tables; Chapter 15 reads the Tetro engine
-  that does.
+- Your own code can walk these tables directly; the Tetro engine is
+  one complete example.
 
 ---
 

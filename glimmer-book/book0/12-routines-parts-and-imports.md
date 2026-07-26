@@ -9,13 +9,11 @@ nav_order: 12
 
 # Chapter 12 - Routines, Parts and Imports
 
-Canvas came out of chapter 11 in good shape: 126 lines, one file, and
-a debugger that can answer questions about it. This chapter is about
-what happens to that file next, because programs that get used are
-programs that grow, and growth is where one long file starts to cost
-you. The feature I have picked to force the issue is one a painting
+Canvas ended the previous chapter in one file, with a debugger that
+can answer questions about it. The next feature exposes
+the cost of keeping everything there. A painting
 program owes its painter: an eraser. With two painting rules to name,
-chapter 10's `PaintPixel` becomes `StampPixel` on a `Stamp` pulse, and
+`PaintPixel` becomes `StampPixel` on a `Stamp` pulse, and
 the picture it writes becomes `Paint`. AD sits unused beside GO on the
 keypad, and the rule is `StampPixel`'s mirror image: find the
 cursor's row byte, build the column's mask, and clear the bit instead
@@ -43,8 +41,8 @@ you come back in a month.
 
 ## Canvas, in three files
 
-The destination first, the reasons after. The entry file after the
-split, complete:
+Here is the destination. The reasons for each boundary follow. The
+entry file after the split is complete:
 
 ```text
 program Canvas
@@ -124,7 +122,7 @@ anywhere inside.
 
 `CursorSpot` in the entry file is the answer to the eraser's
 duplication: the stamp arithmetic, written once and tightened.
-`MxMask` from chapter 10 turns x into the column's mask, y indexes
+`MxMask` turns x into the column's mask, y indexes
 `Paint`, and the routine
 hands back B holding the mask and HL aimed at the cursor's row byte.
 With the arithmetic in one place, both painting rules shrink to their
@@ -158,8 +156,8 @@ exactly one bit. The dozen shared instructions are in one place now,
 and the next change to the addressing reaches both rules though you
 touch neither.
 
-Chapter 11's contract checking covers this routine without you writing
-a line of contract. The assembler reads the body and works out for
+Contract checking covers this routine without a hand-written contract.
+The assembler reads the body and works out for
 itself what your helper touches:
 B and HL come out carrying the mask and the row address, A, DE and
 the flags are clobbered, and C passes through untouched. Every `call
@@ -193,8 +191,7 @@ belong to the entry file, and paths (the part's, and the import's)
 resolve relative to it, whatever directory you build from.
 
 A part needs no preamble of its own; ours opens with a comment and
-goes straight into blocks. `MoveLeft` arrives exactly as chapter 11
-left it:
+goes straight into blocks. `MoveLeft` arrives unchanged:
 
 ```text
 ; Canvas's rules and pictures - a part of canvas.glim.
@@ -213,8 +210,8 @@ end
 ```
 
 The other three movement effects follow, then the painting rules and
-the renders: 90 lines, six effects and two renders, one file with one
-kind of content.
+the renders: six effects and two renders in a file with one kind of
+content.
 
 Diagnostics know which file they are standing in. Misspell the label
 in `MoveDown`'s guard, `jr nc,_sotp`, and rebuild:
@@ -223,8 +220,8 @@ in `MoveDown`'s guard, `jr nc,_sotp`, and rebuild:
 canvas-rules.glim:45:5: [AZMN_SYMBOL] error: Unresolved symbol "_sotp" in rel8 jr nc fixup.
 ```
 
-The coordinates work exactly as chapter 11 taught, with the file name
-choosing the file: line 45 of the part, where the typo sits.
+The file name in the diagnostic points directly to line 45 of the
+part, where the typo sits.
 Breakpoints ride the same map, so a breakpoint inside `StampPixel`
 stops Debug80 in `canvas-rules.glim`.
 
@@ -232,7 +229,7 @@ stops Debug80 in `canvas-rules.glim`.
 
 Two jobs remain that own no facts and answer no pulses. Drawing the
 board is a copy loop, eight row masks into the framebuffer's green
-plane; chapter 10 wrote it inside `DrawCanvas`. Counting lit pixels
+plane, currently written inside `DrawCanvas`. Counting lit pixels
 is a bit-counting loop over the same eight bytes. Both are plain
 assembly with a register interface at the top and a `ret` at the
 bottom: library code in everything but the file it lives in. `import`
@@ -292,8 +289,8 @@ _skip:
 
 You have been reading this dialect all book: the module is written in
 the same assembly you find in every generated file. Each callable opens
-with a `.routine` contract line of the kind you read on `FbPlot` in
-chapter 11, with one difference that matters: in a module you
+with a `.routine` contract line like the one on `FbPlot`, with one
+difference that matters: in a module you
 declare the contract yourself, and the assembler holds every caller to what you
 declared. The module reads the program's names directly, too: `Paint`
 and `Framebuffer` are the same labels your blocks use.
@@ -337,7 +334,7 @@ end
 ```
 
 `DrawCanvas` keeps the cursor and hands the board to `ShowPaint`.
-`ShowCount` replaces chapter 11's `ShowMarks`, and retires the
+`ShowCount` replaces `ShowMarks` and retires the
 `Marks` cell with it, because the count is computed from the picture
 now, fresh on every redraw: `CountLit` returns it in HL, which is
 where `HudWriteU16` wants its value. Stamp, and the count climbs;
