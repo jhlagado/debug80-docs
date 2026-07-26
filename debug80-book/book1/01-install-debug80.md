@@ -53,6 +53,19 @@ and one button, **Open Folder**.
 
 ![The Project section at full width, with the Add projects or folders card and the Open Folder button](../../assets/images/debug80-book/book1/panel-state-no-folder.svg) The panel has nothing more to offer until a folder exists, because Debug80 works on folders. There is no separate "new project" wizard and nothing to name before you begin.
 
+## What it becomes
+
+Everything above is the panel with nothing in it. This is the same section
+several chapters from now, with a project open and a program running:
+
+![The Debug80 section expanded inside the Run and Debug sidebar, holding the Project, Machine, Displays and Matrix Keyboard sections, with TMS9918 Video, Joystick, Registers, Memory and Serial collapsed](../../assets/images/debug80-book/book1/debug80-panel-in-vscode.png)
+
+Variables, Watch, Call Stack and Breakpoints are still at the top, still
+VS Code's. Everything below `DEBUG80` belongs to Debug80: the project row you
+have already met, then the emulated machine, its displays, a keyboard, and
+further sections for registers, memory and the serial line. They arrive as you
+need them, and none of them exist yet on your screen — you have no folder open.
+
 ## Summary
 
 - Debug80 requires VS Code **1.100.0** or later and installs from the marketplace as **Debug80 IDE for Z80 Development**.
