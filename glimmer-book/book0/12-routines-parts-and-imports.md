@@ -366,9 +366,9 @@ A `.routine` boundary, your body verbatim, and the appended `ret`
 closing the fall-through. The label is plain `CursorSpot`, exactly as
 declared, because your code calls it by name, while block
 labels wear the `Glim_` prefix because only dispatchers call them.
-And the bare `.routine` line is where the assembler's inference attaches: the
-contract it works out from this body is what every call site is
-checked against.
+And the bare `.routine` line is where the assembler's inference attaches: it
+works the contract out from this body, then checks every call site
+against it.
 
 Blocks from the part compile exactly like blocks from the entry file:
 

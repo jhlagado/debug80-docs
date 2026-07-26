@@ -85,9 +85,8 @@ end
 
 A second sprite, `Wasp color darkyellow`, and a second tile, `Reed
 color medgreen on black`, follow in the same shape. Their rows are
-yours to draw; any eight strings of `X` and `.` will serve. What the
-build
-cares about is not the artwork but the order and the colour pairs:
+yours to draw; any eight strings of `X` and `.` will serve. The build
+cares about the order and the colour pairs, not the artwork:
 the sprites take slots 0 and 1, Lantern's pair comes first so that
 black is the screen background, and Reed's pair opens the next bank.
 The generated equates read `Lantern .equ 1`, `Reed .equ 8`. The rest
@@ -411,8 +410,8 @@ axis-aligned bounding-box collision. Each sprite owns an 8x8 box, the
 differences compare the boxes' top-left corners, and at a difference
 of 8 the boxes sit edge
 to edge, so `cp 8` fires on any box overlap, and 6 demands the boxes
-share at least a three-pixel band on each axis. The boxes are what
-collide, and that matters for sparse patterns: two thin sprites can
+share at least a three-pixel band on each axis. Boxes collide, not
+pixels, and that matters for sparse patterns: two thin sprites can
 overlap boxes without a single opaque pixel touching. Pixel-perfect
 collision would go on to compare the patterns themselves; for a fly
 and a wasp with full bodies, deep box overlap reads as contact, and

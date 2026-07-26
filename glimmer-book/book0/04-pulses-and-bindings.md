@@ -186,9 +186,9 @@ bind key any rising -> Wake
 
 `any` fires its pulse on every new press, whichever key it is, and it
 fires alongside the named bindings. Press GO and both `Home` and
-`Wake` fire in the same frame. It comes in the rising shape only; what
-it catches is *the player touched the machine*. Title screens wait on
-it.
+`Wake` fire in the same frame. It comes in the rising shape only, and
+it catches one thing: *the player touched the machine*. Title screens
+wait on it.
 
 ## Generated polling
 

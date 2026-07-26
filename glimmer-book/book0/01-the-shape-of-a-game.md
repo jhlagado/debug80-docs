@@ -120,8 +120,8 @@ is real assembly, passed through untouched.
 The generated program advances one **frame** at a time. Every frame,
 the machinery checks which
 facts changed and runs the blocks that declared an interest in them,
-then shows the result and goes round again. That is what `changed`
-does: it marks `DotX` as already changed *before the first frame*, so
+then shows the result and goes round again. `changed` marks `DotX` as
+already changed *before the first frame*, so
 `DrawDot` runs once at startup and our pixel appears. Without it, the
 program would sit there with a dark screen, waiting for a change that
 never comes. From the second frame on, `DotX` holds still, so
@@ -243,8 +243,8 @@ block on its own, whether the program has three of them or thirty.
 ## Holding a key down
 
 To cross the screen, you
-press key 6 seven times. What we
-want is the arcade behaviour: hold the key, the dot keeps moving.
+press key 6 seven times. We want the
+arcade behaviour: hold the key, the dot keeps moving.
 
 By hand, that behaviour is a small state machine you run every frame:
 keep a counter, act when it reaches zero, reload it, and (the edge

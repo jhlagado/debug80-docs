@@ -282,8 +282,8 @@ Everything on the
 declaration side of the line (the shape tables, the timers, the key
 bindings, the change tracking, the card
 gating) was plumbing and data, the kind of code that looks the same
-in every game, and the language absorbed all of it. What remains in
-this module is the part the language has no reason to absorb: the
+in every game, and the language absorbed all of it. This module keeps
+the part the language has no reason to absorb: the
 board algebra that makes Tetro *Tetro*, specific to this one game and
 to no other. A library could package board operations, and some day one
 may; the engineering call here is that code reused by every game

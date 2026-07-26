@@ -136,9 +136,6 @@ runs. Its body indexes the table with the current step:
     ld (CometX),a
 ```
 
-Missing from that body is
-everything expensive: no squares, no roots, no fractions.
-
 Every ramp names an arrival pulse, so `Landed` fires as the flight
 ends. Comet lands quietly for now; a sound cue can later respond to
 the same moment.
@@ -224,8 +221,7 @@ Curve_Glide:
 Sixty-four bytes, one per ramp step, and you can read the ease-out
 straight off the rows: the dot spends three frames on column 0 and
 nineteen on column 6, each dwell longer than the last, give or take a
-rounding step. The table occupies 64 bytes and requires no per-frame
-interpolation.
+rounding step.
 
 `.align 256`, the line above the label, moves the assembler to the
 next 256-byte page boundary before laying the table down, so
