@@ -2,10 +2,10 @@
 layout: default
 title: "Send to TEC-1G hardware"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 9
+nav_order: 10
 ---
 
-[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)
+[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Appendix A — Debug expressions →](appendices/a-debug-expressions.md)
 
 # Send to TEC-1G hardware
 
@@ -70,4 +70,4 @@ Start with the part of the path that failed:
 
 ---
 
-[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Copy monitor ROM source →](10-copy-monitor-rom.md)
+[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Appendix A — Debug expressions →](appendices/a-debug-expressions.md)

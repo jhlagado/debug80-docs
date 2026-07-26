@@ -2,7 +2,7 @@
 layout: default
 title: "Inspect a running program"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 6
+nav_order: 7
 ---
 
 [← Run the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)
@@ -81,15 +81,9 @@ Debug80 renders the RGB matrix with duty-cycle brightness, so a dim pixel and a 
 
 ## Keyboard focus
 
-The panel contains more than one thing that wants the keyboard: the hex keypad, and on the TEC-1G the matrix keyboard and the joystick. Only one owns physical key input at a time.
+The hex keypad, matrix keyboard and joystick can compete for physical key input. Click the surface you intend to use; the on-screen controls continue to work regardless of keyboard focus.
 
-Click the surface you intend to type into. Clicking a keypad key gives the keypad focus, and from then on your physical keys reach the emulated machine rather than the editor. The on-screen keys always work, whatever has focus.
-
-When the Matrix Keyboard section is open, a small pill tells you which surface currently owns the keyboard and how to change it. The matrix releases the keyboard back to VS Code on **Ctrl-Escape**.
-
-Leave the Joystick section open and the joystick takes physical keys ahead of the keypad. When keypad keys seem to do nothing, that is usually the reason: collapse Joystick, or click the keypad first.
-
-On macOS the matrix keyboard ignores Command chords, so **Command-S** and **Command-P** stay VS Code shortcuts while the emulator has focus. Control-letter chords do route to the matrix, which is how a TEC-1G program sees them.
+[Video, input and serial](08-video-input-and-serial.md) explains the input priority, focus indicator, release command and macOS key handling.
 
 ---
 

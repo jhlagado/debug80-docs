@@ -2,7 +2,7 @@
 layout: default
 title: "Video, input and serial"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 8
+nav_order: 9
 ---
 
 [← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
@@ -11,7 +11,7 @@ nav_order: 8
 
 The Machine and Displays sections cover the TEC-1G as it comes. The rest of the panel covers what you can plug into it: a video card, a joystick, a full keyboard and a serial line.
 
-## The sections, and their order
+## The sections and their order
 
 The TEC-1G panel has nine sections: Project, Machine, Displays, TMS9918 Video, Joystick, Matrix Keyboard, Registers, Memory and Serial. Project, Machine, Displays and Registers start open; the rest start closed.
 

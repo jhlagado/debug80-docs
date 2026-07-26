@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Copy monitor ROM source"
+title: "Appendix E — Copy monitor ROM source"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 10
+nav_order: 105
 ---
 
-[← Send to TEC-1G hardware](09-send-to-hardware.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)
+[← Appendix D — The AZM options row](appendices/d-azm-options-row.md) | [Book 1](index.md)
 
-# Copy monitor ROM source
+# Appendix E — Copy monitor ROM source
 
 Debug80 supplies the platform monitor ROM for ordinary TEC-1 and TEC-1G projects, so copy it into a project only when you want to study, edit or debug the monitor itself. Debug80 then assembles the copied files with AZM and uses their source map when execution enters monitor code.
 
@@ -81,4 +81,4 @@ Remove or rename that file when you want the project to use the bundled monitor 
 
 ---
 
-[← Send to TEC-1G hardware](09-send-to-hardware.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)
+[← Appendix D — The AZM options row](appendices/d-azm-options-row.md) | [Book 1](index.md)

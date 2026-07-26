@@ -2,16 +2,14 @@
 layout: default
 title: "Glimmer targets"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 11
+nav_order: 5
 ---
 
-[← Copy monitor ROM source](10-copy-monitor-rom.md) | [Book 1](index.md) | [Appendix A — Debug expressions →](appendices/a-debug-expressions.md)
+[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
 
 # Glimmer targets
 
-Debug80 builds one other kind of program: Glimmer, a reactive game language that compiles to readable Z80 assembly. The compiler ships inside the extension, so there is nothing extra to install.
-
-The language itself belongs to the [Glimmer book](../../glimmer-book/book0/), which starts from an empty file and builds up to two complete games.
+Debug80 builds one other kind of program: Glimmer, a reactive game language that compiles to readable Z80 assembly. The compiler ships inside the extension, so there is nothing extra to install. This chapter covers the Debug80 integration; the Glimmer book teaches the language.
 
 ## A Glimmer file is another target
 
@@ -33,9 +31,9 @@ build/
 
 ![What a Glimmer build produces](../../assets/images/debug80-book/book1/glimmer-build-output.svg)
 
-Glimmer compiles to assembly first and leaves the result where you can read it, so when you want to know what a declaration cost, you open it and count.
+Debug80 calls Glimmer's in-process build pipeline, which generates assembly, injects and checks AZM register contracts, assembles the program and rewrites the debug map to refer back to the Glimmer source. It leaves the generated assembly where you can inspect the instructions produced by a declaration.
 
-There is no `.lst` listing and no register-contracts report. Glimmer runs contract checking internally while it compiles, so those artifacts have nothing to add.
+The pipeline does not emit a separate `.lst` listing or register-contracts report. Build diagnostics appear in VS Code, and the generated assembly remains available in `build/`.
 
 ## Debugging Glimmer
 
@@ -47,10 +45,14 @@ The editor features from the source-navigation chapter cover `.glim` too: Go to 
 
 ## Strict labels and Glimmer
 
-The **Strict labels** checkbox writes `azm.symbolCase` for the whole project, and it applies to the assembly Glimmer generates as much as to assembly you write. Generated code is consistent about capitalization, so leaving it on costs you nothing.
+The **Strict labels** checkbox writes `azm.symbolCase` for the whole project, and it applies to imported or handwritten assembly as well as the assembly Glimmer generates. Generated code uses consistent capitalization. Leave strict labels on unless older assembly in the project relies on case-insensitive names.
 
-Appendix B lists every command, Appendix C every field of `debug80.json`, and Appendix D the assembler settings in the panel.
+Appendix B lists the user commands, Appendix C documents the project and source-map formats, and Appendix D explains the assembler settings in the panel.
+
+## Learn Glimmer
+
+Continue with [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book0/). It starts with an empty file, teaches each language construct through programs you can build and run in Debug80, and finishes with two complete games.
 
 ---
 
-[← Copy monitor ROM source](10-copy-monitor-rom.md) | [Book 1](index.md) | [Appendix A — Debug expressions →](appendices/a-debug-expressions.md)
+[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)

@@ -9,7 +9,7 @@ nav_order: 102
 
 # Appendix B — Command reference
 
-Every command Debug80 contributes. Open the Command Palette with **Shift-Command-P** on macOS or **Shift-Control-P** on Windows and Linux, then type part of the title.
+This appendix lists the Debug80 commands available to users. Open the Command Palette with **Shift-Command-P** on macOS or **Shift-Control-P** on Windows and Linux, then type part of the title.
 
 Everything the panel can do is also a command.
 
@@ -38,7 +38,7 @@ Everything the panel can do is also a command.
 |---|---|
 | **Debug80: Build Current Target** | Assembles without launching. |
 | **Debug80: Run Current Target** | Builds and starts the emulator, restarting any running session. |
-| **Debug80: Start Debugging** | Starts a session without stopping an existing one. Bound to **F5**. |
+| **Debug80: Start Debugging** | Starts the selected target when no debug session is running. |
 | **Run to Here** | Runs until execution returns to the selected frame. Call Stack context menu only. |
 
 ## Source and diagnostics
@@ -60,22 +60,6 @@ Everything the panel can do is also a command.
 | **Debug80: Test CoolTerm Connection** | Pings CoolTerm's remote socket. Opens no port and needs no build. |
 | **Debug80: Send HEX to Board via CoolTerm** | Sends the active target's HEX file to a board. |
 | **Debug80: Copy Monitor ROM into Project** | Copies the bundled monitor ROM source into the project. |
-
-## Not reachable from the palette
-
-These are registered but hidden, either because something else drives them or because they are left over from earlier work.
-
-| Command | Note |
-|---|---|
-| **Debug80: Open Project Configuration Panel** | Opens a settings editor that nothing currently invokes. |
-| **Debug80: Show Platform Panel** | Hard-coded to the TEC-1 platform. |
-| **Debug80: Show Platform Memory Panel** | Hard-coded to the TEC-1 platform. |
-| **Debug80: Show Terminal Panel** | The standalone terminal opens by itself for unrecognised platforms. |
-| **Debug80: Send Terminal Input** | Used by that terminal. |
-
-## Keyboard shortcuts
-
-Debug80 contributes exactly one keybinding of its own: **F5** starts a debug session when the workspace holds a project and no session is running. Everything else uses VS Code's own debug shortcuts (**F10**, **F11**, **Shift-F11** and **F12**).
 
 ---
 

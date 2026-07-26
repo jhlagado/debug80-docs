@@ -2,18 +2,18 @@
 layout: default
 title: "Run the debugger"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 5
+nav_order: 6
 ---
 
-[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)
+[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)
 
 # Run the debugger
 
 ## Start a session
 
-Select your target and click **Run**, or press **F5**.
+Select your target and click **Run**.
 
-Cleared, **Stop on entry** lets the program run straight away. Ticked, Debug80 halts at the target's configured entry point before any of it executes; for a TEC-1G project under MON-3 that is address `$0000` in the monitor ROM, well before your own code at `0x4000`.
+Cleared, **Stop on entry** lets the machine run straight away. Ticked, it pauses at the machine's launch address before the CPU executes an instruction. A TEC-1G session under MON-3 starts at the reset vector, `$0000`, in the monitor ROM; the starter program assembled from the target's source entry file begins later, at `$4000`.
 
 Tick it now, and click **Run**.
 
@@ -26,9 +26,9 @@ The VS Code debug toolbar controls the emulated Z80 while a session is running.
 Left to right:
 
 - **Continue / Pause**: continue from the current instruction. While the program is running the same button becomes **Pause**.
-- **Step Over**: press **F10** to execute the current instruction and stop at the next one in the current flow. When the current instruction calls a subroutine, F10 runs that routine as one action and stops after it returns.
-- **Step Into**: press **F11** to follow execution into a subroutine. In Z80 code this also follows software interrupts, so stepping into `RST 0x10` takes you into the MON-3 service routine.
-- **Step Out**: press **Shift-F11** to run until the current routine returns to its caller.
+- **Step Over**: execute the current instruction and stop at the next one in the current flow. When the current instruction calls a subroutine, Step Over runs that routine as one action and stops after it returns.
+- **Step Into**: follow execution into a subroutine. In Z80 code this also follows software interrupts, so stepping into `RST 0x10` takes you into the MON-3 service routine.
+- **Step Out**: run until the current routine returns to its caller.
 - **Restart**: restart the session.
 - **Stop**: end the session.
 
@@ -42,7 +42,7 @@ If the source-map status line from the last chapter does not read `current`, the
 
 ## Step, then inspect
 
-F10 keeps you in your program, moving past calls as single operations. Reach for F11 when the called code matters and you want the instructions inside it, and for Shift-F11 once F11 has taken you somewhere you have seen enough of.
+**Step Over** keeps you in your program, moving past calls as single operations. Use **Step Into** when the called code matters and you want to see the instructions inside it, then **Step Out** when you have seen enough of that routine.
 
 ## Set a breakpoint
 
@@ -60,7 +60,7 @@ Set one on the `LD DE,SevenSegHello` line inside `ScanHello`, then **Continue**.
 
 ![Run to Here on a call stack frame](../../assets/images/debug80-book/book1/menu-run-to-here.svg)
 
-Right-click a frame in the **Call Stack** view and choose **Run to Here** to continue until execution returns to that frame. It is the quick way out of a routine you stepped too far into, when Step Out would take several presses.
+Right-click a caller frame in the **Call Stack** view and choose **Run to Here** to continue until execution returns to that frame. **Step Out** returns through one caller at a time; **Run to Here** can skip several nested calls when you select a frame farther down the stack.
 
 If a line will not resolve, build the target again to refresh the source map.
 
@@ -82,4 +82,4 @@ The running machine carries on with the code it already has until you **Run** ag
 
 ---
 
-[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)
+[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)

@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 4
 ---
 
-[← Targets](03-targets.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
+[← Targets](03-targets.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)
 
 # Build and run
 
@@ -40,7 +40,7 @@ build/
 
 `main.hex` is what runs, on the emulator and on real hardware alike. `main.d8.json` is the **source map**, and it is what makes source-level debugging possible: it records which addresses came from which lines of which files.
 
-A Glimmer target emits the generated assembly as `main.asm` alongside the hex, binary and source map, and no listing or contracts report.
+A Glimmer target also emits its generated assembly as `main.asm`. [Glimmer targets](11-glimmer-targets.md) describes its build pipeline and output.
 
 ## The source map status line
 
@@ -50,7 +50,7 @@ Under the build line the panel keeps a running verdict on the source map:
 Source map: current.
 ```
 
-It has four other things it can say, and each names its own remedy:
+It has five other things it can say, and each names its own remedy:
 
 | Line | Meaning |
 |---|---|
@@ -60,7 +60,7 @@ It has four other things it can say, and each names its own remedy:
 | `Source map: unreadable, rebuild the selected target.` | The file exists but could not be read. |
 | `Source map: invalid, rebuild the selected target.` | The file was read but did not parse. |
 
-Anything other than `current` means breakpoints and stepping may land in the wrong place. When debugging behaves oddly, read this line before anything else.
+A stale map can send breakpoints and stepping to old locations. A missing, unreadable or invalid map disables the editor and debugger features that depend on it. When debugging behaves oddly, read this line before anything else.
 
 ## Run
 
@@ -76,19 +76,15 @@ Debug80 builds the target, then launches it: it loads the monitor ROM and your p
 
 If a session is already running, **Run** stops it and starts again, so after an edit one press gets you the new build on a fresh machine.
 
-**F5** does the same thing as **Run**, through VS Code's usual debug shortcut. There is no `launch.json` to write; Debug80 supplies the configuration.
+There is no `launch.json` to write; Debug80 supplies the debug configuration.
 
 ## Build or run
 
 Use **Run** while you are writing a program, and **Build** when you want the artifacts and not the machine: before sending a HEX file to real hardware, when you only want to know whether the code assembles, or when you are working on a target that is not the one you are currently debugging.
 
-## Rebuild on save
-
-While a session is running, saving any `.asm`, `.z80`, `.inc` or `.glim` file in the project triggers a rebuild automatically, a moment after you stop typing. Errors appear in the Problems panel as they would from a manual build.
-
 ## Stop on entry
 
-The **Stop on entry** checkbox pauses the program at its entry point instead of letting it run, and applies to this VS Code window for as long as it is open.
+The **Stop on entry** checkbox pauses the CPU at the machine's launch address instead of letting it run, and applies to this VS Code window for as long as it is open.
 
 ## The other three controls
 
@@ -100,10 +96,8 @@ The row below **Stop on entry** holds **Register Contracts**, **Contract Updates
 
 ## Reading the state as data
 
-Run **Debug80: Copy Project Status (JSON)** from the Command Palette and the panel's full view of the project (its state, the target list, the selected target, and the build, source map and hardware status) goes to your clipboard as JSON.
-
-It is the fastest way to answer "what does Debug80 actually think is going on" when something looks wrong.
+Run **Debug80: Copy Project Status (JSON)** from the Command Palette to copy the panel's full view of the project as JSON. The result records the project state, target list, selected target, build, source map and hardware status, which helps when the visible state does not explain what Debug80 is doing.
 
 ---
 
-[← Targets](03-targets.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
+[← Targets](03-targets.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)

@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 101
 ---
 
-[← Glimmer targets](../11-glimmer-targets.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
+[← Send to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)
 
 # Appendix A — Debug expressions
 
@@ -181,4 +181,4 @@ When execution reaches a conditional breakpoint, a true or non-zero expression s
 
 ---
 
-[← Glimmer targets](../11-glimmer-targets.md) | [Book 1](../index.md) | [Appendix B — Common Command Palette Commands →](b-command-reference.md)
+[← Send to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)

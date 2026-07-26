@@ -2,7 +2,7 @@
 layout: default
 title: "Source navigation and ROM source"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 7
+nav_order: 8
 ---
 
 [← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)
@@ -17,7 +17,7 @@ If Go to Definition stops resolving or hover goes quiet, check the source-map st
 
 ## Go to Definition
 
-Place the cursor on a symbol in a `.asm`, `.z80`, `.asmi` or `.glim` file and press **F12**. Debug80 opens the definition recorded in the last successful build.
+Right-click a symbol in a `.asm`, `.z80`, `.asmi` or `.glim` file and choose **Go to Definition**. Debug80 opens the definition recorded in the last successful build.
 
 ## Workspace symbol search
 

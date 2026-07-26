@@ -9,7 +9,7 @@ nav_order: 3
 
 # Targets
 
-A folder can hold many assembly files. Only some of them are programs; the rest are includes, experiments and half-finished ideas. A **target** is Debug80's record of one program: which file is its entry point, where its build output goes, and which machine it runs on.
+A folder can hold many assembly files. Only some of them are programs; the rest are includes, experiments and half-finished ideas. A **target** is Debug80's record of one program: which source file the assembler starts with, where the build output goes, and which machine the program runs on.
 
 **`debug80.json` is the truth. File names only ever make suggestions.**
 
@@ -31,7 +31,7 @@ Your project has one target, named `main`:
 
 ![A folder holds a project, the project selects a target, the target names a source file](../../assets/images/debug80-book/book1/folder-project-target-source.svg)
 
-`sourceFile` is the entry point, the file handed to the assembler. `outputDir` and `artifactBase` decide where the output lands and what it is called, so this target produces `build/main.hex`. `platform` and `profile` say which machine it runs on.
+`sourceFile` is the source entry file handed to the assembler. `outputDir` and `artifactBase` decide where the output lands and what it is called, so this target produces `build/main.hex`. `platform` and `profile` say which machine it runs on.
 
 The target's name is the key, `main`. Debug80 derives it from the source file name, dropping the extension and a trailing `.main` if there is one, so `game.main.asm` yields a target called `game`. If that name is taken it appends `-2`.
 
@@ -112,7 +112,7 @@ If a target names a source file that no longer exists, Debug80 hides it from the
 
 ## Everything here is also a command
 
-Every action in this chapter has a Command Palette equivalent, which is what makes them scriptable and keyboard-reachable:
+Every action in this chapter has a Command Palette equivalent, so it is available from the keyboard as well as the panel:
 
 | Action | Command |
 |---|---|

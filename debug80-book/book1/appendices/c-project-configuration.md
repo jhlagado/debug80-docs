@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 103
 ---
 
-[← Appendix B — Common Command Palette Commands](b-command-reference.md) | [Book 1](../index.md) | [Appendix D — The AZM options row →](d-azm-options-row.md)
+[← Appendix B — Command reference](b-command-reference.md) | [Book 1](../index.md) | [Appendix D — The AZM options row →](d-azm-options-row.md)
 
 # Appendix C — Debug80 file formats
 
@@ -171,6 +171,46 @@ interface D8DebugMap {
 
 The required fields identify the file as a D8 debug map, declare the target architecture and collect mapping data by source file. Z80 maps normally use `arch: "z80"`, `addressWidth: 16` and `endianness: "little"`.
 
+The optional root objects have these shapes:
+
+```typescript
+interface D8SegmentDefaults {
+  kind?: 'code' | 'data' | 'directive' | 'label' | 'macro' | 'unknown';
+  confidence?: 'high' | 'medium' | 'low';
+}
+
+interface D8SymbolDefaults {
+  kind?: 'label' | 'constant' | 'data' | 'macro' | 'unknown';
+  scope?: 'global' | 'local';
+}
+
+interface D8MemoryLayout {
+  segments: Array<{
+    name: string;
+    start: number;
+    end: number;
+    kind?: 'rom' | 'ram' | 'io' | 'banked' | 'unknown';
+    bank?: number;
+  }>;
+}
+
+interface D8Generator {
+  name?: string;
+  tool?: string;
+  version?: string;
+  args?: string[];
+  createdAt?: string;
+  inputs?: Record<string, string>;
+}
+
+interface D8Diagnostics {
+  warnings?: string[];
+  errors?: string[];
+}
+```
+
+`segmentDefaults` and `symbolDefaults` supply omitted values throughout the file. `memory` describes the target's address regions. `generator` identifies the tool and inputs that produced the map, while `diagnostics` can preserve warnings and errors from generation.
+
 Each file entry can hold segments and symbols:
 
 ```typescript
@@ -224,16 +264,21 @@ A symbol records a named label, data address or constant:
 ```typescript
 interface D8Symbol {
   name: string;
+  identity?: string;
   address?: number;
   value?: number;
   line?: number;
   kind?: 'label' | 'constant' | 'data' | 'macro' | 'unknown';
   scope?: 'global' | 'local';
+  visibility?: 'exported' | 'source' | 'local';
+  sourceUnit?: string;
   size?: number;
 }
 ```
 
 Address-backed symbols can be used for source navigation, call-stack naming and debugger display. Value-only constants can appear in symbol lookup and expression evaluation, but they are not breakpoint addresses.
+
+`identity` is a stable declaration identity emitted by AZM. `scope` records global or local lookup scope, while `visibility` records whether AZM exported the declaration, kept it visible to its source unit or kept it local. `sourceUnit` names the assembled source unit that owns the declaration.
 
 This is a minimal source map for a one-byte instruction at `$0800`, tied to line 5 of `src/main.asm`:
 
@@ -274,4 +319,4 @@ Debug80 validates the file before importing it. Invalid JSON or an unsupported D
 
 ---
 
-[← Appendix B — Common Command Palette Commands](b-command-reference.md) | [Book 1](../index.md) | [Appendix D — The AZM options row →](d-azm-options-row.md)
+[← Appendix B — Command reference](b-command-reference.md) | [Book 1](../index.md) | [Appendix D — The AZM options row →](d-azm-options-row.md)
