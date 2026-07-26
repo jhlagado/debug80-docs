@@ -6,6 +6,8 @@ has_children: true
 has_toc: false
 ---
 
+<Mark class="book-plate" book="azm" size="52" />
+
 # AZM Book 1 — Assembler Manual
 
 This is the reference for AZM, an enhanced Z80 assembler with modern programming features.

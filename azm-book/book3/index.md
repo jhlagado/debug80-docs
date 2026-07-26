@@ -6,6 +6,8 @@ has_children: true
 has_toc: false
 ---
 
+<Mark class="book-plate" book="azm" size="52" />
+
 # AZM Book 3 — Algorithms and Data Structures
 
 This book applies the Z80 and AZM foundations from Book 2 to larger assembly programs. It works through sorting, searching, strings, bit manipulation, records, recursion, composition, pointer structures and a capstone backtracking problem.

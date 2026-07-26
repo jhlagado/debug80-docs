@@ -6,16 +6,7 @@ nav_order: 1
 ---
 
 <div class="library-hall">
-  <svg class="library-hall__mark" viewBox="0 0 24 24" role="img" aria-label="Debug80">
-    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
-      <rect x="5.2" y="5.2" width="13.6" height="13.6" rx="1.2"/>
-      <path d="M2.4 9H5.2M2.4 12H5.2M2.4 15H5.2"/>
-      <path d="M18.8 9H21.6M18.8 12H21.6M18.8 15H21.6"/>
-      <path d="M9 2.4V5.2M12 2.4V5.2M15 2.4V5.2"/>
-      <path d="M9 18.8V21.6M12 18.8V21.6M15 18.8V21.6"/>
-    </g>
-    <text x="12" y="15.1" text-anchor="middle" font-size="8">80</text>
-  </svg>
+  <Mark class="library-hall__mark" book="debug80" size="46" />
   <p class="library-hall__eyebrow">$0000 · cold boot</p>
   <h1 class="library-hall__title">The Debug80 Library</h1>
   <p class="library-hall__tagline">Books on the Z80 — a debugger, an assembler, a game language, and the machine they serve.</p>
@@ -24,19 +15,19 @@ nav_order: 1
 <nav class="library-shelf">
   <a class="volume volume--debug80" href="/debug80-book/book1/">
     <span class="volume__tag">Vol $00 · 1 book</span>
-    <span class="volume__title">Debug80</span>
+    <span class="volume__head"><Mark book="debug80" size="26" /><span class="volume__title">Debug80</span></span>
     <span class="volume__desc">Source-level Z80 debugging in VS Code — from installation to stepping real hardware projects and sending HEX to the board.</span>
     <span class="volume__enter">run →</span>
   </a>
   <a class="volume volume--azm" href="/azm-book/">
     <span class="volume__tag">Vol $01 · 3 books</span>
-    <span class="volume__title">AZM</span>
+    <span class="volume__head"><Mark book="azm" size="26" /><span class="volume__title">AZM</span></span>
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
   </a>
   <a class="volume volume--glimmer" href="/glimmer-book/book0/">
     <span class="volume__tag">Vol $02 · 1 book</span>
-    <span class="volume__title">Glimmer</span>
+    <span class="volume__head"><Mark book="glimmer" size="26" /><span class="volume__title">Glimmer</span></span>
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — built up one construct at a time, ending in complete games.</span>
     <span class="volume__enter">react →</span>
   </a>

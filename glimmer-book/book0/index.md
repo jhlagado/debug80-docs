@@ -6,6 +6,8 @@ has_children: true
 has_toc: false
 ---
 
+<Mark class="book-plate" book="glimmer" size="52" />
+
 # Glimmer Book: Reactive Games for the Z80
 
 Glimmer lets you write a Z80 game as a set of declarations: this is the

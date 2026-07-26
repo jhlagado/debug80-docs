@@ -6,6 +6,8 @@ has_children: true
 has_toc: false
 ---
 
+<Mark class="book-plate" book="azm" size="52" />
+
 # AZM Book 2 — Z80 Fundamentals
 
 This book starts from no prior knowledge of computers or programming. It introduces the Z80 from the bare machine upward: memory, registers, machine code, assembly language, flags, loops, tables, the stack, subroutines and port I/O.

@@ -6,6 +6,8 @@ has_children: true
 has_toc: false
 nav_exclude: true
 ---
+<Mark class="book-plate" book="azm" size="52" />
+
 # AZM Books
 
 One core assembler manual and two teaching books for working with **AZM**, the assembler used by the Debug80 environment. Start with the manual when you want the AZM language rules directly. Start with Book 2 when you want a guided introduction to Z80 programming before using the reference.

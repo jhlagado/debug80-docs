@@ -6,6 +6,8 @@ has_children: true
 has_toc: false
 nav_exclude: true
 ---
+<Mark class="book-plate" book="glimmer" size="52" />
+
 # Glimmer Books
 
 Glimmer is a reactive game language that compiles to readable Z80 assembly: you declare a program's state,

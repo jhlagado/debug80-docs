@@ -6,6 +6,8 @@ has_children: true
 has_toc: false
 ---
 
+<Mark class="book-plate" book="debug80" size="52" />
+
 # Debug80 Book 1 — Getting started
 
 Debug80 turns Visual Studio Code into a Z80 development environment. You write assembly, run it in an emulated TEC-1G, step through it with source-level breakpoints, and send the same program to a real board over a serial cable.
