@@ -44,8 +44,6 @@ _row:
 
 After `RenderTile` returns, `B` is 0. The outer `djnz` wraps it to 255 and branches, but the next call resets `B` to 8 and again returns with it at 0. The outer loop therefore never terminates.
 
-The failure occurs at the interface: `ScanTiles` relies on `B` surviving the call, while `RenderTile` overwrites it.
-
 ---
 
 ## Terms
@@ -178,17 +176,7 @@ azm --rc error program.asm      # fail on proven conflicts
 azm --rc strict program.asm     # fail on anything AZM cannot prove safe
 ```
 
-The default mode is `off`.
-
-Use the modes as a ladder:
-
-| Mode | Use it when |
-|------|-------------|
-| `off` | You want ordinary assembly only |
-| `audit` | You want AZM to analyze contracts without failing the build; useful while editing |
-| `warn` | You want warnings printed while the build still succeeds |
-| `error` | You want proven register contract conflicts to fail the build |
-| `strict` | You want anything AZM cannot prove safe to fail the build, including unknown routine boundaries and stack effects |
+The default mode is `off`. `strict` goes beyond `error` by failing on anything AZM cannot prove safe, including unknown routine boundaries and stack effects.
 
 For a Debug80 edit-and-restart loop, use `audit` or `warn` while exploring a messy port. Use `strict` for deliberate rebuilds once the routine boundaries and external interfaces are in place.
 
@@ -378,12 +366,8 @@ Six contract keys are recognized:
 
 Read those keys from the caller's point of view:
 
-- `noreturn` means there is no continuation after the call or tail transfer
 - `in` means the caller must provide this carrier before the call
 - `out` means the caller may intentionally consume this carrier after the call
-- `maybe-out` means AZM saw a written value that might be an output, but you still need to review it
-- `clobbers` means the caller must not expect the incoming value to survive
-- `preserves` means the incoming value survives the call
 
 ### Carrier lists
 

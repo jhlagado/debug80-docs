@@ -319,7 +319,7 @@ The name comes first, then `.enum`, then a comma-separated member list. Each mem
 The qualifier is always required. `Read` alone is an error:
 
 ```asm
-        ld   a,Read      ; error: unknown symbol Read
+        ld   a,Read      ; error: enum member "Read" must be qualified
         ld   a,Mode.Read ; correct
 ```
 
