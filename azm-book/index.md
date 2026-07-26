@@ -45,7 +45,3 @@ Ten chapters from foundations to a complete eight-queens capstone.
 ## [Appendices](appendices/)
 
 Quick-reference material for the whole series: number systems and ASCII, registers and flags, addressing modes, and a searchable Z80 instruction table.
-
----
-
-> **Mermaid diagrams** — These books are Mermaid-ready. All ` ``` `mermaid` ``` ` fenced blocks render as live diagrams. Future chapters will use sequence diagrams, flowcharts, and state machines to illustrate hardware flow, algorithm structure, and memory layouts.
