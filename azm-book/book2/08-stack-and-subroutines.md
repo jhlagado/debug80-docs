@@ -62,7 +62,7 @@ Every subroutine should document which registers it reads on entry and which it 
 ; In:  B = first byte, C = second byte
 ; Out: A = B + C
 ; Preserves: BC, DE, HL
-; Clobbers: AF
+; Clobbers: F
 add_bytes:
   ld a, b
   add a, c
@@ -93,7 +93,11 @@ example:
   ret
 ```
 
-The critical rule: every `push` in a subroutine must have exactly one matching `pop` before the subroutine returns. If a subroutine pushes twice and pops once, the stack has an extra word on it when `ret` runs. `ret` will then read that extra word as the return address and jump to garbage.
+The critical rule is that SP must have the same value at `ret` that it had
+immediately after the corresponding `call`, unless the routine deliberately
+implements a different calling convention. A pushed word may be popped into a
+different register, but every path to `ret` must remove all temporary stack
+entries. Otherwise `ret` reads a temporary value as its return address.
 
 ### Cross-register moves through the stack
 
@@ -165,7 +169,7 @@ The program has a `main` entry point and two helper subroutines.
 ; In:  B = first byte, C = second byte
 ; Out: A = B + C
 ; Preserves: BC, DE, HL
-; Clobbers: AF
+; Clobbers: F
 add_bytes:
   ld a, b
   add a, c
@@ -190,30 +194,35 @@ After the call, `result_add` holds 30 (`$1E`).
 ; In:  HL = first value, DE = second value
 ; Out: HL = larger value
 ; Preserves: DE
-; Clobbers: AF
+; Clobbers: F
 max_word:
   push de
   or a
   sbc hl, de
-  pop de
   jr c, max_is_de
   add hl, de
+  pop de
   ret                ; HL held the original (larger) value
 max_is_de:
-  ex de, hl          ; HL < DE: put DE (the larger value) into HL
+  pop hl             ; saved DE is the larger value; DE itself is unchanged
   ret
 ```
 
-AF is clobbered by `or a` and `sbc hl, de`; the comment header documents this.
+`or a` and `sbc hl, de` modify F; the comment header documents this.
 
 The `or a` before `sbc hl, de` clears the carry flag. `sbc hl, de` subtracts DE from HL including the carry bit, so carry must be clear before the instruction for a pure 16-bit subtraction.
 
 After `sbc hl, de`, the carry flag indicates the comparison result:
 
-- **Carry clear**: HL was greater than or equal to DE (no unsigned borrow). HL now holds `original_HL - DE`, which is not the result we want. `add hl, de` restores HL to its original value and the subroutine returns with that value.
-- **Carry set**: HL was less than DE (unsigned borrow occurred). DE is the larger value. `ex de, hl` puts DE into HL and the second `ret` returns.
+- **Carry clear**: HL was greater than or equal to DE (no unsigned borrow). HL
+  now holds `original_HL - DE`. `add hl, de` restores the original HL, and
+  `pop de` removes the saved word while restoring DE.
+- **Carry set**: HL was less than DE (unsigned borrow occurred). The saved DE
+  value is the larger word. `pop hl` loads that saved value directly into HL.
+  DE was never modified, so the declared preservation still holds.
 
-The `or a / sbc hl, de / add hl, de` sequence is how you do an unsigned 16-bit comparison when you need the original HL back after the test.
+The `or a / sbc hl, de` pair performs an unsigned 16-bit comparison. Each path
+then obtains the required result while consuming the saved stack word.
 
 The caller passes 80 (`$0050`) in HL and 200 (`$00C8`) in DE:
 
@@ -226,7 +235,9 @@ The caller passes 80 (`$0050`) in HL and 200 (`$00C8`) in DE:
 
 After the call, `result_max` holds 200.
 
-**Stack balance in `max_word`.** The subroutine has one `push de` and one `pop de`. The pop occurs before `jr c, max_is_de`, which means DE is restored regardless of which branch the conditional takes.
+**Stack balance in `max_word`.** The subroutine pushes one word. The
+carry-clear path removes it with `pop de`; the carry-set path removes it with
+`pop hl`. Both paths reach `ret` with the temporary word gone and DE unchanged.
 
 ---
 
@@ -240,15 +251,19 @@ next_instr:
   pop hl                ; HL = address of this instruction
 ```
 
-`call next_instr` jumps to the very next instruction; it does nothing except push the return address. `pop hl` retrieves that address. HL now holds its own address in memory, which is the value PC had when `pop hl` was fetched.
+`call next_instr` targets the instruction immediately after the call, so its
+only useful effect here is pushing that instruction's address. `pop hl`
+retrieves the address of `next_instr`.
 
 No `ret` appears here, and that is fine. The only thing the stack requires is balance: `call` pushed one word, `pop hl` consumed it.
 
 ---
 
-## What Comes Next
+## Port I/O in Chapter 9
 
-Peripheral drivers are built from exactly the subroutine structure in this chapter: a fixed register contract, a body that talks to one device, and a `ret`. Chapter 9 is where they get something to talk to.
+Peripheral drivers often use the same subroutine structure: a documented
+register interface, a body that accesses one device and a `ret`. Chapter 9
+introduces the Z80 port instructions used by those drivers.
 
 ---
 

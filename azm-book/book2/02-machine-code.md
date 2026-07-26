@@ -12,9 +12,11 @@ A program is a sequence of bytes in memory.
 
 ---
 
-## Opcodes
+## Opcodes and Operands
 
-The byte (or bytes) that represent an instruction are called its **opcode**. Some instructions are one byte; others include one or more additional bytes carrying a constant value, a memory address or an offset.
+The **opcode** byte, sometimes with a prefix byte, identifies the instruction and
+its operand form. Some instructions consist only of an opcode. Others include
+additional operand bytes carrying a constant, memory address or displacement.
 
 A few examples from the Z80 instruction set:
 
@@ -26,7 +28,7 @@ A few examples from the Z80 instruction set:
 | `$80`         | `add a, b`   | Add B to A; result goes into A      |
 | `$32 lo hi`   | `ld (nn), a` | Store A at the 16-bit address `nn`  |
 | `$3A lo hi`   | `ld a, (nn)` | Load A from the 16-bit address `nn` |
-| `$76`         | `halt`       | Stop the CPU                        |
+| `$76`         | `halt`       | Suspend execution until interrupt or reset |
 
 Address operands always follow the Z80's little-endian convention: low byte first, high byte second. The address `$8000` appears in the instruction stream as `$00 $80`. For a searchable reference of the full Z80 instruction set, see [Appendix 4](../appendices/04-classic-z80-instruction-support.md).
 
@@ -59,13 +61,23 @@ The CPU starts with PC = `$0000`.
 
 **PC = `$0006`:** `$32 $00 $80` stores A at a 16-bit address. The opcode `$32` is followed by two address bytes: `$00` (low) and `$80` (high), giving address `$8000`. The value 8 is written to memory location `$8000`. PC advances to `$0009`.
 
-**PC = `$0009`:** `$76` is HALT. The CPU stops. Address `$8000` now contains `$08`.
+**PC = `$0009`:** `$76` is HALT. Normal instruction execution stops until an
+interrupt or reset. Address `$8000` now contains `$08`.
 
 ---
 
-## Why Raw Machine Code Is Impractical
+## The Cost of Raw Machine Code
 
-The program above was ten bytes. Real programs are thousands. Every address is a bare number. `$8000` could be your result variable, a display buffer or a lookup table and nothing in the code says which. Insert one instruction anywhere and every downstream address shifts; miss a single update and you get a silent wrong result with no error to point to. Reading the code directly is no help: `3E 05 47 3E 03 80 32 00 80 76` means nothing until you decode each byte by hand. And there are no structural building blocks: no subroutines, no loops, no conditionals, just bytes and jump targets calculated by hand.
+The program above was ten bytes. Real programs are thousands. Every address is
+a bare number. `$8000` could be a result variable, a display buffer or a lookup
+table, and nothing in the byte stream says which. Insert one instruction and
+downstream addresses may shift; miss one manual update and the program uses the
+wrong address without producing an error. The sequence
+`3E 05 47 3E 03 80 32 00 80 76` means nothing until you decode each byte.
+
+Machine code contains jumps, calls, loops and conditionals, but raw bytes give
+those structures no names. You must calculate their addresses and recognise
+their instruction patterns by hand.
 
 ---
 
@@ -90,7 +102,7 @@ Labels also name positions within the code, the targets of jumps and branches. I
 
 ---
 
-## What Comes Next
+## Assembly in Chapter 3
 
 The hex program you just decoded by hand appears again in Chapter 3, this time written in AZM, with names where the numbers were.
 

@@ -30,7 +30,8 @@ main:
 result: .db 0
 ```
 
-The five instructions in the body of `main` are the same five operations you already saw in Chapter 2.
+The six instructions in the body of `main` are the same six operations you
+already saw in Chapter 2.
 
 `.org $0000` tells the assembler: everything from here assembles starting at address `$0000`. `main:` is a label. The assembler records it as the current address, so `main` refers to `$0000`. `halt` stops the CPU. `.org $8000` starts a new block at `$8000`. `result:` is another label, and `.db 0` places one byte with value 0 at the current address, so `result` refers to `$8000`.
 
@@ -40,11 +41,15 @@ The five instructions in the body of `main` are the same five operations you alr
 
 ---
 
-## What AZM adds — and what it doesn't
+## AZM Extensions and Standard Assembly
 
 You just saw two constructs in that program that are not Z80 instructions: `.org` and `.db`. These are assembler directives.
 
-**Standard directives** are not AZM inventions. `.org` places code and data at specific addresses, `.equ` names a compile-time constant, `.db`, `.dw` and `.ds` define storage, and `.include` splits a program across files. You will find all of them in a Z80 reference and in other assemblers, usually spelled without the leading dot. AZM writes them with a dot, and that is the spelling this book uses throughout.
+**Common assembler directives** are not Z80 instructions. `.org` places code
+and data at specific addresses, `.equ` names a compile-time constant, `.db`,
+`.dw` and `.ds` define storage, and `.include` brings another source file into
+the assembly. Other assemblers provide similar directives, although their
+names and exact behavior vary. AZM uses the dotted spellings shown here.
 
 **AZM adds** the following on top:
 
@@ -91,15 +96,17 @@ A source can be a register, an immediate constant encoded directly in the instru
 
 ---
 
-> **The Parentheses Rule: memorise this before reading further**
+> **Parentheses in `ld` memory operands**
 >
-> **Parentheses always mean "go to this address in memory."**
+> In the `ld` forms used here, parentheses mean "use memory at this address."
 >
 > `ld a, b` copies register B into A, no memory involved.
 > `ld a, (hl)` reads the *byte at the address held in HL* from memory.
 >
-> Missing or adding parentheses writes a completely different instruction,
-> one the assembler will happily accept, silently doing the wrong thing.
+> Adding or removing parentheses may select a different legal instruction, so
+> check the operand form rather than relying on the assembler to infer intent.
+> Other instructions also use parentheses for indirect jump targets and I/O
+> ports; parentheses do not mean memory in every Z80 instruction.
 
 ---
 
@@ -118,7 +125,10 @@ ld a, a     ; legal, pointless
 
 ### Immediate constant into register
 
-Any 8-bit register takes an immediate byte (0–255). Any 16-bit register pair takes a 16-bit constant:
+Any 8-bit register takes a one-byte immediate: either an unsigned value from
+0 to 255 or a signed value from -128 to 127. Both interpretations produce the
+same eight-bit patterns. A 16-bit register pair takes a two-byte immediate:
+unsigned 0 to 65,535 or signed -32,768 to 32,767.
 
 ```asm
 ld a, 42        ; A = 42
@@ -217,19 +227,26 @@ main:
 
 `ld de, $5678` overwrites both D and E. The `$FF` that was in D from the earlier copy is gone.
 
-The final two instructions, `ld d, h` and `ld e, l`, copy HL into DE one byte at a time. After both, DE holds `$1234`. There is no single instruction that copies one register pair into another; you always do it as two 8-bit moves. `ex de, hl` swaps the two register pairs in one instruction, and Chapter 7 introduces it when both HL and DE are in use as pointers.
+The final two instructions, `ld d, h` and `ld e, l`, copy HL into DE one byte
+at a time. After both, DE holds `$1234`. There is no `ld de, hl` instruction.
+A direct copy using `ld` therefore takes two 8-bit moves. Chapter 8 shows a
+stack-based transfer, while `ex de, hl` exchanges rather than copies the pairs.
 
 Example `02_constants_and_labels.asm` demonstrates word-size memory access and is walked through in Chapter 4.
 
 ---
 
-## When Your Program Does the Wrong Thing
+## Debugging a Wrong Result
 
 Assembly gives you no runtime errors, no stack traces and no error messages.
 
 ### Step 1: Read the assembler listing
 
-From a terminal, run `azm your-file.asm`; AZM writes a `.lst` by default unless you pass `--nolist`. In VS Code with Debug80, start a debug session (**F5**); the target's `outputDir` receives a `.lst` (and related artifacts) you can open alongside the source. The listing shows each source line alongside the hex bytes it generated and the address where they were placed. Before running a program, glance at the listing and confirm:
+From a terminal, run `azm your-file.asm`; AZM writes a `.lst` by default unless
+you pass `--nolst`. In VS Code with Debug80, use **Run and Debug** to start the
+selected target. Its `outputDir` receives a `.lst` and related artifacts that
+you can open alongside the source. The listing shows each source line with its
+generated bytes and address. Before running a program, check:
 
 - Did every instruction assemble without an error or warning?
 - Is the data section placed where you intended? (`count` at `$8000`, `scratch` at `$8001`?)
@@ -239,13 +256,19 @@ A misplaced `.org` is one of the most common sources of programs that compile cl
 
 ### Step 2: Use the emulator's step mode
 
-Every Z80 emulator has a way to single-step: execute one instruction and pause. Before each step, ask yourself: *what should this instruction do to which register?* After the step, check whether the register holds what you expected.
+Debug80 and most Z80 emulators can execute one instruction and pause. Before
+each step, predict which register or memory location should change. After the
+step, compare the result with that prediction.
 
-If a register has the wrong value after an instruction, you have found the exact point of failure. Now ask why: was the source register already wrong before this instruction?
+If a register first acquires the wrong value after one instruction, inspect
+that instruction's source operand and the value it held before the step.
 
 ### Step 3: Watch the flags
 
-After any instruction that modifies flags (`add`, `sub`, `cp`, `and`, `or`, `xor`, `inc`, `dec`), check what the flags register actually contains in the emulator's register display. A jump that branches the wrong way almost always traces back to a flag that was set differently than you thought.
+After any instruction that modifies flags (`add`, `sub`, `cp`, `and`, `or`,
+`xor`, `inc`, `dec`), check the flags register in the emulator's register
+display. A jump that takes the wrong path often reads a flag set by an earlier
+instruction than the programmer expected.
 
 Apply the flag-before-branch check from Chapter 5 when this happens: identify which instruction set the flag, then verify nothing between that instruction and the jump changed it.
 

@@ -27,15 +27,16 @@ Any of A, B, C, D, E, H, L can appear on either side when the other side is `(HL
 
 IX and IY support displaced addressing: `(ix+d)` reads the byte at address IX + d without changing IX. Chapter 7 covers this in full when the use case makes it concrete.
 
-> **The Parentheses Rule: a reminder**
+> **Parentheses in `ld` memory operands**
 >
-> Parentheses always mean "go to this address in memory."
+> In these `ld` forms, parentheses mean "use memory at this address."
 >
 > `ld a, b` copies register B into A, no memory involved.
 > `ld a, (hl)` reads the _byte at the address held in HL_ from memory.
 >
-> Missing or adding parentheses writes a completely different instruction,
-> one the assembler will happily accept, silently doing the wrong thing.
+> Adding or removing parentheses may select a different legal instruction.
+> Check the intended addressing mode whenever memory is involved. Parentheses
+> can mean something else in indirect jump and I/O forms.
 
 ---
 
@@ -79,7 +80,9 @@ ld a, ($8000)
 ld ($8001), a
 ```
 
-Both this and the `(BC)`/`(DE)` restriction above are examples of the same reality: the Z80's instruction set was built from the combinations that fit the original opcode space, not from a consistent scheme.
+Both this and the `(BC)`/`(DE)` restriction follow from the specific operand
+combinations encoded by the Z80 instruction set. There is no general rule that
+every source and destination pairing is legal.
 [Appendix 4](../appendices/04-classic-z80-instruction-support.md) has the complete searchable list.
 
 ---
@@ -144,7 +147,9 @@ With `ld a, MaxCount`, the assembler sees `MaxCount`, defined with `.equ 10`, an
 
 `ld (count), a` stores A at the address of `count`. This is a direct-address write: the `(nn) ← A` form from the table above. `count` resolves to `$8000`.
 
-`ld (scratch), hl` stores the two-byte value in HL into `scratch`. `.dw 0` reserved two consecutive bytes for `scratch`: `$8001` and `$8002`. This uses the `(nn) ← reg16` form.
+`ld (scratch), hl` stores the two-byte value in HL into `scratch`. `.dw 0`
+emitted two initialized bytes for `scratch`: `$8001` and `$8002`. This uses the
+`(nn) ← reg16` form.
 
 `ld hl, (scratch)` reads the word back from `scratch`. After this instruction, HL holds `$1234` again. This uses the `reg16 ← (nn)` form.
 
@@ -152,9 +157,10 @@ After the program runs: `$8000` holds `10` (`$0A`) and `$8001`–`$8002` hold `$
 
 ---
 
-## What Comes Next
+## Branching in Chapter 5
 
-Every program so far has done its work in a straight line. Chapter 5 adds the ability to branch (to ask whether a value is zero, whether one number is greater than another, whether a carry occurred) and act on the answer.
+Every program so far has done its work in a straight line. Chapter 5 adds
+branches based on zero, ordering and carry conditions.
 
 ---
 

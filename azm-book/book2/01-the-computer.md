@@ -74,9 +74,9 @@ Here is the complete Z80 register set:
 | Register | Width | Role |
 |----------|-------|------|
 | A | 8 bits | **Accumulator.** Most arithmetic and logic results end up here. |
-| F | 8 bits | **Flags.** Individual bits record the outcome of the last operation. Cannot be read directly in most instructions. |
+| F | 8 bits | **Flags.** Individual bits record the outcome of the last instruction that affected them. Cannot be read directly in most instructions. |
 | B | 8 bits | General purpose. Frequently used as a loop counter. |
-| C | 8 bits | General purpose. Also used as a port number with `in`/`out`. |
+| C | 8 bits | General purpose. Forms the low byte of BC during register-addressed `in`/`out`. |
 | D | 8 bits | General purpose. |
 | E | 8 bits | General purpose. |
 | H | 8 bits | General purpose. High byte of HL. |
@@ -86,7 +86,7 @@ Here is the complete Z80 register set:
 | HL | 16 bits | H and L as a pair. The primary address register — most indirect memory access goes through HL. |
 | IX | 16 bits | Index register. Used for indexed memory access (base address + offset). Splits into IXH and IXL. |
 | IY | 16 bits | Index register. Same role as IX; a second independent index. Splits into IYH and IYL. |
-| SP | 16 bits | **Stack pointer.** Always points to the most recently pushed value on the hardware stack. |
+| SP | 16 bits | **Stack pointer.** Points to the top of the hardware stack. |
 | PC | 16 bits | **Program counter.** Always holds the address of the next instruction to execute. Cannot be read or written directly. |
 | I | 8 bits | Interrupt vector register. Used with interrupt mode 2. |
 | R | 8 bits | Refresh register. Incremented automatically as each instruction is fetched. Rarely something you will use directly. |
@@ -118,7 +118,7 @@ $0006:  32 00 80     ; store A at address $8000
 $0009:  76           ; halt
 ```
 
-When the CPU resets, PC is `$0000`. It fetches `$3E`, recognises it as a two-byte "load constant into A" instruction, reads the next byte (`$05`), loads 5 into A and advances PC to `$0002`. It continues instruction by instruction until it reaches `$76` (HALT) and stops. Address `$8000` now holds the value 8.
+When the CPU resets, PC is `$0000`. It fetches `$3E`, recognises it as a two-byte "load constant into A" instruction, reads the next byte (`$05`), loads 5 into A and advances PC to `$0002`. It continues instruction by instruction until it reaches `$76` (HALT). HALT suspends normal instruction execution until an interrupt or reset. Address `$8000` now holds the value 8.
 
 Chapter 2 decodes this program step by step. Chapter 3 rewrites it in assembly.
 

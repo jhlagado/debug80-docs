@@ -14,7 +14,7 @@ The `.routine` directive is AZM's structured contract format.
 
 ---
 
-## The bug contracts catch
+## A Register-Liveness Bug
 
 Consider a caller that keeps HL live across a call:
 
@@ -31,7 +31,7 @@ A contract on `find_max` might say:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
-.routine in HL,B out A clobbers B,HL
+.routine in HL,B out A clobbers B,HL,F
 find_max:
 ```
 
@@ -53,23 +53,22 @@ The fix is caller-side: reload HL, save it before the call or stop using HL afte
     ld a, (hl)
 ```
 
-Register contracts are **boundary checking** at subroutine calls, turning "I thought HL was still valid" into a diagnostic with a line number.
+Register contracts check subroutine boundaries and can replace an incorrect
+assumption about HL with a diagnostic at the call site.
 
 ---
 
 ## A contract is the boundary between caller and callee
 
-The caller asks one question about every register it still plans to use after `call`:
-
-> Is this register still mine?
-
-The callee contract answers:
+For every register used after `call`, compare the caller's required value with
+the callee contract:
 
 ```asm
 .routine clobbers HL
 ```
 
-"No: HL may be different after return."
+Here HL may be different after return, so the caller must not reuse its
+incoming value without saving or reloading it.
 
 The caller sees only the **external interface**: registers and flags that must be set on entry, registers and flags that carry results on exit and registers the routine destroys without restoring. Everything that happens inside the body (scratch registers, loop counters, temporary pushes) matters only if it leaks across `ret`.
 
@@ -158,7 +157,7 @@ A complete contract for `find_max`:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
-.routine in HL,B out A clobbers B,HL
+.routine in HL,B out A clobbers B,HL,F
 find_max:
   ld a, 0
 _loop:
@@ -226,7 +225,7 @@ is_empty:
 
 `or a` sets Z when A is zero. Callers test with `jr z`, `jr nz`, `ret z` or `call nz`; those instructions are evidence the flag mattered.
 
-### Teaching point
+### Documenting a flag result
 
 A flag can be the entire return value. Document the flag in `out`; put semantic wording in the plain `;` line above the contract:
 
@@ -259,13 +258,13 @@ Internal use of A or flags mid-routine does not require listing A in `clobbers` 
 The `.routine` directive marks an explicit routine entry for register contract analysis:
 
 ```asm
-.routine in HL,B out A clobbers B,HL
+.routine in HL,B out A clobbers B,HL,F
 find_max:
 ```
 
 AZM associates the directive with the next non-local label. Owner-local labels begin with `_` and remain inside that routine's namespace.
 
-### Failure story: ambiguous routine boundaries
+### Routine boundaries and local labels
 
 ```asm
 check_collision:
@@ -299,7 +298,7 @@ AZM has no `.endroutine`; data and ordinary labels after a routine remain ordina
 The `@` prefix has one separate job: it exports a symbol from a source unit. It does not mark a routine and has no register-contract effect:
 
 ```asm
-.routine in HL,B out A clobbers B,HL
+.routine in HL,B out A clobbers B,HL,F
 @find_max:
     ...
 ```
@@ -369,7 +368,9 @@ Caller in source:
     call MON_PRINT_CHAR
 ```
 
-`.asmi` is how you teach the analyzer what the external routine does, using the same `in` / `out` / `clobbers` vocabulary as `.routine` blocks, stored in a separate file you can share across projects (MON3, platform ROM tables, emulator integration).
+An `.asmi` file supplies the analyzer with the external routine's `in`, `out`
+and `clobbers` information. The file can be shared by projects that use the
+same MON3, platform ROM or emulator interface.
 
 Update it when platform documentation changes; source files stay unchanged.
 
@@ -416,12 +417,12 @@ _skip:
 
 ```asm
 ; find_max: scan a byte table and return the largest value
-.routine in HL,B out A clobbers B,HL
+.routine in HL,B out A clobbers B,HL,F
 find_max:
   ...
 
 ; count_above: count bytes strictly above threshold in C
-.routine in HL,B,C out A clobbers B,HL
+.routine in HL,B,C out A clobbers B,HL,F
 count_above:
   push de
   ld d, 0
@@ -440,13 +441,13 @@ azm --rc warn source.asm
 
 If `main` reloads HL before each call (Chapter 10), checks pass. If `main` uses HL after `find_max` without reloading, register contracts report the conflict against `clobbers HL`.
 
-**Step 4: catch a lying contract.**
+**Step 4: catch a stale contract.**
 
 If `find_max` later uses DE internally but the contract still omits DE:
 
 ```asm
 ; stale contract: body now uses DE
-.routine clobbers B,HL
+.routine clobbers B,HL,F
 find_max:
   ...
 ```
@@ -493,7 +494,8 @@ Does push/pop on BC belong in `clobbers` or not? Why?
 source.asm:18: warning: HL is live across call to find_max, but find_max may clobber H, L
 ```
 
-`find_max` declares `clobbers B, HL` only. What does the warning mean? What should the caller change?
+`find_max` declares `clobbers B, HL, F`. What does the warning mean? What
+should the caller change?
 
 **3. Write an external contract.** `BIOS_READ_SECTOR` takes HL = buffer, B = sector number; returns **carry clear** on success, **carry set** on error; clobbers A, BC, DE. Write the `.asmi` record (use `carry`, not `F.C`).
 

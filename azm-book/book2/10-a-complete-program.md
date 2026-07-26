@@ -46,8 +46,9 @@ main:
 
 ; find_max: scan byte table, return largest value
 ; In:  HL = pointer to first byte, B = count
+; Precondition: B > 0
 ; Out: A = maximum value
-; Clobbers: A, B, C, HL
+; Clobbers: B, C, F, HL
 find_max:
   ld a, 0
 find_max_loop:
@@ -62,12 +63,12 @@ find_max_no_update:
 
 ; count_above: count entries strictly greater than threshold
 ; In:  HL = pointer to first byte, B = count, C = threshold
+; Precondition: B > 0
 ; Out: A = count of entries > C
-; Clobbers: A, B, C, D, HL
+; Clobbers: B, D, F, HL
+; Preserves: C
 count_above:
-  push bc
   ld d, 0
-  pop bc
 count_above_loop:
   ld a, (hl)
   cp c
@@ -116,19 +117,19 @@ find_max_no_update:
 
 Apply the flag-before-branch check on `cp c` / `jr nc`: `cp c` establishes the flag, `jr nc` reads it immediately, and nothing changes the flag between them. Carry clear after `cp c` means A ≥ C, so `jr nc` skips the update and the running maximum is left alone. `ld a, c` runs only when carry was set, meaning A was less than C and C is a new maximum. After eight iterations, A = 91 (`$5B`), the largest value in the table.
 
-The comment header documents "Clobbers: A, B, C, HL", and all four are modified by the time the subroutine returns. B is consumed by `djnz`, C holds the current element at each step, HL has walked past the last byte and A holds the result.
+The comment header documents "Clobbers: B, C, F, HL". B is consumed by
+`djnz`, C holds the current element, comparisons modify F, HL advances past the
+last byte and A holds the result.
 
 ---
 
-## `count_above`: two things worth looking at closely
+## `count_above`: reusing comparison flags
 
 `count_above` counts entries strictly greater than a threshold and returns the count in A.
 
 ```asm
 count_above:
-  push bc
   ld d, 0
-  pop bc
 count_above_loop:
   ld a, (hl)
   cp c
@@ -142,17 +143,19 @@ count_above_skip:
   ret
 ```
 
-The subroutine needs a counter. It uses D, and D must be initialized to zero before the loop. Initializing D does not disturb B or C: `ld d, 0` only touches D. But the subroutine wraps the initialization in `push bc / ld d, 0 / pop bc` anyway, because it was not obvious that zeroing D would leave BC alone.
-
-Register-only code extracts this cost: with three inputs and a counter all living in registers, keeping a reliable mental model of which registers are safe to touch requires constant attention. The push/pop pair is not wrong; it is a hedge against uncertainty.
+The subroutine uses D as its running count. `ld d, 0` changes only D, so B
+retains the loop count and C retains the threshold. The comment contract lists
+D among the clobbered registers and C among the preserved registers.
 
 The loop body uses one `cp c` and two conditional branches on the **same** flag result, a useful Z80 idiom. `cp c` sets carry when A < C and sets Z when A == C. To count only entries strictly greater than C, both conditions must be false: carry clear and Z clear. The code runs `jr c, count_above_skip` (skip if A < C) and `jr z, count_above_skip` (skip if A == C) immediately after that single comparison. No instruction between `cp c` and those branches changes the flags, so both tests read the same comparison.
 
 ---
 
-## What works well
+## Strengths of Flat Register-Based Code
 
-You placed `values`, `max_val` and `above_64` at `$8000`. The two subroutines receive a pointer and a count; they write to no address except the one passed in.
+The program places `values`, `max_val` and `above_64` at `$8000`. Both
+subroutines receive a table pointer and count; `main` stores their returned
+values in the named result bytes.
 
 Tracing through `main`, you can follow exactly which registers carry which values at each line.
 
@@ -162,13 +165,16 @@ For a short, performance-sensitive routine (a counted loop over a small table), 
 
 ---
 
-## What gets harder as programs grow
+## Limits as Programs Grow
 
 **Comment-only contracts are not enforced.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. Nothing checks that the caller actually loads the right registers, or that the subroutine actually produces what it claims. A caller that loads the wrong register fails silently. Chapter 12 introduces `.routine` register contracts, which let the assembler verify these claims.
 
 **Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name; the register is D and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. Chapter 11 covers the manual discipline for managing register ownership across subroutines; Chapter 12 shows how register contracts make the contract explicit.
 
-**Repeated comparison patterns have no name.** The `cp c` / `jr c` / `jr z` sequence in `count_above` implements "strictly greater than", a concept with no single Z80 opcode. The same three-instruction pattern will appear every time you want a strict greater-than test. Chapter 14 introduces `op` declarations, which give a name to a short instruction sequence and expand it inline wherever you write the name.
+**Repeated comparison sequences obscure their purpose.** The `cp c` / `jr c` /
+`jr z` sequence in `count_above` implements "strictly greater than", for which
+the Z80 has no single opcode. Chapter 14 introduces `op` declarations for
+naming such a sequence and expanding it inline.
 
 **Byte offsets in data structures must be counted by hand.** This program has no compound data structures, but once you start grouping related bytes (a sprite with `x`, `y` and `color` fields, for example), every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. Chapter 13 introduces AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant without counting.
 
@@ -189,7 +195,10 @@ What is A when the loop exits? Does it match the expected result (91)?
 
 **2. The invisible side effect.** `main` reloads `ld hl, values` before calling `count_above`. Why? What value would HL hold after `find_max` returns if you did not reload it? What would `count_above` scan if HL were not reloaded, and what result would `above_64` receive?
 
-**3. Trace the flags.** The `count_above` loop runs `cp c` once, then `jr c` and `jr z` before `inc d`. Explain what each branch tests and why a second comparison is not needed between them. What would break if you inserted `ld a, (hl)` between `cp c` and `jr c`?
+**3. Trace the flags.** The `count_above` loop runs `cp c` once, then `jr c`
+and `jr z` before `inc d`. Explain what each branch tests and why a second
+comparison is not needed. What would break if `inc d` appeared between `cp c`
+and the first branch?
 
 **4. Add a third task.** Extend the program to also count entries strictly less than 32, storing the count in a new variable named `below_32`. Write the additional subroutine and the three lines in `main` that call it. Document which registers carry each argument and what you must reload before the call.
 

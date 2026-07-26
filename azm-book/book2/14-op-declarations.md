@@ -8,9 +8,14 @@ nav_order: 14
 
 # Chapter 14 — Op Declarations
 
-The Z80 instruction set has gaps. `ld hl, de` does not exist, so copying HL into DE requires two separate byte moves. Testing whether A is strictly greater than a threshold takes a `cp` and two conditional jumps. Zeroing a register pair means loading the immediate zero, not a dedicated clear instruction.
+The Z80 instruction set has gaps. `ld de, hl` does not exist, so copying HL
+into DE requires two separate byte moves. Testing whether A is strictly greater
+than a threshold takes a `cp` and two conditional jumps. Zeroing a register
+pair means loading the immediate zero, not using a dedicated clear instruction.
 
-The problem is that writing `cp c / jr c, .skip / jr z, .skip` does not communicate "skip unless A is strictly above C"; it communicates three separate Z80 instructions that a reader must trace to understand the intent.
+The sequence `cp c / jr c, _skip / jr z, _skip` does not state "skip unless A
+is strictly above C." A reader must derive that condition from three separate
+instructions.
 
 `op` is the AZM mechanism for naming a short instruction sequence and placing it inline at every call site.
 
@@ -62,18 +67,20 @@ end
   load8 C, 0        ; emits: ld c, 0
 ```
 
-A more useful example: swap the contents of two register pairs through the stack.
+A stack-based swap is useful, but a generic `reg16` version would also accept
+SP, which cannot be used with `push` or `pop`. Define the supported pair
+explicitly:
 
 ```asm
-op swap16(r1 reg16, r2 reg16)
-  push r1
-  push r2
-  pop r1
-  pop r2
+op swap_hl_de()
+  push hl
+  push de
+  pop hl
+  pop de
 end
 ```
 
-`reg16` matches any of the four 16-bit register pairs: HL, DE, BC, SP. Calling `swap16 HL, DE` emits:
+Calling `swap_hl_de` emits:
 
 ```asm
   push hl
@@ -91,15 +98,20 @@ After the expansion, HL holds the original value of DE and DE holds the original
 | Matcher | Matches at the call site |
 |---------|--------------------------|
 | `reg8`  | Any 8-bit register: A, B, C, D, E, H, L |
-| `reg16` | Any 16-bit register pair: HL, DE, BC, SP |
-| `imm8`  | A compile-time constant that fits in 8 bits (0–255) |
-| `imm16` | A compile-time constant or label that fits in 16 bits |
-| `ea`    | An effective address expression — a label, a field path or an address constant |
-| `mem8`  | A byte-wide memory operand in parentheses: `(hl)`, `(my_var)` |
-| `mem16` | A word-wide memory operand in parentheses |
+| `reg16` | Any of BC, DE, HL or SP; the op body must still use instructions legal for the matched pair |
+| `imm8`  | A one-byte constant: unsigned 0–255 or signed −128–127 |
+| `imm16` | A two-byte constant: unsigned 0–65,535 or signed −32,768–32,767; unresolved labels also match |
+| `idx16` | An IX/IY indexed memory operand such as `(ix+1)`, not bare IX or IY |
+| `ea`    | An effective-address expression: a label, field path or address constant |
+| `mem8`  | A parenthesized memory operand used by an op as byte-wide |
+| `mem16` | A parenthesized memory operand used by an op as word-wide |
 | `cc`    | A Z80 condition code: Z, NZ, C, NC, M, P, PE, PO |
 
-`mem8` and `mem16` include the parentheses in the substitution. An op with `src mem8` that writes `ld a, src` in its body expands `src` as `(hl)` when called with `(hl)`, and the result is `ld a, (hl)`.
+`mem8` and `mem16` both match the memory operand shapes `(hl)`, `(label)` and
+indexed forms such as `(ix+1)`. The matcher records the width intended by the
+op author; the expanded instruction must still support that operand and width.
+Both matchers include the parentheses in substitution. An op with `src mem8`
+that writes `ld a, src` expands `(hl)` to `ld a, (hl)`.
 
 `ea` matches the address itself, without parentheses.
 
@@ -124,14 +136,20 @@ A `call` to a subroutine emits the `call` instruction (3 bytes), which pushes a 
 
 An op call emits the body instructions directly. No `call`, no `ret`, no stack push or pop.
 
-For a body of N instructions called in K places:
+For a body of N instructions used at K call sites, count the static instruction
+encodings in the binary:
 
-- **Subroutine**: N instructions in memory once, plus K call/ret pairs = N + 2K instructions total.
+- **Subroutine**: N body instructions once, one `ret`, and K `call`
+  instructions = N + 1 + K.
 - **Op**: N instructions at each of K call sites = N × K instructions total.
 
-At K = 1, the op is smaller. At K = 2 and N > 4, the subroutine is smaller.
+At K = 1, the op avoids both `call` and `ret`. At K = 2, the subroutine uses
+fewer instruction encodings when N is greater than 3; both forms use six when
+N is 3.
 
-A subroutine with a 2-instruction body and a 2-instruction call/ret pair doubles the instruction count in the binary for every call site.
+This count compares instruction encodings, not bytes: Z80 instructions vary
+from one to four bytes. At run time, each subroutine invocation also executes
+one `call` and one `ret`; an op executes only its expanded body.
 
 The decision rule: if the body is short enough that the call overhead is a significant fraction of the work being done, use an op. If the body is long enough that call overhead is negligible and if the subroutine is called from enough places that the single copy saves meaningful space, use a subroutine.
 
@@ -139,7 +157,9 @@ The decision rule: if the body is short enough that the call overhead is a signi
 
 ## Pseudo-opcodes: filling Z80 instruction gaps
 
-Some Z80 instruction gaps appear so often that the language fills them with named ops. These are called pseudo-opcodes: they look like instructions, but the Z80 CPU has no such opcode.
+Programs can fill recurring Z80 instruction gaps with named ops. These
+pseudo-opcodes look like instructions in AZM source, but the Z80 has no
+corresponding opcode.
 
 The most common gap is 16-bit register copies. Copying DE into HL requires two 8-bit loads:
 
@@ -159,16 +179,10 @@ end
 
 Calling `ld_hl_de` is clearer than reading `ld h, d / ld l, e` and mentally assembling it into "copy DE into HL."
 
-A general version using `reg16` parameters:
-
-```asm
-op copy16(dst reg16, src reg16)
-  ; note: this only works correctly for certain
-  ; dst/src combinations — see below
-end
-```
-
-The general case is tricky because a `reg16` body can only emit generic instructions, and a true 16-bit register copy needs two instructions that name both halves of both pairs. In practice, specific pseudo-ops for each pair are cleaner:
+A generic `reg16` parameter does not expose the high and low halves of the
+matched pair. A true 16-bit copy therefore cannot derive `d` and `e` from a
+generic destination or `h` and `l` from a generic source. Define the supported
+pairings explicitly:
 
 ```asm
 op ld_hl_de()
@@ -215,12 +229,13 @@ op jr_if_not_above(threshold reg8, skip_label imm16)
 end
 ```
 
-The listing at an invocation `jr_if_not_above C, .skip` shows:
+The listing at an invocation `jr_if_not_above C, _skip` shows the three
+expanded instructions:
 
 ```asm
-  00: B9        cp c
-  01: 38 06     jr c, .skip
-  03: 28 04     jr z, .skip
+  cp c
+  jr c, _skip
+  jr z, _skip
 ```
 
 This also means the register contract analyzer sees the expanded instructions. An op has no call boundary and no contract of its own.
@@ -252,7 +267,7 @@ end
 The rewritten `count_above`:
 
 ```asm
-.routine in HL,B,C out A clobbers B,HL
+.routine in HL,B,C out A clobbers B,HL,F
 count_above:
   push de
   ld d, 0
@@ -296,7 +311,10 @@ The machine output is identical.
 
 ## Exercises
 
-**1. Write an op.** The two-instruction sequence `ld a, r / or a` appears before every counted loop to establish the Z flag from a register's value. Define an op called `test_reg` with a `reg8` parameter that expands to this sequence. Then write the two lines needed before these loops:
+**1. Write an op.** The two-instruction sequence `ld a, r / or a` establishes
+Z from a register's value. Define `test_reg` with a `reg8` parameter, invoke it
+once for each loop below and show the two instructions produced by each
+expansion:
 
 ```asm
   ; loop driven by B
@@ -312,11 +330,14 @@ The machine output is identical.
 
 Show the exact two instructions each invocation expands to.
 
-**2. Op vs subroutine cost.** A subroutine body is 5 instructions. You call it from 4 places. A subroutine call adds 2 instructions of overhead (call + ret). An op call adds no overhead but copies the body at each site.
+**2. Op vs subroutine size.** A reusable body contains 5 instructions and
+appears at 4 call sites. A subroutine stores the body once, one `ret`, and one
+`call` at each site. An op copies the 5 instructions at every site.
 
-- (a) How many total instructions does the binary contain if you use a subroutine?
+- (a) How many instruction encodings does the binary contain with a subroutine?
 - (b) How many if you use an op?
-- (c) At what body length does the op version and the subroutine version produce the same total instruction count, assuming 4 call sites?
+- (c) With four sites, what is the smallest whole-number body length for which
+  the subroutine uses fewer instruction encodings?
 
 **3. Overload resolution.** Given these two op declarations:
 

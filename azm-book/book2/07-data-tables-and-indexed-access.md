@@ -8,8 +8,8 @@ nav_order: 7
 
 # Chapter 7 — Data Tables and Indexed Access
 
-Once your data lives in a table, you need two things: a way to process every
-entry in order, and a way to reach one specific entry directly.
+Table-based programs need sequential access for processing every entry and
+indexed access for reaching one entry directly.
 
 ---
 
@@ -90,10 +90,10 @@ Only `ld a, (hl)` produces the value stored in the table.
 ## Labels, variables and code share the same memory
 
 Assembly makes no distinction between a label that names a variable and one
-that marks a point in code. Both are memory addresses, plain 16-bit numbers. You could
-load data from a code address, and you could jump to a data address. The CPU
-would blindly obey, attempting to execute your data bytes as instructions
-(almost certainly crashing) or overwriting your instructions with data values.
+that marks a point in code. Both are memory addresses, plain 16-bit numbers. A
+load can read from a code address, and a jump can target a data address. In the
+second case the CPU interprets data bytes as instructions, with results
+determined by those byte values.
 
 ---
 
@@ -257,13 +257,15 @@ ldir              ; copy 4 bytes, HL and DE advance, BC reaches 0
 After `ldir`, HL points one byte past the last source byte, DE points one byte
 past the last destination byte, and BC holds zero.
 
-`ldir` uses BC as a 16-bit counter, so it can copy up to 65535 bytes in one
-instruction. The loop form above used B (8-bit), which would need a different
-structure for counts larger than 255.
+`ldir` uses BC as a 16-bit counter. Counts from 1 to 65,535 have their ordinary
+meaning; an initial BC value of zero wraps on the first decrement and copies
+65,536 bytes. The manual loop above uses B as an 8-bit counter and likewise
+treats an initial zero as 256 iterations.
 
 `lddr` copies in the decrementing direction: HL and DE are decremented after
-each byte rather than incremented. This is useful when source and destination
-overlap and copying forward would overwrite source bytes before they are read.
+each byte rather than incremented. When the destination begins inside the
+source range at a higher address, starting from the end with `lddr` avoids
+overwriting source bytes before they are read.
 
 `cpir` scans memory for a byte value. It reads bytes from (HL), compares each
 to A, and stops when it finds a match or exhausts BC bytes. After `cpir`, Z is
@@ -286,9 +288,11 @@ For element-by-element work on a single table, the DJNZ-over-HL pattern from the
 
 ---
 
-## What Comes Next
+## Subroutines in Chapter 8
 
-Everything so far has been a single block of code. Chapter 8 introduces the stack and the `call`/`ret` instructions that make reusable subroutines possible: code you can jump into from anywhere, run and reliably return from.
+Everything so far has been a single block of code. Chapter 8 introduces the
+stack and the `call`/`ret` instructions used to enter reusable subroutines and
+return to their callers.
 
 ---
 

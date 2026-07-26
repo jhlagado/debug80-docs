@@ -40,9 +40,10 @@ The single instruction replaces `dec b / jp nz, label`. It is one byte smaller
 than the `dec b / jr nz` form (2 bytes vs 3) and two bytes smaller than
 `dec b / jp nz` (2 bytes vs 4).
 
-`djnz` is a relative jump, like `jr`. Its target must be within approximately
-128 bytes backward or 127 bytes forward. If the loop body is too long for that
-range, the assembler reports an error and you must use `dec b / jp nz` instead.
+`djnz` is a relative jump, like `jr`. Its signed displacement is measured from
+the address after the instruction, giving a target range of 128 bytes backward
+to 127 bytes forward from that address. If the loop body is too long, the
+assembler reports an error and you must use `dec b / jp nz` instead.
 
 ---
 
@@ -83,7 +84,7 @@ programs use it deliberately for exactly that reason.
 iteration count can be zero, test for it before the loop:
 
 ```asm
-ld a, count_value
+ld a, (count_value)
 or a               ; test whether count_value is zero
 jr z, skip_loop    ; skip the entire loop if count is zero
 ld b, a
@@ -98,7 +99,7 @@ pre-test is needed.
 
 ---
 
-## What the registers hold after a loop
+## Register State After a Loop
 
 Consider the
 counted loop from Section A of the example below, which sums the five bytes
@@ -174,6 +175,7 @@ threshold.
 
 ```asm
 ld a, 0
+ld b, TableLen
 flag_loop:
   add a, (hl)
   inc hl
@@ -287,9 +289,10 @@ iteration count is usually known before the loop starts.
 
 ---
 
-## What Comes Next
+## Tables in Chapter 7
 
-Chapter 7 covers the table structures that give DJNZ something worth walking over and the indexed access instructions that let you reach into them precisely, without juggling HL every instruction.
+Chapter 7 applies counted loops to tables and introduces indexed access for
+reaching fields without changing HL before every load.
 
 ---
 

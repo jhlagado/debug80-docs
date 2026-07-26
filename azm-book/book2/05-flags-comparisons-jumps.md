@@ -8,7 +8,8 @@ nav_order: 5
 
 # Chapter 5 — Flags, Comparisons and Jumps
 
-The Z80 makes decisions by recording the outcome of each operation in the flags register, then testing those flags to decide where execution goes next.
+Z80 instructions record selected outcomes in the flags register. Conditional
+jumps test those flags to choose the next instruction.
 
 ---
 
@@ -45,9 +46,10 @@ so S tells you whether the result was negative. When you are working with
 unsigned values you can usually ignore S.
 
 **P/V** has two unrelated meanings depending on which instruction set it. After
-`add` and `sub` it is the overflow flag: set when a signed operation produced a
-result outside −128 to +127. After logical instructions and rotates it reports
-parity: set when the result has an even number of 1 bits.
+8-bit arithmetic it reports signed overflow. After logical instructions it
+reports parity and is set when the result has an even number of 1 bits. Rotate
+and shift forms differ in whether they update P/V, so check the instruction
+reference rather than carrying one rule across the whole family.
 
 For the full flags reference and all condition codes, see
 [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
@@ -108,7 +110,8 @@ or $80             ; A = %10000011 — bit 7 now set
 
 `or a` is a useful special case: A ORed with itself always equals A, so the
 value does not change. Only the flags are updated: Z is set if A is zero, C is
-cleared. (`cp 0` gives the same flags in two bytes instead of one.)
+cleared. `cp 0` can perform the same zero test without changing A, but it does
+not produce an identical full set of flags: `cp` sets N, while `or` clears it.
 
 ```asm
 ld a, 0
@@ -145,8 +148,8 @@ forms is in [Appendix 3](../appendices/03-addressing-prefixes-and-instruction-fo
 From Chapter 1 you know that the CPU always executes the instruction at the
 address in PC, then advances PC to the next instruction. `jp` breaks that
 sequence: instead of advancing PC by the instruction's length, it puts a new
-address into PC. Whatever was
-written after the `jp` in the source does not run.
+address into PC. Execution continues at the target instead of falling through
+to the following instruction.
 
 ```asm
 jp $8010      ; PC becomes $8010; next instruction comes from $8010
@@ -256,10 +259,10 @@ non-zero, Z is clear and execution falls through.
 ## Short relative jump: `jr`
 
 `jp` encodes a full 16-bit target address in its three instruction bytes.
-`jr` encodes only a signed 8-bit displacement, the distance from the current
-instruction to the target, not the target's actual address. This limits its
-reach to roughly 127 bytes forward or 128 bytes backward from the `jr`
-instruction itself, but the instruction is one byte shorter.
+`jr` encodes only a signed 8-bit displacement, measured from the address
+immediately after the `jr` instruction. This limits the target to 127 bytes
+forward or 128 bytes backward from that following address, but the instruction
+is one byte shorter than `jp`.
 
 `jr nz, label` jumps to `label` if Z is clear. The conditional forms support
 `z`, `nz`, `c` and `nc` only, fewer conditions than `jp`.
@@ -288,9 +291,9 @@ is 128 or greater. You can test which half A falls in by comparing it against
 
 ```asm
   cp $80              ; compare A (unsigned) against 128
-  jr c, is_positive   ; carry set means A < 128 → non-negative
+  jr c, is_non_negative ; carry set means A < 128 → non-negative
   neg                 ; negate A: A = -A
-is_positive:
+is_non_negative:
   ; A now holds the absolute value
 ```
 
@@ -394,7 +397,7 @@ Z is clear.
 
 ---
 
-## What Comes Next
+## Counted Loops in Chapter 6
 
 Chapter 6 shows the single instruction the Z80 provides for exactly the loop pattern built at the end of this chapter: decrement a counter, branch if not zero, fall through when done.
 
@@ -420,14 +423,17 @@ dec a       ; Z = ? C = ?
 
 Once you have your answers, confirm them in the emulator using step mode and the register display.
 
-**2. Apply the flag-before-branch check.** The following snippet is meant to load 10 into `count` only when A holds the value 5, and do nothing otherwise. Find the bug:
+**2. Apply the flag-before-branch check.** The following snippet is meant to
+load 10 into `count` only when A holds the value 5, and do nothing otherwise.
+Find the bug:
 
 ```asm
 ld a, 5
 cp 5
-ld b, 10
+xor a             ; unrelated initialization
 jp nz, skip
-ld (count), b
+ld a, 10
+ld (count), a
 skip:
 ```
 
@@ -435,7 +441,9 @@ Apply the three-question flag-before-branch check: (1) which instruction last se
 
 **3. Count down with flags.** Write a loop that starts with A = 10 and decrements A until A reaches zero. The loop body should store A to a named variable `last_a` on every iteration. Use `dec a` and a conditional jump, not DJNZ (that comes in Chapter 6). After the loop exits, what value is in A? What value is in `last_a`?
 
-**4. Bit test.** A status byte is stored at address `$8000`. Bit 2 is a "ready" flag. Write the two instructions needed to test bit 2 and jump to a label `not_ready` if the flag is clear, without disturbing any other bits in A. _(Hint: `and $04` isolates bit 2.)_
+**4. Bit test.** A already holds a status byte whose bit 2 is a "ready" flag.
+Write the two instructions needed to test bit 2 and jump to `not_ready` if the
+bit is clear, without changing A. _(Hint: `bit 2, a` sets Z from that bit.)_
 
 ---
 

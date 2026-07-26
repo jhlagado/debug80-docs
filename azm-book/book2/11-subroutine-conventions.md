@@ -8,13 +8,19 @@ nav_order: 11
 
 # Chapter 11 — Subroutine Conventions
 
-Chapter 10's two subroutines worked. `find_max` received HL and B, returned A. `count_above` received HL, B and C, returned A. But `count_above` used D as an internal running counter and clobbered it on exit, and nothing in the code said so. A caller that had a value in D before the call would find it gone afterward, with no warning and no error.
+Chapter 10's two subroutines worked. `find_max` received HL and B, while
+`count_above` received HL, B and C. Both returned A. The comment above
+`count_above` listed D as clobbered because its running counter remained in D
+on return. That contract is useful only when every caller reads it and every
+later edit keeps it accurate.
 
 ---
 
 ## The register-passing convention
 
-Z80 subroutines pass arguments in registers. The convention for which registers carry which kinds of values is informal, but widely followed:
+The Z80 has no universal calling convention. Programs may pass arguments in
+registers, on the stack or in fixed memory. This book uses the following
+register convention because it suits small routines and matches later examples:
 
 - **HL** carries a 16-bit address or pointer: the start of a table, a buffer, a string.
 - **BC** carries a 16-bit count or value, such as loop counts or word quantities.
@@ -28,17 +34,24 @@ Return values follow a matching convention:
 - **A** carries a byte result.
 - **HL** carries a 16-bit result: an address, a computed word.
 
-These are not enforced by the assembler. When everyone follows the same convention, reading a call site tells you what is going in and what is coming out.
+These roles are conventions, not hardware rules. Following them consistently
+makes call sites easier to read.
 
 ---
 
 ## Callee-save and caller-save registers
 
-Every subroutine touches at least a few registers. The question is whether the caller can rely on those registers being unchanged after the call.
+For each register, the contract determines whether its incoming value survives
+the call.
 
-**Caller-save registers** are registers the caller accepts may be destroyed by the call. A, F and any register the caller explicitly passes as an argument fall into this category. The caller is responsible for saving anything in those registers that it still needs, before the call, not after.
+**Caller-save registers** may be changed by the routine. In this book, A, F,
+declared outputs and input registers that the routine consumes are caller-save.
+The caller must save any needed value before the call.
 
-**Callee-save registers** are registers the subroutine must restore before it returns, if it uses them internally. BC, DE, HL, IX and IY are callee-save.
+**Callee-save registers** are all other registers that a routine chooses to use
+internally. The routine must restore them before returning or explicitly add
+them to its `Clobbers` list. This is the convention used in this chapter, not a
+property of BC, DE, HL, IX or IY themselves.
 
 The mechanism is push and pop:
 
@@ -52,7 +65,8 @@ my_routine:
   ret
 ```
 
-The stack is LIFO (last in, first out), so the last register pushed must be the first popped. Getting this order wrong swaps the values back into the wrong registers. The assembler does not catch it.
+The stack is LIFO (last in, first out), so the last saved value must be removed
+first. Popping into the wrong pairs restores the values to different registers.
 
 `find_max` from Chapter 10 is clean on this front: it only uses HL and B, both of which are its inputs. But `count_above` uses D internally as the running counter.
 
@@ -76,13 +90,15 @@ CountAboveSkip:
   ret
 ```
 
-One timing issue: the pop must appear on every return path. Missing a pop on one path leaves the stack misaligned, and the eventual `ret` will jump to whatever garbage value ended up at the stack pointer.
+The pop must appear on every return path. Missing it leaves the saved word at
+the top of the stack, so `ret` uses that word as its destination.
 
 ---
 
 ## The IX frame for local storage
 
-When a subroutine needs more temporary storage than the remaining free registers can provide, the stack is the answer.
+When the available registers cannot hold all temporary values, a subroutine can
+allocate local storage on the stack.
 
 The technique uses IX as a base pointer into the stack.
 
@@ -100,12 +116,11 @@ The two bookkeeping entries are already on the stack:
 ```
   higher addresses
   ┌────────────────────────────────────┐
-  │  saved IX high byte    IX+1        │
-  │  saved IX low byte     IX+0  ← IX  │  frame base
-  ├────────────────────────────────────┤
   │  return address high   IX+3        │  pushed by CALL
   │  return address low    IX+2        │  pushed by CALL
-  │  ... (caller's stack below)        │
+  ├────────────────────────────────────┤
+  │  saved IX high byte    IX+1        │
+  │  saved IX low byte     IX+0  ← IX  │  frame base
   └────────────────────────────────────┘
   lower addresses
 ```
@@ -113,12 +128,17 @@ The two bookkeeping entries are already on the stack:
 If the caller pushed arguments onto the stack before the `call`, they sit above the return address:
 
 ```
-  │  arg high byte         IX+5        │  ← pushed by caller
-  │  arg low byte          IX+4        │  ← pushed by caller
+  higher addresses
+  ┌────────────────────────────────────┐
+  │  arg high byte         IX+5        │  pushed by caller
+  │  arg low byte          IX+4        │
   │  return address high   IX+3        │
   │  return address low    IX+2        │
+  ├────────────────────────────────────┤
   │  saved IX high         IX+1        │
   │  saved IX low          IX+0  ← IX  │  frame base
+  └────────────────────────────────────┘
+  lower addresses
 ```
 
 You never read IX+0 through IX+3 directly; those slots belong to the bookkeeping.
@@ -162,7 +182,7 @@ The comment block lives immediately before the subroutine label and declares eve
 ; In:  HL = pointer to first byte of table
 ;      B  = number of bytes to scan
 ; Out: A  = maximum value found
-; Clobbers: B (reaches 0 after the loop), HL (advances past last byte)
+; Clobbers: B (reaches 0), F, HL (advances past last byte)
 find_max:
   ld a, 0
 FindMaxLoop:
@@ -185,7 +205,7 @@ The comment block for `count_above` with push/pop discipline:
 ;      B  = number of bytes to scan
 ;      C  = threshold value
 ; Out: A  = count of bytes where (byte > threshold)
-; Clobbers: B (reaches 0), HL (advances past last byte)
+; Clobbers: B (reaches 0), F, HL (advances past last byte)
 ; Preserves: C, D, E (DE saved via push/pop)
 count_above:
   push de
@@ -221,7 +241,7 @@ Here are both subroutines from Chapter 10 with full push/pop discipline and comp
 ; In:  HL = pointer to first byte
 ;      B  = count (number of bytes to scan)
 ; Out: A  = maximum value found
-; Clobbers: B (reaches 0 after djnz), HL (points past last byte)
+; Clobbers: B (reaches 0 after djnz), F, HL (points past last byte)
 ; Preserves: C, D, E, IX, IY
 find_max:
   ld a, 0
@@ -243,7 +263,7 @@ FindMaxSkip:
 ;      B  = count (number of bytes to scan)
 ;      C  = threshold value (bytes must be strictly greater to count)
 ; Out: A  = number of bytes where byte > threshold
-; Clobbers: B (reaches 0 after djnz), HL (points past last byte)
+; Clobbers: B (reaches 0 after djnz), F, HL (points past last byte)
 ; Preserves: C, D, E (DE saved via push/pop)
 count_above:
   push de            ; D used as counter; save caller's DE
@@ -276,7 +296,7 @@ main:
   ld c, 64
   call count_above
   ld (above_64), a
-  ret
+  halt
 ```
 
 Every caller of `find_max` must either not need HL and B afterward, or reload them.

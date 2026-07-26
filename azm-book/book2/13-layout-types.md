@@ -43,10 +43,10 @@ In AZM, `byte`, `word` and `addr` are layout type names:
 | Type  | Size   | Meaning                                      |
 | ----- | ------ | -------------------------------------------- |
 | byte  | 1 byte | an 8-bit value                               |
-| word  | 2 bytes| a 16-bit little-endian value                 |
-| addr  | 2 bytes| an address (same size as word; name shows intent) |
+| word  | 2 bytes | a 16-bit little-endian value                |
+| addr  | 2 bytes | an address (same size as word; name shows intent) |
 
-You can ask the assembler how big each one is:
+`sizeof` reports the size of each type:
 
 ```asm
 BYTE_SIZE  .equ sizeof(byte)    ; = 1
@@ -139,13 +139,11 @@ sprite_table:
     .ds NumSprites * sizeof(Sprite)   ; same bytes as .ds Sprite[16]
 ```
 
-One-line aliases such as `Pair .type byte[2]` are rejected; if you need a pair of bytes, write the fields:
+The form `Pair .type byte[2]` is rejected. AZM spells a one-line layout alias
+with `.typealias`:
 
 ```asm
-Pair .type
-lo      .byte
-hi      .byte
-.endtype
+Pair .typealias byte[2]
 ```
 
 The older colon form (`x: byte`) is also not AZM syntax.
@@ -208,7 +206,7 @@ ThirdColor .equ offset(Scene, sprites[Idx].color)
 You can also index from the array type directly:
 
 ```asm
-FlagsOffset .equ offset(Sprite[16], [2].flags)
+ThirdColorOffset .equ offset(Sprite[16], [2].color)
 ```
 
 Both expressions fold to constants at assembly time. Add a field to `Sprite` and every `sizeof` and `offset` that refers to it updates automatically.
@@ -383,9 +381,9 @@ game_mode:
     ...
     ld a, (game_mode)
     cp GameMode.Playing
-    jr z, .playing
+    jr z, _playing
     cp GameMode.Paused
-    jr z, .paused
+    jr z, _paused
 ```
 
 Command dispatch uses the same pattern:
@@ -399,7 +397,7 @@ pending:
     ...
     ld a, (pending)
     cp Command.Rotate
-    jr z, .do_rotate
+    jr z, _do_rotate
 ```
 
 `Command.Rotate` is still just a byte in memory and in A. For tables of handlers you would still index by that byte yourself; the enum documents which values are legal, not how to jump.
@@ -493,9 +491,11 @@ points:
     .ds NumPoints * sizeof(Point)   ; 8 bytes: space for 4 points
 ```
 
-Initialize the table in ROM with four points:
+To initialize the table instead of reserving uninitialized storage, replace the
+`points` declaration above with:
 
 ```asm
+points:
   .db 10, 20    ; Point 0: x=10, y=20
   .db 30, 15    ; Point 1: x=30, y=15
   .db  5, 40    ; Point 2: x=5,  y=40
@@ -535,8 +535,8 @@ For a two-field read (both x and y from the same entry), load x, then add 1 to H
 ReadXYLoop:
   ld c, (hl)             ; C = x coordinate
   inc hl                 ; advance to y
-  ld b, (hl)             ; B = y coordinate
-  ; process C (x) and B (y) here
+  ld d, (hl)             ; D = y coordinate; B remains the loop count
+  ; process C (x) and D (y) here
   inc hl                 ; advance past y to next entry
   djnz ReadXYLoop
 ```
