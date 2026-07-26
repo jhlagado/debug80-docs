@@ -21,7 +21,7 @@ chapter introduces another: choosing the *shape* those facts take in
 memory. You could declare sixty-four separate cells, but Glimmer's
 limit of 32 flag-carrying cells means a
 board of one-byte facts would overflow the change banks before the
-program drew a pixel. But the deeper mismatch is one of meaning. When
+program drew a pixel. The deeper mismatch, though, is one of meaning. When
 you stamp one pixel, *the picture* changed. A render that draws the
 picture wants one name to watch and one flag to test.
 
@@ -173,8 +173,8 @@ from 1 to 256. An array starts zero-filled and takes no initializer,
 so the declaration reads directly:
 *Picture is eight bytes, already changed*.
 
-One change flag covers the whole run. What changed when you stamped that pixel? Not
-byte three of some array, but the picture. A board changes *as a unit*,
+One change flag covers the whole run. Stamping a pixel changes the
+picture, not byte three of some array. A board changes *as a unit*,
 and the render that watches it asks one question: do I need to
 redraw? Per-cell flags would spend your whole flag budget on
 bookkeeping the game never wanted, sixty-four bits of "which byte
