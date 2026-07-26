@@ -13,3 +13,6 @@ azm-book/**/*.d8.json
 node_modules/
 .vitepress/dist/
 .vitepress/cache/
+
+# Local editorial and implementation notes; never publish or commit.
+/_internal/
