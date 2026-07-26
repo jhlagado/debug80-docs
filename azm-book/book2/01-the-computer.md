@@ -61,7 +61,7 @@ The Z80 imposes one constraint: when it resets, the program counter starts at `$
 
 ## I/O Ports
 
-The Z80 has a separate address space for hardware peripherals, reached with the `in` and `out` instructions rather than the memory-access instructions you will use for most of this course. An 8-bit port number selects the device. Chapter 9 covers I/O in detail.
+The Z80 has a separate address space for hardware peripherals, reached with the `in` and `out` instructions rather than the memory-access instructions you will use for most of this course. In the usual programming model, an 8-bit port number selects the device. The CPU also drives an upper byte on its address pins during I/O; hardware may ignore it or use it for extra selection. Chapter 9 covers that distinction in detail.
 
 ---
 

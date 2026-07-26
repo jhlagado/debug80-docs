@@ -294,7 +294,7 @@ ld c, a
 
 When you reach the end: what is in A? B? C? Has anything changed in HL? Now assemble the snippet (add `.org $0000`, a `main:` label, a `halt` and a `.org $8000` data block for any storage you need) and confirm in the emulator.
 
-**2. Copy HL into DE, without using `ld de, hl`.** There is no single Z80 instruction that copies one 16-bit register pair directly into another. Write the two `ld` instructions needed to move the value in HL into DE using only 8-bit register moves. Then write a second version that achieves the same result using the stack (`push` / `pop`), a technique you will meet formally in Chapter 8.
+**2. Copy HL into DE, without using `ld de, hl`.** There is no single Z80 instruction that copies one 16-bit register pair directly into another. Write the two `ld` instructions needed to move the value in HL into DE using only 8-bit register moves. Chapter 8 returns to this problem after introducing the stack.
 
 **3. Constants versus labels.** Given this program fragment:
 

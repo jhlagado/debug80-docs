@@ -191,7 +191,8 @@ pos     .field Pos
 ActorTileX  .equ offset(Actor, pos.x)    ; = 1
 ```
 
-For an array field inside a record, put the index in brackets:
+For an array field inside a record, combine the field offset, element stride and
+element field offset explicitly:
 
 ```asm
 Scene .type
@@ -199,8 +200,8 @@ header  .word
 sprites .field Sprite[4]
 .endtype
 
-Idx .equ 3
-ThirdColor .equ offset(Scene, sprites[Idx].color)
+Idx .equ 2
+ThirdColor .equ offset(Scene, sprites) + Idx * sizeof(Sprite) + offset(Sprite, color)
 ```
 
 You can also index from the array type directly:
@@ -211,7 +212,12 @@ ThirdColorOffset .equ offset(Sprite[16], [2].color)
 
 Both expressions fold to constants at assembly time. Add a field to `Sprite` and every `sizeof` and `offset` that refers to it updates automatically.
 
-`offset` is the AZM form, and there is no `offsetof` alias. Unknown types, unknown fields and non-constant indexes are rejected.
+`offset` is the AZM form, and there is no `offsetof` alias. In the current
+assembler, an array index inside an `offset` path must be a non-negative decimal
+literal: `offset(Sprite[16], [2].color)` is valid, while `[Idx]` and `[1 + 1]`
+are not. A named constant remains valid in the surrounding expression, as in
+the `ThirdColor` calculation above. Layout casts accept constant index
+expressions.
 
 ---
 
@@ -409,12 +415,12 @@ pending:
 When the base address and the layout are known at assembly time, a layout cast computes a field address in one expression:
 
 ```asm
-  ld hl, <Sprite>sprite_table[0].color
+  ld hl, <Sprite[8]>sprite_table[0].color
 ```
 
 This has four parts:
 
-- `<Sprite>` is the layout type to apply
+- `<Sprite[8]>` is the array layout type to apply
 - `sprite_table` is the base label
 - `[0]` is a compile-time array index (omit when accessing a single record)
 - `.color` is the field path
@@ -447,7 +453,7 @@ That is different from `.ds Sprite[NumSprites]`: reservation with `Type[N]` requ
 A runtime register is not valid:
 
 ```asm
-  ld hl, <Sprite>sprite_table[hl].color    ; invalid: HL is not a constant
+  ld hl, <Sprite[8]>sprite_table[hl].color    ; invalid: HL is not a constant
 ```
 
 Layout casts fold to a **constant address** at assembly time. The CPU never sees `<Sprite>`; it only sees `ld hl, imm16` or `ld a, (imm16)`.
@@ -507,7 +513,7 @@ A loop that reads every x coordinate and accumulates a sum:
 ```asm
 ; In:  (no register inputs — reads from 'points' table directly)
 ; Out: A = sum of all x coordinates (mod 256)
-; Clobbers: B, D, E, HL
+; Clobbers: B, D, E, F, HL
 sum_x_coords:
   ld hl, points          ; HL = base of points table
   ld b, NumPoints        ; B  = loop count

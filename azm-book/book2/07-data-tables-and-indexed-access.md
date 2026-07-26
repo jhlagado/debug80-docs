@@ -274,7 +274,11 @@ the same scan in the decrementing direction.
 
 AZM assembles `ldir`, `lddr`, `cpir` and `cpdr` directly, like `djnz`.
 
-When both HL and DE are live pointers, as they are during any `ldir` sequence, you sometimes need to exchange them. Without a swap instruction, exchanging the two pairs takes six instructions and clobbers A. `ex de, hl` does it in one: afterward, DE holds what HL had and HL holds what DE had and nothing else changes.
+When both HL and DE are live pointers, as they are during any `ldir` sequence,
+you sometimes need to exchange them. A register-only transfer through A takes
+six instructions and clobbers A; a stack-based exchange avoids A but touches
+memory. `ex de, hl` does it in one: afterward, DE holds what HL had and HL holds
+what DE had, while every other register is unchanged.
 
 ```asm
 ld hl, source

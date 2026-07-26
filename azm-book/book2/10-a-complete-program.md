@@ -8,7 +8,9 @@ nav_order: 10
 
 # Chapter 10 — A Complete Program
 
-This chapter builds a program from scratch, using the full set of techniques from Chapters 3–9: a data table, a DJNZ loop, subroutines called from that loop, conditional branches and push/pop register preservation.
+This chapter builds a program from scratch, using the main techniques from
+Chapters 3–9: a data table, DJNZ loops, subroutines, register-based arguments
+and conditional branches.
 
 ---
 
@@ -161,7 +163,9 @@ Tracing through `main`, you can follow exactly which registers carry which value
 
 Every `call` costs a stack push, and you can count those pushes.
 
-For a short, performance-sensitive routine (a counted loop over a small table), this structure produces code that maps directly to Z80 instructions with no overhead.
+For a short, performance-sensitive routine such as a counted loop over a small
+table, this structure maps directly to Z80 instructions. Its only abstraction
+cost here is the `call` and `ret` used to enter and leave each subroutine.
 
 ---
 
@@ -193,7 +197,11 @@ naming such a sequence and expanding it inline.
 
 What is A when the loop exits? Does it match the expected result (91)?
 
-**2. The invisible side effect.** `main` reloads `ld hl, values` before calling `count_above`. Why? What value would HL hold after `find_max` returns if you did not reload it? What would `count_above` scan if HL were not reloaded, and what result would `above_64` receive?
+**2. The invisible side effect.** `main` reloads `ld hl, values` before calling
+`count_above`. Why? What value would HL hold after `find_max` returns if you did
+not reload it? Identify the eight addresses that `count_above` would scan from
+that position. The source defines only the first two bytes there; can the final
+value stored in `above_64` be determined from this program alone?
 
 **3. Trace the flags.** The `count_above` loop runs `cp c` once, then `jr c`
 and `jr z` before `inc d`. Explain what each branch tests and why a second

@@ -45,13 +45,15 @@ For each register, the contract determines whether its incoming value survives
 the call.
 
 **Caller-save registers** may be changed by the routine. In this book, A, F,
-declared outputs and input registers that the routine consumes are caller-save.
-The caller must save any needed value before the call.
+declared outputs and every register named in `Clobbers` are caller-save at that
+call boundary. An input register is also caller-save when the contract says the
+routine consumes or clobbers it. The caller must save any incoming value that it
+still needs after the call.
 
-**Callee-save registers** are all other registers that a routine chooses to use
-internally. The routine must restore them before returning or explicitly add
-them to its `Clobbers` list. This is the convention used in this chapter, not a
-property of BC, DE, HL, IX or IY themselves.
+**Callee-save registers** are registers not declared as outputs or clobbers. If
+a routine uses one internally, it must restore the incoming value before
+returning. This is the convention used in this chapter, not a fixed property of
+BC, DE, HL, IX or IY themselves.
 
 The mechanism is push and pop:
 

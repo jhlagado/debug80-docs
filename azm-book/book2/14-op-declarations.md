@@ -99,8 +99,8 @@ After the expansion, HL holds the original value of DE and DE holds the original
 |---------|--------------------------|
 | `reg8`  | Any 8-bit register: A, B, C, D, E, H, L |
 | `reg16` | Any of BC, DE, HL or SP; the op body must still use instructions legal for the matched pair |
-| `imm8`  | A one-byte constant: unsigned 0–255 or signed −128–127 |
-| `imm16` | A two-byte constant: unsigned 0–65,535 or signed −32,768–32,767; unresolved labels also match |
+| `imm8`  | A known one-byte constant: unsigned 0–255 or signed −128–127; an unresolved expression also passes initial matching |
+| `imm16` | A known two-byte constant: unsigned 0–65,535 or signed −32,768–32,767; an unresolved expression also passes initial matching |
 | `idx16` | An IX/IY indexed memory operand such as `(ix+1)`, not bare IX or IY |
 | `ea`    | An effective-address expression: a label, field path or address constant |
 | `mem8`  | A parenthesized memory operand used by an op as byte-wide |
@@ -112,6 +112,12 @@ indexed forms such as `(ix+1)`. The matcher records the width intended by the
 op author; the expanded instruction must still support that operand and width.
 Both matchers include the parentheses in substitution. An op with `src mem8`
 that writes `ld a, src` expands `(hl)` to `ld a, (hl)`.
+
+A symbol whose value is not yet resolved can match `imm8`, `imm16` and `ea`.
+When otherwise identical `imm8` and `imm16` overloads both match, AZM prefers
+`imm8`; the expanded instruction still determines whether the final value can
+be encoded. Known numeric constants are matched against the separate signed and
+unsigned ranges shown in the table.
 
 `ea` matches the address itself, without parentheses.
 
@@ -215,9 +221,12 @@ end
 
 ---
 
-## Op expansion is visible in the listing
+## Ops in listings and register analysis
 
-When you run `azm source.asm`, AZM writes a `.lst` file by default. That listing shows the expanded instructions at each call site, not the op name.
+When you run `azm source.asm`, AZM writes a `.lst` file by default. The listing
+keeps the op invocation as the source line and associates the bytes emitted by
+its expansion with that line. It does not replace the invocation with a printed
+copy of the op body.
 
 For `count_above` from Chapter 10, if the strictly-above check were wrapped in an op:
 
@@ -229,8 +238,8 @@ op jr_if_not_above(threshold reg8, skip_label imm16)
 end
 ```
 
-The listing at an invocation `jr_if_not_above C, _skip` shows the three
-expanded instructions:
+At an invocation such as `jr_if_not_above C, _skip`, the emitted bytes still
+come from these three expanded instructions:
 
 ```asm
   cp c
@@ -238,7 +247,9 @@ expanded instructions:
   jr z, _skip
 ```
 
-This also means the register contract analyzer sees the expanded instructions. An op has no call boundary and no contract of its own.
+The register contract analyzer sees those expanded instructions even though the
+listing retains the invocation text. An op has no call boundary and no contract
+of its own.
 
 ---
 
@@ -359,7 +370,9 @@ Which overload fires for each of these call sites? Explain why, using the specif
   load_a H
 ```
 
-**4. Identify the matcher type.** For each operand at the following call sites, state which matcher type it satisfies and whether it would match `reg8`, `reg16`, `imm8`, `imm16`, `ea`, `mem8` or `cc`:
+**4. Identify the matcher types.** For each operand at the following call sites,
+state every matcher it satisfies among `reg8`, `reg16`, `imm8`, `imm16`, `ea`,
+`mem8`, `mem16` and `cc`:
 
 ```asm
   my_op HL            ; (a)

@@ -499,7 +499,11 @@ should the caller change?
 
 **3. Write an external contract.** `BIOS_READ_SECTOR` takes HL = buffer, B = sector number; returns **carry clear** on success, **carry set** on error; clobbers A, BC, DE. Write the `.asmi` record (use `carry`, not `F.C`).
 
-**4. Flags as return.** Write `ring_try_pop` that returns the oldest byte in A with **carry set** on success and **carry clear** when empty. Include human `;` line and `.routine` block. Show one caller fragment that branches on carry after `call`.
+**4. Flags as return.** Assume an existing routine named `ring_try_pop` returns
+the oldest byte in A with **carry set** on success and **carry clear** when
+empty. Write its human `;` contract and `.routine` declaration, then show one
+caller fragment that branches on carry after `call`. The ring-buffer
+implementation is outside this exercise.
 
 **5. Spot the wrong contract.**
 

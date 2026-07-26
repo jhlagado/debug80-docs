@@ -11,8 +11,9 @@ nav_order: 9
 Keyboards send bytes to the CPU, displays receive them and timers report
 hardware events.
 
-The Z80 handles this through a separate **I/O space** of 256 numbered ports.
-The `in` and `out` instructions transfer bytes between registers and
+The Z80 handles this through a separate **I/O space**. In the conventional
+programming model, devices use an 8-bit port number, giving 256 basic port
+numbers. The `in` and `out` instructions transfer bytes between registers and
 peripherals without using a memory transaction. The mapping of port numbers to
 devices belongs to the target hardware.
 
@@ -20,16 +21,18 @@ devices belongs to the target hardware.
 
 ## The I/O address space
 
-An 8-bit port number selects one of 256 ports, from 0 to 255. The CPU marks an
-I/O transaction separately from a memory transaction on its control bus.
+The low byte of an I/O address is an 8-bit port number from 0 to 255. The CPU
+marks an I/O transaction separately from a memory transaction on its control
+bus.
 
 The Z80 still drives all sixteen address pins during an I/O transaction. In the
-`(C)` forms, C supplies the port number and B appears on the upper address
-pins. In the immediate `(n)` forms, `n` supplies the port number and A appears
-on the upper pins. Most systems decode only the low eight bits, but some
-hardware gives the upper byte a purpose. For example, the TEC-1G matrix
-keyboard uses B to select a row. Follow the target's hardware documentation
-whenever it describes upper-byte decoding.
+`(C)` forms, C supplies the low 8-bit port number and B appears on the upper
+address pins. In the immediate `(n)` forms, `n` supplies the port number and A
+appears on the upper pins. Most systems decode only the low eight bits and
+therefore expose 256 ports. Some hardware also decodes the upper byte. For
+example, the TEC-1G matrix keyboard uses B to select a row. This upper-byte
+behaviour is an electrical addressing detail layered on the normal 8-bit port
+model, so follow the target's hardware documentation when it is used.
 
 The `in` and `out` forms in this chapter perform individual byte transfers; the
 Z80 also has block I/O instructions for repeated transfers.

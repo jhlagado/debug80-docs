@@ -19,10 +19,11 @@ F holds eight bits. Each bit is called a flag and records one specific outcome
 of the last instruction that changed flags. Instructions like `sub`, `cp`,
 `and`, `or`, `xor`, `inc` and `dec` update them as a side effect.
 
-`ld` never touches the flags. `inc` and `dec` update most flags but
-leave C unchanged. When a `jp` instruction tests a flag, you need to know which
-earlier instruction set it and whether anything in between might have changed
-it.
+The ordinary `ld` forms used so far do not touch the flags. Two specialised
+forms introduced much later, `ld a,i` and `ld a,r`, are exceptions. `inc` and
+`dec` update most flags but leave C unchanged. When a `jp` instruction tests a
+flag, you need to know which earlier instruction set it and whether anything in
+between might have changed it.
 
 The four flags you will use most:
 
@@ -195,9 +196,12 @@ The condition codes you will use most:
 | `c`  | Jump if C is set   |
 | `nc` | Jump if C is clear |
 
-`jp` also supports `m` (S set), `p` (S clear), `pe` (P/V set) and `po` (P/V
-clear) for signed arithmetic and parity tests. The full list is in
-[Appendix 2](../appendices/02-registers-flags-and-conditions.md).
+`jp` also supports `m` (S set) and `p` (S clear), which test the sign bit of the
+preceding result. They do not by themselves implement a general signed
+less-than or greater-than comparison because signed overflow can change the
+interpretation of S. The `pe` and `po` conditions test P/V; that flag represents
+parity after some instructions and signed overflow after others. The full list
+is in [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
 
 You set a flag with `cp`
 or a logical instruction, then use a conditional `jp` to skip over the block
@@ -237,16 +241,17 @@ non-zero, Z is clear and execution falls through.
 >
 > **Step 1: Which instruction set the flag you're testing?**
 > Scan backward from the jump until you find the instruction that last modified
-> the flag. For Z, the candidates are: `cp`, `sub`, `and`, `or`, `xor`, `inc`,
-> `dec`, `add`, `sbc`, `in r,(C)`. For C, the candidates are: `cp`, `sub`,
-> `add`, `adc`, `sbc`, `and`, `or`, `xor`, `rl*`, `rr*`.
+> the flag. Common candidates for Z include `cp`, `sub`, `and`, `or`, `xor`,
+> `inc`, `dec`, `add`, `sbc` and `in r,(C)`. Common candidates for C include
+> `cp`, `sub`, `add`, `adc`, `sbc`, `and`, `or`, `xor`, `rl*` and `rr*`.
 >
 > **Step 2: Does anything between that instruction and the jump also touch
 > that flag?**
-> `ld` instructions never touch flags. They are safe to place between a
+> The ordinary `ld` instructions used in this book are safe to place between a
 > comparison and a jump. `inc` and `dec` update most flags but leave C alone.
-> Arithmetic and logical instructions update all flags. If something in between
-> modifies the flag you are testing, the jump will read the wrong value.
+> Arithmetic and logical instructions update several flags, but not always the
+> same set. If something in between modifies the flag you are testing, the jump
+> will read the wrong value.
 >
 > **Step 3: Is the flag's meaning what you think it is?**
 > C means different things after `add` (carry out of bit 7) versus after `cp`
@@ -370,7 +375,8 @@ have jumped to `not_equal:`, and `found` would have been set to 0.
 **Section B: zero test with `or a`.** `ld a, 0` loads zero. `or a` sets Z
 because A is zero. `jp z, was_zero` sees Z set and jumps to `was_zero:`.
 `ld a, $AA` runs, marking A so you can confirm in a debugger that this
-path was taken. `jp skip_zero` then skips past the end of the block.
+path was taken. Execution then falls through to `skip_zero:`. The earlier
+`jp skip_zero` runs only when the zero test fails.
 
 **Section C: counted loop with `dec` / `jp nz`.** `ld b, Limit` loads 5 into
 B. At `loop_top:`, the body reads `counter` from RAM, increments it and stores
@@ -418,6 +424,7 @@ ld a, 5
 cp 3        ; Z = ? C = ?
 
 ld a, 0
+xor a       ; establish Z set and C clear
 dec a       ; Z = ? C = ?
 ```
 
@@ -442,8 +449,9 @@ Apply the three-question flag-before-branch check: (1) which instruction last se
 **3. Count down with flags.** Write a loop that starts with A = 10 and decrements A until A reaches zero. The loop body should store A to a named variable `last_a` on every iteration. Use `dec a` and a conditional jump, not DJNZ (that comes in Chapter 6). After the loop exits, what value is in A? What value is in `last_a`?
 
 **4. Bit test.** A already holds a status byte whose bit 2 is a "ready" flag.
+The instruction `bit 2, a` leaves A unchanged and sets Z when bit 2 is clear.
 Write the two instructions needed to test bit 2 and jump to `not_ready` if the
-bit is clear, without changing A. _(Hint: `bit 2, a` sets Z from that bit.)_
+bit is clear.
 
 ---
 
