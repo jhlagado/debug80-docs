@@ -25,17 +25,21 @@ Search for `debug80` and install **Debug80 IDE for Z80 Development**, published 
 
 The extension takes over `.asm`, `.z80` and `.asmi` files for syntax highlighting, and `.glim` files for Glimmer. If you already have another Z80 assembly extension installed you do not need it, and Debug80 will set the language mode on those files itself.
 
-## Find the Debug80 panel
+## Find Debug80 in the sidebar
 
-Debug80 puts its panel in the **Run and Debug** sidebar rather than an activity bar icon of its own. Open that sidebar.
+Debug80 has no icon of its own in the activity bar. It lives inside VS Code's **Run and Debug** sidebar, as one section among the several VS Code puts there itself: Variables, Watch, Call Stack, Breakpoints. Debug80 is the last of them, and it starts shut.
 
-![The Debug80 section collapsed beneath Run in the Run and Debug sidebar](../../assets/images/debug80-book/book1/panel-sidebar-location.svg)
+Open the Run and Debug sidebar, look to the bottom of the list, and click **DEBUG80**.
 
-On a fresh install the sidebar opens with a **Run** section filling it, and Debug80 sits below as a collapsed section labelled **DEBUG80**. Click that header to expand it, and collapse **Run** above it to give Debug80 the room.
+![Clicking DEBUG80 expands it from a shut section into the Project section, showing the Add projects or folders message and an Open Folder button](../../assets/images/debug80-book/book1/panel-sidebar-location.svg)
 
-You work from that panel for the rest of this book. From there you choose a project, pick what to build, build it, run it, and watch the emulated machine while it runs.
+The sections above Debug80 belong to VS Code's own debugger, not to Debug80. Collapse them if you want the room; nothing is lost by leaving them open.
 
-If the panel is not there at all, the extension has not activated. Use VS Code's **View > Open View…** picker and choose Debug80 from the list.
+That one section is where the rest of this book happens. Everything Debug80 does happens inside it — choosing a project, picking what to build, building it, running it, watching the emulated machine — and it grows as you go. Once a program is running, the same section holds the machine, its displays, the registers and memory, each as a section of its own. Chapter 8 goes through all nine.
+
+The book calls it **the Debug80 panel** from here on. That is the whole of it: one section in the Run and Debug sidebar.
+
+If DEBUG80 is not in the list at all, the extension has not activated. Use VS Code's **View > Open View…** picker and choose Debug80 from the list.
 
 ## The empty state
 
@@ -47,7 +51,7 @@ Add projects or folders to the workspace to start with Debug80.
 
 and one button, **Open Folder**.
 
-![The Debug80 panel with no folder open](../../assets/images/debug80-book/book1/panel-state-no-folder.svg) The panel has nothing more to offer until a folder exists, because Debug80 works on folders. There is no separate "new project" wizard and nothing to name before you begin.
+![The Project section at full width, with the Add projects or folders card and the Open Folder button](../../assets/images/debug80-book/book1/panel-state-no-folder.svg) The panel has nothing more to offer until a folder exists, because Debug80 works on folders. There is no separate "new project" wizard and nothing to name before you begin.
 
 ## Summary
 

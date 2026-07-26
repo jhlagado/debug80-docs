@@ -198,24 +198,51 @@ diagrams['panel-state-ready.svg'] = svg(
 );
 
 // 5. Where the panel lives
+// 5. The accordion. The reader has to get from "DEBUG80 is a collapsed strip
+// at the bottom" to "DEBUG80 is open and showing its Project section", and the
+// second state is the one they are aiming at, so both are drawn.
 diagrams['panel-sidebar-location.svg'] = svg(
-  'Where the Debug80 panel appears in the Run and Debug sidebar',
-  'The Run and Debug sidebar shows a RUN section filling most of the space with a collapsed DEBUG80 section beneath it.',
-  230,
-  [
-    rect('pnl', 10, 10, 300, 210, 6),
-    rect('bar', 11, 11, 298, 26, 5),
-    text('head', 24, 28, 'RUN AND DEBUG'),
-    text('lbl', 26, 60, '▾  RUN'),
-    rect('field', 26, 72, 268, 96, 5),
-    text('dim', 40, 100, 'Open a file which can be'),
-    text('dim', 40, 118, 'debugged or run.'),
-    button(40, 148, 120, 'Run and Debug', true),
-    rect('card', 26, 178, 268, 28, 5),
-    text('lbl', 40, 196, '▸  DEBUG80'),
-    text('note', 330, 190, 'Collapsed at the bottom'),
-    text('note', 330, 208, 'on a fresh install.'),
-  ].join('\n')
+  'Expanding the Debug80 section in the Run and Debug sidebar',
+  'Two views of the Run and Debug sidebar. On the left, DEBUG80 is the last of five collapsed sections. On the right, DEBUG80 has been expanded and shows its Project section with the message "Add projects or folders to the workspace to start with Debug80" and an Open Folder button.',
+  400,
+  (() => {
+    const rows = ['VARIABLES', 'WATCH', 'CALL STACK', 'BREAKPOINTS'];
+    const sidebar = (x, label) => [
+      rect('pnl', x, 40, 300, 300, 6),
+      rect('bar', x + 1, 41, 298, 26, 5),
+      text('head', x + 14, 58, 'RUN AND DEBUG'),
+      text('dim', x + 286, 58, '▾', 'end'),
+      text('note', x + 4, 366, label),
+    ];
+    // A collapsed section header: the disclosure triangle and the name.
+    const shut = (x, y, name, lit = false) => [
+      rect(lit ? 'card' : 'off', x + 14, y, 272, 26, 4),
+      text('lbl', x + 28, y + 17, `▸  ${name}`),
+    ].join('\n');
+
+    return [
+      // --- left: as the extension leaves it -------------------------------
+      ...sidebar(14, '1. DEBUG80 is the last section, and it is shut.'),
+      ...rows.map((n, i) => shut(14, 74 + i * 30, n)),
+      shut(14, 194, 'DEBUG80', true),
+
+      // --- the action ------------------------------------------------------
+      `  <path d="M330 207 H392" stroke="#2f5d7c" stroke-width="1.5"/>`,
+      `  <path d="M386 202 L392 207 L386 212" fill="none" stroke="#2f5d7c" stroke-width="1.5"/>`,
+      text('note', 361, 197, 'click it', 'middle'),
+
+      // --- right: what you are aiming at -----------------------------------
+      ...sidebar(406, '2. Open, it shows the Project section and nothing else.'),
+      ...rows.map((n, i) => shut(406, 74 + i * 30, n)),
+      rect('bar', 420, 194, 272, 26, 4),
+      text('head', 434, 211, '▾  DEBUG80'),
+      text('lbl', 434, 241, '▾  PROJECT'),
+      rect('card', 420, 252, 272, 46, 5),
+      text('val', 434, 271, 'Add projects or folders to the'),
+      text('val', 434, 289, 'workspace to start with Debug80.'),
+      button(578, 320, 110, 'Open Folder', true),
+    ].join('\n');
+  })()
 );
 
 // 6. Four memory views

@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="230" viewBox="0 0 720 230" role="img" aria-labelledby="t d">
-  <title id="t">Where the Debug80 panel appears in the Run and Debug sidebar</title>
-  <desc id="d">The Run and Debug sidebar shows a RUN section filling most of the space with a collapsed DEBUG80 section beneath it.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="400" viewBox="0 0 720 400" role="img" aria-labelledby="t d">
+  <title id="t">Expanding the Debug80 section in the Run and Debug sidebar</title>
+  <desc id="d">Two views of the Run and Debug sidebar. On the left, DEBUG80 is the last of five collapsed sections. On the right, DEBUG80 has been expanded and shows its Project section with the message "Add projects or folders to the workspace to start with Debug80" and an Open Folder button.</desc>
   <defs><style>
   .pnl   { fill: #ffffff; stroke: #2f5d7c; stroke-width: 2; }
   .bar   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 2; }
@@ -21,18 +21,44 @@
   .head  { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #2f5d7c; letter-spacing: .1em; }
   .note  { font: italic 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9a6a12; }
 </style></defs>
-  <rect width="720" height="230" fill="#ffffff"/>
-  <rect class="pnl" x="10" y="10" width="300" height="210" rx="6"/>
-  <rect class="bar" x="11" y="11" width="298" height="26" rx="5"/>
-  <text class="head" x="24" y="28" text-anchor="start">RUN AND DEBUG</text>
-  <text class="lbl" x="26" y="60" text-anchor="start">▾  RUN</text>
-  <rect class="field" x="26" y="72" width="268" height="96" rx="5"/>
-  <text class="dim" x="40" y="100" text-anchor="start">Open a file which can be</text>
-  <text class="dim" x="40" y="118" text-anchor="start">debugged or run.</text>
-  <rect class="prim" x="40" y="136" width="120" height="24" rx="5"/>
-  <text class="ptxt" x="100" y="152" text-anchor="middle">Run and Debug</text>
-  <rect class="card" x="26" y="178" width="268" height="28" rx="5"/>
-  <text class="lbl" x="40" y="196" text-anchor="start">▸  DEBUG80</text>
-  <text class="note" x="330" y="190" text-anchor="start">Collapsed at the bottom</text>
-  <text class="note" x="330" y="208" text-anchor="start">on a fresh install.</text>
+  <rect width="720" height="400" fill="#ffffff"/>
+  <rect class="pnl" x="14" y="40" width="300" height="300" rx="6"/>
+  <rect class="bar" x="15" y="41" width="298" height="26" rx="5"/>
+  <text class="head" x="28" y="58" text-anchor="start">RUN AND DEBUG</text>
+  <text class="dim" x="300" y="58" text-anchor="end">▾</text>
+  <text class="note" x="18" y="366" text-anchor="start">1. DEBUG80 is the last section, and it is shut.</text>
+  <rect class="off" x="28" y="74" width="272" height="26" rx="4"/>
+  <text class="lbl" x="42" y="91" text-anchor="start">▸  VARIABLES</text>
+  <rect class="off" x="28" y="104" width="272" height="26" rx="4"/>
+  <text class="lbl" x="42" y="121" text-anchor="start">▸  WATCH</text>
+  <rect class="off" x="28" y="134" width="272" height="26" rx="4"/>
+  <text class="lbl" x="42" y="151" text-anchor="start">▸  CALL STACK</text>
+  <rect class="off" x="28" y="164" width="272" height="26" rx="4"/>
+  <text class="lbl" x="42" y="181" text-anchor="start">▸  BREAKPOINTS</text>
+  <rect class="card" x="28" y="194" width="272" height="26" rx="4"/>
+  <text class="lbl" x="42" y="211" text-anchor="start">▸  DEBUG80</text>
+  <path d="M330 207 H392" stroke="#2f5d7c" stroke-width="1.5"/>
+  <path d="M386 202 L392 207 L386 212" fill="none" stroke="#2f5d7c" stroke-width="1.5"/>
+  <text class="note" x="361" y="197" text-anchor="middle">click it</text>
+  <rect class="pnl" x="406" y="40" width="300" height="300" rx="6"/>
+  <rect class="bar" x="407" y="41" width="298" height="26" rx="5"/>
+  <text class="head" x="420" y="58" text-anchor="start">RUN AND DEBUG</text>
+  <text class="dim" x="692" y="58" text-anchor="end">▾</text>
+  <text class="note" x="410" y="366" text-anchor="start">2. Open, it shows the Project section and nothing else.</text>
+  <rect class="off" x="420" y="74" width="272" height="26" rx="4"/>
+  <text class="lbl" x="434" y="91" text-anchor="start">▸  VARIABLES</text>
+  <rect class="off" x="420" y="104" width="272" height="26" rx="4"/>
+  <text class="lbl" x="434" y="121" text-anchor="start">▸  WATCH</text>
+  <rect class="off" x="420" y="134" width="272" height="26" rx="4"/>
+  <text class="lbl" x="434" y="151" text-anchor="start">▸  CALL STACK</text>
+  <rect class="off" x="420" y="164" width="272" height="26" rx="4"/>
+  <text class="lbl" x="434" y="181" text-anchor="start">▸  BREAKPOINTS</text>
+  <rect class="bar" x="420" y="194" width="272" height="26" rx="4"/>
+  <text class="head" x="434" y="211" text-anchor="start">▾  DEBUG80</text>
+  <text class="lbl" x="434" y="241" text-anchor="start">▾  PROJECT</text>
+  <rect class="card" x="420" y="252" width="272" height="46" rx="5"/>
+  <text class="val" x="434" y="271" text-anchor="start">Add projects or folders to the</text>
+  <text class="val" x="434" y="289" text-anchor="start">workspace to start with Debug80.</text>
+  <rect class="prim" x="578" y="308" width="110" height="24" rx="5"/>
+  <text class="ptxt" x="633" y="324" text-anchor="middle">Open Folder</text>
 </svg>
