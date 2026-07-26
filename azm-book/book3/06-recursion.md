@@ -20,9 +20,9 @@ The companion listing is [`examples/06_factorial.asm`](examples/06_factorial.asm
 
 Many definitions refer to themselves:
 
-- \(n! = n \times (n-1)!\) for \(n > 0\), and \(0! = 1\).
+- n! = n × (n-1)! for n > 0, and 0! = 1.
 - The sum of a byte table is the first byte plus the sum of the rest.
-- Towers of Hanoi: moving \(n\) disks means moving \(n-1\) disks twice around one move of the bottom disk.
+- Towers of Hanoi: moving n disks means moving n-1 disks twice around one move of the bottom disk.
 
 Each case splits the input into a smaller instance of the same problem plus a small amount of local work. The **base case** is the size where you return immediately without another `call`.
 
@@ -41,7 +41,7 @@ For recursion, treat the stack like any other fixed resource:
 
 ### Frame size example: `factorial_u8`
 
-Each recursive step (for \(n > 0\)) does:
+Each recursive step (for n > 0) does:
 
 ```asm
     push bc          ; 2 bytes — save n in B (C is collateral)
@@ -50,7 +50,7 @@ Each recursive step (for \(n > 0\)) does:
     pop bc
 ```
 
-Plus the return address the CPU pushes on `call` (2 bytes). Active depth for input `FACT_N` is `FACT_N + 1` (down to the \(0! = 1\) base). Name the budget in source:
+Plus the return address the CPU pushes on `call` (2 bytes). Active depth for input `FACT_N` is `FACT_N + 1` (down to the 0! = 1 base). Name the budget in source:
 
 ```asm
 FACT_FRAME_BYTES .equ 4
@@ -66,7 +66,7 @@ Chapter 6's demo uses `FACT_N = 5` → six frames → 24 bytes of stack traffic.
 
 ### Recursive version
 
-**Contract:** B = \(n\) (unsigned), A = \(n!\). Define \(0! = 1\). For 8-bit A, keep \(n \le 5\) in demos (\(6! = 720\) does not fit).
+**Contract:** B = n (unsigned), A = n!. Define 0! = 1. For 8-bit A, keep n ≤ 5 in demos (6! = 720 does not fit).
 
 ```asm
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
@@ -90,7 +90,7 @@ _one:
 
 **Base case:** `b = 0` → A = 1, `ret` without another `call`.
 
-**Recursive step:** save `n` on the stack, compute \((n-1)!\) in A, restore `n` into B, multiply A by `n` via `mul8_a_by_c`, return.
+**Recursive step:** save `n` on the stack, compute (n-1)! in A, restore `n` into B, multiply A by `n` via `mul8_a_by_c`, return.
 
 Work after the inner `call` returns is the hallmark of recursion that **unwinds**: the stack still holds outer return addresses until each level finishes its multiply.
 
@@ -143,7 +143,7 @@ Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
 
 ## Preserving results across inner calls
 
-The outer level still needs **B** = \(n\) for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `.routine` block.
+The outer level still needs **B** = n for the multiply. That is why `push bc` / `pop bc` wrap the recursive call: the callee may clobber B, and the multiply helper clobbers further registers listed in its `.routine` block.
 
 If you made a second recursive call before storing the first result, you would have the same problem with **HL**, the register used for 16-bit results in Book 3. Pattern:
 
@@ -323,10 +323,10 @@ Step into `factorial_u8` with `FACT_N = 3` first: count pushes on the way down, 
 
 ## Exercises
 
-1. Change `FACT_N` to 6 in the example. Does `fact_rec` still match `fact_iter` in an 8-bit result byte? What should you change if you need \(6!\) exactly?
+1. Change `FACT_N` to 6 in the example. Does `fact_rec` still match `fact_iter` in an 8-bit result byte? What should you change if you need 6! exactly?
 2. Hand-count stack bytes for `factorial_u8(5)` at the deepest point. Compare to `FACT_MAX_DEPTH × FACT_FRAME_BYTES`.
 3. Rewrite `sum_u8_rec` to recurse on the head index in workspace instead of advancing HL before the call. Does the sum change? Does stack use change?
-4. Add `hanoi_moves_u8` for \(n \le 4\) using the recurrence \(H(0)=0\), \(H(n)=2H(n-1)+1\). Use two workspace words to store the first recursive result in HL before the second call. Estimate frame bytes per level.
+4. Add `hanoi_moves_u8` for n ≤ 4 using the recurrence H(0)=0, H(n)=2H(n-1)+1. Use two workspace words to store the first recursive result in HL before the second call. Estimate frame bytes per level.
 5. Run `azm --rc warn` on a deliberate bug: call `factorial_u8` and then use B without reloading. Fix using the contract comment.
 6. Lower `STACK_TOP` to `$8010` while keeping data at `$8000`. Run `FACT_N = 5` and describe what fails first.
 
