@@ -10,9 +10,7 @@ nav_order: 6
 
 `B` holds your loop counter. The loop calls a subroutine. `djnz` decrements `B` and branches back. But `B` now holds whatever the subroutine left there, not the value it had before the call. The loop runs the wrong number of iterations. The binary assembles without error.
 
-This is a register collision.
-
-AZM's register contracts find these collisions at assemble time by making the register use between routines explicit and machine-checkable. They are deliberately stricter than casual assembly style: they ask you to write routine boundaries, register effects and external calls in a form the assembler can prove.
+The caller and callee have collided over register `B`. AZM's register contracts find such collisions at assemble time by making register use between routines explicit and machine-checkable. They are deliberately stricter than casual assembly style: routine boundaries, register effects and external calls must be stated in a form the assembler can prove.
 
 The `.routine` directive makes each analysis boundary explicit and records the routine's inputs, outputs, clobbers and preserved carriers.
 
@@ -33,21 +31,20 @@ ScanLoop:
         ret
 ```
 
-`RenderTile` draws one tile. Inside, it uses `B` as the high byte of a 16-bit offset calculation:
+`RenderTile` draws one tile. Inside, it uses `B` as a row counter:
 
 ```asm
 RenderTile:
-        ld      b,0             ; B = 0, high byte of BC
-        ld      c,a
-        add     hl,bc           ; HL += tile index (16-bit add)
-        ld      a,(hl)
-        ; ... drawing work ...
+        ld      b,8
+_row:
+        ; ... draw one row of tile A ...
+        djnz    _row
         ret
 ```
 
-After `call RenderTile` returns, `B` holds 0. `djnz ScanLoop` decrements that 0, which wraps to 255, and branches back. The loop runs 256 times instead of 8.
+After `call RenderTile` returns, `B` holds 0. `djnz ScanLoop` decrements that 0, which wraps to 255, and branches back. The outer loop runs 256 times instead of 8.
 
-Neither routine has a bug when read in isolation. The bug lives in the interface: `ScanTiles` assumes `RenderTile` leaves `B` unchanged.
+The failure occurs at the interface: `ScanTiles` relies on `B` surviving the call, while `RenderTile` overwrites it.
 
 ---
 
@@ -108,11 +105,10 @@ ScanLoop:
 .routine preserves B
 RenderTile:
         push    bc
-        ld      b,0
-        ld      c,a
-        add     hl,bc
-        ld      a,(hl)
-        ; ... drawing work ...
+        ld      b,8
+_row:
+        ; ... draw one row of tile A ...
+        djnz    _row
         pop     bc
         ret
 ```
@@ -183,7 +179,7 @@ azm --rc error program.asm      # fail on proven conflicts
 azm --rc strict program.asm     # fail on anything AZM cannot prove safe
 ```
 
-Default is `off`.
+The default mode is `off`.
 
 Use the modes as a ladder:
 
@@ -222,7 +218,7 @@ The finding name must match the reported register-contract finding kind. A suppr
 
 ---
 
-## What AZM infers
+## Inferred register effects
 
 Given a routine body, AZM infers:
 
@@ -505,7 +501,7 @@ Strict mode treats missing routine bodies and missing external contracts as buil
 azm --reg-profile mon3 program.asm
 ```
 
-The `mon3` profile provides built-in register contract summaries for MON3 RST service calls on TEC-1 and MON3-based projects.
+The `mon3` profile provides built-in summaries for MON-3 RST services, including selector-based API calls through `RST $10`.
 
 `.asmi` files can also describe `RST` services selected through register C:
 
@@ -541,13 +537,13 @@ Use register contracts as part of editing:
 5. Run `azm --rc strict program.asm` once routine boundaries and external interfaces are in place.
 6. Fix routine structure, contracts or interfaces until strict mode passes.
 
-If strict mode makes a piece of assembly uncomfortable, look first at the routine boundary. Shared exits, cross-boundary jumps and hidden monitor calls are often the code shapes that need to become explicit.
+If strict mode produces many findings in one area, inspect the routine boundaries first. Shared exits, cross-boundary jumps and unrecorded monitor calls often need explicit boundaries or external contracts.
 
 ---
 
 ## Text reports
 
-AZM can also write a report with `--reg-report`, producing `program.regcontracts.txt` by default. Do not check it into source control.
+AZM can also write a report with `--reg-report`, producing `program.regcontracts.txt` by default. This is a generated artifact, so projects normally add it to their ignore rules unless they intentionally retain a baseline.
 
 ```sh
 azm --rc audit --reg-report program.asm
@@ -580,7 +576,7 @@ AZM identifies call sites where the callee clearly returns a register the caller
 
 `--fix` does not insert `push`/`pop` pairs or change a single instruction, so the assembled output is unchanged.
 
-After `--fix` runs, inspect the diff anyway. An inferred contract records what the code does today, which is not always what you meant it to do. Where the two differ, write the contract you intended and let the next build tell you the code disagrees.
+After `--fix` runs, inspect the diff anyway. An inferred contract records what the code does today, which may differ from the intended interface. Where they differ, write the intended contract; the next build will report any mismatch between that declaration and the routine body.
 
 ---
 
@@ -618,7 +614,7 @@ warning AZMN_REGISTER_CARE: DE is live across CALL NORMALISE_COORD, but NORMALIS
   may modify D,E (inferred: in DE, out DE — use --accept-out to promote)
 ```
 
-This fires when a routine reads and writes the same register and the analyzer needs to know whether the caller wants the pre-call value preserved or the post-call value returned. If the intent is a transform, run `--accept-out` or add the contract manually.
+This fires when a routine reads and writes the same register but AZM cannot prove whether the pre-call value must survive or the post-call value is an intentional result. For a transform, run `--accept-out` or add the contract manually.
 
 ---
 

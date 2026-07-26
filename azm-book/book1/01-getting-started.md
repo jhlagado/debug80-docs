@@ -79,17 +79,17 @@ By default, AZM writes four output files next to the source:
 
 Chapter 8 covers output selection, suppression flags, Debug80 source paths, exit status and artifact formats.
 
-### What the assembler produced
+### Assembler output
 
 To trace through the assembly: `ld b,LIMIT` assembles to `$06 $08` at `$0100`; `ld hl,Counter` assembles to `$21 $09 $01` at `$0102` (the address `$0109`, little-endian); `inc (hl)` is `$34` at `$0105`; `djnz _loop` is `$10 $FD` at `$0106`; `halt` is `$76` at `$0108`; and `.db 0` places a zero byte at `$0109`.
 
-Placing data after the final instruction keeps entry points at the top of the binary where a loader expects them. AZM resolves forward references, so `ld hl,Counter` at the top can name a label defined further down.
+Placing data after the final instruction keeps the executable entry near the start of the binary, which suits loaders that begin execution at the load address. AZM resolves forward references, so `ld hl,Counter` at the top can name a label defined further down.
 
 ---
 
 ## Source file extensions
 
-AZM accepts `.asm` and `.z80` source extensions and parses them identically. Within the Debug80 toolchain, `.z80` files carry a specific meaning: Debug80 treats them as entry points or assembly targets. For new source outside that toolchain context, `.asm` is the conventional choice.
+AZM accepts `.asm` and `.z80` source extensions and parses them identically. Debug80 can discover either extension as a target source file; files named `main.asm` or `main.z80` are suggested as likely entry points. For new source, `.asm` is the conventional choice, while `.z80` is also useful for source shared with ASM80-compatible tools.
 
 `.asmi` files carry external register contract records for library routines whose source is assembled separately. Load them with `--interface`. The format is covered in Chapter 6.
 

@@ -28,8 +28,8 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--output` | `path` | Write primary output to `path` instead of the default location |
-| `--type` | `bin` or `hex` | Primary output format; default is `hex` |
+| `-o`, `--output` | `path` | Set the output base path; extension must match `--type` |
+| `-t`, `--type` | `bin` or `hex` | Primary output format; default is `hex` |
 | `--nobin` | — | Suppress `.bin` flat binary output |
 | `--nohex` | — | Suppress `.hex` Intel HEX output |
 | `--nod8m` | — | Suppress `.d8.json` Debug80 source map |
@@ -50,13 +50,17 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 | Flag | Argument | What it does |
 |------|----------|--------------|
 | `--rc` | `off`, `audit`, `warn`, `error` or `strict` | Register contract analysis level; default is `off` |
+| `--register-contracts` | `off`, `audit`, `warn`, `error` or `strict` | Long form of `--rc` |
 | `--contracts` | — | Insert or update inferred `.routine` directives |
 | `--fix` | — | Apply conservative register contract source repairs |
+| `--require-expectout` | — | Fail on caller dependencies on inferred outputs that lack `.expectout` |
 | `--reg-report` | — | Write `source.regcontracts.txt` with inferred routine contracts |
 | `--reg-report-format` | `text` or `json` | Select register contract report format; default is `text` |
 | `--reg-baseline` | `file` | Compare against a JSON register contract report baseline |
 | `--reg-ratchet` | — | Fail when register contract findings are new or changed relative to the baseline |
 | `--reg-interface` | — | Write `source.asmi` with inferred `extern` contract records |
+| `--reg-infer` | — | Write a register-contract inference review artifact |
+| `--reg-infer-format` | `json` or `markdown` | Select the inference artifact format; default is `json` |
 | `--reg-profile` | `mon3` | Load a built-in register contract summary profile for known ROM environments |
 | `--accept-out` | `NAME:REG` | Promote an inferred clobber of `REG` in routine `NAME` to an intentional output |
 
@@ -65,12 +69,14 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 | Flag | Argument | What it does |
 |------|----------|--------------|
 | `--case-style` | `upper`, `lower`, `consistent`, `off` | Enforce case style for mnemonics and register names; emits `AZMN_CASE_STYLE` on violations |
+| `--symbol-case` | `strict` or `insensitive` | Select symbol lookup mode; default is `strict` |
 
 ## Other flags
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `--version` | — | Print the AZM version string and exit |
+| `-V`, `--version` | — | Print the AZM version string and exit |
+| `-h`, `--help` | — | Print command usage and exit |
 
 ---
 

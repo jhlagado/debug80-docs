@@ -45,20 +45,21 @@ Sprites:
     .ds Sprite[16]
 ```
 
-`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically. If you mistype a field name, say `offset(Sprite, flagz)`, the assembler rejects it at assemble time. With manual constants, the same typo assembles silently with the wrong value.
+`sizeof(Sprite)` evaluates to 4. `offset(Sprite, flags)` evaluates to 3. Insert a new field between `tile` and `flags`, and both values update automatically. If you mistype a field name, say `offset(Sprite, flagz)`, the assembler rejects it at assemble time. Manual offset constants provide no such connection to the declaration, so an offset can become stale when a field is inserted or resized.
 
 ---
 
 ## Scalar types, sizeof and arrays
 
-Two scalar types are the building blocks for field sizes:
+Three scalar names are the building blocks for field sizes:
 
 | Name | Byte count |
 |------|------------|
 | `byte` | 1 |
 | `word` | 2 |
+| `addr` | 2 |
 
-These names are valid in size positions: inside `.type` / `.union` declarations and as `.ds` operands.
+These names are valid in size positions: inside `.type` / `.union` declarations and as `.ds` operands. `word` and `addr` have the same size; `addr` records that a field contains an address.
 
 `sizeof(Type)` returns the exact packed byte count for a type. The result is an ordinary integer constant, valid anywhere an expression is valid:
 
@@ -114,6 +115,14 @@ Each field has a name, a size and an offset the assembler computes by summing th
 | `name .field byte` | 1-byte field |
 | `name .field word` | 2-byte field |
 | `name .field TypeExpr` | field of any layout size |
+
+AZM also provides concise forms for the three scalar field sizes:
+
+| Declaration | Equivalent form |
+|-------------|-----------------|
+| `name .byte` | `name .field byte` |
+| `name .word` | `name .field word` |
+| `name .addr` | `name .field addr` |
 
 Use `.field` when the size is a type expression, such as an array or a nested record type:
 
@@ -293,7 +302,7 @@ ld   hl,Player + offset(Actor, pos.x)
 
 ## Unions and alternate views
 
-A union describes multiple overlapping views of the same bytes. All union members start at offset zero; the union's size is the size of its largest member. Hardware ports that expose the same address as both a status byte and a 16-bit value are a natural fit:
+A union describes multiple overlapping views of the same bytes. All union members start at offset zero; the union's size is the size of its largest member. Packed data that can be read as either a byte or a 16-bit value is a natural fit:
 
 ```asm
 PortValue .union
@@ -313,7 +322,7 @@ Cast syntax reaches union members by the same rules as record fields:
 
 ```asm
 ld   a,(<IoPort>Port.value.status)    ; read the status byte
-ld   hl,<IoPort>Port.value.full       ; read the full word
+ld   hl,(<IoPort>Port.value.full)     ; read the full word
 ```
 
 ---

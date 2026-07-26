@@ -8,7 +8,7 @@ nav_order: 4
 
 # Chapter 4 — Raw Data, Storage and Strings
 
-Every assembly program has two kinds of memory content: bytes you know at assemble time, and storage you fill at runtime.
+Assembly programs commonly contain bytes fixed at assemble time and storage filled at runtime.
 
 ---
 
@@ -57,7 +57,7 @@ The Z80 is little-endian: the low byte of a 16-bit value is stored at the lower 
         .dw VECTOR_TABLE  ; address of the label, low byte first
 ```
 
-`.dw` accepts any expression that fits in 16 bits (0–65535).
+`.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767). Negative values are encoded in 16-bit two's-complement form.
 
 ## Labels inside data
 
@@ -92,7 +92,7 @@ Equivalent to `.db "Hello",0` but makes the termination policy explicit. Use `.c
         .pstr "Hello"   ; emits: $05 H e l l o
 ```
 
-The first byte is the string length (0–255). Strings longer than 255 characters are a range error. Use `.pstr` when the routine wants the byte count first.
+The first byte is the string length (0–255). Strings longer than 255 characters are a range error. Use `.pstr` when the receiving routine reads a leading byte count.
 
 **`.istr` (inverted terminator string):**
 

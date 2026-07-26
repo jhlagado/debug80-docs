@@ -25,6 +25,7 @@ sizeof(TypeName[n])
 ```asm
 sizeof(byte)         ; 1
 sizeof(word)         ; 2
+sizeof(addr)         ; 2
 
 ; Given: Sprite .type (x .field byte, y .field byte, flags .field byte, ptr .field word)
 sizeof(Sprite)       ; 5

@@ -193,7 +193,7 @@ Aliases map legacy directive heads to canonical AZM directives. If you have Z80 
 
 ### The built-in alias profile
 
-AZM's built-in aliases normalize common undotted uppercase forms before parsing:
+AZM's built-in aliases normalize exact undotted uppercase forms before parsing:
 
 | Alias | Canonical |
 |-------|-----------|
@@ -203,7 +203,7 @@ AZM's built-in aliases normalize common undotted uppercase forms before parsing:
 | `DW` | `.dw` |
 | `DS` | `.ds` |
 
-The full built-in list is in [Appendix A](appendix-a-directives.md). Alias matching is currently case-insensitive: `db`, `DB` and `Db` all normalize to `.db`.
+The full built-in list is in [Appendix A](appendix-a-directives.md). Alias names are case-sensitive: `DB` normalizes to `.db`, while `db` and `Db` do not. Canonical directives use lowercase dotted forms.
 
 ### Project-specific alias files
 
@@ -228,7 +228,7 @@ Directive forms beyond the built-in set belong in a project JSON file:
 azm --aliases project.aliases.json program.asm
 ```
 
-### What aliases rewrite
+### Alias rewrite scope
 
 Aliases normalize the **directive head**: the first token of a statement after an optional label. Operands, expressions, register names, instruction mnemonics and op names pass through unchanged.
 
@@ -260,7 +260,7 @@ Op declarations and layout types typically live in dedicated include files, pull
 
 ### `.import`
 
-AZM 0.3.2 and later supports `.import` with explicit exports:
+`.import` supports explicit exports:
 
 ```asm
 .import "math.asm"

@@ -8,7 +8,7 @@ nav_order: 3
 
 # Chapter 3 — Addresses, Constants and Expressions
 
-Assembly programs need two kinds of names: names for places (where in memory does this code go?) and names for values (what does this number mean?).
+Assembly programs use names for memory locations and names for constant values. Labels provide the locations; `.equ` definitions and enums provide the values.
 
 ---
 
@@ -222,7 +222,7 @@ In a `.equ` or data context, `$` resolves to the address after the last emitted 
 .ds SPRITE_COUNT * 4
 ```
 
-`.db` accepts byte-range expressions (0–255 or −128–127 for signed). `.dw` accepts word-range expressions (0–65535). `.ds` accepts any non-negative count expression.
+`.db` accepts unsigned byte values (0–255) or signed byte values (−128–127). `.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767). Negative values are encoded in two's-complement form. `.ds` accepts any non-negative count expression.
 
 To split a 16-bit address into two bytes:
 
@@ -247,13 +247,13 @@ AZM checks that expression values fit the encoding slot they fill:
 
 | Context | Valid range |
 |---------|-------------|
-| 8-bit immediate (`ld a,n`) | 0–255 or −128–127 |
-| 8-bit data (`.db`) | 0–255 |
+| 8-bit immediate (`ld a,n`) | 0–255 unsigned or −128–127 signed |
+| 8-bit data (`.db`) | 0–255 unsigned or −128–127 signed |
 | Signed 8-bit branch offset | −128–127 (from next PC) |
 | `bit`/`set`/`res` bit index | 0–7 |
-| 16-bit immediate (`ld hl,nn`) | 0–65535 |
-| 16-bit data (`.dw`) | 0–65535 |
-| Port number (`in a,(n)`) | 0–255 |
+| 16-bit immediate (`ld hl,nn`) | 0–65535 unsigned or −32768–32767 signed |
+| 16-bit data (`.dw`) | 0–65535 unsigned or −32768–32767 signed |
+| Port number (`in a,(n)`) | 0–255 unsigned or −128–127 signed |
 
 When a value falls outside the valid range for its encoding, AZM reports a range error naming the value and the allowed range.
 
@@ -267,6 +267,26 @@ Common expression errors:
 - **Range overflow**: a computed value outside the encoding range
 
 Chapter 8 covers diagnostic messages.
+
+---
+
+## Conditional assembly
+
+`.if`, `.else` and `.endif` select source at assemble time. A non-zero expression selects the first branch; zero selects the optional `.else` branch:
+
+```asm
+DEBUG .equ 1
+
+        .if DEBUG
+        ld   a,1        ; diagnostics enabled
+        .else
+        xor  a          ; diagnostics disabled
+        .endif
+```
+
+Conditions may use numeric literals and `.equ` values defined earlier in the active source. Conditional blocks may be nested. Because AZM resolves conditional assembly before it assigns addresses, a condition cannot use `$`, a label address or an `.equ` that depends on either one.
+
+AZM reports unmatched or repeated `.else` directives, unmatched `.endif` directives and unterminated `.if` blocks.
 
 ---
 
@@ -350,7 +370,7 @@ CmdTable:
         jp   do_erase
 ```
 
-### When to use enums
+### Choosing enums
 
 Use enums for any small set of named states, command codes, token kinds or hardware-mode values where a dense sequence is natural. `State.Dead` reads more clearly than `cp 3`. For values that need specific numbers (port addresses, bitmasks, hardware registers), use `.equ`. At runtime, an enum value is an ordinary byte; validate inputs before dispatching on them.
 

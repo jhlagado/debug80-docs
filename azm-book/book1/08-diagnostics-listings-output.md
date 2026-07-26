@@ -8,7 +8,7 @@ nav_order: 8
 
 # Chapter 8 — Diagnostics and Output
 
-If assembly fails, AZM prints diagnostics and writes nothing. If it succeeds, it writes the output artifacts and exits 0.
+AZM prints diagnostics before it returns. A successful assembly writes the enabled output artifacts and exits 0. An assembly error prevents successful program outputs such as `.bin` and `.hex`, although a requested register-contract report or source annotation may still be written to help resolve the failure.
 
 ---
 
@@ -51,7 +51,7 @@ Running `azm scan.asm` stops immediately:
 scan.asm:6:9: error AZMN_PARSE: branch offset 140 out of range -128..127
 ```
 
-Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is the column, pointing at the `jr nz`. The severity `error` means no binary was written.
+Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is the column, pointing at the `jr nz`. The severity `error` means the assembly did not produce a successful binary.
 
 A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The fix is one line:
 
@@ -65,21 +65,21 @@ A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The fi
 
 AZM exits 0 when assembly succeeds: no parse errors, no semantic errors, no range errors and no register contract errors in `error` or `strict` mode.
 
-AZM exits non-zero (1) when any error occurs:
+AZM exits 1 when assembly produces an error diagnostic:
 
 - A parse error: source line cannot be recognized
 - A semantic error: unknown symbol, duplicate symbol, type error
 - A range error: value does not fit the encoding slot
 - A register contract error in `--rc error` or `--rc strict` mode
-- An artifact-writing failure: output path not writable
-
 Warnings (including register contract warnings in `--rc warn` mode) do not affect the exit code.
+
+Invalid command-line arguments and I/O failures, such as an unwritable output path, exit 2 and print the command usage.
 
 ---
 
 ## Output formats
 
-A single assembly run can produce several output files. All are written to the same base path as the source by default; the primary output can be redirected with `--output`.
+A single assembly run can produce several output files. By default, all use the source file's base path. `--output` selects a new base path for every enabled artifact, and its extension must match the primary `--type`.
 
 ### Flat binary (`.bin`)
 
@@ -98,7 +98,7 @@ When two `.org` directives have a gap between them, the binary fills the gap wit
         .binto $0200
 ```
 
-A `.ds` block at the very end of a source file does not extend the binary.
+An unfilled `.ds` block at the very end of a source file does not extend the binary. A `.ds count,fill` block writes the fill byte and therefore does extend it.
 
 ### Intel HEX (`.hex`)
 
@@ -149,7 +149,7 @@ main        8000
 message     8008
 ```
 
-Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter. A `.ds` reservation prints its address but no bytes, because it occupies space without writing any. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on address-only rows below it.
+Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter. An unfilled `.ds` reservation prints its address but no bytes. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on address-only rows below it.
 
 Included and imported files are listed inline at their inclusion point, so the listing reads in the same order the assembler consumed the program. After the last source line comes a symbol table: every label and constant with its value, sorted by name.
 

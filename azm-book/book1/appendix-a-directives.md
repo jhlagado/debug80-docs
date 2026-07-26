@@ -8,12 +8,15 @@ nav_order: 101
 
 # Appendix A — Directive Reference
 
-All AZM directives in canonical lowercase dotted form. Directives are case-sensitive; only the forms below are accepted by the parser. See Chapter 7 for the alias layer that normalises legacy undotted forms.
+The table lists AZM directives and declaration keywords. Dotted directives use canonical lowercase forms and are case-sensitive. See Chapter 7 for the alias layer that normalises legacy undotted forms.
 
 | Directive | Syntax | What it does | Ch. |
 |-----------|--------|--------------|-----|
 | `.org` | `.org expr` | Sets the assembly address counter to `expr`; emits nothing | 3 |
 | `.equ` | `NAME .equ expr` | Binds `NAME` to the constant value of `expr`; emits nothing | 3 |
+| `.if` | `.if expr` | Assembles the following branch when `expr` is non-zero | 3 |
+| `.else` | `.else` | Selects the alternate branch of a conditional block | 3 |
+| `.endif` | `.endif` | Closes a conditional block | 3 |
 | `.db` | `.db expr[,expr…]` | Emits one or more 8-bit values; accepts string literals | 4 |
 | `.dw` | `.dw expr[,expr…]` | Emits one or more 16-bit little-endian values | 4 |
 | `.ds` | `.ds count[,fill]` | Reserves `count` bytes; optional `fill` byte; accepts type expressions | 4, 5 |
@@ -35,6 +38,9 @@ All AZM directives in canonical lowercase dotted form. Directives are case-sensi
 | `.union` | `Name .union` … `.endunion` | Opens a union layout declaration block | 5 |
 | `.endunion` | `.endunion` | Closes a `.union` block | 5 |
 | `.field` | `name .field TypeExpr` | Declares a field of any type inside a `.type` or `.union` block | 5 |
+| `.byte` | `name .byte` | Declares a one-byte scalar field inside a `.type` or `.union` block | 5 |
+| `.word` | `name .word` | Declares a two-byte scalar field inside a `.type` or `.union` block | 5 |
+| `.addr` | `name .addr` | Declares a two-byte address field inside a `.type` or `.union` block | 5 |
 | `.typealias` | `Name .typealias TypeExpr` | Transparent assembler-time alias for a layout type expression | 5 |
 | `.enum` | `Name .enum Member[,…]` | Declares a group of integer constants with qualified names (`Name.Member`) | 3 |
 | `op` / `end` | `op name(params)` … `end` | Declares an inline instruction-expansion op | 7 |
