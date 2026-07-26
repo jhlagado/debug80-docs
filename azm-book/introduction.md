@@ -4,8 +4,6 @@ title: "Introduction"
 parent: "AZM Books"
 nav_order: 1
 ---
-[Book 2 →](book2/index.md)
-
 # Introduction — Why Assembly, Why AZM, Why the Z80
 
 Most programmers never write assembly language. They write in Python or C or JavaScript and let a compiler or interpreter do the mechanical work of turning their code into something the CPU can run. That arrangement is efficient and sensible for most purposes.
@@ -57,7 +55,7 @@ What AZM adds on top of plain assembly is practical:
 
 None of this adds instructions the CPU does not run. Every AZM construct compiles to Z80 bytes you can read in the listing and verify directly.
 
-These books teach raw Z80 assembly first — registers, flags, jumps, the stack, subroutines, I/O — then use AZM's additions for larger algorithms and data structures. The TEC-1G hardware path now lives in Debug80 Book 2.
+These books teach raw Z80 assembly first — registers, flags, jumps, the stack, subroutines, I/O — then use AZM's additions for larger algorithms and data structures. For the hardware itself, [Debug80 Book 1](../debug80-book/book1/) covers getting a program onto a real board, and the [TEC-1G reference](../tec1g/) documents the machine and its monitor.
 
 ---
 
@@ -84,7 +82,7 @@ By the end of Book 3 you will be able to:
 
 **Book 2** starts with the bare machine: what a byte is, what a program looks like as raw hex in memory, why raw hex is unmanageable, and how assembly language solves that. It then builds the Z80 programming model instruction by instruction — loads, flags, jumps, loops, tables, the stack, subroutines, I/O — before introducing AZM's features in the final four chapters.
 
-**Book 3** moves to algorithms and data structures. Each chapter works through a real, compilable AZM program that solves a non-trivial problem. These chapters assume everything in Book 2; Debug80 Book 2 is useful background when you want a concrete TEC-1G hardware target.
+**Book 3** moves to algorithms and data structures. Each chapter works through a real, compilable AZM program that solves a non-trivial problem. These chapters assume everything in Book 2.
 
 **AZM Book 1 — Assembler Manual** is the definitive reference for AZM's language and tooling. It documents AZM syntax, directives, expressions, layout types, op declarations, diagnostics, and output formats for programmers who want the assembler rules directly.
 
@@ -112,6 +110,3 @@ You do not need prior programming experience. Book 2 assumes none. You do need p
 
 Start with [Book 2, Chapter 1](book2/01-the-computer.md).
 
----
-
-[Book 2 →](book2/index.md)
