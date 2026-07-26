@@ -39,7 +39,7 @@ If DEBUG80 is not in the list at all, the extension has not activated. Use VS Co
 
 ## The empty state
 
-With no folder open, the panel has one thing to say:
+With no folder open, the panel displays:
 
 ```text
 Add projects or folders to the workspace to start with Debug80.

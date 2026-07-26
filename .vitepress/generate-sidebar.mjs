@@ -22,10 +22,12 @@ function frontMatter(filePath) {
   return fm;
 }
 
-function mdFiles(dir) {
-  return readdirSync(dir)
+function mdFiles(dir, recursive = false) {
+  const files = readdirSync(dir)
     .filter((name) => name.endsWith('.md'))
     .map((name) => join(dir, name));
+  if (!recursive) return files;
+  return files.concat(subDirs(dir).flatMap((child) => mdFiles(child, true)));
 }
 
 function subDirs(dir) {
@@ -44,8 +46,8 @@ function navOrder(fm) {
   return Number.isFinite(value) ? value : 9999;
 }
 
-function chapterItems(dir, parentTitle) {
-  return mdFiles(dir)
+function chapterItems(dir, parentTitle, recursive = false) {
+  return mdFiles(dir, recursive)
     .filter((file) => !file.endsWith('index.md'))
     .map((file) => ({ file, fm: frontMatter(file) }))
     // `nav_exclude` pages still list under their `parent` section (the
@@ -65,7 +67,7 @@ function sectionFor(dir) {
   } catch {
     return undefined;
   }
-  const items = chapterItems(dir, fm.title);
+  const items = chapterItems(dir, fm.title, true);
   if (items.length === 0) return undefined;
   return { order: navOrder(fm), title: fm.title, entry: { text: fm.title, collapsed: false, items } };
 }

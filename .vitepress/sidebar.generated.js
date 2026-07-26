@@ -46,6 +46,10 @@ export const sidebars = {
           "link": "/debug80-book/book1/07-source-navigation.html"
         },
         {
+          "text": "Glimmer targets",
+          "link": "/debug80-book/book1/11-glimmer-targets.html"
+        },
+        {
           "text": "Video, input and serial",
           "link": "/debug80-book/book1/08-video-input-and-serial.html"
         },
@@ -54,12 +58,24 @@ export const sidebars = {
           "link": "/debug80-book/book1/09-send-to-hardware.html"
         },
         {
-          "text": "Copy monitor ROM source",
-          "link": "/debug80-book/book1/10-copy-monitor-rom.html"
+          "text": "Appendix A — Debug expressions",
+          "link": "/debug80-book/book1/appendices/a-debug-expressions.html"
         },
         {
-          "text": "Glimmer targets",
-          "link": "/debug80-book/book1/11-glimmer-targets.html"
+          "text": "Appendix B — Command reference",
+          "link": "/debug80-book/book1/appendices/b-command-reference.html"
+        },
+        {
+          "text": "Appendix C — Debug80 file formats",
+          "link": "/debug80-book/book1/appendices/c-project-configuration.html"
+        },
+        {
+          "text": "Appendix D — The AZM options row",
+          "link": "/debug80-book/book1/appendices/d-azm-options-row.html"
+        },
+        {
+          "text": "Appendix E — Copy monitor ROM source",
+          "link": "/debug80-book/book1/10-copy-monitor-rom.html"
         }
       ]
     }

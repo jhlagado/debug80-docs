@@ -9,9 +9,9 @@ nav_order: 3
 
 # Targets
 
-A folder can hold many assembly files. Only some of them are programs; the rest are includes, experiments and half-finished ideas. A **target** is Debug80's record of one program: which source file the assembler starts with, where the build output goes, and which machine the program runs on.
+A folder can hold many source files. Only some of them are programs; the rest are includes, experiments and half-finished ideas. A **target** is Debug80's record of one program: the source file where the build starts, where the output goes, and which machine the program runs on.
 
-**`debug80.json` is the truth. File names only ever make suggestions.**
+**`debug80.json` is authoritative. File names provide discovery hints only.**
 
 ## Inside a target
 
@@ -31,13 +31,13 @@ Your project has one target, named `main`:
 
 ![A folder holds a project, the project selects a target, the target names a source file](../../assets/images/debug80-book/book1/folder-project-target-source.svg)
 
-`sourceFile` is the source entry file handed to the assembler. `outputDir` and `artifactBase` decide where the output lands and what it is called, so this target produces `build/main.hex`. `platform` and `profile` say which machine it runs on.
+`sourceFile` is the build's source entry file. Debug80 hands assembly targets to AZM and Glimmer targets to the Glimmer compiler. `outputDir` and `artifactBase` determine where the output lands and what it is called, so this target produces `build/main.hex`. `platform` and `profile` identify the machine it runs on.
 
 The target's name is the key, `main`. Debug80 derives it from the source file name, dropping the extension and a trailing `.main` if there is one, so `game.main.asm` yields a target called `game`. If that name is taken it appends `-2`.
 
 ## Eligible program files
 
-Debug80 will consider three kinds of file: `.asm`, `.z80` and `.glim`. A Glimmer file only qualifies if it contains a top-level `program` declaration, because a `.glim` file without one is a part of a program rather than a program.
+Eligible program files use the `.asm`, `.z80` or `.glim` extension. A Glimmer file only qualifies if it contains a top-level `program` declaration, because a `.glim` file without one is a part of a program rather than a program.
 
 Among those, two names are treated as suggestions: `main.asm` and `main.z80`. A file with either name is marked **suggested** when Debug80 offers you a list.
 
@@ -70,13 +70,13 @@ You can also right-click any `.asm`, `.z80` or `.glim` file in the Explorer and 
 
 ## Choose the active target
 
-The **Target** dropdown selects which one Build and Run act on. Debug80 remembers your choice per project.
+The **Target** dropdown selects which one Build and Run act on. The choice is stored per project.
 
 ![The target dropdown listing configured and discovered targets](../../assets/images/debug80-book/book1/picker-target-dropdown.svg)
 
 Discovered files that are not yet targets appear in the dropdown prefixed with `+`. Choosing one adds it as a target and selects it.
 
-If you change the target while a debug session is running, Debug80 says so rather than silently switching underneath you:
+If you change the target while a debug session is running, Debug80 reports the change rather than silently switching underneath you:
 
 ```text
 Debug80: Selected target blink. Press Build to apply it to the current session.
@@ -100,7 +100,7 @@ Remove every target and the project is still a project. It is what **No target y
 
 ![The panel for a project with no targets](../../assets/images/debug80-book/book1/panel-state-no-targets.svg)
 
-The dropdown then reads `No targets available` if nothing eligible is on disk, or lists discovered files with their `+` prefix if there are any. **Build** and **Run** stay visible and clickable, and refuse with a message rather than failing obscurely:
+The dropdown then reads `No targets available` if nothing eligible is on disk, or lists discovered files with their `+` prefix if there are any. **Build** and **Run** stay visible and clickable, but report a clear message:
 
 ```text
 Debug80: This project has no targets yet. Pick a program file from the target dropdown first.
@@ -110,9 +110,9 @@ Debug80: This project has no targets yet. Pick a program file from the target dr
 
 If a target names a source file that no longer exists, Debug80 hides it from the list rather than offering you something that cannot build. The entry stays in `debug80.json`, so restoring the file brings the target back.
 
-## Everything here is also a command
+## Other ways to run these actions
 
-Every action in this chapter has a Command Palette equivalent, so it is available from the keyboard as well as the panel:
+Most actions in this chapter have a Command Palette equivalent. **Set Program File** appears in the Explorer and editor context menus instead.
 
 | Action | Command |
 |---|---|

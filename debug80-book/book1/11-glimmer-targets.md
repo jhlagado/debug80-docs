@@ -2,10 +2,10 @@
 layout: default
 title: "Glimmer targets"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 5
+nav_order: 8
 ---
 
-[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
+[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)
 
 # Glimmer targets
 
@@ -15,7 +15,7 @@ Debug80 builds one other kind of program: Glimmer, a reactive game language that
 
 A `.glim` file becomes a target the same way an assembly file does, with one extra condition: it must contain a top-level `program` declaration.
 
-Add one with **+** beside the **Target** dropdown, or run **Debug80: Add Target**. Everything from the Targets chapter applies unchanged: the same dropdown, the same **−** to remove, the same rule that `debug80.json` is the truth.
+Add one with **+** beside the **Target** dropdown, or run **Debug80: Add Target**. Everything from the Targets chapter applies unchanged: the same dropdown, the same **−** to remove, and the same authoritative `debug80.json` configuration.
 
 ## Glimmer build output
 
@@ -43,9 +43,9 @@ Step past the end of a block and you continue into the generated assembly, which
 
 The editor features from the source-navigation chapter cover `.glim` too: Go to Definition, hover and workspace symbol search all work once a build is current.
 
-## Strict labels and Glimmer
+## Strict labels
 
-The **Strict labels** checkbox writes `azm.symbolCase` for the whole project, and it applies to imported or handwritten assembly as well as the assembly Glimmer generates. Generated code uses consistent capitalization. Leave strict labels on unless older assembly in the project relies on case-insensitive names.
+The **Strict labels** checkbox controls assembly targets built directly by AZM. Glimmer builds currently use the Glimmer pipeline's own label handling, so this checkbox does not change them.
 
 Appendix B lists the user commands, Appendix C documents the project and source-map formats, and Appendix D explains the assembler settings in the panel.
 
@@ -55,4 +55,4 @@ Continue with [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book
 
 ---
 
-[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
+[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)

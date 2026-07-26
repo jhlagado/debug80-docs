@@ -9,11 +9,11 @@ nav_order: 2
 
 # Open a folder, make a project
 
-Debug80 works on an ordinary folder. Open one and the panel tells you where you stand: no folder, a folder that is not yet a project, or a project.
+Debug80 works on an ordinary folder. Open one and the panel shows one of three states: no folder, a folder that is not yet a project, or a project.
 
 ## Open a folder
 
-Click **Open Folder** in the panel, or use VS Code's own **File > Open Folder**, and choose an empty folder. This chapter calls it `project1`.
+Click **Open Folder** in the panel, or use VS Code's own **File > Open Folder**, and choose an empty folder. We will call it `project1`.
 
 The header row now names the folder, and beside it sit a **+** to add another folder to the workspace and a **−** to remove one. Below the header a card reads:
 
@@ -21,7 +21,7 @@ The header row now names the folder, and beside it sit a **+** to add another fo
 Uninitialized Debug80 project
 ```
 
-A folder is not yet a project. Debug80 decides that by looking for a file called `debug80.json`, at the folder root or under `.vscode/`.
+A folder becomes a Debug80 project when it contains `debug80.json`, either at the folder root or under `.vscode/`.
 
 ## Choose a platform and initialize
 
@@ -29,7 +29,7 @@ The uninitialized state adds two controls to the header row: a **Platform** drop
 
 ![The panel showing an uninitialized project](../../assets/images/debug80-book/book1/panel-state-uninitialized.svg)
 
-The dropdown offers **Simple**, **TEC-1** and **TEC-1G**. This book uses **TEC-1G** throughout. Choose it, then click **Initialize**.
+The dropdown offers **Simple**, **TEC-1** and **TEC-1G**. The examples throughout this book use **TEC-1G**. Choose it, then click **Initialize**.
 
 Debug80 asks one more question, in a picker at the top of the window:
 
@@ -59,7 +59,7 @@ project1/
 
 ![The project folder after initialization](../../assets/images/debug80-book/book1/explorer-after-init.svg)
 
-Everything Debug80 knows about your program is in `debug80.json`, and it is an ordinary file you can read and edit:
+The project's Debug80 configuration is stored in `debug80.json`, an ordinary file you can read and edit:
 
 ```json
 {

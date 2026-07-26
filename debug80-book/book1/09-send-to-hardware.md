@@ -47,7 +47,7 @@ Put the TEC-1G into MON-3 Intel HEX Load mode before sending.
 
 Click **Send to TEC-1G** in the Project section.
 
-The button's label follows the platform, so a TEC-1 project reads **Send to TEC-1** and anything else reads **Send to Board**. It is enabled once a target is selected and a HEX file exists; the panel's hardware status line says which of those is missing:
+The button's label follows the platform, so a TEC-1 project reads **Send to TEC-1** and anything else reads **Send to Board**. It is enabled once a target is selected and a HEX file exists; the panel's hardware status line displays any missing requirement:
 
 ```text
 Ready to send main.hex via CoolTerm.

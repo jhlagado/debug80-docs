@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 4
 ---
 
-[← Targets](03-targets.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)
+[← Targets](03-targets.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)
 
 # Build and run
 
@@ -44,13 +44,13 @@ A Glimmer target also emits its generated assembly as `main.asm`. [Glimmer targe
 
 ## The source map status line
 
-Under the build line the panel keeps a running verdict on the source map:
+Under the build line the panel shows the current source-map status:
 
 ```text
 Source map: current.
 ```
 
-It has five other things it can say, and each names its own remedy:
+Five other messages are possible, and each includes the required remedy:
 
 | Line | Meaning |
 |---|---|
@@ -100,4 +100,4 @@ Run **Debug80: Copy Project Status (JSON)** from the Command Palette to copy the
 
 ---
 
-[← Targets](03-targets.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)
+[← Targets](03-targets.md) | [Book 1](index.md) | [Run the debugger →](05-build-and-step.md)

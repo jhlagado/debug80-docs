@@ -2,10 +2,10 @@
 layout: default
 title: "Source navigation and ROM source"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 8
+nav_order: 7
 ---
 
-[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)
+[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)
 
 # Source navigation and ROM source
 
@@ -13,7 +13,7 @@ A successful build gives Debug80 a current source map. That map lets VS Code nav
 
 If Go to Definition stops resolving or hover goes quiet, check the source-map status line in the panel before looking for anything more interesting. **Debug80: Show Source Map Status** reports the same thing in more detail.
 
-![The source map status line decides which editor features are available](../../assets/images/debug80-book/book1/source-map-status-features.svg)
+![The source map status controls which editor features are available](../../assets/images/debug80-book/book1/source-map-status-features.svg)
 
 ## Go to Definition
 
@@ -49,4 +49,4 @@ When you want to edit or debug the monitor itself, copy the monitor ROM source i
 
 ---
 
-[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)
+[← Inspect a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)

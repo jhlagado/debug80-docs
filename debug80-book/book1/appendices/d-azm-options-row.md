@@ -9,7 +9,7 @@ nav_order: 104
 
 # Appendix D — The AZM options row
 
-The Project section has a row of three controls that the rest of this book walks past: **Register Contracts**, **Contract Updates** and **Strict labels**.
+The Project section has three controls not covered in the main chapters: **Register Contracts**, **Contract Updates** and **Strict labels**.
 
 ![The AZM options row: Register Contracts set to Enforce, Contract Updates set to Ask, and Strict labels ticked](../../../assets/images/debug80-book/book1/panel-state-ready.svg)
 
@@ -17,7 +17,7 @@ All three are AZM settings. The underlying feature is documented in full in [AZM
 
 ## Register contracts, briefly
 
-A routine uses registers. Some it reads, some it writes, some it destroys along the way. A *register contract* writes that down:
+A routine uses registers. Some it reads, some it writes, some it destroys along the way. A *register contract* records that use:
 
 ```text
 .routine out A maybe-out D clobbers D
@@ -41,7 +41,7 @@ Three values: **Enforce**, **Audit**, **Off**.
 | Audit | Analyses and reports | The build succeeds |
 | Off | Does not analyse | The build runs without contract analysis |
 
-**Enforce is the default**. If a build fails with a message about a register conflict, and the code assembles fine everywhere else, this control is why. The failure is usually telling you something true, but if you are mid-experiment and want the program to run first and be correct later, drop to Audit.
+**Enforce is the default**. If a build fails with a message about a register conflict, and the code assembles fine everywhere else, this control is why. The error usually identifies a real conflict, but if you are mid-experiment and want the program to run first and be correct later, drop to Audit.
 
 Enforce and Audit both write the report listed among the [chapter 4](../04-build-and-run.md) build outputs:
 
@@ -55,9 +55,9 @@ The panel offers three settings; AZM itself has five (`off`, `audit`, `warn`, `e
 
 Three values: **Ask**, **Auto**, **Never**. The default is Ask.
 
-AZM does not only find contract problems; it can write the answers back. Given a routine whose contract is missing or out of date, it works out what the contract should be and produces a corrected version of your source. It can also insert `.expectout` at call sites where the fix is unambiguous.
+AZM can identify contract problems and update the source. Given a routine whose contract is missing or out of date, it infers the contract from the routine's register operations and produces a corrected version. It can also insert `.expectout` at call sites where the fix is unambiguous.
 
-This control decides what Debug80 does with that corrected source:
+This control sets how Debug80 handles that corrected source:
 
 - **Never**: does not ask for it.
 - **Ask**: offers it after a build, showing you which files would change. You can look at a diff before deciding.
@@ -73,9 +73,9 @@ Contract Updates works even with Register Contracts set to Off. Asking for updat
 
 A checkbox, ticked by default.
 
-Ticked, a label must be referenced with the capitalization it was defined with; `ScanHello` will not answer to `scanhello`. Unticked, capitalization is ignored.
+Ticked, a label must be referenced with the capitalization used in its definition; `scanhello` does not resolve to `ScanHello`. Unticked, capitalization is ignored.
 
-Leave it on for new code; the strictness catches typos that would otherwise resolve to the wrong symbol or fail late. Turn it off when you are assembling older source that is inconsistent about case and that you would rather not rewrite. [Glimmer targets](../11-glimmer-targets.md) explains how the setting applies to generated assembly.
+Leave it on for new assembly code; the strictness catches typos that would otherwise resolve to the wrong symbol or fail late. Turn it off when you are assembling older source that is inconsistent about case and that you would rather not rewrite. Glimmer builds currently use their own label handling and do not read this checkbox.
 
 ## Persistence across restarts
 

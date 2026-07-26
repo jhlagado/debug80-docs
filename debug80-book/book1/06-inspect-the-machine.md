@@ -2,7 +2,7 @@
 layout: default
 title: "Inspect a running program"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 7
+nav_order: 6
 ---
 
 [← Run the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)
@@ -59,7 +59,7 @@ Every byte in a memory view is an editable field. Click one, type a new value an
 
 ![Writing to read-only memory](../../assets/images/debug80-book/book1/memory-unlock.svg)
 
-Bytes in ROM are marked read-only and refuse edits. To write over a ROM region, tick **Unlock read-only memory** in the section first. Without it the byte snaps back and Debug80 reports:
+Bytes in ROM are marked read-only and cannot be edited until you tick **Unlock read-only memory** in the section. Without it the byte snaps back and Debug80 reports:
 
 ```text
 Read-only memory locked
@@ -73,7 +73,7 @@ The **Machine** section shows the front-panel parts of the TEC-1G: the 20x4 LCD,
 
 The **Displays** section holds the rest of the TEC-1G's output: the speed and mute controls, the status and memory-bank indicators, the 128x64 GLCD and the 8x8 RGB LED matrix.
 
-Debug80 renders the RGB matrix with duty-cycle brightness, so a dim pixel and a bright one tell you something about the program's timing as well as its output.
+Debug80 renders the RGB matrix with duty-cycle brightness, so pixel brightness indicates the program's timing as well as its output.
 
 ![The Displays section](../../assets/images/debug80-book/book1/displays-section.svg)
 

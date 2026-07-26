@@ -5,7 +5,7 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 9
 ---
 
-[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
+[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
 
 # Video, input and serial
 
@@ -31,7 +31,7 @@ Opening the section attaches the card at ports `0xBE` and `0xBF`. Closing it det
 
 ![The TMS9918 Video section](../../assets/images/debug80-book/book1/section-tms9918.svg)
 
-A selector switches between **PAL 50** and **NTSC 60**, which changes the frame rate a program pacing itself on vertical blank will see.
+A selector switches between **PAL 50** and **NTSC 60**, changing the vertical-blank frequency used by programs that pace themselves from that signal.
 
 ## Joystick
 
@@ -51,7 +51,7 @@ The **Matrix Keyboard** section emulates the TEC-1G's full keyboard as a five-ro
 
 While the matrix is attached the hex keypad is dimmed and does not accept clicks, with one exception: **RESET**, which stays live so you can always reset the machine.
 
-A pill above the keypad tells you who currently owns physical keys and what to do about it:
+A pill above the keypad identifies the current owner of physical key input and the available release action:
 
 ```text
 Keyboard captured / click outside to release
@@ -81,4 +81,4 @@ There is no NMI button. Non-maskable interrupts happen as a consequence of input
 
 ---
 
-[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)
+[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Send to TEC-1G hardware →](09-send-to-hardware.md)

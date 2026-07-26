@@ -11,7 +11,7 @@ nav_order: 102
 
 This appendix lists the Debug80 commands available to users. Open the Command Palette with **Shift-Command-P** on macOS or **Shift-Control-P** on Windows and Linux, then type part of the title.
 
-Everything the panel can do is also a command.
+The commands below cover panel actions and editor workflows.
 
 ## Projects and workspace folders
 
@@ -38,7 +38,7 @@ Everything the panel can do is also a command.
 |---|---|
 | **Debug80: Build Current Target** | Assembles without launching. |
 | **Debug80: Run Current Target** | Builds and starts the emulator, restarting any running session. |
-| **Debug80: Start Debugging** | Starts the selected target when no debug session is running. |
+| **Debug80: Start Debugging** | Starts the selected target without first stopping an active debug session. |
 | **Run to Here** | Runs until execution returns to the selected frame. Call Stack context menu only. |
 
 ## Source and diagnostics

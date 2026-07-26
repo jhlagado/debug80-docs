@@ -2,10 +2,10 @@
 layout: default
 title: "Run the debugger"
 parent: "Debug80 Book 1 — Getting started"
-nav_order: 6
+nav_order: 5
 ---
 
-[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)
+[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)
 
 # Run the debugger
 
@@ -82,4 +82,4 @@ The running machine carries on with the code it already has until you **Run** ag
 
 ---
 
-[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)
+[← Build and run](04-build-and-run.md) | [Book 1](index.md) | [Inspect a running program →](06-inspect-the-machine.md)
