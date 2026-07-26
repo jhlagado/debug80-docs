@@ -81,7 +81,7 @@ _right_answer:
 
 ### Zero tests
 
-`ld a, h` / `or l` sets Z when HL is zero. These are the base cases: if either argument is zero, the other register pair holds the GCD (once you account for which branch runs).
+`ld a, h` / `or l` sets Z when HL is zero. These are the base cases: if either argument is zero, the other register pair holds the GCD. `_left_answer` returns HL as it stands; `_right_answer` swaps DE into HL first, so the caller always reads the result in HL.
 
 ### Unsigned compare via `sbc hl, de`
 
@@ -101,7 +101,7 @@ If HL ≥ DE, the second `sbc hl, de` performs the Euclidean subtraction step an
 | 3 | 18 | 12 | 18 ≥ 12 → subtract |
 | 4 | 6 | 12 | 6 < 12 → swap |
 | 5 | 12 | 6 | 12 ≥ 6 → subtract twice |
-| end | 6 | 0 | DE zero → return HL = 6 |
+| end | 0 | 6 | HL zero → swap DE into HL, return 6 |
 
 ---
 
@@ -193,7 +193,7 @@ The companion program stores the byte result at `power_result`. After `halt`, `$
 
 ## Digit count (exercise direction)
 
-How many decimal digits does it take to print a 16-bit value? Four, for 1000. You divide by 10 and count until the value reaches zero. The Z80 has no divide instruction, so you build that division out of repeated subtraction, or out of a shift-and-subtract routine.
+Printing a 16-bit value takes up to five decimal digits, and 1000 takes four. You divide by 10 and count until the value reaches zero. The Z80 has no divide instruction, so you build that division out of repeated subtraction, or out of a shift-and-subtract routine.
 
 A byte-only variant fits entirely in registers; a word variant should save the quotient in HL and keep the digit count in B, then return the count in A. Use workspace for a remainder byte if the divide step needs it.
 

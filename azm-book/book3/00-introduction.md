@@ -34,7 +34,7 @@ Chapter 5 (records) goes deeper: the layout type is the contract; the algorithm 
 
 ## K&R: small programs, explicit invariants
 
-Each loop should have a invariant you can say out loud:
+Each loop should have an invariant you can say out loud:
 
 - "B counts elements remaining."
 - "HL points at the next byte to examine."
@@ -95,7 +95,7 @@ There is no garbage collector, no stdlib, no generated frame setup. Layout types
 
 [Chapter 1 — Foundations](01-foundations.md) works through GCD and digit counting on 16-bit values. No arrays yet: only the Book 3 calling convention, compare/subtract idioms and the first workspace bytes. [Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables, insertion sort and linear search.
 
-Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search. The [Book 3 index](index.md) lists which chapters are written versus outlined.
+Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search.
 
 ---
 

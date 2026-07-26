@@ -119,7 +119,7 @@ sort_len:
     .ds byte
 ```
 
-Entry (store length through HL, since `ld (sort_len), b` is not a supported AZM form):
+Entry (store length through HL, since the Z80 has no `ld (nn), b` instruction):
 
 ```asm
 insertion_sort:
@@ -216,9 +216,9 @@ _found:
     ret
 ```
 
-`cp c` / `jr nc` uses the unsigned sense from Book 2: carry set means A ≥ C. `$FF` means not found: a sentinel index, not a valid offset for an 8-element table.
+`cp c` / `jr nc` uses the unsigned sense from Book 2: `cp` subtracts, so carry is set when A < C and clear when A ≥ C. `jr nc` therefore takes the branch on a match. `$FF` means not found: a sentinel index, not a valid offset for an 8-element table.
 
-With threshold 5 on the sorted table, the first match is 5 at index 4. `found_index` at `$8008` should hold `$04`.
+With threshold 5 on the sorted table, the first element of at least 5 is the 6 at index 4. The table holds no 5. `found_index` at `$8008` should hold `$04`.
 
 ---
 
