@@ -462,6 +462,24 @@ html {
   margin-right: 10px;
 }
 
+/* The generated figures are drawn at 720px with 11px labels. Scaling one to
+   fit a 360px phone renders those labels at about 5px, which is not a smaller
+   figure but an unreadable one. So the plate stops scaling at 560px, where
+   the smallest label still lands around 9px, and scrolls sideways instead.
+   The caption stays put while the figure moves under it. */
+.vp-doc figure.plate {
+  overflow-x: auto;
+}
+
+.vp-doc figure.plate > img {
+  min-width: min(560px, 100vw - 2rem);
+}
+
+.vp-doc figure.plate > figcaption {
+  position: sticky;
+  left: 0;
+}
+
 /* Until the client script promotes them, keep lone images from sitting
    flush against the prose. */
 .vp-doc p:has(> img:only-child) {

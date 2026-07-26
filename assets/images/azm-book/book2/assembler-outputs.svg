@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="222" viewBox="0 0 720 222" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">One source file, four artifacts</title>
+  <desc id="figDesc">A source file feeding the assembler, which emits an Intel HEX file, a flat binary, a debug map and a listing.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <rect class="bxs" x="40" y="74" width="130" height="54" rx="4"/>
+  <text class="tb" x="105" y="105.5" text-anchor="middle" xml:space="preserve">source.asm</text>
+  <rect class="bx" x="236" y="74" width="130" height="54" rx="4"/>
+  <text class="tb" x="301" y="105.5" text-anchor="middle" xml:space="preserve">azm</text>
+  <line class="none" x1="170" y1="101" x2="236" y2="101" marker-end="url(#ar)"/>
+  <rect class="bx" x="448" y="34" width="92" height="34" rx="3"/>
+  <text class="t" x="494" y="56" text-anchor="middle" xml:space="preserve">.hex</text>
+  <text class="dimn" x="552" y="55" text-anchor="start" xml:space="preserve">Intel HEX, gaps implicit</text>
+  <path class="none" d="M366,101 C408,101 408,51 448,51" marker-end="url(#ar)"/>
+  <rect class="bx" x="448" y="82" width="92" height="34" rx="3"/>
+  <text class="t" x="494" y="104" text-anchor="middle" xml:space="preserve">.bin</text>
+  <text class="dimn" x="552" y="103" text-anchor="start" xml:space="preserve">flat binary, gaps filled</text>
+  <path class="none" d="M366,101 C408,101 408,99 448,99" marker-end="url(#ar)"/>
+  <rect class="bx" x="448" y="130" width="92" height="34" rx="3"/>
+  <text class="t" x="494" y="152" text-anchor="middle" xml:space="preserve">.d8.json</text>
+  <text class="dimn" x="552" y="151" text-anchor="start" xml:space="preserve">debug map for Debug80</text>
+  <path class="none" d="M366,101 C408,101 408,147 448,147" marker-end="url(#ar)"/>
+  <rect class="bx" x="448" y="178" width="92" height="34" rx="3"/>
+  <text class="t" x="494" y="200" text-anchor="middle" xml:space="preserve">.lst</text>
+  <text class="dimn" x="552" y="199" text-anchor="start" xml:space="preserve">listing, address per line</text>
+  <path class="none" d="M366,101 C408,101 408,195 448,195" marker-end="url(#ar)"/>
+  <text class="dimn" x="40" y="210" text-anchor="start" xml:space="preserve">Each artifact has a flag that suppresses it, and there are more artifacts than the four core ones shown here.</text>
+</svg>

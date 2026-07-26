@@ -37,6 +37,8 @@ The hardware stack is a region of RAM used as a last-in-first-out buffer. When `
 
 `ret` is equivalent to `pop pc`, if such an instruction existed. The CPU reads the top two bytes of the stack into the program counter, increments SP by two and execution resumes at the instruction after the original `call`.
 
+![call is a push and a jump; ret is the pop that undoes it.](../../assets/images/azm-book/book2/call-and-ret.svg)
+
 ---
 
 ## The hardware stack
@@ -44,6 +46,8 @@ The hardware stack is a region of RAM used as a last-in-first-out buffer. When `
 You decide where the stack lives by loading SP with a starting address before the program uses any `call`, `push` or `pop` instructions. A common choice is the top of available RAM: `ld sp, $BFFF` (or whichever address marks the last byte of RAM on your target).
 
 Each push decreases SP by two and writes a 16-bit value. Each pop reads two bytes and increases SP by two.
+
+![The stack runs downward from wherever you point SP. Beginners reliably assume the opposite.](../../assets/images/azm-book/book2/stack-grows-down.svg)
 
 ---
 
@@ -114,6 +118,8 @@ The second transfer (AF into HL) is particularly useful, because there is no `ld
 
 If you swap the pop order above, DE gets AF and HL gets BC, the reverse of what you might expect if you read the code top-to-bottom without thinking about the stack.
 
+![A push and its pop can name different pairs, which is the only route to F. SP ends where it started.](../../assets/images/azm-book/book2/cross-register-move.svg)
+
 ---
 
 ## Shadow registers: saving state without the stack
@@ -149,6 +155,8 @@ When using `ret cc`, the stack must be balanced at the conditional return point 
 A subroutine can itself call another subroutine. Each `call` pushes another return address; each `ret` pops one.
 
 The only limit is the size of the RAM region allocated to the stack. A program that calls too many levels deep, or forgets to pop before returning, will overwrite RAM used for other purposes.
+
+![Return addresses pushed on the way in, popped on the way out. No register records how deep you are.](../../assets/images/azm-book/book2/nested-calls.svg)
 
 ---
 

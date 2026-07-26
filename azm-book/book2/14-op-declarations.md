@@ -82,6 +82,8 @@ end
 
 Calling `swap_hl_de` emits:
 
+![For a body this short, inlining is smaller than calling. A call costs three bytes at every site plus a ret, so the crossover at three sites is a body of five bytes.](../../assets/images/azm-book/book2/inline-versus-call.svg)
+
 ```asm
   push hl
   push de

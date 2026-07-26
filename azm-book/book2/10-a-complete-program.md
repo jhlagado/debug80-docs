@@ -97,6 +97,8 @@ above_64: .db 0
 
 The table base address `values` must be loaded into HL again before the second call because `find_max` advances HL past the end of the table during its scan. Nothing in the language tells you this will happen; this kind of side effect is invisible in a short program and only surfaces as a bug once the code grows.
 
+![The register traffic across both calls. HL is reloaded between them because find_max leaves it past the end of the table.](../../assets/images/azm-book/book2/main-data-flow.svg)
+
 ---
 
 ## `find_max`: a counted loop with a conditional update

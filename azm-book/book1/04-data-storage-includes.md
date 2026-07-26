@@ -163,6 +163,8 @@ Page:
         .ds 256,0      ; reserve 256 bytes filled with zero
 ```
 
+![Each data directive against the bytes it emits, with the byte that carries a string's termination policy marked](../../assets/images/azm-book/book1/data-directives.svg)
+
 ### Storage maps
 
 For programs with several independent storage areas, collect all `.ds` blocks under a dedicated `.org`:

@@ -38,7 +38,11 @@ Result:
 
 The code and the data byte land in the same output binary at their respective offsets.
 
-`.org` sets the assembly address (the address assigned to the next byte), not the byte's position in the output file. It emits nothing itself. A later `.org` that lands inside an already-assembled range silently overwrites those bytes; AZM does not diagnose the overlap.
+`.org` sets the assembly address (the address assigned to the next byte), not the byte's position in the output file. It emits nothing itself.
+
+The address only ever moves forward. An `.org` that names an address behind the last byte assembled is ignored, and the next byte lands at the next free address instead. Nothing is overwritten and nothing is reported, so a label can end up at an address no line of source names.
+
+![The assembly address moves forward only, so an .org that points behind it is ignored and the label lands at the next free address](../../assets/images/azm-book/book1/address-ruler.svg)
 
 ## `$` — the current assembly address
 
@@ -80,6 +84,8 @@ When you use two `.org` directives with a gap between them, the binary output ma
         ; ... code and data ...
         .binto $0200
 ```
+
+![A gap between two origins is zero fill in the flat binary and no records at all in the Intel HEX](../../assets/images/azm-book/book1/org-and-gaps.svg)
 
 ## `.align`
 

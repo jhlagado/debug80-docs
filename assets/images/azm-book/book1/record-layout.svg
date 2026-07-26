@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="452" viewBox="0 0 720 452" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Record layout, nesting and arrays</title>
+  <desc id="figDesc">A four-byte Sprite record with its field offsets, the same record nested inside an Actor with state at offset 4 and timer at 5, and an array of Sprite where element 2 has its flags field at offset 11.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="46" y="40" text-anchor="start" xml:space="preserve">RECORD</text>
+  <text class="dim" x="84" y="56" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="46" y="64" width="76" height="32" rx="2"/>
+  <text class="t" x="84" y="85" text-anchor="middle" xml:space="preserve">x</text>
+  <text class="dim" x="160" y="56" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="122" y="64" width="76" height="32" rx="2"/>
+  <text class="t" x="160" y="85" text-anchor="middle" xml:space="preserve">y</text>
+  <text class="dim" x="236" y="56" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx" x="198" y="64" width="76" height="32" rx="2"/>
+  <text class="t" x="236" y="85" text-anchor="middle" xml:space="preserve">tile</text>
+  <text class="dim" x="312" y="56" text-anchor="middle" xml:space="preserve">3</text>
+  <rect class="bxs" x="274" y="64" width="76" height="32" rx="2"/>
+  <text class="tb" x="312" y="85" text-anchor="middle" xml:space="preserve">flags</text>
+  <path class="rule" d="M46,104 V112 H350 V104"/>
+  <text class="ts" x="198" y="128" text-anchor="middle" xml:space="preserve">sizeof(Sprite) = 4</text>
+  <text class="ts" x="300" y="128" text-anchor="start" xml:space="preserve">offset(Sprite, flags) = 3</text>
+  <text class="ts" x="540" y="62" text-anchor="start" xml:space="preserve">Sprite  .type</text>
+  <text class="ts" x="540" y="78" text-anchor="start" xml:space="preserve">x       .field byte</text>
+  <text class="ts" x="540" y="94" text-anchor="start" xml:space="preserve">y       .field byte</text>
+  <text class="ts" x="540" y="110" text-anchor="start" xml:space="preserve">tile    .field byte</text>
+  <text class="ts" x="540" y="126" text-anchor="start" xml:space="preserve">flags   .field byte</text>
+  <text class="ts" x="540" y="142" text-anchor="start" xml:space="preserve">        .endtype</text>
+  <text class="cap" x="46" y="178" text-anchor="start" xml:space="preserve">NESTED RECORD</text>
+  <path class="rule" d="M46,204 V198 H286 V204"/>
+  <text class="ts" x="166" y="194" text-anchor="middle" xml:space="preserve">pos  .field Sprite</text>
+  <rect class="bxq" x="46" y="210" width="60" height="32" rx="2"/>
+  <text class="ts" x="76" y="230" text-anchor="middle" xml:space="preserve">x</text>
+  <rect class="bxq" x="106" y="210" width="60" height="32" rx="2"/>
+  <text class="ts" x="136" y="230" text-anchor="middle" xml:space="preserve">y</text>
+  <rect class="bxq" x="166" y="210" width="60" height="32" rx="2"/>
+  <text class="ts" x="196" y="230" text-anchor="middle" xml:space="preserve">tile</text>
+  <rect class="bxq" x="226" y="210" width="60" height="32" rx="2"/>
+  <text class="ts" x="256" y="230" text-anchor="middle" xml:space="preserve">flags</text>
+  <rect class="bxs" x="286" y="210" width="60" height="32" rx="2"/>
+  <text class="tb" x="316" y="231" text-anchor="middle" xml:space="preserve">state</text>
+  <rect class="bx" x="346" y="210" width="120" height="32" rx="2"/>
+  <line class="rule" x1="406" y1="210" x2="406" y2="217"/>
+  <line class="rule" x1="406" y1="235" x2="406" y2="242"/>
+  <text class="t" x="406" y="231" text-anchor="middle" xml:space="preserve">timer</text>
+  <text class="dim" x="76" y="258" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="136" y="258" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dim" x="196" y="258" text-anchor="middle" xml:space="preserve">2</text>
+  <text class="dim" x="256" y="258" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dim" x="316" y="258" text-anchor="middle" xml:space="preserve">4</text>
+  <text class="dim" x="376" y="258" text-anchor="middle" xml:space="preserve">5</text>
+  <text class="dim" x="436" y="258" text-anchor="middle" xml:space="preserve">6</text>
+  <text class="ts" x="486" y="216" text-anchor="start" xml:space="preserve">offset(Actor, pos.y) = 1</text>
+  <text class="ts" x="486" y="234" text-anchor="start" xml:space="preserve">offset(Actor, state) = 4</text>
+  <text class="ts" x="486" y="252" text-anchor="start" xml:space="preserve">sizeof(Actor) = 7</text>
+  <text class="cap" x="46" y="296" text-anchor="start" xml:space="preserve">ARRAY OF RECORDS</text>
+  <text class="ts" x="130" y="320" text-anchor="middle" xml:space="preserve">[0]</text>
+  <rect class="bx" x="46" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="67" y="347" text-anchor="middle" xml:space="preserve">x</text>
+  <rect class="bx" x="88" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="109" y="347" text-anchor="middle" xml:space="preserve">y</text>
+  <rect class="bx" x="130" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="151" y="347" text-anchor="middle" xml:space="preserve">tile</text>
+  <rect class="bx" x="172" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="193" y="347" text-anchor="middle" xml:space="preserve">flags</text>
+  <text class="ts" x="298" y="320" text-anchor="middle" xml:space="preserve">[1]</text>
+  <rect class="bx" x="214" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="235" y="347" text-anchor="middle" xml:space="preserve">x</text>
+  <rect class="bx" x="256" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="277" y="347" text-anchor="middle" xml:space="preserve">y</text>
+  <rect class="bx" x="298" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="319" y="347" text-anchor="middle" xml:space="preserve">tile</text>
+  <rect class="bx" x="340" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="361" y="347" text-anchor="middle" xml:space="preserve">flags</text>
+  <text class="ts" x="466" y="320" text-anchor="middle" xml:space="preserve">[2]</text>
+  <rect class="bx" x="382" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="403" y="347" text-anchor="middle" xml:space="preserve">x</text>
+  <rect class="bx" x="424" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="445" y="347" text-anchor="middle" xml:space="preserve">y</text>
+  <rect class="bx" x="466" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="487" y="347" text-anchor="middle" xml:space="preserve">tile</text>
+  <rect class="bxs" x="508" y="328" width="42" height="30" rx="2"/>
+  <text class="ts" x="529" y="347" text-anchor="middle" xml:space="preserve">flags</text>
+  <rect class="bxq" x="550" y="328" width="90" height="30" rx="2"/>
+  <text class="dim" x="595" y="347" text-anchor="middle" xml:space="preserve">to [15]</text>
+  <path class="rule" d="M46,364 V372 H214 V364"/>
+  <text class="ts" x="130" y="390" text-anchor="middle" xml:space="preserve">stride = sizeof(Sprite) = 4</text>
+  <line class="sline" x1="529" y1="378" x2="529" y2="360" marker-end="url(#arS)"/>
+  <text class="t" x="529" y="390" text-anchor="middle" xml:space="preserve">offset(Sprite[16], [2].flags) = 11</text>
+  <text class="dimn" x="46" y="430" text-anchor="start" xml:space="preserve">Every constant here comes from the field list. Insert a field and sizeof, offset and every cast path follow it.</text>
+</svg>

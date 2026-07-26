@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="244" viewBox="0 0 720 244" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Two address spaces</title>
+  <desc id="figDesc">Memory addressed from $0000 to $FFFF by ld, and ports numbered $00 to $FF by in and out, drawn as two separate bars.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="56" y="30" text-anchor="start" xml:space="preserve">MEMORY</text>
+  <rect class="bx" x="56" y="44" width="280" height="54" rx="3"/>
+  <text class="t" x="196" y="68" text-anchor="middle" xml:space="preserve">$0000 … $FFFF</text>
+  <text class="dim" x="196" y="88" text-anchor="middle" xml:space="preserve">65,536 bytes</text>
+  <text class="ts" x="56" y="124" text-anchor="start" xml:space="preserve">ld a, ($8000)</text>
+  <text class="cap" x="420" y="30" text-anchor="start" xml:space="preserve">PORTS</text>
+  <rect class="bxs" x="420" y="44" width="240" height="54" rx="3"/>
+  <text class="tb" x="540" y="68" text-anchor="middle" xml:space="preserve">$00 … $FF</text>
+  <text class="dim" x="540" y="88" text-anchor="middle" xml:space="preserve">256 port numbers</text>
+  <text class="ts" x="420" y="124" text-anchor="start" xml:space="preserve">in a, ($11)     out ($10), a</text>
+  <text class="dimn" x="56" y="168" text-anchor="start" xml:space="preserve">The two spaces are separate. Port $10 and memory address $0010 are different places, reached by different</text>
+  <text class="dimn" x="56" y="186" text-anchor="start" xml:space="preserve">instructions, and the CPU marks which kind of transaction it is on its control bus.</text>
+  <text class="dimn" x="56" y="216" text-anchor="start" xml:space="preserve">All sixteen address pins are driven during I/O. In the (C) forms B appears on the upper pins, which is how the</text>
+  <text class="dimn" x="56" y="234" text-anchor="start" xml:space="preserve">TEC-1G matrix keyboard selects a row. Most systems decode only the low eight bits.</text>
+</svg>

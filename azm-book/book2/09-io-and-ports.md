@@ -37,6 +37,8 @@ model, so follow the target's hardware documentation when it is used.
 The `in` and `out` forms in this chapter perform individual byte transfers; the
 Z80 also has block I/O instructions for repeated transfers.
 
+![Port $10 and memory address $0010 are different places, reached by different instructions.](../../assets/images/azm-book/book2/io-address-space.svg)
+
 ---
 
 ## Writing to a port: `out`
@@ -115,6 +117,8 @@ wait:
 ```
 
 `and $01` masks all bits except bit 0 and sets Z if the result is zero. `jr z, wait` loops back while Z is set (bit 0 still clear).
+
+![The mask discards every bit but the ready flag, so Z answers one question.](../../assets/images/azm-book/book2/polling-loop.svg)
 
 Both reads use immediate low-byte addresses. These examples assume the target
 decodes only that low byte, as many small Z80 systems do.

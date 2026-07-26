@@ -38,6 +38,8 @@ After `sub` or `cp`, Z is set
 when the two values were equal. After `dec`, Z is set when a register reaches
 zero. After `and`, Z is set when none of the tested bits were present.
 
+![The eight bits of F. The two greyed bits are undocumented copies of result bits.](../../assets/images/azm-book/book2/flags-register.svg)
+
 **C** records unsigned overflow. After addition, C is set when the result
 exceeded 255, the carry out of bit 7. After `sub` or `cp`, C is set when A
 was less than the subtracted value: the subtraction had to borrow.
@@ -74,6 +76,8 @@ sub 5     ; A = $FE (−2); Z is clear, C is set (borrow — A was less than 5)
 
 `cp n` does exactly the same subtraction and sets the same flags, but discards
 the result.
+
+![cp leaves flags behind and nothing else. Carry is set when A is below the operand, because that is the case a borrow was needed.](../../assets/images/azm-book/book2/compare-and-branch.svg)
 
 ```asm
 ld a, 5
@@ -312,6 +316,8 @@ arithmetic, and `cp $80` will treat them all as negative.
 
 `neg` applied to −128 gives −128: the mathematical result (+128) does not fit
 in a signed byte, so the bit pattern (`$80`) is unchanged.
+
+![One byte, two readings. $80 is the pivot, and which side of it counts as negative depends entirely on the conditional jump you write next.](../../assets/images/azm-book/book2/signed-unsigned.svg)
 
 ---
 

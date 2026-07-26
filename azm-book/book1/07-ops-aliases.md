@@ -251,6 +251,8 @@ Instruction mnemonic changes, such as source using `MOV` for `LD`, need a source
 
 Use `.include` when you want text copied into the current source unit. Use `.import` when another source file should expose selected `@` declarations and keep its other non-local declarations private.
 
+![What each of the three composition mechanisms puts in the output](../../assets/images/azm-book/book1/bringing-in-code.svg)
+
 ### `.include`
 
 `.include "path"` inserts another source file inline at that point, as if you had typed its contents there. The file path is relative to the including file; add search directories with `-I`.

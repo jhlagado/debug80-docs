@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="334" viewBox="0 0 720 334" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The four ways an instruction names its data</title>
+  <desc id="figDesc">Four panels showing immediate, direct, register indirect and indexed addressing, each with the instruction and where the value actually comes from.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <rect class="bxq" x="30" y="20" width="310" height="132" rx="4"/>
+  <text class="tb" x="44" y="44" text-anchor="start" xml:space="preserve">ld a, 5</text>
+  <text class="dimn" x="44" y="62" text-anchor="start" xml:space="preserve">immediate: the value is in the instruction</text>
+  <rect class="bxs" x="44" y="92" width="54" height="28" rx="2"/>
+  <text class="tb" x="71" y="111" text-anchor="middle" xml:space="preserve">05</text>
+  <text class="dimn" x="112" y="111" text-anchor="start" xml:space="preserve">the operand byte itself</text>
+  <rect class="bxq" x="370" y="20" width="310" height="132" rx="4"/>
+  <text class="tb" x="384" y="44" text-anchor="start" xml:space="preserve">ld a, (Count)</text>
+  <text class="dimn" x="384" y="62" text-anchor="start" xml:space="preserve">direct: the instruction holds an address</text>
+  <rect class="bxs" x="384" y="92" width="54" height="28" rx="2"/>
+  <text class="tb" x="411" y="111" text-anchor="middle" xml:space="preserve">2A</text>
+  <text class="dim" x="411" y="86" text-anchor="middle" xml:space="preserve">$8000</text>
+  <path class="sline" d="M446,106 H488" marker-end="url(#arS)"/>
+  <text class="dimn" x="496" y="111" text-anchor="start" xml:space="preserve">A = $2A</text>
+  <rect class="bxq" x="30" y="178" width="310" height="132" rx="4"/>
+  <text class="tb" x="44" y="202" text-anchor="start" xml:space="preserve">ld a, (hl)</text>
+  <text class="dimn" x="44" y="220" text-anchor="start" xml:space="preserve">register indirect: HL holds the address</text>
+  <rect class="bx" x="44" y="250" width="54" height="28" rx="2"/>
+  <text class="t" x="71" y="269" text-anchor="middle" xml:space="preserve">HL</text>
+  <text class="dim" x="106" y="269" text-anchor="start" xml:space="preserve">$8000</text>
+  <rect class="bxs" x="194" y="250" width="54" height="28" rx="2"/>
+  <text class="tb" x="221" y="269" text-anchor="middle" xml:space="preserve">2A</text>
+  <text class="dim" x="221" y="244" text-anchor="middle" xml:space="preserve">$8000</text>
+  <path class="sline" d="M156,264 H190" marker-end="url(#arS)"/>
+  <rect class="bxq" x="370" y="178" width="310" height="132" rx="4"/>
+  <text class="tb" x="384" y="202" text-anchor="start" xml:space="preserve">ld a, (ix+2)</text>
+  <text class="dimn" x="384" y="220" text-anchor="start" xml:space="preserve">indexed: base register plus a displacement</text>
+  <rect class="bx" x="384" y="250" width="54" height="28" rx="2"/>
+  <text class="t" x="411" y="269" text-anchor="middle" xml:space="preserve">IX</text>
+  <text class="dim" x="446" y="269" text-anchor="start" xml:space="preserve">$8000</text>
+  <rect class="bx" x="506" y="250" width="54" height="28" rx="2"/>
+  <text class="t" x="533" y="269" text-anchor="middle" xml:space="preserve"></text>
+  <text class="dim" x="533" y="244" text-anchor="middle" xml:space="preserve">$8000</text>
+  <rect class="bx" x="560" y="250" width="54" height="28" rx="2"/>
+  <text class="t" x="587" y="269" text-anchor="middle" xml:space="preserve"></text>
+  <rect class="bxs" x="614" y="250" width="54" height="28" rx="2"/>
+  <text class="tb" x="641" y="269" text-anchor="middle" xml:space="preserve">2A</text>
+  <text class="dim" x="641" y="244" text-anchor="middle" xml:space="preserve">$8002</text>
+  <path class="sline" d="M411,278 V292 H641 V282" marker-end="url(#arS)"/>
+  <text class="dim" x="516" y="304" text-anchor="start" xml:space="preserve">base, then two bytes on</text>
+  <text class="dimn" x="30" y="324" text-anchor="start" xml:space="preserve">The first two differ by a pair of brackets and by everything else. One loads five; the other loads whatever is at Count.</text>
+</svg>

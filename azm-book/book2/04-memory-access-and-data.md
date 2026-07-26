@@ -107,6 +107,8 @@ every source and destination pairing is legal.
 
 For a compact LD quick table and the full addressing-shape reference, see [Appendix 3](../appendices/03-addressing-prefixes-and-instruction-forms.md).
 
+![Where each form finds its data. The first two differ by a pair of brackets: one loads the number, the other loads whatever is at that address.](../../assets/images/azm-book/book2/addressing-modes.svg)
+
 ---
 
 ## Signed and Unsigned Values

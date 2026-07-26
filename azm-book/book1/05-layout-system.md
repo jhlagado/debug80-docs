@@ -223,6 +223,8 @@ ELEM2_FLAGS .equ offset(Sprite[16], [2].flags)
         ld   a,(hl)
 ```
 
+![sizeof and offset derive every constant from the field list, through nested records and array elements](../../assets/images/azm-book/book1/record-layout.svg)
+
 ---
 
 ## Named aliases with `.typealias`
@@ -297,6 +299,8 @@ ld   hl,<Actor>Player.pos.x
 ; Equivalent to:
 ld   hl,Player + offset(Actor, pos.x)
 ```
+
+![A cast path is another spelling of an address the arithmetic could reach anyway](../../assets/images/azm-book/book1/cast-paths.svg)
 
 ---
 

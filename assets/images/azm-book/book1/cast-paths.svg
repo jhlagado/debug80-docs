@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="394" viewBox="0 0 720 394" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">A cast path is another name for an address</title>
+  <desc id="figDesc">Three spellings that all resolve to the flags byte of element 3 of Sprites, converging on one byte, then the difference parentheses make and the rule that an index must be a constant.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="46" y="30" text-anchor="start" xml:space="preserve">THREE NAMES FOR ONE ADDRESS</text>
+  <text class="t" x="46" y="60" text-anchor="start" xml:space="preserve">Sprites + (3 * sizeof(Sprite)) + offset(Sprite, flags)</text>
+  <text class="t" x="46" y="88" text-anchor="start" xml:space="preserve">&lt;Sprite[16]&gt;Sprites[3].flags</text>
+  <text class="t" x="46" y="116" text-anchor="start" xml:space="preserve">Sprites + 15</text>
+  <path class="rule" d="M482,50 H490 V122 H482"/>
+  <line class="sline" x1="490" y1="86" x2="530" y2="86" marker-end="url(#arS)"/>
+  <text class="dim" x="594" y="56" text-anchor="middle" xml:space="preserve">Sprites + 15</text>
+  <rect class="bxs" x="534" y="66" width="120" height="36" rx="3"/>
+  <text class="tb" x="594" y="90" text-anchor="middle" xml:space="preserve">flags</text>
+  <text class="dimn" x="534" y="122" text-anchor="start" xml:space="preserve">element 3, field flags</text>
+  <text class="cap" x="46" y="166" text-anchor="start" xml:space="preserve">ADDRESS, OR THE BYTE AT IT</text>
+  <text class="t" x="46" y="194" text-anchor="start" xml:space="preserve">ld   hl,&lt;Sprite[16]&gt;Sprites[3].flags</text>
+  <text class="dimn" x="400" y="194" text-anchor="start" xml:space="preserve">HL gets the address</text>
+  <text class="t" x="46" y="220" text-anchor="start" xml:space="preserve">ld   a,(&lt;Sprite[16]&gt;Sprites[3].flags)</text>
+  <text class="dimn" x="400" y="220" text-anchor="start" xml:space="preserve">A gets the byte stored there</text>
+  <text class="cap" x="46" y="264" text-anchor="start" xml:space="preserve">NESTED AND ALIASED PATHS</text>
+  <text class="t" x="46" y="292" text-anchor="start" xml:space="preserve">&lt;Actor&gt;Player.pos.x</text>
+  <text class="dimn" x="250" y="292" text-anchor="start" xml:space="preserve">is Player + offset(Actor, pos.x)</text>
+  <text class="t" x="46" y="318" text-anchor="start" xml:space="preserve">&lt;SpriteArray&gt;Sprites[3].flags</text>
+  <text class="dimn" x="340" y="318" text-anchor="start" xml:space="preserve">a .typealias adds no path level</text>
+  <text class="dimn" x="46" y="356" text-anchor="start" xml:space="preserve">A cast changes nothing at runtime. It names the layout AZM applies while it computes the offset.</text>
+  <text class="dimn" x="46" y="374" text-anchor="start" xml:space="preserve">Indices inside a cast path must be assembler-time constants, so &lt;Sprite[16]&gt;Sprites[HL].flags is an error.</text>
+</svg>

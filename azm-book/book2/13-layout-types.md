@@ -97,6 +97,8 @@ color   .byte
 
 Each line names a field and gives its type.
 
+![One description, and every offset and size computed from it. Add a field and they all update.](../../assets/images/azm-book/book2/record-layout.svg)
+
 Inside a layout block, `.byte`, `.word` and `.addr` are shorthands:
 
 ```asm
@@ -270,6 +272,8 @@ ScoreOff .equ offset(Row, score)       ; = 16
 
 Array stride is always `sizeof(element)`. A record whose fields do not add up to a power of two still gets an exact packed size; AZM does not round layouts up for you.
 
+![The stride between records is the element size, and the arithmetic that reaches one field of one element.](../../assets/images/azm-book/book2/array-of-records.svg)
+
 ---
 
 ## Unions
@@ -284,6 +288,8 @@ asWord  .word
 ```
 
 `sizeof(Payload)` is 2, the size of `asWord`. Both fields start at offset 0. Reading `asByte` reads the low byte of whatever 16-bit value is stored there.
+
+![Two named readings of the same bytes, both starting at offset 0.](../../assets/images/azm-book/book2/union-overlay.svg)
 
 Unions can hold named types:
 

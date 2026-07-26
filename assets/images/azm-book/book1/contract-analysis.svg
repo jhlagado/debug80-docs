@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="400" viewBox="0 0 720 400" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The register contract pipeline and the mode ladder</title>
+  <desc id="figDesc">A four-stage pipeline from the .routine boundary through inference and call-site checking to findings, above a staircase of the five --rc modes off, audit, warn, error and strict.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="30" y="34" text-anchor="start" xml:space="preserve">ANALYSIS</text>
+  <rect class="bx" x="30" y="48" width="146" height="80" rx="4"/>
+  <text class="tb" x="103" y="68" text-anchor="middle" xml:space="preserve">.routine</text>
+  <text class="ts" x="103" y="86" text-anchor="middle" xml:space="preserve">names the boundary</text>
+  <text class="ts" x="103" y="102" text-anchor="middle" xml:space="preserve">and the contract</text>
+  <rect class="bx" x="202" y="48" width="146" height="80" rx="4"/>
+  <text class="nb" x="275" y="68" text-anchor="middle" xml:space="preserve">inference</text>
+  <text class="ts" x="275" y="86" text-anchor="middle" xml:space="preserve">in, may-write and</text>
+  <text class="ts" x="275" y="102" text-anchor="middle" xml:space="preserve">maybe-out</text>
+  <rect class="bx" x="374" y="48" width="146" height="80" rx="4"/>
+  <text class="nb" x="447" y="68" text-anchor="middle" xml:space="preserve">call sites</text>
+  <text class="ts" x="447" y="86" text-anchor="middle" xml:space="preserve">live after the call</text>
+  <text class="ts" x="447" y="102" text-anchor="middle" xml:space="preserve">meets may-modify</text>
+  <rect class="bx" x="546" y="48" width="146" height="80" rx="4"/>
+  <text class="nb" x="619" y="68" text-anchor="middle" xml:space="preserve">findings</text>
+  <text class="ts" x="619" y="86" text-anchor="middle" xml:space="preserve">reported, or fatal,</text>
+  <text class="ts" x="619" y="102" text-anchor="middle" xml:space="preserve">by mode</text>
+  <line class="none" x1="176" y1="88" x2="202" y2="88" marker-end="url(#ar)"/>
+  <line class="none" x1="348" y1="88" x2="374" y2="88" marker-end="url(#ar)"/>
+  <line class="none" x1="520" y1="88" x2="546" y2="88" marker-end="url(#ar)"/>
+  <text class="cap" x="30" y="170" text-anchor="start" xml:space="preserve">MODE LADDER</text>
+  <rect class="bxq" x="30" y="268" width="128" height="32" rx="3"/>
+  <text class="t" x="94" y="288" text-anchor="middle" xml:space="preserve">off</text>
+  <text class="dimn" x="94" y="320" text-anchor="middle" xml:space="preserve">no analysis</text>
+  <rect class="bx" x="158" y="252" width="128" height="48" rx="3"/>
+  <text class="t" x="222" y="280" text-anchor="middle" xml:space="preserve">audit</text>
+  <text class="dimn" x="222" y="320" text-anchor="middle" xml:space="preserve">no build failure</text>
+  <rect class="bx" x="286" y="236" width="128" height="64" rx="3"/>
+  <text class="t" x="350" y="272" text-anchor="middle" xml:space="preserve">warn</text>
+  <text class="dimn" x="350" y="320" text-anchor="middle" xml:space="preserve">warns, still builds</text>
+  <rect class="bx" x="414" y="220" width="128" height="80" rx="3"/>
+  <text class="t" x="478" y="264" text-anchor="middle" xml:space="preserve">error</text>
+  <text class="dimn" x="478" y="320" text-anchor="middle" xml:space="preserve">fails on proven</text>
+  <rect class="bx" x="542" y="204" width="128" height="96" rx="3"/>
+  <text class="t" x="606" y="256" text-anchor="middle" xml:space="preserve">strict</text>
+  <text class="dimn" x="606" y="320" text-anchor="middle" xml:space="preserve">fails on unproven</text>
+  <text class="dim" x="30" y="348" text-anchor="start" xml:space="preserve">azm --rc audit program.asm</text>
+  <text class="dimn" x="540" y="348" text-anchor="start" xml:space="preserve">off is the default</text>
+  <text class="dimn" x="30" y="380" text-anchor="start" xml:space="preserve">The mode decides whether a finding warns, fails the build, or is never looked for.</text>
+</svg>

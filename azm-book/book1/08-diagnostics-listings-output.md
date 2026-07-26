@@ -24,6 +24,8 @@ program.asm:31:8: warning: [AZMN_REGISTER_CONTRACTS] CALL CHECK_FOO may modify D
 
 The diagnostic ID (`AZMN_PARSE`, `AZMN_SYMBOL` and so on) is the stable part. If you script against AZM output, match on the code rather than the message text.
 
+![The six fields of a diagnostic, and the one worth matching on](../../assets/images/azm-book/book1/diagnostic-line.svg)
+
 ---
 
 ## Reading a failing build
@@ -80,6 +82,8 @@ Invalid command-line arguments and uncaught artifact-writing failures exit 2 and
 ## Output formats
 
 A single assembly run can produce several output files. By default, all use the source file's base path. `--output` selects a new base path for every enabled artifact, and its extension must match the primary `--type`.
+
+![The artifacts of one run, each suppressible on its own](../../assets/images/azm-book/book2/assembler-outputs.svg)
 
 ### Flat binary (`.bin`)
 
@@ -150,6 +154,8 @@ message     8008
 ```
 
 Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter. An unfilled `.ds` reservation prints its address but no bytes. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on further address-and-bytes rows below it, with the source column left blank.
+
+![A listing row is an address, the bytes it emitted and the source line that produced them](../../assets/images/azm-book/book1/listing-line.svg)
 
 Included and imported files are listed inline at their inclusion point, so the listing reads in the same order the assembler consumed the program. After the last source line comes a symbol table: every label and constant with its value, sorted by name.
 

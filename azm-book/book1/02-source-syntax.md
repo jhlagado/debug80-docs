@@ -90,6 +90,8 @@ A semicolon starts a comment that runs to the end of the line:
         ld a,0   ; inline comment
 ```
 
+![The four fields a source line can carry, any of which may be absent](../../assets/images/azm-book/book1/source-line.svg)
+
 ---
 
 ## Labels
@@ -184,6 +186,8 @@ _loop:
 
 `ShiftRow._loop` and `CopyRow._loop` have distinct identities in AZM output and Debug80 maps. Source code uses the short `_loop` spelling. A local label cannot be exported, so `@_loop:` is an error. Equates, enum members, type names and op names cannot begin with `_`. Names beginning with `__` are reserved for assembler-generated symbols.
 
+![An underscore label belongs to the nearest non-local label above it, so the two routines end up with different symbols](../../assets/images/azm-book/book1/label-scope.svg)
+
 ### Forward references
 
 Labels may be used before they are defined:
@@ -228,6 +232,8 @@ The preferred AZM style:
 The assembler enforces no naming policy; different projects may use their own conventions.
 
 Use `@` only for declarations that form an imported module's public interface.
+
+![Only an @ declaration leaves an imported source unit; plain and owner-local labels stay inside it](../../assets/images/azm-book/book1/export-boundary.svg)
 
 ---
 

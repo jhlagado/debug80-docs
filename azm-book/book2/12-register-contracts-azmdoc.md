@@ -56,6 +56,8 @@ The fix is caller-side: reload HL, save it before the call or stop using HL afte
 Register contracts check subroutine boundaries and can replace an incorrect
 assumption about HL with a diagnostic at the call site.
 
+![The bug, and what azm says about it. The analyzer does not know what table means; it knows HL was live across a call that may destroy it.](../../assets/images/azm-book/book2/liveness-violation.svg)
+
 ---
 
 ## A contract is the boundary between caller and callee
@@ -171,6 +173,8 @@ _skip:
 ```
 
 The human-readable `;` line stays for prose.
+
+![A contract names what crosses the boundary, in both directions.](../../assets/images/azm-book/book2/contract-boundary.svg)
 
 Carrier lists use comma-separated names:
 

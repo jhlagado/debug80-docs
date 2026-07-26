@@ -70,6 +70,8 @@ my_routine:
 The stack is LIFO (last in, first out), so the last saved value must be removed
 first. Popping into the wrong pairs restores the values to different registers.
 
+![Which side is responsible for which register. The contract decides this, not the register.](../../assets/images/azm-book/book2/caller-callee-save.svg)
+
 Chapter 10's `find_max` needs one change first: it borrows C as a temporary, so it clobbers a register that is not one of its inputs. Dropping the temporary and comparing against `(hl)` directly leaves HL, B and A, all inputs or outputs. `count_above` cannot be fixed that way, because it uses D internally as the running counter.
 
 The fix: push and pop DE around the body.
@@ -113,35 +115,9 @@ my_routine:
   add ix, sp         ; IX now points to the frame base (top of stack)
 ```
 
-The two bookkeeping entries are already on the stack:
+Two bookkeeping entries are on the stack already, and any arguments the caller pushed before the `call` sit above them:
 
-```
-  higher addresses
-  ┌────────────────────────────────────┐
-  │  return address high   IX+3        │  pushed by CALL
-  │  return address low    IX+2        │  pushed by CALL
-  ├────────────────────────────────────┤
-  │  saved IX high byte    IX+1        │
-  │  saved IX low byte     IX+0  ← IX  │  frame base
-  └────────────────────────────────────┘
-  lower addresses
-```
-
-If the caller pushed arguments onto the stack before the `call`, they sit above the return address:
-
-```
-  higher addresses
-  ┌────────────────────────────────────┐
-  │  arg high byte         IX+5        │  pushed by caller
-  │  arg low byte          IX+4        │
-  │  return address high   IX+3        │
-  │  return address low    IX+2        │
-  ├────────────────────────────────────┤
-  │  saved IX high         IX+1        │
-  │  saved IX low          IX+0  ← IX  │  frame base
-  └────────────────────────────────────┘
-  lower addresses
-```
+![The frame IX points into. Arguments and bookkeeping sit at positive displacements, locals at negative ones.](../../assets/images/azm-book/book2/ix-frame.svg)
 
 You never read IX+0 through IX+3 directly; those slots belong to the bookkeeping.
 

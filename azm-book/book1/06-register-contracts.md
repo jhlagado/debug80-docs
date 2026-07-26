@@ -256,6 +256,8 @@ CheckLoop:
         djnz    CheckLoop
 ```
 
+![Contract analysis runs from the .routine boundary to the call site, and --rc decides what a finding costs](../../assets/images/azm-book/book1/contract-analysis.svg)
+
 ---
 
 ## Stack discipline
@@ -272,6 +274,8 @@ DrawRows:
 ```
 
 Keep `push`/`pop` save-restore pairs inside the same `.routine` region. Each returning path must restore the stack before `ret`.
+
+![A contract binds every returning path, not only the last one in the body](../../assets/images/azm-book/book1/return-paths.svg)
 
 This shape is awkward for register contracts:
 
@@ -370,6 +374,8 @@ Read those keys from the caller's point of view:
 - `in` means the caller must provide this carrier before the call
 - `out` means the caller may intentionally consume this carrier after the call
 
+![The six keys describe what crosses the routine boundary, and in which direction](../../assets/images/azm-book/book2/contract-boundary.svg)
+
 ### Carrier lists
 
 ```asm
@@ -383,6 +389,8 @@ Register pair names expand to their constituent 8-bit registers for analysis: `B
 ```
 
 Use `carry` for the carry flag; `C` names register C. Individual flag names: `carry`, `zero`, `sign`, `parity`, `halfCarry`. `F` may be used as shorthand for the flag set.
+
+![Pair and flag-set carriers expand to the individual registers and flags the analyzer tracks](../../assets/images/azm-book/book1/carrier-expansion.svg)
 
 Prefer individual flag names when a routine returns status in flags:
 
@@ -591,6 +599,8 @@ program.asm:47:9: warning: [AZMN_REGISTER_CONTRACTS] CALL DRAW_FRAME may modify 
 ```
 
 Options: save around the call, restructure so `B` is not live across the call, or fix the contract if `DRAW_FRAME` actually preserves `B`.
+
+![The shape behind the finding: a register held across a call that may destroy it, and read afterwards](../../assets/images/azm-book/book2/liveness-violation.svg)
 
 **Unconfirmed output:**
 

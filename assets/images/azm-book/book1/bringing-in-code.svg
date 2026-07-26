@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="272" viewBox="0 0 720 272" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Three ways to bring in code</title>
+  <desc id="figDesc">Three panels. .include pastes a file text into the current source unit, .import places a module whose @ declarations are visible and whose plain labels are private, and an .asmi interface file supplies register contracts and emits no bytes.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <rect class="bxq" x="20" y="26" width="220" height="200" rx="4"/>
+  <text class="tb" x="34" y="52" text-anchor="start" xml:space="preserve">.include</text>
+  <text class="ts" x="34" y="76" text-anchor="start" xml:space="preserve">.include "hardware.asm"</text>
+  <text class="dimn" x="34" y="100" text-anchor="start" xml:space="preserve">Its text is inserted at that</text>
+  <text class="dimn" x="34" y="118" text-anchor="start" xml:space="preserve">point. One source unit, so</text>
+  <text class="dimn" x="34" y="136" text-anchor="start" xml:space="preserve">non-local names stay unique.</text>
+  <text class="cap" x="34" y="168" text-anchor="start" xml:space="preserve">IN THE OUTPUT</text>
+  <rect class="bxs" x="34" y="178" width="192" height="34" rx="3"/>
+  <text class="ts" x="130" y="199" text-anchor="middle" xml:space="preserve">bytes from that file</text>
+  <rect class="bxq" x="254" y="26" width="220" height="200" rx="4"/>
+  <text class="tb" x="268" y="52" text-anchor="start" xml:space="preserve">.import</text>
+  <text class="ts" x="268" y="76" text-anchor="start" xml:space="preserve">.import "math.asm"</text>
+  <text class="dimn" x="268" y="100" text-anchor="start" xml:space="preserve">Loaded as a module, emitted</text>
+  <text class="dimn" x="268" y="118" text-anchor="start" xml:space="preserve">at that point. @DoubleA is</text>
+  <text class="dimn" x="268" y="136" text-anchor="start" xml:space="preserve">visible; ClampA is private.</text>
+  <text class="cap" x="268" y="168" text-anchor="start" xml:space="preserve">IN THE OUTPUT</text>
+  <rect class="bxs" x="268" y="178" width="192" height="34" rx="3"/>
+  <text class="ts" x="364" y="199" text-anchor="middle" xml:space="preserve">bytes at the import point</text>
+  <rect class="bxq" x="488" y="26" width="220" height="200" rx="4"/>
+  <text class="tb" x="502" y="52" text-anchor="start" xml:space="preserve">.asmi</text>
+  <text class="ts" x="502" y="76" text-anchor="start" xml:space="preserve">--interface mon3.asmi</text>
+  <text class="dimn" x="502" y="100" text-anchor="start" xml:space="preserve">extern contract records for</text>
+  <text class="dimn" x="502" y="118" text-anchor="start" xml:space="preserve">code assembled elsewhere, so</text>
+  <text class="dimn" x="502" y="136" text-anchor="start" xml:space="preserve">calls to it can be checked.</text>
+  <text class="cap" x="502" y="168" text-anchor="start" xml:space="preserve">IN THE OUTPUT</text>
+  <rect class="bxq" x="502" y="178" width="192" height="34" rx="3"/>
+  <text class="ts" x="598" y="199" text-anchor="middle" xml:space="preserve">nothing</text>
+  <text class="dimn" x="20" y="254" text-anchor="start" xml:space="preserve">Two of the three add bytes. An .asmi file adds only what the analyzer needs to check a call it cannot see.</text>
+</svg>

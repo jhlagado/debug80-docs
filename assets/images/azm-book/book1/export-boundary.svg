@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="272" viewBox="0 0 720 272" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The @ export boundary</title>
+  <desc id="figDesc">An imported source unit holding three declarations. Only the one marked @ReadByte reaches the importing unit; a plain non-local label and an owner-local label stop at the boundary.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="30" text-anchor="start" xml:space="preserve">IMPORTED SOURCE UNIT</text>
+  <rect class="bxq" x="40" y="44" width="300" height="152" rx="4"/>
+  <rect class="bxs" x="56" y="58" width="268" height="32" rx="2"/>
+  <text class="tb" x="70" y="80" text-anchor="start" xml:space="preserve">@ReadByte:</text>
+  <text class="dimn" x="190" y="80" text-anchor="start" xml:space="preserve">crosses the wall</text>
+  <rect class="bx" x="56" y="100" width="268" height="32" rx="2"/>
+  <text class="t" x="70" y="122" text-anchor="start" xml:space="preserve">ShiftRow:</text>
+  <text class="dimn" x="190" y="122" text-anchor="start" xml:space="preserve">private here</text>
+  <rect class="bxq" x="56" y="142" width="268" height="32" rx="2"/>
+  <text class="t" x="70" y="164" text-anchor="start" xml:space="preserve">_loop:</text>
+  <text class="dimn" x="190" y="164" text-anchor="start" xml:space="preserve">owned by ShiftRow</text>
+  <line class="sline" x1="340" y1="74" x2="452" y2="74" marker-end="url(#arS)"/>
+  <line class="dash" x1="340" y1="116" x2="392" y2="116"/>
+  <line class="dash" x1="340" y1="158" x2="392" y2="158"/>
+  <text class="dimn" x="348" y="141" text-anchor="start" xml:space="preserve">stops here</text>
+  <text class="cap" x="452" y="30" text-anchor="start" xml:space="preserve">IMPORTING UNIT</text>
+  <rect class="bx" x="452" y="58" width="248" height="90" rx="4"/>
+  <text class="t" x="468" y="84" text-anchor="start" xml:space="preserve">call    ReadByte</text>
+  <text class="dimn" x="468" y="110" text-anchor="start" xml:space="preserve">the symbol name is ReadByte,</text>
+  <text class="dimn" x="468" y="128" text-anchor="start" xml:space="preserve">not @ReadByte</text>
+  <text class="dimn" x="40" y="230" text-anchor="start" xml:space="preserve">The @ marks the declaration. The symbol is ReadByte, and that is what call sites write.</text>
+  <text class="dimn" x="40" y="248" text-anchor="start" xml:space="preserve">@ exports labels, equates, enums, layout types, type aliases and ops.</text>
+</svg>

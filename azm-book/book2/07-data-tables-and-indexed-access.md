@@ -62,6 +62,8 @@ The order matters: read
 the entry first (`ld a, (hl)`), process it, then advance (`inc hl`). If you
 advance before reading, you skip the first entry.
 
+![HL walking a byte table one entry at a time.](../../assets/images/azm-book/book2/hl-walking.svg)
+
 Word entries are two bytes wide, so advance HL by two between them:
 
 ```asm
@@ -117,6 +119,8 @@ ld c, (ix+2)         ; C = low byte field
 
 Offsets larger than 127 or smaller than -128 are not encodable and will cause
 an assembler error.
+
+![One load of the base, then every field by name. IX is unchanged throughout.](../../assets/images/azm-book/book2/ix-displacement.svg)
 
 ---
 
@@ -256,6 +260,8 @@ ldir              ; copy 4 bytes, HL and DE advance, BC reaches 0
 
 After `ldir`, HL points one byte past the last source byte, DE points one byte
 past the last destination byte, and BC holds zero.
+
+![What ldir leaves in HL, DE and BC. The registers ending up past the data is the part that catches people out.](../../assets/images/azm-book/book2/ldir-copy.svg)
 
 `ldir` uses BC as a 16-bit counter. Counts from 1 to 65,535 have their ordinary
 meaning; an initial BC value of zero wraps on the first decrement and copies

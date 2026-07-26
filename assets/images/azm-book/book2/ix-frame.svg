@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The IX stack frame</title>
+  <desc id="figDesc">A frame with caller arguments at IX+4 and above, the return address at IX+2 and IX+3, the saved IX at IX+0 and IX+1, and locals at negative displacements below.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="dimn" x="470" y="30" text-anchor="start" xml:space="preserve">higher addresses</text>
+  <text class="dimn" x="470" y="300" text-anchor="start" xml:space="preserve">lower addresses</text>
+  <rect class="bxq" x="190" y="44" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="64" text-anchor="middle" xml:space="preserve">arg high byte</text>
+  <text class="dim" x="412" y="63" text-anchor="start" xml:space="preserve">IX+5</text>
+  <text class="dimn" x="470" y="63" text-anchor="start" xml:space="preserve">pushed by the caller</text>
+  <rect class="bxq" x="190" y="74" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="94" text-anchor="middle" xml:space="preserve">arg low byte</text>
+  <text class="dim" x="412" y="93" text-anchor="start" xml:space="preserve">IX+4</text>
+  <rect class="bx" x="190" y="104" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="124" text-anchor="middle" xml:space="preserve">return address high</text>
+  <text class="dim" x="412" y="123" text-anchor="start" xml:space="preserve">IX+3</text>
+  <text class="dimn" x="470" y="123" text-anchor="start" xml:space="preserve">pushed by call</text>
+  <rect class="bx" x="190" y="134" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="154" text-anchor="middle" xml:space="preserve">return address low</text>
+  <text class="dim" x="412" y="153" text-anchor="start" xml:space="preserve">IX+2</text>
+  <rect class="bx" x="190" y="164" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="184" text-anchor="middle" xml:space="preserve">saved IX high</text>
+  <text class="dim" x="412" y="183" text-anchor="start" xml:space="preserve">IX+1</text>
+  <text class="dimn" x="470" y="183" text-anchor="start" xml:space="preserve">pushed by the prologue</text>
+  <rect class="bxs" x="190" y="194" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="214" text-anchor="middle" xml:space="preserve">saved IX low</text>
+  <text class="dim" x="412" y="213" text-anchor="start" xml:space="preserve">IX+0</text>
+  <rect class="bxq" x="190" y="224" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="244" text-anchor="middle" xml:space="preserve">first local</text>
+  <text class="dim" x="412" y="243" text-anchor="start" xml:space="preserve">IX−1</text>
+  <text class="dimn" x="470" y="243" text-anchor="start" xml:space="preserve">dec sp, once per byte</text>
+  <rect class="bxq" x="190" y="254" width="210" height="30" rx="2"/>
+  <text class="t" x="295" y="274" text-anchor="middle" xml:space="preserve">second local</text>
+  <text class="dim" x="412" y="273" text-anchor="start" xml:space="preserve">IX−2</text>
+  <line class="rule" x1="190" y1="224" x2="400" y2="224"/>
+  <path class="sline" d="M140,209 H184" marker-end="url(#arS)"/>
+  <text class="cap" x="100" y="213" text-anchor="start" xml:space="preserve">IX</text>
+  <text class="ts" x="40" y="300" text-anchor="start" xml:space="preserve">add ix, sp</text>
+  <text class="dimn" x="40" y="320" text-anchor="start" xml:space="preserve">The prologue points IX at the frame base. ld sp, ix in the epilogue drops every local in one instruction.</text>
+</svg>

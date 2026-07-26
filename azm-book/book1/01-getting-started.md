@@ -79,6 +79,8 @@ By default, AZM writes four output files next to the source:
 
 Chapter 8 covers output selection, suppression flags, Debug80 source paths, exit status and artifact formats.
 
+![The four files one assembly run writes next to the source](../../assets/images/azm-book/book2/assembler-outputs.svg)
+
 ### Assembler output
 
 To trace through the assembly: `ld b,LIMIT` assembles to `$06 $08` at `$0100`; `ld hl,Counter` assembles to `$21 $09 $01` at `$0102` (the address `$0109`, little-endian); `inc (hl)` is `$34` at `$0105`; `djnz _loop` is `$10 $FD` at `$0106`; `halt` is `$76` at `$0108`; and `.db 0` places a zero byte at `$0109`.

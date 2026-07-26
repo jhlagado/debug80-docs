@@ -39,6 +39,8 @@ already saw in Chapter 2.
 
 `ld (result), a` stores A into the byte named `result`. The parentheses mean "memory at the address of `result`."
 
+![The assembly beside the bytes it produces. Write the label and the assembler supplies the address.](../../assets/images/azm-book/book2/source-and-bytes.svg)
+
 ---
 
 ## AZM Extensions and Standard Assembly
@@ -202,6 +204,8 @@ Two example files accompany this chapter.
 ### `00_first_program.asm`
 
 The addition program from the beginning of this chapter: load two values, add them, store the result to a named variable.
+
+![What one assembly run leaves behind. Each artifact can be suppressed; Book 1 Chapter 8 lists the flags.](../../assets/images/azm-book/book2/assembler-outputs.svg)
 
 ### `01_register_moves.asm`
 
