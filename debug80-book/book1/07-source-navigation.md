@@ -41,9 +41,9 @@ in: A,HL    out: carry    clobbers: B,C    preserves: DE,IX
 
 User programs normally start at `0x4000`; reset code and monitor routines live in ROM. Debug80 supplies the platform monitor ROM internally for ordinary TEC-1 and TEC-1G projects.
 
-When execution enters monitor code, the current PC may point outside your source file. Use **Debug80: Open Auxiliary Source** from the Command Palette when a monitor call changes registers unexpectedly or when the Call Stack shows an address inside ROM.
+When execution enters monitor code, the current PC may point outside your source file. Use **Debug80: Open Auxiliary Source** from the Command Palette when a monitor call changes registers unexpectedly or when the Call Stack shows an address inside ROM. The command lists the auxiliary sources the session knows about and opens the one you pick.
 
-Opening auxiliary source gives you the monitor code around routines such as MON-3 display, disk, clock and sound support.
+Those sources cover the monitor code around routines such as MON-3 display, disk, clock and sound support.
 
 When you want to edit or debug the monitor itself, copy the monitor ROM source into the project. [Appendix E](10-copy-monitor-rom.md) describes that workflow.
 

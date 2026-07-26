@@ -96,7 +96,7 @@ The button is disabled when the selected entry is a discovered file rather than 
 
 ## A project with no targets
 
-Remove every target and the project is still a project. It is what **No target yet** produces during initialization.
+Remove every target and the project is still a project, the state **No target yet** produces during initialization.
 
 ![The panel for a project with no targets](../../assets/images/debug80-book/book1/panel-state-no-targets.svg)
 

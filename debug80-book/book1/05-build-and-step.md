@@ -48,7 +48,7 @@ If the source-map status line from the last chapter does not read `current`, the
 
 Click in the editor gutter beside an instruction line. VS Code adds a red marker and Debug80 binds it to the Z80 address generated for that line.
 
-Breakpoints bind to instruction addresses, so place them on executable lines. When execution reaches that address, Debug80 pauses before running the instruction.
+Place breakpoints on executable lines. When execution reaches the address, Debug80 pauses before running the instruction.
 
 ![A breakpoint on an instruction line](../../assets/images/debug80-book/book1/editor-breakpoint.svg)
 

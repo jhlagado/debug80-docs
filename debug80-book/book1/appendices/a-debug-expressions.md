@@ -98,6 +98,8 @@ halfCarry
 
 This keeps `carry` separate from the `C` register.
 
+Flags combine with `not` and `and`:
+
 ```asm
 zero
 not carry
@@ -114,7 +116,7 @@ PACMO_LIVES
 PC = MainLoop
 ```
 
-Build the active target again when a symbol Watch needs to be generated or refreshed.
+If a symbol is missing or stale in Watch, build the active target again.
 
 ## Memory reads
 

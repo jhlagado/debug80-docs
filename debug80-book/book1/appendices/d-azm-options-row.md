@@ -9,7 +9,7 @@ nav_order: 104
 
 # Appendix D — The AZM options row
 
-The Project section has three controls not covered in the main chapters: **Register Contracts**, **Contract Updates** and **Strict labels**.
+The Project section's three AZM controls, **Register Contracts**, **Contract Updates** and **Strict labels**, get their full treatment here.
 
 ![The AZM options row: Register Contracts set to Enforce, Contract Updates set to Ask, and Strict labels ticked](../../../assets/images/debug80-book/book1/panel-state-ready.svg)
 
@@ -29,7 +29,7 @@ Helper:
 
 `Helper` returns something useful in `A`, may leave something in `D`, and destroys `D` in the process. A caller that had a value in `D` it needed after the call has a bug: the kind that survives a hundred correct runs and then fails once the surrounding code changes.
 
-AZM can infer these contracts by reading the code, compare them against the calls it finds, and report the collisions. That analysis is what the first two controls turn on and act upon.
+AZM can infer these contracts by reading the code, compare them against the calls it finds, and report the collisions. The first two controls turn that analysis on and decide what happens to its results.
 
 ## Register Contracts
 

@@ -29,9 +29,7 @@ The local IP shown in CoolTerm is informational.
 
 ## Configure the serial port
 
-Open **Connection > Options** in CoolTerm. Select the serial port for your USB serial adapter and use the TEC-1G monitor settings shown below.
-
-The port name depends on your USB serial adapter and operating system. The line settings are fixed for this workflow: `4800 8 N 2`.
+Open **Connection > Options** in CoolTerm. Select the serial port for your USB serial adapter, whose name depends on the adapter and the operating system, and set the line settings this workflow requires: `4800 8 N 2`.
 
 ## Build and send
 

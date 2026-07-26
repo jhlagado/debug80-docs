@@ -49,7 +49,7 @@ Initialization writes `"targets": {}` and omits `defaultTarget` when you choose 
 
 ### Launch overrides
 
-When a project needs a hand-written VS Code launch configuration, launch options can override the project defaults for that session.
+When a project needs a hand-written VS Code launch configuration, launch options can override the project defaults for that session. These keys go in a `.vscode/launch.json` entry with `"type": "z80"`.
 
 Use `target` when a launch configuration should always start a specific target, even if the Project section currently selects another one.
 

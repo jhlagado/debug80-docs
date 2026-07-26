@@ -33,7 +33,7 @@ build/
 
 Debug80 calls Glimmer's in-process build pipeline, which generates assembly, injects and checks AZM register contracts, assembles the program and rewrites the debug map to refer back to the Glimmer source. It leaves the generated assembly where you can inspect the instructions produced by a declaration.
 
-The pipeline does not emit a separate `.lst` listing or register-contracts report. Build diagnostics appear in VS Code, and the generated assembly remains available in `build/`.
+The pipeline does not emit a separate `.lst` listing or register-contracts report. Build diagnostics appear in VS Code.
 
 ## Debugging Glimmer
 
@@ -47,11 +47,9 @@ The editor features from the source-navigation chapter cover `.glim` too: Go to 
 
 The **Strict labels** checkbox controls assembly targets built directly by AZM. Glimmer builds currently use the Glimmer pipeline's own label handling, so this checkbox does not change them.
 
-Appendix B lists the user commands, Appendix C documents the project and source-map formats, and Appendix D explains the assembler settings in the panel.
-
 ## Learn Glimmer
 
-Continue with [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book0/). It starts with an empty file, teaches each language construct through programs you can build and run in Debug80, and finishes with two complete games.
+When you want the language itself, go to [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book0/). It starts with an empty file, teaches each language construct through programs you can build and run in Debug80, and finishes with two complete games.
 
 ---
 
