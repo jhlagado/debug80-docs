@@ -159,10 +159,10 @@ design decision before it is a technical one:
   small period is a fast walk, a large one a deliberate step.
 
 In a
-falling-blocks game, the rotate key under your thumb wants one press,
-one quarter turn; give it autorepeat and the piece spins out of
-control. The move-left key beside
-it wants the opposite: press and lean, and the piece keeps sliding
+falling-blocks game, you want one press of the rotate key under your
+thumb to give one quarter turn; give it autorepeat and the piece
+spins out of control. From the move-left key beside
+it you want the opposite: press and lean, and the piece keeps sliding
 until you let go. Rover makes the same
 choices for the same reasons (held compass keys, rising GO), and both
 are one-line decisions.

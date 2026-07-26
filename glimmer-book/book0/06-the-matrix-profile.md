@@ -38,7 +38,7 @@ movement rule update all
 three. That design rots: it keeps three cells that must
 always agree, and trusts every future rule to keep them agreeing.
 Compass stores *one* byte, a position on the rim, and derives
-everything the screen wants from it. A fact you compute stays true to
+everything the screen shows from it. A fact you compute stays true to
 its source, because the rule that derives it re-runs whenever the
 source changes; there is no second copy for a future rule to forget.
 

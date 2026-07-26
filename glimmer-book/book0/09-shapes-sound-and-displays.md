@@ -11,8 +11,8 @@ nav_order: 9
 
 Every picture so far has been built from single calls to `FbPlot`: a
 dot, a drop, a bar of pixels in a loop.
-A game's character deserves a body, two pixels by two
-or a whole 8x8 figure, and plotting one point by point inside
+Give a game's character a body, two pixels by two
+or a whole 8x8 figure, and plotting it point by point inside
 every render block drowns the picture in the code that draws it. A
 picture belongs in data, laid out where you can see its shape.
 

@@ -19,7 +19,7 @@ An effect is a decision the game makes when a
 moment arrives: move or stay at the wall, score or miss. A derivation
 is not a decision at all. The bar length is always the count divided
 by eight, chosen by nobody and waiting on no moment: the same
-information restated in the form the screen wants. So the
+information restated in the form the display shows. So the
 three jobs of a game come apart cleanly: rules decide, derivations
 restate, and pictures depict. Glimmer gives each one its own block
 keyword and runs them in a fixed order every frame.

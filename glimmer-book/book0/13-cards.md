@@ -184,9 +184,9 @@ Entry is edge-triggered: an enter block runs when the program
 *changes* to its card, not while the program sits on it. Frame one
 counts; the start card is entered like any other. Every later arrival
 counts too, so each trip back from the game-over screen repaints a
-fresh splash. Setup that runs once per arrival is exactly what a title
-screen wants, and exactly what a new round wants, and it is the
-behaviour you would have hand-built with a DidInit flag and a guard.
+fresh splash. Setup that runs once per arrival suits a title screen
+and a new round alike, and it is the behaviour you would have
+hand-built with a DidInit flag and a guard.
 
 ## Leaving a card
 

@@ -200,7 +200,7 @@ The report tells the same story from the declarations' side. Run
 ```
 
 A fact with a dependent and no raiser: that pattern is this whole
-class of bug, drawn in two lines. The generated file agrees: the
+class of bug, drawn in two lines. The generated file shows the same gap: the
 wrapper after `PaintPixel`'s body, which raised `CHG_PICTURE +
 CHG_MARKS` before the edit, now raises `CHG_PICTURE` alone. Put
 `Marks` back in the header and the build runs clean.

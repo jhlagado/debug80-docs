@@ -303,7 +303,7 @@ routine answers it for all three:
 
 Inside is a four-row loop: shift each piece row right by the candidate
 X, check the floor, and `and` the shifted mask against the occupancy
-plane. Irreducible game logic, wanted by three rules at three
+plane. Irreducible game logic, called by three rules at three
 different moments, with a register contract the assembler checks at every call
 site.
 

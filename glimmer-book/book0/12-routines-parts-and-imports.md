@@ -11,8 +11,7 @@ nav_order: 12
 
 Canvas ended the previous chapter in one file, with a debugger that
 can answer questions about it. The next feature exposes
-the cost of keeping everything there. A painting
-program owes its painter: an eraser. With two painting rules to name,
+the cost of keeping everything there: an eraser. With two painting rules to name,
 `PaintPixel` becomes `StampPixel` on a `Stamp` pulse, and
 the picture it writes becomes `Paint`. AD sits unused beside GO on the
 keypad, and the rule is `StampPixel`'s mirror image: find the

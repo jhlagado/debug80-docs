@@ -163,7 +163,7 @@ line. This is what the reactive model costs at runtime: a few bytes
 and some AND instructions.
 
 Second stop, a dispatcher, the code that asks *did anything this
-block cares about change?*:
+block depends on change?*:
 
 ```asm
 ; --- logic phase dispatch ---

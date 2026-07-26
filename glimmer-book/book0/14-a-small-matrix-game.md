@@ -15,7 +15,7 @@ for the 8x8 RGB LED matrix, timers and ramps to keep time, shapes and
 sounds and the LCD to announce things, arrays to hold a board, parts
 to split a growing file, cards to give a program screens. Each arrived
 in a program built small on purpose, so you could watch it work alone.
-A game wants all of them at once, cooperating. Today we build a
+A game uses all of them at once, cooperating. Today we build a
 complete game, beginning to end, and every line of it is made of
 things you already know.
 
@@ -45,8 +45,7 @@ want the game without the typing.
 
 ## The game on paper
 
-The first question a designer asks: what must the game remember
-between frames?
+A designer starts with what the game must remember between frames:
 
 | Fact | Type | Job |
 |------|------|-----|
@@ -58,9 +57,10 @@ between frames?
 | `Armed` | byte | game-over gate: restart allowed |
 
 The paddle is three pixels wide, and that is a choice about kindness:
-on an eight-column board a single-pixel catcher would demand
-perfection, while three columns forgive a near miss and, a bonus we
-will collect later, make the catch test three instructions. Three
+on an eight-column board a single-pixel catcher would score only on
+perfect placement, while three columns leave room for a near miss
+and, a bonus we will collect later, make the catch test three
+instructions. Three
 wide also means `PadX`, the left column, runs 0..5 rather than 0..7,
 and you will meet that 5 again in the steering rule. One `DropX` and
 one `DropY`, not an array of them, because Skyfall drops one block at
@@ -291,8 +291,7 @@ right stop is 5, the ceiling we chose at the design table when we made
 the paddle three wide. Its right edge reaches column 7, so every
 column a block can fall in is catchable. The held period of 4 is the
 other tuned number here: crossing the whole board costs twenty frames,
-a third of a second, and the late game will demand every bit of that
-speed.
+a third of a second, and the late game leaves you no more than that.
 
 ## The drop
 
@@ -423,7 +422,7 @@ row.
 ## Game over, gated
 
 The player who loses the last life is, at that instant, mashing 4 and
-6 as fast as they can, and `bind key any` hears all of it: an ungated
+6 as fast as they can, and `bind key any` fires on all of it: an ungated
 game-over screen would flash past unread. The fix is a gate that opens
 on a delay.
 
@@ -473,7 +472,7 @@ Follow the press that finally restarts. It fires `AnyKeyP` once. Card
 switches land at the next frame start and pulses clear at frame end, so
 Splash wakes to a quiet keypad and waits for a
 press of its own. Two distinct presses move from game over to falling
-blocks, and each card hears exactly one.
+blocks, one to each card.
 
 Build it, run it under Debug80, and play a
 few rounds before you read on, including a run that reaches GameOver. The

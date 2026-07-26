@@ -23,7 +23,7 @@ limit of 32 flag-carrying cells means a
 board of one-byte facts would overflow the change banks before the
 program drew a pixel. The deeper mismatch, though, is one of meaning. When
 you stamp one pixel, *the picture* changed. A render that draws the
-picture wants one name to watch and one flag to test.
+picture watches one name and tests one flag.
 
 So this chapter adds the two declarations that model group facts.
 Array state reserves a run of bytes under one name and one flag.
@@ -176,9 +176,8 @@ so the declaration reads directly:
 One change flag covers the whole run. Stamping a pixel changes the
 picture, not byte three of some array. A board changes *as a unit*,
 and the render that watches it asks one question: do I need to
-redraw? Per-cell flags would spend your whole flag budget on
-bookkeeping the game never wanted, sixty-four bits of "which byte
-moved" answering a question no block asks. So `updates Picture`
+redraw? Per-cell flags would spend your whole flag budget tracking which
+byte moved, sixty-four bits that no block ever tests. So `updates Picture`
 raises the one flag whichever byte a block wrote, and `on Picture`
 fires when any byte did. The array name is legal exactly where a byte
 cell's name is legal, in `on` lines and in `updates` lines, and it

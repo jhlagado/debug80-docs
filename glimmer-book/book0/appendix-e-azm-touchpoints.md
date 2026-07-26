@@ -106,7 +106,7 @@ plot a second pixel one column over, and the build stops on the
 call:
 
 ```text
-canvas.glim:112:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, but the pre-call value is used later.
+canvas.glim:116:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, but the pre-call value is used later.
 ```
 
 `B` sits on `FbPlot`'s clobbers line, so the value `inc b` consumes
