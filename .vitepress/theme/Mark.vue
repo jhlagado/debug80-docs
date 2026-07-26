@@ -12,6 +12,12 @@
  * whatever monospace face the machine has, which is why the same mark rendered
  * at three different sizes used to look like three different marks: bloated at
  * 128px, an unreadable smudge at 20px. Geometry scales exactly.
+ *
+ * Glimmer is a lit pixel with four rays, not a star. The obvious drawing for
+ * "glimmer" is a four-point sparkle, but that is Gemini's logo almost exactly,
+ * so it is out however well it fits. A lit pixel is the better idea anyway:
+ * Glimmer draws games on a dot-matrix display, and one dot coming on is what
+ * the name describes.
  */
 withDefaults(defineProps<{ book?: 'debug80' | 'azm' | 'glimmer'; size?: number | string }>(), {
   book: 'debug80',
@@ -63,10 +69,13 @@ const LABEL = { debug80: 'Debug80', azm: 'AZM', glimmer: 'Glimmer' };
       <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
         <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
       </g>
-      <path
-        class="mark__accent mark__accent--filled"
-        d="M12 6.4C12 10 13.9 12 17.6 12C13.9 12 12 14 12 17.6C12 14 10.1 12 6.4 12C10.1 12 12 10 12 6.4Z"
-      />
+      <g class="mark__accent" fill="none" stroke-width="1.6" stroke-linecap="round">
+        <path d="M12 6.4V8" />
+        <path d="M12 16V17.6" />
+        <path d="M6.4 12H8" />
+        <path d="M16 12H17.6" />
+      </g>
+      <rect class="mark__accent--filled" x="10" y="10" width="4" height="4" rx="0.4" />
     </template>
   </svg>
 </template>
