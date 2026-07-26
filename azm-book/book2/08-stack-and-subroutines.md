@@ -41,7 +41,7 @@ The hardware stack is a region of RAM used as a last-in-first-out buffer. When `
 
 ## The hardware stack
 
-You decide where it lives by loading SP with a starting address before the program uses any `call`, `push` or `pop` instructions. A common choice is the top of available RAM: `ld sp, $BFFF` (or whichever address marks the last byte of RAM on your target).
+You decide where the stack lives by loading SP with a starting address before the program uses any `call`, `push` or `pop` instructions. A common choice is the top of available RAM: `ld sp, $BFFF` (or whichever address marks the last byte of RAM on your target).
 
 Each push decreases SP by two and writes a 16-bit value. Each pop reads two bytes and increases SP by two.
 

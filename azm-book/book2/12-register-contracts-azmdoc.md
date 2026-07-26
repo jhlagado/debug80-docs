@@ -38,7 +38,7 @@ find_max:
 Running `azm --rc warn source.asm` can then report:
 
 ```text
-source.asm:6: warning: HL is live across call to find_max, but find_max may clobber H, L
+source.asm:6:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max may modify H,L, but the pre-call value is used later.
 ```
 
 The analyzer does not need to know what `table` means. It only needs to know: the caller had a value in HL, called something that may destroy HL, then used HL again.
@@ -235,7 +235,7 @@ A flag can be the entire return value. Document the flag in `out`; put semantic 
 ring_push:
 ```
 
-Avoid embedding flag syntax in the machine line (`out F.C`) when `out carry` is the formal carrier and the comment carries the success/failure story.
+`out F.C` is not valid carrier syntax; AZM rejects the line with `invalid .routine out carrier list`. Write `out carry` and let the plain `;` comment carry the success/failure story.
 
 ### `out` and `clobbers` must not contradict
 
@@ -491,7 +491,7 @@ Does push/pop on BC belong in `clobbers` or not? Why?
 **2. Read a diagnostic.**
 
 ```text
-source.asm:18: warning: HL is live across call to find_max, but find_max may clobber H, L
+source.asm:18:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max may modify H,L, but the pre-call value is used later.
 ```
 
 `find_max` declares `clobbers B, HL, F`. What does the warning mean? What

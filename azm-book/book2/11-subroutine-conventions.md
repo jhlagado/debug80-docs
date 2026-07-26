@@ -70,7 +70,7 @@ my_routine:
 The stack is LIFO (last in, first out), so the last saved value must be removed
 first. Popping into the wrong pairs restores the values to different registers.
 
-`find_max` from Chapter 10 is clean on this front: it only uses HL and B, both of which are its inputs. But `count_above` uses D internally as the running counter.
+Chapter 10's `find_max` needs one change first: it borrows C as a temporary, so it clobbers a register that is not one of its inputs. Dropping the temporary and comparing against `(hl)` directly leaves HL, B and A, all inputs or outputs. `count_above` cannot be fixed that way, because it uses D internally as the running counter.
 
 The fix: push and pop DE around the body.
 
@@ -178,6 +178,8 @@ A caution: the index displacement in `(ix+d)` is a signed 8-bit value. For local
 The only way to communicate a subroutine's register interface in plain assembly is a comment block.
 
 The comment block lives immediately before the subroutine label and declares every input, every output and every register the subroutine leaves changed:
+
+Here is that revised body, with the C temporary gone:
 
 ```asm
 ; find_max: scan a byte table and return the largest value

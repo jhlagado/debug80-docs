@@ -70,7 +70,7 @@ number of iterations.
 
 ## The zero-count hardware semantic
 
-`djnz` uses B as an 8-bit counter. But what happens if you write `ld b, 0`?
+`djnz` uses B as an 8-bit counter, and `ld b, 0` is the case worth knowing about.
 
 On the Z80, DJNZ decrements B before testing. If B starts at 0, the decrement
 wraps to 255 (`$FF`), the result is non-zero and the jump is taken. The loop
@@ -162,9 +162,6 @@ sentinel_loop:
 found:
 ```
 
-The role of DJNZ here is purely a safety bound,
-not the primary exit condition.
-
 ---
 
 ## Flag-exit loops
@@ -174,6 +171,7 @@ through the flag. A typical case: accumulate values until the sum exceeds a
 threshold.
 
 ```asm
+ld hl, table_base
 ld a, 0
 ld b, TableLen
 flag_loop:
@@ -185,7 +183,7 @@ flag_loop:
 done:
 ```
 
-The exit here is driven by `cp threshold / jr nc`, not by DJNZ. The two conditions are independent: whichever fires
+The two conditions are independent: whichever fires
 first ends the loop.
 
 ---

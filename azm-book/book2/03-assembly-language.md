@@ -57,7 +57,7 @@ names and exact behavior vary. AZM uses the dotted spellings shown here.
 - **`type` / `union`**: named record layouts with scalar types (`byte`, `word`, `addr`); `sizeof` and `offset` compute byte sizes and field positions as compile-time constants; `.ds` accepts type expressions such as `.ds Sprite[16]`
 - **`enum`**: named sets of values with no memory allocated
 - **register contracts**: formal `.routine` register contracts on subroutines, verified by the assembler
-- **string directives**: `.cstr`, `.pstr` and `.istr` emit a string with a chosen termination
+- **string directives**: `.cstr`, `.pstr` and `.istr` emit a string with a chosen framing: NUL terminator, length prefix or high-bit terminator
 
 AZM does **not** add function declarations, local variables, structured control-flow keywords or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`.
 
@@ -164,7 +164,7 @@ count:   .db 0
 scratch: .dw 0
 ```
 
-`count` starts at `$8000`. `scratch` follows immediately at `$8001`, because `count` is one byte wide. Since `scratch` is a word, it occupies two bytes: `$8001` and `$8002`. Change `count` to a word later and every address below it shifts without touching the code that accesses them.
+`count` starts at `$8000`. `scratch` follows immediately at `$8001`, because `count` is one byte wide. Since `scratch` is a word, it occupies two bytes: `$8001` and `$8002`. Change `count` to a word later and every label after it moves up by one byte, with no edit to the code that reads or writes them.
 
 `.db` (define byte) places one byte at the current address. `.dw` (define word) places two bytes in little-endian order. The number that follows is the initial value.
 

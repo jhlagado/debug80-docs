@@ -255,12 +255,12 @@ of its own.
 
 ## A worked example: naming the strictly-above check
 
-`count_above` from Chapter 10 contained this pattern to test whether A is strictly greater than C:
+`count_above` from Chapter 10 used this pattern, with its labels spelled out in full to test whether A is strictly greater than C:
 
 ```asm
   cp c
-  jr c, .skip     ; A < C: skip
-  jr z, .skip     ; A = C: skip
+  jr c, _skip     ; A < C: skip
+  jr z, _skip     ; A = C: skip
 ```
 
 Define an op that names the intent:

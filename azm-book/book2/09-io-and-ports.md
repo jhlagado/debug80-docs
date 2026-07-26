@@ -117,8 +117,7 @@ wait:
 `and $01` masks all bits except bit 0 and sets Z if the result is zero. `jr z, wait` loops back while Z is set (bit 0 still clear).
 
 Both reads use immediate low-byte addresses. These examples assume the target
-decodes only that low byte, as many small Z80 systems do. `and $01`, rather
-than `in a, (STATUS_PORT)`, establishes the flags used by `jr z`.
+decodes only that low byte, as many small Z80 systems do.
 
 ---
 

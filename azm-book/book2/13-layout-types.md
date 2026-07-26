@@ -354,7 +354,7 @@ You reach a member through its group name:
 Unqualified names are rejected:
 
 ```asm
-  ld a, South              ; error: unqualified enum member
+  ld a, South              ; error: Enum member "South" must be qualified.
 ```
 
 The qualification requirement prevents accidental name collisions when two enums share a short name. `Direction.East` and `Axis.East` can coexist.
