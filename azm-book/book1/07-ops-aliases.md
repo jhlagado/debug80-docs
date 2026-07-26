@@ -85,6 +85,8 @@ At the call site `load8 a,42`, the assembler matches `a` to `reg8` and `42` to `
 | `mem8` | Memory dereference for byte-form op overloads |
 | `mem16` | Memory dereference for word-form op overloads |
 
+`mem8` and `mem16` currently match the same memory operand shapes. They document the intended width, but an overload family cannot use those two classes alone to distinguish otherwise identical signatures.
+
 Tokens outside this list are fixed tokens, exact literals the call site must reproduce verbatim.
 
 ### Overloaded ops
@@ -155,8 +157,10 @@ AZM detects mutual recursion between two ops as well as direct recursion.
 **No overload matches:**
 
 ```
-error AZMN_PARSE: no overload of 'load8' matches operands (HL, imm8)
-  tried: load8(reg8, imm8)
+error: [AZMN_PARSE] No matching op overload for "load8" with provided operands.
+call-site operands: (HL, 42)
+available overloads:
+  - load8(dst reg8, val imm8) (program.asm:1) ; dst: expects reg8, got HL
 ```
 
 `HL` is a 16-bit register; `reg8` requires an 8-bit register. Change either the call site or add a `reg16` overload.
@@ -164,13 +168,16 @@ error AZMN_PARSE: no overload of 'load8' matches operands (HL, imm8)
 **Expansion cycle:**
 
 ```
-error AZMN_PARSE: op expansion cycle detected: loop_op → helper → loop_op
+error: [AZMN_PARSE] Cyclic op expansion detected for "loop_op".
+expansion chain: loop_op (program.asm:1) -> helper (program.asm:5) -> loop_op (program.asm:1)
 ```
 
 **Arity mismatch:**
 
 ```
-error AZMN_PARSE: 'load8' expects 2 operands, got 1
+error: [AZMN_PARSE] No op overload of "load8" accepts 1 operand(s).
+available overloads:
+  - load8(dst reg8, val imm8)
 ```
 
 ### Op declarations in include files

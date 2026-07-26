@@ -8,7 +8,7 @@ nav_order: 10
 
 # Chapter 9 — Capstone
 
-You have sorted tables, walked strings, packed flags into bytes, built a ring buffer, called yourself on the stack, split files with `.include` and followed `addr` fields through linked structures. This chapter ties those habits into one program: **eight queens** on an 8×8 board.
+You have sorted tables, walked strings, packed flags into bytes, built a ring buffer, called yourself on the stack, split files with `.include` and followed `addr` fields through linked structures. This chapter ties those habits into one program: **eight queens** on an 8x8 board.
 
 The puzzle: place eight queens so no two share a row, column or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different; the companion program counts all of them and stores the total in RAM.
 
@@ -20,7 +20,7 @@ The companion build is [`examples/09_eight_queens.asm`](examples/09_eight_queens
 
 ## The problem: one queen per row
 
-A queen attacks along its row, column and both diagonals. On an 8×8 board with eight queens, each row must hold exactly one queen. That cuts the search space sharply: you are not choosing 64 squares independently; you are choosing **which column** on row 0, then row 1 and so on.
+A queen attacks along its row, column and both diagonals. On an 8x8 board with eight queens, each row must hold exactly one queen. That cuts the search space sharply: you are not choosing 64 squares independently; you are choosing **which column** on row 0, then row 1 and so on.
 
 If row `r` uses column `c`, you must remember:
 
@@ -52,7 +52,7 @@ DIAG_SUM_LEN  .equ 15
 DIAG_DIFF_LEN .equ 15
 ```
 
-You do not need one byte per square to **search**; you need fast answers to “is this column or diagonal already taken?” Chapter 4's masks would pack each `col_used` row into one bit per column (a **bitboard** per row); the companion uses whole bytes for clarity so every test is `ld a, (hl)` / `or a` / `jr nz`.
+You do not need one byte per square to **search**; you need fast answers to "is this column or diagonal already taken?" Chapter 4's masks would pack each `col_used` row into one bit per column (a **bitboard** per row); the companion uses whole bytes for clarity so every test is `ld a, (hl)` / `or a` / `jr nz`.
 
 The companion keeps separate `.ds` labels for teaching clarity. In a larger project you can fold the workspace into one record and name every field offset once, the same idiom as the ring buffer in Chapter 5:
 
@@ -117,7 +117,7 @@ diag_sum_free:
     sub c
 ```
 
-Each failed check jumps to `_next_col` in the row driver, the flat-ASM equivalent of “try the next column” without a `continue` keyword.
+Each failed check jumps to `_next_col` in the row driver, the flat-ASM equivalent of "try the next column" without a `continue` keyword.
 
 ---
 

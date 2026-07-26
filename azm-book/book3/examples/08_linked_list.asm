@@ -1,10 +1,10 @@
 ; 08_linked_list.asm — Chapter 8 companion
 ; Assemble: azm 08_linked_list.asm
 ; Run to halt, then inspect:
-;   list_sum at $800E — sum of 10+20+30 → $003C (60)
+;   list_sum at $800E — sum of $10+$22+$30 → $0062 (98)
 ;   find_hit at $8010 — $01 if $22 was found
 ;   find_node at $800F — address of node_b when found
-;   sum_after at $8011 — sum after push $40 at head → $0064 (100)
+;   sum_after at $8011 — sum after push $40 at head → $00A2 (162)
 
 ListNode .type
 value   .byte

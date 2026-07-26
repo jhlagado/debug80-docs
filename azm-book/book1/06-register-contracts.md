@@ -42,7 +42,7 @@ _row:
         ret
 ```
 
-After `call RenderTile` returns, `B` holds 0. `djnz ScanLoop` decrements that 0, which wraps to 255, and branches back. The outer loop runs 256 times instead of 8.
+After `RenderTile` returns, `B` is 0. The outer `djnz` wraps it to 255 and branches, but the next call resets `B` to 8 and again returns with it at 0. The outer loop therefore never terminates.
 
 The failure occurs at the interface: `ScanTiles` relies on `B` surviving the call, while `RenderTile` overwrites it.
 
@@ -74,8 +74,7 @@ RenderTile:
 With this contract in place and register contracts enabled, AZM inspects every call to `RenderTile`. At the call in `ScanTiles`, `B` holds the loop counter, a value the caller reads after the call returns. AZM reports the conflict:
 
 ```
-scan.asm:7:9: warning AZMN_REGISTER_CARE: B is live across CALL RenderTile,
-  but RenderTile may modify B (clobbers: B)
+scan.asm:7:9: warning: [AZMN_REGISTER_CONTRACTS] CALL RenderTile may modify B, but the pre-call value is used later.
 ```
 
 ---
@@ -223,10 +222,10 @@ The finding name must match the reported register-contract finding kind. A suppr
 Given a routine body, AZM infers:
 
 - **Inputs** (`in`): registers and flags whose incoming value is read before any write
-- **Outputs** (`out`): registers and flags that carry meaningful return values on all exit paths
-- **Clobbers** (`clobbers`): registers written and not restored to the incoming value
+- **May-writes**: registers and flags that the body may change
+- **Output candidates** (`maybe-out`): written values that a caller later consumes and that require review
 
-The inference follows the routine's control-flow graph. It handles push/pop pairs, branch paths, cross-routine tail calls and nonreturning cycles. ROM services and separately assembled code need explicit `.asmi` or profile contracts.
+An output candidate becomes a semantic output only when a `.routine out` clause, `.expectout` or `--accept-out` confirms it. The inference follows the routine's control-flow graph. It handles push/pop pairs, branch paths, cross-routine tail calls and nonreturning cycles. ROM services and separately assembled code need explicit `.asmi` or profile contracts.
 
 When a `.routine` directive declares contract clauses, AZM also checks that declaration against the routine body. A register omitted from the contract is treated as preserved for callers. If the body may write that register, AZM reports `declaration_contract_mismatch`:
 
@@ -366,10 +365,11 @@ Malformed carrier lists are rejected:
 
 ### Contract keys
 
-Five keys are recognized:
+Six contract keys are recognized:
 
 | Key | Meaning |
 |-----|---------|
+| `noreturn` | Declares that control does not return to the caller |
 | `in` | Registers/flags whose incoming value the routine reads |
 | `out` | Registers/flags that carry meaningful returned values |
 | `maybe-out` | Inferred output candidates that need review before promotion |
@@ -378,6 +378,7 @@ Five keys are recognized:
 
 Read those keys from the caller's point of view:
 
+- `noreturn` means there is no continuation after the call or tail transfer
 - `in` means the caller must provide this carrier before the call
 - `out` means the caller may intentionally consume this carrier after the call
 - `maybe-out` means AZM saw a written value that might be an output, but you still need to review it
@@ -601,17 +602,15 @@ Handle these cases with external contracts, manual annotations or separate revie
 **Register contract conflict:**
 
 ```
-warning AZMN_REGISTER_CARE: B is live across CALL DRAW_FRAME at program.asm:47:9,
-  but DRAW_FRAME may modify B (inferred clobbers: A,B,DE)
+program.asm:47:9: warning: [AZMN_REGISTER_CONTRACTS] CALL DRAW_FRAME may modify B, but the pre-call value is used later.
 ```
 
 Options: save around the call, restructure so `B` is not live across the call, or fix the contract if `DRAW_FRAME` actually preserves `B`.
 
-**Inferred clobbers mismatch:**
+**Unconfirmed output:**
 
 ```
-warning AZMN_REGISTER_CARE: DE is live across CALL NORMALISE_COORD, but NORMALISE_COORD
-  may modify D,E (inferred: in DE, out DE — use --accept-out to promote)
+program.asm:58:9: warning: [AZMN_REGISTER_CONTRACTS] CALL NORMALISE_COORD writes D,E and caller reads it later, but the callee does not declare D,E as output.
 ```
 
 This fires when a routine reads and writes the same register but AZM cannot prove whether the pre-call value must survive or the post-call value is an intentional result. For a transform, run `--accept-out` or add the contract manually.

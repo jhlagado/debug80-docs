@@ -41,7 +41,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 
 | Flag | Argument | What it does |
 |------|----------|--------------|
-| `-I` | `dir` | Add `dir` to the `.include` / `.import` search path; repeatable |
+| `-I`, `--include` | `dir` | Add `dir` to the `.include` / `.import` search path; repeatable |
 | `--aliases` | `file` | Load a JSON alias profile; repeatable for multiple files |
 | `--interface` | `file` | Load an `.asmi` external register contract file; repeatable |
 
@@ -62,7 +62,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 | `--reg-infer` | — | Write a register-contract inference review artifact |
 | `--reg-infer-format` | `json` or `markdown` | Select the inference artifact format; default is `json` |
 | `--reg-profile` | `mon3` | Load a built-in register contract summary profile for known ROM environments |
-| `--accept-out` | `NAME:REG` | Promote an inferred clobber of `REG` in routine `NAME` to an intentional output |
+| `--accept-out` | `ROUTINE:CARRIER[,CARRIER…]` | Confirm one or more output candidates; repeatable |
 
 ## Case and compatibility flags
 

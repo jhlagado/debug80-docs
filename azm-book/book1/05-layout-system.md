@@ -59,7 +59,7 @@ Three scalar names are the building blocks for field sizes:
 | `word` | 2 |
 | `addr` | 2 |
 
-These names are valid in size positions: inside `.type` / `.union` declarations and as `.ds` operands. `word` and `addr` have the same size; `addr` records that a field contains an address.
+These names are valid in size positions: inside `.type` / `.union` declarations and as `.ds` operands. `word` and `addr` have the same size. `addr` documents that a field is intended to contain an address; AZM currently applies no separate address type checking.
 
 `sizeof(Type)` returns the exact packed byte count for a type. The result is an ordinary integer constant, valid anywhere an expression is valid:
 

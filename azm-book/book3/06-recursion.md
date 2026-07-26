@@ -175,7 +175,7 @@ demo_nums:
 
 ```asm
 ; sum_u8_rec: sum bytes table[0 .. A-1] into HL (A = count on entry)
-; Self-call; one return address per tail index; no extra pushes in body.
+; Self-call; six bytes per level: two push af pairs and the return address.
 .routine in HL,A out HL clobbers AF,BC,DE
 sum_u8_rec:
     or a
@@ -203,7 +203,7 @@ _zero:
 
 **Recursive step:** read the head byte, `push af` to hold it while the tail sum runs in HL, recurse with `A - 1`, then pop the head into A and promote into DE (`ld e, a` / `ld d, 0`) before `add hl, de`.
 
-The outer `push af` saves the element count; the inner `push af` saves the head byte. Both must be popped in reverse order after the inner `call`. Frame cost is still dominated by return addresses: depth equals `NUMS_LEN` for a full table.
+The outer `push af` saves the element count; the inner `push af` saves the head byte. Both must be popped in reverse order after the inner `call`. Each level therefore costs six bytes, four for the two pushes and two for the return address, and the depth equals `NUMS_LEN` for a full table.
 
 From `main`:
 

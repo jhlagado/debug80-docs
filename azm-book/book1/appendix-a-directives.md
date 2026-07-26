@@ -22,7 +22,7 @@ The table lists AZM directives and declaration keywords. Dotted directives use c
 | `.ds` | `.ds count[,fill]` | Reserves `count` bytes; optional `fill` byte; accepts type expressions | 4, 5 |
 | `.include` | `.include "path"` | Inserts the named source file at this point | 7 |
 | `.import` | `.import "path"` | Loads a source unit and exposes declarations marked with `@` | 7 |
-| `.routine` | `.routine [in ...] [out ...] [maybe-out ...] [clobbers ...] [preserves ...]` | Starts a routine and declares its register contract | 6 |
+| `.routine` | `.routine [noreturn] [in ...] [out ...] [maybe-out ...] [clobbers ...] [preserves ...]` | Starts a routine and declares its register contract | 6 |
 | `.contracts` | `.contracts strict|audit|off` | Sets register-contract policy for the containing source file | 6 |
 | `.rcignore` | `.rcignore finding "reason"` | Suppresses one local finding with required reason text | 6 |
 | `.expectout` | `.expectout carriers` | Marks outputs intentionally consumed from the next emitted instruction in the same file | 6 |

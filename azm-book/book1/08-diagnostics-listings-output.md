@@ -17,9 +17,9 @@ AZM prints diagnostics before it returns. A successful assembly writes the enabl
 AZM prints diagnostics with file name, line number, column, severity and a diagnostic ID:
 
 ```
-program.asm:14:5: error AZMN_PARSE: immediate value 300 out of range 0..255
-program.asm:23:1: error AZMN_SYMBOL: duplicate symbol COUNT
-program.asm:31:8: warning AZMN_REGISTER_CARE: DE is live across CALL CHECK_FOO, but CHECK_FOO may modify D,E
+program.asm:14:5: error: [AZMN_SYMBOL] 8-bit value out of range: 300.
+program.asm:23:1: error: [AZMN_SYMBOL] duplicate symbol: COUNT
+program.asm:31:8: warning: [AZMN_REGISTER_CONTRACTS] CALL CHECK_FOO may modify D,E, but the pre-call value is used later.
 ```
 
 The diagnostic ID (`AZMN_PARSE`, `AZMN_SYMBOL` and so on) is the stable part. If you script against AZM output, match on the code rather than the message text.
@@ -48,7 +48,7 @@ SkipHandler:
 Running `azm scan.asm` stops immediately:
 
 ```
-scan.asm:6:9: error AZMN_PARSE: branch offset 140 out of range -128..127
+scan.asm:6:9: error: [AZMN_SYMBOL] jr nz target out of range for rel8 branch (140, expected -128..127).
 ```
 
 Read it left-to-right: `scan.asm` is the source file; `6` is the line; `9` is the column, pointing at the `jr nz`. The severity `error` means the assembly did not produce a successful binary.
@@ -73,7 +73,7 @@ AZM exits 1 when assembly produces an error diagnostic:
 - A register contract error in `--rc error` or `--rc strict` mode
 Warnings (including register contract warnings in `--rc warn` mode) do not affect the exit code.
 
-Invalid command-line arguments and I/O failures, such as an unwritable output path, exit 2 and print the command usage.
+Invalid command-line arguments and uncaught artifact-writing failures exit 2 and print the command usage. Source-reading failures are reported as source diagnostics and exit 1.
 
 ---
 

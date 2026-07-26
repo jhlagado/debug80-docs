@@ -8,7 +8,7 @@ nav_order: 9
 
 # Chapter 8 — Pointer Structures
 
-Chapter 5 packed several fields into one record, but every byte still lived in a table you indexed by number. This chapter chains **nodes** through **stored addresses**: each record holds data plus a `.word` link to the next node (or zero for “none”).
+Chapter 5 packed several fields into one record, but every byte still lived in a table you indexed by number. This chapter chains **nodes** through **stored addresses**: each record holds data plus a `.word` link to the next node (or zero for "none").
 
 A pointer is a 16-bit address copied into a `.word` field.
 
@@ -20,9 +20,9 @@ The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list
 
 A ring buffer (Chapter 5) keeps all elements in one byte array and moves **indices**. Inserting in the middle of a plain array means copying bytes, expensive on a small machine.
 
-A **singly linked list** stores each element in its own small record. Insert at the **head** is a few stores: wire the new node’s link to the old head, then store the new node’s address in `list_head`.
+A **singly linked list** stores each element in its own small record. Insert at the **head** is a few stores: wire the new node's link to the old head, then store the new node's address in `list_head`.
 
-The trade is explicit: you pay an extra two bytes per node for the link, and you cannot jump to “element 4” in one arithmetic step. You follow links from the head until you arrive or hit **null**.
+The trade is explicit: you pay an extra two bytes per node for the link, and you cannot jump to "element 4" in one arithmetic step. You follow links from the head until you arrive or hit **null**.
 
 ---
 
@@ -41,7 +41,7 @@ LIST_NEXT   .equ offset(ListNode, next)
 NODE_SIZE   .equ sizeof(ListNode)
 ```
 
-`sizeof(ListNode)` is 3: one data byte, then a little-endian 16-bit link. The link field uses `.word` because it holds a full address, the same width as `word` and `addr` in Book 2 Chapter 13. AZM also offers `.addr` when you want the layout name to say “this field is a pointer”; for flat AZM listings, `.word` is enough as long as you treat it as an address in comments and register contracts.
+`sizeof(ListNode)` is 3: one data byte, then a little-endian 16-bit link. The link field uses `.word` because it holds a full address, the same width as `word` and `addr` in Book 2 Chapter 13. AZM also offers `.addr` when you want the layout name to say "this field is a pointer"; for flat AZM listings, `.word` is enough as long as you treat it as an address in comments and register contracts.
 
 **Null** is the address **0**. A missing next node is stored as `.dw 0`. At run time you test the pointer in HL with:
 
@@ -110,13 +110,13 @@ flowchart LR
 
 ## Load the head pointer into HL
 
-Book 2 Chapter 4’s absolute word load applies:
+Book 2 Chapter 4's absolute word load applies:
 
 ```asm
     ld hl, (list_head)
 ```
 
-That expands to a read of the little-endian word at `list_head`. HL now points at `node_a`’s first byte (the `value` field at offset 0).
+That expands to a read of the little-endian word at `list_head`. HL now points at `node_a`'s first byte (the `value` field at offset 0).
 
 To read **only** the link field of the node currently in HL:
 
@@ -135,7 +135,7 @@ Low byte first, then high byte. That is Z80 little-endian order.
 
 ## Traverse: `list_sum_u16`
 
-Summing the list is a `while`-shaped loop (Chapter 2’s invariant style): HL is the current node; DE holds the running 16-bit sum because each payload is one byte but the total can exceed 255.
+Summing the list is a `while`-shaped loop (Chapter 2's invariant style): HL is the current node; DE holds the running 16-bit sum because each payload is one byte but the total can exceed 255.
 
 ```asm
 ; list_sum_u16: sum value bytes along list starting at HL (null = 0)
@@ -168,7 +168,7 @@ _sum_done:
 
 **Invariant at `_sum_loop`:** DE is the sum of all `value` bytes in nodes strictly before the node HL points at (if any). When HL is null, DE is the full sum returned in HL via `ex de, hl`.
 
-For the static chain `$10`, `$22`, `$30`, the result is `$003C` (60). The companion stores it in `list_sum`.
+For the static chain `$10`, `$22`, `$30`, the result is `$0062` (98). The companion stores it in `list_sum`.
 
 HL is not an index; it is a full address that changes to unrelated addresses as you follow `next`.
 
@@ -292,7 +292,7 @@ Pointer routines follow the same `.routine` declarations as the ring buffer and 
 | `.routine out` | HL = sum, found node or 0; carry for find |
 | `.routine clobbers` | Include every register the link walk destroys |
 
-Document whether zero in HL means end-of-list or “not found”. Here both use HL = 0 with carry distinguishing find success.
+Document whether zero in HL means end-of-list or "not found". Here both use HL = 0 with carry distinguishing find success.
 
 ```sh
 azm --rc warn examples/08_linked_list.asm
@@ -312,7 +312,7 @@ right   .word
 .endtype
 ```
 
-**Insert only** (no search routine in the companion file): walk from the root in HL. If HL is null, you are done; in a static demo you pre-allocate the node and store its address from the parent. If HL is non-null, compare the new key with `(hl)` and descend to `left` or `right` using the same little-endian load as `next`, until you reach a null child slot and store the new node’s address there.
+**Insert only** (no search routine in the companion file): walk from the root in HL. If HL is null, you are done; in a static demo you pre-allocate the node and store its address from the parent. If HL is non-null, compare the new key with `(hl)` and descend to `left` or `right` using the same little-endian load as `next`, until you reach a null child slot and store the new node's address there.
 
 ```asm
 TREE_VALUE .equ offset(TreeNode, value)
@@ -353,10 +353,10 @@ The control flow is a loop, not a self-call: depth is bounded by tree height and
 
 | Label | Expected |
 |-------|----------|
-| `list_sum` | `$003C` (60) |
+| `list_sum` | `$0062` (98) |
 | `find_hit` | `$01` |
 | `find_node` | address of `node_b` |
-| `sum_after` | `$0064` (100) |
+| `sum_after` | `$00A2` (162) |
 
 ---
 
@@ -382,7 +382,7 @@ Single-step `list_sum_u16` once: watch HL jump from `node_a` to `node_b` to `nod
 2. Without assembling, write the null test for DE instead of HL. Why does `or e` alone fail to test a 16-bit pointer?
 3. Add `list_count_u8`: return the number of nodes in A. Document `.routine in` / `.routine out` / `.routine clobbers`. Empty list should return 0.
 4. Implement **insert at tail** using a spare node and a walk to the last link. How many memory reads does tail insert cost versus head insert?
-5. Change `next` to `.addr` in the layout only. Does any instruction encoding change? What changes in the reader’s understanding?
+5. Change `next` to `.addr` in the layout only. Does any instruction encoding change? What changes in the reader's understanding?
 6. Write `list_get_u8`: given zero-based index B, return the value byte in A (carry clear if index out of range). Do not use multiplication; advance B times.
 7. For a three-node `TreeNode` pool, initialize a root and insert `5`, `3`, `8` with `bst_insert_u8` sketch logic. Draw the tree boxes and `.word` arrows on paper.
 

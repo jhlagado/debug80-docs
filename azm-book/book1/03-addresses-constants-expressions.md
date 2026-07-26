@@ -222,7 +222,7 @@ In a `.equ` or data context, `$` resolves to the address after the last emitted 
 .ds SPRITE_COUNT * 4
 ```
 
-`.db` accepts unsigned byte values (0–255) or signed byte values (−128–127). `.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767). Negative values are encoded in two's-complement form. `.ds` accepts any non-negative count expression.
+Use 0–255 for unsigned byte data or −128–127 for signed byte data. Numeric `.db` expressions currently emit their low eight bits without a range diagnostic, so values outside those ranges wrap. `.dw` accepts unsigned word values (0–65535) or signed word values (−32768–32767) and reports values outside those ranges. Negative values are encoded in two's-complement form. Use a non-negative count for `.ds`.
 
 To split a 16-bit address into two bytes:
 
@@ -243,19 +243,19 @@ Runtime-dependent values belong in Z80 instructions:
 
 ### Range checks
 
-AZM checks that expression values fit the encoding slot they fill:
+The table separates the signed and unsigned interpretations and records where AZM enforces them:
 
-| Context | Valid range |
-|---------|-------------|
-| 8-bit immediate (`ld a,n`) | 0–255 unsigned or −128–127 signed |
-| 8-bit data (`.db`) | 0–255 unsigned or −128–127 signed |
-| Signed 8-bit branch offset | −128–127 (from next PC) |
-| `bit`/`set`/`res` bit index | 0–7 |
-| 16-bit immediate (`ld hl,nn`) | 0–65535 unsigned or −32768–32767 signed |
-| 16-bit data (`.dw`) | 0–65535 unsigned or −32768–32767 signed |
-| Port number (`in a,(n)`) | 0–255 unsigned or −128–127 signed |
+| Context | Signed and unsigned range | Enforcement |
+|---------|---------------------------|-------------|
+| 8-bit immediate (`ld a,n`) | 0–255 unsigned or −128–127 signed | Checked |
+| 8-bit data (`.db`) | 0–255 unsigned or −128–127 signed | Not checked; low eight bits are emitted |
+| Signed 8-bit branch offset | −128–127 from the next PC | Checked |
+| `bit`/`set`/`res` bit index | 0–7 | Checked |
+| 16-bit immediate (`ld hl,nn`) | 0–65535 unsigned or −32768–32767 signed | Checked |
+| 16-bit data (`.dw`) | 0–65535 unsigned or −32768–32767 signed | Checked |
+| Port number (`in a,(n)`) | 0–255 unsigned or −128–127 signed | Checked |
 
-When a value falls outside the valid range for its encoding, AZM reports a range error naming the value and the allowed range.
+For checked contexts, a value outside the encoding range produces a range diagnostic. Unchecked `.db` wrapping is current assembler behaviour, but source should still use the stated signed or unsigned range so that the intended value remains clear.
 
 ### Expression errors
 

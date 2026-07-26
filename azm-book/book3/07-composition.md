@@ -10,7 +10,7 @@ nav_order: 8
 
 Every chapter so far kept the whole program in one `.asm` file. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each deserve their own file.
 
-AZM 0.3.2 supports **`.import`** for module-style source files with explicit `@` exports; Book 1 covers that reference workflow. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
+AZM supports **`.import`** for module-style source files with explicit `@` exports; Book 1 covers that reference workflow. The companion build is [`examples/07_include_demo.asm`](examples/07_include_demo.asm) with [`examples/lib/strings.asm`](examples/lib/strings.asm).
 
 ---
 

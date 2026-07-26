@@ -23,6 +23,8 @@ Assembly programs commonly contain bytes fixed at assemble time and storage fill
         .db $48,$65,$6C,$6C,$6F   ; "Hello" in hex
 ```
 
+Use 0–255 for unsigned data or −128–127 for signed data. AZM currently writes the low eight bits of a numeric `.db` expression without a range diagnostic, so larger or more negative values wrap.
+
 String literals are also valid in `.db`:
 
 ```asm
@@ -92,7 +94,7 @@ Equivalent to `.db "Hello",0` but makes the termination policy explicit. Use `.c
         .pstr "Hello"   ; emits: $05 H e l l o
 ```
 
-The first byte is the string length (0–255). Strings longer than 255 characters are a range error. Use `.pstr` when the receiving routine reads a leading byte count.
+The first byte stores the string length modulo 256. Keep `.pstr` strings at 255 characters or fewer; AZM currently does not report longer strings and their length prefix wraps. Use `.pstr` when the receiving routine reads a leading byte count.
 
 **`.istr` (inverted terminator string):**
 
@@ -150,7 +152,7 @@ Stack:
         .ds 256        ; reserve 256 bytes
 ```
 
-The operand is a byte count expression. Labels placed before `.ds` name the start of the reserved block.
+The operand is a byte count expression. Use a non-negative count. AZM currently does not diagnose a negative count, which can move the assembly address backwards. Labels placed before `.ds` name the start of the reserved block.
 
 ### Optional fill byte
 
