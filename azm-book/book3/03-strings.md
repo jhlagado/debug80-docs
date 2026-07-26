@@ -54,9 +54,9 @@ Two different numbers confuse beginners:
 
 `strcpy` must not write past capacity if the source is longer than the destination buffer. This chapter copies into a buffer sized for the demo; Chapter 5's records are a natural place to store `(capacity)` beside `(data)`.
 
-### Why not store length in byte zero?
+### The alternative: length in byte zero
 
-You could: byte 0 holds the count, bytes 1..n hold text. That saves a scan for length but shifts every pointer (`HL` must skip the count byte). Null-terminated layout is the convention in this book because the walk is uniform; every algorithm uses the same `ld a,(hl)` / `or a` / `jr z` spine.
+Byte 0 holds the count, bytes 1..n hold the text. That saves a scan for length but shifts every pointer (`HL` must skip the count byte). Null-terminated layout is the convention in this book because the walk is uniform; every algorithm uses the same `ld a,(hl)` / `or a` / `jr z` spine.
 
 ---
 
@@ -85,7 +85,7 @@ Unless a routine says otherwise, Book 3 string routines use:
 ```asm
     ld a, (hl)
     or a
-    jr z, .at_end
+    jr z, _at_end
     ; ... use A as the character ...
     inc hl
 ```
@@ -115,7 +115,7 @@ _done:
 
 The loop invariant: at `_loop`, B equals the number of non-null bytes already passed.
 
-For `message` above, `str_len` at `$8008` should hold `$05` after `halt`.
+For `message` above, `str_len` at `$800E` should hold `$05` after `halt`.
 
 ---
 
@@ -209,7 +209,7 @@ _equal:
 
 Order matters: compare characters **before** you decide both strings ended. A holds the DE character and C holds the HL character, so `cp c` computes DE - HL. Carry therefore means the HL string is greater. If both bytes are zero, Z remains set and `_equal` returns 0. If one string is a prefix of the other, the zero byte orders the shorter string before the longer one.
 
-The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$8009` should be `$01`.
+The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$800F` should be `$01`.
 
 ---
 
@@ -254,11 +254,13 @@ main:
 ## Memory layout after `halt`
 
 ```
-  $8000  ┌──┬──┬──┬──┬──┬──┬──┬──┐
-         │48│45│4C│4C│4F│00│..│..│  message / buffer
-  $8008  ├──┬──┬──┬──┐
-         │05│01│02│  │  str_len, copy_ok, find_index
-         └──┴──┴──┴──┘
+  $8000  ┌──┬──┬──┬──┬──┬──┐
+         │48│45│4C│4C│4F│00│              message
+  $8006  ├──┼──┼──┼──┼──┼──┬──┬──┐
+         │48│45│4C│4C│4F│00│..│..│     buffer, 8 bytes reserved
+  $800E  ├──┼──┼──┤
+         │05│01│02│                    str_len, copy_ok, find_index
+         └──┴──┴──┘
 ```
 
 ---

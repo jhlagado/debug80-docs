@@ -117,7 +117,7 @@ Load the status byte into A first, then test:
 ```asm
     ld a, (device_flags)
     bit_test FLAG_READY
-    jr z, .not_ready
+    jr z, _not_ready
 ```
 
 `bit_test` expands to a single `and mask`. A must already hold the byte under test. The Z80 has no `ld a, a`, so the op deliberately does not reload A.
@@ -157,7 +157,7 @@ For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, 
 ```asm
     ld a, (device_flags)
     bit 2, a
-    jr nz, .still_busy
+    jr nz, _still_busy
 ```
 
 `bit` does not change A; it only sets flags. Use `and mask` when you need a numeric 0/1 in A for storage.

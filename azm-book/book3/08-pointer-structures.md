@@ -48,7 +48,7 @@ NODE_SIZE   .equ sizeof(ListNode)
 ```asm
     ld a, h
     or l
-    jr z, .at_end
+    jr z, _at_end
 ```
 
 `or l` sets Z only when both H and L are zero: the same 16-bit zero test used throughout the course, without a 16-bit compare instruction.

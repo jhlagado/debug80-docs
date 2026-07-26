@@ -242,7 +242,7 @@ Reload HL before the second call. `insertion_sort` returns HL equal to the base 
 
 ---
 
-## When to use layout types here
+## Layout types for record elements
 
 This chapter uses plain `.db` because each element is one byte. When elements are records:
 
