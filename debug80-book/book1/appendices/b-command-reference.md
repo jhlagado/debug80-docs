@@ -11,8 +11,6 @@ nav_order: 102
 
 This appendix lists the Debug80 commands available to users. Open the Command Palette with **Shift-Command-P** on macOS or **Shift-Control-P** on Windows and Linux, then type part of the title.
 
-The commands below cover panel actions and editor workflows.
-
 ## Projects and workspace folders
 
 | Command | Does |

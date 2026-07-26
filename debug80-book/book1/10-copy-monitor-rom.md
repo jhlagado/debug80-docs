@@ -69,15 +69,11 @@ Stepping into monitor services now opens project-local files under `roms/tec1g/m
 
 ## Return to the bundled ROM
 
-Debug80 looks for the platform's local `*.rom.asm` entry file in the project.
-
-For TEC-1G / MON-3, that file is:
+Remove or rename the platform's local `*.rom.asm` entry file and the project goes back to the bundled monitor ROM. For TEC-1G / MON-3 that file is:
 
 ```text
 roms/tec1g/mon3/mon3.rom.asm
 ```
-
-Remove or rename that file when you want the project to use the bundled monitor ROM again.
 
 ---
 
