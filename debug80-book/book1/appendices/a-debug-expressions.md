@@ -172,8 +172,8 @@ Debug80 treats zero as false and any non-zero value as true:
 
 ```asm
 A
-[PLAYER_LIVES]
-not [PLAYER_LIVES]
+[PACMO_LIVES]
+not [PACMO_LIVES]
 carry or zero
 ```
 

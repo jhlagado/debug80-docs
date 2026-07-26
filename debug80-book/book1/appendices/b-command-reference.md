@@ -15,7 +15,7 @@ This appendix lists the Debug80 commands available to users. Open the Command Pa
 
 | Command | Does |
 |---|---|
-| **Debug80: Create Project** | Writes `debug80.json`, asking for a profile kit and a program file. Offers all five kits, where the panel's Platform dropdown takes the default kit for a platform. |
+| **Debug80: Create Project** | Writes `debug80.json`, asking for a profile kit and a program file. Offers all five kits; the panel's Platform dropdown takes only the default kit for a platform. |
 | **Debug80: Select Workspace Folder** | Chooses which open folder Debug80 is working on. |
 | **Debug80: Add Workspace Folder** | Adds a folder to the workspace and offers to initialize it. |
 | **Debug80: Remove Workspace Folder** | Removes a folder from the workspace. Files on disk are untouched. |
