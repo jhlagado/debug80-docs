@@ -37,11 +37,12 @@ appear occupied, pruning valid branches from the search.
 
 ## Board representation in bytes
 
-Two kinds of data live in workspace RAM:
+Five structures live in workspace RAM:
 
 | Structure | Size | Role |
 |-----------|------|------|
-| `queen_cols` | 8 bytes | Solution snapshot: `queen_cols[r]` = column of the queen on row `r` |
+| `queen_cols` | 8 bytes | Current search path: `queen_cols[r]` = tentative column for row `r` |
+| `solution_cols` | 8 bytes | Last completed solution copied from `queen_cols` |
 | `col_used` | 8 bytes | `$00` = column free, `$01` = occupied |
 | `diag_sum_used` | 15 bytes | Forward diagonal index `row + col` (0..14) |
 | `diag_diff_used` | 15 bytes | Backward diagonal index `row - col + DIAG_BIAS` (0..14) |
@@ -66,6 +67,7 @@ The companion keeps separate `.ds` labels for teaching clarity. In a larger proj
 QueenWorkspace .type
 solution_count .word
 queen_cols     .field byte[8]
+solution_cols  .field byte[8]
 col_used       .field byte[8]
 diag_sum_used  .field byte[15]
 diag_diff_used .field byte[15]
@@ -76,7 +78,9 @@ QS_COLS     .equ offset(QueenWorkspace, queen_cols)
 ; ... then use (ix + QS_COLS) as the base of the queen_cols field
 ```
 
-`queen_cols` updates whenever you commit a placement so the last completed board is visible when the count finishes.
+`queen_cols` changes as the search tries placements. `count_solution` copies
+all eight bytes to `solution_cols`, preserving the last completed board after
+backtracking continues.
 
 ---
 
@@ -147,7 +151,9 @@ When all three tests pass, **mark** before `call place_row` and **unmark** after
     pop bc
 ```
 
-`mark_constraints` sets `col_used[c]`, both diagonal bytes and `queen_cols[row]`. `unmark_constraints` clears the flags but leaves `queen_cols` overwritten on the next successful mark, fine for counting.
+`mark_constraints` sets `col_used[c]`, both diagonal bytes and
+`queen_cols[row]`. `unmark_constraints` clears the flags. The next trial may
+overwrite `queen_cols`, so only `solution_cols` is a stable completed board.
 
 `push bc` around each helper preserves **B = row** and **C = column** across `call`s that clobber AF and HL.
 
@@ -181,23 +187,25 @@ _done:
     ret
 ```
 
-**Base case:** `b == 8`, all rows assigned. `count_solution` bumps the 16-bit `solution_count` at `$8000`.
+**Base case:** `b == 8`, all rows assigned. `count_solution` copies the current
+path to `solution_cols`, then bumps the 16-bit `solution_count` at `$8000`.
 
 **Recursive step:** valid column → mark → `inc b` → `call place_row` → unmark → next column.
 
-Depth is at most nine calls (rows 0..8). Each of the eight trial rows keeps a
-saved BC pair while the next row runs; the row-8 base call has only its return
-address. Name the exact budget:
+Depth is at most nine `place_row` calls (rows 0..8). Each of the eight trial
+rows keeps a saved BC pair while the next row runs. At row 8, the nested
+`count_solution` call temporarily adds one more return address. Name the exact
+budget:
 
 ```asm
 PLACE_STEP_BYTES      .equ 4
-PLACE_BASE_BYTES      .equ 2
+PLACE_BASE_BYTES      .equ 4
 PLACE_MAX_DEPTH       .equ BOARD_SIZE + 1
 PLACE_MAX_STACK_BYTES .equ BOARD_SIZE * PLACE_STEP_BYTES + PLACE_BASE_BYTES
 STACK_TOP             .equ $9FFF
 ```
 
-For an 8x8 board, the deepest path occupies `8 × 4 + 2 = 34` bytes.
+For an 8x8 board, the deepest path occupies `8 × 4 + 4 = 36` bytes.
 
 ### Stopping at the first solution
 
@@ -220,7 +228,9 @@ main:
     halt
 ```
 
-`clear_constraints` zeroes 38 bytes in one loop (`col_used`, both diagonal tables). `queen_cols` does not need clearing before a full search because every solution path writes all eight entries before `count_solution` runs.
+`clear_constraints` zeroes 38 bytes in one loop (`col_used`, both diagonal
+tables). Neither column array needs clearing: every completed path writes all
+eight `queen_cols` entries before they are copied to `solution_cols`.
 
 ---
 
@@ -229,8 +239,9 @@ main:
 ```
   $8000  ┌────────┬────────┐
          │ $5C    │ $00    │  solution_count (word) = 92
-  $8002  ├────────┴────────┴── queen_cols[8] — last solution's columns
-  $800A  ├────────────────────── col_used[8]
+  $8002  ├────────┴────────┴── queen_cols[8] — final abandoned search path
+  $800A  ├────────────────────── solution_cols[8] — last complete solution
+  $8012  ├────────────────────── col_used[8]
          ├────────────────────── diag_sum_used[15]
          └────────────────────── diag_diff_used[15]
 ```
@@ -256,7 +267,7 @@ Run to `halt`, then read `solution_count`. If you see `$005C`, the search finish
 
 | File | What to verify |
 |------|----------------|
-| [`examples/09_eight_queens.asm`](examples/09_eight_queens.asm) | `solution_count` = `$005C` (92); `queen_cols` holds one complete placement |
+| [`examples/09_eight_queens.asm`](examples/09_eight_queens.asm) | `solution_count` = `$005C` (92); `solution_cols` holds one complete placement |
 
 ```sh
 azm examples/09_eight_queens.asm
@@ -280,7 +291,9 @@ non-zero. What value does `solution_count` hold now?
 
 ## Book 3 in practice
 
-You finished with a search that combines **arrays**, **bit-level reasoning**, **records**, **recursion**, **multi-file composition** and **pointer layouts**, choosing the representation that fits each problem.
+The capstone combines arrays, constraint flags, recursion and register
+contracts. Across the earlier chapters, records, separate source files and
+pointer layouts provide other representations for problems that need them.
 
 The next step is a project of your own, such as a buffer, parser or game board.
 Choose the representation, write the `.routine` contracts and use the emulator

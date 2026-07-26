@@ -42,15 +42,16 @@ _outer:
     ld hl, key_byte
     pop af
     ld (hl), a
-    ld b, c
+    ld a, c
+    ld (sort_j), a
 _inner:
-    dec b
-    ld a, b
+    ld a, (sort_j)
+    dec a
+    ld (sort_j), a
     cp $FF
     jr z, _place
     push de
     pop hl
-    ld a, b
     ld c, a
     ld b, 0
     add hl, bc
@@ -67,8 +68,8 @@ _inner:
 _place:
     push de
     pop hl
-    inc b
-    ld a, b
+    ld a, (sort_j)
+    inc a
     ld c, a
     ld b, 0
     add hl, bc
@@ -111,6 +112,8 @@ found_index:
 key_byte:
     .ds byte
 sort_index:
+    .ds byte
+sort_j:
     .ds byte
 sort_len:
     .ds byte

@@ -2,7 +2,7 @@
 ; Assemble: azm 09_eight_queens.asm
 ; Run to halt, then inspect:
 ;   (solution_count) at $8000 — number of distinct 8-queen placements → $005C (92)
-;   (queen_cols)     at $8002 — last completed solution: col per row (8 bytes)
+;   (solution_cols)  at $800A — last completed solution: col per row (8 bytes)
 
 BOARD_SIZE   .equ 8
 DIAG_BIAS    .equ 7
@@ -11,9 +11,9 @@ DIAG_DIFF_LEN .equ 15
 
 ; Recursive place_row stack budget:
 ;   each trial row: saved BC (2) + recursive return address (2)
-;   row-8 base call: return address only (2)
+;   row-8 base call: return address + nested count_solution call (4)
 PLACE_STEP_BYTES      .equ 4
-PLACE_BASE_BYTES      .equ 2
+PLACE_BASE_BYTES      .equ 4
 PLACE_MAX_DEPTH       .equ BOARD_SIZE + 1
 PLACE_MAX_STACK_BYTES .equ BOARD_SIZE * PLACE_STEP_BYTES + PLACE_BASE_BYTES
 STACK_TOP             .equ $9FFF
@@ -199,9 +199,13 @@ _next_col:
 _row_done:
     ret
 
-; count_solution: solution_count++
-.routine clobbers AF,HL
+; count_solution: snapshot queen_cols, then solution_count++
+.routine clobbers AF,BC,DE,HL
 count_solution:
+    ld hl, queen_cols
+    ld de, solution_cols
+    ld bc, BOARD_SIZE
+    ldir
     ld hl, solution_count
     ld a, (hl)
     inc a
@@ -216,6 +220,8 @@ _count_done:
 solution_count:
     .ds word
 queen_cols:
+    .ds BOARD_SIZE
+solution_cols:
     .ds BOARD_SIZE
 col_used:
     .ds BOARD_SIZE

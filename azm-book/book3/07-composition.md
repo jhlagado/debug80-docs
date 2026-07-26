@@ -72,7 +72,7 @@ Typical layout:
 | File | Holds |
 |------|--------|
 | `main.asm` (or `07_include_demo.asm`) | `main`, `halt`, RAM labels, `.org` for data |
-| `lib/strings.asm` | Subroutines only — no second `main`, no conflicting `.org` unless you intend overlay |
+| `lib/strings.asm` | Subroutines only — no second `main` and normally no `.org` |
 | `constants.asm` (optional) | `.equ` shared by several includes |
 
 Put `.include` where the library code should land (often after `main` and before data, or at the bottom of the code section). Forward references work: `call strlen_u8` in `main` is legal even when the `.include` line appears later in the source.
@@ -198,6 +198,17 @@ azm --interface monitor.asmi --rc warn main.asm
 
 Your program `call`s `MON_PRINT_CHAR` like any other label; the analyzer checks that you do not keep A live across the call if `clobbers A` says otherwise. Update the `.asmi` when the platform manual changes; the call sites stay the same.
 
+The interface supplies contracts, not machine addresses. The source still
+needs bindings from the platform manual:
+
+```asm
+MON_PRINT_CHAR .equ $0010
+MON_GET_KEY    .equ $0018
+```
+
+Those sample addresses are placeholders; use the entry points documented by
+the target monitor.
+
 Contrast:
 
 | Feature | `.include "lib.asm"` | `.asmi` + `extern` |
@@ -244,7 +255,9 @@ Step into `strlen_u8` once: confirm the library file's labels appear in the list
 
 1. Move `message` and `str_len` into `demo_data.asm`. Include it from `07_include_demo.asm` after the library include. Assemble and confirm `str_len` is still 5.
 2. Add `strcpy_u8` and `strcmp_u8` from Chapter 3 to `lib/strings.asm`. Extend the demo to copy into an 8-byte buffer, set a `copy_ok` byte like Chapter 3 and verify in the emulator.
-3. Create `lib/strings.equ` with `CHAR_L .equ 'L'` and include it from both the library and main. Remove duplicate `.equ` lines from main.
+3. Create `lib/strings.equ` with `CHAR_L .equ 'L'`. Include it once from
+`07_include_demo.asm`, before `lib/strings.asm`, so both main and library can use
+the constant without defining it twice.
 4. Deliberately define two global labels named `done` in different included files. Record the assembler error, then fix one label with a file-specific prefix.
 5. Write a one-routine `lib/math.asm` with `gcd_u16` from Chapter 1. Include it from a new `08_gcd_client.asm` that only calls GCD and stores the result. No string code in that binary.
 6. Sketch a `monitor.asmi` with two `extern` routines you might call on a machine with a character output routine in A and a key reader returning A. List `in`, `out` and `clobbers` for each without writing Z80 bodies.

@@ -78,9 +78,11 @@ An invariant is a statement that stays true every time control reaches a particu
 
 > Before each outer iteration, bytes `values[0 .. c-1]` are sorted ascending.
 
-**Inner shift loop** (label `_inner`, index in B = j):
+**Inner shift loop** (label `_inner`, next candidate derived from `sort_j`):
 
-> The key byte sits in `key_byte`. Bytes `values[j+1 .. c]` equal the old `values[j .. c-1]` from before this inner pass. Bytes `values[0 .. j]` are unchanged and still sorted.
+> The key byte sits in `key_byte`. `sort_j` is one greater than the next index
+> to inspect. Elements already passed on the right have been shifted one place,
+> while the untouched prefix remains sorted.
 
 **Linear search** (label `_scan`):
 
@@ -118,6 +120,8 @@ key_byte:
     .ds byte
 sort_index:
     .ds byte
+sort_j:
+    .ds byte
 sort_len:
     .ds byte
 ```
@@ -149,7 +153,8 @@ Z80 has no `ld de,hl` instruction.
     ld hl, key_byte
     pop af
     ld (hl), a
-    ld b, c
+    ld a, c
+    ld (sort_j), a
 ```
 
 ### Inner shift
@@ -158,13 +163,13 @@ Compare `values[j]` to `key_byte`. While the element is greater, shift it right 
 
 ```asm
 _inner:
-    dec b
-    ld a, b
+    ld a, (sort_j)
+    dec a
+    ld (sort_j), a
     cp $FF
     jr z, _place
     push de
     pop hl
-    ld a, b
     ld c, a
     ld b, 0
     add hl, bc          ; HL = &values[j]
@@ -182,7 +187,9 @@ _inner:
 
 ### Place the key
 
-When j < 0 or `values[j] <= key`, write `key_byte` at `values[j+1]`. `sort_index` restores the outer-loop index after C has been reused for address arithmetic.
+`sort_j` preserves j while B and C form a 16-bit table offset. When j < 0 or
+`values[j] <= key`, write `key_byte` at `values[j+1]`. `sort_index` then
+restores the outer-loop index after C has been reused for address arithmetic.
 
 Full source: see [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
 

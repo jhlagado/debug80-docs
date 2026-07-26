@@ -233,7 +233,9 @@ azm --rc warn examples/01_gcd.asm
 2 for 10–99 and 3 for 100–255. Two `cp` instructions against 10 and 100 are
 enough; no division is needed.
 4. Rewrite `mul8_a_by_c` with a shift-and-add multiply (faster for larger products). Keep the same `.routine` contract.
-5. Run `azm --rc warn` on a deliberate bug: use HL after `call gcd_u16` without reloading. Read the warning and fix the caller.
+5. Run `azm --rc warn` on a deliberate bug: put a later-needed address in DE,
+call `gcd_u16`, then dereference DE without reloading it. Read the warning about
+the declared DE clobber and fix the caller.
 
 ---
 

@@ -338,7 +338,9 @@ Step into `factorial_u8` with `FACT_N = 3` first: count pushes on the way down, 
 2. Hand-count stack bytes for `factorial_u8(5)` at the deepest point. Confirm
 `FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES`.
 3. Rewrite `sum_u8_rec` to recurse on the head index in workspace instead of advancing HL before the call. Does the sum change? Does stack use change?
-4. Add `hanoi_moves_u8` for n ≤ 4 using the recurrence H(0)=0, H(n)=2H(n-1)+1. Use two workspace words to store the first recursive result in HL before the second call. Estimate frame bytes per level.
+4. Add `hanoi_moves_u16` with B in and HL out, using H(0)=0 and
+H(n)=2H(n-1)+1. Make one recursive call for H(n-1), then double HL and add one.
+Estimate the stack bytes per level.
 5. Run `azm --rc warn` on a deliberate bug: call `factorial_u8` and then use B without reloading. Fix using the contract comment.
 6. Lower `STACK_TOP` to `$8010` while keeping data at `$8000`. Run `FACT_N = 5` and describe what fails first.
 

@@ -176,19 +176,20 @@ HL is not an index; it is a full address that changes to unrelated addresses as 
 
 ## Find: `list_find_u8`
 
-Search reuses the same advance pattern, comparing `(hl)` to the target byte in B:
+Search reuses the same advance pattern, keeping the target byte in D while BC
+is reused to address and load each link:
 
 ```asm
 ; list_find_u8: find first node with value A; HL = node or 0, carry set if found
-.routine in HL,A out HL,carry clobbers A,zero,sign,parity,halfCarry,BC,DE
+.routine in HL,A out HL,carry clobbers A,zero,sign,parity,halfCarry,BC,D
 list_find_u8:
-    ld b, a
+    ld d, a
 _find_loop:
     ld a, h
     or l
     jr z, _missing
     ld a, (hl)
-    cp b
+    cp d
     jr z, _found
     ld bc, LIST_NEXT
     add hl, bc
@@ -308,19 +309,56 @@ right   .word
 .endtype
 ```
 
-**Insert only** (no search routine in the companion file): walk from the root in HL. If HL is null, you are done; in a static demo you pre-allocate the node and store its address from the parent. If HL is non-null, compare the new key with `(hl)` and descend to `left` or `right` using the same little-endian load as `next`, until you reach a null child slot and store the new node's address there.
+An insertion routine needs the **address of a link word**, not merely the node
+address. Start HL at the address of the root word. Each iteration loads the node
+address stored there. A zero word is an empty slot, so the routine writes the
+new node address into that link. Otherwise it compares the key and changes HL
+to the address of the existing node's `left` or `right` word.
 
 ```asm
 TREE_VALUE .equ offset(TreeNode, value)
 TREE_LEFT  .equ offset(TreeNode, left)
 TREE_RIGHT .equ offset(TreeNode, right)
 
-; bst_insert_u8: insert A into tree rooted at HL (HL may be 0 = empty slot ptr)
-; Parent must pass address of left/right word or list_head-style root storage.
-; This sketch assumes HL points at a node; use a separate root word in real code.
+; bst_insert_u8: attach pre-initialized node IX for key A
+; In: HL = address of root/child link word, IX = new node, A = key
+; Duplicate keys leave the tree unchanged.
+.routine in HL,IX,A clobbers AF,C,DE,HL
+bst_insert_u8:
+    ld c, a
+_walk:
+    ld e, (hl)
+    inc hl
+    ld d, (hl)
+    dec hl
+    ld a, d
+    or e
+    jr z, _attach
+
+    ex de, hl             ; HL = existing node
+    ld a, (hl)            ; value is the first field
+    cp c
+    ret z
+    ld de, TREE_LEFT
+    jr nc, _descend       ; key < node value
+    ld de, TREE_RIGHT
+_descend:
+    add hl, de            ; HL = address of chosen child link
+    jr _walk
+
+_attach:
+    push ix
+    pop de
+    ld (hl), e
+    inc hl
+    ld (hl), d
+    ret
 ```
 
-The control flow is a loop, not a self-call: depth is bounded by tree height and you avoid stack cost from Chapter 6 unless you deliberately choose recursive search later. A full BST companion would also need a static node pool and a `root` word.
+The caller initializes the new node's value and clears both child words before
+the call. The control flow is a loop, not a self-call, so tree height affects
+iteration count rather than stack depth. A complete implementation also needs a
+node pool and a `root` word.
 
 ---
 
@@ -379,7 +417,9 @@ Single-step `list_sum_u16` once: watch HL jump from `node_a` to `node_b` to `nod
 4. Implement **insert at tail** using a spare node and a walk to the last link. How many memory reads does tail insert cost versus head insert?
 5. Change `next` to `.addr` in the layout only. Does any instruction encoding change? What changes in the reader's understanding?
 6. Write `list_get_u8`: given zero-based index B, return the value byte in A (carry clear if index out of range). Do not use multiplication; advance B times.
-7. For a three-node `TreeNode` pool, initialize a root and insert `5`, `3`, `8` with `bst_insert_u8` sketch logic. Draw the tree boxes and `.word` arrows on paper.
+7. For a three-node `TreeNode` pool, initialize the nodes for keys `5`, `3` and
+`8`, then pass the address of a `root` word to `bst_insert_u8` for each node.
+Draw the tree boxes and `.word` arrows on paper.
 
 ---
 

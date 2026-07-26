@@ -78,7 +78,8 @@ At run time you still load the live byte from `(device_flags)` into A.
     and $FB
 ```
 
-When the mask is not a compile-time constant in A, invert through a scratch register:
+When A already holds the live flag byte, copy it before loading and inverting
+the clear mask:
 
 ```asm
     ld b, a
@@ -238,7 +239,8 @@ shown beside it. There is no `call` instruction.
 1. Start from `$05`. Predict `(device_flags)` after only
 `bit_set FLAG_ERROR` without clearing busy.
 2. Add `FLAG_FAULT .equ $08`. Write `main` so a fault sets bit 3 and forces busy clear in one pass through A.
-3. Implement `popcount_u8`: count set bits in A with a loop (`and 1`, `srl`, increment counter). Return count in A.
+3. Implement `popcount_u8`: copy A to a shifting register, run `srl` eight times
+and increment a counter whenever carry is set. Return the count in A.
 4. Implement `parity_u8`: return 1 if odd number of set bits, 0 if even. One compact approach is to toggle a workspace byte each time you find a set bit.
 5. Compare `and FLAG_ERROR` / `rr a` with `bit 1, a` followed by a branch. Which
 form is appropriate when the caller needs a numeric 0/1 result, and which when
