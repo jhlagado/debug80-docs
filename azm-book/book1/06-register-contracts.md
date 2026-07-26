@@ -272,7 +272,7 @@ CheckLoop:
 
 ## Stack discipline
 
-AZM can check that discipline when the save and restore happen inside the same routine region:
+A routine that saves registers must restore them on every path that returns. AZM can check that when the save and the restore sit inside the same routine region:
 
 ```asm
 .routine preserves BC
@@ -459,7 +459,7 @@ MaskA:
 Review every `maybe-out`. If the value is intentionally returned, promote it with `--accept-out`:
 
 ```sh
-azm --accept-out MASKA:A --rc audit program.asm
+azm --accept-out MaskA:A --rc audit program.asm
 ```
 
 If the value is not part of the routine interface, leave it as a clobber or rewrite the routine so the effect is clear.

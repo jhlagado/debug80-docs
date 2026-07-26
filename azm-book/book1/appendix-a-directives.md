@@ -81,6 +81,8 @@ Carriers in a `.routine` directive are comma-separated register names, flag name
 | `IX` | `IXH,IXL` |
 | `IY` | `IYH,IYL` |
 | `SP` | `SPH,SPL` |
+| `AF` | `A,carry,zero,sign,parity,halfCarry` |
+| `F` | `carry,zero,sign,parity,halfCarry` |
 
 Individual flag names are `carry`, `zero`, `sign`, `parity` and `halfCarry`. `C` names register C. Chapter 6 describes the complete contract format.
 

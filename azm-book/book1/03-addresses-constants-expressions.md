@@ -38,7 +38,7 @@ Result:
 
 The code and the data byte land in the same output binary at their respective offsets.
 
-`.org` sets the assembly address (the address assigned to the next byte), not the byte's position in the output file. It emits nothing itself. AZM warns when a new `.org` overlaps already-assembled bytes.
+`.org` sets the assembly address (the address assigned to the next byte), not the byte's position in the output file. It emits nothing itself. A later `.org` that lands inside an already-assembled range silently overwrites those bytes; AZM does not diagnose the overlap.
 
 ## `$` — the current assembly address
 
@@ -64,7 +64,7 @@ CodeEnd:
 CODE_SIZE   .equ CodeEnd - CodeStart
 ```
 
-Use label subtraction rather than `$ - 0` so the intent is clear and the result stays correct when the code moves.
+Use label subtraction rather than `$ - $0100` so the intent is clear and the result stays correct when the code moves.
 
 ## Gaps between origins
 

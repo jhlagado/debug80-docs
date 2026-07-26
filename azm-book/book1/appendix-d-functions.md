@@ -50,9 +50,8 @@ The full layout system, including how records and unions define their sizes, is 
 ```
 offset(TypeName, fieldName)
 offset(TypeName, outerField.innerField)
-offset(TypeName, arrayField[n])
-offset(TypeName, arrayField[n].innerField)
 offset(TypeName[n], [index].fieldName)
+offset(TypeName[n], [index].outerField.innerField)
 ```
 
 `offset` returns the byte distance from the start of a type to the named field.
@@ -86,7 +85,7 @@ offset(Actor, pos.y)     ; 1
 offset(Actor, state)     ; 5
 ```
 
-**Array indices in `offset` paths must be numeric literals.** `offset(Table, rows[0].x)` is valid. Layout-cast path expressions (Chapter 5) accept assembler-time constant expressions in index positions.
+**An index step in an `offset` path must be a numeric literal, and it must be the first step, applied to an array type expression.** `offset(Sprite[16], [3].flags)` is valid; `offset(Table, rows[0].x)` is a parse error, because the path parser splits on `.` and cannot consume a bracket mid-path. Reach an array-valued field with a layout cast (Chapter 5) instead; layout-cast path expressions accept assembler-time constant expressions in index positions.
 
 ---
 

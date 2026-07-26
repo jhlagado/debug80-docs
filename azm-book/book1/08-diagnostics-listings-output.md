@@ -149,7 +149,7 @@ main        8000
 message     8008
 ```
 
-Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter. An unfilled `.ds` reservation prints its address but no bytes. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on address-only rows below it.
+Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter. An unfilled `.ds` reservation prints its address but no bytes. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on further address-and-bytes rows below it, with the source column left blank.
 
 Included and imported files are listed inline at their inclusion point, so the listing reads in the same order the assembler consumed the program. After the last source line comes a symbol table: every label and constant with its value, sorted by name.
 
@@ -174,7 +174,7 @@ azm --type bin --nohex --nod8m --output out.bin program.asm
 
 ### Register contract artifacts
 
-Register contracts are normally read through compiler diagnostics from `--rc warn`, `--rc error` and `--rc strict`. Optional artifacts require at minimum `--rc audit`:
+Register contracts are normally read through compiler diagnostics from `--rc warn`, `--rc error` and `--rc strict`. The artifact flags below run the analysis on their own, so they work at the default `--rc off`, except `--reg-report`, which needs at least `--rc audit` before the report has any routines to list:
 
 **`.regcontracts.txt` (register contract report):**
 

@@ -94,7 +94,7 @@ A semicolon starts a comment that runs to the end of the line:
 
 ## Labels
 
-Symbols are what let you write `djnz ReadLoop` instead of `djnz $0105`. Every time you reference a label in an operand or expression, AZM substitutes the address. By the time the binary is written, all the names are gone; only bytes remain.
+Symbols let you write `djnz ReadLoop` instead of `djnz $0105`. Every time you reference a label in an operand or expression, AZM substitutes the address. By the time the binary is written, all the names are gone; only bytes remain.
 
 A label names the assembly address at the point where it appears:
 
@@ -233,7 +233,7 @@ Use `@` only for declarations that form an imported module's public interface.
 
 ## Declaration syntax
 
-Declarations put the declared name on the left, without a colon:
+Declarations put the declared name on the left. The AZM convention is to omit the colon on a declaration and reserve it for address labels; the assembler accepts either spelling:
 
 ```asm
 COUNT       .equ 8
@@ -256,7 +256,7 @@ Count:              ; address label
         .db 8
 ```
 
-AZM reports an error for `COUNT: .equ 8`.
+AZM accepts `COUNT: .equ 8`, but the colon is misleading there: nothing is bound to an address.
 
 ---
 
