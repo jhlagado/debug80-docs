@@ -128,8 +128,8 @@ never comes. From the second frame on, `DotX` holds still, so
 `DrawDot` rests. The pixel stays lit because keeping
 the display alive is the machinery's job, not yours.
 
-`DotX`, `DrawDot` and `on DotX` form the fact, rule and declared
-connection.
+`DotX` is the fact and `DrawDot` is the render rule. `on DotX`
+declares their connection: a change to the fact schedules the rule.
 
 ## The dot responds
 

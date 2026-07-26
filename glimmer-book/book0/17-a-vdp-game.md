@@ -419,8 +419,8 @@ and a wasp with full bodies, deep box overlap reads as contact, and
 the tolerance is where you get to be a designer: 8 ends the game the
 frame the boxes meet, 6 waits for closeness and gives the player the
 near miss they will swear they earned. The ending writes
-`CurrentCard` directly, a transition that depends on a runtime test,
-the form required for a transition that depends on a runtime test.
+`CurrentCard` directly because the transition depends on the runtime
+collision test.
 
 ## The score on the LCD
 

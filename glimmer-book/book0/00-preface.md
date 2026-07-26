@@ -55,9 +55,12 @@ runs in Debug80's emulation. If you do own a TEC-1G, the build
 produces a HEX file you can send to the board, and the same program
 runs on the real thing.
 
-The chapters introduce one construct at a time before bringing them
-together in complete games for the 8x8 matrix and the TMS9918 video
-display processor.
+The book first builds the reactive model from state, pulses, bindings
+and compute/effect/render blocks. It then adds matrix drawing, time,
+motion, resources, structured data and debugging before organising
+those parts into complete games. The final chapters move from the 8x8
+matrix to the TMS9918 video display processor and compare what each
+display asks of a game.
 
 ---
 

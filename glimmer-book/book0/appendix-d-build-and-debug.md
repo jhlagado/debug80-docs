@@ -185,10 +185,12 @@ edit, so the fix is one keystroke away from the report.
 
 ## Diagnostics
 
-Compiler messages carry a file, a line, a `[GLIM]` tag and a
-severity. An error stops the current build before it writes new
-artifacts; output from an earlier successful build may still remain
-on disk. A warning prints and the build finishes.
+Diagnostics can come from two stages. A `[GLIM]` compiler error stops
+before Glimmer writes new generated artifacts. An `[AZMN]` assembler
+error occurs after Glimmer has written the new `.main.asm`, but before
+HEX, binary and debug-map output is produced. Artifacts from an
+earlier successful build may still remain on disk. Warnings print and
+the build continues.
 
 **Duplicate name.** Two declarations named `Score` (states, pulses
 and blocks all draw from one pool of names):
