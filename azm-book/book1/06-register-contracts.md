@@ -609,11 +609,13 @@ Options: save around the call, restructure so `B` is not live across the call, o
 
 **Unconfirmed output:**
 
+With `--require-expectout`, an inferred output dependency that has not been confirmed becomes an error:
+
 ```
-program.asm:58:9: warning: [AZMN_REGISTER_CONTRACTS] CALL NORMALISE_COORD writes D,E and caller reads it later, but the callee does not declare D,E as output.
+program.asm:58:9: error: [AZMN_REGISTER_CONTRACTS] CALL NORMALISE_COORD writes D,E and caller reads it later, but NORMALISE_COORD does not declare D,E as output; add `.expectout {D,E}` above the call to confirm the dependency and promote the callee output.
 ```
 
-This fires when a routine reads and writes the same register but AZM cannot prove whether the pre-call value must survive or the post-call value is an intentional result. For a transform, run `--accept-out` or add the contract manually.
+This fires when a routine reads and writes the same registers but AZM cannot prove whether the pre-call values must survive or the post-call values are intentional results. Confirm this call site with `.expectout {D,E}`. If the routine is deliberately a transform at every call site, use `--accept-out NORMALISE_COORD:D,E` or declare `.routine in DE out DE`.
 
 ---
 
