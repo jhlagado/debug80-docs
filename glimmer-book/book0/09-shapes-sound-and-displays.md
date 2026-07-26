@@ -35,6 +35,8 @@ declaration reads like the resource it describes. The scoreboard is
 the odd one out: the six-digit seven-segment display is a service the
 profile library carries, two routines and no declaration.
 
+![Four kinds of output, four instruments, and the keypad coming back the other way.](../../assets/images/glimmer-book/book0/board-instruments.svg)
+
 ## Fanfare
 
 A cyan spark, two pixels square,

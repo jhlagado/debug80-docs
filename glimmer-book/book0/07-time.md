@@ -239,6 +239,8 @@ there it idles. Writing the cell sets it moving again: write 0 and the
 full climb runs from the start. Drip spends only the arrival; motion
 curves use the journey.
 
+![Every frame, every N frames, once, and step by step, on one axis.](../../assets/images/glimmer-book/book0/time-schedules.svg)
+
 A freshly started program's ramp sits at its terminal
 value, idle, so the first climb needs a push, and a familiar word
 supplies it:

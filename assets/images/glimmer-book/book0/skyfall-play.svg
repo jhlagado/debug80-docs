@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="424" viewBox="0 0 720 424" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Skyfall in play</title>
+  <desc id="figDesc">The 8x8 matrix mid-round: a block falling in column 5, the three-pixel paddle at PadX 4 covering columns 4 to 6, the score on the seven-segment display and the lives on the LCD.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="44" text-anchor="start" xml:space="preserve">8X8 MATRIX</text>
+  <text class="dim" x="59" y="62" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="32" y="94" text-anchor="end" xml:space="preserve">0</text>
+  <text class="dim" x="97" y="62" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dim" x="32" y="132" text-anchor="end" xml:space="preserve">1</text>
+  <text class="dim" x="135" y="62" text-anchor="middle" xml:space="preserve">2</text>
+  <text class="dim" x="32" y="170" text-anchor="end" xml:space="preserve">2</text>
+  <text class="dim" x="173" y="62" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dim" x="32" y="208" text-anchor="end" xml:space="preserve">3</text>
+  <text class="dim" x="211" y="62" text-anchor="middle" xml:space="preserve">4</text>
+  <text class="dim" x="32" y="246" text-anchor="end" xml:space="preserve">4</text>
+  <text class="dim" x="249" y="62" text-anchor="middle" xml:space="preserve">5</text>
+  <text class="dim" x="32" y="284" text-anchor="end" xml:space="preserve">5</text>
+  <text class="dim" x="287" y="62" text-anchor="middle" xml:space="preserve">6</text>
+  <text class="dim" x="32" y="322" text-anchor="end" xml:space="preserve">6</text>
+  <text class="dim" x="325" y="62" text-anchor="middle" xml:space="preserve">7</text>
+  <text class="dim" x="32" y="360" text-anchor="end" xml:space="preserve">7</text>
+  <circle class="bxq" cx="59" cy="89" r="14"/>
+  <circle class="bxq" cx="97" cy="89" r="14"/>
+  <circle class="bxq" cx="135" cy="89" r="14"/>
+  <circle class="bxq" cx="173" cy="89" r="14"/>
+  <circle class="bxq" cx="211" cy="89" r="14"/>
+  <circle class="bxq" cx="249" cy="89" r="14"/>
+  <circle class="bxq" cx="287" cy="89" r="14"/>
+  <circle class="bxq" cx="325" cy="89" r="14"/>
+  <circle class="bxq" cx="59" cy="127" r="14"/>
+  <circle class="bxq" cx="97" cy="127" r="14"/>
+  <circle class="bxq" cx="135" cy="127" r="14"/>
+  <circle class="bxq" cx="173" cy="127" r="14"/>
+  <circle class="bxq" cx="211" cy="127" r="14"/>
+  <circle class="bxq" cx="249" cy="127" r="14"/>
+  <circle class="bxq" cx="287" cy="127" r="14"/>
+  <circle class="bxq" cx="325" cy="127" r="14"/>
+  <circle class="bxq" cx="59" cy="165" r="14"/>
+  <circle class="bxq" cx="97" cy="165" r="14"/>
+  <circle class="bxq" cx="135" cy="165" r="14"/>
+  <circle class="bxq" cx="173" cy="165" r="14"/>
+  <circle class="bxq" cx="211" cy="165" r="14"/>
+  <circle class="bxq" cx="249" cy="165" r="14"/>
+  <circle class="bxq" cx="287" cy="165" r="14"/>
+  <circle class="bxq" cx="325" cy="165" r="14"/>
+  <circle class="bxq" cx="59" cy="203" r="14"/>
+  <circle class="bxq" cx="97" cy="203" r="14"/>
+  <circle class="bxq" cx="135" cy="203" r="14"/>
+  <circle class="bxq" cx="173" cy="203" r="14"/>
+  <circle class="bxq" cx="211" cy="203" r="14"/>
+  <circle class="sig" cx="249" cy="203" r="14"/>
+  <circle class="bxq" cx="287" cy="203" r="14"/>
+  <circle class="bxq" cx="325" cy="203" r="14"/>
+  <circle class="bxq" cx="59" cy="241" r="14"/>
+  <circle class="bxq" cx="97" cy="241" r="14"/>
+  <circle class="bxq" cx="135" cy="241" r="14"/>
+  <circle class="bxq" cx="173" cy="241" r="14"/>
+  <circle class="bxq" cx="211" cy="241" r="14"/>
+  <circle class="bxq" cx="249" cy="241" r="14"/>
+  <circle class="bxq" cx="287" cy="241" r="14"/>
+  <circle class="bxq" cx="325" cy="241" r="14"/>
+  <circle class="bxq" cx="59" cy="279" r="14"/>
+  <circle class="bxq" cx="97" cy="279" r="14"/>
+  <circle class="bxq" cx="135" cy="279" r="14"/>
+  <circle class="bxq" cx="173" cy="279" r="14"/>
+  <circle class="bxq" cx="211" cy="279" r="14"/>
+  <circle class="bxq" cx="249" cy="279" r="14"/>
+  <circle class="bxq" cx="287" cy="279" r="14"/>
+  <circle class="bxq" cx="325" cy="279" r="14"/>
+  <circle class="bxq" cx="59" cy="317" r="14"/>
+  <circle class="bxq" cx="97" cy="317" r="14"/>
+  <circle class="bxq" cx="135" cy="317" r="14"/>
+  <circle class="bxq" cx="173" cy="317" r="14"/>
+  <circle class="bxq" cx="211" cy="317" r="14"/>
+  <circle class="bxq" cx="249" cy="317" r="14"/>
+  <circle class="bxq" cx="287" cy="317" r="14"/>
+  <circle class="bxq" cx="325" cy="317" r="14"/>
+  <circle class="bxq" cx="59" cy="355" r="14"/>
+  <circle class="bxq" cx="97" cy="355" r="14"/>
+  <circle class="bxq" cx="135" cy="355" r="14"/>
+  <circle class="bxq" cx="173" cy="355" r="14"/>
+  <circle class="bx2" cx="211" cy="355" r="14"/>
+  <circle class="bx2" cx="249" cy="355" r="14"/>
+  <circle class="bx2" cx="287" cy="355" r="14"/>
+  <circle class="bxq" cx="325" cy="355" r="14"/>
+  <rect class="none" x="40" y="70" width="304" height="304" rx="4"/>
+  <text class="cap" x="380" y="74" text-anchor="start" xml:space="preserve">SCORE, SEVEN-SEGMENT</text>
+  <rect class="bx" x="380" y="86" width="34" height="48" rx="2"/>
+  <text class="t" x="397" y="116" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="414" y="86" width="34" height="48" rx="2"/>
+  <text class="t" x="431" y="116" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="448" y="86" width="34" height="48" rx="2"/>
+  <text class="t" x="465" y="116" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="482" y="86" width="34" height="48" rx="2"/>
+  <text class="t" x="499" y="116" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="516" y="86" width="34" height="48" rx="2"/>
+  <text class="t" x="533" y="116" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="550" y="86" width="34" height="48" rx="2"/>
+  <text class="t" x="567" y="116" text-anchor="middle" xml:space="preserve">7</text>
+  <text class="cap" x="380" y="154" text-anchor="start" xml:space="preserve">LCD</text>
+  <rect class="bx" x="380" y="166" width="260" height="64" rx="3"/>
+  <text class="ts" x="392" y="192" text-anchor="start" xml:space="preserve">CATCH THE BLOCKS</text>
+  <text class="ts" x="392" y="214" text-anchor="start" xml:space="preserve">LIVES 3</text>
+  <text class="dimn" x="380" y="262" text-anchor="start" xml:space="preserve">the drop falls one row every Gravity frames</text>
+  <text class="dimn" x="380" y="282" text-anchor="start" xml:space="preserve">the paddle slides on held 4 and 6</text>
+  <text class="dimn" x="380" y="302" text-anchor="start" xml:space="preserve">caught when DropX minus PadX is under 3</text>
+  <rect class="sig" x="380" y="327" width="13" height="13" rx="2"/>
+  <text class="dimn" x="400" y="338" text-anchor="start" xml:space="preserve">the drop, yellow</text>
+  <rect class="bx2" x="517.52" y="327" width="13" height="13" rx="2"/>
+  <text class="dimn" x="537.52" y="338" text-anchor="start" xml:space="preserve">the paddle, green</text>
+  <text class="dimn" x="40" y="400" text-anchor="start" xml:space="preserve">Every catch scores, chirps and writes Gravity one smaller. Three misses end the round.</text>
+</svg>

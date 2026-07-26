@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="424" viewBox="0 0 720 424" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The tile grid behind, the sprites above</title>
+  <desc id="figDesc">A name table of 32 by 24 cells with eight tiles placed in it, and a transparent sprite layer of 256 by 192 pixels in front of it holding two sprites at pixel positions.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="260" y="42" text-anchor="start" xml:space="preserve">TILE GRID, 32 X 24 CELLS</text>
+  <rect class="bxq" x="260" y="54" width="384" height="240" rx="0"/>
+  <line class="rule" x1="260" y1="54" x2="260" y2="294"/>
+  <line class="rule" x1="272" y1="54" x2="272" y2="294"/>
+  <line class="rule" x1="284" y1="54" x2="284" y2="294"/>
+  <line class="rule" x1="296" y1="54" x2="296" y2="294"/>
+  <line class="rule" x1="308" y1="54" x2="308" y2="294"/>
+  <line class="rule" x1="320" y1="54" x2="320" y2="294"/>
+  <line class="rule" x1="332" y1="54" x2="332" y2="294"/>
+  <line class="rule" x1="344" y1="54" x2="344" y2="294"/>
+  <line class="rule" x1="356" y1="54" x2="356" y2="294"/>
+  <line class="rule" x1="368" y1="54" x2="368" y2="294"/>
+  <line class="rule" x1="380" y1="54" x2="380" y2="294"/>
+  <line class="rule" x1="392" y1="54" x2="392" y2="294"/>
+  <line class="rule" x1="404" y1="54" x2="404" y2="294"/>
+  <line class="rule" x1="416" y1="54" x2="416" y2="294"/>
+  <line class="rule" x1="428" y1="54" x2="428" y2="294"/>
+  <line class="rule" x1="440" y1="54" x2="440" y2="294"/>
+  <line class="rule" x1="452" y1="54" x2="452" y2="294"/>
+  <line class="rule" x1="464" y1="54" x2="464" y2="294"/>
+  <line class="rule" x1="476" y1="54" x2="476" y2="294"/>
+  <line class="rule" x1="488" y1="54" x2="488" y2="294"/>
+  <line class="rule" x1="500" y1="54" x2="500" y2="294"/>
+  <line class="rule" x1="512" y1="54" x2="512" y2="294"/>
+  <line class="rule" x1="524" y1="54" x2="524" y2="294"/>
+  <line class="rule" x1="536" y1="54" x2="536" y2="294"/>
+  <line class="rule" x1="548" y1="54" x2="548" y2="294"/>
+  <line class="rule" x1="560" y1="54" x2="560" y2="294"/>
+  <line class="rule" x1="572" y1="54" x2="572" y2="294"/>
+  <line class="rule" x1="584" y1="54" x2="584" y2="294"/>
+  <line class="rule" x1="596" y1="54" x2="596" y2="294"/>
+  <line class="rule" x1="608" y1="54" x2="608" y2="294"/>
+  <line class="rule" x1="620" y1="54" x2="620" y2="294"/>
+  <line class="rule" x1="632" y1="54" x2="632" y2="294"/>
+  <line class="rule" x1="644" y1="54" x2="644" y2="294"/>
+  <line class="rule" x1="260" y1="54" x2="644" y2="54"/>
+  <line class="rule" x1="260" y1="64" x2="644" y2="64"/>
+  <line class="rule" x1="260" y1="74" x2="644" y2="74"/>
+  <line class="rule" x1="260" y1="84" x2="644" y2="84"/>
+  <line class="rule" x1="260" y1="94" x2="644" y2="94"/>
+  <line class="rule" x1="260" y1="104" x2="644" y2="104"/>
+  <line class="rule" x1="260" y1="114" x2="644" y2="114"/>
+  <line class="rule" x1="260" y1="124" x2="644" y2="124"/>
+  <line class="rule" x1="260" y1="134" x2="644" y2="134"/>
+  <line class="rule" x1="260" y1="144" x2="644" y2="144"/>
+  <line class="rule" x1="260" y1="154" x2="644" y2="154"/>
+  <line class="rule" x1="260" y1="164" x2="644" y2="164"/>
+  <line class="rule" x1="260" y1="174" x2="644" y2="174"/>
+  <line class="rule" x1="260" y1="184" x2="644" y2="184"/>
+  <line class="rule" x1="260" y1="194" x2="644" y2="194"/>
+  <line class="rule" x1="260" y1="204" x2="644" y2="204"/>
+  <line class="rule" x1="260" y1="214" x2="644" y2="214"/>
+  <line class="rule" x1="260" y1="224" x2="644" y2="224"/>
+  <line class="rule" x1="260" y1="234" x2="644" y2="234"/>
+  <line class="rule" x1="260" y1="244" x2="644" y2="244"/>
+  <line class="rule" x1="260" y1="254" x2="644" y2="254"/>
+  <line class="rule" x1="260" y1="264" x2="644" y2="264"/>
+  <line class="rule" x1="260" y1="274" x2="644" y2="274"/>
+  <line class="rule" x1="260" y1="284" x2="644" y2="284"/>
+  <line class="rule" x1="260" y1="294" x2="644" y2="294"/>
+  <rect class="bx2" x="308" y="234" width="12" height="10" rx="0"/>
+  <rect class="bx2" x="368" y="114" width="12" height="10" rx="0"/>
+  <rect class="bx2" x="428" y="254" width="12" height="10" rx="0"/>
+  <rect class="bx2" x="500" y="144" width="12" height="10" rx="0"/>
+  <rect class="bx2" x="572" y="214" width="12" height="10" rx="0"/>
+  <rect class="bx2" x="332" y="154" width="12" height="10" rx="0"/>
+  <rect class="bx2" x="452" y="94" width="12" height="10" rx="0"/>
+  <rect class="bx2" x="536" y="244" width="12" height="10" rx="0"/>
+  <text class="ts" x="500" y="40" text-anchor="start" xml:space="preserve">tile_at Fern, 20, 9</text>
+  <line class="sline" x1="506" y1="46" x2="506" y2="140" marker-end="url(#arS)"/>
+  <line class="dash" x1="260" y1="54" x2="120" y2="120"/>
+  <line class="dash" x1="644" y1="54" x2="504" y2="120"/>
+  <line class="dash" x1="644" y1="294" x2="504" y2="360"/>
+  <rect class="none" x="120" y="120" width="384" height="240" rx="0"/>
+  <rect class="sig" x="306" y="235" width="12" height="10" rx="0"/>
+  <rect class="sig" x="132" y="130" width="12" height="10" rx="0"/>
+  <text class="cap" x="120" y="378" text-anchor="start" xml:space="preserve">SPRITE LAYER, 256 X 192 PIXELS</text>
+  <line class="sline" x1="318" y1="243" x2="404" y2="330" marker-end="url(#arS)"/>
+  <text class="ts" x="410" y="336" text-anchor="start" xml:space="preserve">sprite_at Moth, MothX, MothY</text>
+  <text class="dimn" x="40" y="404" text-anchor="start" xml:space="preserve">Moving a sprite changes two shadow bytes. The grid behind it is not touched.</text>
+</svg>

@@ -67,6 +67,8 @@ working directory.
 
 After expansion, the project is a **single program**: one address space, one set of global labels, one `.org` sequence you are responsible for coordinating.
 
+![.include pastes text into one namespace; .import keeps a module's private labels behind the wall](../../assets/images/azm-book/book3/include-vs-import.svg)
+
 Typical layout:
 
 | File | Holds |
@@ -216,6 +218,8 @@ Contrast:
 | Delivers | Source pasted into your program | Contracts only |
 | Code in output | Yes — your bytes | No — you supply address binding separately |
 | Typical use | Your reusable subroutines | ROM / monitor / third-party binary |
+
+![An interface file carries contracts across the boundary, and nothing else crosses in either direction](../../assets/images/azm-book/book3/asmi-boundary.svg)
 
 ---
 

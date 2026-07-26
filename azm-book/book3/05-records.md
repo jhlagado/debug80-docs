@@ -55,6 +55,8 @@ ring_state:
 
 `ring_state` reserves `sizeof(RingState)` bytes: three bytes for `head`, `tail` and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type-array form uses literal lengths in the current assembler, not named constants.
 
+![Three control bytes beside the eight they control, and the offset constants that name them](../../assets/images/azm-book/book3/ring-state-layout.svg)
+
 Name the compile-time constants you will use in instructions:
 
 ```asm
@@ -228,32 +230,7 @@ Push fails closed when `count == RING_CAP` (returns with carry clear). Pop fails
 
 After pushing `$11`, `$22`, `$33` and then popping all three, the buffer may still hold those bytes in RAM, but `count` is 0 and the logical queue is empty:
 
-```
-  ring_buf ($8000)          ring_state ($8008)
-  ┌───┬───┬───┬───┬───┬───┬───┬───┐   ┌──────┬──────┬───────┐
-  │11 │22 │33 │   │   │   │   │   │   │ head │ tail │ count │
-  └───┴───┴───┴───┴───┴───┴───┴───┘   │  3   │  3   │   0   │
-    0   1   2   3   4   5   6   7       └──────┴──────┴───────┘
-              ▲
-              └── head and tail both advanced past the consumed cells
-```
-
-After three more pushes without pops, `count` is 3 again and `head` points at the next free cell while `tail` marks the oldest live byte:
-
-```mermaid
-flowchart LR
-  subgraph buf["ring_buf[0..7]"]
-    t["tail → oldest"]
-    h["head → next write"]
-  end
-  subgraph st["ring_state"]
-    T[tail]
-    H[head]
-    C[count]
-  end
-  T -.-> t
-  H -.-> h
-```
+![Four states of the same eight bytes, including the popped bytes that are still in RAM and no longer in the queue](../../assets/images/azm-book/book3/ring-buffer.svg)
 
 When `head` or `tail` would become `RING_CAP`, wrap to 0:
 

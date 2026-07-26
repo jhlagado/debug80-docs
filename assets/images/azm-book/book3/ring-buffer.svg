@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="540" viewBox="0 0 720 540" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The ring buffer as a circle and as a line</title>
+  <desc id="figDesc">Eight storage slots drawn as a circle in four states: empty; three bytes pushed with head at slot 3 and tail at slot 0; the same three popped, still present in RAM but stale with count back to 0; and full after eight pushes with head and tail both at slot 3. The same slots are drawn again as a strip with the wrap from slot 7 to slot 0 marked.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <circle class="bxq" cx="96.00" cy="82.00" r="15"/>
+  <circle class="bxq" cx="134.18" cy="97.82" r="15"/>
+  <circle class="bxq" cx="150.00" cy="136.00" r="15"/>
+  <circle class="bxq" cx="134.18" cy="174.18" r="15"/>
+  <circle class="bxq" cx="96.00" cy="190.00" r="15"/>
+  <circle class="bxq" cx="57.82" cy="174.18" r="15"/>
+  <circle class="bxq" cx="42.00" cy="136.00" r="15"/>
+  <circle class="bxq" cx="57.82" cy="97.82" r="15"/>
+  <text class="dim" x="70" y="68" text-anchor="middle" xml:space="preserve">0</text>
+  <line class="sline" x1="96" y1="42" x2="96" y2="62" marker-end="url(#arS)"/>
+  <text class="cap" x="96" y="34" text-anchor="middle" xml:space="preserve">H T</text>
+  <text class="cap" x="96" y="250" text-anchor="middle" xml:space="preserve">EMPTY</text>
+  <text class="dimn" x="96" y="270" text-anchor="middle" xml:space="preserve">head 0   tail 0   count 0</text>
+  <circle class="bxs" cx="272.00" cy="82.00" r="15"/>
+  <text class="tb" x="272" y="86" text-anchor="middle" xml:space="preserve">11</text>
+  <circle class="bxs" cx="310.18" cy="97.82" r="15"/>
+  <text class="tb" x="310.18" y="101.82" text-anchor="middle" xml:space="preserve">22</text>
+  <circle class="bxs" cx="326.00" cy="136.00" r="15"/>
+  <text class="tb" x="326" y="140" text-anchor="middle" xml:space="preserve">33</text>
+  <circle class="bxq" cx="310.18" cy="174.18" r="15"/>
+  <circle class="bxq" cx="272.00" cy="190.00" r="15"/>
+  <circle class="bxq" cx="233.82" cy="174.18" r="15"/>
+  <circle class="bxq" cx="218.00" cy="136.00" r="15"/>
+  <circle class="bxq" cx="233.82" cy="97.82" r="15"/>
+  <text class="dim" x="246" y="68" text-anchor="middle" xml:space="preserve">0</text>
+  <line class="sline" x1="338.47" y1="202.47" x2="324.33" y2="188.33" marker-end="url(#arS)"/>
+  <text class="cap" x="346.95" y="214.95" text-anchor="middle" xml:space="preserve">H</text>
+  <line class="sline" x1="272" y1="42" x2="272" y2="62" marker-end="url(#arS)"/>
+  <text class="cap" x="272" y="34" text-anchor="middle" xml:space="preserve">T</text>
+  <text class="cap" x="272" y="250" text-anchor="middle" xml:space="preserve">THREE PUSHED</text>
+  <text class="dimn" x="272" y="270" text-anchor="middle" xml:space="preserve">head 3   tail 0   count 3</text>
+  <circle class="bx" cx="448.00" cy="82.00" r="15"/>
+  <text class="dim" x="448" y="86" text-anchor="middle" xml:space="preserve">11</text>
+  <circle class="bx" cx="486.18" cy="97.82" r="15"/>
+  <text class="dim" x="486.18" y="101.82" text-anchor="middle" xml:space="preserve">22</text>
+  <circle class="bx" cx="502.00" cy="136.00" r="15"/>
+  <text class="dim" x="502" y="140" text-anchor="middle" xml:space="preserve">33</text>
+  <circle class="bxq" cx="486.18" cy="174.18" r="15"/>
+  <circle class="bxq" cx="448.00" cy="190.00" r="15"/>
+  <circle class="bxq" cx="409.82" cy="174.18" r="15"/>
+  <circle class="bxq" cx="394.00" cy="136.00" r="15"/>
+  <circle class="bxq" cx="409.82" cy="97.82" r="15"/>
+  <text class="dim" x="422" y="68" text-anchor="middle" xml:space="preserve">0</text>
+  <line class="sline" x1="514.47" y1="202.47" x2="500.33" y2="188.33" marker-end="url(#arS)"/>
+  <text class="cap" x="522.95" y="214.95" text-anchor="middle" xml:space="preserve">H T</text>
+  <text class="cap" x="448" y="250" text-anchor="middle" xml:space="preserve">THREE POPPED</text>
+  <text class="dimn" x="448" y="270" text-anchor="middle" xml:space="preserve">head 3   tail 3   count 0</text>
+  <circle class="bxs" cx="624.00" cy="82.00" r="15"/>
+  <text class="tb" x="624" y="86" text-anchor="middle" xml:space="preserve">99</text>
+  <circle class="bxs" cx="662.18" cy="97.82" r="15"/>
+  <text class="tb" x="662.18" y="101.82" text-anchor="middle" xml:space="preserve">AA</text>
+  <circle class="bxs" cx="678.00" cy="136.00" r="15"/>
+  <text class="tb" x="678" y="140" text-anchor="middle" xml:space="preserve">BB</text>
+  <circle class="bxs" cx="662.18" cy="174.18" r="15"/>
+  <text class="tb" x="662.18" y="178.18" text-anchor="middle" xml:space="preserve">44</text>
+  <circle class="bxs" cx="624.00" cy="190.00" r="15"/>
+  <text class="tb" x="624" y="194" text-anchor="middle" xml:space="preserve">55</text>
+  <circle class="bxs" cx="585.82" cy="174.18" r="15"/>
+  <text class="tb" x="585.82" y="178.18" text-anchor="middle" xml:space="preserve">66</text>
+  <circle class="bxs" cx="570.00" cy="136.00" r="15"/>
+  <text class="tb" x="570" y="140" text-anchor="middle" xml:space="preserve">77</text>
+  <circle class="bxs" cx="585.82" cy="97.82" r="15"/>
+  <text class="tb" x="585.82" y="101.82" text-anchor="middle" xml:space="preserve">88</text>
+  <text class="dim" x="598" y="68" text-anchor="middle" xml:space="preserve">0</text>
+  <line class="sline" x1="690.47" y1="202.47" x2="676.33" y2="188.33" marker-end="url(#arS)"/>
+  <text class="cap" x="698.95" y="214.95" text-anchor="middle" xml:space="preserve">H T</text>
+  <text class="cap" x="624" y="250" text-anchor="middle" xml:space="preserve">FULL, WRAPPED</text>
+  <text class="dimn" x="624" y="270" text-anchor="middle" xml:space="preserve">head 3   tail 3   count 8</text>
+  <rect class="bxs" x="30" y="293" width="13" height="13" rx="2"/>
+  <text class="dimn" x="50" y="304" text-anchor="start" xml:space="preserve">live, counted</text>
+  <rect class="bx" x="150.36" y="293" width="13" height="13" rx="2"/>
+  <text class="dimn" x="170.36" y="304" text-anchor="start" xml:space="preserve">stale, popped but still in RAM</text>
+  <rect class="bxq" x="367.96" y="293" width="13" height="13" rx="2"/>
+  <text class="dimn" x="387.96" y="304" text-anchor="start" xml:space="preserve">never written</text>
+  <text class="cap" x="120" y="352" text-anchor="start" xml:space="preserve">THE SAME EIGHT BYTES AS A LINE</text>
+  <path class="sline" d="M525,382 V368 H147 V382" marker-end="url(#arS)"/>
+  <text class="dimn" x="420" y="364" text-anchor="start" xml:space="preserve">index 7 wraps to index 0</text>
+  <rect class="bxs" x="120" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="147" y="405.5" text-anchor="middle" xml:space="preserve">99</text>
+  <text class="dimn" x="147" y="430" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bxs" x="174" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="201" y="405.5" text-anchor="middle" xml:space="preserve">AA</text>
+  <text class="dimn" x="201" y="430" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bxs" x="228" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="255" y="405.5" text-anchor="middle" xml:space="preserve">BB</text>
+  <text class="dimn" x="255" y="430" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bxs" x="282" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="309" y="405.5" text-anchor="middle" xml:space="preserve">44</text>
+  <text class="dimn" x="309" y="430" text-anchor="middle" xml:space="preserve">3</text>
+  <rect class="bxs" x="336" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="363" y="405.5" text-anchor="middle" xml:space="preserve">55</text>
+  <text class="dimn" x="363" y="430" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bxs" x="390" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="417" y="405.5" text-anchor="middle" xml:space="preserve">66</text>
+  <text class="dimn" x="417" y="430" text-anchor="middle" xml:space="preserve">5</text>
+  <rect class="bxs" x="444" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="471" y="405.5" text-anchor="middle" xml:space="preserve">77</text>
+  <text class="dimn" x="471" y="430" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bxs" x="498" y="386" width="54" height="30" rx="2"/>
+  <text class="tb" x="525" y="405.5" text-anchor="middle" xml:space="preserve">88</text>
+  <text class="dimn" x="525" y="430" text-anchor="middle" xml:space="preserve">7</text>
+  <line class="sline" x1="309" y1="458" x2="309" y2="440" marker-end="url(#arS)"/>
+  <text class="cap" x="309" y="474" text-anchor="middle" xml:space="preserve">H T</text>
+  <text class="dimn" x="380" y="458" text-anchor="start" xml:space="preserve">head and tail meet when the ring is full</text>
+  <text class="dimn" x="380" y="476" text-anchor="start" xml:space="preserve">and when it is empty. count tells them apart.</text>
+  <text class="dimn" x="30" y="510" text-anchor="start" xml:space="preserve">Pop advances tail and decrements count. It never clears the byte, which is why the third ring still shows 11, 22, 33.</text>
+  <text class="dimn" x="30" y="528" text-anchor="start" xml:space="preserve">Indices run clockwise from the slot marked 0.</text>
+</svg>

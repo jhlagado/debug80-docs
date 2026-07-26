@@ -167,6 +167,8 @@ until you let go. Rover makes the same
 choices for the same reasons (held compass keys, rising GO), and both
 are one-line decisions.
 
+![One press read two ways: rising fires once, held fires every eight frames.](../../assets/images/glimmer-book/book0/key-bindings.svg)
+
 One property of the keypad shapes every control scheme: MON-3 reports
 a single pressed key at a time. Held movement runs one direction at
 once, and a fresh press takes over the autorepeat from the key before

@@ -342,6 +342,8 @@ That version builds clean. Canvas keeps its one-pixel cursor for the
 chapters ahead; the habit to keep is reading a callee's clobbers line
 before reusing a register across the call.
 
+![Canvas as a graph, with the chapter's two bugs marked where the tools found them.](../../assets/images/glimmer-book/book0/dependency-graph.svg)
+
 Look again at the diagnostic's address: `canvas.glim:116:5`. The
 faulty call sits in a block body, and
 Glimmer carries every body line's origin through to the assembler, so

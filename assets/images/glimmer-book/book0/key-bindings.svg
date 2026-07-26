@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="346" viewBox="0 0 720 346" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">rising against held, on one frame axis</title>
+  <desc id="figDesc">Three tracks over the same frames: key 6 held down from frame 3 to frame 19, a rising binding firing once at frame 3, and a held binding of period 8 firing at frames 3, 11 and 19.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="28" text-anchor="start" xml:space="preserve">ONE PRESS, HELD FOR SIXTEEN FRAMES</text>
+  <text class="ts" x="120" y="54" text-anchor="start" xml:space="preserve">the key itself</text>
+  <text class="dimn" x="112" y="84" text-anchor="end" xml:space="preserve">key</text>
+  <polyline class="none" points="120,92 186,92 186,64 538,64 538,92 648,92"/>
+  <text class="dim" x="194" y="108" text-anchor="start" xml:space="preserve">down</text>
+  <text class="dim" x="546" y="108" text-anchor="start" xml:space="preserve">up</text>
+  <text class="ts" x="120" y="140" text-anchor="start" xml:space="preserve">bind key KEY_6 rising -&gt; Right</text>
+  <text class="dimn" x="112" y="172" text-anchor="end" xml:space="preserve">rising</text>
+  <line class="rule" x1="120" y1="180" x2="648" y2="180"/>
+  <line class="sline" x1="186" y1="180" x2="186" y2="152" marker-end="url(#arS)"/>
+  <text class="dimn" x="196" y="166" text-anchor="start" xml:space="preserve">one press, one pulse, however long you hold</text>
+  <text class="ts" x="120" y="226" text-anchor="start" xml:space="preserve">bind key KEY_6 held period 8 -&gt; Right</text>
+  <text class="dimn" x="112" y="258" text-anchor="end" xml:space="preserve">held</text>
+  <line class="rule" x1="120" y1="266" x2="648" y2="266"/>
+  <line class="sline" x1="186" y1="266" x2="186" y2="238" marker-end="url(#arS)"/>
+  <line class="sline" x1="362" y1="266" x2="362" y2="238" marker-end="url(#arS)"/>
+  <line class="sline" x1="538" y1="266" x2="538" y2="238" marker-end="url(#arS)"/>
+  <path class="none" d="M186,252 H362" marker-end="url(#ar)"/>
+  <path class="none" d="M362,252 H186" marker-end="url(#ar)"/>
+  <text class="dim" x="246" y="244" text-anchor="start" xml:space="preserve">period 8</text>
+  <line class="rule" x1="120" y1="290" x2="648" y2="290"/>
+  <line class="rule" x1="120" y1="290" x2="120" y2="296"/>
+  <text class="dim" x="120" y="310" text-anchor="middle" xml:space="preserve">0</text>
+  <line class="rule" x1="208" y1="290" x2="208" y2="296"/>
+  <text class="dim" x="208" y="310" text-anchor="middle" xml:space="preserve">4</text>
+  <line class="rule" x1="296" y1="290" x2="296" y2="296"/>
+  <text class="dim" x="296" y="310" text-anchor="middle" xml:space="preserve">8</text>
+  <line class="rule" x1="384" y1="290" x2="384" y2="296"/>
+  <text class="dim" x="384" y="310" text-anchor="middle" xml:space="preserve">12</text>
+  <line class="rule" x1="472" y1="290" x2="472" y2="296"/>
+  <text class="dim" x="472" y="310" text-anchor="middle" xml:space="preserve">16</text>
+  <line class="rule" x1="560" y1="290" x2="560" y2="296"/>
+  <text class="dim" x="560" y="310" text-anchor="middle" xml:space="preserve">20</text>
+  <line class="rule" x1="648" y1="290" x2="648" y2="296"/>
+  <text class="dim" x="648" y="310" text-anchor="middle" xml:space="preserve">24</text>
+  <text class="dimn" x="660" y="310" text-anchor="start" xml:space="preserve">frames</text>
+  <text class="dimn" x="40" y="336" text-anchor="start" xml:space="preserve">Rising is the shape of an action. Held is the shape of movement, and the period is its feel.</text>
+</svg>

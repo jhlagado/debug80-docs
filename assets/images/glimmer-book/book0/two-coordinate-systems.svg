@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="376" viewBox="0 0 720 376" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">A sprite in pixels over a grid in cells</title>
+  <desc id="figDesc">A zoom on four grid columns and three rows with the fly box straddling them, its centre pixel marked, and the cell that centre falls in highlighted, beside the four instructions that convert one system into the other.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="60" y="44" text-anchor="start" xml:space="preserve">CELLS AND PIXELS</text>
+  <rect class="bxq" x="60" y="70" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="60" y="130" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="60" y="190" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="120" y="70" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="120" y="130" width="60" height="60" rx="0"/>
+  <rect class="bxs" x="120" y="190" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="180" y="70" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="180" y="130" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="180" y="190" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="240" y="70" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="240" y="130" width="60" height="60" rx="0"/>
+  <rect class="bxq" x="240" y="190" width="60" height="60" rx="0"/>
+  <text class="dim" x="90" y="62" text-anchor="middle" xml:space="preserve">15</text>
+  <text class="dim" x="150" y="62" text-anchor="middle" xml:space="preserve">16</text>
+  <text class="dim" x="210" y="62" text-anchor="middle" xml:space="preserve">17</text>
+  <text class="dim" x="270" y="62" text-anchor="middle" xml:space="preserve">18</text>
+  <text class="dim" x="52" y="104" text-anchor="end" xml:space="preserve">10</text>
+  <text class="dim" x="52" y="164" text-anchor="end" xml:space="preserve">11</text>
+  <text class="dim" x="52" y="224" text-anchor="end" xml:space="preserve">12</text>
+  <rect class="none" x="105" y="175" width="60" height="60" rx="0"/>
+  <circle class="sig" cx="135" cy="205" r="5"/>
+  <text class="dimn" x="60" y="272" text-anchor="start" xml:space="preserve">the cell under the fly: column 16, row 12</text>
+  <text class="cap" x="360" y="44" text-anchor="start" xml:space="preserve">PIXEL TO CELL</text>
+  <text class="t" x="360" y="76" text-anchor="start" xml:space="preserve">ld a,(FlyX)   ; 126</text>
+  <text class="t" x="360" y="98" text-anchor="start" xml:space="preserve">add a,4       ; 130</text>
+  <text class="t" x="360" y="120" text-anchor="start" xml:space="preserve">srl a</text>
+  <text class="t" x="360" y="142" text-anchor="start" xml:space="preserve">srl a</text>
+  <text class="t" x="360" y="164" text-anchor="start" xml:space="preserve">srl a         ; 16</text>
+  <text class="t" x="360" y="186" text-anchor="start" xml:space="preserve">ld b,a</text>
+  <text class="t" x="360" y="208" text-anchor="start" xml:space="preserve">ld a,(LampCol)</text>
+  <text class="t" x="360" y="230" text-anchor="start" xml:space="preserve">cp b</text>
+  <text class="dimn" x="360" y="262" text-anchor="start" xml:space="preserve">The +4 picks the centre, not the corner.</text>
+  <text class="dimn" x="360" y="278" text-anchor="start" xml:space="preserve">Three shifts divide by eight.</text>
+  <text class="ts" x="360" y="302" text-anchor="start" xml:space="preserve">%10000010 &gt;&gt; 3 = %00010000 = 16</text>
+  <rect class="bxs" x="60" y="311" width="13" height="13" rx="2"/>
+  <text class="dimn" x="80" y="322" text-anchor="start" xml:space="preserve">the cell the centre falls in</text>
+  <text class="dimn" x="60" y="352" text-anchor="start" xml:space="preserve">Sprites are placed in pixels and tiles in cells, and Gather is where the two systems meet.</text>
+</svg>

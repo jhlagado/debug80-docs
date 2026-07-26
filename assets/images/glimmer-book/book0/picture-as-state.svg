@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="380" viewBox="0 0 720 380" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Eight row masks and the pixels they light</title>
+  <desc id="figDesc">Eight bytes of the Picture array, each a row mask, beside the 8x8 matrix showing the diamond they light, with the third byte traced to its row.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="30" text-anchor="start" xml:space="preserve">PICTURE: EIGHT BYTES</text>
+  <text class="dim" x="32" y="72" text-anchor="end" xml:space="preserve">+0</text>
+  <rect class="bx" x="40" y="52" width="150" height="30" rx="2"/>
+  <text class="t" x="115" y="72" text-anchor="middle" xml:space="preserve">%00011000</text>
+  <text class="dim" x="32" y="106" text-anchor="end" xml:space="preserve">+1</text>
+  <rect class="bx" x="40" y="86" width="150" height="30" rx="2"/>
+  <text class="t" x="115" y="106" text-anchor="middle" xml:space="preserve">%00111100</text>
+  <text class="dim" x="32" y="140" text-anchor="end" xml:space="preserve">+2</text>
+  <rect class="bxs" x="40" y="120" width="150" height="30" rx="2"/>
+  <text class="tb" x="115" y="140" text-anchor="middle" xml:space="preserve">%01111110</text>
+  <text class="dim" x="32" y="174" text-anchor="end" xml:space="preserve">+3</text>
+  <rect class="bx" x="40" y="154" width="150" height="30" rx="2"/>
+  <text class="t" x="115" y="174" text-anchor="middle" xml:space="preserve">%11111111</text>
+  <text class="dim" x="32" y="208" text-anchor="end" xml:space="preserve">+4</text>
+  <rect class="bx" x="40" y="188" width="150" height="30" rx="2"/>
+  <text class="t" x="115" y="208" text-anchor="middle" xml:space="preserve">%11111111</text>
+  <text class="dim" x="32" y="242" text-anchor="end" xml:space="preserve">+5</text>
+  <rect class="bx" x="40" y="222" width="150" height="30" rx="2"/>
+  <text class="t" x="115" y="242" text-anchor="middle" xml:space="preserve">%01111110</text>
+  <text class="dim" x="32" y="276" text-anchor="end" xml:space="preserve">+6</text>
+  <rect class="bx" x="40" y="256" width="150" height="30" rx="2"/>
+  <text class="t" x="115" y="276" text-anchor="middle" xml:space="preserve">%00111100</text>
+  <text class="dim" x="32" y="310" text-anchor="end" xml:space="preserve">+7</text>
+  <rect class="bx" x="40" y="290" width="150" height="30" rx="2"/>
+  <text class="t" x="115" y="310" text-anchor="middle" xml:space="preserve">%00011000</text>
+  <text class="cap" x="380" y="30" text-anchor="start" xml:space="preserve">THE LIT PIXELS</text>
+  <circle class="bxq" cx="397" cy="69" r="13"/>
+  <circle class="bxq" cx="431" cy="69" r="13"/>
+  <circle class="bxq" cx="465" cy="69" r="13"/>
+  <circle class="sig" cx="499" cy="69" r="13"/>
+  <circle class="sig" cx="533" cy="69" r="13"/>
+  <circle class="bxq" cx="567" cy="69" r="13"/>
+  <circle class="bxq" cx="601" cy="69" r="13"/>
+  <circle class="bxq" cx="635" cy="69" r="13"/>
+  <circle class="bxq" cx="397" cy="103" r="13"/>
+  <circle class="bxq" cx="431" cy="103" r="13"/>
+  <circle class="sig" cx="465" cy="103" r="13"/>
+  <circle class="sig" cx="499" cy="103" r="13"/>
+  <circle class="sig" cx="533" cy="103" r="13"/>
+  <circle class="sig" cx="567" cy="103" r="13"/>
+  <circle class="bxq" cx="601" cy="103" r="13"/>
+  <circle class="bxq" cx="635" cy="103" r="13"/>
+  <circle class="bxq" cx="397" cy="137" r="13"/>
+  <circle class="sig" cx="431" cy="137" r="13"/>
+  <circle class="sig" cx="465" cy="137" r="13"/>
+  <circle class="sig" cx="499" cy="137" r="13"/>
+  <circle class="sig" cx="533" cy="137" r="13"/>
+  <circle class="sig" cx="567" cy="137" r="13"/>
+  <circle class="sig" cx="601" cy="137" r="13"/>
+  <circle class="bxq" cx="635" cy="137" r="13"/>
+  <circle class="sig" cx="397" cy="171" r="13"/>
+  <circle class="sig" cx="431" cy="171" r="13"/>
+  <circle class="sig" cx="465" cy="171" r="13"/>
+  <circle class="sig" cx="499" cy="171" r="13"/>
+  <circle class="sig" cx="533" cy="171" r="13"/>
+  <circle class="sig" cx="567" cy="171" r="13"/>
+  <circle class="sig" cx="601" cy="171" r="13"/>
+  <circle class="sig" cx="635" cy="171" r="13"/>
+  <circle class="sig" cx="397" cy="205" r="13"/>
+  <circle class="sig" cx="431" cy="205" r="13"/>
+  <circle class="sig" cx="465" cy="205" r="13"/>
+  <circle class="sig" cx="499" cy="205" r="13"/>
+  <circle class="sig" cx="533" cy="205" r="13"/>
+  <circle class="sig" cx="567" cy="205" r="13"/>
+  <circle class="sig" cx="601" cy="205" r="13"/>
+  <circle class="sig" cx="635" cy="205" r="13"/>
+  <circle class="bxq" cx="397" cy="239" r="13"/>
+  <circle class="sig" cx="431" cy="239" r="13"/>
+  <circle class="sig" cx="465" cy="239" r="13"/>
+  <circle class="sig" cx="499" cy="239" r="13"/>
+  <circle class="sig" cx="533" cy="239" r="13"/>
+  <circle class="sig" cx="567" cy="239" r="13"/>
+  <circle class="sig" cx="601" cy="239" r="13"/>
+  <circle class="bxq" cx="635" cy="239" r="13"/>
+  <circle class="bxq" cx="397" cy="273" r="13"/>
+  <circle class="bxq" cx="431" cy="273" r="13"/>
+  <circle class="sig" cx="465" cy="273" r="13"/>
+  <circle class="sig" cx="499" cy="273" r="13"/>
+  <circle class="sig" cx="533" cy="273" r="13"/>
+  <circle class="sig" cx="567" cy="273" r="13"/>
+  <circle class="bxq" cx="601" cy="273" r="13"/>
+  <circle class="bxq" cx="635" cy="273" r="13"/>
+  <circle class="bxq" cx="397" cy="307" r="13"/>
+  <circle class="bxq" cx="431" cy="307" r="13"/>
+  <circle class="bxq" cx="465" cy="307" r="13"/>
+  <circle class="sig" cx="499" cy="307" r="13"/>
+  <circle class="sig" cx="533" cy="307" r="13"/>
+  <circle class="bxq" cx="567" cy="307" r="13"/>
+  <circle class="bxq" cx="601" cy="307" r="13"/>
+  <circle class="bxq" cx="635" cy="307" r="13"/>
+  <rect class="none" x="380" y="52" width="272" height="272" rx="4"/>
+  <line class="sline" x1="198" y1="137" x2="372" y2="137" marker-end="url(#arS)"/>
+  <text class="dimn" x="285" y="130" text-anchor="middle" xml:space="preserve">one byte, one row</text>
+  <text class="dimn" x="40" y="356" text-anchor="start" xml:space="preserve">Sixty-four pixels under one name and one flag. Each mask drops into the green plane of its row.</text>
+</svg>

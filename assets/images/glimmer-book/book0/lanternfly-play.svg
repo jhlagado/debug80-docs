@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="470" viewBox="0 0 720 470" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Lanternfly in play</title>
+  <desc id="figDesc">The 256 by 192 screen with five reeds standing in the tile grid, a lantern glowing in cell 24, 6, the white fly at pixel 124, 92 and the wasp closing from the corner, with the score on the LCD.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="48" text-anchor="start" xml:space="preserve">256 X 192, GRAPHICS I</text>
+  <rect class="bxq" x="40" y="60" width="448" height="336" rx="0"/>
+  <rect class="bx2" x="82" y="88" width="14" height="14" rx="0"/>
+  <rect class="bx2" x="194" y="354" width="14" height="14" rx="0"/>
+  <rect class="bx2" x="278" y="88" width="14" height="14" rx="0"/>
+  <rect class="bx2" x="376" y="368" width="14" height="14" rx="0"/>
+  <rect class="bx2" x="446" y="354" width="14" height="14" rx="0"/>
+  <rect class="bxs" x="376" y="144" width="14" height="14" rx="0"/>
+  <rect class="bx" x="257" y="221" width="14" height="14" rx="0"/>
+  <rect class="bx2" x="208" y="165" width="14" height="14" rx="0"/>
+  <text class="cap" x="520" y="48" text-anchor="start" xml:space="preserve">LCD</text>
+  <rect class="bx" x="520" y="60" width="180" height="60" rx="3"/>
+  <text class="ts" x="530" y="86" text-anchor="start" xml:space="preserve">GATHER THE</text>
+  <text class="ts" x="530" y="108" text-anchor="start" xml:space="preserve">LAMPS 07</text>
+  <text class="cap" x="520" y="150" text-anchor="start" xml:space="preserve">THE CAST</text>
+  <rect class="bx" x="520" y="164" width="14" height="14" rx="2"/>
+  <text class="dimn" x="542" y="176" text-anchor="start" xml:space="preserve">the fly, a sprite</text>
+  <rect class="bx2" x="520" y="188" width="14" height="14" rx="2"/>
+  <text class="dimn" x="542" y="200" text-anchor="start" xml:space="preserve">the wasp, a sprite</text>
+  <rect class="bxs" x="520" y="212" width="14" height="14" rx="2"/>
+  <text class="dimn" x="542" y="224" text-anchor="start" xml:space="preserve">the lantern, a tile</text>
+  <rect class="bx2" x="520" y="236" width="14" height="14" rx="2"/>
+  <text class="dimn" x="542" y="248" text-anchor="start" xml:space="preserve">reeds, tiles</text>
+  <text class="cap" x="520" y="290" text-anchor="start" xml:space="preserve">PIXEL TO CELL</text>
+  <rect class="bxq" x="520" y="306" width="40" height="40" rx="0"/>
+  <rect class="bxq" x="520" y="346" width="40" height="40" rx="0"/>
+  <rect class="bxq" x="560" y="306" width="40" height="40" rx="0"/>
+  <rect class="bxs" x="560" y="346" width="40" height="40" rx="0"/>
+  <rect class="bxq" x="600" y="306" width="40" height="40" rx="0"/>
+  <rect class="bxq" x="600" y="346" width="40" height="40" rx="0"/>
+  <rect class="none" x="550" y="331" width="40" height="40" rx="0"/>
+  <circle class="sig" cx="570" cy="351" r="4"/>
+  <text class="dim" x="520" y="400" text-anchor="start" xml:space="preserve">FlyX + 4, then</text>
+  <text class="dim" x="520" y="418" text-anchor="start" xml:space="preserve">three shifts</text>
+  <text class="dimn" x="40" y="446" text-anchor="start" xml:space="preserve">The fly lives in pixels and the lantern in cells, so a gather converts one into the other first.</text>
+</svg>

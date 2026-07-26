@@ -54,9 +54,13 @@ Two different numbers confuse beginners:
 
 `strcpy` must not write past capacity if the source is longer than the destination buffer. This chapter copies into a buffer sized for the demo; Chapter 5's records are a natural place to store `(capacity)` beside `(data)`.
 
+![Length is what strlen_u8 counts; capacity is what .ds reserved, and nothing in memory enforces the difference](../../assets/images/azm-book/book3/string-layout.svg)
+
 ### The alternative: length in byte zero
 
 Byte 0 holds the count, bytes 1..n hold the text. That saves a scan for length but shifts every pointer (`HL` must skip the count byte). Null-terminated layout is the convention in this book because the walk is uniform; every algorithm uses the same `ld a,(hl)` / `or a` / `jr z` spine.
+
+![The same five characters, stored two ways: the terminator at the end, or the count at the front](../../assets/images/azm-book/book3/string-representations.svg)
 
 ---
 
@@ -142,6 +146,8 @@ _copy:
 
 The last iteration copies the zero terminator. That matters if later code scans `buffer` with the same null-terminated walk.
 
+![HL reads and DE writes in step, and the loop only exits once the terminator has been written](../../assets/images/azm-book/book3/two-pointer-copy.svg)
+
 After `call strcpy_u8`, DE points one past the null. Reload HL from `message` before another pass; do not assume DE still equals the destination base.
 
 ---
@@ -211,6 +217,8 @@ _equal:
 ```
 
 Order matters: compare characters **before** you decide both strings ended. A holds the DE character and B holds the HL character, so `cp b` computes DE - HL. Carry therefore means the HL string is greater. If both bytes are zero, Z remains set and `_equal` returns 0. If one string is a prefix of the other, the zero byte orders the shorter string before the longer one.
+
+![Both pointers advance together, and the pass that settles the answer is the one on the two terminators](../../assets/images/azm-book/book3/strcmp-walk.svg)
 
 The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$800F` should be `$01`.
 

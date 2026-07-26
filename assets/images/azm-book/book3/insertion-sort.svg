@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="446" viewBox="0 0 720 446" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Insertion sort, one row per outer iteration</title>
+  <desc id="figDesc">The bytes 9 4 6 2 8 1 7 3 sorted over seven outer iterations, the sorted prefix shaded on each row and the inserted key marked, ending 1 2 3 4 6 7 8 9.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="150" y="30" text-anchor="start" xml:space="preserve">VALUES AT $8000</text>
+  <text class="dim" x="171" y="54" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="213" y="54" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dim" x="255" y="54" text-anchor="middle" xml:space="preserve">2</text>
+  <text class="dim" x="297" y="54" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dim" x="339" y="54" text-anchor="middle" xml:space="preserve">4</text>
+  <text class="dim" x="381" y="54" text-anchor="middle" xml:space="preserve">5</text>
+  <text class="dim" x="423" y="54" text-anchor="middle" xml:space="preserve">6</text>
+  <text class="dim" x="465" y="54" text-anchor="middle" xml:space="preserve">7</text>
+  <text class="ts" x="30" y="82" text-anchor="start" xml:space="preserve">start</text>
+  <rect class="bx2" x="150" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="171" y="82" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="192" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="213" y="82" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx" x="234" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="255" y="82" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx" x="276" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="297" y="82" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx" x="318" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="339" y="82" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx" x="360" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="82" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="402" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="82" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="444" y="62" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="82" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="506" y="82" text-anchor="start" xml:space="preserve">one element is trivially sorted</text>
+  <text class="ts" x="30" y="122" text-anchor="start" xml:space="preserve">i = 1</text>
+  <rect class="bxs" x="150" y="102" width="42" height="30" rx="2"/>
+  <text class="tb" x="171" y="122" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="192" y="102" width="42" height="30" rx="2"/>
+  <text class="t" x="213" y="122" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="234" y="102" width="42" height="30" rx="2"/>
+  <text class="t" x="255" y="122" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx" x="276" y="102" width="42" height="30" rx="2"/>
+  <text class="t" x="297" y="122" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx" x="318" y="102" width="42" height="30" rx="2"/>
+  <text class="t" x="339" y="122" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx" x="360" y="102" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="122" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="402" y="102" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="122" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="444" y="102" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="122" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="506" y="122" text-anchor="start" xml:space="preserve">key 4 lands at index 0</text>
+  <text class="ts" x="30" y="162" text-anchor="start" xml:space="preserve">i = 2</text>
+  <rect class="bx2" x="150" y="142" width="42" height="30" rx="2"/>
+  <text class="t" x="171" y="162" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bxs" x="192" y="142" width="42" height="30" rx="2"/>
+  <text class="tb" x="213" y="162" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="234" y="142" width="42" height="30" rx="2"/>
+  <text class="t" x="255" y="162" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="276" y="142" width="42" height="30" rx="2"/>
+  <text class="t" x="297" y="162" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx" x="318" y="142" width="42" height="30" rx="2"/>
+  <text class="t" x="339" y="162" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx" x="360" y="142" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="162" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="402" y="142" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="162" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="444" y="142" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="162" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="506" y="162" text-anchor="start" xml:space="preserve">key 6 lands at index 1</text>
+  <text class="ts" x="30" y="202" text-anchor="start" xml:space="preserve">i = 3</text>
+  <rect class="bxs" x="150" y="182" width="42" height="30" rx="2"/>
+  <text class="tb" x="171" y="202" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="192" y="182" width="42" height="30" rx="2"/>
+  <text class="t" x="213" y="202" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="234" y="182" width="42" height="30" rx="2"/>
+  <text class="t" x="255" y="202" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="276" y="182" width="42" height="30" rx="2"/>
+  <text class="t" x="297" y="202" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="318" y="182" width="42" height="30" rx="2"/>
+  <text class="t" x="339" y="202" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx" x="360" y="182" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="202" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="402" y="182" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="202" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="444" y="182" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="202" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="506" y="202" text-anchor="start" xml:space="preserve">key 2 lands at index 0</text>
+  <text class="ts" x="30" y="242" text-anchor="start" xml:space="preserve">i = 4</text>
+  <rect class="bx2" x="150" y="222" width="42" height="30" rx="2"/>
+  <text class="t" x="171" y="242" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="192" y="222" width="42" height="30" rx="2"/>
+  <text class="t" x="213" y="242" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="234" y="222" width="42" height="30" rx="2"/>
+  <text class="t" x="255" y="242" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bxs" x="276" y="222" width="42" height="30" rx="2"/>
+  <text class="tb" x="297" y="242" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx2" x="318" y="222" width="42" height="30" rx="2"/>
+  <text class="t" x="339" y="242" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="360" y="222" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="242" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="402" y="222" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="242" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="444" y="222" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="242" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="506" y="242" text-anchor="start" xml:space="preserve">key 8 lands at index 3</text>
+  <text class="ts" x="30" y="282" text-anchor="start" xml:space="preserve">i = 5</text>
+  <rect class="bxs" x="150" y="262" width="42" height="30" rx="2"/>
+  <text class="tb" x="171" y="282" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx2" x="192" y="262" width="42" height="30" rx="2"/>
+  <text class="t" x="213" y="282" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="234" y="262" width="42" height="30" rx="2"/>
+  <text class="t" x="255" y="282" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="276" y="262" width="42" height="30" rx="2"/>
+  <text class="t" x="297" y="282" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="318" y="262" width="42" height="30" rx="2"/>
+  <text class="t" x="339" y="282" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx2" x="360" y="262" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="282" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="402" y="262" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="282" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="444" y="262" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="282" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="506" y="282" text-anchor="start" xml:space="preserve">key 1 lands at index 0</text>
+  <text class="ts" x="30" y="322" text-anchor="start" xml:space="preserve">i = 6</text>
+  <rect class="bx2" x="150" y="302" width="42" height="30" rx="2"/>
+  <text class="t" x="171" y="322" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx2" x="192" y="302" width="42" height="30" rx="2"/>
+  <text class="t" x="213" y="322" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="234" y="302" width="42" height="30" rx="2"/>
+  <text class="t" x="255" y="322" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="276" y="302" width="42" height="30" rx="2"/>
+  <text class="t" x="297" y="322" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bxs" x="318" y="302" width="42" height="30" rx="2"/>
+  <text class="tb" x="339" y="322" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx2" x="360" y="302" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="322" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx2" x="402" y="302" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="322" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="444" y="302" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="322" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="506" y="322" text-anchor="start" xml:space="preserve">key 7 lands at index 4</text>
+  <text class="ts" x="30" y="362" text-anchor="start" xml:space="preserve">i = 7</text>
+  <rect class="bx2" x="150" y="342" width="42" height="30" rx="2"/>
+  <text class="t" x="171" y="362" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx2" x="192" y="342" width="42" height="30" rx="2"/>
+  <text class="t" x="213" y="362" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bxs" x="234" y="342" width="42" height="30" rx="2"/>
+  <text class="tb" x="255" y="362" text-anchor="middle" xml:space="preserve">3</text>
+  <rect class="bx2" x="276" y="342" width="42" height="30" rx="2"/>
+  <text class="t" x="297" y="362" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="318" y="342" width="42" height="30" rx="2"/>
+  <text class="t" x="339" y="362" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="360" y="342" width="42" height="30" rx="2"/>
+  <text class="t" x="381" y="362" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx2" x="402" y="342" width="42" height="30" rx="2"/>
+  <text class="t" x="423" y="362" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx2" x="444" y="342" width="42" height="30" rx="2"/>
+  <text class="t" x="465" y="362" text-anchor="middle" xml:space="preserve">9</text>
+  <text class="dimn" x="506" y="362" text-anchor="start" xml:space="preserve">key 3 lands at index 2</text>
+  <rect class="bx2" x="30" y="389" width="13" height="13" rx="2"/>
+  <text class="dimn" x="50" y="400" text-anchor="start" xml:space="preserve">sorted prefix</text>
+  <rect class="bxs" x="150.36" y="389" width="13" height="13" rx="2"/>
+  <text class="dimn" x="170.36" y="400" text-anchor="start" xml:space="preserve">the key just placed</text>
+  <rect class="bx" x="305.04" y="389" width="13" height="13" rx="2"/>
+  <text class="dimn" x="325.04" y="400" text-anchor="start" xml:space="preserve">not yet examined</text>
+  <text class="dimn" x="30" y="434" text-anchor="start" xml:space="preserve">The prefix grows by one each pass. Everything left of the shaded edge is already in order, which is the loop invariant.</text>
+</svg>

@@ -104,6 +104,8 @@ for i from 1 to length-1:
     values[j+1] = key
 ```
 
+![Every pass selects a key, shifts the larger values right, drops the key into the hole and advances the sorted boundary](../../assets/images/azm-book/book3/insertion-sort-pass.svg)
+
 ### Keeping the base in DE
 
 If you only keep HL, you lose the base address. **DE holds the base** for the whole routine; HL is recomputed from DE and the current index.
@@ -199,6 +201,8 @@ After `halt`, memory at `$8000` should read:
 01 02 03 04 06 07 08 09
 ```
 
+![Seven passes over the book's own data, the sorted prefix growing by one byte each time](../../assets/images/azm-book/book3/insertion-sort.svg)
+
 ---
 
 ## Linear search
@@ -229,6 +233,8 @@ _found:
 `cp c` / `jr nc` uses the unsigned sense from Book 2: `cp` subtracts, so carry is set when A < C and clear when A ≥ C. `jr nc` therefore takes the branch on a match. `$FF` means not found: a sentinel index, not a valid offset for an 8-element table.
 
 With threshold 5 on the sorted table, the first element of at least 5 is the 6 at index 4. The table holds no 5. `found_index` at `$8008` should hold `$04`.
+
+![The walk stops at the first element the compare does not put below the threshold](../../assets/images/azm-book/book3/linear-search.svg)
 
 ---
 

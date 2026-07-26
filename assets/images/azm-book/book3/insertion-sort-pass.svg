@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="454" viewBox="0 0 720 454" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">One pass of insertion sort in four moves</title>
+  <desc id="figDesc">Pass i equals 5: the key 1 is copied to key_byte, the five larger bytes shift one place right, the key is written into the hole at index 0, and the sorted boundary advances to index 6.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="190" y="42" text-anchor="start" xml:space="preserve">PASS I = 5, VALUES BEFORE THE PASS: 2 4 6 8 9 1 7 3</text>
+  <text class="dim" x="211" y="62" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="253" y="62" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dim" x="295" y="62" text-anchor="middle" xml:space="preserve">2</text>
+  <text class="dim" x="337" y="62" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dim" x="379" y="62" text-anchor="middle" xml:space="preserve">4</text>
+  <text class="dim" x="421" y="62" text-anchor="middle" xml:space="preserve">5</text>
+  <text class="dim" x="463" y="62" text-anchor="middle" xml:space="preserve">6</text>
+  <text class="dim" x="505" y="62" text-anchor="middle" xml:space="preserve">7</text>
+  <text class="ts" x="30" y="98" text-anchor="start" xml:space="preserve">1  select</text>
+  <rect class="bx2" x="190" y="78" width="42" height="30" rx="2"/>
+  <text class="t" x="211" y="98" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="232" y="78" width="42" height="30" rx="2"/>
+  <text class="t" x="253" y="98" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="274" y="78" width="42" height="30" rx="2"/>
+  <text class="t" x="295" y="98" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="316" y="78" width="42" height="30" rx="2"/>
+  <text class="t" x="337" y="98" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx2" x="358" y="78" width="42" height="30" rx="2"/>
+  <text class="t" x="379" y="98" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bxs" x="400" y="78" width="42" height="30" rx="2"/>
+  <text class="tb" x="421" y="98" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="442" y="78" width="42" height="30" rx="2"/>
+  <text class="t" x="463" y="98" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="484" y="78" width="42" height="30" rx="2"/>
+  <text class="t" x="505" y="98" text-anchor="middle" xml:space="preserve">3</text>
+  <line class="sline" x1="400" y1="74" x2="400" y2="112"/>
+  <text class="dimn" x="542" y="92" text-anchor="start" xml:space="preserve">key_byte = 1</text>
+  <text class="dimn" x="542" y="110" text-anchor="start" xml:space="preserve">first index inspected: 4</text>
+  <text class="ts" x="30" y="178" text-anchor="start" xml:space="preserve">2  shift</text>
+  <rect class="bxq" x="190" y="158" width="42" height="30" rx="2"/>
+  <text class="dim" x="211" y="178" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="232" y="158" width="42" height="30" rx="2"/>
+  <text class="t" x="253" y="178" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="274" y="158" width="42" height="30" rx="2"/>
+  <text class="t" x="295" y="178" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="316" y="158" width="42" height="30" rx="2"/>
+  <text class="t" x="337" y="178" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="358" y="158" width="42" height="30" rx="2"/>
+  <text class="t" x="379" y="178" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx" x="400" y="158" width="42" height="30" rx="2"/>
+  <text class="t" x="421" y="178" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="442" y="158" width="42" height="30" rx="2"/>
+  <text class="t" x="463" y="178" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="484" y="158" width="42" height="30" rx="2"/>
+  <text class="t" x="505" y="178" text-anchor="middle" xml:space="preserve">3</text>
+  <line class="sline" x1="400" y1="154" x2="400" y2="192"/>
+  <path class="sline" d="M211,148 H379" marker-end="url(#arS)"/>
+  <text class="dimn" x="542" y="172" text-anchor="start" xml:space="preserve">every byte above the key</text>
+  <text class="dimn" x="542" y="190" text-anchor="start" xml:space="preserve">moves right one place</text>
+  <text class="ts" x="30" y="258" text-anchor="start" xml:space="preserve">3  place</text>
+  <rect class="bxs" x="190" y="238" width="42" height="30" rx="2"/>
+  <text class="tb" x="211" y="258" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx2" x="232" y="238" width="42" height="30" rx="2"/>
+  <text class="t" x="253" y="258" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="274" y="238" width="42" height="30" rx="2"/>
+  <text class="t" x="295" y="258" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="316" y="238" width="42" height="30" rx="2"/>
+  <text class="t" x="337" y="258" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="358" y="238" width="42" height="30" rx="2"/>
+  <text class="t" x="379" y="258" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx" x="400" y="238" width="42" height="30" rx="2"/>
+  <text class="t" x="421" y="258" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="442" y="238" width="42" height="30" rx="2"/>
+  <text class="t" x="463" y="258" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="484" y="238" width="42" height="30" rx="2"/>
+  <text class="t" x="505" y="258" text-anchor="middle" xml:space="preserve">3</text>
+  <line class="sline" x1="400" y1="234" x2="400" y2="272"/>
+  <text class="dimn" x="542" y="252" text-anchor="start" xml:space="preserve">key_byte is written</text>
+  <text class="dimn" x="542" y="270" text-anchor="start" xml:space="preserve">into index 0</text>
+  <text class="ts" x="30" y="338" text-anchor="start" xml:space="preserve">4  advance</text>
+  <rect class="bx2" x="190" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="211" y="338" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx2" x="232" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="253" y="338" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx2" x="274" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="295" y="338" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx2" x="316" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="337" y="338" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx2" x="358" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="379" y="338" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx2" x="400" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="421" y="338" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="442" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="463" y="338" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="484" y="318" width="42" height="30" rx="2"/>
+  <text class="t" x="505" y="338" text-anchor="middle" xml:space="preserve">3</text>
+  <line class="sline" x1="442" y1="314" x2="442" y2="352"/>
+  <text class="dimn" x="542" y="332" text-anchor="start" xml:space="preserve">the boundary moves to</text>
+  <text class="dimn" x="542" y="350" text-anchor="start" xml:space="preserve">index 6, then i increments</text>
+  <text class="dimn" x="30" y="400" text-anchor="start" xml:space="preserve">The blue rule is the invariant: everything left of it is sorted.</text>
+  <text class="dimn" x="30" y="418" text-anchor="start" xml:space="preserve">The hole at step 2 still holds a stale copy until step 3 fills it.</text>
+  <text class="dimn" x="30" y="440" text-anchor="start" xml:space="preserve">Every other pass does less work than this one. None of them does anything different.</text>
+</svg>

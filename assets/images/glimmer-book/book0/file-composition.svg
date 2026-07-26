@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="576" viewBox="0 0 720 576" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Three files, one generated program</title>
+  <desc id="figDesc">An entry file declaring a routine, a part holding the blocks and an imported assembly module with two exported labels and one private one, all gathered into a single generated file.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="24" y="32" text-anchor="start" xml:space="preserve">THE FILES YOU WRITE</text>
+  <rect class="bxs" x="24" y="48" width="210" height="150" rx="4"/>
+  <text class="tb" x="36" y="72" text-anchor="start" xml:space="preserve">canvas.glim</text>
+  <text class="ts" x="36" y="96" text-anchor="start" xml:space="preserve">program Canvas</text>
+  <text class="ts" x="36" y="114" text-anchor="start" xml:space="preserve">import "paint-lib.asm"</text>
+  <text class="ts" x="36" y="132" text-anchor="start" xml:space="preserve">type Point, state</text>
+  <text class="ts" x="36" y="150" text-anchor="start" xml:space="preserve">bind key ...</text>
+  <text class="ts" x="36" y="168" text-anchor="start" xml:space="preserve">routine CursorSpot</text>
+  <text class="ts" x="36" y="186" text-anchor="start" xml:space="preserve">part "canvas-rules.glim"</text>
+  <rect class="bx" x="24" y="240" width="210" height="120" rx="4"/>
+  <text class="tb" x="36" y="264" text-anchor="start" xml:space="preserve">canvas-rules.glim</text>
+  <text class="ts" x="36" y="288" text-anchor="start" xml:space="preserve">effect StampPixel</text>
+  <text class="ts" x="36" y="306" text-anchor="start" xml:space="preserve">effect ErasePixel</text>
+  <text class="ts" x="36" y="324" text-anchor="start" xml:space="preserve">render DrawCanvas</text>
+  <text class="ts" x="36" y="342" text-anchor="start" xml:space="preserve">render ShowCount</text>
+  <rect class="bx" x="24" y="390" width="210" height="130" rx="4"/>
+  <text class="tb" x="36" y="414" text-anchor="start" xml:space="preserve">paint-lib.asm</text>
+  <rect class="bxs" x="36" y="424" width="150" height="24" rx="2"/>
+  <text class="ts" x="111" y="440" text-anchor="middle" xml:space="preserve">@ShowPaint</text>
+  <rect class="bxs" x="36" y="452" width="150" height="24" rx="2"/>
+  <text class="ts" x="111" y="468" text-anchor="middle" xml:space="preserve">@CountLit</text>
+  <rect class="bxq" x="36" y="480" width="150" height="24" rx="2"/>
+  <text class="dim" x="111" y="496" text-anchor="middle" xml:space="preserve">CountByte</text>
+  <rect class="bx" x="290" y="140" width="210" height="190" rx="4"/>
+  <text class="tb" x="302" y="166" text-anchor="start" xml:space="preserve">canvas.main.asm</text>
+  <text class="ts" x="302" y="190" text-anchor="start" xml:space="preserve">the runtime loop</text>
+  <text class="ts" x="302" y="212" text-anchor="start" xml:space="preserve">the dispatchers</text>
+  <text class="ts" x="302" y="234" text-anchor="start" xml:space="preserve">your blocks, wrapped</text>
+  <text class="ts" x="302" y="256" text-anchor="start" xml:space="preserve">CursorSpot</text>
+  <text class="ts" x="302" y="278" text-anchor="start" xml:space="preserve">the imported module</text>
+  <text class="ts" x="302" y="300" text-anchor="start" xml:space="preserve">the profile library</text>
+  <path class="none" d="M234,123 C262,123 262,175 290,175" marker-end="url(#ar)"/>
+  <path class="none" d="M234,300 C262,300 262,235 290,235" marker-end="url(#ar)"/>
+  <path class="none" d="M234,455 C262,455 262,295 290,295" marker-end="url(#ar)"/>
+  <text class="cap" x="520" y="150" text-anchor="start" xml:space="preserve">THE @ BOUNDARY</text>
+  <text class="dimn" x="520" y="174" text-anchor="start" xml:space="preserve">A label wearing @ is</text>
+  <text class="dimn" x="520" y="190" text-anchor="start" xml:space="preserve">callable from any block</text>
+  <text class="dimn" x="520" y="206" text-anchor="start" xml:space="preserve">in any file. A plain label</text>
+  <text class="dimn" x="520" y="222" text-anchor="start" xml:space="preserve">stays private to its own.</text>
+  <text class="cap" x="520" y="270" text-anchor="start" xml:space="preserve">IMPORTED TWICE</text>
+  <text class="dimn" x="520" y="294" text-anchor="start" xml:space="preserve">A second import of the</text>
+  <text class="dimn" x="520" y="310" text-anchor="start" xml:space="preserve">same module places no</text>
+  <text class="dimn" x="520" y="326" text-anchor="start" xml:space="preserve">second copy of its bytes.</text>
+  <text class="dimn" x="24" y="552" text-anchor="start" xml:space="preserve">None of the three changes what the Z80 runs. They change what you find when you come back.</text>
+</svg>

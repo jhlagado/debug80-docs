@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="356" viewBox="0 0 720 356" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">A goto asked for mid-frame, granted at the boundary</title>
+  <desc id="figDesc">Two frames side by side. In the first, the logic phase runs a goto and stages the card change in Next1. The second frame latches the new active card at its start and runs the entering card first.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="24" y="40" text-anchor="start" xml:space="preserve">A GOTO LANDS AT THE NEXT FRAME BOUNDARY</text>
+  <text class="cap" x="24" y="74" text-anchor="start" xml:space="preserve">FRAME N</text>
+  <text class="cap" x="370" y="74" text-anchor="start" xml:space="preserve">FRAME N+1</text>
+  <rect class="bxq" x="24" y="86" width="60" height="44" rx="3"/>
+  <text class="ts" x="54" y="113" text-anchor="middle" xml:space="preserve">poll</text>
+  <rect class="bxq" x="84" y="86" width="64" height="44" rx="3"/>
+  <text class="ts" x="116" y="113" text-anchor="middle" xml:space="preserve">latch</text>
+  <rect class="bxs" x="148" y="86" width="74" height="44" rx="3"/>
+  <text class="ts" x="185" y="113" text-anchor="middle" xml:space="preserve">logic</text>
+  <rect class="bxq" x="222" y="86" width="70" height="44" rx="3"/>
+  <text class="ts" x="257" y="113" text-anchor="middle" xml:space="preserve">render</text>
+  <rect class="bxq" x="292" y="86" width="58" height="44" rx="3"/>
+  <text class="ts" x="321" y="113" text-anchor="middle" xml:space="preserve">end</text>
+  <rect class="bxq" x="370" y="86" width="60" height="44" rx="3"/>
+  <text class="ts" x="400" y="113" text-anchor="middle" xml:space="preserve">poll</text>
+  <rect class="bxs" x="430" y="86" width="64" height="44" rx="3"/>
+  <text class="ts" x="462" y="113" text-anchor="middle" xml:space="preserve">latch</text>
+  <rect class="bxq" x="494" y="86" width="74" height="44" rx="3"/>
+  <text class="ts" x="531" y="113" text-anchor="middle" xml:space="preserve">logic</text>
+  <rect class="bxq" x="568" y="86" width="70" height="44" rx="3"/>
+  <text class="ts" x="603" y="113" text-anchor="middle" xml:space="preserve">render</text>
+  <rect class="bxq" x="638" y="86" width="58" height="44" rx="3"/>
+  <text class="ts" x="667" y="113" text-anchor="middle" xml:space="preserve">end</text>
+  <line class="dash" x1="360" y1="80" x2="360" y2="240"/>
+  <text class="dim" x="116" y="150" text-anchor="middle" xml:space="preserve">active card: Splash</text>
+  <text class="dim" x="462" y="150" text-anchor="middle" xml:space="preserve">active card: Playing</text>
+  <line class="rule" x1="185" y1="130" x2="185" y2="166"/>
+  <text class="dimn" x="185" y="178" text-anchor="middle" xml:space="preserve">StartGame runs goto Playing</text>
+  <path class="sline" d="M185,196 C185,232 462,232 462,172" marker-end="url(#arS)"/>
+  <text class="dimn" x="323" y="250" text-anchor="middle" xml:space="preserve">CurrentCard changed, staged in Next1</text>
+  <text class="dimn" x="24" y="286" text-anchor="start" xml:space="preserve">Splash stays active for the rest of its frame: its blocks finish and its pulses clear at the end.</text>
+  <text class="dimn" x="24" y="302" text-anchor="start" xml:space="preserve">Playing wakes at the next frame start, enter blocks first, with a quiet keypad.</text>
+  <text class="dimn" x="24" y="332" text-anchor="start" xml:space="preserve">Dispatch gates never test CurrentCard. They test GlimActiveCard, latched once at the top of the loop.</text>
+</svg>

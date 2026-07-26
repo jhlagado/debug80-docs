@@ -104,6 +104,8 @@ Count ours: six facts, five moments, and one card cell make twelve,
 with room to spare. Timer cells carry no flag,
 and `FrameCount` costs nothing in a program that never names it.
 
+![Skyfall on paper, before a block is written.](../../assets/images/glimmer-book/book0/skyfall-design.svg)
+
 ## The entry file
 
 Skyfall uses an entry file for declarations and one part for cards and
@@ -480,6 +482,8 @@ first drop falls at a stroll; ten catches in, the pace is markedly
 faster; a few more and survival hangs on the paddle's top speed.
 Every part of that feel is a number you wrote: the 18, the 4, the 6,
 the 90.
+
+![Skyfall in play: the drop in column 5, the paddle covering columns 4 to 6.](../../assets/images/glimmer-book/book0/skyfall-play.svg)
 
 ## The design, printed
 

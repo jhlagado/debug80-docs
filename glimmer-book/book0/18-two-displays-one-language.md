@@ -88,6 +88,8 @@ of VRAM over and over without any help from you, `VdpWaitVBlank`
 catches the rest between two paintings, and `GlimCommit` spends that
 rest moving the previous frame's changes into VRAM.
 
+![Two displays, two prices, one reactive frame.](../../assets/images/glimmer-book/book0/two-loops.svg)
+
 ## The board the program is
 
 On the 8x8 matrix, the scene is 32 bytes of program RAM, and

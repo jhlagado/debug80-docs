@@ -107,6 +107,8 @@ If HL ≥ DE, the second `sbc hl, de` performs the Euclidean subtraction step an
 | 5 | 12 | 6 | 12 ≥ 6 → subtract twice |
 | end | 0 | 6 | HL zero → swap DE into HL, return 6 |
 
+![Euclid's method reaches GCD(48, 18) by subtraction alone, swapping whenever HL falls below DE](../../assets/images/azm-book/book3/gcd-euclid.svg)
+
 ---
 
 ## `main`: calling and storing the result

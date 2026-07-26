@@ -181,6 +181,8 @@ the change, and the answer is one rule:
 **A change is delivered exactly once: to later phases in the same
 frame, otherwise in the next frame.**
 
+![One frame, and the rule that decides which phase sees a change.](../../assets/images/glimmer-book/book0/the-frame.svg)
+
 `DeriveBar`
 updates `BarLen`, and BarLen's one dependent is `DrawBar`, a render,
 which is a later phase. So the change is delivered the same frame: raise the

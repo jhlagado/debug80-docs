@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="380" viewBox="0 0 720 380" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The seven pieces, and one of them turning</title>
+  <desc id="figDesc">The seven Tetro pieces drawn on square grids as their declarations draw them, then the S piece through its four rotations, the fourth an alias of the second, beside the four bytes the first rotation became.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="40" text-anchor="start" xml:space="preserve">SEVEN PIECES, SEVEN DECLARATIONS</text>
+  <rect class="bxq" x="40" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="62" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="84" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="40" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="62" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="84" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="40" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="62" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="84" y="100" width="22" height="22" rx="1"/>
+  <text class="ts" x="73" y="140" text-anchor="middle" xml:space="preserve">PieceI</text>
+  <text class="dim" x="73" y="158" text-anchor="middle" xml:space="preserve">cyan</text>
+  <rect class="bxs" x="134" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="156" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="178" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="134" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="156" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="178" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="134" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="156" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="178" y="100" width="22" height="22" rx="1"/>
+  <text class="ts" x="167" y="140" text-anchor="middle" xml:space="preserve">PieceO</text>
+  <text class="dim" x="167" y="158" text-anchor="middle" xml:space="preserve">white</text>
+  <rect class="bxs" x="228" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="250" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="272" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="228" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="250" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="272" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="228" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="250" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="272" y="100" width="22" height="22" rx="1"/>
+  <text class="ts" x="261" y="140" text-anchor="middle" xml:space="preserve">PieceT</text>
+  <text class="dim" x="261" y="158" text-anchor="middle" xml:space="preserve">magenta</text>
+  <rect class="bxs" x="322" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="344" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="366" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="322" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="344" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="366" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="322" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="344" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="366" y="100" width="22" height="22" rx="1"/>
+  <text class="ts" x="355" y="140" text-anchor="middle" xml:space="preserve">PieceS</text>
+  <text class="dim" x="355" y="158" text-anchor="middle" xml:space="preserve">green</text>
+  <rect class="bxq" x="416" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="438" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="460" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="416" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="438" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="460" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="416" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="438" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="460" y="100" width="22" height="22" rx="1"/>
+  <text class="ts" x="449" y="140" text-anchor="middle" xml:space="preserve">PieceZ</text>
+  <text class="dim" x="449" y="158" text-anchor="middle" xml:space="preserve">red</text>
+  <rect class="bxq" x="510" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="532" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="554" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="510" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="532" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="554" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="510" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="532" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="554" y="100" width="22" height="22" rx="1"/>
+  <text class="ts" x="543" y="140" text-anchor="middle" xml:space="preserve">PieceJ</text>
+  <text class="dim" x="543" y="158" text-anchor="middle" xml:space="preserve">blue</text>
+  <rect class="bxs" x="604" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="626" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="648" y="56" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="604" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="626" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxs" x="648" y="78" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="604" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="626" y="100" width="22" height="22" rx="1"/>
+  <rect class="bxq" x="648" y="100" width="22" height="22" rx="1"/>
+  <text class="ts" x="637" y="140" text-anchor="middle" xml:space="preserve">PieceL</text>
+  <text class="dim" x="637" y="158" text-anchor="middle" xml:space="preserve">yellow</text>
+  <text class="cap" x="40" y="200" text-anchor="start" xml:space="preserve">PIECES, FOUR QUARTER TURNS</text>
+  <rect class="bxs" x="40" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="60" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="80" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="100" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="40" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="60" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="80" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="100" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="40" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="60" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="80" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="100" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="40" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="60" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="80" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="100" y="276" width="20" height="20" rx="1"/>
+  <text class="ts" x="80" y="314" text-anchor="middle" xml:space="preserve">rot0</text>
+  <line class="none" x1="124" y1="256" x2="156" y2="256" marker-end="url(#ar)"/>
+  <rect class="bxq" x="160" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="180" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="200" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="220" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="160" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="180" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="200" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="220" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="160" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="180" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="200" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="220" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="160" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="180" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="200" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="220" y="276" width="20" height="20" rx="1"/>
+  <text class="ts" x="200" y="314" text-anchor="middle" xml:space="preserve">rot1</text>
+  <line class="none" x1="244" y1="256" x2="276" y2="256" marker-end="url(#ar)"/>
+  <rect class="bxq" x="280" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="300" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="320" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="340" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="280" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="300" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="320" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="340" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="280" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="300" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="320" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="340" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="280" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="300" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="320" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="340" y="276" width="20" height="20" rx="1"/>
+  <text class="ts" x="320" y="314" text-anchor="middle" xml:space="preserve">rot2</text>
+  <line class="none" x1="364" y1="256" x2="396" y2="256" marker-end="url(#ar)"/>
+  <rect class="bxq" x="400" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="420" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="440" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="460" y="216" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="400" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="420" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="440" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="460" y="236" width="20" height="20" rx="1"/>
+  <rect class="bxs" x="400" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="420" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="440" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="460" y="256" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="400" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="420" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="440" y="276" width="20" height="20" rx="1"/>
+  <rect class="bxq" x="460" y="276" width="20" height="20" rx="1"/>
+  <text class="ts" x="440" y="314" text-anchor="middle" xml:space="preserve">rot3 = rot1</text>
+  <text class="cap" x="540" y="200" text-anchor="start" xml:space="preserve">SHAPEROT_PIECES_0</text>
+  <text class="t" x="540" y="234" text-anchor="start" xml:space="preserve">%11000000</text>
+  <text class="t" x="540" y="254" text-anchor="start" xml:space="preserve">%01100000</text>
+  <text class="t" x="540" y="274" text-anchor="start" xml:space="preserve">%00000000</text>
+  <text class="t" x="540" y="294" text-anchor="start" xml:space="preserve">%00000000</text>
+  <text class="dimn" x="40" y="350" text-anchor="start" xml:space="preserve">Rotating in play is CurRotation plus one, masked to two bits. The pointer table holds the aliases.</text>
+</svg>

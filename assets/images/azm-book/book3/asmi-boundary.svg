@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="356" viewBox="0 0 720 356" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">What an .asmi interface carries across the boundary</title>
+  <desc id="figDesc">Your source with a call site and an .equ address binding, an interface file holding contract records only, and the monitor ROM that already exists in the machine, with a dashed boundary between them.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="30" y="32" text-anchor="start" xml:space="preserve">YOUR SOURCE, ASSEMBLED BY AZM</text>
+  <text class="cap" x="470" y="32" text-anchor="start" xml:space="preserve">CODE ALREADY IN THE MACHINE</text>
+  <line class="dash" x1="440" y1="46" x2="440" y2="300"/>
+  <rect class="bx" x="30" y="54" width="250" height="84" rx="4"/>
+  <text class="tb" x="46" y="78" text-anchor="start" xml:space="preserve">main.asm</text>
+  <text class="ts" x="46" y="102" text-anchor="start" xml:space="preserve">call MON_PRINT_CHAR</text>
+  <text class="ts" x="46" y="122" text-anchor="start" xml:space="preserve">MON_PRINT_CHAR .equ $0010</text>
+  <rect class="bxq" x="30" y="166" width="250" height="114" rx="4"/>
+  <text class="tb" x="46" y="190" text-anchor="start" xml:space="preserve">monitor.asmi</text>
+  <text class="ts" x="46" y="214" text-anchor="start" xml:space="preserve">extern MON_PRINT_CHAR</text>
+  <text class="ts" x="46" y="234" text-anchor="start" xml:space="preserve">in A</text>
+  <text class="ts" x="46" y="254" text-anchor="start" xml:space="preserve">clobbers A</text>
+  <text class="ts" x="46" y="274" text-anchor="start" xml:space="preserve">end</text>
+  <rect class="bx" x="310" y="176" width="110" height="90" rx="4"/>
+  <text class="nb" x="365" y="202" text-anchor="middle" xml:space="preserve">azm</text>
+  <text class="ts" x="365" y="226" text-anchor="middle" xml:space="preserve">checks calls</text>
+  <text class="dim" x="365" y="248" text-anchor="middle" xml:space="preserve">no bytes</text>
+  <path class="none" d="M280,96 C300,96 296,196 310,196" marker-end="url(#ar)"/>
+  <path class="none" d="M280,222 H310" marker-end="url(#ar)"/>
+  <rect class="bxq" x="470" y="64" width="220" height="116" rx="4"/>
+  <text class="nb" x="580" y="90" text-anchor="middle" xml:space="preserve">monitor ROM</text>
+  <text class="ts" x="486" y="118" text-anchor="start" xml:space="preserve">$0010  MON_PRINT_CHAR</text>
+  <text class="ts" x="486" y="138" text-anchor="start" xml:space="preserve">$0018  MON_GET_KEY</text>
+  <text class="dimn" x="486" y="164" text-anchor="start" xml:space="preserve">not in your output</text>
+  <path class="dash" d="M290,148 H466" marker-end="url(#arD)"/>
+  <text class="dimn" x="308" y="142" text-anchor="start" xml:space="preserve">the .equ binds the address</text>
+  <text class="dimn" x="30" y="332" text-anchor="start" xml:space="preserve">The interface carries contracts, not addresses. Neither file emits a byte, and the ROM is there either way.</text>
+</svg>

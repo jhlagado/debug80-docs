@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="424" viewBox="0 0 720 424" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">One frame, and where a change is delivered</title>
+  <desc id="figDesc">A frame drawn as a band of six phases: scan, poll, compute, effect, render, rollover, with a boundary before the next frame. Three lanes below show a change raised in compute landing this frame through Raised0, and changes raised in effect or render deferring to the next frame through Next0.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="24" y="100" text-anchor="start" xml:space="preserve">FRAME N</text>
+  <text class="cap" x="576" y="100" text-anchor="start" xml:space="preserve">NEXT FRAME</text>
+  <rect class="bxq" x="24" y="110" width="88" height="56" rx="3"/>
+  <text class="t" x="68" y="134" text-anchor="middle" xml:space="preserve">scan</text>
+  <text class="dimn" x="68" y="152" text-anchor="middle" xml:space="preserve">the picture</text>
+  <rect class="bxq" x="112" y="110" width="80" height="56" rx="3"/>
+  <text class="t" x="152" y="134" text-anchor="middle" xml:space="preserve">poll</text>
+  <text class="dimn" x="152" y="152" text-anchor="middle" xml:space="preserve">the keypad</text>
+  <rect class="bx2" x="192" y="110" width="96" height="56" rx="3"/>
+  <text class="t" x="240" y="134" text-anchor="middle" xml:space="preserve">compute</text>
+  <text class="dimn" x="240" y="152" text-anchor="middle" xml:space="preserve">derivations</text>
+  <rect class="bx2" x="288" y="110" width="88" height="56" rx="3"/>
+  <text class="t" x="332" y="134" text-anchor="middle" xml:space="preserve">effect</text>
+  <text class="dimn" x="332" y="152" text-anchor="middle" xml:space="preserve">the rules</text>
+  <rect class="bx2" x="376" y="110" width="88" height="56" rx="3"/>
+  <text class="t" x="420" y="134" text-anchor="middle" xml:space="preserve">render</text>
+  <text class="dimn" x="420" y="152" text-anchor="middle" xml:space="preserve">the pictures</text>
+  <rect class="bxq" x="464" y="110" width="96" height="56" rx="3"/>
+  <text class="t" x="512" y="134" text-anchor="middle" xml:space="preserve">rollover</text>
+  <text class="dimn" x="512" y="152" text-anchor="middle" xml:space="preserve">pulses clear</text>
+  <rect class="bxq" x="576" y="110" width="40" height="56" rx="3"/>
+  <text class="ts" x="596" y="142" text-anchor="middle" xml:space="preserve">scan</text>
+  <rect class="bxq" x="616" y="110" width="36" height="56" rx="3"/>
+  <text class="ts" x="634" y="142" text-anchor="middle" xml:space="preserve">poll</text>
+  <rect class="bxq" x="652" y="110" width="52" height="56" rx="3"/>
+  <text class="ts" x="678" y="142" text-anchor="middle" xml:space="preserve">compute</text>
+  <line class="dash" x1="568" y1="104" x2="568" y2="338"/>
+  <rect class="bxq" x="24" y="196" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="112" y="196" width="80" height="24" rx="2"/>
+  <rect class="bxq" x="192" y="196" width="96" height="24" rx="2"/>
+  <rect class="bxq" x="288" y="196" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="376" y="196" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="464" y="196" width="96" height="24" rx="2"/>
+  <rect class="bxq" x="576" y="196" width="128" height="24" rx="2"/>
+  <rect class="bxs" x="231" y="199" width="18" height="18" rx="2"/>
+  <line class="sline" x1="252" y1="208" x2="420" y2="208" marker-end="url(#arS)"/>
+  <text class="dimn" x="24" y="240" text-anchor="start" xml:space="preserve">a compute raises: the effect and render phases see it this frame, staged in Raised0</text>
+  <rect class="bxq" x="24" y="252" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="112" y="252" width="80" height="24" rx="2"/>
+  <rect class="bxq" x="192" y="252" width="96" height="24" rx="2"/>
+  <rect class="bxq" x="288" y="252" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="376" y="252" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="464" y="252" width="96" height="24" rx="2"/>
+  <rect class="bxq" x="576" y="252" width="128" height="24" rx="2"/>
+  <rect class="bxs" x="323" y="255" width="18" height="18" rx="2"/>
+  <line class="sline" x1="344" y1="264" x2="640" y2="264" marker-end="url(#arS)"/>
+  <text class="dimn" x="24" y="296" text-anchor="start" xml:space="preserve">an effect raises and a compute depends: the whole change defers, staged in Next0</text>
+  <rect class="bxq" x="24" y="308" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="112" y="308" width="80" height="24" rx="2"/>
+  <rect class="bxq" x="192" y="308" width="96" height="24" rx="2"/>
+  <rect class="bxq" x="288" y="308" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="376" y="308" width="88" height="24" rx="2"/>
+  <rect class="bxq" x="464" y="308" width="96" height="24" rx="2"/>
+  <rect class="bxq" x="576" y="308" width="128" height="24" rx="2"/>
+  <rect class="bxs" x="411" y="311" width="18" height="18" rx="2"/>
+  <line class="sline" x1="432" y1="320" x2="640" y2="320" marker-end="url(#arS)"/>
+  <text class="dimn" x="24" y="352" text-anchor="start" xml:space="preserve">a render raises: every dependent sits in an earlier phase, so that change defers too</text>
+  <text class="cap" x="568" y="376" text-anchor="middle" xml:space="preserve">FRAME BOUNDARY</text>
+  <text class="dimn" x="24" y="400" text-anchor="start" xml:space="preserve">A change is delivered exactly once: to later phases in the same frame, otherwise in the next frame.</text>
+</svg>

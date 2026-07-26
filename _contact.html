@@ -1,0 +1,8 @@
+<!doctype html><meta charset=utf-8><title>contact</title>
+<style>body{background:#f4f4f2;font:13px system-ui;margin:0;padding:12px}
+figure{margin:0 0 16px;border-top:1px solid #111;border-bottom:1px solid #111;padding:10px 0}
+figcaption{font:11px ui-monospace;color:#888;padding-top:5px}img{display:block;max-width:100%}</style>
+<div id=o></div><script>
+const [dir,...f]=decodeURIComponent(location.hash.slice(1)).split(',');
+o.innerHTML=f.map(n=>`<figure><img src="assets/images/${dir}/${n}.svg?r=${Math.random()}"><figcaption>${n}</figcaption></figure>`).join('');
+</script>

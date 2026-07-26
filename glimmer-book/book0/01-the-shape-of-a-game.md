@@ -36,6 +36,8 @@ updates. If you have ever used a spreadsheet, changed one cell and
 watched every formula that mentions it recompute, you have already
 seen this model work.
 
+![The same dot, ordered by hand and declared in Glimmer.](../../assets/images/glimmer-book/book0/imperative-reactive.svg)
+
 So in Glimmer you declare the facts your game remembers, name the
 moments it responds to, and write the rules and the pictures as a few
 lines of real Z80 each, with a label saying when they run. Glimmer
@@ -221,14 +223,7 @@ framebuffer and plots the dot where it currently is.
 
 Follow one press of key 6 through the program, from key to pixel:
 
-```mermaid
-flowchart LR
-    K6["key 6 goes down"] -->|bind| R["Right fires"]
-    R -->|on| MR["MoveRight runs"]
-    MR -->|updates| DX["DotX changed"]
-    DX -->|on| DD["DrawDot runs"]
-    DD --> M["8x8 matrix updates"]
-```
+![One press of key 6, from the declarations that describe it to the pixel it lights.](../../assets/images/glimmer-book/book0/reactive-chain.svg)
 
 This is the spreadsheet from the start of the chapter. You never call a
 formula; you write it, and the spreadsheet works out when it must

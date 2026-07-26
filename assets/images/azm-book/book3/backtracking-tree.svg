@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="484" viewBox="0 0 720 484" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Backtracking out of a dead end</title>
+  <desc id="figDesc">Six rows of the search. Rows 0 to 4 accept columns 0, 2, 4, 1 and 3, then row 5 finds every column blocked, so the search unmarks the row 4 placement and resumes its column loop at 4.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="30" y="32" text-anchor="start" xml:space="preserve">COLUMNS TRIED, ROW BY ROW</text>
+  <text class="ts" x="30" y="78" text-anchor="start" xml:space="preserve">row 0</text>
+  <rect class="bxs" x="170" y="60" width="32" height="26" rx="2"/>
+  <text class="tb" x="186" y="78" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dimn" x="520" y="78" text-anchor="start" xml:space="preserve">first column of the first row</text>
+  <path class="rule" d="M186,86 V108 M186,108 H262"/>
+  <line class="rule" x1="186" y1="108" x2="186" y2="122"/>
+  <line class="rule" x1="224" y1="108" x2="224" y2="122"/>
+  <line class="rule" x1="262" y1="108" x2="262" y2="122"/>
+  <text class="ts" x="30" y="140" text-anchor="start" xml:space="preserve">row 1</text>
+  <rect class="bxq" x="170" y="122" width="32" height="26" rx="2"/>
+  <text class="dim" x="186" y="140" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bxq" x="208" y="122" width="32" height="26" rx="2"/>
+  <text class="dim" x="224" y="140" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bxs" x="246" y="122" width="32" height="26" rx="2"/>
+  <text class="tb" x="262" y="140" text-anchor="middle" xml:space="preserve">2</text>
+  <text class="dimn" x="520" y="140" text-anchor="start" xml:space="preserve">c 0 column, c 1 diagonal</text>
+  <path class="rule" d="M262,148 V170 M186,170 H338"/>
+  <line class="rule" x1="186" y1="170" x2="186" y2="184"/>
+  <line class="rule" x1="224" y1="170" x2="224" y2="184"/>
+  <line class="rule" x1="262" y1="170" x2="262" y2="184"/>
+  <line class="rule" x1="300" y1="170" x2="300" y2="184"/>
+  <line class="rule" x1="338" y1="170" x2="338" y2="184"/>
+  <text class="ts" x="30" y="202" text-anchor="start" xml:space="preserve">row 2</text>
+  <rect class="bxq" x="170" y="184" width="32" height="26" rx="2"/>
+  <text class="dim" x="186" y="202" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bxq" x="208" y="184" width="32" height="26" rx="2"/>
+  <text class="dim" x="224" y="202" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bxq" x="246" y="184" width="32" height="26" rx="2"/>
+  <text class="dim" x="262" y="202" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bxq" x="284" y="184" width="32" height="26" rx="2"/>
+  <text class="dim" x="300" y="202" text-anchor="middle" xml:space="preserve">3</text>
+  <rect class="bxs" x="322" y="184" width="32" height="26" rx="2"/>
+  <text class="tb" x="338" y="202" text-anchor="middle" xml:space="preserve">4</text>
+  <text class="dimn" x="520" y="202" text-anchor="start" xml:space="preserve">c 0, c 2 column; c 1, c 3 diagonal</text>
+  <path class="rule" d="M338,210 V232 M186,232 H338"/>
+  <line class="rule" x1="186" y1="232" x2="186" y2="246"/>
+  <line class="rule" x1="224" y1="232" x2="224" y2="246"/>
+  <text class="ts" x="30" y="264" text-anchor="start" xml:space="preserve">row 3</text>
+  <rect class="bxq" x="170" y="246" width="32" height="26" rx="2"/>
+  <text class="dim" x="186" y="264" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bxs" x="208" y="246" width="32" height="26" rx="2"/>
+  <text class="tb" x="224" y="264" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dimn" x="520" y="264" text-anchor="start" xml:space="preserve">c 0 column</text>
+  <path class="rule" d="M224,272 V294 M186,294 H300"/>
+  <line class="rule" x1="186" y1="294" x2="186" y2="308"/>
+  <line class="rule" x1="224" y1="294" x2="224" y2="308"/>
+  <line class="rule" x1="262" y1="294" x2="262" y2="308"/>
+  <line class="rule" x1="300" y1="294" x2="300" y2="308"/>
+  <text class="ts" x="30" y="326" text-anchor="start" xml:space="preserve">row 4</text>
+  <rect class="bxq" x="170" y="308" width="32" height="26" rx="2"/>
+  <text class="dim" x="186" y="326" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bxq" x="208" y="308" width="32" height="26" rx="2"/>
+  <text class="dim" x="224" y="326" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bxq" x="246" y="308" width="32" height="26" rx="2"/>
+  <text class="dim" x="262" y="326" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bxs" x="284" y="308" width="32" height="26" rx="2"/>
+  <text class="tb" x="300" y="326" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="520" y="326" text-anchor="start" xml:space="preserve">c 0 to c 2 column</text>
+  <path class="rule" d="M300,334 V356 M186,356 H452"/>
+  <line class="rule" x1="186" y1="356" x2="186" y2="370"/>
+  <line class="rule" x1="224" y1="356" x2="224" y2="370"/>
+  <line class="rule" x1="262" y1="356" x2="262" y2="370"/>
+  <line class="rule" x1="300" y1="356" x2="300" y2="370"/>
+  <line class="rule" x1="338" y1="356" x2="338" y2="370"/>
+  <line class="rule" x1="376" y1="356" x2="376" y2="370"/>
+  <line class="rule" x1="414" y1="356" x2="414" y2="370"/>
+  <line class="rule" x1="452" y1="356" x2="452" y2="370"/>
+  <text class="ts" x="30" y="388" text-anchor="start" xml:space="preserve">row 5</text>
+  <rect class="bxq" x="170" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="186" y="388" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bxq" x="208" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="224" y="388" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bxq" x="246" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="262" y="388" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bxq" x="284" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="300" y="388" text-anchor="middle" xml:space="preserve">3</text>
+  <rect class="bxq" x="322" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="338" y="388" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bxq" x="360" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="376" y="388" text-anchor="middle" xml:space="preserve">5</text>
+  <rect class="bxq" x="398" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="414" y="388" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bxq" x="436" y="370" width="32" height="26" rx="2"/>
+  <text class="dim" x="452" y="388" text-anchor="middle" xml:space="preserve">7</text>
+  <text class="tb" x="520" y="388" text-anchor="start" xml:space="preserve">every column blocked</text>
+  <path class="sline" d="M468,383 H496 V321 H322" marker-end="url(#arS)"/>
+  <text class="cap" x="520" y="414" text-anchor="start" xml:space="preserve">UNMARK AND BACK UP</text>
+  <text class="dimn" x="520" y="432" text-anchor="start" xml:space="preserve">row 4 releases c 3, resumes at c 4</text>
+  <text class="dimn" x="30" y="452" text-anchor="start" xml:space="preserve">Without the unmark, flags from an abandoned branch stay set, and every later row sees free squares as taken.</text>
+  <text class="dimn" x="30" y="470" text-anchor="start" xml:space="preserve">The count would come out below 92.</text>
+</svg>

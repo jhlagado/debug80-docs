@@ -1,0 +1,216 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="570" viewBox="0 0 720 570" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Four kinds of output, four instruments</title>
+  <desc id="figDesc">A shape reaching the 8x8 matrix through ShapeDraw, a sound cue reaching the speaker through Snd_Bounce, a score reaching the seven-segment display through HudWriteU16, a text resource reaching the LCD through lcd_row, and the keypad reaching a pulse through the poll.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="24" y="40" text-anchor="start" xml:space="preserve">IN YOUR PROGRAM</text>
+  <text class="cap" x="350" y="40" text-anchor="start" xml:space="preserve">ON THE BOARD</text>
+  <rect class="bx" x="24" y="60" width="190" height="52" rx="4"/>
+  <text class="tb" x="119" y="80" text-anchor="middle" xml:space="preserve">shape Spark</text>
+  <text class="ts" x="119" y="98" text-anchor="middle" xml:space="preserve">color cyan, 2x2</text>
+  <line class="none" x1="214" y1="86" x2="350" y2="86" marker-end="url(#ar)"/>
+  <text class="ts" x="282" y="78" text-anchor="middle" xml:space="preserve">call ShapeDraw</text>
+  <circle class="bxq" cx="359" cy="65" r="6"/>
+  <circle class="bxq" cx="377" cy="65" r="6"/>
+  <circle class="bxq" cx="395" cy="65" r="6"/>
+  <circle class="bxq" cx="413" cy="65" r="6"/>
+  <circle class="bxq" cx="431" cy="65" r="6"/>
+  <circle class="bxq" cx="449" cy="65" r="6"/>
+  <circle class="bxq" cx="467" cy="65" r="6"/>
+  <circle class="bxq" cx="485" cy="65" r="6"/>
+  <circle class="bxq" cx="359" cy="83" r="6"/>
+  <circle class="bxq" cx="377" cy="83" r="6"/>
+  <circle class="bxq" cx="395" cy="83" r="6"/>
+  <circle class="bxq" cx="413" cy="83" r="6"/>
+  <circle class="bxq" cx="431" cy="83" r="6"/>
+  <circle class="bxq" cx="449" cy="83" r="6"/>
+  <circle class="bxq" cx="467" cy="83" r="6"/>
+  <circle class="bxq" cx="485" cy="83" r="6"/>
+  <circle class="bxq" cx="359" cy="101" r="6"/>
+  <circle class="bxq" cx="377" cy="101" r="6"/>
+  <circle class="bxq" cx="395" cy="101" r="6"/>
+  <circle class="bxq" cx="413" cy="101" r="6"/>
+  <circle class="bxq" cx="431" cy="101" r="6"/>
+  <circle class="bxq" cx="449" cy="101" r="6"/>
+  <circle class="bxq" cx="467" cy="101" r="6"/>
+  <circle class="bxq" cx="485" cy="101" r="6"/>
+  <circle class="bxq" cx="359" cy="119" r="6"/>
+  <circle class="bxq" cx="377" cy="119" r="6"/>
+  <circle class="bxq" cx="395" cy="119" r="6"/>
+  <circle class="sig" cx="413" cy="119" r="6"/>
+  <circle class="sig" cx="431" cy="119" r="6"/>
+  <circle class="bxq" cx="449" cy="119" r="6"/>
+  <circle class="bxq" cx="467" cy="119" r="6"/>
+  <circle class="bxq" cx="485" cy="119" r="6"/>
+  <circle class="bxq" cx="359" cy="137" r="6"/>
+  <circle class="bxq" cx="377" cy="137" r="6"/>
+  <circle class="bxq" cx="395" cy="137" r="6"/>
+  <circle class="sig" cx="413" cy="137" r="6"/>
+  <circle class="sig" cx="431" cy="137" r="6"/>
+  <circle class="bxq" cx="449" cy="137" r="6"/>
+  <circle class="bxq" cx="467" cy="137" r="6"/>
+  <circle class="bxq" cx="485" cy="137" r="6"/>
+  <circle class="bxq" cx="359" cy="155" r="6"/>
+  <circle class="bxq" cx="377" cy="155" r="6"/>
+  <circle class="bxq" cx="395" cy="155" r="6"/>
+  <circle class="bxq" cx="413" cy="155" r="6"/>
+  <circle class="bxq" cx="431" cy="155" r="6"/>
+  <circle class="bxq" cx="449" cy="155" r="6"/>
+  <circle class="bxq" cx="467" cy="155" r="6"/>
+  <circle class="bxq" cx="485" cy="155" r="6"/>
+  <circle class="bxq" cx="359" cy="173" r="6"/>
+  <circle class="bxq" cx="377" cy="173" r="6"/>
+  <circle class="bxq" cx="395" cy="173" r="6"/>
+  <circle class="bxq" cx="413" cy="173" r="6"/>
+  <circle class="bxq" cx="431" cy="173" r="6"/>
+  <circle class="bxq" cx="449" cy="173" r="6"/>
+  <circle class="bxq" cx="467" cy="173" r="6"/>
+  <circle class="bxq" cx="485" cy="173" r="6"/>
+  <circle class="bxq" cx="359" cy="191" r="6"/>
+  <circle class="bxq" cx="377" cy="191" r="6"/>
+  <circle class="bxq" cx="395" cy="191" r="6"/>
+  <circle class="bxq" cx="413" cy="191" r="6"/>
+  <circle class="bxq" cx="431" cy="191" r="6"/>
+  <circle class="bxq" cx="449" cy="191" r="6"/>
+  <circle class="bxq" cx="467" cy="191" r="6"/>
+  <circle class="bxq" cx="485" cy="191" r="6"/>
+  <rect class="none" x="350" y="56" width="144" height="144" rx="4"/>
+  <text class="nb" x="510" y="84" text-anchor="start" xml:space="preserve">8x8 RGB matrix</text>
+  <text class="dimn" x="510" y="104" text-anchor="start" xml:space="preserve">64 pixels, three planes</text>
+  <rect class="bx" x="24" y="216" width="190" height="52" rx="4"/>
+  <text class="tb" x="119" y="236" text-anchor="middle" xml:space="preserve">sound Bounce</text>
+  <text class="ts" x="119" y="254" text-anchor="middle" xml:space="preserve">len 8 div 3</text>
+  <line class="none" x1="214" y1="242" x2="350" y2="242" marker-end="url(#ar)"/>
+  <text class="ts" x="282" y="234" text-anchor="middle" xml:space="preserve">call Snd_Bounce</text>
+  <circle class="none" cx="382" cy="242" r="20"/>
+  <circle class="bx2" cx="382" cy="242" r="9"/>
+  <path class="none" d="M410,230 Q419,242 410,254"/>
+  <path class="none" d="M420,224 Q433,242 420,260"/>
+  <text class="nb" x="510" y="238" text-anchor="start" xml:space="preserve">speaker</text>
+  <text class="dimn" x="510" y="258" text-anchor="start" xml:space="preserve">one port bit, tapped by the scan</text>
+  <rect class="bx" x="24" y="284" width="190" height="52" rx="4"/>
+  <text class="tb" x="119" y="304" text-anchor="middle" xml:space="preserve">Score in HL</text>
+  <text class="ts" x="119" y="322" text-anchor="middle" xml:space="preserve">a word fact</text>
+  <line class="none" x1="214" y1="310" x2="350" y2="310" marker-end="url(#ar)"/>
+  <text class="ts" x="282" y="302" text-anchor="middle" xml:space="preserve">call HudWriteU16</text>
+  <rect class="bx" x="350" y="288" width="34" height="46" rx="2"/>
+  <text class="t" x="367" y="317" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="384" y="288" width="34" height="46" rx="2"/>
+  <text class="t" x="401" y="317" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="418" y="288" width="34" height="46" rx="2"/>
+  <text class="t" x="435" y="317" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="452" y="288" width="34" height="46" rx="2"/>
+  <text class="t" x="469" y="317" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="486" y="288" width="34" height="46" rx="2"/>
+  <text class="t" x="503" y="317" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx" x="520" y="288" width="34" height="46" rx="2"/>
+  <text class="t" x="537" y="317" text-anchor="middle" xml:space="preserve">2</text>
+  <text class="nb" x="570" y="306" text-anchor="start" xml:space="preserve">seven-segment</text>
+  <text class="dimn" x="570" y="326" text-anchor="start" xml:space="preserve">six digits</text>
+  <rect class="bx" x="24" y="352" width="190" height="52" rx="4"/>
+  <text class="tb" x="119" y="372" text-anchor="middle" xml:space="preserve">text MsgHello</text>
+  <text class="ts" x="119" y="390" text-anchor="middle" xml:space="preserve">"FANFARE"</text>
+  <line class="none" x1="214" y1="378" x2="350" y2="378" marker-end="url(#ar)"/>
+  <text class="ts" x="282" y="370" text-anchor="middle" xml:space="preserve">lcd_row</text>
+  <rect class="bx" x="350" y="352" width="220" height="68" rx="3"/>
+  <text class="ts" x="362" y="380" text-anchor="start" xml:space="preserve">FANFARE</text>
+  <text class="ts" x="362" y="402" text-anchor="start" xml:space="preserve">LIVES 3</text>
+  <text class="nb" x="590" y="382" text-anchor="start" xml:space="preserve">20x4 LCD</text>
+  <rect class="bx" x="24" y="436" width="190" height="52" rx="4"/>
+  <text class="tb" x="119" y="456" text-anchor="middle" xml:space="preserve">pulse Right</text>
+  <text class="ts" x="119" y="474" text-anchor="middle" xml:space="preserve">bind key KEY_6</text>
+  <line class="none" x1="350" y1="462" x2="214" y2="462" marker-end="url(#ar)"/>
+  <text class="ts" x="282" y="454" text-anchor="middle" xml:space="preserve">GlimPollBindings</text>
+  <rect class="bx" x="350" y="436" width="17" height="17" rx="2"/>
+  <text class="dim" x="358.5" y="448" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="370" y="436" width="17" height="17" rx="2"/>
+  <text class="dim" x="378.5" y="448" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bx" x="390" y="436" width="17" height="17" rx="2"/>
+  <text class="dim" x="398.5" y="448" text-anchor="middle" xml:space="preserve">2</text>
+  <rect class="bx" x="410" y="436" width="17" height="17" rx="2"/>
+  <text class="dim" x="418.5" y="448" text-anchor="middle" xml:space="preserve">3</text>
+  <rect class="bx" x="350" y="456" width="17" height="17" rx="2"/>
+  <text class="dim" x="358.5" y="468" text-anchor="middle" xml:space="preserve">4</text>
+  <rect class="bx" x="370" y="456" width="17" height="17" rx="2"/>
+  <text class="dim" x="378.5" y="468" text-anchor="middle" xml:space="preserve">5</text>
+  <rect class="bxs" x="390" y="456" width="17" height="17" rx="2"/>
+  <text class="dim" x="398.5" y="468" text-anchor="middle" xml:space="preserve">6</text>
+  <rect class="bx" x="410" y="456" width="17" height="17" rx="2"/>
+  <text class="dim" x="418.5" y="468" text-anchor="middle" xml:space="preserve">7</text>
+  <rect class="bx" x="350" y="476" width="17" height="17" rx="2"/>
+  <text class="dim" x="358.5" y="488" text-anchor="middle" xml:space="preserve">8</text>
+  <rect class="bx" x="370" y="476" width="17" height="17" rx="2"/>
+  <text class="dim" x="378.5" y="488" text-anchor="middle" xml:space="preserve">9</text>
+  <rect class="bx" x="390" y="476" width="17" height="17" rx="2"/>
+  <text class="dim" x="398.5" y="488" text-anchor="middle" xml:space="preserve">A</text>
+  <rect class="bx" x="410" y="476" width="17" height="17" rx="2"/>
+  <text class="dim" x="418.5" y="488" text-anchor="middle" xml:space="preserve">B</text>
+  <rect class="bx" x="350" y="496" width="17" height="17" rx="2"/>
+  <text class="dim" x="358.5" y="508" text-anchor="middle" xml:space="preserve">C</text>
+  <rect class="bx" x="370" y="496" width="17" height="17" rx="2"/>
+  <text class="dim" x="378.5" y="508" text-anchor="middle" xml:space="preserve">D</text>
+  <rect class="bx" x="390" y="496" width="17" height="17" rx="2"/>
+  <text class="dim" x="398.5" y="508" text-anchor="middle" xml:space="preserve">E</text>
+  <rect class="bx" x="410" y="496" width="17" height="17" rx="2"/>
+  <text class="dim" x="418.5" y="508" text-anchor="middle" xml:space="preserve">F</text>
+  <text class="nb" x="450" y="470" text-anchor="start" xml:space="preserve">hex keypad</text>
+  <text class="dimn" x="450" y="490" text-anchor="start" xml:space="preserve">one key at a time</text>
+  <text class="dimn" x="24" y="546" text-anchor="start" xml:space="preserve">Every instrument is reached by a call the profile generated, and the keypad reaches you the same way.</text>
+</svg>

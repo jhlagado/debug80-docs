@@ -92,6 +92,8 @@ board row lands on screen as one `or` of plane byte into framebuffer
 byte. A full row announces itself in the separate `BoardRows`
 occupancy byte, which reads `$FF` regardless of the row's colours.
 
+![The settled board: one occupancy byte and three colour bytes per row.](../../assets/images/glimmer-book/book0/tetro-board.svg)
+
 Three timers put the game on its own schedule:
 
 ```text
@@ -168,6 +170,8 @@ Declaration order does the numbering here too: `PieceI` first through
 to 6, and that same order
 runs through every table below and through the preview letters in
 `text PieceNames "IOTSZJL"`.
+
+![The seven pieces, and the S piece through its four quarter turns.](../../assets/images/glimmer-book/book0/tetro-pieces.svg)
 
 ## The tables the shapes became
 

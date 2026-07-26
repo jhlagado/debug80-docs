@@ -85,26 +85,9 @@ node_spare:
 
 ### Memory diagram
 
-After assembly, RAM might look like this (addresses illustrative):
+After assembly, RAM holds this:
 
-```
-  list_head ($800C)          nodes
-  ┌─────────┐               node_a ($8000)     node_b ($8003)     node_c ($8006)
-  │ node_a ─┼──────────────►│ 10 │ node_b ────►│ 22 │ node_c ────►│ 30 │  0  │
-  └─────────┘               └────┴─────────────└────┴─────────────└────┴─────┘
-       │                         value  next          value  next         value  next
-       └─────────────────────────┘
-```
-
-```mermaid
-flowchart LR
-  H[list_head]
-  A[node_a 10]
-  B[node_b 22]
-  C[node_c 30]
-  N[null 0]
-  H --> A --> B --> C --> N
-```
+![Each next field holds the address of the next node, and list_head is a word of storage rather than a node](../../assets/images/azm-book/book3/linked-list.svg)
 
 ---
 
@@ -249,6 +232,8 @@ Steps in plain terms:
 
 After `ld de, node_spare` / `ld a, $40` / `call list_push_head`, the list order is spare → a → b → c. The new sum is `$00A2` (162).
 
+![Two stores change the shape of the list, and no existing node is touched](../../assets/images/azm-book/book3/insert-at-head.svg)
+
 ```asm
     ld de, node_spare
     ld a, $40
@@ -314,6 +299,8 @@ address. Start HL at the address of the root word. Each iteration loads the node
 address stored there. A zero word is an empty slot, so the routine writes the
 new node address into that link. Otherwise it compares the key and changes HL
 to the address of the existing node's `left` or `right` word.
+
+![HL holds the address of a link word, never the address of a node, so one pair of stores attaches a node anywhere in the tree](../../assets/images/azm-book/book3/bst-insert.svg)
 
 ```asm
 TREE_VALUE .equ offset(TreeNode, value)

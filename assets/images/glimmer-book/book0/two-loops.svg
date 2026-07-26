@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="478" viewBox="0 0 720 478" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Two displays under one reactive frame</title>
+  <desc id="figDesc">On the left the matrix path: a render repaints the framebuffer and the scan drives eight rows. On the right the VDP path: a render writes shadows, the commit runs in the vertical blank, and VRAM persists. Both stand on the same reactive frame.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="36" text-anchor="start" xml:space="preserve">SKYFALL, DISPLAY MATRIX8X8</text>
+  <text class="cap" x="400" y="36" text-anchor="start" xml:space="preserve">LANTERNFLY, DISPLAY TMS9918</text>
+  <rect class="bx" x="40" y="56" width="280" height="48" rx="3"/>
+  <text class="ts" x="180" y="85" text-anchor="middle" xml:space="preserve">a render repaints the framebuffer</text>
+  <line class="none" x1="180" y1="104" x2="180" y2="120" marker-end="url(#ar)"/>
+  <rect class="bx" x="40" y="120" width="280" height="48" rx="3"/>
+  <text class="ts" x="180" y="149" text-anchor="middle" xml:space="preserve">ScanFrame drives eight rows</text>
+  <line class="none" x1="180" y1="168" x2="180" y2="184" marker-end="url(#ar)"/>
+  <rect class="bx" x="40" y="184" width="280" height="48" rx="3"/>
+  <text class="ts" x="180" y="213" text-anchor="middle" xml:space="preserve">64 LEDs, lit by the CPU itself</text>
+  <rect class="bx" x="400" y="56" width="280" height="48" rx="3"/>
+  <text class="ts" x="540" y="85" text-anchor="middle" xml:space="preserve">a render writes the shadows</text>
+  <line class="none" x1="540" y1="104" x2="540" y2="120" marker-end="url(#ar)"/>
+  <rect class="bx" x="400" y="120" width="280" height="48" rx="3"/>
+  <text class="ts" x="540" y="149" text-anchor="middle" xml:space="preserve">GlimCommit, in the vertical blank</text>
+  <line class="none" x1="540" y1="168" x2="540" y2="184" marker-end="url(#ar)"/>
+  <rect class="bx" x="400" y="184" width="280" height="48" rx="3"/>
+  <text class="ts" x="540" y="213" text-anchor="middle" xml:space="preserve">VRAM, painted by the VDP</text>
+  <text class="dimn" x="40" y="258" text-anchor="start" xml:space="preserve">the picture is produced, every frame</text>
+  <text class="dimn" x="400" y="258" text-anchor="start" xml:space="preserve">the picture persists, and is corrected</text>
+  <line class="rule" x1="40" y1="274" x2="680" y2="274"/>
+  <path class="none" d="M180,282 V308" marker-end="url(#ar)"/>
+  <path class="none" d="M540,282 V308" marker-end="url(#ar)"/>
+  <rect class="bxs" x="40" y="308" width="640" height="128" rx="4"/>
+  <text class="tb" x="360" y="332" text-anchor="middle" xml:space="preserve">the same reactive frame under either display</text>
+  <text class="ts" x="70" y="358" text-anchor="start" xml:space="preserve">call GlimPollBindings</text>
+  <text class="ts" x="70" y="378" text-anchor="start" xml:space="preserve">latch GlimActiveCard</text>
+  <text class="ts" x="70" y="398" text-anchor="start" xml:space="preserve">call GlimTickTimers</text>
+  <text class="ts" x="70" y="418" text-anchor="start" xml:space="preserve">call GlimRunLogicEffects</text>
+  <text class="ts" x="380" y="358" text-anchor="start" xml:space="preserve">call GlimMergeRaised</text>
+  <text class="ts" x="380" y="378" text-anchor="start" xml:space="preserve">call GlimRunRenderEffects</text>
+  <text class="ts" x="380" y="398" text-anchor="start" xml:space="preserve">call GlimEndFrame</text>
+  <text class="ts" x="380" y="418" text-anchor="start" xml:space="preserve">jp MainLoop</text>
+  <text class="dimn" x="40" y="464" text-anchor="start" xml:space="preserve">Everything above the rule came from the display line. Everything below it is the language.</text>
+</svg>

@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="540" viewBox="0 0 720 540" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Euclid by subtraction, step by step</title>
+  <desc id="figDesc">The subtract or swap loop as a flow, then every state the loop passes through: HL and DE from 48 and 18, through 30, 12, 18, 6, 12 and 6, to 0 and 6.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="30" y="36" text-anchor="start" xml:space="preserve">GCD_U16</text>
+  <polygon class="bx" points="100,54 170,80 100,106 30,80"/>
+  <text class="t" x="100" y="84.5" text-anchor="middle" xml:space="preserve">HL = 0?</text>
+  <polygon class="bx" points="280,54 350,80 280,106 210,80"/>
+  <text class="t" x="280" y="84.5" text-anchor="middle" xml:space="preserve">DE = 0?</text>
+  <polygon class="bx" points="460,54 530,80 460,106 390,80"/>
+  <text class="t" x="460" y="84.5" text-anchor="middle" xml:space="preserve">HL &lt; DE?</text>
+  <rect class="bx" x="570" y="58" width="140" height="44" rx="4"/>
+  <text class="t" x="640" y="84.5" text-anchor="middle" xml:space="preserve">HL = HL − DE</text>
+  <line class="none" x1="170" y1="80" x2="210" y2="80" marker-end="url(#ar)"/>
+  <line class="none" x1="350" y1="80" x2="390" y2="80" marker-end="url(#ar)"/>
+  <line class="none" x1="530" y1="80" x2="570" y2="80" marker-end="url(#ar)"/>
+  <text class="dim" x="176" y="74" text-anchor="start" xml:space="preserve">no</text>
+  <text class="dim" x="356" y="74" text-anchor="start" xml:space="preserve">no</text>
+  <text class="dim" x="536" y="74" text-anchor="start" xml:space="preserve">no</text>
+  <rect class="bxs" x="30" y="142" width="140" height="40" rx="20"/>
+  <text class="t" x="100" y="166.5" text-anchor="middle" xml:space="preserve">ex de, hl, ret</text>
+  <rect class="bxs" x="210" y="142" width="140" height="40" rx="20"/>
+  <text class="t" x="280" y="166.5" text-anchor="middle" xml:space="preserve">ret</text>
+  <rect class="bx" x="390" y="142" width="140" height="40" rx="4"/>
+  <text class="t" x="460" y="166.5" text-anchor="middle" xml:space="preserve">ex de, hl</text>
+  <line class="none" x1="100" y1="106" x2="100" y2="142" marker-end="url(#ar)"/>
+  <line class="none" x1="280" y1="106" x2="280" y2="142" marker-end="url(#ar)"/>
+  <line class="none" x1="460" y1="106" x2="460" y2="142" marker-end="url(#ar)"/>
+  <text class="dim" x="106" y="128" text-anchor="start" xml:space="preserve">yes</text>
+  <text class="dim" x="286" y="128" text-anchor="start" xml:space="preserve">yes</text>
+  <text class="dim" x="466" y="128" text-anchor="start" xml:space="preserve">yes</text>
+  <path class="none" d="M640,102 V204 H16 V80 H30" marker-end="url(#ar)"/>
+  <path class="none" d="M460,182 V204"/>
+  <text class="dimn" x="560" y="198" text-anchor="start" xml:space="preserve">round again</text>
+  <text class="cap" x="30" y="250" text-anchor="start" xml:space="preserve">GCD(48, 18), EVERY STATE OF THE LOOP</text>
+  <text class="dim" x="118" y="272" text-anchor="end" xml:space="preserve">HL</text>
+  <text class="dim" x="330" y="272" text-anchor="end" xml:space="preserve">DE</text>
+  <text class="dim" x="490" y="272" text-anchor="start" xml:space="preserve">what happens next</text>
+  <line class="rule" x1="30" y1="280" x2="690" y2="280"/>
+  <text class="dim" x="30" y="302" text-anchor="start" xml:space="preserve">0</text>
+  <text class="t" x="118" y="302" text-anchor="end" xml:space="preserve">48</text>
+  <rect class="bx2" x="130" y="291" width="120" height="15" rx="2"/>
+  <text class="t" x="330" y="302" text-anchor="end" xml:space="preserve">18</text>
+  <rect class="bx2" x="342" y="291" width="45" height="15" rx="2"/>
+  <text class="dimn" x="490" y="302" text-anchor="start" xml:space="preserve">HL ≥ DE, subtract</text>
+  <text class="dim" x="30" y="330" text-anchor="start" xml:space="preserve">1</text>
+  <text class="t" x="118" y="330" text-anchor="end" xml:space="preserve">30</text>
+  <rect class="bx2" x="130" y="319" width="75" height="15" rx="2"/>
+  <text class="t" x="330" y="330" text-anchor="end" xml:space="preserve">18</text>
+  <rect class="bx2" x="342" y="319" width="45" height="15" rx="2"/>
+  <text class="dimn" x="490" y="330" text-anchor="start" xml:space="preserve">HL ≥ DE, subtract</text>
+  <text class="dim" x="30" y="358" text-anchor="start" xml:space="preserve">2</text>
+  <text class="t" x="118" y="358" text-anchor="end" xml:space="preserve">12</text>
+  <rect class="bx2" x="130" y="347" width="30" height="15" rx="2"/>
+  <text class="t" x="330" y="358" text-anchor="end" xml:space="preserve">18</text>
+  <rect class="bx2" x="342" y="347" width="45" height="15" rx="2"/>
+  <text class="dimn" x="490" y="358" text-anchor="start" xml:space="preserve">HL &lt; DE, swap</text>
+  <text class="dim" x="30" y="386" text-anchor="start" xml:space="preserve">3</text>
+  <text class="t" x="118" y="386" text-anchor="end" xml:space="preserve">18</text>
+  <rect class="bx2" x="130" y="375" width="45" height="15" rx="2"/>
+  <text class="t" x="330" y="386" text-anchor="end" xml:space="preserve">12</text>
+  <rect class="bx2" x="342" y="375" width="30" height="15" rx="2"/>
+  <text class="dimn" x="490" y="386" text-anchor="start" xml:space="preserve">HL ≥ DE, subtract</text>
+  <text class="dim" x="30" y="414" text-anchor="start" xml:space="preserve">4</text>
+  <text class="t" x="118" y="414" text-anchor="end" xml:space="preserve">6</text>
+  <rect class="bx2" x="130" y="403" width="15" height="15" rx="2"/>
+  <text class="t" x="330" y="414" text-anchor="end" xml:space="preserve">12</text>
+  <rect class="bx2" x="342" y="403" width="30" height="15" rx="2"/>
+  <text class="dimn" x="490" y="414" text-anchor="start" xml:space="preserve">HL &lt; DE, swap</text>
+  <text class="dim" x="30" y="442" text-anchor="start" xml:space="preserve">5</text>
+  <text class="t" x="118" y="442" text-anchor="end" xml:space="preserve">12</text>
+  <rect class="bx2" x="130" y="431" width="30" height="15" rx="2"/>
+  <text class="t" x="330" y="442" text-anchor="end" xml:space="preserve">6</text>
+  <rect class="bx2" x="342" y="431" width="15" height="15" rx="2"/>
+  <text class="dimn" x="490" y="442" text-anchor="start" xml:space="preserve">HL ≥ DE, subtract</text>
+  <text class="dim" x="30" y="470" text-anchor="start" xml:space="preserve">6</text>
+  <text class="t" x="118" y="470" text-anchor="end" xml:space="preserve">6</text>
+  <rect class="bx2" x="130" y="459" width="15" height="15" rx="2"/>
+  <text class="t" x="330" y="470" text-anchor="end" xml:space="preserve">6</text>
+  <rect class="bx2" x="342" y="459" width="15" height="15" rx="2"/>
+  <text class="dimn" x="490" y="470" text-anchor="start" xml:space="preserve">HL ≥ DE, subtract</text>
+  <text class="dim" x="30" y="498" text-anchor="start" xml:space="preserve">7</text>
+  <text class="tb" x="118" y="498" text-anchor="end" xml:space="preserve">0</text>
+  <text class="tb" x="330" y="498" text-anchor="end" xml:space="preserve">6</text>
+  <rect class="bxs" x="342" y="487" width="15" height="15" rx="2"/>
+  <text class="nb" x="490" y="498" text-anchor="start" xml:space="preserve">HL = 0, swap and return 6</text>
+  <text class="dimn" x="30" y="526" text-anchor="start" xml:space="preserve">No divide instruction is needed. Repeated subtraction reaches the answer, and the swap keeps the larger value in HL.</text>
+</svg>

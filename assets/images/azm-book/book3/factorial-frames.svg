@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="438" viewBox="0 0 720 438" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The stack during factorial_u8(5)</title>
+  <desc id="figDesc">Eleven two-byte stack slots from $9FFD downward: the return to main, then a saved BC and a return address for each of n equals 5 down to 1, with SP at the base call and the multiplies listed as each level returns.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="180" y="34" text-anchor="start" xml:space="preserve">STACK AT THE DEEPEST CALL</text>
+  <text class="dimn" x="180" y="54" text-anchor="start" xml:space="preserve">SP was $9FFF on entry to main</text>
+  <rect class="bx" x="180" y="74" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="91.5" text-anchor="middle" xml:space="preserve">return to main</text>
+  <text class="dim" x="172" y="91" text-anchor="end" xml:space="preserve">$9FFD</text>
+  <rect class="bx" x="180" y="100" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="117.5" text-anchor="middle" xml:space="preserve">saved BC, n = 5</text>
+  <text class="dim" x="172" y="117" text-anchor="end" xml:space="preserve">$9FFB</text>
+  <rect class="bx" x="180" y="126" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="143.5" text-anchor="middle" xml:space="preserve">return into n = 5</text>
+  <text class="dim" x="172" y="143" text-anchor="end" xml:space="preserve">$9FF9</text>
+  <rect class="bx" x="180" y="152" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="169.5" text-anchor="middle" xml:space="preserve">saved BC, n = 4</text>
+  <text class="dim" x="172" y="169" text-anchor="end" xml:space="preserve">$9FF7</text>
+  <rect class="bx" x="180" y="178" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="195.5" text-anchor="middle" xml:space="preserve">return into n = 4</text>
+  <text class="dim" x="172" y="195" text-anchor="end" xml:space="preserve">$9FF5</text>
+  <rect class="bx" x="180" y="204" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="221.5" text-anchor="middle" xml:space="preserve">saved BC, n = 3</text>
+  <text class="dim" x="172" y="221" text-anchor="end" xml:space="preserve">$9FF3</text>
+  <rect class="bx" x="180" y="230" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="247.5" text-anchor="middle" xml:space="preserve">return into n = 3</text>
+  <text class="dim" x="172" y="247" text-anchor="end" xml:space="preserve">$9FF1</text>
+  <rect class="bx" x="180" y="256" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="273.5" text-anchor="middle" xml:space="preserve">saved BC, n = 2</text>
+  <text class="dim" x="172" y="273" text-anchor="end" xml:space="preserve">$9FEF</text>
+  <rect class="bx" x="180" y="282" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="299.5" text-anchor="middle" xml:space="preserve">return into n = 2</text>
+  <text class="dim" x="172" y="299" text-anchor="end" xml:space="preserve">$9FED</text>
+  <rect class="bx" x="180" y="308" width="176" height="26" rx="2"/>
+  <text class="t" x="268" y="325.5" text-anchor="middle" xml:space="preserve">saved BC, n = 1</text>
+  <text class="dim" x="172" y="325" text-anchor="end" xml:space="preserve">$9FEB</text>
+  <rect class="bxs" x="180" y="334" width="176" height="26" rx="2"/>
+  <text class="tb" x="268" y="351.5" text-anchor="middle" xml:space="preserve">return into n = 1</text>
+  <text class="dim" x="172" y="351" text-anchor="end" xml:space="preserve">$9FE9</text>
+  <line class="sline" x1="104" y1="347" x2="138" y2="347" marker-end="url(#arS)"/>
+  <text class="cap" x="76" y="351" text-anchor="start" xml:space="preserve">SP</text>
+  <text class="t" x="388" y="351" text-anchor="start" xml:space="preserve">base returns A = 1</text>
+  <text class="t" x="388" y="325" text-anchor="start" xml:space="preserve">A = 1 × 1 = 1</text>
+  <text class="t" x="388" y="273" text-anchor="start" xml:space="preserve">A = 1 × 2 = 2</text>
+  <text class="t" x="388" y="221" text-anchor="start" xml:space="preserve">A = 2 × 3 = 6</text>
+  <text class="t" x="388" y="169" text-anchor="start" xml:space="preserve">A = 6 × 4 = 24</text>
+  <text class="t" x="388" y="117" text-anchor="start" xml:space="preserve">A = 24 × 5 = 120</text>
+  <line class="sline" x1="600" y1="352" x2="600" y2="86" marker-end="url(#arS)"/>
+  <text class="cap" x="612" y="217" text-anchor="start" xml:space="preserve">UNWIND</text>
+  <text class="dimn" x="30" y="394" text-anchor="start" xml:space="preserve">Five non-base levels at four bytes each, plus the two-byte return address of the base call, is 22 bytes.</text>
+  <text class="dimn" x="30" y="412" text-anchor="start" xml:space="preserve">The multiply for level n cannot run until the call below it returns, which is what keeps the frames alive.</text>
+</svg>

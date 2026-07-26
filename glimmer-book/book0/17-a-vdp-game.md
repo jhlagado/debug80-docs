@@ -33,6 +33,8 @@ chapter: the text concentrates on the parts specific to this game,
 while the four movement effects follow Grove and the GameOver card
 follows Skyfall.
 
+![Lanternfly in play: the fly among the reeds, the lantern lit, the wasp closing.](../../assets/images/glimmer-book/book0/lanternfly-play.svg)
+
 ## Lanternfly on paper
 
 Start with the design in Glimmer's terms before writing any block.
@@ -343,6 +345,8 @@ against its floor (the difficulty screw, turned by an ordinary timer
 write, as in Skyfall), and the respawn masks one random byte down to
 a column and folds another into rows 4..19, the band the reeds stay
 out of.
+
+![The fly's centre pixel, and the cell it falls in.](../../assets/images/glimmer-book/book0/two-coordinate-systems.svg)
 
 `PlaceLantern`, on
 `LampCol, LampRow`, is the six-line runtime `NamePut` call from

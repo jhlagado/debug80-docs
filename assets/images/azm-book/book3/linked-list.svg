@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="294" viewBox="0 0 720 294" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">A three-node list with the head as a separate word</title>
+  <desc id="figDesc">list_head at $800C holding $8000, pointing at node_a at $8000, whose next word holds $8003 for node_b, whose next word holds $8006 for node_c, whose next word holds zero.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="90" y="34" text-anchor="start" xml:space="preserve">LIST_HEAD IS A WORD OF STORAGE, NOT A NODE</text>
+  <rect class="bxs" x="90" y="56" width="112" height="40" rx="3"/>
+  <text class="tb" x="146" y="81" text-anchor="middle" xml:space="preserve">$8000</text>
+  <text class="dim" x="90" y="48" text-anchor="start" xml:space="preserve">$800C</text>
+  <text class="dimn" x="216" y="81" text-anchor="start" xml:space="preserve">one .dw holding the address of the first node</text>
+  <line class="sline" x1="146" y1="96" x2="146" y2="156" marker-end="url(#arS)"/>
+  <rect class="bx" x="90" y="156" width="42" height="44" rx="2"/>
+  <rect class="bx" x="132" y="156" width="70" height="44" rx="2"/>
+  <text class="t" x="111" y="182.5" text-anchor="middle" xml:space="preserve">$10</text>
+  <text class="t" x="167" y="182.5" text-anchor="middle" xml:space="preserve">$8003</text>
+  <text class="dim" x="90" y="148" text-anchor="start" xml:space="preserve">$8000</text>
+  <text class="dimn" x="111" y="215" text-anchor="middle" xml:space="preserve">value</text>
+  <text class="dimn" x="167" y="215" text-anchor="middle" xml:space="preserve">next</text>
+  <rect class="bx" x="300" y="156" width="42" height="44" rx="2"/>
+  <rect class="bx" x="342" y="156" width="70" height="44" rx="2"/>
+  <text class="t" x="321" y="182.5" text-anchor="middle" xml:space="preserve">$22</text>
+  <text class="t" x="377" y="182.5" text-anchor="middle" xml:space="preserve">$8006</text>
+  <text class="dim" x="300" y="148" text-anchor="start" xml:space="preserve">$8003</text>
+  <text class="dimn" x="321" y="215" text-anchor="middle" xml:space="preserve">value</text>
+  <text class="dimn" x="377" y="215" text-anchor="middle" xml:space="preserve">next</text>
+  <rect class="bx" x="510" y="156" width="42" height="44" rx="2"/>
+  <rect class="bx" x="552" y="156" width="70" height="44" rx="2"/>
+  <text class="t" x="531" y="182.5" text-anchor="middle" xml:space="preserve">$30</text>
+  <text class="t" x="587" y="182.5" text-anchor="middle" xml:space="preserve">$0000</text>
+  <text class="dim" x="510" y="148" text-anchor="start" xml:space="preserve">$8006</text>
+  <text class="dimn" x="531" y="215" text-anchor="middle" xml:space="preserve">value</text>
+  <text class="dimn" x="587" y="215" text-anchor="middle" xml:space="preserve">next</text>
+  <line class="none" x1="202" y1="178" x2="300" y2="178" marker-end="url(#ar)"/>
+  <line class="none" x1="412" y1="178" x2="510" y2="178" marker-end="url(#ar)"/>
+  <text class="cap" x="634" y="182" text-anchor="start" xml:space="preserve">NULL</text>
+  <text class="dimn" x="90" y="250" text-anchor="start" xml:space="preserve">Each next field holds a number. The arrow is drawn because that number is the address above the next box.</text>
+  <text class="dimn" x="90" y="274" text-anchor="start" xml:space="preserve">sizeof(ListNode) is 3. ld a, h / or l is the null test, because no Z80 instruction compares a pair to zero.</text>
+</svg>

@@ -56,6 +56,8 @@ DIAG_SUM_LEN  .equ 15
 DIAG_DIFF_LEN .equ 15
 ```
 
+![One queen threatens a row, a column and two diagonals, and costs exactly three flag bytes](../../assets/images/azm-book/book3/queens-board.svg)
+
 You do not need one byte per square to **search**; you need fast answers to "is
 this column or diagonal already taken?" Chapter 4's masks could pack all eight
 column flags into one byte. The companion instead uses one byte per column so
@@ -157,6 +159,8 @@ overwrite `queen_cols`, so only `solution_cols` is a stable completed board.
 
 `push bc` around each helper preserves **B = row** and **C = column** across `call`s that clobber AF and HL.
 
+![The recursive call sits between the mark and the unmark, so every flag set on the way down is cleared on the way back](../../assets/images/azm-book/book3/mark-recurse-unmark.svg)
+
 ---
 
 ## Recursive `place_row`
@@ -191,6 +195,8 @@ _done:
 path to `solution_cols`, then bumps the 16-bit `solution_count` at `$8000`.
 
 **Recursive step:** valid column → mark → `inc b` → `call place_row` → unmark → next column.
+
+![Columns 0, 2, 4, 1 and 3 leave row 5 with nothing legal, and the search backs up to try again](../../assets/images/azm-book/book3/backtracking-tree.svg)
 
 Depth is at most nine `place_row` calls (rows 0..8). Each of the eight trial
 rows keeps a saved BC pair while the next row runs. At row 8, the nested

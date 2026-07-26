@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="474" viewBox="0 0 720 474" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Every-frame, timer, ramp and one-shot on one frame axis</title>
+  <desc id="figDesc">Four lanes over a shared axis of 384 frames: FrameCount marked changed on every frame, a timer of period 24 firing repeatedly, a ramp of 250 steps climbing then idling at its terminal value, and a one-shot counting down to a single firing.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="28" text-anchor="start" xml:space="preserve">FOUR SCHEDULES ON ONE FRAME AXIS</text>
+  <text class="ts" x="90" y="54" text-anchor="start" xml:space="preserve">on FrameCount</text>
+  <rect class="bxs" x="90" y="64" width="550" height="22" rx="2"/>
+  <text class="ts" x="365" y="79" text-anchor="middle" xml:space="preserve">FrameCount is marked changed on every frame</text>
+  <text class="dimn" x="648" y="80" text-anchor="start" xml:space="preserve">every frame</text>
+  <text class="ts" x="90" y="122" text-anchor="start" xml:space="preserve">timer Fall : byte = 24 -&gt; FallTick</text>
+  <line class="rule" x1="90" y1="164" x2="640" y2="164"/>
+  <line class="sline" x1="124.38" y1="164" x2="124.38" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="158.75" y1="164" x2="158.75" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="193.13" y1="164" x2="193.13" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="227.5" y1="164" x2="227.5" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="261.88" y1="164" x2="261.88" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="296.25" y1="164" x2="296.25" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="330.63" y1="164" x2="330.63" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="365" y1="164" x2="365" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="399.38" y1="164" x2="399.38" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="433.75" y1="164" x2="433.75" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="468.13" y1="164" x2="468.13" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="502.5" y1="164" x2="502.5" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="536.88" y1="164" x2="536.88" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="571.25" y1="164" x2="571.25" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="605.63" y1="164" x2="605.63" y2="138" marker-end="url(#arS)"/>
+  <line class="sline" x1="640" y1="164" x2="640" y2="138" marker-end="url(#arS)"/>
+  <text class="dimn" x="648" y="142" text-anchor="start" xml:space="preserve">forever</text>
+  <text class="ts" x="90" y="200" text-anchor="start" xml:space="preserve">ramp Heat : byte steps 250 -&gt; HeatUp</text>
+  <line class="rule" x1="90" y1="266" x2="640" y2="266"/>
+  <polyline class="sline" points="90,266 446.64,218 640,218"/>
+  <line class="sline" x1="446.64" y1="212" x2="446.64" y2="192" marker-end="url(#arS)"/>
+  <text class="dimn" x="455" y="198" text-anchor="start" xml:space="preserve">HeatUp fires on arrival</text>
+  <text class="dimn" x="648" y="222" text-anchor="start" xml:space="preserve">idle at 249</text>
+  <text class="dimn" x="98" y="284" text-anchor="start" xml:space="preserve">marked changed at every step</text>
+  <text class="ts" x="90" y="310" text-anchor="start" xml:space="preserve">timer Grace : word = 384 -&gt; GraceOver once</text>
+  <line class="rule" x1="90" y1="376" x2="640" y2="376"/>
+  <line class="sline" x1="90" y1="328" x2="640" y2="376"/>
+  <line class="sline" x1="640" y1="372" x2="640" y2="346" marker-end="url(#arS)"/>
+  <text class="dimn" x="648" y="350" text-anchor="start" xml:space="preserve">GraceOver</text>
+  <text class="dimn" x="98" y="360" text-anchor="start" xml:space="preserve">the cell is the countdown</text>
+  <line class="rule" x1="90" y1="400" x2="640" y2="400"/>
+  <line class="rule" x1="90" y1="400" x2="90" y2="406"/>
+  <text class="dim" x="90" y="420" text-anchor="middle" xml:space="preserve">0</text>
+  <line class="rule" x1="227.5" y1="400" x2="227.5" y2="406"/>
+  <text class="dim" x="227.5" y="420" text-anchor="middle" xml:space="preserve">96</text>
+  <line class="rule" x1="365" y1="400" x2="365" y2="406"/>
+  <text class="dim" x="365" y="420" text-anchor="middle" xml:space="preserve">192</text>
+  <line class="rule" x1="502.5" y1="400" x2="502.5" y2="406"/>
+  <text class="dim" x="502.5" y="420" text-anchor="middle" xml:space="preserve">288</text>
+  <line class="rule" x1="640" y1="400" x2="640" y2="406"/>
+  <text class="dim" x="640" y="420" text-anchor="middle" xml:space="preserve">384</text>
+  <text class="dimn" x="648" y="420" text-anchor="start" xml:space="preserve">frames</text>
+  <text class="dimn" x="40" y="450" text-anchor="start" xml:space="preserve">A timer repeats. A one-shot arrives once. A ramp marks its cell changed at every step, then fires.</text>
+</svg>

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="414" viewBox="0 0 720 414" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Only the active card dispatches</title>
+  <desc id="figDesc">Three columns of blocks under their cards. The Playing column is active and its blocks dispatch; the Splash and GameOver columns are greyed, and their blocks are skipped whatever their change flags say.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="36" text-anchor="start" xml:space="preserve">GLIMACTIVECARD = CARD.PLAYING</text>
+  <rect class="bxq" x="40" y="64" width="190" height="32" rx="3"/>
+  <text class="dim" x="135" y="85" text-anchor="middle" xml:space="preserve">card Splash</text>
+  <rect class="bxq" x="40" y="108" width="190" height="28" rx="2"/>
+  <text class="dim" x="135" y="127" text-anchor="middle" xml:space="preserve">enter ShowSplash</text>
+  <rect class="bxq" x="40" y="144" width="190" height="28" rx="2"/>
+  <text class="dim" x="135" y="163" text-anchor="middle" xml:space="preserve">effect BlinkPrompt</text>
+  <rect class="bxq" x="40" y="180" width="190" height="28" rx="2"/>
+  <text class="dim" x="135" y="199" text-anchor="middle" xml:space="preserve">render DrawPrompt</text>
+  <rect class="bxq" x="40" y="216" width="190" height="28" rx="2"/>
+  <text class="dim" x="135" y="235" text-anchor="middle" xml:space="preserve">effect StartGame</text>
+  <rect class="bxs" x="250" y="64" width="190" height="32" rx="3"/>
+  <text class="tb" x="345" y="85" text-anchor="middle" xml:space="preserve">card Playing</text>
+  <rect class="bx" x="250" y="108" width="190" height="28" rx="2"/>
+  <text class="ts" x="345" y="127" text-anchor="middle" xml:space="preserve">enter StartRound</text>
+  <rect class="bx" x="250" y="144" width="190" height="28" rx="2"/>
+  <text class="ts" x="345" y="163" text-anchor="middle" xml:space="preserve">effect ScorePoint</text>
+  <rect class="bx" x="250" y="180" width="190" height="28" rx="2"/>
+  <text class="ts" x="345" y="199" text-anchor="middle" xml:space="preserve">render ShowScore</text>
+  <rect class="bx" x="250" y="216" width="190" height="28" rx="2"/>
+  <text class="ts" x="345" y="235" text-anchor="middle" xml:space="preserve">render DrawClock</text>
+  <rect class="bx" x="250" y="252" width="190" height="28" rx="2"/>
+  <text class="ts" x="345" y="271" text-anchor="middle" xml:space="preserve">effect EndRound</text>
+  <rect class="bxq" x="460" y="64" width="190" height="32" rx="3"/>
+  <text class="dim" x="555" y="85" text-anchor="middle" xml:space="preserve">card GameOver</text>
+  <rect class="bxq" x="460" y="108" width="190" height="28" rx="2"/>
+  <text class="dim" x="555" y="127" text-anchor="middle" xml:space="preserve">enter ShowFinal</text>
+  <rect class="bxq" x="460" y="144" width="190" height="28" rx="2"/>
+  <text class="dim" x="555" y="163" text-anchor="middle" xml:space="preserve">render FinalBar</text>
+  <rect class="bxq" x="460" y="180" width="190" height="28" rx="2"/>
+  <text class="dim" x="555" y="199" text-anchor="middle" xml:space="preserve">effect OpenGate</text>
+  <rect class="bxq" x="460" y="216" width="190" height="28" rx="2"/>
+  <text class="dim" x="555" y="235" text-anchor="middle" xml:space="preserve">effect Restart</text>
+  <text class="ts" x="40" y="320" text-anchor="start" xml:space="preserve">ld   a,(GlimActiveCard)</text>
+  <text class="ts" x="40" y="338" text-anchor="start" xml:space="preserve">cp   Card.Playing</text>
+  <text class="ts" x="40" y="356" text-anchor="start" xml:space="preserve">jr   nz,_skip_ScorePoint</text>
+  <text class="dimn" x="330" y="330" text-anchor="start" xml:space="preserve">Three instructions in front of</text>
+  <text class="dimn" x="330" y="346" text-anchor="start" xml:space="preserve">the familiar flag test: what a</text>
+  <text class="dimn" x="330" y="362" text-anchor="start" xml:space="preserve">block pays to belong to a card.</text>
+  <text class="dimn" x="40" y="390" text-anchor="start" xml:space="preserve">A pulse that fires while its listener is gated off clears at frame end, heard by nobody.</text>
+</svg>

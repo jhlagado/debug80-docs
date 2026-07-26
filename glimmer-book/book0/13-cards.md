@@ -54,12 +54,7 @@ press of GO scores a point on the seven-segment display. When the
 clock drains, the score appears as a red bar, and after a ninety-frame
 pause any key returns to the splash.
 
-```mermaid
-flowchart LR
-    S["Splash"] -->|"any key"| P["Playing"]
-    P -->|"clock reaches zero"| G["GameOver"]
-    G -->|"any key, gate open"| S
-```
+![Gate's three cards, and the condition on each transition.](../../assets/images/glimmer-book/book0/card-machine.svg)
 
 The whole game is one file, `gate.glim`, and we are going to walk it
 top to bottom. It opens above any `card` line with the program-wide
@@ -450,6 +445,8 @@ wakes. A goto cannot leak its frame's triggers into the destination
 card, which means every round starts with a zero score, whichever key
 started it.
 
+![A goto asked for in the logic phase, granted at the frame boundary.](../../assets/images/glimmer-book/book0/card-transition.svg)
+
 ## The card machinery
 
 Build the file and open the output:
@@ -499,6 +496,8 @@ _skip_ScorePoint:
 Wrong card, skip; right card, the flag test proceeds as ever. Three
 instructions in front of the familiar dispatch are the entire price
 of the section machinery: what each block pays to belong to a card.
+
+![One card active, and every other card's blocks skipped.](../../assets/images/glimmer-book/book0/dispatch-gating.svg)
 
 An enter dispatch adds the edge. `ShowFinal`'s, together with the two
 instructions that follow the last enter dispatch in the phase:

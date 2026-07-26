@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="450" viewBox="0 0 720 450" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">From a fact to the picture, in six stages</title>
+  <desc id="figDesc">Glimmer state, the RAM shadow tables, the dirty markers, the commit in the vertical blank, VRAM, and the picture the VDP paints, with the frame band underneath showing where the commit spends its time.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="44" text-anchor="start" xml:space="preserve">SIX STAGES</text>
+  <rect class="bx" x="40" y="56" width="180" height="64" rx="4"/>
+  <text class="tb" x="130" y="82" text-anchor="middle" xml:space="preserve">Glimmer state</text>
+  <text class="dim" x="130" y="102" text-anchor="middle" xml:space="preserve">MothX, MothY</text>
+  <rect class="bx" x="270" y="56" width="180" height="64" rx="4"/>
+  <text class="tb" x="360" y="82" text-anchor="middle" xml:space="preserve">shadow tables</text>
+  <text class="dim" x="360" y="102" text-anchor="middle" xml:space="preserve">768 + 128 bytes</text>
+  <rect class="bx" x="500" y="56" width="180" height="64" rx="4"/>
+  <text class="tb" x="590" y="82" text-anchor="middle" xml:space="preserve">dirty markers</text>
+  <text class="dim" x="590" y="102" text-anchor="middle" xml:space="preserve">row bits, one flag</text>
+  <line class="none" x1="220" y1="88" x2="270" y2="88" marker-end="url(#ar)"/>
+  <line class="none" x1="450" y1="88" x2="500" y2="88" marker-end="url(#ar)"/>
+  <path class="none" d="M590,120 V152 H130 V184" marker-end="url(#ar)"/>
+  <rect class="bxs" x="40" y="184" width="180" height="64" rx="4"/>
+  <text class="tb" x="130" y="210" text-anchor="middle" xml:space="preserve">GlimCommit</text>
+  <text class="dim" x="130" y="230" text-anchor="middle" xml:space="preserve">in the vertical blank</text>
+  <rect class="bx" x="270" y="184" width="180" height="64" rx="4"/>
+  <text class="tb" x="360" y="210" text-anchor="middle" xml:space="preserve">VRAM</text>
+  <text class="dim" x="360" y="230" text-anchor="middle" xml:space="preserve">16 KiB of its own</text>
+  <rect class="bx" x="500" y="184" width="180" height="64" rx="4"/>
+  <text class="tb" x="590" y="210" text-anchor="middle" xml:space="preserve">the picture</text>
+  <text class="dim" x="590" y="230" text-anchor="middle" xml:space="preserve">painted for you</text>
+  <line class="none" x1="220" y1="216" x2="270" y2="216" marker-end="url(#ar)"/>
+  <line class="none" x1="450" y1="216" x2="500" y2="216" marker-end="url(#ar)"/>
+  <text class="cap" x="30" y="290" text-anchor="start" xml:space="preserve">ONE FRAME</text>
+  <rect class="bxq" x="30" y="300" width="110" height="32" rx="3"/>
+  <text class="ts" x="85" y="321" text-anchor="middle" xml:space="preserve">wait vblank</text>
+  <rect class="bxs" x="140" y="300" width="110" height="32" rx="3"/>
+  <text class="ts" x="195" y="321" text-anchor="middle" xml:space="preserve">GlimCommit</text>
+  <rect class="bxq" x="250" y="300" width="70" height="32" rx="3"/>
+  <text class="ts" x="285" y="321" text-anchor="middle" xml:space="preserve">poll</text>
+  <rect class="bxq" x="320" y="300" width="90" height="32" rx="3"/>
+  <text class="ts" x="365" y="321" text-anchor="middle" xml:space="preserve">logic</text>
+  <rect class="bxq" x="410" y="300" width="140" height="32" rx="3"/>
+  <text class="ts" x="480" y="321" text-anchor="middle" xml:space="preserve">render</text>
+  <rect class="bxq" x="550" y="300" width="140" height="32" rx="3"/>
+  <text class="ts" x="620" y="321" text-anchor="middle" xml:space="preserve">end frame</text>
+  <path class="rule" d="M30,338 V348 H250 V338"/>
+  <text class="dimn" x="140" y="366" text-anchor="middle" xml:space="preserve">the vertical blank</text>
+  <text class="dimn" x="420" y="366" text-anchor="middle" xml:space="preserve">renders write the shadows</text>
+  <text class="dimn" x="30" y="400" text-anchor="start" xml:space="preserve">A render writes RAM. The next frame opens in the blank, and the commit moves only what is marked.</text>
+  <text class="dimn" x="30" y="424" text-anchor="start" xml:space="preserve">On a frame where only the moth moved: one flag, 128 bytes, three group bytes, and done.</text>
+</svg>

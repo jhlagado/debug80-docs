@@ -188,6 +188,8 @@ mask**: one row of the 8x8 matrix, one bit per column, bit 7 the
 leftmost. The `MxMask` library helper takes a column number in A
 and returns the column's mask in A, clobbering B on the way.
 
+![Eight row masks, and the picture they light.](../../assets/images/glimmer-book/book0/picture-as-state.svg)
+
 ## Painting a pixel
 
 Stamping a pixel means finding one byte in the array and setting one
@@ -332,6 +334,8 @@ ld hl,Hero + offset(Sprite, pos) + offset(Point, y)
 
 Both are constants by the time the Z80 sees them; the instruction
 above assembles to one `ld hl,nn`.
+
+![An array, a record, and the byte that base plus index times stride plus offset lands on.](../../assets/images/glimmer-book/book0/record-layout.svg)
 
 A type can also rename an existing shape:
 

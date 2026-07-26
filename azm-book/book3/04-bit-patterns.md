@@ -45,6 +45,8 @@ INITIAL .equ FLAG_READY | FLAG_BUSY    ; $05
 
 At run time you still load the live byte from `(device_flags)` into A.
 
+![Three named bits in one byte, two of them set at reset](../../assets/images/azm-book/book3/byte-as-switches.svg)
+
 ---
 
 ## AND, OR, XOR on A
@@ -136,6 +138,8 @@ Logical shifts move bit positions for multiply/divide tricks and for isolation:
 | `sla r` | Shift left; bit 0 ← 0; high bit → carry |
 | `srl r` | Shift right; high bit ← 0; low bit → carry |
 
+![The same byte and the same clear carry through both instructions: bit 0 is where they part company](../../assets/images/azm-book/book3/rotate-vs-shift.svg)
+
 **Extract bit 1 into bit 0** after masking:
 
 ```asm
@@ -177,6 +181,8 @@ Start: `$05` = ready + busy (`$01 | $04`).
 | extract error | `$01` | `and $02`, `rr a` |
 
 After `halt`, `(device_flags)` should be `$03`, `(ready_lit)` `$01`, `(error_bit)` `$01`.
+
+![Each operator against its mask, with the bit that moved marked and carry cleared every time](../../assets/images/azm-book/book3/mask-operations.svg)
 
 ---
 

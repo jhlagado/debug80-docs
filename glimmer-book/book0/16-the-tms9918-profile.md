@@ -36,6 +36,8 @@ shadow table; the profile later commits the table to VRAM.
 The division of labour is already there: scenery belongs in tiles;
 anything that glides belongs in sprites.
 
+![Tiles in the grid behind, sprites at pixel positions in front.](../../assets/images/glimmer-book/book0/vdp-layers.svg)
+
 The Z80 reaches the VDP's memory through two ports: control at `$BF`
 and data at `$BE`. Two control-port writes set a
 VRAM address, and the data port then streams bytes to consecutive
@@ -349,6 +351,8 @@ position. The next frame opens in the blank: `GlimCommit` streams the
 sprite shadow to VRAM, and the moth stands one pixel to the right.
 Every shadow write reaches the screen at the top of the following
 frame, tiles and sprites alike.
+
+![From a fact to the picture: six stages and one vertical blank.](../../assets/images/glimmer-book/book0/shadow-commit.svg)
 
 ## A scene planted once
 

@@ -146,6 +146,8 @@ Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
 | Readable structure | matches the math definition | matches a for-loop |
 | Risk on small RAM | overflow if depth × frame too large | multiply still needs care for range |
 
+![The same result from two shapes: one grows the stack with n, the other does not](../../assets/images/azm-book/book3/recursive-vs-iterative.svg)
+
 `main` calls both with `B = 5` and stores to `fact_rec` and `fact_iter`. After `halt`, both bytes at `$8000` and `$8001` should read `$78` (120).
 
 ---
@@ -271,22 +273,9 @@ Defenses that fit Book 3:
 
 ## Memory diagram: stack growth on a call chain
 
-`factorial_u8(3)` before the deepest call returns:
+`factorial_u8(5)` before the deepest call returns:
 
-```
-  higher addresses
-  ┌──────────────────────────────────────────────┐
-  │  return to main                              │
-  │  saved BC (n=3)          ← frame for n=3     │
-  │  return to n=3 level                         │
-  │  saved BC (n=2)          ← frame for n=2     │
-  │  return to n=2 level                         │
-  │  saved BC (n=1)          ← frame for n=1     │
-  │  return to n=1 level                         │
-  │  (n=0 base case — no push before ret)        │
-  └──────────────────────────────────────────────┘
-  lower addresses  ← SP near the bottom after pushes
-```
+![Eleven two-byte slots at the deepest call, and the multiply each level performs on the way back up](../../assets/images/azm-book/book3/factorial-frames.svg)
 
 Data at `$8000` does not move; only SP walks.
 

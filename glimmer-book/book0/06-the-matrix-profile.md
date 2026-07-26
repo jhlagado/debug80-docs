@@ -230,6 +230,8 @@ anything else complains. And since the scan
 is by far the frame's largest cost, it paces the frame and makes the
 frame a useful unit of game time.
 
+![The scan owns most of the frame, and one row travels from memory to light.](../../assets/images/glimmer-book/book0/scan-timing.svg)
+
 ## The framebuffer
 
 `ScanFrame` reads its picture from one place, and you have been
@@ -273,6 +275,8 @@ COLOR_WHITE       .equ $07
 The A value passed to `FbPlot` is therefore a set of plane bits, not a
 colour-table index.
 
+![Seven colours from three planes.](../../assets/images/glimmer-book/book0/colour-planes.svg)
+
 `FbPlot` turns x, y, and colour into plane-byte writes. Its head,
 from the profile library:
 
@@ -300,6 +304,8 @@ means `FbPlot` adds light: plot red and then green at the same
 coordinates and that pixel shows yellow. A clean picture starts from
 `FbClear`, which zeroes the 32 bytes, the call that has opened every
 redrawing render in this book.
+
+![Plotting x 5, y 2 in yellow sets one bit in two plane bytes.](../../assets/images/glimmer-book/book0/framebuffer.svg)
 
 The `.routine` line above the label is the register interface, and you
 will meet it the first time a library call eats a register of yours.

@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="534" viewBox="0 0 720 534" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Mark, recurse, unmark</title>
+  <desc id="figDesc">The column loop of place_row: three constraint tests, then mark_constraints setting col_used, diag_sum_used and diag_diff_used, then inc b and the recursive call, then unmark_constraints clearing the same three bytes, then the next column.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="60" y="34" text-anchor="start" xml:space="preserve">ONE TURN OF THE COLUMN LOOP, ROW 2, COLUMN 4</text>
+  <rect class="bx" x="60" y="50" width="240" height="40" rx="20"/>
+  <text class="t" x="180" y="74.5" text-anchor="middle" xml:space="preserve">try column c</text>
+  <polygon class="bx" points="180,112 330,156 180,200 30,156"/>
+  <text class="t" x="180" y="153" text-anchor="middle" xml:space="preserve">col_free, diag_sum_free,</text>
+  <text class="t" x="180" y="168" text-anchor="middle" xml:space="preserve">diag_diff_free all zero?</text>
+  <rect class="bx" x="60" y="214" width="240" height="44" rx="4"/>
+  <text class="t" x="180" y="240.5" text-anchor="middle" xml:space="preserve">call mark_constraints</text>
+  <rect class="bxs" x="60" y="282" width="240" height="44" rx="4"/>
+  <text class="t" x="180" y="308.5" text-anchor="middle" xml:space="preserve">inc b, call place_row</text>
+  <rect class="bx" x="60" y="350" width="240" height="44" rx="4"/>
+  <text class="t" x="180" y="376.5" text-anchor="middle" xml:space="preserve">call unmark_constraints</text>
+  <rect class="bx" x="60" y="418" width="240" height="40" rx="20"/>
+  <text class="t" x="180" y="442.5" text-anchor="middle" xml:space="preserve">inc c</text>
+  <line class="none" x1="180" y1="90" x2="180" y2="112" marker-end="url(#ar)"/>
+  <line class="none" x1="180" y1="200" x2="180" y2="214" marker-end="url(#ar)"/>
+  <line class="none" x1="180" y1="258" x2="180" y2="282" marker-end="url(#ar)"/>
+  <line class="none" x1="180" y1="326" x2="180" y2="350" marker-end="url(#ar)"/>
+  <line class="none" x1="180" y1="394" x2="180" y2="418" marker-end="url(#ar)"/>
+  <text class="dim" x="188" y="210" text-anchor="start" xml:space="preserve">yes</text>
+  <path class="none" d="M330,156 H356 V438 H300" marker-end="url(#ar)"/>
+  <text class="dim" x="336" y="148" text-anchor="start" xml:space="preserve">no</text>
+  <path class="none" d="M60,438 H24 V70 H60" marker-end="url(#ar)"/>
+  <text class="dimn" x="100" y="486" text-anchor="start" xml:space="preserve">the next column, with the flags exactly as they were</text>
+  <text class="cap" x="430" y="190" text-anchor="start" xml:space="preserve">THE THREE CONSTRAINT BYTES</text>
+  <text class="dim" x="470" y="210" text-anchor="middle" xml:space="preserve">col[4]</text>
+  <text class="dim" x="560" y="210" text-anchor="middle" xml:space="preserve">sum[6]</text>
+  <text class="dim" x="650" y="210" text-anchor="middle" xml:space="preserve">diff[5]</text>
+  <rect class="bx" x="430" y="222" width="80" height="28" rx="2"/>
+  <text class="t" x="470" y="241" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="520" y="222" width="80" height="28" rx="2"/>
+  <text class="t" x="560" y="241" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="610" y="222" width="80" height="28" rx="2"/>
+  <text class="t" x="650" y="241" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dimn" x="430" y="270" text-anchor="start" xml:space="preserve">before the mark</text>
+  <rect class="bxs" x="430" y="290" width="80" height="28" rx="2"/>
+  <text class="tb" x="470" y="309" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bxs" x="520" y="290" width="80" height="28" rx="2"/>
+  <text class="tb" x="560" y="309" text-anchor="middle" xml:space="preserve">1</text>
+  <rect class="bxs" x="610" y="290" width="80" height="28" rx="2"/>
+  <text class="tb" x="650" y="309" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dimn" x="430" y="338" text-anchor="start" xml:space="preserve">while row 3 searches</text>
+  <rect class="bx" x="430" y="358" width="80" height="28" rx="2"/>
+  <text class="t" x="470" y="377" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="520" y="358" width="80" height="28" rx="2"/>
+  <text class="t" x="560" y="377" text-anchor="middle" xml:space="preserve">0</text>
+  <rect class="bx" x="610" y="358" width="80" height="28" rx="2"/>
+  <text class="t" x="650" y="377" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dimn" x="430" y="406" text-anchor="start" xml:space="preserve">after the unmark</text>
+  <text class="dimn" x="30" y="512" text-anchor="start" xml:space="preserve">Every byte written on the way down is cleared on the way back,</text>
+  <text class="dimn" x="30" y="530" text-anchor="start" xml:space="preserve">so an abandoned branch leaves nothing for the next column to trip over.</text>
+</svg>

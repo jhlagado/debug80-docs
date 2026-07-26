@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="346" viewBox="0 0 720 346" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Textual include against a module import</title>
+  <desc id="figDesc">On the left, two source files pasted into one source unit by .include, where strlen_u8 joins the shared namespace and _loop and _done stay local to their owner. On the right, a module whose @ prefixed label crosses the wall while its private helper does not.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <rect class="bxq" x="20" y="44" width="330" height="250" rx="4"/>
+  <text class="cap" x="36" y="70" text-anchor="start" xml:space="preserve">.INCLUDE "LIB/STRINGS.ASM"</text>
+  <rect class="bx" x="36" y="86" width="140" height="56" rx="3"/>
+  <text class="ts" x="106" y="108" text-anchor="middle" xml:space="preserve">07_include_demo.asm</text>
+  <text class="dimn" x="106" y="128" text-anchor="middle" xml:space="preserve">main, data</text>
+  <rect class="bx" x="190" y="86" width="140" height="56" rx="3"/>
+  <text class="ts" x="260" y="108" text-anchor="middle" xml:space="preserve">lib/strings.asm</text>
+  <text class="dimn" x="260" y="128" text-anchor="middle" xml:space="preserve">strlen_u8</text>
+  <path class="rule" d="M106,142 V158 H260 V142"/>
+  <line class="none" x1="183" y1="158" x2="183" y2="176" marker-end="url(#ar)"/>
+  <rect class="bx" x="36" y="176" width="294" height="74" rx="4"/>
+  <text class="nb" x="183" y="200" text-anchor="middle" xml:space="preserve">one source unit</text>
+  <text class="ts" x="183" y="222" text-anchor="middle" xml:space="preserve">strlen_u8 shared</text>
+  <text class="dim" x="183" y="240" text-anchor="middle" xml:space="preserve">_loop, _done stay local</text>
+  <text class="dimn" x="36" y="276" text-anchor="start" xml:space="preserve">the text lands at the .include line</text>
+  <rect class="bxq" x="370" y="44" width="330" height="250" rx="4"/>
+  <text class="cap" x="386" y="70" text-anchor="start" xml:space="preserve">.IMPORT "STRINGS"</text>
+  <rect class="bx" x="386" y="96" width="170" height="150" rx="4"/>
+  <text class="nb" x="471" y="120" text-anchor="middle" xml:space="preserve">module</text>
+  <rect class="bxs" x="400" y="136" width="142" height="30" rx="2"/>
+  <text class="tb" x="471" y="156" text-anchor="middle" xml:space="preserve">@strlen_u8</text>
+  <rect class="bxq" x="400" y="190" width="142" height="30" rx="2"/>
+  <text class="dim" x="471" y="210" text-anchor="middle" xml:space="preserve">helper</text>
+  <line class="sline" x1="542" y1="151" x2="578" y2="151" marker-end="url(#arS)"/>
+  <text class="dimn" x="584" y="155" text-anchor="start" xml:space="preserve">exported</text>
+  <line class="dash" x1="542" y1="205" x2="566" y2="205"/>
+  <text class="dimn" x="584" y="209" text-anchor="start" xml:space="preserve">private</text>
+  <text class="dimn" x="386" y="276" text-anchor="start" xml:space="preserve">only @ names cross the wall</text>
+  <text class="dimn" x="20" y="326" text-anchor="start" xml:space="preserve">Book 3 uses .include. Both put bytes in one address space; they differ in which names the rest of the program can see.</text>
+</svg>

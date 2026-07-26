@@ -109,6 +109,8 @@ The split moved source
 between files and changed nothing the Z80 will see. The rest of the chapter takes
 the three declarations in turn, smallest first.
 
+![Three files, one program, and the doors through the module wall.](../../assets/images/glimmer-book/book0/file-composition.svg)
+
 ## One copy of the arithmetic
 
 A `routine` declares a callable helper. The header carries a name and

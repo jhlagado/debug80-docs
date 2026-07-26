@@ -120,6 +120,8 @@ a helper quietly trampling a register your loop was counting on,
 fails the build with a message instead of failing the game an hour
 into play.
 
+![Two stages: Glimmer writes the assembly, the assembler writes the bytes.](../../assets/images/glimmer-book/book0/build-pipeline.svg)
+
 ## The file Glimmer wrote
 
 Open `build/main.main.asm`. The file reads top to bottom in a fixed

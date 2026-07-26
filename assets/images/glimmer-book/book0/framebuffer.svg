@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">One FbPlot call traced into the framebuffer</title>
+  <desc id="figDesc">Thirty-two framebuffer bytes as eight rows of red, green, blue and aux. A call plotting x 5, y 2 in yellow sets bit 2 of the red and green bytes of row 2.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #2a7139;
+      --sig-bg: #2a71391a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #6cbb7e;
+        --sig-bg: #6cbb7e26;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="26" text-anchor="start" xml:space="preserve">ONE CALL</text>
+  <text class="t" x="40" y="52" text-anchor="start" xml:space="preserve">ld b,5              ; x = 5</text>
+  <text class="t" x="40" y="70" text-anchor="start" xml:space="preserve">ld c,2              ; y = 2</text>
+  <text class="t" x="40" y="88" text-anchor="start" xml:space="preserve">ld a,COLOR_YELLOW   ; red + green</text>
+  <text class="t" x="40" y="106" text-anchor="start" xml:space="preserve">call FbPlot</text>
+  <path class="sline" d="M305,96 C345,96 345,118 374,118" marker-end="url(#arS)"/>
+  <text class="cap" x="380" y="26" text-anchor="start" xml:space="preserve">FRAMEBUFFER, 32 BYTES</text>
+  <text class="dim" x="411" y="48" text-anchor="middle" xml:space="preserve">red</text>
+  <text class="dim" x="473" y="48" text-anchor="middle" xml:space="preserve">green</text>
+  <text class="dim" x="535" y="48" text-anchor="middle" xml:space="preserve">blue</text>
+  <text class="dim" x="597" y="48" text-anchor="middle" xml:space="preserve">aux</text>
+  <rect class="bxq" x="380" y="56" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="442" y="56" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="504" y="56" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="56" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="73" text-anchor="end" xml:space="preserve">y=0</text>
+  <text class="dim" x="636" y="73" text-anchor="start" xml:space="preserve">+0</text>
+  <rect class="bxq" x="380" y="81" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="442" y="81" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="504" y="81" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="81" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="98" text-anchor="end" xml:space="preserve">y=1</text>
+  <text class="dim" x="636" y="98" text-anchor="start" xml:space="preserve">+4</text>
+  <rect class="bxs" x="380" y="106" width="62" height="25" rx="2"/>
+  <text class="tb" x="411" y="123" text-anchor="middle" xml:space="preserve">$04</text>
+  <rect class="bxs" x="442" y="106" width="62" height="25" rx="2"/>
+  <text class="tb" x="473" y="123" text-anchor="middle" xml:space="preserve">$04</text>
+  <rect class="bxq" x="504" y="106" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="106" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="123" text-anchor="end" xml:space="preserve">y=2</text>
+  <text class="cap" x="636" y="123" text-anchor="start" xml:space="preserve">+8</text>
+  <rect class="bxq" x="380" y="131" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="442" y="131" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="504" y="131" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="131" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="148" text-anchor="end" xml:space="preserve">y=3</text>
+  <text class="dim" x="636" y="148" text-anchor="start" xml:space="preserve">+12</text>
+  <rect class="bxq" x="380" y="156" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="442" y="156" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="504" y="156" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="156" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="173" text-anchor="end" xml:space="preserve">y=4</text>
+  <text class="dim" x="636" y="173" text-anchor="start" xml:space="preserve">+16</text>
+  <rect class="bxq" x="380" y="181" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="442" y="181" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="504" y="181" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="181" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="198" text-anchor="end" xml:space="preserve">y=5</text>
+  <text class="dim" x="636" y="198" text-anchor="start" xml:space="preserve">+20</text>
+  <rect class="bxq" x="380" y="206" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="442" y="206" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="504" y="206" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="206" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="223" text-anchor="end" xml:space="preserve">y=6</text>
+  <text class="dim" x="636" y="223" text-anchor="start" xml:space="preserve">+24</text>
+  <rect class="bxq" x="380" y="231" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="442" y="231" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="504" y="231" width="62" height="25" rx="2"/>
+  <rect class="bxq" x="566" y="231" width="62" height="25" rx="2"/>
+  <text class="dim" x="372" y="248" text-anchor="end" xml:space="preserve">y=7</text>
+  <text class="dim" x="636" y="248" text-anchor="start" xml:space="preserve">+28</text>
+  <text class="cap" x="40" y="296" text-anchor="start" xml:space="preserve">ROW 2, RED PLANE: ONE BIT PER COLUMN</text>
+  <rect class="bx" x="40" y="316" width="62" height="30" rx="2"/>
+  <text class="t" x="71" y="335.5" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="71" y="309" text-anchor="middle" xml:space="preserve">7</text>
+  <text class="dimn" x="71" y="360" text-anchor="middle" xml:space="preserve">col 0</text>
+  <rect class="bx" x="102" y="316" width="62" height="30" rx="2"/>
+  <text class="t" x="133" y="335.5" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="133" y="309" text-anchor="middle" xml:space="preserve">6</text>
+  <text class="dimn" x="133" y="360" text-anchor="middle" xml:space="preserve">col 1</text>
+  <rect class="bx" x="164" y="316" width="62" height="30" rx="2"/>
+  <text class="t" x="195" y="335.5" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="195" y="309" text-anchor="middle" xml:space="preserve">5</text>
+  <text class="dimn" x="195" y="360" text-anchor="middle" xml:space="preserve">col 2</text>
+  <rect class="bx" x="226" y="316" width="62" height="30" rx="2"/>
+  <text class="t" x="257" y="335.5" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="257" y="309" text-anchor="middle" xml:space="preserve">4</text>
+  <text class="dimn" x="257" y="360" text-anchor="middle" xml:space="preserve">col 3</text>
+  <rect class="bx" x="288" y="316" width="62" height="30" rx="2"/>
+  <text class="t" x="319" y="335.5" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="319" y="309" text-anchor="middle" xml:space="preserve">3</text>
+  <text class="dimn" x="319" y="360" text-anchor="middle" xml:space="preserve">col 4</text>
+  <rect class="bxs" x="350" y="316" width="62" height="30" rx="2"/>
+  <text class="tb" x="381" y="335.5" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dim" x="381" y="309" text-anchor="middle" xml:space="preserve">2</text>
+  <text class="dimn" x="381" y="360" text-anchor="middle" xml:space="preserve">col 5</text>
+  <rect class="bx" x="412" y="316" width="62" height="30" rx="2"/>
+  <text class="t" x="443" y="335.5" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="443" y="309" text-anchor="middle" xml:space="preserve">1</text>
+  <text class="dimn" x="443" y="360" text-anchor="middle" xml:space="preserve">col 6</text>
+  <rect class="bx" x="474" y="316" width="62" height="30" rx="2"/>
+  <text class="t" x="505" y="335.5" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dim" x="505" y="309" text-anchor="middle" xml:space="preserve">0</text>
+  <text class="dimn" x="505" y="360" text-anchor="middle" xml:space="preserve">col 7</text>
+  <text class="dimn" x="552" y="336" text-anchor="start" xml:space="preserve">bit 7 is column 0</text>
+  <text class="dimn" x="552" y="352" text-anchor="start" xml:space="preserve">so x = 5 sets bit 2</text>
+  <text class="dimn" x="40" y="396" text-anchor="start" xml:space="preserve">Eight rows of four bytes, so a row address is Framebuffer + y * 4. The aux byte bought that.</text>
+</svg>

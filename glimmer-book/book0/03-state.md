@@ -212,6 +212,8 @@ bits a bank, states first and pulses after them. The dispatch masks
 carry the bank in their name (the `__B0` suffix you can see above),
 and a block whose triggers span banks tests each one.
 
+![DotX, its bit in Changed0, and the first three frames of the program.](../../assets/images/glimmer-book/book0/change-flags.svg)
+
 ## The first frame, predicted
 
 Now the challenge: predict before you build, then build and watch.
