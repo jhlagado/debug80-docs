@@ -21,7 +21,6 @@ facts, moments, rules, phases, timers, resources, parts and cards.
 
 ## Chapters
 
-- [Preface](00-preface.md)
 1. [Building Skyfall](01-building-skyfall.md)
 2. [Reading Tetro](02-reading-tetro.md)
 3. [The TMS9918 Profile](03-the-tms9918-profile.md)

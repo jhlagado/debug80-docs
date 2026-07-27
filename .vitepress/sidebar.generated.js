@@ -1052,10 +1052,6 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Preface",
-          "link": "/glimmer-book/book1/00-preface.html"
-        },
-        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1117,10 +1113,6 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": true,
       "items": [
-        {
-          "text": "Preface",
-          "link": "/glimmer-book/book2/00-preface.html"
-        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"
@@ -1180,10 +1172,6 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Preface",
-          "link": "/glimmer-book/book1/00-preface.html"
-        },
-        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1245,10 +1233,6 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": true,
       "items": [
-        {
-          "text": "Preface",
-          "link": "/glimmer-book/book2/00-preface.html"
-        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"
@@ -1308,10 +1292,6 @@ export const sidebars = {
       "collapsed": true,
       "items": [
         {
-          "text": "Preface",
-          "link": "/glimmer-book/book1/00-preface.html"
-        },
-        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1373,10 +1353,6 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": false,
       "items": [
-        {
-          "text": "Preface",
-          "link": "/glimmer-book/book2/00-preface.html"
-        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"
@@ -1436,10 +1412,6 @@ export const sidebars = {
       "collapsed": true,
       "items": [
         {
-          "text": "Preface",
-          "link": "/glimmer-book/book1/00-preface.html"
-        },
-        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1501,10 +1473,6 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": true,
       "items": [
-        {
-          "text": "Preface",
-          "link": "/glimmer-book/book2/00-preface.html"
-        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"

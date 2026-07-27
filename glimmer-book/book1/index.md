@@ -26,7 +26,6 @@ The book teaches Glimmer 0.6. Every complete program in it is built with
 
 ## Chapters
 
-- [Preface](00-preface.md)
 1. [The Shape of a Game](01-the-shape-of-a-game.md)
 2. [First Light](02-first-light.md)
 3. [State](03-state.md)
