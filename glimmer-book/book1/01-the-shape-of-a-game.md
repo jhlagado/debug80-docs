@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "The Shape of a Game"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 1
 ---
 
@@ -30,7 +30,7 @@ the block drops; the score changes, so the display updates. A
 spreadsheet uses the same model when changing one cell recomputes every
 formula that refers to it.
 
-![The same dot, ordered by hand and declared in Glimmer.](../../assets/images/glimmer-book/book0/imperative-reactive.svg)
+![The same dot, ordered by hand and declared in Glimmer.](../../assets/images/glimmer-book/book1/imperative-reactive.svg)
 
 In Glimmer, you declare the facts that store game state, name the
 moments that trigger work and write the rules and pictures as a few
@@ -212,7 +212,7 @@ framebuffer and plots the dot where it currently is.
 The following diagram traces one press of key 6 through the program,
 from key to pixel:
 
-![One press of key 6, from the declarations that describe it to the pixel it lights.](../../assets/images/glimmer-book/book0/reactive-chain.svg)
+![One press of key 6, from the declarations that describe it to the pixel it lights.](../../assets/images/glimmer-book/book1/reactive-chain.svg)
 
 This chain follows the spreadsheet model from the start of the
 chapter. A formula runs when one of its inputs changes. On the Z80,

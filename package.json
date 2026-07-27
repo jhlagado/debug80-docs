@@ -13,7 +13,7 @@
     "diagrams:debug80": "node scripts/generate-book-diagrams.mjs",
     "diagrams:azm": "node scripts/generate-azm-book1-diagrams.mjs && node scripts/generate-azm-book2-diagrams.mjs && node scripts/generate-azm-book3-diagrams.mjs",
     "diagrams:glimmer": "node scripts/generate-glimmer-diagrams.mjs",
-    "diagrams:check": "node scripts/lib/check-figures.mjs assets/images/debug80-book/book1 assets/images/azm-book/book1 assets/images/azm-book/book2 assets/images/azm-book/book3 assets/images/glimmer-book/book0",
+    "diagrams:check": "node scripts/lib/check-figures.mjs assets/images/debug80-book/book1 assets/images/azm-book/book1 assets/images/azm-book/book2 assets/images/azm-book/book3 assets/images/glimmer-book/book1 assets/images/glimmer-book/book2",
     "links": "node scripts/check-links.mjs",
     "llms": "node scripts/check-llms-txt.mjs",
     "symbols": "node scripts/check-symbols.mjs"

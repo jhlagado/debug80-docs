@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Shapes, Sound and Displays on the Board"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 9
 ---
 
@@ -31,7 +31,7 @@ declaration reads like the resource it describes. The scoreboard is
 the odd one out: the six-digit seven-segment display is a service the
 profile library provides through two routines you call directly.
 
-![Four kinds of output, four instruments, and the keypad coming back the other way.](../../assets/images/glimmer-book/book0/board-instruments.svg)
+![Four kinds of output, four instruments, and the keypad coming back the other way.](../../assets/images/glimmer-book/book1/board-instruments.svg)
 
 ## Fanfare
 

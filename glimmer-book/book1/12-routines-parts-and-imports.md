@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Routines, Parts and Imports"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 12
 ---
 
@@ -105,7 +105,7 @@ between files, and the running program is the one you had before. The
 rest of the chapter takes
 the three declarations in turn, smallest first.
 
-![Three files, one program, and the doors through the module wall.](../../assets/images/glimmer-book/book0/file-composition.svg)
+![Three files, one program, and the doors through the module wall.](../../assets/images/glimmer-book/book1/file-composition.svg)
 
 ## One copy of the arithmetic
 

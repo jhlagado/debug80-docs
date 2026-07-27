@@ -234,7 +234,7 @@ export const sidebars = {
           "link": "/azm-book/book3/00-introduction.html"
         },
         {
-          "text": "Foundations",
+          "text": "Arithmetic Foundations",
           "link": "/azm-book/book3/01-foundations.html"
         },
         {
@@ -258,7 +258,7 @@ export const sidebars = {
           "link": "/azm-book/book3/06-recursion.html"
         },
         {
-          "text": "Composition",
+          "text": "Source Composition",
           "link": "/azm-book/book3/07-composition.html"
         },
         {
@@ -266,7 +266,7 @@ export const sidebars = {
           "link": "/azm-book/book3/08-pointer-structures.html"
         },
         {
-          "text": "Capstone",
+          "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
         }
       ]
@@ -408,7 +408,7 @@ export const sidebars = {
           "link": "/azm-book/book3/00-introduction.html"
         },
         {
-          "text": "Foundations",
+          "text": "Arithmetic Foundations",
           "link": "/azm-book/book3/01-foundations.html"
         },
         {
@@ -432,7 +432,7 @@ export const sidebars = {
           "link": "/azm-book/book3/06-recursion.html"
         },
         {
-          "text": "Composition",
+          "text": "Source Composition",
           "link": "/azm-book/book3/07-composition.html"
         },
         {
@@ -440,7 +440,7 @@ export const sidebars = {
           "link": "/azm-book/book3/08-pointer-structures.html"
         },
         {
-          "text": "Capstone",
+          "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
         }
       ]
@@ -582,7 +582,7 @@ export const sidebars = {
           "link": "/azm-book/book3/00-introduction.html"
         },
         {
-          "text": "Foundations",
+          "text": "Arithmetic Foundations",
           "link": "/azm-book/book3/01-foundations.html"
         },
         {
@@ -606,7 +606,7 @@ export const sidebars = {
           "link": "/azm-book/book3/06-recursion.html"
         },
         {
-          "text": "Composition",
+          "text": "Source Composition",
           "link": "/azm-book/book3/07-composition.html"
         },
         {
@@ -614,7 +614,7 @@ export const sidebars = {
           "link": "/azm-book/book3/08-pointer-structures.html"
         },
         {
-          "text": "Capstone",
+          "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
         }
       ]
@@ -756,7 +756,7 @@ export const sidebars = {
           "link": "/azm-book/book3/00-introduction.html"
         },
         {
-          "text": "Foundations",
+          "text": "Arithmetic Foundations",
           "link": "/azm-book/book3/01-foundations.html"
         },
         {
@@ -780,7 +780,7 @@ export const sidebars = {
           "link": "/azm-book/book3/06-recursion.html"
         },
         {
-          "text": "Composition",
+          "text": "Source Composition",
           "link": "/azm-book/book3/07-composition.html"
         },
         {
@@ -788,7 +788,7 @@ export const sidebars = {
           "link": "/azm-book/book3/08-pointer-structures.html"
         },
         {
-          "text": "Capstone",
+          "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
         }
       ]
@@ -930,7 +930,7 @@ export const sidebars = {
           "link": "/azm-book/book3/00-introduction.html"
         },
         {
-          "text": "Foundations",
+          "text": "Arithmetic Foundations",
           "link": "/azm-book/book3/01-foundations.html"
         },
         {
@@ -954,7 +954,7 @@ export const sidebars = {
           "link": "/azm-book/book3/06-recursion.html"
         },
         {
-          "text": "Composition",
+          "text": "Source Composition",
           "link": "/azm-book/book3/07-composition.html"
         },
         {
@@ -962,7 +962,7 @@ export const sidebars = {
           "link": "/azm-book/book3/08-pointer-structures.html"
         },
         {
-          "text": "Capstone",
+          "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
         }
       ]
@@ -1008,208 +1008,480 @@ export const sidebars = {
   ],
   "/glimmer-book/": [
     {
-      "text": "Glimmer Book: Reactive Games for the Z80",
+      "text": "Glimmer Book 1 — Reactive Programming for Z80 Games",
       "collapsed": false,
       "items": [
         {
           "text": "Preface",
-          "link": "/glimmer-book/book0/00-preface.html"
+          "link": "/glimmer-book/book1/00-preface.html"
         },
         {
           "text": "The Shape of a Game",
-          "link": "/glimmer-book/book0/01-the-shape-of-a-game.html"
+          "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
         {
           "text": "First Light",
-          "link": "/glimmer-book/book0/02-first-light.html"
+          "link": "/glimmer-book/book1/02-first-light.html"
         },
         {
           "text": "State",
-          "link": "/glimmer-book/book0/03-state.html"
+          "link": "/glimmer-book/book1/03-state.html"
         },
         {
           "text": "Pulses and Bindings",
-          "link": "/glimmer-book/book0/04-pulses-and-bindings.html"
+          "link": "/glimmer-book/book1/04-pulses-and-bindings.html"
         },
         {
           "text": "Compute, Effect, Render",
-          "link": "/glimmer-book/book0/05-compute-effect-render.html"
+          "link": "/glimmer-book/book1/05-compute-effect-render.html"
         },
         {
           "text": "The 8x8 Matrix Profile",
-          "link": "/glimmer-book/book0/06-the-matrix-profile.html"
+          "link": "/glimmer-book/book1/06-the-matrix-profile.html"
         },
         {
           "text": "Time",
-          "link": "/glimmer-book/book0/07-time.html"
+          "link": "/glimmer-book/book1/07-time.html"
         },
         {
           "text": "Motion Curves",
-          "link": "/glimmer-book/book0/08-motion-curves.html"
+          "link": "/glimmer-book/book1/08-motion-curves.html"
         },
         {
           "text": "Shapes, Sound and Displays on the Board",
-          "link": "/glimmer-book/book0/09-shapes-sound-and-displays.html"
+          "link": "/glimmer-book/book1/09-shapes-sound-and-displays.html"
         },
         {
           "text": "Arrays and Layout Types",
-          "link": "/glimmer-book/book0/10-arrays-and-layout-types.html"
+          "link": "/glimmer-book/book1/10-arrays-and-layout-types.html"
         },
         {
           "text": "Dependency Reports and Debugging",
-          "link": "/glimmer-book/book0/11-dependency-reports-and-debugging.html"
+          "link": "/glimmer-book/book1/11-dependency-reports-and-debugging.html"
         },
         {
           "text": "Routines, Parts and Imports",
-          "link": "/glimmer-book/book0/12-routines-parts-and-imports.html"
+          "link": "/glimmer-book/book1/12-routines-parts-and-imports.html"
         },
         {
           "text": "Cards",
-          "link": "/glimmer-book/book0/13-cards.html"
+          "link": "/glimmer-book/book1/13-cards.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Book 2 — Building Complete Z80 Games",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Preface",
+          "link": "/glimmer-book/book2/00-preface.html"
         },
         {
-          "text": "A Small Matrix Game",
-          "link": "/glimmer-book/book0/14-a-small-matrix-game.html"
+          "text": "Building Skyfall",
+          "link": "/glimmer-book/book2/01-building-skyfall.html"
         },
         {
           "text": "Reading Tetro",
-          "link": "/glimmer-book/book0/15-reading-tetro.html"
+          "link": "/glimmer-book/book2/02-reading-tetro.html"
         },
         {
           "text": "The TMS9918 Profile",
-          "link": "/glimmer-book/book0/16-the-tms9918-profile.html"
+          "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
         },
         {
-          "text": "A VDP Game",
-          "link": "/glimmer-book/book0/17-a-vdp-game.html"
+          "text": "Building Lanternfly",
+          "link": "/glimmer-book/book2/04-building-lanternfly.html"
         },
         {
           "text": "Two Displays, One Language",
-          "link": "/glimmer-book/book0/18-two-displays-one-language.html"
-        },
+          "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Reference",
+      "collapsed": false,
+      "items": [
         {
           "text": "Appendix A — Declaration Reference",
-          "link": "/glimmer-book/book0/appendix-a-declarations.html"
+          "link": "/glimmer-book/appendices/appendix-a-declarations.html"
         },
         {
           "text": "Appendix B — The 8x8 Matrix Profile",
-          "link": "/glimmer-book/book0/appendix-b-matrix-profile.html"
+          "link": "/glimmer-book/appendices/appendix-b-matrix-profile.html"
         },
         {
           "text": "Appendix C — The TMS9918 Profile",
-          "link": "/glimmer-book/book0/appendix-c-tms9918-profile.html"
+          "link": "/glimmer-book/appendices/appendix-c-tms9918-profile.html"
         },
         {
           "text": "Appendix D — Build and Debug",
-          "link": "/glimmer-book/book0/appendix-d-build-and-debug.html"
+          "link": "/glimmer-book/appendices/appendix-d-build-and-debug.html"
         },
         {
           "text": "Appendix E — AZM Touchpoints",
-          "link": "/glimmer-book/book0/appendix-e-azm-touchpoints.html"
+          "link": "/glimmer-book/appendices/appendix-e-azm-touchpoints.html"
         }
       ]
     }
   ],
-  "/glimmer-book/book0/": [
+  "/glimmer-book/book1/": [
     {
-      "text": "Glimmer Book: Reactive Games for the Z80",
+      "text": "Glimmer Book 1 — Reactive Programming for Z80 Games",
       "collapsed": false,
       "items": [
         {
           "text": "Preface",
-          "link": "/glimmer-book/book0/00-preface.html"
+          "link": "/glimmer-book/book1/00-preface.html"
         },
         {
           "text": "The Shape of a Game",
-          "link": "/glimmer-book/book0/01-the-shape-of-a-game.html"
+          "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
         {
           "text": "First Light",
-          "link": "/glimmer-book/book0/02-first-light.html"
+          "link": "/glimmer-book/book1/02-first-light.html"
         },
         {
           "text": "State",
-          "link": "/glimmer-book/book0/03-state.html"
+          "link": "/glimmer-book/book1/03-state.html"
         },
         {
           "text": "Pulses and Bindings",
-          "link": "/glimmer-book/book0/04-pulses-and-bindings.html"
+          "link": "/glimmer-book/book1/04-pulses-and-bindings.html"
         },
         {
           "text": "Compute, Effect, Render",
-          "link": "/glimmer-book/book0/05-compute-effect-render.html"
+          "link": "/glimmer-book/book1/05-compute-effect-render.html"
         },
         {
           "text": "The 8x8 Matrix Profile",
-          "link": "/glimmer-book/book0/06-the-matrix-profile.html"
+          "link": "/glimmer-book/book1/06-the-matrix-profile.html"
         },
         {
           "text": "Time",
-          "link": "/glimmer-book/book0/07-time.html"
+          "link": "/glimmer-book/book1/07-time.html"
         },
         {
           "text": "Motion Curves",
-          "link": "/glimmer-book/book0/08-motion-curves.html"
+          "link": "/glimmer-book/book1/08-motion-curves.html"
         },
         {
           "text": "Shapes, Sound and Displays on the Board",
-          "link": "/glimmer-book/book0/09-shapes-sound-and-displays.html"
+          "link": "/glimmer-book/book1/09-shapes-sound-and-displays.html"
         },
         {
           "text": "Arrays and Layout Types",
-          "link": "/glimmer-book/book0/10-arrays-and-layout-types.html"
+          "link": "/glimmer-book/book1/10-arrays-and-layout-types.html"
         },
         {
           "text": "Dependency Reports and Debugging",
-          "link": "/glimmer-book/book0/11-dependency-reports-and-debugging.html"
+          "link": "/glimmer-book/book1/11-dependency-reports-and-debugging.html"
         },
         {
           "text": "Routines, Parts and Imports",
-          "link": "/glimmer-book/book0/12-routines-parts-and-imports.html"
+          "link": "/glimmer-book/book1/12-routines-parts-and-imports.html"
         },
         {
           "text": "Cards",
-          "link": "/glimmer-book/book0/13-cards.html"
+          "link": "/glimmer-book/book1/13-cards.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Book 2 — Building Complete Z80 Games",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Preface",
+          "link": "/glimmer-book/book2/00-preface.html"
         },
         {
-          "text": "A Small Matrix Game",
-          "link": "/glimmer-book/book0/14-a-small-matrix-game.html"
+          "text": "Building Skyfall",
+          "link": "/glimmer-book/book2/01-building-skyfall.html"
         },
         {
           "text": "Reading Tetro",
-          "link": "/glimmer-book/book0/15-reading-tetro.html"
+          "link": "/glimmer-book/book2/02-reading-tetro.html"
         },
         {
           "text": "The TMS9918 Profile",
-          "link": "/glimmer-book/book0/16-the-tms9918-profile.html"
+          "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
         },
         {
-          "text": "A VDP Game",
-          "link": "/glimmer-book/book0/17-a-vdp-game.html"
+          "text": "Building Lanternfly",
+          "link": "/glimmer-book/book2/04-building-lanternfly.html"
         },
         {
           "text": "Two Displays, One Language",
-          "link": "/glimmer-book/book0/18-two-displays-one-language.html"
-        },
+          "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Reference",
+      "collapsed": false,
+      "items": [
         {
           "text": "Appendix A — Declaration Reference",
-          "link": "/glimmer-book/book0/appendix-a-declarations.html"
+          "link": "/glimmer-book/appendices/appendix-a-declarations.html"
         },
         {
           "text": "Appendix B — The 8x8 Matrix Profile",
-          "link": "/glimmer-book/book0/appendix-b-matrix-profile.html"
+          "link": "/glimmer-book/appendices/appendix-b-matrix-profile.html"
         },
         {
           "text": "Appendix C — The TMS9918 Profile",
-          "link": "/glimmer-book/book0/appendix-c-tms9918-profile.html"
+          "link": "/glimmer-book/appendices/appendix-c-tms9918-profile.html"
         },
         {
           "text": "Appendix D — Build and Debug",
-          "link": "/glimmer-book/book0/appendix-d-build-and-debug.html"
+          "link": "/glimmer-book/appendices/appendix-d-build-and-debug.html"
         },
         {
           "text": "Appendix E — AZM Touchpoints",
-          "link": "/glimmer-book/book0/appendix-e-azm-touchpoints.html"
+          "link": "/glimmer-book/appendices/appendix-e-azm-touchpoints.html"
+        }
+      ]
+    }
+  ],
+  "/glimmer-book/book2/": [
+    {
+      "text": "Glimmer Book 1 — Reactive Programming for Z80 Games",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Preface",
+          "link": "/glimmer-book/book1/00-preface.html"
+        },
+        {
+          "text": "The Shape of a Game",
+          "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
+        },
+        {
+          "text": "First Light",
+          "link": "/glimmer-book/book1/02-first-light.html"
+        },
+        {
+          "text": "State",
+          "link": "/glimmer-book/book1/03-state.html"
+        },
+        {
+          "text": "Pulses and Bindings",
+          "link": "/glimmer-book/book1/04-pulses-and-bindings.html"
+        },
+        {
+          "text": "Compute, Effect, Render",
+          "link": "/glimmer-book/book1/05-compute-effect-render.html"
+        },
+        {
+          "text": "The 8x8 Matrix Profile",
+          "link": "/glimmer-book/book1/06-the-matrix-profile.html"
+        },
+        {
+          "text": "Time",
+          "link": "/glimmer-book/book1/07-time.html"
+        },
+        {
+          "text": "Motion Curves",
+          "link": "/glimmer-book/book1/08-motion-curves.html"
+        },
+        {
+          "text": "Shapes, Sound and Displays on the Board",
+          "link": "/glimmer-book/book1/09-shapes-sound-and-displays.html"
+        },
+        {
+          "text": "Arrays and Layout Types",
+          "link": "/glimmer-book/book1/10-arrays-and-layout-types.html"
+        },
+        {
+          "text": "Dependency Reports and Debugging",
+          "link": "/glimmer-book/book1/11-dependency-reports-and-debugging.html"
+        },
+        {
+          "text": "Routines, Parts and Imports",
+          "link": "/glimmer-book/book1/12-routines-parts-and-imports.html"
+        },
+        {
+          "text": "Cards",
+          "link": "/glimmer-book/book1/13-cards.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Book 2 — Building Complete Z80 Games",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Preface",
+          "link": "/glimmer-book/book2/00-preface.html"
+        },
+        {
+          "text": "Building Skyfall",
+          "link": "/glimmer-book/book2/01-building-skyfall.html"
+        },
+        {
+          "text": "Reading Tetro",
+          "link": "/glimmer-book/book2/02-reading-tetro.html"
+        },
+        {
+          "text": "The TMS9918 Profile",
+          "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
+        },
+        {
+          "text": "Building Lanternfly",
+          "link": "/glimmer-book/book2/04-building-lanternfly.html"
+        },
+        {
+          "text": "Two Displays, One Language",
+          "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Appendix A — Declaration Reference",
+          "link": "/glimmer-book/appendices/appendix-a-declarations.html"
+        },
+        {
+          "text": "Appendix B — The 8x8 Matrix Profile",
+          "link": "/glimmer-book/appendices/appendix-b-matrix-profile.html"
+        },
+        {
+          "text": "Appendix C — The TMS9918 Profile",
+          "link": "/glimmer-book/appendices/appendix-c-tms9918-profile.html"
+        },
+        {
+          "text": "Appendix D — Build and Debug",
+          "link": "/glimmer-book/appendices/appendix-d-build-and-debug.html"
+        },
+        {
+          "text": "Appendix E — AZM Touchpoints",
+          "link": "/glimmer-book/appendices/appendix-e-azm-touchpoints.html"
+        }
+      ]
+    }
+  ],
+  "/glimmer-book/appendices/": [
+    {
+      "text": "Glimmer Book 1 — Reactive Programming for Z80 Games",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Preface",
+          "link": "/glimmer-book/book1/00-preface.html"
+        },
+        {
+          "text": "The Shape of a Game",
+          "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
+        },
+        {
+          "text": "First Light",
+          "link": "/glimmer-book/book1/02-first-light.html"
+        },
+        {
+          "text": "State",
+          "link": "/glimmer-book/book1/03-state.html"
+        },
+        {
+          "text": "Pulses and Bindings",
+          "link": "/glimmer-book/book1/04-pulses-and-bindings.html"
+        },
+        {
+          "text": "Compute, Effect, Render",
+          "link": "/glimmer-book/book1/05-compute-effect-render.html"
+        },
+        {
+          "text": "The 8x8 Matrix Profile",
+          "link": "/glimmer-book/book1/06-the-matrix-profile.html"
+        },
+        {
+          "text": "Time",
+          "link": "/glimmer-book/book1/07-time.html"
+        },
+        {
+          "text": "Motion Curves",
+          "link": "/glimmer-book/book1/08-motion-curves.html"
+        },
+        {
+          "text": "Shapes, Sound and Displays on the Board",
+          "link": "/glimmer-book/book1/09-shapes-sound-and-displays.html"
+        },
+        {
+          "text": "Arrays and Layout Types",
+          "link": "/glimmer-book/book1/10-arrays-and-layout-types.html"
+        },
+        {
+          "text": "Dependency Reports and Debugging",
+          "link": "/glimmer-book/book1/11-dependency-reports-and-debugging.html"
+        },
+        {
+          "text": "Routines, Parts and Imports",
+          "link": "/glimmer-book/book1/12-routines-parts-and-imports.html"
+        },
+        {
+          "text": "Cards",
+          "link": "/glimmer-book/book1/13-cards.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Book 2 — Building Complete Z80 Games",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Preface",
+          "link": "/glimmer-book/book2/00-preface.html"
+        },
+        {
+          "text": "Building Skyfall",
+          "link": "/glimmer-book/book2/01-building-skyfall.html"
+        },
+        {
+          "text": "Reading Tetro",
+          "link": "/glimmer-book/book2/02-reading-tetro.html"
+        },
+        {
+          "text": "The TMS9918 Profile",
+          "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
+        },
+        {
+          "text": "Building Lanternfly",
+          "link": "/glimmer-book/book2/04-building-lanternfly.html"
+        },
+        {
+          "text": "Two Displays, One Language",
+          "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        }
+      ]
+    },
+    {
+      "text": "Glimmer Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Appendix A — Declaration Reference",
+          "link": "/glimmer-book/appendices/appendix-a-declarations.html"
+        },
+        {
+          "text": "Appendix B — The 8x8 Matrix Profile",
+          "link": "/glimmer-book/appendices/appendix-b-matrix-profile.html"
+        },
+        {
+          "text": "Appendix C — The TMS9918 Profile",
+          "link": "/glimmer-book/appendices/appendix-c-tms9918-profile.html"
+        },
+        {
+          "text": "Appendix D — Build and Debug",
+          "link": "/glimmer-book/appendices/appendix-d-build-and-debug.html"
+        },
+        {
+          "text": "Appendix E — AZM Touchpoints",
+          "link": "/glimmer-book/appendices/appendix-e-azm-touchpoints.html"
         }
       ]
     }

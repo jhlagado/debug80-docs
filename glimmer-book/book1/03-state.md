@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "State"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 3
 ---
 
@@ -207,7 +207,7 @@ bits a bank, states first and pulses after them. The dispatch masks
 carry the bank in their name (the `__B0` suffix you can see above),
 and a block whose triggers span banks tests each one.
 
-![DotX, its bit in Changed0, and the first three frames of the program.](../../assets/images/glimmer-book/book0/change-flags.svg)
+![DotX, its bit in Changed0, and the first three frames of the program.](../../assets/images/glimmer-book/book1/change-flags.svg)
 
 ## The first frame, predicted
 

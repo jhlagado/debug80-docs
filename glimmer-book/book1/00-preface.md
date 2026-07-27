@@ -1,16 +1,17 @@
 ---
 layout: default
 title: "Preface"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 0
 ---
 
 # Preface
 
-This book teaches you to write Z80 games with Glimmer. Glimmer applies
-reactive programming to a forty-year-old processor: you describe the
-game while the compiler generates the frame loop, key scanning, timing
-and change tracking that every game needs.
+The two Glimmer books teach Z80 game programming through a reactive
+model. You describe the game while the compiler generates the frame
+loop, key scanning, timing and change tracking that every game needs.
+This first book develops the language and its model through focused
+programs; Book 2 applies them to complete games.
 
 A Glimmer program describes four things: facts, moments, rules and pictures.
 Facts hold game state, such as the player's position and current score.
@@ -52,9 +53,9 @@ lessons work without physical hardware. On a TEC-1G, the build
 produces a HEX file you can send to the board, and the same program
 runs on the physical machine.
 
-The book first builds the reactive model from state, pulses, bindings
-and compute/effect/render blocks. It then adds matrix drawing, time,
-motion, resources, structured data and debugging before organising
-those parts into complete games. The final chapters move from the 8x8
-matrix to the TMS9918 video display processor and compare the demands
-each display places on a game.
+This book builds the reactive model from state, pulses, bindings and
+compute/effect/render blocks. Matrix drawing, time, motion and resources
+extend that model, followed by structured data, debugging, source
+organisation and cards. [Glimmer Book 2](../book2/) uses the completed
+toolkit to build Skyfall, study Tetro and create a game for the TMS9918
+video display processor.

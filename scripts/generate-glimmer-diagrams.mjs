@@ -1,5 +1,5 @@
 /**
- * Generates the figures for the Glimmer book, Book 0.
+ * Generates the figures for both Glimmer books.
  *
  * Glimmer is the most visual of the four books and had no figures at all: the
  * frame and its delivery rule, the scan window the game runs in, the seven
@@ -21,9 +21,21 @@ import {
   strip, bitfield, box, node, plot, ledGrid, legend,
 } from './lib/figure.mjs';
 
-const OUT = 'assets/images/glimmer-book/book0';
+const BOOK1_OUT = 'assets/images/glimmer-book/book1';
+const BOOK2_OUT = 'assets/images/glimmer-book/book2';
 const BOOK = 'glimmer';
 const figures = {};
+const book2Figures = new Set([
+  'skyfall-design.svg',
+  'skyfall-play.svg',
+  'tetro-board.svg',
+  'tetro-pieces.svg',
+  'vdp-layers.svg',
+  'shadow-commit.svg',
+  'lanternfly-play.svg',
+  'two-coordinate-systems.svg',
+  'two-loops.svg',
+]);
 
 const add = (name, title, desc, height, parts) => {
   figures[name] = svg({ title, desc, height, book: BOOK, body: parts.filter(Boolean).join('\n') });
@@ -1174,10 +1186,10 @@ add(
 }
 
 /* ============================================================
-   Chapter 14 - A Small Matrix Game
+   Book 2, Chapter 1 - Building Skyfall
    ============================================================ */
 
-// 14.1 Skyfall mid-round. The book builds this game and never shows it.
+// 1.1 Skyfall mid-round.
 add(
   'skyfall-play.svg',
   'Skyfall in play',
@@ -1223,7 +1235,7 @@ add(
   ],
 );
 
-// 14.2 The design tables from the head of the chapter, drawn as the skeleton
+// 1.2 The design tables from the head of the chapter, drawn as the skeleton
 // they are: settle these and every block that remains is a small exercise.
 {
   const chip = (x, y, w, main, side) => [
@@ -1268,10 +1280,10 @@ add(
 }
 
 /* ============================================================
-   Chapter 15 - Reading Tetro
+   Book 2, Chapter 2 - Reading Tetro
    ============================================================ */
 
-// 15.1 The seven pieces as the declarations draw them, and one piece through
+// 2.1 The seven pieces as the declarations draw them, and one piece through
 // its four rotations with the bytes the first one became.
 {
   const pieces = [
@@ -1336,7 +1348,7 @@ add(
   );
 }
 
-// 15.2 The board as four byte arrays: one occupancy bitmap for collision and
+// 2.2 The board as four byte arrays: one occupancy bitmap for collision and
 // three colour planes that reach the framebuffer as one OR per row.
 {
   const rows = [
@@ -1387,10 +1399,10 @@ add(
 }
 
 /* ============================================================
-   Chapter 16 - The TMS9918 Profile
+   Book 2, Chapter 3 - The TMS9918 Profile
    ============================================================ */
 
-// 16.1 The two layers, drawn as the exploded stack they are: a grid of cells
+// 3.1 The two layers, drawn as the exploded stack they are: a grid of cells
 // behind, and sprites at pixel positions floating over it.
 {
   const lines = [];
@@ -1426,7 +1438,7 @@ add(
   );
 }
 
-// 16.2 The six stages a render's write passes through before it is light, and
+// 3.2 The six stages a render's write passes through before it is light, and
 // the window the commit spends.
 {
   const stage = (x, y, title, sub, hi) => [
@@ -1477,10 +1489,10 @@ add(
 }
 
 /* ============================================================
-   Chapter 17 - A VDP Game
+   Book 2, Chapter 4 - Building Lanternfly
    ============================================================ */
 
-// 17.1 Lanternfly mid-round, with the pixel-to-cell conversion inset beside
+// 4.1 Lanternfly mid-round, with the pixel-to-cell conversion inset beside
 // it, because that conversion is what a gather is made of.
 {
   const k = 1.75;
@@ -1530,7 +1542,7 @@ add(
   );
 }
 
-// 17.2 The conversion at full size, with the arithmetic beside it.
+// 4.2 The conversion at full size, with the arithmetic beside it.
 {
   const ox = 60;
   const oy = 70;
@@ -1581,10 +1593,10 @@ add(
 }
 
 /* ============================================================
-   Chapter 18 - Two Displays, One Language
+   Book 2, Chapter 5 - Two Displays, One Language
    ============================================================ */
 
-// 18.1 The closing argument. Two display paths, different heads, joined
+// 5.1 The closing argument. Two display paths, different heads, joined
 // beneath one reactive frame that neither of them changed.
 {
   const col = (x, stages) => stages.flatMap((label, i) => {
@@ -1642,8 +1654,13 @@ add(
 
 /* ---------- write ---------- */
 
-mkdirSync(OUT, { recursive: true });
+mkdirSync(BOOK1_OUT, { recursive: true });
+mkdirSync(BOOK2_OUT, { recursive: true });
 for (const [name, body] of Object.entries(figures)) {
-  writeFileSync(path.join(OUT, name), body);
+  const outputDirectory = book2Figures.has(name) ? BOOK2_OUT : BOOK1_OUT;
+  writeFileSync(path.join(outputDirectory, name), body);
 }
-console.log(`${Object.keys(figures).length} figures -> ${OUT}`);
+console.log(
+  `${Object.keys(figures).length - book2Figures.size} figures -> ${BOOK1_OUT}\n` +
+  `${book2Figures.size} figures -> ${BOOK2_OUT}`,
+);

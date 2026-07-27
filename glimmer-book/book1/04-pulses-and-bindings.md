@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Pulses and Bindings"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 4
 ---
 
@@ -158,7 +158,7 @@ move-left key needs the opposite behaviour: holding the key keeps it sliding
 until release. Rover uses held compass keys and rising GO for the same
 reasons.
 
-![One press read two ways: rising fires once, held fires every eight frames.](../../assets/images/glimmer-book/book0/key-bindings.svg)
+![One press read two ways: rising fires once, held fires every eight frames.](../../assets/images/glimmer-book/book1/key-bindings.svg)
 
 One property of the keypad shapes every control scheme: MON-3 reports
 a single pressed key at a time. Held movement runs one direction at

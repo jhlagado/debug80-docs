@@ -1,8 +1,8 @@
 ---
 layout: default
 title: "Appendix B — The 8x8 Matrix Profile"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 20
+parent: "Glimmer Reference"
+nav_order: 2
 ---
 
 # Appendix B — The 8x8 Matrix Profile

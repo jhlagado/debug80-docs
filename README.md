@@ -34,7 +34,8 @@ and the change tracking, and compiles to readable Z80 assembly.
 | [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/) | The reference: syntax, directives, expressions, layouts, contracts. |
 | [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/) | The Z80 from the bare machine up, assuming nothing. |
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/) | Sorting, strings, records, recursion and a backtracking capstone. |
-| [Glimmer Book](https://debug80.com/glimmer-book/book0/) | The guided course, ending in two complete games. |
+| [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs. |
+| [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/) | Skyfall, Tetro and Lanternfly across the matrix and TMS9918 displays. |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/) | Reference material for the machine and its monitor. |
 
 ## Working on it
@@ -51,7 +52,7 @@ npm run dev
 
 ### Checks
 
-Four scripts guard things that are easy to get wrong and hard to notice. CI runs
+Five scripts guard things that are easy to get wrong and hard to notice. CI runs
 them on every push.
 
 | Command | Checks |
@@ -60,6 +61,7 @@ them on every push.
 | `npm run symbols` | Every symbol the prose names in backticks is one the code actually defines. AZM is case-sensitive, so `RenderTile` and `RENDER_TILE` are different symbols and only one of them exists. |
 | `npm run verify:debug80` | Command names, panel labels and status strings quoted in Debug80 Book 1 match the extension source. Needs the extension checked out alongside this repo; skipped otherwise. |
 | `npm run sidebar` | Regenerates the sidebars from front matter. Run after adding or renaming a page. |
+| `npm run llms` | Confirms that the public citation guide contains the current books and URLs. |
 
 ### Figures
 
@@ -75,7 +77,7 @@ not the SVGs.
 ```text
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
-glimmer-book/     The Glimmer course
+glimmer-book/     Glimmer Books 1-2, plus their shared reference
 tec1g/            TEC-1G and MON-3 reference
 assets/images/    Figures, most of them generated
 scripts/          Diagram generator and the four checks

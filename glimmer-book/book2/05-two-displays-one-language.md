@@ -1,15 +1,15 @@
 ---
 layout: default
 title: "Two Displays, One Language"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 18
+parent: "Glimmer Book 2 — Building Complete Z80 Games"
+nav_order: 5
 ---
 
 # Two Displays, One Language
 
-We began this book with one white pixel in the middle of the 8x8 RGB
-LED matrix. Those sixty-four pixels now run complete games, and you
-have moved from them to a video chip with sprites. Skyfall drops
+The series began with one white pixel in the middle of the 8x8 RGB
+LED matrix. Those sixty-four pixels now run complete games, and Book 2
+has moved from them to a video chip with sprites. Skyfall drops
 blocks down the 8x8 board toward a paddle you slide along the bottom
 row; Lanternfly steers a white sprite through a night garden with a
 wasp on its tail. You built Skyfall and worked through Lanternfly's
@@ -85,7 +85,7 @@ VRAM, `VdpWaitVBlank` detects the interval between two refreshes and
 `GlimCommit` moves the previous frame's changes into VRAM during that
 interval.
 
-![Two displays, two prices, one reactive frame.](../../assets/images/glimmer-book/book0/two-loops.svg)
+![Two displays, two prices, one reactive frame.](../../assets/images/glimmer-book/book2/two-loops.svg)
 
 ## The board the program is
 
@@ -248,7 +248,7 @@ Every program in this book produced a HEX file containing the same
 assembled bytes that Debug80 runs. That file can be transferred to a
 real TEC-1G. If a board is within reach, Skyfall is one transfer away.
 
-The book began with the ability to read `ld a,(hl)`. You can now read,
-modify and extend complete Glimmer games on either display the TEC-1G
-offers. A new game can begin as Mover did: one fact, one picture and a
-connection between them.
+The series began with the ability to read `ld a,(hl)`. You can now
+read, modify and extend complete Glimmer games on either display the
+TEC-1G offers. A new game can begin as Mover did: one fact, one picture
+and a connection between them.

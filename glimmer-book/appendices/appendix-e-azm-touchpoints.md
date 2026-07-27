@@ -1,8 +1,8 @@
 ---
 layout: default
 title: "Appendix E — AZM Touchpoints"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 23
+parent: "Glimmer Reference"
+nav_order: 5
 ---
 
 # Appendix E — AZM Touchpoints
@@ -13,8 +13,8 @@ Each entry below says what the feature is, where Glimmer relies on
 it, shows one excerpt from a real build, and points into
 [AZM Book 1](../../azm-book/book1/), where each feature has a
 dedicated chapter. The excerpts come from generated files of this
-book's programs: Canvas (chapter 10), Tetro (chapter 15), Sprite
-Chase (chapter 17).
+books' programs: Canvas (Book 1, chapter 10), Tetro (Book 2, chapter 2)
+and Sprite Chase (Book 2, chapter 4).
 
 ## Labels and local labels
 
@@ -107,7 +107,7 @@ canvas.glim:116:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, bu
 
 `B` sits on `FbPlot`'s clobbers line, so the value `inc b` consumes
 may be anything; the diagnostic carries the call, the register and
-the reason, at the `.glim` line and column you typed. Chapter 11
+the reason, at the `.glim` line and column you typed. Book 1, chapter 11
 walks this bug and its fix.
 Full treatment: [Register
 Contracts](../../azm-book/book1/06-register-contracts.md).
@@ -183,7 +183,7 @@ placed after the runtime, from `tetro.main.asm`:
         .import "tetro-lib.asm"
 ```
 
-Chapter 12 explains when to use a module; the directive above is the
+Book 1, chapter 12 explains when to use a module; the directive above is the
 generated form.
 Full treatment: [Ops, Aliases and Source
 Composition](../../azm-book/book1/07-ops-aliases.md).
@@ -263,6 +263,7 @@ Card              .enum Splash, Playing, Paused, GameOver
 ```
 
 `Card.Splash` is 0, `Card.Playing` is 1, and the card gates from
-chapter 13 compare against exactly these symbols: `cp Card.Playing`.
+Book 1, chapter 13 compares against exactly these symbols:
+`cp Card.Playing`.
 Full treatment: [Addresses, Constants and
 Expressions](../../azm-book/book1/03-addresses-constants-expressions.md).

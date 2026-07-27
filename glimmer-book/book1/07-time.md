@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Time"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 7
 ---
 
@@ -225,7 +225,7 @@ the pulse, then the ramp remains idle at that value. Writing 0 to the
 cell starts the complete climb again. Drip uses only the completion
 pulse; motion curves use the intermediate values.
 
-![Every frame, every N frames, once, and step by step, on one axis.](../../assets/images/glimmer-book/book0/time-schedules.svg)
+![Every frame, every N frames, once, and step by step, on one axis.](../../assets/images/glimmer-book/book1/time-schedules.svg)
 
 A ramp starts at its terminal value and remains idle until code writes
 a lower value. A familiar modifier triggers that first write:

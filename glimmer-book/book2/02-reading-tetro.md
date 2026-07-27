@@ -1,8 +1,8 @@
 ---
 layout: default
 title: "Reading Tetro"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 15
+parent: "Glimmer Book 2 — Building Complete Z80 Games"
+nav_order: 2
 ---
 
 # Reading Tetro
@@ -90,7 +90,7 @@ board row lands on screen as one `or` of plane byte into framebuffer
 byte. A full row announces itself in the separate `BoardRows`
 occupancy byte, which reads `$FF` regardless of the row's colours.
 
-![The settled board: one occupancy byte and three colour bytes per row.](../../assets/images/glimmer-book/book0/tetro-board.svg)
+![The settled board: one occupancy byte and three colour bytes per row.](../../assets/images/glimmer-book/book2/tetro-board.svg)
 
 Three timers define the game's schedule:
 
@@ -168,7 +168,7 @@ to 6, and that same order
 runs through every table below and through the preview letters in
 `text PieceNames "IOTSZJL"`.
 
-![The seven pieces, and the S piece through its four quarter turns.](../../assets/images/glimmer-book/book0/tetro-pieces.svg)
+![The seven pieces, and the S piece through its four quarter turns.](../../assets/images/glimmer-book/book2/tetro-pieces.svg)
 
 ## The tables the shapes became
 
@@ -511,4 +511,4 @@ resolving program-wide.
 Next, a different machine to draw with: the TMS9918 video display
 processor, where the program describes a scene and the chip keeps it
 on screen:
-[The TMS9918 Profile](16-the-tms9918-profile.md).
+[The TMS9918 Profile](03-the-tms9918-profile.md).

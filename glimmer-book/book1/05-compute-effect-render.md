@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Compute, Effect, Render"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 5
 ---
 
@@ -172,7 +172,7 @@ that change:
 **A change is delivered exactly once: to later phases in the same
 frame, otherwise in the next frame.**
 
-![One frame, and the rule that determines which phase sees a change.](../../assets/images/glimmer-book/book0/the-frame.svg)
+![One frame, and the rule that determines which phase sees a change.](../../assets/images/glimmer-book/book1/the-frame.svg)
 
 `DeriveBar`
 updates `BarLen`, and BarLen's one dependent is `DrawBar`, a render,

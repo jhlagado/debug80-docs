@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Dependency Reports and Debugging"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 11
 ---
 
@@ -337,7 +337,7 @@ That version builds clean. Canvas keeps its one-pixel cursor for the
 chapters ahead. The example shows why a callee's clobbers list matters
 before a register is reused across the call.
 
-![Canvas as a graph, with the chapter's two bugs marked where the tools found them.](../../assets/images/glimmer-book/book0/dependency-graph.svg)
+![Canvas as a graph, with the chapter's two bugs marked where the tools found them.](../../assets/images/glimmer-book/book1/dependency-graph.svg)
 
 The diagnostic's address, `canvas.glim:116:5`, points at the faulty
 call in a block body, and

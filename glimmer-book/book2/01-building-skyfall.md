@@ -1,19 +1,16 @@
 ---
 layout: default
-title: "A Small Matrix Game"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 14
+title: "Building Skyfall"
+parent: "Glimmer Book 2 — Building Complete Z80 Games"
+nav_order: 1
 ---
 
-# A Small Matrix Game
+# Building Skyfall
 
-Earlier chapters introduced the components one at a time: the
-drawing profile
-for the 8x8 RGB LED matrix, timers and ramps to keep time, shapes and
-sounds and the LCD to announce things, arrays to hold a board, parts
-to split a growing file, cards to give a program screens. Each arrived
-in a deliberately small program that isolated its behaviour. A
-complete game combines them.
+Glimmer Book 1 introduced each component in a deliberately small
+program: the drawing profile for the 8x8 RGB LED matrix, timers and
+ramps, shapes and sounds, LCD text, arrays, parts and cards. Skyfall
+combines them in one game.
 
 The game is called *Skyfall*.
 Blocks fall from the top row of the 8x8 matrix in random columns, and
@@ -32,8 +29,8 @@ with one named job. The rest of the design (the collision rules, the
 balance numbers, how the game feels under the thumb) is in those
 blocks and those numbers,
 and each choice appears where it first matters. The finished source is
-included as [skyfall.glim](code/skyfall.glim) and
-[skyfall-rules.glim](code/skyfall-rules.glim).
+included as <a href="/glimmer-book/book2/code/skyfall.glim">skyfall.glim</a>
+and <a href="/glimmer-book/book2/code/skyfall-rules.glim">skyfall-rules.glim</a>.
 
 ## The game on paper
 
@@ -96,7 +93,7 @@ Skyfall uses six facts, five moments, and one card cell: twelve flags,
 leaving twenty available. Timer cells carry no change flags, and the
 unnamed `FrameCount` uses none.
 
-![Skyfall on paper, before a block is written.](../../assets/images/glimmer-book/book0/skyfall-design.svg)
+![Skyfall on paper, before a block is written.](../../assets/images/glimmer-book/book2/skyfall-design.svg)
 
 ## The entry file
 
@@ -472,7 +469,7 @@ hangs on the paddle's top speed.
 Every part of that feel is a number you wrote: the 18, the 4, the 6,
 the 90.
 
-![Skyfall in play: the drop in column 5, the paddle covering columns 4 to 6.](../../assets/images/glimmer-book/book0/skyfall-play.svg)
+![Skyfall in play: the drop in column 5, the paddle covering columns 4 to 6.](../../assets/images/glimmer-book/book2/skyfall-play.svg)
 
 ## The design, printed
 
@@ -559,4 +556,4 @@ everything after follows from presses and ticks.
 Skyfall can be extended with a wider paddle, a faster floor or two
 drops at once. The next chapter shifts from building to reading:
 Tetro, the largest repository game for the 8x8 matrix, using the same
-components: [Reading Tetro](15-reading-tetro.md).
+components: [Reading Tetro](02-reading-tetro.md).

@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "A VDP Game"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 17
+title: "Building Lanternfly"
+parent: "Glimmer Book 2 — Building Complete Z80 Games"
+nav_order: 4
 ---
 
-# A VDP Game
+# Building Lanternfly
 
 Skyfall
 settled every landing with one subtraction against a column number.
@@ -25,12 +25,12 @@ somewhere else. A wasp hunts you throughout the round, and every lantern
 you take quickens its stride. When it reaches you, the game ends.
 Around all of it stand the splash, playing and game-over cards, now
 running over VRAM shadows. The complete source is included as
-[lanternfly.glim](code/lanternfly.glim). The text
+<a href="/glimmer-book/book2/code/lanternfly.glim">lanternfly.glim</a>. The text
 concentrates on the parts specific to this game,
 while the four movement effects follow Grove and the GameOver card
 follows Skyfall.
 
-![Lanternfly in play: the fly among the reeds, the lantern lit, the wasp closing.](../../assets/images/glimmer-book/book0/lanternfly-play.svg)
+![Lanternfly in play: the fly among the reeds, the lantern lit, the wasp closing.](../../assets/images/glimmer-book/book2/lanternfly-play.svg)
 
 ## Lanternfly on paper
 
@@ -340,7 +340,7 @@ write, as in Skyfall), and the respawn masks one random byte down to
 a column and folds another into rows 4..19, the band the reeds leave
 clear.
 
-![The fly's centre pixel, and the cell it falls in.](../../assets/images/glimmer-book/book0/two-coordinate-systems.svg)
+![The fly's centre pixel, and the cell it falls in.](../../assets/images/glimmer-book/book2/two-coordinate-systems.svg)
 
 `PlaceLantern`, on
 `LampCol, LampRow`, is the six-line runtime `NamePut` call from
@@ -572,4 +572,4 @@ a `Pip` tile on the top grid row, the tile grid itself as
 scoreboard, where Lanternfly borrowed the LCD.
 
 The last chapter compares the two games:
-[Two Displays, One Language](18-two-displays-one-language.md).
+[Two Displays, One Language](05-two-displays-one-language.md).

@@ -25,10 +25,10 @@ nav_order: 1
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
   </a>
-  <a class="volume volume--glimmer" href="/glimmer-book/book0/00-preface">
-    <span class="volume__tag">Vol $02 · 1 book</span>
+  <a class="volume volume--glimmer" href="/glimmer-book/book1/00-preface">
+    <span class="volume__tag">Vol $02 · 2 books</span>
     <span class="volume__head"><Mark book="glimmer" size="26" /><span class="volume__title">Glimmer</span></span>
-    <span class="volume__desc">A reactive game language that compiles to readable Z80 — built up one construct at a time, ending in complete games.</span>
+    <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>
     <span class="volume__enter">react →</span>
   </a>
 </nav>
@@ -85,11 +85,17 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 
 ## Glimmer
 
-### [Glimmer Book: Reactive Games for the Z80](glimmer-book/book0/)
+### [Glimmer Book 1 — Reactive Programming for Z80 Games](glimmer-book/book1/)
 
-The guided Glimmer course. Starting from Z80 assembly alone, it builds up the whole Glimmer language one construct at a time and finishes with complete games on two displays: the TEC-1G's 8x8 RGB LED matrix and the TMS9918 video display processor.
+The guided introduction to Glimmer. Focused programs develop the reactive model, frame phases, timing, drawing, structured state, source organisation and cards before those ideas meet in Canvas.
 
-For readers who can read Z80 assembly and want to write games with it.
+For readers who can read Z80 assembly and want to understand the Glimmer language.
+
+### [Glimmer Book 2 — Building Complete Z80 Games](glimmer-book/book2/)
+
+The application book. It builds Skyfall, studies the larger Tetro codebase, introduces the TMS9918 display profile and then builds Lanternfly.
+
+For readers ready to apply Glimmer to complete games.
 
 ---
 

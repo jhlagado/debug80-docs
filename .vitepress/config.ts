@@ -53,7 +53,7 @@ export default defineConfig({
       // if a URL points at one; nothing navigates through them.
       { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
       { text: 'AZM Books', link: '/azm-book/book1/01-getting-started' },
-      { text: 'Glimmer Book', link: '/glimmer-book/book0/00-preface' },
+      { text: 'Glimmer Books', link: '/glimmer-book/book1/00-preface' },
     ],
     sidebar: sidebars,
     search: { provider: 'local' },

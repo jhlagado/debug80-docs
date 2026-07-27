@@ -45,6 +45,9 @@ jobs:
       - name: Build with VitePress
         run: npm run build
 
+      - name: Check the public citation guide
+        run: npm run llms
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

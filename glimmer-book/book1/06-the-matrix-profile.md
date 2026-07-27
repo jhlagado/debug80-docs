@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "The 8x8 Matrix Profile"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 6
 ---
 
@@ -224,7 +224,7 @@ notice. And since the scan
 is by far the frame's largest cost, it paces the frame and makes the
 frame a useful unit of game time.
 
-![The scan occupies most of the frame, and one row travels from memory to light.](../../assets/images/glimmer-book/book0/scan-timing.svg)
+![The scan occupies most of the frame, and one row travels from memory to light.](../../assets/images/glimmer-book/book1/scan-timing.svg)
 
 ## The framebuffer
 
@@ -268,7 +268,7 @@ COLOR_WHITE       .equ $07
 
 The A value passed to `FbPlot` is therefore a set of plane bits.
 
-![Seven colours from three planes.](../../assets/images/glimmer-book/book0/colour-planes.svg)
+![Seven colours from three planes.](../../assets/images/glimmer-book/book1/colour-planes.svg)
 
 `FbPlot` turns x, y and colour into plane-byte writes. Its head,
 from the profile library:
@@ -299,7 +299,7 @@ coordinates and that pixel shows yellow. A clean picture starts from
 `FbClear`, which zeroes the 32 bytes, the call that has opened every
 redrawing render in this book.
 
-![Plotting x 5, y 2 in yellow sets one bit in two plane bytes.](../../assets/images/glimmer-book/book0/framebuffer.svg)
+![Plotting x 5, y 2 in yellow sets one bit in two plane bytes.](../../assets/images/glimmer-book/book1/framebuffer.svg)
 
 The `.routine` line above the label is the register interface. It is
 declared in the generated file and checked on every build: `FbPlot`

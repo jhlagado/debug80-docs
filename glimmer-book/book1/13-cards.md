@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Cards"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 13
 ---
 
@@ -46,7 +46,7 @@ press of GO scores a point on the seven-segment display. When the
 clock drains, the score appears as a red bar, and after a ninety-frame
 pause any key returns to the splash.
 
-![Gate's three cards, and the condition on each transition.](../../assets/images/glimmer-book/book0/card-machine.svg)
+![Gate's three cards, and the condition on each transition.](../../assets/images/glimmer-book/book1/card-machine.svg)
 
 The complete game is one file, `gate.glim`. Above the first `card`
 line are the program-wide
@@ -435,7 +435,7 @@ the key is GO), but that frame's active card is still Splash, so
 becomes active. A goto leaves its frame's triggers behind, so every round
 starts with a zero score, whichever key started it.
 
-![A goto raised in the logic phase takes effect at the frame boundary.](../../assets/images/glimmer-book/book0/card-transition.svg)
+![A goto raised in the logic phase takes effect at the frame boundary.](../../assets/images/glimmer-book/book1/card-transition.svg)
 
 ## The card machinery
 
@@ -487,7 +487,7 @@ The wrong card skips the block; the right card continues to the flag
 test. Card gating adds three instructions before the familiar
 dispatch.
 
-![One card active, and every other card's blocks skipped.](../../assets/images/glimmer-book/book0/dispatch-gating.svg)
+![One card active, and every other card's blocks skipped.](../../assets/images/glimmer-book/book1/dispatch-gating.svg)
 
 An enter dispatch adds the edge. `ShowFinal`'s, together with the two
 instructions that follow the last enter dispatch in the phase:
@@ -517,6 +517,12 @@ test is what makes the re-raise idiom and `Restart`'s every-run
 change mark safe: a raised flag alone, with both card bytes equal,
 skips every enter block in the file.
 
-The next chapter puts a complete game inside the card machinery:
-[A Small Matrix
-Game](14-a-small-matrix-game.md).
+Gate completes the language path that began with Mover. A Glimmer
+program can now hold structured state, respond to input and time, divide
+work into frame phases, organise source across files and restrict rules
+to the active card. Canvas showed how those facilities support one
+interactive program; Gate supplied its screen and lifecycle model.
+
+[Glimmer Book 2](../book2/) begins by putting the full toolkit into
+Skyfall, a complete matrix game built from its design through to the
+finished source.

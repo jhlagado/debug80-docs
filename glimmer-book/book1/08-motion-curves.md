@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Motion Curves"
-parent: "Glimmer Book: Reactive Games for the Z80"
+parent: "Glimmer Book 1 — Reactive Programming for Z80 Games"
 nav_order: 8
 ---
 
@@ -170,7 +170,7 @@ an anticipation launched `from 1` needs room to dip to 0. Glide
 lands on column 6 for the same reason: the complete Comet adds two
 more curves over the same run, and one of them springs.
 
-![The seven presets, each one run from start to finish.](../../assets/images/glimmer-book/book0/motion-presets.svg)
+![The seven presets, each one run from start to finish.](../../assets/images/glimmer-book/book1/motion-presets.svg)
 
 ## The ramp is the clock, the curve is the path
 
@@ -188,7 +188,7 @@ curve table holds the corresponding column for each step.
 `TrackComet` joins them, clock in and path out, with one byte read per
 step. This separation lets one clock drive any motion curve.
 
-![The ramp counts frames, the curve holds the path, and a switch mid-flight moves the dot.](../../assets/images/glimmer-book/book0/ramp-and-curve.svg)
+![The ramp counts frames, the curve holds the path, and a switch mid-flight moves the dot.](../../assets/images/glimmer-book/book1/ramp-and-curve.svg)
 
 Sixty-four ramp steps
 index sixty-four table entries; the final step reads the final byte,

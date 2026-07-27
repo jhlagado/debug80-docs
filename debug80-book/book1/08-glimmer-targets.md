@@ -53,4 +53,5 @@ The **Strict labels** checkbox controls assembly targets built directly by AZM. 
 
 ## Glimmer language documentation
 
-Language syntax and program examples are documented in [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book0/).
+Language syntax and program examples are documented in the
+[Glimmer books](../../glimmer-book/).

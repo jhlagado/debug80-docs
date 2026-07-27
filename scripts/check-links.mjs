@@ -35,6 +35,13 @@ function resolves(target, fromFile) {
   const base = t.startsWith('/') ? ROOT : path.dirname(fromFile);
   const rel = t.startsWith('/') ? t.slice(1) : t;
   const abs = path.resolve(base, rel);
+  const publicAbs = t.startsWith('/') ? path.resolve(ROOT, 'public', rel) : undefined;
+
+  // VitePress serves files under public/ from the site root.
+  if (publicAbs !== undefined && existsSync(publicAbs)) {
+    if (statSync(publicAbs).isDirectory()) return existsSync(path.join(publicAbs, 'index.html'));
+    return true;
+  }
 
   // A directory link serves its index.
   if (existsSync(abs) && statSync(abs).isDirectory()) return existsSync(path.join(abs, 'index.md'));

@@ -1,8 +1,8 @@
 ---
 layout: default
 title: "Appendix A — Declaration Reference"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 19
+parent: "Glimmer Reference"
+nav_order: 1
 ---
 
 # Appendix A — Declaration Reference

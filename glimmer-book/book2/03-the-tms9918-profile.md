@@ -1,8 +1,8 @@
 ---
 layout: default
 title: "The TMS9918 Profile"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 16
+parent: "Glimmer Book 2 — Building Complete Z80 Games"
+nav_order: 3
 ---
 
 # The TMS9918 Profile
@@ -33,7 +33,7 @@ shadow table; the profile later commits the table to VRAM.
 Tiles represent grid-aligned scenery, while sprites represent objects
 that move at pixel coordinates.
 
-![Tiles in the grid behind, sprites at pixel positions in front.](../../assets/images/glimmer-book/book0/vdp-layers.svg)
+![Tiles in the grid behind, sprites at pixel positions in front.](../../assets/images/glimmer-book/book2/vdp-layers.svg)
 
 The Z80 reaches the VDP's memory through two ports: control at `$BF`
 and data at `$BE`. Two control-port writes set a
@@ -347,7 +347,7 @@ sprite shadow to VRAM, and the moth stands one pixel to the right.
 Every shadow write reaches the screen at the top of the following
 frame, tiles and sprites alike.
 
-![From a fact to the picture: six stages and one vertical blank.](../../assets/images/glimmer-book/book0/shadow-commit.svg)
+![From a fact to the picture: six stages and one vertical blank.](../../assets/images/glimmer-book/book2/shadow-commit.svg)
 
 ## A scene planted once
 
@@ -512,4 +512,4 @@ terminator always sits right after them.
 
 The next chapter builds a complete game with the profile, including sprite
 collision, scoring on the tile grid, and cards on the VDP:
-[A VDP Game](17-a-vdp-game.md).
+[Building Lanternfly](04-building-lanternfly.md).

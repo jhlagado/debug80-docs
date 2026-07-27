@@ -1,8 +1,8 @@
 ---
 layout: default
 title: "Appendix D — Build and Debug"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 22
+parent: "Glimmer Reference"
+nav_order: 4
 ---
 
 # Appendix D — Build and Debug

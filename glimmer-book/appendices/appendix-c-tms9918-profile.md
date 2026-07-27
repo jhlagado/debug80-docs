@@ -1,8 +1,8 @@
 ---
 layout: default
 title: "Appendix C — The TMS9918 Profile"
-parent: "Glimmer Book: Reactive Games for the Z80"
-nav_order: 21
+parent: "Glimmer Reference"
+nav_order: 3
 ---
 
 # Appendix C — The TMS9918 Profile
