@@ -47,15 +47,15 @@ export const sidebars = {
         },
         {
           "text": "Glimmer targets",
-          "link": "/debug80-book/book1/11-glimmer-targets.html"
+          "link": "/debug80-book/book1/08-glimmer-targets.html"
         },
         {
           "text": "Video, input and serial",
-          "link": "/debug80-book/book1/08-video-input-and-serial.html"
+          "link": "/debug80-book/book1/09-video-input-and-serial.html"
         },
         {
           "text": "Sending to TEC-1G hardware",
-          "link": "/debug80-book/book1/09-send-to-hardware.html"
+          "link": "/debug80-book/book1/10-send-to-hardware.html"
         },
         {
           "text": "Appendix A — Debug expressions",
@@ -75,7 +75,7 @@ export const sidebars = {
         },
         {
           "text": "Appendix E — Local monitor ROM source",
-          "link": "/debug80-book/book1/10-copy-monitor-rom.html"
+          "link": "/debug80-book/book1/appendices/e-copy-monitor-rom.html"
         }
       ]
     }
@@ -104,20 +104,48 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Appendix 1 — Numbers, Notation, and ASCII",
-          "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+          "text": "AZM Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix A — Directive Reference",
+              "link": "/azm-book/appendices/appendix-a-directives.html"
+            },
+            {
+              "text": "Appendix B — Expression Operators",
+              "link": "/azm-book/appendices/appendix-b-operators.html"
+            },
+            {
+              "text": "Appendix C — CLI Flag Reference",
+              "link": "/azm-book/appendices/appendix-c-cli.html"
+            },
+            {
+              "text": "Appendix D — Built-in Functions",
+              "link": "/azm-book/appendices/appendix-d-functions.html"
+            }
+          ]
         },
         {
-          "text": "Appendix 2 — Registers, Flags, and Conditions",
-          "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
-        },
-        {
-          "text": "Appendix 3 — Addressing, Prefixes, and Forms",
-          "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
-        },
-        {
-          "text": "Appendix 4 — Z80 Instruction Reference",
-          "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+          "text": "Z80 Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix 1 — Numbers, Notation, and ASCII",
+              "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+            },
+            {
+              "text": "Appendix 2 — Registers, Flags, and Conditions",
+              "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Appendix 3 — Addressing, Prefixes, and Forms",
+              "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Appendix 4 — Z80 Instruction Reference",
+              "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+            }
+          ]
         }
       ]
     }
@@ -162,22 +190,6 @@ export const sidebars = {
         {
           "text": "Diagnostics and Output",
           "link": "/azm-book/book1/08-diagnostics-listings-output.html"
-        },
-        {
-          "text": "Appendix A — Directive Reference",
-          "link": "/azm-book/book1/appendix-a-directives.html"
-        },
-        {
-          "text": "Appendix B — Expression Operators",
-          "link": "/azm-book/book1/appendix-b-operators.html"
-        },
-        {
-          "text": "Appendix C — CLI Flag Reference",
-          "link": "/azm-book/book1/appendix-c-cli.html"
-        },
-        {
-          "text": "Appendix D — Built-in Functions",
-          "link": "/azm-book/book1/appendix-d-functions.html"
         }
       ]
     },
@@ -186,20 +198,48 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Appendix 1 — Numbers, Notation, and ASCII",
-          "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+          "text": "AZM Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix A — Directive Reference",
+              "link": "/azm-book/appendices/appendix-a-directives.html"
+            },
+            {
+              "text": "Appendix B — Expression Operators",
+              "link": "/azm-book/appendices/appendix-b-operators.html"
+            },
+            {
+              "text": "Appendix C — CLI Flag Reference",
+              "link": "/azm-book/appendices/appendix-c-cli.html"
+            },
+            {
+              "text": "Appendix D — Built-in Functions",
+              "link": "/azm-book/appendices/appendix-d-functions.html"
+            }
+          ]
         },
         {
-          "text": "Appendix 2 — Registers, Flags, and Conditions",
-          "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
-        },
-        {
-          "text": "Appendix 3 — Addressing, Prefixes, and Forms",
-          "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
-        },
-        {
-          "text": "Appendix 4 — Z80 Instruction Reference",
-          "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+          "text": "Z80 Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix 1 — Numbers, Notation, and ASCII",
+              "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+            },
+            {
+              "text": "Appendix 2 — Registers, Flags, and Conditions",
+              "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Appendix 3 — Addressing, Prefixes, and Forms",
+              "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Appendix 4 — Z80 Instruction Reference",
+              "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+            }
+          ]
         }
       ]
     }
@@ -252,18 +292,6 @@ export const sidebars = {
         {
           "text": "Subroutine Conventions",
           "link": "/azm-book/book2/11-subroutine-conventions.html"
-        },
-        {
-          "text": "Register Contracts",
-          "link": "/azm-book/book2/12-register-contracts-azmdoc.html"
-        },
-        {
-          "text": "Layout Types",
-          "link": "/azm-book/book2/13-layout-types.html"
-        },
-        {
-          "text": "Op Declarations",
-          "link": "/azm-book/book2/14-op-declarations.html"
         }
       ]
     },
@@ -272,20 +300,48 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Appendix 1 — Numbers, Notation, and ASCII",
-          "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+          "text": "AZM Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix A — Directive Reference",
+              "link": "/azm-book/appendices/appendix-a-directives.html"
+            },
+            {
+              "text": "Appendix B — Expression Operators",
+              "link": "/azm-book/appendices/appendix-b-operators.html"
+            },
+            {
+              "text": "Appendix C — CLI Flag Reference",
+              "link": "/azm-book/appendices/appendix-c-cli.html"
+            },
+            {
+              "text": "Appendix D — Built-in Functions",
+              "link": "/azm-book/appendices/appendix-d-functions.html"
+            }
+          ]
         },
         {
-          "text": "Appendix 2 — Registers, Flags, and Conditions",
-          "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
-        },
-        {
-          "text": "Appendix 3 — Addressing, Prefixes, and Forms",
-          "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
-        },
-        {
-          "text": "Appendix 4 — Z80 Instruction Reference",
-          "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+          "text": "Z80 Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix 1 — Numbers, Notation, and ASCII",
+              "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+            },
+            {
+              "text": "Appendix 2 — Registers, Flags, and Conditions",
+              "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Appendix 3 — Addressing, Prefixes, and Forms",
+              "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Appendix 4 — Z80 Instruction Reference",
+              "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+            }
+          ]
         }
       ]
     }
@@ -342,20 +398,48 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Appendix 1 — Numbers, Notation, and ASCII",
-          "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+          "text": "AZM Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix A — Directive Reference",
+              "link": "/azm-book/appendices/appendix-a-directives.html"
+            },
+            {
+              "text": "Appendix B — Expression Operators",
+              "link": "/azm-book/appendices/appendix-b-operators.html"
+            },
+            {
+              "text": "Appendix C — CLI Flag Reference",
+              "link": "/azm-book/appendices/appendix-c-cli.html"
+            },
+            {
+              "text": "Appendix D — Built-in Functions",
+              "link": "/azm-book/appendices/appendix-d-functions.html"
+            }
+          ]
         },
         {
-          "text": "Appendix 2 — Registers, Flags, and Conditions",
-          "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
-        },
-        {
-          "text": "Appendix 3 — Addressing, Prefixes, and Forms",
-          "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
-        },
-        {
-          "text": "Appendix 4 — Z80 Instruction Reference",
-          "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+          "text": "Z80 Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix 1 — Numbers, Notation, and ASCII",
+              "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+            },
+            {
+              "text": "Appendix 2 — Registers, Flags, and Conditions",
+              "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Appendix 3 — Addressing, Prefixes, and Forms",
+              "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Appendix 4 — Z80 Instruction Reference",
+              "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+            }
+          ]
         }
       ]
     }
@@ -400,22 +484,6 @@ export const sidebars = {
         {
           "text": "Diagnostics and Output",
           "link": "/azm-book/book1/08-diagnostics-listings-output.html"
-        },
-        {
-          "text": "Appendix A — Directive Reference",
-          "link": "/azm-book/book1/appendix-a-directives.html"
-        },
-        {
-          "text": "Appendix B — Expression Operators",
-          "link": "/azm-book/book1/appendix-b-operators.html"
-        },
-        {
-          "text": "Appendix C — CLI Flag Reference",
-          "link": "/azm-book/book1/appendix-c-cli.html"
-        },
-        {
-          "text": "Appendix D — Built-in Functions",
-          "link": "/azm-book/book1/appendix-d-functions.html"
         }
       ]
     },
@@ -466,18 +534,6 @@ export const sidebars = {
         {
           "text": "Subroutine Conventions",
           "link": "/azm-book/book2/11-subroutine-conventions.html"
-        },
-        {
-          "text": "Register Contracts",
-          "link": "/azm-book/book2/12-register-contracts-azmdoc.html"
-        },
-        {
-          "text": "Layout Types",
-          "link": "/azm-book/book2/13-layout-types.html"
-        },
-        {
-          "text": "Op Declarations",
-          "link": "/azm-book/book2/14-op-declarations.html"
         }
       ]
     },
@@ -532,20 +588,48 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Appendix 1 — Numbers, Notation, and ASCII",
-          "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+          "text": "AZM Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix A — Directive Reference",
+              "link": "/azm-book/appendices/appendix-a-directives.html"
+            },
+            {
+              "text": "Appendix B — Expression Operators",
+              "link": "/azm-book/appendices/appendix-b-operators.html"
+            },
+            {
+              "text": "Appendix C — CLI Flag Reference",
+              "link": "/azm-book/appendices/appendix-c-cli.html"
+            },
+            {
+              "text": "Appendix D — Built-in Functions",
+              "link": "/azm-book/appendices/appendix-d-functions.html"
+            }
+          ]
         },
         {
-          "text": "Appendix 2 — Registers, Flags, and Conditions",
-          "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
-        },
-        {
-          "text": "Appendix 3 — Addressing, Prefixes, and Forms",
-          "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
-        },
-        {
-          "text": "Appendix 4 — Z80 Instruction Reference",
-          "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+          "text": "Z80 Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Appendix 1 — Numbers, Notation, and ASCII",
+              "link": "/azm-book/appendices/01-numbers-notation-and-ascii.html"
+            },
+            {
+              "text": "Appendix 2 — Registers, Flags, and Conditions",
+              "link": "/azm-book/appendices/02-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Appendix 3 — Addressing, Prefixes, and Forms",
+              "link": "/azm-book/appendices/03-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Appendix 4 — Z80 Instruction Reference",
+              "link": "/azm-book/appendices/04-classic-z80-instruction-support.html"
+            }
+          ]
         }
       ]
     }
@@ -644,23 +728,23 @@ export const sidebars = {
           "link": "/glimmer-book/book0/18-two-displays-one-language.html"
         },
         {
-          "text": "Appendix A - Declaration Reference",
+          "text": "Appendix A — Declaration Reference",
           "link": "/glimmer-book/book0/appendix-a-declarations.html"
         },
         {
-          "text": "Appendix B - The 8x8 Matrix Profile",
+          "text": "Appendix B — The 8x8 Matrix Profile",
           "link": "/glimmer-book/book0/appendix-b-matrix-profile.html"
         },
         {
-          "text": "Appendix C - The TMS9918 Profile",
+          "text": "Appendix C — The TMS9918 Profile",
           "link": "/glimmer-book/book0/appendix-c-tms9918-profile.html"
         },
         {
-          "text": "Appendix D - Build and Debug",
+          "text": "Appendix D — Build and Debug",
           "link": "/glimmer-book/book0/appendix-d-build-and-debug.html"
         },
         {
-          "text": "Appendix E - AZM Touchpoints",
+          "text": "Appendix E — AZM Touchpoints",
           "link": "/glimmer-book/book0/appendix-e-azm-touchpoints.html"
         }
       ]

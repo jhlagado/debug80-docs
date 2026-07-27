@@ -6,7 +6,6 @@
 ;   (sum_rec)   at $8002 — $8003 — sum_u8_rec on demo table → $001A (26)
 
 FACT_N .equ 5
-NUMS_LEN .equ 5
 
 ; Stack budget for factorial_u8:
 ;   each non-base level: saved BC (2) + recursive return address (2)
@@ -124,3 +123,4 @@ sum_rec:
 
 demo_nums:
     .db 2, 3, 5, 7, 9
+NUMS_LEN .equ $ - demo_nums   ; the table decides its own length

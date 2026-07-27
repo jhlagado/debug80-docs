@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 15
 ---
 
-# Chapter 15 - Reading Tetro
+# Reading Tetro
 
 This chapter teaches a different skill: reading someone
 else's code. Writing teaches you what the language can say; reading a

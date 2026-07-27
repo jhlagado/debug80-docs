@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="254" viewBox="0 0 720 254" role="img" aria-labelledby="figTitle figDesc">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="248" viewBox="0 0 720 248" role="img" aria-labelledby="figTitle figDesc">
   <title id="figTitle">A union is one set of bytes with two readings</title>
-  <desc id="figDesc">The Payload union with asByte and asWord both starting at offset 0, drawn as two labelled views over the same two bytes.</desc>
+  <desc id="figDesc">The PortValue union with status and full both starting at offset 0, drawn as a one-byte view and a two-byte view over the same pair of bytes.</desc>
   <defs>
     <style>
     :root {
@@ -65,22 +65,22 @@
       <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
     </marker>
   </defs>
-  <text class="ts" x="46" y="44" text-anchor="start" xml:space="preserve">Payload .union</text>
-  <text class="ts" x="46" y="64" text-anchor="start" xml:space="preserve">asByte  .byte</text>
-  <text class="ts" x="46" y="84" text-anchor="start" xml:space="preserve">asWord  .word</text>
-  <text class="ts" x="46" y="104" text-anchor="start" xml:space="preserve">.endunion</text>
-  <text class="cap" x="320" y="32" text-anchor="start" xml:space="preserve">THE BYTES</text>
-  <rect class="bx" x="320" y="44" width="90" height="34" rx="2"/>
-  <text class="t" x="365" y="65.5" text-anchor="middle" xml:space="preserve">lo</text>
-  <rect class="bx" x="410" y="44" width="90" height="34" rx="2"/>
-  <text class="t" x="455" y="65.5" text-anchor="middle" xml:space="preserve">hi</text>
-  <rect class="bxs" x="320" y="100" width="90" height="26" rx="2"/>
-  <text class="tb" x="365" y="118" text-anchor="middle" xml:space="preserve">asByte</text>
-  <rect class="bxs" x="320" y="136" width="180" height="26" rx="2"/>
-  <text class="tb" x="410" y="154" text-anchor="middle" xml:space="preserve">asWord</text>
-  <text class="dim" x="520" y="118" text-anchor="start" xml:space="preserve">offset 0, 1 byte</text>
-  <text class="dim" x="520" y="154" text-anchor="start" xml:space="preserve">offset 0, 2 bytes</text>
-  <text class="dim" x="320" y="190" text-anchor="start" xml:space="preserve">sizeof(Payload) = 2, the largest member</text>
-  <text class="dimn" x="46" y="226" text-anchor="start" xml:space="preserve">Both fields start at offset 0. Reading asByte reads the low byte of whatever 16-bit value was stored there.</text>
-  <text class="dimn" x="46" y="244" text-anchor="start" xml:space="preserve">Reach for a union when the same bytes have more than one legitimate reading, not to save space.</text>
+  <text class="ts" x="46" y="44" text-anchor="start" xml:space="preserve">PortValue .union</text>
+  <text class="ts" x="46" y="64" text-anchor="start" xml:space="preserve">status    .field byte</text>
+  <text class="ts" x="46" y="84" text-anchor="start" xml:space="preserve">full      .field word</text>
+  <text class="ts" x="46" y="104" text-anchor="start" xml:space="preserve">          .endunion</text>
+  <text class="cap" x="330" y="32" text-anchor="start" xml:space="preserve">THE BYTES</text>
+  <rect class="bx" x="330" y="44" width="90" height="34" rx="2"/>
+  <text class="t" x="375" y="65.5" text-anchor="middle" xml:space="preserve">lo</text>
+  <rect class="bx" x="420" y="44" width="90" height="34" rx="2"/>
+  <text class="t" x="465" y="65.5" text-anchor="middle" xml:space="preserve">hi</text>
+  <rect class="bxs" x="330" y="100" width="90" height="26" rx="2"/>
+  <text class="tb" x="375" y="118" text-anchor="middle" xml:space="preserve">status</text>
+  <rect class="bxs" x="330" y="136" width="180" height="26" rx="2"/>
+  <text class="tb" x="420" y="154" text-anchor="middle" xml:space="preserve">full</text>
+  <text class="dim" x="528" y="118" text-anchor="start" xml:space="preserve">offset 0, 1 byte</text>
+  <text class="dim" x="528" y="154" text-anchor="start" xml:space="preserve">offset 0, 2 bytes</text>
+  <text class="dim" x="330" y="190" text-anchor="start" xml:space="preserve">sizeof(PortValue) = 2, the largest member</text>
+  <text class="dimn" x="46" y="220" text-anchor="start" xml:space="preserve">Every member starts at offset 0, so the size is the largest member rather than the sum. Reading status</text>
+  <text class="dimn" x="46" y="238" text-anchor="start" xml:space="preserve">reads the low byte of whatever word is stored there.</text>
 </svg>

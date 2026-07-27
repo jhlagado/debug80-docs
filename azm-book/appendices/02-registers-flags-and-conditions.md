@@ -3,7 +3,8 @@ layout: default
 title: "Appendix 2 — Registers, Flags, and Conditions"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_order: 2
+nav_group: "Z80 Reference"
+nav_order: 12
 ---
 # Appendix 2 — Registers, Flags, and Conditions
 

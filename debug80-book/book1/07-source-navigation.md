@@ -56,4 +56,4 @@ inside ROM.
 
 Those sources cover the monitor code around routines such as MON-3 display, disk, clock and sound support.
 
-When you want to edit or debug the monitor itself, copy the monitor ROM source into the project. [Appendix E](10-copy-monitor-rom.md) describes that workflow.
+When you want to edit or debug the monitor itself, copy the monitor ROM source into the project. [Appendix E](appendices/e-copy-monitor-rom.md) describes that workflow.

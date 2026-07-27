@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 4
 ---
 
-# Chapter 4 — Memory Access and Data Representation
+# Memory Access and Data Representation
 
 Scanning a table, processing a string or reading from hardware all require reaching into memory, and the Z80 has several specific ways to do it.
 

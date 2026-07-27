@@ -24,9 +24,6 @@ has_toc: false
 8. [Ops, Aliases and Source Composition](07-ops-aliases.md)
 9. [Diagnostics and Output](08-diagnostics-listings-output.md)
 
-## Appendices
+## Reference
 
-- [Appendix A — Directive Reference](appendix-a-directives.md)
-- [Appendix B — Expression Operators](appendix-b-operators.md)
-- [Appendix C — CLI Flag Reference](appendix-c-cli.md)
-- [Appendix D — Built-in Functions](appendix-d-functions.md)
+The directive, operator, CLI flag and built-in function tables live in the [AZM appendices](../appendices/), alongside the Z80 machine reference.

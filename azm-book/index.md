@@ -22,9 +22,9 @@ Covers AZM syntax, directives, expressions, labels, enums, storage, layout types
 
 ## [AZM Book 2 — Z80 Fundamentals](book2/)
 
-No prior knowledge assumed. Learn the machine from first principles: memory, registers, instructions, flags, loops, subroutines, I/O, and the AZM features that make assembly practical and safe.
+No prior knowledge assumed. Learn the machine from first principles: memory, registers, instructions, flags, loops, subroutines and port I/O.
 
-Fourteen chapters from bare machine code through ops, layout types, and register contracts.
+Eleven chapters from bare machine code to subroutine conventions. Book 1 then covers AZM's own features.
 
 ---
 

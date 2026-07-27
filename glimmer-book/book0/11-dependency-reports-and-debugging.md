@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 11
 ---
 
-# Chapter 11 - Dependency Reports and Debugging
+# Dependency Reports and Debugging
 
 Canvas is the largest program in the book so far: a `Point`
 cursor, an eight-byte picture, five pulses, and six blocks connecting

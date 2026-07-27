@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Appendix C - The TMS9918 Profile"
+title: "Appendix C — The TMS9918 Profile"
 parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 21
 ---
 
-# Appendix C - The TMS9918 Profile
+# Appendix C — The TMS9918 Profile
 
 The combination of `platform tec1g-mon3` and `display tms9918`
 contributes the commit-shaped loop, VRAM map, shadow tables, sprite and

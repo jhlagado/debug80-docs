@@ -88,4 +88,4 @@ The hex keypad, matrix keyboard and joystick can compete for physical
 key input. Clicking a surface gives it keyboard focus; the on-screen
 controls continue to work regardless of that focus.
 
-[Video, input and serial](08-video-input-and-serial.md) explains the input priority, focus indicator, release command and macOS key handling.
+[Video, input and serial](09-video-input-and-serial.md) explains the input priority, focus indicator, release command and macOS key handling.

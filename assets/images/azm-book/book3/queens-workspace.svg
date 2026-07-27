@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="398" viewBox="0 0 720 398" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The eight queens workspace as one record</title>
+  <desc id="figDesc">The six fields of QueenWorkspace drawn in declaration order with the byte offset and resolved address of each, the last three bracketed as the nested Constraints record of 38 bytes that clear_constraints zeroes in one pass, and the two bytes of solutionCount holding 92 after the search finishes.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="30" text-anchor="start" xml:space="preserve">QUEENWORKSPACE, ONE .DS AT $8000</text>
+  <rect class="bx" x="40" y="48" width="100" height="72" rx="4"/>
+  <text class="nb" x="90" y="68" text-anchor="middle" xml:space="preserve">solutionCount</text>
+  <text class="ts" x="90" y="86" text-anchor="middle" xml:space="preserve">2 bytes</text>
+  <text class="ts" x="90" y="102" text-anchor="middle" xml:space="preserve">$8000</text>
+  <text class="dim" x="90" y="140" text-anchor="middle" xml:space="preserve">offset 0</text>
+  <rect class="bx" x="146" y="48" width="100" height="72" rx="4"/>
+  <text class="nb" x="196" y="68" text-anchor="middle" xml:space="preserve">queenCols</text>
+  <text class="ts" x="196" y="86" text-anchor="middle" xml:space="preserve">8 bytes</text>
+  <text class="ts" x="196" y="102" text-anchor="middle" xml:space="preserve">$8002</text>
+  <text class="dim" x="196" y="140" text-anchor="middle" xml:space="preserve">offset 2</text>
+  <rect class="bx" x="252" y="48" width="100" height="72" rx="4"/>
+  <text class="nb" x="302" y="68" text-anchor="middle" xml:space="preserve">solutionCols</text>
+  <text class="ts" x="302" y="86" text-anchor="middle" xml:space="preserve">8 bytes</text>
+  <text class="ts" x="302" y="102" text-anchor="middle" xml:space="preserve">$800A</text>
+  <text class="dim" x="302" y="140" text-anchor="middle" xml:space="preserve">offset 10</text>
+  <rect class="bxs" x="358" y="48" width="100" height="72" rx="4"/>
+  <text class="tb" x="408" y="68" text-anchor="middle" xml:space="preserve">colUsed</text>
+  <text class="ts" x="408" y="86" text-anchor="middle" xml:space="preserve">8 bytes</text>
+  <text class="ts" x="408" y="102" text-anchor="middle" xml:space="preserve">$8012</text>
+  <text class="dim" x="408" y="140" text-anchor="middle" xml:space="preserve">offset 18</text>
+  <rect class="bxs" x="464" y="48" width="100" height="72" rx="4"/>
+  <text class="tb" x="514" y="68" text-anchor="middle" xml:space="preserve">diagSumUsed</text>
+  <text class="ts" x="514" y="86" text-anchor="middle" xml:space="preserve">15 bytes</text>
+  <text class="ts" x="514" y="102" text-anchor="middle" xml:space="preserve">$801A</text>
+  <text class="dim" x="514" y="140" text-anchor="middle" xml:space="preserve">offset 26</text>
+  <rect class="bxs" x="570" y="48" width="100" height="72" rx="4"/>
+  <text class="tb" x="620" y="68" text-anchor="middle" xml:space="preserve">diagDiffUsed</text>
+  <text class="ts" x="620" y="86" text-anchor="middle" xml:space="preserve">15 bytes</text>
+  <text class="ts" x="620" y="102" text-anchor="middle" xml:space="preserve">$8029</text>
+  <text class="dim" x="620" y="140" text-anchor="middle" xml:space="preserve">offset 41</text>
+  <path class="rule" d="M358,156 V170 H670 V156"/>
+  <text class="dimn" x="514" y="190" text-anchor="middle" xml:space="preserve">constraints, sizeof(Constraints) = 38 bytes</text>
+  <text class="dimn" x="514" y="208" text-anchor="middle" xml:space="preserve">cleared in one pass, so the order of these three is part of the layout</text>
+  <text class="dimn" x="40" y="240" text-anchor="start" xml:space="preserve">sizeof(QueenWorkspace) = 56 bytes, $8000 through $8037</text>
+  <text class="cap" x="40" y="288" text-anchor="start" xml:space="preserve">SOLUTIONCOUNT AFTER HALT</text>
+  <rect class="bxs" x="40" y="306" width="90" height="34" rx="2"/>
+  <text class="tb" x="85" y="327.5" text-anchor="middle" xml:space="preserve">5C</text>
+  <text class="dimn" x="85" y="354" text-anchor="middle" xml:space="preserve">$8000</text>
+  <rect class="bxs" x="130" y="306" width="90" height="34" rx="2"/>
+  <text class="tb" x="175" y="327.5" text-anchor="middle" xml:space="preserve">00</text>
+  <text class="dimn" x="175" y="354" text-anchor="middle" xml:space="preserve">$8001</text>
+  <text class="nb" x="240" y="328" text-anchor="start" xml:space="preserve">= 92 distinct placements</text>
+  <text class="dimn" x="240" y="350" text-anchor="start" xml:space="preserve">low byte first, the same word order as every other .dw</text>
+  <text class="dimn" x="40" y="386" text-anchor="start" xml:space="preserve">Widen the board and every offset, address and clear length on this plate moves without a number being edited.</text>
+</svg>

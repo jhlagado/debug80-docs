@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 1
 ---
 
-# Chapter 1 — The Computer
+# The Computer
 
 A Z80 computer has three main parts: a CPU, memory and I/O ports. The CPU does the work, fetching instructions and carrying them out. Memory holds the program and the data it works with. I/O ports connect the CPU to the outside world: a keyboard, a display, a storage device, a sensor.
 

@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 2
 ---
 
-# Chapter 2 — Source Syntax and Symbols
+# Source Syntax and Symbols
 
 ---
 
@@ -34,15 +34,13 @@ Start:
 
 Labels on their own line are common for routines; labels on the same line are common for constants.
 
-Some directives take a line of their own and emit nothing. `.routine` is one: it attaches a register contract to the label that follows it.
+Some directives take a line of their own and emit no bytes:
 
 ```asm
-.routine in A,HL out carry clobbers BC
-ReadKey:
-        ret
+        .org    $0100
 ```
 
-Chapter 6 covers routine boundaries and contract analysis.
+`.routine` has the same shape. It sits on the line above a label and records that routine's register contract, which [Chapter 6](06-register-contracts.md) covers.
 
 ### Chained instruction lines
 
@@ -136,33 +134,13 @@ MyLabel: ld a,0
 
 Non-local identifiers contain letters, digits and underscores and must start with a letter.
 
-`$` cannot serve as a namespace separator in source labels. It has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import` and `@` exports, not through `$`-qualified labels.
-
-### Exported labels
-
-An exported label begins with `@` followed by a plain identifier:
-
-```asm
-@ShiftRow:
-```
-
-The symbol name is `ShiftRow`, so call sites write `call ShiftRow`. The `@` marks the declaration as visible outside an imported source unit. It has no register-contract meaning; `.routine` declares a routine boundary.
-
-Export and routine declarations are independent:
-
-```asm
-.routine in HL out A
-@ReadByte:
-        ld      a,(hl)
-        ret
-```
+`$` cannot serve as a namespace separator in source labels. It has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import`, not through `$`-qualified labels.
 
 ### Owner-local labels
 
 A label beginning with one underscore belongs to the nearest preceding non-local label. The same local spelling can be reused under another owner:
 
 ```asm
-.routine in HL
 ShiftRow:
         ld      b,8
 _loop:
@@ -171,7 +149,6 @@ _loop:
         djnz    _loop
         ret
 
-.routine in HL,DE
 CopyRow:
         ld      b,8
 _loop:
@@ -183,7 +160,7 @@ _loop:
         ret
 ```
 
-`ShiftRow._loop` and `CopyRow._loop` have distinct identities in AZM output and Debug80 maps. Source code uses the short `_loop` spelling. A local label cannot be exported, so `@_loop:` is an error. Equates, enum members, type names and op names cannot begin with `_`. Names beginning with `__` are reserved for assembler-generated symbols.
+`ShiftRow._loop` and `CopyRow._loop` have distinct identities in AZM output and Debug80 maps. Source code uses the short `_loop` spelling. Equates, enum members, type names and op names cannot begin with `_`. Names beginning with `__` are reserved for assembler-generated symbols.
 
 ![An underscore label belongs to the nearest non-local label above it, so the two routines end up with different symbols](../../assets/images/azm-book/book1/label-scope.svg)
 
@@ -213,8 +190,6 @@ EntryB:
         ret
 ```
 
-When a `.routine` directive precedes consecutive non-local labels, AZM treats them as aliases for the same routine body.
-
 ---
 
 ## Naming conventions
@@ -226,13 +201,8 @@ The preferred AZM style:
 - **Constants** (`SCREEN_WIDTH`, `MAX_SPRITES`, `LCD_DATA`): uppercase with underscores.
 - **Routine and data labels** (`DrawSprite:`, `InitTimer:`, `SpriteTable:`): PascalCase.
 - **Owner-local labels** (`_loop:`, `_skipInit:`, `_done:`): a leading underscore followed by short camelCase.
-- **Exported labels** (`@ReadKey:`, `@DrawSprite:`): PascalCase after the `@`.
 
 The assembler enforces no naming policy; different projects may use their own conventions.
-
-The `@` prefix is reserved for declarations that form an imported module's public interface.
-
-![Only an @ declaration leaves an imported source unit; plain and owner-local labels stay inside it](../../assets/images/azm-book/book1/export-boundary.svg)
 
 ---
 
@@ -319,4 +289,4 @@ DOT     .equ 'A' + 1       ; ASCII + offset
 SIZE    .equ WIDTH * HEIGHT ; 1024
 ```
 
-See [Appendix B](appendix-b-operators.md) for the full numeric literal table.
+See [Appendix B](../appendices/appendix-b-operators.md) for the full numeric literal table.

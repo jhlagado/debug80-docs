@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 2
 ---
 
-# Chapter 1 — Foundations
+# Foundations
 
 Greatest common divisor on 16-bit values comes first, then 8-bit exponentiation. The companion listing is [`examples/01_gcd.asm`](examples/01_gcd.asm).
 
@@ -48,7 +48,7 @@ its incoming value. A routine that uses one as scratch must restore it before
 every `ret`.
 
 Every subroutine in this book documents its contract with the register-contract
-notation introduced in Book 2 Chapter 12.
+notation [Book 1 Chapter 6](../book1/06-register-contracts.md) covers.
 
 ---
 
@@ -207,13 +207,7 @@ The companion program stores the byte result at `power_result`. After `halt`, `$
 
 ## Memory diagram: results after `main`
 
-```
-  $8000  ┌────────┬────────┐
-         │ $06    │ $00    │  gcd_result (word)
-  $8002  ├────────┤
-         │ $51    │          power_result (byte = 81)
-         └────────┴────────┘
-```
+![A word result stored low byte first, and a byte result in the cell after it](../../assets/images/azm-book/book3/gcd-results.svg)
 
 ---
 

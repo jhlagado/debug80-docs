@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="296" viewBox="0 0 720 296" role="img" aria-labelledby="figTitle figDesc">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="280" viewBox="0 0 720 280" role="img" aria-labelledby="figTitle figDesc">
   <title id="figTitle">What an op costs against what a call costs</title>
-  <desc id="figDesc">Three call sites with a four-byte body inlined comes to twelve bytes; the same body as a subroutine comes to fourteen, being the body, a ret and three three-byte calls.</desc>
+  <desc id="figDesc">A four-byte body at three call sites comes to twelve bytes inlined; the same body as a subroutine comes to fourteen, being the body, a ret and three three-byte calls.</desc>
   <defs>
     <style>
     :root {
@@ -65,7 +65,7 @@
       <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
     </marker>
   </defs>
-  <text class="ts" x="46" y="40" text-anchor="start" xml:space="preserve">op swap_hl_de()   ; push hl / push de / pop hl / pop de</text>
+  <text class="ts" x="46" y="40" text-anchor="start" xml:space="preserve">op shift_left_4()   ; add a,a  add a,a  add a,a  add a,a</text>
   <text class="dim" x="46" y="60" text-anchor="start" xml:space="preserve">body = 4 bytes, used at 3 call sites</text>
   <rect class="bxs" x="46" y="104" width="192" height="30" rx="2"/>
   <text class="tb" x="142" y="124" text-anchor="middle" xml:space="preserve">12 bytes</text>
@@ -74,7 +74,6 @@
   <text class="t" x="158" y="196" text-anchor="middle" xml:space="preserve">14 bytes</text>
   <text class="dimn" x="46" y="168" text-anchor="start" xml:space="preserve">As a subroutine, called three times</text>
   <text class="dim" x="286" y="196" text-anchor="start" xml:space="preserve">4 body + 1 ret + 3 × 3 call</text>
-  <text class="dimn" x="46" y="240" text-anchor="start" xml:space="preserve">Inlining wins here. A call costs three bytes at every site plus a ret, so a body this short is cheaper repeated</text>
-  <text class="dimn" x="46" y="258" text-anchor="start" xml:space="preserve">than shared. The crossover for three sites is a body of five bytes; above that, the subroutine is smaller.</text>
-  <text class="dimn" x="46" y="276" text-anchor="start" xml:space="preserve">Every invocation is a separate copy in the binary, and a disassembly shows exactly that.</text>
+  <text class="dimn" x="46" y="240" text-anchor="start" xml:space="preserve">A call costs three bytes at every site plus a ret, so a body this short is cheaper repeated than shared.</text>
+  <text class="dimn" x="46" y="258" text-anchor="start" xml:space="preserve">At three sites the crossover is a body of five bytes; above that the subroutine is smaller.</text>
 </svg>

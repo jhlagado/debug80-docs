@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 9
 ---
 
-# Chapter 8 — Pointer Structures
+# Pointer Structures
 
 Chapter 5 packed several fields into one record, but every byte still lived in
 a table indexed by number. This chapter chains **nodes** through **stored
@@ -47,7 +47,13 @@ LIST_NEXT   .equ offset(ListNode, next)
 NODE_SIZE   .equ sizeof(ListNode)
 ```
 
-`sizeof(ListNode)` is 3: one data byte, then a little-endian 16-bit link. The link field uses `.word` because it holds a full address, the same width as `word` and `addr` in Book 2 Chapter 13. AZM also offers `.addr` when you want the layout name to say "this field is a pointer"; for flat AZM listings, `.word` is enough as long as you treat it as an address in comments and register contracts.
+`NODE_SIZE` comes out as 3 for this field list: one data byte, then a
+little-endian 16-bit link. Nothing in the source writes that 3 down. The link
+field uses `.word` because it holds a full address, the same width as `word`
+and `addr`, which [Book 1 Chapter 5](../book1/05-layout-system.md) covers. AZM also offers `.addr` when you want the
+layout name to say "this field is a pointer"; the companion uses it for the
+`find_node` result byte pair, where the distinction between an address and a
+count is worth recording.
 
 **Null** is the address **0**. A missing next node is stored as `.dw 0`. At run time you test the pointer in HL with:
 
@@ -121,6 +127,31 @@ field offset:
 
 Low byte first, then high byte. That is Z80 little-endian order.
 
+### The advance step as an `op`
+
+Both walks below end with the same move: replace HL with the node its `next`
+field names. An `op` gives that sequence a name and expands it inline, so the
+bytes are identical to writing it out twice:
+
+```asm
+op follow_next()
+  ld bc, LIST_NEXT
+  add hl, bc            ; HL = &node.next
+  ld a, (hl)
+  ld c, a               ; C = low byte of next
+  inc hl
+  ld a, (hl)
+  ld h, a               ; H = high byte of next
+  ld l, c
+end
+```
+
+There is no `call` and no return address. The `.lst` file shows the eight
+expanded instructions and their bytes against each `follow_next` line, and
+`--rc warn` analyses the expansion, which is why both routines still declare BC
+under `clobbers`. The op assembles the high byte into H before reading L from
+C, which is why the low byte is parked in C rather than in L.
+
 ---
 
 ## Traverse: `list_sum_u16`
@@ -142,14 +173,7 @@ _sum_loop:
     jr nc, _sum_no_carry
     inc d
 _sum_no_carry:
-    ld bc, LIST_NEXT
-    add hl, bc
-    ld a, (hl)
-    ld c, a
-    inc hl
-    ld a, (hl)
-    ld h, a
-    ld l, c
+    follow_next
     jr _sum_loop
 _sum_done:
     ex de, hl
@@ -181,14 +205,7 @@ _find_loop:
     ld a, (hl)
     cp d
     jr z, _found
-    ld bc, LIST_NEXT
-    add hl, bc
-    ld a, (hl)
-    ld c, a
-    inc hl
-    ld a, (hl)
-    ld h, a
-    ld l, c
+    follow_next
     jr _find_loop
 _found:
     scf
@@ -268,8 +285,8 @@ For the head variable:
     ld hl, <word>list_head
 ```
 
-Runtime traversal cannot put HL inside brackets, so the chapter routines use
-explicit `add hl, bc` with `LIST_NEXT`.
+Runtime traversal cannot put HL inside brackets, so `follow_next` uses
+`add hl, bc` with `LIST_NEXT`.
 
 ---
 

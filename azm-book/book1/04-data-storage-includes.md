@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 4
 ---
 
-# Chapter 4 — Raw Data, Storage and Strings
+# Raw Data, Storage and Strings
 
 Assembly programs commonly contain bytes fixed at assemble time and storage filled at runtime.
 

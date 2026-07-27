@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 7
 ---
 
-# Chapter 7 - Time
+# Time
 
 Every program you have written so far has one thing in common: none
 of them can act without you. Mover's dot sits wherever your

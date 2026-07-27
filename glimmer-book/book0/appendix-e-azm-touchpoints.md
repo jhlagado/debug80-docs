@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Appendix E - AZM Touchpoints"
+title: "Appendix E — AZM Touchpoints"
 parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 23
 ---
 
-# Appendix E - AZM Touchpoints
+# Appendix E — AZM Touchpoints
 
 Every Glimmer build writes one AZM assembly file, and AZM assembles
 and checks it.
@@ -166,7 +166,7 @@ through to the generated file verbatim:
 
 Full treatment: [The Layout
 System](../../azm-book/book1/05-layout-system.md) and [Built-in
-Functions](../../azm-book/book1/appendix-d-functions.md).
+Functions](../../azm-book/appendices/appendix-d-functions.md).
 
 ## `.import` source units
 

@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 13
 ---
 
-# Chapter 13 - Cards
+# Cards
 
 An arcade machine begins with the screen that drew you over: the
 attract screen, blinking its invitation. It is a little program of its

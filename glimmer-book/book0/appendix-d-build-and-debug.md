@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Appendix D - Build and Debug"
+title: "Appendix D — Build and Debug"
 parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 22
 ---
 
-# Appendix D - Build and Debug
+# Appendix D — Build and Debug
 
 The toolchain in one place: the CLI's two commands and their options,
 the four files a build writes, the conventions that let Debug80 treat

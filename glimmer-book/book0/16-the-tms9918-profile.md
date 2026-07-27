@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 16
 ---
 
-# Chapter 16 - The TMS9918 Profile
+# The TMS9918 Profile
 
 Until now, every picture has come from the 8x8 RGB LED matrix,
 and that

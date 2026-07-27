@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 6
 ---
 
-# Chapter 5 — Records
+# Records
 
 Chapter 2 indexed bytes in a table. Real programs store **records**: several fields packed together (coordinates, queue indices, flags) with a stride larger than 1.
 
@@ -13,7 +13,7 @@ Field offsets kept only in comments can drift away from the data they describe.
 Wirth's alternative fixes the **representation** first, then expresses the
 algorithm against that layout. AZM's `.type` blocks provide that representation.
 
-Layout types from Book 2 Chapter 13 come back here, driving field reads and writes through HL and IX and then building a **ring buffer**, a fixed-size FIFO queue over a byte table. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
+Layout types, which [Book 1 Chapter 5](../book1/05-layout-system.md) covers, come back here, driving field reads and writes through HL and IX and then building a **ring buffer**, a fixed-size FIFO queue over a byte table. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
 
 ---
 
@@ -104,7 +104,7 @@ ring_state:
     .ds RingState
 ```
 
-These forms are equivalent to `.ds 8` and `.ds 3` here. With a literal length you can also write `.ds byte[8]`; that documents element width when capacity is fixed in source. Initialized data still uses `.db` / `.dw`; `.ds` only reserves space.
+The second reserves `sizeof(RingState)` bytes, whatever the field list currently sums to. With a literal length you can also write `.ds byte[8]`; that documents element width when capacity is fixed in source. Initialized data still uses `.db` / `.dw`; `.ds` only reserves space.
 
 Labels stay **untyped**. `ring_state` is an address, not a permanent `RingState`
 variable. A routine passes that address in a register and uses
@@ -137,7 +137,9 @@ displacement:
   ld (ix + RING_COUNT), a
 ```
 
-`RING_HEAD` is the constant 0; `RING_TAIL` is 1; `RING_COUNT` is 2.
+Each displacement is whatever `offset` computes from the current field list, so
+reordering `RingState` reorders the generated instructions without touching a
+line of this code.
 
 ### Run-time index into the byte table
 
@@ -326,7 +328,7 @@ FIFO order: bytes leave in the same order they arrived because `tail` chases `he
 
 ## Register contracts on routines
 
-Book 2 Chapter 12 introduced the `.routine` directive and register contracts.
+[Book 1 Chapter 6](../book1/06-register-contracts.md) covers the `.routine` directive and register contracts.
 
 | Tag | Meaning |
 |-----|---------|

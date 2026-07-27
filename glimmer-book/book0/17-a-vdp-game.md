@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 17
 ---
 
-# Chapter 17 - A VDP Game
+# A VDP Game
 
 Skyfall
 never tested whether two shapes had met. It never had to: the paddle

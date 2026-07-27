@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 5
 ---
 
-# Chapter 5 — Flags, Comparisons and Jumps
+# Flags, Comparisons and Jumps
 
 Z80 instructions record selected outcomes in the flags register. Conditional
 jumps test those flags to choose the next instruction.

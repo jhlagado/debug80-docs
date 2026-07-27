@@ -5,9 +5,13 @@
 ;   (ready_lit)    at $8001 — 1 if READY was set at start → 1
 ;   (error_bit)    at $8002 — bit 1 isolated → 1
 
-FLAG_READY .equ $01
-FLAG_ERROR .equ $02
-FLAG_BUSY  .equ $04
+; Bit positions first; the masks are shifts of those positions, so a bit never
+; has one number in the mask and a different one in a bit instruction.
+StatusBit .enum Ready, Error, Busy
+
+FLAG_READY .equ 1 << StatusBit.Ready
+FLAG_ERROR .equ 1 << StatusBit.Error
+FLAG_BUSY  .equ 1 << StatusBit.Busy
 
 op bit_set(mask imm8)
   or mask

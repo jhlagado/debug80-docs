@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 9
 ---
 
-# Chapter 9 — I/O and Ports
+# I/O and Ports
 
 Keyboards send bytes to the CPU, displays receive them and timers report
 hardware events.

@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 2
 ---
 
-# Chapter 2 - First Light
+# First Light
 
 You have read a Glimmer program. Now you build one, run it on an
 emulated TEC-1G, and set a breakpoint in your own source to stop it

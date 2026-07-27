@@ -8,11 +8,26 @@ has_toc: false
 ---
 # Appendices — Global Reference
 
-These appendices provide lookup material for the whole AZM book series.
+These appendices provide lookup material for the whole AZM book series. Lettered appendices describe the assembler, numbered appendices describe the Z80 itself.
 
 ---
 
-## Appendix Table
+## AZM Reference
+
+What the assembler accepts and what it does with it.
+
+| App | File | What it is for |
+|-----|------|----------------|
+| A | [Directive Reference](appendix-a-directives.md) | Every directive and declaration keyword, with the chapter that introduces it |
+| B | [Expression Operators](appendix-b-operators.md) | Operator precedence, associativity, and evaluation rules |
+| C | [CLI Flag Reference](appendix-c-cli.md) | Command line flags and their defaults |
+| D | [Built-in Functions](appendix-d-functions.md) | `sizeof`, `offset`, `LSB` and `MSB` |
+
+---
+
+## Z80 Reference
+
+What the machine underneath does, independent of any assembler.
 
 | App | File | What it is for |
 |-----|------|----------------|
@@ -28,5 +43,5 @@ These appendices provide lookup material for the whole AZM book series.
 These appendices help with:
 
 - fast lookup while reading any AZM book
-- checking a mnemonic or operand form without leaving the book
+- checking a directive, mnemonic or operand form without leaving the book
 - remembering the small exceptions the Z80 instruction set is full of

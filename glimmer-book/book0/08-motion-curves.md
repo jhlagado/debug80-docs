@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 8
 ---
 
-# Chapter 8 - Motion Curves
+# Motion Curves
 
 The ramp gives a program a clock of its own: a byte that
 walks from 0 to its last step, once per frame, marked changed the

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="272" viewBox="0 0 720 272" role="img" aria-labelledby="figTitle figDesc">
   <title id="figTitle">The @ export boundary</title>
-  <desc id="figDesc">An imported source unit holding three declarations. Only the one marked @ReadByte reaches the importing unit; a plain non-local label and an owner-local label stop at the boundary.</desc>
+  <desc id="figDesc">An imported source unit holding three declarations. Only the one marked @DoubleA reaches the importing unit; a plain non-local label and an owner-local label stop at the boundary.</desc>
   <defs>
     <style>
     :root {
@@ -68,23 +68,23 @@
   <text class="cap" x="40" y="30" text-anchor="start" xml:space="preserve">IMPORTED SOURCE UNIT</text>
   <rect class="bxq" x="40" y="44" width="300" height="152" rx="4"/>
   <rect class="bxs" x="56" y="58" width="268" height="32" rx="2"/>
-  <text class="tb" x="70" y="80" text-anchor="start" xml:space="preserve">@ReadByte:</text>
+  <text class="tb" x="70" y="80" text-anchor="start" xml:space="preserve">@DoubleA:</text>
   <text class="dimn" x="190" y="80" text-anchor="start" xml:space="preserve">crosses the wall</text>
   <rect class="bx" x="56" y="100" width="268" height="32" rx="2"/>
-  <text class="t" x="70" y="122" text-anchor="start" xml:space="preserve">ShiftRow:</text>
+  <text class="t" x="70" y="122" text-anchor="start" xml:space="preserve">ClampA:</text>
   <text class="dimn" x="190" y="122" text-anchor="start" xml:space="preserve">private here</text>
   <rect class="bxq" x="56" y="142" width="268" height="32" rx="2"/>
-  <text class="t" x="70" y="164" text-anchor="start" xml:space="preserve">_loop:</text>
-  <text class="dimn" x="190" y="164" text-anchor="start" xml:space="preserve">owned by ShiftRow</text>
+  <text class="t" x="70" y="164" text-anchor="start" xml:space="preserve">_clamp:</text>
+  <text class="dimn" x="190" y="164" text-anchor="start" xml:space="preserve">owned by ClampA</text>
   <line class="sline" x1="340" y1="74" x2="452" y2="74" marker-end="url(#arS)"/>
   <line class="dash" x1="340" y1="116" x2="392" y2="116"/>
   <line class="dash" x1="340" y1="158" x2="392" y2="158"/>
   <text class="dimn" x="348" y="141" text-anchor="start" xml:space="preserve">stops here</text>
   <text class="cap" x="452" y="30" text-anchor="start" xml:space="preserve">IMPORTING UNIT</text>
   <rect class="bx" x="452" y="58" width="248" height="90" rx="4"/>
-  <text class="t" x="468" y="84" text-anchor="start" xml:space="preserve">call    ReadByte</text>
-  <text class="dimn" x="468" y="110" text-anchor="start" xml:space="preserve">the symbol name is ReadByte,</text>
-  <text class="dimn" x="468" y="128" text-anchor="start" xml:space="preserve">not @ReadByte</text>
-  <text class="dimn" x="40" y="230" text-anchor="start" xml:space="preserve">The @ marks the declaration. The symbol is ReadByte, and that is what call sites write.</text>
+  <text class="t" x="468" y="84" text-anchor="start" xml:space="preserve">call    DoubleA</text>
+  <text class="dimn" x="468" y="110" text-anchor="start" xml:space="preserve">the symbol name is DoubleA,</text>
+  <text class="dimn" x="468" y="128" text-anchor="start" xml:space="preserve">not @DoubleA</text>
+  <text class="dimn" x="40" y="230" text-anchor="start" xml:space="preserve">The @ marks the declaration. The symbol is DoubleA, and that is what call sites write.</text>
   <text class="dimn" x="40" y="248" text-anchor="start" xml:space="preserve">@ exports labels, equates, enums, layout types, type aliases and ops.</text>
 </svg>

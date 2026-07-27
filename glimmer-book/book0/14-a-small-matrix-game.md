@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 14
 ---
 
-# Chapter 14 - A Small Matrix Game
+# A Small Matrix Game
 
 The book has handed you instruments one at a time: the
 drawing profile

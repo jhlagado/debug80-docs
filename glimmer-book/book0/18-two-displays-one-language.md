@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 18
 ---
 
-# Chapter 18 - Two Displays, One Language
+# Two Displays, One Language
 
 We began this book with one white pixel in the middle of the 8x8 RGB
 LED matrix. Those sixty-four pixels now run complete games, and you

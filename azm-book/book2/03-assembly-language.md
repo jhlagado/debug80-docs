@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 3
 ---
 
-# Chapter 3 — Assembly Language
+# Assembly Language
 
 The CPU still runs the same machine code, but you get readable instruction names, names for addresses and a source file you can actually inspect without decoding hex in your head.
 

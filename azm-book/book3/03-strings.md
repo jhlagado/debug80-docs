@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 4
 ---
 
-# Chapter 3 — Strings
+# Strings
 
 Chapter 2 walked a byte table with a **fixed length** in B. Text in memory
 usually has no fixed length: a sentinel ends the walk instead of a counter.

@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 3
 ---
 
-# Chapter 3 — Addresses, Constants and Expressions
+# Addresses, Constants and Expressions
 
 Assembly programs use names for memory locations and names for constant values. Labels provide the locations; `.equ` definitions and enums provide the values.
 
@@ -200,7 +200,7 @@ FRAME_SIZE  .equ (COLS * ROWS) + 2
 ENTRY_ADDR  .equ TABLE_BASE + (ENTRY_NUM * 3)
 ```
 
-See [Appendix B](appendix-b-operators.md) for the full precedence table.
+See [Appendix B](../appendices/appendix-b-operators.md) for the full precedence table.
 
 ### `$` in expressions
 

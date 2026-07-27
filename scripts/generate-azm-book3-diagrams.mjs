@@ -24,7 +24,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import {
   svg, rect, text, line, path as pathEl, caption,
-  strip, bitfield, stack, node, legend,
+  strip, bitfield, box, stack, node, legend,
 } from './lib/figure.mjs';
 
 const OUT = 'assets/images/azm-book/book3';
@@ -136,9 +136,132 @@ function plotBox(x, y, w, h, f, samples = 60) {
   );
 }
 
+// 1.2 Where the two results land. The chapter's point is byte order: a word
+// store writes the low byte first, so the register halves arrive in memory
+// crossed over. Both values are computed here rather than transcribed.
+{
+  const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));
+  const g = gcd(48, 18);
+  const p = 3 ** 4;
+  const lo = hex2(g & 0xff).slice(1);
+  const hi = hex2((g >> 8) & 0xff).slice(1);
+  const pw = hex2(p).slice(1);
+
+  const rx = 250;
+  const rcw = 100;
+
+  add(
+    'gcd-results.svg',
+    'Where a word result and a byte result land in memory',
+    `HL holding ${hi} in H and ${lo} in L, stored to gcd_result at $8000 as low byte then high byte with the two halves crossing over, and power_result holding ${pw} in the single byte at $8002.`,
+    366,
+    [
+      caption(rx, 30, 'HL when gcd_u16 returns'),
+      strip({
+        x: rx,
+        y: 48,
+        cw: rcw,
+        ch: 36,
+        cells: [{ v: hi, sub: 'H' }, { v: lo, sub: 'L' }],
+      }),
+      text('t', 40, 72, 'ld (gcd_result), hl'),
+      text('dimn', 40, 94, 'one store, two bytes'),
+
+      // The crossing is the figure. Two elbows at different heights so the
+      // horizontal runs do not lie on top of each other.
+      pathEl('sline', `M${rx + rcw + rcw / 2},112 V136 H${rx + rcw / 2} V172`, 'arS'),
+      pathEl('sline', `M${rx + rcw / 2},112 V154 H${rx + rcw + rcw / 2} V172`, 'arS'),
+      text('dimn', 40, 140, 'low byte first,'),
+      text('dimn', 40, 158, 'high byte second'),
+
+      strip({
+        x: rx,
+        y: 176,
+        cw: rcw,
+        ch: 36,
+        cells: [{ v: lo, hi: true, sub: '$8000' }, { v: hi, hi: true, sub: '$8001' }],
+      }),
+      pathEl('rule', `M${rx},236 V248 H${rx + 2 * rcw} V236`),
+      text('dimn', rx + rcw, 266, 'gcd_result, .ds word', 'middle'),
+
+      caption(500, 156, 'power_u8'),
+      strip({
+        x: 500,
+        y: 176,
+        cw: rcw,
+        ch: 36,
+        cells: [{ v: pw, hi: true, sub: '$8002' }],
+      }),
+      pathEl('rule', 'M500,236 V248 H600 V236'),
+      text('dimn', 550, 266, 'power_result, .ds byte', 'middle'),
+
+      text('dimn', 40, 306, `.ds word reserves two bytes and .ds byte reserves one, so the two results sit at $8000 and $8002 with nothing counted by hand.`),
+      text('dimn', 40, 324, `Reading $8000 and $8001 back as a word gives ${g}; the byte at $8002 is ${p}.`),
+      text('dimn', 40, 350, 'Little-endian order applies to every 16-bit store, not only to this one.'),
+    ],
+  );
+}
+
 /* ============================================================
    Chapter 2 - Arrays and Loops
    ============================================================ */
+
+// 2.0 What "values[3]" means as address arithmetic. The chapter's four steps
+// are drawn against the addresses they produce, because the thing beginners
+// get wrong is that the label is an address and not the first element.
+{
+  const data = [9, 4, 6, 2, 8, 1, 7, 3];
+  const idx = 3;
+  const base = 0x8000;
+  const x0 = 64;
+  const cw = 78;
+  const cx = (i) => x0 + i * cw + cw / 2;
+  const addr = (a) => `$${a.toString(16).toUpperCase().padStart(4, '0')}`;
+
+  add(
+    'array-indexing.svg',
+    'Reaching one element of a byte table',
+    `The four instructions that read values[${idx}], each with the register state it produces, drawn against the eight-byte table at ${addr(base)} with the element at ${addr(base + idx)} marked.`,
+    386,
+    [
+      caption(40, 30, `reading values[${idx}]`),
+      ...[
+        ['ld hl, values', 'HL = $8000'],
+        ['ld b, 0', 'B = $00'],
+        ['ld c, 3', 'C = $03'],
+        ['add hl, bc', 'HL = $8003'],
+        ['ld a, (hl)', 'A = 2'],
+      ].flatMap(([code, state], i) => {
+        const y = 56 + i * 24;
+        const last = i === 4;
+        return [
+          text(last ? 'tb' : 't', 40, y, code),
+          text(last ? 'nb' : 'dim', 250, y, state),
+        ];
+      }),
+      text('dimn', 400, 60, 'values is the address of element 0.'),
+      text('dimn', 400, 78, 'It is not the 9 stored there.'),
+      text('dimn', 400, 108, 'BC carries the index because add hl, bc'),
+      text('dimn', 400, 126, 'is the only 16-bit add the Z80 offers here.'),
+
+      text('dim', 56, 216, 'address', 'end'),
+      text('dim', 56, 240, 'index', 'end'),
+      ...data.map((_, i) => text('dim', cx(i), 216, i === 0 || i === idx ? addr(base + i) : '', 'middle')),
+      ...data.map((_, i) => text('dim', cx(i), 240, String(i), 'middle')),
+      strip({
+        x: x0,
+        y: 252,
+        cw,
+        ch: 34,
+        cells: data.map((v, i) => ({ v: String(v), hi: i === idx })),
+      }),
+      line('sline', cx(idx), 320, cx(idx), 292, 'arS'),
+      text('dimn', cx(idx), 340, 'HL after add hl, bc', 'middle'),
+
+      text('dimn', 40, 372, 'One byte per element, so the step from one element to the next is inc hl. Chapter 5 replaces that 1 with sizeof.'),
+    ],
+  );
+}
 
 /** Run the book's insertion sort, capturing the per-pass frames a caller wants. */
 function runInsertionSort(data, watchPass) {
@@ -1059,6 +1182,59 @@ add(
   ],
 );
 
+// 7.3 The address space the companion actually produces. Every address here is
+// read off examples/07_include_demo.lst rather than counted, including where
+// the library's bytes land and where the reserved message field ends.
+add(
+  'include-address-space.svg',
+  'One address space after the include expands',
+  'The code region with main occupying $0000 to $0009 and the included strlen_u8 occupying $000A to $0015, the call from main resolving to a plain address inside it, and the data region with a six-byte message, two reserved bytes and str_len at $8008.',
+  394,
+  [
+    caption(40, 30, 'code, from .org $0000'),
+    text('dim', 40, 58, '$0000'),
+    text('dim', 328, 58, '$000A'),
+    text('dim', 680, 58, '$0016', 'end'),
+    box({
+      x: 40, y: 66, w: 260, h: 62,
+      title: '07_include_demo.asm', lines: ['main, 10 bytes'],
+    }),
+    box({
+      x: 320, y: 66, w: 360, h: 62, cls: 'bxs', titleCls: 'tb',
+      title: 'lib/strings.asm', lines: ['strlen_u8, 12 bytes'],
+    }),
+    pathEl('sline', 'M320,66 V44'),
+    text('cap', 328, 40, 'the include lands here'),
+
+    text('t', 40, 176, 'call strlen_u8'),
+    text('dim', 190, 176, 'assembles to CD 0A 00'),
+    pathEl('sline', 'M176,168 V152 H500 V134', 'arS'),
+    text('dimn', 40, 200, 'One source unit, so the call is an ordinary address. There is no link step and no export table.'),
+
+    caption(40, 248, 'data, from .org $8000'),
+    text('dim', 40, 276, '$8000'),
+    text('dim', 340, 276, '$8006'),
+    text('dim', 460, 276, '$8008'),
+    box({
+      x: 40, y: 284, w: 280, h: 62,
+      title: 'message', lines: ['HELLO and a null, 6 bytes'],
+    }),
+    box({
+      x: 340, y: 284, w: 100, h: 62, cls: 'bxq', titleCls: 'dimn',
+      title: 'reserved', lines: ['2 bytes'],
+    }),
+    box({
+      x: 460, y: 284, w: 100, h: 62, cls: 'bxs', titleCls: 'tb',
+      title: 'str_len', lines: ['05'],
+    }),
+    text('dimn', 580, 310, 'The message field is'),
+    text('dimn', 580, 328, 'eight bytes wide, so'),
+    text('dimn', 580, 346, 'str_len sits at $8008.'),
+
+    text('dimn', 40, 380, 'The library file contributes bytes at the point its .include appears, and shares one set of global labels with the program that pasted it.'),
+  ],
+);
+
 /* ============================================================
    Chapter 8 - Pointer Structures
    ============================================================ */
@@ -1423,6 +1599,85 @@ function listNode(x, y, addr, value, link, opts = {}) {
     'Six rows of the search. Rows 0 to 4 accept columns 0, 2, 4, 1 and 3, then row 5 finds every column blocked, so the search unmarks the row 4 placement and resumes its column loop at 4.',
     484,
     parts,
+  );
+}
+
+// 9.4 The workspace as the record the listing declares. Offsets and sizes are
+// summed here from the same field list the .type block uses, so the addresses
+// under each field are the addresses azm resolves and not a second copy of
+// them. Checked against examples/09_eight_queens.lst.
+{
+  const COL = 8;
+  const DIAG = 15;
+  const fields = [
+    { name: 'solutionCount', size: 2, group: false },
+    { name: 'queenCols', size: COL, group: false },
+    { name: 'solutionCols', size: COL, group: false },
+    { name: 'colUsed', size: COL, group: true },
+    { name: 'diagSumUsed', size: DIAG, group: true },
+    { name: 'diagDiffUsed', size: DIAG, group: true },
+  ];
+  let running = 0;
+  const laid = fields.map((f) => {
+    const off = running;
+    running += f.size;
+    return { ...f, off };
+  });
+  const total = running;
+  const constraintsSize = laid.filter((f) => f.group).reduce((n, f) => n + f.size, 0);
+  const base = 0x8000;
+  const addr = (a) => `$${a.toString(16).toUpperCase().padStart(4, '0')}`;
+
+  const bw = 100;
+  const pitch = 106;
+  const bx0 = 40;
+  const bcx = (i) => bx0 + i * pitch + bw / 2;
+  const groupFrom = bx0 + laid.findIndex((f) => f.group) * pitch;
+  const groupTo = bx0 + (laid.length - 1) * pitch + bw;
+
+  add(
+    'queens-workspace.svg',
+    'The eight queens workspace as one record',
+    `The six fields of QueenWorkspace drawn in declaration order with the byte offset and resolved address of each, the last three bracketed as the nested Constraints record of ${constraintsSize} bytes that clear_constraints zeroes in one pass, and the two bytes of solutionCount holding 92 after the search finishes.`,
+    398,
+    [
+      caption(bx0, 30, 'QueenWorkspace, one .ds at $8000'),
+      ...laid.flatMap((f, i) => [
+        box({
+          x: bx0 + i * pitch,
+          y: 48,
+          w: bw,
+          h: 72,
+          cls: f.group ? 'bxs' : 'bx',
+          titleCls: f.group ? 'tb' : 'nb',
+          title: f.name,
+          lines: [`${f.size} bytes`, addr(base + f.off)],
+        }),
+        text('dim', bcx(i), 140, `offset ${f.off}`, 'middle'),
+      ]),
+
+      pathEl('rule', `M${groupFrom},156 V170 H${groupTo} V156`),
+      text('dimn', (groupFrom + groupTo) / 2, 190, `constraints, sizeof(Constraints) = ${constraintsSize} bytes`, 'middle'),
+      text('dimn', (groupFrom + groupTo) / 2, 208, 'cleared in one pass, so the order of these three is part of the layout', 'middle'),
+
+      text('dimn', bx0, 240, `sizeof(QueenWorkspace) = ${total} bytes, ${addr(base)} through ${addr(base + total - 1)}`),
+
+      caption(bx0, 288, 'solutionCount after halt'),
+      strip({
+        x: bx0,
+        y: 306,
+        cw: 90,
+        ch: 34,
+        cells: [
+          { v: '5C', hi: true, sub: addr(base) },
+          { v: '00', hi: true, sub: addr(base + 1) },
+        ],
+      }),
+      text('nb', 240, 328, '= 92 distinct placements'),
+      text('dimn', 240, 350, 'low byte first, the same word order as every other .dw'),
+
+      text('dimn', bx0, 386, 'Widen the board and every offset, address and clear length on this plate moves without a number being edited.'),
+    ],
   );
 }
 

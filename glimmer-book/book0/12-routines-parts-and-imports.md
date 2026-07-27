@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 12
 ---
 
-# Chapter 12 - Routines, Parts and Imports
+# Routines, Parts and Imports
 
 Canvas ended the previous chapter in one file, with a debugger that
 can answer questions about it. The next feature exposes

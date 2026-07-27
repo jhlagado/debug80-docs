@@ -100,49 +100,10 @@ const src = (s) => s.replace(/ /g, ' ');
       text('tb', 533, 242, 'CopyRow._loop', 'middle'),
 
       text('dimn', 30, 272, 'The same _loop spelling under a different owner is a different symbol.'),
-      text('dimn', 30, 290, 'A local label cannot be exported, so @_loop: is an error.'),
+      text('dimn', 30, 290, 'Equates, enum members, type names and op names cannot begin with an underscore.'),
     ],
   );
 }
-
-// 2.3 The export boundary. Drawn as a wall with one door: the arrow that
-// crosses is the only declaration marked with @.
-add(
-  'export-boundary.svg',
-  'The @ export boundary',
-  'An imported source unit holding three declarations. Only the one marked @ReadByte reaches the importing unit; a plain non-local label and an owner-local label stop at the boundary.',
-  272,
-  [
-    caption(40, 30, 'Imported source unit'),
-    rect('bxq', 40, 44, 300, 152, 4),
-
-    rect('bxs', 56, 58, 268, 32, 2),
-    text('tb', 70, 80, '@ReadByte:'),
-    text('dimn', 190, 80, 'crosses the wall'),
-
-    rect('bx', 56, 100, 268, 32, 2),
-    text('t', 70, 122, 'ShiftRow:'),
-    text('dimn', 190, 122, 'private here'),
-
-    rect('bxq', 56, 142, 268, 32, 2),
-    text('t', 70, 164, '_loop:'),
-    text('dimn', 190, 164, 'owned by ShiftRow'),
-
-    line('sline', 340, 74, 452, 74, 'arS'),
-    line('dash', 340, 116, 392, 116),
-    line('dash', 340, 158, 392, 158),
-    text('dimn', 348, 141, 'stops here'),
-
-    caption(452, 30, 'Importing unit'),
-    rect('bx', 452, 58, 248, 90, 4),
-    text('t', 468, 84, src('call    ReadByte')),
-    text('dimn', 468, 110, 'the symbol name is ReadByte,'),
-    text('dimn', 468, 128, 'not @ReadByte'),
-
-    text('dimn', 40, 230, 'The @ marks the declaration. The symbol is ReadByte, and that is what call sites write.'),
-    text('dimn', 40, 248, '@ exports labels, equates, enums, layout types, type aliases and ops.'),
-  ],
-);
 
 /* ============================================================
    Chapter 3: Addresses, Constants and Expressions
@@ -434,6 +395,39 @@ add(
   ],
 );
 
+// 5.3 A union. The record figure above cannot show this one: every member
+// starts at the same offset, so the interesting fact is the overlap rather
+// than the running sum, and drawing it as a strip would say the opposite.
+add(
+  'union-overlay.svg',
+  'A union is one set of bytes with two readings',
+  'The PortValue union with status and full both starting at offset 0, drawn as a one-byte view and a two-byte view over the same pair of bytes.',
+  248,
+  [
+    ...[
+      'PortValue .union',
+      'status    .field byte',
+      'full      .field word',
+      '          .endunion',
+    ].map((l, i) => text('ts', 46, 44 + i * 20, src(l))),
+
+    caption(330, 32, 'The bytes'),
+    strip({ x: 330, y: 44, cw: 90, ch: 34, cells: [{ v: 'lo' }, { v: 'hi' }] }),
+
+    rect('bxs', 330, 100, 90, 26, 2),
+    text('tb', 375, 118, 'status', 'middle'),
+    rect('bxs', 330, 136, 180, 26, 2),
+    text('tb', 420, 154, 'full', 'middle'),
+
+    text('dim', 528, 118, 'offset 0, 1 byte'),
+    text('dim', 528, 154, 'offset 0, 2 bytes'),
+    text('dim', 330, 190, 'sizeof(PortValue) = 2, the largest member'),
+
+    text('dimn', 46, 220, 'Every member starts at offset 0, so the size is the largest member rather than the sum. Reading status'),
+    text('dimn', 46, 238, 'reads the low byte of whatever word is stored there.'),
+  ],
+);
+
 /* ============================================================
    Chapter 6: Register Contracts
    ============================================================ */
@@ -627,6 +621,81 @@ add(
     ],
   );
 }
+
+// 7.2 The size trade between an op and a subroutine. The two totals are
+// computed rather than asserted, because the honest answer for a body this
+// short is that inlining wins, and a figure that implied otherwise would be
+// arguing with the arithmetic beside it.
+{
+  const body = 4;      // add a,a four times
+  const sites = 3;
+  const inline = body * sites;
+  const asCall = body + 1 + 3 * sites;   // body, ret, and three 3-byte calls
+  const bar = (x, y, bytes, label, hi) => [
+    rect(hi ? 'bxs' : 'bx', x, y, bytes * 16, 30, 2),
+    text(hi ? 'tb' : 't', x + bytes * 8, y + 20, `${bytes} bytes`, 'middle'),
+    text('dimn', x, y - 8, label),
+  ];
+  add(
+    'inline-versus-call.svg',
+    'What an op costs against what a call costs',
+    'A four-byte body at three call sites comes to twelve bytes inlined; the same body as a subroutine comes to fourteen, being the body, a ret and three three-byte calls.',
+    280,
+    [
+      text('ts', 46, 40, src('op shift_left_4()   ; add a,a  add a,a  add a,a  add a,a')),
+      text('dim', 46, 60, `body = ${body} bytes, used at ${sites} call sites`),
+
+      ...bar(46, 104, inline, 'Inlined at every site', true),
+      ...bar(46, 176, asCall, 'As a subroutine, called three times', false),
+      text('dim', 46 + asCall * 16 + 16, 196, `${body} body + 1 ret + ${sites} × 3 call`),
+
+      text('dimn', 46, 240, 'A call costs three bytes at every site plus a ret, so a body this short is cheaper repeated than shared.'),
+      text('dimn', 46, 258, 'At three sites the crossover is a body of five bytes; above that the subroutine is smaller.'),
+    ],
+  );
+}
+
+// 7.3 The import boundary, drawn as a wall with one door: the arrow that
+// crosses is the only declaration marked with @. This lives with .import
+// rather than with the label syntax in Chapter 2, because @ means nothing
+// until there is a boundary for it to cross. The names are the ones in that
+// section's math.asm, so the figure and the code beside it agree.
+add(
+  'export-boundary.svg',
+  'The @ export boundary',
+  'An imported source unit holding three declarations. Only the one marked @DoubleA reaches the importing unit; a plain non-local label and an owner-local label stop at the boundary.',
+  272,
+  [
+    caption(40, 30, 'Imported source unit'),
+    rect('bxq', 40, 44, 300, 152, 4),
+
+    rect('bxs', 56, 58, 268, 32, 2),
+    text('tb', 70, 80, '@DoubleA:'),
+    text('dimn', 190, 80, 'crosses the wall'),
+
+    rect('bx', 56, 100, 268, 32, 2),
+    text('t', 70, 122, 'ClampA:'),
+    text('dimn', 190, 122, 'private here'),
+
+    rect('bxq', 56, 142, 268, 32, 2),
+    text('t', 70, 164, '_clamp:'),
+    text('dimn', 190, 164, 'owned by ClampA'),
+
+    line('sline', 340, 74, 452, 74, 'arS'),
+    line('dash', 340, 116, 392, 116),
+    line('dash', 340, 158, 392, 158),
+    text('dimn', 348, 141, 'stops here'),
+
+    caption(452, 30, 'Importing unit'),
+    rect('bx', 452, 58, 248, 90, 4),
+    text('t', 468, 84, src('call    DoubleA')),
+    text('dimn', 468, 110, 'the symbol name is DoubleA,'),
+    text('dimn', 468, 128, 'not @DoubleA'),
+
+    text('dimn', 40, 230, 'The @ marks the declaration. The symbol is DoubleA, and that is what call sites write.'),
+    text('dimn', 40, 248, '@ exports labels, equates, enums, layout types, type aliases and ops.'),
+  ],
+);
 
 /* ============================================================
    Chapter 8: Diagnostics, Listings and Output

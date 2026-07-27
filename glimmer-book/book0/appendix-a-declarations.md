@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Appendix A - Declaration Reference"
+title: "Appendix A — Declaration Reference"
 parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 19
 ---
 
-# Appendix A - Declaration Reference
+# Appendix A — Declaration Reference
 
 Each entry gives the grammar
 production from the Glim grammar reference, then one example from a

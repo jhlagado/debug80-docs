@@ -49,8 +49,29 @@ function navOrder(fm) {
   return Number.isFinite(value) ? value : 9999;
 }
 
+/**
+ * Consecutive pages sharing a `nav_group` fold into a labelled subsection.
+ * The AZM appendices need this: the assembler tables and the Z80 tables
+ * answer different questions, and one undifferentiated run of eight buries
+ * both. Pages without a `nav_group` stay at the top level of their section.
+ */
+function groupRuns(entries) {
+  const out = [];
+  for (const { fm, item } of entries) {
+    const group = fm.nav_group;
+    if (group === undefined) {
+      out.push(item);
+      continue;
+    }
+    const last = out[out.length - 1];
+    if (last !== undefined && last.items !== undefined && last.text === group) last.items.push(item);
+    else out.push({ text: group, collapsed: false, items: [item] });
+  }
+  return out;
+}
+
 function chapterItems(dir, parentTitle, recursive = false) {
-  return mdFiles(dir, recursive)
+  const entries = mdFiles(dir, recursive)
     .filter((file) => !file.endsWith('index.md'))
     .map((file) => ({ file, fm: frontMatter(file) }))
     // `nav_exclude` pages still list under their `parent` section (the
@@ -59,7 +80,8 @@ function chapterItems(dir, parentTitle, recursive = false) {
     .filter(({ fm }) => fm.parent !== undefined || fm.nav_exclude !== 'true')
     .filter(({ fm }) => parentTitle === undefined || fm.parent === parentTitle)
     .sort((a, b) => navOrder(a.fm) - navOrder(b.fm))
-    .map(({ file, fm }) => ({ text: fm.title ?? file, link: pageLink(file) }));
+    .map(({ file, fm }) => ({ fm, item: { text: fm.title ?? file, link: pageLink(file) } }));
+  return groupRuns(entries);
 }
 
 /** A directory holding one book's chapters, keyed by its own index title. */

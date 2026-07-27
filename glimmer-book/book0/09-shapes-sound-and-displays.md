@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 9
 ---
 
-# Chapter 9 - Shapes, Sound and Displays on the Board
+# Shapes, Sound and Displays on the Board
 
 Every picture so far has been built from single calls to `FbPlot`: a
 dot, a drop, a bar of pixels in a loop.

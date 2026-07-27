@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 2
 ---
 
-# Chapter 2 — Machine Code
+# Machine Code
 
 A program is a sequence of bytes in memory.
 

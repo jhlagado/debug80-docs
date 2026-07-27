@@ -49,8 +49,8 @@ The book teaches Glimmer 0.6. Every complete program in it is built with
 
 ## Appendices
 
-- [Appendix A - Declaration Reference](appendix-a-declarations.md)
-- [Appendix B - The 8x8 Matrix Profile](appendix-b-matrix-profile.md)
-- [Appendix C - The TMS9918 Profile](appendix-c-tms9918-profile.md)
-- [Appendix D - Build and Debug](appendix-d-build-and-debug.md)
-- [Appendix E - AZM Touchpoints](appendix-e-azm-touchpoints.md)
+- [Appendix A — Declaration Reference](appendix-a-declarations.md)
+- [Appendix B — The 8x8 Matrix Profile](appendix-b-matrix-profile.md)
+- [Appendix C — The TMS9918 Profile](appendix-c-tms9918-profile.md)
+- [Appendix D — Build and Debug](appendix-d-build-and-debug.md)
+- [Appendix E — AZM Touchpoints](appendix-e-azm-touchpoints.md)

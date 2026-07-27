@@ -12,6 +12,8 @@ has_toc: false
 
 This book starts from no prior knowledge of computers or programming. It introduces the Z80 from the bare machine upward: memory, registers, machine code, assembly language, flags, loops, tables, the stack, subroutines and port I/O.
 
+AZM's own features are the subject of [AZM Book 1 — Assembler Manual](../book1/index.md), which this book hands over to at the end.
+
 ## Main Path
 
 1. [The Computer](01-the-computer.md)
@@ -25,6 +27,3 @@ This book starts from no prior knowledge of computers or programming. It introdu
 9. [I/O and Ports](09-io-and-ports.md)
 10. [A Complete Program](10-a-complete-program.md)
 11. [Subroutine Conventions](11-subroutine-conventions.md)
-12. [Register Contracts](12-register-contracts-azmdoc.md)
-13. [Layout Types](13-layout-types.md)
-14. [Op Declarations](14-op-declarations.md)

@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 5
 ---
 
-# Chapter 5 - Compute, Effect, Render
+# Compute, Effect, Render
 
 Rover's blocks do two different jobs: five of them change facts, one
 of them draws. Games have a third job, quieter than either: facts

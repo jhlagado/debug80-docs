@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 5
 ---
 
-# Chapter 5 — The Layout System
+# The Layout System
 
 You have stored a sprite table as raw bytes. Each sprite occupies four bytes (an x position, a y position, a tile index and a flags byte), and you have `.equ` constants for each field offset. You insert a new field. Every constant after the insertion is now wrong, along with every access expression built on it.
 
@@ -88,6 +88,13 @@ Array type expressions appear in `.ds` operands, `.field` declarations and `size
 ```asm
 .ds byte[32]    ; same as .ds 32
 .ds Sprite[16]  ; same as .ds sizeof(Sprite) * 16
+```
+
+The count inside the brackets of a `.ds` operand must be a numeric literal. For a named count, multiply explicitly:
+
+```asm
+MAX_SPRITES .equ 16
+.ds MAX_SPRITES * sizeof(Sprite)
 ```
 
 When the count is needed as a numeric constant (for a `.equ`, for example),
@@ -326,6 +333,8 @@ value   .field PortValue
 
 Port:   .ds IoPort
 ```
+
+![Every union member starts at offset 0, so the size is the largest member rather than the sum](../../assets/images/azm-book/book1/union-overlay.svg)
 
 Cast syntax reaches union members by the same rules as record fields:
 

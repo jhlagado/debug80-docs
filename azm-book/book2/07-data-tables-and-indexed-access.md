@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 7
 ---
 
-# Chapter 7 — Data Tables and Indexed Access
+# Data Tables and Indexed Access
 
 Table-based programs need sequential access for processing every entry and
 indexed access for reaching one entry directly.

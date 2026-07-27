@@ -15,6 +15,7 @@
     "diagrams:glimmer": "node scripts/generate-glimmer-diagrams.mjs",
     "diagrams:check": "node scripts/lib/check-figures.mjs assets/images/debug80-book/book1 assets/images/azm-book/book1 assets/images/azm-book/book2 assets/images/azm-book/book3 assets/images/glimmer-book/book0",
     "links": "node scripts/check-links.mjs",
+    "llms": "node scripts/check-llms-txt.mjs",
     "symbols": "node scripts/check-symbols.mjs"
   },
   "devDependencies": {

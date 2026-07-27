@@ -13,6 +13,21 @@ next    .word
 
 LIST_VALUE  .equ offset(ListNode, value)
 LIST_NEXT   .equ offset(ListNode, next)
+NODE_SIZE   .equ sizeof(ListNode)
+
+; HL := the node HL's next field points at. Both walks below need it, and an
+; op keeps the eight instructions in one place while still emitting them
+; inline at each call site.
+op follow_next()
+  ld bc, LIST_NEXT
+  add hl, bc            ; HL = &node.next
+  ld a, (hl)
+  ld c, a               ; C = low byte of next
+  inc hl
+  ld a, (hl)
+  ld h, a               ; H = high byte of next
+  ld l, c
+end
 
 .org $0000
 main:
@@ -55,14 +70,7 @@ _sum_loop:
     jr nc, _sum_no_carry
     inc d
 _sum_no_carry:
-    ld bc, LIST_NEXT
-    add hl, bc
-    ld a, (hl)
-    ld c, a
-    inc hl
-    ld a, (hl)
-    ld h, a
-    ld l, c
+    follow_next
     jr _sum_loop
 _sum_done:
     ex de, hl
@@ -79,14 +87,7 @@ _find_loop:
     ld a, (hl)
     cp d
     jr z, _found
-    ld bc, LIST_NEXT
-    add hl, bc
-    ld a, (hl)
-    ld c, a
-    inc hl
-    ld a, (hl)
-    ld h, a
-    ld l, c
+    follow_next
     jr _find_loop
 _found:
     scf
@@ -104,10 +105,10 @@ list_push_head:
     ld c, l
     ld b, h              ; BC = old head
     pop af
-    ld (de), a           ; new node's value field
+    ld (de), a           ; new node's value field, at offset LIST_VALUE = 0
     ex de, hl            ; HL = new node
     push hl
-    inc hl
+    inc hl               ; LIST_NEXT is 1, so one inc reaches the link
     ld (hl), c           ; next, low byte
     inc hl
     ld (hl), b           ; next, high byte
@@ -116,15 +117,17 @@ list_push_head:
     ret
 
 .org $8000
+; Three ListNode records written out by hand: one value byte, then the
+; NODE_SIZE - 1 bytes of link that follow it.
 node_a:
-    .db $10
-    .dw node_b
+    .db $10               ; value
+    .dw node_b            ; next
 node_b:
     .db $22
     .dw node_c
 node_c:
     .db $30
-    .dw 0
+    .dw 0                 ; next = null
 
 node_spare:
     .ds ListNode
@@ -135,7 +138,7 @@ list_head:
 list_sum:
     .ds word
 find_node:
-    .ds word
+    .ds addr              ; holds a node address, not a count
 find_hit:
     .ds byte
 sum_after:

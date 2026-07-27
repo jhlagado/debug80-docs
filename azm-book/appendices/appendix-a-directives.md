@@ -1,8 +1,10 @@
 ---
 layout: default
 title: "Appendix A — Directive Reference"
-parent: "AZM Book 1 — Assembler Manual"
-nav_order: 101
+parent: "Appendices"
+grand_parent: "AZM Books"
+nav_group: "AZM Reference"
+nav_order: 1
 ---
 
 # Appendix A — Directive Reference

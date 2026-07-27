@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 1
 ---
 
-# Chapter 1 - The Shape of a Game
+# The Shape of a Game
 
 A game written out by hand is a large program. The same game in
 Glimmer is a small one, and a short program is one you can hold in

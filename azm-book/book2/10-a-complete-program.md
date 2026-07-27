@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 10
 ---
 
-# Chapter 10 — A Complete Program
+# A Complete Program
 
 This chapter builds a program from scratch, using the main techniques from
 Chapters 3–9: a data table, DJNZ loops, subroutines, register-based arguments
@@ -172,16 +172,16 @@ cost here is the `call` and `ret` used to enter and leave each subroutine.
 
 ## Limits as Programs Grow
 
-**Comment-only contracts are not enforced.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. Nothing checks that the caller actually loads the right registers, or that the subroutine actually produces what it claims. A caller that loads the wrong register fails silently. Chapter 12 introduces `.routine` register contracts, which let the assembler verify these claims.
+**Comment-only contracts are not enforced.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. Nothing checks that the caller actually loads the right registers, or that the subroutine actually produces what it claims. A caller that loads the wrong register fails silently. [Book 1 Chapter 6](../book1/06-register-contracts.md) covers `.routine` register contracts, which let the assembler verify these claims.
 
-**Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name; the register is D and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. Chapter 11 covers the manual discipline for managing register ownership across subroutines; Chapter 12 shows how register contracts make the contract explicit.
+**Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name; the register is D and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. Chapter 11 covers the manual discipline for managing register ownership across subroutines; [Book 1 Chapter 6](../book1/06-register-contracts.md) shows how register contracts make the contract explicit.
 
 **Repeated comparison sequences obscure their purpose.** The `cp c` / `jr c` /
 `jr z` sequence in `count_above` implements "strictly greater than", for which
-the Z80 has no single opcode. Chapter 14 introduces `op` declarations for
-naming such a sequence and expanding it inline.
+the Z80 has no single opcode. [Book 1 Chapter 7](../book1/07-ops-aliases.md)
+covers `op` declarations for naming such a sequence and expanding it inline.
 
-**Byte offsets in data structures must be counted by hand.** This program has no compound data structures, but once you start grouping related bytes (a sprite with `x`, `y` and `color` fields, for example), every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. Chapter 13 introduces AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant without counting.
+**Byte offsets in data structures must be counted by hand.** This program has no compound data structures, but once you start grouping related bytes (a sprite with `x`, `y` and `color` fields, for example), every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. [Book 1 Chapter 5](../book1/05-layout-system.md) covers AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant without counting.
 
 ---
 

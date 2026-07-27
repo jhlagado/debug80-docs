@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 8
 ---
 
-# Chapter 7 — Composition
+# Composition
 
 Every chapter so far kept the whole program in one `.asm` file. Real projects outgrow one screen: string helpers, table drivers and board-specific I/O stubs each belong in their own file.
 
@@ -123,12 +123,19 @@ Four rules keep libraries predictable:
 
 1. **No `main` and no `halt`** in the library, only subroutines and maybe private helpers (`ring_advance_index` style).
 2. **No `.org` in the library** unless you are deliberately placing code at a fixed address (unusual in Book 3).
-3. **Every exported routine gets register contracts**, same as Book 2 Chapter 12 and Book 3 Chapters 1–3.
+3. **Every exported routine gets register contracts**, same as [Book 1 Chapter 6](../book1/06-register-contracts.md) and Book 3 Chapters 1 to 3.
 4. **Routine entries have `.routine` directives.** Prefix a label with `@` only when the library exports it for `.import`.
 
 The application file stays short:
 
 ```asm
+DemoData .type
+message  .field byte[8]
+str_len  .byte
+.endtype
+
+DEMO_BASE .equ $8000
+
 .org $0000
 main:
     ld hl, message
@@ -138,14 +145,19 @@ main:
 
 .include "lib/strings.asm"
 
-.org $8000
+.org DEMO_BASE
 message:
     .db "HELLO", 0
 
-.org $8008
+.org DEMO_BASE + offset(DemoData, str_len)
 str_len:
     .ds byte
 ```
+
+The message text is six bytes but the field reserves eight, so `str_len` keeps
+its address when the message changes. `offset(DemoData, str_len)` is where that
+decision lives; a second `.org $8008` would be the same number written down a
+second time, free to drift when the field widens.
 
 ### Growing the library
 
@@ -196,7 +208,7 @@ across the `.include` branches and given a unique non-local name.
 
 Chapter 3's string routines live in **your** ROM image. Monitor ROM, BIOS and emulator stubs live at fixed addresses in **someone else's** code. You still need register contracts for `--rc warn`, but there is no AZM source to paste with `.include`.
 
-Book 2 Chapter 12 introduced **`.asmi`** files, which contain contract records
+[Book 1 Chapter 6](../book1/06-register-contracts.md) covers **`.asmi`** files, which contain contract records
 but no instructions:
 
 ```
@@ -246,19 +258,15 @@ Contrast:
 
 ---
 
-## Memory layout after `halt`
+## Address space after `halt`
 
-Companion program after a successful run:
+The include expands before anything is placed, so the library's bytes sit at
+the point its `.include` line appeared and the call to it is an ordinary
+address:
 
-```
-  $8000  ┌──┬──┬──┬──┬──┬──┐
-         │48│45│4C│4C│4F│00│  message ("HELLO" + null)
-  $8008  ├──┐
-         │05│                 str_len
-         └──┘
-```
+![The library lands where its include line was, and the call to it is a plain address](../../assets/images/azm-book/book3/include-address-space.svg)
 
-Same result as Chapter 3's single-file demo.
+Same data as Chapter 3's single-file demo, reached by two files instead of one.
 
 ---
 

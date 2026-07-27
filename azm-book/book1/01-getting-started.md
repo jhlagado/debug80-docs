@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 1
 ---
 
-# Chapter 1 — Getting Started with AZM
+# Getting Started with AZM
 
 AZM is a modern Z80 assembler for the Debug80 toolchain. An assembler turns assembly source into machine-code bytes. AZM also produces metadata that helps Debug80 connect source to generated code.
 
@@ -46,7 +46,6 @@ Here is a small but complete AZM source file:
 
 LIMIT   .equ 8
 
-.routine clobbers B,HL
 Main:
         ld      b,LIMIT
         ld      hl,Counter

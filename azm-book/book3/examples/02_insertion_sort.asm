@@ -3,7 +3,6 @@
 ; Run to halt, then inspect values at $8000 (8 bytes, sorted 1..9).
 ; (found_index) at $8008 — index of first value >= 5 → 4
 
-ARRAY_LEN .equ 8
 THRESHOLD .equ 5
 
 .org $0000
@@ -107,6 +106,7 @@ _found:
 .org $8000
 values:
     .db 9, 4, 6, 2, 8, 1, 7, 3
+ARRAY_LEN .equ $ - values     ; the table decides its own length
 found_index:
     .ds byte
 key_byte:

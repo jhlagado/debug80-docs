@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="394" viewBox="0 0 720 394" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">One address space after the include expands</title>
+  <desc id="figDesc">The code region with main occupying $0000 to $0009 and the included strlen_u8 occupying $000A to $0015, the call from main resolving to a plain address inside it, and the data region with a six-byte message, two reserved bytes and str_len at $8008.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="40" y="30" text-anchor="start" xml:space="preserve">CODE, FROM .ORG $0000</text>
+  <text class="dim" x="40" y="58" text-anchor="start" xml:space="preserve">$0000</text>
+  <text class="dim" x="328" y="58" text-anchor="start" xml:space="preserve">$000A</text>
+  <text class="dim" x="680" y="58" text-anchor="end" xml:space="preserve">$0016</text>
+  <rect class="bx" x="40" y="66" width="260" height="62" rx="4"/>
+  <text class="nb" x="170" y="86" text-anchor="middle" xml:space="preserve">07_include_demo.asm</text>
+  <text class="ts" x="170" y="104" text-anchor="middle" xml:space="preserve">main, 10 bytes</text>
+  <rect class="bxs" x="320" y="66" width="360" height="62" rx="4"/>
+  <text class="tb" x="500" y="86" text-anchor="middle" xml:space="preserve">lib/strings.asm</text>
+  <text class="ts" x="500" y="104" text-anchor="middle" xml:space="preserve">strlen_u8, 12 bytes</text>
+  <path class="sline" d="M320,66 V44"/>
+  <text class="cap" x="328" y="40" text-anchor="start" xml:space="preserve">the include lands here</text>
+  <text class="t" x="40" y="176" text-anchor="start" xml:space="preserve">call strlen_u8</text>
+  <text class="dim" x="190" y="176" text-anchor="start" xml:space="preserve">assembles to CD 0A 00</text>
+  <path class="sline" d="M176,168 V152 H500 V134" marker-end="url(#arS)"/>
+  <text class="dimn" x="40" y="200" text-anchor="start" xml:space="preserve">One source unit, so the call is an ordinary address. There is no link step and no export table.</text>
+  <text class="cap" x="40" y="248" text-anchor="start" xml:space="preserve">DATA, FROM .ORG $8000</text>
+  <text class="dim" x="40" y="276" text-anchor="start" xml:space="preserve">$8000</text>
+  <text class="dim" x="340" y="276" text-anchor="start" xml:space="preserve">$8006</text>
+  <text class="dim" x="460" y="276" text-anchor="start" xml:space="preserve">$8008</text>
+  <rect class="bx" x="40" y="284" width="280" height="62" rx="4"/>
+  <text class="nb" x="180" y="304" text-anchor="middle" xml:space="preserve">message</text>
+  <text class="ts" x="180" y="322" text-anchor="middle" xml:space="preserve">HELLO and a null, 6 bytes</text>
+  <rect class="bxq" x="340" y="284" width="100" height="62" rx="4"/>
+  <text class="dimn" x="390" y="304" text-anchor="middle" xml:space="preserve">reserved</text>
+  <text class="ts" x="390" y="322" text-anchor="middle" xml:space="preserve">2 bytes</text>
+  <rect class="bxs" x="460" y="284" width="100" height="62" rx="4"/>
+  <text class="tb" x="510" y="304" text-anchor="middle" xml:space="preserve">str_len</text>
+  <text class="ts" x="510" y="322" text-anchor="middle" xml:space="preserve">05</text>
+  <text class="dimn" x="580" y="310" text-anchor="start" xml:space="preserve">The message field is</text>
+  <text class="dimn" x="580" y="328" text-anchor="start" xml:space="preserve">eight bytes wide, so</text>
+  <text class="dimn" x="580" y="346" text-anchor="start" xml:space="preserve">str_len sits at $8008.</text>
+  <text class="dimn" x="40" y="380" text-anchor="start" xml:space="preserve">The library file contributes bytes at the point its .include appears, and shares one set of global labels with the program that pasted it.</text>
+</svg>

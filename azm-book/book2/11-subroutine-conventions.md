@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 11
 ---
 
-# Chapter 11 — Subroutine Conventions
+# Subroutine Conventions
 
 Chapter 10's two subroutines worked. `find_max` received HL and B, while
 `count_above` received HL, B and C. Both returned A. The comment above
@@ -207,7 +207,7 @@ CountAboveSkip:
 
 The problem is that these comments have no enforcement. The bug appears at runtime, sometimes far from its origin.
 
-Chapter 12 shows what AZM provides beyond comments: a structured declaration syntax that the register contract analyzer can read and verify.
+[Book 1 Chapter 6](../book1/06-register-contracts.md) covers what AZM provides beyond comments: a structured declaration syntax that the register contract analyzer can read and verify.
 
 ---
 
@@ -334,3 +334,22 @@ SumEarlyExit:
 ```
 
 The explanation must account for the caller's BC and the stack when the early exit fires, followed by a corrected version.
+
+---
+
+## Book 2 complete
+
+You can now:
+
+- write a complete AZM program with subroutines, loops, conditional branches and data tables
+- read and write Z80 instructions against the flags they set and the addressing modes they use
+- apply push/pop discipline to protect callers from register clobbering
+- document a subroutine interface as a comment block the next reader can rely on
+
+The comment block is where this book stops. AZM can check the same interface itself, and it can name a record layout or an instruction idiom once instead of at every use. Those features belong to the assembler rather than to the machine, so they live in Book 1:
+
+- [Chapter 5, The Layout System](../book1/05-layout-system.md), for record types, `sizeof`, `offset` and cast paths in place of hand-counted byte offsets
+- [Chapter 6, Register Contracts](../book1/06-register-contracts.md), for `.routine` and the analysis that turns a comment block into something the assembler proves
+- [Chapter 7, Ops, Aliases and Source Composition](../book1/07-ops-aliases.md), for `op` declarations, and for building one program out of several files
+
+[Book 3](../book3/index.md) covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for programs that outgrow a single file.

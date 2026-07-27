@@ -39,7 +39,7 @@ build/
 
 `main.hex` is what runs, on the emulator and on real hardware alike. `main.d8.json` is the **source map**: it records which addresses came from which lines of which files, and every source-level debugging feature depends on it.
 
-A Glimmer target also emits its generated assembly as `main.asm`. [Glimmer targets](11-glimmer-targets.md) describes its build pipeline and output.
+A Glimmer target also emits its generated assembly as `main.asm`. [Glimmer targets](08-glimmer-targets.md) describes its build pipeline and output.
 
 ## The source map status line
 

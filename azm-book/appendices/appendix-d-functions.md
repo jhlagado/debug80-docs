@@ -1,8 +1,10 @@
 ---
 layout: default
 title: "Appendix D — Built-in Functions"
-parent: "AZM Book 1 — Assembler Manual"
-nav_order: 104
+parent: "Appendices"
+grand_parent: "AZM Books"
+nav_group: "AZM Reference"
+nav_order: 4
 ---
 
 # Appendix D — Built-in Functions
@@ -39,7 +41,7 @@ SPRITE_SIZE  .equ sizeof(Sprite)
 TOTAL_BYTES  .equ MAX_COUNT * sizeof(Sprite) + sizeof(Header)
 ```
 
-The full layout system, including how records and unions define their sizes, is covered in [Chapter 5](05-layout-system.md).
+The full layout system, including how records and unions define their sizes, is covered in [Chapter 5](../book1/05-layout-system.md).
 
 ---
 

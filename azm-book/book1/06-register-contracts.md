@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 6
 ---
 
-# Chapter 6 — Register Contracts
+# Register Contracts
 
 `B` holds your loop counter. The loop calls a subroutine. `djnz` decrements `B` and branches back. But `B` now holds whatever the subroutine left there, not the value it had before the call. The loop runs the wrong number of iterations. The binary assembles without error.
 
@@ -385,7 +385,7 @@ The keys describe the boundary from the caller's point of view:
 .routine in A,DE,HL out carry clobbers BC
 ```
 
-Register pair names expand to their constituent 8-bit registers for analysis: `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
+Register pair names expand to their constituent 8-bit registers for analysis: `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](../appendices/appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
 
 ```asm
 .routine out carry,zero clobbers A
@@ -401,6 +401,33 @@ Individual flag names state precisely which status a routine returns:
 .routine in A,HL out carry clobbers BC
 CheckTile:
 ```
+
+Two flag conventions recur. Carry set reports success, cleared reports failure:
+
+```asm
+; TryRead: reads one byte into A. Carry set on success, clear when empty.
+.routine in HL out A,carry clobbers BC,HL
+TryRead:
+        ; ...
+        scf                     ; success
+        ret
+_empty:
+        or      a               ; clears carry
+        ret
+```
+
+Zero reports an emptiness or equality test. `or a` sets it from a byte already in `A` without altering that byte:
+
+```asm
+; IsEmpty: zero set when the count byte is zero.
+.routine out zero clobbers A
+IsEmpty:
+        ld      a,(Count)
+        or      a
+        ret
+```
+
+A contract records the carrier, never what the flag means; that stays in the comment above the directive. `out F.C` is not carrier syntax and is rejected with `invalid .routine out carrier list`.
 
 A register pair expresses a value that the routine treats as a unit:
 

@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 8
 ---
 
-# Chapter 8 — Diagnostics and Output
+# Diagnostics and Output
 
 AZM prints diagnostics before it returns. A successful assembly writes the enabled output artifacts and exits 0. An assembly error prevents successful program outputs such as `.bin` and `.hex`, although a requested register-contract report or source annotation may still be written to help resolve the failure.
 

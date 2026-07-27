@@ -1000,7 +1000,11 @@ add(
 );
 
 /* ============================================================
-   Chapter 12 — Register Contracts
+   Register contracts, for Book 1 Chapter 6
+
+   Book 2 stops at the machine, so these two are drawn here only because the
+   rest of this generator's vocabulary is here. Book 1 Chapter 6 is the only
+   place either one is embedded.
    ============================================================ */
 
 add(
@@ -1070,142 +1074,6 @@ add(
     text('dimn', 40, 290, 'HL was read afterwards. Reload it, save it across the call, or stop using it.'),
   ],
 );
-
-/* ============================================================
-   Chapter 13 — Layout Types
-   ============================================================ */
-
-add(
-  'record-layout.svg',
-  'A record and the constants it yields',
-  'The Sprite record as three consecutive bytes with x at offset 0, y at offset 1 and colour at offset 2, and sizeof reporting 3.',
-  292,
-  [
-    ...['Sprite .type', 'x       .byte', 'y       .byte', 'color   .byte', '.endtype'].map((l, i) =>
-      text('ts', 46, 44 + i * 20, l),
-    ),
-
-    caption(300, 32, 'In memory'),
-    strip({
-      x: 300,
-      y: 44,
-      cw: 86,
-      ch: 34,
-      cells: [
-        { v: 'x', sub: 'offset 0' },
-        { v: 'y', sub: 'offset 1' },
-        { v: 'color', sub: 'offset 2', hi: true },
-      ],
-    }),
-    pathEl('rule', 'M300,102 V116 H558 V102'),
-    text('dim', 429, 134, 'sizeof(Sprite) = 3', 'middle'),
-
-    text('cap', 46, 176, 'Assembly-time constants'),
-    ...[
-      'SpriteX     .equ offset(Sprite, x)       ; = 0',
-      'SpriteY     .equ offset(Sprite, y)       ; = 1',
-      'SpriteColor .equ offset(Sprite, color)   ; = 2',
-      'SpriteSize  .equ sizeof(Sprite)          ; = 3',
-    ].map((l, i) => text('ts', 46, 196 + i * 20, l)),
-
-    text('dimn', 46, 286, 'Add a field and every one of these updates. The description is in one place, so the offsets cannot drift from it.'),
-  ],
-);
-
-add(
-  'array-of-records.svg',
-  'An array of records, and reaching one field',
-  'Four Sprite records laid end to end with the three-byte stride marked between origins, and the arithmetic that lands on the colour byte of the third.',
-  268,
-  [
-    caption(46, 30, '.ds Sprite[4]'),
-    ...[0, 1, 2, 3].flatMap((n) => {
-      const x = 46 + n * 156;
-      return [
-        rect(n === 2 ? 'bxs' : 'bx', x, 44, 150, 34, 2),
-        text('t', x + 25, 66, 'x', 'middle'),
-        text('t', x + 75, 66, 'y', 'middle'),
-        text(n === 2 ? 'tb' : 't', x + 125, 66, 'color', 'middle'),
-        line('rule', x + 50, 44, x + 50, 78),
-        line('rule', x + 100, 44, x + 78 + 22, 78),
-        text('dim', x + 75, 96, `[${n}]`, 'middle'),
-      ];
-    }),
-
-    pathEl('rule', 'M46,112 V124 H196 V112'),
-    text('dim', 121, 142, 'stride = sizeof(Sprite) = 3', 'middle'),
-
-    text('cap', 46, 184, 'The colour byte of element 2'),
-    text('ts', 46, 208, 'base + 2 * sizeof(Sprite) + offset(Sprite, color)'),
-    text('ts', 46, 230, 'offset(Sprite[16], [2].color)     ; the same constant, folded'),
-
-    text('dimn', 46, 258, 'The stride is always the element size. AZM packs records exactly and never rounds a layout up for you.'),
-  ],
-);
-
-add(
-  'union-overlay.svg',
-  'A union is one set of bytes with two readings',
-  'The Payload union with asByte and asWord both starting at offset 0, drawn as two labelled views over the same two bytes.',
-  254,
-  [
-    ...['Payload .union', 'asByte  .byte', 'asWord  .word', '.endunion'].map((l, i) =>
-      text('ts', 46, 44 + i * 20, l),
-    ),
-
-    caption(320, 32, 'The bytes'),
-    strip({ x: 320, y: 44, cw: 90, ch: 34, cells: [{ v: 'lo' }, { v: 'hi' }] }),
-
-    rect('bxs', 320, 100, 90, 26, 2),
-    text('tb', 365, 118, 'asByte', 'middle'),
-    rect('bxs', 320, 136, 180, 26, 2),
-    text('tb', 410, 154, 'asWord', 'middle'),
-
-    text('dim', 520, 118, 'offset 0, 1 byte'),
-    text('dim', 520, 154, 'offset 0, 2 bytes'),
-    text('dim', 320, 190, 'sizeof(Payload) = 2, the largest member'),
-
-    text('dimn', 46, 226, 'Both fields start at offset 0. Reading asByte reads the low byte of whatever 16-bit value was stored there.'),
-    text('dimn', 46, 244, 'Reach for a union when the same bytes have more than one legitimate reading, not to save space.'),
-  ],
-);
-
-/* ============================================================
-   Chapter 14 — Op Declarations
-   ============================================================ */
-
-// The size comparison is computed, not asserted, because the honest answer is
-// that a short body inlines smaller than it calls and the chapter should not
-// pretend otherwise.
-{
-  const body = 4;      // push hl / push de / pop hl / pop de
-  const sites = 3;
-  const inline = body * sites;
-  const asCall = body + 1 + 3 * sites;   // body, ret, and three 3-byte calls
-  const bar = (x, y, bytes, label, hi) => [
-    rect(hi ? 'bxs' : 'bx', x, y, bytes * 16, 30, 2),
-    text(hi ? 'tb' : 't', x + bytes * 8, y + 20, `${bytes} bytes`, 'middle'),
-    text('dimn', x, y - 8, label),
-  ];
-  add(
-    'inline-versus-call.svg',
-    'What an op costs against what a call costs',
-    'Three call sites with a four-byte body inlined comes to twelve bytes; the same body as a subroutine comes to fourteen, being the body, a ret and three three-byte calls.',
-    296,
-    [
-      text('ts', 46, 40, 'op swap_hl_de()   ; push hl / push de / pop hl / pop de'),
-      text('dim', 46, 60, `body = ${body} bytes, used at ${sites} call sites`),
-
-      ...bar(46, 104, inline, 'Inlined at every site', true),
-      ...bar(46, 176, asCall, 'As a subroutine, called three times', false),
-      text('dim', 46 + asCall * 16 + 16, 196, `${body} body + 1 ret + ${sites} × 3 call`),
-
-      text('dimn', 46, 240, `Inlining wins here. A call costs three bytes at every site plus a ret, so a body this short is cheaper repeated`),
-      text('dimn', 46, 258, 'than shared. The crossover for three sites is a body of five bytes; above that, the subroutine is smaller.'),
-      text('dimn', 46, 276, 'Every invocation is a separate copy in the binary, and a disassembly shows exactly that.'),
-    ],
-  );
-}
 
 /* ---------- write ---------- */
 

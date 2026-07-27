@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 10
 ---
 
-# Chapter 10 - Arrays and Layout Types
+# Arrays and Layout Types
 
 Every game you have written so far has kept its whole world in a
 handful of named bytes. Today the world itself

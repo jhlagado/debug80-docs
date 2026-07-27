@@ -76,7 +76,7 @@ Every nontrivial routine in this book uses:
 - A `.routine` directive for `in`, `out`, `maybe-out`, `clobbers` and `preserves`
 - A non-local entry label; prefix it with `@` only when another source unit imports it
 
-`azm --rc warn` compares callers to callees the same way Book 2 Chapter 12 demonstrated.
+`azm --rc warn` compares callers to callees, which [Book 1 Chapter 6](../book1/06-register-contracts.md) covers in full.
 
 ---
 

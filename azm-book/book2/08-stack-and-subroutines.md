@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 8
 ---
 
-# Chapter 8 — Stack and Subroutines
+# Stack and Subroutines
 
 Larger programs need to reuse logic (the same comparison, the same output routine, the same byte-copying sequence) called from a dozen different places.
 

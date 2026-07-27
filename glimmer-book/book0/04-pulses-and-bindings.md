@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 4
 ---
 
-# Chapter 4 - Pulses and Bindings
+# Pulses and Bindings
 
 State describes the things a game remembers. This chapter is about
 the things it must catch: a fact persists, the beacon's position

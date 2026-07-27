@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 5
 ---
 
-# Chapter 4 — Bit Patterns
+# Bit Patterns
 
 Chapters 2 and 3 treated each byte as one number. Hardware status registers, UART flags and packed record fields treat a byte as **eight switches in one box**.
 
@@ -27,15 +27,25 @@ You could use eight bytes of RAM, which is wasteful on a small machine. One byte
 
 ---
 
-## Bit masks as `.equ` names
+## Bit positions as an enum, masks as shifts
 
-Each bit receives an assemble-time name:
+A flag has two numbers: its position (0, 1, 2) and its mask (`$01`, `$02`,
+`$04`). Written as six separate `.equ` lines they can disagree. An enum names
+the positions once, and each mask is a shift of the position it belongs to:
 
 ```asm
-FLAG_READY .equ $01    ; bit 0
-FLAG_ERROR .equ $02    ; bit 1
-FLAG_BUSY  .equ $04    ; bit 2
+StatusBit .enum Ready, Error, Busy
+
+FLAG_READY .equ 1 << StatusBit.Ready
+FLAG_ERROR .equ 1 << StatusBit.Error
+FLAG_BUSY  .equ 1 << StatusBit.Busy
 ```
+
+`.enum` assigns 0 to the first member, 1 to the second and so on, so
+`StatusBit.Busy` is 2 and `FLAG_BUSY` folds to `$04` at assembly time.
+Members are always qualified: `Busy` on its own is an error, and
+`StatusBit.Busy` is the spelling AZM accepts. Inserting a member renumbers
+every position after it, and the masks follow.
 
 `FLAG_READY` is not a memory address; it is the value `$01` substituted wherever it appears. Combining flags at assembly time is `or`:
 
@@ -97,7 +107,7 @@ the clear mask:
 
 ## `op` for flag idioms
 
-Book 2 Chapter 14: short sequences that repeat in one file are good `op` candidates: no `call` overhead, intent visible at the call site.
+Short sequences that repeat in one file are good `op` candidates: no `call` overhead, intent visible at the call site. [Book 1 Chapter 7](../book1/07-ops-aliases.md) covers `op` declarations.
 
 ```asm
 op bit_set(mask imm8)
@@ -162,9 +172,13 @@ For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, 
 
 ```asm
     ld a, (device_flags)
-    bit 2, a
+    bit StatusBit.Busy, a
     jr nz, _still_busy
 ```
+
+`bit` takes a bit **position**, not a mask, which is why the enum is worth
+having: `StatusBit.Busy` reads correctly here and `FLAG_BUSY` would not. The
+assembler emits `CB 57`, the same two bytes as `bit 2, a`.
 
 `bit` does not change A; it only sets flags. `and mask` is the appropriate form
 when storage requires a numeric 0/1 in A.

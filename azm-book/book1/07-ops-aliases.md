@@ -5,7 +5,7 @@ parent: "AZM Book 1 — Assembler Manual"
 nav_order: 7
 ---
 
-# Chapter 7 — Ops, Aliases and Source Composition
+# Ops, Aliases and Source Composition
 
 Op declarations name an instruction idiom so it can be reused, directive aliases let AZM read directive spellings from other assemblers, and `.include` and `.import` build one program out of several files.
 
@@ -123,6 +123,42 @@ DivSkip:
 end
 ```
 
+### Pseudo-opcodes for instruction-set gaps
+
+Some idioms exist only because the Z80 lacks the instruction. There is no 16-bit register-to-register load, so copying DE into HL is two 8-bit moves:
+
+```asm
+op ld_hl_de()
+  ld   h,d
+  ld   l,e
+end
+```
+
+A `reg16` parameter cannot generalize this. The matcher supplies the pair name, not its high and low halves, so a generic body has no way to write `ld h,d`. Each supported pairing needs its own declaration: `ld_hl_de`, `ld_de_hl`, `ld_bc_hl`.
+
+Where the instruction does exist, a parameterized op still names the intent:
+
+```asm
+op clear16(r reg16)
+  ld   r,0
+end
+
+        clear16  hl     ; expands to: ld hl,0
+        clear16  bc     ; expands to: ld bc,0
+```
+
+A named op also gives a condition its own word. `cp c` followed by `jr c` and `jr z` is "skip unless A is strictly above C", a reading no one recovers from the three instructions at a glance:
+
+```asm
+op jr_if_not_above(threshold reg8, target imm16)
+  cp   threshold
+  jr   c,target
+  jr   z,target
+end
+```
+
+The listing keeps the invocation as its source line and attributes the expanded bytes to it, rather than printing a copy of the body.
+
 ### Ops vs subroutines
 
 An op is appropriate when:
@@ -136,6 +172,12 @@ A subroutine is appropriate when:
 - The body is several instructions long and is called many times (code size matters)
 - The routine needs its own register contract, declared with `.routine`
 - You want callee-side register preservation
+
+The size trade is countable. For a body of N instructions used at K call sites, a subroutine stores the body once, adds one `ret` and one `call` per site: N + 1 + K encodings. An op emits N × K. At K = 1 the op is always smaller; at K = 2 the subroutine wins as soon as N exceeds 3.
+
+![A four-byte body inlined at three sites against the same body reached by call](../../assets/images/azm-book/book1/inline-versus-call.svg)
+
+That count is in instruction encodings, not bytes, and Z80 instructions run from one to four bytes each. At run time the subroutine also executes a `call` and a `ret` per invocation, where the op executes only its body.
 
 ### Nested ops and cycle detection
 
@@ -209,7 +251,7 @@ AZM's built-in aliases normalize exact undotted uppercase forms before parsing:
 | `DW` | `.dw` |
 | `DS` | `.ds` |
 
-The full built-in list is in [Appendix A](appendix-a-directives.md). Alias names are case-sensitive: `DB` normalizes to `.db`, while `db` and `Db` do not. Canonical directives use lowercase dotted forms.
+The full built-in list is in [Appendix A](../appendices/appendix-a-directives.md). Alias names are case-sensitive: `DB` normalizes to `.db`, while `db` and `Db` do not. Canonical directives use lowercase dotted forms.
 
 ### Project-specific alias files
 
@@ -275,6 +317,10 @@ Op declarations and layout types typically live in dedicated include files, pull
 ```
 
 `.import` loads another source file as a module-like unit. Its bytes are emitted at the import point. Declarations beginning with `@` are visible to the importing unit; plain non-local declarations remain inside the imported unit.
+
+An exported declaration is a plain identifier with `@` in front of it. The `@` is declaration syntax and not part of the name, so `@DoubleA:` declares the symbol `DoubleA` and call sites write `call DoubleA`. Exported names take PascalCase after the `@`. An owner-local label belongs to its routine rather than to the file's interface, so `@_clamp:` is an error.
+
+![Only an @ declaration leaves an imported source unit; a plain label and an owner-local label stop at the boundary](../../assets/images/azm-book/book1/export-boundary.svg)
 
 ```asm
 ; main.asm

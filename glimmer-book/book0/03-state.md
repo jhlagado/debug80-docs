@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 3
 ---
 
-# Chapter 3 - State
+# State
 
 In the last chapter you built Beacon, pressed GO, and watched one
 remembered fact, a colour, become light on the 8x8 RGB LED matrix.

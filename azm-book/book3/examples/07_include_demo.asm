@@ -4,6 +4,13 @@
 ; Run to halt, then inspect:
 ;   (str_len) at $8008 — length of message ("HELLO" → 5)
 
+; The message field is reserved at a fixed width so str_len keeps its address
+; when the text changes length. offset(DemoData, str_len) places it.
+DemoData .type
+message  .field byte[8]
+str_len  .byte
+.endtype
+
 .org $0000
 main:
     ld hl, message
@@ -13,10 +20,12 @@ main:
 
 .include "lib/strings.asm"
 
-.org $8000
+DEMO_BASE .equ $8000
+
+.org DEMO_BASE
 message:
     .db "HELLO", 0
 
-.org $8008
+.org DEMO_BASE + offset(DemoData, str_len)
 str_len:
     .ds byte

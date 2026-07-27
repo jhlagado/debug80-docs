@@ -1,8 +1,10 @@
 ---
 layout: default
 title: "Appendix B — Expression Operators"
-parent: "AZM Book 1 — Assembler Manual"
-nav_order: 102
+parent: "Appendices"
+grand_parent: "AZM Books"
+nav_group: "AZM Reference"
+nav_order: 2
 ---
 
 # Appendix B — Expression Operators

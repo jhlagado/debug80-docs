@@ -4,10 +4,33 @@
 ;   (solution_count) at $8000 — number of distinct 8-queen placements → $005C (92)
 ;   (solution_cols)  at $800A — last completed solution: col per row (8 bytes)
 
-BOARD_SIZE   .equ 8
-DIAG_BIAS    .equ 7
-DIAG_SUM_LEN .equ 15
-DIAG_DIFF_LEN .equ 15
+ColFlags  .typealias byte[8]     ; one flag per column, so also the board size
+DiagFlags .typealias byte[15]    ; one flag per diagonal: 2 * BOARD_SIZE - 1
+
+; The three constraint tables sit in one record so clear_constraints can zero
+; them in a single pass of sizeof(Constraints) bytes.
+Constraints .type
+colUsed      .field ColFlags
+diagSumUsed  .field DiagFlags
+diagDiffUsed .field DiagFlags
+.endtype
+
+QueenWorkspace .type
+solutionCount .word
+queenCols     .field ColFlags
+solutionCols  .field ColFlags
+constraints   .field Constraints
+.endtype
+
+BOARD_SIZE   .equ sizeof(ColFlags)
+DIAG_BIAS    .equ BOARD_SIZE - 1
+
+solution_count .equ <QueenWorkspace>queens_ws.solutionCount
+queen_cols     .equ <QueenWorkspace>queens_ws.queenCols
+solution_cols  .equ <QueenWorkspace>queens_ws.solutionCols
+col_used       .equ <QueenWorkspace>queens_ws.constraints.colUsed
+diag_sum_used  .equ <QueenWorkspace>queens_ws.constraints.diagSumUsed
+diag_diff_used .equ <QueenWorkspace>queens_ws.constraints.diagDiffUsed
 
 ; Recursive place_row stack budget:
 ;   each trial row: saved BC (2) + recursive return address (2)
@@ -17,6 +40,30 @@ PLACE_BASE_BYTES      .equ 4
 PLACE_MAX_DEPTH       .equ BOARD_SIZE + 1
 PLACE_MAX_STACK_BYTES .equ BOARD_SIZE * PLACE_STEP_BYTES + PLACE_BASE_BYTES
 STACK_TOP             .equ $9FFF
+
+; A square is either free or taken; the flag tables store nothing else.
+Slot .enum Free, Taken
+
+; Diagonal addressing is the one piece of index arithmetic that repeats. Each
+; op leaves HL on the flag byte for row B and column C, and expands inline.
+op diag_sum_addr()
+  ld a, b
+  add a, c              ; forward diagonal index = row + col
+  ld e, a
+  ld d, 0
+  ld hl, diag_sum_used
+  add hl, de
+end
+
+op diag_diff_addr()
+  ld a, b
+  add a, DIAG_BIAS
+  sub c                 ; backward diagonal index = row - col + DIAG_BIAS
+  ld e, a
+  ld d, 0
+  ld hl, diag_diff_used
+  add hl, de
+end
 
 .org $0000
 main:
@@ -33,7 +80,7 @@ main:
 .routine clobbers AF,BC,DE,HL
 clear_constraints:
     ld hl, col_used
-    ld bc, DIAG_SUM_LEN + DIAG_DIFF_LEN + BOARD_SIZE
+    ld bc, sizeof(Constraints)
     xor a
     ld b, a
 _zero_loop:
@@ -58,12 +105,7 @@ col_free:
 ; diag_sum_free: is forward diagonal (row+col) unused?
 .routine in B,C out zero clobbers A,DE,HL,sign,parity,halfCarry,carry
 diag_sum_free:
-    ld a, b
-    add a, c
-    ld e, a
-    ld d, 0
-    ld hl, diag_sum_used
-    add hl, de
+    diag_sum_addr
     ld a, (hl)
     or a
     ret
@@ -71,13 +113,7 @@ diag_sum_free:
 ; diag_diff_free: is backward diagonal (row-col+DIAG_BIAS) unused?
 .routine in B,C out zero clobbers A,DE,HL,sign,parity,halfCarry,carry
 diag_diff_free:
-    ld a, b
-    add a, DIAG_BIAS
-    sub c
-    ld e, a
-    ld d, 0
-    ld hl, diag_diff_used
-    add hl, de
+    diag_diff_addr
     ld a, (hl)
     or a
     ret
@@ -89,33 +125,22 @@ mark_constraints:
     ld d, 0
     ld e, c
     add hl, de
-    ld a, 1
+    ld a, Slot.Taken
     ld (hl), a
 
     ld hl, queen_cols
     ld d, 0
     ld e, b
     add hl, de
-    ld a, c
+    ld a, c               ; queen_cols holds a column number, not a Slot
     ld (hl), a
 
-    ld a, b
-    add a, c
-    ld e, a
-    ld d, 0
-    ld hl, diag_sum_used
-    add hl, de
-    ld a, 1
+    diag_sum_addr
+    ld a, Slot.Taken
     ld (hl), a
 
-    ld a, b
-    add a, DIAG_BIAS
-    sub c
-    ld e, a
-    ld d, 0
-    ld hl, diag_diff_used
-    add hl, de
-    ld a, 1
+    diag_diff_addr
+    ld a, Slot.Taken
     ld (hl), a
     ret
 
@@ -126,25 +151,14 @@ unmark_constraints:
     ld d, 0
     ld e, c
     add hl, de
+    xor a                 ; one byte, and Slot.Free is zero
+    ld (hl), a
+
+    diag_sum_addr
     xor a
     ld (hl), a
 
-    ld a, b
-    add a, c
-    ld e, a
-    ld d, 0
-    ld hl, diag_sum_used
-    add hl, de
-    xor a
-    ld (hl), a
-
-    ld a, b
-    add a, DIAG_BIAS
-    sub c
-    ld e, a
-    ld d, 0
-    ld hl, diag_diff_used
-    add hl, de
+    diag_diff_addr
     xor a
     ld (hl), a
     ret
@@ -217,15 +231,5 @@ _count_done:
     ret
 
 .org $8000
-solution_count:
-    .ds word
-queen_cols:
-    .ds BOARD_SIZE
-solution_cols:
-    .ds BOARD_SIZE
-col_used:
-    .ds BOARD_SIZE
-diag_sum_used:
-    .ds DIAG_SUM_LEN
-diag_diff_used:
-    .ds DIAG_DIFF_LEN
+queens_ws:
+    .ds QueenWorkspace

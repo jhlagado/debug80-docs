@@ -89,5 +89,5 @@
   <rect class="bxs" x="406" y="222" width="254" height="30" rx="3"/>
   <text class="tb" x="533" y="242" text-anchor="middle" xml:space="preserve">CopyRow._loop</text>
   <text class="dimn" x="30" y="272" text-anchor="start" xml:space="preserve">The same _loop spelling under a different owner is a different symbol.</text>
-  <text class="dimn" x="30" y="290" text-anchor="start" xml:space="preserve">A local label cannot be exported, so @_loop: is an error.</text>
+  <text class="dimn" x="30" y="290" text-anchor="start" xml:space="preserve">Equates, enum members, type names and op names cannot begin with an underscore.</text>
 </svg>

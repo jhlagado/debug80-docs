@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 10
 ---
 
-# Chapter 9 — Capstone
+# Capstone
 
 The preceding chapters sorted tables, walked strings, packed flags into bytes,
 built a ring buffer, used recursive calls, split files with `.include` and
@@ -37,26 +37,31 @@ appear occupied and prune valid branches from the search.
 
 ---
 
-## Board representation in bytes
+## Board representation as one record
 
 Five structures live in workspace RAM:
 
-| Structure | Size | Role |
-|-----------|------|------|
-| `queen_cols` | 8 bytes | Current search path: `queen_cols[r]` = tentative column for row `r` |
-| `solution_cols` | 8 bytes | Last completed solution copied from `queen_cols` |
-| `col_used` | 8 bytes | `$00` = column free, `$01` = occupied |
-| `diag_sum_used` | 15 bytes | Forward diagonal index `row + col` (0..14) |
-| `diag_diff_used` | 15 bytes | Backward diagonal index `row - col + DIAG_BIAS` (0..14) |
+| Field | Size | Role |
+|-------|------|------|
+| `queenCols` | `sizeof(ColFlags)` | Current search path: one tentative column per row |
+| `solutionCols` | `sizeof(ColFlags)` | Last completed solution copied from `queenCols` |
+| `constraints.colUsed` | `sizeof(ColFlags)` | `Slot.Free` or `Slot.Taken` per column |
+| `constraints.diagSumUsed` | `sizeof(DiagFlags)` | Forward diagonal index `row + col` |
+| `constraints.diagDiffUsed` | `sizeof(DiagFlags)` | Backward diagonal index `row - col + DIAG_BIAS` |
 
-`DIAG_BIAS` is 7 so the smallest index is 0 when `row = 0` and `col = 7`.
+Two array aliases carry the only literal counts in the program, and everything
+else is derived from them:
 
 ```asm
-BOARD_SIZE    .equ 8
-DIAG_BIAS     .equ 7
-DIAG_SUM_LEN  .equ 15
-DIAG_DIFF_LEN .equ 15
+ColFlags  .typealias byte[8]     ; one flag per column, so also the board size
+DiagFlags .typealias byte[15]    ; one flag per diagonal: 2 * BOARD_SIZE - 1
+
+BOARD_SIZE .equ sizeof(ColFlags)
+DIAG_BIAS  .equ BOARD_SIZE - 1
 ```
+
+`DIAG_BIAS` is one less than the board size, so the smallest backward-diagonal
+index is 0 when `row = 0` and `col = BOARD_SIZE - 1`.
 
 ![One queen threatens a row, a column and two diagonals, and costs exactly three flag bytes](../../assets/images/azm-book/book3/queens-board.svg)
 
@@ -65,28 +70,66 @@ column or diagonal already taken?" Chapter 4's masks could pack all eight
 column flags into one byte. The companion instead uses one byte per column so
 every test is `ld a, (hl)` / `or a` / `jr nz`.
 
-The companion keeps separate `.ds` labels for teaching clarity. A larger
-project can fold the workspace into one record and name every field offset
-once, using the same idiom as Chapter 5's ring buffer:
+### The three flag tables are one record
+
+`clear_constraints` zeroes the three flag tables in a single `ldir`-style pass.
+That only works if they are contiguous and in a known order, which is a
+property of the layout, not of the loop. So the layout says it:
 
 ```asm
-QueenWorkspace .type
-solution_count .word
-queen_cols     .field byte[8]
-solution_cols  .field byte[8]
-col_used       .field byte[8]
-diag_sum_used  .field byte[15]
-diag_diff_used .field byte[15]
+Constraints .type
+colUsed      .field ColFlags
+diagSumUsed  .field DiagFlags
+diagDiffUsed .field DiagFlags
 .endtype
 
-QS_SOLUTION .equ offset(QueenWorkspace, solution_count)
-QS_COLS     .equ offset(QueenWorkspace, queen_cols)
-; ... then use (ix + QS_COLS) as the base of the queen_cols field
+QueenWorkspace .type
+solutionCount .word
+queenCols     .field ColFlags
+solutionCols  .field ColFlags
+constraints   .field Constraints
+.endtype
 ```
 
-`queen_cols` changes as the search tries placements. `count_solution` copies
-all eight bytes to `solution_cols`, preserving the last completed board after
-backtracking continues.
+The whole workspace is then one reservation, and each old label becomes a
+layout cast that folds to the same immediate address:
+
+```asm
+solution_count .equ <QueenWorkspace>queens_ws.solutionCount
+queen_cols     .equ <QueenWorkspace>queens_ws.queenCols
+solution_cols  .equ <QueenWorkspace>queens_ws.solutionCols
+col_used       .equ <QueenWorkspace>queens_ws.constraints.colUsed
+diag_sum_used  .equ <QueenWorkspace>queens_ws.constraints.diagSumUsed
+diag_diff_used .equ <QueenWorkspace>queens_ws.constraints.diagDiffUsed
+
+.org $8000
+queens_ws:
+    .ds QueenWorkspace
+```
+
+Every `ld hl, col_used` in the rest of the program still assembles to
+`ld hl, imm16`; the difference is that the immediate now comes from the field
+list. Widening the board to 10 columns is a change to `ColFlags` and
+`DiagFlags`, after which the addresses, the clear length and `BOARD_SIZE` all
+follow.
+
+`queenCols` changes as the search tries placements. `count_solution` copies
+all `BOARD_SIZE` bytes to `solutionCols`, preserving the last completed board
+after backtracking continues.
+
+### Free and taken as an enum
+
+A flag byte holds one of two values, so it gets a name for each:
+
+```asm
+Slot .enum Free, Taken
+```
+
+`Slot.Free` is 0 and `Slot.Taken` is 1. `mark_constraints` stores
+`ld a, Slot.Taken`, which is the same `3E 01` as `ld a, 1` was.
+`unmark_constraints` keeps `xor a` because it is one byte rather than two, with
+a comment noting that zero is `Slot.Free`. Enum members must be qualified;
+`Taken` alone is rejected.
 
 ---
 
@@ -109,31 +152,52 @@ col_free:
     ret
 ```
 
-**Forward diagonal** (index `row + col` into `diag_sum_used`):
+**Diagonal addressing** is the one piece of index arithmetic the program
+repeats: `diag_sum_free`, `mark_constraints` and `unmark_constraints` all need
+the same six instructions, and so do their backward-diagonal counterparts. Two
+`op` declarations name the calculation and expand inline at each of the six
+sites:
+
+```asm
+op diag_sum_addr()
+  ld a, b
+  add a, c              ; forward diagonal index = row + col
+  ld e, a
+  ld d, 0
+  ld hl, diag_sum_used
+  add hl, de
+end
+
+op diag_diff_addr()
+  ld a, b
+  add a, DIAG_BIAS
+  sub c                 ; backward diagonal index = row - col + DIAG_BIAS
+  ld e, a
+  ld d, 0
+  ld hl, diag_diff_used
+  add hl, de
+end
+```
+
+The bias keeps the backward index non-negative: `row - col` runs from
+`-(BOARD_SIZE - 1)` to `BOARD_SIZE - 1`, and adding `DIAG_BIAS` slides that
+range to `0 .. sizeof(DiagFlags) - 1`.
+
+**Forward diagonal** then reads as the question it is asking:
 
 ```asm
 ; diag_sum_free: is forward diagonal (row+col) unused?
 .routine in B,C out zero clobbers A,DE,HL,sign,parity,halfCarry,carry
 diag_sum_free:
-    ld a, b
-    add a, c
-    ld e, a
-    ld d, 0
-    ld hl, diag_sum_used
-    add hl, de
+    diag_sum_addr
     ld a, (hl)
     or a
     ret
 ```
 
-**Backward diagonal** (use `row - col + DIAG_BIAS` so the index stays in the
-range 0–14):
-
-```asm
-    ld a, b
-    add a, DIAG_BIAS
-    sub c
-```
+There is no `call` here. The listing file prints the six expanded instructions
+and their bytes beside the `diag_sum_addr` line, and `--rc warn` analyses those
+instructions, which is why the contract still declares DE and HL clobbered.
 
 Each failed check jumps to `_next_col` in the row driver, the flat-ASM equivalent of "try the next column" without a `continue` keyword.
 
@@ -158,9 +222,11 @@ When all three tests pass, **mark** before `call place_row` and **unmark** after
     pop bc
 ```
 
-`mark_constraints` sets `col_used[c]`, both diagonal bytes and
-`queen_cols[row]`. `unmark_constraints` clears the flags. The next trial may
-overwrite `queen_cols`, so only `solution_cols` is a stable completed board.
+`mark_constraints` writes `Slot.Taken` into `col_used[c]` and both diagonal
+bytes, and records the column number in `queen_cols[row]`.
+`unmark_constraints` clears the three flags and leaves `queen_cols` alone. The
+next trial may overwrite `queen_cols`, so only `solution_cols` is a stable
+completed board.
 
 `push bc` around each helper preserves **B = row** and **C = column** across `call`s that clobber AF and HL.
 
@@ -187,12 +253,12 @@ _try_cols:
 _col_loop:
     ld a, c
     cp BOARD_SIZE
-    jr nc, _done
+    jr nc, _row_done
     ; ... col_free, diag_sum_free, diag_diff_free ...
     ; ... mark, inc b, call place_row, unmark ...
     inc c
     jr _col_loop
-_done:
+_row_done:
     ret
 ```
 
@@ -242,23 +308,23 @@ main:
     halt
 ```
 
-`clear_constraints` zeroes 38 bytes in one loop (`col_used`, both diagonal
-tables). Neither column array needs clearing: every completed path writes all
-eight `queen_cols` entries before they are copied to `solution_cols`.
+`clear_constraints` zeroes `sizeof(Constraints)` bytes in one loop, which is
+`col_used` and both diagonal tables and nothing else:
+
+```asm
+clear_constraints:
+    ld hl, col_used
+    ld bc, sizeof(Constraints)
+```
+
+Neither column array needs clearing: every completed path writes all
+`BOARD_SIZE` `queen_cols` entries before they are copied to `solution_cols`.
 
 ---
 
 ## Memory after `halt`
 
-```
-  $8000  ┌────────┬────────┐
-         │ $5C    │ $00    │  solution_count (word) = 92
-  $8002  ├────────┴────────┴── queen_cols[8] — final abandoned search path
-  $800A  ├────────────────────── solution_cols[8] — last complete solution
-  $8012  ├────────────────────── col_used[8]
-         ├────────────────────── diag_sum_used[15]
-         └────────────────────── diag_diff_used[15]
-```
+![Every field offset and address in the workspace comes from one type declaration](../../assets/images/azm-book/book3/queens-workspace.svg)
 
 After execution reaches `halt`, `$005C` in `solution_count` confirms that the
 search completed. A single-step trace with column 0 accepted on row 0 shows
@@ -273,7 +339,9 @@ backtracking after a deeper row fails.
 |--------------|------|
 | Byte arrays + indexing (Ch. 2) | `col_used`, diagonal tables |
 | Bit thinking (Ch. 4) | Optional bitboard exercise |
-| Records / workspace (Ch. 5) | Fixed layout at `$8000` |
+| Records / workspace (Ch. 5) | `QueenWorkspace` at `$8000`, addressed by layout cast |
+| Enums (Book 1 Ch. 3) | `Slot.Free` and `Slot.Taken` in the flag tables |
+| Ops (Book 1 Ch. 7) | `diag_sum_addr`, `diag_diff_addr` |
 | Recursion + stack (Ch. 6) | `place_row` self-call, SP init |
 | Small routines with `.routine` contracts (Ch. 1, 7) | `col_free`, `mark_constraints`, … |
 | Pointers (Ch. 8) | Not required — pure tables |

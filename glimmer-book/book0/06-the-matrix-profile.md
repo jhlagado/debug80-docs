@@ -5,7 +5,7 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 6
 ---
 
-# Chapter 6 - The 8x8 Matrix Profile
+# The 8x8 Matrix Profile
 
 The TEC-1G has no video chip. The display is eight rows of eight RGB LEDs, and the
 hardware can light exactly one row at a time. Three ports carry a

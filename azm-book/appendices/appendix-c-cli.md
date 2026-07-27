@@ -1,8 +1,10 @@
 ---
 layout: default
 title: "Appendix C — CLI Flag Reference"
-parent: "AZM Book 1 — Assembler Manual"
-nav_order: 103
+parent: "Appendices"
+grand_parent: "AZM Books"
+nav_group: "AZM Reference"
+nav_order: 3
 ---
 
 # Appendix C — CLI Flag Reference

@@ -5,7 +5,7 @@ parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 6
 ---
 
-# Chapter 6 — Counting Loops and DJNZ
+# Counting Loops and DJNZ
 
 The `dec b / jp nz` loop from Chapter 5 uses two instructions where one would do.
 This chapter shows the single-instruction replacement, and the three loop forms

@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 7
 ---
 
-# Chapter 6 — Recursion
+# Recursion
 
 Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
 
@@ -240,7 +240,7 @@ companion routine shows HL growing after each `ret` during the unwind.
 
 ## Register contracts on recursive entries
 
-Recursive routines use the same register contract shape as every other routine (Book 2 Chapter 12):
+Recursive routines use the same register contract shape as every other routine ([Book 1 Chapter 6](../book1/06-register-contracts.md)):
 
 - human `;` line stating the job
 - one `.routine` directive with `in`, `out`, `maybe-out`, `clobbers` or `preserves` as needed

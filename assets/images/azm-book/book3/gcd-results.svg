@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="292" viewBox="0 0 720 292" role="img" aria-labelledby="figTitle figDesc">
-  <title id="figTitle">A record and the constants it yields</title>
-  <desc id="figDesc">The Sprite record as three consecutive bytes with x at offset 0, y at offset 1 and colour at offset 2, and sizeof reporting 3.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="366" viewBox="0 0 720 366" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Where a word result and a byte result land in memory</title>
+  <desc id="figDesc">HL holding 00 in H and 06 in L, stored to gcd_result at $8000 as low byte then high byte with the two halves crossing over, and power_result holding 51 in the single byte at $8002.</desc>
   <defs>
     <style>
     :root {
@@ -65,27 +65,34 @@
       <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
     </marker>
   </defs>
-  <text class="ts" x="46" y="44" text-anchor="start" xml:space="preserve">Sprite .type</text>
-  <text class="ts" x="46" y="64" text-anchor="start" xml:space="preserve">x       .byte</text>
-  <text class="ts" x="46" y="84" text-anchor="start" xml:space="preserve">y       .byte</text>
-  <text class="ts" x="46" y="104" text-anchor="start" xml:space="preserve">color   .byte</text>
-  <text class="ts" x="46" y="124" text-anchor="start" xml:space="preserve">.endtype</text>
-  <text class="cap" x="300" y="32" text-anchor="start" xml:space="preserve">IN MEMORY</text>
-  <rect class="bx" x="300" y="44" width="86" height="34" rx="2"/>
-  <text class="t" x="343" y="65.5" text-anchor="middle" xml:space="preserve">x</text>
-  <text class="dimn" x="343" y="92" text-anchor="middle" xml:space="preserve">offset 0</text>
-  <rect class="bx" x="386" y="44" width="86" height="34" rx="2"/>
-  <text class="t" x="429" y="65.5" text-anchor="middle" xml:space="preserve">y</text>
-  <text class="dimn" x="429" y="92" text-anchor="middle" xml:space="preserve">offset 1</text>
-  <rect class="bxs" x="472" y="44" width="86" height="34" rx="2"/>
-  <text class="tb" x="515" y="65.5" text-anchor="middle" xml:space="preserve">color</text>
-  <text class="dimn" x="515" y="92" text-anchor="middle" xml:space="preserve">offset 2</text>
-  <path class="rule" d="M300,102 V116 H558 V102"/>
-  <text class="dim" x="429" y="134" text-anchor="middle" xml:space="preserve">sizeof(Sprite) = 3</text>
-  <text class="cap" x="46" y="176" text-anchor="start" xml:space="preserve">Assembly-time constants</text>
-  <text class="ts" x="46" y="196" text-anchor="start" xml:space="preserve">SpriteX     .equ offset(Sprite, x)       ; = 0</text>
-  <text class="ts" x="46" y="216" text-anchor="start" xml:space="preserve">SpriteY     .equ offset(Sprite, y)       ; = 1</text>
-  <text class="ts" x="46" y="236" text-anchor="start" xml:space="preserve">SpriteColor .equ offset(Sprite, color)   ; = 2</text>
-  <text class="ts" x="46" y="256" text-anchor="start" xml:space="preserve">SpriteSize  .equ sizeof(Sprite)          ; = 3</text>
-  <text class="dimn" x="46" y="286" text-anchor="start" xml:space="preserve">Add a field and every one of these updates. The description is in one place, so the offsets cannot drift from it.</text>
+  <text class="cap" x="250" y="30" text-anchor="start" xml:space="preserve">HL WHEN GCD_U16 RETURNS</text>
+  <rect class="bx" x="250" y="48" width="100" height="36" rx="2"/>
+  <text class="t" x="300" y="70.5" text-anchor="middle" xml:space="preserve">00</text>
+  <text class="dimn" x="300" y="98" text-anchor="middle" xml:space="preserve">H</text>
+  <rect class="bx" x="350" y="48" width="100" height="36" rx="2"/>
+  <text class="t" x="400" y="70.5" text-anchor="middle" xml:space="preserve">06</text>
+  <text class="dimn" x="400" y="98" text-anchor="middle" xml:space="preserve">L</text>
+  <text class="t" x="40" y="72" text-anchor="start" xml:space="preserve">ld (gcd_result), hl</text>
+  <text class="dimn" x="40" y="94" text-anchor="start" xml:space="preserve">one store, two bytes</text>
+  <path class="sline" d="M400,112 V136 H300 V172" marker-end="url(#arS)"/>
+  <path class="sline" d="M300,112 V154 H400 V172" marker-end="url(#arS)"/>
+  <text class="dimn" x="40" y="140" text-anchor="start" xml:space="preserve">low byte first,</text>
+  <text class="dimn" x="40" y="158" text-anchor="start" xml:space="preserve">high byte second</text>
+  <rect class="bxs" x="250" y="176" width="100" height="36" rx="2"/>
+  <text class="tb" x="300" y="198.5" text-anchor="middle" xml:space="preserve">06</text>
+  <text class="dimn" x="300" y="226" text-anchor="middle" xml:space="preserve">$8000</text>
+  <rect class="bxs" x="350" y="176" width="100" height="36" rx="2"/>
+  <text class="tb" x="400" y="198.5" text-anchor="middle" xml:space="preserve">00</text>
+  <text class="dimn" x="400" y="226" text-anchor="middle" xml:space="preserve">$8001</text>
+  <path class="rule" d="M250,236 V248 H450 V236"/>
+  <text class="dimn" x="350" y="266" text-anchor="middle" xml:space="preserve">gcd_result, .ds word</text>
+  <text class="cap" x="500" y="156" text-anchor="start" xml:space="preserve">POWER_U8</text>
+  <rect class="bxs" x="500" y="176" width="100" height="36" rx="2"/>
+  <text class="tb" x="550" y="198.5" text-anchor="middle" xml:space="preserve">51</text>
+  <text class="dimn" x="550" y="226" text-anchor="middle" xml:space="preserve">$8002</text>
+  <path class="rule" d="M500,236 V248 H600 V236"/>
+  <text class="dimn" x="550" y="266" text-anchor="middle" xml:space="preserve">power_result, .ds byte</text>
+  <text class="dimn" x="40" y="306" text-anchor="start" xml:space="preserve">.ds word reserves two bytes and .ds byte reserves one, so the two results sit at $8000 and $8002 with nothing counted by hand.</text>
+  <text class="dimn" x="40" y="324" text-anchor="start" xml:space="preserve">Reading $8000 and $8001 back as a word gives 6; the byte at $8002 is 81.</text>
+  <text class="dimn" x="40" y="350" text-anchor="start" xml:space="preserve">Little-endian order applies to every 16-bit store, not only to this one.</text>
 </svg>

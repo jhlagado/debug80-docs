@@ -5,7 +5,7 @@ parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 3
 ---
 
-# Chapter 2 — Arrays and Loops
+# Arrays and Loops
 
 Chapter 1 kept every value in registers. Sorting and searching need **indexed storage**: many bytes in a row, one element selected by offset.
 
@@ -31,17 +31,20 @@ Two separate algorithms, one representation:
 A byte array is a label, a length and consecutive bytes in memory:
 
 ```asm
-ARRAY_LEN .equ 8
-
 .org $8000
 values:
     .db 9, 4, 6, 2, 8, 1, 7, 3
+ARRAY_LEN .equ $ - values
 ```
 
-`values` is the **base address**, the address of `values[0]`, not the first element's numeric value. `ARRAY_LEN` is a compile-time constant from `.equ`.
+`values` is the **base address**, the address of `values[0]`, not the first
+element's numeric value. `$` is the current assembly address, so `$ - values`
+is the number of bytes the `.db` line just emitted. Writing `ARRAY_LEN .equ 8`
+instead would mean counting the initialisers by eye and recounting them after
+every edit.
 
 Layout types provide self-documenting sizes when an array needs uninitialized
-storage (Book 2 Chapter 13):
+storage ([Book 1 Chapter 5](../book1/05-layout-system.md)):
 
 ```asm
 values:
@@ -60,14 +63,7 @@ Reading `values[i]` when `i` fits in one byte takes four steps:
 3. `add hl, bc` advances HL to element i.
 4. `ld a, (hl)` loads the element into A.
 
-```
-  values + 0   values + 1   values + 2
-  ┌────┬────┬────┬────┬────┬────┬────┬────┐
-  │  9 │  4 │  6 │  2 │  8 │  1 │  7 │  3 │
-  └────┴────┴────┴────┴────┴────┴────┴────┘
-    ▲
-    HL when i = 0
-```
+![Four instructions turn a label and an index into the address of one element](../../assets/images/azm-book/book3/array-indexing.svg)
 
 For sequential scans, `inc hl` after each read is cheaper than recomputing base + i.
 
