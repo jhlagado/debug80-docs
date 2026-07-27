@@ -22,10 +22,7 @@ author: "Brian Chiha"
 
 This web edition is adapted from the original PDF title page credit: [**User Guide By Brian Chiha v1.6**](https://github.com/MarkJelic/TEC-1G/blob/main/files/MON3_User_Guide_v1-6.pdf). Brian Chiha is the author of this text and should be credited as the author wherever this guide is referenced.
 
-Mon3 (Talking Electronics Computer Monitor version 3) is custom-built for the
-TEC-1G single-board Z80 computer. It provides the operating environment used
-to program the machine. The monitor is approachable for beginners learning
-Z80 while still providing services for advanced software development.
+Mon3 (Talking Electronics Computer Monitor version 3) is custom-built for the TEC-1G Single Board Z80 Computer. Mon3 is the heart of the TEC-1G. It brings the hardware to life. Consider it an operating system that provides the ability to program the TEC. The monitor is designed for beginners who are just learning to code Z80 and rich enough for the advanced software developer.
 
 The version of this document matches the monitor's binary file version. For example, version 1.2 of this document is for file `MON3-1G_BC23-12.bin`. The `12` at the end of the file is the version number.
 
@@ -113,7 +110,7 @@ MON-3 provides the operating environment for the TEC-1G: reset behaviour, the ma
    - [Seven Segment Scroller via the Serial Terminal](09-quick-start-programs.md#seven-segment-scroller-via-the-serial-terminal)
    - [Making Bubbles](09-quick-start-programs.md#making-bubbles)
    - [GLCD Font Display](09-quick-start-programs.md#glcd-font-display)
-   - [GLCD Serial Terminal](09-quick-start-programs.md#glcd-serial-terminal)
+   - [Use the GLCD as a Serial Terminal](09-quick-start-programs.md#use-the-glcd-as-a-serial-terminal)
 10. [Appendix and Useful Links](10-appendix-and-useful-links.md)
    - [Ports](10-appendix-and-useful-links.md#ports)
    - [Serial Connection](10-appendix-and-useful-links.md#serial-connection)

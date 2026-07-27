@@ -11,8 +11,8 @@ search: false
 
 # Advanced Programming
 
-MON-3 contains built-in services that simplify access to TEC-1G hardware
-from Z80 programs.
+To assist when developing Z80 programs, Mon3 contains built-in
+functionality that makes it easy to interface with the TEC-1G hardware.
 
 ## RST (Restart) commands
 
@@ -27,7 +27,7 @@ outlines the routines.
 | `RST 10H` | `D7` | API entry call. Executes a monitor routine. See the API calls section below for details. |
 | `RST 18H` | `DF` | API 2 entry call. Graphical LCD routine entry. See the [Graphical LCD Add-On](07-graphical-lcd.md) chapter for details. |
 | `RST 20H` | `E7` | Scan Seven Segments and Keys. Multiplexes the seven-segment displays and checks for a key press. It can be used to display information on the seven segments and check for a key to be pressed. It must be called in a loop until a key is pressed to maintain seven-segment persistence. Returns Zero flag set when a key is pressed and register `A` with the key value. Register `DE` points to the seven-segment data. See the first program in the Quick Start Programs chapter for an example. Registers `DE`, `A`, and `B` are modified. |
-| `RST 28H` | `EF` | LCD Busy Check. Direct LCD communication calls this routine before sending a command. The routine exits only when the LCD Busy flag is clear.<br><br>`RST 28H` checks the LCD busy flag.<br>`LD A,01H` loads `A` with a clear-screen instruction.<br>`OUT (04),A` sends the instruction to the LCD. |
+| `RST 28H` | `EF` | LCD Busy Check. Call before sending a command to the LCD when directly communicating with the LCD. The routine only exits when the LCD Busy flag is not set.<br><br>`RST 28H` checks the LCD busy flag.<br>`LD A,01H` loads `A` with a clear-screen instruction.<br>`OUT (04),A` sends the instruction to the LCD. |
 | `RST 30H` | `F7` | Breakpoint entry. Breaks code execution at the current address location. See the Debugging Programs section for details. |
 | `RST 38H` | `FF` | Maskable interrupt handler. Jumps here with Interrupts Enabled (`EI`), Interrupt Mode 1 (`IM 1`), and when the `INT` pin on the CPU goes low. Mon3 does nothing when this happens, but a user-defined routine can be used. See the Interrupt section below. |
 
@@ -37,8 +37,8 @@ The Z80 CPU has the ability to interrupt the execution of code, handle the
 interrupt and then resume code execution.  This is done in software with
 Interrupts Enabled (EI) and Interrupt Mode 1 (IM 1) and by hardware when
 the INT line on the CPU goes low.  Mon3 ignores interrupts, but a
-user-defined routine can handle the interrupt. Its address is stored at RAM
-address <span class="mon3-address-emphasis">0892H</span>.
+user-defined routine can be provided to handle the interrupt.  To do this,
+the address of the interrupt routine is to be placed at RAM address <span class="mon3-address-emphasis">0892H</span>.
 
 ```asm
        ei                 ; Enable interrupts
@@ -60,8 +60,8 @@ This code will sound a bell tone in the speaker when an interrupt occurs.
 
 Non-Maskable Interrupts occur when the NMI line on the CPU goes low.
 These interrupts will always trigger.  Mon3 ignores the NMI line, but a
-user-defined routine can handle the interrupt. Its address is stored at RAM
-address <span class="mon3-address-emphasis">0894H</span>.
+user-defined routine can be provided to handle the interrupt.  To do this,
+the address of the interrupt routine is to be placed at RAM address <span class="mon3-address-emphasis">0894H</span>.
 
 ```asm
      ld hl,myNMI            ; NMI routine
@@ -85,8 +85,8 @@ HALT instruction or externally (no jumper).
 
 ## API (Application Programming Interface) commands
 
-The MON-3 API exposes monitor routines to application programs. It makes
-code shorter and easier to write by providing
+The API on Mon3 exposes routines used by Mon3 which can be used in
+your own programs. It makes writing code quicker and easier by exposing
 monitor services through a small call interface.
 
 ### General conventions
@@ -122,9 +122,9 @@ D7        rst 10H
 ```
 
 
-For API call-number references, the file `api_includes.z80` in the
-GitHub repository, maps each API call number to its text equivalent for
-application code.
+To assist with API call number references, the file api_includes.z80, in the
+GitHub repository, contains the API Call Number with its Text equivalent for
+use with your own code.
 
 See the [MON-3 source in the TEC-1G repository](https://github.com/MarkJelic/TEC-1G/tree/main/ROMs/MON3/source).
 
@@ -236,13 +236,13 @@ See the [MON-3 source in the TEC-1G repository](https://github.com/MarkJelic/TEC
 ## API Utility Calls
 
 ### softwareID #0 (00H)
-Returns the software ID string.
+Get Software ID String
 - Input: nothing
 - Return: HL = Pointer to SOFTWARE ASCII String
 - Destroy: none
 
 ### versionID #1 (01H)
-Returns the version number and version string.
+Get Version Number and Version String
 - Input: nothing
 - Return: `HL` = pointer to release ASCII string
 - Return: `BC` = release major version number
@@ -259,13 +259,13 @@ Makes a short beep tone to the TEC Speaker
 - Destroys: A
 
 ### convAToSeg #4 (04H)
-Converts register A to seven-segment display format.
+Convert register A to Seven Segment display format
 - Inputs: `A` = byte to convert
 - Inputs: `DE` = address to store segment values (2 bytes)
 - Destroys: `BC`
 
 ### regAToASCII #5 (05H)
-Converts register A to ASCII. For example, 2CH becomes `"2C"`.
+Convert register A to ASCII. IE: 2CH -> "2C"
 - Input: A = byte to convert
 - Output: HL = two-byte ASCII string
 - Destroys: A
@@ -278,7 +278,7 @@ format
 - Destroys: none
 
 ### stringCompare #7 (07H)
-Compares two strings.
+Compare two string
 - Input: `HL` = source pointer
 - Input: `DE` = target pointer
 - Input: `B` = bytes to compare (up to 256)
@@ -286,32 +286,32 @@ Compares two strings.
 - Destroys: `HL`, `DE`, `A`, `BC`
 
 ### HLToString #8 (08H)
-Converts HL to an ASCII string. For example, <span class="mon3-address-emphasis">2C0FH</span> becomes `"2C0F"`.
+Convert HL to ASCII string. IE: <span class="mon3-address-emphasis">2C0FH</span> -> "2C0F"
 - Input: `HL` = value to convert
 - Input: `DE` = address of string destination (4 bytes)
 - Output: `DE` = address one after last ASCII entry
 - Destroys: `A`
 
 ### AToString #9 (09H)
-Converts register A to an ASCII string. For example, 2CH becomes `"2C"`.
+Convert register A to ASCII string. IE: 2CH -> "2C"
 - Input: `A` = byte to convert
 - Input: `DE` = address of string destination (2 bytes)
 - Output: `DE` = address one after last ASCII entry
 - Destroys: `A`
 
 ### scanSegments #10 (0AH)
-Multiplexes the seven-segment displays with the contents of DE. Repeated
-calls maintain display persistence.
+Multiplex the Seven Segment displays with the contents of DE.  Must be
+called repetitively for segments to stay persistent.
 - Inputs: DE = pointer to 6-byte location of segment data
 - Destroys: A, B, DE = DE + 6
 
 ### displayError #11 (0BH)
-Displays ERROR on the seven-segment display and waits for a keypress.
+Display ERROR on the Seven Segments and wait for keypress
 - Input: none
 - Destroys: all
 
 ### checkStartEnd #30 (1EH)
-Checks the difference between start and end addresses.
+Check start and end address differences.
 - Input: `HL` = address location of START value
 - Input: `HL+2` = address location of END value
 - Output: `HL` = start address
@@ -436,7 +436,7 @@ Key mapping returned in register `E`; some gaps are present.
 | Enter | `0A` | 3 | `16` | C | `26` | N | `31` | Y | `3C` | | |
 
 ### matrixScanASCII #53 (35H)
-Converts the output of the matrixScan routine to ASCII. `matrixScan` returns
+Convert the output of the matrixScan routine to ASCII.  matrixScan returns
 values between 0 and 63 (3Fh). These represent key presses on the
 keyboard.  This routine will convert the output of matrixScan DE, to the
 actual key pressed in ASCII.  If the key doesn't map to an ASCII character
@@ -480,33 +480,33 @@ scan_loop:
 ## API Serial Data Transfer Calls
 
 ### serialEnable #20 (14H)
-Enables the BitBang serial port for transmission. The Disco LEDs glow blue to
+Enable BitBang serial port for serial transmit.  Disco LED's glow blue to
 indicate ready status.
 - Input: none
 - Destroy: A
 
 ### serialDisable #21 (15H)
-Disables the BitBang serial port for transmission. The Disco LEDs turn off.
+Disable BitBang serial port for serial transmit.  Disco LEDs turn off.
 - Input: none
 - Destroy: A
 
 ### txByte #22 (16H)
-Bit Bang FTDI USB transmit routine. Sends one byte over the FTDI USB serial
+Bit Bang FTDI USB transmit routine.  Send one byte over FTDI USB serial
 connection.  It assumes a UART connection of 4800-8-N-2.
 - Input: A = byte to transmit
 - Output: nothing
 - Destroy: none
 
 ### rxByte #23 (17H)
-Bit Bang FTDI USB receive routine. Receives one byte through the FTDI USB
-serial connection using 4800-8-N-2. The routine waits until it detects a
-bit.
+Bit Bang FTDI USB receive routine.  Receive one byte via the FTDI USB
+serial connection.  It assumes a UART connection of 4800-8-N-2.  Note
+routine will wait until a bit is detected.
 - Input: nothing
 - Return: A = byte received
 - Destroy: none
 
 ### intelHexLoad #24 (18H)
-Loads an Intel HEX file through the FTDI USB serial connection. Displays file
+Load an Intel Hex file via the FTDI USB serial connection.  Displays file
 progress on the segments and PASS or FAIL at the end of the load.  Intel
 Hex file format is a string of ASCII with the following parts:
 
@@ -535,39 +535,41 @@ CHECKSUM is the addition of all bytes in one line.
 - Destroy: HL,DE,BC,A
 
 ### sendToSerial #25 (19H)
-SIO Binary Dump. Transfers TEC data to a serial terminal. The inputs are a
-start address and data length. `checkStartEnd` derives the length from a
-From/To address pair.
+SIO Binary Dump.  Transfer TEC data to a serial terminal.  From address and
+Length of data is needed for input.  Use checkStartEnd to get length if
+using From/To address.
 - Input: `HL` = start address
 - Input: `DE` = length in bytes of data to send
 - Destroys: `A`, `HL`, `DE`, `BC`
 
 ### receiveFromSerial #26 (1AH)
-Receives binary data from FTDI. The inputs are a start address and data
-length. `checkStartEnd` derives the length from a From/To address pair.
+SIO receives binary data.  Receive binary data from FTDI.  From address
+and Length of data is needed for input.  Use checkStartEnd to get length
+if using From/To address.
 - Input: `HL` = start address
 - Input: `DE` = length in bytes of data to receive
 - Destroys: `A`, `HL`, `DE`, `BC`
 
 ### sendAssembly #27 (1BH)
-Sends disassembled TEC code to the serial terminal as readable assembly
-language. The inputs are a start address and data length. `checkStartEnd`
-derives the length from a From/To address pair.
+Send Assembly instructions to the serial port.  Print out the disassembled
+code that is on the TEC in readable assembly language on the serial
+terminal.  From address and Length of data is needed for input.  Use
+checkStartEnd to get length if using From/To address.
 - Input: `HL` = start address
 - Input: `DE` = length in bytes of data to disassemble
 - Destroys: `A`, `HL`, `DE`, `BC`
 
 ### sendHex #28 (1CH)
-Sends a traditional HEX dump to the serial terminal, displaying up to 16
-bytes per line. The inputs are a start address and data length.
-`checkStartEnd` derives the length from a From/To address pair.
+Send a traditional HEX dump as text to the serial terminal.  Up to 16 bytes
+are displayed per line.    From address and Length of data is needed for
+input.  Use checkStartEnd to get length if using From/To address.
 - Input: `HL` = start address
 - Input: `DE` = length in bytes of data to send as hex
 - Destroys: `A`, `HL`, `DE`, `BC`
 
 ### genDataDump #29 (1DH)
-Generates an ASCII data dump containing the address followed by the number
-of bytes in B. This routine is a subroutine of `_sendHex`.
+Generate data dump in ASCII.  Print the Address and then B number of
+bytes.  This routine is a subroutine in the _sendHex routine.
 - Input: `B` = number of bytes to display
 - Input: `HL` = start address of data dump
 - Input: `DE` = address of string destination
@@ -602,12 +604,13 @@ When an item is selected, the routine that is associated with the menu
 entry will be called.  The selected menu item number will be stored at RAM
 address <span class="mon3-address-emphasis">0897H</span>.  Items start from 0.
 
-When a RET should remove the current menu, a preceding `menuPop` call
-returns control to the previous menu or enters Data Entry mode.
+If after the RET the menu is to be removed or popped off, then call the
+menuPop routine prior to the RET.  This will return control to the previous
+menu or enter Data Entry mode.
 
-The menu can also serve as a selectable list. A `menuPop` call closes the
-list once an item has been selected. The example below demonstrates this
-flow.
+The menu can also be used as a selectable List.  Use menuPop to close the
+list once the item has been selected.  See an example below on how to do
+this.
 - Input: HL = Pointer to Menu configuration.
 - Destroys: A, HL
 
@@ -656,7 +659,7 @@ Text>, [<Param Text Label>, <Param RAM Address>]+
 ```
 
 ### menuPop #47 (2FH)
-Replaces the current menu with its parent menu, if any. If menus have been
+Replace the current menu with its parent menu if any.  If menus have been
 nested, the parent menu will become the active menu.  This is the same as
 pressing the <span class="mon3-key-emphasis">AD</span> key but done in software.  If no parent menu exists then
 the Monitor mode is changed to Data Entry View.  Useful if using the menu
@@ -665,7 +668,7 @@ as a Select List where execution of code is to be continued.
 - Destroys: A
 
 ### Menu and Parameter Driver Example
-The example creates a menu with three items. The first item jumps to a routine, the
+Create a Menu with 3 items.  The first item jumps to a routine which is the
 standard way to use the menu.  The second item displays a selectable list
 that saves a value in RAM and returns to the menu.  The last item will
 create a parameter entry list of four 2-byte items.
@@ -769,17 +772,18 @@ paramCFG:
 ## API Sound Calls
 
 ### playNote #34 (22H)
-Plays a note with a given frequency and wavelength.
+Play a note.  Play a note with a given frequency and wavelength
 - Input: `HL` = frequency (`01-7F`)
 - Input: `B` = wavelength (`00-FF`)
 - Destroys: `HL`, `BC`, `A`
 
 ### playTune #35 (23H)
-Plays a series of notes. Values from 01H through 18H select notes from the
-lowest to the highest frequency. 00H inserts a pause, and any value above
-18H ends playback. A single pause can separate adjacent notes.
+Play a series of notes.  To play a note use a reference between 01H and 18H.
+Where 01H is the lowest frequency and 18H is the highest frequency.  Use
+00H for a pause and any value above 18H to exit.  A single pause can be
+used to separate notes.
 
-The note reference table is:
+Note reference table is as follows:
 
 | Note | Code | Note | Code | Note | Code | Note | Code |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -794,7 +798,7 @@ The note reference table is:
 - Destroy: `A`, `B`, `DE`, `HL`
 
 ### playTuneMenu #36 (24H)
-Plays a series of notes with the `_playTune` routine, but the address of the
+Play a series of notes with the _playTune routine, but the address of the
 first note is selected via a parameter menu.
 - Input: none
 - Destroy: A,B,DE,HL
@@ -802,47 +806,47 @@ first note is selected via a parameter menu.
 ## API System Latch Calls
 
 ### getCaps #37 (25H)
-Returns the Caps Lock state.
+Get Caps lock state
 - Input: none
 - Output: A = caps lock state; 0 = off, 80H = on
 
 ### getShadow #38 (26H)
-Returns the SHADOW state.
+Get SHADOW state
 - Input: none
 - Output: A = shadow state; 0 = off, 01H = on
 
 ### getProtect #39 (27H)
-Returns the PROTECT state.
+Get PROTECT state
 - Input: none
 - Output: A = protect state; 0 = off, 02H = on
 
 ### getExpand #40 (28H)
-Returns the EXPAND state.
+Get EXPAND state
 - Input: none
 - Output: A = expand state; 0 = off, 04H = on
 
 ### setCaps #41 (29H)
-Sets the Caps Lock state.
+Set Caps lock state
 - Input: A = Desired caps lock state; 0 = off, 80H = on
 - Destroy: A
 
 ### setShadow #42 (2AH)
-Sets the SHADOW state.
+Set Shadow state
 - Input: A = Desired shadow state; 0 = off, 01H = on
 - Destroy: A
 
 ### setProtect #43 (2BH)
-Sets the PROTECT state.
+Set Protect state
 - Input: A = Desired protect state; 0 = off, 02H = on
 - Destroy: A
 
 ### setExpand #44 (2CH)
-Sets the EXPAND state.
+Set Expand state
 - Input: A = Desired expand state; 0 = off, 04H = on
 - Destroy: A
 
 ### toggleCaps #48 (30H)
-Toggles the Caps Lock state.
+Toggle Caps Lock state. On/Off or vice versa
 - Input: none
 - Destroy: A
 
@@ -854,52 +858,51 @@ A 16-bit delay routine.  An input delay of <span class="mon3-address-emphasis">2
 - Destroys: none
 
 ### random #49 (31H)
-Returns a pseudo-random number between 00H and FFH.
+Random number generator.  Return a random number between 00H-FFH
 - Input: none
 - Output: A = pseudo-random number
 - Destroy: B
 
 ### setDisStart #50 (32H)
-Sets the first address used for disassembly output.
+Set Disassembly start address.  Set the first address for disassembly output
 - Input: HL = start address
 - Output: none
 - Destroy: none
 
 ### getDisNext #51 (33H)
-Returns the next disassembly address, which becomes the start of the next
-output line.
+Get Disassembly next address.  The new start address for the next output.
 - Input: none
 - Output: HL = start address
 - Destroy: none
 
 ### getDisassembly #52 (34H)
-Generates one disassembly line. `setDisStart` establishes the first address;
-subsequent calls advance it automatically.
+Generate Disassembly line.  Must call setDisStart prior.  Only need to call
+setDisStart once as the next address is automatically increased.
 - Input: none
 - Output: `HL` = pointer to zero-terminated disassembly ASCII
 - Destroy: none
 
 ### RTCAPI #46 (2EH)
-Calls a Real Time Clock (RTC) routine for the RTC add-on board. See the RTC
+Call a Real Time Clock (RTI) routine for the RTC add on board.  See the RTC
 chapter below for details on this add-on.
 
 - Input: `B` = RTC routine number
 - Other inputs depend on the RTC routine.
 
 ### LCDConfirm #55 (37H)
-Displays a confirmation message on the LCD before proceeding. `C` confirms;
-any other key declines.
+Ask a confirmation message on the LCD before proceeding.  Press 'C' to
+confirm or any other key to not confirm.
 - Input: none
 - Output: `Zero Flag` = set == confirmed or 'C' pressed
 - Destroy: `A`, `HL`
 
 ### getGLCDTerm #56 (38H)
-Reports whether the GLCD is being used as a terminal.
+Get GLCDTERM state.  Check if using the GLCD as a Terminal
 - Input: none
 - Output: `A` = GLCD Terminal state; 0 = off, FF = on
 
 ### setGLCDTerm #57 (39H)
-Sets the GLCD Terminal state.
+Set GLCD Terminal state
 - Input: `A` = Desired GLCD Terminal state; 0 = off, FF = on
 - Destroy: `A`
 
@@ -916,8 +919,8 @@ See the Hard Drive Access section for details of this routine.
 See the Hard Drive Access section for details of this routine.
 
 ### RGBScan #62 (3EH)
-Multiplexes the 8x8 RGB board in red, green and blue. Repeated calls in a
-loop maintain the display. Row data runs from top to bottom.
+Multiplex the 8x8 RGB Board with 3 colours, Red, Green and Blue.  Need to
+be called in a loop.  The Row data is from top to bottom.
 
 - Input: `IY` = 24 bytes of row data: 8 red, 8 green, 8 blue
 

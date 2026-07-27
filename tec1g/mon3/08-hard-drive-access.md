@@ -28,24 +28,24 @@ In terms of the particular medium used to store files, there are a few things to
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-73-figure-2.jpg)
 
-With FAT32, files can be copied seamlessly from a PC or Mac to the drive.
+With FAT32, files can be seamlessly copied from your PC/MAC to the drive.
 A USB to drive reader is required, which can be easily found.
 
 If both GPIO and PATA boards are connected to the TEC, Mon3 will
 prioritise the GPIO board then the PATA board.  Details of the Add-on
 Boards can be found in the TEC-1G GitHub repository.
 
-Mon3 can only read or write existing files; it cannot create a new file on
-the drive. A transfer from the TEC therefore begins with the **Export Raw
-Data** menu option, which sends the code to a PC or Mac over serial. The
-resulting binary can then be copied to the drive through a USB
-SD/PATA/CF adaptor.
+Mon3 can only Read or Write to existing files.  There is no ability to create
+new files from the TEC to the drive.   To transfer code from the TEC to the
+drive, first, use the EXPORT RAW DATA menu option to transfer the code
+via Serial to your PC/MAC.  Then copy the binary from  your PC/MAC to the
+drive via a USB to SD/PATA/CF adaptor.
 
 ## Access to the Drive
 
-**Drive Access** in the Main Menu opens three options: Catalog, Save
-Session and Load Session. These options also have shortcuts in Data Entry
-mode.
+In the Main Menu, select DRIVE ACCESS.  A menu will be displayed with
+three options.  Catalog, Save Session and Load Session.   These options also
+have shortcuts in Data Entry mode.
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-74-figure-1.png)
 
@@ -57,16 +57,16 @@ Mon3 finds files on the drive, they will be displayed on the LCD screen.
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-74-figure-2.png)
 
-<span class="mon3-key-emphasis">Plus</span> and <span class="mon3-key-emphasis">Minus</span> select a file, <span class="mon3-key-emphasis">GO</span> loads it, and
-<span class="mon3-key-emphasis">AD</span> returns to the menu. If the file has the extension *.HEX, it is assumed that this
+Use <span class="mon3-key-emphasis">Plus</span>/<span class="mon3-key-emphasis">Minus</span> to select the file to load and <span class="mon3-key-emphasis">GO</span> to load the file.  <span class="mon3-key-emphasis">AD</span> will exit
+back to the Menu.  If the file has the extension *.HEX, it is assumed that this
 file is in Intel Hex format and it will automatically convert the file to binary
 prior to loading.  Any other extension will ask for a Start Address as to
 where the file is to be loaded at.
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-75-figure-1.png)
 
-The Useful Links section lists sources of ready-to-run TEC-1G files for the
-drive.
+See the Useful Links section below on how to load your drive with ready to
+run TEC-1G files.
 
 ### Save / Load Session
 
@@ -76,8 +76,7 @@ need to use Non-Volatile RAM.  It can be used prior to powering down to
 save any unfinished work.  Then be able to access the same machine state
 later on.
 
-Because Mon3 cannot create files, the session file must already exist on the
-PC or Mac.
+As Mon3 can't create files, the session file must be created on your PC/MAC.
 The filename must be called "MYDATA.TEC" and be exactly 64 Kb in size.
 The file can be easily created using the following command line
 statements.
@@ -87,8 +86,8 @@ statements.
 | MS Windows | `>fsutil file createnew MYDATA.TEC 65536` |
 | macOS | `$dd if=/dev/zero of=MYDATA.TEC bs=65536 count=1` |
 
-A File Not Found error appears if Mon3 cannot find `MYDATA.TEC` on the
-drive.
+A File Not Found error will appear if Mon3 can't find the MYDATA.TEC file
+on your drive.
 
 Save Session will save normal RAM between <span class="mon3-address-emphasis">0000H-BFFFH</span> and Expansion
 RAM if any between <span class="mon3-address-emphasis">8000H-BFFFH</span>.  Save Session can also be access in Data
@@ -129,12 +128,12 @@ Error messages descriptions are below:
 
 ## Drive Access API Calls
 
-Special API calls support opening, reading and writing files from application
-code. The details of these calls and their
+Special API calls have been created to help with opening, reading and
+writing to files within your own code.  The details of these calls and their
 limitations are described below.
 
 ### loadFromDisk #58 (3AH)
-Catalogs files on the disk and displays them on the LCD for
+Catalog the files on the disk and display them on the LCD Display for
 loading.  This is the same as selecting CATALOG from the main menu or
 <span class="mon3-key-emphasis">Fn-F</span> from data entry mode.
    -   Input: None
@@ -146,7 +145,7 @@ rst 10H
 ```
 
 ### openFile #59 (3BH)
-Opens an existing file for reading or writing. The routine exits cleanly on success, or
+Open a file for reading or writing.   The routine will exit cleanly if success or
 an error will be displayed if file isn't found.  The filename is case sensitive
 and must match exactly.  The file must already be existing on the drive.
 
@@ -162,8 +161,8 @@ filename: .db "TBASIC.HEX",0
 ```
 
 ### readSector #60 (3CH)
-Loads a sector from the opened file. One preceding `openFile` call is
-required. A 512-byte sector is loaded at address
+Load a sector from the opened file.  Requires openFile to be called prior
+but only once.  A sector, which is 512 bytes, will be loaded at address
 <span class="mon3-address-emphasis">0600H-07FFH</span>.   The input is the byte address in the file.  The entire sector
 where that byte is will be returned.  An error will display if the input byte is
 bigger than actual file size.
@@ -182,9 +181,11 @@ This example will read the sector that contains the byte 12575H and place
 that sector in address <span class="mon3-address-emphasis">0600H-07FFH</span>.
 
 ### writeSector #61 (3DH)
-Writes a sector to an opened file after a `readSector` call. The sector is
-saved back to the same file position selected by `readSector`. Data at
-address <span class="mon3-address-emphasis">0600H-07FFH</span> can be altered between the read and write calls.
+Write a sector to an opened file.  Requires a readSector to be called first.
+The sector will be saved back to the same position in the file from the
+readSector routine.   To use this routine, firstly call the readSector routine.
+Data at address <span class="mon3-address-emphasis">0600H-07FFH</span> can then be altered and a writeSector can
+be called to save the modifications back to the file.
 
    -   Input: None
    -   Destroy: ALL

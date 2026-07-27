@@ -19,7 +19,7 @@ as a stand-alone program.  See the GitHub for source files.
 Tiny Basic is an easy-to-use BASIC programming language.  Tiny Basic by
 default uses the FTDI to USB serial terminal connection.  If a GLCD Add-On
 board is installed, the GLCD can be used as a terminal along with a Matrix
-Keyboard. **Settings > Toggle GLCD Term** enables this mode. Some
+Keyboard.  Go to Settings -> Toggle GLCD Term to enable.  Some
 additional commands have been implemented to interact with the TEC-1G
 hardware.  Tiny Basic will use RAM address <span class="mon3-address-emphasis">0900H-3FFFH</span>
 
@@ -41,7 +41,7 @@ for the TEC-1G.  Here is a list of language additions.
 Here are some Tiny Basic Example programs
 
 ```text
-The first 22 Fibonacci numbers
+Display the first 22 Fibonacci Numbers
  5 REM ** FIBONACCI SEQUENCE **
 10 PRINT "FIBONACCI SEQUENCE"
 20 FOR I=1 TO 22
@@ -56,7 +56,7 @@ The first 22 Fibonacci numbers
 110 LET F=A
 120 RETURN
 
-The factors of a given number
+Display the Factors of a given number
  5 REM ** FACTORS OF N **
 10 INPUT "GIVE ME A NUMBER" I
 20 LET C=1
@@ -78,7 +78,7 @@ Output the numbers 0 to 9 on the TEC-1G Seven Segment Display
 80 NEXT I
 90 XON
 
-All ASCII characters
+Print All ASCII Characters
 10 REM ** PRINT ASCII CHARACTERS **
 20 FOR I=32 TO 255
 30 PRINT #1,&I+32,$32,$I+32,$32,
