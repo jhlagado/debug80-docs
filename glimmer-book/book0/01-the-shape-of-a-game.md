@@ -12,12 +12,12 @@ Glimmer is a small one, and a short program is one you can hold in
 your head, change and debug quickly.
 
 Before we start, here is what I assume about you: you already read
-assembly. You can follow a `ld a,(hl)` and a conditional jump without
-slowing down, so you know the pleasure of this machine: nothing between
-you and the metal, every byte where you put it. The obstacle is how much
+assembly. You can read a `ld a,(hl)` and a conditional jump at a
+glance, so you know the pleasure of this machine: the metal right under
+your hands, every byte where you put it. The obstacle is how much
 a game has to do at once. The keys have to be watched, the display kept
 alive, time kept, and all of it has to happen every frame, in the right
-order, without a missed beat. That supporting work is most of the code
+order. That supporting work is most of the code
 in any game, and it is nearly the same from one game to the next. The
 rules, the part that makes this game the game it is, end up threaded
 all through it.
@@ -58,7 +58,7 @@ yourself in chapter 2, once we have the tools installed.
 
 ## A dot appears
 
-Here is a complete Glimmer program, the whole file, nothing left out.
+Here is a complete Glimmer program, the whole file.
 It lights one white pixel in the middle of the 8x8 matrix.
 
 ```text
@@ -115,7 +115,7 @@ block turns memory into light. Its header carries two
 things: a name, and the line `on DotX`, which answers the question
 every block must answer: *when should this code run?* This one runs
 on any frame where `DotX` changed. Everything between `begin` and `end`
-is real assembly, passed through untouched.
+is real assembly, copied through to the output verbatim.
 
 The generated program advances one **frame** at a time. Every frame,
 the machinery checks which
@@ -126,7 +126,7 @@ already changed *before the first frame*, so
 program would sit there with a dark screen, waiting for a change that
 never comes. From the second frame on, `DotX` holds still, so
 `DrawDot` rests. The pixel stays lit because keeping
-the display alive is the machinery's job, not yours.
+the display alive is the machinery's job.
 
 `DotX` is the fact and `DrawDot` is the render rule. `on DotX`
 declares their connection: a change to the fact schedules the rule.
@@ -230,8 +230,8 @@ run. Here the same idea is running on a Z80, and the whole chain is
 readable off the page: `bind ... -> Right`, `on Right`, `updates
 DotX`, `on DotX`.
 
-`MoveRight` never mentions
-drawing. `DrawDot` never mentions keys. You can read any one
+Each header lists everything its block touches: `MoveRight` declares
+`Right` and `DotX`, `DrawDot` declares `DotX`. You can read any one
 block on its own, whether the program has three of them or thirty.
 
 ## Holding a key down
@@ -341,8 +341,8 @@ The headers alone tell someone who has never seen a Z80 what this game
 does. Any single block tells a Z80 programmer everything it touches.
 
 Labels that start with an underscore, like `_stop`, are local to their
-block, so both movement rules own a `_stop` of their own without
-quarrelling. And blocks fall off their last line: Glimmer supplies
+block, so each movement rule gets a `_stop` of its own. And blocks
+fall off their last line: Glimmer supplies
 the return, so you write the work and skip the ceremony.
 
 ## The program behind the program

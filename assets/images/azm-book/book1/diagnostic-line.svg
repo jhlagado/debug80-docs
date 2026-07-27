@@ -89,5 +89,5 @@
   <text class="nb" x="572" y="108" text-anchor="middle" xml:space="preserve">message</text>
   <text class="dimn" x="572" y="128" text-anchor="middle" xml:space="preserve">may change between releases</text>
   <text class="dimn" x="46" y="164" text-anchor="start" xml:space="preserve">The diagnostic ID is the stable part of the line.</text>
-  <text class="dimn" x="46" y="182" text-anchor="start" xml:space="preserve">If you script against AZM output, match on the code rather than the message text.</text>
+  <text class="dimn" x="46" y="182" text-anchor="start" xml:space="preserve">If you script against AZM output, match on the code: it is the stable part.</text>
 </svg>

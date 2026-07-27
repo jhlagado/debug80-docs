@@ -153,7 +153,7 @@ declared cycle: the I piece declares two and gets `rot2` and `rot3` as
 repeats, while the O piece declares one and shows it in all four
 positions. Rotating in play is `CurRotation + 1`, masked to two bits;
 the cycling lives in the generated tables, so the rule that rotates
-never has to know how many distinct forms a piece has.
+works the same for every piece.
 
 In most projects in this family of
 games there is a data file: a few hundred lines of hand-maintained
@@ -285,9 +285,8 @@ declaration side of the line (the shape tables, the timers, the key
 bindings, the change tracking, the card
 gating) was plumbing and data, the kind of code that looks the same
 in every game, and the language absorbed all of it. This module keeps
-the part the language has no reason to absorb: the
-board algebra that makes Tetro *Tetro*, specific to this one game and
-to no other. A library could package board operations, and some day one
+the part that belongs to one game alone: the
+board algebra that makes Tetro *Tetro*. A library could package board operations, and some day one
 may; the engineering call here is that code reused by every game
 belongs to the language, and code owned by one game belongs to that
 game, written where its author can shape it.
@@ -309,7 +308,7 @@ plane. Irreducible game logic, called by three rules at three
 different moments, with a register contract the assembler checks at every call
 site.
 
-Nowhere does that division show more sharply than in the board render,
+That division shows most sharply in the board render,
 back in `tetro-rules.glim`:
 
 ```text
@@ -323,8 +322,8 @@ end
 Six facts in the header, one call in the body. Everything that can
 change the picture is declared where you can read it; the 100-line
 rebuild (planes into framebuffer, piece overlaid in its colour, flash
-rows forced white) is in the engine, where its loops can sprawl
-without cluttering a single rule.
+rows forced white) is in the engine, where its loops have room to
+sprawl.
 
 ## Gravity, lock, flash
 
@@ -413,7 +412,7 @@ that, pieces fall twice as fast.
 Tetro leaves its cards in two ways, and you can see which form fits
 where. When the exit is
 unconditional, the header says so: `SplashExit` is four lines, `on
-AnyKeyP` and `goto Playing` with no body at all, so any key on the
+AnyKeyP` and `goto Playing`, header only, so any key on the
 splash screen starts the game. The `Pause` and `Unpause` effects do
 the same on `PauseP`, flipping between Playing and Paused.
 

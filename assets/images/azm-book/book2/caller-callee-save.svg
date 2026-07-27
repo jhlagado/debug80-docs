@@ -85,5 +85,5 @@
   <text class="dimn" x="390" y="154" text-anchor="start" xml:space="preserve">push de at the top, pop de before each</text>
   <text class="dimn" x="390" y="172" text-anchor="start" xml:space="preserve">return. Miss one path and ret takes the</text>
   <text class="dimn" x="390" y="190" text-anchor="start" xml:space="preserve">saved word as its destination.</text>
-  <text class="dimn" x="56" y="262" text-anchor="start" xml:space="preserve">The contract decides this, not the register. BC is callee-save whenever the contract does not name it.</text>
+  <text class="dimn" x="56" y="262" text-anchor="start" xml:space="preserve">The contract decides this. BC is callee-save whenever the contract leaves it unnamed.</text>
 </svg>

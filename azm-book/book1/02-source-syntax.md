@@ -93,7 +93,7 @@ A semicolon starts a comment that runs to the end of the line:
 
 ## Labels
 
-Symbols let you write `djnz ReadLoop` instead of `djnz $0105`. Every time you reference a label in an operand or expression, AZM substitutes the address. By the time the binary is written, all the names are gone; only bytes remain.
+Symbols let you write `djnz ReadLoop` instead of `djnz $0105`. Every time you reference a label in an operand or expression, AZM substitutes the address. By the time the binary is written, only bytes remain.
 
 A label names the assembly address at the point where it appears:
 
@@ -115,7 +115,7 @@ ReadLoop:
 
 ### Non-local labels
 
-A plain label declares a non-local symbol. Calls, jumps, expressions and data declarations in the same assembled source unit can refer to it directly. Two non-local labels in that source unit cannot share a name.
+A plain label declares a non-local symbol. Calls, jumps, expressions and data declarations in the same assembled source unit can refer to it directly. Each non-local label in a source unit needs a name of its own.
 
 ```asm
 ; error: two definitions of Count
@@ -134,7 +134,7 @@ MyLabel: ld a,0
 
 Non-local identifiers contain letters, digits and underscores and must start with a letter.
 
-`$` cannot serve as a namespace separator in source labels. It has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files provide privacy through `.import`, not through `$`-qualified labels.
+`$` has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files get their privacy from `.import`.
 
 ### Owner-local labels
 
@@ -160,7 +160,7 @@ _loop:
         ret
 ```
 
-`ShiftRow._loop` and `CopyRow._loop` have distinct identities in AZM output and Debug80 maps. Source code uses the short `_loop` spelling. Equates, enum members, type names and op names cannot begin with `_`. Names beginning with `__` are reserved for assembler-generated symbols.
+`ShiftRow._loop` and `CopyRow._loop` have distinct identities in AZM output and Debug80 maps. Source code uses the short `_loop` spelling. The leading `_` belongs to owner-local labels alone; equates, enum members, type names and op names start with a letter. Names beginning with `__` are reserved for assembler-generated symbols.
 
 ![An underscore label belongs to the nearest non-local label above it, so the two routines end up with different symbols](../../assets/images/azm-book/book1/label-scope.svg)
 
@@ -231,7 +231,7 @@ Count:              ; address label
         .db 8
 ```
 
-AZM accepts `COUNT: .equ 8`, but the colon is misleading there: nothing is bound to an address.
+AZM accepts `COUNT: .equ 8`, but the colon misleads: a colon marks an address, while `.equ` binds a value.
 
 ---
 

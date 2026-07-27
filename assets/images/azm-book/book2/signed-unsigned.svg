@@ -82,6 +82,6 @@
   <text class="cap" x="60" y="160" text-anchor="start" xml:space="preserve">SIGNED  −128 – 127</text>
   <text class="dim" x="210" y="134" text-anchor="middle" xml:space="preserve">0 … 127</text>
   <text class="dim" x="510" y="134" text-anchor="middle" xml:space="preserve">−128 … −1</text>
-  <text class="dimn" x="60" y="178" text-anchor="start" xml:space="preserve">The byte does not know which reading you meant. cp $80 splits the bar here; whether that is a large</text>
+  <text class="dimn" x="60" y="178" text-anchor="start" xml:space="preserve">The byte holds one bit pattern and answers to both readings. cp $80 splits the bar here; whether that is a large</text>
   <text class="dimn" x="60" y="196" text-anchor="start" xml:space="preserve">positive number or a negative one is decided by which conditional jump you write next.</text>
 </svg>

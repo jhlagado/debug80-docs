@@ -35,13 +35,13 @@ workflow requires line settings of `4800 8 N 2`.
 ## Building and sending
 
 With the correct project and target selected, **Build** creates the
-required `.hex` file. This stage uses **Build** rather than **Run**
-because the artifact, not the emulator, is required.
+required `.hex` file. This stage uses **Build** because only the
+artifact is required.
 
 The **Test CoolTerm** action checks CoolTerm's remote control socket before a
-transfer. It does nothing else: no port is opened and no build is needed. The
-test therefore separates "CoolTerm is not reachable" from "the transfer
-failed". On success Debug80 reports:
+transfer. The ping is the whole action: it runs on an unbuilt project and
+leaves the serial port closed, so a failure points at CoolTerm's socket alone.
+On success Debug80 reports:
 
 ```text
 Debug80: Connected to CoolTerm remote socket.
@@ -57,7 +57,7 @@ The button's label follows the platform, so a TEC-1 project reads **Send to TEC-
 Ready to send main.hex via CoolTerm.
 ```
 
-Debug80 does not read anything back from the board. MON-3 reports the load result on the TEC-1G seven-segment display: `PASS` for an accepted load, `ERROR` for a checksum or write verification failure.
+Confirmation comes from the board itself: MON-3 reports the load result on the TEC-1G seven-segment display, `PASS` for an accepted load and `ERROR` for a checksum or write verification failure.
 
 If your target has no `outputDir`, the send path looks for the HEX beside `debug80.json` rather than in `build/`. Scaffolded projects always set `outputDir`, so this only bites hand-edited configs.
 

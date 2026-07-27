@@ -35,13 +35,13 @@ The target's name is the key, `main`. Debug80 derives it from the source file na
 
 ## Eligible program files
 
-Eligible program files use the `.asm`, `.z80` or `.glim` extension. A Glimmer file only qualifies if it contains a top-level `program` declaration, because a `.glim` file without one is a part of a program rather than a program.
+Eligible program files use the `.asm`, `.z80` or `.glim` extension. A Glimmer file qualifies when it contains a top-level `program` declaration; the other `.glim` files are parts that a program includes.
 
 Among those, two names are treated as suggestions: `main.asm` and `main.z80`. A file with either name is marked **suggested** when Debug80 offers you a list.
 
 ## Adding a target
 
-The **+** beside the **Target** dropdown adds one. Debug80 lists every eligible program file that is not already a target, annotating the ones that match the naming convention, and you choose.
+The **+** beside the **Target** dropdown adds one. Debug80 lists the eligible program files still available to add, annotating the ones that match the naming convention, and you choose.
 
 The second target begins with `src/blink.asm`:
 
@@ -77,9 +77,9 @@ The **Target** dropdown selects which one Build and Run act on. The choice is st
 
 ![The target dropdown listing configured and discovered targets](../../assets/images/debug80-book/book1/picker-target-dropdown.svg)
 
-Discovered files that are not yet targets appear in the dropdown prefixed with `+`. Choosing one adds it as a target and selects it.
+A `+` prefix in the dropdown marks a file Debug80 found and offers to adopt. Choosing one adds it as a target and selects it.
 
-If you change the target while a debug session is running, Debug80 reports the change rather than silently switching underneath you:
+If you change the target while a debug session is running, Debug80 reports the change and leaves the session on the build it already has:
 
 ```text
 Debug80: Selected target blink. Press Build to apply it to the current session.
@@ -95,7 +95,7 @@ Remove target blink from this project? Its source files and build artifacts will
 
 ![Confirming target removal](../../assets/images/debug80-book/book1/modal-remove-target.svg)
 
-The button is disabled when the selected entry is a discovered file rather than a configured target, because there is nothing to remove.
+The button is disabled when the selected entry is a discovered file rather than a configured target: removal acts on the entries in `debug80.json`.
 
 ## A project with no targets
 
@@ -112,7 +112,7 @@ Debug80: This project has no targets yet. Pick a program file from the target dr
 
 ## Targets whose files have gone
 
-If a target names a source file that no longer exists, Debug80 hides it from the list rather than offering you something that cannot build. The entry stays in `debug80.json`, so restoring the file brings the target back.
+If a target names a source file that no longer exists, Debug80 hides it from the list. The entry stays in `debug80.json`, so restoring the file brings the target back.
 
 ## Other ways to run these actions
 

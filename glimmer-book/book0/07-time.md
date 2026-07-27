@@ -7,15 +7,15 @@ nav_order: 7
 
 # Time
 
-Every program you have written so far has one thing in common: none
-of them can act without you. Mover's dot sits wherever your
+Every program you have written so far waits for you. Mover's dot sits
+wherever your
 last press left it. Meter's bar holds its level until you lean on plus
-or minus. With no hand on the keypad, frame after frame goes by
+or minus. While the keypad is idle, frame after frame goes by
 with every change flag clear and every reactive block at rest. The
 profile still scans the display and polls the keypad.
 
-In a real game, ten seconds without input still leaves something
-moving: a drop falls, a ghost
+In a real game, something keeps moving through ten seconds of
+silence: a drop falls, a ghost
 patrols, a fuse burns down. This is where challenge comes from: a
 game that acts while you hesitate is a game you can lose. Until now
 your programs have had exactly one source of moments, the keypad,
@@ -30,8 +30,7 @@ against those beats. Glimmer gives you three ways to do it (a
 built-in frame counter, timers, and ramps), and each answers a
 different question about time. Our program is *Drip*: a drop that
 falls on its own schedule, blinks as it falls, and falls faster the
-longer the program runs. Drip contains no `bind` because it answers to
-its own schedule rather than the keypad.
+longer the program runs. Drip takes all its moments from clocks.
 
 ## Every frame
 
@@ -53,8 +52,8 @@ begin
 end
 ```
 
-`FrameCount` is built in, a byte cell every Glimmer program may name
-without declaring it. Each frame, before the phases run, the runtime
+`FrameCount` is built in, a byte cell any Glimmer program may name
+straight away. Each frame, before the phases run, the runtime
 increments it and marks it changed, so a block with `on FrameCount`
 runs every frame, reading a value that climbs 0, 1, 2, and wraps past
 255 back to 0.
@@ -66,8 +65,8 @@ schedule a Glimmer program has.
 
 Flag bits are a budget (a
 program holds up to 32 flag-carrying cells), and `FrameCount` takes a
-bit only in a program that names it. Ticks pays for one cell; Drip,
-which never mentions `FrameCount`, pays nothing for it.
+bit only in a program that names it. Ticks pays for one; Drip spends
+its bits elsewhere.
 
 For motion, though, the every-frame schedule runs too hot. A drop stepping
 one row per frame falls off an eight-row board in eight frames.
@@ -135,9 +134,8 @@ reloads from `Fall` to begin the next cycle.
 fire, declared with the same word, consumed the same way. `Descend`
 reads as every rule you have written: on a moment, change a fact.
 If a `bind` line pointed at `FallTick` instead, the same block would
-run per keypress. A rule never knows where its moment comes from, and that
-lets you retune a game's entire schedule without touching a single
-rule.
+run per keypress. A rule sees only its pulse, so you can retune a
+game's entire schedule by editing the declarations that fire it.
 
 Timer ticking happens immediately after the keypad poll and before any
 phase runs, so a pulse fired by a timer is seen by
@@ -147,9 +145,9 @@ like every pulse.
 The cell named `Fall` is the period, and it is
 ordinary writable state: a block that lists `updates Fall` and stores
 a new value has changed the tempo from the next reload on. One
-distinction to keep straight: a timer's cell carries no change flag;
-the pulse is its announcement. So `Fall` may stand in `updates` lines,
-and `on` lines take `FallTick`.
+distinction to keep straight: a timer announces itself through its
+pulse, so `Fall` may stand in `updates` lines, and `on` lines take
+`FallTick`.
 
 ## A blink
 
@@ -181,10 +179,9 @@ Every fifth frame, `Twinkle` flips `Visible` between 1 and 0.
 when it moves and when it blinks, and its body tests `Visible` before
 plotting: the dark half of the blink is a cleared framebuffer.
 
-Each timer owns its own hidden countdown; the two share nothing except
-the frame. Periods 24 and 5 drift in and out of step with each other,
-and neither cares: you declared two independent schedules, and
-independent is what you got.
+Each timer owns its own hidden countdown, and the frame is all the two
+share. Periods 24 and 5 drift in and out of step with each other: you
+declared two independent schedules, and independent is what you got.
 
 ## One shot
 
@@ -208,8 +205,9 @@ firing:
 ```
 
 `word` is the point here: a byte cell tops out at a 255-frame delay,
-and a word countdown runs to 65535. Drip has no use for a one-shot,
-but delayed restarts and title screens do.
+and a word countdown runs to 65535. Drip runs on oscillators;
+delayed restarts and title screens are where a one-shot earns its
+place.
 
 ## The climb
 
@@ -256,7 +254,7 @@ begin
 end
 ```
 
-`Boot` begins changed, and no block ever updates it, so `Ignite` runs
+`Boot`'s only change is the one it starts with, so `Ignite` runs
 exactly once, on the first frame. The same modifier that draws a
 first-frame picture can also fire a first-frame rule.
 
@@ -352,8 +350,7 @@ In a running build, the drop crawls down the middle column, blinking as it goes,
 and wraps back to the top. Around its second descent the pace picks
 up, then again at the top of every climb, until it settles into a
 quick steady drip. Speed, blink, and difficulty each cost one
-declaration and one small rule, and none of the three knows the others
-exist.
+declaration and one small rule, and each stands on its own.
 
 ## The program, as a report
 
@@ -399,14 +396,15 @@ The schedules take their place in the graph beside everything else:
 `raised by: timer Fall` and `raised by: ramp Heat` read exactly like
 the `key` lines in Meter's report, because a moment is a moment
 wherever it comes from. `Fall` shows
-`raised by: Quicken` and `triggers: (nothing)`; its writes matter to
-the hidden countdown, and no block watches the cell. And `Boot`,
+`raised by: Quicken` and `triggers: (nothing)`, because its writes
+reach the hidden countdown and `FallTick` carries the news to blocks.
+And `Boot`,
 raised by nothing, is the report's way of showing a moment that exists
 purely because a declaration marked it changed.
 
 ## Inside GlimTickTimers
 
-The *hidden* countdown is not hidden in the generated file. From
+The *hidden* countdown is a labelled byte in the generated file. From
 `drip.main.asm`, the storage:
 
 ```asm
@@ -474,8 +472,8 @@ it from `Fall`, sets the pulse byte and ORs the pulse's flag straight into
 last move sets the tick apart from the blocks you write, which raise
 through `Raised0` or `Next0` because some consumers may already have
 run. The
-tick runs before all of them, so it can deliver directly without
-breaking the exactly-once rule.
+tick runs before all of them, so a direct delivery still reaches every
+consumer exactly once.
 
 Further down, the ramp:
 
@@ -518,13 +516,11 @@ tick and the climb resumes.
         ret
 ```
 
-With no flag behind `Fall`, `updates Fall` compiles to nothing here;
-the store inside the body is the act itself, and the header line
-documents it for the dependency report and for you.
+The store inside the body is the whole act, so `updates Fall` stands
+here for the dependency report and for you.
 
 `GlimTickTimers` is generated only when a program declares a timer or
-a ramp or names `FrameCount`; programs without those declarations
-have no such call.
+a ramp or names `FrameCount`.
 
 Drip's drop falls in equal steps, the plainest motion there is; next
 chapter we shape those steps into curves, and meet the ramp-driven

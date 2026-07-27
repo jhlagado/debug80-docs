@@ -46,7 +46,7 @@ The Z80 can address 65,536 bytes of memory, arranged as a flat array of 65,536 n
 
 The full address range runs from `$0000` to `$FFFF`, address zero to address 65,535.
 
-**ROM** (read-only memory) holds data that cannot change during normal operation and keeps its contents when the power goes off. Bootloaders, fixed routines and lookup tables live here. **RAM** (random-access memory) can be freely read and written, but loses its contents when the power goes off; variables, the stack and anything your program creates or modifies go here.
+**ROM** (read-only memory) holds fixed data and keeps its contents when the power goes off. Bootloaders, fixed routines and lookup tables live here. **RAM** (random-access memory) can be freely read and written, but loses its contents when the power goes off; variables, the stack and anything your program creates or modifies go here.
 
 The hardware designer decides which addresses connect to which chips. A system's **memory map** describes which ranges connect to which hardware. A typical small Z80 board might look like this:
 
@@ -64,7 +64,7 @@ The Z80 imposes one constraint: when it resets, the program counter starts at `$
 
 ## I/O Ports
 
-The Z80 has a separate address space for hardware peripherals, reached with the `in` and `out` instructions rather than the memory-access instructions you will use for most of this course. In the usual programming model, an 8-bit port number selects the device. The CPU also drives an upper byte on its address pins during I/O; hardware may ignore it or use it for extra selection. Chapter 9 covers that distinction in detail.
+The Z80 has a separate address space for hardware peripherals, reached with the `in` and `out` instructions. In the usual programming model, an 8-bit port number selects the device. The CPU also drives an upper byte on its address pins during I/O; hardware may ignore it or use it for extra selection. Chapter 9 covers that distinction in detail.
 
 ---
 
@@ -77,7 +77,7 @@ Here is the complete Z80 register set:
 | Register | Width | Role |
 |----------|-------|------|
 | A | 8 bits | **Accumulator.** Most arithmetic and logic results end up here. |
-| F | 8 bits | **Flags.** Individual bits record the outcome of the last instruction that affected them. Cannot be read directly in most instructions. |
+| F | 8 bits | **Flags.** Individual bits record the outcome of the last instruction that affected them. Conditional instructions test them; `push af` moves the whole byte. |
 | B | 8 bits | General purpose. Frequently used as a loop counter. |
 | C | 8 bits | General purpose. Forms the low byte of BC during register-addressed `in`/`out`. |
 | D | 8 bits | General purpose. |
@@ -90,9 +90,9 @@ Here is the complete Z80 register set:
 | IX | 16 bits | Index register. Used for indexed memory access (base address + offset). Splits into IXH and IXL. |
 | IY | 16 bits | Index register. Same role as IX; a second independent index. Splits into IYH and IYL. |
 | SP | 16 bits | **Stack pointer.** Points to the top of the hardware stack. |
-| PC | 16 bits | **Program counter.** Always holds the address of the next instruction to execute. Cannot be read or written directly. |
+| PC | 16 bits | **Program counter.** Always holds the address of the next instruction to execute. Jumps, calls and returns are what write to it. |
 | I | 8 bits | Interrupt vector register. Used with interrupt mode 2. |
-| R | 8 bits | Refresh register. Incremented automatically as each instruction is fetched. Rarely something you will use directly. |
+| R | 8 bits | Refresh register. Incremented automatically as each instruction is fetched. |
 
 When B and C are used as the pair BC, B holds the high byte and C holds the low byte, the same pattern as DE (D high, E low) and HL (H high, L low). So if HL = `$1A2B`, then H = `$1A` and L = `$2B`.
 

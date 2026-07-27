@@ -225,8 +225,8 @@ sprite or a tile.
 - `VdpSetAddrWrite` sets the VRAM write address in HL.
   `VdpWriteBlock` then streams BC bytes from HL through the data
   port. `VdpFill` sets the address itself and writes BC copies of E.
-- `VdpWaitVBlank` spins on bit 7 of the status register. The loop
-  owns this call; blocks leave the VDP's timing alone.
+- `VdpWaitVBlank` spins on bit 7 of the status register. The generated
+  loop owns this call.
 - `SpriteSet` positions slot A at D = x, E = y in the shadow.
   `SpriteInit` assigns slot A its pattern D and colour E; the
   generated `LoadResourcesVram` calls it once per declared slot.

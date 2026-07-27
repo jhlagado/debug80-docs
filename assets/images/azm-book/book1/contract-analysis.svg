@@ -103,5 +103,5 @@
   <text class="dimn" x="606" y="320" text-anchor="middle" xml:space="preserve">fails on unproven</text>
   <text class="dim" x="30" y="348" text-anchor="start" xml:space="preserve">azm --rc audit program.asm</text>
   <text class="dimn" x="540" y="348" text-anchor="start" xml:space="preserve">off is the default</text>
-  <text class="dimn" x="30" y="380" text-anchor="start" xml:space="preserve">The mode decides whether a finding warns, fails the build, or is never looked for.</text>
+  <text class="dimn" x="30" y="380" text-anchor="start" xml:space="preserve">The mode decides whether a finding warns, fails the build, or stays unreported.</text>
 </svg>

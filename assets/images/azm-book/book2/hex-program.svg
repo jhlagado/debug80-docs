@@ -112,5 +112,5 @@
   <text class="dimn" x="66" y="170" text-anchor="start" xml:space="preserve">opcode</text>
   <rect class="bx" x="126.98" y="159" width="13" height="13" rx="2"/>
   <text class="dimn" x="146.98" y="170" text-anchor="start" xml:space="preserve">operand byte</text>
-  <text class="dimn" x="46" y="206" text-anchor="start" xml:space="preserve">The byte stream carries no names. Nothing here says $8000 is a result rather than a display buffer.</text>
+  <text class="dimn" x="46" y="206" text-anchor="start" xml:space="preserve">The byte stream is numbers alone. $8000 could be a result, a display buffer or a lookup table.</text>
 </svg>

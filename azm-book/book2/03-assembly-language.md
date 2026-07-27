@@ -7,7 +7,7 @@ nav_order: 3
 
 # Assembly Language
 
-The CPU still runs the same machine code, but you get readable instruction names, names for addresses and a source file you can actually inspect without decoding hex in your head.
+The CPU still runs the same machine code, but you get readable instruction names, names for addresses and a source file you can read as it stands.
 
 ---
 
@@ -44,9 +44,9 @@ already saw in Chapter 2.
 
 ## AZM Extensions and Standard Assembly
 
-You just saw two constructs in that program that are not Z80 instructions: `.org` and `.db`. These are assembler directives.
+Two constructs in that program are directives to the assembler rather than instructions to the CPU: `.org` and `.db`.
 
-**Common assembler directives** are not Z80 instructions. `.org` places code
+**Common assembler directives** do their work at assembly time. `.org` places code
 and data at specific addresses, `.equ` names a compile-time constant, `.db`,
 `.dw` and `.ds` define storage, and `.include` brings another source file into
 the assembly. Other assemblers provide similar directives, although their
@@ -54,13 +54,13 @@ names and exact behavior vary. AZM uses the dotted spellings shown here.
 
 **AZM adds** the following on top:
 
-- **`op`**: defines an inline instruction sequence that expands at each call site, with no call overhead
+- **`op`**: defines an instruction sequence that expands inline at each call site, costing exactly what those instructions cost
 - **`type` / `union`**: named record layouts with scalar types (`byte`, `word`, `addr`); `sizeof` and `offset` compute byte sizes and field positions as compile-time constants; `.ds` accepts type expressions such as `.ds Sprite[16]`
-- **`enum`**: named sets of values with no memory allocated
+- **`enum`**: named sets of related constants, numbered automatically
 - **register contracts**: formal `.routine` register contracts on subroutines, verified by the assembler
 - **string directives**: `.cstr`, `.pstr` and `.istr` emit a string with a chosen framing: NUL terminator, length prefix or high-bit terminator
 
-AZM does **not** add function declarations, local variables, structured control-flow keywords or typed assignment operators. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`.
+Every one of those additions resolves at assembly time, and the code that runs is still the Z80 instructions you wrote. Other languages call a named block of reusable code a function; in AZM it is a subroutine built from `call` and `ret`.
 
 ---
 
@@ -105,13 +105,12 @@ A source can be a register, an immediate constant encoded directly in the instru
 > `ld a, (hl)` reads the *byte at the address held in HL* from memory.
 >
 > Adding or removing parentheses may select a different legal instruction, so
-> the operand form must be checked rather than left for the assembler to infer.
-> Other instructions also use parentheses for indirect jump targets and I/O
-> ports; parentheses do not mean memory in every Z80 instruction.
+> the operand form is worth checking whenever memory is involved. Other
+> instructions use parentheses for indirect jump targets and I/O ports.
 
 ---
 
-The Z80 implements specific pairings of source and destination types; not all combinations are legal. Chapter 4 covers the memory access forms and the complete LD forms table.
+The Z80 implements specific pairings of source and destination types. Chapter 4 covers the memory access forms and the complete LD forms table.
 
 ### 8-bit register to register
 
@@ -142,14 +141,14 @@ ld ix, $4000    ; IX = $4000
 
 ## Constants
 
-A **constant** is a name for a fixed value that has no address of its own:
+A **constant** is a name the assembler substitutes for a fixed value:
 
 ```asm
 MaxCount .equ 10
 BaseAddr .equ $8000
 ```
 
-Wherever you write the name, the assembler substitutes the value. `ld a, MaxCount` becomes `ld a, 10`. `ld hl, BaseAddr` becomes `ld hl, $8000`. Constants produce no bytes in the output and occupy no memory at run time.
+Wherever you write the name, the assembler substitutes the value. `ld a, MaxCount` becomes `ld a, 10`. `ld hl, BaseAddr` becomes `ld hl, $8000`. A constant lives entirely at assembly time; its value ends up inside the instructions that use it.
 
 The difference between a constant and a label: a constant is a value you write down (`10`, `$8000`). A label is an address the assembler computes from where things end up in the output.
 
@@ -165,7 +164,7 @@ count:   .db 0
 scratch: .dw 0
 ```
 
-`count` starts at `$8000`. `scratch` follows immediately at `$8001`, because `count` is one byte wide. Since `scratch` is a word, it occupies two bytes: `$8001` and `$8002`. If `count` later becomes a word, every label after it moves up by one byte with no edit to the code that reads or writes them.
+`count` starts at `$8000`. `scratch` follows immediately at `$8001`, because `count` is one byte wide. Since `scratch` is a word, it occupies two bytes: `$8001` and `$8002`. If `count` later becomes a word, every label after it moves up by one byte and the code that reads or writes them keeps working as written.
 
 `.db` (define byte) places one byte at the current address. `.dw` (define word) places two bytes in little-endian order. The number that follows is the initial value.
 
@@ -241,7 +240,7 @@ Example `02_constants_and_labels.asm` demonstrates word-size memory access and i
 
 ## Debugging a Wrong Result
 
-Assembly gives you no runtime errors, no stack traces and no error messages.
+A wrong result in assembly surfaces as a wrong byte in a register or in memory, and finding its cause means reading the listing, stepping the program and watching the flags.
 
 ### Step 1: The assembler listing
 
@@ -251,11 +250,11 @@ selected target. Its `outputDir` receives a `.lst` and related artifacts that
 can be opened alongside the source. The listing shows each source line with its
 generated bytes and address. Before execution, it can confirm:
 
-- Did every instruction assemble without an error or warning?
+- Did the assembler report any errors or warnings?
 - Is the data section placed where you intended? (`count` at `$8000`, `scratch` at `$8001`?)
 - Does the entry point (`main`) start at `$0000`, or wherever your memory map expects it?
 
-A misplaced `.org` is one of the most common sources of programs that compile cleanly and then do nothing sensible at all.
+A misplaced `.org` is one of the most common reasons a program assembles cleanly and then runs the wrong bytes.
 
 ### Step 2: The emulator's step mode
 
@@ -297,7 +296,7 @@ ld c, a
 
 The trace should establish the final values in A, B and C and whether HL changed. Assembly of the snippet, with `.org $0000`, a `main:` label, a `halt` and any required data block, provides an emulator result against which to check the prediction.
 
-**2. An HL-to-DE copy without `ld de, hl`.** There is no single Z80 instruction that copies one 16-bit register pair directly into another. The task is to express the transfer from HL to DE using two 8-bit `ld` instructions. Chapter 8 returns to this problem after introducing the stack.
+**2. An HL-to-DE copy in two moves.** The Z80's 16-bit `ld` forms load from an immediate, from memory or into SP, so a pair-to-pair copy such as HL into DE is built from two 8-bit `ld` instructions. The task is to write them. Chapter 8 returns to this problem after introducing the stack.
 
 **3. Constants versus labels.** Given this program fragment:
 

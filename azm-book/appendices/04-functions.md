@@ -8,7 +8,7 @@ nav_order: 4
 
 # Appendix 4 — Built-in Functions
 
-AZM has four built-in functions you can use in any expression: `sizeof`, `offset`, `LSB` and `MSB`. The assembler evaluates all four entirely at assemble time; the Z80 sees only the resulting integer, never the function call.
+AZM has four built-in functions you can use in any expression: `sizeof`, `offset`, `LSB` and `MSB`. The assembler evaluates all four entirely at assemble time, so the Z80 sees a plain integer.
 
 ---
 
@@ -85,7 +85,7 @@ offset(Actor, pos.y)     ; 1
 offset(Actor, state)     ; 5
 ```
 
-**An index step in an `offset` path must be a numeric literal, and it must be the first step, applied to an array type expression.** `offset(Sprite[16], [3].flags)` is valid; `offset(Table, rows[0].x)` is a parse error, because the path parser splits on `.` and cannot consume a bracket mid-path. Reach an array-valued field with a layout cast (Chapter 5) instead; layout-cast path expressions accept assembler-time constant expressions in index positions.
+**An index step in an `offset` path must be a numeric literal, and it must be the first step, applied to an array type expression.** `offset(Sprite[16], [3].flags)` is valid; `offset(Table, rows[0].x)` is a parse error, because the path parser splits on `.` and takes its bracket at the start. Reach an array-valued field with a layout cast (Chapter 5) instead; layout-cast path expressions accept assembler-time constant expressions in index positions.
 
 ---
 

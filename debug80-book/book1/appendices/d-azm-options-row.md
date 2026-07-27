@@ -37,7 +37,7 @@ Three values: **Enforce**, **Audit**, **Off**.
 |---|---|---|
 | Enforce | Analyses, and treats a proven conflict as an error | The build fails |
 | Audit | Analyses and reports | The build succeeds |
-| Off | Does not analyse | The build runs without contract analysis |
+| Off | Skips the analysis | The build succeeds |
 
 **Enforce is the default**. If a build fails with a message about a
 register conflict, and the code assembles fine everywhere else, this
@@ -60,13 +60,13 @@ AZM can identify contract problems and update the source. Given a routine whose 
 
 This control sets how Debug80 handles that corrected source:
 
-- **Never**: does not ask for it.
+- **Never**: skips the fix analysis, so your source stays as you wrote it.
 - **Ask**: offers it after a build, showing you which files would change. You can look at a diff before deciding.
 - **Auto**: applies it.
 
 The changes are applied as **editor edits, not file writes**. The revised text arrives in your open editor as unsaved changes: the diff gutter marks them, and undo reverts them.
 
-They land **on Build only**. Run restarts the emulated machine the moment assembly finishes, and having your code move underneath you at that moment is disorienting, so Debug80 does not do it.
+They land **on Build only**. Run restarts the emulated machine the moment assembly finishes, which is a poor moment to have your source rewritten under you.
 
 Contract Updates works even with Register Contracts set to Off. Asking for updates turns the analysis on by itself.
 
@@ -79,12 +79,11 @@ Ticked, a label must be referenced with the capitalization used in its definitio
 For new assembly code, leaving it on catches typos that would
 otherwise resolve to the wrong symbol or fail late. Older source with
 inconsistent capitalization may require it to be disabled. Glimmer
-builds currently use their own label handling and do not read this
-checkbox.
+builds use their own label handling.
 
 ## Persistence across restarts
 
-The three controls are not stored alike, which is easy to miss because they sit in one row:
+Two of the three live in this VS Code window and the third lives in `debug80.json`, which is easy to miss because they sit in one row:
 
 | Control | Where it lives | Survives a window restart? |
 |---|---|---|
@@ -96,6 +95,6 @@ The three controls are not stored alike, which is easy to miss because they sit 
 
 ## A warning about `debug80.json`
 
-If you set `azm.registerContracts` by hand in `debug80.json`, the panel dropdown overrides it on every Build and Run started from the panel. The hand-written value survives only for builds that do not go through the panel.
+If you set `azm.registerContracts` by hand in `debug80.json`, the panel dropdown overrides it on every Build and Run started from the panel. The hand-written value applies only to builds started outside the panel.
 
 If you want a project-wide contracts policy that sticks, the file-scoped `registerContractsPolicy` described in [AZM Book 1](../../../azm-book/book1/06-register-contracts.md) is the mechanism that survives.

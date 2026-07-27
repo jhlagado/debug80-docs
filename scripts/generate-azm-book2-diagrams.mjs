@@ -184,7 +184,7 @@ add(
     line('none', 490, 75, 530, 75, 'ar'),
     pathEl('none', 'M605,100 V138 H105 V100', 'ar'),
     text('dimn', 300, 132, 'and round again'),
-    text('dimn', 40, 174, 'A jump or a call writes PC itself, so the advance never happens. That is the whole of control flow.'),
+    text('dimn', 40, 174, 'A jump or a call writes PC itself, and that is the whole of control flow.'),
   ],
 );
 
@@ -241,7 +241,7 @@ add(
         { cls: 'bxs', label: 'opcode' },
         { cls: 'bx', label: 'operand byte' },
       ]),
-      text('dimn', x0, 206, 'The byte stream carries no names. Nothing here says $8000 is a result rather than a display buffer.'),
+      text('dimn', x0, 206, 'The byte stream is numbers alone. $8000 could be a result, a display buffer or a lookup table.'),
     ],
   );
 }
@@ -510,7 +510,7 @@ add(
       text('dim', x0 + w / 4, y + 50, '0 … 127', 'middle'),
       text('dim', x0 + (3 * w) / 4, y + 50, '−128 … −1', 'middle'),
 
-      text('dimn', x0, 178, 'The byte does not know which reading you meant. cp $80 splits the bar here; whether that is a large'),
+      text('dimn', x0, 178, 'The byte holds one bit pattern and answers to both readings. cp $80 splits the bar here; whether that is a large'),
       text('dimn', x0, 196, 'positive number or a negative one is decided by which conditional jump you write next.'),
     ],
   );
@@ -524,7 +524,7 @@ add(
 add(
   'djnz-flow.svg',
   'What djnz does',
-  'djnz decrements B, then jumps back if B is not zero and falls through if it is, with a side note that B starting at zero wraps to 255 and runs 256 times.',
+  'djnz decrements B, then jumps back while B remains non-zero and falls through once it reaches zero, with a side note that B starting at zero wraps to 255 and runs 256 times.',
   268,
   [
     node({ x: 60, y: 34, w: 150, h: 44, label: 'ld b, count', kind: 'term' }),
@@ -541,9 +541,9 @@ add(
     text('cap', 396, 58, 'The zero case'),
     text('ts', 396, 84, 'ld b, 0'),
     text('dimn', 396, 108, 'B is decremented before the test, so'),
-    text('dimn', 396, 126, 'zero wraps to $FF, which is not zero,'),
-    text('dimn', 396, 144, 'and the jump is taken. 256 iterations,'),
-    text('dimn', 396, 162, 'not none.'),
+    text('dimn', 396, 126, 'zero wraps to $FF and the jump is'),
+    text('dimn', 396, 144, 'taken. The loop runs 256 times where'),
+    text('dimn', 396, 162, 'you may have expected none.'),
     text('dimn', 396, 194, 'Test for zero before the loop when the'),
     text('dimn', 396, 212, 'count can be zero.'),
 
@@ -586,7 +586,7 @@ add(
         { l: 'body' },
         { l: 'djnz', k: 'test', hi: true },
       ], 'Hardware decides. djnz is the bound.'),
-      text('dimn', 30, 290, 'In the second and third shapes djnz is not the exit condition. It is the guarantee that the loop ends at all.'),
+      text('dimn', 30, 290, 'In the second and third shapes the data or the hardware decides the exit, and djnz guarantees the loop ends at all.'),
     ],
   );
 }
@@ -741,7 +741,7 @@ add(
 
       text('dimn', 40, 244, 'ld sp, $C000 runs before the first call, push or pop. Each push takes SP down two and writes a word at the new'),
       text('dimn', 40, 262, 'SP; each pop reads a word and puts SP back up two.'),
-      text('dimn', 40, 280, 'Point SP at the top of RAM and the stack runs down into free space rather than down into your program.'),
+      text('dimn', 40, 280, 'Point SP at the top of RAM and the stack runs down into free space.'),
     ],
   );
 }
@@ -804,7 +804,7 @@ add(
     text('dimn', 46, 196, "There is no register recording how deep you are. The only limit is how much RAM sits below SP, and nothing"),
     text('dimn', 46, 214, 'checks that you have not run out of it.'),
 
-    text('dimn', 46, 252, 'A missing ret does not return anywhere. Execution runs on into whatever bytes follow the last instruction.'),
+    text('dimn', 46, 252, 'A missing ret lets execution run on into whatever bytes follow the last instruction.'),
   ],
 );
 
@@ -837,7 +837,7 @@ add(
     }),
 
     text('ts', 46, 220, 'DE = $0820       HL = $3C41       SP = $9000'),
-    text('dimn', 46, 248, 'The stack has no memory of which pair supplied the bytes, so a push and its pop can name different registers.'),
+    text('dimn', 46, 248, 'The stack holds bytes alone, so a push and its pop can name different registers.'),
     text('dimn', 46, 266, 'That is the only way to reach F, because no ld instruction can name it.'),
     text('dimn', 46, 284, 'SP is back where it started. Every path to ret must leave it that way, or ret reads a temporary as its destination.'),
   ],
@@ -924,7 +924,7 @@ add(
       text('ts', 54, 266, 'ld hl, values'),
       text('dimn', 306, 266, 'reloaded before the second call'),
 
-      text('dimn', 40, 304, 'find_max walks HL to the end of the table and does not put it back. Its contract says so, and the caller reloads it.'),
+      text('dimn', 40, 304, 'find_max leaves HL at the end of the table. Its contract says so, and the caller reloads it.'),
     ],
   );
 }
@@ -958,7 +958,7 @@ add(
     text('dimn', 390, 172, 'return. Miss one path and ret takes the'),
     text('dimn', 390, 190, 'saved word as its destination.'),
 
-    text('dimn', 56, 262, 'The contract decides this, not the register. BC is callee-save whenever the contract does not name it.'),
+    text('dimn', 56, 262, 'The contract decides this. BC is callee-save whenever the contract leaves it unnamed.'),
   ],
 );
 
@@ -1061,7 +1061,7 @@ add(
     text('dim', 330, 54, 'HL holds table'),
     pathEl('dash', 'M320,102 H300', 'arD'),
     text('dim', 330, 98, 'find_max walks HL to the end of'),
-    text('dim', 330, 116, 'the table and does not put it back'),
+    text('dim', 330, 116, 'the table and leaves it there'),
     pathEl('dash', 'M320,128 H300', 'arD'),
     text('dim', 330, 132, 'so this reads the wrong byte'),
 
@@ -1070,7 +1070,7 @@ add(
     text('ts', 54, 220, 'source.asm:6:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max'),
     text('ts', 54, 238, 'may modify H,L, but the pre-call value is used later.'),
 
-    text('dimn', 40, 272, 'The analyzer does not know what table means. It knows HL held a value, that the call may destroy HL, and that'),
+    text('dimn', 40, 272, 'The analyzer works from three facts alone: HL held a value, the call may destroy HL, and'),
     text('dimn', 40, 290, 'HL was read afterwards. Reload it, save it across the call, or stop using it.'),
   ],
 );

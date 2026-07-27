@@ -62,8 +62,8 @@ loop_top:
 ```
 
 The label `loop_top` sits at the first instruction of the body, not before the
-`ld b` initializer. Forget the `ld b` init and the loop runs for an unpredictable
-number of iterations.
+`ld b` initializer. With the `ld b` init missing, B holds whatever the previous
+code left in it and the loop runs that many times.
 
 ---
 
@@ -95,8 +95,7 @@ loop_top:
 skip_loop:
 ```
 
-If you know at write-time that the count is always between 1 and 255, no
-pre-test is needed.
+A count known at write-time to be between 1 and 255 can go straight into B.
 
 ---
 
@@ -122,15 +121,15 @@ incremented after reading each entry, so after five elements it has advanced
 five positions beyond the base.
 
 If another variable is stored immediately after the table, HL now points at it.
-A stray `ld (hl), a` at this point would silently overwrite that variable. The
-Z80 has no array bounds, no memory protection, no runtime error.
+A stray `ld (hl), a` at this point would overwrite that variable, and the
+hardware would carry out the write like any other.
 
 ---
 
 ## Sentinel loops
 
 A sentinel loop tests each element against a known value. The data tells it
-when to stop; there is no count to set in advance.
+when to stop.
 
 The structure uses `cp` and `jr z` instead of DJNZ as the exit mechanism:
 
@@ -145,9 +144,9 @@ sentinel_loop:
 found:
 ```
 
-This form has no automatic bound: if the sentinel value never appears, the loop
-runs past the end of the table. A safe sentinel loop pairs the value test with a
-DJNZ bound:
+The value test is this form's only exit, so a table that never contains the
+sentinel sends the loop past the end. A safe sentinel loop pairs the value test
+with a DJNZ bound:
 
 ```asm
 ld hl, table_base
@@ -202,7 +201,7 @@ flagval: .db 0
 addends: .db 3, 7, 2, 8, 5
 ```
 
-Where `$8010` falls in the memory map (ROM or RAM) depends on your hardware, not on the assembler.
+Whether `$8010` lands in ROM or in RAM is a property of your hardware; `.org` only says where the bytes go.
 
 The program runs three loop forms side by side over the same five-element table.
 
@@ -285,14 +284,14 @@ has crossed a threshold."
 In practice, most Z80 loops are counted loops, since DJNZ is compact and the
 iteration count is usually known before the loop starts.
 
-![The three shapes. In the second and third, djnz is not the exit condition; it is the guarantee that the loop ends at all.](../../assets/images/azm-book/book2/loop-shapes.svg)
+![The three shapes. In the second and third, the value or flag test is the exit condition and djnz is the guarantee that the loop ends at all.](../../assets/images/azm-book/book2/loop-shapes.svg)
 
 ---
 
 ## Tables in Chapter 7
 
 Chapter 7 applies counted loops to tables and introduces indexed access for
-reaching fields without changing HL before every load.
+reaching fields by offset from a single base address.
 
 ---
 

@@ -7,7 +7,7 @@ nav_order: 6
 
 # Inspecting a running program
 
-VS Code contributes the panels you already know (Variables, Watch and Call Stack) and Debug80 adds its own Registers, Memory, Machine and Displays sections, which show the Z80 and the board rather than the abstractions above them.
+VS Code contributes the panels you already know (Variables, Watch and Call Stack) and Debug80 adds its own Registers, Memory, Machine and Displays sections, which show the Z80 and the board.
 
 ## Symbols and Constants in Variables
 
@@ -27,7 +27,7 @@ The **Call Stack** view names the current Z80 frame from the nearest known symbo
 
 ## Registers
 
-Debug80 keeps the CPU registers in their own **Registers** section: the pairs `BC`, `DE`, `HL`, `AF`, `IX`, `IY`, the shadow set `BC'`, `DE'`, `HL'`, `AF'`, and `PC` and `SP`. The interrupt and refresh registers `I` and `R` are shown but not editable.
+Debug80 keeps the CPU registers in their own **Registers** section: the pairs `BC`, `DE`, `HL`, `AF`, `IX`, `IY`, the shadow set `BC'`, `DE'`, `HL'`, `AF'`, and `PC` and `SP`. The interrupt and refresh registers `I` and `R` are read-only.
 
 ![The Registers section](../../assets/images/debug80-book/book1/registers-editable.svg)
 
@@ -62,7 +62,7 @@ reverts it. Editing works only while the program is paused.
 
 ![Writing to read-only memory](../../assets/images/debug80-book/book1/memory-unlock.svg)
 
-Bytes in ROM are marked read-only and cannot be edited until you tick **Unlock read-only memory** in the section. Without it the byte snaps back and Debug80 reports:
+Bytes in ROM are marked read-only, and **Unlock read-only memory** in the section makes them writable. Until you tick it, an edited byte snaps back and Debug80 reports:
 
 ```text
 Read-only memory locked

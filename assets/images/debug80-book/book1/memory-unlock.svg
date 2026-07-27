@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="156" viewBox="0 0 720 156" role="img" aria-labelledby="t d">
   <title id="t">Writing to read-only memory</title>
-  <desc id="d">The Unlock read-only memory checkbox, and the message shown when a ROM byte is edited without it.</desc>
+  <desc id="d">The Unlock read-only memory checkbox, and the message shown when a ROM byte is edited while it stays clear.</desc>
   <defs><style>
   .pnl   { fill: #ffffff; stroke: #2f5d7c; stroke-width: 2; }
   .bar   { fill: #eef4f9; stroke: #2f5d7c; stroke-width: 2; }

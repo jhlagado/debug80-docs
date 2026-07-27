@@ -47,5 +47,5 @@
   <rect class="btn" x="622" y="99" width="72" height="26" rx="13"/>
   <text class="btxt" x="658" y="116" text-anchor="middle">Run</text>
   <text class="stat" x="26" y="156" text-anchor="start">Source map: select a target and build.</text>
-  <text class="note" x="26" y="178" text-anchor="start">Build and Run stay clickable, and say why they cannot run.</text>
+  <text class="note" x="26" y="178" text-anchor="start">Build and Run stay clickable, and say what is missing when you press them.</text>
 </svg>

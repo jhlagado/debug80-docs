@@ -7,7 +7,7 @@ nav_order: 6
 
 # The 8x8 Matrix Profile
 
-The TEC-1G has no video chip. The display is eight rows of eight RGB LEDs, and the
+The 8x8 display is eight rows of eight RGB LEDs, and the
 hardware can light exactly one row at a time. Three ports carry a
 row's red, green, and blue column data; a fourth selects the row that
 shows it. The Z80 itself sweeps those rows. It paints
@@ -38,7 +38,7 @@ always agree, and trusts every future rule to keep them agreeing.
 Compass stores *one* byte, a position on the rim, and derives
 everything the screen shows from it. A fact you compute stays true to
 its source, because the rule that derives it re-runs whenever the
-source changes; there is no second copy for a future rule to forget.
+source changes.
 
 ## Compass
 
@@ -208,23 +208,20 @@ At `Start` the profile clears its canvas and display once; then the
 loop begins. `ScanFrame` leads it, the CPU doing its display job: one
 complete pass over the 8x8 matrix, all eight rows, each lit for a
 fixed dwell, returning with the board dark. Everything else (polling,
-your three phases, the rollover) runs in that blank window, while
-nothing is showing. Your renders write memory in the dark, and the
+your three phases, the rollover) runs in that blank window. Your
+renders write memory in the dark, and the
 next scan presents their combined result, which is why the player only
 ever sees finished pictures.
 
-If the time each row stayed lit
-depended on how much game work a frame happened to do, brightness
-would wobble with your logic, the display
-flickering because the game thought harder this frame. Instead each
-row shines for the same count on every frame, so brightness stays
+Each row shines for the same count on every frame, whatever the game
+did that frame, so brightness stays
 even across the rows of any one sweep. The dark gap between sweeps is
 where your game runs, and it is a budget: a longer gap means fewer
 sweeps a second, and the LEDs spend a smaller share of their time
 lit. The few dozen instructions this book's blocks spend per frame
-move that share by amounts no eye will find. Heavy work that fills the
-blank window makes the display itself dim before
-anything else complains. And since the scan
+move that share by amounts too small to see. Heavy work that fills the
+blank window dims the display, and that is the first symptom you will
+notice. And since the scan
 is by far the frame's largest cost, it paces the frame and makes the
 frame a useful unit of game time.
 
@@ -270,8 +267,7 @@ COLOR_MAGENTA     .equ COLOR_RED + COLOR_BLUE
 COLOR_WHITE       .equ $07
 ```
 
-The A value passed to `FbPlot` is therefore a set of plane bits, not a
-colour-table index.
+The A value passed to `FbPlot` is therefore a set of plane bits.
 
 ![Seven colours from three planes.](../../assets/images/glimmer-book/book0/colour-planes.svg)
 

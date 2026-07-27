@@ -21,8 +21,8 @@ covers that workflow. The companion build is
 ## The problem: one file stops scaling
 
 Chapter 3's `strlen_u8` is twenty lines. Once copy, compare, ring-buffer helpers
-and Chapter 1's GCD join it, the listing becomes difficult to navigate and the
-string walk cannot be reused without duplication.
+and Chapter 1's GCD join it, the listing becomes difficult to navigate and
+reusing the string walk means copying it into the next program.
 
 The growing program needs two forms of structure:
 
@@ -43,8 +43,7 @@ The directive:
 ```
 
 tells the assembler to read `lib/strings.asm` and treat its contents as source
-at that exact line. There is no separate link step, no export table and no
-namespace prefix on `call strlen_u8`.
+at that exact line.
 
 Paths resolve **relative to the file that contains the `.include`**, then
 through any directories supplied with `-I`. In the companion tree,
@@ -78,7 +77,7 @@ Typical layout:
 | File | Holds |
 |------|--------|
 | `main.asm` (or `07_include_demo.asm`) | `main`, `halt`, RAM labels, `.org` for data |
-| `lib/strings.asm` | Subroutines only — no second `main` and normally no `.org` |
+| `lib/strings.asm` | Subroutines only; `main` and `.org` stay in the application file |
 | `constants.asm` (optional) | `.equ` shared by several includes |
 
 The `.include` directive appears where the library code should land, often
@@ -88,11 +87,11 @@ line appears later in the source.
 
 ### Include scope
 
-- Not a separate private symbol table: non-local declarations join the including source unit, while `_name` labels remain local to their nearest non-local owner.
-- Not a substitute for register contracts; contracts stay in `.routine` directives on callable entries.
-- Recursive include/import chains are rejected with a source diagnostic. A
-  directed acyclic graph avoids them: the application includes libraries, and
-  libraries do not include the application.
+- Non-local declarations join the including source unit, while `_name` labels remain local to their nearest non-local owner.
+- Register contracts still live in `.routine` directives on callable entries.
+- Recursive include/import chains are rejected with a source diagnostic. Keep
+  the include graph acyclic by pointing every edge the same way: the
+  application includes libraries.
 
 ---
 
@@ -121,8 +120,8 @@ _done:
 
 Four rules keep libraries predictable:
 
-1. **No `main` and no `halt`** in the library, only subroutines and maybe private helpers (`ring_advance_index` style).
-2. **No `.org` in the library** unless you are deliberately placing code at a fixed address (unusual in Book 3).
+1. **Subroutines only**, plus any private helpers (`ring_advance_index` style); `main` and `halt` live in the application file.
+2. **Placement stays with the application.** A library uses `.org` only to pin code at a fixed address, which Book 3 rarely needs.
 3. **Every exported routine gets register contracts**, same as [Book 1 Chapter 6](../book1/06-register-contracts.md) and Book 3 Chapters 1 to 3.
 4. **Routine entries have `.routine` directives.** Prefix a label with `@` only when the library exports it for `.import`.
 
@@ -189,8 +188,9 @@ treated as destroyed unless the caller preserved it.
 
 ### Symbol collisions
 
-Because included text shares one source-unit namespace, two files cannot both
-define `buffer` or `count` as non-local labels. The usual remedies are:
+Because included text shares one source-unit namespace, a non-local label such
+as `buffer` or `count` may be defined once across all the included files. The
+usual remedies are:
 
 - Workspace labels can carry a prefix: `demo_buffer`, `demo_str_len`.
 - Library routines can carry a prefix such as `str_strlen_u8` if two included
@@ -206,10 +206,10 @@ across the `.include` branches and given a unique non-local name.
 
 ## External code: `.asmi` interfaces (brief)
 
-Chapter 3's string routines live in **your** ROM image. Monitor ROM, BIOS and emulator stubs live at fixed addresses in **someone else's** code. You still need register contracts for `--rc warn`, but there is no AZM source to paste with `.include`.
+Chapter 3's string routines live in **your** ROM image. Monitor ROM, BIOS and emulator stubs live at fixed addresses in **someone else's** code. You still need register contracts for `--rc warn`.
 
 [Book 1 Chapter 6](../book1/06-register-contracts.md) covers **`.asmi`** files, which contain contract records
-but no instructions:
+alone:
 
 ```
 extern MON_PRINT_CHAR
@@ -230,13 +230,13 @@ The interface is loaded during assembly:
 azm --interface monitor.asmi --rc warn main.asm
 ```
 
-The program `call`s `MON_PRINT_CHAR` like any other label. The analyzer checks
-that A is not kept live across a call whose contract says `clobbers A`. A
+The program `call`s `MON_PRINT_CHAR` like any other label. The analyzer reports
+any value kept live in A across a call whose contract says `clobbers A`. A
 platform-manual change requires an update to the `.asmi`, while call sites
 remain unchanged.
 
-The interface supplies contracts, not machine addresses. The source still
-needs bindings from the platform manual:
+The interface supplies contracts; the addresses come from the platform manual
+as `.equ` bindings:
 
 ```asm
 MON_PRINT_CHAR .equ $0010
@@ -251,10 +251,10 @@ Contrast:
 | Feature | `.include "lib.asm"` | `.asmi` + `extern` |
 |---------|----------------------|---------------------|
 | Delivers | Source pasted into your program | Contracts only |
-| Code in output | Yes — your bytes | No — you supply address binding separately |
+| Code in output | Yes, your bytes | No, you supply the address binding separately |
 | Typical use | Your reusable subroutines | ROM / monitor / third-party binary |
 
-![An interface file carries contracts across the boundary, and nothing else crosses in either direction](../../assets/images/azm-book/book3/asmi-boundary.svg)
+![An interface file carries contracts across the boundary, while the code and its addresses stay on their own sides](../../assets/images/azm-book/book3/asmi-boundary.svg)
 
 ---
 
@@ -266,7 +266,7 @@ address:
 
 ![The library lands where its include line was, and the call to it is a plain address](../../assets/images/azm-book/book3/include-address-space.svg)
 
-Same data as Chapter 3's single-file demo, reached by two files instead of one.
+Same data as Chapter 3's single-file demo, now reached through two files.
 
 ---
 
@@ -297,16 +297,16 @@ listing and leaves `str_len` equal to 5 at `$8008`.
    byte for emulator verification.
 3. A `lib/strings.equ` file contains `CHAR_L .equ 'L'` and is included once
    from `07_include_demo.asm` before `lib/strings.asm`. Main and library can
-   then share the constant without defining it twice.
+   then share one definition of the constant.
 4. Two deliberately conflicting global labels named `done` in separate
    included files should produce an assembler diagnostic. A file-specific
    prefix provides the correction.
 5. A one-routine `lib/math.asm` contains Chapter 1's `gcd_u16`. A new
-   `08_gcd_client.asm` should include it, call GCD and store the result without
-   including string code.
+   `08_gcd_client.asm` should include that file alone, call GCD and store the
+   result.
 6. A `monitor.asmi` sketch defines two `extern` routines: character output
    through A and key input returning A. Each record lists `in`, `out` and
-   `clobbers` without providing a Z80 body.
+   `clobbers` and stops there.
 7. An include graph should show `main.asm` including `constants.asm`,
    `lib/strings.asm` and `lib/ring.asm` once each, and identify the cycle
    introduced if `ring.asm` includes `main.asm`.

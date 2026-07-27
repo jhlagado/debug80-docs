@@ -11,9 +11,9 @@ Greatest common divisor on 16-bit values comes first, then 8-bit exponentiation.
 
 ---
 
-## The problem: GCD without a divide instruction
+## The problem: greatest common divisor
 
-The greatest common divisor of two integers is the largest value that divides both without remainder. For 48 and 18, the answer is 6.
+The greatest common divisor of two integers is the largest value that divides both exactly. For 48 and 18, the answer is 6.
 
 Euclid's method gets there with subtraction alone:
 
@@ -43,7 +43,7 @@ Book 3 adds a **16-bit family** used in this chapter and reused later unless a c
 clobbers` may change across the call. An input is also caller-save when the
 contract says the routine consumes or clobbers it.
 
-**Callee-save:** every register not declared as an output or clobber must retain
+**Callee-save:** every register outside the output and clobber lists must retain
 its incoming value. A routine that uses one as scratch must restore it before
 every `ret`.
 
@@ -93,7 +93,7 @@ _right_answer:
 
 If HL ≥ DE, the second `sbc hl, de` performs the Euclidean subtraction step and the loop repeats.
 
-`ex de, hl` swaps the two 16-bit arguments without touching memory.
+`ex de, hl` swaps the two 16-bit arguments in a single byte of code.
 
 ### Trace: GCD(48, 18)
 
@@ -159,12 +159,13 @@ sort_len:
 
 Book 3 follows four workspace rules:
 
-- Workspace belongs in RAM rather than ROM and continues in the same `.org`
-  block as the data. A later `.org` below an earlier one is ignored, as Chapter
-  2 explains.
-- `.ds` reserves without initializing, so each byte must be written before it is
-  read.
-- Each logical temporary has its own label (`key_byte`, not `temp4`).
+- Workspace belongs in RAM and continues in the same `.org` block as the data.
+  Placement runs forward, so a later `.org` below an earlier one leaves the
+  cursor where it was, as Chapter 2 explains.
+- `.ds` reserves the bytes and leaves whatever was there, so each byte must be
+  written before it is read.
+- Each logical temporary has its own label naming what it holds, such as
+  `key_byte`.
 - Comments identify which routines touch each workspace label.
 
 Chapter 2's insertion sort stores the current key in `key_byte`, placed after
@@ -199,7 +200,7 @@ _done:
     ret
 ```
 
-`mul8_a_by_c` multiplies the accumulator in A by C using repeated addition, correct for the demo sizes (3^4 = 81), not a general fast multiply.
+`mul8_a_by_c` multiplies the accumulator in A by C using repeated addition, correct for the demo sizes (3^4 = 81).
 
 The companion program stores the byte result at `power_result`. After `halt`, `$8002` should hold `$51` (81 decimal).
 
@@ -236,10 +237,10 @@ azm --rc warn examples/01_gcd.asm
    zero handling. Their expected results can be checked in the emulator.
 3. A `digit_count_u8` routine uses A for both input and output. It returns 1 for
    values 0–9, 2 for 10–99 and 3 for 100–255. Two `cp` instructions against 10
-   and 100 are enough; no division is needed.
+   and 100 are enough.
 4. A shift-and-add version of `mul8_a_by_c` provides a faster implementation
    for larger products while retaining the existing `.routine` contract.
 5. A deliberate register-contract error leaves a later-needed address in DE,
-   calls `gcd_u16`, and then dereferences DE without reloading it. `azm --rc
-   warn` should report the declared DE clobber; reloading the address at the
-   caller resolves the warning.
+   calls `gcd_u16`, and then dereferences DE as if the call had preserved it.
+   `azm --rc warn` should report the declared DE clobber; reloading the address
+   at the caller resolves the warning.

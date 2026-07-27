@@ -12,8 +12,8 @@ The table lists AZM directives and declaration keywords. Dotted directives use c
 
 | Directive | Syntax | What it does | Ch. |
 |-----------|--------|--------------|-----|
-| `.org` | `.org expr` | Sets the assembly address counter to `expr`; emits nothing | 3 |
-| `.equ` | `NAME .equ expr` | Binds `NAME` to the constant value of `expr`; emits nothing | 3 |
+| `.org` | `.org expr` | Sets the assembly address counter to `expr`; assembly-time only | 3 |
+| `.equ` | `NAME .equ expr` | Binds `NAME` to the constant value of `expr`; assembly-time only | 3 |
 | `.if` | `.if expr` | Assembles the following branch when `expr` is non-zero | 3 |
 | `.else` | `.else` | Selects the alternate branch of a conditional block | 3 |
 | `.endif` | `.endif` | Closes a conditional block | 3 |

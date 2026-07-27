@@ -44,7 +44,7 @@
   <rect class="bar" x="407" y="41" width="298" height="26" rx="5"/>
   <text class="head" x="420" y="58" text-anchor="start">RUN AND DEBUG</text>
   <text class="dim" x="692" y="58" text-anchor="end">▾</text>
-  <text class="note" x="410" y="366" text-anchor="start">2. Open, it shows the Project section and nothing else.</text>
+  <text class="note" x="410" y="366" text-anchor="start">2. Open, it shows the Project section alone.</text>
   <rect class="off" x="420" y="74" width="272" height="26" rx="4"/>
   <text class="lbl" x="434" y="91" text-anchor="start">▸  VARIABLES</text>
   <rect class="off" x="420" y="104" width="272" height="26" rx="4"/>

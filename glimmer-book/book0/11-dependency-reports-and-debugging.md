@@ -14,8 +14,8 @@ program you know by heart, before you are hunting a real bug through a
 file twice this size.
 A misdrawn pixel in Canvas might trace to
 the painting rule, the redraw, a movement effect, or a binding. The
-question that finds bugs in a reactive program (*which fact failed to
-change?*) now has seven candidate answers.
+question that finds bugs in a reactive program (*which fact should
+have changed?*) now has seven candidate answers.
 
 Every block you have built sits behind a
 `.routine` boundary for register-contract checking. Every
@@ -102,8 +102,8 @@ the count.
 
 ## The report at scale
 
-The earlier four-fact dependency report told you little you could not
-see at a glance. Canvas has eight facts, and this is the scale where the report
+The earlier four-fact dependency report showed you what you could
+already see at a glance. Canvas has eight facts, and this is the scale where the report
 starts paying for itself:
 
 ```sh
@@ -144,7 +144,7 @@ Glimmer computes the report from your `bind`, `on` and `updates`
 connections, gathered into one place and sorted by fact.
 
 When something misbehaves in a reactive program, your first question
-is the one this chapter opened with: which fact failed to change? The
+is the one this chapter opened with: which fact should have changed? The
 report answers it from your chair, in both directions, before you
 touch a debugger. Suppose the count on the display sits still while pixels
 keep landing. Downstream from `Marks` is one trigger, `ShowMarks (render)`, so
@@ -167,7 +167,8 @@ effect PaintPixel
 begin
 ```
 
-The body still stores to `Marks`; the header has stopped saying so.
+The body still stores to `Marks`, and the header now lists `Picture`
+alone.
 This is a common reactive error: a store added to a block without
 updating the header to match. On the next build, the tool reports:
 
@@ -185,8 +186,8 @@ program, the consequence is visible. Pixels paint, the board
 redraws, and the count reads 00000 no matter how many marks pile
 up. The
 store still executes on every press, and `Marks` climbs in memory;
-its change flag stays down, so `ShowMarks`, triggered `on Marks`,
-waits for an announcement that never arrives.
+its change flag stays down, and that flag is the whole of what
+`ShowMarks` runs on.
 
 The report tells the same story from the declarations' side. With
 `--deps`, the broken program's `Marks` stanza reads:
@@ -250,7 +251,7 @@ Glim_DrawCanvas:
 The `.routine` line is the boundary. It applies to the label below it
 and opens a region that the next `.routine` closes, and it hands that
 region to the assembler as one unit: `Glim_PaintPixel` is a callable routine,
-and because the directive carries no clauses, the assembler infers the
+and because the directive stands bare, the assembler infers the
 routine's register behaviour (what it reads on entry, what it may
 destroy) from the body itself. Your code sits inside verbatim; the
 wrapper closes the region with the compiled `updates` line and the
@@ -282,10 +283,10 @@ FbPlot:
 As a block header, the contract line says `in A,B,C`:
 the routine consumes those three on entry (colour, x, y). `clobbers
 A,B,DE,HL` and the flags: any of those may hold anything on return.
-A register absent from a declared contract counts as preserved, and
-the assembler checks the routine's body against that promise too. C's
-absence from the clobbers list is a verified guarantee that y survives
-the call, proven on every
+A register the contract leaves out counts as preserved, and
+the assembler checks the routine's body against that promise too.
+`FbPlot` leaves C out of its clobbers list, which is a verified
+guarantee that y survives the call, proven on every
 build, and about to matter.
 
 ## A trampled register
@@ -314,8 +315,8 @@ canvas.glim:116:5: [AZMN_REGISTER_CONTRACTS] error: CALL FbPlot may modify B, bu
 ```
 
 An error this time, and the build stops. The generated assembly is on
-disk for reading; nothing downstream of it is: no hex, no binary,
-no debug map. The assembler followed the code past the first call, found `inc
+disk for reading, and the build halts short of the hex, the binary
+and the debug map. The assembler followed the code past the first call, found `inc
 b` consuming B's pre-call value, checked B against `FbPlot`'s
 clobbers list, and refused. On the board, this bug is a second pixel
 landing wherever `FbPlot` happened to leave B, and an evening of

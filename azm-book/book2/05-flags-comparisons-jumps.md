@@ -35,7 +35,7 @@ The four flags you will use most:
 
 After `sub` or `cp`, Z is set
 when the two values were equal. After `dec`, Z is set when a register reaches
-zero. After `and`, Z is set when none of the tested bits were present.
+zero. After `and`, Z is set when every bit the mask selected was 0.
 
 ![The eight bits of F. The two greyed bits are undocumented copies of result bits.](../../assets/images/azm-book/book2/flags-register.svg)
 
@@ -50,8 +50,8 @@ unsigned values you can usually ignore S.
 **P/V** has two unrelated meanings depending on which instruction set it. After
 8-bit arithmetic it reports signed overflow. After logical instructions it
 reports parity and is set when the result has an even number of 1 bits. Rotate
-and shift forms differ in whether they update P/V, so check the instruction
-reference rather than carrying one rule across the whole family.
+and shift forms differ in whether they update P/V, so the instruction
+reference is the authority for each one.
 
 For the full flags reference and all condition codes, see
 [Appendix 6](../appendices/06-registers-flags-and-conditions.md).
@@ -76,7 +76,7 @@ sub 5     ; A = $FE (-2); Z is clear, C is set (borrow - A was less than 5)
 `cp n` does exactly the same subtraction and sets the same flags, but discards
 the result.
 
-![cp leaves flags behind and nothing else. Carry is set when A is below the operand, because that is the case a borrow was needed.](../../assets/images/azm-book/book2/compare-and-branch.svg)
+![cp changes the flags and leaves A as it was. Carry is set when A is below the operand, because that is the case a borrow was needed.](../../assets/images/azm-book/book2/compare-and-branch.svg)
 
 ```asm
 ld a, 5
@@ -112,10 +112,10 @@ ld a, $03
 or $80             ; A = %10000011 - bit 7 now set
 ```
 
-`or a` is a useful special case: A ORed with itself always equals A, so the
-value does not change. Only the flags are updated: Z is set if A is zero, C is
-cleared. `cp 0` can perform the same zero test without changing A, but it does
-not produce an identical full set of flags: `cp` sets N, while `or` clears it.
+`or a` is a useful special case: A ORed with itself always equals A, so A keeps
+its value. Only the flags are updated: Z is set if A is zero, C is cleared.
+`cp 0` tests for zero the same way and also leaves A alone; the two differ in
+N, which `cp` sets and `or` clears.
 
 ```asm
 ld a, 0
@@ -134,8 +134,7 @@ xor $0F            ; A = %11110000 - lower four bits flipped
 
 The most-used form is `xor a`. A XOR'd against itself is always zero; every
 bit cancels. `ld a, 0`
-also zeros A but leaves the flags unchanged. `xor a` guarantees a clean
-state in both A and carry.
+also zeros A but leaves the flags unchanged.
 
 ```asm
 xor a              ; A = 0; Z is set; C is clear
@@ -151,9 +150,7 @@ forms is in [Appendix 7](../appendices/07-addressing-prefixes-and-instruction-fo
 
 From Chapter 1 you know that the CPU always executes the instruction at the
 address in PC, then advances PC to the next instruction. `jp` breaks that
-sequence: instead of advancing PC by the instruction's length, it puts a new
-address into PC. Execution continues at the target instead of falling through
-to the following instruction.
+sequence: it puts a new address into PC, and execution continues from there.
 
 ```asm
 jp $8010      ; PC becomes $8010; next instruction comes from $8010
@@ -181,9 +178,9 @@ or jumping back to an earlier address to repeat something.
 
 A conditional `jp` works exactly like an unconditional one, with one addition:
 before changing PC, it checks a flag. If the flag condition is met, PC changes
-and execution continues from the target address. If it is not met, the jump
-doesn't happen and execution continues with the instruction that immediately
-follows. It falls through.
+and execution continues from the target address. If it is not met, execution
+continues with the instruction that immediately follows: the jump falls
+through.
 
 `jp z, target` checks Z. If Z is set, the jump happens.
 
@@ -200,14 +197,14 @@ The condition codes you will use most:
 | `nc` | Jump if C is clear |
 
 `jp` also supports `m` (S set) and `p` (S clear), which test the sign bit of the
-preceding result. They do not by themselves implement a general signed
-less-than or greater-than comparison because signed overflow can change the
-interpretation of S. The `pe` and `po` conditions test P/V; that flag represents
+preceding result. A general signed less-than or greater-than comparison also
+has to account for signed overflow, which can flip the meaning of S. The `pe`
+and `po` conditions test P/V; that flag represents
 parity after some instructions and signed overflow after others. The full list
 is in [Appendix 6](../appendices/06-registers-flags-and-conditions.md).
 
 A `cp` or logical instruction sets a flag, after which a conditional `jp`
-can skip the block that does not apply:
+selects which block runs:
 
 ```asm
 cp 5
@@ -250,9 +247,9 @@ non-zero, Z is clear and execution falls through.
 > that flag?**
 > The ordinary `ld` instructions used in this book are safe to place between a
 > comparison and a jump. `inc` and `dec` update most flags but leave C alone.
-> Arithmetic and logical instructions update several flags, but not always the
-> same set. If something in between modifies the flag you are testing, the jump
-> will read the wrong value.
+> Arithmetic and logical instructions each update their own set of flags. If
+> something in between modifies the flag you are testing, the jump will read
+> the wrong value.
 >
 > **Step 3: Is the flag's meaning what you think it is?**
 > C means different things after `add` (carry out of bit 7) versus after `cp`
@@ -281,8 +278,8 @@ is one byte shorter than `jp`.
 | Conditions available | z, nz, c, nc, m, p, pe, po | z, nz, c, nc only                  |
 
 For short loops and nearby tests, `jr` saves a byte per jump and the range is
-rarely a problem. For anything that might be far away, or when you need a
-condition that `jr` does not support, `jp` is the safe choice. The assembler
+rarely a problem. For anything that might be far away, or when you need `m`,
+`p`, `pe` or `po`, `jp` is the safe choice. The assembler
 will tell you if a `jr` target is out of range. Jump range limits for `jr` and
 the related `djnz` instruction (Chapter 6) are in
 [Appendix 6](../appendices/06-registers-flags-and-conditions.md).
@@ -368,7 +365,7 @@ found:   .db 0
 
 **Section A: equality test.** `ld a, Limit` loads 5 into A. `cp 5` subtracts 5
 from A and sets Z. `jp nz, not_equal` tests
-whether Z is clear: it is set, so the jump does not occur. Execution continues
+whether Z is clear: Z is set, so execution continues
 through `ld a, 1 / ld (found), a`, then `jp done_compare` skips the else-block
 and lands at `done_compare:`.
 

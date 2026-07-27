@@ -87,5 +87,5 @@
   <text class="dimn" x="46" y="166" text-anchor="start" xml:space="preserve">Popped on the way out, bottom to top.</text>
   <text class="dimn" x="46" y="196" text-anchor="start" xml:space="preserve">There is no register recording how deep you are. The only limit is how much RAM sits below SP, and nothing</text>
   <text class="dimn" x="46" y="214" text-anchor="start" xml:space="preserve">checks that you have not run out of it.</text>
-  <text class="dimn" x="46" y="252" text-anchor="start" xml:space="preserve">A missing ret does not return anywhere. Execution runs on into whatever bytes follow the last instruction.</text>
+  <text class="dimn" x="46" y="252" text-anchor="start" xml:space="preserve">A missing ret lets execution run on into whatever bytes follow the last instruction.</text>
 </svg>

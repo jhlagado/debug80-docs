@@ -100,7 +100,7 @@ const src = (s) => s.replace(/ /g, ' ');
       text('tb', 533, 242, 'CopyRow._loop', 'middle'),
 
       text('dimn', 30, 272, 'The same _loop spelling under a different owner is a different symbol.'),
-      text('dimn', 30, 290, 'Equates, enum members, type names and op names cannot begin with an underscore.'),
+      text('dimn', 30, 290, 'The leading underscore belongs to owner-local labels alone; every other name starts with a letter.'),
     ],
   );
 }
@@ -173,8 +173,8 @@ const src = (s) => s.replace(/ /g, ' ');
       }),
 
       text('dimn', 46, 326, 'The second .org asks for $0012, which is behind the cursor, so AZM ignores it and the cursor stays at $0014.'),
-      text('dimn', 46, 344, 'B is defined at $0014. Nothing is overwritten, nothing is reported, and no line of source names that address.'),
-      text('dimn', 46, 376, '.org moves the cursor forward. Emitted bytes and .align padding move it forward. Nothing moves it back.'),
+      text('dimn', 46, 344, 'B is defined at $0014. The earlier bytes stand, the build stays silent, and no line of source names that address.'),
+      text('dimn', 46, 376, '.org, emitted bytes and .align padding all move the cursor forward. Forward is the only direction it travels.'),
     ],
   );
 }
@@ -217,7 +217,7 @@ add(
     text('dimn', 366, 246, 'no records here', 'middle'),
 
     text('dimn', 46, 284, 'Zero bytes in the binary, no records at all in the HEX. .binfrom and .binto trim the binary to the range you meant.'),
-    text('dimn', 46, 302, '.align padding is not a gap: those zero bytes are assembled, so they appear in both.'),
+    text('dimn', 46, 302, '.align padding is assembled: those zero bytes are real, so they appear in both.'),
   ],
 );
 
@@ -256,7 +256,7 @@ add(
       ...row(356, '.ds 4,0', [{ v: '00' }, { v: '00' }, { v: '00' }, { v: '00' }], 'fill byte written'),
 
       text('dimn', 46, 410, 'The three string directives differ only in which byte marks the end.'),
-      text('dimn', 46, 428, 'An unfilled .ds advances the address without writing anything. A fill byte makes the block real in the flat binary.'),
+      text('dimn', 46, 428, 'An unfilled .ds advances the address alone. A fill byte makes the block real in the flat binary.'),
     ],
   );
 }
@@ -390,7 +390,7 @@ add(
     text('t', 46, 318, '<SpriteArray>Sprites[3].flags'),
     text('dimn', 340, 318, 'a .typealias adds no path level'),
 
-    text('dimn', 46, 356, 'A cast changes nothing at runtime. It names the layout AZM applies while it computes the offset.'),
+    text('dimn', 46, 356, 'A cast names the layout AZM applies while it computes the offset, entirely at assembly time.'),
     text('dimn', 46, 374, 'Indices inside a cast path must be assembler-time constants, so <Sprite[16]>Sprites[HL].flags is an error.'),
   ],
 );
@@ -515,7 +515,7 @@ add(
       text('dim', 30, 348, 'azm --rc audit program.asm'),
       text('dimn', 540, 348, 'off is the default'),
 
-      text('dimn', 30, 380, 'The mode decides whether a finding warns, fails the build, or is never looked for.'),
+      text('dimn', 30, 380, 'The mode decides whether a finding warns, fails the build, or stays unreported.'),
     ],
   );
 }
@@ -569,7 +569,7 @@ add(
       caption(372, 52, 'One path does not'),
       ...branch(24, false),
       ...branch(372, true),
-      text('dimn', 24, 362, 'Every returning path is checked against the same contract. A pop on one path does not cover the other.'),
+      text('dimn', 24, 362, 'Every returning path is checked against the same contract, so each one needs its own pop.'),
       text('dimn', 24, 380, 'Keep the push and its pop inside one .routine region. A shared exit owned by another routine is rejected first.'),
     ],
   );
@@ -617,7 +617,7 @@ add(
         'calls to it can be checked.',
       ], 'nothing', 'bxq'),
 
-      text('dimn', 20, 254, 'Two of the three add bytes. An .asmi file adds only what the analyzer needs to check a call it cannot see.'),
+      text('dimn', 20, 254, 'Two of the three add bytes. An .asmi file adds contracts alone, enough for the analyzer to check a call whose body lives elsewhere.'),
     ],
   );
 }
@@ -727,7 +727,7 @@ add(
         note ? text('dimn', x + w / 2, 128, note, 'middle') : '',
       ]),
       text('dimn', 46, 164, 'The diagnostic ID is the stable part of the line.'),
-      text('dimn', 46, 182, 'If you script against AZM output, match on the code rather than the message text.'),
+      text('dimn', 46, 182, 'If you script against AZM output, match on the code: it is the stable part.'),
     ],
   );
 }

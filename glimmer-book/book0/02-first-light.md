@@ -82,8 +82,8 @@ names directly, so your source says GO where you mean GO. The other
 new thing is that *the colour itself is a fact*. The 8x8 matrix mixes
 red, green and blue per pixel, so the values 1 through 7 are its seven
 visible colours, and `NextColour`'s wrap keeps the cell inside that
-range. `DrawBeacon` never knows or cares which colour is current; it
-reads the fact and plots it. Spoken aloud, the chain is: "GO fires Step;
+range. `DrawBeacon` reads the fact and plots whatever colour it holds.
+Spoken aloud, the chain is: "GO fires Step;
 on Step, NextColour updates Colour; on Colour,
 DrawBeacon."
 
@@ -210,14 +210,13 @@ them, and at the bottom of the file the profile library spells out
 ## Stopping the world
 
 A breakpoint on the `inc a` line inside `NextColour` in `main.glim` shows
-where the reactive chain reaches that rule. With the breakpoint set before
-the next Run, the program starts without reaching it.
+where the reactive chain reaches that rule, and it goes in before the
+next Run.
 
-The beacon glows. And nothing stops: `NextColour`
-has not run, because `Step` has not fired, because you have not
-pressed GO. A breakpoint in a reactive program is
-a question (*when does this rule actually run?*) and right now the
-answer is: not yet.
+The beacon glows and the program runs on. `NextColour` runs only when
+`Step` fires, and `Step` fires only when you press GO. A breakpoint in
+a reactive program is a question (*when does this rule actually run?*)
+and right now the answer is: not yet.
 
 Pressing the GO key now fires `Step` and reaches the breakpoint.
 

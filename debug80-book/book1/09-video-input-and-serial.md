@@ -17,9 +17,9 @@ The TEC-1G panel has nine sections: Project, Machine, Displays, TMS9918 Video, J
 
 Every header carries **↑** and **↓** buttons to move a section up or down, and the layout you end up with is remembered.
 
-**Debug80: Reset Panel Layout** puts the default order and open state back. It does nothing on the Simple platform, which has no accordion.
+**Debug80: Reset Panel Layout** puts the default order and open state back on the TEC-1 and TEC-1G panels. The Simple platform's panel has a fixed layout of its own.
 
-Sections other than Project stay hidden until a debug session is running.
+The other eight sections appear once the folder is an initialized Debug80 project, and Project is the only one on screen before that.
 
 ## TMS9918 Video
 
@@ -41,7 +41,7 @@ Aux, and `L` for Fire 3.
 
 ![The Joystick section](../../assets/images/debug80-book/book1/section-joystick.svg)
 
-The arrow keys switch role with the **Move** and **Fire** toggle: in Move mode they steer, and in Fire mode they map to the four fire buttons. Switching modes drops any arrow key you are holding, so a held direction cannot leak through as a fire press.
+The arrow keys switch role with the **Move** and **Fire** toggle: in Move mode they steer, and in Fire mode they map to the four fire buttons. Switching modes drops any arrow key you are holding, so the new mode starts with every button up.
 
 When several input surfaces are eligible, the joystick outranks the hex keypad. Dead keypad input usually means an open Joystick section.
 
@@ -53,7 +53,7 @@ typing reaches it once the matrix owns keyboard focus.
 
 ![The Matrix Keyboard section](../../assets/images/debug80-book/book1/section-matrix-keyboard.svg)
 
-While the matrix is attached the hex keypad is dimmed and does not accept clicks, with one exception: **RESET**, which stays live so you can always reset the machine.
+While the matrix is attached the hex keypad is dimmed, with one live exception: **RESET**, so you can always reset the machine.
 
 A pill above the keypad identifies the current owner of physical key input and the available release action:
 
@@ -61,9 +61,9 @@ A pill above the keypad identifies the current owner of physical key input and t
 Keyboard captured / click outside to release
 ```
 
-It also reports when the joystick has taken over, and when the keyboard has been released back to VS Code. **Ctrl-Escape** releases the matrix without reaching for the mouse.
+It also reports when the joystick has taken over, and when the keyboard has been released back to VS Code. **Ctrl-Escape** releases the matrix from the keyboard.
 
-On macOS, Command chords are deliberately not routed, so **Command-S** and **Command-P** stay VS Code shortcuts while the emulator has focus. Option chords are read from the physical key rather than the character macOS produces, so **Option-S** reaches the matrix as `S` rather than as `ß`.
+On macOS, Command chords stay with VS Code, so **Command-S** and **Command-P** keep working while the emulator has focus. Option chords are read from the physical key rather than the character macOS produces, so **Option-S** reaches the matrix as `S` rather than as `ß`.
 
 ## Serial
 
@@ -73,12 +73,12 @@ The **Serial** section is the emulated bit-banged UART (4800 baud on the TEC-1G,
 
 **SEND FILE** feeds a file into the emulated machine one character at a time, pacing itself so a program polling the port can keep up, and it can be cancelled while it runs. **SAVE** writes the captured buffer out, choosing a `.hex` extension when every line looks like Intel HEX.
 
-This section talks to the *emulated* machine and never touches a physical port.
+This section talks to the *emulated* machine; the physical port belongs to CoolTerm, in [Sending to TEC-1G hardware](10-send-to-hardware.md).
 
 ## Reset, and what survives it
 
-**RESET** on the keypad resets the emulated machine. On the TEC-1G it also releases every held key, joystick direction and matrix key first, so nothing is stuck down across the reset, and it preserves the monitor's configuration state so MON-3 comes back up the way it went down.
+**RESET** on the keypad resets the emulated machine. On the TEC-1G it also releases every held key, joystick direction and matrix key first, and it preserves the monitor's configuration state so MON-3 comes back up the way it went down.
 
 Holding **FN** while pressing RESET latches the function key for the first keypad read after reset. That reproduces holding a key down while a real board boots, which is how MON-3's startup options are selected.
 
-There is no NMI button. Non-maskable interrupts happen as a consequence of input: pressing a key raises one, and the video card raises one at vertical blank while it is attached. Releasing an input cancels an NMI that has not yet been taken.
+Non-maskable interrupts happen as a consequence of input: pressing a key raises one, and the video card raises one at vertical blank while it is attached. Releasing an input cancels a pending NMI.

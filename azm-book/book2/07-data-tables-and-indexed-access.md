@@ -90,8 +90,8 @@ Only `ld a, (hl)` produces the value stored in the table.
 
 ## Labels, variables and code share the same memory
 
-Assembly makes no distinction between a label that names a variable and one
-that marks a point in code. Both are memory addresses, plain 16-bit numbers. A
+A label that names a variable and a label that marks a point in code are the
+same kind of thing to the assembler: a memory address, a plain 16-bit number. A
 load can read from a code address, and a jump can target a data address. In the
 second case the CPU interprets data bytes as instructions, with results
 determined by those byte values.
@@ -102,10 +102,11 @@ determined by those byte values.
 
 IX is a 16-bit index register. Its specific capability is the `(ix+d)`
 addressing mode: `d` is a signed byte offset, any value from -128 to +127 and
-`ld a, (ix+d)` reads the byte at address IX + d without touching IX itself.
+`ld a, (ix+d)` reads the byte at address IX + d while IX keeps pointing where
+it did.
 
 Once IX holds the base of a record, every field can be named by its
-offset, with no incrementing between reads:
+offset from that base:
 
 ```asm
 ; A three-byte record: offset 0 = id, offset 1 = high byte, offset 2 = low byte
@@ -116,7 +117,7 @@ ld c, (ix+2)         ; C = low byte field
 ; IX is unchanged throughout - all three fields read from one base address
 ```
 
-Offsets larger than 127 or smaller than -128 are not encodable and will cause
+The displacement field holds -128 through +127; an offset outside that range is
 an assembler error.
 
 ![One load of the base, then every field by name. IX is unchanged throughout.](../../assets/images/azm-book/book2/ix-displacement.svg)
@@ -143,8 +144,8 @@ add hl, de           ; HL = scores + 3
 ld a, (hl)           ; A = entry 3 = 40
 ```
 
-`add hl, de` adds the 16-bit value in DE to HL. This form does not check bounds; if the index exceeds the table
-length, the read will access whatever bytes follow the table in memory.
+`add hl, de` adds the 16-bit value in DE to HL, and the load takes whatever is at the result, so an index past the table
+length reads the bytes that follow the table in memory.
 
 ---
 
@@ -221,8 +222,8 @@ ld (rec1_lo), a
 assembler computes `address_of_records + 3` before emitting any code. IX is
 loaded with that address in a single `ld ix, imm16` instruction.
 
-No `inc` instructions appear between reads: the displacement
-encodes the offset directly. `rec1_id` receives `$02` (the id byte of record 1)
+The displacement encodes each offset directly, so all three reads work from the
+single base address in IX. `rec1_id` receives `$02` (the id byte of record 1)
 and `rec1_lo` receives `$B0`.
 
 ---

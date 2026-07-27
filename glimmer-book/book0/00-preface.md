@@ -26,8 +26,8 @@ assembly: registers, flags, memory access, a short routine with
 labels and branches. Games, reactive
 programming, and every tool in the workflow are taught as you meet
 them. Readers new to the Z80 can begin with [AZM Book 2 - Z80
-Fundamentals](../../azm-book/book2/), which starts from no prior
-knowledge and leads here.
+Fundamentals](../../azm-book/book2/), which starts at the bare machine
+and leads here.
 
 Three tools do the work, and the book introduces each one at the
 point you first need it:

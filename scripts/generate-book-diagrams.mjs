@@ -156,7 +156,7 @@ diagrams['panel-state-no-targets.svg'] = svg(
     button(552, 112, 60, 'Build'),
     pill(622, 112, 72, 'Run'),
     status(26, 156, 'Source map: select a target and build.'),
-    text('note', 26, 178, 'Build and Run stay clickable, and say why they cannot run.'),
+    text('note', 26, 178, 'Build and Run stay clickable, and say what is missing when you press them.'),
   ].join('\n')
 );
 
@@ -232,7 +232,7 @@ diagrams['panel-sidebar-location.svg'] = svg(
       text('note', 361, 197, 'click it', 'middle'),
 
       // --- right: what you are aiming at -----------------------------------
-      ...sidebar(406, '2. Open, it shows the Project section and nothing else.'),
+      ...sidebar(406, '2. Open, it shows the Project section alone.'),
       ...rows.map((n, i) => shut(406, 74 + i * 30, n)),
       rect('bar', 420, 194, 272, 26, 4),
       text('head', 434, 211, '▾  DEBUG80'),
@@ -597,7 +597,7 @@ mk('registers-editable.svg', 'The Registers section',
    ], 3, 'Every field except I and R is editable while the program is paused.'));
 
 mk('memory-unlock.svg', 'Writing to read-only memory',
-   'The Unlock read-only memory checkbox, and the message shown when a ROM byte is edited without it.',
+   'The Unlock read-only memory checkbox, and the message shown when a ROM byte is edited while it stays clear.',
    { height: 156, svg: [
      frame(156, 'MEMORY'),
      text('lbl', 26, 58, 'A'), rect('field', 44, 46, 150, 24), text('val', 53, 62, 'PC'),
@@ -736,7 +736,7 @@ mk('section-serial.svg', 'The Serial section',
      text('valm', 38, 90, ':104010001127400E0AD718F84465627567383020BA'),
      text('valm', 38, 112, ':00000001FF'),
      button(26, 152, 100, 'SEND FILE'), button(136, 152, 70, 'SAVE'),
-     text('note', 230, 156, 'The emulated UART. Never touches a physical port.'),
+     text('note', 230, 156, 'The emulated UART. Chapter 10 covers sending to a real board.'),
    ].join('\n') });
 
 // ── chapter 11 ───────────────────────────────────────────────────────────────

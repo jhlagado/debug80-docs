@@ -94,7 +94,7 @@ above_64: .db 0
 
 `main` sets up registers, calls a subroutine, stores the result, then repeats for the second task. The calling sequence is entirely explicit: every register used to pass arguments is loaded immediately before each `call`.
 
-The table base address `values` must be loaded into HL again before the second call because `find_max` advances HL past the end of the table during its scan. Nothing in the language tells you this will happen; this kind of side effect is invisible in a short program and only surfaces as a bug once the code grows.
+The table base address `values` must be loaded into HL again before the second call because `find_max` advances HL past the end of the table during its scan. The comment header is the only record of that: `find_max` lists HL among its clobbers. In a short program the scan is easy enough to follow; once the code grows, that side effect surfaces as a bug.
 
 ![The register traffic across both calls. HL is reloaded between them because find_max leaves it past the end of the table.](../../assets/images/azm-book/book2/main-data-flow.svg)
 
@@ -172,16 +172,16 @@ cost here is the `call` and `ret` used to enter and leave each subroutine.
 
 ## Limits as Programs Grow
 
-**Comment-only contracts are not enforced.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. Nothing checks that the caller actually loads the right registers, or that the subroutine actually produces what it claims. A caller that loads the wrong register fails silently. [Book 1 Chapter 6](../book1/06-register-contracts.md) covers `.routine` register contracts, which let the assembler verify these claims.
+**Comment-only contracts rely on the reader.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. The caller alone is responsible for loading the right registers, and the subroutine alone for producing what it claims. A caller that loads the wrong register assembles cleanly and returns a wrong answer at run time. [Book 1 Chapter 6](../book1/06-register-contracts.md) covers `.routine` register contracts, which let the assembler verify these claims.
 
-**Register ownership has no names.** `count_above` uses D as a counter, but the running count has no name; the register is D and nothing says why. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. Chapter 11 covers the manual discipline for managing register ownership across subroutines; [Book 1 Chapter 6](../book1/06-register-contracts.md) shows how register contracts make the contract explicit.
+**Register ownership lives in your head.** `count_above` keeps its running count in D, and D is the only name that count has. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. Chapter 11 covers the manual discipline for managing register ownership across subroutines; [Book 1 Chapter 6](../book1/06-register-contracts.md) shows how register contracts make the contract explicit.
 
 **Repeated comparison sequences obscure their purpose.** The `cp c` / `jr c` /
-`jr z` sequence in `count_above` implements "strictly greater than", for which
-the Z80 has no single opcode. [Book 1 Chapter 7](../book1/07-ops-aliases.md)
+`jr z` sequence in `count_above` implements "strictly greater than", which the
+Z80 spells out in three instructions every time. [Book 1 Chapter 7](../book1/07-ops-aliases.md)
 covers `op` declarations for naming such a sequence and expanding it inline.
 
-**Byte offsets in data structures must be counted by hand.** This program has no compound data structures, but once you start grouping related bytes (a sprite with `x`, `y` and `color` fields, for example), every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. [Book 1 Chapter 5](../book1/05-layout-system.md) covers AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant without counting.
+**Byte offsets in data structures must be counted by hand.** Every byte in this program is a standalone variable, but once you start grouping related bytes (a sprite with `x`, `y` and `color` fields, for example), every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. [Book 1 Chapter 5](../book1/05-layout-system.md) covers AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant.
 
 ---
 
@@ -198,7 +198,7 @@ covers `op` declarations for naming such a sequence and expanding it inline.
 
 What is A when the loop exits? Does it match the expected result (91)?
 
-**2. The invisible side effect.** `main` reloads `ld hl, values` before calling
+**2. The side effect in HL.** `main` reloads `ld hl, values` before calling
 `count_above`. Why? What value would HL hold after `find_max` returns if you did
 not reload it? Identify the eight addresses that `count_above` would scan from
 that position. The source defines only the first two bytes there; can the final

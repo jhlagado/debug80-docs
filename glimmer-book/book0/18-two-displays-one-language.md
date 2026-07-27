@@ -21,9 +21,9 @@ and the same delayed game-over gate.
 As programs, though, their paths separate at one early line.
 `display matrix8x8` against `display tms9918` set the prices:
 what a render writes to, what collision costs, how motion travels to
-the screen, how large a world a game can afford. The declaration
-never forced a design (you made every choice in those two games), but
-both games followed its prices, the way water follows a slope.
+the screen, how large a world a game can afford. You made every choice
+in those two games, and both games followed the declaration's prices,
+the way water follows a slope.
 
 ## The two loops
 
@@ -82,7 +82,7 @@ fixed dwell and returns with the 8x8 matrix dark, so the whole game
 (polling, rules, renders) runs inside the blank window between scans,
 and the scan is the frame's largest cost. Lanternfly's frame *waits
 for* its picture: the VDP paints 256x192 pixels from its own 16 KiB
-of VRAM over and over without any help from you, `VdpWaitVBlank`
+of VRAM over and over on its own, `VdpWaitVBlank`
 catches the rest between two paintings, and `GlimCommit` spends that
 rest moving the previous frame's changes into VRAM.
 
@@ -122,8 +122,7 @@ Whatever moved (paddle, drop, or both), the block clears the canvas
 and repaints everything on it, and the cost stays trivial because
 everything on it is one plot and a three-pixel shape. `FbClear` did
 your erasing wholesale: every picture starts from darkness, so
-whatever vacated a pixel is gone before the plots begin, and you
-never had to think about what to remove.
+whatever vacated a pixel is gone before the plots begin.
 
 The same smallness shaped your rules. Positions on the 8x8 are
 cells, so Skyfall's entire collision question (did the paddle catch
@@ -137,16 +136,15 @@ at a time.
 
 Timing came from the profile too: every rule and render shares the
 blank window between scans, and the scan paces the game, which is
-why Skyfall's difficulty lives in a timer period, counted in frames,
-rather than in how much work a frame does.
+why Skyfall's difficulty lives in a timer period, counted in frames.
 
 ## The scene the program describes
 
 On the VDP, the scene outlives the frame that drew it. In
 Lanternfly's splash card, you planted five reeds with five `tile_at`
 lines, once, in an `enter` block; the commit carried them to VRAM;
-and the VDP has repainted them in every picture since without
-another instruction spent. An 8x8
+and the VDP has repainted them in every picture since, out of its own
+VRAM. An 8x8
 matrix render repaints its whole layer whenever a fact changes; a
 VDP program writes each cell once and writes again only where a
 fact changed.
@@ -159,21 +157,21 @@ stands. On a frame where only the fly moved, the commit carries the
 sprite table, and the lantern's grid row besides, because `Gather`
 runs on every fly step and its `updates` re-mark the row it redraws.
 Splitting the test from the catch response removes that extra row.
-On a still frame there is no VRAM traffic, although the commit still
-checks its dirty markers. Moving the fly writes two shadow bytes, then
+On a still frame the commit reads its dirty markers and
+returns. Moving the fly writes two shadow bytes, then
 the next commit sends the 128-byte sprite table.
 
 That scale rewrote your rules. Positions are pixels now, so
 Lanternfly's collision is the distance between two facts (absolute
 pixel difference per axis, each under a tolerance of 6), and the
-tolerance itself was a design decision Skyfall did not have: how
-much overlap counts as touching. The lantern pickup crosses the
+tolerance itself is a design decision the pixel scale brings with it:
+how much overlap counts as touching. The lantern pickup crosses the
 two coordinate systems on purpose: the fly lives in pixels, the
 lantern in grid cells, so `Gather` centres the fly (+4), divides by
 eight (three shifts), and compares cells. When `Gather` takes a lantern, it blanks the old grid cell
 itself, inside the effect, because four lines later the respawn
-overwrites `LampCol` and `LampRow` and no render would ever again
-know which cell to clear.
+overwrites `LampCol` and `LampRow`, and the old cell's address is gone
+with them.
 
 The commit pacing sets this profile's motion cost: a held key reaches
 the screen two frames later (defer, shadow write, commit) at full
@@ -203,8 +201,8 @@ quickened to a floor of 6, `Pace` at 8 quickened to a floor of 1,
 the same `dec` and store in both), and a one-shot word timer armed
 at 90 frames to gate the restart. Three cards each, entered through
 `enter` blocks that re-raise what their renders need, left by `goto`
-or a conditional write to `CurrentCard`. You moved the whole
-GameOver card between profiles without a single edit.
+or a conditional write to `CurrentCard`. The whole GameOver card moved
+between profiles verbatim.
 
 Both
 games run compute, effect and render in that order; both stage changes
@@ -219,7 +217,7 @@ framebuffer or shadow, `FbPlot` or `SpriteSet`) came from one
 declaration and lives above the identical tail. The language owns
 the model: everything you learned (facts, moments, rules,
 pictures, phases, cards) moved across two opposite display
-architectures without changing shape.
+architectures intact.
 
 The world required by the next idea determines its display. A game
 whose world is a board of cells that change together

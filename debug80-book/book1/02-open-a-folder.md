@@ -7,9 +7,8 @@ nav_order: 2
 
 # Opening a folder and creating a project
 
-Debug80 works on an ordinary folder. Once one is open, the panel shows
-one of three states: no folder, a folder that is not yet a project, or
-a project.
+Debug80 works on an ordinary folder. The panel shows one of three
+states: no folder, an uninitialized folder, and a project.
 
 ## The project folder
 
@@ -43,7 +42,7 @@ Create a starter source file for this Debug80 project
 
 ![The program file picker offering Create ASM starter and No target yet](../../assets/images/debug80-book/book1/picker-program-file.svg)
 
-with two standing options. **Create ASM starter** writes `src/main.asm` with a small working program. **No target yet** creates the project without one, and you pick a program file later. If the folder already holds assembly files they are listed above those two, so you can adopt an existing file instead.
+with two standing options. **Create ASM starter** writes `src/main.asm` with a small working program. **No target yet** creates the project and leaves the program file for you to pick later. If the folder already holds assembly files they are listed above those two, so you can adopt an existing file instead.
 
 For this example, **Create ASM starter** supplies the first runnable
 target.
@@ -98,8 +97,9 @@ The project's Debug80 configuration is stored in `debug80.json`, an ordinary fil
 
 The generated file is longer than the extract above; it also records the memory map, the monitor ROM the profile brings with it, and the source roots the assembler searches.
 
-No JSON schema ships for `debug80.json`, so editing it by hand gets no
-autocomplete. The panel and commands are safer for routine changes.
+Editing `debug80.json` by hand is plain text work, with no schema
+behind it to complete or check what you type. The panel and commands
+are safer for routine changes.
 
 ## The starter program
 
@@ -150,7 +150,7 @@ Every service the program uses comes from MON-3 through `RST 0x10`, with the cal
 
 ## Several folders at once
 
-The **+** beside the folder name adds a folder, and Debug80 offers to initialize it if it is not already a project. The **−** removes the selected folder from the workspace without touching anything on disk, and it is disabled when only one folder is open.
+The **+** beside the folder name adds a folder, and Debug80 offers to initialize it if it is not already a project. The **−** removes the selected folder from the workspace, leaving it on disk, and it is disabled when only one folder is open.
 
 With several folders open, the folder-name button becomes a picker
 that selects which one Debug80 is working on.

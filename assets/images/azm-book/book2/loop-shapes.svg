@@ -101,5 +101,5 @@
   <polygon class="bxs" points="589,214 684,234 589,254 494,234"/>
   <text class="t" x="589" y="238.5" text-anchor="middle" xml:space="preserve">djnz</text>
   <text class="dimn" x="494" y="280" text-anchor="start" xml:space="preserve">Hardware decides. djnz is the bound.</text>
-  <text class="dimn" x="30" y="290" text-anchor="start" xml:space="preserve">In the second and third shapes djnz is not the exit condition. It is the guarantee that the loop ends at all.</text>
+  <text class="dimn" x="30" y="290" text-anchor="start" xml:space="preserve">In the second and third shapes the data or the hardware decides the exit, and djnz guarantees the loop ends at all.</text>
 </svg>

@@ -8,12 +8,12 @@ nav_order: 17
 # A VDP Game
 
 Skyfall
-never tested whether two shapes had met. It never had to: the paddle
+settled every landing with one subtraction against a column number.
+The paddle
 and the drop shared the same eight columns, because the 8x8 RGB LED
-matrix is a board, and on a board a landing is one subtraction
-against a column number. The VDP takes that certainty away. Sprites stand
-at pixel positions on a 256x192 scene, gliding over a tile grid they
-never disturb, and the questions change with the scenery: when have
+matrix is a board. The VDP takes that certainty away. Sprites stand
+at pixel positions on a 256x192 scene, gliding in front of a tile grid
+that holds its own picture, and the questions change with the scenery: when have
 two sprites actually met? And how does something sitting in the grid
 get picked up by something floating above it?
 
@@ -41,7 +41,7 @@ terms. For Lanternfly, the facts
 split into two coordinate systems, and that split is the whole
 chapter in miniature. Sprites glide, so `FlyX`/`FlyY` and
 `WaspX`/`WaspY` hold the two movers' top-left pixels. The lantern
-sits in the grid and never moves between cells, so `LampCol` and
+sits in one grid cell at a time, so `LampCol` and
 `LampRow` hold a grid column and row. `Score` counts lanterns for the
 LCD, and `Armed` gates the restart.
 
@@ -88,7 +88,7 @@ end
 A second sprite, `Wasp color darkyellow`, and a second tile, `Reed
 color medgreen on black`, follow in the same shape. Their rows are
 yours to draw; any eight strings of `X` and `.` will serve. The build
-depends on the order and the colour pairs, not the artwork:
+depends on the order and the colour pairs:
 the sprites take slots 0 and 1, Lantern's pair comes first so that
 black is the screen background, and Reed's pair opens the next bank.
 The generated equates read `Lantern .equ 1`, `Reed .equ 8`. The rest
@@ -129,8 +129,8 @@ text MsgScore "LAMPS "
 text MsgPad   "        "
 ```
 
-No fact carries `changed` (the cards own
-startup, exactly as they did in Skyfall), and every row-one message is
+The cards own startup here, exactly as they did in Skyfall, and every
+row-one message is
 padded to sixteen characters so that each card's writing covers
 whatever the previous card left behind. And the initial values: fly at
 the centre, wasp in the far
@@ -173,8 +173,8 @@ tile through `NamePut`, the runtime-coordinate path. The second parks
 sprite slot 0 at y = `$D1`, the terminator value used at startup: the
 VDP stops processing sprites at the first slot
 holding it, so one write hides the fly and the wasp together. On the
-very first frame both calls touch cells already blank and a sprite
-already hidden, and no harm comes of either. The card's one effect,
+very first frame both calls write values that are already in place.
+The card's one effect,
 `StartGame`, is the opening move: `on AnyKeyP`,
 `goto Playing`.
 
@@ -207,28 +207,27 @@ begin
 end
 ```
 
-The entry re-raise is needed because a card-gated render never sees
-flags raised while its card slept, so
-when the card wakes, its renders have missed everything. The `updates` line is the sleeping
+The entry re-raise is needed because a card-gated render sees only the
+flags raised while its card is active, so a waking card has to raise
+them again. The `updates` line is the sleeping
 card catching
 up on the news: it names every cell the Playing renders read, and
 entry marks them all, so the first frame of play repaints the whole
 scene. And now the idiom has real stakes, because the body writes the
 round-start values *first*, and replay falls out of that ordering:
 every round begins exactly where the first one did, repainted from
-fresh values, with no separate reset path to write or get wrong.
-`Pace` closes the list the way `Gravity` closed Skyfall's; a timer
-cell carries no flag, so its entry documents the write and compiles
-to nothing.
+fresh values, with the entry block as the single reset path.
+`Pace` closes the list the way `Gravity` closed Skyfall's: the store
+in the body is the whole act, and the entry line documents it.
 
 Four move effects steer the fly. They are Grove's four moves with the
-moth's cells and pulses renamed for the fly, so
-they are not printed here. Up and left stop at zero, down at 184,
+moth's cells and pulses renamed for the fly. Up and left stop at zero,
+down at 184,
 right at 248, each on its own held pulse at period 1.
 
 ## The chaser
 
-The wasp needs no cleverness:
+The wasp hunts by stepping toward the fly on both axes:
 
 ```text
 effect ChaseStep
@@ -267,10 +266,10 @@ end
 Every `ChaseTick`, one compare per axis points the wasp at the fly.
 Carry out of `cp b` means the wasp sits left of, or above, its
 target, so it steps toward; no carry steps the other way; equal skips
-the axis. The wasp needs no clamps of its own: it only ever
-steps toward the fly, and the fly's own clamps fence the space, so
-the hunter can never reach a wall its prey is not already pressed
-against. The stride is `Pace`. At the opening period of 8 the wasp
+the axis. The fly's own clamps fence the space for both of them: the
+wasp only ever steps toward the fly, so it stays inside the same
+bounds and needs no clamps of its own.
+The stride is `Pace`. At the opening period of 8 the wasp
 drifts, and every gathered lantern will shrink the period, all the
 way down to 1, a step every frame on both axes at once, which is
 faster than you: the keypad moves the fly one axis at a time, and the
@@ -339,12 +338,12 @@ the cell matches the lantern's column and row or the block leaves. On
 a match, the old cell goes blank through `NamePut`
 first, and it must go blank
 *here*, inside the effect: four lines later the respawn overwrites
-`LampCol` and `LampRow`, and after that no render will ever again
-know which cell to erase. Then the score climbs, `Pace` shrinks
+`LampCol` and `LampRow`, and the old cell's address is gone with them.
+Then the score climbs, `Pace` shrinks
 against its floor (the difficulty screw, turned by an ordinary timer
 write, as in Skyfall), and the respawn masks one random byte down to
-a column and folds another into rows 4..19, the band the reeds stay
-out of.
+a column and folds another into rows 4..19, the band the reeds leave
+clear.
 
 ![The fly's centre pixel, and the cell it falls in.](../../assets/images/glimmer-book/book0/two-coordinate-systems.svg)
 
@@ -362,9 +361,10 @@ The `updates` line raises all four flags every time
 `Gather` runs on every step the fly takes. So a frame where the fly
 merely moved also re-runs `PlaceLantern` and `ShowScore`: the
 lantern's name-table row goes back through the commit, and the LCD is
-rewritten with the score it already shows. Nothing breaks (a render
-redraws from current facts, and redrawing the same picture is a
-correct redraw), but bytes move that carried no news. The refinement,
+rewritten with the score it already shows. The result stays correct (a
+render redraws from current facts, and redrawing the same picture is a
+correct redraw), but the commit spends bytes on a picture that already
+stands. The refinement,
 when a game needs it, is to split the work: let the movement-triggered
 block do the cheap test alone and raise a pulse only on a catch, then
 hang the four-flag effect on that pulse. Lanternfly keeps the simple
@@ -468,9 +468,9 @@ end
 where the digits belong. The tens digit counts up in B, starting at
 `'0'` and stepping once per subtracted ten, then goes out through
 `ApiCharToLcd`. After that the block reads `Score` again and reduces it a second time
-for the ones digit, deliberately, so no register has to survive the
-first API call. The eight spaces of `MsgPad` cover the tail of the splash
-card's invitation, so the row reads `LAMPS 07` and nothing else:
+for the ones digit, deliberately, so the value comes fresh from memory
+after the API call. The eight spaces of `MsgPad` cover the tail of the splash
+card's invitation, so the row reads `LAMPS 07`:
 whole row owned, every time the score changes.
 
 The counted digits stop at two: past 99 the tens character would
@@ -487,7 +487,7 @@ Lanternfly reuses Skyfall's delayed restart gate. `GameOverShow`
 closes `Armed` and starts `Wait`; `OpenGate` later writes `MsgAny` and
 opens the gate; `Restart` tests `Armed` before writing `Card.Splash`.
 Card gating stops the move and chase blocks, so
-no shadow changes, no commit carries anything, and VRAM keeps the
+the shadows hold still and VRAM keeps the
 final scene exactly as it stood: the wasp frozen on top of the fly
 among the reeds, the score on the LCD naming the run. A restart walks
 the loop back through Splash, where `SplashShow` hides the actors and
@@ -507,8 +507,8 @@ Glim_PlaceFly:
         ret
 ```
 
-The line stands in the generated file exactly as you wrote it, and
-that is not an omission: `sprite_at` is an op, so the assembler
+The line stands in the generated file exactly as you wrote it, because
+`sprite_at` is an op, so the assembler
 substitutes its body at each call site. This one line assembles as
 the six instructions from the op definition with this site's
 arguments folded in: `FlyX` and `FlyY` read into D and E, `Fly`
@@ -545,12 +545,11 @@ N+1: the two effects test the new position, `PlaceFly` runs, and
 `SpriteDirty`. Frame N+2 opens in the vertical blank, `GlimCommit`
 sees the flag and streams all 128 sprite-attribute bytes to VRAM, and
 the fly stands one pixel to the right. Two frames of latency from
-pulse to picture, then, and no cost in rate: the pipeline refills every
+pulse to picture, then, at full rate: the pipeline refills every
 frame, so a held key still moves the sprite by one pixel per refresh.
 A gather frame adds up to two dirty name rows, 32 bytes each;
 a still frame costs the commit one clear flag and three clear group
-bytes, and the VDP paints the standing scene without any help from
-you.
+bytes, and the VDP paints the standing scene on its own.
 
 ## Reading Sprite Chase
 
@@ -569,7 +568,7 @@ a pulse is a byte cell like any other for the frame it holds.
 
 The rest of the file is variations on blocks you have already
 written. `FleeTarget` is `ChaseStep` with the conclusion flipped
-(carry steps *away*) plus the clamps the wasp never needed, because
+(carry steps *away*) plus clamps of its own, because
 fleeing runs into walls. `Collide` is `Caught` at tolerance 8 with a
 respawn where your game changes card, and the respawn masks
 `ApiRandom` exactly as `Gather` does. The score display swaps

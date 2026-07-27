@@ -37,9 +37,9 @@ The Z80 program counter, usually written as PC, holds the address of the next in
 
 The source map from the last successful build records which source line produced the instruction at each address, so the editor can show you the line while the register view shows the machine address.
 
-If the source-map status line from the last chapter does not read
-`current`, the line the editor highlights may not be the instruction
-the Z80 is about to run. A fresh build restores the mapping first.
+The editor highlights the instruction the Z80 is about to run while
+the source-map status line from the last chapter reads `current`.
+After any other status, a fresh build restores the mapping.
 
 ## Step, then inspect
 
@@ -73,7 +73,7 @@ continues until execution returns to that frame. **Step Out** returns
 through one caller at a time; **Run to Here** can skip several nested
 calls when a frame farther down the stack is selected.
 
-If a line will not resolve, build the target again to refresh the source map.
+Run to Cursor and Run to Here both find their line through the source map, which a fresh build of the target refreshes.
 
 ## Conditional breakpoints
 
@@ -84,8 +84,7 @@ breakpoint's context menu opens its condition.
 The inline editor accepts a Debug80 expression. Conditions can use
 registers, flags, symbols from the source map and byte reads from
 memory, so execution can stop when a counter reaches zero, a pointer
-lands on an address, or a particular key value appears, instead of on
-every pass.
+lands on an address, or a particular key value appears.
 
 A true or non-zero result stops the program; a false or zero result lets it run on. If the expression itself errors, Debug80 writes the error to the Debug Console and treats the condition as false.
 

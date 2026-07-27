@@ -46,7 +46,7 @@ drawing to run. A `curve`
 declaration names a motion shape, and the compiler turns it into a
 table of bytes inside the
 generated program. The expensive mathematics happens once, at build
-time, on your desk, where cycles cost nothing. The Z80 pays one table
+time, on your desk, where cycles are free. The Z80 pays one table
 read per frame.
 
 ## Comet
@@ -117,8 +117,8 @@ Spoken aloud, the declaration says: *Glide is an ease-out curve, 64
 steps, running from 0 to 6.* At build time, Glimmer traces an ease-out
 path (fast at first, slowing toward the end) and writes the 64
 positions it passes through into the program as a table of bytes named
-`Curve_Glide`. A curve is a resource: it declares data, so it owns no
-cell, carries no change flag, and adds no work to the frame.
+`Curve_Glide`. A curve is a resource: it declares data, and the bytes
+of the table are its entire cost.
 
 `TrackComet` is where the table gets put to work. Each frame of a
 flight the ramp steps, `Travel` is marked changed, and the compute
@@ -185,12 +185,12 @@ ramp Travel : byte steps 64 -> Landed
 curve Glide ease_out steps 64 from 0 to 6
 ```
 
-The ramp keeps time. Its cell answers one question (how far along is
-the flight?) and it knows nothing about columns. The curve holds the
-geometry. Its table answers the other question (where does the flight
-pass at each step?) and it knows nothing about frames. `TrackComet`
+The ramp keeps time. Its cell answers one question, how far along is
+the flight, and it counts purely in frames. The curve holds the
+geometry. Its table answers the other question, where does the flight
+pass at each step, and it speaks purely in columns. `TrackComet`
 joins them, clock in, path out, one byte read per step. That split is
-the idiom: time and path never meet until a block introduces them, so
+the idiom: a block is what brings time and path together, so
 one clock can drive any shape of journey.
 
 ![The ramp counts frames, the curve holds the path, and a switch mid-flight moves the dot.](../../assets/images/glimmer-book/book0/ramp-and-curve.svg)

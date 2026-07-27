@@ -92,5 +92,5 @@
   <text class="cap" x="502" y="168" text-anchor="start" xml:space="preserve">IN THE OUTPUT</text>
   <rect class="bxq" x="502" y="178" width="192" height="34" rx="3"/>
   <text class="ts" x="598" y="199" text-anchor="middle" xml:space="preserve">nothing</text>
-  <text class="dimn" x="20" y="254" text-anchor="start" xml:space="preserve">Two of the three add bytes. An .asmi file adds only what the analyzer needs to check a call it cannot see.</text>
+  <text class="dimn" x="20" y="254" text-anchor="start" xml:space="preserve">Two of the three add bytes. An .asmi file adds contracts alone, enough for the analyzer to check a call whose body lives elsewhere.</text>
 </svg>

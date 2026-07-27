@@ -112,6 +112,6 @@
   <text class="dim" x="552" y="239" text-anchor="middle" xml:space="preserve">$0014</text>
   <text class="dimn" x="552" y="292" text-anchor="middle" xml:space="preserve">B</text>
   <text class="dimn" x="46" y="326" text-anchor="start" xml:space="preserve">The second .org asks for $0012, which is behind the cursor, so AZM ignores it and the cursor stays at $0014.</text>
-  <text class="dimn" x="46" y="344" text-anchor="start" xml:space="preserve">B is defined at $0014. Nothing is overwritten, nothing is reported, and no line of source names that address.</text>
-  <text class="dimn" x="46" y="376" text-anchor="start" xml:space="preserve">.org moves the cursor forward. Emitted bytes and .align padding move it forward. Nothing moves it back.</text>
+  <text class="dimn" x="46" y="344" text-anchor="start" xml:space="preserve">B is defined at $0014. The earlier bytes stand, the build stays silent, and no line of source names that address.</text>
+  <text class="dimn" x="46" y="376" text-anchor="start" xml:space="preserve">.org, emitted bytes and .align padding all move the cursor forward. Forward is the only direction it travels.</text>
 </svg>

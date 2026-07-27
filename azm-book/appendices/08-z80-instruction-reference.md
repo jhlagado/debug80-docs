@@ -27,7 +27,7 @@ Status values used below:
 - `documented` is part of the standard documented Z80 set
 - `documented prefix family` is standard, but lives in `CB`, `ED`, `DD`, `FD`,
   `DDCB`, or `FDCB`
-- `undocumented but classic` is not in the original documented set, but is
+- `undocumented but classic` sits outside the original documented set, yet is
   widely supported and commonly treated as standard practice
 
 ---
@@ -163,8 +163,8 @@ bytes.
 
 ### Shifts: SLA, SRA, SRL, SLL/SLS
 
-Shifts do not wrap. The bit that falls off one end is lost after being copied
-to carry. A fixed value fills the vacated position.
+A shift discards the bit that falls off one end, after copying it to carry, and
+fills the vacated position with a fixed value. Rotates are the ones that wrap.
 
 ```
 SLA  (shift left arithmetic)

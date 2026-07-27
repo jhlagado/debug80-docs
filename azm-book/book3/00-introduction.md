@@ -63,7 +63,7 @@ workspace:
     .ds byte[4]       ; algorithm-local scratch (uninitialized)
 ```
 
-`.ds` reserves bytes without initializing them. It is suitable for temporaries
+`.ds` reserves the bytes and leaves whatever was there, which suits temporaries
 that the algorithm writes before reading.
 
 ---
@@ -82,9 +82,9 @@ Every nontrivial routine in this book uses:
 
 ## Execution model
 
-AZM supplies no garbage collector, standard library or generated frame setup.
-Layout types fold to constants at assembly time; address arithmetic appears in
-the program only when you write the corresponding instructions.
+Every byte of the output comes from a line you wrote. Layout types fold to
+constants at assembly time; address arithmetic appears in the program only
+where you write the corresponding instructions.
 
 ---
 
@@ -101,8 +101,8 @@ before consulting any hints.
 ## The next chapters
 
 [Chapter 1, Foundations](01-foundations.md) works through 16-bit GCD and 8-bit
-exponentiation. No arrays yet: only the Book 3 calling convention,
-compare/subtract idioms and the first workspace bytes.
+exponentiation with the Book 3 calling convention, compare/subtract idioms and
+the first workspace bytes.
 [Chapter 2, Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables,
 insertion sort and linear search.
 

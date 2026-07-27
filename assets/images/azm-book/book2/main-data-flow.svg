@@ -86,5 +86,5 @@
   <rect class="bxs" x="40" y="248" width="250" height="26" rx="2"/>
   <text class="ts" x="54" y="266" text-anchor="start" xml:space="preserve">ld hl, values</text>
   <text class="dimn" x="306" y="266" text-anchor="start" xml:space="preserve">reloaded before the second call</text>
-  <text class="dimn" x="40" y="304" text-anchor="start" xml:space="preserve">find_max walks HL to the end of the table and does not put it back. Its contract says so, and the caller reloads it.</text>
+  <text class="dimn" x="40" y="304" text-anchor="start" xml:space="preserve">find_max leaves HL at the end of the table. Its contract says so, and the caller reloads it.</text>
 </svg>

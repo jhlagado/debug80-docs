@@ -87,7 +87,7 @@
   <rect class="bxq" x="550" y="126" width="122" height="30" rx="2"/>
   <text class="dim" x="550" y="176" text-anchor="start" xml:space="preserve">SP = $9000</text>
   <text class="ts" x="46" y="220" text-anchor="start" xml:space="preserve">DE = $0820       HL = $3C41       SP = $9000</text>
-  <text class="dimn" x="46" y="248" text-anchor="start" xml:space="preserve">The stack has no memory of which pair supplied the bytes, so a push and its pop can name different registers.</text>
+  <text class="dimn" x="46" y="248" text-anchor="start" xml:space="preserve">The stack holds bytes alone, so a push and its pop can name different registers.</text>
   <text class="dimn" x="46" y="266" text-anchor="start" xml:space="preserve">That is the only way to reach F, because no ld instruction can name it.</text>
   <text class="dimn" x="46" y="284" text-anchor="start" xml:space="preserve">SP is back where it started. Every path to ret must leave it that way, or ret reads a temporary as its destination.</text>
 </svg>

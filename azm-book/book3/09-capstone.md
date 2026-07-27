@@ -14,7 +14,7 @@ techniques in one program: **eight queens** on an 8x8 board.
 
 The puzzle: place eight queens so no two share a row, column or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different; the companion program counts all of them and stores the total in RAM.
 
-Flat AZM has no `break`, no `continue` and no `func`: only `call`, `ret` and branches.
+`call`, `ret` and branches are flat AZM's entire control flow.
 
 The companion build is [`examples/09_eight_queens.asm`](examples/09_eight_queens.asm).
 
@@ -22,7 +22,7 @@ The companion build is [`examples/09_eight_queens.asm`](examples/09_eight_queens
 
 ## The problem: one queen per row
 
-A queen attacks along its row, column and both diagonals. On an 8x8 board with eight queens, each row must hold exactly one queen. That cuts the search space sharply: you are not choosing 64 squares independently; you are choosing **which column** on row 0, then row 1 and so on.
+A queen attacks along its row, column and both diagonals. On an 8x8 board with eight queens, each row must hold exactly one queen. That cuts the search space sharply: the search chooses **which column** goes on row 0, then row 1 and so on down the board, eight choices per row.
 
 If row `r` uses column `c`, the search records three constraints:
 
@@ -32,8 +32,8 @@ If row `r` uses column `c`, the search records three constraints:
 
 When all three checks pass for `(r, c)`, record the placement, recurse to row
 `r + 1` and when that returns, **undo** the marks before trying the next column.
-That undo step is backtracking. Without it, stale flags make available squares
-appear occupied and prune valid branches from the search.
+That undo step is backtracking. Any flag left set makes a free square look
+occupied and prunes valid branches from the search.
 
 ---
 
@@ -66,16 +66,16 @@ index is 0 when `row = 0` and `col = BOARD_SIZE - 1`.
 
 ![One queen threatens a row, a column and two diagonals, and costs exactly three flag bytes](../../assets/images/azm-book/book3/queens-board.svg)
 
-The search does not need one byte per square. It needs fast answers to "is this
-column or diagonal already taken?" Chapter 4's masks could pack all eight
-column flags into one byte. The companion instead uses one byte per column so
-every test is `ld a, (hl)` / `or a` / `jr nz`.
+The search needs fast answers to one question: is this column or diagonal
+already taken? Chapter 4's masks could pack all eight column flags into one
+byte. The companion instead uses one byte per column so every test is
+`ld a, (hl)` / `or a` / `jr nz`.
 
 ### The three flag tables are one record
 
 `clear_constraints` zeroes the three flag tables in a single `ldir`-style pass.
-That only works if they are contiguous and in a known order, which is a
-property of the layout, not of the loop. So the layout says it:
+That works only when they are contiguous and in a known order, which is a
+property of the layout. So the layout says it:
 
 ```asm
 Constraints .type
@@ -173,10 +173,9 @@ end
 shorter when the index is already in C and B is free.
 
 **Diagonal addressing** carries an extra step: the index is computed from the
-row and the column rather than taken from one register. `diag_sum_free`,
-`mark_constraints` and `unmark_constraints` all need the same six
-instructions, and so do their backward-diagonal counterparts, so two more ops
-cover the six sites:
+row and the column. `diag_sum_free`, `mark_constraints` and
+`unmark_constraints` all need the same six instructions, and so do their
+backward-diagonal counterparts, so two more ops cover the six sites:
 
 ```asm
 op diag_sum_addr()
@@ -215,11 +214,11 @@ diag_sum_free:
     ret
 ```
 
-There is no `call` here. The listing file prints the six expanded instructions
-and their bytes beside the `diag_sum_addr` line, and `--rc warn` analyses those
-instructions, which is why the contract still declares DE and HL clobbered.
+The listing file prints the six expanded instructions and their bytes beside the
+`diag_sum_addr` line, and `--rc warn` analyses those instructions, which is why
+the contract still declares DE and HL clobbered.
 
-Each failed check jumps to `_next_col` in the row driver, the flat-ASM equivalent of "try the next column" without a `continue` keyword.
+Each failed check jumps to `_next_col` in the row driver, which is how flat ASM says "try the next column".
 
 ---
 
@@ -328,8 +327,8 @@ main:
     halt
 ```
 
-`clear_constraints` zeroes `sizeof(Constraints)` bytes in one loop, which is
-`col_used` and both diagonal tables and nothing else:
+`clear_constraints` zeroes `sizeof(Constraints)` bytes in one loop, which covers
+`col_used` and both diagonal tables:
 
 ```asm
 clear_constraints:
@@ -337,8 +336,8 @@ clear_constraints:
     ld bc, sizeof(Constraints)
 ```
 
-Neither column array needs clearing: every completed path writes all
-`BOARD_SIZE` `queen_cols` entries before they are copied to `solution_cols`.
+Every completed path writes all `BOARD_SIZE` `queen_cols` entries before they
+are copied to `solution_cols`, so the clear can skip both column arrays.
 
 ---
 
@@ -364,7 +363,7 @@ backtracking after a deeper row fails.
 | Ops (Book 1 Ch. 7) | `flag_addr`, `diag_sum_addr`, `diag_diff_addr` |
 | Recursion + stack (Ch. 6) | `place_row` self-call, SP init |
 | Small routines with `.routine` contracts (Ch. 1, 7) | `col_free`, `mark_constraints`, … |
-| Pointers (Ch. 8) | Not required — pure tables |
+| Pointers (Ch. 8) | Pure tables here |
 
 ---
 
@@ -398,8 +397,8 @@ azm --rc warn examples/09_eight_queens.asm
    can be compared with the byte-table version.
 5. An iterative version uses an explicit workspace stack of `(row, col)` trial
    states and includes a workspace estimate for depth 8.
-6. A deliberate contract error calls `col_free` without restoring C after a
-   clobbering helper. `azm --rc warn` should identify the failure, and the
+6. A deliberate contract error calls `col_free` with C still holding whatever a
+   clobbering helper left. `azm --rc warn` should identify the failure, and the
    `.routine` contract defines the correction.
 
 ---

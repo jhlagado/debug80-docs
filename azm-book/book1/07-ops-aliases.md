@@ -15,7 +15,7 @@ Op declarations name an instruction idiom so it can be reused, directive aliases
 
 An op is a named instruction idiom that expands inline at each call site into ordinary Z80 instructions.
 
-There is no call overhead and no register contract for the op itself.
+The op carries its own bytes at each site, so the cost is the instructions themselves and the register effects belong to the surrounding routine.
 
 ### Simple zero-operand ops
 
@@ -84,7 +84,7 @@ At the call site `load8 a,42`, the assembler matches `a` to `reg8` and `42` to `
 | `mem8` | Memory dereference for byte-form op overloads |
 | `mem16` | Memory dereference for word-form op overloads |
 
-`mem8` and `mem16` currently match the same memory operand shapes. They document the intended width, but an overload family cannot use those two classes alone to distinguish otherwise identical signatures.
+`mem8` and `mem16` currently match the same memory operand shapes. They document the intended width, so an overload family needs some other difference to tell two otherwise identical signatures apart.
 
 Tokens outside this list are fixed tokens, exact literals the call site must reproduce verbatim.
 
@@ -125,7 +125,7 @@ end
 
 ### Pseudo-opcodes for instruction-set gaps
 
-Some idioms exist only because the Z80 lacks the instruction. There is no 16-bit register-to-register load, so copying DE into HL is two 8-bit moves:
+Some idioms exist to fill a gap in the instruction set. Copying DE into HL takes two 8-bit moves, since the Z80's register-to-register loads are all 8-bit:
 
 ```asm
 op ld_hl_de()
@@ -134,7 +134,7 @@ op ld_hl_de()
 end
 ```
 
-A `reg16` parameter cannot generalize this. The matcher supplies the pair name, not its high and low halves, so a generic body has no way to write `ld h,d`. Each supported pairing needs its own declaration: `ld_hl_de`, `ld_de_hl`, `ld_bc_hl`.
+A `reg16` parameter leaves this ungeneralised: the matcher supplies the pair name alone, so a generic body has no `ld h,d` to write. Each supported pairing needs its own declaration: `ld_hl_de`, `ld_de_hl`, `ld_bc_hl`.
 
 Where the instruction does exist, a parameterized op still names the intent:
 
@@ -157,7 +157,7 @@ op jr_if_not_above(threshold reg8, target imm16)
 end
 ```
 
-The listing keeps the invocation as its source line and attributes the expanded bytes to it, rather than printing a copy of the body.
+The listing keeps the invocation as its source line and attributes the expanded bytes to it.
 
 ### Ops vs subroutines
 
@@ -251,7 +251,7 @@ AZM's built-in aliases normalize exact undotted uppercase forms before parsing:
 | `DW` | `.dw` |
 | `DS` | `.ds` |
 
-The full built-in list is in [Appendix 1](../appendices/01-directives.md). Alias names are case-sensitive: `DB` normalizes to `.db`, while `db` and `Db` do not. Canonical directives use lowercase dotted forms.
+The full built-in list is in [Appendix 1](../appendices/01-directives.md). Alias names are case-sensitive: `DB` alone normalizes to `.db`, while `db` and `Db` stay as written. Canonical directives use lowercase dotted forms.
 
 ### Project-specific alias files
 
@@ -318,7 +318,7 @@ Op declarations and layout types typically live in dedicated include files, pull
 
 `.import` loads another source file as a module-like unit. Its bytes are emitted at the import point. Declarations beginning with `@` are visible to the importing unit; plain non-local declarations remain inside the imported unit.
 
-An exported declaration is a plain identifier with `@` in front of it. The `@` is declaration syntax and not part of the name, so `@DoubleA:` declares the symbol `DoubleA` and call sites write `call DoubleA`. Exported names take PascalCase after the `@`. An owner-local label belongs to its routine rather than to the file's interface, so `@_clamp:` is an error.
+An exported declaration is a plain identifier with `@` in front of it. The `@` is declaration syntax rather than part of the name, so `@DoubleA:` declares the symbol `DoubleA` and call sites write `call DoubleA`. Exported names take PascalCase after the `@`. An owner-local label belongs to its routine rather than to the file's interface, so `@_clamp:` is an error.
 
 ![Only an @ declaration leaves an imported source unit; a plain label and an owner-local label stop at the boundary](../../assets/images/azm-book/book1/export-boundary.svg)
 
@@ -404,13 +404,10 @@ Recursive include/import chains are rejected with a source diagnostic.
 
 `.import` remains deliberately small:
 
-- `.import "file.asm"` is the only supported import syntax
-- There is no `as Name` namespace syntax
-- There is no `Module.Symbol` reference syntax
-- There is no re-export syntax
+- `.import "file.asm"` is the whole of the import syntax: no aliasing, no qualified references, no re-export
 - Plain declarations in an imported source unit are private to that unit; `@` exports labels, equates, enums, layout types, type aliases and ops
 - Different imported source units may reuse the same private declaration names
 - `$`-qualified private names are internal debug-map display names, not source syntax
 - `.include` behaviour is unchanged
 
-Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. ASM80-compatible lowered `.z80` output does not currently support `.import`; if a program uses `.import` and you request `--asm80`, AZM reports an explicit `AZMN_ASM80` diagnostic.
+Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. For ASM80-compatible lowered `.z80` output, `.import` is still to come: request `--asm80` for a program that uses it and AZM reports an explicit `AZMN_ASM80` diagnostic.

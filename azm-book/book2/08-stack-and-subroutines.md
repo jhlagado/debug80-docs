@@ -9,13 +9,11 @@ nav_order: 8
 
 Larger programs need to reuse logic (the same comparison, the same output routine, the same byte-copying sequence) called from a dozen different places.
 
-`call` and `ret` solve this.
-
 ---
 
 ## Subroutines
 
-The Z80 has no hardware concept of a subroutine beyond `call` and `ret`. There is no special mode the CPU enters, no register tracking call depth, no difference between bytes at a call site and bytes inside a subroutine body.
+`call` and `ret` are the Z80's entire subroutine mechanism. The CPU stays in the same mode throughout, the bytes of a subroutine body are ordinary instructions like any others, and the stack is the only record of how deep the calls have gone.
 
 ---
 
@@ -52,7 +50,7 @@ Each push decreases SP by two and writes a 16-bit value. Each pop reads two byte
 
 ## Passing values through registers
 
-The Z80 has no hardware-enforced calling convention. The conventions used in these chapters are:
+A calling convention on the Z80 is an agreement between a routine and its callers, kept by the code on both sides. The conventions used in these chapters are:
 
 - **A** carries a single byte result or input value.
 - **HL** carries a 16-bit result or input value.
@@ -72,7 +70,7 @@ add_bytes:
   ret
 ```
 
-`Preserves` means those registers hold the same values after the call that they held before. `Clobbers` means the caller must not rely on those registers after the call.
+`Preserves` means those registers hold the same values after the call that they held before. `Clobbers` names the registers the routine may leave holding something else.
 
 Every subroutine in AZM is a plain label followed by instructions, ending with `ret`. If you forget `ret`, control falls through into whatever bytes follow the last instruction, which is almost always wrong.
 
@@ -104,7 +102,7 @@ entries. Otherwise `ret` reads a temporary value as its return address.
 
 ### Cross-register moves through the stack
 
-You can push one pair and pop into a different pair, since the stack has no memory of which register supplied the bytes it holds. This lets you perform register transfers that `ld` cannot express:
+You can push one pair and pop into a different pair: the stack holds two bytes, and the `pop` decides where they land. That gives a route between any two register pairs:
 
 ```asm
   push af         ; save AF onto the stack
@@ -113,19 +111,19 @@ You can push one pair and pop into a different pair, since the stack has no memo
   pop hl          ; HL <- what was in AF
 ```
 
-The second transfer (AF into HL) is particularly useful, because there is no `ld l, f` instruction. The flags register F cannot appear in any `ld` combination.
+The second transfer (AF into HL) is particularly useful. The stack is the one route out of F: `push af` puts the flags byte in memory, and any `pop` can collect it.
 
-If you swap the pop order above, DE gets AF and HL gets BC, the reverse of what you might expect if you read the code top-to-bottom without thinking about the stack.
+If you swap the pop order above, DE gets AF and HL gets BC, the reverse of what a top-to-bottom reading suggests.
 
 ![A push and its pop can name different pairs, which is the only route to F. SP ends where it started.](../../assets/images/azm-book/book2/cross-register-move.svg)
 
 ---
 
-## Shadow registers: saving state without the stack
+## Shadow registers: saving state with `exx`
 
 In a tight interrupt handler or innermost loop, saving BC, DE and HL via `push` and `pop` costs six instructions (three pushes, three pops) and takes six bytes of stack space. `exx` does the same job in a single instruction: it swaps BC, DE and HL with a second hidden set of registers (BC′, DE′, HL′) simultaneously. A second instruction, `ex af, af′`, swaps A and F with their shadow counterparts.
 
-These are the **shadow registers**: a second, hidden copy of A, F, B, C, D, E, H and L. You cannot use them directly in instructions; `exx` and `ex af, af′` are the only way in.
+These are the **shadow registers**: a second, hidden copy of A, F, B, C, D, E, H and L. `exx` and `ex af, af′` are the only way in: a shadow value has to be swapped into the main set before an instruction can use it.
 
 The trade-off is that there is only one shadow set. If both the main code and an interrupt handler rely on `exx`, the interrupt can silently destroy the values stored by the main code. Shadow registers are therefore suitable only when speed matters and one context has exclusive use of them.
 
@@ -155,7 +153,7 @@ A subroutine can itself call another subroutine. Each `call` pushes another retu
 
 The only limit is the size of the RAM region allocated to the stack. A program that calls too many levels deep, or forgets to pop before returning, will overwrite RAM used for other purposes.
 
-![Return addresses pushed on the way in, popped on the way out. No register records how deep you are.](../../assets/images/azm-book/book2/nested-calls.svg)
+![Return addresses pushed on the way in, popped on the way out. SP is the only measure of depth.](../../assets/images/azm-book/book2/nested-calls.svg)
 
 ---
 
@@ -226,7 +224,7 @@ After `sbc hl, de`, the carry flag indicates the comparison result:
   `pop de` removes the saved word while restoring DE.
 - **Carry set**: HL was less than DE (unsigned borrow occurred). The saved DE
   value is the larger word. `pop hl` loads that saved value directly into HL.
-  DE was never modified, so the declared preservation still holds.
+  DE still holds its incoming value, so the declared preservation holds.
 
 The `or a / sbc hl, de` pair performs an unsigned 16-bit comparison. Each path
 then obtains the required result while consuming the saved stack word.
@@ -250,7 +248,7 @@ carry-clear path removes it with `pop de`; the carry-set path removes it with
 
 ## An advanced trick: reading the program counter
 
-The Z80 has no instruction to read PC directly. But because `call` pushes the address of the next instruction onto the stack, you can read PC with a trick:
+`call` pushes the address of the next instruction onto the stack, which is how a program gets to see its own PC:
 
 ```asm
   call next_instr       ; pushes address of next_instr onto the stack
@@ -262,7 +260,7 @@ next_instr:
 only useful effect here is pushing that instruction's address. `pop hl`
 retrieves the address of `next_instr`.
 
-No `ret` appears here, and that is fine. The only thing the stack requires is balance: `call` pushed one word, `pop hl` consumed it.
+Balance is all the stack requires: `call` pushed one word and `pop hl` consumed it, so execution carries straight on into the next instruction.
 
 ---
 

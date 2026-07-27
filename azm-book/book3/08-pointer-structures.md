@@ -18,7 +18,7 @@ The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list
 
 ---
 
-## The problem: variable shape without shifting memory
+## The problem: changing shape by rewriting links
 
 A ring buffer (Chapter 5) keeps all elements in one byte array and moves **indices**. Inserting in the middle of a plain array means copying bytes, expensive on a small machine.
 
@@ -27,8 +27,8 @@ at the **head** takes only a few stores: the new node links to the old head,
 and `list_head` receives the new node's address.
 
 The trade is explicit: each node costs an extra two bytes for the link, and
-"element 4" cannot be reached in one arithmetic step. Traversal follows links
-from the head until it reaches the requested node or **null**.
+reaching "element 4" means following four links from the head, or hitting
+**null** on the way.
 
 ---
 
@@ -48,8 +48,8 @@ NODE_SIZE   .equ sizeof(ListNode)
 ```
 
 `NODE_SIZE` comes out as 3 for this field list: one data byte, then a
-little-endian 16-bit link. Nothing in the source writes that 3 down. The link
-field uses `.word` because it holds a full address, the same width as `word`
+little-endian 16-bit link. The link field uses `.word` because it holds a full
+address, the same width as `word`
 and `addr`, which [Book 1 Chapter 5](../book1/05-layout-system.md) covers. AZM also offers `.addr` when you want the
 layout name to say "this field is a pointer"; the companion uses it for the
 `find_node` result byte pair, where the distinction between an address and a
@@ -63,13 +63,13 @@ count is worth recording.
     jr z, _at_end
 ```
 
-`or l` sets Z only when both H and L are zero: the same 16-bit zero test used throughout the course, without a 16-bit compare instruction.
+`or l` sets Z only when both H and L are zero: the same 16-bit zero test used throughout the course.
 
 ---
 
 ## Static nodes in fixed RAM
 
-Book 3 does not use a heap allocator. You **name** nodes as labels and connect them at assembly time or in `main`:
+Every node in Book 3 is a **named** label, connected to its neighbours at assembly time or in `main`:
 
 ```asm
 node_a:
@@ -130,8 +130,8 @@ Low byte first, then high byte. That is Z80 little-endian order.
 ### The advance step
 
 Both walks below end with the same move: replace HL with the node its `next`
-field names. It reads the two link bytes low first, and parks the low byte in C
-so that writing H does not destroy the L it still needs:
+field names. It reads the two link bytes low first and parks the low byte in C,
+because HL is still the address of the link until both bytes are in hand:
 
 ```asm
 ld bc, LIST_NEXT
@@ -144,8 +144,8 @@ ld h, a               ; H = high byte of next
 ld l, c
 ```
 
-Eight instructions, no `call` and no return address. Both routines declare BC
-under `clobbers` because of it.
+Eight instructions, written inline at both sites. Both routines declare BC under
+`clobbers` because of it.
 
 ---
 
@@ -266,7 +266,7 @@ The insertion consists of four steps:
 
 After `ld de, node_spare` / `ld a, $40` / `call list_push_head`, the list order is spare → a → b → c. The new sum is `$00A2` (162).
 
-![Two stores change the shape of the list, and no existing node is touched](../../assets/images/azm-book/book3/insert-at-head.svg)
+![Two stores change the shape of the list, and every existing node stays where it was](../../assets/images/azm-book/book3/insert-at-head.svg)
 
 ```asm
     ld de, node_spare
@@ -294,8 +294,8 @@ For the head variable:
     ld hl, <word>list_head
 ```
 
-Runtime traversal cannot put HL inside brackets, so the advance step uses
-`add hl, bc` with `LIST_NEXT`.
+The bracketed index is an assembly-time literal, so runtime traversal advances
+with `add hl, bc` and `LIST_NEXT`.
 
 ---
 
@@ -379,9 +379,9 @@ _attach:
 ```
 
 The caller initializes the new node's value and clears both child words before
-the call. The control flow is a loop, not a self-call, so tree height affects
-iteration count rather than stack depth. A complete implementation also needs a
-node pool and a `root` word.
+the call. The control flow is a loop, so tree height affects iteration count
+rather than stack depth. A complete implementation also needs a node pool and a
+`root` word.
 
 ---
 
@@ -439,9 +439,8 @@ table base.
 1. A memory diagram should show the list after `$40` is inserted at its head,
    identifying the node addressed by `list_head` and the value of
    `node_a.next`.
-2. The null test should use DE rather than HL and be written without
-   assembling. Its explanation should show why `or e` alone cannot test a
-   16-bit pointer.
+2. The null test should use DE rather than HL and be worked out on paper. Its
+   explanation should show why the test needs both halves of the pair.
 3. A `list_count_u8` routine returns the number of nodes in A and includes
    `.routine in`, `.routine out` and `.routine clobbers`. An empty list returns
    0.
@@ -452,7 +451,7 @@ table base.
    encoding while making the field's meaning clearer.
 6. A `list_get_u8` routine accepts a zero-based index in B and returns the value
    byte in A, with carry clear when the index is out of range. It advances B
-   times rather than using multiplication.
+   times along the links.
 7. A three-node `TreeNode` pool uses keys `5`, `3` and `8`, with each node
    inserted through the address of a `root` word. A paper diagram should record
    the resulting tree boxes and `.word` links.

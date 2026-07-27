@@ -111,6 +111,6 @@
   <rect class="bxs" x="594" y="274" width="80" height="36" rx="4"/>
   <text class="t" x="634" y="296.5" text-anchor="middle" xml:space="preserve">ret</text>
   <text class="dimn" x="634" y="328" text-anchor="middle" xml:space="preserve">BC not restored</text>
-  <text class="dimn" x="24" y="362" text-anchor="start" xml:space="preserve">Every returning path is checked against the same contract. A pop on one path does not cover the other.</text>
+  <text class="dimn" x="24" y="362" text-anchor="start" xml:space="preserve">Every returning path is checked against the same contract, so each one needs its own pop.</text>
   <text class="dimn" x="24" y="380" text-anchor="start" xml:space="preserve">Keep the push and its pop inside one .routine region. A shared exit owned by another routine is rejected first.</text>
 </svg>

@@ -85,6 +85,6 @@
   <text class="dimn" x="250" y="292" text-anchor="start" xml:space="preserve">is Player + offset(Actor, pos.x)</text>
   <text class="t" x="46" y="318" text-anchor="start" xml:space="preserve">&lt;SpriteArray&gt;Sprites[3].flags</text>
   <text class="dimn" x="340" y="318" text-anchor="start" xml:space="preserve">a .typealias adds no path level</text>
-  <text class="dimn" x="46" y="356" text-anchor="start" xml:space="preserve">A cast changes nothing at runtime. It names the layout AZM applies while it computes the offset.</text>
+  <text class="dimn" x="46" y="356" text-anchor="start" xml:space="preserve">A cast names the layout AZM applies while it computes the offset, entirely at assembly time.</text>
   <text class="dimn" x="46" y="374" text-anchor="start" xml:space="preserve">Indices inside a cast path must be assembler-time constants, so &lt;Sprite[16]&gt;Sprites[HL].flags is an error.</text>
 </svg>

@@ -85,7 +85,7 @@ An invariant is a statement that stays true every time control reaches a particu
 
 **Linear search** (label `_scan`):
 
-> If the loop has run k times, no element among `values[0 .. k-1]` satisfies `>= threshold`.
+> If the loop has run k times, every element among `values[0 .. k-1]` is below `threshold`.
 
 ---
 
@@ -112,7 +112,8 @@ If you only keep HL, you lose the base address. **DE holds the base** for the wh
 Length arrives in B, but the inner loops also need B, so the routine stores the
 length in workspace. Its scratch bytes follow the table in the same `.org
 $8000` block. AZM maintains a forward-only placement cursor for each segment,
-so a later data `.org` cannot move back over bytes already placed:
+so a later data `.org` places bytes at the cursor and leaves the earlier ones
+where they are:
 
 ```asm
 found_index:
@@ -127,7 +128,8 @@ sort_len:
     .ds byte
 ```
 
-Entry (store length through HL, since the Z80 has no `ld (nn), b` instruction):
+Entry (B reaches memory through `(hl)`, since `ld (nn), a` is the Z80's only
+absolute byte store):
 
 ```asm
 insertion_sort:
@@ -138,7 +140,8 @@ insertion_sort:
     ld c, 1
 ```
 
-Z80 has no `ld de,hl` instruction.
+Copying HL into DE takes two instructions: `push hl` / `pop de` here, or
+`ld d, h` / `ld e, l`.
 
 ### Loading the key
 
@@ -230,11 +233,11 @@ _found:
     ret
 ```
 
-`cp c` / `jr nc` uses the unsigned sense from Book 2: `cp` subtracts, so carry is set when A < C and clear when A ≥ C. `jr nc` therefore takes the branch on a match. `$FF` means not found: a sentinel index, not a valid offset for an 8-element table.
+`cp c` / `jr nc` uses the unsigned sense from Book 2: `cp` subtracts, so carry is set when A < C and clear when A ≥ C. `jr nc` therefore takes the branch on a match. `$FF` means not found: a sentinel chosen because an 8-element table only ever uses indices 0 to 7.
 
-With threshold 5 on the sorted table, the first element of at least 5 is the 6 at index 4. The table holds no 5. `found_index` at `$8008` should hold `$04`.
+With threshold 5 on the sorted table (1, 2, 3, 4, 6, 7, 8, 9), the first element of at least 5 is the 6 at index 4. `found_index` at `$8008` should hold `$04`.
 
-![The walk stops at the first element the compare does not put below the threshold](../../assets/images/azm-book/book3/linear-search.svg)
+![The walk stops at the first element the compare puts at or above the threshold](../../assets/images/azm-book/book3/linear-search.svg)
 
 ---
 
@@ -255,8 +258,7 @@ main:
 ```
 
 The second call reloads HL because the `insertion_sort` contract lists it as
-clobbered. The caller therefore does not depend on whichever address the
-current implementation happens to leave there.
+clobbered.
 
 ---
 
@@ -305,4 +307,4 @@ while the sorted prefix grows.
 5. A bubble sort can use nested `djnz` loops and should include a one-sentence
    outer-loop invariant.
 6. An alternative table uses `.ds byte[8]` for its reservation and eight `ld
-   (hl), a` stores in `main` for initialization instead of `.db`.
+   (hl), a` stores in `main` for initialization.

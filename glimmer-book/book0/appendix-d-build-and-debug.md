@@ -238,4 +238,5 @@ Wrote warn.main.d8.json (4 block segments attributed to .glim source)
 ```
 
 In a running program, the store still executes and the cell changes
-in memory, but no block waiting `on` that cell ever runs.
+in memory, but the change flag stays down, and a block runs only when
+its flag rises.

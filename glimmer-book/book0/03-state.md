@@ -132,7 +132,7 @@ The full shape is `state Name : type = initial changed`, and the last
 two parts are optional. The type is `byte` or `word`. The initial
 value defaults to 0, and `Score` leans on that default. The
 `changed` modifier marks the fact as already
-changed when the program starts. `DotX` carries it; the other two go without.
+changed when the program starts, and `DotX` carries it.
 
 The one new thing here is `word`. A `word` cell is 16 bits, and your
 code moves it with the Z80's
@@ -145,7 +145,7 @@ difference:
     ld (Score),hl
 ```
 
-The declaration reserved two bytes instead of one, and in the
+The declaration reserved two bytes, and in the
 generated file that difference amounts to a single directive:
 
 ```asm
@@ -202,8 +202,7 @@ everything every frame whether or not it moved, or keep a dirty flag
 per fact and set it in every code path that writes that fact. The
 flags here are the second chore, done for you. You declare `updates`
 once in a block's header; the generated wrapper sets the bit, the
-dispatcher tests it, and `GlimEndFrame` clears it, so it is a flag
-you never touch.
+dispatcher tests it, and `GlimEndFrame` clears it.
 
 One byte holds eight facts, and a program can declare up to 32
 flag-carrying facts: they fill `Changed0` through `Changed3`, eight
@@ -232,9 +231,9 @@ so ShowScore rests, and the six-position seven-segment display stays
 dark.
 
 A dark display looks like a bug the first time you meet it, so work it
-out from the source before you reach for the debugger: no fact
-ShowScore watches has changed, so ShowScore has never run, and a
-render that has never run has never drawn. The display stays dark
+out from the source before you reach for the debugger: a render draws
+only on the frames it runs, and ShowScore runs only when `Score`
+changes. The display stays dark
 until the first press of GO, when `updates Colour, Score` raises both
 bits and the score lights up as `000001`.
 
@@ -251,9 +250,9 @@ With that one edit, frame one runs both renders, and the display shows
 `changed`: it belongs on every fact whose picture should exist before
 anything happens.
 
-Building both versions confirms the prediction. A breakpoint inside
-`ShowScore` does not stop on frame one with `Score` unchanged; with
-`Score changed`, it stops there before the first key press. In either
+Building both versions confirms the prediction. With plain `Score`, a
+breakpoint inside `ShowScore` first stops at the press of GO; with
+`Score changed`, it stops on frame one, before any key press. In either
 version, each later score change reaches the breakpoint again.
 
 Next we turn to the moments themselves, where pulses come from, and

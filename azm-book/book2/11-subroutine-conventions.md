@@ -17,8 +17,8 @@ later edit keeps it accurate.
 
 ## The register-passing convention
 
-The Z80 has no universal calling convention. Programs may pass arguments in
-registers, on the stack or in fixed memory. This book uses the following
+Programs may pass arguments in registers, on the stack or in fixed memory, and
+the Z80 leaves the choice to the program. This book uses the following
 register convention because it suits small routines and matches later examples:
 
 - **HL** carries a 16-bit address or pointer: the start of a table, a buffer, a string.
@@ -49,10 +49,10 @@ call boundary. An input register is also caller-save when the contract says the
 routine consumes or clobbers it. The caller must save any incoming value that it
 still needs after the call.
 
-**Callee-save registers** are registers not declared as outputs or clobbers. If
-a routine uses one internally, it must restore the incoming value before
-returning. This is the convention used in this chapter, not a fixed property of
-BC, DE, HL, IX or IY themselves.
+**Callee-save registers** are the ones whose incoming values survive the call:
+every register the contract leaves out of its outputs and clobbers. A routine
+that uses one internally restores it before returning. This is the convention
+used in this chapter, not a fixed property of BC, DE, HL, IX or IY themselves.
 
 The mechanism is push and pop:
 
@@ -71,7 +71,7 @@ first. Popping into the wrong pairs restores the values to different registers.
 
 ![Which side is responsible for which register. The contract decides this, not the register.](../../assets/images/azm-book/book2/caller-callee-save.svg)
 
-Chapter 10's `find_max` needs one change first: it borrows C as a temporary, so it clobbers a register that is not one of its inputs. Dropping the temporary and comparing against `(hl)` directly leaves HL, B and A, all inputs or outputs. `count_above` cannot be fixed that way, because it uses D internally as the running counter.
+Chapter 10's `find_max` needs one change first: it borrows C as a temporary, so it clobbers a register that is not one of its inputs. Dropping the temporary and comparing against `(hl)` directly leaves HL, B and A, all inputs or outputs. `count_above` needs the other remedy, since D holds its running count for the whole loop.
 
 The fix: push and pop DE around the body.
 
@@ -100,8 +100,8 @@ the top of the stack, so `ret` uses that word as its destination.
 
 ## The IX frame for local storage
 
-When the available registers cannot hold all temporary values, a subroutine can
-allocate local storage on the stack.
+When a subroutine needs more temporary values than the registers can hold, it
+can allocate local storage on the stack.
 
 The technique uses IX as a base pointer into the stack.
 
@@ -118,7 +118,7 @@ Two bookkeeping entries are on the stack already, and any arguments the caller p
 
 ![The frame IX points into. Arguments and bookkeeping sit at positive displacements, locals at negative ones.](../../assets/images/azm-book/book2/ix-frame.svg)
 
-You never read IX+0 through IX+3 directly; those slots belong to the bookkeeping.
+IX+0 and IX+1 hold the saved IX and IX+2 and IX+3 hold the return address, so caller arguments start at IX+4 and locals sit below IX+0.
 
 Local storage decrements SP once for each required byte:
 
@@ -174,7 +174,7 @@ FindMaxSkip:
   ret
 ```
 
-`Clobbers` lists every register the caller should not rely on after the call.
+`Clobbers` lists every register the routine may leave changed.
 
 The comment block for `count_above` with push/pop discipline:
 
@@ -205,7 +205,7 @@ CountAboveSkip:
 
 `Preserves` lists registers the subroutine explicitly restores.
 
-The problem is that these comments have no enforcement. The bug appears at runtime, sometimes far from its origin.
+These comments bind only the people who read them. A mismatch shows up at runtime, sometimes far from its origin.
 
 [Book 1 Chapter 6](../book1/06-register-contracts.md) covers what AZM provides beyond comments: a structured declaration syntax that the register contract analyzer can read and verify.
 
@@ -234,7 +234,7 @@ FindMaxSkip:
   ret
 ```
 
-`find_max` uses only its input registers and A. Nothing else is touched, so nothing else needs push/pop.
+`find_max` uses only its input registers and A, which is why its body has no push/pop at all.
 
 ```asm
 ; count_above: count bytes in a table strictly above a threshold
@@ -278,7 +278,7 @@ main:
   halt
 ```
 
-Every caller of `find_max` must either not need HL and B afterward, or reload them.
+A caller that needs HL or B after `find_max` returns has to reload them.
 
 ---
 

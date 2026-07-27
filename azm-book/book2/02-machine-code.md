@@ -52,7 +52,7 @@ The CPU starts with PC = `$0000`.
 
 **PC = `$0000`:** The byte there is `$3E`. The Z80 recognises this as a two-byte instruction: "load the next byte into A." It reads the following byte, `$05` and loads 5 into A. PC advances to `$0002`.
 
-**PC = `$0002`:** The byte is `$47`: "copy A into B." One byte, no operand. B becomes 5; A remains 5. PC advances to `$0003`.
+**PC = `$0002`:** The byte is `$47`: "copy A into B." One byte, opcode only. B becomes 5; A remains 5. PC advances to `$0003`.
 
 **PC = `$0003`:** `$3E $03` loads 3 into A. B is unchanged and still holds 5. PC advances to `$0005`.
 
@@ -71,14 +71,14 @@ interrupt or reset. Address `$8000` now contains `$08`.
 
 The program above was ten bytes. Real programs are thousands. Every address is
 a bare number. `$8000` could be a result variable, a display buffer or a lookup
-table, and nothing in the byte stream says which. Inserting one instruction may
-shift downstream addresses; a missed manual update makes the program use the
-wrong address without producing an error. The sequence
-`3E 05 47 3E 03 80 32 00 80 76` means nothing until you decode each byte.
+table, and the byte stream records only the number. Inserting one instruction may
+shift downstream addresses; a missed manual update sends the program to the
+wrong address, and it runs on from there. You learn what
+`3E 05 47 3E 03 80 32 00 80 76` does by decoding it one byte at a time.
 
-Machine code contains jumps, calls, loops and conditionals, but raw bytes give
-those structures no names. You must calculate their addresses and recognise
-their instruction patterns by hand.
+Machine code contains jumps, calls, loops and conditionals; in raw bytes each
+one is an address you calculate by hand and an instruction pattern you
+recognise by eye.
 
 ---
 
@@ -97,7 +97,7 @@ Result:          ; the assembler records "Result" as the current address
   .db 0          ; allocate one byte at this address, initial value 0
 ```
 
-(`.db` stands for "define byte". `.dw` defines a 16-bit word.) From this point on, writing `ld (Result), a` in the code is equivalent to writing `ld ($8000), a`, but you never have to know or write `$8000`.
+(`.db` stands for "define byte". `.dw` defines a 16-bit word.) From this point on, writing `ld (Result), a` in the code is equivalent to writing `ld ($8000), a`, with the assembler supplying the address.
 
 Labels also name positions within the code, the targets of jumps and branches. Instead of writing `jp $0034`, you write `jp loop_top` and the assembler works out the address of `loop_top` itself.
 

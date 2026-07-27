@@ -8,13 +8,13 @@ nav_order: 4
 # Strings
 
 Chapter 2 walked a byte table with a **fixed length** in B. Text in memory
-usually has no fixed length: a sentinel ends the walk instead of a counter.
+usually carries its end inside the data: a sentinel byte stops the walk.
 
 The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
 
 ---
 
-## The problem: text without a length field
+## The problem: finding where the text ends
 
 The examples cover three common operations: finding a message length before
 formatting a screen line, copying a label into a buffer, and locating the first
@@ -24,7 +24,7 @@ formatting a screen line, copying a label into a buffer, and locating the first
 
 ## Representation: null-terminated bytes
 
-A **null-terminated string** (C-style) is a sequence of byte values followed by a zero byte `$00`. The zero is not part of the visible text; it marks the end.
+A **null-terminated string** (C-style) is a sequence of byte values followed by a zero byte `$00`, which marks the end of the text.
 
 ```asm
 .org $8000
@@ -57,7 +57,7 @@ Two different numbers confuse beginners:
 
 `strcpy` must not write past capacity if the source is longer than the destination buffer. This chapter copies into a buffer sized for the demo; Chapter 5's records are a natural place to store `(capacity)` beside `(data)`.
 
-![Length is what strlen_u8 counts; capacity is what .ds reserved, and nothing in memory enforces the difference](../../assets/images/azm-book/book3/string-layout.svg)
+![Length is what strlen_u8 counts, capacity is what .ds reserved, and the caller alone keeps one inside the other](../../assets/images/azm-book/book3/string-layout.svg)
 
 ### The alternative: length in byte zero
 
@@ -76,10 +76,10 @@ Unless a routine says otherwise, Book 3 string routines use:
 | Current / source pointer | HL | Points at next byte to read |
 | Destination pointer | DE | Used by copy and compare |
 | Search character | C | Compared with `cp c` |
-| Length or index result | A | 0–255; these routines require strings no longer than 255 bytes |
+| Length or index result | A | 0–255; these routines handle strings of up to 255 bytes |
 | Not found sentinel | A = `$FF` | Same idea as Chapter 2 search |
 
-**Callee-save:** push BC/DE/HL if you use them as scratch and the `.routine` block does not list them under `clobbers`.
+**Callee-save:** push BC/DE/HL when you use as scratch any register the `.routine` block leaves out of `clobbers`.
 
 **Invariant for traversal** (owner-local label `_loop` or `_scan`):
 
@@ -87,7 +87,7 @@ Unless a routine says otherwise, Book 3 string routines use:
 
 ---
 
-## The core loop: test for zero without destroying the byte
+## The core loop: test for zero and keep the byte
 
 ```asm
     ld a, (hl)
@@ -97,7 +97,7 @@ Unless a routine says otherwise, Book 3 string routines use:
     inc hl
 ```
 
-`or a` sets the Zero flag from A's value without changing A. That is the standard Z80 idiom for "is this byte zero?" It plays the same role as `cp 0`, but `or a` is one byte cheaper.
+`or a` sets the Zero flag from A's value and leaves A intact. That is the standard Z80 idiom for "is this byte zero?" It plays the same role as `cp 0`, but `or a` is one byte cheaper.
 
 ---
 
@@ -151,9 +151,8 @@ The last iteration copies the zero terminator. That matters if later code scans 
 
 ![HL reads and DE writes in step, and the loop only exits once the terminator has been written](../../assets/images/azm-book/book3/two-pointer-copy.svg)
 
-After `call strcpy_u8`, DE points one byte past the null. Another pass reloads
-HL from `message`, and no later code relies on DE still containing the
-destination base.
+After `call strcpy_u8`, DE points one byte past the null, so `main` reloads both
+pointers before the compare: `ld hl, buffer` and `ld de, message`.
 
 ---
 
@@ -183,7 +182,7 @@ _missing:
     ret
 ```
 
-Invariant at `_scan`: no byte at index `< B` equals C.
+Invariant at `_scan`: every byte at index `< B` differs from C.
 
 For `'L'` in `"HELLO"`, `find_index` should be `$02` (0-based).
 
@@ -231,16 +230,15 @@ The companion program copies `message` into `buffer`, then compares the two buff
 
 ## Preparing for print: digits and terminators
 
-Display routines need ASCII rather than raw small integers. Chapter 1's digit
-loop divides the value by 10, adds `'0'` to each remainder, stores the digits
-backward into a small buffer and appends a null terminator.
+Display routines need ASCII, so a small integer is converted digit by digit.
+Chapter 1's digit loop divides the value by 10, adds `'0'` to each remainder,
+stores the digits backward into a small buffer and appends a null terminator.
 
 Sketch of the invariant for decimal output into a byte buffer at DE:
 
 > HL (or DE) points at the next free byte leftward; the digits emitted so far sit to the right; when the value reaches zero, the digits are complete.
 
-Book 3 does not require a print port. Storing `"42", 0` in RAM provides a result
-that can be verified after `halt`.
+Storing `"42", 0` in RAM provides a result that can be verified after `halt`.
 
 ---
 
@@ -280,7 +278,7 @@ _store_copy_ok:
 
 ## Memory layout after `halt`
 
-![Where the three results land, and the two bytes of buffer that str_copy never reaches](../../assets/images/azm-book/book3/string-workspace.svg)
+![Where the three results land, and the two spare bytes at the end of buffer](../../assets/images/azm-book/book3/string-workspace.svg)
 
 ---
 
@@ -310,7 +308,7 @@ and HL stopping on the null.
 3. A `strcat_u8` routine uses HL as destination and DE as source. It scans HL
    to the null before copying from DE into that position.
 4. A bounded `strncpy_u8` uses B as the maximum number of bytes to write. It
-   stops early when the source ends, never exceeds B bytes, and pads with null
+   stops early when the source ends, writes at most B bytes, and pads with null
    when required.
 5. A hand trace of `strcmp_u8` on `"AB"` and `"A"` should include the expected
    return code.

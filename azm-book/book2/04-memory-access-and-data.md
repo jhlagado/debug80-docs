@@ -24,7 +24,7 @@ ld (hl), 19    ; byte at address HL = 19
 
 Any of A, B, C, D, E, H, L can appear on either side when the other side is `(HL)`. The standard pattern is: load an address into HL, read or write with `(HL)`, increment HL, repeat. Chapter 7 builds on this pattern heavily when working with byte tables.
 
-IX and IY support displaced addressing: `(ix+d)` reads the byte at address IX + d without changing IX. Chapter 7 covers this in full when the use case makes it concrete.
+IX and IY support displaced addressing: `(ix+d)` reads the byte at address IX + d while IX keeps its value. Chapter 7 covers this in full when the use case makes it concrete.
 
 > **Parentheses in `ld` memory operands**
 >
@@ -33,9 +33,9 @@ IX and IY support displaced addressing: `(ix+d)` reads the byte at address IX + 
 > `ld a, b` copies register B into A, no memory involved.
 > `ld a, (hl)` reads the _byte at the address held in HL_ from memory.
 >
-> Adding or removing parentheses may select a different legal instruction.
-> The intended addressing mode therefore needs verification whenever memory is involved. Parentheses
-> can mean something else in indirect jump and I/O forms.
+> Adding or removing parentheses may select a different legal instruction, so
+> the operand form is worth checking whenever memory is involved. In indirect
+> jump and I/O forms, parentheses mark a jump target or a port number.
 
 ---
 
@@ -48,7 +48,7 @@ ld a, (bc)     ; A = byte at address BC
 ld (de), a     ; byte at address DE = A
 ```
 
-These are compact single-byte opcodes with A hardcoded in the instruction encoding. The Z80 has no opcodes for `ld b, (bc)` or any other register with those indirect modes; the assembler will tell you if you try.
+These are compact single-byte opcodes with A hardcoded in the instruction encoding, and the assembler rejects any other register in those forms.
 
 ---
 
@@ -67,9 +67,9 @@ When you write `ld a, (count)`, the assembler substitutes the address that `coun
 
 ---
 
-## Two memory locations cannot be combined
+## Memory to memory goes through a register
 
-There is no instruction that copies one memory address directly to another. A register must carry the value between them:
+A register has to carry the value from one memory location to another; the Z80 has no direct memory-to-memory `ld`:
 
 ```asm
 ; No such instruction: ld ($8001), ($8000)
@@ -80,8 +80,7 @@ ld ($8001), a
 ```
 
 Both this and the `(BC)`/`(DE)` restriction follow from the specific operand
-combinations encoded by the Z80 instruction set. There is no general rule that
-every source and destination pairing is legal.
+combinations encoded by the Z80 instruction set.
 [Appendix 8](../appendices/08-z80-instruction-reference.md) has the complete searchable list.
 
 ---
@@ -145,7 +144,7 @@ count:   .db 0
 scratch: .dw 0
 ```
 
-With `ld a, MaxCount`, the assembler sees `MaxCount`, defined with `.equ 10`, and writes 10 into the instruction. This is an immediate load; no memory access happens.
+With `ld a, MaxCount`, the assembler sees `MaxCount`, defined with `.equ 10`, and writes 10 into the instruction. This is an immediate load: the 10 travels inside the instruction bytes.
 
 `ld (count), a` stores A at the address of `count`. This is a direct-address write: the `(nn) ← A` form from the table above. `count` resolves to `$8000`.
 
@@ -178,7 +177,7 @@ ld ($8010), a
 ld de, ($8020)
 ```
 
-**2. The illegal instruction.** Four of these five `ld` instructions assemble without error. The answer should identify the rejected form and explain the restriction:
+**2. The illegal instruction.** Four of these five `ld` instructions assemble. The answer should identify the rejected form and explain the restriction:
 
 ```asm
 ld a, (hl)
@@ -188,7 +187,7 @@ ld hl, (scratch)
 ld b, $FF
 ```
 
-_(Hint: re-read the two-memory-locations section and the note about what `ld` cannot do.)_
+_(Hint: re-read the section on memory-to-memory moves and the LD forms table.)_
 
 **3. Signed or unsigned?** Each byte below needs both its unsigned interpretation (0–255) and its signed two's-complement interpretation (−128 to +127):
 

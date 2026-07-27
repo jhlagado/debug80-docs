@@ -85,5 +85,5 @@
   <text class="cap" x="484" y="107" text-anchor="start" xml:space="preserve">SP now</text>
   <text class="dimn" x="40" y="244" text-anchor="start" xml:space="preserve">ld sp, $C000 runs before the first call, push or pop. Each push takes SP down two and writes a word at the new</text>
   <text class="dimn" x="40" y="262" text-anchor="start" xml:space="preserve">SP; each pop reads a word and puts SP back up two.</text>
-  <text class="dimn" x="40" y="280" text-anchor="start" xml:space="preserve">Point SP at the top of RAM and the stack runs down into free space rather than down into your program.</text>
+  <text class="dimn" x="40" y="280" text-anchor="start" xml:space="preserve">Point SP at the top of RAM and the stack runs down into free space.</text>
 </svg>

@@ -80,5 +80,5 @@
   <line class="none" x1="490" y1="75" x2="530" y2="75" marker-end="url(#ar)"/>
   <path class="none" d="M605,100 V138 H105 V100" marker-end="url(#ar)"/>
   <text class="dimn" x="300" y="132" text-anchor="start" xml:space="preserve">and round again</text>
-  <text class="dimn" x="40" y="174" text-anchor="start" xml:space="preserve">A jump or a call writes PC itself, so the advance never happens. That is the whole of control flow.</text>
+  <text class="dimn" x="40" y="174" text-anchor="start" xml:space="preserve">A jump or a call writes PC itself, and that is the whole of control flow.</text>
 </svg>

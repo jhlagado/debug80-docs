@@ -74,13 +74,13 @@
   <text class="dim" x="330" y="54" text-anchor="start" xml:space="preserve">HL holds table</text>
   <path class="dash" d="M320,102 H300" marker-end="url(#arD)"/>
   <text class="dim" x="330" y="98" text-anchor="start" xml:space="preserve">find_max walks HL to the end of</text>
-  <text class="dim" x="330" y="116" text-anchor="start" xml:space="preserve">the table and does not put it back</text>
+  <text class="dim" x="330" y="116" text-anchor="start" xml:space="preserve">the table and leaves it there</text>
   <path class="dash" d="M320,128 H300" marker-end="url(#arD)"/>
   <text class="dim" x="330" y="132" text-anchor="start" xml:space="preserve">so this reads the wrong byte</text>
   <text class="cap" x="40" y="190" text-anchor="start" xml:space="preserve">What azm --rc warn reports</text>
   <rect class="bxq" x="40" y="202" width="640" height="44" rx="3"/>
   <text class="ts" x="54" y="220" text-anchor="start" xml:space="preserve">source.asm:6:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max</text>
   <text class="ts" x="54" y="238" text-anchor="start" xml:space="preserve">may modify H,L, but the pre-call value is used later.</text>
-  <text class="dimn" x="40" y="272" text-anchor="start" xml:space="preserve">The analyzer does not know what table means. It knows HL held a value, that the call may destroy HL, and that</text>
+  <text class="dimn" x="40" y="272" text-anchor="start" xml:space="preserve">The analyzer works from three facts alone: HL held a value, the call may destroy HL, and</text>
   <text class="dimn" x="40" y="290" text-anchor="start" xml:space="preserve">HL was read afterwards. Reload it, save it across the call, or stop using it.</text>
 </svg>

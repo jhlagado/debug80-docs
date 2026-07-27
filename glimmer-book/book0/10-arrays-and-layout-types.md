@@ -36,8 +36,8 @@ cursor around the 8x8 RGB LED matrix; GO stamps a green pixel where
 the cursor stands; the stamped pixels stay put while the cursor moves
 on. That last clause is a first for this book: every program until now
 kept its facts (a position, a colour, a score) but redrew its whole
-picture from them each time, so nothing you saw outlived the facts
-behind it. In Canvas the picture *is* the state, so it
+picture from them each time, so everything you saw came fresh from the
+facts behind it. In Canvas the picture *is* the state, so it
 outlives your touch: steer the cursor away and your work stays. The
 picture is an eight-byte array, and the cursor is a two-field layout
 called `Point`.
@@ -173,10 +173,10 @@ so the declaration reads directly:
 *Picture is eight bytes, already changed*.
 
 One change flag covers the whole run. Stamping a pixel changes the
-picture, not byte three of some array. A board changes *as a unit*,
+picture. A board changes *as a unit*,
 and the render that watches it asks one question: do I need to
 redraw? Per-cell flags would spend your whole flag budget tracking which
-byte moved, sixty-four bits that no block ever tests. So `updates Picture`
+byte moved, sixty-four bits behind a single question. So `updates Picture`
 raises the one flag whichever byte a block wrote, and `on Picture`
 fires when any byte did. The array name is legal exactly where a byte
 cell's name is legal, in `on` lines and in `updates` lines, and it
@@ -256,7 +256,7 @@ underneath.
 ## Two bytes that travel together
 
 The cursor is one fact with two parts: an x and a y that move
-together, change together, and mean nothing apart. Glimmer models it
+together and change together. Glimmer models it
 with a layout type and a typed state cell:
 
 ```text
@@ -269,12 +269,12 @@ state Cursor : Point changed
 ```
 
 A `type` declaration names an arrangement of bytes: `Point` is two
-byte fields, `x` at the start and `y` after it. The type reserves no
-storage by itself; it is a name for a shape. Storage
+byte fields, `x` at the start and `y` after it. The name describes a
+shape; storage
 arrives with the state line, which reads *Cursor is a Point, already
 changed* and reserves two zero-filled bytes in that shape.
 
-Typed state follows the array rules: zero-filled, no initializer, one
+Typed state follows the array rules: zero-filled, one
 change flag for the whole cell. Zero-filled has a visible consequence
 here: Cursor starts as (0,0), so the program opens with the cursor
 in the top-left corner. And the single flag is what lets every
@@ -295,9 +295,9 @@ fixed address and the instruction is a plain absolute load. You could
 write `Cursor + 1` and reach the
 same byte today. The reason not to is concrete: adding a field at the top
 of the layout silently shifts every hand-counted offset below it, and the bug
-that follows points nowhere near its cause. Written as `offset`, the addresses
-follow the definition instead: when the layout grows, every one of them moves
-with it without requiring changes to the instructions.
+that follows surfaces far from its cause. Written as `offset`, the addresses
+follow the definition: when the layout grows, every one of them moves
+with it.
 
 ## Layout fields
 

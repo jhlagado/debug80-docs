@@ -17,7 +17,7 @@ Layout types, which [Book 1 Chapter 5](../book1/05-layout-system.md) covers, com
 
 ---
 
-## The problem: a queue without moving memory
+## The problem: a queue that moves only its indices
 
 A FIFO queue (first in, first out) needs:
 
@@ -42,7 +42,7 @@ count   .byte
 .endtype
 ```
 
-Field lines do **not** allocate memory. Storage still comes from `.ds`, `.db` or `.dw`:
+Field lines describe layout; storage comes from `.ds`, `.db` or `.dw`:
 
 ```asm
 RING_CAP .equ 8
@@ -54,7 +54,7 @@ ring_state:
     .ds RingState
 ```
 
-`ring_state` reserves `sizeof(RingState)` bytes: three bytes for `head`, `tail` and `count` in order. When the length is a named constant, `.ds RING_CAP` and `.ds byte[8]` mean the same reservation; the type-array form uses literal lengths in the current assembler, not named constants.
+`ring_state` reserves `sizeof(RingState)` bytes: three bytes for `head`, `tail` and `count` in order. `.ds RING_CAP` and `.ds byte[8]` reserve the same eight bytes; the count inside `[ ]` must be a literal, so a named capacity goes in the plain form.
 
 ![Three control bytes beside the eight they control, and the offset constants that name them](../../assets/images/azm-book/book3/ring-state-layout.svg)
 
@@ -106,9 +106,9 @@ ring_state:
 
 The second reserves `sizeof(RingState)` bytes, whatever the field list currently sums to. With a literal length you can also write `.ds byte[8]`; that documents element width when capacity is fixed in source. Initialized data still uses `.db` / `.dw`; `.ds` only reserves space.
 
-Labels stay **untyped**. `ring_state` is an address, not a permanent `RingState`
-variable. A routine passes that address in a register and uses
-`offset(RingState, field)` constants at the access site.
+Labels stay **untyped**: `ring_state` is an address. A routine passes that
+address in a register and applies `offset(RingState, field)` constants at the
+access site, which is where the layout enters.
 
 ---
 
@@ -138,8 +138,8 @@ displacement:
 ```
 
 Each displacement is whatever `offset` computes from the current field list, so
-reordering `RingState` reorders the generated instructions without touching a
-line of this code.
+reordering `RingState` changes the generated displacements while this code stays
+as written.
 
 ### Run-time index into the byte table
 
@@ -156,7 +156,8 @@ line of this code.
   ld (hl), a
 ```
 
-AZM does not emit multiply/add for runtime indices.
+Runtime indices are your own `add hl, bc`; AZM's layout arithmetic all happens
+at assembly time.
 
 ---
 
@@ -172,7 +173,7 @@ Parts:
 
 - `<RingState>`: layout to apply
 - `ring_state`: base label
-- `.count`: field path (no `[i]` when accessing a single record)
+- `.count`: field path
 
 The assembler computes `ring_state + offset(RingState, count)` and emits `ld hl, imm16`.
 
@@ -190,7 +191,7 @@ That is `ring_buf + 3` when the element type is `byte`. For a table of structure
 
 expands to `sprite_table + 2 * sizeof(Sprite) + offset(Sprite, flags)`.
 
-Runtime registers are rejected inside the brackets:
+The bracketed index must be an assembly-time literal, so a register there is an error:
 
 ```asm
   ld hl, <byte[8]>ring_buf[hl]    ; error: HL is not a constant
@@ -240,7 +241,7 @@ Push fails closed when `count == RING_CAP` (returns with carry clear). Pop fails
 
 After pushing `$11`, `$22`, `$33` and then popping all three, the buffer may still hold those bytes in RAM, but `count` is 0 and the logical queue is empty:
 
-![Four states of the same eight bytes, including the popped bytes that are still in RAM and no longer in the queue](../../assets/images/azm-book/book3/ring-buffer.svg)
+![Four states of the same eight bytes, including the popped bytes that are still in RAM while count says the queue is empty](../../assets/images/azm-book/book3/ring-buffer.svg)
 
 When `head` or `tail` would become `RING_CAP`, the index wraps to 0:
 
@@ -291,7 +292,7 @@ _full:
     ret
 ```
 
-Carry flag is the success/fail signal: no separate error code byte unless the caller wants one in workspace.
+Carry flag is the success/fail signal.
 
 ### Pop
 
@@ -334,16 +335,16 @@ FIFO order: bytes leave in the same order they arrived because `tail` chases `he
 |-----|---------|
 | `.routine in` | Registers the caller must set before `call` |
 | `.routine out` | Registers and flags that carry meaningful values across returning exits |
-| `.routine clobbers` | Registers destroyed (not restored) |
+| `.routine clobbers` | Registers the routine destroys |
 
 The `.routine` directive appears immediately before the callable entry.
 `@name:` is reserved for symbols exported from a source unit; call sites use the
 plain symbol name, such as `call ring_push`.
 
 For `ring_push` and `ring_pop`, the human `;` line states the meaning of success
-and failure, while `.routine out` names the carrier as `carry` rather than
-`F.C`. The shown `ring_pop` returns A = 0 on its empty path, but carry still
-determines whether A contains a popped byte.
+and failure, while `.routine out` names the carrier as `carry`. The shown
+`ring_pop` returns A = 0 on its empty path, but carry still determines whether A
+contains a popped byte.
 
 The register-contract checker provides machine verification:
 
@@ -399,7 +400,8 @@ offset, element stride and element field offset:
 offset(Scene, sprites) + 2 * sizeof(Sprite) + offset(Sprite, color)
 ```
 
-Current AZM does not accept `sprites[2].color` as a nested `offset` path.
+In current AZM an `offset` path names fields, so an index into a record array
+belongs in the arithmetic above.
 
 Unions (`.union` / `.endunion`) share the same offset rules; the union's size is the largest member.
 
@@ -423,7 +425,7 @@ A single-step trace of `ring_push` shows `head` and `count` changing through
 
 ## Exercises
 
-1. The first exercise calculates three `.equ` values without assembling:
+1. The first exercise calculates three `.equ` values by hand:
    `sizeof(RingState)`, `offset(RingState, tail)` and
    `offset(RingState, count)` for the chapter's three-byte layout.
 2. Adding a `flags` byte after `count` should be followed by an account of which
@@ -431,9 +433,9 @@ A single-step trace of `ring_push` shows `head` and `count` changing through
 3. An alternative `ring_buf[head]` address calculation uses DE as the base and
    C as the index while retaining the existing `ring_push` contract.
 4. A capacity of 16 can use `and 15` in `ring_advance_index` instead of `cp` /
-   `xor`; a paper proof should show that `head` never reaches 16.
-5. A `ring_peek` routine should return the oldest byte in A without removing it
-   and report an empty ring with carry clear. Its contract documents
+   `xor`; a paper proof should show that `head` stays in 0..15.
+5. A `ring_peek` routine should return the oldest byte in A, leave the queue
+   unchanged, and report an empty ring with carry clear. Its contract documents
    `.routine in`, `.routine out` and `.routine clobbers`.
 6. Two forms should load the address of `ring_state.head` into HL: a layout
    cast and `ring_state + offset(RingState, head)`. Assembly should produce the

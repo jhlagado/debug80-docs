@@ -75,7 +75,7 @@ Memory-to-memory moves must go through a register.
 | `OR` | `or x` | `A` | accumulator only |
 | `XOR` | `xor x` | `A` | accumulator only |
 | `CP` | `cp x` | no stored result | flags only |
-| `INC` | `inc r`, `inc rr`, `inc (hl)`, `inc (ix+d)` | operand itself | does not mean "new temporary value" |
+| `INC` | `inc r`, `inc rr`, `inc (hl)`, `inc (ix+d)` | operand itself | changes the operand in place |
 | `DEC` | `dec r`, `dec rr`, `dec (hl)`, `dec (ix+d)` | operand itself | often used for loops |
 
 ---
@@ -87,7 +87,7 @@ Memory-to-memory moves must go through a register.
 | accumulator rotates | `rlca`, `rrca`, `rla`, `rra` | short one-byte accumulator forms |
 | general rotates | `rlc r`, `rrc r`, `rl r`, `rr r` | base `CB` family |
 | shifts | `sla r`, `sra r`, `srl r` | base `CB` family |
-| bit test | `bit n,r`, `bit n,(hl)` | tests a bit, does not store a new value |
+| bit test | `bit n,r`, `bit n,(hl)` | tests a bit and leaves the operand as it stands |
 | bit clear | `res n,r`, `res n,(hl)` | writes back changed value |
 | bit set | `set n,r`, `set n,(hl)` | writes back changed value |
 | indexed forms | `bit 3,(ix+2)`, `srl (iy-1)` | `DD CB d` / `FD CB d` families |

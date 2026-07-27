@@ -15,8 +15,8 @@ occupies.
 
 An effect is a decision the game makes when a
 moment arrives: move or stay at the wall, score or miss. A derivation
-is not a decision at all. The bar length is always the count divided
-by eight, chosen by nobody and waiting on no moment: the same
+follows automatically. The bar length is always the count divided
+by eight: the same
 information restated in the form the display shows. So the
 three jobs of a game come apart cleanly: rules decide, derivations
 restate, and pictures depict. Glimmer gives each one its own block
@@ -110,14 +110,12 @@ begin
 end
 ```
 
-One keyword in that file is new to you: `compute`. `DeriveBar` holds
-no game rule and it draws no picture; its
+One keyword in that file is new to you: `compute`. `DeriveBar`'s
 whole job is to maintain a fact that follows from another fact, the
 bar length that `Count` implies. When Count's change reaches the
 compute phase, `DeriveBar` recalculates `BarLen` before the render
-phase begins. `BarLen` is ordinary state: `DrawBar` depends on it as
-it would any other fact, without needing to know whether a rule or a
-derivation wrote it.
+phase begins. `BarLen` is ordinary state, and `DrawBar` depends on it
+as it would any other fact.
 
 ## Three jobs, three keywords, one order
 
@@ -146,8 +144,8 @@ otherwise they receive it at the next frame's start. A chain of
 derivations, a compute feeding a compute,
 therefore advances one step per frame, so a two-stage consequence
 reaches the screen two frames after its cause. A render runs after
-the compute and effect passes, and it reads live memory rather than a
-snapshot. Glimmer promises the
+the compute and effect passes, and it reads live memory. Glimmer
+promises the
 trigger schedule; the Z80 bodies still determine the values.
 
 The runtime frame now has its full shape. From
@@ -231,9 +229,9 @@ the change is in `Changed0` from the start: `DeriveBar` runs and
 resizes `BarLen` (a same-frame delivery to a later phase), so
 `DrawBar` redraws the bar, and `ShowCount` rewrites the digits.
 A chain that points backward, logic feeding a compute, advances one
-step per frame instead of tangling.
+step per frame.
 
-The rule means **declaration order does not control when an update is
+The rule means **phase alone decides when an update is
 delivered.** Move `DeriveBar` to the bottom of the file and every
 delivery lands on the same frames as before, so you can organise your
 source for the person reading it: rules together, renders together,
@@ -274,7 +272,7 @@ program Meter
 Every fact, who raises it, what it triggers, and each dependent's
 phase: the program's whole design, computed from the `on`, `updates`,
 and `bind` lines you already wrote. When a program misbehaves, this report
-and the question *which fact failed to change?* find most bugs before
+and the question *which fact should have changed?* find most bugs before
 the debugger opens. A later chapter builds a debugging practice on it.
 
 Next, the display gets a chapter of its own: what

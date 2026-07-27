@@ -11,8 +11,7 @@ nav_order: 4
 
 ## A build
 
-With `main` selected, **Build** assembles that target without
-launching it.
+With `main` selected, **Build** assembles that target.
 
 Debug80 hands your entry file to the assembler, writes the output into the target's `outputDir`, and stops. The panel reports what happened on its own line:
 
@@ -71,28 +70,28 @@ Debug80 builds the target, then launches it: it loads the monitor ROM and your p
 
 ![The emulated TEC-1G running the starter program](../../assets/images/debug80-book/book1/machine-running.svg)
 
-**Run** changes colour rather than label: grey when nothing is running, amber while starting, green while running, blue when paused at a breakpoint. Both buttons are disabled while a session is starting.
+**Run** keeps its label and reports the session state in its colour: grey when nothing is running, amber while starting, green while running, blue when paused at a breakpoint. Both buttons are disabled while a session is starting.
 
 If a session is already running, **Run** stops it and starts again, so after an edit one press gets you the new build on a fresh machine.
 
-There is no `launch.json` to write; Debug80 supplies the debug configuration.
+Debug80 supplies the debug configuration itself, so there is no `launch.json` to write.
 
 ## Choosing between Build and Run
 
 **Run** suits the edit-and-test cycle. **Build** suits work that needs
-the artifacts but not the machine: sending a HEX file to real
-hardware, checking whether code assembles, or building a target other
-than the one currently being debugged.
+only the artifacts: sending a HEX file to real hardware, checking
+whether code assembles, or building a target other than the one
+currently being debugged.
 
 ## Stop on entry
 
-The **Stop on entry** checkbox pauses the CPU at the machine's launch address instead of letting it run, and applies to this VS Code window for as long as it is open.
+The **Stop on entry** checkbox pauses the CPU at the machine's launch address, and applies to this VS Code window for as long as it is open.
 
 ## The other three controls
 
 The row below **Stop on entry** holds **Register Contracts**, **Contract Updates** and **Strict labels**.
 
-**Register Contracts** defaults to Enforce, which means AZM checks how your routines use registers and fails the build when it proves a conflict. If a build fails complaining about registers rather than syntax, that is the control responsible, and setting it to Audit reports the problem without stopping you. It is also why a build writes `main.regcontracts.txt`.
+**Register Contracts** defaults to Enforce, which means AZM checks how your routines use registers and fails the build when it proves a conflict. If a build fails complaining about registers rather than syntax, that is the control responsible, and setting it to Audit reports the problem and lets the build finish. It is also why a build writes `main.regcontracts.txt`.
 
 [Appendix D](appendices/d-azm-options-row.md) covers all three: what they change, which of them can rewrite your source, and which one is saved into `debug80.json`.
 
@@ -100,5 +99,4 @@ The row below **Stop on entry** holds **Register Contracts**, **Contract Updates
 
 **Debug80: Copy Project Status (JSON)** copies the panel's full view
 of the project as JSON. The result records the project state, target
-list, selected target, build, source map and hardware status, which
-helps when the visible state does not explain what Debug80 is doing.
+list, selected target, build, source map and hardware status.

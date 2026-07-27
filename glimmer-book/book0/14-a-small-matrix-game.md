@@ -27,7 +27,7 @@ lives. A splash card waits for any key, a game-over card names the
 ending on the LCD, and after a short pause any key starts the sky
 falling again.
 
-A game this size is designed, not discovered, and Glimmer gives you a
+A game this size is designed, and Glimmer gives you a
 place to do the designing: the declarations. A Glimmer game's
 declarations carry its
 structure: the facts, the moments, the schedules, the
@@ -61,13 +61,13 @@ and, a bonus we will collect later, make the catch test three
 instructions. Three
 wide also means `PadX`, the left column, runs 0..5 rather than 0..7,
 and you will meet that 5 again in the steering rule. One `DropX` and
-one `DropY`, not an array of them, because Skyfall drops one block at
+one `DropY`, because Skyfall drops one block at
 a time, a deliberate simplification that keeps the whole sky in a
 single rule, a simplification you could later lift with an array.
 `Score` is a word because I have watched people get good at this game.
 `Lives` is three because that is the arcade's oldest tuning: one life
 makes every slip fatal, five makes misses free, three keeps a miss
-expensive without ending the evening. And `Armed`, the odd one out (a
+expensive and the evening going. And `Armed`, the odd one out (a
 gate for the game-over screen), answers a problem you only meet in
 playtesting; the game-over card is where it earns its place.
 
@@ -99,8 +99,8 @@ Splash again.
 One design step remains: the budget check. Facts, moments, and
 `CurrentCard` each take one of the program's 32 change-flag cells.
 Skyfall uses six facts, five moments, and one card cell: twelve flags,
-with room to spare. Timer cells carry no flag,
-and `FrameCount` costs nothing in a program that never names it.
+with room to spare. Timer cells are free, and so is a `FrameCount`
+the program leaves unnamed.
 
 ![Skyfall on paper, before a block is written.](../../assets/images/glimmer-book/book0/skyfall-design.svg)
 
@@ -166,11 +166,10 @@ text MsgLives "LIVES "
 text MsgPad   "      "
 ```
 
-No fact carries the `changed` modifier, and this is the first program
-in the book where that is true. Every program so far used `changed` to
-draw its first picture. Skyfall's screens all belong to cards, and
-each card's `enter` block re-raises what its renders need, so startup
-takes care of itself.
+Startup here is entirely the cards' work: every screen belongs to a
+card, and each card's `enter` block re-raises what its renders need.
+Every program so far used `changed` to draw its first picture, and
+Skyfall is the first with the modifier nowhere in the file.
 
 And the row-one messages are all padded to sixteen characters. The LCD
 keeps whatever was last written, and three cards take turns with the
@@ -180,9 +179,9 @@ the tail of row two.
 
 ## A helper and the splash card
 
-The rules file opens not with a card but with a routine, declared
-before the first `card` line so it reads as belonging to the whole
-game rather than to any one screen.
+The rules file opens with a routine, declared
+before the first `card` line so it belongs to the whole game and every
+card can call it.
 
 ```text
 ; Skyfall's rules - a part of skyfall.glim.
@@ -225,7 +224,7 @@ byte to a column, 0..7.
 Every game with replay needs one block that puts the world back the
 way it was, and a card system gives you exactly one right place for
 it: the `enter` block of the playing card, which runs on the first
-round and on every replay without you lifting a finger.
+round and on every replay alike.
 
 ```text
 card Playing
@@ -252,8 +251,8 @@ The `updates` marks reach the card's renders the same frame, so the
 board, the score, and the lives readout all appear the moment play
 begins, on the first round and on every replay.
 
-`Gravity` in that list documents the write: a timer cell carries no
-change flag, so its entry compiles to nothing, and the line stands as
+`Gravity` in that list documents the write: the store in the body is
+the whole act, and the line stands as
 the block's declaration that it writes the pace, for the dependency
 report waiting at the end of this chapter, and for you, six months
 from now.
@@ -291,7 +290,8 @@ right stop is 5, the ceiling we chose at the design table when we made
 the paddle three wide. Its right edge reaches column 7, so every
 column a block can fall in is catchable. The held period of 4 is the
 other tuned number here: crossing the whole board costs twenty frames,
-a third of a second, and the late game leaves you no more than that.
+a third of a second, and that is exactly the budget the late game
+gives you.
 
 ## The drop
 
@@ -348,8 +348,8 @@ every landing, both sides of the paddle included: carry means caught.
 
 A catch scores, chirps, and turns the difficulty screw: `dec a` and a
 store into `Gravity`, the timer's next reload counting from the new
-period, with `cp 7` holding a floor of 6 so the game gets hard rather
-than impossible. Pacing is the same ordinary write it was in Drip;
+period, with `cp 7` holding a floor of 6 so the game gets hard and
+stays playable. Pacing is the same ordinary write it was in Drip;
 here it answers the score instead of a ramp.
 
 A miss buzzes and spends a life, and the last life writes
@@ -463,8 +463,8 @@ end
 ```
 
 `GameOverShow` closes the gate and arms the one-shot: ninety frames,
-long enough to read a sixteen-character verdict, short enough not to
-feel like punishment. When `GateP` arrives, `OpenGate` writes the
+long enough to read a sixteen-character verdict, short enough to keep
+the game moving. When `GateP` arrives, `OpenGate` writes the
 invitation on row two and opens the gate; until then, `Restart`
 swallows every press at `jr z,_wait`.
 
@@ -545,7 +545,7 @@ difference from the design tables tells you exactly which connection
 needs review.
 
 `AnyKeyP` triggers two blocks in two
-different cards, and card gating keeps them from ever both running.
+different cards, and card gating runs exactly one of them.
 `Gravity` shows `triggers: (nothing)` even though the whole game
 dances to it: the hidden countdown is its only consumer, and
 `FallTick`, one line up, carries the announcement. And `CurrentCard`

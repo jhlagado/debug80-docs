@@ -24,7 +24,7 @@ Rules that apply everywhere:
 - Flag-carrying cells are allocated by category order (states, then
   pulses, then ramps, then `FrameCount`) into up to four change-flag
   banks; the current cap is 32 cells.
-- Two built-in cells need no declaration: `FrameCount` increments every
+- Two cells are built in: `FrameCount` increments every
   frame and is legal in `on`; `CurrentCard` arrives with the first card.
 
 ```text
@@ -171,8 +171,8 @@ timer Gate : word = 384 -> Opened once
   and reloads from the cell each time it runs out.
 - `once`: the cell is the countdown itself; it fires a single time at
   zero and stays idle until code writes it again.
-- Timer cells carry no change flag (trigger on the pulse), so they
-  are legal in `updates` and absent from `on`.
+- A timer announces itself through its pulse, so the cell is legal in
+  `updates` and `on` lines take the pulse.
 
 ### ramp
 
@@ -316,8 +316,7 @@ begin
 end
 ```
 
-- No triggers, no dispatch: blocks call it with an ordinary
-  `call ClampX`.
+- Called directly: blocks reach it with an ordinary `call ClampX`.
 - Emitted as a `.routine` boundary followed by `ClampX:`, with its
   register contract inferred by the assembler.
 - The body falls through and the generator appends the final `ret`;

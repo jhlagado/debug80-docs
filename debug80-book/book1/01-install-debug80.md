@@ -22,7 +22,7 @@ The **Extensions** view in the Activity Bar provides the installation
 route. A search for `debug80` finds **Debug80 IDE for Z80
 Development**, published by `jhlagado`.
 
-The extension takes over `.asm`, `.z80` and `.asmi` files for syntax highlighting, and `.glim` files for Glimmer. If you already have another Z80 assembly extension installed you do not need it, and Debug80 will set the language mode on those files itself.
+The extension takes over `.asm`, `.z80` and `.asmi` files for syntax highlighting, and `.glim` files for Glimmer. It sets the language mode on those files itself each time one opens, which takes precedence over any other Z80 assembly extension you have installed.
 
 ## Find Debug80 in the sidebar
 
@@ -35,8 +35,7 @@ the list reveals the panel.
 
 The book calls it **the Debug80 panel** from here on.
 
-If DEBUG80 is not in the list at all, the extension has not activated.
-VS Code's **View > Open View…** picker can reveal Debug80 directly.
+The extension contributes this section itself, so it appears once Debug80 is installed, and opening it is what starts the extension running. When the list lacks it, check that the extension is installed and enabled; VS Code's **View > Open View...** picker reaches Debug80 directly.
 
 ## The empty state
 

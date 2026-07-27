@@ -10,8 +10,8 @@ nav_order: 7
 Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
 
 The **hardware stack** holds one return address per active call. Its capacity
-must be budgeted at assembly time because the CPU gives no warning before an
-overflow overwrites other data.
+must be budgeted at assembly time, because an overflow silently overwrites
+whatever lies below the stack.
 
 The companion listing is [`examples/06_factorial.asm`](examples/06_factorial.asm).
 
@@ -25,7 +25,7 @@ Many definitions refer to themselves:
 - The sum of a byte table is the first byte plus the sum of the rest.
 - Towers of Hanoi: moving n disks means moving n-1 disks twice around one move of the bottom disk.
 
-Each case splits the input into a smaller instance of the same problem plus a small amount of local work. The **base case** is the size where you return immediately without another `call`.
+Each case splits the input into a smaller instance of the same problem plus a small amount of local work. The **base case** is the size where you return immediately.
 
 Iterative loops from Chapters 1–2 already do this with registers and workspace. Recursion makes the "smaller problem" explicit as another `call`.
 
@@ -57,7 +57,8 @@ Each recursive step (for n > 0) does:
 
 Each non-base level therefore adds four bytes: two for saved BC and two for the
 next recursive return address. The base call adds only its two-byte return
-address because it does not push BC. Source constants name both parts:
+address, because the base path returns before the `push bc`. Source constants
+name both parts:
 
 ```asm
 FACT_STEP_BYTES      .equ 4
@@ -69,8 +70,8 @@ STACK_TOP            .equ $9FFF
 
 The demo uses `FACT_N = 5`: five non-base levels and one base call occupy 22
 bytes at the deepest point. `FACT_MAX_DEPTH` is six, but multiplying six by a
-uniform four-byte frame would overstate the exact requirement because the base
-case has no saved BC.
+uniform four-byte frame would overstate the requirement: the base level's frame
+is two bytes.
 
 ---
 
@@ -79,7 +80,7 @@ case has no saved BC.
 ### Recursive version
 
 **Contract:** B = n (unsigned), A = n!, with 0! defined as 1. An 8-bit result
-limits the demos to n ≤ 5 because 6! = 720 does not fit.
+limits the demos to n ≤ 5, because 6! = 720 needs more than eight bits.
 
 ```asm
 ; factorial_u8: unsigned B! into A (0! = 1; safe for B <= 5 in 8 bits)
@@ -101,7 +102,7 @@ _one:
     ret
 ```
 
-**Base case:** `b = 0` → A = 1, `ret` without another `call`.
+**Base case:** `b = 0` → A = 1 and `ret`.
 
 **Recursive step:** save `n` on the stack, compute (n-1)! in A, restore `n` into B, multiply A by `n` via `mul8_a_by_c`, return.
 
@@ -109,7 +110,7 @@ Work after the inner `call` returns is the hallmark of recursion that **unwinds*
 
 ### Iterative version
 
-Same contract, no self-call:
+Same contract, one loop:
 
 ```asm
 ; factorial_iter_u8: same contract as factorial_u8, iterative
@@ -139,7 +140,7 @@ _iter_one:
     ret
 ```
 
-Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
+Stack depth stays **O(1)** for every `n` in the 8-bit range.
 
 ### Recursive and iterative forms
 
@@ -150,7 +151,7 @@ Stack depth stays **O(1)** no matter how large `n` is (within your 8-bit range).
 | Readable structure | matches the math definition | matches a for-loop |
 | Risk on small RAM | overflow if depth × frame too large | multiply still needs care for range |
 
-![The same result from two shapes: one grows the stack with n, the other does not](../../assets/images/azm-book/book3/recursive-vs-iterative.svg)
+![The same result from two shapes: one grows the stack with n, the other holds one frame at any n](../../assets/images/azm-book/book3/recursive-vs-iterative.svg)
 
 `main` calls both with `B = 5` and stores to `fact_rec` and `fact_iter`. After `halt`, both bytes at `$8000` and `$8001` should read `$78` (120).
 
@@ -221,7 +222,7 @@ runs in HL, recurse with `A - 1`, then pop the head into A and promote it into D
 (`ld e, a` / `ld d, 0`) before `add hl, de`.
 
 Each non-base level keeps one two-byte AF value and has one two-byte recursive
-return address. The base call adds its return address but no saved AF. For
+return address. The base call adds its two-byte return address alone. For
 `NUMS_LEN = 5`, maximum occupancy is therefore `5 × 4 + 2 = 22` bytes.
 
 From `main`:
@@ -251,10 +252,10 @@ Self-calls add two documentation requirements:
 1. **The human comment identifies recursion** (`; Self-call; ...`), making the
    need for stack arithmetic explicit.
 2. **The stack budget appears in `.equ` constants** (`FACT_STEP_BYTES`,
-   `FACT_BASE_BYTES`, `FACT_MAX_DEPTH`) or in the comment block rather than as
-   a magic number buried in `main`.
+   `FACT_BASE_BYTES`, `FACT_MAX_DEPTH`) or in the comment block, where a reader
+   working on the routine will find it.
 
-Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it, same rule as Chapter 11.
+Register contracts (`azm --rc warn`) still check each `call` site against the callee contract. They do not yet multiply depth by frame size; overflow prevention stays your compile-time inequality and testing on hardware. When a recursive routine uses an IX frame, include IX in `clobbers` unless the epilogue restores it, same rule as Book 2 Chapter 11.
 
 Internal labels use owner-local names such as `_one` and `_zero`.
 
@@ -267,7 +268,7 @@ Stack overflow on the Z80 is **silent**. SP decrements through your globals; sto
 Symptoms you might see in the emulator:
 
 - correct results for small inputs, nonsense for large ones
-- `halt` never reached because PC jumped into data
+- execution running past `halt` because PC jumped into data
 - workspace or table bytes changing while stepping through unrelated code
 
 Book 3 uses four defenses:
@@ -286,7 +287,7 @@ Book 3 uses four defenses:
 
 ![Eleven two-byte slots at the deepest call, and the multiply each level performs on the way back up](../../assets/images/azm-book/book3/factorial-frames.svg)
 
-Data at `$8000` does not move; only SP walks.
+Only SP walks; the data at `$8000` stays where it is.
 
 ---
 
@@ -344,8 +345,8 @@ and the multiplies on the way up. The complete file can then run to `halt`.
 4. A `hanoi_moves_u16` routine uses B as input and HL as output, with H(0)=0
    and H(n)=2H(n-1)+1. It should make one recursive call for H(n-1), double HL,
    add one and include an estimate of stack bytes per level.
-5. A deliberate contract error calls `factorial_u8` and then uses B without
-   reloading it. `azm --rc warn` should expose the error, and the contract
-   comment provides the basis for correcting it.
+5. A deliberate contract error calls `factorial_u8` and then uses B as if the
+   call had preserved it. `azm --rc warn` should expose the error, and the
+   contract comment provides the basis for correcting it.
 6. A constrained-stack case lowers `STACK_TOP` to `$8010`, retains data at
    `$8000` and sets `FACT_N = 5`; its purpose is to identify the first failure.

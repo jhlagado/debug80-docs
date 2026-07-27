@@ -143,5 +143,5 @@
   <text class="t" x="428" y="375.5" text-anchor="middle" xml:space="preserve">00</text>
   <text class="dimn" x="560" y="376" text-anchor="start" xml:space="preserve">fill byte written</text>
   <text class="dimn" x="46" y="410" text-anchor="start" xml:space="preserve">The three string directives differ only in which byte marks the end.</text>
-  <text class="dimn" x="46" y="428" text-anchor="start" xml:space="preserve">An unfilled .ds advances the address without writing anything. A fill byte makes the block real in the flat binary.</text>
+  <text class="dimn" x="46" y="428" text-anchor="start" xml:space="preserve">An unfilled .ds advances the address alone. A fill byte makes the block real in the flat binary.</text>
 </svg>

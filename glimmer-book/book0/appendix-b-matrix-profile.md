@@ -129,7 +129,7 @@ plain shape; `Snd_<Name>` wrappers appear per sound cue.
 | `HudWriteU16` | `in HL out BC,HL clobbers A,DE,carry,zero,sign,parity,halfCarry` |
 | `HudBlankDig` | `clobbers A,B,HL,carry,zero,sign,parity,halfCarry` |
 
-- The loop calls `ScanFrame` at frame start; blocks leave it alone.
+- The generated loop calls `ScanFrame` at frame start.
 - `FbClear` zeroes all 32 framebuffer bytes.
 - `FbPlot` sets one pixel: B = x (0-7), C = y (0-7), A = colour bits,
   OR-combined. It ORs into the framebuffer; C survives the call.
@@ -177,7 +177,7 @@ Snd_Click:
         jp      SndStart
 ```
 
-`call Snd_Click` from any block starts the cue without blocking.
+`call Snd_Click` from any block starts the cue and returns at once.
 
 ## HUD service
 

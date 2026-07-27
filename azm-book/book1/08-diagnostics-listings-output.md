@@ -68,11 +68,11 @@ AZM exits 0 when assembly succeeds: no parse errors, no semantic errors, no rang
 
 AZM exits 1 when assembly produces an error diagnostic:
 
-- A parse error: source line cannot be recognized
+- A parse error: the source line falls outside the grammar
 - A semantic error: unknown symbol, duplicate symbol, type error
-- A range error: value does not fit the encoding slot
+- A range error: the value overflows the encoding slot
 - A register contract error in `--rc error` or `--rc strict` mode
-Warnings (including register contract warnings in `--rc warn` mode) do not affect the exit code.
+Warnings, including register contract warnings in `--rc warn` mode, leave the exit code alone.
 
 Invalid command-line arguments and uncaught artifact-writing failures exit 2 and print the command usage. Source-reading failures are reported as source diagnostics and exit 1.
 
@@ -101,7 +101,7 @@ When two `.org` directives have a gap between them, the binary fills the gap wit
         .binto $0200
 ```
 
-An unfilled `.ds` block at the very end of a source file does not extend the binary. A `.ds count,fill` block writes the fill byte and therefore does extend it.
+An unfilled `.ds` block at the very end of a source file leaves the binary as long as the last byte written. A `.ds count,fill` block writes the fill byte and extends it.
 
 ### Intel HEX (`.hex`)
 
@@ -152,7 +152,7 @@ main        8000
 message     8008
 ```
 
-Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit nothing (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter. An unfilled `.ds` reservation prints its address but no bytes. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on further address-and-bytes rows below it, with the source column left blank.
+Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit no bytes (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter, as does an unfilled `.ds` reservation, which prints its address alone. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on further address-and-bytes rows below it, with the source column left blank.
 
 ![A listing row is an address, the bytes it emitted and the source line that produced them](../../assets/images/azm-book/book1/listing-line.svg)
 
@@ -217,4 +217,4 @@ azm --asm80 program.asm
 
 Writes a `.z80` file with AZM-specific features translated to plain ASM80 syntax. Useful for verifying AZM produces byte-identical output to ASM80 or for sharing source with a collaborator who only has ASM80.
 
-ASM80-compatible lowered output does not currently support `.import`. If a program uses `.import` and you request `--asm80`, AZM reports an `AZMN_ASM80` diagnostic instead of flattening the import boundary.
+ASM80-compatible lowered output leaves `.import` for a later release. Request `--asm80` for a program that uses it and AZM reports an `AZMN_ASM80` diagnostic, keeping the import boundary intact.

@@ -7,7 +7,7 @@ nav_order: 8
 
 # Glimmer targets
 
-Debug80 builds one other kind of program: Glimmer, a reactive game language that compiles to readable Z80 assembly. The compiler ships inside the extension, so there is nothing extra to install. This chapter covers the Debug80 integration; the Glimmer book teaches the language.
+Debug80 builds one other kind of program: Glimmer, a reactive game language that compiles to readable Z80 assembly. The compiler ships inside the extension. This chapter covers the Debug80 integration; the Glimmer book teaches the language.
 
 ## A Glimmer file is another target
 
@@ -35,7 +35,7 @@ build/
 
 Debug80 calls Glimmer's in-process build pipeline, which generates assembly, injects and checks AZM register contracts, assembles the program and rewrites the debug map to refer back to the Glimmer source. It leaves the generated assembly where you can inspect the instructions produced by a declaration.
 
-The pipeline does not emit a separate `.lst` listing or register-contracts report. Build diagnostics appear in VS Code.
+The four files listed above are the pipeline's whole output; build diagnostics appear in VS Code.
 
 ## Debugging Glimmer
 
@@ -49,7 +49,7 @@ The editor features from the source-navigation chapter cover `.glim` too: Go to 
 
 ## Strict labels
 
-The **Strict labels** checkbox controls assembly targets built directly by AZM. Glimmer builds currently use the Glimmer pipeline's own label handling, so this checkbox does not change them.
+The **Strict labels** checkbox controls assembly targets built directly by AZM. Glimmer builds use the Glimmer pipeline's own label handling.
 
 ## Learn Glimmer
 

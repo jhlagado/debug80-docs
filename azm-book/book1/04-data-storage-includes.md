@@ -140,7 +140,7 @@ CMD_COUNT .equ ($ - CmdTable) / 2
 
 ## `.ds` — reserve storage
 
-`.ds count` advances the address counter without writing bytes.
+`.ds count` reserves space by advancing the address counter, leaving those bytes as it found them.
 
 ### Basic syntax
 
@@ -155,8 +155,8 @@ Stack:
         .ds 256        ; reserve 256 bytes
 ```
 
-The operand is a non-negative byte-count expression. AZM currently does not
-diagnose negative counts, which can move the assembly address backwards.
+The operand is a byte count and should be zero or more. A negative count moves
+the assembly address backwards, and AZM currently accepts it in silence.
 Labels placed before `.ds` name the start of the reserved block.
 
 ### Optional fill byte

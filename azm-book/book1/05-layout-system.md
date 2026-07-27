@@ -17,7 +17,7 @@ from its field list.
 
 ## The core idea
 
-Without the layout system, a sprite record needs one `.equ` per field offset:
+Written by hand, a sprite record needs one `.equ` per field offset:
 
 ```asm
 SPRITE_X     .equ 0
@@ -261,7 +261,7 @@ FLAGS   .equ offset(SpriteArray, [3].flags)
 
 `sizeof(SpriteArray)` returns the same value as `sizeof(Sprite[16])`, and the cast path `<SpriteArray>Sprites[3].flags` expands to `Sprites + offset(Sprite[16], [3].flags)`.
 
-A `.typealias` does not add a wrapper field. With `SpriteArray .typealias Sprite[16]`, the correct cast path to element 3's `flags` field is `[3].flags`. A wrapper record with a `.field` declaration adds an extra path level:
+A `.typealias` names the array type directly, so with `SpriteArray .typealias Sprite[16]` the cast path to element 3's `flags` field is `[3].flags`. A wrapper record with a `.field` declaration adds an extra path level:
 
 ```asm
 SpriteArray .type
@@ -275,7 +275,7 @@ With that declaration, the same field requires `.sprites[3].flags`; the `.sprite
 
 ## Cast syntax
 
-A layout cast tells AZM to treat an address as a particular layout while it calculates field offsets. It does not change runtime memory:
+A layout cast tells AZM to treat an address as a particular layout while it calculates field offsets. It works entirely at assembly time, and the emitted bytes are the same:
 
 ```asm
 ld   hl,<Sprite>Player.flags

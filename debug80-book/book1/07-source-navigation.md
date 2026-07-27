@@ -48,8 +48,8 @@ in: A,HL    out: carry    clobbers: B,C    preserves: DE,IX
 
 User programs normally start at `0x4000`; reset code and monitor routines live in ROM. Debug80 supplies the platform monitor ROM internally for ordinary TEC-1 and TEC-1G projects.
 
-When execution enters monitor code, the current PC may point outside
-your source file. **Debug80: Open Auxiliary Source** lists the
+When execution enters monitor code, the PC sits at an address in the
+ROM. **Debug80: Open Auxiliary Source** lists the
 auxiliary sources known to the session, which helps when a monitor
 call changes registers unexpectedly or the Call Stack shows an address
 inside ROM.

@@ -89,5 +89,5 @@
   <text class="dim" x="611" y="246" text-anchor="middle" xml:space="preserve">records</text>
   <text class="dimn" x="366" y="246" text-anchor="middle" xml:space="preserve">no records here</text>
   <text class="dimn" x="46" y="284" text-anchor="start" xml:space="preserve">Zero bytes in the binary, no records at all in the HEX. .binfrom and .binto trim the binary to the range you meant.</text>
-  <text class="dimn" x="46" y="302" text-anchor="start" xml:space="preserve">.align padding is not a gap: those zero bytes are assembled, so they appear in both.</text>
+  <text class="dimn" x="46" y="302" text-anchor="start" xml:space="preserve">.align padding is assembled: those zero bytes are real, so they appear in both.</text>
 </svg>

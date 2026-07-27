@@ -22,7 +22,7 @@ beside the Z80 as a second chip with 16 KiB of video RAM of its own,
 painting a 256x192 picture from that memory over and over, whether
 the Z80 is busy or idle. The CPU
 stops being the display and becomes its director: from here on, your
-work is not showing the scene but describing it.
+work is describing the scene.
 
 A described scene has two layers in the VDP's Graphics I mode. The
 background is a grid, 32 columns by 24
@@ -45,8 +45,7 @@ and raises a flag in its status register to say so. The profile paces
 the whole program on that flag, and it moves your VRAM traffic into
 that resting window. One thing before any code: your blocks keep
 writing plain RAM, exactly as they always have. The ports belong to
-the generated library, and
-you will not touch them once in this chapter.
+the generated library.
 
 Selecting all of this costs one changed line: `display tms9918`, with
 the platform line as before. The keypad, the LCD, and `text`
@@ -219,7 +218,7 @@ GlimSpritePats:
 Moth              .equ 0   ; sprite slot + pattern
 ```
 
-Even without the labels, the moth remains visible in the binary: each
+The moth is visible in the bytes themselves: each
 `X` became a 1, each dot a 0.
 
 A `tile` carries two colours, foreground `on` background, and its
@@ -240,7 +239,8 @@ Bloom             .equ 8   ; tile index
 
 Fern takes the seat beside the blank tile in bank 0; Bloom's colour
 pair is new, so it opens bank 1 at index 8. Six more ferns and seven
-more blooms would cost nothing; a sixteenth distinct colour pair
+more blooms would fit in the two banks already open; a sixteenth
+distinct colour pair
 would open bank 15, sixteenth of the 32 the colour table holds.
 
 ## Shadow-table writes
@@ -356,15 +356,15 @@ frame, tiles and sprites alike.
 `PlantScene` runs exactly once because `Init` is a byte declared
 `changed`, so
 its flag is up before the first frame; the effect fires on frame 1,
-places eight tiles, and `Init` never changes again. One line you have
-always written is absent: `updates`, because this block changes no
-cell. Its work lands in the name shadow, which the profile tracks with
-row bits instead of change flags.
+places eight tiles, and `Init` holds that one change for the rest of
+the run. The block's writes land in the name shadow, which the profile
+tracks with dirty row bits of its own, so the header needs no
+`updates` line.
 
 Those eight `tile_at` lines touch eight different grid rows, so frame
 1 ends with eight dirty bits standing, and frame 2's commit streams
 eight rows into VRAM. From then on the garden is the VDP's to paint,
-picture after picture, and the program never redraws it. The
+picture after picture. The
 difference: an 8x8 matrix render repaints its layer whenever a fact
 changes; a VDP program writes each cell once and writes again only
 what differs.

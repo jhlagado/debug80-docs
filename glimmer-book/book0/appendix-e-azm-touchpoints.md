@@ -71,7 +71,7 @@ routines and keeps its tables and scratch to itself:
 
 Block bodies in `tetro.glim` reach it by its bare name,
 `call SetCurPiece`. The module's private labels (`ClearScoreTbl`,
-`CurPiecePtr`) carry no `@` and stay the module's own.
+`CurPiecePtr`) wear plain names and stay the module's own.
 Full treatment: [Source Syntax and
 Symbols](../../azm-book/book1/02-source-syntax.md) and [Ops, Aliases
 and Source Composition](../../azm-book/book1/07-ops-aliases.md).
@@ -84,8 +84,8 @@ same line (`in`, `out`, `clobbers`, `preserves`) are the contract,
 and a register the line leaves unmentioned counts as preserved.
 
 A bare `.routine` asks AZM to infer the contract from the body, and
-Glimmer emits exactly that above every generated block: your bodies
-are analysed as written, with no annotations to maintain. The
+Glimmer emits exactly that above every generated block, so your bodies
+are analysed as written. The
 profile library declares its contracts in full:
 
 ```asm

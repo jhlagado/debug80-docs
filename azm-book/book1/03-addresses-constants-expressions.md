@@ -37,9 +37,9 @@ Result:
 
 The code and the data byte land in the same output binary at their respective offsets.
 
-`.org` sets the assembly address (the address assigned to the next byte), not the byte's position in the output file. It emits nothing itself.
+`.org` sets the assembly address, the address assigned to the next byte, which is a separate thing from where that byte sits in the output file. The directive only moves the address; the bytes come from the directives after it.
 
-The address only ever moves forward. An `.org` that names an address behind the last byte assembled is ignored, and the next byte lands at the next free address instead. Nothing is overwritten and nothing is reported, so a label can end up at an address no line of source names.
+The address only ever moves forward. An `.org` that names an address behind the last byte assembled is ignored, and the next byte lands at the next free address instead. The bytes already assembled stay as they are and the build stays silent, so a label can end up at an address no line of source names.
 
 ![The assembly address moves forward only, so an .org that points behind it is ignored and the label lands at the next free address](../../assets/images/azm-book/book1/address-ruler.svg)
 
@@ -67,7 +67,7 @@ CodeEnd:
 CODE_SIZE   .equ CodeEnd - CodeStart
 ```
 
-Label subtraction, rather than `$ - $0100`, makes the intent clear and keeps the result correct when the code moves.
+Label subtraction makes the intent clear and keeps the result correct when the code moves.
 
 ## Gaps between origins
 
@@ -98,7 +98,7 @@ Advances the assembly address to the next multiple of 16, inserting zero bytes t
 
 ## Constants with `.equ`
 
-`.equ` binds a name to a constant expression. It emits nothing. The name becomes a synonym for the value, usable in any expression context: instruction operands, data directives, storage counts, layout sizes and other `.equ` expressions.
+`.equ` binds a name to a constant expression, entirely at assembly time. The name becomes a synonym for the value, usable in any expression context: instruction operands, data directives, storage counts, layout sizes and other `.equ` expressions.
 
 The canonical form:
 
@@ -165,7 +165,7 @@ DispatchB:
 ENTRY_STRIDE .equ DispatchB - DispatchA   ; 3: jp is a 3-byte instruction
 ```
 
-Any code that dispatches through this table loads `ENTRY_STRIDE` by name rather than encoding the stride as a literal.
+Any code that dispatches through this table loads `ENTRY_STRIDE` by name.
 
 ### Forward references in `.equ`
 
@@ -287,7 +287,7 @@ DEBUG .equ 1
         .endif
 ```
 
-Conditions may use numeric literals and `.equ` values defined earlier in the active source. Conditional blocks may be nested. Because AZM resolves conditional assembly before it assigns addresses, a condition cannot use `$`, a label address or an `.equ` that depends on either one.
+Conditions may use numeric literals and `.equ` values defined earlier in the active source. Conditional blocks may be nested. Because AZM resolves conditional assembly before it assigns addresses, a condition is limited to values known by then: numeric literals, and `.equ` values built from them.
 
 AZM reports unmatched or repeated `.else` directives, unmatched `.endif` directives and unterminated `.if` blocks.
 

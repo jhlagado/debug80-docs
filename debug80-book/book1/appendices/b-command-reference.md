@@ -19,7 +19,7 @@ filters the list.
 | **Debug80: Create Project** | Writes `debug80.json`, asking for a profile kit and a program file. Offers all five kits; the panel's Platform dropdown takes only the default kit for a platform. |
 | **Debug80: Select Workspace Folder** | Chooses which open folder Debug80 is working on. |
 | **Debug80: Add Workspace Folder** | Adds a folder to the workspace and offers to initialize it. |
-| **Debug80: Remove Workspace Folder** | Removes a folder from the workspace. Files on disk are untouched. |
+| **Debug80: Remove Workspace Folder** | Removes a folder from the workspace. The folder stays on disk. |
 | **Debug80: Configure Project** | Steps through project-level settings. |
 
 ## Targets
@@ -28,7 +28,7 @@ filters the list.
 |---|---|
 | **Debug80: Select Active Target** | Chooses which target Build and Run act on. |
 | **Debug80: Add Target** | Adds a target from an eligible program file. |
-| **Debug80: Remove Target** | Removes a target. Source files and build output are untouched. |
+| **Debug80: Remove Target** | Removes a target. Source files and build output stay on disk. |
 | **Debug80: Set Program File** | Points a target at a file. Explorer and editor context menus only, on `.asm`, `.z80` and `.glim` files. |
 
 ## Building and running
@@ -37,7 +37,7 @@ filters the list.
 |---|---|
 | **Debug80: Build Current Target** | Assembles without launching. |
 | **Debug80: Run Current Target** | Builds and starts the emulator, restarting any running session. |
-| **Debug80: Start Debugging** | Starts the selected target without first stopping an active debug session. |
+| **Debug80: Start Debugging** | Starts the selected target, leaving any active debug session running. |
 | **Run to Here** | Runs until execution returns to the selected frame. Call Stack context menu only. |
 
 ## Source and diagnostics
@@ -55,7 +55,7 @@ filters the list.
 | Command | Does |
 |---|---|
 | **Debug80: Open Debug80 View** | Reveals and focuses the panel. |
-| **Debug80: Reset Panel Layout** | Restores the default section order and open state. No effect on the Simple platform. |
-| **Debug80: Test CoolTerm Connection** | Pings CoolTerm's remote socket. Opens no port and needs no build. |
+| **Debug80: Reset Panel Layout** | Restores the default section order and open state on the TEC-1 and TEC-1G panels. |
+| **Debug80: Test CoolTerm Connection** | Pings CoolTerm's remote socket. Runs on an unbuilt project and leaves the serial port closed. |
 | **Debug80: Send HEX to Board via CoolTerm** | Sends the active target's HEX file to a board. |
 | **Debug80: Copy Monitor ROM into Project** | Copies the bundled monitor ROM source into the project. |

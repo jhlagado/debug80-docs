@@ -10,8 +10,8 @@ nav_order: 4
 State describes the things a game remembers. This chapter is about
 the things it must catch: a fact persists, the beacon's position
 outliving every frame that draws it, but a moment passes. The instant
-GO goes down exists exactly once, and if your program does not catch
-it, it never happened at all. Glimmer gives moments their own
+GO goes down exists exactly once, and your program has that one frame
+to catch it. Glimmer gives moments their own
 declaration, the pulse. Mover introduced one pulse and one bind line.
 Now we can take the whole input story
 properly: every key name, both shapes a key can fire in, and what the
@@ -116,7 +116,7 @@ end
 Half of this file is Mover, and the second axis costs what
 you would expect: one more state cell, two more pulses, two more rules
 with the clamp turned sideways. `GoHome` shows an effect at its
-simplest: two constant stores and no branch. `DrawDot` now draws from
+simplest: two constant stores. `DrawDot` now draws from
 both facts (`on DotX, DotY`), so movement on either axis redraws the
 dot.
 
@@ -142,8 +142,7 @@ controls, the digits do the work: 2, 4, 6, 8 make a compass, and 5
 sits in the middle, in easy reach for fire or rotate. GO and AD serve
 as start and menu keys. The names compile to MON-3's key codes in the
 generated file, so the binding `bind key KEY_2 ...` in your source and
-the 2 key on the panel mean the same physical thing: no magic numbers
-in between.
+the 2 key on the panel mean the same physical thing.
 
 ## Rising or held
 
@@ -193,9 +192,9 @@ wait on it.
 ## Generated polling
 
 All five of Rover's pulses come out of one generated routine, and
-inside it is the repeat clock you did not have to write. The
-hand-written version needed the counter, the reload and the
-release edge that resets on letting go. The top of the routine, from
+inside it is the repeat clock Glimmer wrote for you: the counter, the
+reload, and the release edge that resets on letting go. The top of the
+routine, from
 `rover.main.asm`:
 
 ```asm

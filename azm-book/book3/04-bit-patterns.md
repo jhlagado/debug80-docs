@@ -19,7 +19,7 @@ A device reports ready, error and busy in a single status register at `$8000`.
 The example has four requirements:
 
 1. An LED reflects whether ready was set at startup.
-2. An error can be recorded without clearing ready.
+2. An error can be recorded while ready stays set.
 3. Busy clears after the operation finishes.
 4. A separate byte stores the error bit as `$00` or `$01` for a later test.
 
@@ -75,7 +75,7 @@ At run time you still load the live byte from `(device_flags)` into A.
     ld (device_flags), a
 ```
 
-**Test bit 0 (ready) without changing the stored byte:**
+**Test bit 0 (ready), leaving the stored byte alone:**
 
 ```asm
     ld a, (device_flags)
@@ -107,7 +107,7 @@ the clear mask:
 
 ## `op` for flag idioms
 
-Short sequences that repeat in one file are good `op` candidates: no `call` overhead, intent visible at the call site. [Book 1 Chapter 7](../book1/07-ops-aliases.md) covers `op` declarations.
+Short sequences that repeat in one file are good `op` candidates: the bytes expand inline, and the intent stays visible at the call site. [Book 1 Chapter 7](../book1/07-ops-aliases.md) covers `op` declarations.
 
 ```asm
 op bit_set(mask imm8)
@@ -134,7 +134,7 @@ The status byte must be in A before the test:
     jr z, _not_ready
 ```
 
-`bit_test` expands to a single `and mask`. It takes no register parameter, so A must already hold the byte under test.
+`bit_test` expands to a single `and mask` on A.
 
 ---
 
@@ -164,7 +164,7 @@ extract_bit_u8:
 
 One `rr a` moves that bit into position 0. Result in `error_bit` should be `$01` when the error flag is set.
 
-For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, r` instruction (sets Z if bit clear) when you only need a branch, not a 0/1 byte in A.
+For a general bit index `n`, loop `n` times with `srl a`, or use the Z80 `bit n, r` instruction (sets Z if bit clear) when a branch is all you need.
 
 ---
 
@@ -177,11 +177,11 @@ For a general bit index `n`, loop `n` times with `srl a` or use the Z80 `bit n, 
 ```
 
 `bit` takes a bit **position**, not a mask, which is why the enum is worth
-having: `StatusBit.Busy` reads correctly here and `FLAG_BUSY` would not. The
-assembler emits `CB 57`, the same two bytes as `bit 2, a`.
+having: `StatusBit.Busy` reads correctly here, while `FLAG_BUSY` would mean bit
+4. The assembler emits `CB 57`, the same two bytes as `bit 2, a`.
 
-`bit` does not change A; it only sets flags. `and mask` is the appropriate form
-when storage requires a numeric 0/1 in A.
+`bit` sets flags and leaves A alone. `and mask` is the appropriate form when
+storage requires a numeric 0/1 in A.
 
 ---
 
@@ -211,7 +211,7 @@ Chapter 5 stores structs as bytes. A status nibble and a type nibble can share o
        [  type  ][flags]
 ```
 
-`offset` and `sizeof` tell you **which** byte, not how to twiddle bits inside it.
+`offset` and `sizeof` tell you **which** byte; the masks in this chapter work inside it.
 
 ---
 
@@ -251,15 +251,15 @@ azm examples/04_bit_flags.asm
 ```
 
 AZM writes `examples/04_bit_flags.lst` by default. The `bit_set` invocation
-remains visible as the source line, with the bytes emitted by its `or` expansion
-shown beside it. There is no `call` instruction.
+remains visible as the source line, with the two bytes emitted by its `or`
+expansion shown beside it.
 
 ---
 
 ## Exercises
 
 1. Starting from `$05`, the predicted `(device_flags)` value after
-   `bit_set FLAG_ERROR` should be recorded without clearing busy.
+   `bit_set FLAG_ERROR` should be recorded, with busy still set.
 2. A `FLAG_FAULT .equ $08` definition extends `main` so that a fault sets bit 3
    and clears busy in one pass through A.
 3. A `popcount_u8` routine should copy A to a shifting register, perform eight

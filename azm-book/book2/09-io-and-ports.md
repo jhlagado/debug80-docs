@@ -13,7 +13,7 @@ hardware events.
 The Z80 handles this through a separate **I/O space**. In the conventional
 programming model, devices use an 8-bit port number, giving 256 basic port
 numbers. The `in` and `out` instructions transfer bytes between registers and
-peripherals without using a memory transaction. The mapping of port numbers to
+peripherals over I/O bus cycles. The mapping of port numbers to
 devices belongs to the target hardware.
 
 ---
@@ -115,7 +115,7 @@ wait:
   ret
 ```
 
-`and $01` masks all bits except bit 0 and sets Z if the result is zero. `jr z, wait` loops back while Z is set (bit 0 still clear).
+`and $01` keeps only bit 0 and sets Z when that bit was 0. `jr z, wait` loops back while Z is set (bit 0 still clear).
 
 ![The mask discards every bit but the ready flag, so Z answers one question.](../../assets/images/azm-book/book2/polling-loop.svg)
 
@@ -231,12 +231,13 @@ The key lines work as follows:
 
 **`out (OUT_PORT), a`** is the immediate port form. `OUT_PORT` is defined as `$10` with `.equ`; the assembler substitutes `$10` at compile time.
 
-**`in a, (IN_PORT)`** reads from port `$11` into A. Flags are **not** set by this form.
+**`in a, (IN_PORT)`** reads from port `$11` into A and leaves the flags as they were.
 
 **`out (C), d`**: D supplies the data and C holds the port number.
 
 **`in a, (STATUS_PORT)` in `poll_and_recv`** uses the immediate form, so the
-read does not set flags. `and $01` isolates bit 0 and sets Z before the branch.
+flags still hold whatever the previous instruction left. `and $01` isolates
+bit 0 and sets Z before the branch.
 
 **`send_block`** is a DJNZ loop from Chapter 6 applied to output. B counts the
 bytes and HL steps through source memory. Using the immediate output form keeps

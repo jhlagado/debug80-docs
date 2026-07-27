@@ -85,7 +85,7 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 | Level | Effect |
 |-------|--------|
 | `off` | No register contract analysis (default) |
-| `audit` | Analyze contracts without failing the build; useful while editing |
+| `audit` | Analyze contracts and let the build finish; useful while editing |
 | `warn` | Print register contract warnings; build succeeds |
 | `error` | Fail the build on proven register contract conflicts |
-| `strict` | Fail on anything AZM cannot prove safe, including unknown routine boundaries and stack effects |
+| `strict` | Require AZM to prove every call safe, so unknown routine boundaries and stack effects fail |

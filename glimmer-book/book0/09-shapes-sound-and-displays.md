@@ -21,9 +21,8 @@ LCD, all mounted beside the 8x8 RGB LED matrix and all reachable from
 a block. When your character hits a wall, the player should hear it:
 a beep placed at the right instant is feedback, the kind a player
 responds to without thinking. When the score changes, the player should
-be able to read it without taking their eyes off the game for more
-than a glance. This chapter gives your game a face, a voice, and a
-scoreboard.
+be able to read it at a glance. This chapter gives your game a face, a
+voice, and a scoreboard.
 
 The same pattern appears three times in this chapter. You declare a
 resource in the `.glim` file (a shape, a sound cue, a text string)
@@ -31,7 +30,7 @@ and Glimmer generates the data plus something
 callable to go with it. Your blocks call what was generated, and the
 declaration reads like the resource it describes. The scoreboard is
 the odd one out: the six-digit seven-segment display is a service the
-profile library carries, two routines and no declaration.
+profile library carries, two routines you call directly.
 
 ![Four kinds of output, four instruments, and the keypad coming back the other way.](../../assets/images/glimmer-book/book0/board-instruments.svg)
 
@@ -203,8 +202,8 @@ call ShapeDraw
 `ShapeDraw`
 ORs each lit pixel's colour bits into the framebuffer, so lit pixels
 land on top of whatever is already there and empty pixels leave it
-alone; two overlapping shapes combine rather than punch holes in
-each other. `DrawSpark` starts with `FbClear` because a moving shape
+alone; two overlapping shapes combine. `DrawSpark` starts with
+`FbClear` because a moving shape
 redraws from a clean board.
 
 Placement is entirely your responsibility: `ShapeDraw` plots every lit
@@ -217,16 +216,16 @@ matters here too: the generated contract line
 declares that `ShapeDraw` clobbers A, BC, DE, and HL. `DrawSpark`
 therefore loads its arguments immediately before the call.
 
-## Sound that keeps out of the way
+## Sound the scan plays
 
 ```text
 sound Bounce len 8 div 3
 ```
 
-A `sound` declares a cue: a short, non-blocking beep. The two numbers
-can wait: first, how this board makes sound at all, because there is
-no sound chip to hand the job to. The
-speaker is a port bit, and the only musician available is the CPU. So
+A `sound` declares a cue: a short beep that plays while your blocks
+keep running. The two numbers
+can wait: first, how this board makes sound at all. The
+speaker is a port bit, and the CPU is the only musician available. So
 Glimmer folds sound into the work the CPU is already doing: the scan
 loop that keeps the 8x8 matrix lit visits the speaker once per row, 8
 ticks per frame, and taps it on schedule. `len` counts those ticks
@@ -291,7 +290,7 @@ block runs, so `ShowScore` repaints its digits every step, quiet
 ticks included. The repaint writes the same six
 glyph bytes and spends a few dozen cycles in the blank window. When a
 score changes rarely and its redraw is heavy, move the heavy fact
-into an effect of its own so the quiet ticks never raise it; when the
+into an effect of its own so only a real change raises it; when the
 redraw is `HudWriteU16`, the broad `updates` makes the dependency
 easier to read.
 
@@ -302,8 +301,8 @@ text MsgHello "FANFARE"
 ```
 
 A `text` declares a zero-terminated string for the TEC-1G's 20x4
-LCD. The LCD is board hardware, alongside the keypad rather than part of
-any display profile, so text resources work the same on the 8x8 matrix
+LCD. The LCD belongs to the board, alongside the keypad, so text
+resources work the same on the 8x8 matrix
 and, later in the book, on the TMS9918. Writing a string to a row is one
 line in a block:
 
@@ -315,20 +314,19 @@ That one line is your first meeting with an AZM **op**. An op is a
 macro that the assembler owns: a named instruction sequence, defined
 once in the generated
 file and expanded inline wherever it is invoked. So `lcd_row`
-reads like an instruction and costs what its body costs, with no call
-and no routine behind it. Glimmer emits the `lcd_row` op whenever a
+reads like an instruction and costs exactly what its body costs.
+Glimmer emits the `lcd_row` op whenever a
 program declares text; your blocks invoke it. Here it packages the
 two MON-3 calls that position the LCD cursor and stream a string,
 taking the message label and a row constant: `LcdRow1` through
 `LcdRow4` come with it.
 
-`Banner` starts `changed` and
-appears in no block's `updates`, so it changes exactly once, before the
-first frame; `Greet` runs on
+`Banner` starts `changed` and stays at that one change, so `Greet`
+runs on
 frame one, writes FANFARE to the top row, and rests for the rest of
 the program's life. A title, border, greeting, or other one-time
-startup action can use a fact that starts changed and never changes
-again, with a block attached to it.
+startup action can use a fact that starts changed, with a block
+attached to it.
 
 ## The file, resource by resource
 
