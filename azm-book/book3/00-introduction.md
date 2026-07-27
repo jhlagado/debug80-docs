@@ -100,10 +100,10 @@ before consulting any hints.
 
 ## The next chapters
 
-[Chapter 1 — Foundations](01-foundations.md) works through 16-bit GCD and 8-bit
+[Chapter 1, Foundations](01-foundations.md) works through 16-bit GCD and 8-bit
 exponentiation. No arrays yet: only the Book 3 calling convention,
 compare/subtract idioms and the first workspace bytes.
-[Chapter 2 — Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables,
+[Chapter 2, Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables,
 insertion sort and linear search.
 
 Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search.
