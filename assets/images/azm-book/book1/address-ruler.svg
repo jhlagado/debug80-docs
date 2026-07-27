@@ -80,10 +80,10 @@
   <text class="dimn" x="358" y="138" text-anchor="start" xml:space="preserve">the assembly address after the table</text>
   <rect class="bxs" x="46" y="163" width="13" height="13" rx="2"/>
   <text class="dimn" x="66" y="174" text-anchor="start" xml:space="preserve">assembled bytes</text>
-  <rect class="bx2" x="177.8" y="163" width="13" height="13" rx="2"/>
-  <text class="dimn" x="197.8" y="174" text-anchor="start" xml:space="preserve">.align padding</text>
-  <rect class="bxq" x="303.88" y="163" width="13" height="13" rx="2"/>
-  <text class="dimn" x="323.88" y="174" text-anchor="start" xml:space="preserve">no bytes assembled</text>
+  <rect class="bx2" x="172.19" y="163" width="13" height="13" rx="2"/>
+  <text class="dimn" x="192.19" y="174" text-anchor="start" xml:space="preserve">.align padding</text>
+  <rect class="bxq" x="287.71" y="163" width="13" height="13" rx="2"/>
+  <text class="dimn" x="307.71" y="174" text-anchor="start" xml:space="preserve">no bytes assembled</text>
   <text class="cap" x="46" y="212" text-anchor="start" xml:space="preserve">GOING BACKWARDS</text>
   <text class="ts" x="46" y="234" text-anchor="start" xml:space="preserve">        .org $0010</text>
   <text class="ts" x="46" y="252" text-anchor="start" xml:space="preserve">A:      .db $AA, $AA, $AA, $AA</text>

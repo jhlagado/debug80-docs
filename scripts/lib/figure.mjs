@@ -32,13 +32,28 @@ const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /**
- * Rough advance width per character. There is no text measurement here, so
- * everything that centres or sizes itself around a string estimates. These
- * two are measured off the actual faces at 1px and are close enough that a
- * label never overruns its box by more than a pixel or two.
+ * Advance width per character. There is no text measurement here, so anything
+ * that centres or sizes itself around a string estimates.
+ *
+ * Monospace is exact. Proportional is not, and the naive version, one average
+ * advance for every character, is wrong in a way that matters: capitals run
+ * about a third wider than lowercase, so an all-caps label comes out far too
+ * short and quietly overruns whatever is beside it. These weights must stay in
+ * step with the geometry lint, or the drawing and the checking disagree and the
+ * disagreement is the bug.
  */
+const NARROW = new Set([...'ijltfr.,:;\'"|!()[] ']);
 export const monoW = (s, size) => String(s).length * size * 0.6;
-export const sansW = (s, size) => String(s).length * size * 0.52;
+export const sansW = (s, size) => {
+  let units = 0;
+  for (const ch of String(s)) {
+    if (ch >= 'A' && ch <= 'Z') units += 0.68;
+    else if (ch >= '0' && ch <= '9') units += 0.56;
+    else if (NARROW.has(ch)) units += 0.31;
+    else units += 0.53;
+  }
+  return units * size;
+};
 
 function styles(signal) {
   return `

@@ -215,9 +215,9 @@
   <text class="dimn" x="506" y="362" text-anchor="start" xml:space="preserve">key 3 lands at index 2</text>
   <rect class="bx2" x="30" y="389" width="13" height="13" rx="2"/>
   <text class="dimn" x="50" y="400" text-anchor="start" xml:space="preserve">sorted prefix</text>
-  <rect class="bxs" x="150.36" y="389" width="13" height="13" rx="2"/>
-  <text class="dimn" x="170.36" y="400" text-anchor="start" xml:space="preserve">the key just placed</text>
-  <rect class="bx" x="305.04" y="389" width="13" height="13" rx="2"/>
-  <text class="dimn" x="325.04" y="400" text-anchor="start" xml:space="preserve">not yet examined</text>
+  <rect class="bxs" x="137.27" y="389" width="13" height="13" rx="2"/>
+  <text class="dimn" x="157.27" y="400" text-anchor="start" xml:space="preserve">the key just placed</text>
+  <rect class="bx" x="277.1" y="389" width="13" height="13" rx="2"/>
+  <text class="dimn" x="297.1" y="400" text-anchor="start" xml:space="preserve">not yet examined</text>
   <text class="dimn" x="30" y="434" text-anchor="start" xml:space="preserve">The prefix grows by one each pass. Everything left of the shaded edge is already in order, which is the loop invariant.</text>
 </svg>

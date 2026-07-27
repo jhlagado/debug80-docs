@@ -107,7 +107,7 @@
   <text class="dimn" x="601" y="194" text-anchor="middle" xml:space="preserve">FbPlot</text>
   <rect class="bxs" x="16" y="245" width="13" height="13" rx="2"/>
   <text class="dimn" x="36" y="256" text-anchor="start" xml:space="preserve">the code you write</text>
-  <rect class="bx" x="164.96" y="245" width="13" height="13" rx="2"/>
-  <text class="dimn" x="184.96" y="256" text-anchor="start" xml:space="preserve">the machinery</text>
+  <rect class="bx" x="150" y="245" width="13" height="13" rx="2"/>
+  <text class="dimn" x="170" y="256" text-anchor="start" xml:space="preserve">the machinery</text>
   <text class="dimn" x="16" y="284" text-anchor="start" xml:space="preserve">You never call a block. You write it, and a change to a fact schedules it.</text>
 </svg>

@@ -131,9 +131,9 @@
   <text class="dimn" x="40" y="462" text-anchor="start" xml:space="preserve">ramp step</text>
   <rect class="bxq" x="150" y="453" width="13" height="13" rx="2"/>
   <text class="dimn" x="170" y="464" text-anchor="start" xml:space="preserve">Straight, linear</text>
-  <rect class="bx" x="287.52" y="453" width="13" height="13" rx="2"/>
-  <text class="dimn" x="307.52" y="464" text-anchor="start" xml:space="preserve">Glide, ease_out</text>
-  <rect class="bxs" x="419.32" y="453" width="13" height="13" rx="2"/>
-  <text class="dimn" x="439.32" y="464" text-anchor="start" xml:space="preserve">Spring, overshoot</text>
+  <rect class="bx" x="269.15" y="453" width="13" height="13" rx="2"/>
+  <text class="dimn" x="289.15" y="464" text-anchor="start" xml:space="preserve">Glide, ease_out</text>
+  <rect class="bxs" x="392.15" y="453" width="13" height="13" rx="2"/>
+  <text class="dimn" x="412.15" y="464" text-anchor="start" xml:space="preserve">Spring, overshoot</text>
   <text class="dimn" x="40" y="490" text-anchor="start" xml:space="preserve">The ramp knows nothing about columns and the table knows nothing about frames.</text>
 </svg>

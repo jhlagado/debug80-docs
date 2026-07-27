@@ -130,10 +130,10 @@
   <text class="dimn" x="624" y="270" text-anchor="middle" xml:space="preserve">head 3   tail 3   count 8</text>
   <rect class="bxs" x="30" y="293" width="13" height="13" rx="2"/>
   <text class="dimn" x="50" y="304" text-anchor="start" xml:space="preserve">live, counted</text>
-  <rect class="bx" x="150.36" y="293" width="13" height="13" rx="2"/>
-  <text class="dimn" x="170.36" y="304" text-anchor="start" xml:space="preserve">stale, popped but still in RAM</text>
-  <rect class="bxq" x="367.96" y="293" width="13" height="13" rx="2"/>
-  <text class="dimn" x="387.96" y="304" text-anchor="start" xml:space="preserve">never written</text>
+  <rect class="bx" x="139.69" y="293" width="13" height="13" rx="2"/>
+  <text class="dimn" x="159.69" y="304" text-anchor="start" xml:space="preserve">stale, popped but still in RAM</text>
+  <rect class="bxq" x="331.66" y="293" width="13" height="13" rx="2"/>
+  <text class="dimn" x="351.66" y="304" text-anchor="start" xml:space="preserve">never written</text>
   <text class="cap" x="120" y="352" text-anchor="start" xml:space="preserve">THE SAME EIGHT BYTES AS A LINE</text>
   <path class="sline" d="M525,382 V368 H147 V382" marker-end="url(#arS)"/>
   <text class="dimn" x="420" y="364" text-anchor="start" xml:space="preserve">index 7 wraps to index 0</text>

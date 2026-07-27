@@ -165,7 +165,7 @@
   <text class="dimn" x="380" y="322" text-anchor="start" xml:space="preserve">yellow drop, green paddle on the board itself</text>
   <rect class="sig" x="380" y="347" width="13" height="13" rx="2"/>
   <text class="dimn" x="400" y="358" text-anchor="start" xml:space="preserve">the drop</text>
-  <rect class="bx2" x="471.76" y="347" width="13" height="13" rx="2"/>
-  <text class="dimn" x="491.76" y="358" text-anchor="start" xml:space="preserve">the paddle</text>
+  <rect class="bx2" x="465.38" y="347" width="13" height="13" rx="2"/>
+  <text class="dimn" x="485.38" y="358" text-anchor="start" xml:space="preserve">the paddle</text>
   <text class="dimn" x="40" y="400" text-anchor="start" xml:space="preserve">Every catch scores, chirps and writes Gravity one smaller. Three misses end the round.</text>
 </svg>

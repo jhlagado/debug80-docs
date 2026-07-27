@@ -151,8 +151,8 @@
   <text class="dimn" x="392" y="220" text-anchor="start" xml:space="preserve">row − col + 7 = 5</text>
   <rect class="bxs" x="392" y="259" width="13" height="13" rx="2"/>
   <text class="dimn" x="412" y="270" text-anchor="start" xml:space="preserve">queen</text>
-  <rect class="bx2" x="466.6" y="259" width="13" height="13" rx="2"/>
-  <text class="dimn" x="486.6" y="270" text-anchor="start" xml:space="preserve">attacked</text>
+  <rect class="bx2" x="467.15" y="259" width="13" height="13" rx="2"/>
+  <text class="dimn" x="487.15" y="270" text-anchor="start" xml:space="preserve">attacked</text>
   <text class="dimn" x="392" y="306" text-anchor="start" xml:space="preserve">DIAG_BIAS is 7 so the backward</text>
   <text class="dimn" x="392" y="324" text-anchor="start" xml:space="preserve">index is never negative.</text>
   <text class="cap" x="70" y="398" text-anchor="start" xml:space="preserve">COL_USED, 8 BYTES</text>
