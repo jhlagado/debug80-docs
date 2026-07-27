@@ -513,3 +513,9 @@ terminator always sits right after them.
 The next chapter builds a complete game with the profile, including sprite
 collision, scoring on the tile grid, and cards on the VDP:
 [Building Lanternfly](04-building-lanternfly.md).
+
+## Exercise
+
+**From state to screen.** `MoveRight` changes `MothX` from 124 to 125 during frame N. When does the VDP first show x=125, and what happens to the value between the state write and the visible picture?
+
+[Exercise notes](exercise-notes.md#chapter-3-the-tms9918-profile)

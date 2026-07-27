@@ -573,3 +573,9 @@ scoreboard, where Lanternfly borrowed the LCD.
 
 The last chapter compares the two games:
 [Two Displays, One Language](05-two-displays-one-language.md).
+
+## Exercise
+
+**Pixel and grid coordinates.** The fly is at pixel position (124, 92). Which grid cell contains its centre, and what happens when the lantern is in that cell?
+
+[Exercise notes](exercise-notes.md#chapter-4-building-lanternfly)

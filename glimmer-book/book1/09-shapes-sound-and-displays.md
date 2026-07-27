@@ -406,25 +406,8 @@ The next chapter represents game boards and other related state with
 arrays and layout types:
 [Arrays and Layout Types](10-arrays-and-layout-types.md).
 
-## Exercises
+## Exercise
 
-**1. A shape as bytes.** The four rows of the red `Cross` shape can be
-translated into the generated table format. The answer should give its width,
-height, colour byte, and the four left-aligned row masks in binary or
-hexadecimal.
-
-**2. A corner collision.** On a tick that moves Spark onto both an x wall and
-a y wall, an event trace should record the two velocity changes, the score
-change, and the state of the sound cue after both calls to `Snd_Bounce`.
-
-**3. A startup cue.** A new declaration,
-`sound Start len 16 div 5`, can accompany the LCD greeting when `Greet` runs
-on frame one. The added declaration and call, followed by an observation of
-the LCD and speaker while the spark continues moving, provide the result.
-
-**4. A cue started on every tick.** Moving `call Snd_Bounce` out of the wall
-branches and placing it at the end of `Move` restarts the cue every six
-frames. A comparison should describe the resulting sound, identify why it no
-longer reports collisions, and state where the calls belong.
+**A shape as bytes.** What four left-aligned row bytes does Glimmer generate for the three-pixel-wide `Cross` shape?
 
 [Exercise notes](exercise-notes.md#chapter-9-shapes-sound-and-displays-on-the-board)

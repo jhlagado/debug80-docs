@@ -414,26 +414,8 @@ released. The next chapter adds a clock so the program moves while the
 player watches:
 [Time](07-time.md).
 
-## Exercises
+## Exercise
 
-**1. One yellow pixel in memory.** For a yellow pixel at x=5, y=2, a
-framebuffer worksheet should calculate the row's four byte offsets from
-`Framebuffer`, the column mask, and the values ORed into the red, green, and
-blue plane bytes.
-
-**2. Three scan-loop moments.** A trace for rows 0, 1, and 7 should record
-HL's framebuffer offset at the start of each row, C's one-hot row mask, and
-the result of `rlc c`. The final row should account for the carry that ends
-the loop and the blanking write before return.
-
-**3. A faster orbit.** Changing Compass's held period from 4 to 2 should
-halve the calculated lap from 112 frames to 56. The source edit, the new
-calculation, and a running observation that the position still changes one
-frame after its pulse provide the result.
-
-**4. A trail instead of a dot.** A Compass build with `FbClear` removed from
-`DrawDot` should leave previously plotted pixels in the framebuffer. A short
-report should describe the visible trail and connect it to `FbPlot`'s OR
-operation before restoring the clearing call.
+**One yellow pixel.** Which framebuffer row and colour-plane bytes change when a yellow pixel is plotted at x=5, y=2, and which bit mask is ORed into them?
 
 [Exercise notes](exercise-notes.md#chapter-6-the-8x8-matrix-profile)

@@ -435,37 +435,12 @@ table base.
 
 ---
 
-## Exercises
+## Exercise
 
-[Exercise notes](exercise-notes.md#chapter-8-pointer-structures) give results,
-checks and implementation guidance.
+**Node representation.** A layout calculation should give
+`sizeof(ListNode)` and both field offsets. A diagram of the list after `$40`
+is inserted at the head should label `list_head`, every stored link word
+and the null link, followed by an explanation of the source and byte-level
+effects of changing `next .word` to `next .addr`.
 
-1. **Node representation.** A layout calculation should give
-   `sizeof(ListNode)` and both field offsets. A diagram of the list after `$40`
-   is inserted at the head should label `list_head`, every stored link word
-   and the null link, followed by an explanation of the source and byte-level
-   effects of changing `next .word` to `next .addr`.
-2. **Traversal invariant.** A trace of `list_sum_u16` through
-   `$10`, `$22`, `$30` should record HL and DE at each `_sum_loop`, including
-   the final null iteration. Its invariant should relate DE to the nodes
-   already visited.
-3. **Count routine and contract.** A `list_count_u8` routine uses HL as the head
-   pointer and A as the count result. Its contract should document every
-   clobber, and its tests should cover an empty list, the original three-node
-   list and the four-node list after head insertion.
-4. **Indexed retrieval.** A `list_get_u8` routine uses HL as the head pointer
-   and B as a zero-based index. On success A contains the value and carry is
-   set; when the index is out of range carry is clear. Tests should cover
-   indices 0, 1, 2 and 3 on the original list, plus index 0 on an empty list.
-
-### Extensions
-
-5. **Extension — Tail insertion cost.** An insertion routine at the tail uses
-   a pre-allocated spare node. A cost record for the original three-node list
-   should count the nodes traversed and link bytes read before the stores, then
-   compare that work with head insertion. The final order should be
-   `$10, $22, $30, $40`.
-6. **Extension — Three-node search tree.** `TreeNode` records for keys 5, 3
-   and 8, with every child word initially clear, can be inserted through a
-   `root` word with `bst_insert_u8`. The resulting link diagram and an in-order
-   traversal should agree on `3, 5, 8`.
+[Exercise notes](exercise-notes.md#chapter-8-pointer-structures)

@@ -557,3 +557,9 @@ Skyfall can be extended with a wider paddle, a faster floor or two
 drops at once. The next chapter shifts from building to reading:
 Tetro, the largest repository game for the 8x8 matrix, using the same
 components: [Reading Tetro](02-reading-tetro.md).
+
+## Exercise
+
+**Landing on the paddle.** With `PadX = 3`, the paddle covers columns 3, 4 and 5. Which of the drop columns 2, 3, 5 and 6 count as catches, and how does the unsigned subtraction reject a drop to the left of the paddle?
+
+[Exercise notes](exercise-notes.md#chapter-1-building-skyfall)

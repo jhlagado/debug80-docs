@@ -284,9 +284,9 @@ For the examples in this chapter: after `00_first_program.asm` runs, address `$8
 
 ---
 
-## Exercises
+## Exercise
 
-**1. Register trace.** A trace table should give A, B and C after each
+**Register trace.** A trace table should give A, B and C after each
 instruction and state whether any instruction changes HL.
 
 ```asm
@@ -299,30 +299,5 @@ ld c, a
 
 A complete test program with `.org`, `main:` and `halt` allows the final
 emulator state to be compared with the trace.
-
-**2. Copying HL into DE.** The shortest sequence of `ld` instructions should
-copy HL into DE while leaving HL unchanged. With HL = `$1234` and DE =
-`$FFFF`, the result should give H, L, D, E, HL and DE; the assembler should
-accept every instruction.
-
-**3. Constants and labels.** The listing for this fragment provides the
-evidence:
-
-```asm
-BASE .equ $8000
-
-.org $8000
-count: .db 0
-next:  .dw $1234
-```
-
-It should show the values of `BASE`, `count` and `next`, the bytes emitted at
-`$8000`–`$8002`, and the source line responsible for each byte. A second
-listing with `.org $8100` should reveal which names change.
-
-**4. `dec` and the Zero flag.** Starting with B = 3 and carry set, a
-three-decrement trace should record B, Z and C after each `dec b`. The emulator
-result should confirm both the point at which Z becomes set and whether `dec`
-changes carry.
 
 [Exercise notes](exercise-notes.md#chapter-3-assembly-language)

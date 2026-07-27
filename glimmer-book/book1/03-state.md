@@ -254,26 +254,8 @@ version, each later score change reaches the breakpoint again.
 The next chapter examines pulses and each way a key can fire one:
 [Pulses and Bindings](04-pulses-and-bindings.md).
 
-## Exercises
+## Exercise
 
-**1. Two startup policies.** A comparison table for `state Score : word` and
-`state Score : word changed` should record the initial `Changed0` bits, the
-renders that run on frame one, and the seven-segment display before the first
-GO press.
-
-**2. Facts, bits, and masks.** For the six facts in Beacon, a completed table
-should give each bit number and mask value. The same answer should calculate
-the trigger masks for `DrawBeacon` and `ShowScore`.
-
-**3. A different opening state.** A modified Beacon can begin at column 1 in
-blue with a score of 10 already visible. The three revised state declarations
-and a first-frame observation of both displays provide a check that byte,
-word, initializer, and `changed` syntax are working together.
-
-**4. An incomplete render dependency.** If `DrawBeacon` declares `on DotX`
-instead of `on DotX, Colour`, pressing GO changes `Colour` and `Score` while
-the dot stays in its previous colour. A diagnosis should account for the
-memory values, the score display, and the stale matrix pixel, then state the
-header correction.
+**The opening display.** Why does the dot appear before the first key press while the seven-segment score remains dark? Which single change to the `Score` declaration makes `000000` appear at startup?
 
 [Exercise notes](exercise-notes.md#chapter-3-state)

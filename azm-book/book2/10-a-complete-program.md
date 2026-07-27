@@ -212,9 +212,9 @@ example, `x` at 0, `y` at 1 and `color` at 2. [Book 1 Chapter
 
 ---
 
-## Exercises
+## Exercise
 
-**1. A `find_max` trace.** Every row of this table should be completed for the
+**A `find_max` trace.** Every row of this table should be completed for the
 chapter's eight-byte input, including the carry result from `cp c`.
 
 | Iteration | C (current) | A before `cp` | Carry set? | Update A? | A after |
@@ -230,23 +230,5 @@ chapter's eight-byte input, including the carry result from `cp c`.
 
 The final line should give A, B and HL on return and the byte stored in
 `max_val`.
-
-**2. The side effect in HL.** `main` reloads `ld hl, values` before calling
-`count_above`. A test run without that reload should show HL after `find_max`,
-the eight addresses scanned by the second routine, and which bytes are defined
-by the source. The analysis should state whether `above_64` can be predicted
-from the source alone; a run with the reload restored provides the expected
-result.
-
-**3. Shared comparison flags.** With C = 64, traces through `cp c`, `jr c` and
-`jr z` for A = 63, 64 and 65 should give Z, carry and whether D increments.
-A second version with `inc d` between `cp c` and `jr c` should identify which
-branch still reads a valid comparison flag and which one does not.
-
-**4. A third task.** Extending the program to count entries strictly less than
-32 adds another complete path through the program. The extension should include
-the subroutine, its register contract, the call setup in `main`, and a result
-byte named `below_32`. The supplied table should produce 3; `{32}` and
-`{0, 31, 32, 255}` should produce 0 and 2.
 
 [Exercise notes](exercise-notes.md#chapter-10-a-complete-program)

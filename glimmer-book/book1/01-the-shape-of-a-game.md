@@ -423,29 +423,8 @@ declared reason to run. The next chapter puts that division into
 practice by installing the tools and building
 [First Light](02-first-light.md).
 
-## Exercises
+## Exercise
 
-**1. The opening frames.** In the first, stationary version of Mover,
-`DotX` begins at 3 with the `changed` modifier. A two-row table recording
-frames 1 and 2 should show whether the DotX change bit is set, whether
-`DrawDot` runs, which pixel remains in the framebuffer, and what the next
-matrix scan presents.
-
-**2. Declarations and generated code.** A mapping from each of these source
-forms to its generated counterpart explains how Mover becomes assembly:
-`state DotX`, `pulse Right`, `bind key KEY_6 held period 8`, `on Right`, and
-`updates DotX`. The completed mapping should name either the storage, mask,
-polling state, dispatch test, or wrapper operation produced by each form.
-
-**3. Vertical movement.** A vertical version of Mover can use a `DotY` fact,
-keys 2 and 8, and a render with a fixed x coordinate. The revised declarations
-and block headers, together with the two boundary tests, form the answer. Its
-predicted behaviour should keep the dot in column 3 while moving between rows
-0 and 7.
-
-**4. A missing initial change.** Removing `changed` from the stationary
-Mover leaves every change flag clear at startup. A short diagnosis should
-identify the skipped block, the initial display state, and the smallest source
-edit that restores the first picture.
+**The first picture.** Mover starts with `DotX = 3 changed`. Why is the first matrix scan blank, and why does the dot appear on the following scan even though `DrawDot` runs only once?
 
 [Exercise notes](exercise-notes.md#chapter-1-the-shape-of-a-game)

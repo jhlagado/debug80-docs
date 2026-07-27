@@ -386,28 +386,8 @@ preset 3 springs past and settles.
 The next chapter adds a body, sound and a scoreboard to the comet:
 [Shapes, Sound and Displays on the Board](09-shapes-sound-and-displays.md).
 
-## Exercises
+## Exercise
 
-**1. Reading the Glide table.** Using the generated `Curve_Glide` bytes in
-the chapter, a lookup table should give `CometX` for Travel values 0, 9, 31,
-45, and 63. The pattern of repeated values should also identify which end of
-the flight has the longest dwell.
-
-**2. Page-aligned indexing.** Suppose `Curve_Glide` begins at `$4300` and
-Travel holds `$2A`. A register trace through `ld hl,Curve_Glide`,
-`ld a,(Travel)`, and `ld l,a` should give H, L, HL, and the address of the
-table byte read next. The trace should explain why replacing L is valid for
-every curve in this chapter.
-
-**3. A different launch shape.** Replacing `ease_out` with `ease_in` in the
-single-curve Comet preserves the 64-frame duration and endpoints while
-reversing the dwell pattern. A side-by-side observation should record where
-the comet moves slowly and where it moves quickly in each build.
-
-**4. Lost overshoot headroom.** A Spring declaration from 0 to 7 has no
-display column beyond its destination. A diagnosis should predict what byte
-clamping does to the top of the generated curve, explain the missing visible
-overshoot, and give the endpoint used by the chapter to restore one column of
-headroom.
+**Reading the curve.** When `Travel` is 31, which column does `Curve_Glide` give to `CometX`, and what do the repeated values near the end of the table tell you about an ease-out motion?
 
 [Exercise notes](exercise-notes.md#chapter-8-motion-curves)

@@ -337,36 +337,11 @@ and the multiplies on the way up. The complete file can then run to `halt`.
 
 ---
 
-## Exercises
+## Exercise
 
-[Exercise notes](exercise-notes.md#chapter-6-recursion) give results, checks
-and implementation guidance.
+**Factorial trace and range.** A trace of `factorial_u8(4)` should show the
+recursive calls and unwind multiplications. A second run with `FACT_N = 6`
+needs a predicted byte for both factorial routines and an explanation of
+why matching bytes do not establish that 6! was represented exactly.
 
-1. **Factorial trace and range.** A trace of `factorial_u8(4)` should show the
-   recursive calls and unwind multiplications. A second run with `FACT_N = 6`
-   needs a predicted byte for both factorial routines and an explanation of
-   why matching bytes do not establish that 6! was represented exactly.
-2. **Stack budget.** A stack diagram at the deepest point of
-   `factorial_u8(5)` should distinguish return addresses from saved BC pairs
-   and give both the occupancy and the resulting SP when
-   `STACK_TOP = $9FFF`.
-3. **Recursive-sum invariant.** A trace of `sum_u8_rec` over `2, 3, 5` should
-   record HL after each return and state separately what HL means on entry to a
-   call and after that call returns. Tests should also cover an empty table and
-   the chapter's five-byte table.
-4. **Register-contract diagnosis.** A deliberate caller uses the incoming
-   value of B after `factorial_u8` without restoring it. The
-   `azm --rc warn` result should explain the violation; the repaired call site
-   must satisfy the contract and preserve the value needed later.
-
-### Extensions
-
-5. **Extension — Sixteen-bit Hanoi count.** A `hanoi_moves_u16` routine uses
-   B as input and HL as output for `H(0) = 0` and
-   `H(n) = 2H(n-1) + 1`. Its documentation should include a recursive stack
-   budget, and its tests should produce `H(0) = 0`, `H(1) = 1`, `H(5) = 31`
-   and `H(8) = 255`.
-6. **Extension — Iterative table sum.** An iterative routine should expose the
-   same caller-visible input and output as `sum_u8_rec`. Empty, one-byte and
-   five-byte tables provide correctness tests, followed by a comparison of
-   maximum stack occupancy for a 255-byte input.
+[Exercise notes](exercise-notes.md#chapter-6-recursion)

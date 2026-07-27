@@ -267,9 +267,9 @@ Balance is all the stack requires: `call` pushed one word and `pop hl` consumed 
 
 ---
 
-## Exercises
+## Exercise
 
-**1. Stack trace.** With SP = `$C000`, AF = `$1234` and BC = `$5678`, a
+**Stack trace.** With SP = `$C000`, AF = `$1234` and BC = `$5678`, a
 four-instruction trace should give SP and the two bytes written or read at each
 step, followed by final DE, HL and SP.
 
@@ -279,44 +279,5 @@ push bc
 pop de
 pop hl
 ```
-
-**2. A mismatched stack.** Immediately before `call count_nonzero`, SP is
-`$C000`, BC is `$1234`, DE is `$5678`, and the instruction after the call is at
-`$0103`. A trace of the return-address push and every stack operation in this
-subroutine exposes the mismatch:
-
-```asm
-count_nonzero:
-  push bc
-  push de
-  ld b, $08
-  ld c, 0
-count_loop:
-  ld a, (hl)
-  or a
-  jr z, skip
-  inc c
-skip:
-  inc hl
-  djnz count_loop
-  ld a, c
-  pop bc
-  ret
-```
-
-The trace should give the value loaded into BC by `pop bc`, the address loaded
-into PC by `ret`, final SP, and the location of the real return address. A
-corrected version should return to `$0103` with BC and DE restored.
-
-**3. A byte-doubling subroutine.** A `double_byte` subroutine should receive a
-byte in B, return B × 2 in A, leave B unchanged, and document its register
-contract. A caller stores the result in `doubled`. Test results for B values 0,
-15, 127, 128 and 255 should include A and the carry flag after the addition.
-
-**4. The `or a / sbc hl, de` pattern.** Two traces of the comparison body from
-`max_word` should use HL = `$0064`, DE = `$0028` and HL = `$0014`, DE =
-`$0028`, both with carry initially set. Each trace should give carry after
-`or a`, HL and carry after `sbc hl, de`, the selected return path, and final HL
-and DE. Those observations should explain the purpose of `or a`.
 
 [Exercise notes](exercise-notes.md#chapter-8-stack-and-subroutines)

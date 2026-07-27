@@ -244,27 +244,8 @@ follows a moment through the three block phases and explains their
 execution order:
 [Compute, Effect, Render](05-compute-effect-render.md).
 
-## Exercises
+## Exercise
 
-**1. Rising and held timelines.** For a key pressed on frame 0 and held
-through frame 17, a timeline should mark the frames on which a `rising`
-binding fires and the frames on which `held period 8` fires. A release on
-frame 18 and a fresh press on frame 20 complete the comparison.
-
-**2. Polling paths.** The opening part of `GlimPollBindings` has three useful
-paths: no key, a newly pressed key, and the same key held before its repeat
-count expires. A table should record the relevant Z and C states, the branch
-taken, and the effect on `Glim_HeldKey`, `Glim_HeldCount`, and the pulse.
-
-**3. Stepwise vertical movement.** Changing Rover's KEY_2 binding from
-`held period 8` to `rising` creates a visible comparison inside one program.
-An observation log should describe the dot while KEY_2 is held and while
-KEY_6 remains held, including the input required to produce a second upward
-step.
-
-**4. An autorepeating Home key.** Replacing Rover's GO binding with
-`held period 8` makes `Home` fire repeatedly during one long press. A trace
-should show the first two firings and explain why `rising` is the appropriate
-repair even though repeated stores of `(3,3)` leave the same pixel visible.
+**Rising and held input.** What difference would the player notice if Rover's KEY_2 binding changed from `held period 8` to `rising`? Why is `rising` still the appropriate binding for the Home action?
 
 [Exercise notes](exercise-notes.md#chapter-4-pulses-and-bindings)

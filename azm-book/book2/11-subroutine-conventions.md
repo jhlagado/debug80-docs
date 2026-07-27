@@ -305,9 +305,9 @@ features are covered in Book 1:
 
 ---
 
-## Exercises
+## Exercise
 
-**1. Push/pop order.** With BC = `$1111`, HL = `$2222`, AF = `$3344` and SP =
+**Push/pop order.** With BC = `$1111`, HL = `$2222`, AF = `$3344` and SP =
 `$C000`, these pushes establish the stack contents:
 
 ```asm
@@ -320,46 +320,5 @@ The answer should supply the correct three-pop epilogue, restored registers and
 SP. A second trace using `pop bc / pop hl / pop af` should give the resulting
 registers and explain why a balanced SP alone does not prove correct
 restoration.
-
-**2. Registers that need saving.** A subroutine receives HL as a table pointer
-and B as a count. Its contract allows B, HL, A and F to change, but promises to
-preserve the incoming C and DE. The body uses C, D and E as scratch registers.
-Matching save and restore sequences should state the extra preservation imposed
-by saving C as part of BC and give the required order on every return path.
-
-**3. An IX frame.** Immediately before a call, SP is `$C000` and IX is `$9000`;
-the call pushes return address `$1234`. A frame trace should save IX, establish
-the frame base, allocate four local bytes, store 42 at `(ix-1)`, read it into
-A, discard the locals, restore IX and return. The result should give SP and IX
-after each prologue and epilogue instruction, the four local addresses, final
-A, and the address loaded into PC by `ret`.
-
-**4. An early return with a missing pop.** This routine sums bytes until it
-finds zero or consumes B entries:
-
-```asm
-sum_until_zero:
-  push bc
-  ld c, 0
-SumLoop:
-  ld a, (hl)
-  or a
-  jr z, SumEarlyExit
-  add a, c
-  ld c, a
-  inc hl
-  djnz SumLoop
-  ld a, c
-  pop bc
-  ret
-SumEarlyExit:
-  ld a, 0
-  ret                ; BUG: saved BC is still on the stack
-```
-
-With SP = `$C000`, BC = `$0307`, return address `$0103`, and table
-`{2, 0, 5}`, the trace should identify the word that the early `ret` mistakes
-for its destination. A corrected path should finish with recorded values for
-A, BC, HL, SP and PC.
 
 [Exercise notes](exercise-notes.md#chapter-11-subroutine-conventions)

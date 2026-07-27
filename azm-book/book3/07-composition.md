@@ -290,39 +290,12 @@ listing and leaves `str_len` equal to 5 at `$8008`.
 
 ---
 
-## Exercises
+## Exercise
 
-[Exercise notes](exercise-notes.md#chapter-7-source-composition) give results,
-checks and implementation guidance.
+**Include graph and placement.** An include graph should show `main.asm`
+including `constants.asm`, `lib/strings.asm` and `lib/ring.asm` once each.
+It should mark the source position at which each library emits bytes and
+identify the edge that would create a cycle if `ring.asm` included
+`main.asm`.
 
-1. **Include graph and placement.** An include graph should show `main.asm`
-   including `constants.asm`, `lib/strings.asm` and `lib/ring.asm` once each.
-   It should mark the source position at which each library emits bytes and
-   identify the edge that would create a cycle if `ring.asm` included
-   `main.asm`.
-2. **Composed string library.** An included string library gains the Chapter 3
-   copy and compare routines. Its client should copy `"HELLO"` into an
-   eight-byte buffer, compare it with the source and store `copy_ok = 1`.
-   Register contracts must remain beside their routine entries, and
-   `azm --rc warn` must accept the client calls.
-3. **Shared symbols and diagnostics.** One constants include containing
-   `CHAR_L .equ 'L'` should serve both client and library. A duplicate
-   non-local `done` label in two included files should produce a diagnostic;
-   descriptive prefixes or owner-local labels should repair the collision.
-4. **Contract-only boundary.** A `monitor.asmi` should describe one external
-   character-output routine that takes A and one key routine that returns A.
-   A deliberately invalid client can keep a live A value across the first call
-   to demonstrate the register-contract warning; the corrected client should
-   preserve or reload that value.
-
-### Extensions
-
-5. **Extension — Single-purpose math build.** A `lib/math.asm` containing
-   `gcd_u16` can be included by a client that computes GCD(270, 192) and stores
-   `$0006`. The map or listing should show the math routine and no
-   string-routine labels or bytes.
-6. **Extension — Include and import boundaries.** A short design should show
-   how the same string library's public entry labels change for module-style
-   `.import`, including the exported `@` entries and the helpers that remain
-   private. The comparison should identify the namespace difference from
-   textual `.include`.
+[Exercise notes](exercise-notes.md#chapter-7-source-composition)

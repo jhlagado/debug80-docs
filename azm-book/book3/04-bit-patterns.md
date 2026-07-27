@@ -264,32 +264,10 @@ expansion shown beside it.
 
 ---
 
-## Exercises
+## Exercise
 
-[Exercise notes](exercise-notes.md#chapter-4-bit-patterns) give results, checks
-and implementation guidance.
+**Mask trace.** A trace starting with A = `$05` should show A after setting
+error, clearing busy and toggling ready in that order. Each value should
+appear in binary beside the mask used for that step.
 
-1. **Mask trace.** A trace starting with A = `$05` should show A after setting
-   error, clearing busy and toggling ready in that order. Each value should
-   appear in binary beside the mask used for that step.
-2. **Enum-derived flag.** Adding `Fault` after `Busy` in `StatusBit` provides
-   the position from which `FLAG_FAULT` is derived. One load-modify-store pass
-   should set fault and clear busy while preserving every other bit, with
-   initial values `$00`, `$05` and `$FF` used as tests.
-3. **Population count contract.** A `popcount_u8` routine uses A as input and
-   output and supplies a complete `.routine` contract. Its tests are
-   `$00 -> 0`, `$01 -> 1`, `$55 -> 4`, `$80 -> 1` and `$FF -> 8`.
-4. **Numeric extraction or branch.** A comparison of `and FLAG_ERROR` followed
-   by `rr a` with `bit StatusBit.Error, a` should record the resulting flags
-   and A values. Inputs `$00` and `$02` should establish which sequence
-   supplies a stored 0/1 result and which supplies a branch condition.
-
-### Extensions
-
-5. **Extension — Parity.** A `parity_u8` routine returns 1 for an odd number of
-   set bits and 0 for an even number. Its tests should cover `$00`, `$01`,
-   `$03`, `$7F`, `$80` and `$FF`.
-6. **Extension — Sixteen-bit shift op.** An op named
-   `shift_right_pair(hi reg8, lo reg8)` expands to `srl hi` followed by
-   `rr lo`. Tests on B:C should produce `$8001 -> $4000` with carry set,
-   `$0100 -> $0080` with carry clear, and `$0001 -> $0000` with carry set.
+[Exercise notes](exercise-notes.md#chapter-4-bit-patterns)

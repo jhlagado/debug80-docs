@@ -512,3 +512,9 @@ Next, a different machine to draw with: the TMS9918 video display
 processor, where the program describes a scene and the chip keeps it
 on screen:
 [The TMS9918 Profile](03-the-tms9918-profile.md).
+
+## Exercise
+
+**A completed row.** What sequence follows when gravity locks a piece and `FullRowsMask` reports a completed row, from the first white flash through to the next piece?
+
+[Exercise notes](exercise-notes.md#chapter-2-reading-tetro)

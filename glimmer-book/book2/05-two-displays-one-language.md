@@ -252,3 +252,9 @@ The series began with the ability to read `ld a,(hl)`. You can now
 read, modify and extend complete Glimmer games on either display the
 TEC-1G offers. A new game can begin as Mover did: one fact, one picture
 and a connection between them.
+
+## Exercise
+
+**Choosing a display.** Which display profile better suits an 8x8 cellular automaton, and which better suits a garden with persistent scenery and several independently moving insects? What property of each display determines the choice?
+
+[Exercise notes](exercise-notes.md#chapter-5-two-displays-one-language)

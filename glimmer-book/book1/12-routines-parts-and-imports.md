@@ -406,28 +406,8 @@ The next chapter declares a title screen, playing screen and game-over
 screen as cards:
 [Cards](13-cards.md).
 
-## Exercises
+## Exercise
 
-**1. Three source boundaries.** A table should place each Canvas element in
-the entry file, `canvas-rules.glim`, or `paint-lib.asm`: program identity,
-hardware selection, shared state, bindings, reactive blocks, cursor-address
-arithmetic, framebuffer copying, and bit counting. A final column should name
-the reason for each placement.
-
-**2. `CursorSpot` at one coordinate.** For Cursor `(3,6)`, a trace through
-`CursorSpot` should give the mask in B, the address in HL, and the registers
-known to survive the routine. The trace should use the inferred contract
-described in the chapter.
-
-**3. Clearing the painting through the module.** A clear feature can bind
-KEY_MINUS to a new pulse, call an exported `ClearPaint` routine from an effect
-in the part, and declare `updates Paint`. The public routine, binding, effect,
-and an observation that both the matrix and derived count return to zero form
-the result.
-
-**4. A missing export marker.** Removing `@` from `@CountLit` makes the label
-private while `ShowCount` still calls it from a `.glim` part. The build
-diagnostic, the module rule it enforces, and the one-character repair provide
-a complete account of the failure.
+**Two kinds of source file.** Why are Canvas reaction blocks placed in a Glimmer `part`, while the drawing and counting loops are brought in with `import`? What does `@` mean on an imported assembly label?
 
 [Exercise notes](exercise-notes.md#chapter-12-routines-parts-and-imports)

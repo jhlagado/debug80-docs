@@ -27,6 +27,7 @@ facts, moments, rules, phases, timers, resources, parts and cards.
 3. [The TMS9918 Profile](03-the-tms9918-profile.md)
 4. [Building Lanternfly](04-building-lanternfly.md)
 5. [Two Displays, One Language](05-two-displays-one-language.md)
+- [Exercise Notes](exercise-notes.md)
 
 ## Reference
 

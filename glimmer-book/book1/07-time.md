@@ -514,27 +514,8 @@ a ramp or names `FrameCount`.
 Drip's drop falls in equal steps. The next chapter uses ramps to play
 back motion curves: [Motion Curves](08-motion-curves.md).
 
-## Exercises
+## Exercise
 
-**1. Independent clocks.** Starting both counters at their declared values
-and numbering the first call to `GlimTickTimers` as frame 1, a timeline
-through frame 24 should mark every `BlinkTick` from period 5 and the first
-`FallTick` from period 24. The answer should include the first later frame on
-which both timers fire together.
-
-**2. Three kinds of schedule.** A comparison of an oscillator timer, a
-one-shot timer, and a ramp should record what its named cell stores, when its
-pulse fires, what happens after completion, and which write restarts or
-retunes it.
-
-**3. Faster fall and blink.** A Drip variant with `Fall = 12` and `Blink = 4`
-should produce its first two fall pulses on frames 12 and 24 and blink every
-four frames. The two declaration edits and an observation of the first
-24 frames provide the check.
-
-**4. A ramp that never restarts.** Removing the final store to `Heat` from
-`Quicken` leaves the ramp idle at 249 after its first completion. A diagnosis
-should state how many times `HeatUp` and `Quicken` run and the fall period
-that remains after that single difficulty change.
+**Independent timers.** If `Fall` fires every 24 frames and `Blink` every 5 frames, on which frames do they first fire, and on which frame do they first fire together?
 
 [Exercise notes](exercise-notes.md#chapter-7-time)

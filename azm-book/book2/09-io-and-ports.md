@@ -261,9 +261,9 @@ documentation for the target platform and its handler conventions.
 
 ---
 
-## Exercises
+## Exercise
 
-**1. Flag behaviour of `in`.** The comparison should state whether each form
+**Flag behaviour of `in`.** The comparison should state whether each form
 updates Z and whether `jr z, is_zero` can follow directly:
 
 ```asm
@@ -276,21 +276,4 @@ The shortest correct sequence for each form may assume C already contains
 input bytes `$00` and `$80`, recording A, Z and carry after each read and any
 explicit flag-setting instruction.
 
-**2. A bit-3 ready check.** A version of `poll_and_recv` that treats bit 3 as
-the ready flag needs a new mask. The answer should give that mask in binary and
-hexadecimal and trace the branch for `$00`, `$08`, `$09` and `$80`. The
-assembler listing should show the mask as the operand of `and`.
-
-**3. A receive loop.** The counterpart to `send_block` is a `recv_block`
-routine that reads B bytes from the fixed `IN_PORT` into memory starting at HL.
-Its register comment should document the B > 0 precondition. With an emulator
-or test device supplying `$11, $22, $33, $44`, the observed result should
-include the four destination bytes and final B and HL.
-
-**4. Register-addressed output.** A three-instruction sequence should place
-`$12` on the upper address pins, select low-byte port `$20`, place `$7F` in D,
-and perform `out (C), d`. The result should give BC, D, the 16-bit address-pin
-value and the transferred byte, then identify the part used by conventional
-8-bit port decoding.
-
-[Exercise notes](exercise-notes.md#chapter-9-io-and-ports)
+[Exercise notes](exercise-notes.md#chapter-9-i-o-and-ports)

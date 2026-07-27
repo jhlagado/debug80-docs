@@ -269,27 +269,8 @@ trace which fact should have changed before you open the debugger.
 The next chapter examines the framebuffer, scanner and drawing
 routines in [the 8x8 matrix profile](06-the-matrix-profile.md).
 
-## Exercises
+## Exercise
 
-**1. A plus press across two frames.** Assume `Count` and `BarLen` are zero
-before a new PLUS press on frame N. A two-frame trace should record which
-blocks run, the values of both facts, and whether `ShowCount` and `DrawBar`
-run on frames N and N+1.
-
-**2. Raised now or deferred.** The wrappers for `DeriveBar` and `Increase`
-send their change bits to different staging bytes. A comparison should name
-the updated fact, its consumers and phases, the chosen staging byte, and the
-frame on which each consumer runs.
-
-**3. A coarser meter.** Adding a fourth `srl a` to `DeriveBar` changes the
-scale from one pixel per eight counts to one per sixteen. A table for Count
-values 0, 8, 16, 32, 48, and 64, followed by a running observation at 32 and
-64, should show the new bar lengths.
-
-**4. A derivation wired to itself.** Changing `DeriveBar`'s trigger from
-`on Count` to `on BarLen` leaves Count with no path to the compute block. A
-debugging record should compare Count, BarLen, and the matrix after Count
-reaches 8, show the broken relationships in the dependency report, and give
-the corrected trigger.
+**One press through the phases.** Count and BarLen both begin at zero. When PLUS is pressed on frame N, when do Count, BarLen, the digits and the bar change, and why does the visible update wait until frame N+1?
 
 [Exercise notes](exercise-notes.md#chapter-5-compute-effect-render)

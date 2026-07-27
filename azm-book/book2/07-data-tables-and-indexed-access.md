@@ -296,52 +296,12 @@ For element-by-element work on a single table, the DJNZ-over-HL pattern from the
 
 ---
 
-## Exercises
+## Exercise
 
-**1. Address, value and final pointer.** In the chapter example, `scores`
+**Address, value and final pointer.** In the chapter example, `scores`
 begins at `$8000` and is followed immediately by `records`. The trace should
 give the values loaded by `ld hl, scores` and `ld a, (scores)`, followed by
 final HL after the six-iteration sum loop. It should also identify the byte a
 subsequent `ld a, (hl)` reads and whether that byte belongs to `scores`.
-
-**2. IX record access.** This table contains three three-byte records with
-`id`, `hi` and `lo` at offsets 0, 1 and 2:
-
-```asm
-.org $8010
-records: .db $11, $AA, $01
-         .db $22, $BB, $02
-         .db $33, $CC, $03
-```
-
-The result should calculate the base address of record index 2 and use
-displaced loads to read its fields into A, B and C. Final A, B, C and IX make
-the addressing result observable.
-
-**3. Block-copy trace.** Suppose HL = `$8100`, DE = `$8200`, BC = 4 and memory
-at `$8100`–`$8103` contains `$10, $20, $30, $40`. An `ldir` trace should give
-the four destination bytes and final HL, DE and BC. The same analysis with an
-initial count of zero should state how many bytes the hardware attempts to
-copy.
-
-**4. The missing increment.** The following loop is intended to find the maximum
-score in `scores`. The faulty and corrected runs should each give HL, B and
-`max_score`, with the repair placed so that both comparison paths advance the
-pointer.
-
-```asm
-ld hl, scores
-ld b, TableLen
-ld a, 0
-max_loop:
-  cp (hl)
-  jr nc, no_new_max
-  ld a, (hl)
-no_new_max:
-  djnz max_loop
-ld (max_score), a
-```
-
-The six scores from the chapter provide the input for both runs.
 
 [Exercise notes](exercise-notes.md#chapter-7-data-tables-and-indexed-access)

@@ -302,37 +302,11 @@ while the sorted prefix grows.
 
 ---
 
-## Exercises
+## Exercise
 
-[Exercise notes](exercise-notes.md#chapter-2-arrays-and-loops) give results,
-checks and implementation guidance.
+**Insertion-sort trace.** A trace starting with
+`9, 4, 6, 2, 8, 1, 7, 3` should show the whole table after outer iterations
+`i = 1`, `i = 2` and `i = 3`. Each row should identify the sorted prefix,
+followed by a statement of the outer-loop invariant.
 
-1. **Insertion-sort trace.** A trace starting with
-   `9, 4, 6, 2, 8, 1, 7, 3` should show the whole table after outer iterations
-   `i = 1`, `i = 2` and `i = 3`. Each row should identify the sorted prefix,
-   followed by a statement of the outer-loop invariant.
-2. **Addresses and storage.** With `values` at `$8000`, calculate the addresses
-   and initial contents of `values[0]`, `values[3]` and `values[7]`. A second
-   version can reserve the table with `.ds byte[8]` and initialize the same
-   eight bytes in `main`; after initialization and sorting, its final bytes
-   must match the original example.
-3. **Equality search contract.** A `find_byte_eq` routine uses HL as the table
-   pointer, B as its length, C as the search byte, and A as the returned index
-   or `$FF`. Its `.routine` contract and tests should cover searches for `1`,
-   `6`, `9`, `5`, and a zero-length table.
-4. **Boundary-value verification.** A version with the first input value
-   replaced by 0 should run with `THRESHOLD` set first to 0 and then to 10.
-   Each run needs a prediction of the sorted table and `found_index` before
-   RAM is checked, followed by an explanation of how the search invariant
-   accounts for both boundary results.
-
-### Extensions
-
-5. **Extension — Descending insertion sort.** Reversing the inner comparison
-   should make the same input finish as `9, 8, 7, 6, 4, 3, 2, 1`. The
-   explanation should give the revised sorted-prefix invariant, and the memory
-   check should cover all eight bytes.
-6. **Extension — Bubble sort.** A nested-loop bubble sort should replace
-   insertion sort and define what the completed suffix contains after each
-   outer pass. Tests should cover empty, one-element, already sorted and
-   reverse-sorted tables without reading beyond their declared lengths.
+[Exercise notes](exercise-notes.md#chapter-2-arrays-and-loops)

@@ -222,6 +222,10 @@ export const sidebars = {
         {
           "text": "Subroutine Conventions",
           "link": "/azm-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -268,6 +272,10 @@ export const sidebars = {
         {
           "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book3/exercise-notes.html"
         }
       ]
     },
@@ -396,6 +404,10 @@ export const sidebars = {
         {
           "text": "Subroutine Conventions",
           "link": "/azm-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -442,6 +454,10 @@ export const sidebars = {
         {
           "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book3/exercise-notes.html"
         }
       ]
     },
@@ -570,6 +586,10 @@ export const sidebars = {
         {
           "text": "Subroutine Conventions",
           "link": "/azm-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -616,6 +636,10 @@ export const sidebars = {
         {
           "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book3/exercise-notes.html"
         }
       ]
     },
@@ -744,6 +768,10 @@ export const sidebars = {
         {
           "text": "Subroutine Conventions",
           "link": "/azm-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -790,6 +818,10 @@ export const sidebars = {
         {
           "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book3/exercise-notes.html"
         }
       ]
     },
@@ -918,6 +950,10 @@ export const sidebars = {
         {
           "text": "Subroutine Conventions",
           "link": "/azm-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -964,6 +1000,10 @@ export const sidebars = {
         {
           "text": "Eight Queens Capstone",
           "link": "/azm-book/book3/09-capstone.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/azm-book/book3/exercise-notes.html"
         }
       ]
     },
@@ -1066,6 +1106,10 @@ export const sidebars = {
         {
           "text": "Cards",
           "link": "/glimmer-book/book1/13-cards.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book1/exercise-notes.html"
         }
       ]
     },
@@ -1096,6 +1140,10 @@ export const sidebars = {
         {
           "text": "Two Displays, One Language",
           "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -1186,6 +1234,10 @@ export const sidebars = {
         {
           "text": "Cards",
           "link": "/glimmer-book/book1/13-cards.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book1/exercise-notes.html"
         }
       ]
     },
@@ -1216,6 +1268,10 @@ export const sidebars = {
         {
           "text": "Two Displays, One Language",
           "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -1306,6 +1362,10 @@ export const sidebars = {
         {
           "text": "Cards",
           "link": "/glimmer-book/book1/13-cards.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book1/exercise-notes.html"
         }
       ]
     },
@@ -1336,6 +1396,10 @@ export const sidebars = {
         {
           "text": "Two Displays, One Language",
           "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book2/exercise-notes.html"
         }
       ]
     },
@@ -1426,6 +1490,10 @@ export const sidebars = {
         {
           "text": "Cards",
           "link": "/glimmer-book/book1/13-cards.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book1/exercise-notes.html"
         }
       ]
     },
@@ -1456,6 +1524,10 @@ export const sidebars = {
         {
           "text": "Two Displays, One Language",
           "link": "/glimmer-book/book2/05-two-displays-one-language.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/glimmer-book/book2/exercise-notes.html"
         }
       ]
     },

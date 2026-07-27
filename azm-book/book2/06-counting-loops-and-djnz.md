@@ -288,9 +288,9 @@ iteration count is usually known before the loop starts.
 
 ---
 
-## Exercises
+## Exercise
 
-**1. The zero-count case.** A byte named `iterations`, incremented once in this
+**The zero-count case.** A byte named `iterations`, incremented once in this
 loop body, makes the hardware behaviour observable. The prediction should give
 B and `iterations` after runtime counts 0, 1 and 255.
 
@@ -305,42 +305,5 @@ loop_top:
 A guarded version should make count 0 produce zero iterations while retaining
 the ordinary meanings of 1 and 255. All three emulator runs should agree with
 the prediction.
-
-**2. Find a minimum.** A DJNZ routine should receive HL as the address of a
-non-empty byte table and B as its length, then store the smallest unsigned byte
-in `minimum`. The explanation should state the running-value invariant at the
-top of the loop. These tables provide the test cases:
-
-| Table | Expected minimum |
-| ----- | ---------------- |
-| `3, 7, 2, 8, 5` | 2 |
-| `9` | 9 |
-| `255, 0, 127` | 0 |
-
-**3. Sentinel loop: find the zero.** A table of bytes ends with a zero sentinel:
-
-```asm
-.org $8010
-message: .db $41, $42, $43, $00, $44, $45
-```
-
-The loop should store the zero-based index of the first zero byte in `zero_pos`,
-with a six-byte bound and `$FF` for no match. Results for the given table, a
-table beginning with zero and a six-byte table containing no zero should
-include `zero_pos`, B and HL.
-
-**4. Flag-exit trace.** The completed trace for the chapter's flag-exit loop
-over `3, 7, 2, 8, 5` should fill every unknown:
-
-| Iteration | Byte added | A after add | `cp $10` → C set? | Exit? |
-| --------- | ---------- | ----------- | ----------------- | ----- |
-| 1         | 3          | ?           | ?                 | ?     |
-| 2         | 7          | ?           | ?                 | ?     |
-| 3         | 2          | ?           | ?                 | ?     |
-| 4         | 8          | ?           | ?                 | ?     |
-
-The result should give final A, B, HL and `flagval`. A second trace with a
-threshold of `$0C` should compare its exit iteration and register state with
-the first.
 
 [Exercise notes](exercise-notes.md#chapter-6-counting-loops-and-djnz)

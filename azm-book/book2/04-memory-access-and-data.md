@@ -163,9 +163,9 @@ After the program runs: `$8000` holds `10` (`$0A`) and `$8001`–`$8002` hold `$
 
 ---
 
-## Exercises
+## Exercise
 
-**1. Memory form identification.** Each instruction should be matched to a row
+**Memory form identification.** Each instruction should be matched to a row
 in the LD forms table, with the memory action and the register or address that
 selects the location.
 
@@ -176,43 +176,5 @@ ld a, (bc)
 ld ($8010), a
 ld de, ($8020)
 ```
-
-**2. Repair an illegal transfer.** One form in this group is rejected by the
-assembler. The corrected answer should identify it and replace only that line
-with the shortest legal sequence that copies the same byte. With `(HL)`
-containing `$5A`, the result should also state the final value of A.
-
-```asm
-ld a, (hl)
-ld (hl), b
-ld ($8000), (hl)
-ld hl, (scratch)
-ld b, $FF
-```
-
-**3. Signed and unsigned readings.** A table containing the binary, unsigned
-decimal and signed two's-complement readings of these bytes makes the two
-interpretations explicit:
-
-- `$00`
-- `$7F`
-- `$80`
-- `$FF`
-
-The answer should identify the values whose readings agree. For `$80` and
-`$FF`, it should also give the result byte after adding `$01` and interpret
-that result both ways.
-
-**4. Word-store trace.** A trace of this sequence should record `$8050` and
-`$8051` after the store, followed by the final DE after the load:
-
-```asm
-ld hl, $ABCD
-ld ($8050), hl
-ld de, ($8050)
-```
-
-The emulator's memory display provides a direct check of the byte order and
-register-pair result.
 
 [Exercise notes](exercise-notes.md#chapter-4-memory-access-and-data)

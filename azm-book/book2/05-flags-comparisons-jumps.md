@@ -401,9 +401,9 @@ Z is clear.
 
 ---
 
-## Exercises
+## Exercise
 
-**1. Flag prediction.** A result table for each independent sequence should
+**Flag prediction.** A result table for each independent sequence should
 give the final A and whether Z and C are set or clear. The last sequence needs
 one row after `xor a` and another after `dec a`.
 
@@ -423,32 +423,5 @@ dec a       ; Z = ? C = ?
 ```
 
 Step mode provides the observed flags for comparison.
-
-**2. A clobbered comparison.** The following code is intended to store 10 in
-`count` only when the incoming A is 5. The test begins with `count` containing
-`$EE`. The trace should identify the instruction that supplies Z to `jp nz`
-and the observed result for incoming A values 5 and 4. A corrected version
-must retain the `xor a` initialization while making the store conditional on
-the earlier comparison.
-
-```asm
-cp 5
-xor a             ; unrelated initialization
-jp nz, skip
-ld a, 10
-ld (count), a
-skip:
-```
-
-**3. Count down with flags.** A loop beginning with A = 10 should decrement A
-once per iteration, store every new value in `last_a`, and exit at zero. The
-result should include final A, final `last_a`, the sequence of ten stored bytes,
-and evidence that the store between `dec` and the jump leaves Z unchanged.
-
-**4. Test a status bit.** A short routine should receive a status byte in A and
-store 1 in `ready` when bit 2 is set, or 0 when it is clear, using a mask and
-conditional jump from this chapter. Test results for `$04`, `$05`, `$00` and
-`$FB` should give the stored byte and identify the instruction that supplies Z
-to the branch.
 
 [Exercise notes](exercise-notes.md#chapter-5-flags-comparisons-and-jumps)
