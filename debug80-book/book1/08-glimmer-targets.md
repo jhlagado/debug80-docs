@@ -7,7 +7,7 @@ nav_order: 8
 
 # Glimmer targets
 
-Debug80 builds one other kind of program: Glimmer, a reactive game language that compiles to readable Z80 assembly. The compiler ships inside the extension. This chapter covers the Debug80 integration; the Glimmer book teaches the language.
+Debug80 also builds Glimmer, a reactive game language that compiles to Z80 assembly. The compiler ships inside the extension. This chapter covers the Debug80 integration.
 
 ## A Glimmer file is another target
 
@@ -31,7 +31,7 @@ build/
   game.d8.json   the source map
 ```
 
-![What a Glimmer build produces](../../assets/images/debug80-book/book1/glimmer-build-output.svg)
+![Glimmer build output files](../../assets/images/debug80-book/book1/glimmer-build-output.svg)
 
 Debug80 calls Glimmer's in-process build pipeline, which generates assembly, injects and checks AZM register contracts, assembles the program and rewrites the debug map to refer back to the Glimmer source. It leaves the generated assembly where you can inspect the instructions produced by a declaration.
 
@@ -51,6 +51,6 @@ The editor features from the source-navigation chapter cover `.glim` too: Go to 
 
 The **Strict labels** checkbox controls assembly targets built directly by AZM. Glimmer builds use the Glimmer pipeline's own label handling.
 
-## Learn Glimmer
+## Glimmer language documentation
 
-When you want the language itself, go to [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book0/). It starts with an empty file, teaches each language construct through programs you can build and run in Debug80, and finishes with two complete games.
+Language syntax and program examples are documented in [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book0/).

@@ -12,19 +12,18 @@ and checks it.
 Each entry below says what the feature is, where Glimmer relies on
 it, shows one excerpt from a real build, and points into
 [AZM Book 1](../../azm-book/book1/), where each feature has a
-chapter of its own. The excerpts come from generated files of this
+dedicated chapter. The excerpts come from generated files of this
 book's programs: Canvas (chapter 10), Tetro (chapter 15), Sprite
 Chase (chapter 17).
 
 ## Labels and local labels
 
 A label beginning with one underscore is
-local: it belongs to the nearest non-local label above it, its
-owner, and AZM tracks it as `Owner._name`, so the same spelling can
-recur under different owners.
+local to the nearest non-local label above it. AZM tracks it as
+`Owner._name`, so the same spelling can recur in different scopes.
 
 Every block body is compiled under a generated label,
-`Glim_<BlockName>:`, and that label owns the block's locals. Two of
+`Glim_<BlockName>:`, which scopes the block's locals. Two of
 Canvas's movement blocks, side by side in `canvas.main.asm`:
 
 ```asm
@@ -60,7 +59,7 @@ unit; writing `@` in front of the declaration exports it. The `@`
 marks the declaration alone: the symbol's name is the bare
 identifier, and every reference writes it without the prefix.
 
-Hand-written modules brought in with `import` shape their whole API
+Hand-written modules brought in with `import` define their complete API
 this way. Tetro's collision engine, `tetro-lib.asm`, exports eight
 routines and keeps its tables and scratch to itself:
 
@@ -71,7 +70,7 @@ routines and keeps its tables and scratch to itself:
 
 Block bodies in `tetro.glim` reach it by its bare name,
 `call SetCurPiece`. The module's private labels (`ClearScoreTbl`,
-`CurPiecePtr`) wear plain names and stay the module's own.
+`CurPiecePtr`) use plain names and stay private to the module.
 Full treatment: [Source Syntax and
 Symbols](../../azm-book/book1/02-source-syntax.md) and [Ops, Aliases
 and Source Composition](../../azm-book/book1/07-ops-aliases.md).
@@ -96,7 +95,7 @@ FbPlot:
 ```
 
 Declared clauses
-are checked against the routine's own body, so a `preserves` promise
+are checked against the routine's body, so a `preserves` contract
 the body breaks fails the build; and every call site is checked
 against the callee's contract, so a caller reusing a clobbered
 register fails too. Adding an `inc b` after Canvas's `call FbPlot` to
@@ -139,7 +138,7 @@ Contracts](../../azm-book/book1/06-register-contracts.md).
 `.type` opens a record: named fields, each with a size, closed by
 `.endtype`. From the record, `sizeof(Name)` and
 `offset(Type, field)` are constants the assembler computes, so field
-access is written by name and survives the layout growing.
+access is written by name and adjusts when the layout grows.
 
 A `type` declaration in a `.glim` file compiles to the record, and a
 typed state cell reserves storage sized by it. Canvas's `Point`:
@@ -184,14 +183,14 @@ placed after the runtime, from `tetro.main.asm`:
         .import "tetro-lib.asm"
 ```
 
-Chapter 12 teaches when a program earns a module; the directive
-above is what that decision compiles to.
+Chapter 12 explains when to use a module; the directive above is the
+generated form.
 Full treatment: [Ops, Aliases and Source
 Composition](../../azm-book/book1/07-ops-aliases.md).
 
 ## `op` definitions
 
-An op is an assembler-owned macro: a named instruction sequence with
+An op is an assembler macro: a named instruction sequence with
 typed parameters, expanded inline wherever its name appears in code.
 Contract findings inside an expansion attach to the line that
 invoked the op, so diagnostics land where you can act.
@@ -211,8 +210,8 @@ op sprite_at(slot imm8, xcell imm16, ycell imm16)
 end
 ```
 
-and a render body invoking it, one line where the shadow-table dance
-would otherwise be six:
+and a render body invoking it, one line where the shadow-table update
+would otherwise take six:
 
 ```asm
 ; --- render block PlacePlayer ---

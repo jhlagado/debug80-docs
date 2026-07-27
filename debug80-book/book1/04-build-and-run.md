@@ -58,11 +58,9 @@ Five other messages are possible, and each includes the required remedy:
 | `Source map: unreadable, rebuild the selected target.` | The file exists but could not be read. |
 | `Source map: invalid, rebuild the selected target.` | The file was read but did not parse. |
 
-A stale map can send breakpoints and stepping to old locations. A missing, unreadable or invalid map disables the editor and debugger features that depend on it. When debugging behaves oddly, read this line before anything else.
+A stale map can send breakpoints and stepping to old locations. A missing, unreadable or invalid map disables the editor and debugger features that depend on it. The source-map status line is the first diagnostic when debugging behaves unexpectedly.
 
 ## A run
-
-The **Run** action performs the next stage.
 
 Debug80 builds the target, then launches it: it loads the monitor ROM and your program into an emulated TEC-1G and starts a debug session.
 

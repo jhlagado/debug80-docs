@@ -23,7 +23,7 @@ The `%` prefix marks a binary number: `%01110101` is the binary representation o
 
 ## Hexadecimal
 
-Hexadecimal is base 16. It uses sixteen digits: `0`–`9` for values 0–9, then `A`–`F` for values 10–15. AZM marks hex numbers with a `$` prefix. The key property that makes hex useful here: exactly four bits map to exactly one hex digit.
+Hexadecimal is base 16. It uses sixteen digits: `0`–`9` for values 0–9, then `A`–`F` for values 10–15. AZM marks hex numbers with a `$` prefix. Exactly four bits map to one hex digit, so a byte fits in two hex digits.
 
 | Hex digit | Value | Binary pattern |
 |-----------|-------|----------------|
@@ -126,8 +126,6 @@ $0009:  76           ; halt
 ```
 
 When the CPU resets, PC is `$0000`. It fetches `$3E`, recognises it as a two-byte "load constant into A" instruction, reads the next byte (`$05`), loads 5 into A and advances PC to `$0002`. It continues instruction by instruction until it reaches `$76` (HALT). HALT suspends normal instruction execution until an interrupt or reset. Address `$8000` now holds the value 8.
-
-Chapter 2 decodes this program step by step. Chapter 3 rewrites it in assembly.
 
 ---
 

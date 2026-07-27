@@ -7,15 +7,15 @@ nav_order: 6
 
 # Counting Loops and DJNZ
 
-The `dec b / jp nz` loop from Chapter 5 uses two instructions where one would do.
-This chapter shows the single-instruction replacement, and the three loop forms
-you will reach for most often: counted, sentinel and flag-exit.
+The `dec b / jp nz` loop from Chapter 5 uses two instructions for one repeated
+operation: decrement B, then branch while it is non-zero. DJNZ combines those
+steps. This chapter uses it in counted, sentinel and flag-exit loops.
 
 ---
 
-## Chapter 5 left a two-instruction pattern
+## The two-instruction loop
 
-Chapter 5 ended with this loop shape:
+The earlier counted loop had this shape:
 
 ```asm
 ld b, Limit
@@ -29,7 +29,7 @@ loop_top:
 
 ## DJNZ: decrement B and jump if not zero
 
-`djnz label` does exactly what its name says:
+`djnz label` performs three steps:
 
 1. B decreases by one.
 2. If B is now non-zero, jump to `label`.
@@ -288,16 +288,10 @@ iteration count is usually known before the loop starts.
 
 ---
 
-## Tables in Chapter 7
-
-Chapter 7 applies counted loops to tables and introduces indexed access for
-reaching fields by offset from a single base address.
-
----
-
 ## Exercises
 
-**1. The zero-count trap.** The explanation should state how many times this loop body executes and why:
+**1. The zero-count trap.** Tracing B through the first decrement establishes
+how many times this loop body executes when `count_value` is zero:
 
 ```asm
 ld a, (count_value)   ; suppose count_value holds 0 at runtime
@@ -307,9 +301,14 @@ loop_top:
   djnz loop_top
 ```
 
-The corrected version must skip the loop entirely when `count_value` is zero.
+A zero test before loading the loop counter produces the version in which a
+runtime count of zero skips the body entirely.
 
-**2. A minimum loop.** The DJNZ sum loop from the chapter accumulates all five entries in `addends: .db 3, 7, 2, 8, 5`. This version must instead find the **minimum** value and store it in a variable named `minimum`. A starting value of 255 allows each smaller byte to replace the current minimum; Chapter 5's `cp` and `jr nc` provide the comparison.
+**2. A minimum loop.** Adapting the DJNZ sum loop to find the **minimum** of
+`addends: .db 3, 7, 2, 8, 5` shows how the loop body can maintain a running
+selection instead of a total. Starting at 255 lets each smaller byte replace
+the current minimum, while Chapter 5's `cp` and `jr nc` provide the comparison.
+The final value belongs in a variable named `minimum`.
 
 **3. Sentinel loop: find the zero.** A table of bytes ends with a zero sentinel:
 
@@ -318,7 +317,9 @@ The corrected version must skip the loop entirely when `count_value` is zero.
 message: .db $41, $42, $43, $00, $44, $45
 ```
 
-The required sentinel loop scans `message` and stores the **index** (0-based position) of the first zero byte in a variable named `zero_pos`. When no zero appears in the first six bytes, `zero_pos` must receive `$FF`.
+A sentinel loop over `message` can store the **index** (0-based position) of the
+first zero byte in `zero_pos`. Bounding the scan at six bytes also supplies a
+defined not-found result: `$FF`.
 
 **4. Loop analysis.** The flag-exit loop in the chapter example exits when the accumulated sum reaches or exceeds `$10` (16). The following table records an iteration-by-iteration trace over `3, 7, 2, 8, 5`:
 

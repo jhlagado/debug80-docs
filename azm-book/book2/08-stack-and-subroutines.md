@@ -44,7 +44,7 @@ The program determines where the stack lives by loading SP with a starting addre
 
 Each push decreases SP by two and writes a 16-bit value. Each pop reads two bytes and increases SP by two.
 
-![The stack runs downward from wherever you point SP. Beginners reliably assume the opposite.](../../assets/images/azm-book/book2/stack-grows-down.svg)
+![The stack grows toward lower addresses: each push decreases SP by two.](../../assets/images/azm-book/book2/stack-grows-down.svg)
 
 ---
 
@@ -56,7 +56,9 @@ A calling convention on the Z80 is an agreement between a routine and its caller
 - **HL** carries a 16-bit result or input value.
 - **BC** and **DE** carry secondary input values.
 
-Every subroutine should document which registers it reads on entry and which it modifies on exit. The comment header is the contract between the subroutine and its caller.
+The comment header records which registers a subroutine reads on entry and
+which it modifies on exit. This record is the contract between the subroutine
+and its caller.
 
 ```asm
 ; add_bytes: add two byte values.
@@ -248,7 +250,8 @@ carry-clear path removes it with `pop de`; the carry-set path removes it with
 
 ## An advanced trick: reading the program counter
 
-`call` pushes the address of the next instruction onto the stack, which is how a program gets to see its own PC:
+`call` pushes the address of the next instruction onto the stack, which allows
+code to obtain the current PC:
 
 ```asm
   call next_instr       ; pushes address of next_instr onto the stack
@@ -264,17 +267,11 @@ Balance is all the stack requires: `call` pushed one word and `pop hl` consumed 
 
 ---
 
-## Port I/O in Chapter 9
-
-Peripheral drivers often use the same subroutine structure: a documented
-register interface, a body that accesses one device and a `ret`. Chapter 9
-introduces the Z80 port instructions used by those drivers.
-
----
-
 ## Exercises
 
-**1. Stack trace.** This exercise tracks the stack and register values through four instructions, starting with SP at `$C000`, AF at `$1234` and BC at `$5678`.
+**1. Stack trace.** Tracking the stack and register values through four
+instructions shows how LIFO order controls cross-register transfers. The
+initial values are SP = `$C000`, AF = `$1234` and BC = `$5678`.
 
 ```asm
 push af
@@ -285,7 +282,9 @@ pop hl
 
 After all four instructions: what is in DE? What is in HL? What is SP? _(Remember: the stack is last-in-first-out: the pair pushed last is the first to be popped.)_
 
-**2. The push/pop mismatch.** This subroutine has a stack-balance bug. The answer should identify it and explain precisely what happens when `ret` executes:
+**2. The push/pop mismatch.** This subroutine has a stack-balance bug. Following
+SP from the two pushes to `ret` identifies the unconsumed word and explains the
+address that `ret` uses:
 
 ```asm
 count_nonzero:
@@ -306,8 +305,15 @@ skip:
   ret
 ```
 
-The answer also needs a corrected version.
+The same trace indicates where the missing pop belongs in a corrected version.
 
-**3. A byte-doubling subroutine.** The required `double_byte` subroutine receives a byte in B and returns B × 2 in A. Its comment header must document inputs, outputs and clobbered registers. Three lines in `main` then pass 15, call the subroutine and store the result in a variable named `doubled`.
+**3. A byte-doubling subroutine.** A `double_byte` subroutine that receives a
+byte in B and returns B × 2 in A demonstrates register-based arguments and
+results. Its comment header records inputs, outputs and clobbered registers. In
+`main`, three lines can pass 15, call the subroutine and store the result in a
+variable named `doubled`.
 
-**4. The `or a / sbc hl, de` pattern.** The explanation should cover what `or a` does to carry, why omitting it gives wrong results, and why `add hl, de` follows on the carry-clear path. It should also identify the value in HL after `sbc hl, de` on that path.
+**4. The `or a / sbc hl, de` pattern.** Tracing this pair establishes what `or
+a` does to carry, why an incoming carry would change the subtraction and why
+`add hl, de` follows on the carry-clear path. The intermediate value in HL
+after `sbc hl, de` completes the trace.

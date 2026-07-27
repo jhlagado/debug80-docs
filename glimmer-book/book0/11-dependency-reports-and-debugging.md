@@ -10,28 +10,25 @@ nav_order: 11
 Canvas is the largest program in the book so far: a `Point`
 cursor, an eight-byte picture, five pulses, and six blocks connecting
 them. The chapters ahead double that, so the tools come now, on a
-program you know by heart, before you are hunting a real bug through a
-file twice this size.
+familiar program before later examples double its size.
 A misdrawn pixel in Canvas might trace to
 the painting rule, the redraw, a movement effect, or a binding. The
-question that finds bugs in a reactive program (*which fact should
-have changed?*) now has seven candidate answers.
+useful debugging question is *which fact should have changed?* Canvas
+now has seven candidate answers.
 
 Every block you have built sits behind a
 `.routine` boundary for register-contract checking. Every
-build proves register contracts across the whole generated file,
+build checks register contracts across the complete generated file,
 every debug map lands breakpoints in your source, and the dependency
 report prints the reactive graph on request. You will extend
 Canvas with a counter, then break it twice on purpose (once for a
-warning, once for a hard error) to watch a good diagnostic catch a
-bug you understand.
+warning and once for a hard error) so each diagnostic can be examined
+against a known bug.
 
 ## A count of marks
 
-A
-painting program can report on the painter: one byte counts every
-pixel painted, and the seven-segment display shows the tally. One
-declaration joins the state:
+One byte now counts every pixel painted, and the seven-segment display
+shows the tally. One declaration joins the state:
 
 ```text
 state Marks   : byte = 0 changed
@@ -102,9 +99,9 @@ the count.
 
 ## The report at scale
 
-The earlier four-fact dependency report showed you what you could
-already see at a glance. Canvas has eight facts, and this is the scale where the report
-starts paying for itself:
+The earlier four-fact dependency report repeated relationships visible
+at a glance. Canvas has eight facts, enough for the grouped report to
+make those relationships easier to trace:
 
 ```sh
 glimmer --deps canvas.glim
@@ -138,14 +135,15 @@ program Canvas
     triggers:  PaintPixel (logic)
 ```
 
-Each fact owns a stanza: its kind and type, the blocks that raise it,
-and the blocks it triggers, every dependent tagged with its phase.
+Each fact has a stanza containing its kind and type, the blocks that
+raise it and the blocks it triggers, with every dependent tagged by
+phase.
 Glimmer computes the report from your `bind`, `on` and `updates`
 connections, gathered into one place and sorted by fact.
 
 When something misbehaves in a reactive program, your first question
 is the one this chapter opened with: which fact should have changed? The
-report answers it from your chair, in both directions, before you
+report supplies both directions of that trace before you
 touch a debugger. Suppose the count on the display sits still while pixels
 keep landing. Downstream from `Marks` is one trigger, `ShowMarks (render)`, so
 exactly one block draws the count.
@@ -179,15 +177,15 @@ Wrote canvas.main.d8.json (56 block segments attributed to .glim source)
 ```
 
 Glimmer scanned the body, found `ld (Marks),a`, checked the header,
-and reported the gap, naming the block, the missing declaration, and
+and reported the gap, naming the block, the missing declaration and
 the consequence, at line 75, the block's header line. A warning
-leaves the build standing: both artifacts were written. In the running
+allows the build to finish: both artifacts were written. In the running
 program, the consequence is visible. Pixels paint, the board
 redraws, and the count reads 00000 no matter how many marks pile
 up. The
 store still executes on every press, and `Marks` climbs in memory;
-its change flag stays down, and that flag is the whole of what
-`ShowMarks` runs on.
+its change flag stays down, and `ShowMarks` runs only when that flag
+is set.
 
 The report tells the same story from the declarations' side. With
 `--deps`, the broken program's `Marks` stanza reads:
@@ -198,8 +196,8 @@ The report tells the same story from the declarations' side. With
     triggers:  ShowMarks (render)
 ```
 
-A fact with a dependent and no raiser: that pattern is this whole
-class of bug, drawn in two lines. The generated file shows the same gap: the
+A fact with a dependent and no raiser identifies this class of bug in
+two lines. The generated file shows the same gap: the
 wrapper after `PaintPixel`'s body, which raised `CHG_PICTURE +
 CHG_MARKS` before the edit, now raises `CHG_PICTURE` alone. Restoring
 `Marks` to the header gives a clean build.
@@ -249,8 +247,8 @@ Glim_DrawCanvas:
 ```
 
 The `.routine` line is the boundary. It applies to the label below it
-and opens a region that the next `.routine` closes, and it hands that
-region to the assembler as one unit: `Glim_PaintPixel` is a callable routine,
+and opens a region that the next `.routine` closes. The assembler
+checks that region as one unit: `Glim_PaintPixel` is a callable routine,
 and because the directive stands bare, the assembler infers the
 routine's register behaviour (what it reads on entry, what it may
 destroy) from the body itself. Your code sits inside verbatim; the
@@ -268,7 +266,7 @@ enforcement:
         .contracts strict
 ```
 
-Under `strict`, the assembler proves every `call` in the file against the
+Under `strict`, the assembler checks every `call` in the file against the
 contract of the routine it calls, the inferred contracts of your
 blocks and the declared contracts of the library alike. `FbPlot`'s
 declaration sits in the profile library:
@@ -284,21 +282,21 @@ As a block header, the contract line says `in A,B,C`:
 the routine consumes those three on entry (colour, x, y). `clobbers
 A,B,DE,HL` and the flags: any of those may hold anything on return.
 A register the contract leaves out counts as preserved, and
-the assembler checks the routine's body against that promise too.
+the assembler checks the routine's body against that contract too.
 `FbPlot` leaves C out of its clobbers list, which is a verified
 guarantee that y survives the call, proven on every
 build, and about to matter.
 
-## A trampled register
+## A register clobber
 
-This time the bug is trusting a register across a call that quietly
-destroys it. The assembler catches the stale-register use before the
-first byte runs.
+This time the bug reuses a register after a call that may clobber it.
+The assembler detects the stale-register use before the first byte
+runs.
 
 `DrawCanvas` ends by plotting the cursor over the picture: x into B,
-y into C, white into A, `call FbPlot`. Widening the cursor to two
-pixels, the cursor and the column to its right, invites the shortest
-edit: after the plot, nudge B along and plot again.
+y into C, white into A, `call FbPlot`. A tempting edit for a
+two-pixel cursor increments B after the first plot and calls `FbPlot`
+again.
 
 ```text
     ld a,COLOR_WHITE
@@ -319,12 +317,11 @@ disk for reading, and the build halts short of the hex, the binary
 and the debug map. The assembler followed the code past the first call, found `inc
 b` consuming B's pre-call value, checked B against `FbPlot`'s
 clobbers list, and refused. On the board, this bug is a second pixel
-landing wherever `FbPlot` happened to leave B, and an evening of
-staring; at build time it is one line naming the file, the position,
-the call, and the register.
+landing wherever `FbPlot` happened to leave B. At build time, the
+diagnostic names the file, position, call and register.
 
-The fix honours the contract. B gets rebuilt from state after the
-call; C, promised safe, carries y straight through:
+The fix follows the contract. B is rebuilt from state after the call;
+C is preserved by `FbPlot`, so it carries y through:
 
 ```text
     ld a,COLOR_WHITE
@@ -337,8 +334,8 @@ call; C, promised safe, carries y straight through:
 ```
 
 That version builds clean. Canvas keeps its one-pixel cursor for the
-chapters ahead; the habit to keep is reading a callee's clobbers line
-before reusing a register across the call.
+chapters ahead. The example shows why a callee's clobbers list matters
+before a register is reused across the call.
 
 ![Canvas as a graph, with the chapter's two bugs marked where the tools found them.](../../assets/images/glimmer-book/book0/dependency-graph.svg)
 
@@ -347,7 +344,7 @@ call in a block body, and
 Glimmer carries every body line's origin through to the assembler, so
 the error arrives with your file, your line, and your column
 attached. A misspelling of the counter's name inside `ShowMarks`
-produces an assembler answer in the same coordinates:
+produces an assembler diagnostic in the same coordinates:
 
 ```text
 canvas.glim:122:5: [AZMN_SYMBOL] error: Unresolved symbol "Marsk" in 16-bit fixup.
@@ -356,13 +353,13 @@ canvas.glim:122:5: [AZMN_SYMBOL] error: Unresolved symbol "Marsk" in 16-bit fixu
 You write Z80 inside blocks, so assembler diagnostics are part of
 everyday Glimmer work, and they reach you on the line you typed.
 
-## Stepping where the bug lives
+## Stepping through the bug
 
 The same coordinates keep working while the program runs: the report
 identifies where the breakpoint belongs, and the debug map makes it
 land. A breakpoint on the `or b` line inside `PaintPixel` halts on
-that source line when GO fires `Paint`. The registers panel holds the
-story so far: HL points into `Picture` at the cursor's row, B carries
+that source line when GO fires `Paint`. The registers panel shows the
+current state: HL points into `Picture` at the cursor's row, B carries
 the column mask `MxMask` built, and A holds the row's current bits.
 The next step merges the new pixel into A; the following step stores
 it in the picture; three more steps advance the counter by one.
@@ -375,9 +372,8 @@ instruction by instruction. The crossing works in the other direction
 too: stepping into `DrawCanvas`'s `call FbPlot` lands in the labelled
 and commented profile library.
 
-Canvas is healthy again, and while debugging it you may have noticed a
-pattern: the cursor's `offset` arithmetic appears in
+The cursor's `offset` arithmetic appears in
 six of its seven blocks, retyped wherever a rule needs the cursor. The
-next chapter writes it once:
+next chapter moves it into one routine:
 [Routines, Parts and Imports](12-routines-parts-and-imports.md), the
-structure a growing program needs.
+structure used to organise a growing program.

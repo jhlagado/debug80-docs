@@ -7,15 +7,13 @@ nav_order: 14
 
 # A Small Matrix Game
 
-The book has handed you instruments one at a time: the
+Earlier chapters introduced the components one at a time: the
 drawing profile
 for the 8x8 RGB LED matrix, timers and ramps to keep time, shapes and
 sounds and the LCD to announce things, arrays to hold a board, parts
 to split a growing file, cards to give a program screens. Each arrived
-in a program built small on purpose, so you could watch it work alone.
-A game uses all of them at once, cooperating. Today we build a
-complete game, beginning to end, and every line of it is made of
-things you already know.
+in a deliberately small program that isolated its behaviour. A
+complete game combines them.
 
 The game is called *Skyfall*.
 Blocks fall from the top row of the 8x8 matrix in random columns, and
@@ -23,27 +21,23 @@ you slide a three-pixel paddle along the bottom with held 4 and 6,
 trying to be underneath when they arrive. Catch a block and the score
 climbs on the seven-segment display, a chirp sounds, and the next
 block falls a little faster. Miss, and a buzz takes one of your three
-lives. A splash card waits for any key, a game-over card names the
+lives. A splash card responds to any key, a game-over card names the
 ending on the LCD, and after a short pause any key starts the sky
 falling again.
 
-A game this size is designed, and Glimmer gives you a
-place to do the designing: the declarations. A Glimmer game's
-declarations carry its
-structure: the facts, the moments, the schedules, the
-resources, the screens. Settle those on paper and the skeleton of the
-game stands, and every block that remains is a small Z80 exercise with one job you
-have already named. The rest of the design (the collision rules, the
+A game this size begins with its declarations. They record the facts,
+moments, schedules, resources and screens. Once those are settled on
+paper, the game structure is visible and each remaining block becomes a small Z80 exercise
+with one named job. The rest of the design (the collision rules, the
 balance numbers, how the game feels under the thumb) is in those
 blocks and those numbers,
-and we will make each of those calls as we come to it. The finished
-source also ships with the book, [skyfall.glim](code/skyfall.glim)
-and [skyfall-rules.glim](code/skyfall-rules.glim), for the day you
-want the game ready-made.
+and each choice appears where it first matters. The finished source is
+included as [skyfall.glim](code/skyfall.glim) and
+[skyfall-rules.glim](code/skyfall-rules.glim).
 
 ## The game on paper
 
-A designer starts with what the game must remember between frames:
+A designer starts with the values stored between frames:
 
 | Fact | Type | Job |
 |------|------|-----|
@@ -62,14 +56,14 @@ instructions. Three
 wide also means `PadX`, the left column, runs 0..5 rather than 0..7,
 and you will meet that 5 again in the steering rule. One `DropX` and
 one `DropY`, because Skyfall drops one block at
-a time, a deliberate simplification that keeps the whole sky in a
+a time, a deliberate simplification that keeps all falling-block state in a
 single rule, a simplification you could later lift with an array.
 `Score` is a word because I have watched people get good at this game.
 `Lives` is three because that is the arcade's oldest tuning: one life
 makes every slip fatal, five makes misses free, three keeps a miss
 expensive and the evening going. And `Armed`, the odd one out (a
 gate for the game-over screen), answers a problem you only meet in
-playtesting; the game-over card is where it earns its place.
+playtesting; the game-over card uses it to delay restarts.
 
 Next, the moments, and for each one, where it comes from and who
 consumes it:
@@ -83,13 +77,13 @@ consumes it:
 
 Two schedules drive them. `Gravity` is an oscillator with period 18,
 the difficulty of the game, stored where a fact belongs. Eighteen
-frames a row is a stroll (the opening drop spends 126 frames crossing
+frames a row is a stroll (the opening drop takes 126 frames to cross
 the board), and
 every catch will write the period smaller.
 `Wait` is a one-shot word timer, idle at zero until the game-over card
 arms it as a delayed moment.
 
-The resources cost a line of thought each: one green 3x1 `shape` for
+The resources are one green 3x1 `shape` for
 the paddle, a high `sound` for catches, a low one for misses, and six
 `text` strings for the LCD. And the screens: three cards, `Splash`,
 `Playing`, `GameOver`, joined in a loop: any key leaves Splash, the
@@ -99,8 +93,8 @@ Splash again.
 One design step remains: the budget check. Facts, moments, and
 `CurrentCard` each take one of the program's 32 change-flag cells.
 Skyfall uses six facts, five moments, and one card cell: twelve flags,
-with room to spare. Timer cells are free, and so is a `FrameCount`
-the program leaves unnamed.
+leaving twenty available. Timer cells carry no change flags, and the
+unnamed `FrameCount` uses none.
 
 ![Skyfall on paper, before a block is written.](../../assets/images/glimmer-book/book0/skyfall-design.svg)
 
@@ -166,8 +160,8 @@ text MsgLives "LIVES "
 text MsgPad   "      "
 ```
 
-Startup here is entirely the cards' work: every screen belongs to a
-card, and each card's `enter` block re-raises what its renders need.
+The cards handle startup: every screen is associated with a card, and
+each card's `enter` block re-raises what its renders need.
 Every program so far used `changed` to draw its first picture, and
 Skyfall is the first with the modifier nowhere in the file.
 
@@ -210,7 +204,7 @@ effect StartGame
 end
 ```
 
-`RandCol` is where the sky gets its randomness, and it is a routine
+`RandCol` generates a random column, and it is a routine
 because two different blocks call it: the round's
 first drop and every respawn after a landing both need a fresh column.
 MON-3's API dispatcher sits behind `rst $10` with the call number in
@@ -251,11 +245,9 @@ The `updates` marks reach the card's renders the same frame, so the
 board, the score, and the lives readout all appear the moment play
 begins, on the first round and on every replay.
 
-`Gravity` in that list documents the write: the store in the body is
-the whole act, and the line stands as
-the block's declaration that it writes the pace, for the dependency
-report waiting at the end of this chapter, and for you, six months
-from now.
+`Gravity` in that list documents the write. The store in the body
+changes the pace, and the header records that relationship for the
+dependency report and future maintenance.
 
 ## Steering the paddle
 
@@ -289,9 +281,9 @@ These are Mover's rules with one number changed: the
 right stop is 5, the ceiling we chose at the design table when we made
 the paddle three wide. Its right edge reaches column 7, so every
 column a block can fall in is catchable. The held period of 4 is the
-other tuned number here: crossing the whole board costs twenty frames,
-a third of a second, and that is exactly the budget the late game
-gives you.
+other tuned number here: crossing the board takes twenty frames, about
+a third of a second, which matches the reaction time available late in
+the game.
 
 ## The drop
 
@@ -346,17 +338,17 @@ edge, and the paddle covers offsets 0, 1, and 2. A drop left of the
 paddle underflows to 253 or higher, so the one unsigned `cp 3` sorts
 every landing, both sides of the paddle included: carry means caught.
 
-A catch scores, chirps, and turns the difficulty screw: `dec a` and a
+A catch scores, chirps and increases the difficulty: `dec a` and a
 store into `Gravity`, the timer's next reload counting from the new
 period, with `cp 7` holding a floor of 6 so the game gets hard and
 stays playable. Pacing is the same ordinary write it was in Drip;
-here it answers the score instead of a ramp.
+here score events trigger the write instead of a ramp.
 
-A miss buzzes and spends a life, and the last life writes
+A miss buzzes and removes a life, and the last life writes
 `Card.GameOver` into `CurrentCard`, the conditional form of a
 transition. Either way
 the block falls into `_next`: a fresh drop spawns at the top of a
-random column, and `_store` files the row. One timing detail: the
+random column, and `_store` stores the row. One timing detail: the
 switch to GameOver lands at the next frame start, so
 this frame's renders still run and the final board reaches the screen.
 
@@ -413,11 +405,10 @@ contracts.
 `ShowLives` extends the `lcd_row`
 idiom by one step. The op positions the
 LCD cursor and streams its string, and the cursor advances with every
-character written, so when `MsgLives` ends, the cursor rests exactly
+character written, so when `MsgLives` ends, the cursor is exactly
 where the digit belongs. One `ApiCharToLcd` call drops it in, and
 `MsgPad` streams six spaces over whatever the previous card left
-behind. The rule underneath: a render that owns a row writes the whole
-row.
+behind. A render responsible for an LCD row writes the complete row.
 
 ## Game over, gated
 
@@ -466,16 +457,16 @@ end
 long enough to read a sixteen-character verdict, short enough to keep
 the game moving. When `GateP` arrives, `OpenGate` writes the
 invitation on row two and opens the gate; until then, `Restart`
-swallows every press at `jr z,_wait`.
+returns at `jr z,_wait` without changing cards.
 
 The press that finally restarts fires `AnyKeyP` once. Card
-switches land at the next frame start and pulses clear at frame end, so
-Splash wakes to a quiet keypad and waits for a
-press of its own. Two distinct presses move from game over to falling
+switches land at the next frame start and pulses clear at frame end.
+Splash therefore becomes active with no pulse set. Two distinct
+presses move from game over to falling
 blocks, one to each card.
 
-Playing a few rounds in a Debug80 build, including one that reaches
-GameOver, makes the pacing visible. The first drop falls at a stroll;
+In a Debug80 build, the pacing changes over several rounds. The first
+drop falls at a stroll;
 ten catches in, the pace is markedly faster; a few more and survival
 hangs on the paddle's top speed.
 Every part of that feel is a number you wrote: the 18, the 4, the 6,
@@ -552,7 +543,7 @@ dances to it: the hidden countdown is its only consumer, and
 (raised by three blocks, triggering three enters) is the game's mode
 graph in four lines.
 
-`skyfall.main.asm` adds the startup story in two bytes:
+`skyfall.main.asm` records the startup state in two bytes:
 
 ```asm
 Changed0:         .db %00000000   ; flags dispatch tests
@@ -561,12 +552,11 @@ Changed1:         .db %00001000   ; flags dispatch tests
 
 Twelve flag cells fill bank 0 and spill into bank 1, and at boot every
 bit is clear except one: bit 3 of `Changed1`, which is
-`CurrentCard`'s. The whole game unfolds from that single set bit:
+`CurrentCard`'s. That single set bit triggers the startup sequence:
 `SplashShow` runs on the first frame, the title appears, and
 everything after follows from presses and ticks.
 
-Skyfall is a complete Glimmer game, and it is yours to bend: a wider
-paddle, a faster floor, two drops at once. The next chapter shifts
-from building to reading: Tetro, the largest of the repository's games
-for the 8x8 matrix, with the same
-instruments under real pressure: [Reading Tetro](15-reading-tetro.md).
+Skyfall can be extended with a wider paddle, a faster floor or two
+drops at once. The next chapter shifts from building to reading:
+Tetro, the largest repository game for the 8x8 matrix, using the same
+components: [Reading Tetro](15-reading-tetro.md).

@@ -25,7 +25,7 @@ Rules that apply everywhere:
   pulses, then ramps, then `FrameCount`) into up to four change-flag
   banks; the current cap is 32 cells.
 - Two cells are built in: `FrameCount` increments every
-  frame and is legal in `on`; `CurrentCard` arrives with the first card.
+  frame and is legal in `on`; `CurrentCard` starts with the first card.
 
 ```text
 identifier      ::= [A-Za-z_][A-Za-z0-9_]*
@@ -67,8 +67,8 @@ display matrix8x8
 - At most once, and only together with `platform`.
 - `matrix8x8` generates the scan-driven matrix runtime; `tms9918` the
   vblank-paced VDP runtime with a commit phase.
-- The display gates its resources: shapes and sounds belong to
-  `matrix8x8`, sprites and tiles to `tms9918`.
+- The display gates its resources: `matrix8x8` provides shapes and
+  sounds, while `tms9918` provides sprites and tiles.
 
 ## Facts and moments
 
@@ -91,7 +91,7 @@ state Cursor : Point changed
 - Scalars are `byte` or `word`; the initial value defaults to 0.
 - `changed` marks the cell changed at startup, so dependents run on
   the first frame.
-- Arrays and typed cells: one flag for the whole cell, zero-filled
+- Arrays and typed cells: one flag for the complete cell, zero-filled
   storage, no initializer; indexing is ordinary Z80 in block bodies.
 - `byte[N]` takes N from 1 to 256; word arrays are unimplemented.
 
@@ -133,7 +133,7 @@ pulse Step
 - A one-frame transient cell, raised by bindings, timers, ramps, or a
   block's `updates`; it clears at the end of every frame.
 - A raise whose consumers are all in later phases lands the same
-  frame; any other raise rolls over whole to the next frame.
+  frame; any other raise is delivered as a unit on the next frame.
 
 ### bind
 
@@ -171,7 +171,7 @@ timer Gate : word = 384 -> Opened once
   and reloads from the cell each time it runs out.
 - `once`: the cell is the countdown itself; it fires a single time at
   zero and stays idle until code writes it again.
-- A timer announces itself through its pulse, so the cell is legal in
+- Timer expiry raises its pulse, so the cell is legal in
   `updates` and `on` lines take the pulse.
 
 ### ramp
@@ -407,7 +407,7 @@ end
 - Declaration order is the sprite slot and pattern number; the name
   compiles to the slot equate, so the generated op takes it directly:
   `sprite_at Player, PlayerX, PlayerY`.
-- Patterns, colours, and slot setup upload once through the generated
+- Patterns, colours and slot setup upload once through the generated
   `LoadResourcesVram`. At most 31 sprites; slot 31 stays hidden.
 
 ### tile
@@ -481,7 +481,7 @@ card-decl       ::= "card" identifier
 card Playing
 ```
 
-- Starts a section: blocks after it belong to that card until the next
+- Starts a section: blocks after it are associated with that card until the next
   `card` line or end of file, with no closing keyword; declarations
   before the first card are global.
 - The first declared card is the start card.

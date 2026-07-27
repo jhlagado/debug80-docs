@@ -14,12 +14,12 @@ mid-run.
 The program is called *Beacon*: one pixel in the middle of the 8x8 RGB
 LED matrix, and every press of the GO key steps it to the next colour.
 It is small enough to type in five minutes, and it still exercises the
-whole reactive chain (one fact, one moment, one rule, one picture)
+complete reactive chain (one fact, one moment, one rule and one picture)
 with you at the keypad supplying the moments.
 
 ## The tools
 
-Everything this book needs is in one VS Code extension, **Debug80**:
+One VS Code extension, **Debug80**, provides all the required tools:
 the Glimmer compiler, the assembler, and a full emulated TEC-1G,
 keypad and all. The setup consists of installing VS Code and adding
 Debug80 from the Extensions marketplace. [Debug80 Book 1](../../debug80-book/book1/) provides a
@@ -77,9 +77,9 @@ end
 
 The program uses only constructs already introduced, so the new
 details are easy to isolate. `KEY_GO` names the GO key, the big one on the
-TEC-1G's pad. MON-3 gives every key a name, and bind lines use the
+TEC-1G's pad. MON-3 defines a name for every key, and bind lines use the
 names directly, so your source says GO where you mean GO. The other
-new thing is that *the colour itself is a fact*. The 8x8 matrix mixes
+new detail is that *the colour itself is a fact*. The 8x8 matrix mixes
 red, green and blue per pixel, so the values 1 through 7 are its seven
 visible colours, and `NextColour`'s wrap keeps the cell inside that
 range. `DrawBeacon` reads the fact and plots whatever colour it holds.
@@ -96,22 +96,23 @@ compiler, assembles the result, checks it, loads the MON-3 ROM and
 your program into the emulated TEC-1G, and runs. The platform panel
 opens on the TEC-1G, and there on the 8x8 matrix is a single red
 pixel. `Colour` started at 1, which is red, and the word `changed` in
-your declaration is why it drew itself before you touched anything.
+your declaration schedules the first drawing before you touch
+anything.
 
 Each click of GO on the panel's keypad advances the colour: green,
 yellow, blue, magenta, cyan, white, then round again to red. Between
 presses, the scan keeps the pixel lit and the keypad poll
-keeps checking while both reactive blocks wait for their facts to
-change.
+keeps checking. The dispatcher skips both reactive blocks until their
+facts change.
 
-The build also left things for us in the project's `build` folder.
+The build also created several files in the project's `build` folder.
 `main.main.asm` is the generated assembly program: your blocks and
 the machinery around them, one readable file, and the subject of the
 next section. Beside it sit the assembled bytes as Intel HEX, which
-is what will travel to a real TEC-1G one day, and the debug map,
+can be sent to a physical TEC-1G, and the debug map,
 which records the source line every address came from. And one more
-thing happened during that build: the assembler
-ran its register-contract checking over the whole program. Every
+build step ran: the assembler checked register contracts throughout
+the program. Every
 routine in the generated file declares which registers it uses, and
 every call is proven against those declarations. The classic Z80 bug,
 a helper quietly trampling a register your loop was counting on,
@@ -144,7 +145,7 @@ order, and its section comments are a table of contents:
 
 Three sections show the source model as real code.
 
-First stop, the bookkeeping your declarations became:
+The first excerpt is the bookkeeping generated from your declarations:
 
 ```asm
 ; --- change flags ---
@@ -158,12 +159,12 @@ GlimDep_NextColour__B0 .equ CHG_STEP
 GlimDep_DrawBeacon__B0 .equ CHG_COLOUR
 ```
 
-Each fact owns one bit; each block owns a mask built from its `on`
-line. This is what the reactive model costs at runtime: a few bytes
-and some AND instructions.
+Each fact receives one bit, and each block receives a mask built from
+its `on` line. The reactive model costs a few bytes and some AND
+instructions at runtime.
 
-Second stop, a dispatcher, the code that asks *did anything this
-block depends on change?*:
+The second excerpt is a dispatcher. It tests whether any dependency
+of the block changed:
 
 ```asm
 ; --- logic phase dispatch ---
@@ -180,7 +181,7 @@ _skip_NextColour:
 That is your `on Step`, compiled: three instructions and a
 branch.
 
-Third stop, the end of every frame:
+The third excerpt handles the end of every frame:
 
 ```asm
 ; --- frame rollover ---
@@ -196,46 +197,45 @@ GlimEndFrame:
         ret
 ```
 
-Those first two stores implement the startup promise: a
-pulse holds for exactly one frame, and here is `Step` being cleared at
-the frame's end. The `Next0` handoff below it carries changes that
-arrived too late for this frame into the next one; its purpose becomes
-clear when a program has more than one phase.
+Those first two stores enforce the pulse lifetime: a pulse holds for
+exactly one frame, and `Step` is cleared at the frame's end. The
+`Next0` handoff below carries changes raised after their phase into
+the next frame; its purpose becomes clear when a program has more than
+one phase.
 
 Your two blocks sit wrapped under
 `Glim_NextColour` and `Glim_DrawBeacon`, bodies exactly as you typed
 them, and at the bottom of the file the profile library spells out
 `ScanFrame`, `FbClear` and `FbPlot` as plain, readable routines.
 
-## Stopping the world
+## A source breakpoint
 
 A breakpoint on the `inc a` line inside `NextColour` in `main.glim` shows
 where the reactive chain reaches that rule, and it goes in before the
 next Run.
 
-The beacon glows and the program runs on. `NextColour` runs only when
-`Step` fires, and `Step` fires only when you press GO. A breakpoint in
-a reactive program is a question (*when does this rule actually run?*)
-and right now the answer is: not yet.
+The beacon glows while execution continues. `NextColour` runs only
+when `Step` fires, and `Step` fires only when you press GO. Before that
+input, execution has no reason to reach the breakpoint.
 
 Pressing the GO key now fires `Step` and reaches the breakpoint.
 
 The debugger halts on the source line. In the registers panel, A holds
 the colour loaded on the line above. One step executes the increment;
 the next steps pass through the compare and store. Continuing lets the
-beacon show its next colour before the machine returns to waiting.
+beacon show its next colour before the frame loop resumes.
 
 You set a breakpoint in a declarative source file, on a line of
-assembly inside a rule, and a full-speed emulated Z80 stopped there
-and offered you its registers. The debug map made
-that happen: block-body lines belong to `main.glim`, so breakpoints
+assembly inside a rule, and the debugger stopped a full-speed emulated
+Z80 there with its registers visible. The debug map provides that
+source mapping: block-body lines belong to `main.glim`, so breakpoints
 and stepping land in your source, and when you step past the end of
 your block, the debugger continues into `main.main.asm`, the
-generated file you now know your way around.
+generated file described in the previous section.
 
 Mover runs the same way. Saved in the project as `mover.main.glim`, it
 appears as a second target in the Debug80 panel. Running that target
 lets keys 4 and 6 steer the dot.
 
-In the next chapter, Beacon grows a position and a score, and you
-learn everything a fact can be: [State](03-state.md).
+The next chapter adds a position and score to Beacon, then examines
+the forms a fact can take: [State](03-state.md).

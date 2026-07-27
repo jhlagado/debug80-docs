@@ -7,7 +7,7 @@ nav_order: 8
 
 # Diagnostics and Output
 
-AZM prints diagnostics before it returns. A successful assembly writes the enabled output artifacts and exits 0. An assembly error prevents successful program outputs such as `.bin` and `.hex`, although a requested register-contract report or source annotation may still be written to help resolve the failure.
+AZM prints diagnostics before exiting. A successful assembly writes the enabled output artifacts and exits 0. An assembly error prevents successful program outputs such as `.bin` and `.hex`, although a requested register-contract report or source annotation may still be written to help resolve the failure.
 
 ---
 
@@ -21,9 +21,9 @@ program.asm:23:1: error: [AZMN_SYMBOL] duplicate symbol: COUNT
 program.asm:31:8: warning: [AZMN_REGISTER_CONTRACTS] CALL CHECK_FOO may modify D,E, but the pre-call value is used later.
 ```
 
-The diagnostic ID (`AZMN_PARSE`, `AZMN_SYMBOL` and so on) is the stable part. Scripts that consume AZM output should match the code rather than the message text.
+The diagnostic ID (`AZMN_PARSE`, `AZMN_SYMBOL` and so on) is the stable matching key for scripts that consume AZM output; the message text is not stable.
 
-![The six fields of a diagnostic, and the one worth matching on](../../assets/images/azm-book/book1/diagnostic-line.svg)
+![The six fields of a diagnostic, with the stable diagnostic ID highlighted](../../assets/images/azm-book/book1/diagnostic-line.svg)
 
 ---
 
@@ -46,7 +46,7 @@ SkipHandler:
         djnz ScanLoop
 ```
 
-Running `azm scan.asm` stops immediately:
+Running `azm scan.asm` reports:
 
 ```
 scan.asm:6:9: error: [AZMN_SYMBOL] jr nz target out of range for rel8 branch (140, expected -128..127).
@@ -54,7 +54,7 @@ scan.asm:6:9: error: [AZMN_SYMBOL] jr nz target out of range for rel8 branch (14
 
 The column, `9`, points at the `jr nz` rather than its operand.
 
-A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The fix is one line:
+A `jr` encodes a signed 8-bit offset: maximum forward reach is 127 bytes. The corresponding `jp` form carries a 16-bit target address:
 
 ```asm
         jp   nz,SkipHandler    ; jp carries a 16-bit target address
@@ -80,7 +80,7 @@ Invalid command-line arguments and uncaught artifact-writing failures exit 2 and
 
 ## Output formats
 
-A single assembly run can produce several output files. By default, all use the source file's base path. `--output` selects a new base path for every enabled artifact, and its extension must match the primary `--type`.
+A single assembly run can produce several output files. By default, all use the source file's base path. `--output` selects a new base path for every enabled artifact. Its extension must match the primary `--type`.
 
 ![The artifacts of one run, each suppressible on its own](../../assets/images/azm-book/book2/assembler-outputs.svg)
 
@@ -111,11 +111,11 @@ Intel HEX records contain the same bytes as the binary, organized as text record
 azm --type hex program.asm
 ```
 
-HEX handles gaps naturally: records are emitted only for address ranges that contain assembled bytes. The default primary output type is `hex`.
+HEX represents gaps by emitting records only for address ranges that contain assembled bytes. The default primary output type is `hex`.
 
 ### Debug80 map (`.d8.json`)
 
-The `.d8.json` file is a JSON metadata file that Debug80 reads to correlate binary addresses with source lines. It records source paths, address ranges, listing rows, and symbols. The producer/consumer format is documented in the [Debug80 source map format reference](../../debug80-book/book1/appendices/c-project-configuration.md#source-map-format).
+The `.d8.json` file is a JSON metadata file that Debug80 reads to correlate binary addresses with source lines. It records source paths, address ranges, listing rows and symbols. The producer/consumer format is documented in the [Debug80 source map format reference](../../debug80-book/book1/appendices/c-project-configuration.md#source-map-format).
 
 ```sh
 azm --source-root . --output build/program.hex src/program.asm
@@ -125,7 +125,7 @@ With `--source-root`, file paths in the map are written relative to the given ro
 
 ### Assembler listing (`.lst`)
 
-The listing shows every source line next to the address and bytes it assembled to, in the classic asm80 layout.
+The listing shows every source line next to its assembled address and bytes in asm80 layout.
 
 ```
                             .org $8000
@@ -152,7 +152,7 @@ main        8000
 message     8008
 ```
 
-Reading a row: the four hex digits on the left are the address, the byte tokens after them are the emitted machine code and the source line follows. Lines that emit no bytes (blank lines, comments, `.equ` definitions, labels on their own line) appear with an empty gutter, as does an unfilled `.ds` reservation, which prints its address alone. A line that emits more than eight bytes wraps: the first eight appear beside the source text and the rest continue on further address-and-bytes rows below it, with the source column left blank.
+In each row, the four hex digits on the left are the address, followed by the emitted machine-code bytes and the source line. Lines that emit no bytes (blank lines, comments, `.equ` definitions and labels on their own line) have an empty gutter. An unfilled `.ds` reservation also has an empty gutter and prints its address alone. A line that emits more than eight bytes wraps: the first eight appear beside the source text, and the remaining bytes continue on address-and-bytes rows with a blank source column.
 
 ![A listing row is an address, the bytes it emitted and the source line that produced them](../../assets/images/azm-book/book1/listing-line.svg)
 
@@ -179,7 +179,7 @@ azm --type bin --nohex --nod8m --output out.bin program.asm
 
 ### Register contract artifacts
 
-Register contracts are normally read through compiler diagnostics from `--rc warn`, `--rc error` and `--rc strict`. The artifact flags below run the analysis on their own, so they work at the default `--rc off`, except `--reg-report`, which needs at least `--rc audit` before the report has any routines to list:
+Register contracts are normally read through compiler diagnostics from `--rc warn`, `--rc error` and `--rc strict`. The artifact flags below run the analysis independently, so they work at the default `--rc off`. The exception is `--reg-report`, which needs at least `--rc audit` before the report has any routines to list:
 
 **`.regcontracts.txt` (register contract report):**
 
@@ -215,6 +215,6 @@ Writes `program.asmi` with inferred `extern` contract records. Other projects th
 azm --asm80 program.asm
 ```
 
-Writes a `.z80` file with AZM-specific features translated to plain ASM80 syntax. Useful for verifying AZM produces byte-identical output to ASM80 or for sharing source with a collaborator who only has ASM80.
+This writes a `.z80` file with AZM-specific features translated to plain ASM80 syntax. The output can be compared byte for byte with ASM80 output or shared with an ASM80 user.
 
-ASM80-compatible lowered output leaves `.import` for a later release. Request `--asm80` for a program that uses it and AZM reports an `AZMN_ASM80` diagnostic, keeping the import boundary intact.
+ASM80-compatible lowered output does not support `.import`. Using `--asm80` with a program that imports source produces an `AZMN_ASM80` diagnostic and keeps the import boundary intact.

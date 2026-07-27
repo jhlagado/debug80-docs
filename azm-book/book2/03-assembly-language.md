@@ -7,7 +7,9 @@ nav_order: 3
 
 # Assembly Language
 
-The CPU still runs the same machine code, but you get readable instruction names, names for addresses and a source file you can read as it stands.
+Assembly language gives machine instructions readable names and gives memory
+addresses labels. The assembler translates that source into the same bytes the
+CPU executes.
 
 ---
 
@@ -203,7 +205,7 @@ Two example files accompany this chapter.
 
 The addition program from the beginning of this chapter: load two values, add them, store the result to a named variable.
 
-![What one assembly run leaves behind. Each artifact can be suppressed; Book 1 Chapter 8 lists the flags.](../../assets/images/azm-book/book2/assembler-outputs.svg)
+![Artifacts from one assembly run. Each artifact can be suppressed; Book 1 Chapter 8 lists the flags.](../../assets/images/azm-book/book2/assembler-outputs.svg)
 
 ### `01_register_moves.asm`
 
@@ -270,7 +272,7 @@ that instruction's source operand and the value it held before the step.
 After an instruction that modifies flags (`add`, `sub`, `cp`, `and`, `or`,
 `xor`, `inc`, `dec`), the emulator's register display shows the resulting flag
 state. A jump that takes the wrong path often reads a flag set by an earlier
-instruction than the programmer expected.
+instruction than the branch was intended to test.
 
 The flag-before-branch check from Chapter 5 identifies which instruction set the flag and whether anything before the jump changed it.
 
@@ -284,7 +286,7 @@ For the examples in this chapter: after `00_first_program.asm` runs, address `$8
 
 ## Exercises
 
-**1. Register trace.** This exercise traces the value in each register after every instruction:
+**1. Register trace.** Tracing the value in each register after every instruction shows which loads replace a value and which preserve their source:
 
 ```asm
 ld a, $10
@@ -294,9 +296,16 @@ add a, b
 ld c, a
 ```
 
-The trace should establish the final values in A, B and C and whether HL changed. Assembly of the snippet, with `.org $0000`, a `main:` label, a `halt` and any required data block, provides an emulator result against which to check the prediction.
+The final values in A, B and C, together with whether HL changed, complete the
+trace. Adding `.org $0000`, a `main:` label, a `halt` and any required data
+block turns the snippet into a program whose emulator state can check the
+prediction.
 
-**2. An HL-to-DE copy in two moves.** The Z80's 16-bit `ld` forms load from an immediate, from memory or into SP, so a pair-to-pair copy such as HL into DE is built from two 8-bit `ld` instructions. The task is to write them. Chapter 8 returns to this problem after introducing the stack.
+**2. An HL-to-DE copy in two moves.** The Z80's 16-bit `ld` forms load from an
+immediate, from memory or into SP, so copying HL into DE takes two 8-bit `ld`
+instructions, one for each half of the pair. Writing those two instructions
+also shows which register contains the high byte and which contains the low
+byte. Chapter 8 returns to this transfer after introducing the stack.
 
 **3. Constants versus labels.** Given this program fragment:
 
@@ -307,6 +316,9 @@ BASE .equ $8000
 count: .db 0
 ```
 
-The answer should distinguish what `BASE` and `count` mean to the assembler, what output each produces, and which name occupies a byte in the binary.
+Comparing `BASE` with `count` reveals the difference between a value defined at
+assembly time and an address assigned from output placement. The comparison
+includes what output each definition produces and which name occupies a byte in
+the binary.
 
 **4. `dec` and the Zero flag.** Starting with `ld b, 3`, a three-step trace of `dec b` shows the value in B after each instruction and the point at which the Zero flag becomes set. Chapter 6 uses this mechanism to build counted loops.

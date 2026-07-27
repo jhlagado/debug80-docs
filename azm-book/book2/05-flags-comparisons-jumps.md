@@ -132,7 +132,7 @@ ld a, $FF
 xor $0F            ; A = %11110000 - lower four bits flipped
 ```
 
-The most-used form is `xor a`. A XOR'd against itself is always zero; every
+The common `xor a` form XORs A against itself, which always produces zero; every
 bit cancels. `ld a, 0`
 also zeros A but leaves the flags unchanged.
 
@@ -373,7 +373,7 @@ If A had held any value other than 5, Z would have been clear, `jp nz` would
 have jumped to `not_equal:`, and `found` would have been set to 0.
 
 **Section B: zero test with `or a`.** `ld a, 0` loads zero. `or a` sets Z
-because A is zero. `jp z, was_zero` sees Z set and jumps to `was_zero:`.
+because A is zero. `jp z, was_zero` tests Z and jumps to `was_zero:`.
 `ld a, $AA` runs, marking A so you can confirm in a debugger that this
 path was taken. Execution then falls through to `skip_zero:`. The earlier
 `jp skip_zero` runs only when the zero test fails.
@@ -386,8 +386,6 @@ jumps back to `loop_top:` while B is non-zero.
 After five iterations, `counter` holds 5 and B holds 0.
 
 `dec b` sets Z here, not `ld (counter), a`, which never touches flags at all.
-This is exactly the situation the
-flag-before-branch check is designed to catch.
 
 **Section D: logical operations.** A is loaded with `$F3` (`%11110011`), then
 `and $0F` clears bits 7–4 and keeps bits 3–0. Result: `$03`. Z is clear.
@@ -403,15 +401,11 @@ Z is clear.
 
 ---
 
-## Counted Loops in Chapter 6
-
-Chapter 6 shows the single instruction the Z80 provides for exactly the loop pattern built at the end of this chapter: decrement a counter, branch if not zero, fall through when done.
-
----
-
 ## Exercises
 
-**1. Flag prediction.** This exercise predicts whether Z and C are set or clear after each instruction or short sequence before checking the result in an emulator:
+**1. Flag prediction.** Predicting whether Z and C are set or clear after each
+instruction or short sequence makes the flag changes visible before an emulator
+confirms them:
 
 ```asm
 ld a, 5
@@ -430,9 +424,9 @@ dec a       ; Z = ? C = ?
 
 Step mode and the register display provide the observed result for comparison with the prediction.
 
-**2. The flag-before-branch check.** The following snippet is meant to
-load 10 into `count` only when A holds the value 5, and do nothing otherwise.
-The exercise is to locate the bug:
+**2. The flag-before-branch check.** The following snippet is intended to load
+10 into `count` only when A holds 5. Tracing the last instruction to set Z
+reveals why the branch fails:
 
 ```asm
 ld a, 5
@@ -444,10 +438,17 @@ ld (count), a
 skip:
 ```
 
-The three questions are: (1) which instruction last set the flag before `jp nz`? (2) does anything between that instruction and the jump modify that flag? (3) does the condition mean what the author intended? The answer should state what the code actually does and provide a corrected version.
+The three checks are which instruction last set Z before `jp nz`, whether
+anything between that instruction and the jump modifies Z and whether the jump
+condition matches the intended test. Together they explain what the code
+actually does and lead to a corrected version.
 
-**3. Count down with flags.** The required loop starts with A = 10, decrements A until it reaches zero, and stores A in a named variable `last_a` on every iteration. It uses `dec a` and a conditional jump rather than DJNZ, which comes in Chapter 6. The final trace should give the values in A and `last_a`.
+**3. Count down with flags.** A loop that starts with A = 10, decrements A to
+zero and stores A in `last_a` on every iteration demonstrates how `dec a` feeds
+a conditional jump. A final trace records the values left in A and `last_a`.
+DJNZ provides a different counted-loop mechanism in Chapter 6.
 
 **4. Bit test.** A already holds a status byte whose bit 2 is a "ready" flag.
 The instruction `bit 2, a` leaves A unchanged and sets Z when bit 2 is clear.
-The answer consists of the two instructions that test bit 2 and jump to `not_ready` when it is clear.
+Pairing it with a jump to `not_ready` shows how a two-instruction bit test
+branches when the flag is clear.

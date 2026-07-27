@@ -172,7 +172,7 @@ Page:
 
 ### Storage maps
 
-For programs with several independent storage areas, collect all `.ds` blocks under a dedicated `.org`:
+A dedicated `.org` can group `.ds` blocks for several independent storage areas:
 
 ```asm
 ; --- RAM layout: $8000-$8FFF ---
@@ -191,4 +191,4 @@ StackTop:       .ds 2
 
 ---
 
-The storage map above is the manual approach: field offsets are implicit in declaration order, and stay correct only as long as nobody inserts a field. Chapter 5 shows the structured equivalent: name the fields once in a `.type` declaration and the layout system computes every offset.
+In the storage map above, declaration order determines the implicit field offsets. Inserting a field changes every following offset. Chapter 5 shows the structured equivalent: a `.type` declaration names the fields, and the layout system computes every offset.

@@ -13,12 +13,13 @@ addresses**: each record holds data plus a `.word` link to the next node, or
 zero for "none".
 
 A pointer is a 16-bit address copied into a `.word` field.
-
-The companion listing is [`examples/08_linked_list.asm`](examples/08_linked_list.asm): a static three-node list, sum and find walks and insert-at-head into a pre-allocated spare node.
+[`examples/08_linked_list.asm`](examples/08_linked_list.asm) builds a static
+three-node list, walks it to sum and find values, then inserts a pre-allocated
+spare node at the head.
 
 ---
 
-## The problem: changing shape by rewriting links
+## Changing shape by rewriting links
 
 A ring buffer (Chapter 5) keeps all elements in one byte array and moves **indices**. Inserting in the middle of a plain array means copying bytes, expensive on a small machine.
 
@@ -51,9 +52,8 @@ NODE_SIZE   .equ sizeof(ListNode)
 little-endian 16-bit link. The link field uses `.word` because it holds a full
 address, the same width as `word`
 and `addr`, which [Book 1 Chapter 5](../book1/05-layout-system.md) covers. AZM also offers `.addr` when you want the
-layout name to say "this field is a pointer"; the companion uses it for the
-`find_node` result byte pair, where the distinction between an address and a
-count is worth recording.
+layout name to say "this field is a pointer"; the example uses it for the
+`find_node` result byte pair, distinguishing an address from a count.
 
 **Null** is the address **0**. A missing next node is stored as `.dw 0`. At run time you test the pointer in HL with:
 
@@ -184,7 +184,8 @@ _sum_done:
 
 **Invariant at `_sum_loop`:** DE is the sum of all `value` bytes in nodes strictly before the node HL points at (if any). When HL is null, DE is the full sum returned in HL via `ex de, hl`.
 
-For the static chain `$10`, `$22`, `$30`, the result is `$0062` (98). The companion stores it in `list_sum`.
+For the static chain `$10`, `$22`, `$30`, the result is `$0062` (98). The
+example stores it in `list_sum`.
 
 HL is not an index; it is a full address that changes to unrelated addresses as you follow `next`.
 
@@ -385,7 +386,7 @@ rather than stack depth. A complete implementation also needs a node pool and a
 
 ---
 
-## `main`: what to inspect at `halt`
+## State at `halt`
 
 ```asm
     ld hl, (list_head)
@@ -417,7 +418,7 @@ rather than stack depth. A complete implementation also needs a node pool and a
 
 ---
 
-## Examples
+## Inspecting the list walk
 
 | File | What to verify |
 |------|----------------|
@@ -436,22 +437,22 @@ table base.
 
 ## Exercises
 
-1. A memory diagram should show the list after `$40` is inserted at its head,
-   identifying the node addressed by `list_head` and the value of
-   `node_a.next`.
-2. The null test should use DE rather than HL and be worked out on paper. Its
-   explanation should show why the test needs both halves of the pair.
-3. A `list_count_u8` routine returns the number of nodes in A and includes
-   `.routine in`, `.routine out` and `.routine clobbers`. An empty list returns
-   0.
-4. An **insert at tail** routine uses a spare node and walks to the final link.
-   Its memory reads can then be compared with those required for head
-   insertion.
-5. A layout-only change from `next` to `.addr` should preserve the instruction
-   encoding while making the field's meaning clearer.
-6. A `list_get_u8` routine accepts a zero-based index in B and returns the value
-   byte in A, with carry clear when the index is out of range. It advances B
-   times along the links.
-7. A three-node `TreeNode` pool uses keys `5`, `3` and `8`, with each node
-   inserted through the address of a `root` word. A paper diagram should record
-   the resulting tree boxes and `.word` links.
+1. Draw the memory diagram after inserting `$40` at the head of the chapter's
+   list. Which node does `list_head` point at? What does `node_a`'s `next`
+   hold?
+2. Without assembling, write the null test for a pointer in DE. Why does
+   `or e` alone fall short as a 16-bit test?
+3. State the invariant that holds at the top of `list_sum_u16`'s loop,
+   relating DE to the nodes already visited.
+4. Add `list_count_u8`: return the number of nodes in A, with an empty list
+   returning 0. Document `in`, `out` and `clobbers`.
+5. Implement insert at tail using the spare node and a walk to the last link.
+   Count the memory reads a tail insert costs against a head insert.
+6. Change `next` to `.addr` in the layout alone. Does any instruction encoding
+   change? What changes for the reader?
+7. Write `list_get_u8`: given a zero-based index in B, return that node's
+   value byte in A, carry clear when the index is out of range. Advance B
+   times; the list has no stride to multiply.
+8. For a three-node `TreeNode` pool, initialize nodes for keys 5, 3 and 8,
+   then pass the address of a `root` word to `bst_insert_u8` for each. Draw
+   the boxes and `.word` arrows on paper.

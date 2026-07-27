@@ -7,17 +7,13 @@ nav_order: 4
 
 # Pulses and Bindings
 
-State describes the things a game remembers. This chapter is about
-the things it must catch: a fact persists, the beacon's position
-outliving every frame that draws it, but a moment passes. The instant
-GO goes down exists exactly once, and your program has that one frame
-to catch it. Glimmer gives moments their own
-declaration, the pulse. Mover introduced one pulse and one bind line.
-Now we can take the whole input story
-properly: every key name, both shapes a key can fire in, and what the
-generated polling does with the keypad, frame after frame.
+State describes values that persist across frames. Input events have
+a shorter lifetime: the instant GO goes down occurs on one frame.
+Glimmer represents such moments with a pulse. Mover introduced one
+pulse and one bind line; this chapter covers every key name, both
+binding modes and the generated keypad polling that runs each frame.
 
-*Rover* is a white dot you steer around the whole 8x8 RGB LED matrix
+*Rover* is a white dot you steer around the 8x8 RGB LED matrix
 with 2, 4, 6, and 8 (the keypad's compass points), and GO recalls it
 to the centre. It feels like a game character the moment you hold a
 key.
@@ -113,10 +109,9 @@ begin
 end
 ```
 
-Half of this file is Mover, and the second axis costs what
-you would expect: one more state cell, two more pulses, two more rules
-with the clamp turned sideways. `GoHome` shows an effect at its
-simplest: two constant stores. `DrawDot` now draws from
+Half of this file is Mover. The second axis adds one state cell, two
+pulses and two rules with the clamp turned sideways. `GoHome` is an
+effect containing two constant stores. `DrawDot` now draws from
 both facts (`on DotX, DotY`), so movement on either axis redraws the
 dot.
 
@@ -138,7 +133,8 @@ monitor gives every key a name, and `bind` uses those names directly:
 | AD (address) | `KEY_AD` |
 
 Twenty keys, four of them off the hex pad. When you lay out a game's
-controls, the digits do the work: 2, 4, 6, 8 make a compass, and 5
+controls, the digits provide a useful arrangement: 2, 4, 6 and 8 make
+a compass, and 5
 sits in the middle, in easy reach for fire or rotate. GO and AD serve
 as start and menu keys. The names compile to MON-3's key codes in the
 generated file, so the binding `bind key KEY_2 ...` in your source and
@@ -156,13 +152,11 @@ design decision before it is a technical one:
   small period is a fast walk, a large one a deliberate step.
 
 In a
-falling-blocks game, you want one press of the rotate key under your
-thumb to give one quarter turn; give it autorepeat and the piece
-spins out of control. From the move-left key beside
-it you want the opposite: press and lean, and the piece keeps sliding
-until you let go. Rover makes the same
-choices for the same reasons (held compass keys, rising GO), and both
-are one-line decisions.
+falling-blocks game, one press of the rotate key should give one
+quarter turn; autorepeat would spin the piece out of control. The
+move-left key needs the opposite behaviour: holding the key keeps it sliding
+until release. Rover uses held compass keys and rising GO for the same
+reasons.
 
 ![One press read two ways: rising fires once, held fires every eight frames.](../../assets/images/glimmer-book/book0/key-bindings.svg)
 
@@ -171,11 +165,11 @@ a single pressed key at a time. Held movement runs one direction at
 once, and a fresh press takes over the autorepeat from the key before
 it. Rover's controls, and every game later in this book, are built on
 single-key movement, and the keypad's compass layout suits it. You
-already felt the takeover: your thumb on 6 and 2 a page ago.
+saw the takeover while holding 6 and tapping 2 in Rover.
 
-## Any key at all
+## The `any` binding
 
-A third binding form catches every key:
+A third binding form responds to every key:
 
 ```text
 pulse Wake
@@ -186,14 +180,14 @@ bind key any rising -> Wake
 `any` fires its pulse on every new press, whichever key it is, and it
 fires alongside the named bindings. A press of GO therefore fires
 both `Home` and `Wake` in the same frame. It comes in the rising shape only, and
-it catches one thing: *the player touched the machine*. Title screens
-wait on it.
+it records one event: *the player touched the machine*. A title screen
+can use that pulse to start the game after any key press.
 
 ## Generated polling
 
-All five of Rover's pulses come out of one generated routine, and
-inside it is the repeat clock Glimmer wrote for you: the counter, the
-reload, and the release edge that resets on letting go. The top of the
+One generated routine produces all five of Rover's pulses and
+implements autorepeat with a counter, a reload value and release-edge
+handling. The top of the
 routine, from
 `rover.main.asm`:
 
@@ -220,23 +214,23 @@ _keydown:
         ...
 ```
 
-Once per frame, the routine asks MON-3 about the keypad. `_scanKeys`
-answers in the flags (zero set means a key is down, carry set means
-the press is new this frame), and from those two flags the routine
-sorts out the three cases you have been designing with all chapter.
-Silence disarms the autorepeat. A held key counts its repeat clock
+Once per frame, the routine calls MON-3's keypad scanner. `_scanKeys`
+returns its result in the flags (zero set means a key is down, carry
+set means the press is new this frame), and from those two flags the routine
+distinguishes the three input cases used in this chapter. A frame with
+no key down disarms autorepeat. A held key counts its repeat clock
 down and fires its pulse when the count runs out, reloading the period
 from your `bind` line; your `period 8` lives down here as the reload
-value. A new press fires its pulse at once and arms the clock. And
-here is the clock itself, in its entirety:
+value. A new press fires its pulse at once and arms the clock. The
+clock uses two bytes:
 
 ```asm
 Glim_HeldKey:     .db $FF
 Glim_HeldCount:   .db 0
 ```
 
-Two bytes of storage run the whole autorepeat: which key is armed,
-and how many frames remain until it repeats. When a pulse fires here, the poll writes
+Those bytes record which key is armed and how many frames remain until
+it repeats. When a pulse fires here, the poll writes
 the pulse's byte and sets its change bit directly, and because polling
 runs before any block, every phase of the frame sees the moment.
 
@@ -245,8 +239,7 @@ byte. Between those
 two points, a moment is a fact like any other: one frame wide, one bit
 in `Changed0`, triggering whatever declared `on` it.
 
-Moments also come from machine clocks introduced later, but the keypad
-story is complete. Next
-comes the full picture of what a frame does once the moments are in:
-the three kinds of block, and the order a frame runs them in,
+Later chapters produce moments from machine clocks. The next chapter
+follows a moment through the three block phases and explains their
+execution order:
 [Compute, Effect, Render](05-compute-effect-render.md).

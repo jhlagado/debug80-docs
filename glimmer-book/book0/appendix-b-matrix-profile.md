@@ -136,7 +136,7 @@ plain shape; `Snd_<Name>` wrappers appear per sound cue.
 - `MxMask` converts x in A (0 = leftmost) to the matrix bit
   convention, `%10000000` for column 0.
 - `ShapeDraw` draws a plain shape: HL = `Shape_<Name>`, B = x, C = y.
-  It plots with no clipping, so the whole shape must remain inside the
+  It plots with no clipping, so the complete shape must remain inside the
   8x8 matrix.
 - `SndStart` (re)starts a cue: A = duration in row ticks, C = divider
   half-period. `Snd_<Name>` loads both from the declaration and jumps
@@ -283,5 +283,5 @@ ShapeRotCount     .equ 1
   per shape, indexed by `id` alone.
 - `ShapeRotRightTbl` records each rotation's rightmost occupied
   column, the X bound a collision probe checks first.
-- Your own code can walk these tables directly; the Tetro engine is
+- Block and imported-module code can walk these tables directly; the Tetro engine is
   one complete example.

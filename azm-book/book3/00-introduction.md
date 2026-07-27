@@ -7,15 +7,18 @@ nav_order: 1
 
 # Introduction to Book 3
 
-You finished Book 2 with the Z80 programming model and AZM's register
-contracts, layout types and ops. Book 3 applies those tools to algorithms and
-small data structures in flat assembly.
+Book 2 teaches the Z80 programming model, then points into Book 1 for the AZM
+features that build on those foundations: register contracts, layout types and
+ops. Book 3 applies both books to algorithms and small data structures in flat
+assembly.
 
 ---
 
-## About this book
+## Algorithms in assembly
 
-Each chapter starts from a concrete problem (sort this table, find this value, walk this string), shows a complete AZM program or subroutine, then names the invariants and conventions that make the code trustworthy.
+Each algorithm starts with a concrete job such as sorting a table, finding a
+value or walking a string. The implementation then connects a complete AZM
+program or subroutine to the invariants and conventions that govern it.
 
 ---
 
@@ -36,7 +39,7 @@ algorithm uses those constants to form addresses.
 
 ---
 
-## K&R: small programs, explicit invariants
+## Small programs, explicit invariants
 
 Each loop needs an invariant that can be stated plainly:
 
@@ -82,27 +85,27 @@ Every nontrivial routine in this book uses:
 
 ## Execution model
 
-Every byte of the output comes from a line you wrote. Layout types fold to
-constants at assembly time; address arithmetic appears in the program only
-where you write the corresponding instructions.
+The assembler emits bytes from explicit source instructions and directives.
+Layout types fold to constants at assembly time; address arithmetic appears in
+the program only where the corresponding instructions appear in source.
 
 ---
 
-## Reading and running the chapters
+## Programs and results
 
-Each chapter first defines the problem and its invariant. The corresponding file
-under this book's `examples/` directory provides the complete program. Its
-documented RAM locations show the result after assembly and execution to
-`halt`. The exercises are designed for working through with pencil and emulator
-before consulting any hints.
+The files under this book's `examples/` directory contain the complete
+programs. Each chapter identifies the RAM locations that hold the result after
+execution reaches `halt`, giving you a direct comparison between a pencil trace
+and the emulator state. The exercises extend the same representations,
+invariants and register contracts.
 
 ---
 
-## The next chapters
+## From arithmetic to search
 
-[Chapter 1, Foundations](01-foundations.md) works through 16-bit GCD and 8-bit
-exponentiation with the Book 3 calling convention, compare/subtract idioms and
-the first workspace bytes.
+[Chapter 1, Arithmetic Foundations](01-foundations.md) works through 16-bit GCD
+and 8-bit exponentiation with the Book 3 calling convention, compare/subtract
+idioms and the first workspace bytes.
 [Chapter 2, Arrays and Loops](02-arrays-and-loops.md) adds contiguous tables,
 insertion sort and linear search.
 

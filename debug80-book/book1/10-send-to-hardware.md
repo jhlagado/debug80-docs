@@ -59,7 +59,7 @@ Ready to send main.hex via CoolTerm.
 
 Confirmation comes from the board itself: MON-3 reports the load result on the TEC-1G seven-segment display, `PASS` for an accepted load and `ERROR` for a checksum or write verification failure.
 
-If your target has no `outputDir`, the send path looks for the HEX beside `debug80.json` rather than in `build/`. Scaffolded projects always set `outputDir`, so this only bites hand-edited configs.
+If your target has no `outputDir`, the send path looks for the HEX beside `debug80.json` rather than in `build/`. Scaffolded projects always set `outputDir`, so this fallback applies only to hand-edited configurations.
 
 The serial startup message `TEC-1G Connected` belongs to MON-3 startup, not to the transfer.
 
@@ -67,7 +67,7 @@ The serial startup message `TEC-1G Connected` belongs to MON-3 startup, not to t
 
 The observed failure identifies which part of the path to inspect:
 
-- If Debug80 cannot connect to CoolTerm, open CoolTerm and check that the Remote Control Socket is enabled on port `51413`.
-- If Debug80 asks for a HEX file, build the active target.
-- If the TEC-1G displays `ERROR`, check that the board is in Intel HEX Load mode and try the transfer again.
-- If characters appear to be missed, add transmit delay in CoolTerm.
+- For a Debug80 connection failure, the relevant checks are that CoolTerm is open and the Remote Control Socket is enabled on port `51413`.
+- A request for a HEX file means the active target needs to be built.
+- `ERROR` on the TEC-1G calls for confirming that the board is in Intel HEX Load mode before another transfer.
+- Missed characters can be addressed by adding transmit delay in CoolTerm.

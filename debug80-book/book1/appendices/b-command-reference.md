@@ -7,7 +7,7 @@ nav_order: 102
 
 # Appendix B — Command reference
 
-This appendix lists the Debug80 commands available to users. The
+This appendix lists the Debug80 commands. The
 Command Palette opens with **Shift-Command-P** on macOS or
 **Shift-Control-P** on Windows and Linux; typing part of a title
 filters the list.

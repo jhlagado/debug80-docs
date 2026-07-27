@@ -7,7 +7,7 @@ nav_order: 3
 
 # Targets
 
-A folder can hold many source files. Only some of them are programs; the rest are includes, experiments and half-finished ideas. A **target** is Debug80's record of one program: the source file where the build starts, where the output goes, and which machine the program runs on.
+A folder can hold program entry files alongside includes, experiments and unfinished files. A **target** is Debug80's record of one program: the source file where the build starts, where the output goes and which machine the program runs on.
 
 **`debug80.json` is authoritative. File names provide discovery hints only.**
 
@@ -41,7 +41,7 @@ Among those, two names are treated as suggestions: `main.asm` and `main.z80`. A 
 
 ## Adding a target
 
-The **+** beside the **Target** dropdown adds one. Debug80 lists the eligible program files still available to add, annotating the ones that match the naming convention, and you choose.
+The **+** beside the **Target** dropdown adds one. Debug80 lists the eligible program files still available to add and marks the ones that match the naming convention.
 
 The second target begins with `src/blink.asm`:
 
@@ -104,13 +104,13 @@ same state produced by **No target yet** during initialization.
 
 ![The panel for a project with no targets](../../assets/images/debug80-book/book1/panel-state-no-targets.svg)
 
-The dropdown then reads `No targets available` if nothing eligible is on disk, or lists discovered files with their `+` prefix if there are any. **Build** and **Run** stay visible and clickable, but report a clear message:
+The dropdown then reads `No targets available` if nothing eligible is on disk, or lists discovered files with their `+` prefix if there are any. **Build** and **Run** stay visible and clickable, but report:
 
 ```text
 Debug80: This project has no targets yet. Pick a program file from the target dropdown first.
 ```
 
-## Targets whose files have gone
+## Targets with missing source files
 
 If a target names a source file that no longer exists, Debug80 hides it from the list. The entry stays in `debug80.json`, so restoring the file brings the target back.
 

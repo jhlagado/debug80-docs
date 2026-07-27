@@ -7,29 +7,25 @@ nav_order: 7
 
 # Time
 
-Every program you have written so far waits for you. Mover's dot sits
-wherever your
-last press left it. Meter's bar holds its level until you lean on plus
-or minus. While the keypad is idle, frame after frame goes by
-with every change flag clear and every reactive block at rest. The
-profile still scans the display and polls the keypad.
+Every program so far changes state only after keypad input. Mover's
+dot remains at the position set by the last press, and Meter's bar
+holds its level until plus or minus changes it. While the keypad is
+idle, the profile continues scanning the display and polling the
+keypad, but every change flag remains clear and the dispatcher skips
+each reactive block.
 
-In a real game, something keeps moving through ten seconds of
-silence: a drop falls, a ghost
-patrols, a fuse burns down. This is where challenge comes from: a
-game that acts while you hesitate is a game you can lose. Until now
-your programs have had exactly one source of moments, the keypad,
-which means the player has held all the initiative. This chapter gives
-the machine some initiative of its own.
+Many games also change with time: a drop falls, a ghost patrols or a
+fuse burns down while the player hesitates. The programs so far have
+used the keypad as their only source of moments. This chapter adds
+moments generated from frame counts.
 
 The runtime frame scans the 8x8 RGB LED matrix, polls the keypad, runs
 whatever changed,
 and comes around again for as long as the power holds. Every turn of
-that loop is a beat, and this chapter is about declaring moments
-against those beats. Glimmer gives you three ways to do it (a
-built-in frame counter, timers, and ramps), and each answers a
-different question about time. Our program is *Drip*: a drop that
-falls on its own schedule, blinks as it falls, and falls faster the
+that loop is a beat. Glimmer provides three ways to schedule moments
+against those beats: a built-in frame counter, timers and ramps. Our
+program is *Drip*: a drop that falls on a schedule, blinks as it falls
+and falls faster the
 longer the program runs. Drip takes all its moments from clocks.
 
 ## Every frame
@@ -63,12 +59,11 @@ Each count is one full turn of the loop: one scan of the 8x8 matrix,
 one poll, one pass through your blocks. That pace is the fastest
 schedule a Glimmer program has.
 
-Flag bits are a budget (a
-program holds up to 32 flag-carrying cells), and `FrameCount` takes a
-bit only in a program that names it. Ticks pays for one; Drip spends
-its bits elsewhere.
+Flag bits are limited to 32 flag-carrying cells. `FrameCount` takes a
+bit only in a program that names it. Ticks includes that bit; Drip
+uses other schedules.
 
-For motion, though, the every-frame schedule runs too hot. A drop stepping
+For motion, the every-frame schedule is often too fast. A drop stepping
 one row per frame falls off an eight-row board in eight frames.
 Mover stepped once every eight frames; eight steps in eight frames is
 a flash. Game tempo is *every N frames*, with
@@ -77,8 +72,8 @@ change while the program runs.
 
 ## A drop on a schedule
 
-Drip's first cut: a drop that falls one row at a time, and
-starts over from the top after it leaves the bottom.
+The first version of Drip falls one row at a time and starts over from
+the top after leaving the bottom.
 
 ```text
 program Drip
@@ -124,18 +119,18 @@ timer Fall : byte = 24 -> FallTick
 ```
 
 Spoken aloud, the declaration says: *Fall is a byte timer with period 24, firing
-FallTick.* A `timer` is an oscillator,
-and its answer to the question of time is *every N frames, forever*.
+FallTick.* A `timer` is an oscillator that fires *every N frames,
+forever*.
 Behind the name sits a hidden countdown that loses one on every frame;
 the frame it reaches zero, the timer fires its pulse and the countdown
 reloads from `Fall` to begin the next cycle.
 
-`FallTick` is exactly like the ones your keys
-fire, declared with the same word, consumed the same way. `Descend`
-reads as every rule you have written: on a moment, change a fact.
+`FallTick` behaves exactly like a pulse from a key binding: it is
+declared with the same word and consumed the same way. `Descend`
+follows the same rule pattern: on a moment, change a fact.
 If a `bind` line pointed at `FallTick` instead, the same block would
-run per keypress. A rule sees only its pulse, so you can retune a
-game's entire schedule by editing the declarations that fire it.
+run per keypress. Blocks depend on the pulse rather than its source,
+so changing the declaration that fires it retunes the schedule.
 
 Timer ticking happens immediately after the keypad poll and before any
 phase runs, so a pulse fired by a timer is seen by
@@ -151,8 +146,8 @@ pulse, so `Fall` may stand in `updates` lines, and `on` lines take
 
 ## A blink
 
-One steady pixel reads as furniture. A blink makes the drop read as
-alive, and it costs one more timer and one more fact:
+A steady pixel can be hard to distinguish from a static display
+element. Blinking the drop adds one timer and one fact:
 
 ```text
 state Visible : byte = 1
@@ -179,9 +174,8 @@ Every fifth frame, `Twinkle` flips `Visible` between 1 and 0.
 when it moves and when it blinks, and its body tests `Visible` before
 plotting: the dark half of the blink is a cleared framebuffer.
 
-Each timer owns its own hidden countdown, and the frame is all the two
-share. Periods 24 and 5 drift in and out of step with each other: you
-declared two independent schedules, and independent is what you got.
+Each timer has a separate hidden countdown. Periods 24 and 5 drift in
+and out of step because the schedules are independent.
 
 ## One shot
 
@@ -206,39 +200,35 @@ firing:
 
 `word` is the point here: a byte cell tops out at a 255-frame delay,
 and a word countdown runs to 65535. Drip runs on oscillators;
-delayed restarts and title screens are where a one-shot earns its
-place.
+delayed restarts and title screens use one-shots.
 
 ## The climb
 
-Drip has one problem left: it plays its hundredth descent at the pace
-of its first. A game grows
-harder, and on this board that means one concrete thing: the fall
+Drip still plays its hundredth descent at the pace of its first. To
+increase the difficulty on this board, the fall
 period should shrink as time passes. 24, then 20, then 16, down to a
-floor. Two needs hide in that sentence: a long, patient schedule to
-space the changes out, and the change itself when the schedule comes
-due. The schedule is the last of this chapter's declarations, the
+floor. That requires a long schedule between difficulty changes and an
+event when each interval ends. The schedule uses the last declaration
+introduced in this chapter, the
 `ramp`:
 
 ```text
 ramp Heat : byte steps 250 -> HeatUp
 ```
 
-Spoken aloud, it says: *Heat is a ramp over 250 steps, firing HeatUp.* Where a
-timer answers *every N frames, forever*, a ramp answers *progress from
-here to there, step by step*. Each frame, a ramp steps its cell one
-closer to `steps - 1`, marking it changed at every step; this is a
-fact in motion, and a block with `on Heat` could watch the whole
-journey go by. On the step that reaches 249 it fires its pulse, and
-there it idles. Writing the cell sets it moving again: write 0 and the
-full climb runs from the start. Drip spends only the arrival; motion
-curves use the journey.
+Spoken aloud, it says: *Heat is a ramp over 250 steps, firing HeatUp.*
+Where a timer fires *every N frames, forever*, a ramp records progress
+from one value to another, step by step. Each frame, a ramp moves its
+cell one closer to `steps - 1` and marks it changed. A block with `on
+Heat` can therefore run at every step. The step that reaches 249 fires
+the pulse, then the ramp remains idle at that value. Writing 0 to the
+cell starts the complete climb again. Drip uses only the completion
+pulse; motion curves use the intermediate values.
 
 ![Every frame, every N frames, once, and step by step, on one axis.](../../assets/images/glimmer-book/book0/time-schedules.svg)
 
-A freshly started program's ramp sits at its terminal
-value, idle, so the first climb needs a push, and a familiar word
-supplies it:
+A ramp starts at its terminal value and remains idle until code writes
+a lower value. A familiar modifier triggers that first write:
 
 ```text
 state Boot    : byte = 0 changed
@@ -254,12 +244,11 @@ begin
 end
 ```
 
-`Boot`'s only change is the one it starts with, so `Ignite` runs
+`Boot` changes only at startup, so `Ignite` runs
 exactly once, on the first frame. The same modifier that draws a
 first-frame picture can also fire a first-frame rule.
 
-When the climb arrives, `Quicken` collects it. Here is the complete
-program:
+`Quicken` handles the completion pulse. Here is the complete program:
 
 ```text
 program Drip
@@ -349,8 +338,8 @@ settle at 4), and the final store rewinds `Heat` to begin the next
 In a running build, the drop crawls down the middle column, blinking as it goes,
 and wraps back to the top. Around its second descent the pace picks
 up, then again at the top of every climb, until it settles into a
-quick steady drip. Speed, blink, and difficulty each cost one
-declaration and one small rule, and each stands on its own.
+quick steady drip. Speed, blink and difficulty each add one
+declaration and one small rule.
 
 ## The program, as a report
 
@@ -392,15 +381,14 @@ program Drip
     triggers:  (nothing)
 ```
 
-The schedules take their place in the graph beside everything else:
+The schedules appear in the graph beside the other declarations:
 `raised by: timer Fall` and `raised by: ramp Heat` read exactly like
 the `key` lines in Meter's report, because a moment is a moment
 wherever it comes from. `Fall` shows
 `raised by: Quicken` and `triggers: (nothing)`, because its writes
-reach the hidden countdown and `FallTick` carries the news to blocks.
-And `Boot`,
-raised by nothing, is the report's way of showing a moment that exists
-purely because a declaration marked it changed.
+reach the hidden countdown while `FallTick` triggers the blocks.
+`Boot`, raised by nothing, appears because the declaration marks it
+changed at startup.
 
 ## Inside GlimTickTimers
 
@@ -425,12 +413,12 @@ Changed0:         .db %00000101   ; flags dispatch tests
 
 `Glim_Fall_cnt` is one byte
 sitting beside the period it reloads from, and `Blink` gets a countdown
-of its own. `Heat` begins at 249, its
+as well. `Heat` begins at 249, its
 terminal, idle until `Ignite` writes it. And `Changed0` starts at
 `%00000101`, bits 0 and 2, the two cells you declared `changed`:
 `DropY` for the first picture, `Boot` for the first climb.
 
-The loop shows where the ticking lives:
+The loop shows where ticking occurs:
 
 ```asm
 MainLoop:
@@ -469,7 +457,7 @@ _next_Fall:
 The counter decrements and is stored. On the zero frame, the code reloads
 it from `Fall`, sets the pulse byte and ORs the pulse's flag straight into
 `Changed0`. That
-last move sets the tick apart from the blocks you write, which raise
+direct write distinguishes the tick from the blocks you write, which raise
 through `Raised0` or `Next0` because some consumers may already have
 run. The
 tick runs before all of them, so a direct delivery still reaches every
@@ -498,7 +486,7 @@ _next_Heat:
         ret
 ```
 
-The first compare is the idle test: at 249 the whole section falls
+The first compare is the idle test: at 249 the ramp section falls
 through. Below it, each moving frame steps the cell and marks
 `CHG_HEAT` (the per-step change flag a `ramp` cell carries and a
 `timer` cell lacks), and the step that lands on 249 also fires
@@ -516,12 +504,12 @@ tick and the climb resumes.
         ret
 ```
 
-The store inside the body is the whole act, so `updates Fall` stands
-here for the dependency report and for you.
+The body stores the new period directly. `updates Fall` records that
+write in the dependency report even though `Fall` carries no change
+flag.
 
 `GlimTickTimers` is generated only when a program declares a timer or
 a ramp or names `FrameCount`.
 
-Drip's drop falls in equal steps, the plainest motion there is; next
-chapter we shape those steps into curves, and meet the ramp-driven
-pattern that plays them back: [Motion Curves](08-motion-curves.md).
+Drip's drop falls in equal steps. The next chapter uses ramps to play
+back motion curves: [Motion Curves](08-motion-curves.md).

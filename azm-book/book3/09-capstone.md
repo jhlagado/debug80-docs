@@ -1,26 +1,29 @@
 ---
 layout: default
-title: "Capstone"
+title: "Eight Queens Capstone"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 10
 ---
 
-# Capstone
+# Eight Queens Capstone
 
 The preceding chapters sorted tables, walked strings, packed flags into bytes,
 built a ring buffer, used recursive calls, split files with `.include` and
 followed `.word` links through data structures. This chapter combines those
 techniques in one program: **eight queens** on an 8x8 board.
 
-The puzzle: place eight queens so no two share a row, column or diagonal. There are exactly **92** distinct solutions if you treat reflected and rotated boards as different; the companion program counts all of them and stores the total in RAM.
+The puzzle places eight queens so no two share a row, column or diagonal. There
+are exactly **92** distinct solutions if you treat reflected and rotated boards
+as different; the example counts all of them and stores the total in RAM.
 
-`call`, `ret` and branches are flat AZM's entire control flow.
+`call`, `ret` and branches provide all control flow in flat AZM.
 
-The companion build is [`examples/09_eight_queens.asm`](examples/09_eight_queens.asm).
+The complete build is
+[`examples/09_eight_queens.asm`](examples/09_eight_queens.asm).
 
 ---
 
-## The problem: one queen per row
+## Backtracking one row at a time
 
 A queen attacks along its row, column and both diagonals. On an 8x8 board with eight queens, each row must hold exactly one queen. That cuts the search space sharply: the search chooses **which column** goes on row 0, then row 1 and so on down the board, eight choices per row.
 
@@ -66,16 +69,16 @@ index is 0 when `row = 0` and `col = BOARD_SIZE - 1`.
 
 ![One queen threatens a row, a column and two diagonals, and costs exactly three flag bytes](../../assets/images/azm-book/book3/queens-board.svg)
 
-The search needs fast answers to one question: is this column or diagonal
-already taken? Chapter 4's masks could pack all eight column flags into one
-byte. The companion instead uses one byte per column so every test is
-`ld a, (hl)` / `or a` / `jr nz`.
+The search repeatedly tests whether a column or diagonal is already taken.
+Chapter 4's masks could pack all eight column flags into one byte. The example
+instead uses one byte per column so every test is `ld a, (hl)` / `or a` / `jr
+nz`.
 
 ### The three flag tables are one record
 
 `clear_constraints` zeroes the three flag tables in a single `ldir`-style pass.
-That works only when they are contiguous and in a known order, which is a
-property of the layout. So the layout says it:
+That pass depends on contiguous tables in a known order. The layout declaration
+records both properties:
 
 ```asm
 Constraints .type
@@ -202,7 +205,8 @@ The bias keeps the backward index non-negative: `row - col` runs from
 `-(BOARD_SIZE - 1)` to `BOARD_SIZE - 1`, and adding `DIAG_BIAS` slides that
 range to `0 .. sizeof(DiagFlags) - 1`.
 
-**Forward diagonal** then reads as the question it is asking:
+The **forward-diagonal** routine applies the address calculation and tests the
+selected byte:
 
 ```asm
 ; diag_sum_free: is forward diagonal (row+col) unused?
@@ -218,7 +222,8 @@ The listing file prints the six expanded instructions and their bytes beside the
 `diag_sum_addr` line, and `--rc warn` analyses those instructions, which is why
 the contract still declares DE and HL clobbered.
 
-Each failed check jumps to `_next_col` in the row driver, which is how flat ASM says "try the next column".
+Each failed check jumps to `_next_col` in the row driver, continuing the column
+loop.
 
 ---
 
@@ -367,7 +372,7 @@ backtracking after a deeper row fails.
 
 ---
 
-## Examples
+## Running the complete search
 
 | File | What to verify |
 |------|----------------|
@@ -382,33 +387,31 @@ azm --rc warn examples/09_eight_queens.asm
 
 ## Exercises
 
-1. A hand trace of `place_row` should cover rows 0–2 when the first successful
-   columns are 0, 2 and 4. It should include the three `queen_cols` entries and
-   the `col_used` bytes set before recursion reaches row 3.
-2. Removing `call unmark_constraints` after the recursive `call place_row`
-   creates a case for determining whether `solution_count` remains 92 and how
-   stale flags affect the column loop.
-3. An alternative base case stops after the first solution by adding a `found`
-   byte, setting it in `count_solution` and returning early from every active
-   frame when it is non-zero. The resulting `solution_count` shows whether the
-   early exit propagated correctly.
-4. A bitboard version packs `col_used` into one byte and rewrites `col_free`
-   and `mark_constraints` using Chapter 4's `and` and `or`. Its listing length
-   can be compared with the byte-table version.
-5. An iterative version uses an explicit workspace stack of `(row, col)` trial
-   states and includes a workspace estimate for depth 8.
-6. A deliberate contract error calls `col_free` with C still holding whatever a
-   clobbering helper left. `azm --rc warn` should identify the failure, and the
-   `.routine` contract defines the correction.
+1. Trace `place_row` by hand for rows 0 to 2 when the first successful columns
+   are 0, 2 and 4. Write the three `queen_cols` entries and the `col_used`
+   bytes that are set before the recursion into row 3.
+2. Remove the `call unmark_constraints` after the recursive `call place_row`
+   and run the program. Does `solution_count` stay 92? Explain what the stale
+   flags do to the column loop.
+3. Stop after the first solution: add a `found` byte, set it in
+   `count_solution`, and return early from every frame while it is set. What
+   does `solution_count` hold now?
+4. Pack `col_used` into a single byte of eight bits. Rewrite `col_free` and
+   `mark_constraints` with `and` and `or` from Chapter 4, then compare listing
+   sizes.
+5. Replace the recursion with an explicit stack in workspace: push each
+   `(row, col)` trial, loop until the stack empties. Estimate the workspace
+   bytes for depth 8.
+6. Run `azm --rc warn` on a deliberate bug: call `col_free` after a helper
+   clobbers C, without restoring it. Fix the caller using the `.routine`
+   contract.
 
----
-
-## Book 3 in practice
+## Representation and invariants
 
 The capstone combines arrays, constraint flags, recursion and register
 contracts. Across the earlier chapters, records, separate source files and
 pointer layouts provide other representations for problems that need them.
 
-The same approach applies to a new buffer, parser or game board: its
-representation determines the `.routine` contracts, and emulator traces show
-whether the implementation preserves each invariant.
+A new buffer, parser or game board begins with its representation and
+`.routine` contracts. Emulator traces then show whether each implementation
+step preserves the stated invariant.

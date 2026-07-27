@@ -1,17 +1,20 @@
 ---
 layout: default
-title: "Foundations"
+title: "Arithmetic Foundations"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 2
 ---
 
-# Foundations
+# Arithmetic Foundations
 
-Greatest common divisor on 16-bit values comes first, then 8-bit exponentiation. The companion listing is [`examples/01_gcd.asm`](examples/01_gcd.asm).
+Greatest common divisor on 16-bit values comes first, then 8-bit
+exponentiation. The complete program in
+[`examples/01_gcd.asm`](examples/01_gcd.asm) stores both results in RAM for
+inspection after `halt`.
 
 ---
 
-## The problem: greatest common divisor
+## Greatest common divisor
 
 The greatest common divisor of two integers is the largest value that divides both exactly. For 48 and 18, the answer is 6.
 
@@ -52,7 +55,7 @@ notation [Book 1 Chapter 6](../book1/06-register-contracts.md) covers.
 
 ---
 
-## `gcd_u16`: the listing
+## Subtractive GCD in AZM
 
 ```asm
 ; gcd_u16: greatest common divisor (Euclidean, subtractive)
@@ -202,7 +205,8 @@ _done:
 
 `mul8_a_by_c` multiplies the accumulator in A by C using repeated addition, correct for the demo sizes (3^4 = 81).
 
-The companion program stores the byte result at `power_result`. After `halt`, `$8002` should hold `$51` (81 decimal).
+The example stores the byte result at `power_result`. After `halt`, `$8002`
+should hold `$51` (81 decimal).
 
 ---
 
@@ -212,14 +216,15 @@ The companion program stores the byte result at `power_result`. After `halt`, `$
 
 ---
 
-## Examples
+## Running the arithmetic example
+
+[`examples/01_gcd.asm`](examples/01_gcd.asm) should reach `halt` with
+`gcd_result` = 6 and `power_result` = 81. These commands assemble it from
+`book3/`; the second also checks register contracts:
 
 | File | What to verify |
 |------|----------------|
 | [`examples/01_gcd.asm`](examples/01_gcd.asm) | `gcd_result` = 6, `power_result` = 81, then `halt` |
-
-These commands assemble the example from `book3/`, with the second form also
-checking register contracts:
 
 ```sh
 azm examples/01_gcd.asm
@@ -230,17 +235,19 @@ azm --rc warn examples/01_gcd.asm
 
 ## Exercises
 
-1. The first exercise sets `GCD_A` to 270 and `GCD_B` to 192, traces the first
-   five loop iterations by hand, and compares the trace with `gcd_result` after
-   the program runs.
-2. Two additional `gcd_u16` calls, for (0, 5) and (5, 0), test the routine's
-   zero handling. Their expected results can be checked in the emulator.
-3. A `digit_count_u8` routine uses A for both input and output. It returns 1 for
-   values 0–9, 2 for 10–99 and 3 for 100–255. Two `cp` instructions against 10
-   and 100 are enough.
-4. A shift-and-add version of `mul8_a_by_c` provides a faster implementation
-   for larger products while retaining the existing `.routine` contract.
-5. A deliberate register-contract error leaves a later-needed address in DE,
-   calls `gcd_u16`, and then dereferences DE as if the call had preserved it.
-   `azm --rc warn` should report the declared DE clobber; reloading the address
-   at the caller resolves the warning.
+Check every answer by assembling and running; the emulator is the answer key.
+
+1. Change `GCD_A` and `GCD_B` to 270 and 192. Trace the first five loop
+   iterations by hand, then run the program and confirm `gcd_result`.
+2. Add `gcd_u16` calls for (0, 5) and (5, 0). Predict what each returns, then
+   test both in the emulator.
+3. State the loop invariant of `gcd_u16` in one sentence: what stays true about
+   HL and DE across every subtract and every swap?
+4. Implement `digit_count_u8` with A in and A out. Return 1 for values 0-9,
+   2 for 10-99 and 3 for 100-255; two `cp` instructions against 10 and 100 are
+   enough.
+5. Rewrite `mul8_a_by_c` with a shift-and-add multiply. Keep the same
+   `.routine` contract, and confirm `power_result` still holds `$51`.
+6. Run `azm --rc warn` on a deliberate bug: put a later-needed address in DE,
+   call `gcd_u16`, then dereference DE without reloading it. Read the warning
+   about the declared DE clobber and fix the caller.

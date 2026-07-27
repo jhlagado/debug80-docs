@@ -22,20 +22,20 @@ The **Extensions** view in the Activity Bar provides the installation
 route. A search for `debug80` finds **Debug80 IDE for Z80
 Development**, published by `jhlagado`.
 
-The extension takes over `.asm`, `.z80` and `.asmi` files for syntax highlighting, and `.glim` files for Glimmer. It sets the language mode on those files itself each time one opens, which takes precedence over any other Z80 assembly extension you have installed.
+The extension provides syntax highlighting for `.asm`, `.z80` and `.asmi` files, and Glimmer support for `.glim` files. It sets the language mode each time one of these files opens, taking precedence over any other installed Z80 assembly extension.
 
 ## Find Debug80 in the sidebar
 
-Debug80 has no icon of its own in the activity bar. It lives inside VS Code's **Run and Debug** sidebar, as one section among the several VS Code puts there itself: Variables, Watch, Call Stack, Breakpoints. Debug80 is the last of them, and it starts shut.
+Debug80 appears under the standard **Run and Debug** icon in the Activity Bar. Inside that sidebar, Debug80 follows VS Code's Variables, Watch, Call Stack and Breakpoints sections. It is the last section and is collapsed by default.
 
 In the Run and Debug sidebar, expanding **DEBUG80** at the bottom of
 the list reveals the panel.
 
-![Clicking DEBUG80 expands it from a shut section into the Project section, showing the Add projects or folders message and an Open Folder button](../../assets/images/debug80-book/book1/panel-sidebar-location.svg)
+![Clicking DEBUG80 expands the collapsed section, showing the Add projects or folders message and an Open Folder button](../../assets/images/debug80-book/book1/panel-sidebar-location.svg)
 
 The book calls it **the Debug80 panel** from here on.
 
-The extension contributes this section itself, so it appears once Debug80 is installed, and opening it is what starts the extension running. When the list lacks it, check that the extension is installed and enabled; VS Code's **View > Open View...** picker reaches Debug80 directly.
+The extension contributes this section, so it appears once Debug80 is installed, and opening it starts the extension. The section requires the extension to be installed and enabled. VS Code's **View > Open View...** picker also reaches Debug80 directly.
 
 ## The empty state
 
@@ -51,8 +51,8 @@ and one button, **Open Folder**.
 
 ## The panel with a program running
 
-This is the same section several chapters from now, with a project open and a program running:
+With a project open and a program running, the section contains the project and machine controls:
 
 ![The Debug80 section expanded inside the Run and Debug sidebar, holding the Project, Machine, Displays and Matrix Keyboard sections, with TMS9918 Video, Joystick, Registers, Memory and Serial collapsed](../../assets/images/debug80-book/book1/debug80-panel-in-vscode.png)
 
-Everything below `DEBUG80` belongs to Debug80: the project row you have already met, then the emulated machine, its displays, a keyboard, and further sections for registers, memory and the serial line.
+Everything below `DEBUG80` belongs to Debug80: the project row, the emulated machine, its displays, a keyboard and further sections for registers, memory and the serial line.

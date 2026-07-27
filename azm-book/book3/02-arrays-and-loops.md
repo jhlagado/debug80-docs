@@ -7,19 +7,20 @@ nav_order: 3
 
 # Arrays and Loops
 
-Chapter 1 kept every value in registers. Sorting and searching need **indexed storage**: many bytes in a row, one element selected by offset.
-
-The companion program is [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
+Chapter 1 kept every value in registers. Sorting and searching need **indexed
+storage**: many bytes in a row, one element selected by offset. The complete
+program in [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm)
+sorts eight bytes, then searches the result.
 
 ---
 
-## The problem: sort and find
+## Sorting and searching one table
 
 The example starts with eight scores in RAM in arbitrary order. Displaying them
 requires ascending order, followed by the index of the first score that is at
 least 5.
 
-Two separate algorithms, one representation:
+The same representation supports two algorithms:
 
 1. **Insertion sort**: build a sorted prefix; insert each new element into its place.
 2. **Linear search**: walk from index 0 until `values[i] >= threshold` or you run out.
@@ -107,7 +108,8 @@ for i from 1 to length-1:
 
 ### Keeping the base in DE
 
-If you only keep HL, you lose the base address. **DE holds the base** for the whole routine; HL is recomputed from DE and the current index.
+Keeping only HL would discard the base address. **DE holds the base** for the
+whole routine; HL is recomputed from DE and the current index.
 
 Length arrives in B, but the inner loops also need B, so the routine stores the
 length in workspace. Its scratch bytes follow the table in the same `.org
@@ -196,7 +198,8 @@ _inner:
 `values[j] <= key`, write `key_byte` at `values[j+1]`. `sort_index` then
 restores the outer-loop index after C has been reused for address arithmetic.
 
-Full source: see [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
+The complete implementation is in
+[`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm).
 
 After `halt`, memory at `$8000` should read:
 
@@ -280,7 +283,11 @@ Stride becomes `sizeof(Score)` and field offsets use `offset(Score, value)`, the
 
 ---
 
-## Examples
+## Inspecting the sort
+
+After [`examples/02_insertion_sort.asm`](examples/02_insertion_sort.asm)
+reaches `halt`, `values` should be in ascending order and `found_index` should
+be 4 for threshold 5:
 
 | File | What to verify |
 |------|----------------|
@@ -297,14 +304,15 @@ while the sorted prefix grows.
 
 ## Exercises
 
-1. A hand trace should cover the first three outer iterations (i = 1, 2, 3)
-   and record the table contents after each iteration.
-2. Changing one `.db` value to 0 provides a case for determining whether the
-   sort still terminates correctly and why.
-3. Changing one comparison in the inner loop should produce a descending sort.
-4. A `find_byte_eq` routine should return the index of the first element equal
-   to C, or `$FF`.
-5. A bubble sort can use nested `djnz` loops and should include a one-sentence
-   outer-loop invariant.
-6. An alternative table uses `.ds byte[8]` for its reservation and eight `ld
-   (hl), a` stores in `main` for initialization.
+1. Hand-trace insertion sort for the first three outer iterations (i = 1, 2,
+   3). Write the table contents after each, then check your rows against the
+   emulator.
+2. Change one `.db` value to 0 and rerun. Does the sort still terminate
+   correctly? Why?
+3. Implement descending sort by changing one comparison in the inner loop.
+4. Add `find_byte_eq`: return the index of the first element equal to C, or
+   `$FF` when the scan reaches the table length.
+5. Replace insertion sort with bubble sort using nested `djnz` loops. State
+   the outer loop's invariant in one sentence.
+6. Reserve the table with `.ds byte[8]` and initialize it in `main` with eight
+   `ld (hl), a` stores instead of `.db`.

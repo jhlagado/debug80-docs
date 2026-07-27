@@ -7,47 +7,42 @@ nav_order: 1
 
 # The Shape of a Game
 
-A game written out by hand is a large program. The same game in
-Glimmer is a small one, and a short program is one you can hold in
-your head, change and debug quickly.
+A game written entirely by hand is a large program. Glimmer expresses
+the same game in a smaller source file that is easier to understand,
+change and debug.
 
-Before we start, here is what I assume about you: you already read
-assembly. You can read a `ld a,(hl)` and a conditional jump at a
-glance, so you know the pleasure of this machine: the metal right under
-your hands, every byte where you put it. The obstacle is how much
-a game has to do at once. The keys have to be watched, the display kept
-alive, time kept, and all of it has to happen every frame, in the right
-order. That supporting work is most of the code
-in any game, and it is nearly the same from one game to the next. The
-rules, the part that makes this game the game it is, end up threaded
-all through it.
+The intended reader can already read assembly and recognise
+`ld a,(hl)` and a conditional jump at a glance. In a game, that
+assembly must also scan the keys, refresh the display, track time and
+run each operation in the right order on every frame. This supporting
+work makes up much of a typical game and changes little from one game
+to the next. The rules specific to the game end up distributed through
+it.
 
 There is a name for the usual way of arranging all this: *imperative*.
 The program is a list of orders (do this, then this, then check that)
 and making sure every order lands at the right moment, frame after
 frame, is your job. Reactive programming turns that around. You write
-down how the program should respond when things happen, and the
-machinery does the watching. Almost everything an interactive program
-does is a *reaction*: a key goes down, so the player moves; a timer
-runs out, so the block drops; the score changes, so the display
-updates. If you have ever used a spreadsheet, changed one cell and
-watched every formula that mentions it recompute, you have already
-seen this model work.
+down the program's response to each event, and generated code monitors
+those events. Almost everything an interactive program does is a
+*reaction*: a key goes down, so the player moves; a timer runs out, so
+the block drops; the score changes, so the display updates. A
+spreadsheet uses the same model when changing one cell recomputes every
+formula that refers to it.
 
 ![The same dot, ordered by hand and declared in Glimmer.](../../assets/images/glimmer-book/book0/imperative-reactive.svg)
 
-So in Glimmer you declare the facts your game remembers, name the
-moments it responds to, and write the rules and the pictures as a few
-lines of real Z80 each, with a label saying when they run. Glimmer
-supplies the machinery around them (the loop, the key scanning, the
-timing, the change tracking) and calls your code at the moments you
-declared.
+In Glimmer, you declare the facts that store game state, name the
+moments that trigger work and write the rules and pictures as a few
+lines of Z80 each, with a label specifying when they run. Glimmer
+generates the loop, key scanning, timing and change tracking around
+them, then calls your code for the declared moments.
 
 The language inside every rule is Z80 assembly itself: the real
 instruction set, the real registers, the real flags. Glimmer emits one
 ordinary assembly-language source file with your code inside it, which
-you can open, read and step through whenever you want to know what a
-declaration cost you.
+you can open, read and step through to inspect the code generated for
+any declaration.
 
 Our machine is the TEC-1G, a Z80 single-board computer with a hex
 keypad and an 8x8 RGB LED matrix (sixty-four pixels, each one mixing
@@ -58,7 +53,7 @@ yourself in chapter 2, once we have the tools installed.
 
 ## A dot appears
 
-Here is a complete Glimmer program, the whole file.
+Here is a complete Glimmer program.
 It lights one white pixel in the middle of the 8x8 matrix.
 
 ```text
@@ -86,15 +81,15 @@ becomes clear when we work through it from top to bottom.
 `program Mover` names the program. `platform tec1g-mon3` and
 `display matrix8x8` tell Glimmer what hardware we are aiming at: a
 TEC-1G running the MON-3 monitor, drawing on the 8x8 matrix. These two
-lines buy you a lot; the keypad wiring, the display driver, and a
-small library of drawing helpers all come from this choice, and we
-will meet them as we need them.
+lines select the keypad wiring, display driver and a small library of
+drawing helpers. Later examples introduce each of those facilities
+when they first use it.
 
 ```text
 state DotX : byte = 3 changed
 ```
 
-This is our first *fact*: a named variable that the program remembers.
+This is our first *fact*: a named variable that stores program state.
 One reading habit will serve throughout the book: Glimmer declarations
 are built to be read aloud. This one reads: "DotX is a byte, starting
 at 3, already changed." Every
@@ -112,21 +107,20 @@ end
 
 And here is our first *rule* (Glimmer calls them blocks). A `render`
 block turns memory into light. Its header carries two
-things: a name, and the line `on DotX`, which answers the question
-every block must answer: *when should this code run?* This one runs
-on any frame where `DotX` changed. Everything between `begin` and `end`
+things: a name and the line `on DotX`, which specifies when the code
+runs. This block runs on any frame where `DotX` changed. Everything
+between `begin` and `end`
 is real assembly, copied through to the output verbatim.
 
 The generated program advances one **frame** at a time. Every frame,
-the machinery checks which
-facts changed and runs the blocks that declared an interest in them,
-then shows the result and goes round again. `changed` marks `DotX` as
+the generated loop checks which facts changed, runs the blocks that
+list those facts in an `on` line, shows the result and begins the next
+frame. `changed` marks `DotX` as
 already changed *before the first frame*, so
 `DrawDot` runs once at startup and our pixel appears. Without it, the
-program would sit there with a dark screen, waiting for a change that
-never comes. From the second frame on, `DotX` holds still, so
-`DrawDot` rests. The pixel stays lit because keeping
-the display alive is the machinery's job.
+program would keep a dark screen because no change schedules the
+render. From the second frame on, `DotX` remains unchanged, so
+the dispatcher skips `DrawDot`. Matrix scanning keeps the pixel lit.
 
 `DotX` is the fact and `DrawDot` is the render rule. `on DotX`
 declares their connection: a change to the fact schedules the rule.
@@ -174,18 +168,18 @@ begin
 end
 ```
 
-The new declarations make most sense in source order because each one
-answers a question raised by the previous one.
+Each new declaration depends on the one before it, so their source
+order also gives the clearest explanation.
 
 ```text
 pulse Right
 ```
 
 `DotX` is a
-fact that persists; it outlives every frame that draws it. A press of
-key 6 is a *moment*: it happens, and then it is gone. Glimmer gives
-moments their own declaration, the **pulse**. A pulse is a fact that
-holds for exactly one frame and then clears itself.
+fact that persists across frames. A press of key 6 is a *moment*: it
+happens, then ends. Glimmer represents moments with a **pulse**. A
+pulse is a fact that holds for exactly one frame before generated code
+clears it.
 
 ```text
 bind key KEY_6 rising -> Right
@@ -195,9 +189,8 @@ The **bind** line is the wire from the physical world to your pulse.
 Following the arrow from left to right gives its meaning: key 6, on a
 new press, fires `Right`. The word `rising` means the pulse fires on the frame the key
 first goes down: one press, one pulse, however long you hold the key.
-We will want a different behaviour for movement soon, and Glimmer has
-one waiting, but rising is the shape to learn first because it is the
-shape of every clean button press in every game: fire, rotate, start.
+Movement soon uses a different binding. A rising edge suits discrete
+actions such as firing, rotating and starting.
 
 ```text
 effect MoveRight
@@ -205,18 +198,15 @@ effect MoveRight
     updates DotX
 ```
 
-When I say
-rule, I mean something specific, and the word keeps this meaning for
-the whole book: a rule is a decision the game makes when a moment
-arrives. The `effect` block holds the rule. Its header answers two
-questions this time: `on Right` runs the block on any frame where
-`Right` fired, and `updates DotX` says this block *changes* that fact,
-so everyone watching `DotX` should hear about it. The body is your Z80 again, and
-the screen's edge is in there with it: `cp 7`, and at column 7 we stay
-put.
+Throughout this book, a rule is the state change associated with a
+moment. An `effect` block contains that rule. Its header declares two
+relationships: `on Right` runs the block on any frame where `Right`
+fired, and `updates DotX` marks that fact as changed after the block
+runs. The body is Z80 again, including the screen boundary: `cp 7`
+keeps the dot at column 7 when it reaches the edge.
 
-`DrawDot` picked up one new line, `call FbClear`, for a reason you can
-guess: the dot moves now, so each redraw starts from a clean
+`DrawDot` also calls `FbClear` because the dot now moves. Each redraw
+starts from a clean
 framebuffer and plots the dot where it currently is.
 
 The following diagram traces one press of key 6 through the program,
@@ -224,15 +214,14 @@ from key to pixel:
 
 ![One press of key 6, from the declarations that describe it to the pixel it lights.](../../assets/images/glimmer-book/book0/reactive-chain.svg)
 
-This is the spreadsheet from the start of the chapter. You never call a
-formula; you write it, and the spreadsheet works out when it must
-run. Here the same idea is running on a Z80, and the whole chain is
-readable off the page: `bind ... -> Right`, `on Right`, `updates
-DotX`, `on DotX`.
+This chain follows the spreadsheet model from the start of the
+chapter. A formula runs when one of its inputs changes. On the Z80,
+the same dependency chain appears directly in the declarations:
+`bind ... -> Right`, `on Right`, `updates DotX`, `on DotX`.
 
-Each header lists everything its block touches: `MoveRight` declares
+Each header lists every declared dependency and update: `MoveRight` declares
 `Right` and `DotX`, `DrawDot` declares `DotX`. You can read any one
-block on its own, whether the program has three of them or thirty.
+block independently, whether the program has three of them or thirty.
 
 ## Holding a key down
 
@@ -240,9 +229,9 @@ Crossing the screen with `rising` takes seven separate presses of key
 6. Arcade movement usually continues while the key is held.
 
 By hand, that behaviour is a small state machine run every frame. It
-keeps a counter, acts when the counter reaches zero, reloads it, and
-(the edge people forget) resets it on release so the next press fires
-at once.
+keeps a counter, acts when the counter reaches zero, reloads it and
+resets it on release so the next press fires at once. That final edge
+is easy to miss.
 
 ```asm
         call    Key6Down         ; Z if key 6 is down this frame
@@ -273,11 +262,10 @@ bind key KEY_6 held period 8 -> Right
 
 A `held` binding fires on the first press,
 then fires again every 8 frames for as long as the key stays down.
-That period is the *feel* of your controls (drop it to 4 and the dot
+That period controls the movement's *feel* (drop it to 4 and the dot
 sprints, raise it to 15 and the dot trudges), and tuning it is editing
-one digit. Glimmer writes the counter and its edges for you; you will
-meet the two bytes it uses in the generated assembly later in this
-chapter.
+one digit. Glimmer generates the counter and edge handling; the
+generated assembly later in this chapter shows the two bytes it uses.
 
 The mirror-image key and rule for leftward travel complete the
 program:
@@ -332,7 +320,7 @@ begin
 end
 ```
 
-When read aloud from the top, the file describes itself as: "Mover, on the TEC-1G,
+From the top, the file describes the program as follows: "Mover, on the TEC-1G,
 drawing on the 8x8 matrix. DotX is a byte, starting at 3, already changed.
 Two moments, Left and Right. Key 4 held fires Left every 8 frames; key
 6 held fires Right. On Left, MoveLeft updates DotX. On Right,
@@ -341,9 +329,9 @@ The headers alone tell someone who has never seen a Z80 what this game
 does. Any single block tells a Z80 programmer everything it touches.
 
 Labels that start with an underscore, like `_stop`, are local to their
-block, so each movement rule gets a `_stop` of its own. And blocks
-fall off their last line: Glimmer supplies
-the return, so you write the work and skip the ceremony.
+block, so each movement rule gets a separate `_stop`. Blocks
+end after their last line: Glimmer supplies
+the return instruction.
 
 ## The program behind the program
 
@@ -354,7 +342,7 @@ polling, held-key timing, change tracking and your blocks. Here are
 three excerpts, so you can see which lines came from you and which
 came from Glimmer.
 
-The state:
+The generated state storage:
 
 ```asm
 ; --- state storage ---
@@ -369,12 +357,11 @@ Changed0:         .db %00000001   ; flags dispatch tests
 There is `state DotX : byte = 3`, a labelled byte holding 3, exactly
 what you would have written yourself. Each pulse is a byte too, and
 the two `Glim_` cells under them are the held-key repeat clock,
-written for you. And `Changed0` is the change tracking we have been
-talking about all chapter, revealed as one humble byte: one bit per
-fact, and bit 0 (DotX's bit) starts set. That is the word `changed`
-from your declaration, compiled into a single 1.
+generated from the binding. `Changed0` stores the change flags in one
+byte, with one bit per fact. Bit 0, DotX's bit, starts set. The
+compiler has turned `changed` in the declaration into that initial 1.
 
-The loop:
+The generated loop:
 
 ```asm
 ; --- runtime loop ---
@@ -391,13 +378,12 @@ MainLoop:
         jp      MainLoop
 ```
 
-From top to bottom, the loop restates this chapter in assembly: show
-the picture, poll the keys, run the rules whose facts
-changed, draw what changed, tidy up, go round again. Every routine it
-calls sits further down in this same file, in this same plain style,
-and you can follow any of them to the end.
+From top to bottom, the loop shows the picture, polls the keys, runs
+the rules whose facts changed, draws changed output and ends the
+frame before repeating. Every routine it calls appears further down
+in the same file.
 
-And your own code:
+The generated file also contains your block:
 
 ```asm
 ; --- logic block MoveRight ---
@@ -420,22 +406,19 @@ your comment, copied in byte for byte, down to the indentation.
 Around it, Glimmer's wrapping: a label so the dispatcher can call your
 rule, and after `_stop:`, three generated instructions that set DotX's
 change bit.
-That is the line `updates DotX`, compiled: you declared what the
-block changes, and this is the machinery telling everyone who watches
-`DotX` that news arrived. The `.routine` directive above it enrols the
-block in the assembler's register-contract checking, a safety net we
-will lean on properly when our programs get bigger.
+Those instructions compile the line `updates DotX`: after the block
+runs, they raise the bit that schedules later blocks with `on DotX`.
+The `.routine` directive above the label enrols the block in the
+assembler's register-contract checking, which later chapters use as
+the programs grow.
 
 This file assembles to the bytes the Z80 executes. You can open it,
-follow it, and step through it with a debugger whenever you want the
-whole story of a declaration, and in the next chapter, you will.
+follow it and step through it with a debugger to inspect the exact
+implementation of a declaration.
 
-This holds for every program in the book: **Glimmer owns the loop, and
-you own the behaviour.** The frames, the polling, the timing and the
-bookkeeping are generated from your declarations, where you can read
-every byte. The rules and the pictures are yours, in real Z80, each a
-few lines with one job and a declared reason to run.
-
-In the next chapter you install the tools, build a program of your
-own, and press its keys yourself:
+For every program in the book, Glimmer generates the frame loop,
+polling, timing and bookkeeping from the declarations. You write the
+rules and pictures in Z80, each as a small block with one job and a
+declared reason to run. The next chapter puts that division into
+practice by installing the tools and building
 [First Light](02-first-light.md).

@@ -22,7 +22,10 @@ ld b, (hl)     ; B = byte at address HL
 ld (hl), 19    ; byte at address HL = 19
 ```
 
-Any of A, B, C, D, E, H, L can appear on either side when the other side is `(HL)`. The standard pattern is: load an address into HL, read or write with `(HL)`, increment HL, repeat. Chapter 7 builds on this pattern heavily when working with byte tables.
+Any of A, B, C, D, E, H, L can appear on either side when the other side is
+`(HL)`. To process consecutive bytes, load an address into HL, read or write
+with `(HL)`, increment HL and repeat. Chapter 7 applies this sequence to byte
+tables.
 
 IX and IY support displaced addressing: `(ix+d)` reads the byte at address IX + d while IX keeps its value. Chapter 7 covers this in full when the use case makes it concrete.
 
@@ -144,7 +147,9 @@ count:   .db 0
 scratch: .dw 0
 ```
 
-With `ld a, MaxCount`, the assembler sees `MaxCount`, defined with `.equ 10`, and writes 10 into the instruction. This is an immediate load: the 10 travels inside the instruction bytes.
+With `ld a, MaxCount`, the assembler substitutes the value 10 from the `.equ`
+definition. This is an immediate load: the 10 travels inside the instruction
+bytes.
 
 `ld (count), a` stores A at the address of `count`. This is a direct-address write: the `(nn) ← A` form from the table above. `count` resolves to `$8000`.
 
@@ -158,16 +163,11 @@ After the program runs: `$8000` holds `10` (`$0A`) and `$8001`–`$8002` hold `$
 
 ---
 
-## Branching in Chapter 5
-
-Every program so far has done its work in a straight line. Chapter 5 adds
-branches based on zero, ordering and carry conditions.
-
----
-
 ## Exercises
 
-**1. Memory form identification.** The task is to classify each instruction with the LD forms table, identify its row and state whether it reads from or writes to memory.
+**1. Memory form identification.** Matching each instruction to a row in the LD
+forms table shows which operand determines the addressing mode and whether the
+instruction reads from or writes to memory.
 
 ```asm
 ld a, (hl)
@@ -177,7 +177,9 @@ ld ($8010), a
 ld de, ($8020)
 ```
 
-**2. The illegal instruction.** Four of these five `ld` instructions assemble. The answer should identify the rejected form and explain the restriction:
+**2. The illegal instruction.** Four of these five `ld` instructions assemble.
+Identifying the rejected form and the operand restriction explains why the Z80
+needs a register for that transfer:
 
 ```asm
 ld a, (hl)
@@ -189,7 +191,9 @@ ld b, $FF
 
 _(Hint: re-read the section on memory-to-memory moves and the LD forms table.)_
 
-**3. Signed or unsigned?** Each byte below needs both its unsigned interpretation (0–255) and its signed two's-complement interpretation (−128 to +127):
+**3. Signed or unsigned?** Reading each byte below once as unsigned (0–255) and
+once as signed two's complement (−128 to +127) shows how one bit pattern can
+represent two values:
 
 - `$00`
 - `$7F`

@@ -19,7 +19,7 @@ Assembly programs use names for memory locations and names for constant values. 
 
 After this directive, AZM places the next byte at address `$0100`. Labels defined after it get addresses starting there. Assembly begins at address 0 until an `.org` sets a different address.
 
-You can use multiple `.org` directives in one source file to place different sections at different addresses:
+Multiple `.org` directives can place sections from one source file at different addresses:
 
 ```asm
         .org $0100
@@ -37,9 +37,9 @@ Result:
 
 The code and the data byte land in the same output binary at their respective offsets.
 
-`.org` sets the assembly address, the address assigned to the next byte, which is a separate thing from where that byte sits in the output file. The directive only moves the address; the bytes come from the directives after it.
+`.org` sets the assembly address assigned to the next byte. That address is distinct from the byte's position in the output file. The directive moves the address but emits no bytes; subsequent instructions and directives provide the bytes.
 
-The address only ever moves forward. An `.org` that names an address behind the last byte assembled is ignored, and the next byte lands at the next free address instead. The bytes already assembled stay as they are and the build stays silent, so a label can end up at an address no line of source names.
+The address only moves forward. AZM silently ignores an `.org` behind the last byte assembled, and the next byte uses the next free address. Existing bytes remain unchanged. A following label can therefore receive an address that no source line names explicitly.
 
 ![The assembly address moves forward only, so an .org that points behind it is ignored and the label lands at the next free address](../../assets/images/azm-book/book1/address-ruler.svg)
 
@@ -71,9 +71,9 @@ Label subtraction makes the intent clear and keeps the result correct when the c
 
 ## Gaps between origins
 
-When you use two `.org` directives with a gap between them, the binary output may contain a hole depending on how the output is formed:
+Two `.org` directives separated by an address gap affect each output format differently:
 
-- **Flat binary:** bytes are emitted in address order. If your first section ends at `$01FF` and the next `.org` is `$8000`, the binary fills the gap with zero bytes unless you use `.binfrom` / `.binto` to trim it.
+- **Flat binary:** bytes are emitted in address order. If the first section ends at `$01FF` and the next `.org` is `$8000`, the binary fills the gap with zero bytes unless `.binfrom` / `.binto` trim it.
 - **Intel HEX:** records are emitted only for the addresses that contain assembled bytes. Gaps in HEX are implicit.
 
 `.binfrom` and `.binto` mark the address range to include in the flat binary:
@@ -92,7 +92,7 @@ When you use two `.org` directives with a gap between them, the binary output ma
         .align 16
 ```
 
-Advances the assembly address to the next multiple of 16, inserting zero bytes to fill the gap. The directive supplies address alignment required by hardware or lookup tables.
+`.align` advances the assembly address to the next multiple of 16 and inserts zero bytes to fill the gap. The directive supplies address alignment required by hardware or lookup tables.
 
 ---
 
@@ -115,7 +115,7 @@ COUNT   .equ 20   ; error: duplicate symbol
 
 ### Hardware constants
 
-Port addresses and memory-mapped I/O addresses belong as `.equ` constants:
+`.equ` constants can name port addresses and memory-mapped I/O addresses:
 
 ```asm
 LCD_DATA    .equ $00
@@ -185,7 +185,7 @@ AZM resolves forward references across passes. Circular references produce an er
 
 ## Expressions
 
-An expression is any combination of numeric literals, symbols and arithmetic operators that the assembler evaluates to an integer before writing the binary. Expressions appear everywhere you can put a number: instruction operands, `.equ` definitions, `.db` / `.dw` / `.ds` operands.
+An expression combines numeric literals, symbols and arithmetic operators. The assembler evaluates it to an integer before writing the binary. Expressions can appear in numeric contexts: instruction operands, `.equ` definitions and `.db` / `.dw` / `.ds` operands.
 
 ### Arithmetic operators
 
@@ -200,7 +200,7 @@ FRAME_SIZE  .equ (COLS * ROWS) + 2
 ENTRY_ADDR  .equ TABLE_BASE + (ENTRY_NUM * 3)
 ```
 
-See [Appendix 2](../appendices/02-operators.md) for the full precedence table.
+[Appendix 2](../appendices/02-operators.md) contains the full precedence table.
 
 ### `$` in expressions
 
@@ -262,7 +262,7 @@ For checked contexts, a value outside the encoding range produces a range diagno
 
 ### Expression errors
 
-Common expression errors:
+Expression errors include:
 
 - **Unknown symbol**: a name with no `.equ`, label or layout definition
 - **Circular reference**: an `.equ` that transitively references itself
@@ -295,7 +295,7 @@ AZM reports unmatched or repeated `.else` directives, unmatched `.endif` directi
 
 ## Enums as grouped constants
 
-When you write a set of related constants with `.equ`, they often form a natural sequence:
+Related `.equ` constants often form a sequence:
 
 ```asm
 RED   .equ 0
@@ -305,7 +305,7 @@ BLUE  .equ 2
 
 Adding `YELLOW` between `RED` and `GREEN` requires renumbering `GREEN`, `BLUE` and everything that follows.
 
-An enum groups related constants under a single name and assigns their values automatically. You list the members; AZM assigns 0 to the first, 1 to the second and so on:
+An enum groups related constants under a single name and assigns their values automatically. AZM assigns 0 to the first listed member, 1 to the second and so on:
 
 ```asm
 Mode .enum Read, Write, Append

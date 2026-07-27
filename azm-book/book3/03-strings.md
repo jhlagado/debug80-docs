@@ -8,16 +8,17 @@ nav_order: 4
 # Strings
 
 Chapter 2 walked a byte table with a **fixed length** in B. Text in memory
-usually carries its end inside the data: a sentinel byte stops the walk.
-
-The companion program is [`examples/03_string_length.asm`](examples/03_string_length.asm).
+usually carries its end inside the data: a sentinel byte stops the walk. The
+complete program in
+[`examples/03_string_length.asm`](examples/03_string_length.asm) measures,
+copies, compares and searches one null-terminated string.
 
 ---
 
-## The problem: finding where the text ends
+## Finding where the text ends
 
 The examples cover three common operations: finding a message length before
-formatting a screen line, copying a label into a buffer, and locating the first
+formatting a screen line, copying a label into a buffer and locating the first
 `'/'` in a path.
 
 ---
@@ -48,7 +49,7 @@ Both forms emit the same bytes: `48 45 4C 4C 4F 00`.
 
 ### Length vs capacity
 
-Two different numbers confuse beginners:
+Length and capacity describe different limits:
 
 | Concept | Meaning |
 |---------|---------|
@@ -97,7 +98,8 @@ Unless a routine says otherwise, Book 3 string routines use:
     inc hl
 ```
 
-`or a` sets the Zero flag from A's value and leaves A intact. That is the standard Z80 idiom for "is this byte zero?" It plays the same role as `cp 0`, but `or a` is one byte cheaper.
+`or a` sets the Zero flag from A's value and leaves A intact. It occupies one
+byte, one fewer than `cp 0`.
 
 ---
 
@@ -147,7 +149,8 @@ _copy:
     ret
 ```
 
-The last iteration copies the zero terminator. That matters if later code scans `buffer` with the same null-terminated walk.
+The last iteration copies the zero terminator so later code can scan `buffer`
+with the same null-terminated walk.
 
 ![HL reads and DE writes in step, and the loop only exits once the terminator has been written](../../assets/images/azm-book/book3/two-pointer-copy.svg)
 
@@ -224,14 +227,15 @@ Order matters: compare characters **before** you decide both strings ended. A ho
 
 ![Both pointers advance together, and the pass that settles the answer is the one on the two terminators](../../assets/images/azm-book/book3/strcmp-walk.svg)
 
-The companion program copies `message` into `buffer`, then compares the two buffers. `copy_ok` at `$800F` should be `$01`.
+The example copies `message` into `buffer`, then compares the two buffers.
+`copy_ok` at `$800F` should be `$01`.
 
 ---
 
 ## Preparing for print: digits and terminators
 
-Display routines need ASCII, so a small integer is converted digit by digit.
-Chapter 1's digit loop divides the value by 10, adds `'0'` to each remainder,
+Display routines need ASCII, so a small integer is converted digit by digit. A
+decimal-output loop divides the value by 10, adds `'0'` to each remainder,
 stores the digits backward into a small buffer and appends a null terminator.
 
 Sketch of the invariant for decimal output into a byte buffer at DE:
@@ -282,7 +286,10 @@ _store_copy_ok:
 
 ---
 
-## Examples
+## Running the string routines
+
+[`examples/03_string_length.asm`](examples/03_string_length.asm) should leave
+`str_len` = 5, `copy_ok` = 1 and `find_index` = 2:
 
 | File | What to verify |
 |------|----------------|
@@ -300,17 +307,17 @@ and HL stopping on the null.
 
 ## Exercises
 
-1. In the first exercise, `message` becomes `.db "AZM", 0`; the predicted
-   `str_len` and `find_index` for `'M'` can then be compared with execution.
-2. A `strchr` routine should return HL pointing at the match with carry set, or
-   HL = 0 with carry clear when the character is absent. Its contract includes
-   `in`, `out` and `clobbers`.
-3. A `strcat_u8` routine uses HL as destination and DE as source. It scans HL
-   to the null before copying from DE into that position.
-4. A bounded `strncpy_u8` uses B as the maximum number of bytes to write. It
-   stops early when the source ends, writes at most B bytes, and pads with null
-   when required.
-5. A hand trace of `strcmp_u8` on `"AB"` and `"A"` should include the expected
-   return code.
-6. A four-byte workspace should contain the decimal string for `str_len` after
-   the length calculation.
+1. Change `message` to `.db "AZM", 0`. Predict `str_len` and `find_index` for
+   `'M'` before running the program.
+2. State the invariant that holds at the top of `strcpy_u8`'s loop, relating
+   the bytes behind HL and the bytes behind DE.
+3. Add `strchr`: return HL pointing at the match with carry set, or HL = 0
+   with carry clear when the character is absent. Document `in`, `out` and
+   `clobbers`.
+4. Implement `strcat_u8` with HL destination and DE source: scan HL to its
+   null, then copy from DE into that position.
+5. Write a bounded copy, `strncpy_u8`, with B holding the maximum bytes to
+   write. Stop early when the source ends, and pad with a null if room
+   remains.
+6. Hand-trace `strcmp_u8` on `"AB"` against `"A"`. Which return code should
+   you get? Confirm in the emulator.

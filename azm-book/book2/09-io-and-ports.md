@@ -83,7 +83,7 @@ in d, (C)        ; read from port $10 into D
 in a, (C)        ; read from the same port into A
 ```
 
-Unlike `out`, the `in` instruction **sets flags**. After `in r, (C)`:
+The register-addressed `in r, (C)` form **sets flags**:
 
 - S is set if the byte read has bit 7 set.
 - Z is set if the byte read is zero.
@@ -97,7 +97,8 @@ Unlike `out`, the `in` instruction **sets flags**. After `in r, (C)`:
 
 ## Polling a port in a loop
 
-A common pattern is to poll a status port until a condition is met, then read or write a data port.
+Polling repeatedly reads a status port until a condition is met, then accesses
+the data port.
 
 ```asm
 STATUS_PORT .equ $11
@@ -117,7 +118,7 @@ wait:
 
 `and $01` keeps only bit 0 and sets Z when that bit was 0. `jr z, wait` loops back while Z is set (bit 0 still clear).
 
-![The mask discards every bit but the ready flag, so Z answers one question.](../../assets/images/azm-book/book2/polling-loop.svg)
+![The mask discards every bit except the ready flag. Z is set while that bit is clear.](../../assets/images/azm-book/book2/polling-loop.svg)
 
 Both reads use immediate low-byte addresses. These examples assume the target
 decodes only that low byte, as many small Z80 systems do.
@@ -245,9 +246,9 @@ B available as the loop counter.
 
 ---
 
-## A note on interrupts
+## Interrupts
 
-Everything in this chapter uses `in` and `out` to poll a peripheral: the CPU loops checking the status port until the device is ready. This works but keeps the CPU busy the entire time it is waiting.
+Polling keeps the CPU busy checking the status port until the device is ready.
 
 The Z80 also supports **interrupts**. A hardware interrupt suspends the current
 instruction stream, transfers control to a handler and later resumes the
@@ -260,31 +261,30 @@ documentation for the target platform and its handler conventions.
 
 ---
 
-## Integration in Chapter 10
-
-Chapter 10 puts the whole of Chapters 3 to 9 into one program.
-
----
-
 ## Exercises
 
-**1. Flag behaviour of `in`.** The explanation must distinguish the flag behaviour of these two forms:
+**1. Flag behaviour of `in`.** Comparing these two forms shows when a port read
+can feed a conditional branch directly:
 
 ```asm
 in a, (IN_PORT)   ; form A
 in a, (C)         ; form B
 ```
 
-The answer should identify which form can feed `jr z, handle_zero` directly, which requires `or a`, and the minimum correct sequence that branches to `is_zero` when the byte read was zero.
+The comparison identifies which form can feed `jr z, handle_zero` directly,
+which requires `or a` and the shortest correct sequence that branches to
+`is_zero` when the byte read was zero.
 
-**2. A bit-3 ready check.** This version of `poll_and_recv` must wait for bit 3 rather than bit 0. Only the mask in the `and` instruction changes; the task includes deriving that mask in hexadecimal.
+**2. A bit-3 ready check.** Changing `poll_and_recv` to wait for bit 3 instead
+of bit 0 requires only a new `and` mask. Deriving that mask in hexadecimal
+connects the bit position to the byte value used by the instruction.
 
 **3. A receive loop.** The counterpart to `send_block` is a `recv_block`
 routine that reads B bytes from the fixed `IN_PORT` into memory starting at HL.
-Its interface needs documented inputs and clobbered registers, and its body uses
-the same DJNZ structure with `in a, (IN_PORT)` instead of `out`.
+Documenting its inputs and clobbered registers exposes the same DJNZ structure,
+with `in a, (IN_PORT)` supplying each byte before the store.
 
-**4. Register-addressed output.** The answer identifies the data register, the
-8-bit port-number register and the register that appears on the upper address
-pins in `out (C), d`. It then gives the three instructions that send `$7F` from
-D to port `$20`.
+**4. Register-addressed output.** Tracing `out (C), d` identifies the data
+register, the 8-bit port-number register and the register that appears on the
+upper address pins. The same roles determine the three instructions that send
+`$7F` from D to port `$20`.

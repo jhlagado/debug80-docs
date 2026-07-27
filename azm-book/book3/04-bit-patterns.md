@@ -7,13 +7,14 @@ nav_order: 5
 
 # Bit Patterns
 
-Chapters 2 and 3 treated each byte as one number. Hardware status registers, UART flags and packed record fields treat a byte as **eight switches in one box**.
-
-The companion program is [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm).
+Chapters 2 and 3 treated each byte as one number. Hardware status registers,
+UART flags and packed record fields assign separate meanings to individual
+bits. [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm) tests, sets,
+clears and extracts flags from one status byte.
 
 ---
 
-## The problem: eight flags, one byte
+## Eight flags in one byte
 
 A device reports ready, error and busy in a single status register at `$8000`.
 The example has four requirements:
@@ -23,7 +24,8 @@ The example has four requirements:
 3. Busy clears after the operation finishes.
 4. A separate byte stores the error bit as `$00` or `$01` for a later test.
 
-You could use eight bytes of RAM, which is wasteful on a small machine. One byte with named bit masks is the usual trade.
+Named bit masks let one byte hold the eight flags, at the cost of masking or
+shifting whenever code accesses one of them.
 
 ---
 
@@ -107,7 +109,9 @@ the clear mask:
 
 ## `op` for flag idioms
 
-Short sequences that repeat in one file are good `op` candidates: the bytes expand inline, and the intent stays visible at the call site. [Book 1 Chapter 7](../book1/07-ops-aliases.md) covers `op` declarations.
+An `op` can name a short sequence that repeats within one file. Its instructions
+expand inline at each use. [Book 1 Chapter 7](../book1/07-ops-aliases.md) covers
+`op` declarations.
 
 ```asm
 op bit_set(mask imm8)
@@ -176,9 +180,9 @@ For a general bit index `n`, loop `n` times with `srl a`, or use the Z80 `bit n,
     jr nz, _still_busy
 ```
 
-`bit` takes a bit **position**, not a mask, which is why the enum is worth
-having: `StatusBit.Busy` reads correctly here, while `FLAG_BUSY` would mean bit
-4. The assembler emits `CB 57`, the same two bytes as `bit 2, a`.
+`bit` takes a bit **position**, not a mask. `StatusBit.Busy` supplies position
+2, while `FLAG_BUSY` would mean bit 4. The assembler emits `CB 57`, the same
+two bytes as `bit 2, a`.
 
 `bit` sets flags and leaves A alone. `and mask` is the appropriate form when
 storage requires a numeric 0/1 in A.
@@ -215,7 +219,7 @@ Chapter 5 stores structs as bytes. A status nibble and a type nibble can share o
 
 ---
 
-## `main` in the companion
+## `main` in the example
 
 ```asm
 .org $0000
@@ -240,7 +244,11 @@ main:
 
 ---
 
-## Examples
+## Inspecting the flag byte
+
+After [`examples/04_bit_flags.asm`](examples/04_bit_flags.asm) runs,
+`device_flags` should be `$03`, `ready_lit` should be 1 and `error_bit` should
+be 1:
 
 | File | What to verify |
 |------|----------------|
@@ -258,17 +266,16 @@ expansion shown beside it.
 
 ## Exercises
 
-1. Starting from `$05`, the predicted `(device_flags)` value after
-   `bit_set FLAG_ERROR` should be recorded, with busy still set.
-2. A `FLAG_FAULT .equ $08` definition extends `main` so that a fault sets bit 3
-   and clears busy in one pass through A.
-3. A `popcount_u8` routine should copy A to a shifting register, perform eight
-   `srl` operations, increment a counter for each set carry, and return the
-   count in A.
-4. A `parity_u8` routine should return 1 for an odd number of set bits and 0
-   for an even number. One compact implementation toggles a workspace byte for
-   every set bit.
-5. A comparison between `and FLAG_ERROR` / `rr a` and `bit 1, a` followed by a
-   branch should distinguish a stored numeric result from control flow alone.
-6. An op named `shift_right_pair(hi reg8, lo reg8)` should expand to `srl hi`
-   followed by `rr lo`, shifting the 16-bit value in B:C right by one bit.
+1. Start from `$05`. Predict `(device_flags)` after `bit_set FLAG_ERROR` alone,
+   with busy left as it is, then run and check.
+2. Add `Fault` to the `StatusBit` enum and derive `FLAG_FAULT` from it. Write
+   `main` so a fault sets bit 3 and clears busy in one pass through A.
+3. Implement `popcount_u8`: copy A to a shifting register, run `srl` eight
+   times and increment a counter whenever carry is set. Return the count in A.
+4. Implement `parity_u8`: return 1 for an odd number of set bits, 0 for even.
+   One compact approach toggles a workspace byte each time a set bit appears.
+5. Compare `and FLAG_ERROR` followed by `rr a` with `bit 1, a` followed by a
+   branch. Which form suits a caller that needs a numeric 0/1 result, and
+   which suits one that needs only control flow?
+6. Define an op `shift_right_pair(hi reg8, lo reg8)` that expands to `srl hi`
+   followed by `rr lo`. Use it to shift the 16-bit value in B:C right one bit.

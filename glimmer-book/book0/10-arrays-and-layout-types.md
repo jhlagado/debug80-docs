@@ -7,38 +7,38 @@ nav_order: 10
 
 # Arrays and Layout Types
 
-Every game you have written so far has kept its whole world in a
-handful of named bytes. Today the world itself
-becomes data. The picture in a painting program, the wall of settled
+Every game so far has stored its state in a handful of named bytes.
+Larger structures also need representation in memory: the picture in
+a painting program, the wall of settled
 pieces in a falling-block game, the body of a snake: each of those
 is many related bytes that persist together, change together, and
-redraw together: one fact that happens to be sixty-four pixels wide.
+redraw together. Glimmer can treat such a structure as one fact.
 
-Choosing which facts a game remembers is one design decision. This
-chapter introduces another: choosing the *shape* those facts take in
-memory. You could declare sixty-four separate cells, but Glimmer's
+Choosing which values to store is one design decision. Another is the
+*shape* those values take in memory. You could declare sixty-four
+separate cells, but Glimmer's
 limit of 32 flag-carrying cells means a
 board of one-byte facts would overflow the change banks before the
-program drew a pixel. The deeper mismatch, though, is one of meaning. When
-you stamp one pixel, *the picture* changed. A render that draws the
-picture watches one name and tests one flag.
+program drew a pixel. It would also give the wrong change granularity:
+stamping one pixel changes *the picture*, so its render needs one name
+and one flag.
 
 So this chapter adds the two declarations that model group facts.
 Array state reserves a run of bytes under one name and one flag.
 Layout types name an arrangement of fields, so that bytes which
-belong together (an x and a y, a piece's origin and colour) travel
-under one declaration.
+form one record, such as an x and y or a piece's origin and colour,
+share one declaration.
 
 ## Canvas
 
 Canvas is a painting program. Keys 2, 4, 6, and 8 steer a white
 cursor around the 8x8 RGB LED matrix; GO stamps a green pixel where
 the cursor stands; the stamped pixels stay put while the cursor moves
-on. That last clause is a first for this book: every program until now
-kept its facts (a position, a colour, a score) but redrew its whole
+on. That last clause is new in this book: every program until now
+kept its facts (a position, a colour and a score) but redrew its complete
 picture from them each time, so everything you saw came fresh from the
 facts behind it. In Canvas the picture *is* the state, so it
-outlives your touch: steer the cursor away and your work stays. The
+persists after the cursor moves. The
 picture is an eight-byte array, and the cursor is a two-field layout
 called `Point`.
 
@@ -174,13 +174,13 @@ so the declaration reads directly:
 
 One change flag covers the whole run. Stamping a pixel changes the
 picture. A board changes *as a unit*,
-and the render that watches it asks one question: do I need to
-redraw? Per-cell flags would spend your whole flag budget tracking which
-byte moved, sixty-four bits behind a single question. So `updates Picture`
+and the render tests one flag to determine whether it must redraw.
+Per-cell flags would use the flag budget to track individual bytes.
+`updates Picture`
 raises the one flag whichever byte a block wrote, and `on Picture`
 fires when any byte did. The array name is legal exactly where a byte
 cell's name is legal, in `on` lines and in `updates` lines, and it
-spends one bit of `Changed0`, leaving the banks as roomy as before.
+uses one bit of `Changed0`.
 
 Eight bytes hold sixty-four pixels because each byte is a **row
 mask**: one row of the 8x8 matrix, one bit per column, bit 7 the
@@ -217,17 +217,17 @@ This addressing is the Z80 you already know: `Picture` is a label, the
 row number goes in DE,
 `add hl,de` lands HL on the row's byte, and OR folds the new pixel
 into whatever the row already held. Glimmer supplies the label, the
-storage behind it, and the flag that `updates Picture` raises; the
-arithmetic between them is yours, instruction by instruction. GO fires
+storage behind it and the flag that `updates Picture` raises; the
+arithmetic between them remains hand-written, instruction by instruction. GO fires
 `Paint`, the logic phase runs `PaintPixel`, and `Picture`'s change is
 delivered to the render phase later the same frame. One press of GO
 therefore produces one visible pixel in one frame.
 
 ## Redrawing the picture
 
-`DrawCanvas` watches both facts (`on Picture, Cursor`) so a stamp
+`DrawCanvas` depends on both facts (`on Picture, Cursor`) so a stamp
 and a move each trigger a redraw. Redrawing means rebuilding the
-whole frame from state, and the heart of it is one loop:
+complete frame from state with one loop:
 
 ```text
     ld hl,Picture
@@ -248,7 +248,7 @@ The framebuffer gives each row four bytes (red, green, blue, and an
 aux byte) so the loop drops each of Picture's row masks into the
 green plane and steps DE by four to reach the next row. Because
 `Picture` and the framebuffer share the row-mask convention, the
-whole painting transfers in one eight-pass loop. The cursor goes on
+complete painting transfers in one eight-pass loop. The cursor goes on
 top afterwards, white, through `FbPlot`. On a painted pixel the cursor
 shows white; after it moves away, the next redraw restores the green
 underneath.
@@ -270,8 +270,8 @@ state Cursor : Point changed
 
 A `type` declaration names an arrangement of bytes: `Point` is two
 byte fields, `x` at the start and `y` after it. The name describes a
-shape; storage
-arrives with the state line, which reads *Cursor is a Point, already
+shape. The state line reserves the
+storage and reads *Cursor is a Point, already
 changed* and reserves two zero-filled bytes in that shape.
 
 Typed state follows the array rules: zero-filled, one
@@ -290,18 +290,17 @@ shape:
 ```
 
 `offset(Point, y)` is a constant computed at assemble time (1, since
-`y` sits one byte into the layout), so the whole operand folds to a
+`y` sits one byte into the layout), so the complete operand folds to a
 fixed address and the instruction is a plain absolute load. You could
 write `Cursor + 1` and reach the
-same byte today. The reason not to is concrete: adding a field at the top
-of the layout silently shifts every hand-counted offset below it, and the bug
-that follows surfaces far from its cause. Written as `offset`, the addresses
-follow the definition: when the layout grows, every one of them moves
-with it.
+same byte today. Using `offset` keeps the address tied to the field
+definition. If a field is added at the top, the assembler adjusts each
+later address instead of leaving hand-counted offsets pointing at the
+wrong bytes.
 
 ## Layout fields
 
-Point is the smallest useful layout. Fields come in five kinds, and a
+Point is a small layout. Fields come in five kinds, and a
 game piece shows them all:
 
 ```text
@@ -318,7 +317,7 @@ end
 address: a pointer to a shape table, a curve, a routine. A bare
 number reserves that many raw bytes, so `frames : 4` is a four-byte
 scratch run with one name. And a field can be another type: `pos :
-Point` nests the whole two-byte layout inside this one.
+Point` nests the two-byte layout inside this one.
 
 Two functions read a layout's measurements inside any block body.
 `sizeof(Name)` is the layout's full size (`sizeof(Point)` is 2,
@@ -343,16 +342,15 @@ type Board = byte[8]
 state Grid : Board
 ```
 
-The alias form gives a shape a name of its own, so a program with
+The alias form gives a shape a reusable name, so a program with
 three boards declares `Board` once and `sizeof(Board)`, 8 here,
 follows the definition. State declared through an alias is typed
 state like any other: zero-filled, one flag.
 
 ## The declarations, compiled
 
-In `canvas.main.asm`, the two new declarations tell their whole story
-in two short sections. First the
-layout:
+In `canvas.main.asm`, two short sections show the generated forms of
+the new declarations. First, the layout:
 
 ```asm
 ; --- layout types ---
@@ -365,9 +363,9 @@ Point .type
 ```
 
 `type Point` compiled to an assembler `.type` record, field names and byte
-widths carried straight through, and the generated comment names the
-division of labour: Glimmer names the layout, the assembler owns the type
-system. `sizeof` and `offset` work inside your blocks because they
+widths carried straight through. The generated comment records the
+division of labour: Glimmer emits the layout, and the assembler
+evaluates its type operations. `sizeof` and `offset` work inside your blocks because they
 are assembler expressions, evaluated over this record when the generated
 file assembles. The alias form compiles to the matching
 directive, from the Board example's generated file:
@@ -404,7 +402,6 @@ Ten bytes of program state, two flags, and both marked `changed` so
 `DrawCanvas` paints the opening frame: the blank picture, the cursor
 in its corner.
 
-Canvas is now the largest program in the book, a good subject for what
-comes next: reading the dependency report, heeding the warnings, and
-debugging a reactive program methodically: [Dependency Reports and
-Debugging](11-dependency-reports-and-debugging.md).
+The next chapter uses Canvas to develop a method for reading dependency
+reports, interpreting warnings and debugging a reactive program:
+[Dependency Reports and Debugging](11-dependency-reports-and-debugging.md).

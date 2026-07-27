@@ -7,7 +7,7 @@ nav_order: 7
 
 # Ops, Aliases and Source Composition
 
-Op declarations name an instruction idiom so it can be reused, directive aliases let AZM read directive spellings from other assemblers, and `.include` and `.import` build one program out of several files.
+Op declarations name reusable instruction idioms. Directive aliases let AZM read directive spellings from other assemblers. `.include` and `.import` compose a program from several files.
 
 ---
 
@@ -30,7 +30,7 @@ op nop_pair()
 end
 ```
 
-Using them:
+Invocation:
 
 ```asm
         clear_a
@@ -147,7 +147,7 @@ end
         clear16  bc     ; expands to: ld bc,0
 ```
 
-A named op also gives a condition its own word. `cp c` followed by `jr c` and `jr z` is "skip unless A is strictly above C", a reading no one recovers from the three instructions at a glance:
+A named op can identify the condition implemented by an instruction sequence. Here, `cp c` followed by `jr c` and `jr z` means "skip unless A is strictly above C":
 
 ```asm
 op jr_if_not_above(threshold reg8, target imm16)
@@ -161,23 +161,23 @@ The listing keeps the invocation as its source line and attributes the expanded 
 
 ### Ops vs subroutines
 
-An op is appropriate when:
+An op is appropriate for:
 
-- The idiom is small enough that call overhead is significant relative to the body
-- The register and flag effects must be exactly as if you had typed the instructions
-- You want the expansion visible in the output
+- Small idioms where call overhead is significant relative to the body
+- Register and flag effects that must match the expanded instructions exactly
+- Expansions that must remain visible in the output
 
-A subroutine is appropriate when:
+A subroutine is appropriate for:
 
-- The body is several instructions long and is called many times (code size matters)
-- The routine needs its own register contract, declared with `.routine`
-- You want callee-side register preservation
+- Bodies that are several instructions long and called many times (code size matters)
+- Routines that need their own register contract, declared with `.routine`
+- Callee-side register preservation
 
-The size trade is countable. For a body of N instructions used at K call sites, a subroutine stores the body once, adds one `ret` and one `call` per site: N + 1 + K encodings. An op emits N × K. At K = 1 the op is always smaller; at K = 2 the subroutine wins as soon as N exceeds 3.
+For a body of N instructions used at K call sites, a subroutine stores the body once and adds one `ret` and one `call` per site: N + 1 + K encodings. An op emits N × K. At K = 1, the op is always smaller. At K = 2, the subroutine is smaller when N exceeds 3.
 
 ![A four-byte body inlined at three sites against the same body reached by call](../../assets/images/azm-book/book1/inline-versus-call.svg)
 
-That count is in instruction encodings, not bytes, and Z80 instructions run from one to four bytes each. At run time the subroutine also executes a `call` and a `ret` per invocation, where the op executes only its body.
+That count measures instruction encodings, not bytes; Z80 instructions occupy one to four bytes each. At run time, the subroutine also executes a `call` and a `ret` per invocation, while the op executes only its body.
 
 ### Nested ops and cycle detection
 
@@ -231,13 +231,13 @@ Op names are global; they share the namespace with labels and `.equ` constants. 
         .include "ops.asm"
 ```
 
-Op names must avoid Z80 mnemonics. `clear_a` is valid; `ld` produces a parse error. Underscore-separated lowercase names read naturally as instructions (`shift_left_4`, `negate_a`, `memcopy`).
+Op names must avoid Z80 mnemonics. `clear_a` is valid; `ld` produces a parse error. AZM convention uses underscore-separated lowercase names such as `shift_left_4`, `negate_a` and `memcopy`.
 
 ---
 
 ## Aliases and compatibility
 
-Aliases map legacy directive heads to canonical AZM directives. If you have Z80 source written for a different assembler (one that uses `DEFB`, `DEFW`, `RMB` or other directive heads), aliases let those heads work without modifying every line.
+Aliases map legacy directive heads to canonical AZM directives. Source written for assemblers that use `DEFB`, `DEFW`, `RMB` or other directive heads can use aliases without changing every line.
 
 ### The built-in alias profile
 
@@ -352,7 +352,7 @@ ClampA:
 
 `.routine` declares the analysis boundary and contract. `@` exports the following label.
 
-If outside code tries to reference a private imported label, AZM reports a visibility diagnostic. The call can remain inside the imported file, or the helper can become public when it genuinely forms part of the file's interface:
+A reference to a private imported label from outside its source unit produces a visibility diagnostic. The call can remain inside the imported file, or the helper can become public when it forms part of the file's interface:
 
 ```asm
 ; math.asm - ClampA is now part of the module's interface
@@ -402,7 +402,7 @@ Recursive include/import chains are rejected with a source diagnostic.
 
 ### Import limits
 
-`.import` remains deliberately small:
+`.import` has the following limits:
 
 - `.import "file.asm"` is the whole of the import syntax: no aliasing, no qualified references, no re-export
 - Plain declarations in an imported source unit are private to that unit; `@` exports labels, equates, enums, layout types, type aliases and ops
@@ -410,4 +410,4 @@ Recursive include/import chains are rejected with a source diagnostic.
 - `$`-qualified private names are internal debug-map display names, not source syntax
 - `.include` behaviour is unchanged
 
-Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. For ASM80-compatible lowered `.z80` output, `.import` is still to come: request `--asm80` for a program that uses it and AZM reports an explicit `AZMN_ASM80` diagnostic.
+Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. ASM80-compatible lowered `.z80` output does not support `.import`; requesting `--asm80` for a program that uses it produces an explicit `AZMN_ASM80` diagnostic.

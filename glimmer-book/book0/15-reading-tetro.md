@@ -10,10 +10,10 @@ nav_order: 15
 This chapter teaches a different skill: reading someone
 else's code. Writing teaches you what the language can say; reading a
 program bigger than any you have written teaches you what the language
-looks like under real pressure. Tetro is the largest example for the
+looks like at a larger scale. Tetro is the largest example for the
 8x8 RGB LED matrix in the Glimmer repository: seven pieces that rotate, a board that
-remembers colour, line clears that flash before they collapse, a piece
-preview on the LCD, and a game over that guards its own restart key.
+stores colour, line clears that flash before they collapse, a piece
+preview on the LCD and a delayed restart after game over.
 
 Tetro is three files, about 900 lines together. `tetro.glim` holds
 the declarations. `tetro-rules.glim`, brought in with `part`, holds
@@ -29,7 +29,7 @@ in the Glimmer repository into a working directory and built through
 the entry file (`glimmer build tetro.glim` on Appendix D's command
 line). Keeping all three open makes the boundaries visible.
 Every generated excerpt in this chapter comes from the
-`tetro.main.asm` that build writes, with the whole game inside.
+`tetro.main.asm` that build writes, containing the complete game.
 
 ## Three files, one program
 
@@ -54,8 +54,8 @@ stays private to the module.
 
 ## The facts on the board
 
-In a program new to you, read the state declarations first:
-they carry most of the design.
+The state declarations provide the clearest starting point in an
+unfamiliar program because they record most of its design.
 
 ```text
 state PlayerX        : byte
@@ -77,13 +77,13 @@ The falling piece occupies four cells of state: where it is
 (`PlayerX`, `PlayerY`), which of the seven pieces it is
 (`CurPieceIndex`), and which of four rotations it shows
 (`CurRotation`). `NextPieceIndex` is the preview. `ClearMask` and
-`Armed` are flow control; each solves a problem you would otherwise
-meet the hard way.
+`Armed` provide flow control for the line-clear flash and delayed
+restart.
 
 The board is four `byte[8]` arrays, one bit per cell of the 8x8
 matrix, eight rows, MSB-left. `BoardRows` records occupancy (the
 one question collision asks), and the three colour planes
-remember what colour each settled cell keeps. This matches the
+store the colour of each settled cell. This matches the
 framebuffer: `Framebuffer` stores each row as
 red, green, and blue bitmask bytes, so a settled
 board row lands on screen as one `or` of plane byte into framebuffer
@@ -92,7 +92,7 @@ occupancy byte, which reads `$FF` regardless of the row's colours.
 
 ![The settled board: one occupancy byte and three colour bytes per row.](../../assets/images/glimmer-book/book0/tetro-board.svg)
 
-Three timers put the game on its own schedule:
+Three timers define the game's schedule:
 
 ```text
 timer Gravity   : byte = 32  -> GravityFire   ; writable: difficulty curve
@@ -103,12 +103,12 @@ timer GOverGate : word = 0   -> GateOpenP once  ; armed on game over
 `Gravity` is an oscillator with a writable period: every 32
 frames, one `GravityFire`, and a compute block further down halves
 that period as the score climbs. The two `once` timers start at 0 by
-design: a one-shot at 0 is asleep, and it fires only after some block
+design: a one-shot at 0 is inactive, and it fires only after some block
 writes a count into it. `ClearHold`
 times the line-clear flash, `GOverGate` times the restart gate, and
 each gets armed by exactly the block that needs it.
 
-Seven lines put the whole control scheme on the page:
+Seven lines define the control scheme:
 
 ```text
 bind key KEY_4  held period 10 -> MoveLeftP
@@ -155,13 +155,12 @@ positions. Rotating in play is `CurRotation + 1`, masked to two bits;
 the cycling lives in the generated tables, so the rule that rotates
 works the same for every piece.
 
-In most projects in this family of
-games there is a data file: a few hundred lines of hand-maintained
+In many projects in this family of games, a data file contains a few
+hundred lines of hand-maintained
 bitmap tables with pointer tables over them, where one slip of the
 editor becomes a piece that draws wrong or collides wrong. Tetro has
-seven declarations you can read as pictures. The tables still exist
-(we look at them next), but the language absorbed the part that was
-drudgery.
+seven declarations that remain readable as pictures. The compiler
+generates the tables examined next.
 
 Declaration order does the numbering here too: `PieceI` first through
 `PieceL` seventh, each shape taking a `ShapeId_<Name>` equate from 0
@@ -221,7 +220,7 @@ probe checks first), then `ShapeRotColorTbl`, one colour byte per
 piece, and the `ShapeId_PieceI .equ 0` through `ShapeId_PieceL .equ 6`
 identity equates.
 
-The whole family indexes by `id*4 + rotation`. The engine routine
+Every table indexes by `id*4 + rotation`. The engine routine
 that consumes it, from `tetro-lib.asm`:
 
 ```asm
@@ -241,8 +240,8 @@ that consumes it, from `tetro-lib.asm`:
 
 From that index the routine fetches the right bound, the bitmap
 pointer (doubling the index, because the pointer table holds words),
-and the colour byte, all into the module's own scratch. This is the
-seam between the two files, close up: the shape declarations in
+and the colour byte, all into the module's private scratch. This is
+the interface between the two files: the shape declarations in
 `tetro.glim` emit the tables, the imported module addresses them by
 name, and the two sides stay compatible because both agree on
 `id*4 + rotation`.
@@ -283,17 +282,14 @@ and overlays the falling piece.
 Everything on the
 declaration side of the line (the shape tables, the timers, the key
 bindings, the change tracking, the card
-gating) was plumbing and data, the kind of code that looks the same
-in every game, and the language absorbed all of it. This module keeps
-the part that belongs to one game alone: the
-board algebra that makes Tetro *Tetro*. A library could package board operations, and some day one
-may; the engineering call here is that code reused by every game
-belongs to the language, and code owned by one game belongs to that
-game, written where its author can shape it.
+gating) is common runtime plumbing and data generated by the language.
+The module contains Tetro-specific board algebra. Shared board
+operations could later move into a library; here, game-specific code
+remains in a file the author controls.
 
 Moving, rotating, and falling
 all ask the same question (does the piece fit *there*?), and one
-routine answers it for all three:
+routine performs the test for all three:
 
 ```asm
 ; Test a candidate placement at D=x, E=y against bounds and the board.
@@ -327,7 +323,7 @@ sprawl.
 
 ## Gravity, lock, flash
 
-Now the game's central rule, shown whole:
+The game's central rule is:
 
 ```text
 effect ApplyGravity
@@ -377,7 +373,7 @@ end
 
 The timer's `GravityFire` and the
 player's `SoftDropP` both mean "try to descend", so they run the same
-rule. The probe asks `CheckCollAt` about the
+rule. `CheckCollAt` tests the
 square below; free means fall, blocked means the piece has landed.
 Landing runs the engine in sequence: lock the piece into the planes,
 sound the cue, scan for full rows.
@@ -393,16 +389,15 @@ every drawn row, so only the
 planes show.
 
 `ld a,24`
-into `ClearHold` arms it: at zero a one-shot sleeps, a written count
+into `ClearHold` arms it: at zero a one-shot is inactive, a written count
 ticks down once per frame, and arrival fires `ClearTick`. The block
-that catches the tick,
+triggered by the tick,
 `FinishClear`, completes what the lock started: it zeroes `ClearMask`,
 calls `ClearFullRows` to collapse the flashed rows, adds the count to
 `LinesCleared`, converts it to points with `ScoreForClears`, adds
 those to `Score`, and calls `SpawnPiece`, with the same blocked-spawn
 branch into `Card.GameOver` as gravity's.
 
-The score has one listener of its own.
 `DifficultyCurve`, a compute on `Score` with `updates Gravity`, writes
 16 into the `Gravity` period cell once the score passes 2000: past
 that, pieces fall twice as fast.
@@ -449,7 +444,7 @@ and each card's `enter` block opens with `lcd_row` on row 1:
 LCD names the mode the 8x8 matrix is in, and because the writes live
 in `enter` blocks, each one happens exactly once per visit.
 
-Row 2 belongs to the preview:
+Row 2 shows the preview:
 
 ```text
 render ShowPreview
@@ -475,7 +470,7 @@ feedback: `Snd_Rotate` on a successful turn, `Snd_Lock` on landing,
 `Snd_Clear` at the flash, `Snd_Over` at the end, each a generated
 wrapper the blocks call by name.
 
-## Card seams in the generated file
+## Card boundaries in the generated file
 
 The four cards
 became `Card .enum Splash, Playing, Paused, GameOver`, and every block
@@ -503,14 +498,14 @@ _skip_Pause:
 _skip_Unpause:
 ```
 
-The `cp Card.Playing` flips to `cp Card.Paused` and that is the whole
-seam: a card in the source is a gate on each of its blocks in the
+The `cp Card.Playing` changes to `cp Card.Paused`, marking the
+boundary. A card in the source is a gate on each of its blocks in the
 dispatcher. Enter blocks dispatch first, then every
-other block in source order, each behind its own card test, thirteen
+other block in source order, each behind a card test, thirteen
 entries in one readable column of test-and-call.
 
-Further down, one `.import "tetro-lib.asm"` line places the engine
-whole, its bytes outside every execution path, its `@` labels
+Further down, one `.import "tetro-lib.asm"` line places the complete
+engine outside every execution path, with its `@` labels
 resolving program-wide.
 
 Next, a different machine to draw with: the TMS9918 video display

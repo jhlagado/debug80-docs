@@ -7,20 +7,23 @@ nav_order: 10
 
 # A Complete Program
 
-This chapter builds a program from scratch, using the main techniques from
-Chapters 3–9: a data table, DJNZ loops, subroutines, register-based arguments
-and conditional branches.
+The earlier chapters introduced one mechanism at a time. This chapter combines
+them in one program: a data table, DJNZ loops, subroutines, register-based
+arguments and conditional branches. The focus is the data flow through
+`main` and across two calls.
 
 ---
 
-## The program: find the maximum value in a byte table
+## The integration goal
 
 The program solves two related problems on the same byte table:
 
 1. The maximum value in the table.
 2. The number of entries strictly greater than 64.
 
-The structure (a data table, subroutines that receive a pointer and a length, results stored to named RAM, a `main` that orchestrates the calls) is what a complete flat Z80 program looks like.
+`main` supplies a table pointer and length to each subroutine, receives each
+result and stores it in named RAM. That structure connects the separate
+instruction patterns from earlier chapters into one flat Z80 program.
 
 The example is `learning/book2/examples/08_complete_program.asm`.
 
@@ -92,9 +95,15 @@ above_64: .db 0
 
 ## `main`: the calling sequence
 
-`main` sets up registers, calls a subroutine, stores the result, then repeats for the second task. The calling sequence is entirely explicit: every register used to pass arguments is loaded immediately before each `call`.
+`main` sets up registers, calls a subroutine, stores the result, then repeats
+for the second task. Every argument register is loaded immediately before its
+`call`, so the complete data flow is visible in the calling sequence.
 
-The table base address `values` must be loaded into HL again before the second call because `find_max` advances HL past the end of the table during its scan. The comment header is the only record of that: `find_max` lists HL among its clobbers. In a short program the scan is easy enough to follow; once the code grows, that side effect surfaces as a bug.
+The table base address `values` must be loaded into HL again before the second
+call because `find_max` advances HL past the end of the table during its scan.
+The comment header records that side effect by listing HL among the clobbers.
+Reloading HL at the call site prevents the second routine from scanning the
+bytes after the table.
 
 ![The register traffic across both calls. HL is reloaded between them because find_max leaves it past the end of the table.](../../assets/images/azm-book/book2/main-data-flow.svg)
 
@@ -150,38 +159,56 @@ The subroutine uses D as its running count. `ld d, 0` changes only D, so B
 retains the loop count and C retains the threshold. The comment contract lists
 D among the clobbered registers and C among the preserved registers.
 
-The loop body uses one `cp c` and two conditional branches on the **same** flag result, a useful Z80 idiom. `cp c` sets carry when A < C and sets Z when A == C. To count only entries strictly greater than C, both conditions must be false: carry clear and Z clear. The code runs `jr c, count_above_skip` (skip if A < C) and `jr z, count_above_skip` (skip if A == C) immediately after that single comparison. No instruction between `cp c` and those branches changes the flags, so both tests read the same comparison.
+The loop body uses one `cp c` and two conditional branches on the **same** flag
+result. `cp c` sets carry when A < C and sets Z when A == C. To count only
+entries strictly greater than C, both conditions must be false: carry clear and
+Z clear. The code runs `jr c, count_above_skip` (skip if A < C) and `jr z,
+count_above_skip` (skip if A == C) immediately after that single comparison.
+No instruction between `cp c` and those branches changes the flags, so both
+tests read the same comparison.
 
 ---
 
-## Strengths of Flat Register-Based Code
+## Tracing the integrated program
 
 The program places `values`, `max_val` and `above_64` at `$8000`. Both
-subroutines receive a table pointer and count; `main` stores their returned
-values in the named result bytes.
+subroutines receive a table pointer and count, and `main` stores their returned
+values in the named result bytes. A trace through `main` follows each value from
+RAM into an argument register, through a loop and back to a result byte.
 
-Tracing through `main`, you can follow exactly which registers carry which values at each line.
-
-Every `call` costs a stack push, and you can count those pushes.
-
-For a short, performance-sensitive routine such as a counted loop over a small
-table, this structure maps directly to Z80 instructions. Its only abstraction
-cost here is the `call` and `ret` used to enter and leave each subroutine.
+Each `call` pushes one return address on the stack. The counted loops otherwise
+map directly to the Z80 instructions in their bodies, with `call` and `ret`
+providing entry and return.
 
 ---
 
-## Limits as Programs Grow
+## Interfaces exposed by integration
 
-**Comment-only contracts rely on the reader.** The `;` comment above `find_max` says what registers it reads on entry and what it produces on exit. The caller alone is responsible for loading the right registers, and the subroutine alone for producing what it claims. A caller that loads the wrong register assembles cleanly and returns a wrong answer at run time. [Book 1 Chapter 6](../book1/06-register-contracts.md) covers `.routine` register contracts, which let the assembler verify these claims.
+Putting the routines together exposes the register interface at each call. The
+`;` comment above `find_max` says what the routine reads, returns and clobbers.
+The assembler treats that comment as text, so the caller remains responsible
+for loading the declared registers and the routine for honouring its claims. A
+mismatch assembles and produces the wrong result at run time. [Book 1 Chapter
+6](../book1/06-register-contracts.md) covers `.routine` register contracts,
+which let the assembler verify these claims.
 
-**Register ownership lives in your head.** `count_above` keeps its running count in D, and D is the only name that count has. In a longer subroutine with more registers in flight, tracking which register holds which value requires re-reading the code from the top. Chapter 11 covers the manual discipline for managing register ownership across subroutines; [Book 1 Chapter 6](../book1/06-register-contracts.md) shows how register contracts make the contract explicit.
+`count_above` keeps its running count in D, and D is the only name that count
+has while the routine runs. Chapter 11 now concentrates on this interface
+boundary: which registers carry arguments and results, which side saves a live
+value and how every return path keeps the stack balanced. [Book 1 Chapter
+6](../book1/06-register-contracts.md) shows how AZM expresses the same contract
+in a form the assembler can check.
 
-**Repeated comparison sequences obscure their purpose.** The `cp c` / `jr c` /
-`jr z` sequence in `count_above` implements "strictly greater than", which the
-Z80 spells out in three instructions every time. [Book 1 Chapter 7](../book1/07-ops-aliases.md)
-covers `op` declarations for naming such a sequence and expanding it inline.
+The `cp c` / `jr c` / `jr z` sequence in `count_above` implements "strictly
+greater than" in three instructions. [Book 1 Chapter
+7](../book1/07-ops-aliases.md) covers `op` declarations for naming such a
+sequence and expanding it inline.
 
-**Byte offsets in data structures must be counted by hand.** Every byte in this program is a standalone variable, but once you start grouping related bytes (a sprite with `x`, `y` and `color` fields, for example), every field access requires you to count "x is at offset 0, y is at offset 1, color is at offset 2" and then repeat that count every time the structure changes. [Book 1 Chapter 5](../book1/05-layout-system.md) covers AZM layout types, where `offset(Sprite, color)` gives you the field offset as a compile-time constant.
+Every byte in this program is a standalone variable. Grouping related bytes
+into records requires each field access to carry its numeric offset: for
+example, `x` at 0, `y` at 1 and `color` at 2. [Book 1 Chapter
+5](../book1/05-layout-system.md) covers AZM layout types, where
+`offset(Sprite, color)` supplies the field offset as a compile-time constant.
 
 ---
 
@@ -205,8 +232,11 @@ that position. The source defines only the first two bytes there; can the final
 value stored in `above_64` be determined from this program alone?
 
 **3. Flag trace.** The `count_above` loop runs `cp c` once, then `jr c`
-and `jr z` before `inc d`. The explanation should state what each branch tests,
-why a second comparison is unnecessary, and what would break if `inc d`
-appeared between `cp c` and the first branch.
+and `jr z` before `inc d`. Tracing the flags from `cp c` through both branches
+shows what each branch tests, why both can share one comparison and what would
+break if `inc d` appeared between the comparison and the first branch.
 
-**4. A third task.** The extended program also counts entries strictly less than 32 and stores the count in `below_32`. The answer requires an additional subroutine, the three calling lines in `main`, and documentation of the argument registers and values that must be reloaded.
+**4. A third task.** Extending the program to count entries strictly less than
+32 adds another complete path through the program: an additional subroutine,
+three calling lines in `main` and a result stored in `below_32`. Its interface
+records the argument registers and identifies the values reloaded by the caller.

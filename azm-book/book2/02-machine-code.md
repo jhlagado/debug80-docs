@@ -101,8 +101,6 @@ Result:          ; the assembler records "Result" as the current address
 
 Labels also name positions within the code, the targets of jumps and branches. Instead of writing `jp $0034`, you write `jp loop_top` and the assembler works out the address of `loop_top` itself.
 
----
-
-## Assembly in Chapter 3
-
-The hex program you just decoded by hand appears again in Chapter 3, this time written in AZM, with names where the numbers were.
+Assembly language gives these byte patterns instruction names and replaces
+manually calculated addresses with labels. The next chapter rewrites this
+program in AZM so you can compare the source with the bytes it produces.

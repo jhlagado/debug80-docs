@@ -9,9 +9,9 @@ nav_order: 7
 
 A successful build gives Debug80 a current source map. That map lets VS Code navigate assembly symbols, show compact symbol details and open source that belongs to the TEC-1G monitor.
 
-If Go to Definition stops resolving or hover goes quiet, the source-map status
-line in the panel is the first place to check. **Debug80: Show Source Map Status**
-reports the same thing in more detail.
+The panel's source-map status is the first diagnostic when Go to Definition
+stops resolving or hover becomes unavailable. **Debug80: Show Source Map Status**
+reports the same state in more detail.
 
 ![The source map status controls which editor features are available](../../assets/images/debug80-book/book1/source-map-status-features.svg)
 
@@ -56,4 +56,4 @@ inside ROM.
 
 Those sources cover the monitor code around routines such as MON-3 display, disk, clock and sound support.
 
-When you want to edit or debug the monitor itself, copy the monitor ROM source into the project. [Appendix E](appendices/e-copy-monitor-rom.md) describes that workflow.
+Editing or debugging the monitor itself requires a project-local copy of the monitor ROM source. [Appendix E](appendices/e-copy-monitor-rom.md) describes that workflow.

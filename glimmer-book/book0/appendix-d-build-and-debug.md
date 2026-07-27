@@ -29,7 +29,7 @@ dependency.
 
 ## The command line
 
-`glimmer -h` prints the whole surface:
+`glimmer -h` prints the complete command interface:
 
 ```text
 Usage: glimmer [options] <entry.glim>
@@ -89,7 +89,7 @@ Wrote demo.main.d8.json (11 block segments attributed to .glim source)
 | `-V, --version` | Print the installed Glimmer package version. |
 | `-h, --help` | The usage text above. |
 
-`--no-check` belongs to the default command. Combining it with
+`--no-check` applies to the default command. Combining it with
 `build` stops immediately:
 
 ```text
@@ -131,12 +131,12 @@ Debug80 finds Glimmer programs two ways.
 **By convention.** A file named `main.glim`, or ending in
 `.main.glim`, whose first declaration is `program`, is discovered as
 a target. The Run action makes Debug80 build it through Glimmer and
-launch the result. Part files open with their own declarations (`effect`,
+launch the result. Part files open directly with declarations (`effect`,
 `state`), so the `program` check keeps them out of the target list.
 
 **By explicit entry.** A `debug80.json` target names any `.glim`
 file directly by pointing `sourceFile` at it. The Glimmer
-repository's own project file carries this entry for Tetro, trimmed
+repository project file carries this entry for Tetro, trimmed
 here to the shape that matters:
 
 ```json
@@ -178,8 +178,8 @@ precision:
 badbody.glim:17:5: [AZMN_PARSE] error: inc expects one operand
 ```
 
-Line 17 is the `inc a,b` inside the block body, in the file you
-edit, so the fix is one keystroke away from the report.
+Line 17 is the `inc a,b` inside the block body in the source file, so
+the diagnostic points directly to the edit.
 
 ## Diagnostics
 
@@ -205,7 +205,7 @@ reserved.glim:6: [GLIM] error: Reserved name "GlimScore": it belongs to the gene
 ```
 
 **Undeclared cell.** A block triggers `on Points` with no `Points`
-anywhere in the program, a typo for `Score`, caught at the header:
+anywhere in the program, a typo for `Score`, reported at the header:
 
 ```text
 undeclared.glim:8: [GLIM] error: Effect DrawScore triggers on undeclared cell "Points".

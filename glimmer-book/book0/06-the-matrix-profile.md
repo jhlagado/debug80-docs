@@ -9,7 +9,7 @@ nav_order: 6
 
 The 8x8 display is eight rows of eight RGB LEDs, and the
 hardware can light exactly one row at a time. Three ports carry a
-row's red, green, and blue column data; a fourth selects the row that
+row's red, green and blue column data; a fourth selects the row that
 shows it. The Z80 itself sweeps those rows. It paints
 row 0, holds it lit a moment, paints row 1, and so on around the
 board, and if it sweeps all eight quickly enough, over and over, your
@@ -20,8 +20,8 @@ eye fuses them into a steady picture. If it ever stops sweeping, the
 Every program you have written in this book has therefore been doing
 two jobs at once. One is the game. The other is the generated display
 controller, which shows the current picture every frame.
-This chapter opens the machinery
-that does it: the scan that keeps the 8x8 matrix lit,
+This chapter examines the generated machinery: the scan that keeps
+the 8x8 matrix lit,
 the loop shape it forces on the frame, the 32 bytes of memory your
 renders have been writing all along, and the library routines that
 write them.
@@ -30,19 +30,18 @@ The chapter's program is *Compass*. While GO is held,
 a dot runs clockwise around the rim of the 8x8, coloured by the
 quadrant it is crossing: red along the top, green down the right
 side, blue along the bottom, yellow climbing the left (north, east,
-south, west). Releasing GO leaves the dot where it is. The obvious way to build this game is to
-store the dot's x, its y, and its colour as facts, and have the
+south, west). Releasing GO leaves the dot where it is. One possible
+design stores the dot's x, y and colour as facts, then has the
 movement rule update all
-three. That design rots: it keeps three cells that must
-always agree, and trusts every future rule to keep them agreeing.
-Compass stores *one* byte, a position on the rim, and derives
-everything the screen shows from it. A fact you compute stays true to
-its source, because the rule that derives it re-runs whenever the
-source changes.
+three. Those redundant cells could become inconsistent if a later rule
+updates only some of them. Compass stores *one* byte, a position on the
+rim, and derives the screen coordinates and colour from it. Whenever
+the position changes, one compute block refreshes all three derived
+values together.
 
 ## Compass
 
-The whole program:
+The complete program:
 
 ```text
 program Compass
@@ -138,7 +137,7 @@ top-left corner. `Advance` is small: step forward, and past 27 wrap to
 as the key stays down.
 
 `Position`
-is the fact the game reasons about; drawing takes an x, a y and a
+is the fact used by the game rules; drawing takes an x, a y and a
 colour; the compute derives all three in one place. A threshold
 ladder splits the rim into its quadrants: positions 0 to 6 lie on
 the top edge, 7 to 13 on the right, 14 to 20 on the bottom, 21 to 27
@@ -162,8 +161,8 @@ game's tempo: 28 steps at 4 frames each is 112 frames a lap. Halving
 the period halves the lap.
 
 In a running build, holding GO sends the dot along the top in red and
-changes its colour at every corner. Releasing GO leaves it waiting in
-the colour of its quadrant.
+changes its colour at every corner. Releasing GO leaves it in place
+with the colour of its quadrant.
 
 ## The scan-shaped loop
 
@@ -175,12 +174,12 @@ display matrix8x8
 ```
 
 They select the program's **profile**: everything the generated file
-contains beyond your own declarations. The port addresses, the MON-3
+contains beyond the program declarations. The port addresses, the MON-3
 key codes, the polling routine, the shape of the runtime loop, and
 the library at the bottom of the file all come from this one choice.
 `platform` names the board and monitor, which is where `KEY_GO` and
 the `_scanKeys` polling come from. `display` names the output device,
-and it decides the loop itself, because the CPU is what lights the
+and determines the loop structure, because the CPU lights the
 pixels. The `tms9918` display instead builds a loop around a video
 chip while leaving the reactive core (state, flags, dispatch,
 rollover) unchanged.
@@ -205,27 +204,27 @@ MainLoop:
 ```
 
 At `Start` the profile clears its canvas and display once; then the
-loop begins. `ScanFrame` leads it, the CPU doing its display job: one
+loop begins. `ScanFrame` runs first, with the CPU performing one
 complete pass over the 8x8 matrix, all eight rows, each lit for a
 fixed dwell, returning with the board dark. Everything else (polling,
 your three phases, the rollover) runs in that blank window. Your
 renders write memory in the dark, and the
-next scan presents their combined result, which is why the player only
-ever sees finished pictures.
+next scan presents their combined result. The player therefore sees
+the completed framebuffer from the previous blank window.
 
 Each row shines for the same count on every frame, whatever the game
 did that frame, so brightness stays
 even across the rows of any one sweep. The dark gap between sweeps is
 where your game runs, and it is a budget: a longer gap means fewer
-sweeps a second, and the LEDs spend a smaller share of their time
-lit. The few dozen instructions this book's blocks spend per frame
-move that share by amounts too small to see. Heavy work that fills the
+sweeps a second, and the LEDs are lit for a smaller share of the time.
+The few dozen instructions executed by this book's blocks per frame
+change that share by amounts too small to see. Heavy work that fills the
 blank window dims the display, and that is the first symptom you will
 notice. And since the scan
 is by far the frame's largest cost, it paces the frame and makes the
 frame a useful unit of game time.
 
-![The scan owns most of the frame, and one row travels from memory to light.](../../assets/images/glimmer-book/book0/scan-timing.svg)
+![The scan occupies most of the frame, and one row travels from memory to light.](../../assets/images/glimmer-book/book0/scan-timing.svg)
 
 ## The framebuffer
 
@@ -248,8 +247,8 @@ Next0:            .db 0   ; raises deferred to next frame
 Framebuffer:      .ds 32           ; 8 rows x R,G,B,aux
 ```
 
-Thirty-two bytes hold the whole picture: eight rows of four bytes
-(red, green, blue, and a fourth, aux, that the scanner steps over).
+Thirty-two bytes hold the complete picture: eight rows of four bytes
+(red, green, blue and a fourth, aux, that the scanner steps over).
 Each of the three plane bytes carries one bit per column. A pixel is
 one column bit, present in up to three planes: set it in the red byte
 alone and the pixel glows red; set it in red and green both and the
@@ -271,7 +270,7 @@ The A value passed to `FbPlot` is therefore a set of plane bits.
 
 ![Seven colours from three planes.](../../assets/images/glimmer-book/book0/colour-planes.svg)
 
-`FbPlot` turns x, y, and colour into plane-byte writes. Its head,
+`FbPlot` turns x, y and colour into plane-byte writes. Its head,
 from the profile library:
 
 ```asm
@@ -291,7 +290,8 @@ FbPlot:
 
 At four bytes a row, the row's
 address is `Framebuffer + y * 4`, and multiplying by four is two
-`add a,a` instructions; a padding byte bought a fast address. The
+`add a,a` instructions. The padding byte makes that address
+calculation faster. The
 rest of the routine shifts the colour bits out of D one at a time,
 ORing the pixel mask into each plane byte whose bit is set. ORing
 means `FbPlot` adds light: plot red and then green at the same
@@ -301,17 +301,16 @@ redrawing render in this book.
 
 ![Plotting x 5, y 2 in yellow sets one bit in two plane bytes.](../../assets/images/glimmer-book/book0/framebuffer.svg)
 
-The `.routine` line above the label is the register interface, and you
-will meet it the first time a library call eats a register of yours.
-It is declared in the generated file and checked on every build:
-`FbPlot` consumes A, B, and C, and clobbers A, B, DE, and HL.
+The `.routine` line above the label is the register interface. It is
+declared in the generated file and checked on every build: `FbPlot`
+consumes A, B and C, and clobbers A, B, DE and HL.
 `DrawBar` kept its
 loop counter in B, a clobbered register, which is why it pushed BC
 around the call. When a block of yours misuses a library
 routine's registers, the build fails with the contract, and these
 lines are where you read what the contract says.
 
-`MxMask` is the small helper `FbPlot` leans on:
+`FbPlot` calls the small `MxMask` helper:
 
 ```asm
 ; Convert x (0-7, 0 = leftmost) to the matrix bit convention.
@@ -329,19 +328,19 @@ _loop:
 
 x 0 is the leftmost column and bit 7 of the plane byte, a convention
 with a purpose: a binary literal in your source reads left to right
-like the 8x8 itself. `MxMask` is callable from your own blocks too,
-for the day a render builds whole row masks instead of plotting pixel
-by pixel. Any fact you can turn into an x, a y, and three colour
+like the 8x8 itself. Blocks can call `MxMask` too,
+when a render builds complete row masks instead of plotting pixel
+by pixel. Any fact you can turn into an x, a y and three colour
 bits, you can draw.
 
 ## ScanFrame, top to bottom
 
 The scanner, the routine that *is* your display, is twenty-nine
-instructions, and you are going to read every one. The
+instructions. The
 four ports it drives are equates from the top of the generated file:
-`PortRow` at `$05` selects the row, and `PortRed`, `PortGreen`, and
+`PortRow` at `$05` selects the row, and `PortRed`, `PortGreen` and
 `PortBlue` at `$06`, `$F8`, and `$F9` take the plane bytes. The
-routine, whole, from the profile library:
+complete routine from the profile library:
 
 ```asm
 ; Scan all 8 rows with equal dwell, then blank the matrix for game
@@ -391,9 +390,8 @@ final blank leaves the 8x8 matrix dark for the game work to come.
 
 The colour ports
 feed whichever row is enabled, so the previous row must go dark
-before its data changes hands. Without that blank, each row would
-flash its neighbour's colours for an instant, every row, every frame,
-a ghost of the picture smeared one row over. Then the dwell:
+before its data changes. Without that blank, each row would briefly
+show its neighbour's colours on every frame. The dwell follows:
 `djnz` spinning B down from `ScanDwellPeriod`, 255, the wait that
 sets how long a row shines and, eight times over, how long a frame
 lasts.
@@ -401,15 +399,17 @@ lasts.
 In the middle of every pass sit two calls, `SndService` and
 `HudScanDig`, and they are there because the scan is the steadiest
 thing the program does. Eight beats a frame, evenly spaced, at full
-speed, so the profile hangs its other board services on it: an
+speed, so the profile schedules its other board services there: an
 active sound cue toggles the speaker here, and one seven-segment
 digit is strobed here per beat. A value written through `HudWriteU16`
 therefore stays lit by the same trick as the 8x8. Sound and display
 resources build on both services.
 
-A breakpoint on `ScanFrame` in `compass.main.asm` catches the frame at
-its start, making a step-through of one scan pass possible in Debug80.
+A breakpoint on `ScanFrame` in `compass.main.asm` stops execution at
+the start of a frame, making a step-through of one scan pass possible
+in Debug80.
 
-Compass moves while GO is held and rests the moment it lifts; next
-chapter the program gets a clock of its own and moves while the
-player watches: [Time](07-time.md).
+Compass moves while GO is held and remains in place when GO is
+released. The next chapter adds a clock so the program moves while the
+player watches:
+[Time](07-time.md).

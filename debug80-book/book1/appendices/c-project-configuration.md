@@ -7,7 +7,7 @@ nav_order: 103
 
 # Appendix C — Debug80 file formats
 
-Two generated formats are worth understanding: `debug80.json` and `.d8.json`.
+Debug80 uses two generated formats: `debug80.json` and `.d8.json`.
 
 `debug80.json` defines the Debug80 project: the folder's platform, available targets, source locations and build-output locations.
 
@@ -23,10 +23,9 @@ debug80.json
 
 Debug80 also accepts it at `.vscode/debug80.json`, and looks for the root copy first.
 
-Editing this file by hand is plain text work, with no schema behind it
-to complete or check what you type. The panel and Debug80 commands are
-preferable for routine changes; this appendix covers fields that need
-to be read or edited by hand.
+The panel and Debug80 commands handle routine changes. Manual edits are
+plain text and receive no schema completion or validation; this appendix
+covers fields that may need to be read or edited by hand.
 
 ### Top-level shape
 
@@ -66,7 +65,7 @@ Debug80 can also control where it opens files:
 }
 ```
 
-`sourceColumn` controls source files opened by Debug80. `panelColumn` controls the platform panel. The two automatic-open settings are useful when you want a repeatable screen layout for teaching, screenshots or demonstrations.
+`sourceColumn` controls source files opened by Debug80. `panelColumn` controls the platform panel. The two automatic-open settings provide a repeatable screen layout for teaching, screenshots or demonstrations.
 
 ### Profiles
 
@@ -117,7 +116,7 @@ A target is a named runnable program:
 
 Generated TEC-1G targets include a `tec1g` block with memory regions, application start, entry point and ROM paths.
 
-The important user-level facts are:
+At user level, this block sets:
 
 - TEC-1G / MON-3 user code starts at `0x4000`.
 - The monitor ROM comes from Debug80's bundled platform assets for ordinary projects.
@@ -135,15 +134,14 @@ An `azm` object carries assembler options, at the project root or on an individu
 | `emitRegisterReport` | boolean | Write the `.regcontracts.txt` report beside the other artifacts. |
 | `emitRegisterInterface` | boolean | Write the `.asmi` interface file. |
 
-`symbolCase` is the one the panel puts in front of you:
-the **Strict labels** checkbox writes it, and it is the
-only panel control that changes `debug80.json` as you click it.
+The panel exposes `symbolCase` through the **Strict labels** checkbox,
+the only panel control that changes `debug80.json` immediately.
 Scaffolding sets `strict` for new projects; legacy source with
 inconsistent capitalization may require it to be disabled.
 
-The remaining register-contract options are generated with sensible defaults.
+Scaffolding supplies defaults for the remaining register-contract options.
 
-One trap: a `registerContracts` value written here is overridden by the panel's **Register Contracts** dropdown for any build started from the panel. [Appendix D](d-azm-options-row.md) covers that row and what survives a restart.
+The panel's **Register Contracts** dropdown overrides a `registerContracts` value written here for any build started from the panel. [Appendix D](d-azm-options-row.md) describes that row and its persistence across restarts.
 
 ## Source map format
 

@@ -7,9 +7,9 @@ nav_order: 8
 
 # Motion Curves
 
-The ramp gives a program a clock of its own: a byte that
-walks from 0 to its last step, once per frame, marked changed the
-whole way. When a compute block reads it, a position starts moving.
+The ramp provides a frame clock: a byte that advances from 0 to its
+last step, once per frame, and is marked changed at every step. A
+compute block can turn that progress into a moving position.
 Dividing a 64-step ramp by eight makes a dot cross the 8x8 RGB LED
 matrix:
 
@@ -27,9 +27,8 @@ end
 ```
 
 Sixty-four frames, eight columns, eight frames on each: the crossing
-is perfectly even. The dot goes exactly where
-it is told, on schedule, and that
-is how it reads: a position being updated. The difference between
+is perfectly even. The table places the dot on schedule, and the
+result looks like a position being updated. The difference between
 position and motion is the difference between a slide rule and a
 thrown ball. The slider moves because a hand pushes it, at whatever
 pace the hand keeps. The ball leaves your hand fast and slows as it
@@ -46,13 +45,13 @@ drawing to run. A `curve`
 declaration names a motion shape, and the compiler turns it into a
 table of bytes inside the
 generated program. The expensive mathematics happens once, at build
-time, on your desk, where cycles are free. The Z80 pays one table
-read per frame.
+time on the development computer. The Z80 performs one table read per
+frame.
 
 ## Comet
 
 This chapter's program is Comet: a flight you can launch on demand.
-The dot rests at the left
+The dot starts at the left
 edge of the middle row. GO launches it across the row: quick off the
 pad, slowing all the way, gliding in to land near the right edge. GO
 again at any time, even mid-flight, launches it again.
@@ -118,9 +117,9 @@ steps, running from 0 to 6.* At build time, Glimmer traces an ease-out
 path (fast at first, slowing toward the end) and writes the 64
 positions it passes through into the program as a table of bytes named
 `Curve_Glide`. A curve is a resource: it declares data, and the bytes
-of the table are its entire cost.
+of the table are the space it occupies in the program.
 
-`TrackComet` is where the table gets put to work. Each frame of a
+`TrackComet` reads the table. Each frame of a
 flight the ramp steps, `Travel` is marked changed, and the compute
 runs. Its body indexes the table with the current step:
 
@@ -144,7 +143,7 @@ shape, from a compute block seven instructions long.
 
 ## Curve declarations
 
-The full form, every dial at once:
+The full declaration form is:
 
 ```text
 curve <Name> <preset> steps <N> from <A> to <B>
@@ -164,12 +163,11 @@ the shape, and there are seven to choose from:
 - `overshoot`: runs past `to`, then settles back onto it.
 - `anticipation`: pulls back behind `from` before setting off.
 
-The last two step outside the `from`..`to` run on purpose (that is
-their character) and they come with a rule you must respect. Table
-values clamp to the byte range 0 to 255, so give these presets
-headroom: an overshoot aimed at `to 6` borrows column 7 for its peak,
-and an anticipation launched `from 1` needs room to dip to 0. Glide
-lands on column 6 for the same reason: Comet is about to grow two
+The last two deliberately step outside the `from`..`to` range. Because
+table values clamp to the byte range 0 to 255, these presets require
+headroom: an overshoot aimed at `to 6` uses column 7 for its peak, and
+an anticipation launched `from 1` needs room to dip to 0. Glide
+lands on column 6 for the same reason: the complete Comet adds two
 more curves over the same run, and one of them springs.
 
 ![The seven presets, each one run from start to finish.](../../assets/images/glimmer-book/book0/motion-presets.svg)
@@ -185,13 +183,10 @@ ramp Travel : byte steps 64 -> Landed
 curve Glide ease_out steps 64 from 0 to 6
 ```
 
-The ramp keeps time. Its cell answers one question, how far along is
-the flight, and it counts purely in frames. The curve holds the
-geometry. Its table answers the other question, where does the flight
-pass at each step, and it speaks purely in columns. `TrackComet`
-joins them, clock in, path out, one byte read per step. That split is
-the idiom: a block is what brings time and path together, so
-one clock can drive any shape of journey.
+The ramp keeps time by recording the flight's progress in frames. The
+curve table holds the corresponding column for each step.
+`TrackComet` joins them, clock in and path out, with one byte read per
+step. This separation lets one clock drive any motion curve.
 
 ![The ramp counts frames, the curve holds the path, and a switch mid-flight moves the dot.](../../assets/images/glimmer-book/book0/ramp-and-curve.svg)
 
@@ -229,7 +224,7 @@ rounding step.
 next 256-byte page boundary before laying the table down, so
 `Curve_Glide` starts at an address whose low byte is zero: a
 page-aligned table. A curve holds at
-most 256 bytes, every entry is in the base's own page, and the base's
+most 256 bytes, every entry is in the same page as the base, and the base's
 low byte is zero, so *base plus step* collapses into writing the step
 straight into L:
 
@@ -244,13 +239,11 @@ untouched.
 
 ## Switching curves in flight
 
-You name a motion so you can choose between motions, and that choice
-is something you feel at the keypad. So here is the full
-Comet: three curves over the same run, a `Preset` fact naming the
-current one, and PLUS cycling through them. Running the complete
-program before the walkthrough makes the three motions concrete: GO
-launches, PLUS switches presets, and another GO launches again. A few
-switches make their different paths visible.
+Naming each motion lets the program select a curve at runtime. The
+complete Comet defines three curves over the same run, stores the
+current choice in `Preset` and cycles through them with PLUS. GO
+launches the comet, and PLUS switches presets so their different paths
+become visible.
 
 ```text
 program Comet
@@ -359,9 +352,9 @@ _index:
 
 A chain of loads leaves HL holding the base of whichever table
 `Preset` names, and from `_index` the page-alignment idiom finishes
-the job. Every curve table is page-aligned, so one `ld l,a` serves all
-three; picking a motion at runtime costs the frame a few loads and
-branches before the same single table read.
+the lookup. Every curve table is page-aligned, so one `ld l,a` serves
+all three. Selecting a motion at runtime adds a few loads and branches
+before the same single table read.
 
 Here is `Spring` in the generated file, the numbers behind the feel:
 
@@ -377,11 +370,12 @@ Curve_Spring:
 Halfway through the flight the dot climbs onto column 7, the spare
 column the headroom rule kept free, holds it for thirteen frames,
 then settles back onto 6 for the landing. All three tables end on 6,
-so pressing PLUS while the comet rests redraws it where it stands.
+so pressing PLUS while the comet is stationary redraws it at its
+current position.
 
 On the very first frame, `Preset` is already changed, so
 `TrackComet` runs before any launch, reads the idle ramp's final step,
-and the dot appears on its landing column, waiting for GO. And
+and the dot appears on its landing column until GO is pressed.
 `TrackComet` triggers `on Travel, Preset`, so a switch lands
 on the next update. A press of PLUS during a flight makes the dot jump to
 the new path's position at the same step, then finishes the journey on
@@ -389,5 +383,5 @@ the new curve. Launch under preset 1 and you are watching this chapter's
 opening motion again, equal dwell on every column. Preset 2 glides in;
 preset 3 springs past and settles.
 
-Next the comet earns a body, a voice, and a scoreboard:
+The next chapter adds a body, sound and a scoreboard to the comet:
 [Shapes, Sound and Displays on the Board](09-shapes-sound-and-displays.md).

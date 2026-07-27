@@ -117,7 +117,7 @@ PACMO_LIVES
 PC = MainLoop
 ```
 
-If a symbol is missing or stale in Watch, build the active target again.
+When a symbol is missing or stale in Watch, a fresh build of the active target refreshes the source map.
 
 ## Memory reads
 

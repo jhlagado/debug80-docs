@@ -41,7 +41,7 @@ The editor highlights the instruction the Z80 is about to run while
 the source-map status line from the last chapter reads `current`.
 After any other status, a fresh build restores the mapping.
 
-## Step, then inspect
+## Stepping and inspection
 
 **Step Over** keeps you in your program, moving past calls as single
 operations. **Step Into** exposes the instructions inside a call, and
@@ -62,9 +62,9 @@ address, Debug80 pauses before running the instruction.
 A breakpoint on `LD DE,SevenSegHello` inside `ScanHello`, followed by
 **Continue**, stops before the display data is loaded.
 
-## Run to Cursor, and Run to Here
+## Run to Cursor and Run to Here
 
-**Run to Cursor** reaches one spot without leaving a breakpoint behind. During a session, right-click an instruction line and choose it from the editor menu.
+**Run to Cursor** reaches one spot without leaving a breakpoint behind. During a session, the command is available from an instruction line's editor context menu.
 
 ![Run to Here on a call stack frame](../../assets/images/debug80-book/book1/menu-run-to-here.svg)
 

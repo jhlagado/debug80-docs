@@ -7,9 +7,9 @@ nav_order: 1
 
 # Getting Started with AZM
 
-AZM is a modern Z80 assembler for the Debug80 toolchain. An assembler turns assembly source into machine-code bytes. AZM keeps those bytes visible while adding assembler-time support for larger programs: layout types, register contracts, op declarations, directive aliases, diagnostics, output artifacts and Debug80 source maps.
+AZM is an enhanced Z80 assembler for the Debug80 toolchain. It turns assembly source into machine-code bytes and adds modern assembler-time features for larger programs: layout types, register contracts, op declarations, directive aliases, diagnostics, output artifacts and Debug80 source maps.
 
-This manual gives the precise rule for each of them. [AZM Book 2 — Z80 Fundamentals](../book2/index.md) teaches the machine itself; come here for the exact assembler rules.
+This manual defines the rules for those assembler features. [AZM Book 2 — Z80 Fundamentals](../book2/index.md) introduces the Z80 itself.
 
 ---
 
@@ -83,7 +83,7 @@ Chapter 8 covers output selection, suppression flags, Debug80 source paths, exit
 
 ### Assembler output
 
-To trace through the assembly: `ld b,LIMIT` assembles to `$06 $08` at `$0100`; `ld hl,Counter` assembles to `$21 $09 $01` at `$0102` (the address `$0109`, little-endian); `inc (hl)` is `$34` at `$0105`; `djnz _loop` is `$10 $FD` at `$0106`; `halt` is `$76` at `$0108`; and `.db 0` places a zero byte at `$0109`.
+The first instruction, `ld b,LIMIT`, assembles to `$06 $08` at `$0100`. `ld hl,Counter` assembles to `$21 $09 $01` at `$0102`, encoding the address `$0109` in little-endian order. `inc (hl)` is `$34` at `$0105`, and `djnz _loop` is `$10 $FD` at `$0106`. `halt` is `$76` at `$0108`. The final `.db 0` places a zero byte at `$0109`.
 
 Placing data after the final instruction keeps the executable entry near the start of the binary, which suits loaders that begin execution at the load address. AZM resolves forward references, so `ld hl,Counter` at the top can name a label defined further down.
 
@@ -91,7 +91,7 @@ Placing data after the final instruction keeps the executable entry near the sta
 
 ## Source file extensions
 
-AZM accepts `.asm` and `.z80` source extensions and parses them identically. Debug80 can discover either extension as a target source file; files named `main.asm` or `main.z80` are suggested as likely entry points. For new source, `.asm` is the conventional choice, while `.z80` is also useful for source shared with ASM80-compatible tools.
+AZM accepts `.asm` and `.z80` source extensions and parses them identically. Debug80 can discover either extension as a target source file. Files named `main.asm` or `main.z80` are suggested as likely entry points. The conventional extension for new source is `.asm`; `.z80` also supports source shared with ASM80-compatible tools.
 
 `.asmi` files carry external register contract records for library routines whose source is assembled separately. The `--interface` option loads them. Chapter 6 covers the format.
 
@@ -99,6 +99,6 @@ AZM accepts `.asm` and `.z80` source extensions and parses them identically. Deb
 
 ## The Debug80 connection
 
-Debug80 is the companion debugging tool for this toolchain. It reads the `.d8.json` file that AZM emits alongside each binary (a map of addresses, symbols and source line positions) and uses it to show you source-correlated debug information: which line the program counter is on, what a symbol resolves to, where a routine was defined.
+Debug80 is the companion debugging tool for this toolchain. It reads the `.d8.json` file that AZM emits alongside each binary. The map contains addresses, symbols and source line positions, allowing Debug80 to show the source line at the program counter, resolved symbol values and routine definitions.
 
 When assembly takes place outside Debug80, the `.d8.json` file still appears next to the binary. The `--nod8m` option suppresses it when no source map is required.

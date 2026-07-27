@@ -7,9 +7,9 @@ nav_order: 6
 
 # Register Contracts
 
-`B` holds your loop counter. The loop calls a subroutine. `djnz` decrements `B` and branches back. But `B` now holds whatever the subroutine left there. The loop runs the wrong number of iterations, and the binary assembles cleanly.
+A loop can hold its counter in `B` and call a subroutine before `djnz` decrements that counter. If the subroutine overwrites `B`, `djnz` reads the changed value. The resulting binary assembles successfully but runs the wrong number of iterations.
 
-The caller and callee have collided over register `B`. AZM's register contracts find such collisions at assemble time by making register use between routines explicit and machine-checkable. They are deliberately stricter than casual assembly style: routine boundaries, register effects and external calls must be stated in a form the assembler can prove.
+The caller and callee have a register collision. AZM's register contracts detect such collisions at assemble time by making register use between routines explicit and machine-checkable. Analysis requires routine boundaries, register effects and external calls in a form the assembler can prove.
 
 The `.routine` directive makes each analysis boundary explicit and records the routine's inputs, outputs, clobbers and preserved carriers.
 
@@ -41,7 +41,7 @@ _row:
         ret
 ```
 
-After `RenderTile` returns, `B` is 0. The outer `djnz` wraps it to 255 and branches, but the next call resets `B` to 8 and again returns with it at 0. The outer loop therefore runs forever.
+After `RenderTile` returns, `B` is 0. The outer `djnz` wraps it to 255 and branches, but the next call resets `B` to 8 and again returns with it at 0. The outer loop runs forever.
 
 ---
 
@@ -78,7 +78,7 @@ scan.asm:7:9: warning: [AZMN_REGISTER_CONTRACTS] CALL RenderTile may modify B, b
 
 ## Repair options
 
-Three ways to fix this collision:
+The collision has three repair options.
 
 **Option 1: save and restore in the caller**
 
@@ -177,7 +177,7 @@ azm --rc strict program.asm     # fail on anything AZM cannot prove safe
 
 The default mode is `off`. `strict` goes beyond `error` by requiring AZM to prove every call safe, so unknown routine boundaries and stack effects become failures.
 
-For a Debug80 edit-and-restart loop, `audit` or `warn` lets you explore a messy port while the build keeps running. `strict` is appropriate for deliberate rebuilds once the routine boundaries and external interfaces are in place.
+During a Debug80 edit-and-restart loop, `audit` or `warn` reports contract findings while the build continues. `strict` is appropriate once the routine boundaries and external interfaces are in place.
 
 Debug80's own **Register Contracts** dropdown offers three of these five: Off,
 Audit and Enforce, which is `error`. Reaching `warn` or `strict` from Debug80
@@ -192,7 +192,9 @@ that value for any build started from the panel.
 .contracts audit
 ```
 
-Accepted modes are `strict`, `audit` and `off`. In a translation unit built from `.include` files, AZM applies the directive to routines and diagnostics owned by that included file, not only to the root entry file. Project configuration can also assign policies with file globs; the most specific matching rule wins. A glob beats the `.contracts` directive, which in turn beats `--rc`. `.contracts` may appear only once in each physical file, and a file carrying a mode other than `off` runs the analysis even when no `--rc` flag is given.
+Accepted modes are `strict`, `audit` and `off`. In a translation unit built from `.include` files, AZM applies the directive to routines and diagnostics owned by that included file, not only to the root entry file.
+
+Project configuration can also assign policies with file globs; the most specific matching rule wins. A glob takes precedence over the `.contracts` directive, which takes precedence over `--rc`. Each physical file may contain only one `.contracts` directive. A mode other than `off` runs the analysis even when no `--rc` flag is given.
 
 An `.rcignore` directive immediately before a finding suppresses it and records the reason:
 
@@ -237,7 +239,7 @@ Worker:
         ret
 ```
 
-Bare `.routine` leaves every carrier to inference. AZM infers the body summary and can update the directive when you run `--contracts`.
+Bare `.routine` leaves every carrier to inference. AZM infers the body summary and can update the directive during a `--contracts` run.
 
 ## Caller-side conflict checking
 
@@ -279,7 +281,7 @@ A `push`/`pop` save-restore pair must remain inside the same `.routine` region. 
 
 ![A contract binds every returning path, not only the last one in the body](../../assets/images/azm-book/book1/return-paths.svg)
 
-This shape is awkward for register contracts:
+The following structure crosses routine regions:
 
 ```asm
 .routine preserves BC
@@ -448,7 +450,7 @@ NormaliseDe:
 
 ### Caller-site hints
 
-For one call site that intentionally consumes inferred outputs, place `.expectout` immediately before the call:
+An `.expectout` immediately before a call marks one call site as intentionally consuming inferred outputs:
 
 ```asm
         .expectout DE
@@ -487,7 +489,7 @@ azm --accept-out MaskA:A --rc audit program.asm
 
 When the value is internal to the routine, it remains a clobber; alternatively, the routine can be rewritten to make the effect clear.
 
-You can hand-write or edit `.routine` directives directly. A later `--contracts` run updates the directive from current inference.
+`.routine` directives can be written or edited directly. A later `--contracts` run updates the directive from current inference.
 
 ### Generating `.asmi` interface files
 
@@ -495,7 +497,7 @@ You can hand-write or edit `.routine` directives directly. A later `--contracts`
 azm --rc audit --reg-interface program.asm
 ```
 
-Writes `program.asmi` with `extern` contract records for declared routines. Other projects that call into your code can load this file with `--interface`.
+This writes `program.asmi` with `extern` contract records for declared routines. Other projects that call these routines can load the file with `--interface`.
 
 ---
 
@@ -552,7 +554,7 @@ The exact-service form applies when AZM can prove the selector value in `C`. The
 
 ## A practical workflow
 
-Register contracts fit into an editing cycle:
+The register-contract editing cycle is:
 
 1. A routine is written or edited.
 2. While the code is still moving, `azm --rc audit program.asm` reports findings while the build continues.
@@ -561,7 +563,7 @@ Register contracts fit into an editing cycle:
 5. Once routine boundaries and external interfaces are in place, `azm --rc strict program.asm` also requires AZM to prove the remainder safe.
 6. Routine structure, contracts and interfaces are then corrected until strict mode passes.
 
-When strict mode produces many findings in one area, the routine boundaries are the first place to investigate. Shared exits, cross-boundary jumps and unrecorded monitor calls often need explicit boundaries or external contracts.
+Many strict-mode findings in one area often indicate incomplete routine boundaries. Shared exits, cross-boundary jumps and unrecorded monitor calls may need explicit boundaries or external contracts.
 
 ---
 
@@ -596,7 +598,7 @@ azm --rc audit --reg-baseline baseline.regcontracts.json --reg-ratchet program.a
 azm --fix --rc warn program.asm
 ```
 
-AZM identifies call sites where the callee clearly returns a register the caller goes on to use, and inserts an `.expectout` directive above the call to record it. It also rewrites the `.routine` directives from what it inferred, promoting a `maybe-out` to an `out` where the evidence is unambiguous.
+AZM identifies call sites where the callee clearly returns a register that the caller later uses. It inserts an `.expectout` directive above the call to record that dependency. AZM also rewrites `.routine` directives from its inference, promoting `maybe-out` to `out` where the evidence is unambiguous.
 
 `--fix` edits the contract directives alone, so the assembled output is identical.
 
@@ -613,7 +615,7 @@ Register contract analysis tracks:
 
 The following cases require external contracts, manual annotations or separate review:
 
-- RAM aliasing (what another call might overwrite in your storage)
+- RAM aliasing (what another call might overwrite in program storage)
 - Indirect call targets (call through register)
 - Interrupt handler effects
 - Self-modifying code
@@ -628,7 +630,7 @@ The following cases require external contracts, manual annotations or separate r
 program.asm:47:9: warning: [AZMN_REGISTER_CONTRACTS] CALL DRAW_FRAME may modify B, but the pre-call value is used later.
 ```
 
-Options: save around the call, restructure so the call falls outside `B`'s live range, or fix the contract if `DRAW_FRAME` actually preserves `B`.
+The conflict can be resolved by saving around the call, moving the call outside `B`'s live range or correcting the contract if `DRAW_FRAME` preserves `B`.
 
 ![The shape behind the finding: a register held across a call that may destroy it, and read afterwards](../../assets/images/azm-book/book2/liveness-violation.svg)
 
@@ -640,4 +642,4 @@ With `--require-expectout`, an inferred output dependency that has not been conf
 program.asm:58:9: error: [AZMN_REGISTER_CONTRACTS] CALL NORMALISE_COORD writes D,E and caller reads it later, but NORMALISE_COORD does not declare D,E as output; add `.expectout {D,E}` above the call to confirm the dependency and promote the callee output.
 ```
 
-This fires when a routine reads and writes the same registers, leaving the analysis two readings: the pre-call values must survive, or the post-call values are intentional results. An `.expectout {D,E}` directive confirms this call site. If the routine is deliberately a transform at every call site, `--accept-out NORMALISE_COORD:D,E` or `.routine in DE out DE` records that interface.
+This diagnostic occurs when a routine reads and writes the same registers. Two interpretations remain: the pre-call values must survive, or the post-call values are intentional results. An `.expectout {D,E}` directive confirms the second interpretation at this call site. For a routine that transforms the registers at every call site, `--accept-out NORMALISE_COORD:D,E` or `.routine in DE out DE` records that interface.

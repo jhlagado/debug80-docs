@@ -50,7 +50,7 @@ Short instruction runs can share one physical line when the instructions are sep
 main: ld a,b \ inc a \ ret
 ```
 
-AZM assembles that line exactly as if you had written the instructions on separate lines:
+AZM assembles that line exactly like the equivalent instructions on separate lines:
 
 ```asm
 main:
@@ -61,7 +61,7 @@ main:
 
 The backslash must be readable as a separator, with whitespace on both sides. A backslash inside a quoted string is still part of the string, not an instruction separator.
 
-Only instructions and op invocations belong in a chain. A label may appear before the first instruction in the chain, but not before a later segment:
+A chain accepts only instructions and op invocations. A label may appear before the first instruction, but a later segment cannot have a label:
 
 ```asm
 Start:  xor a \ ld b,a \ ret     ; valid
@@ -93,7 +93,7 @@ A semicolon starts a comment that runs to the end of the line:
 
 ## Labels
 
-Symbols let you write `djnz ReadLoop` instead of `djnz $0105`. Every time you reference a label in an operand or expression, AZM substitutes the address. By the time the binary is written, only bytes remain.
+Symbols allow `djnz ReadLoop` in place of `djnz $0105`. AZM substitutes the address for each label reference in an operand or expression. The output binary contains only the resulting bytes.
 
 A label names the assembly address at the point where it appears:
 
@@ -134,7 +134,7 @@ MyLabel: ld a,0
 
 Non-local identifiers contain letters, digits and underscores and must start with a letter.
 
-`$` has two source-level meanings in AZM: the current assembly address when written by itself, and hexadecimal notation when followed by hex digits, such as `$4000`. Imported files get their privacy from `.import`.
+`$` has two source-level meanings in AZM. By itself, it denotes the current assembly address; before hexadecimal digits, it starts a literal such as `$4000`. `.import` controls the privacy of declarations in imported files.
 
 ### Owner-local labels
 
@@ -196,7 +196,7 @@ EntryB:
 
 User symbols are case-sensitive. `START`, `start` and `Start` are three distinct symbols.
 
-The preferred AZM style:
+Preferred AZM style uses:
 
 - **Constants** (`SCREEN_WIDTH`, `MAX_SPRITES`, `LCD_DATA`): uppercase with underscores.
 - **Routine and data labels** (`DrawSprite:`, `InitTimer:`, `SpriteTable:`): PascalCase.
@@ -208,7 +208,7 @@ The assembler enforces no naming policy; different projects may use their own co
 
 ## Declaration syntax
 
-Declarations put the declared name on the left. The AZM convention is to omit the colon on a declaration and reserve it for address labels; the assembler accepts either spelling:
+Declarations put the declared name on the left. AZM convention omits the colon on a declaration and reserves it for address labels. The assembler accepts either spelling:
 
 ```asm
 COUNT       .equ 8
@@ -231,7 +231,7 @@ Count:              ; address label
         .db 8
 ```
 
-AZM accepts `COUNT: .equ 8`, but the colon misleads: a colon marks an address, while `.equ` binds a value.
+AZM accepts `COUNT: .equ 8`, but this form conflicts with the convention: a colon marks an address, while `.equ` binds a value.
 
 ---
 
@@ -256,7 +256,7 @@ AZM is case-insensitive for Z80 instruction mnemonics and register names.
 all name the same register. A consistent mnemonic case makes the project
 easier to read.
 
-The `--case-style` flag enforces consistency if you want the assembler to flag mixed casing.
+The `--case-style` flag reports mixed casing and enforces a consistent style.
 
 ---
 
@@ -289,4 +289,4 @@ DOT     .equ 'A' + 1       ; ASCII + offset
 SIZE    .equ WIDTH * HEIGHT ; 1024
 ```
 
-See [Appendix 2](../appendices/02-operators.md) for the full numeric literal table.
+[Appendix 2](../appendices/02-operators.md) contains the full numeric literal table.

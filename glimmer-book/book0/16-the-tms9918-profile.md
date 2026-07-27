@@ -10,44 +10,43 @@ nav_order: 16
 Until now, every picture has come from the 8x8 RGB LED matrix,
 and that
 display shows only what the CPU is actively pushing: the profile loop
-spends most of each frame driving the LED rows from the framebuffer,
+uses most of each frame to drive the LED rows from the framebuffer,
 and your blocks do their work in the blank that follows.
 
-This chapter's display paints itself. The TEC-Deck expansion card
+This chapter's display refreshes independently. The TEC-Deck expansion card
 adds a TMS9918 video display processor to the TEC-1G, and you have
 almost certainly seen its work: this is the chip family that drew the
-MSX machines and the ColecoVision, the sprite chip of a whole era of
-games. It sits
-beside the Z80 as a second chip with 16 KiB of video RAM of its own,
-painting a 256x192 picture from that memory over and over, whether
+MSX machines and the ColecoVision, a sprite chip used by many games of
+that era. It sits beside the Z80 as a second chip with 16 KiB of video
+RAM, refreshing a 256x192 picture from that memory whether
 the Z80 is busy or idle. The CPU
-stops being the display and becomes its director: from here on, your
-work is describing the scene.
+stops driving each display row. Instead, the program describes the
+scene in VDP memory.
 
 A described scene has two layers in the VDP's Graphics I mode. The
 background is a grid, 32 columns by 24
 rows, each cell showing one 8x8-pixel tile pattern; a table of one
-byte per cell, the name table, says which pattern each cell wears. In
-front of the grid are up to 32 sprite entries, each at a pixel
-position of its own. Moving one changes two position bytes in the
+byte per cell, the name table, selects the pattern for each cell. In
+front of the grid are up to 32 sprite entries, each with a pixel
+position. Moving one changes two position bytes in the
 shadow table; the profile later commits the table to VRAM.
-The division of labour is already there: scenery belongs in tiles;
-anything that glides belongs in sprites.
+Tiles represent grid-aligned scenery, while sprites represent objects
+that move at pixel coordinates.
 
 ![Tiles in the grid behind, sprites at pixel positions in front.](../../assets/images/glimmer-book/book0/vdp-layers.svg)
 
 The Z80 reaches the VDP's memory through two ports: control at `$BF`
 and data at `$BE`. Two control-port writes set a
 VRAM address, and the data port then streams bytes to consecutive
-addresses: the VDP walks its own pointer forward for you. After painting the last line of a
-picture the VDP rests before starting the next (the vertical blank)
-and raises a flag in its status register to say so. The profile paces
-the whole program on that flag, and it moves your VRAM traffic into
-that resting window. One thing before any code: your blocks keep
-writing plain RAM, exactly as they always have. The ports belong to
-the generated library.
+addresses: the VDP increments its address pointer after each byte.
+After the last line of a picture comes the vertical blank before the
+next refresh. The VDP raises a status-register flag at that point. The
+profile paces the program on that flag and performs VRAM transfers
+during the blanking window. Your blocks keep
+writing plain RAM, exactly as before; the generated library accesses
+the ports.
 
-Selecting all of this costs one changed line: `display tms9918`, with
+Selecting this profile requires one changed line: `display tms9918`, with
 the platform line as before. The keypad, the LCD, and `text`
 declarations live on the board itself and work the same here; sound
 cues, `shape`, and the seven-segment HUD service stay with the 8x8
@@ -196,7 +195,7 @@ dots, the garden shows through behind it. `color white` picks one of
 the sixteen VDP colours (`transparent`, `black`, `medgreen`,
 `lightgreen`, `darkblue`, `lightblue`, `darkred`, `cyan`, `medred`,
 `lightred`, `darkyellow`, `lightyellow`, `darkgreen`, `magenta`,
-`gray`, `white`), and the whole sprite wears it. Inside block bodies
+`gray`, `white`), and the colour applies to the complete sprite. Inside block bodies
 the same sixteen names exist as `VC_*` equates, so your assembly
 talks about colour in the same vocabulary as your declarations.
 
@@ -237,7 +236,7 @@ Fern              .equ 1   ; tile index
 Bloom             .equ 8   ; tile index
 ```
 
-Fern takes the seat beside the blank tile in bank 0; Bloom's colour
+Fern takes the index beside the blank tile in bank 0; Bloom's colour
 pair is new, so it opens bank 1 at index 8. Six more ferns and seven
 more blooms would fit in the two banks already open; a sixteenth
 distinct colour pair
@@ -257,10 +256,9 @@ SpriteShadow:     .ds 128, 0       ; 32 x (y, x, pattern, colour)
 SpriteDirty:      .db 0
 ```
 
-Beside each shadow
-sits its own bookkeeping, sized to its table: three bytes of
+Each shadow has bookkeeping sized to its table: three bytes of
 `NameDirtyRows` carry one bit per grid row, and the single
-`SpriteDirty` byte covers the whole sprite table.
+`SpriteDirty` byte covers the complete sprite table.
 
 Three profile routines write the shadows for you, and each declares
 its register interface in the generated file:
@@ -279,8 +277,8 @@ NamePut:
 - `SpriteInit`: A = slot, D = pattern number, E = colour. Gives a
   slot its look; the generated startup calls it once per sprite.
 
-For the two common calls, Glimmer generates a pair of assembler ops, so a
-block body reads as a sentence:
+For the two common calls, Glimmer generates a pair of assembler ops,
+keeping the block body concise:
 
 ```asm
 op sprite_at(slot imm8, xcell imm16, ycell imm16)
@@ -334,8 +332,8 @@ until the vblank flag comes up (reading the register clears it,
 arming the next frame), so the program takes exactly one trip around
 `MainLoop` per VDP refresh.
 
-`GlimCommit` then spends the blank window moving the previous frame's
-shadow writes into VRAM: the whole sprite table if `SpriteDirty` is
+`GlimCommit` then uses the blank window to move the previous frame's
+shadow writes into VRAM: the complete sprite table if `SpriteDirty` is
 set, and each name-table row whose dirty bit is marked. Only after
 the shadows are flushed does the frame poll keys and run your phases,
 whose renders write the shadows anew.
@@ -358,30 +356,29 @@ frame, tiles and sprites alike.
 its flag is up before the first frame; the effect fires on frame 1,
 places eight tiles, and `Init` holds that one change for the rest of
 the run. The block's writes land in the name shadow, which the profile
-tracks with dirty row bits of its own, so the header needs no
+tracks with separate dirty row bits, so the header needs no
 `updates` line.
 
 Those eight `tile_at` lines touch eight different grid rows, so frame
 1 ends with eight dirty bits standing, and frame 2's commit streams
-eight rows into VRAM. From then on the garden is the VDP's to paint,
-picture after picture. The
+eight rows into VRAM. The VDP then refreshes the garden from VRAM on
+each picture. The
 difference: an 8x8 matrix render repaints its layer whenever a fact
 changes; a VDP program writes each cell once and writes again only
 what differs.
 
 `MothX` and `MothY` carry `changed` for the same reason `Init` does:
 on frame 1, `PlaceMoth` puts the moth into the sprite shadow
-alongside the garden, and the first picture arrives whole.
+alongside the garden, and the first picture contains both.
 
-When a program has cards, an `enter` block is the natural home for
+When a program has cards, an `enter` block can perform
 scene placement. Grove has
-one screen, so a changed cell provides the run-once trigger with the
-tools already on the table.
+one screen, so a changed cell provides the run-once trigger.
 
 ## Inside the generated file
 
-Two generated routines carry this chapter's machinery. First the
-commit. Its sprite half is four decisions long:
+Two generated routines implement the profile behaviour. The sprite
+half of the commit has four steps:
 
 ```asm
 ; --- commit: flush dirty shadows to VRAM ---
@@ -399,9 +396,8 @@ GlimCommit:
         call    VdpWriteBlock
 ```
 
-One flag guards one stream: when any sprite moved, all 128 bytes go,
-a table small enough to send whole. The name table is 768 bytes, too
-much to send on a hunch, and that size is why the rows carry
+One flag guards one stream: when any sprite moved, all 128 bytes are
+sent. The 768-byte name table instead uses row-level
 individual bits. The rest of the routine is the dirty-row loop:
 
 ```asm
@@ -457,7 +453,7 @@ Each bit that falls into carry names a row (group times eight plus
 bit), and `CommitNameRow` turns the row number into `row*32`, points
 the VDP at `VRAM_NAME` plus that offset, and streams 32 shadow bytes
 through the data port. On a Grove frame where only the moth moved,
-the whole commit reads one flag, sends 128 bytes, reads three group
+the commit reads one flag, sends 128 bytes, reads three group
 bytes, and is done.
 
 The second routine is the one-time upload that `Start` calls before
@@ -514,6 +510,6 @@ stops processing sprites at the first slot holding it. Declaration
 order keeps your live sprites contiguous from slot 0, so the
 terminator always sits right after them.
 
-In the next chapter the profile carries a full game, with sprite
+The next chapter builds a complete game with the profile, including sprite
 collision, scoring on the tile grid, and cards on the VDP:
 [A VDP Game](17-a-vdp-game.md).

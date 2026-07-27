@@ -13,21 +13,19 @@ The paddle
 and the drop shared the same eight columns, because the 8x8 RGB LED
 matrix is a board. The VDP takes that certainty away. Sprites stand
 at pixel positions on a 256x192 scene, gliding in front of a tile grid
-that holds its own picture, and the questions change with the scenery: when have
-two sprites actually met? And how does something sitting in the grid
-get picked up by something floating above it?
+that stores a separate picture. Collision now requires tests between
+sprite coordinates and between sprite pixels and grid cells.
 
 This chapter builds a
 complete game around those two questions: *Lanternfly*. You are a
 white fly over a night garden, steered with 2/4/6/8, one pixel per
 frame. A lantern glows somewhere in the grid; when the fly reaches its
 cell, the lantern is gathered, the score climbs on the LCD, and a fresh one appears
-somewhere else. A wasp hunts you the whole time, and every lantern
+somewhere else. A wasp hunts you throughout the round, and every lantern
 you take quickens its stride. When it reaches you, the game ends.
 Around all of it stand the splash, playing and game-over cards, now
-running over VRAM shadows. The complete source ships with this book as
-[lanternfly.glim](code/lanternfly.glim). Keeping it open beside the
-chapter connects the discussion to the complete source. The text
+running over VRAM shadows. The complete source is included as
+[lanternfly.glim](code/lanternfly.glim). The text
 concentrates on the parts specific to this game,
 while the four movement effects follow Grove and the GameOver card
 follows Skyfall.
@@ -38,8 +36,7 @@ follows Skyfall.
 
 Before any block is written, the design can be stated in Glimmer's
 terms. For Lanternfly, the facts
-split into two coordinate systems, and that split is the whole
-chapter in miniature. Sprites glide, so `FlyX`/`FlyY` and
+split into two coordinate systems. Sprites glide, so `FlyX`/`FlyY` and
 `WaspX`/`WaspY` hold the two movers' top-left pixels. The lantern
 sits in one grid cell at a time, so `LampCol` and
 `LampRow` hold a grid column and row. `Score` counts lanterns for the
@@ -51,7 +48,7 @@ gate. Two schedules drive `ChaseTick` and `GateP`: `Pace`, a writable
 oscillator that is at once the wasp's stride and the game's difficulty, and
 `Wait`, the game-over one-shot. These timers serve the same roles as
 Skyfall's, and the three cards form the same loop. The budget check
-counts eight facts, seven moments, and `CurrentCard`, which spend 16
+counts eight facts, seven moments and `CurrentCard`, which use 16
 of the 32 change-flag
 cells.
 
@@ -86,8 +83,8 @@ end
 ```
 
 A second sprite, `Wasp color darkyellow`, and a second tile, `Reed
-color medgreen on black`, follow in the same shape. Their rows are
-yours to draw; any eight strings of `X` and `.` will serve. The build
+color medgreen on black`, follow in the same shape. Each accepts any
+eight strings of `X` and `.`. The build
 depends on the order and the colour pairs:
 the sprites take slots 0 and 1, Lantern's pair comes first so that
 black is the screen background, and Reed's pair opens the next bank.
@@ -129,7 +126,7 @@ text MsgScore "LAMPS "
 text MsgPad   "        "
 ```
 
-The cards own startup here, exactly as they did in Skyfall, and every
+The cards handle startup here, exactly as in Skyfall, and every
 row-one message is
 padded to sixteen characters so that each card's writing covers
 whatever the previous card left behind. And the initial values: fly at
@@ -209,22 +206,19 @@ end
 ```
 
 The entry re-raise is needed because a card-gated render sees only the
-flags raised while its card is active, so a waking card has to raise
-them again. The `updates` line is the sleeping
-card catching
-up on the news: it names every cell the Playing renders read, and
-entry marks them all, so the first frame of play repaints the whole
-scene. And now the idiom has real stakes, because the body writes the
+flags raised while its card is active. The `updates` line names every
+cell read by the Playing renders and marks them all, so the first frame
+of play repaints the complete scene. The body writes the
 round-start values *first*, and replay falls out of that ordering:
 every round begins exactly where the first one did, repainted from
 fresh values, with the entry block as the single reset path.
-`Pace` closes the list the way `Gravity` closed Skyfall's: the store
-in the body is the whole act, and the entry line documents it.
+`Pace` closes the list as `Gravity` did in Skyfall: the body stores
+the new value, and the entry line documents the write.
 
 Four move effects steer the fly. They are Grove's four moves with the
 moth's cells and pulses renamed for the fly. Up and left stop at zero,
 down at 184,
-right at 248, each on its own held pulse at period 1.
+right at 248, each on a separate held pulse at period 1.
 
 ## The chaser
 
@@ -267,9 +261,9 @@ end
 Every `ChaseTick`, one compare per axis points the wasp at the fly.
 Carry out of `cp b` means the wasp sits left of, or above, its
 target, so it steps toward; no carry steps the other way; equal skips
-the axis. The fly's own clamps fence the space for both of them: the
+the axis. The fly's clamps define the space for both of them: the
 wasp only ever steps toward the fly, so it stays inside the same
-bounds and needs no clamps of its own.
+bounds and needs no additional clamps.
 The stride is `Pace`. At the opening period of 8 the wasp
 drifts, and every gathered lantern will shrink the period, all the
 way down to 1, a step every frame on both axes at once, which is
@@ -351,9 +345,9 @@ clear.
 `PlaceLantern`, on
 `LampCol, LampRow`, is the six-line runtime `NamePut` call from
 `SplashShow` with `ld a,Lantern` in place of the `xor a`, and it
-earns its keep twice: when `Gather` respawns the lantern mid-round,
-and on round entry, when `StartRound`'s re-raise gives the first
-lantern its first draw. Two more renders, Grove's `PlaceMoth` twice
+handles two cases: `Gather` respawns the lantern mid-round, and
+`StartRound`'s re-raise draws the first lantern on round entry. Two
+more renders, Grove's `PlaceMoth` twice
 over, place the movers: `sprite_at Fly, FlyX, FlyY` in `PlaceFly`,
 and the same shape for the wasp in `PlaceWasp`.
 
@@ -364,12 +358,11 @@ merely moved also re-runs `PlaceLantern` and `ShowScore`: the
 lantern's name-table row goes back through the commit, and the LCD is
 rewritten with the score it already shows. The result stays correct (a
 render redraws from current facts, and redrawing the same picture is a
-correct redraw), but the commit spends bytes on a picture that already
-stands. The refinement,
-when a game needs it, is to split the work: let the movement-triggered
+correct redraw), but the commit retransmits an unchanged row. When the
+transfer volume warrants it, the refinement is to split the work: let the movement-triggered
 block do the cheap test alone and raise a pulse only on a catch, then
-hang the four-flag effect on that pulse. Lanternfly keeps the simple
-shape because it can afford it.
+hang the four-flag effect on that pulse. Lanternfly keeps the simpler
+version because its transfer volume remains small.
 
 ## Colliding with the wasp
 
@@ -408,10 +401,11 @@ end
 Sprite collision is the distance between two facts. `sub b` and a
 conditional `neg` produce the absolute pixel difference on one axis,
 and both differences under a tolerance means caught. Skyfall resolved
-a landing with one subtraction; sprites spend one per axis, folded
+a landing with one subtraction; sprite collision uses one subtraction
+per axis, folded
 absolute before the compare, the same arithmetic, grown a dimension.
 The technique has a name you will meet in every sprite game:
-axis-aligned bounding-box collision. Each sprite owns an 8x8 box, the
+axis-aligned bounding-box collision. Each sprite is represented by an 8x8 box, the
 differences compare the boxes' top-left corners, and at a difference
 of 8 the boxes sit edge
 to edge, so `cp 8` fires on any box overlap, while at 6 the boxes must
@@ -421,8 +415,8 @@ overlap boxes without a single opaque pixel touching. Pixel-perfect
 collision would go on to compare the patterns themselves; for a fly
 and a wasp with full bodies, deep box overlap reads as contact, and
 the tolerance is where you get to be a designer: 8 ends the game the
-frame the boxes meet, 6 waits for closeness and gives the player the
-near miss they will swear they earned. The ending writes
+frame the boxes meet, while a threshold of 6 requires closer contact
+and makes near misses more likely. The ending writes
 `CurrentCard` directly because the transition depends on the runtime
 collision test.
 
@@ -471,8 +465,8 @@ where the digits belong. The tens digit counts up in B, starting at
 `ApiCharToLcd`. After that the block reads `Score` again and reduces it a second time
 for the ones digit, deliberately, so the value comes fresh from memory
 after the API call. The eight spaces of `MsgPad` cover the tail of the splash
-card's invitation, so the row reads `LAMPS 07`:
-whole row owned, every time the score changes.
+card's invitation, so the complete row reads `LAMPS 07` after every
+score change.
 
 The counted digits stop at two: past 99 the tens character would
 step beyond `'9'` into the character set's punctuation. This
@@ -515,7 +509,7 @@ the six instructions from the op definition with this site's
 arguments folded in: `FlyX` and `FlyY` read into D and E, `Fly`
 becoming `ld a,0`, then `call SpriteSet`. `Glim_SplashShow` reads the
 same way, five `tile_at` lines, one op, five expansions, each with
-its own reed's coordinates as immediate loads.
+the corresponding reed coordinates as immediate loads.
 
 The enter block's wrapper shows delivery again:
 
@@ -538,19 +532,19 @@ sprite cells also feed `Gather` and `Caught` (logic blocks whose
 phase has already run), so that whole change defers through `Next0`,
 and the fly and wasp take the stage one frame later.
 
-The same staging sets what motion costs. With key 6 held, frame N runs
+The same staging determines motion latency. With key 6 held, frame N runs
 `MoveRight`, which steps `FlyX`, and the change
 defers, because `Gather` and `Caught` sit in the same phase. Frame
 N+1: the two effects test the new position, `PlaceFly` runs, and
-`SpriteSet` files two shadow bytes (y, then x) and sets
+`SpriteSet` stores two shadow bytes (y, then x) and sets
 `SpriteDirty`. Frame N+2 opens in the vertical blank, `GlimCommit`
 sees the flag and streams all 128 sprite-attribute bytes to VRAM, and
 the fly stands one pixel to the right. Two frames of latency from
 pulse to picture, then, at full rate: the pipeline refills every
 frame, so a held key still moves the sprite by one pixel per refresh.
 A gather frame adds up to two dirty name rows, 32 bytes each;
-a still frame costs the commit one clear flag and three clear group
-bytes, and the VDP paints the standing scene on its own.
+on a still frame, the commit reads one clear flag and three clear
+group bytes while the VDP continues refreshing the scene from VRAM.
 
 ## Reading Sprite Chase
 
@@ -569,7 +563,7 @@ a pulse is a byte cell like any other for the frame it holds.
 
 The rest of the file is variations on blocks you have already
 written. `FleeTarget` is `ChaseStep` with the conclusion flipped
-(carry steps *away*) plus clamps of its own, because
+(carry steps *away*) plus separate clamps, because
 fleeing runs into walls. `Collide` is `Caught` at tolerance 8 with a
 respawn where your game changes card, and the respawn masks
 `ApiRandom` exactly as `Gather` does. The score display swaps
@@ -577,6 +571,5 @@ surfaces: `DrawScore` calls `NamePut` with a runtime column and drops
 a `Pip` tile on the top grid row, the tile grid itself as
 scoreboard, where Lanternfly borrowed the LCD.
 
-The two games have more to say to each other, and the last chapter
-reads them side by side:
+The last chapter compares the two games:
 [Two Displays, One Language](18-two-displays-one-language.md).

@@ -10,11 +10,11 @@ has_toc: false
 
 # AZM Book 2 — Z80 Fundamentals
 
-This book is for readers new to computers and programming. It introduces the Z80 from the bare machine upward: memory, registers, machine code, assembly language, flags, loops, tables, the stack, subroutines and port I/O.
+This book starts with no assumed knowledge of computers or programming. It builds from the Z80's memory and registers through machine code, assembly language, flags, loops, tables, the stack, subroutines and port I/O.
 
-AZM's own features are the subject of [AZM Book 1 — Assembler Manual](../book1/index.md), which this book hands over to at the end.
+After these machine-level fundamentals, [AZM Book 1 — Assembler Manual](../book1/index.md) explains AZM's own features.
 
-## Main Path
+## Chapters
 
 1. [The Computer](01-the-computer.md)
 2. [Machine Code](02-machine-code.md)

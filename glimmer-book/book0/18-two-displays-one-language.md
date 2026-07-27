@@ -18,12 +18,10 @@ the same loop, a writable timer whose period is the difficulty, a
 one-shot guarding the restart, `ApiRandom` masked for every respawn
 and the same delayed game-over gate.
 
-As programs, though, their paths separate at one early line.
-`display matrix8x8` against `display tms9918` set the prices:
-what a render writes to, what collision costs, how motion travels to
-the screen, how large a world a game can afford. You made every choice
-in those two games, and both games followed the declaration's prices,
-the way water follows a slope.
+Their implementations separate at one early line. `display
+matrix8x8` and `display tms9918` determine what a render writes, how
+collision is calculated, how motion reaches the screen and the
+available scene size.
 
 ## The two loops
 
@@ -75,23 +73,24 @@ the card, tick the timers, run the phases, roll the frame over. That
 identical tail is the language's reactive frame, unchanged under
 either display.
 
-Everything above your finger is the profile, and the two heads
-describe two different relationships with a screen. Skyfall's frame
+Everything above `GlimPollBindings` is profile-specific, and the two
+loop prefixes describe different relationships with a screen.
+Skyfall's frame
 *produces* its picture: `ScanFrame` drives all eight LED rows with a
 fixed dwell and returns with the 8x8 matrix dark, so the whole game
 (polling, rules, renders) runs inside the blank window between scans,
-and the scan is the frame's largest cost. Lanternfly's frame *waits
-for* its picture: the VDP paints 256x192 pixels from its own 16 KiB
-of VRAM over and over on its own, `VdpWaitVBlank`
-catches the rest between two paintings, and `GlimCommit` spends that
-rest moving the previous frame's changes into VRAM.
+and the scan is the frame's largest cost. Lanternfly's frame begins by
+waiting for its picture: the VDP refreshes 256x192 pixels from 16 KiB of
+VRAM, `VdpWaitVBlank` detects the interval between two refreshes and
+`GlimCommit` moves the previous frame's changes into VRAM during that
+interval.
 
 ![Two displays, two prices, one reactive frame.](../../assets/images/glimmer-book/book0/two-loops.svg)
 
 ## The board the program is
 
 On the 8x8 matrix, the scene is 32 bytes of program RAM, and
-Skyfall's whole visible world (drop, paddle) is in them. A
+Skyfall's complete visible scene (drop and paddle) is in them. A
 render writes the framebuffer; the next scan shows it; and because
 the CPU re-presents those bytes every frame, the picture persists
 exactly as long as the bytes do.
@@ -120,8 +119,8 @@ end
 
 Whatever moved (paddle, drop, or both), the block clears the canvas
 and repaints everything on it, and the cost stays trivial because
-everything on it is one plot and a three-pixel shape. `FbClear` did
-your erasing wholesale: every picture starts from darkness, so
+everything on it is one plot and a three-pixel shape. `FbClear`
+erases the framebuffer before each redraw, so
 whatever vacated a pixel is gone before the plots begin.
 
 The same smallness shaped your rules. Positions on the 8x8 are
@@ -143,8 +142,7 @@ why Skyfall's difficulty lives in a timer period, counted in frames.
 On the VDP, the scene outlives the frame that drew it. In
 Lanternfly's splash card, you planted five reeds with five `tile_at`
 lines, once, in an `enter` block; the commit carried them to VRAM;
-and the VDP has repainted them in every picture since, out of its own
-VRAM. An 8x8
+and the VDP has refreshed them in every picture since from VRAM. An 8x8
 matrix render repaints its whole layer whenever a fact changes; a
 VDP program writes each cell once and writes again only where a
 fact changed.
@@ -178,13 +176,13 @@ the screen two frames later (defer, shadow write, commit) at full
 rate, sixty-odd pixels a second. Skyfall's paddle reaches the next
 scan one frame after its pulse.
 
-Here is the whole divergence in one table:
+The main differences fit in one table:
 
 | | Skyfall, 8x8 matrix | Lanternfly, VDP |
 |---|---|---|
 | The scene | 32 bytes, redrawn on change | 768 cells + 32 sprites, persistent in VRAM |
-| A render writes | the whole framebuffer | shadow cells, committed by dirty group |
-| What shows it | `ScanFrame`, every frame | the VDP, from VRAM, on its own |
+| A render writes | the complete framebuffer | shadow cells, committed by dirty group |
+| Display mechanism | `ScanFrame`, every frame | the VDP, from VRAM |
 | Positions | cells on an 8x8 board | pixels on 256x192; grid cells, 32x24 |
 | Collision | one subtract, one compare | pixel distance per axis, under a tolerance |
 | Erasing | `FbClear` opens each redraw | an explicit blank of the old cell |
@@ -201,7 +199,7 @@ quickened to a floor of 6, `Pace` at 8 quickened to a floor of 1,
 the same `dec` and store in both), and a one-shot word timer armed
 at 90 frames to gate the restart. Three cards each, entered through
 `enter` blocks that re-raise what their renders need, left by `goto`
-or a conditional write to `CurrentCard`. The whole GameOver card moved
+or a conditional write to `CurrentCard`. The GameOver card moved
 between profiles verbatim.
 
 Both
@@ -209,24 +207,22 @@ games run compute, effect and render in that order; both stage changes
 through `Raised0` and `Next0` so one change reaches its dependents
 together, in a later phase or at the next frame's start; both print
 their design with `glimmer --deps` in the same report shape, raisers
-and triggers per fact. Skyfall spends 12 of the 32 change-flag cells,
+and triggers per fact. Skyfall uses 12 of the 32 change-flag cells,
 Lanternfly 16, on the same budget.
 
-The profile owns the loop: everything about *showing* (scan or commit,
-framebuffer or shadow, `FbPlot` or `SpriteSet`) came from one
-declaration and lives above the identical tail. The language owns
-the model: everything you learned (facts, moments, rules,
-pictures, phases, cards) moved across two opposite display
-architectures intact.
+The profile supplies the display-specific loop: scan or commit,
+framebuffer or shadow and `FbPlot` or `SpriteSet`. The language model
+remains the same across both display architectures: facts, moments,
+rules, pictures, phases and cards.
 
-The world required by the next idea determines its display. A game
+The next game's requirements determine its display. A game
 whose world is a board of cells that change together
 (pieces locking, lines clearing, a body growing) is a natural fit
 for the 8x8 matrix, where the whole scene is 32 bytes and cell
 arithmetic answers most questions. A game whose world is a place
 (standing scenery, a few movers gliding over it, room to travel)
-favours the VDP, where persistence and size are comparatively cheap
-and a mover is two shadow bytes. Both displays keep their own limits
+favours the VDP, where persistence and size require less Z80 work and
+a mover is two shadow bytes. Both displays have limits
 (sixty-four pixels on one side, sprite counts and colour rules on
 the other), and either way, the declarations you write first will
 read almost the same.
@@ -236,17 +232,16 @@ read almost the same.
 The Glimmer repository's `examples/` directory contains more programs
 readable with the model developed here. `counter`, `dot`, `slide` and
 `trail` are single-idea warm-ups. `snake.glim` is
-the 8x8 under a different pressure than Skyfall's: a growing body in
+another 8x8 design: a growing body in
 a 64-byte ring buffer, with its body-scan and draw loops in an
 imported assembly engine. You have also read `tetro.glim` and
-`sprite-chase.glim`; both reward a second visit as
-*yours to change*: a new piece, a smarter fleeing target.
+`sprite-chase.glim`; each can be extended with a new piece or a
+smarter fleeing target.
 
-When the engine files you import grow past helpers into modules of
-their own, the [AZM books](../../azm-book/) hold the assembler's
-whole story: ops, routines, register contracts, and the module
-system Glimmer's output leans on. [Debug80 Book
-1](../../debug80-book/book1/) covers the workshop end to end, from
+When imported engine files grow from helpers into modules, the
+[AZM books](../../azm-book/) cover ops, routines, register contracts
+and the module system used by Glimmer's output. [Debug80 Book
+1](../../debug80-book/book1/) covers the workflow from
 project setup to sending a build to a physical board.
 
 Every program in this book produced a HEX file containing the same

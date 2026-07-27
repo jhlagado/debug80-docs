@@ -7,11 +7,12 @@ nav_order: 11
 
 # Subroutine Conventions
 
-Chapter 10's two subroutines worked. `find_max` received HL and B, while
-`count_above` received HL, B and C. Both returned A. The comment above
-`count_above` listed D as clobbered because its running counter remained in D
-on return. That contract is useful only when every caller reads it and every
-later edit keeps it accurate.
+Chapter 10 showed how data moves through a complete program. This chapter
+concentrates on the rules at each call boundary. `find_max` receives HL and B,
+while `count_above` receives HL, B and C. Both return A. The comment above
+`count_above` lists D as clobbered because its running counter remains in D on
+return. Callers and later edits must follow that contract for the routines to
+compose correctly.
 
 ---
 
@@ -71,9 +72,11 @@ first. Popping into the wrong pairs restores the values to different registers.
 
 ![Which side is responsible for which register. The contract decides this, not the register.](../../assets/images/azm-book/book2/caller-callee-save.svg)
 
-Chapter 10's `find_max` needs one change first: it borrows C as a temporary, so it clobbers a register that is not one of its inputs. Dropping the temporary and comparing against `(hl)` directly leaves HL, B and A, all inputs or outputs. `count_above` needs the other remedy, since D holds its running count for the whole loop.
-
-The fix: push and pop DE around the body.
+Chapter 10's `find_max` borrows C as a temporary, so it clobbers a register that
+is not one of its inputs. Comparing against `(hl)` directly removes that
+temporary and leaves only HL, B and A, which already serve as inputs or output.
+`count_above` needs D for its running count throughout the loop, so it preserves
+the caller's whole DE pair with `push de` and `pop de`.
 
 ```asm
 count_above:
@@ -150,9 +153,9 @@ A caution: the index displacement in `(ix+d)` is a signed 8-bit value. For local
 
 ## Register documentation
 
-The only way to communicate a subroutine's register interface in plain assembly is a comment block.
-
-The comment block lives immediately before the subroutine label and declares every input, every output and every register the subroutine leaves changed:
+Plain assembly records a subroutine's register interface in a comment block
+immediately before the label. The block declares every input, every output and
+every register the subroutine leaves changed:
 
 Here is that revised body, with the C temporary gone:
 
@@ -205,15 +208,18 @@ CountAboveSkip:
 
 `Preserves` lists registers the subroutine explicitly restores.
 
-These comments bind only the people who read them. A mismatch shows up at runtime, sometimes far from its origin.
+The caller and routine uphold these comments by convention. A mismatch shows
+up at runtime, sometimes far from its origin.
 
 [Book 1 Chapter 6](../book1/06-register-contracts.md) covers what AZM provides beyond comments: a structured declaration syntax that the register contract analyzer can read and verify.
 
 ---
 
-## A worked example: the complete pair
+## Conventions applied to both routines
 
-Here are both subroutines from Chapter 10 with full push/pop discipline and complete comment blocks.
+The two Chapter 10 subroutines now follow the same convention. Their comment
+blocks describe the call boundary, while their bodies preserve every register
+that the contract promises to preserve.
 
 ```asm
 ; find_max: scan a byte table and return the largest value
@@ -292,11 +298,18 @@ A caller that needs HL or B after `find_max` returns has to reload them.
   push af
 ```
 
-The answer requires the matching three-pop epilogue and an explanation of what happens when the order is reversed.
+LIFO order determines the matching three-pop epilogue. Tracing the values when
+the pop order is reversed shows which register receives each saved pair.
 
-**2. Registers that need saving.** A subroutine receives HL as an input table pointer and B as a byte count. Internally, it uses C and D as scratch and E as a second counter. The task is to determine which registers need push/pop discipline and provide the matching entry and exit sequences.
+**2. Registers that need saving.** A subroutine receives HL as an input table
+pointer and B as a byte count. Internally, it uses C and D as scratch and E as a
+second counter. Classifying the inputs and internal registers determines which
+pairs need push/pop discipline and produces matching entry and exit sequences.
 
-**3. An IX frame.** The required prologue and epilogue allocate four bytes of local storage at `(ix-1)` through `(ix-4)`. Two further instructions store 42 in the first local and read it back into A.
+**3. An IX frame.** A prologue and epilogue that allocate four bytes of local
+storage place them at `(ix-1)` through `(ix-4)`. Storing 42 in the first local
+and reading it back into A demonstrates that IX remains a stable base while SP
+moves.
 
 **4. A missing pop.** The following subroutine has a return path that misses a pop:
 
@@ -333,23 +346,24 @@ SumEarlyExit:
   ret                ; BUG: missing pop
 ```
 
-The explanation must account for the caller's BC and the stack when the early exit fires, followed by a corrected version.
+Tracing the early exit accounts for both the caller's BC and the word left on
+the stack. The corrected path restores BC before returning.
 
 ---
 
-## Book 2 complete
+## From machine rules to assembler checks
 
-You can now:
+Book 2 ends with the rules that routines and callers must uphold in plain Z80
+assembly: arguments and results occupy agreed registers, preserved values are
+restored and every path reaches `ret` with a balanced stack. A comment records
+that agreement for callers.
 
-- write a complete AZM program with subroutines, loops, conditional branches and data tables
-- read and write Z80 instructions against the flags they set and the addressing modes they use
-- apply push/pop discipline to protect callers from register clobbering
-- document a subroutine interface as a comment block the next reader can rely on
-
-The comment block is where this book stops. AZM can check the same interface itself, and it can name a record layout or an instruction idiom once instead of at every use. Those features belong to the assembler rather than to the machine, so they live in Book 1:
+AZM can check the same interface and can name a record layout or instruction
+idiom once instead of repeating its details at each use. Those assembler
+features are covered in Book 1:
 
 - [Chapter 5, The Layout System](../book1/05-layout-system.md), for record types, `sizeof`, `offset` and cast paths in place of hand-counted byte offsets
 - [Chapter 6, Register Contracts](../book1/06-register-contracts.md), for `.routine` and the analysis that turns a comment block into something the assembler proves
-- [Chapter 7, Ops, Aliases and Source Composition](../book1/07-ops-aliases.md), for `op` declarations, and for building one program out of several files
+- [Chapter 7, Ops, Aliases and Source Composition](../book1/07-ops-aliases.md), for `op` declarations and for building one program out of several files
 
 [Book 3](../book3/index.md) covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for programs that outgrow a single file.

@@ -7,26 +7,24 @@ nav_order: 13
 
 # Cards
 
-An arcade machine begins with the screen that drew you over: the
-attract screen, blinking its invitation. It is a little program of its
-own, with one job: blink, and wait for a coin. Once the coin goes in, a different
-program takes over: rules, clock, score. A loss hands control to a
-third one that shows you the damage and waits to offer another round. Most
-finished games are at least three programs wearing one cabinet, and at any
-instant exactly one of the three is running.
+An arcade machine begins with an attract screen that blinks until a
+coin starts the game. Gameplay activates the rules, clock and score.
+After a loss, a result screen shows the outcome and offers another
+round. Most finished games have at least these three modes, with
+exactly one active at any instant.
 
 In every program you have written so far, every block is in play on
 every frame. To hold three screens in one file with the toolkit you
-have, you would reach for what every programmer reaches for: a Mode
-fact, and the same guard at the top of every single body. *Am I the
-screen that owns this block?* This chapter's game has thirteen
+have, you would reach for a Mode fact and the same guard at the top of
+every body: compare `Mode` with the value for this screen. This
+chapter's game has thirteen
 blocks, so that is thirteen copies of one test. And the cost is worse
 than the typing: the headers, the design you have learned to read
-straight off the page, would leave screen ownership buried in thirteen
+straight off the page, would leave each block's screen hidden in thirteen
 bodies.
 
 Glimmer's word for a screen or mode is a **card**, borrowed from
-HyperCard, which built whole applications out of stacks of them.
+HyperCard, which built applications out of stacks of them.
 Exactly one card is active at a time. A `card` line starts a
 block-dispatch section: the blocks after it run only while that card
 is active. A card gates dispatch.
@@ -34,14 +32,13 @@ State, pulses, timers and resources stay program-wide wherever you
 write them. Keeping them at the top of the file leaves the design in
 one place, while the card sections hold blocks.
 
-Cards are also a choice, and the choosing rule is short: they suit
-groups of blocks that belong to mutually exclusive modes
+Cards suit groups of blocks associated with mutually exclusive modes
 (screens, a pause, a round structure). Every program before this
 chapter had one screen, and one screen does fine on plain blocks.
 
 ## Gate
 
-The chapter's game is Gate, and as a game it is a shell. At the
+The chapter's game is Gate, a small framework for three screens. At the
 splash, two pixels blink in the middle of the 8x8 RGB LED matrix, and
 any key starts a round. A round
 is 512 frames on a clock drawn as a shrinking green bar, and every
@@ -51,8 +48,8 @@ pause any key returns to the splash.
 
 ![Gate's three cards, and the condition on each transition.](../../assets/images/glimmer-book/book0/card-machine.svg)
 
-The whole game is one file, `gate.glim`, and we are going to walk it
-top to bottom. It opens above any `card` line with the program-wide
+The complete game is one file, `gate.glim`. Above the first `card`
+line are the program-wide
 declarations (the facts, moments, and schedules every card shares):
 
 ```text
@@ -148,7 +145,7 @@ it only at the splash. During a round the same tick fires, and with
 `BlinkPrompt` gated off it clears at frame end like any pulse. The block's
 position in the file is its entire mode test.
 
-The three `card` lines also hand you two names you can use in code.
+The three `card` lines also generate two names for use in code.
 `Card` is an assembler enum: `Card.Splash`, `Card.Playing`,
 `Card.GameOver`. `CurrentCard` is a built-in byte cell, a fact
 like any other, legal in `on` and `updates`. It starts at the first
@@ -168,7 +165,7 @@ seven-segment digits (`HudBlankDig` is the display's counterpart to
 `FbClear`), and set `PromptOn`. The `updates` line delivers `PromptOn`
 to the render phase in the same frame, so the
 prompt is lit on the very first frame of the card, with the blink
-timer taking over from there.
+timer controlling later changes.
 
 Entry is edge-triggered: an enter block runs when the program
 *changes* to its card, not while the program sits on it. Frame one
@@ -255,9 +252,8 @@ effect EndRound
 end
 ```
 
-`StartRound` zeroes the score and arms the clock, and it must arm on
-entry. The alternative shows why. With `PlayClock : word = 512`
-declared instead, the countdown starts spending itself the moment the
+`StartRound` zeroes the score and arms the clock on entry. With
+`PlayClock : word = 512` declared instead, the countdown starts the moment the
 program boots, while the splash is still blinking. `TimeUp` fires
 into a frame whose one consumer, `EndRound`, is gated off, the clock
 settles at zero, and the round that eventually starts runs forever.
@@ -270,8 +266,8 @@ left. Running `on FrameCount`, the block redraws on every frame the
 card is active, because the card gates it along
 with everything else in the section.
 
-And here the gating settles those overlapping bindings from the top
-of the file. During a round, one press of GO raises `HitP` and
+Card gating resolves the overlapping bindings from the top of the
+file. During a round, one press of GO raises `HitP` and
 `AnyKeyP` together. `HitP` finds `ScorePoint`; `AnyKeyP`'s two
 consumers, `StartGame` and `Restart`, sit on the other two cards,
 gated off.
@@ -336,15 +332,14 @@ _done:
 end
 ```
 
-The last card exists because of something you would discover in your
-first minute of playtesting: a player mashing GO at the end of a round
-sails straight past the result screen. So restart waits
-behind a gate. `ShowFinal` closes it and arms `RestartGate`; ninety
+Repeated GO presses at the end of a round could otherwise skip the
+result screen. A restart gate prevents that transition. `ShowFinal`
+closes it and arms `RestartGate`; ninety
 frames later `GateOpenP` fires and `OpenGate` opens it, and only then
-does a key press travel.
+can a key press restart the game.
 
-`Restart` is the travel, and it is our first transition that depends
-on a runtime test. `goto` is unconditional once its block runs, so a
+`Restart` is the first transition that depends on a runtime test.
+`goto` is unconditional once its block runs, so a
 conditional transition writes `CurrentCard` itself. Its header
 declares `updates CurrentCard`, and the branch that leaves stores a
 `Card` value. The enum members are ordinary assembler constants, so
@@ -357,17 +352,17 @@ only when the program actually changed to its card, so a raised flag
 on the card the program is already sitting on passes every enter block
 by.
 
-## Facts that changed while you were away
+## Facts changed on another card
 
 `FinalBar` draws the score, and
 it depends on `Score`, a fact whose last change happened during the
 round, frames before this card existed on screen. `Score` changed
 many times in that round, and each change was delivered exactly once
-in its own frame, to the
+in that frame, to the
 blocks active at the time, and the flag dropped at that frame's end. **A card-gated block sees only the flags
 raised while its card is active.** Left to itself, `FinalBar` would
-wait forever on a flag that already came and went, and the game-over
-screen would show you a blank 8x8 matrix.
+receive no trigger because the earlier flag has already cleared, and
+the game-over screen would show a blank 8x8 matrix.
 
 The fix is in the enter block's header, which you already read past
 once:
@@ -392,8 +387,8 @@ stores or no stores. From `gate.main.asm`:
 One of those two raises is a **re-raise**: `Score` holds the value it
 held a moment ago, and its flag goes up again, so `FinalBar` runs on
 the card's first frame and paints the result. When a card's renders
-depend on facts that changed while the card was away, list those facts
-in the enter block's `updates`.
+depend on facts changed while another card was active, the enter
+block's `updates` list re-raises those facts.
 
 ## Transitions land at frame boundaries
 
@@ -416,7 +411,7 @@ Glim_StartGame:
 
 `CurrentCard`'s consumers are the enter blocks, and they dispatch at
 the head of the phase. By the time any goto runs, they have had their
-turn this frame, so the change defers to `Next1` and arrives whole at
+turn this frame, so the change defers to `Next1` and arrives at
 the next frame's start.
 
 Second, dispatch gates test a copy of `CurrentCard`, latched once per
@@ -430,17 +425,17 @@ MainLoop:
         ld      (GlimActiveCard),a  ; frame start, never mid-frame
 ```
 
-So every card switch lands at a frame boundary. The frame that
-decides to leave finishes as the old card: its blocks complete their
+So every card switch lands at a frame boundary. The frame containing
+the transition finishes as the old card: its blocks complete their
 phases, its pulses clear at frame end. The destination activates at
 the next frame's start, enter blocks first. The press that leaves the
 splash raises `AnyKeyP` (and `HitP` too, when
 the key is GO), but that frame's active card is still Splash, so
 `ScorePoint` is gated off, and both pulses are gone before Playing
-wakes. A goto leaves its frame's triggers behind, so every round
+becomes active. A goto leaves its frame's triggers behind, so every round
 starts with a zero score, whichever key started it.
 
-![A goto asked for in the logic phase, granted at the frame boundary.](../../assets/images/glimmer-book/book0/card-transition.svg)
+![A goto raised in the logic phase takes effect at the frame boundary.](../../assets/images/glimmer-book/book0/card-transition.svg)
 
 ## The card machinery
 
@@ -488,9 +483,9 @@ logic dispatcher:
 _skip_ScorePoint:
 ```
 
-Wrong card, skip; right card, the flag test proceeds as ever. Three
-instructions in front of the familiar dispatch are the entire price
-of the section machinery: what each block pays to belong to a card.
+The wrong card skips the block; the right card continues to the flag
+test. Card gating adds three instructions before the familiar
+dispatch.
 
 ![One card active, and every other card's blocks skipped.](../../assets/images/glimmer-book/book0/dispatch-gating.svg)
 
@@ -515,12 +510,12 @@ _skip_ShowFinal:
 
 In order, the three tests say that the active card is GameOver; the
 previous card was anything else, which is your edge; and
-`CurrentCard`'s flag is up. Then, once every enter block has had its
-chance, `GlimPrevCard` catches up with the present, and the edge
-stays disarmed until the card genuinely changes again. That middle
+`CurrentCard`'s flag is up. After all enter blocks have been tested,
+the code copies `GlimActiveCard` into `GlimPrevCard`, disabling the
+edge until the card changes again. That middle
 test is what makes the re-raise idiom and `Restart`'s every-run
 change mark safe: a raised flag alone, with both card bytes equal,
-walks past every enter block in the file.
+skips every enter block in the file.
 
 The next chapter puts a complete game inside the card machinery:
 [A Small Matrix

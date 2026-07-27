@@ -10,19 +10,18 @@ nav_order: 9
 Every picture so far has been built from single calls to `FbPlot`: a
 dot, a drop, a bar of pixels in a loop.
 Once a game's character has a body, two pixels by two
-or a whole 8x8 figure, plotting it point by point inside
+or a complete 8x8 figure, plotting it point by point inside
 every render block drowns the picture in the code that draws it. A
-picture belongs in data, laid out where you can see its shape.
+data declaration can show the shape directly.
 
 The TEC-1G
-has been sitting here all book with three instruments still to
-try: a speaker, the six-digit seven-segment display, and the 20x4
+also has a speaker, the six-digit seven-segment display and the 20x4
 LCD, all mounted beside the 8x8 RGB LED matrix and all reachable from
 a block. When your character hits a wall, the player should hear it:
 a beep placed at the right instant is feedback, the kind a player
 responds to by reflex. When the score changes, the player should
-be able to read it at a glance. This chapter gives your game a face, a
-voice, and a scoreboard.
+be able to read it at a glance. This chapter covers shapes, sound cues,
+the score display and LCD text.
 
 The same pattern appears three times in this chapter. You declare a
 resource in the `.glim` file (a shape, a sound cue, a text string)
@@ -30,14 +29,14 @@ and Glimmer generates the data plus something
 callable to go with it. Your blocks call what was generated, and the
 declaration reads like the resource it describes. The scoreboard is
 the odd one out: the six-digit seven-segment display is a service the
-profile library carries, two routines you call directly.
+profile library provides through two routines you call directly.
 
 ![Four kinds of output, four instruments, and the keypad coming back the other way.](../../assets/images/glimmer-book/book0/board-instruments.svg)
 
 ## Fanfare
 
 A cyan spark, two pixels square,
-bounces around the 8x8 matrix on its own timer.
+bounces around the 8x8 matrix on a dedicated timer.
 Every wall hit reverses its direction, beeps the speaker, and adds
 one to a score on the six-digit seven-segment display. The 20x4 LCD
 announces the program from the first frame.
@@ -144,21 +143,21 @@ score twice, but the second sound call replaces the first, leaving one
 active cue.
 
 Only three declarations at the top are new (`shape`, `sound`, and
-`text`) and each gets its own section below. A timer fires `Tick`
-every 6 frames, and `Move` runs on `Tick`. One idea rides in the
-state: velocity as a fact.
+`text`) and each has a section below. A timer fires `Tick`
+every 6 frames, and `Move` runs on `Tick`. Velocity is stored as a
+fact.
 `VelX` holds 1 when the spark travels right and `$FF` when it travels
 left, and because adding
 `$FF` to a byte steps it down by one, a single `add` moves the spark
 whichever way it is going. After the step, a spark at column 0 or
 column 6 has an edge against a wall (the shape is 2 wide, so 6 is as
-far right as it fits), and the rule answers with three moves: negate
-the velocity, bump the score word, start the sound cue. Then the same
-story again for y.
+far right as it fits), and the rule performs three operations: negate
+the velocity, increment the score word and start the sound cue. The
+same operations then run for y.
 
 ## A shape is pixel art with a name
 
-Here is the spark's body again, on its own:
+Here is the spark's body again:
 
 ```text
 shape Spark color cyan
@@ -183,9 +182,8 @@ shape Cross color red
 end
 ```
 
-The picture sits in your source at the same zoom you designed it at:
-six months from now you will open this file and see a cross, not
-decode one.
+The source preserves the picture at the scale used to design it, so
+the cross remains visible as a cross rather than an encoded mask.
 
 From each shape Glimmer emits a data table named `Shape_<Name>`, and
 because at least one shape exists in the program, the profile library
@@ -206,14 +204,14 @@ alone; two overlapping shapes combine. `DrawSpark` starts with
 `FbClear` because a moving shape
 redraws from a clean board.
 
-Placement is entirely your responsibility: `ShapeDraw` plots every lit
+The calling block is responsible for placement: `ShapeDraw` plots every lit
 pixel at x plus column, y plus row, straight into the framebuffer, and
 a row that hangs off the board writes into whatever memory follows it.
-The whole shape must stay inside the 8x8 matrix. For the 2x2 spark that
+The complete shape must stay inside the 8x8 matrix. For the 2x2 spark that
 means x and y each stay in 0..6, which is exactly the range `Move`
 enforces with its bounce tests. Register hygiene
 matters here too: the generated contract line
-declares that `ShapeDraw` clobbers A, BC, DE, and HL. `DrawSpark`
+declares that `ShapeDraw` clobbers A, BC, DE and HL. `DrawSpark`
 therefore loads its arguments immediately before the call.
 
 ## Sound the scan plays
@@ -224,11 +222,10 @@ sound Bounce len 8 div 3
 
 A `sound` declares a cue: a short beep that plays while your blocks
 keep running. The two numbers
-can wait: first, how this board makes sound at all. The
-speaker is a port bit, and the CPU is the only musician available. So
-Glimmer folds sound into the work the CPU is already doing: the scan
-loop that keeps the 8x8 matrix lit visits the speaker once per row, 8
-ticks per frame, and taps it on schedule. `len` counts those ticks
+describe duration and pitch. The speaker is a port bit controlled by
+the CPU. Glimmer integrates sound with the scan loop that keeps the
+8x8 matrix lit: once per row, 8 ticks per frame, the service updates
+the speaker output. `len` counts those ticks
 (`len 8` sounds for about one frame) and `div` sets the pitch as a
 divider, with smaller values higher.
 
@@ -237,10 +234,10 @@ plays while the frames keep coming, and its vocabulary is short and
 rhythmic by nature: clicks, chirps, buzzes, down to a long low
 `len 200 div 9` at the mournful end of the range. Melody is a
 different trade: MON-3 can play a tune, but it holds the CPU for the
-duration, and the game stands still to sing.
+duration, so game execution pauses until the tune ends.
 
-Each cue compiles to a routine named `Snd_<Name>`, and calling it is
-the entire interface:
+Each cue compiles to a routine named `Snd_<Name>`, called with no
+arguments:
 
 ```text
     call Snd_Bounce
@@ -249,12 +246,11 @@ the entire interface:
 The call starts the cue and returns at once; the scan plays it out
 over the following frames while your blocks keep running. One cue is
 active at a time, and starting a new cue replaces the current one;
-a fresh wall hit restarts the chirp from the top.
+a fresh wall hit restarts the chirp from its first tick.
 
-Sound accompanies a moment, and the
-moment sits inside a rule, behind a conditional, so `call Snd_Bounce`
-sits inside the effect, on the branch where the wall hit happened, and
-the quiet path steps past it.
+Sound accompanies a moment, so `call Snd_Bounce` sits inside the
+effect on the branch where the wall hit occurred. The other branch
+continues without starting a cue.
 
 ## The score, on the seven-segment display
 
@@ -267,8 +263,7 @@ two routines:
   fixed leading zero, 0 to 65535.
 - `HudBlankDig`: clear all six digits.
 
-`Score` is a word, so `ShowScore` loads all sixteen bits and hands
-them over:
+`Score` is a word, so `ShowScore` loads all sixteen bits into HL:
 
 ```text
 render ShowScore
@@ -282,15 +277,15 @@ end
 The startup code Glimmer generates calls `FbClear` and `HudBlankDig`
 before the first frame, so both displays begin dark; `Score` is
 declared `changed`, so `ShowScore` runs on frame one and the score
-opens at zero rather than blank.
+shows zero rather than remaining blank.
 
 `Move`'s header lists every fact the
 block may change, and each listed fact is marked changed whenever the
 block runs, so `ShowScore` repaints its digits every step, quiet
 ticks included. The repaint writes the same six
-glyph bytes and spends a few dozen cycles in the blank window. When a
+glyph bytes and takes a few dozen cycles in the blank window. When a
 score changes rarely and its redraw is heavy, move the heavy fact
-into an effect of its own so only a real change raises it; when the
+into a separate effect so only a real change raises it; when the
 redraw is `HudWriteU16`, the broad `updates` makes the dependency
 easier to read.
 
@@ -301,7 +296,7 @@ text MsgHello "FANFARE"
 ```
 
 A `text` declares a zero-terminated string for the TEC-1G's 20x4
-LCD. The LCD belongs to the board, alongside the keypad, so text
+LCD. The board provides the LCD alongside the keypad, so text
 resources work the same on the 8x8 matrix
 and, later in the book, on the TMS9918. Writing a string to a row is one
 line in a block:
@@ -310,8 +305,8 @@ line in a block:
     lcd_row MsgHello, LcdRow1
 ```
 
-That one line is your first meeting with an AZM **op**. An op is a
-macro that the assembler owns: a named instruction sequence, defined
+That one line introduces an AZM **op**. An op is an assembler macro:
+a named instruction sequence defined
 once in the generated
 file and expanded inline wherever it is invoked. So `lcd_row`
 reads like an instruction and costs exactly what its body costs.
@@ -323,15 +318,14 @@ taking the message label and a row constant: `LcdRow1` through
 
 `Banner` starts `changed` and stays at that one change, so `Greet`
 runs on
-frame one, writes FANFARE to the top row, and rests for the rest of
-the program's life. A title, border, greeting, or other one-time
+frame one and writes FANFARE to the top row. The dispatcher skips it
+on later frames. A title, border, greeting or other one-time
 startup action can use a fact that starts changed, with a block
 attached to it.
 
 ## The file, resource by resource
 
-Every resource leaves a mark that can be found by name in the
-generated `fanfare.main.asm`.
+Each resource appears by name in the generated `fanfare.main.asm`.
 
 The text resource is its bytes, terminator included:
 
@@ -356,8 +350,8 @@ Shape_Spark:
 `ShapeDraw` walks exactly this: read the header, then for each row
 shift the mask left and `FbPlot` every set bit at its offset from B
 and C. The declaration you drew in `X`s and the table the routine
-consumes are the same picture at two zoom levels; you can check it
-by eye, two set bits, twice.
+consumes are the same picture at two scales: two set bits in each of
+two rows.
 
 The sound cue is a three-instruction wrapper:
 
@@ -405,9 +399,9 @@ Glim_Greet:
         ret
 ```
 
-Your one line, verbatim, and the assembler finishes the job from the
-definition above.
+The generated block retains your line verbatim, and the assembler
+expands it from the definition above.
 
-Next, the board itself becomes data: arrays and layout types, for
-games whose state is many related bytes,
+The next chapter represents game boards and other related state with
+arrays and layout types:
 [Arrays and Layout Types](10-arrays-and-layout-types.md).

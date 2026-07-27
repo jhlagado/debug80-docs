@@ -7,7 +7,7 @@ nav_order: 5
 
 # The Layout System
 
-You have stored a sprite table as raw bytes. Each sprite occupies four bytes (an x position, a y position, a tile index and a flags byte), and you have `.equ` constants for each field offset. You insert a new field. Every constant after the insertion is now wrong, along with every access expression built on it.
+In the following example, a raw sprite table stores four bytes per sprite: an x position, a y position, a tile index and a flags byte. When `.equ` constants define the field offsets, inserting a field makes every following constant and its access expressions stale.
 
 AZM's layout system replaces those manual constants with one record
 declaration. `sizeof` and `offset` then derive byte counts and field positions
@@ -15,7 +15,7 @@ from its field list.
 
 ---
 
-## The core idea
+## Record offsets
 
 Written by hand, a sprite record needs one `.equ` per field offset:
 
@@ -30,7 +30,7 @@ Sprites:
     .ds 16 * SPRITE_SIZE
 ```
 
-Adding a field between `SPRITE_TILE` and `SPRITE_FLAGS` makes both `SPRITE_FLAGS` and `SPRITE_SIZE` wrong.
+Adding a field between `SPRITE_TILE` and `SPRITE_FLAGS` changes the required values of both `SPRITE_FLAGS` and `SPRITE_SIZE`.
 
 A type declaration replaces the manual constants:
 
@@ -151,7 +151,7 @@ timer   .field word
         .endtype
 ```
 
-After the declaration, `sizeof` and `offset` give you the assembler-time constants:
+After the declaration, `sizeof` and `offset` provide the assembler-time constants:
 
 ```asm
 SPRITE_SIZE  .equ sizeof(Sprite)           ; 4
@@ -192,7 +192,7 @@ N       .equ 3
         ld   a,(hl)
 ```
 
-For runtime indexing, when the index is in a register, write the address arithmetic explicitly:
+Runtime indexing requires explicit address arithmetic when the index is in a register:
 
 ```asm
 ; A = sprite index (0..15)
@@ -247,7 +247,7 @@ A `.typealias` declaration gives a name to any layout type expression. The decla
 SpriteArray .typealias Sprite[16]
 ```
 
-`SpriteArray` now works anywhere a type expression works:
+`SpriteArray` is valid anywhere a type expression is valid:
 
 ```asm
 Sprites:
@@ -275,14 +275,14 @@ With that declaration, the same field requires `.sprites[3].flags`; the `.sprite
 
 ## Cast syntax
 
-A layout cast tells AZM to treat an address as a particular layout while it calculates field offsets. It works entirely at assembly time, and the emitted bytes are the same:
+A layout cast applies a particular layout to an address while AZM calculates field offsets. The cast is evaluated entirely at assembly time and does not change the emitted bytes:
 
 ```asm
 ld   hl,<Sprite>Player.flags
 ld   hl,<Sprite[16]>Sprites[3].flags
 ```
 
-The structure is `<TypeExpr>base[index].field`, where `<TypeExpr>` is the layout to apply, `base` is a label or address expression, each `[index]` is an array step and each `.field` is a field name step. These two lines produce the same assembled bytes:
+The structure is `<TypeExpr>base[index].field`. `<TypeExpr>` is the layout, `base` is a label or address expression, each `[index]` is an array step and each `.field` is a field-name step. These two lines produce the same assembled bytes:
 
 ```asm
 ld   hl,Sprites + (3 * sizeof(Sprite)) + offset(Sprite, flags)
@@ -312,13 +312,13 @@ ld   hl,<Actor>Player.pos.x
 ld   hl,Player + offset(Actor, pos.x)
 ```
 
-![A cast path is another spelling of an address the arithmetic could reach anyway](../../assets/images/azm-book/book1/cast-paths.svg)
+![A cast path and explicit arithmetic resolve to the same address](../../assets/images/azm-book/book1/cast-paths.svg)
 
 ---
 
 ## Unions and alternate views
 
-A union describes multiple overlapping views of the same bytes. All union members start at offset zero; the union's size is the size of its largest member. Packed data that can be read as either a byte or a 16-bit value is a natural fit:
+A union describes multiple overlapping views of the same bytes. All union members start at offset zero; the union's size is the size of its largest member. The following packed value provides both byte and 16-bit views:
 
 ```asm
 PortValue .union

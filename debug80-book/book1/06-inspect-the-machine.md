@@ -7,7 +7,7 @@ nav_order: 6
 
 # Inspecting a running program
 
-VS Code contributes the panels you already know (Variables, Watch and Call Stack) and Debug80 adds its own Registers, Memory, Machine and Displays sections, which show the Z80 and the board.
+VS Code provides the Variables, Watch and Call Stack panels. Debug80 adds Registers, Memory, Machine and Displays sections for the Z80 and the board.
 
 ## Symbols and Constants in Variables
 
@@ -44,7 +44,7 @@ The **Memory** section is four independent views, labelled **A** to **D**, which
 
 ![The four memory views, each with its own anchor](../../assets/images/debug80-book/book1/panel-memory-views.svg)
 
-Each view has an anchor box that accepts three kinds of thing:
+Each view has an anchor box that accepts three kinds of value:
 
 - a register name, so the view follows that register as it changes
 - a symbol from the source map, such as `SevenSegHello`

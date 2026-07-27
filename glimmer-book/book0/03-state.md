@@ -8,15 +8,13 @@ nav_order: 3
 # State
 
 In the last chapter you built Beacon, pressed GO, and watched one
-remembered fact, a colour, become light on the 8x8 RGB LED matrix.
-A game needs more, because a game
-*is* its facts: where the player is, what colour things are, how well
-you are doing. Choosing those facts (what the program must remember,
-and what it can afford to forget) comes before any rule you write.
+stored fact, a colour, become light on the 8x8 RGB LED matrix. A game
+also needs the player's position, object colours and progress such as
+a score. Choosing which values to store comes before writing the rules
+that change them.
 
-So today Beacon grows. By the end of the chapter it will remember
-three facts (a position, a colour, and a score), and in teaching it
-those three you will meet everything a `state` declaration can say,
+This version of Beacon stores three facts (a position, a colour and a
+score). Together, their declarations use every part of the `state` syntax,
 along with the change tracking that goes with it. Near the end, a
 first-frame prediction made from the source can be checked against a
 running build.
@@ -26,8 +24,8 @@ running build.
 The new Beacon steers along its row with
 keys 4 and 6, held for movement the way Mover was. GO still steps the
 colour, and every step now scores a point, shown on the TEC-1G's
-six-position seven-segment display. Position, colour, score: the three
-kinds of fact almost every game keeps.
+six-position seven-segment display. Position, colour and score are
+common forms of game state.
 
 ```text
 program Beacon
@@ -130,13 +128,13 @@ state Score  : word
 
 The full shape is `state Name : type = initial changed`, and the last
 two parts are optional. The type is `byte` or `word`. The initial
-value defaults to 0, and `Score` leans on that default. The
+value defaults to 0, which provides the initial value for `Score`. The
 `changed` modifier marks the fact as already
 changed when the program starts, and `DotX` carries it.
 
-The one new thing here is `word`. A `word` cell is 16 bits, and your
+The new type here is `word`. A `word` cell is 16 bits, and your
 code moves it with the Z80's
-own 16-bit instructions. The score lines in `NextColour` show the
+native 16-bit instructions. The score lines in `NextColour` show the
 difference:
 
 ```asm
@@ -184,9 +182,9 @@ GlimDep_DrawBeacon__B0 .equ CHG_DOTX + CHG_COLOUR
 GlimDep_ShowScore__B0 .equ CHG_SCORE
 ```
 
-Every fact owns one bit of `Changed0`, pulses included: a pulse is a
-fact that holds for one frame, remember, and it is tracked the same
-way as its longer-lived siblings. DrawBeacon's mask shows what a
+Every fact receives one bit of `Changed0`, including pulses. A pulse
+is a fact that holds for one frame and uses the same change tracking
+as persistent state. DrawBeacon's mask shows what a
 two-fact trigger becomes: the sum of two bits. The dispatcher ANDs the
 changed byte against that mask, so *any* fact in the list sets the
 block running.
@@ -194,15 +192,14 @@ block running.
 When DrawBeacon runs
 because you moved, its body still reads `Colour` and plots the current
 colour: a body always works from the facts as they are now, whichever
-bit woke it. **Flags decide who runs; values decide what happens.**
+bit triggered it. **Flags select the blocks to run; values determine
+the result.**
 
-By hand, keeping the picture current costs you one of two chores:
-redraw
-everything every frame whether or not it moved, or keep a dirty flag
-per fact and set it in every code path that writes that fact. The
-flags here are the second chore, done for you. You declare `updates`
-once in a block's header; the generated wrapper sets the bit, the
-dispatcher tests it, and `GlimEndFrame` clears it.
+Handwritten code can keep the picture current by redrawing everything
+every frame or by maintaining a dirty flag for each fact. Glimmer
+generates the second form. You declare `updates` once in a block's
+header; the generated wrapper sets the bit, the dispatcher tests it
+and `GlimEndFrame` clears it.
 
 One byte holds eight facts, and a program can declare up to 32
 flag-carrying facts: they fill `Changed0` through `Changed3`, eight
@@ -216,8 +213,8 @@ and a block whose triggers span banks tests each one.
 
 The challenge is to predict the first frame before building, then compare that
 prediction with the running program.
-`Changed0` begins
-life as the sum of every `changed` in the source:
+`Changed0` starts with the sum of every `changed` modifier in the
+source:
 
 ```asm
 Changed0:         .db %00000001   ; flags dispatch tests
@@ -226,14 +223,13 @@ Changed0:         .db %00000001   ; flags dispatch tests
 One bit: `DotX`'s. DrawBeacon's mask
 includes that bit, so the beacon appears, and it appears with both
 its position and its colour correct, because the body reads both cells
-regardless of which bit woke it. ShowScore's mask is `CHG_SCORE`, and that bit is clear,
-so ShowScore rests, and the six-position seven-segment display stays
+regardless of which bit triggered it. ShowScore's mask is `CHG_SCORE`, and that bit is clear,
+so the dispatcher skips ShowScore and the six-position seven-segment display stays
 dark.
 
-A dark display looks like a bug the first time you meet it, so work it
-out from the source before you reach for the debugger: a render draws
-only on the frames it runs, and ShowScore runs only when `Score`
-changes. The display stays dark
+The source explains why the dark display is expected: a render draws
+only on the frames when it runs, and ShowScore runs only when `Score`
+changes. The display therefore stays dark
 until the first press of GO, when `updates Colour, Score` raises both
 bits and the score lights up as `000001`.
 
@@ -245,16 +241,15 @@ start, you already know the word that does it:
 state Score  : word changed
 ```
 
-With that one edit, frame one runs both renders, and the display shows
+With that edit, frame one runs both renders, and the display shows
 `000000` before you have pressed anything. That is the rule for
-`changed`: it belongs on every fact whose picture should exist before
-anything happens.
+`changed`: apply it to each fact whose initial value must be rendered
+before the first input.
 
 Building both versions confirms the prediction. With plain `Score`, a
 breakpoint inside `ShowScore` first stops at the press of GO; with
 `Score changed`, it stops on frame one, before any key press. In either
 version, each later score change reaches the breakpoint again.
 
-Next we turn to the moments themselves, where pulses come from, and
-every way a key can fire one:
+The next chapter examines pulses and each way a key can fire one:
 [Pulses and Bindings](04-pulses-and-bindings.md).

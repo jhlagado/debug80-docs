@@ -8,7 +8,7 @@ nav_order: 2
 # Opening a folder and creating a project
 
 Debug80 works on an ordinary folder. The panel shows one of three
-states: no folder, an uninitialized folder, and a project.
+states: no folder, an uninitialized folder and a project.
 
 ## The project folder
 
@@ -42,7 +42,7 @@ Create a starter source file for this Debug80 project
 
 ![The program file picker offering Create ASM starter and No target yet](../../assets/images/debug80-book/book1/picker-program-file.svg)
 
-with two standing options. **Create ASM starter** writes `src/main.asm` with a small working program. **No target yet** creates the project and leaves the program file for you to pick later. If the folder already holds assembly files they are listed above those two, so you can adopt an existing file instead.
+with two persistent options. **Create ASM starter** writes `src/main.asm` with a small working program. **No target yet** creates the project and leaves the program file for you to select later. If the folder already holds assembly files they are listed above those two, so you can adopt an existing file instead.
 
 For this example, **Create ASM starter** supplies the first runnable
 target.
@@ -54,7 +54,7 @@ uses the platform's default kit, which for TEC-1G is `TEC-1G / MON-3`.
 
 ## The project files
 
-Four things appear in the folder:
+Initialization creates:
 
 ```text
 project1/
@@ -97,9 +97,9 @@ The project's Debug80 configuration is stored in `debug80.json`, an ordinary fil
 
 The generated file is longer than the extract above; it also records the memory map, the monitor ROM the profile brings with it, and the source roots the assembler searches.
 
-Editing `debug80.json` by hand is plain text work, with no schema
-behind it to complete or check what you type. The panel and commands
-are safer for routine changes.
+The panel and commands handle routine changes to `debug80.json`.
+Manual edits are plain text and receive no schema completion or
+validation.
 
 ## The starter program
 

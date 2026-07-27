@@ -7,17 +7,22 @@ nav_order: 6
 
 # Records
 
-Chapter 2 indexed bytes in a table. Real programs store **records**: several fields packed together (coordinates, queue indices, flags) with a stride larger than 1.
+Chapter 2 indexed bytes in a table. A table of **records** packs several fields
+together, such as coordinates, queue indices and flags, with a stride larger
+than 1.
 
 Field offsets kept only in comments can drift away from the data they describe.
-Wirth's alternative fixes the **representation** first, then expresses the
-algorithm against that layout. AZM's `.type` blocks provide that representation.
+AZM's `.type` blocks define the representation once, and the algorithm uses
+offsets computed from that layout.
 
-Layout types, which [Book 1 Chapter 5](../book1/05-layout-system.md) covers, come back here, driving field reads and writes through HL and IX and then building a **ring buffer**, a fixed-size FIFO queue over a byte table. The companion listing is [`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm).
+Layout types, which [Book 1 Chapter 5](../book1/05-layout-system.md) covers,
+drive field reads and writes through HL and IX. The example in
+[`examples/05_ring_buffer.asm`](examples/05_ring_buffer.asm) uses them to build
+a **ring buffer**, a fixed-size FIFO queue over a byte table.
 
 ---
 
-## The problem: a queue that moves only its indices
+## A queue that moves only its indices
 
 A FIFO queue (first in, first out) needs:
 
@@ -26,7 +31,10 @@ A FIFO queue (first in, first out) needs:
 - a read index (where the next pop comes from)
 - a count of how many elements are valid (or equivalent logic)
 
-Shifting the whole table on every pop is wasteful on a small machine. A **ring buffer** keeps indices in workspace RAM and only moves the indices. Storage is a fixed byte array; push writes at `head` and advances; pop reads at `tail` and advances. When an index reaches capacity, it wraps to 0.
+A **ring buffer** avoids shifting the whole table on every pop. Its fixed byte
+array stays in place while indices in workspace RAM move: push writes at `head`
+and advances, while pop reads at `tail` and advances. An index wraps to 0 when
+it reaches capacity.
 
 ---
 
@@ -156,8 +164,8 @@ as written.
   ld (hl), a
 ```
 
-Runtime indices are your own `add hl, bc`; AZM's layout arithmetic all happens
-at assembly time.
+Runtime indices require instructions such as `add hl, bc`; AZM evaluates layout
+arithmetic at assembly time.
 
 ---
 
@@ -212,7 +220,8 @@ The long form and the cast must agree:
 
 ## Ring buffer structure
 
-Separate **data** (the ring) from **control** (indices and count):
+The ring buffer keeps **data** in its byte array and **control** in the indices
+and count:
 
 ```asm
 RingState .type
@@ -228,14 +237,15 @@ ring_state:
     .ds RingState
 ```
 
-**Invariants** (when the routines are correct):
+**Invariants:**
 
 - `0 <= count <= RING_CAP`
 - `head` and `tail` are each in `0 .. RING_CAP - 1`
 - the oldest byte is at `ring_buf[tail]` when `count > 0`
 - the next free slot for push is `ring_buf[head]` when `count < RING_CAP`
 
-Push fails closed when `count == RING_CAP` (returns with carry clear). Pop fails when `count == 0`.
+When `count == RING_CAP`, push returns with carry clear. When `count == 0`, pop
+returns with carry clear.
 
 ### Memory diagram
 
@@ -292,7 +302,7 @@ _full:
     ret
 ```
 
-Carry flag is the success/fail signal.
+The carry flag reports whether the byte was pushed.
 
 ### Pop
 
@@ -356,7 +366,7 @@ azm --rc warn examples/05_ring_buffer.asm
 
 ## `main`: test sequence
 
-The companion program:
+The example runs this sequence:
 
 1. Clears `ring_state` through IX.
 2. Pushes `$11`, `$22`, `$33`, then pops three times (FIFO).
@@ -407,7 +417,7 @@ Unions (`.union` / `.endunion`) share the same offset rules; the union's size is
 
 ---
 
-## Examples
+## Inspecting the queue state
 
 | File | What to verify |
 |------|----------------|
@@ -425,21 +435,21 @@ A single-step trace of `ring_push` shows `head` and `count` changing through
 
 ## Exercises
 
-1. The first exercise calculates three `.equ` values by hand:
-   `sizeof(RingState)`, `offset(RingState, tail)` and
-   `offset(RingState, count)` for the chapter's three-byte layout.
-2. Adding a `flags` byte after `count` should be followed by an account of which
-   `.equ` lines and which push/pop instructions change.
-3. An alternative `ring_buf[head]` address calculation uses DE as the base and
-   C as the index while retaining the existing `ring_push` contract.
-4. A capacity of 16 can use `and 15` in `ring_advance_index` instead of `cp` /
-   `xor`; a paper proof should show that `head` stays in 0..15.
-5. A `ring_peek` routine should return the oldest byte in A, leave the queue
-   unchanged, and report an empty ring with carry clear. Its contract documents
-   `.routine in`, `.routine out` and `.routine clobbers`.
-6. Two forms should load the address of `ring_state.head` into HL: a layout
-   cast and `ring_state + offset(RingState, head)`. Assembly should produce the
-   same immediate for both.
-7. Four reserved `Event` records use `Event .type`, `code .byte`, `param
-   .word`, `.endtype` and `.ds Event[4]`. A loop should zero every `param` field
-   using `sizeof(Event)` as its stride.
+1. Without assembling, compute `sizeof(RingState)`, `offset(RingState, tail)`
+   and `offset(RingState, count)` for the chapter's three-byte layout. Write
+   the three `.equ` lines, then assemble and compare.
+2. Add a `flags` byte to `RingState` after `count`. Which constants change?
+   Which push and pop code must change?
+3. Rewrite the `ring_buf[head]` address setup using DE as the base, keeping
+   the index in C and the same contract on `ring_push`.
+4. Change `RING_CAP` to 16 and use `and 15` in `ring_advance_index` in place
+   of the `cp` and `xor` pair. Prove on paper that `head` stays below 16.
+5. Write `ring_peek`: return the oldest byte in A and leave the queue as it
+   was, with carry clear signalling empty. Document `in`, `out` and
+   `clobbers`.
+6. Load the address of `ring_state.head` into HL twice, once with a layout
+   cast and once as `ring_state + offset(RingState, head)`. Assemble both and
+   confirm the same immediate in the listing.
+7. Declare an `Event` record (`code .byte`, `param .word`) and reserve
+   `.ds Event[4]`. Write a loop that zeroes every `param` field using
+   `sizeof(Event)` as the stride.

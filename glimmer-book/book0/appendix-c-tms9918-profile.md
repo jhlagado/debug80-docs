@@ -34,7 +34,7 @@ MainLoop:
         jp      MainLoop
 ```
 
-- The VDP renders autonomously from its own VRAM; the loop paces on
+- The VDP renders autonomously from its VRAM; the loop paces on
   the vblank status flag. `VdpWaitVBlank` spins until the flag rises,
   and reading the status register clears it for the next frame.
 - `GlimCommit` streams changed shadow tables to VRAM immediately
@@ -157,8 +157,8 @@ covers pattern indexes `g*8` to `g*8+7`.
   colours from the first pair. `VdpInit` fills the colour table with
   `$F1` (white on black) before `LoadResourcesVram` writes the
   declared pairs.
-- The colour table holds 32 groups. A program that needs more raises
-  a build diagnostic naming the count. Reusing (fg, bg) pairs reduces
+- The colour table holds 32 groups. The compiler reports a build
+  diagnostic when a program declares more, naming the count. Reusing (fg, bg) pairs reduces
   the count.
 
 ```asm
@@ -195,8 +195,8 @@ end
 
 `sprite_at Player, PlayerX, PlayerY` reads the two byte cells and
 positions the slot; the cell names assemble as addresses. `tile_at`
-takes immediates, so a computed position loads A, D, E itself and
-calls `NamePut` directly, the way Sprite Chase draws its score pips.
+takes immediates, so code with a computed position loads A, D and E
+and calls `NamePut` directly, as Sprite Chase does for its score pips.
 
 ## Library routines
 
@@ -226,7 +226,7 @@ sprite or a tile.
   `VdpWriteBlock` then streams BC bytes from HL through the data
   port. `VdpFill` sets the address itself and writes BC copies of E.
 - `VdpWaitVBlank` spins on bit 7 of the status register. The generated
-  loop owns this call.
+  loop calls it.
 - `SpriteSet` positions slot A at D = x, E = y in the shadow.
   `SpriteInit` assigns slot A its pattern D and colour E; the
   generated `LoadResourcesVram` calls it once per declared slot.

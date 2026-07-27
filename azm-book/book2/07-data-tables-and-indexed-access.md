@@ -230,9 +230,7 @@ and `rec1_lo` receives `$B0`.
 
 ## Block operations: LDIR and friends
 
-The Z80 has hardware instructions for copying or scanning ranges of memory. The
-most useful is `ldir`.
-
+The Z80 has hardware instructions for copying or scanning ranges of memory.
 `ldir` copies BC bytes from the address in HL to the address in DE. After each
 byte is copied, HL and DE are both incremented and BC is decremented. The
 instruction repeats until BC reaches zero.
@@ -261,7 +259,7 @@ ldir              ; copy 4 bytes, HL and DE advance, BC reaches 0
 After `ldir`, HL points one byte past the last source byte, DE points one byte
 past the last destination byte, and BC holds zero.
 
-![What ldir leaves in HL, DE and BC. The registers ending up past the data is the part that catches people out.](../../assets/images/azm-book/book2/ldir-copy.svg)
+![Register state after ldir. HL and DE point one byte past the copied ranges, and BC holds zero.](../../assets/images/azm-book/book2/ldir-copy.svg)
 
 `ldir` uses BC as a 16-bit counter. Counts from 1 to 65,535 have their ordinary
 meaning; an initial BC value of zero wraps on the first decrement and copies
@@ -298,19 +296,12 @@ For element-by-element work on a single table, the DJNZ-over-HL pattern from the
 
 ---
 
-## Subroutines in Chapter 8
-
-Everything so far has been a single block of code. Chapter 8 introduces the
-stack and the `call`/`ret` instructions used to enter reusable subroutines and
-return to their callers.
-
----
-
 ## Exercises
 
 **1. Post-loop pointer value.** The HL sum loop in the chapter starts with `ld hl, scores` where `scores` is at address `$8000` and contains six entries. After the loop completes all six iterations, what address does HL hold? What byte would `ld a, (hl)` read at that point? Is that byte part of `scores`?
 
-**2. Address versus value.** The explanation must distinguish the effects of these two instructions:
+**2. Address versus value.** Comparing these two instructions separates a
+table's address from the first value stored there:
 
 ```asm
 ld hl, scores      ; (a)
@@ -319,9 +310,15 @@ ld a, (scores)     ; (b)
 
 Which instruction loads the number 10 (the first element of the table) into a register? Which loads the memory address where 10 is stored?
 
-**3. IX record access.** Three three-byte records are packed in memory, with `id` at offset 0, `hi` at offset 1 and `lo` at offset 2. The table starts at address `$8010`. The required IX loads read all three fields of the **third** record (index 2) into A, B and C respectively; computing the address loaded into IX establishes the base.
+**3. IX record access.** Three three-byte records are packed in memory, with
+`id` at offset 0, `hi` at offset 1 and `lo` at offset 2. The table starts at
+address `$8010`. Reading all three fields of the **third** record (index 2) into
+A, B and C begins by computing the record's base address for IX, followed by
+one displaced load for each field.
 
-**4. The missing increment.** The following loop is meant to find the maximum score in the `scores` table, but it has a subtle error. The answer should identify what goes wrong and explain the final value in `max_score`:
+**4. The missing increment.** The following loop is intended to find the maximum
+score in `scores`, but its pointer never advances. Tracing HL through the
+iterations explains both the error and the final value in `max_score`:
 
 ```asm
 ld hl, scores

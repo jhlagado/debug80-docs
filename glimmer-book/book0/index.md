@@ -12,9 +12,9 @@ has_toc: false
 
 Glimmer lets you write a Z80 game as a set of declarations: this is the
 state, these are the inputs, these rules run when these facts change. The
-behaviour itself lives in small blocks of real assembly. From those
-declarations it generates the whole running program as readable Z80 assembly source:
-the main loop, the input polling, the change tracking, and the display glue.
+behaviour lives in small blocks of Z80 assembly. From those
+declarations it generates a complete program as readable assembly source:
+the main loop, input polling, change tracking and display glue.
 
 You bring some Z80 assembly; everything else
 is taught here, one construct at a time, and most chapters end in a

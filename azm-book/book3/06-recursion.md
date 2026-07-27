@@ -7,17 +7,20 @@ nav_order: 7
 
 # Recursion
 
-Chapter 5 kept all state in registers, workspace bytes or a `RingState` record. This chapter adds **recursion**: the same subroutine label on the `call` instruction that defines it, with a base case that stops the chain.
+Chapter 5 kept all state in registers, workspace bytes or a `RingState` record.
+**Recursion** calls the current subroutine again with a smaller input, while a
+base case stops the chain.
 
 The **hardware stack** holds one return address per active call. Its capacity
 must be budgeted at assembly time, because an overflow silently overwrites
 whatever lies below the stack.
 
-The companion listing is [`examples/06_factorial.asm`](examples/06_factorial.asm).
+[`examples/06_factorial.asm`](examples/06_factorial.asm) compares recursive and
+iterative factorial, then recursively sums a byte table.
 
 ---
 
-## The problem: smaller versions of the same job
+## Smaller versions of the same job
 
 Many definitions refer to themselves:
 
@@ -106,7 +109,9 @@ _one:
 
 **Recursive step:** save `n` on the stack, compute (n-1)! in A, restore `n` into B, multiply A by `n` via `mul8_a_by_c`, return.
 
-Work after the inner `call` returns is the hallmark of recursion that **unwinds**: the stack still holds outer return addresses until each level finishes its multiply.
+This form of recursion **unwinds** through work after the inner `call` returns.
+The stack still holds outer return addresses until each level finishes its
+multiply.
 
 ### Iterative version
 
@@ -235,7 +240,7 @@ From `main`:
 ```
 
 `sum_rec` at `$8002` should hold `$001A` (26). A single-step trace of the
-companion routine shows HL growing after each `ret` during the unwind.
+routine shows HL growing after each `ret` during the unwind.
 
 ---
 
@@ -261,7 +266,7 @@ Internal labels use owner-local names such as `_one` and `_zero`.
 
 ---
 
-## Stack overflow: what actually goes wrong
+## Stack-overflow failure
 
 Stack overflow on the Z80 is **silent**. SP decrements through your globals; stores from later `push` or `ld (ix+d), a` corrupt unrelated bytes; `ret` pops garbage into PC.
 
@@ -316,7 +321,7 @@ main:
 
 ---
 
-## Examples
+## Inspecting the call chain
 
 | File | What to verify |
 |------|----------------|
@@ -334,19 +339,16 @@ and the multiplies on the way up. The complete file can then run to `halt`.
 
 ## Exercises
 
-1. With `FACT_N` set to 6, the comparison should determine whether `fact_rec`
-   still matches `fact_iter` in an eight-bit result and what representation is
-   required for an exact 6!.
-2. A hand count of stack bytes at the deepest point of `factorial_u8(5)` should
-   be checked against `FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES`.
-3. A `sum_u8_rec` variant should recurse on a head index in workspace instead
-   of advancing HL before the call. Its sum and stack use can then be compared
-   with the original.
-4. A `hanoi_moves_u16` routine uses B as input and HL as output, with H(0)=0
-   and H(n)=2H(n-1)+1. It should make one recursive call for H(n-1), double HL,
-   add one and include an estimate of stack bytes per level.
-5. A deliberate contract error calls `factorial_u8` and then uses B as if the
-   call had preserved it. `azm --rc warn` should expose the error, and the
-   contract comment provides the basis for correcting it.
-6. A constrained-stack case lowers `STACK_TOP` to `$8010`, retains data at
-   `$8000` and sets `FACT_N = 5`; its purpose is to identify the first failure.
+1. Change `FACT_N` to 6. Does `fact_rec` still match `fact_iter` in an 8-bit
+   result byte? What would you change to hold 6! exactly?
+2. Hand-count the stack bytes for `factorial_u8(5)` at the deepest point, then
+   confirm the count matches `FACT_N * FACT_STEP_BYTES + FACT_BASE_BYTES`.
+3. Rewrite `sum_u8_rec` to recurse on a head index held in workspace instead
+   of advancing HL before the call. Does the sum change? Does the stack use?
+4. Add `hanoi_moves_u16` with B in and HL out, from H(0) = 0 and
+   H(n) = 2H(n-1) + 1: one recursive call for H(n-1), then double HL and add
+   one. Estimate the stack bytes per level before you run it.
+5. Run `azm --rc warn` on a deliberate bug: call `factorial_u8`, then use B
+   without reloading it. Fix the caller using the contract.
+6. Lower `STACK_TOP` to `$8010` while the data stays at `$8000`. Run with
+   `FACT_N = 5` and describe what fails first.

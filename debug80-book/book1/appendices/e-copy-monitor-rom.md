@@ -7,7 +7,7 @@ nav_order: 105
 
 # Appendix E — Local monitor ROM source
 
-Debug80 supplies the platform monitor ROM for ordinary TEC-1 and TEC-1G projects, so copy it into a project only when you want to study, edit or debug the monitor itself. Debug80 then assembles the copied files with AZM and uses their source map when execution enters monitor code.
+Debug80 supplies the platform monitor ROM for ordinary TEC-1 and TEC-1G projects, so a project-local copy is needed only to study, edit or debug the monitor itself. Debug80 then assembles the copied files with AZM and uses their source map when execution enters monitor code.
 
 ## The copy command
 
@@ -53,7 +53,7 @@ writes the generated artifacts under `build/roms/`, and starts the
 machine on that ROM instead of the bundled one. **Build** alone
 assembles it without launching.
 
-Once a `*.rom.asm` file exists, *every* launch builds it and points the platform at the result, whatever ROM `debug80.json` names. When a project behaves unexpectedly, a forgotten monitor source in `roms/` is worth checking: it is quietly replacing the monitor.
+Once a `*.rom.asm` file exists, *every* launch builds it and points the platform at the result, whatever ROM `debug80.json` names. A forgotten monitor source in `roms/` can therefore explain unexpected project behaviour because it replaces the configured monitor.
 
 For TEC-1G / MON-3, the generated files include:
 
