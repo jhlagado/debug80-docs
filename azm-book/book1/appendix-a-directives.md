@@ -4,7 +4,6 @@ title: "Appendix A — Directive Reference"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 101
 ---
-[← Diagnostics and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix B — Expression Operators →](appendix-b-operators.md)
 
 # Appendix A — Directive Reference
 
@@ -87,7 +86,3 @@ Carriers in a `.routine` directive are comma-separated register names, flag name
 Individual flag names are `carry`, `zero`, `sign`, `parity` and `halfCarry`. `C` names register C. Chapter 6 describes the complete contract format.
 
 ![The pair and flag-set spellings against the carriers the analyzer tracks](../../assets/images/azm-book/book1/carrier-expansion.svg)
-
----
-
-[← Diagnostics and Output](08-diagnostics-listings-output.md) | [Manual](index.md) | [Appendix B — Expression Operators →](appendix-b-operators.md)

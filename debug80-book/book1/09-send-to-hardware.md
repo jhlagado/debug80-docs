@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 10
 ---
 
-[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Appendix A — Debug expressions →](appendices/a-debug-expressions.md)
-
 # Sending to TEC-1G hardware
 
 Debug80 sends the active target's Intel HEX file to real hardware through CoolTerm. CoolTerm owns the serial port. Debug80 controls CoolTerm through its localhost Remote Control Socket.
@@ -73,7 +71,3 @@ The observed failure identifies which part of the path to inspect:
 - If Debug80 asks for a HEX file, build the active target.
 - If the TEC-1G displays `ERROR`, check that the board is in Intel HEX Load mode and try the transfer again.
 - If characters appear to be missed, add transmit delay in CoolTerm.
-
----
-
-[← Video, input and serial](08-video-input-and-serial.md) | [Book 1](index.md) | [Appendix A — Debug expressions →](appendices/a-debug-expressions.md)

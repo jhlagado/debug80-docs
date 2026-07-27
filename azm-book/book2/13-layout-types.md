@@ -4,7 +4,6 @@ title: "Layout Types"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 13
 ---
-[← Register Contracts](12-register-contracts-azmdoc.md) | [Book 2](index.md) | [Op Declarations →](14-op-declarations.md)
 
 # Chapter 13 — Layout Types
 
@@ -588,7 +587,3 @@ Without running AZM, the task is to derive `sizeof(Enemy)`, `offset(Enemy, x)`, 
 **4. Enum in a dispatch.** The task is to define `Command` with members `Move`, `Attack`, `Wait` and `Retreat`, load `Command.Attack` into A, and explain in a comment why `ld a, Attack` fails to assemble.
 
 **5. Union offsets.** Given `WordView` from this chapter (`raw` as `.word`, `bytes` as `.field Pair`), the answer needs `.equ` lines for `WORD_LO` and `WORD_HI`, the value of `sizeof(WordView)`, and the reason `offset(WordView, raw)` and `offset(WordView, bytes.lo)` are both 0.
-
----
-
-[← Register Contracts](12-register-contracts-azmdoc.md) | [Book 2](index.md) | [Op Declarations →](14-op-declarations.md)

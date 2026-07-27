@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 105
 ---
 
-[← Appendix D — The AZM options row](appendices/d-azm-options-row.md) | [Book 1](index.md)
-
 # Appendix E — Local monitor ROM source
 
 Debug80 supplies the platform monitor ROM for ordinary TEC-1 and TEC-1G projects, so copy it into a project only when you want to study, edit or debug the monitor itself. Debug80 then assembles the copied files with AZM and uses their source map when execution enters monitor code.
@@ -81,7 +79,3 @@ returns to the bundled monitor ROM. For TEC-1G / MON-3 that file is:
 ```text
 roms/tec1g/mon3/mon3.rom.asm
 ```
-
----
-
-[← Appendix D — The AZM options row](appendices/d-azm-options-row.md) | [Book 1](index.md)

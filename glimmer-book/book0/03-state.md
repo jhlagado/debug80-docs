@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 3
 ---
 
-[← First Light](02-first-light.md) | [Book](index.md) | [Pulses and Bindings →](04-pulses-and-bindings.md)
-
 # Chapter 3 - State
 
 In the last chapter you built Beacon, pressed GO, and watched one
@@ -261,7 +259,3 @@ version, each later score change reaches the breakpoint again.
 Next we turn to the moments themselves, where pulses come from, and
 every way a key can fire one:
 [Pulses and Bindings](04-pulses-and-bindings.md).
-
----
-
-[← First Light](02-first-light.md) | [Book](index.md) | [Pulses and Bindings →](04-pulses-and-bindings.md)

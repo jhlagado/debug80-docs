@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 4
 ---
 
-[← State](03-state.md) | [Book](index.md) | [Compute, Effect, Render →](05-compute-effect-render.md)
-
 # Chapter 4 - Pulses and Bindings
 
 State describes the things a game remembers. This chapter is about
@@ -253,7 +251,3 @@ story is complete. Next
 comes the full picture of what a frame does once the moments are in:
 the three kinds of block, and the order a frame runs them in,
 [Compute, Effect, Render](05-compute-effect-render.md).
-
----
-
-[← State](03-state.md) | [Book](index.md) | [Compute, Effect, Render →](05-compute-effect-render.md)

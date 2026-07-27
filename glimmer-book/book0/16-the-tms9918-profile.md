@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 16
 ---
 
-[← Reading Tetro](15-reading-tetro.md) | [Book](index.md) | [A VDP Game →](17-a-vdp-game.md)
-
 # Chapter 16 - The TMS9918 Profile
 
 Until now, every picture has come from the 8x8 RGB LED matrix,
@@ -519,7 +517,3 @@ terminator always sits right after them.
 In the next chapter the profile carries a full game, with sprite
 collision, scoring on the tile grid, and cards on the VDP:
 [A VDP Game](17-a-vdp-game.md).
-
----
-
-[← Reading Tetro](15-reading-tetro.md) | [Book](index.md) | [A VDP Game →](17-a-vdp-game.md)

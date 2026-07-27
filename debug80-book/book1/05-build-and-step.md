@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 5
 ---
 
-[← Building and running](04-build-and-run.md) | [Book 1](index.md) | [Inspecting a running program →](06-inspect-the-machine.md)
-
 # Running the debugger
 
 ## Starting a session
@@ -100,7 +98,3 @@ moment later, refreshing the source map so breakpoints keep landing on
 the intended lines.
 
 The running machine carries on with the code it already has until you **Run** again.
-
----
-
-[← Building and running](04-build-and-run.md) | [Book 1](index.md) | [Inspecting a running program →](06-inspect-the-machine.md)

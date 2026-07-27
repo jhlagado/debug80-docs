@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 7
 ---
 
-[← The 8x8 Matrix Profile](06-the-matrix-profile.md) | [Book](index.md) | [Motion Curves →](08-motion-curves.md)
-
 # Chapter 7 - Time
 
 Every program you have written so far has one thing in common: none
@@ -531,7 +529,3 @@ have no such call.
 Drip's drop falls in equal steps, the plainest motion there is; next
 chapter we shape those steps into curves, and meet the ramp-driven
 pattern that plays them back: [Motion Curves](08-motion-curves.md).
-
----
-
-[← The 8x8 Matrix Profile](06-the-matrix-profile.md) | [Book](index.md) | [Motion Curves →](08-motion-curves.md)

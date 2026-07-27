@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 3
 ---
 
-[← Opening a folder and creating a project](02-open-a-folder.md) | [Book 1](index.md) | [Building and running →](04-build-and-run.md)
-
 # Targets
 
 A folder can hold many source files. Only some of them are programs; the rest are includes, experiments and half-finished ideas. A **target** is Debug80's record of one program: the source file where the build starts, where the output goes, and which machine the program runs on.
@@ -128,7 +126,3 @@ Most actions in this chapter have a Command Palette equivalent. **Set Program Fi
 | Point a target at a file | **Debug80: Set Program File** |
 | Add a workspace folder | **Debug80: Add Workspace Folder** |
 | Remove a workspace folder | **Debug80: Remove Workspace Folder** |
-
----
-
-[← Opening a folder and creating a project](02-open-a-folder.md) | [Book 1](index.md) | [Building and running →](04-build-and-run.md)

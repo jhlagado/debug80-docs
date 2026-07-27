@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 13
 ---
 
-[← Routines, Parts and Imports](12-routines-parts-and-imports.md) | [Book](index.md) | [A Small Matrix Game →](14-a-small-matrix-game.md)
-
 # Chapter 13 - Cards
 
 An arcade machine begins with the screen that drew you over: the
@@ -530,7 +528,3 @@ walks past every enter block in the file.
 The next chapter puts a complete game inside the card machinery:
 [A Small Matrix
 Game](14-a-small-matrix-game.md).
-
----
-
-[← Routines, Parts and Imports](12-routines-parts-and-imports.md) | [Book](index.md) | [A Small Matrix Game →](14-a-small-matrix-game.md)

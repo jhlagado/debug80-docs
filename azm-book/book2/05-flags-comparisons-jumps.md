@@ -4,7 +4,6 @@ title: "Flags, Comparisons and Jumps"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 5
 ---
-[← Memory Access and Data](04-memory-access-and-data.md) | [Book 2](index.md) | [Counting Loops and DJNZ →](06-counting-loops-and-djnz.md)
 
 # Chapter 5 — Flags, Comparisons and Jumps
 
@@ -455,7 +454,3 @@ The three questions are: (1) which instruction last set the flag before `jp nz`?
 **4. Bit test.** A already holds a status byte whose bit 2 is a "ready" flag.
 The instruction `bit 2, a` leaves A unchanged and sets Z when bit 2 is clear.
 The answer consists of the two instructions that test bit 2 and jump to `not_ready` when it is clear.
-
----
-
-[← Memory Access and Data](04-memory-access-and-data.md) | [Book 2](index.md) | [Counting Loops and DJNZ →](06-counting-loops-and-djnz.md)

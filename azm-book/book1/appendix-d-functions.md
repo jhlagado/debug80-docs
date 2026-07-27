@@ -4,7 +4,6 @@ title: "Appendix D — Built-in Functions"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 104
 ---
-[← Appendix C — CLI Flag Reference](appendix-c-cli.md) | [Manual](index.md)
 
 # Appendix D — Built-in Functions
 
@@ -136,7 +135,3 @@ Source ported from assemblers that used `LOW()` or `HIGH()` requires the AZM nam
 ## Case sensitivity
 
 All four functions are case-sensitive. `SIZEOF`, `Sizeof`, `Offset`, `lsb` and `msb` are parse errors.
-
----
-
-[← Appendix C — CLI Flag Reference](appendix-c-cli.md) | [Manual](index.md)

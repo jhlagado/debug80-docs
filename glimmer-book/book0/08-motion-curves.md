@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 8
 ---
 
-[← Time](07-time.md) | [Book](index.md) | [Shapes, Sound and Displays on the Board →](09-shapes-sound-and-displays.md)
-
 # Chapter 8 - Motion Curves
 
 The ramp gives a program a clock of its own: a byte that
@@ -393,7 +391,3 @@ preset 3 springs past and settles.
 
 Next the comet earns a body, a voice, and a scoreboard:
 [Shapes, Sound and Displays on the Board](09-shapes-sound-and-displays.md).
-
----
-
-[← Time](07-time.md) | [Book](index.md) | [Shapes, Sound and Displays on the Board →](09-shapes-sound-and-displays.md)

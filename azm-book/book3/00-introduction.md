@@ -4,7 +4,6 @@ title: "Introduction"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 1
 ---
-[Book 3](index.md) | [Foundations →](01-foundations.md)
 
 # Introduction to Book 3
 
@@ -108,7 +107,3 @@ compare/subtract idioms and the first workspace bytes.
 insertion sort and linear search.
 
 Later chapters add strings, bits, records, recursion, multiple source files, pointers and a capstone search.
-
----
-
-[Book 3](index.md) | [Foundations →](01-foundations.md)

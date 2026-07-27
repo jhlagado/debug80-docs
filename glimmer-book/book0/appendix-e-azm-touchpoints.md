@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 23
 ---
 
-[← Appendix D](appendix-d-build-and-debug.md) | [Book](index.md)
-
 # Appendix E - AZM Touchpoints
 
 Every Glimmer build writes one AZM assembly file, and AZM assembles
@@ -269,7 +267,3 @@ Card              .enum Splash, Playing, Paused, GameOver
 chapter 13 compare against exactly these symbols: `cp Card.Playing`.
 Full treatment: [Addresses, Constants and
 Expressions](../../azm-book/book1/03-addresses-constants-expressions.md).
-
----
-
-[← Appendix D](appendix-d-build-and-debug.md) | [Book](index.md)

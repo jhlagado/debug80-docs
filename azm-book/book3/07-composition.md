@@ -4,7 +4,6 @@ title: "Composition"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 8
 ---
-[← Recursion](06-recursion.md) | [Book 3](index.md) | [Pointer Structures →](08-pointer-structures.md)
 
 # Chapter 7 — Composition
 
@@ -303,7 +302,3 @@ listing and leaves `str_len` equal to 5 at `$8008`.
 7. An include graph should show `main.asm` including `constants.asm`,
    `lib/strings.asm` and `lib/ring.asm` once each, and identify the cycle
    introduced if `ring.asm` includes `main.asm`.
-
----
-
-[← Recursion](06-recursion.md) | [Book 3](index.md) | [Pointer Structures →](08-pointer-structures.md)

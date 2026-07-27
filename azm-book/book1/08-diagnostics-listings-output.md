@@ -4,7 +4,6 @@ title: "Diagnostics and Output"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 8
 ---
-[← Ops, Aliases and Source Composition](07-ops-aliases.md) | [Manual](index.md) | [Appendix A — Directive Reference →](appendix-a-directives.md)
 
 # Chapter 8 — Diagnostics and Output
 
@@ -219,7 +218,3 @@ azm --asm80 program.asm
 Writes a `.z80` file with AZM-specific features translated to plain ASM80 syntax. Useful for verifying AZM produces byte-identical output to ASM80 or for sharing source with a collaborator who only has ASM80.
 
 ASM80-compatible lowered output does not currently support `.import`. If a program uses `.import` and you request `--asm80`, AZM reports an `AZMN_ASM80` diagnostic instead of flattening the import boundary.
-
----
-
-[← Ops, Aliases and Source Composition](07-ops-aliases.md) | [Manual](index.md) | [Appendix A — Directive Reference →](appendix-a-directives.md)

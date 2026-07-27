@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 8
 ---
 
-[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)
-
 # Glimmer targets
 
 Debug80 builds one other kind of program: Glimmer, a reactive game language that compiles to readable Z80 assembly. The compiler ships inside the extension, so there is nothing extra to install. This chapter covers the Debug80 integration; the Glimmer book teaches the language.
@@ -56,7 +54,3 @@ The **Strict labels** checkbox controls assembly targets built directly by AZM. 
 ## Learn Glimmer
 
 When you want the language itself, go to [Glimmer Book: Reactive Games for the Z80](../../glimmer-book/book0/). It starts with an empty file, teaches each language construct through programs you can build and run in Debug80, and finishes with two complete games.
-
----
-
-[← Source navigation and ROM source](07-source-navigation.md) | [Book 1](index.md) | [Video, input and serial →](08-video-input-and-serial.md)

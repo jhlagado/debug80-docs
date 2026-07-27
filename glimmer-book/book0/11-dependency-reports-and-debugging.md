@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 11
 ---
 
-[← Arrays and Layout Types](10-arrays-and-layout-types.md) | [Book](index.md) | [Routines, Parts and Imports →](12-routines-parts-and-imports.md)
-
 # Chapter 11 - Dependency Reports and Debugging
 
 Canvas is the largest program in the book so far: a `Point`
@@ -382,7 +380,3 @@ six of its seven blocks, retyped wherever a rule needs the cursor. The
 next chapter writes it once:
 [Routines, Parts and Imports](12-routines-parts-and-imports.md), the
 structure a growing program needs.
-
----
-
-[← Arrays and Layout Types](10-arrays-and-layout-types.md) | [Book](index.md) | [Routines, Parts and Imports →](12-routines-parts-and-imports.md)

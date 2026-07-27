@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 2
 ---
 
-[← The Shape of a Game](01-the-shape-of-a-game.md) | [Book](index.md) | [State →](03-state.md)
-
 # Chapter 2 - First Light
 
 You have read a Glimmer program. Now you build one, run it on an
@@ -242,7 +240,3 @@ lets keys 4 and 6 steer the dot.
 
 In the next chapter, Beacon grows a position and a score, and you
 learn everything a fact can be: [State](03-state.md).
-
----
-
-[← The Shape of a Game](01-the-shape-of-a-game.md) | [Book](index.md) | [State →](03-state.md)

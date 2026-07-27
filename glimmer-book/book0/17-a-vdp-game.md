@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 17
 ---
 
-[← The TMS9918 Profile](16-the-tms9918-profile.md) | [Book](index.md) | [Two Displays, One Language →](18-two-displays-one-language.md)
-
 # Chapter 17 - A VDP Game
 
 Skyfall
@@ -582,7 +580,3 @@ scoreboard, where Lanternfly borrowed the LCD.
 The two games have more to say to each other, and the last chapter
 reads them side by side:
 [Two Displays, One Language](18-two-displays-one-language.md).
-
----
-
-[← The TMS9918 Profile](16-the-tms9918-profile.md) | [Book](index.md) | [Two Displays, One Language →](18-two-displays-one-language.md)

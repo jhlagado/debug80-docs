@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 6
 ---
 
-[← Running the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)
-
 # Inspecting a running program
 
 VS Code contributes the panels you already know (Variables, Watch and Call Stack) and Debug80 adds its own Registers, Memory, Machine and Displays sections, which show the Z80 and the board rather than the abstractions above them.
@@ -91,7 +89,3 @@ key input. Clicking a surface gives it keyboard focus; the on-screen
 controls continue to work regardless of that focus.
 
 [Video, input and serial](08-video-input-and-serial.md) explains the input priority, focus indicator, release command and macOS key handling.
-
----
-
-[← Running the debugger](05-build-and-step.md) | [Book 1](index.md) | [Source navigation and ROM source →](07-source-navigation.md)

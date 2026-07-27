@@ -4,7 +4,6 @@ title: "Register Contracts"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 12
 ---
-[← Subroutine Conventions](11-subroutine-conventions.md) | [Book 2](index.md) | [Layout Types →](13-layout-types.md)
 
 # Chapter 12 — Register Contracts
 
@@ -525,7 +524,3 @@ _done:
 The answer should establish whether the body uses B, compare the cost of a false clobber with a missing one, and provide the corrected contract.
 
 **6. Routine and branch labels.** This version of `check_collision` needs `.routine` before `check_collision:` and owner-local labels `_loop` and `_done`. The explanation should show why another routine can reuse `_loop` without a duplicate-symbol error.
-
----
-
-[← Subroutine Conventions](11-subroutine-conventions.md) | [Book 2](index.md) | [Layout Types →](13-layout-types.md)

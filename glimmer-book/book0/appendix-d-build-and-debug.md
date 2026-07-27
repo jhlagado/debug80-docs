@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 22
 ---
 
-[← Appendix C](appendix-c-tms9918-profile.md) | [Book](index.md) | [Appendix E →](appendix-e-azm-touchpoints.md)
-
 # Appendix D - Build and Debug
 
 The toolchain in one place: the CLI's two commands and their options,
@@ -241,7 +239,3 @@ Wrote warn.main.d8.json (4 block segments attributed to .glim source)
 
 In a running program, the store still executes and the cell changes
 in memory, but no block waiting `on` that cell ever runs.
-
----
-
-[← Appendix C](appendix-c-tms9918-profile.md) | [Book](index.md) | [Appendix E →](appendix-e-azm-touchpoints.md)

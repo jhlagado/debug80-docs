@@ -4,7 +4,6 @@ title: "The Computer"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 1
 ---
-[Book 2](index.md) | [Machine Code →](02-machine-code.md)
 
 # Chapter 1 — The Computer
 
@@ -162,7 +161,3 @@ Each flag is a single bit, set (1) or clear (0). The two you will use from the v
 The Z80 has four more flags: S (sign), H (half carry), P/V (parity/overflow) and N (subtract). The full flags reference is in [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
 
 `ld` instructions do not affect flags at all. Arithmetic and comparison instructions do. Chapter 5 explains exactly which instructions set which flags.
-
----
-
-[Book 2](index.md) | [Machine Code →](02-machine-code.md)

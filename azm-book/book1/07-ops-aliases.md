@@ -4,7 +4,6 @@ title: "Ops, Aliases and Source Composition"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 7
 ---
-[← Register Contracts](06-register-contracts.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)
 
 # Chapter 7 — Ops, Aliases and Source Composition
 
@@ -369,7 +368,3 @@ Recursive include/import chains are rejected with a source diagnostic.
 - `.include` behaviour is unchanged
 
 Native AZM outputs support `.import`: `.bin`, `.hex` and `.d8.json`. Debug80 map output records imported physical files and source line segments, so emitted bytes still map back to the correct source file. ASM80-compatible lowered `.z80` output does not currently support `.import`; if a program uses `.import` and you request `--asm80`, AZM reports an explicit `AZMN_ASM80` diagnostic.
-
----
-
-[← Register Contracts](06-register-contracts.md) | [Manual](index.md) | [Diagnostics and Output →](08-diagnostics-listings-output.md)

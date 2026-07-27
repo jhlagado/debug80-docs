@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 15
 ---
 
-[← A Small Matrix Game](14-a-small-matrix-game.md) | [Book](index.md) | [The TMS9918 Profile →](16-the-tms9918-profile.md)
-
 # Chapter 15 - Reading Tetro
 
 This chapter teaches a different skill: reading someone
@@ -520,7 +518,3 @@ Next, a different machine to draw with: the TMS9918 video display
 processor, where the program describes a scene and the chip keeps it
 on screen:
 [The TMS9918 Profile](16-the-tms9918-profile.md).
-
----
-
-[← A Small Matrix Game](14-a-small-matrix-game.md) | [Book](index.md) | [The TMS9918 Profile →](16-the-tms9918-profile.md)

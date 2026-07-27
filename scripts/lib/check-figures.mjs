@@ -248,17 +248,40 @@ export function checkFigure(file) {
     }
   }
 
-  // A straight connector crossing a label. Only <line> is checked; a <path>
-  // can curve around, and guessing at its extent invents more noise than it
-  // catches. Dashed leaders are skipped, since they are drawn to touch labels.
+  // A straight connector crossing a label. Both <line> and the axis-aligned
+  // <path> forms count: `M x,y H x2 V y2` draws exactly the same stroke as two
+  // <line> elements and obscures text exactly as well. Only paths made purely
+  // of M/H/V are read; anything with a curve in it can route around a label,
+  // and guessing at its extent invents more noise than it catches. Dashed
+  // leaders are skipped, since they are drawn to touch their labels.
+  const segments = [];
   for (const m of src.matchAll(/<line([^>]*)\/>/g)) {
     const a = attrs(m[0]);
     if (/\b(dash|rule)\b/.test(a.class ?? '')) continue;
-    const x1 = Number(a.x1); const y1 = Number(a.y1);
-    const x2 = Number(a.x2); const y2 = Number(a.y2);
+    segments.push([Number(a.x1), Number(a.y1), Number(a.x2), Number(a.y2)]);
+  }
+  for (const m of src.matchAll(/<path([^>]*)\/>/g)) {
+    const a = attrs(m[0]);
+    if (/\b(dash|rule)\b/.test(a.class ?? '')) continue;
+    const d = (a.d ?? '').trim();
+    if (!/^M[\d.,\s-]+(?:[HV][\d.\s-]+)+$/i.test(d)) continue;
+    const start = d.match(/^M\s*(-?[\d.]+)[,\s]+(-?[\d.]+)/);
+    if (!start) continue;
+    let cx = Number(start[1]);
+    let cy = Number(start[2]);
+    for (const step of d.slice(start[0].length).matchAll(/([HV])\s*(-?[\d.]+)/gi)) {
+      const v = Number(step[2]);
+      const nx = step[1].toUpperCase() === 'H' ? v : cx;
+      const ny = step[1].toUpperCase() === 'V' ? v : cy;
+      segments.push([cx, cy, nx, ny]);
+      cx = nx;
+      cy = ny;
+    }
+  }
+
+  for (const [x1, y1, x2, y2] of segments) {
     for (const t of texts) {
       if (t.cls === 'inv') continue;
-      // Axis-aligned connectors are the common case and are exact.
       if (Math.abs(y1 - y2) < 0.5) {
         const [lo, hi] = [Math.min(x1, x2), Math.max(x1, x2)];
         if (y1 > t.y + 1 && y1 < t.y + t.h - 1 && hi - 1 > t.x && t.x + t.w - 1 > lo) {

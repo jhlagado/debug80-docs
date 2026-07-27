@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 0
 ---
 
-[Book](index.md) | [The Shape of a Game →](01-the-shape-of-a-game.md)
-
 # Preface
 
 This book teaches you to write Z80 games with Glimmer. Glimmer applies
@@ -61,7 +59,3 @@ motion, resources, structured data and debugging before organising
 those parts into complete games. The final chapters move from the 8x8
 matrix to the TMS9918 video display processor and compare the demands
 each display places on a game.
-
----
-
-[Book](index.md) | [The Shape of a Game →](01-the-shape-of-a-game.md)

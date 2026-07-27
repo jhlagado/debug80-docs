@@ -4,7 +4,6 @@ title: "Machine Code"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 2
 ---
-[← The Computer](01-the-computer.md) | [Book 2](index.md) | [Assembly Language →](03-assembly-language.md)
 
 # Chapter 2 — Machine Code
 
@@ -107,7 +106,3 @@ Labels also name positions within the code, the targets of jumps and branches. I
 ## Assembly in Chapter 3
 
 The hex program you just decoded by hand appears again in Chapter 3, this time written in AZM, with names where the numbers were.
-
----
-
-[← The Computer](01-the-computer.md) | [Book 2](index.md) | [Assembly Language →](03-assembly-language.md)

@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 18
 ---
 
-[← A VDP Game](17-a-vdp-game.md) | [Book](index.md)
-
 # Chapter 18 - Two Displays, One Language
 
 We began this book with one white pixel in the middle of the 8x8 RGB
@@ -261,7 +259,3 @@ The book began with the ability to read `ld a,(hl)`. You can now read,
 modify and extend complete Glimmer games on either display the TEC-1G
 offers. A new game can begin as Mover did: one fact, one picture and a
 connection between them.
-
----
-
-[← A VDP Game](17-a-vdp-game.md) | [Book](index.md)

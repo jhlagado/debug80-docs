@@ -4,7 +4,6 @@ title: "Addresses, Constants and Expressions"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 3
 ---
-[← Source Syntax and Symbols](02-source-syntax.md) | [Manual](index.md) | [Raw Data, Storage and Strings →](04-data-storage-includes.md)
 
 # Chapter 3 — Addresses, Constants and Expressions
 
@@ -377,7 +376,3 @@ CmdTable:
 ### Choosing enums
 
 Enums suit small sets of named states, command codes, token kinds or hardware-mode values where a dense sequence is natural. `State.Dead` reads more clearly than `cp 3`. Values that require specific numbers, such as port addresses, bitmasks and hardware registers, belong in `.equ` definitions. At runtime, an enum value is an ordinary byte, so input validation must occur before dispatch.
-
----
-
-[← Source Syntax and Symbols](02-source-syntax.md) | [Manual](index.md) | [Raw Data, Storage and Strings →](04-data-storage-includes.md)

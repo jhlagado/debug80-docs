@@ -4,7 +4,6 @@ title: "A Complete Program"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 10
 ---
-[← I/O and Ports](09-io-and-ports.md) | [Book 2](index.md) | [Subroutine Conventions →](11-subroutine-conventions.md)
 
 # Chapter 10 — A Complete Program
 
@@ -211,7 +210,3 @@ why a second comparison is unnecessary, and what would break if `inc d`
 appeared between `cp c` and the first branch.
 
 **4. A third task.** The extended program also counts entries strictly less than 32 and stores the count in `below_32`. The answer requires an additional subroutine, the three calling lines in `main`, and documentation of the argument registers and values that must be reloaded.
-
----
-
-[← I/O and Ports](09-io-and-ports.md) | [Book 2](index.md) | [Subroutine Conventions →](11-subroutine-conventions.md)

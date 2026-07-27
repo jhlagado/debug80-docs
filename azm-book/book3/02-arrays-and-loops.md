@@ -4,7 +4,6 @@ title: "Arrays and Loops"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 3
 ---
-[← Foundations](01-foundations.md) | [Book 3](index.md) | [Strings →](03-strings.md)
 
 # Chapter 2 — Arrays and Loops
 
@@ -311,7 +310,3 @@ while the sorted prefix grows.
    outer-loop invariant.
 6. An alternative table uses `.ds byte[8]` for its reservation and eight `ld
    (hl), a` stores in `main` for initialization instead of `.db`.
-
----
-
-[← Foundations](01-foundations.md) | [Book 3](index.md) | [Strings →](03-strings.md)

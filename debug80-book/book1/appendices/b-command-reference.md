@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 102
 ---
 
-[← Appendix A — Debug expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Debug80 file formats →](c-project-configuration.md)
-
 # Appendix B — Command reference
 
 This appendix lists the Debug80 commands available to users. The
@@ -61,7 +59,3 @@ filters the list.
 | **Debug80: Test CoolTerm Connection** | Pings CoolTerm's remote socket. Opens no port and needs no build. |
 | **Debug80: Send HEX to Board via CoolTerm** | Sends the active target's HEX file to a board. |
 | **Debug80: Copy Monitor ROM into Project** | Copies the bundled monitor ROM source into the project. |
-
----
-
-[← Appendix A — Debug expressions](a-debug-expressions.md) | [Book 1](../index.md) | [Appendix C — Debug80 file formats →](c-project-configuration.md)

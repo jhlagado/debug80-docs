@@ -4,7 +4,6 @@ title: "Raw Data, Storage and Strings"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 4
 ---
-[← Addresses, Constants and Expressions](03-addresses-constants-expressions.md) | [Manual](index.md) | [The Layout System →](05-layout-system.md)
 
 # Chapter 4 — Raw Data, Storage and Strings
 
@@ -193,5 +192,3 @@ StackTop:       .ds 2
 ---
 
 The storage map above is the manual approach: field offsets are implicit in declaration order, and stay correct only as long as nobody inserts a field. Chapter 5 shows the structured equivalent: name the fields once in a `.type` declaration and the layout system computes every offset.
-
-[← Addresses, Constants and Expressions](03-addresses-constants-expressions.md) | [Manual](index.md) | [The Layout System →](05-layout-system.md)

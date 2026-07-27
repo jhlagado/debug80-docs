@@ -4,7 +4,6 @@ title: "I/O and Ports"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 9
 ---
-[← Stack and Subroutines](08-stack-and-subroutines.md) | [Book 2](index.md) | [A Complete Program →](10-a-complete-program.md)
 
 # Chapter 9 — I/O and Ports
 
@@ -288,7 +287,3 @@ the same DJNZ structure with `in a, (IN_PORT)` instead of `out`.
 8-bit port-number register and the register that appears on the upper address
 pins in `out (C), d`. It then gives the three instructions that send `$7F` from
 D to port `$20`.
-
----
-
-[← Stack and Subroutines](08-stack-and-subroutines.md) | [Book 2](index.md) | [A Complete Program →](10-a-complete-program.md)

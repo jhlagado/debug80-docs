@@ -14,12 +14,6 @@ One core assembler manual and two teaching books for working with **AZM**, the a
 
 ---
 
-## [Introduction](introduction.md)
-
-Why assembly language, why AZM, why the Z80, and what you'll be able to do after each book.
-
----
-
 ## [AZM Book 1 — Assembler Manual](book1/)
 
 Covers AZM syntax, directives, expressions, labels, enums, storage, layout types, register contracts, op declarations, aliases, diagnostics, listings, output formats, ASM80-compatible output, porting, and source style.

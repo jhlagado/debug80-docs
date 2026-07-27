@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 1
 ---
 
-[← Preface](00-preface.md) | [Book](index.md) | [First Light →](02-first-light.md)
-
 # Chapter 1 - The Shape of a Game
 
 A game written out by hand is a large program. The same game in
@@ -441,7 +439,3 @@ few lines with one job and a declared reason to run.
 In the next chapter you install the tools, build a program of your
 own, and press its keys yourself:
 [First Light](02-first-light.md).
-
----
-
-[← Preface](00-preface.md) | [Book](index.md) | [First Light →](02-first-light.md)

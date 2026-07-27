@@ -18,11 +18,11 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
-          "text": "Install Debug80",
+          "text": "Debug80 installation",
           "link": "/debug80-book/book1/01-install-debug80.html"
         },
         {
-          "text": "Open a folder, make a project",
+          "text": "Opening a folder and creating a project",
           "link": "/debug80-book/book1/02-open-a-folder.html"
         },
         {
@@ -30,15 +30,15 @@ export const sidebars = {
           "link": "/debug80-book/book1/03-targets.html"
         },
         {
-          "text": "Build and run",
+          "text": "Building and running",
           "link": "/debug80-book/book1/04-build-and-run.html"
         },
         {
-          "text": "Run the debugger",
+          "text": "Running the debugger",
           "link": "/debug80-book/book1/05-build-and-step.html"
         },
         {
-          "text": "Inspect a running program",
+          "text": "Inspecting a running program",
           "link": "/debug80-book/book1/06-inspect-the-machine.html"
         },
         {
@@ -54,7 +54,7 @@ export const sidebars = {
           "link": "/debug80-book/book1/08-video-input-and-serial.html"
         },
         {
-          "text": "Send to TEC-1G hardware",
+          "text": "Sending to TEC-1G hardware",
           "link": "/debug80-book/book1/09-send-to-hardware.html"
         },
         {
@@ -74,17 +74,13 @@ export const sidebars = {
           "link": "/debug80-book/book1/appendices/d-azm-options-row.html"
         },
         {
-          "text": "Appendix E — Copy monitor ROM source",
+          "text": "Appendix E — Local monitor ROM source",
           "link": "/debug80-book/book1/10-copy-monitor-rom.html"
         }
       ]
     }
   ],
   "/azm-book/": [
-    {
-      "text": "Introduction",
-      "link": "/azm-book/introduction.html"
-    },
     {
       "text": "Books",
       "collapsed": false,

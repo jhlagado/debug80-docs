@@ -4,7 +4,6 @@ title: "Getting Started with AZM"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 1
 ---
-[← Preface](00-preface.md) | [Manual](index.md) | [Source Syntax and Symbols →](02-source-syntax.md)
 
 # Chapter 1 — Getting Started with AZM
 
@@ -102,7 +101,3 @@ AZM accepts `.asm` and `.z80` source extensions and parses them identically. Deb
 Debug80 is the companion debugging tool for this toolchain. It reads the `.d8.json` file that AZM emits alongside each binary (a map of addresses, symbols and source line positions) and uses it to show you source-correlated debug information: which line the program counter is on, what a symbol resolves to, where a routine was defined.
 
 When assembly takes place outside Debug80, the `.d8.json` file still appears next to the binary. The `--nod8m` option suppresses it when no source map is required.
-
----
-
-[← Preface](00-preface.md) | [Manual](index.md) | [Source Syntax and Symbols →](02-source-syntax.md)

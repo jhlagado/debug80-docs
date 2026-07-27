@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 9
 ---
 
-[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Sending to TEC-1G hardware →](09-send-to-hardware.md)
-
 # Video, input and serial
 
 The Machine and Displays sections cover the TEC-1G as it comes. The rest of the panel covers what you can plug into it: a video card, a joystick, a full keyboard and a serial line.
@@ -84,7 +82,3 @@ This section talks to the *emulated* machine and never touches a physical port.
 Holding **FN** while pressing RESET latches the function key for the first keypad read after reset. That reproduces holding a key down while a real board boots, which is how MON-3's startup options are selected.
 
 There is no NMI button. Non-maskable interrupts happen as a consequence of input: pressing a key raises one, and the video card raises one at vertical blank while it is attached. Releasing an input cancels an NMI that has not yet been taken.
-
----
-
-[← Glimmer targets](11-glimmer-targets.md) | [Book 1](index.md) | [Sending to TEC-1G hardware →](09-send-to-hardware.md)

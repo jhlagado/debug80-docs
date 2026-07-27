@@ -4,7 +4,6 @@ title: "Memory Access and Data"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 4
 ---
-[← Assembly Language](03-assembly-language.md) | [Book 2](index.md) | [Flags, Comparisons, Jumps →](05-flags-comparisons-jumps.md)
 
 # Chapter 4 — Memory Access and Data Representation
 
@@ -208,7 +207,3 @@ ld ($8050), hl
 ```
 
 What value is stored at address `$8050`? What value is stored at `$8051`? Which is the low byte and which is the high byte? (The Z80 stores 16-bit values little-endian, low byte first.)
-
----
-
-[← Assembly Language](03-assembly-language.md) | [Book 2](index.md) | [Flags, Comparisons, Jumps →](05-flags-comparisons-jumps.md)

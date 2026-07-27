@@ -4,7 +4,6 @@ title: "Records"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 6
 ---
-[← Bit Patterns](04-bit-patterns.md) | [Book 3](index.md) | [Recursion →](06-recursion.md)
 
 # Chapter 5 — Records
 
@@ -440,7 +439,3 @@ A single-step trace of `ring_push` shows `head` and `count` changing through
 7. Four reserved `Event` records use `Event .type`, `code .byte`, `param
    .word`, `.endtype` and `.ds Event[4]`. A loop should zero every `param` field
    using `sizeof(Event)` as its stride.
-
----
-
-[← Bit Patterns](04-bit-patterns.md) | [Book 3](index.md) | [Recursion →](06-recursion.md)

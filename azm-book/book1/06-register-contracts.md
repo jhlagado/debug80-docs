@@ -4,7 +4,6 @@ title: "Register Contracts"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 6
 ---
-[← The Layout System](05-layout-system.md) | [Manual](index.md) | [Ops, Aliases and Source Composition →](07-ops-aliases.md)
 
 # Chapter 6 — Register Contracts
 
@@ -378,7 +377,7 @@ The keys describe the boundary from the caller's point of view:
 - `in` means the caller must provide this carrier before the call
 - `out` means the caller may intentionally consume this carrier after the call
 
-![The six keys describe what crosses the routine boundary, and in which direction](../../assets/images/azm-book/book2/contract-boundary.svg)
+![The four directional keys, and what each says crosses the boundary. noreturn describes control flow and maybe-out a review state, so neither appears here](../../assets/images/azm-book/book2/contract-boundary.svg)
 
 ### Carrier lists
 
@@ -615,7 +614,3 @@ program.asm:58:9: error: [AZMN_REGISTER_CONTRACTS] CALL NORMALISE_COORD writes D
 ```
 
 This fires when a routine reads and writes the same registers but AZM cannot prove whether the pre-call values must survive or the post-call values are intentional results. An `.expectout {D,E}` directive confirms this call site. If the routine is deliberately a transform at every call site, `--accept-out NORMALISE_COORD:D,E` or `.routine in DE out DE` records that interface.
-
----
-
-[← The Layout System](05-layout-system.md) | [Manual](index.md) | [Ops, Aliases and Source Composition →](07-ops-aliases.md)

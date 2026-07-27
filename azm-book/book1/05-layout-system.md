@@ -4,7 +4,6 @@ title: "The Layout System"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 5
 ---
-[← Raw Data, Storage and Strings](04-data-storage-includes.md) | [Manual](index.md) | [Register Contracts →](06-register-contracts.md)
 
 # Chapter 5 — The Layout System
 
@@ -334,7 +333,3 @@ Cast syntax reaches union members by the same rules as record fields:
 ld   a,(<IoPort>Port.value.status)    ; read the status byte
 ld   hl,(<IoPort>Port.value.full)     ; read the full word
 ```
-
----
-
-[← Raw Data, Storage and Strings](04-data-storage-includes.md) | [Manual](index.md) | [Register Contracts →](06-register-contracts.md)

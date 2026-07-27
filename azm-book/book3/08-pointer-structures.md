@@ -4,7 +4,6 @@ title: "Pointer Structures"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 9
 ---
-[← Composition](07-composition.md) | [Book 3](index.md) | [Capstone →](09-capstone.md)
 
 # Chapter 8 — Pointer Structures
 
@@ -431,7 +430,3 @@ table base.
 7. A three-node `TreeNode` pool uses keys `5`, `3` and `8`, with each node
    inserted through the address of a `root` word. A paper diagram should record
    the resulting tree boxes and `.word` links.
-
----
-
-[← Composition](07-composition.md) | [Book 3](index.md) | [Capstone →](09-capstone.md)

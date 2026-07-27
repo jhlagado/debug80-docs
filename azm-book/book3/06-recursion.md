@@ -4,7 +4,6 @@ title: "Recursion"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 7
 ---
-[← Records](05-records.md) | [Book 3](index.md) | [Composition →](07-composition.md)
 
 # Chapter 6 — Recursion
 
@@ -350,7 +349,3 @@ and the multiplies on the way up. The complete file can then run to `halt`.
    comment provides the basis for correcting it.
 6. A constrained-stack case lowers `STACK_TOP` to `$8010`, retains data at
    `$8000` and sets `FACT_N = 5`; its purpose is to identify the first failure.
-
----
-
-[← Records](05-records.md) | [Book 3](index.md) | [Composition →](07-composition.md)

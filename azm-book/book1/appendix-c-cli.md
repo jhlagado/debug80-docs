@@ -4,7 +4,6 @@ title: "Appendix C — CLI Flag Reference"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 103
 ---
-[← Appendix B — Expression Operators](appendix-b-operators.md) | [Manual](index.md) | [Appendix D — Built-in Functions →](appendix-d-functions.md)
 
 # Appendix C — CLI Flag Reference
 
@@ -89,7 +88,3 @@ Produces four output files next to the source: `source.bin`, `source.hex`, `sour
 | `warn` | Print register contract warnings; build succeeds |
 | `error` | Fail the build on proven register contract conflicts |
 | `strict` | Fail on anything AZM cannot prove safe, including unknown routine boundaries and stack effects |
-
----
-
-[← Appendix B — Expression Operators](appendix-b-operators.md) | [Manual](index.md) | [Appendix D — Built-in Functions →](appendix-d-functions.md)

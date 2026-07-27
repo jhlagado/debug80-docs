@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 7
 ---
 
-[← Inspecting a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)
-
 # Source navigation and ROM source
 
 A successful build gives Debug80 a current source map. That map lets VS Code navigate assembly symbols, show compact symbol details and open source that belongs to the TEC-1G monitor.
@@ -59,7 +57,3 @@ inside ROM.
 Those sources cover the monitor code around routines such as MON-3 display, disk, clock and sound support.
 
 When you want to edit or debug the monitor itself, copy the monitor ROM source into the project. [Appendix E](10-copy-monitor-rom.md) describes that workflow.
-
----
-
-[← Inspecting a running program](06-inspect-the-machine.md) | [Book 1](index.md) | [Glimmer targets →](11-glimmer-targets.md)

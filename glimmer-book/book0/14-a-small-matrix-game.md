@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 14
 ---
 
-[← Cards](13-cards.md) | [Book](index.md) | [Reading Tetro →](15-reading-tetro.md)
-
 # Chapter 14 - A Small Matrix Game
 
 The book has handed you instruments one at a time: the
@@ -572,7 +570,3 @@ paddle, a faster floor, two drops at once. The next chapter shifts
 from building to reading: Tetro, the largest of the repository's games
 for the 8x8 matrix, with the same
 instruments under real pressure: [Reading Tetro](15-reading-tetro.md).
-
----
-
-[← Cards](13-cards.md) | [Book](index.md) | [Reading Tetro →](15-reading-tetro.md)

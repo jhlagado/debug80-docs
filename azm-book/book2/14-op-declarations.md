@@ -4,7 +4,6 @@ title: "Op Declarations"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 14
 ---
-[← Layout Types](13-layout-types.md) | [Book 2](index.md)
 
 # Chapter 14 — Op Declarations
 
@@ -397,7 +396,3 @@ You can now:
 - name repeated instruction sequences with ops and read code that communicates intent rather than mechanics alone
 
 Book 3 covers arrays and runtime indexing, string handling, recursion, multi-file programs and patterns for larger programs that exceed what a single file can hold clearly.
-
----
-
-[← Layout Types](13-layout-types.md) | [Book 2](index.md)

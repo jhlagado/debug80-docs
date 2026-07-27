@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 4
 ---
 
-[← Targets](03-targets.md) | [Book 1](index.md) | [Running the debugger →](05-build-and-step.md)
-
 # Building and running
 
 **Build** assembles your program. **Run** assembles it and starts the emulated machine.
@@ -104,7 +102,3 @@ The row below **Stop on entry** holds **Register Contracts**, **Contract Updates
 of the project as JSON. The result records the project state, target
 list, selected target, build, source map and hardware status, which
 helps when the visible state does not explain what Debug80 is doing.
-
----
-
-[← Targets](03-targets.md) | [Book 1](index.md) | [Running the debugger →](05-build-and-step.md)

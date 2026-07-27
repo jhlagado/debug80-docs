@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 1
 ---
 
-[Book 1](index.md) | [Opening a folder and creating a project →](02-open-a-folder.md)
-
 # Debug80 installation
 
 Debug80 is a Z80 development environment that runs inside VS Code. You write assembly, it assembles the code, loads it into an emulated TEC-1G, and lets you step through your own source while the emulated machine runs.
@@ -59,7 +57,3 @@ This is the same section several chapters from now, with a project open and a pr
 ![The Debug80 section expanded inside the Run and Debug sidebar, holding the Project, Machine, Displays and Matrix Keyboard sections, with TMS9918 Video, Joystick, Registers, Memory and Serial collapsed](../../assets/images/debug80-book/book1/debug80-panel-in-vscode.png)
 
 Everything below `DEBUG80` belongs to Debug80: the project row you have already met, then the emulated machine, its displays, a keyboard, and further sections for registers, memory and the serial line.
-
----
-
-[Book 1](index.md) | [Opening a folder and creating a project →](02-open-a-folder.md)

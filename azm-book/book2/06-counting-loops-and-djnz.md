@@ -4,7 +4,6 @@ title: "Counting Loops and DJNZ"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 6
 ---
-[← Flags, Comparisons, Jumps](05-flags-comparisons-jumps.md) | [Book 2](index.md) | [Data Tables and Indexed Access →](07-data-tables-and-indexed-access.md)
 
 # Chapter 6 — Counting Loops and DJNZ
 
@@ -332,7 +331,3 @@ The required sentinel loop scans `message` and stores the **index** (0-based pos
 | 4         | 8          | ?           | ?                 | ?     |
 
 Completing the table establishes the value stored in `flagval`. Repeating the trace with a threshold of `$0C` (12) shows whether the loop exits one iteration earlier.
-
----
-
-[← Flags, Comparisons, Jumps](05-flags-comparisons-jumps.md) | [Book 2](index.md) | [Data Tables and Indexed Access →](07-data-tables-and-indexed-access.md)

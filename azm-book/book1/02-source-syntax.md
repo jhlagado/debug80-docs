@@ -4,7 +4,6 @@ title: "Source Syntax and Symbols"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 2
 ---
-[← Getting Started](01-getting-started.md) | [Manual](index.md) | [Addresses, Constants and Expressions →](03-addresses-constants-expressions.md)
 
 # Chapter 2 — Source Syntax and Symbols
 
@@ -321,7 +320,3 @@ SIZE    .equ WIDTH * HEIGHT ; 1024
 ```
 
 See [Appendix B](appendix-b-operators.md) for the full numeric literal table.
-
----
-
-[← Getting Started](01-getting-started.md) | [Manual](index.md) | [Addresses, Constants and Expressions →](03-addresses-constants-expressions.md)

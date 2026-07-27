@@ -4,7 +4,6 @@ title: "Bit Patterns"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 5
 ---
-[← Strings](03-strings.md) | [Book 3](index.md) | [Records →](05-records.md)
 
 # Chapter 4 — Bit Patterns
 
@@ -259,7 +258,3 @@ shown beside it. There is no `call` instruction.
    branch should distinguish a stored numeric result from control flow alone.
 6. An op named `shift_right_pair(hi reg8, lo reg8)` should expand to `srl hi`
    followed by `rr lo`, shifting the 16-bit value in B:C right by one bit.
-
----
-
-[← Strings](03-strings.md) | [Book 3](index.md) | [Records →](05-records.md)

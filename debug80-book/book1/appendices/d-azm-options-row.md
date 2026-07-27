@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 104
 ---
 
-[← Appendix C — Debug80 file formats](c-project-configuration.md) | [Book 1](../index.md) | [Appendix E — Local monitor ROM source →](../10-copy-monitor-rom.md)
-
 # Appendix D — The AZM options row
 
 The Project section's three AZM controls, **Register Contracts**, **Contract Updates** and **Strict labels**, get their full treatment here.
@@ -101,7 +99,3 @@ The three controls are not stored alike, which is easy to miss because they sit 
 If you set `azm.registerContracts` by hand in `debug80.json`, the panel dropdown overrides it on every Build and Run started from the panel. The hand-written value survives only for builds that do not go through the panel.
 
 If you want a project-wide contracts policy that sticks, the file-scoped `registerContractsPolicy` described in [AZM Book 1](../../../azm-book/book1/06-register-contracts.md) is the mechanism that survives.
-
----
-
-[← Appendix C — Debug80 file formats](c-project-configuration.md) | [Book 1](../index.md) | [Appendix E — Local monitor ROM source →](../10-copy-monitor-rom.md)

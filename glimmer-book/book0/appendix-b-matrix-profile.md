@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 20
 ---
 
-[← Appendix A](appendix-a-declarations.md) | [Book](index.md) | [Appendix C →](appendix-c-tms9918-profile.md)
-
 # Appendix B - The 8x8 Matrix Profile
 
 The combination of `platform tec1g-mon3` and `display matrix8x8`
@@ -287,7 +285,3 @@ ShapeRotCount     .equ 1
   column, the X bound a collision probe checks first.
 - Your own code can walk these tables directly; the Tetro engine is
   one complete example.
-
----
-
-[← Appendix A](appendix-a-declarations.md) | [Book](index.md) | [Appendix C →](appendix-c-tms9918-profile.md)

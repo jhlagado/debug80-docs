@@ -4,7 +4,6 @@ title: "Strings"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 4
 ---
-[← Arrays and Loops](02-arrays-and-loops.md) | [Book 3](index.md) | [Bit Patterns →](04-bit-patterns.md)
 
 # Chapter 3 — Strings
 
@@ -325,7 +324,3 @@ and HL stopping on the null.
    return code.
 6. A four-byte workspace should contain the decimal string for `str_len` after
    the length calculation.
-
----
-
-[← Arrays and Loops](02-arrays-and-loops.md) | [Book 3](index.md) | [Bit Patterns →](04-bit-patterns.md)

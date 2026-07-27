@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 10
 ---
 
-[← Shapes, Sound and Displays on the Board](09-shapes-sound-and-displays.md) | [Book](index.md) | [Dependency Reports and Debugging →](11-dependency-reports-and-debugging.md)
-
 # Chapter 10 - Arrays and Layout Types
 
 Every game you have written so far has kept its whole world in a
@@ -410,7 +408,3 @@ Canvas is now the largest program in the book, a good subject for what
 comes next: reading the dependency report, heeding the warnings, and
 debugging a reactive program methodically: [Dependency Reports and
 Debugging](11-dependency-reports-and-debugging.md).
-
----
-
-[← Shapes, Sound and Displays on the Board](09-shapes-sound-and-displays.md) | [Book](index.md) | [Dependency Reports and Debugging →](11-dependency-reports-and-debugging.md)

@@ -4,7 +4,6 @@ title: "Assembly Language"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 3
 ---
-[← Machine Code](02-machine-code.md) | [Book 2](index.md) | [Memory Access and Data →](04-memory-access-and-data.md)
 
 # Chapter 3 — Assembly Language
 
@@ -312,7 +311,3 @@ count: .db 0
 The answer should distinguish what `BASE` and `count` mean to the assembler, what output each produces, and which name occupies a byte in the binary.
 
 **4. `dec` and the Zero flag.** Starting with `ld b, 3`, a three-step trace of `dec b` shows the value in B after each instruction and the point at which the Zero flag becomes set. Chapter 6 uses this mechanism to build counted loops.
-
----
-
-[← Machine Code](02-machine-code.md) | [Book 2](index.md) | [Memory Access and Data →](04-memory-access-and-data.md)

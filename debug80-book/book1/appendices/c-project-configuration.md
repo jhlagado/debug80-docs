@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 103
 ---
 
-[← Appendix B — Command reference](b-command-reference.md) | [Book 1](../index.md) | [Appendix D — The AZM options row →](d-azm-options-row.md)
-
 # Appendix C — Debug80 file formats
 
 Two generated formats are worth understanding: `debug80.json` and `.d8.json`.
@@ -338,7 +336,3 @@ This is a minimal source map for a one-byte instruction at `$0800`, tied to line
 ```
 
 Debug80 validates the file before importing it. Invalid JSON or an unsupported D8 version leaves source-map-backed features unavailable until the target builds successfully again.
-
----
-
-[← Appendix B — Command reference](b-command-reference.md) | [Book 1](../index.md) | [Appendix D — The AZM options row →](d-azm-options-row.md)

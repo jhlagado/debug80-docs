@@ -4,7 +4,6 @@ title: "Capstone"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 10
 ---
-[← Pointer Structures](08-pointer-structures.md) | [Book 3](index.md)
 
 # Chapter 9 — Capstone
 
@@ -326,7 +325,3 @@ pointer layouts provide other representations for problems that need them.
 The same approach applies to a new buffer, parser or game board: its
 representation determines the `.routine` contracts, and emulator traces show
 whether the implementation preserves each invariant.
-
----
-
-[← Pointer Structures](08-pointer-structures.md) | [Book 3](index.md)

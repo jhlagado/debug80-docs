@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 21
 ---
 
-[← Appendix B](appendix-b-matrix-profile.md) | [Book](index.md) | [Appendix D →](appendix-d-build-and-debug.md)
-
 # Appendix C - The TMS9918 Profile
 
 The combination of `platform tec1g-mon3` and `display tms9918`
@@ -243,7 +241,3 @@ The LCD slice, its `Api*ToLcd` equates, `text` string data, and the
 `lcd_row` op are board hardware shared with the matrix profile;
 Appendix B documents them, and a `tms9918` build emits the same
 lines.
-
----
-
-[← Appendix B](appendix-b-matrix-profile.md) | [Book](index.md) | [Appendix D →](appendix-d-build-and-debug.md)

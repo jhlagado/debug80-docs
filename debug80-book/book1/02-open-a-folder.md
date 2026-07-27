@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 2
 ---
 
-[← Debug80 installation](01-install-debug80.md) | [Book 1](index.md) | [Targets →](03-targets.md)
-
 # Opening a folder and creating a project
 
 Debug80 works on an ordinary folder. Once one is open, the panel shows
@@ -156,7 +154,3 @@ The **+** beside the folder name adds a folder, and Debug80 offers to initialize
 
 With several folders open, the folder-name button becomes a picker
 that selects which one Debug80 is working on.
-
----
-
-[← Debug80 installation](01-install-debug80.md) | [Book 1](index.md) | [Targets →](03-targets.md)

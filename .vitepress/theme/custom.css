@@ -93,6 +93,15 @@ html {
   display: none;
 }
 
+/* When a sidebar is present the default theme also rules off under the title,
+   in the lighter divider colour, and that rule shares its baseline with the
+   masthead's. The result is 200-odd pixels where the grey line paints over the
+   top of the ink one and the masthead rule looks thinner than it does either
+   side of the wordmark. One rule under the masthead, not two. */
+.VPNavBarTitle.has-sidebar .title {
+  border-bottom: 0;
+}
+
 /* The mark. Body in ink, one accent that defaults to the book's signal but
    can be overridden where the mark sits on a coloured ground. */
 .mark {

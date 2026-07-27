@@ -4,7 +4,6 @@ title: "Data Tables and Indexed Access"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 7
 ---
-[← Counting Loops and DJNZ](06-counting-loops-and-djnz.md) | [Book 2](index.md) | [Stack and Subroutines →](08-stack-and-subroutines.md)
 
 # Chapter 7 — Data Tables and Indexed Access
 
@@ -337,7 +336,3 @@ ld (max_score), a
 ```
 
 _(Hint: `inc hl` is missing somewhere. Where? And what does HL read on every iteration as a result?)_
-
----
-
-[← Counting Loops and DJNZ](06-counting-loops-and-djnz.md) | [Book 2](index.md) | [Stack and Subroutines →](08-stack-and-subroutines.md)

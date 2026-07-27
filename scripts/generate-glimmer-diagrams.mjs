@@ -1085,7 +1085,7 @@ add(
     text('ts', 470, 110, 'TimeUp', 'middle'),
     text('ts', 470, 142, 'goto', 'middle'),
 
-    pathEl('none', 'M580,150 V210 H140 V150', 'ar'),
+    pathEl('none', 'M655,150 V210 H65 V150', 'ar'),
     text('dimn', 360, 226, 'AnyKeyP, once the gate is open', 'middle'),
     text('dimn', 360, 242, 'writes CurrentCard directly', 'middle'),
 

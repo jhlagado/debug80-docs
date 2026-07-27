@@ -5,8 +5,6 @@ parent: "Debug80 Book 1 — Getting started"
 nav_order: 101
 ---
 
-[← Sending to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)
-
 # Appendix A — Debug expressions
 
 Debug80 supports Z80-focused expressions in the standard VS Code
@@ -183,7 +181,3 @@ carry or zero
 ```
 
 When execution reaches a conditional breakpoint, a true or non-zero expression stops the program. A false or zero expression lets execution continue. Expression errors appear in the Debug Console and the condition is treated as false.
-
----
-
-[← Sending to TEC-1G hardware](../09-send-to-hardware.md) | [Book 1](../index.md) | [Appendix B — Command reference →](b-command-reference.md)

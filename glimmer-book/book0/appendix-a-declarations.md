@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 19
 ---
 
-[Book](index.md) | [Appendix B →](appendix-b-matrix-profile.md)
-
 # Appendix A - Declaration Reference
 
 Each entry gives the grammar
@@ -531,7 +529,3 @@ with the module's exported routine written in ordinary assembly:
   no declared or inferable contract fails to assemble.
 - Glimmer places the `.import` in a dedicated section outside every
   execution path, because import bytes land at the directive.
-
----
-
-[Book](index.md) | [Appendix B →](appendix-b-matrix-profile.md)

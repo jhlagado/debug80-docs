@@ -4,7 +4,6 @@ title: "Appendix B — Expression Operators"
 parent: "AZM Book 1 — Assembler Manual"
 nav_order: 102
 ---
-[← Appendix A — Directive Reference](appendix-a-directives.md) | [Manual](index.md) | [Appendix C — CLI Flag Reference →](appendix-c-cli.md)
 
 # Appendix B — Expression Operators
 
@@ -47,7 +46,3 @@ AZM accepts eight numeric literal forms. They can be mixed within one expression
 **Trailing-`H` rule:** the token must begin with a decimal digit (`0`–`9`). `0FFH` is hex 255. `FFH` starts with a letter, so the parser reads it as a symbol name. The forms `$FF` and `0FFH` force hexadecimal interpretation.
 
 `%` has two roles: a `%` at the start of a value is a binary literal prefix; a `%` between two expressions is the modulo operator.
-
----
-
-[← Appendix A — Directive Reference](appendix-a-directives.md) | [Manual](index.md) | [Appendix C — CLI Flag Reference →](appendix-c-cli.md)

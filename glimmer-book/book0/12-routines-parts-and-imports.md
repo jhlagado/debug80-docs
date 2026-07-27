@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 12
 ---
 
-[← Dependency Reports and Debugging](11-dependency-reports-and-debugging.md) | [Book](index.md) | [Cards →](13-cards.md)
-
 # Chapter 12 - Routines, Parts and Imports
 
 Canvas ended the previous chapter in one file, with a debugger that
@@ -413,7 +411,3 @@ Canvas has room to grow again, and the next chapter spends that
 room on what every finished game needs: a title screen, a playing
 screen and a game-over screen, declared as cards:
 [Cards](13-cards.md).
-
----
-
-[← Dependency Reports and Debugging](11-dependency-reports-and-debugging.md) | [Book](index.md) | [Cards →](13-cards.md)

@@ -78,7 +78,7 @@
   <line class="none" x1="440" y1="120" x2="500" y2="120" marker-end="url(#ar)"/>
   <text class="ts" x="470" y="110" text-anchor="middle" xml:space="preserve">TimeUp</text>
   <text class="ts" x="470" y="142" text-anchor="middle" xml:space="preserve">goto</text>
-  <path class="none" d="M580,150 V210 H140 V150" marker-end="url(#ar)"/>
+  <path class="none" d="M655,150 V210 H65 V150" marker-end="url(#ar)"/>
   <text class="dimn" x="360" y="226" text-anchor="middle" xml:space="preserve">AnyKeyP, once the gate is open</text>
   <text class="dimn" x="360" y="242" text-anchor="middle" xml:space="preserve">writes CurrentCard directly</text>
   <text class="dimn" x="60" y="274" text-anchor="start" xml:space="preserve">CurrentCard is the next-card register, and the first declared card is where the program starts.</text>

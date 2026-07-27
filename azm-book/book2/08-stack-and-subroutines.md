@@ -4,7 +4,6 @@ title: "Stack and Subroutines"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 8
 ---
-[← Data Tables and Indexed Access](07-data-tables-and-indexed-access.md) | [Book 2](index.md) | [I/O and Ports →](09-io-and-ports.md)
 
 # Chapter 8 — Stack and Subroutines
 
@@ -314,7 +313,3 @@ The answer also needs a corrected version.
 **3. A byte-doubling subroutine.** The required `double_byte` subroutine receives a byte in B and returns B × 2 in A. Its comment header must document inputs, outputs and clobbered registers. Three lines in `main` then pass 15, call the subroutine and store the result in a variable named `doubled`.
 
 **4. The `or a / sbc hl, de` pattern.** The explanation should cover what `or a` does to carry, why omitting it gives wrong results, and why `add hl, de` follows on the carry-clear path. It should also identify the value in HL after `sbc hl, de` on that path.
-
----
-
-[← Data Tables and Indexed Access](07-data-tables-and-indexed-access.md) | [Book 2](index.md) | [I/O and Ports →](09-io-and-ports.md)

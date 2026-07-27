@@ -4,7 +4,6 @@ title: "Subroutine Conventions"
 parent: "AZM Book 2 — Z80 Fundamentals"
 nav_order: 11
 ---
-[← A Complete Program](10-a-complete-program.md) | [Book 2](index.md) | [Register Contracts →](12-register-contracts-azmdoc.md)
 
 # Chapter 11 — Subroutine Conventions
 
@@ -335,7 +334,3 @@ SumEarlyExit:
 ```
 
 The explanation must account for the caller's BC and the stack when the early exit fires, followed by a corrected version.
-
----
-
-[← A Complete Program](10-a-complete-program.md) | [Book 2](index.md) | [Register Contracts →](12-register-contracts-azmdoc.md)

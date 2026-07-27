@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 6
 ---
 
-[← Compute, Effect, Render](05-compute-effect-render.md) | [Book](index.md) | [Time →](07-time.md)
-
 # Chapter 6 - The 8x8 Matrix Profile
 
 The TEC-1G has no video chip. The display is eight rows of eight RGB LEDs, and the
@@ -419,7 +417,3 @@ its start, making a step-through of one scan pass possible in Debug80.
 Compass moves while GO is held and rests the moment it lifts; next
 chapter the program gets a clock of its own and moves while the
 player watches: [Time](07-time.md).
-
----
-
-[← Compute, Effect, Render](05-compute-effect-render.md) | [Book](index.md) | [Time →](07-time.md)

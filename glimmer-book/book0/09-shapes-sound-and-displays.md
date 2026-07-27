@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 9
 ---
 
-[← Motion Curves](08-motion-curves.md) | [Book](index.md) | [Arrays and Layout Types →](10-arrays-and-layout-types.md)
-
 # Chapter 9 - Shapes, Sound and Displays on the Board
 
 Every picture so far has been built from single calls to `FbPlot`: a
@@ -415,7 +413,3 @@ definition above.
 Next, the board itself becomes data: arrays and layout types, for
 games whose state is many related bytes,
 [Arrays and Layout Types](10-arrays-and-layout-types.md).
-
----
-
-[← Motion Curves](08-motion-curves.md) | [Book](index.md) | [Arrays and Layout Types →](10-arrays-and-layout-types.md)

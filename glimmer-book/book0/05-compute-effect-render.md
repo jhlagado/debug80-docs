@@ -5,8 +5,6 @@ parent: "Glimmer Book: Reactive Games for the Z80"
 nav_order: 5
 ---
 
-[← Pulses and Bindings](04-pulses-and-bindings.md) | [Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)
-
 # Chapter 5 - Compute, Effect, Render
 
 Rover's blocks do two different jobs: five of them change facts, one
@@ -282,7 +280,3 @@ the debugger opens. A later chapter builds a debugging practice on it.
 Next, the display gets a chapter of its own: what
 [the 8x8 matrix profile](06-the-matrix-profile.md) builds, and every
 way to put light on it.
-
----
-
-[← Pulses and Bindings](04-pulses-and-bindings.md) | [Book](index.md) | [The 8x8 Matrix Profile →](06-the-matrix-profile.md)

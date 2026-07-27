@@ -1009,7 +1009,7 @@ add(
 
     text('cap', 520, 104, 'out'),
     text('ts', 520, 124, 'A = max'),
-    pathEl('sline', 'M476,118 H600', 'arS'),
+    pathEl('sline', 'M476,118 H512', 'arS'),
 
     text('cap', 520, 188, 'preserves'),
     text('ts', 520, 208, 'DE, IX, IY'),
@@ -1036,12 +1036,13 @@ add(
       'ld a, (hl)',
     ].map((l, i) => text(i === 2 ? 'tb' : 'ts', 56, 50 + i * 26, l)),
 
-    text('dim', 320, 54, 'HL holds table'),
-    text('dim', 320, 102, 'find_max walks HL to the end'),
-    text('dim', 320, 122, 'and does not put it back'),
-    text('dim', 320, 154, 'so this reads the wrong byte'),
-    pathEl('dash', 'M300,98 H296 V50 H286', 'arD'),
-    pathEl('dash', 'M300,150 H296 V128 H286', 'arD'),
+    pathEl('dash', 'M320,50 H300', 'arD'),
+    text('dim', 330, 54, 'HL holds table'),
+    pathEl('dash', 'M320,102 H300', 'arD'),
+    text('dim', 330, 98, 'find_max walks HL to the end of'),
+    text('dim', 330, 116, 'the table and does not put it back'),
+    pathEl('dash', 'M320,128 H300', 'arD'),
+    text('dim', 330, 132, 'so this reads the wrong byte'),
 
     text('cap', 40, 190, 'What azm --rc warn reports'),
     rect('bxq', 40, 202, 640, 44, 3),

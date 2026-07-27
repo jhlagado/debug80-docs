@@ -4,7 +4,6 @@ title: "Foundations"
 parent: "AZM Book 3 — Algorithms and Data Structures"
 nav_order: 2
 ---
-[← Introduction](00-introduction.md) | [Book 3](index.md) | [Arrays and Loops →](02-arrays-and-loops.md)
 
 # Chapter 1 — Foundations
 
@@ -250,7 +249,3 @@ azm --rc warn examples/01_gcd.asm
    calls `gcd_u16`, and then dereferences DE without reloading it. `azm --rc
    warn` should report the declared DE clobber; reloading the address at the
    caller resolves the warning.
-
----
-
-[← Introduction](00-introduction.md) | [Book 3](index.md) | [Arrays and Loops →](02-arrays-and-loops.md)
