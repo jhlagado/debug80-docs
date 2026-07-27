@@ -16,7 +16,7 @@ diagDiffUsed .field DiagFlags
 .endtype
 
 QueenWorkspace .type
-solutionCount .word
+solutionCount .field word
 queenCols     .field ColFlags
 solutionCols  .field ColFlags
 constraints   .field Constraints
@@ -44,8 +44,15 @@ STACK_TOP             .equ $9FFF
 ; A square is either free or taken; the flag tables store nothing else.
 Slot .enum Free, Taken
 
-; Diagonal addressing is the one piece of index arithmetic that repeats. Each
-; op leaves HL on the flag byte for row B and column C, and expands inline.
+; Three idioms for reaching one flag byte, named once each and expanded inline
+; at the call site. Every one of them leaves the address in HL.
+op flag_addr(tbl imm16, idx reg8)
+  ld hl, tbl
+  ld d, 0
+  ld e, idx
+  add hl, de
+end
+
 op diag_sum_addr()
   ld a, b
   add a, c              ; forward diagonal index = row + col
@@ -121,17 +128,11 @@ diag_diff_free:
 ; mark_constraints: occupy column C on row B and both diagonals
 .routine in B,C clobbers AF,DE,HL
 mark_constraints:
-    ld hl, col_used
-    ld d, 0
-    ld e, c
-    add hl, de
+    flag_addr col_used, c
     ld a, Slot.Taken
     ld (hl), a
 
-    ld hl, queen_cols
-    ld d, 0
-    ld e, b
-    add hl, de
+    flag_addr queen_cols, b
     ld a, c               ; queen_cols holds a column number, not a Slot
     ld (hl), a
 
@@ -147,10 +148,7 @@ mark_constraints:
 ; unmark_constraints: release column C on row B and both diagonals
 .routine in B,C clobbers AF,DE,HL
 unmark_constraints:
-    ld hl, col_used
-    ld d, 0
-    ld e, c
-    add hl, de
+    flag_addr col_used, c
     xor a                 ; one byte, and Slot.Free is zero
     ld (hl), a
 

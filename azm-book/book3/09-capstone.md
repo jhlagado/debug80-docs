@@ -39,10 +39,11 @@ appear occupied and prune valid branches from the search.
 
 ## Board representation as one record
 
-Five structures live in workspace RAM:
+Six fields live in workspace RAM:
 
 | Field | Size | Role |
 |-------|------|------|
+| `solutionCount` | `sizeof(word)` | Running total, 92 when the search finishes |
 | `queenCols` | `sizeof(ColFlags)` | Current search path: one tentative column per row |
 | `solutionCols` | `sizeof(ColFlags)` | Last completed solution copied from `queenCols` |
 | `constraints.colUsed` | `sizeof(ColFlags)` | `Slot.Free` or `Slot.Taken` per column |
@@ -84,7 +85,7 @@ diagDiffUsed .field DiagFlags
 .endtype
 
 QueenWorkspace .type
-solutionCount .word
+solutionCount .field word
 queenCols     .field ColFlags
 solutionCols  .field ColFlags
 constraints   .field Constraints
@@ -152,11 +153,30 @@ col_free:
     ret
 ```
 
-**Diagonal addressing** is the one piece of index arithmetic the program
-repeats: `diag_sum_free`, `mark_constraints` and `unmark_constraints` all need
-the same six instructions, and so do their backward-diagonal counterparts. Two
-`op` declarations name the calculation and expand inline at each of the six
-sites:
+Indexing a flag table is Chapter 2's four instructions, and the program writes
+them at three sites. One parameterised `op` names the calculation once:
+
+```asm
+op flag_addr(tbl imm16, idx reg8)
+  ld hl, tbl
+  ld d, 0
+  ld e, idx
+  add hl, de
+end
+```
+
+`imm16` matches the table label and `reg8` matches the index register, so
+`flag_addr col_used, c` and `flag_addr queen_cols, b` both expand to
+`ld hl` / `ld d, 0` / `ld e` / `add hl, de` with the operands substituted.
+
+`col_free` keeps its own version because `ld b, 0` / `add hl, bc` is a byte
+shorter when the index is already in C and B is free.
+
+**Diagonal addressing** carries an extra step: the index is computed from the
+row and the column rather than taken from one register. `diag_sum_free`,
+`mark_constraints` and `unmark_constraints` all need the same six
+instructions, and so do their backward-diagonal counterparts, so two more ops
+cover the six sites:
 
 ```asm
 op diag_sum_addr()
@@ -236,7 +256,7 @@ completed board.
 
 ## Recursive `place_row`
 
-**Contract:** B = current row (0..7). At row `BOARD_SIZE`, a full placement was found; increment the global counter. Otherwise try every column on this row.
+**Contract:** B = current row, 0 to `BOARD_SIZE - 1`. At row `BOARD_SIZE`, a full placement was found; increment the global counter. Otherwise try every column on this row.
 
 ```asm
 ; place_row: assign a queen to row B; count solutions at row BOARD_SIZE
@@ -262,7 +282,7 @@ _row_done:
     ret
 ```
 
-**Base case:** `b == 8`, all rows assigned. `count_solution` copies the current
+**Base case:** B has reached `BOARD_SIZE`, so every row is assigned. `count_solution` copies the current
 path to `solution_cols`, then bumps the 16-bit `solution_count` at `$8000`.
 
 **Recursive step:** valid column → mark → `inc b` → `call place_row` → unmark → next column.
@@ -341,7 +361,7 @@ backtracking after a deeper row fails.
 | Bit thinking (Ch. 4) | Optional bitboard exercise |
 | Records / workspace (Ch. 5) | `QueenWorkspace` at `$8000`, addressed by layout cast |
 | Enums (Book 1 Ch. 3) | `Slot.Free` and `Slot.Taken` in the flag tables |
-| Ops (Book 1 Ch. 7) | `diag_sum_addr`, `diag_diff_addr` |
+| Ops (Book 1 Ch. 7) | `flag_addr`, `diag_sum_addr`, `diag_diff_addr` |
 | Recursion + stack (Ch. 6) | `place_row` self-call, SP init |
 | Small routines with `.routine` contracts (Ch. 1, 7) | `col_free`, `mark_constraints`, … |
 | Pointers (Ch. 8) | Not required — pure tables |
