@@ -85,10 +85,10 @@
   </g>
   <text class="lbl" x="44" y="262" text-anchor="start">ADDRESS</text>
   <text class="lbl" x="238" y="262" text-anchor="start">DATA</text>
-  <rect class="card" x="360" y="44" width="320" height="26" rx="13"/>
-  <circle cx="378" cy="57" r="4" fill="#9a6a12"/>
-  <text class="lbl" x="392" y="61" text-anchor="start">KEYBOARD RELEASED</text>
-  <text class="dim" x="666" y="61" text-anchor="end">CLICK EMULATOR TO CAPTURE</text>
+  <rect class="card" x="348" y="44" width="340" height="26" rx="13"/>
+  <circle cx="366" cy="57" r="4" fill="#9a6a12"/>
+  <text class="lbl" x="380" y="61" text-anchor="start">Keyboard released</text>
+  <text class="dim" x="674" y="61" text-anchor="end">click emulator to capture</text>
   <rect class="field" x="360" y="96" width="320" height="186" rx="6"/>
   <rect class="btn" x="374" y="110" width="46" height="30" rx="5"/>
   <text class="btxt" x="397" y="130" text-anchor="middle">RESET</text>

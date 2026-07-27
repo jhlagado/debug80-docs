@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="384" viewBox="0 0 720 384" role="img" aria-labelledby="figTitle figDesc">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="412" viewBox="0 0 720 412" role="img" aria-labelledby="figTitle figDesc">
   <title id="figTitle">Skyfall as declarations before it is code</title>
   <desc id="figDesc">The facts, the moments with their sources, the two schedules and the three cards, laid out as the game skeleton the chapter designs on paper before any block is written.</desc>
   <defs>
@@ -101,8 +101,8 @@
   <text class="ts" x="502" y="240" text-anchor="start" xml:space="preserve">card Playing</text>
   <rect class="bx" x="490" y="258" width="200" height="30" rx="3"/>
   <text class="ts" x="502" y="278" text-anchor="start" xml:space="preserve">card GameOver</text>
-  <text class="cap" x="30" y="290" text-anchor="start" xml:space="preserve">RESOURCES</text>
-  <text class="dimn" x="30" y="312" text-anchor="start" xml:space="preserve">shape Paddle, sound Catch and Miss, six text strings</text>
-  <text class="dimn" x="30" y="340" text-anchor="start" xml:space="preserve">Six facts, five moments and CurrentCard: twelve of the 32 change-flag cells, with room to spare.</text>
-  <text class="dimn" x="30" y="364" text-anchor="start" xml:space="preserve">Settle these and the skeleton stands. Every block that remains has one job you have already named.</text>
+  <text class="cap" x="30" y="318" text-anchor="start" xml:space="preserve">RESOURCES</text>
+  <text class="dimn" x="30" y="340" text-anchor="start" xml:space="preserve">shape Paddle, sound Catch and Miss, six text strings</text>
+  <text class="dimn" x="30" y="368" text-anchor="start" xml:space="preserve">Six facts, five moments and CurrentCard: twelve of the 32 change-flag cells, with room to spare.</text>
+  <text class="dimn" x="30" y="392" text-anchor="start" xml:space="preserve">Settle these and the skeleton stands. Every block that remains has one job you have already named.</text>
 </svg>

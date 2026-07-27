@@ -322,7 +322,7 @@ add(
   'assembler-outputs.svg',
   'One source file, four artifacts',
   'A source file feeding the assembler, which emits an Intel HEX file, a flat binary, a debug map and a listing.',
-  222,
+  252,
   [
     box({ x: 40, y: 74, w: 130, h: 54, title: 'source.asm', cls: 'bxs', titleCls: 'tb' }),
     box({ x: 236, y: 74, w: 130, h: 54, title: 'azm', titleCls: 'tb' }),
@@ -340,7 +340,7 @@ add(
       pathEl('none', `M366,101 C408,101 408,${y + 17} 448,${y + 17}`, 'ar'),
     ]),
 
-    text('dimn', 40, 210, 'Each artifact has a flag that suppresses it, and there are more artifacts than the four core ones shown here.'),
+    text('dimn', 40, 236, 'Each artifact has a flag that suppresses it, and there are more artifacts than the four core ones shown here.'),
   ],
 );
 
@@ -736,7 +736,7 @@ add(
     stack({ x, y: 44, w: 148, sh: 28, slots, spIndex: null }),
     spIdx === null ? '' : line('sline', x - 12, 44 + spIdx * 28 + 14, x - 12, 44 + spIdx * 28 + 14),
     spIdx === null ? '' : pathEl('sline', `M${x - 44},${44 + spIdx * 28 + 14} H${x - 6}`, 'arS'),
-    spIdx === null ? '' : text('cap', x - 74, 44 + spIdx * 28 + 18, 'SP'),
+    spIdx === null ? '' : text('cap', x - 68, 44 + spIdx * 28 + 18, 'SP'),
     text('dimn', x, 44 + slots.length * 28 + 22, note),
   ];
   add(
@@ -763,7 +763,7 @@ add(
     ...['main', 'draw', 'plot'].flatMap((n, i) => [
       box({ x: 46 + i * 150, y: 40, w: 120, h: 42, title: n, titleCls: 'tb' }),
       i < 2 ? line('none', 166 + i * 150, 61, 196 + i * 150, 61, 'ar') : '',
-      i < 2 ? text('dimn', 176 + i * 150, 52, 'call') : '',
+      i < 2 ? text('dimn', 172 + i * 150, 52, 'call') : '',
     ]),
 
     caption(470, 30, 'The stack at the deepest point'),
@@ -898,16 +898,16 @@ add(
     'main-data-flow.svg',
     'What main hands to each routine',
     'main calls find_max with HL and B and gets back A, then calls count_above with HL, B and C and gets back A. Both clobber HL, which is why it is reloaded between the calls.',
-    296,
+    312,
     [
       ...row(40, 'find_max', 'HL, B', 'A = the maximum', 'B, C, F, HL'),
       ...row(158, 'count_above', 'HL, B, C', 'A = the count', 'B, D, F, HL'),
 
-      rect('bxs', 40, 232, 250, 26, 2),
-      text('ts', 54, 250, 'ld hl, values'),
-      text('dimn', 306, 250, 'reloaded before the second call'),
+      rect('bxs', 40, 248, 250, 26, 2),
+      text('ts', 54, 266, 'ld hl, values'),
+      text('dimn', 306, 266, 'reloaded before the second call'),
 
-      text('dimn', 40, 288, 'find_max walks HL to the end of the table and does not put it back. Its contract says so, and the caller reloads it.'),
+      text('dimn', 40, 304, 'find_max walks HL to the end of the table and does not put it back. Its contract says so, and the caller reloads it.'),
     ],
   );
 }
@@ -1024,32 +1024,32 @@ add(
   'liveness-violation.svg',
   'A value used after the call that destroyed it',
   'A caller loads HL, calls find_max which clobbers HL, then reads through HL, with the diagnostic azm reports at the call site.',
-  296,
+  302,
   [
+    // The highlight goes behind the call line, not on top of a second copy
+    // of it.
+    rect('bxs', 40, 84, 250, 26, 2),
     ...[
       'ld hl, table',
       'ld b, 8',
       'call find_max',
       'ld a, (hl)',
-    ].map((l, i) => text('ts', 56, 48 + i * 24, l)),
+    ].map((l, i) => text(i === 2 ? 'tb' : 'ts', 56, 50 + i * 26, l)),
 
-    rect('bxs', 40, 92, 240, 26, 2),
-    text('ts', 56, 110, 'call find_max'),
+    text('dim', 320, 54, 'HL holds table'),
+    text('dim', 320, 102, 'find_max walks HL to the end'),
+    text('dim', 320, 122, 'and does not put it back'),
+    text('dim', 320, 154, 'so this reads the wrong byte'),
+    pathEl('dash', 'M300,98 H296 V50 H286', 'arD'),
+    pathEl('dash', 'M300,150 H296 V128 H286', 'arD'),
 
-    text('dim', 300, 62, 'HL holds table'),
-    text('dim', 300, 110, 'find_max walks HL to the end'),
-    text('dim', 300, 134, 'and does not put it back'),
-    pathEl('dash', 'M292,56 H286', 'arD'),
+    text('cap', 40, 190, 'What azm --rc warn reports'),
+    rect('bxq', 40, 202, 640, 44, 3),
+    text('ts', 54, 220, 'source.asm:6:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max'),
+    text('ts', 54, 238, 'may modify H,L, but the pre-call value is used later.'),
 
-    rect('bxs', 296, 122, 8, 8, 1),
-
-    text('cap', 40, 176, 'What azm --rc warn reports'),
-    rect('bxq', 40, 190, 640, 44, 3),
-    text('ts', 54, 208, 'source.asm:6:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max'),
-    text('ts', 54, 226, 'may modify H,L, but the pre-call value is used later.'),
-
-    text('dimn', 40, 262, 'The analyzer does not know what table means. It knows HL held a value, that the call may destroy HL, and that'),
-    text('dimn', 40, 280, 'HL was read afterwards. Reload it, save it across the call, or stop using it.'),
+    text('dimn', 40, 272, 'The analyzer does not know what table means. It knows HL held a value, that the call may destroy HL, and that'),
+    text('dimn', 40, 290, 'HL was read afterwards. Reload it, save it across the call, or stop using it.'),
   ],
 );
 

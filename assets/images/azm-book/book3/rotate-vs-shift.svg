@@ -154,5 +154,5 @@
   <text class="dim" x="394" y="268" text-anchor="start" xml:space="preserve">after  $68</text>
   <text class="dimn" x="510" y="268" text-anchor="start" xml:space="preserve">bit 0 = old carry</text>
   <text class="dimn" x="20" y="316" text-anchor="start" xml:space="preserve">Both leave carry holding the old bit 7. The difference is bit 0, which is why rla can carry a bit between registers</text>
-  <text class="dimn" x="20" y="334" text-anchor="start" xml:space="preserve">and rlca cannot. and clears carry, so the rr a in extract_bit_u8 shifts a zero into bit 7.</text>
+  <text class="dimn" x="20" y="334" text-anchor="start" xml:space="preserve">and rlca cannot. or a clears carry first, so the rr a in extract_bit_u8 shifts a zero into bit 7.</text>
 </svg>

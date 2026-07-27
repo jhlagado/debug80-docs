@@ -63,11 +63,11 @@
   <rect class="bx" x="46" y="40" width="120" height="42" rx="4"/>
   <text class="tb" x="106" y="65.5" text-anchor="middle" xml:space="preserve">main</text>
   <line class="none" x1="166" y1="61" x2="196" y2="61" marker-end="url(#ar)"/>
-  <text class="dimn" x="176" y="52" text-anchor="start" xml:space="preserve">call</text>
+  <text class="dimn" x="172" y="52" text-anchor="start" xml:space="preserve">call</text>
   <rect class="bx" x="196" y="40" width="120" height="42" rx="4"/>
   <text class="tb" x="256" y="65.5" text-anchor="middle" xml:space="preserve">draw</text>
   <line class="none" x1="316" y1="61" x2="346" y2="61" marker-end="url(#ar)"/>
-  <text class="dimn" x="326" y="52" text-anchor="start" xml:space="preserve">call</text>
+  <text class="dimn" x="322" y="52" text-anchor="start" xml:space="preserve">call</text>
   <rect class="bx" x="346" y="40" width="120" height="42" rx="4"/>
   <text class="tb" x="406" y="65.5" text-anchor="middle" xml:space="preserve">plot</text>
   <text class="cap" x="470" y="30" text-anchor="start" xml:space="preserve">THE STACK AT THE DEEPEST POINT</text>

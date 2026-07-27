@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="296" viewBox="0 0 720 296" role="img" aria-labelledby="figTitle figDesc">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="302" viewBox="0 0 720 302" role="img" aria-labelledby="figTitle figDesc">
   <title id="figTitle">A value used after the call that destroyed it</title>
   <desc id="figDesc">A caller loads HL, calls find_max which clobbers HL, then reads through HL, with the diagnostic azm reports at the call site.</desc>
   <defs>
@@ -60,21 +60,21 @@
       <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
     </marker>
   </defs>
-  <text class="ts" x="56" y="48" text-anchor="start" xml:space="preserve">ld hl, table</text>
-  <text class="ts" x="56" y="72" text-anchor="start" xml:space="preserve">ld b, 8</text>
-  <text class="ts" x="56" y="96" text-anchor="start" xml:space="preserve">call find_max</text>
-  <text class="ts" x="56" y="120" text-anchor="start" xml:space="preserve">ld a, (hl)</text>
-  <rect class="bxs" x="40" y="92" width="240" height="26" rx="2"/>
-  <text class="ts" x="56" y="110" text-anchor="start" xml:space="preserve">call find_max</text>
-  <text class="dim" x="300" y="62" text-anchor="start" xml:space="preserve">HL holds table</text>
-  <text class="dim" x="300" y="110" text-anchor="start" xml:space="preserve">find_max walks HL to the end</text>
-  <text class="dim" x="300" y="134" text-anchor="start" xml:space="preserve">and does not put it back</text>
-  <path class="dash" d="M292,56 H286" marker-end="url(#arD)"/>
-  <rect class="bxs" x="296" y="122" width="8" height="8" rx="1"/>
-  <text class="cap" x="40" y="176" text-anchor="start" xml:space="preserve">What azm --rc warn reports</text>
-  <rect class="bxq" x="40" y="190" width="640" height="44" rx="3"/>
-  <text class="ts" x="54" y="208" text-anchor="start" xml:space="preserve">source.asm:6:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max</text>
-  <text class="ts" x="54" y="226" text-anchor="start" xml:space="preserve">may modify H,L, but the pre-call value is used later.</text>
-  <text class="dimn" x="40" y="262" text-anchor="start" xml:space="preserve">The analyzer does not know what table means. It knows HL held a value, that the call may destroy HL, and that</text>
-  <text class="dimn" x="40" y="280" text-anchor="start" xml:space="preserve">HL was read afterwards. Reload it, save it across the call, or stop using it.</text>
+  <rect class="bxs" x="40" y="84" width="250" height="26" rx="2"/>
+  <text class="ts" x="56" y="50" text-anchor="start" xml:space="preserve">ld hl, table</text>
+  <text class="ts" x="56" y="76" text-anchor="start" xml:space="preserve">ld b, 8</text>
+  <text class="tb" x="56" y="102" text-anchor="start" xml:space="preserve">call find_max</text>
+  <text class="ts" x="56" y="128" text-anchor="start" xml:space="preserve">ld a, (hl)</text>
+  <text class="dim" x="320" y="54" text-anchor="start" xml:space="preserve">HL holds table</text>
+  <text class="dim" x="320" y="102" text-anchor="start" xml:space="preserve">find_max walks HL to the end</text>
+  <text class="dim" x="320" y="122" text-anchor="start" xml:space="preserve">and does not put it back</text>
+  <text class="dim" x="320" y="154" text-anchor="start" xml:space="preserve">so this reads the wrong byte</text>
+  <path class="dash" d="M300,98 H296 V50 H286" marker-end="url(#arD)"/>
+  <path class="dash" d="M300,150 H296 V128 H286" marker-end="url(#arD)"/>
+  <text class="cap" x="40" y="190" text-anchor="start" xml:space="preserve">What azm --rc warn reports</text>
+  <rect class="bxq" x="40" y="202" width="640" height="44" rx="3"/>
+  <text class="ts" x="54" y="220" text-anchor="start" xml:space="preserve">source.asm:6:5: warning: [AZMN_REGISTER_CONTRACTS] CALL find_max</text>
+  <text class="ts" x="54" y="238" text-anchor="start" xml:space="preserve">may modify H,L, but the pre-call value is used later.</text>
+  <text class="dimn" x="40" y="272" text-anchor="start" xml:space="preserve">The analyzer does not know what table means. It knows HL held a value, that the call may destroy HL, and that</text>
+  <text class="dimn" x="40" y="290" text-anchor="start" xml:space="preserve">HL was read afterwards. Reload it, save it across the call, or stop using it.</text>
 </svg>

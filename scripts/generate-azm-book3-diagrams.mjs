@@ -676,7 +676,7 @@ function runInsertionSort(data, watchPass) {
         'bit 0 = old carry'),
 
       text('dimn', 20, 316, 'Both leave carry holding the old bit 7. The difference is bit 0, which is why rla can carry a bit between registers'),
-      text('dimn', 20, 334, 'and rlca cannot. and clears carry, so the rr a in extract_bit_u8 shifts a zero into bit 7.'),
+      text('dimn', 20, 334, 'and rlca cannot. or a clears carry first, so the rr a in extract_bit_u8 shifts a zero into bit 7.'),
     ],
   );
 }

@@ -276,7 +276,7 @@ diagrams['panel-memory-views.svg'] = svg(
 diagrams['panel-sections.svg'] = svg(
   'The Debug80 panel sections',
   'Nine collapsible sections: Project, Machine, Displays, TMS9918 Video, Joystick, Matrix Keyboard, Registers, Memory and Serial. Four are open by default.',
-  276,
+  300,
   [
     rect('pnl', 10, 10, W - 20, 256, 6),
     ...[
@@ -297,7 +297,7 @@ diagrams['panel-sections.svg'] = svg(
         text('dim', W - 40, y + 15, '↑ ↓', 'end'),
       ];
     }),
-    text('note', 36, 250, 'Open by default: Project, Machine, Displays, Registers.'),
+    text('note', 22, 288, 'Open by default: Project, Machine, Displays, Registers.'),
   ].join('\n')
 );
 
@@ -431,11 +431,12 @@ function lcd4(x, y, lines) {
 
 /** The pill that reports which surface currently owns the keyboard. */
 function cuePill(x, y, state, hint) {
+  const w = 340;
   return [
-    rect('card', x, y - 14, 320, 26, 13),
+    rect('card', x, y - 14, w, 26, 13),
     `  <circle cx="${x + 18}" cy="${y - 1}" r="4" fill="#9a6a12"/>`,
     text('lbl', x + 32, y + 3, state),
-    text('dim', x + 306, y + 3, hint, 'end'),
+    text('dim', x + w - 14, y + 3, hint, 'end'),
   ].join('\n');
 }
 
@@ -537,7 +538,7 @@ mk('machine-running.svg', 'The Machine section',
      lcd4(26, 66, ['= TEC-1G Main Menu =', '→Intel HEX Load', '  Drive Access', '  Smart Block Copy']),
      sevenSeg(26, 176, 'tEC-1G'),
      // Right column
-     cuePill(360, 58, 'KEYBOARD RELEASED', 'CLICK EMULATOR TO CAPTURE'),
+     cuePill(348, 58, 'Keyboard released', 'click emulator to capture'),
      rect('field', 360, 96, 320, 186, 6),
      keypad(374, 110),
    ].join('\n') });

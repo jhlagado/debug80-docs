@@ -66,7 +66,7 @@
   <rect class="bxq" x="108" y="100" width="148" height="28" rx="2"/>
   <line class="sline" x1="96" y1="58" x2="96" y2="58"/>
   <path class="sline" d="M64,58 H102" marker-end="url(#arS)"/>
-  <text class="cap" x="34" y="62" text-anchor="start" xml:space="preserve">SP</text>
+  <text class="cap" x="40" y="62" text-anchor="start" xml:space="preserve">SP</text>
   <text class="dimn" x="108" y="150" text-anchor="start" xml:space="preserve">PC at the call</text>
   <text class="cap" x="328" y="30" text-anchor="start" xml:space="preserve">Inside the routine</text>
   <rect class="bxq" x="328" y="44" width="148" height="28" rx="2"/>
@@ -75,7 +75,7 @@
   <rect class="bxq" x="328" y="100" width="148" height="28" rx="2"/>
   <line class="sline" x1="316" y1="86" x2="316" y2="86"/>
   <path class="sline" d="M284,86 H322" marker-end="url(#arS)"/>
-  <text class="cap" x="254" y="90" text-anchor="start" xml:space="preserve">SP</text>
+  <text class="cap" x="260" y="90" text-anchor="start" xml:space="preserve">SP</text>
   <text class="dimn" x="328" y="150" text-anchor="start" xml:space="preserve">PC at the routine</text>
   <text class="cap" x="548" y="30" text-anchor="start" xml:space="preserve">After ret</text>
   <rect class="bxq" x="548" y="44" width="148" height="28" rx="2"/>
@@ -83,7 +83,7 @@
   <rect class="bxq" x="548" y="100" width="148" height="28" rx="2"/>
   <line class="sline" x1="536" y1="58" x2="536" y2="58"/>
   <path class="sline" d="M504,58 H542" marker-end="url(#arS)"/>
-  <text class="cap" x="474" y="62" text-anchor="start" xml:space="preserve">SP</text>
+  <text class="cap" x="480" y="62" text-anchor="start" xml:space="preserve">SP</text>
   <text class="dimn" x="548" y="150" text-anchor="start" xml:space="preserve">PC after the call</text>
   <text class="dimn" x="40" y="226" text-anchor="start" xml:space="preserve">call is a push of the address after it, then a jump. ret is the pop that puts that address back into PC.</text>
 </svg>

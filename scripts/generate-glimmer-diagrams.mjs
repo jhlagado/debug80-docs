@@ -86,52 +86,56 @@ const add = (name, title, desc, height, parts) => {
 // figure holds both halves of the relationship at once. This replaces the
 // chapter's mermaid block.
 {
-  const pitch = 114;
-  const colX = (i) => 24 + i * pitch;
+  // Six columns must fit 720 with the declaration boxes, which are wider than
+  // the run boxes, overhanging at both ends: 5 * pitch + declW + margins.
+  const pitch = 120;
+  const colX = (i) => 22 + i * pitch;
+  const declW = 104;
+  const runW = 78;
   const decl = [
     null,
     ['pulse Right'],
-    ['effect MoveRight', 'on Right', 'updates DotX'],
+    ['effect', 'MoveRight', 'on Right', 'updates DotX'],
     ['state DotX', '= 3 changed'],
     ['render DrawDot', 'on DotX'],
     null,
   ];
-  const run = ['key 6 down', 'Right', 'MoveRight', 'DotX', 'DrawDot', 'a pixel'];
+  const run = ['key 6', 'Right', 'MoveRight', 'DotX', 'DrawDot', 'a pixel'];
   const edges = ['bind', 'on', 'updates', 'on', 'FbPlot'];
   add(
     'reactive-chain.svg',
     'One key press followed through the reactive chain',
     'Six stages in a row, key, pulse, effect, state change, render and pixel. Above each stage is the declaration that creates it; below it is the step that runs, joined by the bind, on and updates connections.',
-    286,
+    306,
     [
-      caption(11, 40, 'What you declare'),
+      caption(16, 40, 'What you declare'),
       ...decl.flatMap((lines, i) => {
-        const bx = colX(i) - 13;
+        const bx = colX(i) + runW / 2 - declW / 2;
         if (!lines) {
           return [
-            rect('bxq', bx, 56, 106, 62, 3),
-            text('dimn', bx + 53, 92, 'hardware', 'middle'),
+            rect('bxq', bx, 56, declW, 80, 3),
+            text('dimn', bx + declW / 2, 100, 'hardware', 'middle'),
           ];
         }
         return [
-          rect('bx', bx, 56, 106, 62, 3),
-          ...lines.map((l, j) => text('ts', bx + 53, 78 + j * 16, l, 'middle')),
-          pathEl('dash', `M${colX(i) + 40},118 V150`, 'arD'),
+          rect('bx', bx, 56, declW, 80, 3),
+          ...lines.map((l, j) => text('ts', bx + declW / 2, 76 + j * 16, l, 'middle')),
+          pathEl('dash', `M${colX(i) + runW / 2},136 V152`, 'arD'),
         ];
       }),
 
-      caption(11, 142, 'What runs'),
-      ...run.flatMap((label, i) => [node({ x: colX(i), y: 150, w: 80, h: 48, label, hi: i === 2 || i === 4 })]),
+      caption(16, 168, 'What runs'),
+      ...run.flatMap((label, i) => [node({ x: colX(i), y: 176, w: runW, h: 48, label, hi: i === 2 || i === 4 })]),
       ...edges.flatMap((label, i) => [
-        line('none', colX(i) + 80, 174, colX(i + 1), 174, 'ar'),
-        text('dimn', colX(i) + 97, 168, label, 'middle'),
+        line('none', colX(i) + runW, 200, colX(i + 1), 200, 'ar'),
+        text('dimn', colX(i) + runW + (pitch - runW) / 2, 194, label, 'middle'),
       ]),
 
-      legend(24, 232, [
+      legend(16, 254, [
         { cls: 'bxs', label: 'the code you write' },
         { cls: 'bx', label: 'the machinery' },
       ]),
-      text('dimn', 24, 262, 'You never call a block. You write it, and a change to a fact schedules it.'),
+      text('dimn', 16, 284, 'You never call a block. You write it, and a change to a fact schedules it.'),
     ],
   );
 }
@@ -1208,10 +1212,11 @@ add(
     text('dimn', 380, 262, 'the drop falls one row every Gravity frames'),
     text('dimn', 380, 282, 'the paddle slides on held 4 and 6'),
     text('dimn', 380, 302, 'caught when DropX minus PadX is under 3'),
+    text('dimn', 380, 322, 'yellow drop, green paddle on the board itself'),
 
-    legend(380, 336, [
-      { cls: 'sig', label: 'the drop, yellow' },
-      { cls: 'bx2', label: 'the paddle, green' },
+    legend(380, 356, [
+      { cls: 'sig', label: 'the drop' },
+      { cls: 'bx2', label: 'the paddle' },
     ]),
 
     text('dimn', 40, 400, 'Every catch scores, chirps and writes Gravity one smaller. Three misses end the round.'),
@@ -1230,7 +1235,7 @@ add(
     'skyfall-design.svg',
     'Skyfall as declarations before it is code',
     'The facts, the moments with their sources, the two schedules and the three cards, laid out as the game skeleton the chapter designs on paper before any block is written.',
-    384,
+    412,
     [
       caption(30, 56, 'Facts'),
       ...['PadX  : byte', 'DropX : byte', 'DropY : byte', 'Score : word', 'Lives : byte', 'Armed : byte']
@@ -1253,11 +1258,11 @@ add(
       ...chip(490, 220, 200, 'card Playing', ''),
       ...chip(490, 258, 200, 'card GameOver', ''),
 
-      caption(30, 290, 'Resources'),
-      text('dimn', 30, 312, 'shape Paddle, sound Catch and Miss, six text strings'),
+      caption(30, 318, 'Resources'),
+      text('dimn', 30, 340, 'shape Paddle, sound Catch and Miss, six text strings'),
 
-      text('dimn', 30, 340, 'Six facts, five moments and CurrentCard: twelve of the 32 change-flag cells, with room to spare.'),
-      text('dimn', 30, 364, 'Settle these and the skeleton stands. Every block that remains has one job you have already named.'),
+      text('dimn', 30, 368, 'Six facts, five moments and CurrentCard: twelve of the 32 change-flag cells, with room to spare.'),
+      text('dimn', 30, 392, 'Settle these and the skeleton stands. Every block that remains has one job you have already named.'),
     ],
   );
 }

@@ -162,9 +162,10 @@
   <text class="dimn" x="380" y="262" text-anchor="start" xml:space="preserve">the drop falls one row every Gravity frames</text>
   <text class="dimn" x="380" y="282" text-anchor="start" xml:space="preserve">the paddle slides on held 4 and 6</text>
   <text class="dimn" x="380" y="302" text-anchor="start" xml:space="preserve">caught when DropX minus PadX is under 3</text>
-  <rect class="sig" x="380" y="327" width="13" height="13" rx="2"/>
-  <text class="dimn" x="400" y="338" text-anchor="start" xml:space="preserve">the drop, yellow</text>
-  <rect class="bx2" x="517.52" y="327" width="13" height="13" rx="2"/>
-  <text class="dimn" x="537.52" y="338" text-anchor="start" xml:space="preserve">the paddle, green</text>
+  <text class="dimn" x="380" y="322" text-anchor="start" xml:space="preserve">yellow drop, green paddle on the board itself</text>
+  <rect class="sig" x="380" y="347" width="13" height="13" rx="2"/>
+  <text class="dimn" x="400" y="358" text-anchor="start" xml:space="preserve">the drop</text>
+  <rect class="bx2" x="471.76" y="347" width="13" height="13" rx="2"/>
+  <text class="dimn" x="491.76" y="358" text-anchor="start" xml:space="preserve">the paddle</text>
   <text class="dimn" x="40" y="400" text-anchor="start" xml:space="preserve">Every catch scores, chirps and writes Gravity one smaller. Three misses end the round.</text>
 </svg>
