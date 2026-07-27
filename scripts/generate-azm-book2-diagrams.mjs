@@ -29,36 +29,48 @@ const add = (name, title, desc, height, parts) => {
    Chapter 1 — The Computer
    ============================================================ */
 
-// 1.1 System block diagram. The bus widths are the point: 16 address lines
-// explain the 64K ceiling, 8 data lines explain the byte-at-a-time model.
-add(
-  'system-block.svg',
-  'Z80 system block diagram',
-  'A CPU box connected to a memory box and an I/O ports box by a 16-bit address bus, an 8-bit data bus and a control line group.',
-  250,
-  [
-    box({ x: 40, y: 40, w: 150, h: 90, title: 'CPU', lines: ['Z80'] }),
-    box({ x: 400, y: 26, w: 170, h: 66, title: 'Memory', lines: ['64 KB address space'] }),
-    box({ x: 400, y: 148, w: 170, h: 66, title: 'I/O ports', lines: ['256 port numbers'] }),
+// 1.1 System block diagram. The buses are drawn as one shared band rather than
+// as separate lines to each device, because that is what they are: memory and
+// the ports hang off the same wires. Drawing a line from the CPU to each box
+// separately implies two private connections and leaves the control line
+// starting nowhere, since the CPU box is not tall enough to reach it.
+{
+  const busY = { addr: 84, data: 124, ctrl: 164 };
+  add(
+    'system-block.svg',
+    'Z80 system block diagram',
+    'A CPU connected to one shared bus band carrying a 16-bit address bus, an 8-bit data bus and the control lines, with memory and the I/O ports both hanging off that band.',
+    250,
+    [
+      box({ x: 34, y: 66, w: 140, h: 116, title: 'CPU', lines: ['Z80'] }),
 
-    // Address bus: the wide one.
-    line('sline', 190, 62, 400, 62, 'arS'),
-    text('cap', 214, 54, 'ADDRESS BUS'),
-    text('dim', 214, 78, '16 lines  →  $0000-$FFFF'),
+      rect('bxq', 236, 60, 232, 128, 4),
+      caption(250, 50, 'The buses'),
+      ...[
+        ['ADDRESS', '16 lines, $0000-$FFFF', busY.addr],
+        ['DATA', '8 lines, one byte', busY.data],
+        ['CONTROL', 'read, write, MREQ, IORQ', busY.ctrl],
+      ].flatMap(([name, note, y]) => [
+        text('cap', 250, y - 6, name),
+        text('dim', 250, y + 12, note),
+      ]),
 
-    // Data bus: bidirectional, hence arrowheads at both ends.
-    pathEl('none', 'M190,92 H400', 'ar'),
-    pathEl('none', 'M400,92 H190', 'ar'),
-    text('cap', 214, 108, 'DATA BUS'),
-    text('dim', 300, 108, '8 lines'),
+      // The CPU drives all three, so one bidirectional link, not three.
+      pathEl('none', 'M174,124 H232', 'ar'),
+      pathEl('none', 'M232,124 H174', 'ar'),
 
-    line('none', 190, 178, 400, 178, 'ar'),
-    text('cap', 214, 170, 'CONTROL'),
-    text('dim', 214, 194, 'read / write / IORQ / MREQ'),
+      box({ x: 530, y: 60, w: 156, h: 56, title: 'Memory', lines: ['64 KB'] }),
+      box({ x: 530, y: 132, w: 156, h: 56, title: 'I/O ports', lines: ['256 ports'] }),
+      pathEl('none', 'M468,88 H526', 'ar'),
+      pathEl('none', 'M526,88 H468', 'ar'),
+      pathEl('none', 'M468,160 H526', 'ar'),
+      pathEl('none', 'M526,160 H468', 'ar'),
 
-    text('dimn', 40, 234, 'Sixteen address lines set the ceiling at 65,536 bytes. Eight data lines set the unit of transfer at one byte.'),
-  ],
-);
+      text('dimn', 34, 218, 'Sixteen address lines set the ceiling at 65,536 bytes. Eight data lines set the unit of transfer at one byte.'),
+      text('dimn', 34, 236, 'Memory and the ports share the same wires; the control lines say which of them a transaction is for.'),
+    ],
+  );
+}
 
 // 1.2 Memory map. The board from the chapter, drawn to scale by address.
 {
@@ -235,37 +247,42 @@ add(
 }
 
 // 2.2 Little-endian. The crossing arrows are the whole point.
-add(
-  'little-endian.svg',
-  'Little-endian byte order',
-  'The 16-bit value $8000 split into a low byte $00 stored at the lower address and a high byte $80 stored at the higher address, with the two arrows crossing.',
-  222,
-  [
-    caption(46, 26, 'The value'),
-    rect('bx', 46, 40, 108, 34, 2),
-    text('tb', 100, 63, '$8000', 'middle'),
-    rect('none', 46, 40, 54, 34, 2),
-    text('dim', 73, 90, 'high $80', 'middle'),
-    text('dim', 127, 90, 'low $00', 'middle'),
+// The two crossing arrows are the whole point, so the band they cross is kept
+// clear of every label: the halves are named above the value, the addresses
+// below the cells.
+{
+  const hiX = 126;
+  const loX = 216;
+  add(
+    'little-endian.svg',
+    'Little-endian byte order',
+    'The value $8000 split into a high byte $80 and a low byte $00, with two crossing arrows showing the low byte going to the lower address and the high byte to the higher one.',
+    286,
+    [
+      caption(46, 30, 'The value'),
+      text('dim', hiX, 52, 'high $80', 'middle'),
+      text('dim', loX, 52, 'low $00', 'middle'),
+      rect('bx', 86, 62, 170, 36, 2),
+      text('tb', 171, 86, '$8000', 'middle'),
 
-    caption(46, 132, 'In memory'),
-    strip({
-      x: 46,
-      y: 148,
-      cw: 54,
-      ch: 34,
-      base: 0x0007,
-      cells: [{ v: '00', hi: true }, { v: '80' }],
-    }),
-    text('dimn', 168, 162, 'low byte at the lower address'),
-    text('dimn', 168, 182, 'high byte at the higher address'),
+      // Nothing is drawn in the band between y=104 and y=168 except these two.
+      pathEl('sline', `M${loX},104 C${loX},136 ${hiX},136 ${hiX},166`, 'arS'),
+      pathEl('sline', `M${hiX},104 C${hiX},136 ${loX},136 ${loX},166`, 'arS'),
 
-    pathEl('sline', 'M127,96 C127,120 73,124 73,144', 'arS'),
-    pathEl('dash', 'M73,96 C73,120 127,124 127,144', 'arD'),
+      rect('bxs', 86, 172, 85, 36, 2),
+      text('tb', hiX + 2, 196, '00', 'middle'),
+      rect('bx', 171, 172, 85, 36, 2),
+      text('t', loX - 2, 196, '80', 'middle'),
+      text('dim', hiX + 2, 228, '$0007', 'middle'),
+      text('dim', loX - 2, 228, '$0008', 'middle'),
+      caption(300, 196, 'In memory'),
+      text('dimn', 300, 220, 'low byte at the lower address'),
 
-    text('dimn', 46, 212, 'So ld ($8000), a assembles to 32 00 80. The swap is in the encoding, not in the value.'),
-  ],
-);
+      text('dimn', 46, 262, 'So ld ($8000), a assembles to 32 00 80. The swap is in how the address is encoded, not in the value itself.'),
+      text('dimn', 46, 280, 'Every 16-bit value the Z80 reads or writes uses this order.'),
+    ],
+  );
+}
 
 /* ============================================================
    Chapter 3 — Assembly Language

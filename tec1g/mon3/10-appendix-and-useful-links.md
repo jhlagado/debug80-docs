@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Quick Start Programs](09-quick-start-programs.md) | [Guide](index.md)
-
 # Appendix and Useful Links
 
 ## Ports
@@ -192,5 +190,3 @@ I/O, Z80 Bus Connector and TEC Deck Connectors. Pin 28 is `RD`.
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-92-figure-6.png)
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-92-figure-7.png)
-
-[← Quick Start Programs](09-quick-start-programs.md) | [Guide](index.md)

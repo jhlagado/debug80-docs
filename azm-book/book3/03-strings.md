@@ -280,15 +280,7 @@ _store_copy_ok:
 
 ## Memory layout after `halt`
 
-```
-  $8000  ┌──┬──┬──┬──┬──┬──┐
-         │48│45│4C│4C│4F│00│              message
-  $8006  ├──┼──┼──┼──┼──┼──┬──┬──┐
-         │48│45│4C│4C│4F│00│..│..│     buffer, 8 bytes reserved
-  $800E  ├──┼──┼──┤
-         │05│01│02│                    str_len, copy_ok, find_index
-         └──┴──┴──┘
-```
+![Where the three results land, and the two bytes of buffer that str_copy never reaches](../../assets/images/azm-book/book3/string-workspace.svg)
 
 ---
 

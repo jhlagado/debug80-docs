@@ -50,14 +50,19 @@
     .on-dim { fill: var(--dim); }
     .inv   { fill: var(--fill); }
   </style>
-    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
     </marker>
-    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="var(--sig)"/>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
     </marker>
-    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
     </marker>
   </defs>
   <text class="cap" x="60" y="34" text-anchor="start" xml:space="preserve">INSERTING KEY 3 INTO A TREE WHOSE ROOT HOLDS KEY 5</text>

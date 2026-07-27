@@ -123,5 +123,3 @@ MON-3 provides the operating environment for the TEC-1G: reset behaviour, the ma
    - [Example Using CGRAM and DDRAM](10-appendix-and-useful-links.md#example-using-cgram-and-ddram)
    - [Useful Links](10-appendix-and-useful-links.md#useful-links)
    - [I/O Connectors](10-appendix-and-useful-links.md#io-connectors)
-
-[Basic Operation and Main Menu →](01-basic-operation-and-main-menu.md)

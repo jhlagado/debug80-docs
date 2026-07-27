@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Basic Operation and Main Menu](01-basic-operation-and-main-menu.md) | [Guide](index.md) | [Tiny Basic →](03-tiny-basic.md)
-
 # Memory Map and Data Entry Mode
 
 ## Memory Map
@@ -199,5 +197,3 @@ alignment.
 <div class="mon3-warning" markdown="1">
 **Warning:** Breakpoints will be ignored if a connection is made between the `+` and `D5` pins on the G.IMP header. Do not connect the `+` pin to the `-` pin on the G.IMP header. This will short out the TEC.
 </div>
-
-[← Basic Operation and Main Menu](01-basic-operation-and-main-menu.md) | [Guide](index.md) | [Tiny Basic →](03-tiny-basic.md)

@@ -7,7 +7,10 @@ import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BOOK_DIRS = ['debug80-book', 'azm-book', 'glimmer-book'];
+// Every top-level section whose subdirectories carry their own chapters.
+// `tec1g` is not a book series, but its MON-3 guide is shaped like one, so it
+// gets a sidebar the same way and inherits the theme's prev/next pager.
+const BOOK_DIRS = ['debug80-book', 'azm-book', 'glimmer-book', 'tec1g'];
 
 function frontMatter(filePath) {
   const text = readFileSync(filePath, 'utf8');

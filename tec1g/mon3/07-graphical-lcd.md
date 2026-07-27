@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Real Time Clock Add-On](06-real-time-clock.md) | [Guide](index.md) | [Hard Drive Access →](08-hard-drive-access.md)
-
 # Graphical LCD Add-On
 
 Mon3 includes a Graphical LCD (GLCD) library that will work with the
@@ -594,5 +592,3 @@ Some easy-to-type examples have also been provided in the Quick Start
 Programs chapter below.
 
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-72-figure-1.jpg)
-
-[← Real Time Clock Add-On](06-real-time-clock.md) | [Guide](index.md) | [Hard Drive Access →](08-hard-drive-access.md)

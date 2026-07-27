@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← MON-3 User Guide](index.md) | [Guide](index.md) | [Memory Map and Data Entry Mode →](02-memory-map-and-data-entry-mode.md)
-
 # Basic Operation and Main Menu
 
 ## Basic Operation
@@ -309,5 +307,3 @@ Lists the people who developed and tested the TEC-1G.
    -   Ian McLean - Tester and QA
    -   James Elphick - Tester and QA
    -   John Hardy & Ken Stone - The original designers
-
-[← MON-3 User Guide](index.md) | [Guide](index.md) | [Memory Map and Data Entry Mode →](02-memory-map-and-data-entry-mode.md)

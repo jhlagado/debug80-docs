@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Advanced Programming](05-advanced-programming.md) | [Guide](index.md) | [Graphical LCD Add-On →](07-graphical-lcd.md)
-
 # Real Time Clock Add-On
 
 A RTC add-on board that connects to
@@ -313,5 +311,3 @@ Exit back to RTC Setup.
 ![MON-3 illustration](../../assets/images/tec1g/mon3/page-56-figure-1.png)
 
 *A TEC-1G with various add-on boards. Credit: Andrew McRae.*
-
-[← Advanced Programming](05-advanced-programming.md) | [Guide](index.md) | [Graphical LCD Add-On →](07-graphical-lcd.md)

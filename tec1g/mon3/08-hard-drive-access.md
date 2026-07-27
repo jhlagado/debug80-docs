@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Graphical LCD Add-On](07-graphical-lcd.md) | [Guide](index.md) | [Quick Start Programs →](09-quick-start-programs.md)
-
 # Hard Drive Access
 
 Mon3 has the ability to read and write to files from certain Hard Drives and
@@ -205,5 +203,3 @@ address <span class="mon3-address-emphasis">0600H-07FFH</span> can be altered be
 
 This example will read a sector first, make some modifications and then
 write it back to the file.
-
-[← Graphical LCD Add-On](07-graphical-lcd.md) | [Guide](index.md) | [Quick Start Programs →](09-quick-start-programs.md)

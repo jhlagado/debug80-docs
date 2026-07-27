@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Terminal Monitor and TEC Magazine Code](04-terminal-monitor-and-tec-magazine-code.md) | [Guide](index.md) | [Real Time Clock Add-On →](06-real-time-clock.md)
-
 # Advanced Programming
 
 MON-3 contains built-in services that simplify access to TEC-1G hardware
@@ -938,5 +936,3 @@ RGBDATA:  .db 00h,00h,24h,00h,18h,00h,00h,00h    ; RED Data
           .db 24h,3Ch,5Ah,0FFh,0FFh,0BDh,42h,24h ; GREEN Data
           .db 00h,00h,00h,00h,18h,00h,00h,00h    ; BLUE Data
 ```
-
-[← Terminal Monitor and TEC Magazine Code](04-terminal-monitor-and-tec-magazine-code.md) | [Guide](index.md) | [Real Time Clock Add-On →](06-real-time-clock.md)

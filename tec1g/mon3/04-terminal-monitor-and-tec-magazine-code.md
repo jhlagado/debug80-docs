@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Tiny Basic](03-tiny-basic.md) | [Guide](index.md) | [Advanced Programming →](05-advanced-programming.md)
-
 # Terminal Monitor and TEC Magazine Code
 
 ## Terminal Monitor
@@ -253,5 +251,3 @@ JP NZ,4009H   4016     C2 09 40
 RRC B         4019     CB 08
 JP 4006H      401B     C3 06 40
 ```
-
-[← Tiny Basic](03-tiny-basic.md) | [Guide](index.md) | [Advanced Programming →](05-advanced-programming.md)

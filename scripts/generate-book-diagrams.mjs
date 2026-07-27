@@ -669,8 +669,8 @@ mk('section-tms9918.svg', 'The TMS9918 Video section',
 
 mk('section-joystick.svg', 'The Joystick section',
    'A D-pad with Fire 1, Fire 2, Fire 3 and Aux buttons, and a Move and Fire mode toggle.',
-   { height: 204, svg: [
-     frame(204, 'JOYSTICK'),
+   { height: 214, svg: [
+     frame(186, 'JOYSTICK'),
      ...[['Move', true], ['Fire', false]].map(([s, on], i) =>
        [rect(on ? 'btn' : 'off', 26 + i * 76, 48, 66, 24, 4),
         text(on ? 'btxt' : 'dim', 59 + i * 76, 64, s, 'middle')].join('\n')),
@@ -678,7 +678,7 @@ mk('section-joystick.svg', 'The Joystick section',
        [rect('btn', x, y, 44, 34, 5), text('btxt', x + 22, y + 22, g, 'middle')].join('\n')),
      ...['Fire 1', 'Fire 2', 'Fire 3', 'Aux'].map((s, i) =>
        [rect('btn', 260 + i * 104, 100, 92, 34, 5), text('btxt', 306 + i * 104, 122, s, 'middle')].join('\n')),
-     text('note', 26, 178, 'W A S D steer; J or Space is Fire 1. An open Joystick section outranks the keypad.'),
+     text('note', 22, 202, 'W A S D steer; J or Space is Fire 1. An open Joystick section outranks the keypad.'),
    ].join('\n') });
 
 /**
@@ -718,13 +718,13 @@ function matrixKeyboard(x0, y0, width) {
 
 mk('section-matrix-keyboard.svg', 'The Matrix Keyboard section',
    'The full five-row matrix keyboard with the routing cue pill above it.',
-   { height: 302, svg: [
-     frame(302, 'MATRIX KEYBOARD'),
+   { height: 316, svg: [
+     frame(268, 'MATRIX KEYBOARD'),
      rect('card', 26, 46, 320, 24, 12),
      text('val', 40, 63, 'Keyboard captured / click outside to release'),
      matrixKeyboard(26, 82, W - 52),
-     text('note', 26, 258, 'While the matrix is attached the hex keypad dims, except RESET.'),
-     text('note', 26, 276, 'Ctrl-Escape releases the keyboard back to VS Code.'),
+     text('note', 22, 286, 'While the matrix is attached the hex keypad dims, except RESET.'),
+     text('note', 22, 304, 'Ctrl-Escape releases the keyboard back to VS Code.'),
    ].join('\n') });
 
 mk('section-serial.svg', 'The Serial section',

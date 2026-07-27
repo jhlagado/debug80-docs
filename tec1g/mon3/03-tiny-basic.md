@@ -9,8 +9,6 @@ has_toc: true
 search: false
 ---
 
-[← Memory Map and Data Entry Mode](02-memory-map-and-data-entry-mode.md) | [Guide](index.md) | [Terminal Monitor and TEC Magazine Code →](04-terminal-monitor-and-tec-magazine-code.md)
-
 # Tiny Basic
 
 ## Overview
@@ -87,5 +85,3 @@ All ASCII characters
 40 IF (I+1)/10*10=(I+1) PRINT
 50 NEXT I
 ```
-
-[← Memory Map and Data Entry Mode](02-memory-map-and-data-entry-mode.md) | [Guide](index.md) | [Terminal Monitor and TEC Magazine Code →](04-terminal-monitor-and-tec-magazine-code.md)

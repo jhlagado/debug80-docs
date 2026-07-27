@@ -525,6 +525,47 @@ function runInsertionSort(data, watchPass) {
   );
 }
 
+// 3.5 Where the chapter's three results end up. Addresses and bytes are the
+// ones azm actually emits for examples/03_string_length.asm, checked against
+// its listing rather than counted by hand.
+add(
+  'string-workspace.svg',
+  'Memory after the string example halts',
+  'The message at $8000 as six bytes, the eight-byte buffer at $8006 holding the copy with its last two bytes never written, and the three result bytes at $800E.',
+  350,
+  [
+    caption(40, 30, 'message, six bytes'),
+    strip({
+      x: 40, y: 48, cw: 54, ch: 32, base: 0x8000, addrEvery: 1,
+      cells: [
+        { v: '48', sub: 'H' }, { v: '45', sub: 'E' }, { v: '4C', sub: 'L' },
+        { v: '4C', sub: 'L' }, { v: '4F', sub: 'O' }, { v: '00', sub: 'NUL', hi: true },
+      ],
+    }),
+
+    caption(40, 132, 'buffer, eight bytes reserved'),
+    strip({
+      x: 40, y: 150, cw: 54, ch: 32, base: 0x8006, addrEvery: 1,
+      cells: [
+        { v: '48' }, { v: '45' }, { v: '4C' }, { v: '4C' }, { v: '4F' },
+        { v: '00', hi: true }, { v: '??' }, { v: '??' },
+      ],
+    }),
+    text('dimn', 40, 216, 'str_copy stops after the terminator, so the last two bytes still hold whatever was in RAM.'),
+    text('dimn', 40, 234, '.ds reserves space; it does not write anything.'),
+
+    caption(40, 268, 'results'),
+    strip({
+      x: 40, y: 286, cw: 92, ch: 32, base: 0x800e, addrEvery: 1,
+      cells: [
+        { v: '05', sub: 'str_len', hi: true },
+        { v: '01', sub: 'copy_ok', hi: true },
+        { v: '02', sub: 'find_index', hi: true },
+      ],
+    }),
+  ],
+);
+
 /* ============================================================
    Chapter 4 - Bit Patterns
    ============================================================ */
@@ -662,16 +703,16 @@ function runInsertionSort(data, watchPass) {
     [
       ...panel(20, 'rlca', 'circular: A alone', rlcaA,
         (cx, bx) => [
-          pathEl('sline', `M${b7(bx)},138 C${b7(bx)},204 ${b0(bx)},204 ${b0(bx)},220`, 'arS'),
-          pathEl('dash', `M${b7(bx)},138 C${b7(bx)},176 ${cx + 15},176 ${cx + 15},220`, 'arD'),
+          pathEl('sline', `M${b7(bx)},138 C${b7(bx)},200 ${b0(bx)},200 ${b0(bx)},214`, 'arS'),
+          pathEl('dash', `M${b7(bx)},138 C${b7(bx)},176 ${cx + 15},176 ${cx + 15},214`, 'arD'),
           text('dimn', cx - 4, 170, 'copy'),
         ],
         'bit 0 = old bit 7'),
 
       ...panel(380, 'rla', 'nine-bit ring: A and carry', rlaA,
         (cx, bx) => [
-          pathEl('sline', `M${b7(bx)},138 C${b7(bx)},176 ${cx + 15},176 ${cx + 15},220`, 'arS'),
-          pathEl('sline', `M${cx + 15},138 C${cx + 15},204 ${b0(bx)},204 ${b0(bx)},220`, 'arS'),
+          pathEl('sline', `M${b7(bx)},138 C${b7(bx)},176 ${cx + 15},176 ${cx + 15},214`, 'arS'),
+          pathEl('sline', `M${cx + 15},138 C${cx + 15},200 ${b0(bx)},200 ${b0(bx)},214`, 'arS'),
         ],
         'bit 0 = old carry'),
 
@@ -1003,7 +1044,7 @@ add(
     text('nb', 365, 202, 'azm', 'middle'),
     text('ts', 365, 226, 'checks calls', 'middle'),
     text('dim', 365, 248, 'no bytes', 'middle'),
-    pathEl('none', 'M280,96 C300,96 296,196 310,196', 'ar'),
+    pathEl('none', 'M280,96 H295 V196 H310', 'ar'),
     pathEl('none', 'M280,222 H310', 'ar'),
 
     rect('bxq', 470, 64, 220, 116, 4),
@@ -1011,8 +1052,8 @@ add(
     text('ts', 486, 118, '$0010  MON_PRINT_CHAR'),
     text('ts', 486, 138, '$0018  MON_GET_KEY'),
     text('dimn', 486, 164, 'not in your output'),
-    pathEl('dash', 'M290,148 H466', 'arD'),
-    text('dimn', 308, 142, 'the .equ binds the address'),
+    text('dimn', 308, 138, 'the .equ binds the address'),
+    pathEl('dash', 'M290,156 H466', 'arD'),
 
     text('dimn', 30, 332, 'The interface carries contracts, not addresses. Neither file emits a byte, and the ROM is there either way.'),
   ],
