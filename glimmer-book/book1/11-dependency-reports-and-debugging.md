@@ -377,3 +377,27 @@ six of its seven blocks, retyped wherever a rule needs the cursor. The
 next chapter moves it into one routine:
 [Routines, Parts and Imports](12-routines-parts-and-imports.md), the
 structure used to organise a growing program.
+
+## Exercises
+
+**1. A stuck counter trace.** In the version that omits `updates Marks`, a
+dependency trace should start at `KEY_GO` and finish at `ShowMarks`, marking
+the connection missing from the report. The answer should reconcile the
+changing byte in memory with the fixed value on the display.
+
+**2. Registers across `FbPlot`.** A before-and-after register table should
+classify A, B, C, DE, and HL as preserved or potentially clobbered by
+`FbPlot`. It should then explain why the corrected two-pixel example may reuse
+C but must reconstruct B.
+
+**3. A bounded two-pixel cursor.** The safe version of a two-pixel cursor
+plots a second pixel only when the cursor's x coordinate is below 7 and
+rebuilds B after the first `FbPlot`. The revised tail of `DrawCanvas`, a clean
+contract check, and observations at x=6 and x=7 provide the result.
+
+**4. An indirect write with no declaration.** Removing `updates Picture`
+while retaining `ld (hl),a` produces no direct-store warning. A debugging
+record should include the `Picture` stanza from the dependency report, the
+changed row byte in memory, the unchanged matrix, and the header repair.
+
+[Exercise notes](exercise-notes.md#chapter-11-dependency-reports-and-debugging)

@@ -526,3 +526,29 @@ interactive program; Gate supplied its screen and lifecycle model.
 [Glimmer Book 2](../book2/) begins by putting the full toolkit into
 Skyfall, a complete matrix game built from its design through to the
 finished source.
+
+## Exercises
+
+**1. Starting a round frame by frame.** A three-frame trace beginning before
+a GO press on Splash should record `HitP`, `AnyKeyP`, `CurrentCard`,
+`GlimActiveCard`, the active card's blocks, and the score. The final row
+should show the first frame on Playing.
+
+**2. Re-raising the final score.** A change-delivery trace should begin with
+the last point scored on Playing and end with `FinalBar` on the first
+GameOver frame. The trace should identify why the old Score flag is gone,
+which header raises it again, and which staging byte carries the new raise to
+the render phase.
+
+**3. GO as the only start key.** Replacing `StartGame`'s trigger
+`on AnyKeyP` with `on HitP` changes the splash policy while leaving the
+program-wide bindings intact. A running observation should compare GO, a hex
+key, and AD at the splash, then confirm that GO still starts a zero-score
+round.
+
+**4. A blank result screen.** Removing `Score` from `ShowFinal`'s `updates`
+line leaves `FinalBar` without a fresh trigger on GameOver. A diagnosis should
+account for the correct score byte, the blank matrix, and the unchanged
+seven-segment score before restoring the re-raise.
+
+[Exercise notes](exercise-notes.md#chapter-13-cards)

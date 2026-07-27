@@ -40,6 +40,7 @@ The book teaches Glimmer 0.6. Every complete program in it is built with
 11. [Dependency Reports and Debugging](11-dependency-reports-and-debugging.md)
 12. [Routines, Parts and Imports](12-routines-parts-and-imports.md)
 13. [Cards](13-cards.md)
+- [Exercise Notes](exercise-notes.md)
 
 ## Appendices
 

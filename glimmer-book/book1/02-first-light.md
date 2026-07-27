@@ -239,3 +239,27 @@ lets keys 4 and 6 steer the dot.
 
 The next chapter adds a position and score to Beacon, then examines
 the forms a fact can take: [State](03-state.md).
+
+## Exercises
+
+**1. Beacon's colour cycle.** Starting from `Colour = 1`, a table for eight
+successive GO presses should record the value loaded into A at the breakpoint
+on `inc a` and the colour visible after the frame completes. The eighth row
+should confirm where the wrap begins again.
+
+**2. One press through the generated file.** A trace beginning with a new GO
+press and ending at `DrawBeacon` should name the pulse byte and change bit, the
+logic dispatch mask, the value written to `Colour`, and the render dispatch
+mask. The trace should also identify the point at which `Step` returns to zero.
+
+**3. A colour-reset control.** Beacon can bind `KEY_AD` with `rising` to a
+new pulse and add one effect that stores 1 in `Colour`. The source addition
+and an observation log showing GO changing the colour and AD returning the
+pixel to red provide the result.
+
+**4. A dark first frame.** A version with `changed` removed from `Colour`
+should be built and run. The report should compare the matrix before any input
+with the matrix after the first GO press, then explain why the breakpoint in
+`NextColour` still works even though the opening picture was skipped.
+
+[Exercise notes](exercise-notes.md#chapter-2-first-light)

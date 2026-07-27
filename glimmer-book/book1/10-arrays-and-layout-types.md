@@ -405,3 +405,27 @@ in its corner.
 The next chapter uses Canvas to develop a method for reading dependency
 reports, interpreting warnings and debugging a reactive program:
 [Dependency Reports and Debugging](11-dependency-reports-and-debugging.md).
+
+## Exercises
+
+**1. Layout measurements.** A memory map for `Cursor`, `Picture`, and the
+chapter's `Sprite` type should give the offsets of `Point.x` and `Point.y`,
+the size of `Point`, the size and field offsets of `Sprite`, and the number
+of change flags used by Canvas's ten state bytes.
+
+**2. Painting one bit.** Assume Cursor is `(2,5)` and `Picture + 5` contains
+`$80`. A register-and-memory trace through `PaintPixel` should give the mask
+returned by `MxMask`, the address in HL, and the byte stored back into row 5.
+
+**3. A blue canvas.** Changing the destination at the start of
+`DrawCanvas`'s copy loop from `Framebuffer + 1` to `Framebuffer + 2` moves
+the painting from the green plane to the blue plane. The one-line edit and a
+running observation of painted pixels and the white cursor provide the check.
+
+**4. The wrong framebuffer stride.** If the copy loop advances DE by three
+bytes per row instead of four, its first four writes land at offsets 1, 4, 7,
+and 10 from `Framebuffer`. A diagnosis should identify the plane or auxiliary
+byte at each destination and explain the corrupted picture before restoring
+the four-byte stride.
+
+[Exercise notes](exercise-notes.md#chapter-10-arrays-and-layout-types)
