@@ -165,7 +165,8 @@ end
 ```
 
 Five `tile_at` lines stand five reeds in the dark, their coordinates
-written as immediates because the reeds never move. The two calls
+written as immediates because the reeds stand where they are planted.
+The two calls
 after them clear the stage. The first knows the lantern only through
 state: wherever the last round left it, `LampCol` and `LampRow` still
 say so, and the block loads them into D and E and writes the blank

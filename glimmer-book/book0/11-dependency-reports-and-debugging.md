@@ -155,7 +155,7 @@ fact that should have changed, follows its raisers upstream and its
 triggers downstream, then places the first breakpoint where the chain
 is thinnest.
 
-## A write without its declaration
+## An undeclared write
 
 The next version deliberately removes `Marks` from `PaintPixel`'s
 updates list so the stuck count can be observed:
@@ -296,9 +296,9 @@ destroys it. The assembler catches the stale-register use before the
 first byte runs.
 
 `DrawCanvas` ends by plotting the cursor over the picture: x into B,
-y into C, white into A, `call FbPlot`. If the cursor is widened
-to two pixels (the cursor and the column to its right) and reach
-for the shortest edit: after the plot, nudge B along and plot again.
+y into C, white into A, `call FbPlot`. Widening the cursor to two
+pixels, the cursor and the column to its right, invites the shortest
+edit: after the plot, nudge B along and plot again.
 
 ```text
     ld a,COLOR_WHITE

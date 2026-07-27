@@ -15,12 +15,12 @@ every render block drowns the picture in the code that draws it. A
 picture belongs in data, laid out where you can see its shape.
 
 The TEC-1G
-has been sitting here all book with three instruments we have never
-touched: a speaker, the six-digit seven-segment display, and the 20x4
+has been sitting here all book with three instruments still to
+try: a speaker, the six-digit seven-segment display, and the 20x4
 LCD, all mounted beside the 8x8 RGB LED matrix and all reachable from
 a block. When your character hits a wall, the player should hear it:
 a beep placed at the right instant is feedback, the kind a player
-responds to without thinking. When the score changes, the player should
+responds to by reflex. When the score changes, the player should
 be able to read it at a glance. This chapter gives your game a face, a
 voice, and a scoreboard.
 

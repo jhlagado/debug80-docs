@@ -39,7 +39,7 @@ blocks and those numbers,
 and we will make each of those calls as we come to it. The finished
 source also ships with the book, [skyfall.glim](code/skyfall.glim)
 and [skyfall-rules.glim](code/skyfall-rules.glim), for the day you
-want the game without the typing.
+want the game ready-made.
 
 ## The game on paper
 

@@ -54,7 +54,7 @@ stays private to the module.
 
 ## The facts on the board
 
-In a program you have never seen, read the state declarations first:
+In a program new to you, read the state declarations first:
 they carry most of the design.
 
 ```text
