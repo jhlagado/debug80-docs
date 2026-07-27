@@ -235,19 +235,32 @@ azm --rc warn examples/01_gcd.asm
 
 ## Exercises
 
-Check every answer by assembling and running; the emulator is the answer key.
+[Exercise notes](exercise-notes.md#chapter-1-arithmetic-foundations) give
+results, checks and implementation guidance.
 
-1. Change `GCD_A` and `GCD_B` to 270 and 192. Trace the first five loop
-   iterations by hand, then run the program and confirm `gcd_result`.
-2. Add `gcd_u16` calls for (0, 5) and (5, 0). Predict what each returns, then
-   test both in the emulator.
-3. State the loop invariant of `gcd_u16` in one sentence: what stays true about
-   HL and DE across every subtract and every swap?
-4. Implement `digit_count_u8` with A in and A out. Return 1 for values 0-9,
-   2 for 10-99 and 3 for 100-255; two `cp` instructions against 10 and 100 are
-   enough.
-5. Rewrite `mul8_a_by_c` with a shift-and-add multiply. Keep the same
-   `.routine` contract, and confirm `power_result` still holds `$51`.
-6. Run `azm --rc warn` on a deliberate bug: put a later-needed address in DE,
-   call `gcd_u16`, then dereference DE without reloading it. Read the warning
-   about the declared DE clobber and fix the caller.
+1. **Euclid trace and invariant.** A trace for inputs 270 and 192 should show
+   HL and DE after the first five subtract-or-swap transitions. Its invariant
+   should explain why each transition preserves the eventual answer, and a
+   complete run should supply the returned GCD.
+2. **Result representation and zero cases.** A written prediction should give
+   HL and the two little-endian bytes stored at `gcd_result` for calls with
+   `(HL, DE)` equal to `(0, 5)`, `(5, 0)` and `(270, 192)`. A test driver can
+   store each result in a separate `.ds word` slot for comparison.
+3. **Register-contract diagnosis.** A deliberate caller keeps a later-needed
+   address in DE across `call gcd_u16`. The `azm --rc warn` result should
+   identify why this violates the declared contract; reloading or preserving
+   the address should leave that call site without a warning.
+4. **Decimal digit count.** A new `digit_count_u8` routine takes and returns A,
+   with a `.routine` contract that describes every clobber. Its boundary tests
+   are `0 -> 1`, `9 -> 1`, `10 -> 2`, `99 -> 2`, `100 -> 3` and `255 -> 3`.
+
+### Extensions
+
+5. **Extension — Shift-and-add multiplication.** An eight-step shift-and-add
+   replacement for `mul8_a_by_c` should preserve its caller-visible contract.
+   Its tests are `0 * 37 = 0`, `1 * 255 = 255`, `9 * 9 = 81` and the low-byte
+   result of `20 * 20 = 144`.
+6. **Extension — Exact 16-bit product.** A `mul8_u16` variant can take A and C
+   as unsigned factors and return the full product in HL. Its contract should
+   name every changed register and flag, while RAM tests should contain
+   `$90 $01` for `20 * 20` and `$FE $01` for `255 * 2`.

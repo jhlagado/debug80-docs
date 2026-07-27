@@ -307,17 +307,37 @@ and HL stopping on the null.
 
 ## Exercises
 
-1. Change `message` to `.db "AZM", 0`. Predict `str_len` and `find_index` for
-   `'M'` before running the program.
-2. State the invariant that holds at the top of `strcpy_u8`'s loop, relating
-   the bytes behind HL and the bytes behind DE.
-3. Add `strchr`: return HL pointing at the match with carry set, or HL = 0
-   with carry clear when the character is absent. Document `in`, `out` and
-   `clobbers`.
-4. Implement `strcat_u8` with HL destination and DE source: scan HL to its
-   null, then copy from DE into that position.
-5. Write a bounded copy, `strncpy_u8`, with B holding the maximum bytes to
-   write. Stop early when the source ends, and pad with a null if room
-   remains.
-6. Hand-trace `strcmp_u8` on `"AB"` against `"A"`. Which return code should
-   you get? Confirm in the emulator.
+[Exercise notes](exercise-notes.md#chapter-3-strings) give results, checks and
+implementation guidance.
+
+1. **Sentinel walk.** With `message` changed to `.db "AZM", 0`, a prediction
+   should give `str_len` and the indices returned when C is `'M'`, `'A'` and
+   `'Z'`. A RAM check can verify all four results, and the explanation should
+   state the traversal invariant at the top of `str_find_char`.
+2. **Two-pointer trace.** A trace of `strcpy_u8` copying `"AZ", 0` should
+   record `(HL)`, `(DE)` and A on each iteration, including the terminator
+   pass. Its invariant should state the relationship between the source and
+   destination bytes already passed.
+3. **Pointer-returning search.** A new `strchr_u8` uses HL and C as inputs; on
+   success HL points at the first match and carry is set; when absent HL is
+   zero and carry is clear. Its full `.routine` contract and tests should cover
+   `"HELLO"` with `'H'`, `'L'`, `'O'`, `'Z'`, plus the empty string with
+   `'A'`.
+4. **Lexicographic verification.** A trace of `strcmp_u8` on `"AB"` against
+   `"A"` should identify the subtraction that sets the decisive flags. Further
+   tests should verify
+   `"A"/"A" -> 0`, `"AB"/"A" -> 1`, `"A"/"AB" -> $FF` and
+   `"ABC"/"ABD" -> $FF`.
+
+### Extensions
+
+5. **Extension — Concatenation with capacity.** A `strcat_u8` routine uses HL
+   as destination, DE as source and B as total destination capacity. Its
+   design should define a carry result for success or insufficient space
+   before the implementation is written. Tests should use `"AZ" + "M"` in
+   capacities 4 and 3 and confirm that failure leaves the original destination
+   unchanged.
+6. **Extension — Bounded copy.** A bounded copy uses HL as source, DE as
+   destination and B as capacity. The result must be null-terminated whenever
+   B is non-zero and must write only within the first B destination bytes.
+   Capacity tests 0, 1, 4 and 8 should use source `"HELLO"`.

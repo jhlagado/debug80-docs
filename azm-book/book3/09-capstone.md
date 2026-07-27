@@ -383,29 +383,6 @@ azm examples/09_eight_queens.asm
 azm --rc warn examples/09_eight_queens.asm
 ```
 
----
-
-## Exercises
-
-1. Trace `place_row` by hand for rows 0 to 2 when the first successful columns
-   are 0, 2 and 4. Write the three `queen_cols` entries and the `col_used`
-   bytes that are set before the recursion into row 3.
-2. Remove the `call unmark_constraints` after the recursive `call place_row`
-   and run the program. Does `solution_count` stay 92? Explain what the stale
-   flags do to the column loop.
-3. Stop after the first solution: add a `found` byte, set it in
-   `count_solution`, and return early from every frame while it is set. What
-   does `solution_count` hold now?
-4. Pack `col_used` into a single byte of eight bits. Rewrite `col_free` and
-   `mark_constraints` with `and` and `or` from Chapter 4, then compare listing
-   sizes.
-5. Replace the recursion with an explicit stack in workspace: push each
-   `(row, col)` trial, loop until the stack empties. Estimate the workspace
-   bytes for depth 8.
-6. Run `azm --rc warn` on a deliberate bug: call `col_free` after a helper
-   clobbers C, without restoring it. Fix the caller using the `.routine`
-   contract.
-
 ## Representation and invariants
 
 The capstone combines arrays, constraint flags, recursion and register
@@ -415,3 +392,40 @@ pointer layouts provide other representations for problems that need them.
 A new buffer, parser or game board begins with its representation and
 `.routine` contracts. Emulator traces then show whether each implementation
 step preserves the stated invariant.
+
+---
+
+## Exercises
+
+[Exercise notes](exercise-notes.md#chapter-9-eight-queens-capstone) give
+results, checks and implementation guidance.
+
+1. **Constraint trace.** For tentative placements `(row, col)` of `(0, 0)`,
+   `(1, 2)` and `(2, 4)`, a trace should give `queen_cols[0..2]` and every set
+   index in `col_used`, `diag_sum_used` and `diag_diff_used`, including the
+   arithmetic for both diagonal indices.
+2. **Workspace layout.** A layout calculation should give
+   `sizeof(Constraints)`, `sizeof(QueenWorkspace)` and the offsets of
+   `solutionCount`, `queenCols`, `solutionCols`, `constraints.colUsed`,
+   `constraints.diagSumUsed` and `constraints.diagDiffUsed`. The listing
+   should confirm the resulting addresses when `queens_ws = $8000`.
+3. **Backtracking failure.** A deliberate version without the unmark call
+   following recursive `place_row` should produce a `solution_count` different
+   from 92. A trace of one failed branch should identify the stale bytes that
+   exclude later legal placements; restoring the call should recover `$005C`.
+4. **Contract diagnosis.** A deliberate call to `col_free` follows another
+   helper that has clobbered C, without restoring the column. The
+   `azm --rc warn` result should expose the invalid input; the repaired caller
+   should restore the 92-solution result.
+
+### Extensions
+
+5. **Extension — First-solution search.** A `found` byte set by
+   `count_solution` should propagate an early return through every active
+   frame. The result should be `solution_count = 1`, with the saved
+   `solution_cols` validated by eight unique columns and two unique sets of
+   diagonal indices.
+6. **Extension — Packed column constraints.** Replacing the eight-byte
+   `col_used` array with one bitset byte requires corresponding column test,
+   mark and unmark operations. A comparison of `sizeof(Constraints)` and the
+   relevant listing bytes should preserve the 92-solution result.

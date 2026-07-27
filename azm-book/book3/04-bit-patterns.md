@@ -266,16 +266,30 @@ expansion shown beside it.
 
 ## Exercises
 
-1. Start from `$05`. Predict `(device_flags)` after `bit_set FLAG_ERROR` alone,
-   with busy left as it is, then run and check.
-2. Add `Fault` to the `StatusBit` enum and derive `FLAG_FAULT` from it. Write
-   `main` so a fault sets bit 3 and clears busy in one pass through A.
-3. Implement `popcount_u8`: copy A to a shifting register, run `srl` eight
-   times and increment a counter whenever carry is set. Return the count in A.
-4. Implement `parity_u8`: return 1 for an odd number of set bits, 0 for even.
-   One compact approach toggles a workspace byte each time a set bit appears.
-5. Compare `and FLAG_ERROR` followed by `rr a` with `bit 1, a` followed by a
-   branch. Which form suits a caller that needs a numeric 0/1 result, and
-   which suits one that needs only control flow?
-6. Define an op `shift_right_pair(hi reg8, lo reg8)` that expands to `srl hi`
-   followed by `rr lo`. Use it to shift the 16-bit value in B:C right one bit.
+[Exercise notes](exercise-notes.md#chapter-4-bit-patterns) give results, checks
+and implementation guidance.
+
+1. **Mask trace.** A trace starting with A = `$05` should show A after setting
+   error, clearing busy and toggling ready in that order. Each value should
+   appear in binary beside the mask used for that step.
+2. **Enum-derived flag.** Adding `Fault` after `Busy` in `StatusBit` provides
+   the position from which `FLAG_FAULT` is derived. One load-modify-store pass
+   should set fault and clear busy while preserving every other bit, with
+   initial values `$00`, `$05` and `$FF` used as tests.
+3. **Population count contract.** A `popcount_u8` routine uses A as input and
+   output and supplies a complete `.routine` contract. Its tests are
+   `$00 -> 0`, `$01 -> 1`, `$55 -> 4`, `$80 -> 1` and `$FF -> 8`.
+4. **Numeric extraction or branch.** A comparison of `and FLAG_ERROR` followed
+   by `rr a` with `bit StatusBit.Error, a` should record the resulting flags
+   and A values. Inputs `$00` and `$02` should establish which sequence
+   supplies a stored 0/1 result and which supplies a branch condition.
+
+### Extensions
+
+5. **Extension — Parity.** A `parity_u8` routine returns 1 for an odd number of
+   set bits and 0 for an even number. Its tests should cover `$00`, `$01`,
+   `$03`, `$7F`, `$80` and `$FF`.
+6. **Extension — Sixteen-bit shift op.** An op named
+   `shift_right_pair(hi reg8, lo reg8)` expands to `srl hi` followed by
+   `rr lo`. Tests on B:C should produce `$8001 -> $4000` with carry set,
+   `$0100 -> $0080` with carry clear, and `$0001 -> $0000` with carry set.

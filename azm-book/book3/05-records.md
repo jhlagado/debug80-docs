@@ -435,21 +435,39 @@ A single-step trace of `ring_push` shows `head` and `count` changing through
 
 ## Exercises
 
-1. Without assembling, compute `sizeof(RingState)`, `offset(RingState, tail)`
-   and `offset(RingState, count)` for the chapter's three-byte layout. Write
-   the three `.equ` lines, then assemble and compare.
-2. Add a `flags` byte to `RingState` after `count`. Which constants change?
-   Which push and pop code must change?
-3. Rewrite the `ring_buf[head]` address setup using DE as the base, keeping
-   the index in C and the same contract on `ring_push`.
-4. Change `RING_CAP` to 16 and use `and 15` in `ring_advance_index` in place
-   of the `cp` and `xor` pair. Prove on paper that `head` stays below 16.
-5. Write `ring_peek`: return the oldest byte in A and leave the queue as it
-   was, with carry clear signalling empty. Document `in`, `out` and
-   `clobbers`.
-6. Load the address of `ring_state.head` into HL twice, once with a layout
-   cast and once as `ring_state + offset(RingState, head)`. Assemble both and
-   confirm the same immediate in the listing.
-7. Declare an `Event` record (`code .byte`, `param .word`) and reserve
-   `.ds Event[4]`. Write a loop that zeroes every `param` field using
-   `sizeof(Event)` as the stride.
+[Exercise notes](exercise-notes.md#chapter-5-records) give results, checks and
+implementation guidance.
+
+1. **Layout arithmetic.** The written calculation should give
+   `sizeof(RingState)` and the offsets of `head`, `tail` and `count`. A second
+   calculation with `flags .byte` after `count` should give the new size and
+   offsets for comparison with the listing.
+2. **Queue-state trace.** A trace from a cleared state should follow
+   `push $11`, `push $22`, `pop`, `push $33`. Every row should record `head`,
+   `tail`, `count`, the returned value and carry where applicable, followed by
+   the logical queue contents at the end.
+3. **Equivalent field addresses.** `ring_state.head` and `ring_state.count`
+   should each be loaded into HL once with layout casts and once with
+   `ring_state + offset(...)`. The paired instructions must emit identical
+   immediate addresses. The explanation should account for why adding `flags`
+   at the end changes `sizeof(RingState)` but leaves those two addresses
+   unchanged.
+4. **Non-destructive peek.** A `ring_peek` routine uses IX as input, A and
+   carry as outputs, and a complete clobber list. Tests should cover an empty
+   ring, a one-byte ring containing `$7A`, and a wrapped non-empty ring;
+   successful calls must leave `head`, `tail`, `count` and all buffer bytes
+   unchanged.
+
+### Extensions
+
+5. **Extension — Power-of-two wrap.** With `RING_CAP` set to 16, the
+   compare-based wrap can be replaced by `inc a` followed by
+   `and RING_CAP - 1`. Tests should use
+   incoming indices 0, 14 and 15, and explain why the same expression fails
+   for capacity 10.
+6. **Extension — Record-array stride.** An `Event` layout containing
+   `code .byte` followed by `param .word`, with storage reserved as
+   `.ds Event[4]`, provides the test structure. A loop whose stride is
+   `sizeof(Event)` should zero every `param` field. All four records should
+   begin with non-zero parameters, and every `code` byte should remain
+   unchanged.

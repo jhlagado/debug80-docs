@@ -25,3 +25,4 @@ from Book 1 to algorithms and data structures in larger assembly programs.
 8. [Source Composition](07-composition.md)
 9. [Pointer Structures](08-pointer-structures.md)
 10. [Eight Queens Capstone](09-capstone.md)
+11. [Exercise Notes](exercise-notes.md)
