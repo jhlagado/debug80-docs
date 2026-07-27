@@ -110,8 +110,8 @@ read_when_ready:
 wait:
   in a, (STATUS_PORT) ; read status into A
   and $01           ; test bit 0 (ready flag)
-  jr z, wait        ; Z set means bit 0 was 0 — not ready yet; loop
-  in a, (DATA_PORT) ; bit 0 is 1 — device is ready; read data into A
+  jr z, wait        ; Z set means bit 0 was 0 - not ready yet; loop
+  in a, (DATA_PORT) ; bit 0 is 1 - device is ready; read data into A
   ret
 ```
 

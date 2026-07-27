@@ -109,8 +109,8 @@ You can push one pair and pop into a different pair, since the stack has no memo
 ```asm
   push af         ; save AF onto the stack
   push bc         ; save BC onto the stack
-  pop de          ; DE ← what was in BC
-  pop hl          ; HL ← what was in AF
+  pop de          ; DE <- what was in BC
+  pop hl          ; HL <- what was in AF
 ```
 
 The second transfer (AF into HL) is particularly useful, because there is no `ld l, f` instruction. The flags register F cannot appear in any `ld` combination.

@@ -40,7 +40,7 @@ npm run azm -- examples/hello.asm
 Here is a small but complete AZM source file:
 
 ```asm
-; counter.asm — increment a counter eight times
+; counter.asm - increment a counter eight times
 
         .org $0100
 

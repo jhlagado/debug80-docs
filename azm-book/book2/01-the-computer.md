@@ -51,9 +51,9 @@ The full address range runs from `$0000` to `$FFFF`, address zero to address 65,
 The hardware designer decides which addresses connect to which chips. A system's **memory map** describes which ranges connect to which hardware. A typical small Z80 board might look like this:
 
 ```
-$0000–$1FFF   ROM   (8 KB — startup code)
-$2000–$7FFF   RAM   (24 KB — program and data)
-$8000–$FFFF   —     (unmapped, or more RAM, or memory-mapped I/O)
+$0000-$1FFF   ROM   (8 KB - startup code)
+$2000-$7FFF   RAM   (24 KB - program and data)
+$8000-$FFFF   -     (unmapped, or more RAM, or memory-mapped I/O)
 ```
 
 The Z80 imposes one constraint: when it resets, the program counter starts at `$0000`. Whatever is mapped there must be valid code. On the board above, that means ROM.
@@ -120,7 +120,7 @@ The following is a complete Z80 program, ten bytes of raw instructions starting 
 $0000:  3E 05        ; load 5 into register A
 $0002:  47           ; copy A into register B
 $0003:  3E 03        ; load 3 into register A
-$0005:  80           ; add B to A  →  A = 8
+$0005:  80           ; add B to A  ->  A = 8
 $0006:  32 00 80     ; store A at address $8000
 $0009:  76           ; halt
 ```
@@ -139,8 +139,8 @@ Storing the word `$1A2B` at address `$8000`:
 
 ```
 Address   Contents
-$8000       $2B    ← low byte first
-$8001       $1A    ← high byte second
+$8000       $2B    <- low byte first
+$8001       $1A    <- high byte second
 ```
 
 You saw this in the first program: the address `$8000` is encoded in the instruction at `$0006` as two bytes `$00 $80` (low byte `$00` first, high byte `$80` second).

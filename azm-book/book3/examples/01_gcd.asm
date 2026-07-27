@@ -1,8 +1,8 @@
-; 01_gcd.asm — Chapter 1 companion
+; 01_gcd.asm - Chapter 1 companion
 ; Assemble: azm 01_gcd.asm
 ; Run to halt, then inspect:
-;   (gcd_result)   at $8000 — GCD(48, 18) → $0006
-;   (power_result) at $8002 — 3^4 → $51 (81)
+;   (gcd_result)   at $8000 - GCD(48, 18) -> $0006
+;   (power_result) at $8002 - 3^4 -> $51 (81)
 
 BASE .equ 3
 EXP  .equ 4
@@ -49,7 +49,7 @@ _right_is_answer:
     ex de, hl
     ret
 
-; power_u8: unsigned C^B into A (B may be 0 → 1)
+; power_u8: unsigned C^B into A (B may be 0 -> 1)
 .routine in B,C out A clobbers F,B,E
 power_u8:
     ld e, 1

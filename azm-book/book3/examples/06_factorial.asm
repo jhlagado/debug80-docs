@@ -1,9 +1,9 @@
-; 06_factorial.asm — Chapter 6 companion
+; 06_factorial.asm - Chapter 6 companion
 ; Assemble: azm 06_factorial.asm
 ; Run to halt, then inspect:
-;   (fact_rec)  at $8000 — 5! via recursion → $78 (120)
-;   (fact_iter) at $8001 — 5! via loop     → $78 (120)
-;   (sum_rec)   at $8002 — $8003 — sum_u8_rec on demo table → $001A (26)
+;   (fact_rec)  at $8000 - 5! via recursion -> $78 (120)
+;   (fact_iter) at $8001 - 5! via loop     -> $78 (120)
+;   (sum_rec)   at $8002 - $8003 - sum_u8_rec on demo table -> $001A (26)
 
 FACT_N .equ 5
 

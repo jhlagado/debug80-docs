@@ -77,7 +77,7 @@ Dot paths reach through nested record fields:
 
 ```asm
 Actor   .type
-pos     .field Sprite    ; offsets 0–4
+pos     .field Sprite    ; offsets 0-4
 state   .field byte      ; offset 5
         .endtype
 

@@ -1,8 +1,8 @@
-; 09_eight_queens.asm — Chapter 9 companion
+; 09_eight_queens.asm - Chapter 9 companion
 ; Assemble: azm 09_eight_queens.asm
 ; Run to halt, then inspect:
-;   (solution_count) at $8000 — number of distinct 8-queen placements → $005C (92)
-;   (solution_cols)  at $800A — last completed solution: col per row (8 bytes)
+;   (solution_count) at $8000 - number of distinct 8-queen placements -> $005C (92)
+;   (solution_cols)  at $800A - last completed solution: col per row (8 bytes)
 
 ColFlags  .typealias byte[8]     ; one flag per column, so also the board size
 DiagFlags .typealias byte[15]    ; one flag per diagonal: 2 * BOARD_SIZE - 1

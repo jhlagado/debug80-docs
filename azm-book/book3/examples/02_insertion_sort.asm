@@ -1,7 +1,7 @@
-; 02_insertion_sort.asm — Chapter 2 companion
+; 02_insertion_sort.asm - Chapter 2 companion
 ; Assemble: azm 02_insertion_sort.asm
 ; Run to halt, then inspect values at $8000 (8 bytes, sorted 1..9).
-; (found_index) at $8008 — index of first value >= 5 → 4
+; (found_index) at $8008 - index of first value >= 5 -> 4
 
 THRESHOLD .equ 5
 

@@ -1,10 +1,10 @@
-; 05_ring_buffer.asm — Chapter 5 companion
+; 05_ring_buffer.asm - Chapter 5 companion
 ; Assemble: azm 05_ring_buffer.asm
 ; Run to halt, then inspect:
-;   ring_buf at $8000 — FIFO storage (capacity 8)
-;   ring_state at $8008 — head, tail, count (RingState)
-;   pop_result at $800B — last popped byte ($33)
-;   push_ok at $800C — $01 if last push succeeded, $00 if ring was full
+;   ring_buf at $8000 - FIFO storage (capacity 8)
+;   ring_state at $8008 - head, tail, count (RingState)
+;   pop_result at $800B - last popped byte ($33)
+;   push_ok at $800C - $01 if last push succeeded, $00 if ring was full
 
 RING_CAP .equ 8
 

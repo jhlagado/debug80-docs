@@ -59,8 +59,8 @@ You can load A from a fixed 16-bit address, or store it to one. Register pairs c
 ```asm
 ld a, ($8000)      ; A = byte at $8000
 ld ($8001), a      ; byte at $8001 = A
-ld hl, ($8002)     ; HL = word at $8002–$8003
-ld ($8004), bc     ; word at $8004–$8005 = BC
+ld hl, ($8002)     ; HL = word at $8002-$8003
+ld ($8004), bc     ; word at $8004-$8005 = BC
 ```
 
 When you write `ld a, (count)`, the assembler substitutes the address that `count` was assigned and emits a direct-address load.

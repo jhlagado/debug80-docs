@@ -332,7 +332,7 @@ When two enums share a word, the group name separates them:
 Color .enum Red, Green, Blue
 State .enum Idle, Active, Dead
 
-; Color.Red = 0, State.Idle = 0 — different symbols
+; Color.Red = 0, State.Idle = 0 - different symbols
 ```
 
 Enum members are valid in any assembler-time expression context:
@@ -359,7 +359,7 @@ When there are many values and performance matters, a jump table is more efficie
 ```asm
 Cmd .enum Draw, Move, Erase
 
-; C = Cmd.* value, guaranteed 0–2
+; C = Cmd.* value, guaranteed 0-2
         ld   hl,CmdTable
         ld   b,0
         add  hl,bc

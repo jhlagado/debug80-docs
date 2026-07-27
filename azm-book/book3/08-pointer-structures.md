@@ -127,30 +127,25 @@ field offset:
 
 Low byte first, then high byte. That is Z80 little-endian order.
 
-### The advance step as an `op`
+### The advance step
 
 Both walks below end with the same move: replace HL with the node its `next`
-field names. An `op` gives that sequence a name and expands it inline, so the
-bytes are identical to writing it out twice:
+field names. It reads the two link bytes low first, and parks the low byte in C
+so that writing H does not destroy the L it still needs:
 
 ```asm
-op follow_next()
-  ld bc, LIST_NEXT
-  add hl, bc            ; HL = &node.next
-  ld a, (hl)
-  ld c, a               ; C = low byte of next
-  inc hl
-  ld a, (hl)
-  ld h, a               ; H = high byte of next
-  ld l, c
-end
+ld bc, LIST_NEXT
+add hl, bc            ; HL = &node.next
+ld a, (hl)
+ld c, a               ; C = low byte of next
+inc hl
+ld a, (hl)
+ld h, a               ; H = high byte of next
+ld l, c
 ```
 
-There is no `call` and no return address. The `.lst` file shows the eight
-expanded instructions and their bytes against each `follow_next` line, and
-`--rc warn` analyses the expansion, which is why both routines still declare BC
-under `clobbers`. The op assembles the high byte into H before reading L from
-C, which is why the low byte is parked in C rather than in L.
+Eight instructions, no `call` and no return address. Both routines declare BC
+under `clobbers` because of it.
 
 ---
 
@@ -173,7 +168,14 @@ _sum_loop:
     jr nc, _sum_no_carry
     inc d
 _sum_no_carry:
-    follow_next
+    ld bc, LIST_NEXT
+    add hl, bc            ; HL = &node.next
+    ld a, (hl)
+    ld c, a               ; C = low byte of next
+    inc hl
+    ld a, (hl)
+    ld h, a               ; H = high byte of next
+    ld l, c
     jr _sum_loop
 _sum_done:
     ex de, hl
@@ -205,7 +207,14 @@ _find_loop:
     ld a, (hl)
     cp d
     jr z, _found
-    follow_next
+    ld bc, LIST_NEXT
+    add hl, bc            ; HL = &node.next
+    ld a, (hl)
+    ld c, a               ; C = low byte of next
+    inc hl
+    ld a, (hl)
+    ld h, a               ; H = high byte of next
+    ld l, c
     jr _find_loop
 _found:
     scf
@@ -285,7 +294,7 @@ For the head variable:
     ld hl, <word>list_head
 ```
 
-Runtime traversal cannot put HL inside brackets, so `follow_next` uses
+Runtime traversal cannot put HL inside brackets, so the advance step uses
 `add hl, bc` with `LIST_NEXT`.
 
 ---

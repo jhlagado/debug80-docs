@@ -38,11 +38,11 @@ Address operands always follow the Z80's little-endian convention: low byte firs
 Here is a complete Z80 program written entirely as bytes, placed in memory starting at address `$0000`.
 
 ```asm
-$0000:  3E 05        ; LD A, 5         — load 5 into A
-$0002:  47           ; LD B, A         — copy A into B; B now holds 5, A holds 5
-$0003:  3E 03        ; LD A, 3         — load 3 into A; B still holds 5
-$0005:  80           ; ADD A, B        — A = A + B = 3 + 5 = 8
-$0006:  32 00 80     ; LD ($8000), A   — store A at address $8000
+$0000:  3E 05        ; LD A, 5         - load 5 into A
+$0002:  47           ; LD B, A         - copy A into B; B now holds 5, A holds 5
+$0003:  3E 03        ; LD A, 3         - load 3 into A; B still holds 5
+$0005:  80           ; ADD A, B        - A = A + B = 3 + 5 = 8
+$0006:  32 00 80     ; LD ($8000), A   - store A at address $8000
 $0009:  76           ; HALT
 ```
 

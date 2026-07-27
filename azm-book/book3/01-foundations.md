@@ -179,7 +179,7 @@ For small 8-bit operands, repeated multiplication is enough:
 **Contract:** B = exponent, C = base, A = result (C^B). Zero exponent yields 1.
 
 ```asm
-; power_u8: unsigned C^B into A (B may be 0 → 1)
+; power_u8: unsigned C^B into A (B may be 0 -> 1)
 .routine in B,C out A clobbers F,B,E
 power_u8:
     ld e, 1

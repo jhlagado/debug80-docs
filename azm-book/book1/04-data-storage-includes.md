@@ -175,7 +175,7 @@ Page:
 For programs with several independent storage areas, collect all `.ds` blocks under a dedicated `.org`:
 
 ```asm
-; --- RAM layout: $8000–$8FFF ---
+; --- RAM layout: $8000-$8FFF ---
         .org $8000
 
 RingBuf:        .ds 8

@@ -80,7 +80,7 @@ At run time you still load the live byte from `(device_flags)` into A.
 ```asm
     ld a, (device_flags)
     and FLAG_READY
-    ; Z set → ready bit was clear
+    ; Z set -> ready bit was clear
 ```
 
 **Clear bit 2 (busy):** clearing requires `and` with the **inverted** mask. For

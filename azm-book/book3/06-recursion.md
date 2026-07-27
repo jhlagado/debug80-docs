@@ -49,7 +49,7 @@ For recursion, the stack is managed like any other fixed resource:
 Each recursive step (for n > 0) does:
 
 ```asm
-    push bc          ; 2 bytes — save n in B (C is collateral)
+    push bc          ; 2 bytes - save n in B (C is collateral)
     dec b
     call factorial_u8
     pop bc

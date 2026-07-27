@@ -270,8 +270,8 @@ main:
   call find_max
   ld (max_val), a
 
-  ld hl, values      ; reload HL — find_max walked it to the end
-  ld b, 8            ; reload B — find_max consumed it
+  ld hl, values      ; reload HL - find_max walked it to the end
+  ld b, 8            ; reload B - find_max consumed it
   ld c, 64
   call count_above
   ld (above_64), a

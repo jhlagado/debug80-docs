@@ -70,7 +70,7 @@ sub 3     ; A = 5; Z is clear (result non-zero), C is clear (no borrow)
 
 ```asm
 ld a, 3
-sub 5     ; A = $FE (−2); Z is clear, C is set (borrow — A was less than 5)
+sub 5     ; A = $FE (-2); Z is clear, C is set (borrow - A was less than 5)
 ```
 
 `cp n` does exactly the same subtraction and sets the same flags, but discards
@@ -102,14 +102,14 @@ byte:
 
 ```asm
 ld a, $F3          ; A = %11110011
-and $0F            ; A = %00000011 — upper four bits cleared, lower four kept
+and $0F            ; A = %00000011 - upper four bits cleared, lower four kept
 ```
 
 `or n` sets bits where the mask has 1 and leaves others unchanged:
 
 ```asm
 ld a, $03
-or $80             ; A = %10000011 — bit 7 now set
+or $80             ; A = %10000011 - bit 7 now set
 ```
 
 `or a` is a useful special case: A ORed with itself always equals A, so the
@@ -129,7 +129,7 @@ or a       ; Z is clear because A is non-zero
 
 ```asm
 ld a, $FF
-xor $0F            ; A = %11110000 — lower four bits flipped
+xor $0F            ; A = %11110000 - lower four bits flipped
 ```
 
 The most-used form is `xor a`. A XOR'd against itself is always zero; every
@@ -228,7 +228,7 @@ result:
 ```asm
 ld a, (status)
 and $04            ; keep only bit 2; Z is set if bit 2 was 0
-jp z, bit_clear    ; bit 2 was 0 — go to bit_clear
+jp z, bit_clear    ; bit 2 was 0 - go to bit_clear
 ```
 
 If bit 2 was 1, the result is
@@ -297,7 +297,7 @@ is 128 or greater. You can test which half A falls in by comparing it against
 
 ```asm
   cp $80              ; compare A (unsigned) against 128
-  jr c, is_non_negative ; carry set means A < 128 → non-negative
+  jr c, is_non_negative ; carry set means A < 128 -> non-negative
   neg                 ; negate A: A = -A
 is_non_negative:
   ; A now holds the absolute value

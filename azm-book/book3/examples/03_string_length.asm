@@ -1,9 +1,9 @@
-; 03_string_length.asm — Chapter 3 companion
+; 03_string_length.asm - Chapter 3 companion
 ; Assemble: azm 03_string_length.asm
 ; Run to halt, then inspect:
-;   (str_len)     at $800E — length of message ("HELLO" → 5)
-;   (copy_ok)     at $800F — $01 if buffer matches source
-;   (find_index)  at $8010 — index of 'L' in message → 2
+;   (str_len)     at $800E - length of message ("HELLO" -> 5)
+;   (copy_ok)     at $800F - $01 if buffer matches source
+;   (find_index)  at $8010 - index of 'L' in message -> 2
 
 .org $0000
 main:
@@ -35,7 +35,7 @@ _store_copy_ok:
 
 CHAR_L .equ 'L'
 
-; strlen_u8: bytes before null terminator (HL → string)
+; strlen_u8: bytes before null terminator (HL -> string)
 .routine in HL out A clobbers F,B,HL
 strlen_u8:
     ld b, 0
@@ -50,7 +50,7 @@ _done:
     ld a, b
     ret
 
-; strcpy_u8: copy null-terminated string HL → DE (terminator included)
+; strcpy_u8: copy null-terminated string HL -> DE (terminator included)
 .routine in HL,DE out DE clobbers AF,HL
 strcpy_u8:
 _copy:

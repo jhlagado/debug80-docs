@@ -134,7 +134,7 @@ For `message` above, `str_len` at `$800E` should hold `$05` after `halt`.
 Copying uses **two pointers**: HL reads, DE writes.
 
 ```asm
-; strcpy_u8: copy null-terminated string HL → DE (terminator included)
+; strcpy_u8: copy null-terminated string HL -> DE (terminator included)
 .routine in HL,DE out DE clobbers AF,HL
 strcpy_u8:
 _copy:

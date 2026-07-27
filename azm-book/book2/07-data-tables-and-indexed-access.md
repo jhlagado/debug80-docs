@@ -113,7 +113,7 @@ ld ix, record_base   ; IX = base of the record
 ld a, (ix+0)         ; A = id field
 ld b, (ix+1)         ; B = high byte field
 ld c, (ix+2)         ; C = low byte field
-; IX is unchanged throughout — all three fields read from one base address
+; IX is unchanged throughout - all three fields read from one base address
 ```
 
 Offsets larger than 127 or smaller than -128 are not encodable and will cause

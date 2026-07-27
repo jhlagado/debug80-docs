@@ -1,8 +1,8 @@
-; 07_include_demo.asm — Chapter 7 companion
+; 07_include_demo.asm - Chapter 7 companion
 ; Assemble from book3:
 ;   azm examples/07_include_demo.asm
 ; Run to halt, then inspect:
-;   (str_len) at $8008 — length of message ("HELLO" → 5)
+;   (str_len) at $8008 - length of message ("HELLO" -> 5)
 
 ; The message field is reserved at a fixed width so str_len keeps its address
 ; when the text changes length. offset(DemoData, str_len) places it.

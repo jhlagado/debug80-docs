@@ -1,9 +1,9 @@
-; 04_bit_flags.asm — Chapter 4 companion
+; 04_bit_flags.asm - Chapter 4 companion
 ; Assemble: azm 04_bit_flags.asm
 ; Run to halt, then inspect:
-;   (device_flags) at $8000 — final packed status byte → $03
-;   (ready_lit)    at $8001 — 1 if READY was set at start → 1
-;   (error_bit)    at $8002 — bit 1 isolated → 1
+;   (device_flags) at $8000 - final packed status byte -> $03
+;   (ready_lit)    at $8001 - 1 if READY was set at start -> 1
+;   (error_bit)    at $8002 - bit 1 isolated -> 1
 
 ; Bit positions first; the masks are shifts of those positions, so a bit never
 ; has one number in the mask and a different one in a bit instruction.

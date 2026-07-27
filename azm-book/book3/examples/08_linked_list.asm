@@ -1,10 +1,10 @@
-; 08_linked_list.asm — Chapter 8 companion
+; 08_linked_list.asm - Chapter 8 companion
 ; Assemble: azm 08_linked_list.asm
 ; Run to halt, then inspect:
-;   list_sum at $800E — sum of $10+$22+$30 → $0062 (98)
-;   find_node at $8010 — address of node_b when found
-;   find_hit at $8012 — $01 if $22 was found
-;   sum_after at $8013 — sum after push $40 at head → $00A2 (162)
+;   list_sum at $800E - sum of $10+$22+$30 -> $0062 (98)
+;   find_node at $8010 - address of node_b when found
+;   find_hit at $8012 - $01 if $22 was found
+;   sum_after at $8013 - sum after push $40 at head -> $00A2 (162)
 
 ListNode .type
 value   .byte
@@ -14,20 +14,6 @@ next    .word
 LIST_VALUE  .equ offset(ListNode, value)
 LIST_NEXT   .equ offset(ListNode, next)
 NODE_SIZE   .equ sizeof(ListNode)
-
-; HL := the node HL's next field points at. Both walks below need it, and an
-; op keeps the eight instructions in one place while still emitting them
-; inline at each call site.
-op follow_next()
-  ld bc, LIST_NEXT
-  add hl, bc            ; HL = &node.next
-  ld a, (hl)
-  ld c, a               ; C = low byte of next
-  inc hl
-  ld a, (hl)
-  ld h, a               ; H = high byte of next
-  ld l, c
-end
 
 .org $0000
 main:
@@ -70,7 +56,14 @@ _sum_loop:
     jr nc, _sum_no_carry
     inc d
 _sum_no_carry:
-    follow_next
+    ld bc, LIST_NEXT
+    add hl, bc            ; HL = &node.next
+    ld a, (hl)
+    ld c, a               ; C = low byte of next
+    inc hl
+    ld a, (hl)
+    ld h, a               ; H = high byte of next
+    ld l, c
     jr _sum_loop
 _sum_done:
     ex de, hl
@@ -87,7 +80,14 @@ _find_loop:
     ld a, (hl)
     cp d
     jr z, _found
-    follow_next
+    ld bc, LIST_NEXT
+    add hl, bc            ; HL = &node.next
+    ld a, (hl)
+    ld c, a               ; C = low byte of next
+    inc hl
+    ld a, (hl)
+    ld h, a               ; H = high byte of next
+    ld l, c
     jr _find_loop
 _found:
     scf
