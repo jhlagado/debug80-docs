@@ -14,15 +14,14 @@ has_toc: false
 
 ## Main Path
 
-1. [Preface](00-preface.md)
-2. [Getting Started with AZM](01-getting-started.md)
-3. [Source Syntax and Symbols](02-source-syntax.md)
-4. [Addresses, Constants and Expressions](03-addresses-constants-expressions.md)
-5. [Raw Data, Storage and Strings](04-data-storage-includes.md)
-6. [The Layout System](05-layout-system.md)
-7. [Register Contracts](06-register-contracts.md)
-8. [Ops, Aliases and Source Composition](07-ops-aliases.md)
-9. [Diagnostics and Output](08-diagnostics-listings-output.md)
+1. [Getting Started with AZM](01-getting-started.md)
+2. [Source Syntax and Symbols](02-source-syntax.md)
+3. [Addresses, Constants and Expressions](03-addresses-constants-expressions.md)
+4. [Raw Data, Storage and Strings](04-data-storage-includes.md)
+5. [The Layout System](05-layout-system.md)
+6. [Register Contracts](06-register-contracts.md)
+7. [Ops, Aliases and Source Composition](07-ops-aliases.md)
+8. [Diagnostics and Output](08-diagnostics-listings-output.md)
 
 ## Reference
 

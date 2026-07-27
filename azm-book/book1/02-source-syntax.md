@@ -243,7 +243,7 @@ AZM's canonical directive names start with a dot:
 .org    .equ    .db    .dw    .ds    .end
 ```
 
-The full directive list is in Appendix A.
+The full directive list is in [Appendix 1](../appendices/01-directives.md).
 
 Directives are lowercase and case-sensitive. `.db` is the canonical form; `.DB` and `.Db` are parse errors. Compatibility forms for other assembler source are covered in Chapter 7.
 
@@ -289,4 +289,4 @@ DOT     .equ 'A' + 1       ; ASCII + offset
 SIZE    .equ WIDTH * HEIGHT ; 1024
 ```
 
-See [Appendix B](../appendices/appendix-b-operators.md) for the full numeric literal table.
+See [Appendix 2](../appendices/02-operators.md) for the full numeric literal table.

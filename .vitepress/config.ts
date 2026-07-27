@@ -46,13 +46,14 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      // A series with several books points at its hub, because that is the
-      // only page listing the siblings now that each book has its own
-      // sidebar. A series with one book points straight at the book, so the
-      // reader is not sent through a page holding a single link.
-      { text: 'Debug80 Book', link: '/debug80-book/book1/' },
-      { text: 'AZM Books', link: '/azm-book/' },
-      { text: 'Glimmer Book', link: '/glimmer-book/book0/' },
+      // Straight to the first page of each series, never to a contents page.
+      // The sidebar lists every chapter of every book in the series, so a
+      // landing page whose whole content is that same list is a click the
+      // reader pays for nothing. The index pages still exist and still work
+      // if a URL points at one; nothing navigates through them.
+      { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
+      { text: 'AZM Books', link: '/azm-book/book1/01-getting-started' },
+      { text: 'Glimmer Book', link: '/glimmer-book/book0/00-preface' },
     ],
     sidebar: sidebars,
     search: { provider: 'local' },

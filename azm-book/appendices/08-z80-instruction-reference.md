@@ -1,12 +1,11 @@
 ---
 layout: default
-title: "Appendix 4 — Z80 Instruction Reference"
+title: "Appendix 8 — Z80 Instruction Reference"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_group: "Z80 Reference"
-nav_order: 14
+nav_order: 8
 ---
-# Appendix 4 — Classic Z80 Instruction Support Table
+# Appendix 8 — Z80 Instruction Reference
 
 This appendix is a **searchable support table** for the classic Z80 instruction
 set.

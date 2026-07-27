@@ -126,36 +126,34 @@ for (const book of BOOK_DIRS) {
   const bookDir = join(root, book);
   const { books, shared } = splitSections(bookDir);
 
-  // The series landing page lists the books themselves, not their chapters.
+  // Every sidebar carries every book in the series: the one being read open,
+  // its siblings collapsed. A reader can then reach any chapter of any book
+  // from wherever they are, which is what makes the series and book landing
+  // pages unnecessary rather than merely redundant. Collapsing a sibling costs
+  // one line and saves a trip up and back down through two tables of contents.
+  const asGroup = (b, open) => ({ text: b.title, collapsed: !open, items: b.entry.items });
+
   sidebars[`/${book}/`] = [
     ...rootItems(bookDir),
-    ...(books.length > 0
-      ? [{
-          text: 'Books',
-          collapsed: false,
-          items: books.map((b) => ({
-            text: b.title,
-            link: pageLink(join(b.dir, 'index.md')),
-          })),
-        }]
-      : []),
+    ...books.map((b, i) => asGroup(b, i === 0)),
     ...shared.map((s) => s.entry),
   ];
 
-  // Each book gets its own sidebar, so its siblings stay out of the way.
   for (const b of books) {
     const key = `/${relative(root, b.dir).replace(/\\/g, '/')}/`;
-    sidebars[key] = [b.entry, ...shared.map((s) => s.entry)];
+    sidebars[key] = [
+      ...books.map((x) => asGroup(x, x.dir === b.dir)),
+      ...shared.map((s) => s.entry),
+    ];
   }
 
   // Landing directly on a shared section still needs a sidebar.
   for (const s of shared) {
     const key = `/${relative(root, s.dir).replace(/\\/g, '/')}/`;
-    sidebars[key] = [...books.map((b) => ({
-      text: b.title,
-      collapsed: true,
-      items: b.entry.items,
-    })), ...shared.map((x) => x.entry)];
+    sidebars[key] = [
+      ...books.map((b) => ({ text: b.title, collapsed: true, items: b.entry.items })),
+      ...shared.map((x) => x.entry),
+    ];
   }
 }
 

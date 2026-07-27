@@ -7,7 +7,9 @@ nav_order: 1
 
 # Getting Started with AZM
 
-AZM is a modern Z80 assembler for the Debug80 toolchain. An assembler turns assembly source into machine-code bytes. AZM also produces metadata that helps Debug80 connect source to generated code.
+AZM is a modern Z80 assembler for the Debug80 toolchain. An assembler turns assembly source into machine-code bytes. AZM keeps those bytes visible while adding assembler-time support for larger programs: layout types, register contracts, op declarations, directive aliases, diagnostics, output artifacts and Debug80 source maps.
+
+This manual gives the precise rule for each of them. [AZM Book 2 — Z80 Fundamentals](../book2/index.md) teaches the machine itself; come here for the exact assembler rules.
 
 ---
 

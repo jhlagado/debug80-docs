@@ -251,7 +251,7 @@ AZM's built-in aliases normalize exact undotted uppercase forms before parsing:
 | `DW` | `.dw` |
 | `DS` | `.ds` |
 
-The full built-in list is in [Appendix A](../appendices/appendix-a-directives.md). Alias names are case-sensitive: `DB` normalizes to `.db`, while `db` and `Db` do not. Canonical directives use lowercase dotted forms.
+The full built-in list is in [Appendix 1](../appendices/01-directives.md). Alias names are case-sensitive: `DB` normalizes to `.db`, while `db` and `Db` do not. Canonical directives use lowercase dotted forms.
 
 ### Project-specific alias files
 

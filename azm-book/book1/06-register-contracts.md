@@ -385,7 +385,7 @@ The keys describe the boundary from the caller's point of view:
 .routine in A,DE,HL out carry clobbers BC
 ```
 
-Register pair names expand to their constituent 8-bit registers for analysis: `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix A](../appendices/appendix-a-directives.md) for the full carrier-notation table. Flags are named individually:
+Register pair names expand to their constituent 8-bit registers for analysis: `BC` to `B,C`, `DE` to `D,E` and so on. See [Appendix 1](../appendices/01-directives.md) for the full carrier-notation table. Flags are named individually:
 
 ```asm
 .routine out carry,zero clobbers A

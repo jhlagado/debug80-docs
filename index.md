@@ -13,19 +13,19 @@ nav_order: 1
 </div>
 
 <nav class="library-shelf">
-  <a class="volume volume--debug80" href="/debug80-book/book1/">
+  <a class="volume volume--debug80" href="/debug80-book/book1/01-install-debug80">
     <span class="volume__tag">Vol $00 · 1 book</span>
     <span class="volume__head"><Mark book="debug80" size="26" /><span class="volume__title">Debug80</span></span>
     <span class="volume__desc">Source-level Z80 debugging in VS Code — from installation to stepping real hardware projects and sending HEX to the board.</span>
     <span class="volume__enter">run →</span>
   </a>
-  <a class="volume volume--azm" href="/azm-book/">
+  <a class="volume volume--azm" href="/azm-book/book1/01-getting-started">
     <span class="volume__tag">Vol $01 · 3 books</span>
     <span class="volume__head"><Mark book="azm" size="26" /><span class="volume__title">AZM</span></span>
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
   </a>
-  <a class="volume volume--glimmer" href="/glimmer-book/book0/">
+  <a class="volume volume--glimmer" href="/glimmer-book/book0/00-preface">
     <span class="volume__tag">Vol $02 · 1 book</span>
     <span class="volume__head"><Mark book="glimmer" size="26" /><span class="volume__title">Glimmer</span></span>
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — built up one construct at a time, ending in complete games.</span>

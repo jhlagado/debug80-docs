@@ -1,13 +1,12 @@
 ---
 layout: default
-title: "Appendix A — Directive Reference"
+title: "Appendix 1 — Directive Reference"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_group: "AZM Reference"
 nav_order: 1
 ---
 
-# Appendix A — Directive Reference
+# Appendix 1 — Directive Reference
 
 The table lists AZM directives and declaration keywords. Dotted directives use canonical lowercase forms and are case-sensitive. See Chapter 7 for the alias layer that normalises legacy undotted forms.
 

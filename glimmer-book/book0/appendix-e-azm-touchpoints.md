@@ -166,7 +166,7 @@ through to the generated file verbatim:
 
 Full treatment: [The Layout
 System](../../azm-book/book1/05-layout-system.md) and [Built-in
-Functions](../../azm-book/appendices/appendix-d-functions.md).
+Functions](../../azm-book/appendices/04-functions.md).
 
 ## `.import` source units
 

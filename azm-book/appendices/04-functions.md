@@ -1,13 +1,12 @@
 ---
 layout: default
-title: "Appendix D — Built-in Functions"
+title: "Appendix 4 — Built-in Functions"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_group: "AZM Reference"
 nav_order: 4
 ---
 
-# Appendix D — Built-in Functions
+# Appendix 4 — Built-in Functions
 
 AZM has four built-in functions you can use in any expression: `sizeof`, `offset`, `LSB` and `MSB`. The assembler evaluates all four entirely at assemble time; the Z80 sees only the resulting integer, never the function call.
 

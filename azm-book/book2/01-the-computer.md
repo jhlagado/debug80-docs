@@ -17,7 +17,7 @@ A Z80 computer has three main parts: a CPU, memory and I/O ports. The CPU does t
 
 A **bit** is a single binary digit: 0 or 1. A **byte** is eight bits: the smallest unit of data the Z80 can read, write or operate on directly. A byte holds values from 0 to 255. Two consecutive bytes form a **word**, a 16-bit value ranging from 0 to 65,535.
 
-The `%` prefix marks a binary number: `%01110101` is the binary representation of `$75` (117 in decimal). The full explanation of binary (how bits combine to make values, two's complement for signed numbers and bit-by-bit arithmetic) is in [Appendix 1](../appendices/01-numbers-notation-and-ascii.md).
+The `%` prefix marks a binary number: `%01110101` is the binary representation of `$75` (117 in decimal). The full explanation of binary (how bits combine to make values, two's complement for signed numbers and bit-by-bit arithmetic) is in [Appendix 5](../appendices/05-numbers-notation-and-ascii.md).
 
 ---
 
@@ -36,7 +36,7 @@ Hexadecimal is base 16. It uses sixteen digits: `0`–`9` for values 0–9, then
 | E | 14 | 1110 |
 | F | 15 | 1111 |
 
-So `$75` is the byte `%0111 0101`, a `7` (0111) followed by a `5` (0101). And `$FF` is `%1111 1111`, which is 255. A four-digit hex number like `$8000` is a 16-bit address. The full conversion tables are in [Appendix 1](../appendices/01-numbers-notation-and-ascii.md).
+So `$75` is the byte `%0111 0101`, a `7` (0111) followed by a `5` (0101). And `$FF` is `%1111 1111`, which is 255. A four-digit hex number like `$8000` is a 16-bit address. The full conversion tables are in [Appendix 5](../appendices/05-numbers-notation-and-ascii.md).
 
 ---
 
@@ -96,7 +96,7 @@ Here is the complete Z80 register set:
 
 When B and C are used as the pair BC, B holds the high byte and C holds the low byte, the same pattern as DE (D high, E low) and HL (H high, L low). So if HL = `$1A2B`, then H = `$1A` and L = `$2B`.
 
-The Z80 also has a hidden second copy of A, F, B, C, D, E, H and L called the **shadow registers**, covered in Chapter 8. A compact register reference is in [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
+The Z80 also has a hidden second copy of A, F, B, C, D, E, H and L called the **shadow registers**, covered in Chapter 8. A compact register reference is in [Appendix 6](../appendices/06-registers-flags-and-conditions.md).
 
 ![The whole register set. Each of the four main pairs is two 8-bit registers and one 16-bit register at the same time.](../../assets/images/azm-book/book2/register-file.svg)
 
@@ -158,6 +158,6 @@ Each flag is a single bit, set (1) or clear (0). The two you will use from the v
 | Z | Zero | The result of the last operation was zero |
 | C | Carry | The last addition produced a carry out of bit 7, or the last subtraction required a borrow |
 
-The Z80 has four more flags: S (sign), H (half carry), P/V (parity/overflow) and N (subtract). The full flags reference is in [Appendix 2](../appendices/02-registers-flags-and-conditions.md).
+The Z80 has four more flags: S (sign), H (half carry), P/V (parity/overflow) and N (subtract). The full flags reference is in [Appendix 6](../appendices/06-registers-flags-and-conditions.md).
 
 `ld` instructions do not affect flags at all. Arithmetic and comparison instructions do. Chapter 5 explains exactly which instructions set which flags.

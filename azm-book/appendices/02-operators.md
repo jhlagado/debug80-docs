@@ -1,13 +1,12 @@
 ---
 layout: default
-title: "Appendix B — Expression Operators"
+title: "Appendix 2 — Expression Operators"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_group: "AZM Reference"
 nav_order: 2
 ---
 
-# Appendix B — Expression Operators
+# Appendix 2 — Expression Operators
 
 ## Operator table
 

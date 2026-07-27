@@ -1,13 +1,12 @@
 ---
 layout: default
-title: "Appendix C — CLI Flag Reference"
+title: "Appendix 3 — CLI Flag Reference"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_group: "AZM Reference"
 nav_order: 3
 ---
 
-# Appendix C — CLI Flag Reference
+# Appendix 3 — CLI Flag Reference
 
 The source file is always the last argument:
 

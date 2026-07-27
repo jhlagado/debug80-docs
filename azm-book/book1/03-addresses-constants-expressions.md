@@ -200,7 +200,7 @@ FRAME_SIZE  .equ (COLS * ROWS) + 2
 ENTRY_ADDR  .equ TABLE_BASE + (ENTRY_NUM * 3)
 ```
 
-See [Appendix B](../appendices/appendix-b-operators.md) for the full precedence table.
+See [Appendix 2](../appendices/02-operators.md) for the full precedence table.
 
 ### `$` in expressions
 

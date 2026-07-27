@@ -1,12 +1,11 @@
 ---
 layout: default
-title: "Appendix 3 — Addressing, Prefixes, and Forms"
+title: "Appendix 7 — Addressing, Prefixes and Forms"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_group: "Z80 Reference"
-nav_order: 13
+nav_order: 7
 ---
-# Appendix 3 — Addressing, Prefixes, and Instruction Forms
+# Appendix 7 — Addressing, Prefixes and Forms
 
 ---
 

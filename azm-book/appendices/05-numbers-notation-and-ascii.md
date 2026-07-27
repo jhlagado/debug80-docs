@@ -1,12 +1,11 @@
 ---
 layout: default
-title: "Appendix 1 — Numbers, Notation, and ASCII"
+title: "Appendix 5 — Numbers, Notation and ASCII"
 parent: "Appendices"
 grand_parent: "AZM Books"
-nav_group: "Z80 Reference"
-nav_order: 11
+nav_order: 5
 ---
-# Appendix 1 — Numbers, Notation, and ASCII
+# Appendix 5 — Numbers, Notation and ASCII
 
 ---
 
