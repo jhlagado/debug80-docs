@@ -263,28 +263,34 @@ documentation for the target platform and its handler conventions.
 
 ## Exercises
 
-**1. Flag behaviour of `in`.** Comparing these two forms shows when a port read
-can feed a conditional branch directly:
+**1. Flag behaviour of `in`.** The comparison should state whether each form
+updates Z and whether `jr z, is_zero` can follow directly:
 
 ```asm
 in a, (IN_PORT)   ; form A
 in a, (C)         ; form B
 ```
 
-The comparison identifies which form can feed `jr z, handle_zero` directly,
-which requires `or a` and the shortest correct sequence that branches to
-`is_zero` when the byte read was zero.
+The shortest correct sequence for each form may assume C already contains
+`IN_PORT` for form B. Tests beginning with Z clear and carry set should use
+input bytes `$00` and `$80`, recording A, Z and carry after each read and any
+explicit flag-setting instruction.
 
-**2. A bit-3 ready check.** Changing `poll_and_recv` to wait for bit 3 instead
-of bit 0 requires only a new `and` mask. Deriving that mask in hexadecimal
-connects the bit position to the byte value used by the instruction.
+**2. A bit-3 ready check.** A version of `poll_and_recv` that treats bit 3 as
+the ready flag needs a new mask. The answer should give that mask in binary and
+hexadecimal and trace the branch for `$00`, `$08`, `$09` and `$80`. The
+assembler listing should show the mask as the operand of `and`.
 
 **3. A receive loop.** The counterpart to `send_block` is a `recv_block`
 routine that reads B bytes from the fixed `IN_PORT` into memory starting at HL.
-Documenting its inputs and clobbered registers exposes the same DJNZ structure,
-with `in a, (IN_PORT)` supplying each byte before the store.
+Its register comment should document the B > 0 precondition. With an emulator
+or test device supplying `$11, $22, $33, $44`, the observed result should
+include the four destination bytes and final B and HL.
 
-**4. Register-addressed output.** Tracing `out (C), d` identifies the data
-register, the 8-bit port-number register and the register that appears on the
-upper address pins. The same roles determine the three instructions that send
-`$7F` from D to port `$20`.
+**4. Register-addressed output.** A three-instruction sequence should place
+`$12` on the upper address pins, select low-byte port `$20`, place `$7F` in D,
+and perform `out (C), d`. The result should give BC, D, the 16-bit address-pin
+value and the transferred byte, then identify the part used by conventional
+8-bit port decoding.
+
+[Exercise notes](exercise-notes.md#chapter-9-io-and-ports)

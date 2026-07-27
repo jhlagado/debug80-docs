@@ -290,25 +290,32 @@ iteration count is usually known before the loop starts.
 
 ## Exercises
 
-**1. The zero-count trap.** Tracing B through the first decrement establishes
-how many times this loop body executes when `count_value` is zero:
+**1. The zero-count case.** A byte named `iterations`, incremented once in this
+loop body, makes the hardware behaviour observable. The prediction should give
+B and `iterations` after runtime counts 0, 1 and 255.
 
 ```asm
-ld a, (count_value)   ; suppose count_value holds 0 at runtime
+ld a, (count_value)
 ld b, a
 loop_top:
-  ; ... body ...
+  ; increment iterations here
   djnz loop_top
 ```
 
-A zero test before loading the loop counter produces the version in which a
-runtime count of zero skips the body entirely.
+A guarded version should make count 0 produce zero iterations while retaining
+the ordinary meanings of 1 and 255. All three emulator runs should agree with
+the prediction.
 
-**2. A minimum loop.** Adapting the DJNZ sum loop to find the **minimum** of
-`addends: .db 3, 7, 2, 8, 5` shows how the loop body can maintain a running
-selection instead of a total. Starting at 255 lets each smaller byte replace
-the current minimum, while Chapter 5's `cp` and `jr nc` provide the comparison.
-The final value belongs in a variable named `minimum`.
+**2. Find a minimum.** A DJNZ routine should receive HL as the address of a
+non-empty byte table and B as its length, then store the smallest unsigned byte
+in `minimum`. The explanation should state the running-value invariant at the
+top of the loop. These tables provide the test cases:
+
+| Table | Expected minimum |
+| ----- | ---------------- |
+| `3, 7, 2, 8, 5` | 2 |
+| `9` | 9 |
+| `255, 0, 127` | 0 |
 
 **3. Sentinel loop: find the zero.** A table of bytes ends with a zero sentinel:
 
@@ -317,11 +324,13 @@ The final value belongs in a variable named `minimum`.
 message: .db $41, $42, $43, $00, $44, $45
 ```
 
-A sentinel loop over `message` can store the **index** (0-based position) of the
-first zero byte in `zero_pos`. Bounding the scan at six bytes also supplies a
-defined not-found result: `$FF`.
+The loop should store the zero-based index of the first zero byte in `zero_pos`,
+with a six-byte bound and `$FF` for no match. Results for the given table, a
+table beginning with zero and a six-byte table containing no zero should
+include `zero_pos`, B and HL.
 
-**4. Loop analysis.** The flag-exit loop in the chapter example exits when the accumulated sum reaches or exceeds `$10` (16). The following table records an iteration-by-iteration trace over `3, 7, 2, 8, 5`:
+**4. Flag-exit trace.** The completed trace for the chapter's flag-exit loop
+over `3, 7, 2, 8, 5` should fill every unknown:
 
 | Iteration | Byte added | A after add | `cp $10` → C set? | Exit? |
 | --------- | ---------- | ----------- | ----------------- | ----- |
@@ -330,4 +339,8 @@ defined not-found result: `$FF`.
 | 3         | 2          | ?           | ?                 | ?     |
 | 4         | 8          | ?           | ?                 | ?     |
 
-Completing the table establishes the value stored in `flagval`. Repeating the trace with a threshold of `$0C` (12) shows whether the loop exits one iteration earlier.
+The result should give final A, B, HL and `flagval`. A second trace with a
+threshold of `$0C` should compare its exit iteration and register state with
+the first.
+
+[Exercise notes](exercise-notes.md#chapter-6-counting-loops-and-djnz)

@@ -298,27 +298,36 @@ For element-by-element work on a single table, the DJNZ-over-HL pattern from the
 
 ## Exercises
 
-**1. Post-loop pointer value.** The HL sum loop in the chapter starts with `ld hl, scores` where `scores` is at address `$8000` and contains six entries. After the loop completes all six iterations, what address does HL hold? What byte would `ld a, (hl)` read at that point? Is that byte part of `scores`?
+**1. Address, value and final pointer.** In the chapter example, `scores`
+begins at `$8000` and is followed immediately by `records`. The trace should
+give the values loaded by `ld hl, scores` and `ld a, (scores)`, followed by
+final HL after the six-iteration sum loop. It should also identify the byte a
+subsequent `ld a, (hl)` reads and whether that byte belongs to `scores`.
 
-**2. Address versus value.** Comparing these two instructions separates a
-table's address from the first value stored there:
+**2. IX record access.** This table contains three three-byte records with
+`id`, `hi` and `lo` at offsets 0, 1 and 2:
 
 ```asm
-ld hl, scores      ; (a)
-ld a, (scores)     ; (b)
+.org $8010
+records: .db $11, $AA, $01
+         .db $22, $BB, $02
+         .db $33, $CC, $03
 ```
 
-Which instruction loads the number 10 (the first element of the table) into a register? Which loads the memory address where 10 is stored?
+The result should calculate the base address of record index 2 and use
+displaced loads to read its fields into A, B and C. Final A, B, C and IX make
+the addressing result observable.
 
-**3. IX record access.** Three three-byte records are packed in memory, with
-`id` at offset 0, `hi` at offset 1 and `lo` at offset 2. The table starts at
-address `$8010`. Reading all three fields of the **third** record (index 2) into
-A, B and C begins by computing the record's base address for IX, followed by
-one displaced load for each field.
+**3. Block-copy trace.** Suppose HL = `$8100`, DE = `$8200`, BC = 4 and memory
+at `$8100`–`$8103` contains `$10, $20, $30, $40`. An `ldir` trace should give
+the four destination bytes and final HL, DE and BC. The same analysis with an
+initial count of zero should state how many bytes the hardware attempts to
+copy.
 
 **4. The missing increment.** The following loop is intended to find the maximum
-score in `scores`, but its pointer never advances. Tracing HL through the
-iterations explains both the error and the final value in `max_score`:
+score in `scores`. The faulty and corrected runs should each give HL, B and
+`max_score`, with the repair placed so that both comparison paths advance the
+pointer.
 
 ```asm
 ld hl, scores
@@ -333,4 +342,6 @@ no_new_max:
 ld (max_score), a
 ```
 
-_(Hint: `inc hl` is missing somewhere. Where? And what does HL read on every iteration as a result?)_
+The six scores from the chapter provide the input for both runs.
+
+[Exercise notes](exercise-notes.md#chapter-7-data-tables-and-indexed-access)

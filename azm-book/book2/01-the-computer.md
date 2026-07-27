@@ -159,3 +159,34 @@ Each flag is a single bit, set (1) or clear (0). The two you will use from the v
 The Z80 has four more flags: S (sign), H (half carry), P/V (parity/overflow) and N (subtract). The full flags reference is in [Appendix 6](../appendices/06-registers-flags-and-conditions.md).
 
 `ld` instructions do not affect flags at all. Arithmetic and comparison instructions do. Chapter 5 explains exactly which instructions set which flags.
+
+---
+
+## Exercises
+
+**1. Parts of the system.** A table with one row for each action below should
+identify the active parts of the computer (CPU, memory or I/O), what travels on
+the data bus, and what the address selects.
+
+- Fetch the opcode at `$0120`.
+- Read a byte from RAM at `$8004`.
+- Write `$3C` to port `$10`.
+- Add B to A.
+
+**2. Registers and stored words.** Suppose HL holds `$3A7C`. The answer should
+give H and L, followed by the two bytes produced when that word is stored at
+`$8200`. Each stored byte needs its address and its role as the high or low
+byte.
+
+**3. Instruction trace.** A trace of the chapter's first machine-code program
+should give the starting and finishing PC for all six instructions, together
+with every changed register or memory byte. The final row should include A, B,
+PC, `$8000`, and the state of Z and C established by `add a, b`.
+
+**4. Reset and the memory map.** A board maps RAM at `$2000`–`$7FFF` and ROM
+at `$8000`–`$9FFF`, with `$0000`–`$1FFF` unmapped. The analysis should identify
+the CPU's first problem after reset and supply a revised map that keeps both
+chips at their original sizes while providing valid startup code. A range
+diagram makes the proposed map unambiguous.
+
+[Exercise notes](exercise-notes.md#chapter-1-the-computer)

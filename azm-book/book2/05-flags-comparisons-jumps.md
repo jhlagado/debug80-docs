@@ -403,9 +403,9 @@ Z is clear.
 
 ## Exercises
 
-**1. Flag prediction.** Predicting whether Z and C are set or clear after each
-instruction or short sequence makes the flag changes visible before an emulator
-confirms them:
+**1. Flag prediction.** A result table for each independent sequence should
+give the final A and whether Z and C are set or clear. The last sequence needs
+one row after `xor a` and another after `dec a`.
 
 ```asm
 ld a, 5
@@ -422,14 +422,16 @@ xor a       ; establish Z set and C clear
 dec a       ; Z = ? C = ?
 ```
 
-Step mode and the register display provide the observed result for comparison with the prediction.
+Step mode provides the observed flags for comparison.
 
-**2. The flag-before-branch check.** The following snippet is intended to load
-10 into `count` only when A holds 5. Tracing the last instruction to set Z
-reveals why the branch fails:
+**2. A clobbered comparison.** The following code is intended to store 10 in
+`count` only when the incoming A is 5. The test begins with `count` containing
+`$EE`. The trace should identify the instruction that supplies Z to `jp nz`
+and the observed result for incoming A values 5 and 4. A corrected version
+must retain the `xor a` initialization while making the store conditional on
+the earlier comparison.
 
 ```asm
-ld a, 5
 cp 5
 xor a             ; unrelated initialization
 jp nz, skip
@@ -438,17 +440,15 @@ ld (count), a
 skip:
 ```
 
-The three checks are which instruction last set Z before `jp nz`, whether
-anything between that instruction and the jump modifies Z and whether the jump
-condition matches the intended test. Together they explain what the code
-actually does and lead to a corrected version.
+**3. Count down with flags.** A loop beginning with A = 10 should decrement A
+once per iteration, store every new value in `last_a`, and exit at zero. The
+result should include final A, final `last_a`, the sequence of ten stored bytes,
+and evidence that the store between `dec` and the jump leaves Z unchanged.
 
-**3. Count down with flags.** A loop that starts with A = 10, decrements A to
-zero and stores A in `last_a` on every iteration demonstrates how `dec a` feeds
-a conditional jump. A final trace records the values left in A and `last_a`.
-DJNZ provides a different counted-loop mechanism in Chapter 6.
+**4. Test a status bit.** A short routine should receive a status byte in A and
+store 1 in `ready` when bit 2 is set, or 0 when it is clear, using a mask and
+conditional jump from this chapter. Test results for `$04`, `$05`, `$00` and
+`$FB` should give the stored byte and identify the instruction that supplies Z
+to the branch.
 
-**4. Bit test.** A already holds a status byte whose bit 2 is a "ready" flag.
-The instruction `bit 2, a` leaves A unchanged and sets Z when bit 2 is clear.
-Pairing it with a jump to `not_ready` shows how a two-instruction bit test
-branches when the flag is clear.
+[Exercise notes](exercise-notes.md#chapter-5-flags-comparisons-and-jumps)

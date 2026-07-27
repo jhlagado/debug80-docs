@@ -165,9 +165,9 @@ After the program runs: `$8000` holds `10` (`$0A`) and `$8001`–`$8002` hold `$
 
 ## Exercises
 
-**1. Memory form identification.** Matching each instruction to a row in the LD
-forms table shows which operand determines the addressing mode and whether the
-instruction reads from or writes to memory.
+**1. Memory form identification.** Each instruction should be matched to a row
+in the LD forms table, with the memory action and the register or address that
+selects the location.
 
 ```asm
 ld a, (hl)
@@ -177,9 +177,10 @@ ld ($8010), a
 ld de, ($8020)
 ```
 
-**2. The illegal instruction.** Four of these five `ld` instructions assemble.
-Identifying the rejected form and the operand restriction explains why the Z80
-needs a register for that transfer:
+**2. Repair an illegal transfer.** One form in this group is rejected by the
+assembler. The corrected answer should identify it and replace only that line
+with the shortest legal sequence that copies the same byte. With `(HL)`
+containing `$5A`, the result should also state the final value of A.
 
 ```asm
 ld a, (hl)
@@ -189,24 +190,29 @@ ld hl, (scratch)
 ld b, $FF
 ```
 
-_(Hint: re-read the section on memory-to-memory moves and the LD forms table.)_
-
-**3. Signed or unsigned?** Reading each byte below once as unsigned (0–255) and
-once as signed two's complement (−128 to +127) shows how one bit pattern can
-represent two values:
+**3. Signed and unsigned readings.** A table containing the binary, unsigned
+decimal and signed two's-complement readings of these bytes makes the two
+interpretations explicit:
 
 - `$00`
 - `$7F`
 - `$80`
 - `$FF`
 
-Which of these values has the same meaning under both interpretations? Which has the most dramatically different meanings?
+The answer should identify the values whose readings agree. For `$80` and
+`$FF`, it should also give the result byte after adding `$01` and interpret
+that result both ways.
 
-**4. Word-store trace.** The following sequence determines the bytes at `$8050` and `$8051`:
+**4. Word-store trace.** A trace of this sequence should record `$8050` and
+`$8051` after the store, followed by the final DE after the load:
 
 ```asm
 ld hl, $ABCD
 ld ($8050), hl
+ld de, ($8050)
 ```
 
-What value is stored at address `$8050`? What value is stored at `$8051`? Which is the low byte and which is the high byte? (The Z80 stores 16-bit values little-endian, low byte first.)
+The emulator's memory display provides a direct check of the byte order and
+register-pair result.
+
+[Exercise notes](exercise-notes.md#chapter-4-memory-access-and-data)

@@ -286,7 +286,8 @@ For the examples in this chapter: after `00_first_program.asm` runs, address `$8
 
 ## Exercises
 
-**1. Register trace.** Tracing the value in each register after every instruction shows which loads replace a value and which preserve their source:
+**1. Register trace.** A trace table should give A, B and C after each
+instruction and state whether any instruction changes HL.
 
 ```asm
 ld a, $10
@@ -296,29 +297,32 @@ add a, b
 ld c, a
 ```
 
-The final values in A, B and C, together with whether HL changed, complete the
-trace. Adding `.org $0000`, a `main:` label, a `halt` and any required data
-block turns the snippet into a program whose emulator state can check the
-prediction.
+A complete test program with `.org`, `main:` and `halt` allows the final
+emulator state to be compared with the trace.
 
-**2. An HL-to-DE copy in two moves.** The Z80's 16-bit `ld` forms load from an
-immediate, from memory or into SP, so copying HL into DE takes two 8-bit `ld`
-instructions, one for each half of the pair. Writing those two instructions
-also shows which register contains the high byte and which contains the low
-byte. Chapter 8 returns to this transfer after introducing the stack.
+**2. Copying HL into DE.** The shortest sequence of `ld` instructions should
+copy HL into DE while leaving HL unchanged. With HL = `$1234` and DE =
+`$FFFF`, the result should give H, L, D, E, HL and DE; the assembler should
+accept every instruction.
 
-**3. Constants versus labels.** Given this program fragment:
+**3. Constants and labels.** The listing for this fragment provides the
+evidence:
 
 ```asm
 BASE .equ $8000
 
 .org $8000
 count: .db 0
+next:  .dw $1234
 ```
 
-Comparing `BASE` with `count` reveals the difference between a value defined at
-assembly time and an address assigned from output placement. The comparison
-includes what output each definition produces and which name occupies a byte in
-the binary.
+It should show the values of `BASE`, `count` and `next`, the bytes emitted at
+`$8000`–`$8002`, and the source line responsible for each byte. A second
+listing with `.org $8100` should reveal which names change.
 
-**4. `dec` and the Zero flag.** Starting with `ld b, 3`, a three-step trace of `dec b` shows the value in B after each instruction and the point at which the Zero flag becomes set. Chapter 6 uses this mechanism to build counted loops.
+**4. `dec` and the Zero flag.** Starting with B = 3 and carry set, a
+three-decrement trace should record B, Z and C after each `dec b`. The emulator
+result should confirm both the point at which Z becomes set and whether `dec`
+changes carry.
+
+[Exercise notes](exercise-notes.md#chapter-3-assembly-language)

@@ -269,9 +269,9 @@ Balance is all the stack requires: `call` pushed one word and `pop hl` consumed 
 
 ## Exercises
 
-**1. Stack trace.** Tracking the stack and register values through four
-instructions shows how LIFO order controls cross-register transfers. The
-initial values are SP = `$C000`, AF = `$1234` and BC = `$5678`.
+**1. Stack trace.** With SP = `$C000`, AF = `$1234` and BC = `$5678`, a
+four-instruction trace should give SP and the two bytes written or read at each
+step, followed by final DE, HL and SP.
 
 ```asm
 push af
@@ -280,11 +280,10 @@ pop de
 pop hl
 ```
 
-After all four instructions: what is in DE? What is in HL? What is SP? _(Remember: the stack is last-in-first-out: the pair pushed last is the first to be popped.)_
-
-**2. The push/pop mismatch.** This subroutine has a stack-balance bug. Following
-SP from the two pushes to `ret` identifies the unconsumed word and explains the
-address that `ret` uses:
+**2. A mismatched stack.** Immediately before `call count_nonzero`, SP is
+`$C000`, BC is `$1234`, DE is `$5678`, and the instruction after the call is at
+`$0103`. A trace of the return-address push and every stack operation in this
+subroutine exposes the mismatch:
 
 ```asm
 count_nonzero:
@@ -305,15 +304,19 @@ skip:
   ret
 ```
 
-The same trace indicates where the missing pop belongs in a corrected version.
+The trace should give the value loaded into BC by `pop bc`, the address loaded
+into PC by `ret`, final SP, and the location of the real return address. A
+corrected version should return to `$0103` with BC and DE restored.
 
-**3. A byte-doubling subroutine.** A `double_byte` subroutine that receives a
-byte in B and returns B × 2 in A demonstrates register-based arguments and
-results. Its comment header records inputs, outputs and clobbered registers. In
-`main`, three lines can pass 15, call the subroutine and store the result in a
-variable named `doubled`.
+**3. A byte-doubling subroutine.** A `double_byte` subroutine should receive a
+byte in B, return B × 2 in A, leave B unchanged, and document its register
+contract. A caller stores the result in `doubled`. Test results for B values 0,
+15, 127, 128 and 255 should include A and the carry flag after the addition.
 
-**4. The `or a / sbc hl, de` pattern.** Tracing this pair establishes what `or
-a` does to carry, why an incoming carry would change the subtraction and why
-`add hl, de` follows on the carry-clear path. The intermediate value in HL
-after `sbc hl, de` completes the trace.
+**4. The `or a / sbc hl, de` pattern.** Two traces of the comparison body from
+`max_word` should use HL = `$0064`, DE = `$0028` and HL = `$0014`, DE =
+`$0028`, both with carry initially set. Each trace should give carry after
+`or a`, HL and carry after `sbc hl, de`, the selected return path, and final HL
+and DE. Those observations should explain the purpose of `or a`.
+
+[Exercise notes](exercise-notes.md#chapter-8-stack-and-subroutines)

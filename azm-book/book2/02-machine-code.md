@@ -104,3 +104,52 @@ Labels also name positions within the code, the targets of jumps and branches. I
 Assembly language gives these byte patterns instruction names and replaces
 manually calculated addresses with labels. The next chapter rewrites this
 program in AZM so you can compare the source with the bytes it produces.
+
+---
+
+## Exercises
+
+**1. Decode a byte stream.** Decoding this program should place each instruction
+beside its starting address:
+
+```asm
+3E 12 47 3E 05 80 32 10 80 76
+```
+
+The completed trace should also give the final values in A and B and the byte
+stored at `$8010`.
+
+**2. Encode a short program.** The opcode table in this chapter provides
+everything needed to encode the following source as one continuous byte
+sequence beginning at `$0000`. The result should include each instruction's
+starting address and the final value of PC.
+
+```asm
+ld a, $2A
+ld b, a
+ld ($8120), a
+halt
+```
+
+**3. Patch a little-endian address.** Changing the destination in the chapter's
+ten-byte program from `$8000` to `$8120` alters two byte positions. The patch
+should identify those positions, give their old and new values, and show the
+complete byte sequence. Decoding the resulting store instruction provides the
+check.
+
+**4. Labels and emitted data.** The assembler listing for this fragment should
+show the value of each name, the addresses occupied by emitted data, and the
+bytes found at those addresses:
+
+```asm
+Limit .equ 10
+
+.org $8100
+first:  .db $AA
+second: .dw $1234
+```
+
+The explanation should identify the definition that emits no bytes and the
+listing evidence that distinguishes a constant from a label.
+
+[Exercise notes](exercise-notes.md#chapter-2-machine-code)

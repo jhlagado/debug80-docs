@@ -27,3 +27,4 @@ After these machine-level fundamentals, [AZM Book 1 — Assembler Manual](../boo
 9. [I/O and Ports](09-io-and-ports.md)
 10. [A Complete Program](10-a-complete-program.md)
 11. [Subroutine Conventions](11-subroutine-conventions.md)
+12. [Exercise Notes](exercise-notes.md)
