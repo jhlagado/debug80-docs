@@ -512,7 +512,7 @@ terminator always sits right after them.
 
 The next chapter builds a complete game with the profile, including sprite
 collision, scoring on the tile grid, and cards on the VDP:
-[Building Lanternfly](04-building-lanternfly.md).
+[Building Rushlight](04-building-rushlight.md).
 
 ## Exercise
 

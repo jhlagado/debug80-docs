@@ -1,6 +1,6 @@
-; Lanternfly - gather the lanterns before the wasp finds you.
+; Rushlight - gather the lanterns before the wasp finds you.
 
-program Lanternfly
+program Rushlight
 
 platform tec1g-mon3
 display tms9918
@@ -75,7 +75,7 @@ bind key KEY_4 held period 1 -> LeftP
 bind key KEY_6 held period 1 -> RightP
 bind key any   rising -> AnyKeyP
 
-text MsgTitle "LANTERNFLY      "
+text MsgTitle "RUSHLIGHT       "
 text MsgRun   "GATHER THE LAMPS"
 text MsgOver  "THE WASP GOT YOU"
 text MsgAny   "PRESS ANY KEY   "

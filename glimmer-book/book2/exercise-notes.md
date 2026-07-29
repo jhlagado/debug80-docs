@@ -29,7 +29,7 @@ the sprite shadow, setting `SpriteDirty`. VRAM still contains 124. The
 `GlimCommit` at the start of frame N+1 copies the shadow to VRAM, and the VDP
 then shows x=125.
 
-## Chapter 4: Building Lanternfly
+## Chapter 4: Building Rushlight
 
 The fly's centre is (128,96), and dividing each coordinate by eight gives grid
 cell (16,12). If the lantern occupies that cell, `Gather` blanks the old tile,

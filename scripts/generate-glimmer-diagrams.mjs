@@ -32,7 +32,7 @@ const book2Figures = new Set([
   'tetro-pieces.svg',
   'vdp-layers.svg',
   'shadow-commit.svg',
-  'lanternfly-play.svg',
+  'rushlight-play.svg',
   'two-coordinate-systems.svg',
   'two-loops.svg',
 ]);
@@ -1489,10 +1489,10 @@ add(
 }
 
 /* ============================================================
-   Book 2, Chapter 4 - Building Lanternfly
+   Book 2, Chapter 4 - Building Rushlight
    ============================================================ */
 
-// 4.1 Lanternfly mid-round, with the pixel-to-cell conversion inset beside
+// 4.1 Rushlight mid-round, with the pixel-to-cell conversion inset beside
 // it, because that conversion is what a gather is made of.
 {
   const k = 1.75;
@@ -1501,8 +1501,8 @@ add(
   const sy = (py) => 60 + py * k;
   const reeds = [[3, 2], [11, 21], [17, 2], [24, 22], [29, 21]];
   add(
-    'lanternfly-play.svg',
-    'Lanternfly in play',
+    'rushlight-play.svg',
+    'Rushlight in play',
     'The 256 by 192 screen with five reeds standing in the tile grid, a lantern glowing in cell 24, 6, the white fly at pixel 124, 92 and the wasp closing from the corner, with the score on the LCD.',
     470,
     [
@@ -1614,7 +1614,7 @@ add(
     478,
     [
       caption(40, 36, 'Skyfall, display matrix8x8'),
-      caption(400, 36, 'Lanternfly, display tms9918'),
+      caption(400, 36, 'Rushlight, display tms9918'),
       ...col(40, [
         'a render repaints the framebuffer',
         'ScanFrame drives eight rows',

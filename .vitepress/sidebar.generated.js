@@ -1126,8 +1126,8 @@ export const sidebars = {
           "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
         },
         {
-          "text": "Building Lanternfly",
-          "link": "/glimmer-book/book2/04-building-lanternfly.html"
+          "text": "Building Rushlight",
+          "link": "/glimmer-book/book2/04-building-rushlight.html"
         },
         {
           "text": "Two Displays, One Language",
@@ -1246,8 +1246,8 @@ export const sidebars = {
           "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
         },
         {
-          "text": "Building Lanternfly",
-          "link": "/glimmer-book/book2/04-building-lanternfly.html"
+          "text": "Building Rushlight",
+          "link": "/glimmer-book/book2/04-building-rushlight.html"
         },
         {
           "text": "Two Displays, One Language",
@@ -1366,8 +1366,8 @@ export const sidebars = {
           "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
         },
         {
-          "text": "Building Lanternfly",
-          "link": "/glimmer-book/book2/04-building-lanternfly.html"
+          "text": "Building Rushlight",
+          "link": "/glimmer-book/book2/04-building-rushlight.html"
         },
         {
           "text": "Two Displays, One Language",
@@ -1486,8 +1486,8 @@ export const sidebars = {
           "link": "/glimmer-book/book2/03-the-tms9918-profile.html"
         },
         {
-          "text": "Building Lanternfly",
-          "link": "/glimmer-book/book2/04-building-lanternfly.html"
+          "text": "Building Rushlight",
+          "link": "/glimmer-book/book2/04-building-rushlight.html"
         },
         {
           "text": "Two Displays, One Language",

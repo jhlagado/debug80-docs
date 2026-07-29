@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Building Lanternfly"
+title: "Building Rushlight"
 parent: "Glimmer Book 2 — Building Complete Z80 Games"
 nav_order: 4
 ---
 
-# Building Lanternfly
+# Building Rushlight
 
 Skyfall
 settled every landing with one subtraction against a column number.
@@ -17,7 +17,7 @@ that stores a separate picture. Collision now requires tests between
 sprite coordinates and between sprite pixels and grid cells.
 
 This chapter builds a
-complete game around those two questions: *Lanternfly*. You are a
+complete game around those two questions: *Rushlight*. You are a
 white fly over a night garden, steered with 2/4/6/8, one pixel per
 frame. A lantern glows somewhere in the grid; when the fly reaches its
 cell, the lantern is gathered, the score climbs on the LCD, and a fresh one appears
@@ -25,17 +25,17 @@ somewhere else. A wasp hunts you throughout the round, and every lantern
 you take quickens its stride. When it reaches you, the game ends.
 Around all of it stand the splash, playing and game-over cards, now
 running over VRAM shadows. The complete source is included as
-<a href="/glimmer-book/book2/code/lanternfly.glim">lanternfly.glim</a>. The text
+<a href="/glimmer-book/book2/code/rushlight.glim">rushlight.glim</a>. The text
 concentrates on the parts specific to this game,
 while the four movement effects follow Grove and the GameOver card
 follows Skyfall.
 
-![Lanternfly in play: the fly among the reeds, the lantern lit, the wasp closing.](../../assets/images/glimmer-book/book2/lanternfly-play.svg)
+![Rushlight in play: the fly among the reeds, the lantern lit, the wasp closing.](../../assets/images/glimmer-book/book2/rushlight-play.svg)
 
-## Lanternfly on paper
+## Rushlight on paper
 
 Before any block is written, the design can be stated in Glimmer's
-terms. For Lanternfly, the facts
+terms. For Rushlight, the facts
 split into two coordinate systems. Sprites glide, so `FlyX`/`FlyY` and
 `WaspX`/`WaspY` hold the two movers' top-left pixels. The lantern
 sits in one grid cell at a time, so `LampCol` and
@@ -54,7 +54,7 @@ cells.
 
 ## The scene and the declarations
 
-The file opens the way Grove's did (`program Lanternfly`, the
+The file opens the way Grove's did (`program Rushlight`, the
 platform line, `display tms9918`), and then it declares the cast.
 Here are the two members you meet first:
 
@@ -118,7 +118,7 @@ bind key KEY_4 held period 1 -> LeftP
 bind key KEY_6 held period 1 -> RightP
 bind key any   rising -> AnyKeyP
 
-text MsgTitle "LANTERNFLY      "
+text MsgTitle "RUSHLIGHT       "
 text MsgRun   "GATHER THE LAMPS"
 text MsgOver  "THE WASP GOT YOU"
 text MsgAny   "PRESS ANY KEY   "
@@ -361,7 +361,7 @@ render redraws from current facts, and redrawing the same picture is a
 correct redraw), but the commit retransmits an unchanged row. When the
 transfer volume warrants it, the refinement is to split the work: let the movement-triggered
 block do the cheap test alone and raise a pulse only on a catch, then
-hang the four-flag effect on that pulse. Lanternfly keeps the simpler
+hang the four-flag effect on that pulse. Rushlight keeps the simpler
 version because its transfer volume remains small.
 
 ## Colliding with the wasp
@@ -478,7 +478,7 @@ or a hundreds pass in the same counting style.
 
 ## Game over, gated
 
-Lanternfly reuses Skyfall's delayed restart gate. `GameOverShow`
+Rushlight reuses Skyfall's delayed restart gate. `GameOverShow`
 closes `Armed` and starts `Wait`; `OpenGate` later writes `MsgAny` and
 opens the gate; `Restart` tests `Armed` before writing `Card.Splash`.
 Card gating stops the move and chase blocks, so
@@ -490,9 +490,9 @@ strikes the lantern.
 
 ## Inside the generated file
 
-Building the full source (`glimmer build lanternfly.glim` with the
+Building the full source (`glimmer build rushlight.glim` with the
 companion file) produces these render blocks in
-`lanternfly.main.asm`:
+`rushlight.main.asm`:
 
 ```asm
 ; --- render block PlaceFly ---
@@ -569,7 +569,7 @@ respawn where your game changes card, and the respawn masks
 `ApiRandom` exactly as `Gather` does. The score display swaps
 surfaces: `DrawScore` calls `NamePut` with a runtime column and drops
 a `Pip` tile on the top grid row, the tile grid itself as
-scoreboard, where Lanternfly borrowed the LCD.
+scoreboard, where Rushlight borrowed the LCD.
 
 The last chapter compares the two games:
 [Two Displays, One Language](05-two-displays-one-language.md).
@@ -578,4 +578,4 @@ The last chapter compares the two games:
 
 **Pixel and grid coordinates.** The fly is at pixel position (124, 92). Which grid cell contains its centre, and what happens when the lantern is in that cell?
 
-[Exercise notes](exercise-notes.md#chapter-4-building-lanternfly)
+[Exercise notes](exercise-notes.md#chapter-4-building-rushlight)

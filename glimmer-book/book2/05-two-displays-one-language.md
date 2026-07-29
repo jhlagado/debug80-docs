@@ -11,8 +11,8 @@ The series began with one white pixel in the middle of the 8x8 RGB
 LED matrix. Those sixty-four pixels now run complete games, and Book 2
 has moved from them to a video chip with sprites. Skyfall drops
 blocks down the 8x8 board toward a paddle you slide along the bottom
-row; Lanternfly steers a white sprite through a night garden with a
-wasp on its tail. You built Skyfall and worked through Lanternfly's
+row; Rushlight steers a white sprite through a night garden with a
+wasp on its tail. You built Skyfall and worked through Rushlight's
 design. Side by side, they are near twins: three cards joined in
 the same loop, a writable timer whose period is the difficulty, a
 one-shot guarding the restart, `ApiRandom` masked for every respawn
@@ -46,7 +46,7 @@ MainLoop:
         jp      MainLoop
 ```
 
-And from `lanternfly.main.asm`:
+And from `rushlight.main.asm`:
 
 ```asm
 ; --- runtime loop ---
@@ -79,7 +79,7 @@ Skyfall's frame
 *produces* its picture: `ScanFrame` drives all eight LED rows with a
 fixed dwell and returns with the 8x8 matrix dark, so the whole game
 (polling, rules, renders) runs inside the blank window between scans,
-and the scan is the frame's largest cost. Lanternfly's frame begins by
+and the scan is the frame's largest cost. Rushlight's frame begins by
 waiting for its picture: the VDP refreshes 256x192 pixels from 16 KiB of
 VRAM, `VdpWaitVBlank` detects the interval between two refreshes and
 `GlimCommit` moves the previous frame's changes into VRAM during that
@@ -140,7 +140,7 @@ why Skyfall's difficulty lives in a timer period, counted in frames.
 ## The scene the program describes
 
 On the VDP, the scene outlives the frame that drew it. In
-Lanternfly's splash card, you planted five reeds with five `tile_at`
+Rushlight's splash card, you planted five reeds with five `tile_at`
 lines, once, in an `enter` block; the commit carried them to VRAM;
 and the VDP has refreshed them in every picture since from VRAM. An 8x8
 matrix render repaints its whole layer whenever a fact changes; a
@@ -160,7 +160,7 @@ returns. Moving the fly writes two shadow bytes, then
 the next commit sends the 128-byte sprite table.
 
 That scale rewrote your rules. Positions are pixels now, so
-Lanternfly's collision is the distance between two facts (absolute
+Rushlight's collision is the distance between two facts (absolute
 pixel difference per axis, each under a tolerance of 6), and the
 tolerance itself is a design decision the pixel scale brings with it:
 how much overlap counts as touching. The lantern pickup crosses the
@@ -178,7 +178,7 @@ scan one frame after its pulse.
 
 The main differences fit in one table:
 
-| | Skyfall, 8x8 matrix | Lanternfly, VDP |
+| | Skyfall, 8x8 matrix | Rushlight, VDP |
 |---|---|---|
 | The scene | 32 bytes, redrawn on change | 768 cells + 32 sprites, persistent in VRAM |
 | A render writes | the complete framebuffer | shadow cells, committed by dirty group |
@@ -190,7 +190,7 @@ The main differences fit in one table:
 
 ## One language
 
-The `display` line leaves the game model alone. Skyfall and Lanternfly
+The `display` line leaves the game model alone. Skyfall and Rushlight
 declare their games in interchangeable sentences: `state`
 bytes and words for facts, pulses for moments, `bind key ... held`
 for steering and `bind key any rising` for the restart key, a
@@ -208,7 +208,7 @@ through `Raised0` and `Next0` so one change reaches its dependents
 together, in a later phase or at the next frame's start; both print
 their design with `glimmer --deps` in the same report shape, raisers
 and triggers per fact. Skyfall uses 12 of the 32 change-flag cells,
-Lanternfly 16, on the same budget.
+Rushlight 16, on the same budget.
 
 The profile supplies the display-specific loop: scan or commit,
 framebuffer or shadow and `FbPlot` or `SpriteSet`. The language model

@@ -19,7 +19,7 @@ This first book introduces the reactive model one construct at a time.
 Its small programs lead into Canvas, which brings structured state,
 dependency reports, multiple source files and cards together in one
 interactive program. [Glimmer Book 2](../book2/) applies the completed
-toolkit to Skyfall, Tetro and Lanternfly.
+toolkit to Skyfall, Tetro and Rushlight.
 
 The book teaches Glimmer 0.6. Every complete program in it is built with
 `glimmer build`.

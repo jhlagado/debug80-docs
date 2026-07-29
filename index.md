@@ -93,7 +93,7 @@ For readers who can read Z80 assembly and want to understand the Glimmer languag
 
 ### [Glimmer Book 2 — Building Complete Z80 Games](glimmer-book/book2/)
 
-The application book. It builds Skyfall, studies the larger Tetro codebase, introduces the TMS9918 display profile and then builds Lanternfly.
+The application book. It builds Skyfall, studies the larger Tetro codebase, introduces the TMS9918 display profile and then builds Rushlight.
 
 For readers ready to apply Glimmer to complete games.
 

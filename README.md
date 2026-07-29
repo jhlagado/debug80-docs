@@ -35,7 +35,7 @@ and the change tracking, and compiles to readable Z80 assembly.
 | [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/) | The Z80 from the bare machine up, assuming nothing. |
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/) | Sorting, strings, records, recursion and a backtracking capstone. |
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs. |
-| [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/) | Skyfall, Tetro and Lanternfly across the matrix and TMS9918 displays. |
+| [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/) | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays. |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/) | Reference material for the machine and its monitor. |
 
 ## Working on it
