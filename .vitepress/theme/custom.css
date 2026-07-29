@@ -453,6 +453,20 @@ html {
   cursor: zoom-in;
 }
 
+/*
+ * Generated SVGs choose their palette from the operating-system preference.
+ * Give them a matching ground when the site's manual theme differs from it.
+ */
+.vp-doc figure.plate > img[src$='.svg'] {
+  background: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .vp-doc figure.plate > img[src$='.svg'] {
+    background: #1c1f22;
+  }
+}
+
 .vp-doc figure.plate > figcaption {
   margin-top: 14px;
   padding: 10px 0 12px;
@@ -865,6 +879,16 @@ html {
   object-fit: contain;
   background: var(--paper-card);
   padding: 12px;
+}
+
+.image-lightbox__image[src$='.svg'] {
+  background: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .image-lightbox__image[src$='.svg'] {
+    background: #1c1f22;
+  }
 }
 
 .image-lightbox__caption {
