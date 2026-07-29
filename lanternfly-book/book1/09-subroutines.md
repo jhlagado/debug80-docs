@@ -17,7 +17,7 @@ end
 addScore(10)
 ```
 
-`amount` receives a fresh scalar value for the invocation.
+`amount` receives its own scalar value for each invocation.
 
 ## One declaration form
 
@@ -149,11 +149,3 @@ profile determines whether it can supply the required storage.
 
 The [chapter listing](/lanternfly-book/book1/code/09-routines.txt) contains an
 action, two result-bearing subroutines and an aggregate parameter.
-
-## Summary
-
-- `sub` declares routines with and without results.
-- Parameters receive arguments from left to right.
-- `return expression` supplies a result and bare `return` leaves an action.
-- Scalar locals hold per-invocation intermediate values.
-- Aggregate parameters alias compatible caller storage.

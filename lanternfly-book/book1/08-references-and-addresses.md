@@ -98,6 +98,8 @@ var boardPlanes as (near ref (u8[8]))[3] = [
 Each element is one near reference to an eight-byte array. The board arrays
 retain separate storage.
 
+![Three reference slots point to three independently allocated board arrays.](../../assets/images/lanternfly-book/book1/array-of-references.svg)
+
 ```lanternfly
 value(boardPlanes[planeIndex]) = clearPlane
 ```
@@ -122,6 +124,8 @@ var remoteMonster as far ref Monster = ref monsters[0]
 On a banked Z80 target, that context may be a bank identifier beside a 16-bit
 offset. An 8086 backend may use a segment and offset. A flat-memory target may
 represent both classes identically.
+
+![On one possible banked Z80 target, a near reference uses the current bank while a far reference carries the bank identifier.](../../assets/images/lanternfly-book/book1/banked-references.svg)
 
 Stored references and public interfaces state `near` or `far`. An unqualified
 `ref Monster` is available for local reference variables and private
@@ -149,11 +153,3 @@ remains unavailable for that address space.
 The [chapter listing](/lanternfly-book/book1/code/08-references.txt) selects a
 monster by reference, creates a local alias and clears one of several referenced
 board planes.
-
-## Summary
-
-- `ref` forms a typed reference to existing storage.
-- Field and index paths pass through aggregate references.
-- `value(reference)` accesses the complete referent.
-- A local `ref name as Type` declaration aliases existing aggregate storage.
-- `near`, `far` and opaque addresses describe target reachability.

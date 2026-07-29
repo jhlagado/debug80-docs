@@ -164,12 +164,3 @@ end
 
 The [chapter listing](/lanternfly-book/book1/code/03-expressions.txt) includes
 the distance calculation, Boolean state and a bit-mask test.
-
-## Summary
-
-- Every integer operation has a resolved width and signedness.
-- Value-preserving widening targets a type already present in the expression.
-- Byte subtraction produces `i16`.
-- Comparisons produce `boolean`.
-- Boolean `and` and `or` short-circuit.
-- Integer `and`, `or`, `xor` and `not` operate on bits.

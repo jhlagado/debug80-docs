@@ -7,12 +7,12 @@ const east as u8 = 1
 const south as u8 = 2
 const west as u8 = 3
 
-var lives as i16 = 3
-var score as i16 = 0
+var lives as u8 = 3
+var score as u8 = 0
 var status as u8 = playing
 var direction as u8 = north
-var deltaX as i16 = 0
-var deltaY as i16 = 0
+var deltaX as i8 = 0
+var deltaY as i8 = 0
 
 sub updateStatus()
     if lives = 0 then

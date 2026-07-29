@@ -141,11 +141,3 @@ information needed to form branches, tests and counter updates.
 
 The [chapter listing](/lanternfly-book/book1/code/05-loops.txt) contains counted,
 conditional and indefinite loops.
-
-## Summary
-
-- `for` walks through an inclusive range.
-- An omitted step means `+1`; `step` accepts another compile-time integer.
-- `while` tests before each iteration.
-- `loop` repeats until control leaves it.
-- `exit` leaves and `continue` advances the innermost loop.

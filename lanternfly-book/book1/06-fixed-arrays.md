@@ -74,6 +74,8 @@ var scores as u16[5]
 Each `u16` occupies two bytes, so `scores` occupies ten bytes. Entry 3 begins
 six bytes after entry 0. The address calculation multiplies the index by two.
 
+![Each u16 entry occupies two adjacent bytes, so scores[3] begins at byte offset six.](../../assets/images/lanternfly-book/book1/array-stride.svg)
+
 The same rule applies to elements that occupy three, six or another exact byte
 count. Record arrays in Chapter 7 rely on this true stride.
 
@@ -99,6 +101,8 @@ Lanternfly stores the rightmost dimension contiguously. The element number is:
 ```text
 row * mapColumns + column
 ```
+
+![Rows occupy consecutive runs of four bytes; row 1, column 2 is element 6.](../../assets/images/lanternfly-book/book1/row-major-array.svg)
 
 `count(tiles, 0)` produces 24 and `count(tiles, 1)` produces 32. A dimension
 argument is required for a multidimensional array so the requested extent is
@@ -144,12 +148,3 @@ loop, native operation or runtime helper while preserving the same result.
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt) fills a
 sample array, clears it and declares a two-dimensional tile map with direction
 tables.
-
-## Summary
-
-- An array type states its element type and fixed dimensions.
-- Indices start at zero and dynamic access is checked.
-- `count` returns an extent and `size` returns exact bytes.
-- Multidimensional arrays use row-major layout.
-- Square-bracket initializers match the declared shape exactly.
-- `clear` and `fill` perform repeated aggregate stores.

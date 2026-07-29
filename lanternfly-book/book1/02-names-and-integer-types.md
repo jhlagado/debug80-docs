@@ -157,12 +157,3 @@ shift is folded.
 
 The [chapter listing](/lanternfly-book/book1/code/02-names-and-types.txt) brings
 constants, Boolean state and integer conversion together.
-
-## Summary
-
-- `u8`, `i8`, `u16`, `i16`, `u32` and `i32` state width and signedness.
-- `boolean` stores `true` or `false`.
-- `const` names a fixed compile-time value.
-- `=` assigns at statement level and compares inside an expression.
-- Destination conversion is automatic; a type name records an explicit
-  cross-type choice.

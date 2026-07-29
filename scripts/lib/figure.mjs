@@ -23,6 +23,7 @@ export const BOOKS = {
   debug80: { light: '#b4442f', dark: '#e08a76' },
   azm: { light: '#14607e', dark: '#5fa8c6' },
   glimmer: { light: '#2a7139', dark: '#6cbb7e' },
+  lanternfly: { light: '#744f90', dark: '#b995d0' },
   tec1g: { light: '#96620f', dark: '#d1a052' },
 };
 

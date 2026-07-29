@@ -129,11 +129,3 @@ entries. A dot selects a record field.
 
 The [chapter listing](/lanternfly-book/book1/code/01-first-program.txt) contains
 the complete routine.
-
-## Summary
-
-- `var` declares storage and `as` introduces its type.
-- `sub` declares a named action.
-- `if`, `then` and `end` enclose a conditional block.
-- `=` converts a completed expression to its destination type and stores it.
-- `//` begins a line comment.

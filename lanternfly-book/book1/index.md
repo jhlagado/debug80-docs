@@ -34,8 +34,8 @@ work far enough to explain its cost.
 6. [Fixed Arrays](06-fixed-arrays.md)
 7. [Records and Exact Layout](07-records-and-exact-layout.md)
 8. [References and Addresses](08-references-and-addresses.md)
-9. [Subroutines](09-procedures-and-functions.md)
-10. [Services, Targets and Assembly](10-services-and-targets.md)
+9. [Subroutines](09-subroutines.md)
+10. [Services, Targets and Assembly](10-services-targets-and-assembly.md)
 
 The [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
 defines the complete source rules. The
@@ -46,3 +46,6 @@ test.
 Each chapter links to a companion listing under
 `/lanternfly-book/book1/code/`. The listings keep a `.txt` extension while the
 project decides the final Lanternfly source extension.
+
+Exercises will arrive with the compiler, when the toolchain can run each
+program and provide an answer key.

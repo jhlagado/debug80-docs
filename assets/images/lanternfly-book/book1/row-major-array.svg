@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="276" viewBox="0 0 720 276" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">A three-by-four array stored in row-major order</title>
+  <desc id="figDesc">A grid with three rows and four columns. The cells are numbered from zero to eleven across each row. Row one, column two is highlighted as element six.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #744f90;
+      --sig-bg: #744f901a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #b995d0;
+        --sig-bg: #b995d026;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="24" y="28" text-anchor="start" xml:space="preserve">TILES AS U8[3, 4]</text>
+  <text class="dim" x="225" y="58" text-anchor="middle" xml:space="preserve">column 0</text>
+  <text class="dim" x="315" y="58" text-anchor="middle" xml:space="preserve">column 1</text>
+  <text class="dim" x="405" y="58" text-anchor="middle" xml:space="preserve">column 2</text>
+  <text class="dim" x="495" y="58" text-anchor="middle" xml:space="preserve">column 3</text>
+  <text class="dim" x="164" y="97" text-anchor="end" xml:space="preserve">row 0</text>
+  <text class="dim" x="164" y="139" text-anchor="end" xml:space="preserve">row 1</text>
+  <text class="dim" x="164" y="181" text-anchor="end" xml:space="preserve">row 2</text>
+  <rect class="bx" x="180" y="72" width="90" height="42" rx="2"/>
+  <text class="t" x="225" y="90" text-anchor="middle" xml:space="preserve">0,0</text>
+  <text class="dim" x="225" y="106" text-anchor="middle" xml:space="preserve">element 0</text>
+  <rect class="bx" x="270" y="72" width="90" height="42" rx="2"/>
+  <text class="t" x="315" y="90" text-anchor="middle" xml:space="preserve">0,1</text>
+  <text class="dim" x="315" y="106" text-anchor="middle" xml:space="preserve">element 1</text>
+  <rect class="bx" x="360" y="72" width="90" height="42" rx="2"/>
+  <text class="t" x="405" y="90" text-anchor="middle" xml:space="preserve">0,2</text>
+  <text class="dim" x="405" y="106" text-anchor="middle" xml:space="preserve">element 2</text>
+  <rect class="bx" x="450" y="72" width="90" height="42" rx="2"/>
+  <text class="t" x="495" y="90" text-anchor="middle" xml:space="preserve">0,3</text>
+  <text class="dim" x="495" y="106" text-anchor="middle" xml:space="preserve">element 3</text>
+  <rect class="bx" x="180" y="114" width="90" height="42" rx="2"/>
+  <text class="t" x="225" y="132" text-anchor="middle" xml:space="preserve">1,0</text>
+  <text class="dim" x="225" y="148" text-anchor="middle" xml:space="preserve">element 4</text>
+  <rect class="bx" x="270" y="114" width="90" height="42" rx="2"/>
+  <text class="t" x="315" y="132" text-anchor="middle" xml:space="preserve">1,1</text>
+  <text class="dim" x="315" y="148" text-anchor="middle" xml:space="preserve">element 5</text>
+  <rect class="bxs" x="360" y="114" width="90" height="42" rx="2"/>
+  <text class="tb" x="405" y="132" text-anchor="middle" xml:space="preserve">1,2</text>
+  <text class="dim" x="405" y="148" text-anchor="middle" xml:space="preserve">element 6</text>
+  <rect class="bx" x="450" y="114" width="90" height="42" rx="2"/>
+  <text class="t" x="495" y="132" text-anchor="middle" xml:space="preserve">1,3</text>
+  <text class="dim" x="495" y="148" text-anchor="middle" xml:space="preserve">element 7</text>
+  <rect class="bx" x="180" y="156" width="90" height="42" rx="2"/>
+  <text class="t" x="225" y="174" text-anchor="middle" xml:space="preserve">2,0</text>
+  <text class="dim" x="225" y="190" text-anchor="middle" xml:space="preserve">element 8</text>
+  <rect class="bx" x="270" y="156" width="90" height="42" rx="2"/>
+  <text class="t" x="315" y="174" text-anchor="middle" xml:space="preserve">2,1</text>
+  <text class="dim" x="315" y="190" text-anchor="middle" xml:space="preserve">element 9</text>
+  <rect class="bx" x="360" y="156" width="90" height="42" rx="2"/>
+  <text class="t" x="405" y="174" text-anchor="middle" xml:space="preserve">2,2</text>
+  <text class="dim" x="405" y="190" text-anchor="middle" xml:space="preserve">element 10</text>
+  <rect class="bx" x="450" y="156" width="90" height="42" rx="2"/>
+  <text class="t" x="495" y="174" text-anchor="middle" xml:space="preserve">2,3</text>
+  <text class="dim" x="495" y="190" text-anchor="middle" xml:space="preserve">element 11</text>
+  <text class="t" x="180" y="226" text-anchor="start" xml:space="preserve">row 1, column 2 → 1 × 4 + 2 → element 6</text>
+  <text class="dimn" x="180" y="254" text-anchor="start" xml:space="preserve">The rightmost index changes between adjacent bytes.</text>
+</svg>

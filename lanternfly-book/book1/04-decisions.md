@@ -15,8 +15,8 @@ const finished as u8 = 0
 const playing as u8 = 1
 const won as u8 = 2
 
-var lives as i16 = 3
-var score as i16 = 0
+var lives as u8 = 3
+var score as u8 = 0
 var status as u8 = playing
 
 sub updateStatus()
@@ -88,8 +88,8 @@ const south as u8 = 2
 const west as u8 = 3
 
 var direction as u8 = north
-var deltaX as i16 = 0
-var deltaY as i16 = 0
+var deltaX as i8 = 0
+var deltaY as i8 = 0
 
 sub findStep()
     deltaX = 0
@@ -153,11 +153,3 @@ The selected expression is evaluated once.
 
 The [chapter listing](/lanternfly-book/book1/code/04-decisions.txt) combines an
 ordered status chain with direction selection.
-
-## Summary
-
-- `if` runs a block when its condition is `true`.
-- `else if` adds ordered conditions and `else` handles the remainder.
-- One `end` closes the complete decision.
-- `select` compares one value with constant `case` values.
-- Cases never fall through.

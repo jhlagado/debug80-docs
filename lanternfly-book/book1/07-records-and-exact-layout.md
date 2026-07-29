@@ -76,6 +76,8 @@ const timerOffset as u8 = offset(Monster.timer)
 `monsterBytes` is six and `timerOffset` is four. Exact layout allows a record
 to match a firmware table, file representation or existing game-state map.
 
+![Monster occupies six bytes in declaration order, with timer at offset four.](../../assets/images/lanternfly-book/book1/monster-layout.svg)
+
 ## Arrays of records
 
 ```lanternfly
@@ -91,6 +93,8 @@ monsters[index].timer = monsters[index].timer + 1
 
 The backend calculates `index * 6`, adds the timer offset and accesses one
 byte. A six-byte stride remains six on every target.
+
+![Each Monster begins six bytes after the previous one; monsters[2].timer is byte offset 16.](../../assets/images/lanternfly-book/book1/record-array-stride.svg)
 
 ## Nested records and arrays
 
@@ -155,11 +159,3 @@ Aggregate locals do not allocate record or array storage on the stack. Chapter
 
 The [chapter listing](/lanternfly-book/book1/code/07-records.txt) declares
 points, monsters and a mover with a position history.
-
-## Summary
-
-- `record` declares a Pascal-cased type with named fields.
-- Fields keep declaration order and exact size.
-- `size` and `offset` expose compile-time layout.
-- Arrays of records use the record's true byte stride.
-- Assignment copies equal fixed-size records or arrays.

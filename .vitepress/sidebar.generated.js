@@ -1564,12 +1564,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/08-references-and-addresses.html"
         },
         {
-          "text": "Procedures and Functions",
-          "link": "/lanternfly-book/book1/09-procedures-and-functions.html"
+          "text": "Subroutines",
+          "link": "/lanternfly-book/book1/09-subroutines.html"
         },
         {
-          "text": "Services and Targets",
-          "link": "/lanternfly-book/book1/10-services-and-targets.html"
+          "text": "Services, Targets and Assembly",
+          "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
         }
       ]
     }
@@ -1612,12 +1612,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/08-references-and-addresses.html"
         },
         {
-          "text": "Procedures and Functions",
-          "link": "/lanternfly-book/book1/09-procedures-and-functions.html"
+          "text": "Subroutines",
+          "link": "/lanternfly-book/book1/09-subroutines.html"
         },
         {
-          "text": "Services and Targets",
-          "link": "/lanternfly-book/book1/10-services-and-targets.html"
+          "text": "Services, Targets and Assembly",
+          "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
         }
       ]
     }

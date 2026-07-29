@@ -9,7 +9,7 @@ nav_order: 10
 
 Arithmetic keeps one meaning across targets. Drawing a pixel or reading a key
 depends on the platform. Typed services and inline assembly connect portable
-Lanternfly code to those target operations.
+Lanternfly code to platform operations.
 
 ```lanternfly
 sub showPlayer()
@@ -161,13 +161,3 @@ diagnostics to those mappings.
 
 The [chapter listing](/lanternfly-book/book1/code/10-services.txt) uses standard
 operations, declares display services and contains one inline assembly block.
-
-## Summary
-
-- Standard value and aggregate operations preserve their meaning across
-  backends.
-- `extern sub` gives platform routines typed source signatures and target
-  bindings.
-- Runtime helpers supply operations missing from a target processor.
-- `asm` and `end` delimit raw target assembly.
-- Generated source, mappings, symbols and costs are compiler artifacts.
