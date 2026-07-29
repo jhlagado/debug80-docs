@@ -10,8 +10,8 @@ nav_order: 6
 Chapter 5 ended with loops that touch every entry in a table, and
 quietly assumed the table. Try to build one without arrays and the
 problem shows itself immediately. Suppose the program needs eight sound
-samples. Eight separate variables — `sample0`, `sample1`, up to
-`sample7` — can certainly be declared, but a loop cannot reach them:
+samples. Eight separate variables (`sample0`, `sample1`, up to
+`sample7`) can certainly be declared, but a loop cannot reach them:
 `for index = 0 to 7` has no way to turn the value of `index` into a
 choice among eight *names*. And the reason is worth spelling out,
 because it deepens something Chapter 1 began. Names are gone by the
@@ -174,8 +174,8 @@ Two indices select one tile:
 tiles[row, column] = tileNumber
 ```
 
-Memory itself has no rows — it is Chapter 1's single long street of
-pigeonholes — so a two-dimensional array is a filing convention:
+Memory itself has no rows; it is Chapter 1's single long street of
+pigeonholes. A two-dimensional array is therefore a filing convention:
 Lanternfly stores the rightmost dimension contiguously, laying row 0
 end to end, then row 1 immediately after it, and so on through row
 23. The element number is:

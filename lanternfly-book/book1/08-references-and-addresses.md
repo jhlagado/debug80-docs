@@ -23,8 +23,8 @@ the whereabouts of bytes that live elsewhere. Chapters 1 through 7
 worked almost entirely in values. This chapter adds locations, and with
 them a new kind of variable: one whose content is, in effect, an arrow
 pointing at other storage. Lanternfly calls it a reference, and a
-reference is a location *plus a type* — not merely "somewhere in
-memory" but "a `Monster`, there":
+reference is a location *plus a type* — not "somewhere in memory"
+but "a `Monster`, there":
 
 ```lanternfly
 var monsters as Monster[4]

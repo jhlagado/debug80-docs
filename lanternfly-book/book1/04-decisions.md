@@ -13,7 +13,7 @@ else is true. A score of 100 or more wins it — but only if the player is
 still alive to enjoy the fact. Every other state keeps the round in
 progress. Chapter 3 built the machinery for asking single questions;
 this chapter is about arranging the questions into policy. The program
-below encodes not just the three rules but their pecking order:
+below encodes the three rules together with their pecking order:
 
 ```lanternfly
 const finished as u8 = 0
@@ -228,8 +228,8 @@ other classic hole: two cases quietly competing for the same value,
 with the winner decided by whichever the compiler happened to check
 first. In a `select`, every value of the expression has at most one
 home, and the compiler proves it. Contrast that with the `else if`
-chain, where overlapping conditions are not merely legal but the
-point — the chain resolves overlaps by rank. The two statements
+chain, where overlapping conditions are the point rather than an
+error — the chain resolves overlaps by rank. The two statements
 disagree about overlap because they model different situations.
 
 ## Choosing `if` or `select`
