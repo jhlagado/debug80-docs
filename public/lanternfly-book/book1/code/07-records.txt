@@ -1,28 +1,29 @@
-TYPE Point
-    X AS SBYTE
-    Y AS SBYTE
-END TYPE
+record Point
+    var x as i8
+    var y as i8
+end
 
-TYPE Monster
-    X AS BYTE
-    Y AS BYTE
-    Direction AS BYTE
-    State AS BYTE
-    Timer AS BYTE
-    Frame AS BYTE
-END TYPE
+record Monster
+    var x as u8
+    var y as u8
+    var direction as u8
+    var state as u8
+    var timer as u8
+    var frame as u8
+end
 
-TYPE Mover
-    Position AS Point
-    Previous AS Point[4]
-    Count AS BYTE
-END TYPE
+record Mover
+    var position as Point
+    var previous as Point[4]
+    var savedCount as u8
+end
 
-DIM Position AS Point
-DIM Monsters[4] AS Monster
-DIM Player AS Mover
+var position as Point
+var savedPosition as Point
+var monsters as Monster[4]
+var player as Mover
 
-SUB SavePosition(Index AS INTEGER)
-    Player.Previous[Index].X = Player.Position.X
-    Player.Previous[Index].Y = Player.Position.Y
-END SUB
+sub savePosition(index as i16)
+    player.previous[index] = player.position
+    savedPosition = player.position
+end

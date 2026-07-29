@@ -7,108 +7,117 @@ nav_order: 1
 
 # A First Program
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+A player begins a round with three lives. Losing a life subtracts one while the
+count is above zero:
 
-A player begins a round with three lives. When the player loses a life, the
-program subtracts one, stopping at zero. Here is the complete routine:
+```lanternfly
+var lives as u8 = 3
 
-```text
-DIM Lives AS INTEGER = 3
-
-SUB LoseLife()
-    IF Lives > 0 THEN
-        Lives = Lives - 1
-    END IF
-END SUB
+sub loseLife()
+    if lives > 0 then
+        lives = u8(lives - 1)
+    end
+end
 ```
 
-You can follow the rule before learning each keyword. `Lives` starts at 3. The
-subtraction runs only while `Lives` is greater than zero. The words divide the
-source into a declaration, a routine and a decision.
+You can trace the routine from top to bottom. `lives` starts at three. The
+comparison controls whether the subtraction runs. Each `end` closes the
+innermost open block.
 
-## A name for stored information
+## Storing a value
 
-```text
-DIM Lives AS INTEGER = 3
+```lanternfly
+var lives as u8 = 3
 ```
 
-`DIM` introduces storage. `Lives` is the name used by the rest of the source.
-`AS INTEGER` says that the storage holds a signed whole number. The final `= 3`
-sets its starting value.
+`var` declares storage. `lives` names that storage and `as u8` gives it an
+unsigned eight-bit type. The initializer stores three before the program
+entry begins.
 
-Read the line from left to right: declare `Lives` as an integer and initialise
-it to three. A declaration gives the compiler enough information to choose a
-representation and reject operations that do not fit that representation.
+Lanternfly names values and routines in lower camel case. A short name such as
+`lives` needs one word. A longer name joins words by capitalising each word
+after the first:
 
-## A named action
+```lanternfly
+var remainingLives as u8 = 3
+```
 
-```text
-SUB LoseLife()
+## Naming an action
+
+```lanternfly
+sub loseLife()
     ...
-END SUB
+end
 ```
 
-`SUB` begins a procedure: a named action that returns no value. Its name is
-`LoseLife`. The parentheses will hold inputs in later examples. Empty
-parentheses say that this procedure receives none.
+`sub` declares a subroutine: a named sequence of statements. Parentheses hold
+parameters in later chapters. Empty parentheses mean that this subroutine
+receives none.
 
-`END SUB` closes the procedure. Repeating the opening word at the end makes a
-longer source file easier to scan. `END SUB`, `END IF` and `NEXT` name the
-structure that each closing line completes.
+The final `end` closes the subroutine. Lanternfly uses the same closing word
+for a subroutine, decision, loop and record. Indentation shows which opening
+line belongs to it.
 
-## A decision written as a block
+## Running a statement conditionally
 
-```text
-IF Lives > 0 THEN
-    Lives = Lives - 1
-END IF
+```lanternfly
+if lives > 0 then
+    lives = u8(lives - 1)
+end
 ```
 
-The expression after `IF` asks whether `Lives` is greater than zero. When that
-comparison is true, the indented assignment runs. `END IF` marks the end of the
-decision.
+The comparison `lives > 0` produces a Boolean value. When it is `true`, the
+indented assignment runs. When it is `false`, execution continues after the
+closing `end`.
 
-The indentation shows the same structure as the keywords. `IF` and `END IF`
-give a formatter an unambiguous block to indent.
+The assignment reads the old value, subtracts one and converts the result back
+to `u8`. The condition keeps the result non-negative, and subtracting from a
+`u8` value keeps it below 256, so the conversion preserves the value.
 
-## Words for structure, symbols for formulas
+## Assignment reads from right to left
 
-The opening example establishes the source style used throughout the book:
+```lanternfly
+lives = u8(lives - 1)
+```
 
-| Job                       | Lanternfly form        |
-| ------------------------- | ---------------------- |
-| declare a value           | `DIM Lives AS INTEGER` |
-| begin a decision          | `IF Lives > 0 THEN`    |
-| close a decision          | `END IF`               |
-| subtract one              | `Lives - 1`            |
-| store a result            | `Lives = Lives - 1`    |
-| begin and end a procedure | `SUB` and `END SUB`    |
+The expression on the right is evaluated first. `u8(...)` converts that result
+to the destination type. The final value is then stored in `lives`.
 
-Words carry the grammar of the program. Symbols keep arithmetic and
-comparisons in the notation used on paper. Parentheses group expressions and
-hold call arguments. Square brackets will select array entries and a dot will
-select a record field.
+At the start of an assignment statement, `=` means “store in”. Inside an
+expression, the same token compares two values. Chapter 2 shows both uses
+together.
 
-This division gives Lanternfly the reading shape associated with structured
-BASIC and Visual Basic. Lanternfly borrows that source convention while
-specifying its own fixed integer widths, exact data layouts and
-machine-independent arithmetic rules.
+## Comments explain intent
 
-## The working punctuation budget
+`//` begins a comment and consumes the rest of its line:
 
-The first language draft uses punctuation where it has a familiar job:
+```lanternfly
+// Keep the life count at zero after the round ends.
+if lives > 0 then
+    lives = u8(lives - 1)  // The condition makes this conversion safe.
+end
+```
 
-- `+`, `-`, `*` and `/` write arithmetic;
-- `=`, `<>`, `<`, `<=`, `>` and `>=` write comparisons;
-- parentheses group calculations and enclose call arguments;
-- square brackets select array entries;
-- a dot selects a named field.
+The compiler ignores comment text. A comment earns its place when it explains
+why the code exists or records a constraint that the statements alone cannot
+show.
 
-Control flow uses words: `IF`, `ELSE`, `FOR`, `WHILE`, `SELECT CASE`, `SUB` and
-`FUNCTION`. Word operators such as `AND`, `OR`, `NOT`, `MOD`, `SHL` and `SHR`
-replace punctuation whose meaning is less obvious to a new programmer.
+## Words and symbols
+
+Lanternfly uses words for program structure and symbols for formulas:
+
+| Job | Form |
+| --- | --- |
+| declare storage | `var lives as u8` |
+| declare a subroutine | `sub loseLife()` |
+| begin a decision | `if lives > 0 then` |
+| close the current block | `end` |
+| subtract | `lives - 1` |
+| assign | `lives = ...` |
+| comment | `// explanation` |
+
+Parentheses group expressions and hold arguments. Square brackets select array
+entries. A dot selects a record field.
 
 ## Example
 
@@ -117,7 +126,8 @@ the complete routine.
 
 ## Summary
 
-- `DIM` declares stored information and `AS` gives it a type.
-- `SUB` and `END SUB` enclose a named action.
-- `IF`, `THEN` and `END IF` enclose a conditional block.
-- Words show program structure while symbols write formulas and comparisons.
+- `var` declares storage and `as` introduces its type.
+- `sub` declares a named action.
+- `if`, `then` and `end` enclose a conditional block.
+- `=` stores a completed expression in its destination.
+- `//` begins a line comment.

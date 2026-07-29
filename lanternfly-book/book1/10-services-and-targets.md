@@ -1,128 +1,152 @@
 ---
 layout: default
-title: "Services and Targets"
+title: "Services, Targets and Assembly"
 parent: "Lanternfly Book 1 — Language Fundamentals"
 nav_order: 10
 ---
 
-# Services and Targets
+# Services, Targets and Assembly
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+Arithmetic keeps one meaning across targets. Drawing a pixel or reading a key
+depends on the platform. Typed services and inline assembly connect portable
+Lanternfly code to those target operations.
 
-Arithmetic and control flow have the same meaning on every Lanternfly target.
-Drawing a pixel, reading a key or writing to a device depends on the platform.
-A typed service connects source code to that platform operation:
-
-```text
-SUB ShowPlayer()
-    ScreenClear()
-    DrawPixel(PlayerX, PlayerY, PlayerColour)
-END SUB
+```lanternfly
+sub showPlayer()
+    screenClear()
+    drawPixel(playerX, playerY, playerColour)
+end
 ```
 
-The calls look like ordinary procedures. An interface supplies each name,
-parameter type, result type and visible effect.
+The calls use ordinary subroutine syntax. A target interface supplies their
+parameter types, results and observable effects.
 
-## Core language operations
+## Standard operations
 
-The language defines calculations, comparisons, assignments, control flow and
-typed storage. Their results remain the same across backends.
+Lanternfly defines a small set of operations whose source meaning stays fixed:
 
-```text
-Distance = ABS(TargetX - PlayerX)
-Root = ISQRT(Value)
-Power = Base ^ Exponent
+```lanternfly
+distance = abs(targetX - playerX)
+root = sqrt(area)
+actorBytes = size(Actor)
+rowCount = count(board, 0)
+timerOffset = offset(Actor.timer)
 ```
 
-`ABS`, `ISQRT`, `MIN`, `MAX`, `CLAMP`, `SGN`, `POW` and `BITCOUNT` form the
-initial scalar library. Aggregate operations include `FILL`, `CLEAR`, `COPY`
-and `MOVE`.
+`abs` returns an unsigned magnitude. `sqrt` returns the floor of a non-negative
+integer square root. The layout queries `size`, `count` and `offset` fold at
+compile time.
 
-A backend may translate one operation to a machine instruction, an inline
-sequence, a helper routine or a host-language built-in. Each implementation
-must produce the same Lanternfly result.
+A Z80 backend may call a helper for square root or wide arithmetic. A C backend
+may emit a native operator or library call. Helpers enter the program only
+when selected operations require them, and the cost report names those
+helpers.
 
 ## Platform services
 
-Input, display, sound, random values, firmware and device operations arrive
-through typed interfaces. A display interface might supply:
+Input, display, sound, random values, firmware and device access arrive through
+typed interfaces. Once its interface is imported, a program calls display
+services like ordinary subroutines:
 
-```text
-ScreenClear()
-DrawPixel(X, Y, Colour)
-ShowNumber(Value)
+```lanternfly
+screenClear()
+drawPixel(x, y, colour)
+showNumber(value)
 ```
 
-The concrete import-file syntax is still being designed. Its semantic contract
-already includes:
+`import` loads an exported source module once:
 
-- the service name;
-- parameter and result types;
-- storage or device effects;
-- whether the call returns;
-- the target capability it requires;
-- the native symbol, host function or helper that implements it.
+```lanternfly
+import "display.lf"
+```
 
-Lanternfly source can call the same service name when several targets provide
-compatible implementations.
+Private declarations remain inside their module. Exported names become visible
+to the importer. A platform build supplies native implementations for services
+whose work lies outside Lanternfly.
 
-## Runtime helpers fill target gaps
+## Inline assembly
 
-A small processor may need a helper for multiplication, division, integer
-square root or 32-bit arithmetic. A C backend may use its host operations for
-some of the same work.
+An instruction sequence can be placed directly inside a subroutine:
 
-Helpers are selected from the operations a program actually uses. The division
-helper is linked only into programs that divide. The cost report can name each
-selected helper and its estimated code or cycle cost.
+```lanternfly
+sub waitForKey()
+    asm
+        call ROM_WAIT_KEY
+    end
+end
+```
 
-The helper boundary preserves the readable source. A formula remains a formula
-when its implementation requires several instructions or a call.
+`asm` switches the lexer into raw assembly mode. The next physical line whose
+trimmed content is exactly `end` returns to Lanternfly. Every line in between
+belongs to the assembler, including its comment syntax.
 
-## Native code is an explicit boundary
-
-Some operations depend on an instruction, firmware entry point or precisely
-timed sequence. A native declaration binds a Lanternfly signature to that
-target implementation. An inline native block can hold substrate source when
-the operation belongs inside one routine.
-
-The concrete keywords for native declarations and blocks remain provisional.
-Their contract records reads, writes, I/O, returned values, control flow and
-target requirements. That information lets the compiler protect surrounding
-code and map a native error back to its Lanternfly call.
-
-## One source meaning, several outputs
-
-The same typed program can move through different backends:
+An assembly-source backend emits the payload verbatim at that position:
 
 ```text
 Lanternfly source
-    -> typed program
-    -> target backend
-    -> AZM, another assembler, C or BASIC
+    -> generated assembly with inline blocks
+    -> selected assembler
+    -> machine program
 ```
 
-Generated C or BASIC must preserve fixed-width arithmetic, exact layout,
-narrowing and evaluation order. Host-language defaults are implementation
-details rather than permission to change the result.
+Assembler diagnostics retain the original inline source lines.
 
-Each backend should produce inspectable output, source provenance and the
-target assumptions used by its cost report. Those artifacts let you connect a
-Lanternfly statement to generated source and then to machine code where the
-target supplies it.
+## The assembly barrier
+
+The compiler cannot infer register use or memory effects from arbitrary target
+assembly, so a statement-level `asm` block forms a conservative barrier. The
+compiler assumes that it can read and write every visible mutable object, call
+target routines, fault and clobber processor registers or flags.
+
+Before the block, the backend preserves every generated value needed
+afterwards. Control from the assembly must reach the generated statement after
+the block. A direct return or jump around Lanternfly control breaks that
+contract and can bypass a hosted-body epilogue.
+
+Raw names are assembler names. The backend's symbol artifact shows which
+generated Lanternfly names are available to inline source.
+
+## Module-level assembly
+
+An `asm` block can also appear among module declarations:
+
+```lanternfly
+asm
+ROM_WAIT_KEY = $0038
+end
+```
+
+This form can provide target directives, labels, routines or data. Symbols
+defined inside the raw block stay in the assembly world until a typed native
+declaration exposes them to Lanternfly.
+
+Inline assembly commits that source file to a compatible assembly target. A C
+or BASIC backend rejects the block unless its profile supplies an
+assembly-fragment pipeline.
+
+## Generated artifacts
+
+A source-generating backend records:
+
+- generated assembly, C or BASIC;
+- source mappings from Lanternfly to generated ranges;
+- typed symbols and exact layouts;
+- selected helpers and imports;
+- inline assembly ranges and conservative effects;
+- target-qualified code and timing estimates when available.
+
+For an assembly backend, the assembler adds machine-code addresses and its own
+diagnostics to those mappings.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/10-services.txt) uses standard
-operations and three assumed platform services. The interface declarations
-will be added when their source syntax is selected.
+operations, assumed display services and one inline assembly block.
 
 ## Summary
 
-- Core operations keep one meaning across targets.
-- Platform services enter through typed interfaces and ordinary calls.
-- Backends link runtime helpers only when a program uses them.
-- Native code has an explicit target-qualified contract.
-- Generated source, source maps and cost information are compiler outputs.
+- Standard operations preserve their source meaning across backends.
+- Platform services enter through typed modules and ordinary calls.
+- Runtime helpers supply operations missing from a target processor.
+- `asm` and `end` delimit raw target assembly.
+- Generated source, mappings, symbols and costs are compiler artifacts.

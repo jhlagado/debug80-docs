@@ -1,33 +1,41 @@
-TYPE Monster
-    X AS BYTE
-    Y AS BYTE
-    Timer AS BYTE
-END TYPE
+record Monster
+    var x as u8
+    var y as u8
+    var timer as u8
+    var frame as u8
+end
 
-DIM Monsters[4] AS Monster
-DIM Current AS NEAR REF TO Monster = REF Monsters[0]
+const clearPlane as u8[8] = [0, 0, 0, 0, 0, 0, 0, 0]
 
-DIM BoardRows[8] AS BYTE
-DIM BoardRed[8] AS BYTE
-DIM BoardGreen[8] AS BYTE
-DIM BoardBlue[8] AS BYTE
-DIM BoardPlanes[4] AS NEAR REF TO BYTE[8] = (
-    REF BoardRows,
-    REF BoardRed,
-    REF BoardGreen,
-    REF BoardBlue
-)
+var monsters as Monster[4]
+var selectedIndex as i16 = 0
+var current as near ref Monster = ref monsters[0]
 
-SUB SelectMonster(Index AS INTEGER)
-    Current = REF Monsters[Index]
-    Current.Timer = 10
-END SUB
+var boardRed as u8[8]
+var boardGreen as u8[8]
+var boardBlue as u8[8]
+var boardPlanes as (near ref (u8[8]))[3] = [
+    ref boardRed,
+    ref boardGreen,
+    ref boardBlue
+]
 
-SUB ClearPlanes()
-    DIM PlaneIndex AS INTEGER
+sub selectMonster(index as i16)
+    current = ref monsters[index]
+    current.timer = 10
+end
 
-    FOR PlaneIndex = 0 TO 3
-        ALIAS Plane = BoardPlanes[PlaneIndex]
-        CLEAR(Plane)
-    NEXT PlaneIndex
-END SUB
+sub resetSelected()
+    ref monster as Monster = monsters[selectedIndex]
+
+    monster.timer = 0
+    monster.frame = 0
+end
+
+sub clearPlanes()
+    var planeIndex as i16
+
+    for planeIndex = 0 to count(boardPlanes) - 1
+        value(boardPlanes[planeIndex]) = clearPlane
+    end
+end

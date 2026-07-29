@@ -7,144 +7,145 @@ nav_order: 5
 
 # Loops
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
-
 Adding the numbers from 1 through 10 repeats one assignment while a counter
-advances. A `FOR` loop states the counter's start and inclusive limit in its
-opening line:
+advances:
 
-```text
-DIM Total AS INTEGER
+```lanternfly
+var total as i16 = 0
 
-SUB SumTen()
-    DIM Number AS INTEGER
+sub sumTen()
+    var number as i16
 
-    Total = 0
-    FOR Number = 1 TO 10
-        Total = Total + Number
-    NEXT Number
-END SUB
+    total = 0
+    for number = 1 to 10
+        total = total + number
+    end
+end
 ```
 
-`Number` takes the values 1, 2, 3 and so on through 10. `Total` finishes at 55.
+`number` takes each value from 1 through the inclusive limit 10. `total`
+finishes at 55.
 
-## Counted repetition
+## Counted loops
 
-```text
-FOR Number = 1 TO 10
-    Total = Total + Number
-NEXT Number
+```lanternfly
+for number = 1 to 10
+    total = total + number
+end
 ```
 
-The start and limit are evaluated once. `NEXT Number` advances the counter and
-returns to the test. Naming the counter after `NEXT` helps match the ends of
-nested loops.
+The loop variable is declared with the other locals at the start of the
+subroutine. The start and limit are evaluated once. Omitting `step` uses the
+mathematical step `+1`.
 
-`STEP` changes the amount added each time:
+An explicit step changes the sequence:
 
-```text
-FOR Column = 0 TO 14 STEP 2
-    EvenCount = EvenCount + 1
-NEXT Column
+```lanternfly
+for column = 0 to 14 step 2
+    evenCount = evenCount + 1
+end
 ```
 
 This visits 0, 2, 4, 6, 8, 10, 12 and 14. A negative step counts down:
 
-```text
-FOR Row = 7 TO 0 STEP -1
-    Remaining = Remaining + 1
-NEXT Row
+```lanternfly
+for row = 7 to 0 step -1
+    remaining = remaining + 1
+end
 ```
 
-The limit remains inclusive in both directions.
+The loop body cannot assign to its control variable. Lanternfly performs the
+step using mathematical integers and stops before a fixed-width counter can
+wrap past its boundary.
 
-## Repeating while a condition holds
+## Conditional loops
 
-A `WHILE` loop tests before each iteration:
+A `while` loop tests before each iteration:
 
-```text
-SUB CountDown()
-    DIM Remaining AS INTEGER
+```lanternfly
+sub countDown()
+    var remaining as i16 = 3
 
-    Remaining = 3
-    WHILE Remaining > 0
-        Remaining = Remaining - 1
-    END WHILE
-END SUB
+    while remaining > 0
+        remaining = remaining - 1
+    end
+end
 ```
 
-When the initial condition is false, the body runs zero times. This form suits
-a search or update whose work is needed only while a known condition holds.
+An initially false condition runs the body zero times. This shape fits a search
+or update whose continuation depends on current state.
 
-## Testing after the body
+## Indefinite loops
 
-Some operations must run once before their stopping condition can be checked.
-The following routine advances to the next multiple of eight:
+`loop` repeats until a statement leaves it:
 
-```text
-DIM StartValue AS INTEGER = 13
-DIM Result AS INTEGER
+```lanternfly
+sub findNextMultiple()
+    var candidate as i16 = startValue
 
-SUB FindNextMultiple()
-    DIM Candidate AS INTEGER
+    loop
+        candidate = candidate + 1
 
-    Candidate = StartValue
-    DO
-        Candidate = Candidate + 1
-    LOOP UNTIL Candidate MOD 8 = 0
-
-    Result = Candidate
-END SUB
+        if candidate mod 8 = 0 then
+            result = candidate
+            exit
+        end
+    end
+end
 ```
 
-The body runs before `UNTIL` is tested, so `Candidate` advances at least once.
-Starting at 13 produces 16. Starting at 16 produces 24 because the routine
-asks for the next multiple rather than the current one.
+The candidate advances before the test, so a starting value of 16 produces 24.
+`exit` leaves the innermost loop.
 
-`LOOP WHILE condition` provides the matching form when repetition should
-continue while the final condition is true.
+## Skipping an iteration
 
-## Leaving or continuing a loop
+`continue` starts the next iteration immediately:
 
-The loop kind appears in an early exit:
+```lanternfly
+for index = 0 to actorCount - 1
+    if not actors[index].active then
+        continue
+    end
 
-```text
-IF Candidate > MaximumValue THEN
-    EXIT WHILE
-END IF
+    updateActor(actors[index])
+end
 ```
 
-`EXIT FOR`, `EXIT WHILE` and `EXIT DO` leave the nearest enclosing loop of that
-kind. `CONTINUE FOR`, `CONTINUE WHILE` and `CONTINUE DO` skip the rest of the
-current iteration and return to the loop's next test or step.
+Inactive actors skip the call. In a counted loop, `continue` proceeds to the
+next step and test.
 
-Naming the loop kind makes the destination visible. In a nested `FOR` inside a
-`WHILE`, `EXIT FOR` and `EXIT WHILE` select different enclosing blocks.
+## Nested-loop exits
+
+`exit` and `continue` always act on the innermost loop. An early `return` can
+leave a subroutine during a nested search. Code that must continue after the
+outer loop can use a Boolean flag:
+
+```lanternfly
+var found as boolean = false
+```
+
+The explicit flag records why the outer condition changes.
 
 ## Choosing a loop
 
-Use the opening line to state what controls repetition:
+| Repetition rule | Form |
+| --- | --- |
+| counter crosses an inclusive range | `for ... to ... end` |
+| condition is tested before work | `while ... end` |
+| statements repeat until they exit | `loop ... end` |
 
-| Known rule                       | Form                      |
-| -------------------------------- | ------------------------- |
-| counter runs through a range     | `FOR ... TO ... NEXT`     |
-| condition is checked before work | `WHILE ... END WHILE`     |
-| work runs before the condition   | `DO ... LOOP WHILE/UNTIL` |
-
-The choice records the algorithm's stopping rule. That rule also lets the
-compiler generate the target's branches and counter operations.
+The opening line states what controls repetition and gives the backend the
+information needed to form branches, tests and counter updates.
 
 ## Example
 
-The [chapter listing](/lanternfly-book/book1/code/05-loops.txt) contains the
-three complete loop routines.
+The [chapter listing](/lanternfly-book/book1/code/05-loops.txt) contains counted,
+conditional and indefinite loops.
 
 ## Summary
 
-- `FOR` walks through an inclusive numeric range.
-- `STEP` changes the counter increment and may be negative.
-- `WHILE` tests before each iteration.
-- `DO` with `LOOP WHILE` or `LOOP UNTIL` tests after each iteration.
-- `EXIT` and `CONTINUE` name the kind of loop they affect.
+- `for` walks through an inclusive range.
+- An omitted step means `+1`; `step` accepts another compile-time integer.
+- `while` tests before each iteration.
+- `loop` repeats until control leaves it.
+- `exit` leaves and `continue` advances the innermost loop.

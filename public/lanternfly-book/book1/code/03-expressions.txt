@@ -1,22 +1,22 @@
-CONST VisibleFlag AS BYTE = %00000001
+const visibleMask as u8 = %00000001
 
-DIM ObjectX AS BYTE = 20
-DIM TargetX AS BYTE = 250
-DIM Distance AS INTEGER
-DIM HasArrived AS INTEGER
-DIM Flags AS BYTE = VisibleFlag
-DIM VisibleCount AS INTEGER = 0
-DIM Lives AS BYTE = 3
+var objectX as u8 = 20
+var targetX as u8 = 250
+var distance as u16 = 0
+var hasArrived as boolean = false
+var flags as u8 = visibleMask
+var visibleCount as i16 = 0
+var lives as u8 = 3
 
-SUB MeasureDistance()
-    Distance = ABS(TargetX - ObjectX)
-    HasArrived = Distance <= 2
+sub measureDistance()
+    distance = abs(targetX - objectX)
+    hasArrived = distance <= 2
 
-    IF (Flags AND VisibleFlag) <> 0 AND Distance <= 2 THEN
-        VisibleCount = VisibleCount + 1
-    END IF
+    if (flags and visibleMask) <> 0 and hasArrived then
+        visibleCount = visibleCount + 1
+    end
 
-    IF Distance <= 2 AND Lives > 0 THEN
-        Lives = BYTE(Lives - 1)
-    END IF
-END SUB
+    if hasArrived and lives > 0 then
+        lives = u8(lives - 1)
+    end
+end

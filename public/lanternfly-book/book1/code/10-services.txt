@@ -1,18 +1,33 @@
-DIM PlayerX AS BYTE
-DIM PlayerY AS BYTE
-DIM PlayerColour AS BYTE
-DIM TargetX AS BYTE
-DIM Distance AS INTEGER
-DIM Root AS WORD
-DIM Value AS WORD
+record Actor
+    var x as i16
+    var y as i16
+    var timer as u8
+end
 
-SUB UpdateMeasurements()
-    Distance = ABS(TargetX - PlayerX)
-    Root = ISQRT(Value)
-END SUB
+var playerX as u8 = 0
+var playerY as u8 = 0
+var playerColour as u8 = 7
+var targetX as u8 = 0
+var distance as u16 = 0
+var root as u16 = 0
+var area as u16 = 0
 
-SUB ShowPlayer()
-    ScreenClear()
-    DrawPixel(PlayerX, PlayerY, PlayerColour)
-    ShowNumber(Distance)
-END SUB
+const actorBytes as u8 = size(Actor)
+const timerOffset as u8 = offset(Actor.timer)
+
+sub updateMeasurements()
+    distance = abs(targetX - playerX)
+    root = sqrt(area)
+end
+
+sub showPlayer()
+    screenClear()
+    drawPixel(playerX, playerY, playerColour)
+    showNumber(distance)
+end
+
+sub waitForKey()
+    asm
+        call ROM_WAIT_KEY
+    end
+end

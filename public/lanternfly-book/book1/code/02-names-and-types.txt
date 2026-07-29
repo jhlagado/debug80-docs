@@ -1,17 +1,20 @@
-CONST StartingLives AS BYTE = 3
-CONST MaximumScore AS WORD = 9999
+const startingLives as u8 = 3
+const maximumScore as u16 = 9999
 
-DIM Lives AS BYTE = StartingLives
-DIM Score AS WORD = 0
+var lives as u8 = startingLives
+var score as u16 = 0
+var gameOver as boolean = false
 
-SUB LoseLife()
-    IF Lives > 0 THEN
-        Lives = BYTE(Lives - 1)
-    END IF
-END SUB
+sub loseLife()
+    if lives > 0 then
+        lives = u8(lives - 1)
+    end
 
-SUB AddScore()
-    IF Score < MaximumScore THEN
-        Score = WORD(Score + 10)
-    END IF
-END SUB
+    gameOver = lives = 0
+end
+
+sub addScore()
+    if score < maximumScore then
+        score = score + 10
+    end
+end

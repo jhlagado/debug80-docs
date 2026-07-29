@@ -1,39 +1,52 @@
-DIM Score AS INTEGER
-DIM Bonus AS INTEGER = 10
-DIM BoardRows[8, 8] AS BYTE
-DIM SelectedRow AS INTEGER
+record Actor
+    var x as i16
+    var velocityX as i16
+    var active as boolean
+end
 
-SUB AddScore(Amount AS INTEGER)
-    Score = Score + Amount
-END SUB
+var score as i16 = 0
+var bonus as i16 = 10
+var selectedRow as u8[8]
 
-FUNCTION Limited(Value AS INTEGER, Limit AS INTEGER) AS INTEGER
-    IF Value > Limit THEN
-        RETURN Limit
-    END IF
+sub addScore(amount as i16)
+    score = score + amount
+end
 
-    RETURN Value
-END FUNCTION
+sub limited(value as i16, limit as i16) as i16
+    if value > limit then
+        return limit
+    end
 
-FUNCTION DistanceSquared(X AS INTEGER, Y AS INTEGER) AS LONG
-    DIM XSquared AS LONG
-    DIM YSquared AS LONG
+    return value
+end
 
-    XSquared = LONG(X) * LONG(X)
-    YSquared = LONG(Y) * LONG(Y)
-    RETURN XSquared + YSquared
-END FUNCTION
+sub distanceSquared(x as i16, y as i16) as i32
+    var xSquared as i32
+    var ySquared as i32
 
-SUB ClearRow(Row AS REF TO BYTE[8])
-    DIM Index AS INTEGER
+    xSquared = i32(x) * i32(x)
+    ySquared = i32(y) * i32(y)
+    return xSquared + ySquared
+end
 
-    FOR Index = 0 TO COUNT(Row) - 1
-        Row[Index] = 0
-    NEXT Index
-END SUB
+sub clearRow(row as u8[8])
+    var index as i16
 
-SUB UpdateScore()
-    AddScore(Bonus)
-    Score = Limited(Score, 1000)
-    ClearRow(BoardRows[SelectedRow])
-END SUB
+    for index = 0 to count(row) - 1
+        row[index] = 0
+    end
+end
+
+sub updateActor(actor as Actor)
+    if not actor.active then
+        return
+    end
+
+    actor.x = actor.x + actor.velocityX
+end
+
+sub updateScore()
+    addScore(bonus)
+    score = limited(score, 1000)
+    clearRow(selectedRow)
+end

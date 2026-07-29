@@ -1,7 +1,7 @@
-DIM Lives AS INTEGER = 3
+var lives as u8 = 3
 
-SUB LoseLife()
-    IF Lives > 0 THEN
-        Lives = Lives - 1
-    END IF
-END SUB
+sub loseLife()
+    if lives > 0 then
+        lives = u8(lives - 1)
+    end
+end

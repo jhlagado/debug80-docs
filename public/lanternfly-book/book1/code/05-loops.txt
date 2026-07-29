@@ -1,41 +1,43 @@
-DIM Total AS INTEGER
-DIM EvenCount AS INTEGER
-DIM Remaining AS INTEGER
-DIM StartValue AS INTEGER = 13
-DIM Result AS INTEGER
+var total as i16 = 0
+var evenCount as i16 = 0
+var startValue as i16 = 13
+var result as i16 = 0
 
-SUB SumTen()
-    DIM Number AS INTEGER
+sub sumTen()
+    var number as i16
 
-    Total = 0
-    FOR Number = 1 TO 10
-        Total = Total + Number
-    NEXT Number
-END SUB
+    total = 0
+    for number = 1 to 10
+        total = total + number
+    end
+end
 
-SUB CountEvenColumns()
-    DIM Column AS INTEGER
+sub countEvenColumns()
+    var column as i16
 
-    EvenCount = 0
-    FOR Column = 0 TO 14 STEP 2
-        EvenCount = EvenCount + 1
-    NEXT Column
-END SUB
+    evenCount = 0
+    for column = 0 to 14 step 2
+        evenCount = evenCount + 1
+    end
+end
 
-SUB CountDown()
-    Remaining = 3
-    WHILE Remaining > 0
-        Remaining = Remaining - 1
-    END WHILE
-END SUB
+sub countDown()
+    var remaining as i16 = 3
 
-SUB FindNextMultiple()
-    DIM Candidate AS INTEGER
+    while remaining > 0
+        remaining = remaining - 1
+    end
+end
 
-    Candidate = StartValue
-    DO
-        Candidate = Candidate + 1
-    LOOP UNTIL Candidate MOD 8 = 0
+sub findNextMultiple()
+    var candidate as i16 = startValue
 
-    Result = Candidate
-END SUB
+    loop
+        candidate = candidate + 1
+
+        if candidate mod 8 = 0 then
+            result = candidate
+            exit
+        end
+    end
+end

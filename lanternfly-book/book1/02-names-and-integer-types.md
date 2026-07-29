@@ -7,119 +7,147 @@ nav_order: 2
 
 # Names and Integer Types
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+A life counter fits in one byte. A score may need two bytes and a long-running
+frame counter may need four. Lanternfly records both the width and signedness
+in each integer type:
 
-The first routine stored `Lives` in an `INTEGER`. Small computers often need a
-more exact choice. A coordinate may occupy one byte, a score may need the full
-unsigned range of two bytes and a long-running counter may need four bytes.
-Lanternfly names all six integer choices.
-
-```text
-DIM Lives AS BYTE = 3
-DIM Temperature AS INTEGER = -4
-DIM Score AS WORD = 0
-DIM FrameCount AS DWORD = 0
+```lanternfly
+var lives as u8 = 3
+var temperature as i16 = -4
+var score as u16 = 0
+var frameCount as u32 = 0
 ```
-
-Each declaration records the width and whether the stored value is signed.
 
 ## Six integer types
 
-| Type      |   Width |                           Range |
-| --------- | ------: | ------------------------------: |
-| `BYTE`    |  8 bits |                        0 to 255 |
-| `SBYTE`   |  8 bits |                     -128 to 127 |
-| `INTEGER` | 16 bits |               -32,768 to 32,767 |
-| `WORD`    | 16 bits |                     0 to 65,535 |
-| `LONG`    | 32 bits | -2,147,483,648 to 2,147,483,647 |
-| `DWORD`   | 32 bits |              0 to 4,294,967,295 |
+| Type | Width | Range |
+| --- | ---: | ---: |
+| `u8` | 8 bits | 0 to 255 |
+| `i8` | 8 bits | -128 to 127 |
+| `u16` | 16 bits | 0 to 65,535 |
+| `i16` | 16 bits | -32,768 to 32,767 |
+| `u32` | 32 bits | 0 to 4,294,967,295 |
+| `i32` | 32 bits | -2,147,483,648 to 2,147,483,647 |
 
-`INTEGER` is the ordinary type for calculations and loop counters. `BYTE` and
-`WORD` suit compact non-negative storage. `SBYTE` and `LONG` retain negative
-values at their respective widths. `DWORD` supplies the full unsigned 32-bit
-range.
+The first letter states signedness. `u` means unsigned and stores zero or a
+positive value. `i` means signed and includes negative values. The number
+states the exact bit width.
 
-The source type states a program fact. A `BYTE` coordinate tells you that the
-stored position lies between 0 and 255. A `SBYTE` offset tells you that moving
-left or above an origin is meaningful.
+A coordinate stored as `u8` occupies one byte on every target. An `i32`
+counter occupies four. The backend may need several Z80 instructions to
+calculate with a four-byte value, but it must preserve the same range.
 
 ## Constants name fixed values
 
-```text
-CONST StartingLives AS BYTE = 3
-CONST MaximumScore AS WORD = 9999
+```lanternfly
+const startingLives as u8 = 3
+const maximumScore as u16 = 9999
 
-DIM Lives AS BYTE = StartingLives
-DIM Score AS WORD = 0
+var lives as u8 = startingLives
+var score as u16 = 0
 ```
 
-`CONST` gives a name to a value that stays fixed. The declared type checks the
-value at compile time. `StartingLives` can then initialise storage or take part
-in a calculation.
+`const` names a compile-time value. The value cannot change while the program
+runs. Constants can set array sizes, initialise storage and take part in
+formulas.
 
-Names describe intent better than repeated numbers. If the starting life
-count changes, one declaration changes with it.
+The explicit type catches an out-of-range value at compile time:
 
-## Assignment and equality share one sign
-
-```text
-Score = Score + 10
+```lanternfly
+const maximumByte as u8 = 255
 ```
 
-At the start of a statement, `=` stores the expression on its right into the
-named location on its left. Read it as “Score becomes Score plus ten.”
+`256` would require a wider type.
 
-Inside a condition, `=` compares two values:
+## Boolean values
 
-```text
-IF Score = MaximumScore THEN
-    Score = 0
-END IF
+Conditions use the separate `boolean` type:
+
+```lanternfly
+var gameOver as boolean = false
+
+gameOver = lives = 0
 ```
 
-The position supplies the meaning. The `IF` line needs a condition, so `=` is
-equality. The line inside the block is an assignment because a writable name
-appears on the left of the statement.
+`true` and `false` are Boolean literals. A comparison also produces a Boolean.
+Lanternfly stores `false` as zero and `true` as one in a single byte.
 
-This follows the reading convention used by BASIC-family languages and much
-written pseudocode. The compiler parses the complete statement, so it can
-diagnose an expression used where an assignment belongs.
+An integer does not become a condition by itself. Write the comparison that
+expresses the test:
 
-## Calculations widen before storage
-
-Compact storage should not force every calculation to wrap after eight bits.
-When two byte values are added or subtracted, Lanternfly calculates with at
-least 16 bits. The result narrows only when it is stored back into a byte.
-
-```text
-DIM Lives AS BYTE = 3
-
-SUB LoseLife()
-    IF Lives > 0 THEN
-        Lives = BYTE(Lives - 1)
-    END IF
-END SUB
+```lanternfly
+if lives > 0 then
+    ...
+end
 ```
 
-`Lives - 1` produces a signed 16-bit result. `BYTE(...)` explicitly keeps the
-low eight bits for storage. The preceding condition proves that the value is
-between 0 and 2, so the conversion preserves its mathematical value.
+## Assignment and equality share `=`
 
-Explicit conversion documents intentional narrowing. A compiler may also
-prove that an implicit store fits, but the source remains clearest when a
-boundary is central to the rule.
+At the beginning of a statement, a writable path followed by `=` is an
+assignment:
+
+```lanternfly
+score = score + 10
+```
+
+Inside an expression, `=` compares:
+
+```lanternfly
+if score = maximumScore then
+    score = 0
+end
+```
+
+The `if` condition needs a Boolean expression, so the first `=` tests equality.
+The next line begins with writable storage and assigns zero.
+
+## Conversions state a width choice
+
+Two `u8` values subtract into `i16` so the result can represent a difference
+from -255 through 255. Storing that result in a byte narrows it. A type name
+used like a call makes the conversion explicit:
+
+```lanternfly
+lives = u8(lives - 1)
+```
+
+Narrowing retains the low bits. Changing signedness preserves the bit pattern.
+An explicit conversion records that choice. If an assignment, argument or
+return performs either conversion implicitly, the compiler warns unless it can
+prove that the mathematical value is preserved.
+
+Widening supplies the missing high bits:
+
+```lanternfly
+var wideScore as u32 = u32(score)
+```
+
+Unsigned widening fills with zero. Signed widening copies the sign.
+
+## Literal types follow their context
+
+An integer literal begins as an exact value. In `score + 10`, the literal ten
+adopts the type of `score`. In an expression made only from literals, the
+default type is `i16`.
+
+An explicit destination supplies context:
+
+```lanternfly
+const highBit as u16 = 1 shl 15
+```
+
+Both literal operands are resolved using the expected `u16` type before the
+shift is folded.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/02-names-and-types.txt) brings
-the declarations, constants and bounded subtraction together.
+constants, Boolean state and integer conversion together.
 
 ## Summary
 
-- Lanternfly supplies signed and unsigned integers at 8, 16 and 32 bits.
-- `INTEGER` is the ordinary signed calculation type.
-- `CONST` names a fixed compile-time value.
-- `=` stores in an assignment and compares inside a condition.
-- A type name used as a function performs an explicit integer conversion.
+- `u8`, `i8`, `u16`, `i16`, `u32` and `i32` state width and signedness.
+- `boolean` stores `true` or `false`.
+- `const` names a fixed compile-time value.
+- `=` assigns at statement level and compares inside an expression.
+- A type name followed by parentheses performs an explicit conversion.

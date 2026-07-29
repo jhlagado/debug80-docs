@@ -1,142 +1,159 @@
 ---
 layout: default
-title: "Procedures and Functions"
+title: "Subroutines"
 parent: "Lanternfly Book 1 — Language Fundamentals"
 nav_order: 9
 ---
 
-# Procedures and Functions
+# Subroutines
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+Parameters let one subroutine work with values supplied by each caller:
 
-The earlier chapters used procedures with empty parentheses. Parameters let
-one procedure work with values supplied by its caller:
+```lanternfly
+sub addScore(amount as i16)
+    score = score + amount
+end
 
-```text
-SUB AddScore(Amount AS INTEGER)
-    Score = Score + Amount
-END SUB
-
-AddScore(10)
+addScore(10)
 ```
 
-`Amount` is a scalar input. Each call gives it a value for that invocation.
+`amount` receives a fresh scalar value for the invocation.
 
-## Procedures perform actions
+## One declaration form
 
-```text
-SUB AddScore(Amount AS INTEGER)
-    Score = Score + Amount
-END SUB
+Every user routine begins with `sub`. A subroutine that performs an action
+omits a result type:
+
+```lanternfly
+sub addScore(amount as i16)
+    score = score + amount
+end
 ```
 
-A procedure begins with `SUB` and ends with `END SUB`. Its parameter list names
-the inputs and their types. The call uses the same order:
+The parameter list names each input and its type. A call supplies arguments in
+the same order:
 
-```text
-AddScore(Bonus)
+```lanternfly
+addScore(bonus)
 ```
 
-Arguments are evaluated from left to right before the call begins. The backend
-chooses registers, stack slots or another calling convention. Those choices do
-not change the source signature.
+Arguments are evaluated from left to right before the invocation begins.
 
-## Functions return one value
+## Returning a value
 
-A function adds a result type after its parameter list:
+A trailing `as Type` declares a result:
 
-```text
-FUNCTION Limited(Value AS INTEGER, Limit AS INTEGER) AS INTEGER
-    IF Value > Limit THEN
-        RETURN Limit
-    END IF
+```lanternfly
+sub limited(value as i16, limit as i16) as i16
+    if value > limit then
+        return limit
+    end
 
-    RETURN Value
-END FUNCTION
+    return value
+end
 ```
 
 The caller can use the result in an expression:
 
-```text
-Score = Limited(Score + Bonus, 1000)
+```lanternfly
+score = limited(score + bonus, 1000)
 ```
 
-Every reachable function path returns a value compatible with the declared
-result type. `RETURN` also provides an early exit when the answer is already
-known.
+Every reachable path in a result-bearing subroutine returns a compatible
+value. A result-free call can stand alone as a statement. A result-bearing call
+can also stand alone when its result is intentionally discarded.
 
-## Scalar locals belong to one call
+## Scalar locals
 
-Declarations at the start of a routine create local scalar storage:
+Local scalar storage belongs to one invocation:
 
-```text
-FUNCTION DistanceSquared(X AS INTEGER, Y AS INTEGER) AS LONG
-    DIM XSquared AS LONG
-    DIM YSquared AS LONG
+```lanternfly
+sub distanceSquared(x as i16, y as i16) as i32
+    var xSquared as i32
+    var ySquared as i32
 
-    XSquared = LONG(X) * LONG(X)
-    YSquared = LONG(Y) * LONG(Y)
-    RETURN XSquared + YSquared
-END FUNCTION
+    xSquared = i32(x) * i32(x)
+    ySquared = i32(y) * i32(y)
+    return xSquared + ySquared
+end
 ```
 
-`XSquared` and `YSquared` hold intermediate results. Their names are visible
-inside the function. A recursive or reentrant target profile provides separate
-local values for each active call. A simpler profile may allocate them
-statically when it also rejects overlapping calls.
+Local declarations appear before executable statements and have routine scope.
+An omitted initializer starts an owned scalar local with zero bits. Reference
+locals require valid initializers.
 
-## Aggregate parameters are references
+The backend can place locals in registers, stack slots or proven-safe static
+scratch. Source semantics still provide fresh values for overlapping
+invocations.
 
-Passing an array or record by value would hide a potentially large copy.
-Aggregate parameters state reference access:
+## Aggregate parameters
 
-```text
-SUB ClearRow(Row AS REF TO BYTE[8])
-    DIM Index AS INTEGER
+A private aggregate parameter aliases the caller's existing storage:
 
-    FOR Index = 0 TO COUNT(Row) - 1
-        Row[Index] = 0
-    NEXT Index
-END SUB
+```lanternfly
+sub clearRow(row as u8[8])
+    var index as i16
+
+    for index = 0 to count(row) - 1
+        row[index] = 0
+    end
+end
 ```
 
-The call passes existing storage:
+The call passes a compatible storage path:
 
-```text
-ClearRow(BoardRows[SelectedRow])
+```lanternfly
+clearRow(boardRows[selectedRow])
 ```
 
-`Row` keeps its array shape, so `COUNT(Row)` and indexing remain available.
-The routine allocates one scalar loop counter while the row remains in the
-caller's array.
+Updating `row[index]` updates the selected row in the caller. A temporary array
+initializer cannot serve as a writable aggregate argument.
 
-The exact spelling for read-only, output and in/out reference intent remains a
-design question. The semantic interface must still record which storage a
-routine may read or write.
+An exported routine states the reference class:
 
-## Leaving a procedure
-
-A procedure can finish by reaching `END SUB` or leave early with:
-
-```text
-EXIT SUB
+```lanternfly
+export sub clearSharedRow(row as near ref (u8[8]))
+    ...
+end
 ```
 
-A function uses `RETURN expression` because every exit supplies its result.
-These source exits all pass through the routine epilogue selected by the
-backend.
+The explicit class makes the public calling convention independent of a
+backend default.
+
+## Early return
+
+A result-free subroutine may leave early with bare `return`:
+
+```lanternfly
+sub updateActor(actor as Actor)
+    if not actor.active then
+        return
+    end
+
+    actor.x = actor.x + actor.velocityX
+end
+```
+
+Reaching the closing `end` also returns from a result-free subroutine.
+
+## Recursion and target profiles
+
+Recursive calls need independent frames. A recursion-capable target profile
+defines its stack rules and reports frame costs. A profile that uses fixed
+scratch rejects direct or mutual call cycles at compile time.
+
+The routine body keeps the same source meaning under either profile. The
+profile determines whether it can supply the required storage.
 
 ## Example
 
-The [chapter listing](/lanternfly-book/book1/code/09-routines.txt) contains a
-procedure, a scalar function and an aggregate reference parameter.
+The [chapter listing](/lanternfly-book/book1/code/09-routines.txt) contains an
+action, two result-bearing subroutines and an aggregate parameter.
 
 ## Summary
 
-- A procedure performs an action and a function returns one value.
-- Parameters declare names and types in the routine header.
-- Scalar locals hold per-call intermediate values.
-- Aggregate parameters provide typed reference access to existing storage.
-- Calling conventions belong to the backend rather than the source language.
+- `sub` declares routines with and without results.
+- Parameters receive arguments from left to right.
+- `return expression` supplies a result and bare `return` leaves an action.
+- Scalar locals hold per-invocation intermediate values.
+- Aggregate parameters alias compatible caller storage.

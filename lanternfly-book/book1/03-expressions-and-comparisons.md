@@ -7,139 +7,148 @@ nav_order: 3
 
 # Expressions and Comparisons
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+Two byte-sized coordinates can be far apart. Subtracting them needs a signed
+intermediate even though each coordinate is unsigned:
 
-A moving object has an x coordinate and a target has another. The program
-needs their distance whether the target lies to the left or the right:
+```lanternfly
+var objectX as u8 = 20
+var targetX as u8 = 250
+var distance as u16 = 0
 
-```text
-DIM ObjectX AS BYTE = 20
-DIM TargetX AS BYTE = 250
-DIM Distance AS INTEGER
-
-SUB MeasureDistance()
-    Distance = ABS(TargetX - ObjectX)
-END SUB
+sub measureDistance()
+    distance = abs(targetX - objectX)
+end
 ```
 
-Both coordinates occupy one byte. Their subtraction widens to an `INTEGER`
-before `ABS` removes the sign. The result is 230 rather than an eight-bit
-wrapped value.
+`targetX - objectX` has type `i16`. `abs` removes the sign and returns `u16`,
+so the result is 230.
 
 ## Arithmetic operators
 
-Lanternfly keeps the familiar formula symbols and uses words for the remaining
-integer operations:
+Lanternfly uses familiar symbols for formulas and short words for the
+remaining integer operations:
 
-| Operation        | Form          |
-| ---------------- | ------------- |
-| addition         | `a + b`       |
-| subtraction      | `a - b`       |
-| multiplication   | `a * b`       |
-| integer division | `a / b`       |
-| remainder        | `a MOD b`     |
-| integer power    | `a ^ b`       |
-| shift left       | `a SHL count` |
-| shift right      | `a SHR count` |
+| Operation | Form |
+| --- | --- |
+| addition | `a + b` |
+| subtraction | `a - b` |
+| multiplication | `a * b` |
+| integer division | `a / b` |
+| remainder | `a mod b` |
+| integer power | `a ^ b` |
+| shift left | `a shl count` |
+| shift right | `a shr count` |
 
-Division discards the fractional part. `17 / 5` produces 3, while `17 MOD 5`
-produces 2. `SHL` and `SHR` move a fixed-width bit pattern and make that intent
-visible in the source.
+Division truncates toward zero. `17 / 5` produces 3 and `17 mod 5` produces 2.
+A zero divisor triggers an arithmetic fault at runtime or a compile error when
+the zero is constant.
 
-Parentheses control grouping:
+`shl` moves bits left and fills the low positions with zero. `shr` fills from
+the sign bit for signed values and with zero for unsigned values. The result
+keeps the left operand's type.
 
-```text
-Average = (First + Second) / 2
+## Width belongs to every operation
+
+Arithmetic on matching 16-bit or 32-bit values retains that type. For matching
+8-bit values, `+`, `*`, `/`, `mod` and `^` produce the corresponding 16-bit
+type. Subtraction from either byte type produces `i16`. Bitwise operations and
+shifts retain the 8-bit operand type.
+
+Mixed widths or mixed signedness require an explicit choice:
+
+```lanternfly
+var signedValue as i16 = -4
+var unsignedValue as u16 = 20
+var total as i32 = 0
+
+total = i32(signedValue) + i32(unsignedValue)
 ```
 
-Without the parentheses, division would run before addition.
+Each fixed-width operation wraps in its resolved result type. Constant folding
+uses the same rule, so compile-time and runtime calculations agree.
 
-## Comparisons produce numeric truth
+## Comparisons produce Boolean values
 
-```text
-DIM HasArrived AS INTEGER
+```lanternfly
+var hasArrived as boolean = false
 
-HasArrived = Distance <= 2
+hasArrived = distance <= 2
 ```
-
-A comparison produces zero for false and a value with every bit set for true.
-For an `INTEGER`, true is -1. Any nonzero integer also counts as true when used
-as a condition.
 
 The comparison operators are:
 
-| Meaning               | Operator |
-| --------------------- | -------- |
-| equal                 | `=`      |
-| unequal               | `<>`     |
-| less than             | `<`      |
-| less than or equal    | `<=`     |
-| greater than          | `>`      |
-| greater than or equal | `>=`     |
+| Meaning | Operator |
+| --- | --- |
+| equal | `=` |
+| unequal | `<>` |
+| less than | `<` |
+| less than or equal | `<=` |
+| greater than | `>` |
+| greater than or equal | `>=` |
 
-The `<>` spelling reads as “less than or greater than”, which gives a direct
-visual cue for inequality.
+Comparison chaining is rejected. A bounded-range test joins two comparisons:
 
-## Words combine truth and bit patterns
-
-`AND`, `OR`, `XOR` and `NOT` operate on every bit of an integer. They also
-combine comparison results because true is represented by all set bits.
-
-```text
-IF Distance <= 2 AND Lives > 0 THEN
-    Lives = BYTE(Lives - 1)
-END IF
+```lanternfly
+if minimum <= value and value <= maximum then
+    acceptValue()
+end
 ```
 
-Both comparisons run, then `AND` combines their truth values.
+## Boolean and bitwise words share spelling
 
-The same word can test a flag:
+With Boolean operands, `and`, `or`, `xor` and `not` combine truth values:
 
-```text
-CONST VisibleFlag AS BYTE = %00000001
-DIM Flags AS BYTE
-
-IF Flags AND VisibleFlag THEN
-    VisibleCount = VisibleCount + 1
-END IF
+```lanternfly
+if hasArrived and lives > 0 then
+    lives = u8(lives - 1)
+end
 ```
 
-`Flags AND VisibleFlag` keeps the selected bit. Zero means the flag is clear;
-a nonzero result means it is set.
+Boolean `and` and `or` short-circuit. In `left and right`, a false left side
+skips the right side. In `left or right`, a true left side skips it.
 
-Lanternfly uses this single operator family for conditions and masks.
-Expressions in the first language draft are pure, so both sides can be
-evaluated safely: a function used in an expression reads values and returns a
-value.
+With integer operands, the same words operate on every bit:
 
-## Reading precedence
+```lanternfly
+const visibleMask as u8 = %00000001
+var flags as u8 = visibleMask
 
-Calls, indexes and parentheses bind first. Arithmetic follows the order used
-in ordinary formulas. Comparisons run after arithmetic, then `AND`, `XOR` and
-`OR` combine the results.
-
-Parentheses remain useful when a condition mixes several levels:
-
-```text
-IF (Flags AND VisibleFlag) <> 0 AND Distance <= 2 THEN
-    VisibleCount = VisibleCount + 1
-END IF
+if (flags and visibleMask) <> 0 then
+    visibleCount = visibleCount + 1
+end
 ```
 
-The first `AND` selects a bit. `<> 0` turns that test into the same 16-bit
-truth type as the distance comparison and the second `AND` combines them.
+The bitwise `and` produces an integer, so `<> 0` converts the mask test into a
+Boolean condition.
+
+## Grouping and precedence
+
+Parentheses bind first. Power binds more tightly than unary minus, followed by
+multiplication and division, addition and subtraction, shifts, comparisons,
+`not`, `and`, `xor` and `or`.
+
+```lanternfly
+average = (first + second) / 2
+```
+
+The parentheses add before dividing. They also make mixed mask and condition
+expressions easier to scan:
+
+```lanternfly
+if (flags and visibleMask) <> 0 and distance <= 2 then
+    visibleCount = visibleCount + 1
+end
+```
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/03-expressions.txt) includes
-the distance calculation, comparison and flag test.
+the distance calculation, Boolean state and a bit-mask test.
 
 ## Summary
 
-- Arithmetic symbols write familiar formulas.
-- `MOD`, `SHL` and `SHR` give integer operations readable names.
-- Byte addition and subtraction widen before the result is stored.
-- Comparisons produce zero or an all-bits-set truth value.
-- `AND`, `OR`, `XOR` and `NOT` work with both masks and numeric truth.
+- Every integer operation has a resolved width and signedness.
+- Byte subtraction produces `i16`.
+- Comparisons produce `boolean`.
+- Boolean `and` and `or` short-circuit.
+- Integer `and`, `or`, `xor` and `not` operate on bits.

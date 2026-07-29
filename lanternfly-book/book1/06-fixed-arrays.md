@@ -7,138 +7,129 @@ nav_order: 6
 
 # Fixed Arrays
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+Eight separately named samples would force a loop to choose among eight names.
+An array gives one name to the complete fixed sequence:
 
-Eight samples can be stored under eight separate names, but a loop cannot
-select those names with a counter. An array gives one name to a fixed number
-of values:
+```lanternfly
+var samples as u8[8]
 
-```text
-DIM Samples[8] AS BYTE
+sub fillSamples()
+    var index as i16
 
-SUB FillSamples()
-    DIM Index AS INTEGER
-
-    FOR Index = 0 TO COUNT(Samples) - 1
-        Samples[Index] = BYTE(Index * 2)
-    NEXT Index
-END SUB
+    for index = 0 to count(samples) - 1
+        samples[index] = u8(index * 2)
+    end
+end
 ```
 
-`Samples[0]` receives 0, `Samples[1]` receives 2 and the final entry receives
-14. The declaration fixes the count and element type before the program runs.
+`samples[0]` receives 0, `samples[1]` receives 2 and the final entry receives
+14.
 
-## A count belongs to the declaration
+## The type contains the shape
 
-```text
-DIM Samples[8] AS BYTE
+```lanternfly
+var samples as u8[8]
 ```
 
-The brackets declare eight entries. Every entry is a `BYTE`. Valid indexes run
-from 0 through 7 because Lanternfly arrays are zero-based.
+`u8[8]` means an array of eight `u8` elements. Valid indices run from 0 through
+7 because Lanternfly arrays are zero-based.
 
-`COUNT(Samples)` produces 8 at compile time. Subtracting one gives the final
-valid index. The loop remains correct if the declared count changes.
+`count(samples)` produces eight at compile time. `size(samples)` produces the
+exact byte size, also eight:
 
-An array owns one continuous region of storage. Its exact size follows from
-its count and element type:
-
-```text
-SIZEOF(Samples) = 8 * SIZEOF(BYTE)
-                = 8
+```lanternfly
+const sampleCount as u8 = count(samples)
+const sampleBytes as u8 = size(samples)
 ```
 
-The compiler and every backend use that exact size.
+The query inspects the declared type. It performs no runtime load.
 
 ## Selecting an entry
 
-```text
-Samples[Index] = BYTE(Index * 2)
+```lanternfly
+samples[index] = u8(index * 2)
 ```
 
-The index is evaluated while the program runs. The backend calculates the
-entry address from the array base, the index and the element size. Lanternfly
-source names the selected value rather than the target registers needed for
-that address calculation.
+The backend combines the array base, runtime index and element size to locate
+the destination. A constant index follows the same rule:
 
-A constant index follows the same rule:
-
-```text
-Samples[3] = 10
+```lanternfly
+samples[3] = 10
 ```
 
-The compiler checks constant indexes. A target profile may also request
-runtime bounds checks for dynamic indexes. A checked access reports an error
-when the index falls outside 0 through `COUNT(array) - 1`.
+A constant out-of-range index is a compile error. A dynamic index is checked
+unless the compiler proves it lies inside the array. A failed check invokes
+the target's bounds-fault service before any load or store.
 
-## Arrays keep their exact element size
+## Element size controls the stride
 
-```text
-DIM Scores[5] AS WORD
+```lanternfly
+var scores as u16[5]
 ```
 
-Each `WORD` occupies two bytes, so the array occupies ten bytes. Entry 3 begins
+Each `u16` occupies two bytes, so `scores` occupies ten bytes. Entry 3 begins
 six bytes after entry 0. The address calculation multiplies the index by two.
 
-The same rule applies when an element occupies three, six or another count of
-bytes. A backend may implement multiplication with shifts, additions or a
-helper routine. The declared layout stays exact.
+The same rule applies to elements that occupy three, six or another exact byte
+count. Record arrays in Chapter 7 rely on this true stride.
 
-## More than one dimension
+## Multidimensional arrays
 
 A tile map has rows and columns:
 
-```text
-CONST MapRows AS INTEGER = 24
-CONST MapColumns AS INTEGER = 32
+```lanternfly
+const mapRows as u8 = 24
+const mapColumns as u8 = 32
 
-DIM Tiles[MapRows, MapColumns] AS BYTE
+var tiles as u8[mapRows, mapColumns]
 ```
 
-Two indexes select one tile:
+Two indices select one tile:
 
-```text
-DIM Row AS INTEGER
-DIM Column AS INTEGER
-DIM TileNumber AS BYTE
-
-Tiles[Row, Column] = TileNumber
+```lanternfly
+tiles[row, column] = tileNumber
 ```
 
-Lanternfly stores multidimensional arrays in row-major order. Entries in one
-row sit next to each other. The address calculation is:
+Lanternfly stores the rightmost dimension contiguously. The element number is:
 
 ```text
-offset = Row * MapColumns + Column
+row * mapColumns + column
 ```
 
-The source keeps both indexes visible. A constrained backend may calculate a
-row address first, then add the column.
+`count(tiles, 0)` produces 24 and `count(tiles, 1)` produces 32. A dimension
+argument is required for a multidimensional array so the requested extent is
+explicit.
 
-## Static initial values
+## Array initializers
 
-A fixed table may list its values in the declaration:
+Square brackets provide one initializer per element:
 
-```text
-DIM StepX[4] AS SBYTE = (0, 1, 0, -1)
-DIM StepY[4] AS SBYTE = (-1, 0, 1, 0)
+```lanternfly
+const stepX as i8[4] = [0, 1, 0, -1]
+const stepY as i8[4] = [-1, 0, 1, 0]
 ```
 
-Each initializer must fit the element type and the number of values must match
-the declared count. The table occupies its final representation before the
-program starts.
+A multidimensional initializer mirrors the declared shape:
+
+```lanternfly
+const smallMap as u8[2, 4] = [
+    [0, 0, 1, 1],
+    [2, 2, 3, 3]
+]
+```
+
+The rank, nested shape and element count must match exactly. Constant aggregate
+data can be placed in ROM by a target profile.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt) fills a
-sample array and declares a two-dimensional tile map.
+sample array and declares a two-dimensional tile map with direction tables.
 
 ## Summary
 
-- An array has a fixed count and one element type.
-- Indexes start at zero.
-- `COUNT` and `SIZEOF` provide compile-time shape information.
-- Runtime indexing uses the exact element size.
+- An array type states its element type and fixed dimensions.
+- Indices start at zero and dynamic access is checked.
+- `count` returns an extent and `size` returns exact bytes.
 - Multidimensional arrays use row-major layout.
+- Square-bracket initializers match the declared shape exactly.

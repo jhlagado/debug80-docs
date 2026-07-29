@@ -10,23 +10,19 @@ has_toc: false
 
 # Lanternfly Book 1 — Language Fundamentals
 
-> [!IMPORTANT]
-> This book records the pre-0.3 language draft and is paused while its examples
-> are reconciled with the
-> [current Lanternfly specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md).
-> In particular, the current language uses lowercase keywords, `var`, bare
-> `end`, strict `boolean` conditions and one `sub` form with an optional result.
+Lanternfly is a statically typed language for game logic and other small-system
+programs. Its statements resemble structured BASIC and readable pseudocode.
+Its types describe exact bytes, arrays, records and addresses so the same
+source can be lowered to Z80 assembly, another assembler, C or a selected BASIC
+dialect.
 
-A Lanternfly program should read like a precise description of its work. Words
-such as `IF`, `THEN`, `FOR`, `TO` and `NEXT` show the program's structure.
-Arithmetic and comparison operators keep formulas compact. Declarations give
-every stored value a known size and interpretation.
+This book teaches the working 0.3 language one program at a time. Each chapter
+adds a source construct, shows the problem it solves and follows the generated
+work far enough to explain its cost.
 
-This first part of the book establishes that source style through small
-examples. It introduces each programming term before relying on it and stays
-independent of a particular processor. The current chapters teach the settled
-semantic model while also testing provisional choices such as keyword spelling
-and case handling.
+> [!NOTE]
+> Edition 0.3 is the implementation contract for the first compiler. The
+> examples in this book follow that contract while the compiler is being built.
 
 ## Chapters
 
@@ -38,11 +34,15 @@ and case handling.
 6. [Fixed Arrays](06-fixed-arrays.md)
 7. [Records and Exact Layout](07-records-and-exact-layout.md)
 8. [References and Addresses](08-references-and-addresses.md)
-9. [Procedures and Functions](09-procedures-and-functions.md)
-10. [Services and Targets](10-services-and-targets.md)
+9. [Subroutines](09-procedures-and-functions.md)
+10. [Services, Targets and Assembly](10-services-and-targets.md)
 
-The next part will combine these facilities in a complete program and develop
-the source-unit, import and native-interface syntax that remains provisional.
+The [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
+defines the complete source rules. The
+[conformance contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/conformance.md)
+lists the programs, diagnostics and runtime faults that an implementation must
+test.
 
-Companion listings currently use `.txt` filenames while the language's source
-extension remains a design decision. The contents show Lanternfly source.
+Each chapter links to a companion listing under
+`/lanternfly-book/book1/code/`. The listings keep a `.txt` extension while the
+project decides the final Lanternfly source extension.

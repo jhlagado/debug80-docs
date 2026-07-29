@@ -7,141 +7,155 @@ nav_order: 7
 
 # Records and Exact Layout
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+An x coordinate and a y coordinate describe one position. A record keeps those
+fields together and gives the pair a type:
 
-An x coordinate and a y coordinate describe one point. Two parallel arrays
-leave that relationship implicit. A record gives the pair one type:
+```lanternfly
+record Point
+    var x as i8
+    var y as i8
+end
 
-```text
-TYPE Point
-    X AS SBYTE
-    Y AS SBYTE
-END TYPE
+var position as Point
 
-DIM Position AS Point
-
-Position.X = 12
-Position.Y = -3
+position.x = 12
+position.y = -3
 ```
 
-`Point` occupies two bytes. `X` is the first byte and `Y` is the second.
+`Point` occupies two bytes. `x` is the first byte and `y` is the second.
 
-## Fields name the parts
+## Record declarations
 
-```text
-TYPE Point
-    X AS SBYTE
-    Y AS SBYTE
-END TYPE
+```lanternfly
+record Point
+    var x as i8
+    var y as i8
+end
 ```
 
-`TYPE` begins a record declaration. Each field has a name and a type. `END
-TYPE` closes the declaration.
+`record` introduces a Pascal-cased type name. Each field uses the familiar
+`var name as Type` form. A record declaration describes layout; storage appears
+when another declaration uses the type.
+
+```lanternfly
+var position as Point
+```
 
 A dot selects a field:
 
-```text
-Position.X
-Position.Y
+```lanternfly
+position.x
+position.y
 ```
 
-The field name carries the meaning that an offset such as “byte 1” would lose.
-The compiler still calculates the offset for the backend.
+The compiler turns each field name into a byte offset while the source retains
+the coordinate names.
 
-## Records have exact sizes
+## Exact field layout
 
-Lanternfly places fields in declaration order with their exact sizes. The
-record contains exactly the bytes declared by its fields.
+Fields appear in declaration order. Lanternfly inserts no implicit padding:
 
-```text
-TYPE Monster
-    X AS BYTE
-    Y AS BYTE
-    Direction AS BYTE
-    State AS BYTE
-    Timer AS BYTE
-    Frame AS BYTE
-END TYPE
+```lanternfly
+record Monster
+    var x as u8
+    var y as u8
+    var direction as u8
+    var state as u8
+    var timer as u8
+    var frame as u8
+end
 ```
 
-`Monster` occupies six bytes. Its field offsets are 0 through 5:
+`Monster` occupies six bytes. Its field offsets run from zero through five:
 
-```text
-SIZEOF(Monster) = 6
-OFFSET(Monster, Timer) = 4
+```lanternfly
+const monsterBytes as u8 = size(Monster)
+const timerOffset as u8 = offset(Monster.timer)
 ```
 
-Exact layout lets a record match a file format, firmware table or packed game
-state. A native adapter handles any target-specific alignment rule while the
-Lanternfly record remains six bytes.
+`monsterBytes` is six and `timerOffset` is four. Exact layout allows a record
+to match a firmware table, file representation or existing game-state map.
 
 ## Arrays of records
 
-```text
-DIM Monsters[4] AS Monster
+```lanternfly
+var monsters as Monster[4]
 ```
 
-The array occupies 24 bytes. Selecting an entry uses the true six-byte stride:
+The array occupies 24 bytes. A field path can select an entry and then one of
+its fields:
 
-```text
-Monsters[Index].Timer = BYTE(Monsters[Index].Timer + 1)
+```lanternfly
+monsters[index].timer = u8(monsters[index].timer + 1)
 ```
 
-The backend calculates `Index * 6`, adds the `Timer` field offset and performs
-the byte access. That multiplication is generated work, not a reason to round
-the record up to eight bytes.
+The backend calculates `index * 6`, adds the timer offset and accesses one
+byte. A six-byte stride remains six on every target.
 
-## Records can contain arrays
+## Nested records and arrays
 
-A record may keep a small history beside its current position:
+A record can contain another record or a fixed array:
 
-```text
-TYPE Mover
-    Position AS Point
-    Previous AS Point[4]
-    Count AS BYTE
-END TYPE
+```lanternfly
+record Mover
+    var position as Point
+    var previous as Point[4]
+    var savedCount as u8
+end
 
-DIM Player AS Mover
-DIM SavedPosition AS Point
+var player as Mover
 ```
 
-Paths can contain several field and index steps:
+Paths retain a type at every step:
 
-```text
-Player.Previous[Index].X = Player.Position.X
+```lanternfly
+player.previous[index].x = player.position.x
 ```
 
-Each step retains its type. `Player.Previous` is an array of `Point`, selecting
-an entry produces one `Point` and `.X` produces an `SBYTE` storage location.
+`player.previous` has type `Point[4]`. Indexing selects one `Point` and `.x`
+selects its `i8` field.
 
-## Assignment follows value shape
+A by-value containment cycle has no finite size, so the compiler rejects direct
+or mutual record cycles. References in Chapter 8 can connect separately
+allocated records.
 
-Scalar fields can be assigned directly. Aggregate records and arrays are
-copied only by explicit operations:
+## Record initializers
 
-```text
-CLEAR(Player.Previous)
-COPY(SavedPosition, Player.Position)
+A record initializer names every field:
+
+```lanternfly
+const origin as Point = Point(x = 0, y = 0)
 ```
 
-`CLEAR` writes the all-zero representation where the type permits it. `COPY`
-requires source and destination with the same exact size and non-overlapping
-storage. `MOVE` covers overlapping regions.
+Each field appears exactly once. The written order controls initializer
+evaluation while the declaration order controls storage.
 
-These names expose a potentially large memory operation at the call site.
+## Aggregate assignment
+
+Records and arrays with identical types can be assigned:
+
+```lanternfly
+savedPosition = player.position
+actors[0] = actors[1]
+```
+
+The complete fixed-size value is copied. Copying has snapshot semantics, so an
+overlapping source and destination behave as though the source value was read
+first. The backend may inline a small copy, emit a loop or call a runtime
+helper. Generated listings and cost reports expose that choice.
+
+Aggregate locals do not allocate record or array storage on the stack. Chapter
+8 introduces a local alias for working with an existing aggregate.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/07-records.txt) declares
-points, monsters and a record containing an array.
+points, monsters and a mover with a position history.
 
 ## Summary
 
-- `TYPE` and `END TYPE` declare a record.
-- A dot selects a named field.
-- Field order and size determine a layout made only from declared fields.
-- Arrays of records use the true record size as their stride.
-- Aggregate copying uses explicit operations such as `COPY` and `MOVE`.
+- `record` declares a Pascal-cased type with named fields.
+- Fields keep declaration order and exact size.
+- `size` and `offset` expose compile-time layout.
+- Arrays of records use the record's true byte stride.
+- Assignment copies equal fixed-size records or arrays.

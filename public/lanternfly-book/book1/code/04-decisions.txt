@@ -1,44 +1,44 @@
-CONST Finished AS BYTE = 0
-CONST Playing AS BYTE = 1
-CONST Won AS BYTE = 2
+const finished as u8 = 0
+const playing as u8 = 1
+const won as u8 = 2
 
-CONST North AS BYTE = 0
-CONST East AS BYTE = 1
-CONST South AS BYTE = 2
-CONST West AS BYTE = 3
+const north as u8 = 0
+const east as u8 = 1
+const south as u8 = 2
+const west as u8 = 3
 
-DIM Lives AS INTEGER = 3
-DIM Score AS INTEGER = 0
-DIM Status AS BYTE = Playing
-DIM Direction AS BYTE = North
-DIM DeltaX AS INTEGER
-DIM DeltaY AS INTEGER
+var lives as i16 = 3
+var score as i16 = 0
+var status as u8 = playing
+var direction as u8 = north
+var deltaX as i16 = 0
+var deltaY as i16 = 0
 
-SUB UpdateStatus()
-    IF Lives = 0 THEN
-        Status = Finished
-    ELSEIF Score >= 100 THEN
-        Status = Won
-    ELSE
-        Status = Playing
-    END IF
-END SUB
+sub updateStatus()
+    if lives = 0 then
+        status = finished
+    else if score >= 100 then
+        status = won
+    else
+        status = playing
+    end
+end
 
-SUB FindStep()
-    DeltaX = 0
-    DeltaY = 0
+sub findStep()
+    deltaX = 0
+    deltaY = 0
 
-    SELECT CASE Direction
-    CASE North
-        DeltaY = -1
-    CASE East
-        DeltaX = 1
-    CASE South
-        DeltaY = 1
-    CASE West
-        DeltaX = -1
-    CASE ELSE
-        DeltaX = 0
-        DeltaY = 0
-    END SELECT
-END SUB
+    select direction
+    case north
+        deltaY = -1
+    case east
+        deltaX = 1
+    case south
+        deltaY = 1
+    case west
+        deltaX = -1
+    else
+        deltaX = 0
+        deltaY = 0
+    end
+end

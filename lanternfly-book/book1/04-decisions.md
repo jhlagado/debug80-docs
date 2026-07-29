@@ -7,146 +7,157 @@ nav_order: 4
 
 # Decisions
 
-> [!IMPORTANT]
-> This chapter uses the pre-0.3 draft syntax. See the
-> [book revision notice](index.md).
+A game status depends on two facts. Zero lives ends the round. A score of 100
+or more wins it. Every other state keeps the round in progress:
 
-A game can show one of three states. No lives means the round has ended. A
-score of at least 100 means the target has been reached. Every other state is
-still in progress.
+```lanternfly
+const finished as u8 = 0
+const playing as u8 = 1
+const won as u8 = 2
 
-```text
-CONST Finished AS BYTE = 0
-CONST Playing AS BYTE = 1
-CONST Won AS BYTE = 2
+var lives as i16 = 3
+var score as i16 = 0
+var status as u8 = playing
 
-DIM Lives AS INTEGER = 3
-DIM Score AS INTEGER = 0
-DIM Status AS BYTE = Playing
-
-SUB UpdateStatus()
-    IF Lives = 0 THEN
-        Status = Finished
-    ELSEIF Score >= 100 THEN
-        Status = Won
-    ELSE
-        Status = Playing
-    END IF
-END SUB
+sub updateStatus()
+    if lives = 0 then
+        status = finished
+    else if score >= 100 then
+        status = won
+    else
+        status = playing
+    end
+end
 ```
 
-The conditions are checked from top to bottom. The first true branch runs and
-the remaining branches are skipped.
+Conditions are tested from top to bottom. The first true branch runs and
+execution continues after `end`.
 
-## One branch
+## One conditional branch
 
-The smallest block runs one action when its condition is true:
-
-```text
-IF Score >= 100 THEN
-    Status = Won
-END IF
+```lanternfly
+if score >= 100 then
+    status = won
+end
 ```
 
-`THEN` separates the condition from its body. `END IF` closes the block. The
-body may contain declarations at its beginning, assignments, calls, loops or
-another decision.
+`then` separates the Boolean condition from its body. The body may contain
+assignments, calls, loops or another decision. The closing `end` belongs to the
+nearest open block.
 
-The book uses the block form even for one statement. The opening and closing
-words keep edits safe when a second statement is added later.
+## Two alternatives
 
-## Alternatives
+`else` handles every value left after the first test:
 
-`ELSE` supplies a branch for every remaining value:
-
-```text
-IF Lives > 0 THEN
-    Status = Playing
-ELSE
-    Status = Finished
-END IF
+```lanternfly
+if lives > 0 then
+    status = playing
+else
+    status = finished
+end
 ```
 
-`ELSEIF` adds another condition while keeping the chain at one indentation
-level:
+Exactly one branch runs. A true condition selects the first body. A false
+condition selects the `else` body.
 
-```text
-IF Lives = 0 THEN
-    Status = Finished
-ELSEIF Score >= 100 THEN
-    Status = Won
-ELSE
-    Status = Playing
-END IF
+## Several ordered tests
+
+Lanternfly writes a longer chain as two words, `else if`:
+
+```lanternfly
+if lives = 0 then
+    status = finished
+else if score >= 100 then
+    status = won
+else
+    status = playing
+end
 ```
 
-Order carries meaning. Checking `Lives = 0` first gives the finished state
-priority when both the life and score conditions apply.
+Order carries meaning. The life test receives priority when both conditions
+apply. One `end` closes the complete chain.
 
-## Choosing among named values
+## Selecting one named value
 
-`SELECT CASE` suits one value with several recognised cases:
+`select` evaluates one expression and compares it with constant cases:
 
-```text
-CONST North AS BYTE = 0
-CONST East AS BYTE = 1
-CONST South AS BYTE = 2
-CONST West AS BYTE = 3
+```lanternfly
+const north as u8 = 0
+const east as u8 = 1
+const south as u8 = 2
+const west as u8 = 3
 
-DIM Direction AS BYTE = North
-DIM DeltaX AS INTEGER
-DIM DeltaY AS INTEGER
+var direction as u8 = north
+var deltaX as i16 = 0
+var deltaY as i16 = 0
 
-SUB FindStep()
-    DeltaX = 0
-    DeltaY = 0
+sub findStep()
+    deltaX = 0
+    deltaY = 0
 
-    SELECT CASE Direction
-    CASE North
-        DeltaY = -1
-    CASE East
-        DeltaX = 1
-    CASE South
-        DeltaY = 1
-    CASE West
-        DeltaX = -1
-    CASE ELSE
-        DeltaX = 0
-        DeltaY = 0
-    END SELECT
-END SUB
+    select direction
+    case north
+        deltaY = -1
+    case east
+        deltaX = 1
+    case south
+        deltaY = 1
+    case west
+        deltaX = -1
+    else
+        deltaX = 0
+        deltaY = 0
+    end
+end
 ```
 
-The expression after `SELECT CASE` is evaluated once. Each `CASE` names one or
-more compile-time values. `CASE ELSE` handles values not listed above it. After
-a matching case body finishes, execution continues after `END SELECT`.
+Each `case` holds one or more compatible compile-time values. Cases never fall
+through, so a matching body continues after the closing `end`. The optional
+`else` handles unmatched values.
 
-`SELECT CASE` exposes a state table in the layout of the source. `IF` remains
-better when each branch asks a different kind of question.
+Several values can share a body:
 
-## Conditions are integer expressions
-
-Zero is false and any nonzero integer is true:
-
-```text
-IF Lives THEN
-    Status = Playing
-END IF
+```lanternfly
+case north, south
+    deltaX = 0
 ```
 
-The explicit comparison `Lives > 0` often communicates more when a quantity is
-being tested. Direct numeric truth fits flags and functions whose documented
-result already means yes or no.
+Duplicate or overlapping cases are compile errors.
+
+## Choosing `if` or `select`
+
+Use `if` when each branch asks a different question:
+
+```lanternfly
+if lives = 0 then
+    ...
+else if score >= 100 then
+    ...
+end
+```
+
+Use `select` when several constant values are compared with one expression:
+
+```lanternfly
+select direction
+case north
+    ...
+case south
+    ...
+end
+```
+
+The selected expression is evaluated once.
 
 ## Example
 
-The [chapter listing](/lanternfly-book/book1/code/04-decisions.txt) combines the
-status chain with the direction selection.
+The [chapter listing](/lanternfly-book/book1/code/04-decisions.txt) combines an
+ordered status chain with direction selection.
 
 ## Summary
 
-- `IF`, `ELSEIF`, `ELSE` and `END IF` express ordered alternatives.
-- Only the first true branch of an `IF` chain runs.
-- `SELECT CASE` compares one value with several constant cases.
-- A completed `CASE` continues after `END SELECT`.
-- Zero is false and every nonzero integer is true.
+- `if` runs a block when its condition is `true`.
+- `else if` adds ordered conditions and `else` handles the remainder.
+- One `end` closes the complete decision.
+- `select` compares one value with constant `case` values.
+- Cases never fall through.
