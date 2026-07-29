@@ -47,8 +47,8 @@ subject of the transaction stays ambient. That split is defensible
 here: there is one score, every caller means it, and forcing each call
 to repeat `score` would add noise without information. But notice it
 was a *choice*. A routine's parameters are the facts that vary per
-call; its globals are the facts the whole program agrees on; and every
-routine you write draws that line somewhere. Draw it consciously.
+call; its globals are the facts the whole program agrees on; and every routine draws that line somewhere — better on purpose than by
+accident.
 
 ## One declaration form
 
@@ -95,8 +95,7 @@ end
 
 This is a clamp — one of the small utilities game code reaches for
 constantly, because scores, positions and timers all have ceilings
-they must respect. Notice how the vocabulary idea plays out: the
-routine's name states what comes back, its two parameters are
+they must respect. The vocabulary idea plays out in the signature: the routine's name states what comes back, its two parameters are
 transparently the question being asked, and a reader who never opens
 the body can still use it correctly. That is the mark of a
 well-designed value-producer, and it is worth more than cleverness
@@ -167,8 +166,7 @@ instructions on a small processor, and assembly programmers have
 always hoarded fixed scratch bytes for exactly this reason. The
 compiler plays the same trick with a proof instead of a hope, and
 source semantics still provide fresh values for overlapping
-invocations. You write locals; the backend haggles over their
-lodging; the meaning never moves.
+invocations. You write locals; the backend chooses their lodging; the meaning never moves.
 
 ## Aggregate parameters
 
@@ -257,8 +255,8 @@ frame costs, and recursion simply works there, priced like
 everything else. A profile that uses fixed scratch — the
 static-lodging economy described above, on targets where it is the
 only economical choice — rejects direct or mutual call cycles at
-compile time, because a second frame would overwrite the first and
-the compiler declines to pretend otherwise.
+compile time, because a second frame would overwrite the first — a fact the compiler
+reports rather than hides.
 
 The routine body keeps the same source meaning under either profile;
 the profile determines only whether the required storage can be
@@ -276,10 +274,9 @@ depend on how deep a call tree happened to grow.
 
 The [chapter listing](/lanternfly-book/book1/code/09-routines.txt)
 contains an action, two result-bearing subroutines and an aggregate
-parameter. Trace `limited(score + bonus, 1000)` with a score of 980
-and a bonus of 50: the argument expression evaluates first, 1030
-travels in, the comparison trips, and 1000 comes back. Then trace it
-with a bonus of 10 and watch the other path run. Two pencil passes
+parameter. Traced with a score of 980 and a bonus of 50, `limited(score + bonus,
+1000)` evaluates its argument first: 1030 travels in, the comparison
+trips, and 1000 comes back. With a bonus of 10, the other path runs. Two pencil passes
 cover every reachable line of the routine — which is, not
 coincidentally, exactly what the compiler checked when it accepted
 the declaration. You and it are converging on the same habits; the

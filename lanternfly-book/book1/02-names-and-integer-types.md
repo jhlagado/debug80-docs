@@ -40,8 +40,8 @@ this chapter is about making those decisions well.
 
 ## Counting in binary
 
-The ranges in the table below will look arbitrary until you can rebuild
-them yourself, so take two minutes and rebuild them. A bit is a digit
+The ranges in the table below look arbitrary until they are rebuilt from
+first principles, and the rebuilding takes two minutes. A bit is a digit
 that can be 0 or 1, and bits gain meaning the same way decimal digits do:
 by position. In decimal, the columns are worth 1, 10, 100, 1000 — each
 ten times the last. In binary, the columns are worth 1, 2, 4, 8, 16, 32,
@@ -77,16 +77,13 @@ states the exact bit width. Once it is familiar, `i32` reads at a glance
 memorise, because you can regenerate any row of it from the doubling
 rule above.
 
-The signed rows deserve their own explanation, because the machine has
-no minus sign to store — only bits. The arrangement in universal use is
-called two's complement, and its essence fits in a sentence: the top bit
-of a signed value is given a *negative* place value. In an `i8`, the
+The signed rows use two's-complement interpretation: the top bit of a
+signed value has a negative place value. In an `i8`, the
 columns are worth -128, 64, 32, 16, 8, 4, 2, 1. All zeros is 0; a lone
-top bit is -128; all ones is -128 + 127, which is -1. Notice what that
-means: the same eight bits that spell 255 in a `u8` spell -1 in an
+top bit is -128; all ones is -128 + 127, which is -1. So the same eight bits that spell 255 in a `u8` spell -1 in an
 `i8`. The pattern does not change — only the agreement about what the
-top column is worth. Hold onto that idea; when this chapter reaches
-conversions, it will do the heavy lifting.
+top column is worth. The idea returns when this chapter reaches conversions, where it does the
+heavy lifting.
 
 ## The price of a width
 
@@ -106,12 +103,11 @@ instructions wherever the source asked for 32 bits — and it must,
 because the type is a promise about range, and the promise holds on
 every target.
 
-So choosing a type is answering two questions, and it is worth
-answering them in this order. First: what is the largest value this
-count can ever legitimately hold, and can it ever be negative? Answer
-generously — the wrap bug from Chapter 1 is what "slightly too
-optimistic" costs. Second: of the types that are safely large enough,
-take the narrowest, because every wasted byte and every widened
+So choosing a type is answering two questions, in order. First: what is
+the largest value this count can ever legitimately hold, and can it ever
+be negative? A generous answer is the cheap one — the wrap bug from
+Chapter 1 is what "slightly too optimistic" costs. Second: which is the
+narrowest type safely large enough? Every wasted byte and every widened
 addition is paid for on the target. Lives fit a `u8` with a guard.
 A score bounded at 9,999 fits a `u16` twice over. A frame counter that
 must outlive the longest session anyone will ever play earns its
@@ -128,16 +124,10 @@ var lives as u8 = startingLives
 var score as u16 = 0
 ```
 
-`const` names a compile-time value — settled before the program runs,
-costing nothing while it runs. It is the antidote to an old ailment
-called the magic number. A bare `3` in the middle of a program answers
-no questions: three what? decided by whom? changeable? The same value
-spelled `startingLives` answers all of them, and the day the designer
-grants a fourth life, you change one declaration instead of hunting
-every literal three in the source and deciding, one by one, which of
-them meant lives and which meant something else that happened to be
-three. That hunt is how seasoned programmers lose evenings, and `const`
-is how they stopped.
+`const` names a compile-time value. A bare `3` does not say whether it
+means starting lives, a movement rate or something else. `startingLives`
+records that role, gives every use one declaration and lets a later change
+replace the value in one place.
 
 The declared type also puts a fence around the value:
 
@@ -145,14 +135,9 @@ The declared type also puts a fence around the value:
 const maximumByte as u8 = 255
 ```
 
-`255` is the largest value a `u8` can hold — all eight columns lit — so
-this compiles. `256` would need the ninth column, so the compiler
-rejects it and asks for a wider type. It is a small check that catches
-a whole class of slipped digits before the program exists to
-misbehave, and it works because the width was written down where the
-compiler could hold you to it. This is the chapter's bargain in
-miniature: you state a limit once, and from then on the limit defends
-itself.
+`255` is the largest value a `u8` can hold, so this compiles. `256`
+needs a ninth bit and is rejected. The declared type therefore checks that
+the named constant fits the range it is meant to describe.
 
 ## Boolean values
 
@@ -171,8 +156,8 @@ gameOver = lives = 0
 ```
 
 `true` and `false` are the Boolean literals, and a comparison produces
-a Boolean. The type is as honest about cost as the integers are: one
-byte, storing zero for `false` and one for `true`. A byte is more room
+a Boolean. The type occupies one byte, storing zero for `false` and one for
+`true`. A byte is more room
 than one fact strictly needs — Chapter 3 shows how eight facts can
 share a byte when memory is tight — but it is what the machine can
 address directly, and for ordinary state the clarity is worth the
@@ -194,16 +179,13 @@ means:
 
 ```lanternfly
 if lives > 0 then
-    ...
+    loseLife()
 end
 ```
 
-The beneficiary is the reader. `if lives then` obliges the next person
-to remember a convention; `lives > 0` names the fact the branch
-depends on, and there is nothing to remember. The rule also closes a
-classic trap from C's history, where a mistyped assignment inside a
-condition silently became both a store and a test. In Lanternfly the
-condition must be Boolean, so the mistake has nowhere to hide.
+`lives > 0` states the fact on which the branch depends. A condition must
+have type `boolean`; Lanternfly does not convert an integer or assignment
+into a condition.
 
 ## Assignment and equality share `=`
 
@@ -234,12 +216,10 @@ instantly.
 
 ## Conversions state a width choice
 
-Sooner or later two widths meet in one expression, and this is where a
-typed language either helps or nags. Lanternfly draws its line at a
-principle worth stating in full, because every rule in this section is
-the same principle wearing different clothes: **conversions that cannot
-lose information happen silently, and conversions that can lose
-information are written down.**
+Sooner or later two widths meet. Lanternfly distinguishes three cases:
+value-preserving widening is silent; an ordinary narrowing or signedness
+change is allowed with a warning; and an explicit conversion performs the
+same bit conversion while recording that the boundary was intentional.
 
 Start with the subtraction from Chapter 1. Two `u8` values subtract
 into `i16`, so the result has room for any difference from -255
@@ -264,26 +244,16 @@ var byteValue as u8 = 0
 byteValue = u8(wideValue)
 ```
 
-The conversion keeps the low eight bits, and this is where the binary
-practice pays off. Three hundred in binary is `%100101100` — nine
-columns. A byte keeps the low eight, `%00101100`, which is
-32 + 8 + 4, or 44. The lost ninth column was worth 256, and 300 minus
-256 is, again, 44. Nothing mysterious happened; a value too big for
-the box was cut to fit, and `u8(...)` is you signing for the cut.
-Omitting it would perform the same store but warn that a value from
-another declared type may be lost. The warning is the compiler asking
-one question — did you mean to cross this boundary? — and the
-conversion is how you answer it in advance. Remember Chapter 1's
-philosophy of silence: because ordinary round trips say nothing, this
-warning, when it comes, means exactly what it says.
+The conversion keeps the low eight bits. Three hundred in binary is
+`%100101100`; a byte keeps `%00101100`, which is 44. Omitting
+`u8(...)` performs the same store but emits the default conversion warning.
+The explicit form suppresses that warning by making the narrowing part of the
+source.
 
-Changing signedness likewise preserves the bit pattern and normally
-deserves an explicit conversion — and now the two's complement section
-collects its debt. The same eight bits that mean 255 as a `u8` mean
--1 as an `i8`, because the only difference between the types is what
-the top column is worth. No bits move in such a conversion; what
-changes is the *reading* of them, and a change of reading is exactly
-the kind of decision the next programmer needs to see written down.
+Changing signedness also preserves the bit pattern and warns by default.
+The same eight bits that mean 255 as a `u8` mean -1 as an `i8`, because
+the types interpret the top bit differently. An explicit conversion records
+that reinterpretation.
 
 Widening runs the other way and needs no ceremony:
 
@@ -325,12 +295,6 @@ declaration away.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/02-names-and-types.txt)
-brings constants, Boolean state and integer conversion together. The
-conversion line rewards a pencil trace in the Chapter 1 manner: write
-the wide value in binary, cut it to eight columns, and add up what
-remains — predict the stored byte before reading on. If your
-prediction and the listing agree, the narrowing rule is yours for
-good, and with it the habit this chapter was really teaching: a type
-is a claim about a count, binary is how the claim cashes out in bits,
-and every strange-looking number a small machine ever shows you is one
-of these rules, obeyed.
+brings constants, Boolean state and integer conversion together. Trace the
+conversion by writing the wide value in binary, retaining the low eight bits
+and adding their place values. The stored result should be 44.

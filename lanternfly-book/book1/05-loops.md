@@ -9,21 +9,18 @@ nav_order: 5
 
 Everything a computer is admired for comes down to repetition. A
 processor does nothing a patient person could not do with a pencil; it
-simply does it millions of times a second without losing interest. The
+simply does it millions of times a second, identically, for hours. The
 game loop that wakes fifty times a second is a loop. The routine that
 touches every entry in a table is a loop. The search that keeps looking
 until it finds, the counter that ticks down to zero, the screen redrawn
 row by row — all of them are one idea, a body of statements executed
 again and again under some rule that says when to stop.
 
-The stopping rule is the interesting part. A loop that stops too early
-leaves work undone; a loop that stops too late corrupts what it
-touches; a loop that never stops takes the whole machine down with it,
-because on a small computer there is nothing else running to wrest
-control back. Lanternfly has three loop statements, and they differ in
-exactly one thing: the kind of stopping rule they announce. Learning
-the three is learning to say, precisely, "this is what keeps me going
-and this is what stops me" — and the compiler holds you to it.
+The stopping rule determines whether a loop completes its work. If it never
+becomes false, the current routine or frame cannot reach later statements; on
+a simple standalone target, the visible program may stall completely.
+Lanternfly has three loop statements, distinguished by where the stopping rule
+is expressed.
 
 The first is the counted loop. Adding the numbers from 1 through 10
 repeats one assignment while a counter advances:
@@ -53,6 +50,12 @@ is the one you replace with arithmetic. The loop earns its keep when
 the work in the body is real, and for the rest of this chapter it will
 be.)
 
+`number` is the book's first local variable. Local declarations appear at the
+start of a subroutine, before executable statements. The name is visible only
+inside that routine and each invocation receives its own scalar value. An
+owned scalar local without an initializer begins with zero bits; here the
+`for` statement assigns the first value before the body reads it.
+
 ## Counted loops
 
 ```lanternfly
@@ -66,8 +69,8 @@ clause is a promise the rest of the program can lean on.
 
 First, the loop variable — declared with the other locals at the start
 of the subroutine — takes each value of the range in turn. Second, the
-range is inclusive at both ends: `1 to 10` visits ten values, not
-nine. Fix that in place now, because half-open ranges in other
+range is inclusive at both ends: `1 to 10` visits ten values, not nine — a detail worth pinning down at
+once, because half-open ranges in other
 languages train the opposite instinct, and the fence-post error — one
 iteration too many or too few — is among the commonest bugs in all of
 programming. In Lanternfly the rule is simply
@@ -135,22 +138,18 @@ sub countDown()
 end
 ```
 
-The test comes first, which has a consequence easy to state and easy
-to forget: an initially false condition runs the body zero times. A
-`while` is a guard and a loop in one — Chapter 1's `if lives > 0`
-guard, applied afresh before every single pass — and the zero-times
-case is a feature, not an edge: a loop over an empty list should do
-nothing, and this one does nothing without any special handling.
+The test comes first, so an initially false condition runs the body zero
+times. If `remaining` starts at zero, `countDown` reaches its `end` without
+executing the assignment.
 
 Nothing here promises progress, though. The body must move the world
 toward the condition turning false, and a body that forgets is an
-infinite loop. Run the trace on `countDown`: 3 is above zero, becomes
+infinite loop. A trace of `countDown` shows it: 3 is above zero, becomes
 2; 2 becomes 1; 1 becomes 0; and the fourth test finds 0, answers
 false, and the loop is done — three passes, each visibly one step
-closer to the exit. That "visibly closer" quality is what to check
-whenever you write a `while`. Find the quantity that shrinks toward
-the condition's edge, and if you cannot find one, you have written a
-hope rather than a loop. The counted loop made this mistake
+closer to the exit. Every sound `while` has that "visibly closer" quality: some quantity
+shrinks toward the condition's edge, and a loop without one is a hope
+rather than a loop. The counted loop made this mistake
 impossible; `while` trades the safety for flexibility and hands the
 responsibility to you.
 
@@ -189,16 +188,10 @@ and the program you meant. (Chapter 3's `mod` is doing the judging:
 divisible-by-eight means remainder zero. "Which and where inside"
 strikes again.)
 
-A `loop` with an `exit` can imitate either of the other two forms,
-which tempts some programmers to use nothing else. Resist. The
-opening word of a loop is the first thing a reader learns about it:
-`for` promises a counted march, `while` names the continuing
-condition before the body begins, and `loop` warns, honestly, that
-the stopping rule is somewhere inside and must be hunted. Spending
-the least powerful form that fits is a kindness to every future
-reader, yourself included — it is the difference between a door
-labelled with where it leads and a corridor you must walk to find
-out.
+Although `loop` with `exit` can imitate the other forms, the opening word
+should expose the real stopping rule. Use `for` for a counted range, `while`
+for a condition tested before each pass and `loop` when the test belongs
+inside the body.
 
 ## Skipping an iteration
 
@@ -206,23 +199,18 @@ out.
 pass. `continue` starts the next iteration immediately:
 
 ```lanternfly
-for index = 0 to actorCount - 1
-    if not actors[index].active then
+for number = 1 to 10
+    if number mod 2 = 0 then
         continue
     end
 
-    updateActor(actors[index])
+    total = total + number
 end
 ```
 
-This is the standard filtering idiom: a table of game actors in which
-only some slots are live, a quick test at the top of the body, and
-`continue` to step past the rest. (The bracket-and-dot notation for
-tables like `actors[index].active` arrives properly in Chapters 6
-and 7; here it is enough that inactive actors skip the call.) In a
-counted loop, `continue` proceeds to the next step and test — the
-counter still advances, the range is still honoured, and only the
-remainder of this one pass is abandoned.
+This loop skips even numbers and adds the odd ones. In a counted loop,
+`continue` proceeds to the next step and test: the control variable still
+advances and only the remainder of the current pass is abandoned.
 
 The alternative is wrapping the whole body in an `if`, which works,
 and which buries the real work one indentation level deeper for
@@ -261,22 +249,12 @@ computed in one place, named, and consulted in another.
 | condition is tested before work | `while ... end` |
 | statements repeat until they exit | `loop ... end` |
 
-The choice is the same judgement each time: which stopping rule is
-*true* of this work? Announce that one. The opening line states what
-controls repetition, and the statement serves two readers at once —
-the human, who learns the loop's character before its body, and the
-backend, which takes from that same line the information it needs to
-form the branches, tests and counter updates. A well-chosen loop is
-documentation and machine code from a single sentence.
+Choose the form whose opening line states the stopping rule. That line also
+gives the backend the range, condition or branch structure it must lower.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/05-loops.txt)
-contains counted, conditional and indefinite loops. The indefinite
-one deserves your pencil most: start `candidate` at 16, walk the
-loop until `exit` fires, and confirm 24. Then start it at 15 and
-notice you get 16 — the "advance before test" shape doing exactly
-what it says, twice. If the two traces feel almost too easy, that is
-the intended reward for four chapters of pencil work: you are
-becoming fluent in running small machines by hand, just in time for
-the next chapter to hand you real tables to run them over.
+contains counted, conditional and indefinite loops. Trace
+`findNextMultiple` from 16 and from 15. Because the candidate advances before
+the test, the expected results are 24 and 16.

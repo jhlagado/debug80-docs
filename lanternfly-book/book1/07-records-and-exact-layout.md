@@ -41,9 +41,8 @@ worked with quantities; Chapter 6 arranged quantities into sequences.
 A record is the first construct whose subject is not a quantity at all
 but a *thing* — a monster, a player, a particle — and designing one is
 an act of modelling: deciding which few bytes capture what the game
-needs to know about each thing it tracks. Get the model right and the
-code that follows writes itself; get it wrong and every routine fights
-the shape of its own data. The examples in this chapter are small
+needs to know about each thing it tracks. Get the model right and the code that follows is short and plain; get it
+wrong and every routine works against the shape of its own data. The examples in this chapter are small
 exercises in getting it right.
 
 ## Record declarations
@@ -74,9 +73,8 @@ var position as Point
 
 `record Point` is the blueprint; `var position as Point` is a
 building. There can be one building, or forty in an array, or none at
-all — the blueprint costs nothing either way. Keep the two roles
-separate in your head and half of this chapter follows automatically:
-blueprints are consulted at compile time, buildings occupy pigeonholes
+all — the blueprint costs nothing either way. With the two roles kept separate, half of this chapter follows
+automatically: blueprints are consulted at compile time, buildings occupy pigeonholes
 at run time, and the compiler is the only party that ever needs both
 at once.
 
@@ -112,8 +110,8 @@ record Monster
 end
 ```
 
-Pause on the design before the layout, because this record is a
-compact answer to a modelling question: what must the game remember
+The design comes before the layout, because this record is a compact
+answer to a modelling question: what must the game remember
 about a monster between frames? Where it is (`x`, `y`), where it is
 heading (`direction` — an index into Chapter 6's step tables), what
 it is doing (`state` — the named-constant idiom from Chapter 4), how
@@ -220,8 +218,8 @@ contributes a fixed offset or a stride multiply to one flat address
 calculation — the reading is layered, the arithmetic is flat.
 
 One shape is refused. A record cannot contain its own type by value,
-directly or through mutual containment — picture `Mover` holding a
-`Mover` holding a `Mover`, and the size has no bottom. A by-value
+directly or through mutual containment — a `Mover` holding a `Mover`
+holding a `Mover`, with no bottom to the size. A by-value
 containment cycle has no finite size, so the compiler rejects it.
 When two records genuinely need to point at one another, that is a
 job for Chapter 8's references, which connect separately allocated
@@ -281,11 +279,10 @@ about where the bytes actually live.
 
 The [chapter listing](/lanternfly-book/book1/code/07-records.txt)
 declares points, monsters and a mover with a position history. The
-trace worth doing here is an offset walk: from the declarations
-alone, predict `size(type Mover)` and the byte offset of
-`player.previous[2].y`, then check against the layout rules. Two
-bytes for `position`, then two strides of two into `previous`, then
-one more for `y` — the arithmetic is short, and being able to run it
+trace worth doing here is an offset walk: `size(type Mover)` and the byte offset of
+`player.previous[2].y`, both derived from the declarations alone. Two
+bytes for `position`, then two strides of two into `previous`, then one
+more for `y`, gives offset seven — the arithmetic is short, and running it
 from the source alone is exactly what "exact layout" means. When a
 record of yours must one day match a datasheet, this is the
 five-minute skill that does it.

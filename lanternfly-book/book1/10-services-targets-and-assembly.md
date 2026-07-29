@@ -80,7 +80,7 @@ export extern sub showNumber(value as u16)
 assembly. The declaration's job is the types, and the types are
 doing real protective work. A firmware routine is reached by address and
 convention; call it with the wrong argument width and nothing checks —
-the machine executes your mistake with complete confidence. Wrapping the
+the machine executes your mistake exactly as written. Wrapping the
 routine in a typed declaration moves that hazard from runtime to compile
 time: `drawPixel(playerX, playerY, playerColour)` is checked like any
 other call, and the reader sees a vocabulary of named, typed operations
@@ -165,8 +165,7 @@ wrote.
 ## The assembly barrier
 
 Honesty cuts both ways at this boundary. The compiler cannot infer
-register use or memory effects from arbitrary target assembly — it will
-not pretend to read what it cannot — so a statement-level `asm` block
+register use or memory effects from arbitrary target assembly, so a statement-level `asm` block
 forms a conservative barrier. The compiler assumes the block can read and
 write every visible mutable object, call target routines, fault, and
 clobber processor registers and flags.

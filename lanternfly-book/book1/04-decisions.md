@@ -35,7 +35,7 @@ sub updateStatus()
 end
 ```
 
-Notice the three constants before anything else. `status` could have
+The three constants come first for a reason. `status` could have
 stored bare numbers — zero for finished, one for playing, two for won —
 and the program would run identically. It would also be unreadable in a
 month, because a bare `2` in a comparison carries no more meaning in a
@@ -135,8 +135,8 @@ claims execution: its body runs, and the rest of the chain — tests and
 all — is skipped. One `end` closes the complete chain, however long it
 grows.
 
-Order carries meaning, and here is the proof. Picture the state both
-tests care about: the player reaches 100 points and dies in the same
+Order carries meaning, and one state proves it: the player reaches 100
+points and dies in the same
 frame. Both conditions are true, and only the order of the chain
 decides the outcome. As written, the life test comes first, so dying
 with a winning score still finishes the round — presumably the
@@ -161,8 +161,7 @@ An `else if` chain asks a different question at every step. Often the
 questions are all the same question — *what is this value?* — asked
 of one expression, against a set of known answers. A direction is
 north, east, south or west; a status is one of three constants; a
-menu choice is one of five entries. That shape is common enough to
-deserve its own statement, and it has one:
+menu choice is one of five entries. That shape is common enough to have its own statement:
 
 ```lanternfly
 const north as u8 = 0
@@ -175,18 +174,19 @@ var deltaX as i8 = 0
 var deltaY as i8 = 0
 
 sub findStep()
-    deltaX = 0
-    deltaY = 0
-
     select direction
     case north
+        deltaX = 0
         deltaY = -1
     case east
         deltaX = 1
+        deltaY = 0
     case south
+        deltaX = 0
         deltaY = 1
     case west
         deltaX = -1
+        deltaY = 0
     else
         deltaX = 0
         deltaY = 0
@@ -203,81 +203,34 @@ and rightward on most raster hardware, which is why north is -1 and
 not +1; the constants quietly encode a fact about the machine's idea
 of a screen.
 
-The optional `else` handles anything unmatched. It is the same
-exhaustiveness question `if` posed, wearing new clothes: without an
-`else`, an unmatched value does nothing, and "does nothing" must be a
-decision, not an accident. Here the `else` restates the safe default
-— no movement — so even a corrupted direction cannot send the player
-drifting.
+The optional `else` handles anything unmatched. Each normal case assigns both
+deltas, while `else` supplies the zero step for an invalid direction. Without
+it, an unmatched value would leave the previous deltas unchanged.
 
-Cases never fall through: a matching body runs, and execution
-continues after the closing `end`. If you have written C, you carry a
-scar with this lesson's name on it — the `switch` whose forgotten
-`break` let one case spill silently into the next has been shipping
-bugs since the seventies. Lanternfly simply removes the trap. When
-several values genuinely deserve the same body, you say so in one
-place:
+Cases never fall through: a matching body runs, then execution continues after
+the closing `end`. When several values need the same body, list them together:
 
 ```lanternfly
 case north, south
     deltaX = 0
 ```
 
-Duplicate or overlapping cases are compile errors, which closes the
-other classic hole: two cases quietly competing for the same value,
-with the winner decided by whichever the compiler happened to check
-first. In a `select`, every value of the expression has at most one
-home, and the compiler proves it. Contrast that with the `else if`
-chain, where overlapping conditions are the point rather than an
-error — the chain resolves overlaps by rank. The two statements
-disagree about overlap because they model different situations.
+Duplicate or overlapping cases are compile errors. By contrast, an `else if`
+chain may contain overlapping conditions because their order resolves which
+branch wins.
 
 ## Choosing `if` or `select`
 
-The two statements are not rivals; they answer different questions.
-Use `if` when each branch asks a different question:
-
-```lanternfly
-if lives = 0 then
-    ...
-else if score >= 100 then
-    ...
-end
-```
-
-A life count and a score are different measurements — no single
-expression is being classified here, so a chain of separate tests is
-the honest shape, and rank settles the ties.
-
-Use `select` when several constant values are compared with one
-expression:
-
-```lanternfly
-select direction
-case north
-    ...
-case south
-    ...
-end
-```
-
-The selected expression is evaluated once, however many cases follow
-— an `else if` chain written for the same job would re-test
-`direction` at every step. And beyond cost, `select` makes a claim
-that `if` cannot: *everything here branches on this one value*. A
-reader arriving at a `select` knows the shape of the decision before
-reading a single case, which is precisely the kind of head start good
-source code keeps handing out.
+Use `if` when branches test different facts, as `updateStatus` does with
+`lives` and `score`. Use `select` when several constant values are compared
+with one expression. The selected expression is evaluated once, and the
+statement makes that single basis for the decision explicit.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/04-decisions.txt)
-combines an ordered status chain with direction selection. Before
-running it in your head, try the chapter's central experiment: set
-`lives` to 0 and `score` to 100 in the margin, walk `updateStatus`
-top to bottom, and confirm the dead player does not win. Then swap
-the first two branches on paper and watch the rule change under the
-same facts. No other exercise teaches the weight of order in an
-`else if` chain quite as quickly — and once you have felt it, you
-will never again read a chain without asking who was put first, and
-why.
+combines an ordered status chain with direction selection. Trace
+`updateStatus` with `lives = 0` and `score = 100`; the first branch should
+produce `finished`. Reversing the first two conditions on paper should
+produce `won` from the same inputs, demonstrating that branch order is part
+of the rule.

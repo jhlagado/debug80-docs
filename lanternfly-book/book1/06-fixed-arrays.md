@@ -8,10 +8,10 @@ nav_order: 6
 # Fixed Arrays
 
 Chapter 5 ended with loops that touch every entry in a table, and
-quietly assumed the table. Try to build one without arrays and the
-problem shows itself immediately. Suppose the program needs eight sound
-samples. Eight separate variables (`sample0`, `sample1`, up to
-`sample7`) can certainly be declared, but a loop cannot reach them:
+quietly assumed the table. Without arrays the table cannot usefully be built, and the failure is
+instructive. A program that needs eight sound samples can declare eight
+separate variables (`sample0`, `sample1`, up to `sample7`), but a loop
+cannot reach them:
 `for index = 0 to 7` has no way to turn the value of `index` into a
 choice among eight *names*. And the reason is worth spelling out,
 because it deepens something Chapter 1 began. Names are gone by the
@@ -83,8 +83,8 @@ const sampleBytes as u8 = size(samples)
 The query inspects the declared type, and writing `count(samples)`
 instead of a literal 8 keeps the loop and the declaration joined at
 one point: resize the array and every loop over it follows, with no
-hunt for stray eights. It is the magic-number lesson of Chapter 2,
-applied to shapes — the count *has* a name; use it.
+hunt for stray eights. It is the magic-number lesson of Chapter 2, applied to shapes: the count
+already has a name.
 
 ## Selecting an entry
 
@@ -193,11 +193,10 @@ types for you. The multidimensional array asks the compiler to write
 the same formula on every access, without the off-by-one, and the
 type checker rides along for free.
 
-The filing convention also whispers advice about loop order. Walk the
-map with rows in the outer loop and columns in the inner one, and
-consecutive iterations touch consecutive bytes — the address simply
-steps forward by one each time. Swap the loops and each iteration
-leaps a whole row's width of bytes. Both orders visit every tile;
+The filing convention also settles loop order. With rows in the outer loop
+and columns in the inner one, consecutive iterations touch consecutive
+bytes — the address simply
+steps forward by one each time. With the loops swapped, each iteration leaps a whole row's width of bytes. Both orders visit every tile;
 the first keeps the address arithmetic trivial, and on a small
 processor trivial arithmetic is the kind you want in your innermost
 loop, where every instruction is multiplied by seven hundred and
@@ -217,10 +216,9 @@ const stepX as i8[4] = [0, 1, 0, -1]
 const stepY as i8[4] = [-1, 0, 1, 0]
 ```
 
-Look closely at those two tables, because they are Chapter 4's
-`findStep` wearing a different shape. Index them with the direction
-constants — north is 0, east is 1, south is 2, west is 3 — and
-`stepX[direction]` with `stepY[direction]` yield the same offsets the
+Those two tables are Chapter 4's `findStep` wearing a different shape.
+Indexed with the direction constants — north is 0, east is 1, south is 2,
+west is 3 — `stepX[direction]` and `stepY[direction]` yield the same offsets the
 four-case `select` produced: north steps (0, -1), east steps (1, 0),
 and so on around the compass. An entire decision has become data —
 two table lookups, no branches at all — and adding a new direction
@@ -233,8 +231,8 @@ replacing decisions with tables — is one of the oldest and best in
 the small-machine book. Code that branches must be read to be
 understood; a table can be *seen* whole, checked entry by entry
 against the design, extended without touching a working routine.
-Whenever you find yourself writing a `select` whose every case
-merely assigns different constants, reach for tables instead.
+A `select` whose every case merely assigns different constants is better
+written as a pair of tables.
 
 A multidimensional initializer mirrors the declared shape:
 
@@ -245,9 +243,8 @@ const smallMap as u8[2, 4] = [
 ]
 ```
 
-The rank, nested shape and element count must match exactly — the
-compiler would rather reject a lopsided table than guess which row
-you shorted. Constant aggregate data can be placed in ROM by a target
+The rank, nested shape and element count must match exactly — the compiler rejects a lopsided table outright rather than guessing which
+row was shorted. Constant aggregate data can be placed in ROM by a target
 profile, which on a cartridge-based or embedded machine means your
 tables cost no precious RAM at all: the direction tables, the level
 maps, the sprite data all live in the read-only space the hardware
@@ -280,11 +277,9 @@ listing will show which choice was made.
 
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt)
 fills a sample array, clears it and declares a two-dimensional tile
-map with direction tables. Two traces are worth the pencil. First,
-compute the byte offset of `tiles[1, 2]` from the row-major formula —
-one full row of columns, then two more. Second, look up
-`stepX[west]` and `stepY[west]` and confirm the tables agree with
-Chapter 4's `select`. Both checks take a minute, and both are the
+map with direction tables. Two traces are worth the pencil: the byte offset of `tiles[1, 2]` from the
+row-major formula — one full row of columns, then two more — and
+`stepX[west]` beside `stepY[west]`, checked against Chapter 4's `select`. Both checks take a minute, and both are the
 exact checks you will one day perform on a program that matters —
 because when a tile map scrolls wrong or a monster walks east on a
 north command, the bug is in this chapter's arithmetic, and the

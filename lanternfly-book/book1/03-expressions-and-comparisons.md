@@ -15,8 +15,8 @@ the expression, and this chapter is the grammar of expressions: the
 operators, the types their results take, and the comparisons that turn
 quantities into decisions.
 
-Begin with a real computation. Put two objects on the same screen line
-and ask how far apart they are. Each coordinate fits comfortably in a
+A real computation makes it concrete: two objects sit on the same screen
+line, and the game asks how far apart they are. Each coordinate fits comfortably in a
 byte, but the question "how far apart" hides a subtraction, and a
 subtraction can come out negative — the target may be to the left of the
 object just as easily as to the right. The calculation needs room for a
@@ -37,18 +37,10 @@ between two bytes. `abs` removes the sign and returns `u16`, so
 `distance` receives 230. Swap the two coordinates and the subtraction
 produces -230 instead, and `abs` still delivers 230.
 
-That one line carries the discipline of this whole chapter. In a
-language that runs on big machines, you can write a formula and let some
-runtime decide how much room the numbers need. A compiler for a small
-machine has no such luxury: it must choose a width for every
-intermediate value, at compile time, because the processor needs to know
-whether it is working with one byte or two before the first instruction
-is emitted. Lanternfly makes those choices by fixed, learnable rules,
-and the skill this chapter teaches is following the type through a
-formula the same way you follow the value. Programmers who can do that
-read `abs(targetX - objectX)` and see three types — `u8`, `i16`, `u16`
-— as clearly as they see the arithmetic, and they stop being surprised
-by their own formulas.
+Every Lanternfly intermediate has a target-independent type before lowering.
+The Z80, C and any later backend must reproduce the same result width and
+wrap behaviour. This chapter therefore traces a formula in two ways: the
+values it calculates and the types carried by its intermediate results.
 
 ## Arithmetic operators
 
@@ -67,7 +59,7 @@ remaining integer operations:
 | shift right | `a shr count` |
 
 The first four are school arithmetic and need no introduction, but
-division deserves a careful look because integer division is not the
+division needs a careful look because integer division is not the
 division you grew up with. There are no fractions here — the types
 cannot hold them — so division truncates toward zero and `mod` supplies
 what division discards: `17 / 5` produces 3, and `17 mod 5` produces
@@ -81,44 +73,35 @@ eight-pixel tiles turns a pixel position into a tile with `x / 8` and
 into an offset within that tile with `x mod 8`. A one-dimensional
 element number turns back into a row with `n / columns` and a column
 with `n mod columns`. Seconds become minutes and seconds with `/ 60`
-and `mod 60`. Learn to hear "which and where inside" whenever you see
-the pair, and half the index arithmetic in this book will read itself.
+and `mod 60`. Once "which and where inside" is audible in the pair, half the index
+arithmetic in this book is already familiar.
 
 A zero divisor triggers an arithmetic fault at runtime, or a compile
 error when the zero is constant. The compiler catches the mistake it
 can see; the target catches the one it cannot. Neither lets the
 program sail on with an answer that means nothing.
 
-The shifts move whole bit patterns sideways, and their arithmetic
-meaning falls out of Chapter 2's column values. `shl` moves bits left
-and fills the low positions with zero; since every column is worth
-double its neighbour, each single shift doubles the value — `5 shl 1`
-is 10, `5 shl 3` is 40, and Chapter 2's `1 shl 15` marched a single
-bit up to the 32,768 column. `shr` moves bits right and halves the
-value, filling from the sign bit for signed values and with zero for
-unsigned values, so shifting a negative number right keeps it
-negative and halving works for both signs. The result keeps the left
-operand's type. On processors without a fast multiply — the Z80 among
-them — shifting is how careful programmers double and halve, and the
-compiler leans on the same trick when a multiplier happens to be a
-power of two.
+The shifts move whole bit patterns sideways. `shl` moves bits left and fills
+the low positions with zero; `5 shl 1` is 10 and `5 shl 3` is 40.
+`shr` moves bits right, filling from the sign bit for a signed value and
+with zero for an unsigned value. This agrees with unsigned division by two,
+but not always with signed division, which truncates toward zero:
+`i8(-3) shr 1` is -2 while `i8(-3) / 2` is -1. Use division when that
+rounding rule matters. A shift result keeps the left operand's type.
 
 ## Width belongs to every operation
 
-Here is the rule the opening example relied on, in full — and behind
-each clause of it, a fact about hardware.
-
 Arithmetic on matching 16-bit or 32-bit values retains that type. For
 matching 8-bit values, `+`, `*`, `/`, `mod` and `^` produce the
-corresponding 16-bit type. This is the hardware speaking: multiply two
-bytes and the honest answer needs up to sixteen bits — 255 × 255 is
-65,025 — and even an addition can carry into a ninth column. Rather
-than quietly cutting such results and calling it arithmetic,
-Lanternfly gives the intermediate the room it mathematically needs.
-Subtraction from either byte type produces `i16`, because a
-difference can be negative, as the opening example showed. Bitwise
-operations and shifts retain the 8-bit operand type: masks have no
-ninth column to carry into.
+corresponding 16-bit type. Subtraction from either byte type produces
+`i16`. Bitwise operations and shifts retain the left or matching operand
+type.
+
+These are fixed result rules, not arbitrary-precision arithmetic. A 16-bit
+product can hold the complete product of two bytes, and `i16` can hold the
+complete difference between them. Other operations simply use the stated
+width; power in particular can overflow it. Every result wraps in its selected
+fixed-width type.
 
 When the two sides of an operation differ, the narrower operand
 widens automatically, provided every one of its values fits the type
@@ -132,17 +115,16 @@ var elementNumber as u16 = 0
 elementNumber = row * 20 + column
 ```
 
-Trace the types the way you would trace the values, because this is
-the skill in action. `row` is `u8`; `row * 20` is a byte
+The types trace the same way the values do — the skill in action. `row` is
+`u8`; `row * 20` is a byte
 multiplication, so it produces `u16` — value 60. `column` is `u8`,
 narrower than the `u16` on the other side of the `+`, and every `u8`
 value fits in a `u16`, so it widens; the addition is `u16` work and
-yields 64. The destination is `u16`, so the store is exact. Value 64,
-type `u16`, no conversions written because none lost anything — the
-whole chapter's machinery, running quietly under one ordinary line.
+yields 64. The destination is `u16`, so the store is exact. No conversion
+is needed because the widening preserves every possible `u8` value.
 
-Note what did not happen: the compiler never invents a third common
-type. If you carry habits from C, where mixed operands are silently
+What did not happen is as telling: the compiler never invents a third
+common type. If you carry habits from C, where mixed operands are silently
 promoted up a ladder of conversion rules that few programmers can
 recite, this is the adjustment to make. Lanternfly widens one side to
 meet the other, or asks you to decide. Incompatible signedness is the
@@ -173,13 +155,8 @@ shape: a formula's meaning includes the order its intermediates are
 formed in, and rearranging a working formula is not always the
 harmless tidying it appears to be.
 
-Each fixed-width operation wraps in its resolved result type.
-Constant folding uses the same rule, so a formula evaluated at
-compile time agrees with the same formula evaluated on the target,
-wrap for wrap. You will never discover that the compiler's arithmetic
-and the machine's arithmetic were two different arithmetics — a
-discovery that has ruined debugging sessions in languages that
-promise less.
+Each fixed-width operation wraps in its resolved result type. Constant
+folding uses the same rule, so compile-time and runtime evaluation agree.
 
 ## Comparisons produce Boolean values
 
@@ -244,34 +221,39 @@ has already said it is safe. Whole families of careful code are built
 on that ordering, so it is worth knowing it is guaranteed rather than
 merely likely.
 
-With integer operands, the same four words operate on every bit at
-once, and this is where Chapter 2's promise about packing facts into
-bytes comes due. On a machine with memory measured in kilobytes,
-eight independent yes-or-no facts for the price of one byte is a
-bargain taken daily — visible, active, invulnerable, and five more,
-all in one `flags` byte. The `%` prefix writes a literal in binary,
-the natural notation for masks, each character one bit in the order
-the byte holds them:
+With integer operands, the same four words operate on every bit at once. The
+`%` prefix writes a binary literal, which makes individual flag masks visible:
 
 ```lanternfly
 const visibleMask as u8 = %00000001
+const activeMask as u8 = %00000010
 var flags as u8 = visibleMask
+
+flags = flags or activeMask
+flags = flags and not visibleMask
+flags = flags xor activeMask
 
 if (flags and visibleMask) <> 0 then
     visibleCount = visibleCount + 1
 end
 ```
 
-The bitwise words give the byte a complete vocabulary. `or` with a
-mask switches a fact on — `flags or visibleMask` has the visible bit
-set and every other bit unchanged. `and` with the mask's complement
-switches it off. `xor` with a mask flips it, on to off and off to on,
-which is how blinking things blink. And `and` with the mask itself,
-as in the condition above, reads the fact back: the result keeps
-only the masked bit, producing an integer, and `<> 0` turns that
-integer into the Boolean the condition needs. The last step is
-spelled out because, as Chapter 2 established, an integer never
-becomes a condition by itself — not even a freshly masked one.
+`or` sets the selected bit, `and not` clears it and `xor` toggles it. To
+read a flag, `and` keeps the selected bit and `<> 0` converts that integer
+result into the Boolean required by the condition.
+
+## Expressions used as statements
+
+A routine call can stand alone when its effects matter:
+
+```lanternfly
+updateClock()
+```
+
+Lanternfly also permits a value-producing expression as a statement, so a
+result-bearing call may be invoked for its effects and its result discarded.
+A pure expression such as `playerScore + 10` is legal but warns by default
+because it calculates a value and does nothing with it.
 
 ## Grouping and precedence
 
@@ -291,7 +273,7 @@ value <= maximum` needed no parentheses because the ranking already
 reads it as two comparisons joined by `and` — the order a person
 means.
 
-One consequence deserves its own paragraph. Because comparisons bind
+One consequence needs its own paragraph. Because comparisons bind
 before `not`, the expression `not x = y` means `not (x = y)` —
 usually exactly what was wanted, since "not equal-to" is the common
 intent. A C programmer's reflex reads it the other way, because C's
@@ -322,11 +304,7 @@ is worth a pair of brackets.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/03-expressions.txt)
-includes the distance calculation, Boolean state and a bit-mask test.
-Two traces are worth the pencil here. First the value trace: 250
-minus 20, through `abs`, into `distance`. Then the type trace — `u8`
-in, `i16` in flight, `u16` out — which is the new skill. The value
-tells you what the program computed; the type tells you why it had
-room to. When you can run both traces down an unfamiliar formula
-without stopping, this chapter has done its work, and the rest of the
-book will spend the skill freely.
+includes the distance calculation, Boolean state and a bit-mask test. Trace
+`250 - 20` through `abs` into `distance`, recording both value and type:
+the expected sequence is `u8` inputs, an `i16` difference and a `u16`
+result.

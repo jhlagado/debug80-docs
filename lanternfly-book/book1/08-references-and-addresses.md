@@ -11,10 +11,10 @@ Chapter 7 ended with aggregate assignment, which copies a value out of
 its storage. Copying is sometimes exactly wrong. A game that maintains
 four monsters usually wants a notion of the *current* one — the monster
 being updated this frame, the one the missile is homing on, the one the
-cursor in the level editor is pointing at. Copy it into a working
-variable and every change lands on the copy while the original sits
-untouched in the array; the game pets a photograph of the monster and
-wonders why the monster never moves.
+cursor in the level editor is pointing at. Copied into a working variable, it stops being the monster: every change
+lands on the copy while the original sits untouched in the array — a
+program faithfully updating a photograph while the monster itself never
+moves.
 
 The distinction underneath is worth naming, because this whole chapter
 lives in it. There are two relationships a program can have with data:
@@ -79,8 +79,7 @@ reference is the machine's natural two-byte address. It can be
 stored, passed to a subroutine, returned or compared with a
 compatible reference. That scalarity is the trick behind the whole
 chapter: however large the monster, its whereabouts fit in two
-bytes, and moving two bytes is cheap. Notice the trade against
-Chapter 7's aggregate copy — the copy moves all the bytes and makes
+bytes, and moving two bytes is cheap. The trade against Chapter 7's aggregate copy is exact: the copy moves all the bytes and makes
 an independent value; the reference moves two bytes and shares the
 original. Independent snapshot or shared original: that is the whole
 choice, and now you have both.
@@ -120,8 +119,8 @@ The first line adds one to the score that `scoreReference` points
 at — for a scalar referent, `value` is how you reach the thing
 itself rather than the reference. The second copies a whole monster
 into the storage `current` points at, aggregate assignment through a
-reference. Compare it with the rebinding
-`current = ref monsters[nextMonster]`: after the copy, `current`
+reference. Set beside the rebinding `current = ref monsters[nextMonster]`, the
+difference is complete: after the copy, `current`
 still points where it pointed, and that monster now holds new
 bytes; after the rebind, no bytes moved at all — only the arrow
 swung. Two intentions, two spellings, no way to write one and get
@@ -145,7 +144,7 @@ end
 ```
 
 Without the alias, both statements would spell out
-`monsters[selectedIndex]`, and the backend would happily recompute
+`monsters[selectedIndex]`, and the backend would recompute
 the `index * 6` address arithmetic each time. The alias performs the
 selection once and reuses the result — it needs only reference-sized
 local state, leaves the `Monster` exactly where it lives in the
@@ -277,11 +276,10 @@ out to be one of the most honest types in the language.
 
 The [chapter listing](/lanternfly-book/book1/code/08-references.txt)
 selects a monster by reference, creates a local alias and clears one
-of several referenced board planes. As you read it, keep asking the
-chapter's one question at every assignment: is this line moving a
-reference, or moving the bytes it refers to? Ask it at
-`current = ref monsters[index]`, at `monster.timer = 0`, at
-`value(boardPlanes[planeIndex]) = clearPlane`, and check yourself
-against the spellings — rebinds touch the arrow, `value(...)` and
+of several referenced board planes. The chapter's one question applies at every assignment in it: is the line
+moving a reference, or moving the bytes it refers to? At `current = ref
+monsters[index]` the arrow moves; at `monster.timer = 0` and
+`value(boardPlanes[planeIndex]) = clearPlane` the bytes do — rebinds touch
+the arrow, `value(...)` and
 field paths touch the bytes. When those two operations are
 effortless to tell apart, references are yours.
