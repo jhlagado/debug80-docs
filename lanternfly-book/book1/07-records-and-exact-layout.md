@@ -86,7 +86,7 @@ The array occupies 24 bytes. A field path can select an entry and then one of
 its fields:
 
 ```lanternfly
-monsters[index].timer = u8(monsters[index].timer + 1)
+monsters[index].timer = monsters[index].timer + 1
 ```
 
 The backend calculates `index * 6`, adds the timer offset and accesses one
@@ -129,6 +129,10 @@ const origin as Point = Point(x = 0, y = 0)
 
 Each field appears exactly once. The written order controls initializer
 evaluation while the declaration order controls storage.
+
+A record type and a subroutine cannot share the same case-insensitive name.
+That rule keeps `Point(...)` unambiguously a record initializer even though
+Lanternfly otherwise keeps type and value names in separate namespaces.
 
 ## Aggregate assignment
 

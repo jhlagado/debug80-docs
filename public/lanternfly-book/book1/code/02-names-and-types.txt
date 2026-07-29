@@ -7,7 +7,7 @@ var gameOver as boolean = false
 
 sub loseLife()
     if lives > 0 then
-        lives = u8(lives - 1)
+        lives = lives - 1
     end
 
     gameOver = lives = 0

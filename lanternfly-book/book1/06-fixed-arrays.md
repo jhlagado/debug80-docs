@@ -50,6 +50,10 @@ The query inspects the declared type. It performs no runtime load.
 samples[index] = u8(index * 2)
 ```
 
+Here `index` is `i16`, while an array entry is `u8`. The explicit conversion
+records the deliberate cross-type store. An ordinary update based on the old
+`u8` entry would convert back to `u8` automatically.
+
 The backend combines the array base, runtime index and element size to locate
 the destination. A constant index follows the same rule:
 
@@ -121,10 +125,25 @@ const smallMap as u8[2, 4] = [
 The rank, nested shape and element count must match exactly. Constant aggregate
 data can be placed in ROM by a target profile.
 
+## Clearing and filling
+
+Two standard procedures handle repeated stores:
+
+```lanternfly
+clear(samples)
+fill(tiles, emptyTile)
+```
+
+`clear` writes the all-zero representation to an array or record whose fields
+permit it. `fill` writes one compatible scalar value to every entry of a fixed
+array, including every cell of a multidimensional array. The backend may use a
+loop, native operation or runtime helper while preserving the same result.
+
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt) fills a
-sample array and declares a two-dimensional tile map with direction tables.
+sample array, clears it and declares a two-dimensional tile map with direction
+tables.
 
 ## Summary
 
@@ -133,3 +152,4 @@ sample array and declares a two-dimensional tile map with direction tables.
 - `count` returns an extent and `size` returns exact bytes.
 - Multidimensional arrays use row-major layout.
 - Square-bracket initializers match the declared shape exactly.
+- `clear` and `fill` perform repeated aggregate stores.

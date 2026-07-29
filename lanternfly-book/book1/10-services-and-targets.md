@@ -31,27 +31,30 @@ root = sqrt(area)
 actorBytes = size(Actor)
 rowCount = count(board, 0)
 timerOffset = offset(Actor.timer)
+clear(board)
+fill(framebuffer, backgroundColour)
 ```
 
 `abs` returns an unsigned magnitude. `sqrt` returns the floor of a non-negative
 integer square root. The layout queries `size`, `count` and `offset` fold at
-compile time.
+compile time. `clear` writes the all-zero representation to a record or array
+that permits it. `fill` writes one scalar value to every element of an array.
 
 A Z80 backend may call a helper for square root or wide arithmetic. A C backend
-may emit a native operator or library call. Helpers enter the program only
-when selected operations require them, and the cost report names those
-helpers.
+may emit a native operator or library call. Aggregate procedures may become an
+inline loop or a memory helper. Helpers enter the program only when selected
+operations require them, and the cost report names those helpers.
 
 ## Platform services
 
 Input, display, sound, random values, firmware and device access arrive through
-typed interfaces. Once its interface is imported, a program calls display
-services like ordinary subroutines:
+typed external routines. A platform interface module can declare and export
+them without supplying Lanternfly bodies:
 
 ```lanternfly
-screenClear()
-drawPixel(x, y, colour)
-showNumber(value)
+export extern sub screenClear()
+export extern sub drawPixel(x as u8, y as u8, colour as u8)
+export extern sub showNumber(value as u16)
 ```
 
 `import` loads an exported source module once:
@@ -61,8 +64,24 @@ import "display.lf"
 ```
 
 Private declarations remain inside their module. Exported names become visible
-to the importer. A platform build supplies native implementations for services
-whose work lies outside Lanternfly.
+to the importer. Calls still use ordinary subroutine syntax:
+
+```lanternfly
+screenClear()
+drawPixel(playerX, playerY, playerColour)
+```
+
+An external routine can name its target binding directly:
+
+```lanternfly
+extern sub printChar(ch as u8) at $0008
+extern sub waitForKey() from "ROM_WAIT_KEY"
+```
+
+`at` supplies an absolute routine address. `from` supplies a substrate symbol.
+With neither clause, the target profile binds the Lanternfly name. The profile
+also defines argument and result carriers, clobbers, visible effects and cost.
+A missing or incompatible binding is a compile error.
 
 ## Inline assembly
 
@@ -117,7 +136,7 @@ end
 ```
 
 This form can provide target directives, labels, routines or data. Symbols
-defined inside the raw block stay in the assembly world until a typed native
+defined inside the raw block stay in the assembly world until an `extern sub`
 declaration exposes them to Lanternfly.
 
 Inline assembly commits that source file to a compatible assembly target. A C
@@ -141,12 +160,14 @@ diagnostics to those mappings.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/10-services.txt) uses standard
-operations, assumed display services and one inline assembly block.
+operations, declares display services and contains one inline assembly block.
 
 ## Summary
 
-- Standard operations preserve their source meaning across backends.
-- Platform services enter through typed modules and ordinary calls.
+- Standard value and aggregate operations preserve their meaning across
+  backends.
+- `extern sub` gives platform routines typed source signatures and target
+  bindings.
 - Runtime helpers supply operations missing from a target processor.
 - `asm` and `end` delimit raw target assembly.
 - Generated source, mappings, symbols and costs are compiler artifacts.

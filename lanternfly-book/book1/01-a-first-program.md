@@ -15,7 +15,7 @@ var lives as u8 = 3
 
 sub loseLife()
     if lives > 0 then
-        lives = u8(lives - 1)
+        lives = lives - 1
     end
 end
 ```
@@ -62,7 +62,7 @@ line belongs to it.
 
 ```lanternfly
 if lives > 0 then
-    lives = u8(lives - 1)
+    lives = lives - 1
 end
 ```
 
@@ -70,18 +70,24 @@ The comparison `lives > 0` produces a Boolean value. When it is `true`, the
 indented assignment runs. When it is `false`, execution continues after the
 closing `end`.
 
-The assignment reads the old value, subtracts one and converts the result back
-to `u8`. The condition keeps the result non-negative, and subtracting from a
-`u8` value keeps it below 256, so the conversion preserves the value.
+The subtraction uses a signed intermediate so it can represent a negative
+result. The assignment converts that result to the declared `u8` destination.
+The condition keeps the value between zero and 254.
 
-## Assignment reads from right to left
+## Assignment uses the destination type
 
 ```lanternfly
-lives = u8(lives - 1)
+lives = lives - 1
 ```
 
-The expression on the right is evaluated first. `u8(...)` converts that result
-to the destination type. The final value is then stored in `lives`.
+The expression on the right is evaluated first. Since `lives` was declared as
+`u8`, the assignment converts the result to that type before storing it. No
+`u8(...)` conversion is needed for this ordinary update.
+
+Lanternfly permits wider intermediate results so byte arithmetic does not lose
+information too early. When an expression begins with values of the
+destination type and returns to that same type, the conversion is automatic
+and produces no warning.
 
 At the start of an assignment statement, `=` means “store in”. Inside an
 expression, the same token compares two values. Chapter 2 shows both uses
@@ -94,7 +100,7 @@ together.
 ```lanternfly
 // Keep the life count at zero after the round ends.
 if lives > 0 then
-    lives = u8(lives - 1)  // The condition makes this conversion safe.
+    lives = lives - 1  // The guard prevents a wrap from zero to 255.
 end
 ```
 
@@ -129,5 +135,5 @@ the complete routine.
 - `var` declares storage and `as` introduces its type.
 - `sub` declares a named action.
 - `if`, `then` and `end` enclose a conditional block.
-- `=` stores a completed expression in its destination.
+- `=` converts a completed expression to its destination type and stores it.
 - `//` begins a line comment.

@@ -54,7 +54,20 @@ Arithmetic on matching 16-bit or 32-bit values retains that type. For matching
 type. Subtraction from either byte type produces `i16`. Bitwise operations and
 shifts retain the 8-bit operand type.
 
-Mixed widths or mixed signedness require an explicit choice:
+A narrower operand widens automatically when every one of its values fits the
+type already present on the other side:
+
+```lanternfly
+var row as u8 = 3
+var column as u8 = 4
+var elementNumber as u16 = 0
+
+elementNumber = row * 20 + column
+```
+
+`row * 20` produces `u16`, then `column` widens to `u16` for the addition. The
+compiler never invents a third common type. Incompatible signedness still
+requires an explicit choice:
 
 ```lanternfly
 var signedValue as i16 = -4
@@ -63,6 +76,10 @@ var total as i32 = 0
 
 total = i32(signedValue) + i32(unsignedValue)
 ```
+
+Order still controls the intermediate type. With byte inputs, `x + 1 - y`
+uses `u16` after the addition and wraps there if the subtraction is negative.
+Write `i16(x) + 1 - i16(y)` when the calculation needs a signed final range.
 
 Each fixed-width operation wraps in its resolved result type. Constant folding
 uses the same rule, so compile-time and runtime calculations agree.
@@ -100,7 +117,7 @@ With Boolean operands, `and`, `or`, `xor` and `not` combine truth values:
 
 ```lanternfly
 if hasArrived and lives > 0 then
-    lives = u8(lives - 1)
+    lives = lives - 1
 end
 ```
 
@@ -127,6 +144,9 @@ Parentheses bind first. Power binds more tightly than unary minus, followed by
 multiplication and division, addition and subtraction, shifts, comparisons,
 `not`, `and`, `xor` and `or`.
 
+Because comparisons bind before `not`, `not x = y` means `not (x = y)`. Write
+`(not x) = y` when comparing the bitwise complement of `x`.
+
 ```lanternfly
 average = (first + second) / 2
 ```
@@ -148,6 +168,7 @@ the distance calculation, Boolean state and a bit-mask test.
 ## Summary
 
 - Every integer operation has a resolved width and signedness.
+- Value-preserving widening targets a type already present in the expression.
 - Byte subtraction produces `i16`.
 - Comparisons produce `boolean`.
 - Boolean `and` and `or` short-circuit.

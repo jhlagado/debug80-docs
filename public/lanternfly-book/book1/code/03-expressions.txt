@@ -17,6 +17,6 @@ sub measureDistance()
     end
 
     if hasArrived and lives > 0 then
-        lives = u8(lives - 1)
+        lives = lives - 1
     end
 end

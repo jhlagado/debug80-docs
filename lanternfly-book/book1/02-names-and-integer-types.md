@@ -104,25 +104,39 @@ The next line begins with writable storage and assigns zero.
 ## Conversions state a width choice
 
 Two `u8` values subtract into `i16` so the result can represent a difference
-from -255 through 255. Storing that result in a byte narrows it. A type name
-used like a call makes the conversion explicit:
+from -255 through 255. Storing that result in a byte narrows it:
 
 ```lanternfly
-lives = u8(lives - 1)
+lives = lives - 1
 ```
 
-Narrowing retains the low bits. Changing signedness preserves the bit pattern.
-An explicit conversion records that choice. If an assignment, argument or
-return performs either conversion implicitly, the compiler warns unless it can
-prove that the mathematical value is preserved.
+Narrowing retains the low bits. All the typed values in this expression are
+`u8`, and the result returns to a `u8` destination. Lanternfly treats that
+round trip as the declared arithmetic of the byte and does not warn.
+
+An explicit conversion records a genuinely cross-type choice:
+
+```lanternfly
+var wideValue as i16 = 300
+var byteValue as u8 = 0
+
+byteValue = u8(wideValue)
+```
+
+The conversion keeps the low eight bits, producing 44 in this example.
+Omitting `u8(...)` would perform the same store but warn that a value from
+another declared type may be lost.
+Changing signedness likewise preserves the bit pattern and normally deserves
+an explicit conversion.
 
 Widening supplies the missing high bits:
 
 ```lanternfly
-var wideScore as u32 = u32(score)
+var wideScore as u32 = score
 ```
 
-Unsigned widening fills with zero. Signed widening copies the sign.
+Value-preserving widening is automatic. Unsigned widening fills with zero, and
+signed widening copies the sign.
 
 ## Literal types follow their context
 
@@ -150,4 +164,5 @@ constants, Boolean state and integer conversion together.
 - `boolean` stores `true` or `false`.
 - `const` names a fixed compile-time value.
 - `=` assigns at statement level and compares inside an expression.
-- A type name followed by parentheses performs an explicit conversion.
+- Destination conversion is automatic; a type name records an explicit
+  cross-type choice.

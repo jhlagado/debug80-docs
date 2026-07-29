@@ -14,3 +14,7 @@ sub fillSamples()
         samples[index] = u8(index * 2)
     end
 end
+
+sub resetSamples()
+    clear(samples)
+end

@@ -4,6 +4,10 @@ record Actor
     var timer as u8
 end
 
+extern sub screenClear()
+extern sub drawPixel(x as u8, y as u8, colour as u8)
+extern sub showNumber(value as u16)
+
 var playerX as u8 = 0
 var playerY as u8 = 0
 var playerColour as u8 = 7
@@ -11,6 +15,7 @@ var targetX as u8 = 0
 var distance as u16 = 0
 var root as u16 = 0
 var area as u16 = 0
+var framebuffer as u8[256]
 
 const actorBytes as u8 = size(Actor)
 const timerOffset as u8 = offset(Actor.timer)
@@ -21,6 +26,7 @@ sub updateMeasurements()
 end
 
 sub showPlayer()
+    clear(framebuffer)
     screenClear()
     drawPixel(playerX, playerY, playerColour)
     showNumber(distance)

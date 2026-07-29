@@ -45,7 +45,7 @@ always identify valid storage.
 Field and index paths pass through a reference:
 
 ```lanternfly
-current.timer = u8(current.timer + 1)
+current.timer = current.timer + 1
 current.x = 4
 ```
 
