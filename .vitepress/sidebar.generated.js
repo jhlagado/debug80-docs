@@ -1526,6 +1526,102 @@ export const sidebars = {
       ]
     }
   ],
+  "/lanternfly-book/": [
+    {
+      "text": "Lanternfly Book 1 — Language Fundamentals",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "A First Program",
+          "link": "/lanternfly-book/book1/01-a-first-program.html"
+        },
+        {
+          "text": "Names and Integer Types",
+          "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
+        },
+        {
+          "text": "Expressions and Comparisons",
+          "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
+        },
+        {
+          "text": "Decisions",
+          "link": "/lanternfly-book/book1/04-decisions.html"
+        },
+        {
+          "text": "Loops",
+          "link": "/lanternfly-book/book1/05-loops.html"
+        },
+        {
+          "text": "Fixed Arrays",
+          "link": "/lanternfly-book/book1/06-fixed-arrays.html"
+        },
+        {
+          "text": "Records and Exact Layout",
+          "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
+        },
+        {
+          "text": "References and Addresses",
+          "link": "/lanternfly-book/book1/08-references-and-addresses.html"
+        },
+        {
+          "text": "Procedures and Functions",
+          "link": "/lanternfly-book/book1/09-procedures-and-functions.html"
+        },
+        {
+          "text": "Services and Targets",
+          "link": "/lanternfly-book/book1/10-services-and-targets.html"
+        }
+      ]
+    }
+  ],
+  "/lanternfly-book/book1/": [
+    {
+      "text": "Lanternfly Book 1 — Language Fundamentals",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "A First Program",
+          "link": "/lanternfly-book/book1/01-a-first-program.html"
+        },
+        {
+          "text": "Names and Integer Types",
+          "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
+        },
+        {
+          "text": "Expressions and Comparisons",
+          "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
+        },
+        {
+          "text": "Decisions",
+          "link": "/lanternfly-book/book1/04-decisions.html"
+        },
+        {
+          "text": "Loops",
+          "link": "/lanternfly-book/book1/05-loops.html"
+        },
+        {
+          "text": "Fixed Arrays",
+          "link": "/lanternfly-book/book1/06-fixed-arrays.html"
+        },
+        {
+          "text": "Records and Exact Layout",
+          "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
+        },
+        {
+          "text": "References and Addresses",
+          "link": "/lanternfly-book/book1/08-references-and-addresses.html"
+        },
+        {
+          "text": "Procedures and Functions",
+          "link": "/lanternfly-book/book1/09-procedures-and-functions.html"
+        },
+        {
+          "text": "Services and Targets",
+          "link": "/lanternfly-book/book1/10-services-and-targets.html"
+        }
+      ]
+    }
+  ],
   "/tec1g/": [
     {
       "text": "MON-3 User Guide",

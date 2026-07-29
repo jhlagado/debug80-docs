@@ -9,7 +9,7 @@ nav_order: 1
   <Mark class="library-hall__mark" book="debug80" size="46" />
   <p class="library-hall__eyebrow">$0000 · cold boot</p>
   <h1 class="library-hall__title">The Debug80 Library</h1>
-  <p class="library-hall__tagline">Books on the Z80 — a debugger, an assembler, a game language, and the machine they serve.</p>
+  <p class="library-hall__tagline">Books on small-computer programming — a debugger, an assembler, two languages and the machines they serve.</p>
 </div>
 
 <nav class="library-shelf">
@@ -30,6 +30,12 @@ nav_order: 1
     <span class="volume__head"><Mark book="glimmer" size="26" /><span class="volume__title">Glimmer</span></span>
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>
     <span class="volume__enter">react →</span>
+  </a>
+  <a class="volume volume--lanternfly" href="/lanternfly-book/book1/01-a-first-program">
+    <span class="volume__tag">Vol $03 · 1 book</span>
+    <span class="volume__head"><Mark book="lanternfly" size="26" /><span class="volume__title">Lanternfly</span></span>
+    <span class="volume__desc">A small typed language with pseudocode-like source — declarations, integer calculations, decisions, loops and fixed data.</span>
+    <span class="volume__enter">begin →</span>
   </a>
 </nav>
 
@@ -104,6 +110,32 @@ For readers ready to apply Glimmer to complete games.
 Glimmer is a reactive game language that compiles to readable Z80 assembly, built as a thin layer in front of the assembler. You declare a program's state, inputs, and rules; you write the behaviour in small blocks of real Z80 assembly; and Glimmer generates the running program around them as one readable AZM source file: the main loop, the input polling, the change tracking and the display glue.
 
 Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G emulation, with breakpoints and stepping landing in `.glim` source.
+
+---
+
+## Lanternfly
+
+### [Lanternfly Book 1 — Language Fundamentals](lanternfly-book/book1/)
+
+The opening Lanternfly book develops the language from one short routine. It
+introduces declarations, fixed-width integer types, expressions, comparisons,
+decisions and loops through source intended to read like precise pseudocode.
+
+For readers learning structured programming and for experienced programmers
+who want to follow the language design from its first examples.
+
+---
+
+## About Lanternfly
+
+Lanternfly is a small, statically typed imperative language. English keywords
+mark blocks and control flow, while familiar operators write arithmetic and
+comparisons. Its data model centres on fixed arrays, exact records and typed
+references to existing storage.
+
+Lanternfly is currently a language and compiler design project. The book tests
+its working syntax and semantics through concrete source examples before the
+first implementation edition is frozen.
 
 ---
 

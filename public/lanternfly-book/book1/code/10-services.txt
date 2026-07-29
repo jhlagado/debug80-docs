@@ -1,0 +1,18 @@
+DIM PlayerX AS BYTE
+DIM PlayerY AS BYTE
+DIM PlayerColour AS BYTE
+DIM TargetX AS BYTE
+DIM Distance AS INTEGER
+DIM Root AS WORD
+DIM Value AS WORD
+
+SUB UpdateMeasurements()
+    Distance = ABS(TargetX - PlayerX)
+    Root = ISQRT(Value)
+END SUB
+
+SUB ShowPlayer()
+    ScreenClear()
+    DrawPixel(PlayerX, PlayerY, PlayerColour)
+    ShowNumber(Distance)
+END SUB

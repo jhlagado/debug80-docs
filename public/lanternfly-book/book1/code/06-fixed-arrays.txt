@@ -1,0 +1,15 @@
+CONST MapRows AS INTEGER = 24
+CONST MapColumns AS INTEGER = 32
+
+DIM Samples[8] AS BYTE
+DIM Tiles[MapRows, MapColumns] AS BYTE
+DIM StepX[4] AS SBYTE = (0, 1, 0, -1)
+DIM StepY[4] AS SBYTE = (-1, 0, 1, 0)
+
+SUB FillSamples()
+    DIM Index AS INTEGER
+
+    FOR Index = 0 TO COUNT(Samples) - 1
+        Samples[Index] = BYTE(Index * 2)
+    NEXT Index
+END SUB

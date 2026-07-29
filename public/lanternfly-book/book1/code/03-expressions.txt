@@ -1,0 +1,22 @@
+CONST VisibleFlag AS BYTE = %00000001
+
+DIM ObjectX AS BYTE = 20
+DIM TargetX AS BYTE = 250
+DIM Distance AS INTEGER
+DIM HasArrived AS INTEGER
+DIM Flags AS BYTE = VisibleFlag
+DIM VisibleCount AS INTEGER = 0
+DIM Lives AS BYTE = 3
+
+SUB MeasureDistance()
+    Distance = ABS(TargetX - ObjectX)
+    HasArrived = Distance <= 2
+
+    IF (Flags AND VisibleFlag) <> 0 AND Distance <= 2 THEN
+        VisibleCount = VisibleCount + 1
+    END IF
+
+    IF Distance <= 2 AND Lives > 0 THEN
+        Lives = BYTE(Lives - 1)
+    END IF
+END SUB

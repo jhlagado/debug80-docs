@@ -1,0 +1,41 @@
+DIM Total AS INTEGER
+DIM EvenCount AS INTEGER
+DIM Remaining AS INTEGER
+DIM StartValue AS INTEGER = 13
+DIM Result AS INTEGER
+
+SUB SumTen()
+    DIM Number AS INTEGER
+
+    Total = 0
+    FOR Number = 1 TO 10
+        Total = Total + Number
+    NEXT Number
+END SUB
+
+SUB CountEvenColumns()
+    DIM Column AS INTEGER
+
+    EvenCount = 0
+    FOR Column = 0 TO 14 STEP 2
+        EvenCount = EvenCount + 1
+    NEXT Column
+END SUB
+
+SUB CountDown()
+    Remaining = 3
+    WHILE Remaining > 0
+        Remaining = Remaining - 1
+    END WHILE
+END SUB
+
+SUB FindNextMultiple()
+    DIM Candidate AS INTEGER
+
+    Candidate = StartValue
+    DO
+        Candidate = Candidate + 1
+    LOOP UNTIL Candidate MOD 8 = 0
+
+    Result = Candidate
+END SUB

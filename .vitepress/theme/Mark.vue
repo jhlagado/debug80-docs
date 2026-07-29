@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * The three marks, at any size.
+ * The four marks, at any size.
  *
  * One construction: a square body at the stroke weight of the schematic
  * figures, with a single accent inside. The accent takes `--mark-accent`,
@@ -19,12 +19,23 @@
  * Glimmer draws games on a dot-matrix display, and one dot coming on is what
  * the name describes.
  */
-withDefaults(defineProps<{ book?: 'debug80' | 'azm' | 'glimmer'; size?: number | string }>(), {
-  book: 'debug80',
-  size: 24,
-});
+withDefaults(
+  defineProps<{
+    book?: 'debug80' | 'azm' | 'glimmer' | 'lanternfly';
+    size?: number | string;
+  }>(),
+  {
+    book: 'debug80',
+    size: 24,
+  },
+);
 
-const LABEL = { debug80: 'Debug80', azm: 'AZM', glimmer: 'Glimmer' };
+const LABEL = {
+  debug80: 'Debug80',
+  azm: 'AZM',
+  glimmer: 'Glimmer',
+  lanternfly: 'Lanternfly',
+};
 </script>
 
 <template>
@@ -65,7 +76,7 @@ const LABEL = { debug80: 'Debug80', azm: 'AZM', glimmer: 'Glimmer' };
       />
     </template>
 
-    <template v-else>
+    <template v-else-if="book === 'glimmer'">
       <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
         <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
       </g>
@@ -76,6 +87,17 @@ const LABEL = { debug80: 'Debug80', azm: 'AZM', glimmer: 'Glimmer' };
         <path d="M16 12H17.6" />
       </g>
       <rect class="mark__accent--filled" x="10" y="10" width="4" height="4" rx="0.4" />
+    </template>
+
+    <template v-else>
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
+        <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
+      </g>
+      <g class="mark__accent" fill="none" stroke-width="1.5" stroke-linecap="round">
+        <path d="M9 8.8V7.8C9 6.8 15 6.8 15 7.8V8.8" />
+        <rect x="8.5" y="8.8" width="7" height="7.6" rx="0.7" />
+      </g>
+      <rect class="mark__accent--filled" x="10.2" y="10.5" width="3.6" height="3.6" rx="0.5" />
     </template>
   </svg>
 </template>

@@ -1,0 +1,7 @@
+DIM Lives AS INTEGER = 3
+
+SUB LoseLife()
+    IF Lives > 0 THEN
+        Lives = Lives - 1
+    END IF
+END SUB

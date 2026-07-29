@@ -10,7 +10,7 @@ reading the markdown on GitHub.
 
 ## What is documented here
 
-Four Z80 things, and the machine they run on.
+Five programming projects and the machine that anchors them.
 
 **Debug80** is a VS Code extension: source-level debugging for Z80 assembly,
 with an emulated TEC-1 or TEC-1G in the sidebar and a path out to real hardware
@@ -24,7 +24,14 @@ directives.
 remembers and how it responds; Glimmer generates the loop, the input polling
 and the change tracking, and compiles to readable Z80 assembly.
 
-**The TEC-1G** is the single-board computer all of it targets.
+**Lanternfly** is a small, typed imperative language whose source follows the
+shape of familiar pseudocode. It uses English keywords for declarations and
+control flow, familiar operators for formulas and fixed layouts for stored
+data.
+
+**The TEC-1G** is the single-board computer at the centre of the current
+Debug80, AZM and Glimmer material, and the first hardware context for
+Lanternfly's Z80 work.
 
 ## The books
 
@@ -36,6 +43,7 @@ and the change tracking, and compiles to readable Z80 assembly.
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/) | Sorting, strings, records, recursion and a backtracking capstone. |
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs. |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/) | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays. |
+| [Lanternfly Book 1 — Language Fundamentals](https://debug80.com/lanternfly-book/book1/) | A pseudocode-like typed language developed from declarations through structured control. |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/) | Reference material for the machine and its monitor. |
 
 ## Working on it
@@ -78,6 +86,7 @@ not the SVGs.
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
+lanternfly-book/  Lanternfly language books
 tec1g/            TEC-1G and MON-3 reference
 assets/images/    Figures, most of them generated
 scripts/          Diagram generator and the four checks

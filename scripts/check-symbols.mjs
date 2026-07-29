@@ -19,7 +19,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const BOOK_DIRS = ['azm-book', 'debug80-book', 'glimmer-book'];
+const BOOK_DIRS = ['azm-book', 'debug80-book', 'glimmer-book', 'lanternfly-book'];
 
 /**
  * Z80 mnemonics, registers, condition codes and AZM keywords. These collide

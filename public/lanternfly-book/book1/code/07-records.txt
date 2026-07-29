@@ -1,0 +1,28 @@
+TYPE Point
+    X AS SBYTE
+    Y AS SBYTE
+END TYPE
+
+TYPE Monster
+    X AS BYTE
+    Y AS BYTE
+    Direction AS BYTE
+    State AS BYTE
+    Timer AS BYTE
+    Frame AS BYTE
+END TYPE
+
+TYPE Mover
+    Position AS Point
+    Previous AS Point[4]
+    Count AS BYTE
+END TYPE
+
+DIM Position AS Point
+DIM Monsters[4] AS Monster
+DIM Player AS Mover
+
+SUB SavePosition(Index AS INTEGER)
+    Player.Previous[Index].X = Player.Position.X
+    Player.Previous[Index].Y = Player.Position.Y
+END SUB

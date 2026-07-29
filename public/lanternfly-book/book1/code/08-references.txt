@@ -1,0 +1,33 @@
+TYPE Monster
+    X AS BYTE
+    Y AS BYTE
+    Timer AS BYTE
+END TYPE
+
+DIM Monsters[4] AS Monster
+DIM Current AS NEAR REF TO Monster = REF Monsters[0]
+
+DIM BoardRows[8] AS BYTE
+DIM BoardRed[8] AS BYTE
+DIM BoardGreen[8] AS BYTE
+DIM BoardBlue[8] AS BYTE
+DIM BoardPlanes[4] AS NEAR REF TO BYTE[8] = (
+    REF BoardRows,
+    REF BoardRed,
+    REF BoardGreen,
+    REF BoardBlue
+)
+
+SUB SelectMonster(Index AS INTEGER)
+    Current = REF Monsters[Index]
+    Current.Timer = 10
+END SUB
+
+SUB ClearPlanes()
+    DIM PlaneIndex AS INTEGER
+
+    FOR PlaneIndex = 0 TO 3
+        ALIAS Plane = BoardPlanes[PlaneIndex]
+        CLEAR(Plane)
+    NEXT PlaneIndex
+END SUB

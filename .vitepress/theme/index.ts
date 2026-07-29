@@ -8,6 +8,7 @@ import './custom.css';
 
 /** Each book is its own illuminated volume; the accent follows the route. */
 const BOOK_BY_PREFIX: readonly (readonly [string, string])[] = [
+  ['/lanternfly-book/', 'lanternfly'],
   ['/glimmer-book/', 'glimmer'],
   ['/azm-book/', 'azm'],
   ['/debug80-book/', 'debug80'],

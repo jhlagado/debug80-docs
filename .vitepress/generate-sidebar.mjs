@@ -10,7 +10,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 // Every top-level section whose subdirectories carry their own chapters.
 // `tec1g` is not a book series, but its MON-3 guide is shaped like one, so it
 // gets a sidebar the same way and inherits the theme's prev/next pager.
-const BOOK_DIRS = ['debug80-book', 'azm-book', 'glimmer-book', 'tec1g'];
+const BOOK_DIRS = ['debug80-book', 'azm-book', 'glimmer-book', 'lanternfly-book', 'tec1g'];
 
 function frontMatter(filePath) {
   const text = readFileSync(filePath, 'utf8');

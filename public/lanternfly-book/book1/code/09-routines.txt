@@ -1,0 +1,39 @@
+DIM Score AS INTEGER
+DIM Bonus AS INTEGER = 10
+DIM BoardRows[8, 8] AS BYTE
+DIM SelectedRow AS INTEGER
+
+SUB AddScore(Amount AS INTEGER)
+    Score = Score + Amount
+END SUB
+
+FUNCTION Limited(Value AS INTEGER, Limit AS INTEGER) AS INTEGER
+    IF Value > Limit THEN
+        RETURN Limit
+    END IF
+
+    RETURN Value
+END FUNCTION
+
+FUNCTION DistanceSquared(X AS INTEGER, Y AS INTEGER) AS LONG
+    DIM XSquared AS LONG
+    DIM YSquared AS LONG
+
+    XSquared = LONG(X) * LONG(X)
+    YSquared = LONG(Y) * LONG(Y)
+    RETURN XSquared + YSquared
+END FUNCTION
+
+SUB ClearRow(Row AS REF TO BYTE[8])
+    DIM Index AS INTEGER
+
+    FOR Index = 0 TO COUNT(Row) - 1
+        Row[Index] = 0
+    NEXT Index
+END SUB
+
+SUB UpdateScore()
+    AddScore(Bonus)
+    Score = Limited(Score, 1000)
+    ClearRow(BoardRows[SelectedRow])
+END SUB
