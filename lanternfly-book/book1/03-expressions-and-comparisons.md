@@ -7,6 +7,10 @@ nav_order: 3
 
 # Expressions and Comparisons
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 A moving object has an x coordinate and a target has another. The program
 needs their distance whether the target lies to the left or the right:
 

@@ -10,6 +10,13 @@ has_toc: false
 
 # Lanternfly Book 1 — Language Fundamentals
 
+> [!IMPORTANT]
+> This book records the pre-0.3 language draft and is paused while its examples
+> are reconciled with the
+> [current Lanternfly specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md).
+> In particular, the current language uses lowercase keywords, `var`, bare
+> `end`, strict `boolean` conditions and one `sub` form with an optional result.
+
 A Lanternfly program should read like a precise description of its work. Words
 such as `IF`, `THEN`, `FOR`, `TO` and `NEXT` show the program's structure.
 Arithmetic and comparison operators keep formulas compact. Declarations give

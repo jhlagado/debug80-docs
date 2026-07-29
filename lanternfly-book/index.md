@@ -11,6 +11,11 @@ nav_exclude: true
 
 # Lanternfly Books
 
+> [!IMPORTANT]
+> Book 1 currently preserves the earlier design dialect while it is being
+> revised against
+> [specification 0.3](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md).
+
 Lanternfly is a small, typed language for programs built from fixed data,
 calculations, decisions, loops and calls. Its source follows the shape of
 widely understood pseudocode: words mark the structure and familiar operators

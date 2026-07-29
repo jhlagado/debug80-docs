@@ -7,6 +7,10 @@ nav_order: 5
 
 # Loops
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 Adding the numbers from 1 through 10 repeats one assignment while a counter
 advances. A `FOR` loop states the counter's start and inclusive limit in its
 opening line:

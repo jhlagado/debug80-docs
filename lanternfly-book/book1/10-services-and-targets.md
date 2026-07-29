@@ -7,6 +7,10 @@ nav_order: 10
 
 # Services and Targets
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 Arithmetic and control flow have the same meaning on every Lanternfly target.
 Drawing a pixel, reading a key or writing to a device depends on the platform.
 A typed service connects source code to that platform operation:

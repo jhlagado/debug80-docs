@@ -7,6 +7,10 @@ nav_order: 8
 
 # References and Addresses
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 A routine may need to work with one monster selected while the program runs.
 Copying the whole record would create a second monster. A reference keeps the
 location and type of the selected record:

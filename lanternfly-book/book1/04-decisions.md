@@ -7,6 +7,10 @@ nav_order: 4
 
 # Decisions
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 A game can show one of three states. No lives means the round has ended. A
 score of at least 100 means the target has been reached. Every other state is
 still in progress.

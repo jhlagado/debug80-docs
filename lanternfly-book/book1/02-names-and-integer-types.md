@@ -7,6 +7,10 @@ nav_order: 2
 
 # Names and Integer Types
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 The first routine stored `Lives` in an `INTEGER`. Small computers often need a
 more exact choice. A coordinate may occupy one byte, a score may need the full
 unsigned range of two bytes and a long-running counter may need four bytes.

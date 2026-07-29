@@ -7,6 +7,10 @@ nav_order: 6
 
 # Fixed Arrays
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 Eight samples can be stored under eight separate names, but a loop cannot
 select those names with a counter. An array gives one name to a fixed number
 of values:

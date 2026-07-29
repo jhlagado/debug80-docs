@@ -7,6 +7,10 @@ nav_order: 9
 
 # Procedures and Functions
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 The earlier chapters used procedures with empty parentheses. Parameters let
 one procedure work with values supplied by its caller:
 

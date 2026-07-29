@@ -7,6 +7,10 @@ nav_order: 1
 
 # A First Program
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 A player begins a round with three lives. When the player loses a life, the
 program subtracts one, stopping at zero. Here is the complete routine:
 

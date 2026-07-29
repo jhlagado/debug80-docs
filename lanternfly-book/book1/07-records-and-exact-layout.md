@@ -7,6 +7,10 @@ nav_order: 7
 
 # Records and Exact Layout
 
+> [!IMPORTANT]
+> This chapter uses the pre-0.3 draft syntax. See the
+> [book revision notice](index.md).
+
 An x coordinate and a y coordinate describe one point. Two parallel arrays
 leave that relationship implicit. A record gives the pair one type:
 
