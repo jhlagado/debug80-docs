@@ -20,8 +20,8 @@ var boardPlanes as (near ref (u8[8]))[3] = [
     ref boardBlue
 ]
 
-sub selectMonster(index as i16)
-    current = ref monsters[index]
+sub selectMonster()
+    current = ref monsters[selectedIndex]
     current.timer = 10
 end
 

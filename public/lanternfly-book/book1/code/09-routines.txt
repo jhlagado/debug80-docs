@@ -12,20 +12,22 @@ sub addScore(amount as i16)
     score = score + amount
 end
 
-sub limited(value as i16, limit as i16) as i16
-    if value > limit then
-        return limit
+sub atMost(input as i16, maximum as i16) as i16
+    if input > maximum then
+        return maximum
     end
 
-    return value
+    return input
 end
 
-sub distanceSquared(x as i16, y as i16) as i32
-    var xSquared as i32
-    var ySquared as i32
+sub distanceSquared(x as i16, y as i16) as u32
+    var xMagnitude as u32 = abs(x)
+    var yMagnitude as u32 = abs(y)
+    var xSquared as u32
+    var ySquared as u32
 
-    xSquared = i32(x) * i32(x)
-    ySquared = i32(y) * i32(y)
+    xSquared = xMagnitude * xMagnitude
+    ySquared = yMagnitude * yMagnitude
     return xSquared + ySquared
 end
 
@@ -47,6 +49,6 @@ end
 
 sub updateScore()
     addScore(bonus)
-    score = limited(score, 1000)
+    score = atMost(score, 1000)
     clearRow(selectedRow)
 end

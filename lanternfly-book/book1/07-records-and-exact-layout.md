@@ -7,14 +7,10 @@ nav_order: 7
 
 # Records and Exact Layout
 
-An x coordinate and a y coordinate are two numbers, but they describe one
-thing: a position. A program that stores them as two unrelated variables —
-`positionX` here, `positionY` there — is forever one refactoring away
-from moving the first and forgetting the second, and nothing in the
-language knows the two belong together. The knowledge lives only in the
-programmer's head, which Chapter 1 already identified as the least
-reliable storage a program has. A record repairs that. It gathers the
-fields into a single named shape and makes the pair a type of its own:
+An x coordinate and a y coordinate are two numbers that describe one
+position. Separate variables do not tell the compiler that they share a
+layout or should be copied together. A record gathers the fields into one
+named type:
 
 ```lanternfly
 record Point
@@ -28,22 +24,15 @@ position.x = 12
 position.y = -3
 ```
 
-`Point` occupies two bytes: `x` is the first and `y` is the second. From
-this chapter on, "a position" is something the program can declare, copy
-and pass around as one value — and, just as important on our machines,
-something whose exact bytes you can state from the source alone. That
-second property gives the chapter its title, and by the end it will let
-a Lanternfly record sit byte-for-byte on top of layouts the outside
-world has already fixed.
+`Point` occupies two bytes: `x` is first and `y` is second. The program can
+declare and copy a position as one value. Later chapters show how subroutines
+receive aggregate storage by alias or reference rather than by-value copying.
+The exact field layout can also match an external byte layout.
 
-Records also change what kind of thinking you do. Chapters 2 through 5
-worked with quantities; Chapter 6 arranged quantities into sequences.
-A record is the first construct whose subject is not a quantity at all
-but a *thing* — a monster, a player, a particle — and designing one is
-an act of modelling: deciding which few bytes capture what the game
-needs to know about each thing it tracks. Get the model right and the code that follows is short and plain; get it
-wrong and every routine works against the shape of its own data. The examples in this chapter are small
-exercises in getting it right.
+Records model entities such as monsters, players and particles by naming the
+few fields each instance needs. The `Monster` example later in this chapter
+shows how those field choices determine both the source interface and exact
+storage cost.
 
 ## Record declarations
 
@@ -54,29 +43,24 @@ record Point
 end
 ```
 
-`record` introduces a type name, and the name is Pascal-cased — capital
-first letter — where values and routines stay lower camel case. The
-convention splits the vocabulary of a program in two at a glance:
+`record` introduces a type name. User-defined type names use Pascal case,
+capitalising the first letter of every word, while values and routines use
+lower camel case. The convention splits the vocabulary of a program in two at
+a glance:
 `Point` is a kind of thing, `position` is a thing. Each field uses the
 familiar `var name as Type` form, so a record body reads as a small run
-of declarations, which is what it is. Everything Chapter 2 taught about
+of declarations. Everything Chapter 2 taught about
 choosing types applies field by field: `i8` here because a coordinate
-on this screen can be negative and never strays past two digits.
+in this example may be negative and is constrained to the `i8` range.
 
-One distinction does more work in this chapter than any other: a
-record declaration describes layout, and no storage exists until
-another declaration uses the type.
+A record declaration describes layout; storage exists only when another
+declaration uses the type. `record Point` fixes that layout at compile time;
+`var position as Point` allocates bytes for one instance. A program may
+allocate one instance, an array of them or none.
 
 ```lanternfly
 var position as Point
 ```
-
-`record Point` is the blueprint; `var position as Point` is a
-building. There can be one building, or forty in an array, or none at
-all — the blueprint costs nothing either way. With the two roles kept separate, half of this chapter follows
-automatically: blueprints are consulted at compile time, buildings occupy pigeonholes
-at run time, and the compiler is the only party that ever needs both
-at once.
 
 A dot selects a field:
 
@@ -88,11 +72,9 @@ position.y
 The compiler turns each field name into a byte offset — `x` is "the
 byte at offset zero", `y` "the byte at offset one" — while the source
 keeps the coordinate names. Nothing is looked up at runtime; there is
-no table of field names inside the machine, any more than there is a
-table of variable names. Like every name in a compiled language, a
-field name is free. You can afford exactly as many well-named fields
-as clarity wants, and the generated code could not tell the
-difference.
+no table of field names inside the machine. A longer field name costs no
+runtime storage or lookup. Adding a field is different: it changes the record
+layout and increases every instance by that field's size.
 
 ## Exact field layout
 
@@ -116,18 +98,15 @@ about a monster between frames? Where it is (`x`, `y`), where it is
 heading (`direction` — an index into Chapter 6's step tables), what
 it is doing (`state` — the named-constant idiom from Chapter 4), how
 long until it changes (`timer`), and which picture shows it
-(`frame`). Six questions, six bytes. A monster also has things the
+(`frame`). Those choices produce six fields and six bytes. A monster also has things the
 game need *not* remember — its speed if all monsters share one, its
 appearance if `frame` selects it from a table — and leaving those
-out is as much a part of the model as putting the six in. Every byte
-in a record is multiplied by every instance of it, so a record earns
-its fields the way a sentence earns its words.
+out is as important as including the state each instance needs. Every field's
+size is multiplied by the number of instances.
 
-Now the layout. If you have worked in C, you will feel how strong
-the no-padding promise is. A C compiler may slide invisible padding
-bytes between struct members to suit an architecture's alignment
-taste, and the same struct can have different sizes under different
-compilers. A Lanternfly record has one layout, derivable by eye:
+A C implementation may add padding bytes between struct members to satisfy
+alignment requirements, so the same struct can have different sizes under
+different compilers. A Lanternfly record has one layout, derivable by eye:
 fields in order, each at the offset where the previous one ended.
 `Monster` occupies six bytes and its field offsets run from zero
 through five, and both facts can be asked for by name:
@@ -137,54 +116,41 @@ const monsterBytes as u8 = size(type Monster)
 const timerOffset as u8 = offset(Monster.timer)
 ```
 
-`monsterBytes` is six and `timerOffset` is four. Exact layout is
-what lets a record match something that already exists — a firmware
-table whose bytes were fixed a decade ago, a file format, a block of
-game state at a documented address. Declare a record whose fields
-mirror the documented bytes, and the dot notation becomes a set of
-honest names for someone else's layout: the manual says "byte 4 is
-the timer", your source says `.timer`, and the two are provably the
-same byte.
+`monsterBytes` is six and `timerOffset` is four. Exact layout lets the
+field offsets match a firmware table, file format or documented state block.
+Reaching the external bytes still requires placed storage, an imported
+contract or a typed reference established by the target. Once that base
+location is supplied, `.timer` selects the documented byte at offset four.
 
 ![Monster occupies six bytes in declaration order, with timer at offset four.](../../assets/images/lanternfly-book/book1/monster-layout.svg)
 
 ## Arrays of records
 
-The natural home of a record is an array of them — a game does not
-have one monster:
+Games often need several monsters, so records commonly become array elements:
 
 ```lanternfly
 var monsters as Monster[4]
 ```
 
-The array occupies 24 bytes, four true six-byte strides with nothing
-between, exactly as Chapter 6 promised. A field path selects an
-entry and then one of its fields:
+The array occupies 24 bytes, with a six-byte stride and no padding between
+entries. A field path selects an entry and then one of its fields:
 
 ```lanternfly
 monsters[index].timer = monsters[index].timer + 1
 ```
 
 Both selection rules compose in one address: the backend calculates
-`index * 6`, adds the timer offset of four, and accesses a single
-byte. Read the path aloud and you can hear the arithmetic — bracket
-says multiply, dot says add. A six-byte stride remains six on every
-target, because the layout is the contract and the contract does not
-renegotiate per machine.
+`index * 6`, adds the timer offset of four, and accesses a single byte. The
+six-byte stride is fixed across targets.
 
 ![Each Monster begins six bytes after the previous one; monsters[2].timer is byte offset 16.](../../assets/images/lanternfly-book/book1/record-array-stride.svg)
 
-It is worth noticing that the same 24 bytes could have been organised
-the other way: six parallel arrays of four bytes each — `monsterX`,
-`monsterY`, `monsterTimer` and so on — Chapter 6's parallel-array
-idiom scaled up. Both arrangements store identical information;
-they differ in what sits next to what. The array of records keeps
-each monster's six facts adjacent, which suits code that works on
-one monster at a time — update this one, copy that one. Parallel
-arrays keep each *aspect* adjacent, which suits code that sweeps one
-fact across everybody. Most game logic lives monster-at-a-time, so
-the record array is the usual right answer, but the choice is a real
-one, and knowing you are making it is the point.
+The same information could use six parallel arrays such as `monsterX`,
+`monsterY` and `monsterTimer`. An array of records keeps one monster's fields
+adjacent, which suits routines that consume most fields of one entity.
+Parallel arrays keep one field adjacent across many entities, which suits
+loops that process the same field for every entity. Choose from the program's
+access pattern.
 
 ## Nested records and arrays
 
@@ -201,9 +167,9 @@ var player as Mover
 ```
 
 `Mover` describes a moving thing with a current position and a short
-history of past ones — eleven bytes altogether: two, then eight,
-then one, in that order, by the same rules as ever. The model grows
-by composition: a `Mover` is not six loose coordinates but "a
+history of past ones — eleven bytes altogether: two for `position`, eight for
+`previous`, then one for `savedCount`. The model grows
+by composition: a `Mover` is not ten loose coordinates and a count but "a
 `Point`, four more `Point`s, and a count", each layer named at its
 own level of meaning. Paths retain a type at every step:
 
@@ -217,7 +183,7 @@ of the path is checked against a declared type, and each link
 contributes a fixed offset or a stride multiply to one flat address
 calculation — the reading is layered, the arithmetic is flat.
 
-One shape is refused. A record cannot contain its own type by value,
+A record cannot contain its own type by value,
 directly or through mutual containment — a `Mover` holding a `Mover`
 holding a `Mover`, with no bottom to the size. A by-value
 containment cycle has no finite size, so the compiler rejects it.
@@ -233,9 +199,9 @@ A record initializer names every field:
 const origin as Point = Point(x = 0, y = 0)
 ```
 
-Each field appears exactly once — naming them all is the point,
-since a positional form would quietly break the day a field is added
-in the middle. The written order controls initializer evaluation
+Each field appears exactly once. Naming them all keeps each initializer tied
+to its field even when the declaration changes. The written order controls
+initializer evaluation
 while the declaration order controls storage, so you may write the
 fields in whatever order reads best.
 
@@ -263,26 +229,20 @@ the position is one value. Copying has snapshot semantics: an
 overlapping source and destination behave as though the source value
 was read in full first, so even shuffling entries within one array
 cannot smear a half-written value into its own input. The backend
-may inline a small copy, emit a loop or call a runtime helper, and
-the generated listings and cost reports expose that choice — a
-two-byte `Point` will move differently from a twenty-four-byte
-monster table, and the language's habit of showing costs applies to
-its conveniences too.
+may inline a small copy, emit a loop or call a runtime helper. Once a compiler
+exists, its generated listings and cost reports can expose that choice — a
+two-byte `Point` will move differently from a twenty-four-byte monster table.
 
 Subroutine locals, for their part, stay scalar: a local declaration
 does not carve record or array storage out of the stack. Chapter 8
 introduces the local alias, which gives a subroutine a short name
-for existing aggregate storage instead — reference-sized, and honest
-about where the bytes actually live.
+for existing aggregate storage instead. The local holds a reference-sized
+location while the aggregate bytes remain in their original storage.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/07-records.txt)
-declares points, monsters and a mover with a position history. The
-trace worth doing here is an offset walk: `size(type Mover)` and the byte offset of
-`player.previous[2].y`, both derived from the declarations alone. Two
-bytes for `position`, then two strides of two into `previous`, then one
-more for `y`, gives offset seven — the arithmetic is short, and running it
-from the source alone is exactly what "exact layout" means. When a
-record of yours must one day match a datasheet, this is the
-five-minute skill that does it.
+declares points, monsters and a mover with a position history. From the
+declarations, calculate `size(type Mover)` and the byte offset of
+`player.previous[2].y`. The expected size is 11 bytes and the expected
+offset is 7.

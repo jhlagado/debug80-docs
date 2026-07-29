@@ -25,18 +25,19 @@ sub updateStatus()
 end
 
 sub findStep()
-    deltaX = 0
-    deltaY = 0
-
     select direction
     case north
+        deltaX = 0
         deltaY = -1
     case east
         deltaX = 1
+        deltaY = 0
     case south
+        deltaX = 0
         deltaY = 1
     case west
         deltaX = -1
+        deltaY = 0
     else
         deltaX = 0
         deltaY = 0

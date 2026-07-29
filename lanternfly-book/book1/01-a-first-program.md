@@ -26,7 +26,7 @@ end
 ```
 
 The example contains a variable, a subroutine, a condition and an assignment.
-Read from top to bottom, it says: if at least one life remains, subtract one.
+From top to bottom, it says: if at least one life remains, subtract one.
 The rest of the chapter takes those parts in order.
 
 ## The case for Lanternfly
@@ -36,10 +36,11 @@ memory and firmware reservations must fit into the machine's memory map.
 Lanternfly therefore fixes the width and layout of data before execution.
 
 The source keeps the structure that would be tedious to express repeatedly in
-assembly. The compiler lowers `lives` to one byte of static storage, the `if`
-to a comparison and conditional branch, and the assignment to arithmetic plus
-a store. Generated listings expose those choices so their cost can be
-inspected.
+assembly. A backend must reserve one byte for `lives` and preserve the
+conditional update. The first Z80 backend will commonly use a comparison,
+conditional branch, arithmetic and a store; a C backend may retain a
+higher-level conditional. Once the compiler exists, its generated listing will
+expose the exact choices.
 
 ## Storing a value
 
@@ -64,9 +65,8 @@ capitalising each word after the first:
 var remainingLives as u8 = 3
 ```
 
-The convention earns its keep the day you read someone else's program.
-When every name in the ecosystem has the same shape, your eye spends
-nothing on decoding style and everything on meaning.
+The casing distinguishes ordinary values and routines from the Pascal-cased
+record types introduced later.
 
 ## Naming an action
 
@@ -86,7 +86,7 @@ home.
 The parentheses hold parameters, the inputs a caller supplies. This
 pair is empty because losing a life needs nothing from the caller —
 everything the routine touches is already sitting in `lives`. Parameters
-arrive properly in Chapter 9, and by then you will have wanted them.
+are introduced in Chapter 9.
 
 The inner `end` closes the `if`; the outer one closes the subroutine.
 Lanternfly uses `end` for each block. Indentation is not grammar, but it makes
@@ -126,11 +126,9 @@ the expression started as `u8` and the result returns to a `u8` destination.
 The conversion is therefore automatic and produces no warning. Chapter 2
 shows the warnings used when an expression crosses declared types.
 
-One habit is worth establishing in the first chapter. At the start of a
-statement, `=` means "store in". Inside an expression, the same token
-compares two values for equality. This program only stores; Chapter 2
-puts both uses side by side, and the distinction will feel natural
-sooner than you expect.
+At the start of a statement, `=` means “store in”. Inside an expression, the
+same token compares two values for equality. Chapter 2 puts both uses side by
+side.
 
 ## Comments explain intent
 
@@ -151,9 +149,9 @@ The useful comment records what the statements cannot say. The code shows
 which condition is checked; the comment explains that the condition prevents
 unsigned wrap. That reason helps a later edit preserve the guard.
 
-A comment that merely repeats its statement — "subtract one from
-lives" — protects nobody, records nothing, and goes stale the first time the line changes. The why is the comment's job;
-the what is already on the page.
+A comment that merely repeats its statement — "subtract one from lives" —
+adds no information and goes stale when the line changes. Record the reason
+when it is not already apparent from the code.
 
 ## Words and symbols
 
@@ -171,10 +169,10 @@ readable without making formulas verbose.
 | assign | `lives = ...` |
 | comment | `// explanation` |
 
-Three symbols do structural work inside expressions: parentheses group
-and hold arguments, square brackets select array entries, and a dot
+Three punctuation forms do structural work inside expressions: parentheses
+group and hold arguments, square brackets select array entries, and a dot
 selects a field of a record. Arrays arrive in Chapter 6 and records in
-Chapter 7; until then, parentheses carry the load alone.
+Chapter 7.
 
 ## Example
 

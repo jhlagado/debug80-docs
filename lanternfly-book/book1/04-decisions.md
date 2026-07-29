@@ -35,19 +35,9 @@ sub updateStatus()
 end
 ```
 
-The three constants come first for a reason. `status` could have
-stored bare numbers — zero for finished, one for playing, two for won —
-and the program would run identically. It would also be unreadable in a
-month, because a bare `2` in a comparison carries no more meaning in a
-status than it did in Chapter 2's magic numbers. The constants give
-each state of the game a name; comparisons and assignments say `won`
-rather than `2`, and the numbers retreat to the one place they are
-defined. This is the standard idiom for a value that means a *state*
-rather than a quantity — a small set of named constants and one
-variable that always holds one of them — and you will see it in every
-chapter from now on. It costs nothing at runtime, like every name in a
-compiled language, and it turns the whole decision below into
-sentences.
+The constants name the permitted states. Comparisons and assignments can use
+`finished`, `playing` and `won`, while their numeric encodings remain in one
+set of declarations.
 
 ## One conditional branch
 
@@ -62,9 +52,8 @@ nothing otherwise. `then` separates the Boolean condition from its
 body, and the closing `end` belongs to the nearest open block, exactly
 as in Chapter 1.
 
-The body may contain assignments, calls, loops — anything a program
-can do, it can do conditionally. That includes another decision.
-Decisions nest, and the nesting reads exactly as it speaks:
+The body may contain any executable statement allowed in a routine body:
+assignments, calls, loops and other decisions. Decisions can nest:
 
 ```lanternfly
 if lives > 0 then
@@ -74,24 +63,22 @@ if lives > 0 then
 end
 ```
 
-Only when lives remain does the arrival question even get asked. You
-have met this logic before in different clothing: Chapter 3's
-short-circuiting `and` would write it in one line, `lives > 0 and
-hasArrived`, and for a simple pair the one-liner is usually the better
-sentence. The nested form comes into its own when each level has its
-own extra work to do, or when the inner decision has an `else` of its
-own. Both spellings are the same policy; choose the one the next
-reader will absorb faster.
+Only when lives remain does the arrival question get asked. Short-circuiting
+`and` can express the same condition in one `if`:
 
-Underneath, a decision is as small as it looks. The comparison
-compiles to arithmetic that sets the processor's flags, and the `if`
-becomes a conditional jump — skip the body if the test failed. A
-single `if` is among the cheapest things you can ask of the machine,
-which is worth knowing on a processor you share with a frame deadline.
-The costly decisions are not the individual tests but the habits
-around them — testing the same fact repeatedly, or chaining tests in
-an order that makes the common case walk past every rare one. Both
-habits have remedies later in this chapter.
+```lanternfly
+if lives > 0 and hasArrived then
+    loseLife()
+end
+```
+
+The nested form is useful when each level has more work or when the inner
+decision has its own `else`.
+
+On a typical byte processor, the comparison can set processor flags and the
+`if` can become a conditional jump that skips the body. The exact cost depends
+on the compared types and the target. Repeating a test repeats that cost, and
+a chain pays for each condition it reaches.
 
 ## Two alternatives
 
@@ -105,16 +92,9 @@ else
 end
 ```
 
-Exactly one branch runs. That guarantee sounds slight and is not,
-because it is *exhaustiveness*: with an `else`, there is no state of
-the world in which the decision falls through untouched and `status`
-keeps whatever it held before. A bare `if` says "in this case, act";
-an `if` with `else` says "in every case, act". Asking which of those
-two sentences you mean is one of the more profitable questions in
-programming, because the bugs live in the gap between them — the
-untaken branch that left a stale value behind is a cousin of Chapter
-1's lying counter, and `else` is one of the standing defences against
-it.
+Exactly one branch runs. With `else`, `status` is assigned whether the
+condition is true or false; a bare `if` would leave it unchanged on the false
+path.
 
 ## Several ordered tests
 
@@ -139,21 +119,18 @@ Order carries meaning, and one state proves it: the player reaches 100
 points and dies in the same
 frame. Both conditions are true, and only the order of the chain
 decides the outcome. As written, the life test comes first, so dying
-with a winning score still finishes the round — presumably the
-designer's intent, and now enforced by position. Reverse the first two
+with a winning score still finishes the round, matching the priority stated
+at the start of the chapter. Reverse the first two
 branches and the same collision of events crowns a dead player the
 winner. Neither version is wrong as code; they are different rules.
 When you write an `else if` chain, you are ranking your rules, and
 when you read one, the ranking is as much a part of the program as the
 comparisons.
 
-The skipping has a practical face as well. Execution pays for the
-tests it reaches, so a chain costs in proportion to how far down it
-travels before a condition answers true. When one case dominates —
-the round is almost always simply in progress — a chain ordered with
-the common case early answers most frames after a test or two. Rules
-of priority set the order first; among equals, put the frequent case
-where execution finds it soonest.
+Execution pays the target-specific cost of every condition it reaches. When
+priority permits either order, placing a frequent cheap condition earlier may
+reduce average work; a rarer condition can still belong first when it is much
+cheaper or when the rules give it priority.
 
 ## Selecting one named value
 
@@ -194,37 +171,48 @@ sub findStep()
 end
 ```
 
-`select` evaluates one expression and compares it with constant
-cases. Each `case` holds one or more compatible compile-time values,
-and the matching body runs. Note the deltas: a direction becomes a
-step by turning a name into a pair of signed offsets — north means y
-decreases, east means x increases. Screen coordinates grow downward
-and rightward on most raster hardware, which is why north is -1 and
-not +1; the constants quietly encode a fact about the machine's idea
-of a screen.
+`select` evaluates one integer expression and compares it with constant
+integer cases. Each `case` holds one or more compatible compile-time values,
+and the matching body runs. The deltas turn each direction into a pair of
+signed offsets. This game uses a
+top-left origin, so increasing `y` moves down and north uses -1.
 
 The optional `else` handles anything unmatched. Each normal case assigns both
 deltas, while `else` supplies the zero step for an invalid direction. Without
 it, an unmatched value would leave the previous deltas unchanged.
 
 Cases never fall through: a matching body runs, then execution continues after
-the closing `end`. When several values need the same body, list them together:
+the closing `end`. A separate terrain selection shows values that genuinely
+share a complete body:
 
 ```lanternfly
-case north, south
-    deltaX = 0
+const grass as u8 = 0
+const sand as u8 = 1
+const mud as u8 = 2
+
+var terrain as u8 = grass
+var movementCost as u8 = 0
+
+select terrain
+case grass, sand
+    movementCost = 1
+case mud
+    movementCost = 2
+end
 ```
 
-Duplicate or overlapping cases are compile errors. By contrast, an `else if`
-chain may contain overlapping conditions because their order resolves which
-branch wins.
+`grass` and `sand` select the same movement cost, so they share one case.
+Duplicate case values are compile errors. By contrast, an `else if` chain may
+contain conditions that are true for the same input because their order
+resolves which branch wins.
 
 ## Choosing `if` or `select`
 
-Use `if` when branches test different facts, as `updateStatus` does with
+`if` suits branches that test different facts, as `updateStatus` does with
 `lives` and `score`. Use `select` when several constant values are compared
-with one expression. The selected expression is evaluated once, and the
-statement makes that single basis for the decision explicit.
+with one integer expression. The selected expression is evaluated once, and
+the statement makes that single basis for the decision explicit. Selection on
+Boolean values, addresses or references is outside the working 0.3 language.
 
 ## Example
 

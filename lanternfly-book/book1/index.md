@@ -18,13 +18,14 @@ BASIC dialects may become targets later.
 
 The types describe exact integer widths, arrays, records, references and
 addresses. A programmer can therefore account for storage from the source and
-inspect the generated listing to see how a statement was lowered. Lanternfly
-is intended for game logic and other small-system programs where memory,
+trace the operations that a backend must implement. Once a compiler exists,
+its generated listings will make the selected lowering visible. Lanternfly is
+intended for game logic and other small-system programs where memory,
 execution cost and readable source all matter.
 
 This book teaches the working 0.3 language one program at a time. Each
-chapter adds a source construct, shows the problem it solves and follows the
-generated work far enough to explain its cost.
+chapter adds a source construct, shows the problem it solves and traces its
+storage or computational cost from the language rules.
 
 > [!NOTE]
 > Edition 0.3 is the implementation contract for the first compiler. The
@@ -45,14 +46,16 @@ generated work far enough to explain its cost.
 10. [Services, Targets and Assembly](10-services-targets-and-assembly.md)
 
 The [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-defines the complete source rules. The
+records the current normative 0.3 source rules. The
 [conformance contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/conformance.md)
 lists the programs, diagnostics and runtime faults that an implementation must
 test.
 
-Each chapter links to a companion listing under
-`/lanternfly-book/book1/code/`. The listings keep a `.txt` extension while the
-project decides the final Lanternfly source extension.
+Each chapter links to a companion source listing under
+`/lanternfly-book/book1/code/`. These are complete Lanternfly examples, not
+generated backend output. They retain a `.txt` extension because the final
+Lanternfly source extension remains undecided.
 
-Exercises will arrive with the compiler, when the toolchain can run each
-program and provide an answer key.
+Runnable exercises and automated answer checks will arrive with the compiler.
+For now, chapter endings point to a companion listing and identify what to
+inspect; many also give a trace or calculation with its expected result.

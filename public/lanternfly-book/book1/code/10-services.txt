@@ -6,7 +6,7 @@ end
 
 extern sub screenClear()
 extern sub drawPixel(x as u8, y as u8, colour as u8)
-extern sub showNumber(value as u16)
+extern sub showNumber(number as u16)
 
 var playerX as u8 = 0
 var playerY as u8 = 0
@@ -19,6 +19,10 @@ var framebuffer as u8[256]
 
 const actorBytes as u8 = size(type Actor)
 const timerOffset as u8 = offset(Actor.timer)
+
+asm
+ROM_WAIT_KEY = $0038
+end
 
 sub updateMeasurements()
     distance = abs(targetX - playerX)

@@ -11,10 +11,10 @@ nav_exclude: true
 
 # Lanternfly Books
 
-Lanternfly is a small, typed language for programs built from fixed data,
-calculations, decisions, loops and calls. Its source follows the shape of
-widely understood pseudocode: words mark the structure and familiar operators
-write the formulas.
+Lanternfly is a statically typed language for small-machine programs built
+from fixed data, calculations, decisions, loops and calls. Its source follows
+the shape of widely understood pseudocode: words mark the structure and
+familiar operators write the formulas.
 
 ## Books
 

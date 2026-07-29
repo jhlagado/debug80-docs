@@ -22,8 +22,9 @@ var position as Point
 var savedPosition as Point
 var monsters as Monster[4]
 var player as Mover
+var saveIndex as i16 = 0
 
-sub savePosition(index as i16)
-    player.previous[index] = player.position
+sub savePosition()
+    player.previous[saveIndex] = player.position
     savedPosition = player.position
 end

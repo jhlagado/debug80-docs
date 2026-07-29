@@ -10,7 +10,7 @@ nav_order: 3
 Chapters 1 and 2 declared storage and moved single values into it. A
 program that only moved values would be a filing system; what makes it a
 program is that it *computes* — combines the values it has into values it
-needs, on the fly, millions of times a run. The notation for combining is
+needs throughout a run. The notation for combining is
 the expression, and this chapter is the grammar of expressions: the
 operators, the types their results take, and the comparisons that turn
 quantities into decisions.
@@ -58,23 +58,22 @@ remaining integer operations:
 | shift left | `a shl count` |
 | shift right | `a shr count` |
 
-The first four are school arithmetic and need no introduction, but
-division needs a careful look because integer division is not the
+Addition, subtraction and multiplication use their familiar meanings.
+Division needs a careful look because integer division is not the
 division you grew up with. There are no fractions here — the types
 cannot hold them — so division truncates toward zero and `mod` supplies
 what division discards: `17 / 5` produces 3, and `17 mod 5` produces
 the 2 left over. Together the two answers reconstruct the question,
 since 3 × 5 + 2 is 17 again.
 
-The pair is one of the most-used tools in
-game arithmetic, because "which group is this in, and where inside the
-group" is a question games ask constantly. A screen built from
+The pair recurs in game arithmetic whenever a program asks "which group is
+this in, and where inside the group?" A screen built from
 eight-pixel tiles turns a pixel position into a tile with `x / 8` and
 into an offset within that tile with `x mod 8`. A one-dimensional
 element number turns back into a row with `n / columns` and a column
 with `n mod columns`. Seconds become minutes and seconds with `/ 60`
-and `mod 60`. Once "which and where inside" is audible in the pair, half the index
-arithmetic in this book is already familiar.
+and `mod 60`. Chapter 6 uses the same pair to move between a linear element
+number and row-and-column indices.
 
 A zero divisor triggers an arithmetic fault at runtime, or a compile
 error when the zero is constant. The compiler catches the mistake it
@@ -87,7 +86,17 @@ the low positions with zero; `5 shl 1` is 10 and `5 shl 3` is 40.
 with zero for an unsigned value. This agrees with unsigned division by two,
 but not always with signed division, which truncates toward zero:
 `i8(-3) shr 1` is -2 while `i8(-3) / 2` is -1. Use division when that
-rounding rule matters. A shift result keeps the left operand's type.
+rounding rule matters. A shift result keeps the left operand's type. A
+negative shift count faults. A count at least as large as the left operand's
+width produces zero for `shl` and unsigned `shr`, and produces all sign bits
+for signed `shr`.
+
+Power requires a non-negative exponent. `x ^ 0` is one in the result type,
+including when `x` is zero; a negative exponent faults.
+
+Unary minus produces `i16` from either byte type and retains `i16` or `i32`.
+It is invalid for `u16` or `u32` until an explicit conversion selects a signed
+type.
 
 ## Width belongs to every operation
 
@@ -99,7 +108,7 @@ type.
 
 These are fixed result rules, not arbitrary-precision arithmetic. A 16-bit
 product can hold the complete product of two bytes, and `i16` can hold the
-complete difference between them. Other operations simply use the stated
+complete difference between them. Other operations use the stated
 width; power in particular can overflow it. Every result wraps in its selected
 fixed-width type.
 
@@ -115,20 +124,16 @@ var elementNumber as u16 = 0
 elementNumber = row * 20 + column
 ```
 
-The types trace the same way the values do — the skill in action. `row` is
-`u8`; `row * 20` is a byte
+The types trace alongside the values. `row` is `u8`; `row * 20` is a byte
 multiplication, so it produces `u16` — value 60. `column` is `u8`,
 narrower than the `u16` on the other side of the `+`, and every `u8`
 value fits in a `u16`, so it widens; the addition is `u16` work and
 yields 64. The destination is `u16`, so the store is exact. No conversion
 is needed because the widening preserves every possible `u8` value.
 
-What did not happen is as telling: the compiler never invents a third
-common type. If you carry habits from C, where mixed operands are silently
-promoted up a ladder of conversion rules that few programmers can
-recite, this is the adjustment to make. Lanternfly widens one side to
-meet the other, or asks you to decide. Incompatible signedness is the
-case where it asks:
+Lanternfly widens an operand only to a compatible type already present in the
+expression. It never invents a third common type; incompatible operands
+require explicit conversion:
 
 ```lanternfly
 var signedValue as i16 = -4
@@ -138,12 +143,10 @@ var total as i32 = 0
 total = i32(signedValue) + i32(unsignedValue)
 ```
 
-There is no width in which `i16` and `u16` can meet without one of
-them giving something up — an `i16` cannot hold 65,535, a `u16`
-cannot hold -4 — so the language declines to guess which sacrifice
-you meant. The two conversions to `i32` are you settling the
-question, in writing, in a type with room for every value either
-operand could hold.
+Neither existing operand type can hold every value of the other: `i16` cannot
+hold 65,535, and `u16` cannot hold -4. Lanternfly does not invent an absent
+third type, so the expression requires explicit conversions. The written
+`i32` conversions select a type that can hold every value of both operands.
 
 Order still controls the intermediate type, and it can matter. With
 byte inputs, `x + 1 - y` performs the addition first, producing
@@ -160,9 +163,8 @@ folding uses the same rule, so compile-time and runtime evaluation agree.
 
 ## Comparisons produce Boolean values
 
-Arithmetic combines quantities into quantities. The next step in the
-chapter's progression is combining quantities into *decisions*, and
-the bridge is the comparison:
+Arithmetic produces integer values. Comparisons produce the Boolean values
+that control decisions:
 
 ```lanternfly
 var hasArrived as boolean = false
@@ -181,24 +183,25 @@ The comparison operators are:
 | greater than | `>` |
 | greater than or equal | `>=` |
 
-Each takes two compatible values and produces a Boolean, which can be
-stored, as above, or consumed directly by an `if` or a loop
-condition. Storing one is underrated: `hasArrived` computes the
-arrival test once, names it in the game's vocabulary, and lets a
-dozen later lines consult the name instead of repeating the formula.
+Compatible integers support all six operators. Booleans and compatible typed
+references support only `=` and `<>`; arrays and records have no equality
+operator in the working language. Every permitted comparison produces a
+Boolean, which can be stored, as above, or consumed directly by an `if` or a
+loop condition. Storing the result as `hasArrived` names the test and lets
+later statements reuse it without repeating the formula.
 
 Comparison chaining is rejected: the Python habit of writing
-`minimum <= value <= maximum` in one breath does not carry over. A
+`minimum <= input <= maximum` in one breath does not carry over. A
 bounded-range test joins two comparisons explicitly:
 
 ```lanternfly
-if minimum <= value and value <= maximum then
+if minimum <= input and input <= maximum then
     acceptValue()
 end
 ```
 
-Two comparisons and an `and` are exactly what the machine will
-execute, and in this language the source prefers to say so.
+The source semantics require two comparisons joined by Boolean `and`; a
+backend may choose any equivalent instruction sequence.
 
 ## Boolean and bitwise words share spelling
 
@@ -215,11 +218,8 @@ Boolean `and` and `or` short-circuit. In `left and right`, a false
 left side skips the right side entirely; in `left or right`, a true
 left side skips it. Short-circuiting saves work, but its deeper use
 is protection: the left test can stand guard over the right one. A
-condition like `count > 0 and total / count > threshold` never
-divides by zero, because the division is only reached when the guard
-has already said it is safe. Whole families of careful code are built
-on that ordering, so it is worth knowing it is guaranteed rather than
-merely likely.
+condition like `itemCount > 0 and total / itemCount > threshold` never
+divides by zero, because the division is reached only after the guard succeeds.
 
 With integer operands, the same four words operate on every bit at once. The
 `%` prefix writes a binary literal, which makes individual flag masks visible:
@@ -258,37 +258,41 @@ because it calculates a value and does nothing with it.
 ## Grouping and precedence
 
 An expression with several operators needs an order, and parentheses
-bind first — when in doubt, or when a reader might doubt, group.
-After parentheses: power binds more tightly than unary minus,
-followed by multiplication and division, addition and subtraction,
+bind first — when in doubt, or when a reader might doubt, group. Calls,
+indexing and field access bind before the operators in this chapter. After
+those postfix forms, power binds more tightly than unary minus,
+followed by multiplication, division and `mod`, addition and subtraction,
 shifts, comparisons, `not`, `and`, `xor` and `or`.
 
-The top of that ranking is school algebra — multiplication before
-addition, as in `row * 20 + column`, which multiplied first exactly
-as arithmetic class promised. The lower reaches are arranged so that
+Power associates from right to left, so `2 ^ 3 ^ 2` means
+`2 ^ (3 ^ 2)`. The remaining chainable binary operators associate from left
+to right; for example, `10 - 3 - 2` means `(10 - 3) - 2`. Comparisons do not
+chain.
+
+The top of that ranking follows school algebra: multiplication precedes
+addition, as in `row * 20 + column`. The lower levels are arranged so that
 the common whole-line shapes read without brackets: arithmetic
 resolves first, then comparisons turn the quantities into Booleans,
-then the Boolean words combine the answers. `minimum <= value and
-value <= maximum` needed no parentheses because the ranking already
-reads it as two comparisons joined by `and` — the order a person
-means.
+then the Boolean words combine the answers. `minimum <= input and
+input <= maximum` needed no parentheses because the ranking already
+reads it as `(minimum <= input) and (input <= maximum)`.
 
-One consequence needs its own paragraph. Because comparisons bind
-before `not`, the expression `not x = y` means `not (x = y)` —
-usually exactly what was wanted, since "not equal-to" is the common
-intent. A C programmer's reflex reads it the other way, because C's
-`!` binds before `==`, and that reflex has caused enough bugs in C
-that compilers warn about it. Write `(not x) = y` on the rare
-occasion you mean to compare the bitwise complement of `x`.
+Because comparisons bind before `not`, `not x = y` means `not (x = y)`.
+To compare the bitwise complement of `x`, write `(not x) = y`.
 
 ```lanternfly
+var first as u8 = 10
+var second as u8 = 20
+var average as u16 = 0
+
 average = (first + second) / 2
 ```
 
 The parentheses add before dividing — without them, precedence would
 divide `second` by 2 first and the "average" would be nothing of the
-kind. They also make mixed mask and condition expressions easier to
-scan:
+kind. Because both inputs are `u8`, their sum is a `u16` and can hold every
+possible byte sum before the division. Parentheses also define the boundary
+between bitwise and Boolean work:
 
 ```lanternfly
 if (flags and visibleMask) <> 0 and distance <= 2 then
@@ -296,10 +300,9 @@ if (flags and visibleMask) <> 0 and distance <= 2 then
 end
 ```
 
-The first `and` works on bits and the second on Booleans; the
-parentheses keep the two jobs visibly separate. Precedence would sort
-the meaning out either way, but the reader sorting it out at a glance
-is worth a pair of brackets.
+The first `and` works on bits and the second on Booleans. The parentheses are
+required: without them, comparison would bind first and produce the invalid
+mix `flags and (visibleMask <> 0)`.
 
 ## Example
 

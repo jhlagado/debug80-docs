@@ -11,13 +11,13 @@ Nine chapters of arithmetic, decisions, loops and layouts, and not one
 pixel has reached a screen. That is not an oversight; it is a boundary,
 and this final chapter is about crossing it well. Everything the book has
 taught so far keeps one meaning across targets — `lives - 1` computes the
-same value on a Z80, under a C backend, anywhere. Drawing a pixel or
-reading a key is different in kind: it depends on hardware the language
-cannot know in advance and would be wrong to guess at. Every compiled
-language for real machines needs a story for this boundary. Lanternfly's
-story has two layers — typed services for the routine crossings, inline
-assembly for the intimate ones — and both keep the language's oldest
-promise, that you can always see what a line will cost and touch.
+same value on a Z80, under a C backend, anywhere. Drawing a pixel or reading a
+key depends on target hardware and therefore has no target-independent
+definition. Lanternfly crosses this boundary through two layers: typed
+services and inline assembly.
+Generated artifacts will expose lowering, helper selection and conservative
+native-boundary assumptions, with timing information where a target profile
+supplies it.
 
 ```lanternfly
 sub showPlayer()
@@ -33,8 +33,8 @@ this chapter is about where that interface comes from.
 
 ## Standard operations
 
-Before the platform-specific, the almost-portable. Lanternfly defines a
-small set of operations whose source meaning stays fixed on every target:
+Before platform services come core operations with target-independent
+meaning:
 
 ```lanternfly
 distance = abs(targetX - playerX)
@@ -46,23 +46,22 @@ clear(board)
 fill(framebuffer, backgroundColour)
 ```
 
-Most are old friends by now. `abs` returns an unsigned magnitude, as in
-Chapter 3. `sqrt` returns the floor of a non-negative integer square root.
+`abs` returns an unsigned magnitude with the operand's width. `sqrt` returns
+the floor of a non-negative integer square root, also in the unsigned integer
+type with the operand's width. A negative constant operand is a compile error;
+a negative runtime operand invokes the arithmetic-fault service.
 The layout queries `size`, `count` and `offset` fold at compile time, as
 Chapters 6 and 7 showed. `clear` writes the all-zero representation to a
 record or array that permits it, and `fill` writes one scalar value to
 every element of an array.
 
-What is new here is the frank account of how they are made. A Z80 backend
-may call a helper routine for square root or wide arithmetic — the
-processor has no such instructions, so somebody must supply the
-subroutine. A C backend may emit a native operator or a library call.
+The implementation differs by target. A Z80 backend may call a helper routine
+for square root, 32-bit multiplication or division because the processor has
+no instructions for those complete operations. A C backend may emit a native
+operator or a library call.
 Aggregate procedures may become an inline loop or a memory helper. The
-part that matters: helpers enter the program only when selected operations
-require them, and the cost report names those helpers. Many languages ship
-a runtime you carry whole whether you use it or not; Lanternfly's runtime
-is itemised, assembled from exactly what your program asked for, with the
-receipt attached.
+required helpers are emitted or linked only when selected operations need
+them, and the generated artifact report names each one.
 
 ## Platform services
 
@@ -73,39 +72,69 @@ and export them without supplying Lanternfly bodies:
 ```lanternfly
 export extern sub screenClear()
 export extern sub drawPixel(x as u8, y as u8, colour as u8)
-export extern sub showNumber(value as u16)
+export extern sub showNumber(number as u16)
 ```
 
-`extern` says the body lives elsewhere — in ROM, or in hand-written
-assembly. The declaration's job is the types, and the types are
-doing real protective work. A firmware routine is reached by address and
-convention; call it with the wrong argument width and nothing checks —
-the machine executes your mistake exactly as written. Wrapping the
-routine in a typed declaration moves that hazard from runtime to compile
-time: `drawPixel(playerX, playerY, playerColour)` is checked like any
-other call, and the reader sees a vocabulary of named, typed operations
-rather than a scatter of magic addresses.
+`extern` says the body lives elsewhere — in ROM, hand-written assembly, a C
+library, a BASIC runtime or another substrate. Calls are checked against the
+declared parameter and result types, so
+`drawPixel(playerX, playerY, playerColour)` is checked like any other call.
+The target profile must either verify that declaration against the native
+calling convention or generate a valid adapter. A wrong hand-written
+declaration can still misdescribe the firmware; the type check protects the
+Lanternfly side of the boundary, not an inaccurate interface.
 
-`import` loads an exported source module once:
+`import` asks the whole-program compiler to resolve a source module:
 
 ```lanternfly
 import "display.lf"
 ```
 
-Private declarations remain inside their module; exported names become
-visible to the importer. This is how a platform grows a face: one module,
-written once per target, declaring the services that machine offers —
-and the game imports the face, never the machinery behind it.
+The `.lf` suffix is illustrative; the source-file extension remains
+undecided.
 
-The payoff arrives on the day you port. Move the game to a second
-machine and the game logic — every chapter of it, the loops, the
-records, the rules — compiles unchanged; what must be written anew is
-one interface module, declaring the same service names against the new
-machine's ROM and hardware. The port is measured in declarations
-rather than rewrites, and the size of that one module is an honest
-measure of how platform-bound your game ever was. Programmers of the
-eighties ported games by rewriting them; a typed service boundary is
-how their successors stopped.
+Private declarations remain inside their module; exported names become
+visible to the importer. The rule also applies to ordinary source modules.
+For example, `gameRules.lf` may publish a type, constant, variable and
+subroutine while retaining private implementation state:
+
+```lanternfly
+export const startingLives as u8 = 3
+
+export record Score
+    var points as u16
+end
+
+export var score as Score
+
+const scoreStep as u16 = 10
+
+export sub addPoint()
+    score.points = score.points + scoreStep
+end
+```
+
+Another file imports that interface:
+
+```lanternfly
+import "gameRules.lf"
+
+var lives as u8 = startingLives
+
+sub collectToken()
+    addPoint()
+end
+```
+
+Repeated imports resolve and emit the module once. `startingLives`, `Score`,
+`score` and `addPoint` are visible to the importer; `scoreStep` remains
+private.
+
+When two target modules export the same service contract and both targets
+support the language features used by the game, the game logic can compile
+against either interface. Address classes, memory limits, unsupported
+operations or target-specific assumptions may still require changes; the
+module boundary identifies where those differences enter.
 
 An external routine can name its target binding directly:
 
@@ -114,23 +143,19 @@ extern sub printChar(ch as u8) at $0008
 extern sub waitForKey() from "ROM_WAIT_KEY"
 ```
 
-`at` supplies an absolute routine address — the natural spelling for ROM
-entry points that have sat at fixed addresses since the machine was
-designed. `from` supplies a substrate symbol by name. With neither clause,
+`at` supplies an absolute routine address, such as an entry point documented
+by a target's ROM interface. `from` supplies a substrate symbol by name. With
+neither clause,
 the target profile binds the Lanternfly name itself. The profile also
 defines the argument and result carriers — which registers or cells carry
 each value — along with clobbers, visible effects and cost. A missing or
-incompatible binding is a compile error, and it is worth pausing on how
-much grief that one sentence retires: the traditional version of this
-mistake was a program that assembled cleanly and crashed at the first
-keypress.
+incompatible binding is a compile error.
 
 ## Inline assembly
 
-Services cover the crossings the platform anticipated. For the rest —
-the timing-critical loop, the undocumented trick, the instruction the
-compiler has no reason to emit — an instruction sequence can be placed
-directly inside a subroutine:
+Typed services cover platform operations declared in interface modules. An
+`asm` block supplies target instructions that fall outside those declarations
+or cannot be expressed through generated Lanternfly operations:
 
 ```lanternfly
 sub waitForKey()
@@ -141,12 +166,10 @@ end
 ```
 
 `asm` switches the lexer into raw assembly mode, and the switch is total:
-the next physical line whose trimmed content is exactly `end` returns to
-Lanternfly, and every line in between belongs to the assembler, including
-its comment syntax. The totality is the design. An assembly dialect is its
-own language with its own lexical habits, and a half-translated embedding
-that reinterpreted quotes or semicolons would corrupt exactly the code you
-most need carried faithfully.
+the next physical line whose trimmed content compares case-insensitively equal
+to `end` returns to Lanternfly. Every line in between belongs to the assembler,
+including its comment syntax. Lanternfly does not reinterpret quotes,
+semicolons or assembler-specific tokens inside the block.
 
 An assembly-source backend emits the payload verbatim at that position:
 
@@ -164,22 +187,17 @@ wrote.
 
 ## The assembly barrier
 
-Honesty cuts both ways at this boundary. The compiler cannot infer
-register use or memory effects from arbitrary target assembly, so a statement-level `asm` block
+The compiler cannot infer register use or memory effects from arbitrary
+target assembly, so a statement-level `asm` block
 forms a conservative barrier. The compiler assumes the block can read and
-write every visible mutable object, call target routines, fault, and
-clobber processor registers and flags.
+write every visible mutable object, call target routines, fault, perform
+device I/O and clobber processor registers and flags.
 
-Around that assumption, the backend protects its own work: before the
-block, it preserves every generated value needed afterwards. The price is
-paid in the surrounding code — values that might have stayed cached in
-registers are written safely home instead — which is the real cost of an
-`asm` block, and a reason to keep them few and small. In return, one
-obligation falls on you: control from the assembly must reach the
-generated statement after the block. A direct return or jump around
-Lanternfly's control flow breaks the contract and can bypass a
-hosted-body epilogue — the block is a guest inside a routine the compiler
-is still responsible for, and guests leave by the door.
+Before the block, the backend preserves generated values that remain live
+after it. Reducing barrier crossings can therefore reduce spills when much
+state is live. Control from the assembly must reach the generated successor
+statement; a direct return or jump around Lanternfly control flow violates the
+contract and may bypass a hosted-body epilogue.
 
 Raw names inside the block are assembler names, not Lanternfly names. The
 backend's symbol artifact shows which generated Lanternfly names are
@@ -197,48 +215,46 @@ end
 ```
 
 This form can provide target directives, labels, routines or data — here,
-simply teaching the assembler a name for a ROM address, the definition
-the earlier `from "ROM_WAIT_KEY"` binding relies on. Symbols defined
-inside the raw block stay in the assembly world until an `extern sub`
-declaration exposes them to Lanternfly; the two worlds meet only where a
-typed declaration says they do.
+giving the assembler a name for a ROM address, the definition
+the earlier `from "ROM_WAIT_KEY"` binding relies on. A routine label defined
+inside the raw block can be bound through `extern sub`. Other raw symbols,
+including data labels, remain assembly-only in the working 0.3 language.
 
-There is a price of admission, honestly posted: inline assembly commits
-that source file to a compatible assembly target. A C or BASIC backend
+Inline assembly commits that source file to a compatible assembly target. A
+C or BASIC backend
 rejects the block unless its profile supplies an assembly-fragment
-pipeline. The practical discipline follows directly — keep `asm` inside
-per-target interface modules, behind the typed faces of the previous
-section, and the game logic that imports them stays portable to every
-backend at once.
+pipeline. Keeping `asm` in per-target interface modules isolates it when each
+module exports the same service contract and the game uses features supported
+by every selected backend.
 
 ## Generated artifacts
 
-The book has promised since Chapter 1 that costs stay visible. Here,
-finally, is the ledger. A source-generating backend records:
+A source-generating backend records:
 
-- generated assembly, C or BASIC;
-- source mappings from Lanternfly to generated ranges;
+- canonical generated assembly, C or BASIC;
+- mappings from Lanternfly source to generated ranges and, where available,
+  from generated code to machine addresses;
 - typed symbols and exact layouts;
 - selected helpers and imports;
-- inline assembly ranges and conservative effects;
-- target-qualified code and timing estimates when available.
+- external bindings and generated ABI adapters;
+- read, write, call, fault and device-I/O summaries;
+- startup-initialization effects;
+- module-assembly provenance and statement-assembly conservative effects;
+- target assumptions and an optional cost report, including timing estimates
+  where the profile supplies them.
 
 For an assembly backend, the assembler adds machine-code addresses and its
-own diagnostics to those mappings. Every claim this book has made about
-following the generated work — counting the instructions behind an `if`,
-pricing a 32-bit addition, watching an aggregate copy choose between loop
-and helper — cashes out in these artifacts. They are the difference
-between trusting a compiler and being able to check one, and the
-language's position is that on a small machine you deserve both.
+own diagnostics to those mappings. The artifacts let a programmer count the
+instructions behind an `if`, inspect a 32-bit helper or see how an aggregate
+copy was lowered.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/10-services.txt) uses
 standard operations, declares display services and contains one inline
-assembly block. It is also the end of Book 1, and a fair place to take
-stock: you can now read a Lanternfly program from its first declaration to
-its last `end`, price its storage byte by byte, and follow any line of it
-down to the instructions it becomes. The [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-holds the complete rules when you need the fine print, and the exercises
-will arrive with the compiler — at which point the pencil traces this book
-kept assigning become programs you can finally run against your answers.
+assembly block. Together, the chapters have built a boundary: portable logic
+uses exact integer and layout rules, typed services describe what a target
+provides, and native code can be kept in target-facing modules. The
+[working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
+records the current normative 0.3 rules. When compiler backends are available,
+their generated artifacts will show how each target implements those rules.

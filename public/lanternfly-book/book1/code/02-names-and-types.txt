@@ -4,6 +4,8 @@ const maximumScore as u16 = 9999
 var lives as u8 = startingLives
 var score as u16 = 0
 var gameOver as boolean = false
+var wideValue as i16 = 300
+var byteValue as u8 = 0
 
 sub loseLife()
     if lives > 0 then
@@ -13,8 +15,14 @@ sub loseLife()
     gameOver = lives = 0
 end
 
+sub convertWideValue()
+    byteValue = u8(wideValue)
+end
+
 sub addScore()
-    if score < maximumScore then
+    if score <= maximumScore - 10 then
         score = score + 10
+    else
+        score = maximumScore
     end
 end
