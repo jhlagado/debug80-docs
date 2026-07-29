@@ -30,7 +30,7 @@ hardest. In spirit it is closer to Pascal than to the BASIC it resembles:
 statically typed, block structured, compiled — but it keeps the plain
 spoken surface that made BASIC learnable in an afternoon.
 
-The efficiency is not an afterthought; it is the design. Lanternfly's types
+Efficiency is the design. Lanternfly's types
 describe exact bytes, arrays, records and addresses, so a declaration in
 source corresponds to storage you can point to on the target, and a
 statement corresponds to instructions you can count. On a processor with

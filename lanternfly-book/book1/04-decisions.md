@@ -230,9 +230,7 @@ first. In a `select`, every value of the expression has at most one
 home, and the compiler proves it. Contrast that with the `else if`
 chain, where overlapping conditions are not merely legal but the
 point — the chain resolves overlaps by rank. The two statements
-disagree about overlap because they model different situations, which
-is the deepest version of the choice the next section makes
-practical.
+disagree about overlap because they model different situations.
 
 ## Choosing `if` or `select`
 

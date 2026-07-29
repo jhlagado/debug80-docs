@@ -67,10 +67,10 @@ clause is a promise the rest of the program can lean on.
 First, the loop variable — declared with the other locals at the start
 of the subroutine — takes each value of the range in turn. Second, the
 range is inclusive at both ends: `1 to 10` visits ten values, not
-nine. Fix that in place now with whatever ceremony it takes, because
-half-open ranges in other languages train the opposite instinct, and
-the fence-post error — one iteration too many or too few — is the
-most-shipped loop bug in the world. In Lanternfly the rule is simply
+nine. Fix that in place now, because half-open ranges in other
+languages train the opposite instinct, and the fence-post error — one
+iteration too many or too few — is among the commonest bugs in all of
+programming. In Lanternfly the rule is simply
 that the loop visits both ends of the range you wrote. Third, the
 start and limit are evaluated once, before the first pass, so nothing
 the body does to the variables that produced them can stretch or
@@ -267,8 +267,7 @@ controls repetition, and the statement serves two readers at once —
 the human, who learns the loop's character before its body, and the
 backend, which takes from that same line the information it needs to
 form the branches, tests and counter updates. A well-chosen loop is
-documentation and machine code from a single sentence, which is this
-language's whole ambition in miniature.
+documentation and machine code from a single sentence.
 
 ## Example
 

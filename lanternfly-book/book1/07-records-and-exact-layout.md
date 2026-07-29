@@ -217,8 +217,7 @@ player.previous[index].x = player.position.x
 and `.x` selects its `i8` field. However deep the nesting, each link
 of the path is checked against a declared type, and each link
 contributes a fixed offset or a stride multiply to one flat address
-calculation — the reading is layered, the arithmetic is flat, and
-both facts are exactly what you want.
+calculation — the reading is layered, the arithmetic is flat.
 
 One shape is refused. A record cannot contain its own type by value,
 directly or through mutual containment — picture `Mover` holding a

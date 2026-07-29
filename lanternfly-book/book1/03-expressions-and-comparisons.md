@@ -74,7 +74,7 @@ what division discards: `17 / 5` produces 3, and `17 mod 5` produces
 the 2 left over. Together the two answers reconstruct the question,
 since 3 × 5 + 2 is 17 again.
 
-Far from being a limitation, the pair is one of the most-used tools in
+The pair is one of the most-used tools in
 game arithmetic, because "which group is this in, and where inside the
 group" is a question games ask constantly. A screen built from
 eight-pixel tiles turns a pixel position into a tile with `x / 8` and

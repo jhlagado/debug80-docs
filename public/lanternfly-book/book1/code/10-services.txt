@@ -17,7 +17,7 @@ var root as u16 = 0
 var area as u16 = 0
 var framebuffer as u8[256]
 
-const actorBytes as u8 = size(Actor)
+const actorBytes as u8 = size(type Actor)
 const timerOffset as u8 = offset(Actor.timer)
 
 sub updateMeasurements()

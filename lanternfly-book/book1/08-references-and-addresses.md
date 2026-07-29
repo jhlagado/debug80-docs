@@ -284,5 +284,4 @@ reference, or moving the bytes it refers to? Ask it at
 `value(boardPlanes[planeIndex]) = clearPlane`, and check yourself
 against the spellings — rebinds touch the arrow, `value(...)` and
 field paths touch the bytes. When those two operations are
-effortless to tell apart, references are yours, and the last
-conceptual hurdle in this book is behind you.
+effortless to tell apart, references are yours.

@@ -53,8 +53,8 @@ It helps to know what problem Lanternfly is solving before learning its
 rules, so here is the situation on a small machine — say a Z80 with
 sixty-four kilobytes of memory, the processor inside a whole generation
 of home computers, arcade boards and hobby machines that are still being
-built and programmed today. Sixty-four kilobytes is not much room. This
-paragraph, rendered as text, would occupy a noticeable slice of it. Into
+built and programmed today. Sixty-four kilobytes is not much room —
+this chapter, stored as plain text, would fill roughly a third of it. Into
 that space must fit your program, its data, the screen, and whatever the
 machine's firmware reserves for itself. Every technique in this book
 descends from that arithmetic.
@@ -225,8 +225,7 @@ complain about a missing one; the indentation is for you, so a human can
 check the pairing at a glance. Each audience gets a signal it is good at
 reading, and when the two disagree — an `end` that the indentation says
 belongs to the wrong block — the visible mismatch is itself the warning
-that something is wrong. Programs whose shape can lie to the eye hide
-their bugs longer.
+that something is wrong.
 
 ## Running a statement conditionally
 
@@ -264,8 +263,7 @@ cheerfully as it does anything else, and no error is reported, because
 nothing erroneous happened at the level the machine can see — every
 part behaved exactly as built, and the lie emerged from the whole.
 
-That is worth a moment of respect, because it is the shape of most real
-bugs on small machines: not a crash, but a truthful mechanism assembled
+This is the shape of most real bugs on small machines: not a crash, but a truthful mechanism assembled
 into a falsehood. The compiler cannot catch it, because each piece is
 legal. Only the programmer knows that this byte means lives, and that
 lives must never wrap — and the guard is where that knowledge becomes
@@ -300,8 +298,7 @@ count and the new one, and the name `lives` on the two sides of the `=`
 refers to the same pigeonhole at two different moments. Read it as "the
 new `lives` is the old `lives` minus one" and the circularity
 evaporates. This right-then-left rhythm governs every assignment in the
-language, and trusting it is one of the small foundations the rest of
-the book lays bricks on.
+language.
 
 Because `lives` was declared `u8`, the assignment converts the result
 to `u8` on the way in. Notice that nothing extra had to be written to
@@ -351,8 +348,7 @@ work, and only the recorded reason protects them from improvement.
 
 A comment that merely repeats its statement — "subtract one from
 lives" — protects nobody, records nothing, and goes stale the first
-time the line changes. Write the why. The what is already on the page,
-in a language this book is teaching you to read.
+time the line changes. Write the why. The what is already on the page.
 
 ## Words and symbols
 
@@ -364,8 +360,7 @@ symbolic notation for centuries, and abandoning it would make
 arithmetic harder to read for no gain, whereas program structure has no
 notation from school, so it reads best as words a beginner can
 pronounce. When you scan a page of Lanternfly, the words give you the
-skeleton and the symbols give you the mathematics, and neither costume
-is worn by the other.
+skeleton and the symbols give you the mathematics.
 
 | Job | Form |
 | --- | --- |
@@ -404,5 +399,4 @@ ahead, because the skill scales and the stakes rise. The programmers
 who are calm when a real program misbehaves are the ones who can sit
 down with a listing and a pencil and become the machine for a while —
 holding its counts in their margins, taking its branches with their
-eyes — until the moment the paper says something the screen has been
-trying to say all along.
+eyes — until the paper shows what the screen could not.

@@ -28,8 +28,7 @@ addScore(10)
 routine, and the same three lines serve both — the routine describes
 the transaction once, and the callers supply the particulars.
 
-Something larger than convenience arrives with this chapter, and it is
-worth naming before the details begin. A program of any size is not
+A program of any size is not
 written as one long story; it is written as a *vocabulary*. Each `sub`
 adds a word to the game's language — `loseLife`, `addScore`,
 `findStep`, `updateStatus` — and the main loop, when you finally write

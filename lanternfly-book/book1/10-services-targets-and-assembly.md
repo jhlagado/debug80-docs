@@ -76,8 +76,8 @@ export extern sub drawPixel(x as u8, y as u8, colour as u8)
 export extern sub showNumber(value as u16)
 ```
 
-`extern` says the body lives elsewhere — in ROM, in hand-written assembly,
-in another world. The declaration's job is the types, and the types are
+`extern` says the body lives elsewhere — in ROM, or in hand-written
+assembly. The declaration's job is the types, and the types are
 doing real protective work. A firmware routine is reached by address and
 convention; call it with the wrong argument width and nothing checks —
 the machine executes your mistake with complete confidence. Wrapping the

@@ -206,8 +206,7 @@ sixty-eight passes.
 `count(tiles, 0)` produces 24 and `count(tiles, 1)` produces 32. The
 dimension argument is required for a multidimensional array so the
 requested extent is explicit — an unadorned `count(tiles)` would
-leave the reader guessing which direction was meant, and this
-language does not deal in guesses.
+leave the reader guessing which direction was meant.
 
 ## Array initializers
 

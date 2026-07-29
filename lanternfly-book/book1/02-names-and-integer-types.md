@@ -184,8 +184,8 @@ sits inside an expression, so it compares. The comparison of `lives`
 with zero produces true or false, and that Boolean lands in
 `gameOver`. What looks at first like a typo is actually the whole
 sentence "record whether the player is out of lives" in eleven
-characters, and it earns its keep in any routine that wants to make
-the decision once and consult it often.
+characters, and it earns its keep in any routine that makes the
+decision once and consults it often.
 
 If you arrive from C, you may expect to write `if lives then` and let
 any nonzero value count as true. An integer does not become a
@@ -297,8 +297,7 @@ bits with zero. Signed widening copies the sign bit into them, which
 under two's complement is precisely what keeps -4 meaning -4 in the
 wider home: the negative top column moves left, and the copies fill
 the columns it vacated. Both fills are the machine doing the obvious
-thing, and both are free of surprises, which is why the principle
-lets them pass in silence.
+thing, which is why the principle lets them pass in silence.
 
 ## Literal types follow their context
 

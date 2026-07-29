@@ -123,7 +123,7 @@ const add = (name, title, desc, height, parts) => {
           hi: field === 'timer',
         })),
       }),
-      text('t', 60, 158, 'size(Monster) = 6'),
+      text('t', 60, 158, 'size(type Monster) = 6'),
       text('t', 360, 158, 'offset(Monster.timer) = 4'),
       text('dimn', 60, 184, 'Each field begins at the offset printed inside its byte.'),
     ],
