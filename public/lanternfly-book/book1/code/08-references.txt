@@ -1,41 +1,50 @@
-record Monster
-    var x as u8
-    var y as u8
-    var timer as u8
-    var frame as u8
+record Reading
+    var value as i16
+    var unit as u8
+    var quality as u8
 end
 
-const clearPlane as u8[8] = [0, 0, 0, 0, 0, 0, 0, 0]
-
-var monsters as Monster[4]
-var selectedIndex as i16 = 0
-var current as near ref Monster = ref monsters[0]
-
-var boardRed as u8[8]
-var boardGreen as u8[8]
-var boardBlue as u8[8]
-var boardPlanes as (near ref (u8[8]))[3] = [
-    ref boardRed,
-    ref boardGreen,
-    ref boardBlue
+const unitCelsius as u8 = 0
+const emptyBuffer as u8[16] = [
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0
 ]
 
-sub selectMonster()
-    current = ref monsters[selectedIndex]
-    current.timer = 10
+var readings as Reading[4]
+var selectedIndex as i16 = 0
+var current as near ref Reading = ref readings[0]
+
+var inputBuffer as u8[16]
+var outputBuffer as u8[16]
+var scratchBuffer as u8[16]
+var buffers as (near ref (u8[16]))[3] = [
+    ref inputBuffer,
+    ref outputBuffer,
+    ref scratchBuffer
+]
+
+sub selectReading()
+    current = ref readings[selectedIndex]
+    current.quality = 1
 end
 
-sub resetSelected()
-    ref monster as Monster = monsters[selectedIndex]
+sub markSelected()
+    ref reading as Reading = readings[selectedIndex]
 
-    monster.timer = 0
-    monster.frame = 0
+    reading.quality = 1
+    reading.unit = unitCelsius
 end
 
-sub clearPlanes()
-    var planeIndex as i16
+sub clearBuffers()
+    var bufferIndex as i16
 
-    for planeIndex = 0 to count(boardPlanes) - 1
-        value(boardPlanes[planeIndex]) = clearPlane
+    for bufferIndex = 0 to count(buffers) - 1
+        value(buffers[bufferIndex]) = emptyBuffer
     end
+end
+
+sub main()
+    selectReading()
+    markSelected()
+    clearBuffers()
 end

@@ -1,224 +1,187 @@
 ---
 layout: default
-title: "Decisions"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Choosing a Path"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 4
 ---
 
-# Decisions
+# Choosing a Path
 
-Strip away the graphics and a game is a bundle of rules, and the rules
-have an order of importance. Zero lives ends the round, no matter what
-else is true. A score of 100 or more wins it — but only if the player is
-still alive to enjoy the fact. Every other state keeps the round in
-progress. Chapter 3 built the machinery for asking single questions;
-this chapter is about arranging the questions into policy. The program
-below encodes the three rules together with their pecking order:
+A batch-processing program can be working, complete or stopped by an error.
+The status depends on two facts, and their priority matters. An error takes
+precedence even when the last item has also been processed:
 
 ```lanternfly
-const finished as u8 = 0
-const playing as u8 = 1
-const won as u8 = 2
+const statusWorking as u8 = 0
+const statusComplete as u8 = 1
+const statusFailed as u8 = 2
 
-var lives as u8 = 3
-var score as u8 = 0
-var status as u8 = playing
+var itemsRemaining as u16 = 40
+var errorCount as u8 = 0
+var status as u8 = statusWorking
 
 sub updateStatus()
-    if lives = 0 then
-        status = finished
-    else if score >= 100 then
-        status = won
+    if errorCount > 0 then
+        status = statusFailed
+    else if itemsRemaining = 0 then
+        status = statusComplete
     else
-        status = playing
+        status = statusWorking
     end
 end
 ```
 
-The constants name the permitted states. Comparisons and assignments can use
-`finished`, `playing` and `won`, while their numeric encodings remain in one
-set of declarations.
+Conditions are tested from top to bottom. The first true condition chooses its
+branch, and execution continues after the closing `end`.
 
-## One conditional branch
+## A single branch
 
 ```lanternfly
-if score >= 100 then
-    status = won
+if itemsRemaining = 0 then
+    status = statusComplete
 end
 ```
 
-This is the decision at its smallest: one test, one consequence,
-nothing otherwise. `then` separates the Boolean condition from its
-body, and the closing `end` belongs to the nearest open block, exactly
-as in Chapter 1.
+`if` evaluates a Boolean condition. When the result is `true`, the body runs.
+When it is `false`, execution moves directly past `end`.
 
-The body may contain any executable statement allowed in a routine body:
-assignments, calls, loops and other decisions. Decisions can nest:
+The body may contain assignments, calls, loops or another decision. Nesting is
+useful when an inner test belongs only to one outer state:
 
 ```lanternfly
-if lives > 0 then
-    if hasArrived then
-        loseLife()
+if errorCount = 0 then
+    if itemsRemaining = 0 then
+        status = statusComplete
     end
 end
 ```
 
-Only when lives remain does the arrival question get asked. Short-circuiting
-`and` can express the same condition in one `if`:
+When both tests are short and the body needs only their combined result,
+Boolean `and` expresses the same rule in one condition:
 
 ```lanternfly
-if lives > 0 and hasArrived then
-    loseLife()
+if errorCount = 0 and itemsRemaining = 0 then
+    status = statusComplete
 end
 ```
-
-The nested form is useful when each level has more work or when the inner
-decision has its own `else`.
-
-On a typical byte processor, the comparison can set processor flags and the
-`if` can become a conditional jump that skips the body. The exact cost depends
-on the compared types and the target. Repeating a test repeats that cost, and
-a chain pays for each condition it reaches.
 
 ## Two alternatives
 
-`else` handles every value left after the first test:
+`else` supplies the path for a false condition:
 
 ```lanternfly
-if lives > 0 then
-    status = playing
+if itemsRemaining = 0 then
+    status = statusComplete
 else
-    status = finished
+    status = statusWorking
 end
 ```
 
-Exactly one branch runs. With `else`, `status` is assigned whether the
-condition is true or false; a bare `if` would leave it unchanged on the false
-path.
+Exactly one assignment runs. This form is appropriate when both outcomes must
+set the value. A single `if` is appropriate when the false case should preserve
+the value already stored.
 
-## Several ordered tests
+## Ordered conditions
 
-Lanternfly writes a longer chain as two words, `else if`:
+An `else if` chain ranks several rules:
 
 ```lanternfly
-if lives = 0 then
-    status = finished
-else if score >= 100 then
-    status = won
+if errorCount > 0 then
+    status = statusFailed
+else if itemsRemaining = 0 then
+    status = statusComplete
 else
-    status = playing
+    status = statusWorking
 end
 ```
 
-Conditions are tested from top to bottom, and the first true condition
-claims execution: its body runs, and the rest of the chain — tests and
-all — is skipped. One `end` closes the complete chain, however long it
-grows.
+Consider `errorCount = 1` and `itemsRemaining = 0`. Both comparisons are true,
+but the first branch sets `statusFailed` and the second comparison is skipped.
+Reversing the first two branches would classify the same state as complete.
 
-Order carries meaning, and one state proves it: the player reaches 100
-points and dies in the same
-frame. Both conditions are true, and only the order of the chain
-decides the outcome. As written, the life test comes first, so dying
-with a winning score still finishes the round, matching the priority stated
-at the start of the chapter. Reverse the first two
-branches and the same collision of events crowns a dead player the
-winner. Neither version is wrong as code; they are different rules.
-When you write an `else if` chain, you are ranking your rules, and
-when you read one, the ranking is as much a part of the program as the
-comparisons.
+Branch order belongs to the program's policy. A higher-priority condition
+belongs first. When two conditions have equal priority, their frequency and
+cost can guide the order because execution pays for each comparison it reaches.
 
-Execution pays the target-specific cost of every condition it reaches. When
-priority permits either order, placing a frequent cheap condition earlier may
-reduce average work; a rarer condition can still belong first when it is much
-cheaper or when the rules give it priority.
+## Selecting among named values
 
-## Selecting one named value
-
-An `else if` chain asks a different question at every step. Often the
-questions are all the same question — *what is this value?* — asked
-of one expression, against a set of known answers. A direction is
-north, east, south or west; a status is one of three constants; a
-menu choice is one of five entries. That shape is common enough to have its own statement:
+Sometimes every branch compares one value with a set of fixed alternatives.
+`select` gives that pattern its own structure:
 
 ```lanternfly
-const north as u8 = 0
-const east as u8 = 1
-const south as u8 = 2
-const west as u8 = 3
+const modeCompact as u8 = 0
+const modeDetailed as u8 = 1
+const modeDiagnostic as u8 = 2
 
-var direction as u8 = north
-var deltaX as i8 = 0
-var deltaY as i8 = 0
+var reportMode as u8 = modeCompact
+var lineWidth as u8 = 40
+var includeChecks as boolean = false
 
-sub findStep()
-    select direction
-    case north
-        deltaX = 0
-        deltaY = -1
-    case east
-        deltaX = 1
-        deltaY = 0
-    case south
-        deltaX = 0
-        deltaY = 1
-    case west
-        deltaX = -1
-        deltaY = 0
+sub configureReport()
+    select reportMode
+    case modeCompact
+        lineWidth = 40
+        includeChecks = false
+    case modeDetailed
+        lineWidth = 80
+        includeChecks = false
+    case modeDiagnostic
+        lineWidth = 80
+        includeChecks = true
     else
-        deltaX = 0
-        deltaY = 0
+        lineWidth = 40
+        includeChecks = true
     end
 end
 ```
 
-`select` evaluates one integer expression and compares it with constant
-integer cases. Each `case` holds one or more compatible compile-time values,
-and the matching body runs. The deltas turn each direction into a pair of
-signed offsets. This game uses a
-top-left origin, so increasing `y` moves down and north uses -1.
+`select` evaluates `reportMode` once. Each `case` contains compatible
+compile-time integer values. A matching body runs, then execution continues
+after `end`; Lanternfly cases never fall through.
 
-The optional `else` handles anything unmatched. Each normal case assigns both
-deltas, while `else` supplies the zero step for an invalid direction. Without
-it, an unmatched value would leave the previous deltas unchanged.
+The optional `else` handles values that match no case. Here it chooses a
+conservative report configuration for an invalid mode. Omitting `else` would
+leave the previous values unchanged.
 
-Cases never fall through: a matching body runs, then execution continues after
-the closing `end`. A separate terrain selection shows values that genuinely
-share a complete body:
+Several constants may share one body:
 
 ```lanternfly
-const grass as u8 = 0
-const sand as u8 = 1
-const mud as u8 = 2
+const inputSerial as u8 = 0
+const inputFile as u8 = 1
+const inputKeyboard as u8 = 2
 
-var terrain as u8 = grass
-var movementCost as u8 = 0
-
-select terrain
-case grass, sand
-    movementCost = 1
-case mud
-    movementCost = 2
+select inputKind
+case inputSerial, inputFile
+    buffered = true
+case inputKeyboard
+    buffered = false
 end
 ```
 
-`grass` and `sand` select the same movement cost, so they share one case.
-Duplicate case values are compile errors. By contrast, an `else if` chain may
-contain conditions that are true for the same input because their order
-resolves which branch wins.
+Duplicate case values are compile errors. Shared values belong on one `case`
+line because there is one complete body for them.
 
-## Choosing `if` or `select`
+## `if` and `select`
 
-`if` suits branches that test different facts, as `updateStatus` does with
-`lives` and `score`. Use `select` when several constant values are compared
-with one integer expression. The selected expression is evaluated once, and
-the statement makes that single basis for the decision explicit. Selection on
-Boolean values, addresses or references is outside the working 0.3 language.
+`if` fits branches that ask different questions, such as “did an error occur?”
+and “is the batch complete?” `select` fits branches that compare one integer
+expression with named constant values.
+
+The opening word tells you the shape of the decision. An `else if` chain
+announces an ordered policy; a `select` announces a classification by one
+value.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/04-decisions.txt)
-combines an ordered status chain with direction selection. Trace
-`updateStatus` with `lives = 0` and `score = 100`; the first branch should
-produce `finished`. Reversing the first two conditions on paper should
-produce `won` from the same inputs, demonstrating that branch order is part
-of the rule.
+contains the batch-status policy and report-mode selection. With one error and
+zero remaining items, `updateStatus` produces `statusFailed`. With no errors
+and zero remaining items, it produces `statusComplete`.
+
+## Chapter summary
+
+- `if` runs one body when a Boolean condition is true.
+- `else` supplies the false path, and `else if` ranks several conditions.
+- The first true condition in a chain determines the result.
+- `select` compares one integer expression with compile-time case values.
+- Lanternfly cases do not fall through, and `else` handles unmatched values.

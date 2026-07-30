@@ -1,182 +1,195 @@
 ---
 layout: default
-title: "A First Program"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Your First Lanternfly Program"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 1
 ---
 
-# A First Program
+# Your First Lanternfly Program
 
-Games keep counts: lives left, coins collected and frames until an effect
-ends. Each count has a valid range. Our first program maintains one such
-invariant: `lives` must stay between 0 and 255 and must not wrap from zero
-back to 255.
+Lanternfly is meant for many kinds of work: calculations, text processing,
+tools, device control and games. We will begin with a calculation because you
+can follow every value from the start of the program to the end.
 
-The player starts a round with three lives. Losing one should subtract
-one, but only while the count is above zero:
+Suppose an order has a subtotal of 120 and a postage charge of 15. We want to
+calculate the amount due. Here is the complete Lanternfly source:
 
 ```lanternfly
-var lives as u8 = 3
+var subtotal as u16 = 120
+var postage as u16 = 15
+var total as u16 = 0
 
-sub loseLife()
-    if lives > 0 then
-        lives = lives - 1
-    end
+sub main()
+    total = subtotal + postage
 end
 ```
 
-The example contains a variable, a subroutine, a condition and an assignment.
-From top to bottom, it says: if at least one life remains, subtract one.
-The rest of the chapter takes those parts in order.
+Before `main` begins, `subtotal` contains 120, `postage` contains 15 and
+`total` contains 0. After the one statement inside `main` has run, the first
+two values are unchanged and `total` contains 135.
 
-## The case for Lanternfly
+By tracing this modest calculation, we can concentrate on three ideas: static
+storage, an entry point and a statement that changes a stored value. You will
+still use all three when you write programs with thousands of statements.
 
-A Z80 can directly address 65,536 bytes. Program code, variables, display
-memory and firmware reservations must fit into the machine's memory map.
-Lanternfly therefore fixes the width and layout of data before execution.
+## Three places in memory
 
-The source keeps the structure that would be tedious to express repeatedly in
-assembly. A backend must reserve one byte for `lives` and preserve the
-conditional update. The first Z80 backend will commonly use a comparison,
-conditional branch, arithmetic and a store; a C backend may retain a
-higher-level conditional. Once the compiler exists, its generated listing will
-expose the exact choices.
-
-## Storing a value
+The first three lines declare variables:
 
 ```lanternfly
-var lives as u8 = 3
+var subtotal as u16 = 120
+var postage as u16 = 15
+var total as u16 = 0
 ```
 
-`var` reserves storage and `lives` names it. `u8` means an unsigned
-eight-bit integer, so the variable occupies one byte and can represent values
-from 0 through 255. The initializer arranges for that byte to contain 3 before
-the program entry begins.
+You declare a variable when you need a named place to store a value. The
+declaration begins with `var`; you then write the name, the type and an initial
+value. For the first variable, we chose the name `subtotal`, the type `u16` and
+the initial value 120.
 
-The width is part of the program rather than a backend choice. Every target
-must give `u8` the same range and arithmetic behaviour. Chapter 2 adds wider
-and signed types for values that need different ranges.
+`u16` means an unsigned sixteen-bit integer. It can hold a whole number from 0
+through 65,535 and occupies two bytes. We will examine Lanternfly's integer
+types in detail in Chapter 2. All three values in this program fit comfortably
+in `u16`.
 
-Lanternfly names values and routines in lower camel case. A short name
-such as `lives` is a single word; a longer name joins words by
-capitalising each word after the first:
+Because we wrote these declarations at module level, outside any subroutine,
+the compiler will give them static storage. During a whole-program build, it
+will reserve two bytes for each variable and assign each one an address. The
+six bytes already exist when execution reaches `main`, with the three initial
+values installed.
+
+No allocation takes place while this program runs. We decided how much storage
+it needs when we wrote the declarations. When you later work with arrays and
+records, you will still state their maximum size in the source and then change
+the values held in that storage during execution.
+
+## Where execution begins
+
+In an ordinary Lanternfly source file, you write a module consisting of
+declarations such as the three variables and the subroutine below. Executable
+statements do not sit loose between those declarations; you put them inside a
+subroutine.
 
 ```lanternfly
-var remainingLives as u8 = 3
-```
-
-The casing distinguishes ordinary values and routines from the Pascal-cased
-record types introduced later.
-
-## Naming an action
-
-```lanternfly
-sub loseLife()
-    if lives > 0 then
-        lives = lives - 1
-    end
+sub main()
+    total = subtotal + postage
 end
 ```
 
-`sub` declares a named sequence of statements. A collision routine, timeout
-handler or other part of the game can invoke `loseLife()` without repeating
-the guard and subtraction. If the rule changes, its implementation has one
-home.
+To begin a subroutine declaration, write `sub` followed by its name and a pair
+of parentheses. No parameter names appear between the parentheses in `main()`,
+so this subroutine accepts no arguments. The final `end` closes the subroutine.
 
-The parentheses hold parameters, the inputs a caller supplies. This
-pair is empty because losing a life needs nothing from the caller —
-everything the routine touches is already sitting in `lives`. Parameters
-are introduced in Chapter 9.
+We indent the body so that its boundary is visible, but the spaces themselves
+do not define it. The parser treats indentation as whitespace and uses words
+such as `sub` and `end` to recognise the block.
 
-The inner `end` closes the `if`; the outer one closes the subroutine.
-Lanternfly uses `end` for each block. Indentation is not grammar, but it makes
-the nesting visible.
+When you configure an executable build, you select one parameter-free
+subroutine with no result as the entry. We use `main` for that job because the
+convention is familiar, but `main` is not a special Lanternfly keyword. You may
+choose another suitable name for a project.
 
-## Running a statement conditionally
+By the time the selected entry begins, the module variables have their initial
+values. The processor normally executes statements inside the entry from top
+to bottom.
 
-```lanternfly
-if lives > 0 then
-    lives = lives - 1
-end
-```
+## Following the assignment
 
-The comparison `lives > 0` produces a Boolean value. When it is `true`, the
-assignment runs. When it is `false`, execution continues after `end` and
-`lives` is unchanged.
-
-Without the guard, a call made when `lives` is zero would calculate `0 - 1`.
-Byte subtraction uses a wider signed intermediate, so that intermediate is
-`-1`. Storing it back into `u8` keeps the low eight bits, which represent 255.
-The guard prevents the negative intermediate from reaching the unsigned
-destination.
-
-## Assignment uses the destination type
+Here is that statement on its own:
 
 ```lanternfly
-lives = lives - 1
+total = subtotal + postage
 ```
 
-The right-hand expression is evaluated using the old value of `lives`. The
-result is then converted to the destination type and stored. Read the
-statement as “the new `lives` is the old `lives` minus one”.
+At the beginning of a statement, `=` means assignment: evaluate the expression
+on the right, then store its value in the place named on the left. Lanternfly
+completes the calculation before it changes the destination.
 
-Because the destination is `u8`, assignment converts the result to `u8`.
-This update qualifies for the round-trip arithmetic rule: every typed value in
-the expression started as `u8` and the result returns to a `u8` destination.
-The conversion is therefore automatic and produces no warning. Chapter 2
-shows the warnings used when an expression crosses declared types.
+To follow the assignment by hand, we begin with 120 from `subtotal` and 15 from
+`postage`. We add the two `u16` values to obtain 135, then write 135 to the two
+bytes reserved for `total`, replacing the previous value of 0. Neither input
+variable changes because neither one appears on the left of the assignment.
 
-At the start of a statement, `=` means “store in”. Inside an expression, the
-same token compares two values for equality. Chapter 2 puts both uses side by
-side.
+We can account for all three variables before and after the statement:
 
-## Comments explain intent
+| Variable | Before | After |
+| --- | ---: | ---: |
+| `subtotal` | 120 | 120 |
+| `postage` | 15 | 15 |
+| `total` | 0 | 135 |
 
-`//` begins a comment and consumes the rest of its line. The compiler
-ignores it entirely, which means a comment is addressed to the only
-audience left: the next person who reads the routine. Usually that
-person is you, some months later, having forgotten everything you were
-certain you would remember.
+In mathematics, an equals sign states that two expressions have the same
+value. Assignment has a direction. A useful spoken reading is “put
+`subtotal + postage` into `total`”. Calculate the value from the right side,
+then use the left side to choose where to store it.
+
+Lanternfly comments begin with `//` and continue to the end of the line. A
+comment can record a fact that a future programmer needs but cannot derive
+from the calculation:
 
 ```lanternfly
-// Keep the life count at zero after the round ends.
-if lives > 0 then
-    lives = lives - 1  // The guard prevents a wrap from zero to 255.
-end
+// Charges are stored in whole cents.
+var subtotal as u16 = 120
 ```
 
-The useful comment records what the statements cannot say. The code shows
-which condition is checked; the comment explains that the condition prevents
-unsigned wrap. That reason helps a later edit preserve the guard.
+Repeating “declare the subtotal” in the comment would add no information. With
+the comment above, another programmer knows whether 120 means $1.20, $120 or
+something else.
 
-A comment that merely repeats its statement — "subtract one from lives" —
-adds no information and goes stale when the line changes. Record the reason
-when it is not already apparent from the code.
+## A result without a screen
 
-## Words and symbols
+This first program leaves its result in memory instead of printing it. On a
+desktop computer, a language runtime can usually assume the presence of a
+terminal or window. The small computers Lanternfly targets do not share one
+standard output device. One machine may have a serial port, another a memory-
+mapped display and another only a monitor routine supplied in ROM.
 
-Lanternfly spells structure with words such as `var`, `sub`, `if`, `then` and
-`end`. Arithmetic and comparison use familiar symbols. This keeps blocks
-readable without making formulas verbose.
+You make facilities like these available to Lanternfly by declaring machine
+services. Later we will give such a service a typed name and call it like an
+ordinary subroutine. Adding output here would require us to explain that
+boundary before we have established how an ordinary assignment works.
 
-| Job | Form |
-| --- | --- |
-| declare storage | `var lives as u8` |
-| declare a subroutine | `sub loseLife()` |
-| begin a decision | `if lives > 0 then` |
-| close the current block | `end` |
-| subtract | `lives - 1` |
-| assign | `lives = ...` |
-| comment | `// explanation` |
+Printing 135 also involves more than sending the value of `total` to a screen.
+We would have to convert the binary integer into the character bytes `1`, `3`
+and `5`, then deliver those bytes to the target's output routine. By storing
+the numeric result, we can postpone those two separate jobs until we are ready
+to study them.
 
-Three punctuation forms do structural work inside expressions: parentheses
-group and hold arguments, square brackets select array entries, and a dot
-selects a field of a record. Arrays arrive in Chapter 6 and records in
-Chapter 7.
+A monitor or debugger can inspect the bytes assigned to `total`. The planned
+toolchain will also retain symbol information so that programmers can work
+with the name `total` rather than look up its address by hand. Those bytes
+contain 135 even though no display routine has been called.
 
-## Example
+The complete source is available as the
+[chapter listing](/lanternfly-book/book1/code/01-first-program.txt).
 
-The [chapter listing](/lanternfly-book/book1/code/01-first-program.txt)
-contains the complete routine. Trace four calls starting from `lives = 3`.
-The stored values should be 2, 1, 0 and 0. The fourth call checks the false
-branch and confirms that the guard prevents wraparound.
+## From Lanternfly to Z80 code
+
+The Z80 cannot execute Lanternfly source directly. The planned compiler and
+AZM assembler divide the translation into two stages:
+
+```text
+order.lf
+    → Lanternfly compiler
+    → order.asm
+    → AZM
+    → order.bin
+```
+
+The Lanternfly compiler will check the declarations and the assignment, choose
+addresses for the three variables and emit Z80 assembly. AZM will resolve the
+assembly labels and encode the instructions and data as bytes. The target
+computer can then load and execute `order.bin`.
+
+The toolchain will keep the generated assembly available for inspection. When
+an address, instruction choice or cycle count becomes relevant, you can
+examine what the compiler asked AZM to assemble. For everyday program logic,
+you can work with names, types, expressions and subroutines instead of
+managing registers and addresses for every operation.
+
+You can now account for the program from beginning to end. Its static storage
+is ready before the selected entry begins. While following that entry, you can
+account for each value used in the calculation and for the result stored in
+`total`. When the entry returns, the target profile performs its normal
+termination operation. In the next chapter, we will choose integer types
+deliberately rather than accept `u16` on trust.

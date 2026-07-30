@@ -1,63 +1,58 @@
 ---
 layout: default
-title: "Subroutines"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Building with Subroutines"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 9
 ---
 
-# Subroutines
+# Building with Subroutines
 
-Chapter 1 declared a parameter-free subroutine. A routine that must add an
-amount chosen by its caller needs an input. Parameters let one body work with
-values supplied afresh at each call:
+The routines in earlier chapters mostly read module variables. A reusable
+routine receives the values that vary from one call to another:
 
 ```lanternfly
-sub addScore(amount as i16)
-    score = score + amount
+var total as i16 = 0
+
+sub addToTotal(amount as i16)
+    total = total + amount
 end
 
-addScore(10)
-```
-
-`amount` receives its own scalar value for each invocation. Call
-`addScore(10)` from the coin routine and `addScore(50)` from the bonus
-routine, and the same three lines serve both — the routine describes
-the transaction once, and the callers supply the particulars.
-
-Each routine defines an interface: parameters supply values that vary by call,
-an optional result carries a value back, locals hold private working state and
-module variables provide shared state. In `addScore`, `amount` varies by call
-while `score` is the one shared destination.
-
-## One declaration form
-
-Every user routine begins with `sub`. Lanternfly distinguishes an action from
-a value-producing routine through the presence of a result type rather than a
-second declaration keyword. A subroutine that performs an action omits the
-result type:
-
-```lanternfly
-sub addScore(amount as i16)
-    score = score + amount
+sub main()
+    addToTotal(10)
+    addToTotal(25)
 end
 ```
 
-The parameter list names each input and its type, in the same
-`name as Type` shape as variable, constant and field declarations. A parameter
-is a declaration whose initial value arrives from outside. A call supplies
-arguments in the same order:
+Each call supplies a fresh value for `amount`. The routine defines the update
+once, and callers choose the quantity.
+
+## Parameters and arguments
+
+Every user routine begins with `sub`. Parameters use the same
+`name as Type` form as other declarations:
 
 ```lanternfly
-addScore(bonus)
+sub addToTotal(amount as i16)
+    total = total + amount
+end
 ```
 
-Arguments are evaluated from left to right before the invocation begins. When
-two argument expressions both have effects, that order is part of the
-language and remains the same on every target.
+At the call site, an argument supplies the parameter value:
 
-## Returning a value
+```lanternfly
+addToTotal(nextAmount)
+```
 
-A trailing `as Type` declares a result:
+Scalar parameters pass by value. Changing `amount` inside the routine would
+change its private parameter value, not `nextAmount` in the caller.
+
+Arguments are evaluated from left to right before the routine begins. This
+order matters when argument expressions call routines or perform other visible
+work.
+
+## Returning a result
+
+A trailing result type turns a call into an expression:
 
 ```lanternfly
 sub atMost(input as i16, maximum as i16) as i16
@@ -69,143 +64,130 @@ sub atMost(input as i16, maximum as i16) as i16
 end
 ```
 
-`atMost` applies an upper bound. Its name and parameter names expose that
-single rule; a full clamp would also accept and enforce a lower bound.
-
-The caller uses the result in an expression, exactly where the
-unclamped value would have gone:
+The caller can place the returned `i16` wherever an `i16` expression belongs:
 
 ```lanternfly
-score = atMost(score + bonus, 1000)
+total = atMost(total + nextAmount, 1000)
 ```
 
-In this line, `score + bonus` computes the first argument and `1000` supplies
-the second. The call transforms those inputs, and the assignment stores the
-result under Chapter 2's rules. Calls
-nest in expressions because a call with a result *is* an expression —
-`atMost(...)` stands wherever an `i16` may stand.
+Every reachable path in a result-bearing routine must return a compatible
+scalar. First-edition results may be integers, Booleans, opaque addresses or
+typed references. Records and arrays remain in caller-owned storage and are
+passed through aliases or references.
 
-Every reachable path in a result-bearing subroutine returns a compatible
-integer, Boolean, opaque-address or typed-reference scalar. Returning an array
-or record by value is deferred. A path that reaches `end` without a result is
-a compile error.
-
-A result-free call stands alone as a statement, and a result-bearing
-call can also stand alone when its result is intentionally
-discarded.
+A result-bearing call may stand alone when its side effects matter and its
+result may be discarded. A result-free routine cannot appear where an
+expression value is required.
 
 ## Scalar locals
 
-Chapter 5 introduced a loop-control local. More generally, parameters carry
-values in and locals provide private working storage:
+Locals hold working values that belong to one invocation:
 
 ```lanternfly
-sub distanceSquared(x as i16, y as i16) as u32
-    var xMagnitude as u32 = abs(x)
-    var yMagnitude as u32 = abs(y)
-    var xSquared as u32
-    var ySquared as u32
+sub absoluteDifference(left as i16, right as i16) as u16
+    var difference as i16 = left - right
 
-    xSquared = xMagnitude * xMagnitude
-    ySquared = yMagnitude * yMagnitude
-    return xSquared + ySquared
+    return abs(difference)
 end
 ```
 
-Local declarations appear before executable statements and have
-routine scope, so the top of a routine lists its private storage. Each
-invocation receives its own scalar values, and code outside the routine cannot
-name or modify them.
+Local declarations appear before executable statements. An initializer may
+use parameters, module declarations and earlier locals. Code outside the
+routine cannot name `difference`.
 
-An omitted initializer starts an owned scalar local with zero bits. A
-reference local requires a valid initializer and cannot temporarily point
-nowhere.
+An owned scalar local with no initializer starts with zero bits. A reference
+local requires an initializer because first-edition references have no null
+value.
 
-A backend may place locals in registers, stack slots or proven-safe static
-scratch. Whatever lowering it chooses, source semantics provide independent
-values for overlapping invocations.
+A backend may keep locals in registers, stack slots or proven-safe static
+scratch. The source rule remains the same: overlapping invocations receive
+independent scalar parameters and locals.
 
 ## Aggregate parameters
 
-Scalars pass by value. A private aggregate parameter instead aliases the
-caller's existing storage:
+An array or record parameter aliases the caller's existing storage:
 
 ```lanternfly
-sub clearRow(row as u8[8])
+sub clearBlock(block as u8[8])
     var index as i16
 
-    for index = 0 to count(row) - 1
-        row[index] = 0
+    for index = 0 to count(block) - 1
+        block[index] = 0
     end
 end
 ```
 
-The call passes a compatible storage path:
+The call supplies a compatible storage path:
 
 ```lanternfly
-clearRow(selectedRow)
+clearBlock(workspace)
 ```
 
-The caller selects the storage and updating `row[index]` updates that storage.
-The source semantics do not copy the eight-byte array. A backend may choose
-its private aggregate carrier; a future generated report can expose that
-physical choice.
+Writing `block[index]` changes `workspace[index]`. The aggregate is not copied
+into local stack storage.
 
-An aggregate parameter is a writable alias, so its argument must be a
-compatible caller-owned storage path or typed reference. A general expression
-or temporary aggregate initializer has no writable storage identity and is
-rejected.
-
-Chapter 10 defines modules and exports. For an aggregate parameter in a public
-interface, the reference class must be explicit:
+This shorthand suits private routines. An exported interface states its
+reference class explicitly:
 
 ```lanternfly
-export sub clearSharedRow(row as near ref (u8[8]))
+export sub clearSharedBlock(block as near ref (u8[8]))
     var index as i16
 
-    for index = 0 to count(row) - 1
-        row[index] = 0
+    for index = 0 to count(block) - 1
+        block[index] = 0
     end
 end
 ```
 
-Inside one compilation, the backend selects a private aggregate carrier
-according to its ABI and lowering rules. A public interface states `near ref`
-explicitly so its calling convention does not depend on a backend default.
+The explicit `near ref` fixes the representation that importing modules and
+the target calling convention must share.
 
 ## Early return
 
-A result-free subroutine may leave early with bare `return`:
+A result-free routine can leave early with bare `return`:
 
 ```lanternfly
-sub updateActor(actor as Actor)
-    if not actor.active then
+sub normaliseReading(reading as Reading)
+    if reading.quality = qualityInvalid then
         return
     end
 
-    actor.x = actor.x + actor.velocityX
+    reading.value = atMost(reading.value, maximumReading)
 end
 ```
 
-This early return handles the inactive case before the position update. The
-remaining work stays outside another level of conditional nesting. Reaching
-the closing `end` also returns from a result-free subroutine.
+The invalid case ends the call before the update. Handling it first keeps the
+main work at the routine's outer indentation. Reaching the closing `end` also
+returns from a result-free routine.
+
+`return` leaves the subroutine. `exit` leaves the innermost loop, so the two
+words describe different control boundaries.
 
 ## Recursion and target profiles
 
-A routine that calls itself needs an independent frame for every active call.
-A recursion-capable target profile defines its frame layout, reports frame
-size and states the configured stack bounds under which recursive calls are
-permitted. A profile that uses fixed scratch rejects direct or mutual call
-cycles because a second frame would overwrite the first.
+A recursive call needs an independent parameter-and-local frame for every
+active invocation. A recursion-capable target profile defines the frame
+layout, stack bounds and reentrancy rules. A profile based on fixed scratch
+storage rejects direct and mutual recursion because another invocation would
+overwrite the active frame.
 
-The routine body has the same source meaning under either profile; the profile
-determines whether it can supply the required independent storage.
+Target profiles may disagree about whether a recursive source program is
+valid. The generated report identifies frame size and the profile capability
+that governs the call.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/09-routines.txt)
-contains an action, two result-bearing subroutines and an aggregate parameter.
-With a score of 980 and a bonus of 50,
-`atMost(score + bonus, 1000)` returns 1000. With a bonus of 10 it returns
-990. These two traces cover both return paths.
+contains value parameters, returned results, scalar locals and an aggregate
+parameter. Two calls to `addToTotal` produce 35. Applying
+`atMost(total, 30)` then returns 30.
+
+## Chapter summary
+
+- Scalar parameters receive values from the caller, and arguments are
+  evaluated from left to right.
+- A trailing `as Type` declares a scalar result returned with `return`.
+- Scalar locals hold private working values for one invocation.
+- Record and array parameters alias caller-owned storage.
+- Recursion depends on whether the selected target profile can provide
+  independent active frames.

@@ -65,7 +65,7 @@
       <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
     </marker>
   </defs>
-  <text class="cap" x="24" y="28" text-anchor="start" xml:space="preserve">TILES AS U8[3, 4]</text>
+  <text class="cap" x="24" y="28" text-anchor="start" xml:space="preserve">TABLE AS U8[3, 4]</text>
   <text class="dim" x="225" y="58" text-anchor="middle" xml:space="preserve">column 0</text>
   <text class="dim" x="315" y="58" text-anchor="middle" xml:space="preserve">column 1</text>
   <text class="dim" x="405" y="58" text-anchor="middle" xml:space="preserve">column 2</text>

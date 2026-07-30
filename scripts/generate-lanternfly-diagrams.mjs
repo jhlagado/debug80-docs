@@ -29,7 +29,7 @@ const add = (name, title, desc, height, parts) => {
 };
 
 /* ============================================================
-   Chapter 6 - Fixed Arrays
+   Chapter 6 - Tables with Fixed Arrays
    ============================================================ */
 
 {
@@ -40,10 +40,10 @@ const add = (name, title, desc, height, parts) => {
   add(
     'array-stride.svg',
     'A five-entry word array laid out as ten bytes',
-    'Ten contiguous byte cells grouped into five two-byte scores. Entry three is highlighted at byte offsets six and seven, showing that its address is the array base plus three times the two-byte element size.',
+    'Ten contiguous byte cells grouped into five two-byte readings. Entry three is highlighted at byte offsets six and seven, showing that its address is the array base plus three times the two-byte element size.',
     190,
     [
-      caption(40, 28, 'scores as u16[5]'),
+      caption(40, 28, 'readings as u16[5]'),
       strip({
         x,
         y: 62,
@@ -54,8 +54,8 @@ const add = (name, title, desc, height, parts) => {
         cells: Array.from({ length: 10 }, (_, i) => ({ hi: selected.has(i) })),
       }),
       ...Array.from({ length: 5 }, (_, i) =>
-        text('dimn', x + (i * 2 + 1) * cw, 119, `scores[${i}]`, 'middle')),
-      text('t', 90, 160, 'scores[3] → base + 3 × 2 → byte offset 6'),
+        text('dimn', x + (i * 2 + 1) * cw, 119, `readings[${i}]`, 'middle')),
+      text('t', 90, 160, 'readings[3] → base + 3 × 2 → byte offset 6'),
     ],
   );
 }
@@ -74,7 +74,7 @@ const add = (name, title, desc, height, parts) => {
     'A grid with three rows and four columns. The cells are numbered from zero to eleven across each row. Row one, column two is highlighted as element six.',
     276,
     [
-      caption(24, 28, 'tiles as u8[3, 4]'),
+      caption(24, 28, 'table as u8[3, 4]'),
       ...Array.from({ length: columns }, (_, column) =>
         text('dim', x + column * cw + cw / 2, 58, `column ${column}`, 'middle')),
       ...Array.from({ length: rows }, (_, row) =>
@@ -98,33 +98,33 @@ const add = (name, title, desc, height, parts) => {
 }
 
 /* ============================================================
-   Chapter 7 - Records and Exact Layout
+   Chapter 7 - Records and Memory Layout
    ============================================================ */
 
 {
-  const fields = ['x', 'y', 'direction', 'state', 'timer', 'frame'];
+  const fields = ['year low', 'year high', 'month', 'day'];
 
   add(
-    'monster-layout.svg',
-    'The exact six-byte layout of a Monster record',
-    'Six byte cells in declaration order at addresses 9000 through 9005. The timer field is highlighted at offset four.',
+    'date-layout.svg',
+    'The exact four-byte Z80 layout of a Date record',
+    'Four byte cells in declaration order at addresses 9000 through 9003. The two-byte year uses Z80 little-endian order and the month field is highlighted at offset two.',
     202,
     [
-      caption(40, 28, 'Monster, declaration order'),
+      caption(40, 28, 'Date, declaration order'),
       strip({
         x: 60,
         y: 62,
-        cw: 100,
+        cw: 140,
         ch: 34,
         base: 0x9000,
         cells: fields.map((field, offset) => ({
           v: String(offset),
           sub: field,
-          hi: field === 'timer',
+          hi: field === 'month',
         })),
       }),
-      text('t', 60, 158, 'size(type Monster) = 6'),
-      text('t', 360, 158, 'offset(Monster.timer) = 4'),
+      text('t', 60, 158, 'size(type Date) = 4'),
+      text('t', 360, 158, 'offset(Date.month) = 2'),
       text('dimn', 60, 184, 'Each field begins at the offset printed inside its byte.'),
     ],
   );
@@ -132,49 +132,49 @@ const add = (name, title, desc, height, parts) => {
 
 {
   const recordX = (index) => 30 + index * 170;
-  const fieldNames = ['x', 'y', 'd', 's', 't', 'f'];
-  const cellWidth = 25;
+  const fieldNames = ['vL', 'vH', 'u', 'q'];
+  const cellWidth = 36;
 
   add(
     'record-array-stride.svg',
-    'Four six-byte Monster records stored as one array',
-    'Four groups of six byte cells begin at offsets zero, six, twelve and eighteen. The timer field in monsters two is highlighted at total byte offset sixteen.',
+    'Four four-byte Reading records stored as one array on Z80',
+    'Four groups of four byte cells begin at offsets zero, four, eight and twelve. The signed value uses Z80 little-endian byte order. The quality field in reading two is highlighted at total byte offset eleven.',
     204,
     [
-      caption(30, 26, 'monsters as Monster[4]'),
+      caption(30, 26, 'readings as Reading[4]'),
       ...Array.from({ length: 4 }, (_, record) => [
-        text('dimn', recordX(record) + 75, 50, `monsters[${record}]`, 'middle'),
+        text('dimn', recordX(record) + 72, 50, `readings[${record}]`, 'middle'),
         ...fieldNames.map((field, fieldOffset) => {
-          const selected = record === 2 && field === 't';
+          const selected = record === 2 && field === 'q';
           const x = recordX(record) + fieldOffset * cellWidth;
           return [
             rect(selected ? 'bxs' : 'bx', x, 64, cellWidth, 34, 1),
             text(selected ? 'tb' : 't', x + cellWidth / 2, 85, field, 'middle'),
           ].join('\n');
         }),
-        text('dim', recordX(record) + 75, 120, `base + ${record * 6}`, 'middle'),
+        text('dim', recordX(record) + 72, 120, `base + ${record * 4}`, 'middle'),
       ].join('\n')),
-      text('t', 30, 160, 'monsters[2].timer → 2 × 6 + 4 → byte offset 16'),
-      text('dimn', 30, 188, 'x  y  d(irection)  s(tate)  t(imer)  f(rame)'),
+      text('t', 30, 160, 'readings[2].quality → 2 × 4 + 3 → byte offset 11'),
+      text('dimn', 30, 188, 'vL  vH = i16 value bytes    u = unit    q = quality'),
     ],
   );
 }
 
 /* ============================================================
-   Chapter 8 - References and Addresses
+   Chapter 8 - Sharing Storage with References
    ============================================================ */
 
 {
   const rows = [
-    ['boardPlanes[0]', 'boardRed : u8[8]'],
-    ['boardPlanes[1]', 'boardGreen : u8[8]'],
-    ['boardPlanes[2]', 'boardBlue : u8[8]'],
+    ['buffers[0]', 'inputBuffer : u8[16]'],
+    ['buffers[1]', 'outputBuffer : u8[16]'],
+    ['buffers[2]', 'scratchBuffer : u8[16]'],
   ];
 
   add(
     'array-of-references.svg',
     'An array of references pointing to three separate arrays',
-    'Three reference slots on the left point to three independently allocated eight-byte board arrays on the right. Selecting a reference does not move or combine the arrays.',
+    'Three reference slots on the left point to three independently allocated sixteen-byte buffers on the right. Selecting a reference does not move or combine the arrays.',
     300,
     [
       caption(40, 30, 'reference array'),
@@ -187,7 +187,7 @@ const add = (name, title, desc, height, parts) => {
           box({ x: 450, y, w: 230, h: 42, title: target, cls: index === 1 ? 'bxs' : 'bx' }),
         ];
       }),
-      text('t', 40, 276, 'value(boardPlanes[1]) selects all eight bytes of boardGreen'),
+      text('t', 40, 276, 'value(buffers[1]) selects all sixteen bytes of outputBuffer'),
     ],
   );
 }
@@ -196,21 +196,21 @@ const add = (name, title, desc, height, parts) => {
   add(
     'banked-references.svg',
     'Near and far references on one possible banked Z80 target',
-    'The near reference carries a sixteen-bit offset and uses the current bank context. The far reference carries a bank identifier with the offset and reaches a Monster in bank seven.',
+    'The near reference carries a sixteen-bit offset and uses the current bank context. The far reference carries a bank identifier with the offset and reaches a Reading in bank seven.',
     306,
     [
-      caption(40, 30, 'near ref Monster'),
+      caption(40, 30, 'near ref Reading'),
       rect('bxq', 40, 48, 300, 210, 4),
       box({ x: 82, y: 78, w: 216, h: 48, title: 'offset $8120', cls: 'bxs', titleCls: 'tb' }),
       line('sline', 190, 126, 190, 164, 'arS'),
-      box({ x: 82, y: 164, w: 216, h: 54, title: 'Monster', lines: ['in the current bank'] }),
+      box({ x: 82, y: 164, w: 216, h: 54, title: 'Reading', lines: ['in the current bank'] }),
 
-      caption(380, 30, 'far ref Monster'),
+      caption(380, 30, 'far ref Reading'),
       rect('bxq', 380, 48, 300, 210, 4),
       box({ x: 410, y: 78, w: 84, h: 48, title: 'bank 7', cls: 'bxs', titleCls: 'tb' }),
       box({ x: 504, y: 78, w: 146, h: 48, title: 'offset $8120', cls: 'bxs', titleCls: 'tb' }),
       line('sline', 530, 126, 530, 164, 'arS'),
-      box({ x: 422, y: 164, w: 216, h: 54, title: 'Monster', lines: ['in bank 7'] }),
+      box({ x: 422, y: 164, w: 216, h: 54, title: 'Reading', lines: ['in bank 7'] }),
 
       text('dimn', 40, 290, 'A target profile chooses the physical representation of both reference classes.'),
     ],

@@ -1,22 +1,32 @@
-const visibleMask as u8 = %00000001
+const readyMask as u8 = %00000001
+const errorMask as u8 = %00000010
 
-var objectX as u8 = 20
-var targetX as u8 = 250
-var distance as u16 = 0
-var hasArrived as boolean = false
-var flags as u8 = visibleMask
-var visibleCount as i16 = 0
-var lives as u8 = 3
+var previousReading as u8 = 250
+var currentReading as u8 = 20
+var changeMagnitude as u16 = 0
+var changeIsLarge as boolean = false
+var statusFlags as u8 = readyMask
+var deviceReady as boolean = true
+var errorCount as u16 = 0
+var recordedCount as u16 = 0
 
-sub measureDistance()
-    distance = abs(targetX - objectX)
-    hasArrived = distance <= 2
+sub recordChange()
+    recordedCount = recordedCount + 1
+end
 
-    if (flags and visibleMask) <> 0 and hasArrived then
-        visibleCount = visibleCount + 1
+sub measureChange()
+    changeMagnitude = abs(currentReading - previousReading)
+    changeIsLarge = changeMagnitude >= 100
+
+    if deviceReady and changeIsLarge then
+        recordChange()
     end
 
-    if hasArrived and lives > 0 then
-        lives = lives - 1
+    if (statusFlags and errorMask) <> 0 then
+        errorCount = errorCount + 1
     end
+end
+
+sub main()
+    measureChange()
 end

@@ -1,0 +1,70 @@
+// Chapter 6 companion — Euclid
+// Three loops, three stopping rules; termination argued, not hoped.
+// Verified against specification 0.4: §10.1-10.3, §11, §3.1.
+
+// Euclid's algorithm. Invariant: gcd(a, b) never changes.
+// Variant: b strictly decreases (a mod b < b), so b reaches 0.
+// The same condition that stops the loop guards the division (F-DIV-ZERO).
+sub greatestCommonDivisor(first as u16, second as u16) as u16
+    var a as u16 = first
+    var b as u16 = second
+    var remainder as u16 = 0
+
+    while b > 0
+        remainder = a mod b
+        a = b
+        b = remainder
+    end
+
+    return a
+end
+
+// The stopping rule shrinks the value itself: divide until one digit stands.
+sub countDigits(value as u16) as u8
+    var remaining as u16 = value
+    var digits as u8 = 1
+
+    while remaining >= 10
+        remaining = remaining / 10
+        digits = digits + 1
+    end
+
+    return digits
+end
+
+// The counted contract: inclusive range, accumulator body.
+sub sumFirst(limit as u16) as u16
+    var index as u16 = 0
+    var sum as u16 = 0
+
+    for index = 1 to limit
+        sum = sum + index
+    end
+
+    return sum
+end
+
+var divisor as u16 = 0
+var digitCount as u8 = 0
+var firstTen as u16 = 0
+
+sub main()
+    divisor = greatestCommonDivisor(48, 36)
+    digitCount = countDigits(4072)
+    firstTen = sumFirst(10)
+end
+
+// Traces:
+//   gcd(48, 36):  (a, b) = (48, 36) -> (36, 12) -> (12, 0); returns 12.
+//   gcd(17, 5):   (17, 5) -> (5, 2) -> (2, 1) -> (1, 0); returns 1.
+//   countDigits(4072): 4072 -> 407 -> 40 -> 4; digits 1 -> 2 -> 3 -> 4.
+//   sumFirst(10) = 55.  sumFirst(0): zero iterations (start 1 > limit 0);
+//     sum stays 0 and index rests at the converted start, 1 (§10.2).
+// Final storage: divisor 12, digitCount 4, firstTen 55.
+//
+// Spec notes:
+// - Preheader order: start evaluated and converted, then limit, then the
+//   store into the control variable (§10.2).
+// - The body never writes `index`; E-CONTROL-003 enforces the contract.
+// - No-wrap rule: a u16 control cannot wrap at either boundary (§10.2).
+// - 16-bit / and mod lower to helpers on Z80; the cost report names them.

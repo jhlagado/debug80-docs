@@ -1,0 +1,78 @@
+// Chapter 5 companion — Guarded till
+// Chapters 3-4 left two unstated rules; decisions turn both into mechanisms.
+// Verified against specification 0.4: §9.1-9.2, §11.5.
+
+const cash as u8 = 0
+const card as u8 = 1
+const voucher as u8 = 2
+
+var total as u16 = 0
+var saleCount as u8 = 0
+var accepted as boolean = false
+
+sub addSale(price as u16)
+    total = total + price
+    saleCount = saleCount + 1
+end
+
+// Ch 3's wrap, retired: u16 subtraction only when it cannot go negative.
+sub safeChange(paid as u16, owed as u16) as u16
+    if paid >= owed then
+        return paid - owed
+    end
+
+    return 0
+end
+
+// Ch 4's precondition, now an invariant the compiler can see through:
+// every reachable path returns (§11.5).
+sub meanPrice() as u16
+    if saleCount = 0 then
+        return 0
+    end
+
+    return total / saleCount
+end
+
+// Ordered rules: the chain ranks overlapping bands; order is policy.
+sub deliveryFee(grams as u16) as u16
+    if grams <= 500 then
+        return 95
+    else if grams <= 2000 then
+        return 250
+    else
+        return 495
+    end
+end
+
+// One value classified against named constants; no fall-through.
+sub surcharge(method as u8) as u16
+    select method
+    case cash
+        accepted = true
+        return 0
+    case card
+        accepted = true
+        return 25
+    else
+        accepted = false
+        return 0
+    end
+end
+
+sub main()
+    addSale(120)
+    addSale(95)
+end
+
+// Trace:
+//   safeChange(500, 293) -> 207     safeChange(200, 293) -> 0 (no wrap)
+//   meanPrice() empty -> 0          after the two sales -> 215 / 2 = 107
+//   deliveryFee(450) -> 95          deliveryFee(2000) -> 250 (inclusive band)
+//   surcharge(card) -> 25, accepted = true
+//   surcharge(voucher) -> 0, accepted = false (else = defensive default)
+//
+// Spec notes:
+// - select requires an integer selection; cases are constant, non-overlapping
+//   (§9.2, E-CONTROL-001). Ranges are provisional and not used.
+// - Every value-producing routine returns on every reachable path (§11.5).

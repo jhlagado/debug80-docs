@@ -1,15 +1,17 @@
-record Actor
-    var x as i16
-    var velocityX as i16
-    var active as boolean
+record Reading
+    var value as i16
+    var quality as u8
 end
 
-var score as i16 = 0
-var bonus as i16 = 10
-var selectedRow as u8[8]
+const qualityInvalid as u8 = 0
+const maximumReading as i16 = 1000
 
-sub addScore(amount as i16)
-    score = score + amount
+var total as i16 = 0
+var workspace as u8[8]
+var currentReading as Reading
+
+sub addToTotal(amount as i16)
+    total = total + amount
 end
 
 sub atMost(input as i16, maximum as i16) as i16
@@ -20,35 +22,32 @@ sub atMost(input as i16, maximum as i16) as i16
     return input
 end
 
-sub distanceSquared(x as i16, y as i16) as u32
-    var xMagnitude as u32 = abs(x)
-    var yMagnitude as u32 = abs(y)
-    var xSquared as u32
-    var ySquared as u32
+sub absoluteDifference(left as i16, right as i16) as u16
+    var difference as i16 = left - right
 
-    xSquared = xMagnitude * xMagnitude
-    ySquared = yMagnitude * yMagnitude
-    return xSquared + ySquared
+    return abs(difference)
 end
 
-sub clearRow(row as u8[8])
+sub clearBlock(block as u8[8])
     var index as i16
 
-    for index = 0 to count(row) - 1
-        row[index] = 0
+    for index = 0 to count(block) - 1
+        block[index] = 0
     end
 end
 
-sub updateActor(actor as Actor)
-    if not actor.active then
+sub normaliseReading(reading as Reading)
+    if reading.quality = qualityInvalid then
         return
     end
 
-    actor.x = actor.x + actor.velocityX
+    reading.value = atMost(reading.value, maximumReading)
 end
 
-sub updateScore()
-    addScore(bonus)
-    score = atMost(score, 1000)
-    clearRow(selectedRow)
+sub main()
+    addToTotal(10)
+    addToTotal(25)
+    total = atMost(total, 30)
+    clearBlock(workspace)
+    normaliseReading(currentReading)
 end

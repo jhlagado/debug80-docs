@@ -1,51 +1,35 @@
 ---
 layout: default
-title: "Expressions and Comparisons"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Calculations and Comparisons"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 3
 ---
 
-# Expressions and Comparisons
+# Calculations and Comparisons
 
-Chapters 1 and 2 declared storage and moved single values into it. A
-program that only moved values would be a filing system; what makes it a
-program is that it *computes* — combines the values it has into values it
-needs throughout a run. The notation for combining is
-the expression, and this chapter is the grammar of expressions: the
-operators, the types their results take, and the comparisons that turn
-quantities into decisions.
-
-A real computation makes it concrete: two objects sit on the same screen
-line, and the game asks how far apart they are. Each coordinate fits comfortably in a
-byte, but the question "how far apart" hides a subtraction, and a
-subtraction can come out negative — the target may be to the left of the
-object just as easily as to the right. The calculation needs room for a
-sign even though neither input has one:
+A measurement system stores two byte-sized readings. Finding the size of the
+change requires more than subtracting one byte from another: the intermediate
+may be negative even though both inputs are unsigned.
 
 ```lanternfly
-var objectX as u8 = 20
-var targetX as u8 = 250
-var distance as u16 = 0
+var previousReading as u8 = 250
+var currentReading as u8 = 20
+var changeMagnitude as u16 = 0
 
-sub measureDistance()
-    distance = abs(targetX - objectX)
+sub measureChange()
+    changeMagnitude = abs(currentReading - previousReading)
 end
 ```
 
-`targetX - objectX` has type `i16`, wide enough for any difference
-between two bytes. `abs` removes the sign and returns `u16`, so
-`distance` receives 230. Swap the two coordinates and the subtraction
-produces -230 instead, and `abs` still delivers 230.
+`currentReading - previousReading` produces the signed value -230 as `i16`.
+`abs` returns its magnitude as `u16`, so `changeMagnitude` receives 230. The
+same calculation also returns 230 when the readings are reversed.
 
-Every Lanternfly intermediate has a target-independent type before lowering.
-The Z80, C and any later backend must reproduce the same result width and
-wrap behaviour. This chapter therefore traces a formula in two ways: the
-values it calculates and the types carried by its intermediate results.
+Lanternfly assigns a fixed type to every intermediate result. A backend must
+preserve those types and their wrap rules while translating the expression
+into target operations.
 
 ## Arithmetic operators
-
-Lanternfly uses familiar symbols for formulas and short words for the
-remaining integer operations:
 
 | Operation | Form |
 | --- | --- |
@@ -58,121 +42,81 @@ remaining integer operations:
 | shift left | `a shl count` |
 | shift right | `a shr count` |
 
-Addition, subtraction and multiplication use their familiar meanings.
-Division needs a careful look because integer division is not the
-division you grew up with. There are no fractions here — the types
-cannot hold them — so division truncates toward zero and `mod` supplies
-what division discards: `17 / 5` produces 3, and `17 mod 5` produces
-the 2 left over. Together the two answers reconstruct the question,
-since 3 × 5 + 2 is 17 again.
+Integer division discards the fractional part by truncating toward zero.
+`17 / 5` is 3, while `17 mod 5` is 2. The results fit the identity
+`3 * 5 + 2 = 17`.
 
-The pair recurs in game arithmetic whenever a program asks "which group is
-this in, and where inside the group?" A screen built from
-eight-pixel tiles turns a pixel position into a tile with `x / 8` and
-into an offset within that tile with `x mod 8`. A one-dimensional
-element number turns back into a row with `n / columns` and a column
-with `n mod columns`. Seconds become minutes and seconds with `/ 60`
-and `mod 60`. Chapter 6 uses the same pair to move between a linear element
-number and row-and-column indices.
+Division and remainder are useful whenever one number contains a group and a
+position within that group. An elapsed count of seconds becomes minutes with
+`seconds / 60` and remaining seconds with `seconds mod 60`. A linear table
+index becomes a row with `index / columns` and a column with
+`index mod columns`.
 
-A zero divisor triggers an arithmetic fault at runtime, or a compile
-error when the zero is constant. The compiler catches the mistake it
-can see; the target catches the one it cannot. Neither lets the
-program sail on with an answer that means nothing.
+A zero divisor produces a compile error when it is constant and an arithmetic
+fault when discovered at runtime.
 
-The shifts move whole bit patterns sideways. `shl` moves bits left and fills
-the low positions with zero; `5 shl 1` is 10 and `5 shl 3` is 40.
-`shr` moves bits right, filling from the sign bit for a signed value and
-with zero for an unsigned value. This agrees with unsigned division by two,
-but not always with signed division, which truncates toward zero:
-`i8(-3) shr 1` is -2 while `i8(-3) / 2` is -1. Use division when that
-rounding rule matters. A shift result keeps the left operand's type. A
-negative shift count faults. A count at least as large as the left operand's
-width produces zero for `shl` and unsigned `shr`, and produces all sign bits
-for signed `shr`.
+Shifts move a bit pattern. `5 shl 3` produces 40. Unsigned `shr` fills high
+bits with zero; signed `shr` repeats the sign bit. A shift keeps the type of
+its left operand.
 
-Power requires a non-negative exponent. `x ^ 0` is one in the result type,
-including when `x` is zero; a negative exponent faults.
+## Result widths
 
-Unary minus produces `i16` from either byte type and retains `i16` or `i32`.
-It is invalid for `u16` or `u32` until an explicit conversion selects a signed
-type.
+Matching 16-bit or 32-bit operands generally keep their type. Byte arithmetic
+uses wider results where one extra byte can preserve the useful mathematical
+range:
 
-## Width belongs to every operation
+| Operator on matching bytes | Result |
+| --- | --- |
+| `+`, `*`, `/`, `mod`, `^` | corresponding 16-bit type |
+| `-` | `i16` |
+| `and`, `or`, `xor`, `shl`, `shr` | operand type |
+| comparison | `boolean` |
 
-Arithmetic on matching 16-bit or 32-bit values retains that type. For
-matching 8-bit values, `+`, `*`, `/`, `mod` and `^` produce the
-corresponding 16-bit type. Subtraction from either byte type produces
-`i16`. Bitwise operations and shifts retain the left or matching operand
-type.
+The `u8 - u8` rule explains the measurement example: `i16` can represent
+every difference from -255 through 255.
 
-These are fixed result rules, not arbitrary-precision arithmetic. A 16-bit
-product can hold the complete product of two bytes, and `i16` can hold the
-complete difference between them. Other operations use the stated
-width; power in particular can overflow it. Every result wraps in its selected
-fixed-width type.
-
-When the two sides of an operation differ, the narrower operand
-widens automatically, provided every one of its values fits the type
-already present on the other side:
+When operands have different widths, the narrower value may widen to a type
+already present when every source value fits:
 
 ```lanternfly
-var row as u8 = 3
-var column as u8 = 4
-var elementNumber as u16 = 0
+var page as u8 = 3
+var offset as u8 = 4
+var absoluteIndex as u16 = 0
 
-elementNumber = row * 20 + column
+absoluteIndex = page * 64 + offset
 ```
 
-The types trace alongside the values. `row` is `u8`; `row * 20` is a byte
-multiplication, so it produces `u16` — value 60. `column` is `u8`,
-narrower than the `u16` on the other side of the `+`, and every `u8`
-value fits in a `u16`, so it widens; the addition is `u16` work and
-yields 64. The destination is `u16`, so the store is exact. No conversion
-is needed because the widening preserves every possible `u8` value.
+`page * 64` produces `u16`. The `u8` offset then widens to `u16`, and the
+addition produces 196 as `u16`.
 
-Lanternfly widens an operand only to a compatible type already present in the
-expression. It never invents a third common type; incompatible operands
-require explicit conversion:
+Some pairs have no safe direction. `i16` cannot contain every `u16` value, and
+`u16` cannot contain negative `i16` values:
 
 ```lanternfly
 var signedValue as i16 = -4
 var unsignedValue as u16 = 20
-var total as i32 = 0
+var combined as i32 = 0
 
-total = i32(signedValue) + i32(unsignedValue)
+combined = i32(signedValue) + i32(unsignedValue)
 ```
 
-Neither existing operand type can hold every value of the other: `i16` cannot
-hold 65,535, and `u16` cannot hold -4. Lanternfly does not invent an absent
-third type, so the expression requires explicit conversions. The written
-`i32` conversions select a type that can hold every value of both operands.
+The written conversions select `i32`, which contains the full range of both
+inputs.
 
-Order still controls the intermediate type, and it can matter. With
-byte inputs, `x + 1 - y` performs the addition first, producing
-`u16`, and the subtraction then wraps in `u16` if its result is
-negative: with `x` at 0 and `y` at 2, the expression yields 65,535
-rather than -1. Write `i16(x) + 1 - i16(y)` when the calculation
-needs a signed final range. The lesson generalises beyond this one
-shape: a formula's meaning includes the order its intermediates are
-formed in, and rearranging a working formula is not always the
-harmless tidying it appears to be.
+Operation order can change the intermediate type. With byte inputs,
+`x + 1 - y` forms a `u16` sum before the subtraction. The form
+`i16(x) + 1 - i16(y)` selects a signed type from the start when the calculation
+needs a negative final range.
 
-Each fixed-width operation wraps in its resolved result type. Constant
-folding uses the same rule, so compile-time and runtime evaluation agree.
+## Comparisons
 
-## Comparisons produce Boolean values
-
-Arithmetic produces integer values. Comparisons produce the Boolean values
-that control decisions:
+Comparisons produce Boolean values:
 
 ```lanternfly
-var hasArrived as boolean = false
+var changeIsLarge as boolean = false
 
-hasArrived = distance <= 2
+changeIsLarge = changeMagnitude >= 100
 ```
-
-The comparison operators are:
 
 | Meaning | Operator |
 | --- | --- |
@@ -183,16 +127,12 @@ The comparison operators are:
 | greater than | `>` |
 | greater than or equal | `>=` |
 
-Compatible integers support all six operators. Booleans and compatible typed
-references support only `=` and `<>`; arrays and records have no equality
-operator in the working language. Every permitted comparison produces a
-Boolean, which can be stored, as above, or consumed directly by an `if` or a
-loop condition. Storing the result as `hasArrived` names the test and lets
-later statements reuse it without repeating the formula.
+Compatible integers support all six comparisons. Booleans and compatible
+typed references support equality and inequality. Lanternfly has no aggregate
+equality operator in the working language, so a program compares array
+elements or record fields explicitly.
 
-Comparison chaining is rejected: the Python habit of writing
-`minimum <= input <= maximum` in one breath does not carry over. A
-bounded-range test joins two comparisons explicitly:
+Lanternfly rejects comparison chains. A range test joins two comparisons:
 
 ```lanternfly
 if minimum <= input and input <= maximum then
@@ -200,114 +140,98 @@ if minimum <= input and input <= maximum then
 end
 ```
 
-The source semantics require two comparisons joined by Boolean `and`; a
-backend may choose any equivalent instruction sequence.
+## Boolean operators
 
-## Boolean and bitwise words share spelling
-
-With Boolean operands, `and`, `or`, `xor` and `not` combine truth
-values, which is how simple comparisons compose into real game rules:
+`and`, `or`, `xor` and `not` combine Boolean values:
 
 ```lanternfly
-if hasArrived and lives > 0 then
-    lives = lives - 1
+if deviceReady and changeMagnitude >= 100 then
+    recordChange()
 end
 ```
 
-Boolean `and` and `or` short-circuit. In `left and right`, a false
-left side skips the right side entirely; in `left or right`, a true
-left side skips it. Short-circuiting saves work, but its deeper use
-is protection: the left test can stand guard over the right one. A
-condition like `itemCount > 0 and total / itemCount > threshold` never
-divides by zero, because the division is reached only after the guard succeeds.
-
-With integer operands, the same four words operate on every bit at once. The
-`%` prefix writes a binary literal, which makes individual flag masks visible:
+Boolean `and` and `or` short-circuit. A false left side of `and` skips the
+right side, while a true left side of `or` skips it. This allows an earlier
+test to protect a later operation:
 
 ```lanternfly
-const visibleMask as u8 = %00000001
-const activeMask as u8 = %00000010
-var flags as u8 = visibleMask
-
-flags = flags or activeMask
-flags = flags and not visibleMask
-flags = flags xor activeMask
-
-if (flags and visibleMask) <> 0 then
-    visibleCount = visibleCount + 1
+if itemCount > 0 and total / itemCount > threshold then
+    reportHighAverage()
 end
 ```
 
-`or` sets the selected bit, `and not` clears it and `xor` toggles it. To
-read a flag, `and` keeps the selected bit and `<> 0` converts that integer
-result into the Boolean required by the condition.
+The division runs only after `itemCount > 0` succeeds.
 
-## Expressions used as statements
+## Bit masks
 
-A routine call can stand alone when its effects matter:
+The same word operators act on individual bits when their operands are
+integers:
 
 ```lanternfly
-updateClock()
+const readyMask as u8 = %00000001
+const errorMask as u8 = %00000010
+
+var statusFlags as u8 = readyMask
+
+statusFlags = statusFlags or errorMask
+statusFlags = statusFlags and not readyMask
+statusFlags = statusFlags xor errorMask
 ```
 
-Lanternfly also permits a value-producing expression as a statement, so a
-result-bearing call may be invoked for its effects and its result discarded.
-A pure expression such as `playerScore + 10` is legal but warns by default
-because it calculates a value and does nothing with it.
+`or` sets selected bits, `and not` clears them and `xor` toggles them. A mask
+test converts the selected bits into the Boolean required by `if`:
+
+```lanternfly
+if (statusFlags and errorMask) <> 0 then
+    errorCount = errorCount + 1
+end
+```
 
 ## Grouping and precedence
 
-An expression with several operators needs an order, and parentheses
-bind first — when in doubt, or when a reader might doubt, group. Calls,
-indexing and field access bind before the operators in this chapter. After
-those postfix forms, power binds more tightly than unary minus,
-followed by multiplication, division and `mod`, addition and subtraction,
-shifts, comparisons, `not`, `and`, `xor` and `or`.
-
-Power associates from right to left, so `2 ^ 3 ^ 2` means
-`2 ^ (3 ^ 2)`. The remaining chainable binary operators associate from left
-to right; for example, `10 - 3 - 2` means `(10 - 3) - 2`. Comparisons do not
-chain.
-
-The top of that ranking follows school algebra: multiplication precedes
-addition, as in `row * 20 + column`. The lower levels are arranged so that
-the common whole-line shapes read without brackets: arithmetic
-resolves first, then comparisons turn the quantities into Booleans,
-then the Boolean words combine the answers. `minimum <= input and
-input <= maximum` needed no parentheses because the ranking already
-reads it as `(minimum <= input) and (input <= maximum)`.
-
-Because comparisons bind before `not`, `not x = y` means `not (x = y)`.
-To compare the bitwise complement of `x`, write `(not x) = y`.
+Parentheses bind first and make an intended calculation visible:
 
 ```lanternfly
-var first as u8 = 10
-var second as u8 = 20
-var average as u16 = 0
-
 average = (first + second) / 2
 ```
 
-The parentheses add before dividing — without them, precedence would
-divide `second` by 2 first and the "average" would be nothing of the
-kind. Because both inputs are `u8`, their sum is a `u16` and can hold every
-possible byte sum before the division. Parentheses also define the boundary
-between bitwise and Boolean work:
+Without the parentheses, division would occur before addition. After calls,
+indexing, field access and parentheses, Lanternfly evaluates power, unary
+arithmetic, multiplication and division, addition and subtraction, shifts,
+comparisons, `not`, `and`, `xor` and finally `or`.
+
+That ordering lets a Boolean expression read naturally:
 
 ```lanternfly
-if (flags and visibleMask) <> 0 and distance <= 2 then
-    visibleCount = visibleCount + 1
+minimum <= input and input <= maximum
+```
+
+The comparisons run before the Boolean `and`. Parentheses are still valuable
+when a line mixes bitwise and Boolean work:
+
+```lanternfly
+if (statusFlags and errorMask) <> 0 and deviceReady then
+    errorCount = errorCount + 1
 end
 ```
 
-The first `and` works on bits and the second on Booleans. The parentheses are
-required: without them, comparison would bind first and produce the invalid
-mix `flags and (visibleMask <> 0)`.
+The first `and` combines bits; the second combines Boolean results.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/03-expressions.txt)
-includes the distance calculation, Boolean state and a bit-mask test. Trace
-`250 - 20` through `abs` into `distance`, recording both value and type:
-the expected sequence is `u8` inputs, an `i16` difference and a `u16`
-result.
+calculates the change between two readings and tests a device-status mask.
+The first expression traces from `u8` inputs to an `i16` result of -230 and a
+`u16` magnitude of 230.
+
+## Chapter summary
+
+- Every operation has a target-independent result type and fixed-width wrap
+  behaviour.
+- Byte subtraction produces `i16`; other byte arithmetic often produces the
+  corresponding 16-bit type.
+- Comparisons produce `boolean` values.
+- Boolean `and` and `or` short-circuit, while integer word operators combine
+  bits.
+- Parentheses record the intended order and clarify expressions that mix
+  arithmetic, comparison and bitwise work.

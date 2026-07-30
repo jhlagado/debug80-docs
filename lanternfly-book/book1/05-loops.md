@@ -1,25 +1,18 @@
 ---
 layout: default
-title: "Loops"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Repeating Work"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 5
 ---
 
-# Loops
+# Repeating Work
 
-Games repeat work: updating each table entry, searching until a match and
-drawing a screen row by row. A loop repeats a body of statements under a rule
-that says when to stop.
+Many programs perform the same operation over a sequence of values. The
+operation might add a range of numbers, search for a match, wait for input or
+process every entry in a table. A loop states both the repeated work and the
+rule that ends it.
 
-The stopping rule determines whether a loop completes its work. If its
-stopping condition never occurs, the current routine or frame cannot reach
-later statements; on a simple standalone target, the visible program may
-stall completely.
-Lanternfly has three loop statements, distinguished by where the stopping rule
-is expressed.
-
-The first is the counted loop. Adding the numbers from 1 through 10
-repeats one assignment while a counter advances:
+This first loop adds the integers from 1 through 10:
 
 ```lanternfly
 var total as i16 = 0
@@ -34,17 +27,23 @@ sub sumTen()
 end
 ```
 
-`number` takes each value from 1 through the inclusive limit 10, and
-`total` finishes at 55. `total = total + number` is the
-*accumulator* pattern — a variable that starts empty and gathers a
-result piece by piece as the loop feeds it. Sums, counts, best-so-far
-records and checksums all use this shape.
+`number` takes each value from 1 through 10, and `total` finishes at 55. The
+variable `total` is an accumulator: it begins with an empty result and gathers
+one value during each pass.
 
-`number` is the book's first local variable. Local declarations appear at the
-start of a subroutine, before executable statements. The name is visible only
-inside that routine and each invocation receives its own scalar value. An
-owned scalar local without an initializer begins with zero bits; here the
-`for` statement assigns the first value before the body reads it.
+## Local variables
+
+```lanternfly
+var number as i16
+```
+
+This declaration appears inside `sumTen`, before its executable statements.
+`number` is a scalar local. Its name is visible only within the subroutine, and
+each invocation receives its own value.
+
+An owned scalar local with no initializer starts with zero bits. The `for`
+statement stores its start value before the loop body reads it, so this routine
+does not depend on the initial zero.
 
 ## Counted loops
 
@@ -54,85 +53,66 @@ for number = 1 to 10
 end
 ```
 
-This example uses the local `number` as its control variable. More generally,
-the control may be any previously declared writable integer variable. Once
-Chapter 9 introduces parameters, a writable scalar integer parameter can also
-serve. `for` does not declare a hidden variable. The range is inclusive at
-both ends, so `1 to 10` visits ten values. The start, limit and effective step
-are evaluated once, in that order, before the first pass. The loop therefore
-fixes its bounds and direction when it begins.
+A counted loop visits an inclusive range. `1 to 10` runs ten times. The
+control name must already denote a writable integer variable or scalar
+parameter; `for` does not declare it.
 
-Omitting `step` uses the mathematical step `+1`. An explicit step
-changes the sequence. In the working language it must be a non-zero
-compile-time integer:
+The start and limit are evaluated once before the first pass. An optional
+compile-time `step` changes the sequence:
 
 ```lanternfly
-for column = 0 to 14 step 2
-    evenCount = evenCount + 1
+for address = 0 to 14 step 2
+    evenAddressCount = evenAddressCount + 1
 end
 ```
 
-This visits 0, 2, 4, 6, 8, 10, 12 and 14 — eight iterations, still
-ending inside the stated range. A negative step counts down:
+This loop visits 0, 2, 4, 6, 8, 10, 12 and 14. A negative step counts down:
 
 ```lanternfly
-for row = 7 to 0 step -1
-    remaining = remaining + 1
+for position = 7 to 0 step -1
+    bytesProcessed = bytesProcessed + 1
 end
 ```
 
-A negative step suits work that proceeds backward — drawing rows from
-the bottom of the screen up, retiring particles from the end of a
-list, draining a timer toward zero.
-
-The loop body cannot modify its control variable, whether directly, through
-an alias, through a call or across an unconstrained native boundary. A loop
-whose body controls progress uses `while` or `loop` instead. Lanternfly
-performs the step with mathematical integers and stops before a fixed-width
-control variable would wrap past its boundary.
-
-After the loop, the control variable retains the last value stored. If the
-range admits no iteration, it retains the converted start value.
+The loop computes its next value mathematically and stops before the control
+variable would wrap beyond its boundary. The body must leave the control
+variable alone, including through calls or aliases. When the body itself must
+control progress, `while` or `loop` expresses that relationship.
 
 ## Conditional loops
 
-A counted loop fixes its bounds when it begins. Much of
-the interesting work has no fixed range. Keep taking damage while shields
-remain. Keep following the list until its end. Keep waiting until the
-player presses something. In each case the number of repetitions is
-unknowable at the top — what is known is the *condition* under which
-work continues. A `while` loop announces exactly that:
+A `while` loop tests its condition before each pass. The Euclidean algorithm
+for a greatest common divisor repeats while the second working value remains
+nonzero:
 
 ```lanternfly
-sub countDown()
-    var remaining as i16 = 3
+var leftValue as u16 = 84
+var rightValue as u16 = 30
+var greatestCommonDivisor as u16 = 0
 
-    while remaining > 0
-        remaining = remaining - 1
+sub calculateGcd()
+    var remainder as u16
+
+    while rightValue <> 0
+        remainder = leftValue mod rightValue
+        leftValue = rightValue
+        rightValue = remainder
     end
+
+    greatestCommonDivisor = leftValue
 end
 ```
 
-The test comes first, so an initially false condition runs the body zero
-times. If `remaining` starts at zero, `countDown` reaches its `end` without
-executing the assignment.
+The pairs are (84, 30), (30, 24), (24, 6) and (6, 0). The next condition is
+false, so the loop ends and the result is 6.
 
-The body or the surrounding environment must be capable of changing the
-condition. In `countDown`, the body provides that progress: 3 becomes 2, then
-1, then 0, and the fourth test ends the loop. A polling loop may instead
-depend on input or hardware state changing outside the routine. The fixed
-starting value here makes the pre-test trace short; a typical `while` loop
-starts from state established at runtime.
+An initially false condition runs the body zero times. This makes `while`
+suitable when the program may already be finished before it reaches the loop.
 
 ## Indefinite loops
 
-Sometimes even the condition is awkward to state up front, because
-the natural stopping rule lives in the *middle* of the work: produce
-a candidate, then judge it. This shape is often called a "loop and a half" —
-half a pass must run before the test makes sense.
-Forcing it into a `while` means contorting the condition or
-duplicating the producing step; Lanternfly instead provides `loop`,
-which repeats until a statement leaves it:
+Some operations need to perform work before they can test whether they are
+finished. `loop` repeats until an `exit` statement leaves it:
 
 ```lanternfly
 sub findNextMultiple()
@@ -149,22 +129,17 @@ sub findNextMultiple()
 end
 ```
 
-The half-pass is visible on the page: advance the candidate — that is
-the half — then test it, and `exit` leaves the innermost loop
-immediately when the test is satisfied, continuing after its `end`.
-Because the candidate advances before the test, a starting value of
-16 produces 24, not 16 — the routine finds the *next* multiple. The `mod`
-test recognises a multiple of eight by its zero remainder.
+The candidate advances before the test. Starting at 16 produces 24;
+starting at 15 produces 16. `exit` leaves the innermost loop and continues
+after its closing `end`.
 
-Although `loop` with `exit` can imitate the other forms, the opening word
-should expose the real stopping rule. Use `for` for a counted range, `while`
-for a condition tested before each pass and `loop` when the test belongs
-inside the body.
+An indefinite loop needs at least one reachable exit or an intentional design
+reason to run forever. On a small standalone computer, an accidental endless
+loop may prevent every later operation from running.
 
-## Skipping an iteration
+## Skipping one pass
 
-`exit` abandons a loop; its milder sibling abandons only the current
-pass. `continue` starts the next iteration immediately:
+`continue` abandons the remainder of the current pass and begins the next one:
 
 ```lanternfly
 for number = 1 to 10
@@ -176,47 +151,48 @@ for number = 1 to 10
 end
 ```
 
-This loop skips even numbers and adds the odd ones. In a counted loop,
-`continue` proceeds to the next step and test: the control variable still
-advances and only the remainder of the current pass is abandoned.
+Even numbers skip the accumulator, so the loop adds 1, 3, 5, 7 and 9. In a
+counted loop, the normal step and range test still occur after `continue`.
 
-The alternative is wrapping the whole body in an `if`, which adds an
-indentation level. An early `continue` handles the skipped case first and
-leaves the remaining work at the loop body's main indentation. Chapter 9
-uses the corresponding early `return` in a subroutine.
+An early `continue` is useful when one condition excludes an entry from the
+main work. It keeps the main path at the loop body's outer indentation.
 
-## Nested-loop exits
+## Nested loops
 
-`exit` and `continue` always act on the innermost loop. That rule
-never bends, so a search through a grid — a loop within a loop —
-needs a plan for carrying "found it" past the inner boundary. An
-early `return` can leave the whole subroutine on the spot, which is
-often the cleanest answer for a routine whose only job was the
-search. Code that must continue working after the outer loop can use
-a Boolean flag:
+`exit` and `continue` act on the innermost loop. A search through rows and
+columns can return from its subroutine as soon as it finds a match. When work
+must continue after the outer loop, a Boolean such as `found` can carry the
+result out of the inner loop:
 
 ```lanternfly
 var found as boolean = false
 ```
 
-The inner loop sets the flag and exits; the outer loop's condition or a test
-after the inner `end` consults it. The name `found` records the fact being
-carried across the loop boundary.
+The inner loop sets `found` and exits. The outer loop tests the flag before
+starting another row.
 
 ## Choosing a loop
 
 | Repetition rule | Form |
 | --- | --- |
-| counter traverses an inclusive range | `for ... to ... end` |
-| condition is tested before work | `while ... end` |
-| statements repeat until they exit | `loop ... end` |
+| visit an inclusive numeric range | `for ... to ... end` |
+| test before each pass | `while ... end` |
+| repeat until a statement exits | `loop ... end` |
 
-The appropriate form states the stopping rule in its opening line. That line also
-gives the backend the range, condition or branch structure it must lower.
+The loop form should put the stopping rule where it naturally belongs. A clear
+stopping rule makes termination easier to reason about and gives the backend
+an accurate control-flow structure to lower.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/05-loops.txt)
-contains counted, conditional and indefinite loops. Trace
-`findNextMultiple` from 16 and from 15. Because the candidate advances before
-the test, the expected results are 24 and 16.
+contains all three loop forms. The `calculateGcd` trace ends at 6, while
+`findNextMultiple` advances from 13 to 16.
+
+## Chapter summary
+
+- A local scalar belongs to one subroutine invocation.
+- `for` visits an inclusive range with a fixed compile-time step.
+- `while` tests before each pass, so its body may run zero times.
+- `loop` repeats until `exit`, and `continue` skips the rest of one pass.
+- `exit` and `continue` apply to the innermost loop.

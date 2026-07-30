@@ -1,5 +1,7 @@
 var total as i16 = 0
-var evenCount as i16 = 0
+var leftValue as u16 = 84
+var rightValue as u16 = 30
+var greatestCommonDivisor as u16 = 0
 var startValue as i16 = 13
 var result as i16 = 0
 
@@ -12,21 +14,16 @@ sub sumTen()
     end
 end
 
-sub countEvenColumns()
-    var column as i16
+sub calculateGcd()
+    var remainder as u16
 
-    evenCount = 0
-    for column = 0 to 14 step 2
-        evenCount = evenCount + 1
+    while rightValue <> 0
+        remainder = leftValue mod rightValue
+        leftValue = rightValue
+        rightValue = remainder
     end
-end
 
-sub countDown()
-    var remaining as i16 = 3
-
-    while remaining > 0
-        remaining = remaining - 1
-    end
+    greatestCommonDivisor = leftValue
 end
 
 sub findNextMultiple()
@@ -40,4 +37,10 @@ sub findNextMultiple()
             exit
         end
     end
+end
+
+sub main()
+    sumTen()
+    calculateGcd()
+    findNextMultiple()
 end

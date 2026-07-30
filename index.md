@@ -115,27 +115,29 @@ Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G e
 
 ## Lanternfly
 
-### [Lanternfly Book 1 — Language Fundamentals](lanternfly-book/book1/)
+### [Lanternfly Book 1 — Programming Fundamentals](lanternfly-book/book1/)
 
-The opening Lanternfly book develops the language from one short routine. It
-introduces declarations, fixed-width integer types, expressions, comparisons,
-decisions and loops through source intended to read like precise pseudocode.
+The opening Lanternfly book develops a complete programming language from one
+short module. It introduces declarations, fixed-width integer types,
+expressions, control structures, tables, records, references, subroutines and
+machine services.
 
-For readers learning structured programming and for experienced programmers
-who want to follow the language design from its first examples.
+For students learning structured programming and experienced programmers who
+want a readable route from typed source to assembly language.
 
 ---
 
 ## About Lanternfly
 
-Lanternfly is a small, statically typed imperative language. English keywords
-mark blocks and control flow, while familiar operators write arithmetic and
-comparisons. Its data model centres on fixed arrays, exact records and typed
-references to existing storage.
+Lanternfly is a small, statically typed general-purpose language in the
+structured BASIC family. English keywords mark blocks and control flow, while
+familiar operators write arithmetic and comparisons. Its data model centres
+on fixed arrays, exact records and typed references to existing storage.
 
-Lanternfly is currently a language and compiler design project. The book tests
-its working syntax and semantics through concrete source examples before the
-first implementation edition is frozen.
+The first compiler is designed to translate Lanternfly into Z80 assembly,
+which an assembler then converts into machine code. Lanternfly is currently a
+language and compiler design project; the package contains the working
+specification and conformance contract while implementation work remains.
 
 ---
 

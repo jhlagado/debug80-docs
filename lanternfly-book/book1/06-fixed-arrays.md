@@ -1,30 +1,21 @@
 ---
 layout: default
-title: "Fixed Arrays"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Tables with Fixed Arrays"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 6
 ---
 
-# Fixed Arrays
+# Tables with Fixed Arrays
 
-Chapter 5 supplied the repetition mechanism that arrays now make useful for
-tables. A program that needs eight sound samples can declare eight
-separate variables (`sample0`, `sample1`, up to `sample7`), but a loop
-cannot reach them:
-`for index = 0 to 7` has no way to turn the value of `index` into a
-choice among eight *names*. Names are gone by the
-time the program runs. The compiler's ledger — which name means which
-address — is spent during translation and never reaches the machine;
-at runtime there are only addresses. So a runtime choice among eight
-storage locations must be made with the tools that survive translation,
-and those are numbers and arithmetic. What the loop needs is storage
-selectable *by arithmetic*. An array is exactly that — one name for a
-complete fixed sequence, indexed by number:
+A data logger stores eight recent samples. Eight separately named variables
+would hold the values, but a loop could not select one of those names from a
+runtime index. An array gives the complete sequence one name and lets an
+integer select an entry:
 
 ```lanternfly
 var samples as u8[8]
 
-sub fillSamples()
+sub prepareSamples()
     var index as i16
 
     for index = 0 to count(samples) - 1
@@ -33,226 +24,197 @@ sub fillSamples()
 end
 ```
 
-`samples[0]` receives 0, `samples[1]` receives 2 and the final entry
-receives 14. The loop can reach each element because the array turns the
-runtime value of `index` into a storage location. The same combination handles
-tables of actors, rows of tiles, planes of pixels and histories of positions.
+The entries receive 0, 2, 4, 6, 8, 10, 12 and 14. Arrays connect two ideas
+from Chapter 5: a loop produces the index, and indexing turns that number into
+a storage location.
 
-## The type contains the shape
+## Fixed shape
 
 ```lanternfly
 var samples as u8[8]
 ```
 
-`u8[8]` means an array of eight `u8` elements. The count is part of
-the type, fixed at compile time. The compiler can lay the whole value out as
-eight consecutive bytes at a known address, with no allocator or hidden
-length field.
+`u8[8]` is an array of eight bytes. The count belongs to the type and must be
+a positive compile-time value. The compiler reserves all eight bytes together;
+the array carries no hidden runtime length and needs no allocator.
 
-Valid indices run from 0 through 7, because Lanternfly arrays are
-zero-based. Zero-basing puzzles newcomers — the first entry is entry
-number zero? — until you see what an index actually is. It is not a
-rank but a *distance*: how many elements stand between the start of
-the array and the one you want. The first element is zero elements
-from the start, so its index is zero. Under that reading, the address of an
-element is the base plus the indexed distance. The loop idiom
-`for index = 0 to count(samples) - 1` walks precisely the valid
-range, first element to last, inclusively.
+Lanternfly arrays are zero-based. Valid indices for eight entries run from 0
+through 7. An index is best understood as a distance from the beginning:
+entry zero is zero elements from the base, entry one is one element away and
+entry seven is seven elements away.
 
-`count(samples)` produces eight at compile time, and `size(samples)`
-produces the exact byte size — also eight here, though the two part
-company the moment elements grow wider than a byte:
+`count(samples)` produces 8 during compilation. `size(samples)` produces the
+array's byte size:
 
 ```lanternfly
 const sampleCount as u8 = count(samples)
 const sampleBytes as u8 = size(samples)
 ```
 
-The query inspects the declared type, and writing `count(samples)`
-instead of a literal 8 keeps the loop and the declaration joined at
-one point: resize the array and every loop over it follows, with no
-hunt for stray eights. It is the magic-number lesson of Chapter 2, applied to shapes: the count
-already has a name.
+Both values are 8 here. They differ when an element occupies more than one
+byte.
 
-## Selecting an entry
+## Indexing and bounds
 
 ```lanternfly
 samples[index] = u8(index * 2)
 ```
 
-Here `index` is `i16` while an array entry is `u8`, so the explicit
-conversion from Chapter 2 reappears, recording the deliberate
-cross-type store. An ordinary update based on the old `u8` entry
-would convert back automatically.
-
-Underneath, selection is arithmetic. The backend combines the array's
-base address, the runtime index and the element size to locate the
-destination — base plus index times size, the formula that makes an
-array an array. A constant index follows the same rule with the
-multiplication done at compile time:
+The backend combines the array's base address, the index and the element size
+to find the selected entry. A constant index uses the same rule:
 
 ```lanternfly
 samples[3] = 10
 ```
 
-Without a bounds check, index 9 would calculate an address one byte past
-`samples`. On a Z80 without memory protection, such a store could overwrite
-another variable, saved state or program code. Lanternfly prevents that store
-with the checks below.
-
-A constant out-of-range index is a compile error. A dynamic index is checked
-at runtime unless the compiler proves it lies inside the array. A loop bounded
-by `count(...)` exposes such a proof opportunity; an implementation that
-proves the range may remove the check. If a remaining check fails, the target
+A constant index outside the valid range is a compile error. A runtime index
+is checked unless the compiler proves it safe. If the check fails, the target
 bounds-fault service runs before any load or store.
 
-## Element size controls the stride
+The loop bound `count(samples) - 1` documents the valid range and gives the
+compiler an opportunity to prove every access safe. Resizing the declaration
+also updates the loop automatically.
+
+## Element stride
 
 ```lanternfly
-var scores as u16[5]
+var readings as u16[5]
 ```
 
-Each `u16` occupies two bytes, so `scores` occupies ten. Entry 3
-begins six bytes after entry 0, and the address calculation
-multiplies the index by two. The distance from one element's start to
-the next is called the *stride*, and here it equals the
-element size:
+Each `u16` occupies two bytes, so the array occupies ten. `readings[3]` begins
+six bytes after the base because its offset is `3 * 2`.
 
-![Each u16 entry occupies two adjacent bytes, so scores[3] begins at byte offset six.](../../assets/images/lanternfly-book/book1/array-stride.svg)
+![Each u16 entry occupies two adjacent bytes, so readings[3] begins at byte offset six.](../../assets/images/lanternfly-book/book1/array-stride.svg)
 
-The same rule applies to elements that occupy three, six or another
-exact byte count — there is no padding and no rounding to convenient
-powers of two. Therefore `size(...)` of an array is its count multiplied
-by its element size. The resulting bytes can match an externally defined
-firmware table, file format or hardware buffer.
+The distance from one element's beginning to the next is its stride. In a
+fixed array, the stride is the exact element size. Lanternfly inserts no
+padding between elements, so an array can match a firmware table, binary file
+layout or hardware buffer byte for byte.
 
 ## Multidimensional arrays
 
-A tile map has rows and columns:
+A program that records four measurements for each of seven days can declare a
+two-dimensional table:
 
 ```lanternfly
-const mapRows as u8 = 24
-const mapColumns as u8 = 32
+const dayCount as u8 = 7
+const readingCount as u8 = 4
 
-var tiles as u8[mapRows, mapColumns]
+var weeklyReadings as u16[dayCount, readingCount]
 ```
 
-Two indices select one tile:
+Two indices select one value:
 
 ```lanternfly
-tiles[row, column] = tileNumber
+weeklyReadings[day, reading] = value
 ```
 
-Memory itself has no rows; it is a linear address space. A two-dimensional
-array is therefore a layout convention:
-Lanternfly stores the rightmost dimension contiguously, laying row 0
-end to end, then row 1 immediately after it, and so on through row
-23. The element number is:
+Memory is linear, so Lanternfly stores the rightmost dimension contiguously.
+For an array with four entries per row, the element number is:
 
 ```text
-row * mapColumns + column
+day * 4 + reading
 ```
 
-The following schematic uses a separate three-row, four-column array so every
-cell fits in the figure. In that smaller shape, row 1, column 2 is element
-`1 * 4 + 2`, or 6. The 24-by-32 `tiles` array above uses the same formula
-with 32 columns, so `tiles[1, 2]` is element 34.
+The diagram uses a three-by-four byte array so every cell is easy to see. Row
+1, column 2 has element number `1 * 4 + 2`, or 6.
 
-![Rows occupy consecutive runs of four bytes; row 1, column 2 is element 6.](../../assets/images/lanternfly-book/book1/row-major-array.svg)
+![Rows occupy consecutive runs of four entries; row 1, column 2 is element 6.](../../assets/images/lanternfly-book/book1/row-major-array.svg)
 
-Chapter 3's `row * 20 + column` example performed the same row-major
-calculation for a screen twenty columns wide. A multidimensional array applies
-the formula from its declared shape on every access. The compiler checks the
-number and integer type of the supplied indices; the bounds rule still applies
-to their runtime values.
+`count(weeklyReadings, 0)` produces 7 and
+`count(weeklyReadings, 1)` produces 4. A multidimensional array requires the
+dimension number because each direction may have a different extent.
 
-The layout also informs loop order. With rows outside and columns inside,
-consecutive iterations touch consecutive bytes. With the loops swapped, each
-iteration moves by a row's width. A backend may exploit contiguous access by
-incrementing an address rather than recomputing the full index. A future
-generated listing can show whether it did so.
-
-`count(tiles, 0)` produces 24 and `count(tiles, 1)` produces 32. The
-dimension argument is required for a multidimensional array so the
-requested extent is explicit — an unadorned `count(tiles)` would
-leave the reader guessing which direction was meant.
+Loop order follows layout. A day loop on the outside and a reading loop on the
+inside touches adjacent elements. That access pattern is usually cheaper on a
+small processor because the generated code can advance an address through the
+row.
 
 ## Array initializers
 
-Square brackets provide one initializer per element:
+Square brackets provide one value for every element:
 
 ```lanternfly
-const stepX as i8[4] = [0, 1, 0, -1]
-const stepY as i8[4] = [-1, 0, 1, 0]
-```
-
-For a valid direction from north through west, the two tables contain the
-same offsets as Chapter 4's `select`: north selects (0, -1), east selects
-(1, 0) and so on. Invalid input needs explicit treatment because an array
-access faults where the earlier `select` used its `else`:
-
-```lanternfly
-sub findStep()
-    deltaX = 0
-    deltaY = 0
-
-    if direction <= west then
-        deltaX = stepX[direction]
-        deltaY = stepY[direction]
-    end
-end
-```
-
-If another part of the program establishes that `direction` is always in
-range, the guard may be unnecessary. Without that invariant, removing the
-guard changes invalid-input behaviour.
-
-`stepX` and `stepY` are *parallel arrays*: one index selects related entries
-from both. A table can replace a `select` whose cases only supply constants,
-provided the program also preserves or deliberately changes the original
-handling of unmatched values.
-
-A multidimensional initializer mirrors the declared shape:
-
-```lanternfly
-const smallMap as u8[2, 4] = [
-    [0, 0, 1, 1],
-    [2, 2, 3, 3]
+const daysInMonth as u8[12] = [
+    31, 28, 31, 30, 31, 30,
+    31, 31, 30, 31, 30, 31
 ]
 ```
 
-The rank, nested shape and element count must match exactly — the compiler
-rejects a lopsided table rather than padding a row or inventing missing
-elements. Constant aggregate data can be placed in ROM by a target
-profile. On a cartridge-based or embedded machine, direction tables, level
-maps and sprite data can remain in read-only space instead of writable RAM.
+The initializer must match the declared count exactly. A two-dimensional
+initializer mirrors both dimensions:
+
+```lanternfly
+const calibration as i8[2, 4] = [
+    [0, 1, 0, -1],
+    [1, 0, -1, 0]
+]
+```
+
+The compiler rejects missing entries, extra entries and rows with the wrong
+shape. A target profile may place constant aggregate data in read-only memory,
+which preserves writable RAM for changing program state.
+
+## Text and byte arrays
+
+The working 0.3 language has yet to settle its runtime text model. Double
+quotes currently appear only in compile-time forms such as
+`import "console.lf"` and `from "ROM_PRINT"`. Character literals and runtime
+string literals are outside the current contract.
+
+A program can store encoded text as a fixed byte array when a platform
+interface defines the encoding and framing:
+
+```lanternfly
+// ASCII values for HELLO followed by a zero terminator.
+const greetingBytes as u8[6] = [$48, $45, $4c, $4c, $4f, 0]
+```
+
+The array has the exact representation required by a NUL-terminated ASCII
+service. Another service might require a length prefix, a high-bit terminator
+or machine-specific display codes. Calling that array a string would hide the
+contract that gives each byte its meaning.
+
+The Lanternfly project still needs to define a small static text facility:
+character and text literal spelling, encoding, read-only references, bounded
+views, capacity rules and operations such as length, comparison and copy.
+These features can preserve fixed allocation; they require no heap or
+automatic resizing. Until that contract is settled, reusable text handling
+belongs in explicitly typed platform or library interfaces.
 
 ## Clearing and filling
 
-Initialization at declaration is one thing; wiping a table at the
-start of each round is another, and writing the loop by hand every
-time grows old. Two standard procedures handle repeated stores:
+Two standard procedures handle common whole-array writes:
 
 ```lanternfly
 clear(samples)
-fill(tiles, emptyTile)
+fill(weeklyReadings, 0)
 ```
 
-`clear` writes the all-zero representation to an array or record
-whose fields permit it. `fill` writes one compatible scalar value to
-every entry of a fixed array, including every cell of a
-multidimensional one. Each says in a word what a loop would say in
-three lines, and the reader learns the intent — "this table starts
-empty", "this map starts as open floor" — without simulating any
-loop in their head. The backend may implement either with a loop, a
-native operation or a runtime helper while preserving the same
-result. Once a compiler exists, its generated listing can show which choice
-was made.
+`clear` writes the all-zero representation to a writable array or record whose
+fields accept it. `fill` evaluates one compatible scalar value and writes it
+to every array entry in row-major order.
+
+The backend may lower either operation to an inline loop, target instruction
+sequence or runtime helper. The source names the operation; generated
+artifacts show the chosen implementation and cost.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt)
-fills a sample array, clears it and declares a two-dimensional tile map with
-direction tables. Calculate the byte offset of `tiles[1, 2]` from the
-row-major formula, then check `stepX[west]` and `stepY[west]` against
-Chapter 4's `select`. The expected results are offset 34 and step (-1, 0).
+fills a sample buffer and declares a weekly table. For
+`weeklyReadings[1, 2]`, the expression `1 * readingCount + 2` gives element 6
+and byte offset 12 because each entry occupies two bytes.
+
+## Chapter summary
+
+- A fixed array stores a compile-time number of identical elements
+  contiguously.
+- Indices are zero-based and checked before access.
+- Element address is the array base plus index times stride.
+- Multidimensional arrays use row-major layout with the rightmost dimension
+  contiguous.
+- Programs can encode text as byte data under explicit service contracts; a
+  static text facility remains open design work.
+- `clear` and `fill` express repeated aggregate writes while leaving the
+  backend free to choose an implementation.

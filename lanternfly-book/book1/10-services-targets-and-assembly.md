@@ -1,161 +1,134 @@
 ---
 layout: default
-title: "Services, Targets and Assembly"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Modules, Machine Services and Assembly"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 10
 ---
 
-# Services, Targets and Assembly
+# Modules, Machine Services and Assembly
 
-Nine chapters of arithmetic, decisions, loops and layouts, and not one
-pixel has reached a screen. That is not an oversight; it is a boundary,
-and this final chapter is about crossing it well. Everything the book has
-taught so far keeps one meaning across targets — `lives - 1` computes the
-same value on a Z80, under a C backend, anywhere. Drawing a pixel or reading a
-key depends on target hardware and therefore has no target-independent
-definition. Lanternfly crosses this boundary through two layers: typed
-services and inline assembly.
-Generated artifacts will expose lowering, helper selection and conservative
-native-boundary assumptions, with timing information where a target profile
-supplies it.
+A complete program needs more than calculations. It must obtain input, produce
+output, access firmware or communicate with devices. Those operations differ
+between computers, so Lanternfly gives them typed interfaces and keeps the
+target-specific implementation at a defined boundary.
 
 ```lanternfly
-sub showPlayer()
-    screenClear()
-    drawPixel(playerX, playerY, playerColour)
+extern sub writeNumber(value as i16)
+extern sub writeNewLine()
+
+sub showReading(value as i16)
+    writeNumber(value)
+    writeNewLine()
 end
 ```
 
-The calls use ordinary subroutine syntax — from the caller's side, a
-platform service looks exactly like Chapter 9. A target interface supplies
-their parameter types, results and observable effects, and the rest of
-this chapter is about where that interface comes from.
+From Lanternfly's side, an external service looks like an ordinary call. Its
+declaration gives the compiler enough information to check arguments and
+results. The selected target profile supplies the machine-level binding.
 
 ## Standard operations
 
-Before platform services come core operations with target-independent
-meaning:
+Lanternfly defines a small set of target-independent operations:
 
 ```lanternfly
-distance = abs(targetX - playerX)
+change = abs(current - previous)
 root = sqrt(area)
-actorBytes = size(type Actor)
-rowCount = count(board, 0)
-timerOffset = offset(Actor.timer)
-clear(board)
-fill(framebuffer, backgroundColour)
+dateBytes = size(type Date)
+entryCount = count(entries)
+qualityOffset = offset(Reading.quality)
+clear(workspace)
+fill(histogram, 0)
 ```
 
-`abs` returns an unsigned magnitude with the operand's width. `sqrt` returns
-the floor of a non-negative integer square root, also in the unsigned integer
-type with the operand's width. A negative constant operand is a compile error;
-a negative runtime operand invokes the arithmetic-fault service.
-The layout queries `size`, `count` and `offset` fold at compile time, as
-Chapters 6 and 7 showed. `clear` writes the all-zero representation to a
-record or array that permits it, and `fill` writes one scalar value to
-every element of an array.
+`abs` returns an unsigned magnitude. `sqrt` returns the floor of a
+non-negative integer square root. Negative runtime input to `sqrt` invokes the
+arithmetic-fault service.
 
-The implementation differs by target. A Z80 backend may call a helper routine
-for square root, 32-bit multiplication or division because the processor has
-no instructions for those complete operations. A C backend may emit a native
-operator or a library call.
-Aggregate procedures may become an inline loop or a memory helper. The
-required helpers are emitted or linked only when selected operations need
-them, and the generated artifact report names each one.
+`size`, `count` and `offset` are compile-time layout queries. `clear` and
+`fill` perform repeated aggregate stores.
 
-## Platform services
+The Z80 has no single instruction for many wide arithmetic operations. A
+backend may emit an instruction sequence or select a runtime helper for square
+root, division, bounds checking or aggregate copying. Helpers are included
+only when the program uses the operation, and generated artifacts list them.
 
-Input, display, sound, random values, firmware and device access arrive
-through typed external routines. A platform interface module can declare
-and export them without supplying Lanternfly bodies:
+## Source modules
+
+A module gives related types, storage and routines one source file. Top-level
+declarations are private until marked `export`:
 
 ```lanternfly
-export extern sub screenClear()
-export extern sub drawPixel(x as u8, y as u8, colour as u8)
-export extern sub showNumber(number as u16)
-```
+// counters.lf
+export const counterLimit as u16 = 9999
 
-`extern` says the body lives elsewhere — in ROM, hand-written assembly, a C
-library, a BASIC runtime or another substrate. Calls are checked against the
-declared parameter and result types, so
-`drawPixel(playerX, playerY, playerColour)` is checked like any other call.
-The target profile must either verify that declaration against the native
-calling convention or generate a valid adapter. A wrong hand-written
-declaration can still misdescribe the firmware; the type check protects the
-Lanternfly side of the boundary, not an inaccurate interface.
-
-`import` asks the whole-program compiler to resolve a source module:
-
-```lanternfly
-import "display.lf"
-```
-
-The `.lf` suffix is illustrative; the source-file extension remains
-undecided.
-
-Private declarations remain inside their module; exported names become
-visible to the importer. The rule also applies to ordinary source modules.
-For example, `gameRules.lf` may publish a type, constant, variable and
-subroutine while retaining private implementation state:
-
-```lanternfly
-export const startingLives as u8 = 3
-
-export record Score
-    var points as u16
+export record Counter
+    var value as u16
 end
 
-export var score as Score
+export var processed as Counter
 
-const scoreStep as u16 = 10
+const counterStep as u16 = 1
 
-export sub addPoint()
-    score.points = score.points + scoreStep
+export sub incrementProcessed()
+    if processed.value < counterLimit then
+        processed.value = processed.value + counterStep
+    end
 end
 ```
 
-Another file imports that interface:
+Another module imports the exported interface:
 
 ```lanternfly
-import "gameRules.lf"
+import "counters.lf"
 
-var lives as u8 = startingLives
-
-sub collectToken()
-    addPoint()
+sub recordItem()
+    incrementProcessed()
 end
 ```
 
-Repeated imports resolve and emit the module once. `startingLives`, `Score`,
-`score` and `addPoint` are visible to the importer; `scoreStep` remains
-private.
+`Counter`, `counterLimit`, `processed` and `incrementProcessed` become visible
+to the importer. `counterStep` remains private. Repeated imports resolve the
+same module once during whole-program compilation.
 
-When two target modules export the same service contract and both targets
-support the language features used by the game, the game logic can compile
-against either interface. Address classes, memory limits, unsupported
-operations or target-specific assumptions may still require changes; the
-module boundary identifies where those differences enter.
+The build manifest names a root module and an entry subroutine. The compiler
+loads the import graph, type-checks all modules, allocates static storage,
+resolves machine bindings and emits one target program.
 
-An external routine can name its target binding directly:
+## External services
+
+An interface module can publish routines implemented by firmware, assembly or
+another substrate:
 
 ```lanternfly
-extern sub printChar(ch as u8) at $0008
+export extern sub readByte() as u8
+export extern sub writeByte(value as u8)
+export extern sub writeNumber(value as i16)
+```
+
+Calls receive the same type checking as Lanternfly-defined routines. The
+profile also describes argument carriers, result carriers, clobbered machine
+state, visible storage effects and device I/O.
+
+An external routine may name its machine binding:
+
+```lanternfly
+extern sub printCharacter(ch as u8) at $0008
 extern sub waitForKey() from "ROM_WAIT_KEY"
 ```
 
-`at` supplies an absolute routine address, such as an entry point documented
-by a target's ROM interface. `from` supplies a substrate symbol by name. With
-neither clause,
-the target profile binds the Lanternfly name itself. The profile also
-defines the argument and result carriers — which registers or cells carry
-each value — along with clobbers, visible effects and cost. A missing or
-incompatible binding is a compile error.
+`at` supplies an absolute entry address. `from` names a symbol that the
+assembler or substrate toolchain will resolve. With neither form, the target
+profile binds the Lanternfly name.
+
+This arrangement separates a program's logic from a computer's firmware
+details. Two platform modules can export the same service signatures and bind
+them to different machines.
 
 ## Inline assembly
 
-Typed services cover platform operations declared in interface modules. An
-`asm` block supplies target instructions that fall outside those declarations
-or cannot be expressed through generated Lanternfly operations:
+Typed services are the preferred boundary for reusable platform operations.
+An `asm` block supplies target instructions for work that needs direct access
+to the selected assembler:
 
 ```lanternfly
 sub waitForKey()
@@ -165,48 +138,42 @@ sub waitForKey()
 end
 ```
 
-`asm` switches the lexer into raw assembly mode, and the switch is total:
-the next physical line whose trimmed content compares case-insensitively equal
-to `end` returns to Lanternfly. Every line in between belongs to the assembler,
-including its comment syntax. Lanternfly does not reinterpret quotes,
-semicolons or assembler-specific tokens inside the block.
-
-An assembly-source backend emits the payload verbatim at that position:
+After `asm`, every physical line belongs to the assembler until a line
+containing only `end` closes the block. Lanternfly does not interpret comments,
+quotes or instruction syntax inside it. An assembly-source backend places the
+lines unchanged into the generated source:
 
 ```text
-Lanternfly source
-    -> generated assembly with inline blocks
-    -> selected assembler
-    -> machine program
+Lanternfly module
+    → generated assembly plus inline blocks
+    → assembler
+    → machine code
 ```
 
-Your instructions travel unaltered into the same stream the compiler is
-writing, and assembler diagnostics retain the original inline source
-lines, so an error in your hand-written code points home to the line you
-wrote.
+Assembler diagnostics map back to the original inline lines so an invalid
+instruction can be reported at its source location.
 
 ## The assembly barrier
 
-The compiler cannot infer register use or memory effects from arbitrary
-target assembly, so a statement-level `asm` block
-forms a conservative barrier. The compiler assumes the block can read and
-write every visible mutable object, call target routines, fault, perform
-device I/O and clobber processor registers and flags.
+Arbitrary assembly may read memory, change registers, call routines or perform
+device I/O. The compiler treats a statement-level `asm` block as a
+conservative barrier. Values needed afterward must be preserved, and visible
+mutable storage may have changed.
 
-Before the block, the backend preserves generated values that remain live
-after it. Reducing barrier crossings can therefore reduce spills when much
-state is live. Control from the assembly must reach the generated successor
-statement; a direct return or jump around Lanternfly control flow violates the
-contract and may bypass a hosted-body epilogue.
+Control from the block must reach the generated statement that follows it. A
+raw return or jump around Lanternfly control flow would bypass routine or host
+obligations. Raw symbol names also belong to the assembler; a generated symbol
+artifact records which Lanternfly objects are exposed under which assembly
+names.
 
-Raw names inside the block are assembler names, not Lanternfly names. The
-backend's symbol artifact shows which generated Lanternfly names are
-available to inline source, so the crossing is made with the map open
-rather than by guessing at name-mangling.
+Large amounts of low-level work are easier to describe as an external routine
+with a checked interface. Inline blocks suit short, local instruction
+sequences where the surrounding Lanternfly control remains clear.
 
 ## Module-level assembly
 
-An `asm` block can also appear among module declarations:
+An `asm` block among module declarations can provide assembler definitions,
+data or routines:
 
 ```lanternfly
 asm
@@ -214,47 +181,46 @@ ROM_WAIT_KEY = $0038
 end
 ```
 
-This form can provide target directives, labels, routines or data — here,
-giving the assembler a name for a ROM address, the definition
-the earlier `from "ROM_WAIT_KEY"` binding relies on. A routine label defined
-inside the raw block can be bound through `extern sub`. Other raw symbols,
-including data labels, remain assembly-only in the working 0.3 language.
+This block defines the symbol used by an external binding or statement block.
+It has no Lanternfly execution point of its own. A routine implemented there
+is exposed through an `extern sub` contract.
 
-Inline assembly commits that source file to a compatible assembly target. A
-C or BASIC backend
-rejects the block unless its profile supplies an assembly-fragment
-pipeline. Keeping `asm` in per-target interface modules isolates it when each
-module exports the same service contract and the game uses features supported
-by every selected backend.
+Inline assembly makes the containing module target-specific. A platform
+project can isolate such blocks in interface modules while ordinary program
+modules continue to use the exported Lanternfly signatures.
 
 ## Generated artifacts
 
-A source-generating backend records:
+A source-generating backend records the information needed to inspect the
+translation:
 
-- canonical generated assembly, C or BASIC;
-- mappings from Lanternfly source to generated ranges and, where available,
-  from generated code to machine addresses;
-- typed symbols and exact layouts;
-- selected helpers and imports;
-- external bindings and generated ABI adapters;
-- read, write, call, fault and device-I/O summaries;
-- startup-initialization effects;
-- module-assembly provenance and statement-assembly conservative effects;
-- target assumptions and an optional cost report, including timing estimates
-  where the profile supplies them.
+- generated assembly or other target source;
+- mappings from Lanternfly lines to generated ranges and machine addresses;
+- typed symbols, storage addresses and exact layouts;
+- selected runtime helpers and imported modules;
+- external bindings, calling-convention adapters and native effects;
+- initialization work, runtime fault sites and target assumptions;
+- optional size and timing estimates when the target profile supplies them.
 
-For an assembly backend, the assembler adds machine-code addresses and its
-own diagnostics to those mappings. The artifacts let a programmer count the
-instructions behind an `if`, inspect a 32-bit helper or see how an aggregate
-copy was lowered.
+These artifacts connect the high-level program to the machine. You can inspect
+the instructions behind a loop, find the address of a record, see why a helper
+was linked or locate the generated code for a source statement.
 
 ## Example
 
-The [chapter listing](/lanternfly-book/book1/code/10-services.txt) uses
-standard operations, declares display services and contains one inline
-assembly block. Together, the chapters have built a boundary: portable logic
-uses exact integer and layout rules, typed services describe what a target
-provides, and native code can be kept in target-facing modules. The
-[working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-records the current normative 0.3 rules. When compiler backends are available,
-their generated artifacts will show how each target implements those rules.
+The [chapter listing](/lanternfly-book/book1/code/10-services.txt)
+uses standard operations, declares console services and includes one inline
+assembly block. The module's `main` routine measures a change and writes the
+result through a typed target service.
+
+## Chapter summary
+
+- Modules keep declarations private by default and expose selected names with
+  `export`.
+- `extern sub` gives machine or host code a checked Lanternfly signature.
+- Standard operations keep one source meaning while backends choose
+  instructions or runtime helpers.
+- `asm` admits target assembly at an explicit boundary and acts as a
+  conservative compiler barrier.
+- Generated artifacts show how language constructs, storage and services map
+  to the target machine.

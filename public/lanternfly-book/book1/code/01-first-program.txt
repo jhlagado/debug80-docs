@@ -1,7 +1,7 @@
-var lives as u8 = 3
+var subtotal as u16 = 120
+var postage as u16 = 15
+var total as u16 = 0
 
-sub loseLife()
-    if lives > 0 then
-        lives = lives - 1
-    end
+sub main()
+    total = subtotal + postage
 end

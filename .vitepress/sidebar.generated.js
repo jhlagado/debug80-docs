@@ -1528,47 +1528,47 @@ export const sidebars = {
   ],
   "/lanternfly-book/": [
     {
-      "text": "Lanternfly Book 1 — Language Fundamentals",
+      "text": "Lanternfly Book 1 — Programming Fundamentals",
       "collapsed": false,
       "items": [
         {
-          "text": "A First Program",
+          "text": "Your First Lanternfly Program",
           "link": "/lanternfly-book/book1/01-a-first-program.html"
         },
         {
-          "text": "Names and Integer Types",
+          "text": "Values and Integer Types",
           "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
         },
         {
-          "text": "Expressions and Comparisons",
+          "text": "Calculations and Comparisons",
           "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
         },
         {
-          "text": "Decisions",
+          "text": "Choosing a Path",
           "link": "/lanternfly-book/book1/04-decisions.html"
         },
         {
-          "text": "Loops",
+          "text": "Repeating Work",
           "link": "/lanternfly-book/book1/05-loops.html"
         },
         {
-          "text": "Fixed Arrays",
+          "text": "Tables with Fixed Arrays",
           "link": "/lanternfly-book/book1/06-fixed-arrays.html"
         },
         {
-          "text": "Records and Exact Layout",
+          "text": "Records and Memory Layout",
           "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
         },
         {
-          "text": "References and Addresses",
+          "text": "Sharing Storage with References",
           "link": "/lanternfly-book/book1/08-references-and-addresses.html"
         },
         {
-          "text": "Subroutines",
+          "text": "Building with Subroutines",
           "link": "/lanternfly-book/book1/09-subroutines.html"
         },
         {
-          "text": "Services, Targets and Assembly",
+          "text": "Modules, Machine Services and Assembly",
           "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
         }
       ]
@@ -1576,47 +1576,47 @@ export const sidebars = {
   ],
   "/lanternfly-book/book1/": [
     {
-      "text": "Lanternfly Book 1 — Language Fundamentals",
+      "text": "Lanternfly Book 1 — Programming Fundamentals",
       "collapsed": false,
       "items": [
         {
-          "text": "A First Program",
+          "text": "Your First Lanternfly Program",
           "link": "/lanternfly-book/book1/01-a-first-program.html"
         },
         {
-          "text": "Names and Integer Types",
+          "text": "Values and Integer Types",
           "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
         },
         {
-          "text": "Expressions and Comparisons",
+          "text": "Calculations and Comparisons",
           "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
         },
         {
-          "text": "Decisions",
+          "text": "Choosing a Path",
           "link": "/lanternfly-book/book1/04-decisions.html"
         },
         {
-          "text": "Loops",
+          "text": "Repeating Work",
           "link": "/lanternfly-book/book1/05-loops.html"
         },
         {
-          "text": "Fixed Arrays",
+          "text": "Tables with Fixed Arrays",
           "link": "/lanternfly-book/book1/06-fixed-arrays.html"
         },
         {
-          "text": "Records and Exact Layout",
+          "text": "Records and Memory Layout",
           "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
         },
         {
-          "text": "References and Addresses",
+          "text": "Sharing Storage with References",
           "link": "/lanternfly-book/book1/08-references-and-addresses.html"
         },
         {
-          "text": "Subroutines",
+          "text": "Building with Subroutines",
           "link": "/lanternfly-book/book1/09-subroutines.html"
         },
         {
-          "text": "Services, Targets and Assembly",
+          "text": "Modules, Machine Services and Assembly",
           "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
         }
       ]

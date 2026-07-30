@@ -1,45 +1,46 @@
-const finished as u8 = 0
-const playing as u8 = 1
-const won as u8 = 2
+const statusWorking as u8 = 0
+const statusComplete as u8 = 1
+const statusFailed as u8 = 2
 
-const north as u8 = 0
-const east as u8 = 1
-const south as u8 = 2
-const west as u8 = 3
+const modeCompact as u8 = 0
+const modeDetailed as u8 = 1
+const modeDiagnostic as u8 = 2
 
-var lives as u8 = 3
-var score as u8 = 0
-var status as u8 = playing
-var direction as u8 = north
-var deltaX as i8 = 0
-var deltaY as i8 = 0
+var itemsRemaining as u16 = 40
+var errorCount as u8 = 0
+var status as u8 = statusWorking
+var reportMode as u8 = modeCompact
+var lineWidth as u8 = 40
+var includeChecks as boolean = false
 
 sub updateStatus()
-    if lives = 0 then
-        status = finished
-    else if score >= 100 then
-        status = won
+    if errorCount > 0 then
+        status = statusFailed
+    else if itemsRemaining = 0 then
+        status = statusComplete
     else
-        status = playing
+        status = statusWorking
     end
 end
 
-sub findStep()
-    select direction
-    case north
-        deltaX = 0
-        deltaY = -1
-    case east
-        deltaX = 1
-        deltaY = 0
-    case south
-        deltaX = 0
-        deltaY = 1
-    case west
-        deltaX = -1
-        deltaY = 0
+sub configureReport()
+    select reportMode
+    case modeCompact
+        lineWidth = 40
+        includeChecks = false
+    case modeDetailed
+        lineWidth = 80
+        includeChecks = false
+    case modeDiagnostic
+        lineWidth = 80
+        includeChecks = true
     else
-        deltaX = 0
-        deltaY = 0
+        lineWidth = 40
+        includeChecks = true
     end
+end
+
+sub main()
+    updateStatus()
+    configureReport()
 end

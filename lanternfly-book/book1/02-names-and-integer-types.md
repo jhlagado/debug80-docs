@@ -1,56 +1,42 @@
 ---
 layout: default
-title: "Names and Integer Types"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Values and Integer Types"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 2
 ---
 
-# Names and Integer Types
+# Values and Integer Types
 
-Chapter 1 began with three lives, so one byte was enough for that stated
-range. Other values need more room. A score that awards ten points per event
-passes 255 after twenty-six awards. A frame counter ticking fifty times a
-second passes 65,535 — the most two bytes can hold — in a little over twenty
-minutes. Temperatures, velocities and differences between two positions may
-also need to represent negative values, which an unsigned type cannot do.
+Chapter 1 used `u16` for three non-negative values. That choice gave each
+variable a range of 0 through 65,535, though the example never needed most of
+it. Other facts need different ranges. A temperature may be negative, a small
+counter may fit in one byte and an elapsed-time counter may need to run for
+days.
 
-Here is the fact this chapter turns on: every count in a program has a
-size and a sign, whether or not the language makes you say so. A language
-that hides the question has not answered it — somewhere below the surface,
-a width was chosen for you, and you will meet the choice the day a counter
-wraps. Lanternfly brings the question up into the source, where it can be
-answered on purpose:
+Lanternfly records those choices in each declaration:
 
 ```lanternfly
-var lives as u8 = 3
-var temperature as i16 = -4
-var score as u16 = 0
-var frameCount as u32 = 0
+var unitsInStock as u16 = 1200
+var roomTemperature as i16 = -4
+var elapsedSeconds as u32 = 0
+var orderReady as boolean = false
 ```
 
-The type column records storage decisions: one byte for lives, two bytes for
-the signed temperature, two for the unsigned score and four for the frame
-counter — which at fifty frames a second now takes nearly three years of
-continuous play to wrap. The declaration is part of the program's memory
-design, written where future readers can see it.
+The types tell the compiler how much storage to reserve and how to interpret
+each bit pattern.
 
-## Counting in binary
+## Bits, bytes and ranges
 
-The ranges in the table below follow from binary place values. A bit is a digit
-that can be 0 or 1, and bits gain meaning the same way decimal digits do:
-by position. In decimal, the columns are worth 1, 10, 100, 1000 — each
-ten times the last. In binary, the columns are worth 1, 2, 4, 8, 16, 32,
-64, 128 — each double the last. The byte `%00000011` is 2 + 1, or three
-lives. The byte `%11111111` is all eight columns at once:
-128 + 64 + 32 + 16 + 8 + 4 + 2 + 1, which is 255. That is where the
-byte's ceiling comes from: those eight columns add up to 255.
+A bit stores 0 or 1. In an eight-bit byte, the binary columns are worth 1, 2,
+4, 8, 16, 32, 64 and 128. The pattern `%00001100` contains 8 + 4, so its
+value is 12. The pattern `%11111111` contains every column and has the
+unsigned value 255.
 
-The pattern count continues doubling past the byte. A ninth bit creates 512
-distinct patterns, while sixteen bits create 65,536 and thirty-two bits create
-4,294,967,296. For unsigned values, the maximum is one less than the pattern
-count.
+Eight bits provide 256 distinct patterns. An unsigned byte uses them for the
+values 0 through 255. Sixteen bits provide 65,536 patterns, and 32 bits
+provide 4,294,967,296.
 
-## Six integer types
+## The integer family
 
 | Type | Width | Range |
 | --- | ---: | ---: |
@@ -61,208 +47,155 @@ count.
 | `u32` | 32 bits | 0 to 4,294,967,295 |
 | `i32` | 32 bits | -2,147,483,648 to 2,147,483,647 |
 
-The first letter states signedness: `u` means unsigned and stores zero or a
-positive value, `i` means signed and includes negatives. The number
-states the exact bit width. Thus `i32` means a signed, thirty-two-bit
-integer.
+The first letter gives the interpretation: `u` is unsigned and `i` is signed.
+The number gives the exact width. Every target must preserve these ranges,
+even when its processor handles one width more easily than another.
 
-The signed rows use two's-complement interpretation: the top bit of a
-signed value has a negative place value. In an `i8`, the
-columns are worth -128, 64, 32, 16, 8, 4, 2, 1. All zeros is 0; a lone
-top bit is -128; all ones is -128 + 127, which is -1. So the same eight bits that spell 255 in a `u8` spell -1 in an
-`i8`. The pattern does not change — only the agreement about what the
-top column is worth. The same interpretation explains the signedness
-conversions later in the chapter.
+Signed values use two's-complement representation. In an `i8`, the top bit has
+the value -128 and the remaining bits are worth 64 through 1. The all-ones
+pattern means -1 as `i8` and 255 as `u8`. The bits are identical; the declared
+type determines their meaning.
 
-## The price of a width
+## Choosing a type
 
-Width affects both space and time. A coordinate stored as `u8` occupies one
-byte on every target: one byte on a Z80, one byte anywhere else this
-source is ever compiled. An `i32` counter occupies four. On a machine
-with 65,536 addressable bytes, a table of a hundred entries shows
-that difference immediately: one hundred bytes against four hundred
-for the same hundred counts.
+Type selection begins with the values that the program must represent. The
+narrowest suitable type contains every valid value and its boundary cases,
+including negatives when the range requires them.
 
-Width also prices the arithmetic. The Z80 directly supports eight-bit
-operations, while 32-bit work must be decomposed across several bytes with
-explicit carries. Another target may support the same width directly, but
-every backend must preserve the declared range and result.
+A month number fits in `u8`. A signed temperature from -500 through 500 needs
+`i16`. A non-negative byte counter that may exceed 255 needs `u16`.
 
-So choosing a type requires two decisions. First, estimate the largest
-legitimate value and whether it can be negative; include plausible boundary
-cases rather than relying on the most convenient estimate. Then choose the
-narrowest type that contains that range. Lives bounded from 0 through 255 fit
-`u8`. A score bounded at 9,999 fits `u16`. A signed temperature whose required
-range exceeds `i8` but remains within `i16` needs two bytes, while a
-non-negative frame counter intended to run beyond 65,535 uses `u32`.
+Width affects cost. One hundred `u8` values occupy 100 bytes, while one hundred
+`u32` values occupy 400. The Z80 performs eight-bit arithmetic directly and
+builds many wider operations from several instructions or a helper routine.
+The wider type is still correct when the range requires it; the point is to
+choose it with the cost visible.
 
-## Constants name fixed values
+## Constants
+
+A fixed value gains meaning when you name it:
 
 ```lanternfly
-const startingLives as u8 = 3
-const maximumScore as u16 = 9999
+const warehouseCapacity as u16 = 5000
+const dispatchBatch as u16 = 10
 
-var lives as u8 = startingLives
-var score as u16 = 0
+var unitsInStock as u16 = 1200
 ```
 
-`const` names a compile-time value. A bare `3` does not say whether it
-means starting lives, a movement rate or something else. `startingLives`
-records that role, gives every use one declaration and lets a later change
-replace the value in one place.
+`const` declares a compile-time value. The compiler can substitute its value
+where needed, so an ordinary scalar constant usually occupies no storage.
 
-The declared type also puts a fence around the value:
-
-```lanternfly
-const maximumByte as u8 = 255
-```
-
-`255` is the largest value a `u8` can hold, so this compiles. `256`
-needs a ninth bit and is rejected. The declared type therefore checks that
-the named constant fits the range it is meant to describe.
+The declared type checks the boundary. `const maximumByte as u8 = 255` is
+valid; a value of 256 requires another bit and produces a compile error.
 
 ## Boolean values
 
-Some facts in a game are not quantities. The round is over or it is not; the
-door is locked or it is not. `boolean` represents those facts without
-interchanging them with integers:
+Some values are facts rather than quantities:
 
 ```lanternfly
-var gameOver as boolean = false
+var orderReady as boolean = false
 
-gameOver = lives = 0
+orderReady = unitsInStock >= dispatchBatch
 ```
 
-`true` and `false` are the Boolean literals, and a comparison produces
-a Boolean. The type occupies one byte, storing zero for `false` and one for
-`true`. A byte is more room
-than one fact strictly needs — Chapter 3 shows how eight facts can
-share a byte when memory is tight — but it is what the machine can
-address directly, and for ordinary state the clarity is worth the
-seven spare bits.
-
-In the second line, the first `=` begins an assignment and the second tests
-equality inside the expression. The comparison produces the Boolean stored in
-`gameOver`.
-
-An integer does not become a condition by itself; the program writes the
-comparison it means:
+`boolean` has the two values `true` and `false`. It occupies one byte, using
+zero for `false` and one for `true`. Integer values do not become conditions
+automatically, so a test states the comparison it means:
 
 ```lanternfly
-if lives > 0 then
-    loseLife()
+if unitsInStock > 0 then
+    dispatchOne()
 end
 ```
 
-`lives > 0` states the fact on which the branch depends. A condition must
-have type `boolean`; Lanternfly does not convert an integer or assignment
-into a condition.
+This separation catches accidental uses of counts and bit patterns where the
+program needs a yes-or-no answer.
 
-## Assignment and equality share `=`
+## Assignment and equality
 
-Many languages split these two jobs across `=` and `==`. Lanternfly uses
-position to distinguish them. At the beginning of a statement, a writable path followed
-by `=` is an assignment:
+Lanternfly uses `=` for two related operations. At the start of a statement,
+it assigns:
 
 ```lanternfly
-score = score + 10
+unitsInStock = unitsInStock - dispatchBatch
 ```
 
-Inside an expression, `=` compares:
+Inside an expression, it compares for equality:
 
 ```lanternfly
-if score = maximumScore then
-    score = 0
+if unitsInStock = warehouseCapacity then
+    orderReady = true
 end
 ```
 
-The `if` condition needs a Boolean expression, so the first `=` tests
-equality. The next line begins with writable storage and assigns zero.
-The token's position determines which meaning applies.
+Grammar makes the distinction. The first form begins with a writable storage
+path. The second appears where `if` requires a Boolean expression.
 
-## Conversions state a width choice
+## Converting between integer types
 
-Sooner or later two widths meet. Lanternfly distinguishes three cases:
-value-preserving widening is silent; an ordinary narrowing or same-width
-signedness change is allowed with a warning; and an explicit conversion
-performs the same bit conversion while recording that the boundary was
-intentional.
-
-The subtraction from Chapter 1 shows the round-trip case. Two `u8` values subtract
-into `i16`, so the result has room for any difference from -255
-through 255. Storing that result back into a byte narrows it:
+Widening preserves a value, so Lanternfly performs it silently:
 
 ```lanternfly
-lives = lives - 1
+var byteCount as u8 = 200
+var totalCount as u16 = byteCount
 ```
 
-Narrowing retains the low bits. Every typed value in this expression
-is `u8`, and the result returns to a `u8` destination, so Lanternfly
-treats the round trip as the declared arithmetic of the byte and does
-not warn — Chapter 1 relied on this rule without naming it, and the
-guard made sure the narrowing never had anything to lose.
+Every `u8` value fits in `u16`. Unsigned widening fills the new high bits with
+zero; signed widening repeats the sign bit so a negative value keeps the same
+meaning.
 
-An explicit conversion records a genuinely cross-type choice:
+Narrowing may discard high bits:
 
 ```lanternfly
 var wideValue as i16 = 300
-var byteValue as u8 = 0
-
-byteValue = u8(wideValue)
+var byteValue as u8 = u8(wideValue)
 ```
 
-The conversion keeps the low eight bits. Three hundred in binary is
-`%100101100`; a byte keeps `%00101100`, which is 44. Omitting
-`u8(...)` performs the same store but emits the default conversion warning.
-The explicit form suppresses that warning by making the narrowing part of the
-source.
+The conversion keeps the low eight bits. Three hundred is
+`%100101100`; the low byte is `%00101100`, which is 44. Writing `u8(...)`
+records the narrowing choice and suppresses the default conversion warning.
 
-Changing signedness at the same width also preserves the bit pattern and warns
-by default.
-The same eight bits that mean 255 as a `u8` mean -1 as an `i8`, because
-the types interpret the top bit differently. An explicit conversion records
-that reinterpretation.
+A same-width signedness conversion preserves the bit pattern and changes its
+interpretation. Converting `u8(255)` to `i8` produces -1. An explicit
+conversion records that the representation change is part of the program.
 
-Widening runs the other way and needs no ceremony:
+Arithmetic that begins and ends in the same declared type receives a
+round-trip allowance:
 
 ```lanternfly
-var wideScore as u32 = score
+unitsInStock = unitsInStock - dispatchBatch
 ```
 
-Value-preserving widening is automatic because nothing can be lost —
-the new box is strictly bigger. Unsigned widening fills the new high
-bits with zero. Signed widening copies the sign bit into them, which
-under two's complement is precisely what keeps -4 meaning -4 in the
-wider home: the negative top column moves left, and the copies fill
-the columns it vacated. In both cases the wider representation preserves the
-original value.
+When every typed value in the calculation is `u16`, the wider or signed
+intermediate prescribed by the operator rules may return to `u16` without a
+warning. The program is still responsible for guarding values that would wrap.
 
-## Literal types follow their context
+## Literal context
 
-An integer literal begins as an exact value and takes its type from
-where it lands. In `score + 10`, the literal ten adopts the type of
-`score`. In an expression made only of literals, the default type is
-`i16`.
-
-This matters when an uncontextualised expression would exceed the `i16`
-default:
+An integer literal begins as an exact value. Its surrounding declaration,
+assignment, argument or return can supply its type:
 
 ```lanternfly
 const highBit as u16 = 1 shl 15
 ```
 
-Shifting 1 left fifteen places produces 32,768 — one more than the
-largest `i16`, so under the default the value would have no room. The
-declared `u16` supplies the context: both literal operands are
-resolved as `u16` before the shift is folded, and the constant holds
-the high bit of a sixteen-bit word, exactly as intended. When a
-literal expression behaves surprisingly, the first question to ask is
-what type the context supplied — the answer is usually one
-declaration away.
+The declared `u16` context applies to the literal calculation, producing
+32,768. An all-literal expression with no expected type defaults to `i16`.
+A literal formula that exceeds that range needs a declaration or explicit
+conversion that states the intended type.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/02-names-and-types.txt)
-brings constants, Boolean state and integer conversion together. Trace the
-conversion by writing the wide value in binary, retaining the low eight bits
-and adding their place values. The stored result should be 44.
+combines constants, Boolean state and an explicit narrowing conversion. The
+two calls made by `main` leave `unitsInStock` at 1,190 and `byteValue` at 44.
+
+## Chapter summary
+
+- An integer type fixes width, signedness, range and storage cost.
+- `const` names a compile-time value and checks it against a declared type.
+- `boolean` represents `true` or `false` and remains separate from integers.
+- Value-preserving widening is automatic; narrowing and signedness changes
+  should be explicit when intentional.
+- Literal values take their type from context, with `i16` as the default for
+  an otherwise untyped literal expression.

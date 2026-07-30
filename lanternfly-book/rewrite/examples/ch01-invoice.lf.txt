@@ -1,0 +1,40 @@
+// Chapter 1 companion — Invoice
+// A program is stored data plus statements that change it.
+// Fixture family: Counter (conformance §5.1).
+// Verified against specification 0.4: §2.4, §3.1, §4.1, §4.2, §8.1, §8.7, §12.6.
+
+// Fixed facts: prices in whole pence. Scalar constants occupy no storage.
+const applePrice as u16 = 120
+const breadPrice as u16 = 95
+const milkPrice as u16 = 78
+
+// Changing facts: the invoice's state. Static storage, installed before entry.
+var total as u16 = 0
+var itemCount as u8 = 0
+
+// The build manifest names this parameterless routine as the program entry.
+sub main()
+    total = total + applePrice
+    itemCount = itemCount + 1
+
+    total = total + breadPrice
+    itemCount = itemCount + 1
+
+    total = total + milkPrice
+    itemCount = itemCount + 1
+end
+
+// Trace (final storage is the program's answer):
+//   entry          total = 0    itemCount = 0
+//   after apple    total = 120  itemCount = 1
+//   after bread    total = 215  itemCount = 2
+//   after milk     total = 293  itemCount = 3
+// Returning from main invokes the target's program-termination service.
+//
+// Spec notes:
+// - `itemCount + 1`: exact literal adopts u8; u8 + u8 gives u16 (§3.1 table);
+//   the store back to u8 is the round-trip exemption, no W-CONVERT-001 (§8.1).
+// - `total + applePrice`: u16 + u16 stays u16; wraps at 65,536 by rule —
+//   out of reach for these values, and chapter 2 makes the ceiling explicit.
+// - Assignment evaluates the destination path, then the right side, then
+//   stores (§8.7).

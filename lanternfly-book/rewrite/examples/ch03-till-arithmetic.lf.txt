@@ -1,0 +1,36 @@
+// Chapter 3 companion — Till arithmetic
+// Change, coin breakdown and shelf spacing: typed formulas over ch 1's data.
+// Fixture family: Rushlight numeric case (conformance §5.4) for the abs line.
+// Verified against specification 0.4: §3.1, §8.1–8.5, §8.7.
+
+var total as u16 = 293
+var paid as u16 = 500
+var change as u16 = 0
+var pounds as u16 = 0
+var pence as u16 = 0
+var isPaid as boolean = false
+
+var frontShelf as u8 = 20
+var backShelf as u8 = 250
+var spacing as u16 = 0
+
+sub main()
+    isPaid = paid >= total          // comparison produces boolean: true
+    change = paid - total           // u16 - u16 stays u16: 207
+    pounds = change / 100           // which group:       2
+    pence = change mod 100          // where inside:      7
+    spacing = abs(backShelf - frontShelf)  // u8-u8 -> i16, abs -> u16: 230
+end
+
+// Trace:
+//   isPaid  = true            (500 >= 293)
+//   change  = 207             (wraps if paid < total — ch 5 adds the guard)
+//   pounds  = 2, pence = 7    (2 * 100 + 7 = 207; / and mod reconstruct)
+//   spacing = 230             (250 - 20 through a signed i16 intermediate)
+//
+// Spec notes:
+// - u16 - u16 keeps u16 (§3.1 table); only byte subtraction widens signed.
+// - `change / 100`: exact literal 100 adopts u16; result u16 (§3.1).
+// - abs of an i16 produces u16 (§8.5).
+// - Assignment: destination path, right side, store (§8.7); all round-trip
+//   u16 stores are warning-free (§8.1).

@@ -1,229 +1,214 @@
 ---
 layout: default
-title: "References and Addresses"
-parent: "Lanternfly Book 1 — Language Fundamentals"
+title: "Sharing Storage with References"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 8
 ---
 
-# References and Addresses
+# Sharing Storage with References
 
-Chapter 7's aggregate assignment copies bytes into an independent value.
-Changing that copy does not update the original array entry. A reference
-instead identifies existing storage. It carries both a location and a
-referent type: in this example, a `Monster` at that address.
+Aggregate assignment creates an independent copy. A reference identifies
+storage that already exists, so several parts of a program can work with the
+same record:
 
 ```lanternfly
-var monsters as Monster[4]
-var current as near ref Monster = ref monsters[0]
+var readings as Reading[4]
+var current as near ref Reading = ref readings[0]
 
-sub selectThirdMonster()
-    current = ref monsters[2]
-    current.timer = 10
+sub selectThirdReading()
+    current = ref readings[2]
+    current.quality = 1
 end
 ```
 
-Rebinding `current` selects another array entry; assigning through
-`current.timer` changes that entry inside `monsters`. Later accesses through
-`current` use the newly selected entry.
+The first assignment rebinds `current` to another array entry. The second
+assignment follows the reference and changes `readings[2].quality`.
 
-A first-edition Lanternfly reference must be initialized, has no null value
-and can only identify storage whose lifetime is preserved by the static
-storage model. Rebinding may change which compatible object it identifies,
-but it never produces an untyped or absent referent.
+First-edition references are non-null and must be initialized. They identify
+storage whose lifetime is established by the static storage model.
 
-## Forming a reference
+## Forming a typed reference
 
-Prefix `ref` takes the location of a storage path:
+Prefix `ref` takes the location of a writable storage path:
 
 ```lanternfly
-ref monsters[index]
-ref player.position
-ref board[row]
+ref readings[index]
+ref dailyLog.date
+ref inputBuffer
 ```
 
-The path must reach mutable, nonvolatile storage with a lifetime outside the
-current scalar-local frame: module or imported storage, an aggregate
-parameter, or storage already reached through a reference. Constant storage,
-volatile storage and owned scalar locals cannot be reference roots in the
-working language. The result carries its referent type:
-`ref monsters[index]` has type
-`ref Monster`, and `ref player.position.x` has type `ref i8`. The
-type is what separates a reference from a bare address. An address
-says only "location 31,844"; a `ref Monster` says "a six-byte
-monster laid out as Chapter 7 declared, starting there". The
-compiler uses that referent type to validate field and index access.
+The resulting type includes the referent. `ref readings[index]` is a
+`ref Reading`, while `ref dailyLog.date.month` is a `ref u8`. That type tells
+the compiler which field and index operations are valid at the stored address.
 
-On the stated Z80 model, a near reference occupies two bytes. It can be
-stored, passed to a subroutine, returned or compared with a compatible
-reference. Moving the reference moves those two bytes and continues to share
-the original storage. Chapter 7's aggregate assignment instead copies every
-byte of the referent into an independent value.
+On an ordinary Z80 address space, a near reference commonly occupies two
+bytes. Passing or assigning the reference moves those address bytes while the
+underlying record remains in place.
 
-## Field and index access
+References can be formed from module or imported storage, aggregate parameters
+and storage already reached through another reference. The first edition
+excludes references to owned scalar locals, constant storage and volatile
+storage because their lifetime or access contract requires rules that the
+reference type does not yet carry.
 
-Field and index paths pass through a reference:
+## Access through a reference
+
+Field and index syntax passes through a reference:
 
 ```lanternfly
-current.timer = current.timer + 1
-current.x = 4
+current.value = current.value + 1
+current.quality = 0
 ```
 
-The declared referent type tells the compiler which field layout to use.
-`current` is a `ref Monster`, so `.timer` applies Chapter 7's offset of four
-to the address held by `current`. Field syntax is the same as direct record
-access.
+Because `current` refers to a `Reading`, the compiler applies the field layout
+from Chapter 7 at the address stored in `current`.
 
-Indexing works through a reference to an array in the same way:
+A reference to an array supports indexing:
 
 ```lanternfly
-selectedRow[index] = 0
+selectedBuffer[index] = 0
 ```
 
-If `selectedRow` has type `near ref (u8[8])`, the expression writes the
-selected byte of the referenced array.
+If `selectedBuffer` is a `near ref (u8[16])`, the index selects a byte in the
+referenced array and receives the usual bounds check.
 
-One distinction has to be kept straight, and the language gives each
-side its own spelling. Assignment to the reference variable rebinds
-it — points the arrow somewhere new. An explicit `value` access
-reads or writes the complete referent instead — the thing at the
-arrow's tip:
+## Rebinding and changing the referent
+
+Assignment to a reference variable changes the address it holds:
 
 ```lanternfly
-value(scoreReference) = value(scoreReference) + 1
-value(current) = monsters[nextMonster]
+current = ref readings[nextIndex]
 ```
 
-The first line adds one to the score that `scoreReference` points
-at — for a scalar referent, `value` is how you reach the thing
-itself rather than the reference. The second copies a whole monster
-into the storage `current` points at, aggregate assignment through a
-reference.
+`value(...)` selects the complete object at the address:
+
+```lanternfly
+value(countReference) = value(countReference) + 1
+value(current) = readings[nextIndex]
+```
+
+The first line updates a referenced scalar. The second copies a complete
+`Reading` into the storage identified by `current`.
+
+The two spellings keep address changes separate from record changes. Assigning
+`current` changes which record it identifies; assigning `value(current)`
+changes the identified record.
 
 ## Local aggregate aliases
 
-Chapter 7 noted that subroutine locals stay scalar. A local alias gives
-existing aggregate storage a short name:
+A local alias gives an existing array or record a short, non-rebindable name:
 
 ```lanternfly
-sub resetSelected()
-    ref monster as Monster = monsters[selectedIndex]
+sub markSelected()
+    ref reading as Reading = readings[selectedIndex]
 
-    monster.timer = 0
-    monster.frame = 0
+    reading.quality = 1
+    reading.unit = unitCelsius
 end
 ```
 
-Without the alias, both statements would spell out
-`monsters[selectedIndex]`. The selection is evaluated once. The alias needs
-only reference-sized local state and leaves the `Monster` in the global
-array; a backend may also reuse the calculated address when lowering the
-accesses.
+The index is evaluated once when the alias is declared. `reading` then names
+the selected array entry for the rest of the subroutine. The record stays in
+the global array, so the routine needs only reference-sized local state.
 
-Within this routine, `monster` remains an alias for
-`monsters[selectedIndex]`. A reference variable may be rebound; a local
-aggregate alias may not.
+The alias form accepts records and fixed arrays. An ordinary reference
+variable is the appropriate form when code must rebind the name.
 
 ## Arrays of references
 
-References are scalar values, and scalar values can fill arrays —
-which solves a problem layout alone cannot. Several boards of the
-same shape can be allocated separately, wherever they each need to
-live, and still be collected into one lookup table:
+A program may allocate several buffers separately and collect their locations
+in one table:
 
 ```lanternfly
-var boardRed as u8[8]
-var boardGreen as u8[8]
-var boardBlue as u8[8]
+var inputBuffer as u8[16]
+var outputBuffer as u8[16]
+var scratchBuffer as u8[16]
 
-var boardPlanes as (near ref (u8[8]))[3] = [
-    ref boardRed,
-    ref boardGreen,
-    ref boardBlue
+var buffers as (near ref (u8[16]))[3] = [
+    ref inputBuffer,
+    ref outputBuffer,
+    ref scratchBuffer
 ]
 ```
 
-Each element is one near reference to an eight-byte array; the board arrays
-keep their separate storage. The compound type
-`(near ref (u8[8]))[3]` parses from the inside out: an array of eight bytes, a
-near reference to that array and three such references.
+Each table entry is a near reference to a complete 16-byte array. The buffers
+retain separate storage, while an integer index selects one of their addresses.
 
-![Three reference slots point to three independently allocated board arrays.](../../assets/images/lanternfly-book/book1/array-of-references.svg)
+![Three reference slots point to three independently allocated buffers.](../../assets/images/lanternfly-book/book1/array-of-references.svg)
 
 ```lanternfly
-value(boardPlanes[planeIndex]) = clearPlane
+value(buffers[bufferIndex]) = emptyBuffer
 ```
 
-`boardPlanes[planeIndex]` evaluates to a reference value;
-`value(...)` selects the referenced array; aggregate assignment
-copies the clear plane into it. The reference array provides indirection: one
-integer selects storage from several separately allocated arrays without
-copying any of them.
+The indexed expression produces a reference, and `value(...)` selects the
+array it identifies. Aggregate assignment then copies `emptyBuffer` into that
+selected storage.
 
 ## Near and far references
 
-So far "location" has meant an address in the target's ordinary
-memory. On real hardware, ordinary needs qualifying. A near
-reference reaches storage in the target's current memory context:
+A near reference reaches storage in the target's current address context:
 
 ```lanternfly
-var current as near ref Monster = ref monsters[0]
+var current as near ref Reading = ref readings[0]
 ```
 
-A far reference retains extra target context:
+A far reference retains additional target context:
 
 ```lanternfly
-var remoteMonster as far ref Monster = ref monsters[0]
+var archived as far ref Reading = ref readings[0]
 ```
 
-The Z80 has a 16-bit ordinary address space and therefore reaches one
-65,536-byte address context at a time. Banking hardware can change which
-physical memory occupies part of that context. A far reference may retain a
-bank identifier beside the 16-bit offset; an 8086 backend may use a segment
-and offset; a flat-memory target may represent both classes identically.
+On a banked Z80 system, the extra context may be a bank number alongside a
+16-bit offset. An 8086 backend might use a segment and offset. A flat-memory
+target may represent near and far references identically while preserving
+their source types.
 
-![On one possible banked Z80 target, a near reference uses the current bank while a far reference carries the bank identifier.](../../assets/images/lanternfly-book/book1/banked-references.svg)
+![A near reference uses the current memory context, while a far reference can retain a bank identifier.](../../assets/images/lanternfly-book/book1/banked-references.svg)
 
-Stored references and public interfaces state `near` or `far`,
-because a reference that outlives a moment, or crosses between
-modules or a native interface boundary, must have one agreed size and meaning.
-An unqualified `ref Monster` is available for local reference
-variables and private parameters, where the target's default class
-is sufficient and the source stays portable across targets whose
-defaults differ.
+Module storage, stored reference fields and public interfaces state `near` or
+`far` because their representation must remain stable across calls and files.
+Private parameters and local reference variables may use unqualified `ref T`
+to select the target profile's default class.
 
-A near reference widens implicitly to the corresponding far reference only
-when the target can attach the current memory context. Converting far to near
-requires the checked explicit form `near ref Monster(expression)`; a value
-that cannot be represented faults rather than losing its memory context.
+A near reference may widen to far when the target can attach its current
+context. Far-to-near conversion uses the checked explicit form
+`near ref Reading(expression)`. A location outside the near range invokes the
+target address-fault service.
 
 ## Opaque addresses
 
-One rung remains below the typed reference. Some interfaces need a
-location whose record shape belongs to a target service rather than
-to your program:
+Some machine interfaces expose a location whose contents have no Lanternfly
+type:
 
 ```lanternfly
-var entryPoint as far address
+var deviceBuffer as far address
 ```
 
-`near address` and `far address` retain an address class. Assignment and
-equality are supported, but arithmetic, field access and indexing are not.
-There is no declared referent to give such access meaning; a typed reference
-is precisely an address plus that shape, and `address` is the address alone.
+`near address` and `far address` are opaque scalar values. They can be stored,
+passed and compared with the same address class. Ordinary arithmetic, field
+access and indexing are unavailable because the language has no referent type
+from which to derive them.
 
-Opaque near and far addresses do not convert or compare across classes.
-Changing their representation requires a target operation whose contract
-defines the source and destination address representations.
-
-A display service may return a VRAM address on a target where video memory is
-not in the CPU address space. The program can store, pass and compare that
-opaque value, but only a target service can interpret or dereference it.
+A target service may return an address in video memory or another device
+address space. The program can carry that value back to target services while
+the platform contract remains responsible for interpreting it.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/08-references.txt)
-selects a monster by reference, creates a local alias and clears one of
-several referenced board planes. The representative assignments show both
-operations: `current = ref monsters[selectedIndex]` rebinds, while
-`monster.timer = 0` and
-`value(boardPlanes[planeIndex]) = clearPlane` write referent storage.
+rebinds a `Reading` reference, creates a local alias and clears one of three
+separately allocated buffers. The assignment to `current` changes an address,
+while the assignment through `reading` changes a field in the referenced
+record.
+
+## Chapter summary
+
+- A typed reference is a non-null scalar value that identifies existing
+  storage of a declared type.
+- Assigning a reference rebinds it; `value(reference)` selects the complete
+  referent.
+- A local aggregate alias gives existing record or array storage a
+  non-rebindable short name.
+- Arrays of references provide indexed access to separately allocated objects.
+- Near and far references carry target address-class information, while opaque
+  addresses carry no referent type.

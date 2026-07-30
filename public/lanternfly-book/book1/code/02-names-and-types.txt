@@ -1,28 +1,26 @@
-const startingLives as u8 = 3
-const maximumScore as u16 = 9999
+const warehouseCapacity as u16 = 5000
+const dispatchBatch as u16 = 10
 
-var lives as u8 = startingLives
-var score as u16 = 0
-var gameOver as boolean = false
+var unitsInStock as u16 = 1200
+var roomTemperature as i16 = -4
+var elapsedSeconds as u32 = 0
+var orderReady as boolean = false
 var wideValue as i16 = 300
 var byteValue as u8 = 0
 
-sub loseLife()
-    if lives > 0 then
-        lives = lives - 1
+sub dispatchUnits()
+    if unitsInStock >= dispatchBatch then
+        unitsInStock = unitsInStock - dispatchBatch
     end
 
-    gameOver = lives = 0
+    orderReady = unitsInStock >= dispatchBatch
 end
 
 sub convertWideValue()
     byteValue = u8(wideValue)
 end
 
-sub addScore()
-    if score <= maximumScore - 10 then
-        score = score + 10
-    else
-        score = maximumScore
-    end
+sub main()
+    dispatchUnits()
+    convertWideValue()
 end

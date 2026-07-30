@@ -1,13 +1,18 @@
-const mapRows as u8 = 24
-const mapColumns as u8 = 32
+const dayCount as u8 = 7
+const readingCount as u8 = 4
 
-const stepX as i8[4] = [0, 1, 0, -1]
-const stepY as i8[4] = [-1, 0, 1, 0]
+const daysInMonth as u8[12] = [
+    31, 28, 31, 30, 31, 30,
+    31, 31, 30, 31, 30, 31
+]
+
+const greetingBytes as u8[6] = [$48, $45, $4c, $4c, $4f, 0]
 
 var samples as u8[8]
-var tiles as u8[mapRows, mapColumns]
+var readings as u16[5]
+var weeklyReadings as u16[dayCount, readingCount]
 
-sub fillSamples()
+sub prepareSamples()
     var index as i16
 
     for index = 0 to count(samples) - 1
@@ -15,6 +20,12 @@ sub fillSamples()
     end
 end
 
-sub resetSamples()
-    clear(samples)
+sub prepareWeek()
+    clear(weeklyReadings)
+    weeklyReadings[1, 2] = 120
+end
+
+sub main()
+    prepareSamples()
+    prepareWeek()
 end

@@ -1,43 +1,48 @@
-record Actor
-    var x as i16
-    var y as i16
-    var timer as u8
+record Date
+    var year as u16
+    var month as u8
+    var day as u8
 end
 
-extern sub screenClear()
-extern sub drawPixel(x as u8, y as u8, colour as u8)
-extern sub showNumber(number as u16)
+record Reading
+    var value as i16
+    var unit as u8
+    var quality as u8
+end
 
-var playerX as u8 = 0
-var playerY as u8 = 0
-var playerColour as u8 = 7
-var targetX as u8 = 0
-var distance as u16 = 0
-var root as u16 = 0
-var area as u16 = 0
-var framebuffer as u8[256]
+extern sub writeUnsigned(value as u16)
+extern sub writeNewLine()
 
-const actorBytes as u8 = size(type Actor)
-const timerOffset as u8 = offset(Actor.timer)
+var previousReading as i16 = 250
+var currentReading as i16 = 20
+var change as u16 = 0
+var workspace as u8[32]
+
+const dateBytes as u8 = size(type Date)
+const qualityOffset as u8 = offset(Reading.quality)
 
 asm
 ROM_WAIT_KEY = $0038
 end
 
-sub updateMeasurements()
-    distance = abs(targetX - playerX)
-    root = sqrt(area)
+sub measureChange()
+    change = abs(currentReading - previousReading)
 end
 
-sub showPlayer()
-    clear(framebuffer)
-    screenClear()
-    drawPixel(playerX, playerY, playerColour)
-    showNumber(distance)
+sub showReading(value as u16)
+    writeUnsigned(value)
+    writeNewLine()
 end
 
 sub waitForKey()
     asm
         call ROM_WAIT_KEY
     end
+end
+
+sub main()
+    clear(workspace)
+    measureChange()
+    showReading(change)
+    waitForKey()
 end
