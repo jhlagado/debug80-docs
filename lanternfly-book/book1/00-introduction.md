@@ -11,7 +11,7 @@ This book is a first course in Lanternfly, a programming language for small
 computers. We begin with a calculation three lines long, and by the last
 chapter we are writing programs that organise records, span several modules
 and talk to real hardware through typed services. Between those two points
-lies everything this kind of machine asks of a programmer: choosing
+lies everything we must bring to a machine this small: choosing
 representations deliberately, guarding the values we store and knowing what
 each line costs.
 

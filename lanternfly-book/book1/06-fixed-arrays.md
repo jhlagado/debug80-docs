@@ -199,8 +199,8 @@ which preserves writable RAM for changing program state.
 
 ## Characters and strings
 
-Text is byte data with one extra obligation: something has to know where it
-ends. A character literal such as `'H'` is an exact byte value, so a `u8`
+Text is byte data with one extra fact to record: where it ends. A character
+literal such as `'H'` is an exact byte value, so a `u8`
 array can hold text-shaped bytes — but the array's count describes its
 capacity, and nothing in it records how much of that capacity is currently
 meaningful. Lanternfly's string type carries that fact itself:
@@ -216,10 +216,10 @@ exactly fourteen bytes settled at compile time. There is no allocator and no
 hidden buffer; the declaration is the cost. A capacity of 255 or more widens
 the length field to two bytes and nothing else changes.
 
-The terminator earns its keep at the boundary. Because every operation
-maintains it, the payload is always valid NUL-terminated text, so a firmware
-or platform routine that expects the classic C convention can read the bytes
-directly, at no conversion cost, while `length` never has to scan for the
+Every operation maintains the terminator, so the payload is always valid
+NUL-terminated text: a firmware
+or platform routine that requires the classic C convention can read the bytes
+directly, at no conversion cost, while `length` never scans for the
 zero — it reads the stored count and returns it as a `u16`.
 
 A double-quoted literal supplies text wherever it fits:
@@ -246,7 +246,7 @@ valid empty string, which is why a module string needs no initializer: it
 simply begins empty.
 
 The length byte, the payload cells and the terminator have no names. No
-index reaches them, and `fill` refuses a string, because the whole
+index reaches them, and `fill` rejects a string, because the whole
 arrangement depends on the count, the nonzero payload and the terminator
 staying in agreement — assignment, `append`, `clear`, comparison and
 `length` are the complete interface, and each one preserves what the others
@@ -303,8 +303,9 @@ gives element 6 and byte offset 12 because each entry occupies two bytes.
 - `for each` visits every element in row-major order when positions are not
   needed.
 - Character literals are byte values, and `string[N]` is the text type: a
-  counted string of exact size `N + 2` whose payload always ends with a zero
-  byte, so C-convention services read it directly.
+  counted string of exact size `N + 2` through capacity 254 and `N + 3` from
+  capacity 255, whose payload always ends with a zero byte so C-convention
+  services read it directly.
 - Strings are sealed — assignment, `append`, `clear`, comparison and `length`
   are the whole interface, and every copy is checked against capacity before
   a byte moves.
