@@ -159,8 +159,7 @@ to study them.
 
 A monitor or debugger can inspect the bytes assigned to `total`. The planned
 toolchain will also retain symbol information so that programmers can work
-with the name `total` rather than look up its address by hand. Those bytes
-contain 135 even though no display routine has been called.
+with the name `total` rather than look up its address by hand.
 
 The complete source is available as the
 [chapter listing](/lanternfly-book/book1/code/01-first-program.txt).
@@ -189,9 +188,6 @@ examine what the compiler asked AZM to assemble. For everyday program logic,
 you can work with names, types, expressions and subroutines instead of
 managing registers and addresses for every operation.
 
-You can now account for the program from beginning to end. Its static storage
-is ready before the selected entry begins. While following that entry, you can
-account for each value used in the calculation and for the result stored in
-`total`. When the entry returns, the target profile performs its normal
-termination operation. In the next chapter, we will choose integer types
-deliberately rather than accept `u16` on trust.
+When the entry returns, the target profile performs its normal termination
+operation. In the next chapter, we will choose integer types deliberately
+rather than accept `u16` on trust.

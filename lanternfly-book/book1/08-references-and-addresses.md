@@ -29,8 +29,7 @@ it selects another entry; the alias inside `markSelected` names whichever
 entry is selected when the routine runs.
 
 Lanternfly has no pointer or reference type, no address-of operator and no
-dereference operator. Identity lives in declared paths and integer indices,
-and this chapter shows how far those reach.
+dereference operator. Identity lives in declared paths and integer indices.
 
 ## Identity as an index
 
@@ -183,8 +182,7 @@ The [chapter listing](/lanternfly-book/book1/code/08-references.txt)
 selects a reading by index, adjusts it through an alias and clears one row
 of a buffer table. The assignment to `selectedReading` changes which entry
 later code means; the assignments through `reading` change the entry
-itself. Keeping those two operations distinct is the working skill of this
-chapter.
+itself.
 
 ## Chapter summary
 

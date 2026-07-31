@@ -202,9 +202,9 @@ translation:
 - initialization work, runtime fault sites and target assumptions;
 - optional size and timing estimates when the target profile supplies them.
 
-These artifacts connect the high-level program to the machine. You can inspect
-the instructions behind a loop, find the address of a record, see why a helper
-was linked or locate the generated code for a source statement.
+You can inspect the instructions behind a loop, find the address of a record,
+see why a helper was linked or locate the generated code for a source
+statement.
 
 ## Example
 
