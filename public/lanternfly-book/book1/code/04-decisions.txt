@@ -40,7 +40,27 @@ sub configureReport()
     end
 end
 
+enum InputKind as u8
+    serial
+    file
+    keyboard
+end
+
+var inputKind as InputKind = serial
+var buffered as boolean = false
+
+// Every member has a case, so this select is complete without an else.
+sub configureInput()
+    select inputKind
+    case serial, file
+        buffered = true
+    case keyboard
+        buffered = false
+    end
+end
+
 sub main()
     updateStatus()
     configureReport()
+    configureInput()
 end

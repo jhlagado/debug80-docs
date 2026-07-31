@@ -243,9 +243,10 @@ artifacts show the chosen implementation and cost.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt)
-fills a sample buffer and declares a weekly table. For
-`weeklyReadings[1, 2]`, the expression `1 * readingCount + 2` gives element 6
-and byte offset 12 because each entry occupies two bytes.
+fills a sample buffer and declares a weekly table, then zeroes a month of
+readings across a 1-to-31 domain and holds one line width per report mode.
+For `weeklyReadings[1, 2]`, the expression `1 * readingCount + 2` gives
+element 6 and byte offset 12 because each entry occupies two bytes.
 
 ## Chapter summary
 

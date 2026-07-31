@@ -182,9 +182,11 @@ value.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/04-decisions.txt)
-contains the batch-status policy and report-mode selection. With one error and
-zero remaining items, `updateStatus` produces `statusFailed`. With no errors
-and zero remaining items, it produces `statusComplete`.
+contains the batch-status policy and report-mode selection, and closes with
+an enumeration selector whose `select` covers every member without an
+`else`. With one error and zero remaining items, `updateStatus` produces
+`statusFailed`. With no errors and zero remaining items, it produces
+`statusComplete`.
 
 ## Chapter summary
 

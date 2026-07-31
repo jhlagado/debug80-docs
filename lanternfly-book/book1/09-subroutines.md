@@ -71,8 +71,8 @@ total = atMost(total + nextAmount, 1000)
 ```
 
 Every reachable path in a result-bearing routine must return a compatible
-scalar. First-edition results may be integers, Booleans, opaque addresses or
-`cstr` values. Records and arrays remain in caller-owned storage and are
+scalar. First-edition results may be ordinals — integers, enumerations and
+ranges — Booleans, opaque addresses or `cstr` values. Records and arrays remain in caller-owned storage and are
 reached through aggregate parameters and aliases.
 
 A result-bearing call may stand alone when its side effects matter and its
