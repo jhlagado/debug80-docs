@@ -10,6 +10,9 @@ has_toc: false
 
 # Lanternfly Book 1 — Programming Fundamentals
 
+[Lanternfly Book 2](../book2/) is the companion language reference for exact
+syntax, type, storage, control-flow and diagnostic rules.
+
 ## Introduction
 
 Lanternfly is a compiled, low-level programming language for computers where

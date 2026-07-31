@@ -193,8 +193,9 @@ fits in a small table:
 | bread added and counted  |   215 |         2 |
 | milk added and counted   |   293 |         3 |
 
-This table is a hand trace: the machine's run, performed on paper. The
-final row is the program's answer: total 293, three items.
+This table is a hand trace: the machine's run, performed on paper. We
+will make tables like this one throughout the book, and the final row is
+always the program's answer — here, total 293, three items.
 
 ## Memory and instructions
 
