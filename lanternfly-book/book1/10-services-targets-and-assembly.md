@@ -212,7 +212,9 @@ translation:
 
 You can inspect the instructions behind a loop, find the address of a record,
 see why a helper was linked or locate the generated code for a source
-statement.
+statement. The mapping is verified when the toolchain composes the final
+program: a map that cannot be validated against the assembled output is an
+error, so the map you inspect is either checked or absent, never a guess.
 
 ## Example
 
