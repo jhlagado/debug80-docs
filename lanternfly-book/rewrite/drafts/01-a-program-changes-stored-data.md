@@ -13,19 +13,17 @@ system represents employees and hours and computes wages. A game represents
 positions and scores and computes the next frame. A thermostat represents a
 temperature and a setpoint and computes a switch. The data comes first,
 because until the facts have a shape, there is nothing for the algorithm to
-transform — and most of the failures a working programmer meets trace back
-to one of the two answers being fuzzy.
+transform.
 
 This book teaches Lanternfly by asking those two questions of one program
 after another. Lanternfly is a statically typed structured BASIC for
 fixed-memory systems: source that reads in short English words, compiled
 once — whole — into a program for a small machine such as a Z80. There is
-no interpreter reading the source while it runs, and there is no hidden
-machinery underneath it; a declaration corresponds to storage with a size
-you can state, and a statement corresponds to instructions a listing will
-show you. On a machine with sixty-five thousand bytes of memory and a frame
-deadline, both properties matter, and this book keeps both visible from the
-first chapter to the last.
+no interpreter reading the source while it runs: a declaration corresponds
+to storage with a size you can state, and a statement corresponds to
+instructions a listing will show you. On a machine with sixty-five thousand
+bytes of memory and a frame deadline, both properties matter, and this book
+keeps both visible.
 
 The first program is an invoice. Its data: a running total and a count of
 items, both starting at nothing. Its algorithm: add three fixed prices, one
@@ -54,13 +52,12 @@ end
 ```
 
 Three fixed prices, two changing facts, one routine that runs from top to
-bottom. By the end of this chapter every line of it is accounted for, and
-so is the byte-by-byte state of the machine that runs it.
+bottom.
 
 ## Choosing the representation
 
-The program's first decisions happen before any statement: what shape does
-each fact get? Lanternfly makes the decisions visible, because every
+The program's first decisions happen before any statement: the shape of
+each fact. Lanternfly makes the decisions visible, because every
 declaration names a type, and a type is a recorded choice about size and
 range.
 
@@ -113,8 +110,7 @@ The `= 0` initializers are installed before the program's entry point
 begins, so no statement ever sees either variable in an undefined state.
 The rule behind this is broader and worth meeting now: all module storage
 is allocated, and every static initializer installed, before an executable
-program's entry runs. A Lanternfly program begins with its world already
-in order.
+program's entry runs.
 
 ## The entry point
 
@@ -185,8 +181,7 @@ message is worth reading.
 
 Statements execute in source order. `main` has six, and the program is
 therefore a story with a beginning, six events and an end — no branches
-yet, no repetition, just sequence, which is the oldest control structure
-and the one every other chapter builds on.
+yet, no repetition, just sequence, the oldest control structure.
 
 Because the story is finite and the state is three bytes, the whole run
 fits in a small table:
@@ -199,11 +194,7 @@ fits in a small table:
 | milk added and counted   |   293 |         3 |
 
 This table is a hand trace: the machine's run, performed on paper. The
-final row is the program's answer — total 293, three items — and checking
-a program by tracing it is the working skill this book exercises in every
-chapter, because the programmers who stay calm when a program misbehaves
-are the ones who can sit down with a listing and become the machine for a
-while.
+final row is the program's answer: total 293, three items.
 
 ## Memory and instructions
 
@@ -212,26 +203,22 @@ numbered byte-sized cells — on a Z80, exactly 65,536 of them, each
 holding a value from 0 to 255, each with a number called its address.
 `total` is two of those cells at an address the compiler chose;
 `itemCount` is one more. There is no label in the machine, no record of
-what the bytes mean; meaning lives in the program, which is why the
-declarations that assign it are worth taking seriously.
+what the bytes mean; meaning lives in the program.
 
 One accumulation line compiles to a handful of instructions in the shape
 of load, add, store: bring the two bytes of `total` into a register pair,
 add the price, put the bytes back. The count's line is shorter still.
-Nothing else is generated — no runtime system, no bookkeeping, nothing
-the source did not ask for — and the generated listing shows each line's
-instructions against the line that produced them. The claim from the top
-of the chapter is concrete now: this program is three bytes of state and
-a few dozen bytes of code, and both numbers can be read off the build's
-own artifacts.
+Nothing else is generated: the program contains exactly what the source
+asked for, and the generated listing shows each line's instructions
+against the line that produced them. This program is three bytes of state
+and a few dozen bytes of code, and both numbers can be read off the
+build's own artifacts.
 
 ## The listing
 
 The [chapter listing](/lanternfly-book/book1/code/01-invoice.txt) holds
-the complete program with its trace. The trace above was worked from the
-same listing, and reproducing it — cover the table, run the six
-statements on paper, compare — is a five-minute exercise that pays for
-itself in every later chapter.
+the complete program with its trace. The trace above was worked from that
+listing; reproduced on paper, it takes five minutes.
 
 The two questions have their first answers. Data: two typed cells and
 three folded constants. Algorithm: six statements in a straight line.
