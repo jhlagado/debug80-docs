@@ -9,7 +9,7 @@ nav_order: 6
 
 Records and fixed arrays give aggregate data an exact, static shape.
 Lanternfly identifies objects within that shape through storage paths and
-integer selectors, without introducing source-level pointers.
+ordinal selectors, without introducing source-level pointers.
 
 ## Records
 
@@ -17,14 +17,14 @@ integer selectors, without introducing source-level pointers.
 
 ```lanternfly
 record Point
-    var x as i16
-    var y as i16
+    x as i16
+    y as i16
 end
 
 record Actor
-    var position as Point
-    var image as u8
-    var active as boolean
+    position as Point
+    image as u8
+    active as boolean
 end
 ```
 
@@ -54,15 +54,38 @@ const boardColumns as u8 = 20
 
 var actors as Actor[actorCount]
 var board as u8[boardRows, boardColumns]
+var samples as u8[10 to 20]
+var palette as u8[Colour]
 ```
 
-Each extent is a positive compile-time constant. Arrays use zero-based
-indices, contiguous inline storage and true element sizes. They may contain
-scalars or records and may appear as record fields.
+Every dimension has a fixed, nonempty ordinal domain. A lone positive constant
+is shorthand for the zero-based domain `0 until count`. An explicit `to` or
+`until` range chooses other bounds, while an enum or subrange type supplies
+its complete domain. `samples` therefore has eleven elements indexed from 10
+through 20, and `palette` has one element for each `Colour` member.
+
+Arrays use contiguous inline storage and true element sizes. Their normalized
+index domains are part of the type, so equal element counts with different
+bounds or different nominal ordinal types are not assignment-compatible. An
+array may contain scalars, strings or records and may appear as a record field.
+
+Initializer positions follow ascending ordinal order in each dimension. The
+first value maps to the lower bound, and the rightmost dimension changes
+fastest. Enum-indexed initializers therefore follow member declaration order.
+
+When a counted string is the element type, its capacity brackets come first:
+
+```lanternfly
+var names as string[24][8]
+```
+
+This is eight `string[24]` values. Each short string occupies 26 bytes, so the
+array occupies 208 bytes before any surrounding record fields.
 
 Multidimensional arrays use row-major order. The rightmost dimension is
 contiguous. In `u8[12, 20]`, element `[row, column]` is at element number
-`row * 20 + column`.
+`row * 20 + column`. In `u8[1 to 12, 1 to 20]`, it is
+`(row - 1) * 20 + (column - 1)`.
 
 One bracket operation supplies one index for every dimension:
 
@@ -75,9 +98,10 @@ selects an element rather than a partial row.
 
 ## Bounds checking
 
-A constant out-of-range index is a compile error. Every dynamic index is
-checked unless the compiler proves it lies in range. Failure causes
-`F-BOUNDS` before a load or store.
+A constant out-of-range index is a compile error. Every dynamic index must
+belong to a compatible ordinal family and is checked unless its type already
+proves it lies in the dimension's domain. Failure causes `F-BOUNDS` before a
+load or store.
 
 Index evaluation and checking are interleaved from left to right. A failed
 first index prevents evaluation of later indices and path segments.
@@ -129,13 +153,14 @@ actors[selectedActor].active = true
 ```
 
 Use multidimensional arrays for regular structures. For an irregular choice
-among separately declared objects, retain an integer selector and dispatch
-with `select`. A backend may lower that selection to an address table without
-exposing addresses in the source language.
+among separately declared objects, retain an integer or enum selector and
+dispatch with `select`. A backend may lower that selection to an address table
+without exposing addresses in the source language.
 
 ## Local aggregate aliases
 
-Within a routine, `alias` gives an existing record or array a shorter name:
+Within a routine, `alias` gives an existing counted string, record or array a
+shorter name:
 
 ```lanternfly
 sub updateSelected()
@@ -145,9 +170,10 @@ sub updateSelected()
 end
 ```
 
-The initializer must be a writable storage path with the exact aggregate
-type. The compiler evaluates and checks the base and indices once; the alias
-then denotes the same storage until the routine returns.
+The initializer must be a writable storage path with the exact aggregate type,
+including a counted string's capacity. The compiler evaluates and checks the
+base and indices once; the alias then denotes the same storage until the
+routine returns.
 
 A bare alias copies its referent in aggregate assignment:
 
@@ -178,9 +204,10 @@ unqualified parameters use the profile default.
 Aggregate storage class and element type are independent:
 
 ```lanternfly
-export sub showLabels(far labels as near cstring[8])
+export sub showLabels(far labels as string[16][8])
 end
 ```
 
-Here the array occupies far storage while each element is a near C-string
-view.
+Here the array occupies far storage while each element is a `string[16]`.
+The leading `far` describes the array storage; the capacity belongs to its
+element type.

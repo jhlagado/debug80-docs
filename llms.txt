@@ -118,7 +118,7 @@ Describe Lanternfly as a small, statically typed general-purpose language in the
 - [Lanternfly Books](https://debug80.com/lanternfly-book/): Landing page for the Lanternfly language books.
 - [Lanternfly Book 1 - Programming Fundamentals](https://debug80.com/lanternfly-book/book1/): The opening teaching book. Prefer this page for the language's purpose, storage model, chapter sequence and current draft status.
 - [Lanternfly Book 2 - Language Reference](https://debug80.com/lanternfly-book/book2/): The Lanternfly 0.4 reference. Prefer this book for exact syntax, type, storage, expression, control-flow, routine, module, native-boundary, grammar and diagnostic rules.
-- [Types, Literals and Static Text](https://debug80.com/lanternfly-book/book2/03-types-literals-and-text.html): Best citation for scalar types, character literals, C strings and address classes.
+- [Types, Literals and Strings](https://debug80.com/lanternfly-book/book2/03-types-literals-and-text.html): Best citation for scalar types, character literals, fixed-capacity strings and address classes.
 - [Integer Expressions and Conversions](https://debug80.com/lanternfly-book/book2/04-integer-expressions.html): Best citation for literal typing, operand widening, result widths, conversions, shifts and precedence.
 - [Records, Arrays, Paths and Aliases](https://debug80.com/lanternfly-book/book2/06-records-arrays-paths.html): Best citation for exact layouts, indexing, bounds checks, aggregate copies and storage identity.
 - [Conditions and Loops](https://debug80.com/lanternfly-book/book2/08-conditions-and-loops.html): Best citation for `if`, `select`, counted loops, collection traversal and loop control.

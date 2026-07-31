@@ -14,12 +14,12 @@ makes source easier to scan.
 
 ## Canonical spelling
 
-| Category | Canonical form | Example |
-|---|---|---|
-| Keywords and built-in operations | lowercase | `if`, `record`, `count` |
-| Built-in types | lowercase | `u8`, `boolean`, `near cstring` |
-| Values and routines | lower camel case | `playerScore`, `updatePlayer` |
-| User-defined types | Pascal case | `Actor`, `GameState` |
+| Category                         | Canonical form   | Example                       |
+| -------------------------------- | ---------------- | ----------------------------- |
+| Keywords and built-in operations | lowercase        | `if`, `record`, `count`       |
+| Built-in types                   | lowercase        | `u8`, `string[24]`            |
+| Values and routines              | lower camel case | `playerScore`, `updatePlayer` |
+| User-defined types               | Pascal case      | `Actor`, `GameState`          |
 
 These forms are reading conventions rather than semantic distinctions.
 Declarations that differ only in case conflict in the same namespace.
@@ -32,42 +32,46 @@ case and Pascal case are canonical.
 
 Each module has one type scope and one value scope:
 
-- record declarations enter the type scope;
-- constants, variables, routines and external routines enter the value scope.
+- record, enum and range declarations enter the type scope;
+- enum members, constants, variables, routines and external routines enter the
+  value scope.
 
 A type and a value may share a name:
 
 ```lanternfly
 record Actor
-    var active as boolean
+    active as boolean
 end
 
 var actor as Actor
 ```
 
-A record type and a callable routine may not share a case-insensitive name.
-That restriction keeps `Point(...)` unambiguously a record initializer or a
-routine invocation. A storage declaration and a routine also conflict because
-both occupy the value scope.
+A record, enum or range type and a callable routine may not share a
+case-insensitive name. That restriction keeps `Point(...)` unambiguously a
+record initializer or a routine invocation and preserves checked type
+conversions. A storage declaration and a routine also conflict because both
+occupy the value scope.
 
 ## Module collection and source order
 
 The compiler first collects every module declaration name, then checks
 declaration and routine bodies. A type annotation may therefore name a later
-record type, and a routine may call another routine declared later in the
+user-defined type, and a routine may call another routine declared later in the
 module.
 
 Constant initializers and placement expressions retain a source-order rule:
 
 - imported exports precede local declarations;
-- a local declaration expression may use only earlier constants;
+- a local declaration expression may use only earlier constants or enum
+  members;
 - a layout path may begin only with earlier storage;
 - routine-body constant contexts may use any successfully initialized module
   constant.
 
-Constant values, array extents, record layouts, target addresses and layout
-queries share one dependency graph. If that graph contains a cycle, the
-diagnostic includes the complete dependency path.
+Constant values, ordinal domains, string capacities, array domains, record
+layouts, target addresses and layout queries share one dependency graph. If
+that graph contains a cycle, the diagnostic includes the complete dependency
+path.
 
 ## Routine scope
 
@@ -90,13 +94,13 @@ only be unique within that record and resolve after a field-selection dot:
 
 ```lanternfly
 record Position
-    var x as i16
-    var y as i16
+    x as i16
+    y as i16
 end
 
 record Velocity
-    var x as i16
-    var y as i16
+    x as i16
+    y as i16
 end
 ```
 

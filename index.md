@@ -128,8 +128,9 @@ want a readable route from typed source to assembly language.
 ### [Lanternfly Book 2 — Language Reference](lanternfly-book/book2/)
 
 The reference manual defines Lanternfly 0.4 syntax and semantics: names,
-fixed-width types, static text, exact storage, expressions, control flow,
-routines, modules, target services, grammar, diagnostics and conformance.
+fixed-width types, fixed-capacity strings, exact storage, expressions, control
+flow, routines, modules, target services, grammar, diagnostics and
+conformance.
 
 For compiler implementers and programmers who need the exact language rules.
 

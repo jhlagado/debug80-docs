@@ -41,7 +41,7 @@ implementation.
 
 1. [Language Model and Source Form](01-language-and-source.md)
 2. [Names and Scopes](02-names-and-scopes.md)
-3. [Types, Literals and Static Text](03-types-literals-and-text.md)
+3. [Types, Literals and Strings](03-types-literals-and-text.md)
 4. [Integer Expressions and Conversions](04-integer-expressions.md)
 5. [Constants, Variables and Placement](05-constants-variables-placement.md)
 6. [Records, Arrays, Paths and Aliases](06-records-arrays-paths.md)

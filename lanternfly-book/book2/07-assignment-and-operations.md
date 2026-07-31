@@ -41,6 +41,10 @@ conversion:
 - narrowing or changing signedness warns with `W-CONVERT-001` by default;
 - a project may promote that warning to an error.
 
+Assignment to an enum or subrange performs the checked ordinal conversion. A
+known value outside the destination domain is a compile error; a dynamic
+failure causes `F-RANGE` before the destination changes.
+
 The same destination rules apply to initializers, scalar arguments, returned
 values, `fill` values and counted-loop starts.
 
@@ -69,19 +73,22 @@ ends the exemption.
 
 ## Equality and ordering
 
-| Operator | Meaning |
-|---|---|
-| `=` | equal |
-| `<>` | not equal |
-| `<` | less than |
-| `<=` | less than or equal |
-| `>` | greater than |
-| `>=` | greater than or equal |
+| Operator | Meaning               |
+| -------- | --------------------- |
+| `=`      | equal                 |
+| `<>`     | not equal             |
+| `<`      | less than             |
+| `<=`     | less than or equal    |
+| `>`      | greater than          |
+| `>=`     | greater than or equal |
 
 Comparison chaining is invalid. Integer comparisons use the compatibility
 rules from [Chapter 4](04-integer-expressions.md#compatible-operand-types).
-Booleans support `=` and `<>`. Opaque addresses support `=` and `<>` when
-their classes match. Compatible C strings support all six operators.
+Subranges compare through their host ordinal family. Enum comparisons require
+the same nominal enum and follow declaration order. Booleans support `=` and
+`<>`. Opaque addresses support `=` and `<>` when their classes match. Strings
+support all six operators and compare their current content, even when their
+capacities differ.
 
 Record and array equality is deferred. Programs compare their selected fields
 or elements explicitly.
@@ -105,19 +112,23 @@ negative runtime operand causes `F-NEGATIVE-SQRT`.
 
 ### `length`
 
-`length(text)` accepts `cstring` and returns its payload byte count as `u16`. It
-scans to the NUL terminator. Literal calls fold at compile time.
+`length(text)` accepts `string[N]` or a string literal and returns its payload
+byte count as `u16`. It reads a string's stored header without scanning the
+payload. Literal calls fold at compile time.
 
 ## Layout queries
 
-Layout queries are compile-time operations that produce exact, untyped
-integers:
+Layout queries are compile-time operations. Most produce exact, untyped
+integers; `lower` and `upper` preserve a nominal ordinal domain when one
+defines the selected dimension:
 
 ```lanternfly
 const actorBytes as u16 = size(type Actor)
 const tableBytes as u16 = size(actors)
 const actorCount as u8 = count(actors)
 const rowCount as u8 = count(board, 0)
+const firstRow as u8 = lower(board, 0)
+const lastRow as u8 = upper(board, 0)
 const xOffset as u8 = offset(Actor.position.x)
 ```
 
@@ -127,6 +138,10 @@ a statically typed path.
 `count(type ArrayType)` and `count(path)` return array extents. A
 multidimensional array requires a zero-based dimension argument.
 
+`lower` and `upper` return the first and last valid ordinal for an array
+dimension. They preserve an enum or subrange result type and otherwise return
+an exact integer.
+
 `offset(Record.fieldPath)` returns a field path's byte offset from the
 beginning of its record type. Intermediate fields must be by-value records.
 
@@ -134,25 +149,34 @@ A layout-query path is unevaluated. It may use fields and constant indices,
 but cannot call routines or evaluate dynamic indices. The compiler validates
 constant indices without reading storage or running a bounds check.
 
-## Aggregate procedures
+## Aggregate and string procedures
 
-`clear` and `fill` have the internal result type `unit` and are valid only as
-complete statements:
+`clear`, `fill` and `append` have the internal result type `unit` and are valid
+only as complete statements:
 
 ```lanternfly
 clear(board)
 fill(framebuffer, backgroundColour)
+append(playerName, '!')
 ```
 
-`clear(target)` writes the all-zero representation through a writable record
-or fixed array. Every scalar leaf must accept zero.
+`clear(target)` writes the all-zero representation through a writable counted
+string, record or fixed array. Every leaf must accept zero. A counted string
+becomes empty.
 
 `fill(target, value)` requires a writable fixed array with a scalar leaf type.
 The value receives that type as its expected destination type and is evaluated
 and converted once. Every element receives the converted value in row-major
 order. A conversion produces at most one warning for the statement.
 
-Both procedures evaluate the destination path once. Their writes are
+`append(destination, source)` requires a writable counted-string destination.
+The source may be another string, a string literal or a nonzero `u8` byte. It
+checks the final length and byte invariant before writing; failure causes
+`F-RANGE` without changing the destination. Source and destination may overlap
+because the operation has snapshot semantics.
+
+All three procedures evaluate the destination path once. `fill` and `append`
+then evaluate their second argument once before storing. Their writes are
 observable; volatile aggregates receive ordered scalar writes.
 
 ## Expression statements

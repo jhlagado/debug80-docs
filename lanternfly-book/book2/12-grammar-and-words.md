@@ -32,6 +32,8 @@ export-decl         ::= "export" exportable-declaration
 
 declaration         ::= const-decl
                       | var-decl
+                      | enum-decl
+                      | range-decl
                       | record-decl
                       | extern-sub-decl
                       | sub-decl
@@ -39,6 +41,8 @@ declaration         ::= const-decl
 exportable-declaration
                     ::= const-decl
                       | var-decl
+                      | enum-decl
+                      | range-decl
                       | record-decl
                       | extern-sub-decl
                       | sub-decl
@@ -51,11 +55,19 @@ var-decl            ::= "volatile"? "var" value-name "as" type-expr
 
 placement           ::= "at" address-const-expr
 
+enum-decl           ::= "enum" type-name "as" integer-type newline
+                        enum-member+
+                        "end" newline
+enum-member         ::= value-name newline
+
+range-decl          ::= "range" type-name "as" ordinal-type
+                        "=" ordinal-range newline
+
 record-decl         ::= "record" type-name newline
                         field-decl+
                         "end" newline
 
-field-decl          ::= "var" value-name "as" type-expr newline
+field-decl          ::= value-name "as" type-expr newline
 
 sub-decl            ::= "sub" value-name "(" params? ")"
                         ("as" type-expr)? newline
@@ -131,6 +143,7 @@ expression-statement
 standard-procedure-statement
                     ::= "clear" "(" storage-path ")" newline
                       | "fill" "(" storage-path "," expression ")" newline
+                      | "append" "(" storage-path "," expression ")" newline
 
 if-statement        ::= "if" expression "then" newline block
                         ("else" "if" expression "then" newline block)*
@@ -145,7 +158,7 @@ select-statement    ::= "select" expression newline
 case-clause         ::= "case" case-item
                         ("," case-item)* newline block
 case-item           ::= const-expr
-                      | const-expr "to" const-expr
+                      | const-expr ("to" | "until") const-expr
 
 for-statement       ::= "for" value-name "=" expression
                         ("to" | "until") expression
@@ -171,22 +184,28 @@ block               ::= statement*
 type-expr           ::= arrayable-type dimensions?
 
 aggregate-type      ::= type-name
+                      | string-type
                       | arrayable-type dimensions
 
 arrayable-type      ::= scalar-type
+                      | string-type
                       | type-name
                       | address-type
 
-dimensions          ::= "[" const-expr ("," const-expr)* "]"
+dimensions          ::= "[" index-domain ("," index-domain)* "]"
+index-domain        ::= const-expr
+                      | ordinal-range
+                      | type-name
+ordinal-range       ::= const-expr ("to" | "until") const-expr
+ordinal-type        ::= integer-type | type-name
 
 scalar-type         ::= integer-type
                       | "boolean"
-                      | cstring-type
 
 integer-type        ::= "u8" | "i8" | "u16" | "i16"
                       | "u32" | "i32"
 
-cstring-type        ::= ("near" | "far")? "cstring"
+string-type         ::= "string" "[" const-expr "]"
 address-type        ::= ("near" | "far") "address"
 
 storage-base        ::= value-name
@@ -246,13 +265,15 @@ invocation          ::= value-name "(" arguments? ")"
 arguments           ::= expression ("," expression)*
 
 conversion          ::= integer-type "(" expression ")"
-                      | cstring-type "(" expression ")"
+                      | type-name "(" expression ")"
 
 standard-value-operation
                     ::= ("abs" | "sqrt" | "length") "(" expression ")"
 
 layout-query        ::= "size" "(" layout-operand ")"
                       | "count" "(" layout-operand
+                        ("," const-expr)? ")"
+                      | ("lower" | "upper") "(" layout-operand
                         ("," const-expr)? ")"
                       | "offset" "(" type-name
                         ("." value-name)+ ")"
@@ -288,6 +309,11 @@ newline             ::= logical-newline
 `const-expr` and `address-const-expr` receive the semantic restrictions from
 [Chapter 5](05-constants-variables-placement.md#constant-expressions) and
 [Chapter 4](04-integer-expressions.md#target-address-constant-expressions).
+In an array domain, a lone name that resolves to an ordinal type denotes that
+type's complete domain; otherwise it is a count expression. Parentheses force
+the count interpretation when a value and type share a name. A call-like form
+likewise becomes a checked conversion when its leading name resolves to a
+type.
 
 ## Assignment disambiguation
 
@@ -307,6 +333,7 @@ The core word inventory is:
 abs
 alias
 and
+append
 as
 asm
 at
@@ -318,6 +345,7 @@ count
 each
 else
 end
+enum
 exit
 export
 extern
@@ -329,10 +357,12 @@ if
 import
 in
 length
+lower
 mod
 not
 offset
 or
+range
 record
 return
 select
@@ -346,6 +376,7 @@ then
 to
 true
 until
+upper
 var
 volatile
 while
@@ -357,18 +388,18 @@ Reserved built-in type and storage-class words are:
 ```text
 address
 boolean
-cstring
 far
 i8
 i16
 i32
 near
+string
 u8
 u16
 u32
 ```
 
-`type` is contextual inside `size` and `count`.
+`type` is contextual inside `size`, `count`, `lower` and `upper`.
 
 Several familiar words are deliberately absent from the first edition:
 
