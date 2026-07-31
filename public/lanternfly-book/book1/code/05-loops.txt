@@ -29,7 +29,7 @@ end
 sub findNextMultiple()
     var candidate as i16 = startValue
 
-    loop
+    while true
         candidate = candidate + 1
 
         if candidate mod 8 = 0 then

@@ -5,46 +5,43 @@ record Reading
 end
 
 const unitCelsius as u8 = 0
-const emptyBuffer as u8[16] = [
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0
-]
+const calibrationOffset as i16 = 2
+const bufferCount as u8 = 3
+const bufferSize as u8 = 16
 
 var readings as Reading[4]
-var selectedIndex as i16 = 0
-var current as near ref Reading = ref readings[0]
+var selectedReading as u8 = 0
+var previousReading as u8 = 0
 
-var inputBuffer as u8[16]
-var outputBuffer as u8[16]
-var scratchBuffer as u8[16]
-var buffers as (near ref (u8[16]))[3] = [
-    ref inputBuffer,
-    ref outputBuffer,
-    ref scratchBuffer
-]
-
-sub selectReading()
-    current = ref readings[selectedIndex]
-    current.quality = 1
-end
+var buffers as u8[bufferCount, bufferSize]
 
 sub markSelected()
-    ref reading as Reading = readings[selectedIndex]
+    alias reading as Reading = readings[selectedReading]
 
     reading.quality = 1
     reading.unit = unitCelsius
 end
 
-sub clearBuffers()
-    var bufferIndex as i16
+sub adjustSelected()
+    alias reading as Reading = readings[selectedReading]
 
-    for bufferIndex = 0 to count(buffers) - 1
-        value(buffers[bufferIndex]) = emptyBuffer
+    reading.value = reading.value + calibrationOffset
+    reading.quality = 1
+end
+
+sub clearBuffer(selected as u8)
+    var index as u8
+
+    for index = 0 until bufferSize
+        buffers[selected, index] = 0
     end
 end
 
 sub main()
-    selectReading()
+    previousReading = selectedReading
+    selectedReading = 2
+
     markSelected()
-    clearBuffers()
+    adjustSelected()
+    clearBuffer(1)
 end

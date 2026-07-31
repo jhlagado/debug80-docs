@@ -6,17 +6,27 @@ const daysInMonth as u8[12] = [
     31, 31, 30, 31, 30, 31
 ]
 
-const greetingBytes as u8[6] = [$48, $45, $4c, $4c, $4f, 0]
+// ASCII values for HELLO followed by a zero terminator.
+const greetingBytes as u8[6] = ['H', 'E', 'L', 'L', 'O', 0]
 
 var samples as u8[8]
+var sampleTotal as u16 = 0
 var readings as u16[5]
 var weeklyReadings as u16[dayCount, readingCount]
 
 sub prepareSamples()
     var index as i16
 
-    for index = 0 to count(samples) - 1
+    for index = 0 until count(samples)
         samples[index] = u8(index * 2)
+    end
+end
+
+sub sumSamples()
+    sampleTotal = 0
+
+    for each sample in samples
+        sampleTotal = sampleTotal + sample
     end
 end
 
@@ -27,5 +37,6 @@ end
 
 sub main()
     prepareSamples()
+    sumSamples()
     prepareWeek()
 end
