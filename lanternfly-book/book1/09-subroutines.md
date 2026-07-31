@@ -24,7 +24,7 @@ end
 ```
 
 Each call supplies a fresh value for `amount`. The routine defines the update
-once, and callers choose the quantity.
+once, and each call site supplies its own quantity.
 
 ## Parameters and arguments
 
@@ -64,7 +64,7 @@ sub atMost(input as i16, maximum as i16) as i16
 end
 ```
 
-The caller can place the returned `i16` wherever an `i16` expression belongs:
+We can place the returned `i16` wherever an `i16` expression belongs:
 
 ```lanternfly
 total = atMost(total + nextAmount, 1000)
@@ -178,7 +178,7 @@ layout, stack bounds and reentrancy rules. A profile based on fixed scratch
 storage rejects direct and mutual recursion because another invocation would
 overwrite the active frame.
 
-Target profiles may disagree about whether a recursive source program is
+Target profiles may differ over whether a recursive source program is
 valid. The generated report identifies frame size and the profile capability
 that governs the call.
 
