@@ -1612,40 +1612,48 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/01-a-first-program.html"
         },
         {
-          "text": "Values and Integer Types",
-          "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
+          "text": "Scalar Values and Literals",
+          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
         },
         {
-          "text": "Calculations and Comparisons",
+          "text": "Expressions, Conversions and Comparisons",
           "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
         },
         {
-          "text": "Choosing a Path",
-          "link": "/lanternfly-book/book1/04-decisions.html"
+          "text": "Named Ordinals and Decisions",
+          "link": "/lanternfly-book/book1/04-ordinals-and-decisions.html"
         },
         {
           "text": "Repeating Work",
           "link": "/lanternfly-book/book1/05-loops.html"
         },
         {
-          "text": "Tables with Fixed Arrays",
+          "text": "Fixed Arrays and Index Domains",
           "link": "/lanternfly-book/book1/06-fixed-arrays.html"
         },
         {
-          "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
+          "text": "Characters and Fixed-Capacity Strings",
+          "link": "/lanternfly-book/book1/07-characters-and-strings.html"
         },
         {
-          "text": "Selecting Storage with Indices and Aliases",
-          "link": "/lanternfly-book/book1/08-references-and-addresses.html"
+          "text": "Records and Memory Layout",
+          "link": "/lanternfly-book/book1/08-records-and-exact-layout.html"
         },
         {
           "text": "Building with Subroutines",
           "link": "/lanternfly-book/book1/09-subroutines.html"
         },
         {
-          "text": "Modules, Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
+          "text": "Selecting Existing Storage",
+          "link": "/lanternfly-book/book1/10-selecting-storage.html"
+        },
+        {
+          "text": "Modules and Imports",
+          "link": "/lanternfly-book/book1/11-modules-and-imports.html"
+        },
+        {
+          "text": "Machine Services and Assembly",
+          "link": "/lanternfly-book/book1/12-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1674,7 +1682,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
         },
         {
-          "text": "Records, Arrays, Paths and Aliases",
+          "text": "Records, Arrays and Storage Paths",
           "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
         },
         {
@@ -1722,40 +1730,48 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/01-a-first-program.html"
         },
         {
-          "text": "Values and Integer Types",
-          "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
+          "text": "Scalar Values and Literals",
+          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
         },
         {
-          "text": "Calculations and Comparisons",
+          "text": "Expressions, Conversions and Comparisons",
           "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
         },
         {
-          "text": "Choosing a Path",
-          "link": "/lanternfly-book/book1/04-decisions.html"
+          "text": "Named Ordinals and Decisions",
+          "link": "/lanternfly-book/book1/04-ordinals-and-decisions.html"
         },
         {
           "text": "Repeating Work",
           "link": "/lanternfly-book/book1/05-loops.html"
         },
         {
-          "text": "Tables with Fixed Arrays",
+          "text": "Fixed Arrays and Index Domains",
           "link": "/lanternfly-book/book1/06-fixed-arrays.html"
         },
         {
-          "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
+          "text": "Characters and Fixed-Capacity Strings",
+          "link": "/lanternfly-book/book1/07-characters-and-strings.html"
         },
         {
-          "text": "Selecting Storage with Indices and Aliases",
-          "link": "/lanternfly-book/book1/08-references-and-addresses.html"
+          "text": "Records and Memory Layout",
+          "link": "/lanternfly-book/book1/08-records-and-exact-layout.html"
         },
         {
           "text": "Building with Subroutines",
           "link": "/lanternfly-book/book1/09-subroutines.html"
         },
         {
-          "text": "Modules, Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
+          "text": "Selecting Existing Storage",
+          "link": "/lanternfly-book/book1/10-selecting-storage.html"
+        },
+        {
+          "text": "Modules and Imports",
+          "link": "/lanternfly-book/book1/11-modules-and-imports.html"
+        },
+        {
+          "text": "Machine Services and Assembly",
+          "link": "/lanternfly-book/book1/12-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1784,7 +1800,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
         },
         {
-          "text": "Records, Arrays, Paths and Aliases",
+          "text": "Records, Arrays and Storage Paths",
           "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
         },
         {
@@ -1832,40 +1848,48 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/01-a-first-program.html"
         },
         {
-          "text": "Values and Integer Types",
-          "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
+          "text": "Scalar Values and Literals",
+          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
         },
         {
-          "text": "Calculations and Comparisons",
+          "text": "Expressions, Conversions and Comparisons",
           "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
         },
         {
-          "text": "Choosing a Path",
-          "link": "/lanternfly-book/book1/04-decisions.html"
+          "text": "Named Ordinals and Decisions",
+          "link": "/lanternfly-book/book1/04-ordinals-and-decisions.html"
         },
         {
           "text": "Repeating Work",
           "link": "/lanternfly-book/book1/05-loops.html"
         },
         {
-          "text": "Tables with Fixed Arrays",
+          "text": "Fixed Arrays and Index Domains",
           "link": "/lanternfly-book/book1/06-fixed-arrays.html"
         },
         {
-          "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
+          "text": "Characters and Fixed-Capacity Strings",
+          "link": "/lanternfly-book/book1/07-characters-and-strings.html"
         },
         {
-          "text": "Selecting Storage with Indices and Aliases",
-          "link": "/lanternfly-book/book1/08-references-and-addresses.html"
+          "text": "Records and Memory Layout",
+          "link": "/lanternfly-book/book1/08-records-and-exact-layout.html"
         },
         {
           "text": "Building with Subroutines",
           "link": "/lanternfly-book/book1/09-subroutines.html"
         },
         {
-          "text": "Modules, Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
+          "text": "Selecting Existing Storage",
+          "link": "/lanternfly-book/book1/10-selecting-storage.html"
+        },
+        {
+          "text": "Modules and Imports",
+          "link": "/lanternfly-book/book1/11-modules-and-imports.html"
+        },
+        {
+          "text": "Machine Services and Assembly",
+          "link": "/lanternfly-book/book1/12-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1894,7 +1918,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
         },
         {
-          "text": "Records, Arrays, Paths and Aliases",
+          "text": "Records, Arrays and Storage Paths",
           "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
         },
         {
