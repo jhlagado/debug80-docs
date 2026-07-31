@@ -65,15 +65,15 @@ The spec adds Pascal-style ordinal types as a fundamental:
   is now a settled part of the grammar (no Provisional marker).
 - **Aggregate parameter storage class before the name**:
   `export sub moveActor(near actor as Actor, ...)`; element class stays in
-  the type (`far labels as near cstr[8]`). `E-ALIAS-001/002` govern.
+  the type (`far labels as near cstring[8]`). `E-ALIAS-001/002` govern.
 - **Hosted early exit is bare `return`** (`exit body` removed); fixture 11
   is now "Hosted return".
 - **Routine names are not values** (§11.6): no address-of, no indirect
   calls; `select` is the dispatch story.
 - **Arrays contain scalars or records** (§6); multidimensional arrays and
   record fields cover nesting.
-- **`cstr` conversions** spelled `near cstr(...)` / `far cstr(...)` /
-  `cstr(...)`; `F-ADDRESS` now belongs to checked far-to-near `cstr`
+- **`cstring` conversions** spelled `near cstring(...)` / `far cstring(...)` /
+  `cstring(...)`; `F-ADDRESS` now belongs to checked far-to-near `cstring`
   conversion.
 
 ## Per-chapter classification
@@ -148,9 +148,9 @@ teaching contrast, now in the brief. Aggregate parameters (unqualified
 private form; class-before-name for exported) — **Defined** (§11.3).
 
 ### Ch 12 — Static Text and Byte Buffers
-Unchanged: character literals, `cstr` semantics, buffers as `u8` arrays,
+Unchanged: character literals, `cstring` semantics, buffers as `u8` arrays,
 no silent conversion — **Defined**. Bounded writable views: open (Q4).
-No byte access through `cstr` (Q4a) — confirmed still true in the
+No byte access through `cstring` (Q4a) — confirmed still true in the
 rewrite; §3.2 unchanged on indexing.
 
 ### Ch 13 — Storage Identity: Paths, Selectors and Aliases  **(redesigned)**
@@ -163,7 +163,7 @@ language's doctrine as a positive model:
 - local `alias` (evaluated once, non-rebindable, aggregate-only,
   `E-ALIAS-001`, `E-LOCAL-003`): **Defined**;
 - aggregate parameters with `near`/`far` before the name; independent
-  element classes (`far labels as near cstr[8]`): **Defined**;
+  element classes (`far labels as near cstring[8]`): **Defined**;
 - opaque `near/far address`: no derivation to or from storage paths —
   **Defined**;
 - pointers/references/address-of/dereference/function values: **Excluded
@@ -208,7 +208,7 @@ service names).
   of the language; the books may teach them.
 - **Q4**: bounded writable-text views / writable string procedures —
   open; ch 12 hand-rolls composition meanwhile.
-- **Q4a**: no source-level byte access to `cstr` content (no indexing
+- **Q4a**: no source-level byte access to `cstring` content (no indexing
   through the view) — copying a label into a `u8` buffer is
   inexpressible without a native service or bounded views. Confirmed
   against the 3b31fe4 spec. Needs a project ruling for mixed

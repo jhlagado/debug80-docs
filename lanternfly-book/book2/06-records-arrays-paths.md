@@ -178,7 +178,7 @@ unqualified parameters use the profile default.
 Aggregate storage class and element type are independent:
 
 ```lanternfly
-export sub showLabels(far labels as near cstr[8])
+export sub showLabels(far labels as near cstring[8])
 end
 ```
 

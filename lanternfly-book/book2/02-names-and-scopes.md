@@ -17,7 +17,7 @@ makes source easier to scan.
 | Category | Canonical form | Example |
 |---|---|---|
 | Keywords and built-in operations | lowercase | `if`, `record`, `count` |
-| Built-in types | lowercase | `u8`, `boolean`, `near cstr` |
+| Built-in types | lowercase | `u8`, `boolean`, `near cstring` |
 | Values and routines | lower camel case | `playerScore`, `updatePlayer` |
 | User-defined types | Pascal case | `Actor`, `GameState` |
 

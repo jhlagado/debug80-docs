@@ -201,7 +201,7 @@ which preserves writable RAM for changing program state.
 
 The 0.4 language settles static text. A character literal such as `'H'` is
 an exact byte value, and a double-quoted literal is a C-style string —
-written `cstr` in declarations — a read-only view of NUL-terminated static
+written `cstring` in declarations — a read-only view of NUL-terminated static
 text with a near or far address class. A C-style string supports `length`,
 content comparison and passage to services that honour its read-only,
 program-lifetime contract.
@@ -262,7 +262,7 @@ element 6 and byte offset 12 because each entry occupies two bytes.
   contiguous.
 - `for each` visits every element in row-major order when positions are not
   needed.
-- Character literals are byte values, and a C-style string (`cstr`) names
+- Character literals are byte values, and a C-style string (`cstring`) names
   read-only static text; writable text stays in `u8` arrays under explicit
   service contracts.
 - `clear` and `fill` express repeated aggregate writes while leaving the

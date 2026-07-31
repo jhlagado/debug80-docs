@@ -105,7 +105,7 @@ negative runtime operand causes `F-NEGATIVE-SQRT`.
 
 ### `length`
 
-`length(text)` accepts `cstr` and returns its payload byte count as `u16`. It
+`length(text)` accepts `cstring` and returns its payload byte count as `u16`. It
 scans to the NUL terminator. Literal calls fold at compile time.
 
 ## Layout queries

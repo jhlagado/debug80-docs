@@ -46,7 +46,7 @@ through an alias, dispatch among separately declared tables with `select`.
 6. Aggregate parameters revisited as the same machinery at the call
    boundary; storage class before the name (`near`/`far`), mandatory on
    exports (`E-ALIAS-002`); element class independent
-   (`far labels as near cstr[8]`).
+   (`far labels as near cstring[8]`).
 7. The carrier is not a value: no source expression names it; it cannot be
    stored, returned, compared, rebound or converted. `destination = entry`
    copies the referent; identity that must persist goes back to being an
