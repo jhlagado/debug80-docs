@@ -31,7 +31,7 @@ nav_order: 1
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>
     <span class="volume__enter">react →</span>
   </a>
-  <a class="volume volume--lanternfly" href="/lanternfly-book/book1/01-a-first-program">
+  <a class="volume volume--lanternfly" href="/lanternfly-book/book1/00-introduction">
     <span class="volume__tag">Vol $03 · 2 books</span>
     <span class="volume__head"><Mark book="lanternfly" size="26" /><span class="volume__title">Lanternfly</span></span>
     <span class="volume__desc">A statically typed structured BASIC for fixed-memory systems — a teaching book and the complete 0.4 language reference.</span>
