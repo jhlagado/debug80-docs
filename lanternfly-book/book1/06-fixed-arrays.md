@@ -246,3 +246,6 @@ and byte offset 12 because each entry occupies two bytes.
   writable text stays in `u8` arrays under explicit service contracts.
 - `clear` and `fill` express repeated aggregate writes while leaving the
   backend free to choose an implementation.
+
+An array holds many values of one type. In the next chapter we group
+values of different types into records, and lay them out byte by byte.
