@@ -294,6 +294,17 @@ acyclicity from field-type completeness; ch 9 gains the calling-order
 rule and reframes recursion; ch 10 moves to `.lafy`, the import prefix
 and point-of-import visibility. Listings verified declaration-ordered.
 
+## Provenance update (spec revision of 2026-08-01, read same day)
+
+Specification §13.2.2 now defines the generated-source provenance
+contract: backends return anchored fragments with explicit source-node
+spans; final composition verifies every anchor and span against the
+assembled output; failures are `E-MAP-001` and no partial map is
+published. This is toolchain contract below book1's altitude — its one
+reader-facing consequence (the inspected map is verified or absent,
+never guessed) is now a sentence in book1 ch 10. The rewrite's ch 15
+(artifacts ledger) should cite the verified-map guarantee when drafted.
+
 ## Conformance alignment
 
 Fixture names to echo: Counter (ch 1), Rushlight numeric case (ch 3's
