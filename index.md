@@ -19,13 +19,13 @@ nav_order: 1
     <span class="volume__desc">Source-level Z80 debugging in VS Code — from installation to stepping real hardware projects and sending HEX to the board.</span>
     <span class="volume__enter">run →</span>
   </a>
-  <a class="volume volume--azm" href="/azm-book/book1/01-getting-started">
+  <a class="volume volume--azm" href="/azm-book/book1/00-introduction">
     <span class="volume__tag">Vol $01 · 3 books</span>
     <span class="volume__head"><Mark book="azm" size="26" /><span class="volume__title">AZM</span></span>
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
   </a>
-  <a class="volume volume--glimmer" href="/glimmer-book/book1/01-the-shape-of-a-game">
+  <a class="volume volume--glimmer" href="/glimmer-book/book1/00-introduction">
     <span class="volume__tag">Vol $02 · 2 books</span>
     <span class="volume__head"><Mark book="glimmer" size="26" /><span class="volume__title">Glimmer</span></span>
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>

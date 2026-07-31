@@ -142,6 +142,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/azm-book/book1/00-introduction.html"
+        },
+        {
           "text": "Getting Started with AZM",
           "link": "/azm-book/book1/01-getting-started.html"
         },
@@ -179,6 +183,10 @@ export const sidebars = {
       "text": "AZM Book 2 — Z80 Fundamentals",
       "collapsed": true,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/azm-book/book2/00-introduction.html"
+        },
         {
           "text": "The Computer",
           "link": "/azm-book/book2/01-the-computer.html"
@@ -324,6 +332,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/azm-book/book1/00-introduction.html"
+        },
+        {
           "text": "Getting Started with AZM",
           "link": "/azm-book/book1/01-getting-started.html"
         },
@@ -361,6 +373,10 @@ export const sidebars = {
       "text": "AZM Book 2 — Z80 Fundamentals",
       "collapsed": true,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/azm-book/book2/00-introduction.html"
+        },
         {
           "text": "The Computer",
           "link": "/azm-book/book2/01-the-computer.html"
@@ -506,6 +522,10 @@ export const sidebars = {
       "collapsed": true,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/azm-book/book1/00-introduction.html"
+        },
+        {
           "text": "Getting Started with AZM",
           "link": "/azm-book/book1/01-getting-started.html"
         },
@@ -543,6 +563,10 @@ export const sidebars = {
       "text": "AZM Book 2 — Z80 Fundamentals",
       "collapsed": false,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/azm-book/book2/00-introduction.html"
+        },
         {
           "text": "The Computer",
           "link": "/azm-book/book2/01-the-computer.html"
@@ -688,6 +712,10 @@ export const sidebars = {
       "collapsed": true,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/azm-book/book1/00-introduction.html"
+        },
+        {
           "text": "Getting Started with AZM",
           "link": "/azm-book/book1/01-getting-started.html"
         },
@@ -725,6 +753,10 @@ export const sidebars = {
       "text": "AZM Book 2 — Z80 Fundamentals",
       "collapsed": true,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/azm-book/book2/00-introduction.html"
+        },
         {
           "text": "The Computer",
           "link": "/azm-book/book2/01-the-computer.html"
@@ -870,6 +902,10 @@ export const sidebars = {
       "collapsed": true,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/azm-book/book1/00-introduction.html"
+        },
+        {
           "text": "Getting Started with AZM",
           "link": "/azm-book/book1/01-getting-started.html"
         },
@@ -907,6 +943,10 @@ export const sidebars = {
       "text": "AZM Book 2 — Z80 Fundamentals",
       "collapsed": true,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/azm-book/book2/00-introduction.html"
+        },
         {
           "text": "The Computer",
           "link": "/azm-book/book2/01-the-computer.html"
@@ -1052,6 +1092,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/glimmer-book/book1/00-introduction.html"
+        },
+        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1113,6 +1157,10 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": true,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/glimmer-book/book2/00-introduction.html"
+        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"
@@ -1172,6 +1220,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/glimmer-book/book1/00-introduction.html"
+        },
+        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1233,6 +1285,10 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": true,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/glimmer-book/book2/00-introduction.html"
+        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"
@@ -1292,6 +1348,10 @@ export const sidebars = {
       "collapsed": true,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/glimmer-book/book1/00-introduction.html"
+        },
+        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1353,6 +1413,10 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": false,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/glimmer-book/book2/00-introduction.html"
+        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"
@@ -1412,6 +1476,10 @@ export const sidebars = {
       "collapsed": true,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/glimmer-book/book1/00-introduction.html"
+        },
+        {
           "text": "The Shape of a Game",
           "link": "/glimmer-book/book1/01-the-shape-of-a-game.html"
         },
@@ -1473,6 +1541,10 @@ export const sidebars = {
       "text": "Glimmer Book 2 — Building Complete Z80 Games",
       "collapsed": true,
       "items": [
+        {
+          "text": "Introduction",
+          "link": "/glimmer-book/book2/00-introduction.html"
+        },
         {
           "text": "Building Skyfall",
           "link": "/glimmer-book/book2/01-building-skyfall.html"

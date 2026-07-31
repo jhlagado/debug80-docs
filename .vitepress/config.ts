@@ -52,8 +52,8 @@ export default defineConfig({
       // reader pays for nothing. The index pages still exist and still work
       // if a URL points at one; nothing navigates through them.
       { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
-      { text: 'AZM Books', link: '/azm-book/book1/01-getting-started' },
-      { text: 'Glimmer Books', link: '/glimmer-book/book1/01-the-shape-of-a-game' },
+      { text: 'AZM Books', link: '/azm-book/book1/00-introduction' },
+      { text: 'Glimmer Books', link: '/glimmer-book/book1/00-introduction' },
       { text: 'Lanternfly Books', link: '/lanternfly-book/book1/00-introduction' },
     ],
     sidebar: sidebars,

@@ -14,6 +14,8 @@ has_toc: false
 
 ## Main Path
 
+- [Introduction](00-introduction.md)
+
 1. [Getting Started with AZM](01-getting-started.md)
 2. [Source Syntax and Symbols](02-source-syntax.md)
 3. [Addresses, Constants and Expressions](03-addresses-constants-expressions.md)
