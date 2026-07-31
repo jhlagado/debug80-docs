@@ -3,10 +3,10 @@
 // Verified against specification 0.4 (3b31fe4): §7.1, §9.2, §10.2, §11.3-11.4.
 
 record Reading
-    var day as u8
-    var month as u8
-    var temperature as i16
-    var validated as boolean
+    day as u8
+    month as u8
+    temperature as i16
+    validated as boolean
 end
 
 const logCapacity as u8 = 10

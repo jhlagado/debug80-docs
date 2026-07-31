@@ -239,6 +239,37 @@ service names).
   aggregate params, ranges, repeat/until evidence, module aliases,
   float32).
 
+## Strings update (spec revision of 2026-07-31, read same day)
+
+Three surface changes landed after the ordinal addendum; every brief,
+example and draft written before this date predates them.
+
+- **Counted strings ratified as the sole text type.** `string[N]`
+  (capacity 1–65,534 in the type; one-byte length through 254, two-byte
+  beyond; maintained NUL terminator; sealed representation) is now
+  specification §3.2. Operations: checked assignment and `append`
+  (F-RANGE before any destination write), `clear`, all six content
+  comparisons, header-read `length`. Zero storage is the valid empty
+  value. Strings follow the aggregate rules: module `var` or `const`
+  storage, alias/parameter access in routines, exact-capacity parameter
+  matching, no by-value return, `string[24][8]` element arrays.
+- **`cstring` removed.** The read-only view type is gone from the
+  language; the terminator makes the payload valid C text for native
+  contracts, so one type carries both conventions. `F-ADDRESS` fell with
+  it. Q4's `pstring`/`istring` family note stands, but the read-only
+  half of Q4/Q4a now folds into the read-only-parameter open question:
+  until read-only string parameters exist, literal or constant text
+  cannot reach a routine (spec §16).
+- **Record fields are bare.** `field-decl ::= value-name "as" type-expr`
+  — no `var` inside `record`. All rewrite examples were mechanically
+  updated on 2026-07-31; prose drafts that describe field syntax were
+  not audited beyond ch 1.
+
+Chapter 12 (Static Text and Byte Buffers) is the most affected: its
+brief assumes `cstring` labels plus `u8` buffers, and should be
+re-planned around `string[N]` as the working text type. Ch 2's value
+survey and ch 16's report lines also touch text.
+
 ## Conformance alignment
 
 Fixture names to echo: Counter (ch 1), Rushlight numeric case (ch 3's
