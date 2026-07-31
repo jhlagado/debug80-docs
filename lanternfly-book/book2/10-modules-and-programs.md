@@ -7,30 +7,10 @@ nav_order: 10
 
 # Modules, Programs and Hosted Bodies
 
-An ordinary Lanternfly source file is a module. Each module keeps its
-declarations private unless they are deliberately exported. Together, the
-modules contribute their types, storage and routines to one whole-program
-build.
-
-## Imports
-
-`import` brings another source unit into the program:
-
-```lanternfly
-import "actors.lf"
-```
-
-An import:
-
-- resolves relative to the importing file and configured search paths;
-- loads a canonical resolved source unit once;
-- keeps the unit's private declarations;
-- exposes only explicit exports;
-- contributes code and data to the same program;
-- may be repeated without duplicating the module.
-
-Lanternfly has no textual `include`. Import cycles are rejected with their
-path. Imports do not re-export another module's declarations.
+Chapter 1 defines source modules and imports. This chapter completes the module
+model with exports, whole-program compilation, startup order and program entry.
+Together, the modules contribute their types, storage and routines to one
+target program.
 
 ## Exports
 
@@ -54,12 +34,20 @@ An exported declaration cannot expose a private user-defined type. The check
 reaches through arrays and record fields and applies to constants, variables,
 parameters and results.
 
+Exporting a record exports its complete field layout. Every aggregate
+parameter in an exported routine must state `near` or `far` so importing
+modules agree about its storage class.
+
 Exporting an enum exports all of its members. The importer receives the enum
 in its type scope and those unqualified member names in its value scope.
 
 Exports enter the importer without qualification. A same-namespace
 case-insensitive collision is a compile error. Module aliases and explicit
 re-exports are deferred.
+
+Imported exports enter the importing module's type and value scopes before its
+local declarations are checked. They participate in the ordinary collision and
+shadowing rules.
 
 ## Whole-program compilation
 
@@ -74,8 +62,19 @@ The compiler:
 7. lowers routines, data and runtime helpers;
 8. emits one target program and its debug artifacts.
 
-Because each resolved module has one canonical identity, even a diamond-shaped
-import graph emits it only once.
+## Startup order
+
+When initialization has observable effects, their order is deterministic:
+
+1. Start at the root module.
+2. Visit imports depth first in source order.
+3. Process each resolved module once.
+4. Install a module after its imports.
+5. Within the module, process runtime writes and copies in declaration order.
+
+Preloaded image bytes appear in the startup-effect artifact under the same
+logical ordering. Chapter 6 defines the corresponding traversal order inside
+each aggregate.
 
 ## Program entry
 

@@ -81,12 +81,6 @@ A routine has one value scope containing its parameters and locals.
 A `for each` binding adds a nested value name for its body. It cannot shadow a
 module value, parameter, local or enclosing traversal binding.
 
-## Imports
-
-An import adds only the other module's explicit exports to the importing
-module's type and value scopes. Same-namespace collisions are compile errors.
-Imports do not qualify names in 0.4; module-alias syntax is deferred.
-
 ## Reserved names
 
 Keywords, built-in type names and built-in operation names are reserved under

@@ -22,7 +22,7 @@ const debuggingEnabled as boolean = false
 ```
 
 Scalar constants normally occupy no storage of their own, although placement
-or target export rules may require a stored representation.
+or target ABI rules may require a stored representation.
 
 Fixed-capacity string constants use their exact storage layout:
 
@@ -30,8 +30,7 @@ Fixed-capacity string constants use their exact storage layout:
 const prompt as string[6] = "READY?"
 ```
 
-Constant storage can be exported but cannot be modified. A string's
-representation remains sealed.
+Constant storage cannot be modified. A string's representation remains sealed.
 [Chapter 6](06-records-arrays-paths.md#aggregate-initializers) extends these
 rules to arrays and records after introducing their declarations and layout.
 
@@ -125,26 +124,13 @@ establish it.
 A placed variable without an initializer describes existing external storage.
 The compiler leaves its target-supplied value in place.
 
-## Startup order
-
-When initialization has observable effects, their order is deterministic:
-
-1. Start at the root module.
-2. Visit imports depth first in source order.
-3. Process each resolved module once.
-4. Install a module after its imports.
-5. Within the module, process runtime writes and copies in declaration order.
-
-Preloaded image bytes appear in the startup-effect artifact under the same
-logical ordering.
-
 ## Volatile storage
 
 `volatile` marks storage whose reads and writes are observable:
 
 ```lanternfly
 volatile var keyboardStatus as u8 at $9000
-export volatile var videoControl as u8 at $9001
+volatile var videoControl as u8 at $9001
 ```
 
 Every source read performs a storage read and every source write performs a

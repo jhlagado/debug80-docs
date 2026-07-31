@@ -41,6 +41,9 @@ export extern sub screenClear()
 compile-time string escapes are decoded. A declaration with neither clause
 asks the profile to bind the Lanternfly name.
 
+The double-quoted symbol after `from` is compile-time text. It accepts only
+`\"` and `\\` and allocates no runtime string storage.
+
 The declaration supplies parameter and result types. The profile supplies or
 verifies:
 

@@ -87,11 +87,11 @@ alias. A temporary initializer, constant aggregate or volatile aggregate is
 invalid.
 
 An unqualified aggregate parameter in a private routine uses the profile
-default storage class. Exported routines, and private routines accepting
-non-default storage, put `near` or `far` before the parameter name:
+default storage class. A private routine accepting non-default storage puts
+`near` or `far` before the parameter name:
 
 ```lanternfly
-export sub moveActor(near actor as Actor, deltaX as i16)
+sub moveActor(far actor as Actor, deltaX as i16)
 end
 ```
 
@@ -103,7 +103,7 @@ the array is far while `string[16]` is its element type.
 A counted-string parameter states its exact capacity:
 
 ```lanternfly
-export sub readName(near destination as string[24])
+sub readName(destination as string[24])
 end
 ```
 
