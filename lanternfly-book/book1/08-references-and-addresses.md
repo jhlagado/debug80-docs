@@ -1,179 +1,162 @@
 ---
 layout: default
-title: "Sharing Storage with References"
+title: "Selecting Storage with Indices and Aliases"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 8
 ---
 
-# Sharing Storage with References
+# Selecting Storage with Indices and Aliases
 
-Aggregate assignment creates an independent copy. A reference identifies
-storage that already exists, so several parts of a program can work with the
-same record:
+Aggregate assignment creates an independent copy. Often a program needs the
+opposite: several parts working with the same storage, chosen at run time.
+Lanternfly answers with data rather than with pointers. The program remembers
+*which* entry — an integer index — and gives storage a temporary name — an
+alias — while a routine works on it:
 
 ```lanternfly
 var readings as Reading[4]
-var current as near ref Reading = ref readings[0]
+var selectedReading as u8 = 0
 
-sub selectThirdReading()
-    current = ref readings[2]
-    current.quality = 1
-end
-```
-
-The first assignment rebinds `current` to another array entry. The second
-assignment follows the reference and changes `readings[2].quality`.
-
-First-edition references are non-null and must be initialized. They identify
-storage whose lifetime is established by the static storage model.
-
-## Forming a typed reference
-
-Prefix `ref` takes the location of a writable storage path:
-
-```lanternfly
-ref readings[index]
-ref dailyLog.date
-ref inputBuffer
-```
-
-The resulting type includes the referent. `ref readings[index]` is a
-`ref Reading`, while `ref dailyLog.date.month` is a `ref u8`. That type tells
-the compiler which field and index operations are valid at the stored address.
-
-On an ordinary Z80 address space, a near reference commonly occupies two
-bytes. Passing or assigning the reference moves those address bytes while the
-underlying record remains in place.
-
-References can be formed from module or imported storage, aggregate parameters
-and storage already reached through another reference. The first edition
-excludes references to owned scalar locals, constant storage and volatile
-storage because their lifetime or access contract requires rules that the
-reference type does not yet carry.
-
-## Access through a reference
-
-Field and index syntax passes through a reference:
-
-```lanternfly
-current.value = current.value + 1
-current.quality = 0
-```
-
-Because `current` refers to a `Reading`, the compiler applies the field layout
-from Chapter 7 at the address stored in `current`.
-
-A reference to an array supports indexing:
-
-```lanternfly
-selectedBuffer[index] = 0
-```
-
-If `selectedBuffer` is a `near ref (u8[16])`, the index selects a byte in the
-referenced array and receives the usual bounds check.
-
-## Rebinding and changing the referent
-
-Assignment to a reference variable changes the address it holds:
-
-```lanternfly
-current = ref readings[nextIndex]
-```
-
-`value(...)` selects the complete object at the address:
-
-```lanternfly
-value(countReference) = value(countReference) + 1
-value(current) = readings[nextIndex]
-```
-
-The first line updates a referenced scalar. The second copies a complete
-`Reading` into the storage identified by `current`.
-
-The two spellings keep address changes separate from record changes. Assigning
-`current` changes which record it identifies; assigning `value(current)`
-changes the identified record.
-
-## Local aggregate aliases
-
-A local alias gives an existing array or record a short, non-rebindable name:
-
-```lanternfly
 sub markSelected()
-    ref reading as Reading = readings[selectedIndex]
+    alias reading as Reading = readings[selectedReading]
 
     reading.quality = 1
-    reading.unit = unitCelsius
 end
 ```
 
-The index is evaluated once when the alias is declared. `reading` then names
-the selected array entry for the rest of the subroutine. The record stays in
-the global array, so the routine needs only reference-sized local state.
+`selectedReading` is the program's notion of "the current reading". Changing
+it selects another entry; the alias inside `markSelected` names whichever
+entry is selected when the routine runs.
 
-The alias form accepts records and fixed arrays. An ordinary reference
-variable is the appropriate form when code must rebind the name.
+Lanternfly has no pointer or reference type, no address-of operator and no
+dereference operator. Identity lives in declared paths and integer indices,
+and this chapter shows how far those reach.
 
-## Arrays of references
+## Identity as an index
 
-A program may allocate several buffers separately and collect their locations
-in one table:
-
-```lanternfly
-var inputBuffer as u8[16]
-var outputBuffer as u8[16]
-var scratchBuffer as u8[16]
-
-var buffers as (near ref (u8[16]))[3] = [
-    ref inputBuffer,
-    ref outputBuffer,
-    ref scratchBuffer
-]
-```
-
-Each table entry is a near reference to a complete 16-byte array. The buffers
-retain separate storage, while an integer index selects one of their addresses.
-
-![Three reference slots point to three independently allocated buffers.](../../assets/images/lanternfly-book/book1/array-of-references.svg)
+A path with an index already selects storage at run time:
 
 ```lanternfly
-value(buffers[bufferIndex]) = emptyBuffer
+readings[selectedReading].quality = 1
 ```
 
-The indexed expression produces a reference, and `value(...)` selects the
-array it identifies. Aggregate assignment then copies `emptyBuffer` into that
-selected storage.
-
-## Near and far references
-
-A near reference reaches storage in the target's current address context:
+The index is ordinary data. It can be stored in a variable or a record
+field, passed to a routine, compared, saved and restored. A program that
+must remember a relationship between entries stores the destination index:
 
 ```lanternfly
-var current as near ref Reading = ref readings[0]
+var previousReading as u8 = 0
+
+previousReading = selectedReading
+selectedReading = nextCandidate
 ```
 
-A far reference retains additional target context:
+Both variables survive as long as their storage, and each use of
+`readings[previousReading]` is bounds-checked, so a stale index is caught at
+the access rather than silently misread. An address held this way would be
+none of those things: it could not be range-checked, and nothing would
+connect it to the pool it came from.
+
+## Local aliases
+
+Repeating a long path obscures the work and repeats its index arithmetic.
+`alias` gives the selected aggregate a short local name:
 
 ```lanternfly
-var archived as far ref Reading = ref readings[0]
+sub adjustSelected()
+    alias reading as Reading = readings[selectedReading]
+
+    reading.value = reading.value + calibrationOffset
+    reading.quality = 1
+end
 ```
 
-On a banked Z80 system, the extra context may be a bank number alongside a
-16-bit offset. An 8086 backend might use a segment and offset. A flat-memory
-target may represent near and far references identically while preserving
-their source types.
+The path's base and index are evaluated and checked once, when execution
+reaches the declaration. From then until the routine returns, `reading`
+denotes that array entry. Field access and indexing through the alias follow
+the ordinary rules, and aggregate assignment works in both directions:
 
-![A near reference uses the current memory context, while a far reference can retain a bank identifier.](../../assets/images/lanternfly-book/book1/banked-references.svg)
+```lanternfly
+archivedReading = reading
+reading = defaultReading
+```
 
-Module storage, stored reference fields and public interfaces state `near` or
-`far` because their representation must remain stable across calls and files.
-Private parameters and local reference variables may use unqualified `ref T`
-to select the target profile's default class.
+The first line copies the selected entry out; the second copies a prepared
+record into it. The alias itself cannot be rebound, compared or stored — it
+is a name, not a value. The backend may carry an address underneath, but
+that carrier has no source spelling, so no program can misuse it.
 
-A near reference may widen to far when the target can attach its current
-context. Far-to-near conversion uses the checked explicit form
-`near ref Reading(expression)`. A location outside the near range invokes the
-target address-fault service.
+An alias earns its place when a routine touches the same aggregate several
+times or passes it onward. A path used once is best written as the path.
+
+The alias form accepts records and fixed arrays. Constant storage cannot
+initialize a writable alias, and volatile storage requires direct access so
+that every read and write remains visible.
+
+## Regular shapes: one table instead of many
+
+Programs that once collected separate buffers behind a table of pointers
+declare one multidimensional array instead:
+
+```lanternfly
+const bufferCount as u8 = 3
+const bufferSize as u8 = 16
+
+var buffers as u8[bufferCount, bufferSize]
+
+sub clearBuffer(selected as u8)
+    var index as u8
+
+    for index = 0 until bufferSize
+        buffers[selected, index] = 0
+    end
+end
+```
+
+The first index selects the buffer and the second selects the byte, using
+the row-major arithmetic from Chapter 6. The "pointer table" has become two
+integers, and both are checked against declared extents.
+
+## Irregular choices: a selector and `select`
+
+When the candidates are genuinely separate declarations, the program stores
+a selector and chooses the named object:
+
+```lanternfly
+const inputLog as u8 = 0
+const archiveLog as u8 = 1
+
+var activeLog as u8 = inputLog
+
+sub countActiveEntries() as u8
+    select activeLog
+    case inputLog
+        return countEntries(inputEntries)
+    case archiveLog
+        return countEntries(archiveEntries)
+    else
+        return 0
+    end
+end
+```
+
+The selector is data, like any index. The backend may lower a dense
+selection to an address table; that choice belongs to lowering, and the
+source semantics remain a selector and declared storage.
+
+## Near and far storage
+
+Every static storage root has a target storage class. Ordinary
+compiler-allocated storage is near: directly usable in the target's current
+address context. A banked or segmented target also offers far storage,
+which carries extra context such as a bank number alongside a 16-bit
+offset. A flat-memory target may treat the two classes identically while
+preserving their source meaning.
+
+Storage classes matter at interfaces. Chapter 9 shows the spelling on
+aggregate parameters, where an exported routine states `near` or `far`
+before the parameter's name so that callers in other modules agree about
+the storage they hand over.
 
 ## Opaque addresses
 
@@ -184,31 +167,34 @@ type:
 var deviceBuffer as far address
 ```
 
-`near address` and `far address` are opaque scalar values. They can be stored,
-passed and compared with the same address class. Ordinary arithmetic, field
-access and indexing are unavailable because the language has no referent type
-from which to derive them.
+`near address` and `far address` are opaque scalar values. They can be
+stored, passed and compared within the same address class. Ordinary
+arithmetic, field access and indexing are unavailable because the language
+has no referent type from which to derive them, and no conversion connects
+an opaque address to ordinary storage in either direction.
 
 A target service may return an address in video memory or another device
-address space. The program can carry that value back to target services while
-the platform contract remains responsible for interpreting it.
+address space. The program can carry that value back to target services
+while the platform contract remains responsible for interpreting it.
 
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/08-references.txt)
-rebinds a `Reading` reference, creates a local alias and clears one of three
-separately allocated buffers. The assignment to `current` changes an address,
-while the assignment through `reading` changes a field in the referenced
-record.
+selects a reading by index, adjusts it through an alias and clears one row
+of a buffer table. The assignment to `selectedReading` changes which entry
+later code means; the assignments through `reading` change the entry
+itself. Keeping those two operations distinct is the working skill of this
+chapter.
 
 ## Chapter summary
 
-- A typed reference is a non-null scalar value that identifies existing
-  storage of a declared type.
-- Assigning a reference rebinds it; `value(reference)` selects the complete
-  referent.
-- A local aggregate alias gives existing record or array storage a
-  non-rebindable short name.
-- Arrays of references provide indexed access to separately allocated objects.
-- Near and far references carry target address-class information, while opaque
-  addresses carry no referent type.
+- Persistent identity is data: a declared path, an integer index or a
+  stored selector, each checked at the point of use.
+- `alias` gives existing record or array storage a non-rebindable local
+  name, evaluated once and valid until the routine returns.
+- Multidimensional arrays replace regular pointer tables; a selector with
+  `select` replaces irregular ones.
+- Storage classes distinguish near from far static storage; interfaces
+  state them explicitly.
+- Opaque addresses carry device locations without a referent type, and
+  only target services can interpret them.
