@@ -137,9 +137,12 @@ stride, and `.quality` adds 3. The compiler checks each step against the
 declared type before reducing the path to address arithmetic.
 
 A record cannot contain itself by value, either directly or through another
-record. Such a cycle would have no finite size. When a program needs links
-rather than inline containment, it stores the index of the destination entry
-in its fixed pool; Chapter 8 develops that identity model.
+record. Such a cycle would have no finite size, and the declaration order
+from Chapter 1 makes it unwritable: a field's type must be completely
+declared before the field names it, and a record being declared is not yet
+complete. When a program needs links rather than inline containment, it
+stores the index of the destination entry in its fixed pool; Chapter 8
+develops that identity model.
 
 A string field behaves the same way, because a string is fixed-size data
 like everything else in a record:

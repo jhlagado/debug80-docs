@@ -70,6 +70,12 @@ declarations such as the three variables and the subroutine below. Executable
 statements do not sit loose between those declarations; you put them inside a
 subroutine.
 
+A module reads strictly top to bottom: every name must be declared before
+the line that uses it, with no forward references. The three variables
+stand above `main` because its statement uses them, and the same rule will
+order every program in this book — which suits us, because reading a
+module from the top is exactly how we trace one.
+
 ```lanternfly
 sub main()
     total = subtotal + postage
@@ -170,7 +176,7 @@ The Z80 cannot execute Lanternfly source directly. The planned compiler and
 AZM assembler divide the translation into two stages:
 
 ```text
-order.lf
+order.lafy
     → Lanternfly compiler
     → order.asm
     → AZM

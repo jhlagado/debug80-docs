@@ -59,7 +59,7 @@ A module gives related types, storage and routines one source file. Top-level
 declarations are private until marked `export`:
 
 ```lanternfly
-// counters.lf
+// counters.lafy
 export const counterLimit as u16 = 9999
 
 export record Counter
@@ -80,7 +80,7 @@ end
 Another module imports the exported interface:
 
 ```lanternfly
-import "counters.lf"
+import "counters.lafy"
 
 sub recordItem()
     incrementProcessed()
@@ -88,12 +88,19 @@ end
 ```
 
 `Counter`, `counterLimit`, `processed` and `incrementProcessed` become visible
-to the importer. `counterStep` remains private. Repeated imports resolve the
-same module once during whole-program compilation.
+to the importer. `counterStep` remains private. A source module's filename
+ends in `.lafy`, and that extension is part of the import path.
+
+Imports stand together at the top of a module, before any declaration, and
+each one's exports are visible from that point on — so Chapter 1's
+top-to-bottom reading order holds across module boundaries: everything a
+declaration uses is either imported above it or declared above it. Repeated
+imports resolve the same module once during whole-program compilation.
 
 The build manifest names a root module and an entry subroutine. The compiler
-loads the import graph, type-checks all modules, allocates static storage,
-resolves machine bindings and emits one target program.
+resolves each module's imports depth first, checks declarations in source
+order, allocates static storage, resolves machine bindings and emits one
+target program.
 
 ## External services
 
@@ -216,8 +223,8 @@ result through a typed target service.
 
 ## Chapter summary
 
-- Modules keep declarations private by default and expose selected names with
-  `export`.
+- A `.lafy` module stands its imports first and keeps declarations private
+  unless marked `export`; visibility follows top-to-bottom reading order.
 - `extern sub` gives machine or host code a checked Lanternfly signature.
 - Standard operations keep one source meaning while backends choose
   instructions or runtime helpers.

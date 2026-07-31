@@ -3,7 +3,7 @@
 // Service names are ILLUSTRATIVE pending gate Q2.
 // Verified against specification 0.4 (3b31fe4): §4.3-4.4, §12.4, §13.1-13.2.
 
-// ============================= platform.lf =============================
+// ============================= platform.lafy =============================
 // One file per target: the machine's face, typed. The game imports this
 // module and never sees an address or a register convention.
 
@@ -24,9 +24,9 @@ ROM_PRINT_U16  = $002b
 ROM_NEWLINE    = $002e
 end
 
-// ============================== main.lf ================================
+// ============================== main.lafy ================================
 
-import "platform.lf"
+import "platform.lafy"
 
 const title as near cstring = "READINGS"
 

@@ -2,7 +2,7 @@
 // Two files: the reading log behind an interface, and the program using it.
 // Verified against specification 0.4 (3b31fe4): §12.1-12.3, §12.5-12.6.
 
-// ============================ readinglog.lf ============================
+// ============================ readinglog.lafy ============================
 // The module owns the table. Nothing outside can break the occupancy
 // invariant, because nothing outside can see the storage.
 
@@ -53,9 +53,9 @@ export sub meanTemperature() as i16
     return sum / logCount
 end
 
-// ============================== main.lf ================================
+// ============================== main.lafy ================================
 
-import "readinglog.lf"
+import "readinglog.lafy"
 
 var recorded as u8 = 0
 var mean as i16 = 0
@@ -69,7 +69,7 @@ sub main()
     accepted = addReading(13, 1, 5)
 
     // log[0].day = 9          // would not compile: `log` is not visible
-    //                         // outside readinglog.lf (E-NAME-001)
+    //                         // outside readinglog.lafy (E-NAME-001)
 
     recorded = entryCount()    // 3
     mean = meanTemperature()   // (2 - 3 + 5) / 3 = 1
@@ -82,8 +82,8 @@ end
 //   log[0..2] hold the three readings and logCount is 3.
 //
 // Spec notes:
-// - Exports enter main.lf unqualified; log, logCount, Reading and
+// - Exports enter main.lafy unqualified; log, logCount, Reading and
 //   logCapacity stay private (§12.2-12.3).
-// - The import loads readinglog.lf once however many files import it;
+// - The import loads readinglog.lafy once however many files import it;
 //   the whole-program build allocates all storage together (§12.5).
 // - Returning from main invokes the termination service (§12.6).

@@ -49,17 +49,17 @@ private.
    it.
 
 ## Opening example
-The import line and one call: `import "readinglog.lf"` /
+The import line and one call: `import "readinglog.lafy"` /
 `addReading(11, 1, 2)` — using a module before seeing inside one.
 
 ## Companion program
 `rewrite/examples/ch14-log-module.lf.txt` (two files marked inline:
-`readinglog.lf` and `main.lf`).
+`readinglog.lafy` and `main.lafy`).
 
 ## Hand trace
 `main` appends (11,1,2°), (12,1,-3°), (13,1,5°) through the exported API;
 `entryCount()` → 3; `meanTemperature()` → 1. A commented-out
-`log[0].day = 9` in `main.lf` marks the compile error privacy now
+`log[0].day = 9` in `main.lafy` marks the compile error privacy now
 guarantees (`E-NAME-001`: unknown name — `log` is not visible).
 
 ## Memory / machine consequence
@@ -70,7 +70,7 @@ rule (§4.3).
 
 ## Explicitly deferred
 Module aliases and re-exports (Deferred, §12.3/§16); source extension open
-(`.lf` illustrative); platform interface modules (ch 15 builds one).
+(`.lafy`, the settled extension); platform interface modules (ch 15 builds one).
 
 ## Open spec questions touched
 Q1 (manifest format — prose says "the build names", shows no file).
