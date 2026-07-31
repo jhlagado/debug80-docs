@@ -1,0 +1,16 @@
+// counters.lafy
+export const counterLimit as u16 = 9999
+
+export record Counter
+    value as u16
+end
+
+export var processed as Counter
+
+const counterStep as u16 = 1
+
+export sub incrementProcessed()
+    if processed.value < counterLimit then
+        processed.value = processed.value + counterStep
+    end
+end

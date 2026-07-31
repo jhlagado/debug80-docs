@@ -1,0 +1,11 @@
+// tally.lafy — the root module; the build manifest selects main as entry.
+import "counters.lafy"
+
+sub recordItem()
+    incrementProcessed()
+end
+
+sub main()
+    recordItem()
+    recordItem()
+end
