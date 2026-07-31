@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Tables with Fixed Arrays"
+title: "Fixed Arrays and Index Domains"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 6
 ---
 
-# Tables with Fixed Arrays
+# Fixed Arrays and Index Domains
 
 A data logger stores eight recent samples. Eight separately named variables
 would hold the values, but a loop could not select one of those names from a
@@ -43,7 +43,7 @@ length and needs no allocator.
 A count-declared array is therefore zero-based, and an index into one is
 best understood as a distance from the beginning: entry zero is zero
 elements from the base, entry seven is seven elements away. A dimension can
-also declare its bounds outright, or take them from a Chapter 2 type:
+also declare its bounds outright, or take them from a Chapter 4 type:
 
 ```lanternfly
 var octoberReadings as i16[1 to 31]
@@ -196,70 +196,6 @@ The compiler rejects missing entries, extra entries and rows with the wrong
 shape. A target profile may place constant aggregate data in read-only memory,
 which preserves writable RAM for changing program state.
 
-## Characters and strings
-
-Text is byte data with one extra fact to record: where it ends. A character
-literal such as `'H'` is an exact byte value, so a `u8` array can hold
-text-shaped bytes — but the array's count describes its capacity, and
-nothing in it records how much of that capacity is currently meaningful.
-Lanternfly's string type carries that fact itself:
-
-```lanternfly
-var playerName as string[12]
-```
-
-`string[12]` is a counted string in the Pascal tradition. The capacity is
-part of the type, and the layout is as concrete as any array's: one length
-byte, twelve payload cells, and a zero byte after the current payload, for
-exactly fourteen bytes settled at compile time. There is no allocator and no
-hidden buffer; the declaration is the cost. A capacity of 255 or more widens
-the length field to two bytes and nothing else changes.
-
-Every operation maintains the terminator, so the payload is always valid
-NUL-terminated text: a firmware or platform routine that requires the
-classic C convention can read the bytes directly, at no conversion cost,
-while `length` never scans for the zero — it reads the stored count and
-returns it as a `u16`.
-
-A double-quoted literal supplies text wherever it fits:
-
-```lanternfly
-var greeting as string[12] = "HELLO"
-
-sub renameGuest()
-    playerName = greeting
-    append(playerName, '!')
-end
-```
-
-Assignment copies content, not identity, and the capacities of source and
-destination need not match — the copy is checked instead. A source the
-compiler can see is rejected at compile time when it cannot fit; a runtime
-copy or `append` that would overflow invokes the range-fault service before
-any destination byte changes, the same guarantee an array's bounds check
-gives. `append` grows a string by another string, a literal or one nonzero
-byte, and `clear` restores the empty value. All six comparison operators
-examine the payload bytes, so `playerName = greeting` as a condition tests
-whether the text matches, not whether two names share storage. All-zero storage is the
-valid empty string, which is why a module string needs no initializer: it
-simply begins empty.
-
-The length header, the payload cells and the terminator have no names. No
-index reaches them, and `fill` rejects a string, because the whole
-arrangement depends on the count, the nonzero payload and the terminator
-staying in agreement — assignment, `append`, `clear`, comparison and
-`length` are the complete interface, and each one preserves what the others
-rely on. A `u8` array, which promises none of this, never converts into a
-string, and a string is not an array of its bytes.
-
-Strings sit in records and arrays like any other fixed-size data.
-`string[12][8]` declares eight strings of capacity twelve — the capacity
-brackets belong to the element type — and a record field
-`name as string[12]` occupies its fourteen bytes at a fixed offset, as the
-next chapter shows. Byte storage under other conventions — a high-bit
-terminator, machine-specific display codes — remains ordinary `u8` data
-under an explicit service contract that assigns each byte its meaning.
-
 ## Clearing and filling
 
 Two standard procedures handle common whole-array writes:
@@ -269,10 +205,11 @@ clear(samples)
 fill(weeklyReadings, 0)
 ```
 
-`clear` writes the all-zero representation to a writable array, record or
-string whose leaves accept it — for a string, that is the empty value. `fill`
+`clear` writes the all-zero representation to a writable array whose
+elements accept it — integer and Boolean elements do. `fill`
 evaluates one compatible scalar value and writes it to every array entry in
-row-major order; a string's sealed cells are beyond its reach.
+row-major order. Later chapters extend `clear` to the aggregate types they
+introduce.
 
 The backend may lower either operation to an inline loop, target instruction
 sequence or runtime helper. The source names the operation; generated
@@ -282,9 +219,8 @@ artifacts show the chosen implementation and cost.
 
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt)
 fills a sample buffer and declares a weekly table, zeroes a month of
-readings across a 1-to-31 domain, holds one line width per report mode, and
-builds a status line in a `string[16]` by appending a literal and a computed
-digit. For `weeklyReadings[1, 2]`, the expression `1 * readingCount + 2`
+readings across a 1-to-31 domain and holds one line width per report mode.
+For `weeklyReadings[1, 2]`, the expression `1 * readingCount + 2`
 gives element 6 and byte offset 12 because each entry occupies two bytes.
 
 ## Chapter summary
@@ -300,15 +236,9 @@ gives element 6 and byte offset 12 because each entry occupies two bytes.
   contiguous.
 - `for each` visits every element in row-major order when positions are not
   needed.
-- Character literals are byte values, and `string[N]` is the text type: a
-  counted string of exact size `N + 2` through capacity 254 and `N + 3` from
-  capacity 255, whose payload always ends with a zero byte so C-convention
-  services read it directly.
-- Strings are sealed — assignment, `append`, `clear`, comparison and `length`
-  are the whole interface, and every copy is checked against capacity before
-  a byte moves.
 - `clear` and `fill` express repeated aggregate writes while leaving the
   backend free to choose an implementation.
 
-An array holds many values of one type. In the next chapter we group
-values of different types into records, and lay them out byte by byte.
+An array of bytes can hold anything — including text, whose one special
+need the next chapter takes up: a sequence of character bytes must also
+record where it ends.

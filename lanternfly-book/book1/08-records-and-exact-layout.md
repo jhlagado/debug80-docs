@@ -2,7 +2,7 @@
 layout: default
 title: "Records and Memory Layout"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 7
+nav_order: 8
 ---
 
 # Records and Memory Layout
@@ -20,13 +20,16 @@ end
 
 var reportDate as Date
 
-reportDate.year = 2026
-reportDate.month = 7
-reportDate.day = 30
+sub setReportDate()
+    reportDate.year = 2026
+    reportDate.month = 7
+    reportDate.day = 30
+end
 ```
 
-`Date` occupies four bytes. We can store, copy and pass a date as one value
-while each field retains its own type.
+`Date` occupies four bytes. We can store and copy a date as one aggregate
+while each field retains its own type, and Chapter 9 shows how a routine
+receives a temporary name for a record the caller already owns.
 
 ## Declaring a record
 
@@ -156,10 +159,10 @@ end
 var station as Station
 ```
 
-`name` occupies its fourteen bytes — length, payload capacity and terminator
-— at offset 0, `id` sits at offset 14, and `Station` occupies fifteen bytes
-on every backend. The field supports the full string interface through its
-path: `station.name = "NORTH"` is a checked copy, and
+`name` occupies its fourteen bytes — Chapter 7's length, payload capacity
+and terminator — at offset 0, `id` sits at offset 14, and `Station`
+occupies fifteen bytes on every backend. The field supports the full string
+interface through its path: `station.name = "NORTH"` is a checked copy, and
 `append(station.name, '2')` grows the stored text in place.
 
 ## Record initializers
@@ -192,18 +195,22 @@ independent snapshot, so later changes to the source leave the copy unchanged.
 Overlapping source and destination behave as though the source value were read
 in full before any destination byte changed.
 
-The backend may inline a small copy, generate a loop or call a helper. A
+The backend may inline a small copy, generate a loop or call a helper — a
 four-byte `Reading` and a 256-byte table have the same source operation but
-very different machine costs, which generated listings and cost reports can
-expose.
+very different machine costs.
+
+`clear` extends to records whose every leaf accepts the all-zero
+representation — integers, Booleans and strings all do — so
+`clear(dailyLog)` resets the date, the four entries and `used` in one
+statement.
 
 Owned local variables remain scalar in the first edition. A subroutine that
 needs a short local name for an existing record, array or string uses the
-alias form introduced in Chapter 8.
+alias form introduced in Chapter 10.
 
 ## Example
 
-The [chapter listing](/lanternfly-book/book1/code/07-records.txt)
+The [chapter listing](/lanternfly-book/book1/code/08-records.txt)
 declares `Date`, `Reading`, `DailyLog` and `Station`. Its declarations give
 `size(type DailyLog)` as 21 and place
 `dailyLog.entries[2].quality` at byte offset 15; `size(type Station)` is 15
@@ -219,6 +226,6 @@ because the `string[12]` field occupies fourteen bytes.
 - Nested records and arrays still reduce to one exact byte layout.
 - Aggregate assignment copies the complete record or array value.
 
-Our tables now hold structured entries, which raises a question we have so
-far answered casually: where does a program store _which_ entry an
-operation applies to? The next chapter answers it properly.
+A record gives structured data one name and one exact layout. In the next
+chapter, routines finally receive values and hand results back — including
+a temporary name for a record like these.

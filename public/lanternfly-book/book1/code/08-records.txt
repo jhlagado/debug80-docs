@@ -47,7 +47,12 @@ sub labelStation()
     station.id = 2
 end
 
+sub startNewLog()
+    clear(dailyLog)
+end
+
 sub main()
     saveEntry()
     labelStation()
+    startNewLog()
 end
