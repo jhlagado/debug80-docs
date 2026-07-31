@@ -36,21 +36,15 @@ Each module has one type scope and one value scope:
 - enum members, constants, variables, routines and external routines enter the
   value scope.
 
-A type and a value may share a name:
+A type and a value may share a name. A type annotation looks in the type scope,
+while a declaration name or expression looks in the value scope. Canonical
+capitalization makes the roles visible, as with a type named `Actor` and a
+value named `actor`.
 
-```lanternfly
-record Actor
-    active as boolean
-end
-
-var actor as Actor
-```
-
-A record, enum or range type and a callable routine may not share a
-case-insensitive name. That restriction keeps `Point(...)` unambiguously a
-record initializer or a routine invocation and preserves checked type
-conversions. A storage declaration and a routine also conflict because both
-occupy the value scope.
+A user-defined type and a callable routine may not share a case-insensitive
+name. That restriction keeps a call-like form unambiguously a type operation
+or a routine invocation. A storage declaration and a routine also conflict
+because both occupy the value scope.
 
 ## Module collection and source order
 
@@ -86,25 +80,6 @@ A routine has one value scope containing its parameters and locals.
 
 A `for each` binding adds a nested value name for its body. It cannot shadow a
 module value, parameter, local or enclosing traversal binding.
-
-## Record fields
-
-Fields occupy a separate scope belonging to their record. Field names need
-only be unique within that record and resolve after a field-selection dot:
-
-```lanternfly
-record Position
-    x as i16
-    y as i16
-end
-
-record Velocity
-    x as i16
-    y as i16
-end
-```
-
-The repeated field names do not conflict.
 
 ## Imports
 

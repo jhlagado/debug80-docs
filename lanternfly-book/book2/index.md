@@ -44,7 +44,7 @@ implementation.
 3. [Types, Literals and Strings](03-types-literals-and-text.md)
 4. [Integer Expressions and Conversions](04-integer-expressions.md)
 5. [Constants, Variables and Placement](05-constants-variables-placement.md)
-6. [Records, Arrays, Paths and Aliases](06-records-arrays-paths.md)
+6. [Records, Arrays and Storage Paths](06-records-arrays-paths.md)
 7. [Assignment and Standard Operations](07-assignment-and-operations.md)
 8. [Conditions and Loops](08-conditions-and-loops.md)
 9. [Routines](09-routines.md)
