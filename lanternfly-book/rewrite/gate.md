@@ -11,6 +11,41 @@ plus the decisions chapter's stronger word for pointers: **Excluded by
 philosophy**, which the book must teach as doctrine, not as a missing
 feature.
 
+## Ordinal domains update (faee26b, read 2026-07-31)
+
+The spec adds Pascal-style ordinal types as a fundamental:
+
+- **Three ordinal kinds**: fixed-width integers; nominal `enum Name as u8 …
+  end` (explicit representation, members unqualified in the value scope,
+  ordinals from zero, no arithmetic/bitwise, conversion to representation
+  explicit, integer→enum checked with `F-RANGE`); nominal
+  `range Name as Host = lo to|until hi` subranges (widen silently to host;
+  assignment/argument/return INTO a subrange is domain-checked, `F-RANGE`).
+- **Array index domains** (§6 retitled): every dimension declares an ordinal
+  domain; `T[8]` is shorthand for `T[0 until 8]`; explicit bounds
+  (`u8[10 to 20]`, `Tile[1 to rows, 1 to cols]`) and enum/subrange
+  dimensions (`u8[Colour]`, `Colour[ScreenColumn]`). Domain is part of the
+  type for compatibility. **Zero-based is now only the count-shorthand
+  default — the published book's "Lanternfly arrays are zero-based" is
+  false as stated.** Index must belong to the dimension's root ordinal
+  family; a check is elided when the index's TYPE domain is contained —
+  bounds checking via types.
+- **`lower`/`upper`** join the layout queries (typed results for named
+  enum/subrange dimensions); `for row = lower(board, 0) to upper(board, 0)`
+  is the declared-domain traversal.
+- **`select`** takes any ordinal; case ranges `to`/`until` are now REAL
+  (Q3 resolved — no longer Provisional); enum select without `else` is
+  exhaustive when cases cover every member.
+- **`for`** controls may be enum/enum-subrange, advancing by ordinal.
+- **The const-integer state-code idiom is superseded** for states,
+  directions and selectors: enums are the type-checked replacement, and
+  chapter examples (status codes, payment methods, stations, directions)
+  should migrate. Briefs/examples ch02, ch04, ch05, ch07 (grids), ch11,
+  ch13 and the published book1 chapters 2, 4, 5, 6, 8 are affected;
+  published-book sweep done 2026-07-31, briefs/examples migration pending.
+- New diagnostics: `E-TYPE-005`, extended `E-PATH-001`/`E-CONTROL-001`,
+  fault `F-RANGE`. New words: `enum`, `range`, `lower`, `upper`.
+
 ## Headline language changes absorbed (vs the pre-3b31fe4 draft)
 
 - **No references, ever**: no `ref` type or operator, no `value(...)`, no
@@ -169,8 +204,8 @@ service names).
 - **Q1**: concrete build-manifest format (ch 1/14/16 need "how to build").
 - **Q2**: standard platform-service names for text/number output (align
   book + conformance fixture 10).
-- **Q3**: `case` ranges — Provisional; book omits until the parser
-  decision.
+- **Q3**: RESOLVED by faee26b — `case` ranges (`to`/`until`) are now part
+  of the language; the books may teach them.
 - **Q4**: bounded writable-text views / writable string procedures —
   open; ch 12 hand-rolls composition meanwhile.
 - **Q4a**: no source-level byte access to `cstr` content (no indexing

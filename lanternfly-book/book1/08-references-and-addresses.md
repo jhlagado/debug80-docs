@@ -139,9 +139,11 @@ sub countActiveEntries() as u8
 end
 ```
 
-The selector is data, like any index. The backend may lower a dense
-selection to an address table; that choice belongs to lowering, and the
-source semantics remain a selector and declared storage.
+The selector is data, like any index, and Chapter 2's enumerations are its
+natural type: an `enum LogKind` selector cannot hold an invalid choice, and
+its `select` is complete when every member has a case. The backend may
+lower a dense selection to an address table; that choice belongs to
+lowering, and the source semantics remain a selector and declared storage.
 
 ## Near and far storage
 

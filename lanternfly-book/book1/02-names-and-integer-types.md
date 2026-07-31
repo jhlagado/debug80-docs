@@ -111,6 +111,46 @@ end
 This separation catches accidental uses of counts and bit patterns where the
 program needs a yes-or-no answer.
 
+## Enumerations and ranges
+
+Some values are one choice from a fixed set of named alternatives. An
+enumeration declares that set as a type of its own:
+
+```lanternfly
+enum ReportMode as u8
+    compact
+    detailed
+    diagnostic
+end
+
+var currentMode as ReportMode = compact
+```
+
+The representation type follows `as`; members take ordinals from zero in
+declaration order, and their names are written without qualification. An
+enumeration supports assignment, all six comparisons, `select`, counted
+loops and array indexing, and deliberately nothing arithmetic: adding two
+report modes has no meaning, and the type says so. Converting an integer
+into an enumeration is checked — an invalid constant is a compile error,
+and an invalid runtime value causes the range fault — so a `ReportMode`
+variable holds a valid mode or the program stops at the moment it would
+not.
+
+A range constrains a host type to part of its domain:
+
+```lanternfly
+range ScreenColumn as u8 = 0 until 32
+range VerboseMode as ReportMode = detailed to diagnostic
+```
+
+A range value widens silently to its host, while any value entering the
+range — by assignment, argument, return or conversion — is checked against
+its domain. Ranges and enumerations are types, not values: a range cannot
+be stored or passed, and its work happens entirely at declarations and
+boundaries. Chapter 6 puts both to work as array index domains, where a
+suitably typed index makes a bounds check unnecessary because the type
+already proves it.
+
 ## Assignment and equality
 
 Lanternfly uses `=` for two related operations. At the start of a statement,
@@ -195,6 +235,8 @@ two calls made by `main` leave `unitsInStock` at 1,190 and `byteValue` at 44.
 - An integer type fixes width, signedness, range and storage cost.
 - `const` names a compile-time value and checks it against a declared type.
 - `boolean` represents `true` or `false` and remains separate from integers.
+- Enumerations name a fixed set of alternatives as a checked type, and
+  ranges constrain a host type to part of its domain.
 - Value-preserving widening is automatic; narrowing and signedness changes
   should be explicit when intentional.
 - Literal values take their type from context, with `i16` as the default for

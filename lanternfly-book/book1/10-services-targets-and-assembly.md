@@ -44,8 +44,9 @@ fill(histogram, 0)
 non-negative integer square root. Negative runtime input to `sqrt` invokes the
 arithmetic-fault service.
 
-`size`, `count` and `offset` are compile-time layout queries. `clear` and
-`fill` perform repeated aggregate stores.
+`size`, `count`, `offset`, `lower` and `upper` are compile-time layout
+queries; the last two return a dimension's first and last valid index.
+`clear` and `fill` perform repeated aggregate stores.
 
 The Z80 has no single instruction for many wide arithmetic operations. A
 backend may emit an instruction sequence or select a runtime helper for square
