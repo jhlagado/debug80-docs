@@ -9,8 +9,8 @@ nav_order: 0
 
 This book is a first course in Lanternfly, a programming language for small
 computers. It begins with a three-line calculation and ends with programs
-that organise records, divide themselves into modules and talk to real
-hardware through typed services. Along the way it teaches the habits that
+that organise records, split across modules and talk to real hardware
+through typed services. Along the way it teaches the habits that
 matter on machines where every byte is accounted for: choosing
 representations deliberately, guarding the values you store and knowing what
 each line costs.
@@ -28,9 +28,8 @@ processor. The first target is the Z80, an eight-bit processor with 65,536
 addressable bytes, still designed into hobby and educational computers
 today.
 
-That combination is the language's reason to exist. Interpreted BASIC made
-small computers approachable but spent most of the processor reading the
-program; assembly used the machine fully but dissolved every idea into
+Interpreted BASIC made small computers approachable but spent most of the
+processor reading the program; assembly used the machine fully but dissolved every idea into
 register bookkeeping. Lanternfly keeps the readable surface and compiles it
 honestly, and its toolchain keeps the generated assembly open for
 inspection, so the cost of any line is a fact you can look up rather than a
@@ -88,5 +87,4 @@ which this book cites by section where it matters.
 
 The first program is three declarations and one statement. It is enough to
 show where a program's values live, where execution begins and what an
-assignment actually does — which is where every larger program in this book
-starts.
+assignment actually does.
