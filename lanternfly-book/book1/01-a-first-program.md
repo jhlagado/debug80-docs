@@ -101,8 +101,10 @@ Here is that statement on its own:
 total = subtotal + postage
 ```
 
-At the beginning of a statement, `=` means assignment: evaluate the expression
-on the right, then store its value in the place named on the left. Lanternfly
+At the beginning of a statement, `=` means assignment: identify the place
+named on the left, evaluate the expression on the right, then store the value
+in that place. The order matters once destinations involve work of their own,
+such as an index expression; the store always comes last, so Lanternfly
 completes the calculation before it changes the destination.
 
 To follow the assignment by hand, we begin with 120 from `subtotal` and 15 from
@@ -120,8 +122,8 @@ We can account for all three variables before and after the statement:
 
 In mathematics, an equals sign states that two expressions have the same
 value. Assignment has a direction. A useful spoken reading is “put
-`subtotal + postage` into `total`”. Calculate the value from the right side,
-then use the left side to choose where to store it.
+`subtotal + postage` into `total`”: the left side chooses where the value
+will go, the right side supplies it, and the store completes the statement.
 
 Lanternfly comments begin with `//` and continue to the end of the line. A
 comment can record a fact that a future programmer needs but cannot derive

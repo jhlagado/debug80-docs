@@ -57,6 +57,11 @@ A counted loop visits an inclusive range. `1 to 10` runs ten times. The
 control name must already denote a writable integer variable or scalar
 parameter; `for` does not declare it.
 
+`until` is the exclusive twin: `for number = 0 until 10` visits 0 through 9,
+stopping below its boundary. The half-open form earns its keep with
+zero-based tables in Chapter 6, where an array's count can stand as the
+boundary without a subtracted one.
+
 The start and limit are evaluated once before the first pass. An optional
 compile-time `step` changes the sequence:
 
@@ -77,7 +82,7 @@ end
 The loop computes its next value mathematically and stops before the control
 variable would wrap beyond its boundary. The body must leave the control
 variable alone, including through calls or aliases. When the body itself must
-control progress, `while` or `loop` expresses that relationship.
+control progress, `while` expresses that relationship.
 
 ## Conditional loops
 
@@ -112,13 +117,14 @@ suitable when the program may already be finished before it reaches the loop.
 ## Indefinite loops
 
 Some operations need to perform work before they can test whether they are
-finished. `loop` repeats until an `exit` statement leaves it:
+finished. `while true` states that honestly: the condition never ends the
+loop, and an `exit` statement inside the body does:
 
 ```lanternfly
 sub findNextMultiple()
     var candidate as i16 = startValue
 
-    loop
+    while true
         candidate = candidate + 1
 
         if candidate mod 8 = 0 then
@@ -176,8 +182,10 @@ starting another row.
 | Repetition rule | Form |
 | --- | --- |
 | visit an inclusive numeric range | `for ... to ... end` |
+| visit a half-open numeric range | `for ... until ... end` |
+| visit every element of an array (Chapter 6) | `for each ... in ... end` |
 | test before each pass | `while ... end` |
-| repeat until a statement exits | `loop ... end` |
+| repeat until a statement exits | `while true ... end` |
 
 The loop form should put the stopping rule where it naturally belongs. A clear
 stopping rule makes termination easier to reason about and gives the backend
@@ -192,7 +200,9 @@ contains all three loop forms. The `calculateGcd` trace ends at 6, while
 ## Chapter summary
 
 - A local scalar belongs to one subroutine invocation.
-- `for` visits an inclusive range with a fixed compile-time step.
+- `for ... to` visits an inclusive range, and `for ... until` stops below
+  its boundary; both take a fixed compile-time step.
 - `while` tests before each pass, so its body may run zero times.
-- `loop` repeats until `exit`, and `continue` skips the rest of one pass.
+- `while true` repeats until `exit`, and `continue` skips the rest of one
+  pass.
 - `exit` and `continue` apply to the innermost loop.

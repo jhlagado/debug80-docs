@@ -18,7 +18,7 @@ var samples as u8[8]
 sub prepareSamples()
     var index as i16
 
-    for index = 0 to count(samples) - 1
+    for index = 0 until count(samples)
         samples[index] = u8(index * 2)
     end
 end
@@ -71,9 +71,35 @@ A constant index outside the valid range is a compile error. A runtime index
 is checked unless the compiler proves it safe. If the check fails, the target
 bounds-fault service runs before any load or store.
 
-The loop bound `count(samples) - 1` documents the valid range and gives the
-compiler an opportunity to prove every access safe. Resizing the declaration
-also updates the loop automatically.
+The loop `for index = 0 until count(samples)` walks exactly the valid range:
+`until` excludes its boundary, so the count stands as written. The shape also
+documents the range and gives the compiler an opportunity to prove every
+access safe. Resizing the declaration updates the loop automatically.
+
+## Visiting every element
+
+When the work needs each element rather than its position, `for each`
+traverses the array in row-major order:
+
+```lanternfly
+var sampleTotal as u16 = 0
+
+sub sumSamples()
+    sampleTotal = 0
+
+    for each sample in samples
+        sampleTotal = sampleTotal + sample
+    end
+end
+```
+
+The name `sample` denotes the current element itself. Reading it reads the
+array entry, and assigning to it would write that entry. The collection path
+is evaluated once before traversal begins, and `exit` and `continue` behave
+as in any loop. A `for each` over a two-dimensional array visits every value
+of every row without spelling either index; the indexed loop remains the form
+to reach for when the position takes part in the work, as it does in
+`prepareSamples`.
 
 ## Element stride
 
@@ -157,30 +183,29 @@ which preserves writable RAM for changing program state.
 
 ## Text and byte arrays
 
-The working 0.3 language has yet to settle its runtime text model. Double
-quotes currently appear only in compile-time forms such as
-`import "console.lf"` and `from "ROM_PRINT"`. Character literals and runtime
-string literals are outside the current contract.
+The 0.4 language settles static text. A character literal such as `'H'` is
+an exact byte value, and a double-quoted literal is a `cstr`: a read-only
+view of NUL-terminated static text with a near or far address class. A
+`cstr` supports `length`, content comparison and passage to services that
+honour its read-only, program-lifetime contract.
 
-A program can store encoded text as a fixed byte array when a platform
-interface defines the encoding and framing:
+Writable text remains ordinary byte storage under an explicit contract, and
+character literals make such data readable:
 
 ```lanternfly
 // ASCII values for HELLO followed by a zero terminator.
-const greetingBytes as u8[6] = [$48, $45, $4c, $4c, $4f, 0]
+const greetingBytes as u8[6] = ['H', 'E', 'L', 'L', 'O', 0]
 ```
 
 The array has the exact representation required by a NUL-terminated ASCII
 service. Another service might require a length prefix, a high-bit terminator
 or machine-specific display codes. Calling that array a string would hide the
-contract that gives each byte its meaning.
+contract that gives each byte its meaning, and no writable array converts
+silently into a `cstr`.
 
-The Lanternfly project still needs to define a small static text facility:
-character and text literal spelling, encoding, read-only references, bounded
-views, capacity rules and operations such as length, comparison and copy.
-These features can preserve fixed allocation; they require no heap or
-automatic resizing. Until that contract is settled, reusable text handling
-belongs in explicitly typed platform or library interfaces.
+Bounded writable views and richer string operations remain open design work.
+Until they land, reusable text handling belongs in explicitly typed platform
+or library interfaces.
 
 ## Clearing and filling
 
@@ -214,7 +239,9 @@ and byte offset 12 because each entry occupies two bytes.
 - Element address is the array base plus index times stride.
 - Multidimensional arrays use row-major layout with the rightmost dimension
   contiguous.
-- Programs can encode text as byte data under explicit service contracts; a
-  static text facility remains open design work.
+- `for each` visits every element in row-major order when positions are not
+  needed.
+- Character literals are byte values and `cstr` names read-only static text;
+  writable text stays in `u8` arrays under explicit service contracts.
 - `clear` and `fill` express repeated aggregate writes while leaving the
   backend free to choose an implementation.
