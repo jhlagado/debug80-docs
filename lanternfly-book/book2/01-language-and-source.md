@@ -45,17 +45,6 @@ but Lanternfly source has no pointer or reference value.
 Heap allocation, garbage collection, exceptions, dynamic collections,
 closures and indirect calls lie outside the first edition.
 
-## Glimmer hosting
-
-Lanternfly is independent of Glimmer. A Glimmer integration can supply typed
-storage, constants, user-defined types and routines through a host manifest. Glimmer
-retains state scheduling, pulses, effects, rendering, cards and platform
-resources.
-
-A hosted Lanternfly body contains local declarations followed by statements.
-It is a separate compilation-unit form rather than an ordinary module.
-[Chapter 10](10-modules-and-programs.md#hosted-bodies) defines its restrictions.
-
 ## Source files
 
 An ordinary source file is a module containing imports and declarations.
