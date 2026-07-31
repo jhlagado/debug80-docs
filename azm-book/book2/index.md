@@ -16,6 +16,8 @@ After these machine-level fundamentals, [AZM Book 1 — Assembler Manual](../boo
 
 ## Chapters
 
+- [Introduction](00-introduction.md)
+
 1. [The Computer](01-the-computer.md)
 2. [Machine Code](02-machine-code.md)
 3. [Assembly Language](03-assembly-language.md)
