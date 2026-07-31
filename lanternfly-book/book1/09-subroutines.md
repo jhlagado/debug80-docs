@@ -170,12 +170,19 @@ returns from a result-free routine.
 `return` leaves the subroutine. `exit` leaves the innermost loop, so the two
 words describe different control boundaries.
 
-## Recursion and target profiles
+## Calling order and recursion
+
+Chapter 1's declaration order governs calls too. A routine body may call
+imported routines, routines declared earlier in the module, and itself —
+the routine's own name becomes visible at its header, so a direct
+self-call is legal source. A call to a later routine is a
+declaration-before-use error, which makes mutual recursion — two routines
+each calling the other — unwritable in one module.
 
 A recursive call needs an independent parameter-and-local frame for every
 active invocation. A recursion-capable target profile defines the frame
-layout, stack bounds and reentrancy rules. A profile based on fixed scratch
-storage rejects direct and mutual recursion because another invocation would
+layout, stack bounds and reentrancy rules. A profile based on fixed
+scratch storage rejects a self-call because another invocation would
 overwrite the active frame.
 
 Target profiles may differ over whether a recursive source program is
@@ -196,8 +203,9 @@ parameter. Two calls to `addToTotal` produce 35. Applying
 - A trailing `as Type` declares a scalar result returned with `return`.
 - Scalar locals hold private working values for one invocation.
 - Record, array and string parameters alias caller-owned storage.
-- Recursion depends on whether the selected target profile can provide
-  independent active frames.
+- A routine calls imported routines, earlier routines or itself; recursion
+  depends on whether the selected target profile can provide independent
+  active frames.
 
 Our programs can compute anything but touch nothing; in the final chapter
 we reach the machine itself, through modules, typed services and assembly.

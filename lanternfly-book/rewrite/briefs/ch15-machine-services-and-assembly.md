@@ -58,7 +58,7 @@ typed call.
 
 ## Companion program
 `rewrite/examples/ch15-platform-services.lf.txt` (files marked inline:
-`platform.lf` and `main.lf`).
+`platform.lafy` and `main.lafy`).
 
 ## Hand trace
 The trace is now an *ordered service trace* (conformance compares those

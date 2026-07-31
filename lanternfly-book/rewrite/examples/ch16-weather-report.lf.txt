@@ -3,10 +3,10 @@
 // Service names ILLUSTRATIVE pending gate Q2; manifest format pending Q1.
 // Verified against specification 0.4 (3b31fe4).
 
-// ============================== model.lf ===============================
+// ============================== model.lafy ===============================
 // Ch 10-11 behind ch 14's border: the table and its invariant, private.
 
-export record Reading              // exported: report.lf renders fields
+export record Reading              // exported: report.lafy renders fields
     day as u8
     month as u8
     temperature as i16
@@ -122,7 +122,7 @@ export sub meanTemperature() as i16
     return sum / logCount
 end
 
-// ============================= platform.lf =============================
+// ============================= platform.lafy =============================
 // Ch 15's face, unchanged.
 
 export extern sub printChar(ch as u8) at $0008
@@ -136,12 +136,12 @@ ROM_PRINT_U16  = $002b
 ROM_NEWLINE    = $002e
 end
 
-// ============================== report.lf ==============================
+// ============================== report.lafy ==============================
 // Root module: composition and main. The build manifest names this file
 // and main() (Q1: the manifest's format is the project's to fix).
 
-import "model.lf"
-import "platform.lf"
+import "model.lafy"
+import "platform.lafy"
 
 const title as near cstring = "WEEK REPORT"
 const coldLabel as near cstring = "COLDEST "
@@ -216,7 +216,7 @@ end
 // Static budget, priced byte by byte (the book's thesis at the finish):
 //   log 50 + logCount 1 + carried 5 = 56 bytes of model storage;
 //   four cstring payloads 12+9+9+6 = 36 bytes (with terminators);
-//   report.lf scalars live in frames or scratch per the backend's report.
+//   report.lafy scalars live in frames or scratch per the backend's report.
 //
 // Spec notes:
 // - carried is module-level because locals cannot own aggregates (§11.4);

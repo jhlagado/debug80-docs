@@ -270,6 +270,30 @@ brief assumes `cstring` labels plus `u8` buffers, and should be
 re-planned around `string[N]` as the working text type. Ch 2's value
 survey and ch 16's report lines also touch text.
 
+## Declaration-order update (spec commits 29bc3f3 + .lafy revision, read 2026-08-01)
+
+- **Strict declaration-before-use.** No forward references of any kind: a
+  type annotation, initializer, domain, capacity or routine body may use
+  only imported names and earlier declarations. A routine's own name is
+  visible from its header, so direct self-recursion is legal source;
+  mutual recursion is unwritable. Record self/mutual containment is now a
+  use-before-declaration error rather than a rejected cycle. Imports form
+  a contiguous prefix; exports are visible from the point of import.
+- **Placement model.** `at` is the only placement clause; target profiles
+  declare `memoryRegions` and `placementDefaults`, builds may override; a
+  deterministic placement plan is validated against the assembled output
+  (`E-PLACE-001/002`). Book1 does not teach storage `at`, so only the
+  rewrite's ch 15 brief is affected.
+- **Source extension settled: `.lafy`**, exact lowercase, part of every
+  import path (`E-MODULE-001` otherwise). The §16 extension question is
+  closed. All rewrite examples using `.lf` need the rename.
+
+Book1 updated 2026-08-01: ch 1 teaches the top-to-bottom rule beside its
+first module and renames the pipeline source file; ch 7 derives record
+acyclicity from field-type completeness; ch 9 gains the calling-order
+rule and reframes recursion; ch 10 moves to `.lafy`, the import prefix
+and point-of-import visibility. Listings verified declaration-ordered.
+
 ## Conformance alignment
 
 Fixture names to echo: Counter (ch 1), Rushlight numeric case (ch 3's

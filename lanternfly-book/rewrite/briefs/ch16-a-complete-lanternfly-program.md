@@ -28,8 +28,8 @@ the database quartet (ch 11) and digit rendering through services (ch
 1. The program stated in ordinary language first (the plan's example-first
    discipline shown to the reader): collect a week's readings, order them,
    report coldest, warmest and mean.
-2. Module map: `model.lf` (table + invariant, private), `platform.lf`
-   (services, illustrative names), root `report.lf` (composition + main).
+2. Module map: `model.lafy` (table + invariant, private), `platform.lafy`
+   (services, illustrative names), root `report.lafy` (composition + main).
    Each border justified in one sentence.
 3. The sort over records: identical structure to ch 9, new cost column
    (five-byte copies), plus `carried` — why it is module-level, why that
@@ -52,7 +52,7 @@ specified by its observable trace.
 
 ## Companion program
 `rewrite/examples/ch16-weather-report.lf.txt` (files marked inline:
-`model.lf`, `platform.lf`, `report.lf`).
+`model.lafy`, `platform.lafy`, `report.lafy`).
 
 ## Hand trace
 Appends: (11,1,2), (12,1,-3), (13,1,5), (14,1,0), (15,1,-1) → count 5.
