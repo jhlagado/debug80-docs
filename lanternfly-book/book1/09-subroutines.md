@@ -72,9 +72,9 @@ total = atMost(total + nextAmount, 1000)
 
 Every reachable path in a result-bearing routine must return a compatible
 scalar. First-edition results may be ordinals — integers, enumerations and
-ranges — Booleans, opaque addresses or C-style strings. Records and arrays
-remain in caller-owned storage and are reached through aggregate parameters
-and aliases.
+ranges — Booleans or opaque addresses. Strings, records and arrays remain in
+caller-owned storage and are reached through aggregate parameters and
+aliases.
 
 A result-bearing call may stand alone when its side effects matter and its
 result may be discarded. A result-free routine cannot appear where an
@@ -96,8 +96,9 @@ Local declarations appear before executable statements. An initializer may
 use parameters, module declarations and earlier locals. Code outside the
 routine cannot name `difference`.
 
-An owned scalar local with no initializer starts with zero bits. A C-style
-string local requires an initializer because it always names valid text.
+An owned scalar local with no initializer starts with zero bits. A string is
+aggregate storage, so a routine reaches one through a parameter or a Chapter
+8 alias rather than owning a local copy.
 
 A backend may keep locals in registers, stack slots or proven-safe static
 scratch. The source rule remains the same: overlapping invocations receive
@@ -105,7 +106,7 @@ independent scalar parameters and locals.
 
 ## Aggregate parameters
 
-An array or record parameter aliases the caller's existing storage:
+An array, record or string parameter aliases the caller's existing storage:
 
 ```lanternfly
 sub clearBlock(block as u8[8])
@@ -142,8 +143,11 @@ end
 
 The leading `near` fixes the storage class that importing modules and the
 target calling convention must share. It qualifies the aggregate itself; an
-element type carries its own spelling, so an array of near C strings held in
-far storage is written `far labels as near cstring[8]`.
+element type carries its own spelling, so an array of near opaque addresses
+held in far storage is written `far handles as near address[8]`. A string
+parameter states its exact capacity — `line as string[40]` accepts a
+`string[40]` and nothing else — because the alias must match the caller's
+layout byte for byte.
 
 ## Early return
 
@@ -191,7 +195,7 @@ parameter. Two calls to `addToTotal` produce 35. Applying
   evaluated from left to right.
 - A trailing `as Type` declares a scalar result returned with `return`.
 - Scalar locals hold private working values for one invocation.
-- Record and array parameters alias caller-owned storage.
+- Record, array and string parameters alias caller-owned storage.
 - Recursion depends on whether the selected target profile can provide
   independent active frames.
 

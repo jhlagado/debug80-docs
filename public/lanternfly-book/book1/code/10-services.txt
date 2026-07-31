@@ -1,13 +1,13 @@
 record Date
-    var year as u16
-    var month as u8
-    var day as u8
+    year as u16
+    month as u8
+    day as u8
 end
 
 record Reading
-    var value as i16
-    var unit as u8
-    var quality as u8
+    value as i16
+    unit as u8
+    quality as u8
 end
 
 extern sub writeUnsigned(value as u16)

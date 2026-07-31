@@ -13,9 +13,9 @@ together. A record defines one type with named fields:
 
 ```lanternfly
 record Date
-    var year as u16
-    var month as u8
-    var day as u8
+    year as u16
+    month as u8
+    day as u8
 end
 
 var reportDate as Date
@@ -32,9 +32,9 @@ value while each field retains its own type.
 
 ```lanternfly
 record Date
-    var year as u16
-    var month as u8
-    var day as u8
+    year as u16
+    month as u8
+    day as u8
 end
 ```
 
@@ -85,9 +85,9 @@ A measurement needs a signed value, a unit code and a quality code:
 
 ```lanternfly
 record Reading
-    var value as i16
-    var unit as u8
-    var quality as u8
+    value as i16
+    unit as u8
+    quality as u8
 end
 
 var readings as Reading[4]
@@ -117,9 +117,9 @@ Records can contain other records and fixed arrays:
 
 ```lanternfly
 record DailyLog
-    var date as Date
-    var entries as Reading[4]
-    var used as u8
+    date as Date
+    entries as Reading[4]
+    used as u8
 end
 
 var dailyLog as DailyLog
@@ -140,6 +140,24 @@ A record cannot contain itself by value, either directly or through another
 record. Such a cycle would have no finite size. When a program needs links
 rather than inline containment, it stores the index of the destination entry
 in its fixed pool; Chapter 8 develops that identity model.
+
+A string field behaves the same way, because a string is fixed-size data
+like everything else in a record:
+
+```lanternfly
+record Station
+    name as string[12]
+    id as u8
+end
+
+var station as Station
+```
+
+`name` occupies its fourteen bytes — length, payload capacity and terminator
+— at offset 0, `id` sits at offset 14, and `Station` occupies fifteen bytes
+on every backend. The field supports the full string interface through its
+path: `station.name = "NORTH"` is a checked copy, and
+`append(station.name, '2')` grows the stored text in place.
 
 ## Record initializers
 
@@ -183,14 +201,16 @@ introduced in Chapter 8.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/07-records.txt)
-declares `Date`, `Reading` and `DailyLog`. Its declarations give
+declares `Date`, `Reading`, `DailyLog` and `Station`. Its declarations give
 `size(type DailyLog)` as 21 and place
-`dailyLog.entries[2].quality` at byte offset 15.
+`dailyLog.entries[2].quality` at byte offset 15; `size(type Station)` is 15
+because the `string[12]` field occupies fourteen bytes.
 
 ## Chapter summary
 
 - A record groups named fields into one fixed-size type.
-- Fields occupy declaration order with no implicit padding.
+- Fields occupy declaration order with no implicit padding, and a string
+  field contributes its exact `N + 2` bytes like any other.
 - Arrays of records use the record size as their stride.
 - Nested records and arrays still reduce to one exact byte layout.
 - Aggregate assignment copies the complete record or array value.
