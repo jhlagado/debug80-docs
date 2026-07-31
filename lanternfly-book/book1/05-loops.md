@@ -54,8 +54,10 @@ end
 ```
 
 A counted loop visits an inclusive range. `1 to 10` runs ten times. The
-control name must already denote a writable integer variable or scalar
-parameter; `for` does not declare it.
+control name must already denote a writable ordinal variable or scalar
+parameter; `for` does not declare it. An enumeration or range control
+advances by ordinal position, so a loop can visit every member of a
+Chapter 2 enumeration by naming its first and last members.
 
 `until` is the exclusive twin: `for number = 0 until 10` visits 0 through 9,
 stopping below its boundary. The half-open form earns its keep with

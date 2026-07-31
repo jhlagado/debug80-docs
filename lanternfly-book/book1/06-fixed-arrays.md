@@ -34,14 +34,27 @@ a storage location.
 var samples as u8[8]
 ```
 
-`u8[8]` is an array of eight bytes. The count belongs to the type and must be
-a positive compile-time value. The compiler reserves all eight bytes together;
-the array carries no hidden runtime length and needs no allocator.
+`u8[8]` is an array of eight bytes. Every dimension declares an ordinal
+index domain, and a lone count is the shorthand for the commonest one:
+`u8[8]` means `u8[0 until 8]`, with valid indices 0 through 7. The compiler
+reserves all eight bytes together; the array carries no hidden runtime
+length and needs no allocator.
 
-Lanternfly arrays are zero-based. Valid indices for eight entries run from 0
-through 7. An index is best understood as a distance from the beginning:
-entry zero is zero elements from the base, entry one is one element away and
-entry seven is seven elements away.
+A count-declared array is therefore zero-based, and an index into one is
+best understood as a distance from the beginning: entry zero is zero
+elements from the base, entry seven is seven elements away. A dimension can
+also declare its bounds outright, or take them from a Chapter 2 type:
+
+```lanternfly
+var octoberReadings as i16[1 to 31]
+var modeWidths as u8[ReportMode]
+```
+
+The first array indexes naturally by day of the month, with no wasted
+entry zero and no subtracted one in sight. The second holds one value per
+enumeration member — a table looked up by name. The domain is part of the
+array's type, and `lower` and `upper` query a dimension's first and last
+valid index the way `count` queries its extent.
 
 `count(samples)` produces 8 during compilation. `size(samples)` produces the
 array's byte size:
@@ -236,7 +249,10 @@ and byte offset 12 because each entry occupies two bytes.
 
 - A fixed array stores a compile-time number of identical elements
   contiguously.
-- Indices are zero-based and checked before access.
+- Every dimension declares an ordinal index domain; a lone count means
+  `0 until count`, and explicit or enum domains choose other bounds.
+- Indices are checked against their dimension's domain, and an index whose
+  type already fits the domain needs no runtime check.
 - Element address is the array base plus index times stride.
 - Multidimensional arrays use row-major layout with the rightmost dimension
   contiguous.

@@ -136,8 +136,16 @@ end
 ```
 
 `select` evaluates `reportMode` once. Each `case` contains compatible
-compile-time integer values. A matching body runs, then execution continues
+compile-time ordinal values. A matching body runs, then execution continues
 after `end`; Lanternfly cases never fall through.
+
+The constants here are integers by construction, but Chapter 2's
+enumerations suit this pattern even better. With
+`var reportMode as ReportMode`, the cases name the members directly, an
+invalid mode cannot enter the variable in the first place, and a `select`
+whose cases cover every member is complete without an `else`. A case may
+also span a run of values with a range: `case 0 to 9` includes both ends,
+and `until` excludes its boundary.
 
 The optional `else` handles values that match no case. Here it chooses a
 conservative report configuration for an invalid mode. Omitting `else` would
@@ -164,7 +172,7 @@ line because there is one complete body for them.
 ## `if` and `select`
 
 `if` fits branches that ask different questions, such as “did an error occur?”
-and “is the batch complete?” `select` fits branches that compare one integer
+and “is the batch complete?” `select` fits branches that compare one ordinal
 expression with named constant values.
 
 The opening word tells you the shape of the decision. An `else if` chain
@@ -183,7 +191,9 @@ and zero remaining items, it produces `statusComplete`.
 - `if` runs one body when a Boolean condition is true.
 - `else` supplies the false path, and `else if` ranks several conditions.
 - The first true condition in a chain determines the result.
-- `select` compares one integer expression with compile-time case values.
+- `select` compares one ordinal expression with compile-time case values
+  and ranges; an enumeration `select` covering every member is complete
+  without `else`.
 - Lanternfly cases do not fall through, and `else` handles unmatched values.
 
 A decision runs its branch once. In the next chapter we repeat work, and
