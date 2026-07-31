@@ -86,9 +86,11 @@ bounds-fault service runs before any load or store.
 
 The loop `for index = 0 until count(samples)` walks exactly the valid range:
 `until` excludes its boundary, so the loop takes the count directly, with
-nothing subtracted. The shape also
-documents the range and gives the compiler an opportunity to prove every
-access safe. Resizing the declaration updates the loop automatically.
+nothing subtracted. An array with an explicit domain traverses by its own
+bounds instead: `for day = lower(octoberReadings) to upper(octoberReadings)`.
+Either shape documents the range and gives the compiler an opportunity to
+prove every access safe, and resizing the declaration updates the loop
+automatically.
 
 ## Visiting every element
 
