@@ -233,4 +233,4 @@ statement to the instructions it becomes. The
 them, and when the first compiler arrives, the programs you have traced in
 these chapters will be among the first it runs. Until then, the traces
 are the running — and the pencil that produced them will be just as
-useful the day the programs misbehave for real.
+useful the day a program goes wrong for real.

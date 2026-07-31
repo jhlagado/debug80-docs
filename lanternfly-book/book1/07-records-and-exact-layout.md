@@ -25,8 +25,8 @@ reportDate.month = 7
 reportDate.day = 30
 ```
 
-`Date` occupies four bytes. A variable can store, copy and pass a date as one
-value while each field retains its own type.
+`Date` occupies four bytes. We can store, copy and pass a date as one value
+while each field retains its own type.
 
 ## Declaring a record
 
@@ -60,8 +60,9 @@ occupy target memory and require no runtime lookup.
 ## Exact field layout
 
 Fields appear in declaration order with no implicit padding. `Date.year`
-occupies offsets 0 and 1, `month` occupies offset 2 and `day` occupies offset 3. The diagram uses the Z80's little-endian byte order, with the low byte of
-`year` first. Another target profile may use a different byte order inside
+occupies offsets 0 and 1, `month` occupies offset 2 and `day` occupies
+offset 3. The diagram uses the Z80's little-endian byte order, with the low
+byte of `year` first. Another target profile may use a different byte order inside
 `u16`, while the field offsets and total record size remain fixed:
 
 ![On Z80, a Date record occupies four bytes in declaration order, with month at offset two.](../../assets/images/lanternfly-book/book1/date-layout.svg)
@@ -194,8 +195,8 @@ very different machine costs, which generated listings and cost reports can
 expose.
 
 Owned local variables remain scalar in the first edition. A subroutine that
-needs a short local name for an existing record or array uses the alias form
-introduced in Chapter 8.
+needs a short local name for an existing record, array or string uses the
+alias form introduced in Chapter 8.
 
 ## Example
 

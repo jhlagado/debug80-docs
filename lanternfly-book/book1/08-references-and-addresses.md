@@ -85,8 +85,9 @@ record into it. The alias itself cannot be rebound, compared or stored — it
 is a name, not a value. The backend may carry an address underneath, but
 that carrier has no source spelling, so no program can misuse it.
 
-An alias earns its place when a routine touches the same aggregate several
-times or passes it onward. A path used once is best written as the path.
+An alias is the right choice when a routine touches the same aggregate
+several times or passes it onward. A path used once is best written as the
+path.
 
 The alias form accepts records, fixed arrays and strings — an alias of a
 `string[12]` element gives a table entry a short name for a run of appends.
@@ -95,8 +96,8 @@ requires direct access so that every read and write remains visible.
 
 ## Regular shapes: one table instead of many
 
-Programs that once collected separate buffers behind a table of pointers
-declare one multidimensional array instead:
+Where another language would collect separate buffers behind a table of
+pointers, we declare one multidimensional array:
 
 ```lanternfly
 const bufferCount as u8 = 3
@@ -119,8 +120,8 @@ integers, and both are checked against declared extents.
 
 ## Irregular choices: a selector and `select`
 
-When the candidates are genuinely separate declarations, the program stores
-a selector and chooses the named object:
+When the candidates are genuinely separate declarations, we store a
+selector and match it with `select`:
 
 ```lanternfly
 const inputLog as u8 = 0
@@ -157,8 +158,8 @@ preserving their source meaning.
 
 Storage classes matter at interfaces. Chapter 9 shows the spelling on
 aggregate parameters, where an exported routine states `near` or `far`
-before the parameter's name so that callers in other modules agree about
-the storage they hand over.
+before the parameter's name so that every importing module is checked
+against the same storage class.
 
 ## Opaque addresses
 
