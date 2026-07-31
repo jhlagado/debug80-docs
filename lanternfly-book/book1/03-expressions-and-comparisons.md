@@ -236,3 +236,6 @@ The first expression traces from `u8` inputs to an `i16` result of -230 and a
   bits.
 - Parentheses record the intended order and clarify expressions that mix
   arithmetic, comparison and bitwise work.
+
+Comparisons give us Boolean answers; in the next chapter those answers
+choose between paths.

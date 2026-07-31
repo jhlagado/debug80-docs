@@ -196,3 +196,6 @@ itself.
   state them explicitly.
 - Opaque addresses carry device locations without a referent type, and
   only target services can interpret them.
+
+Aliases gave routines a working name for storage; in the next chapter we
+complete the routines themselves, with parameters, results and locals.

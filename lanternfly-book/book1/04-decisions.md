@@ -185,3 +185,6 @@ and zero remaining items, it produces `statusComplete`.
 - The first true condition in a chain determines the result.
 - `select` compares one integer expression with compile-time case values.
 - Lanternfly cases do not fall through, and `else` handles unmatched values.
+
+A decision runs its branch once. In the next chapter we repeat work, and
+meet the rules that end the repetition.

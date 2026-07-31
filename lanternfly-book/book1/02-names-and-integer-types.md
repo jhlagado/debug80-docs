@@ -199,3 +199,6 @@ two calls made by `main` leave `unitsInStock` at 1,190 and `byteValue` at 44.
   should be explicit when intentional.
 - Literal values take their type from context, with `i16` as the default for
   an otherwise untyped literal expression.
+
+In the next chapter we put these types to work: calculations, comparisons
+and the rules that give every intermediate result a width.

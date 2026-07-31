@@ -206,3 +206,6 @@ contains all three loop forms. The `calculateGcd` trace ends at 6, while
 - `while true` repeats until `exit`, and `continue` skips the rest of one
   pass.
 - `exit` and `continue` apply to the innermost loop.
+
+Our loops so far have counted and calculated. In the next chapter we give
+them something to walk: tables of fixed storage.

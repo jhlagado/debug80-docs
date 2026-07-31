@@ -193,3 +193,7 @@ parameter. Two calls to `addToTotal` produce 35. Applying
 - Record and array parameters alias caller-owned storage.
 - Recursion depends on whether the selected target profile can provide
   independent active frames.
+
+One boundary remains. Our programs can compute anything but touch nothing;
+in the final chapter we reach the machine itself, through modules, typed
+services and assembly.
