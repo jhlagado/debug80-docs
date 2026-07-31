@@ -143,8 +143,8 @@ something else.
 This first program leaves its result in memory instead of printing it. On a
 desktop computer, a language runtime can usually assume the presence of a
 terminal or window. The small computers Lanternfly targets do not share one
-standard output device. One machine may have a serial port, another a memory-
-mapped display and another only a monitor routine supplied in ROM.
+standard output device. One machine may have a serial port, another a
+memory-mapped display and another only a monitor routine supplied in ROM.
 
 You make facilities like these available to Lanternfly by declaring machine
 services. Later we will give such a service a typed name and call it like an
@@ -184,7 +184,7 @@ computer can then load and execute `order.bin`.
 
 The toolchain will keep the generated assembly available for inspection. When
 an address, instruction choice or cycle count becomes relevant, you can
-examine what the compiler asked AZM to assemble. For everyday program logic,
+examine the assembly the compiler passed to AZM. For everyday program logic,
 you can work with names, types, expressions and subroutines instead of
 managing registers and addresses for every operation.
 
