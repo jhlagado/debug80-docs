@@ -22,8 +22,8 @@ var elapsedSeconds as u32 = 0
 var orderReady as boolean = false
 ```
 
-The types tell the compiler how much storage to reserve and how to interpret
-each bit pattern.
+The types fix the storage the compiler reserves and the meaning of each bit
+pattern.
 
 ## Bits, bytes and ranges
 
@@ -100,7 +100,7 @@ orderReady = unitsInStock >= dispatchBatch
 
 `boolean` has the two values `true` and `false`. It occupies one byte, using
 zero for `false` and one for `true`. Integer values do not become conditions
-automatically, so a test spells its comparison out:
+automatically, so we spell the comparison out:
 
 ```lanternfly
 if unitsInStock > 0 then
@@ -108,8 +108,8 @@ if unitsInStock > 0 then
 end
 ```
 
-This separation catches accidental uses of counts and bit patterns where the
-program needs a yes-or-no answer.
+This separation catches accidental uses of counts and bit patterns where we
+need a yes-or-no answer.
 
 ## Enumerations and ranges
 
@@ -147,9 +147,9 @@ A range value widens silently to its host, while any value entering the
 range — by assignment, argument, return or conversion — is checked against
 its domain. The range form itself is grammar rather than a value —
 `0 until 32` cannot be stored or passed — while a variable of a range type
-holds an ordinary host value, checked at every boundary it crosses. Chapter 6 puts both to work as array index domains, where a
-suitably typed index makes a bounds check unnecessary because the type
-already proves it.
+holds an ordinary host value, checked at every boundary it crosses.
+Chapter 6 puts both to work as array index domains, where a suitably typed
+index makes a bounds check unnecessary because the type already proves it.
 
 ## Assignment and equality
 
@@ -208,7 +208,7 @@ unitsInStock = unitsInStock - dispatchBatch
 
 When every typed value in the calculation is `u16`, the wider or signed
 intermediate prescribed by the operator rules may return to `u16` without a
-warning. The program is still responsible for guarding values that would wrap.
+warning. Guarding values that would wrap remains our job.
 
 ## Literal context
 
