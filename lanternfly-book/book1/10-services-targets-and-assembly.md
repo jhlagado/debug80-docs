@@ -63,7 +63,7 @@ declarations are private until marked `export`:
 export const counterLimit as u16 = 9999
 
 export record Counter
-    var value as u16
+    value as u16
 end
 
 export var processed as Counter

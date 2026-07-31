@@ -7,10 +7,10 @@
 // Ch 10-11 behind ch 14's border: the table and its invariant, private.
 
 export record Reading              // exported: report.lf renders fields
-    var day as u8
-    var month as u8
-    var temperature as i16
-    var validated as boolean
+    day as u8
+    month as u8
+    temperature as i16
+    validated as boolean
 end
 
 const logCapacity as u8 = 10
