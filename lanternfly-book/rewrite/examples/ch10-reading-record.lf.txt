@@ -9,7 +9,9 @@ record Reading
     var validated as boolean
 end
 
-// Layout facts, asked for by name and folded at compile time.
+// Layout facts, asked for by name and folded at compile time. (Read by
+// people and later chapters rather than by this program — a strict build
+// would note the unused privates with W-UNUSED-001.)
 const readingBytes as u8 = size(type Reading)          // 5
 const temperatureOffset as u8 = offset(Reading.temperature) // 2
 

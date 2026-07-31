@@ -60,17 +60,29 @@ sub surcharge(method as u8) as u16
     end
 end
 
+var change as u16 = 0
+var fee as u16 = 0
+var cardCost as u16 = 0
+var mean as u16 = 0
+
 sub main()
     addSale(120)
     addSale(95)
+
+    mean = meanPrice()             // 215 / 2 = 107
+    change = safeChange(200, total) // 0 — the guard, not a wrap
+    fee = deliveryFee(450)          // 95
+    cardCost = surcharge(card)      // 25, accepted = true
 end
 
 // Trace:
-//   safeChange(500, 293) -> 207     safeChange(200, 293) -> 0 (no wrap)
-//   meanPrice() empty -> 0          after the two sales -> 215 / 2 = 107
+//   meanPrice() empty would be 0; after the two sales -> 215 / 2 = 107
+//   safeChange(200, 215) -> 0 (guard); safeChange(500, 215) would be 285
 //   deliveryFee(450) -> 95          deliveryFee(2000) -> 250 (inclusive band)
 //   surcharge(card) -> 25, accepted = true
-//   surcharge(voucher) -> 0, accepted = false (else = defensive default)
+//   surcharge(voucher) would set accepted = false (else = defensive default)
+// Final storage: total 215, saleCount 2, mean 107, change 0, fee 95,
+//   cardCost 25, accepted true.
 //
 // Spec notes:
 // - select requires an integer selection; cases are constant, non-overlapping

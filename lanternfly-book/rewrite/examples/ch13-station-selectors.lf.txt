@@ -86,6 +86,8 @@ sub main()
     selectedEntry = 1
     touchSelected()
 
+    recordDay(northStation, 0, 1)    // stationGrids[0, 0] = 1
+
     northMean = stationMean(northStation)
     southMean = stationMean(southStation)
 end
@@ -100,7 +102,7 @@ end
 //   northMean: (1+3+5+2-1+0+4) / 7 = 14 / 7 = 2
 //   southMean: (4+6+8+2+0-2+3) / 7 = 21 / 7 = 3
 // Final storage: log[1].validated true, snapshot as above, northMean 2,
-//   southMean 3, selectedEntry 1.
+//   southMean 3, selectedEntry 1, stationGrids[0, 0] = 1.
 //
 // Spec notes:
 // - The alias initializer is evaluated and checked once; the alias cannot

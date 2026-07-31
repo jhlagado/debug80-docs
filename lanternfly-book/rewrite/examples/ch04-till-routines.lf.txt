@@ -33,19 +33,26 @@ sub meanPrice() as u16
     return total / saleCount
 end
 
+var pounds as u16 = 0
+var pence as u16 = 0
+var mean as u16 = 0
+
 sub main()
     addSale(120)
     addSale(95)
 
     total = totalWithService(total)   // 215 + 21 = 236
+    pounds = poundsPart(total)        // 2
+    pence = pencePart(total)          // 36
+    mean = meanPrice()                // 236 / 2 = 118
 end
 
 // Trace:
 //   addSale(120)          total = 120  saleCount = 1
 //   addSale(95)           total = 215  saleCount = 2
 //   totalWithService(215) service = 21, returns 236
-//   final storage         total = 236  saleCount = 2
-//   (meanPrice() at that state would return 236 / 2 = 118.)
+//   poundsPart(236) = 2, pencePart(236) = 36, meanPrice() = 118
+//   final storage: total 236, saleCount 2, pounds 2, pence 36, mean 118
 //
 // Spec notes:
 // - Locals precede statements and initialize in order per invocation (§4.2).
