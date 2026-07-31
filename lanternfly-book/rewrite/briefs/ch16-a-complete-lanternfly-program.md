@@ -15,7 +15,7 @@ None. The `Reading` table (ch 10–11) behind a module border (ch 14), a
 report buffer (ch 12), a platform face (ch 15) — and one deliberate
 addition forced by the language: `var carried as Reading` at module level,
 the static scratch slot the sort needs because locals cannot own
-aggregates (ch 4/13's rule, met honestly at last).
+aggregates (ch 4/13's rule, finally met as written).
 
 ## Algorithm introduced
 Insertion sort over the record table — ch 9's promise cashed: the shift

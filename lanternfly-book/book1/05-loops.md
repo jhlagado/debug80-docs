@@ -120,7 +120,7 @@ suitable when the program may already be finished before it reaches the loop.
 ## Indefinite loops
 
 Some operations need to perform work before they can test whether they are
-finished. `while true` states that honestly: the condition never ends the
+finished. `while true` states that outright: the condition never ends the
 loop, and an `exit` statement inside the body does:
 
 ```lanternfly

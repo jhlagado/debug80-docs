@@ -36,6 +36,13 @@ check "marker vocabulary" '\bdelve|tapestry|figurative landscape|\brealm\b|inter
 # False agency and emotional colouring of mechanisms.
 check "false agency" 'reads itself|writes itself|defends itself|sells itself|asking to exist|cheerfully|happily|gracefully|complete confidence|\bwants\b|\bdeserves\b|\bhopes\b'
 
+# Honesty is a virtue of people, not compilers, layouts or numbers.
+check "inanimate honesty" '\bhonest\b|\bhonestly\b|\bhonesty\b'
+
+# Machines have no interior: no verbs of mind with a machine subject.
+# (Notation may "mean" something by definition; a program may not.)
+check "machine mind" '\b(program|compiler|routine|backend|toolchain|machine|loop|alias|module|code|it) (means|knows|believes|understands|thinks|remembers|notices|wonders|decides|cares|wishes|prefers|agrees)\b'
+
 # Reader stage-directions.
 check "stage direction" '^Notice |[.!] Notice |Note that you|Look closely|Keep in mind|Bear in mind|Remember that|Read it aloud|Hold onto'
 

@@ -31,7 +31,7 @@ digit-counting loop, matured); signed rendering via sign test + `abs`.
    left to right — "FEB" < "JAN" and why).
 3. What `cstring` refuses: no mutation, no indexing, no integer conversion —
    the view is for holding, passing, measuring and comparing. The refusal
-   is honest: byte access to a label's content is a service or
+   is stated, not papered over: byte access to a label's content is a service or
    future-edition affair (gate Q4a), and the book says so plainly.
 4. Writable text is ch 11's occupancy pattern over bytes: capacity in the
    type, length beside it, append guarded, overflow reported not faulted.
@@ -73,4 +73,4 @@ first edition's character set).
 Q4 (writable-text follow-up) plus new finding Q4a: no source-level byte
 access to `cstring` content (no indexing through the view), so copying a
 label into a buffer requires a service or a future bounded view. Routed to
-the project via the gate; the chapter teaches around it honestly.
+the project via the gate; the chapter names the gap and teaches around it.

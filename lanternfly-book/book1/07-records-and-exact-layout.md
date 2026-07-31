@@ -216,5 +216,5 @@ because the `string[12]` field occupies fourteen bytes.
 - Aggregate assignment copies the complete record or array value.
 
 Our tables now hold structured entries, which raises a question we have so
-far answered casually: how does a program keep track of *which* entry it
-means? The next chapter answers it properly.
+far answered casually: where does a program store *which* entry an
+operation applies to? The next chapter answers it properly.

@@ -12,7 +12,7 @@ Ch 7–10: arrays, search skeletons, sort invariants, the `Reading` model.
 ## Data representation introduced
 The partial-fill pattern: `log as Reading[logCapacity]` plus
 `logCount as u8` — fixed storage, variable occupancy, and the invariant
-that makes it honest: entries 0..logCount-1 are meaningful, the rest are
+that gives the count its meaning: entries 0..logCount-1 are meaningful, the rest are
 noise; every operation preserves it. Fifty bytes of table, one byte of
 occupancy.
 

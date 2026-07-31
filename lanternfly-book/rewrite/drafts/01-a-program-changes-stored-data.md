@@ -81,8 +81,8 @@ const applePrice as u16 = 120
 ```
 
 `const` declares a compile-time value. `applePrice` names it, `as u16`
-types it, and `= 120` supplies it. From here on the program says
-`applePrice` where it means that price, and the day the shop changes the
+types it, and `= 120` supplies it. From here on the source reads
+`applePrice` wherever that price appears, and the day the shop changes the
 price, one line changes with it.
 
 A scalar constant normally occupies no storage at all. The compiler folds
@@ -90,8 +90,8 @@ the value into the places that use it, so the three price constants cost
 the running program nothing — a name in the source, a number in the
 generated instructions, no byte of memory in between. The distinction
 between the two declaration keywords is exactly the distinction between
-the two kinds of fact: `const` for what the program knows, `var` for what
-the program tracks.
+the two kinds of fact: `const` for a fact fixed before the program runs,
+`var` for a fact that changes while it runs.
 
 ## Changing facts: `var`
 

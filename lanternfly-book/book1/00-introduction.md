@@ -31,9 +31,9 @@ today.
 Interpreted BASIC made small computers approachable but spent most of the
 processor reading the program; assembly used the machine fully but
 dissolved every idea into register bookkeeping. Lanternfly keeps the
-readable surface and compiles it honestly, and its toolchain keeps the
-generated assembly open for inspection, so the cost of any line is a fact
-we can look up rather than a guess.
+readable surface and compiles it ahead of time, and its toolchain keeps
+the generated assembly open for inspection, so the cost of any line is a
+fact we can look up rather than a guess.
 
 ## The intended reader
 
@@ -48,9 +48,10 @@ part of the pleasure of the subject.
 
 ## A language before its compiler
 
-Lanternfly is a young project. This book follows the 0.4 working
-specification, the contract for the first compiler — and that compiler
-does not exist yet. Every example shows the intended source language,
+Lanternfly is a young project. This book follows the
+[0.4 working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md),
+the contract for the first compiler — and that compiler does not exist
+yet. Every example shows the intended source language,
 checked against the specification, but nothing here can be compiled and
 run today.
 
@@ -75,20 +76,7 @@ Chapters 2 and 3 are about values: integer types, Booleans, enumerations
 and ranges, then calculations and comparisons. In Chapters 4 and 5 we add control — decisions, then
 loops. Chapters 6 and 7 give our data structure: fixed arrays and counted
 strings, then records with exact layouts. In Chapter 8 we learn how a Lanternfly
-program keeps track of *which* piece of data it means — with indices and
+program records *which* piece of data an operation applies to — with indices and
 aliases rather than pointers. Chapter 9 completes subroutines with
 parameters, results and locals, and in Chapter 10 we open the machine
 boundary: modules, typed services and inline assembly.
-
-## Prerequisites
-
-Nothing has to be installed. A pencil is the only equipment: tracing
-programs by hand is how we replace the compiler for now, and the habit
-transfers directly to debugging real programs later. When you want the
-fine print behind any rule, the
-[working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-holds it, and this book cites its sections where they matter.
-
-The first program is three declarations and one statement — enough to
-show where a program's values live, where execution begins and what an
-assignment does. We start there.

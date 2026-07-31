@@ -32,7 +32,7 @@ target in the spare slot so the value test alone terminates the loop.
    range (ch 6's least-powerful-form rule paying off).
 4. The sentinel: move the boundary test into the data. One comparison per
    step instead of two — Wirth-era arithmetic.
-5. The honest 0.4 accounting: the sentinel guarantees termination
+5. The full 0.4 accounting: the sentinel guarantees termination
    dynamically, but the compiler cannot prove `index` in range, so each
    access carries a runtime bounds check (`F-BOUNDS`, §6). The trick that
    removed one comparison re-buys another. Cost report comparison: plain

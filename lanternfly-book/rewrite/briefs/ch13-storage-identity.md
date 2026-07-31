@@ -52,7 +52,7 @@ through an alias, dispatch among separately declared tables with `select`.
    copies the referent; identity that must persist goes back to being an
    index.
 8. Opaque addresses: hold, pass, compare same-class — never index, never
-   derive. Device address spaces (VRAM) are the honest use; ch 15 crosses
+   derive. Device address spaces (VRAM) are their intended use; ch 15 crosses
    that boundary.
 9. The doctrine argued, not asserted: what pointers would cost (dangling,
    aliasing analysis, unched arithmetic) against what the model already

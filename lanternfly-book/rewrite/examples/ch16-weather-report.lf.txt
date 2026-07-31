@@ -18,7 +18,7 @@ const logCapacity as u8 = 10
 var log as Reading[logCapacity]    // private
 var logCount as u8 = 0             // private
 
-// Ch 4/13's rule met honestly: locals cannot own aggregates, so the
+// Ch 4/13's rule met as written: locals cannot own aggregates, so the
 // sort's travelling value is one static scratch slot — the small-machine
 // pattern the rule was always pointing at.
 var carried as Reading             // private scratch for sortByTemperature
