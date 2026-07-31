@@ -100,7 +100,7 @@ orderReady = unitsInStock >= dispatchBatch
 
 `boolean` has the two values `true` and `false`. It occupies one byte, using
 zero for `false` and one for `true`. Integer values do not become conditions
-automatically, so a test states the comparison it means:
+automatically, so a test spells its comparison out:
 
 ```lanternfly
 if unitsInStock > 0 then

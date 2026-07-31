@@ -68,7 +68,7 @@ zero extra table storage — one scalar holds the travelling value.
 Sorting record tables by a key field (ch 11 — the shift becomes an
 aggregate copy and the cost table gets a column); faster orders
 (merge/quick need either recursion-capable profiles or explicit stacks —
-named as beyond this book's first edition, honestly).
+named outright as beyond this book's first edition).
 
 ## Open spec questions touched
 None.

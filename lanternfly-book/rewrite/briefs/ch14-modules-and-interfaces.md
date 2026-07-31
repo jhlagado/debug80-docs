@@ -3,7 +3,7 @@
 ## Single job
 Divide a program by responsibility: modules with private declarations and
 explicit exports, composed by a whole-program build with one entry. The
-chapter's payoff is architectural honesty — ch 11's occupancy invariant
+chapter's payoff is enforcement — ch 11's occupancy invariant
 becomes *enforceable* the moment the table is private and only the module's
 routines can touch it.
 
@@ -29,7 +29,7 @@ private.
    the occupancy invariant stops being discipline and becomes fact — no
    code outside the module *can* write `logCount` or a noise entry.
 3. Interface design under the export check: an exported routine cannot
-   expose a private type (`E-MODULE-002`, recursively). Two honest
+   expose a private type (`E-MODULE-002`, recursively). Two workable
    choices traced: export the `Reading` record too, or keep it private
    behind a scalar API — the chapter's example chooses the scalar API and
    says why (the record layout stays changeable).

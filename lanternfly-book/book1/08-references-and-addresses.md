@@ -9,7 +9,7 @@ nav_order: 8
 
 Aggregate assignment creates an independent copy. Often a program needs the
 opposite: several parts working with the same storage, chosen at run time.
-Lanternfly answers with data rather than with pointers. The program remembers
+Lanternfly answers with data rather than with pointers. The program stores
 *which* entry — an integer index — and gives storage a temporary name — an
 alias — while a routine works on it:
 
@@ -24,7 +24,7 @@ sub markSelected()
 end
 ```
 
-`selectedReading` is the program's notion of "the current reading". Changing
+`selectedReading` holds "the current reading" as plain data. Changing
 it selects another entry; the alias inside `markSelected` names whichever
 entry is selected when the routine runs.
 
@@ -41,7 +41,7 @@ readings[selectedReading].quality = 1
 
 The index is ordinary data. It can be stored in a variable or a record
 field, passed to a routine, compared, saved and restored. A program that
-must remember a relationship between entries stores the destination index:
+must keep a relationship between entries stores the destination index:
 
 ```lanternfly
 var previousReading as u8 = 0
@@ -184,7 +184,7 @@ while the platform contract remains responsible for interpreting it.
 The [chapter listing](/lanternfly-book/book1/code/08-references.txt)
 selects a reading by index, adjusts it through an alias and clears one row
 of a buffer table. The assignment to `selectedReading` changes which entry
-later code means; the assignments through `reading` change the entry
+later code operates on; the assignments through `reading` change the entry
 itself.
 
 ## Chapter summary

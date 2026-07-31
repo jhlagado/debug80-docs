@@ -3,7 +3,7 @@
 ## Single job
 Cross the boundary between portable meaning and the machine, in the three
 sanctioned ways: typed external routines (services), device storage
-(`volatile` + `at`), and raw assembly behind an honest barrier. The
+(`volatile` + `at`), and raw assembly behind a declared barrier. The
 language's oldest promise — visible cost — becomes the artifacts ledger.
 
 ## Prior knowledge

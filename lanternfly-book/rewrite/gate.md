@@ -134,7 +134,7 @@ Outer pass loop becomes `for pass = 1 until count(readings)`; inner
 shifting `while` unchanged — **Defined**. Bounded aggregate views are the
 project's open design for *reusable* sorts (decisions ch. names
 insertion sort as a decision fixture); this chapter sorts its own table
-in place and defers reusability honestly → Q5.
+in place and names reusability as deferred → Q5.
 
 ### Ch 10 — Records and Data Models
 Unchanged: exact layout, initializers, `size`/`offset`, record equality
