@@ -44,6 +44,7 @@ Lanternfly's Z80 work.
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs. |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/) | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays. |
 | [Lanternfly Book 1 — Programming Fundamentals](https://debug80.com/lanternfly-book/book1/) | A general introduction to writing programs with Lanternfly, from variables through machine services. |
+| [Lanternfly Book 2 — Language Reference](https://debug80.com/lanternfly-book/book2/) | The Lanternfly 0.4 syntax, type, storage, control-flow, module and diagnostic reference. |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/) | Reference material for the machine and its monitor. |
 
 ## Working on it
