@@ -35,7 +35,7 @@ end
 Parentheses appear in every declaration and invocation, including an empty
 parameter list.
 
-A result type must be an integer, Boolean, opaque address or `cstr`. Aggregate
+A result type must be an integer, Boolean, opaque address or `cstring`. Aggregate
 return by value is deferred. A result-free invocation has the internal type
 `unit`, which cannot be written in source or used as a value.
 
@@ -95,7 +95,7 @@ end
 ```
 
 The leading class describes aggregate storage. Element types retain their own
-classes, as in `far labels as near cstr[8]`.
+classes, as in `far labels as near cstring[8]`.
 
 ## Scalar locals
 

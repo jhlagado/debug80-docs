@@ -126,7 +126,7 @@ end
 // Ch 15's face, unchanged.
 
 export extern sub printChar(ch as u8) at $0008
-export extern sub printText(text as near cstr) from "ROM_PRINT_TEXT"
+export extern sub printText(text as near cstring) from "ROM_PRINT_TEXT"
 export extern sub printNumber(value as u16) from "ROM_PRINT_U16"
 export extern sub newline() from "ROM_NEWLINE"
 
@@ -143,10 +143,10 @@ end
 import "model.lf"
 import "platform.lf"
 
-const title as near cstr = "WEEK REPORT"
-const coldLabel as near cstr = "COLDEST "
-const warmLabel as near cstr = "WARMEST "
-const meanLabel as near cstr = "MEAN "
+const title as near cstring = "WEEK REPORT"
+const coldLabel as near cstring = "COLDEST "
+const warmLabel as near cstring = "WARMEST "
+const meanLabel as near cstring = "MEAN "
 
 sub printSigned(value as i16)
     if value < 0 then
@@ -215,7 +215,7 @@ end
 //
 // Static budget, priced byte by byte (the book's thesis at the finish):
 //   log 50 + logCount 1 + carried 5 = 56 bytes of model storage;
-//   four cstr payloads 12+9+9+6 = 36 bytes (with terminators);
+//   four cstring payloads 12+9+9+6 = 36 bytes (with terminators);
 //   report.lf scalars live in frames or scratch per the backend's report.
 //
 // Spec notes:

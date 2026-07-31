@@ -2,7 +2,7 @@
 
 ## Single job
 Teach text as the two representations 0.4 actually provides: immutable
-static C strings (`cstr` — a typed view of NUL-terminated bytes) and
+static C strings (`cstring` — a typed view of NUL-terminated bytes) and
 writable `u8` buffers with explicit occupancy. The reader leaves able to
 hold and compare fixed labels, and to compose a report line byte by byte —
 including rendering a signed number as digits.
@@ -13,9 +13,9 @@ is that pattern with bytes for elements).
 
 ## Data representation introduced
 Character literals as byte values ('A', '\n', '\0' — exact untyped
-integers). `cstr`: non-null read-only view, no hidden length, appended NUL,
+integers). `cstring`: non-null read-only view, no hidden length, appended NUL,
 address classes. Writable text: `line as u8[lineCapacity]` +
-`lineLength as u8` — deliberately NOT a cstr; no silent conversion exists
+`lineLength as u8` — deliberately NOT a cstring; no silent conversion exists
 (§3.2), and the two representations answer different questions.
 
 ## Algorithm introduced
@@ -26,10 +26,10 @@ digit-counting loop, matured); signed rendering via sign test + `abs`.
 ## Ordered themes
 1. Text is bytes wearing an agreement (ASCII); a character literal is a
    byte value with a readable spelling.
-2. `cstr` for fixed words: literals, `length` (folds for literals, scans
+2. `cstring` for fixed words: literals, `length` (folds for literals, scans
    at runtime), content comparison via all six operators (bytes, unsigned,
    left to right — "FEB" < "JAN" and why).
-3. What `cstr` refuses: no mutation, no indexing, no integer conversion —
+3. What `cstring` refuses: no mutation, no indexing, no integer conversion —
    the view is for holding, passing, measuring and comparing. The refusal
    is honest: byte access to a label's content is a service or
    future-edition affair (gate Q4a), and the book says so plainly.
@@ -58,7 +58,7 @@ divisor loop: 12≥10 → divisor 10; emit 12/10='1'(49), 12 mod 10 → 2='2'(50
 (70 < 74 at byte 0).
 
 ## Memory / machine consequence
-The literal's bytes live once in static storage (poolable); the `cstr`
+The literal's bytes live once in static storage (poolable); the `cstring`
 value is just its address-class representation — two bytes near on Z80.
 The buffer is sixteen bytes you own and index; the label is bytes you may
 only look at through the view's four verbs.
@@ -71,6 +71,6 @@ first edition's character set).
 
 ## Open spec questions touched
 Q4 (writable-text follow-up) plus new finding Q4a: no source-level byte
-access to `cstr` content (no indexing through the view), so copying a
+access to `cstring` content (no indexing through the view), so copying a
 label into a buffer requires a service or a future bounded view. Routed to
 the project via the gate; the chapter teaches around it honestly.

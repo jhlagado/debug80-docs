@@ -8,7 +8,7 @@
 // module and never sees an address or a register convention.
 
 export extern sub printChar(ch as u8) at $0008
-export extern sub printText(text as near cstr) from "ROM_PRINT_TEXT"
+export extern sub printText(text as near cstring) from "ROM_PRINT_TEXT"
 export extern sub printNumber(value as u16) from "ROM_PRINT_U16"
 export extern sub newline() from "ROM_NEWLINE"
 
@@ -28,7 +28,7 @@ end
 
 import "platform.lf"
 
-const title as near cstr = "READINGS"
+const title as near cstring = "READINGS"
 
 var keySeen as boolean = false
 

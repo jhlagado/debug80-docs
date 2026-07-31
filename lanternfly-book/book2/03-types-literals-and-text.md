@@ -24,8 +24,8 @@ different targets.
 | `boolean` | `true` or `false` | 1 byte |
 | `near address` | opaque near machine address | target-defined |
 | `far address` | opaque far machine address | target-defined |
-| `near cstr` | near static C-string view | target-defined |
-| `far cstr` | far static C-string view | target-defined |
+| `near cstring` | near static C-string view | target-defined |
+| `far cstring` | far static C-string view | target-defined |
 
 `boolean` is not an integer type. Its stored representation is exactly zero
 for `false` and one for `true`, and comparisons and Boolean operators always
@@ -81,8 +81,8 @@ A double-quoted literal in an expression creates a static, NUL-terminated byte
 sequence:
 
 ```lanternfly
-const title as near cstr = "LANTERNFLY"
-var prompt as near cstr = "READY?"
+const title as near cstring = "LANTERNFLY"
+var prompt as near cstring = "READY?"
 ```
 
 Direct characters range from ASCII space through `~`. Character escapes are
@@ -90,16 +90,16 @@ accepted except `\0` and `\x00`; the compiler appends the single terminator.
 An embedded zero, physical newline, non-ASCII character or payload above
 65,534 bytes is invalid.
 
-The resulting `cstr` is a non-null, read-only view. It carries no hidden
+The resulting `cstring` is a non-null, read-only view. It carries no hidden
 length, capacity, ownership flag or allocation. Assignment copies the view's
-target-specific carrier, not the payload bytes. Every `cstr` contract
+target-specific carrier, not the payload bytes. Every `cstring` contract
 guarantees immutable, NUL-terminated storage that remains accessible for the
 program's lifetime.
 
 ## C-string address classes
 
 Stored variables, constants, record fields, exported declarations and routine
-results must state `near cstr` or `far cstr`. Unqualified `cstr` uses the
+results must state `near cstring` or `far cstring`. Unqualified `cstring` uses the
 target profile's default class and is permitted for private parameters and
 local variables.
 
@@ -110,9 +110,9 @@ The explicit conversions are:
 
 | Form | Operation |
 |---|---|
-| `near cstr(value)` | identity for near; checked far-to-near conversion |
-| `far cstr(value)` | identity for far; permitted near-to-far widening |
-| `cstr(value)` | conversion to the profile's default C-string class |
+| `near cstring(value)` | identity for near; checked far-to-near conversion |
+| `far cstring(value)` | identity for far; permitted near-to-far widening |
+| `cstring(value)` | conversion to the profile's default C-string class |
 
 A near-to-far conversion requires a profile that can attach the current
 mapping context. A far-to-near conversion must prove representability at
@@ -141,7 +141,7 @@ far operands use the permitted near-to-far conversion first.
 
 For text that must change at runtime, use an ordinary `u8` array and track its
 occupied length or terminator explicitly. Lanternfly 0.4 provides no implicit
-writable-buffer-to-`cstr` conversion.
+writable-buffer-to-`cstring` conversion.
 
 ## Compile-time text positions
 

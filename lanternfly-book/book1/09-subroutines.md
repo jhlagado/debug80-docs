@@ -143,7 +143,7 @@ end
 The leading `near` fixes the storage class that importing modules and the
 target calling convention must share. It qualifies the aggregate itself; an
 element type carries its own spelling, so an array of near C strings held in
-far storage is written `far labels as near cstr[8]`.
+far storage is written `far labels as near cstring[8]`.
 
 ## Early return
 

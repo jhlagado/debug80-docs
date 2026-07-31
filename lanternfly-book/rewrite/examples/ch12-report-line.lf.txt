@@ -1,12 +1,12 @@
 // Chapter 12 companion — Report line
-// Fixed labels as cstr views; a composed line as bytes you own.
+// Fixed labels as cstring views; a composed line as bytes you own.
 // Fixture family: Static text (conformance §5.10), minus the print call.
 // Verified against specification 0.4: §2.4, §3.2, §8.5, §10.1.
 
 // Immutable words: views of NUL-terminated static bytes.
-const title as near cstr = "LANTERNFLY"
-const january as near cstr = "JAN"
-const february as near cstr = "FEB"
+const title as near cstring = "LANTERNFLY"
+const january as near cstring = "JAN"
+const february as near cstring = "FEB"
 
 const lineCapacity as u8 = 16
 
@@ -83,9 +83,9 @@ end
 // Spec notes:
 // - "JAN" occupies four static bytes (74 65 78 0); the const holds the
 //   view, not a copy (§3.2).
-// - cstr allows comparison, length, assignment of the view — no indexing,
+// - cstring allows comparison, length, assignment of the view — no indexing,
 //   no mutation. Copying a label's bytes into `line` is therefore not
-//   expressible in source (gate Q4a); a print service takes the cstr
+//   expressible in source (gate Q4a); a print service takes the cstring
 //   directly instead (ch 15).
 // - '0' + digit: character literal is an exact byte value adopting u16
 //   from `digit`; u8(...) writes the acknowledged narrowing (§2.4, §3.1).

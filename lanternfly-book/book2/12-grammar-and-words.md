@@ -186,7 +186,7 @@ scalar-type         ::= integer-type
 integer-type        ::= "u8" | "i8" | "u16" | "i16"
                       | "u32" | "i32"
 
-cstring-type        ::= ("near" | "far")? "cstr"
+cstring-type        ::= ("near" | "far")? "cstring"
 address-type        ::= ("near" | "far") "address"
 
 storage-base        ::= value-name
@@ -357,7 +357,7 @@ Reserved built-in type and storage-class words are:
 ```text
 address
 boolean
-cstr
+cstring
 far
 i8
 i16

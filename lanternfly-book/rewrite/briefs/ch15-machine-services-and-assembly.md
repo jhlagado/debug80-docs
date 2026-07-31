@@ -31,7 +31,7 @@ reaches a screen through a platform interface module.
    services; the game imports the face, never the machinery (ch 14's
    borders earning their keep). Service names illustrative pending Q2.
 4. The native contract: value invariants at entry and return (integers at
-   width, Booleans 0/1, `cstr` terminated and immutable); effect
+   width, Booleans 0/1, `cstring` terminated and immutable); effect
    summaries; the conservative fallback and `W-NATIVE-001` — and its bite:
    a conservative call inside a counted loop can be rejected because it
    might write the control variable (`E-CONTROL-003`).

@@ -50,10 +50,10 @@ var gameOver as boolean = false
 
 Compiler-allocated storage without an initializer begins with all bits zero,
 but only when every scalar leaf accepts that representation. Integers and
-Booleans do. A `cstr` does not, and a target profile determines whether zero
+Booleans do. A `cstring` does not, and a target profile determines whether zero
 is valid for each opaque address type.
 
-A type containing `cstr` requires an initializer that supplies every C-string
+A type containing `cstring` requires an initializer that supplies every C-string
 field, or a host/native contract that guarantees valid values.
 
 ## Local variables

@@ -202,7 +202,7 @@ unstated semantics:
 - exceptions;
 - generics and operator overloading;
 - dynamic strings;
-- implicit writable-buffer-to-`cstr` conversion;
+- implicit writable-buffer-to-`cstring` conversion;
 - unchecked indexing as conforming execution.
 
 Recursion is accepted only by a profile that declares and tests that
