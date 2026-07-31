@@ -127,8 +127,9 @@ changeIsLarge = changeMagnitude >= 100
 | greater than | `>` |
 | greater than or equal | `>=` |
 
-Compatible integers support all six comparisons, and so do compatible C
-strings, which compare their text content byte by byte. Booleans and
+Compatible integers and enumeration values support all six comparisons,
+and so do compatible C strings, which compare their text content byte by
+byte. Booleans and
 same-class opaque addresses support equality and inequality. Lanternfly has
 no aggregate equality operator in the working language, so a program
 compares array elements or record fields explicitly.

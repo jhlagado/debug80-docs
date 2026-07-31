@@ -55,9 +55,10 @@ end
 
 A counted loop visits an inclusive range. `1 to 10` runs ten times. The
 control name must already denote a writable ordinal variable or scalar
-parameter; `for` does not declare it. An enumeration or range control
-advances by ordinal position, so a loop can visit every member of a
-Chapter 2 enumeration by naming its first and last members.
+parameter; `for` does not declare it. An enumeration or enumeration-range
+control advances by ordinal position, so a loop can visit every member of
+a Chapter 2 enumeration by naming its first and last members; an
+integer-range control counts with its host's arithmetic.
 
 `until` is the exclusive twin: `for number = 0 until 10` visits 0 through 9,
 stopping below its boundary. The half-open form earns its keep with
@@ -196,8 +197,9 @@ an accurate control-flow structure to lower.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/05-loops.txt)
-contains all three loop forms. The `calculateGcd` trace ends at 6, while
-`findNextMultiple` advances from 13 to 16.
+contains each loop form. The `calculateGcd` trace ends at 6,
+`findNextMultiple` advances from 13 to 16, and the enumeration-controlled
+loop visits all three phases, leaving `phasesVisited` at 3.
 
 ## Chapter summary
 

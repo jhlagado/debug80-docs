@@ -39,8 +39,25 @@ sub findNextMultiple()
     end
 end
 
+enum Phase as u8
+    warmup
+    working
+    cooldown
+end
+
+var phase as Phase = warmup
+var phasesVisited as u8 = 0
+
+// An enumeration control advances by ordinal position.
+sub visitPhases()
+    for phase = warmup to cooldown
+        phasesVisited = phasesVisited + 1
+    end
+end
+
 sub main()
     sumTen()
     calculateGcd()
     findNextMultiple()
+    visitPhases()
 end

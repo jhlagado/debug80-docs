@@ -31,7 +31,7 @@ end
 sub clearBlock(block as u8[8])
     var index as i16
 
-    for index = 0 to count(block) - 1
+    for index = 0 until count(block)
         block[index] = 0
     end
 end

@@ -145,9 +145,9 @@ range VerboseMode as ReportMode = detailed to diagnostic
 
 A range value widens silently to its host, while any value entering the
 range — by assignment, argument, return or conversion — is checked against
-its domain. Ranges and enumerations are types, not values: a range cannot
-be stored or passed, and its work happens entirely at declarations and
-boundaries. Chapter 6 puts both to work as array index domains, where a
+its domain. The range form itself is grammar rather than a value —
+`0 until 32` cannot be stored or passed — while a variable of a range type
+holds an ordinary host value, checked at every boundary it crosses. Chapter 6 puts both to work as array index domains, where a
 suitably typed index makes a bounds check unnecessary because the type
 already proves it.
 
@@ -227,8 +227,9 @@ conversion that states the intended type.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/02-names-and-types.txt)
-combines constants, Boolean state and an explicit narrowing conversion. The
-two calls made by `main` leave `unitsInStock` at 1,190 and `byteValue` at 44.
+combines constants, Boolean state, an enumeration with a range over it and
+an explicit narrowing conversion. The calls made by `main` leave
+`unitsInStock` at 1,190, `byteValue` at 44 and `currentMode` at `detailed`.
 
 ## Chapter summary
 

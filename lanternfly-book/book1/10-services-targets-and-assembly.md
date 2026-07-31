@@ -13,11 +13,11 @@ between computers, so Lanternfly gives them typed interfaces and keeps the
 target-specific implementation at a defined boundary.
 
 ```lanternfly
-extern sub writeNumber(value as i16)
+extern sub writeUnsigned(value as u16)
 extern sub writeNewLine()
 
-sub showReading(value as i16)
-    writeNumber(value)
+sub showReading(value as u16)
+    writeUnsigned(value)
     writeNewLine()
 end
 ```

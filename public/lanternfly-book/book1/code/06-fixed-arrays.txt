@@ -35,8 +35,29 @@ sub prepareWeek()
     weeklyReadings[1, 2] = 120
 end
 
+enum ReportMode as u8
+    compact
+    detailed
+    diagnostic
+end
+
+// One line width per report mode: a table looked up by name.
+var modeWidths as u8[ReportMode] = [40, 80, 80]
+
+// Indexed naturally by day of the month: no entry zero, no subtracted one.
+var octoberReadings as i16[1 to 31]
+
+sub prepareOctober()
+    var day as u8
+
+    for day = lower(octoberReadings) to upper(octoberReadings)
+        octoberReadings[day] = 0
+    end
+end
+
 sub main()
     prepareSamples()
     sumSamples()
     prepareWeek()
+    prepareOctober()
 end
