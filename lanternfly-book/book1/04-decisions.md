@@ -31,8 +31,8 @@ sub updateStatus()
 end
 ```
 
-Conditions are tested from top to bottom. The first true condition chooses its
-branch, and execution continues after the closing `end`.
+Conditions are tested from top to bottom. The first true condition selects
+its branch, and execution continues after the closing `end`.
 
 ## A single branch
 
@@ -95,11 +95,11 @@ else
 end
 ```
 
-Consider `errorCount = 1` and `itemsRemaining = 0`. Both comparisons are true,
+With `errorCount = 1` and `itemsRemaining = 0`, both comparisons are true,
 but the first branch sets `statusFailed` and the second comparison is skipped.
 Reversing the first two branches would classify the same state as complete.
 
-Branch order belongs to the program's policy. A higher-priority condition
+Branch order states the policy we chose. A higher-priority condition
 belongs first. When two conditions have equal priority, their frequency and
 cost can guide the order because execution pays for each comparison it reaches.
 
@@ -147,7 +147,7 @@ whose cases cover every member is complete without an `else`. A case may
 also span a run of values with a range: `case 0 to 9` includes both ends,
 and `until` excludes its boundary.
 
-The optional `else` handles values that match no case. Here it chooses a
+The optional `else` handles values that match no case. Here it supplies a
 conservative report configuration for an invalid mode. Omitting `else` would
 leave the previous values unchanged.
 
@@ -171,9 +171,9 @@ line because there is one complete body for them.
 
 ## `if` and `select`
 
-`if` fits branches that ask different questions, such as “did an error occur?”
-and “is the batch complete?” `select` fits branches that compare one ordinal
-expression with named constant values.
+`if` fits a decision built from different questions — did an error occur?
+is the batch complete? — while `select` fits branches that compare one
+ordinal expression with named constant values.
 
 The opening word tells you the shape of the decision. An `else if` chain
 announces an ordered policy; a `select` announces a classification by one

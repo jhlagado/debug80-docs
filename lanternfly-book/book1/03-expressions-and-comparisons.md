@@ -129,10 +129,10 @@ changeIsLarge = changeMagnitude >= 100
 
 Compatible integers and enumeration values support all six comparisons,
 and so do strings, which compare their text content byte by byte whatever
-their declared capacities. Booleans and
-same-class opaque addresses support equality and inequality. Lanternfly has
-no aggregate equality operator in the working language, so a program
-compares array elements or record fields explicitly.
+their declared capacities. Booleans and same-class opaque addresses
+support equality and inequality. Lanternfly has no aggregate equality
+operator in the working language, so we compare array elements or record
+fields explicitly.
 
 Lanternfly rejects comparison chains. A range test joins two comparisons:
 
@@ -238,5 +238,5 @@ The first expression traces from `u8` inputs to an `i16` result of -230 and a
 - Parentheses record the intended order and clarify expressions that mix
   arithmetic, comparison and bitwise work.
 
-Comparisons give us Boolean answers; in the next chapter those answers
-choose between paths.
+Comparisons give us Boolean answers; in the next chapter we use those
+answers to choose between paths.

@@ -61,7 +61,7 @@ a Chapter 2 enumeration by naming its first and last members; an
 integer-range control counts with its host's arithmetic.
 
 `until` is the exclusive twin: `for number = 0 until 10` visits 0 through 9,
-stopping below its boundary. The half-open form earns its keep with
+stopping below its boundary. The half-open form matters most with
 zero-based tables in Chapter 6, where an array's count can stand as the
 boundary without a subtracted one.
 
@@ -169,16 +169,10 @@ main work. It keeps the main path at the loop body's outer indentation.
 ## Nested loops
 
 `exit` and `continue` act on the innermost loop. A search through rows and
-columns can return from its subroutine as soon as it finds a match. When work
-must continue after the outer loop, a Boolean such as `found` can carry the
-result out of the inner loop:
-
-```lanternfly
-var found as boolean = false
-```
-
-The inner loop sets `found` and exits. The outer loop tests the flag before
-starting another row.
+columns can return from its subroutine as soon as it finds a match. When
+work must continue after the outer loop, a Boolean such as
+`var found as boolean = false` carries the result out: the inner loop sets
+it and exits, and the outer loop tests it before starting another row.
 
 ## Choosing a loop
 
