@@ -14,10 +14,10 @@ Everything so far described *quantities*; this chapter models a *thing*.
 ## Data representation introduced
 ```
 record Reading
-    var day as u8          // 1..31
-    var month as u8        // 1..12
-    var temperature as i16 // whole degrees, negative welcome
-    var validated as boolean
+    day as u8          // 1..31
+    month as u8        // 1..12
+    temperature as i16 // whole degrees, negative welcome
+    validated as boolean
 end
 ```
 Five bytes, offsets 0/1/2/4 — every field type argued from the fact it
