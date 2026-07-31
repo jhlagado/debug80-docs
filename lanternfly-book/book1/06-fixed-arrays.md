@@ -88,9 +88,8 @@ The loop `for index = 0 until count(samples)` walks exactly the valid range:
 `until` excludes its boundary, so the loop takes the count directly, with
 nothing subtracted. An array with an explicit domain traverses by its own
 bounds instead: `for day = lower(octoberReadings) to upper(octoberReadings)`.
-Either shape documents the range and gives the compiler an opportunity to
-prove every access safe, and resizing the declaration updates the loop
-automatically.
+Either shape documents the range and lets the compiler prove every access
+safe, and resizing the declaration updates the loop automatically.
 
 ## Visiting every element
 
@@ -167,8 +166,8 @@ The diagram uses a three-by-four byte array so every cell is easy to see. Row
 `count(weeklyReadings, 1)` produces 4. A multidimensional array requires the
 dimension number because each direction may have a different extent.
 
-Loop order follows layout. A day loop on the outside and a reading loop on the
-inside touches adjacent elements. That access pattern is usually cheaper on a
+Loop order follows layout. A day loop on the outside and a reading loop on
+the inside touch adjacent elements. That access pattern is usually cheaper on a
 small processor because the generated code can advance an address through the
 row.
 
@@ -200,10 +199,10 @@ which preserves writable RAM for changing program state.
 ## Characters and strings
 
 Text is byte data with one extra fact to record: where it ends. A character
-literal such as `'H'` is an exact byte value, so a `u8`
-array can hold text-shaped bytes — but the array's count describes its
-capacity, and nothing in it records how much of that capacity is currently
-meaningful. Lanternfly's string type carries that fact itself:
+literal such as `'H'` is an exact byte value, so a `u8` array can hold
+text-shaped bytes — but the array's count describes its capacity, and
+nothing in it records how much of that capacity is currently meaningful.
+Lanternfly's string type carries that fact itself:
 
 ```lanternfly
 var playerName as string[12]
@@ -217,10 +216,10 @@ hidden buffer; the declaration is the cost. A capacity of 255 or more widens
 the length field to two bytes and nothing else changes.
 
 Every operation maintains the terminator, so the payload is always valid
-NUL-terminated text: a firmware
-or platform routine that requires the classic C convention can read the bytes
-directly, at no conversion cost, while `length` never scans for the
-zero — it reads the stored count and returns it as a `u16`.
+NUL-terminated text: a firmware or platform routine that requires the
+classic C convention can read the bytes directly, at no conversion cost,
+while `length` never scans for the zero — it reads the stored count and
+returns it as a `u16`.
 
 A double-quoted literal supplies text wherever it fits:
 
@@ -237,11 +236,11 @@ Assignment copies content, not identity, and the capacities of source and
 destination need not match — the copy is checked instead. A source the
 compiler can see is rejected at compile time when it cannot fit; a runtime
 copy or `append` that would overflow invokes the range-fault service before
-any destination byte changes, the same promise an array's bounds check makes.
-`append` grows a string by another string, a literal or one nonzero byte, and
-`clear` restores the empty value. All six comparison operators examine the
-payload bytes, so `playerName = greeting` as a condition asks whether the
-text matches, not whether two names share storage. All-zero storage is the
+any destination byte changes, the same guarantee an array's bounds check
+gives. `append` grows a string by another string, a literal or one nonzero
+byte, and `clear` restores the empty value. All six comparison operators
+examine the payload bytes, so `playerName = greeting` as a condition tests
+whether the text matches, not whether two names share storage. All-zero storage is the
 valid empty string, which is why a module string needs no initializer: it
 simply begins empty.
 
@@ -259,8 +258,7 @@ brackets belong to the element type — and a record field
 `name as string[12]` occupies its fourteen bytes at a fixed offset, as the
 next chapter shows. Byte storage under other conventions — a high-bit
 terminator, machine-specific display codes — remains ordinary `u8` data
-under an explicit service contract, where each byte's meaning is the
-contract's business.
+under an explicit service contract that assigns each byte its meaning.
 
 ## Clearing and filling
 
