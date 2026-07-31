@@ -45,8 +45,7 @@ The written declaration determines the exact layout:
 - no implicit padding is inserted;
 - nested records are stored inline;
 - offsets and total size are compile-time facts;
-- direct and mutual by-value containment cycles are invalid;
-- exporting a record exports its complete field layout.
+- direct and mutual by-value containment cycles are invalid.
 
 A variable allocates an instance:
 

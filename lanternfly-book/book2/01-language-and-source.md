@@ -65,6 +65,27 @@ end
 A build manifest names the root module and the entry subroutine. The source
 extension remains open in 0.4; `.lf` is illustrative.
 
+## Imports
+
+`import` adds another source module to the program:
+
+```lanternfly
+import "actors.lf"
+```
+
+The double-quoted path is compile-time text. It accepts only `\"` and `\\`,
+allocates no runtime string storage, and resolves relative to the importing
+file and configured search paths.
+
+Each resolved source unit has one canonical identity. Repeated imports load it
+once, so a diamond-shaped import graph does not duplicate code or data. Import
+cycles are errors and include their path.
+
+The imported module chooses which declarations it makes visible. These are its
+[exports](10-modules-and-programs.md#exports); private declarations remain
+private, and imports do not re-export declarations from another module.
+Lanternfly has no textual `include`.
+
 ## Source text
 
 Source files use UTF-8. Identifiers are restricted to ASCII letters, digits

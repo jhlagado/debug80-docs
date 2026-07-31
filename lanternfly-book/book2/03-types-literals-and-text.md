@@ -207,15 +207,3 @@ Counted strings are aggregate storage.
 parameter and alias forms, together with the restrictions on returns and local
 ownership. Byte indexing, slicing, capacity-generic parameters and deliberate
 truncating copy remain deferred.
-
-## Compile-time text positions
-
-Import paths and external substrate symbols also use double-quoted tokens:
-
-```lanternfly
-import "display.lf"
-extern sub waitForKey() from "ROM_WAIT_KEY"
-```
-
-These positions accept only `\"` and `\\`. They decode to compile-time text
-and do not allocate runtime string storage.
