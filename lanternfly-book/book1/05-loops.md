@@ -43,7 +43,9 @@ each invocation receives its own value.
 
 An owned scalar local with no initializer starts with zero bits. The `for`
 statement stores its start value before the loop body reads it, so this routine
-does not depend on the initial zero.
+does not depend on the initial zero. A loop-control variable is all the
+local storage we need for now; Chapter 9 completes the picture of locals,
+their initializers and their lifetime.
 
 ## Counted loops
 
@@ -54,10 +56,10 @@ end
 ```
 
 A counted loop visits an inclusive range. `1 to 10` runs ten times. The
-control name must already denote a writable ordinal variable or scalar
-parameter; `for` does not declare it. An enumeration or enumeration-range
+control name must already denote a writable ordinal variable; `for` does
+not declare it. An enumeration or enumeration-range
 control advances by ordinal position, so a loop can visit every member of
-a Chapter 2 enumeration by naming its first and last members; an
+a Chapter 4 enumeration by naming its first and last members; an
 integer-range control counts with its host's arithmetic.
 
 `until` is the exclusive twin: `for number = 0 until 10` visits 0 through 9,
@@ -83,8 +85,8 @@ end
 ```
 
 The loop computes its next value mathematically and stops before the control
-variable would wrap beyond its boundary. The body must leave the control
-variable alone, including through calls or aliases. When the body itself must
+variable would wrap beyond its boundary. The body must not assign to the
+control variable — the loop owns its own progress. When the body itself must
 control progress, `while` expresses that relationship.
 
 ## Conditional loops
@@ -168,11 +170,12 @@ main work. It keeps the main path at the loop body's outer indentation.
 
 ## Nested loops
 
-`exit` and `continue` act on the innermost loop. A search through rows and
-columns can return from its subroutine as soon as it finds a match. When
-work must continue after the outer loop, a Boolean such as
-`var found as boolean = false` carries the result out: the inner loop sets
-it and exits, and the outer loop tests it before starting another row.
+`exit` and `continue` act on the innermost loop. A loop inside another
+loop pairs every value of one control with every value of the other — five
+outer passes around ten inner passes make fifty inner bodies. When an
+inner discovery must stop the whole nest, a Boolean carries it out: the
+inner loop sets `var found as boolean = false` to `true` and exits, and
+the outer loop tests the flag before starting another pass.
 
 ## Choosing a loop
 
