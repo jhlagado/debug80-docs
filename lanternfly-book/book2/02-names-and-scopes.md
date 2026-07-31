@@ -24,6 +24,12 @@ makes source easier to scan.
 These forms are reading conventions rather than semantic distinctions.
 Declarations that differ only in case conflict in the same namespace.
 
+**Lower camel case**, often shortened to **camel case**, begins with a
+lowercase word and capitalizes each later word: `playerScore` or
+`updatePlayer`. **Pascal case** follows the same pattern but capitalizes the
+first word as well: `PlayerScore` or `GameState`. Lanternfly uses the first
+form for values and routines, and the second for user-defined types.
+
 Identifiers begin with an ASCII letter. Later characters may be ASCII
 letters, digits or `_`. The `_` character is permitted, although lower camel
 case and Pascal case are canonical.
@@ -46,26 +52,33 @@ name. That restriction keeps a call-like form unambiguously a type operation
 or a routine invocation. A storage declaration and a routine also conflict
 because both occupy the value scope.
 
-## Module collection and source order
+## Declaration order
 
-The compiler first collects every module declaration name, then checks
-declaration and routine bodies. A type annotation may therefore name a later
-user-defined type, and a routine may call another routine declared later in the
-module.
+A module is read in declaration order. Its imports come first and make their
+exports visible. Each local declaration becomes available only after the
+compiler has checked it completely. Code may therefore use imported names and
+earlier local declarations, but not declarations that appear later in the
+file.
 
-Constant initializers and placement expressions retain a source-order rule:
+A `sub` is the one carefully bounded case. Its signature becomes visible
+after the header is checked and before its body, so the routine may call
+itself. Its body may also call imported routines and earlier local routines;
+it cannot call a later routine.
 
-- imported exports precede local declarations;
-- a local declaration expression may use only earlier constants or enum
-  members;
-- a layout path may begin only with earlier storage;
-- routine-body constant contexts may use any successfully initialized module
-  constant.
+The rule applies to types, constants, enum members, storage, external
+routines and ordinary routines. In particular:
 
-Constant values, ordinal domains, string capacities, array domains, record
-layouts, target addresses and layout queries share one dependency graph. If
-that graph contains a cycle, the diagnostic includes the complete dependency
-path.
+- a type annotation may name only an imported or earlier type;
+- an initializer cannot name itself or a later declaration;
+- a layout path may begin only with imported or earlier storage;
+- a routine-body constant context may use imported or earlier module
+  constants and enum members;
+- a record field type must already be complete.
+
+This declaration-before-use rule prevents source declaration cycles from
+forming. A compiler may still retain a syntax tree or use several internal
+passes, but it must accept the same programs as a compiler that checks the
+module in order. Import cycles remain a separate module error.
 
 ## Routine scope
 
@@ -85,8 +98,8 @@ module value, parameter, local or enclosing traversal binding.
 
 Keywords, built-in type names and built-in operation names are reserved under
 case-insensitive comparison. The word `type` is contextual: it selects the
-type namespace inside `size` and `count`, and remains available as an ordinary
-identifier elsewhere.
+type namespace inside `size`, `count`, `lower` and `upper`, and remains
+available as an ordinary identifier elsewhere.
 
 [Chapter 12](12-grammar-and-words.md#word-inventory) lists the complete
 inventory.

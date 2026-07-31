@@ -182,8 +182,9 @@ cannot overlap.
 
 Recursion is a target-profile capability:
 
-- a non-recursive profile rejects direct and mutual call cycles with the
-  cycle path;
+- declaration-before-use permits a routine to call itself but makes mutual
+  recursion in one source program inexpressible;
+- a non-recursive profile rejects a direct self-cycle;
 - a recursive profile supplies independent frames and documents stack,
   reentrancy and maximum-bound rules.
 

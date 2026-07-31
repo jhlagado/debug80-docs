@@ -207,3 +207,11 @@ Counted strings are aggregate storage.
 parameter and alias forms, together with the restrictions on returns and local
 ownership. Byte indexing, slicing, capacity-generic parameters and deliberate
 truncating copy remain deferred.
+
+The optional standard text modules have two narrow exceptions to the
+exact-capacity parameter rule. `writeText` may read a literal or `string[N]`
+path of any capacity, while `readLine` may write a `string[N]` path of any
+capacity. Their temporary carriers are not source-level references or general
+parameter forms.
+[Chapter 10](10-modules-and-programs.md#standard-text-modules) introduces the
+module before Chapter 11 describes its target binding.
