@@ -7,13 +7,14 @@ nav_order: 13
 
 # Diagnostics and Conformance
 
-The Lanternfly 0.4 conformance contract defines stable diagnostic IDs,
-required runtime faults, semantic fixtures and generated artifacts. Message
-wording can change; the ID identifies the rule.
+Conformance makes separate Lanternfly implementations comparable. The 0.4
+contract defines stable diagnostic IDs, required runtime faults, semantic
+fixtures and generated artifacts. Diagnostic wording may improve over time;
+the ID is the stable identity of the rule.
 
 ## Conformance boundaries
 
-An implementation can make three claims:
+The contract distinguishes three claims:
 
 1. A **0.4 front end** accepts and rejects source according to the
    specification and produces typed program data, diagnostics and effect
@@ -24,12 +25,13 @@ An implementation can make three claims:
    control flow and composes diagnostics and source mappings.
 
 A backend may omit a profile capability such as recursion or far aggregate
-access when it rejects every use of that capability instead of assigning
+access, provided that it rejects every use rather than quietly assigning
 different semantics.
 
-K0, K1 and K2 are development milestones. `D-STAGE-001` reports a construct
-assigned to a later milestone. It is a development-stage error rather than a
-language error and disappears as implementation progresses.
+K0, K1 and K2 are development milestones rather than conformance levels.
+`D-STAGE-001` reports a construct assigned to a later milestone. It is a
+development-stage error, not a language error, and disappears as
+implementation progresses.
 
 ## Compile-time errors
 
@@ -90,10 +92,10 @@ language error and disappears as implementation progresses.
 | `E-ASM-001` | Assembly block is unclosed or appears in an invalid position |
 | `E-ASM-002` | Target lacks a compatible assembly-fragment pipeline |
 
-Each diagnostic identifies its originating input. Source errors include file,
-line and column. Configuration errors identify the manifest or profile field.
-Cycles and dependency failures include the relevant path. Hosted diagnostics
-identify their containing body.
+Every diagnostic identifies the input that caused it. Source errors include
+file, line and column; configuration errors identify the manifest or profile
+field. Cycles and dependency failures include the relevant path, and hosted
+diagnostics identify their containing body.
 
 ## Default warnings
 
@@ -115,8 +117,8 @@ has no execution point and receives neither runtime-effect warning.
 
 ## Runtime faults
 
-Runtime faults do not return to the failing expression. They preserve their
-class and source location in debug artifacts.
+Runtime faults do not return to the expression that failed. Debug artifacts
+preserve the fault class and source location.
 
 | ID | Runtime condition |
 |---|---|
@@ -134,8 +136,8 @@ arithmetic overflow wraps.
 
 ## Minimum positive programs
 
-Every claimed backend eventually runs the applicable programs and compares
-final storage plus ordered service and fault traces:
+Every claimed backend must eventually run the applicable programs and compare
+their final storage, ordered service traces and fault traces:
 
 1. Counter;
 2. Trail;
@@ -182,8 +184,9 @@ responsible Lanternfly source location.
 
 ## Deferred features
 
-A conforming first implementation rejects these facilities rather than
-accepting them under unstated semantics:
+The following facilities remain outside the first implementation. A
+conforming implementation rejects them rather than accepting them with
+unstated semantics:
 
 - floating point;
 - dynamic allocation, heap storage and garbage collection;
@@ -222,4 +225,4 @@ The post-0.4 queue includes:
 - optional `float32`.
 
 Until a later specification changes them, the 0.4 rules in this manual and
-the normative specification remain the implementation baseline.
+the normative specification are the implementation baseline.

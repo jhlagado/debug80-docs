@@ -10,13 +10,20 @@ has_toc: false
 
 # Lanternfly Book 2 — Language Reference
 
-This manual records the syntax and semantics of the Lanternfly 0.4
-implementation baseline. It is arranged for lookup: declarations, types,
-storage, expressions, control flow, routines, modules, native boundaries,
-grammar and diagnostics each have their own chapter.
+Lanternfly is a small, statically typed language for machines where memory
+layout, code size and predictable execution still matter. Its semantics are
+deliberately close to the machine, while its structured BASIC syntax keeps
+the source familiar and readable.
 
-[Lanternfly Book 1](../book1/) teaches programming with the language. This
-book defines the rules that a compiler, backend and host integration must
+This manual defines the Lanternfly 0.4 implementation baseline. It is a
+reference rather than a course: declarations, types, storage, expressions,
+control flow, routines, modules, native boundaries, grammar and diagnostics
+each have a chapter of their own. Read it from the beginning for a complete
+view of the language, or enter through the chapter list when you need one
+rule.
+
+[Lanternfly Book 1](../book1/) teaches the language through programs. This
+book states the rules that every compiler, backend and host integration must
 preserve.
 
 > [!NOTE]
@@ -25,9 +32,9 @@ preserve.
 > [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
 > remains normative if this manual and the specification differ.
 
-The specification uses **must** for a semantic requirement, **should** for a
-strong toolchain recommendation, **provisional** for a rule awaiting parser or
-corpus evidence, and **deferred** for a facility outside the first
+The vocabulary is precise. **Must** marks a semantic requirement, **should**
+marks a strong toolchain recommendation, **provisional** marks a rule awaiting
+parser or corpus evidence, and **deferred** marks a facility outside the first
 implementation.
 
 ## Chapters
@@ -57,4 +64,3 @@ implementation.
 - The
   [lowering and runtime contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/lowering-and-runtime.md)
   defines the typed front-end, host, backend and runtime boundaries.
-

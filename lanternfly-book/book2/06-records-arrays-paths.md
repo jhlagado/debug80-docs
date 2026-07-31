@@ -7,9 +7,9 @@ nav_order: 6
 
 # Records, Arrays, Paths and Aliases
 
-Records and fixed arrays define the exact static layout of aggregate data.
-Lanternfly uses storage paths and integer selectors to identify objects within
-that layout.
+Records and fixed arrays give aggregate data an exact, static shape.
+Lanternfly identifies objects within that shape through storage paths and
+integer selectors, without introducing source-level pointers.
 
 ## Records
 
@@ -28,7 +28,7 @@ record Actor
 end
 ```
 
-Record layout is exact:
+The written declaration determines the exact layout:
 
 - fields appear in declaration order;
 - no implicit padding is inserted;
@@ -64,7 +64,7 @@ Multidimensional arrays use row-major order. The rightmost dimension is
 contiguous. In `u8[12, 20]`, element `[row, column]` is at element number
 `row * 20 + column`.
 
-One bracket operation supplies exactly one index for every dimension:
+One bracket operation supplies one index for every dimension:
 
 ```lanternfly
 board[row, column]       // valid
@@ -106,9 +106,9 @@ actors[0] = actors[1]
 destination = source
 ```
 
-An ordinary aggregate copy has snapshot semantics. Its result is as if the
-complete source were read before any destination byte changed. Overlapping
-regions therefore have defined behaviour.
+An ordinary aggregate copy has snapshot semantics: it behaves as though the
+complete source were read before any destination byte changed. This rule gives
+overlapping regions defined behaviour.
 
 A volatile aggregate copy requires the compiler to prove that source and
 destination do not overlap. It then visits record fields in declaration order
@@ -120,7 +120,7 @@ types, ranks or dimensions, and immutable destinations.
 
 ## Persistent identity
 
-Programs retain identity through paths and indices:
+Paths and indices let a program retain identity without storing an address:
 
 ```lanternfly
 var selectedActor as u8 = 0
@@ -128,14 +128,14 @@ var selectedActor as u8 = 0
 actors[selectedActor].active = true
 ```
 
-Regular structures use multidimensional arrays. Irregular choices among
-separately declared objects use an integer selector and `select`. A backend
-may lower that selection to an address table without exposing addresses in
-the source language.
+Use multidimensional arrays for regular structures. For an irregular choice
+among separately declared objects, retain an integer selector and dispatch
+with `select`. A backend may lower that selection to an address table without
+exposing addresses in the source language.
 
 ## Local aggregate aliases
 
-`alias` gives a routine a shorter name for an existing record or array:
+Within a routine, `alias` gives an existing record or array a shorter name:
 
 ```lanternfly
 sub updateSelected()
@@ -145,9 +145,9 @@ sub updateSelected()
 end
 ```
 
-The initializer must be a writable storage path with the exact aggregate type.
-The compiler evaluates and checks its base and indices once. The alias then
-denotes the same storage until the routine returns.
+The initializer must be a writable storage path with the exact aggregate
+type. The compiler evaluates and checks the base and indices once; the alias
+then denotes the same storage until the routine returns.
 
 A bare alias copies its referent in aggregate assignment:
 

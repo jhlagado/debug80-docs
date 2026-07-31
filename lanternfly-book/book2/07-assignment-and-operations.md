@@ -7,8 +7,9 @@ nav_order: 7
 
 # Assignment and Standard Operations
 
-Assignment is a statement. Equality is an expression operator. Grammar context
-distinguishes the shared `=` token.
+Lanternfly uses `=` for both assignment and equality, following their familiar
+BASIC roles. Assignment is a statement; equality is an expression operator.
+The surrounding grammar makes the meaning unambiguous.
 
 ## Assignment
 
@@ -17,8 +18,8 @@ playerScore = playerScore + 10
 player.position.x = nextX
 ```
 
-Assignment is not an expression. Chained assignment and compound forms such
-as `+=` are absent.
+Because assignment is not an expression, it cannot be chained or nested
+inside a larger calculation. Compound forms such as `+=` are also absent.
 
 The parser selects assignment when a statement begins with a writable storage
 path followed by `=`. Elsewhere, `=` means equality:
@@ -31,7 +32,7 @@ end
 
 ## Destination conversion
 
-An exact literal may adopt the scalar destination type when it fits.
+An exact literal adopts the scalar destination type when it fits.
 
 Integer assignment uses the same bit conversion as an explicit integer
 conversion:
@@ -164,14 +165,14 @@ distance(playerX, enemyX)
 playerScore + 10
 ```
 
-The final value is discarded while calls, volatile accesses, checks, faults
-and short-circuit behaviour remain. A pure expression statement normally
-receives `W-EXPR-001`. A routine invocation is not warned merely because its
-result is discarded.
+The statement discards its final value, but calls, volatile accesses, checks,
+faults and short-circuit behaviour still occur. A pure expression statement
+normally receives `W-EXPR-001`. A routine invocation is not warned merely
+because its result is discarded.
 
 ## Evaluation order
 
-Evaluation order is fixed across backends:
+Lanternfly fixes evaluation order across backends:
 
 - statements execute in source order;
 - invocation arguments evaluate left to right;

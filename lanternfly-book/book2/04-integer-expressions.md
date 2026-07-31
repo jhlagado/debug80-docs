@@ -7,14 +7,15 @@ nav_order: 4
 
 # Integer Expressions and Conversions
 
-Lanternfly fixes integer width, signedness and evaluation rules across every
-backend. A backend cannot inherit the promotion rules of its host language or
-target CPU.
+Integer arithmetic is one of the easiest places for a cross-target language
+to become unpredictable. Lanternfly therefore fixes integer width,
+signedness and evaluation rules across every backend. A backend cannot inherit
+the promotion rules of its host language or target CPU.
 
 ## Literal typing
 
-An exact integer literal adopts an expected integer type when it fits. Expected
-types propagate from:
+An integer literal begins as an exact mathematical value. It adopts an
+expected integer type when it fits, with that expectation coming from:
 
 - constant and variable initializers;
 - assignment destinations;
@@ -56,7 +57,7 @@ preserves every source value:
 | `u16` | `u32`, `i32` |
 | `i16` | `i32` |
 
-The compiler never searches for a third common type. `u8 + u16` operates as
+The compiler never invents a third common type. `u8 + u16` operates as
 `u16 + u16`; `u8 + i8` and `i16 + u16` require an explicit conversion.
 
 ## Result types
@@ -73,7 +74,8 @@ The compiler never searches for a third common type. `u8 + u16` operates as
 The `u8 - u8` rule covers the mathematical range -255 through 255. It supports
 coordinate differences without first converting both operands.
 
-Operator order determines intermediate types:
+Because each operator selects its own result type, written order can affect
+the intermediate types:
 
 ```lanternfly
 elementNumber = row * 20 + column
@@ -89,7 +91,7 @@ signed final range can state it directly:
 delta = i16(x) + 1 - i16(y)
 ```
 
-Arithmetic wraps in the selected result width.
+Once selected, the result width also determines wrapping.
 
 ## Unary operations
 
@@ -105,7 +107,7 @@ Integer `not` retains the operand type and complements every bit.
 
 ## Explicit integer conversions
 
-An integer type used as a call-like operator performs conversion:
+Writing an integer type like a call performs an explicit conversion:
 
 ```lanternfly
 i32(signedValue) + i32(unsignedValue)
@@ -133,8 +135,8 @@ A constant zero divisor is a compile error. A runtime zero divisor causes
 
 ## Shifts
 
-The right operand may have any integer type and is interpreted as a
-mathematical count. It is not converted to the left operand's type.
+The right operand may have any integer type. Lanternfly interprets it as a
+mathematical count rather than converting it to the left operand's type.
 
 - `shl` fills low bits with zero.
 - Unsigned `shr` fills high bits with zero.
@@ -194,9 +196,10 @@ to right. Comparisons bind more tightly than `not`, so `not x = y` means
 
 ## Target-address constant expressions
 
-Placement and absolute external bindings use a separate target-address
-constant-expression context. Exact literals and the results of `size`,
-`count` and `offset` remain mathematical through:
+Placement and absolute external bindings need to express addresses that may
+not fit the ordinary default `i16`. In this separate constant-expression
+context, exact literals and the results of `size`, `count` and `offset`
+remain mathematical through:
 
 ```text
 unary +  unary -  +  -  *  /  mod  ^  shl
@@ -209,4 +212,3 @@ evaluation in its containing operation.
 The target profile validates the final address against its address space,
 alignment and representation. This permits `$8000` on a 16-bit profile even
 though the literal does not fit default `i16`.
-

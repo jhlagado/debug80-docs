@@ -7,8 +7,8 @@ nav_order: 9
 
 # Routines
 
-`sub` declares every user routine. Lanternfly has no separate `function`
-keyword.
+One declaration form covers every user routine. A `sub` may return a scalar
+value or no value at all, so Lanternfly needs no separate `function` keyword.
 
 ## Declarations
 
@@ -49,8 +49,9 @@ separation = distance(playerX, enemyX)
 distance(playerX, enemyX)
 ```
 
-An invocation can be an expression statement. Any result is discarded. A
-result-free invocation is invalid where a value is required.
+An invocation may stand alone as an expression statement, in which case any
+result is discarded. A result-free invocation is invalid where a value is
+required.
 
 Arguments evaluate from left to right.
 
@@ -68,7 +69,7 @@ The destination conversion rules apply at the call boundary.
 
 ## Aggregate parameters
 
-A record or array parameter creates a non-rebindable alias to caller storage:
+A record or array parameter temporarily names the caller's storage:
 
 ```lanternfly
 sub moveActor(actor as Actor, deltaX as i16, deltaY as i16)
@@ -77,8 +78,8 @@ sub moveActor(actor as Actor, deltaX as i16, deltaY as i16)
 end
 ```
 
-Writing through `actor` changes the caller's record. The source type remains
-`Actor`; no reference type appears.
+Writing through `actor` changes the caller's record. The parameter cannot be
+rebound, and its source type remains `Actor`; no reference type appears.
 
 An aggregate argument must be a compatible writable storage path or local
 alias. A temporary initializer, constant aggregate or volatile aggregate is
@@ -115,7 +116,7 @@ invalid.
 
 ## Local aggregate aliases
 
-`alias` names aggregate storage allocated elsewhere:
+`alias` gives aggregate storage allocated elsewhere a local name:
 
 ```lanternfly
 alias actor as Actor = actors[selectedActor]
@@ -148,10 +149,10 @@ must return a compatible value. Bare `return` is invalid there.
 
 ## Calling convention
 
-Source semantics give each invocation fresh scalar parameters and locals. A
-backend may use registers, stack slots or both. Static temporaries are
-permitted only when whole-program analysis proves that invocations cannot
-overlap.
+At source level, each invocation receives fresh scalar parameters and locals.
+A backend may realize them with registers, stack slots or both. It may use
+static temporaries only when whole-program analysis proves that invocations
+cannot overlap.
 
 Recursion is a target-profile capability:
 
@@ -166,4 +167,3 @@ deferred.
 Routine names are not values. Source code cannot take a routine address, store
 one, return one or call indirectly. Runtime dispatch uses `select`; a backend
 may lower a dense selection to a jump table.
-

@@ -7,12 +7,14 @@ nav_order: 10
 
 # Modules, Programs and Hosted Bodies
 
-An ordinary Lanternfly source file is a module. Modules contribute types,
-storage and routines to one whole-program build.
+An ordinary Lanternfly source file is a module. Each module keeps its
+declarations private unless they are deliberately exported. Together, the
+modules contribute their types, storage and routines to one whole-program
+build.
 
 ## Imports
 
-`import` loads another source unit:
+`import` brings another source unit into the program:
 
 ```lanternfly
 import "actors.lf"
@@ -69,13 +71,13 @@ The compiler:
 7. lowers routines, data and runtime helpers;
 8. emits one target program and its debug artifacts.
 
-Canonical module identity prevents duplicate emission through a diamond import
-graph.
+Because each resolved module has one canonical identity, even a diamond-shaped
+import graph emits it only once.
 
 ## Program entry
 
-A build manifest names the root module and one entry subroutine for an
-executable build:
+For an executable build, the manifest names the root module and one entry
+subroutine:
 
 ```lanternfly
 sub main()
@@ -99,7 +101,8 @@ A library build has no entry.
 
 ## Hosted bodies
 
-A hosted body is supplied through a host manifest. Its source contains local
+A hosted body lets another system provide the surrounding program context.
+The host manifest supplies that context, while the body itself contains local
 declarations followed by statements:
 
 ```lanternfly
@@ -123,8 +126,8 @@ The host manifest supplies:
 - source identity and target-profile context.
 
 Manifest names follow the ordinary module namespace and collision rules.
-Hosted locals follow routine local scope and initialization rules. A hosted
-local cannot shadow a manifest value.
+Hosted locals follow the scope and initialization rules for routine locals,
+and cannot shadow a manifest value.
 
 ## Host constants and records
 
@@ -143,8 +146,8 @@ backend may use static scratch only when the host contract guarantees that
 entries cannot overlap, re-enter or be interrupted by another entry using the
 same scratch.
 
-Normal completion reaches the host epilogue. Bare `return` reaches the same
-epilogue early and must not become a machine return. A hosted body cannot
+Normal completion reaches the host epilogue. Bare `return` reaches that same
+epilogue early; it must not become a machine return. A hosted body cannot
 return a value.
 
 ## Host output
@@ -161,4 +164,3 @@ The compiler returns a summary of:
 
 A host can compare that summary with explicit dependency declarations or use
 it to derive change tracking.
-

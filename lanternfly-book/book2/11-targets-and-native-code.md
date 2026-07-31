@@ -7,8 +7,9 @@ nav_order: 11
 
 # Targets, External Routines and Assembly
 
-A target profile connects target-independent Lanternfly semantics to a CPU,
-runtime, firmware and device environment.
+Lanternfly source describes behaviour without exposing a particular CPU's
+registers or calling convention. A target profile supplies that missing
+connection to the CPU, runtime, firmware and device environment.
 
 ## Target profiles
 
@@ -23,12 +24,12 @@ A profile declares:
 - native dialect and assembly-fragment support;
 - optional capabilities such as recursion.
 
-Display, input, sound, random, firmware and device operations enter the
-language as typed external routines.
+Operations such as display, input, sound, random-number generation, firmware
+calls and device access enter the language as typed external routines.
 
 ## External routines
 
-`extern sub` gives native code a Lanternfly signature:
+`extern sub` describes native code with a Lanternfly signature:
 
 ```lanternfly
 export extern sub printChar(ch as u8) at $0008
@@ -51,8 +52,8 @@ verifies:
 - reentrancy, interrupt and cost properties.
 
 A missing binding, unsupported binding form or incompatible ABI is a compile
-error. The backend may generate an adapter when it can reconcile the typed
-signature with the native ABI without changing source meaning.
+error. When the typed signature and native ABI can be reconciled without
+changing source meaning, the backend may generate an adapter.
 
 An external routine has no Lanternfly body and cannot be the program entry.
 
@@ -73,8 +74,9 @@ optimization cannot repair an invalid representation or lifetime.
 
 ## Native effect contracts
 
-The effect summary states visible reads, writes, calls, faults, device I/O,
-control flow and ABI clobbers.
+The effect summary tells the compiler what a native routine can observe or
+change: reads, writes, calls, faults, device I/O, control flow and ABI
+clobbers.
 
 An incomplete summary receives `W-NATIVE-001` and a conservative fallback:
 the call may read and write every mutable object reachable at the boundary,
@@ -90,9 +92,10 @@ source-defined Lanternfly routines or hosted bodies are deferred.
 
 ## Runtime helpers
 
-Backends may select helpers for multiplication, division, power, square root,
-wide arithmetic, aggregate copying, bounds checks and far access. Helpers are
-linked only when used and appear in generated listings and cost reports.
+A backend may select runtime helpers for multiplication, division, power,
+square root, wide arithmetic, aggregate copying, bounds checks and far
+access. Only helpers that are used are linked, and each appears in generated
+listings and cost reports.
 
 Bounds, arithmetic, address and invalid-value faults do not return to the
 failing expression. A hosted profile may trap them; a standalone profile may
@@ -101,7 +104,7 @@ source location.
 
 ## Inline assembly
 
-`asm` begins raw assembly and a following physical line containing only `end`
+`asm` opens a raw assembly block. A later physical line containing only `end`
 closes it:
 
 ```lanternfly
@@ -148,10 +151,11 @@ statement-level native-effect warning.
 
 ## Backend compatibility
 
-An `asm` block is target-specific. A C, BASIC or other non-assembly backend
-rejects it unless the profile supplies a compatible fragment pipeline. Raw
-assembly names are not Lanternfly names; a generated symbol artifact records
-any Lanternfly storage or routines exposed to the assembly source.
+An `asm` block is necessarily target-specific. A C, BASIC or other
+non-assembly backend rejects it unless the profile supplies a compatible
+fragment pipeline. Raw assembly names are not Lanternfly names; a generated
+symbol artifact records any Lanternfly storage or routines exposed to the
+assembly source.
 
 ## Floating point
 
