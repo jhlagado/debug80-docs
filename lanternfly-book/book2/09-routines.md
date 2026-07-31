@@ -25,19 +25,19 @@ A result-bearing routine adds `as Type`:
 ```lanternfly
 sub distance(left as i16, right as i16) as u16
     if left >= right then
-        return left - right
+        return u16(left - right)
     end
 
-    return right - left
+    return u16(right - left)
 end
 ```
 
 Parentheses appear in every declaration and invocation, including an empty
 parameter list.
 
-A result type must be an integer, Boolean, opaque address or `cstring`. Aggregate
-return by value is deferred. A result-free invocation has the internal type
-`unit`, which cannot be written in source or used as a value.
+A result type must be an ordinal, Boolean or opaque address. String and other
+aggregate return by value is deferred. A result-free invocation has the
+internal type `unit`, which cannot be written in source or used as a value.
 
 ## Invocation
 
@@ -69,7 +69,8 @@ The destination conversion rules apply at the call boundary.
 
 ## Aggregate parameters
 
-A record or array parameter temporarily names the caller's storage:
+A counted-string, record or array parameter temporarily names the caller's
+storage:
 
 ```lanternfly
 sub moveActor(actor as Actor, deltaX as i16, deltaY as i16)
@@ -94,8 +95,18 @@ export sub moveActor(near actor as Actor, deltaX as i16)
 end
 ```
 
-The leading class describes aggregate storage. Element types retain their own
-classes, as in `far labels as near cstring[8]`.
+The leading class describes aggregate storage. In `far labels as
+string[16][8]`, the array is far while `string[16]` is its element type.
+
+A counted-string parameter states its exact capacity:
+
+```lanternfly
+export sub readName(near destination as string[24])
+end
+```
+
+It is a writable, non-rebindable alias to the caller's `string[24]`, not a
+copied string value or source reference.
 
 ## Scalar locals
 
@@ -111,20 +122,22 @@ sub updateActor(actor as Actor)
 end
 ```
 
-Local initializers execute in declaration order. Owned aggregate locals are
-invalid.
+Local initializers execute in declaration order. Owned counted-string and
+other aggregate locals are invalid.
 
 ## Local aggregate aliases
 
-`alias` gives aggregate storage allocated elsewhere a local name:
+`alias` gives counted-string or other aggregate storage allocated elsewhere a
+local name:
 
 ```lanternfly
 alias actor as Actor = actors[selectedActor]
 ```
 
 The path is evaluated and checked once. The alias cannot be rebound and
-allocates no record or array storage. Direct indexing remains clearer for a
-single access; an alias suits repeated access or a nested aggregate call.
+allocates no counted-string, record or array storage. Direct indexing remains
+clearer for a single access; an alias suits repeated access or a nested
+aggregate call.
 
 ## Return
 

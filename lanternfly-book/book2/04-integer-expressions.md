@@ -51,25 +51,25 @@ widen to the type already present on the other side when that conversion
 preserves every source value:
 
 | Source | Permitted wider operand type |
-|---|---|
-| `u8` | `u16`, `i16`, `u32`, `i32` |
-| `i8` | `i16`, `i32` |
-| `u16` | `u32`, `i32` |
-| `i16` | `i32` |
+| ------ | ---------------------------- |
+| `u8`   | `u16`, `i16`, `u32`, `i32`   |
+| `i8`   | `i16`, `i32`                 |
+| `u16`  | `u32`, `i32`                 |
+| `i16`  | `i32`                        |
 
 The compiler never invents a third common type. `u8 + u16` operates as
 `u16 + u16`; `u8 + i8` and `i16 + u16` require an explicit conversion.
 
 ## Result types
 
-| Operator | `u8` result | `i8` result | 16/32-bit result |
-|---|---|---|---|
-| `+`, `*`, `/`, `mod` | `u16` | `i16` | operand type |
-| `-` | `i16` | `i16` | operand type |
-| `and`, `or`, `xor` | operand type | operand type | operand type |
-| `shl`, `shr` | left type | left type | left type |
-| `^` | `u16` | `i16` | base type |
-| comparisons | `boolean` | `boolean` | `boolean` |
+| Operator             | `u8` result  | `i8` result  | 16/32-bit result |
+| -------------------- | ------------ | ------------ | ---------------- |
+| `+`, `*`, `/`, `mod` | `u16`        | `i16`        | operand type     |
+| `-`                  | `i16`        | `i16`        | operand type     |
+| `and`, `or`, `xor`   | operand type | operand type | operand type     |
+| `shl`, `shr`         | left type    | left type    | left type        |
+| `^`                  | `u16`        | `i16`        | base type        |
+| comparisons          | `boolean`    | `boolean`    | `boolean`        |
 
 The `u8 - u8` rule covers the mathematical range -255 through 255. It supports
 coordinate differences without first converting both operands.
@@ -198,8 +198,8 @@ to right. Comparisons bind more tightly than `not`, so `not x = y` means
 
 Placement and absolute external bindings need to express addresses that may
 not fit the ordinary default `i16`. In this separate constant-expression
-context, exact literals and the results of `size`, `count` and `offset`
-remain mathematical through:
+context, exact literals and the results of `size`, `count`, `offset`, and
+integer-domain `lower` and `upper` remain mathematical through:
 
 ```text
 unary +  unary -  +  -  *  /  mod  ^  shl

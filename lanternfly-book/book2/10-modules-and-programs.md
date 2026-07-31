@@ -40,8 +40,8 @@ Top-level declarations are private by default:
 export const actorCount as u8 = 8
 
 export record Actor
-    var x as i16
-    var y as i16
+    x as i16
+    y as i16
 end
 
 export var actors as Actor[actorCount]
@@ -53,6 +53,9 @@ end
 An exported declaration cannot expose a private user-defined type. The check
 reaches through arrays and record fields and applies to constants, variables,
 parameters and results.
+
+Exporting an enum exports all of its members. The importer receives the enum
+in its type scope and those unqualified member names in its value scope.
 
 Exports enter the importer without qualification. A same-namespace
 case-insensitive collision is a compile error. Module aliases and explicit
@@ -113,14 +116,15 @@ if nextX < screenWidth then
 end
 ```
 
-It cannot contain imports, exports, module storage, record declarations or
+It cannot contain imports, exports, module storage, type declarations or
 subroutine declarations.
 
 The host manifest supplies:
 
 - typed constants;
 - typed storage;
-- record definitions;
+- enum, subrange, string, record and array definitions with their ordinary
+  domains and exact layouts;
 - routine signatures and effects;
 - the body epilogue;
 - source identity and target-profile context.
@@ -129,11 +133,14 @@ Manifest names follow the ordinary module namespace and collision rules.
 Hosted locals follow the scope and initialization rules for routine locals,
 and cannot shadow a manifest value.
 
-## Host constants and records
+## Host constants and types
 
-A typed host constant can appear in every hosted constant-expression context,
-including case values, range endpoints and counted-loop steps. Manifest
-records use ordinary nominal typing and exact layout.
+An eligible scalar host constant can appear in hosted constant-expression
+contexts, including case values, range endpoints and counted-loop steps.
+Provider-bound opaque addresses are runtime values and cannot appear there;
+immutable aggregate constants follow their ordinary initializer and layout
+rules instead. Manifest enums, subranges, records and ordinal arrays use the
+ordinary nominal typing, domain and exact-layout rules.
 
 Lanternfly has no `resource` declaration. A host maps each resource to an
 existing language category: constant, opaque address, storage object or

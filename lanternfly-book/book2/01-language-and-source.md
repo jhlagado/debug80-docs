@@ -26,7 +26,8 @@ conventions or instruction selection.
 The 0.4 language includes:
 
 - signed and unsigned integers with fixed widths;
-- Boolean values, character bytes and static NUL-terminated text;
+- nominal enums and checked subrange types;
+- Boolean values, character bytes and fixed-capacity strings;
 - constants and statically allocated variables;
 - exact records and fixed arrays;
 - field access, runtime indexing and temporary aggregate aliases;
@@ -36,10 +37,10 @@ The 0.4 language includes:
 - typed target services and explicit inline assembly.
 
 This inventory reflects one central design choice: storage is explicit and
-finite. Persistent identity comes from declared paths and integer indices into
+finite. Persistent identity comes from declared paths and ordinal indices into
 fixed pools. Aggregate parameters and local aliases temporarily name existing
-records or arrays. Their backend carrier may be an address, but Lanternfly
-source has no pointer or reference value.
+counted strings, records or arrays. Their backend carrier may be an address,
+but Lanternfly source has no pointer or reference value.
 
 Heap allocation, garbage collection, exceptions, dynamic collections,
 closures and indirect calls lie outside the first edition.
@@ -47,7 +48,7 @@ closures and indirect calls lie outside the first edition.
 ## Glimmer hosting
 
 Lanternfly is independent of Glimmer. A Glimmer integration can supply typed
-storage, constants, records and routines through a host manifest. Glimmer
+storage, constants, user-defined types and routines through a host manifest. Glimmer
 retains state scheduling, pulses, effects, rendering, cards and platform
 resources.
 
@@ -122,7 +123,7 @@ The language has these statement categories:
 
 - assignment;
 - a discarded expression, including a routine call;
-- `clear` and `fill`;
+- `clear`, `fill` and `append`;
 - `if` and `select`;
 - counted, collection and conditional loops;
 - `exit`, `continue` and `return`;

@@ -245,7 +245,7 @@ text matches, not whether two names share storage. All-zero storage is the
 valid empty string, which is why a module string needs no initializer: it
 simply begins empty.
 
-The length byte, the payload cells and the terminator have no names. No
+The length header, the payload cells and the terminator have no names. No
 index reaches them, and `fill` rejects a string, because the whole
 arrangement depends on the count, the nonzero payload and the terminator
 staying in agreement — assignment, `append`, `clear`, comparison and

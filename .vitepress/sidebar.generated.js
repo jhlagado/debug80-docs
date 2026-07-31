@@ -1662,7 +1662,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/02-names-and-scopes.html"
         },
         {
-          "text": "Types, Literals and Static Text",
+          "text": "Types, Literals and Strings",
           "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
         },
         {
@@ -1772,7 +1772,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/02-names-and-scopes.html"
         },
         {
-          "text": "Types, Literals and Static Text",
+          "text": "Types, Literals and Strings",
           "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
         },
         {
@@ -1882,7 +1882,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/02-names-and-scopes.html"
         },
         {
-          "text": "Types, Literals and Static Text",
+          "text": "Types, Literals and Strings",
           "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
         },
         {

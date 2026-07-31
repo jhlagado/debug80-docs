@@ -24,9 +24,10 @@ const debuggingEnabled as boolean = false
 Scalar constants normally occupy no storage of their own, although placement
 or target export rules may require a stored representation.
 
-Aggregate constants use exact array or record layout:
+Aggregate constants use exact string, array or record layout:
 
 ```lanternfly
+const prompt as string[6] = "READY?"
 const movementCost as u8[4] = [1, 1, 2, 255]
 
 const origin as Point = Point(
@@ -35,8 +36,9 @@ const origin as Point = Point(
 )
 ```
 
-Constant aggregate storage can be indexed and exported but cannot be modified
-or passed to a writable aggregate parameter.
+Constant aggregates can be exported; arrays and records support their ordinary
+index and field paths. No constant aggregate can be modified or passed to a
+writable aggregate parameter, and a string's representation remains sealed.
 
 ## Module variables
 
@@ -49,12 +51,10 @@ var gameOver as boolean = false
 ```
 
 Compiler-allocated storage without an initializer begins with all bits zero,
-but only when every scalar leaf accepts that representation. Integers and
-Booleans do. A `cstring` does not, and a target profile determines whether zero
-is valid for each opaque address type.
-
-A type containing `cstring` requires an initializer that supplies every C-string
-field, or a host/native contract that guarantees valid values.
+but only when every leaf accepts that representation. Integers, Booleans and
+strings do; an uninitialized string begins empty. Enums and subranges accept
+zero only when their domains contain it, and a target profile determines
+whether zero is valid for each opaque address type.
 
 ## Local variables
 
@@ -74,14 +74,16 @@ once per invocation in declaration order. A local name becomes visible after
 its declaration.
 
 An owned local without an initializer receives all-zero storage when its type
-accepts zero. Record and array locals cannot own automatic aggregate storage;
+accepts zero. Counted-string, record and array locals cannot own automatic
+aggregate storage;
 [Chapter 9](09-routines.md#local-aggregate-aliases) defines local aliases.
 
 ## Initializers
 
-A scalar initializer is an expression. An array initializer must match the
-declared rank, shape and element count exactly. A record initializer names
-every field exactly once:
+A scalar initializer is an expression. A string initializer is a literal or
+an earlier string constant whose known content fits. An array initializer must
+match the declared rank, shape and element count exactly. A record initializer
+names every field exactly once:
 
 ```lanternfly
 var row as u8[4] = [1, 2, 3, 4]
@@ -100,11 +102,13 @@ initializer.
 A scalar constant expression may contain:
 
 - literals and earlier constants;
+- visible enum members;
 - parentheses;
 - integer and Boolean operators;
 - comparisons and explicit scalar conversions;
-- `abs`, `sqrt` and literal `length`;
-- `size`, `count` and `offset`.
+- `abs`, `sqrt` and `length` when its operand is a literal or immutable string
+  storage whose payload is known to the compiler;
+- `size`, `count`, `lower`, `upper` and `offset`.
 
 It cannot read variable storage, call a routine, use a volatile object or
 perform another observable operation.

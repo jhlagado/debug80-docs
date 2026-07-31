@@ -37,8 +37,8 @@ One-line conditionals are deferred.
 
 ## `select`
 
-`select` chooses among integer cases after evaluating its controlling
-expression once:
+`select` chooses among compatible ordinal cases after evaluating its
+controlling expression once. Integers, enums and subranges are ordinal:
 
 ```lanternfly
 select direction
@@ -51,25 +51,30 @@ else
 end
 ```
 
-Cases contain integer compile-time constants and never fall through. Several
-values may share a case:
+Cases contain compatible ordinal compile-time constants and never fall
+through. Several values may share a case:
 
 ```lanternfly
 case grass, sand
     movementCost = 1
 ```
 
-Inclusive case ranges are provisional:
+`to` includes its upper endpoint, while `until` excludes its boundary:
 
 ```lanternfly
 case 0 to 9
     band = cold
+case 10 until 20
+    band = warm
 ```
 
 Each case value folds under its own expression type. A single exact literal
 may adopt the selected type, while an all-literal expression uses the normal
 `i16` default. The folded value must be representable in the selected type.
-Duplicate, overlapping, reversed or incompatible cases are errors.
+After conversion to the selected type, every range must contain at least one
+value. Duplicate, overlapping, reversed, empty or incompatible cases are
+errors. An enum selection without `else` is exhaustive when its cases cover
+every member.
 
 Boolean and opaque-address selection is deferred.
 
@@ -95,8 +100,9 @@ for index = 0 until count(actors)
 end
 ```
 
-With a positive step, `until` is the natural form for zero-based traversal
-because the array count can appear directly.
+With a positive step, `until` is the natural form for a count-declared array
+because the array count can appear directly. Arrays with explicit domains use
+`lower` and `upper` for matching traversal.
 
 An optional compile-time step may be positive or negative:
 
@@ -106,8 +112,10 @@ for row = 7 to 0 step -1
 end
 ```
 
-The control name must denote a writable, non-volatile integer variable or
-scalar parameter. The loop introduces no control declaration.
+The control name must denote a writable, non-volatile ordinal variable or
+scalar parameter. Enum controls advance in declaration order; subranges use
+their host ordering. An explicit step for an enum or enum-subrange control is
+an integer constant. The loop introduces no control declaration.
 
 ## Counted-loop evaluation
 
@@ -116,8 +124,9 @@ in that order, and only then stores the converted start. The boundary
 therefore observes the control variable's old value. The step is a
 compile-time expression and must be nonzero.
 
-The boundary retains its own integer type. An exact boundary need not fit the
-control variable when that value is never stored:
+The boundary is an independently typed compatible ordinal expression. For an
+integer control, an exact boundary need not fit the control variable when that
+value is never stored:
 
 ```lanternfly
 var bytes as u8[256]
@@ -133,10 +142,10 @@ the exact value 256.
 
 ## Counted-loop continuation
 
-| Step | `to` continues while | `until` continues while |
-|---|---|---|
-| positive | control <= boundary | control < boundary |
-| negative | control >= boundary | control > boundary |
+| Step     | `to` continues while | `until` continues while |
+| -------- | -------------------- | ----------------------- |
+| positive | control <= boundary  | control < boundary      |
+| negative | control >= boundary  | control > boundary      |
 
 After each body execution, the compiler calculates the next value
 mathematically and tests it before storing it. If that value fails the

@@ -6,7 +6,12 @@ export default defineConfig({
   description:
     'Technical documentation for the Debug80 Z80 debugger extension and the AZM assembler',
   srcDir: '.',
-  srcExclude: ['_internal/**', '01-basic-operation.md', 'README.md'],
+  srcExclude: [
+    '_internal/**',
+    '01-basic-operation.md',
+    'README.md',
+    'lanternfly-book/rewrite/**',
+  ],
 
   // Jekyll published every page as /path/page.html; keeping .html URLs
   // preserves all 120 live URLs verbatim.
@@ -46,15 +51,25 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      // Straight to the first page of each series, never to a contents page.
-      // The sidebar lists every chapter of every book in the series, so a
-      // landing page whose whole content is that same list is a click the
-      // reader pays for nothing. The index pages still exist and still work
-      // if a URL points at one; nothing navigates through them.
+      // Straight to the first page of each single-book series. Lanternfly has
+      // two books, so its menu exposes both without an intermediate landing
+      // page. The index pages still exist for direct URLs.
       { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
       { text: 'AZM Books', link: '/azm-book/book1/00-introduction' },
       { text: 'Glimmer Books', link: '/glimmer-book/book1/00-introduction' },
-      { text: 'Lanternfly Books', link: '/lanternfly-book/book1/00-introduction' },
+      {
+        text: 'Lanternfly Books',
+        items: [
+          {
+            text: 'Book 1 — Programming Fundamentals',
+            link: '/lanternfly-book/book1/00-introduction',
+          },
+          {
+            text: 'Book 2 — Language Reference',
+            link: '/lanternfly-book/book2/',
+          },
+        ],
+      },
     ],
     sidebar: sidebars,
     search: { provider: 'local' },

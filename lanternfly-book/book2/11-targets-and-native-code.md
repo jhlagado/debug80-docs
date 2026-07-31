@@ -62,15 +62,21 @@ An external routine has no Lanternfly body and cannot be the program entry.
 Every external or host routine must preserve Lanternfly value invariants:
 
 - integers retain their declared width;
+- enums and subranges contain values from their declared domains;
 - Booleans are zero or one;
+- opaque addresses satisfy the selected class validity rule;
 - aggregate parameters name valid aligned storage of the declared class and
   exact type for the call;
-- C strings are non-null, immutable and terminated in accessible storage for
-  the program's lifetime;
+- strings have the declared short or long layout and preserve their
+  length, nonzero-payload and terminator invariants;
 - constant storage remains immutable.
 
 A contract that cannot guarantee those facts is incompatible. Disabling
 optimization cannot repair an invalid representation or lifetime.
+
+After a native call declared to write string storage, an adapter validates the
+representation before Lanternfly resumes. An invalid length, embedded zero,
+misplaced terminator or reserved all-ones length causes `F-INVALID-STRING`.
 
 ## Native effect contracts
 
@@ -93,14 +99,13 @@ source-defined Lanternfly routines or hosted bodies are deferred.
 ## Runtime helpers
 
 A backend may select runtime helpers for multiplication, division, power,
-square root, wide arithmetic, aggregate copying, bounds checks and far
-access. Only helpers that are used are linked, and each appears in generated
-listings and cost reports.
+square root, wide arithmetic, aggregate copying, counted-string operations,
+bounds checks and far access. Only helpers that are used are linked, and each
+appears in generated listings and cost reports.
 
-Bounds, arithmetic, address and invalid-value faults do not return to the
-failing expression. A hosted profile may trap them; a standalone profile may
-terminate or enter a monitor. Debug artifacts retain the fault class and
-source location.
+Bounds, range, arithmetic and invalid-value faults do not return to the failing
+expression. A hosted profile may trap them; a standalone profile may terminate
+or enter a monitor. Debug artifacts retain the fault class and source location.
 
 ## Inline assembly
 
@@ -132,6 +137,11 @@ Unless a future contract narrows its effects, the block:
 - may call native routines, fault and perform device I/O;
 - clobbers registers, flags and volatile machine state;
 - preserves the stack, mapping and calling state required to continue.
+
+The block must not modify immutable storage or leave an invalid enum,
+subrange, Boolean, opaque-address or string representation visible to
+Lanternfly. Source that violates one of those obligations is nonconforming for
+the selected target.
 
 The compiler emits `W-ASM-001` and treats the block as an observable barrier.
 Values needed afterward are spilled or preserved. The specialized assembly

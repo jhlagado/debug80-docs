@@ -60,8 +60,7 @@ occupy target memory and require no runtime lookup.
 ## Exact field layout
 
 Fields appear in declaration order with no implicit padding. `Date.year`
-occupies offsets 0 and 1, `month` occupies offset 2 and `day` occupies offset
-3. The diagram uses the Z80's little-endian byte order, with the low byte of
+occupies offsets 0 and 1, `month` occupies offset 2 and `day` occupies offset 3. The diagram uses the Z80's little-endian byte order, with the low byte of
 `year` first. Another target profile may use a different byte order inside
 `u16`, while the field offsets and total record size remain fixed:
 
@@ -210,11 +209,12 @@ because the `string[12]` field occupies fourteen bytes.
 
 - A record groups named fields into one fixed-size type.
 - Fields occupy declaration order with no implicit padding, and a string
-  field contributes its exact `N + 2` bytes like any other.
+  field contributes its exact `N + 2` bytes through capacity 254 or `N + 3`
+  bytes from capacity 255.
 - Arrays of records use the record size as their stride.
 - Nested records and arrays still reduce to one exact byte layout.
 - Aggregate assignment copies the complete record or array value.
 
 Our tables now hold structured entries, which raises a question we have so
-far answered casually: where does a program store *which* entry an
+far answered casually: where does a program store _which_ entry an
 operation applies to? The next chapter answers it properly.
