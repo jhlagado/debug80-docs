@@ -1,0 +1,89 @@
+// Chapter 14 companion — Log module
+// Two files: the reading log behind an interface, and the program using it.
+// Verified against specification 0.4 (3b31fe4): §12.1-12.3, §12.5-12.6.
+
+// ============================ readinglog.lf ============================
+// The module owns the table. Nothing outside can break the occupancy
+// invariant, because nothing outside can see the storage.
+
+record Reading                     // private: layout stays changeable
+    var day as u8
+    var month as u8
+    var temperature as i16
+    var validated as boolean
+end
+
+const logCapacity as u8 = 10       // private
+
+var log as Reading[logCapacity]    // private
+var logCount as u8 = 0             // private
+
+// The published surface: scalars in, scalars out. Exporting these
+// routines does not expose Reading (E-MODULE-002 stays satisfied).
+export sub addReading(day as u8, month as u8, temperature as i16) as boolean
+    if logCount >= logCapacity then
+        return false
+    end
+
+    log[logCount].day = day
+    log[logCount].month = month
+    log[logCount].temperature = temperature
+    log[logCount].validated = false
+    logCount = logCount + 1
+
+    return true
+end
+
+export sub entryCount() as u8
+    return logCount
+end
+
+export sub meanTemperature() as i16
+    var index as u8 = 0
+    var sum as i16 = 0
+
+    if logCount = 0 then
+        return 0
+    end
+
+    for index = 0 until logCount
+        sum = sum + log[index].temperature
+    end
+
+    return sum / logCount
+end
+
+// ============================== main.lf ================================
+
+import "readinglog.lf"
+
+var recorded as u8 = 0
+var mean as i16 = 0
+var accepted as boolean = false
+
+// The build manifest names this module as root and main() as entry (Q1:
+// the manifest's file format is a project question; the rule is not).
+sub main()
+    accepted = addReading(11, 1, 2)
+    accepted = addReading(12, 1, -3)
+    accepted = addReading(13, 1, 5)
+
+    // log[0].day = 9          // would not compile: `log` is not visible
+    //                         // outside readinglog.lf (E-NAME-001)
+
+    recorded = entryCount()    // 3
+    mean = meanTemperature()   // (2 - 3 + 5) / 3 = 1
+end
+
+// Trace:
+//   three addReading calls -> module-private logCount 3
+//   entryCount() -> 3;  meanTemperature() -> 4 / 3 = 1
+// Final storage: recorded 3, mean 1, accepted true; inside the module,
+//   log[0..2] hold the three readings and logCount is 3.
+//
+// Spec notes:
+// - Exports enter main.lf unqualified; log, logCount, Reading and
+//   logCapacity stay private (§12.2-12.3).
+// - The import loads readinglog.lf once however many files import it;
+//   the whole-program build allocates all storage together (§12.5).
+// - Returning from main invokes the termination service (§12.6).

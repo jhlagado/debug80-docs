@@ -1,6 +1,6 @@
 // Chapter 6 companion — Euclid
-// Three loops, three stopping rules; termination argued, not hoped.
-// Verified against specification 0.4: §10.1-10.3, §11, §3.1.
+// Four loops, four stopping rules; termination argued, not hoped.
+// Verified against specification 0.4 (3b31fe4): §10.1, §10.3-10.4, §11, §3.1.
 
 // Euclid's algorithm. Invariant: gcd(a, b) never changes.
 // Variant: b strictly decreases (a mod b < b), so b reaches 0.
@@ -19,6 +19,23 @@ sub greatestCommonDivisor(first as u16, second as u16) as u16
     return a
 end
 
+// The stopping rule lives mid-body: while true tells the truth about it.
+// Terminates because value mod value = 0 — the search cannot pass value.
+// Precondition: value >= 2 (ch 5 discipline; a guard would return early).
+sub smallestDivisor(value as u16) as u16
+    var candidate as u16 = 2
+
+    while true
+        if value mod candidate = 0 then
+            exit
+        end
+
+        candidate = candidate + 1
+    end
+
+    return candidate
+end
+
 // The stopping rule shrinks the value itself: divide until one digit stands.
 sub countDigits(value as u16) as u8
     var remaining as u16 = value
@@ -32,7 +49,7 @@ sub countDigits(value as u16) as u8
     return digits
 end
 
-// The counted contract: inclusive range, accumulator body.
+// The counted contract: `to` includes its limit — the numbers 1 through n.
 sub sumFirst(limit as u16) as u16
     var index as u16 = 0
     var sum as u16 = 0
@@ -45,11 +62,13 @@ sub sumFirst(limit as u16) as u16
 end
 
 var divisor as u16 = 0
+var firstFactor as u16 = 0
 var digitCount as u8 = 0
 var firstTen as u16 = 0
 
 sub main()
     divisor = greatestCommonDivisor(48, 36)
+    firstFactor = smallestDivisor(35)
     digitCount = countDigits(4072)
     firstTen = sumFirst(10)
 end
@@ -57,14 +76,21 @@ end
 // Traces:
 //   gcd(48, 36):  (a, b) = (48, 36) -> (36, 12) -> (12, 0); returns 12.
 //   gcd(17, 5):   (17, 5) -> (5, 2) -> (2, 1) -> (1, 0); returns 1.
+//   smallestDivisor(35): 35 mod 2 = 1, mod 3 = 2, mod 4 = 3, mod 5 = 0 -> 5.
+//   smallestDivisor(13): runs to 13; 13 mod 13 = 0 -> 13 (prime).
 //   countDigits(4072): 4072 -> 407 -> 40 -> 4; digits 1 -> 2 -> 3 -> 4.
 //   sumFirst(10) = 55.  sumFirst(0): zero iterations (start 1 > limit 0);
-//     sum stays 0 and index rests at the converted start, 1 (§10.2).
-// Final storage: divisor 12, digitCount 4, firstTen 55.
+//     sum stays 0 and index rests at the converted start, 1 (§10.1).
+// Final storage: divisor 12, firstFactor 5, digitCount 4, firstTen 55.
 //
 // Spec notes:
-// - Preheader order: start evaluated and converted, then limit, then the
-//   store into the control variable (§10.2).
-// - The body never writes `index`; E-CONTROL-003 enforces the contract.
-// - No-wrap rule: a u16 control cannot wrap at either boundary (§10.2).
+// - Preheader order: start evaluated and converted, then the boundary, then
+//   the store into the control variable (§10.1).
+// - The body never writes `index`; E-CONTROL-003 enforces the contract. The
+//   next value is tested before it is stored, so no unsigned wrap; a
+//   continuing value that cannot fit the control type is F-LOOP-RANGE.
+// - `exit` leaves only the loop; the `return` after it leaves the routine
+//   (§10.4). `while true` is the language's whole indefinite form.
+// - The exclusive twin `for index = 0 until boundary` is chapter 7's
+//   canonical table walk; nothing in this chapter needs it yet.
 // - 16-bit / and mod lower to helpers on Z80; the cost report names them.

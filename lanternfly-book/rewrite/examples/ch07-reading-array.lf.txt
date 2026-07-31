@@ -1,0 +1,96 @@
+// Chapter 7 companion — Reading array
+// One week of temperatures; elements walked by name, positions when needed.
+// Verified against specification 0.4 (3b31fe4): §4.5, §6, §7, §8.5, §10.1-10.2.
+
+const readingCount as u8 = 8
+
+var readings as i16[readingCount] = [12, 15, 9, -3, 0, 21, 18, 7]
+
+var total as i16 = 0
+var coldest as i16 = 0
+var mean as i16 = 0
+
+// for each: "every element, in order" — the binding is the element itself.
+sub sumReadings() as i16
+    var sum as i16 = 0
+
+    for each reading in readings
+        sum = sum + reading
+    end
+
+    return sum
+end
+
+// Best-so-far. Invariant: `lowest` is the coldest of the elements visited.
+sub coldestReading() as i16
+    var lowest as i16 = readings[0]
+
+    for each reading in readings
+        if reading < lowest then
+            lowest = reading
+        end
+    end
+
+    return lowest
+end
+
+// When the position matters, the half-open indexed form takes the count
+// directly: 0 until 8 visits exactly the valid indices 0..7.
+sub firstFreezingIndex() as u8
+    var index as u8 = 0
+
+    for index = 0 until count(readings)
+        if readings[index] < 0 then
+            return index
+        end
+    end
+
+    return count(readings)      // absent, in-band (ch 8 owns this idiom)
+end
+
+// A small 2D grid, walked row-major without spelling either index.
+var grid as u8[2, 4] = [
+    [1, 0, 2, 1],
+    [3, 1, 0, 4]
+]
+var gridTotal as u16 = 0
+var freezingAt as u8 = 0
+
+sub sumGrid() as u16
+    var sum as u16 = 0
+
+    for each cell in grid
+        sum = sum + cell
+    end
+
+    return sum
+end
+
+sub main()
+    total = sumReadings()
+    coldest = coldestReading()
+    mean = total / readingCount
+    freezingAt = firstFreezingIndex()
+    gridTotal = sumGrid()
+end
+
+// Traces:
+//   sum by element:  12, 27, 36, 33, 33, 54, 72, 79
+//   coldest:         12, 12, 9, -3, -3, -3, -3, -3
+//   mean:            79 / 8 = 9   (truncates toward zero; §8.3)
+//   firstFreezing:   readings[3] = -3 -> returns 3 (early return leaves
+//                    the routine; `exit` would only leave the loop)
+//   grid, row-major: 1, 1, 3, 4 | 7, 8, 8, 12 -> gridTotal 12
+// Final storage: total 79, coldest -3, mean 9, freezingAt 3, gridTotal 12.
+//
+// Spec notes:
+// - `for each` evaluates the collection path once; the binding denotes the
+//   current element, write-through if assigned (§10.2). Assigning `reading`
+//   here would write the array — these routines only read it.
+// - `for index = 0 until count(readings)`: the boundary is independently
+//   typed and never stored, which is what lets a u8 control walk a
+//   256-entry table to its exact boundary (§10.1).
+// - Both loop shapes let the compiler prove every access in range — no
+//   runtime bounds checks in the standard idioms (§6).
+// - `sum + cell`: u8 element widens to the u16 sum (§3.1).
+// - Element number for grid[1, 2] is 1 * 4 + 2 = 6 (row-major, §6).

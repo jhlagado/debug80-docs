@@ -1,0 +1,80 @@
+// Chapter 15 companion — Platform services
+// The typed door to the machine: services, a device register, one asm block.
+// Service names are ILLUSTRATIVE pending gate Q2.
+// Verified against specification 0.4 (3b31fe4): §4.3-4.4, §12.4, §13.1-13.2.
+
+// ============================= platform.lf =============================
+// One file per target: the machine's face, typed. The game imports this
+// module and never sees an address or a register convention.
+
+export extern sub printChar(ch as u8) at $0008
+export extern sub printText(text as near cstr) from "ROM_PRINT_TEXT"
+export extern sub printNumber(value as u16) from "ROM_PRINT_U16"
+export extern sub newline() from "ROM_NEWLINE"
+
+// A device register: placed, volatile, never implicitly written. Every
+// source read is a real read (§4.4). Bit 0 means "a key is waiting".
+export volatile var keyboardStatus as u8 at $9000
+
+// Module-level asm teaches the assembler the symbols the `from` bindings
+// name. Emitted verbatim; runtime meaning belongs to the extern contracts.
+asm
+ROM_PRINT_TEXT = $0028
+ROM_PRINT_U16  = $002b
+ROM_NEWLINE    = $002e
+end
+
+// ============================== main.lf ================================
+
+import "platform.lf"
+
+const title as near cstr = "READINGS"
+
+var keySeen as boolean = false
+
+// A signed value through unsigned services: sign byte, then magnitude.
+sub printSigned(value as i16)
+    if value < 0 then
+        printChar(u8('-'))
+    end
+
+    printNumber(abs(value))
+end
+
+sub main()
+    printText(title)
+    newline()
+    printSigned(-3)
+    newline()
+
+    keySeen = (keyboardStatus and %00000001) <> 0
+
+    asm
+        nop
+    end
+end
+
+// Trace — ordered service and device events (conformance §5 compares
+// these beside final storage):
+//   printText("READINGS")
+//   newline()
+//   printChar(45)            // '-'
+//   printNumber(3)           // abs(-3), u16
+//   newline()
+//   volatile read of $9000   // may not be cached, combined or reordered
+//   [asm barrier: nop]       // conservative W-ASM-001 block
+// Final storage: keySeen reflects bit 0 of the register at read time.
+//
+// Spec notes:
+// - Each extern states the types Lanternfly checks; the profile supplies
+//   carriers, clobbers and effects, and a missing binding is E-EXTERN-001
+//   at compile time (§12.4).
+// - Declaring keyboardStatus writes nothing to $9000 (§4.3); reading it is
+//   an observable event (§4.4).
+// - The statement asm block is a conservative barrier: the compiler
+//   assumes it may read and write anything visible, and spills live
+//   values around it — the cost appears in the listing (§13.2.1,
+//   W-ASM-001). A single nop earns the whole conservative contract, which
+//   is exactly the chapter's lesson about what a barrier costs. Control
+//   reaches main's end, and the termination service, as the block
+//   contract requires.

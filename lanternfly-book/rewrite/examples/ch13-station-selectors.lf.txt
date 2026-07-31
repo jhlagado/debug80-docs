@@ -1,0 +1,113 @@
+// Chapter 13 companion — Station selectors
+// Every "pointer" idiom, without pointers: indices, selectors, aliases.
+// Verified against specification 0.4 (3b31fe4): §7.1, §9.2, §10.2, §11.3-11.4.
+
+record Reading
+    var day as u8
+    var month as u8
+    var temperature as i16
+    var validated as boolean
+end
+
+const logCapacity as u8 = 10
+
+var log as Reading[logCapacity]
+var logCount as u8 = 0
+
+// Identity as data: "the current entry" is an index, not an address.
+// It can be stored, compared, saved in a record — and a stale value is
+// caught by the bounds check, not silently dereferenced.
+var selectedEntry as u8 = 0
+
+var snapshot as Reading
+
+// A local alias: one nickname, evaluated once, non-rebindable (§11.4).
+sub touchSelected()
+    alias entry as Reading = log[selectedEntry]
+
+    entry.validated = true
+    snapshot = entry              // bare alias on the right: copies referent
+end
+
+// Regular shape: a multidimensional array is the row-pointer table you
+// never build. station picks the row; day picks the cell.
+const stationCount as u8 = 2
+const daysPerWeek as u8 = 7
+
+var stationGrids as i16[stationCount, daysPerWeek]
+
+sub recordDay(station as u8, day as u8, temperature as i16)
+    stationGrids[station, day] = temperature
+end
+
+// Irregular fixed choice: separately declared tables, chosen by selector.
+// Source semantics: select + named storage. Lowering may build an address
+// table; that is the backend's business (§7.1).
+const northStation as u8 = 0
+const southStation as u8 = 1
+
+var northLog as i16[daysPerWeek] = [1, 3, 5, 2, -1, 0, 4]
+var southLog as i16[daysPerWeek] = [4, 6, 8, 2, 0, -2, 3]
+
+// Exported aggregate parameter: storage class before the name (E-ALIAS-002).
+export sub meanOfWeek(near table as i16[7]) as i16
+    var sum as i16 = 0
+
+    for each value in table
+        sum = sum + value
+    end
+
+    return sum / 7
+end
+
+sub stationMean(station as u8) as i16
+    select station
+    case northStation
+        return meanOfWeek(northLog)
+    case southStation
+        return meanOfWeek(southLog)
+    else
+        return 0
+    end
+end
+
+var northMean as i16 = 0
+var southMean as i16 = 0
+
+sub main()
+    log[0].day = 11
+    log[0].month = 1
+    log[0].temperature = 2
+    log[1].day = 12
+    log[1].month = 1
+    log[1].temperature = -3
+    logCount = 2
+
+    selectedEntry = 1
+    touchSelected()
+
+    northMean = stationMean(northStation)
+    southMean = stationMean(southStation)
+end
+
+// Trace:
+//   selectedEntry = 1; touchSelected():
+//     alias binds log[1] once (bounds-checked at the declaration);
+//     log[1].validated becomes true;
+//     snapshot receives 12 | 1 | FD FF | 1 — a copy. The selector still
+//     names the table entry; the snapshot is independent bytes. Identity
+//     that must persist is the index, not the copy.
+//   northMean: (1+3+5+2-1+0+4) / 7 = 14 / 7 = 2
+//   southMean: (4+6+8+2+0-2+3) / 7 = 21 / 7 = 3
+// Final storage: log[1].validated true, snapshot as above, northMean 2,
+//   southMean 3, selectedEntry 1.
+//
+// Spec notes:
+// - The alias initializer is evaluated and checked once; the alias cannot
+//   be rebound and has no source-visible carrier (§7.1, §11.4).
+// - meanOfWeek's parameter aliases caller storage for the call; `near`
+//   before the name is the aggregate storage class, independent of the
+//   element type (§11.3). Arguments must be storage paths: northLog and
+//   southLog qualify (E-CALL-001).
+// - select dispatches the irregular choice; routine names are not values
+//   and there is nothing here a pointer could add (§7.1, §11.6).

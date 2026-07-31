@@ -1,0 +1,44 @@
+// Chapter 10 companion — Reading record
+// A measurement modelled: four facts, five bytes, offsets derivable by eye.
+// Verified against specification 0.4: §4.5, §5, §7, §8.5.
+
+record Reading
+    var day as u8          // 1..31
+    var month as u8        // 1..12
+    var temperature as i16 // whole degrees; winter exists
+    var validated as boolean
+end
+
+// Layout facts, asked for by name and folded at compile time.
+const readingBytes as u8 = size(type Reading)          // 5
+const temperatureOffset as u8 = offset(Reading.temperature) // 2
+
+var current as Reading = Reading(day = 12, month = 1, temperature = -3, validated = false)
+var previous as Reading = Reading(day = 11, month = 1, temperature = 2, validated = true)
+var sameDay as boolean = false
+
+// Record equality is deferred (§8.2) — and that is a feature here:
+// "same" is a design decision. This model says same date, any temperature.
+sub main()
+    sameDay = current.day = previous.day and current.month = previous.month
+
+    previous = current      // five-byte snapshot copy (§7)
+end
+
+// Trace:
+//   current in storage:  12 | 1 | FD FF | 0
+//     (temperature -3 as two's complement $FFFD; byte order is a target
+//      detail — little-endian on Z80 profiles)
+//   sameDay: day 12 = 11 is false; short-circuit skips the month test -> false
+//   previous = current: previous becomes 12 | 1 | FD FF | 0
+// Final storage: sameDay false; previous equals current field for field.
+//
+// Spec notes:
+// - Fields at declared offsets, no padding: day 0, month 1, temperature 2,
+//   validated 4; size 5 (§5).
+// - Initializers name every field exactly once; written order evaluates,
+//   declaration order stores (§4.5).
+// - `current.day = previous.day` inside an expression is equality (§8.2);
+//   the statement-initial `=` before it is the assignment (§8.1).
+// - Comparing two records this way needs their names spelled out — the
+//   clunk chapter 11's aggregate parameters exist to remove.

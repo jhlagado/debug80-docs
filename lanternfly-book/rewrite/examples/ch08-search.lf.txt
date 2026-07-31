@@ -1,0 +1,63 @@
+// Chapter 8 companion — Search
+// Linear search twice: plain, then with a sentinel — and what checking costs.
+// Verified against specification 0.4: §6, §8.4, §10.1.
+
+const sampleCount as u8 = 8
+
+// Eight payload values and one spare slot for the sentinel.
+var samples as i16[9] = [12, 15, 9, -3, 0, 21, 18, 7, 0]
+
+var foundAt as u8 = 0
+var missingAt as u8 = 0
+var sentinelAt as u8 = 0
+
+// Plain linear search. Returns the index; sampleCount means "absent".
+// The left test guards the right one (short-circuit `and`, §8.4).
+sub findPlain(target as i16) as u8
+    var index as u8 = 0
+
+    while index < sampleCount and samples[index] <> target
+        index = index + 1
+    end
+
+    return index
+end
+
+// Sentinel search: plant the target in the spare slot; the value test
+// alone stops the loop. One comparison per step — and, on a conforming
+// 0.4 target, a runtime bounds check the compiler could not prove away.
+sub findWithSentinel(target as i16) as u8
+    var index as u8 = 0
+
+    samples[sampleCount] = target
+
+    while samples[index] <> target
+        index = index + 1
+    end
+
+    return index
+end
+
+sub main()
+    foundAt = findPlain(-3)          // 3
+    missingAt = findPlain(99)        // 8 = absent
+    sentinelAt = findWithSentinel(21) // 5
+end
+
+// Traces:
+//   findPlain(-3):  0:12 no, 1:15 no, 2:9 no, 3:-3 yes -> 3
+//   findPlain(99):  all eight mismatch; index reaches 8; left test ends
+//                   the loop before samples[8] is touched -> 8 (absent)
+//   findWithSentinel(21): plant 21 at slot 8; 0,1,2,3,4 mismatch, 5 hits -> 5
+//   findWithSentinel(99): runs through the payload to the plant at 8 ->
+//                   8 (absent; the "match" was our own sentinel)
+// Final storage: foundAt 3, missingAt 8, sentinelAt 5, samples[8] 21.
+//
+// Spec notes:
+// - `index < sampleCount` proves the access in findPlain; no runtime
+//   bounds machinery in the checked build (§6).
+// - findWithSentinel's access has no provable bound: every samples[index]
+//   carries an F-BOUNDS check (§6). The sentinel removes the count test
+//   and the target adds its own — the cost report shows the exchange.
+// - Unchecked builds are explicitly nonconforming (§6), so the honest
+//   comparison is the checked one.

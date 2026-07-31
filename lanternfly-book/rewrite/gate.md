@@ -2,190 +2,206 @@
 
 Working document for the Wirth-model rewrite. NOT for commit; lives untracked
 under `lanternfly-book/rewrite/`. Classifications are against the working
-specification, design draft 0.4 (`packages/lanternfly/docs/specification.md`,
-read 2026-07-30) and its conformance companion. Categories: **Defined** (spec
-gives enough to teach precisely), **Provisional** (spec marks the rule as
-awaiting implementation/corpus evidence), **Incomplete** (open semantic
-question — route to the Lanternfly project, never settle in the book),
-**Deferred** (excluded from the first implementation; the book may name it
-only as future work).
+specification, design draft 0.4 **as rewritten at commit 3b31fe4 ("Rewrite
+Lanternfly as a structured BASIC"), reread in full 2026-07-31**, with the
+conformance contract and the decisions chapter
+(`design-book/10-stages-and-decisions.md`). Categories: **Defined** /
+**Provisional** / **Incomplete** (route to the project) / **Deferred** —
+plus the decisions chapter's stronger word for pointers: **Excluded by
+philosophy**, which the book must teach as doctrine, not as a missing
+feature.
+
+## Headline language changes absorbed (vs the pre-3b31fe4 draft)
+
+- **No references, ever**: no `ref` type or operator, no `value(...)`, no
+  reference variables, results or arrays. Identity = declared paths,
+  multidimensional indices, integer selectors into fixed pools. Aggregate
+  parameters and local `alias` declarations are temporary, non-escaping
+  names; their backend carriers have no source syntax. Not deferred —
+  excluded (decisions ch., "Deferred exploration").
+- **Loop vocabulary**: inclusive `for ... to`, exclusive `for ... until`
+  (canonical for zero-based traversal; the boundary is independently typed,
+  so `for index = 0 until count(bytes)` is legal with a `u8` control and
+  boundary 256), `for each ... in` (row-major, element binding denotes the
+  element, write-through, collection path evaluated once), `while`,
+  `while true` as the indefinite form. `loop` removed. New fault
+  `F-LOOP-RANGE` when a continuing value cannot fit the control type.
+- **`alias name as Type = path`** replaces the old `ref` alias spelling and
+  is now a settled part of the grammar (no Provisional marker).
+- **Aggregate parameter storage class before the name**:
+  `export sub moveActor(near actor as Actor, ...)`; element class stays in
+  the type (`far labels as near cstr[8]`). `E-ALIAS-001/002` govern.
+- **Hosted early exit is bare `return`** (`exit body` removed); fixture 11
+  is now "Hosted return".
+- **Routine names are not values** (§11.6): no address-of, no indirect
+  calls; `select` is the dispatch story.
+- **Arrays contain scalars or records** (§6); multidimensional arrays and
+  record fields cover nesting.
+- **`cstr` conversions** spelled `near cstr(...)` / `far cstr(...)` /
+  `cstr(...)`; `F-ADDRESS` now belongs to checked far-to-near `cstr`
+  conversion.
 
 ## Per-chapter classification
 
 ### Ch 1 — A Program Changes Stored Data
-- `var`, `const`, scalar assignment, comments: **Defined** (§4.1–4.2, §8.1, §2.4).
-- Program entry: `sub main()` (no params/result), named by a build manifest;
-  all static storage allocated and initializers installed before entry;
-  returning from entry invokes the target termination service: **Defined**
-  (§12.6). Concrete manifest format: **Incomplete** → Q1 below.
-- Assignment evaluation order (destination path, then right side, then
-  store): **Defined** (§8.7). Current book states this wrongly — fix F1.
+Unchanged by the rewrite: `var`/`const`, assignment
+(destination-path-first, §8.7), `sub main()` entry via build manifest,
+termination service — **Defined** (§4, §8, §12.6). Manifest format:
+**Incomplete** → Q1.
 
 ### Ch 2 — Values and Representations
-- Six integer types, `boolean` (one byte, canonical 0/1, no integer
-  conversions — `boolean(...)` **Deferred**), literal forms (`42`, `$2a`,
-  `%00101010`, `'A'`), exact-literal typing (expected-type contexts; no
-  i16-fallback-then-warn; oversized literal is an error; `u8(300)` = 44),
-  `const` with mandatory explicit type: **Defined** (§2.4, §3, §3.1, §4.1).
-- Type inference for `const`: **Deferred** (§4.1).
+Unchanged: types, literals, exact-literal rules, conversions, `boolean`
+(no integer conversions — Deferred), `const` explicit type — **Defined**.
 
 ### Ch 3 — Expressions and Assignment
-- Operator set, result-type table, one-sided value-preserving widening (never
-  a third common type), operator-order intermediates, wrapping, constant
-  folding agreeing with runtime, precedence (comparisons bind before `not`;
-  `^` right-associative, `-2 ^ 2 = -(2 ^ 2)`), short-circuit, conversions,
-  round-trip warning exemption, expression statements + `W-EXPR-001`,
-  evaluation order: **Defined** (§3.1, §8).
-- Compound assignment (`+=`), chained assignment: absent (§8.1) — teach as
-  a fact, not a loss.
+Unchanged: result table, one-sided widening, no third common type,
+wrap/folding agreement, precedence (comparisons before `not`; `^`
+right-assoc), round-trip exemption, evaluation order — **Defined**.
 
 ### Ch 4 — Subroutines and Local State
-- `sub`, scalar parameters (pass values), scalar results (integer, Boolean,
-  address, `cstr`, typed ref), locals before statements, per-invocation
-  freshness, zero-init of owned scalars, declaration-order initializers,
-  left-to-right argument evaluation, calling convention & static temporaries,
-  recursion as a profile capability: **Defined** (§11, §8.7).
-- Aggregate return by value: **Deferred** (§11.1).
-- Ordering note: early `return` and all-paths-return checking need decisions
-  — teach basic form here, complete `return` story in/after ch 5.
-- Aggregate parameters (writable aliases): **Defined** (§11.3) but taught in
-  ch 7/13 where arrays/references exist.
+Unchanged: `sub`, scalar params/results/locals, all-paths-return,
+calling convention, recursion as profile capability — **Defined** (§11).
+Aggregate returns **Deferred**. Local declaration placement is a bounded
+open question (start-of-block vs current start-of-routine) — the book
+teaches the current rule and does not speculate.
 
 ### Ch 5 — Decisions and Invariants
-- `if` / `else if` / `else`, `select` over integer selection, multi-value
-  cases, no fall-through, duplicate/overlap rejection: **Defined** (§9).
-- `case` ranges (`case 0 to 9`): **Provisional** (§9.2) — recommend the book
-  omits them until the parser decision lands (Q3).
-- One-line conditionals: **Deferred** (§9.1).
-- Boolean/address/reference selection: **Deferred** (§9.2).
+Unchanged: `if`/`else if`, `select` (integer selection, no fall-through,
+overlap rejection) — **Defined**. `case` ranges **Provisional** (omit,
+Q3). Named scalar sets (enums) are an open design; the book's
+constants-as-states idiom is the current answer and is taught as such.
 
-### Ch 6 — Loops and Termination
-- `while`, counted `for` (preheader order: start, then limit — limit sees the
-  control variable's old value — then store; inclusive limits; compile-time
-  nonzero step, independently typed; no-wraparound termination; defined
-  post-loop value; body cannot write the control variable, including via
-  effect summaries), `loop`/`exit`/`continue`: **Defined** (§10).
-- GCD example needs only `while` + `mod`: fully **Defined**.
-- `repeat`/`until`, labelled/named loop exits: **Deferred** (§10.3).
+### Ch 6 — Loops and Termination  **(revised)**
+- `for ... to` (inclusive), `for ... until` (exclusive), compile-time
+  nonzero `step`, preheader order (start, then boundary, then store),
+  no-write control rule (`E-CONTROL-002/003`), post-loop value,
+  `F-LOOP-RANGE`: **Defined** (§10.1).
+- `while`, `while true`, `exit`, `continue` (loop-only): **Defined**
+  (§10.3–10.4). `repeat`/`until`-loop and labelled exits: **Deferred**.
+- `for each` belongs thematically to ch 7 (needs arrays); ch 6 names it.
 
-### Ch 7 — Fixed Arrays and Traversal
-- Declaration, zero-based indices, exact index arity, row-major layout,
-  contiguity, initializer shape rules, constant-index compile checks, runtime
-  bounds checks (`F-BOUNDS`) unless proven, interleaved index evaluation,
-  `count`/`size`, `clear`/`fill` (statement-only, `unit`): **Defined**
-  (§6, §7, §8.5).
+### Ch 7 — Fixed Arrays and Traversal  **(revised)**
+- Arrays, zero-based, row-major, bounds (`F-BOUNDS`), index arity,
+  `count`/`size`, `clear`/`fill`: **Defined** (§6–8).
+- `for each ... in` as the primary traversal (element binding write-through,
+  path evaluated once, constant arrays give read-only bindings, volatile
+  rejected, `E-CONTROL-005`): **Defined** (§10.2).
+- `for index = 0 until count(a)` as the canonical indexed form: **Defined**.
 
 ### Ch 8 — Searching Tables
-- Linear search: loops + early return or flag — **Defined**.
-- Sentinel search: expressible with an ordinary spare slot in a writable
-  array; no special feature needed — **Defined**.
+Unchanged in design: `while`-based plain search (short-circuit guard
+proves bounds) vs sentinel search (unprovable index keeps `F-BOUNDS`
+checks) — **Defined**. `for each` cannot early-deliver an index, so
+searches that must report position stay indexed — a teachable contrast.
 
-### Ch 9 — Sorting and Rearranging Data
-- Insertion/selection sort: nested loops, scalar temp, aggregate element
-  copy with snapshot semantics: **Defined** (§7, §10).
+### Ch 9 — Sorting and Rearranging Data  **(loop idiom revised)**
+Outer pass loop becomes `for pass = 1 until count(readings)`; inner
+shifting `while` unchanged — **Defined**. Bounded aggregate views are the
+project's open design for *reusable* sorts (decisions ch. names
+insertion sort as a decision fixture); this chapter sorts its own table
+in place and defers reusability honestly → Q5.
 
 ### Ch 10 — Records and Data Models
-- `record`, exact declaration-order layout, no padding, nested by-value
-  records, containment-cycle rejection, named-field initializers (written
-  order evaluates; declaration order stores), `size`/`offset`,
-  record/callable name rule: **Defined** (§5, §4.5, §8.5, §2.1).
-- Record equality: **Deferred** (§8.2) — fields compared explicitly; teach as
-  a design point, not a gap.
+Unchanged: exact layout, initializers, `size`/`offset`, record equality
+**Deferred** (field-wise comparison as design) — **Defined**.
 
-### Ch 11 — Tables of Records
-- Arrays of records, composed paths, aggregate copy, true stride: **Defined**.
+### Ch 11 — Tables of Records  **(loop idiom revised)**
+Partial-fill pattern loops become `until logCount`. `for each` visits
+every element of the fixed array — capacity, not occupancy — so the
+partially filled table *requires* the indexed form: a load-bearing
+teaching contrast, now in the brief. Aggregate parameters (unqualified
+private form; class-before-name for exported) — **Defined** (§11.3).
 
 ### Ch 12 — Static Text and Byte Buffers
-- Character literals (byte values, escape set), `cstr` (near/far classes,
-  immutable view, no hidden length, literal gets appended NUL, 65,534-byte
-  cap, content comparison via all six operators, `length` → `u16` with
-  literal folding), writable text as plain `u8` arrays with explicit
-  capacity, NO implicit array→`cstr` conversion: **Defined** (§2.4, §3.2).
-- Bounded writable-text views and writable string procedures: **Deferred** —
-  named follow-up in the language completeness review; the book must teach
-  the u8-array pattern without inventing library helpers (Q4).
-- Printing needs extern contracts (ch 15); fixture 10 "Static text" expects
-  an external print-style call — align names (Q2).
+Unchanged: character literals, `cstr` semantics, buffers as `u8` arrays,
+no silent conversion — **Defined**. Bounded writable views: open (Q4).
+No byte access through `cstr` (Q4a) — confirmed still true in the
+rewrite; §3.2 unchanged on indexing.
 
-### Ch 13 — References and Storage Identity
-- Typed references (non-null, scalar), formation rules and address-class
-  logic, `value(...)`, rebind vs referent write, reference equality only,
-  arrays of references, checked far→near conversion (`F-ADDRESS`), opaque
-  `near/far address` (assignment + same-class equality only), class
-  qualifiers mandatory on stored/public references and all results:
-  **Defined** (§7.1).
-- Local aggregate alias `ref x as T = path`: semantics defined, **spelling
-  Provisional** (§11.4, §16) — book should note the spelling may change.
-- References to owned scalar locals; read-only references; null references:
-  **Deferred**.
-- Volatile storage: **Defined** (§4.4) with hard restrictions (no refs,
-  aliases or aggregate arguments rooted in volatile) — teach in ch 15 with
-  devices.
+### Ch 13 — Storage Identity: Paths, Selectors and Aliases  **(redesigned)**
+Replaces the dead "References and Storage Identity" plan. Teaches the
+language's doctrine as a positive model:
+- paths and multidimensional indices as persistent identity (§7.1);
+- integer selectors into fixed pools — store the index, not an address;
+  `select` for irregular fixed choices; backend address tables are
+  lowering, not semantics: **Defined**;
+- local `alias` (evaluated once, non-rebindable, aggregate-only,
+  `E-ALIAS-001`, `E-LOCAL-003`): **Defined**;
+- aggregate parameters with `near`/`far` before the name; independent
+  element classes (`far labels as near cstr[8]`): **Defined**;
+- opaque `near/far address`: no derivation to or from storage paths —
+  **Defined**;
+- pointers/references/address-of/dereference/function values: **Excluded
+  by philosophy** — taught as the design argument, with the decisions
+  chapter's reasoning (what pointer tables become: multidim arrays and
+  selectors).
 
 ### Ch 14 — Modules and Interfaces
-- `import` (once-per-compilation, private-by-default, explicit `export`),
-  recursive private-type-exposure check, collision and cycle rejection,
-  whole-program build pipeline, executable vs library builds, entry rules:
-  **Defined** (§12).
-- Module aliases, re-exports, source file extension: **Deferred/open** (§16).
-- Hosted bodies (Glimmer): **Defined** (§12.6, §13.3) — a mention plus
-  pointer, not a chapter.
+Unchanged: import/export/private, recursive exposure check, cycles
+rejected, whole-program build, entry rules — **Defined**. Hosted bodies:
+bare `return` to host epilogue (`E-RETURN-002` = value return rejected).
 
 ### Ch 15 — Machine Services and Assembly
-- `extern sub` with `at`/`from`/profile binding, target-address constant
-  expressions, native contracts (value invariants, effect summaries,
-  `W-NATIVE-001`), no native→Lanternfly callbacks, `volatile` + `at` placed
-  storage (installation rules, startup-effect ordering), statement/module
-  `asm` (raw mode, verbatim emission, conservative barrier, `W-ASM-001`,
-  control must reach the following statement), fault services, itemized
-  helpers, required artifacts: **Defined** (§4.3–4.4, §12.4, §13).
-- Source syntax for narrowing an asm effect contract: **Incomplete** (§16) —
-  teach the conservative barrier only.
+Unchanged: `extern sub` bindings, native contracts, `W-NATIVE-001`,
+volatile + `at` placement, `asm` barriers (`W-ASM-001`), fault services,
+itemized helpers, artifacts — **Defined**. Effect-contract narrowing
+syntax: **Incomplete** (spec §16).
 
 ### Ch 16 — A Complete Lanternfly Program
-- Everything needed is Defined *except*: concrete build-manifest format (Q1)
-  and a standard illustrative platform-service module (Q2). Number-to-text
-  output needs only `/` and `mod` — no gap.
+Everything Defined except Q1 (manifest format) and Q2 (standard platform
+service names).
 
-## Fixes the rewrite must make to current book claims (F-list)
+## Fixes the rewrite must make to current published-book claims (F-list)
 
-- **F1**: Current ch 1 says the right-hand expression is evaluated first in
-  an assignment. Spec §8.7: destination path first, then right side, then
-  store. Observable with effectful index/reference expressions.
-- **F2**: Current book presents the local alias form as settled; §11.4 marks
-  the spelling provisional.
-- **F3**: Current book is silent on: entry point/manifest, program
-  termination, `volatile`, `at` placement, `length`/`cstr`/character
-  literals, post-loop control-variable value, `select` integer-only
-  restriction, power's right associativity, statement-per-line/parenthesised
-  continuation. The new structure covers each in its proper chapter.
+- **F1**: destination-path-first assignment evaluation (§8.7) — the
+  published book says right side first.
+- **F2** *(updated)*: the published book teaches `ref`-based references,
+  `value(...)`, reference variables and arrays of references (its ch 8) —
+  all removed from the language. Its loops chapter teaches bare `loop` —
+  removed. Entire chapters of the published book now describe a language
+  that no longer exists; the rewrite supersedes rather than patches.
+- **F3**: coverage gaps (entry/manifest, termination, volatile, `at`,
+  text, post-loop values, `until`, `for each`) — unchanged list, new
+  homes.
 
-## Questions for the Lanternfly project (Q-list — not settled by the book)
+## Questions for the Lanternfly project (Q-list)
 
-- **Q1**: What is the concrete build-manifest format (name, file shape,
-  entry declaration)? Ch 1/14/16 need to show "how to build and run" and
-  currently cannot.
-- **Q2**: Which platform-service names should the book and the conformance
-  corpus standardize for text/number output (fixture 10 implies a
-  print-style call; the old book used `printChar`/`showNumber`)? The book
-  will mark its interface module illustrative until this is fixed.
-- **Q3**: Will `case` ranges survive the first parser (spec §16)? Book omits
-  them until decided.
-- **Q4**: Bounded writable-text views / writable string procedures are
-  named follow-up work in the completeness review; ch 12's buffer examples
-  will hand-roll a terminator-writing loop — confirm that is the intended
-  teaching story for edition 0.4.
-- Spec §16's own open list (bare `end`, alias spelling, case-insensitive
-  resolution, `at` vs section placement, effect-contract syntax, callbacks,
-  volatile references, read-only references, ranges, module aliases,
-  `float32`) is acknowledged; the book treats each as its classification
-  above dictates.
+- **Q1**: concrete build-manifest format (ch 1/14/16 need "how to build").
+- **Q2**: standard platform-service names for text/number output (align
+  book + conformance fixture 10).
+- **Q3**: `case` ranges — Provisional; book omits until the parser
+  decision.
+- **Q4**: bounded writable-text views / writable string procedures —
+  open; ch 12 hand-rolls composition meanwhile.
+- **Q4a**: no source-level byte access to `cstr` content (no indexing
+  through the view) — copying a label into a `u8` buffer is
+  inexpressible without a native service or bounded views. Confirmed
+  against the 3b31fe4 spec. Needs a project ruling for mixed
+  label+number report lines.
+- **Q5** *(new)*: bounded aggregate views are the decisions chapter's own
+  open question, with insertion sort named as a decision fixture — the
+  book's ch 9 sorts in place and should feed this design discussion
+  rather than anticipate it.
+- **Q6** (found writing ch 16, 2026-07-31): §13.2 makes an incomplete
+  native effect contract count as "a write to any visible counted-loop
+  control variable", and there is no source syntax yet for narrowing a
+  contract — so, read literally, *any* extern call inside a `for` loop is
+  `E-CONTROL-003` unless the target profile supplies the effect summary.
+  Is a routine-local control variable ever "visible" to a native
+  boundary? If locals are never visible, the common print-loop shape is
+  always legal and the spec could say so; if they can be, every service
+  loop in the book depends on profile-supplied contracts, which deserves
+  a sentence in §13.2. Either answer is fine for the book; it needs the
+  project to pick one.
+- Spec §16's remaining open list acknowledged (bare `end`, case
+  insensitivity, `at` growth, effect narrowing, callbacks, read-only
+  aggregate params, ranges, repeat/until evidence, module aliases,
+  float32).
 
 ## Conformance alignment
 
-Companion programs should carry fixture-style names and note which mandatory
-vectors they exercise (conformance §5–6): the ch 1 invoice program is close
-to fixture 1 "Counter"; ch 12's program should align with fixture 10 "Static
-text"; the ch 16 capstone should compose services in the fixture-8/9 style.
-Diagnostics quoted in prose use the contract IDs (`W-CONVERT-001`,
-`F-BOUNDS`, `E-CONTROL-003`, …) so the book and toolchain speak one language.
+Fixture names to echo: Counter (ch 1), Rushlight numeric case (ch 3's
+`abs` line), Static text (ch 12), Hosted return (ch 14 mention). New
+diagnostics the book can now cite: `E-ALIAS-001/002`, `E-CONTROL-005`,
+`F-LOOP-RANGE`. The `until`-to-exact-boundary-256 vector (conformance §6)
+is exactly ch 7's canonical traversal teaching point.

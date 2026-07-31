@@ -1,0 +1,118 @@
+// Chapter 11 companion — Reading log
+// A small database: fixed capacity, variable occupancy, guarded throughout.
+// Invariant: entries 0 .. logCount-1 are meaningful; the rest are noise.
+// Verified against specification 0.4: §5-§7, §8.4, §10, §11.3.
+
+record Reading
+    var day as u8
+    var month as u8
+    var temperature as i16
+    var validated as boolean
+end
+
+const logCapacity as u8 = 10
+
+var log as Reading[logCapacity]
+var logCount as u8 = 0
+
+var foundIndex as u8 = 0
+var warmestIndex as u8 = 0
+var meanTemp as i16 = 0
+var appendOk as boolean = false
+
+// Full is an answer for the caller, not a fault.
+sub appendReading(day as u8, month as u8, temperature as i16) as boolean
+    if logCount >= logCapacity then
+        return false
+    end
+
+    log[logCount].day = day
+    log[logCount].month = month
+    log[logCount].temperature = temperature
+    log[logCount].validated = false
+    logCount = logCount + 1
+
+    return true
+end
+
+// Chapter 8's skeleton, re-aimed at record fields. logCount means absent.
+sub findByDate(day as u8, month as u8) as u8
+    var index as u8 = 0
+
+    while index < logCount and not (log[index].day = day and log[index].month = month)
+        index = index + 1
+    end
+
+    return index
+end
+
+// Aggregate parameter: `entry` aliases the caller's storage (§11.3).
+// Chapter 10's clunk, repaired — the routine names one reading, any reading.
+sub markValidated(entry as Reading)
+    entry.validated = true
+end
+
+// Best-so-far over occupied entries only. Empty table: returns logCount (0),
+// the same in-band absent convention as findByDate.
+sub warmestEntry() as u8
+    var index as u8 = 0
+    var best as u8 = 0
+
+    if logCount = 0 then
+        return logCount
+    end
+
+    for index = 1 until logCount
+        if log[index].temperature > log[best].temperature then
+            best = index
+        end
+    end
+
+    return best
+end
+
+sub meanTemperature() as i16
+    var index as u8 = 0
+    var sum as i16 = 0
+
+    if logCount = 0 then
+        return 0
+    end
+
+    for index = 0 until logCount
+        sum = sum + log[index].temperature
+    end
+
+    return sum / logCount
+end
+
+sub main()
+    appendOk = appendReading(11, 1, 2)
+    appendOk = appendReading(12, 1, -3)
+    appendOk = appendReading(13, 1, 5)
+
+    foundIndex = findByDate(12, 1)      // 1
+    markValidated(log[foundIndex])       // entry 1 validated in place
+
+    warmestIndex = warmestEntry()        // 2 (5 degrees)
+    meanTemp = meanTemperature()         // (2 - 3 + 5) / 3 = 1
+end
+
+// Trace:
+//   three appends -> logCount 3; each append writes four fields then bumps
+//     the count, so the invariant holds at every statement boundary
+//   findByDate(12, 1): entry 0 (11,1) no; entry 1 (12,1) yes -> 1
+//   markValidated(log[1]): the alias writes the table entry, not a copy
+//   warmestEntry: best 0 (2), entry 1 (-3) no, entry 2 (5) yes -> 2
+//   meanTemperature: sum 2 -> -1 -> 4; 4 / 3 = 1 (truncation, §8.3)
+// Final storage: logCount 3, foundIndex 1, warmestIndex 2, meanTemp 1,
+//   log[1].validated true.
+//
+// Spec notes:
+// - `until logCount` bounds the loops by occupancy. `for each` would walk
+//   the whole fixed array — capacity, not occupancy — visiting the noise
+//   entries too; the partial-fill pattern requires the indexed form (§10.1).
+// - Aggregate argument must be a storage path: log[foundIndex] qualifies;
+//   a temporary would not (E-CALL-001).
+// - log[index].temperature addresses base + index * 5 + 2 — a true
+//   non-power-of-two stride (§6).
