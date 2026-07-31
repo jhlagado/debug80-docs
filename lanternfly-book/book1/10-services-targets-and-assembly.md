@@ -225,9 +225,9 @@ result through a typed target service.
 - Generated artifacts show how language constructs, storage and services map
   to the target machine.
 
-That completes the course. You can now read a Lanternfly program from its
-first declaration to its final `end`, account for its storage byte by
-byte, and follow any statement to the instructions it becomes. The
+You can now read a Lanternfly program from its first declaration to its
+final `end`, account for its storage byte by byte, and follow any
+statement to the instructions it becomes. The
 [language reference](../book2/) holds the exact rules whenever you need
 them, and when the first compiler arrives, the programs you have traced in
 these chapters will be among the first it runs. Until then, the traces
