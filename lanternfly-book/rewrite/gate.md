@@ -207,7 +207,13 @@ service names).
 - **Q3**: RESOLVED by faee26b — `case` ranges (`to`/`until`) are now part
   of the language; the books may teach them.
 - **Q4**: bounded writable-text views / writable string procedures —
-  open; ch 12 hand-rolls composition meanwhile.
+  open; ch 12 hand-rolls composition meanwhile. Related fact
+  (2026-07-31): AZM emits three string conventions — `.cstr`, `.pstr`
+  and `.istr` — so counted and high-bit static data are already
+  substrate-expressible via byte arrays or module asm; a typed
+  `pstring`/`istring` view is fixture-gated on a target profile whose
+  services actually consume those conventions, and the `cstring` name
+  deliberately leaves that family open.
 - **Q4a**: no source-level byte access to `cstring` content (no indexing
   through the view) — copying a label into a `u8` buffer is
   inexpressible without a native service or bounded views. Confirmed
