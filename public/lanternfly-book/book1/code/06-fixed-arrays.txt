@@ -6,8 +6,9 @@ const daysInMonth as u8[12] = [
     31, 31, 30, 31, 30, 31
 ]
 
-// ASCII values for HELLO followed by a zero terminator.
-const greetingBytes as u8[6] = ['H', 'E', 'L', 'L', 'O', 0]
+var greeting as string[12] = "HELLO"
+var playerName as string[12]
+var statusLine as string[16]
 
 var samples as u8[8]
 var sampleTotal as u16 = 0
@@ -55,9 +56,23 @@ sub prepareOctober()
     end
 end
 
+sub renameGuest()
+    playerName = greeting
+    append(playerName, '!')
+end
+
+// Builds text such as "MODE 2" in place: clear, a literal, a computed digit.
+sub reportMode(mode as u8)
+    clear(statusLine)
+    append(statusLine, "MODE ")
+    append(statusLine, '0' + mode)
+end
+
 sub main()
     prepareSamples()
     sumSamples()
     prepareWeek()
     prepareOctober()
+    renameGuest()
+    reportMode(2)
 end

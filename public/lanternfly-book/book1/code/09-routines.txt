@@ -1,6 +1,6 @@
 record Reading
-    var value as i16
-    var quality as u8
+    value as i16
+    quality as u8
 end
 
 const qualityInvalid as u8 = 0

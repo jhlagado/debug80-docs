@@ -1,7 +1,7 @@
 record Reading
-    var value as i16
-    var unit as u8
-    var quality as u8
+    value as i16
+    unit as u8
+    quality as u8
 end
 
 const unitCelsius as u8 = 0

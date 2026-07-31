@@ -197,32 +197,70 @@ The compiler rejects missing entries, extra entries and rows with the wrong
 shape. A target profile may place constant aggregate data in read-only memory,
 which preserves writable RAM for changing program state.
 
-## Text and byte arrays
+## Characters and strings
 
-The 0.4 language settles static text. A character literal such as `'H'` is
-an exact byte value, and a double-quoted literal is a C-style string —
-written `cstring` in declarations — a read-only view of NUL-terminated static
-text with a near or far address class. A C-style string supports `length`,
-content comparison and passage to services that honour its read-only,
-program-lifetime contract.
-
-Writable text remains ordinary byte storage under an explicit contract, and
-character literals make such data readable:
+Text is byte data with one extra obligation: something has to know where it
+ends. A character literal such as `'H'` is an exact byte value, so a `u8`
+array can hold text-shaped bytes — but the array's count describes its
+capacity, and nothing in it records how much of that capacity is currently
+meaningful. Lanternfly's string type carries that fact itself:
 
 ```lanternfly
-// ASCII values for HELLO followed by a zero terminator.
-const greetingBytes as u8[6] = ['H', 'E', 'L', 'L', 'O', 0]
+var playerName as string[12]
 ```
 
-The array has the exact representation required by a NUL-terminated ASCII
-service. Another service might require a length prefix, a high-bit terminator
-or machine-specific display codes. Calling that array a string would hide the
-contract that gives each byte its meaning, and no writable array converts
-silently into a C-style string.
+`string[12]` is a counted string in the Pascal tradition. The capacity is
+part of the type, and the layout is as concrete as any array's: one length
+byte, twelve payload cells, and a zero byte after the current payload, for
+exactly fourteen bytes settled at compile time. There is no allocator and no
+hidden buffer; the declaration is the cost. A capacity of 255 or more widens
+the length field to two bytes and nothing else changes.
 
-Bounded writable views and richer string operations remain open design work.
-Until they land, reusable text handling belongs in explicitly typed platform
-or library interfaces.
+The terminator earns its keep at the boundary. Because every operation
+maintains it, the payload is always valid NUL-terminated text, so a firmware
+or platform routine that expects the classic C convention can read the bytes
+directly, at no conversion cost, while `length` never has to scan for the
+zero — it reads the stored count and returns it as a `u16`.
+
+A double-quoted literal supplies text wherever it fits:
+
+```lanternfly
+var greeting as string[12] = "HELLO"
+
+sub renameGuest()
+    playerName = greeting
+    append(playerName, '!')
+end
+```
+
+Assignment copies content, not identity, and the capacities of source and
+destination need not match — the copy is checked instead. A source the
+compiler can see is rejected at compile time when it cannot fit; a runtime
+copy or `append` that would overflow invokes the range-fault service before
+any destination byte changes, the same promise an array's bounds check makes.
+`append` grows a string by another string, a literal or one nonzero byte, and
+`clear` restores the empty value. All six comparison operators examine the
+payload bytes, so `playerName = greeting` as a condition asks whether the
+text matches, not whether two names share storage. All-zero storage is the
+valid empty string, which is why a module string needs no initializer: it
+simply begins empty.
+
+The length byte, the payload cells and the terminator have no names. No
+index reaches them, and `fill` refuses a string, because the whole
+arrangement depends on the count, the nonzero payload and the terminator
+staying in agreement — assignment, `append`, `clear`, comparison and
+`length` are the complete interface, and each one preserves what the others
+rely on. A `u8` array, which promises none of this, never converts into a
+string, and a string is not an array of its bytes.
+
+Strings sit in records and arrays like any other fixed-size data.
+`string[12][8]` declares eight strings of capacity twelve — the capacity
+brackets belong to the element type — and a record field
+`name as string[12]` occupies its fourteen bytes at a fixed offset, as the
+next chapter shows. Byte storage under other conventions — a high-bit
+terminator, machine-specific display codes — remains ordinary `u8` data
+under an explicit service contract, where each byte's meaning is the
+contract's business.
 
 ## Clearing and filling
 
@@ -233,9 +271,10 @@ clear(samples)
 fill(weeklyReadings, 0)
 ```
 
-`clear` writes the all-zero representation to a writable array or record whose
-fields accept it. `fill` evaluates one compatible scalar value and writes it
-to every array entry in row-major order.
+`clear` writes the all-zero representation to a writable array, record or
+string whose leaves accept it — for a string, that is the empty value. `fill`
+evaluates one compatible scalar value and writes it to every array entry in
+row-major order; a string's sealed cells are beyond its reach.
 
 The backend may lower either operation to an inline loop, target instruction
 sequence or runtime helper. The source names the operation; generated
@@ -244,10 +283,11 @@ artifacts show the chosen implementation and cost.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt)
-fills a sample buffer and declares a weekly table, then zeroes a month of
-readings across a 1-to-31 domain and holds one line width per report mode.
-For `weeklyReadings[1, 2]`, the expression `1 * readingCount + 2` gives
-element 6 and byte offset 12 because each entry occupies two bytes.
+fills a sample buffer and declares a weekly table, zeroes a month of
+readings across a 1-to-31 domain, holds one line width per report mode, and
+builds a status line in a `string[16]` by appending a literal and a computed
+digit. For `weeklyReadings[1, 2]`, the expression `1 * readingCount + 2`
+gives element 6 and byte offset 12 because each entry occupies two bytes.
 
 ## Chapter summary
 
@@ -262,9 +302,12 @@ element 6 and byte offset 12 because each entry occupies two bytes.
   contiguous.
 - `for each` visits every element in row-major order when positions are not
   needed.
-- Character literals are byte values, and a C-style string (`cstring`) names
-  read-only static text; writable text stays in `u8` arrays under explicit
-  service contracts.
+- Character literals are byte values, and `string[N]` is the text type: a
+  counted string of exact size `N + 2` whose payload always ends with a zero
+  byte, so C-convention services read it directly.
+- Strings are sealed — assignment, `append`, `clear`, comparison and `length`
+  are the whole interface, and every copy is checked against capacity before
+  a byte moves.
 - `clear` and `fill` express repeated aggregate writes while leaving the
   backend free to choose an implementation.
 

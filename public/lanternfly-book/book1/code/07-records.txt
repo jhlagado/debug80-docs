@@ -1,19 +1,25 @@
 record Date
-    var year as u16
-    var month as u8
-    var day as u8
+    year as u16
+    month as u8
+    day as u8
 end
 
 record Reading
-    var value as i16
-    var unit as u8
-    var quality as u8
+    value as i16
+    unit as u8
+    quality as u8
 end
 
 record DailyLog
-    var date as Date
-    var entries as Reading[4]
-    var used as u8
+    date as Date
+    entries as Reading[4]
+    used as u8
+end
+
+// The string field occupies its exact 14 bytes, so Station is 15.
+record Station
+    name as string[12]
+    id as u8
 end
 
 const releaseDate as Date = Date(
@@ -26,6 +32,7 @@ var reportDate as Date
 var savedDate as Date
 var readings as Reading[4]
 var dailyLog as DailyLog
+var station as Station
 var entryIndex as i16 = 2
 
 sub saveEntry()
@@ -34,6 +41,13 @@ sub saveEntry()
     savedDate = reportDate
 end
 
+sub labelStation()
+    station.name = "NORTH"
+    append(station.name, '2')
+    station.id = 2
+end
+
 sub main()
     saveEntry()
+    labelStation()
 end

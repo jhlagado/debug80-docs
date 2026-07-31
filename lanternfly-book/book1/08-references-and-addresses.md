@@ -88,9 +88,10 @@ that carrier has no source spelling, so no program can misuse it.
 An alias earns its place when a routine touches the same aggregate several
 times or passes it onward. A path used once is best written as the path.
 
-The alias form accepts records and fixed arrays. Constant storage cannot
-initialize a writable alias, and volatile storage requires direct access so
-that every read and write remains visible.
+The alias form accepts records, fixed arrays and strings — an alias of a
+`string[12]` element gives a table entry a short name for a run of appends.
+Constant storage cannot initialize a writable alias, and volatile storage
+requires direct access so that every read and write remains visible.
 
 ## Regular shapes: one table instead of many
 
@@ -190,8 +191,8 @@ itself.
 
 - Persistent identity is data: a declared path, an integer index or a
   stored selector, each checked at the point of use.
-- `alias` gives existing record or array storage a non-rebindable local
-  name, evaluated once and valid until the routine returns.
+- `alias` gives existing record, array or string storage a non-rebindable
+  local name, evaluated once and valid until the routine returns.
 - Multidimensional arrays replace regular pointer tables; a selector with
   `select` replaces irregular ones.
 - Storage classes distinguish near from far static storage; interfaces

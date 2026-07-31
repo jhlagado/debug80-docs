@@ -73,8 +73,8 @@ The chapters build strictly on one another, and the route is worth seeing
 whole before we set out. Chapter 1 settles us inside a single assignment.
 Chapters 2 and 3 are about values: integer types, Booleans, enumerations
 and ranges, then calculations and comparisons. In Chapters 4 and 5 we add control — decisions, then
-loops. Chapters 6 and 7 give our data structure: fixed arrays, then
-records with exact layouts. In Chapter 8 we learn how a Lanternfly
+loops. Chapters 6 and 7 give our data structure: fixed arrays and counted
+strings, then records with exact layouts. In Chapter 8 we learn how a Lanternfly
 program keeps track of *which* piece of data it means — with indices and
 aliases rather than pointers. Chapter 9 completes subroutines with
 parameters, results and locals, and in Chapter 10 we open the machine
