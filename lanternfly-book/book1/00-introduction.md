@@ -26,7 +26,16 @@ integer types, lay out arrays and records byte for byte, and the compiler
 translates the complete program ahead of time into native code for a small
 processor. The first target is the Z80, an eight-bit processor with 65,536
 addressable bytes, still designed into hobby and educational computers
-today.
+today, and the toolchain divides the translation into two inspectable
+stages:
+
+```text
+Lanternfly source (.lafy)
+    → Lanternfly compiler
+    → Z80 assembly
+    → AZM assembler
+    → machine code
+```
 
 Interpreted BASIC made small computers approachable but spent most of the
 processor reading the program; assembly used the machine fully but
@@ -69,14 +78,16 @@ few lines at a time, one idea per section; the full source waits at the
 end of the chapter as a plain-text listing, and a short summary closes
 each chapter with the rules it introduced.
 
-The chapters build strictly on one another, and the route is worth seeing
-whole before we set out. Chapter 1 settles us inside a single assignment.
-Chapters 2 and 3 are about values: integer types, Booleans, enumerations
-and ranges, then calculations and comparisons. In Chapters 4 and 5 we add
-control — decisions, then loops. Chapters 6 and 7 give our data
-structure: fixed arrays and counted strings, then records with exact
-layouts. In Chapter 8 we learn how a Lanternfly program records *which*
-piece of data an operation applies to — with indices and aliases rather
-than pointers. Chapter 9 completes subroutines with parameters, results
-and locals, and in Chapter 10 we open the machine boundary: modules,
-typed services and inline assembly.
+The chapters build strictly on one another — nothing is used before it is
+taught — and the route is worth seeing whole before we set out. Chapter 1
+settles us inside a single assignment and the simplest subroutine call.
+Chapters 2 and 3 are about values: types, literals and constants, then
+calculations, conversions and comparisons. Chapter 4 names fixed sets of
+alternatives and turns Boolean answers into decisions; Chapter 5 adds
+loops. Chapters 6 through 8 build our data structures: fixed arrays,
+counted strings, then records with exact layouts. Chapter 9 completes
+subroutines with parameters, results and locals, and Chapter 10 shows how
+a program records *which* piece of data an operation applies to — with
+indices and aliases rather than pointers. Chapter 11 grows programs past
+one file with modules and imports, and Chapter 12 opens the machine
+boundary: typed services, opaque addresses and inline assembly.

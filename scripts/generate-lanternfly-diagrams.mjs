@@ -160,63 +160,6 @@ const add = (name, title, desc, height, parts) => {
   );
 }
 
-/* ============================================================
-   Chapter 8 - Sharing Storage with References
-   ============================================================ */
-
-{
-  const rows = [
-    ['buffers[0]', 'inputBuffer : u8[16]'],
-    ['buffers[1]', 'outputBuffer : u8[16]'],
-    ['buffers[2]', 'scratchBuffer : u8[16]'],
-  ];
-
-  add(
-    'array-of-references.svg',
-    'An array of references pointing to three separate arrays',
-    'Three reference slots on the left point to three independently allocated sixteen-byte buffers on the right. Selecting a reference does not move or combine the arrays.',
-    300,
-    [
-      caption(40, 30, 'reference array'),
-      caption(450, 30, 'separate storage'),
-      ...rows.flatMap(([reference, target], index) => {
-        const y = 56 + index * 70;
-        return [
-          box({ x: 40, y, w: 190, h: 42, title: reference, cls: index === 1 ? 'bxs' : 'bx' }),
-          line(index === 1 ? 'sline' : 'none', 230, y + 21, 450, y + 21, index === 1 ? 'arS' : 'ar'),
-          box({ x: 450, y, w: 230, h: 42, title: target, cls: index === 1 ? 'bxs' : 'bx' }),
-        ];
-      }),
-      text('t', 40, 276, 'value(buffers[1]) selects all sixteen bytes of outputBuffer'),
-    ],
-  );
-}
-
-{
-  add(
-    'banked-references.svg',
-    'Near and far references on one possible banked Z80 target',
-    'The near reference carries a sixteen-bit offset and uses the current bank context. The far reference carries a bank identifier with the offset and reaches a Reading in bank seven.',
-    306,
-    [
-      caption(40, 30, 'near ref Reading'),
-      rect('bxq', 40, 48, 300, 210, 4),
-      box({ x: 82, y: 78, w: 216, h: 48, title: 'offset $8120', cls: 'bxs', titleCls: 'tb' }),
-      line('sline', 190, 126, 190, 164, 'arS'),
-      box({ x: 82, y: 164, w: 216, h: 54, title: 'Reading', lines: ['in the current bank'] }),
-
-      caption(380, 30, 'far ref Reading'),
-      rect('bxq', 380, 48, 300, 210, 4),
-      box({ x: 410, y: 78, w: 84, h: 48, title: 'bank 7', cls: 'bxs', titleCls: 'tb' }),
-      box({ x: 504, y: 78, w: 146, h: 48, title: 'offset $8120', cls: 'bxs', titleCls: 'tb' }),
-      line('sline', 530, 126, 530, 164, 'arS'),
-      box({ x: 422, y: 164, w: 216, h: 54, title: 'Reading', lines: ['in bank 7'] }),
-
-      text('dimn', 40, 290, 'A target profile chooses the physical representation of both reference classes.'),
-    ],
-  );
-}
-
 mkdirSync(OUT, { recursive: true });
 for (const [name, body] of Object.entries(figures)) {
   writeFileSync(path.join(OUT, name), body);

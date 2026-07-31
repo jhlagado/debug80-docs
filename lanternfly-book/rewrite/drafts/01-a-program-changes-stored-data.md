@@ -217,7 +217,7 @@ build's own artifacts.
 
 ## The listing
 
-The [chapter listing](/lanternfly-book/book1/code/01-invoice.txt) holds
+The chapter listing (issued with the rewrite when it publishes) holds
 the complete program with its trace. The trace above was worked from that
 listing; reproduced on paper, it takes five minutes.
 
