@@ -49,18 +49,89 @@ Imported exports enter the importing module's type and value scopes before its
 local declarations are checked. They participate in the ordinary collision and
 shadowing rules.
 
+## Standard text modules
+
+The first edition defines two optional standard modules. A program imports
+only the part it uses:
+
+```lanternfly
+import "standard/text-output.lafy"
+import "standard/text-input.lafy"
+```
+
+There is no implicit prelude. Without an import, the standard operation names
+are not visible. The `standard/` prefix belongs to the toolchain and cannot be
+shadowed by a project file of the same path.
+
+The output module exports three operations:
+
+```lanternfly
+writeCharacter('A')
+writeText("READY")
+writeNewline()
+```
+
+`writeCharacter` accepts a value assignable to `u8`. `writeText` accepts a
+string literal or any `string[N]` storage path, reads its payload once in
+order, and does not modify the string. Constant and mutable strings of any
+capacity are valid. `writeNewline` asks the target for its appropriate line
+break rather than promising a particular byte sequence.
+
+The input module exports two operations:
+
+```lanternfly
+var command as string[32]
+
+sub readOne() as u8
+    return readCharacter()
+end
+
+sub readCommand() as boolean
+    return readLine(command)
+end
+```
+
+`readCharacter` waits until the selected input device supplies one character
+byte and returns it as `u8`.
+
+`readLine` accepts any writable `string[N]` path, waits for one line and
+consumes its line ending without storing it. It replaces the destination and
+returns `true` when the complete line fits. An empty line produces an empty
+string. If a zero byte arrives or the line exceeds the destination capacity,
+the operation retains the longest valid fitting prefix, consumes and discards
+the rest through the line ending, and returns `false`. The next input operation
+therefore begins with a new line, and an implementation needs no unbounded
+scratch buffer.
+
+The portable contract does not define local echo or interactive editing. A
+target device may perform either before supplying the resulting line. The
+first-edition interface has no nonblocking form or end-of-file result.
+
+These modules define portable character and text transfer, not an operating
+system interface. They introduce no streams, handles, buffering, redirection,
+files, directories or seeking. File loading and saving can later occupy
+separate modules without changing the meaning of standard text input and
+output.
+
 ## Whole-program compilation
 
 The compiler:
 
 1. loads the root module;
-2. resolves the import graph;
-3. collects declarations and exports;
-4. type-checks the complete program;
-5. allocates static storage;
-6. resolves external bindings and adapters;
-7. lowers routines, data and runtime helpers;
-8. emits one target program and its debug artifacts.
+2. resolves each module's import prefix depth first;
+3. checks declarations in source order, making each completed declaration
+   visible to those that follow;
+4. resolves external bindings and adapters;
+5. lowers the required routines, data and runtime helpers;
+6. builds and validates the placement plan;
+7. emits one target program and validates its final memory map and debug
+   artifacts.
+
+This is a language-ordering rule, not a demand for one compiler architecture.
+A desktop compiler may retain syntax trees and typed intermediate forms. A
+small self-hosted compiler may process a source unit once and leave branch and
+address fixups to its backend. Both must accept the same declaration-ordered
+programs.
 
 ## Startup order
 

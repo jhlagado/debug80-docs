@@ -19,6 +19,7 @@ A profile declares:
 - supported scalar operations;
 - near and far representations;
 - address spaces;
+- memory regions and default placement targets;
 - routine ABI;
 - standard-service implementations;
 - native dialect and assembly-fragment support;
@@ -26,6 +27,34 @@ A profile declares:
 
 Operations such as display, input, sound, random-number generation, firmware
 calls and device access enter the language as typed external routines.
+
+## Standard text-service bindings
+
+The standard text modules from Chapter 10 expose portable source operations.
+The selected target profile binds each operation that the program uses to a
+stable service ID:
+
+| Export           | Service ID                           |
+| ---------------- | ------------------------------------ |
+| `writeCharacter` | `standard.textOutput.writeCharacter` |
+| `writeText`      | `standard.textOutput.writeText`      |
+| `writeNewline`   | `standard.textOutput.writeNewline`   |
+| `readCharacter`  | `standard.textInput.readCharacter`   |
+| `readLine`       | `standard.textInput.readLine`        |
+
+All five services perform device I/O and return normally. `writeText` reads
+only its evaluated text source for the duration of the call. A target may
+bind these IDs to monitor or firmware routines, a keyboard and display, a
+serial terminal, generated substrate code, a desktop terminal or a test
+adapter. `readLine` writes only its once-evaluated string destination and
+returns a canonical Boolean. The visible character-byte order and bounded line
+result remain the same.
+
+The toolchain owns the versioned standard-module interfaces; the target owns
+their bindings. A target need not provide either optional module, but it must
+reject a program that imports and uses a service it cannot bind. The ordinary
+external-binding, ABI, adapter and runtime-component machinery carries the
+implementation—there is no separate stream or operating-system abstraction.
 
 ## External routines
 
@@ -169,6 +198,32 @@ non-assembly backend rejects it unless the profile supplies a compatible
 fragment pipeline. Raw assembly names are not Lanternfly names; a generated
 symbol artifact records any Lanternfly storage or routines exposed to the
 assembly source.
+
+## Generated-source mapping
+
+A source-generating backend returns its exact generated text and a provenance
+map. Each record connects a half-open span in that text to a Lanternfly source
+span, a stable source-node ID and the generated code's role. One source node
+may produce several ranges; a folded-away node remains in the typed artifacts
+without borrowing a neighbouring generated range.
+
+An AZM backend divides generated output into anchored fragments. A routine or
+module initializer may use its entry label; an embedded fragment receives a
+deterministic compiler-owned local label. Each fragment records the anchor's
+offset and all generated spans as zero-based UTF-16 positions. A host inserts
+the fragment contiguously and without rewriting it.
+
+After composition, the integration locates each anchor, recovers the
+fragment's final AZM position, verifies the exact text, and joins the
+Lanternfly-to-AZM spans to the assembler's AZM-to-machine map. A missing or
+duplicate anchor, altered fragment or out-of-range provenance produces
+`E-MAP-001`; no partial map is published.
+
+Generated instructions use the responsible Lanternfly span as their primary
+source and retain the AZM range as related provenance. Synthetic wrappers and
+helpers keep their own generated or runtime source. Inline assembly maps to
+its original payload lines, and assembler diagnostics retain their generated
+context while pointing back to the responsible Lanternfly source.
 
 ## Floating point
 

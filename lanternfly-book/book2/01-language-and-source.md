@@ -34,6 +34,7 @@ The 0.4 language includes:
 - expressions, assignment, conditions and loops;
 - routines with scalar locals, parameters and optional scalar results;
 - private source modules with explicit exports;
+- optional standard modules for portable character and text I/O;
 - typed target services and explicit inline assembly.
 
 This inventory reflects one central design choice: storage is explicit and
@@ -62,20 +63,25 @@ sub main()
 end
 ```
 
-A build manifest names the root module and the entry subroutine. The source
-extension remains open in 0.4; `.lf` is illustrative.
+A build manifest names the root module and the entry subroutine. Every
+Lanternfly source module has the exact lowercase `.lafy` extension.
 
 ## Imports
 
 `import` adds another source module to the program:
 
 ```lanternfly
-import "actors.lf"
+import "actors.lafy"
 ```
 
 The double-quoted path is compile-time text. It accepts only `\"` and `\\`,
 allocates no runtime string storage, and resolves relative to the importing
 file and configured search paths.
+
+Imports form one uninterrupted prefix at the beginning of a module. Once a
+declaration or module-level assembly block appears, no later `import` is
+valid. This keeps module dependencies visible before the declarations that
+use them.
 
 Each resolved source unit has one canonical identity. Repeated imports load it
 once, so a diamond-shaped import graph does not duplicate code or data. Import

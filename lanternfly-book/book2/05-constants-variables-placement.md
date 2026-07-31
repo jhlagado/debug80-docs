@@ -113,8 +113,34 @@ var workspaceByte as u8 at $8000
 const glyphByte as u8 = $7e at $4000
 ```
 
-The target profile validates the address range, address space, alignment and
-overlap. Local declarations cannot use `at`.
+The complete object must fit one compatible target memory region. The profile
+checks its address space, range, alignment, permissions and overlap with every
+other placed or allocated object. Local declarations cannot use `at`.
+
+`at` is the only source-level placement clause in the first edition. The
+target profile describes the memory regions and supplies default destinations
+for generated code, constant data, writable data and static scratch. A build
+may choose another permitted region or starting address without changing the
+source. Regions reserved for explicit placement are never used by the ordinary
+allocator.
+
+Before emission, the compiler reserves every explicit `at` range and builds a
+deterministic placement plan for routines, storage, constants, module
+assembly, startup code, helpers, adapters and scratch. Each planned range
+records its address, extent, alignment, region and owner. A component that
+cannot fit produces `E-PLACE-001`.
+
+An AZM backend expresses the completed plan with `.org` directives at the
+start of each contiguous segment. The first `.org` is therefore an output of
+the memory plan, not the source of that policy. After assembly, the compiler
+compares AZM's initialized bytes, reserved addresses and symbols with the
+plan. Missing, displaced, extra or overlapping output produces
+`E-PLACE-002`. Other backends must return equivalent occupancy and symbol
+information for the same check.
+
+A hosted body has no independent origin. It reports its code, data, helper and
+scratch requirements to its host, which places the combined program and
+performs the final-map validation.
 
 A placed variable with an initializer is established before program entry.
 The profile states whether the value comes from preloaded image bytes or

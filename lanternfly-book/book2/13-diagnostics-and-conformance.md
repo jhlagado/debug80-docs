@@ -35,63 +35,65 @@ implementation progresses.
 
 ## Compile-time errors
 
-| ID               | Rejected condition                                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `E-CONFIG-001`   | Malformed host manifest or target profile, unsupported version, missing field or unknown field                      |
-| `E-CONFIG-002`   | Duplicate or unresolved configuration ID, invalid span, layout, type composition or host/target combination         |
-| `E-LEX-001`      | Invalid token or numeric literal, unterminated literal, or physical newline in quoted text                          |
-| `E-PARSE-001`    | Token sequence does not match the 0.4 grammar                                                                       |
-| `E-TEXT-001`     | Invalid character or string literal, escape, encoding, embedded NUL or payload size                                 |
-| `E-TEXT-002`     | Invalid string capacity, constant copy or append, operation, parameter shape or access to the sealed representation |
-| `E-NAME-001`     | Unknown name, duplicate declaration, forbidden shadowing or case-only collision                                     |
-| `E-NAME-002`     | Reserved keyword, built-in type or operation used as a declaration name                                             |
-| `E-NAME-003`     | Record, enum or range type and callable routine share a case-insensitive name                                       |
-| `E-TYPE-001`     | Integer operands lack matching types or a permitted value-preserving widening                                       |
-| `E-TYPE-002`     | Boolean/integer mixing, non-Boolean condition, invalid Boolean ordering or deferred Boolean conversion              |
-| `E-TYPE-003`     | Invalid assignment, argument or return conversion                                                                   |
-| `E-TYPE-004`     | A `unit` invocation, `clear`, `fill` or `append` appears where a value is required                                  |
-| `E-TYPE-005`     | Invalid enum representation, subrange, ordinal family or constant ordinal value                                     |
-| `E-CONST-001`    | Constant zero divisor, negative shift, negative exponent or negative square root                                    |
-| `E-CONST-002`    | A constant expression reads storage, calls a routine, uses a provider-bound address or has another runtime effect   |
-| `E-CONST-003`    | Constant, ordinal-domain, string-capacity, array-domain, record-layout, placement or layout-query dependency cycle  |
-| `E-CONST-004`    | Constant declaration omits its explicit type                                                                        |
-| `E-INIT-001`     | Array initializer has the wrong rank, shape or element count                                                        |
-| `E-INIT-002`     | Record initializer has an unknown, duplicate or missing field                                                       |
-| `E-INIT-004`     | A target cannot preload or write a placed initializer                                                               |
-| `E-INIT-005`     | A volatile or device initializer requires an unsupported startup write                                              |
-| `E-INIT-006`     | Uninitialized compiler-owned storage has no valid all-zero representation                                           |
-| `E-LAYOUT-001`   | Array index domain is empty, reversed, nonconstant or otherwise invalid                                             |
-| `E-LAYOUT-002`   | Direct or mutual by-value record/array containment cycle                                                            |
-| `E-LAYOUT-003`   | Invalid `size`, `count`, `lower`, `upper` or `offset` operand, dimension or field path                              |
-| `E-PATH-001`     | Constant index is out of range or an index has an incompatible ordinal type                                         |
-| `E-PATH-002`     | Volatile aggregate copy cannot be proven non-overlapping                                                            |
-| `E-PATH-003`     | Array access supplies the wrong number of indices                                                                   |
-| `E-COPY-001`     | Aggregate assignment has an incompatible record type, element type, rank or dimensions                              |
-| `E-COPY-002`     | Assignment attempts to modify constant storage                                                                      |
-| `E-COPY-003`     | Invalid `clear` representation or invalid `fill` target or value                                                    |
-| `E-ALIAS-001`    | Alias target is not an exact string, record or array storage path, or is constant or volatile                       |
-| `E-ALIAS-002`    | Invalid aggregate parameter storage class or incompatible argument storage                                          |
-| `E-LOCAL-001`    | Local `var` attempts to own a counted string, record or fixed array                                                 |
-| `E-LOCAL-002`    | Local declaration uses `volatile` or `at`                                                                           |
-| `E-LOCAL-003`    | Local alias declares a scalar or opaque-address type                                                                |
-| `E-CONTROL-001`  | Non-ordinal selection, or invalid, duplicate, overlapping or incompatible case value or range                       |
-| `E-CONTROL-002`  | Invalid or volatile counted-loop control, step, start, boundary or continuing value                                 |
-| `E-CONTROL-003`  | Counted-loop body may write its control variable directly or through a call or native effect                        |
-| `E-CONTROL-004`  | `exit` or `continue` has no enclosing loop                                                                          |
-| `E-CONTROL-005`  | Invalid `for each` collection or binding                                                                            |
-| `E-RETURN-001`   | Return form conflicts with the routine result, or a result-bearing path reaches `end`                               |
-| `E-RETURN-002`   | Hosted-body `return` supplies a value                                                                               |
-| `E-CALL-001`     | Aggregate argument is a temporary, general expression, constant or volatile object                                  |
-| `E-CALL-002`     | Call cycle occurs on a profile without recursion                                                                    |
-| `E-MODULE-001`   | Import cycle, unresolved import or visible export collision                                                         |
-| `E-MODULE-002`   | Exported declaration exposes a private type                                                                         |
-| `E-EXTERN-001`   | External routine lacks a supported binding or compatible ABI                                                        |
-| `E-EXTERN-002`   | External routine has a Lanternfly body or is selected as entry                                                      |
-| `E-BOUNDARY-001` | Native or host contract cannot guarantee required values, storage, string invariants or callback restrictions       |
-| `E-ENTRY-001`    | Executable manifest lacks one valid source-defined entry routine                                                    |
-| `E-TARGET-001`   | Required service, operation, address class or target capability is unavailable                                      |
-| `E-ASM-001`      | Assembly block is unclosed or appears in an invalid position                                                        |
-| `E-ASM-002`      | Target lacks a compatible assembly-fragment pipeline                                                                |
+| ID               | Rejected condition                                                                                                   |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `E-CONFIG-001`   | Malformed host manifest or target profile, unsupported version, missing field or unknown field                       |
+| `E-CONFIG-002`   | Duplicate or unresolved configuration ID, invalid span, layout, type composition or host/target combination          |
+| `E-LEX-001`      | Invalid token or numeric literal, unterminated literal, or physical newline in quoted text                           |
+| `E-PARSE-001`    | Token sequence does not match the 0.4 grammar                                                                        |
+| `E-TEXT-001`     | Invalid character or string literal, escape, encoding, embedded NUL or payload size                                  |
+| `E-TEXT-002`     | Invalid string capacity, constant copy or append, operation, parameter shape or access to the sealed representation  |
+| `E-NAME-001`     | Unknown name, use before declaration, duplicate declaration, forbidden shadowing or case-only collision              |
+| `E-NAME-002`     | Reserved keyword, built-in type or operation used as a declaration name                                              |
+| `E-NAME-003`     | Record, enum or range type and callable routine share a case-insensitive name                                        |
+| `E-TYPE-001`     | Integer operands lack matching types or a permitted value-preserving widening                                        |
+| `E-TYPE-002`     | Boolean/integer mixing, non-Boolean condition, invalid Boolean ordering or deferred Boolean conversion               |
+| `E-TYPE-003`     | Invalid assignment, argument or return conversion, including an invalid `writeText` source or `readLine` destination |
+| `E-TYPE-004`     | A `unit` invocation, `clear`, `fill` or `append` appears where a value is required                                   |
+| `E-TYPE-005`     | Invalid enum representation, subrange, ordinal family or constant ordinal value                                      |
+| `E-CONST-001`    | Constant zero divisor, negative shift, negative exponent or negative square root                                     |
+| `E-CONST-002`    | A constant expression reads storage, calls a routine, uses a provider-bound address or has another runtime effect    |
+| `E-CONST-004`    | Constant declaration omits its explicit type                                                                         |
+| `E-INIT-001`     | Array initializer has the wrong rank, shape or element count                                                         |
+| `E-INIT-002`     | Record initializer has an unknown, duplicate or missing field                                                        |
+| `E-INIT-004`     | A target cannot preload or write a placed initializer                                                                |
+| `E-INIT-005`     | A volatile or device initializer requires an unsupported startup write                                               |
+| `E-INIT-006`     | Uninitialized compiler-owned storage has no valid all-zero representation                                            |
+| `E-LAYOUT-001`   | Array index domain is empty, reversed, nonconstant or otherwise invalid                                              |
+| `E-LAYOUT-003`   | Invalid `size`, `count`, `lower`, `upper` or `offset` operand, dimension or field path                               |
+| `E-PATH-001`     | Constant index is out of range or an index has an incompatible ordinal type                                          |
+| `E-PATH-002`     | Volatile aggregate copy cannot be proven non-overlapping                                                             |
+| `E-PATH-003`     | Array access supplies the wrong number of indices                                                                    |
+| `E-COPY-001`     | Aggregate assignment has an incompatible record type, element type, rank or dimensions                               |
+| `E-COPY-002`     | Assignment attempts to modify constant storage                                                                       |
+| `E-COPY-003`     | Invalid `clear` representation or invalid `fill` target or value                                                     |
+| `E-ALIAS-001`    | Alias target is not an exact string, record or array storage path, or is constant or volatile                        |
+| `E-ALIAS-002`    | Invalid aggregate parameter storage class or incompatible argument storage                                           |
+| `E-LOCAL-001`    | Local `var` attempts to own a counted string, record or fixed array                                                  |
+| `E-LOCAL-002`    | Local declaration uses `volatile` or `at`                                                                            |
+| `E-LOCAL-003`    | Local alias declares a scalar or opaque-address type                                                                 |
+| `E-CONTROL-001`  | Non-ordinal selection, or invalid, duplicate, overlapping or incompatible case value or range                        |
+| `E-CONTROL-002`  | Invalid or volatile counted-loop control, step, start, boundary or continuing value                                  |
+| `E-CONTROL-003`  | Counted-loop body may write its control variable directly or through a call or native effect                         |
+| `E-CONTROL-004`  | `exit` or `continue` has no enclosing loop                                                                           |
+| `E-CONTROL-005`  | Invalid `for each` collection or binding                                                                             |
+| `E-RETURN-001`   | Return form conflicts with the routine result, or a result-bearing path reaches `end`                                |
+| `E-RETURN-002`   | Hosted-body `return` supplies a value                                                                                |
+| `E-CALL-001`     | Aggregate argument is a temporary, general expression, constant or volatile object                                   |
+| `E-CALL-002`     | Direct self-recursion occurs on a profile without recursion                                                          |
+| `E-MODULE-001`   | Root or import path lacks exact lowercase `.lafy`, or an import cycle, resolution or export collision occurs         |
+| `E-MODULE-002`   | Exported declaration exposes a private type                                                                          |
+| `E-MODULE-003`   | An `import` appears outside the module's contiguous import prefix                                                    |
+| `E-EXTERN-001`   | External routine lacks a supported binding or compatible ABI                                                         |
+| `E-EXTERN-002`   | External routine has a Lanternfly body or is selected as entry                                                       |
+| `E-BOUNDARY-001` | Native or host contract cannot guarantee required values, storage, string invariants or callback restrictions        |
+| `E-ENTRY-001`    | Executable manifest lacks one valid source-defined entry routine                                                     |
+| `E-TARGET-001`   | Required native service, optional standard-module binding, operation, address class or capability is unavailable     |
+| `E-ASM-001`      | Assembly block is unclosed or appears in an invalid position                                                         |
+| `E-ASM-002`      | Target lacks a compatible assembly-fragment pipeline                                                                 |
+| `E-PLACE-001`    | Source or build placement cannot fit a compatible target memory region                                               |
+| `E-PLACE-002`    | Emitted bytes, reserved addresses or symbols disagree with the validated placement plan                              |
+| `E-MAP-001`      | Generated-source mapping cannot be composed because an anchor, fragment or provenance span is invalid                |
 
 Every diagnostic identifies the input that caused it. Source errors include
 file, line and column; configuration errors identify the manifest or profile
@@ -152,7 +154,9 @@ their final storage, ordered service traces and fault traces:
 9. Pacmo;
 10. TMS9918 boundary;
 11. text, including an external print-style call on the terminated payload;
-12. Hosted return.
+12. standard character, text and bounded line I/O through explicitly imported
+    modules, when claimed by the target profile;
+13. Hosted return.
 
 The conformance contract also requires focused vectors for integer and ordinal
 boundaries, conversion, constant folding, short and long string forms, exact
@@ -171,11 +175,13 @@ A source-generating backend emits:
   mappings;
 - selected helper and import list;
 - external bindings and generated ABI adapters;
+- the validated placement plan and final occupancy and symbol comparison;
 - read, write, call, fault and device-I/O summary;
 - startup-initialization effects;
 - routine-frame and static-scratch allocation;
 - module-assembly emission and provenance ranges;
 - statement-assembly ranges and conservative runtime effects;
+- anchored generated fragments and composed Lanternfly-to-machine mappings;
 - target assumptions and an optional cost report.
 
 A host integration also reports hosted early-return paths, local-frame or
@@ -198,7 +204,8 @@ unstated semantics:
 - aggregate return by value;
 - source-level pointers, reference values, address-of and dereference;
 - stored, returned, nullable or scalar aliases;
-- read-only aggregate parameters;
+- general read-only, output and in/out aggregate parameters, apart from the
+  compiler-defined text carriers used by standard `writeText` and `readLine`;
 - bit fields and bank-spanning arrays;
 - indirect calls, procedure values and closures;
 - native callbacks into generated Lanternfly code;
@@ -206,6 +213,7 @@ unstated semantics:
 - exceptions;
 - generics and operator overloading;
 - resizable or heap-backed strings;
+- general streams, file operations and an operating-system interface;
 - implicit byte-buffer-to-string conversion;
 - unchecked indexing as conforming execution.
 
@@ -224,7 +232,6 @@ The post-0.4 queue includes:
 - read-only aggregate parameters and general bounded views;
 - post-test loops or named outer-loop exits;
 - module aliases and re-exports;
-- the source file extension;
 - optional `float32`.
 
 Until a later specification changes them, the 0.4 rules in this manual and

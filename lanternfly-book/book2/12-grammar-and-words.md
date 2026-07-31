@@ -16,6 +16,10 @@ The grammar remains provisional while parser implementation tests its edge
 cases. Successful parsing is only the first step: the semantic restrictions
 in the earlier chapters still determine whether the source is valid.
 
+In a source module, every `import-decl` must belong to one contiguous prefix.
+The grammar below allows `top-item*` to stay compact; the later-import case is
+rejected by the module rule rather than by a separate production.
+
 ## Modules and declarations
 
 ```text
