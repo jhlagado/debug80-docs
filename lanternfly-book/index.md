@@ -35,8 +35,11 @@ it is a language for writing the program itself.
 
 - [Lanternfly Book 1 — Programming Fundamentals](book1/) teaches the language
   through variables, integer types, expressions, decisions, loops, arrays,
-  records, references, subroutines, modules and machine services.
+  records, storage identity, subroutines, modules and machine services.
+- [Lanternfly Book 2 — Language Reference](book2/) defines the 0.4 syntax and
+  semantics, including types, exact storage, expressions, control flow,
+  routines, modules, native boundaries, grammar and diagnostics.
 
-The book follows the working
+Both books follow the working
 [Lanternfly 0.4 contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md).
 That contract is currently a design draft for the first compiler.

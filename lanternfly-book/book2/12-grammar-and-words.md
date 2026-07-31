@@ -1,0 +1,386 @@
+---
+layout: default
+title: "Grammar and Word Inventory"
+parent: "Lanternfly Book 2 — Language Reference"
+nav_order: 12
+---
+
+# Grammar and Word Inventory
+
+The grammar in this chapter records Lanternfly 0.4 block shape and assignment
+disambiguation. Expression precedence comes from
+[Chapter 4](04-integer-expressions.md#precedence-and-associativity).
+
+The grammar remains provisional while parser implementation tests its edge
+cases. Semantic restrictions in the earlier chapters still apply after a
+source form parses.
+
+## Modules and declarations
+
+```text
+module              ::= top-item*
+hosted-body         ::= local-decl* statement*
+
+top-item            ::= import-decl
+                      | export-decl
+                      | declaration
+                      | asm-block
+
+import-decl         ::= "import" string-literal newline
+export-decl         ::= "export" exportable-declaration
+
+declaration         ::= const-decl
+                      | var-decl
+                      | record-decl
+                      | extern-sub-decl
+                      | sub-decl
+
+exportable-declaration
+                    ::= const-decl
+                      | var-decl
+                      | record-decl
+                      | extern-sub-decl
+                      | sub-decl
+
+const-decl          ::= "const" value-name "as" type-expr
+                        "=" constant-initializer placement? newline
+
+var-decl            ::= "volatile"? "var" value-name "as" type-expr
+                        ("=" constant-initializer)? placement? newline
+
+placement           ::= "at" address-const-expr
+
+record-decl         ::= "record" type-name newline
+                        field-decl+
+                        "end" newline
+
+field-decl          ::= "var" value-name "as" type-expr newline
+
+sub-decl            ::= "sub" value-name "(" params? ")"
+                        ("as" type-expr)? newline
+                        routine-block
+                        "end" newline
+
+extern-sub-decl     ::= "extern" "sub" value-name "(" params? ")"
+                        ("as" type-expr)?
+                        external-binding? newline
+
+external-binding    ::= "at" address-const-expr
+                      | "from" string-literal
+
+params              ::= param ("," param)*
+param               ::= aggregate-storage-class? value-name "as" type-expr
+aggregate-storage-class
+                    ::= "near" | "far"
+```
+
+## Locals and initializers
+
+```text
+routine-block       ::= local-decl* statement*
+local-decl          ::= local-var-decl | alias-decl
+
+local-var-decl      ::= "var" value-name "as" type-expr
+                        ("=" expression)? newline
+
+alias-decl          ::= "alias" value-name "as" aggregate-type
+                        "=" storage-path newline
+
+constant-initializer
+                    ::= const-expr
+                      | array-initializer
+                      | record-initializer
+
+array-initializer   ::= "[" (constant-initializer
+                        ("," constant-initializer)*)? "]"
+
+record-initializer  ::= type-name "("
+                        field-initializer
+                        ("," field-initializer)* ")"
+
+field-initializer   ::= value-name "=" constant-initializer
+```
+
+## Statements
+
+```text
+statement           ::= assignment-statement
+                      | expression-statement
+                      | standard-procedure-statement
+                      | if-statement
+                      | select-statement
+                      | for-statement
+                      | for-each-statement
+                      | while-statement
+                      | exit-statement
+                      | continue-statement
+                      | return-statement
+                      | asm-block
+
+asm-block           ::= "asm" newline
+                        raw-assembly-line*
+                        "end" newline
+
+assignment-statement
+                    ::= writable-path "=" expression newline
+
+expression-statement
+                    ::= expression newline
+
+standard-procedure-statement
+                    ::= "clear" "(" storage-path ")" newline
+                      | "fill" "(" storage-path "," expression ")" newline
+
+if-statement        ::= "if" expression "then" newline block
+                        ("else" "if" expression "then" newline block)*
+                        ("else" newline block)?
+                        "end" newline
+
+select-statement    ::= "select" expression newline
+                        case-clause+
+                        ("else" newline block)?
+                        "end" newline
+
+case-clause         ::= "case" case-item
+                        ("," case-item)* newline block
+case-item           ::= const-expr
+                      | const-expr "to" const-expr
+
+for-statement       ::= "for" value-name "=" expression
+                        ("to" | "until") expression
+                        ("step" const-expr)? newline
+                        block
+                        "end" newline
+
+for-each-statement  ::= "for" "each" value-name "in" storage-path
+                        newline block "end" newline
+
+while-statement     ::= "while" expression newline block "end" newline
+
+exit-statement      ::= "exit" newline
+continue-statement  ::= "continue" newline
+return-statement    ::= "return" expression? newline
+
+block               ::= statement*
+```
+
+## Types and paths
+
+```text
+type-expr           ::= arrayable-type dimensions?
+
+aggregate-type      ::= type-name
+                      | arrayable-type dimensions
+
+arrayable-type      ::= scalar-type
+                      | type-name
+                      | address-type
+
+dimensions          ::= "[" const-expr ("," const-expr)* "]"
+
+scalar-type         ::= integer-type
+                      | "boolean"
+                      | cstring-type
+
+integer-type        ::= "u8" | "i8" | "u16" | "i16"
+                      | "u32" | "i32"
+
+cstring-type        ::= ("near" | "far")? "cstr"
+address-type        ::= ("near" | "far") "address"
+
+storage-base        ::= value-name
+storage-path        ::= storage-base path-segment*
+writable-path       ::= storage-path
+
+path-segment        ::= "." value-name
+                      | "[" expression ("," expression)* "]"
+```
+
+## Expressions
+
+```text
+expression          ::= or-expression
+
+or-expression       ::= xor-expression ("or" xor-expression)*
+xor-expression      ::= and-expression ("xor" and-expression)*
+and-expression      ::= not-expression ("and" not-expression)*
+
+not-expression      ::= "not" not-expression
+                      | comparison-expression
+
+comparison-expression
+                    ::= shift-expression
+                        (comparison-op shift-expression)?
+
+comparison-op       ::= "=" | "<>" | "<" | "<=" | ">" | ">="
+
+shift-expression    ::= additive-expression
+                        (("shl" | "shr") additive-expression)*
+
+additive-expression ::= multiplicative-expression
+                        (("+" | "-") multiplicative-expression)*
+
+multiplicative-expression
+                    ::= unary-expression
+                        (("*" | "/" | "mod") unary-expression)*
+
+unary-expression    ::= ("+" | "-") unary-expression
+                      | power-expression
+
+power-expression    ::= postfix-expression ("^" unary-expression)?
+postfix-expression  ::= primary-expression path-segment*
+
+primary-expression  ::= integer-literal
+                      | character-literal
+                      | string-literal
+                      | "true" | "false"
+                      | value-name
+                      | invocation
+                      | conversion
+                      | standard-value-operation
+                      | layout-query
+                      | "(" expression ")"
+
+invocation          ::= value-name "(" arguments? ")"
+arguments           ::= expression ("," expression)*
+
+conversion          ::= integer-type "(" expression ")"
+                      | cstring-type "(" expression ")"
+
+standard-value-operation
+                    ::= ("abs" | "sqrt" | "length") "(" expression ")"
+
+layout-query        ::= "size" "(" layout-operand ")"
+                      | "count" "(" layout-operand
+                        ("," const-expr)? ")"
+                      | "offset" "(" type-name
+                        ("." value-name)+ ")"
+
+layout-operand      ::= "type" type-expr | layout-path
+layout-path         ::= value-name layout-path-segment*
+
+layout-path-segment ::= "." value-name
+                      | "[" const-expr ("," const-expr)* "]"
+```
+
+## Lexical forms
+
+```text
+const-expr          ::= expression
+address-const-expr  ::= expression
+
+value-name          ::= identifier
+type-name           ::= identifier
+
+identifier          ::= ascii-letter
+                        (ascii-letter | decimal-digit | "_")*
+
+integer-literal     ::= decimal-digit+
+                      | "$" hexadecimal-digit+
+                      | "%" binary-digit+
+
+character-literal   ::= "'" character-content "'"
+string-literal      ::= '"' string-character* '"'
+newline             ::= logical-newline
+```
+
+`const-expr` and `address-const-expr` receive the semantic restrictions from
+[Chapter 5](05-constants-variables-placement.md#constant-expressions) and
+[Chapter 4](04-integer-expressions.md#target-address-constant-expressions).
+
+## Assignment disambiguation
+
+When a statement begins with a writable path immediately followed by `=`, it
+is an assignment. In an expression, `=` is equality. Parentheses make a
+discarded equality test explicit:
+
+```lanternfly
+(left = right)
+```
+
+## Word inventory
+
+The current core words are:
+
+```text
+abs
+alias
+and
+as
+asm
+at
+case
+clear
+const
+continue
+count
+each
+else
+end
+exit
+export
+extern
+false
+fill
+for
+from
+if
+import
+in
+length
+mod
+not
+offset
+or
+record
+return
+select
+shl
+shr
+size
+sqrt
+step
+sub
+then
+to
+true
+until
+var
+volatile
+while
+xor
+```
+
+Reserved built-in type and storage-class words are:
+
+```text
+address
+boolean
+cstr
+far
+i8
+i16
+i32
+near
+u8
+u16
+u32
+```
+
+`type` is contextual inside `size` and `count`.
+
+The first edition omits these familiar words:
+
+```text
+break
+call
+dim
+do
+function
+goto
+include
+loop
+procedure
+repeat
+```
+
