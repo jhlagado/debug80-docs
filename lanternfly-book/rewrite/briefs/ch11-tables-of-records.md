@@ -6,7 +6,7 @@ table of records with append, search, update and aggregate operations —
 every prior chapter's machinery composed into one working data store.
 Introduces aggregate parameters as the repair for ch 10's closing clunk.
 
-## What the student already knows
+## Prior knowledge
 Ch 7–10: arrays, search skeletons, sort invariants, the `Reading` model.
 
 ## Data representation introduced

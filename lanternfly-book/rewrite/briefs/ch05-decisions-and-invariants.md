@@ -6,7 +6,7 @@ rules about data, enforced at the moments data changes — rather than as
 branching syntax. The reader leaves asking "what must stay true?" before
 asking "what do I test?".
 
-## What the student already knows
+## Prior knowledge
 Ch 1–4: typed storage, expressions and comparisons, routines with
 parameters, results and locals; one documented precondition (`meanPrice`).
 

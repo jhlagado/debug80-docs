@@ -6,7 +6,7 @@ piece of stored data plus statements that change it, run once from an entry
 point. The reader leaves able to read a complete Lanternfly program and state
 its final stored values.
 
-## What the student already knows
+## Prior knowledge
 Nothing about Lanternfly. General curiosity about programming a small
 machine; possibly BASIC, Python or C habits, addressed where they mislead.
 

@@ -5,7 +5,7 @@ Teach formulas as typed calculations: every operation has a resolved result
 width, chosen by fixed rules the reader can run by hand. The reader leaves
 able to trace both the value and the type through any expression.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–2: storage, types, binary, conversions, assignment as
 destination-then-source-then-store.
 

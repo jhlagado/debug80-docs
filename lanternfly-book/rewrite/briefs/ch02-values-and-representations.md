@@ -6,7 +6,7 @@ chosen by the programmer and enforced by the compiler. The reader leaves able
 to derive every range in the type table from binary counting and to predict
 the result of any width or signedness conversion.
 
-## What the student already knows
+## Prior knowledge
 Ch 1: stored data, `var`/`const`, assignment, `main`, straight-line
 execution, final storage as the answer.
 

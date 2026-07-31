@@ -205,7 +205,7 @@ chapter, because the programmers who stay calm when a program misbehaves
 are the ones who can sit down with a listing and become the machine for a
 while.
 
-## What the machine does
+## Memory and instructions
 
 Memory, on the machines this book has in mind, is a single long row of
 numbered byte-sized cells — on a Z80, exactly 65,536 of them, each

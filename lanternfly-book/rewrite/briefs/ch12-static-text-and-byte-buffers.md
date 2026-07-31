@@ -7,7 +7,7 @@ writable `u8` buffers with explicit occupancy. The reader leaves able to
 hold and compare fixed labels, and to compose a report line byte by byte —
 including rendering a signed number as digits.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–11: the full data machinery; ch 11's partial-fill pattern (the buffer
 is that pattern with bytes for elements).
 

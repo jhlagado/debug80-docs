@@ -6,7 +6,7 @@ sanctioned ways: typed external routines (services), device storage
 (`volatile` + `at`), and raw assembly behind an honest barrier. The
 language's oldest promise — visible cost — becomes the artifacts ledger.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–14: a complete portable program with modules; twelve chapters of "the
 observable result is final storage" waiting for a screen.
 

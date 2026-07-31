@@ -7,7 +7,7 @@ represented — and an exact layout you can derive by eye. Decision from the
 finished examples: records (ch 10) and tables of records (ch 11) stay
 separate; modelling and database algorithms are each a full chapter.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–9: scalars and their design (ch 2), arrays and algorithms over them.
 Everything so far described *quantities*; this chapter models a *thing*.
 

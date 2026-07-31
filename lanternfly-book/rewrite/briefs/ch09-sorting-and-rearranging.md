@@ -5,7 +5,7 @@ Insertion sort taught by its invariant — "the prefix is sorted; each pass
 grows it by one" — so the reader can argue the algorithm correct after every
 pass instead of receiving finished code as magic.
 
-## What the student already knows
+## Prior knowledge
 Ch 7–8: arrays, traversal, search, the in-band conventions; Part I's
 invariant/variant habit from GCD.
 

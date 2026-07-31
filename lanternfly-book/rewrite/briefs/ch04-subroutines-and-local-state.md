@@ -6,7 +6,7 @@ values in, results carrying values out, locals holding private working state
 — before the algorithms arrive. Moved forward from old ch 9 so that chs 5–9
 never depend on global-only examples.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–3: storage, types, expressions, one routine (`main`) with no inputs.
 
 ## Data representation introduced

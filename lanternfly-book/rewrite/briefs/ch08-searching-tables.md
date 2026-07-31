@@ -8,7 +8,7 @@ checking does to a trick invented for unchecked languages. Decision from the
 finished examples: search and sorting stay separate chapters; both carry
 full weight.
 
-## What the student already knows
+## Prior knowledge
 Part I complete; ch 7's array and traversal skeleton.
 
 ## Data representation introduced

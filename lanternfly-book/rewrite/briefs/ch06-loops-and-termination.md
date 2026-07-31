@@ -8,7 +8,7 @@ state and its termination argument are both visible in four lines. Closes
 Part I: with this chapter the reader has values, routines, decisions and
 loops — everything an algorithm needs except structured data.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–5: typed storage, expressions, routines with parameters/results/locals,
 guards and invariants.
 

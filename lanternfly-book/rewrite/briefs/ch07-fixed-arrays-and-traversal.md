@@ -8,7 +8,7 @@ selectable by arithmetic — and the two traversal idioms that walk it:
 positions. The reader leaves able to declare an array and run the three
 traversal shapes (sum, best-so-far, mean) that most table work reduces to.
 
-## What the student already knows
+## Prior knowledge
 All of Part I. Ch 6 closed naming `for each` and `until` as the forms whose
 natural home is this chapter.
 

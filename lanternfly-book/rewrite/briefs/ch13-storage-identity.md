@@ -8,7 +8,7 @@ temporary names for existing storage, not values. The reader leaves able to
 build every "pointer" idiom of classic small-machine code without pointers,
 and able to say why the language refuses them.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–12: the full data and algorithm machinery; aggregate parameters used
 practically since ch 11.
 

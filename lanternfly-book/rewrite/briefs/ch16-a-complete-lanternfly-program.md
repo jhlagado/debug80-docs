@@ -7,7 +7,7 @@ program scale: the data model (a record table behind a module interface),
 and the algorithms over it (append, sort, aggregate, render, print). The
 chapter adds nothing new on purpose; its lesson is composition.
 
-## What the student already knows
+## Prior knowledge
 Everything. Each section of this chapter names the chapter it spends.
 
 ## Data representation introduced

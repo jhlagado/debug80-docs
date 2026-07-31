@@ -7,7 +7,7 @@ chapter's payoff is architectural honesty — ch 11's occupancy invariant
 becomes *enforceable* the moment the table is private and only the module's
 routines can touch it.
 
-## What the student already knows
+## Prior knowledge
 Ch 1–13 in one file each. Ch 4 taught routines as vocabulary; this chapter
 scales the idea to published vocabulary.
 

@@ -15,7 +15,7 @@ matter on machines where every byte is accounted for: choosing
 representations deliberately, guarding the values you store and knowing what
 each line costs.
 
-## What Lanternfly is
+## The language
 
 Lanternfly is a statically typed, compiled language in the structured BASIC
 tradition. Its source reads in short English words — `if`, `then`, `for`,
@@ -36,7 +36,7 @@ honestly, and its toolchain keeps the generated assembly open for
 inspection, so the cost of any line is a fact you can look up rather than a
 guess.
 
-## Who this book is for
+## The intended reader
 
 The book is written for programmers meeting Lanternfly for the first time.
 Experience in any language — BASIC, Python, C, JavaScript — is enough
@@ -60,7 +60,7 @@ of storage is the program's answer. When the compiler arrives, these same
 programs are intended to become part of its test suite, and the traces in
 this book state the results those tests must produce.
 
-## How the book teaches
+## The book's method
 
 Each chapter is built around one complete program. The prose shows the
 program a few lines at a time and explains one idea per section; the full
@@ -77,7 +77,7 @@ than pointers. Chapter 9 completes subroutines with parameters, results
 and locals, and Chapter 10 opens the machine boundary: modules, typed
 services and inline assembly.
 
-## What you need
+## Prerequisites
 
 Nothing has to be installed. A pencil and paper are genuinely useful,
 because tracing the programs by hand is how this book replaces a compiler —

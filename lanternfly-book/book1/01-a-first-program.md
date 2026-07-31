@@ -63,7 +63,7 @@ it needs when we wrote the declarations. When you later work with arrays and
 records, you will still state their maximum size in the source and then change
 the values held in that storage during execution.
 
-## Where execution begins
+## The entry point
 
 In an ordinary Lanternfly source file, you write a module consisting of
 declarations such as the three variables and the subroutine below. Executable
