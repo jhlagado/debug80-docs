@@ -1576,6 +1576,64 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
         }
       ]
+    },
+    {
+      "text": "Lanternfly Book 2 — Language Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Language Model and Source Form",
+          "link": "/lanternfly-book/book2/01-language-and-source.html"
+        },
+        {
+          "text": "Names and Scopes",
+          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
+        },
+        {
+          "text": "Types, Literals and Static Text",
+          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
+        },
+        {
+          "text": "Integer Expressions and Conversions",
+          "link": "/lanternfly-book/book2/04-integer-expressions.html"
+        },
+        {
+          "text": "Constants, Variables and Placement",
+          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
+        },
+        {
+          "text": "Records, Arrays, Paths and Aliases",
+          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
+        },
+        {
+          "text": "Assignment and Standard Operations",
+          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
+        },
+        {
+          "text": "Conditions and Loops",
+          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
+        },
+        {
+          "text": "Routines",
+          "link": "/lanternfly-book/book2/09-routines.html"
+        },
+        {
+          "text": "Modules, Programs and Hosted Bodies",
+          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
+        },
+        {
+          "text": "Targets, External Routines and Assembly",
+          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
+        },
+        {
+          "text": "Grammar and Word Inventory",
+          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
+        },
+        {
+          "text": "Diagnostics and Conformance",
+          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
+        }
+      ]
     }
   ],
   "/lanternfly-book/book1/": [
@@ -1626,6 +1684,174 @@ export const sidebars = {
         {
           "text": "Modules, Machine Services and Assembly",
           "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
+        }
+      ]
+    },
+    {
+      "text": "Lanternfly Book 2 — Language Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Language Model and Source Form",
+          "link": "/lanternfly-book/book2/01-language-and-source.html"
+        },
+        {
+          "text": "Names and Scopes",
+          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
+        },
+        {
+          "text": "Types, Literals and Static Text",
+          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
+        },
+        {
+          "text": "Integer Expressions and Conversions",
+          "link": "/lanternfly-book/book2/04-integer-expressions.html"
+        },
+        {
+          "text": "Constants, Variables and Placement",
+          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
+        },
+        {
+          "text": "Records, Arrays, Paths and Aliases",
+          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
+        },
+        {
+          "text": "Assignment and Standard Operations",
+          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
+        },
+        {
+          "text": "Conditions and Loops",
+          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
+        },
+        {
+          "text": "Routines",
+          "link": "/lanternfly-book/book2/09-routines.html"
+        },
+        {
+          "text": "Modules, Programs and Hosted Bodies",
+          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
+        },
+        {
+          "text": "Targets, External Routines and Assembly",
+          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
+        },
+        {
+          "text": "Grammar and Word Inventory",
+          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
+        },
+        {
+          "text": "Diagnostics and Conformance",
+          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
+        }
+      ]
+    }
+  ],
+  "/lanternfly-book/book2/": [
+    {
+      "text": "Lanternfly Book 1 — Programming Fundamentals",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/lanternfly-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Your First Lanternfly Program",
+          "link": "/lanternfly-book/book1/01-a-first-program.html"
+        },
+        {
+          "text": "Values and Integer Types",
+          "link": "/lanternfly-book/book1/02-names-and-integer-types.html"
+        },
+        {
+          "text": "Calculations and Comparisons",
+          "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
+        },
+        {
+          "text": "Choosing a Path",
+          "link": "/lanternfly-book/book1/04-decisions.html"
+        },
+        {
+          "text": "Repeating Work",
+          "link": "/lanternfly-book/book1/05-loops.html"
+        },
+        {
+          "text": "Tables with Fixed Arrays",
+          "link": "/lanternfly-book/book1/06-fixed-arrays.html"
+        },
+        {
+          "text": "Records and Memory Layout",
+          "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
+        },
+        {
+          "text": "Selecting Storage with Indices and Aliases",
+          "link": "/lanternfly-book/book1/08-references-and-addresses.html"
+        },
+        {
+          "text": "Building with Subroutines",
+          "link": "/lanternfly-book/book1/09-subroutines.html"
+        },
+        {
+          "text": "Modules, Machine Services and Assembly",
+          "link": "/lanternfly-book/book1/10-services-targets-and-assembly.html"
+        }
+      ]
+    },
+    {
+      "text": "Lanternfly Book 2 — Language Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Language Model and Source Form",
+          "link": "/lanternfly-book/book2/01-language-and-source.html"
+        },
+        {
+          "text": "Names and Scopes",
+          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
+        },
+        {
+          "text": "Types, Literals and Static Text",
+          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
+        },
+        {
+          "text": "Integer Expressions and Conversions",
+          "link": "/lanternfly-book/book2/04-integer-expressions.html"
+        },
+        {
+          "text": "Constants, Variables and Placement",
+          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
+        },
+        {
+          "text": "Records, Arrays, Paths and Aliases",
+          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
+        },
+        {
+          "text": "Assignment and Standard Operations",
+          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
+        },
+        {
+          "text": "Conditions and Loops",
+          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
+        },
+        {
+          "text": "Routines",
+          "link": "/lanternfly-book/book2/09-routines.html"
+        },
+        {
+          "text": "Modules, Programs and Hosted Bodies",
+          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
+        },
+        {
+          "text": "Targets, External Routines and Assembly",
+          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
+        },
+        {
+          "text": "Grammar and Word Inventory",
+          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
+        },
+        {
+          "text": "Diagnostics and Conformance",
+          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
         }
       ]
     }
