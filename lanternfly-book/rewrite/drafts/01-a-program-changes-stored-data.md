@@ -171,9 +171,9 @@ The count works the same way:
 itemCount = itemCount + 1
 ```
 
-One detail of this line repays early attention. `itemCount` is a `u8`,
-and byte arithmetic in Lanternfly widens: the sum has more room than a
-byte, and the result is narrowed back when it is stored. Chapter 3 gives
+`itemCount` is a `u8`, and byte arithmetic in Lanternfly widens: the sum
+has more room than a byte, and the result is narrowed back when it is
+stored. Chapter 3 gives
 the rules; what matters now is the silence. An update that starts from a
 variable's own type and returns to it is the ordinary arithmetic of that
 variable, and the compiler treats it as such, without a warning. The

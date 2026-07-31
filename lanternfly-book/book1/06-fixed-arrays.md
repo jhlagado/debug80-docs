@@ -72,7 +72,8 @@ is checked unless the compiler proves it safe. If the check fails, the target
 bounds-fault service runs before any load or store.
 
 The loop `for index = 0 until count(samples)` walks exactly the valid range:
-`until` excludes its boundary, so the count stands as written. The shape also
+`until` excludes its boundary, so the loop takes the count directly, with
+nothing subtracted. The shape also
 documents the range and gives the compiler an opportunity to prove every
 access safe. Resizing the declaration updates the loop automatically.
 
