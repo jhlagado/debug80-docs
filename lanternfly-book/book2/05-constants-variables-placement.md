@@ -24,21 +24,16 @@ const debuggingEnabled as boolean = false
 Scalar constants normally occupy no storage of their own, although placement
 or target export rules may require a stored representation.
 
-Aggregate constants use exact string, array or record layout:
+Fixed-capacity string constants use their exact storage layout:
 
 ```lanternfly
 const prompt as string[6] = "READY?"
-const movementCost as u8[4] = [1, 1, 2, 255]
-
-const origin as Point = Point(
-    x = 0,
-    y = 0
-)
 ```
 
-Constant aggregates can be exported; arrays and records support their ordinary
-index and field paths. No constant aggregate can be modified or passed to a
-writable aggregate parameter, and a string's representation remains sealed.
+Constant storage can be exported but cannot be modified. A string's
+representation remains sealed.
+[Chapter 6](06-records-arrays-paths.md#aggregate-initializers) extends these
+rules to arrays and records after introducing their declarations and layout.
 
 ## Module variables
 
@@ -74,28 +69,16 @@ once per invocation in declaration order. A local name becomes visible after
 its declaration.
 
 An owned local without an initializer receives all-zero storage when its type
-accepts zero. Counted-string, record and array locals cannot own automatic
-aggregate storage;
-[Chapter 9](09-routines.md#local-aggregate-aliases) defines local aliases.
+accepts zero. Automatic locals may own scalar values only;
+[Chapter 9](09-routines.md#local-aggregate-aliases) defines local names for
+aggregate storage allocated elsewhere.
 
 ## Initializers
 
 A scalar initializer is an expression. A string initializer is a literal or
-an earlier string constant whose known content fits. An array initializer must
-match the declared rank, shape and element count exactly. A record initializer
-names every field exactly once:
-
-```lanternfly
-var row as u8[4] = [1, 2, 3, 4]
-var point as Point = Point(y = 4, x = 2)
-```
-
-Record initializer fields may appear in any written order. Record storage
-still follows declaration order.
-
-Initializer expressions evaluate in the order they are written. In an
-aggregate constant initializer, every nested value must itself be a constant
-initializer.
+an earlier string constant whose known content fits. Initializer expressions
+evaluate in the order they are written. Chapter 6 defines the corresponding
+forms and order for arrays and records.
 
 ## Constant expressions
 
@@ -127,8 +110,8 @@ const folded as u16 = (maximum + 1) / 2  // 0
 `at` places module-level storage or constant data at a target address:
 
 ```lanternfly
-var workspace as u8[256] at $8000
-const glyph as u8[2] = [$00, $7e] at $4000
+var workspaceByte as u8 at $8000
+const glyphByte as u8 = $7e at $4000
 ```
 
 The target profile validates the address range, address space, alignment and
@@ -152,9 +135,8 @@ When initialization has observable effects, their order is deterministic:
 4. Install a module after its imports.
 5. Within the module, process runtime writes and copies in declaration order.
 
-Inside one aggregate, record fields follow declaration order and arrays follow
-row-major order. Preloaded image bytes appear in the startup-effect artifact
-under the same logical ordering.
+Preloaded image bytes appear in the startup-effect artifact under the same
+logical ordering.
 
 ## Volatile storage
 
@@ -169,8 +151,8 @@ Every source read performs a storage read and every source write performs a
 storage write. The compiler cannot cache, combine, remove or reorder these
 accesses across another observable operation.
 
-Volatility follows field and index paths into a volatile aggregate. A whole
-aggregate copy performs ordered scalar accesses.
+The qualifier applies to the complete declared object. Chapter 6 defines how
+it follows field and index paths into aggregate storage.
 
 The first edition permits `volatile` only on module storage and imported or
 native storage contracts. It rejects:

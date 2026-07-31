@@ -147,11 +147,8 @@ capacity:
 
 ```lanternfly
 var playerName as string[24]
-
-record Contact
-    name as string[24]
-    city as string[16]
-end
+var contactName as string[24]
+var contactCity as string[16]
 ```
 
 `N` is a positive constant from 1 through 65,534 and is part of the type. The
@@ -205,10 +202,11 @@ payload directly as zero-terminated bytes. This is an ABI property, not a
 second source type or a source-level pointer conversion. An ordinary `u8`
 array has no equivalent guarantee.
 
-Counted-string parameters and aliases state an exact capacity and follow the
-aggregate storage model. Source cannot return a counted string by value or own
-one as an automatic local. Byte indexing, slicing, capacity-generic parameters
-and deliberate truncating copy remain deferred.
+Counted strings are aggregate storage.
+[Chapter 9](09-routines.md#aggregate-parameters) defines their exact-capacity
+parameter and alias forms, together with the restrictions on returns and local
+ownership. Byte indexing, slicing, capacity-generic parameters and deliberate
+truncating copy remain deferred.
 
 ## Compile-time text positions
 

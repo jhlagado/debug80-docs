@@ -95,8 +95,10 @@ export sub moveActor(near actor as Actor, deltaX as i16)
 end
 ```
 
-The leading class describes aggregate storage. In `far labels as
-string[16][8]`, the array is far while `string[16]` is its element type.
+A near path may bind to a far parameter when the profile can attach the
+current mapping context. Far storage cannot bind to a near parameter. The
+leading class describes aggregate storage. In `far labels as string[16][8]`,
+the array is far while `string[16]` is its element type.
 
 A counted-string parameter states its exact capacity:
 
@@ -134,10 +136,21 @@ local name:
 alias actor as Actor = actors[selectedActor]
 ```
 
-The path is evaluated and checked once. The alias cannot be rebound and
-allocates no counted-string, record or array storage. Direct indexing remains
-clearer for a single access; an alias suits repeated access or a nested
-aggregate call.
+The initializer must be a writable storage path with the exact aggregate type,
+including a counted string's capacity. The path is evaluated and checked once;
+the alias then denotes the same storage until the routine returns. It allocates
+no counted-string, record or array storage.
+
+A bare alias copies its referent in aggregate assignment:
+
+```lanternfly
+destination = actor
+actor = source
+```
+
+The alias cannot be rebound, stored, returned, compared or converted. Scalar,
+constant and volatile targets are invalid. Direct indexing remains clearer for
+a single access; an alias suits repeated access or a nested aggregate call.
 
 ## Return
 
