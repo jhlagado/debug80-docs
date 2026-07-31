@@ -54,7 +54,7 @@ export default defineConfig({
       { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
       { text: 'AZM Books', link: '/azm-book/book1/01-getting-started' },
       { text: 'Glimmer Books', link: '/glimmer-book/book1/01-the-shape-of-a-game' },
-      { text: 'Lanternfly Books', link: '/lanternfly-book/book1/01-a-first-program' },
+      { text: 'Lanternfly Books', link: '/lanternfly-book/book1/00-introduction' },
     ],
     sidebar: sidebars,
     search: { provider: 'local' },
