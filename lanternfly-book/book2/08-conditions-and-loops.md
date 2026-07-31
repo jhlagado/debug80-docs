@@ -7,7 +7,8 @@ nav_order: 8
 
 # Conditions and Loops
 
-Conditions require `boolean`. Integer values never become conditions
+Lanternfly's control structures are deliberately small and explicit.
+Conditions require `boolean`; integer values never become conditions
 implicitly.
 
 ## `if`
@@ -36,7 +37,8 @@ One-line conditionals are deferred.
 
 ## `select`
 
-`select` evaluates one integer expression once:
+`select` chooses among integer cases after evaluating its controlling
+expression once:
 
 ```lanternfly
 select direction
@@ -93,8 +95,8 @@ for index = 0 until count(actors)
 end
 ```
 
-For a positive step, `until` is the canonical zero-based traversal because the
-array count appears directly.
+With a positive step, `until` is the natural form for zero-based traversal
+because the array count can appear directly.
 
 An optional compile-time step may be positive or negative:
 
@@ -109,10 +111,10 @@ scalar parameter. The loop introduces no control declaration.
 
 ## Counted-loop evaluation
 
-The compiler evaluates the start and boundary once, in that order, before
-storing the converted start. The boundary therefore observes the control
-variable's old value. The step is a compile-time expression and must be
-nonzero.
+Before entering the loop, the compiler evaluates the start and boundary once,
+in that order, and only then stores the converted start. The boundary
+therefore observes the control variable's old value. The step is a
+compile-time expression and must be nonzero.
 
 The boundary retains its own integer type. An exact boundary need not fit the
 control variable when that value is never stored:
@@ -137,9 +139,9 @@ the exact value 256.
 | negative | control >= boundary | control > boundary |
 
 After each body execution, the compiler calculates the next value
-mathematically and tests it before storing it. A value that fails the next test
-ends the loop without being stored. A continuing value must fit the control
-type; a dynamic failure causes `F-LOOP-RANGE`.
+mathematically and tests it before storing it. If that value fails the
+continuation test, the loop ends without storing it. A value that continues
+must fit the control type; a dynamic failure causes `F-LOOP-RANGE`.
 
 After the loop, the control variable retains the last value stored. A
 zero-iteration loop leaves it at the converted start.
@@ -152,7 +154,7 @@ while the control is visible because it may write any visible mutable object.
 
 ## Collection traversal
 
-`for each` visits every leaf element of a fixed array in row-major order:
+`for each` traverses every leaf element of a fixed array in row-major order:
 
 ```lanternfly
 for each actor in actors
@@ -188,7 +190,7 @@ while enemiesRemaining > 0
 end
 ```
 
-`while true` is the indefinite form:
+Use `while true` for an indefinite loop:
 
 ```lanternfly
 while true
@@ -214,4 +216,3 @@ routine or hosted body.
 
 Labelled loops, named exits, a bare `loop`, post-test loops and
 `repeat`/`until` are outside the first edition.
-

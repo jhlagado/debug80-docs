@@ -7,9 +7,10 @@ nav_order: 2
 
 # Names and Scopes
 
-Lanternfly resolves keywords, built-in names and user declarations
-case-insensitively. Tools preserve the spelling at the declaration and use it
-when displaying the name.
+Lanternfly does not make capitalization part of a name. Keywords, built-in
+names and user declarations all resolve case-insensitively. Tools nevertheless
+preserve the spelling at the declaration, so consistent capitalization still
+makes source easier to scan.
 
 ## Canonical spelling
 
@@ -20,7 +21,7 @@ when displaying the name.
 | Values and routines | lower camel case | `playerScore`, `updatePlayer` |
 | User-defined types | Pascal case | `Actor`, `GameState` |
 
-Capitalization is a reading convention rather than a semantic distinction.
+These forms are reading conventions rather than semantic distinctions.
 Declarations that differ only in case conflict in the same namespace.
 
 Identifiers begin with an ASCII letter. Later characters may be ASCII
@@ -51,9 +52,10 @@ both occupy the value scope.
 
 ## Module collection and source order
 
-The compiler collects all module declaration names before checking declaration
-bodies and routine bodies. A type annotation may therefore name a later record
-type, and a routine may call another routine declared later in the module.
+The compiler first collects every module declaration name, then checks
+declaration and routine bodies. A type annotation may therefore name a later
+record type, and a routine may call another routine declared later in the
+module.
 
 Constant initializers and placement expressions retain a source-order rule:
 
@@ -63,9 +65,9 @@ Constant initializers and placement expressions retain a source-order rule:
 - routine-body constant contexts may use any successfully initialized module
   constant.
 
-The compiler puts constant values, array extents, record layouts, target
-addresses and layout queries in one dependency graph. A cycle is rejected with
-the complete dependency path.
+Constant values, array extents, record layouts, target addresses and layout
+queries share one dependency graph. If that graph contains a cycle, the
+diagnostic includes the complete dependency path.
 
 ## Routine scope
 
@@ -102,7 +104,7 @@ The repeated field names do not conflict.
 
 ## Imports
 
-An import adds only the imported module's explicit exports to the importing
+An import adds only the other module's explicit exports to the importing
 module's type and value scopes. Same-namespace collisions are compile errors.
 Imports do not qualify names in 0.4; module-alias syntax is deferred.
 

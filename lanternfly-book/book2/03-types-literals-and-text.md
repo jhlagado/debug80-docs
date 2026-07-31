@@ -7,7 +7,9 @@ nav_order: 3
 
 # Types, Literals and Static Text
 
-Lanternfly scalar types have target-independent widths and signedness.
+Lanternfly makes the size and signedness of every scalar visible in its type.
+That precision lets the same source retain its numerical meaning across
+different targets.
 
 ## Scalar types
 
@@ -26,9 +28,9 @@ Lanternfly scalar types have target-independent widths and signedness.
 | `far cstr` | far static C-string view | target-defined |
 
 `boolean` is not an integer type. Its stored representation is exactly zero
-for `false` and one for `true`. Comparisons and Boolean operators produce
-canonical zero or one. A native provider that supplies another representation
-causes `F-INVALID-BOOLEAN`.
+for `false` and one for `true`, and comparisons and Boolean operators always
+produce those canonical values. A native provider that supplies another
+representation causes `F-INVALID-BOOLEAN`.
 
 Opaque addresses support assignment and equality only with the same address
 class. Source code cannot perform address arithmetic, index through an opaque
@@ -55,7 +57,7 @@ rules.
 
 ## Character literals
 
-A character literal contains one byte:
+A character literal represents one byte:
 
 ```lanternfly
 'A'
@@ -75,7 +77,7 @@ unterminated character literals are errors.
 
 ## Static C strings
 
-A double-quoted literal in an expression creates a static NUL-terminated byte
+A double-quoted literal in an expression creates a static, NUL-terminated byte
 sequence:
 
 ```lanternfly
@@ -88,10 +90,11 @@ accepted except `\0` and `\x00`; the compiler appends the single terminator.
 An embedded zero, physical newline, non-ASCII character or payload above
 65,534 bytes is invalid.
 
-`cstr` is a non-null, read-only view. It contains no hidden length, capacity,
-ownership flag or allocation. Assignment copies the target's view carrier,
-not the payload bytes. Every `cstr` contract guarantees immutable,
-NUL-terminated storage that remains accessible for the program's lifetime.
+The resulting `cstr` is a non-null, read-only view. It carries no hidden
+length, capacity, ownership flag or allocation. Assignment copies the view's
+target-specific carrier, not the payload bytes. Every `cstr` contract
+guarantees immutable, NUL-terminated storage that remains accessible for the
+program's lifetime.
 
 ## C-string address classes
 
@@ -136,9 +139,9 @@ far operands use the permitted near-to-far conversion first.
 `length(text)` scans to the terminator and returns the payload length as
 `u16`. A literal call folds at compile time.
 
-Writable text uses an ordinary `u8` array and an explicit occupied length or
-terminator. Lanternfly 0.4 provides no implicit writable-buffer-to-`cstr`
-conversion.
+For text that must change at runtime, use an ordinary `u8` array and track its
+occupied length or terminator explicitly. Lanternfly 0.4 provides no implicit
+writable-buffer-to-`cstr` conversion.
 
 ## Compile-time text positions
 
@@ -151,4 +154,3 @@ extern sub waitForKey() from "ROM_WAIT_KEY"
 
 These positions accept only `\"` and `\\`. They decode to compile-time text
 and do not allocate a runtime C string.
-

@@ -7,13 +7,14 @@ nav_order: 12
 
 # Grammar and Word Inventory
 
-The grammar in this chapter records Lanternfly 0.4 block shape and assignment
-disambiguation. Expression precedence comes from
+This chapter gathers Lanternfly's concrete source forms in one place. The
+grammar records the 0.4 block shapes and the rule that distinguishes
+assignment from equality. Expression precedence comes from
 [Chapter 4](04-integer-expressions.md#precedence-and-associativity).
 
 The grammar remains provisional while parser implementation tests its edge
-cases. Semantic restrictions in the earlier chapters still apply after a
-source form parses.
+cases. Successful parsing is only the first step: the semantic restrictions
+in the earlier chapters still determine whether the source is valid.
 
 ## Modules and declarations
 
@@ -290,9 +291,9 @@ newline             ::= logical-newline
 
 ## Assignment disambiguation
 
-When a statement begins with a writable path immediately followed by `=`, it
-is an assignment. In an expression, `=` is equality. Parentheses make a
-discarded equality test explicit:
+At the beginning of a statement, a writable path immediately followed by `=`
+forms an assignment. Within an expression, `=` tests equality. Parentheses
+make a discarded equality test explicit:
 
 ```lanternfly
 (left = right)
@@ -300,7 +301,7 @@ discarded equality test explicit:
 
 ## Word inventory
 
-The current core words are:
+The core word inventory is:
 
 ```text
 abs
@@ -369,7 +370,7 @@ u32
 
 `type` is contextual inside `size` and `count`.
 
-The first edition omits these familiar words:
+Several familiar words are deliberately absent from the first edition:
 
 ```text
 break
@@ -383,4 +384,3 @@ loop
 procedure
 repeat
 ```
-

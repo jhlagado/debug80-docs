@@ -7,8 +7,9 @@ nav_order: 5
 
 # Constants, Variables and Placement
 
-`const` declares a compile-time value or immutable aggregate. `var` declares
-storage.
+Lanternfly separates values known during compilation from storage that exists
+while the program runs. `const` declares a compile-time value or immutable
+aggregate; `var` declares storage.
 
 ## Constants
 
@@ -20,8 +21,8 @@ const visibleMask as u8 = %00000001
 const debuggingEnabled as boolean = false
 ```
 
-Scalar constants normally occupy no storage. Placement or target export rules
-may require a stored representation.
+Scalar constants normally occupy no storage of their own, although placement
+or target export rules may require a stored representation.
 
 Aggregate constants use exact array or record layout:
 
@@ -47,10 +48,10 @@ var lives as u8 = 3
 var gameOver as boolean = false
 ```
 
-Compiler-allocated storage without an initializer begins with all bits zero
-when every scalar leaf accepts zero. Integers and Booleans do. A `cstr` does
-not, and a target profile determines whether zero is valid for each opaque
-address type.
+Compiler-allocated storage without an initializer begins with all bits zero,
+but only when every scalar leaf accepts that representation. Integers and
+Booleans do. A `cstr` does not, and a target profile determines whether zero
+is valid for each opaque address type.
 
 A type containing `cstr` requires an initializer that supplies every C-string
 field, or a host/native contract that guarantees valid values.
@@ -90,8 +91,9 @@ var point as Point = Point(y = 4, x = 2)
 Record initializer fields may appear in any written order. Record storage
 still follows declaration order.
 
-Initializer expressions evaluate in written order. For an aggregate constant
-initializer, every nested value must itself be a constant initializer.
+Initializer expressions evaluate in the order they are written. In an
+aggregate constant initializer, every nested value must itself be a constant
+initializer.
 
 ## Constant expressions
 
@@ -108,8 +110,8 @@ It cannot read variable storage, call a routine, use a volatile object or
 perform another observable operation.
 
 Outside a target-address expression, operators receive their fixed types
-before folding. Folding therefore applies the same wrapping and fault rules
-as runtime evaluation:
+before the compiler folds them. Compile-time evaluation therefore follows the
+same wrapping and fault rules as runtime evaluation:
 
 ```lanternfly
 const maximum as u16 = 65535
@@ -118,7 +120,7 @@ const folded as u16 = (maximum + 1) / 2  // 0
 
 ## Placement
 
-`at` gives module-level storage or constant data a target address:
+`at` places module-level storage or constant data at a target address:
 
 ```lanternfly
 var workspace as u8[256] at $8000
@@ -138,7 +140,7 @@ The compiler leaves its target-supplied value in place.
 
 ## Startup order
 
-Observable initialization follows a deterministic order:
+When initialization has observable effects, their order is deterministic:
 
 1. Start at the root module.
 2. Visit imports depth first in source order.
@@ -174,4 +176,3 @@ native storage contracts. It rejects:
 - volatile aggregate arguments;
 - a volatile or device initializer unless the profile explicitly permits the
   startup write.
-

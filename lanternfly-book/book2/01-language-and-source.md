@@ -8,9 +8,14 @@ nav_order: 1
 # Language Model and Source Form
 
 Lanternfly 0.4 is a statically typed structured BASIC for fixed-memory
-systems. It compiles complete programs ahead of time. A backend may emit AZM,
-another assembly language, C or a selected BASIC dialect, but every backend
-must preserve the same source-language meaning.
+systems. It combines the directness of C or Pascal with a syntax intended to
+be read without first decoding a thicket of punctuation. It is a compiled
+language: a complete Lanternfly program becomes native or translated target
+code rather than running through an interpreter.
+
+A backend may emit AZM, another assembly language, C or a selected BASIC
+dialect. The route to the target may change, but the meaning of the source
+program may not.
 
 The first compiler is planned as a desktop-hosted compiler that emits AZM for
 Z80 systems. The language itself does not expose Z80 registers, stack-frame
@@ -30,7 +35,8 @@ The 0.4 language includes:
 - private source modules with explicit exports;
 - typed target services and explicit inline assembly.
 
-Persistent storage identity comes from declared paths and integer indices into
+This inventory reflects one central design choice: storage is explicit and
+finite. Persistent identity comes from declared paths and integer indices into
 fixed pools. Aggregate parameters and local aliases temporarily name existing
 records or arrays. Their backend carrier may be an address, but Lanternfly
 source has no pointer or reference value.
@@ -52,7 +58,8 @@ It is a separate compilation-unit form rather than an ordinary module.
 ## Source files
 
 An ordinary source file is a module containing imports and declarations.
-Executable statements appear inside `sub` bodies:
+Executable statements belong inside `sub` bodies, so the point at which code
+can run is always visible:
 
 ```lanternfly
 const maximumCount as u8 = 10
@@ -74,7 +81,7 @@ Source files use UTF-8. Identifiers are restricted to ASCII letters, digits
 and `_` for portable interoperation. An identifier begins with a letter.
 
 A physical newline ends a declaration or statement except inside parentheses
-or square brackets. Multiline expressions outside those delimiters need
+or square brackets. To split an expression anywhere else, enclose it in
 parentheses. End of file supplies a final logical newline when the final
 physical line has no line-ending character.
 
@@ -105,9 +112,9 @@ while active
 end
 ```
 
-The parser closes the innermost open block. Indentation is whitespace, while
-the formatter emits canonical indentation. Bare `end` is provisional pending
-experience with long nested routines.
+The parser closes the innermost open block. Indentation does not determine
+meaning, although the formatter emits it consistently to show structure.
+Bare `end` is provisional pending experience with long nested routines.
 
 ## Statement forms
 
@@ -125,7 +132,8 @@ Loose executable statements are invalid in an ordinary module.
 
 ## Implementation stages
 
-K0, K1 and K2 are development milestones within edition 0.4, not smaller
-language editions. A development build may reject a later-stage construct
-with `D-STAGE-001`. It cannot report that construct as invalid Lanternfly or
-claim a conforming 0.4 front end until the full required inventory passes.
+K0, K1 and K2 divide the compiler work into manageable milestones; they do
+not divide the language into smaller editions. A development build may reject
+a later-stage construct with `D-STAGE-001`. It cannot report that construct
+as invalid Lanternfly or claim a conforming 0.4 front end until the full
+required inventory passes.
