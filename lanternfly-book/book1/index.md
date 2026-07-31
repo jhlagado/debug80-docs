@@ -78,6 +78,8 @@ device, print a report or run a game.
 
 ## Chapters
 
+- [Introduction](00-introduction.md)
+
 1. [Your First Lanternfly Program](01-a-first-program.md)
 2. [Values and Integer Types](02-names-and-integer-types.md)
 3. [Calculations and Comparisons](03-expressions-and-comparisons.md)

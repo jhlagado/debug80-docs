@@ -1532,6 +1532,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/lanternfly-book/book1/00-introduction.html"
+        },
+        {
           "text": "Your First Lanternfly Program",
           "link": "/lanternfly-book/book1/01-a-first-program.html"
         },
@@ -1560,7 +1564,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
         },
         {
-          "text": "Sharing Storage with References",
+          "text": "Selecting Storage with Indices and Aliases",
           "link": "/lanternfly-book/book1/08-references-and-addresses.html"
         },
         {
@@ -1580,6 +1584,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "Introduction",
+          "link": "/lanternfly-book/book1/00-introduction.html"
+        },
+        {
           "text": "Your First Lanternfly Program",
           "link": "/lanternfly-book/book1/01-a-first-program.html"
         },
@@ -1608,7 +1616,7 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/07-records-and-exact-layout.html"
         },
         {
-          "text": "Sharing Storage with References",
+          "text": "Selecting Storage with Indices and Aliases",
           "link": "/lanternfly-book/book1/08-references-and-addresses.html"
         },
         {
