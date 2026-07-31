@@ -72,8 +72,9 @@ total = atMost(total + nextAmount, 1000)
 
 Every reachable path in a result-bearing routine must return a compatible
 scalar. First-edition results may be ordinals — integers, enumerations and
-ranges — Booleans, opaque addresses or `cstr` values. Records and arrays remain in caller-owned storage and are
-reached through aggregate parameters and aliases.
+ranges — Booleans, opaque addresses or C-style strings. Records and arrays
+remain in caller-owned storage and are reached through aggregate parameters
+and aliases.
 
 A result-bearing call may stand alone when its side effects matter and its
 result may be discarded. A result-free routine cannot appear where an
@@ -95,8 +96,8 @@ Local declarations appear before executable statements. An initializer may
 use parameters, module declarations and earlier locals. Code outside the
 routine cannot name `difference`.
 
-An owned scalar local with no initializer starts with zero bits. A `cstr`
-local requires an initializer because a C string always names valid text.
+An owned scalar local with no initializer starts with zero bits. A C-style
+string local requires an initializer because it always names valid text.
 
 A backend may keep locals in registers, stack slots or proven-safe static
 scratch. The source rule remains the same: overlapping invocations receive

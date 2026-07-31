@@ -200,10 +200,11 @@ which preserves writable RAM for changing program state.
 ## Text and byte arrays
 
 The 0.4 language settles static text. A character literal such as `'H'` is
-an exact byte value, and a double-quoted literal is a `cstr`: a read-only
-view of NUL-terminated static text with a near or far address class. A
-`cstr` supports `length`, content comparison and passage to services that
-honour its read-only, program-lifetime contract.
+an exact byte value, and a double-quoted literal is a C-style string —
+written `cstr` in declarations — a read-only view of NUL-terminated static
+text with a near or far address class. A C-style string supports `length`,
+content comparison and passage to services that honour its read-only,
+program-lifetime contract.
 
 Writable text remains ordinary byte storage under an explicit contract, and
 character literals make such data readable:
@@ -217,7 +218,7 @@ The array has the exact representation required by a NUL-terminated ASCII
 service. Another service might require a length prefix, a high-bit terminator
 or machine-specific display codes. Calling that array a string would hide the
 contract that gives each byte its meaning, and no writable array converts
-silently into a `cstr`.
+silently into a C-style string.
 
 Bounded writable views and richer string operations remain open design work.
 Until they land, reusable text handling belongs in explicitly typed platform
@@ -261,8 +262,9 @@ element 6 and byte offset 12 because each entry occupies two bytes.
   contiguous.
 - `for each` visits every element in row-major order when positions are not
   needed.
-- Character literals are byte values and `cstr` names read-only static text;
-  writable text stays in `u8` arrays under explicit service contracts.
+- Character literals are byte values, and a C-style string (`cstr`) names
+  read-only static text; writable text stays in `u8` arrays under explicit
+  service contracts.
 - `clear` and `fill` express repeated aggregate writes while leaving the
   backend free to choose an implementation.
 
