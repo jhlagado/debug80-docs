@@ -220,7 +220,7 @@ result through a typed target service.
 - `extern sub` gives machine or host code a checked Lanternfly signature.
 - Standard operations keep one source meaning while backends choose
   instructions or runtime helpers.
-- `asm` admits target assembly at an explicit boundary and acts as a
+- `asm` admits target assembly at an explicit boundary and forms a
   conservative compiler barrier.
 - Generated artifacts show how language constructs, storage and services map
   to the target machine.

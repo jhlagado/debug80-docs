@@ -21,7 +21,7 @@ None new — the reading log's API, redrawn as an interface: `addReading`,
 private.
 
 ## Ordered themes
-1. One file was getting crowded; responsibility wants borders. `import`
+1. One file was getting crowded; responsibilities need borders. `import`
    loads a unit once; exports enter the importer unqualified; privates
    stay home (§12.1–12.3).
 2. Private by default is the right default: the exported surface is the
