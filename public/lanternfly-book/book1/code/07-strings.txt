@@ -1,0 +1,27 @@
+var greeting as string[12] = "HELLO"
+var playerName as string[12]
+var statusLine as string[16]
+var namesMatch as boolean = false
+var reportDigit as u8 = 2
+
+sub renameGuest()
+    playerName = greeting
+    append(playerName, '!')
+end
+
+// Builds text such as "MODE 2" in place: clear, a literal, a computed digit.
+sub buildStatusLine()
+    clear(statusLine)
+    append(statusLine, "MODE ")
+    append(statusLine, '0' + reportDigit)
+end
+
+sub compareNames()
+    namesMatch = playerName = greeting
+end
+
+sub main()
+    renameGuest()
+    buildStatusLine()
+    compareNames()
+end
