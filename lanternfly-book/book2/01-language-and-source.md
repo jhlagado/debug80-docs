@@ -13,9 +13,9 @@ be read without first decoding a thicket of punctuation. It is a compiled
 language: a complete Lanternfly program becomes native or translated target
 code rather than running through an interpreter.
 
-A backend may emit AZM, another assembly language, C or a selected BASIC
-dialect. The route to the target may change, but the meaning of the source
-program may not.
+A backend may emit AZM or another assembly language directly, or lower
+Lanternfly through C, Zig, LLVM IR or another suitable intermediate form. The
+route to native code may change, but the meaning of the source program may not.
 
 The first compiler is planned as a desktop-hosted compiler that emits AZM for
 Z80 systems. The language itself does not expose Z80 registers, stack-frame
