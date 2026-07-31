@@ -3,10 +3,10 @@
 // Verified against specification 0.4: §4.5, §5, §7, §8.5.
 
 record Reading
-    var day as u8          // 1..31
-    var month as u8        // 1..12
-    var temperature as i16 // whole degrees; winter exists
-    var validated as boolean
+    day as u8          // 1..31
+    month as u8        // 1..12
+    temperature as i16 // whole degrees; winter exists
+    validated as boolean
 end
 
 // Layout facts, asked for by name and folded at compile time. (Read by
