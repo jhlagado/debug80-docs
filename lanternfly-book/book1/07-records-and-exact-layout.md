@@ -137,9 +137,9 @@ stride, and `.quality` adds 3. The compiler checks each step against the
 declared type before reducing the path to address arithmetic.
 
 A record cannot contain itself by value, either directly or through another
-record. Such a cycle would have no finite size. Chapter 8 uses references to
-connect separately allocated records when a program needs links rather than
-inline containment.
+record. Such a cycle would have no finite size. When a program needs links
+rather than inline containment, it stores the index of the destination entry
+in its fixed pool; Chapter 8 develops that identity model.
 
 ## Record initializers
 

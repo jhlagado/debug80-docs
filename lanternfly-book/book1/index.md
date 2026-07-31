@@ -41,7 +41,7 @@ the same native-code performance class as programs compiled from C or Pascal.
 The exact result remains visible in the generated assembly listing.
 
 Lanternfly is intended to cover the same programming role as an assembler.
-Exact integer widths, fixed arrays, record layouts, references and addresses
+Exact integer widths, fixed arrays, record layouts and address classes
 describe the memory operations that the compiler must produce. Machine
 services enter through typed declarations and an `asm` block remains
 available when a routine depends on a particular instruction or device
@@ -85,7 +85,7 @@ device, print a report or run a game.
 5. [Repeating Work](05-loops.md)
 6. [Tables with Fixed Arrays](06-fixed-arrays.md)
 7. [Records and Memory Layout](07-records-and-exact-layout.md)
-8. [Sharing Storage with References](08-references-and-addresses.md)
+8. [Selecting Storage with Indices and Aliases](08-references-and-addresses.md)
 9. [Building with Subroutines](09-subroutines.md)
 10. [Modules, Machine Services and Assembly](10-services-targets-and-assembly.md)
 

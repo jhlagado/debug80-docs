@@ -72,8 +72,8 @@ total = atMost(total + nextAmount, 1000)
 
 Every reachable path in a result-bearing routine must return a compatible
 scalar. First-edition results may be integers, Booleans, opaque addresses or
-typed references. Records and arrays remain in caller-owned storage and are
-passed through aliases or references.
+`cstr` values. Records and arrays remain in caller-owned storage and are
+reached through aggregate parameters and aliases.
 
 A result-bearing call may stand alone when its side effects matter and its
 result may be discarded. A result-free routine cannot appear where an
@@ -95,9 +95,8 @@ Local declarations appear before executable statements. An initializer may
 use parameters, module declarations and earlier locals. Code outside the
 routine cannot name `difference`.
 
-An owned scalar local with no initializer starts with zero bits. A reference
-local requires an initializer because first-edition references have no null
-value.
+An owned scalar local with no initializer starts with zero bits. A `cstr`
+local requires an initializer because a C string always names valid text.
 
 A backend may keep locals in registers, stack slots or proven-safe static
 scratch. The source rule remains the same: overlapping invocations receive
@@ -111,7 +110,7 @@ An array or record parameter aliases the caller's existing storage:
 sub clearBlock(block as u8[8])
     var index as i16
 
-    for index = 0 to count(block) - 1
+    for index = 0 until count(block)
         block[index] = 0
     end
 end
@@ -126,21 +125,24 @@ clearBlock(workspace)
 Writing `block[index]` changes `workspace[index]`. The aggregate is not copied
 into local stack storage.
 
-This shorthand suits private routines. An exported interface states its
-reference class explicitly:
+This shorthand suits private routines, where the parameter uses the target
+profile's default storage class. An exported interface states the storage
+class before the parameter's name:
 
 ```lanternfly
-export sub clearSharedBlock(block as near ref (u8[8]))
+export sub clearSharedBlock(near block as u8[8])
     var index as i16
 
-    for index = 0 to count(block) - 1
+    for index = 0 until count(block)
         block[index] = 0
     end
 end
 ```
 
-The explicit `near ref` fixes the representation that importing modules and
-the target calling convention must share.
+The leading `near` fixes the storage class that importing modules and the
+target calling convention must share. It qualifies the aggregate itself; an
+element type carries its own spelling, so an array of near C strings held in
+far storage is written `far labels as near cstr[8]`.
 
 ## Early return
 

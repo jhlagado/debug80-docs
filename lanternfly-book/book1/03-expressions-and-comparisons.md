@@ -127,10 +127,11 @@ changeIsLarge = changeMagnitude >= 100
 | greater than | `>` |
 | greater than or equal | `>=` |
 
-Compatible integers support all six comparisons. Booleans and compatible
-typed references support equality and inequality. Lanternfly has no aggregate
-equality operator in the working language, so a program compares array
-elements or record fields explicitly.
+Compatible integers support all six comparisons, and so do compatible C
+strings, which compare their text content byte by byte. Booleans and
+same-class opaque addresses support equality and inequality. Lanternfly has
+no aggregate equality operator in the working language, so a program
+compares array elements or record fields explicitly.
 
 Lanternfly rejects comparison chains. A range test joins two comparisons:
 
