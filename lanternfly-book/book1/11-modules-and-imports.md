@@ -1,0 +1,127 @@
+---
+layout: default
+title: "Modules and Imports"
+parent: "Lanternfly Book 1 — Programming Fundamentals"
+nav_order: 11
+---
+
+# Modules and Imports
+
+Every program so far has fitted in one source file. Real programs outgrow
+that, and the growth has a shape: a measurement model here, its display
+there, the program that composes them somewhere else. Lanternfly's unit of
+growth is the module — one `.lafy` source file of imports and declarations
+— and the reading order we have kept since Chapter 1 stretches across the
+boundary: everything a declaration uses is either imported above it or
+declared above it.
+
+## A source module
+
+A module gives related types, storage and routines one file. Top-level
+declarations are private until marked `export`:
+
+```lanternfly
+// counters.lafy
+export const counterLimit as u16 = 9999
+
+export record Counter
+    value as u16
+end
+
+export var processed as Counter
+
+const counterStep as u16 = 1
+
+export sub incrementProcessed()
+    if processed.value < counterLimit then
+        processed.value = processed.value + counterStep
+    end
+end
+```
+
+A source module's filename ends in the exact lowercase `.lafy` extension.
+The file contains imports and declarations; loose executable statements
+have no legal place in it, which is why statements have lived inside
+routines since Chapter 1.
+
+## Imports and exports
+
+Another module imports the exported interface:
+
+```lanternfly
+// tally.lafy
+import "counters.lafy"
+
+sub recordItem()
+    incrementProcessed()
+end
+```
+
+`Counter`, `counterLimit`, `processed` and `incrementProcessed` become
+visible to the importer; `counterStep` remains private. The extension is
+part of the import path.
+
+Imports stand together at the top of a module, before any declaration, and
+each one's exports are visible from that point on. Everything `recordItem`
+uses is therefore above it: the imported routine through the import line,
+by the same top-to-bottom rule that orders declarations inside one file.
+Repeated imports resolve the same module once during whole-program
+compilation.
+
+Private by default is the useful direction. A module's exports are its
+promise to other modules; everything unexported can be reorganised freely,
+because no other file can have grown to depend on it. Chapter 12 builds its
+platform boundary on exactly this mechanism.
+
+## The root program
+
+A build manifest names one root module and, for an executable program, one
+entry subroutine with no parameters and no result. The compiler resolves
+each module's imports depth first, checks declarations in source order,
+allocates static storage, resolves machine bindings and emits one target
+program.
+
+The root module composes the program:
+
+```lanternfly
+// tally.lafy
+import "counters.lafy"
+
+sub recordItem()
+    incrementProcessed()
+end
+
+sub main()
+    recordItem()
+    recordItem()
+end
+```
+
+Two calls arrive in `main`, each reaches `incrementProcessed` through the
+import, and `processed.value` finishes at 2 — storage declared in one file,
+counted from another, with every access checked against the exported
+types.
+
+## Example
+
+This chapter's companion program spans two files:
+[counters.lafy](/lanternfly-book/book1/code/11-counters.txt) declares the
+counter model and exports its interface, and
+[tally.lafy](/lanternfly-book/book1/code/11-tally.txt) imports it and
+drives it from `main`. The listings use `.txt` filenames for browser
+display; each represents a `.lafy` source module.
+
+## Chapter summary
+
+- A module is one `.lafy` file of imports and declarations; statements
+  live inside its routines.
+- Declarations are private by default; `export` publishes a chosen
+  interface, and unexported names stay free to change.
+- Imports form a contiguous prefix, their exports visible from the point
+  of import — reading order holds across files.
+- A build manifest names the root module and entry; the compiler resolves
+  imports depth first and checks each module in declaration order.
+
+Modules let one program keep its concerns in separate files. In the final
+chapter, one of those files faces the machine — and everything beyond the
+language enters through its typed front door.
