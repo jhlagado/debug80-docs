@@ -12,6 +12,7 @@ const bufferSize as u8 = 16
 var readings as Reading[4]
 var selectedReading as u8 = 0
 var previousReading as u8 = 0
+var nextCandidate as u8 = 2
 
 var buffers as u8[bufferCount, bufferSize]
 
@@ -37,10 +38,13 @@ sub clearBuffer(selected as u8)
     end
 end
 
-sub main()
+sub advanceSelection()
     previousReading = selectedReading
-    selectedReading = 2
+    selectedReading = nextCandidate
+end
 
+sub main()
+    advanceSelection()
     markSelected()
     adjustSelected()
     clearBuffer(1)
