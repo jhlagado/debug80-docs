@@ -1,7 +1,12 @@
+// Charges are stored in whole cents.
 var subtotal as u16 = 120
 var postage as u16 = 15
 var total as u16 = 0
 
-sub main()
+sub addPostage()
     total = subtotal + postage
+end
+
+sub main()
+    addPostage()
 end

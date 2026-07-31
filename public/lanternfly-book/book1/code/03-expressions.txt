@@ -1,5 +1,6 @@
 const readyMask as u8 = %00000001
 const errorMask as u8 = %00000010
+const highBit as u16 = 1 shl 15
 
 var previousReading as u8 = 250
 var currentReading as u8 = 20
@@ -7,26 +8,34 @@ var changeMagnitude as u16 = 0
 var changeIsLarge as boolean = false
 var statusFlags as u8 = readyMask
 var deviceReady as boolean = true
-var errorCount as u16 = 0
-var recordedCount as u16 = 0
-
-sub recordChange()
-    recordedCount = recordedCount + 1
-end
+var shouldRecord as boolean = false
+var errorSeen as boolean = false
+var wideValue as i16 = 300
+var byteValue as u8 = 0
+var area as u16 = 1600
+var side as u16 = 0
 
 sub measureChange()
     changeMagnitude = abs(currentReading - previousReading)
     changeIsLarge = changeMagnitude >= 100
+    shouldRecord = deviceReady and changeIsLarge
+end
 
-    if deviceReady and changeIsLarge then
-        recordChange()
-    end
+sub inspectStatus()
+    errorSeen = (statusFlags and errorMask) <> 0
+end
 
-    if (statusFlags and errorMask) <> 0 then
-        errorCount = errorCount + 1
-    end
+sub convertWideValue()
+    byteValue = u8(wideValue)
+end
+
+sub measureSquare()
+    side = sqrt(area)
 end
 
 sub main()
     measureChange()
+    inspectStatus()
+    convertWideValue()
+    measureSquare()
 end

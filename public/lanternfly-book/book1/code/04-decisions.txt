@@ -1,66 +1,66 @@
-const statusWorking as u8 = 0
-const statusComplete as u8 = 1
-const statusFailed as u8 = 2
+enum Status as u8
+    working
+    complete
+    failed
+end
 
-const modeCompact as u8 = 0
-const modeDetailed as u8 = 1
-const modeDiagnostic as u8 = 2
+enum ReportMode as u8
+    compact
+    detailed
+    diagnostic
+end
+
+range VerboseMode as ReportMode = detailed to diagnostic
 
 var itemsRemaining as u16 = 40
 var errorCount as u8 = 0
-var status as u8 = statusWorking
-var reportMode as u8 = modeCompact
+var status as Status = working
+var reportMode as ReportMode = compact
 var lineWidth as u8 = 40
 var includeChecks as boolean = false
 
 sub updateStatus()
     if errorCount > 0 then
-        status = statusFailed
+        status = failed
     else if itemsRemaining = 0 then
-        status = statusComplete
+        status = complete
     else
-        status = statusWorking
+        status = working
     end
 end
-
-sub configureReport()
-    select reportMode
-    case modeCompact
-        lineWidth = 40
-        includeChecks = false
-    case modeDetailed
-        lineWidth = 80
-        includeChecks = false
-    case modeDiagnostic
-        lineWidth = 80
-        includeChecks = true
-    else
-        lineWidth = 40
-        includeChecks = true
-    end
-end
-
-enum InputKind as u8
-    serial
-    file
-    keyboard
-end
-
-var inputKind as InputKind = serial
-var buffered as boolean = false
 
 // Every member has a case, so this select is complete without an else.
-sub configureInput()
-    select inputKind
-    case serial, file
+sub configureReport()
+    select reportMode
+    case compact
+        lineWidth = 40
+        includeChecks = false
+    case detailed
+        lineWidth = 80
+        includeChecks = false
+    case diagnostic
+        lineWidth = 80
+        includeChecks = true
+    end
+end
+
+// A code read from a device stays u8; else handles unmatched values.
+var channelCode as u8 = 0
+var buffered as boolean = false
+
+sub configureChannel()
+    select channelCode
+    case 0, 1
         buffered = true
-    case keyboard
+    case 2 to 9
         buffered = false
+    else
+        buffered = true
     end
 end
 
 sub main()
     updateStatus()
     configureReport()
-    configureInput()
+    configureChannel()
 end

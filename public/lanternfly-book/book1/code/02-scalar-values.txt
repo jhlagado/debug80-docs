@@ -1,0 +1,26 @@
+const warehouseCapacity as u16 = 5000
+const dispatchBatch as u16 = 10
+
+// Character literals are exact byte values.
+const prompt as u8 = '>'
+const newline as u8 = '\n'
+
+var unitsInStock as u16 = 1200
+var roomTemperature as i16 = -4
+var elapsedSeconds as u32 = 0
+var orderReady as boolean = false
+var promptCharacter as u8 = 0
+
+sub restock()
+    unitsInStock = warehouseCapacity
+    orderReady = true
+end
+
+sub selectPrompt()
+    promptCharacter = prompt
+end
+
+sub main()
+    restock()
+    selectPrompt()
+end

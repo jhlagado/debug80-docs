@@ -19,13 +19,18 @@ var subtotal as u16 = 120
 var postage as u16 = 15
 var total as u16 = 0
 
-sub main()
+sub addPostage()
     total = subtotal + postage
+end
+
+sub main()
+    addPostage()
 end
 ```
 
 Before `main` begins, `subtotal` contains 120, `postage` contains 15 and
-`total` contains 0. After the one statement inside `main` has run, the first
+`total` contains 0. Execution starts in `main`, whose one statement calls
+`addPostage`; after the assignment inside `addPostage` has run, the first
 two values are unchanged and `total` contains 135.
 
 By tracing this modest calculation, we can concentrate on three ideas: static
@@ -63,32 +68,51 @@ it needs when we wrote the declarations. When you later work with arrays and
 records, you will still state their maximum size in the source and then change
 the values held in that storage during execution.
 
-## The entry point
+## Subroutines and the entry point
 
 In an ordinary Lanternfly source file, you write a module consisting of
-declarations such as the three variables and the subroutine below. Executable
+declarations such as the three variables and the two subroutines. Executable
 statements do not sit loose between those declarations; you put them inside a
 subroutine.
 
 A module reads strictly top to bottom: every name must be declared before
 the line that uses it, with no forward references. The three variables
-stand above `main` because its statement uses them, and the same rule will
-order every program in this book — which suits us, because reading a
-module from the top is exactly how we trace one.
+stand above `addPostage` because its statement uses them, and `addPostage`
+stands above `main` because `main` calls it. The same rule will order every
+program in this book — which suits us, because reading a module from the
+top is exactly how we trace one.
 
 ```lanternfly
-sub main()
+sub addPostage()
     total = subtotal + postage
 end
 ```
 
 To begin a subroutine declaration, write `sub` followed by its name and a pair
-of parentheses. No parameter names appear between the parentheses in `main()`,
-so this subroutine accepts no arguments. The final `end` closes the subroutine.
+of parentheses. Empty parentheses mean the subroutine accepts no arguments —
+the only kind we need for now. The final `end` closes the subroutine.
 
 We indent the body so that its boundary is visible, but the spaces themselves
 do not define it. The parser treats indentation as whitespace and uses words
 such as `sub` and `end` to recognise the block.
+
+Writing a subroutine's name followed by parentheses runs it:
+
+```lanternfly
+addPostage()
+```
+
+The call transfers execution into `addPostage`; when its body finishes, the
+program continues after the call. Naming a piece of work this way lets one
+program build up from small routines that each do one thing, and the
+companion programs in this book use such helpers freely. Subroutines that
+accept values and return results wait until Chapter 9.
+
+One reading convention, settled here for the whole book: statements live
+inside routines, so whenever a code fence shows a statement or expression
+on its own, it is an excerpt from inside a routine, shown alone so we can
+concentrate on it. The complete, correctly ordered module always waits in
+the chapter listing.
 
 When you configure an executable build, you select one parameter-free
 subroutine with no result as the entry. We use `main` for that job because the
@@ -163,37 +187,21 @@ and `5`, then deliver those bytes to the target's output routine. By storing
 the numeric result, we can postpone those two separate jobs until we are ready
 to study them.
 
-A monitor or debugger can inspect the bytes assigned to `total`. The planned
-toolchain will also retain symbol information so that programmers can work
-with the name `total` rather than look up its address by hand.
+Inspection tools can read the bytes assigned to `total` by name, because the
+toolchain keeps symbol information alongside the generated program.
 
 The complete source is available as the
 [chapter listing](/lanternfly-book/book1/code/01-first-program.txt).
 
-## From Lanternfly to Z80 code
+## The build
 
-The Z80 cannot execute Lanternfly source directly. The planned compiler and
-AZM assembler divide the translation into two stages:
+The toolchain described in the introduction turns this module into a runnable
+program: the compiler checks the declarations, the call and the assignment,
+chooses an address for each variable, and emits Z80 assembly that AZM encodes
+as machine code. The generated assembly stays open for inspection, so when an
+address or instruction choice becomes relevant, you can read exactly what the
+compiler produced. When `main` returns, the target performs its normal
+termination.
 
-```text
-order.lafy
-    → Lanternfly compiler
-    → order.asm
-    → AZM
-    → order.bin
-```
-
-The Lanternfly compiler will check the declarations and the assignment, choose
-addresses for the three variables and emit Z80 assembly. AZM will resolve the
-assembly labels and encode the instructions and data as bytes. The target
-computer can then load and execute `order.bin`.
-
-The toolchain will keep the generated assembly available for inspection. When
-an address, instruction choice or cycle count becomes relevant, you can
-examine the assembly the compiler passed to AZM. For everyday program logic,
-you can work with names, types, expressions and subroutines instead of
-managing registers and addresses for every operation.
-
-When the entry returns, the target profile performs its normal termination
-operation. In the next chapter, we will choose integer types deliberately
-rather than accept `u16` on trust.
+In the next chapter, we will choose integer types deliberately rather than
+accept `u16` on trust.
