@@ -96,9 +96,10 @@ Local declarations appear before executable statements. An initializer may
 use parameters, module declarations and earlier locals. Code outside the
 routine cannot name `difference`.
 
-An owned scalar local with no initializer starts with zero bits. A string is
-aggregate storage, so a routine reaches one through a parameter or a Chapter
-8 alias rather than owning a local copy.
+An owned scalar local with no initializer starts with zero bits. A string,
+record or array is aggregate storage, so a routine reaches one through a
+parameter — or through the alias form the next chapter introduces — rather
+than owning a local copy.
 
 A backend may keep locals in registers, stack slots or proven-safe static
 scratch. The source rule remains the same: overlapping invocations receive
@@ -127,27 +128,12 @@ clearBlock(workspace)
 Writing `block[index]` changes `workspace[index]`. The aggregate is not copied
 into local stack storage.
 
-This shorthand suits private routines, where the parameter uses the target
-profile's default storage class. An exported interface states the storage
-class before the parameter's name:
-
-```lanternfly
-export sub clearSharedBlock(near block as u8[8])
-    var index as i16
-
-    for index = 0 until count(block)
-        block[index] = 0
-    end
-end
-```
-
-The leading `near` fixes the storage class that importing modules and the
-target calling convention must share. It qualifies the aggregate itself; an
-element type carries its own spelling, so an array of near opaque addresses
-held in far storage is written `far handles as near address[8]`. A string
-parameter states its exact capacity — `line as string[40]` accepts a
-`string[40]` and nothing else — because the alias must match the caller's
-layout byte for byte.
+An aggregate parameter states its exact shape. A string parameter names
+its exact capacity — `line as string[40]` accepts a `string[40]` and
+nothing else — because the alias must match the caller's layout byte for
+byte. Routines shared between modules also state where the aggregate
+lives; Chapter 12 introduces that spelling with the interfaces that need
+it.
 
 ## Early return
 
@@ -185,9 +171,9 @@ layout, stack bounds and reentrancy rules. A profile based on fixed
 scratch storage rejects a self-call because another invocation would
 overwrite the active frame.
 
-Target profiles may differ over whether a recursive source program is
-valid. The generated report identifies frame size and the profile capability
-that governs the call.
+Whether a recursive program is valid therefore depends on the selected
+target; the complete frame and capability rules live in the language
+reference.
 
 ## Example
 
@@ -207,5 +193,7 @@ parameter. Two calls to `addToTotal` produce 35. Applying
   depends on whether the selected target profile can provide independent
   active frames.
 
-Our programs can compute anything but touch nothing; in the final chapter
-we reach the machine itself, through modules, typed services and assembly.
+Routines now receive values, return results and work on caller-owned
+aggregates through temporary names. The next chapter widens that last idea
+into Lanternfly's whole answer to a classic question: how does a program
+keep hold of *which* piece of storage an operation applies to?

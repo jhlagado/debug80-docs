@@ -1,17 +1,17 @@
 ---
 layout: default
-title: "Selecting Storage with Indices and Aliases"
+title: "Selecting Existing Storage"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 8
+nav_order: 10
 ---
 
-# Selecting Storage with Indices and Aliases
+# Selecting Existing Storage
 
 Aggregate assignment creates an independent copy. Often a program needs the
 opposite: several parts working with the same storage, chosen at run time.
 Lanternfly answers with data rather than with pointers. The program stores
-*which* entry — an integer index — and gives storage a temporary name — an
-alias — while a routine works on it:
+an integer index that records *which* entry, and a routine gives the
+selected storage a temporary name — an alias — while it works:
 
 ```lanternfly
 var readings as Reading[4]
@@ -46,15 +46,25 @@ must keep a relationship between entries stores the destination index:
 ```lanternfly
 var previousReading as u8 = 0
 
-previousReading = selectedReading
-selectedReading = nextCandidate
+sub advanceSelection()
+    previousReading = selectedReading
+    selectedReading = nextCandidate
+end
 ```
 
 Both variables survive as long as their storage, and each use of
-`readings[previousReading]` is bounds-checked, so a stale index is caught at
-the access rather than silently misread. An address held this way would be
-none of those things: it could not be range-checked, and nothing would
-connect it to the pool it came from.
+`readings[previousReading]` is bounds-checked, so an index outside the
+array's domain is rejected at the access rather than silently misread. A
+raw machine address would carry no such relationship: nothing could
+range-check it, and nothing would connect it to the pool it came from.
+
+Bounds checking establishes *spatial* validity, and only that. An index
+that stays in range still identifies whatever the slot holds now — if the
+program has since reused entry 2 for a different measurement, a saved index
+of 2 faithfully selects the new occupant. Whether a slot still represents
+the same logical entity is the program's bookkeeping, carried in data such
+as Chapter 8's `used` count; the check guards the boundary, not the
+meaning.
 
 ## Local aliases
 
@@ -94,6 +104,11 @@ The alias form accepts records, fixed arrays and strings — an alias of a
 Constant storage cannot initialize a writable alias, and volatile storage
 requires direct access so that every read and write remains visible.
 
+Aliases also complete Chapter 5's loop rule. A counted loop's body must not
+assign to the control variable through *any* name — not directly, not
+through an alias, and not inside a routine the body calls. The loop owns
+its own progress under every spelling.
+
 ## Regular shapes: one table instead of many
 
 Where another language would collect separate buffers behind a table of
@@ -121,13 +136,16 @@ integers, and both are checked against declared extents.
 ## Irregular choices: a selector and `select`
 
 When the candidates are genuinely separate declarations, we store a
-selector and match it with `select`:
+selector and match it with `select`. This routine assumes two entry tables
+and a `countEntries` routine declared earlier in the module:
 
 ```lanternfly
-const inputLog as u8 = 0
-const archiveLog as u8 = 1
+enum ActiveLog as u8
+    inputLog
+    archiveLog
+end
 
-var activeLog as u8 = inputLog
+var activeLog as ActiveLog = inputLog
 
 sub countActiveEntries() as u8
     select activeLog
@@ -135,54 +153,19 @@ sub countActiveEntries() as u8
         return countEntries(inputEntries)
     case archiveLog
         return countEntries(archiveEntries)
-    else
-        return 0
     end
 end
 ```
 
-The selector is data, like any index, and Chapter 2's enumerations are its
-natural type: an enumeration selector cannot hold an invalid choice, and
-its `select` is complete when every member has a case. The backend may
-lower a dense selection to an address table; that choice belongs to
-lowering, and the source semantics remain a selector and declared storage.
-
-## Near and far storage
-
-Every static storage root has a target storage class. Ordinary
-compiler-allocated storage is near: directly usable in the target's current
-address context. A banked or segmented target also offers far storage,
-which carries extra context such as a bank number alongside a 16-bit
-offset. A flat-memory target may treat the two classes identically while
-preserving their source meaning.
-
-Storage classes matter at interfaces. Chapter 9 shows the spelling on
-aggregate parameters, where an exported routine states `near` or `far`
-before the parameter's name so that every importing module is checked
-against the same storage class.
-
-## Opaque addresses
-
-Some machine interfaces expose a location whose contents have no Lanternfly
-type:
-
-```lanternfly
-var deviceBuffer as far address
-```
-
-`near address` and `far address` are opaque scalar values. They can be
-stored, passed and compared within the same address class. Ordinary
-arithmetic, field access and indexing are unavailable because the language
-has no referent type from which to derive them, and no conversion connects
-an opaque address to ordinary storage in either direction.
-
-A target service may return an address in video memory or another device
-address space. The program can carry that value back to target services
-while the platform contract remains responsible for interpreting it.
+The selector is data, like any index, and an enumeration is its natural
+type: an enumeration selector cannot hold an invalid choice, and its
+`select` is complete when every member has a case. The backend may lower a
+dense selection to an address table; that choice belongs to lowering, and
+the source semantics remain a selector and declared storage.
 
 ## Example
 
-The [chapter listing](/lanternfly-book/book1/code/08-references.txt)
+The [chapter listing](/lanternfly-book/book1/code/10-selecting-storage.txt)
 selects a reading by index, adjusts it through an alias and clears one row
 of a buffer table. The assignment to `selectedReading` changes which entry
 later code operates on; the assignments through `reading` change the entry
@@ -192,14 +175,16 @@ itself.
 
 - Persistent identity is data: a declared path, an integer index or a
   stored selector, each checked at the point of use.
+- Bounds checks establish spatial validity; whether a slot still holds the
+  same logical entity is the program's own bookkeeping.
 - `alias` gives existing record, array or string storage a non-rebindable
   local name, evaluated once and valid until the routine returns.
-- Multidimensional arrays replace regular pointer tables; a selector with
-  `select` replaces irregular ones.
-- Storage classes distinguish near from far static storage; interfaces
-  state them explicitly.
-- Opaque addresses carry device locations without a referent type, and
-  only target services can interpret them.
+- A loop's control variable is off limits under every name — direct, alias
+  or callee.
+- Multidimensional arrays replace regular pointer tables; an enumeration
+  selector with `select` replaces irregular ones.
 
-Aliases gave routines a working name for storage; in the next chapter we
-complete the routines themselves, with parameters, results and locals.
+One module now holds everything we can build: types, storage, routines and
+a disciplined idea of identity. In the next chapter, programs grow past one
+file — and the reading order we have kept since Chapter 1 stretches across
+module boundaries.
