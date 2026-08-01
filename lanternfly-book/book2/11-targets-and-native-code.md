@@ -59,7 +59,7 @@ the ordinary external-binding, ABI, adapter and runtime-component contracts.
 
 `extern sub` describes native code with a Lanternfly signature. The examples
 use the fictional LF-1 teaching machine introduced in
-[Book One](../book1/13-machine-services-and-assembly.md):
+[Book One](../book1/14-machine-services-and-assembly.md):
 
 ```lanternfly
 export extern sub playTone(divider as u16) at $0f06

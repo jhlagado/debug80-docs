@@ -2,7 +2,7 @@
 layout: default
 title: "Machine Services and Assembly"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 13
+nav_order: 14
 ---
 
 # Machine Services and Assembly
@@ -209,12 +209,12 @@ the map you inspect is either checked or absent, never a guess.
 ## Example
 
 This chapter's companion program spans three files:
-[report.lafy](/lanternfly-book/book1/code/13-report.txt) composes the
+[report.lafy](/lanternfly-book/book1/code/14-report.txt) composes the
 program from the standard text output, the measurement model and the
 platform console;
-[readings.lafy](/lanternfly-book/book1/code/13-readings.txt) is an
+[readings.lafy](/lanternfly-book/book1/code/14-readings.txt) is an
 ordinary module exporting that model; and
-[console.lafy](/lanternfly-book/book1/code/13-console.txt) is a platform
+[console.lafy](/lanternfly-book/book1/code/14-console.txt) is a platform
 interface module whose module assembly defines the firmware symbol its
 external binding names. The change traces to 230 and prints as
 `CHANGE 230`: the label through a standard service, the number through the

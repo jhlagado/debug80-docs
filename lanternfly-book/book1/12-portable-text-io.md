@@ -132,6 +132,7 @@ appear once as they are typed and once as the program writes them.
   exceptions, carried by compiler-only temporaries that source can never
   hold.
 
-Our programs now read and write text on any target that supports it. What
-they cannot yet do is reach the parts of a machine no portable contract
-covers — and that, at last, is the final chapter.
+Our programs now read and write text on any target that supports it — and
+with input comes a new obligation. `readLine`'s Boolean was our first
+taste of it: an operation whose answer may be "no", and code that must
+act on that answer. The next chapter gives that idea a language.
