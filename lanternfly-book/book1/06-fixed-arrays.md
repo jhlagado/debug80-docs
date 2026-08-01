@@ -213,7 +213,7 @@ introduce.
 
 The backend may lower either operation to an inline loop, target instruction
 sequence or runtime helper. The source names the operation; generated
-artifacts show the chosen implementation and cost.
+artifacts show the chosen implementation.
 
 ## Example
 

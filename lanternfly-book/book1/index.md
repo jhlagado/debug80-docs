@@ -12,9 +12,9 @@ has_toc: false
 
 A first course in Lanternfly: a compiled, low-level programming language
 for computers where every byte and machine operation matters. Its source
-reads like structured BASIC; its discipline is closer to Pascal; and what
-a line emits is a fact you can look up in the generated assembly rather
-than a guess. The [introduction](00-introduction.md) says who the book is
+reads like structured BASIC; its discipline is closer to Pascal; and the
+instructions and helpers behind any line can be read in the generated
+assembly rather than guessed. The [introduction](00-introduction.md) says who the book is
 for and how it teaches.
 
 [Lanternfly Book 2](../book2/) is the companion language reference for

@@ -1,9 +1,9 @@
 // console.lafy — the platform interface module for the fictional LF-1
 // teaching machine. The module assembly defines the symbol the external
-// binding names; a real platform module does the same from a datasheet.
+// binding names; a real platform module does the same work from the
+// platform's firmware or ABI documentation.
 asm
-ROM_VBLANK_WAIT = $0f09
+ROM_WRITE_UNSIGNED = $0f03
 end
 
-export extern sub writeUnsigned(value as u16)
-export extern sub waitForVBlank() from "ROM_VBLANK_WAIT"
+export extern sub writeUnsigned(value as u16) from "ROM_WRITE_UNSIGNED"

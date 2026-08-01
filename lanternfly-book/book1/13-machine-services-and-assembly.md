@@ -27,18 +27,17 @@ end
 
 sub main()
     measureChange()
-    waitForVBlank()
     showChange()
 end
 ```
 
-Three kinds of call share this program. `writeText` and `writeNewline`
-are portable standard services from Chapter 12. `writeUnsigned` and
-`waitForVBlank` are _custom platform services_: numeric formatting and
-display timing are outside the standard text modules, so this target's
-console module supplies them. `measureChange` is ordinary Lanternfly from
-an ordinary module. Every call is checked against a typed declaration;
-only the platform's own calls are tied to this machine.
+Three kinds of call share this routine. `writeText` and `writeNewline`
+are portable standard services from Chapter 12. `writeUnsigned` is a
+_custom platform service_: numeric formatting is outside the standard
+text modules, so this target's console module supplies it.
+`measureChange` is ordinary Lanternfly from an ordinary module. Every
+call is checked against a typed declaration; only the platform's own call
+is tied to this machine.
 
 ## Operations, standard services and platform services
 
@@ -78,7 +77,8 @@ assembler or substrate toolchain will resolve. With neither form, the
 target profile binds the Lanternfly name. The addresses and symbols in
 this chapter belong to a small fictional teaching machine — call it the
 LF-1 — whose monitor ROM documents these entry points; a real platform
-module does exactly the same work from a real datasheet.
+module does exactly the same work from the platform's firmware or ABI
+documentation.
 
 An interface module collects such declarations and exports them, exactly as
 `counters.lafy` exported ordinary routines. This separates a program's
@@ -215,8 +215,8 @@ ordinary module exporting that model; and
 [console.lafy](/lanternfly-book/book1/code/13-console.txt) is a platform
 interface module whose module assembly defines the firmware symbol its
 external binding names. The change traces to 230 and prints as
-`CHANGE 230` — the label through a standard service, the number through
-this platform's own.
+`CHANGE 230`: the label through a standard service, the number through the
+`writeUnsigned` binding that console.lafy's module assembly names.
 
 ## Chapter summary
 

@@ -11,6 +11,5 @@ end
 
 sub main()
     measureChange()
-    waitForVBlank()
     showChange()
 end
