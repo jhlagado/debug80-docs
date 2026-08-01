@@ -5,5 +5,4 @@ ROM_WAIT_KEY = $0038
 end
 
 export extern sub writeUnsigned(value as u16)
-export extern sub writeNewLine()
 export extern sub waitForKey() from "ROM_WAIT_KEY"

@@ -8,8 +8,8 @@ nav_order: 7
 # Characters and Fixed-Capacity Strings
 
 Text is byte data with one extra fact to record: where it ends. Chapter 2's
-character literals give the bytes readable spellings — `'H'` is exactly the
-byte 72 — so a `u8` array can hold text-shaped bytes. But an array's count
+character literals give the bytes readable spellings (`'H'` is exactly the
+byte 72), so a `u8` array can hold text-shaped bytes. But an array's count
 describes its capacity, and nothing in it records how much of that capacity
 is currently meaningful. Lanternfly's string type carries that fact itself:
 
@@ -24,14 +24,13 @@ part of the type, and the layout is as concrete as any array's: one length
 byte, twelve payload cells, and a zero byte after the current payload, for
 exactly fourteen bytes settled at compile time. There is no allocator and no
 hidden buffer; the declaration is the cost. A capacity of 255 or more widens
-the length field to two bytes — `N + 3` bytes in all — and nothing else
-changes.
+the length field to two bytes, `N + 3` in all, and nothing else changes.
 
 The trailing zero byte is the *terminator*, and every string operation
 maintains it, so the payload is always valid NUL-terminated text. A firmware
 or platform routine that requires the classic C convention can read the
 bytes directly, at no conversion cost, while `length` never scans for the
-zero — it reads the stored count and returns it as a `u16`.
+zero: it reads the stored count and returns it as a `u16`.
 
 ## Literals, copies and growth
 
@@ -60,13 +59,15 @@ nonzero byte. Repeated appends build a line piece by piece:
 sub buildStatusLine()
     clear(statusLine)
     append(statusLine, "MODE ")
-    append(statusLine, '0' + reportDigit)
+    append(statusLine, u8('0' + reportDigit))
 end
 ```
 
 With `reportDigit` at 2, the finished text is `MODE 2`: `clear` empties the
 string, the literal supplies five bytes, and `'0' + reportDigit` computes
-the digit's character byte.
+the digit's character byte. The `u8(...)` wrapper is there because Chapter
+3's byte addition widens to `u16`, and the byte append takes exactly one
+`u8`.
 
 ## Comparison and the empty string
 
@@ -76,8 +77,8 @@ whether two names share storage. Shorter text compares before longer text
 with the same prefix, and capacities play no part.
 
 All-zero storage is the valid empty string. A module string therefore needs
-no initializer — it simply begins empty — and `clear` restores that state
-at any time.
+no initializer (it simply begins empty), and `clear` restores that state at
+any time.
 
 ## The sealed representation
 
@@ -85,8 +86,10 @@ The length byte, the payload cells and the terminator have no names, and no
 index reaches them. The whole arrangement depends on three facts staying in
 agreement: the stored count, the nonzero payload, and the terminator sitting
 immediately after it. Assignment, `append`, `clear`, comparison and `length`
-are the complete interface, and each operation preserves what the others
-rely on.
+are the built-in interface, and each operation preserves what the others
+rely on. Chapter 12's portable text services extend the family, reading
+and writing whole strings at the program's edge through the same sealed
+door, without ever exposing the representation.
 
 A `u8` array makes none of these promises, so it never converts into a
 string, and a string is not an array of its bytes. Byte storage under other
@@ -97,8 +100,8 @@ each byte its meaning.
 ## Strings in tables
 
 Strings sit in arrays like any other fixed-size data. `string[12][8]`
-declares eight strings of capacity twelve — the capacity brackets belong to
-the element type — and each element supports the full string interface
+declares eight strings of capacity twelve (the capacity brackets belong to
+the element type), and each element supports the full string interface
 through its indexed path. The next chapter adds the remaining home: a
 string as one named field inside a record, occupying its exact bytes at a
 fixed offset.
@@ -121,7 +124,8 @@ content. `playerName` finishes as `HELLO!` and `statusLine` as `MODE 2`.
 - Comparisons examine text content; all-zero storage is the valid empty
   string.
 - The representation is sealed — assignment, `append`, `clear`, comparison
-  and `length` are the whole interface.
+  and `length` are the built-in interface, and later services reach strings
+  through the same sealed door.
 
 A string keeps values of one kind in order. In the next chapter we group
 values of different kinds into records, and lay them out byte by byte.

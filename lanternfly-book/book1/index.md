@@ -35,7 +35,8 @@ exact syntax, type, storage, control-flow and diagnostic rules.
 9. [Building with Subroutines](09-subroutines.md)
 10. [Selecting Existing Storage](10-selecting-storage.md)
 11. [Modules and Imports](11-modules-and-imports.md)
-12. [Machine Services and Assembly](12-machine-services-and-assembly.md)
+12. [Portable Text Input and Output](12-portable-text-io.md)
+13. [Machine Services and Assembly](13-machine-services-and-assembly.md)
 
 The [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
 records the normative 0.4 rules. The

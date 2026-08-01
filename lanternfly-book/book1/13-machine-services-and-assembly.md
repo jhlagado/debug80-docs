@@ -2,26 +2,27 @@
 layout: default
 title: "Machine Services and Assembly"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 12
+nav_order: 13
 ---
 
 # Machine Services and Assembly
 
-A complete program needs more than calculations. It must obtain input,
-produce output, access firmware or communicate with devices. Those
-operations differ between computers, so Lanternfly gives them typed
-interfaces and keeps the target-specific implementation at a defined
-boundary — and Chapter 11's modules are exactly the right container for
-that boundary.
+Chapter 12's portable services cover text, and only text. A program that
+must format a number, read a joystick, program a sound chip or poke a
+video controller has left the portable contract — and that is not a
+failure but a boundary. Lanternfly crosses it with typed interfaces, and
+Chapter 11's modules are exactly the right container:
 
 ```lanternfly
 // report.lafy
+import "standard/text-output.lafy"
 import "readings.lafy"
 import "console.lafy"
 
 sub showChange()
+    writeText("CHANGE ")
     writeUnsigned(change)
-    writeNewLine()
+    writeNewline()
 end
 
 sub main()
@@ -31,21 +32,26 @@ sub main()
 end
 ```
 
-The root module reads like any other Lanternfly program. `measureChange`
-and `change` come from an ordinary module; `writeUnsigned`, `writeNewLine`
-and `waitForKey` come from a platform interface module, and behind them sit
-firmware routines. From this side of the boundary, every call is checked
-against a typed declaration.
+One routine, three kinds of call. `writeText` and `writeNewline` are
+portable standard services from Chapter 12. `writeUnsigned` is a *custom
+platform service*: numeric formatting is outside the standard text
+modules, so this target's console module supplies it. `measureChange` is
+ordinary Lanternfly from an ordinary module. Every call is checked against
+a typed declaration; only the middle one is this platform's own.
 
-## Operations and services
+## Operations, standard services and platform services
 
-The operations used throughout this book — `abs`, `sqrt`, `length`, the
-layout queries, `clear`, `fill`, `append` — belong to the language: they
-mean the same on every target, and each backend chooses instructions or a
-runtime helper to implement them. A machine *service* is different: it is
-someone's routine on a particular platform, reached through a declaration.
-The language defines what `abs` means; a target profile and its modules
-define what `writeUnsigned` does.
+Three tiers now share the page, and telling them apart is the chapter's
+first job. *Language operations* — `abs`, `length`, `clear`, `append` and
+their kin — belong to the language: they mean the same everywhere, and
+each backend chooses instructions or a runtime helper. *Standard services*
+(Chapter 12's five) have one portable meaning but optional,
+target-supplied implementations, reached through explicit imports. A
+*platform service* such as `writeUnsigned` is someone's routine on a
+particular machine, reached through a declaration the platform module
+wrote. The language defines what `abs` means; the standard modules define
+what `writeText` means; a target profile and its modules define what
+`writeUnsigned` does.
 
 ## External routines
 
@@ -53,7 +59,6 @@ define what `writeUnsigned` does.
 
 ```lanternfly
 export extern sub writeUnsigned(value as u16)
-export extern sub writeNewLine()
 ```
 
 Calls receive the same type checking as Lanternfly-defined routines. The
@@ -75,7 +80,9 @@ An interface module collects such declarations and exports them, exactly as
 `counters.lafy` exported ordinary routines. This separates a program's
 logic from a computer's firmware details: two platform modules can export
 the same service signatures and bind them to different machines, and every
-program module imports the signatures alone.
+program module imports the signatures alone. The standard text modules are
+the same pattern with the toolchain as author — which is why they were
+never keywords, just imports.
 
 ## Near and far storage
 
@@ -191,19 +198,22 @@ the map you inspect is either checked or absent, never a guess.
 ## Example
 
 This chapter's companion program spans three files:
-[report.lafy](/lanternfly-book/book1/code/12-report.txt) composes the
-program and holds `main`;
-[readings.lafy](/lanternfly-book/book1/code/12-readings.txt) is an
-ordinary module exporting the measurement model; and
-[console.lafy](/lanternfly-book/book1/code/12-console.txt) is a platform
+[report.lafy](/lanternfly-book/book1/code/13-report.txt) composes the
+program from the standard text output, the measurement model and the
+platform console;
+[readings.lafy](/lanternfly-book/book1/code/13-readings.txt) is an
+ordinary module exporting that model; and
+[console.lafy](/lanternfly-book/book1/code/13-console.txt) is a platform
 interface module whose module assembly defines the firmware symbol its
-external binding names. The change traces to 230, and every service call
-crosses the boundary through a typed declaration.
+external binding names. The change traces to 230 and prints as
+`CHANGE 230` — the label through a standard service, the number through
+this platform's own.
 
 ## Chapter summary
 
-- Language operations mean the same everywhere; machine services are
-  platform routines reached through typed `extern sub` declarations.
+- Language operations mean the same everywhere; standard services add
+  portable, optional contracts; platform services are one machine's own
+  routines behind typed `extern sub` declarations.
 - Interface modules export service signatures; `at` and `from` name
   machine bindings, and programs import signatures, never addresses.
 - Storage classes and opaque addresses carry target facts — where storage

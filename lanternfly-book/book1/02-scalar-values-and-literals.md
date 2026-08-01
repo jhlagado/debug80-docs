@@ -134,7 +134,7 @@ by its printable character or escape:
 
 ```lanternfly
 const prompt as u8 = '>'
-const newline as u8 = '\n'
+const lineFeed as u8 = '\n'
 const escape as u8 = '\x1b'
 ```
 
@@ -143,8 +143,11 @@ that the byte's role is a character. The escapes cover the unprintable cases:
 `\n`, `\r` and `\t` for line and tab control, `\xHH` for an exact hexadecimal
 byte, and `\'`, `\"` and `\\` for the quoting characters themselves. A
 character literal is one byte; multi-character and non-ASCII literals are
-invalid. Chapter 7 builds text — sequences of these bytes with a recorded
-length — on this foundation.
+invalid. The name `lineFeed` is deliberate: `'\n'` is exactly the byte 10,
+while ending a line on a device is a separate service that a target may
+spell with a different byte sequence entirely — Chapter 12 draws that line.
+Chapter 7 builds text — sequences of these bytes with a recorded length —
+on this foundation.
 
 ## Example
 
@@ -161,8 +164,8 @@ ready; `selectPrompt` copies the `'>'` byte into a variable.
 - `const` names a compile-time value and checks it against a declared type.
 - `boolean` represents `true` or `false` and remains separate from integers.
 - A character literal is an exact byte value with a readable spelling.
-- Type names take Pascal case; value and routine names take lower camel
-  case.
+- Type names take PascalCase; value, constant and routine names take
+  camelCase.
 
 Our values now have deliberate types. In the next chapter we calculate with
 them, and meet the rules that give every intermediate result a width.

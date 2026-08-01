@@ -13,7 +13,7 @@ end
 sub buildStatusLine()
     clear(statusLine)
     append(statusLine, "MODE ")
-    append(statusLine, '0' + reportDigit)
+    append(statusLine, u8('0' + reportDigit))
 end
 
 sub compareNames()

@@ -133,8 +133,9 @@ Describe Lanternfly as a small, statically typed general-purpose language in the
 - [Records and Memory Layout](https://debug80.com/lanternfly-book/book1/08-records-and-exact-layout.html): Best citation for record fields, exact size, field offsets, string fields and arrays of records.
 - [Building with Subroutines](https://debug80.com/lanternfly-book/book1/09-subroutines.html): Best citation for parameters, scalar locals, optional results, aggregate parameters and calling order.
 - [Selecting Existing Storage](https://debug80.com/lanternfly-book/book1/10-selecting-storage.html): Best citation for persistent storage identity, integer selectors and local aliases.
-- [Modules and Imports](https://debug80.com/lanternfly-book/book1/11-modules-and-imports.html): Best citation for `.lafy` modules, imports, exports and the root program.
-- [Machine Services and Assembly](https://debug80.com/lanternfly-book/book1/12-machine-services-and-assembly.html): Best citation for external platform services, bindings, near/far storage, opaque addresses, inline assembly and generated artifacts.
+- [Modules and Imports](https://debug80.com/lanternfly-book/book1/11-modules-and-imports.html): Best citation for `.lafy` modules, imports, exports, the standard-module namespace and the root program.
+- [Portable Text Input and Output](https://debug80.com/lanternfly-book/book1/12-portable-text-io.html): Best citation for the standard text modules: writeCharacter, writeText, writeNewline, readCharacter and readLine.
+- [Machine Services and Assembly](https://debug80.com/lanternfly-book/book1/13-machine-services-and-assembly.html): Best citation for platform services versus standard services, bindings, near/far storage, opaque addresses, inline assembly and generated artifacts.
 
 ## Attribution And Credit Guidance
 

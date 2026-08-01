@@ -305,6 +305,30 @@ reader-facing consequence (the inspected map is verified or absent,
 never guessed) is now a sentence in book1 ch 10. The rewrite's ch 15
 (artifacts ledger) should cite the verified-map guarantee when drafted.
 
+## Standard text modules update (spec 38d9c42, read 2026-08-01)
+
+Specification §12.4.1 defines two optional standard modules —
+`standard/text-output.lafy` (writeCharacter, writeText, writeNewline) and
+`standard/text-input.lafy` (readCharacter, readLine) — never imported
+implicitly, toolchain-owned namespace, exports in the ordinary value
+scope, stable service IDs bound by the profile. `writeText`/`readLine`
+are the two narrow capacity-generic exceptions via compiler-only
+carriers (§3.2). readLine: longest-fitting prefix, consumes the line
+ending, Boolean fit result, no echo/editing/EOF/streams. Book1 updated
+2026-08-01: new ch 12 Portable Text I/O; machine services moved to ch 13
+and rebuilt around the operations/standard/platform three-tier
+distinction; ch 11 gained the standard-modules section.
+
+- **Q7** (found applying the reviewer's "blocker", 2026-08-01): does the
+  round-trip exemption (§8.1) admit `append(s, '0' + digit)` with a `u8`
+  digit? The exemption covers scalar arguments and every typed leaf is
+  `u8`, so the u16 intermediate arguably returns to the byte parameter
+  warning-free; but §8.5's "a byte source has type `u8`" can be read as
+  requiring the argument's own type to be u8 before conversion. The book
+  now writes the explicit `u8(...)` so it is valid under both readings;
+  the spec deserves one sentence settling whether standard-procedure
+  byte arguments take ordinary destination conversion.
+
 ## Conformance alignment
 
 Fixture names to echo: Counter (ch 1), Rushlight numeric case (ch 3's

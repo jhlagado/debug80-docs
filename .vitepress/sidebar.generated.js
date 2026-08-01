@@ -1652,8 +1652,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/11-modules-and-imports.html"
         },
         {
+          "text": "Portable Text Input and Output",
+          "link": "/lanternfly-book/book1/12-portable-text-io.html"
+        },
+        {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/12-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/13-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1770,8 +1774,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/11-modules-and-imports.html"
         },
         {
+          "text": "Portable Text Input and Output",
+          "link": "/lanternfly-book/book1/12-portable-text-io.html"
+        },
+        {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/12-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/13-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1888,8 +1896,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/11-modules-and-imports.html"
         },
         {
+          "text": "Portable Text Input and Output",
+          "link": "/lanternfly-book/book1/12-portable-text-io.html"
+        },
+        {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/12-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/13-machine-services-and-assembly.html"
         }
       ]
     },
