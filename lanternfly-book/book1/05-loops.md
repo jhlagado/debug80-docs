@@ -179,13 +179,13 @@ and the outer loop tests it before starting another pass.
 
 ## Choosing a loop
 
-| Repetition rule | Form |
-| --- | --- |
-| visit an inclusive numeric range | `for ... to ... end` |
-| visit a half-open numeric range | `for ... until ... end` |
+| Repetition rule                             | Form                      |
+| ------------------------------------------- | ------------------------- |
+| visit an inclusive numeric range            | `for ... to ... end`      |
+| visit a half-open numeric range             | `for ... until ... end`   |
 | visit every element of an array (Chapter 6) | `for each ... in ... end` |
-| test before each pass | `while ... end` |
-| repeat until a statement exits | `while true ... end` |
+| test before each pass                       | `while ... end`           |
+| repeat until a statement exits              | `while true ... end`      |
 
 The loop form should put the stopping rule where it naturally belongs. A clear
 stopping rule makes termination easier to reason about and gives the backend

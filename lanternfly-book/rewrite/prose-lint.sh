@@ -5,7 +5,8 @@
 # back-pointing restatements still need the sentence-level reading pass.
 
 set -e
-TARGETS="${*:-book1 rewrite/briefs rewrite/drafts rewrite/examples}"
+BASE="$(cd "$(dirname "$0")/.." && pwd)"
+TARGETS="${*:-$BASE/book1 $BASE/rewrite/briefs $BASE/rewrite/drafts $BASE/rewrite/examples}"
 FAIL=0
 
 check() {

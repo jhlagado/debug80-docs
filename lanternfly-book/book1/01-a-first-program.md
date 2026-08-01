@@ -144,11 +144,11 @@ variable changes because neither one appears on the left of the assignment.
 
 We can account for all three variables before and after the statement:
 
-| Variable | Before | After |
-| --- | ---: | ---: |
-| `subtotal` | 120 | 120 |
-| `postage` | 15 | 15 |
-| `total` | 0 | 135 |
+| Variable   | Before | After |
+| ---------- | -----: | ----: |
+| `subtotal` |    120 |   120 |
+| `postage`  |     15 |    15 |
+| `total`    |      0 |   135 |
 
 In mathematics, an equals sign states that two expressions have the same
 value. Assignment has a direction. A useful spoken reading is “put
@@ -177,9 +177,9 @@ standard output device. One machine may have a serial port, another a
 memory-mapped display and another only a monitor routine supplied in ROM.
 
 Lanternfly reaches facilities like these through typed services. Portable
-text output arrives in Chapter 12 as a standard module a program explicitly
-imports — still requiring the target's support — and Chapter 13 shows how a
-platform declares its own machine services. Adding output here would
+text output arrives in Chapter 12 as a standard module that a program
+explicitly imports and a target must still support, and Chapter 13 shows
+how a platform declares its own machine services. Adding output here would
 require that boundary before we have established how an ordinary
 assignment works.
 

@@ -26,10 +26,11 @@ exactly fourteen bytes settled at compile time. There is no allocator and no
 hidden buffer; the declaration is the cost. A capacity of 255 or more widens
 the length field to two bytes, `N + 3` in all, and nothing else changes.
 
-The trailing zero byte is the *terminator*, and every string operation
+The trailing zero byte is the _terminator_, and every string operation
 maintains it, so the payload is always valid NUL-terminated text. A firmware
 or platform routine that requires the classic C convention can read the
-bytes directly, at no conversion cost, while `length` never scans for the
+bytes as they sit — no terminator scan to find the end, no terminator to
+insert, no payload to copy — while `length` never scans for the
 zero: it reads the stored count and returns it as a `u16`.
 
 ## Literals, copies and growth
@@ -88,8 +89,8 @@ agreement: the stored count, the nonzero payload, and the terminator sitting
 immediately after it. Assignment, `append`, `clear`, comparison and `length`
 are the built-in interface, and each operation preserves what the others
 rely on. Chapter 12's portable text services extend the family, reading
-and writing whole strings at the program's edge through the same sealed
-door, without ever exposing the representation.
+and writing whole strings at the program's edge through compiler-managed
+carriers, without ever exposing the representation.
 
 A `u8` array makes none of these promises, so it never converts into a
 string, and a string is not an array of its bytes. Byte storage under other
@@ -124,8 +125,8 @@ content. `playerName` finishes as `HELLO!` and `statusLine` as `MODE 2`.
 - Comparisons examine text content; all-zero storage is the valid empty
   string.
 - The representation is sealed — assignment, `append`, `clear`, comparison
-  and `length` are the built-in interface, and later services reach strings
-  through the same sealed door.
+  and `length` are the built-in interface, and later services reach
+  strings only through checked operations.
 
 A string keeps values of one kind in order. In the next chapter we group
 values of different kinds into records, and lay them out byte by byte.

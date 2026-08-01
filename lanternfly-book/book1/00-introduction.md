@@ -41,8 +41,8 @@ Interpreted BASIC made small computers approachable but spent most of the
 processor reading the program; assembly used the machine fully but
 dissolved every idea into register bookkeeping. Lanternfly keeps the
 readable surface and compiles it, and its toolchain keeps the generated
-assembly open for inspection, so the cost of any line is a fact we can
-look up rather than a guess.
+assembly open for inspection, so the cost of what a line emits is a fact
+we can look up rather than a guess.
 
 ## The intended reader
 
@@ -78,8 +78,8 @@ few lines at a time, one idea per section; the full source waits at the
 end of the chapter as a plain-text listing, and a short summary closes
 each chapter with the rules it introduced.
 
-The chapters build strictly on one another — nothing is used before it is
-taught — and the route is worth seeing whole before we set out. Chapter 1
+The chapters build strictly on one another, with nothing used before it
+is taught, and the route is worth seeing whole before we set out. Chapter 1
 settles us inside a single assignment and the simplest subroutine call.
 Chapters 2 and 3 are about values: types, literals and constants, then
 calculations, conversions and comparisons. Chapter 4 names fixed sets of
@@ -87,8 +87,8 @@ alternatives and turns Boolean answers into decisions; Chapter 5 adds
 loops. Chapters 6 through 8 build our data structures: fixed arrays,
 counted strings, then records with exact layouts. Chapter 9 completes
 subroutines with parameters, results and locals, and Chapter 10 shows how
-a program records *which* piece of data an operation applies to — with
+a program records _which_ piece of data an operation applies to — with
 indices and aliases rather than pointers. Chapter 11 grows programs past
-one file with modules and imports, Chapter 12 gives programs a portable
-voice through the standard text services, and Chapter 13 opens the machine
+one file with modules and imports, Chapter 12 reads and writes text
+portably through the standard services, and Chapter 13 opens the machine
 boundary itself: platform services, opaque addresses and inline assembly.
