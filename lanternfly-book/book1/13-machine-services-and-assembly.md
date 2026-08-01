@@ -95,7 +95,9 @@ standard contract.
 
 ## Near and far storage
 
-Interfaces are also where storage location starts to matter. Every static
+Interfaces are also where storage location starts to matter. The `near`
+and `far` spellings describe how a target reaches an aggregate — nothing
+more; they are not a return of source pointers. Every static
 storage root has a target storage class. Ordinary compiler-allocated
 storage is _near_: directly usable in the target's current address context.
 A banked or segmented target also offers _far_ storage, which carries extra
@@ -192,13 +194,13 @@ modules import their exported signatures.
 
 ## Generated artifacts
 
-A source-generating backend records the information needed to inspect the
-translation: the generated assembly, the mappings from Lanternfly lines to
-generated ranges and machine addresses, typed symbols and exact layouts,
-the selected helpers, the external bindings and their adapters, and the
-runtime fault sites. You can inspect the instructions behind a loop, find
-the address of a record, see why a helper was linked or locate the
-generated code for a source statement.
+Reading the translation is a practical activity: inspect the instructions
+behind a loop, find the address of a record, see why a helper was linked,
+trace a runtime fault to its source line. A source-generating backend
+records what those actions need — the generated assembly, the mappings
+from Lanternfly lines to generated ranges and machine addresses, typed
+symbols and exact layouts, the selected helpers, and the external
+bindings with their adapters.
 
 The mapping is verified when the toolchain composes the final program: a
 map that cannot be validated against the assembled output is an error, so
@@ -233,11 +235,9 @@ external binding names. The change traces to 230 and prints as
 - Generated artifacts connect source to machine, and their source map is
   validated or absent, never guessed.
 
-You can now read a Lanternfly program from its first declaration to its
-final `end`, account for its storage byte by byte, and inspect every
-emitted operation in generated assembly — while the verified map records
-the declarations and folded expressions that emit nothing, without
-inventing a machine range for them. The
-[language reference](../book2/) holds the exact rules whenever you need
-them — and when the first compiler arrives, the programs you have traced
-in these chapters will be among the first it runs.
+The [language reference](../book2/) holds the exact rules whenever a
+chapter's working account is not enough. What this book leaves in your
+hands is the verified source map: every emitted operation inspectable in
+generated assembly, every folded-away statement recorded without an
+invented machine range, and every trace you worked by pencil checkable
+against the real thing.

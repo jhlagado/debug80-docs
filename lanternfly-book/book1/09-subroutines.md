@@ -71,10 +71,10 @@ total = atMost(total + nextAmount, 1000)
 ```
 
 Every reachable path in a result-bearing routine must return a compatible
-scalar. First-edition results may be ordinals — integers, enumerations and
-ranges — Booleans or opaque addresses. Strings, records and arrays remain in
-caller-owned storage and are reached through aggregate parameters and
-aliases.
+scalar value. (The scalar kinds — ordinals, Booleans, opaque addresses —
+are catalogued in the language reference.) Strings, records and arrays
+remain in caller-owned storage and are reached through aggregate
+parameters and aliases.
 
 A result-bearing call may stand alone when its side effects matter and its
 result may be discarded. A result-free routine cannot appear where an
@@ -101,9 +101,10 @@ record or array is aggregate storage, so a routine reaches one through a
 parameter, or through the alias form the next chapter introduces, rather
 than owning a local copy.
 
-A backend may keep locals in registers, stack slots or proven-safe static
-scratch. The source rule remains the same: overlapping invocations receive
-independent scalar parameters and locals.
+The source-level guarantee comes first: overlapping invocations receive
+independent scalar parameters and locals. Where a backend keeps them —
+registers, stack slots or proven-safe static scratch — never changes that
+rule.
 
 ## Aggregate parameters
 
@@ -167,14 +168,12 @@ self-call is legal source. A call to a later routine is a
 declaration-before-use error, which makes mutual recursion — two routines
 each calling the other — unwritable in one module.
 
-A recursive call needs an independent parameter-and-local frame for every
-active invocation. A recursion-capable target profile defines the frame
-layout, stack bounds and reentrancy rules. A profile based on fixed
-scratch storage rejects a self-call because another invocation would
-overwrite the active frame.
-
-Whether a recursive program is valid therefore depends on the selected
-target; the complete frame and capability rules live in the language
+Whether that self-call is actually available depends on the selected
+target. The reason is storage: every active invocation needs an
+independent parameter-and-local frame, so a recursion-capable profile
+defines frame layout and stack bounds, while a profile based on fixed
+scratch storage rejects a self-call that would overwrite the active
+frame. The complete frame and capability rules live in the language
 reference.
 
 ## Example

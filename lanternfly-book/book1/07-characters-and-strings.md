@@ -19,7 +19,7 @@ var playerName as string[12]
 
 ## The counted layout
 
-`string[12]` is a counted string in the Pascal tradition. The capacity is
+`string[12]` is a counted string. The capacity is
 part of the type, and the layout is as concrete as any array's: one length
 byte, twelve payload cells, and a zero byte after the current payload, for
 exactly fourteen bytes settled at compile time. There is no allocator and no
@@ -86,7 +86,10 @@ any time.
 The length byte, the payload cells and the terminator have no names, and no
 index reaches them. The whole arrangement depends on three facts staying in
 agreement: the stored count, the nonzero payload, and the terminator sitting
-immediately after it. Assignment, `append`, `clear`, comparison and `length`
+immediately after it. One mismatch shows why the sealing matters: if a
+payload byte could change without the count and terminator moving with it,
+`length` would report one string, comparison would read another, and the
+next `append` would write somewhere between them. Assignment, `append`, `clear`, comparison and `length`
 are the built-in interface, and each operation preserves what the others
 rely on. Chapter 12's portable text services extend the family, reading
 and writing whole strings at the program's edge through compiler-managed

@@ -10,9 +10,10 @@ nav_order: 12
 Every program so far has left its results sitting in storage, and Chapter
 1 promised the reason: the small computers Lanternfly targets share no
 standard output device, and the boundary deserved proper treatment before
-we crossed it. An interactive program cannot wait forever, though — it must
-ask, listen and answer. The first edition's answer is a pair of standard
-modules that make text portable while leaving the device to the target:
+we crossed it. An interactive program needs more — a way to prompt, to
+receive input and to respond. The first edition's answer is a pair of
+standard modules that make text portable while leaving the device to the
+target:
 
 ```lanternfly
 // greet.lafy
@@ -63,18 +64,18 @@ lineFits = readLine(command)
 `readCharacter` waits until the input device supplies one character byte
 and returns it as a `u8`.
 
-`readLine` fills a string from one input line, and its contract is worth
-reading closely because it spells out exactly what happens when a line
-does not fit. It evaluates
-its `string[N]` destination once, waits for a line, consumes the line
-ending without storing it, and replaces the destination with the received
-bytes. An empty line produces the empty string. When everything fits, it
-returns `true`. When a zero byte arrives or the line is longer than `N`,
-it stores the longest valid prefix that fits, discards the rest of that
-line, and returns `false` — so the next call starts cleanly at a new line,
-and the operation never requires an unbounded full-line buffer. The
-Boolean result is there to act on: accept the prefix, complain, or ask
-again.
+`readLine` fills a string from one input line. It evaluates its
+`string[N]` destination once, waits for a line, consumes the line ending
+without storing it, and replaces the destination with the received bytes.
+An empty line produces the empty string, and when everything fits, the
+operation returns `true`.
+
+The contract is equally exact when a line does not fit. When a zero byte
+arrives or the line is longer than `N`, `readLine` stores the longest
+valid prefix that fits, discards the rest of that line, and returns
+`false` — so the next call starts cleanly at a new line, and the
+operation never requires an unbounded full-line buffer. The Boolean
+result is there to act on: accept the prefix, complain, or ask again.
 
 ## Deliberate limits
 
@@ -93,13 +94,13 @@ silently stubbed.
 
 Chapter 9's rule was exact: a string parameter names one capacity and
 accepts only that capacity. `writeText` and `readLine` are the language's
-two exceptions: each accepts _any_ `string[N]`, because the compiler
-forms a temporary carrier holding the storage class, payload location and
-layout for the duration of the call. The carrier is not a value: source
-cannot store, return, compare or rebind it, and no routine we write can
-declare a parameter like it. The exceptions live entirely inside these two
-compiler-defined interfaces, and the sealed representation and the
-no-pointer rule pass through them untouched.
+two exceptions — each accepts _any_ `string[N]`. The compiler arranges
+the call itself, through a temporary of its own that no source program
+can hold, store or declare a parameter like; the storage details are in
+the language reference. The source rule is what matters here: the
+exceptions live entirely inside these two compiler-defined interfaces,
+and the sealed representation and the no-pointer rule pass through them
+untouched.
 
 ## Example
 

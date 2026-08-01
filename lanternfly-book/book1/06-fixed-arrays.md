@@ -94,7 +94,9 @@ safe, and resizing the declaration updates the loop automatically.
 ## Visiting every element
 
 When the work needs each element rather than its position, `for each`
-traverses the array in row-major order:
+traverses the array in _row-major order_ — completing the rightmost
+dimension before advancing the one to its left, which for a
+one-dimensional array simply means first to last:
 
 ```lanternfly
 var sampleTotal as u16 = 0
@@ -150,8 +152,10 @@ Two indices select one value:
 weeklyReadings[day, reading] = value
 ```
 
-Memory is linear, so Lanternfly stores the rightmost dimension contiguously.
-For an array with four entries per row, the element number is:
+Memory is linear, so Lanternfly stores the rightmost dimension
+contiguously — the layout behind the row-major traversal order that
+`for each` already follows. For an array with four entries per row, the
+element number is:
 
 ```text
 day * 4 + reading
@@ -193,8 +197,7 @@ const calibration as i8[2, 4] = [
 ```
 
 The compiler rejects missing entries, extra entries and rows with the wrong
-shape. A target profile may place constant aggregate data in read-only memory,
-which preserves writable RAM for changing program state.
+shape. A target profile may place constant data in read-only memory.
 
 ## Clearing and filling
 
@@ -208,8 +211,9 @@ fill(weeklyReadings, 0)
 `clear` writes the all-zero representation to a writable array whose
 elements accept it — integer and Boolean elements do. `fill`
 evaluates one compatible scalar value and writes it to every array entry in
-row-major order. Later chapters extend `clear` to the aggregate types they
-introduce.
+row-major order. An array is the book's first _aggregate_ — a stored value
+built from smaller values — and later chapters extend `clear` to the
+aggregates they introduce: strings, then records.
 
 The backend may lower either operation to an inline loop, target instruction
 sequence or runtime helper. The source names the operation; generated

@@ -195,14 +195,14 @@ independent snapshot, so later changes to the source leave the copy unchanged.
 Overlapping source and destination behave as though the source value were read
 in full before any destination byte changed.
 
-The backend may inline a small copy, generate a loop or call a helper — a
-four-byte `Reading` and a 256-byte table have the same source operation but
-very different machine costs.
-
 `clear` extends to records whose every leaf accepts the all-zero
 representation — integers, Booleans and strings all do — so
 `clear(dailyLog)` resets the date, the four entries and `used` in one
 statement.
+
+The backend may inline a small copy, generate a loop or call a helper — a
+four-byte `Reading` and a 256-byte table have the same source operation but
+very different machine costs.
 
 Owned local variables remain scalar in the first edition. A subroutine that
 needs a short local name for an existing record, array or string uses the

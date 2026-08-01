@@ -41,8 +41,8 @@ Interpreted BASIC made small computers approachable but spent most of the
 processor reading the program; assembly used the machine fully but
 dissolved every idea into register bookkeeping. Lanternfly keeps the
 readable surface and compiles it, and its toolchain keeps the generated
-assembly open for inspection, so the instructions and helpers behind any
-line are facts we can read rather than guesses.
+assembly open for inspection, so the instructions and helpers behind every
+emitted operation are facts we can read rather than guesses.
 
 ## The intended reader
 
