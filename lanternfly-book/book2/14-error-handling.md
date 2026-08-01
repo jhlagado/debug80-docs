@@ -222,7 +222,7 @@ and a program that declares no failable routine contains no
 failure-channel code. Register assignment is target ABI. The provisional
 Z80 candidate uses the carry flag as the discriminant with the code in
 A — `SCF` sets it in one instruction, the conditional return and jump
-forms test it directly, and the flag-borne tag leaves A free — giving
+forms test it directly, and keeping the tag in a flag leaves A free — giving
 these costs on the static-frame profile:
 
 | Construct | Candidate Z80 lowering | Cost |
