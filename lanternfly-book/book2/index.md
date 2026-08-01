@@ -32,10 +32,9 @@ preserve.
 > [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
 > remains normative if this manual and the specification differ.
 
-The vocabulary is precise. **Must** marks a semantic requirement, **should**
-marks a strong toolchain recommendation, **provisional** marks a rule awaiting
-parser or corpus evidence, and **deferred** marks a facility outside the first
-implementation.
+**Must** marks a semantic requirement, **should** marks a strong toolchain
+recommendation, **provisional** marks a rule awaiting parser or corpus evidence
+and **deferred** marks a facility outside the first implementation.
 
 ## Chapters
 

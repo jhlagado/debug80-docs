@@ -30,9 +30,8 @@ lowercase word and capitalizes each later word: `playerScore` or
 first word as well: `PlayerScore` or `GameState`. Lanternfly uses the first
 form for values and routines, and the second for user-defined types.
 
-Identifiers begin with an ASCII letter. Later characters may be ASCII
-letters, digits or `_`. The `_` character is permitted, although lower camel
-case and Pascal case are canonical.
+Identifiers begin with an ASCII letter. Later characters may be ASCII letters,
+digits or `_`; canonical names still use lower camel case or Pascal case.
 
 ## Type and value namespaces
 
@@ -60,10 +59,10 @@ compiler has checked it completely. Code may therefore use imported names and
 earlier local declarations, but not declarations that appear later in the
 file.
 
-A `sub` is the one carefully bounded case. Its signature becomes visible
-after the header is checked and before its body, so the routine may call
-itself. Its body may also call imported routines and earlier local routines;
-it cannot call a later routine.
+Direct self-calls are the one bounded exception. After a `sub` header is
+checked, its signature becomes visible before its body, so the routine may call
+itself. Its body may also call imported routines and earlier local routines; it
+cannot call a later routine.
 
 The rule applies to types, constants, enum members, storage, external
 routines and ordinary routines. In particular:

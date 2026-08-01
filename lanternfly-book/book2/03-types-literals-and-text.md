@@ -152,7 +152,7 @@ var contactCity as string[16]
 ```
 
 `N` is a positive constant from 1 through 65,534 and is part of the type. The
-capacity chooses the representation at compile time:
+capacity determines the representation at compile time:
 
 | Capacity           | Length header                           | Payload begins | Exact size |
 | ------------------ | --------------------------------------- | -------------: | ---------: |
@@ -168,8 +168,8 @@ current length. Bytes after that terminator are unspecified. All-zero storage
 is a valid empty string.
 
 The representation is sealed. No source path can select the length header,
-payload cells or terminator. This keeps the count, payload and terminator in
-step: source code cannot update one while forgetting the others.
+payload cells or terminator; string operations update all three through one
+checked interface.
 
 ## String operations
 
