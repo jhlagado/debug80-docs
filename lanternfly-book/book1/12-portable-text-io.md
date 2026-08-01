@@ -106,13 +106,14 @@ no-pointer rule pass through them untouched.
 The [chapter listing](/lanternfly-book/book1/code/12-portable-text.txt)
 exercises all five operations in sequence: it prompts, reads a line into
 a `string[16]`, reports whether the line fitted, writes it back, then
-prompts again and reads one character. Reading the line first and the
-single character second keeps the input stream clean, because `readLine`
-always finishes its line, so `readCharacter` begins on a fresh one. At
-the keyboard, one distinction applies: a target may echo input as it is
-typed, before either read operation returns, and the program's own
-`writeText(command)` and `writeCharacter(answer)` are separate output
-operations — on an echoing target, the typed text appears twice.
+prompts again and reads one character. Because `readLine` consumes the
+complete line, including its ending, the later `readCharacter` begins
+with the next supplied character. At the keyboard, one distinction
+applies: a target may echo input as it is typed, before either read
+operation returns, and the program's own `writeText(command)` and
+`writeCharacter(answer)` are separate output operations — so on an
+echoing target, the accepted command and the answer character may each
+appear once as they are typed and once as the program writes them.
 
 ## Chapter summary
 

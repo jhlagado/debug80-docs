@@ -130,10 +130,12 @@ into local stack storage.
 
 An aggregate parameter states its exact shape. A string parameter names
 its exact capacity, because the alias must match the caller's layout byte
-for byte: `line as string[40]` accepts a `string[40]` and nothing else. That is the ordinary rule for every routine we can write; Chapter
-12's standard text services hold the language's two narrow exceptions.
-Routines shared between modules also state where the aggregate lives;
-Chapter 13 introduces that spelling with the interfaces that need it.
+for byte: `line as string[40]` accepts a `string[40]` and nothing else.
+
+That is the ordinary rule for every routine we can write; Chapter 12's
+standard text services hold the language's two narrow exceptions. Routines
+shared between modules also state where the aggregate lives, and Chapter
+13 introduces that spelling with the interfaces that need it.
 
 ## Early return
 

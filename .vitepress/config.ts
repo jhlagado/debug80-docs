@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress';
 import { sidebars } from './sidebar.generated.js';
+import lanternflyGrammar from './lanternfly.tmLanguage.json' with { type: 'json' };
 
 export default defineConfig({
   title: 'Debug80 Docs',
@@ -32,6 +33,9 @@ export default defineConfig({
     // The books fence Z80 listings as ```z80; Shiki has no Z80 grammar, so
     // reuse the generic assembler grammar rather than falling back to txt.
     languageAlias: { z80: 'asm' },
+    // Lanternfly has no published grammar; a small TextMate grammar keeps
+    // its fences highlighted instead of falling back to plain text.
+    languages: [lanternflyGrammar as never],
     // Warm-toned dark syntax theme to match the Nocturne palette.
     theme: 'github-light',
   },
