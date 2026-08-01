@@ -30,9 +30,9 @@ calls and device access enter the language as typed external routines.
 
 ## Standard text-service bindings
 
-The standard text modules from Chapter 10 expose portable source operations.
-The selected target profile binds each operation that the program uses to a
-stable service ID:
+[Chapter 10](10-modules-and-programs.md#standard-text-modules) defines the
+programmer-facing text operations. The selected target profile binds each
+operation that a program uses to a stable service ID:
 
 | Export           | Service ID                           |
 | ---------------- | ------------------------------------ |
@@ -42,19 +42,13 @@ stable service ID:
 | `readCharacter`  | `standard.textInput.readCharacter`   |
 | `readLine`       | `standard.textInput.readLine`        |
 
-All five services perform device I/O and return normally. `writeText` reads
-only its evaluated text source for the duration of the call. A target may
-bind these IDs to monitor or firmware routines, a keyboard and display, a
-serial terminal, generated substrate code, a desktop terminal or a test
-adapter. `readLine` writes only its once-evaluated string destination and
-returns a canonical Boolean. The visible character-byte order and bounded line
-result remain the same.
-
-The toolchain owns the versioned standard-module interfaces; the target owns
-their bindings. A target need not provide either optional module, but it must
-reject a program that imports and uses a service it cannot bind. The ordinary
-external-binding, ABI, adapter and runtime-component machinery carries the
-implementation—there is no separate stream or operating-system abstraction.
+The toolchain owns the versioned module interfaces; the target owns the
+bindings. A target may implement an ID with firmware, a serial device,
+generated substrate code, a desktop terminal or a test adapter. It must
+preserve the Chapter 10 contract for character order, bounded line input and
+normal return. A target that cannot bind a service used by the program rejects
+the build. The ordinary external-binding, ABI, adapter and runtime-component
+machinery carries that implementation.
 
 ## External routines
 
