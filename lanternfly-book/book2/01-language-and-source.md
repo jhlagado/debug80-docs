@@ -146,11 +146,3 @@ The language has these statement categories:
 - statement-level `asm`.
 
 Loose executable statements are invalid in an ordinary module.
-
-## Implementation stages
-
-K0, K1 and K2 divide the compiler work into manageable milestones; they do
-not divide the language into smaller editions. A development build may reject
-a later-stage construct with `D-STAGE-001`. It cannot report that construct
-as invalid Lanternfly or claim a conforming 0.4 front end until the full
-required inventory passes.
