@@ -90,10 +90,10 @@ types `12X4` and Enter. The `X` is where the routine detects the
 problem — but `4` and the line ending are still queued in the input. If
 the routine reported the failure immediately, the retry would begin by
 reading that leftover `4` and could accept it as a fresh, valid entry —
-a wrong answer born entirely on the error path. The rule this teaches
-generalises: **a routine that fails must first put the world back in
-order** — here, by consuming the rest of the spoiled line so the retry
-starts clean.
+a wrong answer produced by the error handling itself. The rule this teaches
+generalises: **a routine that fails must clean up after itself first** —
+here, by consuming the rest of the spoiled line so the retry starts
+clean.
 
 ## A routine that can fail
 
@@ -138,10 +138,9 @@ Every invocation of this routine now ends in exactly one of two ways:
 success, carrying a `u16`, or failure, carrying one member of
 `EntryError`. `return` delivers success as always. `fail` is the new
 statement: it ends the call at once, carrying the named error to the
-caller. It reads like `return`, and that is the right instinct — a
-failure is not an emergency, just the other kind of answer. Both `fail`
-statements stand *after* their `skipRestOfLine`: cleanup first, then
-report.
+caller. It reads like `return` because it works like `return`: failure
+is simply the other way a call can end. Both `fail` statements stand
+*after* their `skipRestOfLine`: cleanup first, then report.
 
 The digit accumulation is worth a second look, because it shows the
 difference between this chapter and the fault machinery. Chapter 3
@@ -191,12 +190,10 @@ the block, and the block's contents are ordinary statements: here a
 `select`, a message and a `continue` back around the loop for another
 try.
 
-The `select` carries a guarantee. Because `code` is an enum,
-Chapter 4's exhaustiveness rule applies: cover every member or say
-`else`. Add a third member to `EntryError` next month and every handler
-that selects over it is flagged until the new case is covered. The
-error set is a checklist, and the compiler checks it against every
-handler.
+Because `code` is an enum, Chapter 4's exhaustiveness rule applies:
+cover every member or say `else`. Add a third member to `EntryError`
+next month and every handler that selects over it is flagged until the
+new case is covered.
 
 `on error` is BASIC ancestry, modernised: where `ON ERROR GOTO` sent the
 whole program to one line number, this block belongs to one statement,
@@ -215,7 +212,7 @@ sub promptForSpeed() as u16 fails EntryError
 end
 ```
 
-Read it aloud: return the number, or fail. If `readNumber` fails,
+The line reads as English: return the number, or fail. If `readNumber` fails,
 `promptForSpeed` fails with the same code, and the failure continues
 toward `main`, where the `on error` block handles it. Two rules keep
 this honest. A routine may only use `or fail` if its own signature
@@ -231,7 +228,7 @@ that prompts the person.
 
 ## What the compiler rejects
 
-The rules above have teeth, and the teeth are compile-time errors:
+Breaking either rule is a compile-time error:
 
 ```lanternfly
 readNumber()                     // rejected: failure ignored
@@ -242,10 +239,9 @@ end                              // declare 'fails'
 ```
 
 The first is the important one. In many languages a failure code is a
-return value like any other, and ignoring it is not just possible but
-easy — the source of a thousand quiet disasters. Here a failable call
-must be handled, propagated or given a default, and there is no fourth
-option. The second rejection is the same rule seen from below: a
+return value like any other, and ignoring one is easy and common. Here
+a failable call must be handled, propagated or given a default, and
+there is no fourth option. The second rejection is the same rule seen from below: a
 routine cannot forward a failure its signature does not admit. Between
 them, `fails` clauses form an unbroken chain from every `fail` statement
 to some `on error` block, and the chain is visible in the signatures
@@ -254,8 +250,8 @@ alone.
 ## A value instead: `or` with a default
 
 Sometimes the response to failure is simply a sensible substitute, and a
-whole handler block is ceremony. Putting a value after `or` supplies the
-fallback:
+full handler block is unnecessary. Putting a value after `or` supplies
+the fallback:
 
 ```lanternfly
 speed = promptForSpeed() or 100
@@ -298,9 +294,9 @@ level — and when there are several, they run in reverse order, latest
 first.
 
 `skipRestOfLine` and `defer` are the same lesson at two scales: failure
-paths have housekeeping duties, and the language can automate them
-inside one routine but not across the input stream — that part remains
-our design responsibility.
+paths still have cleanup to do, and the language automates it inside one
+routine but not across the input stream — that part remains our
+responsibility.
 
 ## Errors are not faults
 
@@ -309,10 +305,10 @@ worth restating now that both sides are familiar. A fault — the bounds
 check of Chapter 6, the range check of Chapter 4, division by zero — is
 a broken contract, and no `on error` block can catch one. An error is an
 expected outcome, declared in a signature and carried as a value. The
-temptation to blur the line runs both ways. Using errors for bugs buries
-evidence: a corrupted index should stop the program at the scene, not
-limp upward as a code. Using faults for input turns a typo into a
-crash. The test is one question: could this happen in a correct program?
+temptation to blur the line runs both ways. Using errors for bugs hides
+the cause: a corrupted index should stop the program at the point of
+damage, not travel upward as an error code. Using faults for input turns
+a typo into a crash. The test is one question: could this happen in a correct program?
 A typed `X` can. An index past the end of an array cannot.
 
 ## What it costs
@@ -338,7 +334,7 @@ bracketed `echoNumber` variant. Typing `250` sets the speed and prints
 spoiled line is consumed, never re-read — and the loop prompts again; an
 empty line is skipped without comment; `65536` produces the range
 message. Every path back to the prompt goes through the `on error`
-block, and there is no path on which a failure goes unanswered.
+block.
 
 ## Chapter summary
 
@@ -347,7 +343,7 @@ block, and there is no path on which a failure goes unanswered.
   set is design work, because not every surprise is an error.
 - `fails` in a signature declares the error set; `fail member` ends the
   call with that error, as `return` ends it with success.
-- A failing routine puts the world back in order first — here, by
+- A failing routine cleans up after itself before it reports — here, by
   consuming the rest of a spoiled input line so a retry starts clean.
 - A failable call must be answered: an `on error` block handles the
   failure and leaves the destination unwritten, `or fail` passes it to a
