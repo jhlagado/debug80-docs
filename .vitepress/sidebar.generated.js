@@ -1656,8 +1656,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/12-portable-text-io.html"
         },
         {
+          "text": "Expecting Failure",
+          "link": "/lanternfly-book/book1/13-expecting-failure.html"
+        },
+        {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/13-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/14-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1716,6 +1720,10 @@ export const sidebars = {
         {
           "text": "Diagnostics and Conformance",
           "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
+        },
+        {
+          "text": "Failable Routines and Error Handling",
+          "link": "/lanternfly-book/book2/14-error-handling.html"
         }
       ]
     }
@@ -1778,8 +1786,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/12-portable-text-io.html"
         },
         {
+          "text": "Expecting Failure",
+          "link": "/lanternfly-book/book1/13-expecting-failure.html"
+        },
+        {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/13-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/14-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1838,6 +1850,10 @@ export const sidebars = {
         {
           "text": "Diagnostics and Conformance",
           "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
+        },
+        {
+          "text": "Failable Routines and Error Handling",
+          "link": "/lanternfly-book/book2/14-error-handling.html"
         }
       ]
     }
@@ -1900,8 +1916,12 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/12-portable-text-io.html"
         },
         {
+          "text": "Expecting Failure",
+          "link": "/lanternfly-book/book1/13-expecting-failure.html"
+        },
+        {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/13-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/14-machine-services-and-assembly.html"
         }
       ]
     },
@@ -1960,6 +1980,10 @@ export const sidebars = {
         {
           "text": "Diagnostics and Conformance",
           "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
+        },
+        {
+          "text": "Failable Routines and Error Handling",
+          "link": "/lanternfly-book/book2/14-error-handling.html"
         }
       ]
     }

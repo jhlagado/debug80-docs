@@ -68,7 +68,7 @@ import line.
 
 Private by default is the useful direction. A module's exports are its
 promise to other modules; everything unexported can be reorganised freely,
-because no other file can have grown to depend on it. Chapter 13 builds its
+because no other file can have grown to depend on it. Chapter 14 builds its
 platform boundary on exactly this mechanism.
 
 ## The standard modules

@@ -179,7 +179,7 @@ memory-mapped display and another only a monitor routine supplied in ROM.
 
 Lanternfly reaches facilities like these through typed services. Portable
 text output arrives in Chapter 12 as a standard module that a program
-explicitly imports and a target must still support, and Chapter 13 shows
+explicitly imports and a target must still support, and Chapter 14 shows
 how a platform declares its own machine services. Adding output here would
 require that boundary before we have established how an ordinary
 assignment works.

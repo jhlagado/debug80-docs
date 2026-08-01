@@ -37,10 +37,12 @@ exact syntax, type, storage, control-flow and diagnostic rules.
 10. [Selecting Existing Storage](10-selecting-storage.md)
 11. [Modules and Imports](11-modules-and-imports.md)
 12. [Portable Text Input and Output](12-portable-text-io.md)
-13. [Machine Services and Assembly](13-machine-services-and-assembly.md)
+13. [Expecting Failure](13-expecting-failure.md)
+14. [Machine Services and Assembly](14-machine-services-and-assembly.md)
 
 The [specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-records the normative 0.5 rules. The
+records the normative rules; it is currently the provisional 0.6 draft,
+whose error-handling revision Chapter 13 teaches. The
 [conformance contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/conformance.md)
 lists the programs and diagnostics that an implementation must test.
 

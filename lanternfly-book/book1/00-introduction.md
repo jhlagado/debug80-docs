@@ -60,9 +60,10 @@ part of the pleasure of the subject.
 ## A language before its compiler
 
 Lanternfly is a young project. This book follows the
-[0.5 specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md),
-the contract for the first compiler — and that compiler does not exist
-yet. Every example shows the intended source language, checked against
+[working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
+— the 0.5 baseline plus the provisional 0.6 error-handling revision that
+Chapter 13 teaches — the contract for the first compiler, and that
+compiler does not exist yet. Every example shows the intended source language, checked against
 the specification.
 
 For us this has an upside. Every program in the book is small enough to
@@ -92,5 +93,7 @@ subroutines with parameters, results and locals, and Chapter 10 shows how
 a program records _which_ piece of data an operation applies to — with
 indices and aliases rather than pointers. Chapter 11 grows programs past
 one file with modules and imports, Chapter 12 reads and writes text
-portably through the standard services, and Chapter 13 opens the machine
-boundary itself: platform services, opaque addresses and inline assembly.
+portably through the standard services, and Chapter 13 teaches a program
+to expect failure: error sets, failable routines and structured handling.
+Chapter 14 opens the machine boundary itself: platform services, opaque
+addresses and inline assembly.
