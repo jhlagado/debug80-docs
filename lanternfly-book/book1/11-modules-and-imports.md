@@ -70,8 +70,28 @@ compilation.
 
 Private by default is the useful direction. A module's exports are its
 promise to other modules; everything unexported can be reorganised freely,
-because no other file can have grown to depend on it. Chapter 12 builds its
+because no other file can have grown to depend on it. Chapter 13 builds its
 platform boundary on exactly this mechanism.
+
+## The standard modules
+
+Some modules ship with the toolchain rather than with the project. The
+first edition defines two, and a program that wants them imports them like
+any others:
+
+```lanternfly
+import "standard/text-output.lafy"
+import "standard/text-input.lafy"
+```
+
+Nothing is imported implicitly — Lanternfly has no prelude, so a module
+that imports nothing sees nothing beyond the language itself. The
+`standard/` path belongs to the toolchain: a project cannot place its own
+files there or shadow those names with its own modules. Once imported,
+standard exports enter the same unqualified value scope as any other
+import, under the same contiguous-prefix rule, and a program imports only
+the standard modules it actually uses. The next chapter puts both of these
+to work.
 
 ## The root program
 
@@ -122,6 +142,6 @@ display; each represents a `.lafy` source module.
 - A build manifest names the root module and entry; the compiler resolves
   imports depth first and checks each module in declaration order.
 
-Modules let one program keep its concerns in separate files. In the final
-chapter, one of those files faces the machine — and everything beyond the
-language enters through its typed front door.
+Modules let one program keep its concerns in separate files. In the next
+chapter we import the two standard ones — and after eleven chapters of
+results left quietly in storage, our programs finally speak.

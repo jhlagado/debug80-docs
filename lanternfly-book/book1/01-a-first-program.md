@@ -176,10 +176,12 @@ terminal or window. The small computers Lanternfly targets do not share one
 standard output device. One machine may have a serial port, another a
 memory-mapped display and another only a monitor routine supplied in ROM.
 
-You make facilities like these available to Lanternfly by declaring machine
-services. Later we will give such a service a typed name and call it like an
-ordinary subroutine. Adding output here would require us to explain that
-boundary before we have established how an ordinary assignment works.
+Lanternfly reaches facilities like these through typed services. Portable
+text output arrives in Chapter 12 as a standard module a program explicitly
+imports — still requiring the target's support — and Chapter 13 shows how a
+platform declares its own machine services. Adding output here would
+require that boundary before we have established how an ordinary
+assignment works.
 
 Printing 135 also involves more than sending the value of `total` to a screen.
 We would have to convert the binary integer into the character bytes `1`, `3`

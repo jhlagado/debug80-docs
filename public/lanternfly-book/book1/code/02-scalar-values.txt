@@ -3,7 +3,7 @@ const dispatchBatch as u16 = 10
 
 // Character literals are exact byte values.
 const prompt as u8 = '>'
-const newline as u8 = '\n'
+const lineFeed as u8 = '\n'
 
 var unitsInStock as u16 = 1200
 var roomTemperature as i16 = -4

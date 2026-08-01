@@ -171,11 +171,11 @@ main work. It keeps the main path at the loop body's outer indentation.
 ## Nested loops
 
 `exit` and `continue` act on the innermost loop. A loop inside another
-loop pairs every value of one control with every value of the other — five
+loop pairs every value of one control with every value of the other: five
 outer passes around ten inner passes make fifty inner bodies. When an
-inner discovery must stop the whole nest, a Boolean carries it out: the
-inner loop sets `var found as boolean = false` to `true` and exits, and
-the outer loop tests the flag before starting another pass.
+inner discovery must stop the whole nest, a Boolean flag declared `false`
+before the loops carries the news out — the inner loop sets it and exits,
+and the outer loop tests it before starting another pass.
 
 ## Choosing a loop
 

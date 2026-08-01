@@ -1,0 +1,33 @@
+// greet.lafy — the root module; the build manifest selects main as entry.
+import "standard/text-output.lafy"
+import "standard/text-input.lafy"
+
+var command as string[16]
+var lineFits as boolean = false
+var answer as u8 = 0
+
+sub promptForCommand()
+    writeText("COMMAND? ")
+    lineFits = readLine(command)
+
+    if lineFits then
+        writeText("GOT ")
+        writeText(command)
+        writeNewline()
+    else
+        writeText("TOO LONG")
+        writeNewline()
+    end
+end
+
+sub promptToProceed()
+    writeText("PROCEED (Y/N)? ")
+    answer = readCharacter()
+    writeCharacter(answer)
+    writeNewline()
+end
+
+sub main()
+    promptForCommand()
+    promptToProceed()
+end

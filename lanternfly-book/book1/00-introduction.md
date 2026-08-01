@@ -89,5 +89,6 @@ counted strings, then records with exact layouts. Chapter 9 completes
 subroutines with parameters, results and locals, and Chapter 10 shows how
 a program records *which* piece of data an operation applies to — with
 indices and aliases rather than pointers. Chapter 11 grows programs past
-one file with modules and imports, and Chapter 12 opens the machine
-boundary: typed services, opaque addresses and inline assembly.
+one file with modules and imports, Chapter 12 gives programs a portable
+voice through the standard text services, and Chapter 13 opens the machine
+boundary itself: platform services, opaque addresses and inline assembly.
