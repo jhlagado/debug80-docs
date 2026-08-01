@@ -233,8 +233,10 @@ can never divide.
 
 ## Bit masks
 
-The same word operators act on individual bits when their operands are
-integers:
+One byte can carry eight independent yes-or-no facts — a device ready
+here, an error there — and that practical economy is what bit masks are
+for. The same word operators act on individual bits when their operands
+are integers:
 
 ```lanternfly
 const readyMask as u8 = %00000001
@@ -264,10 +266,10 @@ Parentheses bind first and make an intended calculation visible:
 average = (first + second) / 2
 ```
 
-Without the parentheses, division would occur before addition. After
-parentheses, Lanternfly evaluates power, unary arithmetic, multiplication
-and division, addition and subtraction, shifts, comparisons, `not`, `and`,
-`xor` and finally `or`.
+Without the parentheses, division would occur before addition. The
+precedence order runs from arithmetic through shifts and comparisons to
+the Boolean operators, with `or` last; the complete ladder is in the
+language reference, and parentheses make any line independent of it.
 
 That ordering lets a Boolean expression read naturally:
 

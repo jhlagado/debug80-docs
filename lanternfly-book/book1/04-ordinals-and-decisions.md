@@ -51,8 +51,10 @@ enum Status as u8
 end
 ```
 
-The representation type follows `as`; members take ordinals from zero in
-declaration order, and their names are written without qualification. An
+The representation type follows `as`. Members take numbered positions
+from zero in declaration order — each member's number is its _ordinal_,
+the term this book uses from here on — and their names are written
+without qualification. An
 enumeration supports assignment and all six comparisons, and deliberately
 nothing arithmetic: adding two statuses has no meaning, and the type says
 so. Converting an integer into an enumeration is checked: an invalid
@@ -178,9 +180,9 @@ after `end`; Lanternfly cases never fall through. Because a `ReportMode`
 variable can only hold a valid member and every member has a case, this
 `select` is complete without an `else` — no value can escape it.
 
-An ordinal selector that is not an enumeration needs a safety net. A code
-read from a device is any `u8`, so its `select` handles the unmatched rest
-with `else`, and a `case` may span a run of values with a range —
+An ordinal selector that is not an enumeration can hold a value with no
+matching case, so its `select` needs `else` to supply the result for the
+unmatched rest. A `case` may also span a run of values with a range —
 `case 2 to 9` includes both ends, and `until` excludes its boundary:
 
 ```lanternfly
@@ -206,9 +208,8 @@ selector leaves unmatched values changing nothing.
 is the batch complete? — while `select` fits branches that compare one
 ordinal expression with named constant values.
 
-The opening word tells you the shape of the decision. An `else if` chain
-announces an ordered policy; a `select` announces a classification by one
-value.
+An `else if` chain announces an ordered policy; a `select` announces a
+classification by one value.
 
 ## Example
 

@@ -38,8 +38,8 @@ var number as i16
 ```
 
 This declaration appears inside `sumTen`, before its executable statements.
-`number` is a scalar local. Its name is visible only within the subroutine, and
-each invocation receives its own value.
+`number` is a scalar local: the name exists only while `sumTen` is running,
+and each run receives its own value.
 
 An owned scalar local with no initializer starts with zero bits. The `for`
 statement stores its start value before the loop body reads it, so this routine
@@ -187,9 +187,9 @@ and the outer loop tests it before starting another pass.
 | test before each pass                       | `while ... end`           |
 | repeat until a statement exits              | `while true ... end`      |
 
-The loop form should put the stopping rule where it naturally belongs. A clear
-stopping rule makes termination easier to reason about and gives the backend
-an accurate control-flow structure to lower.
+The loop form should put the stopping rule where it naturally belongs. A
+clear stopping rule is the difference between a loop we can reason about at
+a glance and one we must trace to trust.
 
 ## Example
 

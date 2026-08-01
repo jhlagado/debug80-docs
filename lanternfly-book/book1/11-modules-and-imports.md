@@ -63,10 +63,8 @@ part of the import path.
 
 Imports stand together at the top of a module, before any declaration, and
 each one's exports are visible from that point on. Everything `recordItem`
-uses is therefore above it: the imported routine through the import line,
-by the same top-to-bottom rule that orders declarations inside one file.
-Repeated imports resolve the same module once during whole-program
-compilation.
+uses is therefore above it, with the imported routine arriving through the
+import line.
 
 Private by default is the useful direction. A module's exports are its
 promise to other modules; everything unexported can be reorganised freely,
@@ -95,10 +93,13 @@ to work.
 ## The root program
 
 A build manifest names one root module and, for an executable program, one
-entry subroutine with no parameters and no result. The compiler resolves
-each module's imports depth first, checks declarations in source order,
-allocates static storage, resolves machine bindings and emits one target
-program.
+entry subroutine with no parameters and no result. The compiler follows
+each import to its module and finishes resolving that module — including
+its own imports — before checking the module that imported it, and it
+processes each module once however many times it is imported. (The
+toolchain's name for this order is _depth first_.) It then checks
+declarations in source order, allocates static storage, resolves machine
+bindings and emits one target program.
 
 The root module composes the program:
 
@@ -138,8 +139,9 @@ display; each represents a `.lafy` source module.
   interface, and unexported names stay free to change.
 - Imports form a contiguous prefix, their exports visible from the point
   of import — reading order holds across files.
-- A build manifest names the root module and entry; the compiler resolves
-  imports depth first and checks each module in declaration order.
+- A build manifest names the root module and entry; the compiler finishes
+  each imported module before its importer and processes every module
+  once.
 - The two standard modules are imported explicitly like any others; the
   `standard/` namespace belongs to the toolchain, and no prelude exists.
 

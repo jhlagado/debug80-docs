@@ -197,13 +197,13 @@ The complete source is available as the
 
 ## The build
 
-The toolchain described in the introduction turns this module into a runnable
-program: the compiler checks the declarations, the call and the assignment,
-chooses an address for each variable, and emits Z80 assembly that AZM encodes
-as machine code. The generated assembly stays open for inspection, so when an
-address or instruction choice becomes relevant, you can read exactly what the
-compiler produced. When `main` returns, the target performs its normal
-termination.
+The planned toolchain described in the introduction will turn this module
+into a runnable program: the compiler will check the declarations, the call
+and the assignment, choose an address for each variable, and emit Z80
+assembly for AZM to encode as machine code. The generated assembly stays
+open for inspection, so when an address or instruction choice becomes
+relevant, you will be able to read exactly what the compiler produced. When
+`main` returns, the target performs its normal termination.
 
 In the next chapter, we will choose integer types deliberately rather than
 accept `u16` on trust.
