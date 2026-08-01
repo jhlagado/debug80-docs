@@ -55,10 +55,10 @@ The representation type follows `as`; members take ordinals from zero in
 declaration order, and their names are written without qualification. An
 enumeration supports assignment and all six comparisons, and deliberately
 nothing arithmetic: adding two statuses has no meaning, and the type says
-so. Converting an integer into an enumeration is checked — an invalid
-constant is a compile error, and an invalid runtime value causes the range
-fault — so a `Status` variable holds a valid state or the program stops at
-the moment it would not.
+so. Converting an integer into an enumeration is checked: an invalid
+constant is a compile error, and an invalid runtime value invokes the
+range fault before any store, so a `Status` variable never holds an
+invalid state.
 
 That guarantee is the working difference from Chapter 2's integer
 constants. Three constants named `statusWorking`, `statusComplete` and
@@ -75,9 +75,9 @@ range VerboseMode as Status = complete to failed
 ```
 
 A range value widens silently to its host, while any value entering the
-range — by assignment or conversion — is checked against its domain. The
-range form itself is grammar rather than a value — `0 until 32` cannot be
-stored or passed — while a variable of a range type holds an ordinary host
+range, by assignment or conversion, is checked against its domain. The
+range form itself is grammar rather than a value (`0 until 32` cannot be
+stored or passed), while a variable of a range type holds an ordinary host
 value, checked at every boundary it crosses. Chapter 6 puts both ordinal
 kinds to work as array index domains, where a suitably typed index makes a
 bounds check unnecessary because the type already proves it.

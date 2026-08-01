@@ -98,7 +98,7 @@ routine cannot name `difference`.
 
 An owned scalar local with no initializer starts with zero bits. A string,
 record or array is aggregate storage, so a routine reaches one through a
-parameter — or through the alias form the next chapter introduces — rather
+parameter, or through the alias form the next chapter introduces, rather
 than owning a local copy.
 
 A backend may keep locals in registers, stack slots or proven-safe static
@@ -129,9 +129,8 @@ Writing `block[index]` changes `workspace[index]`. The aggregate is not copied
 into local stack storage.
 
 An aggregate parameter states its exact shape. A string parameter names
-its exact capacity — `line as string[40]` accepts a `string[40]` and
-nothing else — because the alias must match the caller's layout byte for
-byte. That is the ordinary rule for every routine we can write; Chapter
+its exact capacity, because the alias must match the caller's layout byte
+for byte: `line as string[40]` accepts a `string[40]` and nothing else. That is the ordinary rule for every routine we can write; Chapter
 12's standard text services hold the language's two narrow exceptions.
 Routines shared between modules also state where the aggregate lives;
 Chapter 13 introduces that spelling with the interfaces that need it.
@@ -197,4 +196,4 @@ parameter. Two calls to `addToTotal` produce 35. Applying
 Routines now receive values, return results and work on caller-owned
 aggregates through temporary names. The next chapter widens that last idea
 into Lanternfly's whole answer to a classic question: how does a program
-keep hold of *which* piece of storage an operation applies to?
+keep hold of _which_ piece of storage an operation applies to?

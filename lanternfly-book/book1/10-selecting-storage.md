@@ -10,7 +10,7 @@ nav_order: 10
 Aggregate assignment creates an independent copy. Often a program needs the
 opposite: several parts working with the same storage, chosen at run time.
 Lanternfly answers with data rather than with pointers. The program stores
-an integer index that records *which* entry, and a routine gives the
+an integer index that records _which_ entry, and a routine gives the
 selected storage a temporary name — an alias — while it works:
 
 ```lanternfly
@@ -58,7 +58,7 @@ array's domain is rejected at the access rather than silently misread. A
 raw machine address would carry no such relationship: nothing could
 range-check it, and nothing would connect it to the pool it came from.
 
-Bounds checking establishes *spatial* validity, and only that. An index
+Bounds checking establishes _spatial_ validity, and only that. An index
 that stays in range still identifies whatever the slot holds now — if the
 program has since reused entry 2 for a different measurement, a saved index
 of 2 faithfully selects the new occupant. Whether a slot still represents
@@ -105,7 +105,7 @@ Constant storage cannot initialize a writable alias, and volatile storage
 requires direct access so that every read and write remains visible.
 
 Aliases also complete Chapter 5's loop rule. A counted loop's body must not
-assign to the control variable through *any* name — not directly, not
+assign to the control variable through _any_ name — not directly, not
 through an alias, and not inside a routine the body calls. The loop owns
 its own progress under every spelling.
 

@@ -1,8 +1,9 @@
-// console.lafy — a platform interface module for a Z80 console target.
-// The module assembly defines the symbol the external binding names.
+// console.lafy — the platform interface module for the fictional LF-1
+// teaching machine. The module assembly defines the symbol the external
+// binding names; a real platform module does the same from a datasheet.
 asm
-ROM_WAIT_KEY = $0038
+ROM_VBLANK_WAIT = $0f09
 end
 
 export extern sub writeUnsigned(value as u16)
-export extern sub waitForKey() from "ROM_WAIT_KEY"
+export extern sub waitForVBlank() from "ROM_VBLANK_WAIT"

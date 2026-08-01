@@ -6,7 +6,7 @@ keeps track of *which thing* by declared paths, integer indices and stored
 selectors — data, not addresses. Aliases and aggregate parameters are
 temporary names for existing storage, not values. The reader leaves able to
 build every "pointer" idiom of classic small-machine code without pointers,
-and able to say why the language refuses them.
+and able to say why the language excludes them.
 
 ## Prior knowledge
 Ch 1–12: the full data and algorithm machinery; aggregate parameters used

@@ -239,6 +239,6 @@ gives element 6 and byte offset 12 because each entry occupies two bytes.
 - `clear` and `fill` express repeated aggregate writes while leaving the
   backend free to choose an implementation.
 
-An array of bytes can hold anything — including text, whose one special
-need the next chapter takes up: a sequence of character bytes must also
-record where it ends.
+An array of bytes can hold any fixed byte sequence — including text,
+whose one special need the next chapter takes up: a sequence of character
+bytes must also record where it ends.

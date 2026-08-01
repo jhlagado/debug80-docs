@@ -9,9 +9,9 @@ nav_order: 13
 
 Chapter 12's portable services cover text, and only text. A program that
 must format a number, read a joystick, program a sound chip or poke a
-video controller has left the portable contract — and that is not a
-failure but a boundary. Lanternfly crosses it with typed interfaces, and
-Chapter 11's modules are exactly the right container:
+video controller has left the portable contract, and what supplies those
+operations is a platform interface module — Chapter 11's export mechanism
+carrying one machine's own services:
 
 ```lanternfly
 // report.lafy
@@ -27,27 +27,28 @@ end
 
 sub main()
     measureChange()
+    waitForVBlank()
     showChange()
-    waitForKey()
 end
 ```
 
-One routine, three kinds of call. `writeText` and `writeNewline` are
-portable standard services from Chapter 12. `writeUnsigned` is a *custom
-platform service*: numeric formatting is outside the standard text
-modules, so this target's console module supplies it. `measureChange` is
-ordinary Lanternfly from an ordinary module. Every call is checked against
-a typed declaration; only the middle one is this platform's own.
+Three kinds of call share this program. `writeText` and `writeNewline`
+are portable standard services from Chapter 12. `writeUnsigned` and
+`waitForVBlank` are _custom platform services_: numeric formatting and
+display timing are outside the standard text modules, so this target's
+console module supplies them. `measureChange` is ordinary Lanternfly from
+an ordinary module. Every call is checked against a typed declaration;
+only the platform's own calls are tied to this machine.
 
 ## Operations, standard services and platform services
 
 Three tiers now share the page, and telling them apart is the chapter's
-first job. *Language operations* — `abs`, `length`, `clear`, `append` and
+first job. _Language operations_ — `abs`, `length`, `clear`, `append` and
 their kin — belong to the language: they mean the same everywhere, and
-each backend chooses instructions or a runtime helper. *Standard services*
+each backend chooses instructions or a runtime helper. _Standard services_
 (Chapter 12's five) have one portable meaning but optional,
 target-supplied implementations, reached through explicit imports. A
-*platform service* such as `writeUnsigned` is someone's routine on a
+_platform service_ such as `writeUnsigned` is someone's routine on a
 particular machine, reached through a declaration the platform module
 wrote. The language defines what `abs` means; the standard modules define
 what `writeText` means; a target profile and its modules define what
@@ -68,28 +69,36 @@ machine state, visible storage effects and device I/O.
 An external routine may name its machine binding:
 
 ```lanternfly
-extern sub printCharacter(ch as u8) at $0008
-extern sub waitForKey() from "ROM_WAIT_KEY"
+extern sub playTone(divider as u16) at $0f06
+extern sub waitForVBlank() from "ROM_VBLANK_WAIT"
 ```
 
 `at` supplies an absolute entry address. `from` names a symbol that the
 assembler or substrate toolchain will resolve. With neither form, the
-target profile binds the Lanternfly name.
+target profile binds the Lanternfly name. The addresses and symbols in
+this chapter belong to a small fictional teaching machine — call it the
+LF-1 — whose monitor ROM documents these entry points; a real platform
+module does exactly the same work from a real datasheet.
 
 An interface module collects such declarations and exports them, exactly as
 `counters.lafy` exported ordinary routines. This separates a program's
 logic from a computer's firmware details: two platform modules can export
 the same service signatures and bind them to different machines, and every
-program module imports the signatures alone. The standard text modules are
-the same pattern with the toolchain as author — which is why they were
-never keywords, just imports.
+program module imports the signatures alone.
+
+The standard text modules share the import experience but not the
+authorship. Their interfaces are compiler-defined and versioned, targets
+bind their stable service IDs rather than project-chosen symbols, and two
+of their operations use carriers no ordinary declaration can spell — so a
+project module can imitate the pattern, but cannot recreate or shadow the
+standard contract.
 
 ## Near and far storage
 
 Interfaces are also where storage location starts to matter. Every static
 storage root has a target storage class. Ordinary compiler-allocated
-storage is *near*: directly usable in the target's current address context.
-A banked or segmented target also offers *far* storage, which carries extra
+storage is _near_: directly usable in the target's current address context.
+A banked or segmented target also offers _far_ storage, which carries extra
 context such as a bank number alongside a 16-bit offset. A flat-memory
 target may treat the two classes identically while preserving their source
 meaning.
@@ -142,9 +151,9 @@ An `asm` block supplies target instructions for work that needs direct
 access to the selected assembler:
 
 ```lanternfly
-sub waitForKeyDirectly()
+sub waitForVBlankDirectly()
     asm
-        call ROM_WAIT_KEY
+        call ROM_VBLANK_WAIT
     end
 end
 ```
@@ -170,7 +179,7 @@ data or routines:
 
 ```lanternfly
 asm
-ROM_WAIT_KEY = $0038
+ROM_VBLANK_WAIT = $0f09
 end
 ```
 
@@ -225,8 +234,10 @@ this platform's own.
   validated or absent, never guessed.
 
 You can now read a Lanternfly program from its first declaration to its
-final `end`, account for its storage byte by byte, and connect any source
-statement to generated assembly, an address and an execution trace. The
+final `end`, account for its storage byte by byte, and inspect every
+emitted operation in generated assembly — while the verified map records
+the declarations and folded expressions that emit nothing, without
+inventing a machine range for them. The
 [language reference](../book2/) holds the exact rules whenever you need
 them — and when the first compiler arrives, the programs you have traced
 in these chapters will be among the first it runs.

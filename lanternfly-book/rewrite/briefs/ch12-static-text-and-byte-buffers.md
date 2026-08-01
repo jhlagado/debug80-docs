@@ -29,7 +29,7 @@ digit-counting loop, matured); signed rendering via sign test + `abs`.
 2. `cstring` for fixed words: literals, `length` (folds for literals, scans
    at runtime), content comparison via all six operators (bytes, unsigned,
    left to right — "FEB" < "JAN" and why).
-3. What `cstring` refuses: no mutation, no indexing, no integer conversion —
+3. `cstring`'s exclusions: no mutation, no indexing, no integer conversion —
    the view is for holding, passing, measuring and comparing. The refusal
    is stated, not papered over: byte access to a label's content is a service or
    future-edition affair (gate Q4a), and the book says so plainly.

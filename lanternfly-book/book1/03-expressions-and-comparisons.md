@@ -31,16 +31,16 @@ into target operations.
 
 ## Arithmetic operators
 
-| Operation | Form |
-| --- | --- |
-| addition | `a + b` |
-| subtraction | `a - b` |
-| multiplication | `a * b` |
-| integer division | `a / b` |
-| remainder | `a mod b` |
-| integer power | `a ^ b` |
-| shift left | `a shl count` |
-| shift right | `a shr count` |
+| Operation        | Form          |
+| ---------------- | ------------- |
+| addition         | `a + b`       |
+| subtraction      | `a - b`       |
+| multiplication   | `a * b`       |
+| integer division | `a / b`       |
+| remainder        | `a mod b`     |
+| integer power    | `a ^ b`       |
+| shift left       | `a shl count` |
+| shift right      | `a shr count` |
 
 Integer division discards the fractional part by truncating toward zero.
 `17 / 5` is 3, while `17 mod 5` is 2. The results fit the identity
@@ -61,8 +61,8 @@ its left operand.
 
 Two standard operations round out the numeric set. `abs`, from the opening
 example, returns an unsigned magnitude at its operand's width. `sqrt`
-returns the floor of a non-negative integer square root — `sqrt(1600)` is
-40 — and a negative runtime operand invokes the arithmetic-fault service.
+returns the floor of a non-negative integer square root (`sqrt(1600)` is
+40), and a negative runtime operand invokes the arithmetic-fault service.
 
 ## Result widths
 
@@ -70,12 +70,12 @@ Matching 16-bit or 32-bit operands generally keep their type. Byte arithmetic
 uses wider results where one extra byte can preserve the useful mathematical
 range:
 
-| Operator on matching bytes | Result |
-| --- | --- |
-| `+`, `*`, `/`, `mod`, `^` | corresponding 16-bit type |
-| `-` | `i16` |
-| `and`, `or`, `xor`, `shl`, `shr` | operand type |
-| comparison | `boolean` |
+| Operator on matching bytes       | Result                    |
+| -------------------------------- | ------------------------- |
+| `+`, `*`, `/`, `mod`, `^`        | corresponding 16-bit type |
+| `-`                              | `i16`                     |
+| `and`, `or`, `xor`, `shl`, `shr` | operand type              |
+| comparison                       | `boolean`                 |
 
 The `u8 - u8` rule explains the measurement example: `i16` can represent
 every difference from -255 through 255.
@@ -183,14 +183,14 @@ sub classifyChange()
 end
 ```
 
-| Meaning | Operator |
-| --- | --- |
-| equal | `=` |
-| unequal | `<>` |
-| less than | `<` |
-| less than or equal | `<=` |
-| greater than | `>` |
-| greater than or equal | `>=` |
+| Meaning               | Operator |
+| --------------------- | -------- |
+| equal                 | `=`      |
+| unequal               | `<>`     |
+| less than             | `<`      |
+| less than or equal    | `<=`     |
+| greater than          | `>`      |
+| greater than or equal | `>=`     |
 
 Compatible integers support all six comparisons, and Booleans support
 equality and inequality. As later chapters introduce enumerations and

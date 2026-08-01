@@ -72,26 +72,28 @@ bytes. An empty line produces the empty string. When everything fits, it
 returns `true`. When a zero byte arrives or the line is longer than `N`,
 it stores the longest valid prefix that fits, discards the rest of that
 line, and returns `false` — so the next call starts cleanly at a new line,
-and no hidden full-line buffer exists anywhere. The Boolean is the
-program's to act on: accept the prefix, complain, or ask again.
+and the operation never requires an unbounded full-line buffer. The
+Boolean result is there to act on: accept the prefix, complain, or ask
+again.
 
-## What the contract leaves out
+## Deliberate limits
 
 The five operations are deliberately narrow. There is no portable echo or
 line editing; a target may provide them before the line reaches the
 service. There is no end-of-file result and no nonblocking form. There are
 no streams, handles, files or directories; future file operations belong
-to other modules. A contract this small is one every target can implement.
+to other modules.
 
-The modules are optional in the same way targets are real: the selected
-profile must bind each operation a program actually uses, and a build for
-a target that cannot supply one is rejected rather than silently stubbed.
+The interfaces are portable; the implementations remain target
+capabilities. A target may omit either module, and a build that uses an
+operation the selected profile cannot bind is rejected rather than
+silently stubbed.
 
 ## The two narrow exceptions
 
 Chapter 9's rule was exact: a string parameter names one capacity and
 accepts only that capacity. `writeText` and `readLine` are the language's
-two exceptions: each accepts *any* `string[N]`, because the compiler
+two exceptions: each accepts _any_ `string[N]`, because the compiler
 forms a temporary carrier holding the storage class, payload location and
 layout for the duration of the call. The carrier is not a value: source
 cannot store, return, compare or rebind it, and no routine we write can
@@ -102,11 +104,15 @@ no-pointer rule pass through them untouched.
 ## Example
 
 The [chapter listing](/lanternfly-book/book1/code/12-portable-text.txt)
-exercises all five operations in one conversation: it prompts, reads a
-line into a `string[16]`, reports whether the line fitted, echoes it back,
-then asks a one-character question and answers it. Reading the line first
-and the single character second keeps the input stream clean — `readLine`
-always finishes its line, so `readCharacter` begins on a fresh one.
+exercises all five operations in sequence: it prompts, reads a line into
+a `string[16]`, reports whether the line fitted, writes it back, then
+prompts again and reads one character. Reading the line first and the
+single character second keeps the input stream clean, because `readLine`
+always finishes its line, so `readCharacter` begins on a fresh one. At
+the keyboard, one distinction applies: a target may echo input as it is
+typed, before either read operation returns, and the program's own
+`writeText(command)` and `writeCharacter(answer)` are separate output
+operations — on an echoing target, the typed text appears twice.
 
 ## Chapter summary
 
@@ -124,6 +130,6 @@ always finishes its line, so `readCharacter` begins on a fresh one.
   exceptions, carried by compiler-only temporaries that source can never
   hold.
 
-Our programs can now hold a conversation. What they cannot yet do is reach
-the parts of a machine that no portable contract covers — and that, at
-last, is the final chapter.
+Our programs now read and write text on any target that supports it. What
+they cannot yet do is reach the parts of a machine no portable contract
+covers — and that, at last, is the final chapter.

@@ -38,13 +38,13 @@ provide 4,294,967,296.
 
 ## The integer family
 
-| Type | Width | Range |
-| --- | ---: | ---: |
-| `u8` | 8 bits | 0 to 255 |
-| `i8` | 8 bits | -128 to 127 |
-| `u16` | 16 bits | 0 to 65,535 |
-| `i16` | 16 bits | -32,768 to 32,767 |
-| `u32` | 32 bits | 0 to 4,294,967,295 |
+| Type  |   Width |                           Range |
+| ----- | ------: | ------------------------------: |
+| `u8`  |  8 bits |                        0 to 255 |
+| `i8`  |  8 bits |                     -128 to 127 |
+| `u16` | 16 bits |                     0 to 65,535 |
+| `i16` | 16 bits |               -32,768 to 32,767 |
+| `u32` | 32 bits |              0 to 4,294,967,295 |
 | `i32` | 32 bits | -2,147,483,648 to 2,147,483,647 |
 
 The first letter gives the interpretation: `u` is unsigned and `i` is signed.
@@ -80,9 +80,9 @@ choose it with the cost visible.
 ## Names
 
 Multi-word names need a spelling convention, and this book uses the two
-common ones. In *camelCase*, the name begins with a lowercase word and each
+common ones. In _camelCase_, the name begins with a lowercase word and each
 later word begins with a capital: `playerScore`, `maximumSpeed`,
-`unitsInStock`. In *PascalCase*, the first word is capitalized as well:
+`unitsInStock`. In _PascalCase_, the first word is capitalized as well:
 `PlayerState`, `ScreenBuffer`.
 
 Lanternfly's convention, used throughout this book: type names take
@@ -144,10 +144,10 @@ that the byte's role is a character. The escapes cover the unprintable cases:
 byte, and `\'`, `\"` and `\\` for the quoting characters themselves. A
 character literal is one byte; multi-character and non-ASCII literals are
 invalid. The name `lineFeed` is deliberate: `'\n'` is exactly the byte 10,
-while ending a line on a device is a separate service that a target may
-spell with a different byte sequence entirely — Chapter 12 draws that line.
-Chapter 7 builds text — sequences of these bytes with a recorded length —
-on this foundation.
+while ending a line on a device is a separate service for which a target
+may emit a different byte sequence entirely — Chapter 12 draws that line.
+Chapter 7 builds text on this foundation: sequences of these bytes with
+a recorded length.
 
 ## Example
 
