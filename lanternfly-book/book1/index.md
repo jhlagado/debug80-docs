@@ -12,10 +12,11 @@ has_toc: false
 
 A first course in Lanternfly: a compiled, low-level programming language
 for computers where every byte and machine operation matters. Its source
-reads like structured BASIC; its discipline is closer to Pascal; and every
-emitted operation can be read in the generated assembly rather than
-guessed. The [introduction](00-introduction.md) says who the book is
-for and how it teaches.
+reads like structured BASIC; its discipline is closer to Pascal; and on
+the inspectable AZM path this book works with, every emitted operation can
+be read in the generated assembly rather than guessed. The
+[introduction](00-introduction.md) says who the book is for and how it
+teaches.
 
 [Lanternfly Book 2](../book2/) is the companion language reference for
 exact syntax, type, storage, control-flow and diagnostic rules.
@@ -38,8 +39,8 @@ exact syntax, type, storage, control-flow and diagnostic rules.
 12. [Portable Text Input and Output](12-portable-text-io.md)
 13. [Machine Services and Assembly](13-machine-services-and-assembly.md)
 
-The [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-records the normative 0.4 rules. The
+The [specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
+records the normative 0.5 rules. The
 [conformance contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/conformance.md)
 lists the programs and diagnostics that an implementation must test.
 

@@ -118,8 +118,8 @@ appear once as they are typed and once as the program writes them.
 
 ## Chapter summary
 
-- Portable text lives in two standard modules, imported explicitly like
-  any module; there is no prelude, and `standard/` belongs to the
+- Portable text lives in two standard service modules, imported explicitly
+  like any module; there is no prelude, and `standard/` belongs to the
   toolchain.
 - `writeCharacter`, `writeText` and `writeNewline` transfer bytes, whole
   strings and target-appropriate line endings outward.

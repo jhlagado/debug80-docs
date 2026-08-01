@@ -76,7 +76,8 @@ statements do not sit loose between those declarations; you put them inside a
 subroutine.
 
 A module reads strictly top to bottom: every name must be declared before
-the line that uses it, with no forward references. The three variables
+the line that uses it. (The one declared exception, a routine header stated
+ahead of its body, waits for chapter 9.) The three variables
 stand above `addPostage` because its statement uses them, and `addPostage`
 stands above `main` because `main` calls it. The same rule will order every
 program in this book — which suits us, because reading a module from the
@@ -199,8 +200,9 @@ The complete source is available as the
 
 The planned toolchain described in the introduction will turn this module
 into a runnable program: the compiler will check the declarations, the call
-and the assignment, choose an address for each variable, and emit Z80
-assembly for AZM to encode as machine code. The generated assembly stays
+and the assignment, choose an address for each variable, and emit the
+program: directly as machine code on the reference path, or, as throughout
+this book, as Z80 assembly for AZM to encode. The generated assembly stays
 open for inspection, so when an address or instruction choice becomes
 relevant, you will be able to read exactly what the compiler produced. When
 `main` returns, the target performs its normal termination.

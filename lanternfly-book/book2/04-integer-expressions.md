@@ -44,6 +44,9 @@ const longMinimum as i32 = i32(-2147483648)
 
 Other unary expressions type their operand before applying the operator.
 
+Examples in this chapter that use `u32` or `i32` assume the module imports
+`standard/wide32.lafy` under the capability rules of chapter 10.
+
 ## Compatible operand types
 
 Matching operand types use the result table below. A narrower operand may

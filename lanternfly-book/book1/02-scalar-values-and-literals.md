@@ -51,6 +51,13 @@ The first letter gives the interpretation: `u` is unsigned and `i` is signed.
 The number gives the exact width. Every target must preserve these ranges,
 even when its processor handles one width more easily than another.
 
+The two 32-bit rows carry one extra obligation. `u32` and `i32` are part of
+the language but not of its always-on kernel: a module that uses them
+states `import "standard/wide32.lafy"` at its top; chapter 11 explains
+capability imports. The eight- and sixteen-bit types need no import; they
+are the kernel integer types. The `elapsedSeconds` declaration
+above therefore lives in a module that begins with that import.
+
 Signed values use two's-complement representation. In an `i8`, the top bit has
 the value -128 and the remaining bits are worth 64 through 1. The all-ones
 pattern means -1 as `i8` and 255 as `u8`. The bits are identical; the declared

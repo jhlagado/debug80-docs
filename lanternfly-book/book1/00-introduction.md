@@ -26,8 +26,10 @@ integer types, lay out arrays and records byte for byte, and the compiler
 translates the complete program ahead of time into native code for a small
 processor. The first target is the Z80, an eight-bit processor with 65,536
 addressable bytes, still designed into hobby and educational computers
-today, and the toolchain divides the translation into two inspectable
-stages:
+today. The reference compiler reads the source once and emits machine code
+directly. This book works with the toolchain's second, inspectable form of
+the same translation, which writes Z80 assembly for the AZM assembler to
+finish:
 
 ```text
 Lanternfly source (.lafy)
@@ -58,7 +60,7 @@ part of the pleasure of the subject.
 ## A language before its compiler
 
 Lanternfly is a young project. This book follows the
-[0.4 working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md),
+[0.5 specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md),
 the contract for the first compiler — and that compiler does not exist
 yet. Every example shows the intended source language, checked against
 the specification.

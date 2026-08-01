@@ -184,7 +184,7 @@ end
 
 A scalar binding reads and writes the scalar element. A record binding
 supports field access, aggregate assignment and aggregate calls. A constant
-array gives a read-only binding. Volatile arrays are rejected in 0.4.
+array gives a read-only binding. Volatile arrays are rejected in 0.5.
 
 `continue` advances to the next element. `exit` leaves the traversal. Array
 extents are positive, so the collection contains at least one element.

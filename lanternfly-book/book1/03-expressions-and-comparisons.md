@@ -144,7 +144,8 @@ end
 ```
 
 The written conversions select `i32`, which contains the full range of both
-inputs.
+inputs. Because the excerpt mentions `i32`, its module states
+`import "standard/wide32.lafy"` at the top, as chapter 2 described.
 
 Arithmetic that begins and ends in the same declared type receives a
 round-trip allowance:
