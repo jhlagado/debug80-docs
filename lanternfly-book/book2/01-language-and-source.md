@@ -87,9 +87,9 @@ Each resolved source unit has one canonical identity. Repeated imports load it
 once, so a diamond-shaped import graph does not duplicate code or data. Import
 cycles are errors and include their path.
 
-The imported module chooses which declarations it makes visible. These are its
-[exports](10-modules-and-programs.md#exports); private declarations remain
-private, and imports do not re-export declarations from another module.
+Only declarations marked `export` become visible to an importer. Chapter 10
+defines [exports](10-modules-and-programs.md#exports); private declarations
+remain private, and imports do not re-export declarations from another module.
 Lanternfly has no textual `include`.
 
 ## Source text

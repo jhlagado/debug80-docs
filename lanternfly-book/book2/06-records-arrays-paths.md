@@ -70,7 +70,7 @@ var palette as u8[Colour]
 
 Every dimension has a fixed, nonempty ordinal domain. A lone positive constant
 is shorthand for the zero-based domain `0 until count`. An explicit `to` or
-`until` range chooses other bounds, while an enum or subrange type supplies
+`until` range specifies other bounds, while an enum or subrange type supplies
 its complete domain. `samples` therefore has eleven elements indexed from 10
 through 20, and `palette` has one element for each `Colour` member.
 

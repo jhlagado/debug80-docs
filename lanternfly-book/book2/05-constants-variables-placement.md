@@ -120,9 +120,8 @@ other placed or allocated object. Local declarations cannot use `at`.
 `at` is the only source-level placement clause in the first edition. The
 target profile describes the memory regions and supplies default destinations
 for generated code, constant data, writable data and static scratch. A build
-may choose another permitted region or starting address without changing the
-source. Regions reserved for explicit placement are never used by the ordinary
-allocator.
+may use another permitted region or starting address without changing the source.
+Regions reserved for explicit placement are never used by the ordinary allocator.
 
 Before emission, the compiler reserves every explicit `at` range and builds a
 deterministic placement plan for routines, storage, constants, module

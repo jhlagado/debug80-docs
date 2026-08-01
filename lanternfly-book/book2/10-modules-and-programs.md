@@ -9,8 +9,6 @@ nav_order: 10
 
 Chapter 1 defines source modules and imports. This chapter completes the module
 model with exports, whole-program compilation, startup order and program entry.
-Together, the modules contribute their types, storage and routines to one
-target program.
 
 ## Exports
 
@@ -35,8 +33,8 @@ reaches through arrays and record fields and applies to constants, variables,
 parameters and results.
 
 Exporting a record exports its complete field layout. Every aggregate
-parameter in an exported routine must state `near` or `far` so importing
-modules agree about its storage class.
+parameter in an exported routine must state `near` or `far`; the compiler
+checks every importing call against that storage class.
 
 Exporting an enum exports all of its members. The importer receives the enum
 in its type scope and those unqualified member names in its value scope.
@@ -74,8 +72,8 @@ writeNewline()
 `writeCharacter` accepts a value assignable to `u8`. `writeText` accepts a
 string literal or any `string[N]` storage path, reads its payload once in
 order, and does not modify the string. Constant and mutable strings of any
-capacity are valid. `writeNewline` asks the target for its appropriate line
-break rather than promising a particular byte sequence.
+capacity are valid. `writeNewline` transfers the target's appropriate line
+break; source does not assume a particular byte sequence.
 
 The input module exports two operations:
 
@@ -127,11 +125,11 @@ The compiler:
 7. emits one target program and validates its final memory map and debug
    artifacts.
 
-This is a language-ordering rule, not a demand for one compiler architecture.
-A desktop compiler may retain syntax trees and typed intermediate forms. A
-small self-hosted compiler may process a source unit once and leave branch and
-address fixups to its backend. Both must accept the same declaration-ordered
-programs.
+The rule fixes which programs are accepted while leaving compiler architecture
+open. A desktop compiler may retain syntax trees and typed intermediate forms.
+A small self-hosted compiler may process a source unit once and leave branch
+and address fixups to its backend. Both must accept the same
+declaration-ordered programs.
 
 ## Startup order
 

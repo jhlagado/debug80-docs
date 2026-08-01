@@ -37,8 +37,8 @@ One-line conditionals are deferred.
 
 ## `select`
 
-`select` chooses among compatible ordinal cases after evaluating its
-controlling expression once. Integers, enums and subranges are ordinal:
+`select` evaluates its controlling expression once and selects among compatible
+ordinal cases. Integers, enums and subranges are ordinal:
 
 ```lanternfly
 select direction
@@ -121,7 +121,7 @@ an integer constant. The loop introduces no control declaration.
 
 Before entering the loop, the compiler evaluates the start and boundary once,
 in that order, and only then stores the converted start. The boundary
-therefore observes the control variable's old value. The step is a
+expression therefore reads the control variable's old value. The step is a
 compile-time expression and must be nonzero.
 
 The boundary is an independently typed compatible ordinal expression. For an

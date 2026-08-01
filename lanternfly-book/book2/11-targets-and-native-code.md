@@ -42,27 +42,29 @@ operation that a program uses to a stable service ID:
 | `readCharacter`  | `standard.textInput.readCharacter`   |
 | `readLine`       | `standard.textInput.readLine`        |
 
-The toolchain owns the versioned module interfaces; the target owns the
-bindings. A target may implement an ID with firmware, a serial device,
-generated substrate code, a desktop terminal or a test adapter. It must
-preserve the Chapter 10 contract for character order, bounded line input and
-normal return. A target that cannot bind a service used by the program rejects
-the build. The ordinary external-binding, ABI, adapter and runtime-component
-machinery carries that implementation.
+The toolchain supplies the versioned module interfaces; the selected target
+profile supplies the bindings. A target may implement an ID with firmware, a
+serial device, generated substrate code, a desktop terminal or a test adapter.
+It must preserve the Chapter 10 contract for character order, bounded line
+input and normal return. A target that cannot bind a service used by the
+program rejects the build. The profile resolves each implementation through
+the ordinary external-binding, ABI, adapter and runtime-component contracts.
 
 ## External routines
 
-`extern sub` describes native code with a Lanternfly signature:
+`extern sub` describes native code with a Lanternfly signature. The examples
+use the fictional LF-1 teaching machine introduced in
+[Book One](../book1/13-machine-services-and-assembly.md):
 
 ```lanternfly
-export extern sub printChar(ch as u8) at $0008
-export extern sub waitForKey() from "ROM_WAIT_KEY"
-export extern sub screenClear()
+export extern sub playTone(divider as u16) at $0f06
+export extern sub waitForVBlank() from "ROM_VBLANK_WAIT"
+export extern sub writeUnsigned(value as u16)
 ```
 
 `at` binds an executable target address. `from` names a substrate symbol after
-compile-time string escapes are decoded. A declaration with neither clause
-asks the profile to bind the Lanternfly name.
+compile-time string escapes are decoded. With neither clause, the profile binds
+the Lanternfly name.
 
 The double-quoted symbol after `from` is compile-time text. It accepts only
 `\"` and `\\` and allocates no runtime string storage.
@@ -106,9 +108,8 @@ misplaced terminator or reserved all-ones length causes `F-INVALID-STRING`.
 
 ## Native effect contracts
 
-The effect summary tells the compiler what a native routine can observe or
-change: reads, writes, calls, faults, device I/O, control flow and ABI
-clobbers.
+The effect summary records a native routine's possible reads, writes, calls,
+faults, device I/O, control flow and ABI clobbers.
 
 An incomplete summary receives `W-NATIVE-001` and a conservative fallback:
 the call may read and write every mutable object reachable at the boundary,
@@ -139,9 +140,9 @@ or enter a monitor. Debug artifacts retain the fault class and source location.
 closes it:
 
 ```lanternfly
-sub waitForKey()
+sub waitForVBlankDirectly()
     asm
-        call ROM_WAIT_KEY
+        call ROM_VBLANK_WAIT
     end
 end
 ```
@@ -174,7 +175,7 @@ Values needed afterward are spilled or preserved. The specialized assembly
 warning suppresses `W-NATIVE-001` for the same block.
 
 Calling a generated Lanternfly routine from raw assembly is deferred because
-the hidden edge would escape call-cycle and reentrancy analysis.
+call-cycle and reentrancy analysis cannot include the hidden edge.
 
 ## Module-level assembly
 
