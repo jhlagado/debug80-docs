@@ -164,17 +164,45 @@ words describe different control boundaries.
 Chapter 1's declaration order governs calls too. A routine body may call
 imported routines, routines declared earlier in the module, and itself —
 the routine's own name becomes visible at its header, so a direct
-self-call is legal source. A call to a later routine is a
-declaration-before-use error, which makes mutual recursion — two routines
-each calling the other — unwritable in one module.
+self-call is legal source. A call to a routine that has not yet appeared
+is a declaration-before-use error.
 
-Whether that self-call is actually available depends on the selected
-target. The reason is storage: every active invocation needs an
-independent parameter-and-local frame, so a recursion-capable profile
-defines frame layout and stack bounds, while a profile based on fixed
-scratch storage rejects a self-call that would overwrite the active
-frame. The complete frame and capability rules live in the language
-reference.
+Two routines that call each other would deadlock that rule: each would
+have to come first. `forward sub` breaks the deadlock. It states a
+routine's complete header ahead of its body, and from that line the
+routine can be called like any other:
+
+```lanternfly
+forward sub updateEnemies()
+
+sub updatePlayer()
+    if playerCollides() then
+        updateEnemies()
+    end
+end
+
+sub updateEnemies()
+    if enemyCollides() then
+        updatePlayer()
+    end
+end
+```
+
+The rule is strict. The completing `sub` must appear later in the same
+module and repeat the forward header exactly, and a forward declaration
+still uncompleted when the module ends is a compile error. The early calls
+cost nothing at runtime. On the direct-emission path the compiler leaves a
+placeholder address and patches it in when the body arrives, the same
+mechanism that resolves a forward jump; on the book's AZM path it emits
+the call by name and the assembler resolves the address.
+
+Whether recursion is actually available — a self-call or a mutual cycle —
+depends on the selected target. The reason is storage: every active
+invocation needs an independent parameter-and-local frame, so a
+recursion-capable profile defines frame layout and stack bounds, while a
+profile based on fixed scratch storage rejects every source call-graph
+cycle. The complete frame and capability rules live in
+the language reference.
 
 ## Example
 
@@ -190,9 +218,10 @@ parameter. Two calls to `addToTotal` produce 35. Applying
 - A trailing `as Type` declares a scalar result returned with `return`.
 - Scalar locals hold private working values for one invocation.
 - Record, array and string parameters alias caller-owned storage.
-- A routine calls imported routines, earlier routines or itself; recursion
-  depends on whether the selected target profile can provide independent
-  active frames.
+- A routine calls imported routines, earlier routines, itself or a
+  forward-declared routine whose completing body arrives later in the same
+  module; recursion of any shape depends on whether the selected target
+  profile can provide independent active frames.
 
 Routines now receive values, return results and work on caller-owned
 aggregates through temporary names. The next chapter widens that last idea

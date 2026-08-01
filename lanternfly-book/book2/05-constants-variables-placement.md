@@ -63,7 +63,7 @@ sub addScore(amount as u16)
 end
 ```
 
-Local declarations precede executable statements in 0.4. Initializers run
+Local declarations precede executable statements in 0.5. Initializers run
 once per invocation in declaration order. A local name becomes visible after
 its declaration.
 

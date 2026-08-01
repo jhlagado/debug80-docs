@@ -15,7 +15,7 @@ layout, code size and predictable execution still matter. Its semantics are
 deliberately close to the machine, while its structured BASIC syntax keeps
 the source familiar and readable.
 
-This manual defines the Lanternfly 0.4 implementation baseline. It is a
+This manual defines the Lanternfly 0.5 implementation baseline. It is a
 reference rather than a course: declarations, types, storage, expressions,
 control flow, routines, modules, native boundaries, grammar and diagnostics
 each have a chapter of their own. Read it from the beginning for a complete
@@ -27,9 +27,9 @@ book states the rules that every compiler, backend and host integration must
 preserve.
 
 > [!NOTE]
-> Lanternfly 0.4 is the source-language contract for the first compiler. No
+> Lanternfly 0.5 is the source-language contract for the first compiler. No
 > compiler exists yet. The
-> [working specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
+> [specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
 > remains normative if this manual and the specification differ.
 
 **Must** marks a semantic requirement, **should** marks a strong toolchain
@@ -55,7 +55,7 @@ and **deferred** marks a facility outside the first implementation.
 ## Normative sources
 
 - The
-  [Lanternfly 0.4 specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
+  [Lanternfly 0.5 specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
   defines source meaning.
 - The
   [conformance and diagnostics contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/conformance.md)

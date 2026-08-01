@@ -11,6 +11,11 @@ Lanternfly source describes behaviour without exposing a particular CPU's
 registers or calling convention. A target profile supplies that missing
 connection to the CPU, runtime, firmware and device environment.
 
+The reference backend form emits machine code directly with backpatched
+fixups. An assembly-generating backend, such as the AZM form, is the
+toolchain's transparency and portability path; the provenance rules later
+in this chapter belong to that form.
+
 ## Target profiles
 
 A profile declares:
@@ -127,7 +132,7 @@ source-defined Lanternfly routines or hosted bodies are deferred.
 
 A backend may select runtime helpers for multiplication, division, power,
 square root, wide arithmetic, aggregate copying, counted-string operations,
-bounds checks and far access. Only helpers that are used are linked, and each
+bounds checks and far access. Only helpers that are used are included, and each
 appears in generated listings and cost reports.
 
 Bounds, range, arithmetic and invalid-value faults do not return to the failing
@@ -222,8 +227,10 @@ context while pointing back to the responsible Lanternfly source.
 
 ## Floating point
 
-Floating point is deferred. A future edition may use library-defined records
-and routines or an optional built-in `float32`. A built-in form requires a
-separate contract for representation, rounding, exceptional values,
-conversions, comparison, constant folding, library ABI and code-size
-reporting.
+Floating-point semantics are deferred, but the delivery form is settled: a
+floating-point tier arrives as a standard capability module, with its type
+word reserved and gated, its operators joining the typed operator families
+and its helpers bound as profile runtime components. The open work is the
+semantic contract: representation, rounding, exceptional values,
+conversions, comparison, constant folding, literals, library ABI and
+code-size reporting.

@@ -173,6 +173,33 @@ must return a compatible value. Bare `return` is invalid there.
 
 `exit` is loop control and never substitutes for `return`.
 
+## Forward declarations
+
+`forward sub` states a routine's complete signature before its body:
+
+```lanternfly
+forward sub updateEnemies()
+```
+
+- the forward header is checked as an ordinary header, and the routine name
+  enters the module value scope at that point;
+- from that point the routine may be called wherever a completed routine
+  could be called;
+- the completing `sub` appears later in the same module and repeats the
+  forward header exactly — name spelling, export status, parameter storage
+  classes, names, types and order, and result form — or the compiler
+  reports `E-FORWARD-002`;
+- each routine has at most one forward declaration, under the ordinary
+  duplicate-name rules;
+- a module that ends with an uncompleted forward declaration is
+  `E-FORWARD-001`;
+- `extern sub` is complete without a body and takes no part in forward
+  declaration; hosted bodies contain no routine declarations;
+- the program entry may be forward-declared;
+- the reference backend resolves early calls by backpatching and an
+  assembly-generating backend emits symbolic calls; either way a forward
+  declaration adds no runtime cost.
+
 ## Calling convention
 
 At source level, each invocation receives fresh scalar parameters and locals.
@@ -182,9 +209,10 @@ cannot overlap.
 
 Recursion is a target-profile capability:
 
-- declaration-before-use permits a routine to call itself but makes mutual
-  recursion in one source program inexpressible;
-- a non-recursive profile rejects a direct self-cycle;
+- a routine may call itself, and forward declarations make mutual recursion
+  expressible;
+- a non-recursive profile rejects any source call-graph cycle, direct or
+  through forward-declared routines;
 - a recursive profile supplies independent frames and documents stack,
   reentrancy and maximum-bound rules.
 

@@ -59,10 +59,13 @@ compiler has checked it completely. Code may therefore use imported names and
 earlier local declarations, but not declarations that appear later in the
 file.
 
-Direct self-calls are the one bounded exception. After a `sub` header is
-checked, its signature becomes visible before its body, so the routine may call
-itself. Its body may also call imported routines and earlier local routines; it
-cannot call a later routine.
+Routine signatures are the bounded exception, in two forms. After a `sub`
+header is checked, its signature becomes visible before its body, so the
+routine may call itself. A `forward sub` declaration makes a signature
+visible before its body has appeared at all; chapter 9 gives the completion
+rules. A body may call imported routines, earlier local routines, itself
+and any visible forward-declared routine; it cannot call a routine whose
+signature appears later.
 
 The rule applies to types, constants, enum members, storage, external
 routines and ordinary routines. In particular:

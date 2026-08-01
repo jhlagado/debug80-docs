@@ -7,23 +7,27 @@ nav_order: 1
 
 # Language Model and Source Form
 
-Lanternfly 0.4 is a statically typed structured BASIC for fixed-memory
+Lanternfly 0.5 is a statically typed structured BASIC for fixed-memory
 systems. It combines the directness of C or Pascal with a syntax intended to
 be read without first decoding a thicket of punctuation. It is a compiled
 language: a complete Lanternfly program becomes native or translated target
 code rather than running through an interpreter.
 
-A backend may emit AZM or another assembly language directly, or lower
-Lanternfly through C, Zig, LLVM IR or another suitable intermediate form. The
-route to native code may change, but the meaning of the source program may not.
+The reference compiler architecture is a single pass that emits machine
+code directly with backpatched fixups. A backend may instead write AZM or
+another assembly language as a transparency and portability form, or lower
+Lanternfly through C, Zig, LLVM IR or another suitable intermediate. The
+route to native code may change, but the meaning of the source program may
+not.
 
-The first compiler is planned as a desktop-hosted compiler that emits AZM for
-Z80 systems. The language itself does not expose Z80 registers, stack-frame
-conventions or instruction selection.
+The first compiler is planned as a desktop-hosted compiler for Z80 systems.
+Its first backend writes AZM, the inspectable form. The language itself
+does not expose Z80 registers, stack-frame conventions or instruction
+selection.
 
 ## Language boundary
 
-The 0.4 language includes:
+The 0.5 language includes:
 
 - signed and unsigned integers with fixed widths;
 - nominal enums and checked subrange types;

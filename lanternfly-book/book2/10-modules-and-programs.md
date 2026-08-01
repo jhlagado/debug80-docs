@@ -47,10 +47,36 @@ Imported exports enter the importing module's type and value scopes before its
 local declarations are checked. They participate in the ordinary collision and
 shadowing rules.
 
+## Capability imports
+
+The `standard/` prefix carries two kinds of module. A capability module is
+an export-free language gate: importing it legalizes an optional facility
+and contributes no names. `standard/wide32.lafy` enables `u32` and `i32`,
+and `standard/long-strings.lafy` enables string capacities above 254;
+future floating-point tiers follow the same form. A service module, such as
+the text modules below, exports ordinary names and binds services through
+the target profile.
+
+Capability authorization is module-local. Every module that mentions a
+gated type, representation or operation states the enabling import in its
+own prefix; importing a user module confers none of the capabilities that
+module uses.
+A capability's ID is its canonical import path, and a compiled
+export-interface artifact lists the capability IDs its exports require in
+its `requiredCapabilities` field. A gated mention without the import is
+`E-CAP-001`. An enabled capability whose target requirements —
+representation widths, limits, scalar operations or component bindings —
+are unsatisfied is `E-TARGET-001`.
+
+Capability imports are monotone: an import can make more programs legal but
+can never change the meaning of a program that was already legal. Operators
+are typed families resolved statically, so a capability type extends an
+operator's domain without altering any existing operation.
+
 ## Standard text modules
 
-The first edition defines two optional standard modules. A program imports
-only the part it uses:
+The first edition defines two optional standard service modules. A program
+imports only the part it uses:
 
 ```lanternfly
 import "standard/text-output.lafy"
@@ -130,6 +156,17 @@ open. A desktop compiler may retain syntax trees and typed intermediate forms.
 A small self-hosted compiler may process a source unit once and leave branch
 and address fixups to its backend. Both must accept the same
 declaration-ordered programs.
+
+A program is linked by compilation rather than by a relocating link editor.
+Libraries reach a program in three forms. A source import compiles the
+library into the whole program in dependency order. A compiled
+export-interface artifact restates a module's exported declarations —
+symbols, not relocatable code — so an unchanged library need not be re-read
+from source. A fixed-address library, such as a ROM library on a banked
+system, pairs an export-interface artifact with code that is already
+placed: its symbols bind to final addresses and the build emits no code for
+it. Relocatable object formats and link-time relocation are outside the
+Lanternfly toolchain.
 
 ## Startup order
 

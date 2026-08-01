@@ -24,7 +24,10 @@ part of the type, and the layout is as concrete as any array's: one length
 byte, twelve payload cells, and a zero byte after the current payload, for
 exactly fourteen bytes settled at compile time. There is no allocator and no
 hidden buffer; the declaration is the cost. A capacity of 255 or more widens
-the length field to two bytes, `N + 3` in all, and nothing else changes.
+the length field to two bytes, `N + 3` in all, and nothing else changes —
+though a capacity that large is a declared dependency: the module states
+`import "standard/long-strings.lafy"` at its top; chapter 11 explains
+capability imports.
 
 The trailing zero byte is the _terminator_, and every string operation
 maintains it, so the payload is always valid NUL-terminated text. A firmware

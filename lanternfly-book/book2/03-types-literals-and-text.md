@@ -25,6 +25,11 @@ different targets.
 | `near address` | opaque near machine address | target-defined |
 | `far address`  | opaque far machine address  | target-defined |
 
+`u32` and `i32` are capability-gated. The words are reserved in every
+program, and a module that mentions them states
+`import "standard/wide32.lafy"` in its import prefix; a gated mention
+without the import is `E-CAP-001`. Chapter 10 describes capability imports.
+
 `boolean` is not an integer type. Its stored representation is exactly zero
 for `false` and one for `true`, and comparisons and Boolean operators always
 produce those canonical values. A native provider that supplies another
@@ -162,6 +167,10 @@ capacity determines the representation at compile time:
 A length of 255 or more therefore implies a long string. The capacity, rather
 than the current length, fixes the form: `string[255]` remains long even when
 it is empty.
+
+Declaring a capacity above 254 is gated the same way as the 32-bit integer
+types, by `import "standard/long-strings.lafy"`. The import legalizes the
+long form and changes nothing about either representation.
 
 The payload contains no zero byte, and a zero terminator always follows its
 current length. Bytes after that terminator are unspecified. All-zero storage

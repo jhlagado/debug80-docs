@@ -73,13 +73,26 @@ platform boundary on exactly this mechanism.
 
 ## The standard modules
 
-Some modules ship with the toolchain rather than with the project. The
-first edition defines two, and a program imports them like any others:
+Some modules ship with the toolchain rather than with the project, and they
+come in two kinds. A *service module* exports names that a target must
+support — the first edition defines two, and a program imports them like
+any others:
 
 ```lanternfly
 import "standard/text-output.lafy"
 import "standard/text-input.lafy"
 ```
+
+A *capability module* is the other kind, and chapters 2 and 7 have already
+shown the two current capability modules. `import "standard/wide32.lafy"`
+legalizes the 32-bit integer types, and
+`import "standard/long-strings.lafy"` legalizes string capacities above 254.
+A capability import exports no names at all: it
+legalizes an optional facility for the module that states it, and only for
+that module — importing a neighbour that uses `u32` does not
+license your own source to mention it. Everything else about these imports
+is ordinary: they sit in the same contiguous prefix and obey the same
+`standard/` rules below.
 
 Nothing is imported implicitly — Lanternfly has no prelude, so a module
 that imports nothing receives no imported names at all. The
@@ -142,10 +155,12 @@ display; each represents a `.lafy` source module.
 - A build manifest names the root module and entry; the compiler finishes
   each imported module before its importer and processes every module
   once.
-- The two standard modules are imported explicitly like any others; the
-  `standard/` namespace belongs to the toolchain, and no prelude exists.
+- Standard modules are imported explicitly like any others: two service
+  modules export the text operations, and two capability modules legalize
+  the wide integer types and long strings; the `standard/` namespace
+  belongs to the toolchain, and no prelude exists.
 
 Modules let one program keep its concerns in separate files. In the next
-chapter we import the two standard ones, and after eleven chapters of
+chapter we import the two text service modules, and after eleven chapters of
 results left quietly in storage, our programs read and write their first
 lines.

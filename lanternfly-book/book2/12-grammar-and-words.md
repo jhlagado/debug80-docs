@@ -8,12 +8,13 @@ nav_order: 12
 # Grammar and Word Inventory
 
 This chapter gathers Lanternfly's concrete source forms in one place. The
-grammar records the 0.4 block shapes and the rule that distinguishes
+grammar records the 0.5 block shapes and the rule that distinguishes
 assignment from equality. Expression precedence comes from
 [Chapter 4](04-integer-expressions.md#precedence-and-associativity).
 
-The grammar remains provisional while parser implementation tests its edge
-cases. Successful parsing is only the first step: the semantic restrictions
+The grammar is the blessed 0.5 form. Implementation evidence may motivate
+a later edition, but it does not change the 0.5 grammar. Successful
+parsing is only the first step: the semantic restrictions
 in the earlier chapters still determine whether the source is valid.
 
 In a source module, every `import-decl` must belong to one contiguous prefix.
@@ -40,6 +41,7 @@ declaration         ::= const-decl
                       | range-decl
                       | record-decl
                       | extern-sub-decl
+                      | forward-sub-decl
                       | sub-decl
 
 exportable-declaration
@@ -49,6 +51,7 @@ exportable-declaration
                       | range-decl
                       | record-decl
                       | extern-sub-decl
+                      | forward-sub-decl
                       | sub-decl
 
 const-decl          ::= "const" value-name "as" type-expr
@@ -84,6 +87,9 @@ extern-sub-decl     ::= "extern" "sub" value-name "(" params? ")"
 
 external-binding    ::= "at" address-const-expr
                       | "from" string-literal
+
+forward-sub-decl    ::= "forward" "sub" value-name "(" params? ")"
+                        ("as" type-expr)? newline
 
 params              ::= param ("," param)*
 param               ::= aggregate-storage-class? value-name "as" type-expr
@@ -356,6 +362,7 @@ extern
 false
 fill
 for
+forward
 from
 if
 import

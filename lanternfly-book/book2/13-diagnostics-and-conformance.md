@@ -7,7 +7,7 @@ nav_order: 13
 
 # Diagnostics and Conformance
 
-Conformance makes separate Lanternfly implementations comparable. The 0.4
+Conformance makes separate Lanternfly implementations comparable. The 0.5
 contract defines stable diagnostic IDs, required runtime faults, semantic
 fixtures and generated artifacts. Diagnostic wording may improve over time;
 the ID is the stable identity of the rule.
@@ -16,7 +16,7 @@ the ID is the stable identity of the rule.
 
 The contract distinguishes three claims:
 
-1. A **0.4 front end** accepts and rejects source according to the
+1. A **0.5 front end** accepts and rejects source according to the
    specification and produces typed program data, diagnostics and effect
    information.
 2. A **target backend** preserves the typed program's behaviour for one named
@@ -40,7 +40,7 @@ implementation progresses.
 | `E-CONFIG-001`   | Malformed host manifest or target profile, unsupported version, missing field or unknown field                       |
 | `E-CONFIG-002`   | Duplicate or unresolved configuration ID, invalid span, layout, type composition or host/target combination          |
 | `E-LEX-001`      | Invalid token or numeric literal, unterminated literal, or physical newline in quoted text                           |
-| `E-PARSE-001`    | Token sequence does not match the 0.4 grammar                                                                        |
+| `E-PARSE-001`    | Token sequence does not match the 0.5 grammar                                                                        |
 | `E-TEXT-001`     | Invalid character or string literal, escape, encoding, embedded NUL or payload size                                  |
 | `E-TEXT-002`     | Invalid string capacity, constant copy or append, operation, parameter shape or access to the sealed representation  |
 | `E-NAME-001`     | Unknown name, use before declaration, duplicate declaration, forbidden shadowing or case-only collision              |
@@ -80,7 +80,9 @@ implementation progresses.
 | `E-RETURN-001`   | Return form conflicts with the routine result, or a result-bearing path reaches `end`                                |
 | `E-RETURN-002`   | Hosted-body `return` supplies a value                                                                                |
 | `E-CALL-001`     | Aggregate argument is a temporary, general expression, constant or volatile object                                   |
-| `E-CALL-002`     | Direct self-recursion occurs on a profile without recursion                                                          |
+| `E-CALL-002`     | A source call-graph cycle, direct or through forward declarations, occurs on a profile without recursion             |
+| `E-FORWARD-001`  | Module ends with a forward declaration that has no completing body                                                   |
+| `E-FORWARD-002`  | Completing header differs from its forward declaration                                                               |
 | `E-MODULE-001`   | Root or import path lacks exact lowercase `.lafy`, or an import cycle, resolution or export collision occurs         |
 | `E-MODULE-002`   | Exported declaration exposes a private type                                                                          |
 | `E-MODULE-003`   | An `import` appears outside the module's contiguous import prefix                                                    |
@@ -88,7 +90,8 @@ implementation progresses.
 | `E-EXTERN-002`   | External routine has a Lanternfly body or is selected as entry                                                       |
 | `E-BOUNDARY-001` | Native or host contract cannot guarantee required values, storage, string invariants or callback restrictions        |
 | `E-ENTRY-001`    | Executable manifest lacks one valid source-defined entry routine                                                     |
-| `E-TARGET-001`   | Required native service, optional standard-module binding, operation, address class or capability is unavailable     |
+| `E-TARGET-001`   | Required native service, standard-module binding, operation, address class or capability target requirement is unavailable or unsatisfied |
+| `E-CAP-001`      | A capability-gated word or facility is mentioned without the module's own enabling standard capability import        |
 | `E-ASM-001`      | Assembly block is unclosed or appears in an invalid position                                                         |
 | `E-ASM-002`      | Target lacks a compatible assembly-fragment pipeline                                                                 |
 | `E-PLACE-001`    | Source or build placement cannot fit a compatible target memory region                                               |
@@ -222,7 +225,7 @@ capability.
 
 ## Open and provisional design
 
-The post-0.4 queue includes:
+The post-0.5 queue includes:
 
 - bare versus named block endings;
 - parser evidence for case-insensitive names;
@@ -232,7 +235,8 @@ The post-0.4 queue includes:
 - read-only aggregate parameters and general bounded views;
 - post-test loops or named outer-loop exits;
 - module aliases and re-exports;
-- optional `float32`.
+- `float32` and `float48` capability semantics, including representation,
+  rounding, conversions, comparisons and literal syntax.
 
-Until a later specification changes them, the 0.4 rules in this manual and
+Until a later specification changes them, the 0.5 rules in this manual and
 the normative specification are the implementation baseline.
