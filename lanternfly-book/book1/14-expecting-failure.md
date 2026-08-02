@@ -188,16 +188,46 @@ Chapter 15 by two further forms — and a bare call is rejected:
 readNumber()        // rejected: failure ignored
 ```
 
+## Failure from the program entry
+
+The entry itself may declare an error set:
+
+```lanternfly
+enum ProgramError as u8
+    invalidArguments
+    missingData
+end
+
+sub runProgram() fails ProgramError
+    fail missingData
+end
+
+sub main() fails ProgramError
+    runProgram() or fail
+end
+```
+
+Reaching `end` or using bare `return` reports successful program termination.
+Here, `fail missingData` reports unsuccessful termination with that enum member.
+The enum remains an ordinary opaque, zero-based type inside Lanternfly. A
+target that exposes a numeric exit status maps success to zero and a failed
+member with ordinal `n` to `n + 1`; other targets deliver the same two outcomes
+through their monitor, firmware or test runner.
+
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/14-number-entry.txt)
-is the complete first version of the number-entry module: the error set,
+The complete first version of the number-entry module contains the error set,
 the two line helpers, `readNumber` and the retrying `main`. Typing `250`
 sets the speed and prints `SET`; typing `12X4` prints the bad-digit
 message once — the rest of the spoiled line is consumed, never
 re-read — and the loop prompts again; an empty line is skipped without
 comment; `65536` produces the range message. Every path back to the
 prompt goes through the `on error` block.
+
+<<< @/public/lanternfly-book/book1/code/14-number-entry.txt{lanternfly}
+
+The source is also available as
+[14-number-entry.txt](/lanternfly-book/book1/code/14-number-entry.txt).
 
 ## Exercises
 
@@ -220,3 +250,5 @@ failure, so the destination remains unchanged.
   the destination unwritten on failure, and its `select` over the code
   is checked for exhaustiveness.
 - Ignoring a failable result is a compile error.
+- A failable entry reports unsuccessful program termination with an error-set
+  member; normal completion reports success.

@@ -19,7 +19,7 @@ The spec adds Pascal-style ordinal types as a fundamental:
   end` (explicit representation, members unqualified in the value scope,
   ordinals from zero, no arithmetic/bitwise, conversion to representation
   explicit, integer→enum checked with `F-RANGE`); nominal
-  `range Name as Host = lo to|until hi` subranges (widen silently to host;
+  `range Name as Base = lo to|until hi` subranges (usable as the base type;
   assignment/argument/return INTO a subrange is domain-checked, `F-RANGE`).
 - **Array index domains** (§6 retitled): every dimension declares an ordinal
   domain; `T[8]` is shorthand for `T[0 until 8]`; explicit bounds

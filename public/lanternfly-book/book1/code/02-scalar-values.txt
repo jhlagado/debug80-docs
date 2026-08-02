@@ -1,7 +1,7 @@
 // The u32 declaration below requires this capability import.
 import "standard/wide32.lafy"
 
-const warehouseCapacity as u16 = 5000
+const warehouseCapacity = 5000
 const dispatchBatch as u16 = 10
 
 // Character literals are exact byte values.

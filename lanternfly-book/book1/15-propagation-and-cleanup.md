@@ -120,15 +120,19 @@ costs.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/15-number-entry.txt)
-is the finished number-entry module: Chapter 14's error set, helpers and
-`readNumber`, with the prompting layer, the bracketed `echoNumber` and a
-`main` that exercises both. Typing `250` sets the speed, prints `SET`,
+The finished number-entry module contains Chapter 14's error set, helpers and
+`readNumber`, with the prompting layer, the bracketed `echoNumber` and a `main`
+that exercises both. Typing `250` sets the speed, prints `SET`,
 and then `echoNumber` reads a confirmation entry: a valid one prints
 `[OK]`, a spoiled one prints the balanced `[]` and `NO ECHO`. The two
 entries fail along different paths: a spoiled speed entry crosses
 `promptForSpeed` unchanged, while a spoiled confirmation propagates from
 `echoNumber` directly. Both are answered in `main`.
+
+<<< @/public/lanternfly-book/book1/code/15-number-entry.txt{lanternfly}
+
+The source is also available as
+[15-number-entry.txt](/lanternfly-book/book1/code/15-number-entry.txt).
 
 ## Exercises
 

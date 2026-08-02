@@ -4,20 +4,25 @@ enum Status as u8
     failed
 end
 
+const initialStatus = working
+
 enum ReportMode as u8
     compact
     detailed
     diagnostic
 end
 
-range VerboseMode as ReportMode = detailed to diagnostic
+range ScreenColumn as u8 = 0 until 32
+range DetailedReportMode as ReportMode = detailed to diagnostic
 
 var itemsRemaining as u16 = 40
 var errorCount as u8 = 0
-var status as Status = working
+var status as Status = initialStatus
 var reportMode as ReportMode = compact
 var lineWidth as u8 = 40
 var includeChecks as boolean = false
+var rawColumn as u8 = 31
+var column as ScreenColumn = 0
 
 sub updateStatus()
     if errorCount > 0 then
@@ -45,7 +50,7 @@ sub configureReport()
 end
 
 // A code read from a device stays u8; else handles unmatched values.
-var channelCode as u8 = 0
+var channelCode as u8 = 7
 var buffered as boolean = false
 
 sub configureChannel()
@@ -59,8 +64,21 @@ sub configureChannel()
     end
 end
 
+sub acceptColumn()
+    column = rawColumn
+end
+
 sub main()
     updateStatus()
+
+    itemsRemaining = 0
+    updateStatus()
+
+    errorCount = 1
+    updateStatus()
+
+    reportMode = detailed
     configureReport()
     configureChannel()
+    acceptColumn()
 end

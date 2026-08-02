@@ -104,13 +104,22 @@ selects an element rather than a partial row.
 
 ## Aggregate initializers
 
-An array initializer must match the declared rank, shape and element count
-exactly. A record initializer names every field exactly once:
+An initializer is the source after `=` that supplies a declaration's initial
+value. Square brackets form an array initializer. A record type name followed
+by named field entries forms a record initializer:
 
 ```lanternfly
 const movementCost as u8[4] = [1, 1, 2, 255]
 var position as Position = Position(y = 4, x = 2)
 ```
+
+`Position(y = 4, x = 2)` is not a routine call. `Position` resolves as a type
+name, while `y` and `x` name fields of that record. Lanternfly prohibits a
+routine and a type from having the same case-insensitive name, so this syntax
+cannot have both meanings.
+
+An array initializer must match the declared rank, shape and element count
+exactly. A record initializer names every field exactly once.
 
 Record fields may appear in any written initializer order, while record
 storage retains declaration order. Array positions follow ascending ordinal

@@ -7,58 +7,133 @@ nav_order: 8
 
 # Characters and Fixed-Capacity Strings
 
-Text is byte data with one extra fact to record: where it ends. Chapter 2's
-character literals give the bytes readable spellings (`'H'` is exactly the
-byte 72), so a `u8` array can hold text-shaped bytes. But an array's count
-describes its capacity, and nothing in it records how much of that capacity
-is currently meaningful. Lanternfly's string type carries that fact itself:
+Chapter 2 used character literals such as `'H'` and `'>'`. Each literal is one
+byte. The text `HELLO` needs five character bytes plus a way to record
+that five of the available bytes currently belong to the text.
+
+An ordinary byte array has a fixed element count, but it does not record a
+current text length. Lanternfly uses a fixed-capacity string for that job:
 
 ```lanternfly
 var playerName as string[12]
 ```
 
-## The counted layout
+The capacity 12 is the maximum payload. The current length may be anything from
+zero through 12. Both facts are needed: capacity determines how much storage
+the program reserves, while length determines how much text the string
+currently contains.
 
-`string[12]` is a counted string. The capacity is
-part of the type, and the layout is as concrete as any array's: one length
-byte, twelve payload cells, and a zero byte after the current payload, for
-exactly fourteen bytes settled at compile time. There is no allocator and no
-hidden buffer.
+## Capacity and current length
 
-The trailing zero byte is the _terminator_, and every string operation
-maintains it, so the payload is always valid NUL-terminated text. A
-routine that requires zero-terminated text can read the bytes as they
-sit, and `length` reads the stored count as a `u16` without scanning.
+`string[12]` reserves fourteen bytes:
 
-Larger capacities follow the same model. A capacity above 254 — up to
-64K — widens the length field to two bytes, `N + 3` in all, and nothing
-else changes; such a capacity requires
-`import "standard/long-strings.lafy"` at the module's top (Chapter 12).
+- one byte for the current length;
+- space for up to twelve payload bytes;
+- one further byte so the longest payload can still be followed by zero.
 
-## Literals, copies and growth
+The complete size is known during compilation: `12 + 2`, or 14 bytes. No
+allocator runs when text is assigned or appended.
 
-A double-quoted literal supplies text wherever it fits:
+Suppose the string contains `HELLO`. Its relevant bytes are:
+
+| Offset | Stored value | Meaning |
+| -----: | ------------ | ------- |
+| 0 | 5 | current payload length |
+| 1 | `'H'` | first character |
+| 2 | `'E'` | second character |
+| 3 | `'L'` | third character |
+| 4 | `'L'` | fourth character |
+| 5 | `'O'` | fifth character |
+| 6 | 0 | terminator immediately after the payload |
+| 7–13 | unspecified | storage beyond the current terminator |
+
+The terminating zero moves as the string grows. At the maximum length of 12,
+the payload occupies offsets 1 through 12 and the terminator occupies offset
+13. The zero is not part of the text and is not included in `length`.
+
+The stored length and terminator support two common forms of text access.
+`length(playerName)` reads the length byte and returns 5 as `u16`; it does not
+scan for the end. A native routine that consumes zero-terminated bytes can stop
+at the maintained terminator.
+
+## Empty strings
+
+All-zero storage represents the empty string:
+
+| Offset | Value | Meaning |
+| -----: | ----: | ------- |
+| 0 | 0 | current length is zero |
+| 1 | 0 | terminator follows the empty payload |
+
+A module string without an initializer therefore begins empty. `clear` returns
+any writable string to the same all-zero state:
 
 ```lanternfly
-var greeting as string[12] = "HELLO"
+clear(playerName)
+```
 
+The fixed capacity remains 12. Clearing changes the current content, not the
+type or amount of storage.
+
+## String literals and assignment
+
+A double-quoted literal supplies several character bytes:
+
+```lanternfly
+var greeting as string[8] = "HELLO"
+var playerName as string[12]
+```
+
+The literal has five payload bytes. It fits both capacities. Assignment copies
+the current content:
+
+```lanternfly
+playerName = greeting
+```
+
+After the assignment, `playerName` has length 5 and contains its own copy of
+`HELLO`. A later change to `greeting` would not change `playerName`.
+
+Source and destination capacities may differ because assignment copies the
+current payload rather than the unused capacity. The complete payload must fit
+the destination. A literal or constant that is too long is rejected during
+compilation. When the source length is known only at runtime, the copy checks
+the length before writing; an overflow causes the range fault and leaves the
+destination unchanged.
+
+After a failed copy, `playerName` still contains its complete earlier value
+rather than a truncated prefix.
+
+## Appending text
+
+`append` adds a string, literal or one nonzero `u8` byte to the current payload:
+
+```lanternfly
 sub renameGuest()
     playerName = greeting
     append(playerName, '!')
 end
 ```
 
-Assignment copies content, not identity, and the capacities of source and
-destination need not match — the copy is checked instead. A
-compile-time-known source is rejected at compile time when it cannot fit; a runtime
-copy or `append` that would overflow invokes the range-fault service before
-any destination byte changes, the same guarantee an array's bounds check
-gives.
+The two statements change the destination in stages:
 
-`append` grows a string in place, by another string, a literal or one
-nonzero byte. Repeated appends build a line piece by piece:
+| Stage | Content | Length | Terminator offset |
+| ----- | ------- | -----: | ----------------: |
+| initial `playerName` | empty | 0 | 1 |
+| after assignment | `HELLO` | 5 | 6 |
+| after append | `HELLO!` | 6 | 7 |
+
+Before writing, `append` checks that the combined payload fits and that a
+single-byte source is nonzero. An overflow or zero byte causes the range fault
+without changing the destination. The operation then writes the new payload,
+updates the count and places zero after the new end.
+
+Several appends can build a line from pieces:
 
 ```lanternfly
+var statusLine as string[16]
+var reportDigit as u8 = 2
+
 sub buildStatusLine()
     clear(statusLine)
     append(statusLine, "MODE ")
@@ -66,79 +141,117 @@ sub buildStatusLine()
 end
 ```
 
-With `reportDigit` at 2, the finished text is `MODE 2`: `clear` empties the
-string, the literal supplies five bytes, and `'0' + reportDigit` computes
-the digit's character byte. The `u8(...)` wrapper is there because Chapter
-3's byte addition widens to `u16`, and the byte append takes exactly one
-`u8`.
+`clear` starts with empty content. The first append stores `MODE ` with length
+5. Character `'0'` is byte 48, so adding `reportDigit` equal to 2 produces 50,
+the byte for `'2'`. Chapter 3's byte addition widens to `u16`; the explicit
+`u8(...)` converts the result back to the one byte required by `append`.
 
-## Comparison and the empty string
+The finished string is `MODE 2`, with length 6 and its terminator at offset 7.
 
-All six comparison operators examine the payload bytes, so
-`playerName = greeting` as a condition tests whether the text matches, not
-whether two names share storage. Shorter text compares before longer text
-with the same prefix, and capacities play no part.
+## Comparing text
 
-All-zero storage is the valid empty string. A module string therefore needs
-no initializer (it begins empty), and `clear` restores that state at
-any time.
+String comparisons examine current payload bytes. Capacity has no effect on
+the result:
 
-## The sealed representation
+```lanternfly
+namesMatch = playerName = greeting
+```
 
-The length byte, the payload cells and the terminator have no names, and no
-index reaches them. The whole arrangement depends on three facts staying in
-agreement: the stored count, the nonzero payload, and the terminator sitting
-immediately after it. One mismatch shows why the sealing matters: if a
-payload byte could change without the count and terminator moving with it,
-`length` would report one string, comparison would read another, and the
-next `append` would write somewhere between them.
+After `renameGuest`, `playerName` contains `HELLO!` and `greeting` contains
+`HELLO`, so the equality comparison produces false. The two strings begin with
+the same five bytes, but one has an additional byte.
 
-Assignment, `append`, `clear`, comparison and `length`
-are the built-in interface, and each operation preserves what the others
-rely on. Chapter 13's portable text services extend the family, reading
-and writing whole strings at the program's edge through compiler-managed
-carriers, without ever exposing the representation.
+All six comparison operators are available. Bytes are compared from left to
+right as unsigned values. At the first differing byte, that byte determines
+the order. When one complete payload is a prefix of the other, the shorter text
+comes first, so `HELLO < HELLO!` is true.
 
-A `u8` array maintains none of these invariants, so it never converts into
-a string, and a string is not an array of its bytes. Byte storage under other
-text conventions — a high-bit terminator, machine-specific display codes —
-remains ordinary `u8` data under an explicit service contract that assigns
-each byte its meaning.
+## A sealed representation
 
-## Strings in tables
+Correct text operations depend on three values agreeing:
 
-Strings sit in arrays like any other fixed-size data. `string[12][8]`
-declares eight strings of capacity twelve (the capacity brackets belong to
-the element type), and each element supports the full string interface
-through its indexed path. A string can also stand as one named field
-inside a record, at a fixed offset.
+- the stored length;
+- the nonzero payload bytes;
+- the zero immediately after the payload.
+
+Source code cannot index the internal bytes of a string. If one payload byte
+could be changed without updating the other representation values, `length`
+might report one text while comparison read another, and the next append might
+write at the wrong offset.
+
+Assignment, `append`, `clear`, comparison and `length` update or inspect the
+representation as complete operations. A normal `u8` array has none of these
+text rules. It remains the appropriate type for device bytes, encoded data and
+other layouts where the program or service supplies a different convention.
+
+The sealed representation also means a string does not convert to or from a
+`u8` array. Native and standard services receive text through typed string
+contracts, covered in Chapters 10, 13 and 16.
+
+## Larger capacities
+
+Capacities from 1 through 254 use the one-byte length layout described above,
+for an exact size of `N + 2` bytes.
+
+A capacity from 255 up to 64K uses a two-byte length field and occupies
+`N + 3` bytes. Declaring this long form requires:
+
+```lanternfly
+import "standard/long-strings.lafy"
+```
+
+The source operations remain assignment, `append`, `clear`, comparison and
+`length`. The capacity fixes the layout when the storage is declared; a short
+current value inside a long-capacity string still uses the long layout.
+
+## Strings inside other aggregates
+
+Strings have fixed sizes, so they can be array elements and record fields:
+
+```lanternfly
+var recentNames as string[12][4]
+```
+
+The capacity brackets belong to the element type, and the final brackets give
+the array count. This declaration reserves four `string[12]` values. Each
+occupies fourteen bytes, so the array occupies 56 bytes.
+
+An indexed path supports the same string operations:
+
+```lanternfly
+recentNames[0] = playerName
+append(recentNames[0], '!')
+```
+
+Chapter 9 places a string at a named offset inside a record.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/08-strings.txt)
-copies a greeting with a checked assignment, appends a byte, builds a
-status line from a literal and a computed digit, and compares two names by
-content. `playerName` finishes as `HELLO!` and `statusLine` as `MODE 2`.
+The complete module copies `HELLO` from an eight-character string into a
+twelve-character destination and appends `!`, leaving `playerName` as
+`HELLO!`. It builds `MODE 2` in `statusLine`. The final comparison leaves
+`namesMatch` false because `HELLO!` and `HELLO` have different lengths.
 
-## Exercises
+<<< @/public/lanternfly-book/book1/code/08-strings.txt{lanternfly}
 
-1. What is the exact size of `var name as string[40]`, and where does
-   the terminator sit when the string holds five bytes?
+The source is also available as
+[08-strings.txt](/lanternfly-book/book1/code/08-strings.txt).
 
-Answer: 42 bytes — one length byte, forty payload cells and one
-terminator — with the terminator at offset 6 after five payload bytes.
+## Exercise
+
+1. What is the exact size of `string[12]`, and where is the terminator when the
+   current content is `HELLO`?
+
+Answer: the string occupies 14 bytes. `HELLO` has five payload bytes at offsets
+1 through 5, so the terminator is zero at offset 6.
 
 ## Chapter summary
 
-- `string[N]` is a counted string of exact size `N + 2` through capacity
-  254 and `N + 3` beyond, with its capacity in the type and no allocator.
-- The payload always ends with a zero byte, so a service that requires
-  zero-terminated text reads it directly, and `length` reads the count
-  without scanning.
-- Assignment and `append` are checked copies: an overflow faults before any
-  destination byte changes.
-- Comparisons examine text content; all-zero storage is the valid empty
-  string.
-- The representation is sealed — assignment, `append`, `clear`, comparison
-  and `length` are the built-in interface, and later services reach
-  strings only through checked operations.
+- `string[N]` has a fixed capacity and a separate current length.
+- A short string occupies `N + 2` bytes: one length byte, payload storage and
+  room for a terminating zero.
+- Assignment and `append` check the complete new payload before changing the
+  destination.
+- Comparisons examine text content rather than capacity or storage identity.
+- The sealed representation keeps the length, payload and terminator in
+  agreement.

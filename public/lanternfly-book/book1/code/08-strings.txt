@@ -1,4 +1,4 @@
-var greeting as string[12] = "HELLO"
+var greeting as string[8] = "HELLO"
 var playerName as string[12]
 var statusLine as string[16]
 var namesMatch as boolean = false

@@ -48,12 +48,12 @@ implementation progresses.
 | `E-NAME-003`     | Record, enum or range type and callable routine share a case-insensitive name                                        |
 | `E-TYPE-001`     | Integer operands lack matching types or a permitted value-preserving widening                                        |
 | `E-TYPE-002`     | Boolean/integer mixing, non-Boolean condition, invalid Boolean ordering or deferred Boolean conversion               |
-| `E-TYPE-003`     | Invalid assignment, argument or return conversion, including an invalid `writeText` source or `readLine` destination |
+| `E-TYPE-003`     | Invalid assignment, argument or return conversion, including an invalid `writeText` source or `readLine`/`readArgument` destination |
 | `E-TYPE-004`     | A `unit` invocation, `clear`, `fill` or `append` appears where a value is required                                   |
 | `E-TYPE-005`     | Invalid enum representation, subrange, ordinal family or constant ordinal value                                      |
 | `E-CONST-001`    | Constant zero divisor, negative shift, negative exponent or negative square root                                     |
 | `E-CONST-002`    | A constant expression reads storage, calls a routine, uses a provider-bound address or has another runtime effect    |
-| `E-CONST-004`    | Constant declaration omits its explicit type                                                                         |
+| `E-CONST-004`    | An unannotated initializer produces neither an exact integer nor a scalar type, or an aggregate or placed constant omits its type |
 | `E-INIT-001`     | Array initializer has the wrong rank, shape or element count                                                         |
 | `E-INIT-002`     | Record initializer has an unknown, duplicate or missing field                                                        |
 | `E-INIT-004`     | A target cannot preload or write a placed initializer                                                                |
@@ -89,8 +89,8 @@ implementation progresses.
 | `E-EXTERN-001`   | External routine lacks a supported binding or compatible ABI                                                         |
 | `E-EXTERN-002`   | External routine has a Lanternfly body or is selected as entry                                                       |
 | `E-BOUNDARY-001` | Native or host contract cannot guarantee required values, storage, string invariants or callback restrictions        |
-| `E-ENTRY-001`    | Executable manifest lacks one valid parameterless, result-free, non-failable source-defined entry routine            |
-| `E-TARGET-001`   | Required native service, standard-module binding, operation, address class or capability target requirement is unavailable or unsatisfied |
+| `E-ENTRY-001`    | Selected executable entry is missing, has parameters or a result, or is not a source-defined root-module routine     |
+| `E-TARGET-001`   | Required native service, standard-module binding, termination outcome, operation, address class or capability target requirement is unavailable or unsatisfied |
 | `E-CAP-001`      | A capability-gated word or facility is mentioned without the module's own enabling standard capability import        |
 | `E-ASM-001`      | Assembly block is unclosed or appears in an invalid position                                                         |
 | `E-ASM-002`      | Target lacks a compatible assembly-fragment pipeline                                                                 |

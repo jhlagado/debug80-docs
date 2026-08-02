@@ -61,8 +61,9 @@ Placement rules:
 
 - A forward declaration repeats the `fails` clause exactly; a completing
   header that differs is `E-FORWARD-002`.
-- The program entry routine may not carry a `fails` clause, because no
-  caller exists to receive the failure (`E-ENTRY-001`).
+- The program entry routine may carry a `fails` clause. Its target-profile
+  termination contract consumes the final failure because no source caller
+  exists.
 - A `fails` clause on an external routine, and any form of this chapter
   inside a hosted body, are deferred; both are `E-FAIL-005`.
 - An exported failable routine's compiled export interface records its
@@ -82,6 +83,37 @@ Its operand must be a member of the enclosing routine's declared error
 set, and `fail` outside a failable routine is `E-FAIL-002`. Ordinary
 `return` returns success. In a result-bearing failable routine, every
 reachable path must return a compatible value or `fail`.
+
+## Program entry failure
+
+A selected program entry remains parameter-free and result-free, but it may
+name an error set:
+
+```lanternfly
+enum ProgramError as u8
+    invalidArguments
+    missingData
+end
+
+sub runProgram() fails ProgramError
+    fail missingData
+end
+
+sub main() fails ProgramError
+    runProgram() or fail
+end
+```
+
+Bare `return` and end-of-body completion report successful program
+termination. `fail member`, including a failure propagated by `or fail`,
+reports unsuccessful termination with that member after applicable deferred
+statements have run. The target profile consumes the final outcome instead of
+a source caller.
+
+Error-set enums keep their ordinary zero-based ordinals and remain opaque in
+source. A numeric exit-status profile maps success to zero and failed ordinal
+`n` to `n + 1`. Other profiles preserve the success/failure distinction through
+their monitor, firmware or host contract.
 
 ## Consuming failure
 
@@ -228,6 +260,10 @@ static-frame profile:
 | `or fail` in tail position | folds into the final `RET` | 0 bytes |
 | `or` default | branch over a load | ~4 bytes |
 | `on error` | conditional branch to the block | 2 bytes |
+
+A failable entry routes the same channel into the profile's termination
+implementation. A numeric-status profile may add the error ordinal increment;
+the cost report includes that boundary code.
 
 A framed, recursion-capable profile propagates through a conditional
 jump to the epilogue instead, and routines that defer cleanup route

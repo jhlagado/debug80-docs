@@ -7,12 +7,9 @@ nav_order: 6
 
 # Repeating Work
 
-Many programs perform the same operation over a sequence of values. The
-operation might add a range of numbers, search for a match, wait for input or
-process every entry in a table. A loop states both the repeated work and the
-rule that ends it.
-
-This first loop adds the integers from 1 through 10:
+Adding the integers from 1 through 10 requires the same addition ten times.
+Writing ten assignment statements would repeat the operation and bury the
+actual rule. A counted loop states the changing value and the stopping point:
 
 ```lanternfly
 var total as i16 = 0
@@ -27,49 +24,73 @@ sub sumTen()
 end
 ```
 
-`number` takes each value from 1 through 10, and `total` finishes at 55. The
-variable `total` is an accumulator: it begins with an empty result and adds
-one value during each pass.
+`number` is a scalar local of `sumTen`, like `amountDue` in Chapter 1. The
+`for` statement assigns each value from 1 through 10 to it. After each
+assignment, the body adds that value to `total`.
 
-## Local variables
+The first passes establish the pattern, and the last pass finishes it:
 
-```lanternfly
-var number as i16
-```
+| `number` | `total` before the body | `total` after the body |
+| -------: | ----------------------: | ---------------------: |
+| 1 | 0 | 1 |
+| 2 | 1 | 3 |
+| 3 | 3 | 6 |
+| 4 | 6 | 10 |
+| … | … | … |
+| 10 | 45 | 55 |
 
-This declaration appears inside `sumTen`, before its executable statements.
-`number` is a scalar local: the name exists only while `sumTen` is running,
-and each run receives its own value.
-
-An owned scalar local with no initializer starts with zero bits. The `for`
-statement stores its start value before the loop body reads it, so this routine
-does not depend on the initial zero. A loop-control variable is all the
-local storage we need for now; Chapter 10 gives the full rules for
-locals, their initializers and their lifetime.
+The variable `total` is an accumulator: it stores the partial result from one
+pass to the next. Resetting it before the loop ensures that every call to
+`sumTen` begins the calculation at zero.
 
 ## Counted loops
 
+The general counted-loop form is:
+
 ```lanternfly
-for number = 1 to 10
+for control = start to boundary
+    statements
+end
+```
+
+The control name must already denote a writable ordinal variable. `for` does
+not declare it, which is why `number` appears with the other local declarations
+before the statements in `sumTen`.
+
+The loop follows this sequence:
+
+1. Evaluate the start and boundary once.
+2. Store the start value in the control variable.
+3. Test whether that value belongs in the loop.
+4. Run the body when it does.
+5. Advance the control value and test again.
+
+With a positive step, `to` includes the boundary, so `1 to 10` runs with 10 as
+well as 1. After the final body, the next mathematical value is
+11; it fails the boundary test and is not stored.
+
+`until` names the first excluded value:
+
+```lanternfly
+for number = 0 until 10
     total = total + number
 end
 ```
 
-A counted loop visits an inclusive range. `1 to 10` runs ten times. The
-control name must already denote a writable ordinal variable; `for` does
-not declare it. An enumeration or enumeration-range
-control advances by ordinal position, so a loop can visit every member of
-a Chapter 5 enumeration by naming its first and last members; an
-integer-range control advances by the mathematical step, tested before
-it is stored.
+This loop visits 0 through 9. The two forms are useful in different
+situations:
 
-`until` is the exclusive counterpart: `for number = 0 until 10` visits 0 through 9,
-stopping below its boundary. The half-open form matters most with
-zero-based tables in Chapter 7, where an array's count can stand as the
-boundary without a subtracted one.
+| Form | Values visited | Useful boundary |
+| ---- | -------------- | --------------- |
+| `1 to 10` | 1 through 10 | the last included value |
+| `0 until 10` | 0 through 9 | the count or first excluded value |
 
-The start and limit are evaluated once before the first pass. An optional
-compile-time `step` changes the sequence:
+Zero-based arrays use `until` naturally because `0 until count` visits exactly
+`count` positions. Chapter 7 applies that form to array indices.
+
+## Changing the step
+
+The default step is 1. A compile-time `step` selects another nonzero distance:
 
 ```lanternfly
 for address = 0 to 14 step 2
@@ -77,7 +98,10 @@ for address = 0 to 14 step 2
 end
 ```
 
-This loop visits 0, 2, 4, 6, 8, 10, 12 and 14. A negative step counts down:
+The stored values are 0, 2, 4, 6, 8, 10, 12 and 14. The inclusive boundary is
+visited because the sequence reaches it exactly.
+
+A negative step counts down:
 
 ```lanternfly
 for position = 7 to 0 step -1
@@ -85,16 +109,51 @@ for position = 7 to 0 step -1
 end
 ```
 
-The loop computes its next value mathematically and stops before the control
-variable would wrap beyond its boundary. The body must not assign to the
-control variable — the loop, not the body, advances it. When the body
-itself must control progress, `while` expresses that relationship.
+This loop visits 7, 6, 5, 4, 3, 2, 1 and 0. The next mathematical value would
+be -1, so the loop ends without storing it in `position`.
 
-## Conditional loops
+The sign of the step fixes the direction. If this loop used `step 1`, its
+first test would be `7 <= 0`. That test is false, so the body would run zero
+times. The loop would not wrap around or run forever, and `position` would
+remain 7.
 
-A `while` loop tests its condition before each pass. The Euclidean algorithm
-for a greatest common divisor repeats while the second working value remains
-nonzero:
+The loop body cannot assign to its control variable. The `for` statement is
+responsible for the sequence and boundary test; another assignment would make
+the next value ambiguous. Use `while` when the body itself must determine the
+progress.
+
+## Counting through enumeration members
+
+Enumerations are ordered by declaration, so they can also control a counted
+loop:
+
+```lanternfly
+enum Phase as u8
+    warmup
+    working
+    cooldown
+end
+
+var phase as Phase = warmup
+var phasesVisited as u8 = 0
+
+sub visitPhases()
+    for phase = warmup to cooldown
+        phasesVisited = phasesVisited + 1
+    end
+end
+```
+
+The loop visits `warmup`, `working` and `cooldown` in declaration order.
+Arithmetic on `Phase` remains invalid; the counted loop advances by ordinal
+position as part of its own control rule.
+
+## Loops controlled by a condition
+
+A counted loop suits a known sequence. Some calculations instead repeat while
+a changing condition remains true. The Euclidean algorithm finds the greatest
+common divisor of two integers by repeatedly replacing the pair with the
+second value and the remainder:
 
 ```lanternfly
 var leftValue as u16 = 84
@@ -114,20 +173,32 @@ sub calculateGcd()
 end
 ```
 
-The pairs are (84, 30), (30, 24), (24, 6) and (6, 0). The next condition is
-false, so the loop ends and the result is 6.
+`while` tests its Boolean condition before every pass. The values change as
+follows:
 
-An initially false condition runs the body zero times, which is the
-correct behaviour when no work remains — here, when `rightValue` is
-already zero.
+| `leftValue` | `rightValue` | Remainder | Pair after the body |
+| ----------: | -----------: | --------: | ------------------- |
+| 84 | 30 | 24 | 30, 24 |
+| 30 | 24 | 6 | 24, 6 |
+| 24 | 6 | 0 | 6, 0 |
 
-## Indefinite loops
+The next condition tests `0 <> 0` and produces false. The loop ends, and
+`leftValue` contains the result 6.
 
-Some operations need to perform work before they can test whether they are
-finished. `while true` states that outright: the condition never ends the
-loop, and an `exit` statement inside the body does:
+Because the condition comes first, a false initial condition runs the body
+zero times. If `rightValue` were already zero, the division and remainder
+operation would never run, and the initial `leftValue` would be copied to the
+result.
+
+## Work before the stopping test
+
+Some loops perform work before their stopping condition can be evaluated.
+`while true` repeats until an `exit` statement leaves the loop:
 
 ```lanternfly
+var startValue as i16 = 13
+var result as i16 = 0
+
 sub findNextMultiple()
     var candidate as i16 = startValue
 
@@ -142,76 +213,123 @@ sub findNextMultiple()
 end
 ```
 
-The candidate advances before the test. Starting at 16 produces 24;
-starting at 15 produces 16. `exit` leaves the innermost loop and continues
-after its closing `end`.
+Starting at 13, the routine tests 14, then 15, then 16. The third remainder is
+zero, so `result` receives 16 and `exit` continues execution after the loop's
+closing `end`.
 
-An indefinite loop needs at least one reachable exit or an intentional design
-reason to run forever. On a small standalone computer, an accidental endless
-loop may prevent every later operation from running.
+The increment comes before the test. Starting at 16 returns 24, not 16. The
+routine finds the next multiple after the starting value.
 
-## Skipping one pass
+Every indefinite loop needs a reachable `exit` unless continuous execution is
+deliberate. A missing exit prevents every statement after that loop from
+running.
 
-`continue` skips the remainder of the current pass and begins the next one:
+## Skipping the rest of one pass
+
+`continue` stops the current body and begins the next pass. The counted loop
+still advances and checks its boundary:
 
 ```lanternfly
-for number = 1 to 10
-    if number mod 2 = 0 then
-        continue
-    end
+var oddTotal as i16 = 0
 
-    total = total + number
+sub sumOdds()
+    var number as i16
+
+    oddTotal = 0
+    for number = 1 to 10
+        if number mod 2 = 0 then
+            continue
+        end
+
+        oddTotal = oddTotal + number
+    end
 end
 ```
 
-Even numbers skip the accumulator, so the loop adds 1, 3, 5, 7 and 9. In a
-counted loop, the normal step and range test still occur after `continue`.
-
-An early `continue` is useful when one condition excludes an entry from the
-main work. It keeps the main path at the loop body's outer indentation.
+An even number reaches `continue`, so the addition beneath it is skipped. The
+values 1, 3, 5, 7 and 9 reach the accumulator and produce 25. Testing the
+excluded case first keeps the main addition at the outer indentation of the
+loop body.
 
 ## Nested loops
 
-`exit` and `continue` act on the innermost loop. A loop inside another
-loop pairs every value of one control with every value of the other: five
-outer passes around ten inner passes make fifty inner bodies. When a
-match in the inner loop must stop the whole nest, a Boolean flag
-declared `false` before the loops records it — the inner loop sets it and
-exits, and the outer loop tests it before starting another pass.
+Two controls are needed to search a rectangular grid. The outer loop selects a
+row, and the inner loop selects each column in that row:
+
+```lanternfly
+var target as u8 = 6
+var found as boolean = false
+
+sub findInGrid()
+    var row as u8
+    var column as u8
+
+    found = false
+    for row = 0 until 3
+        if found then
+            continue
+        end
+
+        for column = 0 until 4
+            if row * 4 + column = target then
+                found = true
+                exit
+            end
+        end
+    end
+end
+```
+
+The inner expression assigns element numbers 0 through 3 to row 0, 4 through 7
+to row 1 and 8 through 11 to row 2. Target 6 is found at row 1, column 2.
+
+Bare `exit` leaves only the innermost loop. After the match, the outer loop
+continues with row 2. The `found` test then executes `continue`, preventing
+another inner search. The Boolean is needed because Lanternfly has no labelled
+exit that leaves both loops at once.
+
+`exit` and `continue` always apply to the innermost enclosing `for` or `while`.
+`return`, covered with subroutine results in Chapter 10, leaves the complete
+subroutine instead.
 
 ## Choosing a loop
 
-| Repetition rule                             | Form                      |
-| ------------------------------------------- | ------------------------- |
-| visit an inclusive numeric range            | `for ... to ... end`      |
-| visit a half-open numeric range             | `for ... until ... end`   |
-| visit every element of an array (Chapter 7) | `for each ... in ... end` |
-| test before each pass                       | `while ... end`           |
-| repeat until a statement exits              | `while true ... end`      |
+The stopping rule determines the loop form:
 
-Choose the form whose syntax states the stopping rule.
+| Repetition needed | Form |
+| ----------------- | ---- |
+| visit a sequence including its final value | `for ... to ... end` |
+| visit values before a count or boundary | `for ... until ... end` |
+| repeat while a condition remains true | `while ... end` |
+| perform work before deciding whether to stop | `while true ... exit ... end` |
+
+Chapter 7 adds `for each` for work that needs every array element but not its
+index.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/06-loops.txt)
-contains each loop form. The `calculateGcd` trace ends at 6,
-`findNextMultiple` advances from 13 to 16, and the enumeration-controlled
-loop visits all three phases, leaving `phasesVisited` at 3. `sumOdds`
-skips even numbers with `continue`, finishing at 25, and `findInGrid`
-carries a nested-loop result out through a flag.
+The complete module leaves `total` at 55, `greatestCommonDivisor` at 6 and
+`result` at 16. The enum loop visits three phases, `sumOdds` produces 25 and
+the nested search finds target 6 at row 1, column 2.
 
-## Exercises
+<<< @/public/lanternfly-book/book1/code/06-loops.txt{lanternfly}
 
-1. Which values does `for address = 0 until 9 step 2` visit?
+The source is also available as
+[06-loops.txt](/lanternfly-book/book1/code/06-loops.txt).
 
-Answer: 0, 2, 4, 6 and 8; `until` excludes the boundary.
+## Exercise
+
+1. Which values does `for address = 0 until 9 step 2` visit, and why is 9
+   absent?
+
+Answer: 0, 2, 4, 6 and 8. `until` excludes 9, and the next step from 8 would
+cross that boundary.
 
 ## Chapter summary
 
-- A local scalar belongs to one subroutine invocation.
-- `for ... to` visits an inclusive range, and `for ... until` stops below
-  its boundary; both take a fixed compile-time step.
-- `while` tests before each pass, so its body may run zero times.
-- `while true` repeats until `exit`, and `continue` skips the rest of one
-  pass.
-- `exit` and `continue` apply to the innermost loop.
+- `for ... to` includes its boundary; `for ... until` stops before it.
+- A compile-time `step` changes the distance and direction between control
+  values.
+- `while` tests before every pass, so its body may run zero times.
+- `while true` repeats until `exit`; `continue` skips the rest of one pass.
+- In nested loops, bare `exit` and `continue` affect the innermost loop.

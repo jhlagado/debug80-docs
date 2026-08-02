@@ -60,10 +60,17 @@ The first member has ordinal zero and later members follow in declaration
 order; the last ordinal must fit the declared integer representation. Members
 enter the surrounding value scope and need no qualification. All fixed-width
 integers share the integer root family, while each enum begins a distinct
-family and a subrange belongs to its host's family. Unrelated enums therefore
-remain incompatible even when their representation and member count match.
+family and a subrange belongs to its base type's family. Unrelated enums
+therefore remain incompatible even when their representation and member count
+match.
 Converting an enum to its representation exposes the ordinal; converting an
 integer to an enum checks that a member exists.
+
+An unannotated constant initialized from an enum member retains the enum type:
+
+```lanternfly
+const defaultColour = red  // Colour
+```
 
 A subrange gives a name to part of an integer or enum domain:
 
@@ -72,19 +79,34 @@ range ScreenColumn as u8 = 0 until 32
 range WarmColour as Colour = red to blue
 ```
 
-`to` includes its upper endpoint and `until` excludes its boundary. A subrange
-keeps its host representation but is a distinct nominal type. Its lower and
-inclusive upper endpoints belong to the host domain. An exclusive integer
-boundary may be one beyond the host's maximum because that boundary is not a
-member; an enum boundary must still name a host member. After normalization,
-the subrange must contain at least one value. Values entering it are checked;
-a known failure is a compile error and a dynamic failure causes `F-RANGE`
-before the destination changes.
+The lower endpoint is always included. `to` includes the upper endpoint;
+`until` excludes it:
 
-A subrange widens silently to its host type. An integer subrange therefore
-uses its host's arithmetic rules, while an enum subrange retains its enum's
-non-arithmetic operations. Enums support assignment, all six comparisons,
-`select`, counted loops and array indexing within the same nominal family.
+| Written range | Included values |
+| ------------- | --------------- |
+| `0 to 31` | 0 through 31 |
+| `0 until 32` | 0 through 31 |
+
+`to` states the last included value. `until` states the first excluded value.
+The exclusive form fits zero-based counts because `0 until count` contains
+exactly `count` values. Adjacent ranges can meet at the same boundary: `0 until
+32` accepts 0 through 31, while `32 until 64` accepts 32 through 63. Named
+endpoints often fit the inclusive form: `red to blue` includes `red`, `green`
+and `blue` in declaration order.
+
+A subrange uses its base type's representation but is a distinct nominal type.
+Its lower and inclusive upper endpoints belong to the base type's domain. An
+exclusive integer boundary may be one beyond the base type's maximum because
+that boundary is not a member; an enum boundary must still name a member of
+the base enum. After normalization, the subrange must contain at least one
+value. Values entering it are checked; a known failure is a compile error and
+a dynamic failure causes `F-RANGE` before the destination changes.
+
+A value of a subrange type may be used wherever its base type is accepted.
+Conversion from the base type to the subrange is checked. An integer subrange
+uses its base type's arithmetic rules, while an enum subrange retains its
+enum's non-arithmetic operations. Enums support assignment, all six
+comparisons, `select`, counted loops and array indexing within the same nominal family.
 They do not support integer arithmetic or bitwise operators.
 
 Ranges are type and grammar forms, not runtime values. They cannot be stored,
@@ -217,10 +239,10 @@ parameter and alias forms, together with the restrictions on returns and local
 ownership. Byte indexing, slicing, capacity-generic parameters and deliberate
 truncating copy remain deferred.
 
-The optional standard text modules have two narrow exceptions to the
+The optional standard service modules have three narrow exceptions to the
 exact-capacity parameter rule. `writeText` may read a literal or `string[N]`
-path of any capacity, while `readLine` may write a `string[N]` path of any
-capacity. Their temporary carriers are not source-level references or general
-parameter forms.
-[Chapter 10](10-modules-and-programs.md#standard-text-modules) introduces the
-module before Chapter 11 describes its target binding.
+path of any capacity, while `readLine` and `readArgument` may write a
+`string[N]` path of any capacity. Their temporary carriers are not source-level
+references or general parameter forms.
+[Chapter 10](10-modules-and-programs.md#standard-service-modules) defines the
+modules before Chapter 11 describes their target bindings.

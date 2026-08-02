@@ -56,7 +56,7 @@ exportable-declaration
                       | forward-sub-decl
                       | sub-decl
 
-const-decl          ::= "const" value-name "as" type-expr
+const-decl          ::= "const" value-name ("as" type-expr)?
                         "=" constant-initializer placement? newline
 
 var-decl            ::= "volatile"? "var" value-name "as" type-expr

@@ -51,8 +51,13 @@ else
 end
 ```
 
-Cases contain compatible ordinal compile-time constants and never fall
-through. Several values may share a case:
+Cases contain compatible ordinal compile-time constants. The selected value
+determines one case body. After that body, execution continues after the final
+`end` of the complete `select`.
+
+_Fall-through_ means continuing execution into the next case body. Here,
+execution continues after the final `end`, so no `break` statement is needed.
+Place several values on one case when they should select the same body:
 
 ```lanternfly
 case grass, sand
@@ -114,8 +119,8 @@ end
 
 The control name must denote a writable, non-volatile ordinal variable or
 scalar parameter. Enum controls advance in declaration order; subranges use
-their host ordering. An explicit step for an enum or enum-subrange control is
-an integer constant. The loop introduces no control declaration.
+their base enum's ordering. An explicit step for an enum or enum-subrange
+control is an integer constant. The loop introduces no control declaration.
 
 ## Counted-loop evaluation
 
@@ -146,6 +151,11 @@ the exact value 256.
 | -------- | -------------------- | ----------------------- |
 | positive | control <= boundary  | control < boundary      |
 | negative | control >= boundary  | control > boundary      |
+
+If the step points away from the boundary, the body runs zero times. In
+`for row = 7 to 0 step 1`, the first continuation test is `7 <= 0`. It is
+false, so `row` remains 7 and the body does not run. The loop neither wraps nor
+continues indefinitely.
 
 After each body execution, the compiler calculates the next value
 mathematically and tests it before storing it. If that value fails the

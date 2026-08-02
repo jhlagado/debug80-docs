@@ -16,7 +16,10 @@ var postage as u16 = 15
 var total as u16 = 0
 
 sub addPostage()
-    total = subtotal + postage
+    var amountDue as u16
+
+    amountDue = subtotal + postage
+    total = amountDue
 end
 
 sub main()
@@ -26,13 +29,14 @@ end
 
 Before `main` begins, `subtotal` contains 120, `postage` contains 15 and
 `total` contains 0. Execution starts in `main`, whose one statement calls
-`addPostage`; after the assignment inside `addPostage` has run, the first
-two values are unchanged and `total` contains 135.
+`addPostage`. On entry to `addPostage`, `amountDue` contains zero. The first
+assignment stores 135 there, and the second copies 135 into `total`. The first
+two module variables remain unchanged.
 
-The program shows three facts: static storage, an explicit entry point
-and a statement that changes a stored value.
+This program contains module variables, a local variable, an entry point and
+assignments that change stored values.
 
-## Three places in memory
+## Module variables
 
 ```lanternfly
 var subtotal as u16 = 120
@@ -55,15 +59,15 @@ much storage the program needs, and execution changes only the values
 held in it — a rule that persists for arrays and records: their
 maximum sizes, too, are stated in the source.
 
-## Subroutines and the entry point
+## Subroutines and local variables
 
 An ordinary source file is a module: a sequence of declarations, such as
 these three variables and two subroutines. Executable statements appear
 only inside subroutines.
 
 A module is checked strictly top to bottom: every name must be declared
-before the line that uses it. (Chapter 10 explains the one declared
-exception: a routine header stated ahead of its body.) The three
+before the line that uses it. Chapter 10 explains the permitted forward
+reference: `forward sub` states a routine header before its body. The three
 variables stand above `addPostage` because its statement uses them, and
 `addPostage` stands above `main` because `main` calls it. The same rule
 orders every program in this book, and a module is traced the same way
@@ -71,7 +75,10 @@ it is checked: from the top.
 
 ```lanternfly
 sub addPostage()
-    total = subtotal + postage
+    var amountDue as u16
+
+    amountDue = subtotal + postage
+    total = amountDue
 end
 ```
 
@@ -80,31 +87,46 @@ parameters, and `end` closes it. Indentation is convention: the words
 `sub` and `end` define the block, not the spaces. Chapter 10 covers
 parameters and results.
 
+A declaration inside a subroutine creates a local variable. `amountDue` can be
+named only inside `addPostage`, and each invocation has its own value. Local
+declarations appear before the executable statements. This `u16` local has no
+initializer, so it starts with zero bits; the first assignment replaces that
+zero before any expression reads it. An initializer may instead supply the
+starting value:
+
+```lanternfly
+var amountDue as u16 = subtotal + postage
+```
+
+The initializer runs on every call. Chapter 10 explains the complete rules for
+local initializers, lifetime and overlapping calls.
+
 Whenever a code fence in this book shows a statement or expression on
 its own, it is an excerpt from inside a routine. The complete, correctly
 ordered module always appears in the chapter listing.
 
-The entry point is explicit. An executable build selects one
-parameter-free, result-free, source-defined and non-failable subroutine
-as the entry; `main` is a familiar convention, not a keyword, and any
-suitable name serves. By the
-time the entry begins, the module variables hold their initial values.
+## The entry point
+
+An executable build starts with `main` in its root module unless the build
+manifest names another entry. `main` is not a keyword, but it is the default
+entry name. The selected subroutine is source-defined and has no parameters or
+result. Chapter 12 explains how a program receives launcher arguments, and
+Chapter 14 explains how an entry can report failure. By the time the entry
+begins, the module variables hold their initial values.
 
 ## Following the assignment
 
 ```lanternfly
-total = subtotal + postage
+amountDue = subtotal + postage
+total = amountDue
 ```
 
-At the beginning of a statement, `=` means assignment: identify the place
-named on the left, evaluate the expression on the right, then store the
-value in that place. The order matters once destinations involve work of
-their own, such as an index expression; the store always comes last, so
-the calculation completes before the destination changes.
-
-Tracing by hand: 120 from `subtotal`, 15 from `postage`, their `u16` sum
-135 written to the two bytes reserved for `total`, replacing 0. Neither
-input changes, because neither appears on the left of the assignment.
+At the beginning of a statement, `=` assigns: evaluate the expression on the
+right, then store its value in the place named on the left. The first statement
+stores 135 in `amountDue`; the second stores the same value in `total`.
+`subtotal` and `postage` remain unchanged because neither appears on the left.
+`amountDue` contains 135 until `addPostage` returns. The module variables finish
+with these values:
 
 | Variable   | Before | After |
 | ---------- | -----: | ----: |
@@ -119,33 +141,31 @@ Comments begin with `//` and continue to the end of the line:
 var subtotal as u16 = 120
 ```
 
-The comment records a fact the code cannot state: whether 120 means
-$1.20, $120 or something else.
+The value `120` alone has no unit. The comment identifies the unit as cents,
+so `120` represents $1.20.
 
 ## A result without a screen
 
-This first program leaves its result in memory instead of printing it. On
-a desktop computer, a language runtime can usually assume a terminal or
-window. The small computers Lanternfly targets share no standard output
-device: one machine has a serial port, another a memory-mapped display,
-another only a monitor routine in ROM. Lanternfly reaches such facilities
-through typed services — portable text output in Chapter 13, a
-platform's own machine services in Chapter 16.
-Printing 135 would also mean converting the binary integer into the
-character bytes `1`, `3` and `5`. This program stores its answer instead,
-and inspection tools can read the bytes assigned to `total` by name,
-because the compiler keeps symbol information alongside the generated
-program.
+This program leaves its result in `total`. Small computers provide different
+output devices. Chapter 13 specifies portable text output through typed
+services, and Chapter 16 covers platform services. Printing 135 would also
+require conversion from an integer to the character bytes `1`, `3` and `5`;
+for now, the stored value is the answer.
 
-The complete source is available as the
-[chapter listing](/lanternfly-book/book1/code/01-first-program.txt).
+## Complete program
+
+<<< @/public/lanternfly-book/book1/code/01-first-program.txt{lanternfly}
+
+The source is also available as
+[01-first-program.txt](/lanternfly-book/book1/code/01-first-program.txt).
 
 ## The build
 
 The compiler turns this module into a runnable program: it checks the
-declarations, the call and the assignment, chooses an address for each
-variable, and emits Z80 machine code. When `main` returns, the target
-performs its normal termination.
+declarations, the call and the assignments, chooses storage for each variable
+and emits Z80 machine code. When `main` returns, the target reports
+successful termination. Chapter 14 adds unsuccessful termination through
+`fail`.
 
 ## Exercises
 
@@ -158,13 +178,15 @@ accumulates.
 
 ## Chapter summary
 
-- A declaration states a name, an exact type and an initial value;
-  module-level storage is static, reserved and initialized before entry.
-- Executable statements appear only inside subroutines, and every name
-  is declared before the line that uses it.
-- The entry is a parameter-free, result-free, source-defined and
-  non-failable subroutine named in the build manifest; `main` is a
-  convention, not a keyword.
+- A variable declaration states a name and an exact type; an initializer may
+  also state its first value. Module-level storage is static and exists before
+  entry.
+- Executable statements appear only inside subroutines. Scalar locals are
+  declared before those statements and can be named only within their
+  subroutine.
+- Every name is declared before the line that uses it.
+- An executable starts with the root module's `main` unless its manifest names
+  another parameter-free, result-free, source-defined entry.
 - At the start of a statement, `=` assigns: the right side is evaluated,
   then the value is stored, and only the destination changes.
-- A comment records a fact the code cannot state.
+- A comment can identify units and other facts absent from declarations.

@@ -41,13 +41,15 @@ is tied to this machine.
 
 ## Operations, standard services and platform services
 
-_Language operations_ — `abs`, `length`, `clear`, `append` and the
-rest — mean the same everywhere, and the compiler selects instructions
-or a runtime helper. _Standard services_ (Chapter 13's five) have one
-portable meaning but optional, target-supplied implementations, reached
-through explicit imports. A _platform service_ such as `writeUnsigned`
-is one machine's own routine, reached through a declaration in the
-platform module.
+_Language operations_ are `abs`, `sqrt`, `length`, `size`, `count`, `lower`,
+`upper`, `offset`, `clear`, `fill` and `append`. They require no import and
+mean the same everywhere; the compiler selects instructions or a runtime
+helper only when a program uses one. _Standard services_ include Chapter 13's
+five text operations and Chapter 12's two launcher-argument operations. Each has one
+portable meaning and an optional target-supplied implementation, reached
+through an explicit import. A _platform service_ such as `writeUnsigned` is
+one machine's own routine, reached through a declaration in the platform
+module.
 
 ## External routines
 
@@ -199,15 +201,11 @@ modules import their exported signatures.
 
 ## Complete program
 
-This chapter's companion program spans three files:
-[report.lafy](/lanternfly-book/book1/code/16-report.txt) composes the
-program from the standard text output, the measurement model and the
-platform console;
-[readings.lafy](/lanternfly-book/book1/code/16-readings.txt) is an
-ordinary module exporting that model; and
-[console.lafy](/lanternfly-book/book1/code/16-console.txt) is a platform
-interface module whose module assembly defines the firmware symbols its
-external bindings name.
+The complete program spans three modules. `report.lafy` composes the program
+from the standard text output, the measurement model and the platform console.
+`readings.lafy` exports that model. `console.lafy` is a platform interface
+module whose module assembly defines the firmware symbols named by its external
+bindings.
 
 console.lafy also binds `playTone` at an absolute address and exports a
 `near` aggregate parameter and an opaque `far address`. report.lafy
@@ -215,6 +213,27 @@ calls the ROM's vertical-blank wait through a statement-level `asm`
 block, plays a tone and clears a shared block. The change traces to 230,
 and the program prints `CHANGE 230` — the label through the standard
 `writeText`, the number through the `writeUnsigned` binding.
+
+### report.lafy
+
+<<< @/public/lanternfly-book/book1/code/16-report.txt{lanternfly}
+
+The source is also available as
+[16-report.txt](/lanternfly-book/book1/code/16-report.txt).
+
+### readings.lafy
+
+<<< @/public/lanternfly-book/book1/code/16-readings.txt{lanternfly}
+
+The source is also available as
+[16-readings.txt](/lanternfly-book/book1/code/16-readings.txt).
+
+### console.lafy
+
+<<< @/public/lanternfly-book/book1/code/16-console.txt{lanternfly}
+
+The source is also available as
+[16-console.txt](/lanternfly-book/book1/code/16-console.txt).
 
 ## Exercises
 
@@ -227,9 +246,9 @@ needed afterwards and discard assumptions about mutable storage.
 
 ## Chapter summary
 
-- Language operations mean the same everywhere; standard services add
-  portable, optional contracts; platform services are one machine's own
-  routines behind typed `extern sub` declarations.
+- Every target applies the same language-operation semantics. Imported standard
+  services provide optional portable contracts; platform modules declare
+  machine-specific routines with typed `extern sub` declarations.
 - Interface modules export service signatures; `at` and `from` name
   machine bindings, and program modules import service signatures rather
   than repeating routine entry addresses.

@@ -24,6 +24,7 @@ A profile declares:
 - address spaces;
 - memory regions and default placement targets;
 - routine ABI;
+- program-termination implementation;
 - standard-service implementations;
 - native dialect and assembly-fragment support;
 - optional capabilities such as recursion.
@@ -31,11 +32,11 @@ A profile declares:
 Operations such as display, input, sound, random-number generation, firmware
 calls and device access enter the language as typed external routines.
 
-## Standard text-service bindings
+## Standard service bindings
 
-[Chapter 10](10-modules-and-programs.md#standard-text-modules) defines the
-programmer-facing text operations. The selected target profile binds each
-operation that a program uses to a stable service ID:
+[Chapter 10](10-modules-and-programs.md#standard-service-modules) defines the
+programmer-facing text and launcher-argument operations. The selected target
+profile binds each operation that a program uses to a stable service ID:
 
 | Export           | Service ID                           |
 | ---------------- | ------------------------------------ |
@@ -44,14 +45,24 @@ operation that a program uses to a stable service ID:
 | `writeNewline`   | `standard.textOutput.writeNewline`   |
 | `readCharacter`  | `standard.textInput.readCharacter`   |
 | `readLine`       | `standard.textInput.readLine`        |
+| `argumentCount`  | `standard.programArguments.argumentCount` |
+| `readArgument`   | `standard.programArguments.readArgument`  |
 
 The toolchain supplies the versioned module interfaces; the selected target
 profile supplies the bindings. A target may implement an ID with firmware, a
 serial device, generated code or a test adapter.
 It must preserve the Chapter 10 contract for character order, bounded line
-input and normal return. A target that cannot bind a service used by the
-program rejects the build. The profile resolves each implementation through
-the ordinary external-binding, ABI, adapter and runtime-component contracts.
+input, stable launcher arguments and normal return. A target that cannot bind a
+service used by the program rejects the build. The profile resolves each
+implementation through the ordinary external-binding, ABI, adapter and
+runtime-component contracts.
+
+The profile's `programTermination` record names an implementation and carries
+the Boolean field `numericExitStatus`. Normal entry completion supplies
+success; `fail` from a failable entry supplies an error-set member. A true flag
+maps success to zero and failed ordinal `n` to `n + 1`. A false flag requires a
+target contract that reports both outcomes and preserves the failed member.
+Neither form changes the enum value visible to Lanternfly source.
 
 ## External routines
 

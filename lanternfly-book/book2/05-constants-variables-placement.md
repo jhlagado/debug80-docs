@@ -13,16 +13,35 @@ aggregate; `var` declares storage.
 
 ## Constants
 
-The first implementation requires every constant to state its type:
+An integer constant may remain exact and untyped or state a fixed type:
 
 ```lanternfly
-const screenWidth as u8 = 32
-const visibleMask as u8 = %00000001
-const debuggingEnabled as boolean = false
+const warehouseCapacity = 5000
+const visibleMask as u8 = %10000000
 ```
 
-Scalar constants normally occupy no storage of their own, although placement
-or target ABI rules may require a stored representation.
+Without `as`, an initializer made entirely from exact integer values remains
+exact and untyped. It adopts an integer type when used in a typed expression or
+destination. An explicit annotation supplies the initializer's expected type
+and fixes its width, signedness and boundary checks.
+
+The bitwise operations require a finite width. `not` requires a typed operand,
+`shr` requires a typed left operand, and `and`, `or` and `xor` require at least
+one typed operand. This is why `visibleMask` is declared as `u8`.
+
+If an initializer already has a scalar type, the constant keeps it:
+
+```lanternfly
+const debuggingEnabled = false       // boolean
+const defaultColour = red             // Colour
+```
+
+The second declaration uses the `Colour` enum from Chapter 3. The member `red`
+has type `Colour`. Enum declarations still state their integer representation
+explicitly.
+
+Scalar constants normally occupy no storage. An exact untyped integer has no
+stored representation.
 
 Fixed-capacity string constants use their exact storage layout:
 
@@ -30,7 +49,10 @@ Fixed-capacity string constants use their exact storage layout:
 const prompt as string[6] = "READY?"
 ```
 
-Constant storage cannot be modified. A string's representation remains sealed.
+String, record and array constants require an explicit type because their
+declarations create immutable storage. A placed constant also requires an
+explicit type. Constant storage cannot be modified. A string's representation
+remains sealed.
 [Chapter 6](06-records-arrays-paths.md#aggregate-initializers) extends these
 rules to arrays and records after introducing their declarations and layout.
 
@@ -95,9 +117,10 @@ A scalar constant expression may contain:
 It cannot read variable storage, call a routine, use a volatile object or
 perform another observable operation.
 
-Outside a target-address expression, operators receive their fixed types
-before the compiler folds them. Compile-time evaluation therefore follows the
-same wrapping and fault rules as runtime evaluation:
+An unannotated exact-integer initializer evaluates mathematically. An explicit
+type, typed operand or conversion applies the ordinary fixed-width rules before
+folding. Compile-time evaluation then follows the same wrapping and fault rules
+as runtime evaluation:
 
 ```lanternfly
 const maximum as u16 = 65535

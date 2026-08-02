@@ -166,8 +166,19 @@ visible = active and onScreen
 maskedFlags = flags and visibleMask
 ```
 
-Boolean `and` and `or` short-circuit. Boolean `xor` evaluates both operands.
-Integer forms always evaluate both operands and combine their bits.
+Boolean `and` and `or` evaluate the left operand first:
+
+| Operator | Left operand | Right operand | Result |
+| -------- | ------------ | ------------- | ------ |
+| `and` | `false` | not evaluated | `false` |
+| `and` | `true` | evaluated | the right operand's value |
+| `or` | `true` | not evaluated | `true` |
+| `or` | `false` | evaluated | the right operand's value |
+
+A right operand that is not evaluated performs no call, storage access, check
+or fault. This short-circuit rule is part of expression semantics. Boolean
+`xor` and every integer form evaluate both operands. Integer forms then combine
+corresponding bits.
 
 A condition must have type `boolean`; integers do not convert to conditions:
 
