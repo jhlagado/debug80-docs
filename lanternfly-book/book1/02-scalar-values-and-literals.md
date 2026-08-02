@@ -27,6 +27,20 @@ var orderReady as boolean = false
 The types fix the storage the compiler reserves and the meaning of each bit
 pattern.
 
+## Integer literal spellings
+
+The declarations above write their values in decimal. Lanternfly also uses
+`$` for hexadecimal and `%` for binary:
+
+| Decimal | Hexadecimal | Binary      |
+| ------: | ----------: | -----------: |
+| `42`    | `$2a`       | `%00101010` |
+
+All three spellings name the exact value 42. The surrounding declaration
+supplies its type and storage width. Hexadecimal is compact for addresses and
+byte values, while binary shows the individual bits. Chapter 3 explains how
+calculations supply a literal's type.
+
 ## Bits, bytes and ranges
 
 A bit stores 0 or 1. In an eight-bit byte, the binary columns are worth 1, 2,
@@ -61,12 +75,6 @@ Signed values use two's-complement representation. In an `i8`, the top bit has
 the value -128 and the remaining bits are worth 64 through 1. The all-ones
 pattern means -1 as `i8` and 255 as `u8`. The bits are identical; the declared
 type determines their meaning.
-
-An integer literal is an exact value, written in decimal (`1200`), in
-hexadecimal with `$` (`$7e`) or in binary with `%` (`%00001100`). The
-declaration supplies its type, and a literal that cannot fit the declared
-type is a compile error. Chapter 3 gives the rules for literals inside
-calculations.
 
 ## Choosing a type
 

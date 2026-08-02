@@ -33,10 +33,8 @@ desktop runtime.
 
 ## The book's method
 
-Each chapter is built around one complete program, taken a few lines at a
-time; the full source appears at the end as a plain-text listing, and a
-short summary and one exercise with its answer close the chapter. Every
-program in the book is small enough to trace by hand, and tracing them
-by hand is how we read them. In the early chapters, we trace stored values
-from entry to return; later programs add text and machine I/O to the
-trace. Each chapter relies only on explanations already given.
+Each chapter is built around one complete program, taken a few lines at
+a time, with the full source as a listing at the end. We trace every
+program by hand — stored values from entry to return in the early
+chapters, text and machine I/O later — and each chapter relies only on
+explanations already given.
