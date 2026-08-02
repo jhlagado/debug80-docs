@@ -1,0 +1,28 @@
+// report.lafy — the root module; the build manifest selects main as entry.
+import "standard/text-output.lafy"
+import "readings.lafy"
+import "console.lafy"
+
+var workspace as u8[8]
+
+sub showChange()
+    writeText("CHANGE ")
+    writeUnsigned(change)
+    writeNewline()
+end
+
+// A statement-level asm block is a conservative barrier; the call
+// could equally be written through the waitForVBlank binding.
+sub waitForVBlankDirectly()
+    asm
+        call ROM_VBLANK_WAIT
+    end
+end
+
+sub main()
+    measureChange()
+    waitForVBlankDirectly()
+    showChange()
+    playTone(440)
+    clearSharedBlock(workspace)
+end

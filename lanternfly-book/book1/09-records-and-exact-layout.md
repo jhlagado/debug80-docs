@@ -2,7 +2,7 @@
 layout: default
 title: "Records and Memory Layout"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 8
+nav_order: 9
 ---
 
 # Records and Memory Layout
@@ -28,7 +28,7 @@ end
 ```
 
 `Date` occupies four bytes. We can store and copy a date as one aggregate
-while each field retains its own type, and Chapter 9 shows how a routine
+while each field retains its own type, and Chapter 10 shows how a routine
 receives a temporary name for a record the caller already owns.
 
 ## Declaring a record
@@ -144,7 +144,7 @@ record. Such a cycle would have no finite size, and the declaration order
 from Chapter 1 makes it unwritable: a field's type must be completely
 declared before the field names it, and a record being declared is not yet
 complete. When a program needs links rather than inline containment, it
-stores the index of the destination entry in its fixed pool; Chapter 10
+stores the index of the destination entry in its fixed pool; Chapter 11
 develops that identity model.
 
 A string field behaves the same way, because a string is fixed-size data
@@ -159,7 +159,7 @@ end
 var station as Station
 ```
 
-`name` occupies its fourteen bytes — Chapter 7's length, payload capacity
+`name` occupies its fourteen bytes — Chapter 8's length, payload capacity
 and terminator — at offset 0, `id` sits at offset 14, and `Station`
 occupies fifteen bytes on every backend. The field supports the full string
 interface through its path: `station.name = "NORTH"` is a checked copy, and
@@ -202,19 +202,32 @@ statement.
 
 The backend may inline a small copy, generate a loop or call a helper — a
 four-byte `Reading` and a 256-byte table have the same source operation but
-very different machine costs.
+different machine costs.
 
 Owned local variables remain scalar in the first edition. A subroutine that
 needs a short local name for an existing record, array or string uses the
-alias form introduced in Chapter 10.
+alias form introduced in Chapter 11.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/08-records.txt)
+The [chapter listing](/lanternfly-book/book1/code/09-records.txt)
 declares `Date`, `Reading`, `DailyLog` and `Station`. Its declarations give
 `size(type DailyLog)` as 21 and place
 `dailyLog.entries[2].quality` at byte offset 15; `size(type Station)` is 15
 because the `string[12]` field occupies fourteen bytes.
+
+## Exercises
+
+1. State `size(type Reading)` and the byte offset of
+   `readings[2].quality` from the array base.
+2. Why can a record not contain a field of its own type by value?
+3. What does `clear(dailyLog)` write, field by field?
+
+Answers: four bytes, and `2 * 4 + 3` puts the quality at byte 11; the
+record would need its own complete size before that size existed, and
+declaration order makes the field's type incomplete at the point of
+use; the all-zero representation — a zero date, four zero entries and a
+zero `used` count — because every leaf accepts zero.
 
 ## Chapter summary
 
@@ -227,5 +240,5 @@ because the `string[12]` field occupies fourteen bytes.
 - Aggregate assignment copies the complete record or array value.
 
 A record gives structured data one name and one exact layout. In the next
-chapter, routines finally receive values and hand results back — including
+chapter, routines finally receive values and return results — including
 a temporary name for a record like these.

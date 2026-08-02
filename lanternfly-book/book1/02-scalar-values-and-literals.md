@@ -53,7 +53,7 @@ even when its processor handles one width more easily than another.
 
 The two 32-bit rows carry one extra obligation. `u32` and `i32` are part of
 the language but not of its always-on kernel: a module that uses them
-states `import "standard/wide32.lafy"` at its top; chapter 11 explains
+states `import "standard/wide32.lafy"` at its top; chapter 12 explains
 capability imports. The eight- and sixteen-bit types need no import; they
 are the kernel integer types. The `elapsedSeconds` declaration
 above therefore lives in a module that begins with that import.
@@ -132,7 +132,7 @@ end
 zero for `false` and one for `true`. Integer values do not become Booleans
 automatically — a count and a yes-or-no answer stay distinct types. In the
 next chapter, comparisons produce Boolean values from integer ones; in
-Chapter 4, those values choose between paths.
+Chapter 5, those values select between paths.
 
 ## Character values
 
@@ -152,16 +152,29 @@ byte, and `\'`, `\"` and `\\` for the quoting characters themselves. A
 character literal is one byte; multi-character and non-ASCII literals are
 invalid. The name `lineFeed` is deliberate: `'\n'` is exactly the byte 10,
 while ending a line on a device is a separate service for which a target
-may emit a different byte sequence entirely — Chapter 12 draws that line.
-Chapter 7 builds text on this foundation: sequences of these bytes with
+may emit a different byte sequence entirely — Chapter 13 draws that line.
+Chapter 8 builds text on this foundation: sequences of these bytes with
 a recorded length.
 
-## Example
+## Complete program
 
 The [chapter listing](/lanternfly-book/book1/code/02-scalar-values.txt)
 declares integer, Boolean and character values with deliberate types.
 `restock` raises `unitsInStock` to 5,000 and records that the order is
 ready; `selectPrompt` copies the `'>'` byte into a variable.
+
+## Exercises
+
+1. A sensor reports temperatures from -40 through 85. Name the narrowest
+   suitable type.
+2. Why is `const full as u8 = 256` a compile error?
+3. What exact value does the literal `'\n'` have, and what does the
+   book's `lineFeed` constant record that the number 10 alone does not?
+
+Answers: `i8`, whose range -128 through 127 contains every value; 256
+needs nine bits, and a literal must fit its declared type exactly;
+`'\n'` is exactly 10, and the named constant records that the byte's
+role is a character rather than a quantity.
 
 ## Chapter summary
 
@@ -174,5 +187,5 @@ ready; `selectPrompt` copies the `'>'` byte into a variable.
 - Type names take PascalCase; value, constant and routine names take
   camelCase.
 
-Our values now have deliberate types. In the next chapter we calculate with
-them, and meet the rules that give every intermediate result a width.
+With types chosen deliberately, the next step is calculation — and the
+rules that give every intermediate result a width.

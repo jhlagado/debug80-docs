@@ -1,0 +1,104 @@
+// number-entry.lafy — Book 1, Chapter 15 companion listing.
+// The finished number-entry module: or fail propagation, defer and a
+// main that exercises both. Error handling remains provisional.
+//
+// Line discipline as in Chapter 14: CR or LF ends a line, blank lines
+// are skipped, and a failing routine consumes its spoiled line first.
+
+import "standard/text-output.lafy"
+import "standard/text-input.lafy"
+
+const lineFeed as u8 = 10
+const carriageReturn as u8 = 13
+
+enum EntryError as u8
+    badDigit
+    tooLarge
+end
+
+var speed as u16 = 100
+
+sub isLineEnd(key as u8) as boolean
+    return key = lineFeed or key = carriageReturn
+end
+
+sub skipRestOfLine(key as u8)
+    while not isLineEnd(key)
+        key = readCharacter()
+    end
+end
+
+sub readNumber() as u16 fails EntryError
+    var value as u16 = 0
+    var sawDigit as boolean = false
+    var key as u8 = 0
+
+    while true
+        key = readCharacter()
+
+        if isLineEnd(key) then
+            if sawDigit then
+                return value
+            end
+
+            continue
+        end
+
+        if key < '0' or key > '9' then
+            skipRestOfLine(key)
+            fail badDigit
+        end
+
+        if value > 6553 or (value = 6553 and key > '5') then
+            skipRestOfLine(key)
+            fail tooLarge
+        end
+
+        value = value * 10 + u16(key - '0')
+        sawDigit = true
+    end
+end
+
+sub promptForSpeed() as u16 fails EntryError
+    writeText("SPEED? ")
+    return readNumber() or fail
+end
+
+// The brackets stay balanced on the success exit and on the failure
+// exit that or fail inserts.
+sub echoNumber() fails EntryError
+    writeText("[")
+    defer writeText("]")
+
+    readNumber() or fail
+    writeText("OK")
+end
+
+sub main()
+    while true
+        speed = promptForSpeed()
+        on error code
+            select code
+            case badDigit
+                writeText("DIGITS 0 TO 9 ONLY")
+            case tooLarge
+                writeText("65535 IS THE LARGEST")
+            end
+
+            writeNewline()
+            continue
+        end
+
+        writeText("SET")
+        writeNewline()
+
+        echoNumber()
+        on error code
+            writeText("NO ECHO")
+            writeNewline()
+        end
+
+        writeNewline()
+        return
+    end
+end

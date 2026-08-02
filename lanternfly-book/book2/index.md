@@ -15,13 +15,11 @@ layout, code size and predictable execution still matter. Its semantics are
 deliberately close to the machine, while its structured BASIC syntax keeps
 the source familiar and readable.
 
-This manual documents the Lanternfly 0.5 edition, plus one labelled
-addition: the working specification in the debug80 repository has since
-moved to the provisional 0.6 draft, whose failable-routine and `defer`
-revision [chapter 14](14-error-handling.md) documents. The remaining
-chapters are revised once 0.6 is blessed, and the working specification
-is authoritative where they differ. Until then, this manual remains a reference rather than a
-course: declarations, types, storage, expressions,
+This manual documents the current Lanternfly language. One part is newer
+than the rest: the failable routines and `defer` of
+[chapter 14](14-error-handling.md) remain provisional, and their details
+may change before the first compiler. The manual is a reference rather than
+a course: declarations, types, storage, expressions,
 control flow, routines, modules, native boundaries, grammar and diagnostics
 each have a chapter of their own. Read it from the beginning for a complete
 view of the language, or enter through the chapter list when you need one
@@ -32,11 +30,9 @@ book states the rules that every compiler, backend and host integration must
 preserve.
 
 > [!NOTE]
-> The working specification — currently the provisional 0.6 draft — is the
-> source-language contract for the first compiler; this manual documents
-> the 0.5 edition. No compiler exists yet. The
-> [specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-> remains normative if this manual and the specification differ.
+> No compiler exists yet. This manual states the intended language for the
+> first compiler; the language is still under development, and chapter 14
+> in particular remains provisional.
 
 **Must** marks a semantic requirement, **should** marks a strong toolchain
 recommendation, **provisional** marks a rule awaiting parser or corpus evidence
@@ -58,16 +54,4 @@ and **deferred** marks a facility outside the first implementation.
 12. [Grammar and Word Inventory](12-grammar-and-words.md)
 13. [Diagnostics and Conformance](13-diagnostics-and-conformance.md)
 14. [Failable Routines and Error Handling](14-error-handling.md) —
-    provisional 0.6
-
-## Normative sources
-
-- The
-  [working Lanternfly specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md),
-  currently the provisional 0.6 draft, defines source meaning.
-- The
-  [conformance and diagnostics contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/conformance.md)
-  defines the minimum diagnostic inventory, semantic fixtures and artifacts.
-- The
-  [lowering and runtime contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/lowering-and-runtime.md)
-  defines the typed front-end, host, backend and runtime boundaries.
+    provisional

@@ -33,7 +33,7 @@ Before `main` begins, `subtotal` contains 120, `postage` contains 15 and
 `addPostage`; after the assignment inside `addPostage` has run, the first
 two values are unchanged and `total` contains 135.
 
-By tracing this modest calculation, we can concentrate on three ideas: static
+By tracing this small calculation, we can concentrate on three ideas: static
 storage, an entry point and a statement that changes a stored value. You will
 still use all three when you write programs with thousands of statements.
 
@@ -54,8 +54,8 @@ the initial value 120.
 
 `u16` means an unsigned sixteen-bit integer. It can hold a whole number from 0
 through 65,535 and occupies two bytes. We will examine Lanternfly's integer
-types in detail in Chapter 2. All three values in this program fit comfortably
-in `u16`.
+types in detail in Chapter 2. All three values in this program fit
+comfortably in `u16`.
 
 Because we wrote these declarations at module level, outside any subroutine,
 the compiler will give them static storage. During a whole-program build, it
@@ -75,9 +75,9 @@ declarations such as the three variables and the two subroutines. Executable
 statements do not sit loose between those declarations; you put them inside a
 subroutine.
 
-A module reads strictly top to bottom: every name must be declared before
-the line that uses it. (The one declared exception, a routine header stated
-ahead of its body, waits for chapter 9.) The three variables
+A module is checked strictly top to bottom: every name must be declared
+before the line that uses it. (The one declared exception, a routine header stated
+ahead of its body, waits for chapter 10.) The three variables
 stand above `addPostage` because its statement uses them, and `addPostage`
 stands above `main` because `main` calls it. The same rule will order every
 program in this book — which suits us, because reading a module from the
@@ -107,7 +107,7 @@ The call transfers execution into `addPostage`; when its body finishes, the
 program continues after the call. Naming a piece of work this way lets one
 program build up from small routines that each do one thing, and the
 companion programs in this book use such helpers freely. Subroutines that
-accept values and return results wait until Chapter 9.
+accept values and return results wait until Chapter 10.
 
 One reading convention, settled here for the whole book: statements live
 inside routines, so whenever a code fence shows a statement or expression
@@ -153,7 +153,7 @@ We can account for all three variables before and after the statement:
 
 In mathematics, an equals sign states that two expressions have the same
 value. Assignment has a direction. A useful spoken reading is “put
-`subtotal + postage` into `total`”: the left side chooses where the value
+`subtotal + postage` into `total`”: the left side names where the value
 will go, the right side supplies it, and the store completes the statement.
 
 Lanternfly comments begin with `//` and continue to the end of the line. A
@@ -178,8 +178,8 @@ standard output device. One machine may have a serial port, another a
 memory-mapped display and another only a monitor routine supplied in ROM.
 
 Lanternfly reaches facilities like these through typed services. Portable
-text output arrives in Chapter 12 as a standard module that a program
-explicitly imports and a target must still support, and Chapter 14 shows
+text output arrives in Chapter 13 as a standard module that a program
+explicitly imports and a target must still support, and Chapter 16 shows
 how a platform declares its own machine services. Adding output here would
 require that boundary before we have established how an ordinary
 assignment works.
@@ -206,6 +206,21 @@ this book, as Z80 assembly for AZM to encode. The generated assembly stays
 open for inspection, so when an address or instruction choice becomes
 relevant, you will be able to read exactly what the compiler produced. When
 `main` returns, the target performs its normal termination.
+
+## Exercises
+
+1. Suppose `main` called `addPostage()` twice. What does `total` contain
+   at the end, and why is it not 270?
+2. Which subroutine runs first when the program starts, and what makes
+   it the entry?
+3. Is `total = subtotal + postage` legal between two module
+   declarations, outside any subroutine?
+
+Answers: 135 — `addPostage` recomputes the sum from `subtotal` and
+`postage`, which never change, and the assignment stores rather than
+accumulates; the build manifest selects `main` as the entry, and the
+name itself has no special meaning; no — executable statements live
+inside subroutines.
 
 In the next chapter, we will choose integer types deliberately rather than
 accept `u16` on trust.

@@ -7,9 +7,9 @@ nav_order: 1
 
 # Language Model and Source Form
 
-Lanternfly 0.5 is a statically typed structured BASIC for fixed-memory
+Lanternfly is a statically typed structured BASIC for fixed-memory
 systems. It combines the directness of C or Pascal with a syntax intended to
-be read without first decoding a thicket of punctuation. It is a compiled
+be read without first decoding dense punctuation. It is a compiled
 language: a complete Lanternfly program becomes native or translated target
 code rather than running through an interpreter.
 
@@ -27,7 +27,7 @@ selection.
 
 ## Language boundary
 
-The 0.5 language includes:
+The first edition includes:
 
 - signed and unsigned integers with fixed widths;
 - nominal enums and checked subrange types;

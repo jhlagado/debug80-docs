@@ -55,9 +55,50 @@ sub visitPhases()
     end
 end
 
+
+var oddTotal as i16 = 0
+var found as boolean = false
+var target as u8 = 0
+
+// continue skips even numbers; the loop adds 1, 3, 5, 7 and 9.
+sub sumOdds()
+    var number as i16
+
+    oddTotal = 0
+    for number = 1 to 10
+        if number mod 2 = 0 then
+            continue
+        end
+
+        oddTotal = oddTotal + number
+    end
+end
+
+// A flag carries an inner result out of a nested loop.
+sub findInGrid()
+    var row as u8
+    var column as u8
+
+    found = false
+    for row = 0 until 3
+        if found then
+            continue
+        end
+
+        for column = 0 until 4
+            if row * 4 + column = target then
+                found = true
+                exit
+            end
+        end
+    end
+end
+
 sub main()
     sumTen()
     calculateGcd()
     findNextMultiple()
     visitPhases()
+    sumOdds()
+    findInGrid()
 end

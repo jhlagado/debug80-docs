@@ -2,14 +2,14 @@
 layout: default
 title: "Portable Text Input and Output"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 12
+nav_order: 13
 ---
 
 # Portable Text Input and Output
 
 Every program so far has left its results sitting in storage, and Chapter
 1 promised the reason: the small computers Lanternfly targets share no
-standard output device, and the boundary deserved proper treatment before
+standard output device, and the boundary needed proper treatment before
 we crossed it. An interactive program needs more — a way to prompt, to
 receive input and to respond. The first edition's answer is a pair of
 standard modules that make text portable while leaving the device to the
@@ -29,7 +29,7 @@ sub promptForCommand()
 end
 ```
 
-The imports follow Chapter 11's rules exactly: explicit, at the top, their
+The imports follow Chapter 12's rules exactly: explicit, at the top, their
 exports entering the ordinary value scope. What arrives is five operations
 whose meaning is the same on every target that supports them.
 
@@ -75,7 +75,8 @@ arrives or the line is longer than `N`, `readLine` stores the longest
 valid prefix that fits, discards the rest of that line, and returns
 `false` — so the next call starts cleanly at a new line, and the
 operation never requires an unbounded full-line buffer. The Boolean
-result is there to act on: accept the prefix, complain, or ask again.
+result is there to act on: accept the prefix, report the problem, or read
+another line.
 
 ## Deliberate limits
 
@@ -85,14 +86,14 @@ service. There is no end-of-file result and no nonblocking form. There are
 no streams, handles, files or directories; future file operations belong
 to other modules.
 
-The interfaces are portable; the implementations remain target
-capabilities. A target may omit either module, and a build that uses an
+The interfaces are portable; the implementations remain target-supplied
+bindings. A target may omit either module, and a build that uses an
 operation the selected profile cannot bind is rejected rather than
 silently stubbed.
 
 ## The two narrow exceptions
 
-Chapter 9's rule was exact: a string parameter names one capacity and
+Chapter 10's rule was exact: a string parameter names one capacity and
 accepts only that capacity. `writeText` and `readLine` are the language's
 two exceptions — each accepts _any_ `string[N]`. The compiler arranges
 the call itself, through a temporary of its own that no source program
@@ -102,9 +103,9 @@ exceptions live entirely inside these two compiler-defined interfaces,
 and the sealed representation and the no-pointer rule pass through them
 untouched.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/12-portable-text.txt)
+The [chapter listing](/lanternfly-book/book1/code/13-portable-text.txt)
 exercises all five operations in sequence: it prompts, reads a line into
 a `string[16]`, reports whether the line fitted, writes it back, then
 prompts again and reads one character. Because `readLine` consumes the
@@ -115,6 +116,22 @@ operation returns, and the program's own `writeText(command)` and
 `writeCharacter(answer)` are separate output operations — so on an
 echoing target, the accepted command and the answer character may each
 appear once as they are typed and once as the program writes them.
+
+## Exercises
+
+1. A 20-byte line arrives for a `string[16]` destination. State what
+   `readLine` stores, returns and consumes.
+2. Why is `writeNewline()` a service while `'\n'` is just a byte?
+3. The program prints a prompt and the person's typing appears twice on
+   one target. What happened, and is the program wrong?
+
+Answers: the longest fitting prefix, `false`, and the whole line
+including its ending, so the next read starts cleanly; ending a line is
+device-specific — one target sends byte 10, another a two-byte
+sequence — while `'\n'` is exactly the byte 10 everywhere; the target
+echoes input before the line reaches the service, and the program's own
+`writeText` is a second, separate output — both behaviours are within
+the contract.
 
 ## Chapter summary
 
@@ -132,7 +149,7 @@ appear once as they are typed and once as the program writes them.
   exceptions, carried by compiler-only temporaries that source can never
   hold.
 
-Our programs now read and write text on any target that supports it — and
-with input comes a new obligation. `readLine`'s Boolean was our first
-taste of it: an operation whose answer may be "no", and code that must
-act on that answer. The next chapter gives that idea a language.
+Programs can now read and write text on any target that supports it — and
+with input comes a new obligation. `readLine` returns `false` when a line
+does not fit, and code must act on that result. The next chapter
+introduces explicit failure handling.

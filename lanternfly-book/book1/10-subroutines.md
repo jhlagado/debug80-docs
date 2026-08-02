@@ -2,7 +2,7 @@
 layout: default
 title: "Building with Subroutines"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 9
+nav_order: 10
 ---
 
 # Building with Subroutines
@@ -133,10 +133,10 @@ An aggregate parameter states its exact shape. A string parameter names
 its exact capacity, because the alias must match the caller's layout byte
 for byte: `line as string[40]` accepts a `string[40]` and nothing else.
 
-That is the ordinary rule for every routine we can write; Chapter 12's
+That is the ordinary rule for every routine we can write; Chapter 13's
 standard text services hold the language's two narrow exceptions. Routines
 shared between modules also state where the aggregate lives, and Chapter
-13 introduces that spelling with the interfaces that need it.
+14 introduces that spelling with the interfaces that need it.
 
 ## Early return
 
@@ -204,12 +204,31 @@ profile based on fixed scratch storage rejects every source call-graph
 cycle. The complete frame and capability rules live in
 the language reference.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/09-routines.txt)
-contains value parameters, returned results, scalar locals and an aggregate
-parameter. Two calls to `addToTotal` produce 35. Applying
-`atMost(total, 30)` then returns 30.
+The [chapter listing](/lanternfly-book/book1/code/10-routines.txt)
+contains value parameters, returned results, scalar locals, an aggregate
+parameter and a forward-declared pair. Two calls to `addToTotal` produce
+35, and `atMost(total, 30)` then returns 30. `updatePlayer` and
+`updateEnemies` may call each other because the forward declaration
+supplies the missing signature; with both clash flags false, the pair
+returns immediately.
+
+## Exercises
+
+1. Two routines call each other. Why does one of them need
+   `forward sub`, and what must its completing body repeat?
+2. A routine assigns through a record parameter. Does the caller's
+   record change, and why?
+3. On a target profile without recursion, what happens to the mutual
+   pair at compile time?
+
+Answers: declaration order forbids calling a routine whose signature has
+not appeared, so the earlier caller needs the forward signature, and the
+completing `sub` repeats the header exactly; yes — an aggregate
+parameter is a temporary alias for the caller's storage, not a copy;
+the source call-graph cycle is rejected with a diagnostic naming the
+cycle.
 
 ## Chapter summary
 
@@ -225,5 +244,5 @@ parameter. Two calls to `addToTotal` produce 35. Applying
 
 Routines now receive values, return results and work on caller-owned
 aggregates through temporary names. The next chapter widens that last idea
-into Lanternfly's whole answer to a classic question: how does a program
-keep hold of _which_ piece of storage an operation applies to?
+into Lanternfly's answer to a classic question: how does a program
+record _which_ piece of storage an operation applies to?

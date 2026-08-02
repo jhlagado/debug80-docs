@@ -2,14 +2,14 @@
 layout: default
 title: "Selecting Existing Storage"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 10
+nav_order: 11
 ---
 
 # Selecting Existing Storage
 
 Aggregate assignment creates an independent copy. Often a program needs the
 opposite: several parts working with the same storage, chosen at run time.
-Lanternfly answers with data rather than with pointers. The program stores
+Lanternfly represents that choice as data rather than as pointers. The program stores
 an integer index that records _which_ entry, and a routine gives the
 selected storage a temporary name — an alias — while it works:
 
@@ -61,9 +61,9 @@ range-check it, and nothing would connect it to the pool it came from.
 Bounds checking establishes _spatial_ validity, and only that. An index
 that stays in range still identifies whatever the slot holds now — if the
 program has since reused entry 2 for a different measurement, a saved index
-of 2 faithfully selects the new occupant. Whether a slot still represents
+of 2 selects whatever entry 2 now holds. Whether a slot still represents
 the same logical entity is the program's bookkeeping, carried in data such
-as Chapter 8's `used` count; the check guards the boundary, not the
+as Chapter 9's `used` count; the check guards the boundary, not the
 meaning.
 
 ## Local aliases
@@ -104,10 +104,10 @@ The alias form accepts records, fixed arrays and strings — an alias of a
 Constant storage cannot initialize a writable alias, and volatile storage
 requires direct access so that every read and write remains visible.
 
-Aliases also complete Chapter 5's loop rule. A counted loop's body must not
+Aliases also complete Chapter 6's loop rule. A counted loop's body must not
 assign to the control variable through _any_ name — not directly, not
-through an alias, and not inside a routine the body calls. The loop owns
-its own progress under every spelling.
+through an alias, and not inside a routine the body calls. The loop, not
+the body, advances it — under every spelling.
 
 ## Regular shapes: one table instead of many
 
@@ -130,7 +130,7 @@ end
 ```
 
 The first index selects the buffer and the second selects the byte, using
-the row-major arithmetic from Chapter 6. The "pointer table" has become two
+the row-major arithmetic from Chapter 7. The "pointer table" has become two
 integers, and both are checked against declared extents.
 
 ## Irregular choices: a selector and `select`
@@ -163,13 +163,31 @@ type: an enumeration selector cannot hold an invalid choice, and its
 dense selection to an address table; that choice belongs to lowering, and
 the source semantics remain a selector and declared storage.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/10-selecting-storage.txt)
-selects a reading by index, adjusts it through an alias and clears one row
-of a buffer table. The assignment to `selectedReading` changes which entry
-later code operates on; the assignments through `reading` change the entry
-itself.
+The [chapter listing](/lanternfly-book/book1/code/11-selecting-storage.txt)
+selects a reading by index, adjusts it through an alias, clears one row
+of a buffer table and dispatches on an enumeration selector. The
+assignment to `selectedReading` changes which entry later code operates
+on; the assignments through `reading` change the entry itself; and
+`countActiveEntries` returns 3 because `activeLog` selects the input
+log.
+
+## Exercises
+
+1. A saved index of 2 outlives a reshuffle of the `readings` array. What
+   does the bounds check still guarantee, and what does it not?
+2. `alias reading as Reading = readings[selectedReading]` is followed by
+   `reading = readings[0]`. What does that second line do?
+3. What replaces a C-style table of buffer pointers in this chapter, and
+   what checks the replacement?
+
+Answers: the check guarantees the index selects a real entry, and
+nothing more — whether the slot still holds the same logical measurement
+is the program's own bookkeeping; it copies `readings[0]` into the
+selected entry — an alias cannot be rebound, so aggregate assignment
+through it copies values; one multidimensional array indexed by two
+integers, both checked against declared extents.
 
 ## Chapter summary
 

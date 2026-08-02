@@ -2,7 +2,7 @@
 layout: default
 title: "Named Ordinals and Decisions"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 4
+nav_order: 5
 ---
 
 # Named Ordinals and Decisions
@@ -80,7 +80,7 @@ A range value widens silently to its host, while any value entering the
 range, by assignment or conversion, is checked against its domain. The
 range form itself is grammar rather than a value (`0 until 32` cannot be
 stored or passed), while a variable of a range type holds an ordinary host
-value, checked at every boundary it crosses. Chapter 6 puts both ordinal
+value, checked at every boundary it crosses. Chapter 7 puts both ordinal
 kinds to work as array index domains, where a suitably typed index makes a
 bounds check unnecessary because the type already proves it.
 
@@ -140,8 +140,8 @@ Reversing the first two branches would classify the same state as complete.
 
 Branch order states the policy we chose. A higher-priority condition
 belongs first. When two conditions have equal priority, their frequency and
-cost can guide the order because execution pays for each comparison it
-reaches.
+cost can guide the order, because every comparison reached costs
+instructions.
 
 ## Selecting among named values
 
@@ -181,8 +181,8 @@ variable can only hold a valid member and every member has a case, this
 `select` is complete without an `else` — no value can escape it.
 
 An ordinal selector that is not an enumeration can hold a value with no
-matching case, so its `select` needs `else` to supply the result for the
-unmatched rest. A `case` may also span a run of values with a range —
+matching case, so its `select` needs `else` to handle the unmatched
+rest. A `case` may also span a run of values with a range —
 `case 2 to 9` includes both ends, and `until` excludes its boundary:
 
 ```lanternfly
@@ -211,14 +211,28 @@ ordinal expression with named constant values.
 An `else if` chain announces an ordered policy; a `select` announces a
 classification by one value.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/04-decisions.txt)
+The [chapter listing](/lanternfly-book/book1/code/05-decisions.txt)
 declares the `Status` and `ReportMode` enumerations, ranks the batch-status
 rules, configures a report by complete `select`, and classifies a device
 channel code with case ranges and `else`. With one error and zero remaining
 items, `updateStatus` produces `failed`; with no errors and zero remaining
 items, it produces `complete`.
+
+## Exercises
+
+1. In `updateStatus`, swap the first two branches. With `errorCount = 1`
+   and `itemsRemaining = 0`, what status results, and why?
+2. Three `u8` constants could replace the `Status` enumeration. What
+   checked guarantee would be lost?
+3. `channelCode` is a `u8` and its `select` has no `else`. What happens
+   to a value with no matching case?
+
+Answers: `complete` — the first true condition selects its branch, so
+order states policy; any `u8` from 0 through 255 could enter the
+variable, while an enumeration rejects invalid values at every entry;
+nothing — execution continues after `end` with no branch run.
 
 ## Chapter summary
 

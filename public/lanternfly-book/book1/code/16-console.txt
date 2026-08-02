@@ -1,0 +1,25 @@
+// console.lafy — the platform interface module for the fictional LF-1
+// teaching machine. The module assembly defines the symbols the external
+// bindings name; a real platform module does the same work from the
+// platform's firmware or ABI documentation.
+asm
+ROM_WRITE_UNSIGNED = $0f03
+ROM_VBLANK_WAIT = $0f09
+end
+
+export extern sub writeUnsigned(value as u16) from "ROM_WRITE_UNSIGNED"
+export extern sub waitForVBlank() from "ROM_VBLANK_WAIT"
+export extern sub playTone(divider as u16) at $0f06
+
+// An exported aggregate parameter states its storage class.
+export sub clearSharedBlock(near block as u8[8])
+    var index as i16
+
+    for index = 0 until count(block)
+        block[index] = 0
+    end
+end
+
+// An opaque address from the platform: storable and passable, never
+// dereferenced by Lanternfly source.
+export var deviceBuffer as far address

@@ -2,7 +2,7 @@
 layout: default
 title: "Repeating Work"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 5
+nav_order: 6
 ---
 
 # Repeating Work
@@ -28,7 +28,7 @@ end
 ```
 
 `number` takes each value from 1 through 10, and `total` finishes at 55. The
-variable `total` is an accumulator: it begins with an empty result and gathers
+variable `total` is an accumulator: it begins with an empty result and adds
 one value during each pass.
 
 ## Local variables
@@ -44,7 +44,7 @@ and each run receives its own value.
 An owned scalar local with no initializer starts with zero bits. The `for`
 statement stores its start value before the loop body reads it, so this routine
 does not depend on the initial zero. A loop-control variable is all the
-local storage we need for now; Chapter 9 completes the picture of locals,
+local storage we need for now; Chapter 10 completes the picture of locals,
 their initializers and their lifetime.
 
 ## Counted loops
@@ -59,12 +59,13 @@ A counted loop visits an inclusive range. `1 to 10` runs ten times. The
 control name must already denote a writable ordinal variable; `for` does
 not declare it. An enumeration or enumeration-range
 control advances by ordinal position, so a loop can visit every member of
-a Chapter 4 enumeration by naming its first and last members; an
-integer-range control counts with its host's arithmetic.
+a Chapter 5 enumeration by naming its first and last members; an
+integer-range control advances by the mathematical step, tested before
+it is stored.
 
-`until` is the exclusive twin: `for number = 0 until 10` visits 0 through 9,
+`until` is the exclusive counterpart: `for number = 0 until 10` visits 0 through 9,
 stopping below its boundary. The half-open form matters most with
-zero-based tables in Chapter 6, where an array's count can stand as the
+zero-based tables in Chapter 7, where an array's count can stand as the
 boundary without a subtracted one.
 
 The start and limit are evaluated once before the first pass. An optional
@@ -86,8 +87,8 @@ end
 
 The loop computes its next value mathematically and stops before the control
 variable would wrap beyond its boundary. The body must not assign to the
-control variable — the loop owns its own progress. When the body itself must
-control progress, `while` expresses that relationship.
+control variable — the loop, not the body, advances it. When the body
+itself must control progress, `while` expresses that relationship.
 
 ## Conditional loops
 
@@ -150,7 +151,7 @@ loop may prevent every later operation from running.
 
 ## Skipping one pass
 
-`continue` abandons the remainder of the current pass and begins the next one:
+`continue` skips the remainder of the current pass and begins the next one:
 
 ```lanternfly
 for number = 1 to 10
@@ -172,10 +173,10 @@ main work. It keeps the main path at the loop body's outer indentation.
 
 `exit` and `continue` act on the innermost loop. A loop inside another
 loop pairs every value of one control with every value of the other: five
-outer passes around ten inner passes make fifty inner bodies. When an
-inner discovery must stop the whole nest, a Boolean flag declared `false`
-before the loops carries the news out — the inner loop sets it and exits,
-and the outer loop tests it before starting another pass.
+outer passes around ten inner passes make fifty inner bodies. When a
+match in the inner loop must stop the whole nest, a Boolean flag
+declared `false` before the loops records it — the inner loop sets it and
+exits, and the outer loop tests it before starting another pass.
 
 ## Choosing a loop
 
@@ -183,20 +184,34 @@ and the outer loop tests it before starting another pass.
 | ------------------------------------------- | ------------------------- |
 | visit an inclusive numeric range            | `for ... to ... end`      |
 | visit a half-open numeric range             | `for ... until ... end`   |
-| visit every element of an array (Chapter 6) | `for each ... in ... end` |
+| visit every element of an array (Chapter 7) | `for each ... in ... end` |
 | test before each pass                       | `while ... end`           |
 | repeat until a statement exits              | `while true ... end`      |
 
-The loop form should put the stopping rule where it naturally belongs. A
+The loop form should put the stopping rule where it belongs. A
 clear stopping rule is the difference between a loop we can reason about at
 a glance and one we must trace to trust.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/05-loops.txt)
+The [chapter listing](/lanternfly-book/book1/code/06-loops.txt)
 contains each loop form. The `calculateGcd` trace ends at 6,
 `findNextMultiple` advances from 13 to 16, and the enumeration-controlled
-loop visits all three phases, leaving `phasesVisited` at 3.
+loop visits all three phases, leaving `phasesVisited` at 3. `sumOdds`
+skips even numbers with `continue`, finishing at 25, and `findInGrid`
+carries a nested-loop result out through a flag.
+
+## Exercises
+
+1. Which values does `for address = 0 until 9 step 2` visit?
+2. After `continue` runs in a counted loop, does the control variable
+   still advance?
+3. `while true` has no `exit` on any path. What is the consequence on a
+   small standalone machine?
+
+Answers: 0, 2, 4, 6 and 8 — `until` excludes the boundary; yes — the
+normal step and range test still occur; the loop never ends, so no later
+operation ever runs.
 
 ## Chapter summary
 
@@ -208,5 +223,5 @@ loop visits all three phases, leaving `phasesVisited` at 3.
   pass.
 - `exit` and `continue` apply to the innermost loop.
 
-Our loops so far have counted and calculated. In the next chapter we give
-them something to walk: tables of fixed storage.
+So far the loops have counted and calculated. The next chapter gives
+them something to traverse: tables of fixed storage.

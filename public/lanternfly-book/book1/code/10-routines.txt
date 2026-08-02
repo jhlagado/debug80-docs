@@ -44,10 +44,30 @@ sub normaliseReading(reading as Reading)
     reading.value = atMost(reading.value, maximumReading)
 end
 
+forward sub updateEnemies()
+
+var playerClash as boolean = false
+var enemyClash as boolean = false
+
+sub updatePlayer()
+    if playerClash then
+        playerClash = false
+        updateEnemies()
+    end
+end
+
+sub updateEnemies()
+    if enemyClash then
+        enemyClash = false
+        updatePlayer()
+    end
+end
+
 sub main()
     addToTotal(10)
     addToTotal(25)
     total = atMost(total, 30)
     clearBlock(workspace)
     normaliseReading(currentReading)
+    updatePlayer()
 end

@@ -1,0 +1,37 @@
+// comparisons.lafy — Book 1, Chapter 4 companion listing.
+
+const readyMask as u8 = %00000001
+const errorMask as u8 = %00000010
+const highBit as u16 = 1 shl 15
+
+var changeMagnitude as u16 = 230
+var changeIsLarge as boolean = false
+var deviceReady as boolean = true
+var shouldRecord as boolean = false
+var statusFlags as u8 = readyMask
+var errorSeen as boolean = false
+
+sub classifyChange()
+    changeIsLarge = changeMagnitude >= 100
+end
+
+sub assessChange()
+    shouldRecord = deviceReady and changeMagnitude >= 100
+end
+
+sub inspectStatus()
+    errorSeen = (statusFlags and errorMask) <> 0
+end
+
+sub adjustFlags()
+    statusFlags = statusFlags or errorMask
+    statusFlags = statusFlags and not readyMask
+    statusFlags = statusFlags xor errorMask
+end
+
+sub main()
+    classifyChange()
+    assessChange()
+    inspectStatus()
+    adjustFlags()
+end

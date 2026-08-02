@@ -2,7 +2,7 @@
 layout: default
 title: "Modules and Imports"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 11
+nav_order: 12
 ---
 
 # Modules and Imports
@@ -67,8 +67,8 @@ uses is therefore above it, with the imported routine arriving through the
 import line.
 
 Private by default is the useful direction. A module's exports are its
-promise to other modules; everything unexported can be reorganised freely,
-because no other file can have grown to depend on it. Chapter 14 builds its
+contract with other modules; everything unexported can be reorganised freely,
+because no other file can have grown to depend on it. Chapter 16 builds its
 platform boundary on exactly this mechanism.
 
 ## The standard modules
@@ -99,9 +99,10 @@ that imports nothing receives no imported names at all. The
 `standard/` path belongs to the toolchain: a project cannot place its own
 files there or shadow those names with its own modules. Once imported,
 standard exports enter the same unqualified value scope as any other
-import, under the same contiguous-prefix rule, and a program imports only
-the standard modules it actually uses. The next chapter puts both of these
-to work.
+import, under the same contiguous-prefix rule. A program need import only
+the standard modules it uses — good hygiene rather than a language rule,
+since an unused import is legal and an unused capability import adds no
+bytes to the program. The next chapter puts both of these to work.
 
 ## The root program
 
@@ -135,14 +136,28 @@ import, and `processed.value` finishes at 2 — storage declared in one file,
 counted from another, with every access checked against the exported
 types.
 
-## Example
+## Complete program
 
 This chapter's companion program spans two files:
-[counters.lafy](/lanternfly-book/book1/code/11-counters.txt) declares the
+[counters.lafy](/lanternfly-book/book1/code/12-counters.txt) declares the
 counter model and exports its interface, and
-[tally.lafy](/lanternfly-book/book1/code/11-tally.txt) imports it and
+[tally.lafy](/lanternfly-book/book1/code/12-tally.txt) imports it and
 drives it from `main`. The listings use `.txt` filenames for browser
 display; each represents a `.lafy` source module.
+
+## Exercises
+
+1. `tally.lafy` imports `counters.lafy` and mentions `counterStep`. What
+   happens, and why?
+2. Module A imports module B, and B imports A. What does the compiler
+   report?
+3. A module imports a neighbour that uses `u32` internally. May the
+   importer now declare a `u32` of its own?
+
+Answers: a compile error — `counterStep` is private to `counters.lafy`,
+and only exports become visible; an import-cycle error that includes the
+cycle's path; no — capability imports are module-local, so the importer
+states `import "standard/wide32.lafy"` itself.
 
 ## Chapter summary
 
