@@ -74,13 +74,19 @@ platform boundary on this mechanism.
 
 Some modules ship with the toolchain rather than with the project, and they
 come in two kinds. A *service module* exports names that a target must
-support — the first edition defines two, and a program imports them like
-any others:
+support. The first edition defines three, imported like any other module:
 
 ```lanternfly
 import "standard/text-output.lafy"
 import "standard/text-input.lafy"
+import "standard/program-arguments.lafy"
 ```
+
+The text modules provide Chapter 13's five portable text operations. The
+program-arguments module provides `argumentCount()` and
+`readArgument(index, destination)`. A program declares the destination as a
+fixed-capacity string, and `readArgument` reports whether the complete argument
+fitted.
 
 A *capability module* is the other kind: it exports no names at all,
 and instead legalizes an optional facility for the module that states
@@ -96,9 +102,10 @@ remaining standard-module rules.
 
 ## The root program
 
-A build manifest names one root module and, for an executable program,
-one entry subroutine — parameter-free, result-free, source-defined and
-non-failable.
+A build manifest names one root module. An executable starts with `main` in
+that module unless the manifest names another entry. The selected subroutine
+is parameter-free, result-free and source-defined; Chapter 14 permits it to
+declare an error set with `fails`.
 
 The compiler follows each import to its module and finishes resolving
 that module — including its own imports — before checking the module that
@@ -130,12 +137,26 @@ types.
 
 ## Complete program
 
-This chapter's companion program spans two files:
-[counters.lafy](/lanternfly-book/book1/code/12-counters.txt) declares the
-counter model and exports its interface, and
-[tally.lafy](/lanternfly-book/book1/code/12-tally.txt) imports it and
-drives it from `main`. The listings use `.txt` filenames for browser
-display; each represents a `.lafy` source module.
+The complete program spans two modules. `counters.lafy` declares the counter
+model and exports its interface. `tally.lafy` imports it and drives it from
+`main`.
+
+### counters.lafy
+
+<<< @/public/lanternfly-book/book1/code/12-counters.txt{lanternfly}
+
+The source is also available as
+[12-counters.txt](/lanternfly-book/book1/code/12-counters.txt).
+
+### tally.lafy
+
+<<< @/public/lanternfly-book/book1/code/12-tally.txt{lanternfly}
+
+The source is also available as
+[12-tally.txt](/lanternfly-book/book1/code/12-tally.txt).
+
+The downloadable files use `.txt` filenames for browser display; each
+represents a `.lafy` source module.
 
 ## Exercises
 
@@ -153,10 +174,10 @@ only exported names become visible to an importer.
   interface, and unexported names stay free to change.
 - Imports form a contiguous prefix, their exports visible from the point
   of import — reading order holds across files.
-- A build manifest names the root module and entry; the compiler finishes
-  each imported module before its importer and processes every module
-  once.
+- A build manifest names the root module and may override the entry name;
+  `main` is the default. The compiler finishes each imported module before its
+  importer and processes every module once.
 - Standard modules are imported explicitly like any others: two service
-  modules export the text operations, and two capability modules legalize
-  the wide integer types and long strings; the `standard/` namespace
-  belongs to the toolchain, and no prelude exists.
+  modules export the text operations, a third supplies launcher arguments,
+  and two capability modules legalize the wide integer types and long strings;
+  the `standard/` namespace belongs to the toolchain, and no prelude exists.

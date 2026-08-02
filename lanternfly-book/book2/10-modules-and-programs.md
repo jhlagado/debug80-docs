@@ -73,20 +73,23 @@ can never change the meaning of a program that was already legal. Operators
 are typed families resolved statically, so a capability type extends an
 operator's domain without altering any existing operation.
 
-## Standard text modules
+## Standard service modules
 
-The first edition defines two optional standard service modules,
-importable independently; only used operations select emitted
-components:
+The first edition defines three optional standard service modules, importable
+independently; only used operations select emitted components:
 
 ```lanternfly
 import "standard/text-output.lafy"
 import "standard/text-input.lafy"
+import "standard/program-arguments.lafy"
 ```
 
-There is no implicit prelude. Without an import, the standard operation names
-are not visible. The `standard/` prefix belongs to the toolchain and cannot be
+There is no implicit prelude. A service name is visible only after its module
+has been imported. Kernel operations such as `abs`, `sqrt` and `clear` require
+no import. The `standard/` prefix belongs to the toolchain and cannot be
 shadowed by a project file of the same path.
+
+### Text input and output
 
 The output module exports three operations:
 
@@ -138,6 +141,40 @@ files, directories or seeking. File loading and saving can later occupy
 separate modules without changing the meaning of standard text input and
 output.
 
+### Program arguments
+
+`standard/program-arguments.lafy` exports two launcher-input operations:
+
+```lanternfly
+var argument as string[64]
+var count as u8 = 0
+var fits as boolean = false
+
+sub readFirstArgument()
+    count = argumentCount()
+    if count > 0 then
+        fits = readArgument(0, argument)
+    end
+end
+```
+
+`argumentCount()` returns the number of user arguments as `u8`, from zero
+through 255. The launcher supplies the list before entry; the invocation name
+is separate and does not occupy index zero.
+
+`readArgument(index, destination)` evaluates both operands once. The index is
+assignable to `u8`, and the destination is any writable `string[N]` path. A
+valid argument that fits replaces the destination and returns `true`. An
+invalid index clears the destination and returns `false`. An argument that
+contains a zero byte or exceeds the destination capacity stores the longest
+valid prefix that fits and returns `false`. Repeated reads of one valid index
+produce the same payload during the invocation.
+
+The launcher supplies already-separated byte strings. A shell, monitor,
+firmware launcher, emulator or test runner defines how its own input becomes
+that ordered list. The program declares every destination buffer, so argument
+access requires no pointer array or hidden allocation.
+
 ## Whole-program compilation
 
 The compiler:
@@ -186,8 +223,8 @@ each aggregate.
 
 ## Program entry
 
-For an executable build, the manifest names the root module and one entry
-subroutine:
+For an executable build, the manifest names the root module and may name one
+entry subroutine. An omitted entry field selects `main` in the root module:
 
 ```lanternfly
 sub main()
@@ -200,13 +237,23 @@ The entry must:
 
 - have no parameters;
 - have no result;
-- carry no `fails` clause ([chapter 14](14-error-handling.md));
 - be source-defined rather than external;
-- be unique in the executable manifest.
+- belong to the root module;
+- carry either no `fails` clause or one valid error set
+  ([chapter 14](14-error-handling.md)).
 
-It may remain private to the root module. Static storage is allocated and
-static initializers are installed before entry. Returning from entry invokes
-the target profile's normal termination service.
+The default is a build convention rather than a keyword. An explicit entry
+field may select another suitable name, and the selected routine may remain
+private. Programs receive launcher arguments through the standard service
+above rather than entry parameters.
+
+Static storage is allocated and static initializers are installed before
+entry. Bare `return` or reaching `end` reports successful termination. `fail`
+from a failable entry reports unsuccessful termination with its error-set
+member. The enum remains zero-based and opaque inside Lanternfly. A profile
+that exposes a numeric exit status maps success to zero and failed ordinal `n`
+to `n + 1`; other profiles preserve the same two outcomes through their native
+termination contract.
 
 A library build has no entry.
 

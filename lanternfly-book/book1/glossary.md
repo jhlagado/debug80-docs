@@ -26,9 +26,10 @@ the importing module and exports no names. (Chapter 12)
 a maintained zero terminator, with the capacity part of the type.
 (Chapter 8)
 
-**Entry** — the parameter-free, result-free, source-defined and
-non-failable subroutine the build manifest selects to run first.
-(Chapter 1)
+**Entry** — the parameter-free, result-free and source-defined subroutine that
+runs first. An executable uses the root module's `main` unless its build
+manifest names another entry; the entry may declare `fails`. (Chapters 1 and
+14)
 
 **Error** — an expected failure, carried as a member of an error set from
 a `fail` statement to a handler or default. (Chapter 14)
@@ -61,8 +62,8 @@ enumeration or a range. Ordinals govern array indices, `select` cases and
 counted loops. (Chapter 5)
 
 **Service module** — a standard import, such as
-`standard/text-output.lafy`, that exports portable operations a target
-must bind. (Chapter 13)
+`standard/text-output.lafy` or `standard/program-arguments.lafy`, that exports
+portable operations a target must bind. (Chapters 12 and 13)
 
 **Storage path** — a name plus field selections and index operations
 identifying one piece of declared storage: `readings[i].quality`.

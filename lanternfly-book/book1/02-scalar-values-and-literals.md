@@ -104,7 +104,7 @@ distinct instead.
 `const` gives a fixed value a name:
 
 ```lanternfly
-const warehouseCapacity as u16 = 5000
+const warehouseCapacity = 5000
 const dispatchBatch as u16 = 10
 
 var unitsInStock as u16 = 1200
@@ -113,8 +113,11 @@ var unitsInStock as u16 = 1200
 A constant is a compile-time value. The compiler can substitute it
 where needed, so an ordinary scalar constant usually occupies no storage.
 
-The declared type checks the boundary. `const maximumByte as u8 = 255` is
-valid; a value of 256 requires another bit and produces a compile error.
+Without `as`, an integer constant remains exact and untyped until an expression
+or destination requires a fixed integer type. The assignment to `unitsInStock`
+therefore uses `warehouseCapacity` as `u16`. An explicit type fixes the width
+and checks the boundary: `const maximumByte as u8 = 255` is valid, while 256
+does not fit.
 
 ## Boolean values
 
@@ -150,15 +153,19 @@ that the byte's role is a character. The escapes cover the unprintable cases:
 byte, and `\'`, `\"` and `\\` for the quoting characters themselves. A
 character literal is one byte; multi-character and non-ASCII literals are
 invalid. The name `lineFeed` is deliberate: `'\n'` is exactly the byte
-10, while ending a line on a device is a separate service — Chapter 13
-draws that line.
+10, while Chapter 13 defines device-independent line output as a service.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/02-scalar-values.txt)
-declares integer, Boolean and character values with deliberate types.
-`restock` raises `unitsInStock` to 5,000 and records that the order is
-ready; `selectPrompt` copies the `'>'` byte into a variable.
+The complete module declares exact and fixed-width integer constants, Boolean
+values and character bytes. `restock` raises `unitsInStock` to 5,000 and records
+that the order is ready; `selectPrompt` copies the `'>'` byte into a
+variable.
+
+<<< @/public/lanternfly-book/book1/code/02-scalar-values.txt{lanternfly}
+
+The listing is also available as
+[02-scalar-values.txt](/lanternfly-book/book1/code/02-scalar-values.txt).
 
 ## Exercises
 
@@ -171,8 +178,9 @@ Answer: `i8`, whose range -128 through 127 contains every value.
 
 - An integer type fixes width, signedness, range and storage cost.
 - Integer literals are exact values in decimal, `$` hexadecimal or `%`
-  binary, checked against the declared type.
-- `const` names a compile-time value and checks it against a declared type.
+  binary and adopt a fixed type when their context requires one.
+- `const` names a compile-time value; an integer constant may remain exact or
+  state its fixed type with `as`.
 - `boolean` represents `true` or `false` and remains separate from integers.
 - A character literal is an exact byte value with a readable spelling.
 - Type names take PascalCase; value, constant and routine names take

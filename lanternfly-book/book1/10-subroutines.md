@@ -130,10 +130,12 @@ An aggregate parameter states its exact shape. A string parameter names
 its exact capacity, because the alias must match the caller's layout byte
 for byte: `line as string[40]` accepts a `string[40]` and nothing else.
 
-That is the ordinary rule for every routine we can write; Chapter 13's
-standard text services hold the language's two narrow exceptions. Routines
-shared between modules also state where the aggregate lives, and Chapter
-16 introduces that spelling with the interfaces that need it.
+That is the ordinary rule for every routine we can write. The compiler-defined
+services introduced in chapters 12 and 13 contain three narrow exceptions:
+`writeText`, `readLine` and `readArgument` accept string storage of any
+capacity. Routines shared between modules also state where the aggregate
+lives, and Chapter 16 introduces that spelling with the interfaces that need
+it.
 
 ## Early return
 
@@ -202,14 +204,19 @@ rules.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/10-routines.txt)
-contains value parameters, returned results, scalar locals, an aggregate
-parameter and a forward-declared pair. Two calls to `addToTotal` produce
+The complete module contains value parameters, returned results, scalar
+locals, an aggregate parameter and a forward-declared pair. Two calls to
+`addToTotal` produce
 35, and `atMost(total, 30)` then returns 30. `updatePlayer` and
 `updateEnemies` may call each other because the forward declaration
 supplies the missing signature; with both clash flags false, the pair
 returns immediately. The mutual pair makes the module's call graph
 cyclic, so this program requires a recursion-capable target profile.
+
+<<< @/public/lanternfly-book/book1/code/10-routines.txt{lanternfly}
+
+The source is also available as
+[10-routines.txt](/lanternfly-book/book1/code/10-routines.txt).
 
 ## Exercises
 

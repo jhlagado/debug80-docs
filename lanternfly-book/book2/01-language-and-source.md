@@ -33,7 +33,8 @@ The first edition includes:
 - expressions, assignment, conditions and loops;
 - routines with scalar locals, parameters and optional scalar results;
 - private source modules with explicit exports;
-- optional standard modules for portable character and text I/O;
+- optional standard modules for portable character and text I/O and launcher
+  arguments;
 - typed target services and explicit inline assembly;
 - failable routines with structured error handling
   ([chapter 14](14-error-handling.md)).
@@ -64,8 +65,9 @@ sub main()
 end
 ```
 
-A build manifest names the root module and the entry subroutine. Every
-Lanternfly source module has the exact lowercase `.lafy` extension.
+A build manifest names the root module. An executable uses `main` in that
+module unless the manifest names another entry. Every Lanternfly source module
+has the exact lowercase `.lafy` extension.
 
 ## Imports
 

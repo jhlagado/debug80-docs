@@ -4,7 +4,10 @@ var postage as u16 = 15
 var total as u16 = 0
 
 sub addPostage()
-    total = subtotal + postage
+    var amountDue as u16
+
+    amountDue = subtotal + postage
+    total = amountDue
 end
 
 sub main()

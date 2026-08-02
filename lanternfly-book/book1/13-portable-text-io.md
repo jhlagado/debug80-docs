@@ -87,20 +87,18 @@ bindings. A target may omit either module, and a build that uses an
 operation the selected profile cannot bind is rejected rather than
 silently stubbed.
 
-## The two narrow exceptions
+## The text-service exceptions
 
-Chapter 10's rule was exact: a string parameter names one capacity and
-accepts only that capacity. `writeText` and `readLine` are the language's
-two exceptions — each accepts _any_ `string[N]`. No source program can
-declare a parameter with this property; the exceptions are confined to
-these two compiler-defined interfaces, and the sealed representation and
-the no-pointer rule pass through them untouched.
+Chapter 10's rule was exact: a string parameter names one capacity and accepts
+only that capacity. `writeText` and `readLine` each accept _any_ `string[N]`;
+Chapter 12's `readArgument` uses the same destination form. No source program
+can declare a parameter with this property. The compiler-defined service
+interfaces preserve the sealed representation and introduce no pointer value.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/13-portable-text.txt)
-exercises all five operations in sequence: it prompts, reads a line into
-a `string[16]`, reports whether the line fitted, writes it back, then
+The complete module exercises all five operations in sequence: it prompts,
+reads a line into a `string[16]`, reports whether the line fitted, writes it back, then
 prompts again and reads one character. Because `readLine` consumes the
 complete line, including its ending, the later `readCharacter` begins
 with the next supplied character. At the keyboard, one distinction
@@ -109,6 +107,11 @@ operation returns, and the program's own `writeText(command)` and
 `writeCharacter(answer)` are separate output operations — so on an
 echoing target, the accepted command and the answer character may each
 appear once as they are typed and once as the program writes them.
+
+<<< @/public/lanternfly-book/book1/code/13-portable-text.txt{lanternfly}
+
+The source is also available as
+[13-portable-text.txt](/lanternfly-book/book1/code/13-portable-text.txt).
 
 ## Exercises
 
@@ -131,5 +134,5 @@ a new line.
   started.
 - The contract omits echo, editing, end-of-file, streams and files, and a
   target that cannot bind a used operation rejects the build.
-- `writeText` and `readLine` are the language's two capacity-generic
-  exceptions, confined to these compiler-defined interfaces.
+- `writeText` and `readLine` are the two text-service capacity-generic
+  exceptions, confined to compiler-defined interfaces.

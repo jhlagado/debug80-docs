@@ -1,22 +1,25 @@
-// comparisons.lafy — Book 1, Chapter 4 companion listing.
-
+const largeChangeThreshold as u16 = 100
+const averageThreshold as u16 = 20
 const readyMask as u8 = %00000001
 const errorMask as u8 = %00000010
-const highBit as u16 = 1 shl 15
 
 var changeMagnitude as u16 = 230
 var changeIsLarge as boolean = false
 var deviceReady as boolean = true
 var shouldRecord as boolean = false
+var itemCount as u16 = 0
+var total as u16 = 120
+var highAverage as boolean = false
 var statusFlags as u8 = readyMask
 var errorSeen as boolean = false
 
-sub classifyChange()
-    changeIsLarge = changeMagnitude >= 100
+sub assessChange()
+    changeIsLarge = changeMagnitude >= largeChangeThreshold
+    shouldRecord = deviceReady and changeIsLarge
 end
 
-sub assessChange()
-    shouldRecord = deviceReady and changeMagnitude >= 100
+sub assessAverage()
+    highAverage = itemCount > 0 and total / itemCount > averageThreshold
 end
 
 sub inspectStatus()
@@ -30,8 +33,8 @@ sub adjustFlags()
 end
 
 sub main()
-    classifyChange()
     assessChange()
+    assessAverage()
     inspectStatus()
     adjustFlags()
 end

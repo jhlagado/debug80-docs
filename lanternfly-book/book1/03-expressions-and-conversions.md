@@ -52,7 +52,9 @@ index becomes a row with `index / columns` and a column with
 A zero divisor produces a compile error when it is constant and an arithmetic
 fault when discovered at runtime.
 
-`abs` returns an unsigned magnitude at its operand's width.
+`abs` returns an unsigned magnitude at its operand's width. `abs` and `sqrt`
+are kernel language operations, so they require no import. Compilation selects
+instructions or includes a helper routine only when a program uses them.
 
 Three further operations complete the numeric set: the shifts `shl` and
 `shr` move a bit pattern (`5 shl 3` is 40, and a shift keeps the type of
@@ -172,11 +174,15 @@ conversion that states the intended type.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/03-expressions.txt)
-measures the change between two readings, records an explicit narrowing and
-takes a square root. The first expression traces from `u8` inputs to an
+The complete module measures the change between two readings, records an
+explicit narrowing and takes a square root. The first expression traces from `u8` inputs to an
 `i16` result of -230 and a `u16` magnitude of 230; `u8(300)` produces 44;
 `sqrt(1600)` produces 40.
+
+<<< @/public/lanternfly-book/book1/code/03-expressions.txt{lanternfly}
+
+The source is also available as
+[03-expressions.txt](/lanternfly-book/book1/code/03-expressions.txt).
 
 ## Exercises
 

@@ -7,9 +7,9 @@ nav_order: 5
 
 # Named Ordinals and Decisions
 
-A batch-processing program is always in exactly one of three states:
-working, complete or failed. Lanternfly declares such a fixed set of
-named alternatives as a type of its own:
+A batch can be working, complete or failed. These are three alternatives of
+one kind, not three unrelated numbers. Lanternfly declares the set as an
+enumeration:
 
 ```lanternfly
 enum Status as u8
@@ -33,12 +33,11 @@ sub updateStatus()
 end
 ```
 
-The enumeration gives the states their names; the decision ranks the rules
-that select one. Conditions are tested from top to bottom, the first true
-condition selects its branch, and execution continues after the closing
-`end`.
+The variable `status` can hold only a member of `Status`. The decision checks
+the failure rule first, then the completion rule, then uses `working` for every
+remaining case. Exactly one assignment runs.
 
-## Enumerations
+## Enumerations close a set
 
 ```lanternfly
 enum Status as u8
@@ -48,40 +47,52 @@ enum Status as u8
 end
 ```
 
-The representation type follows `as`. Members take numbered positions
-from zero in declaration order — each member's number is its _ordinal_,
-the term this book uses from here on — and their names are written
-without qualification. An
-enumeration supports assignment and all six comparisons, and deliberately
-nothing arithmetic: adding two statuses has no meaning.
-Converting an integer into an enumeration is checked: an invalid
-constant is a compile error, and an invalid runtime value invokes the
-range fault before any store, so a `Status` variable never holds an
-invalid state.
+`Status` is a new type. The `u8` after `as` fixes its one-byte representation.
+The members receive ordinal positions in declaration order:
 
-Three constants named `statusWorking`, `statusComplete` and
-`statusFailed` would also give the states names, but any `u8` from 0
-through 255 could still enter the variable. The enumeration closes the
-set.
+| Member | Ordinal |
+| ------ | ------: |
+| `working` | 0 |
+| `complete` | 1 |
+| `failed` | 2 |
 
-## Ranges
+The ordinal supplies storage layout and ordering. Ordinary program logic uses
+the member names. A variable of type `Status` cannot hold 17, 255 or a member
+of another enumeration, even though all of those values might fit in one byte.
 
-A range constrains a host type to part of its domain:
+Three `u8` constants could name the same states:
 
 ```lanternfly
-range ScreenColumn as u8 = 0 until 32
-range VerboseMode as Status = complete to failed
+const statusWorking as u8 = 0
+const statusComplete as u8 = 1
+const statusFailed as u8 = 2
 ```
 
-A range value widens silently to its host, while any value entering the
-range, by assignment or conversion, is checked against its domain. The
-range form itself is grammar rather than a value (`0 until 32` cannot be
-stored or passed), while a variable of a range type holds an ordinary host
-value, checked at every boundary it crosses. Chapter 7 uses both ordinal
-kinds as array index domains, where a suitably typed index makes a
-bounds check unnecessary because the type already proves it.
+Those constants would leave the variable itself as `u8`, so every value from 0
+through 255 could enter it. The enumeration makes the permitted set part of
+the type. A known invalid conversion is rejected during compilation; an
+invalid value received at runtime causes the range fault before the variable
+changes.
 
-## A single branch
+Member names appear without a type prefix:
+
+```lanternfly
+status = complete
+```
+
+An unannotated constant initialized from a member keeps the enum type:
+
+```lanternfly
+const initialStatus = working
+```
+
+`initialStatus` has type `Status`, not an integer type. Enumerations support
+assignment and all six comparisons in declaration order. They do not support
+arithmetic or bitwise operators.
+
+## One conditional branch
+
+An `if` statement runs a body only when its condition is true:
 
 ```lanternfly
 if itemsRemaining = 0 then
@@ -89,32 +100,12 @@ if itemsRemaining = 0 then
 end
 ```
 
-`if` evaluates a Boolean condition. When the result is `true`, the body runs.
-When it is `false`, execution moves directly past `end`.
+The comparison produces a Boolean. If it is true, the assignment runs. If it
+is false, execution continues after `end` and `status` keeps its previous
+value.
 
-The body may contain assignments, calls or another decision. Nesting is
-useful when an inner test belongs only to one outer state:
-
-```lanternfly
-if errorCount = 0 then
-    if itemsRemaining = 0 then
-        status = complete
-    end
-end
-```
-
-When both tests are short and the body needs only their combined result,
-Boolean `and` expresses the same rule in one condition:
-
-```lanternfly
-if errorCount = 0 and itemsRemaining = 0 then
-    status = complete
-end
-```
-
-## Two alternatives
-
-`else` supplies the path for a false condition:
+Use a single branch when the false case should preserve the current value.
+When both outcomes must assign a value, add `else`:
 
 ```lanternfly
 if itemsRemaining = 0 then
@@ -124,23 +115,65 @@ else
 end
 ```
 
-Exactly one assignment runs. This form is appropriate when both outcomes must
-set the value. A single `if` is appropriate when the false case should preserve
-the value already stored.
+The condition is evaluated once. A true result runs the first body; a false
+result runs the body after `else`. The two bodies are alternatives, so only one
+runs.
 
-## Ordered conditions
+## Several conditions in priority order
 
-An `else if` chain ranks several rules, as `updateStatus` does. With
-`errorCount = 1` and `itemsRemaining = 0`, both comparisons are true, but
-the first branch sets `failed` and the second comparison is skipped.
-Reversing the first two branches would classify the same state as complete.
+A batch with no remaining items might also have an error. The program must
+state which status takes priority. An `else if` chain tests the rules from top
+to bottom:
 
-Branch order states policy: the higher-priority condition comes first.
+```lanternfly
+if errorCount > 0 then
+    status = failed
+else if itemsRemaining = 0 then
+    status = complete
+else
+    status = working
+end
+```
 
-## Selecting among named values
+The words `else if` continue the same decision, and one `end` closes the whole
+chain. Evaluation stops after the first true condition:
 
-Sometimes every branch compares one value with the members of a set,
-and `select` states the comparison once:
+| `errorCount` | `itemsRemaining` | First true branch | Final status |
+| -----------: | ---------------: | ----------------- | ------------ |
+| 0 | 40 | `else` | `working` |
+| 0 | 0 | `itemsRemaining = 0` | `complete` |
+| 1 | 0 | `errorCount > 0` | `failed` |
+
+In the last row, both comparisons would be true if both were evaluated. The
+first branch sets `failed`, and the second comparison is skipped. Reversing the
+first two branches would make an empty failed batch appear complete. Branch
+order sets the priority.
+
+Nested `if` statements are useful when the inner question belongs only to one
+outer case:
+
+```lanternfly
+if errorCount = 0 then
+    if itemsRemaining = 0 then
+        status = complete
+    end
+end
+```
+
+When both tests form one short condition, Boolean `and` states the same rule
+more directly:
+
+```lanternfly
+if errorCount = 0 and itemsRemaining = 0 then
+    status = complete
+end
+```
+
+## Selecting by one value
+
+An `else if` chain can ask different questions. Another common decision keeps
+comparing one value with members of the same set. `select` states that value
+once:
 
 ```lanternfly
 enum ReportMode as u8
@@ -168,18 +201,77 @@ sub configureReport()
 end
 ```
 
-`select` evaluates `reportMode` once. Each `case` names compatible
-compile-time ordinal values. A matching body runs, then execution continues
-after `end`; Lanternfly cases never fall through. Because a `ReportMode`
-variable can only hold a valid member and every member has a case, this
-`select` is complete without an `else`.
+`select` evaluates `reportMode` once. With `reportMode` equal to `detailed`,
+the two assignments under `case detailed` run. Execution then continues after
+the final `end`. The `diagnostic` body does not run.
 
-An ordinal selector that is not an enumeration can hold a value with no
-matching case, so its `select` needs `else` to handle the unmatched
-rest. A `case` may also span a run of values with a range —
-`case 2 to 9` includes both ends, and `until` excludes its boundary:
+Continuing from one case body into the next is called _fall-through_. A
+Lanternfly case never falls through, so no `break` statement is needed. When
+several values require the same body, place them on one `case` line:
 
 ```lanternfly
+case compact, detailed
+    lineWidth = 80
+```
+
+Every `ReportMode` value names one of the three declared members. The original
+`select` has a case for all three, so it is complete without `else`. A
+`select` over an integer may receive an unmatched value; an `else` body handles
+that remainder.
+
+## Ranges name consecutive values
+
+A range type permits a consecutive part of an integer or enumeration:
+
+```lanternfly
+range ScreenColumn as u8 = 0 until 32
+range DetailedReportMode as ReportMode = detailed to diagnostic
+```
+
+The first value is always included. The word between the values determines
+whether the second value is included:
+
+| Written range | Included values | Meaning of the second value |
+| ------------- | --------------- | --------------------------- |
+| `0 to 31` | 0 through 31 | 31 is the last included value. |
+| `0 until 32` | 0 through 31 | 32 is the first excluded value. |
+
+Both integer ranges contain the same 32 values. Use `to` when the final valid
+value is the useful fact. Use `until` when the stopping boundary or count is
+the useful fact. Thirty-two columns numbered from zero are `0 until 32`, and
+`0 until count` contains exactly `count` values. Adjacent ranges can meet at
+one boundary: `0 until 32` covers 0 through 31, and `32 until 64` covers 32
+through 63.
+
+The enum range uses declaration order. `detailed to diagnostic` includes both
+members. `detailed until diagnostic` would contain only `detailed`, because
+`diagnostic` would be the first excluded member.
+
+A variable of range type is checked when a value enters it:
+
+```lanternfly
+var rawColumn as u8 = 31
+var column as ScreenColumn = 0
+
+sub acceptColumn()
+    column = rawColumn
+end
+```
+
+The value 31 passes. A literal 32 is rejected during compilation. If
+`rawColumn` contains 32 at runtime, the range fault occurs before `column`
+changes. A `ScreenColumn` value can be used wherever a `u8` is accepted;
+assignment in the other direction needs the check because a general `u8` can
+also hold 32 through 255.
+
+## Case values and case ranges
+
+An integer `select` can group individual values and consecutive ranges:
+
+```lanternfly
+var channelCode as u8 = 7
+var buffered as boolean = false
+
 sub configureChannel()
     select channelCode
     case 0, 1
@@ -192,43 +284,51 @@ sub configureChannel()
 end
 ```
 
-Several values sharing one body sit on one `case` line, as `0, 1` do here.
-Duplicate case values are compile errors. Omitting `else` on an integer
-selector leaves unmatched values changing nothing.
+Codes 0 and 1 share the first body. Codes 2 through 9, including both ends,
+share the second. Every other `u8` value reaches `else`. With `channelCode`
+equal to 7, only `buffered = false` runs, followed by the statements after the
+complete `select`.
 
-## `if` and `select`
+Case values must be compile-time constants. Duplicate or overlapping cases
+are errors because one selected value must identify at most one body.
 
-`if` fits a decision built from different questions — did an error occur?
-is the batch complete? — while `select` fits branches that compare one
-ordinal expression with named constant values.
+## Choosing `if` or `select`
+
+Use `if` when the branches ask different questions or when ranges depend on
+runtime expressions. The batch decision asks about an error count and a number
+of remaining items, so an `else if` chain states its priority.
+
+Use `select` when every branch classifies one ordinal value. The report-mode
+decision and channel-code table both have that shape. Writing the selected
+expression once also guarantees that it is evaluated once.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/05-decisions.txt)
-declares the `Status` and `ReportMode` enumerations, ranks the batch-status
-rules, configures a report by complete `select`, and classifies a device
-channel code with case ranges and `else`. With one error and zero remaining
-items, `updateStatus` produces `failed`; with no errors and zero remaining
-items, it produces `complete`.
+The complete module moves a batch through all three statuses: it begins
+`working`, becomes `complete` when no items remain and finally becomes
+`failed` when an error is recorded. It configures a detailed report, classifies
+channel 7 as unbuffered and accepts column 31 as a valid `ScreenColumn`.
 
-## Exercises
+<<< @/public/lanternfly-book/book1/code/05-decisions.txt{lanternfly}
 
-1. Three `u8` constants could replace the `Status` enumeration. What
-   checked guarantee would be lost?
+The source is also available as
+[05-decisions.txt](/lanternfly-book/book1/code/05-decisions.txt).
 
-Answer: any `u8` from 0 through 255 could enter the variable, while an
-enumeration rejects values outside its declared set.
+## Exercise
+
+1. Why does `errorCount > 0` appear before `itemsRemaining = 0` in
+   `updateStatus`?
+
+Answer: both conditions can be true at once. The first true branch wins, so
+placing the error test first gives failure priority over completion.
 
 ## Chapter summary
 
-- An enumeration names a fixed set of alternatives as a checked type with
-  no arithmetic; an invalid value cannot enter it silently.
-- A range constrains a host type to part of its domain and is checked at
-  every boundary.
-- `if` runs one body when a Boolean condition is true; `else` supplies the
-  false path, and `else if` ranks several conditions in policy order.
-- `select` compares one ordinal expression with compile-time case values
-  and ranges; an enumeration `select` covering every member is complete
-  without `else`.
-- Lanternfly cases do not fall through, and `else` handles unmatched values
-  of an open selector.
+- An enumeration defines a closed set of named values in declaration order.
+- `if`, `else if` and `else` test conditions from top to bottom and run one
+  body.
+- `select` evaluates one ordinal value and runs at most one matching case body;
+  execution resumes after the final `end`.
+- A range includes its first value. `to` includes the second value, while
+  `until` stops before it.
+- Values entering an enum or range are checked before the destination changes.

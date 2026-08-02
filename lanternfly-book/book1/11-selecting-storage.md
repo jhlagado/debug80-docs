@@ -166,13 +166,17 @@ selector and declared storage.
 
 ## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/11-selecting-storage.txt)
-selects a reading by index, adjusts it through an alias, clears one row
-of a buffer table and dispatches on an enumeration selector. The
+The complete module selects a reading by index, adjusts it through an alias,
+clears one row of a buffer table and dispatches on an enumeration selector. The
 assignment to `selectedReading` changes which entry later code operates
 on; the assignments through `reading` change the entry itself; and
 `countActiveEntries` returns 3 because `activeLog` selects the input
 log.
+
+<<< @/public/lanternfly-book/book1/code/11-selecting-storage.txt{lanternfly}
+
+The source is also available as
+[11-selecting-storage.txt](/lanternfly-book/book1/code/11-selecting-storage.txt).
 
 ## Exercises
 

@@ -58,7 +58,7 @@ end
 
 var oddTotal as i16 = 0
 var found as boolean = false
-var target as u8 = 0
+var target as u8 = 6
 
 // continue skips even numbers; the loop adds 1, 3, 5, 7 and 9.
 sub sumOdds()

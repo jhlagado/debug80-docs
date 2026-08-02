@@ -35,9 +35,23 @@ var dailyLog as DailyLog
 var station as Station
 var entryIndex as i16 = 2
 
+sub setReportDate()
+    reportDate.year = 2026
+    reportDate.month = 7
+    reportDate.day = 30
+end
+
+sub prepareEntry()
+    readings[entryIndex].value = -12
+    readings[entryIndex].unit = 1
+    readings[entryIndex].quality = 0
+end
+
 sub saveEntry()
+    dailyLog.date = reportDate
     dailyLog.entries[entryIndex] = readings[entryIndex]
     dailyLog.entries[entryIndex].quality = 1
+    dailyLog.used = 3
     savedDate = reportDate
 end
 
@@ -52,7 +66,10 @@ sub startNewLog()
 end
 
 sub main()
-    saveEntry()
-    labelStation()
     startNewLog()
+    setReportDate()
+    prepareEntry()
+    saveEntry()
+    reportDate.day = 31
+    labelStation()
 end

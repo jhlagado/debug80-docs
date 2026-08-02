@@ -84,7 +84,7 @@ ends the exemption.
 
 Comparison chaining is invalid. Integer comparisons use the compatibility
 rules from [Chapter 4](04-integer-expressions.md#compatible-operand-types).
-Subranges compare through their host ordinal family. Enum comparisons require
+Subranges compare through their base ordinal family. Enum comparisons require
 the same nominal enum and follow declaration order. Booleans support `=` and
 `<>`. Opaque addresses support `=` and `<>` when their classes match. Strings
 support all six operators and compare their current content, even when their
@@ -94,6 +94,9 @@ Record and array equality is deferred. Programs compare their selected fields
 or elements explicitly.
 
 ## Standard value operations
+
+The standard value operations are part of the language kernel and require no
+import.
 
 ### `abs`
 
