@@ -10,11 +10,8 @@ has_toc: false
 
 # Lanternfly Book 1 — Programming Fundamentals
 
-A first course in Lanternfly: a compiled, low-level programming language
-for computers where every byte and machine operation matters. Its source
-reads like structured BASIC; its discipline is closer to Pascal; and on
-the inspectable AZM path this book works with, every emitted operation can
-be read in the generated assembly rather than guessed. The
+Book One presents Lanternfly programming through complete programs,
+storage diagrams and execution traces. The
 [introduction](00-introduction.md) says who the book is for and how it
 teaches.
 
@@ -44,9 +41,7 @@ exact syntax, type, storage, control-flow and diagnostic rules.
 
 - [Glossary](glossary.md)
 
-Chapters 14 and 15 teach the language's newest addition, error handling,
-which remains provisional. Each chapter closes with short exercises and
-compact answers.
+Each chapter closes with a summary and one exercise with its answer.
 
 Each chapter links to its complete companion listings. The listings use
 `.txt` filenames for convenient browser display; each represents a

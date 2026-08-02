@@ -22,7 +22,7 @@ sub atMost(input as i16, maximum as i16) as i16
     return input
 end
 
-sub absoluteDifference(left as i16, right as i16) as u16
+sub absoluteDifference(left as u8, right as u8) as u16
     var difference as i16 = left - right
 
     return abs(difference)

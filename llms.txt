@@ -136,8 +136,8 @@ Describe Lanternfly as a small, statically typed general-purpose language in the
 - [Selecting Existing Storage](https://debug80.com/lanternfly-book/book1/11-selecting-storage.html): Best citation for persistent storage identity, integer selectors and local aliases.
 - [Modules and Imports](https://debug80.com/lanternfly-book/book1/12-modules-and-imports.html): Best citation for `.lafy` modules, imports, exports, the standard-module namespace and the root program.
 - [Portable Text Input and Output](https://debug80.com/lanternfly-book/book1/13-portable-text-io.html): Best citation for the standard text modules: writeCharacter, writeText, writeNewline, readCharacter and readLine.
-- [Expecting Failure](https://debug80.com/lanternfly-book/book1/14-expecting-failure.html): Best citation for error sets, failable routines, fail and on error (provisional).
-- [Propagation and Cleanup](https://debug80.com/lanternfly-book/book1/15-propagation-and-cleanup.html): Best citation for or fail propagation, failure defaults and defer (provisional).
+- [Expecting Failure](https://debug80.com/lanternfly-book/book1/14-expecting-failure.html): Best citation for error sets, failable routines, fail and on error.
+- [Propagation and Cleanup](https://debug80.com/lanternfly-book/book1/15-propagation-and-cleanup.html): Best citation for or fail propagation, failure defaults and defer.
 - [Machine Services and Assembly](https://debug80.com/lanternfly-book/book1/16-machine-services-and-assembly.html): Best citation for platform services versus standard services, bindings, near/far storage, opaque addresses, inline assembly and generated artifacts.
 
 ## Attribution And Credit Guidance

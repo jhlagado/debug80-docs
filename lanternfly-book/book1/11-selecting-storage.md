@@ -11,7 +11,8 @@ Aggregate assignment creates an independent copy. Often a program needs the
 opposite: several parts working with the same storage, chosen at run time.
 Lanternfly represents that choice as data rather than as pointers. The program stores
 an integer index that records _which_ entry, and a routine gives the
-selected storage a temporary name — an alias — while it works:
+selected storage a temporary name — an alias — valid until the routine
+returns:
 
 ```lanternfly
 var readings as Reading[4]
@@ -29,7 +30,8 @@ it selects another entry; the alias inside `markSelected` names whichever
 entry is selected when the routine runs.
 
 Lanternfly has no pointer or reference type, no address-of operator and no
-dereference operator. Identity lives in declared paths and integer indices.
+dereference operator. Persistent identity is represented by declared
+paths and integer indices.
 
 ## Identity as an index
 
@@ -62,7 +64,7 @@ Bounds checking establishes _spatial_ validity, and only that. An index
 that stays in range still identifies whatever the slot holds now — if the
 program has since reused entry 2 for a different measurement, a saved index
 of 2 selects whatever entry 2 now holds. Whether a slot still represents
-the same logical entity is the program's bookkeeping, carried in data such
+the same logical entity is recorded in the program's own data, such
 as Chapter 9's `used` count; the check guards the boundary, not the
 meaning.
 
@@ -92,12 +94,11 @@ reading = defaultReading
 
 The first line copies the selected entry out; the second copies a prepared
 record into it. The alias itself cannot be rebound, compared or stored — it
-is a name, not a value. The backend may carry an address underneath, but
+is a name, not a value. The compiler may carry an address underneath, but
 that carrier has no source spelling, so no program can misuse it.
 
-An alias is the right choice when a routine touches the same aggregate
-several times or passes it onward. A path used once is best written as the
-path.
+An alias suits a routine that touches the same aggregate several times
+or passes it onward; a path used once is written as the path.
 
 The alias form accepts records, fixed arrays and strings — an alias of a
 `string[12]` element gives a table entry a short name for a run of appends.
@@ -111,8 +112,8 @@ the body, advances it — under every spelling.
 
 ## Regular shapes: one table instead of many
 
-Where another language would collect separate buffers behind a table of
-pointers, we declare one multidimensional array:
+A program that needs several buffers of one shape declares one
+multidimensional array:
 
 ```lanternfly
 const bufferCount as u8 = 3
@@ -129,9 +130,9 @@ sub clearBuffer(selected as u8)
 end
 ```
 
-The first index selects the buffer and the second selects the byte, using
-the row-major arithmetic from Chapter 7. The "pointer table" has become two
-integers, and both are checked against declared extents.
+The first index selects the buffer and the second selects the byte,
+using the row-major arithmetic from Chapter 7, and both are checked
+against declared extents.
 
 ## Irregular choices: a selector and `select`
 
@@ -157,11 +158,11 @@ sub countActiveEntries() as u8
 end
 ```
 
-The selector is data, like any index, and an enumeration is its natural
-type: an enumeration selector cannot hold an invalid choice, and its
-`select` is complete when every member has a case. The backend may lower a
-dense selection to an address table; that choice belongs to lowering, and
-the source semantics remain a selector and declared storage.
+The selector is data, like any index, and an enumeration suits it: an
+enumeration selector cannot hold an invalid choice, and its
+`select` is complete when every member has a case. The compiler may lower
+a dense selection to an address table; the source semantics remain a
+selector and declared storage.
 
 ## Complete program
 
@@ -177,32 +178,20 @@ log.
 
 1. A saved index of 2 outlives a reshuffle of the `readings` array. What
    does the bounds check still guarantee, and what does it not?
-2. `alias reading as Reading = readings[selectedReading]` is followed by
-   `reading = readings[0]`. What does that second line do?
-3. What replaces a C-style table of buffer pointers in this chapter, and
-   what checks the replacement?
 
-Answers: the check guarantees the index selects a real entry, and
-nothing more — whether the slot still holds the same logical measurement
-is the program's own bookkeeping; it copies `readings[0]` into the
-selected entry — an alias cannot be rebound, so aggregate assignment
-through it copies values; one multidimensional array indexed by two
-integers, both checked against declared extents.
+Answer: the check guarantees that the index selects an existing entry.
+It cannot guarantee that the entry still represents the same logical
+measurement.
 
 ## Chapter summary
 
 - Persistent identity is data: a declared path, an integer index or a
   stored selector, each checked at the point of use.
-- Bounds checks establish spatial validity; whether a slot still holds the
-  same logical entity is the program's own bookkeeping.
+- Bounds checks establish spatial validity; whether a slot still holds
+  the same logical entity is recorded in the program's own data.
 - `alias` gives existing record, array or string storage a non-rebindable
   local name, evaluated once and valid until the routine returns.
 - A loop's control variable is off limits under every name — direct, alias
   or callee.
 - Multidimensional arrays replace regular pointer tables; an enumeration
   selector with `select` replaces irregular ones.
-
-One module now holds everything we can build: types, storage, routines and
-a disciplined idea of identity. In the next chapter, programs grow past one
-file — and the reading order we have kept since Chapter 1 stretches across
-module boundaries.

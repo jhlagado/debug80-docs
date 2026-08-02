@@ -14,16 +14,11 @@ language: a complete Lanternfly program becomes native or translated target
 code rather than running through an interpreter.
 
 The reference compiler architecture is a single pass that emits machine
-code directly with backpatched fixups. A backend may instead write AZM or
-another assembly language as a transparency and portability form, or lower
-Lanternfly through C, Zig, LLVM IR or another suitable intermediate. The
-route to native code may change, but the meaning of the source program may
-not.
-
-The first compiler is planned as a desktop-hosted compiler for Z80 systems.
-Its first backend will write AZM, the inspectable form. The language itself
-does not expose Z80 registers, stack-frame conventions or instruction
-selection.
+code directly with backpatched fixups — small enough to run on the
+machines it targets, in the tradition of Turbo Pascal. Other
+implementations may translate differently; the meaning of the source
+program may not change. The language itself does not expose Z80
+registers, stack-frame conventions or instruction selection.
 
 ## Language boundary
 
@@ -40,7 +35,7 @@ The first edition includes:
 - private source modules with explicit exports;
 - optional standard modules for portable character and text I/O;
 - typed target services and explicit inline assembly;
-- Provisional failable routines with structured error handling
+- failable routines with structured error handling
   ([chapter 14](14-error-handling.md)).
 
 This inventory reflects one central design choice: storage is explicit and
@@ -149,8 +144,8 @@ The language has these statement categories:
 - `if` and `select`;
 - counted, collection and conditional loops;
 - `exit`, `continue` and `return`;
-- `fail`, `defer` and the `on error` handler form (Provisional;
-  [chapter 14](14-error-handling.md));
+- `fail`, `defer` and the `on error` handler form
+  ([chapter 14](14-error-handling.md));
 - statement-level `asm`.
 
 Loose executable statements are invalid in an ordinary module.

@@ -1,6 +1,5 @@
 // number-entry.lafy — Book 1, Chapter 14 companion listing.
 // Number entry with an error set, fail and on error.
-// Error handling is the newest part of the language and provisional.
 //
 // Line discipline: carriage return and line feed each end a line, and a
 // line containing no digits is skipped, so targets that end lines with

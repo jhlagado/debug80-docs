@@ -10,9 +10,8 @@ nav_order: 9
 One declaration form covers every user routine. A `sub` may return a scalar
 value or no value at all, so Lanternfly needs no separate `function` keyword.
 
-Failable signatures, `fail`, structured handling and `defer` are the
-language's newest addition and remain provisional;
-[chapter 14](14-error-handling.md) documents them.
+[Chapter 14](14-error-handling.md) documents failable signatures,
+`fail`, structured handling and `defer`.
 
 ## Declarations
 
@@ -200,9 +199,8 @@ forward sub updateEnemies()
 - `extern sub` is complete without a body and takes no part in forward
   declaration; hosted bodies contain no routine declarations;
 - the program entry may be forward-declared;
-- the reference backend resolves early calls by backpatching and an
-  assembly-generating backend emits symbolic calls; either way a forward
-  declaration adds no runtime cost.
+- a forward declaration changes declaration order only: it adds no
+  runtime work, and the call behaves like any other call.
 
 ## Calling convention
 

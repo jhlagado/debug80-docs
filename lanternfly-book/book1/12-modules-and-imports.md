@@ -7,13 +7,13 @@ nav_order: 12
 
 # Modules and Imports
 
-Every program so far has fitted in one source file. Real programs outgrow
-that, and the growth has a shape: a measurement model here, its display
-there, the program that composes them somewhere else. Lanternfly's unit of
-growth is the module, one `.lafy` source file of imports and declarations,
-and the reading order we have kept since Chapter 1 stretches across the
-boundary: everything a declaration uses is either imported above it or
-declared above it.
+Every program so far has fitted in one source file. Larger programs
+separate their concerns: a measurement model in one file, its display in
+another, the program that composes them in a third. Each file is a
+module — one `.lafy` source file of imports and declarations — and the
+reading order we have kept since Chapter 1 holds across the boundary:
+everything a declaration uses is either imported above it or declared
+above it.
 
 ## A source module
 
@@ -40,9 +40,8 @@ end
 ```
 
 A source module's filename ends in the exact lowercase `.lafy` extension.
-The file contains imports and declarations; loose executable statements
-have no legal place in it, which is why statements have lived inside
-routines since Chapter 1.
+The file contains imports and declarations; executable statements are
+legal only inside routines, as they have been since Chapter 1.
 
 ## Imports and exports
 
@@ -61,15 +60,15 @@ end
 visible to the importer; `counterStep` remains private. The extension is
 part of the import path.
 
-Imports stand together at the top of a module, before any declaration, and
-each one's exports are visible from that point on. Everything `recordItem`
-uses is therefore above it, with the imported routine arriving through the
-import line.
+Imports stand together at the top of a module, before any declaration,
+and each one's exports are visible from that point on. Everything
+`recordItem` uses is therefore either declared above it or exported by an
+import above it.
 
-Private by default is the useful direction. A module's exports are its
-contract with other modules; everything unexported can be reorganised freely,
-because no other file can have grown to depend on it. Chapter 16 builds its
-platform boundary on exactly this mechanism.
+A module's exports are its contract with other modules. Unexported
+declarations can be renamed, reordered or removed without touching any
+other file, because no other file can name them. In Chapter 16 we build a
+platform boundary on this mechanism.
 
 ## The standard modules
 
@@ -83,37 +82,30 @@ import "standard/text-output.lafy"
 import "standard/text-input.lafy"
 ```
 
-A *capability module* is the other kind, and chapters 2 and 7 have already
-shown the two current capability modules. `import "standard/wide32.lafy"`
-legalizes the 32-bit integer types, and
-`import "standard/long-strings.lafy"` legalizes string capacities above 254.
-A capability import exports no names at all: it
-legalizes an optional facility for the module that states it, and only for
-that module — importing a neighbour that uses `u32` does not
-license your own source to mention it. Everything else about these imports
-is ordinary: they sit in the same contiguous prefix and obey the same
-`standard/` rules below.
+A *capability module* is the other kind: it exports no names at all,
+and instead legalizes an optional facility for the module that states
+it, and only for that module. The two current ones appeared in chapters
+2 and 8: `import "standard/wide32.lafy"` legalizes the 32-bit integer
+types, and `import "standard/long-strings.lafy"` legalizes string
+capacities above 254.
 
-Nothing is imported implicitly — Lanternfly has no prelude, so a module
-that imports nothing receives no imported names at all. The
-`standard/` path belongs to the toolchain: a project cannot place its own
-files there or shadow those names with its own modules. Once imported,
-standard exports enter the same unqualified value scope as any other
-import, under the same contiguous-prefix rule. A program need import only
-the standard modules it uses — good hygiene rather than a language rule,
-since an unused import is legal and an unused capability import adds no
-bytes to the program. The next chapter puts both of these to work.
+Nothing is imported implicitly — Lanternfly has no prelude — and the
+`standard/` namespace belongs to the toolchain.
+[Book Two, Chapter 10](../book2/10-modules-and-programs.md) states the
+remaining standard-module rules.
 
 ## The root program
 
-A build manifest names one root module and, for an executable program, one
-entry subroutine with no parameters and no result. The compiler follows
-each import to its module and finishes resolving that module — including
-its own imports — before checking the module that imported it, and it
-processes each module once however many times it is imported. (The
-toolchain's name for this order is _depth first_.) It then checks
-declarations in source order, allocates static storage, resolves machine
-bindings and emits one target program.
+A build manifest names one root module and, for an executable program,
+one entry subroutine — parameter-free, result-free, source-defined and
+non-failable.
+
+The compiler follows each import to its module and finishes resolving
+that module — including its own imports — before checking the module that
+imported it, and it processes each module once however many times it is
+imported. (The toolchain's name for this order is _depth first_.) It then
+checks declarations in source order, allocates static storage, resolves
+machine bindings and emits one target program.
 
 The root module composes the program:
 
@@ -131,7 +123,7 @@ sub main()
 end
 ```
 
-Two calls arrive in `main`, each reaches `incrementProcessed` through the
+`main` makes two calls, each reaches `incrementProcessed` through the
 import, and `processed.value` finishes at 2 — storage declared in one file,
 counted from another, with every access checked against the exported
 types.
@@ -149,15 +141,9 @@ display; each represents a `.lafy` source module.
 
 1. `tally.lafy` imports `counters.lafy` and mentions `counterStep`. What
    happens, and why?
-2. Module A imports module B, and B imports A. What does the compiler
-   report?
-3. A module imports a neighbour that uses `u32` internally. May the
-   importer now declare a `u32` of its own?
 
-Answers: a compile error — `counterStep` is private to `counters.lafy`,
-and only exports become visible; an import-cycle error that includes the
-cycle's path; no — capability imports are module-local, so the importer
-states `import "standard/wide32.lafy"` itself.
+Answer: a compile error. `counterStep` is private to `counters.lafy`, and
+only exported names become visible to an importer.
 
 ## Chapter summary
 
@@ -174,8 +160,3 @@ states `import "standard/wide32.lafy"` itself.
   modules export the text operations, and two capability modules legalize
   the wide integer types and long strings; the `standard/` namespace
   belongs to the toolchain, and no prelude exists.
-
-Modules let one program keep its concerns in separate files. In the next
-chapter we import the two text service modules, and after eleven chapters of
-results left quietly in storage, our programs read and write their first
-lines.

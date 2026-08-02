@@ -7,10 +7,8 @@ nav_order: 4
 
 # Comparisons, Booleans and Bit Masks
 
-Chapter 3 produced numbers. Programs also need answers: is the change
-large, is the device ready, has an error been seen? Lanternfly keeps such
-answers in Chapter 2's `boolean` type, and this chapter covers the three
-ways they arise — comparing values, combining earlier answers, and testing
+Lanternfly keeps yes-or-no answers in the `boolean` type. They arise
+three ways: comparing values, combining earlier answers, and testing
 individual bits.
 
 ```lanternfly
@@ -76,10 +74,8 @@ can never divide.
 
 ## Bit masks
 
-One byte can carry eight independent yes-or-no facts — a device ready
-here, an error there — and that practical economy is what bit masks are
-for. The same word operators act on individual bits when their operands
-are integers:
+One byte can carry eight independent yes-or-no facts. The same word
+operators act on individual bits when their operands are integers:
 
 ```lanternfly
 const readyMask as u8 = %00000001
@@ -109,19 +105,12 @@ Parentheses bind first and make an intended calculation visible:
 average = (first + second) / 2
 ```
 
-Without the parentheses, division would occur before addition. The
-precedence order runs from arithmetic through shifts and comparisons to
-the Boolean operators, with `or` last; the complete ladder is in the
-language reference, and parentheses make any line independent of it.
-
-That ordering lets a Boolean expression read naturally:
-
-```lanternfly
-minimum <= input and input <= maximum
-```
-
-The comparisons run before the Boolean `and`. Parentheses are still valuable
-when a line mixes bitwise and Boolean work:
+Without the parentheses, division would occur before addition.
+Precedence runs from arithmetic through shifts and comparisons to the
+Boolean operators, with `or` last; the complete ladder is in the
+language reference. In `minimum <= input and input <= maximum`, the
+comparisons therefore run before the Boolean `and`, and parentheses
+clarify a line that mixes bitwise and Boolean work:
 
 ```lanternfly
 alarm = (statusFlags and errorMask) <> 0 and deviceReady
@@ -141,18 +130,11 @@ toggle.
 
 ## Exercises
 
-1. With `statusFlags` at `%00000011`, `readyMask` `%00000001` and
-   `errorMask` `%00000010`, what is `statusFlags and not errorMask`?
-2. Why does `itemCount > 0 and total / itemCount > threshold` never
+1. Why does `itemCount > 0 and total / itemCount > threshold` never
    divide by zero?
-3. One of these is a compile error: `a = b = c` at the start of a
-   statement, or `(b = c)` on its own line. Which, and why?
 
-Answers: `%00000001` — `not errorMask` is `%11111101` and `and` keeps only
-the ready bit; short-circuit `and` skips the right side when the left is
-false, so the division is never reached with a zero count; `a = b = c` is
-the error — assignment is a statement, not an expression, so it cannot be
-chained, while `(b = c)` is a discarded equality test.
+Answer: short-circuit `and` skips the right side when the left is false,
+so the division is never reached with a zero count.
 
 ## Chapter summary
 
@@ -164,7 +146,3 @@ chained, while `(b = c)` is a discarded equality test.
   toggles, and a mask test ends in an ordinary comparison.
 - Parentheses bind first; precedence runs from arithmetic through
   comparisons to the Boolean operators, with `or` last.
-
-Expressions can now produce Boolean answers and store them. The next
-chapter gives important values names of their own — and uses those
-answers to choose between paths.

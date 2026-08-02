@@ -12,11 +12,10 @@ grammar records the first edition's block shapes and the rule that
 distinguishes assignment from equality. Expression precedence comes from
 [Chapter 4](04-integer-expressions.md#precedence-and-associativity).
 
-The grammar below is complete for the 0.6 baseline. The productions and
-words introduced by the Provisional error-handling revision — the
-`fails-clause`, the `fail` and `defer` statements, the `or fail` tails
-and the `on-error-clause` — are part of it and are noted where they
-appear; [chapter 14](14-error-handling.md) explains them. Successful
+The grammar below is complete for the 0.6 baseline. The error-handling
+productions and words — the `fails-clause`, the `fail` and `defer`
+statements, the `or fail` tails and the `on-error-clause` — are part of
+it; [chapter 14](14-error-handling.md) explains them. Successful
 parsing is only the first step: the semantic restrictions
 in the earlier chapters still determine whether the source is valid.
 
@@ -440,8 +439,7 @@ u16
 u32
 ```
 
-`defer`, `fail`, `fails` and `on` belong to the Provisional
-error-handling revision but are reserved in every program. `type` is
+`defer`, `fail`, `fails` and `on` are reserved in every program. `type` is
 contextual inside `size`, `count`, `lower` and `upper`; `error` is
 likewise contextual, recognized only immediately after `on`, and remains
 an ordinary identifier everywhere else.

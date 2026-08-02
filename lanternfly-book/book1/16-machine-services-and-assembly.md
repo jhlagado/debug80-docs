@@ -41,17 +41,13 @@ is tied to this machine.
 
 ## Operations, standard services and platform services
 
-Three tiers now share the page, and telling them apart is the chapter's
-first job. _Language operations_ — `abs`, `length`, `clear`, `append` and
-the rest — belong to the language: they mean the same everywhere, and
-each backend selects instructions or a runtime helper. _Standard services_
-(Chapter 13's five) have one portable meaning but optional,
-target-supplied implementations, reached through explicit imports. A
-_platform service_ such as `writeUnsigned` is someone's routine on a
-particular machine, reached through a declaration in the platform
-module. The language defines what `abs` means; the standard modules define
-what `writeText` means; a target profile and its modules define what
-`writeUnsigned` does.
+_Language operations_ — `abs`, `length`, `clear`, `append` and the
+rest — mean the same everywhere, and the compiler selects instructions
+or a runtime helper. _Standard services_ (Chapter 13's five) have one
+portable meaning but optional, target-supplied implementations, reached
+through explicit imports. A _platform service_ such as `writeUnsigned`
+is one machine's own routine, reached through a declaration in the
+platform module.
 
 ## External routines
 
@@ -73,7 +69,7 @@ extern sub waitForVBlank() from "ROM_VBLANK_WAIT"
 ```
 
 `at` supplies an absolute entry address. `from` names a symbol that the
-assembler or substrate toolchain will resolve. With neither form, the
+selected target toolchain resolves. With neither form, the
 target profile binds the Lanternfly name. The addresses and symbols in
 this chapter belong to a small fictional teaching machine — call it the
 LF-1 — whose monitor ROM documents these entry points; a real platform
@@ -86,12 +82,10 @@ logic from a computer's firmware details: two platform modules can export
 the same service signatures and bind them to different machines, and every
 program module imports the signatures alone.
 
-The standard text modules share the import form but not the
-authorship. Their interfaces are compiler-defined and versioned, targets
-bind their stable service IDs rather than project-chosen symbols, and two
-of their operations use carriers no ordinary declaration can spell — so a
-project module can imitate the pattern, but cannot recreate or shadow the
-standard contract.
+The standard text modules share the import form, but their interfaces
+are compiler-defined: targets bind their stable service IDs rather than
+project-chosen symbols, so a project module can imitate the pattern but
+cannot recreate or shadow the standard contract.
 
 ## Near and far storage
 
@@ -135,16 +129,27 @@ var deviceBuffer as far address
 ```
 
 `near address` and `far address` are opaque scalar values with a precise
-contract. A program can store one, pass it and compare it with another of
-the same address class — a service result can be kept in a record today and
-handed back to a service tomorrow. What Lanternfly source can never do is
-look inside: there is no dereference, no address arithmetic, and no
-conversion connecting an opaque address to ordinary storage in either
-direction. Only the receiving target routine interprets the value.
+contract. A program may:
 
-Opaque addresses exist because video memory, device registers and
-firmware structures do: a program needs a way to hold such locations,
-and no portable type could describe their contents.
+- store one in a variable, record field or array element;
+- pass one to a routine;
+- compare one with another of the same address class.
+
+Lanternfly source may not:
+
+- dereference one;
+- perform arithmetic on one;
+- convert one to or from ordinary storage or integers.
+
+Only the receiving target routine interprets the value, and the target
+profile rules on which bit patterns are valid. The LF-1 profile declares
+all-zero `far address` storage valid and assigns it the meaning "no
+buffer supplied", so an uninitialized `deviceBuffer` is legal and begins
+with that value.
+
+Video memory, device registers and firmware structures sit at locations
+whose contents no portable type can describe; an opaque address holds
+such a location.
 
 ## Inline assembly
 
@@ -162,9 +167,9 @@ end
 
 After `asm`, every physical line belongs to the assembler until a line
 containing only `end` closes the block. Lanternfly does not interpret
-comments, quotes or instruction syntax inside it. An assembly-source
-backend places the lines unchanged into the generated source, and
-assembler diagnostics map back to the original inline lines.
+comments, quotes or instruction syntax inside it; the compiler passes the
+lines unchanged to its assembler, and the assembler's diagnostics point
+back at the original inline lines.
 
 Arbitrary assembly may read memory, change registers, call routines or
 perform device I/O, so the compiler treats a statement-level `asm` block as
@@ -192,21 +197,6 @@ assembly makes the containing module target-specific, which is one more
 reason platform work belongs in interface modules while ordinary program
 modules import their exported signatures.
 
-## Generated artifacts
-
-Reading the translation is a practical activity: inspect the instructions
-behind a loop, find the address of a record, see why a helper was included,
-trace a runtime fault to its source line. A source-generating backend
-records what those actions need — the generated assembly, the mappings
-from Lanternfly lines to generated ranges and machine addresses, typed
-symbols and exact layouts, the selected helpers, and the external
-bindings with their adapters.
-
-The mapping is designed to be verified when the toolchain composes the
-final program: a map that cannot be validated against the assembled
-output is an error, so an inspected map will be either checked or absent,
-never a guess.
-
 ## Complete program
 
 This chapter's companion program spans three files:
@@ -217,31 +207,23 @@ platform console;
 ordinary module exporting that model; and
 [console.lafy](/lanternfly-book/book1/code/16-console.txt) is a platform
 interface module whose module assembly defines the firmware symbols its
-external bindings name. The console module also binds `playTone` at an
-absolute address, exports a `near` aggregate parameter and an opaque
-`far address`; report.lafy waits for vertical blank through a
-statement-level `asm` block, plays a tone and clears a shared block. The
-change traces to 230 and prints as `CHANGE 230`: the label through a
-standard service, the number through the `writeUnsigned` binding that
-console.lafy's module assembly names.
+external bindings name.
+
+console.lafy also binds `playTone` at an absolute address and exports a
+`near` aggregate parameter and an opaque `far address`. report.lafy
+calls the ROM's vertical-blank wait through a statement-level `asm`
+block, plays a tone and clears a shared block. The change traces to 230,
+and the program prints `CHANGE 230` — the label through the standard
+`writeText`, the number through the `writeUnsigned` binding.
 
 ## Exercises
 
-1. `playTone` is bound with `at $0f06` and `waitForVBlank` with
-   `from "ROM_VBLANK_WAIT"`. Who resolves each?
-2. Why must the compiler treat a statement-level `asm` block as a
+1. Why must the compiler treat a statement-level `asm` block as a
    conservative barrier?
-3. Which operations does a `far address` value support in source, and
-   which are refused?
 
-Answers: `at` needs no resolution beyond the profile's address checks,
-while `from` is resolved by the assembler or substrate toolchain from
-the named symbol; the block may read or write any visible mutable
-object, call routines, fault or perform device I/O, so values needed
-afterward must be preserved and no assumption survives the block;
-assignment, passing and comparison with the same address class are
-supported — dereference, arithmetic and conversion to ordinary storage
-have no source form.
+Answer: the block may read or write any visible mutable object, call
+routines, fault or perform device I/O. The compiler must preserve values
+needed afterwards and discard assumptions about mutable storage.
 
 ## Chapter summary
 
@@ -249,18 +231,13 @@ have no source form.
   portable, optional contracts; platform services are one machine's own
   routines behind typed `extern sub` declarations.
 - Interface modules export service signatures; `at` and `from` name
-  machine bindings, and programs import signatures, never addresses.
+  machine bindings, and program modules import service signatures rather
+  than repeating routine entry addresses.
 - Storage classes and opaque addresses carry target facts — where storage
   lives, and locations only the target can interpret — under source rules
   that keep them from becoming pointers.
 - `asm` admits target assembly at an explicit boundary and forms a
   conservative compiler barrier.
-- Generated artifacts connect source to machine, and their source map is
-  validated or absent, never guessed.
 
 The [language reference](../book2/) holds the exact rules whenever a
-chapter's working account is not enough. What this book leaves in your
-hands is a method: reading a program as its storage, tracing it by
-pencil, and accounting for the code it asks of the machine. When the
-compiler arrives, its verified source maps are designed to let every one
-of those traces be checked against the real thing.
+chapter's working account is not enough.

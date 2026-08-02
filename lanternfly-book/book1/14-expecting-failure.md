@@ -7,30 +7,21 @@ nav_order: 14
 
 # Expecting Failure
 
-Programs go wrong in two ways, and the two kinds need different
-treatment. An array index outside its domain, a division by zero, a value
-that cannot fit its checked destination — these are bugs. Earlier
-chapters met the checks that catch them. A fault does not return to the
-failing operation, because continuing past a contract violation would
-only move the damage somewhere harder to find. What happens instead
-belongs to the target: it may report the fault, trap it, halt, or enter
-a fault monitor, and debug artifacts preserve the fault's class and
-source location. No program code intercepts one.
+Programs go wrong in two ways. An array index outside its domain, a
+division by zero, a value that cannot fit its checked destination —
+these are bugs, and their checks fault: the failing operation does not
+return, the target reports, traps or halts, and no program code
+intercepts one.
 
 This chapter is about the other kind of going wrong. A person at the
-keyboard types `12X4`. A number arrives one digit too large. Nothing
-about the program is broken — input like this is a normal event in
-normal operation, and stopping would be absurd. The program must detect
-it, respond and carry on. Chapter 13 met this obligation first:
-`readLine` returns a Boolean, and acting on it is our code's job. This
-chapter gives the idea a proper language: routines that declare they can
-fail, call sites where the possibility cannot be ignored, and a compiler
-that rejects source that ignores it anyway.
+keyboard types `12X4`, or a number one digit too large. Nothing about
+the program is broken — input like this is a normal event, and the
+program must detect it, respond and carry on. This chapter introduces
+routines that declare they can fail, call sites where the possibility
+cannot be ignored, and a compiler that rejects source that ignores it.
 
-One status note before we begin. Error handling is the newest part of the
-language and remains provisional: its details may change before the first
-compiler. The reference rules live in
-[Book Two, Chapter 14](../book2/14-error-handling.md).
+[Book Two, Chapter 14](../book2/14-error-handling.md) states the
+reference rules for this chapter and the next.
 
 ## Naming what can go wrong
 
@@ -44,36 +35,31 @@ enum EntryError as u8
 end
 ```
 
-This is called an error set: the complete, closed list of ways one corner
-of the program can fail. Each member is an ordinary enum value that can
+This is called an error set: the complete, closed list of ways a routine
+can fail. Each member is an ordinary enum value that can
 be stored, compared and selected over. The representation must be `u8`,
 which keeps every error code one byte.
 
-What is *not* in the set matters as much as what is. Our example for
-this chapter is number entry at the keyboard, and a person will
-sometimes press Enter on an empty line. We could treat that as a third
-error — but an empty line has an obvious harmless meaning, *no entry
-yet*, and the friendlier response is to keep waiting. Choosing an error
-set is design work: an error is an outcome the calling code must act
-on, and not every surprise qualifies.
+The set's omissions are also design. Our example is number entry at the
+keyboard, and a person will sometimes press Enter on an empty line. An
+empty line means *no entry yet*, and the friendlier response is to keep
+waiting rather than to report a third error. An error is an outcome the
+calling code must act on, and not every surprise qualifies.
 
 ## Raw keys and line endings
 
-The number will arrive as keystrokes, so we read it with Chapter 13's
-`readCharacter` — and that choice comes with an obligation the portable
-`readLine` had been handling for us. `readCharacter` supplies raw
-bytes, and targets do not agree on how a line ends: one device sends
-carriage return (13), another line feed (10), a third sends both. Two
-small rules make all three conventions work without any special cases:
-either byte counts as the end of a line, and a line with no digits is
-skipped rather than reported. Under those rules the two-byte convention
-simply looks like a number followed by one blank line, and the blank
-line is skipped like any other. The equivalence belongs to this entry
-protocol, though, not to the operations themselves: after a CR-terminated
-entry the LF is still queued, and a raw `readCharacter` outside the
-protocol would see it. Skipping blank lines also means that after an
-empty line the routine waits for more input without printing another
-prompt.
+Chapter 13's `readCharacter` returns the entry one byte at a time — and
+raw bytes carry an obligation the portable `readLine` had been handling:
+targets use different line endings.
+One device sends carriage return (13), another line feed (10), a third
+sends both. Two rules cover all three conventions: either byte counts as
+the end of a line, and a line with no digits is skipped rather than
+reported. The two-byte convention then reads as a number followed by one
+blank line, skipped like any other, and after an empty line the routine
+waits for more input without printing another prompt. The equivalence
+belongs to this entry protocol, not to the operations: after a
+CR-terminated entry the LF is still queued, and a raw `readCharacter`
+outside the protocol would return it.
 
 Two helpers state the rules once:
 
@@ -89,16 +75,13 @@ sub skipRestOfLine(key as u8)
 end
 ```
 
-`skipRestOfLine` is the important one, and its purpose becomes clear the
-moment we ask what should happen *after* a failure. Suppose the person
-types `12X4` and Enter. The `X` is where the routine detects the
-problem — but `4` and the line ending are still queued in the input. If
-the routine reported the failure immediately, the retry would begin by
-reading that leftover `4` and could accept it as a fresh, valid entry —
-a wrong answer produced by the error handling itself. The rule this
-teaches generalises: **a routine that fails must first restore whatever
-its own partial work disturbed** — here the input stream, by consuming
-the rest of the spoiled line so the retry starts clean.
+Suppose the person types `12X4` and Enter. The `X` is where the routine
+detects the problem — but `4` and the line ending are still queued in
+the input. A failure reported immediately would leave the retry to read
+that leftover `4` and accept it as a fresh, valid entry — a wrong answer
+produced by the error handling itself. So `readNumber` drains the
+invalid line with `skipRestOfLine` before returning an error, and the
+retry begins at the next line.
 
 ## A routine that can fail
 
@@ -143,20 +126,17 @@ In the absence of a fault, every invocation of this routine now ends in
 one of two ways: success, carrying a `u16`, or failure, carrying one
 member of `EntryError`. `return` delivers success as always. `fail` is
 the new statement: it ends the call at once, carrying the named error to
-the caller. It reads like `return` because it works like `return`:
-failure is the other way a call can end. Both `fail` statements stand
-*after* their `skipRestOfLine`: cleanup first, then report.
+the caller — failure is the other way a call can end. Both `fail`
+statements stand *after* their `skipRestOfLine`: cleanup first, then
+report.
 
-The digit accumulation shows the difference between this chapter and
-the fault machinery. Chapter 3 established that `u16` arithmetic wraps:
-`65530 * 10` is a defined result, not a fault. If we simply multiplied
-and added, an over-long number would wrap silently and `readNumber`
-would return nonsense. The guard turns overflow into a declared error:
-any accumulated value above 6553 must overflow when another digit
-arrives, and at exactly 6553 a final digit above `'5'` pushes past
-65535. So `65535` is accepted and `65536` fails with `tooLarge` — the
-boundary is exact, and it is our code, not a runtime check, that draws
-it.
+Chapter 3 established that `u16` arithmetic wraps: `65530 * 10` is a
+defined result, not a fault, so an unguarded accumulation would wrap
+silently and `readNumber` would return nonsense. The guard turns
+overflow into a declared error: any accumulated value above 6553 must
+overflow when another digit arrives, and at exactly 6553 a final digit
+above `'5'` pushes past 65535. `65535` is accepted and `65536` fails
+with `tooLarge`.
 
 ## Handling failure with `on error`
 
@@ -191,30 +171,22 @@ end
 
 On success, the block is skipped entirely. On failure, the assignment
 does not happen — `speed` keeps its old value — and the block runs with
-`code` naming the error, ready to use. The name is readable only inside
+`code` naming the error. The name is readable only inside
 the block, and the block's contents are ordinary statements: here a
 `select`, a message and a `continue` back around the loop for another
 try.
 
 Because `code` is an enum, Chapter 5's exhaustiveness rule applies:
-cover every member or say `else`. Add a third member to `EntryError`
-next month and every handler that selects over it is flagged until the
-new case is covered.
+cover every member or say `else`. Adding another member to `EntryError`
+flags this handler until its `select` adds a case or an `else`.
 
-`on error` descends from BASIC's `ON ERROR GOTO`: where that form sent the
-whole program to one line number, this block belongs to one statement,
-names its error as a typed value, and ends like any other block.
-
-One rule already has teeth here, and it is the important one. A failable
-call must be answered — in this chapter by an `on error` block, in the
-next by two further forms — and a bare call is rejected:
+A failable
+call must be answered — in this chapter by an `on error` block, in
+Chapter 15 by two further forms — and a bare call is rejected:
 
 ```lanternfly
 readNumber()        // rejected: failure ignored
 ```
-
-In many languages a failure code is a return value like any other, and
-ignoring one is easy and common. Here there is no way to look away.
 
 ## Complete program
 
@@ -229,21 +201,11 @@ prompt goes through the `on error` block.
 
 ## Exercises
 
-1. The person types `99999` and Enter. Which error does `readNumber`
-   raise, and at which digit?
-2. In `main`, why does `speed` keep its old value when `readNumber`
+1. In `main`, why does `speed` keep its old value when `readNumber`
    fails?
-3. A member `emptyLine` is added to `EntryError`. What happens to `main`
-   at the next compile, and why might the addition itself be a design
-   mistake?
 
-Answers: `tooLarge` at the fifth digit — the accumulated 9999 exceeds
-6553 before the final 9 is used; on failure the assignment bound to the
-`on error` block does not happen, so the destination stays unwritten;
-the handler's `select` no longer covers every member, so it is flagged
-until `emptyLine` has a case — and the chapter argued an empty line
-means *no entry yet*, an outcome the calling code should not be forced
-to act on.
+Answer: the assignment bound to the `on error` block does not happen on
+failure, so the destination remains unchanged.
 
 ## Chapter summary
 
@@ -252,15 +214,9 @@ to act on.
   design work, because not every surprise is an error.
 - `fails` in a signature declares the error set; `fail member` ends the
   call with that error, as `return` ends it with success.
-- A failing routine first restores whatever its own partial work
-  disturbed — here, by consuming the rest of a spoiled input line so a
-  retry starts clean.
+- `readNumber` drains an invalid line before failing, so a retry begins
+  at the next line.
 - An `on error` block binds to the failable statement before it, leaves
   the destination unwritten on failure, and its `select` over the code
   is checked for exhaustiveness.
 - Ignoring a failable result is a compile error.
-
-Detection and handling sat side by side in this chapter: `main` called
-`readNumber` and answered for it on the spot. Real programs put layers
-between the two — and the next chapter is about what failure does on the
-way through.

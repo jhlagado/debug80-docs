@@ -40,9 +40,9 @@ index domain, and a lone count is the shorthand for the commonest one:
 reserves all eight bytes together; the array carries no hidden runtime
 length and needs no allocator.
 
-A count-declared array is therefore zero-based, and an index into one is
-best understood as a distance from the beginning: entry zero is zero
-elements from the base, entry seven is seven elements away. A dimension can
+A count-declared array is therefore zero-based, and an index is a
+distance from the beginning: entry zero is zero elements from the base,
+entry seven is seven elements away. A dimension can
 also declare its bounds outright, or take them from a Chapter 5 type:
 
 ```lanternfly
@@ -73,8 +73,8 @@ byte.
 samples[index] = u8(index * 2)
 ```
 
-The backend combines the array's base address, the index and the element size
-to find the selected entry. A constant index uses the same rule:
+The emitted code combines the array's base address, the index and the
+element size to find the selected entry. A constant index uses the same rule:
 
 ```lanternfly
 samples[3] = 10
@@ -96,7 +96,7 @@ safe, and resizing the declaration updates the loop automatically.
 When the work needs each element rather than its position, `for each`
 traverses the array in _row-major order_ — completing the rightmost
 dimension before advancing the one to its left, which for a
-one-dimensional array simply means first to last:
+one-dimensional array means first to last:
 
 ```lanternfly
 var sampleTotal as u16 = 0
@@ -114,8 +114,8 @@ The name `sample` denotes the current element itself. Reading it reads the
 array entry, and assigning to it would write that entry. The collection path
 is evaluated once before traversal begins, and `exit` and `continue` behave
 as in any loop. A `for each` over a two-dimensional array visits every value
-of every row without spelling either index; the indexed loop remains the form
-to reach for when the position takes part in the work, as it does in
+of every row without spelling either index; the indexed loop applies
+when the position takes part in the work, as it does in
 `prepareSamples`.
 
 ## Element stride
@@ -161,8 +161,8 @@ element number is:
 day * 4 + reading
 ```
 
-The diagram uses a three-by-four byte array so every cell is easy to see. Row
-1, column 2 has element number `1 * 4 + 2`, or 6.
+In the three-by-four byte array below, row 1, column 2 has element
+number `1 * 4 + 2`, or 6.
 
 ![Rows occupy consecutive runs of four entries; row 1, column 2 is element 6.](../../assets/images/lanternfly-book/book1/row-major-array.svg)
 
@@ -170,10 +170,9 @@ The diagram uses a three-by-four byte array so every cell is easy to see. Row
 `count(weeklyReadings, 1)` produces 4. A multidimensional array requires the
 dimension number because each direction may have a different extent.
 
-Loop order follows layout. A day loop on the outside and a reading loop on
-the inside touch adjacent elements. That access pattern is usually cheaper on a
-small processor because the generated code can advance an address through the
-row.
+Loop order follows layout: a day loop on the outside and a reading loop
+on the inside touch adjacent elements, so the generated code can advance
+an address through the row.
 
 ## Array initializers
 
@@ -196,8 +195,8 @@ const calibration as i8[2, 4] = [
 ]
 ```
 
-The compiler rejects missing entries, extra entries and rows with the wrong
-shape. A target profile may place constant data in read-only memory.
+The compiler rejects missing entries, extra entries and rows with the
+wrong shape.
 
 ## Clearing and filling
 
@@ -211,13 +210,9 @@ fill(weeklyReadings, 0)
 `clear` writes the all-zero representation to a writable array whose
 elements accept it — integer and Boolean elements do. `fill`
 evaluates one compatible scalar value and writes it to every array entry in
-row-major order. An array is the book's first _aggregate_ — a stored value
-built from smaller values — and later chapters extend `clear` to the
-aggregates they introduce: strings, then records.
-
-The backend may lower either operation to an inline loop, target instruction
-sequence or runtime helper. The source names the operation; generated
-artifacts show the chosen implementation.
+row-major order. An array is the book's first _aggregate_ — a stored
+value built from smaller values — and `clear` also applies to strings
+(Chapter 8) and records (Chapter 9).
 
 ## Complete program
 
@@ -231,31 +226,17 @@ gives element 6 and byte offset 12 because each entry occupies two bytes.
 
 1. For `var readings as i16[1 to 31]`, state `count(readings)` and
    `size(readings)`.
-2. In `u8[12, 20]`, which element number is `[2, 3]`, and at what byte
-   offset does it sit?
-3. Why is `samples[8]` a compile error for `var samples as u8[8]`?
 
-Answers: 31 elements and 62 bytes; element `2 * 20 + 3`, which is 43, at
-byte offset 43 because each element is one byte; valid indices run 0
-through 7, and a constant index outside the domain is rejected during
-compilation.
+Answer: 31 elements and 62 bytes.
 
 ## Chapter summary
 
 - A fixed array stores a compile-time number of identical elements
-  contiguously.
+  contiguously; element address is the base plus index times stride.
 - Every dimension declares an ordinal index domain; a lone count means
-  `0 until count`, and explicit or enum domains choose other bounds.
+  `0 until count`, and explicit or enum domains state other bounds.
 - Indices are checked against their dimension's domain, and an index whose
   type already fits the domain needs no runtime check.
-- Element address is the array base plus index times stride.
-- Multidimensional arrays use row-major layout with the rightmost dimension
-  contiguous.
-- `for each` visits every element in row-major order when positions are not
-  needed.
-- `clear` and `fill` express repeated aggregate writes while leaving the
-  backend free to choose an implementation.
-
-An array of bytes can hold any fixed byte sequence — including text,
-whose one special requirement the next chapter takes up: a sequence of
-character bytes must also record where it ends.
+- Multidimensional arrays use row-major layout, and `for each` visits
+  every element in that order.
+- `clear` and `fill` express whole-array writes.

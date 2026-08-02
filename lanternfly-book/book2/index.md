@@ -15,11 +15,9 @@ layout, code size and predictable execution still matter. Its semantics are
 deliberately close to the machine, while its structured BASIC syntax keeps
 the source familiar and readable.
 
-This manual documents the Lanternfly 0.6 implementation baseline. One part
-is newer than the rest: the failable routines and `defer` of
-[chapter 14](14-error-handling.md) are marked Provisional, and their
-details may change before the first compiler. The manual is a reference
-rather than a course: declarations, types, storage, expressions,
+This manual documents the Lanternfly 0.6 implementation baseline. The
+manual is a reference rather than a course:
+declarations, types, storage, expressions,
 control flow, routines, modules, native boundaries, grammar and diagnostics
 each have a chapter of their own. Read it from the beginning for a complete
 view of the language, or enter through the chapter list when you need one
@@ -28,11 +26,6 @@ rule.
 Readers learn the language through the programs of
 [Lanternfly Book 1](../book1/); this book states the rules that every
 compiler, backend and host integration must preserve.
-
-> [!NOTE]
-> No compiler exists yet. This manual states the intended language for the
-> first compiler; the language is still under development, and chapter 14
-> in particular remains Provisional.
 
 **Must** marks a semantic requirement, **should** marks a strong toolchain
 recommendation, **provisional** marks a rule awaiting parser or corpus evidence
@@ -53,8 +46,7 @@ and **deferred** marks a facility outside the first implementation.
 11. [Targets, External Routines and Assembly](11-targets-and-native-code.md)
 12. [Grammar and Word Inventory](12-grammar-and-words.md)
 13. [Diagnostics and Conformance](13-diagnostics-and-conformance.md)
-14. [Failable Routines and Error Handling](14-error-handling.md) —
-    provisional
+14. [Failable Routines and Error Handling](14-error-handling.md)
 
 ## Normative sources
 

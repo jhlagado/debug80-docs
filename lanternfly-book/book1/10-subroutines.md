@@ -71,8 +71,7 @@ total = atMost(total + nextAmount, 1000)
 ```
 
 Every reachable path in a result-bearing routine must return a compatible
-scalar value. (The scalar kinds — ordinals, Booleans, opaque addresses —
-are catalogued in the language reference.) Strings, records and arrays
+scalar value. Strings, records and arrays
 remain in caller-owned storage and are reached through aggregate
 parameters and aliases.
 
@@ -85,7 +84,7 @@ expression value is required.
 Locals hold working values that belong to one invocation:
 
 ```lanternfly
-sub absoluteDifference(left as i16, right as i16) as u16
+sub absoluteDifference(left as u8, right as u8) as u16
     var difference as i16 = left - right
 
     return abs(difference)
@@ -98,13 +97,11 @@ routine cannot name `difference`.
 
 An owned scalar local with no initializer starts with zero bits. A string,
 record or array is aggregate storage, so a routine reaches one through a
-parameter, or through the alias form the next chapter introduces, rather
+parameter, or through the alias form of Chapter 11, rather
 than owning a local copy.
 
-The source-level guarantee comes first: overlapping invocations receive
-independent scalar parameters and locals. Where a backend keeps them —
-registers, stack slots or proven-safe static scratch — never changes that
-rule.
+Overlapping invocations receive independent scalar parameters and
+locals, wherever the compiler keeps them.
 
 ## Aggregate parameters
 
@@ -136,7 +133,7 @@ for byte: `line as string[40]` accepts a `string[40]` and nothing else.
 That is the ordinary rule for every routine we can write; Chapter 13's
 standard text services hold the language's two narrow exceptions. Routines
 shared between modules also state where the aggregate lives, and Chapter
-14 introduces that spelling with the interfaces that need it.
+16 introduces that spelling with the interfaces that need it.
 
 ## Early return
 
@@ -167,10 +164,11 @@ the routine's own name becomes visible at its header, so a direct
 self-call is legal source. A call to a routine that has not yet appeared
 is a declaration-before-use error.
 
-Two routines that call each other would deadlock that rule: each would
-have to come first. `forward sub` breaks the deadlock. It states a
-routine's complete header ahead of its body, and from that line the
-routine can be called like any other:
+What remains is the advanced case of declaration order. Two routines
+that call each other cannot both come first under that rule;
+`forward sub` resolves the order: it states a routine's complete header
+ahead of its body, and from that line the routine can be called like any
+other:
 
 ```lanternfly
 forward sub updateEnemies()
@@ -190,19 +188,17 @@ end
 
 The rule is strict. The completing `sub` must appear later in the same
 module and repeat the forward header exactly, and a forward declaration
-still uncompleted when the module ends is a compile error. The early calls
-cost nothing at runtime. On the direct-emission path the compiler leaves a
-placeholder address and patches it in when the body arrives, the same
-mechanism that resolves a forward jump; on the book's AZM path it emits
-the call by name and the assembler resolves the address.
+still uncompleted when the module ends is a compile error. A forward
+declaration changes declaration order only: it adds no runtime work, and
+the call behaves like any other call.
 
 Whether recursion is actually available — a self-call or a mutual cycle —
 depends on the selected target. The reason is storage: every active
 invocation needs an independent parameter-and-local frame, so a
 recursion-capable profile defines frame layout and stack bounds, while a
 profile based on fixed scratch storage rejects every source call-graph
-cycle. The complete frame and capability rules live in
-the language reference.
+cycle. The language reference states the complete frame and capability
+rules.
 
 ## Complete program
 
@@ -212,23 +208,16 @@ parameter and a forward-declared pair. Two calls to `addToTotal` produce
 35, and `atMost(total, 30)` then returns 30. `updatePlayer` and
 `updateEnemies` may call each other because the forward declaration
 supplies the missing signature; with both clash flags false, the pair
-returns immediately.
+returns immediately. The mutual pair makes the module's call graph
+cyclic, so this program requires a recursion-capable target profile.
 
 ## Exercises
 
-1. Two routines call each other. Why does one of them need
-   `forward sub`, and what must its completing body repeat?
-2. A routine assigns through a record parameter. Does the caller's
+1. A routine assigns through a record parameter. Does the caller's
    record change, and why?
-3. On a target profile without recursion, what happens to the mutual
-   pair at compile time?
 
-Answers: declaration order forbids calling a routine whose signature has
-not appeared, so the earlier caller needs the forward signature, and the
-completing `sub` repeats the header exactly; yes — an aggregate
-parameter is a temporary alias for the caller's storage, not a copy;
-the source call-graph cycle is rejected with a diagnostic naming the
-cycle.
+Answer: yes. An aggregate parameter aliases the caller's storage; it is
+not a copy.
 
 ## Chapter summary
 
@@ -238,11 +227,6 @@ cycle.
 - Scalar locals hold private working values for one invocation.
 - Record, array and string parameters alias caller-owned storage.
 - A routine calls imported routines, earlier routines, itself or a
-  forward-declared routine whose completing body arrives later in the same
+  forward-declared routine whose completing body comes later in the same
   module; recursion of any shape depends on whether the selected target
   profile can provide independent active frames.
-
-Routines now receive values, return results and work on caller-owned
-aggregates through temporary names. The next chapter widens that last idea
-into Lanternfly's answer to a classic question: how does a program
-record _which_ piece of storage an operation applies to?

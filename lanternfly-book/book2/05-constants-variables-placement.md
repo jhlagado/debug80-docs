@@ -129,13 +129,9 @@ assembly, startup code, helpers, adapters and scratch. Each planned range
 records its address, extent, alignment, region and owner. A component that
 cannot fit produces `E-PLACE-001`.
 
-An AZM backend expresses the completed plan with `.org` directives at the
-start of each contiguous segment. The first `.org` is therefore an output of
-the memory plan, not the source of that policy. After assembly, the compiler
-compares AZM's initialized bytes, reserved addresses and symbols with the
-plan. Missing, displaced, extra or overlapping output produces
-`E-PLACE-002`. Other backends must return equivalent occupancy and symbol
-information for the same check.
+After emission, the compiler compares the program's initialized bytes,
+reserved addresses and symbols with the plan. Missing, displaced, extra
+or overlapping output produces `E-PLACE-002`.
 
 A hosted body has no independent origin. It reports its code, data, helper and
 scratch requirements to its host, which places the combined program and

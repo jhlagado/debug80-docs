@@ -1,6 +1,6 @@
 // number-entry.lafy — Book 1, Chapter 15 companion listing.
 // The finished number-entry module: or fail propagation, defer and a
-// main that exercises both. Error handling remains provisional.
+// main that exercises both.
 //
 // Line discipline as in Chapter 14: CR or LF ends a line, blank lines
 // are skipped, and a failing routine consumes its spoiled line first.

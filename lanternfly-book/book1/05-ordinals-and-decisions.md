@@ -7,12 +7,9 @@ nav_order: 5
 
 # Named Ordinals and Decisions
 
-A batch-processing program is always in exactly one of three states: still
-working, complete, or stopped by an error. The states are not numbers — no
-arithmetic on them makes sense — and they are not Booleans, because there
-are three. They are a fixed set of named alternatives, and Lanternfly lets
-us declare that set as a type of its own before we write the rules that
-move between them:
+A batch-processing program is always in exactly one of three states:
+working, complete or failed. Lanternfly declares such a fixed set of
+named alternatives as a type of its own:
 
 ```lanternfly
 enum Status as u8
@@ -56,16 +53,16 @@ from zero in declaration order — each member's number is its _ordinal_,
 the term this book uses from here on — and their names are written
 without qualification. An
 enumeration supports assignment and all six comparisons, and deliberately
-nothing arithmetic: adding two statuses has no meaning, and the type says
-so. Converting an integer into an enumeration is checked: an invalid
+nothing arithmetic: adding two statuses has no meaning.
+Converting an integer into an enumeration is checked: an invalid
 constant is a compile error, and an invalid runtime value invokes the
 range fault before any store, so a `Status` variable never holds an
 invalid state.
 
-That guarantee is the working difference from Chapter 2's integer
-constants. Three constants named `statusWorking`, `statusComplete` and
-`statusFailed` would give the states names, but any `u8` from 0 through 255
-could still enter the variable. The enumeration closes the set.
+Three constants named `statusWorking`, `statusComplete` and
+`statusFailed` would also give the states names, but any `u8` from 0
+through 255 could still enter the variable. The enumeration closes the
+set.
 
 ## Ranges
 
@@ -80,8 +77,8 @@ A range value widens silently to its host, while any value entering the
 range, by assignment or conversion, is checked against its domain. The
 range form itself is grammar rather than a value (`0 until 32` cannot be
 stored or passed), while a variable of a range type holds an ordinary host
-value, checked at every boundary it crosses. Chapter 7 puts both ordinal
-kinds to work as array index domains, where a suitably typed index makes a
+value, checked at every boundary it crosses. Chapter 7 uses both ordinal
+kinds as array index domains, where a suitably typed index makes a
 bounds check unnecessary because the type already proves it.
 
 ## A single branch
@@ -138,15 +135,12 @@ An `else if` chain ranks several rules, as `updateStatus` does. With
 the first branch sets `failed` and the second comparison is skipped.
 Reversing the first two branches would classify the same state as complete.
 
-Branch order states the policy we chose. A higher-priority condition
-belongs first. When two conditions have equal priority, their frequency and
-cost can guide the order, because every comparison reached costs
-instructions.
+Branch order states policy: the higher-priority condition comes first.
 
 ## Selecting among named values
 
-Sometimes every branch compares one value with the members of a set.
-`select` gives that pattern its own structure:
+Sometimes every branch compares one value with the members of a set,
+and `select` states the comparison once:
 
 ```lanternfly
 enum ReportMode as u8
@@ -178,7 +172,7 @@ end
 compile-time ordinal values. A matching body runs, then execution continues
 after `end`; Lanternfly cases never fall through. Because a `ReportMode`
 variable can only hold a valid member and every member has a case, this
-`select` is complete without an `else` — no value can escape it.
+`select` is complete without an `else`.
 
 An ordinal selector that is not an enumeration can hold a value with no
 matching case, so its `select` needs `else` to handle the unmatched
@@ -208,9 +202,6 @@ selector leaves unmatched values changing nothing.
 is the batch complete? — while `select` fits branches that compare one
 ordinal expression with named constant values.
 
-An `else if` chain announces an ordered policy; a `select` announces a
-classification by one value.
-
 ## Complete program
 
 The [chapter listing](/lanternfly-book/book1/code/05-decisions.txt)
@@ -222,17 +213,11 @@ items, it produces `complete`.
 
 ## Exercises
 
-1. In `updateStatus`, swap the first two branches. With `errorCount = 1`
-   and `itemsRemaining = 0`, what status results, and why?
-2. Three `u8` constants could replace the `Status` enumeration. What
+1. Three `u8` constants could replace the `Status` enumeration. What
    checked guarantee would be lost?
-3. `channelCode` is a `u8` and its `select` has no `else`. What happens
-   to a value with no matching case?
 
-Answers: `complete` — the first true condition selects its branch, so
-order states policy; any `u8` from 0 through 255 could enter the
-variable, while an enumeration rejects invalid values at every entry;
-nothing — execution continues after `end` with no branch run.
+Answer: any `u8` from 0 through 255 could enter the variable, while an
+enumeration rejects values outside its declared set.
 
 ## Chapter summary
 
@@ -247,6 +232,3 @@ nothing — execution continues after `end` with no branch run.
   without `else`.
 - Lanternfly cases do not fall through, and `else` handles unmatched values
   of an open selector.
-
-A decision runs its branch once. In the next chapter we repeat work, and
-meet the rules that end the repetition.
