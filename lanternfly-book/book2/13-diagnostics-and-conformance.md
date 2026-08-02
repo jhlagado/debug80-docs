@@ -9,7 +9,7 @@ nav_order: 13
 
 Conformance makes separate Lanternfly implementations comparable. The
 conformance contract defines stable diagnostic IDs, required runtime
-faults, semantic fixtures and generated artifacts. Diagnostic wording may improve over time;
+faults and semantic fixtures. Diagnostic wording may improve over time;
 the ID is the stable identity of the rule.
 
 ## Conformance boundaries
@@ -94,12 +94,12 @@ implementation progresses.
 | `E-CAP-001`      | A capability-gated word or facility is mentioned without the module's own enabling standard capability import        |
 | `E-ASM-001`      | Assembly block is unclosed or appears in an invalid position                                                         |
 | `E-ASM-002`      | Target lacks a compatible assembly-fragment pipeline                                                                 |
-| `E-FAIL-001`     | Failable invocation unconsumed, or nested inside a larger expression (Provisional)                                   |
-| `E-FAIL-002`     | `fail` or `or fail` in a routine without a `fails` clause, or propagation between different error sets (Provisional) |
-| `E-FAIL-003`     | Invalid `fails` operand, `fail` operand outside the declared set, or invalid failure default (Provisional)           |
-| `E-FAIL-004`     | Invalid `on error` binding, colliding binding name, or a declaration-bound block that can complete normally (Provisional) |
-| `E-FAIL-005`     | `fails` on an external routine, or a failure form inside a hosted body (Provisional)                                 |
-| `E-DEFER-001`    | `defer` outside routine top level or in a hosted body, or a deferred statement that is not infallible (Provisional)  |
+| `E-FAIL-001`     | Failable invocation unconsumed, or nested inside a larger expression                                   |
+| `E-FAIL-002`     | `fail` or `or fail` in a routine without a `fails` clause, or propagation between different error sets |
+| `E-FAIL-003`     | Invalid `fails` operand, `fail` operand outside the declared set, or invalid failure default           |
+| `E-FAIL-004`     | Invalid `on error` binding, colliding binding name, or a declaration-bound block that can complete normally |
+| `E-FAIL-005`     | `fails` on an external routine, or a failure form inside a hosted body                                 |
+| `E-DEFER-001`    | `defer` outside routine top level or in a hosted body, or a deferred statement that is not infallible  |
 | `E-PLACE-001`    | Source or build placement cannot fit a compatible target memory region                                               |
 | `E-PLACE-002`    | Emitted bytes, reserved addresses or symbols disagree with the validated placement plan                              |
 | `E-MAP-001`      | Generated-source mapping cannot be composed because an anchor, fragment or provenance span is invalid                |
@@ -167,41 +167,12 @@ their final storage, ordered service traces and fault traces:
     modules, when claimed by the target profile;
 13. Hosted return;
 14. error handling — a failable parser, propagation, a default, `on error`
-    handling and `defer` cleanup order (Provisional).
+    handling and `defer` cleanup order.
 
 The conformance contract also requires focused vectors for integer and ordinal
 boundaries, conversion, constant folding, short and long string forms, exact
 layouts, bounds and range checks, aliases, loops, evaluation order, imports,
 initialization, native boundaries and hosted execution.
-
-## Required artifacts
-
-A source-generating backend emits:
-
-- canonical generated substrate source;
-- original-to-generated provenance;
-- generated-to-machine mapping when available;
-- typed symbols and exact layouts;
-- string literal payloads, string layouts, placement classes and source-byte
-  mappings;
-- selected helper and import list;
-- external bindings and generated ABI adapters;
-- the validated placement plan and final occupancy and symbol comparison;
-- read, write, call, fault and device-I/O summary;
-- startup-initialization effects;
-- routine-frame and static-scratch allocation;
-- module-assembly emission and provenance ranges;
-- statement-assembly ranges and conservative runtime effects;
-- anchored generated fragments and composed Lanternfly-to-machine mappings;
-- target assumptions and an optional cost report.
-
-A host integration also reports hosted early-return paths, local-frame or
-static-scratch strategy, and any non-overlap assumption used to justify static
-scratch.
-
-One source node may map to several generated or machine ranges. Backend and
-assembler diagnostics retain generated context while mapping back to the
-responsible Lanternfly source location.
 
 ## Deferred features
 
@@ -219,7 +190,7 @@ unstated semantics:
   compiler-defined text carriers used by standard `writeText` and `readLine`;
 - bit fields and bank-spanning arrays;
 - indirect calls, procedure values and closures;
-- native callbacks into generated Lanternfly code;
+- native callbacks into compiled Lanternfly code;
 - unrestricted labels and `goto`;
 - exceptions;
 - generics and operator overloading;
@@ -229,7 +200,7 @@ unstated semantics:
 - unchecked indexing as conforming execution.
 
 Recursion is accepted only by a profile that declares and tests that
-capability. The Provisional failable routines of
+capability. The failable routines of
 [chapter 14](14-error-handling.md) cover expected failures; they do not
 make runtime faults interceptable.
 
@@ -249,5 +220,4 @@ The open design queue includes:
   rounding, conversions, comparisons and literal syntax.
 
 Until a later edition changes them, the rules in this manual are the
-implementation baseline, with [chapter 14](14-error-handling.md)'s
-error handling marked provisional.
+implementation baseline.

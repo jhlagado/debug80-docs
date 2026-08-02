@@ -21,5 +21,7 @@ export sub clearSharedBlock(near block as u8[8])
 end
 
 // An opaque address from the platform: storable and passable, never
-// dereferenced by Lanternfly source.
+// dereferenced by Lanternfly source. The LF-1 profile declares all-zero
+// far address storage valid, meaning "no buffer supplied", so this
+// uninitialized declaration is legal and begins with that value.
 export var deviceBuffer as far address

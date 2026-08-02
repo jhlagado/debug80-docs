@@ -8,11 +8,7 @@ nav_order: 14
 # Failable Routines and Error Handling
 
 > [!NOTE]
-> This chapter documents error handling, the newest part of the language.
-> Its rules remain provisional until their planned evidence programs and
-> conformance fixtures exist, and details may change before the first
-> compiler; the rest of this manual is the settled first edition.
-> Readers can meet the same material as a course in Book One,
+> Readers can meet this material as a course in Book One,
 > [chapters 14](../book1/14-expecting-failure.md)
 > and [15](../book1/15-propagation-and-cleanup.md).
 

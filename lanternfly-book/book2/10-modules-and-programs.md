@@ -152,10 +152,10 @@ The compiler:
 7. emits one target program and validates its final memory map and debug
    artifacts.
 
-The rule fixes which programs are accepted while leaving compiler architecture
-open. A desktop compiler may retain syntax trees and typed intermediate forms.
-A small self-hosted compiler may process a source unit once and leave branch
-and address fixups to its backend. Both must accept the same
+The rule fixes which programs are accepted while leaving compiler
+architecture open. A compiler may retain syntax trees and typed
+intermediate forms, or process each source unit once and resolve branch
+and address fixups by backpatching. Both must accept the same
 declaration-ordered programs.
 
 A program is composed during whole-program compilation; no relocating
@@ -200,7 +200,7 @@ The entry must:
 
 - have no parameters;
 - have no result;
-- carry no `fails` clause (Provisional; [chapter 14](14-error-handling.md));
+- carry no `fails` clause ([chapter 14](14-error-handling.md));
 - be source-defined rather than external;
 - be unique in the executable manifest.
 

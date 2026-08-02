@@ -28,7 +28,7 @@ end
 ```
 
 `Date` occupies four bytes. We can store and copy a date as one aggregate
-while each field retains its own type, and Chapter 10 shows how a routine
+while each field retains its own type, and Chapter 10 explains how a routine
 receives a temporary name for a record the caller already owns.
 
 ## Declaring a record
@@ -41,9 +41,8 @@ record Date
 end
 ```
 
-`record` introduces a user-defined type. Type names use Pascal case, while
-variables, fields and routines use lower camel case. `Date` names a type;
-`reportDate` names one stored value of that type.
+`record` introduces a user-defined type: `Date` names the type, and
+`reportDate` names one stored value of it.
 
 A record declaration defines layout but allocates no instance storage.
 `var reportDate as Date` reserves the four bytes. Another module could declare
@@ -77,8 +76,8 @@ const dateBytes as u8 = size(type Date)
 const monthOffset as u8 = offset(Date.month)
 ```
 
-`dateBytes` is 4 and `monthOffset` is 2. The same values hold for every
-backend. Exact layout allows a record to describe a firmware data block,
+`dateBytes` is 4 and `monthOffset` is 2. The same values hold on every
+target. Exact layout allows a record to describe a firmware data block,
 packet header or binary file structure when its field types match the external
 format.
 
@@ -141,11 +140,11 @@ declared type before reducing the path to address arithmetic.
 
 A record cannot contain itself by value, either directly or through another
 record. Such a cycle would have no finite size, and the declaration order
-from Chapter 1 makes it unwritable: a field's type must be completely
+from Chapter 1 already rejects it: a field's type must be completely
 declared before the field names it, and a record being declared is not yet
-complete. When a program needs links rather than inline containment, it
-stores the index of the destination entry in its fixed pool; Chapter 11
-develops that identity model.
+complete. A program that needs links rather than inline containment
+stores the index of the destination entry in its fixed pool
+(Chapter 11).
 
 A string field behaves the same way, because a string is fixed-size data
 like everything else in a record:
@@ -160,8 +159,8 @@ var station as Station
 ```
 
 `name` occupies its fourteen bytes — Chapter 8's length, payload capacity
-and terminator — at offset 0, `id` sits at offset 14, and `Station`
-occupies fifteen bytes on every backend. The field supports the full string
+and terminator — at offset 0. `id` sits at offset 14, and `Station`
+occupies fifteen bytes on every target. The field supports the full string
 interface through its path: `station.name = "NORTH"` is a checked copy, and
 `append(station.name, '2')` grows the stored text in place.
 
@@ -178,8 +177,7 @@ const releaseDate as Date = Date(
 ```
 
 Every field must appear exactly once. The initializer may list fields in any
-order, but the declaration still controls storage order. Naming the fields
-also makes each value's role clear at the point of initialization.
+order, but the declaration still controls storage order.
 
 ## Copying aggregates
 
@@ -200,10 +198,6 @@ representation — integers, Booleans and strings all do — so
 `clear(dailyLog)` resets the date, the four entries and `used` in one
 statement.
 
-The backend may inline a small copy, generate a loop or call a helper — a
-four-byte `Reading` and a 256-byte table have the same source operation but
-different machine costs.
-
 Owned local variables remain scalar in the first edition. A subroutine that
 needs a short local name for an existing record, array or string uses the
 alias form introduced in Chapter 11.
@@ -220,14 +214,8 @@ because the `string[12]` field occupies fourteen bytes.
 
 1. State `size(type Reading)` and the byte offset of
    `readings[2].quality` from the array base.
-2. Why can a record not contain a field of its own type by value?
-3. What does `clear(dailyLog)` write, field by field?
 
-Answers: four bytes, and `2 * 4 + 3` puts the quality at byte 11; the
-record would need its own complete size before that size existed, and
-declaration order makes the field's type incomplete at the point of
-use; the all-zero representation — a zero date, four zero entries and a
-zero `used` count — because every leaf accepts zero.
+Answer: four bytes; `2 * 4 + 3` puts the `quality` field at byte 11.
 
 ## Chapter summary
 
@@ -238,7 +226,3 @@ zero `used` count — because every leaf accepts zero.
 - Arrays of records use the record size as their stride.
 - Nested records and arrays still reduce to one exact byte layout.
 - Aggregate assignment copies the complete record or array value.
-
-A record gives structured data one name and one exact layout. In the next
-chapter, routines finally receive values and return results — including
-a temporary name for a record like these.

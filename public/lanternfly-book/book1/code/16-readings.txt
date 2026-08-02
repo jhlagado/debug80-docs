@@ -1,6 +1,6 @@
 // readings.lafy — an ordinary module exporting the measurement model.
-export var previousReading as i16 = 250
-export var currentReading as i16 = 20
+export var previousReading as u8 = 250
+export var currentReading as u8 = 20
 export var change as u16 = 0
 
 export sub measureChange()

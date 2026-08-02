@@ -9,13 +9,15 @@ nav_order: 2
 
 Chapter 1 used `u16` for three non-negative values. That choice gave each
 variable a range of 0 through 65,535, though the example never needed most of
-it. Other facts need different ranges. A temperature may be negative, a small
+it. Other values need different ranges. A temperature may be negative, a small
 counter may fit in one byte and an elapsed-time counter may need to run for
 days.
 
 Lanternfly records those choices in each declaration:
 
 ```lanternfly
+import "standard/wide32.lafy"
+
 var unitsInStock as u16 = 1200
 var roomTemperature as i16 = -4
 var elapsedSeconds as u32 = 0
@@ -51,12 +53,9 @@ The first letter gives the interpretation: `u` is unsigned and `i` is signed.
 The number gives the exact width. Every target must preserve these ranges,
 even when its processor handles one width more easily than another.
 
-The two 32-bit rows carry one extra obligation. `u32` and `i32` are part of
-the language but not of its always-on kernel: a module that uses them
-states `import "standard/wide32.lafy"` at its top; chapter 12 explains
-capability imports. The eight- and sixteen-bit types need no import; they
-are the kernel integer types. The `elapsedSeconds` declaration
-above therefore lives in a module that begins with that import.
+The 32-bit types require `import "standard/wide32.lafy"` at the
+module's top — the import that opens this chapter's example. The other
+four types need no import; Chapter 12 explains capability imports.
 
 Signed values use two's-complement representation. In an `i8`, the top bit has
 the value -128 and the remaining bits are worth 64 through 1. The all-ones
@@ -66,7 +65,7 @@ type determines their meaning.
 An integer literal is an exact value, written in decimal (`1200`), in
 hexadecimal with `$` (`$7e`) or in binary with `%` (`%00001100`). The
 declaration supplies its type, and a literal that cannot fit the declared
-type is a compile error. Chapter 3 completes the picture for literals inside
+type is a compile error. Chapter 3 gives the rules for literals inside
 calculations.
 
 ## Choosing a type
@@ -81,26 +80,20 @@ A month number fits in `u8`. A signed temperature from -500 through 500 needs
 Width affects cost. One hundred `u8` values occupy 100 bytes, while one hundred
 `u32` values occupy 400. The Z80 performs eight-bit arithmetic directly and
 builds many wider operations from several instructions or a helper routine.
-The wider type is still correct when the range requires it; the point is to
-choose it with the cost visible.
+The wider type is still correct when the range requires it; choose it
+with the cost visible.
 
 ## Names
 
-Multi-word names need a spelling convention, and this book uses the two
-common ones. In _camelCase_, the name begins with a lowercase word and each
-later word begins with a capital: `playerScore`, `maximumSpeed`,
-`unitsInStock`. In _PascalCase_, the first word is capitalized as well:
-`PlayerState`, `ScreenBuffer`.
-
-Lanternfly's convention, used throughout this book: type names take
-PascalCase, while variables, constants and routines take camelCase. Name
-resolution is case-insensitive, so two declarations whose names differ only
-in case would collide; the conventions keep every kind of name visually
+Type names take _PascalCase_ (`PlayerState`); variables, constants and
+routines take _camelCase_ (`playerScore`). Name resolution is
+case-insensitive, so two declarations whose names differ only in case
+would collide; the conventions keep every kind of name visually
 distinct instead.
 
 ## Constants
 
-A fixed value gains meaning when you name it:
+`const` gives a fixed value a name:
 
 ```lanternfly
 const warehouseCapacity as u16 = 5000
@@ -109,7 +102,7 @@ const dispatchBatch as u16 = 10
 var unitsInStock as u16 = 1200
 ```
 
-`const` declares a compile-time value. The compiler can substitute its value
+A constant is a compile-time value. The compiler can substitute it
 where needed, so an ordinary scalar constant usually occupies no storage.
 
 The declared type checks the boundary. `const maximumByte as u8 = 255` is
@@ -117,7 +110,7 @@ valid; a value of 256 requires another bit and produces a compile error.
 
 ## Boolean values
 
-Some values are facts rather than quantities:
+A Boolean records a yes-or-no condition rather than a quantity:
 
 ```lanternfly
 var orderReady as boolean = false
@@ -130,9 +123,7 @@ end
 
 `boolean` has the two values `true` and `false`. It occupies one byte, using
 zero for `false` and one for `true`. Integer values do not become Booleans
-automatically — a count and a yes-or-no answer stay distinct types. In the
-next chapter, comparisons produce Boolean values from integer ones; in
-Chapter 5, those values select between paths.
+automatically — a count and a yes-or-no answer stay distinct types.
 
 ## Character values
 
@@ -150,11 +141,9 @@ that the byte's role is a character. The escapes cover the unprintable cases:
 `\n`, `\r` and `\t` for line and tab control, `\xHH` for an exact hexadecimal
 byte, and `\'`, `\"` and `\\` for the quoting characters themselves. A
 character literal is one byte; multi-character and non-ASCII literals are
-invalid. The name `lineFeed` is deliberate: `'\n'` is exactly the byte 10,
-while ending a line on a device is a separate service for which a target
-may emit a different byte sequence entirely — Chapter 13 draws that line.
-Chapter 8 builds text on this foundation: sequences of these bytes with
-a recorded length.
+invalid. The name `lineFeed` is deliberate: `'\n'` is exactly the byte
+10, while ending a line on a device is a separate service — Chapter 13
+draws that line.
 
 ## Complete program
 
@@ -167,14 +156,8 @@ ready; `selectPrompt` copies the `'>'` byte into a variable.
 
 1. A sensor reports temperatures from -40 through 85. Name the narrowest
    suitable type.
-2. Why is `const full as u8 = 256` a compile error?
-3. What exact value does the literal `'\n'` have, and what does the
-   book's `lineFeed` constant record that the number 10 alone does not?
 
-Answers: `i8`, whose range -128 through 127 contains every value; 256
-needs nine bits, and a literal must fit its declared type exactly;
-`'\n'` is exactly 10, and the named constant records that the byte's
-role is a character rather than a quantity.
+Answer: `i8`, whose range -128 through 127 contains every value.
 
 ## Chapter summary
 
@@ -186,6 +169,3 @@ role is a character rather than a quantity.
 - A character literal is an exact byte value with a readable spelling.
 - Type names take PascalCase; value, constant and routine names take
   camelCase.
-
-With types chosen deliberately, the next step is calculation — and the
-rules that give every intermediate result a width.

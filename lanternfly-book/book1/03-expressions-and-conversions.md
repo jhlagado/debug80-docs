@@ -25,8 +25,8 @@ end
 `abs` returns its magnitude as `u16`, so `changeMagnitude` receives 230. The
 same calculation also returns 230 when the readings are reversed.
 
-Lanternfly assigns a fixed type to every intermediate result. A backend must
-preserve those types and their wrap rules while translating the expression
+Lanternfly assigns a fixed type to every intermediate result. The compiler
+must preserve those types and their wrap rules while translating the expression
 into target operations.
 
 ## Arithmetic operators
@@ -38,9 +38,6 @@ into target operations.
 | multiplication   | `a * b`       |
 | integer division | `a / b`       |
 | remainder        | `a mod b`     |
-| integer power    | `a ^ b`       |
-| shift left       | `a shl count` |
-| shift right      | `a shr count` |
 
 Integer division discards the fractional part by truncating toward zero.
 `17 / 5` is 3, while `17 mod 5` is 2. The results fit the identity
@@ -55,26 +52,26 @@ index becomes a row with `index / columns` and a column with
 A zero divisor produces a compile error when it is constant and an arithmetic
 fault when discovered at runtime.
 
-Shifts move a bit pattern. `5 shl 3` produces 40. Unsigned `shr` fills high
-bits with zero; signed `shr` repeats the sign bit. A shift keeps the type of
-its left operand.
+`abs` returns an unsigned magnitude at its operand's width.
 
-Two standard operations round out the numeric set. `abs`, from the opening
-example, returns an unsigned magnitude at its operand's width. `sqrt`
-returns the floor of a non-negative integer square root (`sqrt(1600)` is
-40), and a negative runtime operand invokes the arithmetic-fault service.
+Three further operations complete the numeric set: the shifts `shl` and
+`shr` move a bit pattern (`5 shl 3` is 40, and a shift keeps the type of
+its left operand), `sqrt` returns the floor of a non-negative integer
+square root (`sqrt(1600)` is 40), and `^` raises to an integer power.
+[Book Two, Chapter 4](../book2/04-integer-expressions.md) states their
+exact rules.
 
 ## Result widths
 
-Matching 16-bit or 32-bit operands generally keep their type. Byte arithmetic
+Matching 16-bit or 32-bit operands keep their type. Byte arithmetic
 uses wider results where one extra byte can preserve the useful mathematical
 range:
 
 | Operator on matching bytes       | Result                    |
 | -------------------------------- | ------------------------- |
-| `+`, `*`, `/`, `mod`, `^`        | corresponding 16-bit type |
+| `+`, `*`, `/`, `mod`             | corresponding 16-bit type |
 | `-`                              | `i16`                     |
-| `and`, `or`, `xor`, `shl`, `shr` | operand type              |
+| `and`, `or`, `xor`              | operand type              |
 | comparison                       | `boolean`                 |
 
 The `u8 - u8` rule explains the measurement example: `i16` can represent
@@ -126,7 +123,7 @@ The conversion keeps the low eight bits. Three hundred is
 records the narrowing choice and suppresses the default conversion warning.
 
 A same-width signedness conversion preserves the bit pattern and changes its
-interpretation. Converting `u8(255)` to `i8` produces -1. An explicit
+interpretation. Converting the `u8` value 255 to `i8` produces -1. An explicit
 conversion records that the representation change is part of the program.
 
 Some pairs have no safe direction. `i16` cannot contain every `u16` value, and
@@ -134,6 +131,8 @@ Some pairs have no safe direction. `i16` cannot contain every `u16` value, and
 a type that holds both:
 
 ```lanternfly
+import "standard/wide32.lafy"
+
 var signedValue as i16 = -4
 var unsignedValue as u16 = 20
 var combined as i32 = 0
@@ -143,9 +142,8 @@ sub combine()
 end
 ```
 
-The written conversions select `i32`, which contains the full range of both
-inputs. Because the excerpt mentions `i32`, its module states
-`import "standard/wide32.lafy"` at the top, as chapter 2 described.
+The written conversions select `i32`, which contains the full range of
+both inputs, and the capability import makes the module legal.
 
 Arithmetic that begins and ends in the same declared type receives a
 round-trip allowance:
@@ -156,7 +154,7 @@ unitsInStock = unitsInStock - dispatchBatch
 
 When every typed value in the calculation is `u16`, the wider or signed
 intermediate prescribed by the operator rules may return to `u16` without a
-warning. Guarding values that would wrap remains our job.
+warning. The source must still guard values that would wrap.
 
 ## Literal context
 
@@ -184,13 +182,8 @@ takes a square root. The first expression traces from `u8` inputs to an
 
 1. With `u8` values `a = 7` and `b = 9`, state the type and value of
    `a - b`, and of `a * b`.
-2. What value does `u8(516)` produce, and why?
-3. `seconds` is a `u16` holding 3725. Write expressions for the whole
-   minutes and the remaining seconds, and state each result.
 
-Answers: `a - b` is `i16` -2 and `a * b` is `u16` 63; `u8(516)` keeps the
-low eight bits of `%1000000100`, which is 4; `seconds / 60` is 62 and
-`seconds mod 60` is 5, both `u16`.
+Answer: `a - b` is `i16` -2, and `a * b` is `u16` 63.
 
 ## Chapter summary
 
@@ -202,7 +195,3 @@ low eight bits of `%1000000100`, which is 4; `seconds / 60` is 62 and
   are written as explicit conversions.
 - Literal values take their type from context, with `i16` as the default for
   an otherwise untyped literal expression.
-
-Calculations now have exact types at every step. The next chapter turns
-their results into answers: comparisons, Boolean operators and the bit
-masks that pack eight facts into one byte.

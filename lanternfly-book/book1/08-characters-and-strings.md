@@ -23,19 +23,17 @@ var playerName as string[12]
 part of the type, and the layout is as concrete as any array's: one length
 byte, twelve payload cells, and a zero byte after the current payload, for
 exactly fourteen bytes settled at compile time. There is no allocator and no
-hidden buffer; the declaration is the cost. A capacity from 255 through
-the maximum of 65,534 widens the length field to two bytes, `N + 3` in
-all, and nothing else changes —
-though a capacity that large is a declared dependency: the module states
-`import "standard/long-strings.lafy"` at its top; chapter 12 explains
-capability imports.
+hidden buffer.
 
 The trailing zero byte is the _terminator_, and every string operation
-maintains it, so the payload is always valid NUL-terminated text. A firmware
-or platform routine that requires the classic C convention can read the
-bytes as they sit — no terminator scan to find the end, no terminator to
-insert, no payload to copy — while `length` never scans for the
-zero: it reads the stored count and returns it as a `u16`.
+maintains it, so the payload is always valid NUL-terminated text. A
+routine that requires zero-terminated text can read the bytes as they
+sit, and `length` reads the stored count as a `u16` without scanning.
+
+Larger capacities follow the same model. A capacity above 254 — up to
+64K — widens the length field to two bytes, `N + 3` in all, and nothing
+else changes; such a capacity requires
+`import "standard/long-strings.lafy"` at the module's top (Chapter 12).
 
 ## Literals, copies and growth
 
@@ -51,8 +49,8 @@ end
 ```
 
 Assignment copies content, not identity, and the capacities of source and
-destination need not match — the copy is checked instead. A source the
-compiler can see is rejected at compile time when it cannot fit; a runtime
+destination need not match — the copy is checked instead. A
+compile-time-known source is rejected at compile time when it cannot fit; a runtime
 copy or `append` that would overflow invokes the range-fault service before
 any destination byte changes, the same guarantee an array's bounds check
 gives.
@@ -82,7 +80,7 @@ whether two names share storage. Shorter text compares before longer text
 with the same prefix, and capacities play no part.
 
 All-zero storage is the valid empty string. A module string therefore needs
-no initializer (it simply begins empty), and `clear` restores that state at
+no initializer (it begins empty), and `clear` restores that state at
 any time.
 
 ## The sealed representation
@@ -112,9 +110,8 @@ each byte its meaning.
 Strings sit in arrays like any other fixed-size data. `string[12][8]`
 declares eight strings of capacity twelve (the capacity brackets belong to
 the element type), and each element supports the full string interface
-through its indexed path. The next chapter adds the remaining location: a
-string as one named field inside a record, occupying its exact bytes at a
-fixed offset.
+through its indexed path. A string can also stand as one named field
+inside a record, at a fixed offset.
 
 ## Complete program
 
@@ -127,23 +124,17 @@ content. `playerName` finishes as `HELLO!` and `statusLine` as `MODE 2`.
 
 1. What is the exact size of `var name as string[40]`, and where does
    the terminator sit when the string holds five bytes?
-2. `append` would push a string past its capacity at runtime. What
-   happens, and what state is the string left in?
-3. Comparing a `string[12]` with a `string[24]` is legal. Why does the
-   capacity difference not matter?
 
-Answers: 42 bytes — one length byte, forty payload cells, one
-terminator — with the terminator at offset 6 after five payload bytes;
-the range-fault service runs before any destination byte changes, so
-the string keeps its previous valid content; comparison examines the
-current payload bytes, and capacities play no part.
+Answer: 42 bytes — one length byte, forty payload cells and one
+terminator — with the terminator at offset 6 after five payload bytes.
 
 ## Chapter summary
 
 - `string[N]` is a counted string of exact size `N + 2` through capacity
   254 and `N + 3` beyond, with its capacity in the type and no allocator.
-- The payload always ends with a zero byte, so C-convention services read
-  it directly and `length` reads the count without scanning.
+- The payload always ends with a zero byte, so a service that requires
+  zero-terminated text reads it directly, and `length` reads the count
+  without scanning.
 - Assignment and `append` are checked copies: an overflow faults before any
   destination byte changes.
 - Comparisons examine text content; all-zero storage is the valid empty
@@ -151,6 +142,3 @@ current payload bytes, and capacities play no part.
 - The representation is sealed — assignment, `append`, `clear`, comparison
   and `length` are the built-in interface, and later services reach
   strings only through checked operations.
-
-A string keeps values of one kind in order. In the next chapter we group
-values of different kinds into records, and lay them out byte by byte.

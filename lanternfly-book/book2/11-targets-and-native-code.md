@@ -11,10 +11,8 @@ Lanternfly source describes behaviour without exposing a particular CPU's
 registers or calling convention. A target profile supplies that missing
 connection to the CPU, runtime, firmware and device environment.
 
-The reference backend form emits machine code directly with backpatched
-fixups. An assembly-generating backend, such as the AZM form, is the
-toolchain's transparency and portability path; the provenance rules later
-in this chapter belong to that form.
+The reference compiler emits machine code directly with backpatched
+fixups.
 
 ## Target profiles
 
@@ -49,7 +47,7 @@ operation that a program uses to a stable service ID:
 
 The toolchain supplies the versioned module interfaces; the selected target
 profile supplies the bindings. A target may implement an ID with firmware, a
-serial device, generated substrate code, a desktop terminal or a test adapter.
+serial device, generated code or a test adapter.
 It must preserve the Chapter 10 contract for character order, bounded line
 input and normal return. A target that cannot bind a service used by the
 program rejects the build. The profile resolves each implementation through
@@ -132,8 +130,8 @@ source-defined Lanternfly routines or hosted bodies are deferred.
 
 A backend may select runtime helpers for multiplication, division, power,
 square root, wide arithmetic, aggregate copying, counted-string operations,
-bounds checks and far access. Only helpers that are used are included, and each
-appears in generated listings and cost reports.
+bounds checks and far access. Only helpers that are used are included, and
+each appears in the compiler's reports.
 
 Bounds, range, arithmetic and invalid-value faults do not return to the failing
 expression. A hosted profile may trap them; a standalone profile may terminate
@@ -152,10 +150,10 @@ sub waitForVBlankDirectly()
 end
 ```
 
-Lanternfly does not tokenize, interpolate or rewrite the payload. An assembly
-backend emits the lines verbatim and maps assembler diagnostics back to their
-original source locations. Inside the payload, comments and names follow the
-selected assembler's rules.
+Lanternfly does not tokenize, interpolate or rewrite the payload. The
+compiler passes the lines verbatim to its assembler and maps assembler
+diagnostics back to their original source locations. Inside the payload,
+comments and names follow the selected assembler's rules.
 
 ## Statement-level assembly
 
@@ -179,7 +177,7 @@ The compiler emits `W-ASM-001` and treats the block as an observable barrier.
 Values needed afterward are spilled or preserved. The specialized assembly
 warning suppresses `W-NATIVE-001` for the same block.
 
-Calling a generated Lanternfly routine from raw assembly is deferred because
+Calling a compiled Lanternfly routine from raw assembly is deferred because
 call-cycle and reentrancy analysis cannot include the hidden edge.
 
 ## Module-level assembly
@@ -191,39 +189,11 @@ data. It has no execution point. Its runtime effects belong to the
 Module assembly carries emission and provenance metadata but receives no
 statement-level native-effect warning.
 
-## Backend compatibility
+## Target specificity
 
-An `asm` block is necessarily target-specific. A C, BASIC or other
-non-assembly backend rejects it unless the profile supplies a compatible
-fragment pipeline. Raw assembly names are not Lanternfly names; a generated
-symbol artifact records any Lanternfly storage or routines exposed to the
-assembly source.
-
-## Generated-source mapping
-
-A source-generating backend returns its exact generated text and a provenance
-map. Each record connects a half-open span in that text to a Lanternfly source
-span, a stable source-node ID and the generated code's role. One source node
-may produce several ranges; a folded-away node remains in the typed artifacts
-without taking a neighbouring generated range.
-
-An AZM backend divides generated output into anchored fragments. A routine or
-module initializer may use its entry label; an embedded fragment receives a
-deterministic compiler-owned local label. Each fragment records the anchor's
-offset and all generated spans as zero-based UTF-16 positions. A host inserts
-the fragment contiguously and without rewriting it.
-
-After composition, the integration locates each anchor, recovers the
-fragment's final AZM position, verifies the exact text, and joins the
-Lanternfly-to-AZM spans to the assembler's AZM-to-machine map. A missing or
-duplicate anchor, altered fragment or out-of-range provenance produces
-`E-MAP-001`; no partial map is published.
-
-Generated instructions use the responsible Lanternfly span as their primary
-source and retain the AZM range as related provenance. Synthetic wrappers and
-helpers keep their own generated or runtime source. Inline assembly maps to
-its original payload lines, and assembler diagnostics retain their generated
-context while pointing back to the responsible Lanternfly source.
+An `asm` block is necessarily target-specific: its payload belongs to the
+selected target's assembler, and raw assembly names are not Lanternfly
+names.
 
 ## Floating point
 

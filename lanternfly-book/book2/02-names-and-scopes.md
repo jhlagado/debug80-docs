@@ -101,7 +101,7 @@ module value, parameter, local or enclosing traversal binding.
 Keywords, built-in type names and built-in operation names are reserved under
 case-insensitive comparison. The word `type` is contextual: it selects the
 type namespace inside `size`, `count`, `lower` and `upper`, and remains
-available as an ordinary identifier elsewhere. The Provisional word
+available as an ordinary identifier elsewhere. The word
 `error` is likewise contextual, recognized only immediately after `on`
 ([chapter 14](14-error-handling.md)).
 

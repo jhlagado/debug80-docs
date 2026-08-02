@@ -44,8 +44,8 @@ and each run receives its own value.
 An owned scalar local with no initializer starts with zero bits. The `for`
 statement stores its start value before the loop body reads it, so this routine
 does not depend on the initial zero. A loop-control variable is all the
-local storage we need for now; Chapter 10 completes the picture of locals,
-their initializers and their lifetime.
+local storage we need for now; Chapter 10 gives the full rules for
+locals, their initializers and their lifetime.
 
 ## Counted loops
 
@@ -117,8 +117,9 @@ end
 The pairs are (84, 30), (30, 24), (24, 6) and (6, 0). The next condition is
 false, so the loop ends and the result is 6.
 
-An initially false condition runs the body zero times. This makes `while`
-suitable when the program may already be finished before it reaches the loop.
+An initially false condition runs the body zero times, which is the
+correct behaviour when no work remains — here, when `rightValue` is
+already zero.
 
 ## Indefinite loops
 
@@ -188,9 +189,7 @@ exits, and the outer loop tests it before starting another pass.
 | test before each pass                       | `while ... end`           |
 | repeat until a statement exits              | `while true ... end`      |
 
-The loop form should put the stopping rule where it belongs. A
-clear stopping rule is the difference between a loop we can reason about at
-a glance and one we must trace to trust.
+Choose the form whose syntax states the stopping rule.
 
 ## Complete program
 
@@ -204,14 +203,8 @@ carries a nested-loop result out through a flag.
 ## Exercises
 
 1. Which values does `for address = 0 until 9 step 2` visit?
-2. After `continue` runs in a counted loop, does the control variable
-   still advance?
-3. `while true` has no `exit` on any path. What is the consequence on a
-   small standalone machine?
 
-Answers: 0, 2, 4, 6 and 8 — `until` excludes the boundary; yes — the
-normal step and range test still occur; the loop never ends, so no later
-operation ever runs.
+Answer: 0, 2, 4, 6 and 8; `until` excludes the boundary.
 
 ## Chapter summary
 
@@ -222,6 +215,3 @@ operation ever runs.
 - `while true` repeats until `exit`, and `continue` skips the rest of one
   pass.
 - `exit` and `continue` apply to the innermost loop.
-
-So far the loops have counted and calculated. The next chapter gives
-them something to traverse: tables of fixed storage.

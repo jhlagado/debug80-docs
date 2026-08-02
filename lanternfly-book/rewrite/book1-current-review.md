@@ -1,255 +1,338 @@
-# Book One current editorial review
+# Book One editorial review — resolved
 
-This is a current-state reading of Lanternfly Book One. Treat the Lanternfly
-0.4 specification as authoritative. The review is about the beginner's route
-through the book, not whether the compiler has been implemented yet.
+> **Status:** Resolved. The manuscript changes requested by this review have
+> been applied. This file is retained as editorial history and does not list
+> the current Book One defects.
 
-The revised chapter sequence works well, and the recent Chapter 13 changes
-give the machine boundary one coherent example. No blocker or normative
-conflict was found.
+## Scope
 
-## Remaining revisions
+This report reviews the current sixteen-chapter Book One after the revision
+that applied the earlier editorial brief. It reads the book as a course for an
+experienced programmer learning Lanternfly's choices: exact types, fixed
+storage, declaration order, checked access and explicit machine boundaries.
 
-1. **Define `ordinal` in Chapter 4 before relying on it.** Explain that enum
-   members receive numbered positions in declaration order, then name those
-   positions ordinals. Chapters 5 and 6 build on that term.
+The governing technical authority is the Lanternfly 0.6 implementation
+baseline and the Candlemoth direction. Candlemoth is the normative minimal
+self-hosting target. Book One should describe the language and its tools, not
+project history or retired assembler-pipeline details.
 
-2. **Explain row-major order before Chapter 6 uses the term for `for each`.**
-   Either move the layout explanation earlier or first state the concrete
-   order: a multidimensional traversal completes the rightmost dimension
-   before advancing the one to its left.
+## Overall judgment
 
-3. **Give `aggregate` one first-use definition.** At its first use, state
-   that an aggregate is a stored value made from smaller values, such as an
-   array, string or record. Then use the term consistently in later chapters.
+The revision is substantial and successful. The prose now usually begins with
+a concrete program state, names the relevant rule, and gives its consequence.
+It no longer reads as if a topic has been selected and then surrounded with
+generic explanatory sentences. The book has a coherent complete route:
+values and storage; control and data structure; routines, identity and
+modules; text, expected failure and cleanup; then the machine boundary.
 
-4. **Repair the Chapter 12 opening.** "An interactive program cannot wait
-   forever" conflicts with the deliberately blocking `readCharacter` and
-   `readLine` model. Say that an interactive program needs a way to prompt,
-   receive input and respond.
+The principal remaining risk is compression, not empty prose. Several
+chapters carry a sound sequence of ideas but introduce one more exception,
+classification or lowering detail than the reader needs at that point.
 
-5. **Explain import resolution without unexplained jargon in Chapter 11.**
-   Before saying that imports resolve "depth first", state the consequence:
-   the compiler resolves a module's imports before checking that module and
-   processes each resolved module once.
+## What the revision has completed
 
-## Lower-priority edits
+- The introduction is short, orienting and free of the old AZM pipeline and
+  absent-compiler explanation.
+- The intended reader is now a programmer, not a total beginner. Chapter One
+  teaches Lanternfly's model rather than explaining variables in general.
+- `ordinal`, row-major order, aggregate and depth-first import resolution are
+  defined before their later use.
+- The book-wide self-description rule is substantially followed. Forward
+  references now usually state what a later chapter explains instead of making
+  topics "wait" or "arrive."
+- The split between expressions and comparisons gives each chapter a clearer
+  job.
+- The string representation includes a concrete consequence of breaking its
+  invariant.
+- The final movement has been strengthened by Chapters 14 and 15: expected
+  failure, propagation and cleanup now lead naturally to Chapter 16's machine
+  boundary.
+- Chapter 16 ends on the language-reference handoff rather than a broad claim
+  of reader mastery.
 
-- Chapter 7's "in the Pascal tradition" adds history without helping the
-  reader understand Lanternfly's counted layout.
-- Chapter 5's final lowering sentence belongs in Book Two; end on the visible
-  stopping rule and its benefit to the reader.
-- Chapter 13 now works much better, but its final paragraph can end more
-  quietly on the language-reference handoff and the practical value of
-  inspectable generated output.
+## Writing-agent directions
 
-## Preserve
+For each item below, preserve the normative Lanternfly 0.6 facts and the
+existing complete-program examples. Apply the smallest change that repairs the
+reader's route. Do not add implementation history, a compiler-availability
+caveat, or obsolete assembler-pipeline material.
 
-- The present chapter order.
-- The concrete examples and hand-traced storage states.
-- Future-facing descriptions of specified compiler behaviour.
-- The direct, practical teaching voice.
+### Blocker: capability-gated code appears before its required import
 
-## Deep reading: chapter notes
+**Exact evidence:** Chapter 2 opens its declaration block with
+`var elapsedSeconds as u32 = 0`; the enabling import appears only later in
+prose. Chapter 3 shows `var combined as i32 = 0` in a standalone excerpt,
+then says that the enclosing module states the import.
 
-This pass read the current book as a practical course for a new Lanternfly
-reader. The sequence is sound. Its remaining weakness is not correctness but
-concentration: several chapters change the reader's mental model too often
-before the previous one has settled.
+Chapter 2 presents `var elapsedSeconds as u32 = 0` before showing the required
+`standard/wide32.lafy` import. The prose immediately says that the declaration
+is legal only in a module with that import, but the first displayed program
+still appears invalid. Chapter 3 does the same with its `i32` conversion
+excerpt, then explains that the enclosing module needs the import.
 
-### Introduction and Chapters 1--2
+**Reader consequence:** a book that teaches declaration order and exact source
+rules opens an early example with an unstated prerequisite.
 
-The introduction gives a credible method for learning from a specification
-before a compiler exists: small programs, explicit storage, and hand tracing.
-Its opening promise is slightly abstract before the first calculation; put the
-calculation first if a revision is being made. The chapter route is useful but
-dense, and can be divided into values/control and then storage/organisation.
+**Smallest repair:** either put the import in the displayed module before the
+first gated use, or use only kernel integer types in the early examples and
+introduce the capability as a deliberate later extension.
 
-Chapter 1 is an effective opening. The assignment table and declaration-order
-rule are earned by the example. Comments are useful but introduce a fourth
-topic in an already full first chapter; move them only if the opening needs
-space. Keep the toolchain language visibly future-facing.
+**Keep / cut / move:** keep the fact that 32-bit types are capability-gated.
+Keep an import beside any complete example that uses them. Cut the invalid
+appearance created by a bare gated declaration. Do not move capability-gating
+out of the book altogether; Chapter 12 gives it a proper conceptual home.
 
-Chapter 2 moves clearly from bit patterns to widths, signedness, declarations
-and character bytes. Separate storage cost from execution cost so that each
-trade-off has one sentence. Keep naming guidance brief: it is orientation, not
-a general naming lesson.
+### Significant: Chapter 3 remains the densest early chapter
 
-### Chapters 3--6
+**Exact evidence:** the sequence from `## Arithmetic operators` through
+`## Literal context` includes division and remainder, shifts, `sqrt`, result
+widths, widening, narrowing, signedness conversion, mixed-width arithmetic,
+round-trip allowance and literal typing.
 
-Chapter 3's difference example is excellent: it creates the need for a wider
-signed result before stating the rule. The chapter is nevertheless the book's
-heaviest cognitive load. Arithmetic widths, conversion, comparison and
-Boolean logic prepare the next chapter; shifts, power, square root, bit masks
-and the full precedence ladder can be subordinated, moved later, or made a
-compact reference aside. If bit masks remain, begin with the practical use of
-one byte holding several independent yes-or-no states.
+The split that moved comparisons to Chapter 4 is a clear improvement. Chapter
+3 nevertheless moves through division, remainder, shifts, square root, result
+widths, widening, narrowing, signedness conversion, mixed-width calculation,
+round-trip allowance and literal context in one run. Each paragraph is clear;
+the reader has little room to consolidate one rule before the next arrives.
 
-Chapter 4's state-machine example and the contrast between ordered `if` and
-classification by `select` are among the clearest passages. Define ordinal on
-first use. Keep semantic branch priority ahead of frequency and performance.
-For non-enum `select`, replace the safety-net metaphor with the actual reason:
-an integer can have no matching case, so `else` supplies the required result.
+**Smallest repair:** retain the needed route--result widths and explicit
+conversion--but subordinate shifts, square root and power to a compact aside
+or Book Two reference. Do not add more examples until the central width model
+has space to settle.
 
-Chapter 5 gives every loop form a distinct job. The GCD trace and `continue`
-example let the reader see state change. Identify the local-variable rule as a
-narrow loop prerequisite, with the full model deferred to Chapter 9. End on
-the observable stopping rule rather than backend lowering.
+**Keep / cut / move:** keep the opening measurement example, byte-result
+table, widening, narrowing and literal-context rule. Move or visibly demote
+`sqrt`, shifts and the power cross-reference. Do not split comparisons back
+into this chapter; their separate Chapter 4 treatment is working.
 
-Chapter 6's logger, stride diagram and row-major diagram do real teaching
-work. Define row-major order before using the phrase for `for each`, and
-define aggregate at its first useful use. The chapter covers shape, indexing,
-traversal, byte layout, initialisation and bulk operations; retain it as one
-chapter, but give each section a signpost naming which of those jobs it is
-doing. The read-only-memory aside distracts from initializer shape and should
-be shortened or moved to Book Two.
+### Significant: optional capability details interrupt Chapters 2 and 8
 
-### Chapters 7--10
+**Exact evidence:** Chapter 2 interrupts the integer table with the paragraph
+beginning "The two 32-bit rows carry one extra obligation." Chapter 8
+interrupts the counted-string layout with the paragraph beginning "A capacity
+above 254."
 
-Chapter 7 has a strong centre: fixed-capacity text needs both a capacity and a
-length. The diagrams, terminator and checked-copy explanation reinforce one
-another. Remove the Pascal-history aside unless it supports a later purpose.
-Show one failure that sealed representation prevents: payload changed without
-matching count or terminator leaves operations disagreeing about the string.
+The wide-integer and long-string capability paragraphs are correct, but both
+interrupt an ordinary introductory explanation with a facility the reader does
+not yet need. Chapter 12 later provides the natural home for service and
+capability modules.
 
-Chapter 8 earns its record diagrams with concrete data. Define aggregate
-before describing a date as one. Explain self-containing records from finite
-inline layout first, then give declaration order as the rule that rejects the
-impossible shape. Keep aggregate-copy semantics and `clear` adjacent; move
-the lowering-cost discussion after them or to Book Two.
+**Smallest repair:** mention the import only where a displayed example needs
+it, and keep the complete category explanation in Chapter 12 and Book Two.
 
-Chapter 9 completes the routine model in a good order. Put the source-level
-guarantee for locals before the register, stack and scratch possibilities.
-Introduce recursion through its practical target-dependent availability;
-frame mechanics then explain that rule rather than leading it.
+**Keep / cut / move:** keep the ordinary `u8`, `i8`, `u16`, `i16` and
+short-string model in its uninterrupted explanatory run. Move the detailed
+capability rationale to Chapter 12; retain only a compact local requirement
+where an actual source example needs it.
 
-Chapter 10 is the strongest later chapter. It explains aliases without
-smuggling source pointers into Lanternfly, and spatial validity now has a
-clear consequence. Let the checked-table example lead; keep the pointer-table
-comparison brief because it is supplementary for beginners.
+### Significant: Chapter 10 is conceptually overloaded
 
-### Chapters 11--13
+**Exact evidence:** one chapter moves from parameters and returns through
+locals, aggregate parameters, early return, `forward sub`, mutual calls and
+target-dependent recursion.
 
-Chapter 11 gives private-by-default exports a practical reason. Explain the
-effect of depth-first import resolution before applying the label. Do not
-re-teach declaration order in every section once the first explanation has
-landed.
+Parameters, returns, locals, aggregate parameters, early return, forward
+declarations, mutual recursion and target-dependent recursion are all correct
+and well written. Together they make this the book's most demanding middle
+chapter.
 
-Chapter 12's echo example is materially improved: device echo and explicit
-program output now have different visible roles. Its opening still conflicts
-with deliberately blocking input, and the capacity-generic carrier discussion
-is more implementation detail than this course needs. Keep the source rule
-and direct Book Two readers to the storage details.
+**Smallest repair:** keep parameters, results, locals and aggregate parameters
+as the main chapter. Treat forward declarations and recursive call graphs as a
+late section with a more explicit "advanced case" boundary, or move them into
+a small following chapter if the book can support one.
 
-Chapter 13 is substantially better with one coherent LF-1 platform example.
-Before near/far syntax, say these describe how a target reaches an aggregate,
-not general source pointers. Lead the generated-artifact section with reader
-actions--inspect instructions, locate storage, trace a fault--then introduce
-the artifact names. Finish quietly with the reference handoff and the value of
-an inspectable map, rather than a broad achievement statement.
+**Keep / cut / move:** keep the parameter, result, local and aggregate-alias
+explanations together; they answer one routine-design question. Keep the
+forward-declaration example if the book retains recursion here, but preface it
+as an advanced declaration-order case. Move no normative rule unless the
+author elects to create a separate chapter.
 
-## Editorial order for the Book One writer
+### Significant: Chapter 15 changes register in its Cost section
 
-1. Add first-use definitions for `ordinal`, row-major order, aggregate and
-   depth first.
-2. Reduce or subordinate the reference-heavy material in Chapters 3 and 6.
-3. Simplify the Chapter 12 carrier explanation and correct its opening claim.
-4. Tighten the Chapter 13 artifact inventory and final landing.
-5. Re-read Chapters 3--6 continuously after revision. They are the book's
-   most demanding prerequisite run and the best test of whether the course is
-   pleasant as well as correct.
+**Exact evidence:** the Cost section says that a candidate Z80 lowering raises
+a failure in three instructions, assigns byte counts to `or fail`, and
+describes tail-position folding, frames and code layout.
 
-## Independent second reading
+The chapter's teaching work is excellent: `or fail`, defaults and `defer` all
+answer what happens when expected failure crosses routine layers. The Cost
+section then turns to candidate Z80 lowering, exact instruction counts,
+conditional returns, tail-position folding and frames.
 
-This second pass reread the current text from the index and introduction
-through Chapter 13, paragraph by paragraph, rather than checking the earlier
-notes against isolated passages. It confirms the main findings above and adds
-the following points.
+**Reader consequence:** implementation accounting interrupts a chapter about
+using a source-level error model.
 
-### Book-level promises
+**Smallest repair:** retain the source-level fact that programs without
+failable routines pay no cost for error machinery. Move the exact byte and
+instruction account, including candidate-lowering claims, to Book Two.
 
-The introduction says that the chapters build "strictly" with nothing used
-before it is taught. That is an attractive promise, but the book currently
-has the first-use gaps listed above: `ordinal`, row-major order, aggregate and
-depth first. Either repair those gaps before publication or soften the claim;
-otherwise an attentive reader discovers that the book has broken its own
-method.
+**Keep / cut / move:** keep one short source-level cost principle: a program
+that never uses failable routines carries none of their machinery. Move exact
+instruction and byte counts, candidate-lowering terminology, tail-position
+folding and frame details to Book Two. Do not cut the preceding `defer`
+example; it is the chapter's strongest reason for the feature.
 
-The index says that the instructions and helpers behind "any line" can be
-read in generated assembly. Chapter 13 is more exact: declarations and folded
-expressions can emit no machine range. Use Chapter 13's more precise promise
-in the index and introduction so the book does not overstate inspectability.
+### Significant: Chapter 5's performance aside is secondary
 
-### Paragraph-level confirmations and additions
+**Exact evidence:** the final sentence of `## Ordered conditions` adds that
+frequency and cost can guide branch order because each reached comparison costs
+instructions.
 
-The opening of Chapter 1 works because it begins with an observable
-calculation, and the assignment table gives the paragraph sequence a visible
-destination. Its final build paragraph should preserve the planned-toolchain
-status established by the introduction; it currently reads as though a
-compiler is already available. This is a clarity adjustment, not a criticism
-of the book's deliberate future-facing specification voice.
+**Reader consequence:** the chapter has just established policy priority, and
+the performance qualification risks making readers treat the two concerns as
+equally important.
 
-Chapter 3 still needs the strongest editorial intervention. Its topic shifts
-are individually clear, but the prose moves from numeric operations to type
-rules, conversions, literal typing, comparisons, Boolean short-circuiting,
-bit operations and precedence before Chapter 4 can make use of them. The
-reader can follow individual paragraphs but has little time to consolidate a
-single tool. Keep the core route and subordinate the optional numeric and
-bit-level material.
+**Smallest repair:** make policy order the final point of the paragraph; keep
+performance as a short optional sentence only if this book needs it.
 
-Chapter 5 uses "invocation" and gives every call its own local value before
-Chapter 9 has developed calls, parameters and activation. The passage is not
-wrong, but a simpler first description--"this name exists only while this
-routine is running"--would satisfy the immediate loop need without advancing
-the later routine model.
+**Keep / cut / move:** keep the example where an error takes priority over a
+completed batch. Cut or move the general instruction-cost guidance to Book
+Two if the paragraph becomes crowded.
 
-Chapter 7's counted layout is strong. The terminology is better than a vague
-analogy, but the historical Pascal reference is not doing teaching work. The
-sealed-representation paragraph has an invariant but not a consequence; one
-specific mismatched-count or terminator example would make the boundary
-memorable.
+### Significant: Chapter 12's capability section needs a narrower job
 
-Chapter 8's strongest movement is from a field path to byte offsets. Its
-copying section interrupts that movement with lowering options between the
-semantic snapshot and `clear`; keep the source guarantee continuous, then put
-the implementation aside after it.
+**Exact evidence:** `## The standard modules` distinguishes service modules,
+capability modules, their export behaviour, module-local authorization,
+contiguous import prefixes, namespace ownership and unused-import cost.
 
-Chapter 9 has a sound source-level explanation of parameters, results and
-aliases, but its first-edition result catalogue and backend-storage paragraph
-read like reference material. Retain the source rule in the main route and
-make the exceptional catalogue and backend alternatives visibly secondary.
+**Reader consequence:** the central lesson--how one program grows past one
+file--briefly becomes a complete reference entry on optional facilities.
 
-Chapter 10 gives a useful answer to identity without source pointers. The
-pointer-table contrast should remain brief, because it helps readers with that
-background but is not a prerequisite for learning the Lanternfly model.
+**Smallest repair:** give the section one job: distinguish a service import
+that supplies names from a capability import that legalizes a feature. Defer
+namespace and unused-import detail to Book Two.
 
-Chapter 11 makes modules feel necessary and gives exports a reason. The root
-program paragraph uses the label "depth first" where the reader needs the
-order of work. State the order in ordinary language first, then provide the
-technical label.
+**Keep / cut / move:** keep the two import kinds and one concrete example of
+each. Move contiguous-prefix repetition, shadowing detail and byte-cost detail
+to Book Two unless the module example immediately needs them.
 
-Chapter 12 has the book's clearest current operational contract, but the
-`readLine` paragraph carries evaluation, waiting, line endings, replacement,
-empty input, overflow, cleanup and result use in one block. Split it at the
-ordinary-fit and overflow cases. The opening's claim about not waiting forever
-still conflicts with the blocking operations it introduces.
+## Chapter notes
 
-Chapter 13 is coherent and purposeful, but it is reference-dense after a
-beginner-facing Chapter 12. The platform example sustains the reader well.
-Near/far storage, opaque addresses and assembly should each begin with the
-practical boundary they solve before their target vocabulary. The final
-paragraph should end on the reference handoff, not on a general declaration
-of mastery or a forecast of the compiler.
+The following notes are not general praise. They state what must be preserved
+while revising the findings above and identify the narrow, lower-priority
+changes available in each group of chapters.
 
-### Voice and AI-pattern result
+### Introduction and Chapters 1--4
 
-No pervasive promotional tone, fabricated consensus, chat residue, false
-agency, question-heading formula, or detector-oriented language was found.
-The voice is generally direct and technically specific. The remaining
-AI-adjacent risks are local: several polished wrap-up sentences certify what a
-chapter has achieved rather than adding a final operational fact; occasional
-three-part lists add cadence without always improving recall; and phrases such
-as "the opening word tells you the shape" sometimes replace a direct account
-of the syntax with a small piece of reader choreography. These are secondary
-to the prerequisite and density repairs, and should be changed only where a
-sentence fails the deletion test in its paragraph.
+The introduction now does its intended work: it orients without leaking
+internal development history. Its language paragraph is dense but accurate;
+the reader model and hand-tracing method are clear.
+
+Chapter 1 is the clearest early improvement. One calculation establishes
+static storage, declaration order, entry and assignment. The entry-point
+definition has several qualifiers in one sentence, but they are useful facts
+rather than filler.
+
+**Preserve:** the single calculation, before-and-after trace, and explicit
+distinction between static storage and execution. **Optional polish:** split
+the entry-point qualifiers only if the sentence cannot be read cleanly aloud;
+do not remove a real entry constraint merely to shorten it.
+
+Chapter 2 is matter-of-fact and well paced once the early capability detour is
+removed. Chapter 3 has purposeful prose but too much subject matter. Chapter
+4 is the strongest early chapter: comparison, Boolean control, masks and
+precedence follow a clear practical line.
+
+**Preserve:** Chapter 4's order from comparisons to Boolean combinations to
+mask tests. **Do not restore:** the earlier combined expressions-and-
+comparisons chapter.
+
+### Chapters 5--8
+
+Chapter 5 defines ordinal exactly where the reader needs it and gives
+decisions a credible state-machine problem. The performance aside on branch
+frequency is true but secondary to policy order.
+
+Chapter 6 distinguishes loop forms through their stopping rules. The revised
+local-variable explanation is plain and appropriately limited.
+
+**Preserve:** the stopping-rule table and the narrow local-variable model.
+**Do not add:** the full parameter or recursion model here.
+
+Chapter 7 has a productive density: array shape, access, traversal and layout
+support one another, and the first-use definitions now land correctly.
+
+**Preserve:** the row-major definition before traversal and the aggregate
+definition before later aggregate use. **Do not split:** the chapter unless a
+specific reader test shows that the current signposts fail.
+
+Chapter 8 gives strings a convincing practical problem--capacity differs from
+current length--then makes their representation and sealing concrete. The
+long-string capability detail is the only significant interruption.
+
+**Preserve:** the broken-invariant example. **Move:** only the extended
+long-string capability explanation, not the ordinary layout or terminator
+account.
+
+### Chapters 9--12
+
+Chapter 9 is strong because every record claim becomes an offset or a layout.
+The brief alias preview is useful rather than distracting.
+
+**Preserve:** diagrams, offsets and the brief alias bridge into Chapter 11.
+
+Chapter 10 is excellent at the sentence level but full at the chapter level;
+the forward-declaration and recursion material is the pressure point.
+
+Chapter 11 provides a clear identity model without pointers. Its spatial
+validity explanation is among the book's best passages.
+
+**Preserve:** the saved-index example and its distinction between in-range
+storage and the same logical entity.
+
+Chapter 12 makes modules necessary, then explains privacy and import order
+through a small program. Its depth-first paragraph now gives the process
+before the label. The capability-module section is correct but reference-heavy.
+
+### Chapters 13--16
+
+Chapter 13 earns portable text I/O after the earlier programs have left results
+in storage. Its split `readLine` explanation makes the ordinary and overflow
+cases easier to follow. The capacity-generic exception is now short enough to
+remain here.
+
+**Preserve:** the separate ordinary-fit and overflow paragraphs, and the
+source-level statement of the two exceptions. **Do not restore:** internal
+carrier layout details.
+
+Chapter 14 is a successful teaching chapter. The number-entry program earns
+the distinction between a fault and an expected error, and the queued-input
+example proves why cleanup precedes `fail`.
+
+**Preserve:** raw-key cleanup before `fail`; it is the concrete demonstration
+that prevents the error model from becoming abstract.
+
+Chapter 15 gives propagation, defaults and cleanup one connected purpose. Its
+only major interruption is the Cost section described above.
+
+Chapter 16 is a deliberate reference-dense ending, but it earns that density
+as the controlled boundary between source and platform. The near/far bridge
+correctly prevents a pointer misunderstanding, and the ending is restrained.
+
+**Preserve:** the three-tier distinction, the near/far bridge and the quiet
+Book Two handoff. **Do not add:** historical compiler-pipeline material.
+
+## Voice and self-description
+
+No pervasive promotional language, generic consensus, chat residue or broad
+AI-style filler remains. The revision has markedly reduced false narrative
+agency in its chapter transitions. Remaining forward references are usually
+functional; keep checking that they identify the chapter's action and explain
+why deferral helps the current explanation.
+
+The preferred continuing voice is direct and professional: a knowledgeable
+teacher explaining a concrete language decision to someone who already
+programs. Preserve the book's examples, traces and diagrams. Do not replace
+them with a denser catalogue of rules.
+
+## Priority order
+
+1. Repair the capability-gated examples so every displayed source fragment
+   satisfies its own stated prerequisites.
+2. Decide whether Chapter 3's optional numerical material is reduced or
+   visibly demoted.
+3. Decide how Chapter 10 signals or separates forward declarations and
+   recursion.
+4. Move Chapter 15's detailed lowering and cost account to Book Two while
+   retaining the source-level cost principle.
+5. Trim capability-module exposition in Chapters 2, 8 and 12 after the
+   preceding decisions are settled.
