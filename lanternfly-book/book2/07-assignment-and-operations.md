@@ -149,7 +149,7 @@ A layout-query path is unevaluated. It may use fields and constant indices,
 but cannot call routines or evaluate dynamic indices. The compiler validates
 constant indices without reading storage or running a bounds check.
 
-## Aggregate and string procedures
+## Aggregate and string operations
 
 `clear`, `fill` and `append` have the internal result type `unit` and are valid
 only as complete statements:
@@ -175,7 +175,7 @@ checks the final length and byte invariant before writing; failure causes
 `F-RANGE` without changing the destination. Source and destination may overlap
 because the operation has snapshot semantics.
 
-All three procedures evaluate the destination path once. `fill` and `append`
+All three operations evaluate the destination path once. `fill` and `append`
 then evaluate their second argument once before storing. Their writes are
 observable; volatile aggregates receive ordered scalar writes.
 

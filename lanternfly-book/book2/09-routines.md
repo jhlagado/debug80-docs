@@ -191,8 +191,8 @@ forward sub updateEnemies()
   could be called;
 - the completing `sub` appears later in the same module and repeats the
   forward header exactly — name spelling, export status, parameter storage
-  classes, names, types and order, and result form — or the compiler
-  reports `E-FORWARD-002`;
+  classes, names, types and order, result form and `fails` clause — or
+  the compiler reports `E-FORWARD-002`;
 - each routine has at most one forward declaration, under the ordinary
   duplicate-name rules;
 - a module that ends with an uncompleted forward declaration is

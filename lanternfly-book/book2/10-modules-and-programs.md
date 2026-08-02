@@ -75,8 +75,9 @@ operator's domain without altering any existing operation.
 
 ## Standard text modules
 
-The first edition defines two optional standard service modules. A program
-imports only the part it uses:
+The first edition defines two optional standard service modules,
+importable independently; only used operations select emitted
+components:
 
 ```lanternfly
 import "standard/text-output.lafy"
@@ -157,7 +158,8 @@ A small self-hosted compiler may process a source unit once and leave branch
 and address fixups to its backend. Both must accept the same
 declaration-ordered programs.
 
-A program is linked by compilation rather than by a relocating link editor.
+A program is composed during whole-program compilation; no relocating
+link editor is involved.
 Libraries reach a program in three forms. A source import compiles the
 library into the whole program in dependency order. A compiled
 export-interface artifact restates a module's exported declarations —
@@ -198,6 +200,7 @@ The entry must:
 
 - have no parameters;
 - have no result;
+- carry no `fails` clause (Provisional; [chapter 14](14-error-handling.md));
 - be source-defined rather than external;
 - be unique in the executable manifest.
 

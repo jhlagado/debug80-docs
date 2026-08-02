@@ -21,7 +21,7 @@ route to native code may change, but the meaning of the source program may
 not.
 
 The first compiler is planned as a desktop-hosted compiler for Z80 systems.
-Its first backend writes AZM, the inspectable form. The language itself
+Its first backend will write AZM, the inspectable form. The language itself
 does not expose Z80 registers, stack-frame conventions or instruction
 selection.
 
@@ -39,7 +39,9 @@ The first edition includes:
 - routines with scalar locals, parameters and optional scalar results;
 - private source modules with explicit exports;
 - optional standard modules for portable character and text I/O;
-- typed target services and explicit inline assembly.
+- typed target services and explicit inline assembly;
+- Provisional failable routines with structured error handling
+  ([chapter 14](14-error-handling.md)).
 
 This inventory reflects one central design choice: storage is explicit and
 finite. Persistent identity comes from declared paths and ordinal indices into
@@ -147,6 +149,8 @@ The language has these statement categories:
 - `if` and `select`;
 - counted, collection and conditional loops;
 - `exit`, `continue` and `return`;
+- `fail`, `defer` and the `on error` handler form (Provisional;
+  [chapter 14](14-error-handling.md));
 - statement-level `asm`.
 
 Loose executable statements are invalid in an ordinary module.
