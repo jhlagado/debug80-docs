@@ -10,9 +10,9 @@ nav_order: 9
 One declaration form covers every user routine. A `sub` may return a scalar
 value or no value at all, so Lanternfly needs no separate `function` keyword.
 
-The provisional 0.6 draft extends routines with failable signatures,
-`fail`, structured handling and `defer`;
-[chapter 14](14-error-handling.md) documents that revision.
+Failable signatures, `fail`, structured handling and `defer` are the
+language's newest addition and remain provisional;
+[chapter 14](14-error-handling.md) documents them.
 
 ## Declarations
 

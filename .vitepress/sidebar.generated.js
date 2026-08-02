@@ -1616,52 +1616,64 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
         },
         {
-          "text": "Expressions, Conversions and Comparisons",
-          "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
+          "text": "Expressions and Conversions",
+          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
+        },
+        {
+          "text": "Comparisons, Booleans and Bit Masks",
+          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
         },
         {
           "text": "Named Ordinals and Decisions",
-          "link": "/lanternfly-book/book1/04-ordinals-and-decisions.html"
+          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
         },
         {
           "text": "Repeating Work",
-          "link": "/lanternfly-book/book1/05-loops.html"
+          "link": "/lanternfly-book/book1/06-loops.html"
         },
         {
           "text": "Fixed Arrays and Index Domains",
-          "link": "/lanternfly-book/book1/06-fixed-arrays.html"
+          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
         },
         {
           "text": "Characters and Fixed-Capacity Strings",
-          "link": "/lanternfly-book/book1/07-characters-and-strings.html"
+          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
         },
         {
           "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/08-records-and-exact-layout.html"
+          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
         },
         {
           "text": "Building with Subroutines",
-          "link": "/lanternfly-book/book1/09-subroutines.html"
+          "link": "/lanternfly-book/book1/10-subroutines.html"
         },
         {
           "text": "Selecting Existing Storage",
-          "link": "/lanternfly-book/book1/10-selecting-storage.html"
+          "link": "/lanternfly-book/book1/11-selecting-storage.html"
         },
         {
           "text": "Modules and Imports",
-          "link": "/lanternfly-book/book1/11-modules-and-imports.html"
+          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
         },
         {
           "text": "Portable Text Input and Output",
-          "link": "/lanternfly-book/book1/12-portable-text-io.html"
+          "link": "/lanternfly-book/book1/13-portable-text-io.html"
         },
         {
           "text": "Expecting Failure",
-          "link": "/lanternfly-book/book1/13-expecting-failure.html"
+          "link": "/lanternfly-book/book1/14-expecting-failure.html"
+        },
+        {
+          "text": "Propagation and Cleanup",
+          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
         },
         {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/14-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
+        },
+        {
+          "text": "Glossary",
+          "link": "/lanternfly-book/book1/glossary.html"
         }
       ]
     },
@@ -1746,52 +1758,64 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
         },
         {
-          "text": "Expressions, Conversions and Comparisons",
-          "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
+          "text": "Expressions and Conversions",
+          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
+        },
+        {
+          "text": "Comparisons, Booleans and Bit Masks",
+          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
         },
         {
           "text": "Named Ordinals and Decisions",
-          "link": "/lanternfly-book/book1/04-ordinals-and-decisions.html"
+          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
         },
         {
           "text": "Repeating Work",
-          "link": "/lanternfly-book/book1/05-loops.html"
+          "link": "/lanternfly-book/book1/06-loops.html"
         },
         {
           "text": "Fixed Arrays and Index Domains",
-          "link": "/lanternfly-book/book1/06-fixed-arrays.html"
+          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
         },
         {
           "text": "Characters and Fixed-Capacity Strings",
-          "link": "/lanternfly-book/book1/07-characters-and-strings.html"
+          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
         },
         {
           "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/08-records-and-exact-layout.html"
+          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
         },
         {
           "text": "Building with Subroutines",
-          "link": "/lanternfly-book/book1/09-subroutines.html"
+          "link": "/lanternfly-book/book1/10-subroutines.html"
         },
         {
           "text": "Selecting Existing Storage",
-          "link": "/lanternfly-book/book1/10-selecting-storage.html"
+          "link": "/lanternfly-book/book1/11-selecting-storage.html"
         },
         {
           "text": "Modules and Imports",
-          "link": "/lanternfly-book/book1/11-modules-and-imports.html"
+          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
         },
         {
           "text": "Portable Text Input and Output",
-          "link": "/lanternfly-book/book1/12-portable-text-io.html"
+          "link": "/lanternfly-book/book1/13-portable-text-io.html"
         },
         {
           "text": "Expecting Failure",
-          "link": "/lanternfly-book/book1/13-expecting-failure.html"
+          "link": "/lanternfly-book/book1/14-expecting-failure.html"
+        },
+        {
+          "text": "Propagation and Cleanup",
+          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
         },
         {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/14-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
+        },
+        {
+          "text": "Glossary",
+          "link": "/lanternfly-book/book1/glossary.html"
         }
       ]
     },
@@ -1876,52 +1900,64 @@ export const sidebars = {
           "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
         },
         {
-          "text": "Expressions, Conversions and Comparisons",
-          "link": "/lanternfly-book/book1/03-expressions-and-comparisons.html"
+          "text": "Expressions and Conversions",
+          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
+        },
+        {
+          "text": "Comparisons, Booleans and Bit Masks",
+          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
         },
         {
           "text": "Named Ordinals and Decisions",
-          "link": "/lanternfly-book/book1/04-ordinals-and-decisions.html"
+          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
         },
         {
           "text": "Repeating Work",
-          "link": "/lanternfly-book/book1/05-loops.html"
+          "link": "/lanternfly-book/book1/06-loops.html"
         },
         {
           "text": "Fixed Arrays and Index Domains",
-          "link": "/lanternfly-book/book1/06-fixed-arrays.html"
+          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
         },
         {
           "text": "Characters and Fixed-Capacity Strings",
-          "link": "/lanternfly-book/book1/07-characters-and-strings.html"
+          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
         },
         {
           "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/08-records-and-exact-layout.html"
+          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
         },
         {
           "text": "Building with Subroutines",
-          "link": "/lanternfly-book/book1/09-subroutines.html"
+          "link": "/lanternfly-book/book1/10-subroutines.html"
         },
         {
           "text": "Selecting Existing Storage",
-          "link": "/lanternfly-book/book1/10-selecting-storage.html"
+          "link": "/lanternfly-book/book1/11-selecting-storage.html"
         },
         {
           "text": "Modules and Imports",
-          "link": "/lanternfly-book/book1/11-modules-and-imports.html"
+          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
         },
         {
           "text": "Portable Text Input and Output",
-          "link": "/lanternfly-book/book1/12-portable-text-io.html"
+          "link": "/lanternfly-book/book1/13-portable-text-io.html"
         },
         {
           "text": "Expecting Failure",
-          "link": "/lanternfly-book/book1/13-expecting-failure.html"
+          "link": "/lanternfly-book/book1/14-expecting-failure.html"
+        },
+        {
+          "text": "Propagation and Cleanup",
+          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
         },
         {
           "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/14-machine-services-and-assembly.html"
+          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
+        },
+        {
+          "text": "Glossary",
+          "link": "/lanternfly-book/book1/glossary.html"
         }
       ]
     },

@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Expressions, Conversions and Comparisons"
+title: "Expressions and Conversions"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
 nav_order: 3
 ---
 
-# Expressions, Conversions and Comparisons
+# Expressions and Conversions
 
 A measurement system stores two byte-sized readings. Finding the size of the
 change requires more than subtracting one byte from another: the intermediate
@@ -172,128 +172,25 @@ The declared `u16` context applies to the literal calculation, producing
 A literal formula that exceeds that range needs a declaration or explicit
 conversion that states the intended type.
 
-## Comparisons
-
-Comparisons produce Boolean values:
-
-```lanternfly
-var changeIsLarge as boolean = false
-
-sub classifyChange()
-    changeIsLarge = changeMagnitude >= 100
-end
-```
-
-| Meaning               | Operator |
-| --------------------- | -------- |
-| equal                 | `=`      |
-| unequal               | `<>`     |
-| less than             | `<`      |
-| less than or equal    | `<=`     |
-| greater than          | `>`      |
-| greater than or equal | `>=`     |
-
-Compatible integers support all six comparisons, and Booleans support
-equality and inequality. As later chapters introduce enumerations and
-strings, each brings its own comparison rules with it.
-
-`=` therefore does two related jobs, and grammar keeps them apart. At the
-start of a statement it assigns: the left side is a storage path receiving a
-value. Inside an expression it compares for equality and produces a
-`boolean`. `changeIsLarge = changeMagnitude >= 100` uses the first `=` to
-store and the `>=` to compare.
-
-Lanternfly rejects comparison chains. A range test joins two comparisons:
-
-```lanternfly
-inRange = minimum <= input and input <= maximum
-```
-
-## Boolean operators
-
-`and`, `or`, `xor` and `not` combine Boolean values:
-
-```lanternfly
-var shouldRecord as boolean = false
-
-sub assessChange()
-    shouldRecord = deviceReady and changeMagnitude >= 100
-end
-```
-
-Boolean `and` and `or` short-circuit. A false left side of `and` skips the
-right side, while a true left side of `or` skips it. This allows an earlier
-test to protect a later operation:
-
-```lanternfly
-highAverage = itemCount > 0 and total / itemCount > threshold
-```
-
-The division runs only after `itemCount > 0` succeeds, so a zero item count
-can never divide.
-
-## Bit masks
-
-One byte can carry eight independent yes-or-no facts — a device ready
-here, an error there — and that practical economy is what bit masks are
-for. The same word operators act on individual bits when their operands
-are integers:
-
-```lanternfly
-const readyMask as u8 = %00000001
-const errorMask as u8 = %00000010
-
-var statusFlags as u8 = readyMask
-
-sub adjustFlags()
-    statusFlags = statusFlags or errorMask
-    statusFlags = statusFlags and not readyMask
-    statusFlags = statusFlags xor errorMask
-end
-```
-
-`or` sets selected bits, `and not` clears them and `xor` toggles them. A mask
-test converts the selected bits into an ordinary Boolean:
-
-```lanternfly
-errorSeen = (statusFlags and errorMask) <> 0
-```
-
-## Grouping and precedence
-
-Parentheses bind first and make an intended calculation visible:
-
-```lanternfly
-average = (first + second) / 2
-```
-
-Without the parentheses, division would occur before addition. The
-precedence order runs from arithmetic through shifts and comparisons to
-the Boolean operators, with `or` last; the complete ladder is in the
-language reference, and parentheses make any line independent of it.
-
-That ordering lets a Boolean expression read naturally:
-
-```lanternfly
-minimum <= input and input <= maximum
-```
-
-The comparisons run before the Boolean `and`. Parentheses are still valuable
-when a line mixes bitwise and Boolean work:
-
-```lanternfly
-alarm = (statusFlags and errorMask) <> 0 and deviceReady
-```
-
-The first `and` combines bits; the second combines Boolean results.
-
-## Example
+## Complete program
 
 The [chapter listing](/lanternfly-book/book1/code/03-expressions.txt)
-measures the change between two readings, tests a device-status mask, and
-records an explicit narrowing. The first expression traces from `u8` inputs
-to an `i16` result of -230 and a `u16` magnitude of 230; `sqrt(1600)`
-produces 40; `u8(300)` produces 44.
+measures the change between two readings, records an explicit narrowing and
+takes a square root. The first expression traces from `u8` inputs to an
+`i16` result of -230 and a `u16` magnitude of 230; `u8(300)` produces 44;
+`sqrt(1600)` produces 40.
+
+## Exercises
+
+1. With `u8` values `a = 7` and `b = 9`, state the type and value of
+   `a - b`, and of `a * b`.
+2. What value does `u8(516)` produce, and why?
+3. `seconds` is a `u16` holding 3725. Write expressions for the whole
+   minutes and the remaining seconds, and state each result.
+
+Answers: `a - b` is `i16` -2 and `a * b` is `u16` 63; `u8(516)` keeps the
+low eight bits of `%1000000100`, which is 4; `seconds / 60` is 62 and
+`seconds mod 60` is 5, both `u16`.
 
 ## Chapter summary
 
@@ -305,11 +202,7 @@ produces 40; `u8(300)` produces 44.
   are written as explicit conversions.
 - Literal values take their type from context, with `i16` as the default for
   an otherwise untyped literal expression.
-- Comparisons produce `boolean` values, and Boolean `and` and `or`
-  short-circuit.
-- Integer word operators combine bits, and a mask test ends in an ordinary
-  comparison.
 
-Our expressions now produce Boolean answers and store them. In the next
-chapter we give important values names of their own — and use those Boolean
-answers to choose between paths.
+Calculations now have exact types at every step. The next chapter turns
+their results into answers: comparisons, Boolean operators and the bit
+masks that pack eight facts into one byte.

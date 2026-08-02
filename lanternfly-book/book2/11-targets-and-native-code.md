@@ -59,7 +59,7 @@ the ordinary external-binding, ABI, adapter and runtime-component contracts.
 
 `extern sub` describes native code with a Lanternfly signature. The examples
 use the fictional LF-1 teaching machine introduced in
-[Book One](../book1/14-machine-services-and-assembly.md):
+[Book One](../book1/16-machine-services-and-assembly.md):
 
 ```lanternfly
 export extern sub playTone(divider as u16) at $0f06
@@ -205,7 +205,7 @@ A source-generating backend returns its exact generated text and a provenance
 map. Each record connects a half-open span in that text to a Lanternfly source
 span, a stable source-node ID and the generated code's role. One source node
 may produce several ranges; a folded-away node remains in the typed artifacts
-without borrowing a neighbouring generated range.
+without taking a neighbouring generated range.
 
 An AZM backend divides generated output into anchored fragments. A routine or
 module initializer may use its entry label; an embedded fragment receives a

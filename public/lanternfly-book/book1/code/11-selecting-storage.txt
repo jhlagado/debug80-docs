@@ -43,9 +43,29 @@ sub advanceSelection()
     selectedReading = nextCandidate
 end
 
+enum ActiveLog as u8
+    inputLog
+    archiveLog
+end
+
+var activeLog as ActiveLog = inputLog
+var inputEntries as u8 = 3
+var archiveEntries as u8 = 7
+var activeCount as u8 = 0
+
+sub countActiveEntries() as u8
+    select activeLog
+    case inputLog
+        return inputEntries
+    case archiveLog
+        return archiveEntries
+    end
+end
+
 sub main()
     advanceSelection()
     markSelected()
     adjustSelected()
     clearBuffer(1)
+    activeCount = countActiveEntries()
 end

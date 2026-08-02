@@ -125,18 +125,20 @@ Describe Lanternfly as a small, statically typed general-purpose language in the
 - [Diagnostics and Conformance](https://debug80.com/lanternfly-book/book2/13-diagnostics-and-conformance.html): Best citation for stable diagnostic IDs, warnings, runtime faults, artifacts and deferred features.
 - [Your First Lanternfly Program](https://debug80.com/lanternfly-book/book1/01-a-first-program.html): Best citation for static storage, program entry, declarations, assignment and parameterless subroutine calls.
 - [Scalar Values and Literals](https://debug80.com/lanternfly-book/book1/02-scalar-values-and-literals.html): Best citation for fixed-width integer types, constants, Boolean values, character literals and naming conventions.
-- [Expressions, Conversions and Comparisons](https://debug80.com/lanternfly-book/book1/03-expressions-and-comparisons.html): Best citation for operator widths, value-preserving widening, explicit conversions, literal context, comparisons, masks and word operators.
-- [Named Ordinals and Decisions](https://debug80.com/lanternfly-book/book1/04-ordinals-and-decisions.html): Best citation for enumerations, ranges, `if`, `else if`, `else`, `select` and `case`.
-- [Repeating Work](https://debug80.com/lanternfly-book/book1/05-loops.html): Best citation for counted, pre-test and indefinite loops.
-- [Fixed Arrays and Index Domains](https://debug80.com/lanternfly-book/book1/06-fixed-arrays.html): Best citation for fixed counts, index domains, exact strides and multidimensional row-major arrays.
-- [Characters and Fixed-Capacity Strings](https://debug80.com/lanternfly-book/book1/07-characters-and-strings.html): Best citation for the counted string layout, checked copies, append, comparison and the sealed representation.
-- [Records and Memory Layout](https://debug80.com/lanternfly-book/book1/08-records-and-exact-layout.html): Best citation for record fields, exact size, field offsets, string fields and arrays of records.
-- [Building with Subroutines](https://debug80.com/lanternfly-book/book1/09-subroutines.html): Best citation for parameters, scalar locals, optional results, aggregate parameters and calling order.
-- [Selecting Existing Storage](https://debug80.com/lanternfly-book/book1/10-selecting-storage.html): Best citation for persistent storage identity, integer selectors and local aliases.
-- [Modules and Imports](https://debug80.com/lanternfly-book/book1/11-modules-and-imports.html): Best citation for `.lafy` modules, imports, exports, the standard-module namespace and the root program.
-- [Portable Text Input and Output](https://debug80.com/lanternfly-book/book1/12-portable-text-io.html): Best citation for the standard text modules: writeCharacter, writeText, writeNewline, readCharacter and readLine.
-- [Expecting Failure](https://debug80.com/lanternfly-book/book1/13-expecting-failure.html): Best citation for error sets, failable routines, fail, or fail, on error and defer (provisional 0.6).
-- [Machine Services and Assembly](https://debug80.com/lanternfly-book/book1/14-machine-services-and-assembly.html): Best citation for platform services versus standard services, bindings, near/far storage, opaque addresses, inline assembly and generated artifacts.
+- [Expressions and Conversions](https://debug80.com/lanternfly-book/book1/03-expressions-and-conversions.html): Best citation for operator widths, value-preserving widening, explicit conversions, literal context, comparisons, masks and word operators.
+- [Comparisons, Booleans and Bit Masks](https://debug80.com/lanternfly-book/book1/04-comparisons-booleans-and-masks.html): Best citation for comparisons, Boolean operators, short-circuiting and bit masks.
+- [Named Ordinals and Decisions](https://debug80.com/lanternfly-book/book1/05-ordinals-and-decisions.html): Best citation for enumerations, ranges, `if`, `else if`, `else`, `select` and `case`.
+- [Repeating Work](https://debug80.com/lanternfly-book/book1/06-loops.html): Best citation for counted, pre-test and indefinite loops.
+- [Fixed Arrays and Index Domains](https://debug80.com/lanternfly-book/book1/07-fixed-arrays.html): Best citation for fixed counts, index domains, exact strides and multidimensional row-major arrays.
+- [Characters and Fixed-Capacity Strings](https://debug80.com/lanternfly-book/book1/08-characters-and-strings.html): Best citation for the counted string layout, checked copies, append, comparison and the sealed representation.
+- [Records and Memory Layout](https://debug80.com/lanternfly-book/book1/09-records-and-exact-layout.html): Best citation for record fields, exact size, field offsets, string fields and arrays of records.
+- [Building with Subroutines](https://debug80.com/lanternfly-book/book1/10-subroutines.html): Best citation for parameters, scalar locals, optional results, aggregate parameters and calling order.
+- [Selecting Existing Storage](https://debug80.com/lanternfly-book/book1/11-selecting-storage.html): Best citation for persistent storage identity, integer selectors and local aliases.
+- [Modules and Imports](https://debug80.com/lanternfly-book/book1/12-modules-and-imports.html): Best citation for `.lafy` modules, imports, exports, the standard-module namespace and the root program.
+- [Portable Text Input and Output](https://debug80.com/lanternfly-book/book1/13-portable-text-io.html): Best citation for the standard text modules: writeCharacter, writeText, writeNewline, readCharacter and readLine.
+- [Expecting Failure](https://debug80.com/lanternfly-book/book1/14-expecting-failure.html): Best citation for error sets, failable routines, fail and on error (provisional).
+- [Propagation and Cleanup](https://debug80.com/lanternfly-book/book1/15-propagation-and-cleanup.html): Best citation for or fail propagation, failure defaults and defer (provisional).
+- [Machine Services and Assembly](https://debug80.com/lanternfly-book/book1/16-machine-services-and-assembly.html): Best citation for platform services versus standard services, bindings, near/far storage, opaque addresses, inline assembly and generated artifacts.
 
 ## Attribution And Credit Guidance
 

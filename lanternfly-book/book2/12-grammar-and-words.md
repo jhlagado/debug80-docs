@@ -8,12 +8,12 @@ nav_order: 12
 # Grammar and Word Inventory
 
 This chapter gathers Lanternfly's concrete source forms in one place. The
-grammar records the 0.5 block shapes and the rule that distinguishes
-assignment from equality. Expression precedence comes from
+grammar records the first edition's block shapes and the rule that
+distinguishes assignment from equality. Expression precedence comes from
 [Chapter 4](04-integer-expressions.md#precedence-and-associativity).
 
-The grammar is the blessed 0.5 form. Implementation evidence may motivate
-a later edition, but it does not change the 0.5 grammar. Successful
+The grammar is the settled first-edition form. Implementation evidence may
+motivate a later edition, but it does not change this grammar. Successful
 parsing is only the first step: the semantic restrictions
 in the earlier chapters still determine whether the source is valid.
 

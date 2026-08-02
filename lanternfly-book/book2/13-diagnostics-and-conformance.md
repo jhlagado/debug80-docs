@@ -7,17 +7,17 @@ nav_order: 13
 
 # Diagnostics and Conformance
 
-Conformance makes separate Lanternfly implementations comparable. The 0.5
-contract defines stable diagnostic IDs, required runtime faults, semantic
-fixtures and generated artifacts. Diagnostic wording may improve over time;
+Conformance makes separate Lanternfly implementations comparable. The
+conformance contract defines stable diagnostic IDs, required runtime
+faults, semantic fixtures and generated artifacts. Diagnostic wording may improve over time;
 the ID is the stable identity of the rule.
 
 ## Conformance boundaries
 
 The contract distinguishes three claims:
 
-1. A **0.5 front end** accepts and rejects source according to the
-   specification and produces typed program data, diagnostics and effect
+1. A **conforming front end** accepts and rejects source according to the
+   language rules and produces typed program data, diagnostics and effect
    information.
 2. A **target backend** preserves the typed program's behaviour for one named
    target profile and passes every applicable semantic vector.
@@ -40,7 +40,7 @@ implementation progresses.
 | `E-CONFIG-001`   | Malformed host manifest or target profile, unsupported version, missing field or unknown field                       |
 | `E-CONFIG-002`   | Duplicate or unresolved configuration ID, invalid span, layout, type composition or host/target combination          |
 | `E-LEX-001`      | Invalid token or numeric literal, unterminated literal, or physical newline in quoted text                           |
-| `E-PARSE-001`    | Token sequence does not match the 0.5 grammar                                                                        |
+| `E-PARSE-001`    | Token sequence does not match the grammar                                                                            |
 | `E-TEXT-001`     | Invalid character or string literal, escape, encoding, embedded NUL or payload size                                  |
 | `E-TEXT-002`     | Invalid string capacity, constant copy or append, operation, parameter shape or access to the sealed representation  |
 | `E-NAME-001`     | Unknown name, use before declaration, duplicate declaration, forbidden shadowing or case-only collision              |
@@ -213,7 +213,8 @@ unstated semantics:
 - indirect calls, procedure values and closures;
 - native callbacks into generated Lanternfly code;
 - unrestricted labels and `goto`;
-- exceptions;
+- exceptions — the language's provisional failable routines take their
+  place; [chapter 14](14-error-handling.md) documents them;
 - generics and operator overloading;
 - resizable or heap-backed strings;
 - general streams, file operations and an operating-system interface;
@@ -225,7 +226,7 @@ capability.
 
 ## Open and provisional design
 
-The post-0.5 queue includes:
+The open design queue includes:
 
 - bare versus named block endings;
 - parser evidence for case-insensitive names;
@@ -238,5 +239,6 @@ The post-0.5 queue includes:
 - `float32` and `float48` capability semantics, including representation,
   rounding, conversions, comparisons and literal syntax.
 
-Until a later specification changes them, the 0.5 rules in this manual and
-the normative specification are the implementation baseline.
+Until a later edition changes them, the rules in this manual are the
+implementation baseline, with [chapter 14](14-error-handling.md)'s
+error handling marked provisional.

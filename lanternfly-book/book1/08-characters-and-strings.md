@@ -2,7 +2,7 @@
 layout: default
 title: "Characters and Fixed-Capacity Strings"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 7
+nav_order: 8
 ---
 
 # Characters and Fixed-Capacity Strings
@@ -23,10 +23,11 @@ var playerName as string[12]
 part of the type, and the layout is as concrete as any array's: one length
 byte, twelve payload cells, and a zero byte after the current payload, for
 exactly fourteen bytes settled at compile time. There is no allocator and no
-hidden buffer; the declaration is the cost. A capacity of 255 or more widens
-the length field to two bytes, `N + 3` in all, and nothing else changes —
+hidden buffer; the declaration is the cost. A capacity from 255 through
+the maximum of 65,534 widens the length field to two bytes, `N + 3` in
+all, and nothing else changes —
 though a capacity that large is a declared dependency: the module states
-`import "standard/long-strings.lafy"` at its top; chapter 11 explains
+`import "standard/long-strings.lafy"` at its top; chapter 12 explains
 capability imports.
 
 The trailing zero byte is the _terminator_, and every string operation
@@ -92,14 +93,16 @@ agreement: the stored count, the nonzero payload, and the terminator sitting
 immediately after it. One mismatch shows why the sealing matters: if a
 payload byte could change without the count and terminator moving with it,
 `length` would report one string, comparison would read another, and the
-next `append` would write somewhere between them. Assignment, `append`, `clear`, comparison and `length`
+next `append` would write somewhere between them.
+
+Assignment, `append`, `clear`, comparison and `length`
 are the built-in interface, and each operation preserves what the others
-rely on. Chapter 12's portable text services extend the family, reading
+rely on. Chapter 13's portable text services extend the family, reading
 and writing whole strings at the program's edge through compiler-managed
 carriers, without ever exposing the representation.
 
-A `u8` array makes none of these promises, so it never converts into a
-string, and a string is not an array of its bytes. Byte storage under other
+A `u8` array maintains none of these invariants, so it never converts into
+a string, and a string is not an array of its bytes. Byte storage under other
 text conventions — a high-bit terminator, machine-specific display codes —
 remains ordinary `u8` data under an explicit service contract that assigns
 each byte its meaning.
@@ -109,16 +112,31 @@ each byte its meaning.
 Strings sit in arrays like any other fixed-size data. `string[12][8]`
 declares eight strings of capacity twelve (the capacity brackets belong to
 the element type), and each element supports the full string interface
-through its indexed path. The next chapter adds the remaining home: a
+through its indexed path. The next chapter adds the remaining location: a
 string as one named field inside a record, occupying its exact bytes at a
 fixed offset.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/07-strings.txt)
+The [chapter listing](/lanternfly-book/book1/code/08-strings.txt)
 copies a greeting with a checked assignment, appends a byte, builds a
 status line from a literal and a computed digit, and compares two names by
 content. `playerName` finishes as `HELLO!` and `statusLine` as `MODE 2`.
+
+## Exercises
+
+1. What is the exact size of `var name as string[40]`, and where does
+   the terminator sit when the string holds five bytes?
+2. `append` would push a string past its capacity at runtime. What
+   happens, and what state is the string left in?
+3. Comparing a `string[12]` with a `string[24]` is legal. Why does the
+   capacity difference not matter?
+
+Answers: 42 bytes — one length byte, forty payload cells, one
+terminator — with the terminator at offset 6 after five payload bytes;
+the range-fault service runs before any destination byte changes, so
+the string keeps its previous valid content; comparison examines the
+current payload bytes, and capacities play no part.
 
 ## Chapter summary
 

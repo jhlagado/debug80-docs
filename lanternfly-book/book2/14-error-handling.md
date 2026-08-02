@@ -8,14 +8,11 @@ nav_order: 14
 # Failable Routines and Error Handling
 
 > [!NOTE]
-> This chapter documents the provisional 0.6 revision — specification
-> sections 11.8 and 11.9 and their conformance and lowering additions.
-> The rest of this manual documents the 0.5 edition. The sections are
-> marked Provisional in the specification until their evidence programs
-> and fixtures exist, and the
-> [specification](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md)
-> is normative where this chapter and the specification differ.
-> [Book One, Chapter 13](../book1/13-expecting-failure.md) teaches the
+> This chapter documents error handling, the newest part of the language.
+> Its rules remain provisional until their planned evidence programs and
+> conformance fixtures exist, and details may change before the first
+> compiler; the rest of this manual is the settled first edition.
+> [Book One, Chapter 14](../book1/14-expecting-failure.md) teaches the
 > same material as a course.
 
 Lanternfly separates two kinds of failure. A violated contract — an
@@ -236,12 +233,13 @@ these costs on the static-frame profile:
 
 A framed, recursion-capable profile propagates through a conditional
 jump to the epilogue instead, and routines that defer cleanup route
-exits through a shared cleanup tail. The full obligations are in the
-[lowering contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/lowering-and-runtime.md).
+exits through a shared cleanup tail — so the byte counts above are best
+cases for a frameless routine, and frames, cleanup and code layout add
+instructions.
 
 ## Words and grammar
 
-The 0.6 revision reserves `defer`, `fail`, `fails` and `on`, and adds
+This revision reserves `defer`, `fail`, `fails` and `on`, and adds
 `error` as a contextual word. The grammar additions:
 
 ```text
@@ -285,8 +283,8 @@ routine remains non-returning and is never observed as a failure value.
 
 ## Deferred forms
 
-The first edition excludes, pending evidence recorded in the
-specification's design queue: error-set inclusion, so `or fail` could
+The first edition excludes, pending evidence recorded in the language's
+design queue: error-set inclusion, so `or fail` could
 propagate into a caller's larger set; `fails` contracts on external
 routines; `on error` forms beyond the single-statement binding; and
 `defer` inside nested control structure.

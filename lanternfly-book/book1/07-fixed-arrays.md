@@ -2,7 +2,7 @@
 layout: default
 title: "Fixed Arrays and Index Domains"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 6
+nav_order: 7
 ---
 
 # Fixed Arrays and Index Domains
@@ -25,7 +25,7 @@ end
 ```
 
 The entries receive 0, 2, 4, 6, 8, 10, 12 and 14. Arrays connect two ideas
-from Chapter 5: a loop produces the index, and indexing turns that number into
+from Chapter 6: a loop produces the index, and indexing turns that number into
 a storage location.
 
 ## Fixed shape
@@ -43,7 +43,7 @@ length and needs no allocator.
 A count-declared array is therefore zero-based, and an index into one is
 best understood as a distance from the beginning: entry zero is zero
 elements from the base, entry seven is seven elements away. A dimension can
-also declare its bounds outright, or take them from a Chapter 4 type:
+also declare its bounds outright, or take them from a Chapter 5 type:
 
 ```lanternfly
 var octoberReadings as i16[1 to 31]
@@ -51,7 +51,7 @@ var modeWidths as u8[ReportMode]
 ```
 
 The first array indexes naturally by day of the month, with no wasted
-entry zero and no subtracted one in sight. The second holds one value per
+entry zero and no subtracted one. The second holds one value per
 enumeration member — a table looked up by name. The domain is part of the
 array's type, and `lower` and `upper` query a dimension's first and last
 valid index the way `count` queries its extent.
@@ -201,7 +201,7 @@ shape. A target profile may place constant data in read-only memory.
 
 ## Clearing and filling
 
-Two standard procedures handle common whole-array writes:
+Two language operations handle common whole-array writes:
 
 ```lanternfly
 clear(samples)
@@ -219,13 +219,26 @@ The backend may lower either operation to an inline loop, target instruction
 sequence or runtime helper. The source names the operation; generated
 artifacts show the chosen implementation.
 
-## Example
+## Complete program
 
-The [chapter listing](/lanternfly-book/book1/code/06-fixed-arrays.txt)
+The [chapter listing](/lanternfly-book/book1/code/07-fixed-arrays.txt)
 fills a sample buffer and declares a weekly table, zeroes a month of
 readings across a 1-to-31 domain and holds one line width per report mode.
 For `weeklyReadings[1, 2]`, the expression `1 * readingCount + 2`
 gives element 6 and byte offset 12 because each entry occupies two bytes.
+
+## Exercises
+
+1. For `var readings as i16[1 to 31]`, state `count(readings)` and
+   `size(readings)`.
+2. In `u8[12, 20]`, which element number is `[2, 3]`, and at what byte
+   offset does it sit?
+3. Why is `samples[8]` a compile error for `var samples as u8[8]`?
+
+Answers: 31 elements and 62 bytes; element `2 * 20 + 3`, which is 43, at
+byte offset 43 because each element is one byte; valid indices run 0
+through 7, and a constant index outside the domain is rejected during
+compilation.
 
 ## Chapter summary
 
@@ -244,5 +257,5 @@ gives element 6 and byte offset 12 because each entry occupies two bytes.
   backend free to choose an implementation.
 
 An array of bytes can hold any fixed byte sequence — including text,
-whose one special need the next chapter takes up: a sequence of character
-bytes must also record where it ends.
+whose one special requirement the next chapter takes up: a sequence of
+character bytes must also record where it ends.

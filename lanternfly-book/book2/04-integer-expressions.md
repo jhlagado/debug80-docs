@@ -60,7 +60,7 @@ preserves every source value:
 | `u16`  | `u32`, `i32`                 |
 | `i16`  | `i32`                        |
 
-The compiler never invents a third common type. `u8 + u16` operates as
+The compiler never synthesizes a third common type. `u8 + u16` operates as
 `u16 + u16`; `u8 + i8` and `i16 + u16` require an explicit conversion.
 
 ## Result types

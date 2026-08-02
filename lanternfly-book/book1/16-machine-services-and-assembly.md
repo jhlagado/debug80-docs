@@ -2,15 +2,15 @@
 layout: default
 title: "Machine Services and Assembly"
 parent: "Lanternfly Book 1 — Programming Fundamentals"
-nav_order: 14
+nav_order: 16
 ---
 
 # Machine Services and Assembly
 
-Chapter 12's portable services cover text, and only text. A program that
+Chapter 13's portable services cover text, and only text. A program that
 must format a number, read a joystick, program a sound chip or poke a
 video controller has left the portable contract, and what supplies those
-operations is a platform interface module — Chapter 11's export mechanism
+operations is a platform interface module — Chapter 12's export mechanism
 carrying one machine's own services:
 
 ```lanternfly
@@ -32,7 +32,7 @@ end
 ```
 
 Three kinds of call share this routine. `writeText` and `writeNewline`
-are portable standard services from Chapter 12. `writeUnsigned` is a
+are portable standard services from Chapter 13. `writeUnsigned` is a
 _custom platform service_: numeric formatting is outside the standard
 text modules, so this target's console module supplies it.
 `measureChange` is ordinary Lanternfly from an ordinary module. Every
@@ -43,13 +43,13 @@ is tied to this machine.
 
 Three tiers now share the page, and telling them apart is the chapter's
 first job. _Language operations_ — `abs`, `length`, `clear`, `append` and
-their kin — belong to the language: they mean the same everywhere, and
-each backend chooses instructions or a runtime helper. _Standard services_
-(Chapter 12's five) have one portable meaning but optional,
+the rest — belong to the language: they mean the same everywhere, and
+each backend selects instructions or a runtime helper. _Standard services_
+(Chapter 13's five) have one portable meaning but optional,
 target-supplied implementations, reached through explicit imports. A
 _platform service_ such as `writeUnsigned` is someone's routine on a
-particular machine, reached through a declaration the platform module
-wrote. The language defines what `abs` means; the standard modules define
+particular machine, reached through a declaration in the platform
+module. The language defines what `abs` means; the standard modules define
 what `writeText` means; a target profile and its modules define what
 `writeUnsigned` does.
 
@@ -86,7 +86,7 @@ logic from a computer's firmware details: two platform modules can export
 the same service signatures and bind them to different machines, and every
 program module imports the signatures alone.
 
-The standard text modules share the import experience but not the
+The standard text modules share the import form but not the
 authorship. Their interfaces are compiler-defined and versioned, targets
 bind their stable service IDs rather than project-chosen symbols, and two
 of their operations use carriers no ordinary declaration can spell — so a
@@ -100,7 +100,7 @@ and `far` spellings describe how a target reaches an aggregate — nothing
 more; they are not a return of source pointers. Every static
 storage root has a target storage class. Ordinary compiler-allocated
 storage is _near_: directly usable in the target's current address context.
-A banked or segmented target also offers _far_ storage, which carries extra
+A banked or segmented target also provides _far_ storage, which carries extra
 context such as a bank number alongside a 16-bit offset. A flat-memory
 target may treat the two classes identically while preserving their source
 meaning.
@@ -142,9 +142,9 @@ look inside: there is no dereference, no address arithmetic, and no
 conversion connecting an opaque address to ordinary storage in either
 direction. Only the receiving target routine interprets the value.
 
-Opaque addresses are the language's acknowledgement that video memory,
-device registers and firmware structures exist — held safely, spent only at
-the boundary that understands them.
+Opaque addresses exist because video memory, device registers and
+firmware structures do: a program needs a way to hold such locations,
+and no portable type could describe their contents.
 
 ## Inline assembly
 
@@ -195,30 +195,53 @@ modules import their exported signatures.
 ## Generated artifacts
 
 Reading the translation is a practical activity: inspect the instructions
-behind a loop, find the address of a record, see why a helper was linked,
+behind a loop, find the address of a record, see why a helper was included,
 trace a runtime fault to its source line. A source-generating backend
 records what those actions need — the generated assembly, the mappings
 from Lanternfly lines to generated ranges and machine addresses, typed
 symbols and exact layouts, the selected helpers, and the external
 bindings with their adapters.
 
-The mapping is verified when the toolchain composes the final program: a
-map that cannot be validated against the assembled output is an error, so
-the map you inspect is either checked or absent, never a guess.
+The mapping is designed to be verified when the toolchain composes the
+final program: a map that cannot be validated against the assembled
+output is an error, so an inspected map will be either checked or absent,
+never a guess.
 
-## Example
+## Complete program
 
 This chapter's companion program spans three files:
-[report.lafy](/lanternfly-book/book1/code/14-report.txt) composes the
+[report.lafy](/lanternfly-book/book1/code/16-report.txt) composes the
 program from the standard text output, the measurement model and the
 platform console;
-[readings.lafy](/lanternfly-book/book1/code/14-readings.txt) is an
+[readings.lafy](/lanternfly-book/book1/code/16-readings.txt) is an
 ordinary module exporting that model; and
-[console.lafy](/lanternfly-book/book1/code/14-console.txt) is a platform
-interface module whose module assembly defines the firmware symbol its
-external binding names. The change traces to 230 and prints as
-`CHANGE 230`: the label through a standard service, the number through the
-`writeUnsigned` binding that console.lafy's module assembly names.
+[console.lafy](/lanternfly-book/book1/code/16-console.txt) is a platform
+interface module whose module assembly defines the firmware symbols its
+external bindings name. The console module also binds `playTone` at an
+absolute address, exports a `near` aggregate parameter and an opaque
+`far address`; report.lafy waits for vertical blank through a
+statement-level `asm` block, plays a tone and clears a shared block. The
+change traces to 230 and prints as `CHANGE 230`: the label through a
+standard service, the number through the `writeUnsigned` binding that
+console.lafy's module assembly names.
+
+## Exercises
+
+1. `playTone` is bound with `at $0f06` and `waitForVBlank` with
+   `from "ROM_VBLANK_WAIT"`. Who resolves each?
+2. Why must the compiler treat a statement-level `asm` block as a
+   conservative barrier?
+3. Which operations does a `far address` value support in source, and
+   which are refused?
+
+Answers: `at` needs no resolution beyond the profile's address checks,
+while `from` is resolved by the assembler or substrate toolchain from
+the named symbol; the block may read or write any visible mutable
+object, call routines, fault or perform device I/O, so values needed
+afterward must be preserved and no assumption survives the block;
+assignment, passing and comparison with the same address class are
+supported — dereference, arithmetic and conversion to ordinary storage
+have no source form.
 
 ## Chapter summary
 
@@ -237,7 +260,7 @@ external binding names. The change traces to 230 and prints as
 
 The [language reference](../book2/) holds the exact rules whenever a
 chapter's working account is not enough. What this book leaves in your
-hands is the verified source map: every emitted operation inspectable in
-generated assembly, every folded-away statement recorded without an
-invented machine range, and every trace you worked by pencil checkable
-against the real thing.
+hands is a method: reading a program as its storage, tracing it by
+pencil, and accounting for the code it asks of the machine. When the
+compiler arrives, its verified source maps are designed to let every one
+of those traces be checked against the real thing.
