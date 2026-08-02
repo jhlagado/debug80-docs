@@ -12,8 +12,11 @@ grammar records the first edition's block shapes and the rule that
 distinguishes assignment from equality. Expression precedence comes from
 [Chapter 4](04-integer-expressions.md#precedence-and-associativity).
 
-The grammar is the settled first-edition form. Implementation evidence may
-motivate a later edition, but it does not change this grammar. Successful
+The grammar below is complete for the 0.6 baseline. The productions and
+words introduced by the Provisional error-handling revision — the
+`fails-clause`, the `fail` and `defer` statements, the `or fail` tails
+and the `on-error-clause` — are part of it and are noted where they
+appear; [chapter 14](14-error-handling.md) explains them. Successful
 parsing is only the first step: the semantic restrictions
 in the earlier chapters still determine whether the source is valid.
 
@@ -77,9 +80,11 @@ record-decl         ::= "record" type-name newline
 field-decl          ::= value-name "as" type-expr newline
 
 sub-decl            ::= "sub" value-name "(" params? ")"
-                        ("as" type-expr)? newline
+                        ("as" type-expr)? fails-clause? newline
                         routine-block
                         "end" newline
+
+fails-clause        ::= "fails" type-name
 
 extern-sub-decl     ::= "extern" "sub" value-name "(" params? ")"
                         ("as" type-expr)?
@@ -89,7 +94,7 @@ external-binding    ::= "at" address-const-expr
                       | "from" string-literal
 
 forward-sub-decl    ::= "forward" "sub" value-name "(" params? ")"
-                        ("as" type-expr)? newline
+                        ("as" type-expr)? fails-clause? newline
 
 params              ::= param ("," param)*
 param               ::= aggregate-storage-class? value-name "as" type-expr
@@ -104,7 +109,8 @@ routine-block       ::= local-decl* statement*
 local-decl          ::= local-var-decl | alias-decl
 
 local-var-decl      ::= "var" value-name "as" type-expr
-                        ("=" expression)? newline
+                        ("=" expression ("or" "fail")?)? newline
+                        on-error-clause?
 
 alias-decl          ::= "alias" value-name "as" aggregate-type
                         "=" storage-path newline
@@ -138,6 +144,8 @@ statement           ::= assignment-statement
                       | exit-statement
                       | continue-statement
                       | return-statement
+                      | fail-statement
+                      | defer-statement
                       | asm-block
 
 asm-block           ::= "asm" newline
@@ -145,10 +153,21 @@ asm-block           ::= "asm" newline
                         "end" newline
 
 assignment-statement
-                    ::= writable-path "=" expression newline
+                    ::= writable-path "=" expression
+                        ("or" "fail")? newline on-error-clause?
 
 expression-statement
-                    ::= expression newline
+                    ::= expression ("or" "fail")? newline on-error-clause?
+
+on-error-clause     ::= "on" "error" value-name newline
+                        block
+                        "end" newline
+
+fail-statement      ::= "fail" value-name newline
+
+defer-statement     ::= "defer" deferred-statement
+deferred-statement  ::= assignment-statement
+                      | expression-statement
 
 standard-procedure-statement
                     ::= "clear" "(" storage-path ")" newline
@@ -183,7 +202,7 @@ while-statement     ::= "while" expression newline block "end" newline
 
 exit-statement      ::= "exit" newline
 continue-statement  ::= "continue" newline
-return-statement    ::= "return" expression? newline
+return-statement    ::= "return" (expression ("or" "fail")?)? newline
 
 block               ::= statement*
 ```
@@ -316,6 +335,13 @@ string-literal      ::= '"' string-character* '"'
 newline             ::= logical-newline
 ```
 
+The failure forms resolve semantically under chapter 14's rules: an `or`
+whose left operand is a complete failable invocation is the failure
+default, every other `or` is the Boolean operator, and an
+`on-error-clause` binds to the statement it follows. A
+`deferred-statement` admits neither an `or` form nor an `on error`
+clause.
+
 `const-expr` and `address-const-expr` receive the semantic restrictions from
 [Chapter 5](05-constants-variables-placement.md#constant-expressions) and
 [Chapter 4](04-integer-expressions.md#target-address-constant-expressions).
@@ -352,6 +378,7 @@ clear
 const
 continue
 count
+defer
 each
 else
 end
@@ -359,6 +386,8 @@ enum
 exit
 export
 extern
+fail
+fails
 false
 fill
 for
@@ -372,6 +401,7 @@ lower
 mod
 not
 offset
+on
 or
 range
 record
@@ -410,7 +440,11 @@ u16
 u32
 ```
 
-`type` is contextual inside `size`, `count`, `lower` and `upper`.
+`defer`, `fail`, `fails` and `on` belong to the Provisional
+error-handling revision but are reserved in every program. `type` is
+contextual inside `size`, `count`, `lower` and `upper`; `error` is
+likewise contextual, recognized only immediately after `on`, and remains
+an ordinary identifier everywhere else.
 
 Several familiar words are deliberately absent from the first edition:
 

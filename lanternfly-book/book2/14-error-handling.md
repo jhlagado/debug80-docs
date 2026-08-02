@@ -12,8 +12,9 @@ nav_order: 14
 > Its rules remain provisional until their planned evidence programs and
 > conformance fixtures exist, and details may change before the first
 > compiler; the rest of this manual is the settled first edition.
-> [Book One, Chapter 14](../book1/14-expecting-failure.md) teaches the
-> same material as a course.
+> Readers can meet the same material as a course in Book One,
+> [chapters 14](../book1/14-expecting-failure.md)
+> and [15](../book1/15-propagation-and-cleanup.md).
 
 Lanternfly separates two kinds of failure. A violated contract — an
 out-of-range index, a zero divisor, a checked destination rejecting its
@@ -56,9 +57,9 @@ sub readBlock(buffer as u8[128]) as u16 fails TapeError
 sub verifyBlock(index as u8) fails TapeError
 ```
 
-Each invocation of a failable routine completes in exactly one of two
-ways: success, carrying the declared result if there is one, or failure,
-carrying one member of the error set.
+Absent a runtime fault, an invocation of a failable routine returns in
+one of two ways: success, carrying the declared result if there is one,
+or failure, carrying one member of the error set.
 
 Placement rules:
 
@@ -219,8 +220,9 @@ and a program that declares no failable routine contains no
 failure-channel code. Register assignment is target ABI. The provisional
 Z80 candidate uses the carry flag as the discriminant with the code in
 A — `SCF` sets it in one instruction, the conditional return and jump
-forms test it directly, and keeping the tag in a flag leaves A free — giving
-these costs on the static-frame profile:
+forms test it directly, and keeping the tag in a flag leaves A free for
+the code, so the tag costs no register — giving these costs on the
+static-frame profile:
 
 | Construct | Candidate Z80 lowering | Cost |
 | --------- | ---------------------- | ---- |
@@ -239,47 +241,21 @@ instructions.
 
 ## Words and grammar
 
-This revision reserves `defer`, `fail`, `fails` and `on`, and adds
-`error` as a contextual word. The grammar additions:
-
-```text
-sub-decl            ::= "sub" value-name "(" params? ")"
-                        ("as" type-expr)? fails-clause? newline
-                        routine-block
-                        "end" newline
-fails-clause        ::= "fails" type-name
-
-fail-statement      ::= "fail" value-name newline
-
-defer-statement     ::= "defer" deferred-statement
-deferred-statement  ::= assignment-statement
-                      | expression-statement
-
-on-error-clause     ::= "on" "error" value-name newline
-                        block
-                        "end" newline
-```
-
-The assignment, expression-statement and local-declaration productions
-accept an optional `("or" "fail")` tail and an optional trailing
-`on-error-clause`; the return production accepts the `or fail` tail
-only. The failure-default `or` is not a distinct production: it is the
-ordinary `or` of the expression grammar, reinterpreted semantically when
-its left operand is a complete failable invocation.
+The revision reserves `defer`, `fail`, `fails` and `on`, and adds `error`
+as a contextual word recognized only immediately after `on`. The complete
+productions — the `fails-clause`, the `fail` and `defer` statements, the
+`or fail` tails and the `on-error-clause` — appear in
+[chapter 12](12-grammar-and-words.md)'s canonical grammar and word
+inventory.
 
 ## Diagnostics
 
-| ID | Required rejection |
-| -- | ------------------ |
-| `E-FAIL-001` | Failable invocation unconsumed, or nested inside a larger expression |
-| `E-FAIL-002` | `fail` or `or fail` in a routine without a `fails` clause, or propagation between different error-set types |
-| `E-FAIL-003` | `fails` operand not a `u8` enum; `fail` operand outside the declared set; invalid failure default |
-| `E-FAIL-004` | Invalid `on error` binding, colliding binding name, or a declaration-bound block that can complete normally |
-| `E-FAIL-005` | `fails` on an external routine; failure forms in a hosted body (a failable entry is `E-ENTRY-001`) |
-| `E-DEFER-001` | `defer` outside routine top level or in a hosted body; deferred statement not infallible |
-
-The faults of Chapter 13 are unchanged: a fault raised inside a failable
-routine remains non-returning and is never observed as a failure value.
+The revision's rejections — `E-FAIL-001` through `E-FAIL-005` and
+`E-DEFER-001` — appear with the rest of the diagnostic inventory in
+[chapter 13](13-diagnostics-and-conformance.md), together with the
+error-handling minimum program. The faults of chapter 13 are unchanged: a
+fault raised inside a failable routine remains non-returning and is never
+observed as a failure value.
 
 ## Deferred forms
 

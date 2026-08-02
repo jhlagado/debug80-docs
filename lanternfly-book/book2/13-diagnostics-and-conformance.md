@@ -82,18 +82,24 @@ implementation progresses.
 | `E-CALL-001`     | Aggregate argument is a temporary, general expression, constant or volatile object                                   |
 | `E-CALL-002`     | A source call-graph cycle, direct or through forward declarations, occurs on a profile without recursion             |
 | `E-FORWARD-001`  | Module ends with a forward declaration that has no completing body                                                   |
-| `E-FORWARD-002`  | Completing header differs from its forward declaration                                                               |
+| `E-FORWARD-002`  | Completing header differs from its forward declaration in name, export status, parameters, result form or `fails` clause |
 | `E-MODULE-001`   | Root or import path lacks exact lowercase `.lafy`, or an import cycle, resolution or export collision occurs         |
 | `E-MODULE-002`   | Exported declaration exposes a private type                                                                          |
 | `E-MODULE-003`   | An `import` appears outside the module's contiguous import prefix                                                    |
 | `E-EXTERN-001`   | External routine lacks a supported binding or compatible ABI                                                         |
 | `E-EXTERN-002`   | External routine has a Lanternfly body or is selected as entry                                                       |
 | `E-BOUNDARY-001` | Native or host contract cannot guarantee required values, storage, string invariants or callback restrictions        |
-| `E-ENTRY-001`    | Executable manifest lacks one valid source-defined entry routine                                                     |
+| `E-ENTRY-001`    | Executable manifest lacks one valid parameterless, result-free, non-failable source-defined entry routine            |
 | `E-TARGET-001`   | Required native service, standard-module binding, operation, address class or capability target requirement is unavailable or unsatisfied |
 | `E-CAP-001`      | A capability-gated word or facility is mentioned without the module's own enabling standard capability import        |
 | `E-ASM-001`      | Assembly block is unclosed or appears in an invalid position                                                         |
 | `E-ASM-002`      | Target lacks a compatible assembly-fragment pipeline                                                                 |
+| `E-FAIL-001`     | Failable invocation unconsumed, or nested inside a larger expression (Provisional)                                   |
+| `E-FAIL-002`     | `fail` or `or fail` in a routine without a `fails` clause, or propagation between different error sets (Provisional) |
+| `E-FAIL-003`     | Invalid `fails` operand, `fail` operand outside the declared set, or invalid failure default (Provisional)           |
+| `E-FAIL-004`     | Invalid `on error` binding, colliding binding name, or a declaration-bound block that can complete normally (Provisional) |
+| `E-FAIL-005`     | `fails` on an external routine, or a failure form inside a hosted body (Provisional)                                 |
+| `E-DEFER-001`    | `defer` outside routine top level or in a hosted body, or a deferred statement that is not infallible (Provisional)  |
 | `E-PLACE-001`    | Source or build placement cannot fit a compatible target memory region                                               |
 | `E-PLACE-002`    | Emitted bytes, reserved addresses or symbols disagree with the validated placement plan                              |
 | `E-MAP-001`      | Generated-source mapping cannot be composed because an anchor, fragment or provenance span is invalid                |
@@ -159,7 +165,9 @@ their final storage, ordered service traces and fault traces:
 11. text, including an external print-style call on the terminated payload;
 12. standard character, text and bounded line I/O through explicitly imported
     modules, when claimed by the target profile;
-13. Hosted return.
+13. Hosted return;
+14. error handling — a failable parser, propagation, a default, `on error`
+    handling and `defer` cleanup order (Provisional).
 
 The conformance contract also requires focused vectors for integer and ordinal
 boundaries, conversion, constant folding, short and long string forms, exact
@@ -213,8 +221,7 @@ unstated semantics:
 - indirect calls, procedure values and closures;
 - native callbacks into generated Lanternfly code;
 - unrestricted labels and `goto`;
-- exceptions — the language's provisional failable routines take their
-  place; [chapter 14](14-error-handling.md) documents them;
+- exceptions;
 - generics and operator overloading;
 - resizable or heap-backed strings;
 - general streams, file operations and an operating-system interface;
@@ -222,7 +229,9 @@ unstated semantics:
 - unchecked indexing as conforming execution.
 
 Recursion is accepted only by a profile that declares and tests that
-capability.
+capability. The Provisional failable routines of
+[chapter 14](14-error-handling.md) cover expected failures; they do not
+make runtime faults interceptable.
 
 ## Open and provisional design
 
