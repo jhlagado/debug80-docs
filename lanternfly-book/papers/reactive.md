@@ -58,10 +58,9 @@ Everything else in this paper is spelling.
 ```lanternfly
 // Hypothetical syntax; deferred with the task form.
 state count as u8 = 0 changed
-derived barLength as u8 = count / 8
+derive barLength as u8 from count / 8
 
-pulse increase
-bind keyPlus held every 6 raises increase
+pulse increase from keyPlus held every 6
 
 effect on increase
     if count < 64 then
@@ -69,7 +68,7 @@ effect on increase
     end
 end
 
-effect on barLength
+render on barLength
     clearMatrix()
     fillRow(3, barLength, colourGreen)
 end
@@ -88,17 +87,26 @@ Six declaration heads, each declaring one kind of thing, teachable as a
 decision tree:
 
 - a stored fact → `state`;
-- a fact that is a formula → `derived`;
-- a momentary occurrence → `pulse`;
-- a hardware edge turned into a moment → `bind`;
-- statements that respond to change → `effect on`;
+- a fact that is a formula → `derive … from`;
+- a momentary occurrence → `pulse`, with its hardware source, where it
+  has one, named `from` its own declaration;
+- statements that respond to change → `effect on`, running in the
+  middle of the instant;
+- statements that depict facts → `render on`, running last;
 - a process that remembers where it was → `task`.
 
-And one sentence covers every appearance of `on`:
+The phase is written in the head, so a reader learns when code runs
+from its first word: `derive` settles first, `effect` runs in the
+middle, `render` runs last. And one sentence covers every appearance
+of `on`:
 
-> **`on` always attaches a trigger to a head: to an `effect`
-> declaration, to a `wait`, or to the statement whose failure it
-> handles.**
+> **`on` always attaches a trigger to a head: to an `effect` or
+> `render` declaration, to a `wait`, or to the statement whose failure
+> it handles.**
+
+One preposition covers the sources: a fact is derived `from` facts, and
+a moment comes `from` the machine — the same word `extern` routines
+already use for a symbol's source.
 
 The third case is not new syntax — it is `on error`, adopted in
 specification 0.6 before this paper existed. The failure channel is a
@@ -119,14 +127,16 @@ and no field diffing or reference comparison exists anywhere, because
 notification happens at the write, not by inspection afterward. Finer
 waves come from declaring finer cells.
 
-`derived` declares an equation, not an initializer. A state cell is
-bound to a value once; a derived cell is bound to other cells
-continuously — it has no other writer, no independent existence, and
-its formula is its whole meaning. The distinction takes a word because
-inferring it from the right-hand side would make `= limit` and
-`= count` mean different temporal behaviors depending on what a name
-resolves to, and would steal the spelling for initializing a cell from
-another cell's boot-time value. Dependencies are read from the
+`derive` declares an equation, not an initializer, and its spelling
+keeps the two apart: bound-once takes `=`, bound-always takes `from`.
+A derived cell has no other writer, no independent existence, and its
+formula is its whole meaning. The distinction takes its own head and
+its own preposition because an equals sign would read as an
+initializer — and because inferring the difference from the right-hand
+side would make `= limit` and `= count` mean different temporal
+behaviors depending on what a name resolves to, while stealing the
+spelling for initializing a cell from another cell's boot-time
+value. Dependencies are read from the
 expression; cycles are causality errors at compile time, the
 spreadsheet's circular-reference check. A derived cell's dependencies
 are state and derived cells only — moments, task fields and the clock
@@ -163,26 +173,19 @@ information found nowhere else. Reading an unlisted fact is sampling
 and legal; reading an unlisted moment is an error, since a moment has
 no meaning outside its delivery.
 
-**Phases are inferred from what a body is, by a total, ordered
-classifier.** Three rules, tried in order, transitive over the call
-graph — a helper's device call counts as its caller's:
-
-1. any moment among the triggers → **logic**;
-2. otherwise, any device, native or service effect in the body →
-   **render**;
-3. otherwise → **derivation**.
-
-The rules are ordered, so a moment-triggered effect that both writes
-facts and beeps is logic — the ordinary game rule — while render is
-the residual class: fact-triggered depiction, and a render writing
-facts is a compile error, Glimmer's "a render only depicts," now
-checked. One departure from a hand-declared Glimmer port is stated
-rather than hidden: a block Glimmer's author declared `effect` but
-whose triggers and writes are pure fact-to-fact is classified
-derivation here, so it runs before the logic wave and its sampled
-reads see the previous instant where a file-earlier logic write would
-have been visible. Inference trades that corner for the guarantee that
-a phase can never be mis-declared.
+**Phases are declared in the head and verified against the body.** An
+earlier draft inferred them; the reader's argument won instead — the
+head word tells the programmer when their code runs, which on a 4 MHz
+machine is the thing being reasoned about, not metadata. So the phase
+vocabulary is the head vocabulary: `derive` settles first, `effect`
+runs in the middle, `render` runs last. What inference would have
+bought survives as checking: a `render` writing a fact is a compile
+error — Glimmer's "a render only depicts," verified interprocedurally,
+a helper's writes counting as its caller's — and a `derive` equation
+is pure by form. An `effect` may do anything a body may do. Equations
+are the whole derivation phase in the first edition: multi-statement
+fact-to-fact work is an effect, and an early-phase block form waits on
+evidence from real programs.
 
 **Derived cells settle within the instant.** Acyclic derived chains
 are ordered topologically inside the derivation phase, with intra-phase
@@ -213,18 +216,23 @@ specification already provides.
 
 ## 5. Moments, binds and tasks
 
-A `pulse` is a bare moment. Bindings turn hardware edges into moments:
+A `pulse` is a moment, and a moment with a hardware source names it in
+its own declaration:
 
 ```lanternfly
-bind keyPlus held every 6 raises increase
+pulse increase from keyPlus held every 6
+pulse fire from keyGo rising
 ```
 
-`raises` is a word where Glimmer wrote an arrow, because this language
-marks structure with words. The binding vocabulary between the source
-name and `raises` — `held`, `rising`, `every` — belongs to the target
-profile, not the core grammar, exactly as external-binding forms do:
-the language owns the shape — `bind`, a source name, the profile's
-words, `raises`, a pulse name — and the profile owns the middle.
+There is no separate binding construct: the wiring Glimmer wrote as a
+`bind` line with an arrow is a `from` clause on the pulse itself, so
+the moment's source stands at its declaration, where a reader looks
+first. The vocabulary after the source name — `held`, `rising`,
+`every` — belongs to the target profile, not the core grammar, exactly
+as external-binding forms do: the language owns the shape — `pulse`, a
+name, `from`, a source, the profile's words — and the profile owns the
+middle. A pulse without a `from` clause is an internal moment, raised
+by program code once the emit family of section 10 is settled.
 
 Tasks keep the [task-first](task-first.md) model — types, instances as
 module variables, dormancy as a designed idle wait — with two rulings
@@ -249,17 +257,16 @@ its 32,767-tick bound.
 The additions in the specification's section-15 style:
 
 ```text
-reactive-decl       ::= state-decl | derived-decl | pulse-decl
-                      | bind-decl | effect-decl
+reactive-decl       ::= state-decl | derive-decl | pulse-decl
+                      | block-decl
 
 state-decl          ::= "state" value-name "as" type-expr
                         ("=" constant-initializer)? "changed"? newline
-derived-decl        ::= "derived" value-name "as" type-expr
-                        "=" expression newline
-pulse-decl          ::= "pulse" value-name newline
-bind-decl           ::= "bind" source-name profile-word*
-                        "raises" value-name newline
-effect-decl         ::= "effect" trigger-clause newline
+derive-decl         ::= "derive" value-name "as" type-expr
+                        "from" expression newline
+pulse-decl          ::= "pulse" value-name
+                        ("from" source-name profile-word*)? newline
+block-decl          ::= ("effect" | "render") trigger-clause newline
                         routine-block "end" newline
 
 trigger-clause      ::= "on" trigger ("," trigger)*
@@ -273,26 +280,27 @@ wait-trigger        ::= trigger | "after" "(" expression ")"
 
 Counting the cost, because economy is a stated goal:
 
-- **Eleven productions**, with `trigger-clause` written once and used
-  by effects, `trigger` reused by waits, and the adopted
+- **Ten productions**, with `trigger-clause` written once and used by
+  both block heads, `trigger` reused by waits, and the adopted
   `on-error-clause` as their named sibling. A trigger names a pulse
   (its occurrence) or a state cell (its change); `after` belongs to
-  wait position only, so an effect cannot trigger on a deadline —
+  wait position only, so a block cannot trigger on a deadline —
   time-driven work is a task's.
-- **Six new words, none reserved.** `state`, `derived`, `pulse`,
-  `bind`, `effect` and `wait` are contextual in head position — the
+- **Six new words, none reserved.** `state`, `derive`, `pulse`,
+  `effect`, `render` and `wait` are contextual in head position — the
   module grammar already begins every declaration with a head word,
   and `wait` heads only a task-body statement — exactly as `error` is
-  contextual after `on`. `changed` and `raises` are likewise
-  contextual inside their own productions, and `after` inside a wait
-  trigger. Nothing joins the reserved inventory, so the task
-  convention's own `state as u8` record field, and every other use of
-  these words as value names, stays legal.
-- **The bind middle is profile-owned with a stated delimiter.** The
-  words between the source name and `raises` belong to the target
-  profile, as external-binding vocabulary does; the parse rule is
-  one sentence — a bind line is scanned to its `raises` — so the
-  profile extends the vocabulary without touching the grammar.
+  contextual after `on`. `changed` is likewise contextual inside the
+  state declaration, `after` inside a wait trigger, and `from` is the
+  language's existing source word doing its existing job. Nothing
+  joins the reserved inventory, so the task convention's own
+  `state as u8` record field, and every other use of these words as
+  value names, stays legal.
+- **The pulse source is profile-owned and self-delimiting.** The words
+  after the source name belong to the target profile, as
+  external-binding vocabulary does, and the clause runs to the end of
+  the line — no separate binding construct exists, so there is
+  nothing to wire and no arrow to learn.
 - **Effect bodies are routine bodies.** Scratch locals and every
   statement form are available; what an effect body cannot contain is
   `wait-stmt`, which appears only in `task-body` — the may-not-suspend
@@ -313,13 +321,10 @@ balance but `end`.
 
 ```lanternfly
 state count as u8 = 0 changed
-derived barLength as u8 = count / 8
+derive barLength as u8 from count / 8
 
-pulse increase
-pulse decrease
-
-bind keyPlus  held every 6 raises increase
-bind keyMinus held every 6 raises decrease
+pulse increase from keyPlus held every 6
+pulse decrease from keyMinus held every 6
 
 effect on increase
     if count < 64 then
@@ -333,22 +338,22 @@ effect on decrease
     end
 end
 
-effect on barLength
+render on barLength
     clearMatrix()
     fillRow(3, barLength, colourGreen)
 end
 
-effect on count
+render on count
     writeHudNumber(count)
 end
 ```
 
-One press of plus, traced by instants: frame N, the binding raises
-`increase`; the first effect runs in the logic phase and writes
+One press of plus, traced by instants: frame N, the bound pulse
+`increase` fires; the first effect runs in the middle phase and writes
 `count`, whose dependents include the derivation — an earlier phase —
 so the change defers. Frame N+1: `barLength` recomputes, and both
-render-phase effects fire together — bar and digits change in the same
-frame, the delivery rule's exactly-once guarantee at work.
+renders fire together — bar and digits change in the same frame, the
+delivery rule's exactly-once guarantee at work.
 
 **A reaction timer** — sequence beside reactivity, which is the
 synthesis in one program:
@@ -359,11 +364,8 @@ state startFrame as u16 = 0
 state score as u16 = 0
 state best as u16 = 65535
 
-pulse go
-pulse pressed
-
-bind keyGo rising raises go
-bind anyKey rising raises pressed
+pulse go from keyGo rising
+pulse pressed from anyKey rising
 
 task Round()
     while true
@@ -392,11 +394,11 @@ effect on score
     end
 end
 
-effect on score
+render on score
     writeHudNumber(score)
 end
 
-effect on best
+render on best
     writeBestNumber(best)
 end
 ```
@@ -416,12 +418,16 @@ side, which is the case that rules out inferred triggers.
 
 ## 8. What was dissolved, and by what argument
 
-The design shed most of its first draft, each cut by argument:
+The design shed most of its first draft, each cut by argument — and
+one cut was reversed by a better argument, recorded here because the
+reversal is instructive:
 
-- `compute` blocks — derivations are equations (`derived`), the
+- `compute` blocks — derivations are equations (`derive … from`), the
   spreadsheet's and Lustre's form; the block was React-shaped habit.
-- `render` and `effect` as phase keywords — phases are a function of
-  what a body does, and the compiler can read bodies.
+- Phase *inference* — proposed to save the `effect`/`render` keywords,
+  then reversed: the head word tells the reader when code runs, and on
+  this machine that outweighs a saved keyword. The verification half
+  of inference survives as checking.
 - `updates` — writes are visible in transparent bodies; the clause
   restated what the compiler proves, and Glimmer only needed it
   because its bodies were opaque assembly.
@@ -429,12 +435,15 @@ The design shed most of its first draft, each cut by argument:
   name; they were Glimmer's assembler linkage.
 - `await` — borrowed intuition from a call-based world this model
   never was.
-- The bind arrow — words, not sigils.
+- `bind`, whole — a moment's source belongs on the moment's own
+  declaration, so the wiring construct and its arrow dissolved into a
+  `from` clause on `pulse`.
 
 What survived, survived because it carries information the body cannot
-express: `state` versus `derived` (bound once versus bound always),
+express: `state` versus `derive` (bound once versus bound always),
 `pulse` (moment versus fact), `on` (triggering is a decision, not a
-read), `task` (memory), `bind` (the platform edge).
+read), the phase heads (when code runs), `task` (memory), `from` (the
+source, of a fact or of a moment).
 
 ## 9. Precedent
 
@@ -466,11 +475,11 @@ target with every byte in the storage map.
 Stated as open, in the order they should be settled:
 
 1. **The emit family.** `fail` emits the failure moment with a payload;
-   `yield` emits a value; a raised pulse emits a bare moment. Three
-   emitters, three words, one family resemblance. `fail` is adopted
-   specification and stays; whether `yield` and pulse-raising share a
-   word — `raises` already exists in bind position — is the mirror of
-   the `on` unification and calls for the same walk.
+   `yield` emits a value; an internal pulse — one with no `from`
+   clause — needs an emitter that does not yet exist. Three emitters,
+   one family resemblance. `fail` is adopted specification and stays;
+   whether `yield` and pulse-raising share a word is the mirror of the
+   `on` unification and calls for the same walk.
 2. **Valued moments.** Elm's messages carry payloads; Glimmer's pulses
    are bare bits with payloads smuggled through state cells, which has
    a race's shape. `pulse keyDown as u8` is the candidate; `on error
