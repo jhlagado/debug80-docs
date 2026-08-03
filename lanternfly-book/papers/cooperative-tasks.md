@@ -396,11 +396,10 @@ Because the step code is shared while argument values differ per
 instance, those values must live in each instance's initial record
 image — and that adjusts the reset doctrine. An argument-less task
 keeps rule 2 unchanged: all-zero is fresh, `clear` is the reset. An
-instance with arguments is *image-fresh*. The `const` template and the
-reset assignment are legal 0.6 today; the declaration spells its
-initializer in the same field form, because a module aggregate
-initializer cannot yet name a constant — admitting that spelling is a
-small specification delta:
+instance with arguments is *image-fresh*, and every piece of that is
+legal 0.6: a record initializer expresses the image, a `const` template
+names it, a declaration may take the template by name, and reset is one
+aggregate assignment:
 
 ```lanternfly
 // Hypothetical: task fastBlink using blinkAt(10)
@@ -413,7 +412,7 @@ end
 
 const fastImage as BlinkTask = BlinkTask(state = 0, rate = 10, countdown = 0)
 
-var fastBlink as BlinkTask = BlinkTask(state = 0, rate = 10, countdown = 0)
+var fastBlink as BlinkTask = fastImage    // declared fresh, argument installed
 
 // Reset, wherever the owner needs it:
 fastBlink = fastImage
