@@ -824,7 +824,12 @@ sum of every task's longest segment, so the clock's resolution is only
 as good as the largest segment is small. A segment whose cost rivals the
 rest of the pass combined is split across two states — the pattern's own
 mechanism, applied to itself. This, not any scheduler feature, is what
-keeps missed frames rare.
+keeps missed frames rare. One consequence of the static-frames paper's
+aggregate-locals proposal lands here: a per-invocation aggregate local
+in a step routine re-establishes its zero value on every pass, blocked
+passes included, because declarations precede the dispatch — so
+step-routine scratch belongs in the instance record or a `static var`,
+and any aggregate local's clearing joins the segment budget.
 
 Two refinements are recorded and deferred. A scheduler that reads a
 conventional `wakeAt` slot could skip sleeping tasks without dispatching

@@ -144,9 +144,10 @@ absolute byte moves route through A, so a byte-slot restore clobbers a
 code held there. The requirement belongs in the lowering contract.
 
 Save-around covers scalar state, and that limit is doctrine, not
-accident. Lanternfly has no aggregate locals: a routine's buffer is
-module storage, one object shared by every activation, so recursion
-cannot have a per-depth buffer implicitly. Where per-depth aggregate
+accident. Lanternfly today has no aggregate locals — section 6 proposes
+the two-lifetime replacement — so a routine's buffer is module storage,
+one object shared by every activation, and recursion cannot have a
+per-depth buffer implicitly. Where per-depth aggregate
 state is genuinely needed, the language's own idiom supplies it
 explicitly — a frame pool:
 
@@ -197,14 +198,21 @@ the prohibition:
 
 **`static var` semantics.** The object is a module variable in all but
 name scope: allocated like static storage, never overlay-colored, its
-constant initializer installed in the build image before entry — so it
-is initialized once, before the first invocation, and never again, with
-no first-call flag and no runtime cost. An absent initializer means the
+constant initializer installed once under the section 4.3 installation
+contract — image preload or one-time startup writes — before the first
+invocation and never again, with no first-call flag and no
+per-invocation cost. An absent initializer means the
 all-zero value, as everywhere. Because the initializer is a constant
 initializer under the module-variable rule, it cannot read parameters,
 locals or variable storage; a routine that needs run-time first-call
 setup writes the guard itself, which is the task pattern's fresh state
 in miniature. The form covers scalars and aggregates uniformly.
+First-edition rulings keep it narrow: no `at`, no `volatile` and no
+`export` on a `static var` — placement, membrane visibility and
+interface exposure stay module-level concerns — and debug symbols
+qualify the name by its routine, so two routines may reuse a name. The
+word `static` itself is new: one more entry for the word inventory and
+the grammar, a real cost the closing sweep carries.
 
 **The ordinary form and the recursion rule.** A per-invocation
 aggregate local is legal exactly where the compiler proves invocations
@@ -214,16 +222,30 @@ compile-time error whose diagnostic names the three remedies: mark it
 `static var` and accept the sharing, take the aggregate from the caller,
 or index an explicit frame pool by depth. The compiler never silently
 lowers a per-invocation declaration onto shared storage; that would
-change its meaning, not its implementation.
+change its meaning, not its implementation. Per-invocation aggregate
+locals join the overlay coloring like scalar slots — slot sharing is
+invisible because each declaration re-establishes its zero value — so
+section 3's maximum-over-paths bound covers them unchanged.
 
-**Entry state, priced.** A per-invocation aggregate local begins each
-invocation as the all-zero value — semantic parity with scalar locals'
-zero bits — and that guarantee is real work: an entry clear at roughly
-21 T per byte, attributed to the routine in the cost report. An
-initializer, where present, runs on every invocation. That is the crisp
-line between the two forms: an ordinary local's initializer runs per
-invocation and is paid per invocation; a `static var`'s is installed
-once and costs nothing at run time.
+**Entry state, priced.** A per-invocation aggregate local takes no
+initializer in the first edition. When its declaration is reached — the
+same anchor as scalar zeroing — it holds its type's zero value, and a
+type with no valid all-zero value (a record whose enum field's domain
+lacks ordinal 0) is not declarable in this form; the diagnostic points
+at `static var` and caller-supplied storage. The guarantee is the zero
+*value*, not zeroed bytes: a record or array is cleared at roughly
+21 T per byte, while a string becomes empty in two byte writes, its
+sealed cells unspecified as always. On the single-pass reference
+compiler the work is unconditional and appears in the cost report —
+converting a module buffer zeroed once at startup into a per-invocation
+local costs a 40-byte record about 850 T on every call, six times the
+section 9 model call — and that is the crisp line between the two
+forms: the ordinary form re-establishes its zero value at every
+invocation and pays there; a `static var`'s constant image is installed
+once and costs nothing per invocation. Extending the section 4.5
+aggregate initializer forms to this declaration — a per-invocation copy
+from a compiler-built constant image, at like cost — is a later
+edition's option.
 
 **Two cautions.** A `static var` in a task's step routine is shared
 across every instance of that task — cross-instance state, occasionally
@@ -232,21 +254,36 @@ with per-instance state, which belongs in the instance record. And the
 interrupt firewall is unchanged: routine-scoped lifetime does not make
 storage handler-reachable.
 
+In a marked (`task sub`) routine the rule is stated to remove an
+ambiguity this proposal would otherwise create: every local of a marked
+routine, scalar and aggregate, is a hoisted per-instance field —
+first-advance initialization, no per-step clearing — and `static var`
+in a marked routine is legal with its one meaning everywhere: a single
+object shared across every instance of the task.
+
 The result is a three-way storage taxonomy stated in declarations:
 caller-owned storage reached through parameters and aliases;
 routine-owned shared storage declared `static var`; and routine-owned
-per-invocation storage declared `var`, priced at entry and barred from
-cycles. If adopted, the change lands in the specification's
-aggregate-local rule and initializer sections, in the conformance rows
-for the cycle diagnostic, and in the companion paper's statement that
-ordinary routines are scalar-only.
+per-invocation storage declared `var`, priced at its declaration and
+barred from cycles. If adopted, the change lands widely, and the sweep
+is enumerated so none of it is silent: the specification's
+aggregate-local ban (11.4), the local-initializer rule (4.5), the
+calling-convention sentence that aggregates are never locals (11.7),
+the string-local exclusions (3.2, 4.2), the `at` and volatile rulings
+(4.3, 4.4), and the word inventory and grammar (14, 15); the lowering
+contract's allocation classes (7), ABI slot list (8.1) and cost-model
+attribution, plus the conformance rows for the cycle diagnostic; and,
+in the papers, this paper's own sections 5 and 7 statements that the
+language has no aggregate locals, the companion paper's "aggregates are
+static always" and its marked-routine rationale.
 
 ## 7. Interrupts: the firewall and the membrane
 
 Statically framed routines are not reentrant, and no analysis can make
 an asynchronous entry into them safe: an interrupt can arrive with any
-routine mid-flight, its scalars in shared slots and its buffers — which
-are module storage, since the language has no aggregate locals — half
+routine mid-flight, its scalars in shared slots and its buffers —
+module storage under the current rule, per-invocation slots under
+section 6's proposal, handler-unsafe either way — half
 written. The doctrine is therefore a firewall, stated as a hard rule
 rather than a default:
 
