@@ -319,17 +319,13 @@ returns — and receives what reads as true multitasking. The explosion of
 expressive power comes from composition, not from new machinery per
 task.
 
-## 6. The reactive consequence
+## 6. The reactive layer
 
-Task-first is what makes a Lanternfly Glimmer natural rather than
-grafted, and the account this section first gave — version counters on
-state variables, effects as tasks comparing remembered versions — is
-superseded by [Reactive Lanternfly](reactive.md), which replaces the
-per-effect version bookkeeping with changed-bit masks, phased delivery
-and compiler-inferred wiring. What survives of this section is its
-claim, which the reactive paper makes good: the dependency graph is not
-a runtime data structure but compile-time wiring; there is no virtual
-display list, no diffing and no subscription table; and
+[Reactive Lanternfly](reactive.md) completes this program model: facts,
+moments, equations and phased blocks over the same scheduler, with
+changed-bit delivery and compiler-inferred wiring. The dependency graph
+is compile-time wiring, not a runtime data structure; there is no
+virtual display list, no diffing and no subscription table; and
 Glimmer-for-Lanternfly is language constructs plus a platform drawing
 module — not a preprocessor.
 

@@ -7,25 +7,13 @@ nav_order: 1
 
 # Cooperative tasks for Lanternfly: an architecture proposal
 
-**Status: proposal.** This paper proposes cooperative multitasking as a
-facility of the Lanternfly language: adopted now as a blessed coding
-pattern — everything in sections 3 through 5 is legal under specification
-0.6 and costs the compiler nothing — and adopted later as built-in syntax
-by any implementation whose size budget carries it. The Candlemoth
-reference compiler may prove too small for the syntax layer; that risk is
-why the syntax is Deferred rather than proposed outright, and it does not
-touch the pattern. The paper is written as a complete handoff: the
-problem, the pattern, the instance model, a full lowering, the scheduling
-machine and the timing doctrine, with worked examples fixing every shape —
-a paginated generator closing section 6, a task blocked on a polled keypad
-closing section 7, and a rate-limited device poller in section 8.
-
-The document is kept in step with the working specification. Every claim
-about the language cites a specification section, and a change to any cited
-section obligates a review here. Baseline: specification 0.6 as of this document's last revision;
-the pattern uses facilities already present in 0.5, except the
-image-fresh reset of section 6, which uses 0.6's constant-name
-initializer and no-repetition rules.
+**Status: proposal.** This paper defines cooperative multitasking for
+the Lanternfly language. The pattern of sections 3 through 5 is legal
+under specification 0.6 and costs the compiler nothing. The `task` type
+form is deferred sugar over it, adopted by an implementation whose size
+budget carries the rewrite and declared as a capability; the pattern
+does not depend on the sugar. Every claim about the language cites a
+specification section. Baseline: specification 0.6.
 
 ## 1. The problem on the target
 
@@ -47,61 +35,34 @@ small state and advances one step each time the main loop calls it. No
 preemption, no stacks to switch, no operating system — a discipline for
 organizing what the polling loop already does.
 
-## 2. The proposal
+## 2. The layers
 
-The proposal has four layers, each standing on the one below, each with
-its own status.
+1. **The pattern.** A task is a record plus a step routine (section 3),
+   legal under specification 0.6 with zero compiler cost. The section 5
+   convention governs example programs, fixtures and teaching material.
+2. **Instances.** One task body serves several concurrent instances,
+   each a statically allocated record (section 6), with no allocation
+   machinery anywhere.
+3. **Surface syntax.** The `task` type form, `yield` and `wait on`
+   (sections 6 and 7): deferred sugar defined as a lowering onto the
+   pattern, gated by the reference-compiler budget and declared as a
+   capability.
+4. **Scheduling and timing.** The scheduler loop, the mailbox seam and
+   the two-clock model (sections 7 and 8): conventions and library
+   material, not language. The [reactive layer](reactive.md) builds its
+   phased instant on the same scheduler.
 
-1. **The pattern — proposed for adoption now.** A task is a record plus a
-   step routine (section 3), legal under specification 0.6 with zero
-   compiler cost. Adoption means the section 5 convention governs example
-   programs, fixtures and teaching material from here on.
-2. **Instances — Direction.** The declared-instance model of section 6:
-   one task body serving several concurrent instances, each a statically
-   allocated record, with no allocation machinery anywhere.
-3. **Surface syntax — Deferred.** The `task` type form, `yield` and
-   `wait on`
-   (sections 6 and 7), adopted by an implementation only when its size
-   budget carries the rewrite. The Candlemoth reference compiler may
-   never have the room; a larger implementation can adopt the syntax
-   without touching the pattern, because the syntax is defined as a
-   lowering onto it.
-4. **Scheduling and timing — proposed as library doctrine.** The
-   scheduler loop, the mailbox seam and the two-clock timing model
-   (sections 7 and 8) are conventions and library material, not language.
+The novelty claim is narrow: the BASIC lineage has never carried
+structured concurrency. The eight-bit BASICs offered at most an event
+hook such as `ON TIMER GOSUB`, with no persistent task state; VB.NET's
+`Async`/`Await` runs on heap-allocated state machines and a runtime the
+program cannot see. Structured waiting and generators with every byte
+statically allocated, on an eight-bit target, has precedent in Rust's
+embedded executors and none in BASIC's own family.
 
-The sequencing is deliberate and mirrors the evidence rule of
-specification section 16: the manual pattern goes into example programs
-and teaching material first, and each further layer advances on the
-evidence of real programs, not on anticipation. Section 11 states the
-gates.
-
-If the layers survive those gates, this feature belongs in the language
-specification as a core facility. The claim of novelty is narrow and
-checkable: the BASIC lineage has never carried structured concurrency.
-The eight-bit BASICs offered at most an event hook such as
-`ON TIMER GOSUB`, with no persistent task state; the modern descendant
-that did gain `Async`/`Await` — VB.NET — delivers it through
-heap-allocated state machines on a runtime the program cannot see.
-Structured waiting and generators with every byte statically allocated
-and every cost visible in the storage map, on an eight-bit target, has
-precedent in Rust's embedded executors and none in BASIC's own
-family.
-
-A companion paper, [Task-first Lanternfly](task-first.md), proposes the
-program-level inversion this mechanism enables — a program as a set of
-declared task instances, with the scheduler as the language's implicit
-shape — and stages it against the layers above.
-
-The presentation rule for this material, everywhere it appears, comes from
-one observation about JavaScript — working experience of that ecosystem,
-not a measured corpus. Direct use of generators (`function*`, `yield`) is
-rare in everyday JavaScript, while `async`/`await`, which is built on the
-same mechanism, is routine. The lesson, if that experience holds: readers adopt
-this pattern when it is framed as *running several activities on one Z80*,
-and pass it by when it is framed as lazy sequences. Teaching material should
-lead with the cooperative-task reading; the generator reading is a closing
-observation.
+[Task-first Lanternfly](task-first.md) defines the program model built
+on this mechanism; [Reactive Lanternfly](reactive.md) defines the
+reactive layer beside it.
 
 ## 3. The pattern in Lanternfly 0.5
 
@@ -120,10 +81,11 @@ A cursor blinker on a timer tick:
 ```lanternfly
 const blinkRate as u8 = 25
 
-volatile var tickFlag as u8 at $8400
+volatile var ticks as u8 at $8400
 
 record BlinkState
     state as u8
+    lastTick as u8
     countdown as u8
 end
 
@@ -131,13 +93,14 @@ sub blinkStep(blink as BlinkState)
     select blink.state
     case 0
         blink.countdown = blinkRate
+        blink.lastTick = ticks
         blink.state = 1
     case 1
-        if tickFlag = 0 then
+        if ticks = blink.lastTick then
             return
         end
 
-        tickFlag = 0
+        blink.lastTick = ticks
         blink.countdown = blink.countdown - 1
 
         if blink.countdown = 0 then
@@ -148,13 +111,12 @@ sub blinkStep(blink as BlinkState)
 end
 ```
 
-The address `$8400` is illustrative. State 0 initializes; state 1 waits for
-the tick and counts down. Each call to `blinkStep` runs exactly one segment
-and returns, so a call costs microseconds whether or not the tick has
-arrived. (Section 8 supersedes the tick flag for timekeeping: a consumed
-flag serves one reader and drops a tick that lands between test and
-clear, so time crosses the boundary as a counter. The flag stays here as
-the simplest first illustration.)
+The address `$8400` is illustrative; a timer handler increments the
+counter. State 0 initializes; state 1 compares a remembered value
+against the counter, so a tick landing at any point is counted, and any
+number of tasks may watch one counter. Each call to `blinkStep` runs
+exactly one segment and returns, so a call costs microseconds whether
+or not a tick has arrived.
 
 A value-producing task — a generator in the JavaScript sense — returns a
 value from each segment. A melody player that yields the next note on every
@@ -202,7 +164,7 @@ end
 
 Every piece of this is ordinary 0.5 Lanternfly: records (section 5), `select`
 (section 9.2), aggregate parameters aliasing caller storage (section 11.3),
-volatile flag bytes (section 4.4). Two instances of the same task are two
+volatile storage (section 4.4). Two instances of the same task are two
 records passed to the same step routine. All storage is static and sized
 during compilation.
 
@@ -244,7 +206,7 @@ cost is visible in the source: the task record.
 
 ## 5. The convention
 
-The convention below is the adoptable core of the proposal. It is strict on
+The convention is strict on
 purpose: every example, test and book chapter that follows it becomes a
 mechanical test case for the deferred syntax of section 6, because that
 syntax is correct exactly when it emits what the convention already prescribes
@@ -290,10 +252,10 @@ by hand.
    callee is not expressible, which is the stackless restriction of
    section 6 arriving early.
 
-## 6. Deferred surface syntax
+## 6. The task type
 
-**Deferred.** If the convention proves common in real programs, the
-compiler can write the boilerplate. The marked declaration is a `task`
+If the convention proves common in real programs, the compiler can
+write the boilerplate. The marked declaration is a `task`
 *type* — a task is a record plus a step routine, and the type form says
 so; Lanternfly marks every construct with words, and a JavaScript-style
 `*` sigil fits nothing else in the language. Its name is PascalCase like
@@ -372,7 +334,7 @@ same restriction Rust spells "await only inside async fn". Lifting it
 requires capturing nested frames, which reintroduces everything section 4
 rejected.
 
-**Instance identity — Direction.** The marked declaration is a type, so
+**Instances.** The marked declaration is a type, so
 an instance is the most ordinary thing in the language: a module
 variable of that type.
 
@@ -496,13 +458,9 @@ carry fresh data into one advance and are never hoisted — the analogue
 of the JavaScript `next(value)` channel.
 
 The feature selects no runtime helper, places no bytes in programs that
-do not use it, and has one meaning everywhere. What it is not,
-necessarily, is kernel material in section 1.1's full sense: the kernel
-is the closure the reference compiler is written in, and this paper
-itself allows that Candlemoth may never carry the syntax. The natural
-home is a declared capability in the style of recursion, which is what
-the adoption path proposes; the size budget remains the deciding
-constraint.
+do not use it, and has one meaning everywhere. Its home is a declared
+capability in the style of recursion, with the reference-compiler size
+budget the deciding constraint.
 
 ### A worked lowering: a paginated reader
 
@@ -628,7 +586,6 @@ The correspondence, piece by piece:
 
 ## 7. Waiting and scheduling
 
-**Proposed as library doctrine; the service-module packaging is Open.**
 `async`/`await` is this pattern plus a scheduler. A waiting routine is
 a task whose yields mean *waiting on a condition* rather than *here is
 a value*; `wait on keyPress` records what is waited for, yields, and on
@@ -782,7 +739,7 @@ doctrine; a key claimed by one task is gone from the slot.
 
 ## 8. Timing
 
-**Proposed as convention.** A cooperative system needs delays: poll the
+A cooperative system needs delays: poll the
 keypad no more than so often, blink at a steady rate, go away for roughly
 half a second. The default hardware has no timer interrupt, and the
 design builds from that constraint.
@@ -884,7 +841,7 @@ idle spin has no cost that matters.
 
 ## 9. Loops and blocking
 
-**Proposed as doctrine.** The one pathology a cooperative system admits
+The one pathology a cooperative system admits
 is the task that does not come back: a loop that runs too long blocks
 every other task for its duration. The tempting language-level cure —
 insert a yield into every loop automatically — is refused, for four
@@ -954,20 +911,15 @@ chunked traversals dominating real programs, an explicit chunked-loop
 form — a loop that names its yield interval — is the sugar to consider;
 nothing implicit.
 
-## 10. Consequences for Glimmer
+## 10. Glimmer
 
-Glimmer currently hosts Z80 assembly bodies inside a preprocessed page
-structure. A Lanternfly with cooperative tasks inverts that relationship: the
-framework becomes a library — task records, step conventions, a scheduler
-routine — and a game becomes ordinary Lanternfly importing it, the way a
-JavaScript application imports React rather than being preprocessed by it.
-Pages, animations and input watchers are tasks; the Glimmer preprocessor's
-sequencing role is absorbed by the scheduler.
-
-This is the most speculative claim in the document and the one with the
-largest payoff: it would retire a whole toolchain stage. It becomes testable
-only after the compiler exists, by rewriting one real Glimmer program —
-Book 2's Skyfall or Rushlight are the right size — in library form.
+[Reactive Lanternfly](reactive.md) defines the reactive constructs —
+facts, moments, equations and phased blocks — over this paper's
+scheduler. Under them, Glimmer's pages, animations and input watchers
+are tasks and blocks; its sequencing and change tracking are the
+language's; its platform profiles — display scanning, drawing,
+keypads — remain platform interface modules. The test is rewriting one
+real Glimmer program, Skyfall or Rushlight, once the compiler exists.
 
 ## 11. Adoption path
 
@@ -978,8 +930,8 @@ In order, each step gated on the one before:
    are the candidate bodies. The section 6 paginated reader and the
    keypad and poller machines of sections 7 and 8 are the fixture
    sketches.
-2. A teaching chapter presenting the manual pattern as cooperative tasks on
-   the TEC-1G, per the framing rule of section 2.
+2. A teaching chapter presenting the manual pattern as cooperative
+   tasks on the TEC-1G.
 3. If the examples show the boilerplate dominating real task bodies, a
    design decision on the section 6 syntax, tested by compiling the
    existing examples and comparing emitted code against the hand-written
