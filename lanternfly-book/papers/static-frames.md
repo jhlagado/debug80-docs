@@ -106,8 +106,10 @@ When the call graph does contain a cycle — a recursion-capable profile
 has accepted it — the proposed lowering is not a general frame but a
 targeted spill. The routine keeps its static slots and its fast
 absolute addressing throughout. At each call site inside the cycle, the
-compiler pushes exactly the slots that are live across that call and
-restores them afterward:
+compiler pushes exactly the caller's own slots that are live across
+that call and restores them afterward — each activation protects
+itself, because the caller alone knows which of its values the nested
+activations would clobber:
 
 ```
 fib:                          ; n in a static slot, absolute addressing
@@ -122,7 +124,10 @@ fib:                          ; n in a static slot, absolute addressing
 
 This is how an assembly programmer writes recursion by hand: the stack
 saves machine state around the call; it does not carry an addressing
-regime. The general per-level cost is 53 T per live 16-bit value — load
+regime. In a mutual cycle the rule composes by induction: each
+activation saves its own live values when it makes the call that
+re-enters the cycle, so every level's state reaches the stack placed
+there by the activation that owns it. The general per-level cost is 53 T per live 16-bit value — load
 from the slot, push, and the mirror after the call — falling to 21 T
 only when the value is already register-resident on both sides of the
 call. The advantage over a conventional frame is therefore not the
