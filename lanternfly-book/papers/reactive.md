@@ -13,7 +13,8 @@ facts, derived facts, moments and the effects triggered by them, beside
 the tasks of the [cooperative-task paper](cooperative-tasks.md). The
 goal is a synthesis, not an addition — the asynchronous layer and the
 reactive layer reduce to one machine, already reviewed and adopted as
-convention, and the surface adds six words and a shared trigger grammar.
+convention, and the surface adds six contextual words and a shared
+trigger grammar.
 Glimmer, the existing reactive framework for Z80 games, supplies the
 semantics, which this design adopts with its wiring moved from trust to
 proof; Glimmer's platform profiles remain what they are, and Glimmer as
@@ -33,12 +34,16 @@ is:
   in its interior is a task. They are not two mechanisms — an effect is
   a task with one suspension point at the top, and both lower to the
   record-plus-step convention.
-- **One clock: the instant.** Each frame, triggers are delivered under
-  one rule, taken verbatim from Glimmer: *a change is delivered exactly
-  once — to later phases in the same frame, otherwise at the next
-  frame's start.* Every dependent of a fact sees a change together;
+- **One clock: the instant.** Triggers are delivered once per instant
+  under one rule, taken from Glimmer: *a change is delivered exactly
+  once — to later phases in the same instant, otherwise at the next
+  instant's start.* Every dependent of a fact sees a change together;
   each body runs at most once per instant; a chain pointing backward
-  advances one step per frame.
+  advances one step per instant. The instant is the scheduler's
+  super-pass: on hardware with a frame interrupt it is locked to the
+  frame, and on hardware without one it is the pass itself — the
+  elastic pass clock of the timing doctrine serving as the instant, as
+  Glimmer's display-scan loop served as its frame.
 - **Two storage sorts: facts and moments.** A fact (`state`) persists
   and carries a changed bit. A moment (`pulse`) occurs, is delivered
   once, and is gone. The distinction is the oldest in reactive
@@ -122,7 +127,21 @@ inferring it from the right-hand side would make `= limit` and
 resolves to, and would steal the spelling for initializing a cell from
 another cell's boot-time value. Dependencies are read from the
 expression; cycles are causality errors at compile time, the
-spreadsheet's circular-reference check.
+spreadsheet's circular-reference check. A derived cell's dependencies
+are state and derived cells only — moments, task fields and the clock
+counters are not dependencies in the first edition; the clocks are
+sampled, never depended on.
+
+Two rules complete the fact contract. A derived cell's build image is
+its formula folded over its dependencies' initial images — every
+initializer is constant, so the fold is compile-time — and the cell is
+initially changed exactly when any dependency carries `changed`; a
+formula that does not preserve zero therefore starts correct, not
+coincidentally zero. And a `state` declaration admits neither `at`
+placement nor `volatile`: a fact lives in ordinary allocator storage,
+because notification happens at the compiled write, and a device-backed
+cell would change without one. Device state reaches facts through the
+membrane, as always.
 
 ## 4. Effects and wiring
 
@@ -143,25 +162,50 @@ information found nowhere else. Reading an unlisted fact is sampling
 and legal; reading an unlisted moment is an error, since a moment has
 no meaning outside its delivery.
 
-**Phases are inferred from what a body is.** An effect triggered by
-facts alone, writing facts, touching no device, runs in the derivation
-phase; an effect triggered by any moment runs in the logic phase; an
-effect that calls display services runs in the render phase, and a
-render writing facts is a compile error — Glimmer's "a render only
-depicts," now checked. File order never selects a phase; within one
-phase, bodies run in file order, and two same-phase effects touching
-one cell draw a warning naming the pair. The delivery rule then needs
-no further machinery: phase order is the topology, and cross-frame
-deferral handles every backward edge, one step per frame,
-deterministically.
+**Phases are inferred from what a body is, by a total, ordered
+classifier.** Three rules, tried in order, transitive over the call
+graph — a helper's device call counts as its caller's:
 
-Two guardrails complete the wiring story. A state cell is written only
-through its declared path in an effect or task body — passing one to a
-routine as a writable aggregate argument would hide the write from the
-inference, so the first edition rejects it; helpers compute and return.
-And an effect body cannot suspend: `wait on` is grammatically confined
-to task bodies, so the effect/task distinction is visible in the
-syntax rather than policed behind it.
+1. any moment among the triggers → **logic**;
+2. otherwise, any device, native or service effect in the body →
+   **render**;
+3. otherwise → **derivation**.
+
+The rules are ordered, so a moment-triggered effect that both writes
+facts and beeps is logic — the ordinary game rule — while render is
+the residual class: fact-triggered depiction, and a render writing
+facts is a compile error, Glimmer's "a render only depicts," now
+checked. One departure from a hand-declared Glimmer port is stated
+rather than hidden: a block Glimmer's author declared `effect` but
+whose triggers and writes are pure fact-to-fact is classified
+derivation here, so it runs before the logic wave and its sampled
+reads see the previous instant where a file-earlier logic write would
+have been visible. Inference trades that corner for the guarantee that
+a phase can never be mis-declared.
+
+**Derived cells settle within the instant.** Acyclic derived chains
+are ordered topologically inside the derivation phase, with intra-phase
+delivery — a derived feeding a derived resolves in one instant, the
+Lustre-faithful reading, and an improvement this design makes
+deliberately over Glimmer's one-step-per-frame compute chains. Cycles
+were already rejected, so the order always exists. Effects are never
+reordered: within each phase they run in file order, tasks after them,
+and the diagnostics cover the hazards — a warning names any two
+same-phase bodies where one writes a cell another writes or samples,
+tasks included.
+
+Three guardrails complete the wiring story. A state cell is written
+only through its declared path in an effect or task body — passing one
+to a routine as a writable aggregate argument, or taking an `alias` to
+one, would hide the write from the inference, so the first edition
+rejects both; helpers compute and return. An effect body is an
+ordinary routine body — scratch locals and all — but it cannot
+suspend: `wait on` is confined to task bodies by the grammar of
+section 6, so the effect/task distinction is visible in the syntax.
+And moments appear only in trigger position — a bare moment has no
+value to read — with one standing exemption: `on error` inside any
+body consumes its own statement's failure moment, as adopted
+specification already provides.
 
 ## 5. Moments, binds and tasks
 
@@ -178,14 +222,22 @@ profile, not the core grammar, exactly as external-binding forms do:
 the language owns the shape — `bind`, a source name, the profile's
 words, `raises`, a pulse name — and the profile owns the middle.
 
-Tasks are unchanged from the [task-first](task-first.md) model — types,
-instances as module variables, dormancy as a designed idle wait — with
-one spelling change ratified here: the suspension statement is
-`wait on` a trigger, sharing the trigger grammar of `effect on`, and
-`await` is retired. It was borrowed vocabulary from call-based
-asynchrony, and nothing here awaits a call's result; conditions occur
-and bodies resume. `wait on go` says what happens in the language's own
-words, and a task "started at runtime" is a task woken by its trigger.
+Tasks keep the [task-first](task-first.md) model — types, instances as
+module variables, dormancy as a designed idle wait — with two rulings
+added here. First, the spelling: the suspension statement is `wait on`
+a trigger, sharing the trigger grammar of `effect on`, and `await` is
+retired — borrowed vocabulary from call-based asynchrony, and nothing
+here awaits a call's result; `wait on go` says what happens in the
+language's own words, and a task "started at runtime" is a task woken
+by its trigger. Second, the task's place in the instant, which the
+sibling papers left to a bare round-robin: **tasks advance in the
+logic phase, after the logic effects, in declaration order.** Their
+fact writes ride the same delivery rule — renders see them this
+instant, derivations next — and task-first's "declaration order is
+schedule order" is amended to declaration order *within* the phase
+order. A due `wait on after(n)` deadline counts n instant-clock ticks
+from wait entry, under the timing doctrine's wrap-safe comparison and
+its 32,767-tick bound.
 
 ## 6. The grammar, examined
 
@@ -200,43 +252,51 @@ state-decl          ::= "state" value-name "as" type-expr
 derived-decl        ::= "derived" value-name "as" type-expr
                         "=" expression newline
 pulse-decl          ::= "pulse" value-name newline
-bind-decl           ::= "bind" source-name profile-binding
+bind-decl           ::= "bind" source-name profile-word*
                         "raises" value-name newline
 effect-decl         ::= "effect" trigger-clause newline
-                        statement* "end" newline
+                        routine-block "end" newline
 
 trigger-clause      ::= "on" trigger ("," trigger)*
 trigger             ::= value-name
-                      | "after" "(" expression ")"
 
-wait-stmt           ::= "wait" trigger-clause newline
+task-body           ::= local-decl* (statement | wait-stmt)*
+wait-stmt           ::= "wait" "on" wait-trigger ("," wait-trigger)*
+                        newline
+wait-trigger        ::= trigger | "after" "(" expression ")"
 ```
 
 Counting the cost, because economy is a stated goal:
 
-- **Eight productions**, one of which — `trigger-clause` — is written
-  once and used in two positions, with the adopted `on-error-clause` as
-  its named sibling in a third. A trigger names a pulse (its
-  occurrence) or a state cell (its change); `after` is contextual in
-  trigger position, not a reserved word.
-- **Six reserved words**: `state`, `derived`, `pulse`, `bind`,
-  `effect`, `wait`. Set against the ledger of what this design killed
-  during its own derivation — `compute`, `render`, `rule`, `updates`,
-  `await`, block names, and the arrow sigil — the surface is smaller
-  than the first sketch of itself, and each survivor carries
-  information a body cannot express.
-- **No new statement forms inside effects.** An effect body is
-  `statement*` — the existing language, unchanged. The one new
-  statement, `wait-stmt`, appears only in the task-body production, so
-  the may-not-suspend rule is enforced by the grammar, costing zero
-  semantic checking.
-- **No collisions.** `error` is already contextual after `on`, so
-  the handler and trigger readings of `on` disambiguate on one token;
-  `effect`
-  and `wait` head their own forms; the declaration heads join a module
-  grammar in which every declaration already begins with a head word —
-  a bare `on` block was rejected in design precisely because it would
-  have been the only headless declaration in the language.
+- **Eleven productions**, with `trigger-clause` written once and used
+  by effects, `trigger` reused by waits, and the adopted
+  `on-error-clause` as their named sibling. A trigger names a pulse
+  (its occurrence) or a state cell (its change); `after` belongs to
+  wait position only, so an effect cannot trigger on a deadline —
+  time-driven work is a task's.
+- **Six new words, none reserved.** `state`, `derived`, `pulse`,
+  `bind`, `effect` and `wait` are contextual in head position — the
+  module grammar already begins every declaration with a head word,
+  and `wait` heads only a task-body statement — exactly as `error` is
+  contextual after `on`. `changed` and `raises` are likewise
+  contextual inside their own productions, and `after` inside a wait
+  trigger. Nothing joins the reserved inventory, so the task
+  convention's own `state as u8` record field, and every other use of
+  these words as value names, stays legal.
+- **The bind middle is profile-owned with a stated delimiter.** The
+  words between the source name and `raises` belong to the target
+  profile, as external-binding vocabulary does; the parse rule is
+  one sentence — a bind line is scanned to its `raises` — so the
+  profile extends the vocabulary without touching the grammar.
+- **Effect bodies are routine bodies.** Scratch locals and every
+  statement form are available; what an effect body cannot contain is
+  `wait-stmt`, which appears only in `task-body` — the may-not-suspend
+  rule enforced by the productions above, costing no semantic check.
+- **No collisions.** The handler and trigger readings of `on`
+  disambiguate on one token; the six heads join a module grammar in
+  which every declaration already begins with a head word — a bare
+  `on` block was rejected in design precisely because it would have
+  been the only headless declaration in the language.
 
 The shape stays the language's shape: linear, word-marked, sparing
 with punctuation — readable aloud, in the BASIC line, with nothing to
@@ -303,6 +363,7 @@ bind anyKey rising raises pressed
 task Round()
     while true
         wait on go
+        armed = false          // a GO during a stale round scores nothing
         lightOff()
         wait on after(75)
         lightOn()
@@ -336,7 +397,12 @@ end
 ```
 
 The waiting is sequence — inexpressible as an effect, natural as a
-task, dormant in `wait on go` until signalled. `best` shows why
+task, dormant in `wait on go` until signalled. The task advances after
+the logic effects, so on the very instant the light comes on, an
+already-falling keypress finds `armed` still false and scores
+nothing — a sub-instant reaction is rejected by the schedule itself,
+and the round's own `armed = false` makes a stale GO equally harmless.
+`best` shows why
 equations and effects are different sorts: the minimum ever seen is
 memory, not a function of current facts, so it is a fact written by an
 effect. And the first effect reads `frames`, `armed` and `startFrame`
@@ -369,15 +435,18 @@ read), `task` (memory), `bind` (the platform edge).
 
 The two-sorted storage — facts and moments — is Fran's behaviors and
 events, the founding distinction of functional reactive programming.
-The equation cell is Lustre's, whose industrial descendant is certified
-for avionics, and whose compiler discipline — causality analysis, a
-constant-memory step function per instant — is this paper's lowering
-by another name. The imperative process with `wait` beside declarative
-equations is Esterel's synthesis, carried to embedded targets by Céu.
+The equation cell is Lustre's, whose industrial descendant's qualified
+code generator is certified for avionics under DO-178, and whose
+compiler discipline — causality analysis, a constant-memory step
+function per instant — is this paper's lowering by another name. The
+imperative process with `wait` comes from Esterel, the equations from
+Lustre, and their coexistence in one language is the Esterel family's
+own later synthesis, carried to embedded targets by Céu.
 The instant-clocked delivery rule is Glimmer's, proven in shipped Z80
 games. The compiler-is-the-framework stance — inferred writes, no
-runtime graph, plain assignment as the notification site — is
-Svelte's argument, which this design extends from inference to proof.
+runtime graph, plain assignment as the notification site — was
+Svelte's founding argument, which this design extends from inference
+to proof.
 The retreat from wiring-heavy surfaces toward few constructs is Elm's
 lesson, learned when it removed signals from its own language. And the
 claim that a reactive view layer is half a model without transition
