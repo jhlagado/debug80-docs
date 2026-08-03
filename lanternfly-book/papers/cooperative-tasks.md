@@ -389,7 +389,7 @@ member. When every initializer is zero they cost nothing, because the
 all-zero record is the fresh instance under convention rule 2; for an instance without arguments, `clear`
 remains the reset, and the instance-arguments contract below adjusts it
 for the rest. The
-closure rule is rule 8 unchanged: only the marked routine's own locals are
+closure rule is rule 8 unchanged: only the marked body's own locals are
 hoisted, every callee remains an ordinary per-invocation routine, and
 state smuggled into a callee is exactly the overlap section 4 rejects.
 One grammar consequence is recorded explicitly: in a marked routine,
@@ -401,11 +401,16 @@ storage re-zeroed at each declaration under the static-frames paper's
 two-lifetime rule, and a `static var` keeps its one meaning: a single
 object shared, in a step routine, across every instance of the task.
 
-**Instance arguments.** A parameter of a marked routine is bound once
-per instance and persists — exactly as a JavaScript generator's
-arguments outlive its creation call — so the lowering treats it as one
-more retained local: hoisted into the synthesized record, every access
-rewritten to a field read. The only distinction is where the initial
+**Instance arguments.** A parameter of a marked type is bound once per
+instance and persists — exactly as a JavaScript generator's arguments
+outlive its creation call — so the lowering treats it as one more
+retained local hoisted into the synthesized record, every access
+rewritten to a field read, with one visibility distinction: parameters
+hoist as *declared* fields, and instantiation is the type's record
+initializer naming exactly those fields — `BlinkAt(rate = 10)` — while
+retained locals hoist as hidden fields no initializer names. Under the
+specification's no-repetition rule, the instance declaration need not
+repeat the type: `var fastBlink = BlinkAt(rate = 10)`. The only distinction is where the initial
 value comes from: an argument's from the instance declaration, a
 retained local's from its initializer. At the record level even that
 distinction dissolves — every hoisted field has exactly one
@@ -426,7 +431,7 @@ names it, a declaration may take the template by name, and reset is one
 aggregate assignment:
 
 ```lanternfly
-// Hypothetical: task fastBlink using blinkAt(10)
+// Hypothetical: var fastBlink = BlinkAt(rate = 10)
 // The manual form today:
 record BlinkTask
     state as u8
@@ -474,7 +479,7 @@ across page boundaries:
 
 ```lanternfly
 // Hypothetical syntax, not part of 0.6.
-task sub readItems() yields u16
+task ReadItems() yields u16
     var pageNumber as u16 = 0
     var itemIndex as u8 = 0
     var itemCount as u8 = 0
@@ -494,8 +499,8 @@ task sub readItems() yields u16
     end
 end
 
-task directoryItems using readItems
-task archiveItems using readItems
+var directoryItems as ReadItems
+var archiveItems as ReadItems
 ```
 
 `fetchPage` is an ordinary routine —
