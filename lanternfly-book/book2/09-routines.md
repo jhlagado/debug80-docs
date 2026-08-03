@@ -215,8 +215,9 @@ Recursion is a target-profile capability:
   expressible;
 - a non-recursive profile rejects any source call-graph cycle, direct or
   through forward-declared routines;
-- a recursive profile supplies independent frames and documents stack,
-  reentrancy and maximum-bound rules.
+- a recursive profile supplies independent per-invocation scalar state —
+  per-invocation aggregate state is caller-supplied storage — and documents
+  stack, reentrancy and maximum-bound rules.
 
 Native callbacks into source-defined Lanternfly routines or hosted bodies are
 deferred.
