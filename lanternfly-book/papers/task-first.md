@@ -67,25 +67,28 @@ interactive program reads:
 
 ```lanternfly
 // Hypothetical task-first surface. Not part of 0.6.
-task sub watchKeypad()
+task WatchKeypad()
     ...
 end
 
-task sub promptForSpeed()
+task PromptForSpeed()
     ...
 end
 
-task sub blinkCursor()
+task BlinkCursor()
     ...
 end
 
-task poller using watchKeypad
-task prompt using promptForSpeed
-task blinker using blinkCursor
+var poller as WatchKeypad
+var prompt as PromptForSpeed
+var blinker as BlinkCursor
 ```
 
-There is no `main`. The build generates the scheduler: increment the
-pass clock, advance each declared instance in declaration order, repeat.
+A task is a type — a record with a body — and an instance is an
+ordinary module variable of it. There is no `main`. The build generates
+the scheduler: every module variable of a task type is an instance,
+arrays elementwise; increment the pass clock, advance each instance in
+declaration order, repeat.
 Declaration order is schedule order, so execution is deterministic —
 the worst-case pass time is the scheduler's own poll and bookkeeping
 plus the sum of each task's longest segment, and the whole schedule is
@@ -343,8 +346,8 @@ The direction is adoptable in steps, each useful without the next:
    declarations — and it is the step that inverts the default. It does
    not require the `yield`/`await` sugar: manual step routines under the
    declared-instance model already read task-first.
-3. **The full surface.** `task sub`, `yield` and `await`, as the
-   companion paper defines them — budget-gated, and at real risk on the
+3. **The full surface.** The `task` type form, `yield` and `await`, as
+   the companion paper defines them — budget-gated, and at real risk on the
    Candlemoth reference compiler. A larger implementation adopts
    them without touching layers 1 and 2.
 

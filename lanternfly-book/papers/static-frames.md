@@ -256,7 +256,7 @@ with per-instance state, which belongs in the instance record. And the
 interrupt firewall is unchanged: routine-scoped lifetime does not make
 storage handler-reachable.
 
-In a marked (`task sub`) routine the rule is stated to remove an
+In a marked (`task`-type) body the rule is stated to remove an
 ambiguity this proposal would otherwise create: every local of a marked
 routine, scalar and aggregate, is a hoisted per-instance field —
 first-advance initialization, no per-step clearing — and `static var`
