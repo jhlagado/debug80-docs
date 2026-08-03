@@ -1738,6 +1738,20 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/14-error-handling.html"
         }
       ]
+    },
+    {
+      "text": "Lanternfly White Papers",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Cooperative Tasks for Lanternfly",
+          "link": "/lanternfly-book/papers/cooperative-tasks.html"
+        },
+        {
+          "text": "Task-first Lanternfly",
+          "link": "/lanternfly-book/papers/task-first.html"
+        }
+      ]
     }
   ],
   "/lanternfly-book/book1/": [
@@ -1880,6 +1894,20 @@ export const sidebars = {
           "link": "/lanternfly-book/book2/14-error-handling.html"
         }
       ]
+    },
+    {
+      "text": "Lanternfly White Papers",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Cooperative Tasks for Lanternfly",
+          "link": "/lanternfly-book/papers/cooperative-tasks.html"
+        },
+        {
+          "text": "Task-first Lanternfly",
+          "link": "/lanternfly-book/papers/task-first.html"
+        }
+      ]
     }
   ],
   "/lanternfly-book/book2/": [
@@ -2020,6 +2048,176 @@ export const sidebars = {
         {
           "text": "Failable Routines and Error Handling",
           "link": "/lanternfly-book/book2/14-error-handling.html"
+        }
+      ]
+    },
+    {
+      "text": "Lanternfly White Papers",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Cooperative Tasks for Lanternfly",
+          "link": "/lanternfly-book/papers/cooperative-tasks.html"
+        },
+        {
+          "text": "Task-first Lanternfly",
+          "link": "/lanternfly-book/papers/task-first.html"
+        }
+      ]
+    }
+  ],
+  "/lanternfly-book/papers/": [
+    {
+      "text": "Lanternfly Book 1 — Programming Fundamentals",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/lanternfly-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Your First Lanternfly Program",
+          "link": "/lanternfly-book/book1/01-a-first-program.html"
+        },
+        {
+          "text": "Scalar Values and Literals",
+          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
+        },
+        {
+          "text": "Expressions and Conversions",
+          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
+        },
+        {
+          "text": "Comparisons, Booleans and Bit Masks",
+          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
+        },
+        {
+          "text": "Named Ordinals and Decisions",
+          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
+        },
+        {
+          "text": "Repeating Work",
+          "link": "/lanternfly-book/book1/06-loops.html"
+        },
+        {
+          "text": "Fixed Arrays and Index Domains",
+          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
+        },
+        {
+          "text": "Characters and Fixed-Capacity Strings",
+          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
+        },
+        {
+          "text": "Records and Memory Layout",
+          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
+        },
+        {
+          "text": "Building with Subroutines",
+          "link": "/lanternfly-book/book1/10-subroutines.html"
+        },
+        {
+          "text": "Selecting Existing Storage",
+          "link": "/lanternfly-book/book1/11-selecting-storage.html"
+        },
+        {
+          "text": "Modules and Imports",
+          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
+        },
+        {
+          "text": "Portable Text Input and Output",
+          "link": "/lanternfly-book/book1/13-portable-text-io.html"
+        },
+        {
+          "text": "Expecting Failure",
+          "link": "/lanternfly-book/book1/14-expecting-failure.html"
+        },
+        {
+          "text": "Propagation and Cleanup",
+          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
+        },
+        {
+          "text": "Machine Services and Assembly",
+          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
+        },
+        {
+          "text": "Glossary",
+          "link": "/lanternfly-book/book1/glossary.html"
+        }
+      ]
+    },
+    {
+      "text": "Lanternfly Book 2 — Language Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Language Model and Source Form",
+          "link": "/lanternfly-book/book2/01-language-and-source.html"
+        },
+        {
+          "text": "Names and Scopes",
+          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
+        },
+        {
+          "text": "Types, Literals and Strings",
+          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
+        },
+        {
+          "text": "Integer Expressions and Conversions",
+          "link": "/lanternfly-book/book2/04-integer-expressions.html"
+        },
+        {
+          "text": "Constants, Variables and Placement",
+          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
+        },
+        {
+          "text": "Records, Arrays and Storage Paths",
+          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
+        },
+        {
+          "text": "Assignment and Standard Operations",
+          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
+        },
+        {
+          "text": "Conditions and Loops",
+          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
+        },
+        {
+          "text": "Routines",
+          "link": "/lanternfly-book/book2/09-routines.html"
+        },
+        {
+          "text": "Modules, Programs and Hosted Bodies",
+          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
+        },
+        {
+          "text": "Targets, External Routines and Assembly",
+          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
+        },
+        {
+          "text": "Grammar and Word Inventory",
+          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
+        },
+        {
+          "text": "Diagnostics and Conformance",
+          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
+        },
+        {
+          "text": "Failable Routines and Error Handling",
+          "link": "/lanternfly-book/book2/14-error-handling.html"
+        }
+      ]
+    },
+    {
+      "text": "Lanternfly White Papers",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Cooperative Tasks for Lanternfly",
+          "link": "/lanternfly-book/papers/cooperative-tasks.html"
+        },
+        {
+          "text": "Task-first Lanternfly",
+          "link": "/lanternfly-book/papers/task-first.html"
         }
       ]
     }
