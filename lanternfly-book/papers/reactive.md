@@ -7,51 +7,31 @@ nav_order: 4
 
 # Reactive Lanternfly: facts, moments and effects
 
-**Status: proposal.** This paper proposes the reactive layer of the
-Lanternfly language: the constructs that let a program be written as
-facts, derived facts, moments and the effects triggered by them, beside
-the tasks of the [cooperative-task paper](cooperative-tasks.md). The
-goal is a synthesis, not an addition — the asynchronous layer and the
-reactive layer reduce to one machine, already reviewed and adopted as
-convention, and the surface adds six contextual head words and a
-shared trigger grammar.
-Glimmer, the existing reactive framework for Z80 games, supplies the
-semantics, which this design adopts with its wiring moved from trust to
-proof; Glimmer's platform profiles remain what they are, and Glimmer as
-a separate toolchain stage is retired by this proposal. Everything here
-is deferred sugar in the same family as the `task` type form: the
-kernel lowers to specification-0.6 conventions, and an implementation
-without the sugar carries the pattern by hand.
+**Status: proposal.** This paper defines the reactive layer of the
+Lanternfly language, beside the tasks of the
+[cooperative-task paper](cooperative-tasks.md). The constructs are
+deferred sugar in the same family as the `task` type form: the
+semantics lower to specification-0.6 conventions, and an implementation
+without the sugar carries the pattern by hand. The delivery semantics
+are Glimmer's. Glimmer's platform profiles are unchanged; Glimmer as a
+separate toolchain stage is retired.
 
 ## 1. The kernel
 
-Stripped to its semantics, the whole asynchronous-and-reactive layer
-is:
-
-- **One primitive: the triggered body.** Code over static storage that
-  runs to completion when a trigger occurs. A body with one standing
-  trigger and no memory is an effect; a body with memory and triggers
-  in its interior is a task. They are not two mechanisms — an effect is
-  a task with one suspension point at the top, and both lower to the
+- **One primitive: the triggered body.** Code over static storage, run
+  to completion when a trigger occurs. A body with one standing
+  trigger and no memory is an effect or a render; a body with memory
+  and triggers in its interior is a task. Both lower to the
   record-plus-step convention.
-- **One clock: the instant.** Triggers are delivered once per instant
-  under one rule, taken from Glimmer: *a change is delivered exactly
-  once — in the same instant when every dependent sits in a later
-  phase, and otherwise at the next instant's start, to all dependents
-  at once.* Every dependent of a fact therefore sees a change
-  together; each body runs at most once per instant; a chain pointing
-  backward advances one step per instant. The instant is the scheduler's
-  super-pass: on hardware with a frame interrupt it is locked to the
-  frame, and on hardware without one it is the pass itself — the
-  elastic pass clock of the timing doctrine serving as the instant, as
-  Glimmer's display-scan loop served as its frame.
-- **Two storage sorts: facts and moments.** A fact (`state`) persists
-  and carries a changed bit. A moment (`pulse`) occurs, is delivered
-  once, and is gone. The distinction is the oldest in reactive
-  programming — behaviors and events — and every surviving system kept
-  it.
-
-Everything else in this paper is spelling.
+- **One clock: the instant.** A change is delivered exactly once: in
+  the same instant when every dependent sits in a later phase,
+  otherwise at the next instant's start, to all dependents at once.
+  Each body runs at most once per instant. The instant is the
+  scheduler's super-pass — locked to the frame where a frame interrupt
+  exists, the pass itself where none does.
+- **Two storage sorts.** A fact (`state`) persists and carries a
+  changed bit. A moment (`pulse`) occurs, is delivered once, and is
+  gone.
 
 ## 2. The surface
 
@@ -83,178 +63,97 @@ task Round()
 end
 ```
 
-Six declaration heads, each declaring one kind of thing, teachable as a
-decision tree:
+Six declaration heads:
 
 - a stored fact → `state`;
 - a fact that is a formula → `derive … from`;
-- a momentary occurrence → `pulse`, with its hardware source, where it
-  has one, named `from` its own declaration;
-- statements that respond to change → `effect on`, running in the
-  middle of the instant;
-- statements that depict facts → `render on`, running last;
+- a momentary occurrence → `pulse`, with its hardware source named
+  `from` its own declaration;
+- statements that respond to change → `effect on`;
+- statements that depict facts → `render on`;
 - a process that remembers where it was → `task`.
 
-The phase is written in the head, so a reader learns when code runs
-from its first word: `derive` settles first, `effect` runs in the
-middle, `render` runs last. And one sentence covers every appearance
-of `on`:
+The phase is written in the head: `derive` settles first, `effect`
+runs in the middle, `render` runs last.
 
-> **`on` always attaches a trigger to a head: to an `effect` or
-> `render` declaration, to a `wait`, or to the statement whose failure
-> it handles.**
-
-One preposition covers the sources: a fact is derived `from` facts, and
-a moment comes `from` the machine — the same word `extern` routines
-already use for a symbol's source.
-
-The third case is not new syntax — it is `on error`, adopted in
-specification 0.6 before this paper existed. The failure channel is a
-moment: a discrete occurrence, delivered exactly once at one point,
-carrying a payload. The error handler was this paper's construct
-arriving early, and the reactive layer inherits its word, its shape and
-its teaching.
+`on` always attaches a trigger to a head: an `effect` or `render`
+declaration, a `wait`, or the statement whose failure it handles. The
+third is `on error`, already in the specification; the failure channel
+is a moment — delivered once, at one point, carrying a payload. One
+preposition covers the sources: a fact is derived `from` facts, and a
+moment comes `from` the machine — the word `extern` routines already
+use for a symbol's source.
 
 ## 3. Facts
 
-`state` declares a watched cell: ordinary Lanternfly storage plus a
-changed bit in the delivery machinery. The initializer is evaluated
-once, into the build image; `changed` marks the cell already-changed at
-start, so initial renders fire on the first frame. Facts may be
-aggregates: `state board as u8[64]` is one fact at the granularity the
-declaration chose — a verified write to any part raises the one bit,
-and no field diffing or reference comparison exists anywhere, because
-notification happens at the write, not by inspection afterward. Finer
-waves come from declaring finer cells.
+`state` declares a watched cell: ordinary storage plus a changed bit in
+the delivery machinery. The initializer is installed in the build
+image; `changed` marks the cell already-changed, so initial renders
+fire on the first instant. Facts may be aggregates:
+`state board as u8[64]` is one fact at the declared granularity — a
+write anywhere in it raises the one bit. There is no diffing and no
+reference comparison; notification happens at the compiled write. For
+the same reason a `state` declaration admits neither `at` nor
+`volatile` — a device-backed cell would change without a compiled
+write. Device state reaches facts through the membrane.
 
-`derive` declares an equation, not an initializer, and its spelling
-keeps the two apart: bound-once takes `=`, bound-always takes `from`.
-A derived cell has no other writer, no independent existence, and its
-formula is its whole meaning. The distinction takes its own head and
-its own preposition because an equals sign would read as an
-initializer — and because inferring the difference from the right-hand
-side would make `= limit` and `= count` mean different temporal
-behaviors depending on what a name resolves to, while stealing the
-spelling for initializing a cell from another cell's boot-time
-value. Dependencies are read from the
-expression; cycles are causality errors at compile time, the
-spreadsheet's circular-reference check. A derived cell's dependencies
-are state and derived cells only — moments, task fields and the clock
-counters are not dependencies in the first edition; the clocks are
-sampled, never depended on.
+`derive` declares an equation. Bound-once takes `=`; bound-always takes
+`from`. A derived cell has no other writer, and its formula is its
+whole meaning. Dependencies are read from the expression and must be
+state or derived cells; the clock counters may be sampled, never
+depended on; cycles are compile errors. The cell's build image is the
+formula folded over its dependencies' initial images, and it is
+initially changed exactly when a dependency carries `changed`.
 
-Two rules complete the fact contract. A derived cell's build image is
-its formula folded over its dependencies' initial images — every
-initializer is constant, so the fold is compile-time — and the cell is
-initially changed exactly when any dependency carries `changed`; a
-formula that does not preserve zero therefore starts correct, not
-coincidentally zero. And a `state` declaration admits neither `at`
-placement nor `volatile`: a fact lives in ordinary allocator storage,
-because notification happens at the compiled write, and a device-backed
-cell would change without one. Device state reaches facts through the
-membrane, as always.
+## 4. Blocks and wiring
 
-## 4. Effects and wiring
+`effect on` and `render on` declare anonymous triggered blocks. A
+block's body is an ordinary routine body. A `render` may not write a
+fact; a `derive` is pure by form; an `effect` may do anything a body
+may do. The checks see through helper calls.
 
-An `effect` is an anonymous triggered block. It has no name because
-nothing ever references one — names were Glimmer's assembler linkage,
-not a language need — and the dependency report identifies it better by
-its trigger and location than any invented name would.
+Writes are inferred; triggers are declared. The compiler reads every
+write from the body, so there is no updates clause, and the dependency
+report is generated from the code. Triggers are the one thing a body
+does not express: reading a fact is sampling, not depending — a timed
+effect samples the frame counter without running every frame — so the
+`on` list alone decides when a block runs. Reading an unlisted fact is
+legal. A moment appears only in trigger position, except that
+`on error` consumes its own statement's failure moment.
 
-**Writes are inferred; triggers are declared.** The compiler sees every
-write in a transparent body, so an `updates` clause would state what
-the code already proves; it does not exist. Triggers cannot be
-inferred, because a trigger is a decision the body cannot express:
-reading a fact is not depending on it. The counterexample is the frame
-counter — a timed effect *samples* `frames` without meaning to run
-every frame — and the depending/sampling distinction is forty years
-old. So the `on` list is the one clause that survives: it carries
-information found nowhere else. Reading an unlisted fact is sampling
-and legal; reading an unlisted moment is an error, since a moment has
-no meaning outside its delivery.
+Within a phase, blocks run in file order. Derived cells settle in
+dependency order inside the derivation phase, so an equation chain
+resolves in one instant. A warning names any two same-phase bodies
+where one writes a cell another writes or samples.
 
-**Phases are declared in the head and verified against the body.** An
-earlier draft inferred them; the reader's argument won instead — the
-head word tells the programmer when their code runs, which on a 4 MHz
-machine is the thing being reasoned about, not metadata. So the phase
-vocabulary is the head vocabulary: `derive` settles first, `effect`
-runs in the middle, `render` runs last. What inference would have
-bought survives as checking: a `render` writing a fact is a compile
-error — Glimmer's "a render only depicts," verified interprocedurally,
-a helper's writes counting as its caller's — and a `derive` equation
-is pure by form. An `effect` may do anything a body may do. Equations
-are the whole derivation phase in the first edition: multi-statement
-fact-to-fact work is an effect, and an early-phase block form waits on
-evidence from real programs.
+Two rules protect the wiring. A state cell is written only through its
+declared path in an effect or task body; passing one to a routine as a
+writable aggregate argument, or taking an `alias` to one, is rejected —
+helpers compute and return. And a block cannot suspend: `wait on`
+belongs to task bodies only.
 
-**Derived cells settle within the instant.** Acyclic derived chains
-are ordered topologically inside the derivation phase, with intra-phase
-delivery — a derived feeding a derived resolves in one instant, the
-Lustre-faithful reading, and an improvement this design makes
-deliberately over Glimmer's one-step-per-frame compute chains. This is
-the delivery rule's one stated extension: the topological order makes
-every derived-to-derived edge effectively later-phase, so the together
-guarantee is preserved, not weakened. Cycles were already rejected, so
-the order always exists. Effects are never
-reordered: within each phase they run in file order, tasks after them,
-and the diagnostics cover the hazards — a warning names any two
-same-phase bodies where one writes a cell another writes or samples,
-tasks included.
-
-Three guardrails complete the wiring story. A state cell is written
-only through its declared path in an effect or task body — passing one
-to a routine as a writable aggregate argument, or taking an `alias` to
-one, would hide the write from the inference, so the first edition
-rejects both; helpers compute and return. An effect body is an
-ordinary routine body — scratch locals and all — but it cannot
-suspend: `wait on` is confined to task bodies by the grammar of
-section 6, so the effect/task distinction is visible in the syntax.
-And moments appear only in trigger position — a bare moment has no
-value to read — with one standing exemption: `on error` inside any
-body consumes its own statement's failure moment, as adopted
-specification already provides.
-
-## 5. Moments, binds and tasks
-
-A `pulse` is a moment, and a moment with a hardware source names it in
-its own declaration:
+## 5. Moments and tasks
 
 ```lanternfly
 pulse increase from keyPlus held every 6
 pulse fire from keyGo rising
 ```
 
-There is no separate binding construct: the wiring Glimmer wrote as a
-`bind` line with an arrow is a `from` clause on the pulse itself, so
-the moment's source stands at its declaration, where a reader looks
-first. The vocabulary after the source name — `held`, `rising`,
-`every` — belongs to the target profile, not the core grammar, exactly
-as external-binding forms do: the language owns the shape — `pulse`, a
-name, `from`, a source, the profile's words — and the profile owns the
-middle. A pulse without a `from` clause is an internal moment, raised
-by program code once the emit family of section 10 is settled.
+The vocabulary after the source name — `held`, `rising`, `every` —
+belongs to the target profile, as external-binding vocabulary does, and
+the clause runs to the end of the line. A pulse without a `from` clause
+is an internal moment; its emitter is an open question (section 9).
 
-Tasks keep the [task-first](task-first.md) model — types, instances as
-module variables, dormancy as a designed idle wait — with two rulings
-added here. First, the spelling: the suspension statement is `wait on`
-a trigger, sharing the trigger grammar of `effect on`, and `await` is
-retired — borrowed vocabulary from call-based asynchrony, and nothing
-here awaits a call's result; `wait on go` says what happens in the
-language's own words, and a task "started at runtime" is a task woken
-by its trigger. Second, the task's place in the instant, which the
-sibling papers left to a bare round-robin: **tasks advance in the
-logic phase, after the logic effects, in declaration order.** Their
-fact writes ride the same delivery rule — same instant when every
-dependent is in a later phase, next instant for all dependents
-otherwise — and task-first's "declaration order is
-schedule order" is amended to declaration order *within* the phase
-order. A due `wait on after(n)` deadline counts n instant-clock ticks
-from wait entry, under the timing doctrine's wrap-safe comparison and
-its 32,767-tick bound.
+Tasks keep the [task-first](task-first.md) model: types, instances as
+module variables, dormancy as an idle wait. The suspension statement is
+`wait on` a trigger, with the same trigger grammar as the block heads.
+`wait on after(n)` counts n instant-clock ticks from wait entry, under
+the timing doctrine's wrap-safe comparison and its 32,767-tick bound.
+Tasks advance in the middle of the instant, after the effects, in
+declaration order — declaration order within the phase order — and
+their fact writes ride the delivery rule.
 
-## 6. The grammar, examined
-
-The additions in the specification's section-15 style:
+## 6. The grammar
 
 ```text
 reactive-decl       ::= state-decl | derive-decl | pulse-decl
@@ -278,46 +177,27 @@ wait-stmt           ::= "wait" "on" wait-trigger ("," wait-trigger)*
 wait-trigger        ::= trigger | "after" "(" expression ")"
 ```
 
-Counting the cost, because economy is a stated goal:
-
-- **Ten productions**, with `trigger-clause` written once and used by
-  both block heads, `trigger` reused by waits, and the adopted
-  `on-error-clause` as their named sibling. A trigger names a pulse
-  (its occurrence) or a state cell (its change); `after` belongs to
-  wait position only, so a block cannot trigger on a deadline —
-  time-driven work is a task's.
-- **Six new words, none reserved.** `state`, `derive`, `pulse`,
-  `effect`, `render` and `wait` are contextual in head position — the
-  module grammar already begins every declaration with a head word,
-  and `wait` heads only a task-body statement — exactly as `error` is
-  contextual after `on`. `changed` is likewise contextual inside the
-  state declaration, `after` inside a wait trigger, and `from` is the
-  language's existing source word doing its existing job. Nothing
-  joins the reserved inventory, so the task convention's own
-  `state as u8` record field, and every other use of these words as
-  value names, stays legal.
-- **The pulse source is profile-owned and self-delimiting.** The words
-  after the source name belong to the target profile, as
-  external-binding vocabulary does, and the clause runs to the end of
-  the line — no separate binding construct exists, so there is
-  nothing to wire and no arrow to learn.
-- **Effect bodies are routine bodies.** Scratch locals and every
-  statement form are available; what an effect body cannot contain is
-  `wait-stmt`, which appears only in `task-body` — the may-not-suspend
-  rule enforced by the productions above, costing no semantic check.
-- **No collisions.** The handler and trigger readings of `on`
-  disambiguate on one token; the six heads join a module grammar in
-  which every declaration already begins with a head word — a bare
-  `on` block was rejected in design precisely because it would have
-  been the only headless declaration in the language.
-
-The shape stays the language's shape: linear, word-marked, sparing
-with punctuation — readable aloud, in the BASIC line, with nothing to
-balance but `end`.
+- Ten productions. `trigger-clause` serves both block heads, and the
+  specification's `on-error-clause` is its sibling. A trigger names a
+  pulse or a state cell; `after` belongs to wait position, so a block
+  cannot trigger on a deadline — time-driven work is a task's.
+- Six new words — `state`, `derive`, `pulse`, `effect`, `render`,
+  `wait` — all contextual in head position, none reserved. `changed`
+  is contextual inside the state declaration, `after` inside a wait
+  trigger, and `from` keeps its existing job. Every use of these words
+  as value names stays legal, the task convention's `state as u8`
+  field included.
+- The pulse source clause is profile-owned and runs to the end of the
+  line.
+- `wait-stmt` appears only in `task-body`, so a block cannot suspend,
+  by grammar rather than by check.
+- Block bodies are `routine-block`: scratch locals and every statement
+  form.
 
 ## 7. Two worked programs
 
-**The level meter** — Glimmer's own teaching program, native:
+The level meter — plus and minus move a count; a bar and digits show
+it:
 
 ```lanternfly
 state count as u8 = 0 changed
@@ -348,15 +228,14 @@ render on count
 end
 ```
 
-One press of plus, traced by instants: frame N, the bound pulse
-`increase` fires; the first effect runs in the middle phase and writes
-`count`, whose dependents include the derivation — an earlier phase —
-so the change defers. Frame N+1: `barLength` recomputes, and both
-renders fire together — bar and digits change in the same frame, the
-delivery rule's exactly-once guarantee at work.
+One press of plus, by instants: at instant N the bound pulse fires and
+the first effect writes `count`. Its dependents include the
+derivation — an earlier phase — so the change defers. At instant N+1,
+`barLength` recomputes and both renders fire: bar and digits change
+together.
 
-**A reaction timer** — sequence beside reactivity, which is the
-synthesis in one program:
+A reaction timer — press GO, wait for the light, hit any key; the time
+in instants is the score:
 
 ```lanternfly
 state armed as boolean = false
@@ -370,7 +249,7 @@ pulse pressed from anyKey rising
 task Round()
     while true
         wait on go
-        armed = false          // a GO during a stale round scores nothing
+        armed = false
         lightOff()
         wait on after(75)
         lightOn()
@@ -403,109 +282,50 @@ render on best
 end
 ```
 
-The waiting is sequence — inexpressible as an effect, natural as a
-task, dormant in `wait on go` until signalled. The task advances after
-the logic effects, so on the very instant the light comes on, an
-already-falling keypress finds `armed` still false and scores
-nothing — a sub-instant reaction is rejected by the schedule itself,
-and the round's own `armed = false` makes a stale GO equally harmless.
-`best` shows why
-equations and effects are different sorts: the minimum ever seen is
-memory, not a function of current facts, so it is a fact written by an
-effect. And the first effect reads `frames`, `armed` and `startFrame`
-while triggering only on `pressed` — sampling and depending, side by
-side, which is the case that rules out inferred triggers.
+The waiting is sequence, so it is a task, dormant in `wait on go` until
+signalled. The task advances after the effects, so a press landing on
+the instant the light comes on finds `armed` still false and scores
+nothing. `best` is memory — the minimum ever seen — so it is a fact
+written by an effect, not an equation. The first effect samples
+`frames`, `armed` and `startFrame` while triggering only on `pressed`.
 
-## 8. What was dissolved, and by what argument
+## 8. Precedent
 
-The design shed most of its first draft, each cut by argument — and
-one cut was reversed by a better argument, recorded here because the
-reversal is instructive:
+Facts and moments are the behaviors and events of Fran, the founding
+functional-reactive system. The equation cell, the causality check and
+the constant-memory step function per instant are Lustre's; SCADE, its
+industrial descendant, has a code generator qualified under DO-178. The
+sequential process with `wait` is Esterel's, carried to embedded
+targets by Céu. The delivery rule is Glimmer's, proven in shipped Z80
+games. Compile-time wiring with no runtime graph was Svelte's founding
+argument. The statechart tradition holds that a view layer without
+transition structure is half a model; tasks are the other half. The
+combination — verified reactive wiring, static instants and sequential
+processes in one language on an eight-bit target — has no precedent on
+record.
 
-- `compute` blocks — derivations are equations (`derive … from`), the
-  spreadsheet's and Lustre's form; the block was React-shaped habit.
-- Phase *inference* — proposed to save the `effect`/`render` keywords,
-  then reversed: the head word tells the reader when code runs, and on
-  this machine that outweighs a saved keyword. The verification half
-  of inference survives as checking.
-- `updates` — writes are visible in transparent bodies; the clause
-  restated what the compiler proves, and Glimmer only needed it
-  because its bodies were opaque assembly.
-- `rule` and block names — nothing in the language ever consumed a
-  name; they were Glimmer's assembler linkage.
-- `await` — borrowed intuition from a call-based world this model
-  never was.
-- `bind`, whole — a moment's source belongs on the moment's own
-  declaration, so the wiring construct and its arrow dissolved into a
-  `from` clause on `pulse`.
+## 9. Open questions
 
-What survived, survived because it carries information the body cannot
-express: `state` versus `derive` (bound once versus bound always),
-`pulse` (moment versus fact), `on` (triggering is a decision, not a
-read), the phase heads (when code runs), `task` (memory), `from` (the
-source, of a fact or of a moment).
-
-## 9. Precedent
-
-The two-sorted storage — facts and moments — is Fran's behaviors and
-events, the founding distinction of functional reactive programming.
-The equation cell is Lustre's, whose industrial descendant's qualified
-code generator is certified for avionics under DO-178, and whose
-compiler discipline — causality analysis, a constant-memory step
-function per instant — is this paper's lowering by another name. The
-imperative process with `wait` comes from Esterel, the equations from
-Lustre, and their coexistence in one language is the Esterel family's
-own later synthesis, carried to embedded targets by Céu.
-The instant-clocked delivery rule is Glimmer's, proven in shipped Z80
-games. The compiler-is-the-framework stance — inferred writes, no
-runtime graph, plain assignment as the notification site — was
-Svelte's founding argument, which this design extends from inference
-to proof.
-The retreat from wiring-heavy surfaces toward few constructs is Elm's
-lesson, learned when it removed signals from its own language. And the
-claim that a reactive view layer is half a model without transition
-structure is the statechart tradition's — answered here by tasks,
-present from the start. What has no precedent on record is this
-combination — verified reactive wiring, static instants, and
-sequential processes in one language — delivered on an eight-bit
-target with every byte in the storage map.
-
-## 10. Open seams
-
-Stated as open, in the order they should be settled:
-
-1. **The emit family.** `fail` emits the failure moment with a payload;
-   `yield` emits a value; an internal pulse — one with no `from`
-   clause — needs an emitter that does not yet exist. Three emitters,
-   one family resemblance. `fail` is adopted specification and stays;
-   whether `yield` and pulse-raising share a word is the mirror of the
-   `on` unification and calls for the same walk.
-2. **Valued moments.** Elm's messages carry payloads; Glimmer's pulses
-   are bare bits with payloads smuggled through state cells, which has
-   a race's shape. `pulse keyDown as u8` is the candidate; `on error
-   code` already shows a moment binding a payload name.
-3. **Multi-statement derivations.** Whether `derived` may take a block
-   body, or whether anything beyond an expression must be an effect —
-   economy says expression-only, with helpers for the rest.
-4. **Same-phase order.** File order within a phase is inherited from
-   Glimmer with a warning on shared cells; whether the warning should
-   be an error is an evidence question.
-5. **Evidence.** The adoption ladder of the sibling papers applies
-   unchanged: Meter and Rover rewritten in the manual lowering first,
-   then this surface; then a Tetro-sized sketch; the sugar is judged by
+1. The emitter for internal pulses, and whether it shares a word with
+   `yield`. `fail` is adopted specification and stays.
+2. Valued moments: `pulse keyDown as u8`. `on error code` already
+   binds a payload name to a moment.
+3. A block form for multi-statement derivations. In this edition,
+   fact-to-fact work beyond an equation is an effect.
+4. Whether the same-phase conflict warning should be an error.
+5. Evidence: Meter and Rover in the manual lowering, then in this
+   surface; then a Tetro-sized sketch. The sugar is judged by
    comparing its emission against the hand-written form, and the
    reference-compiler budget judges the rewrite.
 
-## 11. Adoption and lowering
+## 10. Lowering
 
-Nothing in this paper adds machinery beneath the surface. A fact is a
-variable plus a bit in a mask byte; a moment is a bit cleared at frame
-end; the delivery rule is three mask bytes and two merges per frame; an
-effect is a task record with no fields and a generated wait; the whole
-reactive program is the task-first scheduler with phases. The manual
-lowering is legal 0.6 today and is the conformance oracle for the
-sugar, exactly as the task convention is for the task form. The sugar
-itself joins the same deferred family, gated by the same
-reference-compiler budget, declared by the same capability mechanism —
-present in a large-target compiler, absent from a minimal one, with the
+A fact is a variable plus a bit in a mask byte. A moment is a bit
+cleared at instant end. The delivery rule is three mask bytes and two
+merges per instant. A block is a task record with no fields and a
+generated wait. The whole reactive program is the task-first scheduler
+with phases. The manual lowering is legal 0.6 today and is the
+conformance oracle for the sugar; the sugar joins the deferred family,
+gated by the reference-compiler budget and declared as a capability —
+present in a large-target compiler, absent from a minimal one, the
 language unchanged either way.
