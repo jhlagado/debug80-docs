@@ -37,10 +37,21 @@ separate toolchain stage is retired.
 
 ```lanternfly
 // Hypothetical syntax; deferred with the task form.
+import "tec1g/keypad.lafy"
+
 state count as u8 = 0 changed
 derive barLength as u8 from count / 8
 
-pulse increase from keyPlus held every 6
+pulse increase
+
+task WatchKeys()
+    while true
+        wait on after(6)
+        if keyHeld(keyPlus) then
+            raise increase
+        end
+    end
+end
 
 effect on increase
     if count < 64 then
@@ -67,8 +78,7 @@ Six declaration heads:
 
 - a stored fact → `state`;
 - a fact that is a formula → `derive … from`;
-- a momentary occurrence → `pulse`, with its hardware source named
-  `from` its own declaration;
+- a momentary occurrence → `pulse`, raised by `raise`;
 - statements that respond to change → `effect on`;
 - statements that depict facts → `render on`;
 - a process that remembers where it was → `task`.
@@ -79,10 +89,7 @@ runs in the middle, `render` runs last.
 `on` always attaches a trigger to a head: an `effect` or `render`
 declaration, a `wait`, or the statement whose failure it handles. The
 third is `on error`, already in the specification; the failure channel
-is a moment — delivered once, at one point, carrying a payload. One
-preposition covers the sources: a fact is derived `from` facts, and a
-moment comes `from` the machine — the word `extern` routines already
-use for a symbol's source.
+is a moment — delivered once, at one point, carrying a payload.
 
 ## 3. Facts
 
@@ -126,23 +133,57 @@ dependency order inside the derivation phase, so an equation chain
 resolves in one instant. A warning names any two same-phase bodies
 where one writes a cell another writes or samples.
 
-Two rules protect the wiring. A state cell is written only through its
-declared path in an effect or task body; passing one to a routine as a
-writable aggregate argument, or taking an `alias` to one, is rejected —
-helpers compute and return. And a block cannot suspend: `wait on`
-belongs to task bodies only.
+`raise` emits a moment: one statement, one pulse name, delivered under
+the same rule as any change. Raising is a write, so it is legal in
+effect and task bodies, rejected in a `render` or a `derive`, and it
+appears in the dependency report beside the writes.
 
-## 5. Moments and tasks
+Two rules protect the wiring. A state cell is written, and a moment
+raised, only in an effect or task body and only through the declared
+name; passing a state cell to a routine as a writable aggregate
+argument, or taking an `alias` to one, is rejected — helpers compute
+and return. And a block cannot suspend: `wait on` belongs to task
+bodies only.
+
+## 5. Moments, input and platforms
+
+A `pulse` declares a moment; `raise` emits it. The language ends there:
+no key names, no edge or repeat vocabulary, and no input machinery live
+in the grammar, because hardware differs by machine and Lanternfly is a
+general-purpose language. Hardware reaches a program through the
+existing boundary — platform interface modules and the membrane — and
+input handling is ordinary Lanternfly written over it:
 
 ```lanternfly
-pulse increase from keyPlus held every 6
-pulse fire from keyGo rising
+import "tec1g/keypad.lafy"
+
+pulse pressed
+pulse go
+
+task WatchKeys()
+    var key as u8 = 0
+    var lastKey as u8 = 0
+
+    while true
+        wait on after(1)
+        key = readKeypad()
+        if key <> 0 and lastKey = 0 then
+            raise pressed
+            if key = keyGo then
+                raise go
+            end
+        end
+        lastKey = key
+    end
+end
 ```
 
-The vocabulary after the source name — `held`, `rising`, `every` —
-belongs to the target profile, as external-binding vocabulary does, and
-the clause runs to the end of the line. A pulse without a `from` clause
-is an internal moment; its emitter is an open question (section 9).
+`readKeypad` and `keyGo` are the platform module's exports; the
+rising-edge test and any repeat period are the task's own code. A
+platform ships such tasks as an input library, with whatever key
+constants, scan routines and conventions its hardware has, and a
+program imports the library for its target. The reactive layer stays
+hardware-free.
 
 Tasks keep the [task-first](task-first.md) model: types, instances as
 module variables, dormancy as an idle wait. The suspension statement is
@@ -163,13 +204,14 @@ state-decl          ::= "state" value-name "as" type-expr
                         ("=" constant-initializer)? "changed"? newline
 derive-decl         ::= "derive" value-name "as" type-expr
                         "from" expression newline
-pulse-decl          ::= "pulse" value-name
-                        ("from" source-name profile-word*)? newline
+pulse-decl          ::= "pulse" value-name newline
 block-decl          ::= ("effect" | "render") trigger-clause newline
                         routine-block "end" newline
 
 trigger-clause      ::= "on" trigger ("," trigger)*
 trigger             ::= value-name
+
+raise-stmt          ::= "raise" value-name newline
 
 task-body           ::= local-decl* (statement | wait-stmt)*
 wait-stmt           ::= "wait" "on" wait-trigger ("," wait-trigger)*
@@ -181,16 +223,15 @@ wait-trigger        ::= trigger | "after" "(" expression ")"
   specification's `on-error-clause` is its sibling. A trigger names a
   pulse or a state cell; `after` belongs to wait position, so a block
   cannot trigger on a deadline — time-driven work is a task's.
-- Six new words — `state`, `derive`, `pulse`, `effect`, `render`,
-  `wait` — all contextual in head position, none reserved. `changed`
-  is contextual inside the state declaration, `after` inside a wait
-  trigger, and `from` keeps its existing job. Every use of these words
-  as value names stays legal, the task convention's `state as u8`
+- Seven new words — `state`, `derive`, `pulse`, `effect`, `render`,
+  `wait` and `raise` — all contextual in head position, none reserved.
+  `changed` is contextual inside the state declaration, `after` inside
+  a wait trigger, and `from` keeps its existing job. Every use of these
+  words as value names stays legal, the task convention's `state as u8`
   field included.
-- The pulse source clause is profile-owned and runs to the end of the
-  line.
 - `wait-stmt` appears only in `task-body`, so a block cannot suspend,
-  by grammar rather than by check.
+  by grammar rather than by check; `raise-stmt` is a statement form
+  whose use outside effect and task bodies is rejected semantically.
 - Block bodies are `routine-block`: scratch locals and every statement
   form.
 
@@ -200,11 +241,27 @@ The level meter — plus and minus move a count; a bar and digits show
 it:
 
 ```lanternfly
+import "tec1g/keypad.lafy"
+
 state count as u8 = 0 changed
 derive barLength as u8 from count / 8
 
-pulse increase from keyPlus held every 6
-pulse decrease from keyMinus held every 6
+pulse increase
+pulse decrease
+
+task WatchKeys()
+    while true
+        wait on after(6)
+        if keyHeld(keyPlus) then
+            raise increase
+        end
+        if keyHeld(keyMinus) then
+            raise decrease
+        end
+    end
+end
+
+var keys as WatchKeys
 
 effect on increase
     if count < 64 then
@@ -228,11 +285,13 @@ render on count
 end
 ```
 
-One press of plus, by instants: at instant N the bound pulse fires and
-the first effect writes `count`. Its dependents include the
-derivation — an earlier phase — so the change defers. At instant N+1,
-`barLength` recomputes and both renders fire: bar and digits change
-together.
+One press of plus, by instants: at instant N the input task raises
+`increase`; the effects have already run, so the moment is delivered at
+instant N+1, when the first effect writes `count`. The write's
+dependents include the derivation — an earlier phase — so the change
+defers again, and at instant N+2 `barLength` recomputes and both
+renders fire: bar and digits change together, two instants after the
+press.
 
 A reaction timer — press GO, wait for the light, hit any key; the time
 in instants is the score:
@@ -243,8 +302,27 @@ state startFrame as u16 = 0
 state score as u16 = 0
 state best as u16 = 65535
 
-pulse go from keyGo rising
-pulse pressed from anyKey rising
+pulse go
+pulse pressed
+
+task WatchKeys()
+    var key as u8 = 0
+    var lastKey as u8 = 0
+
+    while true
+        wait on after(1)
+        key = readKeypad()
+        if key <> 0 and lastKey = 0 then
+            raise pressed
+            if key = keyGo then
+                raise go
+            end
+        end
+        lastKey = key
+    end
+end
+
+var keys as WatchKeys
 
 task Round()
     while true
@@ -283,11 +361,13 @@ end
 ```
 
 The waiting is sequence, so it is a task, dormant in `wait on go` until
-signalled. The task advances after the effects, so a press landing on
-the instant the light comes on finds `armed` still false and scores
+signalled; the module imports `tec1g/keypad.lafy` for `readKeypad` and
+`keyGo`. `Round` advances after the effects, so a press landing on the
+instant the light comes on finds `armed` still false and scores
 nothing. `best` is memory — the minimum ever seen — so it is a fact
-written by an effect, not an equation. The first effect samples
-`frames`, `armed` and `startFrame` while triggering only on `pressed`.
+written by an effect, not an equation. The scoring effect samples
+`frames`, `armed` and `startFrame` while triggering only on
+`pressed`.
 
 ## 8. Precedent
 
@@ -306,10 +386,10 @@ record.
 
 ## 9. Open questions
 
-1. The emitter for internal pulses, and whether it shares a word with
-   `yield`. `fail` is adopted specification and stays.
-2. Valued moments: `pulse keyDown as u8`. `on error code` already
-   binds a payload name to a moment.
+1. Whether `raise` and `yield` share machinery beneath their two
+   words. `fail` is adopted specification and stays.
+2. Valued moments: `pulse keyDown as u8`, raised with a payload.
+   `on error code` already binds a payload name to a moment.
 3. A block form for multi-statement derivations. In this edition,
    fact-to-fact work beyond an equation is an effect.
 4. Whether the same-phase conflict warning should be an error.
