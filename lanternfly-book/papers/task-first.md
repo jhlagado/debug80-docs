@@ -87,8 +87,9 @@ task blinker using blinkCursor
 There is no `main`. The build generates the scheduler: increment the
 pass clock, advance each declared instance in declaration order, repeat.
 Declaration order is schedule order, so execution is deterministic —
-the worst-case pass time is the sum of each task's longest segment, and
-the whole schedule is readable from the declarations alone.
+the worst-case pass time is the scheduler's own poll and bookkeeping
+plus the sum of each task's longest segment, and the whole schedule is
+readable from the declarations alone.
 
 Every piece of this exists today in manual form. The keypad machine in
 the companion paper's section 7 is this program with the scheduler
@@ -251,6 +252,8 @@ sub advanceSum(t as SumTask) as boolean
     case finished
         return false
     end
+
+    return false
 end
 
 var background as SumTask

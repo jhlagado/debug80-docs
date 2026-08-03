@@ -23,7 +23,9 @@ closing section 7, and a rate-limited device poller in section 8.
 The document is kept in step with the working specification. Every claim
 about the language cites a specification section, and a change to any cited
 section obligates a review here. Baseline: specification 0.6 as of this document's last revision;
-the pattern uses only facilities already present in 0.5.
+the pattern uses facilities already present in 0.5, except the
+image-fresh reset of section 6, which uses 0.6's constant-name
+initializer.
 
 ## 1. The problem on the target
 
@@ -100,6 +102,11 @@ lead with the cooperative-task reading; the generator reading is a closing
 observation.
 
 ## 3. The pattern in Lanternfly 0.5
+
+Code fences in this paper are module excerpts. Routines they call and
+imports they need — `toggleCursor`, the standard text modules, the
+scheduler's pass-clock increment — belong to the complete module and are
+not reshown.
 
 A task is a record plus a step routine. The record holds a state field and
 whatever must survive between turns. The step routine is a `select` on the
@@ -219,7 +226,7 @@ declaration fixes where each task's record lives — module storage, an array
 of tasks, a `far` region. Instantiation is declaration; there is no
 allocation to design.
 
-One consequence of section 4.5 is worth adopting as doctrine: zero-initialized
+One consequence of section 4.2 is worth adopting as doctrine: zero-initialized
 storage of the record types above is a fresh task, because state 0 is the
 fresh state. A task array in zeroed RAM is a pool of ready tasks with no
 initialization pass.
@@ -243,8 +250,8 @@ by hand.
 
 1. A task type is a record whose first field is `state as u8`. An
    enumeration declared `as u8` whose ordinal-0 member is the fresh state
-   satisfies this rule and adds section 9.2 exhaustiveness checking to the
-   step routine's `select`.
+   satisfies this rule, and section 9.2's exhaustiveness warning then
+   covers the step routine's `select`.
 2. State 0 is the fresh state. Zero-initialized storage is therefore a
    fresh task. A task type with per-instance start values is instead
    image-fresh: its instances initialize from a `const` template record,
@@ -267,12 +274,14 @@ by hand.
    shape the section 6 lowering synthesizes.
 7. Interrupt handlers and hardware communicate with tasks only through
    `volatile` module storage (section 4.4). A step routine reads flags; it
-   never busy-waits on them. Handlers are native code and never call
+   never busy-waits on them, and it never calls a routine that blocks by
+   contract, such as the standard `readCharacter`. Handlers are native
+   code and never call
    Lanternfly routines — the firewall of the
    [static-frames paper](static-frames.md); this rule is its task-side
    face.
 8. A step routine calls ordinary routines freely, but only the step
-   routine's own body reads or writes the state field. Pausing inside a
+   routine's own body writes the state field. Pausing inside a
    callee is not expressible, which is the stackless restriction of
    section 6 arriving early.
 
@@ -327,7 +336,11 @@ reference compiler rather than a preprocessing stage: it requires resolved
 types to build the record and resolved control structure to place resume
 points. Its output is not structured source but the compiler's control-flow
 form — the lowering contract's IR, where a resume point is an ordinary
-block label whatever loop it sits inside. That is the reason the
+block label whatever loop it sits inside. For the single-pass,
+direct-emitting reference architecture the real obstacle is not the
+rewrite's bytes but buffering: a marked routine's resolved control-flow
+form must be held whole before emission, a structural departure the size
+gate alone does not measure. That is the reason the
 transformation lives after parsing, and the reason no structured
 source-to-source rewrite could express it. Its budget therefore counts
 against the reference-compiler size gate. Two decisions keep that budget
@@ -342,7 +355,7 @@ small:
 - **Resume dispatch.** Each `yield` site becomes a labelled resume block in
   the control-flow form, and the routine's entry dispatches on the state
   byte to the matching label. The obligation is backend-neutral. A backend
-  may realize the dispatch as a jump table — the section 9.2 permission
+  may realize the dispatch as a jump table — the section 11.7 permission
   applied to compiler-owned dispatch, roughly a dozen bytes per task type
   on the Z80 — or as a compare chain where a table pays worse.
 
@@ -368,14 +381,22 @@ question stays open. Advancing names the instance: the step call is made
 through the instance name, and its result reports completion exactly as
 the manual convention prescribes. The initializers of retained locals run
 on an instance's first advance and never again — in the lowered form they
-are the fresh state's opening assignments — and when every initializer is
-zero they cost nothing, because the all-zero record is the fresh instance
-under convention rule 2; for an instance without arguments, `clear`
+are the opening assignments of a distinct entry state that only the first
+advance visits. The fresh-state label may coincide with a loop's re-entry
+point only when every initializer is zero and the entry state has nothing
+to do, as in the reader below; a nonzero initializer forces its own entry
+member. When every initializer is zero they cost nothing, because the
+all-zero record is the fresh instance under convention rule 2; for an instance without arguments, `clear`
 remains the reset, and the instance-arguments contract below adjusts it
 for the rest. The
 closure rule is rule 8 unchanged: only the marked routine's own locals are
 hoisted, every callee remains an ordinary per-invocation routine, and
 state smuggled into a callee is exactly the overlap section 4 rejects.
+One grammar consequence is recorded explicitly: a marked routine admits
+aggregate `var` declarations — the reader's `page` buffer below —
+precisely because every such declaration denotes a field of the
+synthesized record, never automatic storage; ordinary routines remain
+scalar-only under section 11.4.
 
 **Instance arguments.** A parameter of a marked routine is bound once
 per instance and persists — exactly as a JavaScript generator's
@@ -431,10 +452,14 @@ are a different thing and stay rule 4's: extra step-routine parameters
 carry fresh data into one advance and are never hoisted — the analogue
 of the JavaScript `next(value)` channel.
 
-By the section 1.1 criteria the feature is kernel-shaped: it selects no
-runtime helper, places no bytes in programs that do not use it, and has one
-meaning everywhere. Whether it enters the kernel is still an evidence
-question, and the reference-compiler size budget is the deciding constraint.
+The feature selects no runtime helper, places no bytes in programs that
+do not use it, and has one meaning everywhere. What it is not,
+necessarily, is kernel material in section 1.1's full sense: the kernel
+is the closure the reference compiler is written in, and this paper
+itself allows that Candlemoth may never carry the syntax. The natural
+home is a declared capability in the style of recursion, which is what
+the adoption path proposes; the size budget remains the deciding
+constraint.
 
 ### A worked lowering: a paginated reader
 
@@ -547,8 +572,9 @@ The correspondence, piece by piece:
   rewrites it to a field and explicit arithmetic, as the manual form
   writes it directly.
 - Retained locals become fields. A temporary used only between yields
-  would remain an ordinary scalar local of the step routine, with no cost
-  in the record.
+  would remain an ordinary scalar local under the precise frame rule; the
+  conservative first implementation hoists it too, at a few bytes per
+  instance.
 - Every initializer here is zero, and `needPage` is ordinal 0, so a
   zero-initialized `ItemsTask` is a rewound reader and `clear` restarts
   it; nothing runs before the first advance.
@@ -606,7 +632,8 @@ from a platform polled service instead, and the seam between the device
 and the tasks is a one-slot mailbox:
 
 ```lanternfly
-// Platform service: one non-blocking scan, 0 when no key is down.
+// Platform service: one non-blocking scan. 0 means no key, so the
+// platform maps every scan code — the 0 key's included — to nonzero.
 extern sub readKeypad() as u8
 
 const carriageReturn as u8 = '\r'
@@ -660,10 +687,15 @@ sub advancePrompt(t as PromptTask) as boolean
     case finished
         return false
     end
+
+    return false
 end
 ```
 
-`key` demonstrates the scratch rule: it lives and dies within one step, so
+The trailing `return false` satisfies the definite-return rule of
+specification section 11.5, which exempts only `while true` from the
+fall-past path — an exhaustive selection does not yet earn the same
+credit. `key` demonstrates the scratch rule: it lives and dies within one step, so
 it is an ordinary local, not a record field. The scheduler is the main
 loop — poll the device, advance each task, repeat — and the section 3
 blinker runs beside the prompt untouched, which is the cooperation made
@@ -687,6 +719,8 @@ end
 The costs are computable in advance. A blocked task's step is a `select`
 dispatch, one compare and a return — a dozen or so Z80 instructions per
 scheduler pass — and the loop's worst-case pass time is the sum of each
+of the scheduler's own terms — the device poll, the pass-clock
+increment, the loop jump — plus the sum of each
 task's longest segment, so the machine is not merely deterministic but
 predictable by addition. Nothing is allocated at any point: the mailbox is
 one static byte, each task is one static record.
@@ -769,9 +803,10 @@ end
 
 The comparison is wrap-safe: `passes - t.wakeAt` wraps modulo 65,536, and
 a result under `$8000` means the deadline has passed. The bound that
-buys: no single sleep may exceed 32,767 ticks — around eight seconds on
-a kilohertz pass clock, around ten minutes on a 50 Hz frame clock —
-which is ample, and cheaper than widening the counters to `u32`. In a
+buys: no single sleep may exceed 32,767 ticks — eight seconds to half a
+minute across the low-kilohertz pass-clock range, around ten minutes on
+a 50 Hz frame clock — which is ample, and cheaper than widening the
+counters to `u32`. In a
 sugared form, `await sleep(pollInterval)` lowers to this arm exactly as
 `await keyPress()` lowers to the mailbox test.
 
@@ -855,7 +890,7 @@ per segment (section 8) can flag any segment exceeding a stated budget,
 with a fraction of a frame as the natural unit. Blocking becomes a
 visible, reviewable property at build, which is where this language
 places its guarantees. The precedents that do insert implicit
-preemption — Erlang's reduction counting, Go's back-edge preemption —
+preemption — Erlang's reduction counting, Go's runtime preemption —
 own a virtual machine or a signal-driven runtime; a language with
 neither makes the cost visible and lets the programmer place the cut.
 
