@@ -60,7 +60,7 @@ its own status.
    one task body serving several concurrent instances, each a statically
    allocated record, with no allocation machinery anywhere.
 3. **Surface syntax — Deferred.** The `task` type form, `yield` and
-   `await`
+   `wait on`
    (sections 6 and 7), adopted by an implementation only when its size
    budget carries the rewrite. The Candlemoth reference compiler may
    never have the room; a larger implementation can adopt the syntax
@@ -82,10 +82,11 @@ checkable: the BASIC lineage has never carried structured concurrency.
 The eight-bit BASICs offered at most an event hook such as
 `ON TIMER GOSUB`, with no persistent task state; the modern descendant
 that did gain `Async`/`Await` — VB.NET — delivers it through
-heap-allocated state machines on a runtime the program cannot see. Await
-and generators with every byte statically allocated and every cost
-visible in the storage map, on an eight-bit target, has precedent in
-Rust's embedded executors and none in BASIC's own family.
+heap-allocated state machines on a runtime the program cannot see.
+Structured waiting and generators with every byte statically allocated
+and every cost visible in the storage map, on an eight-bit target, has
+precedent in Rust's embedded executors and none in BASIC's own
+family.
 
 A companion paper, [Task-first Lanternfly](task-first.md), proposes the
 program-level inversion this mechanism enables — a program as a set of
@@ -625,15 +626,15 @@ The correspondence, piece by piece:
   build-time storage map, placeable with `at`, while `advanceItems` exists
   once.
 
-## 7. Awaiting and scheduling
+## 7. Waiting and scheduling
 
 **Proposed as library doctrine; the service-module packaging is Open.**
-`async`/`await` is this pattern plus a scheduler. An awaiting
-routine is a task whose yields mean *waiting on a condition* rather than
-*here is a value*; `await keypress()` records what is awaited, yields, and on
-resume checks the flag, yielding again if it is still clear. The manual form
-of section 3 already expresses this — the blinker's state 1 is an await of
-the tick flag.
+`async`/`await` is this pattern plus a scheduler. A waiting routine is
+a task whose yields mean *waiting on a condition* rather than *here is
+a value*; `wait on keyPress` records what is waited for, yields, and on
+resume checks the flag, yielding again if it is still clear. The manual
+form of section 3 already expresses this — the blinker's state 1 is a
+wait on the tick flag.
 
 The scheduler for a closed-world language is small. The set of tasks is
 known during compilation, so the scheduler is a static task table driven by
@@ -690,10 +691,10 @@ sub pollInput()
 end
 ```
 
-A task awaiting a key is blocked in the form of a wait state: its arm
+A task waiting for a key is blocked in the form of a wait state: its arm
 tests the mailbox and, finding it empty, returns with the state
-unchanged. Those two lines are the await. A sugared
-`key = await keyPress()` would lower to exactly this arm:
+unchanged. Those two lines are the wait. A sugared
+`wait on keyPress` would lower to exactly this arm:
 
 ```lanternfly
 enum PromptState as u8
@@ -712,7 +713,7 @@ sub advancePrompt(t as PromptTask) as boolean
     select t.state
     case awaitingKey
         if pendingKey = 0 then
-            return true          // the await: no key yet, yield control
+            return true          // the wait: no key yet, yield control
         end
 
         key = pendingKey
@@ -769,8 +770,8 @@ one static byte, each task is one static record.
 
 The JavaScript reading, for readers who arrive with it: `main`'s loop is
 the event loop, `pollInput` is its I/O phase, each task record is the
-closure a pending callback would capture, and `await` is a return to the
-loop with the position saved in the record. `async`/`await` is a
+closure a pending callback would capture, and a wait is a return to
+the loop with the position saved in the record. `async`/`await` is a
 generator wired to an event loop, and this is that machine with the task
 set fixed at build — the "task list" is the visible sequence of calls in
 the loop, not a heap of closures discovered at runtime. An
@@ -809,10 +810,10 @@ Two clocks, two guarantees:
   `volatile var frames as u16` and returns. The clock is rigid but
   low-rate: right for animation tempo, melodies and delays meant in real
   time, and it doubles as the display synchronization point, because a
-  display task's natural await is the next frame. Only this counter is
+  display task's natural wait is on the next frame. Only this counter is
   volatile, because only it has an asynchronous writer.
 
-**Sleep is the await idiom with a clock as the condition.** A sleepable
+**Sleep is the wait idiom with a clock as the condition.** A sleepable
 task adds a deadline field, and its wait arm compares. The section 7
 machine called `pollInput` on every pass; rate-limited, the poller
 becomes one more task, asleep between scans:
@@ -849,8 +850,8 @@ buys: no single sleep may exceed 32,767 ticks — eight seconds to half a
 minute across the low-kilohertz pass-clock range, around ten minutes on
 a 50 Hz frame clock — which is ample, and cheaper than widening the
 counters to `u32`. In a
-sugared form, `await sleep(pollInterval)` lowers to this arm exactly as
-`await keyPress()` lowers to the mailbox test.
+sugared form, `wait on after(pollInterval)` lowers to this arm exactly
+as `wait on keyPress` lowers to the mailbox test.
 
 **A delay is a lower bound.** A sleep means *not before the deadline*,
 never *exactly at it*. On the pass clock a tick is not even a fixed
@@ -923,7 +924,7 @@ The doctrine distinguishes three kinds of loop:
    loops are the common case and need nothing.
 2. **Wait loops are forbidden, and were already.** Rule 7: a step
    routine reads flags and never busy-waits. Waiting is a wait arm —
-   the await idiom — never a loop.
+   the wait idiom — never a loop.
 3. **Long or unbounded work is chunked.** A traversal too large for one
    segment saves its position in the task record and processes a fixed
    chunk per step. The section 6 paginated reader is this shape, and

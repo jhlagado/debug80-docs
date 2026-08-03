@@ -93,8 +93,13 @@ Every declared instance is scheduled from the first pass, so a task
 meant to lie dormant designs its entry state as an idle wait — the
 zeroed pool of ready tasks is a pool of tasks awaiting their start
 condition, not a pool outside the schedule. The loop increments the
-pass clock, advances each instance in order, and repeats.
-Declaration order is schedule order, so execution is deterministic —
+pass clock, advances each instance in order, and repeats. Under the
+[reactive layer](reactive.md), the same instances advance in the logic
+phase of each instant, after the logic effects — declaration order
+within the phase order, which supersedes the bare round-robin
+whenever a program declares reactive constructs.
+Declaration order is schedule order within a phase, so execution is
+deterministic —
 the worst-case pass time is the scheduler's own poll and bookkeeping
 plus the sum of each task's longest segment, and the whole schedule is
 readable from the declarations alone.
@@ -191,7 +196,7 @@ sub advanceButton(t as ButtonTask)
     select t.state
     case 0
         if pendingKey = 0 then
-            return                        // await: no press yet
+            return                        // the wait: no press yet
         end
         pendingKey = 0
         crossingRequested = true
@@ -242,14 +247,14 @@ record SumTask
 end
 
 sub advanceSum(t as SumTask) as boolean
-    var step as u16 = 0
+    var counted as u16 = 0
 
     select t.state
     case summing
-        while step < chunkSize
+        while counted < chunkSize
             t.checksum = t.checksum + sample[t.position]
             t.position = t.position + 1
-            step = step + 1
+            counted = counted + 1
         end
 
         if t.position = count(sample) then
@@ -317,27 +322,16 @@ task.
 ## 6. The reactive consequence
 
 Task-first is what makes a Lanternfly Glimmer natural rather than
-grafted. The reactive model — state variables, and effects that run when
-state changes — reduces to the task pattern with one more await family:
-
-- A state variable that participates in reactivity carries a version
-  counter; writers increment it.
-- An *effect* is a task whose wait arm compares the versions it depends
-  on against the versions it last acted on. A counter, not a flag,
-  because several effects may depend on one variable and a flag is
-  consumed by its first reader.
-- The render effect gates on two conditions — state changed *and* the
-  frame clock advanced — so drawing lands in the blanking interval by
-  construction.
-
-The dependency graph that reactive frameworks maintain at runtime is,
-here, not a data structure: it is the compare instructions in wait arms,
-fixed at build. No virtual display list, no diffing, no subscription
-tables — the modern signal-based frameworks have been converging on this
-compile-time shape from the other direction, and a static whole-program
-language arrives at it directly. Glimmer-for-Lanternfly, under this
-model, is roughly three conventions and a platform drawing module — a
-library, not a preprocessor.
+grafted, and the account this section first gave — version counters on
+state variables, effects as tasks comparing remembered versions — is
+superseded by [Reactive Lanternfly](reactive.md), which replaces the
+per-effect version bookkeeping with changed-bit masks, phased delivery
+and compiler-inferred wiring. What survives of this section is its
+claim, which the reactive paper makes good: the dependency graph is not
+a runtime data structure but compile-time wiring; there is no virtual
+display list, no diffing and no subscription table; and
+Glimmer-for-Lanternfly is language constructs plus a platform drawing
+module — not a preprocessor.
 
 ## 7. Staging
 
@@ -350,10 +344,10 @@ The direction is adoptable in steps, each useful without the next:
    implicit scheduler enter the language. This is a small, bounded
    compiler feature — a loop and a dispatch, both derivable from the
    declarations — and it is the step that inverts the default. It does
-   not require the `yield`/`await` sugar: manual step routines under the
+   not require the `yield`/`wait on` sugar: manual step routines under the
    declared-instance model already read task-first.
-3. **The full surface.** The `task` type form, `yield` and `await`, as
-   the companion paper defines them — budget-gated, and at real risk on the
+3. **The full surface.** The `task` type form, `yield` and `wait on`,
+   as the companion papers define them — budget-gated, and at real risk on the
    Candlemoth reference compiler. A larger implementation adopts
    them without touching layers 1 and 2.
 
