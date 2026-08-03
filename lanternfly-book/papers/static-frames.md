@@ -178,7 +178,70 @@ declared contract, and a call to a `forward sub` is emitted before the
 callee's clobbers are known — a single-pass compiler assumes
 all-clobbered there, or fixes a convention at forward boundaries.
 
-## 6. Interrupts: the firewall and the membrane
+## 6. Aggregate locals: the two-lifetime rule
+
+**Proposed language change, under review.** The specification currently
+bans aggregate locals outright. The ban conflates two different
+declarations, and the static-frame model needs only the distinction, not
+the prohibition:
+
+- `var buffer as string[40]`, inside a routine, would be a true
+  per-invocation aggregate local: each invocation receives its own
+  value, exactly as scalar locals promise.
+- `static var buffer as string[40]` would declare the other thing: one
+  object with program lifetime and a routine-scoped *name*. Every
+  invocation — recursive activations included — deliberately uses the
+  same object. The keyword makes the sharing a stated fact of the
+  source, in the tradition of C's function statics and Fortran's
+  `SAVE`.
+
+**`static var` semantics.** The object is a module variable in all but
+name scope: allocated like static storage, never overlay-colored, its
+constant initializer installed in the build image before entry — so it
+is initialized once, before the first invocation, and never again, with
+no first-call flag and no runtime cost. An absent initializer means the
+all-zero value, as everywhere. Because the initializer is a constant
+initializer under the module-variable rule, it cannot read parameters,
+locals or variable storage; a routine that needs run-time first-call
+setup writes the guard itself, which is the task pattern's fresh state
+in miniature. The form covers scalars and aggregates uniformly.
+
+**The ordinary form and the recursion rule.** A per-invocation
+aggregate local is legal exactly where the compiler proves invocations
+cannot overlap — which, under the interrupt firewall, is every routine
+outside a recursive cycle. Inside a cycle the declaration is a
+compile-time error whose diagnostic names the three remedies: mark it
+`static var` and accept the sharing, take the aggregate from the caller,
+or index an explicit frame pool by depth. The compiler never silently
+lowers a per-invocation declaration onto shared storage; that would
+change its meaning, not its implementation.
+
+**Entry state, priced.** A per-invocation aggregate local begins each
+invocation as the all-zero value — semantic parity with scalar locals'
+zero bits — and that guarantee is real work: an entry clear at roughly
+21 T per byte, attributed to the routine in the cost report. An
+initializer, where present, runs on every invocation. That is the crisp
+line between the two forms: an ordinary local's initializer runs per
+invocation and is paid per invocation; a `static var`'s is installed
+once and costs nothing at run time.
+
+**Two cautions.** A `static var` in a task's step routine is shared
+across every instance of that task — cross-instance state, occasionally
+wanted (a shared cache, a statistics counter), never to be confused
+with per-instance state, which belongs in the instance record. And the
+interrupt firewall is unchanged: routine-scoped lifetime does not make
+storage handler-reachable.
+
+The result is a three-way storage taxonomy stated in declarations:
+caller-owned storage reached through parameters and aliases;
+routine-owned shared storage declared `static var`; and routine-owned
+per-invocation storage declared `var`, priced at entry and barred from
+cycles. If adopted, the change lands in the specification's
+aggregate-local rule and initializer sections, in the conformance rows
+for the cycle diagnostic, and in the companion paper's statement that
+ordinary routines are scalar-only.
+
+## 7. Interrupts: the firewall and the membrane
 
 Statically framed routines are not reentrant, and no analysis can make
 an asynchronous entry into them safe: an interrupt can arrive with any
@@ -268,7 +331,7 @@ between pure code and I/O, applied here to the boundary that matters on
 this machine: the one between synchronous, run-to-completion Lanternfly
 and the asynchronous machine code beneath it.
 
-## 7. Precedent after the stack won
+## 8. Precedent after the stack won
 
 The stack did not win everywhere. It lost precisely on processors
 shaped like this one, and the model this paper defends has been
@@ -294,7 +357,7 @@ industrial practice ever since:
   of RAM. The constrained and the verified environments keep
   converging on the same model from both ends of the industry.
 
-## 8. The performance claim, stated checkably
+## 9. The performance claim, stated checkably
 
 The comparison must be same-terms, so take one named call shape — two
 16-bit arguments, five accesses to locals inside the callee — through
