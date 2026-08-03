@@ -213,10 +213,8 @@ supplies the missing signature; with both clash flags false, the pair
 returns immediately. The mutual pair makes the module's call graph
 cyclic, so this program requires a recursion-capable target profile.
 
-<<< @/public/lanternfly-book/book1/code/10-routines.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/10-routines.txt{lanternfly}
 
-The source is also available as
-[10-routines.txt](/lanternfly-book/book1/code/10-routines.txt).
 
 ## Exercises
 

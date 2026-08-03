@@ -162,10 +162,8 @@ values and character bytes. `restock` raises `unitsInStock` to 5,000 and records
 that the order is ready; `selectPrompt` copies the `'>'` byte into a
 variable.
 
-<<< @/public/lanternfly-book/book1/code/02-scalar-values.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/02-scalar-values.txt{lanternfly}
 
-The listing is also available as
-[02-scalar-values.txt](/lanternfly-book/book1/code/02-scalar-values.txt).
 
 ## Exercises
 

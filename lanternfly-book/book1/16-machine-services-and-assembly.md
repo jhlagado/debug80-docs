@@ -216,24 +216,18 @@ and the program prints `CHANGE 230` — the label through the standard
 
 ### report.lafy
 
-<<< @/public/lanternfly-book/book1/code/16-report.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/16-report.txt{lanternfly}
 
-The source is also available as
-[16-report.txt](/lanternfly-book/book1/code/16-report.txt).
 
 ### readings.lafy
 
-<<< @/public/lanternfly-book/book1/code/16-readings.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/16-readings.txt{lanternfly}
 
-The source is also available as
-[16-readings.txt](/lanternfly-book/book1/code/16-readings.txt).
 
 ### console.lafy
 
-<<< @/public/lanternfly-book/book1/code/16-console.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/16-console.txt{lanternfly}
 
-The source is also available as
-[16-console.txt](/lanternfly-book/book1/code/16-console.txt).
 
 ## Exercises
 

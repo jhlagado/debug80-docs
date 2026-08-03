@@ -304,10 +304,8 @@ offset 12, and it clears all 31 October readings through their declared 1-to-31
 domain. The report-mode table stores widths 40, 80 and 80 in enum declaration
 order.
 
-<<< @/public/lanternfly-book/book1/code/07-fixed-arrays.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/07-fixed-arrays.txt{lanternfly}
 
-The source is also available as
-[07-fixed-arrays.txt](/lanternfly-book/book1/code/07-fixed-arrays.txt).
 
 ## Exercise
 

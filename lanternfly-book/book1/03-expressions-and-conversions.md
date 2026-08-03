@@ -179,10 +179,8 @@ explicit narrowing and takes a square root. The first expression traces from `u8
 `i16` result of -230 and a `u16` magnitude of 230; `u8(300)` produces 44;
 `sqrt(1600)` produces 40.
 
-<<< @/public/lanternfly-book/book1/code/03-expressions.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/03-expressions.txt{lanternfly}
 
-The source is also available as
-[03-expressions.txt](/lanternfly-book/book1/code/03-expressions.txt).
 
 ## Exercises
 

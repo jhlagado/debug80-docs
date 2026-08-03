@@ -43,6 +43,5 @@ exact syntax, type, storage, control-flow and diagnostic rules.
 
 Each chapter closes with a summary and one exercise with its answer.
 
-Each chapter links to its complete companion listings. The listings use
-`.txt` filenames for convenient browser display; each represents a
-Lanternfly `.lafy` source module.
+Each chapter prints its complete companion listing inline; each listing
+represents a Lanternfly `.lafy` source module.

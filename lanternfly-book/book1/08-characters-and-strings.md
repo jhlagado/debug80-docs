@@ -232,10 +232,8 @@ twelve-character destination and appends `!`, leaving `playerName` as
 `HELLO!`. It builds `MODE 2` in `statusLine`. The final comparison leaves
 `namesMatch` false because `HELLO!` and `HELLO` have different lengths.
 
-<<< @/public/lanternfly-book/book1/code/08-strings.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/08-strings.txt{lanternfly}
 
-The source is also available as
-[08-strings.txt](/lanternfly-book/book1/code/08-strings.txt).
 
 ## Exercise
 
