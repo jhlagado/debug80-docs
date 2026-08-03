@@ -243,7 +243,10 @@ by hand.
    satisfies this rule and adds section 9.2 exhaustiveness checking to the
    step routine's `select`.
 2. State 0 is the fresh state. Zero-initialized storage is therefore a
-   fresh task.
+   fresh task. A task type with per-instance start values is instead
+   image-fresh: its instances initialize from a `const` template record,
+   and reset is aggregate assignment from the template rather than
+   `clear` (section 6).
 3. A task that terminates reserves state 255 as the done state. Its step
    routine returns immediately in that state, so driving a finished task is
    harmless. Perpetual tasks (the blinker, the melody) omit it. In the
@@ -361,10 +364,60 @@ the manual convention prescribes. The initializers of retained locals run
 on an instance's first advance and never again — in the lowered form they
 are the fresh state's opening assignments — and when every initializer is
 zero they cost nothing, because the all-zero record is the fresh instance
-under convention rule 2; `clear` on the instance remains the reset. The
+under convention rule 2; for an instance without arguments, `clear`
+remains the reset, and the instance-arguments contract below adjusts it
+for the rest. The
 closure rule is rule 8 unchanged: only the marked routine's own locals are
 hoisted, every callee remains an ordinary per-invocation routine, and
 state smuggled into a callee is exactly the overlap section 4 rejects.
+
+**Instance arguments.** A parameter of a marked routine is bound once
+per instance and persists — exactly as a JavaScript generator's
+arguments outlive its creation call — so the lowering treats it as one
+more retained local: hoisted into the synthesized record, every access
+rewritten to a field read. The only distinction is where the initial
+value comes from: an argument's from the instance declaration, a
+retained local's from its initializer. At the record level even that
+distinction dissolves — every hoisted field has exactly one
+initial-image value per instance, so an argument with a default value
+and a retained local with an initializer are the same field, differing
+only in whether the instance declaration may override the value.
+Defaults therefore cost the lowering nothing; whether the surface
+admits them is a deferred choice, since ordinary routines have no
+parameter defaults and the asymmetry would need a ruling.
+
+Because the step code is shared while argument values differ per
+instance, those values must live in each instance's initial record
+image — and that adjusts the reset doctrine. An argument-less task
+keeps rule 2 unchanged: all-zero is fresh, `clear` is the reset. An
+instance with arguments is *image-fresh*, and both halves of that are
+already legal 0.6, through a record initializer and a `const` template:
+
+```lanternfly
+// Hypothetical: task fastBlink using blinkAt(10)
+// The manual form today:
+record BlinkTask
+    state as u8
+    rate as u8
+    countdown as u8
+end
+
+const fastImage as BlinkTask = BlinkTask(state = 0, rate = 10, countdown = 0)
+
+var fastBlink as BlinkTask = fastImage    // declared fresh, argument installed
+
+// Reset, wherever the owner needs it:
+fastBlink = fastImage
+```
+
+Instance arguments in a static declaration are compile-time constants,
+because the image is static storage. A start value computed at runtime
+is, in the manual form, the owner's assignment to the record's fields
+before the first advance; a start operation carrying runtime arguments
+is a further sugar decision, deferred with the rest. Per-turn inputs
+are a different thing and stay rule 4's: extra step-routine parameters
+carry fresh data into one advance and are never hoisted — the analogue
+of the JavaScript `next(value)` channel.
 
 By the section 1.1 criteria the feature is kernel-shaped: it selects no
 runtime helper, places no bytes in programs that do not use it, and has one

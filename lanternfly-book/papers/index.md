@@ -21,3 +21,7 @@ discussion documents, each complete on a single page.
    built on the first paper: a program as a set of declared task
    instances, sequence as the local case, worked example programs, and
    the reactive (Glimmer-style) consequence of the inversion.
+3. [Static Frames for Lanternfly](static-frames.md) — the storage-model
+   justification: why locals and parameters live at fixed addresses on
+   the Z80, the save-around-call lowering for recursion, the interrupt
+   reentrancy boundary, and the industrial precedent.
