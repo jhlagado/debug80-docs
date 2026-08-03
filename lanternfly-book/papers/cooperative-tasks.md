@@ -25,7 +25,7 @@ about the language cites a specification section, and a change to any cited
 section obligates a review here. Baseline: specification 0.6 as of this document's last revision;
 the pattern uses facilities already present in 0.5, except the
 image-fresh reset of section 6, which uses 0.6's constant-name
-initializer.
+initializer and no-repetition rules.
 
 ## 1. The problem on the target
 
@@ -59,7 +59,8 @@ its own status.
 2. **Instances — Direction.** The declared-instance model of section 6:
    one task body serving several concurrent instances, each a statically
    allocated record, with no allocation machinery anywhere.
-3. **Surface syntax — Deferred.** `task sub`, `yield` and `await`
+3. **Surface syntax — Deferred.** The `task` type form, `yield` and
+   `await`
    (sections 6 and 7), adopted by an implementation only when its size
    budget carries the rewrite. The Candlemoth reference compiler may
    never have the room; a larger implementation can adopt the syntax
@@ -281,22 +282,27 @@ by hand.
    [static-frames paper](static-frames.md); this rule is its task-side
    face.
 8. A step routine calls ordinary routines freely, but only the step
-   routine's own body writes the state field. Pausing inside a
+   routine's own body writes the state field. The wider boundary is
+   convention, unchecked: fields belong to the step routine; the
+   owner's writes are whole-value re-imaging and, in the manual form,
+   installing start values before the first advance. Pausing inside a
    callee is not expressible, which is the stackless restriction of
    section 6 arriving early.
 
 ## 6. Deferred surface syntax
 
-**Deferred.** If the convention proves common in real programs, the compiler
-can write the boilerplate. A marked routine — the working placeholder is a
-word such as `task sub`, since Lanternfly marks every construct with words
-and a JavaScript-style `*` sigil fits nothing else in the language — would be
-written as a straight-line body with `yield` statements, and the compiler
-would derive the record, the state numbering and the `select` skeleton:
+**Deferred.** If the convention proves common in real programs, the
+compiler can write the boilerplate. The marked declaration is a `task`
+*type* — a task is a record plus a step routine, and the type form says
+so; Lanternfly marks every construct with words, and a JavaScript-style
+`*` sigil fits nothing else in the language. Its name is PascalCase like
+every type, its body is written straight-line with `yield` statements,
+and the compiler derives the record, the state numbering and the
+`select` skeleton:
 
 ```lanternfly
 // Hypothetical syntax, not part of 0.6.
-task sub blink()
+task Blink()
     var countdown as u8 = blinkRate
 
     while true
@@ -338,7 +344,7 @@ points. Its output is not structured source but the compiler's control-flow
 form — the lowering contract's IR, where a resume point is an ordinary
 block label whatever loop it sits inside. For the single-pass,
 direct-emitting reference architecture the real obstacle is not the
-rewrite's bytes but buffering: a marked routine's resolved control-flow
+rewrite's bytes but buffering: a task body's resolved control-flow
 form must be held whole before emission, a structural departure the size
 gate alone does not measure. That is the reason the
 transformation lives after parsing, and the reason no structured
@@ -348,7 +354,7 @@ small:
 
 - **Frame contents.** The precise rule hoists into the record only locals
   live across a `yield`, which requires liveness analysis. The conservative
-  rule hoists every local of the marked routine. The conservative rule costs
+  rule hoists every local of the task body. The conservative rule costs
   a few bytes of RAM per task and no compiler analysis, and is the intended
   first implementation; a later compiler may shrink frames without changing
   any program's meaning.
@@ -359,27 +365,50 @@ small:
   applied to compiler-owned dispatch, roughly a dozen bytes per task type
   on the Z80 — or as a compare chain where a table pays worse.
 
-`yield` would be legal only in the marked routine's own body, never in a
+`yield` would be legal only in the task body itself, never in a
 callee — the restriction rule 8 already imposes on the manual form, and the
 same restriction Rust spells "await only inside async fn". Lifting it
 requires capturing nested frames, which reintroduces everything section 4
 rejected.
 
-**Instance identity — Direction.** An instance is declared, not created.
-A declaration form — the working placeholder is
-`task directoryItems using readItems` — names one instance and statically
-allocates its synthesized record, exactly as `var` allocates a declared
-record. Several declarations over one routine are several instances: the
-code exists once, the records separately. A fixed pool of instances is an
-array of them, indexed like any table, so even a varying number of live
-tasks is a build-time quantity. The synthesized record needs no
-user-visible type name for any of this — the instance name is the
-program's handle — which dissolves the name-collision question that
-previously held this contract open; a name for the record type becomes
-necessary only if instances cross a module interface, and that narrow
-question stays open. Advancing names the instance: the step call is made
-through the instance name, and its result reports completion exactly as
-the manual convention prescribes. The initializers of retained locals run
+**Instance identity — Direction.** The marked declaration is a type, so
+an instance is the most ordinary thing in the language: a module
+variable of that type.
+
+```lanternfly
+// Hypothetical syntax, not part of 0.6.
+var cursor as Blink
+var cursor2 as Blink
+```
+
+The code exists once, the records separately. A fixed pool of instances
+is `var pool as Blink[4]`, indexed like any table, so even a varying
+number of live tasks is a build-time quantity. The anonymous-record
+question that once held this contract open closes the other way: the
+synthesized record type carries the task's own name, PascalCase like
+every type, and instances cross module interfaces like any record — the
+question this passage previously left open. Advancing resolves through
+the instance's type: `cursor()` is a static call to `Blink`'s step
+routine with `cursor` as the hidden aggregate argument, no routine value
+anywhere, and its result reports completion exactly as the manual
+convention prescribes. Per-turn inputs are the call's ordinary
+arguments — `cursor(key)` is rule 4's extra step parameter. The surface
+owes the grammar one production it does not have today: a call whose
+callee is a task-typed storage path, `pool[i]()` included, resolved by
+the path's type; and the section 2.1 type/callable collision list gains
+task types.
+
+Field visibility has two classes, stated because both papers' consumers
+depend on it: declared fields — the hoisted parameters — are
+initializable and readable from outside; hoisted locals and the yield
+channel (`current` below) are readable, never initializable. The write
+boundary is rule 8's, extended there, and it is convention the compiler
+does not check: fields belong to the step routine, whole-value
+re-imaging (`clear`, template assignment — the owner's reset and kill)
+belongs to the owner, and a task reads another's fields by taking the
+instance as an aggregate parameter — a writable alias in law, since
+read-only parameters are parked, so published-field reading is
+discipline, not enforcement. The initializers of retained locals run
 on an instance's first advance and never again — in the lowered form they
 are the opening assignments of a distinct entry state that only the first
 advance visits. The fresh-state label may coincide with a loop's re-entry
@@ -389,10 +418,10 @@ member. When every initializer is zero they cost nothing, because the
 all-zero record is the fresh instance under convention rule 2; for an instance without arguments, `clear`
 remains the reset, and the instance-arguments contract below adjusts it
 for the rest. The
-closure rule is rule 8 unchanged: only the marked body's own locals are
+closure rule is rule 8 unchanged: only the task body's own locals are
 hoisted, every callee remains an ordinary per-invocation routine, and
 state smuggled into a callee is exactly the overlap section 4 rejects.
-One grammar consequence is recorded explicitly: in a marked routine,
+One grammar consequence is recorded explicitly: in a task body,
 every local — scalar or aggregate, the reader's `page` buffer below
 included — denotes a field of the synthesized record, with
 first-advance initialization and no per-step clearing. That differs
@@ -410,7 +439,12 @@ hoist as *declared* fields, and instantiation is the type's record
 initializer naming exactly those fields — `BlinkAt(rate = 10)` — while
 retained locals hoist as hidden fields no initializer names. Under the
 specification's no-repetition rule, the instance declaration need not
-repeat the type: `var fastBlink = BlinkAt(rate = 10)`. The only distinction is where the initial
+repeat the type: `var fastBlink = BlinkAt(rate = 10)`. The record
+initializer rule of section 4.5 — every field exactly once, at least
+one field — will owe task types a carve-out when the syntax lands: a
+task-type initializer names exactly the declared fields, hidden fields
+take their images, and a zero-parameter type instantiates only through
+the `as` form. The only distinction is where the initial
 value comes from: an argument's from the instance declaration, a
 retained local's from its initializer. At the record level even that
 distinction dissolves — every hoisted field has exactly one
