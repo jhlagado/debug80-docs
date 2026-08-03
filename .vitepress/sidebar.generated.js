@@ -1750,6 +1750,10 @@ export const sidebars = {
         {
           "text": "Task-first Lanternfly",
           "link": "/lanternfly-book/papers/task-first.html"
+        },
+        {
+          "text": "Static Frames for Lanternfly",
+          "link": "/lanternfly-book/papers/static-frames.html"
         }
       ]
     }
@@ -1906,6 +1910,10 @@ export const sidebars = {
         {
           "text": "Task-first Lanternfly",
           "link": "/lanternfly-book/papers/task-first.html"
+        },
+        {
+          "text": "Static Frames for Lanternfly",
+          "link": "/lanternfly-book/papers/static-frames.html"
         }
       ]
     }
@@ -2062,6 +2070,10 @@ export const sidebars = {
         {
           "text": "Task-first Lanternfly",
           "link": "/lanternfly-book/papers/task-first.html"
+        },
+        {
+          "text": "Static Frames for Lanternfly",
+          "link": "/lanternfly-book/papers/static-frames.html"
         }
       ]
     }
@@ -2218,6 +2230,10 @@ export const sidebars = {
         {
           "text": "Task-first Lanternfly",
           "link": "/lanternfly-book/papers/task-first.html"
+        },
+        {
+          "text": "Static Frames for Lanternfly",
+          "link": "/lanternfly-book/papers/static-frames.html"
         }
       ]
     }
