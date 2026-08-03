@@ -15,9 +15,7 @@ cannot overlap, and recursion is a target-profile capability rather than
 a default. This paper collects the justification for that commitment on
 the Z80 baseline, states the recursion lowering and its limits, states
 the interrupt doctrine — a firewall with a membrane — and records the
-industrial precedent. This revision incorporates an adversarial
-soundness review; every cost figure below survived it or was corrected
-by it.
+industrial precedent.
 
 ## 1. The decision being justified
 
@@ -182,10 +180,8 @@ all-clobbered there, or fixes a convention at forward boundaries.
 
 ## 6. Aggregate locals: the two-lifetime rule
 
-**Adopted; specification section 11.4 carries the rule.** The
-specification previously banned aggregate locals outright. The ban
-conflated two different declarations, and the static-frame model needs
-only the distinction, not the prohibition:
+Specification section 11.4 carries the rule. Aggregate locals come in
+two lifetimes, distinguished in the declaration:
 
 - `var buffer as string[40]`, inside a routine, is a true
   per-invocation aggregate local: each invocation receives its own
@@ -212,8 +208,7 @@ First-edition rulings keep it narrow: no `at`, no `volatile` and no
 `export` on a `static var` — placement, membrane visibility and
 interface exposure stay module-level concerns — and debug symbols
 qualify the name by its routine, so two routines may reuse a name. The
-word `static` itself is new: one more entry for the word inventory and
-the grammar, a real cost the closing sweep carries.
+word `static` is in the word inventory and the grammar.
 
 **The ordinary form and the recursion rule.** A per-invocation
 aggregate local is legal exactly where the compiler proves invocations
@@ -256,8 +251,7 @@ with per-instance state, which belongs in the instance record. And the
 interrupt firewall is unchanged: routine-scoped lifetime does not make
 storage handler-reachable.
 
-In a task body the rule is stated to remove an
-ambiguity this proposal would otherwise create: every local of a task
+In a task body the rule differs: every local of a task
 body, scalar and aggregate, is a hoisted per-instance field —
 first-advance initialization, no per-step clearing — and `static var`
 in a task body is legal with its one meaning everywhere: a single
@@ -267,17 +261,7 @@ The result is a three-way storage taxonomy stated in declarations:
 caller-owned storage reached through parameters and aliases;
 routine-owned shared storage declared `static var`; and routine-owned
 per-invocation storage declared `var`, priced at its declaration and
-barred from cycles. Adopted, the change lands widely, and the sweep is
-enumerated so none of it was silent: the specification's
-aggregate-local ban (11.4), the local-initializer rule (4.5), the
-calling-convention sentence that aggregates are never locals (11.7),
-the string-local exclusions (3.2, 4.2), the `at` and volatile rulings
-(4.3, 4.4), and the word inventory and grammar (14, 15); the lowering
-contract's allocation classes (7), ABI slot list (8.1) and cost-model
-attribution, plus the conformance rows for the cycle diagnostic; and,
-in the papers, this paper's own sections 5 and 7 statements that the
-language has no aggregate locals, the companion paper's "aggregates are
-static always" and its marked-routine rationale.
+barred from cycles.
 
 ## 7. Interrupts: the firewall and the membrane
 
