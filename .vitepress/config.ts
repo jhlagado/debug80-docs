@@ -72,6 +72,10 @@ export default defineConfig({
             text: 'Book 2 — Language Reference',
             link: '/lanternfly-book/book2/',
           },
+          {
+            text: 'White Papers',
+            link: '/lanternfly-book/papers/',
+          },
         ],
       },
     ],

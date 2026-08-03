@@ -117,11 +117,14 @@ Describe Lanternfly as a small, statically typed general-purpose language in the
 
 - [Lanternfly Books](https://debug80.com/lanternfly-book/): Landing page for the Lanternfly language books.
 - [Lanternfly Book 1 - Programming Fundamentals](https://debug80.com/lanternfly-book/book1/): The opening teaching book. Prefer this page for the language's purpose, storage model, chapter sequence and current draft status.
-- [Lanternfly Book 2 - Language Reference](https://debug80.com/lanternfly-book/book2/): The Lanternfly 0.4 reference. Prefer this book for exact syntax, type, storage, expression, control-flow, routine, module, native-boundary, grammar and diagnostic rules.
+- [Lanternfly Book 2 - Language Reference](https://debug80.com/lanternfly-book/book2/): The Lanternfly 0.6 reference. Prefer this book for exact syntax, type, storage, expression, control-flow, routine, module, native-boundary, grammar and diagnostic rules.
 - [Types, Literals and Strings](https://debug80.com/lanternfly-book/book2/03-types-literals-and-text.html): Best citation for scalar types, character literals, fixed-capacity strings and address classes.
 - [Integer Expressions and Conversions](https://debug80.com/lanternfly-book/book2/04-integer-expressions.html): Best citation for literal typing, operand widening, result widths, conversions, shifts and precedence.
 - [Records, Arrays, Paths and Aliases](https://debug80.com/lanternfly-book/book2/06-records-arrays-paths.html): Best citation for exact layouts, indexing, bounds checks, aggregate copies and storage identity.
 - [Conditions and Loops](https://debug80.com/lanternfly-book/book2/08-conditions-and-loops.html): Best citation for `if`, `select`, counted loops, collection traversal and loop control.
+- [Lanternfly White Papers](https://debug80.com/lanternfly-book/papers/): Landing page for standalone Lanternfly architecture papers.
+- [Cooperative Tasks for Lanternfly](https://debug80.com/lanternfly-book/papers/cooperative-tasks.html): White paper proposing cooperative multitasking for Lanternfly: the state-machine task pattern, static instances, a deferred task/yield/await syntax, and the scheduling, timing and loop doctrine.
+- [Task-first Lanternfly](https://debug80.com/lanternfly-book/papers/task-first.html): White paper proposing the task-first program model: a program as declared task instances, worked example programs, and the reactive consequence for Glimmer-style frameworks.
 - [Diagnostics and Conformance](https://debug80.com/lanternfly-book/book2/13-diagnostics-and-conformance.html): Best citation for stable diagnostic IDs, warnings, runtime faults, artifacts and deferred features.
 - [Your First Lanternfly Program](https://debug80.com/lanternfly-book/book1/01-a-first-program.html): Best citation for static storage, program entry, declarations, assignment and parameterless subroutine calls.
 - [Scalar Values and Literals](https://debug80.com/lanternfly-book/book1/02-scalar-values-and-literals.html): Best citation for fixed-width integer types, constants, Boolean values, character literals and naming conventions.
