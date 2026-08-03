@@ -142,7 +142,10 @@ end
 The address `$8400` is illustrative. State 0 initializes; state 1 waits for
 the tick and counts down. Each call to `blinkStep` runs exactly one segment
 and returns, so a call costs microseconds whether or not the tick has
-arrived.
+arrived. (Section 8 supersedes the tick flag for timekeeping: a consumed
+flag serves one reader and drops a tick that lands between test and
+clear, so time crosses the boundary as a counter. The flag stays here as
+the simplest first illustration.)
 
 A value-producing task — a generator in the JavaScript sense — returns a
 value from each segment. A melody player that yields the next note on every
@@ -264,7 +267,10 @@ by hand.
    shape the section 6 lowering synthesizes.
 7. Interrupt handlers and hardware communicate with tasks only through
    `volatile` module storage (section 4.4). A step routine reads flags; it
-   never busy-waits on them.
+   never busy-waits on them. Handlers are native code and never call
+   Lanternfly routines — the firewall of the
+   [static-frames paper](static-frames.md); this rule is its task-side
+   face.
 8. A step routine calls ordinary routines freely, but only the step
    routine's own body reads or writes the state field. Pausing inside a
    callee is not expressible, which is the stackless restriction of
@@ -390,8 +396,11 @@ Because the step code is shared while argument values differ per
 instance, those values must live in each instance's initial record
 image — and that adjusts the reset doctrine. An argument-less task
 keeps rule 2 unchanged: all-zero is fresh, `clear` is the reset. An
-instance with arguments is *image-fresh*, and both halves of that are
-already legal 0.6, through a record initializer and a `const` template:
+instance with arguments is *image-fresh*. The `const` template and the
+reset assignment are legal 0.6 today; the declaration spells its
+initializer in the same field form, because a module aggregate
+initializer cannot yet name a constant — admitting that spelling is a
+small specification delta:
 
 ```lanternfly
 // Hypothetical: task fastBlink using blinkAt(10)
@@ -404,11 +413,15 @@ end
 
 const fastImage as BlinkTask = BlinkTask(state = 0, rate = 10, countdown = 0)
 
-var fastBlink as BlinkTask = fastImage    // declared fresh, argument installed
+var fastBlink as BlinkTask = BlinkTask(state = 0, rate = 10, countdown = 0)
 
 // Reset, wherever the owner needs it:
 fastBlink = fastImage
 ```
+
+With an enumeration state field, the template writes the member name —
+`state = needPage` — never its ordinal, since an integer does not
+convert to an enumeration in an initializer.
 
 Instance arguments in a static declaration are compile-time constants,
 because the image is static storage. A start value computed at runtime
