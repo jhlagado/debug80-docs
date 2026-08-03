@@ -698,7 +698,7 @@ unchanged. Those two lines are the wait. A sugared
 
 ```lanternfly
 enum PromptState as u8
-    awaitingKey
+    waitingForKey
     finished
 end
 
@@ -711,7 +711,7 @@ sub advancePrompt(t as PromptTask) as boolean
     var key as u8
 
     select t.state
-    case awaitingKey
+    case waitingForKey
         if pendingKey = 0 then
             return true          // the wait: no key yet, yield control
         end
