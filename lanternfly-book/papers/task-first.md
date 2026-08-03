@@ -287,7 +287,7 @@ routine. The inner `while` is a bounded data loop — 64 iterations, a
 known, summable segment cost — so it runs inline and stays atomic. The
 outer traversal of 1,024 bytes is too long for one segment, so it is
 chunked: sixteen steps, with the cursor blinking between every pair.
-`step` is scratch and stays a local; `position` and `checksum` must
+`counted` is scratch and stays a local; `position` and `checksum` must
 survive between steps and live in the record. `chunkSize` is the whole
 latency-throughput trade, adjustable in one place. And the finished sum
 is not an event to catch: it sits in `background.checksum`, ordinary

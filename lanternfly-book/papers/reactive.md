@@ -13,8 +13,8 @@ facts, derived facts, moments and the effects triggered by them, beside
 the tasks of the [cooperative-task paper](cooperative-tasks.md). The
 goal is a synthesis, not an addition — the asynchronous layer and the
 reactive layer reduce to one machine, already reviewed and adopted as
-convention, and the surface adds six contextual words and a shared
-trigger grammar.
+convention, and the surface adds six contextual head words and a
+shared trigger grammar.
 Glimmer, the existing reactive framework for Z80 games, supplies the
 semantics, which this design adopts with its wiring moved from trust to
 proof; Glimmer's platform profiles remain what they are, and Glimmer as
@@ -36,10 +36,11 @@ is:
   record-plus-step convention.
 - **One clock: the instant.** Triggers are delivered once per instant
   under one rule, taken from Glimmer: *a change is delivered exactly
-  once — to later phases in the same instant, otherwise at the next
-  instant's start.* Every dependent of a fact sees a change together;
-  each body runs at most once per instant; a chain pointing backward
-  advances one step per instant. The instant is the scheduler's
+  once — in the same instant when every dependent sits in a later
+  phase, and otherwise at the next instant's start, to all dependents
+  at once.* Every dependent of a fact therefore sees a change
+  together; each body runs at most once per instant; a chain pointing
+  backward advances one step per instant. The instant is the scheduler's
   super-pass: on hardware with a frame interrupt it is locked to the
   frame, and on hardware without one it is the pass itself — the
   elastic pass clock of the timing doctrine serving as the instant, as
@@ -187,8 +188,11 @@ a phase can never be mis-declared.
 are ordered topologically inside the derivation phase, with intra-phase
 delivery — a derived feeding a derived resolves in one instant, the
 Lustre-faithful reading, and an improvement this design makes
-deliberately over Glimmer's one-step-per-frame compute chains. Cycles
-were already rejected, so the order always exists. Effects are never
+deliberately over Glimmer's one-step-per-frame compute chains. This is
+the delivery rule's one stated extension: the topological order makes
+every derived-to-derived edge effectively later-phase, so the together
+guarantee is preserved, not weakened. Cycles were already rejected, so
+the order always exists. Effects are never
 reordered: within each phase they run in file order, tasks after them,
 and the diagnostics cover the hazards — a warning names any two
 same-phase bodies where one writes a cell another writes or samples,
@@ -232,8 +236,9 @@ language's own words, and a task "started at runtime" is a task woken
 by its trigger. Second, the task's place in the instant, which the
 sibling papers left to a bare round-robin: **tasks advance in the
 logic phase, after the logic effects, in declaration order.** Their
-fact writes ride the same delivery rule — renders see them this
-instant, derivations next — and task-first's "declaration order is
+fact writes ride the same delivery rule — same instant when every
+dependent is in a later phase, next instant for all dependents
+otherwise — and task-first's "declaration order is
 schedule order" is amended to declaration order *within* the phase
 order. A due `wait on after(n)` deadline counts n instant-clock ticks
 from wait entry, under the timing doctrine's wrap-safe comparison and
