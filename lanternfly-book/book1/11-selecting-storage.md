@@ -173,10 +173,8 @@ on; the assignments through `reading` change the entry itself; and
 `countActiveEntries` returns 3 because `activeLog` selects the input
 log.
 
-<<< @/public/lanternfly-book/book1/code/11-selecting-storage.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/11-selecting-storage.txt{lanternfly}
 
-The source is also available as
-[11-selecting-storage.txt](/lanternfly-book/book1/code/11-selecting-storage.txt).
 
 ## Exercises
 

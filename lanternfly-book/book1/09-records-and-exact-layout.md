@@ -312,10 +312,8 @@ stores a snapshot in `savedDate`. The source reading's quality remains 0.
 Changing `reportDate.day` to 31 afterward leaves `savedDate.day` at 30. The
 station record finishes with name `NORTH2` and identifier 2.
 
-<<< @/public/lanternfly-book/book1/code/09-records.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/09-records.txt{lanternfly}
 
-The source is also available as
-[09-records.txt](/lanternfly-book/book1/code/09-records.txt).
 
 ## Exercise
 

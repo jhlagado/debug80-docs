@@ -143,20 +143,12 @@ model and exports its interface. `tally.lafy` imports it and drives it from
 
 ### counters.lafy
 
-<<< @/public/lanternfly-book/book1/code/12-counters.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/12-counters.txt{lanternfly}
 
-The source is also available as
-[12-counters.txt](/lanternfly-book/book1/code/12-counters.txt).
 
 ### tally.lafy
 
-<<< @/public/lanternfly-book/book1/code/12-tally.txt{lanternfly}
-
-The source is also available as
-[12-tally.txt](/lanternfly-book/book1/code/12-tally.txt).
-
-The downloadable files use `.txt` filenames for browser display; each
-represents a `.lafy` source module.
+<<< @/lanternfly-book/book1/code/12-tally.txt{lanternfly}
 
 ## Exercises
 

@@ -129,10 +129,8 @@ entries fail along different paths: a spoiled speed entry crosses
 `promptForSpeed` unchanged, while a spoiled confirmation propagates from
 `echoNumber` directly. Both are answered in `main`.
 
-<<< @/public/lanternfly-book/book1/code/15-number-entry.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/15-number-entry.txt{lanternfly}
 
-The source is also available as
-[15-number-entry.txt](/lanternfly-book/book1/code/15-number-entry.txt).
 
 ## Exercises
 

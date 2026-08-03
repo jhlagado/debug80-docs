@@ -154,10 +154,8 @@ for now, the stored value is the answer.
 
 ## Complete program
 
-<<< @/public/lanternfly-book/book1/code/01-first-program.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/01-first-program.txt{lanternfly}
 
-The source is also available as
-[01-first-program.txt](/lanternfly-book/book1/code/01-first-program.txt).
 
 ## The build
 

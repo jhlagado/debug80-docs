@@ -312,10 +312,8 @@ The complete module leaves `total` at 55, `greatestCommonDivisor` at 6 and
 `result` at 16. The enum loop visits three phases, `sumOdds` produces 25 and
 the nested search finds target 6 at row 1, column 2.
 
-<<< @/public/lanternfly-book/book1/code/06-loops.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/06-loops.txt{lanternfly}
 
-The source is also available as
-[06-loops.txt](/lanternfly-book/book1/code/06-loops.txt).
 
 ## Exercise
 

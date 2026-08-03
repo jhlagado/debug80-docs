@@ -309,10 +309,8 @@ The complete module moves a batch through all three statuses: it begins
 `failed` when an error is recorded. It configures a detailed report, classifies
 channel 7 as unbuffered and accepts column 31 as a valid `ScreenColumn`.
 
-<<< @/public/lanternfly-book/book1/code/05-decisions.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/05-decisions.txt{lanternfly}
 
-The source is also available as
-[05-decisions.txt](/lanternfly-book/book1/code/05-decisions.txt).
 
 ## Exercise
 

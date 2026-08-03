@@ -224,10 +224,8 @@ re-read — and the loop prompts again; an empty line is skipped without
 comment; `65536` produces the range message. Every path back to the
 prompt goes through the `on error` block.
 
-<<< @/public/lanternfly-book/book1/code/14-number-entry.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/14-number-entry.txt{lanternfly}
 
-The source is also available as
-[14-number-entry.txt](/lanternfly-book/book1/code/14-number-entry.txt).
 
 ## Exercises
 

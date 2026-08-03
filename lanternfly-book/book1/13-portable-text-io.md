@@ -108,10 +108,8 @@ operation returns, and the program's own `writeText(command)` and
 echoing target, the accepted command and the answer character may each
 appear once as they are typed and once as the program writes them.
 
-<<< @/public/lanternfly-book/book1/code/13-portable-text.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/13-portable-text.txt{lanternfly}
 
-The source is also available as
-[13-portable-text.txt](/lanternfly-book/book1/code/13-portable-text.txt).
 
 ## Exercises
 

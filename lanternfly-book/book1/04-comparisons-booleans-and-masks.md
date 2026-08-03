@@ -230,10 +230,8 @@ evaluation leaves `highAverage` false without dividing. `inspectStatus` finds
 the initial error bit clear. After `adjustFlags`, all eight status bits are
 zero.
 
-<<< @/public/lanternfly-book/book1/code/04-comparisons.txt{lanternfly}
+<<< @/lanternfly-book/book1/code/04-comparisons.txt{lanternfly}
 
-The source is also available as
-[04-comparisons.txt](/lanternfly-book/book1/code/04-comparisons.txt).
 
 ## Exercise
 
