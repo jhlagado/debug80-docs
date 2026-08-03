@@ -211,9 +211,9 @@ multitasking shape for the language.
 
 **Static frames (section 11.7).** In a stack language, a suspended routine's
 frame dies when it returns, so coroutines must capture stacks or allocate on
-a heap. Lanternfly locals may live in static temporaries and aggregates are
-static always, so a frame that outlives its call is a small variation on how
-frames already work. The task record *is* the persistent frame, placed like
+a heap. Lanternfly locals may live in static temporaries and aggregate storage
+is static in every lifetime, so a frame that outlives its call is a small
+variation on how frames already work. The task record *is* the persistent frame, placed like
 any other record.
 
 **Routine names are not values (section 11.7).** A task cannot carry a resume
@@ -392,11 +392,14 @@ for the rest. The
 closure rule is rule 8 unchanged: only the marked routine's own locals are
 hoisted, every callee remains an ordinary per-invocation routine, and
 state smuggled into a callee is exactly the overlap section 4 rejects.
-One grammar consequence is recorded explicitly: a marked routine admits
-aggregate `var` declarations — the reader's `page` buffer below —
-precisely because every such declaration denotes a field of the
-synthesized record, never automatic storage; ordinary routines remain
-scalar-only under section 11.4.
+One grammar consequence is recorded explicitly: in a marked routine,
+every local — scalar or aggregate, the reader's `page` buffer below
+included — denotes a field of the synthesized record, with
+first-advance initialization and no per-step clearing. That differs
+from an ordinary routine, where an aggregate `var` is per-invocation
+storage re-zeroed at each declaration under the static-frames paper's
+two-lifetime rule, and a `static var` keeps its one meaning: a single
+object shared, in a step routine, across every instance of the task.
 
 **Instance arguments.** A parameter of a marked routine is bound once
 per instance and persists — exactly as a JavaScript generator's
@@ -825,7 +828,7 @@ as good as the largest segment is small. A segment whose cost rivals the
 rest of the pass combined is split across two states — the pattern's own
 mechanism, applied to itself. This, not any scheduler feature, is what
 keeps missed frames rare. One consequence of the static-frames paper's
-aggregate-locals proposal lands here: a per-invocation aggregate local
+aggregate-locals rule lands here: a per-invocation aggregate local
 in a step routine re-establishes its zero value on every pass, blocked
 passes included, because declarations precede the dispatch — so
 step-routine scratch belongs in the instance record or a `static var`,

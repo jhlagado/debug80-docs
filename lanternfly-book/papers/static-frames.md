@@ -144,10 +144,11 @@ absolute byte moves route through A, so a byte-slot restore clobbers a
 code held there. The requirement belongs in the lowering contract.
 
 Save-around covers scalar state, and that limit is doctrine, not
-accident. Lanternfly today has no aggregate locals — section 6 proposes
-the two-lifetime replacement — so a routine's buffer is module storage,
-one object shared by every activation, and recursion cannot have a
-per-depth buffer implicitly. Where per-depth aggregate
+accident. Section 6's rule bars per-invocation aggregate locals from
+recursive cycles, so a cycle's buffer is `static var`, module or
+caller-supplied storage — one object unless the caller supplies
+depth-distinct storage — and recursion cannot have a per-depth buffer
+implicitly. Where per-depth aggregate
 state is genuinely needed, the language's own idiom supplies it
 explicitly — a frame pool:
 
@@ -181,15 +182,15 @@ all-clobbered there, or fixes a convention at forward boundaries.
 
 ## 6. Aggregate locals: the two-lifetime rule
 
-**Proposed language change, under review.** The specification currently
-bans aggregate locals outright. The ban conflates two different
-declarations, and the static-frame model needs only the distinction, not
-the prohibition:
+**Adopted; specification section 11.4 carries the rule.** The
+specification previously banned aggregate locals outright. The ban
+conflated two different declarations, and the static-frame model needs
+only the distinction, not the prohibition:
 
-- `var buffer as string[40]`, inside a routine, would be a true
+- `var buffer as string[40]`, inside a routine, is a true
   per-invocation aggregate local: each invocation receives its own
   value, exactly as scalar locals promise.
-- `static var buffer as string[40]` would declare the other thing: one
+- `static var buffer as string[40]` declares the other thing: one
   object with program lifetime and a routine-scoped *name*. Every
   invocation — recursive activations included — deliberately uses the
   same object. The keyword makes the sharing a stated fact of the
@@ -217,8 +218,9 @@ the grammar, a real cost the closing sweep carries.
 **The ordinary form and the recursion rule.** A per-invocation
 aggregate local is legal exactly where the compiler proves invocations
 cannot overlap — which, under the interrupt firewall, is every routine
-outside a recursive cycle. Inside a cycle the declaration is a
-compile-time error whose diagnostic names the three remedies: mark it
+outside a recursive cycle. Inside a cycle the declaration is the
+compile-time error `E-LOCAL-001`, whose diagnostic names the three
+remedies: mark it
 `static var` and accept the sharing, take the aggregate from the caller,
 or index an explicit frame pool by depth. The compiler never silently
 lowers a per-invocation declaration onto shared storage; that would
@@ -265,8 +267,8 @@ The result is a three-way storage taxonomy stated in declarations:
 caller-owned storage reached through parameters and aliases;
 routine-owned shared storage declared `static var`; and routine-owned
 per-invocation storage declared `var`, priced at its declaration and
-barred from cycles. If adopted, the change lands widely, and the sweep
-is enumerated so none of it is silent: the specification's
+barred from cycles. Adopted, the change lands widely, and the sweep is
+enumerated so none of it was silent: the specification's
 aggregate-local ban (11.4), the local-initializer rule (4.5), the
 calling-convention sentence that aggregates are never locals (11.7),
 the string-local exclusions (3.2, 4.2), the `at` and volatile rulings
@@ -282,8 +284,8 @@ static always" and its marked-routine rationale.
 Statically framed routines are not reentrant, and no analysis can make
 an asynchronous entry into them safe: an interrupt can arrive with any
 routine mid-flight, its scalars in shared slots and its buffers —
-module storage under the current rule, per-invocation slots under
-section 6's proposal, handler-unsafe either way — half
+shared or per-invocation storage under section 6's rule, handler-unsafe
+in every form — half
 written. The doctrine is therefore a firewall, stated as a hard rule
 rather than a default:
 
