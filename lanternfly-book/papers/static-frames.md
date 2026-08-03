@@ -256,11 +256,11 @@ with per-instance state, which belongs in the instance record. And the
 interrupt firewall is unchanged: routine-scoped lifetime does not make
 storage handler-reachable.
 
-In a marked (`task`-type) body the rule is stated to remove an
-ambiguity this proposal would otherwise create: every local of a marked
-routine, scalar and aggregate, is a hoisted per-instance field —
+In a task body the rule is stated to remove an
+ambiguity this proposal would otherwise create: every local of a task
+body, scalar and aggregate, is a hoisted per-instance field —
 first-advance initialization, no per-step clearing — and `static var`
-in a marked routine is legal with its one meaning everywhere: a single
+in a task body is legal with its one meaning everywhere: a single
 object shared across every instance of the task.
 
 The result is a three-way storage taxonomy stated in declarations:

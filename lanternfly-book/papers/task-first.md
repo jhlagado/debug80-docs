@@ -86,9 +86,14 @@ var blinker as BlinkCursor
 
 A task is a type — a record with a body — and an instance is an
 ordinary module variable of it. There is no `main`. The build generates
-the scheduler: every module variable of a task type is an instance,
-arrays elementwise; increment the pass clock, advance each instance in
-declaration order, repeat.
+the scheduler over the whole program's task-typed module variables,
+arrays elementwise, ordered by import resolution and then declaration;
+task-typed record fields and locals are rejected in the first edition.
+Every declared instance is scheduled from the first pass, so a task
+meant to lie dormant designs its entry state as an idle wait — the
+zeroed pool of ready tasks is a pool of tasks awaiting their start
+condition, not a pool outside the schedule. The loop increments the
+pass clock, advances each instance in order, and repeats.
 Declaration order is schedule order, so execution is deterministic —
 the worst-case pass time is the scheduler's own poll and bookkeeping
 plus the sum of each task's longest segment, and the whole schedule is
@@ -104,8 +109,9 @@ changes which shape a new program naturally takes.
 The 0.6 entry rule is untouched for the synchronous case: a program with
 an entry routine and no task declarations behaves exactly as the
 specification states. The proposed extension is that a build manifest
-may declare task instances *instead of* an entry, and the generated
-scheduler is then the program.
+may select the task-first shape instead of naming an entry; the
+instances are the program's task-typed module variables, and the
+generated scheduler is then the program.
 
 ## 4. Two worked programs
 
