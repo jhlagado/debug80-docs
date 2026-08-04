@@ -7,6 +7,12 @@ nav_order: 2
 
 # Task-first Lanternfly: an architecture direction
 
+> **Superseded.** This paper proposed a design that has since been decided
+> and folded into the Lanternfly specification, with substantial changes —
+> the rule construct, its three phases and the `changed` qualifier were all
+> removed along the way. It is kept as a record of the argument, not as a
+> description of the language. The specification is authoritative.
+
 **Status: proposal.** This paper proposes an inversion of Lanternfly's
 program model: a program is a set of declared task instances, the
 scheduler is the language's implicit shape rather than something a

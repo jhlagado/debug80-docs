@@ -8,6 +8,11 @@ has_toc: false
 
 # Lanternfly White Papers
 
+> **These papers are superseded.** They proposed the task and reactive
+> layer; the design was decided and folded into the specification, with
+> substantial changes along the way. They are kept as a record of the
+> argument. The specification is authoritative.
+
 Standalone architecture papers for the Lanternfly language: proposals and
 discussion documents, each complete on a single page.
 

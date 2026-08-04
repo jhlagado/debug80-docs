@@ -7,6 +7,12 @@ nav_order: 4
 
 # Reactive Lanternfly: facts, moments and effects
 
+> **Superseded.** This paper proposed a design that has since been decided
+> and folded into the Lanternfly specification, with substantial changes —
+> the rule construct, its three phases and the `changed` qualifier were all
+> removed along the way. It is kept as a record of the argument, not as a
+> description of the language. The specification is authoritative.
+
 **Status: proposal.** This paper defines the reactive layer of the
 Lanternfly language, beside the tasks of the
 [cooperative-task paper](cooperative-tasks.md). The constructs are
