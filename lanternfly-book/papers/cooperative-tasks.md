@@ -7,6 +7,12 @@ nav_order: 1
 
 # Cooperative tasks for Lanternfly: an architecture proposal
 
+> **Superseded.** This paper proposed a design that has since been decided
+> and folded into the Lanternfly specification, with substantial changes —
+> the rule construct, its three phases and the `changed` qualifier were all
+> removed along the way. It is kept as a record of the argument, not as a
+> description of the language. The specification is authoritative.
+
 **Status: proposal.** This paper defines cooperative multitasking for
 the Lanternfly language. The pattern of sections 3 through 5 is legal
 under specification 0.6 and costs the compiler nothing. The `task` type

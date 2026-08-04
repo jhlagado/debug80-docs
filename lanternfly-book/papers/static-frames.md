@@ -7,6 +7,12 @@ nav_order: 3
 
 # Static frames for Lanternfly: the storage-model justification
 
+> **Superseded.** This paper proposed a design that has since been decided
+> and folded into the Lanternfly specification, with substantial changes —
+> the rule construct, its three phases and the `changed` qualifier were all
+> removed along the way. It is kept as a record of the argument, not as a
+> description of the language. The specification is authoritative.
+
 **Status: rationale and doctrine.** The Lanternfly specification
 already commits to the storage model this paper defends: routine locals
 and parameters are per-invocation in meaning, a backend may keep them in
