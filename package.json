@@ -8,6 +8,8 @@
     "build": "vitepress build",
     "preview": "vitepress preview",
     "sidebar": "node .vitepress/generate-sidebar.mjs",
+    "sync:nucleus": "node scripts/sync-nucleus-spec.mjs",
+    "check:nucleus": "node scripts/sync-nucleus-spec.mjs --check",
     "verify:debug80": "node scripts/verify-debug80-claims.mjs",
     "diagrams": "npm run diagrams:debug80 && npm run diagrams:azm && npm run diagrams:glimmer && npm run diagrams:lanternfly && npm run diagrams:check",
     "diagrams:debug80": "node scripts/generate-book-diagrams.mjs",

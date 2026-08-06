@@ -9,7 +9,7 @@ nav_order: 1
   <Mark class="library-hall__mark" book="debug80" size="46" />
   <p class="library-hall__eyebrow">$0000 · cold boot</p>
   <h1 class="library-hall__title">The Debug80 Library</h1>
-  <p class="library-hall__tagline">Books on small-computer programming — a debugger, an assembler, two languages and the machines they serve.</p>
+  <p class="library-hall__tagline">Books on small-computer programming — a debugger, an assembler, languages and the machines they serve.</p>
 </div>
 
 <nav class="library-shelf">
@@ -32,9 +32,9 @@ nav_order: 1
     <span class="volume__enter">react →</span>
   </a>
   <a class="volume volume--lanternfly" href="/lanternfly-book/book1/00-introduction">
-    <span class="volume__tag">Vol $03 · 2 books</span>
+    <span class="volume__tag">Vol $03 · 2 books + specification</span>
     <span class="volume__head"><Mark book="lanternfly" size="26" /><span class="volume__title">Lanternfly</span></span>
-    <span class="volume__desc">A statically typed structured BASIC for fixed-memory systems — a teaching book and the complete 0.4 language reference.</span>
+    <span class="volume__desc">Lanternfly teaching and reference books, plus the complete Nucleus 0.1 language specification.</span>
     <span class="volume__enter">begin →</span>
   </a>
 </nav>
@@ -133,6 +133,15 @@ flow, routines, modules, target services, grammar, diagnostics and
 conformance.
 
 For compiler implementers and programmers who need the exact language rules.
+
+### [Nucleus 0.1 Language Specification](lanternfly-book/nucleus/)
+
+The complete Nucleus 0.1 source-language specification, presented as 21
+linked chapters for practical reading while preserving the Debug80 repository
+source as the authority.
+
+For language implementers and programmers who need the exact Nucleus syntax,
+static semantics, runtime semantics, grammar and conformance rules.
 
 ---
 

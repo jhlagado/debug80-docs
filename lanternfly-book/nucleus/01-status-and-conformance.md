@@ -1,0 +1,150 @@
+---
+layout: "default"
+title: "1. Status and conformance"
+parent: "Nucleus 0.1 Language Specification"
+nav_order: 1
+pageClass: "nucleus-specification"
+---
+[Contents](./) · [2. Design constraints →](02-design-constraints.md)
+
+<div id="1-status-and-conformance" class="nucleus-source-anchor"></div>
+
+# 1. Status and conformance
+
+<div id="11-status" class="nucleus-source-anchor"></div>
+
+## 1.1 Status
+
+This specification is a working draft. Nucleus 0.1 has not been frozen or released as a standard, and later revisions may change rules recorded here. This revision defines the complete proposed 0.1 source language and supports conformance review, but the project may still correct it before the freeze.
+
+The language under design is named **Nucleus 0.1**. "V2" was a working label for an architecture paper and is not the public language name. Nucleus is not a Lanternfly or Candlemoth bootstrap level. It has one source language: no Level Zero, Level One, selectable language profiles, or compiler-selected subsets of standard syntax exist.
+
+<div id="12-scope" class="nucleus-source-anchor"></div>
+
+## 1.2 Scope
+
+This specification defines the source-language syntax, static semantics, runtime semantics, required diagnostics, and specified safety failures of Nucleus 0.1. It defines the conditions for a source program or compiler to claim Nucleus 0.1 conformance.
+
+The separate Nucleus VM Specification defines the bytecode instruction set, encoding, and virtual-machine execution rules. Non-normative implementation plans and design papers record compiler strategies and project constraints; they do not add source-language semantics.
+
+The first implementation is a handwritten Z80 compiler. Project acceptance requires its compiler core and required immutable constants to fit in one 16 KiB bank, while its VM or interpreter has a separate budget. That gate does not create a smaller Nucleus dialect or alter the meaning of a conforming program. Chapter 2 and the implementation plan carry the detailed budget rules.
+
+<div id="13-authority" class="nucleus-source-anchor"></div>
+
+## 1.3 Authority
+
+When repository materials disagree, apply this order:
+
+1. This specification governs Nucleus 0.1 source syntax and semantics.
+2. The Nucleus VM Specification governs bytecode and VM execution. It cannot change the meaning required by this specification.
+3. The implementation plan is non-normative. It records construction order, budgets, measurements, and implementation choices.
+4. Architecture and design-rationale papers, including the paper formerly labelled V2, explain decisions but do not override either specification.
+5. Conformance tests provide evidence that an implementation follows the specifications. A conflicting test is a test defect, not a language amendment.
+6. Lanternfly documentation and materials from the earlier experiment that will be archived as Old Nucleus provide non-normative provenance and development history.
+
+An unwritten rule cannot be supplied by a lower-ranked document. Until this specification states the rule, the point remains unresolved for Nucleus 0.1 conformance.
+
+<div id="14-normative-words" class="nucleus-source-anchor"></div>
+
+## 1.4 Normative words
+
+This specification uses four requirement words:
+
+| Word         | Meaning                                                                                                          |
+| ------------ | ---------------------------------------------------------------------------------------------------------------- |
+| **must**     | The rule is required for conformance.                                                                            |
+| **must not** | The described form or behaviour is prohibited.                                                                   |
+| **may**      | The form or implementation choice is permitted but not required.                                                 |
+| **should**   | The rule is recommended. A departure needs a documented reason and must not violate a `must` or `must not` rule. |
+
+Declarative syntax and semantic rules are normative even when they contain none of these words. Notes, rationale, examples, implementation sketches, and historical remarks are non-normative unless they explicitly state a rule.
+
+<div id="15-conforming-source-programs" class="nucleus-source-anchor"></div>
+
+## 1.5 Conforming source programs
+
+A conforming Nucleus 0.1 source program:
+
+- uses only syntax and features admitted by this specification;
+- satisfies the complete grammar and all applicable static-semantic rules;
+- depends only on specified behaviour or on a choice that this specification explicitly marks as implementation-defined;
+- does not depend on an extension or an unadmitted design candidate.
+
+Exceeding one compiler's documented capacity does not affect a program's language conformance. The compiler may reject the program with a capacity diagnostic; that diagnostic reports an implementation limit rather than a source-language violation.
+
+The complete accepted programs in Chapter 21 form the minimum conformance corpus. A conforming compiler and execution environment must compile and execute each program under its stated inputs without a capacity diagnostic or an `activation-capacity` trap. An implementation may publish smaller limits than another implementation only above this floor. This requirement establishes a minimum useful implementation without creating a language profile or changing the conformance of larger source programs.
+
+A program can use this complete working revision to establish conformance. Such a claim identifies the exact specification revision because the draft may still change before the 0.1 freeze.
+
+<div id="16-conforming-compilers" class="nucleus-source-anchor"></div>
+
+## 1.6 Conforming compilers
+
+A compiler claiming Nucleus 0.1 conformance must:
+
+- compile every complete accepted program in Chapter 21 without a capacity diagnostic;
+- accept and translate every conforming source program within its documented capacity limits;
+- preserve the specified observable results, side effects, and runtime traps of each accepted program;
+- issue a diagnostic for compile-time invalid source rather than silently translating it with another meaning;
+- issue a diagnostic when a documented capacity limit prevents translation;
+- identify and document every implementation-defined choice it makes;
+- keep extensions separate from standard Nucleus mode.
+
+A compiler must not report successful translation and then emit code with semantics that differ from this specification. Diagnostic wording and presentation are implementation-defined unless a later chapter requires a particular machine-readable result.
+
+The first handwritten compiler passes an additional project acceptance gate only if its core plus required immutable constants fit in one 16 KiB bank. A compiler may conform to the language and fail that size gate. Conversely, fitting in the bank does not excuse a compiler that rejects an in-capacity conforming program, accepts invalid source without a diagnostic, or changes program meaning.
+
+<div id="17-extensions" class="nucleus-source-anchor"></div>
+
+## 1.7 Extensions
+
+An implementation may provide extensions only through an explicit selection, such as a distinct mode or option. Standard mode must diagnose source that requires an extension. An extension must not change the syntax, validity, or meaning of a conforming Nucleus 0.1 program.
+
+Source that requires an extension is not a conforming Nucleus 0.1 program unless a later specification revision admits that feature into the language.
+
+<div id="18-implementation-defined-choices" class="nucleus-source-anchor"></div>
+
+## 1.8 Implementation-defined choices
+
+An implementation-defined choice is permitted only where this specification uses that term. The implementation must identify the choice, document the selected behaviour, and apply it consistently for the documented configuration.
+
+Nucleus does not use undefined behaviour as an escape hatch for source-language errors. If this working draft omits a necessary rule, the omission is a specification gap; it does not permit arbitrary compiler or runtime behaviour.
+
+<div id="19-invalid-source-capacity-failures-and-runtime-traps" class="nucleus-source-anchor"></div>
+
+## 1.9 Invalid source, capacity failures, and runtime traps
+
+These cases are distinct:
+
+| Case                                                                                   | Required treatment                                                                                                                       |
+| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| A grammar or static-semantic rule is violated.                                         | The source is invalid. The compiler must issue a compile-time diagnostic and must not present an executable as a successful translation. |
+| A conforming program exceeds a documented compiler capacity.                           | The compiler may stop with a capacity diagnostic. The source does not become invalid.                                                    |
+| A conforming program reaches a condition for which this specification requires a trap. | The generated program must perform the specified runtime trap unless a later chapter explicitly permits compile-time rejection.          |
+| This draft has not yet specified the case.                                             | No conformance result can be inferred until the specification supplies the missing rule.                                                 |
+
+A runtime trap is specified behaviour, not undefined behaviour and not evidence that the source was necessarily invalid. Later chapters define which failures are compile-time invalid, which are recoverable, and which trap at runtime.
+
+<div id="110-provisional-features" class="nucleus-source-anchor"></div>
+
+## 1.10 Provisional features
+
+Design candidates may be prototyped and measured while Nucleus 0.1 remains a working draft. Before 0.1 is frozen, the project either admits each candidate to the single normative language or omits it. Nucleus does not expose candidates as language levels or standard profiles.
+
+A program that depends on an unadmitted candidate is not yet a conforming Nucleus 0.1 program. Prototype support for that candidate follows the extension rules in Section 1.7.
+
+<div id="111-vm-and-native-backends" class="nucleus-source-anchor"></div>
+
+## 1.11 VM and native backends
+
+A compiler that emits Nucleus bytecode must preserve this specification's source semantics and satisfy the separate VM Specification for the bytecode it emits. The VM Specification governs the execution mechanism; this specification governs the source-language meaning.
+
+A compiler using a later native backend may emit Z80 or another target directly. It need not retain or serialize bytecode, but it must preserve the same source semantics, diagnostics, and specified traps. Adding a backend does not create another Nucleus language profile.
+
+<div id="112-provenance-and-non-requirements" class="nucleus-source-anchor"></div>
+
+## 1.12 Provenance and non-requirements
+
+Nucleus inherits selected syntax and design ideas from Lanternfly. Lanternfly documentation is not normative for Nucleus, and Lanternfly behaviour does not fill a gap in this specification.
+
+This working draft makes no claim that Nucleus 0.1 is frozen or implementation-validated. It does not require the first compiler to be written in Nucleus or compile its own source. It also does not require every conforming compiler to use the project's initial VM path.

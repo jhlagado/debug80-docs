@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import { sidebars } from './sidebar.generated.js';
 import lanternflyGrammar from './lanternfly.tmLanguage.json' with { type: 'json' };
+import nucleusGrammar from './nucleus.tmLanguage.json' with { type: 'json' };
 
 export default defineConfig({
   title: 'Debug80 Docs',
@@ -35,7 +36,7 @@ export default defineConfig({
     languageAlias: { z80: 'asm' },
     // Lanternfly has no published grammar; a small TextMate grammar keeps
     // its fences highlighted instead of falling back to plain text.
-    languages: [lanternflyGrammar as never],
+    languages: [lanternflyGrammar as never, nucleusGrammar as never],
     // Warm-toned dark syntax theme to match the Nocturne palette.
     theme: 'github-light',
   },
@@ -56,8 +57,9 @@ export default defineConfig({
   themeConfig: {
     nav: [
       // Straight to the first page of each single-book series. Lanternfly has
-      // two books, so its menu exposes both without an intermediate landing
-      // page. The index pages still exist for direct URLs.
+      // multiple books plus the Nucleus specification, so its menu exposes
+      // each without an intermediate landing page. The index pages still
+      // exist for direct URLs.
       { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
       { text: 'AZM Books', link: '/azm-book/book1/00-introduction' },
       { text: 'Glimmer Books', link: '/glimmer-book/book1/00-introduction' },
@@ -71,6 +73,10 @@ export default defineConfig({
           {
             text: 'Book 2 — Language Reference',
             link: '/lanternfly-book/book2/',
+          },
+          {
+            text: 'Nucleus 0.1 Language Specification',
+            link: '/lanternfly-book/nucleus/',
           },
           {
             text: 'White Papers',
