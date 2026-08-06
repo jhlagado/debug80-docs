@@ -1,0 +1,238 @@
+/**
+ * Split the authoritative Nucleus language specification into VitePress pages.
+ *
+ * The source stays in the Debug80 repository. This script adds only site front
+ * matter, reading navigation, a source notice, and the heading-level shift
+ * required when a chapter becomes its own page. Normative text is not edited.
+ *
+ * Usage:
+ *   npm run sync:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
+ *   npm run check:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
+ */
+
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const outputDir = path.join(root, 'lanternfly-book', 'nucleus');
+const args = process.argv.slice(2);
+const checkOnly = args.includes('--check');
+const sourceArg = args.find((arg) => !arg.startsWith('--'));
+const sourcePath = sourceArg === undefined ? undefined : path.resolve(sourceArg);
+
+if (sourcePath === undefined) {
+  console.error('Pass the authoritative packages/lanternfly/docs/nucleus/specification.md path.');
+  process.exit(2);
+}
+if (!existsSync(sourcePath) || !statSync(sourcePath).isFile()) {
+  console.error(`Specification not found: ${sourcePath}`);
+  process.exit(2);
+}
+
+function git(...gitArgs) {
+  return execFileSync('git', gitArgs, { encoding: 'utf8' }).trim();
+}
+
+const sourceRoot = git('-C', path.dirname(sourcePath), 'rev-parse', '--show-toplevel');
+const sourceRelativePath = path.relative(sourceRoot, sourcePath).replaceAll(path.sep, '/');
+const sourceCommit = git(
+  '-C',
+  sourceRoot,
+  'log',
+  '-1',
+  '--format=%H',
+  '--',
+  sourceRelativePath,
+);
+const source = readFileSync(sourcePath, 'utf8');
+const committedSource = execFileSync(
+  'git',
+  ['-C', sourceRoot, 'show', `${sourceCommit}:${sourceRelativePath}`],
+  { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 },
+);
+
+if (source !== committedSource) {
+  console.error(
+    'The source file differs from its latest committed revision. Commit it in Debug80 before publishing it.',
+  );
+  process.exit(2);
+}
+
+const chapterPattern = /^## (\d+)\. ([^\n]+)$/gm;
+const chapterMatches = [...source.matchAll(chapterPattern)];
+if (chapterMatches.length === 0) {
+  console.error('No numbered chapters found.');
+  process.exit(2);
+}
+chapterMatches.forEach((match, index) => {
+  const expected = index + 1;
+  if (Number(match[1]) !== expected) {
+    throw new Error(`Expected chapter ${expected}, found ${match[1]}.`);
+  }
+});
+
+function slugFor(number, title) {
+  const slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return `${String(number).padStart(2, '0')}-${slug}`;
+}
+
+const chapters = chapterMatches.map((match, index) => {
+  const start = match.index;
+  const end = chapterMatches[index + 1]?.index ?? source.length;
+  return {
+    number: Number(match[1]),
+    title: match[2],
+    slug: slugFor(Number(match[1]), match[2]),
+    sourceText: source.slice(start, end),
+  };
+});
+
+function frontMatter(fields) {
+  return [
+    '---',
+    ...Object.entries(fields).map(([key, value]) => `${key}: ${JSON.stringify(value)}`),
+    '---',
+    '',
+  ].join('\n');
+}
+
+function sourceAnchorFor(heading) {
+  return heading
+    .toLowerCase()
+    .replace(/[`*_~]/g, '')
+    .replace(/[^a-z0-9 _-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+/** Shift source headings up one level without touching fenced examples. */
+function promoteChapterHeadings(text) {
+  let fenced = false;
+  return text
+    .split(/(?<=\n)/)
+    .map((line) => {
+      if (/^```/.test(line)) {
+        fenced = !fenced;
+        return line;
+      }
+      if (fenced) return line;
+      const heading = /^(#{2,3}) ([^\n]+)(\n?)$/.exec(line);
+      if (heading !== null) {
+        const anchor = sourceAnchorFor(heading[2]);
+        return `<div id="${anchor}" class="nucleus-source-anchor"></div>\n\n${line.slice(1)}`;
+      }
+      return line;
+    })
+    .join('');
+}
+
+function chapterNavigation(index) {
+  const links = [];
+  if (index > 0) {
+    const previous = chapters[index - 1];
+    links.push(`[← ${previous.number}. ${previous.title}](${previous.slug}.md)`);
+  }
+  links.push('[Contents](./)');
+  if (index < chapters.length - 1) {
+    const next = chapters[index + 1];
+    links.push(`[${next.number}. ${next.title} →](${next.slug}.md)`);
+  }
+  return `${links.join(' · ')}\n\n`;
+}
+
+const sourceUrl = `https://github.com/jhlagado/debug80/blob/${sourceCommit}/${sourceRelativePath}`;
+const sourceMainUrl = `https://github.com/jhlagado/debug80/blob/main/${sourceRelativePath}`;
+let preamble = source.slice(0, chapterMatches[0].index);
+for (const chapter of chapters) {
+  const sourceAnchor = sourceAnchorFor(`${chapter.number}. ${chapter.title}`);
+  preamble = preamble.replace(
+    `](#${sourceAnchor})`,
+    `](${chapter.slug}.md#${sourceAnchor})`,
+  );
+}
+
+const titleEnd = preamble.indexOf('\n\n');
+if (titleEnd === -1) throw new Error('Expected a blank line after the specification title.');
+const sourceNotice = [
+  '::: info Authoritative source',
+  `This reading edition is generated from the [Nucleus specification in the Debug80 repository](${sourceMainUrl}) at revision [\`${sourceCommit.slice(0, 12)}\`](${sourceUrl}). The repository source is authoritative; this site adds only navigation and page metadata.`,
+  ':::',
+  '',
+  '',
+].join('\n');
+const indexBody = `${preamble.slice(0, titleEnd + 2)}${sourceNotice}${preamble.slice(titleEnd + 2)}`
+  .replace(/\n+$/, '\n');
+
+const parentTitle = 'Nucleus 0.1 Language Specification';
+const expected = new Map();
+expected.set(
+  'index.md',
+  `${frontMatter({
+    layout: 'default',
+    title: parentTitle,
+    nav_order: 3,
+    has_children: true,
+    has_toc: false,
+    standalone: true,
+    isolated: true,
+    pageClass: 'nucleus-specification',
+  })}<Mark class="book-plate" book="lanternfly" size="52" />\n\n${indexBody}`,
+);
+
+chapters.forEach((chapter, index) => {
+  expected.set(
+    `${chapter.slug}.md`,
+    `${frontMatter({
+      layout: 'default',
+      title: `${chapter.number}. ${chapter.title}`,
+      parent: parentTitle,
+      nav_order: chapter.number,
+      pageClass: 'nucleus-specification',
+    })}${chapterNavigation(index)}${promoteChapterHeadings(chapter.sourceText).replace(/\n+$/, '\n')}`,
+  );
+});
+
+const expectedNames = [...expected.keys()].sort();
+let failed = false;
+if (checkOnly) {
+  if (!existsSync(outputDir)) {
+    console.error(`Generated book directory not found: ${outputDir}`);
+    process.exit(1);
+  }
+  const actualNames = readdirSync(outputDir).filter((name) => name.endsWith('.md')).sort();
+  if (actualNames.join('\n') !== expectedNames.join('\n')) {
+    console.error('Generated page list differs from the authoritative chapter list.');
+    failed = true;
+  }
+  for (const [name, contents] of expected) {
+    const file = path.join(outputDir, name);
+    if (!existsSync(file) || readFileSync(file, 'utf8') !== contents) {
+      console.error(`Generated page is stale or incomplete: ${path.relative(root, file)}`);
+      failed = true;
+    }
+  }
+} else {
+  mkdirSync(outputDir, { recursive: true });
+  for (const [name, contents] of expected) writeFileSync(path.join(outputDir, name), contents);
+}
+
+const digest = createHash('sha256').update(source).digest('hex');
+const action = checkOnly ? (failed ? 'FAILED' : 'verified') : 'generated';
+console.log(
+  `${action}: ${chapters.length} chapters, ${source.split('\n').length} lines, ${Buffer.byteLength(source)} bytes, sha256 ${digest}`,
+);
+console.log(`source: ${sourceCommit} ${sourceRelativePath}`);
+if (failed) process.exitCode = 1;

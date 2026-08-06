@@ -94,14 +94,21 @@ function sectionFor(dir) {
   }
   const items = chapterItems(dir, fm.title, true);
   if (items.length === 0) return undefined;
-  return { order: navOrder(fm), title: fm.title, entry: { text: fm.title, collapsed: false, items } };
+  return {
+    order: navOrder(fm),
+    title: fm.title,
+    isolated: fm.isolated === 'true',
+    entry: { text: fm.title, collapsed: false, items },
+  };
 }
 
 /**
- * Each `book*` directory is a standalone book: reading it shows its own
- * chapters and nothing from its siblings. Any other subdirectory - the AZM
- * appendices, for instance - is shared reference and rides along with every
- * book in the series.
+ * Each numbered `book*` directory is a standalone book. A named directory can
+ * opt into the same treatment with `standalone: true` on its index page (the
+ * Nucleus specification does this so its public route names the language).
+ * Other subdirectories are shared reference and ride along with every book in
+ * the series. `isolated: true` keeps an independently named work's reading
+ * sidebar to that work alone while leaving it discoverable from the series.
  */
 function splitSections(bookDir) {
   const books = [];
@@ -109,7 +116,10 @@ function splitSections(bookDir) {
   for (const dir of subDirs(bookDir)) {
     const section = sectionFor(dir);
     if (section === undefined) continue;
-    (/(^|\/)book\d+$/.test(dir.replace(/\\/g, '/')) ? books : shared).push({ ...section, dir });
+    const standalone =
+      /(^|\/)book\d+$/.test(dir.replace(/\\/g, '/')) ||
+      frontMatter(join(dir, 'index.md')).standalone === 'true';
+    (standalone ? books : shared).push({ ...section, dir });
   }
   books.sort((a, b) => a.order - b.order);
   shared.sort((a, b) => a.order - b.order);
@@ -141,10 +151,9 @@ for (const book of BOOK_DIRS) {
 
   for (const b of books) {
     const key = `/${relative(root, b.dir).replace(/\\/g, '/')}/`;
-    sidebars[key] = [
-      ...books.map((x) => asGroup(x, x.dir === b.dir)),
-      ...shared.map((s) => s.entry),
-    ];
+    sidebars[key] = b.isolated
+      ? [asGroup(b, true)]
+      : [...books.map((x) => asGroup(x, x.dir === b.dir)), ...shared.map((s) => s.entry)];
   }
 
   // Landing directly on a shared section still needs a sidebar.

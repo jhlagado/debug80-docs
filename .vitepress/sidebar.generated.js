@@ -1740,6 +1740,96 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Nucleus 0.1 Language Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Design constraints",
+          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
+        },
+        {
+          "text": "3. Source text and lexical rules",
+          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
+        },
+        {
+          "text": "4. Program and file structure",
+          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
+        },
+        {
+          "text": "5. Names and scopes",
+          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
+        },
+        {
+          "text": "6. Types",
+          "link": "/lanternfly-book/nucleus/06-types.html"
+        },
+        {
+          "text": "7. Storage, values, and lifetime",
+          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
+        },
+        {
+          "text": "8. Constants and declarations",
+          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
+        },
+        {
+          "text": "9. Expressions",
+          "link": "/lanternfly-book/nucleus/09-expressions.html"
+        },
+        {
+          "text": "10. Statements",
+          "link": "/lanternfly-book/nucleus/10-statements.html"
+        },
+        {
+          "text": "11. Conditional control",
+          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
+        },
+        {
+          "text": "12. Loop control",
+          "link": "/lanternfly-book/nucleus/12-loop-control.html"
+        },
+        {
+          "text": "13. Routines and calls",
+          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
+        },
+        {
+          "text": "14. Recoverable errors",
+          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
+        },
+        {
+          "text": "15. Safety failures and traps",
+          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
+        },
+        {
+          "text": "16. System boundary",
+          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
+        },
+        {
+          "text": "17. Complete grammar",
+          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
+        },
+        {
+          "text": "18. Static semantics",
+          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
+        },
+        {
+          "text": "19. Runtime semantics",
+          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
+        },
+        {
+          "text": "20. Feature ledger",
+          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
+        },
+        {
+          "text": "21. Conformance examples",
+          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+        }
+      ]
+    },
+    {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
@@ -1754,6 +1844,10 @@ export const sidebars = {
         {
           "text": "Static Frames for Lanternfly",
           "link": "/lanternfly-book/papers/static-frames.html"
+        },
+        {
+          "text": "Reactive Lanternfly",
+          "link": "/lanternfly-book/papers/reactive.html"
         }
       ]
     }
@@ -1900,6 +1994,96 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Nucleus 0.1 Language Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Design constraints",
+          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
+        },
+        {
+          "text": "3. Source text and lexical rules",
+          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
+        },
+        {
+          "text": "4. Program and file structure",
+          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
+        },
+        {
+          "text": "5. Names and scopes",
+          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
+        },
+        {
+          "text": "6. Types",
+          "link": "/lanternfly-book/nucleus/06-types.html"
+        },
+        {
+          "text": "7. Storage, values, and lifetime",
+          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
+        },
+        {
+          "text": "8. Constants and declarations",
+          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
+        },
+        {
+          "text": "9. Expressions",
+          "link": "/lanternfly-book/nucleus/09-expressions.html"
+        },
+        {
+          "text": "10. Statements",
+          "link": "/lanternfly-book/nucleus/10-statements.html"
+        },
+        {
+          "text": "11. Conditional control",
+          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
+        },
+        {
+          "text": "12. Loop control",
+          "link": "/lanternfly-book/nucleus/12-loop-control.html"
+        },
+        {
+          "text": "13. Routines and calls",
+          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
+        },
+        {
+          "text": "14. Recoverable errors",
+          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
+        },
+        {
+          "text": "15. Safety failures and traps",
+          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
+        },
+        {
+          "text": "16. System boundary",
+          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
+        },
+        {
+          "text": "17. Complete grammar",
+          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
+        },
+        {
+          "text": "18. Static semantics",
+          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
+        },
+        {
+          "text": "19. Runtime semantics",
+          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
+        },
+        {
+          "text": "20. Feature ledger",
+          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
+        },
+        {
+          "text": "21. Conformance examples",
+          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+        }
+      ]
+    },
+    {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
@@ -1914,6 +2098,10 @@ export const sidebars = {
         {
           "text": "Static Frames for Lanternfly",
           "link": "/lanternfly-book/papers/static-frames.html"
+        },
+        {
+          "text": "Reactive Lanternfly",
+          "link": "/lanternfly-book/papers/reactive.html"
         }
       ]
     }
@@ -2060,6 +2248,96 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Nucleus 0.1 Language Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Design constraints",
+          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
+        },
+        {
+          "text": "3. Source text and lexical rules",
+          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
+        },
+        {
+          "text": "4. Program and file structure",
+          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
+        },
+        {
+          "text": "5. Names and scopes",
+          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
+        },
+        {
+          "text": "6. Types",
+          "link": "/lanternfly-book/nucleus/06-types.html"
+        },
+        {
+          "text": "7. Storage, values, and lifetime",
+          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
+        },
+        {
+          "text": "8. Constants and declarations",
+          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
+        },
+        {
+          "text": "9. Expressions",
+          "link": "/lanternfly-book/nucleus/09-expressions.html"
+        },
+        {
+          "text": "10. Statements",
+          "link": "/lanternfly-book/nucleus/10-statements.html"
+        },
+        {
+          "text": "11. Conditional control",
+          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
+        },
+        {
+          "text": "12. Loop control",
+          "link": "/lanternfly-book/nucleus/12-loop-control.html"
+        },
+        {
+          "text": "13. Routines and calls",
+          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
+        },
+        {
+          "text": "14. Recoverable errors",
+          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
+        },
+        {
+          "text": "15. Safety failures and traps",
+          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
+        },
+        {
+          "text": "16. System boundary",
+          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
+        },
+        {
+          "text": "17. Complete grammar",
+          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
+        },
+        {
+          "text": "18. Static semantics",
+          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
+        },
+        {
+          "text": "19. Runtime semantics",
+          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
+        },
+        {
+          "text": "20. Feature ledger",
+          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
+        },
+        {
+          "text": "21. Conformance examples",
+          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+        }
+      ]
+    },
+    {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
@@ -2074,6 +2352,102 @@ export const sidebars = {
         {
           "text": "Static Frames for Lanternfly",
           "link": "/lanternfly-book/papers/static-frames.html"
+        },
+        {
+          "text": "Reactive Lanternfly",
+          "link": "/lanternfly-book/papers/reactive.html"
+        }
+      ]
+    }
+  ],
+  "/lanternfly-book/nucleus/": [
+    {
+      "text": "Nucleus 0.1 Language Specification",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Design constraints",
+          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
+        },
+        {
+          "text": "3. Source text and lexical rules",
+          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
+        },
+        {
+          "text": "4. Program and file structure",
+          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
+        },
+        {
+          "text": "5. Names and scopes",
+          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
+        },
+        {
+          "text": "6. Types",
+          "link": "/lanternfly-book/nucleus/06-types.html"
+        },
+        {
+          "text": "7. Storage, values, and lifetime",
+          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
+        },
+        {
+          "text": "8. Constants and declarations",
+          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
+        },
+        {
+          "text": "9. Expressions",
+          "link": "/lanternfly-book/nucleus/09-expressions.html"
+        },
+        {
+          "text": "10. Statements",
+          "link": "/lanternfly-book/nucleus/10-statements.html"
+        },
+        {
+          "text": "11. Conditional control",
+          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
+        },
+        {
+          "text": "12. Loop control",
+          "link": "/lanternfly-book/nucleus/12-loop-control.html"
+        },
+        {
+          "text": "13. Routines and calls",
+          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
+        },
+        {
+          "text": "14. Recoverable errors",
+          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
+        },
+        {
+          "text": "15. Safety failures and traps",
+          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
+        },
+        {
+          "text": "16. System boundary",
+          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
+        },
+        {
+          "text": "17. Complete grammar",
+          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
+        },
+        {
+          "text": "18. Static semantics",
+          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
+        },
+        {
+          "text": "19. Runtime semantics",
+          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
+        },
+        {
+          "text": "20. Feature ledger",
+          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
+        },
+        {
+          "text": "21. Conformance examples",
+          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
         }
       ]
     }
@@ -2220,6 +2594,96 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Nucleus 0.1 Language Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Design constraints",
+          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
+        },
+        {
+          "text": "3. Source text and lexical rules",
+          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
+        },
+        {
+          "text": "4. Program and file structure",
+          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
+        },
+        {
+          "text": "5. Names and scopes",
+          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
+        },
+        {
+          "text": "6. Types",
+          "link": "/lanternfly-book/nucleus/06-types.html"
+        },
+        {
+          "text": "7. Storage, values, and lifetime",
+          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
+        },
+        {
+          "text": "8. Constants and declarations",
+          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
+        },
+        {
+          "text": "9. Expressions",
+          "link": "/lanternfly-book/nucleus/09-expressions.html"
+        },
+        {
+          "text": "10. Statements",
+          "link": "/lanternfly-book/nucleus/10-statements.html"
+        },
+        {
+          "text": "11. Conditional control",
+          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
+        },
+        {
+          "text": "12. Loop control",
+          "link": "/lanternfly-book/nucleus/12-loop-control.html"
+        },
+        {
+          "text": "13. Routines and calls",
+          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
+        },
+        {
+          "text": "14. Recoverable errors",
+          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
+        },
+        {
+          "text": "15. Safety failures and traps",
+          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
+        },
+        {
+          "text": "16. System boundary",
+          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
+        },
+        {
+          "text": "17. Complete grammar",
+          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
+        },
+        {
+          "text": "18. Static semantics",
+          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
+        },
+        {
+          "text": "19. Runtime semantics",
+          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
+        },
+        {
+          "text": "20. Feature ledger",
+          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
+        },
+        {
+          "text": "21. Conformance examples",
+          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+        }
+      ]
+    },
+    {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
@@ -2234,6 +2698,10 @@ export const sidebars = {
         {
           "text": "Static Frames for Lanternfly",
           "link": "/lanternfly-book/papers/static-frames.html"
+        },
+        {
+          "text": "Reactive Lanternfly",
+          "link": "/lanternfly-book/papers/reactive.html"
         }
       ]
     }

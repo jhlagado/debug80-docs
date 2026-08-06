@@ -45,6 +45,7 @@ Lanternfly's Z80 work.
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/) | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays. |
 | [Lanternfly Book 1 — Programming Fundamentals](https://debug80.com/lanternfly-book/book1/) | A general introduction to writing programs with Lanternfly, from variables through machine services. |
 | [Lanternfly Book 2 — Language Reference](https://debug80.com/lanternfly-book/book2/) | The Lanternfly 0.4 syntax, type, storage, control-flow, module and diagnostic reference. |
+| [Nucleus 0.1 Language Specification](https://debug80.com/lanternfly-book/nucleus/) | The complete Nucleus 0.1 source-language specification in a chapter-by-chapter reading edition. |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/) | Reference material for the machine and its monitor. |
 
 ## Working on it
@@ -58,6 +59,15 @@ npm run dev
 
 `npm run build` produces the static site into `.vitepress/dist`. Pushing to
 `main` builds and publishes to GitHub Pages, which serves debug80.com.
+
+The Nucleus reading edition is generated from the single authoritative file in
+the Debug80 repository; its chapter files are not independent sources. Update
+and verify it with:
+
+```sh
+npm run sync:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
+npm run check:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
+```
 
 ### Checks
 
@@ -87,7 +97,7 @@ not the SVGs.
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
-lanternfly-book/  Lanternfly language books
+lanternfly-book/  Lanternfly language books and the Nucleus reading edition
 tec1g/            TEC-1G and MON-3 reference
 assets/images/    Figures, most of them generated
 scripts/          Diagram generator and the four checks

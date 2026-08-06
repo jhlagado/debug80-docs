@@ -314,6 +314,24 @@ html {
   letter-spacing: 0.06em;
 }
 
+/* Nucleus carries its own specification section numbers (1.1, 1.2, ...). */
+.nucleus-specification .vp-doc h2::before {
+  display: none;
+  content: none;
+}
+
+.nucleus-source-anchor {
+  display: block;
+  position: relative;
+  top: calc(-1 * var(--vp-nav-height));
+  visibility: hidden;
+}
+
+/* Keep a chapter name intact when the running navigation wraps on a phone. */
+.nucleus-specification .vp-doc p.running-head a {
+  display: inline-block;
+}
+
 /* Wide enough for a margin: let the number hang into it. */
 @media (min-width: 1280px) {
   .vp-doc h2::before {
@@ -968,4 +986,9 @@ html {
   html { font-size: 16px; }
   .library-hall__title { font-size: 1.9rem; }
   .vp-doc h1 { font-size: 1.7rem; }
+  .nucleus-specification .vp-doc table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
 }

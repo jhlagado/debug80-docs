@@ -39,7 +39,11 @@ it is a language for writing the program itself.
 - [Lanternfly Book 2 — Language Reference](book2/) defines the 0.4 syntax and
   semantics, including types, exact storage, expressions, control flow,
   routines, modules, native boundaries, grammar and diagnostics.
+- [Nucleus 0.1 Language Specification](nucleus/) publishes the complete
+  normative source-language specification as a chapter-by-chapter reading
+  edition. Nucleus is a distinct language, housed here while its own
+  documentation area develops.
 
-Both books follow the working
+The Lanternfly books follow the working
 [Lanternfly 0.4 contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md).
 That contract is currently a design draft for the first compiler.
