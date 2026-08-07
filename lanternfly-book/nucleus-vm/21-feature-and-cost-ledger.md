@@ -34,7 +34,7 @@ Every size or timing entry is labeled **Measured**, **Projected**, or **Hypothes
 | recoverable failure          |           open |                               open |       carriers open | call-local sequence | not measured              | Hypothesis                           |
 | services and traps           |           open |                               open |   adapter dependent |   2/service or trap | not measured              | Hypothesis                           |
 
-The existing spike measured only seven provisional handlers and three slot-addressing arrangements. Its complete core sizes were 165, 162, and 210 bytes for those sketches. Those figures exclude the separately placed dispatch table, and they are not complete-interpreter estimates.
+The measured harness covered seven handlers and three slot-addressing arrangements. Their complete core sizes were 165, 162, and 210 bytes. Those figures exclude the separately placed dispatch table, and they are not complete-interpreter estimates.
 
 <div id="213-required-reports" class="nucleus-source-anchor"></div>
 

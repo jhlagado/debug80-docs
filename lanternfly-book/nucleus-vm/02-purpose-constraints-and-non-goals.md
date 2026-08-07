@@ -38,7 +38,7 @@ The compiler-core account has the language project's hard 16 KiB bank gate. Inte
 
 ## 2.3 Non-goals
 
-NVM is not a Z80, CHIP-8, Sweet 16, or historical CPU compatibility layer. It does not expose a source pointer model, dynamic types, garbage collection, exceptions, unwinding, destructors, branch shortening, relocation records, native register allocation, or native peephole rules.
+NVM is not a CPU-compatibility layer. It does not expose a source pointer model, dynamic types, garbage collection, exceptions, unwinding, destructors, branch shortening, relocation records, native register allocation, or native peephole rules.
 
 NVM contains no dedicated `if`, `while`, `for`, `select`, pattern, aggregate-copy, or source-scope instruction. Compilers lower source constructs to the primitive operations in this book.
 

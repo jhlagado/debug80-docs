@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 This specification is a working draft. Nucleus 0.1 has not been frozen or released as a standard, and later revisions may change rules recorded here. This revision defines the complete proposed 0.1 source language and supports conformance review, but the project may still correct it before the freeze.
 
-The language under design is named **Nucleus 0.1**. "V2" was a working label for an architecture paper and is not the public language name. Nucleus is not a Lanternfly or Candlemoth bootstrap level. It has one source language: no Level Zero, Level One, selectable language profiles, or compiler-selected subsets of standard syntax exist.
+The language under design is named **Nucleus 0.1**. It has one source language: no language levels, selectable language profiles, or compiler-selected subsets of standard syntax exist.
 
 <div id="12-scope" class="nucleus-source-anchor"></div>
 
@@ -38,9 +38,8 @@ When repository materials disagree, apply this order:
 1. This specification governs Nucleus 0.1 source syntax and semantics.
 2. The Nucleus VM Specification governs bytecode and VM execution. It cannot change the meaning required by this specification.
 3. The implementation plan is non-normative. It records construction order, budgets, measurements, and implementation choices.
-4. Architecture and design-rationale papers, including the paper formerly labelled V2, explain decisions but do not override either specification.
+4. Architecture and design-rationale papers explain decisions but do not override either specification.
 5. Conformance tests provide evidence that an implementation follows the specifications. A conflicting test is a test defect, not a language amendment.
-6. Lanternfly documentation and materials from the earlier experiment that will be archived as Old Nucleus provide non-normative provenance and development history.
 
 An unwritten rule cannot be supplied by a lower-ranked document. Until this specification states the rule, the point remains unresolved for Nucleus 0.1 conformance.
 
@@ -57,7 +56,7 @@ This specification uses four requirement words:
 | **may**      | The form or implementation choice is permitted but not required.                                                 |
 | **should**   | The rule is recommended. A departure needs a documented reason and must not violate a `must` or `must not` rule. |
 
-Declarative syntax and semantic rules are normative even when they contain none of these words. Notes, rationale, examples, implementation sketches, and historical remarks are non-normative unless they explicitly state a rule.
+Declarative syntax and semantic rules are normative even when they contain none of these words. Notes, rationale, examples, and implementation sketches are non-normative unless they explicitly state a rule.
 
 <div id="15-conforming-source-programs" class="nucleus-source-anchor"></div>
 
@@ -143,10 +142,8 @@ A compiler that emits Nucleus bytecode must preserve this specification's source
 
 A compiler using a later native backend may emit Z80 or another target directly. It need not retain or serialize bytecode, but it must preserve the same source semantics, diagnostics, and specified traps. Adding a backend does not create another Nucleus language profile.
 
-<div id="112-provenance-and-non-requirements" class="nucleus-source-anchor"></div>
+<div id="112-non-requirements" class="nucleus-source-anchor"></div>
 
-## 1.12 Provenance and non-requirements
-
-Nucleus inherits selected syntax and design ideas from Lanternfly. Lanternfly documentation is not normative for Nucleus, and Lanternfly behaviour does not fill a gap in this specification.
+## 1.12 Non-requirements
 
 This working draft makes no claim that Nucleus 0.1 is frozen or implementation-validated. It does not require the first compiler to be written in Nucleus or compile its own source. It also does not require every conforming compiler to use the project's initial VM path.

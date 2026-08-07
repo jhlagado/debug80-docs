@@ -129,7 +129,7 @@ Named integer constants replace enumeration members where a program needs symbol
 
 Nucleus 0.1 named constants are scalar only. `const` cannot declare a record, fixed array, or bounded string. The language has no separate read-only aggregate-storage declaration.
 
-A program that needs an initialized string or scalar table declares a program variable under Section 8.8. That object is mutable storage even when the program never writes it. Historical Lanternfly constant tables do not establish a read-only aggregate-storage family for Nucleus.
+A program that needs an initialized string or scalar table declares a program variable under Section 8.8. That object is mutable storage even when the program never writes it.
 
 <div id="86-scalar-constant-expressions" class="nucleus-source-anchor"></div>
 

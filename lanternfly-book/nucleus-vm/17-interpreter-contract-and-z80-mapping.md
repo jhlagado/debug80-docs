@@ -92,4 +92,4 @@ The compiler's own resident bank may be reclaimed before execution under the pla
 
 ## 17.9 No self-hosting requirement
 
-The first interpreter and compiler are native Z80 assembly. NVM 0.1 does not require either component to be written in Nucleus, produced by Nucleus, or capable of compiling itself. A later self-hosting experiment does not change conformance.
+The first interpreter and compiler are native Z80 assembly. NVM 0.1 does not require either component to be written in Nucleus, produced by Nucleus, or capable of compiling itself.

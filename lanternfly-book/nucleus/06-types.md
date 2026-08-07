@@ -46,7 +46,7 @@ bounded-string-type
 
 An array has one dimension. An array element may be a scalar, record, or bounded string, but not another array. Records may contain fields of any admitted type, including fixed arrays.
 
-The spelling `string[N]` settles the bounded-text question previously left open by Chapter 3. `string` is a core reserved word. No other type word is added by this chapter.
+`string[N]` is the bounded-text form. `string` is a core reserved word. No other type word is added by this chapter.
 
 <div id="63-scalar-types" class="nucleus-source-anchor"></div>
 
