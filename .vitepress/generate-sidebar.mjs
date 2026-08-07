@@ -87,13 +87,17 @@ function chapterItems(dir, parentTitle, recursive = false) {
 /** A directory holding one book's chapters, keyed by its own index title. */
 function sectionFor(dir) {
   let fm;
+  const indexFile = join(dir, 'index.md');
   try {
-    fm = frontMatter(join(dir, 'index.md'));
+    fm = frontMatter(indexFile);
   } catch {
     return undefined;
   }
   const items = chapterItems(dir, fm.title, true);
   if (items.length === 0) return undefined;
+  if (fm.sidebar_link !== undefined) {
+    items.unshift({ text: fm.sidebar_link, link: pageLink(indexFile) });
+  }
   return {
     order: navOrder(fm),
     title: fm.title,

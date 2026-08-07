@@ -33,8 +33,8 @@ it is a language for writing the program itself.
 
 ## Books
 
-- [Lanternfly Book 1 — Programming Fundamentals](book1/) teaches the language
-  through variables, integer types, expressions, decisions, loops, arrays,
+- [Lanternfly Book 1 — Programming Fundamentals](book1/) is a course in the
+  language's variables, integer types, expressions, decisions, loops, arrays,
   records, storage identity, subroutines, modules and machine services.
 - [Lanternfly Book 2 — Language Reference](book2/) defines the 0.4 syntax and
   semantics, including types, exact storage, expressions, control flow,
@@ -46,6 +46,13 @@ it is a language for writing the program itself.
 - [Nucleus Virtual Machine 0.1 Specification](nucleus-vm/) defines the bytecode
   image, instruction set, execution state, traps, services, and backend
   equivalence used by the first Nucleus implementation.
+
+## White papers
+
+The [Lanternfly White Papers](papers/) catalogue preserves four superseded
+architecture papers on cooperative tasks, task-first programs, static
+frames, and reactive execution. The papers record their original arguments and
+examples; the current Lanternfly specification remains authoritative.
 
 The Lanternfly books follow the working
 [Lanternfly 0.4 contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md).

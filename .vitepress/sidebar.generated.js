@@ -1924,6 +1924,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "White papers overview",
+          "link": "/lanternfly-book/papers/index.html"
+        },
+        {
           "text": "Cooperative Tasks for Lanternfly",
           "link": "/lanternfly-book/papers/cooperative-tasks.html"
         },
@@ -2268,6 +2272,10 @@ export const sidebars = {
       "collapsed": false,
       "items": [
         {
+          "text": "White papers overview",
+          "link": "/lanternfly-book/papers/index.html"
+        },
+        {
           "text": "Cooperative Tasks for Lanternfly",
           "link": "/lanternfly-book/papers/cooperative-tasks.html"
         },
@@ -2611,6 +2619,10 @@ export const sidebars = {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
+        {
+          "text": "White papers overview",
+          "link": "/lanternfly-book/papers/index.html"
+        },
         {
           "text": "Cooperative Tasks for Lanternfly",
           "link": "/lanternfly-book/papers/cooperative-tasks.html"
@@ -3139,6 +3151,10 @@ export const sidebars = {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
+        {
+          "text": "White papers overview",
+          "link": "/lanternfly-book/papers/index.html"
+        },
         {
           "text": "Cooperative Tasks for Lanternfly",
           "link": "/lanternfly-book/papers/cooperative-tasks.html"
