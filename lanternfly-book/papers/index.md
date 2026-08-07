@@ -4,6 +4,7 @@ title: "Lanternfly White Papers"
 nav_order: 3
 has_children: true
 has_toc: false
+sidebar_link: "White papers overview"
 ---
 
 # Lanternfly White Papers
@@ -13,24 +14,22 @@ has_toc: false
 > substantial changes along the way. They are kept as a record of the
 > argument. The specification is authoritative.
 
-Standalone architecture papers for the Lanternfly language: proposals and
-discussion documents, each complete on a single page.
+This collection preserves four architecture papers from the Lanternfly design
+work. Each paper is complete on one page and records its design argument,
+worked examples, and stated limits.
 
-1. [Cooperative Tasks for Lanternfly](cooperative-tasks.md) — an
-   architecture proposal: cooperative multitasking from state-machine
-   records legal in the language today, a static instance model, the
-   deferred `task` type form with `yield` and `wait on`, and the
-   scheduling, timing and loop doctrine — with worked examples
-   throughout.
-2. [Task-first Lanternfly](task-first.md) — an architecture direction
-   built on the first paper: a program as a set of declared task
-   instances, sequence as the local case, worked example programs, and
-   the reactive (Glimmer-style) consequence of the inversion.
-3. [Static Frames for Lanternfly](static-frames.md) — the storage-model
-   justification: why locals and parameters live at fixed addresses on
-   the Z80, the save-around-call lowering for recursion, the interrupt
-   reentrancy boundary, and the industrial precedent.
-4. [Reactive Lanternfly](reactive.md) — the synthesis: facts, moments,
-   equations and effects over the task machine, with Glimmer's delivery
-   semantics adopted and its wiring moved from trust to proof, a
-   grammar examination, and two worked programs.
+1. [Cooperative Tasks for Lanternfly](cooperative-tasks.md) — a
+   proposal for cooperative tasks built from explicit record-and-step state
+   machines. It examines static instances, hypothetical `task`, `yield`, and
+   `wait on` syntax, scheduler timing, loop discipline, and worked lowerings.
+2. [Task-first Lanternfly](task-first.md) — a proposal to treat declared task
+   instances as the program's primary shape and generate their scheduler. Its
+   worked programs cover timed coordination and chunked background work.
+3. [Static Frames for Lanternfly](static-frames.md) — the case for fixed-address
+   routine storage on the Z80, including call-graph overlays, save-around-call
+   recursion, aggregate-local lifetimes, the interrupt firewall, and measured
+   instruction costs.
+4. [Reactive Lanternfly](reactive.md) — a proposed reactive layer of facts,
+   moments, derivations, effects, renders, and tasks. It defines instant and
+   delivery semantics, sketches the grammar and lowering, and traces two
+   example programs.
