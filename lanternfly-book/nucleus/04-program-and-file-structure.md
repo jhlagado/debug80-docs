@@ -174,9 +174,3 @@ Documented compiler capacities apply to the complete logical compilation unit. A
 An implementation may bound the complete logical source length, source-part count, source-identity or diagnostic-name length, number of declarations, number of unresolved forwards, or other storage required by this chapter. It must document each limit and issue a capacity diagnostic when the limit is exceeded. Under Chapter 1, that diagnostic does not make an otherwise conforming source program invalid.
 
 The first compiler's 16 KiB core gate does not change these structural rules. Project measurements account for the code and immutable data used to enforce them, while writable tables and source maps remain in their separately reported accounts under Chapter 2.
-
-<div id="410-provenance" class="nucleus-source-anchor"></div>
-
-## 4.10 Provenance
-
-Lanternfly Level 0 and the current Candlemoth source provide evidence that ordered source parts can form one streaming compilation unit and that unresolved forwards can be checked at its end. Nucleus adopts those two mechanisms through the rules above. The flat manifest in Section 4.3.1 is an external build convention, not Lanternfly's source-level module or import machinery. Nucleus does not inherit Lanternfly's modules, imports, language levels, or Candlemoth's historical global-register source model.

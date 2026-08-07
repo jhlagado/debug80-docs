@@ -85,7 +85,7 @@ For a non-entry activation the VM pops the record, restores the saved prefix, se
 
 ## 13.7 Early return and recursion
 
-Every return performs the same pop and restore. The callee owns no preservation set, destructor, cleanup list, or epilogue obligation. This is the caller-save model discussed by the language design: the VM call operation preserves the caller's overlap once, and every early callee return uses the same record.
+Every return performs the same pop and restore. The callee owns no preservation set, destructor, cleanup list, or epilogue obligation. The VM call operation preserves the caller's overlap once, and every early callee return uses the same record.
 
 Direct and mutual recursion use ordinary `CALL`. Each nested call receives a distinct saved record, so active scalar locals and alias carriers are restored correctly. No routine-specific recursion opcode or static recursion ban exists.
 

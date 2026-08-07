@@ -19,8 +19,6 @@ This chapter defines how the source bytes in each ordered source part become one
 
 The rules are deterministic and require no backtracking. Rules stated for source text, token identity, or lexical errors apply to every conforming compiler. Project acceptance requires the first compiler to consume the source in order with bounded state and without retaining a complete source copy. This is a Chapter 2 project constraint, not a required internal organization for another compiler. Another compiler may organize tokenization differently, but it must produce the same tokens. One byte of lookahead is sufficient for every token rule in this chapter.
 
-Nucleus inherits several spellings from Lanternfly, but Lanternfly documentation and the current Candlemoth tokenizer are evidence rather than authority. Rules in this chapter become Nucleus rules only when this chapter states them.
-
 <div id="32-source-bytes" class="nucleus-source-anchor"></div>
 
 ## 3.2 Source bytes
@@ -123,8 +121,6 @@ Chapter 14 defines the recoverable-error forms that use `error`, `fail`, `fails`
 
 Nucleus uses name-led routine invocation and has no `call` keyword. `call` remains an identifier.
 
-The current Candlemoth tokenizer supplies evidence for bounded name scanning, but its case folding and two other shortcuts are not Nucleus rules. It accepts `_` as a first byte because one class represents both name-start and name-continuation characters, and it can silently conflate two names whose hash pairs collide. A compiler claiming Nucleus conformance must enforce the spelling and exact identity above.
-
 <div id="36-numeric-literals" class="nucleus-source-anchor"></div>
 
 ## 3.6 Numeric literals
@@ -136,7 +132,7 @@ decimal-literal ::= decimal-digit+
 integer-literal ::= decimal-literal
 ```
 
-Hexadecimal integer literals are not part of Nucleus 0.1. The checked Candlemoth scanner implements bounded decimal accumulation but no hexadecimal path, and no target measurement justifies adding one under Chapter 2's admission rule. Hexadecimal digits remain part of the `\xHH` escape syntax in Section 3.7; that lexical use does not create an integer-literal form.
+Hexadecimal integer literals are not part of Nucleus 0.1. Hexadecimal digits remain part of the `\xHH` escape syntax in Section 3.7; that lexical use does not create an integer-literal form. Any additional integer-literal form requires measured admission under Chapter 2.
 
 The tokenizer computes an exact unsigned value from zero through 65,535. A literal whose value exceeds 65,535 is a lexical error. Later type checking decides whether the value fits its context, including `u8`, `u16`, an array bound, or a counted-loop parameter.
 

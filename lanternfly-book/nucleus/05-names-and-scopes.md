@@ -19,7 +19,7 @@ This chapter defines how declarations bind names and where those bindings are vi
 
 A scope controls where source text may refer to a declaration. It does not determine storage allocation, initialization, storage duration, or value lifetime; Chapter 7 defines those subjects.
 
-Nucleus has no implicit declarations, overloads, generic parameters, nested routines, or source-level module namespaces. The historical Candlemoth global `b` and `w` register arrays are not predefined Nucleus names and do not replace formal parameters or named local variables.
+Nucleus has no implicit declarations, overloads, generic parameters, nested routines, or source-level module namespaces. Formal parameters and named local variables use the declarations defined by Chapters 8 and 13.
 
 <div id="52-name-identity" class="nucleus-source-anchor"></div>
 
@@ -235,11 +235,3 @@ The compiler must diagnose an undeclared use, an exact duplicate, forbidden shad
 An implementation may bound identifier length, retained name bytes, ordinary bindings, routine-local bindings, record fields, or unresolved forward signatures. It must document each limit and issue a capacity diagnostic before truncation, wraparound, dropped declarations, or unchecked collision can occur. A capacity failure does not change identifier identity or make an otherwise conforming program invalid.
 
 The implementation may use one bounded ordinary symbol table, a mark for the current routine, and a field table associated with each record type. That layout is non-normative. The observable lookup, collision, visibility, and diagnostic rules above remain the same for any internal representation.
-
-<div id="512-provenance" class="nucleus-source-anchor"></div>
-
-## 5.12 Provenance
-
-Lanternfly's declaration-order checks, forward signatures, and per-record field scopes provide implementation evidence for these rules. Nucleus does not inherit Lanternfly's modules, imports, split type and value namespaces, nested routine machinery, enum-member namespaces, or traversal-binding scopes.
-
-The current Candlemoth implementation uses bounded linear lookup and discards transient local entries after each routine body. Its local shadowing, hash-only name equality, separate type-name path, and source-visible global-register programming model are superseded and are not Nucleus semantics.

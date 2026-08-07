@@ -77,6 +77,4 @@ The external representation of success, recoverable-error codes, and trap reason
 
 An environment may implement services with CP/M calls, a monitor, port I/O, host callbacks, or another mechanism. It may buffer transfers if buffering preserves call order, failure points, and visible bytes. Those choices do not add source names or expose their addresses.
 
-Historical Candlemoth intrinsics supplied source reading, object writing, diagnostics, status, rewind, and output seek for one bootstrap profile. The 0.1 boundary retains the useful streaming and cursor operations, separates ordinary standard I/O from bulk storage, and gives failures Chapter 14 semantics. The historical names, port numbers, end marker, and profile binding are not Nucleus rules.
-
 Arbitrary BIOS calls, native-call declarations, inline assembly, memory peeks and pokes, port access, and callbacks are excluded from the safe source boundary. A later service must have a typed target-independent contract and pass the measured admission rule before it enters the standard set.

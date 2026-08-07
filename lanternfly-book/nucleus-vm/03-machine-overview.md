@@ -23,7 +23,7 @@ A future native backend may consume the semantic operations immediately. The ope
 
 ## 3.2 Selected organization
 
-NVM combines a memory-backed word-slot file with explicit argument, result, error, and activation carriers. It was selected over a pure stack, a source-visible global-register model, and an accumulator-only machine because it gives the streaming compiler uniform addressed destinations without requiring expression-tree recovery or Z80 register allocation.
+NVM combines a memory-backed word-slot file with explicit argument, result, error, and activation carriers. This organization gives the streaming compiler uniform addressed destinations without requiring expression-tree recovery or Z80 register allocation.
 
 The slot file contains 128 words. A routine owns a prefix of it, declared by its descriptor. Calls save only the prefix that the caller and callee can both clobber. The model remains pure caller-save: the callee owns no preserved state and performs no cleanup.
 
