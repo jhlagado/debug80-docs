@@ -1,0 +1,40 @@
+{
+  "name": "nvm",
+  "scopeName": "source.nvm",
+  "fileTypes": [],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#labels" },
+    { "include": "#opcodes" },
+    { "include": "#numbers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        { "name": "comment.line.double-slash.nvm", "match": "//.*$" }
+      ]
+    },
+    "labels": {
+      "patterns": [
+        { "name": "entity.name.label.nvm", "match": "^[A-Za-z_][A-Za-z0-9_]*:" }
+      ]
+    },
+    "opcodes": {
+      "patterns": [
+        {
+          "name": "keyword.control.nvm",
+          "match": "\\b(?:NOP|LDI8|LDI16|MOV|ARG|GETR|GETE|JMP|JZ|JNZ|JFAIL|TRAP|ADD8|SUB8|MUL8|DIV8|AND8|OR8|ADD16|SUB16|MUL16|DIV16|AND16|OR16|NEG8|NEG16|NOT8|NOT16|LNOT|NARROW8|EQ8|NE8|LT8|LE8|GT8|GE8|EQ16|NE16|LT16|LE16|GT16|GE16|ADDRI|ADDO|INDEX|STRLEN|STRIDX|LOAD8|LOAD16|STORE8|STORE16|CALL|SVC|RET|RETV|FAIL)\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.nvm",
+          "match": "\\b0[xX][0-9A-Fa-f]+\\b"
+        },
+        { "name": "constant.numeric.decimal.nvm", "match": "\\b[0-9]+\\b" }
+      ]
+    }
+  }
+}

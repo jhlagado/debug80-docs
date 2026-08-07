@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress';
 import { sidebars } from './sidebar.generated.js';
 import lanternflyGrammar from './lanternfly.tmLanguage.json' with { type: 'json' };
 import nucleusGrammar from './nucleus.tmLanguage.json' with { type: 'json' };
+import nvmGrammar from './nvm.tmLanguage.json' with { type: 'json' };
 
 export default defineConfig({
   title: 'Debug80 Docs',
@@ -34,9 +35,14 @@ export default defineConfig({
     // The books fence Z80 listings as ```z80; Shiki has no Z80 grammar, so
     // reuse the generic assembler grammar rather than falling back to txt.
     languageAlias: { z80: 'asm' },
-    // Lanternfly has no published grammar; a small TextMate grammar keeps
-    // its fences highlighted instead of falling back to plain text.
-    languages: [lanternflyGrammar as never, nucleusGrammar as never],
+    // Lanternfly, Nucleus, and NVM have no published Shiki grammars. Local
+    // TextMate grammars keep their fences distinct from plain text and from
+    // one another.
+    languages: [
+      lanternflyGrammar as never,
+      nucleusGrammar as never,
+      nvmGrammar as never,
+    ],
     // Warm-toned dark syntax theme to match the Nocturne palette.
     theme: 'github-light',
   },
@@ -57,7 +63,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       // Straight to the first page of each single-book series. Lanternfly has
-      // multiple books plus the Nucleus specification, so its menu exposes
+      // multiple books plus the Nucleus specifications, so its menu exposes
       // each without an intermediate landing page. The index pages still
       // exist for direct URLs.
       { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
@@ -77,6 +83,10 @@ export default defineConfig({
           {
             text: 'Nucleus 0.1 Language Specification',
             link: '/lanternfly-book/nucleus/',
+          },
+          {
+            text: 'Nucleus VM 0.1 Specification',
+            link: '/lanternfly-book/nucleus-vm/',
           },
           {
             text: 'White Papers',

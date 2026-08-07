@@ -1830,6 +1830,96 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Nucleus Virtual Machine 0.1 Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Purpose, constraints, and non-goals",
+          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
+        },
+        {
+          "text": "3. Machine overview",
+          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
+        },
+        {
+          "text": "4. Address space and memory model",
+          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
+        },
+        {
+          "text": "5. Bytecode image and loading format",
+          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
+        },
+        {
+          "text": "6. Machine state",
+          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
+        },
+        {
+          "text": "7. Runtime values and representation invariants",
+          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
+        },
+        {
+          "text": "8. Virtual-slot organization",
+          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
+        },
+        {
+          "text": "9. Instruction encoding",
+          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
+        },
+        {
+          "text": "10. Data movement and memory access",
+          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
+        },
+        {
+          "text": "11. Arithmetic, logic, comparison, and conversions",
+          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
+        },
+        {
+          "text": "12. Primitive control flow",
+          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
+        },
+        {
+          "text": "13. Routines and activation storage",
+          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
+        },
+        {
+          "text": "14. Recoverable failure",
+          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
+        },
+        {
+          "text": "15. Safety traps and diagnostics",
+          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
+        },
+        {
+          "text": "16. Nucleus System Services 0.1 ABI",
+          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
+        },
+        {
+          "text": "17. Interpreter contract and Z80 mapping",
+          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
+        },
+        {
+          "text": "18. Native-backend contract",
+          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
+        },
+        {
+          "text": "19. Image validity",
+          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
+        },
+        {
+          "text": "20. Conformance vectors",
+          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
+        },
+        {
+          "text": "21. Feature and cost ledger",
+          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
+        }
+      ]
+    },
+    {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
@@ -2080,6 +2170,96 @@ export const sidebars = {
         {
           "text": "21. Conformance examples",
           "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+        }
+      ]
+    },
+    {
+      "text": "Nucleus Virtual Machine 0.1 Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Purpose, constraints, and non-goals",
+          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
+        },
+        {
+          "text": "3. Machine overview",
+          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
+        },
+        {
+          "text": "4. Address space and memory model",
+          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
+        },
+        {
+          "text": "5. Bytecode image and loading format",
+          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
+        },
+        {
+          "text": "6. Machine state",
+          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
+        },
+        {
+          "text": "7. Runtime values and representation invariants",
+          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
+        },
+        {
+          "text": "8. Virtual-slot organization",
+          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
+        },
+        {
+          "text": "9. Instruction encoding",
+          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
+        },
+        {
+          "text": "10. Data movement and memory access",
+          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
+        },
+        {
+          "text": "11. Arithmetic, logic, comparison, and conversions",
+          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
+        },
+        {
+          "text": "12. Primitive control flow",
+          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
+        },
+        {
+          "text": "13. Routines and activation storage",
+          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
+        },
+        {
+          "text": "14. Recoverable failure",
+          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
+        },
+        {
+          "text": "15. Safety traps and diagnostics",
+          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
+        },
+        {
+          "text": "16. Nucleus System Services 0.1 ABI",
+          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
+        },
+        {
+          "text": "17. Interpreter contract and Z80 mapping",
+          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
+        },
+        {
+          "text": "18. Native-backend contract",
+          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
+        },
+        {
+          "text": "19. Image validity",
+          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
+        },
+        {
+          "text": "20. Conformance vectors",
+          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
+        },
+        {
+          "text": "21. Feature and cost ledger",
+          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
         }
       ]
     },
@@ -2338,6 +2518,96 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Nucleus Virtual Machine 0.1 Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Purpose, constraints, and non-goals",
+          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
+        },
+        {
+          "text": "3. Machine overview",
+          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
+        },
+        {
+          "text": "4. Address space and memory model",
+          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
+        },
+        {
+          "text": "5. Bytecode image and loading format",
+          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
+        },
+        {
+          "text": "6. Machine state",
+          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
+        },
+        {
+          "text": "7. Runtime values and representation invariants",
+          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
+        },
+        {
+          "text": "8. Virtual-slot organization",
+          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
+        },
+        {
+          "text": "9. Instruction encoding",
+          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
+        },
+        {
+          "text": "10. Data movement and memory access",
+          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
+        },
+        {
+          "text": "11. Arithmetic, logic, comparison, and conversions",
+          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
+        },
+        {
+          "text": "12. Primitive control flow",
+          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
+        },
+        {
+          "text": "13. Routines and activation storage",
+          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
+        },
+        {
+          "text": "14. Recoverable failure",
+          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
+        },
+        {
+          "text": "15. Safety traps and diagnostics",
+          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
+        },
+        {
+          "text": "16. Nucleus System Services 0.1 ABI",
+          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
+        },
+        {
+          "text": "17. Interpreter contract and Z80 mapping",
+          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
+        },
+        {
+          "text": "18. Native-backend contract",
+          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
+        },
+        {
+          "text": "19. Image validity",
+          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
+        },
+        {
+          "text": "20. Conformance vectors",
+          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
+        },
+        {
+          "text": "21. Feature and cost ledger",
+          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
+        }
+      ]
+    },
+    {
       "text": "Lanternfly White Papers",
       "collapsed": false,
       "items": [
@@ -2448,6 +2718,98 @@ export const sidebars = {
         {
           "text": "21. Conformance examples",
           "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+        }
+      ]
+    }
+  ],
+  "/lanternfly-book/nucleus-vm/": [
+    {
+      "text": "Nucleus Virtual Machine 0.1 Specification",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Purpose, constraints, and non-goals",
+          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
+        },
+        {
+          "text": "3. Machine overview",
+          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
+        },
+        {
+          "text": "4. Address space and memory model",
+          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
+        },
+        {
+          "text": "5. Bytecode image and loading format",
+          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
+        },
+        {
+          "text": "6. Machine state",
+          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
+        },
+        {
+          "text": "7. Runtime values and representation invariants",
+          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
+        },
+        {
+          "text": "8. Virtual-slot organization",
+          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
+        },
+        {
+          "text": "9. Instruction encoding",
+          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
+        },
+        {
+          "text": "10. Data movement and memory access",
+          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
+        },
+        {
+          "text": "11. Arithmetic, logic, comparison, and conversions",
+          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
+        },
+        {
+          "text": "12. Primitive control flow",
+          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
+        },
+        {
+          "text": "13. Routines and activation storage",
+          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
+        },
+        {
+          "text": "14. Recoverable failure",
+          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
+        },
+        {
+          "text": "15. Safety traps and diagnostics",
+          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
+        },
+        {
+          "text": "16. Nucleus System Services 0.1 ABI",
+          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
+        },
+        {
+          "text": "17. Interpreter contract and Z80 mapping",
+          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
+        },
+        {
+          "text": "18. Native-backend contract",
+          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
+        },
+        {
+          "text": "19. Image validity",
+          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
+        },
+        {
+          "text": "20. Conformance vectors",
+          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
+        },
+        {
+          "text": "21. Feature and cost ledger",
+          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
         }
       ]
     }
@@ -2680,6 +3042,96 @@ export const sidebars = {
         {
           "text": "21. Conformance examples",
           "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+        }
+      ]
+    },
+    {
+      "text": "Nucleus Virtual Machine 0.1 Specification",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "1. Status and conformance",
+          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
+        },
+        {
+          "text": "2. Purpose, constraints, and non-goals",
+          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
+        },
+        {
+          "text": "3. Machine overview",
+          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
+        },
+        {
+          "text": "4. Address space and memory model",
+          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
+        },
+        {
+          "text": "5. Bytecode image and loading format",
+          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
+        },
+        {
+          "text": "6. Machine state",
+          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
+        },
+        {
+          "text": "7. Runtime values and representation invariants",
+          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
+        },
+        {
+          "text": "8. Virtual-slot organization",
+          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
+        },
+        {
+          "text": "9. Instruction encoding",
+          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
+        },
+        {
+          "text": "10. Data movement and memory access",
+          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
+        },
+        {
+          "text": "11. Arithmetic, logic, comparison, and conversions",
+          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
+        },
+        {
+          "text": "12. Primitive control flow",
+          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
+        },
+        {
+          "text": "13. Routines and activation storage",
+          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
+        },
+        {
+          "text": "14. Recoverable failure",
+          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
+        },
+        {
+          "text": "15. Safety traps and diagnostics",
+          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
+        },
+        {
+          "text": "16. Nucleus System Services 0.1 ABI",
+          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
+        },
+        {
+          "text": "17. Interpreter contract and Z80 mapping",
+          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
+        },
+        {
+          "text": "18. Native-backend contract",
+          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
+        },
+        {
+          "text": "19. Image validity",
+          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
+        },
+        {
+          "text": "20. Conformance vectors",
+          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
+        },
+        {
+          "text": "21. Feature and cost ledger",
+          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
         }
       ]
     },
