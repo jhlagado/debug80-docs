@@ -61,6 +61,14 @@ The compiler may consume each event and byte chunk incrementally. It need not ma
 
 The packaging layer must not add declarations, replace tokens, perform textual macro processing, or make accepted source depend on a part's physical origin. A diagnostic from multipart input must carry the stable source-part identity and the Chapter 3 position within that part, allowing the packaging layer to map it back to a physical source when such a mapping exists.
 
+#### 4.3.1 Flat source manifest
+
+The standard authoring convention for this abstract stream is a flat ordered manifest. Each nonblank logical line contains one physical source name. Blank lines are ignored. The build driver processes entries in their written order, resolves every name within one base directory or storage namespace selected for that build, reads the named source, and emits one source part for it. The listed name is the part's diagnostic name. Its stable source identity combines that name with the entry's position, so a driver that permits a duplicate entry can still identify each part.
+
+The manifest has no nesting, glob patterns, variables, conditional entries, dependency discovery, or recursive import meaning. It does not enter the source-byte stream, and the Nucleus tokenizer never sees it. The build driver defines how physical source names and line endings are encoded; a later compiler-input specification may define concrete multipart framing. Those transport choices do not change the ordered-part contract in Section 4.3.
+
+The driver reports a missing physical source or an unresolvable source name before compilation. It may reject a duplicate manifest entry. If it emits the duplicate instead, the compiler processes both parts in order and ordinarily reports duplicate source declarations. A forgotten dependency ordinarily produces an unknown-name diagnostic; a wrong order produces the applicable declaration-before-use diagnostic; and a forward that no later part completes fails at `EOF`. The compiler does not search for another file or reorder parts in response.
+
 <div id="44-top-level-declarations" class="nucleus-source-anchor"></div>
 
 ## 4.4 Top-level declarations
@@ -85,7 +93,7 @@ This rule applies across source-part boundaries because all parts contribute to 
 
 The types named by a constant, variable, record field, formal parameter, routine result, or forward signature must already be declared at that position. The exact scope and collision rules appear in Chapter 5. Constant-expression restrictions and initialization order appear in Chapter 8.
 
-After a routine header has been checked, its routine name and complete signature are available in its body and in later declarations. This permits the body to contain a direct self-call under Chapter 13. A call to another routine whose header has not appeared requires an earlier forward declaration.
+After a routine's complete signature has been checked, its routine name and signature are available in its body and in later declarations. This permits the body to contain a direct self-call under Chapter 13. A call to another routine whose signature has not appeared requires an earlier forward declaration.
 
 For example, this order satisfies the structural rules:
 
@@ -98,7 +106,7 @@ sub run()
     return
 end
 
-sub emit(value as u8)
+sub emit
     return
 end
 ```
@@ -126,14 +134,9 @@ A forward routine declaration supplies a routine signature without a body. It is
 
 The parameter and result types in a forward declaration must already be available. Once checked, the declaration makes the routine callable at later positions under the same rules as a routine whose body has already appeared. It creates no executable statement and does not begin a routine body.
 
-The completing definition must appear later in the same compilation unit. Its header must match the forward declaration in:
+The forward declaration is the complete and sole signature. It records the routine name, parameter names and ordered types, optional result type, and `fails` effect. The later body begins with the abbreviated header `sub NAME` followed by a logical newline. That name must resolve to exactly one incomplete forward. The parameters named by the forward become the parameter bindings in the body; the body cannot rename or redeclare them.
 
-- routine-name identity under Chapter 3's case-folding rule;
-- formal-parameter count, order, and types;
-- the absence or presence of a result and, when present, its type; and
-- the absence or presence of the `fails` effect from Chapter 14.
-
-A routine may have at most one forward declaration and exactly one definition. A second forward declaration, a forward declaration after the definition, a second definition, or a definition with a mismatched header is invalid. Completing a forward declaration does not declare a second routine.
+A routine may have at most one forward declaration and exactly one definition. A second forward declaration, a forward declaration after the definition, a second definition, an abbreviated body without an incomplete forward, or a completion with another name is invalid. Completing a forward declaration does not declare a second routine. An ordinary routine without a forward retains the complete parenthesized header defined in Chapter 13.
 
 Forward declarations apply only to source routines. They do not provide a general forward reference for constants, types, variables, fields, or local names.
 
@@ -155,7 +158,7 @@ Program startup, initialization, termination, and system services are specified 
 
 At `EOF`, the compiler must verify that:
 
-- every forward routine declaration has one matching definition;
+- every forward routine declaration has one abbreviated body definition;
 - every routine has at most one body;
 - no top-level declaration remains structurally incomplete; and
 - exactly one defined `main` satisfies Section 4.7.
@@ -176,4 +179,4 @@ The first compiler's 16 KiB core gate does not change these structural rules. Pr
 
 ## 4.10 Provenance
 
-Lanternfly Level 0 and the current Candlemoth source provide evidence that ordered source parts can form one streaming compilation unit and that unresolved forwards can be checked at its end. Nucleus adopts those two mechanisms through the rules above. It does not inherit Lanternfly's modules, imports, language levels, entry manifest, or Candlemoth's historical global-register source model.
+Lanternfly Level 0 and the current Candlemoth source provide evidence that ordered source parts can form one streaming compilation unit and that unresolved forwards can be checked at its end. Nucleus adopts those two mechanisms through the rules above. The flat manifest in Section 4.3.1 is an external build convention, not Lanternfly's source-level module or import machinery. Nucleus does not inherit Lanternfly's modules, imports, language levels, or Candlemoth's historical global-register source model.

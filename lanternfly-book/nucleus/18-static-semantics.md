@@ -15,7 +15,7 @@ pageClass: "nucleus-specification"
 
 ## 18.1 Compilation order
 
-The compiler processes one logical compilation unit in token order across the ordered source parts from Section 4.3. Source-part metadata has no static meaning. Every use requires an earlier visible declaration, except that an exact forward routine signature makes that routine callable before its body. A routine header makes its own signature visible before its local prefix and body. At `EOF`, every forward must be completed and exactly one `main` definition satisfying Section 4.7 must exist.
+The compiler processes one logical compilation unit in token order across the ordered source parts from Section 4.3. Source-part metadata has no static meaning. Every use requires an earlier visible declaration, except that an exact forward routine signature makes that routine callable before its body. An ordinary header or earlier forward makes the routine's signature visible before its local prefix and body. At `EOF`, every forward must be completed and exactly one `main` definition satisfying Section 4.7 must exist.
 
 Top-level declarations occur only in the compilation-unit sequence. Parameters occur only in routine headers. Local declarations form one contiguous prefix before the first statement. Record fields occur only inside their record declaration. Conditional and loop bodies contain statements and open no declaration scope.
 
@@ -23,7 +23,7 @@ Top-level declarations occur only in the compilation-unit sequence. Parameters o
 
 ## 18.2 Names and declaration classes
 
-Identifiers use complete ASCII-folded identity. Program and routine scopes have one ordinary namespace; record fields have one field scope per record type. No ordinary declaration overloads or shadows another visible ordinary declaration. A suffix name uses the statically selected record type's field scope or the bounded-string `length` intrinsic.
+Identifiers use their complete case-sensitive source spelling as identity. Program and routine scopes have one ordinary namespace; record fields have one field scope per record type. No ordinary declaration overloads, redefines, or shadows another visible ordinary declaration with the same exact identity. Definition order never changes which declaration governs a later use. A suffix name uses the statically selected record type's field scope or the bounded-string `length` intrinsic.
 
 Name-led parsing first resolves the visible binding, then checks its declaration class. A routine name starts a call. A mutable scalar storage root starts an assignment. A record type is valid only in a type position. A failable routine selects the restricted failable-invocation path. Failure to find a binding, finding the wrong class, or finding a later declaration is invalid source.
 
@@ -61,7 +61,7 @@ Program variables use the zero or explicit constant initializer forms in Chapter
 
 ## 18.6 Routine and failure checking
 
-A call must match the visible signature in arity and parameter order. Scalar arguments copy compatible values. Aggregate arguments bind aliases of the exact referent type. A forward definition must match routine identity, parameter count, ordered parameter types, result presence and type, and the `fails` effect exactly. Parameter names may differ; the definition's names bind its body.
+A call must match the visible signature in arity and parameter order. Scalar arguments copy compatible values. Aggregate arguments bind aliases of the exact referent type. A forward declaration is the sole complete signature. Its abbreviated `sub NAME` body header must resolve to that exact incomplete forward, and the stored forward parameter names bind the body.
 
 Every failable invocation has exactly one failure consumer. `or fail` requires a failable enclosing routine. A result-free `return invocation() or fail` requires a result-free failable callee and caller. `on error` requires an immediately preceding eligible assignment or call statement and an existing writable `u8` destination. Failable invocations are invalid inside larger expressions or argument lists.
 
@@ -81,4 +81,4 @@ No label, goto, exception region, or hidden cleanup edge changes these contexts.
 
 A grammar, visibility, declaration-class, type, lifetime, constant, flow, failure-consumption, or context violation makes the source invalid. The compiler issues a diagnostic and must not present an executable as a successful translation.
 
-An implementation may bound complete source length, source-part count and metadata length, identifier length, symbols, types, fields, forwards, parameters, locals, expression depth, statement nesting, fixups, constants, initializer elements, and other retained compile-time state. It must document every limit that can reject otherwise conforming source and issue a capacity diagnostic before truncation, wraparound, dropped state, or changed semantics. Those limits must still compile every complete accepted Chapter 21 program. Runtime activation capacity is separately implementation-defined, must accommodate the accepted corpus, and traps under Chapter 15 beyond any published activation-depth or activation-storage limit.
+An implementation may bound complete source length, source-part count and metadata length, identifier length, symbols, types, fields, forwards, retained forward parameter-name bytes, parameters, locals, expression depth, statement nesting, fixups, constants, initializer elements, and other retained compile-time state. It must document every limit that can reject otherwise conforming source and issue a capacity diagnostic before truncation, wraparound, dropped state, or changed semantics. Those limits must still compile every complete accepted Chapter 21 program. Runtime activation capacity is separately implementation-defined, must accommodate the accepted corpus, and traps under Chapter 15 beyond any published activation-depth or activation-storage limit.

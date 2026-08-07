@@ -99,7 +99,7 @@ sub even(value as u16) as boolean
     return odd(value - 1)
 end
 
-sub odd(value as u16) as boolean
+sub odd
     if value = 0
         return false
     end
@@ -348,3 +348,38 @@ The last program fails lexically at `$`; Nucleus 0.1 integer literals are decima
 The conformance harness must also present the complete accepted program in Section 21.1 as at least two ordered source parts. It splits the program after a delimiter-depth-zero logical newline, assigns a distinct stable identity to each part, and otherwise preserves every source byte and the declared order. The expected output remains `Y`.
 
 For the diagnostic case, the harness introduces an undeclared name in the second part. The compiler diagnostic must identify the second part's stable identity and the position of that name within the part. A separate run may use different physical files or transport chunks, but those changes must not alter tokens, declaration visibility, validity, or program behaviour.
+
+The harness must also construct the same ordered parts from this flat manifest, using one selected base directory:
+
+```text
+model.nu
+
+main.nu
+```
+
+It emits `model.nu` first and `main.nu` second. The blank line adds no part. The manifest text is not presented to the Nucleus tokenizer, and diagnostics for the second part use `main.nu` as its diagnostic name.
+
+<div id="2112-case-sensitive-names-and-forward-parameters" class="nucleus-source-anchor"></div>
+
+## 21.12 Case-sensitive names and forward parameters
+
+This complete program uses three distinct case variants and a forward parameter binding:
+
+```nucleus
+forward sub render(Player as u8) as u8
+
+var player as u8 = 1
+var PLAYER as u8 = 2
+
+sub render
+    return Player + player + PLAYER
+end
+
+sub main() fails
+    writeOutputByte(render(3)) or fail
+end
+```
+
+The expected standard output is byte value 6. The lowercase keywords are recognized as keywords; `Player`, `player`, and `PLAYER` are distinct identifiers. The abbreviated body obtains `Player` from the forward signature.
+
+Changing the body header to `sub Render` makes the program invalid because no incomplete forward named `Render` exists. Writing `SUB render` is also invalid: `SUB` is a `NAME`, not the keyword `sub`.

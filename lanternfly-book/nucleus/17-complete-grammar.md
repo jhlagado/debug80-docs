@@ -36,7 +36,7 @@ line-comment       ::= "//" { source-byte } (line-ending | EOF)
 line-ending        ::= LF | CR LF
 ```
 
-Sections 3.2 through 3.10 define `literal-byte`, accepted source bytes, maximal token formation, case folding, numeric range, and lexical errors. Hexadecimal digits occur only in escapes; integer literals are decimal.
+Sections 3.2 through 3.10 define `literal-byte`, accepted source bytes, maximal token formation, case-sensitive keyword and identifier recognition, numeric range, and lexical errors. Hexadecimal digits occur only in escapes; integer literals are decimal.
 
 The tokenizer emits `NAME`, `NUMBER`, `CHARACTER`, `STRING`, keyword and punctuation terminals, `NEWLINE`, and `EOF`. It emits `NEWLINE` only at delimiter depth zero, collapses blank or comment-only lines, and synthesizes a source-part-boundary or final logical newline when Sections 3.4 and 4.3 require one. Source-part events and metadata remain outside the token grammar. Those stateful rules are part of the token contract and are not context-free productions.
 
@@ -75,12 +75,16 @@ field-declaration
 forward-routine
     ::= "forward" routine-header NEWLINE
 routine-definition
-    ::= routine-header NEWLINE
-        { local-declaration }
-        statement-sequence
-        "end" NEWLINE
+    ::= "sub" NAME routine-definition-tail
+routine-definition-tail
+    ::= routine-signature-tail NEWLINE routine-body
+      | NEWLINE routine-body
+routine-body
+    ::= { local-declaration } statement-sequence "end" NEWLINE
 routine-header
-    ::= "sub" NAME "(" [ formal-parameter
+    ::= "sub" NAME routine-signature-tail
+routine-signature-tail
+    ::= "(" [ formal-parameter
         { "," formal-parameter } ] ")"
         [ "as" type ] [ "fails" ]
 formal-parameter
@@ -220,6 +224,7 @@ The grammar uses these declared semantic predicates:
 | `isConstantContext`                 | In constants, type bounds, array lengths, string capacities, and program initializers, admit only the compile-time operands and operations from Chapter 8.                                                              |
 | `isInfallibleCallableName`          | Admit a call in an ordinary expression only when the visible signature omits `fails`.                                                                                                                                   |
 | `isIntegerConstantName`             | Admit a `NAME` as a counted-loop step magnitude only when it denotes an earlier `u8` or `u16` constant.                                                                                                                 |
+| `isIncompleteForwardName`           | Admit `sub NAME NEWLINE` as a body header only when the exact name resolves to one incomplete forward; install that forward's stored parameter bindings for the body.                                                   |
 
 Field lookup after `.` uses the selected record type, except that a bounded-string base admits only the intrinsic read-only suffix `.length`. Index selection uses a fixed-array domain or a bounded string's current logical length according to the base type; this distinction needs no grammar change. The `NAME` in `step-constant` must denote an earlier integer constant. Calls within ordinary expressions require an infallible visible routine; failable calls use the separate path above. For `return-source`, a result-free failable caller and callee form the admitted no-result propagation case; otherwise the caller and callee result shapes must match. These are static semantic checks over an otherwise deterministic token stream, not token backtracking.
 
@@ -227,7 +232,7 @@ Field lookup after `.` uses the selected record type, except that a bounded-stri
 
 ## 17.4 Predictive analysis
 
-The repository grammar analyzer mechanically expanded the grammar above to 159 BNF rules over 86 nonterminals. It found no nullable-prefix left-recursion cycle, unreachable nonterminal, or unproductive nonterminal. The LL(1) table contained four conflict sites, all on lookahead `NAME`:
+The repository grammar analyzer mechanically expanded the grammar above to 163 BNF rules over 89 nonterminals. It found no nullable-prefix left-recursion cycle, unreachable nonterminal, or unproductive nonterminal. The LL(1) table contained four conflict sites, all on lookahead `NAME`. The focused test reads this Chapter 17 block directly, so the analyzer evidence does not create a second grammar authority.
 
 | Nonterminal         | Conflict                              | Resolution                          |
 | ------------------- | ------------------------------------- | ----------------------------------- |

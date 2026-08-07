@@ -69,11 +69,16 @@ field-declaration     ::= NAME "as" type NEWLINE
 
 forward-routine-declaration
                       ::= "forward" routine-header NEWLINE
-routine-definition    ::= routine-header NEWLINE
-                          { local-declaration }
+routine-definition    ::= "sub" NAME routine-definition-tail
+routine-definition-tail
+                      ::= routine-signature-tail NEWLINE routine-body
+                        | NEWLINE routine-body
+routine-body          ::= { local-declaration }
                           routine-statement-sequence
                           "end" NEWLINE
-routine-header        ::= "sub" NAME "(" [ formal-parameter
+routine-header        ::= "sub" NAME routine-signature-tail
+routine-signature-tail
+                      ::= "(" [ formal-parameter
                           { "," formal-parameter } ] ")"
                           [ "as" type ] [ "fails" ]
 formal-parameter      ::= NAME "as" type
@@ -162,7 +167,7 @@ The declaration contains at least one field. Each field declares one name and on
 
 The record type becomes visible only after the complete declaration has been checked. It is therefore unavailable in its own field list. This rule, the declaration-before-use rule, and Chapter 6's finite-size requirement reject direct and indirect recursive containment without a second declaration pass.
 
-Record field names use the record's field scope under Chapter 5. A case-insensitive duplicate within that field scope is invalid. Record layout offsets and backend encoding are outside this chapter.
+Record field names use the record's field scope under Chapter 5. An exact duplicate within that field scope is invalid; differently cased field names are distinct. Record layout offsets and backend encoding are outside this chapter.
 
 <div id="88-program-variables" class="nucleus-source-anchor"></div>
 
@@ -193,7 +198,7 @@ One routine header declares a routine name, an ordered list of zero or more form
 
 A scalar parameter denotes a per-invocation copied value. An aggregate parameter establishes a fixed typed alias to caller-provided program-variable storage. Scalar-leaf mutation through that alias is permitted. Chapter 13 defines calls, result rules, and the value supplied for each parameter; this chapter defines only the bindings written in the header.
 
-A forward routine declaration contains the complete header and no body. The later definition must match it under Chapters 4 and 5, including case-folded routine identity, parameter count and order, parameter types, optional result type, and `fails` effect. Parameter spelling may differ; the definition's parameter names create its body bindings. The definition completes the existing routine binding; it does not declare another routine.
+A forward routine declaration contains the complete and sole header and no body. The compiler retains its exact routine and parameter names, ordered parameter types, optional result type, and `fails` effect. The later abbreviated `sub NAME` header opens the body under Chapters 4 and 5; the forward's parameter names create that body's parameter bindings. The definition completes the existing routine binding and does not declare another routine or repeat its signature.
 
 A routine definition without an earlier forward makes its checked signature visible before the local-declaration prefix and body. No nested routine declaration is permitted.
 
@@ -230,7 +235,7 @@ The compiler must diagnose:
 - a declaration in a location not permitted by Section 8.2;
 - a missing type, required initializer, or alias target;
 - a type, bound, initializer, or name that is not visible at its declaration point;
-- a duplicate name, case-only collision, or forbidden shadowing under Chapter 5;
+- an exact duplicate name or forbidden shadowing under Chapter 5;
 - a nonconstant operand or invalid folded operation in a constant expression;
 - a scalar initializer incompatible with its declared type;
 - an invalid array length, string capacity, string length, or array element count;
@@ -238,7 +243,7 @@ The compiler must diagnose:
 - an aggregate `const` or a program aggregate initializer not admitted by Section 8.8;
 - an aggregate alias whose target type is not identical to its declared type;
 - an attempt to rebind an aggregate alias or copy a complete aggregate; and
-- a forward completion that does not match its signature.
+- an abbreviated body without one matching incomplete forward, a second completion, or an uncompleted forward.
 
 An implementation may bound top-level declarations, record fields, parameters, locals, aggregate aliases, constant-expression nesting, initializer elements, decoded string bytes, type descriptors, retained signatures, and initialization records. It must publish each limit and issue a capacity diagnostic before truncation, wraparound, omitted initialization, dropped fields, or an incorrect binding can occur. A capacity failure does not change an otherwise conforming declaration into invalid source.
 
@@ -295,12 +300,12 @@ sub inspect()
 end
 ```
 
-A matching forward declaration and definition repeat the complete header:
+A forward declaration supplies the sole signature, and its abbreviated definition supplies the body:
 
 ```nucleus
 forward sub inspectState(item as State)
 
-sub inspectState(item as State)
+sub inspectState
     return
 end
 ```
@@ -309,7 +314,8 @@ The following marked forms are invalid. They illustrate separate errors and are 
 
 ```nucleus
 const Limit as u16 = 8
-var limit as u16                    // case-insensitive duplicate
+var limit as u16                    // valid: names are case-sensitive
+var Limit as u16                    // invalid: exact duplicate
 
 const flags as u8[4] = [1, 2, 4, 8] // named constants are scalar only
 const prompt as string[8] = "READY"  // bounded-string constants are absent
