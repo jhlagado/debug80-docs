@@ -41,7 +41,7 @@ Nucleus uses these scopes:
 | Routine      | The routine's formal parameters and named local variables                                    | Program scope as visible at the routine's source position                                     |
 | Record field | The fields declared by one record type                                                       | None for ordinary-name lookup; selection uses the field scope associated with the record type |
 
-One compilation unit has one program scope. A physical file boundary does not open another scope. Chapter 4 defines how source files, if more than one, contribute to that ordered unit.
+One compilation unit has one program scope. A source-part boundary does not open another scope. Chapter 4 defines how ordered source parts contribute to that unit.
 
 Each routine definition has one routine scope. Parameters and locals are binding classes within that scope, not separate nested scopes. Conditional clauses, loops, and other statement blocks do not open name scopes. Local declarations therefore remain in the routine's declaration prefix and cannot appear inside a statement block.
 

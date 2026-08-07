@@ -23,7 +23,7 @@ Nucleus compilation is declaration ordered and streaming. The rules in this chap
 
 ## 4.2 Compilation unit
 
-A **compilation unit** is one logical Nucleus token stream ending in one `EOF` token. The compiler processes that stream from beginning to end as a single ordered unit. A compilation unit supplies one outer declaration sequence; a physical file boundary does not begin a scope, clear declarations, or change declaration order. Chapter 5 defines the resulting scopes.
+A **compilation unit** is one logical Nucleus token stream formed from one or more ordered source parts and ending in one `EOF` token. The compiler processes that stream from beginning to end as a single ordered unit. A compilation unit supplies one outer declaration sequence; a source-part boundary does not begin a scope, clear declarations, or change declaration order. Chapter 5 defines the resulting scopes.
 
 The structural skeleton is:
 
@@ -35,17 +35,31 @@ The complete grammar in Chapter 17 replaces this skeleton. Its declaration produ
 
 Blank and comment-only physical lines contribute no top-level item. If the final item has no physical line ending, Chapter 3 requires the tokenizer to emit its final `NEWLINE` before `EOF`.
 
-<div id="43-physical-files-and-stream-assembly" class="nucleus-source-anchor"></div>
+<div id="43-multipart-compilation-stream" class="nucleus-source-anchor"></div>
 
-## 4.3 Physical files and stream assembly
+## 4.3 Multipart compilation stream
 
-The core Nucleus 0.1 compiler accepts one logical source stream. It does not open source files, search directories, or resolve source dependencies while parsing that stream.
+The core Nucleus 0.1 compiler does not open source files, search directories, or resolve source dependencies. An external packaging layer supplies one ordered logical compilation stream through these transport-neutral events or records:
 
-A build tool may assemble the stream from one or more physical files. It must preserve their declared order and must not join tokens across a file boundary. When the preceding file does not end at a physical line boundary, the tool must insert a line ending before the next file's first byte. Tokenization then proceeds as if the assembled bytes had been supplied in one file.
+```text
+begin-compilation
+begin-source-part(stable-source-identity, [diagnostic-name])
+source-bytes(bytes)
+end-source-part
+end-compilation
+```
 
-Nucleus 0.1 has no source-level `import`, `include`, `module`, or namespace declaration. File lists, search paths, dependency resolution, and any mapping from logical source positions back to physical filenames are toolchain inputs outside the language. If a project tool calls a dependency an import, it must resolve and order that dependency before invoking the core compiler. A tool may retain a source-position mapping for diagnostics, but the compiler's conformance does not depend on a particular project-file or package format.
+A compilation contains one or more source parts. `source-bytes` may occur repeatedly within a part; its chunk boundaries have no lexical or semantic effect. The stable source identity is unique within the compilation and remains unchanged for every diagnostic from that part. The optional diagnostic name is display metadata. Neither value is part of the Nucleus byte stream, creates a token or identifier, opens a scope, or otherwise participates in program semantics.
 
-This arrangement does not permit textual macro processing. A stream assembler may combine source files and preserve source-position metadata; it must not add declarations, replace tokens, or make the accepted language depend on the file from which a token came.
+Each source part must end at a logical source boundary with delimiter depth zero. When its final source bytes do not include LF or CRLF, the compiler input layer supplies one zero-width line-ending event at the end of that part. It supplies no additional event when the part already ends with a physical line ending. Chapter 3 applies its ordinary comment, blank-line, and `NEWLINE` rules to that event. The next part therefore cannot continue a name, number, literal, comment, parenthesized expression, bracketed expression, or other token sequence from the preceding part. `end-source-part` does not emit `EOF`; only `end-compilation` does so after the final part.
+
+Program scope, declaration order, forward completion, and every other source rule continue across source-part boundaries exactly as they do within one part. Declaration before use determines legal part order. An earlier exact forward routine signature permits the later routine references already admitted by Chapters 4, 5, and 13; the compiler does not infer signatures or construct a dependency graph.
+
+The external packaging layer owns physical files, filenames, dependency discovery, dependency ordering, duplicate suppression, and source transport. It must resolve or reject missing physical inputs and must not present duplicate stable source identities. These are packaging failures, not Nucleus source diagnostics, and the core compiler need not diagnose a host filesystem failure. Nucleus 0.1 retains no source-level `import`, `include`, `module`, or namespace declaration.
+
+The compiler may consume each event and byte chunk incrementally. It need not materialize a source part or the complete compilation stream. A later compiler-input or transport specification may assign a concrete binary, serial, tape, image, memory, or host representation, but that representation must preserve this event order, the source bytes, stable identities, optional names, and boundary rule. No MIME syntax, operating system, filesystem, or project-file format is part of the Nucleus 0.1 contract. A host build tool, serial uploader, tape or image builder, CP/M driver, or memory-resident monitor can implement the packaging layer.
+
+The packaging layer must not add declarations, replace tokens, perform textual macro processing, or make accepted source depend on a part's physical origin. A diagnostic from multipart input must carry the stable source-part identity and the Chapter 3 position within that part, allowing the packaging layer to map it back to a physical source when such a mapping exists.
 
 <div id="44-top-level-declarations" class="nucleus-source-anchor"></div>
 
@@ -67,7 +81,7 @@ Executable statements must appear inside a routine body. A call, assignment, con
 
 Except for a routine use covered by an earlier forward declaration, each name must be declared before use. Chapter 5 defines the declaration point, visibility, and lookup rules.
 
-This rule applies across physical file boundaries because all files contribute to one ordered compilation unit. Moving a declaration to a later file moves it later in declaration order. Splitting a unit into more files does not make later names visible sooner.
+This rule applies across source-part boundaries because all parts contribute to one ordered compilation unit. Moving a declaration to a later part moves it later in declaration order. Splitting a unit into more parts does not make later names visible sooner.
 
 The types named by a constant, variable, record field, formal parameter, routine result, or forward signature must already be declared at that position. The exact scope and collision rules appear in Chapter 5. Constant-expression restrictions and initialization order appear in Chapter 8.
 
@@ -148,13 +162,13 @@ At `EOF`, the compiler must verify that:
 
 The compiler may diagnose a duplicate declaration or mismatched completion as soon as it encounters the later declaration. It must not defer a detectable error merely because end-of-input validation also covers the condition. After any structural error, the initial compiler may stop under the diagnostic policy in Chapter 1; it must not report a successful translation.
 
-<div id="49-capacity-limits-and-file-organization" class="nucleus-source-anchor"></div>
+<div id="49-capacity-limits-and-source-parts" class="nucleus-source-anchor"></div>
 
-## 4.9 Capacity limits and file organization
+## 4.9 Capacity limits and source parts
 
-Documented compiler capacities apply to the complete logical compilation unit. A physical file boundary must not reset a symbol count, forward-signature count, nesting limit, source-position counter, or other unit-wide resource. Dividing the same ordered source among more files neither increases the language-defined capacity nor creates extra scopes.
+Documented compiler capacities apply to the complete logical compilation unit. A source-part boundary must not reset a symbol count, forward-signature count, nesting limit, or other unit-wide resource. Dividing the same ordered source among more parts neither increases a language-defined capacity nor creates extra scopes. Chapter 3 source-position counters restart for each part because diagnostics use part-relative positions.
 
-An implementation may bound the logical source length, number of physical-file mappings retained by its build tool, number of declarations, number of unresolved forwards, or other storage required by this chapter. It must document each limit and issue a capacity diagnostic when the limit is exceeded. Under Chapter 1, that diagnostic does not make an otherwise conforming source program invalid.
+An implementation may bound the complete logical source length, source-part count, source-identity or diagnostic-name length, number of declarations, number of unresolved forwards, or other storage required by this chapter. It must document each limit and issue a capacity diagnostic when the limit is exceeded. Under Chapter 1, that diagnostic does not make an otherwise conforming source program invalid.
 
 The first compiler's 16 KiB core gate does not change these structural rules. Project measurements account for the code and immutable data used to enforce them, while writable tables and source maps remain in their separately reported accounts under Chapter 2.
 
@@ -162,4 +176,4 @@ The first compiler's 16 KiB core gate does not change these structural rules. Pr
 
 ## 4.10 Provenance
 
-Lanternfly Level 0 and the current Candlemoth source provide evidence that ordered physical files can form one streaming compilation unit and that unresolved forwards can be checked at its end. Nucleus adopts those two mechanisms through the rules above. It does not inherit Lanternfly's modules, imports, language levels, entry manifest, or Candlemoth's historical global-register source model.
+Lanternfly Level 0 and the current Candlemoth source provide evidence that ordered source parts can form one streaming compilation unit and that unresolved forwards can be checked at its end. Nucleus adopts those two mechanisms through the rules above. It does not inherit Lanternfly's modules, imports, language levels, entry manifest, or Candlemoth's historical global-register source model.

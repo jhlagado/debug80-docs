@@ -15,7 +15,7 @@ pageClass: "nucleus-specification"
 
 ## 3.1 Scope
 
-This chapter defines how a Nucleus source byte stream becomes a token stream. It defines source bytes, line endings, whitespace, comments, names, reserved words, literals, punctuation, source positions, and lexical errors. Later chapters define grammar, name resolution, types, expression precedence, and runtime meaning.
+This chapter defines how the source bytes in each ordered source part become one logical token stream. It defines source bytes, line endings, whitespace, comments, names, reserved words, literals, punctuation, source positions, and lexical errors. Chapter 4 defines the multipart input around those bytes. Later chapters define grammar, name resolution, types, expression precedence, and runtime meaning.
 
 The rules are deterministic and require no backtracking. Rules stated for source text, token identity, or lexical errors apply to every conforming compiler. Project acceptance requires the first compiler to consume the source in order with bounded state and without retaining a complete source copy. This is a Chapter 2 project constraint, not a required internal organization for another compiler. Another compiler may organize tokenization differently, but it must produce the same tokens. One byte of lookahead is sufficient for every token rule in this chapter.
 
@@ -25,7 +25,7 @@ Nucleus inherits several spellings from Lanternfly, but Lanternfly documentation
 
 ## 3.2 Source bytes
 
-A Nucleus source file is a sequence of bytes in an ASCII-compatible encoding. The accepted source-byte repertoire is:
+A Nucleus source part is a sequence of bytes in an ASCII-compatible encoding. The accepted source-byte repertoire is:
 
 | Bytes        | Use              |
 | ------------ | ---------------- |
@@ -46,13 +46,14 @@ This repertoire excludes Unicode identifiers, Unicode normalization, and locale-
 
 LF and CRLF each form one physical line ending. The tokenizer normalizes either spelling to the same line-break event. A final physical line need not contain a line ending.
 
-Diagnostics must identify a reproducible source position. Each token has a half-open byte span in the original stream and a one-based line and byte column for the span's start. Each lexical error identifies:
+Diagnostics must identify a reproducible source position. Each source part starts at byte offset zero, line one, and byte column one. Each token has the stable source-part identity from Section 4.3, a half-open byte span within that part, and a one-based line and byte column for the span's start. Each lexical error identifies:
 
-- a zero-based byte offset in the original byte stream;
+- the stable source-part identity;
+- a zero-based byte offset within that part;
 - a one-based line number; and
 - a one-based byte column within that line.
 
-When CRLF produces `NEWLINE`, its two bytes occupy one token span, advance the byte offset by two, and advance the line number once. A synthesized final `NEWLINE` has a zero-width span at EOF. A horizontal tab advances the byte column by one; the column is not a display-cell count. These counters permit streaming diagnostics without a resident source map. An implementation that bounds a counter or source length must publish the limit and diagnose overflow.
+When CRLF produces `NEWLINE`, its two bytes occupy one token span, advance the byte offset by two, and advance the line number once. A synthesized source-part-boundary or final `NEWLINE` has a zero-width span at the end of its source part. A horizontal tab advances the byte column by one; the column is not a display-cell count. The optional diagnostic name from Section 4.3 may accompany a diagnostic but does not replace the stable identity. These counters permit streaming diagnostics without a resident source map. An implementation that bounds a counter or source-part length must publish the limit and diagnose overflow.
 
 <div id="34-whitespace-comments-and-logical-newlines" class="nucleus-source-anchor"></div>
 
@@ -68,7 +69,7 @@ Delimiter state tracks open parentheses and square brackets. A physical line end
 
 This is a tokenizer-parser interface rule rather than statement grammar: the tokenizer emits `NEWLINE` under this rule, while later chapters specify which grammar positions accept it. Delimiter state must distinguish `(` from `[`. A closing delimiter with no matching opener, a mismatched closing delimiter, an open delimiter at EOF, or implementation-capacity exhaustion is diagnosed.
 
-Blank and comment-only physical lines produce no `NEWLINE`. Consecutive physical line endings therefore cannot create empty statements. After any token on a delimiter-depth-zero line, its physical line ending produces one `NEWLINE`. If EOF follows such a line without a physical line ending, the tokenizer emits one final `NEWLINE` before `EOF`. EOF following an empty or comment-only final line produces only `EOF`.
+Blank and comment-only physical lines produce no `NEWLINE`. Consecutive physical line endings therefore cannot create empty statements. After any token on a delimiter-depth-zero line, its physical line ending produces one `NEWLINE`. Section 4.3 supplies the same line-ending event at a source-part boundary when the part has no final physical line ending. If EOF follows a token line without either event, the tokenizer emits one final `NEWLINE` before `EOF`. EOF following an empty or comment-only final line produces only `EOF`.
 
 Examples:
 
