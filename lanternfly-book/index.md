@@ -43,6 +43,9 @@ it is a language for writing the program itself.
   normative source-language specification as a chapter-by-chapter reading
   edition. Nucleus is a distinct language, housed here while its own
   documentation area develops.
+- [Nucleus Virtual Machine 0.1 Specification](nucleus-vm/) defines the bytecode
+  image, instruction set, execution state, traps, services, and backend
+  equivalence used by the first Nucleus implementation.
 
 The Lanternfly books follow the working
 [Lanternfly 0.4 contract](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/specification.md).

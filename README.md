@@ -46,6 +46,7 @@ Lanternfly's Z80 work.
 | [Lanternfly Book 1 — Programming Fundamentals](https://debug80.com/lanternfly-book/book1/) | A general introduction to writing programs with Lanternfly, from variables through machine services. |
 | [Lanternfly Book 2 — Language Reference](https://debug80.com/lanternfly-book/book2/) | The Lanternfly 0.4 syntax, type, storage, control-flow, module and diagnostic reference. |
 | [Nucleus 0.1 Language Specification](https://debug80.com/lanternfly-book/nucleus/) | The complete Nucleus 0.1 source-language specification in a chapter-by-chapter reading edition. |
+| [Nucleus VM 0.1 Specification](https://debug80.com/lanternfly-book/nucleus-vm/) | The complete Nucleus bytecode-machine specification, including its image format and instruction set. |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/) | Reference material for the machine and its monitor. |
 
 ## Working on it
@@ -60,13 +61,15 @@ npm run dev
 `npm run build` produces the static site into `.vitepress/dist`. Pushing to
 `main` builds and publishes to GitHub Pages, which serves debug80.com.
 
-The Nucleus reading edition is generated from the single authoritative file in
-the Debug80 repository; its chapter files are not independent sources. Update
-and verify it with:
+The two Nucleus reading editions are generated from their single authoritative
+files in the Debug80 repository; their chapter files are not independent
+sources. Update and verify them with:
 
 ```sh
 npm run sync:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
 npm run check:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
+npm run sync:nucleus-vm -- /path/to/debug80/packages/lanternfly/docs/nucleus/virtual-machine-specification.md
+npm run check:nucleus-vm -- /path/to/debug80/packages/lanternfly/docs/nucleus/virtual-machine-specification.md
 ```
 
 ### Checks
@@ -97,7 +100,7 @@ not the SVGs.
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
-lanternfly-book/  Lanternfly language books and the Nucleus reading edition
+lanternfly-book/  Lanternfly language books and the Nucleus reading editions
 tec1g/            TEC-1G and MON-3 reference
 assets/images/    Figures, most of them generated
 scripts/          Diagram generator and the four checks
