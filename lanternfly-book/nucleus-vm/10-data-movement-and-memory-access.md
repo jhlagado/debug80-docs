@@ -58,3 +58,5 @@ A conforming compiler uses `STORE8` for `u8`, Boolean, and bounded-string byte d
 ## 10.7 Runtime and static responsibilities
 
 The address instructions enforce the supplied dynamic region checks. They do not prove that a constant offset belongs to the nominal record type or that a stride belongs to the selected array type. Those are compiler obligations. NVM bytecode is an execution format rather than a hostile-code capability system.
+
+For exact-type aggregate assignment, the compiler obtains a checked destination address and a checked source address for the complete common extent before emitting the first store. It may then emit `LOAD16`/`STORE16` pairs and a final `LOAD8`/`STORE8` pair, or byte pairs throughout. The source type system makes two distinct same-type aggregate paths disjoint, and self-assignment is a no-op, so the generated sequence requires no overlap direction or temporary object. NVM 0.1 deliberately has no block-copy opcode.

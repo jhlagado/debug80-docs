@@ -177,18 +177,18 @@ An implementation may impose a maximum decoded literal length. It must publish t
 
 The tokenizer recognizes these punctuation tokens:
 
-| Spelling | Token or use                                         |
-| -------- | ---------------------------------------------------- |
-| `(` `)`  | grouping, calls, and declarations                    |
-| `[` `]`  | array types and indexing                             |
-| `,`      | item and argument separator                          |
-| `.`      | record-field selection                               |
-| `+` `-`  | arithmetic punctuation; also unary punctuation       |
-| `*` `/`  | arithmetic punctuation                               |
-| `=`      | assignment or equality, according to grammar context |
-| `<>`     | not equal                                            |
-| `<` `<=` | less-than comparisons                                |
-| `>` `>=` | greater-than comparisons                             |
+| Spelling | Token or use                                           |
+| -------- | ------------------------------------------------------ |
+| `(` `)`  | grouping, calls, declarations, and record initializers |
+| `[` `]`  | array types, indexing, and array initializers          |
+| `,`      | item and argument separator                            |
+| `.`      | record-field selection                                 |
+| `+` `-`  | arithmetic punctuation; also unary punctuation         |
+| `*` `/`  | arithmetic punctuation                                 |
+| `=`      | assignment or equality, according to grammar context   |
+| `<>`     | not equal                                              |
+| `<` `<=` | less-than comparisons                                  |
+| `>` `>=` | greater-than comparisons                               |
 
 Chapter 9 defines which expression operators are admitted, their operand types, precedence, and associativity. Listing a punctuation token here defines its formation, not every grammar position in which it is valid.
 
@@ -269,7 +269,7 @@ Capacity failure must not change token identity. In particular, an overlong name
 | `player_2`                 | one `NAME`                                     |
 | `_player`                  | lexical error at `_`                           |
 | `elseif`                   | one `ELSEIF` keyword                           |
-| `ELSEIF`                   | one `ELSEIF` keyword                           |
+| `ELSEIF`                   | one `NAME`; keywords require lowercase         |
 | `elseifReady`              | one `NAME`                                     |
 | `else if`                  | `ELSE IF`; not an `ELSEIF` clause              |
 | `42`                       | `NUMBER(42)`                                   |

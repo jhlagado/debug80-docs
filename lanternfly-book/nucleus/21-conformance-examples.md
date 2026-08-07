@@ -15,14 +15,15 @@ pageClass: "nucleus-specification"
 
 ## 21.1 Complete accepted program
 
-This program exercises records, a checked fixed array, an aggregate alias parameter and result, a local alias, a counted loop, a conditional chain, a call, and observable output:
+This program exercises records, complete aggregate initializers, exact-type aggregate assignment, a checked fixed array, an aggregate alias parameter and result, a local alias, a counted loop, a conditional chain, a call, and observable output:
 
 ```nucleus
 record Cell
     value as u8
 end
 
-var cells as Cell[4]
+var template as Cell = (1)
+var cells as Cell[4] = [(0), (0), (0), (0)]
 
 sub cellAt(index as u8) as Cell
     return cells[index]
@@ -38,7 +39,8 @@ sub main()
     var code as u8
 
     for index = 0 until 4
-        setCell(cells[index], index + 1)
+        cells[index] = template
+        setCell(template, index + 1)
     end
 
     current.value = cellAt(0).value
@@ -56,7 +58,7 @@ sub main()
 end
 ```
 
-The expected standard output is the byte for `Y`, provided the output service succeeds.
+Each aggregate assignment copies `template` into the selected array element before `template` is changed for the next iteration. The expected standard output is the byte for `Y`, provided the output service succeeds.
 
 <div id="212-recoverable-error-and-propagation" class="nucleus-source-anchor"></div>
 
@@ -143,19 +145,21 @@ sub mutate(value as string[4])
 end
 
 sub main() fails
-    var alias as string[4] = textAlias()
+    var snapshot as string[4]
 
-    if alias.length = 3 and alias[1] = 0
-        mutate(alias)
+    snapshot = textAlias()
+
+    if snapshot.length = 3 and snapshot[1] = 0
+        mutate(textAlias())
     end
 
-    if text[1] = 'Z' and alias.length = 3
+    if text[1] = 'Z' and snapshot[1] = 0
         writeOutputByte('Y') or fail
     end
 end
 ```
 
-The literal's embedded zero is an ordinary byte, so its logical length is three. The local is initialized once with an alias returned by an infallible routine. Mutation through the parameter alias is visible through both program and local aliases, and the expected standard output is `Y`.
+The literal's embedded zero is an ordinary byte, so its logical length is three. Assignment materializes `textAlias()` by copying it into the routine-private `snapshot` object. Passing a second result directly to `mutate` forwards the transient alias without copying, so mutation changes `text` while `snapshot` retains its copied zero byte. The expected standard output is `Y`.
 
 <div id="215-result-free-return-propagation" class="nucleus-source-anchor"></div>
 
@@ -283,21 +287,59 @@ sub main()
 end
 ```
 
-Aggregate copy or alias rebinding:
+Aggregate assignment between different nominal types:
+
+```nucleus
+record LeftCell
+    value as u8
+end
+
+record RightCell
+    value as u8
+end
+
+var left as LeftCell
+var right as RightCell
+
+sub main()
+    left = right
+end
+```
+
+Incomplete structured initializer:
+
+```nucleus
+record Color
+    red as u8
+    green as u8
+    blue as u8
+end
+
+var color as Color = (1, 2)
+
+sub main()
+end
+```
+
+Transient aggregate result retained as a local alias:
 
 ```nucleus
 record Cell
     value as u8
 end
 
-var left as Cell
-var right as Cell
+var cell as Cell
+
+sub cellAlias() as Cell
+    return cell
+end
 
 sub main()
-    var alias as Cell = left
-    alias = right
+    var held as Cell = cellAlias()
 end
 ```
+
+The valid materializing form declares `held` without an initializer and then assigns `cellAlias()` to it.
 
 Value routine with a reachable end:
 
@@ -383,3 +425,36 @@ end
 The expected standard output is byte value 6. The lowercase keywords are recognized as keywords; `Player`, `player`, and `PLAYER` are distinct identifiers. The abbreviated body obtains `Player` from the forward signature.
 
 Changing the body header to `sub Render` makes the program invalid because no incomplete forward named `Render` exists. Writing `SUB render` is also invalid: `SUB` is a `NAME`, not the keyword `sub`.
+
+<div id="2113-routine-private-aggregate-storage" class="nucleus-source-anchor"></div>
+
+## 21.13 Routine-private aggregate storage
+
+This program distinguishes a fixed local alias from a routine-private aggregate object and confirms that aggregate assignment copies without rebinding:
+
+```nucleus
+record Counter
+    value as u8
+end
+
+sub counter() as Counter
+    var state as Counter = (0)
+    state.value = state.value + 1
+    return state
+end
+
+sub main() fails
+    var first as Counter
+    var snapshot as Counter
+
+    first = counter()
+    snapshot = first
+    counter()
+
+    if snapshot.value = 1 and counter().value = 3
+        writeOutputByte('Y') or fail
+    end
+end
+```
+
+`state`, `first`, and `snapshot` each own one routine-private object initialized before `main`. The three calls to `counter` share `state`. `first = counter()` materializes the transient result, and `snapshot = first` copies that value again into a different object. The expected standard output is `Y`.

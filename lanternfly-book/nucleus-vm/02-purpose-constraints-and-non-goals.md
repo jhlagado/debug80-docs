@@ -40,6 +40,6 @@ The compiler-core account has the language project's hard 16 KiB bank gate. Inte
 
 NVM is not a CPU-compatibility layer. It does not expose a source pointer model, dynamic types, garbage collection, exceptions, unwinding, destructors, branch shortening, relocation records, native register allocation, or native peephole rules.
 
-NVM contains no dedicated `if`, `while`, `for`, `select`, pattern, aggregate-copy, or source-scope instruction. Compilers lower source constructs to the primitive operations in this book.
+NVM contains no dedicated `if`, `while`, `for`, `select`, pattern, aggregate-copy, or source-scope instruction. Compilers lower source constructs to the primitive operations in this book. In particular, exact-type aggregate assignment uses checked addresses plus ordinary loads and stores; it does not add an unmeasured 0.1 opcode.
 
 Interpreter speed matters after compiler regularity and size. This priority does not permit an unbounded or incomplete interpreter.

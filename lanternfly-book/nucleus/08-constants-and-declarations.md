@@ -25,17 +25,18 @@ Nucleus uses explicit declarations and explicit types. It has no inferred declar
 
 The declaration families are:
 
-| Declaration           | Permitted location                          | Binding or storage established                                            |
-| --------------------- | ------------------------------------------- | ------------------------------------------------------------------------- |
-| Named constant        | Top level                                   | One typed compile-time scalar value                                       |
-| Program variable      | Top level                                   | One mutable program-lifetime scalar or aggregate object                   |
-| Record type           | Top level                                   | One nominal fixed-layout record type and its field scope                  |
-| Forward routine       | Top level                                   | One routine signature without a body                                      |
-| Routine definition    | Top level                                   | One routine signature and body, or completion of an earlier forward       |
-| Formal parameter      | Routine header                              | One scalar activation value or aggregate-alias binding                    |
-| Scalar local          | Contiguous routine declaration prefix       | One per-invocation scalar value                                           |
-| Aggregate-alias local | Contiguous routine declaration prefix       | One per-invocation immutable binding to existing aggregate storage        |
-| Record field          | Between a record header and its closing end | One named scalar or aggregate subobject in each object of the record type |
+| Declaration             | Permitted location                          | Binding or storage established                                            |
+| ----------------------- | ------------------------------------------- | ------------------------------------------------------------------------- |
+| Named constant          | Top level                                   | One typed compile-time scalar value                                       |
+| Program variable        | Top level                                   | One mutable program-lifetime scalar or aggregate object                   |
+| Record type             | Top level                                   | One nominal fixed-layout record type and its field scope                  |
+| Forward routine         | Top level                                   | One routine signature without a body                                      |
+| Routine definition      | Top level                                   | One routine signature and body, or completion of an earlier forward       |
+| Formal parameter        | Routine header                              | One scalar activation value or aggregate-alias binding                    |
+| Scalar local            | Contiguous routine declaration prefix       | One per-invocation scalar value                                           |
+| Private aggregate local | Contiguous routine declaration prefix       | One zero-initialized or explicitly initialized routine-private object     |
+| Aggregate-alias local   | Contiguous routine declaration prefix       | One per-invocation immutable binding to existing aggregate storage        |
+| Record field            | Between a record header and its closing end | One named scalar or aggregate subobject in each object of the record type |
 
 Only top-level declarations occur in the compilation-unit sequence. Parameters occur only in a routine header. Local declarations form one contiguous prefix after the header and before the first statement. A conditional or loop body cannot contain a declaration, and a declaration after the first statement of a routine is invalid.
 
@@ -86,22 +87,30 @@ formal-parameter      ::= NAME "as" type
 local-declaration     ::= "var" NAME "as" type
                           [ "=" local-initializer ] NEWLINE
 local-initializer     ::= expression
+                        | static-aggregate-initializer
                         | failable-invocation "or" "fail"
 
 constant-initializer  ::= scalar-constant-expression
-program-initializer   ::= scalar-constant-expression
+program-initializer   ::= static-initializer
+static-initializer    ::= scalar-constant-expression
                         | STRING
-                        | scalar-array-initializer
-scalar-array-initializer
-                      ::= "[" scalar-constant-expression
-                          { "," scalar-constant-expression } "]"
+                        | record-initializer
+                        | array-initializer
+static-aggregate-initializer
+                      ::= STRING
+                        | record-initializer
+                        | array-initializer
+record-initializer    ::= "(" static-initializer
+                          { "," static-initializer } ")"
+array-initializer     ::= "[" static-initializer
+                          { "," static-initializer } "]"
 ```
 
-`type`, `scalar-type`, and `aggregate-type` are defined by Chapter 6. The parser selects the initializer form from the declared type. `routine-statement-sequence` and `expression` are placeholders for later chapters, not additional declaration syntax.
+`type`, `scalar-type`, and `aggregate-type` are defined by Chapter 6. The parser selects the initializer form from the declared type. A parenthesized scalar expression and a record initializer share `(` as their first token; the already checked declared or component type selects the form without backtracking. `routine-statement-sequence` and `expression` are placeholders for later chapters, not additional declaration syntax.
 
 Each constant, variable, record header, field, and local declaration introduces one name. A routine header introduces one routine name and its individually written parameters. Each field and parameter repeats the canonical `name as Type` form. No comma-separated field or variable group is permitted.
 
-Square brackets suppress logical newlines under Chapter 3. A scalar-array initializer may therefore span physical lines without adding newline productions to this grammar.
+Parentheses and square brackets suppress logical newlines under Chapter 3. A structured initializer may therefore span physical lines without adding newline productions to this grammar.
 
 <div id="84-named-constants" class="nucleus-source-anchor"></div>
 
@@ -179,14 +188,18 @@ Every program variable has an initial value. With no initializer, the compiler e
 
 An explicit program initializer is permitted only in these forms:
 
-| Declared type                          | Permitted initializer                                                        |
-| -------------------------------------- | ---------------------------------------------------------------------------- |
-| `u8`, `u16`, or `boolean`              | One compatible scalar constant expression                                    |
-| `string[N]`                            | One fitting string literal                                                   |
-| Fixed array with scalar element type   | One flat list of exactly the declared number of compatible constant elements |
-| Record or array with aggregate element | None; omit the initializer to select recursive zero initialization           |
+| Declared type             | Permitted initializer                                                              |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| `u8`, `u16`, or `boolean` | One compatible scalar constant expression                                          |
+| `string[N]`               | One fitting string literal                                                         |
+| Record                    | One positional record initializer with exactly one initializer per field           |
+| Fixed array               | One array initializer with exactly one compatible initializer per declared element |
 
-Program initialization does not evaluate an ordinary runtime expression or read another variable. A string literal establishes both the decoded bytes and their logical length; embedded zero bytes count toward that length. A string or array initializer cannot name another aggregate object. Nucleus has no record-constructor initializer, designated-field initializer, implicit aggregate copy, or partial array initializer. A fixed-array list that is too short or too long is invalid; the compiler neither pads nor discards elements.
+Program initialization does not evaluate an ordinary runtime expression or read another variable. A string literal establishes both the decoded bytes and their logical length; embedded zero bytes count toward that length. A literal shorter than its capacity is valid, while one that exceeds the capacity is invalid and is never truncated.
+
+A record initializer uses parentheses and supplies fields in declaration order. An array initializer uses square brackets and supplies elements in increasing index order. A nested record, fixed array, or bounded string uses its own initializer at the corresponding position, so the initializer delimiters mirror the finite aggregate type tree. Every scalar leaf is a compatible scalar constant expression. Every record and array level is complete: too few or too many components are invalid, and the compiler neither pads an explicit initializer nor discards components.
+
+Nucleus has no named-field, partial, spread, or runtime aggregate initializer. A static initializer cannot name another aggregate object or call a routine. It is a declaration-only description of one static object image, not a general aggregate expression.
 
 The program variable becomes visible only after the compiler has checked its type and initializer. Its initializer may therefore use earlier scalar constants but cannot use the variable itself or a later declaration.
 
@@ -196,7 +209,7 @@ The program variable becomes visible only after the compiler has checked its typ
 
 One routine header declares a routine name, an ordered list of zero or more formal parameters, and either no result type or one result type. Every parameter has an explicit `name as Type` declaration. Parameters have no initializer or default argument, and a header has no grouped names or multiple result list.
 
-A scalar parameter denotes a per-invocation copied value. An aggregate parameter establishes a fixed typed alias to caller-provided program-variable storage. Scalar-leaf mutation through that alias is permitted. Chapter 13 defines calls, result rules, and the value supplied for each parameter; this chapter defines only the bindings written in the header.
+A scalar parameter denotes a per-invocation copied value. An aggregate parameter establishes a fixed typed alias to caller-provided program-lifetime storage. Scalar-leaf mutation through that alias is permitted. Chapter 13 defines calls, result rules, and the value supplied for each parameter; this chapter defines only the bindings written in the header.
 
 A forward routine declaration contains the complete and sole header and no body. The compiler retains its exact routine and parameter names, ordered parameter types, optional result type, and `fails` effect. The later abbreviated `sub NAME` header opens the body under Chapters 4 and 5; the forward's parameter names create that body's parameter bindings. The definition completes the existing routine binding and does not declare another routine or repeat its signature.
 
@@ -206,13 +219,15 @@ A routine definition without an earlier forward makes its checked signature visi
 
 ## 8.10 Local declarations
 
-Local declarations execute in source order at the start of each invocation, after parameter binding and before the first statement. They remain in one contiguous prefix.
+After parameter binding, activation-local declarations take effect in source order before the first statement. Routine-private aggregate objects already exist and are merely brought into lexical use at their declaration positions. All local declarations remain in one contiguous prefix.
 
 A scalar local owns one per-invocation scalar value. Its initializer is an ordinary expression or the failable-invocation propagation form from Chapter 14, evaluated once when execution reaches the declaration. The successful result must be compatible with the declared scalar type. If the initializer is omitted, the compiler establishes zero for `u8` or `u16` and `false` for `boolean` at that point.
 
-An aggregate local owns no aggregate storage. Its initializer is mandatory and must be a compatible aggregate storage path rooted as Section 7.6 permits, a compatible aggregate-alias result from an infallible invocation, or a failable aggregate-alias invocation followed by `or fail` under Chapter 14. The compiler evaluates the path or invocation once when execution reaches the declaration, checks the result's type and program-lifetime provenance, then establishes an immutable typed alias binding to that object or subobject. Later changes to an index used in the initializer do not retarget the alias.
+An aggregate local with no initializer or with a structured initializer creates one routine-private object of the declared type. That object has program lifetime, receives its zero or explicit constant initial image once before `main`, and is shared by every invocation of the routine. The local name denotes that object; routine entry does not clear, copy, or reinitialize it.
 
-An aggregate local's binding cannot be reassigned. Its target is mutable program-variable storage reached directly, through another aggregate alias, or through a checked aggregate-alias result. Mutation through a scalar field, scalar fixed-array element, or bounded-string byte is permitted.
+An aggregate local initialized from a compatible aggregate storage path creates a fixed alias instead. The compiler evaluates the path once on each routine activation, checks its exact type and program-lifetime provenance, then establishes the binding. Later changes to an index used in the initializer do not retarget the alias. An aggregate routine result is transient and cannot supply this binding; retaining its value requires a later aggregate assignment into owning storage.
+
+Neither form can be rebound. Aggregate assignment to a routine-private object changes that object's contents; aggregate assignment through an alias changes its referent. Scalar-field, scalar-element, and bounded-string byte mutation remain permitted.
 
 A local becomes visible only after its complete declaration and initializer have been checked. Its initializer may name parameters, visible program declarations, and earlier locals. It cannot name itself or a later local. A local declaration inside a statement block or after the first statement is invalid.
 
@@ -222,9 +237,9 @@ A local becomes visible only after its complete declaration and initializer have
 
 Constant expressions are evaluated during compilation and perform no source-level runtime operation.
 
-The compiler establishes each program variable's zero or explicit initial value exactly once before the entry routine begins. The semantic order is top-level declaration order. Every program variable has reached its initial value before source execution can read it. Chapter 7 defines lifetime, and Chapter 19 defines startup semantics and implementation requirements.
+The compiler establishes every program variable and routine-private aggregate object's zero or explicit initial value exactly once before the entry routine begins. Their semantic order follows source declaration order, with routine-private objects ordered by their local declarations within each routine definition. Static initializers have no source-level effects and cannot read storage, so this order is not otherwise observable. Every program-lifetime object has reached its initial value before source execution can read it. Chapter 7 defines lifetime, and Chapter 19 defines startup semantics and implementation requirements.
 
-On each routine invocation, parameter binding precedes local initialization. Local declarations then execute once each in source order. A scalar local receives its zero or evaluated value at its declaration. An aggregate local evaluates its storage path and fixes its alias binding at its declaration. After the last local declaration, execution continues with the first statement.
+On each routine invocation, parameter binding precedes activation-local initialization. Local declarations then take effect in source order. A scalar local receives its zero or evaluated value at its declaration. An aggregate alias local evaluates its storage path and fixes its binding at its declaration. A routine-private aggregate object already exists and receives no per-invocation initialization. After the last local declaration, execution continues with the first statement.
 
 <div id="812-invalid-declarations-and-capacity-failures" class="nucleus-source-anchor"></div>
 
@@ -233,19 +248,20 @@ On each routine invocation, parameter binding precedes local initialization. Loc
 The compiler must diagnose:
 
 - a declaration in a location not permitted by Section 8.2;
-- a missing type, required initializer, or alias target;
+- a missing type or an incomplete alias initializer;
 - a type, bound, initializer, or name that is not visible at its declaration point;
 - an exact duplicate name or forbidden shadowing under Chapter 5;
 - a nonconstant operand or invalid folded operation in a constant expression;
 - a scalar initializer incompatible with its declared type;
-- an invalid array length, string capacity, string length, or array element count;
+- an invalid array length, string capacity, string length, record field count, array element count, or nested initializer shape;
 - a record field with an unavailable type or a record with no fields;
-- an aggregate `const` or a program aggregate initializer not admitted by Section 8.8;
+- an aggregate `const`, a nonconstant aggregate initializer, or an initializer form incompatible with its declared component type;
 - an aggregate alias whose target type is not identical to its declared type;
-- an attempt to rebind an aggregate alias or copy a complete aggregate; and
+- an attempt to retain a transient aggregate result as a local alias;
+- an attempt to rebind an aggregate alias or copy between nonidentical aggregate types; and
 - an abbreviated body without one matching incomplete forward, a second completion, or an uncompleted forward.
 
-An implementation may bound top-level declarations, record fields, parameters, locals, aggregate aliases, constant-expression nesting, initializer elements, decoded string bytes, type descriptors, retained signatures, and initialization records. It must publish each limit and issue a capacity diagnostic before truncation, wraparound, omitted initialization, dropped fields, or an incorrect binding can occur. A capacity failure does not change an otherwise conforming declaration into invalid source.
+An implementation may bound top-level declarations, record fields, parameters, locals, aggregate aliases, constant-expression nesting, structured-initializer depth and elements, decoded string bytes, routine-private aggregate storage, type descriptors, retained signatures, and initialization records. It must publish each limit and issue a capacity diagnostic before truncation, wraparound, omitted initialization, dropped fields, or an incorrect binding can occur. A capacity failure does not change an otherwise conforming declaration into invalid source.
 
 <div id="813-examples" class="nucleus-source-anchor"></div>
 
@@ -261,13 +277,15 @@ record Cell
 end
 
 var cells as Cell[cellCount]
+var origin as Cell = (0, false)
+var templates as Cell[2] = [(1, true), (2, false)]
 var flags as u8[4] = [1, 2, 4, 8]
 var prompt as string[8] = "READY"
 var title as string[12] = "NUCLEUS"
 var attempts as u8
 ```
 
-`cells` and `attempts` begin with their zero values, including every field of every `Cell`. `flags`, `prompt`, and `title` are mutable program-lifetime objects with the written initial contents. `title` begins with seven decoded bytes.
+`cells` and `attempts` begin with their zero values, including every field of every `Cell`. `origin`, `templates`, `flags`, `prompt`, and `title` are mutable program-lifetime objects with the written initial contents. `title` begins with seven decoded bytes.
 
 A local aggregate declaration binds existing storage rather than copying it:
 
@@ -300,6 +318,17 @@ sub inspect()
 end
 ```
 
+A structured local initializer creates routine-private static storage:
+
+```nucleus
+sub privateCell() as Cell
+    var cell as Cell = (3, true)
+    return cell
+end
+```
+
+The initializer is applied once before `main`; calls return aliases to the same `cell` object. An aggregate assignment such as `cell = templates[0]` copies a complete `Cell` into that object without changing its identity.
+
 A forward declaration supplies the sole signature, and its abbreviated definition supplies the body:
 
 ```nucleus
@@ -310,7 +339,7 @@ sub inspectState
 end
 ```
 
-The following marked forms are invalid. They illustrate separate errors and are not one compilation unit:
+The following declarations illustrate valid and invalid boundary cases. They are not one compilation unit:
 
 ```nucleus
 const Limit as u16 = 8
@@ -329,12 +358,12 @@ var lateBound as u8[laterLength]    // later constant is unavailable
 const laterLength as u16 = 4
 
 var shortText as string[4] = "READY" // decoded literal is too long
-var copiedCell as Cell = cells[0]   // top-level record copy initialization is absent
+var copiedCell as Cell = cells[0]   // static initializers cannot read aggregate storage
 
 sub invalidLocal()
-    var aggregateLocal as Cell      // aggregate local requires a target
+    var aggregateLocal as Cell      // valid zero-initialized private object
     return
 end
 ```
 
-Inside a routine, `var current as Cell = cells[0]` is alias binding and is valid. At top level, the same initializer would request an aggregate object initialization from another object and is invalid. Assignment such as `current = cells[1]` is also invalid: it performs neither alias rebinding nor whole-record copying.
+Inside a routine, `var current as Cell = cells[0]` is alias binding and is valid. `var aggregateLocal as Cell` instead creates a zero-initialized routine-private object. At top level, `var copiedCell as Cell = cells[0]` would read aggregate storage during static initialization and is invalid. Assignment such as `current = cells[1]` is valid and copies the selected `Cell` into `current`'s referent without rebinding `current`.

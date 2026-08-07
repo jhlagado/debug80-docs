@@ -79,7 +79,7 @@ Every call of a failable routine must consume failure at that call site. Nucleus
 
 A failable invocation cannot appear inside an argument, arithmetic operation, comparison, condition, index, general conversion, or other larger expression. It may be only:
 
-- the complete initializer of a local declaration, followed by `or fail`;
+- the complete initializer of a scalar local declaration, followed by `or fail`;
 - the complete right side of an assignment;
 - the complete routine-call statement; or
 - the complete operand of `return`, followed by `or fail`. The caller and callee must either both have a result or both be result-free.

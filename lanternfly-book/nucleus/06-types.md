@@ -88,13 +88,13 @@ The source type and the way a source occurrence denotes data are separate proper
 
 A named constant has type `u8`, `u16`, or `boolean`; records, fixed arrays, bounded strings, and aggregate aliases cannot be declared as constants.
 
-Top-level variables may provide owned aggregate storage. Aggregate storage may also occur inline as a record field or fixed-array element. The permitted declaration sites, initialization rules, mutability, and storage duration appear in Chapters 7 and 8.
+Top-level variables may provide owned aggregate storage. A routine-local aggregate declaration with no initializer or with a structured initializer provides routine-private owned aggregate storage with program lifetime. Aggregate storage may also occur inline as a record field or fixed-array element. The permitted declaration sites, initialization rules, mutability, and storage duration appear in Chapters 7 and 8.
 
-A local declaration of record, fixed-array, or bounded-string type creates an aggregate alias rather than owned local aggregate storage. An aggregate parameter is also an alias to caller-provided storage. These aliases have fixed referent types and cannot be rebound through assignment.
+An aggregate local initialized from a storage path creates an alias rather than owned storage. An aggregate parameter is also an alias to caller-provided storage. These aliases have fixed referent types and cannot be rebound through assignment. A transient aggregate result cannot initialize a local alias.
 
-Nucleus has no ordinary aggregate value copy. Assignment does not copy a complete record, fixed array, or bounded string, and a routine does not return one by value. Programs update scalar fields, scalar fixed-array elements, or existing bounded-string bytes through the postfix operations defined below. A later bulk operation must be explicit and does not change the type rules in this chapter.
+Assignment between aggregate designators of the exact same type copies the complete record, fixed array, or bounded string into the destination. The assignment changes the destination object's contents and never rebinds an alias. Routine arguments and aggregate results continue to transfer aliases rather than copying automatically.
 
-An aggregate routine result is a typed alias to existing storage. The returned referent must remain alive after the call. Chapter 7 defines the lifetime and escape check; Chapter 13 defines result syntax. A result that would refer to storage ending with the call is invalid.
+An aggregate routine result is a transient typed alias to existing storage. The returned referent must remain alive after the call. Chapter 7 defines its lifetime, permitted consumption, and escape check; Chapter 13 defines result syntax. A result that would refer to storage ending with the call is invalid.
 
 <div id="66-record-types" class="nucleus-source-anchor"></div>
 
@@ -139,7 +139,7 @@ A bounded string is an aggregate, not a `u8` array. It has no source-level heade
 - `text.length` is a read-only `u8` value equal to the current logical byte length.
 - `text[index]` selects one existing byte as a `u8` storage path. The index must have type `u8` or `u16` and must be less than the current length. A failed check performs the `bounds` trap before a read or write.
 
-A byte assignment replaces exactly one existing byte and does not change the string's length or capacity. These operations provide no append, insertion, resize, truncation, bulk copy, whole-string assignment, or whole-string comparison. Embedded zero bytes are ordinary content and do not terminate either operation.
+A byte assignment replaces exactly one existing byte and does not change the string's length or capacity. These operations provide no append, insertion, resize, truncation, or whole-string comparison. Whole-string assignment is available only between identical `string[N]` types under Section 7.8. Embedded zero bytes are ordinary content and do not terminate either operation.
 
 The `.length` intrinsic applies only when the postfix base has bounded-string type. On a record base, `.length` remains ordinary lookup in that record's field scope. Any other field suffix on a bounded string is invalid.
 
@@ -153,7 +153,7 @@ This chapter fixes the semantic domain and capacity, not the stored layout. Chap
 
 An aggregate alias has the same source type as its referent and a separate alias category. For example, an alias to a `Person` record permits `Person` field selection, and an alias to `u8[64]` permits indexing with the fixed bound 64. The alias does not create a reference type that can be named independently.
 
-The compiler must retain the referent type through local aliases, aggregate parameters, field and element selection, assignments admitted for scalar leaves, calls, and aggregate results. An alias passed or returned where another aggregate type is required is invalid unless the two referent types are identical.
+The compiler must retain the referent type through local aliases, aggregate parameters, field and element selection, scalar and aggregate assignments, calls, and aggregate results. Passing or returning an alias, or using it as an aggregate-copy source or destination, is invalid unless the required aggregate type is identical to its referent type.
 
 A backend may represent an alias at runtime with one untagged address-sized value because compiler metadata records the record layout, array length, or string capacity. The runtime carrier has no source spelling and no runtime type tag. Source code cannot read, write, compare, convert, store, return as a scalar, or perform arithmetic on the carrier itself.
 
@@ -187,8 +187,9 @@ The compiler applies these compatibility rules:
 | Bounded-string `.length`                               | Read-only `u8` value equal to the current logical length.                           |
 | Bounded-string index                                   | `u8` or `u16` index below the current length; result is a writable `u8` path.       |
 | Aggregate parameter or local alias                     | Exact referent-type identity.                                                       |
+| Aggregate assignment                                   | Exact type identity; copy the complete aggregate into the destination.              |
 | Aggregate result                                       | Exact referent-type identity and a referent that passes Chapter 7's lifetime check. |
-| Ordinary aggregate assignment or by-value result       | Invalid; Nucleus 0.1 provides neither operation.                                    |
+| Aggregate by-value argument or result                  | Invalid; calls transfer aggregate aliases.                                          |
 
 Compatibility is checked at the source operation. The backend does not infer compatibility from equal byte widths, equal layouts, VM slot numbers, or runtime addresses.
 
@@ -218,9 +219,9 @@ An implementation must diagnose a source form that requires one of these mechani
 
 ## 6.12 Type metadata and capacity
 
-The first compiler's current implementation target represents source types with compact ordinals. Reserved ordinals identify the predefined scalar types; record declarations receive nominal IDs; and fixed-array and bounded-string descriptors are interned by their identity rules. Symbols and routine signatures record these IDs, while the streaming expression checker carries a value or alias category with its type ID.
+Exact type identity is checked from retained metadata without reconstructing source text. Record declarations require nominal IDs. Predefined scalars, fixed arrays, and bounded strings have compact, bounded structural descriptions: kind, element type when applicable, and length or capacity. A compiler may store those descriptions directly in symbols and signatures or intern them behind compact ordinals. Measurements of compiler-core bytes, immutable data, writable workspace, and comparison code determine the representation used by the first implementation.
 
-A byte-sized type ID is the initial implementation target. The implementation must document its maximum number of simultaneously retained type descriptors and diagnose exhaustion before an ID wraps, aliases another type, or changes a compatibility result. The same rule applies to bounded record-field, array-descriptor, and signature tables.
+Every selected representation has a published capacity. An ordinal representation diagnoses exhaustion before an ID wraps or aliases another type. An inline representation diagnoses any limit on element-type nesting, length, capacity, symbol entries, record fields, or signatures before truncation changes a compatibility result. A byte-sized type ID remains a candidate, not a language or VM requirement.
 
 The numeric type ID has no source meaning and need not match across compilations. VM registers and slots are untagged storage locations; the compiler's symbol and expression metadata supply their current source types. Runtime type tags, reflection, and dynamic type tests are absent.
 

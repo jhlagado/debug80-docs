@@ -60,7 +60,7 @@ An index suffix requires a fixed-array or bounded-string storage path or typed a
 
 A field suffix on a record storage path or typed record alias resolves the field name only in that record's field scope and produces the field's declared type. A `.length` suffix on a bounded-string storage path or alias produces its read-only `u8` logical length. Other field suffixes on bounded strings are invalid. Selection does not expose an offset, header, or address to source code.
 
-Index and field suffixes may follow an aggregate result from a routine call. The result remains a typed alias to the object established by Chapter 13; the suffix does not copy that object. A scalar result cannot be indexed or selected, and a result-free call cannot take another suffix.
+Index and field suffixes may follow an aggregate result from a routine call. The result remains a transient typed alias to the object established by Chapter 13; the suffix does not copy that object. A scalar result cannot be indexed or selected, and a result-free call cannot take another suffix.
 
 <div id="94-expression-categories-and-storage-paths" class="nucleus-source-anchor"></div>
 
@@ -68,18 +68,18 @@ Index and field suffixes may follow an aggregate result from a routine call. The
 
 Expression checking records both a type and one of these source categories:
 
-| Category               | Permitted use                                                                                          |
-| ---------------------- | ------------------------------------------------------------------------------------------------------ |
-| Exact integer constant | Adopts an admitted integer type from context or the rules in Section 9.7.                              |
-| Scalar value           | May be copied, converted, compared, passed, returned, or stored in a compatible scalar destination.    |
-| Scalar storage path    | Reads as its scalar value in an expression and may be a writable destination when its root is mutable. |
-| Aggregate storage path | May be indexed, selected, bound to a compatible alias, passed, or returned under the lifetime rules.   |
-| Aggregate alias result | Denotes existing compatible storage and supports the same postfix operations as that storage.          |
-| Result-free invocation | Is valid as a complete call statement, or in Chapter 14's result-free failable propagating `return`.   |
+| Category               | Permitted use                                                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Exact integer constant | Adopts an admitted integer type from context or the rules in Section 9.7.                                                             |
+| Scalar value           | May be copied, converted, compared, passed, returned, or stored in a compatible scalar destination.                                   |
+| Scalar storage path    | Reads as its scalar value in an expression and may be a writable destination when its root is mutable.                                |
+| Aggregate storage path | May be indexed, selected, copied by exact-type assignment, bound to a compatible alias, passed, or returned under the lifetime rules. |
+| Aggregate alias result | Transiently denotes compatible storage and may be selected, indexed, copied by exact-type assignment, passed, returned, or discarded. |
+| Result-free invocation | Is valid as a complete call statement, or in Chapter 14's result-free failable propagating `return`.                                  |
 
 A **storage path** begins with a visible program variable, parameter, or local and continues through zero or more field and index suffixes. Each suffix preserves the root object's identity while selecting a subobject. A scalar constant and a routine call are not storage-path roots. A call that returns an aggregate alias may be selected or indexed in a value context, but Chapter 10 does not admit it as an assignment root.
 
-A bare aggregate storage path is not a copyable value. It is valid only where a rule requires compatible aggregate storage or an alias, or as the base of another postfix suffix. Nucleus has no implicit aggregate load, comparison, copy, or truth test.
+A bare aggregate storage path is valid where a rule requires compatible aggregate storage, an alias, or the source or destination of exact-type aggregate assignment. It is not a general expression value. Nucleus has no aggregate comparison, truth test, automatic argument copy, or automatic result copy.
 
 <div id="95-explicit-integer-conversions" class="nucleus-source-anchor"></div>
 
