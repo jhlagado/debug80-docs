@@ -340,3 +340,11 @@ end
 ```
 
 The last program fails lexically at `$`; Nucleus 0.1 integer literals are decimal.
+
+<div id="2111-multipart-input-presentation" class="nucleus-source-anchor"></div>
+
+## 21.11 Multipart input presentation
+
+The conformance harness must also present the complete accepted program in Section 21.1 as at least two ordered source parts. It splits the program after a delimiter-depth-zero logical newline, assigns a distinct stable identity to each part, and otherwise preserves every source byte and the declared order. The expected output remains `Y`.
+
+For the diagnostic case, the harness introduces an undeclared name in the second part. The compiler diagnostic must identify the second part's stable identity and the position of that name within the part. A separate run may use different physical files or transport chunks, but those changes must not alter tokens, declaration visibility, validity, or program behaviour.

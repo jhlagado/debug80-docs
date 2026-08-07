@@ -64,7 +64,7 @@ Project accounting counts each shared component once and assigns it to an identi
 
 ## 2.5 Streaming compilation model
 
-Bulk storage may be available but slow. The primary bytecode path consumes one logical source stream and emits one logical bytecode stream. A platform may materialize either stream in external storage. Multiple source files and imports do not require the compiler to retain the whole program in memory.
+Bulk storage may be available but slow. The primary bytecode path consumes the ordered multipart compilation stream defined by Chapter 4 and emits one logical bytecode stream. A platform may materialize either stream in external storage. Physical source discovery, ordering, and transport do not require the compiler to retain the whole program in memory.
 
 The first compiler is handwritten Z80 and uses streaming, single-pass compilation wherever the language semantics permit it. Declarations precede use. An explicit forward routine signature supplies the necessary exception without requiring a later whole-program pass.
 

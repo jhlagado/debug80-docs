@@ -23,7 +23,7 @@ The language under design is named **Nucleus 0.1**. "V2" was a working label for
 
 ## 1.2 Scope
 
-This specification defines the source-language syntax, static semantics, runtime semantics, required diagnostics, and specified safety failures of Nucleus 0.1. It defines the conditions for a source program or compiler to claim Nucleus 0.1 conformance.
+This specification defines the source-language syntax, static semantics, runtime semantics, required diagnostics, specified safety failures, and abstract compilation-input contract of Nucleus 0.1. It defines the conditions for a source program or compiler to claim Nucleus 0.1 conformance.
 
 The separate Nucleus VM Specification defines the bytecode instruction set, encoding, and virtual-machine execution rules. Non-normative implementation plans and design papers record compiler strategies and project constraints; they do not add source-language semantics.
 
@@ -84,9 +84,11 @@ A compiler claiming Nucleus 0.1 conformance must:
 
 - compile every complete accepted program in Chapter 21 without a capacity diagnostic;
 - accept and translate every conforming source program within its documented capacity limits;
+- accept an in-capacity program presented through the multipart compilation stream in Section 4.3;
 - preserve the specified observable results, side effects, and runtime traps of each accepted program;
 - issue a diagnostic for compile-time invalid source rather than silently translating it with another meaning;
 - issue a diagnostic when a documented capacity limit prevents translation;
+- identify each source diagnostic by stable source-part identity and position within that part;
 - identify and document every implementation-defined choice it makes;
 - keep extensions separate from standard Nucleus mode.
 
