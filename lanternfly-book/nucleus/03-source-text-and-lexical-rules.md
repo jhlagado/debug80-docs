@@ -101,11 +101,11 @@ identifier ::= ascii-letter (ascii-letter | decimal-digit | "_")*
 
 Leading underscores are not identifiers. Nucleus does not assign implementation names through a source spelling convention; compiler-generated names remain outside the source namespace.
 
-Identifier and reserved-word comparison is ASCII case-insensitive. The tokenizer folds `A` through `Z` to `a` through `z` and leaves every other accepted byte unchanged. No locale participates, and spelling case does not create a distinct name.
+Identifiers are case-sensitive and preserve their source spelling. `Player`, `player`, and `PLAYER` are three distinct identifiers. No locale participates in comparison.
 
-The complete folded identifier is its identity. An implementation must not truncate a spelling, compare only a prefix, or treat an unchecked hash match as equality. It may use hashes to locate candidates only if it resolves collisions by exact comparison. An implementation may impose a maximum identifier length and a maximum number of retained names. It must publish each limit, and exceeding one is a capacity diagnostic.
+The complete preserved spelling is an identifier's identity. An implementation must not fold case, truncate a spelling, compare only a prefix, or treat an unchecked hash match as equality. It may use hashes to locate candidates only if it resolves collisions by exact byte comparison. An implementation may impose a maximum identifier length and a maximum number of retained names. It must publish each limit, and exceeding one is a capacity diagnostic.
 
-After scanning the longest identifier, the tokenizer compares its folded spelling with a fixed reserved-word table. A longer name is never split at a keyword boundary: `elseifReady` is one `NAME`, not `ELSEIF NAME`.
+After scanning the longest identifier, the tokenizer compares its exact spelling with a fixed reserved-word table. A reserved word is recognized only in the canonical lowercase spelling listed below. A longer name is never split at a keyword boundary: `elseifReady` is one `NAME`, not `elseif` followed by `NAME`.
 
 The Nucleus 0.1 reserved words are:
 
@@ -117,13 +117,13 @@ step     string   sub      to        true      u16      u8
 until    var      while
 ```
 
-`elseif` is one keyword. `else if` produces the two tokens `ELSE` and `IF` and does not form an `ELSEIF` clause. Case folding means that `ELSEIF` and `elseif` produce the same token.
+`elseif` is one keyword. `else if` produces the two keywords `else` and `if` and does not form an `elseif` clause. `ELSEIF` is a `NAME`, not a keyword.
 
 Chapter 14 defines the recoverable-error forms that use `error`, `fail`, `fails`, and `on`.
 
 Nucleus uses name-led routine invocation and has no `call` keyword. `call` remains an identifier.
 
-The current Candlemoth tokenizer supplies evidence for ASCII case folding and bounded name scanning, but two implementation shortcuts are not Nucleus rules. It accepts `_` as a first byte because one class represents both name-start and name-continuation characters, and it can silently conflate two names whose hash pairs collide. A compiler claiming Nucleus conformance must enforce the spelling above and exact folded identity.
+The current Candlemoth tokenizer supplies evidence for bounded name scanning, but its case folding and two other shortcuts are not Nucleus rules. It accepts `_` as a first byte because one class represents both name-start and name-continuation characters, and it can silently conflate two names whose hash pairs collide. A compiler claiming Nucleus conformance must enforce the spelling and exact identity above.
 
 <div id="36-numeric-literals" class="nucleus-source-anchor"></div>
 
@@ -204,11 +204,11 @@ Braces, colon, semicolon, question mark, hash, at sign, and backtick have no tok
 
 ## 3.9 Token contract
 
-The tokenizer emits the following token categories. The parser must not depend on the token's original case.
+The tokenizer emits the following token categories. Identifier spelling is part of the token contract.
 
 | Category    | Payload                                                       |
 | ----------- | ------------------------------------------------------------- |
-| `NAME`      | exact folded identifier identity and source span              |
+| `NAME`      | exact preserved identifier spelling and source span           |
 | keyword     | fixed reserved-word ordinal and source span                   |
 | `NUMBER`    | exact value from 0 through 65,535 and source span             |
 | `CHARACTER` | one decoded byte and source span                              |

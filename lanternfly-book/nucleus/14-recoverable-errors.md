@@ -31,7 +31,7 @@ routine-header ::= "sub" NAME "(" [ formal-parameter
                    [ "as" type ] [ "fails" ]
 ```
 
-`fails` is part of the routine signature. A forward declaration and its definition must either both include it or both omit it. The clause does not change the declared parameters or optional success-result type.
+`fails` is part of the routine signature. A forward declaration records it once; the later abbreviated body header cannot repeat it. An ordinary routine without a forward includes it in its complete header. The clause does not change the declared parameters or optional success-result type.
 
 Absent a trap, a failable invocation completes in exactly one of two ways:
 
@@ -172,7 +172,7 @@ The compiler must diagnose:
 - a failable invocation with no consumer or more than one consumer;
 - an `on error` clause attached to an ineligible statement;
 - an error destination that is unavailable, non-writable, or not `u8`;
-- a mismatch in `fails` between a forward declaration and definition; and
+- a `fails` clause or other signature text repeated on an abbreviated forward body; and
 - a result-bearing failable routine that can reach its end without success or failure.
 
 An implementation may bound retained failable signatures, nested handlers, failure fixups, and active error destinations. It must publish each limit and issue a capacity diagnostic before exhaustion can discard a check, route a code to the wrong caller, or execute the wrong handler.

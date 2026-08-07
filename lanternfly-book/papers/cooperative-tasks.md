@@ -70,6 +70,27 @@ embedded executors and none in BASIC's own family.
 on this mechanism; [Reactive Lanternfly](reactive.md) defines the
 reactive layer beside it.
 
+### Nucleus-level desugaring
+
+The later Nucleus design narrows the hand-written base pattern. A task step is
+an ordinary result-free routine with exactly one aggregate record parameter.
+That record contains the continuation-state field and every value that must
+persist between calls. The routine performs one bounded unit of work with an
+explicit `if`/`elseif` state machine, updates the record, and returns. A static
+scheduler calls each known step routine with its program-lifetime record.
+
+Nucleus needs no task keyword, hidden task stack, continuation object, record
+subtype, dynamic dispatch, or task-specific VM operation. Its aggregate
+compatibility remains nominal. When several task records share common state,
+each record contains a field of the declared common record type, and callers
+pass that field explicitly to a routine that accepts the common type.
+Definition order and record layout do not create subtyping.
+
+Lanternfly may still provide `task` and `yield` as surface sugar. Such sugar
+must lower to this record-plus-state-machine form, which remains writable
+directly. The conclusion strengthens the pattern described below without
+making tasks a Nucleus language feature.
+
 ## 3. The pattern in Lanternfly 0.5
 
 Code fences in this paper are module excerpts. Routines they call and
@@ -183,7 +204,7 @@ multitasking shape for the language.
 frame dies when it returns, so coroutines must capture stacks or allocate on
 a heap. Lanternfly locals may live in static temporaries and aggregate storage
 is static in every lifetime, so a frame that outlives its call is a small
-variation on how frames already work. The task record *is* the persistent frame, placed like
+variation on how frames already work. The task record _is_ the persistent frame, placed like
 any other record.
 
 **Routine names are not values (section 11.7).** A task cannot carry a resume
@@ -262,7 +283,7 @@ by hand.
 
 If the convention proves common in real programs, the compiler can
 write the boilerplate. The marked declaration is a `task`
-*type* — a task is a record plus a step routine, and the type form says
+_type_ — a task is a record plus a step routine, and the type form says
 so; Lanternfly marks every construct with words, and a JavaScript-style
 `*` sigil fits nothing else in the language. Its name is PascalCase like
 every type, its body is written straight-line with `yield` statements,
@@ -404,7 +425,7 @@ instance and persists — exactly as a JavaScript generator's arguments
 outlive its creation call — so the lowering treats it as one more
 retained local hoisted into the synthesized record, every access
 rewritten to a field read, with one visibility distinction: parameters
-hoist as *declared* fields, and instantiation is the type's record
+hoist as _declared_ fields, and instantiation is the type's record
 initializer naming exactly those fields — `BlinkAt(rate = 10)` — while
 retained locals hoist as hidden fields no initializer names. Under the
 specification's no-repetition rule, the instance declaration need not
@@ -428,7 +449,7 @@ Because the step code is shared while argument values differ per
 instance, those values must live in each instance's initial record
 image — and that adjusts the reset doctrine. An argument-less task
 keeps rule 2 unchanged: all-zero is fresh, `clear` is the reset. An
-instance with arguments is *image-fresh*, and every piece of that is
+instance with arguments is _image-fresh_, and every piece of that is
 legal 0.6: a record initializer expresses the image, a `const` template
 names it, a declaration may take the template by name, and reset is one
 aggregate assignment:
@@ -593,8 +614,8 @@ The correspondence, piece by piece:
 ## 7. Waiting and scheduling
 
 `async`/`await` is this pattern plus a scheduler. A waiting routine is
-a task whose yields mean *waiting on a condition* rather than *here is
-a value*; `wait on keyPress` records what is waited for, yields, and on
+a task whose yields mean _waiting on a condition_ rather than _here is
+a value_; `wait on keyPress` records what is waited for, yields, and on
 resume checks the flag, yielding again if it is still clear. The manual
 form of section 3 already expresses this — the blinker's state 1 is a
 wait on the tick flag.
@@ -816,8 +837,8 @@ counters to `u32`. In a
 sugared form, `wait on after(pollInterval)` lowers to this arm exactly
 as `wait on keyPress` lowers to the mailbox test.
 
-**A delay is a lower bound.** A sleep means *not before the deadline*,
-never *exactly at it*. On the pass clock a tick is not even a fixed
+**A delay is a lower bound.** A sleep means _not before the deadline_,
+never _exactly at it_. On the pass clock a tick is not even a fixed
 duration; on the frame clock a long segment can push a wake past its
 frame. Real time maps to ticks through a platform constant — half a
 second is 25 on a 50 Hz frame clock — or, on the pass clock, through a

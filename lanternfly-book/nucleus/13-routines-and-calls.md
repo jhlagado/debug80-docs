@@ -26,23 +26,27 @@ Nucleus has one routine family. A routine declares no result or one result type.
 The routine fragment is:
 
 ```text
-routine-header       ::= "sub" NAME "(" [ formal-parameter
+routine-header       ::= "sub" NAME routine-signature-tail
+routine-signature-tail
+                     ::= "(" [ formal-parameter
                          { "," formal-parameter } ] ")"
                          [ "as" type ] [ "fails" ]
 formal-parameter     ::= NAME "as" type
 
 forward-routine      ::= "forward" routine-header NEWLINE
-routine-definition   ::= routine-header NEWLINE
-                         { local-declaration }
-                         statement-sequence
-                         "end" NEWLINE
+routine-definition   ::= "sub" NAME routine-definition-tail
+routine-definition-tail
+                     ::= routine-signature-tail NEWLINE routine-body
+                       | NEWLINE routine-body
+routine-body         ::= { local-declaration }
+                         statement-sequence "end" NEWLINE
 
 routine-invocation   ::= NAME argument-list
 argument-list        ::= "(" [ expression { "," expression } ] ")"
 return-statement     ::= "return" [ expression ]
 ```
 
-Chapter 8 remains authoritative for declaration placement and the local-declaration prefix. The fragments here complete their call and result meaning. Parentheses are required in every header and invocation, including a routine with no parameters or arguments.
+Chapter 8 remains authoritative for declaration placement and the local-declaration prefix. The fragments here complete their call and result meaning. Parentheses are required in every complete header and invocation, including a routine with no parameters or arguments. The abbreviated header is available only to the body that completes an earlier forward.
 
 An omitted result type declares a result-free routine. A written type declares one result of that exact scalar or aggregate type. The optional `fails` effect is defined by Chapter 14. The header has no separate procedure/function keyword and no result-name declaration.
 
@@ -116,9 +120,11 @@ The conservative loop rule is part of Nucleus 0.1 validity. A value routine whos
 
 ## 13.8 Forward definitions and recursion
 
-A definition that completes a forward declaration must match the routine identity, parameter count, parameter order and types, optional result type, and `fails` effect under Chapters 4, 5, 8, and 14. Parameter names need not match. The definition's parameter names bind the routine body. The forward declaration and definition denote one routine.
+A forward declaration contains the routine's complete and sole signature, including its parameter names. Its later body begins with `sub NAME` and a logical newline. That name must resolve to exactly one incomplete forward under Chapters 4, 5, and 8. The stored parameter names bind the body; no parameter, result, or `fails` clause is repeated. The forward declaration and body definition denote one routine.
 
-After its header has been checked, a routine may call itself directly. Mutually recursive routines require an earlier forward signature for every routine called before its definition. Recursive calls use the ordinary argument, activation, result, and lifetime rules; Nucleus has no separate recursive syntax.
+This source form removes duplicate signatures and the corresponding signature-comparison cases. A streaming compiler must retain the forward's parameter names as well as its type and effect metadata until it compiles the body. The net compiler-core and workspace effects remain unmeasured.
+
+After its complete signature has been checked, a routine may call itself directly. Mutually recursive routines require an earlier forward signature for every routine called before its definition. Recursive calls use the ordinary argument, activation, result, and lifetime rules; Nucleus has no separate recursive syntax.
 
 Recursion is admitted in Nucleus 0.1. Implementation staging may postpone its construction in the first compiler, but standard language mode must not reinterpret or permanently reject recursive source within the implementation's documented compile-time capacities.
 
@@ -146,7 +152,7 @@ The compiler may lower calls and returns to regular semantic operations while pa
 
 ## 13.11 Invalid calls and capacity limits
 
-The compiler must diagnose an unavailable or non-routine callee, a missing argument list, wrong arity, an incompatible scalar argument or result, an aggregate argument or result with the wrong referent type, an unprovable aggregate-result lifetime, a result-free call used as a value, the wrong `return` form, a value routine whose end is reachable, and a mismatched forward completion.
+The compiler must diagnose an unavailable or non-routine callee, a missing argument list, wrong arity, an incompatible scalar argument or result, an aggregate argument or result with the wrong referent type, an unprovable aggregate-result lifetime, a result-free call used as a value, the wrong `return` form, a value routine whose end is reachable, an abbreviated body without one incomplete forward, and a duplicate or missing forward completion.
 
 An implementation may bound parameters, arguments, active expression-call nesting, retained signatures, fallthrough-summary depth, and compile-time call-graph metadata. It must publish each limit and issue a capacity diagnostic before dropping an argument, corrupting a signature, losing a result, merging live state, or changing a call target. Runtime activation capacity follows Section 13.9 rather than this compile-time capacity rule.
 
@@ -203,7 +209,7 @@ sub even(value as u16) as boolean
     return odd(value - 1)
 end
 
-sub odd(value as u16) as boolean
+sub odd
     if value = 0
         return false
     end
