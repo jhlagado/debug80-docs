@@ -55,12 +55,12 @@ Nucleus has no semicolon, colon separator, multiple statements on one logical li
 
 When a statement begins with `NAME`, the compiler resolves that name before selecting the statement form:
 
-| Resolved declaration                         | Required continuation                                                            |
-| -------------------------------------------- | -------------------------------------------------------------------------------- |
-| Source routine                               | Its argument list, forming a routine-call statement.                             |
-| Mutable scalar variable, parameter, or local | Zero or more field or index suffixes, followed by `=`.                           |
-| Aggregate object or alias                    | One or more field or index suffixes ending at a mutable scalar, followed by `=`. |
-| Constant, type, or another declaration class | No name-led statement form; the compiler diagnoses the class mismatch.           |
+| Resolved declaration                         | Required continuation                                                                          |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Source routine                               | Its argument list, forming a routine-call statement.                                           |
+| Mutable scalar variable, parameter, or local | Zero or more field or index suffixes, followed by `=`.                                         |
+| Aggregate object or alias                    | Zero or more field or index suffixes ending at a mutable scalar or aggregate, followed by `=`. |
+| Constant, type, or another declaration class | No name-led statement form; the compiler diagnoses the class mismatch.                         |
 
 This dispatch uses the declaration class already established by Chapters 5 and 8. It requires no token backtracking. A routine name followed by `=` is invalid, and a variable followed by an argument list is invalid; the compiler does not reinterpret either name as another declaration class.
 
@@ -70,20 +70,22 @@ Nucleus has no `call` keyword. An already declared routine name followed by its 
 
 ## 10.4 Assignment
 
-An assignment target is a mutable scalar storage path rooted in a program variable, parameter, or local. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. The final selected type must be `u8`, `u16`, or `boolean`. A bounded-string byte selected by `text[index]` is writable; `text.length` is not.
+An assignment target is a mutable scalar or aggregate storage path rooted in a program variable, parameter, or local. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. A bounded-string byte selected by `text[index]` is writable; `text.length` is not.
 
 The compiler evaluates an assignment in this order:
 
 1. evaluate the target path from left to right, including every index expression and bounds check;
 2. evaluate the right-hand expression;
 3. apply the destination compatibility and checked-conversion rules; and
-4. store the scalar result in the selected destination.
+4. store the scalar result or copy the aggregate into the selected destination.
 
 The target path is evaluated once. A call or mutation in an index expression therefore occurs before any operation in the right-hand expression. If target evaluation traps, the right-hand expression is not evaluated. If the right-hand expression or a checked conversion traps, the destination is not changed, although effects from the earlier target evaluation remain.
 
+A scalar destination uses the scalar compatibility rules from Chapter 6. An aggregate destination requires a writable aggregate storage path. Its source must be an aggregate storage path or transient aggregate result with the exact same aggregate type. The compiler validates the complete source and destination extents before copying the fixed object representation. Assignment through an alias changes its referent and never rebinds the alias. Self-assignment has no effect.
+
 In this statement position, `=` is the assignment operator. Inside an expression, it is equality under Chapter 9. Assignment is not an expression and produces no value. Chained assignment, compound assignment such as `+=`, increment and decrement statements, and assignment inside a condition or argument are absent.
 
-Assignment to a bare record, fixed array, bounded string, or aggregate alias is invalid. It does not copy storage or rebind an alias. Programs mutate admitted aggregates through scalar fields, scalar fixed-array elements, and bounded-string byte selection. A string-byte assignment replaces the selected byte without changing the string's length or capacity.
+Assignment to a record, fixed array, bounded string, or aggregate alias copies a complete value only when the source has the exact same type. A string-byte assignment still replaces one selected byte without changing the string's length or capacity. No assignment changes an alias binding.
 
 <div id="105-routine-call-statements" class="nucleus-source-anchor"></div>
 
@@ -111,7 +113,7 @@ Statements in a sequence begin in source order. A compound statement completes b
 
 A compiler may emit semantic operations as it checks each statement. It need not retain a statement tree. Forward branches may use bounded fixup state under Chapter 2, provided capacity exhaustion produces a diagnostic rather than an unresolved or incorrect branch.
 
-The compiler must diagnose an invalid statement start, a wrong-class name, a missing assignment operator or argument list, a non-scalar or non-writable assignment target, an incompatible right-hand expression, a forbidden general expression statement, and any context-invalid `return`, `fail`, `exit`, or `continue`.
+The compiler must diagnose an invalid statement start, a wrong-class name, a missing assignment operator or argument list, a non-writable assignment target, an incompatible right-hand expression, a forbidden general expression statement, and any context-invalid `return`, `fail`, `exit`, or `continue`.
 
 An implementation may bound statement nesting, active control contexts, branch fixups, and retained emission state. It must publish each limit and issue a capacity diagnostic before overflow changes statement association, branch targets, or execution order.
 
@@ -124,6 +126,7 @@ These are valid simple statements when the names have compatible declarations:
 ```nucleus
 count = count + 1
 cells[index].value = nextValue()
+cells[index] = template
 updateDisplay()
 measure(count)
 return
@@ -139,6 +142,6 @@ These forms are invalid:
 count + 1                 // general expression statement
 call updateDisplay()      // no call keyword
 left = right = 0          // assignment is not an expression
-cells = otherCells        // aggregate assignment is absent
+cells = shorterCells      // invalid when the fixed-array types differ
 cells[index]              // storage read is not a statement
 ```

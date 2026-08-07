@@ -25,7 +25,7 @@ Nucleus 0.1 is one language. Measurements may change the draft before it is froz
 
 ## 2.2 Language-shaping constraints
 
-Nucleus remains a safe, practical language for routine TEC-1 programs. Its minimum programming model includes `u8`, `u16`, and Boolean values; formal arguments; named local variables; routines with no result or one typed result; fixed-layout records; checked fixed arrays; bounded strings; assignment and calls; `if`/`elseif`/`else`; `while`; counted `for`; `return`; and the unlabeled, innermost-loop forms of `exit` and `continue`. Silently removing one of these requirements does not make an oversized compiler acceptable. If a faithful implementation cannot fit, that result requires compiler-architecture redesign or rejection of the architecture hypothesis.
+Nucleus remains a safe, practical language for routine TEC-1 programs. Its minimum programming model includes `u8`, `u16`, and Boolean values; formal arguments; named local variables; routines with no result or one typed result; fixed-layout records; checked fixed arrays; bounded strings; complete positional static initializers; exact-type aggregate assignment; assignment and calls; `if`/`elseif`/`else`; `while`; counted `for`; `return`; and the unlabeled, innermost-loop forms of `exit` and `continue`. Silently removing one of these requirements does not make an oversized compiler acceptable. If a faithful implementation cannot fit, that result requires compiler-architecture redesign or rejection of the architecture hypothesis.
 
 The language design uses deterministic parsing with canonical forms, minimal lookahead, and no backtracking. A smaller production count is useful only when it preserves the required programming model. Grammar terseness is not an independent design goal.
 
@@ -103,6 +103,8 @@ A candidate's admission record reports its incremental compiler-core code, requi
 Nucleus 0.1 admits the explicit recoverable-error mechanism in Chapter 14. The implementation ledger still records its compiler-core, immutable-data, workspace, emitted-code, and runtime costs. General exceptions, stack unwinding, destructors, `finally`, and `defer` remain excluded.
 
 Nucleus 0.1 admits recursive routine calls. The first implementation may stage their construction while it measures activation storage, re-entry state, depth limits, and failure behaviour, but staging does not create a non-recursive language profile. Chapter 13 defines the source semantics, and Chapter 15 defines activation-capacity failure.
+
+Several source-preserving economies remain implementation measurements rather than language changes. The first compiler should compare the existing precedence ladder with one precedence-driven expression loop; compare early signature predicates for failable calls with parsing a direct call before checking its category; and compare interned type ordinals with compact structural metadata stored directly in symbols. The VM implementation should measure shared handlers or compiler selection of an equivalent word-width operation where canonical `u8` carriers make the result identical. None of these experiments may change accepted source, arithmetic width, diagnostics required by this specification, or the assigned NVM opcode meanings.
 
 <div id="29-decision-boundary-and-failure-conditions" class="nucleus-source-anchor"></div>
 

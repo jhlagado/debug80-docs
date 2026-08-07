@@ -15,7 +15,7 @@ pageClass: "nucleus-specification"
 
 ## 18.1 Semantic input
 
-A native backend consumes the same lowered operations represented by the opcode families: fixed-width scalar operations, checked conversions, packed-layout addresses, loads and stores, primitive branches, calls, failure edges, traps, and system services. It need not decode a serialized NVM image when the compiler feeds those operations directly.
+A native backend consumes the same lowered operations represented by the opcode families: fixed-width scalar operations, checked conversions, packed-layout addresses, scalar and fixed-size aggregate-copy effects, loads and stores, primitive branches, calls, failure edges, traps, and system services. It need not decode a serialized NVM image when the compiler feeds those operations directly.
 
 <div id="182-required-equivalence" class="nucleus-source-anchor"></div>
 
@@ -27,6 +27,8 @@ For the same source and external streams, native output must preserve:
 - byte and word wraparound;
 - unsigned comparison and division;
 - packed object layout and string length semantics;
+- startup images for top-level and routine-private aggregate objects;
+- exact-type aggregate copies, including complete bounded-string representations;
 - bounds, narrowing, and division checks before writes;
 - call argument evaluation and activation-capacity timing;
 - result-free and value results;

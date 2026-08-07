@@ -15,7 +15,7 @@ pageClass: "nucleus-specification"
 
 ## 19.1 Startup and observable behaviour
 
-Execution begins after the implementation has established every program variable's required initial value in declaration order. The environment then calls `main`. Observable behaviour consists of ordered system-service effects, mutations visible through source aliases, normal termination, recoverable-error outcomes consumed by source, and required traps.
+Execution begins after the implementation has established every program variable and routine-private aggregate object's required initial value in declaration order. The environment then calls `main`. Observable behaviour consists of ordered system-service effects, object copies and mutations visible through source paths, normal termination, recoverable-error outcomes consumed by source, and required traps.
 
 Normal return from `main` terminates successfully. Failure from `main` and a safety trap terminate unsuccessfully. The source language defines no other program-termination operation.
 
@@ -27,21 +27,23 @@ Expressions evaluate in the order specified by Section 9.11. Binary operands are
 
 Integer arithmetic uses the fixed widths and wraparound rules in Chapter 9. Comparisons use unsigned integer order or Boolean equality as applicable. Checked narrowing, division, indexing, and counted-loop increment perform their required checks before producing or storing a result.
 
-Assignment evaluates and checks the complete scalar target path, then evaluates the right side, then converts and stores. A failure or trap before the success-result store leaves the destination unchanged, while effects already completed remain visible. A handled failable assignment then stores its error code in the handler destination; if both destinations name the same scalar, that scalar receives the error code.
+Scalar assignment evaluates and checks the complete target path, then evaluates the right side, then converts and stores. Aggregate assignment evaluates its complete destination path first and its source second. It validates both complete extents before changing the destination, then copies exactly the byte representation of their common nominal type. Self-assignment has no effect. The type rules make two distinct same-type aggregate subobjects disjoint, so partial overlap cannot arise in Nucleus 0.1.
+
+A failure or trap before a success-result store or aggregate copy leaves the destination unchanged, while effects already completed remain visible. A handled failable scalar assignment then stores its error code in the handler destination; if both destinations name the same scalar, that scalar receives the error code.
 
 <div id="193-objects-and-aliases" class="nucleus-source-anchor"></div>
 
 ## 19.3 Objects and aliases
 
-Program objects exist throughout execution. Each routine call creates a distinct logical activation containing copied scalar parameters, scalar locals, and aggregate-alias bindings. Aggregate aliases denote existing objects or aggregate subobjects and preserve identity. Mutation of a scalar leaf is visible through every path to that leaf.
+Program variables and routine-private aggregate objects exist throughout execution. Each routine call creates a distinct logical activation containing copied scalar parameters, scalar locals, and aggregate-alias bindings. Aggregate aliases denote existing objects or aggregate subobjects and preserve identity. Mutation of a scalar leaf is visible through every path to that leaf.
 
-Aggregate arguments and results transfer aliases, not object contents. A returned aggregate alias denotes the original program-lifetime object after the callee's binding ends and may initialize a fixed local alias after one evaluation. Bounded-string byte mutation through any alias is visible through every alias to the same object; it replaces an existing byte without changing length or capacity. No runtime type tag accompanies an alias, and the source language provides no operation that inspects its carrier.
+Aggregate arguments and results transfer aliases, not object contents. A returned aggregate alias transiently denotes the original program-lifetime object after the callee's binding ends. It may be discarded, forwarded, selected, passed onward, or consumed by aggregate assignment, but it cannot become a stored local binding. Aggregate assignment copies object contents into the destination referent and does not rebind either operand. Bounded-string byte mutation through any alias is visible through every alias to the same object; it replaces an existing byte without changing length or capacity. No runtime type tag accompanies an alias, and the source language provides no operation that inspects its carrier.
 
 <div id="194-calls-returns-and-recursion" class="nucleus-source-anchor"></div>
 
 ## 19.4 Calls, returns, and recursion
 
-A call starts after all arguments have been evaluated and the activation-capacity check succeeds. Parameter binding precedes local initialization; local declarations initialize in source order. The first statement begins after the local prefix.
+A call starts after all arguments have been evaluated and the activation-capacity check succeeds. Parameter binding precedes activation-local initialization. Scalar locals initialize in source order, and aggregate-alias local initializers establish their per-activation bindings in source order. Routine-private aggregate objects already exist with their startup values and are neither reinitialized nor saved and restored for recursion. The first statement begins after the local prefix.
 
 `return` transfers an optional success result and ends the activation. A result-free routine also returns successfully at its closing `end`. In a result-free failable routine, `return invocation() or fail` returns successfully when the result-free callee succeeds and propagates its code when it fails. Direct and mutual recursion use the same rules and create distinct active state at each depth. Backend save regions, register files, stacks, and return encodings must preserve these semantics but are not source-visible.
 
