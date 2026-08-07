@@ -78,7 +78,7 @@ Compiler simplicity has priority over VM execution speed. The primary target is 
 
 Structured control lowers to ordinary semantic operations; no dedicated high-level control opcode is required. The bytecode front end initially performs no Z80 register allocation, native instruction selection, branch shortening, relocation planning, native calling-convention analysis, or peephole optimization. A later direct-Z80 backend may consume the same semantic operations as they are produced. Its independent measurement covers code, constants, workspace, output, and execution cost.
 
-VM organization remains an experimental choice. The current hypothesis uses a memory-backed virtual-register file with explicit stacks or save regions where nesting and re-entry require them. This is neither a source-global register model nor a settled pure operand-stack design. This chapter fixes no virtual-register count, page layout, slot width, or opcode encoding.
+The companion Nucleus VM Specification fixes the NVM 0.1 organization, including its memory-backed virtual-slot file, caller-save activations, and bytecode encoding. Those choices implement but do not alter the source semantics. This chapter fixes no virtual-slot count, page layout, slot width, or opcode encoding for another conforming backend.
 
 <div id="27-system-boundary-and-portability" class="nucleus-source-anchor"></div>
 

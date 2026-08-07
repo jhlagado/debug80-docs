@@ -33,7 +33,7 @@ Nucleus 0.1 defines these trap reasons:
 | `narrowing`           | A dynamic checked `u8(...)` operand exceeds 255. The trap precedes production or storage of the narrowed result.                                                  |
 | `division-by-zero`    | A runtime divisor is zero. The trap precedes production of a quotient.                                                                                            |
 | `loop-range`          | A counted-loop next value would continue but does not fit the counter type. The trap precedes the counter store.                                                  |
-| `activation-capacity` | A call would exceed the implementation-defined active-invocation limit. The trap occurs after argument evaluation and before the new activation begins.           |
+| `activation-capacity` | A call would exceed a published activation-depth or activation-storage limit. The trap occurs after argument evaluation and before the new activation begins.     |
 | `unhandled-error`     | `main` returns failure. The report includes the returned `u8` code.                                                                                               |
 
 A conforming implementation may use more detailed internal causes, but it must preserve these public reason identities. It must not report a required reason as another reason merely because two checks share a helper.

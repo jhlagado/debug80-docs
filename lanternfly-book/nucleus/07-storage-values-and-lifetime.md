@@ -211,6 +211,6 @@ Language lifetime is independent of a value's physical location. Reusing a physi
 
 An implementation may bound scalar locals, aggregate-alias bindings, or the metadata used for lifetime checks. It must publish each limit. A compile-time excess requires a capacity diagnostic under Chapter 1. An implementation must not share live activation state or produce a dangling alias when a limit is reached.
 
-The maximum simultaneous activation depth is implementation-defined under Chapter 13. Reaching that limit at runtime performs the activation-capacity trap defined by Chapter 15. The limit and trap do not change the source lifetime of an activation that begins successfully.
+Runtime activation capacity is implementation-defined under Chapter 13. An implementation may bound simultaneous activation depth, activation-storage consumption, or both. Reaching either published limit at runtime performs the activation-capacity trap defined by Chapter 15. The limits and trap do not change the source lifetime of an activation that begins successfully.
 
 Nucleus 0.1 exposes no raw pointer value, address arithmetic, heap allocation, manual deallocation, open slice or view, variable-sized local, arbitrary aggregate copy, or storage-layout query through this chapter. Field byte offsets, array byte offsets, bounded-string encoding, VM carriers, calling opcodes, and save-region layouts belong to the VM specification or a backend contract.

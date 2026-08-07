@@ -13,7 +13,7 @@ pageClass: "nucleus-specification"
 # Nucleus 0.1 Language Specification
 
 ::: info Authoritative source
-This reading edition is generated from the [Nucleus specification in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/nucleus/specification.md) at revision [`07166927db2e`](https://github.com/jhlagado/debug80/blob/07166927db2e92ef656a46966f574ff70f0b455b/packages/lanternfly/docs/nucleus/specification.md). The repository source is authoritative; this site adds only navigation and page metadata.
+This reading edition is generated from the [Nucleus specification in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/nucleus/specification.md) at revision [`376e648dcab8`](https://github.com/jhlagado/debug80/blob/376e648dcab8472f7ee637daf4d3d7e48aa204b6/packages/lanternfly/docs/nucleus/specification.md). The repository source is authoritative; this site adds only navigation and page metadata.
 :::
 
 ## Contents

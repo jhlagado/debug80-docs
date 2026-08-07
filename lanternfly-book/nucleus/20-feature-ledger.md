@@ -36,7 +36,7 @@ No conforming compiler may expose a standard profile that omits one of these mec
 
 ## 20.2 Implementation-defined limits
 
-An implementation selects and documents capacities, not syntax or semantics. Permitted limits include source and identifier length, symbol and type counts, record fields, array and string storage capacity below a target's available resources, parameters, locals, nesting, fixups, initializer elements, and simultaneous activation depth. Every limit must be high enough to compile and execute the complete accepted Chapter 21 programs under their stated inputs. A compile-time excess above that floor produces a capacity diagnostic; activation-depth excess above that floor traps at runtime.
+An implementation selects and documents capacities, not syntax or semantics. Permitted limits include source and identifier length, symbol and type counts, record fields, array and string storage capacity below a target's available resources, parameters, locals, nesting, fixups, initializer elements, simultaneous activation depth, and activation-storage consumption. Every limit must be high enough to compile and execute the complete accepted Chapter 21 programs under their stated inputs. A compile-time excess above that floor produces a capacity diagnostic; runtime activation-capacity excess above that floor traps at runtime.
 
 Diagnostic wording, internal representations, bytecode or native encoding, physical layout, service transport, and the external presentation of status are implementation-defined where earlier chapters leave them to an implementation contract. These choices must preserve the source rules.
 
