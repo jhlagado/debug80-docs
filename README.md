@@ -24,27 +24,27 @@ directives.
 remembers and how it responds; Glimmer generates the loop, the input polling
 and the change tracking, and compiles to readable Z80 assembly.
 
-**Nucleus** is a small, safe, statically typed language with a compact virtual
-machine. Its first compiler is intended to be handwritten in Z80 and to fit,
-with its required immutable data, in one 16 KiB bank.
+**Nucleus** is a small, safe, statically typed language compiled directly to
+Z80 machine code. Its first compiler is intended to be handwritten in Z80 and
+to fit, with its required immutable data, in one 16 KiB bank.
 
 **The TEC-1G** is the single-board computer at the centre of the current
 Debug80, AZM, Glimmer, and Nucleus material.
 
 ## The books
 
-|                                                                                                |                                                                                              |
-| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| [Debug80 Book 1 — Getting started](https://debug80.com/debug80-book/book1/)                    | Installation through to stepping code and sending HEX to a board.                            |
-| [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/)                           | The reference: syntax, directives, expressions, layouts, contracts.                          |
-| [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/)                           | The Z80 from the bare machine up, assuming nothing.                                          |
-| [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                            |
-| [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                         |
-| [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                         |
-| [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and virtual-machine project.                                         |
-| [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/)                    | The complete source-language specification in a chapter-by-chapter reading edition.          |
-| [Nucleus VM 0.1 Specification](https://debug80.com/nucleus/vm/)                                | The complete bytecode-machine specification, including its image format and instruction set. |
-| [TEC-1G / MON-3](https://debug80.com/tec1g/)                                                   | Reference material for the machine and its monitor.                                          |
+|                                                                                                |                                                                                     |
+| ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| [Debug80 Book 1 — Getting started](https://debug80.com/debug80-book/book1/)                    | Installation through to stepping code and sending HEX to a board.                   |
+| [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/)                           | The reference: syntax, directives, expressions, layouts, contracts.                 |
+| [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/)                           | The Z80 from the bare machine up, assuming nothing.                                 |
+| [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                   |
+| [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
+| [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
+| [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and direct-Z80 compiler project.                            |
+| [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/)                    | The complete source-language specification in a chapter-by-chapter reading edition. |
+| [Nucleus Z80 Runtime Contract](https://debug80.com/nucleus/runtime/)                           | The complete direct execution and backend contract.                                 |
+| [TEC-1G / MON-3](https://debug80.com/tec1g/)                                                   | Reference material for the machine and its monitor.                                 |
 
 ## Working on it
 
@@ -65,8 +65,8 @@ sources. Update and verify them with:
 ```sh
 npm run sync:nucleus -- /path/to/debug80/packages/nucleus/docs/specification.md
 npm run check:nucleus -- /path/to/debug80/packages/nucleus/docs/specification.md
-npm run sync:nucleus-vm -- /path/to/debug80/packages/nucleus/docs/virtual-machine-specification.md
-npm run check:nucleus-vm -- /path/to/debug80/packages/nucleus/docs/virtual-machine-specification.md
+npm run sync:nucleus-runtime -- /path/to/debug80/packages/nucleus/docs/z80-runtime-contract.md
+npm run check:nucleus-runtime -- /path/to/debug80/packages/nucleus/docs/z80-runtime-contract.md
 ```
 
 ### Checks

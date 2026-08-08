@@ -1,7 +1,6 @@
 import { defineConfig } from "vitepress";
 import { sidebars } from "./sidebar.generated.js";
 import nucleusGrammar from "./nucleus.tmLanguage.json" with { type: "json" };
-import nvmGrammar from "./nvm.tmLanguage.json" with { type: "json" };
 
 export default defineConfig({
   title: "Debug80 Docs",
@@ -34,9 +33,9 @@ export default defineConfig({
     // The books fence Z80 listings as ```z80; Shiki has no Z80 grammar, so
     // reuse the generic assembler grammar rather than falling back to txt.
     languageAlias: { z80: "asm" },
-    // Nucleus and NVM have no published Shiki grammars. Local TextMate
-    // grammars keep their fences distinct from plain text and from one another.
-    languages: [nucleusGrammar as never, nvmGrammar as never],
+    // Nucleus has no published Shiki grammar. A local TextMate grammar keeps
+    // source examples distinct from plain text.
+    languages: [nucleusGrammar as never],
     // Warm-toned dark syntax theme to match the Nocturne palette.
     theme: "github-light",
   },
@@ -60,7 +59,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       // Straight to the first page of each teaching series. Nucleus has two
-      // specifications, so its menu keeps the project overview within reach.
+      // authorities, so its menu keeps the project overview within reach.
       { text: "Debug80 Book", link: "/debug80-book/book1/01-install-debug80" },
       { text: "AZM Books", link: "/azm-book/book1/00-introduction" },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
@@ -76,8 +75,8 @@ export default defineConfig({
             link: "/nucleus/language/",
           },
           {
-            text: "Nucleus VM 0.1 Specification",
-            link: "/nucleus/vm/",
+            text: "Nucleus Z80 Runtime Contract",
+            link: "/nucleus/runtime/",
           },
         ],
       },

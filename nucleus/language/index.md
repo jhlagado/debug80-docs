@@ -13,7 +13,7 @@ pageClass: "nucleus-specification"
 # Nucleus 0.1 Language Specification
 
 ::: info Authoritative source
-This reading edition is generated from the [Nucleus specification in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/nucleus/docs/specification.md) at revision [`6088a08be6f1`](https://github.com/jhlagado/debug80/blob/6088a08be6f1ef63c23d31fb12588499e0bba76e/packages/nucleus/docs/specification.md). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. [Companion: Nucleus Virtual Machine 0.1 Specification](../vm/).
+This reading edition is generated from the [Nucleus specification in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/nucleus/docs/specification.md) at revision [`aab885a1d1dc`](https://github.com/jhlagado/debug80/blob/aab885a1d1dc13eca84d2cc7b8dfb9a8dbe2592f/packages/nucleus/docs/specification.md). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. [Companion: Nucleus Z80 Runtime and Backend Contract 0.1](../runtime/).
 :::
 
 ## Contents

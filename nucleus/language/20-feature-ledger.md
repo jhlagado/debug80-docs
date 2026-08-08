@@ -38,7 +38,7 @@ No conforming compiler may expose a standard profile that omits one of these mec
 
 An implementation selects and documents capacities, not syntax or semantics. Permitted limits include complete source length, source-part count and metadata length, identifier length, symbol and type counts, record fields, array and string storage capacity below a target's available resources, parameters, scalar locals, nesting, fixups, structured-initializer depth and elements, emitted code size, total emitted image size, simultaneous activation depth, and activation-storage consumption. Every limit must be high enough to compile and execute the complete accepted Chapter 21 programs under their stated inputs. A compile-time excess above that floor produces a capacity diagnostic; runtime activation-capacity excess above that floor traps at runtime.
 
-Diagnostic wording, internal representations, bytecode or native encoding, physical layout, service transport, and the external presentation of status are implementation-defined where earlier chapters leave them to an implementation contract. These choices must preserve the source rules.
+Diagnostic wording, private compiler representations, generated-code organization, service transport, and the external presentation of status are implementation-defined where earlier chapters leave them to the Z80 runtime and backend contract. These choices must preserve the source rules.
 
 <div id="203-post-01-candidates" class="nucleus-source-anchor"></div>
 
@@ -46,16 +46,16 @@ Diagnostic wording, internal representations, bytecode or native encoding, physi
 
 These forms are omitted from 0.1 and may be reconsidered only by a future language revision after measured admission:
 
-The maintainer of this language specification owns source-language admission. The maintainers of the VM specification and System Services contract co-own decisions that change their respective interfaces.
+The maintainer of this language specification owns source-language admission. The maintainer of the Z80 runtime and backend contract co-owns decisions that change the target representation or System Services interface.
 
-| Candidate                                                               | Required decision evidence and owner                                                                                                                           |
-| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `$` hexadecimal integer literals                                        | Scanner, keyword/table, diagnostic, and compiler-core cost; language-specification maintainer in a future revision.                                            |
-| Dense nonnegative selection                                             | Compiler cost versus emitted jump-table savings on representative programs; language-specification maintainer in a future revision.                            |
-| Routine-local aggregate objects or fixed local aggregate aliases        | Representative-program need, declaration and initialization rules, recursion effects, compiler-core cost, and activation cost; language maintainer.            |
-| Open arrays, slices, or capacity-erased string views                    | Source typing, multiword carrier, lifetime, call/result ABI, compiler and VM cost; language- and VM-specification maintainers in coordinated future revisions. |
-| Bounded-string growth, resize, append, and capacity-changing operations | Typed contract, alias effects, emitted cost, and reusable-program evidence; language-specification maintainer in a future revision.                            |
-| Additional system services                                              | Portable typed contract and complete compiler, runtime, and target cost; System Services maintainer in a future service revision.                              |
+| Candidate                                                               | Required decision evidence and owner                                                                                                                                       |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `$` hexadecimal integer literals                                        | Scanner, keyword/table, diagnostic, and compiler-core cost; language-specification maintainer in a future revision.                                                        |
+| Dense nonnegative selection                                             | Compiler cost versus emitted jump-table savings on representative programs; language-specification maintainer in a future revision.                                        |
+| Routine-local aggregate objects or fixed local aggregate aliases        | Representative-program need, declaration and initialization rules, recursion effects, compiler-core cost, and activation cost; language maintainer.                        |
+| Open arrays, slices, or capacity-erased string views                    | Source typing, multiword carrier, lifetime, call/result ABI, compiler and target-runtime cost; language and runtime-contract maintainers in a coordinated future revision. |
+| Bounded-string growth, resize, append, and capacity-changing operations | Typed contract, alias effects, emitted cost, and reusable-program evidence; language-specification maintainer in a future revision.                                        |
+| Additional system services                                              | Portable typed contract and complete compiler, runtime, and target cost; System Services maintainer in a future service revision.                                          |
 
 These candidates are not provisional 0.1 syntax. Extensions may prototype them only under Section 1.7.
 
@@ -67,4 +67,4 @@ Nucleus 0.1 excludes language levels and compiler-selected profiles; modules, im
 
 It also excludes assignment expressions, chained comparisons, conditional expressions, general expression statements, `call` and `then` keywords, `select`/`case`, pattern matching, repeat/do loops, `for in`, omitted counted-loop operands, counted-loop counters drawn from program variables or parameters, source assignment to an active counter, nested reuse of an active counter, labels, goto, labelled exit, exceptions, throw/catch, unwinding, destructors, `finally`, `defer`, resumable traps, and runtime type tags.
 
-Implementation alternatives such as stack, virtual-register, or hybrid bytecode; direct native emission; register allocation; and physical calling convention are not source features. The VM specification records the selected VM mechanisms, and project decisions use measurements without creating Nucleus dialects.
+Implementation alternatives such as register allocation, helper organization, hardware-stack use, fixup representation, and physical calling convention are not source features. The Z80 runtime and backend contract records the selected target obligations, and project decisions use measurements without creating Nucleus dialects.

@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 A **trap** terminates Nucleus source execution immediately. Source code cannot catch, handle, resume, mask, or convert it to a recoverable error. A trap performs no stack unwinding and runs no source cleanup action.
 
-The implementation reports a stable symbolic trap reason and the best available location for the operation that failed. When source mapping is available, the report must identify the source span. Otherwise, it must identify the bytecode or native instruction location. Numeric trap encodings, transport records, monitor integration, and physical output belong to the VM specification or backend contract.
+The implementation reports a stable symbolic trap reason and the best available location for the operation that failed. When source mapping is available, the report must identify the source span. Otherwise, it must identify the generated instruction location. Numeric trap encodings, transport records, monitor integration, and physical output belong to the Z80 runtime and backend contract.
 
 Effects completed before the failing operation remain observable. The failing operation performs no result store unless its rule below says otherwise. No later source operation executes.
 

@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 This chapter defines the two Nucleus 0.1 loop forms, counted-loop direction and bounds, and the required `exit` and `continue` statements. Chapter 9 defines expressions, and Chapter 10 defines statement sequences.
 
-Nucleus has one pre-test conditional loop and one counted loop. Both use the ordinary branch and comparison semantics required by the source language; neither requires a dedicated loop operation in the VM or another backend.
+Nucleus has one pre-test conditional loop and one counted loop. Both use ordinary comparisons and direct Z80 branches; neither requires a dedicated loop runtime mechanism.
 
 <div id="122-grammar" class="nucleus-source-anchor"></div>
 
@@ -125,7 +125,7 @@ The grammar adds only the two simple statements, and their lowering uses the act
 
 A counted loop has the same source effect as ordered start and bound evaluation, counter initialization, a direction-specific comparison, a conditional branch, a body in which the counter is read-only, a checked mathematical increment, and a backward branch. `to` and `until` differ only in whether the bound comparison is inclusive.
 
-The VM and semantic-operation interface require no `for`, `while`, `exit`, or `continue` opcode. A compiler may emit ordinary comparisons and branches as it parses the loop, provided it preserves one-time operand evaluation, the test and store order, and the transfer targets above.
+The semantic-operation interface requires no dedicated `for`, `while`, `exit`, or `continue` operation. A compiler may emit ordinary comparisons and branches, provided it preserves one-time operand evaluation, the test and store order, and the transfer targets above.
 
 <div id="129-excluded-loop-forms" class="nucleus-source-anchor"></div>
 

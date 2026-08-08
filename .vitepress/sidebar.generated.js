@@ -1690,92 +1690,48 @@ export const sidebars = {
       ]
     },
     {
-      "text": "Nucleus Virtual Machine 0.1 Specification",
+      "text": "Nucleus Z80 Runtime and Backend Contract 0.1",
       "collapsed": true,
       "items": [
         {
-          "text": "1. Status and conformance",
-          "link": "/nucleus/vm/01-status-and-conformance.html"
+          "text": "1. Status and authority",
+          "link": "/nucleus/runtime/01-status-and-authority.html"
         },
         {
-          "text": "2. Purpose, constraints, and non-goals",
-          "link": "/nucleus/vm/02-purpose-constraints-and-non-goals.html"
+          "text": "2. Target and resource model",
+          "link": "/nucleus/runtime/02-target-and-resource-model.html"
         },
         {
-          "text": "3. Machine overview",
-          "link": "/nucleus/vm/03-machine-overview.html"
+          "text": "3. Runtime representation",
+          "link": "/nucleus/runtime/03-runtime-representation.html"
         },
         {
-          "text": "4. Address space and memory model",
-          "link": "/nucleus/vm/04-address-space-and-memory-model.html"
+          "text": "4. Program storage and startup",
+          "link": "/nucleus/runtime/04-program-storage-and-startup.html"
         },
         {
-          "text": "5. Bytecode image and loading format",
-          "link": "/nucleus/vm/05-bytecode-image-and-loading-format.html"
+          "text": "5. Checked access and aggregate copying",
+          "link": "/nucleus/runtime/05-checked-access-and-aggregate-copying.html"
         },
         {
-          "text": "6. Machine state",
-          "link": "/nucleus/vm/06-machine-state.html"
+          "text": "6. Calls, activations, and results",
+          "link": "/nucleus/runtime/06-calls-activations-and-results.html"
         },
         {
-          "text": "7. Runtime values and representation invariants",
-          "link": "/nucleus/vm/07-runtime-values-and-representation-invariants.html"
+          "text": "7. Recoverable failure and traps",
+          "link": "/nucleus/runtime/07-recoverable-failure-and-traps.html"
         },
         {
-          "text": "8. Virtual-slot organization",
-          "link": "/nucleus/vm/08-virtual-slot-organization.html"
+          "text": "8. System-service boundary",
+          "link": "/nucleus/runtime/08-system-service-boundary.html"
         },
         {
-          "text": "9. Instruction encoding",
-          "link": "/nucleus/vm/09-instruction-encoding.html"
+          "text": "9. Generated-code integrity",
+          "link": "/nucleus/runtime/09-generated-code-integrity.html"
         },
         {
-          "text": "10. Data movement and memory access",
-          "link": "/nucleus/vm/10-data-movement-and-memory-access.html"
-        },
-        {
-          "text": "11. Arithmetic, logic, comparison, and conversions",
-          "link": "/nucleus/vm/11-arithmetic-logic-comparison-and-conversions.html"
-        },
-        {
-          "text": "12. Primitive control flow",
-          "link": "/nucleus/vm/12-primitive-control-flow.html"
-        },
-        {
-          "text": "13. Routines and activation storage",
-          "link": "/nucleus/vm/13-routines-and-activation-storage.html"
-        },
-        {
-          "text": "14. Recoverable failure",
-          "link": "/nucleus/vm/14-recoverable-failure.html"
-        },
-        {
-          "text": "15. Safety traps and diagnostics",
-          "link": "/nucleus/vm/15-safety-traps-and-diagnostics.html"
-        },
-        {
-          "text": "16. Nucleus System Services 0.1 ABI",
-          "link": "/nucleus/vm/16-nucleus-system-services-0-1-abi.html"
-        },
-        {
-          "text": "17. Interpreter contract and Z80 mapping",
-          "link": "/nucleus/vm/17-interpreter-contract-and-z80-mapping.html"
-        },
-        {
-          "text": "18. Native-backend contract",
-          "link": "/nucleus/vm/18-native-backend-contract.html"
-        },
-        {
-          "text": "19. Image validity",
-          "link": "/nucleus/vm/19-image-validity.html"
-        },
-        {
-          "text": "20. Conformance vectors",
-          "link": "/nucleus/vm/20-conformance-vectors.html"
-        },
-        {
-          "text": "21. Feature and cost ledger",
-          "link": "/nucleus/vm/21-feature-and-cost-ledger.html"
+          "text": "10. Conformance and measurement",
+          "link": "/nucleus/runtime/10-conformance-and-measurement.html"
         }
       ]
     }
@@ -1872,94 +1828,50 @@ export const sidebars = {
       ]
     }
   ],
-  "/nucleus/vm/": [
+  "/nucleus/runtime/": [
     {
-      "text": "Nucleus Virtual Machine 0.1 Specification",
+      "text": "Nucleus Z80 Runtime and Backend Contract 0.1",
       "collapsed": false,
       "items": [
         {
-          "text": "1. Status and conformance",
-          "link": "/nucleus/vm/01-status-and-conformance.html"
+          "text": "1. Status and authority",
+          "link": "/nucleus/runtime/01-status-and-authority.html"
         },
         {
-          "text": "2. Purpose, constraints, and non-goals",
-          "link": "/nucleus/vm/02-purpose-constraints-and-non-goals.html"
+          "text": "2. Target and resource model",
+          "link": "/nucleus/runtime/02-target-and-resource-model.html"
         },
         {
-          "text": "3. Machine overview",
-          "link": "/nucleus/vm/03-machine-overview.html"
+          "text": "3. Runtime representation",
+          "link": "/nucleus/runtime/03-runtime-representation.html"
         },
         {
-          "text": "4. Address space and memory model",
-          "link": "/nucleus/vm/04-address-space-and-memory-model.html"
+          "text": "4. Program storage and startup",
+          "link": "/nucleus/runtime/04-program-storage-and-startup.html"
         },
         {
-          "text": "5. Bytecode image and loading format",
-          "link": "/nucleus/vm/05-bytecode-image-and-loading-format.html"
+          "text": "5. Checked access and aggregate copying",
+          "link": "/nucleus/runtime/05-checked-access-and-aggregate-copying.html"
         },
         {
-          "text": "6. Machine state",
-          "link": "/nucleus/vm/06-machine-state.html"
+          "text": "6. Calls, activations, and results",
+          "link": "/nucleus/runtime/06-calls-activations-and-results.html"
         },
         {
-          "text": "7. Runtime values and representation invariants",
-          "link": "/nucleus/vm/07-runtime-values-and-representation-invariants.html"
+          "text": "7. Recoverable failure and traps",
+          "link": "/nucleus/runtime/07-recoverable-failure-and-traps.html"
         },
         {
-          "text": "8. Virtual-slot organization",
-          "link": "/nucleus/vm/08-virtual-slot-organization.html"
+          "text": "8. System-service boundary",
+          "link": "/nucleus/runtime/08-system-service-boundary.html"
         },
         {
-          "text": "9. Instruction encoding",
-          "link": "/nucleus/vm/09-instruction-encoding.html"
+          "text": "9. Generated-code integrity",
+          "link": "/nucleus/runtime/09-generated-code-integrity.html"
         },
         {
-          "text": "10. Data movement and memory access",
-          "link": "/nucleus/vm/10-data-movement-and-memory-access.html"
-        },
-        {
-          "text": "11. Arithmetic, logic, comparison, and conversions",
-          "link": "/nucleus/vm/11-arithmetic-logic-comparison-and-conversions.html"
-        },
-        {
-          "text": "12. Primitive control flow",
-          "link": "/nucleus/vm/12-primitive-control-flow.html"
-        },
-        {
-          "text": "13. Routines and activation storage",
-          "link": "/nucleus/vm/13-routines-and-activation-storage.html"
-        },
-        {
-          "text": "14. Recoverable failure",
-          "link": "/nucleus/vm/14-recoverable-failure.html"
-        },
-        {
-          "text": "15. Safety traps and diagnostics",
-          "link": "/nucleus/vm/15-safety-traps-and-diagnostics.html"
-        },
-        {
-          "text": "16. Nucleus System Services 0.1 ABI",
-          "link": "/nucleus/vm/16-nucleus-system-services-0-1-abi.html"
-        },
-        {
-          "text": "17. Interpreter contract and Z80 mapping",
-          "link": "/nucleus/vm/17-interpreter-contract-and-z80-mapping.html"
-        },
-        {
-          "text": "18. Native-backend contract",
-          "link": "/nucleus/vm/18-native-backend-contract.html"
-        },
-        {
-          "text": "19. Image validity",
-          "link": "/nucleus/vm/19-image-validity.html"
-        },
-        {
-          "text": "20. Conformance vectors",
-          "link": "/nucleus/vm/20-conformance-vectors.html"
-        },
-        {
-          "text": "21. Feature and cost ledger",
-          "link": "/nucleus/vm/21-feature-and-cost-ledger.html"
+          "text": "10. Conformance and measurement",
+          "link": "/nucleus/runtime/10-conformance-and-measurement.html"
         }
       ]
     }

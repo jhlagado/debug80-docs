@@ -150,7 +150,7 @@ Nucleus routines have no destructors, `finally`, `defer`, exception unwinding, v
 
 The source semantics permit an all-caller-save implementation. A backend may save live implementation values before a call, place arguments, invoke the callee, capture a result before restoring overlapping state, and restore the caller afterward. Recursive calls may use the same rule for each activation. These operations are backend mechanics, not source-visible registers, clobber declarations, or parameter modes.
 
-The compiler may lower calls and returns to regular semantic operations while parsing. This specification does not define virtual-register numbers, save regions, physical stacks, calling opcodes, operand widths, or a native ABI.
+The compiler may lower calls and returns to regular semantic operations while parsing. This specification does not define register assignments, save regions, hardware-stack use, helper entry points, or the physical calling convention. The Z80 runtime and backend contract supplies the required target-level effects.
 
 <div id="1311-invalid-calls-and-capacity-limits" class="nucleus-source-anchor"></div>
 

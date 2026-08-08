@@ -25,9 +25,9 @@ The language under design is named **Nucleus 0.1**. It has one source language: 
 
 This specification defines the source-language syntax, static semantics, runtime semantics, required diagnostics, specified safety failures, and abstract compilation-input contract of Nucleus 0.1. It defines the conditions for a source program or compiler to claim Nucleus 0.1 conformance.
 
-The separate Nucleus VM Specification defines the bytecode instruction set, encoding, and virtual-machine execution rules. Non-normative implementation plans and design papers record compiler strategies and project constraints; they do not add source-language semantics.
+The separate [Nucleus Z80 Runtime and Backend Contract](../runtime/) defines the packed data representation, direct-code integrity rules, runtime boundary, and target execution obligations. Non-normative implementation plans and design papers record compiler strategies and project constraints; they do not add source-language semantics.
 
-The first implementation is a handwritten Z80 compiler. Project acceptance requires its compiler core and required immutable constants to fit in one 16 KiB bank, while its VM or interpreter has a separate budget. That gate does not create a smaller Nucleus dialect or alter the meaning of a conforming program. Chapter 2 and the implementation plan carry the detailed budget rules.
+The first implementation is a handwritten Z80 compiler that emits Z80 machine code directly. Project acceptance requires its compiler core and required immutable constants to fit in one 16 KiB bank; generated programs, compiler workspace, and the target runtime have separate budgets. That gate does not create a smaller Nucleus dialect or alter the meaning of a conforming program. Chapter 2 and the implementation plan carry the detailed budget rules.
 
 <div id="13-authority" class="nucleus-source-anchor"></div>
 
@@ -36,9 +36,9 @@ The first implementation is a handwritten Z80 compiler. Project acceptance requi
 When repository materials disagree, apply this order:
 
 1. This specification governs Nucleus 0.1 source syntax and semantics.
-2. The Nucleus VM Specification governs bytecode and VM execution. It cannot change the meaning required by this specification.
+2. The Nucleus Z80 Runtime and Backend Contract governs packed representation, generated-code integrity, runtime services, and direct Z80 execution. It cannot change the meaning required by this specification.
 3. The implementation plan is non-normative. It records construction order, budgets, measurements, and implementation choices.
-4. Architecture and design-rationale papers explain decisions but do not override either specification.
+4. Architecture and design-rationale papers explain decisions but do not override either authority.
 5. Conformance tests provide evidence that an implementation follows the specifications. A conflicting test is a test defect, not a language amendment.
 
 An unwritten rule cannot be supplied by a lower-ranked document. Until this specification states the rule, the point remains unresolved for Nucleus 0.1 conformance.
@@ -134,16 +134,16 @@ Design candidates may be prototyped and measured while Nucleus 0.1 remains a wor
 
 A program that depends on an unadmitted candidate is not yet a conforming Nucleus 0.1 program. Prototype support for that candidate follows the extension rules in Section 1.7.
 
-<div id="111-vm-and-native-backends" class="nucleus-source-anchor"></div>
+<div id="111-direct-z80-implementation" class="nucleus-source-anchor"></div>
 
-## 1.11 VM and native backends
+## 1.11 Direct Z80 implementation
 
-A compiler that emits Nucleus bytecode must preserve this specification's source semantics and satisfy the separate VM Specification for the bytecode it emits. The VM Specification governs the execution mechanism; this specification governs the source-language meaning.
+The first compiler emits Z80 machine code directly and satisfies the separate Z80 runtime and backend contract. It may retain a checked semantic-operation transcript as private compiler workspace, but it does not serialize or execute that transcript as a public bytecode format.
 
-A compiler using a later native backend may emit Z80 or another target directly. It need not retain or serialize bytecode, but it must preserve the same source semantics, diagnostics, and specified traps. Adding a backend does not create another Nucleus language profile.
+Another compiler may use a different internal organization or target only when it preserves the same source semantics, diagnostics, and specified traps. An implementation choice does not create another Nucleus language profile.
 
 <div id="112-non-requirements" class="nucleus-source-anchor"></div>
 
 ## 1.12 Non-requirements
 
-This working draft makes no claim that Nucleus 0.1 is frozen or implementation-validated. It does not require the first compiler to be written in Nucleus or compile its own source. It also does not require every conforming compiler to use the project's initial VM path.
+This working draft makes no claim that Nucleus 0.1 is frozen or implementation-validated. It does not require the first compiler to be written in Nucleus or compile its own source. It also does not require another conforming compiler to copy the first compiler's internal organization.

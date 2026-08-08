@@ -56,7 +56,7 @@ An array has one dimension. An array element may be a scalar, record, or bounded
 
 `boolean` has exactly the values `false` and `true`. It is distinct from both integer types. An integer is not a condition, a Boolean value is not an integer, and Nucleus 0.1 provides no Boolean-to-integer or integer-to-Boolean conversion.
 
-A scalar variable, parameter, field, array element, or routine result holds a scalar value. Scalar assignment and scalar argument passing copy the value. A backend may use any VM slot or machine representation that preserves the type and value; that representation does not alter source compatibility.
+A scalar variable, parameter, field, array element, or routine result holds a scalar value. Scalar assignment and scalar argument passing copy the value. A compiler may use any private register or memory representation that preserves the type and value; that representation does not alter source compatibility.
 
 <div id="64-literals-and-scalar-conversion" class="nucleus-source-anchor"></div>
 
@@ -108,7 +108,7 @@ A record must have finite size. A field therefore must not contain its own recor
 
 Selecting a scalar field produces a scalar occurrence of the field's declared type. Selecting an aggregate field produces a storage path or aggregate alias with the field's exact aggregate type. Selection does not expose a byte offset or address to source code.
 
-Chapter 8 defines record declaration and field syntax. Runtime byte offsets, alignment, and layout descriptors belong to the VM specification or backend.
+Chapter 8 defines record declaration and field syntax. Runtime byte offsets and packed layout belong to the Z80 runtime and backend contract.
 
 <div id="67-fixed-array-types" class="nucleus-source-anchor"></div>
 
@@ -145,7 +145,7 @@ The `.length` intrinsic applies only when the postfix base has bounded-string ty
 
 Nucleus 0.1 has no `string[]`, open string, slice, general view, or address-and-length source value. A routine that accepts a bounded string names an exact capacity in its parameter type. A broader read-only view may be considered in a later language version after its compiler, carrier, lifetime, and result-ABI costs have been measured.
 
-This chapter fixes the semantic domain and capacity, not the stored layout. Chapter 7 defines storage identity and lifetime, Chapter 8 defines declaration initialization, and the VM specification or backend defines the physical representation and byte encoding. Any representation must preserve embedded zero bytes, lengths through 255, and alias-visible byte mutation.
+This chapter fixes the semantic domain and capacity, not the stored layout. Chapter 7 defines storage identity and lifetime, Chapter 8 defines declaration initialization, and the Z80 runtime and backend contract defines the physical representation and byte encoding. That representation preserves embedded zero bytes, lengths through 255, and alias-visible byte mutation.
 
 <div id="69-aggregate-aliases-and-address-separation" class="nucleus-source-anchor"></div>
 
@@ -155,9 +155,9 @@ An aggregate alias has the same source type as its referent and a separate alias
 
 The compiler must retain the referent type through aggregate parameters, field and element selection, scalar and aggregate assignments, calls, and aggregate results. Passing or returning an alias, or using it as an aggregate-copy source or destination, is invalid unless the required aggregate type is identical to its referent type.
 
-A backend may represent an alias at runtime with one untagged address-sized value because compiler metadata records the record layout, array length, or string capacity. The runtime carrier has no source spelling and no runtime type tag. Source code cannot read, write, compare, convert, store, return as a scalar, or perform arithmetic on the carrier itself.
+A direct backend represents an alias at runtime with one untagged 16-bit address because compiler metadata records the record layout, array length, or string capacity. The runtime carrier has no source spelling and no runtime type tag. Source code cannot read, write, compare, convert, store, return as a scalar, or perform arithmetic on the carrier itself.
 
-An alias carrier and `u16` remain different typed entities even if both occupy one word in a VM slot. No conversion exists in either direction. Address derivation for field and element access is a checked compiler or backend operation, not `u16` arithmetic visible to the program.
+An alias carrier and `u16` remain different typed entities even though both occupy one word. No conversion exists in either direction. Address derivation for field and element access is a checked compiler or backend operation, not `u16` arithmetic visible to the program.
 
 <div id="610-type-identity-and-compatibility" class="nucleus-source-anchor"></div>
 
@@ -191,7 +191,7 @@ The compiler applies these compatibility rules:
 | Aggregate result                                       | Exact referent-type identity and immediate consumption under Chapter 7.            |
 | Aggregate by-value argument or result                  | Invalid; calls transfer aggregate aliases.                                         |
 
-Compatibility is checked at the source operation. The backend does not infer compatibility from equal byte widths, equal layouts, VM slot numbers, or runtime addresses.
+Compatibility is checked at the source operation. The backend does not infer compatibility from equal byte widths, equal layouts, compiler storage ordinals, registers, or runtime addresses.
 
 <div id="611-excluded-type-mechanisms" class="nucleus-source-anchor"></div>
 
@@ -213,7 +213,7 @@ Nucleus 0.1 has none of the following:
 - variable-sized local allocation; or
 - unrestricted dynamic data.
 
-An implementation must diagnose a source form that requires one of these mechanisms. Equal storage width or a convenient VM representation does not admit the source operation.
+An implementation must diagnose a source form that requires one of these mechanisms. Equal storage width or a convenient machine representation does not admit the source operation.
 
 <div id="612-type-metadata-and-capacity" class="nucleus-source-anchor"></div>
 
@@ -225,9 +225,9 @@ One direct representation fits every admitted type in four bytes. Its kind byte 
 
 Four inline bytes are not automatically cheaper than one ordinal per symbol. With mostly distinct types, direct descriptors avoid an interning table; with many repeated types, ordinals reduce writable symbol storage. The measurement package reports both retained-data totals for representative symbol populations. The first compiler also counts the code and scratch state for descriptor construction, interning, exhaustion checks, and equality before selecting either form.
 
-Every selected representation has a published capacity. An ordinal representation diagnoses exhaustion before an ID wraps or aliases another type. An inline representation diagnoses any limit on element-type nesting, length, capacity, symbol entries, record fields, or signatures before truncation changes a compatibility result. A byte-sized type ID remains a candidate, not a language or VM requirement.
+Every selected representation has a published capacity. An ordinal representation diagnoses exhaustion before an ID wraps or aliases another type. An inline representation diagnoses any limit on element-type nesting, length, capacity, symbol entries, record fields, or signatures before truncation changes a compatibility result. A byte-sized type ID remains a candidate, not a language or target requirement.
 
-The numeric type ID has no source meaning and need not match across compilations. VM registers and slots are untagged storage locations; the compiler's symbol and expression metadata supply their current source types. Runtime type tags, reflection, and dynamic type tests are absent.
+The numeric type ID has no source meaning and need not match across compilations. Z80 registers and compiler-managed storage locations are untagged; the compiler's symbol and expression metadata supply their current source types. Runtime type tags, reflection, and dynamic type tests are absent.
 
 <div id="613-examples" class="nucleus-source-anchor"></div>
 

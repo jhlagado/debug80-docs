@@ -98,7 +98,7 @@ Consequently, `then` remains an identifier under Chapter 3. A Boolean variable n
 
 ## 11.7 Lowering boundary
 
-The source semantics require ordered condition evaluation and selection of at most one body. A compiler may lower the statement to comparisons, conditional branches, and ordinary branches while parsing it. The semantic-operation interface and VM require no `if`, `elseif`, or `else` opcode.
+The source semantics require ordered condition evaluation and selection of at most one body. A compiler may lower the statement to comparisons, conditional branches, and ordinary branches while parsing it. The internal semantic-operation interface requires no dedicated `if`, `elseif`, or `else` operation.
 
 Branch fixups and active clause state are implementation details. They must preserve the source order above, skip every unselected body, and continue after the one closing `end`.
 
