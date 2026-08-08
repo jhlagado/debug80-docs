@@ -34,7 +34,7 @@ nav_order: 1
   <a class="volume volume--nucleus" href="/nucleus/">
     <span class="volume__tag">Vol $03 · 2 specifications</span>
     <span class="volume__head"><Mark book="nucleus" size="26" /><span class="volume__title">Nucleus</span></span>
-    <span class="volume__desc">A compact typed language and virtual machine designed for a handwritten compiler and interpreter on the Z80.</span>
+    <span class="volume__desc">A compact typed language, handwritten compiler, and direct runtime contract for the Z80.</span>
     <span class="volume__enter">inspect →</span>
   </a>
 </nav>
@@ -124,21 +124,21 @@ conformance.
 
 For compiler implementers and programmers who need the exact Nucleus rules.
 
-### [Nucleus Virtual Machine 0.1 Specification](nucleus/vm/)
+### [Nucleus Z80 Runtime and Backend Contract 0.1](nucleus/runtime/)
 
-The complete bytecode-machine contract, also presented as 21 linked chapters.
-It defines the image, state, instruction set, calls, activation storage,
-failure, traps, services, validation, Z80 mapping, and conformance vectors.
+The direct execution contract, presented as 10 linked chapters. It defines
+packed representation, storage, checked access, calls, activation state,
+failure, traps, services, generated-code integrity, and conformance evidence.
 
-For compiler, interpreter, and native-backend implementers.
+For compiler, runtime, and target-adapter implementers.
 
 ---
 
 ## About Nucleus
 
-Nucleus is a small, safe, statically typed language and compact virtual machine
-for constrained Z80 systems. Its first compiler is a handwritten Z80 program
-whose executable core and required immutable data must fit in one 16 KiB bank.
+Nucleus is a small, safe, statically typed language compiled directly to Z80
+machine code. Its first compiler is a handwritten Z80 program whose executable
+core and required immutable data must fit in one 16 KiB bank.
 The design uses fixed layouts, bounded resources, streaming compilation,
 predictive parsing, and explicit failure so that implementation cost remains
 visible and measurable.

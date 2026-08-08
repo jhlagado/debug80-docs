@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 This chapter defines source-level storage, object identity, value copying, aggregate aliases, storage duration, and lifetime. Chapter 6 defines the types that occupy storage. Chapter 8 defines declaration syntax, constants, initializers, and when a declaration installs a zero or explicit initial value. Chapter 13 defines routine syntax, result syntax, and calls.
 
-The rules in this chapter do not expose physical addresses, banks, virtual-register numbers, stack positions, frame layouts, or compiler workspace. Those are implementation matters. A conforming implementation preserves the source-level identity and lifetime rules regardless of its storage arrangement.
+The rules in this chapter do not expose physical addresses, banks, Z80 registers, stack positions, activation layouts, or compiler workspace. Those are implementation matters. A conforming implementation preserves the source-level identity and lifetime rules regardless of its storage arrangement.
 
 <div id="72-values-objects-subobjects-and-aliases" class="nucleus-source-anchor"></div>
 
@@ -74,7 +74,7 @@ A scalar parameter receives a copied value. Each scalar local belongs to one act
 
 An aggregate parameter is a typed alias to caller-provided storage. Its binding belongs to the activation, but the target retains program lifetime. A routine has no other named aggregate binding.
 
-Two simultaneously active invocations have distinct logical parameters and scalar locals. This rule applies even when the implementation assigns the same virtual-register numbers or physical storage to invocations that cannot overlap.
+Two simultaneously active invocations have distinct logical parameters and scalar locals. This rule applies even when the implementation assigns the same registers or physical storage to invocations that cannot overlap.
 
 Recursive calls use the same activation rule. An implementation preserves distinct logical activation state at every active depth. Caller-save regions, hardware-stack entries, static-slot save areas, or another re-entry mechanism may implement that rule; none is source storage.
 
@@ -108,7 +108,7 @@ Two aliases may denote the same object or overlapping objects. Nucleus provides 
 
 Scalar assignment copies a value into a scalar destination. The destination may be a scalar variable, parameter, record field, fixed-array element, or existing bounded-string byte. After the assignment, later changes to the source do not change the destination.
 
-Aggregate assignment requires a mutable aggregate destination and an aggregate source of the exact same type. It copies the complete aggregate value into the destination. For the packed NVM representation, the compiler or VM copies exactly the type's fixed byte extent; another backend performs an equivalent recursive field or element copy. A bounded-string copy includes its logical length and complete fixed-capacity object representation.
+Aggregate assignment requires a mutable aggregate destination and an aggregate source of the exact same type. It copies the complete aggregate value into the destination. The direct backend copies exactly the type's packed fixed byte extent. A bounded-string copy includes its logical length and complete fixed-capacity object representation.
 
 The compiler evaluates the destination storage path once, then the source storage path or transient aggregate-alias result once, and validates both complete extents before the first destination byte changes. If evaluation or validation traps, no byte of the aggregate destination changes. A source and destination that denote the same object or subobject produce no change.
 
@@ -216,10 +216,10 @@ The forwarded alias still denotes an element of the caller-provided array. No ag
 
 ## 7.12 Implementation independence and capacities
 
-Language lifetime is independent of a value's physical location. Reusing a physical address or VM slot at different times, overlaying non-overlapping locals, bank placement, and hardware-stack reuse do not merge source objects or activations. Conversely, two source paths to the same object retain shared identity even if a backend represents them differently.
+Language lifetime is independent of a value's physical location. Reusing a register or physical address at different times, overlaying non-overlapping locals, bank placement, and hardware-stack reuse do not merge source objects or activations. Conversely, two source paths to the same object retain shared identity even if a backend represents them differently.
 
 An implementation may bound scalar locals, aggregate-parameter bindings, or the metadata used for their exact types and result categories. It must publish each limit. A compile-time excess requires a capacity diagnostic under Chapter 1. An implementation must not share live activation state or lose an alias binding when a limit is reached.
 
 Runtime activation capacity is implementation-defined under Chapter 13. An implementation may bound simultaneous activation depth, activation-storage consumption, or both. Reaching either published limit at runtime performs the activation-capacity trap defined by Chapter 15. The limits and trap do not change the source lifetime of an activation that begins successfully.
 
-Nucleus 0.1 exposes no raw pointer value, address arithmetic, heap allocation, manual deallocation, open slice or view, variable-sized local, or storage-layout query through this chapter. Field byte offsets, array byte offsets, bounded-string encoding, VM carriers, calling opcodes, aggregate-copy lowering, and save-region layouts belong to the VM specification or a backend contract.
+Nucleus 0.1 exposes no raw pointer value, address arithmetic, heap allocation, manual deallocation, open slice or view, variable-sized local, or storage-layout query through this chapter. Field byte offsets, array byte offsets, bounded-string encoding, address carriers, aggregate-copy lowering, and call-state layouts belong to the Z80 runtime and backend contract.

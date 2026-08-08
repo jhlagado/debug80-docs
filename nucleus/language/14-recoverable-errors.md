@@ -156,7 +156,7 @@ The fixed `main` routine may declare `fails`. A failure returned from `main` has
 
 ## 14.8 Lowering boundary
 
-The source semantics require a success/failure discriminant and a `u8` code for each failable result. The separate VM specification or native backend defines their carriers and calling sequence. A carry flag and byte register are possible backend choices, not source semantics.
+The source semantics require a success/failure discriminant and a `u8` code for each failable result. The Z80 runtime and backend contract defines their required target behavior while leaving the carrier choice private. Carry plus a byte register is one possible calling convention, not source semantics.
 
 Failure propagation is an ordinary conditional return. Local handling is an ordinary conditional branch. Nucleus has no exception object, stack walk, cleanup action, hidden handler registration, or resumable failure state. The all-caller-save-compatible call semantics in Chapter 13 apply to both outcomes.
 

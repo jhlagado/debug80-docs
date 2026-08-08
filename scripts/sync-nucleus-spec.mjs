@@ -7,5 +7,7 @@ syncSpecification({
   title: "Nucleus 0.1 Language Specification",
   navOrder: 1,
   sourceLabel: "Nucleus specification",
-  companion: "[Companion: Nucleus Virtual Machine 0.1 Specification](../vm/).",
+  companion:
+    "[Companion: Nucleus Z80 Runtime and Backend Contract 0.1](../runtime/).",
+  localLinks: new Map([["z80-runtime-contract.md", "../runtime/"]]),
 });
