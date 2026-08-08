@@ -33,9 +33,18 @@ Every branch target is a code-section offset inside the current routine and at a
 
 ## 12.4 Counted loops
 
-Start and bound are evaluated once. The constant step sign selects the comparison direction, and unsigned comparisons and branches implement `to` or `until`. The mathematical next value must be compared with the bound before it is stored. For current `u8` and `u16` source forms, this can be done without a wider VM integer by comparing the remaining distance with the constant step magnitude. A crossed bound exits without a counter store.
+Start and bound are evaluated once. The constant step sign selects the comparison direction, and unsigned comparisons and branches implement `to` or `until`. The counter is a scalar local that source statements cannot change while the loop is active, so a value reaching the update still satisfies the comparison that admitted its iteration.
 
-If an admitted lowering detects the language's specified condition in which a next value would continue but cannot fit the counter width, it executes `TRAP loop-range` before the store. NVM has no counted-loop opcode or hidden loop state.
+For current counter `c`, saved bound `b`, and positive step magnitude `s`, an admitted lowering exits without storing under these conditions:
+
+| Form             | Exit condition | Otherwise store |
+| ---------------- | -------------- | --------------- |
+| positive `to`    | `b - c < s`    | `c + s`         |
+| positive `until` | `b - c <= s`   | `c + s`         |
+| negative `to`    | `c - b < s`    | `c - s`         |
+| negative `until` | `c - b <= s`   | `c - s`         |
+
+The active-iteration invariant makes each subtraction nonnegative, so no wider VM integer is required. Under a negative step, a continuing next value is automatically within the unsigned counter type: it is at or beyond a nonnegative bound and no greater than the current counter. A continuing positive next value also fits for a `u16` counter or a `u8` counter with a `u8` bound. Only a positive `u8` counter with a `u16` bound needs another check: when `s` is at most 255, `c > 255 - s` performs `TRAP loop-range`; when `s` is greater than 255, every continuing path traps. The trap occurs before the store. NVM has no counted-loop opcode or hidden loop state.
 
 <div id="125-failure-branch" class="nucleus-source-anchor"></div>
 

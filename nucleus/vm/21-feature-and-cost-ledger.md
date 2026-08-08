@@ -21,20 +21,21 @@ Every size or timing entry is labeled **Measured**, **Projected**, or **Hypothes
 
 ## 21.2 Component ledger
 
-| Component                    | Compiler bytes |                  Interpreter bytes |    Writable runtime |           Emitted bytes | Timing evidence           | Status                               |
-| ---------------------------- | -------------: | ---------------------------------: | ------------------: | ----------------------: | ------------------------- | ------------------------------------ |
-| image header and descriptors |           open |                               open | loader scratch open |          32 + 8/routine | not measured              | Projected                            |
-| page dispatch                |           none | 11-byte dispatcher; 256-byte table |                none |                1/opcode | 64 T dispatch in spike    | Measured dispatcher; Projected table |
-| common page slot addressing  |           none |                      7-byte helper |       slot page 256 |          1/slot operand | 350 T measured `ADD` path | Measured, isolated                   |
-| inlined page slot addressing |           none |                   no shared helper |       slot page 256 |               unchanged | 299 T measured `ADD` path | Measured handler paths               |
-| argument staging             |           open |                               open |            34 bytes |              3/argument | not measured              | Projected                            |
-| packed activation records    |           open |                               open |   `4 + 2n` per call |                  2/call | not measured              | Projected                            |
-| arithmetic helpers           |           open |                               open |        scratch open |     fixed opcode widths | not measured              | Hypothesis                           |
-| canonical-width selection    |           open |                               open |                none |               unchanged | reference mapping checked | Implemented model; Z80 open          |
-| address and safety checks    |           open |                               open |        scratch open |         3–8/instruction | not measured              | Hypothesis                           |
-| aggregate-copy lowering      |           open |                               none |  scratch slots open | size-dependent sequence | not measured              | Hypothesis                           |
-| recoverable failure          |           open |                               open |       carriers open |     call-local sequence | not measured              | Hypothesis                           |
-| services and traps           |           open |                               open |   adapter dependent |       2/service or trap | not measured              | Hypothesis                           |
+| Component                    | Compiler bytes |                  Interpreter bytes |    Writable runtime |                                 Emitted bytes | Timing evidence           | Status                               |
+| ---------------------------- | -------------: | ---------------------------------: | ------------------: | --------------------------------------------: | ------------------------- | ------------------------------------ |
+| image header and descriptors |           open |                               open | loader scratch open |                                32 + 8/routine | not measured              | Projected                            |
+| page dispatch                |           none | 11-byte dispatcher; 256-byte table |                none |                                      1/opcode | 64 T dispatch in spike    | Measured dispatcher; Projected table |
+| common page slot addressing  |           none |                      7-byte helper |       slot page 256 |                                1/slot operand | 350 T measured `ADD` path | Measured, isolated                   |
+| inlined page slot addressing |           none |                   no shared helper |       slot page 256 |                                     unchanged | 299 T measured `ADD` path | Measured handler paths               |
+| argument staging             |           open |                               open |            34 bytes |                                    3/argument | not measured              | Projected                            |
+| packed activation records    |           open |                               open |   `4 + 2n` per call |                                        2/call | not measured              | Projected                            |
+| arithmetic helpers           |           open |                               open |        scratch open |                           fixed opcode widths | not measured              | Hypothesis                           |
+| canonical-width selection    |           open |                               open |                none |                                     unchanged | reference mapping checked | Implemented model; Z80 open          |
+| address and safety checks    |           open |                               open |        scratch open |                               3–8/instruction | not measured              | Hypothesis                           |
+| counted-loop increment       |           open |                               none |    saved bound slot | subtraction and comparison; optional fit trap | not measured              | Hypothesis                           |
+| aggregate-copy lowering      |           open |                               none |  scratch slots open |                 straight-line or counted loop | not measured              | Hypothesis                           |
+| recoverable failure          |           open |                               open |       carriers open |                           call-local sequence | not measured              | Hypothesis                           |
+| services and traps           |           open |                               open |   adapter dependent |                             2/service or trap | not measured              | Hypothesis                           |
 
 The measured harness covered seven handlers and three slot-addressing arrangements. Their complete core sizes were 165, 162, and 210 bytes. Those figures exclude the separately placed dispatch table, and they are not complete-interpreter estimates.
 
@@ -227,7 +228,7 @@ ADDO  0, 0, objectExtent, 2
 ADDO  1, 0, objectExtent, 3
 ```
 
-It then emits fixed-offset checked addresses and ordinary loads and stores for the known extent. This schematic pair copies one word at `byteOffset`:
+For a short extent, it may then emit fixed-offset checked addresses and ordinary loads and stores. This schematic pair copies one word at `byteOffset`:
 
 ```nvm
 ADDO     3, byteOffset, 2, 4
@@ -236,7 +237,25 @@ LOAD16   4, 6
 STORE16  6, 5
 ```
 
-A final odd byte uses `LOAD8` and `STORE8`. The two initial instructions guarantee the complete extents before the first store; the later constant subregions cannot fail when the carriers remain unchanged. A self-copy may be omitted. A direct Z80 backend may implement the same semantic operation with `LDIR` after its equivalent complete-range checks.
+A final odd byte uses `LOAD8` and `STORE8`. The two initial instructions guarantee the complete extents before the first store; the later constant subregions cannot fail when the carriers remain unchanged.
+
+For a larger extent, the compiler may instead emit a counted byte-copy loop. This example uses slot 4 as the index, slot 5 as the constant one, slot 6 as the extent, slots 7 and 8 as the selected byte addresses, slot 9 as the copied byte, and slot 10 as the loop condition:
+
+```nvm
+LDI16   0, 4
+LDI16   1, 5
+LDI16   objectExtent, 6
+loop:
+INDEX   3, 4, objectExtent, 1, 7
+INDEX   2, 4, objectExtent, 1, 8
+LOAD8   7, 9
+STORE8  9, 8
+ADD16   4, 5, 4
+LT16    4, 6, 10
+JNZ     10, loop
+```
+
+`INDEX` remains the address-producing operation; `ADD16` changes only the ordinary `u16` loop counter. The two complete-region checks still precede the first store. A self-copy may be omitted. A direct Z80 backend may implement the same semantic operation with `LDIR` after its equivalent complete-range checks.
 
 <div id="appendix-d-reference-interpreter" class="nucleus-source-anchor"></div>
 

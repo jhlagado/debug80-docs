@@ -34,7 +34,7 @@ The declaration families are:
 | Routine definition      | Top level                                   | One routine signature and body, or completion of an earlier forward       |
 | Formal parameter        | Routine header                              | One scalar activation value or aggregate-alias binding                    |
 | Scalar local            | Contiguous routine declaration prefix       | One per-invocation scalar value                                           |
-| Private aggregate local | Contiguous routine declaration prefix       | One zero-initialized or explicitly initialized routine-private object     |
+| Private aggregate local | Contiguous routine declaration prefix       | One routine-private program-lifetime object, shared by every invocation   |
 | Aggregate-alias local   | Contiguous routine declaration prefix       | One per-invocation immutable binding to existing aggregate storage        |
 | Record field            | Between a record header and its closing end | One named scalar or aggregate subobject in each object of the record type |
 
@@ -209,7 +209,7 @@ The program variable becomes visible only after the compiler has checked its typ
 
 One routine header declares a routine name, an ordered list of zero or more formal parameters, and either no result type or one result type. Every parameter has an explicit `name as Type` declaration. Parameters have no initializer or default argument, and a header has no grouped names or multiple result list.
 
-A scalar parameter denotes a per-invocation copied value. An aggregate parameter establishes a fixed typed alias to caller-provided program-lifetime storage. Scalar-leaf mutation through that alias is permitted. Chapter 13 defines calls, result rules, and the value supplied for each parameter; this chapter defines only the bindings written in the header.
+A scalar parameter denotes a per-invocation copied value. An aggregate parameter establishes a fixed typed alias to caller-provided program-lifetime storage. Scalar-leaf mutation and exact-type aggregate assignment through that alias are permitted; neither changes the binding. Chapter 13 defines calls, result rules, and the value supplied for each parameter; this chapter defines only the bindings written in the header.
 
 A forward routine declaration contains the complete and sole header and no body. The compiler retains its exact routine and parameter names, ordered parameter types, optional result type, and `fails` effect. The later abbreviated `sub NAME` header opens the body under Chapters 4 and 5; the forward's parameter names create that body's parameter bindings. The definition completes the existing routine binding and does not declare another routine or repeat its signature.
 
@@ -225,7 +225,9 @@ A scalar local owns one per-invocation scalar value. Its initializer is an ordin
 
 An aggregate local with no initializer or with a structured initializer creates one routine-private object of the declared type. That object has program lifetime, receives its zero or explicit constant initial image once before `main`, and is shared by every invocation of the routine. The local name denotes that object; routine entry does not clear, copy, or reinitialize it.
 
-An aggregate local initialized from a compatible aggregate storage path creates a fixed alias instead. The compiler evaluates the path once on each routine activation, checks its exact type and program-lifetime provenance, then establishes the binding. Later changes to an index used in the initializer do not retarget the alias. An aggregate routine result is transient and cannot supply this binding; retaining its value requires a later aggregate assignment into owning storage.
+The declaration's routine scope hides the name from other routines but does not give the object activation lifetime. In particular, recursion does not create another object or preserve and restore the object's contents. The conformance program in Section 21.14 depends on this sharing. A programmer who needs fresh per-invocation state uses scalar locals or asks the caller to supply aggregate storage through a parameter.
+
+An aggregate local initialized from a compatible aggregate storage path creates a fixed alias instead. The compiler evaluates the path once on each routine activation, checks its exact type, then establishes the binding. Later changes to an index used in the initializer do not retarget the alias. An aggregate routine result is transient and cannot supply this binding; retaining its value requires a later aggregate assignment into owning storage.
 
 Neither form can be rebound. Aggregate assignment to a routine-private object changes that object's contents; aggregate assignment through an alias changes its referent. Scalar-field, scalar-element, and bounded-string byte mutation remain permitted.
 
@@ -248,7 +250,7 @@ On each routine invocation, parameter binding precedes activation-local initiali
 The compiler must diagnose:
 
 - a declaration in a location not permitted by Section 8.2;
-- a missing type or an incomplete alias initializer;
+- a missing type;
 - a type, bound, initializer, or name that is not visible at its declaration point;
 - an exact duplicate name or forbidden shadowing under Chapter 5;
 - a nonconstant operand or invalid folded operation in a constant expression;
@@ -360,7 +362,7 @@ const laterLength as u16 = 4
 var shortText as string[4] = "READY" // decoded literal is too long
 var copiedCell as Cell = cells[0]   // static initializers cannot read aggregate storage
 
-sub invalidLocal()
+sub privateLocal()
     var aggregateLocal as Cell      // valid zero-initialized private object
     return
 end

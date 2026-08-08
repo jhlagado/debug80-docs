@@ -62,7 +62,7 @@ The suite constructs nested packed records, scalar and aggregate arrays, and `st
 
 ## 20.5 Required control vectors
 
-The suite covers taken and untaken branches, short-circuit blocks whose omitted side would trap, forward and backward targets, inclusive `to`, exclusive `until`, positive and negative steps, zero-iteration direction mismatch, `exit`, and `continue` through the lowered primitive sequence.
+The suite covers taken and untaken branches, short-circuit blocks whose omitted side would trap, forward and backward targets, inclusive `to`, exclusive `until`, positive and negative steps, zero-iteration direction mismatch, remaining-distance update boundaries, the positive `u8`/`u16`-bound `loop-range` case, `exit`, and `continue` through the lowered primitive sequence. Paired source rejection tests cover a nonlocal counted-loop counter, assignment to an active counter, and nested reuse of one counter.
 
 <div id="206-required-call-vectors" class="nucleus-source-anchor"></div>
 

@@ -77,7 +77,7 @@ All incoming edges to an instruction must carry the same mask. Every instruction
 
 ## 19.8 Source verification remains separate
 
-Image validation does not reconstruct nominal records, source scopes, alias provenance, or typed expression trees. A structurally valid hand-written image may perform operations unavailable in source. A conforming compiler output additionally satisfies the language specification and the lowering obligations in the worked examples.
+Image validation does not reconstruct nominal records, source scopes, source alias categories, or typed expression trees. A structurally valid hand-written image may perform operations unavailable in source. A conforming compiler output additionally satisfies the language specification and the lowering obligations in the worked examples.
 
 <div id="199-rejection-result" class="nucleus-source-anchor"></div>
 

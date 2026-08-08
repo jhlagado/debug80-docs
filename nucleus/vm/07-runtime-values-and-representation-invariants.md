@@ -52,7 +52,7 @@ A string alias is the offset of the length byte. `STRLEN` reads the length after
 
 ## 7.4 Aliases and lifetime
 
-An alias has no runtime tag, ownership bit, or lifetime counter. It denotes storage by data offset. The source compiler guarantees exact referent type and program-lifetime derivation. Field selection uses `ADDO`; array and string selection use checked address instructions.
+An alias has no runtime tag, ownership bit, or lifetime counter. It denotes storage by data offset. Every alias a conforming compiler emits has an exact referent type and denotes program-lifetime storage. Field selection uses `ADDO`; array and string selection use checked address instructions.
 
 Because Nucleus 0.1 allocates every owned aggregate in program data, including routine-private static objects, a valid aggregate alias remains addressable across calls. Slot save and restore preserves alias words like other scalar carriers.
 

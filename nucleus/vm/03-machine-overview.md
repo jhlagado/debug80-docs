@@ -15,7 +15,7 @@ pageClass: "nucleus-specification"
 
 ## 3.1 Processing route
 
-The source compiler checks Nucleus types and lifetimes, then emits target-neutral semantic operations. The first backend serializes those operations as an NVM image. A loader validates the image, allocates zeroed runtime regions, applies static initializers, and starts the entry routine. The interpreter repeatedly decodes one instruction and applies its complete state transition.
+The source compiler checks Nucleus types and source categories, then emits target-neutral semantic operations. The first backend serializes those operations as an NVM image. A loader validates the image, allocates zeroed runtime regions, applies static initializers, and starts the entry routine. The interpreter repeatedly decodes one instruction and applies its complete state transition.
 
 A future native backend may consume the semantic operations immediately. The operation vocabulary, not the serialized file, is the frontend/backend boundary.
 

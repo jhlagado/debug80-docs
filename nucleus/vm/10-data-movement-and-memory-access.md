@@ -51,7 +51,7 @@ pageClass: "nucleus-specification"
 
 `STORE8 source, address` requires a canonical byte, checks one data byte, and stores the source. `STORE16 source, address` checks two bytes and stores the low byte followed by the high byte. A failed precondition performs no partial store.
 
-A conforming compiler uses `STORE8` for `u8`, Boolean, and bounded-string byte destinations. It does not expose or write a bounded-string length through ordinary source assignment.
+A conforming compiler uses `STORE8` for `u8`, Boolean, and bounded-string byte destinations. Byte assignment through a bounded-string index writes one payload byte and never the length. Exact-type aggregate assignment copies the complete `N + 1` byte string representation, including the length byte.
 
 <div id="107-runtime-and-static-responsibilities" class="nucleus-source-anchor"></div>
 
@@ -59,4 +59,4 @@ A conforming compiler uses `STORE8` for `u8`, Boolean, and bounded-string byte d
 
 The address instructions enforce the supplied dynamic region checks. They do not prove that a constant offset belongs to the nominal record type or that a stride belongs to the selected array type. Those are compiler obligations. NVM bytecode is an execution format rather than a hostile-code capability system.
 
-For exact-type aggregate assignment, the compiler obtains a checked destination address and a checked source address for the complete common extent before emitting the first store. It may then emit `LOAD16`/`STORE16` pairs and a final `LOAD8`/`STORE8` pair, or byte pairs throughout. The source type system makes two distinct same-type aggregate paths disjoint, and self-assignment is a no-op, so the generated sequence requires no overlap direction or temporary object. NVM 0.1 deliberately has no block-copy opcode.
+For exact-type aggregate assignment, the compiler obtains a checked destination address and a checked source address for the complete common extent before emitting the first store. It may then emit a straight-line sequence of `LOAD16`/`STORE16` pairs with a final `LOAD8`/`STORE8` pair, or byte pairs throughout. It may instead emit a counted byte-copy loop that walks the common extent with `INDEX` at unit stride. The loop counter is an ordinary `u16` slot; only `INDEX` forms each dynamic address. Both forms perform the complete-extent checks before the first store, and a compiler may select either form by any semantics-preserving policy. The source type system makes two distinct same-type aggregate paths disjoint, and self-assignment is a no-op, so the generated sequence requires no overlap direction or temporary object. NVM 0.1 deliberately has no block-copy opcode.

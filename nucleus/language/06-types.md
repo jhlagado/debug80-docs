@@ -94,7 +94,7 @@ An aggregate local initialized from a storage path creates an alias rather than 
 
 Assignment between aggregate designators of the exact same type copies the complete record, fixed array, or bounded string into the destination. The assignment changes the destination object's contents and never rebinds an alias. Routine arguments and aggregate results continue to transfer aliases rather than copying automatically.
 
-An aggregate routine result is a transient typed alias to existing storage. The returned referent must remain alive after the call. Chapter 7 defines its lifetime, permitted consumption, and escape check; Chapter 13 defines result syntax. A result that would refer to storage ending with the call is invalid.
+An aggregate routine result is a transient typed alias to existing program-lifetime storage. Chapter 7 defines its permitted consumption, and Chapter 13 defines result syntax. Nucleus has no aggregate storage whose lifetime ends with a call, so aggregate results require no separate escape analysis.
 
 <div id="66-record-types" class="nucleus-source-anchor"></div>
 
@@ -177,19 +177,19 @@ Type identity is determined as follows:
 
 The compiler applies these compatibility rules:
 
-| Context                                                | Required compatibility                                                              |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| Scalar assignment, initialization, argument, or result | Exact scalar type, contextual fitting literal, or implicit `u8`-to-`u16` widening.  |
-| Checked narrowing to `u8`                              | Explicit operation and successful range check.                                      |
-| Boolean condition or destination                       | `boolean` only.                                                                     |
-| Record field selection                                 | The field's declared type.                                                          |
-| Fixed-array index                                      | `u8` or `u16` index; result has the exact element type.                             |
-| Bounded-string `.length`                               | Read-only `u8` value equal to the current logical length.                           |
-| Bounded-string index                                   | `u8` or `u16` index below the current length; result is a writable `u8` path.       |
-| Aggregate parameter or local alias                     | Exact referent-type identity.                                                       |
-| Aggregate assignment                                   | Exact type identity; copy the complete aggregate into the destination.              |
-| Aggregate result                                       | Exact referent-type identity and a referent that passes Chapter 7's lifetime check. |
-| Aggregate by-value argument or result                  | Invalid; calls transfer aggregate aliases.                                          |
+| Context                                                | Required compatibility                                                             |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Scalar assignment, initialization, argument, or result | Exact scalar type, contextual fitting literal, or implicit `u8`-to-`u16` widening. |
+| Checked narrowing to `u8`                              | Explicit operation and successful range check.                                     |
+| Boolean condition or destination                       | `boolean` only.                                                                    |
+| Record field selection                                 | The field's declared type.                                                         |
+| Fixed-array index                                      | `u8` or `u16` index; result has the exact element type.                            |
+| Bounded-string `.length`                               | Read-only `u8` value equal to the current logical length.                          |
+| Bounded-string index                                   | `u8` or `u16` index below the current length; result is a writable `u8` path.      |
+| Aggregate parameter or local alias                     | Exact referent-type identity.                                                      |
+| Aggregate assignment                                   | Exact type identity; copy the complete aggregate into the destination.             |
+| Aggregate result                                       | Exact referent-type identity and immediate consumption under Chapter 7.            |
+| Aggregate by-value argument or result                  | Invalid; calls transfer aggregate aliases.                                         |
 
 Compatibility is checked at the source operation. The backend does not infer compatibility from equal byte widths, equal layouts, VM slot numbers, or runtime addresses.
 

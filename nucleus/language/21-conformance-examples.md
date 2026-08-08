@@ -372,6 +372,20 @@ sub main(argument as u8)
 end
 ```
 
+Assignment to an active counted-loop counter:
+
+```nucleus
+sub main()
+    var index as u8
+
+    for index = 0 until 4
+        index = index + 1
+    end
+end
+```
+
+The counter is a valid scalar local, but it is read-only while its loop is active. A program variable or parameter used as the counter, or reuse of `index` by a nested counted loop, is independently invalid.
+
 Hexadecimal integer syntax:
 
 ```nucleus
@@ -458,3 +472,31 @@ end
 ```
 
 `state`, `first`, and `snapshot` each own one routine-private object initialized before `main`. The three calls to `counter` share `state`. `first = counter()` materializes the transient result, and `snapshot = first` copies that value again into a different object. The expected standard output is `Y`.
+
+<div id="2114-routine-private-storage-under-recursion" class="nucleus-source-anchor"></div>
+
+## 21.14 Routine-private storage under recursion
+
+This program depends on every invocation reaching the same routine-private object:
+
+```nucleus
+record Depth
+    value as u8
+end
+
+sub descend(level as u8) as u8
+    var mark as Depth
+
+    mark.value = level
+    if level > 0
+        descend(level - 1)
+    end
+    return mark.value
+end
+
+sub main() fails
+    writeOutputByte(descend(3)) or fail
+end
+```
+
+Each invocation writes the shared `mark` object. The innermost invocation leaves zero in `mark.value`, and every return then reads that value. The expected standard output is byte value 0. An implementation that incorrectly created one `Depth` object per activation would instead produce byte value 3.
