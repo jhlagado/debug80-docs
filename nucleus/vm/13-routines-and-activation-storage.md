@@ -79,7 +79,7 @@ If capacity is insufficient, the activation-capacity trap occurs after source ar
 
 For a non-entry activation the VM pops the record, restores the saved prefix, selects the caller, and resumes at the saved offset. An infallible result-free return leaves completion `none`. A failable result-free success leaves completion `success`. A result-bearing success leaves completion `result` and the captured carrier in `result`.
 
-`GETR destination` requires result completion, copies the result carrier, and clears completion. It works for scalar and aggregate-alias results; the compiler retains their static type and alias provenance. A source aggregate result is transient even though its lowered carrier occupies a slot: the compiler must consume it as an argument, return, selection, discard, or aggregate-copy source rather than preserve it as a source-level local alias. If another call occurs during that containing operation, ordinary live-slot save rules preserve the carrier until consumption.
+`GETR destination` requires result completion, copies the result carrier, and clears completion. It works for scalar results and transient aggregate-alias results; the compiler retains their static type and source category. A source aggregate result is transient even though its lowered carrier occupies a slot: the compiler must consume it as an argument, return, selection, discard, or aggregate-copy source rather than preserve it as a source-level local alias. If another call occurs during that containing operation, ordinary live-slot save rules preserve the carrier until consumption.
 
 <div id="137-early-return-and-recursion" class="nucleus-source-anchor"></div>
 

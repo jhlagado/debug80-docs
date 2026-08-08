@@ -68,14 +68,14 @@ Index and field suffixes may follow an aggregate result from a routine call. The
 
 Expression checking records both a type and one of these source categories:
 
-| Category               | Permitted use                                                                                                                         |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Exact integer constant | Adopts an admitted integer type from context or the rules in Section 9.7.                                                             |
-| Scalar value           | May be copied, converted, compared, passed, returned, or stored in a compatible scalar destination.                                   |
-| Scalar storage path    | Reads as its scalar value in an expression and may be a writable destination when its root is mutable.                                |
-| Aggregate storage path | May be indexed, selected, copied by exact-type assignment, bound to a compatible alias, passed, or returned under the lifetime rules. |
-| Aggregate alias result | Transiently denotes compatible storage and may be selected, indexed, copied by exact-type assignment, passed, returned, or discarded. |
-| Result-free invocation | Is valid as a complete call statement, or in Chapter 14's result-free failable propagating `return`.                                  |
+| Category                         | Permitted use                                                                                                                                          |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Exact integer constant           | Adopts an admitted integer type from context or the rules in Section 9.7.                                                                              |
+| Scalar value                     | May be copied, converted, compared, passed, returned, or stored in a compatible scalar destination.                                                    |
+| Scalar storage path              | Reads as its scalar value in an expression and may be a writable destination when its root is mutable.                                                 |
+| Aggregate storage path           | May be indexed, selected, copied by exact-type assignment, bound to a compatible alias, passed, or returned under Chapter 7's consumption rules.       |
+| Transient aggregate-alias result | Denotes compatible storage for one containing operation and may be selected, indexed, copied by exact-type assignment, passed, returned, or discarded. |
+| Result-free invocation           | Is valid as a complete call statement, or in Chapter 14's result-free failable propagating `return`.                                                   |
 
 A **storage path** begins with a visible program variable, parameter, or local and continues through zero or more field and index suffixes. Each suffix preserves the root object's identity while selecting a subobject. A scalar constant and a routine call are not storage-path roots. A call that returns an aggregate alias may be selected or indexed in a value context, but Chapter 10 does not admit it as an assignment root.
 

@@ -119,7 +119,7 @@ on-error-clause ::= "on" "error" NAME NEWLINE
                     "end" NEWLINE
 ```
 
-The name must resolve to an existing writable `u8` scalar variable, parameter, or local. The clause declares no binding and opens no scope. This rule preserves the declaration-prefix and scope rules from Chapters 5 and 8.
+The name must resolve to an existing writable `u8` scalar variable, parameter, or local. A scalar local serving as an active counted-loop counter is read-only and cannot be the error destination. The clause declares no binding and opens no scope. This rule preserves the declaration-prefix and scope rules from Chapters 5 and 8.
 
 On success, the call supplies its ordinary result, the assignment occurs when present, and the handler body is skipped. On failure, no success-result store occurs, then the compiler stores the error code in the named `u8` destination and executes the handler body. This ordering also applies when the assignment destination and error destination are the same variable: the variable receives the error code. Normal completion of the body continues after its closing `end`. A `return`, `fail`, `exit`, or `continue` inside the body has its ordinary enclosing context.
 
@@ -171,7 +171,7 @@ The compiler must diagnose:
 - a failable invocation in a nested expression or unsupported context;
 - a failable invocation with no consumer or more than one consumer;
 - an `on error` clause attached to an ineligible statement;
-- an error destination that is unavailable, non-writable, or not `u8`;
+- an error destination that is unavailable, non-writable, not `u8`, or an active counted-loop counter;
 - a `fails` clause or other signature text repeated on an abbreviated forward body; and
 - a result-bearing failable routine that can reach its end without success or failure.
 
