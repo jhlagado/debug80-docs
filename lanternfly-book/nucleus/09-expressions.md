@@ -112,7 +112,7 @@ Binary arithmetic, `and`, and `or` associate from left to right. Unary `+`, unar
 
 `not` binds less tightly than comparison. Thus `not left = right` means `not (left = right)`. An integer complement used as a comparison operand requires parentheses, as in `(not mask) = expected`.
 
-The repeated forms in Section 9.2 preserve left association without a left-recursive predictive grammar. An implementation may use another parser family only if it accepts the same token sequences and produces the same association.
+The repeated forms in Section 9.2 preserve left association without a left-recursive predictive grammar. The first handwritten compiler implements the binary levels with one precedence-driven loop and a compact operator table; comparison's single-use rule and Boolean short-circuit emission remain explicit cases in that loop. Separate parsing remains appropriate for primary, postfix, unary, and right-recursive `not`. Another conforming compiler may use a different parser family only if it accepts the same token sequences and produces the same association and evaluation order.
 
 <div id="97-integer-literal-resolution" class="nucleus-source-anchor"></div>
 
