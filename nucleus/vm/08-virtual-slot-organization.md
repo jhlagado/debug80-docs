@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 Slots are numbered 0 through 127. Slot operands are one byte, but a routine may address only `0 .. clobberCount - 1`. A routine's parameter values arrive in slots `0 .. parameterCount - 1`.
 
-Each routine descriptor declares one clobber prefix. It covers parameters, named scalar locals, aggregate-alias bindings, and expression temporaries. Slots have no permanent source name or type.
+Each routine descriptor declares one clobber prefix. It covers parameters, named scalar locals, and expression temporaries, including transient aggregate-alias carriers. Slots have no permanent source name or type.
 
 <div id="82-page-aligned-z80-mapping" class="nucleus-source-anchor"></div>
 

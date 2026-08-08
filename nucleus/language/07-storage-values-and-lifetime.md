@@ -28,7 +28,7 @@ Nucleus distinguishes four related concepts:
 | Concept               | Source meaning                                                                                                                         |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Scalar value          | One `u8`, `u16`, or `boolean` value. Scalar values can be copied.                                                                      |
-| Object                | Storage associated with a program variable or a routine-private aggregate variable.                                                    |
+| Object                | Storage associated with a program variable.                                                                                            |
 | Subobject             | A record field, fixed-array element, or existing bounded-string byte. A bounded string may itself be an object or aggregate subobject. |
 | Typed aggregate alias | A non-owning, fixed binding to an existing record, fixed-array, or bounded-string object or subobject of one of those types.           |
 
@@ -42,13 +42,9 @@ Every alias is bound to an object or aggregate subobject when the alias is estab
 
 A top-level variable owns one object with program lifetime. A scalar variable owns one scalar cell. A record, fixed-array, or bounded-string variable owns the complete aggregate object, including every contained subobject.
 
-A routine-local aggregate declaration with no initializer or with a structured initializer owns one routine-private object with program lifetime. The compiler reserves its storage statically and establishes its zero or explicit initial image before `main` begins. Its local name is visible only in the declaring routine, but every invocation, including a recursive invocation, reaches the same object. Initialization does not run again on routine entry.
-
-The local scope of that name does not imply activation-local storage. A routine-private aggregate object has the same storage duration as a top-level aggregate object; only its source visibility differs. It is persistent routine-private state, not a fresh object for each invocation. A mutation made during one invocation remains visible to later invocations and to a recursive invocation that reaches the same declaration.
-
 Named constants are scalar-only. A named constant denotes a value and need not occupy source-observable storage. Materializing that value in memory does not give it object identity visible to a Nucleus program.
 
-Aggregate storage occurs only in program-lifetime objects and inline within other aggregate storage. A record field has storage within its containing record. An array element has storage within its containing array. A bounded string has its counted content within its containing string object. Nucleus allocates no activation-lifetime aggregate storage.
+Aggregate storage occurs only in top-level program-lifetime objects and inline within other aggregate storage. A record field has storage within its containing record. An array element has storage within its containing array. A bounded string has its counted content within its containing string object. A routine cannot declare owned aggregate storage, and Nucleus allocates no activation-lifetime aggregate storage.
 
 <div id="74-program-lifetime" class="nucleus-source-anchor"></div>
 
@@ -72,33 +68,27 @@ This table defines values, not a byte layout or a universal initialization rule.
 
 ## 7.5 Routine activations
 
-Each routine invocation creates a distinct logical activation. An activation contains that invocation's scalar parameters, scalar locals, and aggregate-alias bindings. It begins when the call establishes the parameters and ends when the routine returns or program execution terminates.
+Each routine invocation creates a distinct logical activation. An activation contains that invocation's scalar parameters, scalar locals, and aggregate-parameter bindings. It begins when the call establishes the parameters and ends when the routine returns or program execution terminates.
 
 A scalar parameter receives a copied value. Each scalar local belongs to one activation. Its source lifetime begins when execution reaches its declaration and Chapter 8 has established its initial value; its lifetime ends with the activation. A scalar result is copied from the returned expression to the caller. It is not shared storage in the callee.
 
-An aggregate parameter is a typed alias to caller-provided storage. A routine-local aggregate declaration initialized from a storage path also establishes a typed alias. The alias binding belongs to the activation, but the target retains its own lifetime. A routine-private aggregate object is outside the activation and is shared by every invocation of its routine.
+An aggregate parameter is a typed alias to caller-provided storage. Its binding belongs to the activation, but the target retains program lifetime. A routine has no other named aggregate binding.
 
-Two simultaneously active invocations have distinct logical parameters, scalar locals, and local alias bindings. This rule applies even when the implementation assigns the same virtual-register numbers or physical storage to invocations that cannot overlap.
+Two simultaneously active invocations have distinct logical parameters and scalar locals. This rule applies even when the implementation assigns the same virtual-register numbers or physical storage to invocations that cannot overlap.
 
 Recursive calls use the same activation rule. An implementation preserves distinct logical activation state at every active depth. Caller-save regions, hardware-stack entries, static-slot save areas, or another re-entry mechanism may implement that rule; none is source storage.
 
-These rules divide storage into two practical planes. The aggregate plane contains fixed program-lifetime objects, including top-level objects and routine-private aggregate objects. The activation plane contains copied scalar parameters, scalar locals, and aggregate-alias bindings. Calls preserve overlapping activation-plane state; they do not save, clear, or restore the bytes of a routine-private aggregate object.
+These rules divide storage into two practical planes. The aggregate plane contains fixed top-level program-lifetime objects and their aggregate subobjects. The activation plane contains copied scalar parameters, scalar locals, and aggregate-parameter bindings. Calls preserve overlapping activation-plane state; aggregate bytes remain in program storage.
 
-As programming guidance, ordinary Nucleus code normally places persistent aggregates at program scope, passes them to routines through aggregate parameters, and uses scalar locals for per-invocation work. A routine-private aggregate object is appropriate when the program deliberately needs persistent routine-private state, such as a fixed buffer, cache, or result area. Using one as though it were a fresh aggregate temporary would give the program shared state instead.
+Programs declare every aggregate object at top level, pass required objects or subobjects through aggregate parameters, and use scalar locals for per-invocation work. A routine that needs destination or scratch aggregate storage receives it from its caller. This rule keeps every aggregate allocation visible in the program declaration sequence and prevents hidden shared aggregate state inside recursion.
 
-<div id="76-aggregate-alias-binding" class="nucleus-source-anchor"></div>
+<div id="76-aggregate-parameter-binding" class="nucleus-source-anchor"></div>
 
-## 7.6 Aggregate alias binding
+## 7.6 Aggregate parameter binding
 
-An aggregate alias binds once, when its parameter or local declaration is established. The target is a compatible aggregate storage path rooted in:
+An aggregate alias binds once when a call establishes an aggregate parameter. The argument is a compatible aggregate storage path rooted in a program variable or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result admitted by Section 7.9. Every admitted source ultimately denotes top-level program storage.
 
-- a program-lifetime variable;
-- a routine-private aggregate object visible in the current routine;
-- an incoming aggregate parameter;
-- another in-scope aggregate alias; or
-- an aggregate field or fixed-array element reached from one of those roots.
-
-The compiler evaluates every field selection and checked index used to form a local alias once at binding. Later changes to an index variable do not retarget the alias. The target type must exactly match the alias type under Chapter 6.
+The caller evaluates every field selection and checked index used to form the argument once before the call begins. The callee receives the resulting typed alias, and its binding cannot be changed. The target type must exactly match the parameter type under Chapter 6.
 
 An alias does not extend the target's lifetime. Current aggregate storage belongs to variables, so scalar-leaf writes through an aggregate alias are allowed under the ordinary assignment rules. Exact-type aggregate assignment through an alias copies into its referent.
 
@@ -124,7 +114,7 @@ The compiler evaluates the destination storage path once, then the source storag
 
 Under the Nucleus 0.1 type and containment rules, two designators of one exact aggregate type are either identical or disjoint. A proper partial overlap would require recursive by-value containment, an overlaid layout, a slice, or arbitrary address formation, all of which are absent. Aggregate assignment therefore needs no runtime overlap check.
 
-Aggregate alias binding is not assignment. Once established, an aggregate parameter or local alias cannot be rebound. When an alias is the destination of aggregate assignment, the copy changes its referent. It does not change the binding.
+Aggregate alias binding is not assignment. Once established, an aggregate parameter cannot be rebound. When an aggregate parameter is the destination of aggregate assignment, the copy changes its referent. It does not change the binding.
 
 <div id="79-aggregate-results" class="nucleus-source-anchor"></div>
 
@@ -132,15 +122,15 @@ Aggregate alias binding is not assignment. Once established, an aggregate parame
 
 An aggregate routine result is a transient typed alias to existing program-lifetime storage. The result preserves the target's exact aggregate type and denotes the same object.
 
-Program-lifetime storage includes top-level objects and routine-private aggregate objects. Nucleus 0.1 has no activation-lifetime aggregate, heap aggregate, or variable-sized local, so every aggregate storage path, alias binding, and transient aggregate-alias result denotes program-lifetime storage. An aggregate result therefore always outlives the callee activation. The compiler retains the exact referent type and transient-result category, but it needs no lifetime-tracking bit, signature annotation, or parameter identity for this purpose.
+Program-lifetime storage consists of top-level objects and their aggregate subobjects. Nucleus 0.1 has no routine-local aggregate declaration, activation-lifetime aggregate, heap aggregate, or variable-sized local, so every aggregate storage path, aggregate-parameter binding, and transient aggregate-alias result denotes program-lifetime storage. An aggregate result therefore always outlives the callee activation. The compiler retains the exact referent type and transient-result category, but it needs no lifetime-tracking bit, signature annotation, or parameter identity for this purpose.
 
-Returning a local alias ends that local binding. The result denotes the target object, not the callee's alias carrier. Field selection and checked indexing continue to denote program-lifetime subobjects because every aggregate subobject has the lifetime of its containing object.
+An aggregate return source is a storage path rooted in a visible program variable or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result forwarded from another call. Field selection and checked indexing continue to denote program-lifetime subobjects because every aggregate subobject has the lifetime of its containing object.
 
-The caller must consume a returned aggregate alias immediately. It may discard the result, forward it as an aggregate argument or aggregate return, select a field or element from it, or use it as the source of exact-type aggregate assignment. Assignment is the materialization operation: it copies the complete aggregate into owning storage or into the referent of an existing alias. A result cannot initialize a local alias, be stored as a carrier, or survive beyond the containing source operation. Code that needs to retain the value declares aggregate storage and assigns the result to that storage.
+The caller must consume a returned aggregate alias immediately. It may discard the result, forward it as an aggregate argument or aggregate return, select a field or element from it, or use it as the source of exact-type aggregate assignment. Assignment is the materialization operation: it copies the complete aggregate into program storage or into the referent of an aggregate parameter. A result cannot be stored as a carrier or survive beyond the containing source operation. Code that needs to retain the value assigns it to a program object or caller-supplied destination.
 
 Immediate consumption does not permit a later call to destroy the transient carrier before it is used. When evaluation of another argument, index, or suffix can call a routine, the compiler must stage or preserve the typed carrier as live implementation state. This staging is not a source alias and ends with the containing operation.
 
-Nucleus has no activation-lifetime aggregate object, aggregate temporary, heap object, or variable-sized local object. A routine-private aggregate object has program lifetime and may be returned safely. An aggregate local with no written initializer owns such an object with the recursive zero value; it is not an unbound alias.
+Nucleus has no routine-local aggregate declaration, activation-lifetime aggregate object, aggregate temporary, heap object, or variable-sized local object. Every aggregate result selects storage that already existed before the call.
 
 <div id="710-end-of-activation-bindings" class="nucleus-source-anchor"></div>
 
@@ -149,7 +139,7 @@ Nucleus has no activation-lifetime aggregate object, aggregate temporary, heap o
 When an activation ends:
 
 - its scalar parameters and scalar locals cease to exist;
-- its local and parameter alias bindings cease to exist;
+- its aggregate-parameter bindings cease to exist;
 - storage reached through those aliases is unaffected if that storage has a longer lifetime; and
 - a valid returned scalar value or aggregate alias has already been transferred to the caller.
 
@@ -195,34 +185,32 @@ item.value = 7
 
 The assignment changes the caller's selected `Entry`. It does not create another `Entry`.
 
-If `first` and `second` are `Entry` aliases and `otherEntries` is another `Entry[8]` object, these assignments copy complete aggregates:
+If `first` and `second` are aggregate parameters of type `Entry` and `otherEntries` is another `Entry[8]` object, these assignments copy complete aggregates:
 
 ```nucleus
 first = second          // copy one Entry into first's referent
 entries = otherEntries  // copy all eight Entry values
 ```
 
-A routine-private structured initializer creates program-lifetime storage and may supply an aggregate result:
+A routine may copy a selected value into caller-supplied storage without declaring an aggregate local:
 
 ```nucleus
-sub initialEntry() as Entry
-    var scratch as Entry = (7)
-    return scratch
+sub copyEntry(items as Entry[8], index as u8, destination as Entry)
+    destination = items[index]
 end
 ```
 
-Every call returns an alias to the same routine-private `scratch` object. Its initializer is applied once before `main`, and later mutations persist across calls and recursive invocations.
+`destination` remains bound to the caller's object. The assignment copies one complete `Entry` from the selected array element into that object.
 
-An aggregate local with no written initializer owns zero-initialized routine-private storage:
+A routine may also forward a selected alias without copying:
 
 ```nucleus
-sub defaultResult() as Entry
-    var scratch as Entry
-    return scratch
+sub forwardedEntry(items as Entry[8], index as u8) as Entry
+    return choose(items, index)
 end
 ```
 
-The declaration does not allocate an `Entry` in the activation. It reserves one program-lifetime object, initializes that object to zero before `main`, and returns an alias to it. Chapter 8 distinguishes zero or structured static initialization from alias binding.
+The forwarded alias still denotes an element of the caller-provided array. No aggregate object or local alias is created by either call.
 
 <div id="712-implementation-independence-and-capacities" class="nucleus-source-anchor"></div>
 
@@ -230,7 +218,7 @@ The declaration does not allocate an `Entry` in the activation. It reserves one 
 
 Language lifetime is independent of a value's physical location. Reusing a physical address or VM slot at different times, overlaying non-overlapping locals, bank placement, and hardware-stack reuse do not merge source objects or activations. Conversely, two source paths to the same object retain shared identity even if a backend represents them differently.
 
-An implementation may bound scalar locals, aggregate-alias bindings, or the metadata used for their exact types and categories. It must publish each limit. A compile-time excess requires a capacity diagnostic under Chapter 1. An implementation must not share live activation state or lose an alias binding when a limit is reached.
+An implementation may bound scalar locals, aggregate-parameter bindings, or the metadata used for their exact types and result categories. It must publish each limit. A compile-time excess requires a capacity diagnostic under Chapter 1. An implementation must not share live activation state or lose an alias binding when a limit is reached.
 
 Runtime activation capacity is implementation-defined under Chapter 13. An implementation may bound simultaneous activation depth, activation-storage consumption, or both. Reaching either published limit at runtime performs the activation-capacity trap defined by Chapter 15. The limits and trap do not change the source lifetime of an activation that begins successfully.
 

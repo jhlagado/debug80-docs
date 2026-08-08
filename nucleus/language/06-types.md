@@ -88,9 +88,9 @@ The source type and the way a source occurrence denotes data are separate proper
 
 A named constant has type `u8`, `u16`, or `boolean`; records, fixed arrays, bounded strings, and aggregate aliases cannot be declared as constants.
 
-Top-level variables may provide owned aggregate storage. A routine-local aggregate declaration with no initializer or with a structured initializer provides routine-private owned aggregate storage with program lifetime. Aggregate storage may also occur inline as a record field or fixed-array element. The permitted declaration sites, initialization rules, mutability, and storage duration appear in Chapters 7 and 8.
+Top-level variables provide all owned aggregate storage. Aggregate storage may also occur inline as a record field or fixed-array element. A routine cannot declare aggregate storage or an aggregate-alias local. The permitted declaration sites, initialization rules, mutability, and storage duration appear in Chapters 7 and 8.
 
-An aggregate local initialized from a storage path creates an alias rather than owned storage. An aggregate parameter is also an alias to caller-provided storage. These aliases have fixed referent types and cannot be rebound through assignment. A transient aggregate result cannot initialize a local alias.
+An aggregate parameter is a fixed typed alias to caller-provided storage. Its binding cannot be changed, but mutation and exact-type aggregate assignment through it change the caller's object. A routine may also return a transient aggregate alias to existing storage.
 
 Assignment between aggregate designators of the exact same type copies the complete record, fixed array, or bounded string into the destination. The assignment changes the destination object's contents and never rebinds an alias. Routine arguments and aggregate results continue to transfer aliases rather than copying automatically.
 
@@ -153,7 +153,7 @@ This chapter fixes the semantic domain and capacity, not the stored layout. Chap
 
 An aggregate alias has the same source type as its referent and a separate alias category. For example, an alias to a `Person` record permits `Person` field selection, and an alias to `u8[64]` permits indexing with the fixed bound 64. The alias does not create a reference type that can be named independently.
 
-The compiler must retain the referent type through local aliases, aggregate parameters, field and element selection, scalar and aggregate assignments, calls, and aggregate results. Passing or returning an alias, or using it as an aggregate-copy source or destination, is invalid unless the required aggregate type is identical to its referent type.
+The compiler must retain the referent type through aggregate parameters, field and element selection, scalar and aggregate assignments, calls, and aggregate results. Passing or returning an alias, or using it as an aggregate-copy source or destination, is invalid unless the required aggregate type is identical to its referent type.
 
 A backend may represent an alias at runtime with one untagged address-sized value because compiler metadata records the record layout, array length, or string capacity. The runtime carrier has no source spelling and no runtime type tag. Source code cannot read, write, compare, convert, store, return as a scalar, or perform arithmetic on the carrier itself.
 
@@ -186,7 +186,7 @@ The compiler applies these compatibility rules:
 | Fixed-array index                                      | `u8` or `u16` index; result has the exact element type.                            |
 | Bounded-string `.length`                               | Read-only `u8` value equal to the current logical length.                          |
 | Bounded-string index                                   | `u8` or `u16` index below the current length; result is a writable `u8` path.      |
-| Aggregate parameter or local alias                     | Exact referent-type identity.                                                      |
+| Aggregate parameter                                    | Exact referent-type identity.                                                      |
 | Aggregate assignment                                   | Exact type identity; copy the complete aggregate into the destination.             |
 | Aggregate result                                       | Exact referent-type identity and immediate consumption under Chapter 7.            |
 | Aggregate by-value argument or result                  | Invalid; calls transfer aggregate aliases.                                         |

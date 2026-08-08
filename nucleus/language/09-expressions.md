@@ -73,7 +73,7 @@ Expression checking records both a type and one of these source categories:
 | Exact integer constant           | Adopts an admitted integer type from context or the rules in Section 9.7.                                                                              |
 | Scalar value                     | May be copied, converted, compared, passed, returned, or stored in a compatible scalar destination.                                                    |
 | Scalar storage path              | Reads as its scalar value in an expression and may be a writable destination when its root is mutable.                                                 |
-| Aggregate storage path           | May be indexed, selected, copied by exact-type assignment, bound to a compatible alias, passed, or returned under Chapter 7's consumption rules.       |
+| Aggregate storage path           | May be indexed, selected, copied by exact-type assignment, passed as an aggregate argument, or returned under Chapter 7's consumption rules.           |
 | Transient aggregate-alias result | Denotes compatible storage for one containing operation and may be selected, indexed, copied by exact-type assignment, passed, returned, or discarded. |
 | Result-free invocation           | Is valid as a complete call statement, or in Chapter 14's result-free failable propagating `return`.                                                   |
 

@@ -65,7 +65,7 @@ These contracts support streaming programs without exposing a filesystem. Nucleu
 
 ## 16.4 Program startup and termination
 
-After every program variable and routine-private aggregate object has its initial value, the environment invokes `main`. It supplies no command-line arguments or implicit source values. Source code obtains input only through the predefined services.
+After every program variable has its initial value, the environment invokes `main`. It supplies no command-line arguments or implicit source values. Source code obtains input only through the predefined services.
 
 Normal return from `main` terminates successfully. Nucleus 0.1 has no source statement for process exit status or immediate successful termination. Failure returned from `main` and every safety trap terminate unsuccessfully under Chapter 15.
 

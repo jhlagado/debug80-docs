@@ -67,10 +67,6 @@ static-initializer
       | STRING
       | record-initializer
       | array-initializer
-static-aggregate-initializer
-    ::= STRING
-      | record-initializer
-      | array-initializer
 record-initializer
     ::= "(" static-initializer
         { "," static-initializer } ")"
@@ -104,11 +100,10 @@ formal-parameter
     ::= NAME "as" type
 
 local-declaration
-    ::= "var" NAME "as" type
+    ::= "var" NAME "as" scalar-type
         [ "=" local-initializer ] NEWLINE
 local-initializer
-    ::= static-aggregate-initializer
-      | expression [ failure-propagation ]
+    ::= expression [ failure-propagation ]
 
 type
     ::= type-atom [ "[" expression "]" ]
@@ -223,17 +218,17 @@ The grammar uses the general `expression` nonterminal for scalar constant leaves
 
 The grammar uses these declared semantic predicates:
 
-| Predicate                      | Decision                                                                                                                                                                    |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isCallableName`               | At statement head, select a routine-call statement; in an expression, admit a call suffix only on a visible routine and retain its result and failure category.             |
-| `isWritableName`               | At statement head, select assignment only when the resolved declaration is a mutable scalar or aggregate root.                                                              |
-| `isRecordTypeName`             | Accept a `NAME` as a type atom only when it resolves to a visible record type.                                                                                              |
-| `isInitializerForDeclaredType` | Select and check the scalar, string, positional record, recursive array, zero-default, private-static, or aggregate-alias rule from the declared or current component type. |
-| `isFailurePropagationBoundary` | At an eligible initializer, assignment, or return boundary, treat the reserved pair `or fail` as propagation rather than beginning another Boolean operand.                 |
-| `isFailablePrecedingStatement` | Admit `on error` only after the direct failable assignment or call statement required by Section 14.6.                                                                      |
-| `isConstantContext`            | In constants, type bounds, array lengths, string capacities, and program initializers, admit only the compile-time operands and operations from Chapter 8.                  |
-| `isIntegerConstantName`        | Admit a `NAME` as a counted-loop step magnitude only when it denotes an earlier `u8` or `u16` constant.                                                                     |
-| `isIncompleteForwardName`      | Admit `sub NAME NEWLINE` as a body header only when the exact name resolves to one incomplete forward; install that forward's stored parameter bindings for the body.       |
+| Predicate                      | Decision                                                                                                                                                              |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `isCallableName`               | At statement head, select a routine-call statement; in an expression, admit a call suffix only on a visible routine and retain its result and failure category.       |
+| `isWritableName`               | At statement head, select assignment only when the resolved declaration is a mutable scalar or aggregate root.                                                        |
+| `isRecordTypeName`             | Accept a `NAME` as a type atom only when it resolves to a visible record type.                                                                                        |
+| `isInitializerForDeclaredType` | Select and check the scalar, string, positional record, recursive array, or zero-default rule from the declared program-variable or current component type.           |
+| `isFailurePropagationBoundary` | At an eligible initializer, assignment, or return boundary, treat the reserved pair `or fail` as propagation rather than beginning another Boolean operand.           |
+| `isFailablePrecedingStatement` | Admit `on error` only after the direct failable assignment or call statement required by Section 14.6.                                                                |
+| `isConstantContext`            | In constants, type bounds, array lengths, string capacities, and program initializers, admit only the compile-time operands and operations from Chapter 8.            |
+| `isIntegerConstantName`        | Admit a `NAME` as a counted-loop step magnitude only when it denotes an earlier `u8` or `u16` constant.                                                               |
+| `isIncompleteForwardName`      | Admit `sub NAME NEWLINE` as a body header only when the exact name resolves to one incomplete forward; install that forward's stored parameter bindings for the body. |
 
 Field lookup after `.` uses the selected record type, except that a bounded-string base admits only the intrinsic read-only suffix `.length`. Index selection uses a fixed-array domain or a bounded string's current logical length according to the base type; this distinction needs no grammar change. Static initializer checking descends the finite declared type tree and records the expected component before parsing each nested initializer. The `NAME` in `step-constant` must denote an earlier integer constant. A call suffix first produces a call expression with the visible signature's result and failure category. The checker then rejects a failable call unless the enclosing initializer, assignment, call statement, or return consumes that complete direct call under Chapter 14. For `return-source`, a result-free failable caller and callee form the admitted no-result propagation case; otherwise the caller and callee result shapes must match. These are static semantic checks over an otherwise deterministic token stream, not token backtracking.
 
@@ -241,14 +236,13 @@ Field lookup after `.` uses the selected record type, except that a bounded-stri
 
 ## 17.4 Predictive analysis
 
-The repository grammar analyzer mechanically expanded the grammar above to 172 BNF rules over 94 nonterminals. It found no nullable-prefix left-recursion cycle, unreachable nonterminal, or unproductive nonterminal. The LL(1) table contained four conflict sites: one name-led statement choice, two type-directed initializer choices, and one `or fail` boundary choice. The focused test reads this Chapter 17 block directly, so the analyzer evidence does not create a second grammar authority.
+The repository grammar analyzer mechanically expanded the grammar above to 168 BNF rules over 93 nonterminals. It found no nullable-prefix left-recursion cycle, unreachable nonterminal, or unproductive nonterminal. The LL(1) table contained three conflict sites: one name-led statement choice, one type-directed initializer choice, and one `or fail` boundary choice. The focused test reads this Chapter 17 block directly, so the analyzer evidence does not create a second grammar authority.
 
-| Nonterminal          | Lookahead | Conflict                                               | Resolution                          |
-| -------------------- | --------- | ------------------------------------------------------ | ----------------------------------- |
-| `simple-statement`   | `NAME`    | assignment versus routine call                         | `isWritableName` / `isCallableName` |
-| `static-initializer` | `(`       | record initializer versus parenthesized expression     | `isInitializerForDeclaredType`      |
-| `local-initializer`  | `(`       | structured initializer versus parenthesized expression | `isInitializerForDeclaredType`      |
-| `or-expression`      | `or`      | Boolean operand versus terminal propagation pair       | `isFailurePropagationBoundary`      |
+| Nonterminal          | Lookahead | Conflict                                           | Resolution                          |
+| -------------------- | --------- | -------------------------------------------------- | ----------------------------------- |
+| `simple-statement`   | `NAME`    | assignment versus routine call                     | `isWritableName` / `isCallableName` |
+| `static-initializer` | `(`       | record initializer versus parenthesized expression | `isInitializerForDeclaredType`      |
+| `or-expression`      | `or`      | Boolean operand versus terminal propagation pair   | `isFailurePropagationBoundary`      |
 
 No unexplained FIRST/FIRST or FIRST/FOLLOW conflict remained. The expression repetitions expand to right-recursive analysis rules while their semantic actions preserve the left association specified in Section 9.6. Unary and `not` recursion remains right-recursive by design. At an initializer, assignment, or return boundary, the parser treats the reserved pair `or fail` as `failure-propagation` rather than as Boolean `or` followed by an operand. Because `fail` cannot begin an expression operand, this is a fixed two-token boundary decision, not symbol-table-directed parsing or backtracking. The completed expression must then be exactly one direct failable invocation. Other reported conflicts require their named predicate or an audited equivalent; a compiler must report a specification defect rather than change the language silently.
 

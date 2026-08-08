@@ -70,7 +70,7 @@ Nucleus has no `call` keyword. An already declared routine name followed by its 
 
 ## 10.4 Assignment
 
-An assignment target is a mutable scalar or aggregate storage path rooted in a program variable, parameter, or local. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. A bounded-string byte selected by `text[index]` is writable; `text.length` is not.
+An assignment target is a mutable scalar path rooted in a program variable, parameter, or scalar local, or an aggregate path rooted in a program variable or aggregate parameter. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. A bounded-string byte selected by `text[index]` is writable; `text.length` is not.
 
 A scalar local used as the counter of an enclosing counted loop is read-only until that loop ends. An assignment rooted at that exact local is invalid in the loop body, including inside a nested statement. Chapter 12 defines the corresponding counter rule and nested-loop restriction.
 

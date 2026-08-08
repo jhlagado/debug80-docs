@@ -63,7 +63,7 @@ The first complete Z80 implementation reports:
 
 ## 21.4 Decision gates
 
-The design is accepted only after one vertical slice compiles, validates, and runs source that exercises scalar locals, arguments, recursion, records, recursive static initializers, routine-private aggregate objects, aggregate assignment, arrays, strings, branches, a handled error, a propagated error, a service, and each reachable safety trap. A direct-Z80 backend for the same slice provides a comparison, not a prerequisite.
+The design is accepted only after one vertical slice compiles, validates, and runs source that exercises scalar locals, scalar and aggregate arguments, aggregate selection and transient results, recursion, records, recursive program-object initializers, aggregate assignment, arrays, strings, branches, a handled error, a propagated error, a service, and each reachable safety trap. A direct-Z80 backend for the same slice provides a comparison, not a prerequisite.
 
 If the interpreter or compiler exceeds its account, the project identifies the responsible component and tests a narrower representation. It does not remove a settled source requirement silently or charge the bytes to another account.
 

@@ -27,7 +27,7 @@ For the same source and external streams, native output must preserve:
 - byte and word wraparound;
 - unsigned comparison and division;
 - packed object layout and string length semantics;
-- startup images for top-level and routine-private aggregate objects;
+- startup images for top-level aggregate objects;
 - exact-type aggregate copies, including complete bounded-string representations;
 - bounds, narrowing, and division checks before writes;
 - call argument evaluation and activation-capacity timing;

@@ -15,7 +15,7 @@ pageClass: "nucleus-specification"
 
 ## 21.1 Complete accepted program
 
-This program exercises records, complete aggregate initializers, exact-type aggregate assignment, a checked fixed array, an aggregate alias parameter and result, a local alias, a counted loop, a conditional chain, a call, and observable output:
+This program exercises records, complete aggregate initializers, exact-type aggregate assignment, a checked fixed array, an aggregate alias parameter and result, scalar locals, a counted loop, a conditional chain, a call, and observable output:
 
 ```nucleus
 record Cell
@@ -35,7 +35,6 @@ end
 
 sub main()
     var index as u8
-    var current as Cell = cells[0]
     var code as u8
 
     for index = 0 until 4
@@ -43,13 +42,13 @@ sub main()
         setCell(template, index + 1)
     end
 
-    current.value = cellAt(0).value
-    if current.value = 1
+    cells[0].value = cellAt(0).value
+    if cells[0].value = 1
         writeOutputByte('Y')
         on error code
             return
         end
-    elseif current.value = 0
+    elseif cells[0].value = 0
         writeOutputByte('N')
         on error code
             return
@@ -135,6 +134,7 @@ The program is valid and writes byte value 4 when the output service succeeds. T
 
 ```nucleus
 var text as string[4] = "A\0B"
+var snapshot as string[4]
 
 sub textAlias() as string[4]
     return text
@@ -145,8 +145,6 @@ sub mutate(value as string[4])
 end
 
 sub main() fails
-    var snapshot as string[4]
-
     snapshot = textAlias()
 
     if snapshot.length = 3 and snapshot[1] = 0
@@ -159,7 +157,7 @@ sub main() fails
 end
 ```
 
-The literal's embedded zero is an ordinary byte, so its logical length is three. Assignment materializes `textAlias()` by copying it into the routine-private `snapshot` object. Passing a second result directly to `mutate` forwards the transient alias without copying, so mutation changes `text` while `snapshot` retains its copied zero byte. The expected standard output is `Y`.
+The literal's embedded zero is an ordinary byte, so its logical length is three. Assignment materializes `textAlias()` by copying it into the program-level `snapshot` object. Passing a second result directly to `mutate` forwards the transient alias without copying, so mutation changes `text` while `snapshot` retains its copied zero byte. The expected standard output is `Y`.
 
 <div id="215-result-free-return-propagation" class="nucleus-source-anchor"></div>
 
@@ -321,7 +319,7 @@ sub main()
 end
 ```
 
-Transient aggregate result retained as a local alias:
+Aggregate local declaration:
 
 ```nucleus
 record Cell
@@ -339,7 +337,7 @@ sub main()
 end
 ```
 
-The valid materializing form declares `held` without an initializer and then assigns `cellAlias()` to it.
+Every local must be scalar. A valid materializing form declares `held` as a program variable and assigns `cellAlias()` to it inside a routine.
 
 Value routine with a reachable end:
 
@@ -440,63 +438,66 @@ The expected standard output is byte value 6. The lowercase keywords are recogni
 
 Changing the body header to `sub Render` makes the program invalid because no incomplete forward named `Render` exists. Writing `SUB render` is also invalid: `SUB` is a `NAME`, not the keyword `sub`.
 
-<div id="2113-routine-private-aggregate-storage" class="nucleus-source-anchor"></div>
+<div id="2113-caller-supplied-aggregate-destination" class="nucleus-source-anchor"></div>
 
-## 21.13 Routine-private aggregate storage
+## 21.13 Caller-supplied aggregate destination
 
-This program distinguishes a fixed local alias from a routine-private aggregate object and confirms that aggregate assignment copies without rebinding:
+This program copies and changes a record through aggregate parameters without declaring aggregate storage inside the routine:
 
 ```nucleus
 record Counter
     value as u8
 end
 
-sub counter() as Counter
-    var state as Counter = (0)
-    state.value = state.value + 1
-    return state
+var source as Counter = (1)
+var destination as Counter
+
+sub copyAndIncrement(input as Counter, output as Counter)
+    output = input
+    output.value = output.value + 1
 end
 
 sub main() fails
-    var first as Counter
-    var snapshot as Counter
-
-    first = counter()
-    snapshot = first
-    counter()
-
-    if snapshot.value = 1 and counter().value = 3
+    copyAndIncrement(source, destination)
+    if source.value = 1 and destination.value = 2
         writeOutputByte('Y') or fail
     end
 end
 ```
 
-`state`, `first`, and `snapshot` each own one routine-private object initialized before `main`. The three calls to `counter` share `state`. `first = counter()` materializes the transient result, and `snapshot = first` copies that value again into a different object. The expected standard output is `Y`.
+`input` and `output` are fixed aliases to caller storage. Complete assignment copies `source` into `destination`, after which the scalar-field assignment changes only `destination`. The expected standard output is `Y`.
 
-<div id="2114-routine-private-storage-under-recursion" class="nucleus-source-anchor"></div>
+<div id="2114-aggregate-selection-and-forwarding" class="nucleus-source-anchor"></div>
 
-## 21.14 Routine-private storage under recursion
+## 21.14 Aggregate selection and forwarding
 
-This program depends on every invocation reaching the same routine-private object:
+This program returns and forwards an alias to one selected array element:
 
 ```nucleus
-record Depth
+record Sample
     value as u8
 end
 
-sub descend(level as u8) as u8
-    var mark as Depth
+var samples as Sample[2] = [(3), (7)]
 
-    mark.value = level
-    if level > 0
-        descend(level - 1)
-    end
-    return mark.value
+sub select(items as Sample[2], index as u8) as Sample
+    return items[index]
+end
+
+sub forwardSelection(items as Sample[2], index as u8) as Sample
+    return select(items, index)
+end
+
+sub replace(item as Sample, value as u8)
+    item.value = value
 end
 
 sub main() fails
-    writeOutputByte(descend(3)) or fail
+    replace(forwardSelection(samples, 1), 9)
+    if samples[1].value = 9
+        writeOutputByte('Y') or fail
+    end
 end
 ```
 
-Each invocation writes the shared `mark` object. The innermost invocation leaves zero in `mark.value`, and every return then reads that value. The expected standard output is byte value 0. An implementation that incorrectly created one `Depth` object per activation would instead produce byte value 3.
+Both result-bearing routines transfer transient aliases to storage inside `samples`. `replace` receives the forwarded alias and mutates the selected original object without an aggregate copy. The expected standard output is `Y`.
