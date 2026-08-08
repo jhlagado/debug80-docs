@@ -56,7 +56,7 @@ The suite covers each opcode at boundary values, including:
 
 ## 20.4 Required layout vectors
 
-The suite constructs nested packed records, scalar and aggregate arrays, and `string[1]`, `string[4]`, and `string[255]`. It verifies exact offsets, little-endian words, embedded zero string bytes, recursive static initializer images, routine-private object initialization, current-length indexing, bounds failures before stores, exact-type aggregate copies, self-assignment, and an invalid stored string length.
+The suite constructs nested packed records, scalar and aggregate arrays, and `string[1]`, `string[4]`, and `string[255]`. It verifies exact offsets, little-endian words, embedded zero string bytes, recursive program-object initializer images, current-length indexing, bounds failures before stores, exact-type aggregate copies, self-assignment, and an invalid stored string length.
 
 <div id="205-required-control-vectors" class="nucleus-source-anchor"></div>
 

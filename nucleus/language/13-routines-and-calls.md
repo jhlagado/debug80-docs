@@ -78,11 +78,9 @@ Nucleus has no parameter modes, implicit read-only aggregate parameter, write pe
 
 ## 13.5 Activation semantics
 
-A successful call begins one logical activation after all arguments have been evaluated. The activation contains that invocation's copied scalar parameters, aggregate-parameter bindings, scalar locals, and aggregate-alias-local bindings. Routine-private aggregate objects have program lifetime and are not part of the activation. Activation-local initialization follows Section 8.11 before the first statement begins.
+A successful call begins one logical activation after all arguments have been evaluated. The activation contains that invocation's copied scalar parameters, aggregate-parameter bindings, and scalar locals. Activation-local initialization follows Section 8.11 before the first statement begins.
 
-Each simultaneously active invocation has distinct activation state. Calling another routine does not change the caller's scalar parameters, scalar locals, or alias bindings. The callee may change program-lifetime storage that it can name or reach through an aggregate argument, and those mutations remain visible to the caller.
-
-The distinct activation state does not include the bytes of a routine-private aggregate object. A nested or recursive call may therefore observe and mutate the same object as its caller. This sharing is the specified source behaviour, not an implementation failure to preserve local state.
+Each simultaneously active invocation has distinct activation state. Calling another routine does not change the caller's scalar parameters, scalar locals, or aggregate-parameter bindings. The callee may change program-lifetime storage that it can name or reach through an aggregate argument, and those mutations remain visible to the caller.
 
 The caller resumes after the invocation when the callee returns normally. For an expression call, the result is transferred before evaluation continues in the containing expression. For a call statement, any result is discarded after transfer.
 
@@ -96,9 +94,9 @@ A result-bearing routine uses `return expression`. Bare `return` is invalid. The
 
 A scalar result follows the scalar destination rules: exact type, fitting exact literal, or implicit `u8`-to-`u16` widening. Checked narrowing must be written explicitly. The caller receives a copied scalar value.
 
-An aggregate result must be an aggregate storage path or transient aggregate-alias result with exact referent-type identity. The caller receives a transient alias to the same existing program-lifetime object, not a copy and not the callee's local binding. Section 7.9 establishes the lifetime of every admitted aggregate result without another result check.
+An aggregate result must be an aggregate storage path or transient aggregate-alias result with exact referent-type identity. The storage path is rooted in a visible program variable or aggregate parameter. The caller receives a transient alias to the same existing program-lifetime object, not a copy. Section 7.9 establishes the lifetime of every admitted aggregate result without another result check.
 
-The caller may consume that transient alias only by discarding it as a complete call statement, passing it directly to an aggregate parameter, forwarding it as an aggregate return, applying an immediate field or index suffix, or using it as the source of exact-type aggregate assignment. It cannot initialize a local alias or be retained in any source variable. To retain the returned value, the caller declares owning aggregate storage and assigns the call result into it, causing the complete copy defined by Section 7.8.
+The caller may consume that transient alias only by discarding it as a complete call statement, passing it directly to an aggregate parameter, forwarding it as an aggregate return, applying an immediate field or index suffix, or using it as the source of exact-type aggregate assignment. It cannot be retained in a source variable. To retain the returned value, the caller assigns the call result into a program object or caller-supplied aggregate destination, causing the complete copy defined by Section 7.8.
 
 If evaluating a later argument or suffix performs another call, the compiler preserves the transient carrier until its containing operation consumes it. Backend liveness or argument staging provides that protection; it does not create a source-visible pointer or extend the result beyond the operation.
 
@@ -158,7 +156,7 @@ The compiler may lower calls and returns to regular semantic operations while pa
 
 ## 13.11 Invalid calls and capacity limits
 
-The compiler must diagnose an unavailable or non-routine callee, a missing argument list, wrong arity, an incompatible scalar argument or result, an aggregate argument or result with the wrong referent type, an attempt to retain a transient result as a local alias, a result-free call used as a value, the wrong `return` form, a value routine whose end is reachable, an abbreviated body without one incomplete forward, and a duplicate or missing forward completion.
+The compiler must diagnose an unavailable or non-routine callee, a missing argument list, wrong arity, an incompatible scalar argument or result, an aggregate argument or result with the wrong referent type, a result-free call used as a value, the wrong `return` form, a value routine whose end is reachable, an abbreviated body without one incomplete forward, and a duplicate or missing forward completion.
 
 An implementation may bound parameters, arguments, active expression-call nesting, retained signatures, fallthrough-summary depth, and compile-time call-graph metadata. It must publish each limit and issue a capacity diagnostic before dropping an argument, corrupting a signature, losing a result, merging live state, or changing a call target. Runtime activation capacity follows Section 13.9 rather than this compile-time capacity rule.
 
@@ -195,25 +193,22 @@ sub entryAt(index as u8) as Entry
     return entries[index]
 end
 
-sub update(index as u8)
-    var current as Entry = entries[index]
-    current.value = entryAt(index).value
+sub update(items as Entry[8], index as u8)
+    items[index].value = entryAt(index).value
 end
 ```
 
 `entryAt` returns an alias to program-lifetime storage. The call itself copies no `Entry`; an aggregate assignment using that result copies into its destination.
 
-To retain the complete returned value, the caller provides owning storage:
+To retain the complete returned value, the caller provides destination storage:
 
 ```nucleus
-sub retain(index as u8)
-    var saved as Entry
-
-    saved = entryAt(index)
+sub retain(index as u8, destination as Entry)
+    destination = entryAt(index)
 end
 ```
 
-By contrast, `var saved as Entry = entryAt(index)` is invalid because it would attempt to preserve the transient result as a local alias rather than materialize it.
+`destination` remains bound to the caller's object. The assignment materializes the transient result without declaring an aggregate local.
 
 Direct and mutual recursion use ordinary signatures:
 
