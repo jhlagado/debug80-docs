@@ -13,7 +13,7 @@ pageClass: "nucleus-specification"
 # Nucleus Z80 Runtime and Backend Contract 0.1
 
 ::: info Authoritative source
-This reading edition is generated from the [Nucleus Z80 runtime and backend contract in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/nucleus/docs/z80-runtime-contract.md) at revision [`aab885a1d1dc`](https://github.com/jhlagado/debug80/blob/aab885a1d1dc13eca84d2cc7b8dfb9a8dbe2592f/packages/nucleus/docs/z80-runtime-contract.md). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. [Companion: Nucleus 0.1 Language Specification](../language/). The language specification governs source-language meaning.
+This reading edition is generated from the [Nucleus Z80 runtime and backend contract in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/nucleus/docs/z80-runtime-contract.md) at revision [`9619beac3903`](https://github.com/jhlagado/debug80/blob/9619beac39037bcc8f1ec62f6e2d237e273c04df/packages/nucleus/docs/z80-runtime-contract.md). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. [Companion: Nucleus 0.1 Language Specification](../language/). The language specification governs source-language meaning.
 :::
 
 ## Contents
