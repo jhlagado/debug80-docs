@@ -15,11 +15,11 @@
  * Usage: node scripts/check-symbols.mjs
  */
 
-import { readdirSync, readFileSync, statSync } from 'node:fs';
-import path from 'node:path';
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import path from "node:path";
 
-const ROOT = path.resolve(import.meta.dirname, '..');
-const BOOK_DIRS = ['azm-book', 'debug80-book', 'glimmer-book', 'lanternfly-book'];
+const ROOT = path.resolve(import.meta.dirname, "..");
+const BOOK_DIRS = ["azm-book", "debug80-book", "glimmer-book", "nucleus"];
 
 /**
  * Z80 mnemonics, registers, condition codes and AZM keywords. These collide
@@ -50,20 +50,20 @@ const GLIMMER_KEYWORDS = new Set(
 const ALLOW = [
   {
     // The sentence that teaches case-sensitivity has to show the wrong cases.
-    file: 'azm-book/book1/02-source-syntax.md',
-    refs: ['START', 'start'],
-    why: 'the sentence demonstrating that START, start and Start differ',
+    file: "azm-book/book1/02-source-syntax.md",
+    refs: ["START", "start"],
+    why: "the sentence demonstrating that START, start and Start differ",
   },
 ];
 
-const normalise = (s) => s.toLowerCase().replace(/_/g, '');
+const normalise = (s) => s.toLowerCase().replace(/_/g, "");
 
 function walk(dir) {
   const out = [];
   for (const name of readdirSync(dir)) {
     const p = path.join(dir, name);
     if (statSync(p).isDirectory()) out.push(...walk(p));
-    else if (name.endsWith('.md')) out.push(p);
+    else if (name.endsWith(".md")) out.push(p);
   }
   return out;
 }
@@ -78,9 +78,13 @@ function walk(dir) {
  */
 function definedIn(text) {
   const defined = new Set();
-  for (const [, lang, body] of text.matchAll(/```(\w*)[^\n]*\n([\s\S]*?)```/g)) {
-    if (lang !== '' && lang !== 'asm' && lang !== 'z80') continue;
-    for (const [, name] of body.matchAll(/^\s*@?([A-Za-z_][A-Za-z0-9_]*)\s*:/gm)) {
+  for (const [, lang, body] of text.matchAll(
+    /```(\w*)[^\n]*\n([\s\S]*?)```/g,
+  )) {
+    if (lang !== "" && lang !== "asm" && lang !== "z80") continue;
+    for (const [, name] of body.matchAll(
+      /^\s*@?([A-Za-z_][A-Za-z0-9_]*)\s*:/gm,
+    )) {
       defined.add(name);
     }
     for (const [, name] of body.matchAll(
@@ -97,11 +101,12 @@ function definedIn(text) {
  * are skipped: `examples/02_insertion_sort.asm` names a file, not a symbol.
  */
 function referencedIn(text) {
-  const prose = text.replace(/```[\s\S]*?```/g, '');
+  const prose = text.replace(/```[\s\S]*?```/g, "");
   const refs = new Set();
   for (const [, span] of prose.matchAll(/`([^`\n]+)`/g)) {
     if (/[/\\]/.test(span) || /\.\w{2,4}\b/.test(span)) continue;
-    for (const [ident] of span.matchAll(/[A-Za-z_][A-Za-z0-9_]*/g)) refs.add(ident);
+    for (const [ident] of span.matchAll(/[A-Za-z_][A-Za-z0-9_]*/g))
+      refs.add(ident);
   }
   return refs;
 }
@@ -110,8 +115,8 @@ const problems = [];
 
 for (const book of BOOK_DIRS) {
   for (const file of walk(path.join(ROOT, book))) {
-    const rel = path.relative(ROOT, file).replace(/\\/g, '/');
-    const text = readFileSync(file, 'utf8');
+    const rel = path.relative(ROOT, file).replace(/\\/g, "/");
+    const text = readFileSync(file, "utf8");
     const defined = definedIn(text);
     if (defined.size === 0) continue;
 
@@ -122,7 +127,9 @@ for (const book of BOOK_DIRS) {
       byNormal.get(key).add(name);
     }
 
-    const allowed = new Set(ALLOW.filter((a) => a.file === rel).flatMap((a) => a.refs));
+    const allowed = new Set(
+      ALLOW.filter((a) => a.file === rel).flatMap((a) => a.refs),
+    );
 
     for (const ref of referencedIn(text)) {
       if (defined.has(ref)) continue; // names a symbol that exists
@@ -136,7 +143,7 @@ for (const book of BOOK_DIRS) {
       // A leading underscore is meaningful in AZM: `_skip` is owner-local and
       // `skip` is a different name, so do not treat them as a near-miss.
       const real = [...candidates].filter(
-        (name) => name.startsWith('_') === ref.startsWith('_'),
+        (name) => name.startsWith("_") === ref.startsWith("_"),
       );
       if (real.length === 0) continue;
 
@@ -145,17 +152,23 @@ for (const book of BOOK_DIRS) {
   }
 }
 
-console.log(`\n  checked ${BOOK_DIRS.join(', ')}`);
+console.log(`\n  checked ${BOOK_DIRS.join(", ")}`);
 
 if (problems.length === 0) {
-  console.log('\nEvery symbol named in prose is defined in code.\n');
+  console.log("\nEvery symbol named in prose is defined in code.\n");
   process.exit(0);
 }
 
-console.error(`\n${problems.length} symbol${problems.length === 1 ? '' : 's'} named in prose but never defined:\n`);
-for (const p of problems.sort((a, b) => a.file.localeCompare(b.file) || a.ref.localeCompare(b.ref))) {
+console.error(
+  `\n${problems.length} symbol${problems.length === 1 ? "" : "s"} named in prose but never defined:\n`,
+);
+for (const p of problems.sort(
+  (a, b) => a.file.localeCompare(b.file) || a.ref.localeCompare(b.ref),
+)) {
   console.error(`  ${p.file}`);
-  console.error(`      prose says \`${p.ref}\`, code defines ${p.real.map((r) => `\`${r}\``).join(', ')}`);
+  console.error(
+    `      prose says \`${p.ref}\`, code defines ${p.real.map((r) => `\`${r}\``).join(", ")}`,
+  );
 }
-console.error('');
+console.error("");
 process.exit(1);

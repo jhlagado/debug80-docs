@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 This document defines the Nucleus Virtual Machine 0.1, abbreviated NVM 0.1. It is the normative contract for NVM 0.1 bytecode images, loaders, interpreters, service adapters, and native backends. It is a working specification until the Nucleus 0.1 release is frozen.
 
-The [Nucleus 0.1 Language Specification](../nucleus/) governs source-language meaning. This document governs the execution target. If the books conflict about source meaning, the language specification prevails. If they conflict about an NVM encoding or state transition, this document prevails. Other repository documents do not override either specification.
+The [Nucleus 0.1 Language Specification](../language/) governs source-language meaning. This document governs the execution target. If the books conflict about source meaning, the language specification prevails. If they conflict about an NVM encoding or state transition, this document prevails. Other repository documents do not override either specification.
 
 In this document, **must** and **must not** state conformance requirements. **May** permits a choice. **Should** states a recommendation whose exception requires a documented reason.
 

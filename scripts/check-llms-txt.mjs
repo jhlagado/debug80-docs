@@ -17,12 +17,12 @@
  * Usage: node scripts/check-llms-txt.mjs
  */
 
-import { readFileSync, existsSync } from 'node:fs';
-import path from 'node:path';
+import { readFileSync, existsSync } from "node:fs";
+import path from "node:path";
 
-const DIST = '.vitepress/dist';
-const ORIGIN = 'https://debug80.com';
-const COPIES = ['llms.txt', 'public/llms.txt'];
+const DIST = ".vitepress/dist";
+const ORIGIN = "https://debug80.com";
+const COPIES = ["llms.txt", "public/llms.txt"];
 
 if (!existsSync(DIST)) {
   console.error(`${DIST} not found. Run "npm run build" first.`);
@@ -31,28 +31,39 @@ if (!existsSync(DIST)) {
 
 /** A URL resolves if the built site has a file for it, directory or page. */
 function resolves(urlPath) {
-  const rel = urlPath.replace(/^\//, '');
-  const candidates = rel === '' || rel.endsWith('/')
-    ? [path.join(DIST, rel, 'index.html')]
-    : [path.join(DIST, rel), path.join(DIST, `${rel}.html`), path.join(DIST, rel, 'index.html')];
+  const rel = urlPath.replace(/^\//, "");
+  const candidates =
+    rel === "" || rel.endsWith("/")
+      ? [path.join(DIST, rel, "index.html")]
+      : [
+          path.join(DIST, rel),
+          path.join(DIST, `${rel}.html`),
+          path.join(DIST, rel, "index.html"),
+        ];
   return candidates.some((c) => existsSync(c));
 }
 
 let failed = false;
 
-const [first, ...rest] = COPIES.map((f) => readFileSync(f, 'utf8'));
+const [first, ...rest] = COPIES.map((f) => readFileSync(f, "utf8"));
 for (let i = 0; i < rest.length; i += 1) {
   if (rest[i] !== first) {
-    console.log(`${COPIES[0]} and ${COPIES[i + 1]} differ. They must be identical; only the public copy is served.`);
+    console.log(
+      `${COPIES[0]} and ${COPIES[i + 1]} differ. They must be identical; only the public copy is served.`,
+    );
     failed = true;
   }
 }
 
 for (const file of COPIES) {
-  const src = readFileSync(file, 'utf8');
-  const urls = [...src.matchAll(new RegExp(`${ORIGIN}([^)\\s]*)`, 'g'))].map((m) => m[1] || '/');
+  const src = readFileSync(file, "utf8");
+  const urls = [...src.matchAll(new RegExp(`${ORIGIN}([^)\\s]*)`, "g"))].map(
+    (m) => m[1] || "/",
+  );
   const dead = urls.filter((u) => !resolves(u));
-  console.log(`${file}: ${urls.length - dead.length}/${urls.length} URLs resolve`);
+  console.log(
+    `${file}: ${urls.length - dead.length}/${urls.length} URLs resolve`,
+  );
   for (const d of dead) console.log(`  dead  ${ORIGIN}${d}`);
   if (dead.length) failed = true;
 }
@@ -62,10 +73,10 @@ for (const file of COPIES) {
  * is a book no model will cite, which is the failure that hid the Glimmer book
  * from it entirely.
  */
-const SERIES = ['debug80-book', 'azm-book', 'glimmer-book', 'lanternfly-book'];
+const SERIES = ["debug80-book", "azm-book", "glimmer-book", "nucleus"];
 const missing = SERIES.filter((s) => !first.includes(`${ORIGIN}/${s}/`));
 if (missing.length) {
-  console.log(`\nno llms.txt entry for: ${missing.join(', ')}`);
+  console.log(`\nno llms.txt entry for: ${missing.join(", ")}`);
   failed = true;
 }
 

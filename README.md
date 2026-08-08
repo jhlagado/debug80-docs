@@ -8,9 +8,9 @@ looking for the documentation, follow the link — the published pages have
 working navigation, search and cross-references, and none of that survives
 reading the markdown on GitHub.
 
-## What is documented here
+## Projects documented here
 
-Five programming projects and the machine that anchors them.
+Four programming projects and the machine that anchors them.
 
 **Debug80** is a VS Code extension: source-level debugging for Z80 assembly,
 with an emulated TEC-1 or TEC-1G in the sidebar and a path out to real hardware
@@ -24,30 +24,27 @@ directives.
 remembers and how it responds; Glimmer generates the loop, the input polling
 and the change tracking, and compiles to readable Z80 assembly.
 
-**Lanternfly** is a small, typed general-purpose language whose source follows
-the shape of structured BASIC and familiar pseudocode. Its compiler is designed
-to emit assembly language, beginning with Z80, for an assembler to convert into
-machine code.
+**Nucleus** is a small, safe, statically typed language with a compact virtual
+machine. Its first compiler is intended to be handwritten in Z80 and to fit,
+with its required immutable data, in one 16 KiB bank.
 
 **The TEC-1G** is the single-board computer at the centre of the current
-Debug80, AZM and Glimmer material, and the first hardware context for
-Lanternfly's Z80 work.
+Debug80, AZM, Glimmer, and Nucleus material.
 
 ## The books
 
-| | |
-|---|---|
-| [Debug80 Book 1 — Getting started](https://debug80.com/debug80-book/book1/) | Installation through to stepping code and sending HEX to a board. |
-| [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/) | The reference: syntax, directives, expressions, layouts, contracts. |
-| [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/) | The Z80 from the bare machine up, assuming nothing. |
-| [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/) | Sorting, strings, records, recursion and a backtracking capstone. |
-| [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs. |
-| [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/) | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays. |
-| [Lanternfly Book 1 — Programming Fundamentals](https://debug80.com/lanternfly-book/book1/) | A general introduction to writing programs with Lanternfly, from variables through machine services. |
-| [Lanternfly Book 2 — Language Reference](https://debug80.com/lanternfly-book/book2/) | The Lanternfly 0.4 syntax, type, storage, control-flow, module and diagnostic reference. |
-| [Nucleus 0.1 Language Specification](https://debug80.com/lanternfly-book/nucleus/) | The complete Nucleus 0.1 source-language specification in a chapter-by-chapter reading edition. |
-| [Nucleus VM 0.1 Specification](https://debug80.com/lanternfly-book/nucleus-vm/) | The complete Nucleus bytecode-machine specification, including its image format and instruction set. |
-| [TEC-1G / MON-3](https://debug80.com/tec1g/) | Reference material for the machine and its monitor. |
+|                                                                                                |                                                                                              |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| [Debug80 Book 1 — Getting started](https://debug80.com/debug80-book/book1/)                    | Installation through to stepping code and sending HEX to a board.                            |
+| [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/)                           | The reference: syntax, directives, expressions, layouts, contracts.                          |
+| [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/)                           | The Z80 from the bare machine up, assuming nothing.                                          |
+| [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                            |
+| [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                         |
+| [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                         |
+| [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and virtual-machine project.                                         |
+| [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/)                    | The complete source-language specification in a chapter-by-chapter reading edition.          |
+| [Nucleus VM 0.1 Specification](https://debug80.com/nucleus/vm/)                                | The complete bytecode-machine specification, including its image format and instruction set. |
+| [TEC-1G / MON-3](https://debug80.com/tec1g/)                                                   | Reference material for the machine and its monitor.                                          |
 
 ## Working on it
 
@@ -66,10 +63,10 @@ files in the Debug80 repository; their chapter files are not independent
 sources. Update and verify them with:
 
 ```sh
-npm run sync:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
-npm run check:nucleus -- /path/to/debug80/packages/lanternfly/docs/nucleus/specification.md
-npm run sync:nucleus-vm -- /path/to/debug80/packages/lanternfly/docs/nucleus/virtual-machine-specification.md
-npm run check:nucleus-vm -- /path/to/debug80/packages/lanternfly/docs/nucleus/virtual-machine-specification.md
+npm run sync:nucleus -- /path/to/debug80/packages/nucleus/docs/specification.md
+npm run check:nucleus -- /path/to/debug80/packages/nucleus/docs/specification.md
+npm run sync:nucleus-vm -- /path/to/debug80/packages/nucleus/docs/virtual-machine-specification.md
+npm run check:nucleus-vm -- /path/to/debug80/packages/nucleus/docs/virtual-machine-specification.md
 ```
 
 ### Checks
@@ -77,13 +74,13 @@ npm run check:nucleus-vm -- /path/to/debug80/packages/lanternfly/docs/nucleus/vi
 Five scripts guard things that are easy to get wrong and hard to notice. CI runs
 them on every push.
 
-| Command | Checks |
-|---|---|
-| `npm run links` | Every internal link resolves. |
-| `npm run symbols` | Every symbol the prose names in backticks is one the code actually defines. AZM is case-sensitive, so `RenderTile` and `RENDER_TILE` are different symbols and only one of them exists. |
-| `npm run verify:debug80` | Command names, panel labels and status strings quoted in Debug80 Book 1 match the extension source. Needs the extension checked out alongside this repo; skipped otherwise. |
-| `npm run sidebar` | Regenerates the sidebars from front matter. Run after adding or renaming a page. |
-| `npm run llms` | Confirms that the public citation guide contains the current books and URLs. |
+| Command                  | Checks                                                                                                                                                                                  |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run links`          | Every internal link resolves.                                                                                                                                                           |
+| `npm run symbols`        | Every symbol the prose names in backticks is one the code actually defines. AZM is case-sensitive, so `RenderTile` and `RENDER_TILE` are different symbols and only one of them exists. |
+| `npm run verify:debug80` | Command names, panel labels and status strings quoted in Debug80 Book 1 match the extension source. Needs the extension checked out alongside this repo; skipped otherwise.             |
+| `npm run sidebar`        | Regenerates the sidebars from front matter. Run after adding or renaming a page.                                                                                                        |
+| `npm run llms`           | Confirms that the public citation guide contains the current books and URLs.                                                                                                            |
 
 ### Figures
 
@@ -100,7 +97,8 @@ not the SVGs.
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
-lanternfly-book/  Lanternfly language books and the Nucleus reading editions
+nucleus/          Nucleus overview and the two generated reading editions
+archive/          Retired research material; excluded from the public build
 tec1g/            TEC-1G and MON-3 reference
 assets/images/    Figures, most of them generated
 scripts/          Diagram generator and the four checks

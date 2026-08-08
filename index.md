@@ -31,11 +31,11 @@ nav_order: 1
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>
     <span class="volume__enter">react →</span>
   </a>
-  <a class="volume volume--lanternfly" href="/lanternfly-book/book1/00-introduction">
-    <span class="volume__tag">Vol $03 · 2 books + specification</span>
-    <span class="volume__head"><Mark book="lanternfly" size="26" /><span class="volume__title">Lanternfly</span></span>
-    <span class="volume__desc">Lanternfly teaching and reference books, plus the complete Nucleus 0.1 language specification.</span>
-    <span class="volume__enter">begin →</span>
+  <a class="volume volume--nucleus" href="/nucleus/">
+    <span class="volume__tag">Vol $03 · 2 specifications</span>
+    <span class="volume__head"><Mark book="nucleus" size="26" /><span class="volume__title">Nucleus</span></span>
+    <span class="volume__desc">A compact typed language and virtual machine designed for a handwritten compiler and interpreter on the Z80.</span>
+    <span class="volume__enter">inspect →</span>
   </a>
 </nav>
 
@@ -113,50 +113,35 @@ Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G e
 
 ---
 
-## Lanternfly
+## Nucleus
 
-### [Lanternfly Book 1 — Programming Fundamentals](lanternfly-book/book1/)
+### [Nucleus 0.1 Language Specification](nucleus/language/)
 
-The opening Lanternfly book develops a complete programming language from one
-short module. It introduces declarations, fixed-width integer types,
-expressions, control structures, tables, records, storage aliases, subroutines and
-machine services.
-
-For students learning structured programming and experienced programmers who
-want a readable route from typed source to assembly language.
-
-### [Lanternfly Book 2 — Language Reference](lanternfly-book/book2/)
-
-The reference manual defines Lanternfly 0.4 syntax and semantics: names,
-fixed-width types, fixed-capacity strings, exact storage, expressions, control
-flow, routines, modules, target services, grammar, diagnostics and
+The complete source-language contract, presented as 21 linked chapters while
+preserving the single repository source as the authority. It defines syntax,
+types, storage, control flow, routines, failure, grammar, semantics, and
 conformance.
 
-For compiler implementers and programmers who need the exact language rules.
+For compiler implementers and programmers who need the exact Nucleus rules.
 
-### [Nucleus 0.1 Language Specification](lanternfly-book/nucleus/)
+### [Nucleus Virtual Machine 0.1 Specification](nucleus/vm/)
 
-The complete Nucleus 0.1 source-language specification, presented as 21
-linked chapters for practical reading while preserving the Debug80 repository
-source as the authority.
+The complete bytecode-machine contract, also presented as 21 linked chapters.
+It defines the image, state, instruction set, calls, activation storage,
+failure, traps, services, validation, Z80 mapping, and conformance vectors.
 
-For language implementers and programmers who need the exact Nucleus syntax,
-static semantics, runtime semantics, grammar and conformance rules.
+For compiler, interpreter, and native-backend implementers.
 
 ---
 
-## About Lanternfly
+## About Nucleus
 
-Lanternfly is a small, statically typed general-purpose language in the
-structured BASIC family. English keywords mark blocks and control flow, while
-familiar operators write arithmetic and comparisons. Its data model centres
-on fixed arrays, exact records, declared storage paths and temporary aggregate
-aliases.
-
-The first compiler is designed to translate Lanternfly into Z80 assembly,
-which an assembler then converts into machine code. Lanternfly is currently a
-language and compiler design project; the package contains the working
-specification and conformance contract while implementation work remains.
+Nucleus is a small, safe, statically typed language and compact virtual machine
+for constrained Z80 systems. Its first compiler is a handwritten Z80 program
+whose executable core and required immutable data must fit in one 16 KiB bank.
+The design uses fixed layouts, bounded resources, streaming compilation,
+predictive parsing, and explicit failure so that implementation cost remains
+visible and measurable.
 
 ---
 

@@ -76,11 +76,7 @@ function promoteChapterHeadings(text) {
 }
 
 export function syncSpecification(config) {
-  const outputDir = path.join(
-    root,
-    "lanternfly-book",
-    config.outputSubdirectory,
-  );
+  const outputDir = path.join(root, config.outputDirectory);
   const args = process.argv.slice(2);
   const checkOnly = args.includes("--check");
   const sourceArg = args.find((arg) => !arg.startsWith("--"));
@@ -223,7 +219,7 @@ export function syncSpecification(config) {
       standalone: true,
       isolated: true,
       pageClass: "nucleus-specification",
-    })}<Mark class="book-plate" book="lanternfly" size="52" />\n\n${indexBody}`,
+    })}<Mark class="book-plate" book="nucleus" size="52" />\n\n${indexBody}`,
   );
 
   chapters.forEach((chapter, index) => {

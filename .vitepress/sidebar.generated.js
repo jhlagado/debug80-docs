@@ -1598,234 +1598,94 @@ export const sidebars = {
       ]
     }
   ],
-  "/lanternfly-book/": [
+  "/nucleus/": [
     {
-      "text": "Lanternfly Book 1 — Programming Fundamentals",
+      "text": "Nucleus 0.1 Language Specification",
       "collapsed": false,
       "items": [
         {
-          "text": "Introduction",
-          "link": "/lanternfly-book/book1/00-introduction.html"
-        },
-        {
-          "text": "Your First Lanternfly Program",
-          "link": "/lanternfly-book/book1/01-a-first-program.html"
-        },
-        {
-          "text": "Scalar Values and Literals",
-          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
-        },
-        {
-          "text": "Expressions and Conversions",
-          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
-        },
-        {
-          "text": "Comparisons, Booleans and Bit Masks",
-          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
-        },
-        {
-          "text": "Named Ordinals and Decisions",
-          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
-        },
-        {
-          "text": "Repeating Work",
-          "link": "/lanternfly-book/book1/06-loops.html"
-        },
-        {
-          "text": "Fixed Arrays and Index Domains",
-          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
-        },
-        {
-          "text": "Characters and Fixed-Capacity Strings",
-          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
-        },
-        {
-          "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
-        },
-        {
-          "text": "Building with Subroutines",
-          "link": "/lanternfly-book/book1/10-subroutines.html"
-        },
-        {
-          "text": "Selecting Existing Storage",
-          "link": "/lanternfly-book/book1/11-selecting-storage.html"
-        },
-        {
-          "text": "Modules and Imports",
-          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
-        },
-        {
-          "text": "Portable Text Input and Output",
-          "link": "/lanternfly-book/book1/13-portable-text-io.html"
-        },
-        {
-          "text": "Expecting Failure",
-          "link": "/lanternfly-book/book1/14-expecting-failure.html"
-        },
-        {
-          "text": "Propagation and Cleanup",
-          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
-        },
-        {
-          "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
-        },
-        {
-          "text": "Glossary",
-          "link": "/lanternfly-book/book1/glossary.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly Book 2 — Language Reference",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Language Model and Source Form",
-          "link": "/lanternfly-book/book2/01-language-and-source.html"
-        },
-        {
-          "text": "Names and Scopes",
-          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
-        },
-        {
-          "text": "Types, Literals and Strings",
-          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
-        },
-        {
-          "text": "Integer Expressions and Conversions",
-          "link": "/lanternfly-book/book2/04-integer-expressions.html"
-        },
-        {
-          "text": "Constants, Variables and Placement",
-          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
-        },
-        {
-          "text": "Records, Arrays and Storage Paths",
-          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
-        },
-        {
-          "text": "Assignment and Standard Operations",
-          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
-        },
-        {
-          "text": "Conditions and Loops",
-          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
-        },
-        {
-          "text": "Routines",
-          "link": "/lanternfly-book/book2/09-routines.html"
-        },
-        {
-          "text": "Modules, Programs and Hosted Bodies",
-          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
-        },
-        {
-          "text": "Targets, External Routines and Assembly",
-          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
-        },
-        {
-          "text": "Grammar and Word Inventory",
-          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
-        },
-        {
-          "text": "Diagnostics and Conformance",
-          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
-        },
-        {
-          "text": "Failable Routines and Error Handling",
-          "link": "/lanternfly-book/book2/14-error-handling.html"
-        }
-      ]
-    },
-    {
-      "text": "Nucleus 0.1 Language Specification",
-      "collapsed": true,
-      "items": [
-        {
           "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
+          "link": "/nucleus/language/01-status-and-conformance.html"
         },
         {
           "text": "2. Design constraints",
-          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
+          "link": "/nucleus/language/02-design-constraints.html"
         },
         {
           "text": "3. Source text and lexical rules",
-          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
+          "link": "/nucleus/language/03-source-text-and-lexical-rules.html"
         },
         {
           "text": "4. Program and file structure",
-          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
+          "link": "/nucleus/language/04-program-and-file-structure.html"
         },
         {
           "text": "5. Names and scopes",
-          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
+          "link": "/nucleus/language/05-names-and-scopes.html"
         },
         {
           "text": "6. Types",
-          "link": "/lanternfly-book/nucleus/06-types.html"
+          "link": "/nucleus/language/06-types.html"
         },
         {
           "text": "7. Storage, values, and lifetime",
-          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
+          "link": "/nucleus/language/07-storage-values-and-lifetime.html"
         },
         {
           "text": "8. Constants and declarations",
-          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
+          "link": "/nucleus/language/08-constants-and-declarations.html"
         },
         {
           "text": "9. Expressions",
-          "link": "/lanternfly-book/nucleus/09-expressions.html"
+          "link": "/nucleus/language/09-expressions.html"
         },
         {
           "text": "10. Statements",
-          "link": "/lanternfly-book/nucleus/10-statements.html"
+          "link": "/nucleus/language/10-statements.html"
         },
         {
           "text": "11. Conditional control",
-          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
+          "link": "/nucleus/language/11-conditional-control.html"
         },
         {
           "text": "12. Loop control",
-          "link": "/lanternfly-book/nucleus/12-loop-control.html"
+          "link": "/nucleus/language/12-loop-control.html"
         },
         {
           "text": "13. Routines and calls",
-          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
+          "link": "/nucleus/language/13-routines-and-calls.html"
         },
         {
           "text": "14. Recoverable errors",
-          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
+          "link": "/nucleus/language/14-recoverable-errors.html"
         },
         {
           "text": "15. Safety failures and traps",
-          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
+          "link": "/nucleus/language/15-safety-failures-and-traps.html"
         },
         {
           "text": "16. System boundary",
-          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
+          "link": "/nucleus/language/16-system-boundary.html"
         },
         {
           "text": "17. Complete grammar",
-          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
+          "link": "/nucleus/language/17-complete-grammar.html"
         },
         {
           "text": "18. Static semantics",
-          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
+          "link": "/nucleus/language/18-static-semantics.html"
         },
         {
           "text": "19. Runtime semantics",
-          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
+          "link": "/nucleus/language/19-runtime-semantics.html"
         },
         {
           "text": "20. Feature ledger",
-          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
+          "link": "/nucleus/language/20-feature-ledger.html"
         },
         {
           "text": "21. Conformance examples",
-          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+          "link": "/nucleus/language/21-conformance-examples.html"
         }
       ]
     },
@@ -1835,1341 +1695,271 @@ export const sidebars = {
       "items": [
         {
           "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
+          "link": "/nucleus/vm/01-status-and-conformance.html"
         },
         {
           "text": "2. Purpose, constraints, and non-goals",
-          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
+          "link": "/nucleus/vm/02-purpose-constraints-and-non-goals.html"
         },
         {
           "text": "3. Machine overview",
-          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
+          "link": "/nucleus/vm/03-machine-overview.html"
         },
         {
           "text": "4. Address space and memory model",
-          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
+          "link": "/nucleus/vm/04-address-space-and-memory-model.html"
         },
         {
           "text": "5. Bytecode image and loading format",
-          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
+          "link": "/nucleus/vm/05-bytecode-image-and-loading-format.html"
         },
         {
           "text": "6. Machine state",
-          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
+          "link": "/nucleus/vm/06-machine-state.html"
         },
         {
           "text": "7. Runtime values and representation invariants",
-          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
+          "link": "/nucleus/vm/07-runtime-values-and-representation-invariants.html"
         },
         {
           "text": "8. Virtual-slot organization",
-          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
+          "link": "/nucleus/vm/08-virtual-slot-organization.html"
         },
         {
           "text": "9. Instruction encoding",
-          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
+          "link": "/nucleus/vm/09-instruction-encoding.html"
         },
         {
           "text": "10. Data movement and memory access",
-          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
+          "link": "/nucleus/vm/10-data-movement-and-memory-access.html"
         },
         {
           "text": "11. Arithmetic, logic, comparison, and conversions",
-          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
+          "link": "/nucleus/vm/11-arithmetic-logic-comparison-and-conversions.html"
         },
         {
           "text": "12. Primitive control flow",
-          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
+          "link": "/nucleus/vm/12-primitive-control-flow.html"
         },
         {
           "text": "13. Routines and activation storage",
-          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
+          "link": "/nucleus/vm/13-routines-and-activation-storage.html"
         },
         {
           "text": "14. Recoverable failure",
-          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
+          "link": "/nucleus/vm/14-recoverable-failure.html"
         },
         {
           "text": "15. Safety traps and diagnostics",
-          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
+          "link": "/nucleus/vm/15-safety-traps-and-diagnostics.html"
         },
         {
           "text": "16. Nucleus System Services 0.1 ABI",
-          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
+          "link": "/nucleus/vm/16-nucleus-system-services-0-1-abi.html"
         },
         {
           "text": "17. Interpreter contract and Z80 mapping",
-          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
+          "link": "/nucleus/vm/17-interpreter-contract-and-z80-mapping.html"
         },
         {
           "text": "18. Native-backend contract",
-          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
+          "link": "/nucleus/vm/18-native-backend-contract.html"
         },
         {
           "text": "19. Image validity",
-          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
+          "link": "/nucleus/vm/19-image-validity.html"
         },
         {
           "text": "20. Conformance vectors",
-          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
+          "link": "/nucleus/vm/20-conformance-vectors.html"
         },
         {
           "text": "21. Feature and cost ledger",
-          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly White Papers",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "White papers overview",
-          "link": "/lanternfly-book/papers/index.html"
-        },
-        {
-          "text": "Cooperative Tasks for Lanternfly",
-          "link": "/lanternfly-book/papers/cooperative-tasks.html"
-        },
-        {
-          "text": "Task-first Lanternfly",
-          "link": "/lanternfly-book/papers/task-first.html"
-        },
-        {
-          "text": "Static Frames for Lanternfly",
-          "link": "/lanternfly-book/papers/static-frames.html"
-        },
-        {
-          "text": "Reactive Lanternfly",
-          "link": "/lanternfly-book/papers/reactive.html"
+          "link": "/nucleus/vm/21-feature-and-cost-ledger.html"
         }
       ]
     }
   ],
-  "/lanternfly-book/book1/": [
-    {
-      "text": "Lanternfly Book 1 — Programming Fundamentals",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "Introduction",
-          "link": "/lanternfly-book/book1/00-introduction.html"
-        },
-        {
-          "text": "Your First Lanternfly Program",
-          "link": "/lanternfly-book/book1/01-a-first-program.html"
-        },
-        {
-          "text": "Scalar Values and Literals",
-          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
-        },
-        {
-          "text": "Expressions and Conversions",
-          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
-        },
-        {
-          "text": "Comparisons, Booleans and Bit Masks",
-          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
-        },
-        {
-          "text": "Named Ordinals and Decisions",
-          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
-        },
-        {
-          "text": "Repeating Work",
-          "link": "/lanternfly-book/book1/06-loops.html"
-        },
-        {
-          "text": "Fixed Arrays and Index Domains",
-          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
-        },
-        {
-          "text": "Characters and Fixed-Capacity Strings",
-          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
-        },
-        {
-          "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
-        },
-        {
-          "text": "Building with Subroutines",
-          "link": "/lanternfly-book/book1/10-subroutines.html"
-        },
-        {
-          "text": "Selecting Existing Storage",
-          "link": "/lanternfly-book/book1/11-selecting-storage.html"
-        },
-        {
-          "text": "Modules and Imports",
-          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
-        },
-        {
-          "text": "Portable Text Input and Output",
-          "link": "/lanternfly-book/book1/13-portable-text-io.html"
-        },
-        {
-          "text": "Expecting Failure",
-          "link": "/lanternfly-book/book1/14-expecting-failure.html"
-        },
-        {
-          "text": "Propagation and Cleanup",
-          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
-        },
-        {
-          "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
-        },
-        {
-          "text": "Glossary",
-          "link": "/lanternfly-book/book1/glossary.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly Book 2 — Language Reference",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Language Model and Source Form",
-          "link": "/lanternfly-book/book2/01-language-and-source.html"
-        },
-        {
-          "text": "Names and Scopes",
-          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
-        },
-        {
-          "text": "Types, Literals and Strings",
-          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
-        },
-        {
-          "text": "Integer Expressions and Conversions",
-          "link": "/lanternfly-book/book2/04-integer-expressions.html"
-        },
-        {
-          "text": "Constants, Variables and Placement",
-          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
-        },
-        {
-          "text": "Records, Arrays and Storage Paths",
-          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
-        },
-        {
-          "text": "Assignment and Standard Operations",
-          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
-        },
-        {
-          "text": "Conditions and Loops",
-          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
-        },
-        {
-          "text": "Routines",
-          "link": "/lanternfly-book/book2/09-routines.html"
-        },
-        {
-          "text": "Modules, Programs and Hosted Bodies",
-          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
-        },
-        {
-          "text": "Targets, External Routines and Assembly",
-          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
-        },
-        {
-          "text": "Grammar and Word Inventory",
-          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
-        },
-        {
-          "text": "Diagnostics and Conformance",
-          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
-        },
-        {
-          "text": "Failable Routines and Error Handling",
-          "link": "/lanternfly-book/book2/14-error-handling.html"
-        }
-      ]
-    },
-    {
-      "text": "Nucleus 0.1 Language Specification",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
-        },
-        {
-          "text": "2. Design constraints",
-          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
-        },
-        {
-          "text": "3. Source text and lexical rules",
-          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
-        },
-        {
-          "text": "4. Program and file structure",
-          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
-        },
-        {
-          "text": "5. Names and scopes",
-          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
-        },
-        {
-          "text": "6. Types",
-          "link": "/lanternfly-book/nucleus/06-types.html"
-        },
-        {
-          "text": "7. Storage, values, and lifetime",
-          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
-        },
-        {
-          "text": "8. Constants and declarations",
-          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
-        },
-        {
-          "text": "9. Expressions",
-          "link": "/lanternfly-book/nucleus/09-expressions.html"
-        },
-        {
-          "text": "10. Statements",
-          "link": "/lanternfly-book/nucleus/10-statements.html"
-        },
-        {
-          "text": "11. Conditional control",
-          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
-        },
-        {
-          "text": "12. Loop control",
-          "link": "/lanternfly-book/nucleus/12-loop-control.html"
-        },
-        {
-          "text": "13. Routines and calls",
-          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
-        },
-        {
-          "text": "14. Recoverable errors",
-          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
-        },
-        {
-          "text": "15. Safety failures and traps",
-          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
-        },
-        {
-          "text": "16. System boundary",
-          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
-        },
-        {
-          "text": "17. Complete grammar",
-          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
-        },
-        {
-          "text": "18. Static semantics",
-          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
-        },
-        {
-          "text": "19. Runtime semantics",
-          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
-        },
-        {
-          "text": "20. Feature ledger",
-          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
-        },
-        {
-          "text": "21. Conformance examples",
-          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
-        }
-      ]
-    },
-    {
-      "text": "Nucleus Virtual Machine 0.1 Specification",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
-        },
-        {
-          "text": "2. Purpose, constraints, and non-goals",
-          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
-        },
-        {
-          "text": "3. Machine overview",
-          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
-        },
-        {
-          "text": "4. Address space and memory model",
-          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
-        },
-        {
-          "text": "5. Bytecode image and loading format",
-          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
-        },
-        {
-          "text": "6. Machine state",
-          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
-        },
-        {
-          "text": "7. Runtime values and representation invariants",
-          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
-        },
-        {
-          "text": "8. Virtual-slot organization",
-          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
-        },
-        {
-          "text": "9. Instruction encoding",
-          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
-        },
-        {
-          "text": "10. Data movement and memory access",
-          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
-        },
-        {
-          "text": "11. Arithmetic, logic, comparison, and conversions",
-          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
-        },
-        {
-          "text": "12. Primitive control flow",
-          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
-        },
-        {
-          "text": "13. Routines and activation storage",
-          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
-        },
-        {
-          "text": "14. Recoverable failure",
-          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
-        },
-        {
-          "text": "15. Safety traps and diagnostics",
-          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
-        },
-        {
-          "text": "16. Nucleus System Services 0.1 ABI",
-          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
-        },
-        {
-          "text": "17. Interpreter contract and Z80 mapping",
-          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
-        },
-        {
-          "text": "18. Native-backend contract",
-          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
-        },
-        {
-          "text": "19. Image validity",
-          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
-        },
-        {
-          "text": "20. Conformance vectors",
-          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
-        },
-        {
-          "text": "21. Feature and cost ledger",
-          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly White Papers",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "White papers overview",
-          "link": "/lanternfly-book/papers/index.html"
-        },
-        {
-          "text": "Cooperative Tasks for Lanternfly",
-          "link": "/lanternfly-book/papers/cooperative-tasks.html"
-        },
-        {
-          "text": "Task-first Lanternfly",
-          "link": "/lanternfly-book/papers/task-first.html"
-        },
-        {
-          "text": "Static Frames for Lanternfly",
-          "link": "/lanternfly-book/papers/static-frames.html"
-        },
-        {
-          "text": "Reactive Lanternfly",
-          "link": "/lanternfly-book/papers/reactive.html"
-        }
-      ]
-    }
-  ],
-  "/lanternfly-book/book2/": [
-    {
-      "text": "Lanternfly Book 1 — Programming Fundamentals",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Introduction",
-          "link": "/lanternfly-book/book1/00-introduction.html"
-        },
-        {
-          "text": "Your First Lanternfly Program",
-          "link": "/lanternfly-book/book1/01-a-first-program.html"
-        },
-        {
-          "text": "Scalar Values and Literals",
-          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
-        },
-        {
-          "text": "Expressions and Conversions",
-          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
-        },
-        {
-          "text": "Comparisons, Booleans and Bit Masks",
-          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
-        },
-        {
-          "text": "Named Ordinals and Decisions",
-          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
-        },
-        {
-          "text": "Repeating Work",
-          "link": "/lanternfly-book/book1/06-loops.html"
-        },
-        {
-          "text": "Fixed Arrays and Index Domains",
-          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
-        },
-        {
-          "text": "Characters and Fixed-Capacity Strings",
-          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
-        },
-        {
-          "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
-        },
-        {
-          "text": "Building with Subroutines",
-          "link": "/lanternfly-book/book1/10-subroutines.html"
-        },
-        {
-          "text": "Selecting Existing Storage",
-          "link": "/lanternfly-book/book1/11-selecting-storage.html"
-        },
-        {
-          "text": "Modules and Imports",
-          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
-        },
-        {
-          "text": "Portable Text Input and Output",
-          "link": "/lanternfly-book/book1/13-portable-text-io.html"
-        },
-        {
-          "text": "Expecting Failure",
-          "link": "/lanternfly-book/book1/14-expecting-failure.html"
-        },
-        {
-          "text": "Propagation and Cleanup",
-          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
-        },
-        {
-          "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
-        },
-        {
-          "text": "Glossary",
-          "link": "/lanternfly-book/book1/glossary.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly Book 2 — Language Reference",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "Language Model and Source Form",
-          "link": "/lanternfly-book/book2/01-language-and-source.html"
-        },
-        {
-          "text": "Names and Scopes",
-          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
-        },
-        {
-          "text": "Types, Literals and Strings",
-          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
-        },
-        {
-          "text": "Integer Expressions and Conversions",
-          "link": "/lanternfly-book/book2/04-integer-expressions.html"
-        },
-        {
-          "text": "Constants, Variables and Placement",
-          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
-        },
-        {
-          "text": "Records, Arrays and Storage Paths",
-          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
-        },
-        {
-          "text": "Assignment and Standard Operations",
-          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
-        },
-        {
-          "text": "Conditions and Loops",
-          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
-        },
-        {
-          "text": "Routines",
-          "link": "/lanternfly-book/book2/09-routines.html"
-        },
-        {
-          "text": "Modules, Programs and Hosted Bodies",
-          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
-        },
-        {
-          "text": "Targets, External Routines and Assembly",
-          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
-        },
-        {
-          "text": "Grammar and Word Inventory",
-          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
-        },
-        {
-          "text": "Diagnostics and Conformance",
-          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
-        },
-        {
-          "text": "Failable Routines and Error Handling",
-          "link": "/lanternfly-book/book2/14-error-handling.html"
-        }
-      ]
-    },
-    {
-      "text": "Nucleus 0.1 Language Specification",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
-        },
-        {
-          "text": "2. Design constraints",
-          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
-        },
-        {
-          "text": "3. Source text and lexical rules",
-          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
-        },
-        {
-          "text": "4. Program and file structure",
-          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
-        },
-        {
-          "text": "5. Names and scopes",
-          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
-        },
-        {
-          "text": "6. Types",
-          "link": "/lanternfly-book/nucleus/06-types.html"
-        },
-        {
-          "text": "7. Storage, values, and lifetime",
-          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
-        },
-        {
-          "text": "8. Constants and declarations",
-          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
-        },
-        {
-          "text": "9. Expressions",
-          "link": "/lanternfly-book/nucleus/09-expressions.html"
-        },
-        {
-          "text": "10. Statements",
-          "link": "/lanternfly-book/nucleus/10-statements.html"
-        },
-        {
-          "text": "11. Conditional control",
-          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
-        },
-        {
-          "text": "12. Loop control",
-          "link": "/lanternfly-book/nucleus/12-loop-control.html"
-        },
-        {
-          "text": "13. Routines and calls",
-          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
-        },
-        {
-          "text": "14. Recoverable errors",
-          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
-        },
-        {
-          "text": "15. Safety failures and traps",
-          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
-        },
-        {
-          "text": "16. System boundary",
-          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
-        },
-        {
-          "text": "17. Complete grammar",
-          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
-        },
-        {
-          "text": "18. Static semantics",
-          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
-        },
-        {
-          "text": "19. Runtime semantics",
-          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
-        },
-        {
-          "text": "20. Feature ledger",
-          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
-        },
-        {
-          "text": "21. Conformance examples",
-          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
-        }
-      ]
-    },
-    {
-      "text": "Nucleus Virtual Machine 0.1 Specification",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
-        },
-        {
-          "text": "2. Purpose, constraints, and non-goals",
-          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
-        },
-        {
-          "text": "3. Machine overview",
-          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
-        },
-        {
-          "text": "4. Address space and memory model",
-          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
-        },
-        {
-          "text": "5. Bytecode image and loading format",
-          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
-        },
-        {
-          "text": "6. Machine state",
-          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
-        },
-        {
-          "text": "7. Runtime values and representation invariants",
-          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
-        },
-        {
-          "text": "8. Virtual-slot organization",
-          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
-        },
-        {
-          "text": "9. Instruction encoding",
-          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
-        },
-        {
-          "text": "10. Data movement and memory access",
-          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
-        },
-        {
-          "text": "11. Arithmetic, logic, comparison, and conversions",
-          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
-        },
-        {
-          "text": "12. Primitive control flow",
-          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
-        },
-        {
-          "text": "13. Routines and activation storage",
-          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
-        },
-        {
-          "text": "14. Recoverable failure",
-          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
-        },
-        {
-          "text": "15. Safety traps and diagnostics",
-          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
-        },
-        {
-          "text": "16. Nucleus System Services 0.1 ABI",
-          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
-        },
-        {
-          "text": "17. Interpreter contract and Z80 mapping",
-          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
-        },
-        {
-          "text": "18. Native-backend contract",
-          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
-        },
-        {
-          "text": "19. Image validity",
-          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
-        },
-        {
-          "text": "20. Conformance vectors",
-          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
-        },
-        {
-          "text": "21. Feature and cost ledger",
-          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly White Papers",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "White papers overview",
-          "link": "/lanternfly-book/papers/index.html"
-        },
-        {
-          "text": "Cooperative Tasks for Lanternfly",
-          "link": "/lanternfly-book/papers/cooperative-tasks.html"
-        },
-        {
-          "text": "Task-first Lanternfly",
-          "link": "/lanternfly-book/papers/task-first.html"
-        },
-        {
-          "text": "Static Frames for Lanternfly",
-          "link": "/lanternfly-book/papers/static-frames.html"
-        },
-        {
-          "text": "Reactive Lanternfly",
-          "link": "/lanternfly-book/papers/reactive.html"
-        }
-      ]
-    }
-  ],
-  "/lanternfly-book/nucleus/": [
+  "/nucleus/language/": [
     {
       "text": "Nucleus 0.1 Language Specification",
       "collapsed": false,
       "items": [
         {
           "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
+          "link": "/nucleus/language/01-status-and-conformance.html"
         },
         {
           "text": "2. Design constraints",
-          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
+          "link": "/nucleus/language/02-design-constraints.html"
         },
         {
           "text": "3. Source text and lexical rules",
-          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
+          "link": "/nucleus/language/03-source-text-and-lexical-rules.html"
         },
         {
           "text": "4. Program and file structure",
-          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
+          "link": "/nucleus/language/04-program-and-file-structure.html"
         },
         {
           "text": "5. Names and scopes",
-          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
+          "link": "/nucleus/language/05-names-and-scopes.html"
         },
         {
           "text": "6. Types",
-          "link": "/lanternfly-book/nucleus/06-types.html"
+          "link": "/nucleus/language/06-types.html"
         },
         {
           "text": "7. Storage, values, and lifetime",
-          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
+          "link": "/nucleus/language/07-storage-values-and-lifetime.html"
         },
         {
           "text": "8. Constants and declarations",
-          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
+          "link": "/nucleus/language/08-constants-and-declarations.html"
         },
         {
           "text": "9. Expressions",
-          "link": "/lanternfly-book/nucleus/09-expressions.html"
+          "link": "/nucleus/language/09-expressions.html"
         },
         {
           "text": "10. Statements",
-          "link": "/lanternfly-book/nucleus/10-statements.html"
+          "link": "/nucleus/language/10-statements.html"
         },
         {
           "text": "11. Conditional control",
-          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
+          "link": "/nucleus/language/11-conditional-control.html"
         },
         {
           "text": "12. Loop control",
-          "link": "/lanternfly-book/nucleus/12-loop-control.html"
+          "link": "/nucleus/language/12-loop-control.html"
         },
         {
           "text": "13. Routines and calls",
-          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
+          "link": "/nucleus/language/13-routines-and-calls.html"
         },
         {
           "text": "14. Recoverable errors",
-          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
+          "link": "/nucleus/language/14-recoverable-errors.html"
         },
         {
           "text": "15. Safety failures and traps",
-          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
+          "link": "/nucleus/language/15-safety-failures-and-traps.html"
         },
         {
           "text": "16. System boundary",
-          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
+          "link": "/nucleus/language/16-system-boundary.html"
         },
         {
           "text": "17. Complete grammar",
-          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
+          "link": "/nucleus/language/17-complete-grammar.html"
         },
         {
           "text": "18. Static semantics",
-          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
+          "link": "/nucleus/language/18-static-semantics.html"
         },
         {
           "text": "19. Runtime semantics",
-          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
+          "link": "/nucleus/language/19-runtime-semantics.html"
         },
         {
           "text": "20. Feature ledger",
-          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
+          "link": "/nucleus/language/20-feature-ledger.html"
         },
         {
           "text": "21. Conformance examples",
-          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
+          "link": "/nucleus/language/21-conformance-examples.html"
         }
       ]
     }
   ],
-  "/lanternfly-book/nucleus-vm/": [
+  "/nucleus/vm/": [
     {
       "text": "Nucleus Virtual Machine 0.1 Specification",
       "collapsed": false,
       "items": [
         {
           "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
+          "link": "/nucleus/vm/01-status-and-conformance.html"
         },
         {
           "text": "2. Purpose, constraints, and non-goals",
-          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
+          "link": "/nucleus/vm/02-purpose-constraints-and-non-goals.html"
         },
         {
           "text": "3. Machine overview",
-          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
+          "link": "/nucleus/vm/03-machine-overview.html"
         },
         {
           "text": "4. Address space and memory model",
-          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
+          "link": "/nucleus/vm/04-address-space-and-memory-model.html"
         },
         {
           "text": "5. Bytecode image and loading format",
-          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
+          "link": "/nucleus/vm/05-bytecode-image-and-loading-format.html"
         },
         {
           "text": "6. Machine state",
-          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
+          "link": "/nucleus/vm/06-machine-state.html"
         },
         {
           "text": "7. Runtime values and representation invariants",
-          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
+          "link": "/nucleus/vm/07-runtime-values-and-representation-invariants.html"
         },
         {
           "text": "8. Virtual-slot organization",
-          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
+          "link": "/nucleus/vm/08-virtual-slot-organization.html"
         },
         {
           "text": "9. Instruction encoding",
-          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
+          "link": "/nucleus/vm/09-instruction-encoding.html"
         },
         {
           "text": "10. Data movement and memory access",
-          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
+          "link": "/nucleus/vm/10-data-movement-and-memory-access.html"
         },
         {
           "text": "11. Arithmetic, logic, comparison, and conversions",
-          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
+          "link": "/nucleus/vm/11-arithmetic-logic-comparison-and-conversions.html"
         },
         {
           "text": "12. Primitive control flow",
-          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
+          "link": "/nucleus/vm/12-primitive-control-flow.html"
         },
         {
           "text": "13. Routines and activation storage",
-          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
+          "link": "/nucleus/vm/13-routines-and-activation-storage.html"
         },
         {
           "text": "14. Recoverable failure",
-          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
+          "link": "/nucleus/vm/14-recoverable-failure.html"
         },
         {
           "text": "15. Safety traps and diagnostics",
-          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
+          "link": "/nucleus/vm/15-safety-traps-and-diagnostics.html"
         },
         {
           "text": "16. Nucleus System Services 0.1 ABI",
-          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
+          "link": "/nucleus/vm/16-nucleus-system-services-0-1-abi.html"
         },
         {
           "text": "17. Interpreter contract and Z80 mapping",
-          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
+          "link": "/nucleus/vm/17-interpreter-contract-and-z80-mapping.html"
         },
         {
           "text": "18. Native-backend contract",
-          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
+          "link": "/nucleus/vm/18-native-backend-contract.html"
         },
         {
           "text": "19. Image validity",
-          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
+          "link": "/nucleus/vm/19-image-validity.html"
         },
         {
           "text": "20. Conformance vectors",
-          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
+          "link": "/nucleus/vm/20-conformance-vectors.html"
         },
         {
           "text": "21. Feature and cost ledger",
-          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
-        }
-      ]
-    }
-  ],
-  "/lanternfly-book/papers/": [
-    {
-      "text": "Lanternfly Book 1 — Programming Fundamentals",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Introduction",
-          "link": "/lanternfly-book/book1/00-introduction.html"
-        },
-        {
-          "text": "Your First Lanternfly Program",
-          "link": "/lanternfly-book/book1/01-a-first-program.html"
-        },
-        {
-          "text": "Scalar Values and Literals",
-          "link": "/lanternfly-book/book1/02-scalar-values-and-literals.html"
-        },
-        {
-          "text": "Expressions and Conversions",
-          "link": "/lanternfly-book/book1/03-expressions-and-conversions.html"
-        },
-        {
-          "text": "Comparisons, Booleans and Bit Masks",
-          "link": "/lanternfly-book/book1/04-comparisons-booleans-and-masks.html"
-        },
-        {
-          "text": "Named Ordinals and Decisions",
-          "link": "/lanternfly-book/book1/05-ordinals-and-decisions.html"
-        },
-        {
-          "text": "Repeating Work",
-          "link": "/lanternfly-book/book1/06-loops.html"
-        },
-        {
-          "text": "Fixed Arrays and Index Domains",
-          "link": "/lanternfly-book/book1/07-fixed-arrays.html"
-        },
-        {
-          "text": "Characters and Fixed-Capacity Strings",
-          "link": "/lanternfly-book/book1/08-characters-and-strings.html"
-        },
-        {
-          "text": "Records and Memory Layout",
-          "link": "/lanternfly-book/book1/09-records-and-exact-layout.html"
-        },
-        {
-          "text": "Building with Subroutines",
-          "link": "/lanternfly-book/book1/10-subroutines.html"
-        },
-        {
-          "text": "Selecting Existing Storage",
-          "link": "/lanternfly-book/book1/11-selecting-storage.html"
-        },
-        {
-          "text": "Modules and Imports",
-          "link": "/lanternfly-book/book1/12-modules-and-imports.html"
-        },
-        {
-          "text": "Portable Text Input and Output",
-          "link": "/lanternfly-book/book1/13-portable-text-io.html"
-        },
-        {
-          "text": "Expecting Failure",
-          "link": "/lanternfly-book/book1/14-expecting-failure.html"
-        },
-        {
-          "text": "Propagation and Cleanup",
-          "link": "/lanternfly-book/book1/15-propagation-and-cleanup.html"
-        },
-        {
-          "text": "Machine Services and Assembly",
-          "link": "/lanternfly-book/book1/16-machine-services-and-assembly.html"
-        },
-        {
-          "text": "Glossary",
-          "link": "/lanternfly-book/book1/glossary.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly Book 2 — Language Reference",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Language Model and Source Form",
-          "link": "/lanternfly-book/book2/01-language-and-source.html"
-        },
-        {
-          "text": "Names and Scopes",
-          "link": "/lanternfly-book/book2/02-names-and-scopes.html"
-        },
-        {
-          "text": "Types, Literals and Strings",
-          "link": "/lanternfly-book/book2/03-types-literals-and-text.html"
-        },
-        {
-          "text": "Integer Expressions and Conversions",
-          "link": "/lanternfly-book/book2/04-integer-expressions.html"
-        },
-        {
-          "text": "Constants, Variables and Placement",
-          "link": "/lanternfly-book/book2/05-constants-variables-placement.html"
-        },
-        {
-          "text": "Records, Arrays and Storage Paths",
-          "link": "/lanternfly-book/book2/06-records-arrays-paths.html"
-        },
-        {
-          "text": "Assignment and Standard Operations",
-          "link": "/lanternfly-book/book2/07-assignment-and-operations.html"
-        },
-        {
-          "text": "Conditions and Loops",
-          "link": "/lanternfly-book/book2/08-conditions-and-loops.html"
-        },
-        {
-          "text": "Routines",
-          "link": "/lanternfly-book/book2/09-routines.html"
-        },
-        {
-          "text": "Modules, Programs and Hosted Bodies",
-          "link": "/lanternfly-book/book2/10-modules-and-programs.html"
-        },
-        {
-          "text": "Targets, External Routines and Assembly",
-          "link": "/lanternfly-book/book2/11-targets-and-native-code.html"
-        },
-        {
-          "text": "Grammar and Word Inventory",
-          "link": "/lanternfly-book/book2/12-grammar-and-words.html"
-        },
-        {
-          "text": "Diagnostics and Conformance",
-          "link": "/lanternfly-book/book2/13-diagnostics-and-conformance.html"
-        },
-        {
-          "text": "Failable Routines and Error Handling",
-          "link": "/lanternfly-book/book2/14-error-handling.html"
-        }
-      ]
-    },
-    {
-      "text": "Nucleus 0.1 Language Specification",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus/01-status-and-conformance.html"
-        },
-        {
-          "text": "2. Design constraints",
-          "link": "/lanternfly-book/nucleus/02-design-constraints.html"
-        },
-        {
-          "text": "3. Source text and lexical rules",
-          "link": "/lanternfly-book/nucleus/03-source-text-and-lexical-rules.html"
-        },
-        {
-          "text": "4. Program and file structure",
-          "link": "/lanternfly-book/nucleus/04-program-and-file-structure.html"
-        },
-        {
-          "text": "5. Names and scopes",
-          "link": "/lanternfly-book/nucleus/05-names-and-scopes.html"
-        },
-        {
-          "text": "6. Types",
-          "link": "/lanternfly-book/nucleus/06-types.html"
-        },
-        {
-          "text": "7. Storage, values, and lifetime",
-          "link": "/lanternfly-book/nucleus/07-storage-values-and-lifetime.html"
-        },
-        {
-          "text": "8. Constants and declarations",
-          "link": "/lanternfly-book/nucleus/08-constants-and-declarations.html"
-        },
-        {
-          "text": "9. Expressions",
-          "link": "/lanternfly-book/nucleus/09-expressions.html"
-        },
-        {
-          "text": "10. Statements",
-          "link": "/lanternfly-book/nucleus/10-statements.html"
-        },
-        {
-          "text": "11. Conditional control",
-          "link": "/lanternfly-book/nucleus/11-conditional-control.html"
-        },
-        {
-          "text": "12. Loop control",
-          "link": "/lanternfly-book/nucleus/12-loop-control.html"
-        },
-        {
-          "text": "13. Routines and calls",
-          "link": "/lanternfly-book/nucleus/13-routines-and-calls.html"
-        },
-        {
-          "text": "14. Recoverable errors",
-          "link": "/lanternfly-book/nucleus/14-recoverable-errors.html"
-        },
-        {
-          "text": "15. Safety failures and traps",
-          "link": "/lanternfly-book/nucleus/15-safety-failures-and-traps.html"
-        },
-        {
-          "text": "16. System boundary",
-          "link": "/lanternfly-book/nucleus/16-system-boundary.html"
-        },
-        {
-          "text": "17. Complete grammar",
-          "link": "/lanternfly-book/nucleus/17-complete-grammar.html"
-        },
-        {
-          "text": "18. Static semantics",
-          "link": "/lanternfly-book/nucleus/18-static-semantics.html"
-        },
-        {
-          "text": "19. Runtime semantics",
-          "link": "/lanternfly-book/nucleus/19-runtime-semantics.html"
-        },
-        {
-          "text": "20. Feature ledger",
-          "link": "/lanternfly-book/nucleus/20-feature-ledger.html"
-        },
-        {
-          "text": "21. Conformance examples",
-          "link": "/lanternfly-book/nucleus/21-conformance-examples.html"
-        }
-      ]
-    },
-    {
-      "text": "Nucleus Virtual Machine 0.1 Specification",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "1. Status and conformance",
-          "link": "/lanternfly-book/nucleus-vm/01-status-and-conformance.html"
-        },
-        {
-          "text": "2. Purpose, constraints, and non-goals",
-          "link": "/lanternfly-book/nucleus-vm/02-purpose-constraints-and-non-goals.html"
-        },
-        {
-          "text": "3. Machine overview",
-          "link": "/lanternfly-book/nucleus-vm/03-machine-overview.html"
-        },
-        {
-          "text": "4. Address space and memory model",
-          "link": "/lanternfly-book/nucleus-vm/04-address-space-and-memory-model.html"
-        },
-        {
-          "text": "5. Bytecode image and loading format",
-          "link": "/lanternfly-book/nucleus-vm/05-bytecode-image-and-loading-format.html"
-        },
-        {
-          "text": "6. Machine state",
-          "link": "/lanternfly-book/nucleus-vm/06-machine-state.html"
-        },
-        {
-          "text": "7. Runtime values and representation invariants",
-          "link": "/lanternfly-book/nucleus-vm/07-runtime-values-and-representation-invariants.html"
-        },
-        {
-          "text": "8. Virtual-slot organization",
-          "link": "/lanternfly-book/nucleus-vm/08-virtual-slot-organization.html"
-        },
-        {
-          "text": "9. Instruction encoding",
-          "link": "/lanternfly-book/nucleus-vm/09-instruction-encoding.html"
-        },
-        {
-          "text": "10. Data movement and memory access",
-          "link": "/lanternfly-book/nucleus-vm/10-data-movement-and-memory-access.html"
-        },
-        {
-          "text": "11. Arithmetic, logic, comparison, and conversions",
-          "link": "/lanternfly-book/nucleus-vm/11-arithmetic-logic-comparison-and-conversions.html"
-        },
-        {
-          "text": "12. Primitive control flow",
-          "link": "/lanternfly-book/nucleus-vm/12-primitive-control-flow.html"
-        },
-        {
-          "text": "13. Routines and activation storage",
-          "link": "/lanternfly-book/nucleus-vm/13-routines-and-activation-storage.html"
-        },
-        {
-          "text": "14. Recoverable failure",
-          "link": "/lanternfly-book/nucleus-vm/14-recoverable-failure.html"
-        },
-        {
-          "text": "15. Safety traps and diagnostics",
-          "link": "/lanternfly-book/nucleus-vm/15-safety-traps-and-diagnostics.html"
-        },
-        {
-          "text": "16. Nucleus System Services 0.1 ABI",
-          "link": "/lanternfly-book/nucleus-vm/16-nucleus-system-services-0-1-abi.html"
-        },
-        {
-          "text": "17. Interpreter contract and Z80 mapping",
-          "link": "/lanternfly-book/nucleus-vm/17-interpreter-contract-and-z80-mapping.html"
-        },
-        {
-          "text": "18. Native-backend contract",
-          "link": "/lanternfly-book/nucleus-vm/18-native-backend-contract.html"
-        },
-        {
-          "text": "19. Image validity",
-          "link": "/lanternfly-book/nucleus-vm/19-image-validity.html"
-        },
-        {
-          "text": "20. Conformance vectors",
-          "link": "/lanternfly-book/nucleus-vm/20-conformance-vectors.html"
-        },
-        {
-          "text": "21. Feature and cost ledger",
-          "link": "/lanternfly-book/nucleus-vm/21-feature-and-cost-ledger.html"
-        }
-      ]
-    },
-    {
-      "text": "Lanternfly White Papers",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "White papers overview",
-          "link": "/lanternfly-book/papers/index.html"
-        },
-        {
-          "text": "Cooperative Tasks for Lanternfly",
-          "link": "/lanternfly-book/papers/cooperative-tasks.html"
-        },
-        {
-          "text": "Task-first Lanternfly",
-          "link": "/lanternfly-book/papers/task-first.html"
-        },
-        {
-          "text": "Static Frames for Lanternfly",
-          "link": "/lanternfly-book/papers/static-frames.html"
-        },
-        {
-          "text": "Reactive Lanternfly",
-          "link": "/lanternfly-book/papers/reactive.html"
+          "link": "/nucleus/vm/21-feature-and-cost-ledger.html"
         }
       ]
     }
