@@ -1,19 +1,19 @@
 ---
 layout: "default"
 title: "Nucleus Virtual Machine 0.1 Specification"
-nav_order: 4
+nav_order: 2
 has_children: true
 has_toc: false
 standalone: true
 isolated: true
 pageClass: "nucleus-specification"
 ---
-<Mark class="book-plate" book="lanternfly" size="52" />
+<Mark class="book-plate" book="nucleus" size="52" />
 
 # Nucleus Virtual Machine 0.1 Specification
 
 ::: info Authoritative source
-This reading edition is generated from the [Nucleus VM specification in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/lanternfly/docs/nucleus/virtual-machine-specification.md) at revision [`7d09f6801b7d`](https://github.com/jhlagado/debug80/blob/7d09f6801b7d88b16ee4d13a3e5bad857458664b/packages/lanternfly/docs/nucleus/virtual-machine-specification.md). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. [Companion: Nucleus 0.1 Language Specification](../nucleus/). The language specification governs source-language meaning.
+This reading edition is generated from the [Nucleus VM specification in the Debug80 repository](https://github.com/jhlagado/debug80/blob/main/packages/nucleus/docs/virtual-machine-specification.md) at revision [`f57320085bca`](https://github.com/jhlagado/debug80/blob/f57320085bca7e1c263591a5ad46fe69788d09d3/packages/nucleus/docs/virtual-machine-specification.md). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. [Companion: Nucleus 0.1 Language Specification](../language/). The language specification governs source-language meaning.
 :::
 
 ## Contents

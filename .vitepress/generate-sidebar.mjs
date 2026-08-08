@@ -2,32 +2,38 @@
 // matter already present in every page (title, nav_order, parent,
 // has_children, nav_exclude). Navigation therefore stays defined by the
 // markdown files themselves, exactly as it was under Jekyll.
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { join, dirname, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 // Every top-level section whose subdirectories carry their own chapters.
 // `tec1g` is not a book series, but its MON-3 guide is shaped like one, so it
 // gets a sidebar the same way and inherits the theme's prev/next pager.
-const BOOK_DIRS = ['debug80-book', 'azm-book', 'glimmer-book', 'lanternfly-book', 'tec1g'];
+const BOOK_DIRS = [
+  "debug80-book",
+  "azm-book",
+  "glimmer-book",
+  "nucleus",
+  "tec1g",
+];
 
 function frontMatter(filePath) {
-  const text = readFileSync(filePath, 'utf8');
+  const text = readFileSync(filePath, "utf8");
   const match = /^---\n([\s\S]*?)\n---/.exec(text);
   if (!match) return {};
   const fm = {};
-  for (const line of match[1].split('\n')) {
+  for (const line of match[1].split("\n")) {
     const kv = /^(\w+):\s*(.*)$/.exec(line);
     if (!kv) continue;
-    fm[kv[1]] = kv[2].replace(/^["']|["']$/g, '');
+    fm[kv[1]] = kv[2].replace(/^["']|["']$/g, "");
   }
   return fm;
 }
 
 function mdFiles(dir, recursive = false) {
   const files = readdirSync(dir)
-    .filter((name) => name.endsWith('.md'))
+    .filter((name) => name.endsWith(".md"))
     .map((name) => join(dir, name));
   if (!recursive) return files;
   return files.concat(subDirs(dir).flatMap((child) => mdFiles(child, true)));
@@ -40,12 +46,12 @@ function subDirs(dir) {
 }
 
 function pageLink(filePath) {
-  const rel = relative(root, filePath).replace(/\\/g, '/');
-  return `/${rel.replace(/\.md$/, '.html')}`;
+  const rel = relative(root, filePath).replace(/\\/g, "/");
+  return `/${rel.replace(/\.md$/, ".html")}`;
 }
 
 function navOrder(fm) {
-  const value = Number.parseFloat(fm.nav_order ?? '');
+  const value = Number.parseFloat(fm.nav_order ?? "");
   return Number.isFinite(value) ? value : 9999;
 }
 
@@ -64,7 +70,8 @@ function groupRuns(entries) {
       continue;
     }
     const last = out[out.length - 1];
-    if (last !== undefined && last.items !== undefined && last.text === group) last.items.push(item);
+    if (last !== undefined && last.items !== undefined && last.text === group)
+      last.items.push(item);
     else out.push({ text: group, collapsed: false, items: [item] });
   }
   return out;
@@ -72,22 +79,25 @@ function groupRuns(entries) {
 
 function chapterItems(dir, parentTitle, recursive = false) {
   const entries = mdFiles(dir, recursive)
-    .filter((file) => !file.endsWith('index.md'))
+    .filter((file) => !file.endsWith("index.md"))
     .map((file) => ({ file, fm: frontMatter(file) }))
     // `nav_exclude` pages still list under their `parent` section (the
     // just-the-docs has_toc pattern used by the MON-3 guide); it only hides
     // parentless pages.
-    .filter(({ fm }) => fm.parent !== undefined || fm.nav_exclude !== 'true')
+    .filter(({ fm }) => fm.parent !== undefined || fm.nav_exclude !== "true")
     .filter(({ fm }) => parentTitle === undefined || fm.parent === parentTitle)
     .sort((a, b) => navOrder(a.fm) - navOrder(b.fm))
-    .map(({ file, fm }) => ({ fm, item: { text: fm.title ?? file, link: pageLink(file) } }));
+    .map(({ file, fm }) => ({
+      fm,
+      item: { text: fm.title ?? file, link: pageLink(file) },
+    }));
   return groupRuns(entries);
 }
 
 /** A directory holding one book's chapters, keyed by its own index title. */
 function sectionFor(dir) {
   let fm;
-  const indexFile = join(dir, 'index.md');
+  const indexFile = join(dir, "index.md");
   try {
     fm = frontMatter(indexFile);
   } catch {
@@ -101,7 +111,7 @@ function sectionFor(dir) {
   return {
     order: navOrder(fm),
     title: fm.title,
-    isolated: fm.isolated === 'true',
+    isolated: fm.isolated === "true",
     entry: { text: fm.title, collapsed: false, items },
   };
 }
@@ -109,7 +119,7 @@ function sectionFor(dir) {
 /**
  * Each numbered `book*` directory is a standalone book. A named directory can
  * opt into the same treatment with `standalone: true` on its index page (the
- * Nucleus specification does this so its public route names the language).
+ * Nucleus specifications do this so each one has an isolated reading sidebar).
  * Other subdirectories are shared reference and ride along with every book in
  * the series. `isolated: true` keeps an independently named work's reading
  * sidebar to that work alone while leaving it discoverable from the series.
@@ -121,8 +131,8 @@ function splitSections(bookDir) {
     const section = sectionFor(dir);
     if (section === undefined) continue;
     const standalone =
-      /(^|\/)book\d+$/.test(dir.replace(/\\/g, '/')) ||
-      frontMatter(join(dir, 'index.md')).standalone === 'true';
+      /(^|\/)book\d+$/.test(dir.replace(/\\/g, "/")) ||
+      frontMatter(join(dir, "index.md")).standalone === "true";
     (standalone ? books : shared).push({ ...section, dir });
   }
   books.sort((a, b) => a.order - b.order);
@@ -145,7 +155,11 @@ for (const book of BOOK_DIRS) {
   // from wherever they are, which is what makes the series and book landing
   // pages unnecessary rather than merely redundant. Collapsing a sibling costs
   // one line and saves a trip up and back down through two tables of contents.
-  const asGroup = (b, open) => ({ text: b.title, collapsed: !open, items: b.entry.items });
+  const asGroup = (b, open) => ({
+    text: b.title,
+    collapsed: !open,
+    items: b.entry.items,
+  });
 
   sidebars[`/${book}/`] = [
     ...rootItems(bookDir),
@@ -154,29 +168,37 @@ for (const book of BOOK_DIRS) {
   ];
 
   for (const b of books) {
-    const key = `/${relative(root, b.dir).replace(/\\/g, '/')}/`;
+    const key = `/${relative(root, b.dir).replace(/\\/g, "/")}/`;
     sidebars[key] = b.isolated
       ? [asGroup(b, true)]
-      : [...books.map((x) => asGroup(x, x.dir === b.dir)), ...shared.map((s) => s.entry)];
+      : [
+          ...books.map((x) => asGroup(x, x.dir === b.dir)),
+          ...shared.map((s) => s.entry),
+        ];
   }
 
   // Landing directly on a shared section still needs a sidebar.
   for (const s of shared) {
-    const key = `/${relative(root, s.dir).replace(/\\/g, '/')}/`;
+    const key = `/${relative(root, s.dir).replace(/\\/g, "/")}/`;
     sidebars[key] = [
-      ...books.map((b) => ({ text: b.title, collapsed: true, items: b.entry.items })),
+      ...books.map((b) => ({
+        text: b.title,
+        collapsed: true,
+        items: b.entry.items,
+      })),
       ...shared.map((x) => x.entry),
     ];
   }
 }
 
-const banner = '// Generated by generate-sidebar.mjs \u2014 do not edit by hand.\n';
+const banner =
+  "// Generated by generate-sidebar.mjs \u2014 do not edit by hand.\n";
 writeFileSync(
-  join(root, '.vitepress', 'sidebar.generated.js'),
+  join(root, ".vitepress", "sidebar.generated.js"),
   `${banner}export const sidebars = ${JSON.stringify(sidebars, null, 2)};\n`,
 );
 console.log(
   Object.entries(sidebars)
     .map(([key, value]) => `${key} ${value.length} sections`)
-    .join('\n'),
+    .join("\n"),
 );

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * The four marks, at any size.
+ * The four project marks, at any size.
  *
  * One construction: a square body at the stroke weight of the schematic
  * figures, with a single accent inside. The accent takes `--mark-accent`,
@@ -21,20 +21,20 @@
  */
 withDefaults(
   defineProps<{
-    book?: 'debug80' | 'azm' | 'glimmer' | 'lanternfly';
+    book?: "debug80" | "azm" | "glimmer" | "nucleus";
     size?: number | string;
   }>(),
   {
-    book: 'debug80',
+    book: "debug80",
     size: 24,
   },
 );
 
 const LABEL = {
-  debug80: 'Debug80',
-  azm: 'AZM',
-  glimmer: 'Glimmer',
-  lanternfly: 'Lanternfly',
+  debug80: "Debug80",
+  azm: "AZM",
+  glimmer: "Glimmer",
+  nucleus: "Nucleus",
 };
 </script>
 
@@ -49,7 +49,12 @@ const LABEL = {
     :aria-label="LABEL[book]"
   >
     <template v-if="book === 'debug80'">
-      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="square"
+      >
         <rect x="5.2" y="5.2" width="13.6" height="13.6" rx="1.2" />
         <path d="M2.4 9H5.2M2.4 12H5.2M2.4 15H5.2" />
         <path d="M18.8 9H21.6M18.8 12H21.6M18.8 15H21.6" />
@@ -64,7 +69,12 @@ const LABEL = {
     </template>
 
     <template v-else-if="book === 'azm'">
-      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="square"
+      >
         <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
       </g>
       <path
@@ -77,27 +87,61 @@ const LABEL = {
     </template>
 
     <template v-else-if="book === 'glimmer'">
-      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="square"
+      >
         <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
       </g>
-      <g class="mark__accent" fill="none" stroke-width="1.6" stroke-linecap="round">
+      <g
+        class="mark__accent"
+        fill="none"
+        stroke-width="1.6"
+        stroke-linecap="round"
+      >
         <path d="M12 6.4V8" />
         <path d="M12 16V17.6" />
         <path d="M6.4 12H8" />
         <path d="M16 12H17.6" />
       </g>
-      <rect class="mark__accent--filled" x="10" y="10" width="4" height="4" rx="0.4" />
+      <rect
+        class="mark__accent--filled"
+        x="10"
+        y="10"
+        width="4"
+        height="4"
+        rx="0.4"
+      />
     </template>
 
     <template v-else>
-      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square">
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="square"
+      >
         <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
       </g>
-      <g class="mark__accent" fill="none" stroke-width="1.5" stroke-linecap="round">
-        <path d="M9 8.8V7.8C9 6.8 15 6.8 15 7.8V8.8" />
-        <rect x="8.5" y="8.8" width="7" height="7.6" rx="0.7" />
+      <g
+        class="mark__accent"
+        fill="none"
+        stroke-width="1.5"
+        stroke-linecap="square"
+      >
+        <path d="M8.1 9.4V8.1H9.4M14.6 8.1H15.9V9.4" />
+        <path d="M8.1 14.6V15.9H9.4M14.6 15.9H15.9V14.6" />
       </g>
-      <rect class="mark__accent--filled" x="10.2" y="10.5" width="3.6" height="3.6" rx="0.5" />
+      <rect
+        class="mark__accent--filled"
+        x="10"
+        y="10"
+        width="4"
+        height="4"
+        rx="0.4"
+      />
     </template>
   </svg>
 </template>

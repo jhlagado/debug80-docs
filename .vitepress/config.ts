@@ -1,19 +1,18 @@
-import { defineConfig } from 'vitepress';
-import { sidebars } from './sidebar.generated.js';
-import lanternflyGrammar from './lanternfly.tmLanguage.json' with { type: 'json' };
-import nucleusGrammar from './nucleus.tmLanguage.json' with { type: 'json' };
-import nvmGrammar from './nvm.tmLanguage.json' with { type: 'json' };
+import { defineConfig } from "vitepress";
+import { sidebars } from "./sidebar.generated.js";
+import nucleusGrammar from "./nucleus.tmLanguage.json" with { type: "json" };
+import nvmGrammar from "./nvm.tmLanguage.json" with { type: "json" };
 
 export default defineConfig({
-  title: 'Debug80 Docs',
+  title: "Debug80 Docs",
   description:
-    'Technical documentation for the Debug80 Z80 debugger extension and the AZM assembler',
-  srcDir: '.',
+    "Technical documentation for the Debug80 Z80 debugger extension and the AZM assembler",
+  srcDir: ".",
   srcExclude: [
-    '_internal/**',
-    '01-basic-operation.md',
-    'README.md',
-    'lanternfly-book/rewrite/**',
+    "_internal/**",
+    "archive/**",
+    "01-basic-operation.md",
+    "README.md",
   ],
 
   // Jekyll published every page as /path/page.html; keeping .html URLs
@@ -21,9 +20,9 @@ export default defineConfig({
   cleanUrls: false,
 
   sitemap: {
-    hostname: 'https://debug80.com',
+    hostname: "https://debug80.com",
     transformItems(items) {
-      return items.filter((item) => !item.url.startsWith('tec1g/'));
+      return items.filter((item) => !item.url.startsWith("tec1g/"));
     },
   },
 
@@ -34,70 +33,60 @@ export default defineConfig({
   markdown: {
     // The books fence Z80 listings as ```z80; Shiki has no Z80 grammar, so
     // reuse the generic assembler grammar rather than falling back to txt.
-    languageAlias: { z80: 'asm' },
-    // Lanternfly, Nucleus, and NVM have no published Shiki grammars. Local
-    // TextMate grammars keep their fences distinct from plain text and from
-    // one another.
-    languages: [
-      lanternflyGrammar as never,
-      nucleusGrammar as never,
-      nvmGrammar as never,
-    ],
+    languageAlias: { z80: "asm" },
+    // Nucleus and NVM have no published Shiki grammars. Local TextMate
+    // grammars keep their fences distinct from plain text and from one another.
+    languages: [nucleusGrammar as never, nvmGrammar as never],
     // Warm-toned dark syntax theme to match the Nocturne palette.
-    theme: 'github-light',
+    theme: "github-light",
   },
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    ["link", { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+    ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
     [
-      'link',
+      "link",
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
+    ],
+    [
+      "link",
       {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap',
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap",
       },
     ],
   ],
 
   themeConfig: {
     nav: [
-      // Straight to the first page of each single-book series. Lanternfly has
-      // multiple books plus the Nucleus specifications, so its menu exposes
-      // each without an intermediate landing page. The index pages still
-      // exist for direct URLs.
-      { text: 'Debug80 Book', link: '/debug80-book/book1/01-install-debug80' },
-      { text: 'AZM Books', link: '/azm-book/book1/00-introduction' },
-      { text: 'Glimmer Books', link: '/glimmer-book/book1/00-introduction' },
+      // Straight to the first page of each teaching series. Nucleus has two
+      // specifications, so its menu keeps the project overview within reach.
+      { text: "Debug80 Book", link: "/debug80-book/book1/01-install-debug80" },
+      { text: "AZM Books", link: "/azm-book/book1/00-introduction" },
+      { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
       {
-        text: 'Lanternfly Books',
+        text: "Nucleus",
         items: [
           {
-            text: 'Book 1 — Programming Fundamentals',
-            link: '/lanternfly-book/book1/00-introduction',
+            text: "Nucleus overview",
+            link: "/nucleus/",
           },
           {
-            text: 'Book 2 — Language Reference',
-            link: '/lanternfly-book/book2/',
+            text: "Nucleus 0.1 Language Specification",
+            link: "/nucleus/language/",
           },
           {
-            text: 'Nucleus 0.1 Language Specification',
-            link: '/lanternfly-book/nucleus/',
-          },
-          {
-            text: 'Nucleus VM 0.1 Specification',
-            link: '/lanternfly-book/nucleus-vm/',
-          },
-          {
-            text: 'White Papers',
-            link: '/lanternfly-book/papers/',
+            text: "Nucleus VM 0.1 Specification",
+            link: "/nucleus/vm/",
           },
         ],
       },
     ],
     sidebar: sidebars,
-    search: { provider: 'local' },
-    socialLinks: [{ icon: 'github', link: 'https://github.com/jhlagado/debug80' }],
+    search: { provider: "local" },
+    socialLinks: [
+      { icon: "github", link: "https://github.com/jhlagado/debug80" },
+    ],
     outline: { level: [2, 3] },
   },
 
@@ -109,10 +98,10 @@ export default defineConfig({
   // standard doc layout instead of rewriting 129 files.
   transformPageData(pageData) {
     const layout = pageData.frontmatter.layout;
-    if (layout === 'default' || layout === 'home') {
+    if (layout === "default" || layout === "home") {
       delete pageData.frontmatter.layout;
     }
-    if (pageData.relativePath.startsWith('tec1g/')) {
+    if (pageData.relativePath.startsWith("tec1g/")) {
       pageData.frontmatter.search = false;
     }
   },

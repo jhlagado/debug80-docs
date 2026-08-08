@@ -45,10 +45,12 @@
   --vp-c-brand-3: var(--signal);
   --vp-c-brand-soft: var(--signal-soft);
 
-  --vp-font-family-base: ui-sans-serif, -apple-system, BlinkMacSystemFont,
-    'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-  --vp-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-    'Liberation Mono', monospace;
+  --vp-font-family-base:
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Helvetica Neue", Arial, sans-serif;
+  --vp-font-family-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
 
   --vp-code-color: var(--ink);
   --vp-code-bg: var(--paper-soft);
@@ -68,11 +70,26 @@
  * Hues carried over from the previous theme's volume colours,
  * all pulled to the same strength as the brick red so no book
  * reads louder than another. */
-html[data-book='debug80'] { --signal: #b4442f; --signal-soft: rgba(180, 68, 47, 0.1); }
-html[data-book='azm']     { --signal: #14607e; --signal-soft: rgba(20, 96, 126, 0.1); }
-html[data-book='glimmer'] { --signal: #2a7139; --signal-soft: rgba(42, 113, 57, 0.1); }
-html[data-book='lanternfly'] { --signal: #744f90; --signal-soft: rgba(116, 79, 144, 0.1); }
-html[data-book='tec1g']   { --signal: #96620f; --signal-soft: rgba(150, 98, 15, 0.1); }
+html[data-book="debug80"] {
+  --signal: #b4442f;
+  --signal-soft: rgba(180, 68, 47, 0.1);
+}
+html[data-book="azm"] {
+  --signal: #14607e;
+  --signal-soft: rgba(20, 96, 126, 0.1);
+}
+html[data-book="glimmer"] {
+  --signal: #2a7139;
+  --signal-soft: rgba(42, 113, 57, 0.1);
+}
+html[data-book="nucleus"] {
+  --signal: #744f90;
+  --signal-soft: rgba(116, 79, 144, 0.1);
+}
+html[data-book="tec1g"] {
+  --signal: #96620f;
+  --signal-soft: rgba(150, 98, 15, 0.1);
+}
 
 html {
   font-size: 17px;
@@ -196,7 +213,7 @@ html {
 
 /* A tick in the margin marks the open chapter. */
 .VPSidebarItem.is-active > .item::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -14px;
   top: 0.62em;
@@ -254,7 +271,7 @@ html {
 }
 
 .page-eyebrow__folio::before {
-  content: '·';
+  content: "·";
   margin-right: 12px;
   color: var(--rule);
 }
@@ -270,7 +287,7 @@ html {
 
 /* A short bar, not a full-width rule: the title's datum mark. */
 .vp-doc h1::after {
-  content: '';
+  content: "";
   display: block;
   width: 56px;
   height: 3px;
@@ -410,7 +427,7 @@ html {
   color: var(--ink);
 }
 
-.vp-doc div[class*='language-'] {
+.vp-doc div[class*="language-"] {
   background: var(--paper-soft);
   border: 1px solid var(--rule);
   border-left: 3px solid var(--signal);
@@ -418,17 +435,17 @@ html {
   margin: 1.5rem 0;
 }
 
-.vp-doc div[class*='language-'] pre {
+.vp-doc div[class*="language-"] pre {
   padding: 16px 0;
 }
 
-.vp-doc div[class*='language-'] code {
+.vp-doc div[class*="language-"] code {
   font-size: 0.8rem;
   line-height: 1.66;
 }
 
 /* The language tag sits in the corner like a drawing annotation. */
-.vp-doc div[class*='language-']::before {
+.vp-doc div[class*="language-"]::before {
   font-family: var(--vp-font-family-mono);
   font-size: 0.62rem;
   letter-spacing: 0.14em;
@@ -438,7 +455,7 @@ html {
   right: 10px;
 }
 
-.vp-doc div[class*='language-'] .copy {
+.vp-doc div[class*="language-"] .copy {
   border-radius: 2px;
 }
 
@@ -475,12 +492,12 @@ html {
  * Generated SVGs choose their palette from the operating-system preference.
  * Give them a matching ground when the site's manual theme differs from it.
  */
-.vp-doc figure.plate > img[src$='.svg'] {
+.vp-doc figure.plate > img[src$=".svg"] {
   background: #fff;
 }
 
 @media (prefers-color-scheme: dark) {
-  .vp-doc figure.plate > img[src$='.svg'] {
+  .vp-doc figure.plate > img[src$=".svg"] {
     background: #1c1f22;
   }
 }
@@ -676,7 +693,9 @@ html {
   border-top: 3px solid var(--spine);
   border-radius: 0;
   text-decoration: none;
-  transition: border-color 0.14s ease, transform 0.14s ease;
+  transition:
+    border-color 0.14s ease,
+    transform 0.14s ease;
 }
 
 .library-shelf .volume:hover {
@@ -686,7 +705,7 @@ html {
 
 /* A drafting corner tick, the same mark the diagrams use. */
 .library-shelf .volume::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 14px;
   bottom: 14px;
@@ -728,11 +747,21 @@ html {
   margin-top: 2px;
 }
 
-.volume--debug80 { --vol-accent: #b4442f; }
-.volume--azm     { --vol-accent: #14607e; }
-.volume--glimmer { --vol-accent: #2a7139; }
-.volume--lanternfly { --vol-accent: #744f90; }
-.volume--tec1g   { --vol-accent: #96620f; }
+.volume--debug80 {
+  --vol-accent: #b4442f;
+}
+.volume--azm {
+  --vol-accent: #14607e;
+}
+.volume--glimmer {
+  --vol-accent: #2a7139;
+}
+.volume--nucleus {
+  --vol-accent: #744f90;
+}
+.volume--tec1g {
+  --vol-accent: #96620f;
+}
 
 /* ============================================================
    Mermaid
@@ -899,12 +928,12 @@ html {
   padding: 12px;
 }
 
-.image-lightbox__image[src$='.svg'] {
+.image-lightbox__image[src$=".svg"] {
   background: #fff;
 }
 
 @media (prefers-color-scheme: dark) {
-  .image-lightbox__image[src$='.svg'] {
+  .image-lightbox__image[src$=".svg"] {
     background: #1c1f22;
   }
 }
@@ -983,9 +1012,15 @@ html {
 }
 
 @media (max-width: 720px) {
-  html { font-size: 16px; }
-  .library-hall__title { font-size: 1.9rem; }
-  .vp-doc h1 { font-size: 1.7rem; }
+  html {
+    font-size: 16px;
+  }
+  .library-hall__title {
+    font-size: 1.9rem;
+  }
+  .vp-doc h1 {
+    font-size: 1.7rem;
+  }
   .nucleus-specification .vp-doc table {
     display: block;
     max-width: 100%;
