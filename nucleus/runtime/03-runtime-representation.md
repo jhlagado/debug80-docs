@@ -40,13 +40,30 @@ A fixed array stores its elements consecutively. Its stride is the complete
 element extent. Neither a record nor an array stores a runtime type tag, field
 table, length word, or address.
 
+Compiler metadata retains every complete aggregate extent, fixed-array length,
+fixed-array stride, and record-field offset as an unsigned 16-bit value. The
+same word-sized extent machinery applies to records, arrays, and bounded
+strings. This is compiler metadata only; it adds no header to an aggregate
+object.
+
 <div id="33-bounded-strings" class="nucleus-source-anchor"></div>
 
 ## 3.3 Bounded strings
 
-`string[N]` occupies `N + 1` bytes. Byte zero is the current logical length
-`L`; bytes 1 through `L` are the content; the remaining payload bytes are not
-source-readable. The invariant is `0 <= L <= N`.
+`string[N]` occupies `N + 2` bytes. Byte zero is the current logical length
+`L`; bytes 1 through `N` are the content capacity; and byte `N + 1` is always
+`$00`. The compiler writes that final byte while building the static image,
+and no runtime operation writes it again. Bytes `L + 1` through `N` are also
+zero. The invariant is `0 <= L <= N`, and the complete object extent is at
+most 255 bytes because the source capacity is at most 253. This string-specific
+limit does not constrain the complete extent of a containing record or array.
+
+The address `carrier + 1` is always zero-terminated within `N + 1` bytes, so a
+terminator-consuming routine can never read past the end of the object. This
+does not make the payload a C string of exactly `L` bytes. Embedded zero bytes
+are ordinary Nucleus content, but a C consumer stops at the first one. The
+guarantee prevents a runaway read; it does not preserve counted length for a C
+consumer.
 
 An aggregate carrier for a bounded string addresses its length byte. Reading
 `.length` checks the complete object and the length invariant. Indexing checks

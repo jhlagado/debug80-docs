@@ -15,12 +15,18 @@ memory and machine cost remain visible. Its compiler emits Z80 machine code
 directly, while a compact runtime and backend contract fixes packed storage,
 calls, services, traps, and generated-code integrity.
 
-The first compiler is intended to be handwritten in Z80 assembly. Its
+The first compiler is handwritten in Z80 assembly. Its
 executable core and required immutable data must fit in one 16 KiB bank. That
 limit shapes the language, compiler, runtime, and the evidence used to admit
 implementation techniques.
 
-## Specifications
+## Books and specifications
+
+### [Programming Nucleus](book1/)
+
+A practical course built from complete programs. It begins with values,
+storage and routines, then develops fixed data, control flow, recoverable
+errors, multipart projects and the compiler-and-debugger workflow.
 
 ### [Nucleus 0.1 Language Specification](language/)
 
@@ -46,5 +52,8 @@ general pointers, heap allocation, garbage collection, runtime type tags, and
 filesystem work inside the compiler. An external build driver supplies one
 ordered multipart source stream from a flat manifest.
 
-The two books published here are generated from single authoritative Markdown
-files in the [Debug80 repository](https://github.com/jhlagado/debug80/tree/main/packages/nucleus/docs).
+Programming Nucleus is maintained in this repository. The language reading
+edition is generated from the authoritative specification in the
+[standalone Nucleus repository](https://github.com/jhlagado/nucleus). The
+runtime reading edition is generated from the authoritative contract in that
+repository.

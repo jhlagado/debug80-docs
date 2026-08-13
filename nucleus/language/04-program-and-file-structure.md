@@ -146,7 +146,9 @@ Forward declarations apply only to source routines. They do not provide a genera
 
 Every Nucleus 0.1 compilation unit defines exactly one routine named `main`. Its data signature is fixed: it has no parameters and no result. It may include the `fails` effect declared by Chapter 14. The definition must have a body by `EOF`; a forward declaration alone cannot satisfy the entry rule.
 
-Execution begins by calling `main` after program-lifetime initialization. Normal completion of `main` terminates successfully. A failure returned from `main` performs the unhandled-error trap in Chapter 15. The build does not select another entry name, and Nucleus 0.1 defines no library-only compilation unit without `main`.
+Execution enters an implicit implementation startup path, which establishes every program-lifetime initial value before calling `main`. Normal completion of `main` terminates successfully. A failure returned from `main` performs the unhandled-error trap in Chapter 15. The build does not select another entry name, and Nucleus 0.1 defines no library-only compilation unit without `main`.
+
+The startup entry is not a source declaration and cannot be called by source. Nucleus defines no source-visible reset, vector, interrupt, or alternate entry declaration.
 
 Program startup, initialization, termination, and system services are specified in Chapters 16 and 19.
 

@@ -86,9 +86,9 @@ The source type and the way a source occurrence denotes data are separate proper
 | Owned aggregate storage | Storage containing one record, fixed array, or bounded string for a lifetime defined in Chapter 7. |
 | Aggregate alias         | A typed, non-owning binding to existing aggregate storage.                                         |
 
-A named constant has type `u8`, `u16`, or `boolean`; records, fixed arrays, bounded strings, and aggregate aliases cannot be declared as constants.
+A scalar named constant has either an exact integer type inferred from its initializer or type `boolean`. A record, fixed array, or bounded-string constant has an explicit aggregate type and complete static initializer under Chapter 8.
 
-Top-level variables provide all owned aggregate storage. Aggregate storage may also occur inline as a record field or fixed-array element. A routine cannot declare aggregate storage or an aggregate-alias local. The permitted declaration sites, initialization rules, mutability, and storage duration appear in Chapters 7 and 8.
+Top-level variables and aggregate constants provide owned aggregate storage. Aggregate storage may also occur inline as a record field or fixed-array element. A routine cannot declare aggregate storage or an aggregate-alias local. The permitted declaration sites, initialization rules, mutability, and storage duration appear in Chapters 7 and 8.
 
 An aggregate parameter is a fixed typed alias to caller-provided storage. Its binding cannot be changed, but mutation and exact-type aggregate assignment through it change the caller's object. A routine may also return a transient aggregate alias to existing storage.
 
@@ -128,7 +128,7 @@ Indexing an array of scalars produces a scalar occurrence with the element type.
 
 ## 6.8 Bounded strings
 
-`string[N]` is a fixed-capacity counted sequence of bytes with a current length from 0 through `N`. `N` is a compile-time integer from 1 through 255 and is part of the type. The empty string is a valid value. Payload bytes may have any value from 0 through 255, including zero.
+`string[N]` is a fixed-capacity counted sequence of bytes with a current length from 0 through `N`. `N` is a compile-time integer from 1 through 253 and is part of the type. The empty string is a valid value. Payload bytes may have any value from 0 through 255, including zero.
 
 A string literal is a contextual bounded-string initializer. It is compatible with `string[N]` when its decoded byte length does not exceed `N`. A literal that is too long is invalid. The literal does not create an open-ended string type, infer a new capacity, or permit a later capacity mismatch.
 
@@ -139,13 +139,13 @@ A bounded string is an aggregate, not a `u8` array. It has no source-level heade
 - `text.length` is a read-only `u8` value equal to the current logical byte length.
 - `text[index]` selects one existing byte as a `u8` storage path. The index must have type `u8` or `u16` and must be less than the current length. A failed check performs the `bounds` trap before a read or write.
 
-A byte assignment replaces exactly one existing byte and does not change the string's length or capacity. These operations provide no append, insertion, resize, truncation, or whole-string comparison. Whole-string assignment is available only between identical `string[N]` types under Section 7.8. Embedded zero bytes are ordinary content and do not terminate either operation.
+A bounded string's length is established only by static initialization or by whole-object assignment from an identical `string[N]`. A byte assignment replaces exactly one existing byte and does not change the string's length or capacity. These operations provide no append, insertion, resize, truncation, or whole-string comparison. Source code cannot build counted text by filling bytes and then changing the length. Constructed text uses a fixed `u8[N]` array plus a caller-managed scalar length. Whole-string assignment is available only between identical `string[N]` types under Section 7.8. Embedded zero bytes are ordinary content and do not terminate either operation.
 
 The `.length` intrinsic applies only when the postfix base has bounded-string type. On a record base, `.length` remains ordinary lookup in that record's field scope. Any other field suffix on a bounded string is invalid.
 
 Nucleus 0.1 has no `string[]`, open string, slice, general view, or address-and-length source value. A routine that accepts a bounded string names an exact capacity in its parameter type. A broader read-only view may be considered in a later language version after its compiler, carrier, lifetime, and result-ABI costs have been measured.
 
-This chapter fixes the semantic domain and capacity, not the stored layout. Chapter 7 defines storage identity and lifetime, Chapter 8 defines declaration initialization, and the Z80 runtime and backend contract defines the physical representation and byte encoding. That representation preserves embedded zero bytes, lengths through 255, and alias-visible byte mutation.
+This chapter fixes the semantic domain and capacity, not the stored layout. Chapter 7 defines storage identity and lifetime, Chapter 8 defines declaration initialization, and the Z80 runtime and backend contract defines the physical representation and byte encoding. That representation preserves embedded zero bytes, logical lengths through 253, and alias-visible byte mutation.
 
 <div id="69-aggregate-aliases-and-address-separation" class="nucleus-source-anchor"></div>
 
@@ -177,19 +177,19 @@ Type identity is determined as follows:
 
 The compiler applies these compatibility rules:
 
-| Context                                                | Required compatibility                                                             |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| Scalar assignment, initialization, argument, or result | Exact scalar type, contextual fitting literal, or implicit `u8`-to-`u16` widening. |
-| Checked narrowing to `u8`                              | Explicit operation and successful range check.                                     |
-| Boolean condition or destination                       | `boolean` only.                                                                    |
-| Record field selection                                 | The field's declared type.                                                         |
-| Fixed-array index                                      | `u8` or `u16` index; result has the exact element type.                            |
-| Bounded-string `.length`                               | Read-only `u8` value equal to the current logical length.                          |
-| Bounded-string index                                   | `u8` or `u16` index below the current length; result is a writable `u8` path.      |
-| Aggregate parameter                                    | Exact referent-type identity.                                                      |
-| Aggregate assignment                                   | Exact type identity; copy the complete aggregate into the destination.             |
-| Aggregate result                                       | Exact referent-type identity and immediate consumption under Chapter 7.            |
-| Aggregate by-value argument or result                  | Invalid; calls transfer aggregate aliases.                                         |
+| Context                                                | Required compatibility                                                                                  |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Scalar assignment, initialization, argument, or result | Exact scalar type, fitting exact integer literal or named constant, or implicit `u8`-to-`u16` widening. |
+| Checked narrowing to `u8`                              | Explicit operation and successful range check.                                                          |
+| Boolean condition or destination                       | `boolean` only.                                                                                         |
+| Record field selection                                 | The field's declared type.                                                                              |
+| Fixed-array index                                      | `u8` or `u16` index; result has the exact element type.                                                 |
+| Bounded-string `.length`                               | Read-only `u8` value equal to the current logical length.                                               |
+| Bounded-string index                                   | `u8` or `u16` index below the current length; result is a writable `u8` path.                           |
+| Aggregate parameter                                    | Exact referent-type identity.                                                                           |
+| Aggregate assignment                                   | Exact type identity; copy the complete aggregate into the destination.                                  |
+| Aggregate result                                       | Exact referent-type identity and immediate consumption under Chapter 7.                                 |
+| Aggregate by-value argument or result                  | Invalid; calls transfer aggregate aliases.                                                              |
 
 Compatibility is checked at the source operation. The backend does not infer compatibility from equal byte widths, equal layouts, compiler storage ordinals, registers, or runtime addresses.
 

@@ -16,9 +16,9 @@ pageClass: "nucleus-specification"
 ## 5.1 Region checks
 
 A generated access of width `w` at address `a` is permitted only when the
-mathematical half-open region `[a, a + w)` lies within the selected program-data
-region. The calculation must not use wrapped 16-bit arithmetic as evidence that
-the region fits.
+mathematical half-open region `[a, a + w)` lies wholly within either the used
+writable region or the generated read-only-data region. The calculation must
+not use wrapped 16-bit arithmetic as evidence that the region fits.
 
 A fixed-array access first checks the unsigned index against its declared
 length, then forms `base + index * stride`, and then establishes the complete
@@ -38,8 +38,16 @@ performs no destination write.
 Exact-type aggregate assignment establishes and checks the complete destination
 region and then the complete source region before the first destination byte
 changes. It copies the common fixed extent, including a bounded string's length
-byte and complete capacity. Self-assignment has no effect. Nucleus types cannot
-produce proper partial overlap between distinct same-type aggregate paths.
+byte, complete capacity, and permanent terminator. Self-assignment has no
+effect. Nucleus types cannot produce proper partial overlap between distinct
+same-type aggregate paths.
+
+The source checker rejects an assignment rooted directly at an aggregate
+constant. The runtime carrier has no read-only bit, so an alias derived from a
+constant uses the same region and copy checks as another aggregate alias. A
+target may map generated read-only data to RAM, ROM, or protected memory. A
+physical write through such an alias may therefore change bytes, be ignored, or
+be rejected by the target; the language requires no dynamic permission check.
 
 The backend may inline the copy, emit a counted loop, or call a shared helper.
 For a Z80 target, `LDIR` is permitted after both complete-region checks. The

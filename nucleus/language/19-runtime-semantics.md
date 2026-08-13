@@ -45,7 +45,7 @@ Aggregate arguments and results transfer aliases, not object contents. A returne
 
 A call starts after all arguments have been evaluated and the activation-capacity check succeeds. Parameter binding precedes activation-local initialization. Scalar locals initialize in source order, and the first statement begins after the local prefix.
 
-`return` transfers an optional success result and ends the activation. A result-free routine also returns successfully at its closing `end`. In a result-free failable routine, `return invocation() or fail` returns successfully when the result-free callee succeeds and propagates its code when it fails. Direct and mutual recursion use the same rules and create distinct active state at each depth. Backend save regions, register files, stacks, and return encodings must preserve these semantics but are not source-visible.
+`return` transfers an optional success result and ends the activation. A result-free routine also returns successfully at its closing `end`. `return` is success-only: a caller propagates a failable value in an earlier local initializer or assignment, or propagates a result-free call as its own statement, before returning successfully. Direct and mutual recursion use the same rules and create distinct active state at each depth. Backend save regions, register files, stacks, and return encodings must preserve these semantics but are not source-visible.
 
 <div id="195-conditional-and-loop-execution" class="nucleus-source-anchor"></div>
 
@@ -59,7 +59,7 @@ Normal completion and `continue` in a counted loop use the increment-and-next-te
 
 ## 19.6 Recoverable errors
 
-A failable call returns success or one `u8` error code. On success, the ordinary result, if any, is transferred before surrounding evaluation continues. On failure, `or fail` returns the same code from the caller, while `on error` performs no success-result store, stores the code, and executes its handler. No success result exists on the failure path.
+A failable call returns success or one `u8` error code. On success, the ordinary result, if any, is transferred before surrounding evaluation continues. On failure, `else fail` returns the same code from the caller, while `handle NAME` performs no success-result store, stores the code, and executes its handler. No success result exists on the failure path.
 
 Error propagation ends activations through ordinary return control. It performs no stack unwinding, source cleanup, or handler search. A trap bypasses this channel. Failure reaching the external caller of `main` becomes the `unhandled-error` trap.
 

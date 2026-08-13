@@ -27,13 +27,18 @@ The reusable statement fragment is:
 
 ```text
 statement-sequence      ::= { statement }
-statement               ::= simple-statement NEWLINE [ on-error-clause ]
+statement               ::= name-statement name-statement-tail
+                          | other-simple-statement NEWLINE
                           | if-statement
                           | while-statement
                           | for-statement
-simple-statement        ::= assignment-statement
+name-statement          ::= assignment-statement
                           | routine-call-statement
-                          | return-statement
+name-statement-tail     ::= NEWLINE
+                          | "else" "fail" NEWLINE
+                          | "handle" NAME NEWLINE
+                            statement-sequence "end" NEWLINE
+other-simple-statement  ::= return-statement
                           | "exit"
                           | "continue"
                           | fail-statement
@@ -43,9 +48,9 @@ routine-call-statement  ::= NAME argument-list
 return-statement        ::= "return" [ expression ]
 ```
 
-Chapters 11 through 14 define the referenced productions and semantic restrictions. Chapter 17 replaces this fragment with the complete grammar for failable invocations, propagation, and `on error` attachment.
+Chapters 11 through 14 define the referenced productions and semantic restrictions. Chapter 17 replaces this fragment with the complete grammar for failable invocations, propagation, and immediate `handle` attachment.
 
-A simple statement consumes one logical `NEWLINE`. A compound statement consumes the `NEWLINE` after its own closing `end`. Blank and comment-only physical lines produce no token under Chapter 3 and therefore do not create empty statements. A statement sequence may contain no statements; this permits an empty conditional clause or loop body without a placeholder operation.
+A simple statement consumes one logical `NEWLINE`. An immediate handler consumes the newline after its call site and the newline after its closing `end`. Other compound statements consume the `NEWLINE` after their own closing `end`. Blank and comment-only physical lines produce no token under Chapter 3 and therefore do not create empty statements. A statement sequence may contain no statements; this permits an empty conditional clause, loop body, or handler body without a placeholder operation.
 
 Nucleus has no semicolon, colon separator, multiple statements on one logical line, one-line compound statement, or empty-statement token.
 
@@ -55,12 +60,12 @@ Nucleus has no semicolon, colon separator, multiple statements on one logical li
 
 When a statement begins with `NAME`, the compiler resolves that name before selecting the statement form:
 
-| Resolved declaration                         | Required continuation                                                                          |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Source routine                               | Its argument list, forming a routine-call statement.                                           |
-| Mutable scalar variable, parameter, or local | Zero or more field or index suffixes, followed by `=`.                                         |
-| Aggregate object or alias                    | Zero or more field or index suffixes ending at a mutable scalar or aggregate, followed by `=`. |
-| Constant, type, or another declaration class | No name-led statement form; the compiler diagnoses the class mismatch.                         |
+| Resolved declaration                                                         | Required continuation                                                                          |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Source routine                                                               | Its argument list, forming a routine-call statement.                                           |
+| Mutable scalar variable, parameter, or local                                 | Zero or more field or index suffixes, followed by `=`.                                         |
+| Aggregate object or alias                                                    | Zero or more field or index suffixes ending at a mutable scalar or aggregate, followed by `=`. |
+| Scalar constant, aggregate constant root, type, or another declaration class | No assignment or call statement form; the compiler diagnoses the class mismatch.               |
 
 This dispatch uses the declaration class already established by Chapters 5 and 8. It requires no token backtracking. A routine name followed by `=` is invalid, and a variable followed by an argument list is invalid; the compiler does not reinterpret either name as another declaration class.
 
@@ -70,7 +75,7 @@ Nucleus has no `call` keyword. An already declared routine name followed by its 
 
 ## 10.4 Assignment
 
-An assignment target is a mutable scalar path rooted in a program variable, parameter, or scalar local, or an aggregate path rooted in a program variable or aggregate parameter. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. A bounded-string byte selected by `text[index]` is writable; `text.length` is not.
+An assignment target is a mutable scalar path rooted in a program variable, parameter, or scalar local, or an aggregate path rooted in a program variable or aggregate parameter. A path rooted directly at an aggregate constant name is never an assignment target, including after field or index selection. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. A bounded-string byte selected through a writable root is writable; `text.length` is not.
 
 A scalar local used as the counter of an enclosing counted loop is read-only until that loop ends. An assignment rooted at that exact local is invalid in the loop body, including inside a nested statement. Chapter 12 defines the corresponding counter rule and nested-loop restriction.
 

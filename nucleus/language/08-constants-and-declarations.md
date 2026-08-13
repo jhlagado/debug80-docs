@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 This chapter defines the Nucleus 0.1 declaration families, their canonical source forms, constant expressions, initializers, and declaration-time binding. Chapter 4 defines the compilation-unit sequence and top-level placement. Chapter 5 defines declaration points, scopes, name identity, and collisions. Chapters 6 and 7 define types, storage ownership, aggregate aliases, and lifetime. Chapter 13 defines routine calls, results, and complete routine semantics.
 
-Nucleus uses explicit declarations and explicit types. It has no inferred declarations, implicit variables, grouped declarations, destructuring declarations, or general type-alias declaration.
+Nucleus uses explicit declarations. Variables, fields, parameters, locals, routine results, and aggregate constants have explicit types; scalar named constants infer their type from the required initializer. Nucleus has no implicit variables, grouped declarations, destructuring declarations, or general type-alias declaration.
 
 <div id="82-declaration-families-and-placement" class="nucleus-source-anchor"></div>
 
@@ -25,20 +25,21 @@ Nucleus uses explicit declarations and explicit types. It has no inferred declar
 
 The declaration families are:
 
-| Declaration        | Permitted location                          | Binding or storage established                                            |
-| ------------------ | ------------------------------------------- | ------------------------------------------------------------------------- |
-| Named constant     | Top level                                   | One typed compile-time scalar value                                       |
-| Program variable   | Top level                                   | One mutable program-lifetime scalar or aggregate object                   |
-| Record type        | Top level                                   | One nominal fixed-layout record type and its field scope                  |
-| Forward routine    | Top level                                   | One routine signature without a body                                      |
-| Routine definition | Top level                                   | One routine signature and body, or completion of an earlier forward       |
-| Formal parameter   | Routine header                              | One scalar activation value or aggregate-alias binding                    |
-| Scalar local       | Contiguous routine declaration prefix       | One per-invocation scalar value                                           |
-| Record field       | Between a record header and its closing end | One named scalar or aggregate subobject in each object of the record type |
+| Declaration            | Permitted location                          | Binding or storage established                                             |
+| ---------------------- | ------------------------------------------- | -------------------------------------------------------------------------- |
+| Named constant         | Top level                                   | One inferred scalar value or one explicitly typed read-only aggregate root |
+| Compile-time assertion | Top level                                   | No binding or storage; one required compile-time condition                 |
+| Program variable       | Top level                                   | One mutable program-lifetime scalar or aggregate object                    |
+| Record type            | Top level                                   | One nominal fixed-layout record type and its field scope                   |
+| Forward routine        | Top level                                   | One routine signature without a body                                       |
+| Routine definition     | Top level                                   | One routine signature and body, or completion of an earlier forward        |
+| Formal parameter       | Routine header                              | One scalar activation value or aggregate-alias binding                     |
+| Scalar local           | Contiguous routine declaration prefix       | One per-invocation scalar value                                            |
+| Record field           | Between a record header and its closing end | One named scalar or aggregate subobject in each object of the record type  |
 
 Only top-level declarations occur in the compilation-unit sequence. Parameters occur only in a routine header. Local declarations form one contiguous prefix after the header and before the first statement. A conditional or loop body cannot contain a declaration, and a declaration after the first statement of a routine is invalid.
 
-Nucleus 0.1 has no routine-local constant declaration.
+Nucleus 0.1 has no routine-local constant declaration or assertion.
 
 <div id="83-canonical-syntax" class="nucleus-source-anchor"></div>
 
@@ -48,13 +49,18 @@ The following skeleton defines declaration syntax without defining statement gra
 
 ```text
 top-level-declaration ::= const-declaration
+                        | assert-declaration
                         | program-var-declaration
                         | record-declaration
                         | forward-routine-declaration
                         | routine-definition
 
-const-declaration     ::= "const" NAME "as" type "="
-                          constant-initializer NEWLINE
+const-declaration     ::= "const" NAME "="
+                          scalar-constant-expression NEWLINE
+                        | "const" NAME "as" type "="
+                          static-initializer NEWLINE
+
+assert-declaration    ::= "assert" scalar-constant-expression NEWLINE
 
 program-var-declaration
                       ::= "var" NAME "as" type
@@ -84,9 +90,8 @@ formal-parameter      ::= NAME "as" type
 
 local-declaration     ::= "var" NAME "as" scalar-type
                           [ "=" local-initializer ] NEWLINE
-local-initializer     ::= expression [ "or" "fail" ]
+local-initializer     ::= expression [ "else" "fail" ]
 
-constant-initializer  ::= scalar-constant-expression
 program-initializer   ::= static-initializer
 static-initializer    ::= scalar-constant-expression
                         | STRING
@@ -108,29 +113,41 @@ Parentheses and square brackets suppress logical newlines under Chapter 3. A str
 
 ## 8.4 Named constants
 
-A named constant declaration has this form:
+A scalar named constant declaration has this form:
 
 ```nucleus
-const bufferLength as u16 = 64
-const readyMask as u8 = 128
-const enabled as boolean = true
+const bufferLength = 64
+const readyMask = 128
+const enabled = true
 ```
 
-The declared type must be `u8`, `u16`, or `boolean`. The `as` clause is required; Nucleus does not infer a constant's declared type. The declared type supplies the expected type for contextual literals and for the final compatibility check.
+The initializer determines the constant's type. A Boolean-valued initializer gives the constant type `boolean`. An integer-valued initializer gives it an exact integer type: the value has no fixed `u8` or `u16` type until each use supplies an expected integer type or an expression rule selects one.
 
-A named constant denotes its compile-time scalar value. It does not declare storage and need not occupy runtime storage. The compiler may materialize the value in generated code or immutable implementation data, but no source operation exposes object identity for it.
+An exact named integer constant behaves like an exact integer literal at every use. The same constant may adopt `u8` in one context and `u16` in another when its value fits both. A declaration such as `const Big = 300` is valid; a later use of `Big` where `u8` is required is invalid at that use, while a use where `u16` is required is valid. The compiler reports the position of the incompatible use rather than the constant declaration.
 
-The initializer is required and must be a scalar constant expression compatible with the declared type. A named constant becomes visible only after the compiler has checked the complete declaration, so its initializer cannot name itself. Chapter 5's declaration-order rule also excludes later names and constant cycles.
+A scalar named constant denotes its compile-time scalar value. It does not declare storage and need not occupy runtime storage. The compiler may materialize the value in generated code or immutable implementation data, but no source operation exposes object identity for it.
+
+The initializer is required and must be a scalar constant expression. Its completed value must be either integer-valued or Boolean-valued. A named constant becomes visible only after the compiler has checked the complete declaration, so its initializer cannot name itself. Chapter 5's declaration-order rule also excludes later names and constant cycles.
 
 Named integer constants replace enumeration members where a program needs symbolic numeric values. A constant declaration does not create an enumeration, subrange, distinct integer type, or overload.
 
-<div id="85-aggregate-constants-are-absent" class="nucleus-source-anchor"></div>
+<div id="85-aggregate-constants" class="nucleus-source-anchor"></div>
 
-## 8.5 Aggregate constants are absent
+## 8.5 Aggregate constants
 
-Nucleus 0.1 named constants are scalar only. `const` cannot declare a record, fixed array, or bounded string. The language has no separate read-only aggregate-storage declaration.
+An aggregate constant declares one explicitly typed, statically initialized record, fixed array, or bounded string:
 
-A program that needs an initialized string or scalar table declares a program variable under Section 8.8. That object is mutable storage even when the program never writes it.
+```nucleus
+const Origin as Point = (0, 0)
+const Masks as u8[4] = [$01, $02, $04, $08]
+const Prompt as string[8] = "READY"
+```
+
+The initializer is required and follows the same complete, type-directed static-initializer rules as a program variable. Every scalar leaf is a compatible scalar constant expression. The declaration cannot use a runtime expression, read storage, call a routine, omit a component, or name the constant being declared. A scalar type after `as` is invalid: scalar constants retain the inferred form from Section 8.4.
+
+The named root is read-only. Source assignment cannot be rooted directly at the aggregate constant name, including assignment to the complete object, one record field, one array element, or one bounded-string byte. The constant remains an ordinary aggregate source: field and index selection, `.length`, exact-type copying, aggregate argument passing, and aggregate return are admitted.
+
+Read-only status is deliberately not part of the aggregate alias type. Passing a constant to an aggregate parameter or returning it as an aggregate result removes the direct-root distinction, so mutation through that alias is permitted by the language and is not dynamically checked. A target that places the bytes in writable memory may observe the change; a target that places them in ROM may ignore or reject the physical write. Portable programs treat aggregate constants as immutable and do not depend on mutation through an alias. This bounded rule avoids a transitive const or permission type system.
 
 <div id="86-scalar-constant-expressions" class="nucleus-source-anchor"></div>
 
@@ -147,13 +164,36 @@ It cannot read a variable, field, array element, or bounded string; call a routi
 
 The compiler evaluates a constant expression at compile time with the operand types, result type, overflow rule, and fault rule that Chapter 9 assigns to each admitted operator. It must not substitute host-language overflow, silently widen a typed operation, or fold an expression differently from the corresponding runtime operation. If Chapter 9 assigns no constant-expression rule to an operator, that operator is unavailable in this context.
 
-An exact integer literal remains exact until the declared destination, an operator rule, or a conversion supplies its type. The implicit `u8`-to-`u16` conversion from Chapter 6 is permitted. A checked `u16`-to-`u8` conversion is valid at compile time only when its value lies from 0 through 255; otherwise the declaration is invalid. A constant operation that Chapter 9 defines to trap at runtime makes the constant expression invalid when the compiler proves that condition during evaluation.
+An exact integer literal or earlier exact named integer constant remains exact until an operator rule or conversion supplies its type. The completed integer value of a named constant returns to the exact category for later uses. The implicit `u8`-to-`u16` conversion from Chapter 6 is permitted. A checked `u16`-to-`u8` conversion is valid at compile time only when its value lies from 0 through 255; otherwise the declaration is invalid. A constant operation that Chapter 9 defines to trap at runtime makes the constant expression invalid when the compiler proves that condition during evaluation.
 
-An array length is a scalar constant expression whose value must lie from 1 through 65,535. A `string[N]` capacity is a scalar constant expression whose value must lie from 1 through 255. The compiler evaluates the bound before constructing the type identity. A later constant, a variable, or a cyclic dependency cannot supply a bound.
+An array length is a scalar constant expression whose value must lie from 1 through 65,535. A `string[N]` capacity is a scalar constant expression whose value must lie from 1 through 253. The compiler evaluates the bound before constructing the type identity. A later constant, a variable, or a cyclic dependency cannot supply a bound.
 
-<div id="87-record-declarations" class="nucleus-source-anchor"></div>
+The bounded-string capacity is a property of that source type only. It does
+not impose a 253- or 255-byte ceiling on a fixed array, record, array of
+records, array of bounded strings, or record containing any of those types.
+Their complete extents follow recursively from their declared members. An
+implementation may still diagnose an otherwise valid declaration when the
+complete object cannot fit its published program-data capacity.
 
-## 8.7 Record declarations
+<div id="87-compile-time-assertions" class="nucleus-source-anchor"></div>
+
+## 8.7 Compile-time assertions
+
+A compile-time assertion has this top-level form:
+
+```nucleus
+assert Rows * Columns <= 256
+```
+
+Its operand must be a Boolean scalar constant expression under Section 8.6. It may therefore use literals, earlier named constants, parentheses, pure scalar operators, and admitted conversions, but it cannot read storage or call a routine. An exact integer expression alone is not a condition: `assert Rows` is invalid, while `assert Rows <= 8` is Boolean-valued.
+
+The compiler evaluates the expression while checking the declaration. A true result accepts the declaration. A false result makes the source invalid and produces an assertion diagnostic at the `assert` keyword. The declaration introduces no name or storage and emits no runtime operation or target code.
+
+Assertions follow ordinary declaration order. They can state relationships among earlier constants, including relationships used to justify fixed capacities, but cannot refer to a later declaration.
+
+<div id="88-record-declarations" class="nucleus-source-anchor"></div>
+
+## 8.8 Record declarations
 
 A record declaration introduces one nominal type:
 
@@ -170,9 +210,9 @@ The record type becomes visible only after the complete declaration has been che
 
 Record field names use the record's field scope under Chapter 5. An exact duplicate within that field scope is invalid; differently cased field names are distinct. Record layout offsets and backend encoding are outside this chapter.
 
-<div id="88-program-variables" class="nucleus-source-anchor"></div>
+<div id="89-program-variables" class="nucleus-source-anchor"></div>
 
-## 8.8 Program variables
+## 8.9 Program variables
 
 A top-level `var` declaration owns one mutable program-lifetime object. The declared type may be scalar, record, fixed array, or bounded string.
 
@@ -195,9 +235,9 @@ Nucleus has no named-field, partial, spread, or runtime aggregate initializer. A
 
 The program variable becomes visible only after the compiler has checked its type and initializer. Its initializer may therefore use earlier scalar constants but cannot use the variable itself or a later declaration.
 
-<div id="89-routine-declarations-and-parameters" class="nucleus-source-anchor"></div>
+<div id="810-routine-declarations-and-parameters" class="nucleus-source-anchor"></div>
 
-## 8.9 Routine declarations and parameters
+## 8.10 Routine declarations and parameters
 
 One routine header declares a routine name, an ordered list of zero or more formal parameters, and either no result type or one result type. Every parameter has an explicit `name as Type` declaration. Parameters have no initializer or default argument, and a header has no grouped names or multiple result list.
 
@@ -207,31 +247,31 @@ A forward routine declaration contains the complete and sole header and no body.
 
 A routine definition without an earlier forward makes its checked signature visible before the local-declaration prefix and body. No nested routine declaration is permitted.
 
-<div id="810-local-declarations" class="nucleus-source-anchor"></div>
+<div id="811-local-declarations" class="nucleus-source-anchor"></div>
 
-## 8.10 Local declarations
+## 8.11 Local declarations
 
 After parameter binding, scalar local declarations take effect in source order before the first statement. All local declarations remain in one contiguous prefix.
 
-A scalar local owns one per-invocation scalar value. Its initializer is an ordinary expression or a direct failable call followed by `or fail` under Chapter 14, evaluated once when execution reaches the declaration. The successful result must be compatible with the declared scalar type. If the initializer is omitted, the compiler establishes zero for `u8` or `u16` and `false` for `boolean` at that point.
+A scalar local owns one per-invocation scalar value. Its initializer is an ordinary expression or a direct failable call followed by `else fail` under Chapter 14, evaluated once when execution reaches the declaration. The successful result must be compatible with the declared scalar type. If the initializer is omitted, the compiler establishes zero for `u8` or `u16` and `false` for `boolean` at that point.
 
 The declared local type must be `u8`, `u16`, or `boolean`. A record, fixed array, or bounded string is invalid in a local declaration whether or not an initializer is written. Routines receive aggregates only through formal parameters, reach aggregate subobjects through field and index paths, and may return transient aggregate aliases under Chapters 7 and 13.
 
 A local becomes visible only after its complete declaration and initializer have been checked. Its initializer may name parameters, visible program declarations, and earlier locals. It cannot name itself or a later local. A local declaration inside a statement block or after the first statement is invalid.
 
-<div id="811-initialization-order" class="nucleus-source-anchor"></div>
+<div id="812-initialization-order" class="nucleus-source-anchor"></div>
 
-## 8.11 Initialization order
+## 8.12 Initialization order
 
-Constant expressions are evaluated during compilation and perform no source-level runtime operation.
+Scalar constant expressions are evaluated during compilation and perform no source-level runtime operation. The compiler also constructs every aggregate constant's complete static value before source execution begins.
 
-The compiler establishes every program variable's zero or explicit initial value exactly once before the entry routine begins. Their semantic order follows source declaration order. Static initializers have no source-level effects and cannot read storage, so this order is not otherwise observable. Every program-lifetime object has reached its initial value before source execution can read it. Chapter 7 defines lifetime, and Chapter 19 defines startup semantics and implementation requirements.
+The compiler establishes every program variable's zero or explicit initial value exactly once before the entry routine begins. Aggregate constants and variables follow source declaration order. Static initializers have no source-level effects and cannot read storage, so this order is not otherwise observable. Every program-lifetime object has reached its initial value before source execution can read it. Chapter 7 defines lifetime, and Chapter 19 defines startup semantics and implementation requirements.
 
 On each routine invocation, parameter binding precedes activation-local initialization. Scalar local declarations then take effect in source order, and each receives its zero or evaluated value at its declaration. After the last local declaration, execution continues with the first statement.
 
-<div id="812-invalid-declarations-and-capacity-failures" class="nucleus-source-anchor"></div>
+<div id="813-invalid-declarations-and-capacity-failures" class="nucleus-source-anchor"></div>
 
-## 8.12 Invalid declarations and capacity failures
+## 8.13 Invalid declarations and capacity failures
 
 The compiler must diagnose:
 
@@ -243,7 +283,8 @@ The compiler must diagnose:
 - a scalar initializer incompatible with its declared type;
 - an invalid array length, string capacity, string length, record field count, array element count, or nested initializer shape;
 - a record field with an unavailable type or a record with no fields;
-- an aggregate `const`, a nonconstant aggregate initializer, or an initializer form incompatible with its declared component type;
+- a scalar type written on an aggregate-constant form, a nonconstant aggregate initializer, or an initializer form incompatible with its declared component type;
+- assignment rooted directly at an aggregate constant name;
 - a record, fixed array, or bounded string used as a local variable type;
 - an aggregate argument or result with a nonidentical referent type;
 - an attempt to copy between nonidentical aggregate types; and
@@ -251,19 +292,22 @@ The compiler must diagnose:
 
 An implementation may bound top-level declarations, record fields, parameters, scalar locals, constant-expression nesting, structured-initializer depth and elements, decoded string bytes, type descriptors, retained signatures, and initialization records. It must publish each limit and issue a capacity diagnostic before truncation, wraparound, omitted initialization, dropped fields, or an incorrect binding can occur. A capacity failure does not change an otherwise conforming declaration into invalid source.
 
-<div id="813-examples" class="nucleus-source-anchor"></div>
+<div id="814-examples" class="nucleus-source-anchor"></div>
 
-## 8.13 Examples
+## 8.14 Examples
 
 These top-level declarations are valid under this chapter:
 
 ```nucleus
-const cellCount as u16 = 8
+const cellCount = 8
 record Cell
     value as u16
     active as boolean
 end
 
+const defaultCell as Cell = (0, false)
+const bitMasks as u8[4] = [1, 2, 4, 8]
+const banner as string[8] = "READY"
 var cells as Cell[cellCount]
 var origin as Cell = (0, false)
 var templates as Cell[2] = [(1, true), (2, false)]
@@ -273,7 +317,7 @@ var title as string[12] = "NUCLEUS"
 var attempts as u8
 ```
 
-`cells` and `attempts` begin with their zero values, including every field of every `Cell`. `origin`, `templates`, `flags`, `prompt`, and `title` are mutable program-lifetime objects with the written initial contents. `title` begins with seven decoded bytes.
+`defaultCell`, `bitMasks`, and `banner` are aggregate constants whose direct named roots cannot be assignment targets. `cells` and `attempts` begin with their zero values, including every field of every `Cell`. `origin`, `templates`, `flags`, `prompt`, and `title` are mutable program-lifetime objects with the written initial contents. `title` begins with seven decoded bytes.
 
 A routine manipulates selected aggregate storage directly through a parameter path:
 
@@ -323,23 +367,26 @@ end
 The following declarations illustrate valid and invalid boundary cases. They are not one compilation unit:
 
 ```nucleus
-const Limit as u16 = 8
+const Limit = 8
 var limit as u16                    // valid: names are case-sensitive
 var Limit as u16                    // invalid: exact duplicate
 
-const flags as u8[4] = [1, 2, 4, 8] // named constants are scalar only
-const prompt as string[8] = "READY"  // bounded-string constants are absent
+const flags as u8[4] = [1, 2, 4, 8]    // valid aggregate constant
+const prompt as string[8] = "READY"    // valid aggregate constant
+const missingType = [1, 2]              // invalid: aggregate type is required
+const typedScalar as u8 = 1              // invalid: scalar constants infer type
 
-const first as u16 = second         // later name is unavailable
-const second as u16 = first         // the first error prevents a cycle
+const first = second         // later name is unavailable
+const second = first         // the first error prevents a cycle
 
-const noElements as u16 = 0
+const noElements = 0
 var empty as u8[noElements]         // fixed arrays must be nonempty
 var lateBound as u8[laterLength]    // later constant is unavailable
-const laterLength as u16 = 4
+const laterLength = 4
 
 var shortText as string[4] = "READY" // decoded literal is too long
 var copiedCell as Cell = cells[0]   // static initializers cannot read aggregate storage
+defaultCell.value = 1               // invalid: direct constant-rooted write
 
 sub invalidLocal()
     var aggregateLocal as Cell      // invalid: locals must be scalar

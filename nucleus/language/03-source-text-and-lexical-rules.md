@@ -108,16 +108,18 @@ After scanning the longest identifier, the tokenizer compares its exact spelling
 The Nucleus 0.1 reserved words are:
 
 ```text
-and      as       boolean  const     continue  else     elseif
-end      error    exit     fail      fails     false    for
-forward  if       not      on        or        record   return
+and      as       assert   boolean   const     continue else
+elseif
+end      exit     fail      fails     false    for      forward
+handle   if       mod      not       or        record
+return
 step     string   sub      to        true      u16      u8
-until    var      while
+until    var      while    xor
 ```
 
 `elseif` is one keyword. `else if` produces the two keywords `else` and `if` and does not form an `elseif` clause. `ELSEIF` is a `NAME`, not a keyword.
 
-Chapter 14 defines the recoverable-error forms that use `error`, `fail`, `fails`, and `on`.
+Chapter 14 defines the recoverable-error forms that use `fail`, `fails`, and `handle`. `on` and `error` are ordinary identifiers.
 
 Nucleus uses name-led routine invocation and has no `call` keyword. `call` remains an identifier.
 
@@ -125,22 +127,26 @@ Nucleus uses name-led routine invocation and has no `call` keyword. `call` remai
 
 ## 3.6 Numeric literals
 
-Nucleus admits unsigned decimal integer literals:
+Nucleus admits unsigned decimal, hexadecimal, and binary integer literals:
 
 ```text
 decimal-literal ::= decimal-digit+
+hexadecimal-literal ::= "$" hexadecimal-digit+
+binary-literal ::= "%" binary-digit+
 integer-literal ::= decimal-literal
+                  | hexadecimal-literal
+                  | binary-literal
 ```
 
-Hexadecimal integer literals are not part of Nucleus 0.1. Hexadecimal digits remain part of the `\xHH` escape syntax in Section 3.7; that lexical use does not create an integer-literal form. Any additional integer-literal form requires measured admission under Chapter 2.
+Hexadecimal digits may use either letter case. The `$` and `%` prefixes are part of the literal and do not form separate punctuation tokens. A prefix must be followed by at least one digit of its base.
 
-The tokenizer computes an exact unsigned value from zero through 65,535. A literal whose value exceeds 65,535 is a lexical error. Later type checking decides whether the value fits its context, including `u8`, `u16`, an array bound, or a counted-loop parameter.
+The tokenizer computes an exact unsigned value from zero through 65,535. A decimal literal whose value exceeds 65,535 is a lexical error. A hexadecimal literal may contain at most four digits, and a binary literal may contain at most sixteen digits; an additional digit is an overflow even when it is a leading or trailing zero. Later type checking decides whether the value fits its context, including `u8`, `u16`, an array bound, or a counted-loop parameter.
 
 A leading `+` or `-` is a separate punctuation token and is never part of the literal. Thus `-32768` begins with `-` followed by the literal `32768`; expression and constant rules determine whether that combination is valid.
 
-A letter or underscore immediately following a decimal literal makes the numeric token malformed instead of beginning an adjacent identifier. This rejects forms such as `0x2a` and `12u8` with one diagnostic. `$` begins no Nucleus token and is a lexical error.
+A letter or underscore immediately following any integer literal makes the numeric token malformed instead of beginning an adjacent identifier. This rejects forms such as `0x2a`, `12u8`, `$ffu8`, and `%10value` with one diagnostic. A decimal digit other than zero or one inside a binary literal is likewise malformed rather than the start of a following decimal token.
 
-Binary, octal, and floating-point literals are absent. Numeric separators, exponent notation, decimal points, and type suffixes are absent. In particular, `%1010`, `1_000`, `1.0`, and `42u8` are not alternative integer spellings.
+Octal and floating-point literals are absent. Numeric separators, exponent notation, decimal points, and type suffixes are absent. In particular, `1_000`, `1.0`, and `42u8` are not alternative integer spellings. The later word operator `mod` is distinct from the `%` binary-literal prefix.
 
 <div id="37-character-and-string-literals" class="nucleus-source-anchor"></div>
 
@@ -221,10 +227,13 @@ For reuse in Chapter 17, the lexical grammar is:
 ascii-letter       ::= "A".."Z" | "a".."z"
 decimal-digit      ::= "0".."9"
 hexadecimal-digit  ::= decimal-digit | "A".."F" | "a".."f"
+binary-digit       ::= "0" | "1"
 
 identifier         ::= ascii-letter
                        (ascii-letter | decimal-digit | "_")*
 integer-literal    ::= decimal-digit+
+                     | "$" hexadecimal-digit+
+                     | "%" binary-digit+
 character-literal  ::= "'" literal-byte "'"
 string-literal     ::= '"' literal-byte* '"'
 literal-byte       ::= direct-literal-byte | escape
@@ -264,30 +273,32 @@ Capacity failure must not change token identity. In particular, an overlong name
 
 ## 3.11 Token examples
 
-| Source                     | Result or required diagnostic                  |
-| -------------------------- | ---------------------------------------------- |
-| `player_2`                 | one `NAME`                                     |
-| `_player`                  | lexical error at `_`                           |
-| `elseif`                   | one `ELSEIF` keyword                           |
-| `ELSEIF`                   | one `NAME`; keywords require lowercase         |
-| `elseifReady`              | one `NAME`                                     |
-| `else if`                  | `ELSE IF`; not an `ELSEIF` clause              |
-| `42`                       | `NUMBER(42)`                                   |
-| `-42`                      | `- NUMBER(42)`                                 |
-| `$2a`                      | lexical error; hexadecimal integers are absent |
-| `0x2a`                     | malformed-number diagnostic                    |
-| `%00101010`                | lexical error; binary literals are absent      |
-| `'A'`                      | `CHARACTER(65)`                                |
-| `'\x41'`                   | `CHARACTER(65)`                                |
-| `''`                       | empty-character diagnostic                     |
-| `""`                       | empty `STRING`                                 |
-| `"A\nB"`                   | `STRING` containing bytes 65, 10, 66           |
-| `"A\q"`                    | invalid-escape diagnostic                      |
-| `a <= b`                   | `NAME <= NAME`                                 |
-| `a != b`                   | lexical error at `!`                           |
-| `a; b`                     | lexical error at `;`                           |
-| `a / / b`                  | `NAME / / NAME`; not a comment                 |
-| `a // note` followed by LF | `NAME NEWLINE`; the comment produces no token  |
+| Source                     | Result or required diagnostic                 |
+| -------------------------- | --------------------------------------------- |
+| `player_2`                 | one `NAME`                                    |
+| `_player`                  | lexical error at `_`                          |
+| `elseif`                   | one `ELSEIF` keyword                          |
+| `ELSEIF`                   | one `NAME`; keywords require lowercase        |
+| `elseifReady`              | one `NAME`                                    |
+| `else if`                  | `ELSE IF`; not an `ELSEIF` clause             |
+| `42`                       | `NUMBER(42)`                                  |
+| `-42`                      | `- NUMBER(42)`                                |
+| `$2a`                      | `NUMBER(42)`                                  |
+| `0x2a`                     | malformed-number diagnostic                   |
+| `%00101010`                | `NUMBER(42)`                                  |
+| `$10000`                   | malformed-number diagnostic; too many digits  |
+| `%10000000000000000`       | malformed-number diagnostic; too many digits  |
+| `'A'`                      | `CHARACTER(65)`                               |
+| `'\x41'`                   | `CHARACTER(65)`                               |
+| `''`                       | empty-character diagnostic                    |
+| `""`                       | empty `STRING`                                |
+| `"A\nB"`                   | `STRING` containing bytes 65, 10, 66          |
+| `"A\q"`                    | invalid-escape diagnostic                     |
+| `a <= b`                   | `NAME <= NAME`                                |
+| `a != b`                   | lexical error at `!`                          |
+| `a; b`                     | lexical error at `;`                          |
+| `a / / b`                  | `NAME / / NAME`; not a comment                |
+| `a // note` followed by LF | `NAME NEWLINE`; the comment produces no token |
 
 For this source:
 
@@ -309,4 +320,4 @@ The two physical line endings inside delimiters do not appear in the token seque
 
 ## 3.12 Reserved-word and literal decisions
 
-Chapter 9 admits `not`, `and`, and `or`. Chapter 14 admits `fail`, `fails`, `on`, and `error`. These seven words are reserved. Chapter 11 omits a conditional header marker, so `then` remains an identifier. Nucleus 0.1 integer literals are decimal only. A later revision that needs another token requires an amendment here and cost accounting for the added scanner, table, test, and diagnostic work.
+Chapter 8 admits `assert`. Chapter 9 admits `mod`, `not`, `and`, `or`, and `xor`. Chapter 14 admits `fail`, `fails`, and `handle`. These nine words are reserved. Chapter 11 omits a conditional header marker, so `then` remains an identifier. Nucleus integer literals use decimal digits, `$` hexadecimal, or `%` binary. A later revision that needs another token requires an amendment here and cost accounting for the added scanner, table, test, and diagnostic work.
