@@ -27,6 +27,14 @@ about source behavior, the language specification prevails. If they disagree
 about the direct-Z80 runtime interface or packed representation, this contract
 prevails.
 
+The [Nucleus Target System Specification](https://github.com/jhlagado/nucleus/blob/main/docs/target-system-specification.md)
+governs target profiles, image composition, startup, entry, and banked-program
+placement. This contract defines their direct-Z80 representation.
+
+The [Nucleus Object Stream Format](https://github.com/jhlagado/nucleus/blob/main/docs/nucleus-object-format.md) governs the binary
+record tags, framing, payloads, patch order, integrity check, and terminal
+commit used to publish that representation.
+
 The implementation plan and reviewer's charter are non-normative. Tests,
 proofs, and measurements provide evidence; they do not amend either authority.
 

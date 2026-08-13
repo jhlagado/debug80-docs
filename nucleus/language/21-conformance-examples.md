@@ -44,13 +44,11 @@ sub main()
 
     cells[0].value = cellAt(0).value
     if cells[0].value = 1
-        writeOutputByte('Y')
-        on error code
+        writeOutputByte('Y') handle code
             return
         end
     elseif cells[0].value = 0
-        writeOutputByte('N')
-        on error code
+        writeOutputByte('N') handle code
             return
         end
     end
@@ -64,10 +62,10 @@ Each aggregate assignment copies `template` into the selected array element befo
 ## 21.2 Recoverable error and propagation
 
 ```nucleus
-const badByte as u8 = 10
+const badByte = 10
 
 sub checkedByte() as u8 fails
-    var value as u8 = readInputByte() or fail
+    var value as u8 = readInputByte() else fail
     if value = 0
         fail badByte
     end
@@ -75,12 +73,12 @@ sub checkedByte() as u8 fails
 end
 
 sub emitByte() fails
-    var value as u8 = checkedByte() or fail
-    writeOutputByte(value) or fail
+    var value as u8 = checkedByte() else fail
+    writeOutputByte(value) else fail
 end
 
 sub main() fails
-    emitByte() or fail
+    emitByte() else fail
 end
 ```
 
@@ -119,8 +117,7 @@ sub main()
         end
     end
 
-    writeOutputByte(u8(index))
-    on error code
+    writeOutputByte(u8(index)) handle code
         return
     end
 end
@@ -152,28 +149,29 @@ sub main() fails
     end
 
     if text[1] = 'Z' and snapshot[1] = 0
-        writeOutputByte('Y') or fail
+        writeOutputByte('Y') else fail
     end
 end
 ```
 
 The literal's embedded zero is an ordinary byte, so its logical length is three. Assignment materializes `textAlias()` by copying it into the program-level `snapshot` object. Passing a second result directly to `mutate` forwards the transient alias without copying, so mutation changes `text` while `snapshot` retains its copied zero byte. The expected standard output is `Y`.
 
-<div id="215-result-free-return-propagation" class="nucleus-source-anchor"></div>
+<div id="215-result-free-call-propagation" class="nucleus-source-anchor"></div>
 
-## 21.5 Result-free return propagation
+## 21.5 Result-free call propagation
 
 ```nucleus
 sub emitMarker() fails
-    writeOutputByte('R') or fail
+    writeOutputByte('R') else fail
 end
 
 sub relayMarker() fails
-    return emitMarker() or fail
+    emitMarker() else fail
+    return
 end
 
 sub main() fails
-    relayMarker() or fail
+    relayMarker() else fail
 end
 ```
 
@@ -184,7 +182,7 @@ When output succeeds, `emitMarker` has no result, `relayMarker` returns successf
 ## 21.6 Same-destination error handling
 
 ```nucleus
-const sampleFailure as u8 = 7
+const sampleFailure = 7
 
 sub alwaysFails() as u8 fails
     fail sampleFailure
@@ -193,13 +191,12 @@ end
 sub main() fails
     var code as u8
 
-    code = alwaysFails()
-    on error code
-        writeOutputByte(code) or fail
+    code = alwaysFails() handle code
+        writeOutputByte(code) else fail
         return
     end
 
-    writeOutputByte(0) or fail
+    writeOutputByte(0) else fail
 end
 ```
 
@@ -211,10 +208,10 @@ The failed assignment performs no success-result store and then stores `sampleFa
 
 ```nucleus
 sub main() fails
-    writeStorageByte('A') or fail
-    writeStorageByte('B') or fail
-    seekStorageOutput(0) or fail
-    writeStorageByte('Z') or fail
+    writeStorageByte('A') else fail
+    writeStorageByte('B') else fail
+    seekStorageOutput(0) else fail
+    writeStorageByte('Z') else fail
 end
 ```
 
@@ -246,7 +243,7 @@ Each listing below is valid source. The external conformance harness supplies th
 var bytes as u8[2]
 
 sub main() fails
-    var index as u8 = readInputByte() or fail
+    var index as u8 = readInputByte() else fail
     bytes[index] = 1
 end
 ```
@@ -259,12 +256,25 @@ sub divide(value as u16, divisor as u16) as u16
 end
 
 sub main() fails
-    var divisor as u16 = readInputByte() or fail
+    var divisor as u16 = readInputByte() else fail
     var result as u16 = divide(8, divisor)
 end
 ```
 
 With input byte zero, the required result is `division-by-zero`.
+
+```nucleus
+sub remainder(value as u16, divisor as u16) as u16
+    return value mod divisor
+end
+
+sub main() fails
+    var divisor as u16 = readInputByte() else fail
+    var result as u16 = remainder(8, divisor)
+end
+```
+
+With input byte zero, the required result is likewise `division-by-zero` at `mod`.
 
 <div id="2110-complete-rejected-programs" class="nucleus-source-anchor"></div>
 
@@ -276,7 +286,8 @@ Failable call without consumption:
 
 ```nucleus
 sub readOne() as u8 fails
-    return readInputByte() or fail
+    var value as u8 = readInputByte() else fail
+    return value
 end
 
 sub main()
@@ -384,16 +395,38 @@ end
 
 The counter is a valid scalar local, but it is read-only while its loop is active. A program variable or parameter used as the counter, or reuse of `index` by a nested counted loop, is independently invalid.
 
-Hexadecimal integer syntax:
+Exact integer constant outside the expected range at its use:
 
 ```nucleus
-const value as u8 = $2a
+const Big = 300
+var x as u8
+
+sub main()
+    x = Big
+end
+```
+
+The constant declaration is valid. The assignment is invalid at the use of `Big` because 300 does not fit the destination's expected `u8` type.
+
+Hexadecimal overflow:
+
+```nucleus
+const value = $10000
 
 sub main()
 end
 ```
 
-The last program fails lexically at `$`; Nucleus 0.1 integer literals are decimal.
+Binary overflow:
+
+```nucleus
+const value = %10000000000000000
+
+sub main()
+end
+```
+
+Both programs fail lexically at the literal prefix. A hexadecimal literal has at most four digits, and a binary literal has at most sixteen.
 
 <div id="2111-multipart-input-presentation" class="nucleus-source-anchor"></div>
 
@@ -430,7 +463,7 @@ sub render
 end
 
 sub main() fails
-    writeOutputByte(render(3)) or fail
+    writeOutputByte(render(3)) else fail
 end
 ```
 
@@ -460,7 +493,7 @@ end
 sub main() fails
     copyAndIncrement(source, destination)
     if source.value = 1 and destination.value = 2
-        writeOutputByte('Y') or fail
+        writeOutputByte('Y') else fail
     end
 end
 ```
@@ -495,9 +528,209 @@ end
 sub main() fails
     replace(forwardSelection(samples, 1), 9)
     if samples[1].value = 9
-        writeOutputByte('Y') or fail
+        writeOutputByte('Y') else fail
     end
 end
 ```
 
 Both result-bearing routines transfer transient aliases to storage inside `samples`. `replace` receives the forwarded alias and mutates the selected original object without an aggregate copy. The expected standard output is `Y`.
+
+<div id="2115-inferred-constant-types" class="nucleus-source-anchor"></div>
+
+## 21.15 Inferred constant types
+
+This program uses one exact integer constant in both integer widths and retains a separate Boolean constant:
+
+```nucleus
+const sharedValue = 200
+const enabled = true
+var byteUse as u8 = sharedValue
+var wordUse as u16 = sharedValue
+
+sub main() fails
+    if enabled and byteUse = 200 and wordUse = 200
+        writeOutputByte('Y') else fail
+    end
+end
+```
+
+`sharedValue` adopts `u8` for `byteUse` and `u16` for `wordUse`. `enabled` has type `boolean`. The expected standard output is `Y`.
+
+<div id="2116-integer-literal-spellings" class="nucleus-source-anchor"></div>
+
+## 21.16 Integer literal spellings
+
+This program exercises hexadecimal and binary literals at ordinary and maximum word values:
+
+```nucleus
+const hexMask = $FF
+const binaryMask = %10110000
+const hexMaximum = $ffff
+const binaryMaximum = %1111111111111111
+
+sub main() fails
+    if hexMask = 255 and binaryMask = 176 and hexMaximum = 65535 and binaryMaximum = 65535
+        writeOutputByte(binaryMask) else fail
+    end
+end
+```
+
+All three literal spellings produce the same exact integer category. The expected standard output is byte value 176.
+
+<div id="2117-integer-exclusive-or" class="nucleus-source-anchor"></div>
+
+## 21.17 Integer exclusive OR
+
+This program exercises constant and runtime `xor` at both integer widths. It also distinguishes left association at the shared `or` and `xor` precedence level:
+
+```nucleus
+const folded = 3 xor 1 or 1
+var byteValue as u8 = $a5
+var wordValue as u16 = $f0f0
+
+sub main() fails
+    byteValue = byteValue xor $ff
+    wordValue = wordValue xor $ffff
+    if folded = 3 and byteValue = $5a and wordValue = $0f0f
+        writeOutputByte(byteValue) else fail
+    end
+end
+```
+
+The expected standard output is byte value 90.
+
+Boolean operands are invalid:
+
+```nucleus
+sub main()
+    if true xor false
+    end
+end
+```
+
+The second program is rejected at `xor` because exclusive OR is integer-only.
+
+<div id="2118-integer-remainder" class="nucleus-source-anchor"></div>
+
+## 21.18 Integer remainder
+
+This program exercises constant and runtime `mod` at both integer widths:
+
+```nucleus
+const folded = 100 mod 7
+var byteValue as u8 = 250
+var wordValue as u16 = 1000
+
+sub main() fails
+    byteValue = byteValue mod 16
+    wordValue = wordValue mod 256
+    if folded = 2 and byteValue = 10 and wordValue = 232
+        writeOutputByte(byteValue) else fail
+    end
+end
+```
+
+The expected standard output is byte value 10.
+
+A constant zero divisor is invalid:
+
+```nucleus
+const bad = 1 mod 0
+
+sub main()
+end
+```
+
+The second program is rejected at the zero divisor with the same division-by-zero diagnostic used by `/ 0`.
+
+<div id="2119-compile-time-assertions" class="nucleus-source-anchor"></div>
+
+## 21.19 Compile-time assertions
+
+This program states and uses a relationship between two earlier constants:
+
+```nucleus
+const Rows = 8
+const Columns = 16
+assert Rows * Columns = 128
+
+sub main() fails
+    writeOutputByte(Rows * Columns) else fail
+end
+```
+
+The assertion is true, emits no target code, and the expected standard output is byte value 128.
+
+A false assertion is invalid:
+
+```nucleus
+const Rows = 17
+assert Rows <= 16
+
+sub main()
+end
+```
+
+The second program is rejected at `assert` with an assertion-failed diagnostic.
+
+The assertion expression must be Boolean-valued:
+
+```nucleus
+const Rows = 8
+assert Rows
+
+sub main()
+end
+```
+
+The third program is rejected at `assert` because an exact integer is not a Boolean condition.
+
+<div id="2120-aggregate-constants" class="nucleus-source-anchor"></div>
+
+## 21.20 Aggregate constants
+
+This program reads record, array, and bounded-string constants, copies a constant into mutable storage, and deliberately demonstrates the non-transitive alias rule:
+
+```nucleus
+record Pair
+    left as u8
+    right as u16
+end
+
+const Origin as Pair = (7, 300)
+const Values as u8[3] = [1, 2, 3]
+const Text as string[3] = "A\0B"
+var target as Pair
+
+sub mutate(item as Pair)
+    item.left = 9
+end
+
+sub main() fails
+    target = Origin
+    if target.left = 7 and Values[1] = 2 and Text.length = 3 and Text[2] = 'B'
+        mutate(Origin)
+        if Origin.left = 9 and target.left = 7
+            writeOutputByte('Y') else fail
+        end
+    end
+end
+```
+
+The direct named roots are readable aggregate sources. `target = Origin` copies the complete value. Passing `Origin` to `mutate` loses the direct-root read-only marker, so the mutation is permitted; this conformance execution uses writable proof storage and therefore observes the change. Portable programs do not depend on that mutation when a target places constants in physical read-only memory. The expected standard output is `Y`.
+
+A direct constant-rooted assignment is invalid:
+
+```nucleus
+record Pair
+    value as u8
+end
+
+const Origin as Pair = (1)
+
+sub main()
+    Origin.value = 2
+end
+```
+
+The second program is rejected at `Origin`. The same rule rejects assignment to the whole constant, an array element, or a bounded-string byte reached directly from its constant name.

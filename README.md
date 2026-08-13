@@ -42,6 +42,7 @@ Debug80, AZM, Glimmer, and Nucleus material.
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
 | [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and direct-Z80 compiler project.                            |
+| [Programming Nucleus](https://debug80.com/nucleus/book1/)                                      | A practical course in the language, compiler and Debug80 workflow.                  |
 | [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/)                    | The complete source-language specification in a chapter-by-chapter reading edition. |
 | [Nucleus Z80 Runtime Contract](https://debug80.com/nucleus/runtime/)                           | The complete direct execution and backend contract.                                 |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/)                                                   | Reference material for the machine and its monitor.                                 |
@@ -58,29 +59,31 @@ npm run dev
 `npm run build` produces the static site into `.vitepress/dist`. Pushing to
 `main` builds and publishes to GitHub Pages, which serves debug80.com.
 
-The two Nucleus reading editions are generated from their single authoritative
-files in the Debug80 repository; their chapter files are not independent
-sources. Update and verify them with:
+The Nucleus reading editions are generated from their single authoritative
+files; their chapter files are not independent sources. Both authoritative
+sources are in the standalone Nucleus repository. Update and verify them with:
 
 ```sh
-npm run sync:nucleus -- /path/to/debug80/packages/nucleus/docs/specification.md
-npm run check:nucleus -- /path/to/debug80/packages/nucleus/docs/specification.md
-npm run sync:nucleus-runtime -- /path/to/debug80/packages/nucleus/docs/z80-runtime-contract.md
-npm run check:nucleus-runtime -- /path/to/debug80/packages/nucleus/docs/z80-runtime-contract.md
+npm run sync:nucleus -- /path/to/nucleus/docs/specification.md
+npm run check:nucleus -- /path/to/nucleus/docs/specification.md
+npm run sync:nucleus-runtime -- /path/to/nucleus/docs/z80-runtime-contract.md
+npm run check:nucleus-runtime -- /path/to/nucleus/docs/z80-runtime-contract.md
 ```
 
 ### Checks
 
-Five scripts guard things that are easy to get wrong and hard to notice. CI runs
-them on every push.
+These checks guard things that are easy to get wrong and hard to notice. CI
+runs the repository-only checks on every push. Checks that need adjacent source
+or locally linked packages run during the relevant editing workflow.
 
-| Command                  | Checks                                                                                                                                                                                  |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run links`          | Every internal link resolves.                                                                                                                                                           |
-| `npm run symbols`        | Every symbol the prose names in backticks is one the code actually defines. AZM is case-sensitive, so `RenderTile` and `RENDER_TILE` are different symbols and only one of them exists. |
-| `npm run verify:debug80` | Command names, panel labels and status strings quoted in Debug80 Book 1 match the extension source. Needs the extension checked out alongside this repo; skipped otherwise.             |
-| `npm run sidebar`        | Regenerates the sidebars from front matter. Run after adding or renaming a page.                                                                                                        |
-| `npm run llms`           | Confirms that the public citation guide contains the current books and URLs.                                                                                                            |
+| Command                       | Checks                                                                                                                                                                                  |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run links`               | Every internal link resolves.                                                                                                                                                           |
+| `npm run symbols`             | Every symbol the prose names in backticks is one the code actually defines. AZM is case-sensitive, so `RenderTile` and `RENDER_TILE` are different symbols and only one of them exists. |
+| `npm run verify:debug80`      | Command names, panel labels and status strings quoted in Debug80 Book 1 match the extension source. Needs the extension checked out alongside this repo; skipped otherwise.             |
+| `npm run verify:nucleus-book` | Compiles and executes the complete Nucleus book examples through the locally linked authoritative compiler and runtime packages.                                                        |
+| `npm run sidebar`             | Regenerates the sidebars from front matter. Run after adding or renaming a page.                                                                                                        |
+| `npm run llms`                | Confirms that the public citation guide contains the current books and URLs.                                                                                                            |
 
 ### Figures
 
@@ -97,11 +100,11 @@ not the SVGs.
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
-nucleus/          Nucleus overview and the two generated reading editions
+nucleus/          Programming Nucleus and two generated reading editions
 archive/          Retired research material; excluded from the public build
 tec1g/            TEC-1G and MON-3 reference
 assets/images/    Figures, most of them generated
-scripts/          Diagram generator and the four checks
+scripts/          Diagram generators, documentation checks and spec synchronisers
 public/           Favicon, marks, CNAME
 .vitepress/       Theme, sidebar generator, config
 _internal/        Working notes and unpublished drafts; excluded from the build

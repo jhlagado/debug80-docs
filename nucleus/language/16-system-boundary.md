@@ -17,6 +17,8 @@ pageClass: "nucleus-specification"
 
 Nucleus 0.1 defines a small portable service boundary for byte-stream input and output, slow bulk storage, successful termination, and trap reporting. Programs invoke typed predefined routines and use predefined constants. The source language exposes no service numbers, ports, firmware entry points, raw addresses, file descriptors, device registers, or machine-specific memory map.
 
+Nucleus source contains no physical placement, and a target description contains no source-symbol reference. The source manifest selects and orders declarations; the target description supplies bounded execution regions. Neither input can name or rewrite entities owned by the other.
+
 The **Nucleus System Services 0.1** set is versioned with this language revision. A conforming execution environment supplies every service in Section 16.3 with the stated source contract and the initial stream states stated there. Later additions require a language revision or an explicit extension under Section 1.7 and measured admission under Chapter 2.
 
 <div id="162-predefined-error-codes" class="nucleus-source-anchor"></div>
@@ -51,9 +53,9 @@ sub seekStorageOutput(offset as u16) fails
 
 The declarations above state interfaces; they are not source definitions and do not require completing bodies in the compilation unit.
 
-Standard input starts with its cursor before the first supplied byte. `readInputByte` obtains the next byte from standard input. It may block until a byte, end-of-input condition, or input failure is available. It succeeds with the byte and advances the cursor, fails with `endOfInput` at the end, or fails with `inputFailure` for another input error. Failure leaves the cursor unchanged.
+Standard input starts with its cursor before the first supplied byte. `readInputByte` obtains the next byte from standard input. It may block until a byte, end-of-input condition, or input failure is available. It succeeds with the byte and advances the cursor, fails with `endOfInput` at the end, else fails with `inputFailure` for another input error. Failure leaves the cursor unchanged.
 
-Standard output starts empty and is append-only. `writeOutputByte` appends one byte to standard output. It succeeds after the byte has been accepted or fails with `outputFailure`. Successful writes occur in call order; failure leaves the output unchanged.
+Standard output starts empty and is append-only. `writeOutputByte` appends one byte to standard output. It succeeds after the byte has been accepted else fails with `outputFailure`. Successful writes occur in call order; failure leaves the output unchanged.
 
 The bulk-storage routines operate on one logical input stream and one logical output stream selected by the execution environment. Both cursors start at offset zero. The output supplied to a Chapter 21 conformance run starts empty. `readStorageByte` advances the input cursor after a successful byte and reports `endOfInput` or `storageFailure` otherwise. `rewindStorageInput` moves the input cursor to offset zero or reports `storageFailure`.
 
@@ -65,7 +67,7 @@ These contracts support streaming programs without exposing a filesystem. Nucleu
 
 ## 16.4 Program startup and termination
 
-After every program variable has its initial value, the environment invokes `main`. It supplies no command-line arguments or implicit source values. Source code obtains input only through the predefined services.
+The implementation enters its implicit startup path before `main`. Startup establishes explicit program-variable initializers, establishes zero values for the remaining program variables, and then transfers to `main`. These operations are complete before source execution begins and are not source-callable. The environment supplies no command-line arguments or implicit source values. Source code obtains input only through the predefined services.
 
 Normal return from `main` terminates successfully. Nucleus 0.1 has no source statement for process exit status or immediate successful termination. Failure returned from `main` and every safety trap terminate unsuccessfully under Chapter 15.
 
@@ -77,4 +79,6 @@ The external representation of success, recoverable-error codes, and trap reason
 
 An environment may implement services with CP/M calls, a monitor, port I/O, host callbacks, or another mechanism. It may buffer transfers if buffering preserves call order, failure points, and visible bytes. Those choices do not add source names or expose their addresses.
 
-Arbitrary BIOS calls, native-call declarations, inline assembly, memory peeks and pokes, port access, and callbacks are excluded from the safe source boundary. A later service must have a typed target-independent contract and pass the measured admission rule before it enters the standard set.
+Arbitrary BIOS calls, machine-code-call declarations, inline assembly, memory peeks and pokes, port access, and callbacks are excluded from the safe source boundary. A later service must have a typed target-independent contract and pass the measured admission rule before it enters the standard set.
+
+The target adapter may place the program in ROM, loaded RAM, or bank-switched ROM while preserving the same startup and source semantics. The target-system specification and Z80 runtime contract govern bank assignment and calls. Source code supplies neither a bank number nor a target address, and a target restriction on cross-bank references does not alter source validity.

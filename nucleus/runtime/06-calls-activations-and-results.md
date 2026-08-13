@@ -52,3 +52,61 @@ Every return restores the caller state required after the call. Early return,
 ordinary return, recoverable failure, direct recursion, and mutual recursion
 use the same preservation rule. Nucleus has no source cleanup or unwinding
 phase.
+
+<div id="64-entry-stack-modes-and-interrupts" class="nucleus-source-anchor"></div>
+
+## 6.4 Entry stack modes and interrupts
+
+When `establishStack` is false, startup inherits the caller's stack and does not
+write `SP`. The compiler reports the complete per-compilation stack requirement
+but performs no capacity validation because the descriptor makes no claim
+about the caller's available stack.
+
+When `establishStack` is true, startup establishes `SP` at the mathematical end
+of the writable region. Runtime vectors, initialized variables, and BSS grow
+upward from `writableBase`; the stack grows downward from that end. The unused
+writable extent must cover the published stack requirement plus the two-byte
+saved incoming `SP`.
+
+Startup first selects the new stack and pushes the incoming `SP`, placing that
+saved value in the top two bytes. It restores the value on every terminal path:
+normal return, unhandled recoverable failure, and trap. The value `$0000`
+represents a stack end of `$10000`, not an empty region.
+
+After restoration, the generated terminal dispatcher reaches the initialized
+RAM vector selected by the recorded run state: success, unhandled failure, or
+trap. These vector entries are terminal calls in the target ABI. If an adapter
+returns from one during a monitor or proof run, execution returns to the
+original caller through the restored stack.
+
+The activation-depth and activation-byte limits remain independent bounded
+resources. A call that would exceed either limit performs
+`activation-capacity` before the callee begins or caller state changes.
+
+This activation contract is not interrupt-reentrant. The compiler emits no
+interrupt entry and the service adapter supplies no interrupt-safe-call
+guarantee. A machine interrupt handler must remain outside Nucleus, preserve the
+program's complete machine state, and not enter a Nucleus routine or service.
+
+<div id="65-cross-bank-aggregate-restrictions" class="nucleus-source-anchor"></div>
+
+## 6.5 Cross-bank aggregate restrictions
+
+These are banked-target restrictions rather than language type rules. A valid
+source program may receive a target diagnostic when it cannot be represented
+safely under them.
+
+An aggregate carrier contains a 16-bit address and no bank identity. The
+compiler therefore enforces all three restrictions at a cross-bank boundary:
+
+1. an aggregate constant is bank-local and cannot be named from another bank;
+2. every aggregate argument must be rooted directly in a top-level program
+   variable, including a field or array element selected from that root; and
+3. the call cannot return an aggregate result.
+
+A constant-rooted, parameter-rooted, or transient-result-rooted aggregate
+argument cannot cross banks because its provenance is not represented in the
+runtime carrier. Scalar arguments and results cross without this restriction.
+A bank-local accessor may expose a scalar from a banked aggregate constant, and
+a banked routine may operate on caller-owned RAM through a directly
+variable-rooted aggregate argument.

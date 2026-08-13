@@ -26,6 +26,14 @@ A module or boundary proof may test a smaller path. It must identify the
 language or contract rule it establishes and may not substitute a fixed
 program template for a claimed general compiler feature.
 
+Object-stream producer, materializer, and storage proofs cover the required
+cases in the NOBJ format separately from source-language execution.
+They include runtime-provider identity, link-context, helper-layout, and length
+mismatch, execution at two distinct linked layouts including runtime base
+`$8003` with changed writable-state addresses, deferred `MAP.usedLength`
+validation, direct flat wire loading, and stored banked
+materialization without private backing for every bank.
+
 <div id="102-measurement-reports" class="nucleus-source-anchor"></div>
 
 ## 10.2 Measurement reports
@@ -35,12 +43,3 @@ the proof that produced it. Reports separate compiler code, compiler immutable
 data, peak workspace, generated program, target runtime, fixed runtime state,
 activation storage, instruction count, and T-states. A projection states its
 measured basis; an untested expectation is labelled a hypothesis.
-
-<div id="103-historical-nvm-material" class="nucleus-source-anchor"></div>
-
-## 10.3 Historical NVM material
-
-The retired Nucleus Virtual Machine specification, interpreter, encoders,
-images, and comparison proofs are preserved under `archive/nucleus-nvm/` as
-historical research. They are not active authorities, package tests,
-publication inputs, or requirements on new compiler work.

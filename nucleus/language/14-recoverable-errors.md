@@ -57,8 +57,8 @@ ends the current failable routine with failure. The expression is evaluated once
 Named codes are ordinary constants:
 
 ```nucleus
-const badDigit as u8 = 1
-const tooLarge as u8 = 2
+const badDigit = 1
+const tooLarge = 2
 
 sub parseDigit(value as u8) as u8 fails
     if value < '0' or value > '9'
@@ -74,17 +74,16 @@ end
 
 Every call of a failable routine must consume failure at that call site. Nucleus provides exactly two forms:
 
-1. `or fail` propagates the code from the current failable routine.
-2. A following `on error` clause handles the code locally.
+1. `else fail` propagates the code from the current failable routine.
+2. Immediate `handle NAME ... end` handles the code locally.
 
 A failable invocation cannot appear inside an argument, arithmetic operation, comparison, condition, index, general conversion, or other larger expression. It may be only:
 
-- the complete initializer of a scalar local declaration, followed by `or fail`;
-- the complete right side of an assignment;
-- the complete routine-call statement; or
-- the complete operand of `return`, followed by `or fail`. The caller and callee must either both have a result or both be result-free.
+- the complete initializer of a scalar local declaration, followed by `else fail`;
+- the complete right side of an assignment, followed by `else fail` or `handle`;
+- the complete routine-call statement, followed by `else fail` or `handle`.
 
-The assignment and call-statement forms use exactly one of `or fail` or a following `on error` clause. An unconsumed failable invocation, two consumers on one invocation, or a failable invocation in any other position is invalid. Program-variable and constant initializers cannot call routines under Chapter 8 and therefore cannot be failable.
+Local declarations admit propagation but not handling. `return` admits no failable invocation: it represents success only. An unconsumed failable invocation, two consumers on one invocation, or a failable invocation in any other position is invalid. Program-variable and constant initializers cannot call routines under Chapter 8 and therefore cannot be failable.
 
 <div id="145-propagation" class="nucleus-source-anchor"></div>
 
@@ -93,14 +92,14 @@ The assignment and call-statement forms use exactly one of `or fail` or a follow
 The propagation suffix is:
 
 ```text
-failure-propagation ::= "or" "fail"
+failure-propagation ::= "else" "fail"
 ```
 
-On success, the surrounding declaration or assignment uses the callee's ordinary result, a call statement continues, and `return` returns successfully with the callee's result or with no result when both routines are result-free. On failure, `or fail` immediately returns the same `u8` code from the enclosing routine. The enclosing routine must declare `fails`.
+On success, the surrounding declaration or assignment uses the callee's ordinary result, or the call statement continues. On failure, `else fail` immediately returns the same `u8` code from the enclosing routine. The enclosing routine must declare `fails`.
 
 ```nucleus
 sub loadByte() as u8 fails
-    var value as u8 = readStorageByte() or fail
+    var value as u8 = readStorageByte() else fail
     return value
 end
 ```
@@ -111,12 +110,11 @@ Propagation is explicit at every intermediate call. Nucleus has no implicit prop
 
 ## 14.6 Local handling
 
-An `on error` clause follows the assignment or routine-call statement whose direct failable invocation it handles:
+`handle NAME` occurs on the same logical line as the assignment or routine-call statement whose direct failable invocation it handles:
 
 ```text
-on-error-clause ::= "on" "error" NAME NEWLINE
-                    statement-sequence
-                    "end" NEWLINE
+failure-handler ::= "handle" NAME NEWLINE
+                    statement-sequence "end" NEWLINE
 ```
 
 The name must resolve to an existing writable `u8` scalar variable, parameter, or local. A scalar local serving as an active counted-loop counter is read-only and cannot be the error destination. The clause declares no binding and opens no scope. This rule preserves the declaration-prefix and scope rules from Chapters 5 and 8.
@@ -128,27 +126,25 @@ sub copyOne()
     var code as u8
     var value as u8
 
-    value = readStorageByte()
-    on error code
+    value = readStorageByte() handle code
         return
     end
 
-    writeOutputByte(value)
-    on error code
+    writeOutputByte(value) handle code
         return
     end
 end
 ```
 
-The handled call must be the complete right side of the assignment or the complete call statement. A clause cannot attach to a local declaration, `return`, compound statement, infallible call, propagated call, or earlier statement separated by another statement.
+The handled call must be the complete right side of the assignment or the complete call statement. The handler begins after that line's `NEWLINE`; attachment state never survives the newline. A handler cannot attach to a local declaration, `return`, compound statement, infallible call, propagated call, or another statement.
 
 <div id="147-results-flow-and-entry-failure" class="nucleus-source-anchor"></div>
 
 ## 14.7 Results, flow, and entry failure
 
-Ordinary `return` denotes successful completion. A result-free failable routine may use bare `return`, reach its closing `end`, or use `return resultFreeFailableInvocation() or fail`. In the last form, callee success returns successfully from the caller and callee failure propagates its code. A result-bearing failable routine must return a compatible success result or fail on every path under the fallthrough rules in Section 13.7, extended so `fail` does not fall through.
+Ordinary `return` denotes successful completion only. A result-free failable routine may use bare `return` or reach its closing `end`. A result-bearing failable routine must return a compatible success result or fail on every path under the fallthrough rules in Section 13.7, extended so `fail` does not fall through. A caller that needs to propagate a failable result does so in a preceding local initializer, assignment, or call statement, then returns only the successful result.
 
-`or fail` can exit on failure and continue on success, so it does not by itself make following source unreachable. An `on error` clause can complete normally unless its body has a non-fallthrough statement on every path.
+`else fail` can exit on failure and continue on success, so it does not by itself make following source unreachable. A `handle` body can complete normally unless it has a non-fallthrough statement on every path.
 
 The fixed `main` routine may declare `fails`. A failure returned from `main` has no source caller and performs the unhandled-error trap in Chapter 15 with the returned code. A successful return from `main` terminates normally.
 
@@ -166,11 +162,12 @@ Failure propagation is an ordinary conditional return. Local handling is an ordi
 
 The compiler must diagnose:
 
-- `fail` or `or fail` in an infallible routine;
+- `fail` or `else fail` in an infallible routine;
 - a failure code incompatible with `u8`;
 - a failable invocation in a nested expression or unsupported context;
 - a failable invocation with no consumer or more than one consumer;
-- an `on error` clause attached to an ineligible statement;
+- `handle` attached to an ineligible statement;
+- a propagating `return` form;
 - an error destination that is unavailable, non-writable, not `u8`, or an active counted-loop counter;
 - a `fails` clause or other signature text repeated on an abbreviated forward body; and
 - a result-bearing failable routine that can reach its end without success or failure.

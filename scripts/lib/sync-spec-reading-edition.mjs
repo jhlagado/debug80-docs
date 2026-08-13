@@ -10,6 +10,7 @@ import { execFileSync } from "node:child_process";
 import {
   existsSync,
   mkdirSync,
+  realpathSync,
   readFileSync,
   readdirSync,
   statSync,
@@ -80,17 +81,21 @@ export function syncSpecification(config) {
   const args = process.argv.slice(2);
   const checkOnly = args.includes("--check");
   const sourceArg = args.find((arg) => !arg.startsWith("--"));
-  const sourcePath =
+  const requestedSourcePath =
     sourceArg === undefined ? undefined : path.resolve(sourceArg);
 
-  if (sourcePath === undefined) {
+  if (requestedSourcePath === undefined) {
     console.error(`Pass the authoritative ${config.expectedSource} path.`);
     process.exit(2);
   }
-  if (!existsSync(sourcePath) || !statSync(sourcePath).isFile()) {
-    console.error(`Specification not found: ${sourcePath}`);
+  if (
+    !existsSync(requestedSourcePath) ||
+    !statSync(requestedSourcePath).isFile()
+  ) {
+    console.error(`Specification not found: ${requestedSourcePath}`);
     process.exit(2);
   }
+  const sourcePath = realpathSync(requestedSourcePath);
 
   const sourceRoot = git(
     "-C",
@@ -188,15 +193,19 @@ export function syncSpecification(config) {
     return `${links.join(" · ")}\n\n`;
   }
 
-  const sourceUrl = `https://github.com/jhlagado/debug80/blob/${sourceCommit}/${sourceRelativePath}`;
-  const sourceMainUrl = `https://github.com/jhlagado/debug80/blob/main/${sourceRelativePath}`;
+  const sourceRepositoryUrl =
+    config.sourceRepositoryUrl ?? "https://github.com/jhlagado/debug80";
+  const sourceRepositoryLabel =
+    config.sourceRepositoryLabel ?? "Debug80 repository";
+  const sourceUrl = `${sourceRepositoryUrl}/blob/${sourceCommit}/${sourceRelativePath}`;
+  const sourceMainUrl = `${sourceRepositoryUrl}/blob/main/${sourceRelativePath}`;
   const preamble = rewriteLinks(source.slice(0, chapterMatches[0].index));
   const titleEnd = preamble.indexOf("\n\n");
   if (titleEnd === -1)
     throw new Error("Expected a blank line after the specification title.");
   const sourceNotice = [
     "::: info Authoritative source",
-    `This reading edition is generated from the [${config.sourceLabel} in the Debug80 repository](${sourceMainUrl}) at revision [\`${sourceCommit.slice(0, 12)}\`](${sourceUrl}). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. ${config.companion}`,
+    `This reading edition is generated from the [${config.sourceLabel} in the ${sourceRepositoryLabel}](${sourceMainUrl}) at revision [\`${sourceCommit.slice(0, 12)}\`](${sourceUrl}). The repository source is authoritative; this site adds page metadata and reading navigation, with headings and local links adapted to page boundaries. ${config.companion}`,
     ":::",
     "",
     "",

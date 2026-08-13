@@ -40,11 +40,11 @@ Every alias is bound to an object or aggregate subobject when the alias is estab
 
 ## 7.3 Owned storage
 
-A top-level variable owns one object with program lifetime. A scalar variable owns one scalar cell. A record, fixed-array, or bounded-string variable owns the complete aggregate object, including every contained subobject.
+A top-level variable owns one mutable object with program lifetime. A scalar variable owns one scalar cell. A record, fixed-array, or bounded-string variable owns the complete aggregate object, including every contained subobject. An aggregate constant owns one statically initialized program-lifetime aggregate object whose direct named root is read-only.
 
-Named constants are scalar-only. A named constant denotes a value and need not occupy source-observable storage. Materializing that value in memory does not give it object identity visible to a Nucleus program.
+Scalar named constants denote values and need not occupy source-observable storage. Aggregate named constants occupy program-lifetime storage containing their complete static values. Their direct named roots are read-only under Section 7.8.
 
-Aggregate storage occurs only in top-level program-lifetime objects and inline within other aggregate storage. A record field has storage within its containing record. An array element has storage within its containing array. A bounded string has its counted content within its containing string object. A routine cannot declare owned aggregate storage, and Nucleus allocates no activation-lifetime aggregate storage.
+Aggregate storage occurs only in top-level variable or aggregate-constant objects and inline within other aggregate storage. A record field has storage within its containing record. An array element has storage within its containing array. A bounded string has its counted content within its containing string object. A routine cannot declare owned aggregate storage, and Nucleus allocates no activation-lifetime aggregate storage.
 
 <div id="74-program-lifetime" class="nucleus-source-anchor"></div>
 
@@ -86,11 +86,11 @@ Programs declare every aggregate object at top level, pass required objects or s
 
 ## 7.6 Aggregate parameter binding
 
-An aggregate alias binds once when a call establishes an aggregate parameter. The argument is a compatible aggregate storage path rooted in a program variable or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result admitted by Section 7.9. Every admitted source ultimately denotes top-level program storage.
+An aggregate alias binds once when a call establishes an aggregate parameter. The argument is a compatible aggregate storage path rooted in a program variable, aggregate constant, or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result admitted by Section 7.9. Every admitted source ultimately denotes top-level program storage.
 
 The caller evaluates every field selection and checked index used to form the argument once before the call begins. The callee receives the resulting typed alias, and its binding cannot be changed. The target type must exactly match the parameter type under Chapter 6.
 
-An alias does not extend the target's lifetime. Current aggregate storage belongs to variables, so scalar-leaf writes through an aggregate alias are allowed under the ordinary assignment rules. Exact-type aggregate assignment through an alias copies into its referent.
+An alias does not extend the target's lifetime. Scalar-leaf writes and exact-type aggregate assignment through an aggregate alias are allowed under the ordinary assignment rules, including when the original target was named by an aggregate constant. Read-only status belongs only to the direct constant-rooted source path; it is not carried in the alias type or checked dynamically.
 
 <div id="77-subobject-lifetime-and-identity" class="nucleus-source-anchor"></div>
 
@@ -116,15 +116,17 @@ Under the Nucleus 0.1 type and containment rules, two designators of one exact a
 
 Aggregate alias binding is not assignment. Once established, an aggregate parameter cannot be rebound. When an aggregate parameter is the destination of aggregate assignment, the copy changes its referent. It does not change the binding.
 
+An assignment whose written target is rooted directly at an aggregate constant name is invalid, whether it names the whole object, a field, an array element, or a bounded-string byte. This is a source-path restriction, not transitive immutability. Passing that constant as an aggregate argument or returning it as an aggregate alias deliberately loses the direct-root marker; a callee may then mutate the target through its ordinary writable parameter. Whether such a write changes bytes, is ignored, or is rejected by the target platform depends on where the implementation places read-only data. Portable programs do not depend on mutation through an alias to an aggregate constant.
+
 <div id="79-aggregate-results" class="nucleus-source-anchor"></div>
 
 ## 7.9 Aggregate results
 
 An aggregate routine result is a transient typed alias to existing program-lifetime storage. The result preserves the target's exact aggregate type and denotes the same object.
 
-Program-lifetime storage consists of top-level objects and their aggregate subobjects. Nucleus 0.1 has no routine-local aggregate declaration, activation-lifetime aggregate, heap aggregate, or variable-sized local, so every aggregate storage path, aggregate-parameter binding, and transient aggregate-alias result denotes program-lifetime storage. An aggregate result therefore always outlives the callee activation. The compiler retains the exact referent type and transient-result category, but it needs no lifetime-tracking bit, signature annotation, or parameter identity for this purpose.
+Program-lifetime storage consists of top-level variable and aggregate-constant objects and their aggregate subobjects. Nucleus 0.1 has no routine-local aggregate declaration, activation-lifetime aggregate, heap aggregate, or variable-sized local, so every aggregate storage path, aggregate-parameter binding, and transient aggregate-alias result denotes program-lifetime storage. An aggregate result therefore always outlives the callee activation. The compiler retains the exact referent type and transient-result category, but it needs no lifetime-tracking bit, signature annotation, or parameter identity for this purpose.
 
-An aggregate return source is a storage path rooted in a visible program variable or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result forwarded from another call. Field selection and checked indexing continue to denote program-lifetime subobjects because every aggregate subobject has the lifetime of its containing object.
+An aggregate return source is a storage path rooted in a visible program variable, aggregate constant, or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result forwarded from another call. Field selection and checked indexing continue to denote program-lifetime subobjects because every aggregate subobject has the lifetime of its containing object.
 
 The caller must consume a returned aggregate alias immediately. It may discard the result, forward it as an aggregate argument or aggregate return, select a field or element from it, or use it as the source of exact-type aggregate assignment. Assignment is the materialization operation: it copies the complete aggregate into program storage or into the referent of an aggregate parameter. A result cannot be stored as a carrier or survive beyond the containing source operation. Code that needs to retain the value assigns it to a program object or caller-supplied destination.
 

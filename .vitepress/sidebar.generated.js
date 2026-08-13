@@ -1600,8 +1600,22 @@ export const sidebars = {
   ],
   "/nucleus/": [
     {
-      "text": "Nucleus 0.1 Language Specification",
+      "text": "Programming Nucleus",
       "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/nucleus/book1/00-introduction.html"
+        },
+        {
+          "text": "A First Program",
+          "link": "/nucleus/book1/01-a-first-program.html"
+        }
+      ]
+    },
+    {
+      "text": "Nucleus 0.1 Language Specification",
+      "collapsed": true,
       "items": [
         {
           "text": "1. Status and conformance",
@@ -1732,6 +1746,22 @@ export const sidebars = {
         {
           "text": "10. Conformance and measurement",
           "link": "/nucleus/runtime/10-conformance-and-measurement.html"
+        }
+      ]
+    }
+  ],
+  "/nucleus/book1/": [
+    {
+      "text": "Programming Nucleus",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/nucleus/book1/00-introduction.html"
+        },
+        {
+          "text": "A First Program",
+          "link": "/nucleus/book1/01-a-first-program.html"
         }
       ]
     }

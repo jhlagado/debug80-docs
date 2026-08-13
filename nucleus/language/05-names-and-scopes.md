@@ -109,10 +109,10 @@ A completed declaration must precede every use. For routines, the checked signat
 A declaration is not visible in its own type, bound, initializer, or other declaration operand. A record type is not visible in its own field list. These rules reject self-reference by non-routine declarations and prevent declaration cycles without a dependency graph or a second declaration pass.
 
 ```nucleus
-const first as u16 = second   // invalid: second is not yet visible
-const second as u16 = 2
+const first = second   // invalid: second is not yet visible
+const second = 2
 
-const count as u16 = count    // invalid: count is not visible in its initializer
+const count = count    // invalid: count is not visible in its initializer
 ```
 
 Declaration order applies across the whole logical compilation unit. A later declaration does not become visible to an earlier routine merely because an implementation retained the source or built a syntax tree.
@@ -128,7 +128,7 @@ Lookup never selects a later declaration in preference to an earlier one. Nucleu
 A parameter or local must not shadow an ordinary program binding visible at its declaration point. A local must not reuse the identity of a parameter or an earlier local. Because routine bodies contain no nested declaration scopes, no inner-block shadowing case exists.
 
 ```nucleus
-const limit as u16 = 10
+const limit = 10
 
 sub clamp(limit as u16)       // invalid: parameter shadows visible constant
     return
@@ -148,7 +148,7 @@ record Sample
     value as u8            // valid: a different field scope
 end
 
-const value as u16 = 0     // valid: the ordinary namespace
+const value = 0     // valid: the ordinary namespace
 ```
 
 <div id="57-lookup" class="nucleus-source-anchor"></div>

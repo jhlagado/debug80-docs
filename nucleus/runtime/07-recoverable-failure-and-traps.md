@@ -16,8 +16,8 @@ pageClass: "nucleus-specification"
 ## 7.1 Recoverable completion
 
 A failable routine completes with either success or one `u8` error code. No
-success result exists on failure. `or fail` returns that code from the caller;
-`on error` stores it only after suppressing the success-result store. These
+success result exists on failure. `else fail` returns that code from the caller;
+`handle NAME` stores it only after suppressing the success-result store. These
 paths perform ordinary local control transfer and no stack search or unwinding.
 
 The target calling convention may use carry and a byte register or another

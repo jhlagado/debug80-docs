@@ -25,7 +25,7 @@ Nucleus 0.1 is one language. Measurements may change the draft before it is froz
 
 ## 2.2 Language-shaping constraints
 
-Nucleus is a safe, practical, general-purpose structured language designed to remain viable on small Z80 systems. Its minimum programming model includes `u8`, `u16`, and Boolean values; formal arguments; named scalar local variables; routines with no result or one typed result; fixed-layout records; checked fixed arrays; bounded strings; complete positional static initializers; exact-type aggregate assignment; assignment and calls; `if`/`elseif`/`else`; `while`; counted `for`; `return`; and the unlabeled, innermost-loop forms of `exit` and `continue`. Silently removing one of these requirements does not make an oversized compiler acceptable. If a faithful implementation cannot fit, that result requires compiler-architecture redesign or rejection of the architecture hypothesis.
+Nucleus is a safe, practical, general-purpose structured language designed to remain viable on small Z80 systems. Its minimum programming model includes `u8`, `u16`, and Boolean values; scalar and aggregate constants; formal arguments; named scalar local variables; routines with no result or one typed result; fixed-layout records; checked fixed arrays; bounded strings; complete positional static initializers; exact-type aggregate assignment; assignment and calls; `if`/`elseif`/`else`; `while`; counted `for`; `return`; and the unlabeled, innermost-loop forms of `exit` and `continue`. Silently removing one of these requirements does not make an oversized compiler acceptable. If a faithful implementation cannot fit, that result requires compiler-architecture redesign or rejection of the architecture hypothesis.
 
 The language design uses deterministic parsing with canonical forms, minimal lookahead, and no backtracking. A smaller production count is useful only when it preserves the required programming model. Grammar terseness is not an independent design goal.
 
@@ -85,7 +85,11 @@ The companion Z80 runtime and backend contract fixes packed data layout, stable 
 
 The initial system boundary contains only services that Nucleus programs demonstrably require: input, output, termination, trap reporting, and bulk-storage access. Each additional service requires measured need.
 
-The semantic-operation boundary may support later native or non-Z80 backends where target neutrality has no material cost against the compiler-core gate and other bounded accounts. Portability does not justify growth that causes the first compiler to fail its core gate.
+The semantic-operation boundary may support later direct backends for other Z80 variants or other targets where target neutrality has no material cost against the compiler-core gate and other bounded accounts. Portability does not justify growth that causes the first compiler to fail its core gate.
+
+Nucleus 0.1 defines no interrupt routine, interrupt or restart vector declaration, interrupt-reentrant calling convention, or interrupt-safe service guarantee. The compiler emits no interrupt vector table. A target may interrupt a Nucleus program only through a handler outside the language that preserves the program's machine state and does not enter a Nucleus routine or service.
+
+A target may assign ordered source parts to banked target regions without changing manifest order, declaration visibility, or source identity. Banking introduces no source construct, address value, or alternate return convention. The target-system specification and Z80 runtime contract define bank placement and may diagnose references that their banked representation cannot preserve safely; such a target restriction does not make the source program invalid under this specification.
 
 <div id="28-evidence-and-feature-admission" class="nucleus-source-anchor"></div>
 
@@ -101,9 +105,9 @@ A candidate's admission record reports its incremental compiler-core code, requi
 
 Nucleus 0.1 admits the explicit recoverable-error mechanism in Chapter 14. The implementation ledger still records its compiler-core, immutable-data, workspace, emitted-code, and runtime costs. General exceptions, stack unwinding, destructors, `finally`, and `defer` remain excluded.
 
-Nucleus 0.1 admits recursive routine calls. The first implementation may stage their construction while it measures activation storage, re-entry state, depth limits, and failure behaviour, but staging does not create a non-recursive language profile. Chapter 13 defines the source semantics, and Chapter 15 defines activation-capacity failure.
+Nucleus 0.1 admits recursive routine calls. The current compiler implements direct, main, and mutual recursion with a published activation-depth bound. Chapter 13 defines the source semantics, and Chapter 15 defines activation-capacity failure.
 
-Several source-preserving economies belong in the first implementation rather than in language variants. The first compiler uses one precedence-driven loop for binary expressions and classifies a completed call expression before admitting `or fail`; it does not duplicate the precedence ladder or branch on a routine signature before parsing the call. Interned type ordinals versus compact structural metadata stored directly in symbols remains a measured representation choice. The direct backend measures shared tails, table dispatch, helper calls, fall-through layout, and width-specific target sequences. None of these choices may change accepted source, arithmetic width, required diagnostics, array aliases, or observable behavior.
+Several source-preserving economies belong in the implementation rather than in language variants. The compiler uses one precedence-driven loop for binary expressions and classifies a completed call expression before admitting `else fail`; it does not duplicate the precedence ladder or branch on a routine signature before parsing the call. It uses interned type ordinals naming compact structural metadata. The direct backend may continue to measure shared tails, table dispatch, helper calls, fall-through layout, and width-specific target sequences. None of these choices may change accepted source, arithmetic width, required diagnostics, array aliases, or observable behavior.
 
 <div id="29-decision-boundary-and-failure-conditions" class="nucleus-source-anchor"></div>
 
