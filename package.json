@@ -13,6 +13,7 @@
     "sync:nucleus-runtime": "node scripts/sync-nucleus-runtime-contract.mjs",
     "check:nucleus-runtime": "node scripts/sync-nucleus-runtime-contract.mjs --check",
     "verify:nucleus-book": "node scripts/verify-nucleus-book.mjs",
+    "verify:atom-book": "node scripts/verify-atom-book.mjs",
     "verify:debug80": "node scripts/verify-debug80-claims.mjs",
     "diagrams": "npm run diagrams:debug80 && npm run diagrams:azm && npm run diagrams:glimmer && npm run diagrams:check",
     "diagrams:debug80": "node scripts/generate-book-diagrams.mjs",

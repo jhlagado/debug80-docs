@@ -5,7 +5,7 @@ import nucleusGrammar from "./nucleus.tmLanguage.json" with { type: "json" };
 export default defineConfig({
   title: "Debug80 Docs",
   description:
-    "Technical documentation for the Debug80 Z80 debugger extension and the AZM assembler",
+    "Technical documentation for Debug80, the AZM and Atom assemblers, and Z80 programming",
   srcDir: ".",
   srcExclude: [
     "_internal/**",
@@ -62,6 +62,7 @@ export default defineConfig({
       // authorities, so its menu keeps the project overview within reach.
       { text: "Debug80 Book", link: "/debug80-book/book1/01-install-debug80" },
       { text: "AZM Books", link: "/azm-book/book1/00-introduction" },
+      { text: "Atom Books", link: "/atom-book/book1/00-introduction" },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
       {
         text: "Nucleus",

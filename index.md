@@ -25,14 +25,20 @@ nav_order: 1
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
   </a>
+  <a class="volume volume--atom" href="/atom-book/book1/00-introduction">
+    <span class="volume__tag">Vol $02 · 1 book</span>
+    <span class="volume__head"><Mark book="atom" size="26" /><span class="volume__title">Atom</span></span>
+    <span class="volume__desc">A single-pass Z80 assembler written in Z80 — its reference manual, host pipeline and programming interface.</span>
+    <span class="volume__enter">stream →</span>
+  </a>
   <a class="volume volume--glimmer" href="/glimmer-book/book1/00-introduction">
-    <span class="volume__tag">Vol $02 · 2 books</span>
+    <span class="volume__tag">Vol $03 · 2 books</span>
     <span class="volume__head"><Mark book="glimmer" size="26" /><span class="volume__title">Glimmer</span></span>
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>
     <span class="volume__enter">react →</span>
   </a>
   <a class="volume volume--nucleus" href="/nucleus/">
-    <span class="volume__tag">Vol $03 · 2 specifications</span>
+    <span class="volume__tag">Vol $04 · 2 specifications</span>
     <span class="volume__head"><Mark book="nucleus" size="26" /><span class="volume__title">Nucleus</span></span>
     <span class="volume__desc">A compact typed language, handwritten compiler, and direct runtime contract for the Z80.</span>
     <span class="volume__enter">inspect →</span>
@@ -86,6 +92,35 @@ For readers who know the Z80 basics and want to build more substantial AZM progr
 AZM is an enhanced Z80 assembler with modern programming features. It keeps the generated machine code explicit, while adding assembler-time structure for larger programs: layout types, register contracts, op declarations, directive aliases, diagnostics, listings, Intel HEX output and Debug80 source maps.
 
 You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debug80 when you build and debug `.asm` files in VS Code. The assembler output is meant to serve both paths: readable listings for the programmer, binary and HEX artifacts for machines, and `.d8.json` metadata for source-level debugging.
+
+---
+
+## Atom
+
+### [Atom Book 1 — Assembler Reference](atom-book/book1/)
+
+The definitive reference for Atom source, expressions, instructions,
+directives, host preprocessing, binary inclusion, diagnostics, output
+artifacts, and the JavaScript programming interface.
+
+For Z80 programmers and tool authors who need the exact current Atom rules.
+
+---
+
+## About Atom
+
+Atom is a single-pass Z80 assembler whose native core is written in Z80
+assembly. The Mac command runs that core through Debug80 while a Node host
+resolves source dependencies, conditional assembly, binary inputs, listings,
+D8 maps, Intel HEX, and atomic artifact publication. The native core assembles
+its own checked source byte for byte and occupies 13,812 bytes including fixed
+workspace.
+
+Atom source uses bare directives such as `ORG`, `DB`, and `DW`; a leading period
+marks a private symbol. Source and symbols are case-insensitive. The
+conventional source extension is `.atm`.
+
+Source: [github.com/jhlagado/atom](https://github.com/jhlagado/atom)
 
 ---
 

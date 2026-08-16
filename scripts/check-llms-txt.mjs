@@ -73,7 +73,7 @@ for (const file of COPIES) {
  * is a book no model will cite, which is the failure that hid the Glimmer book
  * from it entirely.
  */
-const SERIES = ["debug80-book", "azm-book", "glimmer-book", "nucleus"];
+const SERIES = ["debug80-book", "azm-book", "atom-book", "glimmer-book", "nucleus"];
 const missing = SERIES.filter((s) => !first.includes(`${ORIGIN}/${s}/`));
 if (missing.length) {
   console.log(`\nno llms.txt entry for: ${missing.join(", ")}`);

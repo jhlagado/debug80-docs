@@ -66,7 +66,7 @@
   --vp-nav-height: 60px;
 }
 
-/* --- One design, five signals ----------------------------- *
+/* --- One design, six signals ------------------------------ *
  * Hues carried over from the previous theme's volume colours,
  * all pulled to the same strength as the brick red so no book
  * reads louder than another. */
@@ -77,6 +77,10 @@ html[data-book="debug80"] {
 html[data-book="azm"] {
   --signal: #14607e;
   --signal-soft: rgba(20, 96, 126, 0.1);
+}
+html[data-book="atom"] {
+  --signal: #9a3f69;
+  --signal-soft: rgba(154, 63, 105, 0.1);
 }
 html[data-book="glimmer"] {
   --signal: #2a7139;
@@ -752,6 +756,9 @@ html {
 }
 .volume--azm {
   --vol-accent: #14607e;
+}
+.volume--atom {
+  --vol-accent: #9a3f69;
 }
 .volume--glimmer {
   --vol-accent: #2a7139;

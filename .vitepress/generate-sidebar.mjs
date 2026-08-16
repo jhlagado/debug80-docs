@@ -13,6 +13,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const BOOK_DIRS = [
   "debug80-book",
   "azm-book",
+  "atom-book",
   "glimmer-book",
   "nucleus",
   "tec1g",
