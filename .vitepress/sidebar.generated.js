@@ -1086,6 +1086,204 @@ export const sidebars = {
       ]
     }
   ],
+  "/atom-book/": [
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Programming Interface",
+          "link": "/atom-book/book1/07-programming-interface.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Appendices",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Appendix 1 — Directive Reference",
+          "link": "/atom-book/appendices/01-directives.html"
+        },
+        {
+          "text": "Appendix 2 — Expressions and Numeric Forms",
+          "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+        },
+        {
+          "text": "Appendix 3 — CLI Flag Reference",
+          "link": "/atom-book/appendices/03-cli-flags.html"
+        },
+        {
+          "text": "Appendix 4 — Built-in Functions",
+          "link": "/atom-book/appendices/04-functions.html"
+        },
+        {
+          "text": "Appendix 5 — Limits and Capacities",
+          "link": "/atom-book/appendices/05-limits-and-capacities.html"
+        }
+      ]
+    }
+  ],
+  "/atom-book/book1/": [
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Programming Interface",
+          "link": "/atom-book/book1/07-programming-interface.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Appendices",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Appendix 1 — Directive Reference",
+          "link": "/atom-book/appendices/01-directives.html"
+        },
+        {
+          "text": "Appendix 2 — Expressions and Numeric Forms",
+          "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+        },
+        {
+          "text": "Appendix 3 — CLI Flag Reference",
+          "link": "/atom-book/appendices/03-cli-flags.html"
+        },
+        {
+          "text": "Appendix 4 — Built-in Functions",
+          "link": "/atom-book/appendices/04-functions.html"
+        },
+        {
+          "text": "Appendix 5 — Limits and Capacities",
+          "link": "/atom-book/appendices/05-limits-and-capacities.html"
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/": [
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Programming Interface",
+          "link": "/atom-book/book1/07-programming-interface.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Appendices",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Appendix 1 — Directive Reference",
+          "link": "/atom-book/appendices/01-directives.html"
+        },
+        {
+          "text": "Appendix 2 — Expressions and Numeric Forms",
+          "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+        },
+        {
+          "text": "Appendix 3 — CLI Flag Reference",
+          "link": "/atom-book/appendices/03-cli-flags.html"
+        },
+        {
+          "text": "Appendix 4 — Built-in Functions",
+          "link": "/atom-book/appendices/04-functions.html"
+        },
+        {
+          "text": "Appendix 5 — Limits and Capacities",
+          "link": "/atom-book/appendices/05-limits-and-capacities.html"
+        }
+      ]
+    }
+  ],
   "/glimmer-book/": [
     {
       "text": "Glimmer Book 1 — Reactive Programming for Z80 Games",

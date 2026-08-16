@@ -1,0 +1,14 @@
+ORG 4000H
+
+LIMIT EQU 8
+
+START:
+    LD B,LIMIT
+    LD HL,COUNTER
+.LOOP:
+    INC (HL)
+    DJNZ .LOOP
+    HALT
+
+COUNTER:
+    DB 0

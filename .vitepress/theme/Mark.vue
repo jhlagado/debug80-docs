@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * The four project marks, at any size.
+ * The five project marks, at any size.
  *
  * One construction: a square body at the stroke weight of the schematic
  * figures, with a single accent inside. The accent takes `--mark-accent`,
@@ -21,7 +21,7 @@
  */
 withDefaults(
   defineProps<{
-    book?: "debug80" | "azm" | "glimmer" | "nucleus";
+    book?: "debug80" | "azm" | "atom" | "glimmer" | "nucleus";
     size?: number | string;
   }>(),
   {
@@ -33,6 +33,7 @@ withDefaults(
 const LABEL = {
   debug80: "Debug80",
   azm: "AZM",
+  atom: "Atom",
   glimmer: "Glimmer",
   nucleus: "Nucleus",
 };
@@ -114,6 +115,28 @@ const LABEL = {
         height="4"
         rx="0.4"
       />
+    </template>
+
+    <template v-else-if="book === 'atom'">
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="square"
+      >
+        <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
+      </g>
+      <ellipse
+        class="mark__accent"
+        cx="12"
+        cy="12"
+        rx="6"
+        ry="2.7"
+        transform="rotate(-32 12 12)"
+        fill="none"
+        stroke-width="1.5"
+      />
+      <circle class="mark__accent--filled" cx="12" cy="12" r="1.6" />
     </template>
 
     <template v-else>
