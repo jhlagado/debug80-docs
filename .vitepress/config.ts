@@ -62,7 +62,17 @@ export default defineConfig({
       // authorities, so its menu keeps the project overview within reach.
       { text: "Debug80 Book", link: "/debug80-book/book1/01-install-debug80" },
       { text: "AZM Books", link: "/azm-book/book1/00-introduction" },
-      { text: "Atom Books", link: "/atom-book/book1/00-introduction" },
+      {
+        text: "Atom",
+        items: [
+          { text: "Atom overview", link: "/atom/" },
+          {
+            text: "Atom Book 1 — Assembler Reference",
+            link: "/atom-book/book1/00-introduction",
+          },
+          { text: "Atom Books", link: "/atom-book/" },
+        ],
+      },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
       {
         text: "Nucleus",

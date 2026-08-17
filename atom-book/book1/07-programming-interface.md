@@ -23,7 +23,7 @@ import {
 
 const result = await assembleAtomProject({
   root: "/ABSOLUTE/PROJECT/ROOT",
-  entry: "SRC/MAIN.ATM",
+  entry: "src/main.asm",
   definitions: { DEBUG: 1 },
   placement: { defaultBank: 0, banks: {} },
   target: { start: 0x4000, capacity: 0x8000 },
@@ -62,7 +62,7 @@ import { resolveAtomProject } from "atom-z80";
 
 const project = await resolveAtomProject({
   root: "/ABSOLUTE/PROJECT/ROOT",
-  entry: "SRC/MAIN.ATM",
+  entry: "src/main.asm",
   definitions: {},
   placement: { defaultBank: 0, banks: {} },
 });

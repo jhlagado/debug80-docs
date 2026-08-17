@@ -11,7 +11,7 @@ nav_order: 3
 The entry source is the final argument:
 
 ```sh
-atom [OPTIONS] ENTRY.ATM
+atom [OPTIONS] entry.asm
 ```
 
 ## Build options

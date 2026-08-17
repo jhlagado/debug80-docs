@@ -6,9 +6,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const atomRepository = path.resolve(process.env.ATOM_REPOSITORY ?? path.join(repository, "..", "atom"));
+const atomExecutable = process.env.ATOM_EXECUTABLE ?? path.join(
+  repository,
+  "node_modules",
+  ".bin",
+  "atom",
+);
 const source = path.join(repository, "atom-book", "book1", "examples", "reference-tour");
-const counterSource = path.join(repository, "atom-book", "book1", "examples", "counter.atm");
+const counterSource = path.join(repository, "atom-book", "book1", "examples", "counter.asm");
 
 function run(command, arguments_, options) {
   return new Promise((resolve, reject) => {
@@ -52,7 +57,7 @@ for (const filename of await markdownFiles(path.join(repository, "atom-book"))) 
   }
 }
 
-for (const filename of ["main.atm", path.join("LIB", "DEVICE.ATM")]) {
+for (const filename of ["main.asm", path.join("lib", "device.asm")]) {
   assert.doesNotMatch(
     assemblyCode(await fs.readFile(path.join(source, filename), "utf8")),
     /[a-z]/,
@@ -62,15 +67,15 @@ for (const filename of ["main.atm", path.join("LIB", "DEVICE.ATM")]) {
 assert.doesNotMatch(
   assemblyCode(await fs.readFile(counterSource, "utf8")),
   /[a-z]/,
-  "counter.atm contains lowercase Atom source",
+  "counter.asm contains lowercase Atom source",
 );
 
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "atom-book-"));
 try {
   await fs.cp(source, temporary, { recursive: true });
   const assembled = await run(
-    process.execPath,
-    [path.join(atomRepository, "bin", "atom.mjs"), "--origin", "4000H", "main.atm"],
+    atomExecutable,
+    ["--origin", "4000H", "main.asm"],
     { cwd: temporary },
   );
   assert.equal(assembled.status, 0, assembled.stderr);
@@ -88,10 +93,10 @@ try {
   );
   const counterDirectory = path.join(temporary, "counter");
   await fs.mkdir(counterDirectory);
-  await fs.copyFile(counterSource, path.join(counterDirectory, "counter.atm"));
+  await fs.copyFile(counterSource, path.join(counterDirectory, "counter.asm"));
   const counter = await run(
-    process.execPath,
-    [path.join(atomRepository, "bin", "atom.mjs"), "--origin", "4000H", "counter.atm"],
+    atomExecutable,
+    ["--origin", "4000H", "counter.asm"],
     { cwd: counterDirectory },
   );
   assert.equal(counter.status, 0, counter.stderr);
@@ -101,8 +106,8 @@ try {
     ),
     Buffer.from([0x06, 0x08, 0x21, 0x09, 0x40, 0x34, 0x10, 0xfd, 0x76, 0x00]),
   );
-  console.log("Atom Book 1 example: 18/18 bytes verified through native Atom");
-  console.log("Atom Book 1 counter: 10/10 bytes verified through native Atom");
+  console.log("Atom Book 1 example: 18/18 bytes verified through published Atom");
+  console.log("Atom Book 1 counter: 10/10 bytes verified through published Atom");
   console.log("Atom Book 1 assembly examples: uppercase source verified");
 } finally {
   await fs.rm(temporary, { recursive: true, force: true });

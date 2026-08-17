@@ -25,10 +25,10 @@ nav_order: 1
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
   </a>
-  <a class="volume volume--atom" href="/atom-book/book1/00-introduction">
-    <span class="volume__tag">Vol $02 · 1 book</span>
+  <a class="volume volume--atom" href="/atom/">
+    <span class="volume__tag">Vol $02 · assembler and books</span>
     <span class="volume__head"><Mark book="atom" size="26" /><span class="volume__title">Atom</span></span>
-    <span class="volume__desc">A single-pass Z80 assembler written in Z80 — its reference manual, host pipeline and programming interface.</span>
+    <span class="volume__desc">A single-pass Z80 assembler written in Z80 — install the command, read the books or inspect its self-hosting core.</span>
     <span class="volume__enter">stream →</span>
   </a>
   <a class="volume volume--glimmer" href="/glimmer-book/book1/00-introduction">
@@ -97,6 +97,11 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 
 ## Atom
 
+### [Atom assembler](atom/)
+
+Install the `atom` command, assemble a first `.asm` file and find the package,
+source and manuals from one place.
+
 ### [Atom Book 1 — Assembler Reference](atom-book/book1/)
 
 The definitive reference for Atom source, expressions, instructions,
@@ -113,12 +118,13 @@ Atom is a single-pass Z80 assembler whose native core is written in Z80
 assembly. The Mac command runs that core through Debug80 while a Node host
 resolves source dependencies, conditional assembly, binary inputs, listings,
 D8 maps, Intel HEX, and atomic artifact publication. The native core assembles
-its own checked source byte for byte and occupies 13,812 bytes including fixed
+its own checked source byte for byte and occupies 12,101 bytes including fixed
 workspace.
 
 Atom source uses bare directives such as `ORG`, `DB`, and `DW`; a leading period
 marks a private symbol. Source and symbols are case-insensitive. The
-conventional source extension is `.atm`.
+conventional source extension is `.asm`; build configuration selects the
+assembler flavour.
 
 Source: [github.com/jhlagado/atom](https://github.com/jhlagado/atom)
 

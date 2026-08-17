@@ -11,8 +11,9 @@ nav_exclude: true
 
 # Atom Books
 
-The reference manual for **Atom**, the single-pass Z80 assembler whose native
-core is itself written in Z80 assembly.
+The reference and teaching books for **Atom**, the single-pass Z80 assembler
+whose native core is itself written in Z80 assembly. For installation and
+project links, begin at the [Atom overview](/atom/).
 
 ---
 

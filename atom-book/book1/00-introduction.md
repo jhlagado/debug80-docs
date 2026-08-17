@@ -44,4 +44,4 @@ filesystem-backed `INCBIN`. It also writes NOBJ, binary, Intel HEX, listing, D8,
 and manifest files. Dependency resolution followed by native assembly is a
 two-stage build, not a second assembler pass.
 
-The first chapter installs the command and assembles a small `.atm` program.
+The first chapter installs the command and assembles a small `.asm` program.
