@@ -70,6 +70,10 @@ export default defineConfig({
             text: "Atom Book 1 — Assembler Reference",
             link: "/atom-book/book1/00-introduction",
           },
+          {
+            text: "Atom Book 2 — Z80 Programming",
+            link: "/atom-book/book2/00-introduction",
+          },
           { text: "Atom Books", link: "/atom-book/" },
         ],
       },

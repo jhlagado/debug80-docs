@@ -4,6 +4,11 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  assembleAtomProject,
+  materializeAtomGeneration,
+} from "atom-z80";
+import { createZ80Runtime } from "../node_modules/atom-z80/node_modules/@jhlagado/debug80-runtime/dist/index.js";
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const atomExecutable = process.env.ATOM_EXECUTABLE ?? path.join(
@@ -14,6 +19,7 @@ const atomExecutable = process.env.ATOM_EXECUTABLE ?? path.join(
 );
 const source = path.join(repository, "atom-book", "book1", "examples", "reference-tour");
 const counterSource = path.join(repository, "atom-book", "book1", "examples", "counter.asm");
+const programmingExamples = path.join(repository, "atom-book", "book2", "examples");
 
 function run(command, arguments_, options) {
   return new Promise((resolve, reject) => {
@@ -46,6 +52,16 @@ async function markdownFiles(directory) {
   return files;
 }
 
+async function filesWithExtension(directory, extension) {
+  const files = [];
+  for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
+    const filename = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await filesWithExtension(filename, extension));
+    else if (entry.name.endsWith(extension)) files.push(filename);
+  }
+  return files;
+}
+
 for (const filename of await markdownFiles(path.join(repository, "atom-book"))) {
   const text = await fs.readFile(filename, "utf8");
   for (const match of text.matchAll(/```asm\s*\n([\s\S]*?)```/g)) {
@@ -64,11 +80,53 @@ for (const filename of ["main.asm", path.join("lib", "device.asm")]) {
     `${filename} contains lowercase Atom source`,
   );
 }
-assert.doesNotMatch(
-  assemblyCode(await fs.readFile(counterSource, "utf8")),
-  /[a-z]/,
-  "counter.asm contains lowercase Atom source",
-);
+for (const filename of await filesWithExtension(path.join(repository, "atom-book"), ".asm")) {
+  assert.doesNotMatch(
+    assemblyCode(await fs.readFile(filename, "utf8")),
+    /[a-z]/,
+    `${path.relative(repository, filename)} contains lowercase Atom source`,
+  );
+}
+
+async function executeProgrammingExample(entry, expected, root = programmingExamples) {
+  const assembled = await assembleAtomProject({
+    root,
+    entry,
+    target: { start: 0, capacity: 0xffff },
+  });
+  const image = materializeAtomGeneration(assembled.generation);
+  const memory = new Uint8Array(0x10000);
+  memory.set(image.bytes, image.base);
+  const runtime = createZ80Runtime({ memory, startAddress: 0 }, 0);
+  for (let instructions = 0; !runtime.isHalted(); instructions += 1) {
+    assert.ok(instructions < 1_000_000, `${entry} did not halt within its execution budget`);
+    runtime.step();
+  }
+  const symbols = new Map(assembled.generation.symbols.map(({ name, value }) => [name, value]));
+  for (const [name, bytes] of Object.entries(expected)) {
+    const address = symbols.get(name);
+    assert.notEqual(address, undefined, `${entry} has no ${name} symbol`);
+    assert.deepEqual(
+      Array.from(runtime.hardware.memory.slice(address, address + bytes.length)),
+      bytes,
+      `${entry} produced the wrong ${name} bytes`,
+    );
+  }
+  return assembled.execution;
+}
+
+async function executeMarkdownProgram(relativeName, blockIndex, expected) {
+  const markdown = await fs.readFile(path.join(repository, relativeName), "utf8");
+  const blocks = [...markdown.matchAll(/```asm\s*\n([\s\S]*?)```/g)];
+  assert.ok(blocks[blockIndex], `${relativeName} has no assembly block ${blockIndex}`);
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "atom-book-program-"));
+  try {
+    await fs.writeFile(path.join(root, "program.asm"), blocks[blockIndex][1]);
+    return await executeProgrammingExample("program.asm", expected, root);
+  } finally {
+    await fs.rm(root, { recursive: true, force: true });
+  }
+}
 
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), "atom-book-"));
 try {
@@ -108,7 +166,41 @@ try {
   );
   console.log("Atom Book 1 example: 18/18 bytes verified through published Atom");
   console.log("Atom Book 1 counter: 10/10 bytes verified through published Atom");
-  console.log("Atom Book 1 assembly examples: uppercase source verified");
 } finally {
   await fs.rm(temporary, { recursive: true, force: true });
 }
+
+await executeProgrammingExample("arithmetic.asm", {
+  GCDRES: [6, 0],
+  POWRES: [81],
+});
+await executeProgrammingExample("sorting.asm", {
+  VALUES: [1, 2, 3, 4, 6, 7, 8, 9],
+  FOUNDIDX: [4],
+});
+await executeProgrammingExample("strings.asm", {
+  BUFFER: [72, 69, 76, 76, 79, 0],
+  STRLENB: [5],
+  COPYOK: [1],
+  FINDIDX: [2],
+});
+await executeProgrammingExample("bit-flags.asm", {
+  FLAGS: [3],
+  READYLIT: [1],
+  ERRORBIT: [1],
+});
+await executeProgrammingExample("recursion.asm", {
+  FACTR: [120],
+  FACTI: [120],
+  SUMR: [26, 0],
+});
+await executeMarkdownProgram("atom-book/book2/03-assembly-language.md", 0, {
+  RESULT: [8],
+});
+await executeMarkdownProgram("atom-book/book2/10-a-complete-program.md", 0, {
+  MAX_VAL: [91],
+  ABOVE_64: [3],
+});
+
+console.log("Atom Book 2 examples: 7/7 assembled and executed through published Atom");
+console.log("Atom books: uppercase assembly source verified");

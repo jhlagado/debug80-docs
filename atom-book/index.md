@@ -26,11 +26,18 @@ programming API.
 
 ---
 
+## [Atom Book 2 — Z80 Programming](book2/)
+
+Starts at the CPU, memory and raw opcodes, then develops assembly language,
+flags, loops, tables, subroutines and I/O. Five final chapters apply those
+tools to arithmetic, sorting, strings, packed flags and recursion.
+
+---
+
 ## [Appendices](appendices/)
 
 Quick-reference tables for directives, expressions and numeric forms, command
 options, built-in functions, and measured limits.
 
-Atom teaching books can follow the Z80 and algorithmic progression of the AZM
-series. The assembler reference comes first because it defines the language
-those books will use.
+Book 1 is the language authority. Book 2 uses that language to teach Z80
+programming through programs assembled and executed by the published package.

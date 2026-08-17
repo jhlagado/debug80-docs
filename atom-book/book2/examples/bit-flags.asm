@@ -1,0 +1,47 @@
+; Chapter 15 companion. Results: FLAGS=$03, READYLIT=1, ERRORBIT=1.
+
+READYBIT EQU 0
+ERRORPOS EQU 1
+BUSYBIT EQU 2
+READYMSK EQU 1<<READYBIT
+ERRORMSK EQU 1<<ERRORPOS
+BUSYMSK EQU 1<<BUSYBIT
+
+ORG 0000H
+MAIN:
+    LD A,(FLAGS)
+    AND READYMSK
+    LD A,0
+    JR Z,.CLEAR
+    LD A,1
+.CLEAR:
+    LD (READYLIT),A
+
+    LD A,(FLAGS)
+    OR ERRORMSK
+    LD (FLAGS),A
+
+    LD A,(FLAGS)
+    LD B,A
+    LD A,BUSYMSK
+    CPL
+    AND B
+    LD (FLAGS),A
+
+    CALL GETERROR
+    LD (ERRORBIT),A
+    HALT
+
+; In: A=packed flags. Out: A=error bit as 0 or 1.
+GETERROR:
+    AND ERRORMSK
+    RR A
+    RET
+
+ORG 8000H
+FLAGS:
+    DB 05H
+READYLIT:
+    DS 1
+ERRORBIT:
+    DS 1

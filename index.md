@@ -26,7 +26,7 @@ nav_order: 1
     <span class="volume__enter">assemble →</span>
   </a>
   <a class="volume volume--atom" href="/atom/">
-    <span class="volume__tag">Vol $02 · assembler and books</span>
+    <span class="volume__tag">Vol $02 · assembler · 2 books</span>
     <span class="volume__head"><Mark book="atom" size="26" /><span class="volume__title">Atom</span></span>
     <span class="volume__desc">A single-pass Z80 assembler written in Z80 — install the command, read the books or inspect its self-hosting core.</span>
     <span class="volume__enter">stream →</span>
@@ -109,6 +109,14 @@ directives, host preprocessing, binary inclusion, diagnostics, output
 artifacts, and the JavaScript programming interface.
 
 For Z80 programmers and tool authors who need the exact current Atom rules.
+
+### [Atom Book 2 — Z80 Programming](atom-book/book2/)
+
+A from-zero route through the Z80, followed by arithmetic, sorting, strings,
+packed flags and recursion in verified Atom programs.
+
+For readers learning assembly or moving from instruction exercises into
+complete routines.
 
 ---
 
