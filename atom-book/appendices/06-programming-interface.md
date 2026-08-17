@@ -1,11 +1,12 @@
 ---
 layout: default
-title: "Programming Interface"
-parent: "Atom Book 1 — Assembler Reference"
-nav_order: 7
+title: "Appendix 6 — Programming Interface"
+parent: "Atom Appendices"
+grand_parent: "Atom Books"
+nav_order: 6
 ---
 
-# Programming Interface
+# Appendix 6 — Programming Interface
 
 Tools can call Atom in process instead of spawning the command. The `atom-z80`
 package exposes one ESM entry at its package root. Node.js 20 or later is

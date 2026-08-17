@@ -17,7 +17,7 @@ project links, begin at the [Atom overview](/atom/).
 
 ---
 
-## [Atom Book 1 — Assembler Reference](book1/)
+## [Atom Book 1 — Assembler Reference](book1/01-getting-started.md)
 
 Covers installation, source syntax, symbols, expressions, the complete claimed
 Z80 instruction surface, data and string directives, host preprocessing,
@@ -26,7 +26,7 @@ programming API.
 
 ---
 
-## [Atom Book 2 — Z80 Programming](book2/)
+## [Atom Book 2 — Z80 Programming](book2/00-introduction.md)
 
 Starts at the CPU, memory and raw opcodes, then develops assembly language,
 flags, loops, tables, subroutines and I/O. Five final chapters apply those
@@ -34,10 +34,10 @@ tools to arithmetic, sorting, strings, packed flags and recursion.
 
 ---
 
-## [Appendices](appendices/)
+## [Appendices](appendices/01-directives.md)
 
-Quick-reference tables for directives, expressions and numeric forms, command
-options, built-in functions, and measured limits.
+The programming API and lookup tables for Atom syntax, measured limits and the
+Z80 machine.
 
 Book 1 is the language authority. Book 2 uses that language to teach Z80
 programming through programs assembled and executed by the published package.

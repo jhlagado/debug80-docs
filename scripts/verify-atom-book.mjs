@@ -8,6 +8,7 @@ import {
   assembleAtomProject,
   materializeAtomGeneration,
 } from "atom-z80";
+import { MNEMONICS } from "../node_modules/atom-z80/src/abi.mjs";
 import { createZ80Runtime } from "../node_modules/atom-z80/node_modules/@jhlagado/debug80-runtime/dist/index.js";
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -202,5 +203,51 @@ await executeMarkdownProgram("atom-book/book2/10-a-complete-program.md", 0, {
   ABOVE_64: [3],
 });
 
+const instructionReference = await fs.readFile(
+  path.join(repository, "atom-book", "appendices", "10-z80-instruction-reference.md"),
+  "utf8",
+);
+const referenceMnemonics = [...instructionReference.matchAll(
+  /^\| `([A-Z]+)`(?: \/ `([A-Z]+)`)? \|/gm,
+)].flatMap((match) => match[2] === undefined ? [match[1]] : [match[1], match[2]]);
+assert.deepEqual(
+  [...referenceMnemonics].sort(),
+  MNEMONICS.slice(1).sort(),
+  "the Atom instruction appendix must contain every published mnemonic exactly once",
+);
+
+const referenceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "atom-book-reference-"));
+try {
+  await fs.writeFile(path.join(referenceRoot, "reference.asm"), [
+    "ORG 0",
+    "IN (C)",
+    "OUT (C),0",
+    "LD HL,DE",
+    "LD BC,DE",
+    "AND A,B",
+    "RLC (IX+3),B",
+    "RES 2,(IY-1),A",
+    "",
+  ].join("\n"));
+  const reference = await assembleAtomProject({
+    root: referenceRoot,
+    entry: "reference.asm",
+    target: { start: 0, capacity: 0xffff },
+  });
+  assert.deepEqual(
+    Array.from(materializeAtomGeneration(reference.generation).bytes),
+    [
+      0xed, 0x70, 0xed, 0x71,
+      0x62, 0x6b, 0x42, 0x4b, 0xa0,
+      0xdd, 0xcb, 0x03, 0x00,
+      0xfd, 0xcb, 0xff, 0x97,
+    ],
+    "Atom reference-only instruction forms changed",
+  );
+} finally {
+  await fs.rm(referenceRoot, { recursive: true, force: true });
+}
+
 console.log("Atom Book 2 examples: 7/7 assembled and executed through published Atom");
+console.log("Atom instruction appendix: 69/69 mnemonics and reference-only forms verified");
 console.log("Atom books: uppercase assembly source verified");

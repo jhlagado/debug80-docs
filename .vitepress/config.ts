@@ -67,14 +67,17 @@ export default defineConfig({
         items: [
           { text: "Atom overview", link: "/atom/" },
           {
-            text: "Atom Book 1 — Assembler Reference",
-            link: "/atom-book/book1/00-introduction",
+            text: "Assembler Reference",
+            link: "/atom-book/book1/01-getting-started",
           },
           {
-            text: "Atom Book 2 — Z80 Programming",
+            text: "Z80 Programming",
             link: "/atom-book/book2/00-introduction",
           },
-          { text: "Atom Books", link: "/atom-book/" },
+          {
+            text: "Appendices",
+            link: "/atom-book/appendices/01-directives",
+          },
         ],
       },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },

@@ -57,11 +57,13 @@ original filenames and positions.
 
 ## Read and use
 
-- [Atom Book 1 — Assembler Reference](/atom-book/book1/) defines the command,
-  source language, output formats and JavaScript API.
-- [Atom Book 2 — Z80 Programming](/atom-book/book2/) begins with registers and
-  opcodes, then develops complete routines, algorithms and recursion.
-- [Atom Books](/atom-book/) is the shelf for the reference and teaching books.
+- [Atom Book 1 — Assembler Reference](/atom-book/book1/01-getting-started.html)
+  defines the command, source language and output formats.
+- [Atom Book 2 — Z80 Programming](/atom-book/book2/00-introduction.html) begins
+  with registers and opcodes, then develops complete routines, algorithms and
+  recursion.
+- [Atom Appendices](/atom-book/appendices/01-directives.html) contain the
+  programming API and lookup tables for Atom and the Z80.
 - [Atom on npm](https://www.npmjs.com/package/atom-z80) provides the current
   package and version history.
 - [Atom source](https://github.com/jhlagado/atom) contains the Z80 core, host,
