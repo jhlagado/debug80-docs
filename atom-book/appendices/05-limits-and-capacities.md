@@ -14,10 +14,10 @@ The native image and Mac proof map establish the current measured limits.
 
 | Item | Bytes |
 | --- | ---: |
-| Z80 code and immutable tables | 13,261 |
-| Fixed non-reentrant workspace | 551 |
-| Linked resident extent | 13,812 |
-| Margin below 16 KiB | 2,572 |
+| Z80 code and immutable tables | 11,648 |
+| Fixed non-reentrant workspace | 453 |
+| Linked resident extent | 12,101 |
+| Margin below 16 KiB | 4,283 |
 
 Caller-owned source, symbol, pending, descriptor, and stack storage are outside
 the resident image account.

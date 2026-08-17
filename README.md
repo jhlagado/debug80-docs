@@ -41,6 +41,7 @@ Debug80, AZM, Glimmer, and Nucleus material.
 | [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/)                           | The reference: syntax, directives, expressions, layouts, contracts.                 |
 | [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/)                           | The Z80 from the bare machine up, assuming nothing.                                 |
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                   |
+| [Atom](https://debug80.com/atom/)                                                              | Installation, first assembly, project links and entry points to the Atom books.      |
 | [Atom Book 1 — Assembler Reference](https://debug80.com/atom-book/book1/)                      | Atom syntax, preprocessing, instructions, output, limits and programming API.       |
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
@@ -85,7 +86,7 @@ or locally linked packages run during the relevant editing workflow.
 | `npm run symbols`             | Every symbol the prose names in backticks is one the code actually defines. AZM is case-sensitive, so `RenderTile` and `RENDER_TILE` are different symbols and only one of them exists. |
 | `npm run verify:debug80`      | Command names, panel labels and status strings quoted in Debug80 Book 1 match the extension source. Needs the extension checked out alongside this repo; skipped otherwise.             |
 | `npm run verify:nucleus-book` | Compiles and executes the complete Nucleus book examples through the locally linked authoritative compiler and runtime packages.                                                        |
-| `npm run verify:atom-book` | Assembles the checked Atom reference project through the native Atom core and enforces uppercase assembly examples. |
+| `npm run verify:atom-book` | Assembles the checked Atom examples through the published `atom` command and enforces uppercase assembly source. |
 | `npm run sidebar`             | Regenerates the sidebars from front matter. Run after adding or renaming a page.                                                                                                        |
 | `npm run llms`                | Confirms that the public citation guide contains the current books and URLs.                                                                                                            |
 
@@ -103,7 +104,8 @@ not the SVGs.
 ```text
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
-atom-book/        Atom assembler reference and lookup appendices
+atom/             Atom product overview and installation
+atom-book/        Atom reference and teaching books, plus lookup appendices
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
 nucleus/          Programming Nucleus and two generated reading editions
 archive/          Retired research material; excluded from the public build

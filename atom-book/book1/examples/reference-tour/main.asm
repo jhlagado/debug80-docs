@@ -1,5 +1,5 @@
 %DEFINE DEBUG 1
-%INCLUDE "LIB/DEVICE.ATM"
+%INCLUDE "lib/device.asm"
 
 ORG 4000H
 

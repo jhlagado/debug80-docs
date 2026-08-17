@@ -19,9 +19,9 @@ An entry source can name dependencies in its leading header:
 %DEFINE DEBUG 1
 
 %IF DEBUG
-%INCLUDE "LIB/DEBUG.ATM"
+%INCLUDE "lib/debug.asm"
 %ELSE
-%INCLUDE "LIB/RELEASE.ATM"
+%INCLUDE "lib/release.asm"
 %ENDIF
 
 ORG 4000H
@@ -118,9 +118,9 @@ The host may serialize the result as an SP1 source plan:
 
 ```text
 SP1 3
-P 0 LIB/HARDWARE.ATM
-P 0 LIB/CONSOLE.ATM
-P 0 SRC/MAIN.ATM
+P 0 lib/hardware.asm
+P 0 lib/console.asm
+P 0 src/main.asm
 END
 ```
 

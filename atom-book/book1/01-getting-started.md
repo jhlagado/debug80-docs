@@ -7,26 +7,24 @@ nav_order: 1
 
 # Getting Started with Atom
 
-The current Atom product is a Mac command-line assembler requiring Node.js 20
-or later. The installed package contains the native Z80 core and the Debug80
+Atom is published as a Mac command-line assembler requiring Node.js 20 or
+later. The installed package contains the native Z80 core and the Debug80
 runtime used to execute it. AZM remains a development oracle and is absent from
 the installed package.
 
 ## Installation
 
-From an Atom checkout:
+Install the public package:
 
 ```sh
-npm install
-npm pack
-npm install --global ./atom-z80-0.1.0.tgz
+npm install --global atom-z80
 ```
 
 The installed command is `atom`.
 
 ## A first Atom program
 
-Save this source as `counter.atm`:
+Save this source as `counter.asm`:
 
 ```asm
 ORG 4000H
@@ -48,7 +46,7 @@ COUNTER:
 Assemble it from the directory containing the file:
 
 ```sh
-atom --origin 4000H counter.atm
+atom --origin 4000H counter.asm
 ```
 
 Atom publishes one immutable generation below `build/counter.atom/current`:
@@ -74,11 +72,13 @@ the current working directory is the root. The final command argument names the
 entry source:
 
 ```sh
-atom --root . --origin 4000H SRC/MAIN.ATM
+atom --root . --origin 4000H src/main.asm
 ```
 
-The `.atm` extension is the Atom convention. The command parses the named file
-by content and does not require a particular extension.
+Atom uses the ordinary `.asm` extension. A host such as Debug80 selects the
+assembler flavour from project configuration rather than from the filename.
+The command itself parses the named file by content and does not require a
+particular extension.
 
 ## Native self-assembly
 
@@ -89,7 +89,7 @@ This command assembles it using Atom:
 atom --self-host
 ```
 
-The resulting `atom.bin` is 13,812 bytes and must match the pinned AZM-built
+The resulting `atom.bin` is 12,101 bytes and must match the pinned AZM-built
 core byte for byte. Self-host mode fixes the origin, capacity, fill, entry, and
 preprocessor state; only the output directory can be changed.
 

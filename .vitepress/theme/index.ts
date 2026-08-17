@@ -10,6 +10,7 @@ import "./custom.css";
 const BOOK_BY_PREFIX: readonly (readonly [string, string])[] = [
   ["/nucleus/", "nucleus"],
   ["/glimmer-book/", "glimmer"],
+  ["/atom/", "atom"],
   ["/atom-book/", "atom"],
   ["/azm-book/", "azm"],
   ["/debug80-book/", "debug80"],

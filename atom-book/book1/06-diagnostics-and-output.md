@@ -17,7 +17,7 @@ Native source failures name the original logical file, one-based line, and
 one-based byte column:
 
 ```text
-LIB/DEVICE.ATM:14:9: UNDEFINED SYMBOL PORTBASE
+lib/device.asm:14:9: UNDEFINED SYMBOL PORTBASE
 ```
 
 The native core records a source-part ordinal and byte offset. Equal-length
@@ -41,7 +41,7 @@ The command returns:
 
 ## Artifact bundle
 
-For `SRC/MAIN.ATM`, the default bundle is `build/main.atom`. The `current`
+For `src/main.asm`, the default bundle is `build/main.atom`. The `current`
 symlink points to one content-addressed immutable generation:
 
 ```text
@@ -122,7 +122,7 @@ The common build options are:
 
 ```sh
 atom --root . --origin 4000H --capacity 8000H \
-  --entry 4000H --fill 0 -DDEBUG=1 SRC/MAIN.ATM
+  --entry 4000H --fill 0 -DDEBUG=1 src/main.asm
 ```
 
 `-o` or `--output` selects the bundle directory. The complete table appears in
