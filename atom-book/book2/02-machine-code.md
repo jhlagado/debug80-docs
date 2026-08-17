@@ -29,7 +29,7 @@ A few examples from the Z80 instruction set:
 | `$3A LO HI`   | `LD A, (NN)` | Load A from the 16-bit address `NN` |
 | `$76`         | `HALT`       | Suspend execution until interrupt or reset |
 
-Address operands always follow the Z80's little-endian convention: low byte first, high byte second. The address `$8000` appears in the instruction stream as `$00 $80`. For a searchable reference of the full Z80 instruction set, see [Appendix 8](../../azm-book/appendices/08-z80-instruction-reference.md).
+Address operands always follow the Z80's little-endian convention: low byte first, high byte second. The address `$8000` appears in the instruction stream as `$00 $80`. For a searchable reference of the full Z80 instruction set, see [Appendix 10](../appendices/10-z80-instruction-reference.md).
 
 ---
 

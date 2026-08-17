@@ -84,7 +84,7 @@ LD ($8001), A
 
 Both this and the `(BC)`/`(DE)` restriction follow from the specific operand
 combinations encoded by the Z80 instruction set.
-[Appendix 8](../../azm-book/appendices/08-z80-instruction-reference.md) has the complete searchable list.
+[Appendix 10](../appendices/10-z80-instruction-reference.md) has the complete searchable list.
 
 ---
 
@@ -106,7 +106,7 @@ combinations encoded by the Z80 instruction set.
 | (nn) ← reg16 | `LD ($8004), HL` | Write 16-bit word to memory     |
 | SP ← reg16   | `LD SP, HL`      | SP = HL (or IX or IY)           |
 
-For a compact LD quick table and the full addressing-shape reference, see [Appendix 7](../../azm-book/appendices/07-addressing-prefixes-and-instruction-forms.md).
+For a compact LD quick table and the full addressing-shape reference, see [Appendix 9](../appendices/09-addressing-prefixes-and-instruction-forms.md).
 
 ![Where each form finds its data. The first two differ by a pair of brackets: one loads the number, the other loads whatever is at that address.](../../assets/images/azm-book/book2/addressing-modes.svg)
 
@@ -122,7 +122,7 @@ Two's complement negation inverts every bit and adds one. The two's complement
 of `$01` (`%00000001`) is `%11111110 + 1 = %11111111 = $FF`, which is −1.
 
 `ADD A, B` performs the same bitwise addition regardless. The result byte is identical whether the inputs are treated as signed or unsigned. The difference surfaces with `$80 + $01`, which gives `$81`: its unsigned meaning is 128 + 1 = 129, while its signed meaning is −128 + 1 = −127. The bug appears when one part of a program writes a value as signed and another reads it as unsigned. The common landmark values (`$00`, `$7F`, `$80`, `$FF`) and their signed and unsigned meanings are in
-[Appendix 6](../../azm-book/appendices/06-registers-flags-and-conditions.md).
+[Appendix 8](../appendices/08-registers-flags-and-conditions.md).
 
 ---
 

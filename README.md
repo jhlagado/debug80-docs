@@ -42,8 +42,9 @@ Debug80, AZM, Glimmer, and Nucleus material.
 | [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/)                           | The Z80 from the bare machine up, assuming nothing.                                 |
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                   |
 | [Atom](https://debug80.com/atom/)                                                              | Installation, first assembly, project links and entry points to the Atom books.      |
-| [Atom Book 1 — Assembler Reference](https://debug80.com/atom-book/book1/)                      | Atom syntax, preprocessing, instructions, output, limits and programming API.       |
-| [Atom Book 2 — Z80 Programming](https://debug80.com/atom-book/book2/)                          | The Z80 from first principles through algorithms and recursion using Atom.           |
+| [Atom Book 1 — Assembler Reference](https://debug80.com/atom-book/book1/01-getting-started.html) | Atom syntax, preprocessing, instructions and output.                               |
+| [Atom Book 2 — Z80 Programming](https://debug80.com/atom-book/book2/00-introduction.html)       | The Z80 from first principles through algorithms and recursion using Atom.          |
+| [Atom Appendices](https://debug80.com/atom-book/appendices/01-directives.html)                  | Programming API and lookup tables for Atom and the Z80.                             |
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
 | [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and direct-Z80 compiler project.                            |

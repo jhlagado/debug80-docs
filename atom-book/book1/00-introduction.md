@@ -14,17 +14,15 @@ inputs, and renders finished artifacts.
 
 This book defines the current source language and the public Mac interfaces. It
 covers source lines and symbols, expressions and forward references,
-instructions, data and storage, project composition, diagnostics, output
-artifacts, and the JavaScript API. The appendices collect exact syntax and
-capacity tables for lookup.
+instructions, data and storage, project composition, diagnostics and output
+artifacts. The appendices collect the JavaScript API and exact lookup tables.
 
 ## The intended reader
 
 The manual assumes that you can read Z80 assembly and recognise its registers,
-instructions, flags, stack, and addressing forms. The AZM book [Z80
-Fundamentals](../../azm-book/book2/) provides a from-zero introduction to the
-processor. Atom uses a smaller assembler language, but the machine remains the
-same.
+instructions, flags, stack and addressing forms. [Atom Book 2 — Z80
+Programming](../book2/00-introduction.md) provides a from-zero introduction to
+the processor.
 
 Programmers coming from another assembler should begin with Chapters 1 and 2.
 The two source conventions most likely to differ are visible immediately:

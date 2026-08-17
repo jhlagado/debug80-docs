@@ -102,21 +102,26 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 Install the `atom` command, assemble a first `.asm` file and find the package,
 source and manuals from one place.
 
-### [Atom Book 1 — Assembler Reference](atom-book/book1/)
+### [Atom Book 1 — Assembler Reference](atom-book/book1/01-getting-started.md)
 
 The definitive reference for Atom source, expressions, instructions,
-directives, host preprocessing, binary inclusion, diagnostics, output
-artifacts, and the JavaScript programming interface.
+directives, host preprocessing, binary inclusion, diagnostics and output
+artifacts.
 
 For Z80 programmers and tool authors who need the exact current Atom rules.
 
-### [Atom Book 2 — Z80 Programming](atom-book/book2/)
+### [Atom Book 2 — Z80 Programming](atom-book/book2/00-introduction.md)
 
 A from-zero route through the Z80, followed by arithmetic, sorting, strings,
 packed flags and recursion in verified Atom programs.
 
 For readers learning assembly or moving from instruction exercises into
 complete routines.
+
+### [Atom Appendices](atom-book/appendices/01-directives.md)
+
+The programming API and compact references for Atom syntax, limits, Z80
+registers, addressing forms and instructions.
 
 ---
 

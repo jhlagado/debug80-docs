@@ -4,6 +4,7 @@ title: "Atom Book 2 — Z80 Programming"
 nav_order: 2
 has_children: true
 has_toc: false
+isolated: true
 ---
 
 <Mark class="book-plate" book="atom" size="52" />

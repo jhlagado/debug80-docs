@@ -40,7 +40,7 @@ The DD/FD rules follow the processor's real encodings. `LD A,IXH` and
 `LD IXH,IXL` are valid. `LD IXH,H` is not encodable. In `LD H,(IX+1)`, the
 destination is the ordinary H register, not IXH.
 
-The shared [Z80 instruction reference](../../azm-book/appendices/08-z80-instruction-reference.md)
+The [Z80 instruction reference](../appendices/10-z80-instruction-reference.md)
 lists the standard and classic-undocumented families. Atom's native
 instruction differential remains the authority for the exact accepted forms.
 

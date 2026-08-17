@@ -4,6 +4,7 @@ title: "Atom Book 1 — Assembler Reference"
 nav_order: 1
 has_children: true
 has_toc: false
+isolated: true
 ---
 
 <Mark class="book-plate" book="atom" size="52" />
@@ -23,9 +24,8 @@ authors.
 4. [Instructions, Data and Storage](04-instructions-data-and-storage.md)
 5. [Source Composition and Conditional Assembly](05-source-composition.md)
 6. [Diagnostics and Output](06-diagnostics-and-output.md)
-7. [Programming Interface](07-programming-interface.md)
 
 ## Reference
 
-The [Atom appendices](../appendices/) contain the directive, expression,
-command-line, built-in function, and capacity tables.
+The [Atom appendices](../appendices/) contain the programming API and lookup
+tables for Atom and the Z80.

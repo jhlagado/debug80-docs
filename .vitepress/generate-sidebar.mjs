@@ -174,21 +174,23 @@ for (const book of BOOK_DIRS) {
       ? [asGroup(b, true)]
       : [
           ...books.map((x) => asGroup(x, x.dir === b.dir)),
-          ...shared.map((s) => s.entry),
+          ...shared.map((s) => ({ ...s.entry, collapsed: true })),
         ];
   }
 
   // Landing directly on a shared section still needs a sidebar.
   for (const s of shared) {
     const key = `/${relative(root, s.dir).replace(/\\/g, "/")}/`;
-    sidebars[key] = [
-      ...books.map((b) => ({
-        text: b.title,
-        collapsed: true,
-        items: b.entry.items,
-      })),
-      ...shared.map((x) => x.entry),
-    ];
+    sidebars[key] = s.isolated
+      ? [s.entry]
+      : [
+          ...books.map((b) => ({
+            text: b.title,
+            collapsed: true,
+            items: b.entry.items,
+          })),
+          ...shared.map((x) => x.entry),
+        ];
   }
 }
 
