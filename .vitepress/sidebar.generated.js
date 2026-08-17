@@ -1126,6 +1126,84 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        }
+      ]
+    },
+    {
       "text": "Atom Appendices",
       "collapsed": false,
       "items": [
@@ -1192,6 +1270,228 @@ export const sidebars = {
       ]
     },
     {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Appendices",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Appendix 1 — Directive Reference",
+          "link": "/atom-book/appendices/01-directives.html"
+        },
+        {
+          "text": "Appendix 2 — Expressions and Numeric Forms",
+          "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+        },
+        {
+          "text": "Appendix 3 — CLI Flag Reference",
+          "link": "/atom-book/appendices/03-cli-flags.html"
+        },
+        {
+          "text": "Appendix 4 — Built-in Functions",
+          "link": "/atom-book/appendices/04-functions.html"
+        },
+        {
+          "text": "Appendix 5 — Limits and Capacities",
+          "link": "/atom-book/appendices/05-limits-and-capacities.html"
+        }
+      ]
+    }
+  ],
+  "/atom-book/book2/": [
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Programming Interface",
+          "link": "/atom-book/book1/07-programming-interface.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        }
+      ]
+    },
+    {
       "text": "Atom Appendices",
       "collapsed": false,
       "items": [
@@ -1254,6 +1554,84 @@ export const sidebars = {
         {
           "text": "Programming Interface",
           "link": "/atom-book/book1/07-programming-interface.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
         }
       ]
     },
