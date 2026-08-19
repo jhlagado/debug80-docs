@@ -37,7 +37,7 @@ After `SUB` or `CP`, Z is set
 when the two values were equal. After `DEC`, Z is set when a register reaches
 zero. After `AND`, Z is set when every bit the mask selected was 0.
 
-![The eight bits of F. The two greyed bits are undocumented copies of result bits.](../../assets/images/azm-book/book2/flags-register.svg)
+![The eight bits of F. The two greyed bits are undocumented copies of result bits.](../../assets/images/atom-book/book2/flags-register.svg)
 
 **C** records unsigned overflow. After addition, C is set when the result
 exceeded 255, the carry out of bit 7. After `SUB` or `CP`, C is set when A
@@ -76,7 +76,7 @@ SUB 5     ; A = $FE (-2); Z is clear, C is set (borrow - A was less than 5)
 `CP N` does exactly the same subtraction and sets the same flags, but discards
 the result.
 
-![cp changes the flags and leaves A as it was. Carry is set when A is below the operand, because that is the case a borrow was needed.](../../assets/images/azm-book/book2/compare-and-branch.svg)
+![cp changes the flags and leaves A as it was. Carry is set when A is below the operand, because that is the case a borrow was needed.](../../assets/images/atom-book/book2/compare-and-branch.svg)
 
 ```asm
 LD A, 5
@@ -311,7 +311,7 @@ arithmetic, and `CP $80` will treat them all as negative.
 `NEG` applied to −128 gives −128: the mathematical result (+128) does not fit
 in a signed byte, so the bit pattern (`$80`) is unchanged.
 
-![One byte, two readings. $80 is the pivot, and which side of it counts as negative depends entirely on the conditional jump you write next.](../../assets/images/azm-book/book2/signed-unsigned.svg)
+![One byte, two readings. $80 is the pivot, and which side of it counts as negative depends entirely on the conditional jump you write next.](../../assets/images/atom-book/book2/signed-unsigned.svg)
 
 ---
 

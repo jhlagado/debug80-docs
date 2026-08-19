@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="306" viewBox="0 0 720 306" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Stack use of the recursive and iterative factorial</title>
+  <desc id="figDesc">Two plots of stack bytes against time for factorial of 5. The recursive version climbs in four-byte steps to 22 bytes and unwinds. The iterative version stays flat at 6 bytes.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="60" y="34" text-anchor="start" xml:space="preserve">FACTORIAL_U8, SELF-CALLING</text>
+  <rect class="bxq" x="60" y="54" width="270" height="150" rx="3"/>
+  <line class="rule" x1="60" y1="204" x2="330" y2="204"/>
+  <polyline class="sline" points="60.00,191.50 64.50,191.50 69.00,191.50 73.50,191.50 78.00,191.50 82.50,166.50 87.00,166.50 91.50,166.50 96.00,166.50 100.50,166.50 105.00,141.50 109.50,141.50 114.00,141.50 118.50,141.50 123.00,141.50 127.50,116.50 132.00,116.50 136.50,116.50 141.00,116.50 145.50,116.50 150.00,91.50 154.50,91.50 159.00,91.50 163.50,91.50 168.00,91.50 172.50,66.50 177.00,66.50 181.50,66.50 186.00,66.50 190.50,66.50 195.00,66.50 199.50,66.50 204.00,66.50 208.50,66.50 213.00,66.50 217.50,91.50 222.00,91.50 226.50,91.50 231.00,91.50 235.50,91.50 240.00,91.50 244.50,116.50 249.00,116.50 253.50,116.50 258.00,116.50 262.50,141.50 267.00,141.50 271.50,141.50 276.00,141.50 280.50,141.50 285.00,166.50 289.50,166.50 294.00,166.50 298.50,166.50 303.00,166.50 307.50,191.50 312.00,191.50 316.50,191.50 321.00,191.50 325.50,191.50 330.00,191.50"/>
+  <text class="dim" x="52" y="62" text-anchor="end" xml:space="preserve">24</text>
+  <text class="dim" x="52" y="208" text-anchor="end" xml:space="preserve">0</text>
+  <text class="dimn" x="60" y="232" text-anchor="start" xml:space="preserve">peak 22 bytes at n = 5</text>
+  <text class="dimn" x="60" y="250" text-anchor="start" xml:space="preserve">four more bytes for every extra level</text>
+  <text class="cap" x="400" y="34" text-anchor="start" xml:space="preserve">FACTORIAL_ITER_U8, ONE FRAME</text>
+  <rect class="bxq" x="400" y="54" width="270" height="150" rx="3"/>
+  <line class="rule" x1="400" y1="204" x2="670" y2="204"/>
+  <polyline class="sline" points="400.00,166.50 404.50,166.50 409.00,166.50 413.50,166.50 418.00,166.50 422.50,166.50 427.00,166.50 431.50,166.50 436.00,166.50 440.50,166.50 445.00,166.50 449.50,166.50 454.00,166.50 458.50,166.50 463.00,166.50 467.50,166.50 472.00,166.50 476.50,166.50 481.00,166.50 485.50,166.50 490.00,166.50 494.50,166.50 499.00,166.50 503.50,166.50 508.00,166.50 512.50,166.50 517.00,166.50 521.50,166.50 526.00,166.50 530.50,166.50 535.00,166.50 539.50,166.50 544.00,166.50 548.50,166.50 553.00,166.50 557.50,166.50 562.00,166.50 566.50,166.50 571.00,166.50 575.50,166.50 580.00,166.50 584.50,166.50 589.00,166.50 593.50,166.50 598.00,166.50 602.50,166.50 607.00,166.50 611.50,166.50 616.00,166.50 620.50,166.50 625.00,166.50 629.50,166.50 634.00,166.50 638.50,166.50 643.00,166.50 647.50,166.50 652.00,166.50 656.50,166.50 661.00,166.50 665.50,166.50 670.00,166.50"/>
+  <text class="dim" x="392" y="62" text-anchor="end" xml:space="preserve">24</text>
+  <text class="dim" x="392" y="208" text-anchor="end" xml:space="preserve">0</text>
+  <text class="dimn" x="400" y="232" text-anchor="start" xml:space="preserve">peak 6 bytes for any n</text>
+  <text class="dimn" x="400" y="250" text-anchor="start" xml:space="preserve">the return address plus one push bc</text>
+  <text class="dimn" x="60" y="292" text-anchor="start" xml:space="preserve">Both return $78. The recursive shape matches the definition; the iterative one matches the RAM you have.</text>
+</svg>

@@ -31,7 +31,7 @@ source length plus its terminator is at most eight.
 Atom can also write the same representation with `CSTR "HELLO"`. The explicit
 `DB` form keeps the terminator visible while the loop is being learned.
 
-![A string's length excludes its terminator, while its storage includes it.](../../assets/images/azm-book/book3/string-layout.svg)
+![A string's length excludes its terminator, while its storage includes it.](../../assets/images/atom-book/book3/string-layout.svg)
 
 ## Measuring a string
 
@@ -78,7 +78,7 @@ STRCOPY:
 The store happens before the test, so the zero byte is copied too. On return,
 HL and DE both point one byte beyond their respective terminators.
 
-![HL reads and DE writes in step until the copied zero ends the loop.](../../assets/images/azm-book/book3/two-pointer-copy.svg)
+![HL reads and DE writes in step until the copied zero ends the loop.](../../assets/images/atom-book/book3/two-pointer-copy.svg)
 
 ## Comparing two strings
 

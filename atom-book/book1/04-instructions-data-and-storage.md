@@ -7,9 +7,9 @@ nav_order: 4
 
 # Instructions, Data and Storage
 
-Atom validates and encodes the complete Z80 instruction-form census used by its
-AZM oracle. The native proof compares 3,445 claimed logical forms byte for byte
-and separately tests invalid combinations.
+Atom accepts the complete documented Z80 instruction set together with the
+classic undocumented forms listed in the instruction reference. It rejects
+operand combinations that the processor cannot encode.
 
 ## Instruction families
 
@@ -25,7 +25,8 @@ SET 6,(IY-1)
 ```
 
 Atom also accepts the classic undocumented index-half registers `IXH`, `IXL`,
-`IYH`, and `IYL`, plus `SLL` and AZM's `SLS` spelling for the same shift.
+`IYH`, and `IYL`. `SLL` and `SLS` are two names for the same undocumented
+shift operation.
 
 Branch width remains explicit. Atom never changes `JR` into `JP`. A forward
 `JR` whose final displacement lies outside −128 through 127 is an error.
@@ -41,8 +42,8 @@ The DD/FD rules follow the processor's real encodings. `LD A,IXH` and
 destination is the ordinary H register, not IXH.
 
 The [Z80 instruction reference](../appendices/10-z80-instruction-reference.md)
-lists the standard and classic-undocumented families. Atom's native
-instruction differential remains the authority for the exact accepted forms.
+lists the exact standard and classic-undocumented forms accepted for each
+mnemonic.
 
 ## `DB` — define bytes
 
@@ -54,9 +55,8 @@ DB "ATOM",0
 DB 'A','Z'
 ```
 
-Each numeric result contributes its low byte. A forward affine expression
-contributes a placeholder IMAGE byte followed by a final byte PATCH when its
-symbol is defined.
+Each numeric result contributes its low byte. A forward affine expression is
+resolved when its symbol is declared.
 
 String escapes are `\0`, `\n`, `\r`, `\t`, `\'`, `\"`, `\\`, and `\xHH`.
 Strings and numeric items may share one list.
@@ -70,8 +70,8 @@ DW 1234H              ; EMITS $34,$12
 DW START,TABLE+2
 ```
 
-Strings are not accepted. A forward affine expression creates a final
-two-byte PATCH.
+Strings are not accepted. A forward affine expression is resolved to a
+little-endian word when its symbol is declared.
 
 ## `DS` — reserve or fill storage
 
@@ -92,10 +92,9 @@ PAGE:
 Both operands must already be resolved. Count and capacity are checked before
 the first output operation, so a failed directive publishes no partial span.
 
-Uninitialized reservations still affect later labels, the high-water mark,
-flat artifact length, listing rows, and D8 source ranges. The selected artifact
-fill byte supplies their bytes in BIN and HEX; it does not turn the reservation
-into native IMAGE records.
+Uninitialized reservations still affect later labels, the output length,
+listing rows, and D8 source ranges. The selected fill byte supplies their bytes
+in BIN and HEX; NOBJ records them as reserved storage.
 
 ## `ALIGN`
 
@@ -137,19 +136,18 @@ FONT: INCBIN "ASSETS/FONT.BIN"
 ```
 
 The path is relative to the source file containing the directive. It must use
-ASCII, resolve inside the project root, and match the physical filename's case.
-Symlink targets outside the root are rejected. The host snapshots the binary
-before native assembly, so a later filesystem change cannot alter the running
-build.
+ASCII, resolve inside the project root, and match the filename's capitalisation.
+Symlink targets outside the root are rejected. Atom reads the complete binary
+before assembly, so one build uses one stable copy of the file.
 
 One binary may contain 0 through 65,535 bytes. Atom does not accept offset or
-length operands. The host lowers the line to an equal-length initialized
-reservation for native address calculation, then substitutes the snapshotted
-bytes at the output boundary. Listings and D8 maps retain the original
+length operands. During source preparation, Atom replaces the line with an
+equal-length reservation for address calculation and attaches the saved binary
+bytes to the resulting output. Listings and D8 maps retain the original
 `INCBIN` line.
 
 ## Directive summary
 
-The native assembler reserves the bare words `EQU`, `ORG`, `DB`, `DW`, `DS`,
+The assembler reserves the bare words `EQU`, `ORG`, `DB`, `DW`, `DS`,
 `ALIGN`, `INCBIN`, `CSTR`, `PSTR`, and `ISTR`. Dotted aliases are invalid.
 The complete table appears in [Appendix 1](../appendices/01-directives.md).

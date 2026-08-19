@@ -8,77 +8,58 @@ nav_order: 5
 
 # Appendix 5 — Limits and Capacities
 
-The native image and Mac proof map establish the current measured limits.
-
-## Resident image
-
-| Item | Bytes |
-| --- | ---: |
-| Z80 code and immutable tables | 11,648 |
-| Fixed non-reentrant workspace | 453 |
-| Linked resident extent | 12,101 |
-| Margin below 16 KiB | 4,283 |
-
-Caller-owned source, symbol, pending, descriptor, and stack storage are outside
-the resident image account.
-
-## Native source and output
+## Source projects
 
 | Limit | Value |
 | --- | ---: |
-| Ordered source parts | 1 through 16 |
-| Bytes in one Mac source page | 24,576 |
-| Output banks | One, bank zero |
-| Encoded instruction length | 1 through 4 bytes |
-| Build descriptor | 15 bytes |
-| Complete 16-part descriptor array | 80 bytes |
-| One `INCBIN` input | 0 through 65,535 bytes |
+| Ordered source parts | 1 through 255 |
+| Bytes in one source part | 0 through 65,535 |
+| Dependency depth, including the entry file | 64 |
+| Project-relative path | 255 ASCII bytes |
+| Total retained project-relative paths | 65,536 bytes |
+| One `INCBIN` file | 0 through 65,535 bytes |
 
-The target is a non-wrapping half-open 16-bit range whose mathematical end is
-at most `$FFFF`. Starting at zero therefore permits a maximum capacity of
-65,535 bytes, covering `$0000` through `$FFFE`.
+`%INCLUDE` adds each dependency once, so the part limit applies to distinct
+files in the resolved project rather than to the number of `%INCLUDE` lines.
+The total source may exceed 65,535 bytes as long as no individual part exceeds
+that size.
 
-## Symbols and pending references
+Atom currently produces one flat output image in bank zero. The output target
+is a non-wrapping range whose exclusive end may be no greater than `$FFFF`.
+With a start address of zero, the largest target capacity is therefore 65,535
+bytes, covering `$0000` through `$FFFE`.
 
-| Record | Bytes |
+## Symbols and forward references
+
+| Default command configuration | Capacity |
 | --- | ---: |
-| Exact symbol | 8 |
-| Pending reference | 6 |
+| Simultaneous symbols | 1,664 |
+| Simultaneous unresolved references | 694 |
 
-A symbol name contains one through eight significant RADIX-40 characters. A
-private name has a separate leading period. Globals remain for the complete
-build; private records remain only in the current global scope.
+Global symbols remain for the entire build. Private symbols are discarded
+when the next global label begins, so only the current private scope counts
+towards the simultaneous-symbol limit. An unresolved reference stops consuming
+pending space as soon as its symbol is declared and its output bytes are
+patched.
 
-The Mac proof map assigns 13,312 bytes to symbols, holding 1,664 simultaneous
-records, and 2,560 bytes to pending references, holding 426 complete records.
+Names contain one through eight significant characters. A private name has a
+separate leading period, so it may occupy nine source characters. Atom rejects
+longer names rather than shortening them.
 
-## Expressions and values
+## Expressions and fields
 
 | Limit | Value |
 | --- | ---: |
 | Value-stack entries | 16 |
 | Operator-stack entries | 16 |
-| Concrete final word domain | −32,768 through 65,535 |
+| Concrete final expression | −32,768 through 65,535 |
 | Shift count | 0 through 23 |
 | Forward affine addend | −128 through 127 |
 | Relative displacement | −128 through 127 |
 | Immediate byte and port | 0 through 255 |
 | IX/IY displacement | −128 through 127 |
+| Encoded instruction length | 1 through 4 bytes |
 
-## Host graph
-
-| Preparation limit | Default |
-| --- | ---: |
-| General graph parts | 255; lowered to 16 for native Atom |
-| Dependency depth including entry | 64 |
-| Logical path | 255 ASCII bytes |
-| Retained logical paths | 65,536 bytes |
-| SP1 bank ordinal | 0 through 255; zero for native Atom |
-
-The default Mac execution budgets are 200,000,000 native instructions and
-2,000,000,000 T-states. The current measured self-build uses 163,392,529
-instructions and 1,492,523,777 T-states.
-
-These Mac capacities are not a TEC-1 RAM map. Fixed workspace, maximum Mac
-symbol and pending arenas, descriptors, and a 256-byte stack consume 16,774
-bytes before a source buffer or operating adapter is added.
+`RST` accepts 0, 8, 16, 24, 32, 40, 48, or 56. `IM` accepts 0, 1, or 2.
+The directive and instruction references describe where a value is checked,
+truncated, or deferred until a forward symbol is declared.

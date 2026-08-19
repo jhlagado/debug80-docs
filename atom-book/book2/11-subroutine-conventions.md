@@ -70,7 +70,7 @@ ROUTINE:
 The stack is LIFO (last in, first out), so the last saved value must be removed
 first. Popping into the wrong pairs restores the values to different registers.
 
-![Caller-save and callee-save responsibilities for registers at a call boundary.](../../assets/images/azm-book/book2/caller-callee-save.svg)
+![Caller-save and callee-save responsibilities for registers at a call boundary.](../../assets/images/atom-book/book2/caller-callee-save.svg)
 
 Chapter 10's `FIND_MAX` borrows C as a temporary, so it clobbers a register that
 is not one of its inputs. Comparing against `(HL)` directly removes that
@@ -119,7 +119,7 @@ ROUTINE:
 
 Two bookkeeping entries are on the stack already, and any arguments the caller pushed before the `CALL` sit above them:
 
-![The frame IX points into. Arguments and bookkeeping sit at positive displacements, locals at negative ones.](../../assets/images/azm-book/book2/ix-frame.svg)
+![The frame IX points into. Arguments and bookkeeping sit at positive displacements, locals at negative ones.](../../assets/images/atom-book/book2/ix-frame.svg)
 
 IX+0 and IX+1 hold the saved IX and IX+2 and IX+3 hold the return address, so caller arguments start at IX+4 and locals sit below IX+0.
 

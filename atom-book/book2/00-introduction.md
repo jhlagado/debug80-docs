@@ -35,11 +35,10 @@ depends on it.
 We work in Atom, an assembler that turns assembly source into Z80 machine
 code. Each chapter takes one layer of the machine — what a flag is, how a loop
 counts down, what the stack stores — and works it through instruction fragments
-you can follow byte by byte. The five complete companion programs in Chapters
-12 through 16 are assembled, executed and checked as part of this book's test
-suite. In Chapter 10, we combine the earlier mechanisms in one complete
-program. Chapter 11 states the conventions used by the algorithm chapters.
-Exercises appear along the way, with notes at the end of the book.
+you can follow byte by byte. Chapters 10 and 12 through 16 provide complete
+programs that you can assemble, run and change. Chapter 11 states the
+subroutine conventions used by the later examples. Exercises appear along the
+way, with notes at the end of the book.
 
 [Atom Book 1](../book1/01-getting-started.md) is the companion reference for
 exact source syntax, directives and output formats. The [programming API](../appendices/06-programming-interface.md)

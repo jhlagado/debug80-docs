@@ -20,7 +20,7 @@ atom [OPTIONS] entry.asm
 | --- | --- | --- |
 | `-o`, `--output` | Directory | Select the artifact bundle directory |
 | `--root` | Directory | Set the project root; default is the current directory |
-| `--origin` | Number | Set the initial native target address |
+| `--origin` | Number | Set the initial output address |
 | `--capacity` | Number | Set the mathematical target capacity |
 | `--entry` | Number | Set the entry address recorded in NOBJ and D8 |
 | `--fill` | Number | Set the byte used for materialised gaps and reservations |
@@ -30,15 +30,11 @@ Command-line numbers accept decimal, `$` hexadecimal, `%` binary, Intel `H`
 hexadecimal, and Intel `B` binary. A shell may expand `$`, so quote that form or
 use an Intel suffix.
 
-## Other options
+## Help
 
 | Option | Effect |
 | --- | --- |
-| `--self-host` | Assemble the checked Atom source shipped in the package |
 | `-h`, `--help` | Print command usage |
-
-Self-host mode accepts only an output-directory override. It fixes all build
-values needed for the byte-identity proof.
 
 ## Status values
 

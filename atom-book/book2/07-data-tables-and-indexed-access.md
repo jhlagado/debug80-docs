@@ -61,7 +61,7 @@ The order matters: the body reads
 the entry first (`LD A, (HL)`), processes it, then advances (`INC HL`). An
 increment before the read would skip the first entry.
 
-![HL walking a byte table one entry at a time.](../../assets/images/azm-book/book2/hl-walking.svg)
+![HL walking a byte table one entry at a time.](../../assets/images/atom-book/book2/hl-walking.svg)
 
 Word entries are two bytes wide, so HL advances by two between them:
 
@@ -120,7 +120,7 @@ LD C, (IX+2)         ; C = low byte field
 The displacement field holds -128 through +127; an offset outside that range is
 an assembler error.
 
-![One load of the base, then every field by name. IX is unchanged throughout.](../../assets/images/azm-book/book2/ix-displacement.svg)
+![One load of the base, then every field by name. IX is unchanged throughout.](../../assets/images/atom-book/book2/ix-displacement.svg)
 
 ---
 
@@ -259,7 +259,7 @@ LDIR              ; copy 4 bytes, HL and DE advance, BC reaches 0
 After `LDIR`, HL points one byte past the last source byte, DE points one byte
 past the last destination byte, and BC holds zero.
 
-![Register state after ldir. HL and DE point one byte past the copied ranges, and BC holds zero.](../../assets/images/azm-book/book2/ldir-copy.svg)
+![Register state after ldir. HL and DE point one byte past the copied ranges, and BC holds zero.](../../assets/images/atom-book/book2/ldir-copy.svg)
 
 `LDIR` uses BC as a 16-bit counter. Counts from 1 to 65,535 have their ordinary
 meaning; an initial BC value of zero wraps on the first decrement and copies

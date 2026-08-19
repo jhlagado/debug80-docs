@@ -21,10 +21,10 @@ START:
     NOP
 ```
 
-`START` receives `$4000`. `ORG` emits no byte. The append-only output adapter
-allows a later backward `ORG` only while the next IMAGE byte remains at or
-beyond the end of all earlier IMAGE bytes. It retains the greatest address
-reached for artifact sizing even when the final cursor later moves backward.
+`START` receives `$4000`. `ORG` emits no byte. A later `ORG` may move the cursor
+backward only if subsequent output does not precede or overlap bytes already
+emitted. Artifact sizing follows the greatest address reached, even if a later
+`ORG` moves the cursor backward.
 
 The command's `--origin` option sets the initial target address and `ORG` may
 then change the logical cursor within the configured target range.
@@ -99,8 +99,7 @@ they are not followed by an opening parenthesis.
 
 ## Forward expressions
 
-Atom reads source once, so it stores unresolved expressions in a deliberately
-small form: one exact symbol plus a signed-byte addend.
+An unresolved expression may contain one symbol and a signed-byte addend.
 
 These forms can be retained:
 
@@ -111,15 +110,14 @@ DB LOW(TARGET-2)
 LD HL,TARGET+4
 ```
 
-The addend must fit −128 through 127. Two unresolved symbols, multiplication of
-an unresolved symbol, and unary negation of an unresolved symbol cannot fit the
-pending record and are rejected.
+The addend must fit −128 through 127. Atom rejects expressions with two
+unresolved symbols, multiplication of an unresolved symbol, or unary negation
+of an unresolved symbol.
 
 `LOW()` or `HIGH()` may wrap one forward affine expression. The function must
 be the outermost operation, so `LOW(TARGET+1)` is valid while
-`LOW(TARGET)+1` is not. Forward byte functions are unavailable for relative
-branches and IX/IY displacements because those fields require a different
-range calculation at resolution time.
+`LOW(TARGET)+1` is not. Forward byte functions are not accepted for relative
+branches or IX/IY displacements.
 
 ## Range belongs to the receiving field
 

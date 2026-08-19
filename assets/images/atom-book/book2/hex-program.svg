@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="228" viewBox="0 0 720 228" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">The ten-byte program in memory</title>
+  <desc id="figDesc">Ten memory cells from $0000 to $0009 holding the bytes 3E 05 47 3E 03 80 32 00 80 76, bracketed into six instructions with the assembly for each below.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="cap" x="46" y="26" text-anchor="start" xml:space="preserve">BYTES AT $0000</text>
+  <rect class="bxs" x="46" y="56" width="52" height="34" rx="2"/>
+  <text class="tb" x="72" y="77.5" text-anchor="middle" xml:space="preserve">3E</text>
+  <text class="dim" x="72" y="49" text-anchor="middle" xml:space="preserve">$0000</text>
+  <rect class="bx" x="98" y="56" width="52" height="34" rx="2"/>
+  <text class="t" x="124" y="77.5" text-anchor="middle" xml:space="preserve">05</text>
+  <text class="dim" x="124" y="49" text-anchor="middle" xml:space="preserve">$0001</text>
+  <rect class="bxs" x="150" y="56" width="52" height="34" rx="2"/>
+  <text class="tb" x="176" y="77.5" text-anchor="middle" xml:space="preserve">47</text>
+  <text class="dim" x="176" y="49" text-anchor="middle" xml:space="preserve">$0002</text>
+  <rect class="bxs" x="202" y="56" width="52" height="34" rx="2"/>
+  <text class="tb" x="228" y="77.5" text-anchor="middle" xml:space="preserve">3E</text>
+  <text class="dim" x="228" y="49" text-anchor="middle" xml:space="preserve">$0003</text>
+  <rect class="bx" x="254" y="56" width="52" height="34" rx="2"/>
+  <text class="t" x="280" y="77.5" text-anchor="middle" xml:space="preserve">03</text>
+  <text class="dim" x="280" y="49" text-anchor="middle" xml:space="preserve">$0004</text>
+  <rect class="bxs" x="306" y="56" width="52" height="34" rx="2"/>
+  <text class="tb" x="332" y="77.5" text-anchor="middle" xml:space="preserve">80</text>
+  <text class="dim" x="332" y="49" text-anchor="middle" xml:space="preserve">$0005</text>
+  <rect class="bxs" x="358" y="56" width="52" height="34" rx="2"/>
+  <text class="tb" x="384" y="77.5" text-anchor="middle" xml:space="preserve">32</text>
+  <text class="dim" x="384" y="49" text-anchor="middle" xml:space="preserve">$0006</text>
+  <rect class="bx" x="410" y="56" width="52" height="34" rx="2"/>
+  <text class="t" x="436" y="77.5" text-anchor="middle" xml:space="preserve">00</text>
+  <text class="dim" x="436" y="49" text-anchor="middle" xml:space="preserve">$0007</text>
+  <rect class="bx" x="462" y="56" width="52" height="34" rx="2"/>
+  <text class="t" x="488" y="77.5" text-anchor="middle" xml:space="preserve">80</text>
+  <text class="dim" x="488" y="49" text-anchor="middle" xml:space="preserve">$0008</text>
+  <rect class="bxs" x="514" y="56" width="52" height="34" rx="2"/>
+  <text class="tb" x="540" y="77.5" text-anchor="middle" xml:space="preserve">76</text>
+  <text class="dim" x="540" y="49" text-anchor="middle" xml:space="preserve">$0009</text>
+  <path class="rule" d="M49,98 V110 H147 V98"/>
+  <text class="ts" x="98" y="128" text-anchor="middle" xml:space="preserve">ld a, 5</text>
+  <path class="rule" d="M153,98 V110 H199 V98"/>
+  <text class="ts" x="176" y="128" text-anchor="middle" xml:space="preserve">ld b, a</text>
+  <path class="rule" d="M205,98 V110 H303 V98"/>
+  <text class="ts" x="254" y="128" text-anchor="middle" xml:space="preserve">ld a, 3</text>
+  <path class="rule" d="M309,98 V110 H355 V98"/>
+  <text class="ts" x="332" y="128" text-anchor="middle" xml:space="preserve">add a, b</text>
+  <path class="rule" d="M361,98 V110 H511 V98"/>
+  <text class="ts" x="436" y="128" text-anchor="middle" xml:space="preserve">ld ($8000), a</text>
+  <path class="rule" d="M517,98 V110 H563 V98"/>
+  <text class="ts" x="540" y="128" text-anchor="middle" xml:space="preserve">halt</text>
+  <rect class="bxs" x="46" y="159" width="13" height="13" rx="2"/>
+  <text class="dimn" x="66" y="170" text-anchor="start" xml:space="preserve">opcode</text>
+  <rect class="bx" x="126.98" y="159" width="13" height="13" rx="2"/>
+  <text class="dimn" x="146.98" y="170" text-anchor="start" xml:space="preserve">operand byte</text>
+  <text class="dimn" x="46" y="206" text-anchor="start" xml:space="preserve">The byte stream is numbers alone. $8000 could be a result, a display buffer or a lookup table.</text>
+</svg>

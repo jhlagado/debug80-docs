@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="292" viewBox="0 0 720 292" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Moving through the stack</title>
+  <desc id="figDesc">push af, push bc, pop de, pop hl traced through four states, ending with DE holding what BC held and HL holding what AF held.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <text class="ts" x="46" y="40" text-anchor="start" xml:space="preserve">AF = $3C41    BC = $0820    SP = $9000</text>
+  <text class="tb" x="46" y="78" text-anchor="start" xml:space="preserve">push af</text>
+  <rect class="bxs" x="46" y="96" width="122" height="30" rx="2"/>
+  <text class="tb" x="107" y="116" text-anchor="middle" xml:space="preserve">$3C41</text>
+  <rect class="bxq" x="46" y="126" width="122" height="30" rx="2"/>
+  <text class="dim" x="46" y="176" text-anchor="start" xml:space="preserve">SP = $8FFE</text>
+  <text class="tb" x="214" y="78" text-anchor="start" xml:space="preserve">push bc</text>
+  <rect class="bxs" x="214" y="96" width="122" height="30" rx="2"/>
+  <text class="tb" x="275" y="116" text-anchor="middle" xml:space="preserve">$0820</text>
+  <rect class="bxs" x="214" y="126" width="122" height="30" rx="2"/>
+  <text class="tb" x="275" y="146" text-anchor="middle" xml:space="preserve">$3C41</text>
+  <text class="dim" x="214" y="176" text-anchor="start" xml:space="preserve">SP = $8FFC</text>
+  <text class="tb" x="382" y="78" text-anchor="start" xml:space="preserve">pop de</text>
+  <rect class="bxs" x="382" y="96" width="122" height="30" rx="2"/>
+  <text class="tb" x="443" y="116" text-anchor="middle" xml:space="preserve">$3C41</text>
+  <rect class="bxq" x="382" y="126" width="122" height="30" rx="2"/>
+  <text class="dim" x="382" y="176" text-anchor="start" xml:space="preserve">SP = $8FFE</text>
+  <text class="tb" x="550" y="78" text-anchor="start" xml:space="preserve">pop hl</text>
+  <rect class="bxq" x="550" y="96" width="122" height="30" rx="2"/>
+  <rect class="bxq" x="550" y="126" width="122" height="30" rx="2"/>
+  <text class="dim" x="550" y="176" text-anchor="start" xml:space="preserve">SP = $9000</text>
+  <text class="ts" x="46" y="220" text-anchor="start" xml:space="preserve">DE = $0820       HL = $3C41       SP = $9000</text>
+  <text class="dimn" x="46" y="248" text-anchor="start" xml:space="preserve">The stack holds bytes alone, so a push and its pop can name different registers.</text>
+  <text class="dimn" x="46" y="266" text-anchor="start" xml:space="preserve">That is the only way to reach F, because no ld instruction can name it.</text>
+  <text class="dimn" x="46" y="284" text-anchor="start" xml:space="preserve">SP is back where it started. Every path to ret must leave it that way, or ret reads a temporary as its destination.</text>
+</svg>

@@ -9,7 +9,7 @@ nav_order: 1
 
 A Z80 computer has three main parts: a CPU, memory and I/O ports. The CPU does the work, fetching instructions and carrying them out. Memory holds the program and the data it works with. I/O ports connect the CPU to the outside world: a keyboard, a display, a storage device, a sensor.
 
-![The three parts and the buses between them. Sixteen address lines fix the memory ceiling at 64 KB; eight data lines fix the unit of transfer at one byte.](../../assets/images/azm-book/book2/system-block.svg)
+![The three parts and the buses between them. Sixteen address lines fix the memory ceiling at 64 KB; eight data lines fix the unit of transfer at one byte.](../../assets/images/atom-book/book2/system-block.svg)
 
 ---
 
@@ -58,7 +58,7 @@ $8000-$FFFF   -     (unmapped, or more RAM, or memory-mapped I/O)
 
 At reset, the program counter starts at `$0000`. That address must contain valid code. On the board above, it is in ROM.
 
-![The memory map of the board above, drawn to scale across the full address space.](../../assets/images/azm-book/book2/memory-map.svg)
+![The memory map of the board above, drawn to scale across the full address space.](../../assets/images/atom-book/book2/memory-map.svg)
 
 ---
 
@@ -98,7 +98,7 @@ When B and C are used as the pair BC, B holds the high byte and C holds the low 
 
 The Z80 also has a hidden second copy of A, F, B, C, D, E, H and L called the **shadow registers**, covered in Chapter 8. A compact register reference is in [Appendix 8](../appendices/08-registers-flags-and-conditions.md).
 
-![The whole register set. Each of the four main pairs is two 8-bit registers and one 16-bit register at the same time.](../../assets/images/azm-book/book2/register-file.svg)
+![The whole register set. Each of the four main pairs is two 8-bit registers and one 16-bit register at the same time.](../../assets/images/atom-book/book2/register-file.svg)
 
 ---
 
@@ -108,7 +108,7 @@ The CPU does one thing, over and over: read the byte at the address in PC, inter
 
 Some instructions are one byte long, some are two, three or four. After executing an instruction, PC advances by exactly as many bytes as that instruction occupied, unless the instruction itself changes PC, which is what jumps and calls do.
 
-![The cycle the CPU repeats until it halts.](../../assets/images/azm-book/book2/fetch-execute.svg)
+![The cycle the CPU repeats until it halts.](../../assets/images/atom-book/book2/fetch-execute.svg)
 
 ---
 
@@ -143,7 +143,7 @@ $8001       $1A    <- high byte second
 
 You saw this in the first program: the address `$8000` is encoded in the instruction at `$0006` as two bytes `$00 $80` (low byte `$00` first, high byte `$80` second).
 
-![Storing $8000. The low byte goes to the lower address, so the two bytes appear in the instruction stream in the opposite order to the way the value is written.](../../assets/images/azm-book/book2/little-endian.svg)
+![Storing $8000. The low byte goes to the lower address, so the two bytes appear in the instruction stream in the opposite order to the way the value is written.](../../assets/images/atom-book/book2/little-endian.svg)
 
 ---
 
