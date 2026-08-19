@@ -7,9 +7,8 @@ nav_order: 10
 
 # A Complete Program
 
-The earlier chapters introduced one mechanism at a time. This chapter combines
-them in one program: a data table, DJNZ loops, subroutines, register-based
-arguments and conditional branches. The focus is the data flow through
+A complete table program brings together DJNZ loops, subroutines,
+register-based arguments and conditional branches. Its data moves through
 `MAIN` and across two calls.
 
 ---
@@ -111,21 +110,8 @@ bytes after the table.
 
 ## `FIND_MAX`: a counted loop with a conditional update
 
-`FIND_MAX` scans the table and returns the largest byte in A. The loop body uses C as a temporary to hold the current element.
-
-```asm
-FIND_MAX:
-  LD A, 0
-.MAXLOOP:
-  LD C, (HL)
-  CP C
-  JR NC, .NOMAX
-  LD A, C
-.NOMAX:
-  INC HL
-  DJNZ .MAXLOOP
-  RET
-```
+`FIND_MAX` scans the table and returns the largest byte in A. The loop body
+uses C as a temporary for the current element.
 
 The flag-before-branch check on `CP C` / `JR NC` shows that `CP C` establishes the flag, `JR NC` reads it immediately, and nothing changes the flag between them. Carry clear after `CP C` means A ≥ C, so `JR NC` skips the update and the running maximum is left alone. `LD A, C` runs only when carry was set, meaning A was less than C and C is a new maximum. After eight iterations, A = 91 (`$5B`), the largest value in the table.
 
@@ -138,22 +124,6 @@ last byte and A holds the result.
 ## `CNTABOVE`: reusing comparison flags
 
 `CNTABOVE` counts entries strictly greater than a threshold and returns the count in A.
-
-```asm
-CNTABOVE:
-  LD D, 0
-.CNTLOOP:
-  LD A, (HL)
-  CP C
-  JR C, .CNTSKIP
-  JR Z, .CNTSKIP
-  INC D
-.CNTSKIP:
-  INC HL
-  DJNZ .CNTLOOP
-  LD A, D
-  RET
-```
 
 The subroutine uses D as its running count. `LD D, 0` changes only D, so B
 retains the loop count and C retains the threshold. The comment contract lists
@@ -169,40 +139,16 @@ tests read the same comparison.
 
 ---
 
-## Tracing the integrated program
+## The two call boundaries
 
-The program places `VALUES`, `MAX_VAL` and `ABOVE_64` at `$8000`. Both
-subroutines receive a table pointer and count, and `MAIN` stores their returned
-values in the named result bytes. A trace through `MAIN` follows each value from
-RAM into an argument register, through a loop and back to a result byte.
+The program places `VALUES`, `MAX_VAL` and `ABOVE_64` at `$8000`. Each routine
+receives a pointer and count, scans the same table and returns one byte. The
+comments above the labels record which registers cross each boundary.
 
-Each `CALL` pushes one return address on the stack. The counted loops otherwise
-map directly to the Z80 instructions in their bodies, with `CALL` and `RET`
-providing entry and return.
-
----
-
-## Interfaces exposed by integration
-
-Putting the routines together exposes the register interface at each call. The
-`;` comment above `FIND_MAX` says what the routine reads, returns and clobbers.
-The assembler treats that comment as text, so the caller remains responsible
-for loading the declared registers and the routine must follow the documented
-contract. A mismatch assembles and produces the wrong result at run time. Chapter 11
-develops a consistent register and stack convention for these comments.
-
-`CNTABOVE` keeps its running count in D, and D is the only name that count
-has while the routine runs. Chapter 11 concentrates on this interface
-boundary: which registers carry arguments and results, which side saves a live
-value and how every return path keeps the stack balanced.
-
-The `CP C` / `JR C` / `JR Z` sequence in `CNTABOVE` implements "strictly
-greater than" in three instructions. Keeping the instructions visible makes
-the flag dependency explicit at each use.
-
-Every byte in this program is a standalone variable. Grouping related bytes
-into records requires each field access to carry its numeric offset: for
-example, `XOFF EQU 0`, `YOFF EQU 1` and `COLOFF EQU 2`.
+Those comments are agreements rather than assembler checks. A caller must load
+the declared inputs, and the routine must leave every unlisted live value
+usable. Chapter 11 makes that responsibility precise and shows how to preserve
+a register when a routine needs it internally.
 
 ---
 

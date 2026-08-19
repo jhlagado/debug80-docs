@@ -46,16 +46,10 @@ Assemble it from the directory containing the file:
 atom --origin 4000H counter.asm
 ```
 
-Atom writes one complete output set below `build/counter.atom/current`:
-
-| File | Contents |
-| --- | --- |
-| `counter.nobj` | Append-only Atom object stream |
-| `counter.bin` | Contiguous flat image |
-| `counter.hex` | Intel HEX |
-| `counter.lst` | Source listing |
-| `counter.d8.json` | Debug80 source and symbol map |
-| `manifest.json` | Artifact byte counts and SHA-256 values |
+Atom writes one complete output set below `build/counter.atom/current`. Open
+`counter.lst` to compare the source with its addresses and bytes, or load
+`counter.bin` in a debugger. [Chapter 6](06-diagnostics-and-output.md) defines
+the complete artifact bundle.
 
 The first instruction is `$06 $08` at `$4000`. `LD HL,COUNTER` is `$21 $09
 $40`, encoding `$4009` in little-endian order. `INC (HL)` is `$34`, `DJNZ

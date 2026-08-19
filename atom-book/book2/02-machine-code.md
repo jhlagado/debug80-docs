@@ -29,7 +29,10 @@ A few examples from the Z80 instruction set:
 | `$3A LO HI`   | `LD A, (NN)` | Load A from the 16-bit address `NN` |
 | `$76`         | `HALT`       | Suspend execution until interrupt or reset |
 
-Address operands always follow the Z80's little-endian convention: low byte first, high byte second. The address `$8000` appears in the instruction stream as `$00 $80`. For a searchable reference of the full Z80 instruction set, see [Appendix 10](../appendices/10-z80-instruction-reference.md).
+Address operands follow the little-endian convention from Chapter 1: low byte
+first, high byte second. The address `$8000` appears in the
+instruction stream as `$00 $80`. For a searchable reference of the full Z80
+instruction set, see [Appendix 10](../appendices/10-z80-instruction-reference.md).
 
 ---
 
@@ -82,28 +85,17 @@ recognise by eye.
 
 ---
 
-## Variables and Labels
+## The address problem
 
-From the CPU's point of view, a variable is just a byte (or several bytes) of memory at some address. The only way to refer to it is by its numeric address.
+From the CPU's point of view, a variable is one or more bytes at a numeric
+address. In the program above, `$8000` is embedded in the instruction at
+`$0006`. Moving the result to `$8100` means finding and changing those address
+bytes by hand. A jump target presents the same problem: inserting code changes
+its address and every raw branch that refers to it.
 
-In the program above, the result was written to the fixed address `$8000`. But `$8000` is embedded as raw bytes in the instruction at `$0006`. If you later decide the result should live at `$8100` instead, you must find that instruction and change bytes `$07` and `$08` by hand. If you have fifty instructions referencing the same address, you change fifty places.
-
-Assembly solves this with **labels**. A label is a name that the assembler associates with a particular address at assembly time. Everywhere you write the label, the assembler substitutes the correct address automatically. If the variable moves, you update the label's definition and every reference updates with it.
-
-In a Z80 assembler a label definition looks like this:
-
-```asm
-RESULT:          ; the assembler records "Result" as the current address
-  DB 0          ; allocate one byte at this address, initial value 0
-```
-
-(`DB` stands for "define byte". `DW` defines a 16-bit word.) From this point on, writing `LD (RESULT), A` in the code is equivalent to writing `LD ($8000), A`, with the assembler supplying the address.
-
-Labels also name positions within the code, the targets of jumps and branches. Instead of writing `JP $0034`, you write `JP LOOP_TOP` and the assembler works out the address of `LOOP_TOP` itself.
-
-Assembly language gives these byte patterns instruction names and replaces
-manually calculated addresses with labels. The next chapter rewrites this
-program in Atom so you can compare the source with the bytes it produces.
+Assembly language gives instruction bytes readable names and lets names stand
+for addresses. The next chapter rewrites this program in Atom, where the
+assembler calculates the address bytes.
 
 ---
 

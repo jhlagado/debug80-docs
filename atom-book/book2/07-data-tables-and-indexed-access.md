@@ -252,7 +252,7 @@ LD B, 4           ; B = byte count
 ; With ldir: one instruction
 LD HL, SOURCE     ; HL = source address
 LD DE, DEST       ; DE = destination address
-LD BC, 4          ; BC = byte count (note: BC, not just B)
+LD BC, 4          ; BC = 16-bit byte count
 LDIR              ; copy 4 bytes, HL and DE advance, BC reaches 0
 ```
 

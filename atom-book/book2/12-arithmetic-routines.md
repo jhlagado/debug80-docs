@@ -8,9 +8,9 @@ nav_order: 12
 # Arithmetic Routines
 
 The Z80 adds and subtracts bytes directly. Larger calculations come from
-short routines that combine those instructions with loops and calls. This
-chapter builds two of them: a greatest-common-divisor routine over 16-bit
-values and an 8-bit power routine.
+short routines that combine those instructions with loops and calls. A
+greatest-common-divisor routine works over 16-bit values, while a power routine
+produces an 8-bit result.
 
 The complete program is [`examples/arithmetic.asm`](examples/arithmetic.asm).
 After it halts, `GCDRES` contains 6 as a little-endian word and `POWRES`
@@ -115,26 +115,6 @@ MUL8AC:
 The result wraps at eight bits. The demonstration uses 3^4, which is 81 and
 fits in one byte. A caller that needs wider or checked arithmetic must choose a
 wider result convention and detect overflow.
-
-## Result storage
-
-The program places its results in RAM:
-
-```asm
-ORG 8000H
-GCDRES:
-    DS 2
-POWRES:
-    DS 1
-```
-
-`DS 2` reserves two bytes for the word returned in HL. `DS 1` reserves the
-single byte returned in A. The command below assembles the program and writes
-its listing and launch images under `build/arithmetic.atom/current`:
-
-```sh
-atom --origin 0000H examples/arithmetic.asm
-```
 
 ## Exercise
 

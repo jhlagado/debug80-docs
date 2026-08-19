@@ -96,7 +96,10 @@ Here is the complete Z80 register set:
 
 When B and C are used as the pair BC, B holds the high byte and C holds the low byte, the same pattern as DE (D high, E low) and HL (H high, L low). So if HL = `$1A2B`, then H = `$1A` and L = `$2B`.
 
-The Z80 also has a hidden second copy of A, F, B, C, D, E, H and L called the **shadow registers**, covered in Chapter 8. A compact register reference is in [Appendix 8](../appendices/08-registers-flags-and-conditions.md).
+The Z80 also has a hidden second copy of A, F, B, C, D, E, H and L called the
+**shadow registers**. They are listed in
+[Appendix 8](../appendices/08-registers-flags-and-conditions.md); the chapters
+use the main register set.
 
 ![The whole register set. Each of the four main pairs is two 8-bit registers and one 16-bit register at the same time.](../../assets/images/atom-book/book2/register-file.svg)
 
@@ -112,23 +115,6 @@ Some instructions are one byte long, some are two, three or four. After executin
 
 ---
 
-## A First Look at the Machine
-
-The following is a complete Z80 program, ten bytes of raw instructions starting at address `$0000`:
-
-```asm
-$0000:  3E 05        ; load 5 into register A
-$0002:  47           ; copy A into register B
-$0003:  3E 03        ; load 3 into register A
-$0005:  80           ; add B to A  ->  A = 8
-$0006:  32 00 80     ; store A at address $8000
-$0009:  76           ; halt
-```
-
-When the CPU resets, PC is `$0000`. It fetches `$3E`, recognises it as a two-byte "load constant into A" instruction, reads the next byte (`$05`), loads 5 into A and advances PC to `$0002`. It continues instruction by instruction until it reaches `$76` (HALT). HALT suspends normal instruction execution until an interrupt or reset. Address `$8000` now holds the value 8.
-
----
-
 ## Endianness
 
 The Z80 is **little-endian**: the low byte goes at the lower address, the high byte at the higher address.
@@ -141,26 +127,9 @@ $8000       $2B    <- low byte first
 $8001       $1A    <- high byte second
 ```
 
-You saw this in the first program: the address `$8000` is encoded in the instruction at `$0006` as two bytes `$00 $80` (low byte `$00` first, high byte `$80` second).
+The same byte order applies when a 16-bit value appears inside an instruction.
 
 ![Storing $8000. The low byte goes to the lower address, so the two bytes appear in the instruction stream in the opposite order to the way the value is written.](../../assets/images/atom-book/book2/little-endian.svg)
-
----
-
-## The Flags Register
-
-Each flag is a single bit, set (1) or clear (0). The two you will use from the very beginning are:
-
-| Symbol | Name | Set when |
-|--------|------|----------|
-| Z | Zero | The result of the last operation was zero |
-| C | Carry | The last addition produced a carry out of bit 7, or the last subtraction required a borrow |
-
-The Z80 has four more flags: S (sign), H (half carry), P/V (parity/overflow) and N (subtract). The full flags reference is in [Appendix 8](../appendices/08-registers-flags-and-conditions.md).
-
-`LD` instructions do not affect flags at all. Arithmetic and comparison instructions do. Chapter 5 explains exactly which instructions set which flags.
-
----
 
 ## Exercise
 

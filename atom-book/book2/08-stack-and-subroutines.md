@@ -50,31 +50,24 @@ Each push decreases SP by two and writes a 16-bit value. Each pop reads two byte
 
 ## Passing values through registers
 
-A calling convention on the Z80 is an agreement between a routine and its callers, kept by the code on both sides. The conventions used in these chapters are:
-
-- **A** carries a single byte result or input value.
-- **HL** carries a 16-bit result or input value.
-- **BC** and **DE** carry secondary input values.
-
-The comment header records which registers a subroutine reads on entry and
-which it modifies on exit. This record is the contract between the subroutine
-and its caller.
+A routine and its callers need to agree on where values arrive and return. The
+following interface uses B and C for two byte inputs and A for the result:
 
 ```asm
-; ADDBYTES: add two byte values.
 ; In:  B = first byte, C = second byte
 ; Out: A = B + C
 ; Preserves: BC, DE, HL
 ; Clobbers: F
-ADDBYTES:
-  LD A, B
-  ADD A, C
-  RET
 ```
 
-`PRESERVES` means those registers hold the same values after the call that they held before. `CLOBBERS` names the registers the routine may leave holding something else.
+`PRESERVES` means those registers hold the same values after the call that they
+held before. `CLOBBERS` names the registers the routine may leave holding
+something else. Chapter 11 develops one consistent convention for choosing
+these roles.
 
-Every subroutine in Atom is a plain label followed by instructions, ending with `RET`. If you forget `RET`, control falls through into whatever bytes follow the last instruction, which is almost always wrong.
+An ordinary subroutine in this book is a plain label followed by instructions
+and ending with `RET`. If you forget `RET`, control falls through into whatever
+bytes follow the last instruction.
 
 ---
 
@@ -118,16 +111,6 @@ The second transfer (AF into HL) is particularly useful. The stack is the one ro
 If you swap the pop order above, DE gets AF and HL gets BC, the reverse of what a top-to-bottom reading suggests.
 
 ![A push and its pop can name different pairs, which is the only route to F. SP ends where it started.](../../assets/images/atom-book/book2/cross-register-move.svg)
-
----
-
-## Shadow registers: saving state with `EXX`
-
-In a tight interrupt handler or innermost loop, saving BC, DE and HL via `PUSH` and `POP` costs six instructions (three pushes, three pops) and takes six bytes of stack space. `EXX` does the same job in a single instruction: it swaps BC, DE and HL with a second hidden set of registers (BC′, DE′, HL′) simultaneously. A second instruction, `EX AF, AF′`, swaps A and F with their shadow counterparts.
-
-These are the **shadow registers**: a second, hidden copy of A, F, B, C, D, E, H and L. `EXX` and `EX AF, AF′` are the only way in: a shadow value has to be swapped into the main set before an instruction can use it.
-
-The trade-off is that there is only one shadow set. If both the main code and an interrupt handler rely on `EXX`, the interrupt can silently destroy the values stored by the main code. Shadow registers are therefore suitable only when speed matters and one context has exclusive use of them.
 
 ---
 
@@ -245,25 +228,6 @@ After the call, `RESMAX` holds 200.
 **Stack balance in `MAX_WORD`.** The subroutine pushes one word. The
 carry-clear path removes it with `POP DE`; the carry-set path removes it with
 `POP HL`. Both paths reach `RET` with the temporary word gone and DE unchanged.
-
----
-
-## An advanced trick: reading the program counter
-
-`CALL` pushes the address of the next instruction onto the stack, which allows
-code to obtain the current PC:
-
-```asm
-  CALL NEXTINS       ; pushes address of NEXTINS onto the stack
-NEXTINS:
-  POP HL                ; HL = address of this instruction
-```
-
-`CALL NEXTINS` targets the instruction immediately after the call, so its
-only useful effect here is pushing that instruction's address. `POP HL`
-retrieves the address of `NEXTINS`.
-
-Balance is all the stack requires: `CALL` pushed one word and `POP HL` consumed it, so execution carries straight on into the next instruction.
 
 ---
 

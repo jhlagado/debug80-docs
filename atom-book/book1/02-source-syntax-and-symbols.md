@@ -58,8 +58,7 @@ READBYTE:
 
 An Atom name begins with an ASCII letter or underscore and continues with
 ASCII letters, digits, or underscores. A global name contains one through
-eight characters. Names are exact RADIX-40 values; Atom reports an overlength
-name instead of truncating or hashing it.
+eight characters. Atom reports an overlength name instead of shortening it.
 
 Global labels remain available for the complete build. Two definitions of the
 same case-insensitive name are an error.
@@ -127,8 +126,8 @@ equates:
 LIMIT EQU ENDPOINT-START
 ```
 
-A private equate uses the ordinary private-name rules and therefore needs a
-current global scope.
+A private equate uses the ordinary private-name rules and needs a current
+global scope.
 
 ## Reserved words
 
