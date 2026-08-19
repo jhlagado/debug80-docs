@@ -94,6 +94,90 @@ const expectations = {
     executableLines: [5, 6, 8, 9, 12, 13],
     symbols: ["addPostage", "main"],
   },
+  "02-values.nu": {
+    initializedTailU16: 97,
+    sourceName: "nucleus/book1/examples/02-values.nu",
+    executableLines: [9, 10, 11],
+    symbols: ["main"],
+  },
+  "03-expressions.nu": {
+    initializedTailU16: 90,
+    sourceName: "nucleus/book1/examples/03-expressions.nu",
+    executableLines: [6, 7, 8, 9],
+    symbols: ["main"],
+  },
+  "04-decisions.nu": {
+    initializedTailU16: 12,
+    sourceName: "nucleus/book1/examples/04-decisions.nu",
+    executableLines: [4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 19],
+    symbols: ["main"],
+  },
+  "05-loops.nu": {
+    initializedTailU16: 3,
+    sourceName: "nucleus/book1/examples/05-loops.nu",
+    executableLines: [3, 4, 5, 6, 8, 12, 13, 15, 16, 17, 18, 19, 21, 23],
+    symbols: ["firstPositive", "main"],
+  },
+  "06-arrays.nu": {
+    initializedTailU16: 21,
+    sourceName: "nucleus/book1/examples/06-arrays.nu",
+    executableLines: [4, 5, 6, 8, 9, 10],
+    symbols: ["main"],
+  },
+  "07-strings.nu": {
+    initializedTailU16: 432,
+    sourceName: "nucleus/book1/examples/07-strings.nu",
+    executableLines: [5, 6, 7, 8],
+    symbols: ["main"],
+  },
+  "08-records.nu": {
+    initializedTailU16: 22,
+    sourceName: "nucleus/book1/examples/08-records.nu",
+    executableLines: [11, 12, 13],
+    symbols: ["main"],
+  },
+  "09-open-views.nu": {
+    initializedTailU16: 22,
+    sourceName: "nucleus/book1/examples/09-open-views.nu",
+    executableLines: [5, 6, 7, 9, 10, 12, 15, 16, 17, 18, 21, 22, 23],
+    symbols: ["sum", "writeOK", "main"],
+  },
+  "10-routines.nu": {
+    initializedTailU16: 34,
+    sourceName: "nucleus/book1/examples/10-routines.nu",
+    executableLines: [4, 5, 6, 9, 10, 11, 13, 16, 17],
+    symbols: ["mark", "choose", "main"],
+  },
+  "11-aggregate-results.nu": {
+    initializedTailU16: 34,
+    sourceName: "nucleus/book1/examples/11-aggregate-results.nu",
+    executableLines: [10, 11, 12, 14, 17, 18, 21, 22, 23],
+    symbols: ["selected", "copyPair", "main"],
+  },
+  "12-forwards.nu": {
+    initializedTailU16: 1,
+    sourceName: "nucleus/book1/examples/12-forwards.nu",
+    executableLines: [1, 3, 4, 5, 7, 11, 12, 14, 19, 20, 21],
+    symbols: ["even", "odd", "main"],
+  },
+  "13-errors.nu": {
+    initializedTailU16: 107,
+    sourceName: "nucleus/book1/examples/13-errors.nu",
+    executableLines: [4, 5, 6, 8, 11, 12, 13, 16, 17, 19, 20],
+    symbols: ["positive", "checked", "main"],
+  },
+  "14-system-boundary.nu": {
+    initializedTailU16: 2,
+    sourceName: "nucleus/book1/examples/14-system-boundary.nu",
+    executableLines: [4, 5, 6, 7, 10, 11],
+    symbols: ["hardwareExamples", "main"],
+  },
+  "15-debugging.nu": {
+    initializedTailU16: 2,
+    sourceName: "nucleus/book1/examples/15-debugging.nu",
+    executableLines: [4, 5, 8, 9, 10, 11],
+    symbols: ["addOne", "main"],
+  },
 };
 
 const compiler = nucleus.createNucleusCompiler();
@@ -208,6 +292,31 @@ for (const name of files) {
   );
 }
 
+const multipartNames = [
+  "nucleus/book1/examples/14-parts/library.nu",
+  "nucleus/book1/examples/14-parts/main.nu",
+];
+const multipartResult = await compiler.build({
+  sources: await Promise.all(
+    multipartNames.map(async (name) => ({
+      name,
+      source: await readFile(path.join(repositoryRoot, name)),
+    })),
+  ),
+  target: { services },
+  artifacts: { d8: true },
+});
+if (!multipartResult.success) {
+  throw new Error(
+    `Chapter 14 multipart companion failed: ${JSON.stringify(multipartResult, null, 2)}`,
+  );
+}
+const multipartMap = JSON.parse(multipartResult.artifacts.d8[0].json);
+if (multipartNames.some((name) => multipartMap.files?.[name] === undefined)) {
+  throw new Error("Chapter 14 multipart D8 lost a source-part identity");
+}
+console.log("Chapter 14 multipart order and D8 identities verified");
+
 const cliRoot = await mkdtemp(path.join(os.tmpdir(), "nucleus-book-cli-"));
 await mkdir(path.join(cliRoot, "examples"));
 await writeFile(
@@ -239,3 +348,63 @@ if (!apiNobj.success || !cliNobj.equals(Buffer.from(apiNobj.artifacts.nobj))) {
   throw new Error("the documented CLI command did not produce the API NOBJ");
 }
 console.log("documented Chapter 1 CLI command: NOBJ identity verified");
+
+const targetText = await readFile(
+  path.join(linkedNucleusRoot, "test", "fixtures", "host-target.json"),
+);
+const toolsRoot = await mkdtemp(path.join(os.tmpdir(), "nucleus-book-tools-"));
+await mkdir(path.join(toolsRoot, "examples"));
+await writeFile(path.join(toolsRoot, "target.json"), targetText);
+const toolsSource = await readFile(path.join(examplesRoot, "15-debugging.nu"));
+await writeFile(
+  path.join(toolsRoot, "examples", "15-debugging.nu"),
+  toolsSource,
+);
+execFileSync(
+  process.execPath,
+  [
+    nucleusCli,
+    "build",
+    "--quiet",
+    "--root",
+    ".",
+    "--target-profile",
+    "target.json",
+    "--hex-output",
+    "build/debugging.hex",
+    "--d8-output",
+    "build/debugging.d8.json",
+    "-o",
+    "build/debugging.nobj",
+    "examples/15-debugging.nu",
+  ],
+  { cwd: toolsRoot, stdio: "pipe" },
+);
+const [toolsNobj, toolsHex, toolsD8] = await Promise.all([
+  readFile(path.join(toolsRoot, "build", "debugging.nobj")),
+  readFile(path.join(toolsRoot, "build", "debugging.hex"), "utf8"),
+  readFile(path.join(toolsRoot, "build", "debugging.d8.json"), "utf8"),
+]);
+const toolsApi = await compiler.build({
+  sources: [{ name: "examples/15-debugging.nu", source: toolsSource }],
+  target: JSON.parse(targetText.toString("utf8")),
+  artifacts: { hex: true, d8: true },
+});
+if (
+  !toolsApi.success ||
+  !toolsNobj.equals(Buffer.from(toolsApi.artifacts.nobj)) ||
+  toolsHex !== toolsApi.artifacts.hex ||
+  toolsD8 !== toolsApi.artifacts.d8[0].json
+) {
+  throw new Error("Chapter 15 CLI NOBJ, HEX or D8 differs from the Host API");
+}
+execFileSync(
+  debug80Tsx,
+  [
+    debug80Validator,
+    debug80Root,
+    path.join(toolsRoot, "build", "debugging.d8.json"),
+  ],
+  { stdio: "pipe" },
+);
+console.log("documented Chapter 15 CLI command: NOBJ, HEX and D8 verified");
