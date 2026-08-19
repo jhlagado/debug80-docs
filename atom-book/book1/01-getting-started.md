@@ -7,10 +7,7 @@ nav_order: 1
 
 # Getting Started with Atom
 
-Atom is published as a Mac command-line assembler requiring Node.js 20 or
-later. The installed package contains the native Z80 core and the Debug80
-runtime used to execute it. AZM remains a development oracle and is absent from
-the installed package.
+Atom is a Mac command-line assembler requiring Node.js 20 or later.
 
 ## Installation
 
@@ -49,7 +46,7 @@ Assemble it from the directory containing the file:
 atom --origin 4000H counter.asm
 ```
 
-Atom publishes one immutable generation below `build/counter.atom/current`:
+Atom writes one complete output set below `build/counter.atom/current`:
 
 | File | Contents |
 | --- | --- |
@@ -79,18 +76,5 @@ Atom uses the ordinary `.asm` extension. A host such as Debug80 selects the
 assembler flavour from project configuration rather than from the filename.
 The command itself parses the named file by content and does not require a
 particular extension.
-
-## Native self-assembly
-
-The installed package carries a generated Atom-syntax form of its native core.
-This command assembles it using Atom:
-
-```sh
-atom --self-host
-```
-
-The resulting `atom.bin` is 12,101 bytes and must match the pinned AZM-built
-core byte for byte. Self-host mode fixes the origin, capacity, fill, entry, and
-preprocessor state; only the output directory can be changed.
 
 The next chapter defines Atom source lines and symbol scope.

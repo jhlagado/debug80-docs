@@ -63,7 +63,7 @@ The CPU starts with PC = `$0000`.
 **PC = `$0009`:** `$76` is HALT. Normal instruction execution stops until an
 interrupt or reset. Address `$8000` now contains `$08`.
 
-![The same ten bytes, bracketed into the six instructions the CPU decodes them as.](../../assets/images/azm-book/book2/hex-program.svg)
+![The same ten bytes, bracketed into the six instructions the CPU decodes them as.](../../assets/images/atom-book/book2/hex-program.svg)
 
 ---
 

@@ -105,7 +105,7 @@ The comment header records that side effect by listing HL among the clobbers.
 Reloading HL at the call site prevents the second routine from scanning the
 bytes after the table.
 
-![The register traffic across both calls. HL is reloaded between them because find_max leaves it past the end of the table.](../../assets/images/azm-book/book2/main-data-flow.svg)
+![The register traffic across both calls. HL is reloaded between them because find_max leaves it past the end of the table.](../../assets/images/atom-book/book2/main-data-flow.svg)
 
 ---
 
@@ -187,8 +187,8 @@ providing entry and return.
 Putting the routines together exposes the register interface at each call. The
 `;` comment above `FIND_MAX` says what the routine reads, returns and clobbers.
 The assembler treats that comment as text, so the caller remains responsible
-for loading the declared registers and the routine for honouring its claims. A
-mismatch assembles and produces the wrong result at run time. Chapter 11
+for loading the declared registers and the routine must follow the documented
+contract. A mismatch assembles and produces the wrong result at run time. Chapter 11
 develops a consistent register and stack convention for these comments.
 
 `CNTABOVE` keeps its running count in D, and D is the only name that count

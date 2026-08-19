@@ -8,9 +8,9 @@ nav_order: 1
 
 # Appendix 1 — Directive Reference
 
-Atom has two directive layers. Bare assembler directives run in the native Z80
-core. `%` host directives are consumed during filesystem preparation and never
-reach the native tokenizer. Both layers are case-insensitive.
+Atom has two directive groups. Bare assembler directives control assembly.
+`%` directives control source preparation and are removed before assembly.
+Both groups are case-insensitive.
 
 ## Assembler directives
 
@@ -38,7 +38,7 @@ ORG 4000H       ; ASSEMBLER DIRECTIVE
 `EQU`, `ORG`, `DS`, and `ALIGN` require already resolved expressions. `DB` and
 `DW` accept Atom's restricted forward affine form.
 
-## Host directives
+## Preprocessor directives
 
 | Directive | Syntax | Effect |
 | --- | --- | --- |
@@ -52,5 +52,6 @@ ORG 4000H       ; ASSEMBLER DIRECTIVE
 Dependencies may test entry definitions but may not add definitions. Body
 conditionals may select ordinary source but cannot add includes or definitions.
 
-The host masks directive and inactive lines with spaces while preserving CR and
-LF bytes.
+The preprocessor replaces directive and inactive lines with spaces while
+preserving CR and LF bytes, so diagnostics retain their original line and
+column positions.

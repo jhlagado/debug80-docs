@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="268" viewBox="0 0 720 268" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">What djnz does</title>
+  <desc id="figDesc">djnz decrements B, then jumps back while B remains non-zero and falls through once it reaches zero, with a side note that B starting at zero wraps to 255 and runs 256 times.</desc>
+  <defs>
+    <style>
+    :root {
+      --ink:    #111417;
+      --ink-2:  #454b52;
+      --dim:    #8797a5;
+      --rule:   #c8ccd0;
+      --fill:   #ffffff;
+      --fill-2: #eef0f1;
+      --sig:    #14607e;
+      --sig-bg: #14607e1a;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:    #e6e8ea;
+        --ink-2:  #b3b9bf;
+        --dim:    #7d8890;
+        --rule:   #3d4348;
+        --fill:   #1c1f22;
+        --fill-2: #262a2e;
+        --sig:    #5fa8c6;
+        --sig-bg: #5fa8c626;
+      }
+    }
+
+    .bx    { fill: var(--fill);   stroke: var(--ink);  stroke-width: 1.5; }
+    .bx2   { fill: var(--fill-2); stroke: var(--ink);  stroke-width: 1.5; }
+    .bxq   { fill: var(--fill-2); stroke: var(--rule); stroke-width: 1.5; }
+    .bxs   { fill: var(--sig-bg); stroke: var(--sig);  stroke-width: 2; }
+    .sig   { fill: var(--sig);    stroke: var(--sig);  stroke-width: 1.5; }
+    .none  { fill: none;          stroke: var(--ink);  stroke-width: 1.5; }
+    .rule  { fill: none; stroke: var(--rule); stroke-width: 1; }
+    .dash  { fill: none; stroke: var(--dim);  stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .sline { fill: none; stroke: var(--sig);  stroke-width: 2; }
+
+    .t     { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .ts    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink-2); }
+    .tb    { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+    .n     { font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .ns    { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink-2); }
+    .nb    { font: 600 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--ink); }
+    .dim   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--dim); }
+    .dimn  { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--dim); }
+    .cap   { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+             fill: var(--sig); letter-spacing: .12em; }
+    .on-sig { fill: var(--sig); }
+    .on-dim { fill: var(--dim); }
+    .inv   { fill: var(--fill); }
+  </style>
+    <!-- markerUnits defaults to strokeWidth, which sizes every arrowhead by the
+         weight of the line carrying it. A 2px signal arrow then gets a head a
+         third larger than the 1.5px ink arrow beside it, and in a figure that
+         uses both the heads read as mismatched rather than as emphasis. Fixed
+         in user space so one arrowhead is one size everywhere. -->
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--ink)"/>
+    </marker>
+    <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--sig)"/>
+    </marker>
+    <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+      <path d="M0,0.5 L10,5 L0,9.5 z" fill="var(--dim)"/>
+    </marker>
+  </defs>
+  <rect class="bx" x="60" y="34" width="150" height="44" rx="22"/>
+  <text class="t" x="135" y="60.5" text-anchor="middle" xml:space="preserve">ld b, count</text>
+  <rect class="bx" x="60" y="104" width="150" height="44" rx="4"/>
+  <text class="t" x="135" y="130.5" text-anchor="middle" xml:space="preserve">loop body</text>
+  <polygon class="bxs" points="135,174 230,200 135,226 40,200"/>
+  <text class="t" x="135" y="204.5" text-anchor="middle" xml:space="preserve">djnz: B ← B − 1</text>
+  <line class="none" x1="135" y1="78" x2="135" y2="104" marker-end="url(#ar)"/>
+  <line class="none" x1="135" y1="148" x2="135" y2="174" marker-end="url(#ar)"/>
+  <path class="none" d="M40,200 H16 V126 H60" marker-end="url(#ar)"/>
+  <text class="dimn" x="20" y="116" text-anchor="start" xml:space="preserve">B ≠ 0</text>
+  <line class="none" x1="230" y1="200" x2="300" y2="200" marker-end="url(#ar)"/>
+  <text class="dimn" x="240" y="192" text-anchor="start" xml:space="preserve">B = 0, fall through</text>
+  <rect class="bxq" x="380" y="34" width="300" height="192" rx="4"/>
+  <text class="cap" x="396" y="58" text-anchor="start" xml:space="preserve">The zero case</text>
+  <text class="ts" x="396" y="84" text-anchor="start" xml:space="preserve">ld b, 0</text>
+  <text class="dimn" x="396" y="108" text-anchor="start" xml:space="preserve">B is decremented before the test, so</text>
+  <text class="dimn" x="396" y="126" text-anchor="start" xml:space="preserve">zero wraps to $FF and the jump is</text>
+  <text class="dimn" x="396" y="144" text-anchor="start" xml:space="preserve">taken. The loop runs 256 times where</text>
+  <text class="dimn" x="396" y="162" text-anchor="start" xml:space="preserve">you may have expected none.</text>
+  <text class="dimn" x="396" y="194" text-anchor="start" xml:space="preserve">Test for zero before the loop when the</text>
+  <text class="dimn" x="396" y="212" text-anchor="start" xml:space="preserve">count can be zero.</text>
+  <text class="dimn" x="40" y="254" text-anchor="start" xml:space="preserve">The displacement is signed and relative, so the body must stay within 128 bytes back of the instruction after djnz.</text>
+</svg>

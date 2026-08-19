@@ -7,9 +7,8 @@ nav_order: 5
 
 # Source Composition and Conditional Assembly
 
-Atom keeps filesystem and dependency work outside the resident Z80 core. The
-host reads `%` directives, constructs an ordered source plan, and masks
-host-owned syntax before native assembly begins.
+Atom's preprocessor reads `%` directives, resolves dependencies, and removes
+preprocessor-only text before assembly begins.
 
 ## A multipart entry
 
@@ -35,9 +34,9 @@ file repeatedly. Dependencies are assembled before their importer in
 deterministic depth-first postorder, and a shared dependency in a diamond
 appears once.
 
-Every file remains a separate source part with its own logical identity and
-byte offsets. Atom accepts at most 16 native parts, and every part must fit the
-Mac runner's 24 KiB source window.
+Every file remains a separate source part with its own filename and byte
+offsets. One project may contain up to 255 parts, and one part may contain up to
+65,535 bytes.
 
 ## `%DEFINE`
 
@@ -49,7 +48,7 @@ Mac runner's 24 KiB source window.
 ```
 
 It performs no text substitution and declares no assembler symbol. Source that
-needs the same value during native assembly must also declare an `EQU`.
+needs the same value in an assembly expression must also declare an `EQU`.
 
 Source definitions occur only in the entry file's leading preprocessing
 header. Command-line `-DNAME[=VALUE]` definitions are loaded first. A duplicate
@@ -89,12 +88,11 @@ ASCII letter follows it. The host replaces every non-newline byte of directive
 lines and inactive ordinary lines with an ASCII space. CR and LF bytes remain
 unchanged.
 
-The original and compiler buffers therefore have identical lengths. A native
-part ordinal and byte offset still identify the original filename, line, and
-column. The resident tokenizer also has a dedicated error for an unprocessed
-line-start host directive, so a broken host boundary fails explicitly.
+The source text and prepared text therefore have identical lengths. Atom can
+still report the original filename, line, and column. If an unprocessed
+line-start `%` directive reaches the assembler, Atom reports it as an error.
 
-The same `%` byte remains available in native expressions:
+The same `%` byte remains available in assembly expressions:
 
 ```asm
 LD A,%10101010
@@ -103,27 +101,11 @@ DB 7 % 3
 
 ## Path rules
 
-An include path resolves relative to the importing source. The resolver
-rejects absolute paths, lexical `..` escapes, symlink targets outside the
-project root, case-conflicting physical spellings, missing files, repeated
-direct dependencies, and dependency cycles.
+An include path resolves relative to the importing source. Atom rejects
+absolute paths, `..` paths that escape the project root, symlink targets
+outside the root, references to the same file with conflicting
+capitalisation, missing files, repeated direct dependencies, and dependency
+cycles.
 
-The graph retains three identities: the physical host path, the canonical
-dependency identity used for cycles and diamonds, and a project-relative
-logical identity used in diagnostics, source plans, listings, and D8 maps.
-
-## Source plan
-
-The host may serialize the result as an SP1 source plan:
-
-```text
-SP1 3
-P 0 lib/hardware.asm
-P 0 lib/console.asm
-P 0 src/main.asm
-END
-```
-
-Line order determines native part order. Current Atom builds require bank zero.
-The native assembler does not parse SP1; a host or operating adapter loads the
-ordered byte intervals described by the plan.
+Diagnostics, listings and D8 maps use project-relative paths. Atom currently
+produces one flat, unbanked output image.

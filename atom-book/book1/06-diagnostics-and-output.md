@@ -13,21 +13,20 @@ generation and leaves any previously selected generation in place.
 
 ## Source diagnostics
 
-Native source failures name the original logical file, one-based line, and
-one-based byte column:
+Source failures name the project-relative file, one-based line, and one-based
+byte column:
 
 ```text
 lib/device.asm:14:9: UNDEFINED SYMBOL PORTBASE
 ```
 
-The native core records a source-part ordinal and byte offset. Equal-length
-host masking preserves their relation to the original file, and the host
-reconstructs the displayed line and column. Undefined-symbol diagnostics also
-unpack the exact case-folded RADIX-40 name from the native symbol record.
+Preprocessing preserves line endings and byte positions, so diagnostics still
+refer to the source text you wrote. Undefined-symbol diagnostics show the
+case-insensitive symbol name.
 
-Dependency and preprocessing errors use the same logical identities. Missing
-files, root escapes, cycles, duplicate definitions, malformed conditionals, and
-invalid `INCBIN` paths fail before native execution.
+Dependency and preprocessing errors use the same project-relative paths.
+Missing files, root escapes, cycles, duplicate definitions, malformed
+conditionals, and invalid `INCBIN` paths stop the build before assembly.
 
 ## Command status
 
@@ -53,14 +52,13 @@ build/main.atom/current/main.d8.json
 build/main.atom/current/manifest.json
 ```
 
-The publisher writes and synchronises a temporary generation, renames it to
-its content digest, and atomically replaces the `current` symlink. Existing
-digest directories are reused only after every byte and manifest field has
-been verified. Atom currently retains old successful generations.
+Atom selects `current` only after every artifact has been written successfully.
+A failed build leaves the previous successful generation selected. Older
+successful generations remain in the bundle.
 
 ## NOBJ
 
-Atom NOBJ profile 0.2 preserves the native append-only result:
+Atom NOBJ profile 0.2 preserves the append-only assembly result:
 
 ```text
 BEGIN IMAGE* PATCH* MAP COMMIT EOF
@@ -72,8 +70,8 @@ expression. The flat MAP records entry address, used length, final cursor,
 source-part count, and bank-zero placement. COMMIT carries the record count,
 entry, and CRC-16/CCITT-FALSE.
 
-NOBJ is the closest artifact to the streaming native output. The binary and
-HEX files are materialised launch views.
+NOBJ retains the distinction between emitted bytes, forward-reference patches,
+and reserved storage. The binary and HEX files are materialised launch views.
 
 ## Flat binary and Intel HEX
 
@@ -85,8 +83,8 @@ their corresponding IMAGE placeholders.
 Intel HEX contains the same contiguous materialised image in 16-byte data
 records followed by the standard EOF record.
 
-`--fill` changes only materialisation. It does not change IMAGE/PATCH history
-or convert uninitialised storage into native output operations.
+`--fill` changes only materialisation. It does not change the IMAGE and PATCH
+records or convert uninitialised storage into emitted bytes.
 
 ## Listing
 
@@ -96,9 +94,8 @@ line continues in rows of up to eight bytes. An uninitialised reservation has
 an address and a `<COUNT RESERVED>` marker. Included files retain their own
 logical names, and `INCBIN` bytes remain attached to the original directive.
 
-The trailer contains labels and constants with their source identities. Two
-reused private spellings remain separate declarations because the host records
-each declaration before native scope eviction.
+The trailer contains labels and constants with their source locations. Private
+names reused under different global labels remain separate declarations.
 
 ## D8 map
 
@@ -106,9 +103,6 @@ The D8 JSON artifact contains source files, line ranges, listing locations,
 code/data/directive classification, symbols, scope, visibility, entry address,
 and target segment. Debug80 can load it with the corresponding BIN or HEX file
 for source-level stepping and symbol lookup.
-
-D8 construction is a host service. The resident assembler contains no JSON,
-path, listing, or source-map machinery.
 
 ## Manifest
 

@@ -68,7 +68,7 @@ HL is smaller, `EX DE,HL` swaps the operands before control returns to `.LOOP`.
 For 48 and 18, the successive pairs are 48/18, 30/18, 12/18, 18/12, 6/12,
 12/6 and 6/6. One final subtraction reaches 0/6 and returns 6.
 
-![Euclid's method reaches GCD(48, 18) by subtraction alone.](../../assets/images/azm-book/book3/gcd-euclid.svg)
+![Euclid's method reaches GCD(48, 18) by subtraction alone.](../../assets/images/atom-book/book3/gcd-euclid.svg)
 
 ## Repeated multiplication
 

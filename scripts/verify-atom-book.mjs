@@ -65,6 +65,21 @@ async function filesWithExtension(directory, extension) {
 
 for (const filename of await markdownFiles(path.join(repository, "atom-book"))) {
   const text = await fs.readFile(filename, "utf8");
+  assert.doesNotMatch(
+    text,
+    /\b(?:AZM|oracle|spelling|spellings|spelled|self[- ]host(?:ed|ing)?)\b/i,
+    `${path.relative(repository, filename)} contains internal comparison or imprecise terminology`,
+  );
+  assert.doesNotMatch(
+    text,
+    /\b(?:byte[- ]identity|differential proof|proof map|native core|resident image)\b/i,
+    `${path.relative(repository, filename)} contains development or implementation detail`,
+  );
+  assert.doesNotMatch(
+    text,
+    /assets\/images\/azm-book\//i,
+    `${path.relative(repository, filename)} leaks another book's asset path`,
+  );
   for (const match of text.matchAll(/```asm\s*\n([\s\S]*?)```/g)) {
     assert.doesNotMatch(
       assemblyCode(match[1]),
@@ -72,6 +87,17 @@ for (const filename of await markdownFiles(path.join(repository, "atom-book"))) 
       `${path.relative(repository, filename)} contains a lowercase assembly example`,
     );
   }
+}
+
+for (const filename of await filesWithExtension(
+  path.join(repository, "assets", "images", "atom-book"),
+  ".svg",
+)) {
+  assert.doesNotMatch(
+    await fs.readFile(filename, "utf8"),
+    /\b(?:AZM|oracle)\b/i,
+    `${path.relative(repository, filename)} contains internal comparison terminology`,
+  );
 }
 
 for (const filename of ["main.asm", path.join("lib", "device.asm")]) {

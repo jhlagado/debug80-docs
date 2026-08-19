@@ -34,7 +34,7 @@ The hardware stack is a region of RAM used as a last-in-first-out buffer. When `
 
 `RET` is equivalent to `POP PC`, if such an instruction existed. The CPU reads the top two bytes of the stack into the program counter, increments SP by two and execution resumes at the instruction after the original `CALL`.
 
-![call is a push and a jump; ret is the pop that undoes it.](../../assets/images/azm-book/book2/call-and-ret.svg)
+![call is a push and a jump; ret is the pop that undoes it.](../../assets/images/atom-book/book2/call-and-ret.svg)
 
 ---
 
@@ -44,7 +44,7 @@ The program determines where the stack lives by loading SP with a starting addre
 
 Each push decreases SP by two and writes a 16-bit value. Each pop reads two bytes and increases SP by two.
 
-![The stack grows toward lower addresses: each push decreases SP by two.](../../assets/images/azm-book/book2/stack-grows-down.svg)
+![The stack grows toward lower addresses: each push decreases SP by two.](../../assets/images/atom-book/book2/stack-grows-down.svg)
 
 ---
 
@@ -117,7 +117,7 @@ The second transfer (AF into HL) is particularly useful. The stack is the one ro
 
 If you swap the pop order above, DE gets AF and HL gets BC, the reverse of what a top-to-bottom reading suggests.
 
-![A push and its pop can name different pairs, which is the only route to F. SP ends where it started.](../../assets/images/azm-book/book2/cross-register-move.svg)
+![A push and its pop can name different pairs, which is the only route to F. SP ends where it started.](../../assets/images/atom-book/book2/cross-register-move.svg)
 
 ---
 
@@ -155,7 +155,7 @@ A subroutine can itself call another subroutine. Each `CALL` pushes another retu
 
 The only limit is the size of the RAM region allocated to the stack. Excessive call depth or a missing pop before return overwrites RAM used for other purposes.
 
-![Return addresses pushed on the way in, popped on the way out. SP is the only measure of depth.](../../assets/images/azm-book/book2/nested-calls.svg)
+![Return addresses pushed on the way in, popped on the way out. SP is the only measure of depth.](../../assets/images/atom-book/book2/nested-calls.svg)
 
 ---
 

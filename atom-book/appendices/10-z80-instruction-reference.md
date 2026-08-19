@@ -7,10 +7,9 @@ nav_order: 10
 ---
 # Appendix 10 — Z80 Instruction Reference
 
-This searchable table covers the complete Z80 instruction-form families Atom
-claims and proves against its AZM byte oracle. It includes the documented Z80
-instructions, classic index-half registers, `SLL` with its `SLS` alias and
-indexed CB forms with plain-register destinations.
+This searchable table covers the Z80 instruction forms accepted by Atom. It
+includes the documented instructions, classic index-half registers, `SLL` with
+its `SLS` alias, and indexed CB forms with plain-register destinations.
 
 The table omits firmware-specific `ED` aliases, extensions from other CPUs and
 cycle counts.
@@ -62,12 +61,12 @@ means a bit number from 0 through 7.
 | `INIR` | `INIR` | `ED` | documented prefix family | repeated `INI` |
 | `JP` | `JP NN`, `JP CC,NN`, `JP (HL)`, `JP (IX)`, `JP (IY)` | base, `DD`, `FD` | documented | absolute branch or indirect jump |
 | `JR` | `JR DISP`, `JR NZ,DISP`, `JR Z,DISP`, `JR NC,DISP`, `JR C,DISP` | base | documented | short relative branch only |
-| `LD` | register/register, register/immediate, `(HL)` forms, `(IX+D)` / `(IY+D)` forms, `A` with `(BC)` / `(DE)`, absolute memory forms, `SP <- HL/IX/IY`, `I/R` transfers, classic half-register forms and the AZM-compatible `LD HL,DE` / `LD BC,DE` expansions | base, `DD`, `FD`, `ED` | documented, classic-undocumented and two compatibility expansions | the biggest family and the one with the most exceptions |
+| `LD` | register/register, register/immediate, `(HL)` forms, `(IX+D)` / `(IY+D)` forms, `A` with `(BC)` / `(DE)`, absolute memory forms, `SP <- HL/IX/IY`, `I/R` transfers, classic half-register forms, and the Atom convenience forms `LD HL,DE` / `LD BC,DE` | base, `DD`, `FD`, `ED` | documented, classic-undocumented and two Atom convenience forms | `LD HL,DE` emits `LD H,D` / `LD L,E`; `LD BC,DE` emits `LD B,D` / `LD C,E` |
 | `LDD` | `LDD` | `ED` | documented prefix family | block transfer, decrement |
 | `LDDR` | `LDDR` | `ED` | documented prefix family | repeated `LDD` |
 | `LDI` | `LDI` | `ED` | documented prefix family | block transfer, increment |
 | `LDIR` | `LDIR` | `ED` | documented prefix family | repeated `LDI` |
-| `NEG` | `NEG` | `ED` | documented prefix family | historically duplicated across several `ED` opcodes |
+| `NEG` | `NEG` | `ED` | documented prefix family | two-byte negation of `A` |
 | `NOP` | `NOP` | base | documented | no operation |
 | `OR` | `OR R`, `OR N`, `OR (HL)`, `OR (IX+D)`, `OR (IY+D)`; optional explicit `A` first operand | base, `DD`, `FD` | documented | accumulator-only logical op |
 | `OTDR` | `OTDR` | `ED` | documented prefix family | repeated block output, decrement |

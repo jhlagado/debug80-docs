@@ -7,10 +7,10 @@ nav_order: 2
 
 # Source Syntax and Symbols
 
-Atom source is case-insensitive. The spellings `START`, `Start`, and `start`
-name the same symbol, and the same rule applies to instruction mnemonics,
-registers, assembler directives, hexadecimal digits, and host-preprocessor
-names. This book uses uppercase assembly consistently.
+Atom source is case-insensitive. `START`, `Start`, and `start` name the same
+symbol. Letter case is also ignored in instruction mnemonics, registers,
+assembler directives, hexadecimal digits, and preprocessor names. This book
+uses uppercase assembly consistently.
 
 ## Line structure
 
@@ -140,6 +140,6 @@ ORG 4000H       ; DIRECTIVE
 .ORG:           ; PRIVATE LABEL NAMED ORG
 ```
 
-Dotted directive aliases such as `.ORG` are deliberately absent. Host
-directives use a separate `%` prefix and are removed before native assembly;
-Chapter 5 covers them.
+Dotted directive aliases such as `.ORG` are not accepted. Preprocessor
+directives use a separate `%` prefix and are removed before assembly; Chapter 5
+covers them.

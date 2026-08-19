@@ -31,7 +31,7 @@ BUSYMSK EQU 1<<BUSYBIT
 The masks are `$01`, `$02` and `$04`. Deriving them with a shift keeps each bit
 position and mask tied to the same constant.
 
-![Three named bits share one byte.](../../assets/images/azm-book/book3/byte-as-switches.svg)
+![Three named bits share one byte.](../../assets/images/atom-book/book3/byte-as-switches.svg)
 
 ## Testing a bit
 

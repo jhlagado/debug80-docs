@@ -55,7 +55,7 @@ Each non-base level saves BC, then `CALL FACTREC` adds a return address. When
 the deeper call returns, BC restores the current n and `MUL8AC` multiplies the
 partial result by it.
 
-![Factorial saves one value per level and multiplies while the calls return.](../../assets/images/azm-book/book3/factorial-frames.svg)
+![Factorial saves one value per level and multiplies while the calls return.](../../assets/images/atom-book/book3/factorial-frames.svg)
 
 ## Measure the stack budget
 
@@ -84,7 +84,7 @@ stack region.
 C. One call frame handles every iteration, so its stack use does not grow with
 n. It produces the same byte result as `FACTREC` for inputs that fit.
 
-![The recursive version grows a stack of pending work; the iterative version keeps the work in registers.](../../assets/images/azm-book/book3/recursive-vs-iterative.svg)
+![The recursive version grows a stack of pending work; the iterative version keeps the work in registers.](../../assets/images/atom-book/book3/recursive-vs-iterative.svg)
 
 The recursive form mirrors the mathematical definition. The iterative form
 uses a fixed stack budget and avoids call overhead. On a small machine, that

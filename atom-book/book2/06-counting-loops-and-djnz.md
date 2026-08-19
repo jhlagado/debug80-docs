@@ -76,7 +76,7 @@ wraps to 255 (`$FF`), the result is non-zero and the jump is taken. The loop
 continues from B = 255 and runs a further 255 times before B reaches zero again.
 Total: 256 iterations.
 
-![djnz decrements before it tests, which is what turns ld b, 0 into 256 iterations rather than none.](../../assets/images/azm-book/book2/djnz-flow.svg)
+![djnz decrements before it tests, which is what turns ld b, 0 into 256 iterations rather than none.](../../assets/images/atom-book/book2/djnz-flow.svg)
 
 `LD B, 0` before `DJNZ` is valid Z80; it gives 256 iterations and some
 programs use it deliberately for exactly that reason.
@@ -284,7 +284,7 @@ has crossed a limit."
 In practice, most Z80 loops are counted loops, since DJNZ is compact and the
 iteration count is usually known before the loop starts.
 
-![The three shapes. In the second and third, the value or flag test is the exit condition and djnz is the guarantee that the loop ends at all.](../../assets/images/azm-book/book2/loop-shapes.svg)
+![The three shapes. In the second and third, the value or flag test is the exit condition and djnz is the guarantee that the loop ends at all.](../../assets/images/atom-book/book2/loop-shapes.svg)
 
 ---
 
