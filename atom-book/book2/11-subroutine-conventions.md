@@ -7,294 +7,162 @@ nav_order: 11
 
 # Subroutine Conventions
 
-Chapter 10 showed how data moves through a complete program. This chapter
-concentrates on the rules at each call boundary. `FIND_MAX` receives HL and B,
-while `CNTABOVE` receives HL, B and C. Both return A. The comment above
-`CNTABOVE` lists D as clobbered because its running counter remains in D on
-return. Callers and later edits must follow that contract for the routines to
-compose correctly.
+A call works only when caller and routine agree on where arguments arrive,
+where results return and which registers may change. The Z80 does not impose
+that agreement. The program does.
 
 ---
 
-## The register-passing convention
+## A register convention
 
-Programs may pass arguments in registers, on the stack or in fixed memory, and
-the Z80 leaves the choice to the program. This book uses the following
-register convention because it suits small routines and matches later examples:
+The examples in this book use a small, practical convention:
 
-- **HL** carries a 16-bit address or pointer: the start of a table, a buffer, a string.
-- **BC** carries a 16-bit count or value, such as loop counts or word quantities.
-- **B** alone carries an 8-bit count when only one is needed.
-- **C** carries a single-byte argument when something other than the count is needed.
-- **DE** carries a second address, most commonly a destination when HL is the source.
-- **A** carries a single byte that needs a fast path: a byte value, a flag, a character.
+- **HL** carries a pointer or a 16-bit result.
+- **DE** carries a second pointer.
+- **BC** carries a count or secondary value.
+- **B** carries an 8-bit loop count when C is free for another purpose.
+- **A** carries a byte argument or result.
 
-Return values follow a matching convention:
+These roles are defaults, not hardware rules. A routine may choose another
+arrangement, but its caller must use the same one.
 
-- **A** carries a byte result.
-- **HL** carries a 16-bit result: an address, a computed word.
-
-These roles are conventions, not hardware rules. Following them consistently
-makes call sites easier to read.
+The two routines in Chapter 10 follow the convention. `FIND_MAX` receives its
+table pointer in HL and its count in B, then returns the maximum in A.
+`CNTABOVE` adds a threshold in C and also returns its result in A.
 
 ---
 
-## Callee-save and caller-save registers
+## Who preserves a live value?
 
-For each register, the contract determines whether its incoming value survives
-the call.
+A register named as an output or clobber may be different after the call. The
+caller saves it first if the incoming value is still needed. A register named
+as preserved must leave the routine unchanged; the routine saves and restores
+it if necessary.
 
-**Caller-save registers** may be changed by the routine. In this book, A, F,
-declared outputs and every register named in `CLOBBERS` are caller-save at that
-call boundary. An input register is also caller-save when the contract says the
-routine consumes or clobbers it. The caller must save any incoming value that it
-still needs after the call.
-
-**Callee-save registers** are the ones whose incoming values survive the call:
-every register the contract leaves out of its outputs and clobbers. A routine
-that uses one internally restores it before returning. This is the convention
-used in this chapter, not a fixed property of BC, DE, HL, IX or IY themselves.
-
-The mechanism is push and pop:
+The stack provides the usual mechanism:
 
 ```asm
 ROUTINE:
   PUSH BC
   PUSH DE
-  ; ... body that uses BC and DE internally ...
+  ; ... use BC and DE ...
   POP DE
   POP BC
   RET
 ```
 
-The stack is LIFO (last in, first out), so the last saved value must be removed
-first. Popping into the wrong pairs restores the values to different registers.
+The last value pushed is the first one popped. Reversing the pop order can
+leave SP balanced while restoring both values to the wrong registers.
 
 ![Caller-save and callee-save responsibilities for registers at a call boundary.](../../assets/images/atom-book/book2/caller-callee-save.svg)
 
-Chapter 10's `FIND_MAX` borrows C as a temporary, so it clobbers a register that
-is not one of its inputs. Comparing against `(HL)` directly removes that
-temporary and leaves only HL, B and A, which already serve as inputs or output.
-`CNTABOVE` needs D for its running count throughout the loop, so it preserves
-the caller's whole DE pair with `PUSH DE` and `POP DE`.
-
-```asm
-CNTABOVE:
-  PUSH DE            ; save caller's DE (D used internally as counter)
-  LD D, 0            ; D = running count
-.CNTLOOP:
-  LD A, (HL)
-  CP C
-  JR C, .CNTSKIP   ; A < threshold: skip
-  JR Z, .CNTSKIP   ; A = threshold: skip (strictly above only)
-  INC D
-.CNTSKIP:
-  INC HL
-  DJNZ .CNTLOOP
-  LD A, D            ; return count in A
-  POP DE             ; restore caller's DE
-  RET
-```
-
-The pop must appear on every return path. Missing it leaves the saved word at
-the top of the stack, so `RET` uses that word as its destination.
-
 ---
 
-## The IX frame for local storage
+## Preserving DE in `CNTABOVE`
 
-When a subroutine needs more temporary values than the registers can hold, it
-can allocate local storage on the stack.
-
-The technique uses IX as a base pointer into the stack.
-
-The prologue establishes the frame:
+Chapter 10 uses D as a running counter. If the caller needs DE unchanged, the
+routine can preserve the pair around its existing body:
 
 ```asm
-ROUTINE:
-  PUSH IX            ; save caller's IX
-  LD IX, 0
-  ADD IX, SP         ; IX now points to the frame base (top of stack)
-```
-
-Two bookkeeping entries are on the stack already, and any arguments the caller pushed before the `CALL` sit above them:
-
-![The frame IX points into. Arguments and bookkeeping sit at positive displacements, locals at negative ones.](../../assets/images/atom-book/book2/ix-frame.svg)
-
-IX+0 and IX+1 hold the saved IX and IX+2 and IX+3 hold the return address, so caller arguments start at IX+4 and locals sit below IX+0.
-
-Local storage decrements SP once for each required byte:
-
-```asm
-  DEC SP
-  DEC SP             ; allocate 2 bytes of local storage
-```
-
-The two bytes are now at IX−1 and IX−2, where indexed addressing reaches them:
-
-```asm
-  LD (IX-1), A       ; write first local
-  LD A, (IX-2)       ; read second local
-```
-
-The epilogue undoes both steps and restores IX for the caller:
-
-```asm
-  LD SP, IX          ; restore SP to frame base (discards locals)
-  POP IX             ; restore caller's IX
-  RET
-```
-
-The `LD SP, IX` line removes all local storage in one instruction, regardless of how many bytes were allocated.
-
-A caution: the index displacement in `(IX+D)` is a signed 8-bit value. For locals, d is negative (−1 through −128). For caller-pushed args, d is positive (4 through 127). The maximum frame size is 128 bytes of locals and 124 bytes of arguments.
-
----
-
-## Register documentation
-
-Plain assembly records a subroutine's register interface in a comment block
-immediately before the label. The block declares every input, every output and
-every register the subroutine leaves changed:
-
-Here is that revised body, with the C temporary gone:
-
-```asm
-; find_max: scan a byte table and return the largest value
-; In:  HL = pointer to first byte of table
-;      B  = number of bytes to scan
-; Out: A  = maximum value found
-; Clobbers: B (reaches 0), F, HL (advances past last byte)
-FIND_MAX:
-  LD A, 0
-.MAXLOOP:
-  CP (HL)
-  JR NC, .NOMAX
-  LD A, (HL)
-.NOMAX:
-  INC HL
-  DJNZ .MAXLOOP
-  RET
-```
-
-`CLOBBERS` lists every register the routine may leave changed.
-
-The comment block for `CNTABOVE` with push/pop discipline:
-
-```asm
-; CNTABOVE: count bytes in a table that are strictly above a threshold
-; In:  HL = pointer to first byte of table
-;      B  = number of bytes to scan
-;      C  = threshold value
-; Out: A  = count of bytes where byte > threshold
-; Clobbers: B (reaches 0), F, HL (advances past last byte)
-; Preserves: C, D, E (DE saved via push/pop)
-CNTABOVE:
   PUSH DE
   LD D, 0
-.CNTLOOP:
-  LD A, (HL)
-  CP C
-  JR C, .CNTSKIP
-  JR Z, .CNTSKIP
-  INC D
-.CNTSKIP:
-  INC HL
-  DJNZ .CNTLOOP
+  ; ... scan the table and increment D ...
   LD A, D
   POP DE
   RET
 ```
 
-`PRESERVES` lists registers the subroutine explicitly restores.
+The result moves to A before `POP DE` restores the caller's D and E. Every
+return path must pass through the pop. Returning early while the saved word is
+still on the stack would make `RET` use that word as an address.
 
-The caller and routine uphold these comments by convention. A mismatch shows
-up at runtime, sometimes far from its origin.
+`FIND_MAX` needs no such save if it compares directly against `(HL)`: its work
+then uses only the declared inputs B and HL, the result A and the flags. First
+choose temporaries that the interface already allows the routine to change;
+that can remove the need for preservation code.
 
 ---
 
-## Conventions applied to both routines
+## Recording the interface
 
-The two Chapter 10 subroutines now follow the same convention. Their comment
-blocks describe the call boundary, while their bodies preserve every register
-listed under `PRESERVES`.
+Put the contract immediately above the global routine label:
 
 ```asm
-; find_max: scan a byte table and return the largest value
-; In:  HL = pointer to first byte
-;      B  = count (number of bytes to scan)
-; Out: A  = maximum value found
-; Clobbers: B (reaches 0 after djnz), F, HL (points past last byte)
-; Preserves: C, D, E, IX, IY
-FIND_MAX:
-  LD A, 0
-.MAXLOOP:
-  CP (HL)
-  JR NC, .NOMAX
-  LD A, (HL)
-.NOMAX:
-  INC HL
-  DJNZ .MAXLOOP
-  RET
-```
-
-`FIND_MAX` uses only its input registers and A, which is why its body has no push/pop at all.
-
-```asm
-; CNTABOVE: count bytes in a table strictly above a threshold
-; In:  HL = pointer to first byte
-;      B  = count (number of bytes to scan)
-;      C  = threshold value (bytes must be strictly greater to count)
-; Out: A  = number of bytes where byte > threshold
-; Clobbers: B (reaches 0 after djnz), F, HL (points past last byte)
-; Preserves: C, D, E (DE saved via push/pop)
+; CNTABOVE: count bytes strictly above a threshold
+; In:  HL = first byte, B = count, C = threshold
+; Out: A = matching count
+; Clobbers: B, F, HL
+; Preserves: C, DE
 CNTABOVE:
-  PUSH DE            ; D used as counter; save caller's DE
-  LD D, 0
-.CNTLOOP:
-  LD A, (HL)
-  CP C               ; compare byte against threshold
-  JR C, .CNTSKIP   ; A < C: skip (carry set = unsigned less-than)
-  JR Z, .CNTSKIP   ; A = C: skip (zero set = equal, not above)
-  INC D                  ; A > C: increment counter
-.CNTSKIP:
-  INC HL
-  DJNZ .CNTLOOP
-  LD A, D            ; move count from D into A for return
-  POP DE             ; restore caller's DE before returning
+```
+
+List what a caller needs to know:
+
+- the meaning and valid range of every input;
+- the result location;
+- registers and flags that may change;
+- registers explicitly preserved;
+- preconditions such as `B > 0`;
+- ownership of any memory read or written.
+
+The comment is useful only when the implementation and every return path obey
+it.
+
+---
+
+## An IX frame for local storage
+
+Registers are usually enough for a small routine. When they are not, IX can
+provide a stable base for temporary bytes on the stack.
+
+The prologue saves the caller's IX and points IX at the current stack:
+
+```asm
+ROUTINE:
+  PUSH IX
+  LD IX, 0
+  ADD IX, SP
+```
+
+The saved IX occupies IX+0 and IX+1. The return address occupies IX+2 and
+IX+3. Arguments pushed by the caller before `CALL` begin at IX+4.
+
+![The frame IX points into. Arguments and bookkeeping sit at positive displacements, locals at negative ones.](../../assets/images/atom-book/book2/ix-frame.svg)
+
+Allocate two local bytes by moving SP down twice:
+
+```asm
+  DEC SP
+  DEC SP
+  LD (IX-1), A
+  LD A, (IX-2)
+```
+
+IX stays fixed while SP moves. The epilogue discards all local bytes, restores
+the caller's IX and returns:
+
+```asm
+  LD SP, IX
+  POP IX
   RET
 ```
 
-The main sequence that calls both:
+An IX displacement is a signed byte. Local offsets reach from -1 through -128;
+caller data above the frame reaches from +4 through +127.
 
-```asm
-MAIN:
-  LD HL, VALUES
-  LD B, 8
-  CALL FIND_MAX
-  LD (MAX_VAL), A
+---
 
-  LD HL, VALUES      ; reload HL - find_max walked it to the end
-  LD B, 8            ; reload B - find_max consumed it
-  LD C, 64
-  CALL CNTABOVE
-  LD (ABOVE_64), A
-  HALT
-```
+## Auditing a return path
 
-A caller that needs HL or B after `FIND_MAX` returns has to reload them.
+For each `RET` or conditional `RET`, count stack words from the routine entry:
 
-## From machine rules to larger routines
+1. Begin after the return address pushed by `CALL`.
+2. Add one word for every `PUSH` or nested `CALL` still active on that path.
+3. Remove one for every matching `POP` or return from a nested call.
+4. Require the temporary balance to be zero when the routine executes `RET`.
 
-The first half of Book 2 ends with the rules that routines and callers must uphold in plain Z80
-assembly: arguments and results occupy agreed registers, preserved values are
-restored and every path reaches `RET` with a balanced stack. A comment records
-that agreement for callers.
-
-The next five chapters keep these interfaces visible in comments and exercise
-them in larger routines. Arithmetic introduces helper calls, sorting combines
-nested loops with indexed storage, strings use pointer conventions and
-recursion makes the stack budget part of routine design.
+Balance proves that `RET` reaches the caller. The interface still has to prove
+that each saved value returned to the intended register.
 
 ---
 

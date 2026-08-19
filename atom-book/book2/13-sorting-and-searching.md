@@ -26,7 +26,7 @@ ARRLEN EQU $-VALUES
 ```
 
 At the `EQU` line, `$` is the address immediately after the last byte. The
-difference is therefore 8. Adding or removing a byte updates every use of
+difference is 8. Adding or removing a byte updates every use of
 `ARRLEN`.
 
 The routine uses DE as the fixed table base. C is the outer index, beginning at

@@ -88,8 +88,8 @@ ASCII letter follows it. The host replaces every non-newline byte of directive
 lines and inactive ordinary lines with an ASCII space. CR and LF bytes remain
 unchanged.
 
-The source text and prepared text therefore have identical lengths. Atom can
-still report the original filename, line, and column. If an unprocessed
+The source text and prepared text have identical lengths, so Atom can still
+report the original filename, line and column. If an unprocessed
 line-start `%` directive reaches the assembler, Atom reports it as an error.
 
 The same `%` byte remains available in assembly expressions:

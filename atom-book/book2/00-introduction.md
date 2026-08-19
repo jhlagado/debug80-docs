@@ -7,13 +7,10 @@ nav_order: 0
 
 # Introduction
 
-This is an introduction to Z80 programming from first principles. We begin with what a
-computer physically is — memory, registers and a processor stepping
-through numbered cells — and build outward through machine code, assembly
-language, flags and jumps, loops, tables, the stack, subroutines and
-ports. In the final chapters, we apply those tools to arithmetic, sorting,
-strings, packed bits and recursion. The opening chapters define bytes,
-addresses and registers before using them in programs.
+This is an introduction to Z80 programming from first principles. The opening
+chapters define bytes, addresses and registers before using them in programs.
+Later chapters combine those mechanisms into routines and then apply them to
+larger algorithms.
 
 ## The machine
 
@@ -33,12 +30,9 @@ depends on it.
 ## The book's method
 
 We work in Atom, an assembler that turns assembly source into Z80 machine
-code. Each chapter takes one layer of the machine — what a flag is, how a loop
-counts down, what the stack stores — and works it through instruction fragments
-you can follow byte by byte. Chapters 10 and 12 through 16 provide complete
-programs that you can assemble, run and change. Chapter 11 states the
-subroutine conventions used by the later examples. Exercises appear along the
-way, with notes at the end of the book.
+code. Each chapter introduces one mechanism, traces it through a small example
+and then relies on it in later programs. Complete companion sources begin in
+Chapter 12. Exercises appear along the way, with notes at the end of the book.
 
 [Atom Book 1](../book1/01-getting-started.md) is the companion reference for
 exact source syntax, directives and output formats. The [programming API](../appendices/06-programming-interface.md)

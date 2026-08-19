@@ -18,10 +18,9 @@ F holds eight bits. Each bit is called a flag and records one specific outcome
 of the last instruction that changed flags. Instructions like `SUB`, `CP`,
 `AND`, `OR`, `XOR`, `INC` and `DEC` update them as a side effect.
 
-The ordinary `LD` forms used so far do not touch the flags. Two specialised
-forms introduced much later, `LD A,I` and `LD A,R`, are exceptions. `INC` and
-`DEC` update most flags but leave C unchanged. When a `JP` instruction tests a
-flag, you need to know which earlier instruction set it and whether anything in
+The `LD` forms used in these chapters do not touch the flags. `INC` and `DEC`
+update most flags but leave C unchanged. When a `JP` instruction tests a flag,
+you need to know which earlier instruction set it and whether anything in
 between might have changed it.
 
 The four flags you will use most:
@@ -315,89 +314,22 @@ in a signed byte, so the bit pattern (`$80`) is unchanged.
 
 ---
 
-## Worked example
+## Tracing a wrong branch
 
-```asm
-LIMIT EQU 5
+When a conditional jump takes the wrong path, inspect the program in this
+order:
 
-ORG $0000
-MAIN:
-  LD A, LIMIT
-  CP 5
-  JP NZ, .NOTEQUAL
-  LD A, 1
-  LD (FOUND), A
-  JP .CMPDONE
-.NOTEQUAL:
-  LD A, 0
-  LD (FOUND), A
-.CMPDONE:
+1. Open the Atom listing and confirm that the code, data and jump target are at
+   the expected addresses.
+2. Step to the instruction that should establish the condition and record its
+   operands and resulting flags.
+3. Step from there to the jump. If another instruction changes the tested flag,
+   the branch is using that newer result.
 
-  LD A, 0
-  OR A
-  JP Z, .WAS_ZERO
-  JP .SKIPZERO
-.WAS_ZERO:
-  LD A, $AA
-.SKIPZERO:
-
-  LD B, LIMIT
-.LOOP_TOP:
-  LD A, (COUNTER)
-  INC A
-  LD (COUNTER), A
-  DEC B
-  JP NZ, .LOOP_TOP
-
-  LD A, $F3
-  AND $0F
-  LD A, $03
-  OR $80
-  LD A, $FF
-  XOR $0F
-  XOR A
-  HALT
-
-ORG $8000
-COUNTER: DB 0
-FOUND:   DB 0
-```
-
-**Section A: equality test.** `LD A, LIMIT` loads 5 into A. `CP 5` subtracts 5
-from A and sets Z. `JP NZ, .NOTEQUAL` tests
-whether Z is clear: Z is set, so execution continues
-through `LD A,1 / LD (FOUND),A`, then `JP .CMPDONE` skips the else-block
-and lands at `.CMPDONE:`.
-
-If A had held any value other than 5, Z would have been clear, `JP NZ` would
-have jumped to `.NOTEQUAL:`, and `FOUND` would have been set to 0.
-
-**Section B: zero test with `OR A`.** `LD A, 0` loads zero. `OR A` sets Z
-because A is zero. `JP Z, .WAS_ZERO` tests Z and jumps to `.WAS_ZERO:`.
-`LD A, $AA` runs, marking A so you can confirm in a debugger that this
-path was taken. Execution then falls through to `.SKIPZERO:`. The earlier
-`JP .SKIPZERO` runs only when the zero test fails.
-
-**Section C: counted loop with `DEC` / `JP NZ`.** `LD B, LIMIT` loads 5 into
-B. At `.LOOP_TOP:`, the body reads `COUNTER` from RAM, increments it and stores
-it back. `DEC B` decrements B and sets Z when B reaches zero. `JP NZ, LOOP_TOP`
-jumps back to `.LOOP_TOP:` while B is non-zero.
-
-After five iterations, `COUNTER` holds 5 and B holds 0.
-
-`DEC B` sets Z here, not `LD (COUNTER), A`, which never touches flags at all.
-
-**Section D: logical operations.** A is loaded with `$F3` (`%11110011`), then
-`AND $0F` clears bits 7–4 and keeps bits 3–0. Result: `$03`. Z is clear.
-
-`LD A, $03` reloads A, resetting it to a known value before the next
-demonstration. `OR $80` sets bit 7 of A regardless of what was already there.
-`$03 | $80 = $83`. Z is clear.
-
-`LD A, $FF` reloads A again. `XOR $0F` flips bits 3–0. `$FF ^ $0F = $F0`.
-Z is clear.
-
-`XOR A` zeroes A, sets Z and clears C in one instruction.
+Debug80 and other Z80 debuggers show registers, flags and memory after each
+instruction. Predicting the one value that should change before taking a step
+makes the first disagreement easy to isolate. The listing and other build
+artifacts are described in [Book 1, Chapter 6](../book1/06-diagnostics-and-output.md).
 
 ---
 

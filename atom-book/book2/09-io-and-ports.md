@@ -28,7 +28,7 @@ The Z80 still drives all sixteen address pins during an I/O transaction. In the
 `(C)` forms, C supplies the low 8-bit port number and B appears on the upper
 address pins. In the immediate `(N)` forms, `N` supplies the port number and A
 appears on the upper pins. Most systems decode only the low eight bits and
-therefore expose 256 ports. Some hardware also decodes the upper byte. For
+expose 256 ports. Some hardware also decodes the upper byte. For
 example, the TEC-1G matrix keyboard uses B to select a row. This upper-byte
 behaviour is an electrical addressing detail layered on the normal 8-bit port
 model, so follow the target's hardware documentation when it is used.
@@ -148,77 +148,25 @@ SENDBLK:
 
 ---
 
-## Worked example
+## Combining the transfer forms
 
 ```asm
-; Port demonstration
-; Demonstrates Z80 in/out instructions and port forms.
-; Port numbers are abstract: inspect the Z80 output, not hardware behavior.
-
-OUT_PORT    EQU $10
-IN_PORT     EQU $11
-STATPORT EQU $12
-
-; SENDBYTE: write A to OUT_PORT
-; In:  A = byte to send
-; Clobbers: nothing
-SENDBYTE:
-  OUT (OUT_PORT), A    ; immediate port form; A is the source
-  RET
-
-; RECVBYTE: read IN_PORT into A
-; Out: A = byte received
-RECVBYTE:
-  IN A, (IN_PORT)      ; immediate port form; reads into A only
-  RET
-
-; echo_reg: write the byte in D using register-addressed form
-; In:  D = byte to send
-; Clobbers: C
-ECHO_REG:
-  LD C, OUT_PORT       ; C holds the 8-bit port number
-  OUT (C), D           ; D is the data source
-  RET
-
-; POLLRECV: spin on STATPORT until bit 0 is set, then read IN_PORT
-; Out: A = byte received
-; Clobbers: F
-POLLRECV:
-.POLLLOOP:
-  IN A, (STATPORT)  ; immediate form; flags unchanged
-  AND $01              ; test bit 0
-  JR Z, .POLLLOOP      ; Z set: not ready; keep polling
-  IN A, (IN_PORT)      ; ready: read data into A
-  RET
-
-; SENDBLK: send B bytes from (HL) to OUT_PORT
-; In:  HL = source address, B = byte count
-; Precondition: B > 0
-; Clobbers: A, B, HL
-SENDBLK:
-.BLKLOOP:
-  LD A, (HL)
-  OUT (OUT_PORT), A
-  INC HL
-  DJNZ .BLKLOOP
-  RET
+OUT_PORT EQU $10
+IN_PORT  EQU $11
 
 PAYLEN EQU 4
 
 ORG $0000
 MAIN:
-  ; Demonstrate SENDBYTE
   LD A, $AA
-  CALL SENDBYTE        ; sends $AA to OUT_PORT
+  OUT (OUT_PORT), A    ; immediate output
 
-  ; Demonstrate RECVBYTE (reads from IN_PORT; result in A)
-  CALL RECVBYTE
+  IN A, (IN_PORT)      ; immediate input
 
-  ; Demonstrate echo_reg
+  LD C, OUT_PORT
   LD D, $55
-  CALL ECHO_REG         ; sends $55 to OUT_PORT via register-addressed out
+  OUT (C), D           ; register-addressed output
 
-  ; Demonstrate SENDBLK
   LD HL, PAYLOAD
   LD B, PAYLEN
   CALL SENDBLK
@@ -228,36 +176,10 @@ ORG $8000
 PAYLOAD: DB $10, $20, $30, $40
 ```
 
-The key lines work as follows:
-
-**`OUT (OUT_PORT), A`** is the immediate port form. `OUT_PORT` is defined as `$10` with `EQU`; the assembler substitutes `$10` at compile time.
-
-**`IN A, (IN_PORT)`** reads from port `$11` into A and leaves the flags as they were.
-
-**`OUT (C), D`**: D supplies the data and C holds the port number.
-
-**`IN A, (STATPORT)` in `POLLRECV`** uses the immediate form, so the
-flags still hold whatever the previous instruction left. `AND $01` isolates
-bit 0 and sets Z before the branch.
-
-**`SENDBLK`** is a DJNZ loop from Chapter 6 applied to output. B counts the
-bytes and HL steps through source memory. Using the immediate output form keeps
-B available as the loop counter.
-
----
-
-## Interrupts
-
-Polling keeps the CPU busy checking the status port until the device is ready.
-
-The Z80 also supports **interrupts**. A hardware interrupt suspends the current
-instruction stream, transfers control to a handler and later resumes the
-interrupted code. Handlers often use `IN` and `OUT` to communicate with the
-device that raised the interrupt.
-
-Interrupts involve `DI`, `EI`, `IM` and `RETI`, along with stack and register
-preservation rules. Interrupt-driven code requires the Z80 interrupt-mode
-documentation for the target platform and its handler conventions.
+The first three transfers place their data and port numbers directly in the
+registers required by each instruction form. The final call applies the
+`SENDBLK` routine above: B counts the bytes and HL advances through the source.
+Its immediate output form leaves B available to `DJNZ`.
 
 ---
 

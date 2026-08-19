@@ -128,7 +128,7 @@ JR Z, IS_ZERO
 ```
 
 Starting with Z clear and carry set, the immediate read leaves both flags
-unchanged. Reading `$00` therefore leaves Z clear and carry set until `OR A`
+unchanged. Reading `$00` leaves Z clear and carry set until `OR A`
 sets Z and clears carry. Reading `$80` also leaves the initial flags after
 `IN`; `OR A` leaves Z clear and clears carry.
 

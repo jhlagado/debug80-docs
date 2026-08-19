@@ -71,7 +71,7 @@ FSTACK EQU FACTN*FSTEP+FBASE
 
 Each of the five non-base levels contributes two bytes for saved BC and two for
 the recursive return address. The base call contributes its two-byte return
-address. The deepest occupancy is therefore 5 × 4 + 2 = 22 bytes across six
+address. The deepest occupancy is 5 × 4 + 2 = 22 bytes across six
 active calls.
 
 The constants document the bound; Atom does not perform stack-depth analysis.
@@ -118,7 +118,7 @@ SUMREC:
 
 The input count in A supplies the bound. HL changes role across the call: it is
 the source pointer on the way down and the 16-bit sum on the way back up. The
-current byte is therefore saved in AF before recursion.
+current byte is saved in AF before recursion.
 
 After the program halts, `FACTR` and `FACTI` both contain `$78` (120), while
 `SUMR` contains `$001A` (26).
