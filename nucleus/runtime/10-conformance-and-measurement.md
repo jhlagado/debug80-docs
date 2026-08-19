@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 The active proof suite assembles the compiler and generated program with AZM,
 runs the result through Debug80, and checks source-level observations. It must
-cover the accepted and rejected Chapter 21 programs as implementation stages
+cover the accepted and rejected Chapter 18 programs as implementation stages
 make them available, including normal output, static data, alias-visible
 mutation, recursion, recoverable failure, every reachable trap, exact
 diagnostic positions, and capacity boundaries.
@@ -43,3 +43,15 @@ the proof that produced it. Reports separate compiler code, compiler immutable
 data, peak workspace, generated program, target runtime, fixed runtime state,
 activation storage, instruction count, and T-states. A projection states its
 measured basis; an untested expectation is labelled a hypothesis.
+
+`test/nobj.test.ts` assembles runtime identity `$0009` under
+`defaultRuntimeLinkContext` and measures a 731-byte canonical linked helper
+image. This identity includes checked four-way integer conversion, signed
+comparison, signed division and modulo, signed loop continuation, and mixed
+`u8`/`i8` promotion in addition to the existing unsigned and aggregate helpers.
+Its 36-byte vector appends the target-specific packet gateway, and its final
+42-byte helper validates the native result and enters the ordinary terminal
+trap dispatcher with the original root frame restored.
+`proofs/stage9-conformance-z80-slice-proof.json` includes the historical direct
+service adapters and measures 921 bytes;
+`proofs/chapter21-target-z80-slice-proof.json` selects an 899-byte proof form.

@@ -11,14 +11,21 @@ isolated: true
 
 # Programming Nucleus
 
+::: info Work in progress
+The introduction and first complete program are available now. The remaining
+chapters are being written and verified against the current compiler and
+language specification.
+:::
+
 Nucleus is a small statically typed language whose compiler emits Z80 machine
 code directly. This book develops the language through complete programs,
 following their effects and testing the rules at their boundaries.
 
-The opening program introduces storage, routines and a command-line build.
-Later chapters develop scalar values, decisions, loops, fixed arrays, bounded
-strings, records, recoverable errors, safety traps and multipart programs. The
-final part covers target profiles, NOBJ, HEX, D8 source maps and Debug80.
+The opening program introduces storage, routines and a command-line build. The
+completed course will develop scalar values, decisions, loops, fixed arrays,
+bounded strings, records, recoverable errors, safety traps and multipart
+programs. Its final part will cover target profiles, NOBJ, HEX, D8 source maps
+and Debug80.
 
 ## Chapters
 

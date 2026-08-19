@@ -14,6 +14,7 @@ import {
   readFileSync,
   readdirSync,
   statSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
@@ -272,6 +273,10 @@ export function syncSpecification(config) {
     }
   } else {
     mkdirSync(outputDir, { recursive: true });
+    for (const name of readdirSync(outputDir)) {
+      if (name.endsWith(".md") && !expected.has(name))
+        unlinkSync(path.join(outputDir, name));
+    }
     for (const [name, contents] of expected)
       writeFileSync(path.join(outputDir, name), contents);
   }

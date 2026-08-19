@@ -84,6 +84,7 @@ const services = {
   trap: 0x7018,
   farCall: 0x701b,
   farJump: 0x701e,
+  packetService: 0x7021,
 };
 
 const expectations = {

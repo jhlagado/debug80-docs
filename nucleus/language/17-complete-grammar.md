@@ -5,7 +5,7 @@ parent: "Nucleus 0.1 Language Specification"
 nav_order: 17
 pageClass: "nucleus-specification"
 ---
-[← 16. System boundary](16-system-boundary.md) · [Contents](./) · [18. Static semantics →](18-static-semantics.md)
+[← 16. System boundary](16-system-boundary.md) · [Contents](./) · [18. Conformance examples →](18-conformance-examples.md)
 
 <div id="17-complete-grammar" class="nucleus-source-anchor"></div>
 
@@ -116,13 +116,15 @@ local-initializer
     ::= expression [ failure-propagation ]
 
 type
-    ::= type-atom [ "[" expression "]" ]
+    ::= type-atom { type-array-suffix }
+type-array-suffix
+    ::= "[" [ expression ] "]"
 type-atom
     ::= scalar-type | NAME | bounded-string-type
 scalar-type
-    ::= "u8" | "u16" | "boolean"
+    ::= "u8" | "u16" | "i8" | "i16" | "boolean"
 bounded-string-type
-    ::= "string" "[" expression "]"
+    ::= "string" "[" [ expression ] "]"
 
 statement-sequence
     ::= { statement }
@@ -130,6 +132,7 @@ statement
     ::= name-statement name-statement-tail
       | other-simple-statement NEWLINE
       | if-statement
+      | select-statement
       | while-statement
       | for-statement
 
@@ -174,6 +177,16 @@ if-statement
         [ "else" NEWLINE statement-sequence ]
         "end" NEWLINE
 
+select-statement
+    ::= "select" expression NEWLINE
+        case-clause { case-clause }
+        [ "else" NEWLINE statement-sequence ]
+        "end" NEWLINE
+case-clause
+    ::= "case" constant-expression
+        { "," constant-expression } NEWLINE
+        statement-sequence
+
 while-statement
     ::= "while" expression NEWLINE
         statement-sequence
@@ -188,16 +201,14 @@ for-statement
 for-bound
     ::= "to" | "until"
 step-constant
-    ::= [ "+" | "-" ] (NUMBER | NAME)
+    ::= [ "+" | "-" ] constant-expression
 
 expression
     ::= or-expression
 or-expression
     ::= and-expression { ("or" | "xor") and-expression }
 and-expression
-    ::= not-expression { "and" not-expression }
-not-expression
-    ::= "not" not-expression | comparison
+    ::= comparison { "and" comparison }
 comparison
     ::= additive [ comparison-operator additive ]
 comparison-operator
@@ -207,14 +218,14 @@ additive
 multiplicative
     ::= unary { ("*" | "/" | "mod") unary }
 unary
-    ::= ("+" | "-") unary | postfix-expression
+    ::= ("+" | "-" | "not") unary | postfix-expression
 postfix-expression
     ::= primary { postfix-suffix }
 primary
     ::= NUMBER | CHARACTER | "true" | "false"
       | NAME | conversion | "(" expression ")"
 conversion
-    ::= ("u8" | "u16") "(" expression ")"
+    ::= ("u8" | "u16" | "i8" | "i16") "(" expression ")"
 postfix-suffix
     ::= argument-list | index-suffix | field-suffix
 argument-list
@@ -225,7 +236,7 @@ field-suffix
     ::= "." NAME
 ```
 
-The grammar uses the general `expression` nonterminal for scalar constant leaves and type bounds. Chapter 8's constant-context predicate rejects variables, calls, nonconstant operations, and values outside the required range. The declared type and current aggregate component select a scalar expression, string literal, parenthesized record initializer, or bracketed array initializer. This type-directed choice resolves the shared opening `(` of a parenthesized scalar expression and a record initializer without backtracking. `type` permits at most one array suffix outside a bounded-string atom, which admits arrays of scalars, records, and bounded strings but not arrays of arrays.
+The grammar uses the general `expression` nonterminal for scalar constant leaves and type bounds. Chapter 8's constant-context predicate rejects variables, calls, nonconstant operations, and values outside the required range. An omitted bounded-string capacity or array bound is admitted only in a formal parameter; every other type position rejects it. `string[]` is the open bounded-string view. An omitted array bound must be the first array suffix and produces `T[]`, including `string[16][]` for an open array whose exact element type is `string[16]` and `u8[][2]` for an open array whose exact row type is `u8[2]`. The declared type and current aggregate component select a scalar expression, string literal, parenthesized record initializer, or bracketed array initializer. This type-directed choice resolves the shared opening `(` of a parenthesized scalar expression and a record initializer without backtracking. Concrete suffixes are interpreted outermost first and form nested fixed-array types; `u8[2][]` and `u8[][]` are rejected by the type-position predicate.
 
 <div id="173-semantic-predicates" class="nucleus-source-anchor"></div>
 
@@ -233,28 +244,30 @@ The grammar uses the general `expression` nonterminal for scalar constant leaves
 
 The grammar uses these declared semantic predicates:
 
-| Predicate                      | Decision                                                                                                                                                                     |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isCallableName`               | At statement head, select a routine-call statement; in an expression, admit a call suffix only on a visible routine and retain its result and failure category.              |
-| `isWritableName`               | At statement head, select assignment only when the resolved declaration is a mutable scalar or aggregate root; an aggregate constant root is rejected before suffix parsing. |
-| `isRecordTypeName`             | Accept a `NAME` as a type atom only when it resolves to a visible record type.                                                                                               |
-| `isInitializerForDeclaredType` | Select and check the scalar, string, positional record, recursive array, or zero-default rule from the declared variable, aggregate constant, or current component type.     |
-| `isConstantContext`            | In constants, type bounds, array lengths, string capacities, and program initializers, admit only the compile-time operands and operations from Chapter 8.                   |
-| `isIntegerConstantName`        | Admit a `NAME` as a counted-loop step magnitude only when it denotes an earlier `u8` or `u16` constant.                                                                      |
-| `isIncompleteForwardName`      | Admit `sub NAME NEWLINE` as a body header only when the exact name resolves to one incomplete forward; install that forward's stored parameter bindings for the body.        |
+| Predicate                      | Decision                                                                                                                                                                           |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `isCallableName`               | At statement head, select a routine-call statement; in an expression, admit a call suffix only on a visible source routine or service, and retain its result and failure category. |
+| `isWritableName`               | At statement head, select assignment only when the resolved declaration is a mutable scalar or aggregate root; an aggregate constant root is rejected before suffix parsing.       |
+| `isRecordTypeName`             | Accept a `NAME` as a type atom only when it resolves to a visible record type.                                                                                                     |
+| `isInitializerForDeclaredType` | Select and check the scalar, string, positional record, recursive array, or zero-default rule from the declared variable, aggregate constant, or current component type.           |
+| `isConstantContext`            | In constants, type bounds, array lengths, string capacities, and program initializers, admit only the compile-time operands and operations from Chapter 8.                         |
+| `isIncompleteForwardName`      | Admit `sub NAME NEWLINE` as a body header only when the exact name resolves to one incomplete forward; install that forward's stored parameter bindings for the body.              |
 
-Field lookup after `.` uses the selected record type, except that a bounded-string base admits only the intrinsic read-only suffix `.length`. Index selection uses a fixed-array domain or a bounded string's current logical length according to the base type; this distinction needs no grammar change. Static initializer checking descends the finite declared type tree and records the expected component before parsing each nested initializer. The `NAME` in `step-constant` must denote an earlier integer constant. A call suffix first produces a call expression with the visible signature's result and failure category. The checker then rejects a failable call unless an eligible initializer, assignment, or complete call statement immediately consumes that direct call under Chapter 14. A return source is always an ordinary successful expression and cannot contain a failable invocation. These are static semantic checks over an otherwise deterministic token stream, not token backtracking.
+Field lookup after `.` uses the selected record type. A concrete bounded-string base admits `.length`; an open `string[]` base admits `.length` and `.capacity`, with writable `.length` restricted to an assignment target. A concrete or open array base admits read-only `.length`. Index selection uses a concrete fixed bound, an open array's retained actual count, or a bounded string's current logical length according to the base type; these distinctions need no grammar change. Static initializer checking descends the finite declared type tree and records the expected component before parsing each nested initializer. A counted-loop step uses the ordinary constant-expression parser for its unsigned magnitude and then requires a nonzero integer result in the range specified by Chapter 12; the optional leading sign selects direction. A call suffix first produces a call expression with the visible signature's result and failure category. The checker then rejects a failable call unless an eligible initializer, assignment, or complete call statement immediately consumes that direct call under Chapter 14. A return source is always an ordinary successful expression and cannot contain a failable invocation. These are static semantic checks over an otherwise deterministic token stream, not token backtracking.
 
-<div id="174-predictive-analysis" class="nucleus-source-anchor"></div>
+<div id="174-determinism" class="nucleus-source-anchor"></div>
 
-## 17.4 Predictive analysis
+## 17.4 Determinism
 
-The repository grammar analyzer mechanically expanded the grammar above to 171 BNF rules over 94 nonterminals. It found no nullable-prefix left-recursion cycle, unreachable nonterminal, or unproductive nonterminal. The only predicate-resolved conflict sites are the name-led statement choice and the type-directed initializer choice. The focused test reads this Chapter 17 block directly, so the analyzer evidence does not create a second grammar authority.
+The two name-led choices require the semantic predicates declared above:
 
-| Nonterminal                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Lookahead | Conflict                                           | Resolution                          |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------------------------------------- | ----------------------------------- |
-| `name-statement`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | `NAME`    | assignment versus routine call                     | `isWritableName` / `isCallableName` |
-| `static-initializer`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `(`       | record initializer versus parenthesized expression | `isInitializerForDeclaredType`      |
-| No unexplained FIRST/FIRST or FIRST/FOLLOW conflict remains. The expression repetitions expand to right-recursive analysis rules while their semantic actions preserve the left association specified in Section 9.6. Unary and `not` recursion remains right-recursive by design. `or` is exclusively the Boolean operator. A same-line `else fail` is selected only after a complete name-led statement or local initializer, while `else` at the start of the following logical line remains an `if` clause. The newline makes those cases deterministic without backtracking. The completed source before `else fail` must be exactly one direct failable invocation. Other reported conflicts require their named predicate or an audited equivalent; a compiler must report a specification defect rather than change the language silently. |
+| Nonterminal          | Lookahead | Choice                                  | Resolution                          |
+| -------------------- | --------- | --------------------------------------- | ----------------------------------- |
+| `name-statement`     | `NAME`    | assignment or routine call              | `isWritableName` / `isCallableName` |
+| `static-initializer` | `(`       | record initializer or scalar expression | `isInitializerForDeclaredType`      |
 
-The analyzer result checks the collected grammar's formal shape. It does not prove the static compatibility, lifetime, capacity, or flow rules consolidated in Chapter 18.
+Expression repetitions preserve the left association specified in Section 9.6;
+unary recursion remains right-associative. `or` is exclusively the Boolean or
+integer operator. A same-line `else fail` follows a complete eligible call,
+initializer, or assignment, while `else` at the start of the next logical line
+belongs to an `if`. These choices require no token backtracking.

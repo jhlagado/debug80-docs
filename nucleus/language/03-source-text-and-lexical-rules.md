@@ -5,7 +5,7 @@ parent: "Nucleus 0.1 Language Specification"
 nav_order: 3
 pageClass: "nucleus-specification"
 ---
-[← 2. Design constraints](02-design-constraints.md) · [Contents](./) · [4. Program and file structure →](04-program-and-file-structure.md)
+[← 2. Design constraints](02-design-constraints.md) · [Contents](./) · [4. Program and compilation structure →](04-program-and-compilation-structure.md)
 
 <div id="3-source-text-and-lexical-rules" class="nucleus-source-anchor"></div>
 
@@ -17,7 +17,11 @@ pageClass: "nucleus-specification"
 
 This chapter defines how the source bytes in each ordered source part become one logical token stream. It defines source bytes, line endings, whitespace, comments, names, reserved words, literals, punctuation, source positions, and lexical errors. Chapter 4 defines the multipart input around those bytes. Later chapters define grammar, name resolution, types, expression precedence, and runtime meaning.
 
-The rules are deterministic and require no backtracking. Rules stated for source text, token identity, or lexical errors apply to every conforming compiler. Project acceptance requires the first compiler to consume the source in order with bounded state and without retaining a complete source copy. This is a Chapter 2 project constraint, not a required internal organization for another compiler. Another compiler may organize tokenization differently, but it must produce the same tokens. One byte of lookahead is sufficient for every token rule in this chapter.
+The rules are deterministic and require no backtracking. Rules stated for source
+text, token identity, or lexical errors apply to every conforming compiler. A
+compiler may organize tokenization differently, but it must produce the same
+tokens. One byte of lookahead is sufficient for every token rule in this
+chapter.
 
 <div id="32-source-bytes" class="nucleus-source-anchor"></div>
 
@@ -63,7 +67,7 @@ ASCII space and horizontal tab are the only horizontal whitespace. They separate
 
 A logical newline is the only statement terminator. Nucleus has no semicolon terminator and no second interchangeable terminator.
 
-Delimiter state tracks open parentheses and square brackets. A physical line ending produces `NEWLINE` only when no delimiter is open. Inside either delimiter, a physical line ending is whitespace and produces no token. Parentheses and brackets inside a comment or literal do not affect this state. The first compiler represents it with a bounded stack; another compiler may use a different representation.
+Delimiter state tracks open parentheses and square brackets. A physical line ending produces `NEWLINE` only when no delimiter is open. Inside either delimiter, a physical line ending is whitespace and produces no token. Parentheses and brackets inside a comment or literal do not affect this state. The representation of this state is implementation-defined.
 
 This is a tokenizer-parser interface rule rather than statement grammar: the tokenizer emits `NEWLINE` under this rule, while later chapters specify which grammar positions accept it. Delimiter state must distinguish `(` from `[`. A closing delimiter with no matching opener, a mismatched closing delimiter, an open delimiter at EOF, or implementation-capacity exhaustion is diagnosed.
 
@@ -108,12 +112,12 @@ After scanning the longest identifier, the tokenizer compares its exact spelling
 The Nucleus 0.1 reserved words are:
 
 ```text
-and      as       assert   boolean   const     continue else
-elseif
+and      as       assert   boolean   case      const     continue
+else     elseif
 end      exit     fail      fails     false    for      forward
 handle   if       mod      not       or        record
-return
-step     string   sub      to        true      u16      u8
+return   select
+step     string   sub      to        true      i16      i8       u16      u8
 until    var      while    xor
 ```
 
@@ -127,7 +131,7 @@ Nucleus uses name-led routine invocation and has no `call` keyword. `call` remai
 
 ## 3.6 Numeric literals
 
-Nucleus admits unsigned decimal, hexadecimal, and binary integer literals:
+Nucleus admits nonnegative decimal, hexadecimal, and binary integer literals:
 
 ```text
 decimal-literal ::= decimal-digit+
@@ -140,9 +144,9 @@ integer-literal ::= decimal-literal
 
 Hexadecimal digits may use either letter case. The `$` and `%` prefixes are part of the literal and do not form separate punctuation tokens. A prefix must be followed by at least one digit of its base.
 
-The tokenizer computes an exact unsigned value from zero through 65,535. A decimal literal whose value exceeds 65,535 is a lexical error. A hexadecimal literal may contain at most four digits, and a binary literal may contain at most sixteen digits; an additional digit is an overflow even when it is a leading or trailing zero. Later type checking decides whether the value fits its context, including `u8`, `u16`, an array bound, or a counted-loop parameter.
+The tokenizer computes an exact nonnegative value from zero through 65,535. A decimal literal whose value exceeds 65,535 is a lexical error. A hexadecimal literal may contain at most four digits, and a binary literal may contain at most sixteen digits; an additional digit is an overflow even when it is a leading or trailing zero. Later type checking decides whether the value fits its context, including `u8`, `u16`, `i8`, `i16`, an array bound, or a counted-loop parameter.
 
-A leading `+` or `-` is a separate punctuation token and is never part of the literal. Thus `-32768` begins with `-` followed by the literal `32768`; expression and constant rules determine whether that combination is valid.
+A leading `+` or `-` is a separate punctuation token and is never part of the literal. Thus `-32768` begins with `-` followed by the literal `32768`. In an exact constant expression, unary minus preserves the mathematical sign separately from the payload bits. Exact negative values are admitted down to -32,768. Hexadecimal and binary literals are always nonnegative: `$FFFF` is 65,535, not -1.
 
 A letter or underscore immediately following any integer literal makes the numeric token malformed instead of beginning an adjacent identifier. This rejects forms such as `0x2a`, `12u8`, `$ffu8`, and `%10value` with one diagnostic. A decimal digit other than zero or one inside a binary literal is likewise malformed rather than the start of a following decimal token.
 
@@ -250,7 +254,10 @@ line-ending        ::= LF | CR LF
 
 ## 3.10 Lexical errors and bounded failure
 
-The first compiler stops after its first lexical diagnostic. Another compiler may continue only to report additional diagnostics; it must not accept the source by guessing, replacing, truncating, or silently resynchronizing tokens, and it must not report successful compilation.
+A compiler may stop after its first lexical diagnostic or continue to report
+additional diagnostics. It must not accept the source by guessing, replacing,
+truncating, or silently resynchronizing tokens, and it must not report
+successful compilation.
 
 Lexical errors include:
 
@@ -320,4 +327,4 @@ The two physical line endings inside delimiters do not appear in the token seque
 
 ## 3.12 Reserved-word and literal decisions
 
-Chapter 8 admits `assert`. Chapter 9 admits `mod`, `not`, `and`, `or`, and `xor`. Chapter 14 admits `fail`, `fails`, and `handle`. These nine words are reserved. Chapter 11 omits a conditional header marker, so `then` remains an identifier. Nucleus integer literals use decimal digits, `$` hexadecimal, or `%` binary. A later revision that needs another token requires an amendment here and cost accounting for the added scanner, table, test, and diagnostic work.
+Chapter 8 admits `assert`. Chapter 9 admits `mod`, `not`, `and`, `or`, and `xor`. Chapter 14 admits `fail`, `fails`, and `handle`. These nine words are reserved. Chapter 11 omits a conditional header marker, so `then` remains an identifier. Nucleus integer literals use decimal digits, `$` hexadecimal, or `%` binary. A later revision that needs another token requires an amendment here.
