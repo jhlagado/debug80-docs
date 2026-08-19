@@ -1934,6 +1934,62 @@ export const sidebars = {
         {
           "text": "A First Program",
           "link": "/nucleus/book1/01-a-first-program.html"
+        },
+        {
+          "text": "Values and Constants",
+          "link": "/nucleus/book1/02-values-and-constants.html"
+        },
+        {
+          "text": "Expressions",
+          "link": "/nucleus/book1/03-expressions.html"
+        },
+        {
+          "text": "Decisions",
+          "link": "/nucleus/book1/04-decisions.html"
+        },
+        {
+          "text": "Loops",
+          "link": "/nucleus/book1/05-loops.html"
+        },
+        {
+          "text": "Fixed and Nested Arrays",
+          "link": "/nucleus/book1/06-fixed-and-nested-arrays.html"
+        },
+        {
+          "text": "Bounded Strings",
+          "link": "/nucleus/book1/07-bounded-strings.html"
+        },
+        {
+          "text": "Records and Aggregate Constants",
+          "link": "/nucleus/book1/08-records-and-aggregate-constants.html"
+        },
+        {
+          "text": "Open Views and Text Construction",
+          "link": "/nucleus/book1/09-open-views-and-text-construction.html"
+        },
+        {
+          "text": "Routines and Calls",
+          "link": "/nucleus/book1/10-routines-and-calls.html"
+        },
+        {
+          "text": "Aggregate Parameters and Results",
+          "link": "/nucleus/book1/11-aggregate-parameters-and-results.html"
+        },
+        {
+          "text": "Forwards and Recursion",
+          "link": "/nucleus/book1/12-forwards-and-recursion.html"
+        },
+        {
+          "text": "Recoverable Errors and Traps",
+          "link": "/nucleus/book1/13-recoverable-errors-and-traps.html"
+        },
+        {
+          "text": "Source Parts and the System Boundary",
+          "link": "/nucleus/book1/14-source-parts-and-the-system-boundary.html"
+        },
+        {
+          "text": "Build, Run and Debug",
+          "link": "/nucleus/book1/15-build-run-and-debug.html"
         }
       ]
     },
@@ -1954,8 +2010,8 @@ export const sidebars = {
           "link": "/nucleus/language/03-source-text-and-lexical-rules.html"
         },
         {
-          "text": "4. Program and file structure",
-          "link": "/nucleus/language/04-program-and-file-structure.html"
+          "text": "4. Program and compilation structure",
+          "link": "/nucleus/language/04-program-and-compilation-structure.html"
         },
         {
           "text": "5. Names and scopes",
@@ -1982,8 +2038,8 @@ export const sidebars = {
           "link": "/nucleus/language/10-statements.html"
         },
         {
-          "text": "11. Conditional control",
-          "link": "/nucleus/language/11-conditional-control.html"
+          "text": "11. Conditional and selection control",
+          "link": "/nucleus/language/11-conditional-and-selection-control.html"
         },
         {
           "text": "12. Loop control",
@@ -2010,20 +2066,8 @@ export const sidebars = {
           "link": "/nucleus/language/17-complete-grammar.html"
         },
         {
-          "text": "18. Static semantics",
-          "link": "/nucleus/language/18-static-semantics.html"
-        },
-        {
-          "text": "19. Runtime semantics",
-          "link": "/nucleus/language/19-runtime-semantics.html"
-        },
-        {
-          "text": "20. Feature ledger",
-          "link": "/nucleus/language/20-feature-ledger.html"
-        },
-        {
-          "text": "21. Conformance examples",
-          "link": "/nucleus/language/21-conformance-examples.html"
+          "text": "18. Conformance examples",
+          "link": "/nucleus/language/18-conformance-examples.html"
         }
       ]
     },
@@ -2086,6 +2130,62 @@ export const sidebars = {
         {
           "text": "A First Program",
           "link": "/nucleus/book1/01-a-first-program.html"
+        },
+        {
+          "text": "Values and Constants",
+          "link": "/nucleus/book1/02-values-and-constants.html"
+        },
+        {
+          "text": "Expressions",
+          "link": "/nucleus/book1/03-expressions.html"
+        },
+        {
+          "text": "Decisions",
+          "link": "/nucleus/book1/04-decisions.html"
+        },
+        {
+          "text": "Loops",
+          "link": "/nucleus/book1/05-loops.html"
+        },
+        {
+          "text": "Fixed and Nested Arrays",
+          "link": "/nucleus/book1/06-fixed-and-nested-arrays.html"
+        },
+        {
+          "text": "Bounded Strings",
+          "link": "/nucleus/book1/07-bounded-strings.html"
+        },
+        {
+          "text": "Records and Aggregate Constants",
+          "link": "/nucleus/book1/08-records-and-aggregate-constants.html"
+        },
+        {
+          "text": "Open Views and Text Construction",
+          "link": "/nucleus/book1/09-open-views-and-text-construction.html"
+        },
+        {
+          "text": "Routines and Calls",
+          "link": "/nucleus/book1/10-routines-and-calls.html"
+        },
+        {
+          "text": "Aggregate Parameters and Results",
+          "link": "/nucleus/book1/11-aggregate-parameters-and-results.html"
+        },
+        {
+          "text": "Forwards and Recursion",
+          "link": "/nucleus/book1/12-forwards-and-recursion.html"
+        },
+        {
+          "text": "Recoverable Errors and Traps",
+          "link": "/nucleus/book1/13-recoverable-errors-and-traps.html"
+        },
+        {
+          "text": "Source Parts and the System Boundary",
+          "link": "/nucleus/book1/14-source-parts-and-the-system-boundary.html"
+        },
+        {
+          "text": "Build, Run and Debug",
+          "link": "/nucleus/book1/15-build-run-and-debug.html"
         }
       ]
     }
@@ -2108,8 +2208,8 @@ export const sidebars = {
           "link": "/nucleus/language/03-source-text-and-lexical-rules.html"
         },
         {
-          "text": "4. Program and file structure",
-          "link": "/nucleus/language/04-program-and-file-structure.html"
+          "text": "4. Program and compilation structure",
+          "link": "/nucleus/language/04-program-and-compilation-structure.html"
         },
         {
           "text": "5. Names and scopes",
@@ -2136,8 +2236,8 @@ export const sidebars = {
           "link": "/nucleus/language/10-statements.html"
         },
         {
-          "text": "11. Conditional control",
-          "link": "/nucleus/language/11-conditional-control.html"
+          "text": "11. Conditional and selection control",
+          "link": "/nucleus/language/11-conditional-and-selection-control.html"
         },
         {
           "text": "12. Loop control",
@@ -2164,20 +2264,8 @@ export const sidebars = {
           "link": "/nucleus/language/17-complete-grammar.html"
         },
         {
-          "text": "18. Static semantics",
-          "link": "/nucleus/language/18-static-semantics.html"
-        },
-        {
-          "text": "19. Runtime semantics",
-          "link": "/nucleus/language/19-runtime-semantics.html"
-        },
-        {
-          "text": "20. Feature ledger",
-          "link": "/nucleus/language/20-feature-ledger.html"
-        },
-        {
-          "text": "21. Conformance examples",
-          "link": "/nucleus/language/21-conformance-examples.html"
+          "text": "18. Conformance examples",
+          "link": "/nucleus/language/18-conformance-examples.html"
         }
       ]
     }
