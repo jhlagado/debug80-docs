@@ -20,10 +20,16 @@ mathematical half-open region `[a, a + w)` lies wholly within either the used
 writable region or the generated read-only-data region. The calculation must
 not use wrapped 16-bit arithmetic as evidence that the region fits.
 
-A fixed-array access first checks the unsigned index against its declared
-length, then forms `base + index * stride`, and then establishes the complete
-element region. A string access applies Section 3.3. Any failed check performs
-`bounds` before a load, store, or alias result is produced.
+A fixed-array access first rejects a negative signed index, then checks its
+unsigned magnitude against the declared length, forms `base + index * stride`,
+and establishes the complete element region. Selecting an array element yields
+that inner array's ordinary carrier, so a following index repeats the same
+check with the inner length and stride rather than flattening the dimensions.
+An open-array access performs the same sequence with the retained count word as
+its outer bound and the statically known element extent as its stride. A string
+access applies the same negative-index rule before Section 3.3's length check.
+Any failed check performs `bounds` before a load, store, or alias result is
+produced.
 
 The compiler may omit a runtime check only when information already proved at
 that source point establishes the same condition.
@@ -40,7 +46,14 @@ region and then the complete source region before the first destination byte
 changes. It copies the common fixed extent, including a bounded string's length
 byte, complete capacity, and permanent terminator. Self-assignment has no
 effect. Nucleus types cannot produce proper partial overlap between distinct
-same-type aggregate paths.
+same-type aggregate paths. An open-string or open-array view is not a
+whole-object assignment operand.
+
+Checked open-string length assignment follows the same atomicity boundary. The
+complete-region check, old-length check, and new-length check all precede
+mutation. Shrinking clears the removed content before the helper publishes the
+new length. A failed check leaves the length, payload, zero tail, permanent
+terminator, and surrounding bytes unchanged.
 
 The source checker rejects an assignment rooted directly at an aggregate
 constant. The runtime carrier has no read-only bit, so an alias derived from a
@@ -53,3 +66,24 @@ The backend may inline the copy, emit a counted loop, or call a shared helper.
 For a Z80 target, `LDIR` is permitted after both complete-region checks. The
 choice is private and must be measured; it does not change copy order or trap
 timing.
+
+<div id="53-generated-integer-selection" class="nucleus-source-anchor"></div>
+
+## 5.3 Generated integer selection
+
+The direct Z80 backend evaluates a `select` expression once and retains its
+canonical scalar word on the hardware expression stack. Each case item emits
+one comparison against that retained word and a conditional branch to the
+case body. A `u8` selector compares the low byte; `u16`, `i8`, and `i16`
+selectors use word equality after the compiler has normalized the constant to
+the selector's exact type.
+
+Every path discards the retained selector exactly once before it enters a case
+body, enters `else`, or continues after an unmatched selection. Case bodies
+therefore begin with the same generated stack shape as the statement that
+contains the `select`. Normal completion of a selected body branches to one
+common exit; it cannot enter the following case body.
+
+The comparison chain and its fixups are generated-program bytes. `select`
+adds no selected-runtime helper, vector entry, writable runtime state, or
+activation field.

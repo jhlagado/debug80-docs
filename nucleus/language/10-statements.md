@@ -5,7 +5,7 @@ parent: "Nucleus 0.1 Language Specification"
 nav_order: 10
 pageClass: "nucleus-specification"
 ---
-[← 9. Expressions](09-expressions.md) · [Contents](./) · [11. Conditional control →](11-conditional-control.md)
+[← 9. Expressions](09-expressions.md) · [Contents](./) · [11. Conditional and selection control →](11-conditional-and-selection-control.md)
 
 <div id="10-statements" class="nucleus-source-anchor"></div>
 
@@ -30,6 +30,7 @@ statement-sequence      ::= { statement }
 statement               ::= name-statement name-statement-tail
                           | other-simple-statement NEWLINE
                           | if-statement
+                          | select-statement
                           | while-statement
                           | for-statement
 name-statement          ::= assignment-statement
@@ -75,7 +76,7 @@ Nucleus has no `call` keyword. An already declared routine name followed by its 
 
 ## 10.4 Assignment
 
-An assignment target is a mutable scalar path rooted in a program variable, parameter, or scalar local, or an aggregate path rooted in a program variable or aggregate parameter. A path rooted directly at an aggregate constant name is never an assignment target, including after field or index selection. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. A bounded-string byte selected through a writable root is writable; `text.length` is not.
+An assignment target is a mutable scalar path rooted in a program variable, parameter, or scalar local, or an aggregate path rooted in a program variable or aggregate parameter. A path rooted directly at an aggregate constant name is never an assignment target, including after field or index selection. The parser uses the Chapter 9 postfix-suffix path; the storage-path rule rejects every call suffix and any field or index suffix unsuitable for the preceding type. A bounded-string byte selected through a writable root is writable. The `.length` property is an additional checked assignment target only when its base is a `string[]` parameter; `.capacity` is never assignable.
 
 A scalar local used as the counter of an enclosing counted loop is read-only until that loop ends. An assignment rooted at that exact local is invalid in the loop body, including inside a nested statement. Chapter 12 defines the corresponding counter rule and nested-loop restriction.
 
@@ -88,11 +89,11 @@ The compiler evaluates an assignment in this order:
 
 The target path is evaluated once. A call or mutation in an index expression therefore occurs before any operation in the right-hand expression. If target evaluation traps, the right-hand expression is not evaluated. If the right-hand expression or a checked conversion traps, the destination is not changed, although effects from the earlier target evaluation remain.
 
-A scalar destination uses the scalar compatibility rules from Chapter 6. An aggregate destination requires a writable aggregate storage path. Its source must be an aggregate storage path or transient aggregate result with the exact same aggregate type. The compiler validates the complete source and destination extents before copying the fixed object representation. Assignment through an alias changes its referent and never rebinds the alias. Self-assignment has no effect.
+A scalar destination uses the scalar compatibility rules from Chapter 6. An aggregate destination requires a writable aggregate storage path and an aggregate storage path or transient result of the exact same concrete type. The compiler validates the complete source and destination extents before changing the destination. Assignment through an alias changes its referent and never rebinds the alias. Self-assignment has no effect.
 
 In this statement position, `=` is the assignment operator. Inside an expression, it is equality under Chapter 9. Assignment is not an expression and produces no value. Chained assignment, compound assignment such as `+=`, increment and decrement statements, and assignment inside a condition or argument are absent.
 
-Assignment to a record, fixed array, bounded string, or aggregate alias copies a complete value only when the source has the exact same type. A string-byte assignment still replaces one selected byte without changing the string's length or capacity. No assignment changes an alias binding.
+Aggregate assignment copies a complete value only when the source has the exact same concrete type. A string-byte assignment replaces one selected byte without changing the string's length or capacity. Checked assignment to `string[]` `.length` follows Section 6.8 and does not change capacity or alias binding. Neither `string[]` nor `T[]` is a whole-object assignment type, and array `.length` is never writable.
 
 <div id="105-routine-call-statements" class="nucleus-source-anchor"></div>
 
@@ -112,17 +113,17 @@ Only the invocation itself forms the statement. A scalar arithmetic expression, 
 
 All four are complete simple statements. No label, condition, target name, or trailing expression may follow `exit` or `continue`.
 
-<div id="107-execution-and-bounded-failure" class="nucleus-source-anchor"></div>
+<div id="107-execution-diagnostics-and-capacity" class="nucleus-source-anchor"></div>
 
-## 10.7 Execution and bounded failure
+## 10.7 Execution, diagnostics, and capacity
 
 Statements in a sequence begin in source order. A compound statement completes before the following statement begins. A `return`, `fail`, taken `exit`, taken `continue`, or trap prevents normal execution of the remaining statements on that path.
 
-A compiler may emit semantic operations as it checks each statement. It need not retain a statement tree. Forward branches may use bounded fixup state under Chapter 2, provided capacity exhaustion produces a diagnostic rather than an unresolved or incorrect branch.
-
 The compiler must diagnose an invalid statement start, a wrong-class name, a missing assignment operator or argument list, a non-writable assignment target, an assignment to an active counted-loop counter, an incompatible right-hand expression, a forbidden general expression statement, and any context-invalid `return`, `fail`, `exit`, or `continue`.
 
-An implementation may bound statement nesting, active control contexts, branch fixups, and retained emission state. It must publish each limit and issue a capacity diagnostic before overflow changes statement association, branch targets, or execution order.
+An implementation may bound statement nesting and active control state. It must
+publish each limit and issue a capacity diagnostic before overflow changes
+statement association, transfer targets, or execution order.
 
 <div id="108-examples" class="nucleus-source-anchor"></div>
 

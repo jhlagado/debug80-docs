@@ -27,14 +27,15 @@ Effects completed before the failing operation remain observable. The failing op
 
 Nucleus 0.1 defines these trap reasons:
 
-| Reason                | Condition and point                                                                                                                                               |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `bounds`              | A dynamic fixed-array index or bounded-string byte index is outside zero through current length minus one. The trap precedes the read, write, or alias formation. |
-| `narrowing`           | A dynamic checked `u8(...)` operand exceeds 255. The trap precedes production or storage of the narrowed result.                                                  |
-| `division-by-zero`    | A runtime divisor for `/` or `mod` is zero. The trap precedes production of a quotient or remainder.                                                              |
-| `loop-range`          | A counted-loop next value would continue but does not fit the counter type. The trap precedes the counter store.                                                  |
-| `activation-capacity` | A call would exceed a published activation-depth or activation-storage limit. The trap occurs after argument evaluation and before the new activation begins.     |
-| `unhandled-error`     | `main` returns failure. The report includes the returned `u8` code.                                                                                               |
+| Reason                | Condition and point                                                                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bounds`              | A dynamic concrete/open-array index or bounded-string byte index is outside zero through current length minus one. The trap precedes the read, write, or alias formation. |
+| `narrowing`           | A dynamic explicit integer conversion is outside its destination range. The trap precedes production or storage of the converted result.                                  |
+| `division-by-zero`    | A runtime divisor for `/` or `mod` is zero. The trap precedes production of a quotient or remainder.                                                                      |
+| `loop-range`          | A counted-loop next value would continue but does not fit the counter type. The trap precedes the counter store.                                                          |
+| `activation-capacity` | A call would exceed a published activation-depth or activation-storage limit. The trap occurs after argument evaluation and before the new activation begins.             |
+| `unhandled-error`     | `main` returns failure. The report includes the returned `u8` code.                                                                                                       |
+| `packet-service`      | A target-specific `service` slot is unavailable or rejects the retained packet extent. The trap precedes native dispatch and packet mutation.                             |
 
 A conforming implementation may use more detailed internal causes, but it must preserve these public reason identities. It must not report a required reason as another reason merely because two checks share a helper.
 

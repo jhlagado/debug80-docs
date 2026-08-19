@@ -27,8 +27,6 @@ This specification defines the source-language syntax, static semantics, runtime
 
 The separate [Nucleus Z80 Runtime and Backend Contract](../runtime/) defines the packed data representation, direct-code integrity rules, runtime boundary, and target execution obligations. Non-normative implementation plans and design papers record compiler strategies and project constraints; they do not add source-language semantics.
 
-The first implementation is a handwritten Z80 compiler that emits Z80 machine code directly. Project acceptance requires its compiler core and required immutable constants to fit in one 16 KiB bank; generated programs, compiler workspace, and the target runtime have separate budgets. That gate does not create a smaller Nucleus dialect or alter the meaning of a conforming program. Chapter 2 and the implementation plan carry the detailed budget rules.
-
 <div id="13-authority" class="nucleus-source-anchor"></div>
 
 ## 1.3 Authority
@@ -71,7 +69,7 @@ A conforming Nucleus 0.1 source program:
 
 Exceeding one compiler's documented capacity does not affect a program's language conformance. The compiler may reject the program with a capacity diagnostic; that diagnostic reports an implementation limit rather than a source-language violation.
 
-The complete accepted programs in Chapter 21 form the minimum conformance corpus. A conforming compiler and execution environment must compile and execute each program under its stated inputs without a capacity diagnostic or an `activation-capacity` trap. An implementation may publish smaller limits than another implementation only above this floor. This requirement establishes a minimum useful implementation without creating a language profile or changing the conformance of larger source programs.
+The complete accepted programs in Chapter 18 form the minimum conformance corpus. A conforming compiler and execution environment must compile and execute each program under its stated inputs without a capacity diagnostic or an `activation-capacity` trap. An implementation may publish smaller limits than another implementation only above this floor. This requirement establishes a minimum useful implementation without creating a language profile or changing the conformance of larger source programs.
 
 A program can use this complete working revision to establish conformance. Such a claim identifies the exact specification revision because the draft may still change before the 0.1 freeze.
 
@@ -81,7 +79,7 @@ A program can use this complete working revision to establish conformance. Such 
 
 A compiler claiming Nucleus 0.1 conformance must:
 
-- compile every complete accepted program in Chapter 21 without a capacity diagnostic;
+- compile every complete accepted program in Chapter 18 without a capacity diagnostic;
 - accept and translate every conforming source program within its documented capacity limits;
 - accept an in-capacity program presented through the multipart compilation stream in Section 4.3;
 - preserve the specified observable results, side effects, and runtime traps of each accepted program;
@@ -92,8 +90,6 @@ A compiler claiming Nucleus 0.1 conformance must:
 - keep extensions separate from standard Nucleus mode.
 
 A compiler must not report successful translation and then emit code with semantics that differ from this specification. Diagnostic wording and presentation are implementation-defined unless a later chapter requires a particular machine-readable result.
-
-The first handwritten compiler passes an additional project acceptance gate only if its core plus required immutable constants fit in one 16 KiB bank. A compiler may conform to the language and fail that size gate. Conversely, fitting in the bank does not excuse a compiler that rejects an in-capacity conforming program, accepts invalid source without a diagnostic, or changes program meaning.
 
 <div id="17-extensions" class="nucleus-source-anchor"></div>
 
@@ -125,25 +121,3 @@ These cases are distinct:
 | This draft has not yet specified the case.                                             | No conformance result can be inferred until the specification supplies the missing rule.                                                 |
 
 A runtime trap is specified behaviour, not undefined behaviour and not evidence that the source was necessarily invalid. Later chapters define which failures are compile-time invalid, which are recoverable, and which trap at runtime.
-
-<div id="110-provisional-features" class="nucleus-source-anchor"></div>
-
-## 1.10 Provisional features
-
-Design candidates may be prototyped and measured while Nucleus 0.1 remains a working draft. Before 0.1 is frozen, the project either admits each candidate to the single normative language or omits it. Nucleus does not expose candidates as language levels or standard profiles.
-
-A program that depends on an unadmitted candidate is not yet a conforming Nucleus 0.1 program. Prototype support for that candidate follows the extension rules in Section 1.7.
-
-<div id="111-direct-z80-implementation" class="nucleus-source-anchor"></div>
-
-## 1.11 Direct Z80 implementation
-
-The first compiler emits Z80 machine code directly and satisfies the separate Z80 runtime and backend contract. It may retain a checked semantic-operation transcript as private compiler workspace, but it does not serialize or execute that transcript as a public bytecode format.
-
-Another compiler may use a different internal organization or target only when it preserves the same source semantics, diagnostics, and specified traps. An implementation choice does not create another Nucleus language profile.
-
-<div id="112-non-requirements" class="nucleus-source-anchor"></div>
-
-## 1.12 Non-requirements
-
-This working draft makes no claim that Nucleus 0.1 is frozen or implementation-validated. It does not require the first compiler to be written in Nucleus or compile its own source. It also does not require another conforming compiler to copy the first compiler's internal organization.

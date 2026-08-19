@@ -31,8 +31,8 @@ errors, multipart projects and the compiler-and-debugger workflow.
 ### [Nucleus 0.1 Language Specification](language/)
 
 The complete source-language contract: lexical rules, declarations, types,
-storage, expressions, control flow, routines, failure handling, grammar,
-static and runtime semantics, and conformance examples.
+storage, expressions, control flow, routines, failure handling, grammar and
+conformance examples.
 
 ### [Nucleus Z80 Runtime and Backend Contract 0.1](runtime/)
 
@@ -47,10 +47,12 @@ runtime contract, and conformance rules. It is designed as an autonomous system
 rather than a profile or implementation level of another language.
 
 The project favours fixed layouts, bounded resources, streaming compilation,
-predictive parsing, explicit failure, and measured economies. It avoids
-general pointers, heap allocation, garbage collection, runtime type tags, and
-filesystem work inside the compiler. An external build driver supplies one
-ordered multipart source stream from a flat manifest.
+predictive parsing, explicit failure and measured economies. It avoids general
+pointers, heap allocation, garbage collection, runtime type tags and filesystem
+work inside the compiler. An external packaging layer supplies one ordered
+multipart source stream. It may use an explicit source list or discover
+dependencies from preserved source comments; the compiler receives the same
+ordered parts in either case.
 
 Programming Nucleus is maintained in this repository. The language reading
 edition is generated from the authoritative specification in the

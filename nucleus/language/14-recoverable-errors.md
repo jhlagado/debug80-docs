@@ -50,7 +50,7 @@ The statement
 fail-statement ::= "fail" expression
 ```
 
-ends the current failable routine with failure. The expression is evaluated once and must be compatible with `u8`; an exact literal must fit, and `u16` requires explicit checked narrowing. The activation ends after the code is obtained. No later statement in that routine executes.
+ends the current failable routine with failure. The expression is evaluated once and must be compatible with `u8`; an exact integer must fit, and a typed value of any other integer type requires explicit checked `u8(...)` conversion. The activation ends after the code is obtained. No later statement in that routine executes.
 
 `fail` in an infallible routine is invalid. A trap while evaluating the code remains a trap and does not become a recoverable error.
 
@@ -148,17 +148,9 @@ Ordinary `return` denotes successful completion only. A result-free failable rou
 
 The fixed `main` routine may declare `fails`. A failure returned from `main` has no source caller and performs the unhandled-error trap in Chapter 15 with the returned code. A successful return from `main` terminates normally.
 
-<div id="148-lowering-boundary" class="nucleus-source-anchor"></div>
+<div id="148-invalid-forms-and-capacities" class="nucleus-source-anchor"></div>
 
-## 14.8 Lowering boundary
-
-The source semantics require a success/failure discriminant and a `u8` code for each failable result. The Z80 runtime and backend contract defines their required target behavior while leaving the carrier choice private. Carry plus a byte register is one possible calling convention, not source semantics.
-
-Failure propagation is an ordinary conditional return. Local handling is an ordinary conditional branch. Nucleus has no exception object, stack walk, cleanup action, hidden handler registration, or resumable failure state. The all-caller-save-compatible call semantics in Chapter 13 apply to both outcomes.
-
-<div id="149-invalid-forms-and-capacities" class="nucleus-source-anchor"></div>
-
-## 14.9 Invalid forms and capacities
+## 14.8 Invalid forms and capacities
 
 The compiler must diagnose:
 

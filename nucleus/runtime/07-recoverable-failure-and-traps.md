@@ -29,14 +29,15 @@ has acted.
 
 ## 7.2 Stable trap codes
 
-|   Code | Reason                | Required condition                                             |
-| -----: | --------------------- | -------------------------------------------------------------- |
-| `0x01` | `bounds`              | A checked data region, array index, or string byte is invalid. |
-| `0x02` | `narrowing`           | A dynamic checked `u8(...)` operand exceeds 255.               |
-| `0x03` | `division-by-zero`    | A runtime integer divisor is zero.                             |
-| `0x04` | `loop-range`          | A continuing counted-loop value does not fit its counter.      |
-| `0x05` | `activation-capacity` | A new activation cannot fit its published limit.               |
-| `0x06` | `unhandled-error`     | `main` returns recoverable failure.                            |
+|   Code | Reason                | Required condition                                                      |
+| -----: | --------------------- | ----------------------------------------------------------------------- |
+| `0x01` | `bounds`              | A checked data region, array index, or string byte is invalid.          |
+| `0x02` | `narrowing`           | A dynamic explicit integer conversion is outside its destination range. |
+| `0x03` | `division-by-zero`    | A runtime integer divisor is zero.                                      |
+| `0x04` | `loop-range`          | A continuing counted-loop value does not fit its counter.               |
+| `0x05` | `activation-capacity` | A new activation cannot fit its published limit.                        |
+| `0x06` | `unhandled-error`     | `main` returns recoverable failure.                                     |
+| `0x07` | `packet-service`      | A target-specific slot or retained packet extent is unsupported.        |
 
 These numeric codes are the machine-readable Nucleus Z80 trap contract.
 

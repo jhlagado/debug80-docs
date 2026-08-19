@@ -1,23 +1,23 @@
 ---
 layout: "default"
-title: "11. Conditional control"
+title: "11. Conditional and selection control"
 parent: "Nucleus 0.1 Language Specification"
 nav_order: 11
 pageClass: "nucleus-specification"
 ---
 [← 10. Statements](10-statements.md) · [Contents](./) · [12. Loop control →](12-loop-control.md)
 
-<div id="11-conditional-control" class="nucleus-source-anchor"></div>
+<div id="11-conditional-and-selection-control" class="nucleus-source-anchor"></div>
 
-# 11. Conditional control
+# 11. Conditional and selection control
 
 <div id="111-scope" class="nucleus-source-anchor"></div>
 
 ## 11.1 Scope
 
-This chapter defines the Nucleus `if` statement, its repeated `elseif` clauses, its optional `else` clause, condition evaluation, and clause selection. Chapter 9 defines Boolean expressions. Chapter 10 defines statement sequences. Chapter 17 supplies the complete grammar.
+This chapter defines the Nucleus `if` and `select` statements. Chapter 9 defines Boolean and integer expressions. Chapter 10 defines statement sequences. Chapter 17 supplies the complete grammar.
 
-Nucleus uses one multiline conditional form. It has no conditional expression, pattern matching, or general multi-way selection statement.
+`if` selects by Boolean conditions. `select` compares one integer value with an ordered sequence of constant values. Nucleus has no conditional expression or pattern matching.
 
 <div id="112-syntax" class="nucleus-source-anchor"></div>
 
@@ -94,13 +94,49 @@ Nucleus conditional headers do not use `then`. The logical newline already separ
 
 Consequently, `then` remains an identifier under Chapter 3. A Boolean variable named `then` may appear as the complete condition in `if then`; the following logical newline terminates that header.
 
-<div id="117-lowering-boundary" class="nucleus-source-anchor"></div>
+<div id="117-integer-selection" class="nucleus-source-anchor"></div>
 
-## 11.7 Lowering boundary
+## 11.7 Integer selection
 
-The source semantics require ordered condition evaluation and selection of at most one body. A compiler may lower the statement to comparisons, conditional branches, and ordinary branches while parsing it. The internal semantic-operation interface requires no dedicated `if`, `elseif`, or `else` operation.
+The selection grammar is:
 
-Branch fixups and active clause state are implementation details. They must preserve the source order above, skip every unselected body, and continue after the one closing `end`.
+```text
+select-statement ::= "select" expression NEWLINE
+                     case-clause { case-clause }
+                     [ "else" NEWLINE statement-sequence ]
+                     "end" NEWLINE
+case-clause     ::= "case" constant-expression
+                     { "," constant-expression } NEWLINE
+                     statement-sequence
+```
+
+The selector must have type `u8`, `u16`, `i8`, or `i16`. The compiler evaluates it exactly once, including any observable call or storage access in the expression. Boolean and aggregate selectors are invalid.
+
+Each case item is a compile-time integer constant expression. The compiler applies the ordinary constant conversion and range rules to the selector's exact type. Signed selectors admit negative cases. Boolean, dynamic, and out-of-range case items are invalid.
+
+Case items are tested from top to bottom. The first equal item selects its body. Several comma-separated items share one body, and duplicate values are permitted; a later duplicate is unreachable when an earlier one matches. A selected body never falls through into the next case. Normal completion continues after the complete `select`.
+
+At least one `case` is required. The optional `else` is final. When no case matches, the `else` body executes if present; otherwise the statement performs no body operation. An empty case body matches and performs no operation. It does not share the next body.
+
+`select` is not a loop. `exit` and `continue` still target the innermost enclosing `while` or `for`. Nested selection, conditionals, loops, and immediate handlers use the ordinary structured-control nesting limit.
+
+Without `else`, a `select` remains capable of falling through because no case may match. With `else`, it is non-fallthrough only when every case body and the `else` body are independently non-fallthrough.
+
+This example evaluates `direction` once. Values 1 and 2 share a body:
+
+```nucleus
+select direction
+case 0
+    stop()
+case 1, 2
+    move()
+else
+    wait()
+end
+```
+
+This version admits equality cases only. It has no case ranges, pattern cases,
+Boolean selection, fallthrough, or source-visible `break`.
 
 <div id="118-excluded-conditional-mechanisms" class="nucleus-source-anchor"></div>
 
@@ -111,12 +147,12 @@ Nucleus 0.1 has no:
 - one-line `if` form;
 - postfix or statement-modifier condition;
 - conditional expression;
-- `select` or `case` statement;
 - pattern matching;
 - fall-through selection; or
 - implicit integer truth test.
 
-A restricted dense nonnegative selection form remains a possible later candidate under Chapter 2. It is not standard syntax unless a later specification revision admits it after measurement.
+Duplicate case values are permitted under Section 11.7; the first matching item
+wins.
 
 <div id="119-invalid-conditionals-and-capacity-limits" class="nucleus-source-anchor"></div>
 

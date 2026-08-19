@@ -68,9 +68,9 @@ Arguments are evaluated from left to right. Each scalar argument is evaluated an
 
 If argument evaluation traps, no later argument is evaluated and the routine body does not begin. Effects from earlier arguments remain observable.
 
-A scalar argument must have the exact parameter type, be an exact literal that fits it, or use the implicit `u8`-to-`u16` widening. Passing `u16` to `u8` requires explicit checked `u8(...)`. Boolean and integer arguments do not convert between each other.
+A scalar argument must have the exact parameter type, be an exact integer value that fits it, or use one of the value-preserving implicit conversions: `u8` to `u16`, `u8` to `i16`, or `i8` to `i16`. Every other integer conversion requires the explicit destination-type form `u8(...)`, `u16(...)`, `i8(...)`, or `i16(...)`, which traps when the mathematical source value lies outside the destination range. Boolean and integer arguments do not convert between each other.
 
-An aggregate argument must be an aggregate storage path or a transient aggregate-alias result with exact referent-type identity. It does not copy the record, fixed array, or bounded string. The callee's parameter becomes a fixed alias to the same object or subobject. Scalar-leaf mutation and exact-type aggregate assignment through that parameter are visible through every other path to the same storage.
+An argument for a concrete aggregate parameter must be an aggregate storage path or transient alias with exact referent-type identity. An argument for `string[]` may instead have any concrete bounded-string capacity, be another `string[]` parameter, or be a string literal. A literal argument creates the distinct anonymous object defined in Section 6.8 and transfers its ordinary address-and-capacity carrier. An argument for `T[]` may be any complete concrete `T[N]` storage path or transient alias, or another `T[]` parameter; its element type must match exactly. In every case the call transfers an alias rather than copying the object. An open binding also retains the actual capacity or count used by its postfix operations. Scalar-leaf mutation through the parameter is visible through every other path to the same storage.
 
 Nucleus has no parameter modes, implicit read-only aggregate parameter, write permission, copy-in/copy-out aggregate parameter, or hidden source-level pointer conversion.
 
@@ -92,13 +92,15 @@ A result-free routine uses bare `return`, or reaches its closing `end`. Every `r
 
 A result-bearing routine uses `return expression`. Bare `return` is invalid. The expression is evaluated once before the activation ends and must be compatible with the declared result type. It cannot be a failable invocation: failure must be propagated or handled by an earlier statement, and `return` represents success only.
 
-A scalar result follows the scalar destination rules: exact type, fitting exact literal, or implicit `u8`-to-`u16` widening. Checked narrowing must be written explicitly. The caller receives a copied scalar value.
+A scalar result follows the scalar destination rules: exact type, fitting exact integer value, or an admitted value-preserving implicit conversion. Every other integer conversion must be written explicitly and checked. The caller receives a copied scalar value.
 
 An aggregate result must be an aggregate storage path or transient aggregate-alias result with exact referent-type identity. The storage path is rooted in a visible program variable, aggregate constant, or aggregate parameter. The caller receives a transient alias to the same existing program-lifetime object, not a copy. Section 7.9 establishes the lifetime of every admitted aggregate result without another result check.
 
-The caller may consume that transient alias only by discarding it as a complete call statement, passing it directly to an aggregate parameter, forwarding it as an aggregate return, applying an immediate field or index suffix, or using it as the source of exact-type aggregate assignment. It cannot be retained in a source variable. To retain the returned value, the caller assigns the call result into a program object or caller-supplied aggregate destination, causing the complete copy defined by Section 7.8.
+The caller may consume that transient alias only by discarding it as a complete call statement, passing it directly to a compatible aggregate parameter, forwarding it as an aggregate return, applying an immediate field or index suffix, or using it as an exact-type aggregate-assignment source. It cannot be retained in a source variable. To retain the returned value, the caller assigns the call result into a program object or caller-supplied aggregate destination, causing the copy defined by Section 7.8.
 
-If evaluating a later argument or suffix performs another call, the compiler preserves the transient carrier until its containing operation consumes it. Backend liveness or argument staging provides that protection; it does not create a source-visible pointer or extend the result beyond the operation.
+If evaluating a later argument or suffix performs another call, the transient
+carrier remains valid until its containing operation consumes it. This does not
+create a source-visible pointer or extend the result beyond the operation.
 
 `return` may appear anywhere in a routine statement sequence, including inside a conditional or loop. It ends the current activation immediately after transferring the result, if any. It does not execute later statements in the routine.
 
@@ -114,11 +116,19 @@ The static rule uses a bounded structured fallthrough summary:
 - assignment and call statements fall through;
 - an `if` does not fall through only when it has an `else` and every clause body does not fall through;
 - an `if` without `else` may fall through; and
-- every `while` and `for` is treated as able to finish, regardless of a constant condition or its body.
+- a `select` follows the fallthrough rule in Section 11.7; and
+- a `while` whose condition folds to the Boolean constant `true` does not fall through when no syntactic `exit` targets that loop; every other `while` and every `for` is treated as able to finish.
 
-A statement sequence can reach its end when control can pass through every statement on a path. Once a statement on a path does not fall through, later statements on that path do not restore fallthrough. This rule permits one streaming summary per nested statement and requires no control-flow graph.
+A statement sequence can reach its end when control can pass through every statement on a path. Once a statement on a path does not fall through, later statements on that path do not restore fallthrough.
 
-The conservative loop rule is part of Nucleus 0.1 validity. A value routine whose only non-returning path is an apparently indefinite loop still requires a structurally reachable `return expression` after that loop or another arrangement that satisfies the rules above.
+The non-fallthrough loop rule recognizes any condition that the ordinary
+expression folder proves to be the Boolean constant `true`. Parentheses,
+`not false`, `true and true`, a named Boolean constant, and another folded
+Boolean expression therefore qualify. A dynamic condition and a condition
+folding to `false` do not. Any syntactic `exit` whose nearest loop is that
+`while` makes it conservatively fallthrough-capable, even when the `exit`
+follows a non-fallthrough statement and cannot execute. An `exit` whose nearest
+loop is a nested `while` or `for` does not count against the outer loop.
 
 <div id="138-forward-definitions-and-recursion" class="nucleus-source-anchor"></div>
 
@@ -126,31 +136,31 @@ The conservative loop rule is part of Nucleus 0.1 validity. A value routine whos
 
 A forward declaration contains the routine's complete and sole signature, including its parameter names. Its later body begins with `sub NAME` and a logical newline. That name must resolve to exactly one incomplete forward under Chapters 4, 5, and 8. The stored parameter names bind the body; no parameter, result, or `fails` clause is repeated. The forward declaration and body definition denote one routine.
 
-The body does not repeat the signature, so the compiler performs no body-signature comparison. A streaming compiler must retain the forward's parameter names as well as its type and effect metadata until it compiles the body. The current compiler uses the measured retained routine and parameter tables published in the implementation plan.
+The body does not repeat the signature, so there is no second signature to
+compare. A streaming compiler must retain the forward's parameter names and
+signature until it compiles the body.
 
 After its complete signature has been checked, a routine may call itself directly. Mutually recursive routines require an earlier forward signature for every routine called before its definition. Recursive calls use the ordinary argument, activation, result, and lifetime rules; Nucleus has no separate recursive syntax.
 
-Recursion is admitted in Nucleus 0.1 and implemented by the current compiler. Standard language mode must not reinterpret or reject recursive source within the implementation's documented compile-time capacities.
+Recursion is part of Nucleus 0.1. Standard language mode must not reinterpret or
+reject recursive source within the implementation's documented compile-time
+capacities.
 
 <div id="139-activation-capacity" class="nucleus-source-anchor"></div>
 
 ## 13.9 Activation capacity
 
-Runtime activation capacity is implementation-defined. An implementation may bound the number of simultaneously active routine invocations, the storage consumed by their activation state, or both. It must publish every bound and provide at least the capacity needed by every complete accepted program in Chapter 21 under its stated inputs. Before beginning a call that would exceed a published bound, the program performs the activation-capacity trap specified by Chapter 15; it must not overwrite a live activation, alias one activation's locals with another, or continue with partial parameter binding.
+Runtime activation capacity is implementation-defined. An implementation may bound the number of simultaneously active routine invocations, the storage consumed by their activation state, or both. It must publish every bound and provide at least the capacity needed by every complete accepted program in Chapter 18 under its stated inputs. Before beginning a call that would exceed a published bound, the program performs the activation-capacity trap specified by Chapter 15; it must not overwrite a live activation, alias one activation's locals with another, or continue with partial parameter binding.
 
 The trap point is after argument evaluation and before the new activation begins. Effects from evaluated arguments remain observable, while the callee performs no local initialization or body statement.
 
 This runtime limit does not create a non-recursive language profile. A compiler accepts recursive call graphs subject to its ordinary compile-time capacities; active depth is a runtime property.
 
-<div id="1310-cleanup-and-lowering-boundary" class="nucleus-source-anchor"></div>
+<div id="1310-cleanup" class="nucleus-source-anchor"></div>
 
-## 13.10 Cleanup and lowering boundary
+## 13.10 Cleanup
 
 Nucleus routines have no destructors, `finally`, `defer`, exception unwinding, variable-sized local allocation, or other source-level scope-exit action. A `return` therefore performs no hidden source cleanup before transferring control.
-
-The source semantics permit an all-caller-save implementation. A backend may save live implementation values before a call, place arguments, invoke the callee, capture a result before restoring overlapping state, and restore the caller afterward. Recursive calls may use the same rule for each activation. These operations are backend mechanics, not source-visible registers, clobber declarations, or parameter modes.
-
-The compiler may lower calls and returns to regular semantic operations while parsing. This specification does not define register assignments, save regions, hardware-stack use, helper entry points, or the physical calling convention. The Z80 runtime and backend contract supplies the required target-level effects.
 
 <div id="1311-invalid-calls-and-capacity-limits" class="nucleus-source-anchor"></div>
 
@@ -209,6 +219,51 @@ end
 ```
 
 `destination` remains bound to the caller's object. The assignment materializes the transient result without declaring an aggregate local.
+
+A length-polymorphic routine receives a complete array rather than a slice:
+
+```nucleus
+sub sum(data as u16[]) as u16
+    var total as u16 = 0
+    var i as u16
+
+    for i = 0 until data.length
+        total = total + data[i]
+    end
+
+    return total
+end
+```
+
+The same routine accepts any admitted concrete `u16[N]` argument. `data.length` is the caller's retained `u16` element count, and every index checks against that count. The counter is declared before the loop; a Nucleus `for` header never declares it.
+
+Mutation uses the same complete-object view:
+
+```nucleus
+sub fill(data as u8[], value as u8)
+    var i as u16
+
+    for i = 0 until data.length
+        data[i] = value
+    end
+end
+
+const tooLong = 5
+
+sub copy(source as u8[], destination as u8[]) fails
+    var i as u16
+
+    if source.length > destination.length
+        fail tooLong
+    end
+
+    for i = 0 until source.length
+        destination[i] = source[i]
+    end
+end
+```
+
+`copy` checks the destination before its first write. The two parameters may have different concrete lengths because compatibility is determined by their exact element type, not by an equal array bound.
 
 Direct and mutual recursion use ordinary signatures:
 

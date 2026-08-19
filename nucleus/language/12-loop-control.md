@@ -5,7 +5,7 @@ parent: "Nucleus 0.1 Language Specification"
 nav_order: 12
 pageClass: "nucleus-specification"
 ---
-[← 11. Conditional control](11-conditional-control.md) · [Contents](./) · [13. Routines and calls →](13-routines-and-calls.md)
+[← 11. Conditional and selection control](11-conditional-and-selection-control.md) · [Contents](./) · [13. Routines and calls →](13-routines-and-calls.md)
 
 <div id="12-loop-control" class="nucleus-source-anchor"></div>
 
@@ -17,7 +17,7 @@ pageClass: "nucleus-specification"
 
 This chapter defines the two Nucleus 0.1 loop forms, counted-loop direction and bounds, and the required `exit` and `continue` statements. Chapter 9 defines expressions, and Chapter 10 defines statement sequences.
 
-Nucleus has one pre-test conditional loop and one counted loop. Both use ordinary comparisons and direct Z80 branches; neither requires a dedicated loop runtime mechanism.
+Nucleus has one pre-test conditional loop and one counted loop.
 
 <div id="122-grammar" class="nucleus-source-anchor"></div>
 
@@ -36,11 +36,10 @@ for-statement         ::= "for" NAME "=" expression
                           statement-sequence
                           "end" NEWLINE
 for-bound             ::= "to" | "until"
-step-constant         ::= [ "+" | "-" ] step-magnitude
-step-magnitude        ::= NUMBER | NAME
+step-constant         ::= [ "+" | "-" ] constant-expression
 ```
 
-A `NAME` used as a step magnitude must denote an earlier `u8` or `u16` named constant. The optional sign belongs to the counted-loop header and is not a runtime signed value. A written numeric magnitude follows Chapter 3's admitted integer-literal forms.
+A written step has an optional direction sign followed by an ordinary compile-time constant expression. The expression supplies a nonnegative magnitude; the optional sign supplies the direction.
 
 Each loop body is a statement sequence and may be empty. A loop opens no name scope, and its `end` closes only that loop.
 
@@ -50,7 +49,7 @@ Each loop body is a statement sequence and may be empty. A loop opens no name sc
 
 A `while` condition must have type `boolean`. The condition is evaluated before every possible iteration. When it produces `true`, the body executes. Normal completion of the body returns control to the condition. When the condition produces `false`, execution continues after the loop.
 
-The loop may execute zero times. Calls, checks, mutations, and traps performed by each evaluated condition remain observable. A condition is evaluated once per test; a trap prevents entry to the body or any later iteration.
+Except for the literal `true` condition, the loop may execute zero times. Calls, checks, mutations, and traps performed by each evaluated condition remain observable. A condition is evaluated once per test; a trap prevents entry to the body or any later iteration.
 
 An indefinite loop uses `while true`. Nucleus has no separate unconditional-loop keyword.
 
@@ -58,15 +57,15 @@ An indefinite loop uses `while true`. Nucleus has no separate unconditional-loop
 
 ## 12.4 Counted-loop counter and operands
 
-The counter name must resolve to a scalar local of type `u8` or `u16`. A program variable, parameter, constant, Boolean, aggregate, alias, routine, field path, or indexed path is invalid. The loop introduces no declaration, so the local must appear in the routine's declaration prefix.
+The counter name must resolve to a scalar local of type `u8`, `u16`, `i8`, or `i16`. The programmer chooses the counter type when declaring that local. A program variable, parameter, constant, Boolean, aggregate, alias, routine, field path, or indexed path is invalid. The loop introduces no declaration, so the local must appear in the routine's declaration prefix.
 
-The counter becomes read-only to source statements from the beginning of the loop body through its closing `end`. The body may read it and pass its scalar value, but it cannot assign to it. A nested counted loop cannot reuse the same local as its counter because its initialization would be another write. The compiler enforces both restrictions by comparing the resolved local binding with the counters in its active loop contexts; it needs no call-graph analysis because another routine cannot name a caller's local.
+The counter becomes read-only to source statements from the beginning of the loop body through its closing `end`. The body may read it and pass its scalar value, but it cannot assign to it. A nested counted loop cannot reuse the same local as its counter because its initialization would be another write. Another routine cannot name the caller's local, so this restriction does not extend through calls.
 
-The start expression must be assignment-compatible with the counter type. The bound must be an integer expression. A typed `u8` counter may be compared with a `u16` bound through the ordinary widening rule. An exact bound remains mathematical for the loop comparison and need not fit the counter because the bound is never stored in it.
+The start and bound expressions must be assignment-compatible with the counter under Chapter 9's integer rules. An exact start or bound may adopt the counter type when representable, and an admitted value-preserving conversion may convert a typed expression to that type. A wider typed value is not narrowed merely because another loop operand has the counter type; source must use an explicit checked conversion.
 
 The compiler evaluates the start expression and then the bound expression exactly once when the loop begins. It performs both evaluations before storing the converted start in the counter. A bound expression that reads the counter therefore reads its pre-loop value. If either evaluation or the start conversion traps, the counter is not initialized by the loop and the body does not begin.
 
-`step` defaults to mathematical `+1`. A written step is a compile-time signed constant. The compiler resolves a named magnitude under Chapter 5, applies the optional sign, and requires a nonzero magnitude from 1 through 65,535. `step 0` and `step -0` are invalid. The signed step is loop-control metadata; Nucleus does not acquire a signed runtime scalar type.
+`step` defaults to mathematical `+1`. A written magnitude must fold to a non-Boolean integer constant from 1 through 65,535. The optional leading `-` selects a negative step; leading `+` or no sign selects a positive step. `step 0`, `step -0`, a negative folded magnitude, and any expression that folds to zero are invalid. The step is loop-control metadata and need not have the counter's storage type. A variable, call, or other runtime value is not a step constant.
 
 <div id="125-counted-loop-tests" class="nucleus-source-anchor"></div>
 
@@ -83,7 +82,7 @@ The compiler stores the converted start in the counter and performs this test be
 
 After normal body completion, and after `continue`, the implementation computes the next counter value mathematically and tests it against the bound before storing it. A value that fails the next test ends the loop without being stored. A value that would continue must fit the counter type. Every such overflow is the runtime `loop-range` trap defined by Chapter 15, even when the compiler can prove it from source constants. The trap occurs only if execution reaches the increment path; an earlier `exit`, `return`, `fail`, or other terminating transfer from the body prevents that increment and its trap.
 
-This order prevents the loop machinery from wrapping an unsigned counter at its terminal boundary. Because the body cannot change the counter, the value reaching the increment still satisfies the comparison that admitted the current iteration. The implementation may use that invariant when comparing the remaining distance with the constant step.
+This order prevents the loop machinery from wrapping a counter at either terminal boundary. Signed loops use signed ordering and work across zero in both directions. Because the body cannot change the counter, the value reaching the increment still satisfies the comparison that admitted the current iteration. The implementation may use that invariant when comparing the remaining distance with the constant step.
 
 After the loop, the counter retains the last value stored. A zero-iteration loop leaves the converted start. `exit` also leaves the current counter value unchanged.
 
@@ -117,19 +116,9 @@ In a `while` loop, `continue` transfers control to the next condition test. In a
 
 Either statement outside a loop is invalid. Nucleus has no labelled transfer, numeric loop depth, `break` synonym, or transfer directly to an outer loop. An early `return` under Chapter 13 remains the way to leave the routine from inside nested loops.
 
-The grammar adds only the two simple statements, and their lowering uses the active loop's existing continue and exit branch targets. This low incremental structure is a settled language decision; target-byte cost remains subject to the Chapter 2 ledger.
+<div id="128-excluded-loop-forms" class="nucleus-source-anchor"></div>
 
-<div id="128-lowering-boundary" class="nucleus-source-anchor"></div>
-
-## 12.8 Lowering boundary
-
-A counted loop has the same source effect as ordered start and bound evaluation, counter initialization, a direction-specific comparison, a conditional branch, a body in which the counter is read-only, a checked mathematical increment, and a backward branch. `to` and `until` differ only in whether the bound comparison is inclusive.
-
-The semantic-operation interface requires no dedicated `for`, `while`, `exit`, or `continue` operation. A compiler may emit ordinary comparisons and branches, provided it preserves one-time operand evaluation, the test and store order, and the transfer targets above.
-
-<div id="129-excluded-loop-forms" class="nucleus-source-anchor"></div>
-
-## 12.9 Excluded loop forms
+## 12.8 Excluded loop forms
 
 Nucleus 0.1 has no:
 
@@ -142,17 +131,17 @@ Nucleus 0.1 has no:
 
 These omissions leave `while` for condition-controlled iteration and one mechanically specified `for` for counted traversal.
 
-<div id="1210-invalid-loops-and-capacity-limits" class="nucleus-source-anchor"></div>
+<div id="129-invalid-loops-and-capacity-limits" class="nucleus-source-anchor"></div>
 
-## 12.10 Invalid loops and capacity limits
+## 12.9 Invalid loops and capacity limits
 
-The compiler must diagnose a non-Boolean `while` condition, a counter that is not a scalar local of type `u8` or `u16`, assignment to an active counter, reuse of an active counter by a nested loop, an incompatible start or bound, an unavailable or nonconstant step magnitude, a zero step, a missing header `NEWLINE` or closing `end`, and `exit` or `continue` outside a loop.
+The compiler must diagnose a non-Boolean `while` condition, a counter that is not an integer scalar local, assignment to an active counter, reuse of an active counter by a nested loop, an incompatible start or bound, an unavailable or nonconstant step magnitude, a zero step, a missing header `NEWLINE` or closing `end`, and `exit` or `continue` outside a loop.
 
 An implementation may bound loop nesting, retained saved bounds, active counter bindings, active branch targets, and fixup state. It must publish each limit and issue a capacity diagnostic before overflow changes a loop's bound, direction, target, or counter update.
 
-<div id="1211-examples" class="nucleus-source-anchor"></div>
+<div id="1210-examples" class="nucleus-source-anchor"></div>
 
-## 12.11 Examples
+## 12.10 Examples
 
 With `level`, `index`, `row`, and `position` declared as scalar locals, these counted loops visit ascending, exclusive, and descending ranges:
 

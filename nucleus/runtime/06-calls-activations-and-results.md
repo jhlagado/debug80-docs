@@ -19,18 +19,31 @@ The caller evaluates every argument from left to right before the callee begins.
 It retains each earlier scalar value or aggregate carrier across evaluation of
 later arguments. A trap during argument evaluation prevents the call.
 
-Scalar parameters receive copied values. Aggregate parameters receive fixed,
-non-null, non-reseatable address carriers to existing program storage. The
-callee may mutate that storage where the language permits.
+Scalar parameters receive copied values. Concrete aggregate parameters receive
+fixed, non-null, non-reseatable address carriers to existing program storage.
+An open-string parameter receives the same fixed carrier plus its actual
+capacity. An open-array parameter receives the fixed carrier plus its actual
+16-bit element count. The callee may mutate that storage where the language
+permits.
 
 <div id="62-activation-state" class="nucleus-source-anchor"></div>
 
 ## 6.2 Activation state
 
 Each successful call creates distinct logical storage for its scalar
-parameters, scalar locals, aggregate-parameter carriers, return address, and
-other live implementation state. Recursion uses the same mechanism as an
-ordinary call. One active invocation must not overwrite another's state.
+parameters, scalar locals, aggregate-parameter carriers and retained open-view
+bounds, return address, and other live implementation state. Recursion uses the
+same mechanism as an ordinary call. One active invocation must not overwrite
+another's state.
+
+In the current Z80 activation, a concrete aggregate parameter occupies its
+two-byte alias slot. `string[]` adds one hidden capacity byte immediately after
+that slot. `T[]` adds one hidden little-endian count word immediately after the
+alias slot. Positive `IX` source displacements therefore include two call-stack
+words for either open view, while activation offsets include three bytes for
+`string[]` and four for `T[]`. Parameters later in a signature are displaced by
+the complete retained size of every earlier binding. Caller cleanup counts both
+words for each open-view source argument on success, propagation, and handling.
 
 The backend may use the hardware stack, a bounded activation arena, static
 slots saved around calls, or a measured combination. It publishes both the
@@ -109,4 +122,6 @@ argument cannot cross banks because its provenance is not represented in the
 runtime carrier. Scalar arguments and results cross without this restriction.
 A bank-local accessor may expose a scalar from a banked aggregate constant, and
 a banked routine may operate on caller-owned RAM through a directly
-variable-rooted aggregate argument.
+variable-rooted aggregate argument. An open-array argument adds no bank field;
+it follows the same root and call-placement restrictions as the concrete array
+alias from which it is formed.

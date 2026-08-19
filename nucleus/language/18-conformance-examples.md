@@ -1,21 +1,34 @@
 ---
 layout: "default"
-title: "21. Conformance examples"
+title: "18. Conformance examples"
 parent: "Nucleus 0.1 Language Specification"
-nav_order: 21
+nav_order: 18
 pageClass: "nucleus-specification"
 ---
-[← 20. Feature ledger](20-feature-ledger.md) · [Contents](./)
+[← 17. Complete grammar](17-complete-grammar.md) · [Contents](./)
 
-<div id="21-conformance-examples" class="nucleus-source-anchor"></div>
+<div id="18-conformance-examples" class="nucleus-source-anchor"></div>
 
-# 21. Conformance examples
+# 18. Conformance examples
 
-<div id="211-complete-accepted-program" class="nucleus-source-anchor"></div>
+This chapter is the executable minimum corpus referenced by Section 1.5. It is
+not a second definition of the language: Chapters 3–16 govern when an example
+and its stated result disagree.
 
-## 21.1 Complete accepted program
+| Sections    | Principal coverage                                                                                  |
+| ----------- | --------------------------------------------------------------------------------------------------- |
+| 18.1–18.4   | records, arrays, aggregate aliases and copying, calls, control flow, recursion, and bounded strings |
+| 18.5–18.7   | failure propagation, immediate handling, and stateful system services                               |
+| 18.8–18.10  | counted-loop arithmetic, required traps, and compile-time rejection                                 |
+| 18.11–18.14 | multipart input, name identity, forward parameters, and aggregate destinations                      |
+| 18.15–18.20 | constants, numeric literals, `xor`, `mod`, assertions, and aggregate constants                      |
+| 18.21–18.22 | open-array library interfaces and ordered integer selection                                         |
 
-This program exercises records, complete aggregate initializers, exact-type aggregate assignment, a checked fixed array, an aggregate alias parameter and result, scalar locals, a counted loop, a conditional chain, a call, and observable output:
+<div id="181-complete-accepted-program" class="nucleus-source-anchor"></div>
+
+## 18.1 Complete accepted program
+
+This program exercises records, complete aggregate initializers, exact-type record assignment, a checked fixed array, an aggregate alias parameter and result, scalar locals, a counted loop, a conditional chain, a call, and observable output:
 
 ```nucleus
 record Cell
@@ -57,9 +70,9 @@ end
 
 Each aggregate assignment copies `template` into the selected array element before `template` is changed for the next iteration. The expected standard output is the byte for `Y`, provided the output service succeeds.
 
-<div id="212-recoverable-error-and-propagation" class="nucleus-source-anchor"></div>
+<div id="182-recoverable-error-and-propagation" class="nucleus-source-anchor"></div>
 
-## 21.2 Recoverable error and propagation
+## 18.2 Recoverable error and propagation
 
 ```nucleus
 const badByte = 10
@@ -84,9 +97,9 @@ end
 
 For the minimum conformance-corpus run, standard input supplies byte `A` and the output service succeeds; the expected standard output is `A`. More generally, success copies one input byte to output. End of input or a service error propagates its standard code, a zero byte produces `badByte`, and any failure reaching `main` performs the `unhandled-error` trap with that code.
 
-<div id="213-recursion-and-control-flow" class="nucleus-source-anchor"></div>
+<div id="183-recursion-and-control-flow" class="nucleus-source-anchor"></div>
 
-## 21.3 Recursion and control flow
+## 18.3 Recursion and control flow
 
 ```nucleus
 forward sub odd(value as u16) as boolean
@@ -99,10 +112,12 @@ sub even(value as u16) as boolean
 end
 
 sub odd
-    if value = 0
-        return false
+    while not false
+        if value = 0
+            return false
+        end
+        return even(value - 1)
     end
-    return even(value - 1)
 end
 
 sub main()
@@ -123,11 +138,16 @@ sub main()
 end
 ```
 
-The program is valid and writes byte value 4 when the output service succeeds. The Chapter 21 conformance floor requires enough activation capacity for this execution; an implementation may perform `activation-capacity` only beyond its published, conformant limit.
+The program is valid and writes byte value 4 when the output service succeeds.
+The condition of the loop in `odd` folds to `true`, and no `exit` targets that
+loop, so the value routine needs no return after the loop. The Chapter 18
+conformance floor requires enough activation capacity for this execution; an
+implementation may perform `activation-capacity` only beyond its published,
+conformant limit.
 
-<div id="214-bounded-string-aliasing-and-byte-mutation" class="nucleus-source-anchor"></div>
+<div id="184-bounded-string-aliasing-and-byte-mutation" class="nucleus-source-anchor"></div>
 
-## 21.4 Bounded-string aliasing and byte mutation
+## 18.4 Bounded-string aliasing and byte mutation
 
 ```nucleus
 var text as string[4] = "A\0B"
@@ -156,9 +176,9 @@ end
 
 The literal's embedded zero is an ordinary byte, so its logical length is three. Assignment materializes `textAlias()` by copying it into the program-level `snapshot` object. Passing a second result directly to `mutate` forwards the transient alias without copying, so mutation changes `text` while `snapshot` retains its copied zero byte. The expected standard output is `Y`.
 
-<div id="215-result-free-call-propagation" class="nucleus-source-anchor"></div>
+<div id="185-result-free-call-propagation" class="nucleus-source-anchor"></div>
 
-## 21.5 Result-free call propagation
+## 18.5 Result-free call propagation
 
 ```nucleus
 sub emitMarker() fails
@@ -177,9 +197,9 @@ end
 
 When output succeeds, `emitMarker` has no result, `relayMarker` returns successfully, and the expected standard output is `R`. An output failure propagates unchanged through both callers.
 
-<div id="216-same-destination-error-handling" class="nucleus-source-anchor"></div>
+<div id="186-same-destination-error-handling" class="nucleus-source-anchor"></div>
 
-## 21.6 Same-destination error handling
+## 18.6 Same-destination error handling
 
 ```nucleus
 const sampleFailure = 7
@@ -202,9 +222,9 @@ end
 
 The failed assignment performs no success-result store and then stores `sampleFailure` in `code`, even though `code` is both destinations. The expected standard output is byte value 7.
 
-<div id="217-bulk-output-cursor-state" class="nucleus-source-anchor"></div>
+<div id="187-bulk-output-cursor-state" class="nucleus-source-anchor"></div>
 
-## 21.7 Bulk-output cursor state
+## 18.7 Bulk-output cursor state
 
 ```nucleus
 sub main() fails
@@ -217,25 +237,27 @@ end
 
 The conformance output begins empty with its cursor at zero. The first two calls append `AB`; the seek returns to zero; the final call overwrites the first byte without inserting or truncating. The expected bulk output is `ZB`, with its cursor at offset one.
 
-<div id="218-runtime-loop-range-reachability" class="nucleus-source-anchor"></div>
+<div id="188-counted-loop-overshoot-before-storage" class="nucleus-source-anchor"></div>
 
-## 21.8 Runtime loop-range reachability
+## 18.8 Counted-loop overshoot before storage
 
 ```nucleus
 sub main()
     var index as u8
 
-    for index = 250 to 300 step 10
+    for index = 250 to 255 step 5 + 5
         exit
     end
 end
 ```
 
-This program is valid and terminates normally with `index` equal to 250. Without the `exit`, the first increment would store 260 if it fit and the loop would continue, so execution would perform `loop-range`; the compiler must not reject the source merely because it can prove that possible runtime path.
+The step expression folds to 10. This program is valid and terminates normally
+with `index` equal to 250. Without the `exit`, the mathematical next value is 260. It fails the `to 255` next-bound test, so the loop ends without storing it
+and without a `loop-range` trap.
 
-<div id="219-specified-trap-cases" class="nucleus-source-anchor"></div>
+<div id="189-specified-trap-cases" class="nucleus-source-anchor"></div>
 
-## 21.9 Specified trap cases
+## 18.9 Specified trap cases
 
 Each listing below is valid source. The external conformance harness supplies the stated standard-input byte and observes the trap report.
 
@@ -276,9 +298,9 @@ end
 
 With input byte zero, the required result is likewise `division-by-zero` at `mod`.
 
-<div id="2110-complete-rejected-programs" class="nucleus-source-anchor"></div>
+<div id="1810-complete-rejected-programs" class="nucleus-source-anchor"></div>
 
-## 21.10 Complete rejected programs
+## 18.10 Complete rejected programs
 
 Each program is rejected for the stated independent reason.
 
@@ -428,33 +450,29 @@ end
 
 Both programs fail lexically at the literal prefix. A hexadecimal literal has at most four digits, and a binary literal has at most sixteen.
 
-<div id="2111-multipart-input-presentation" class="nucleus-source-anchor"></div>
+<div id="1811-multipart-input-presentation" class="nucleus-source-anchor"></div>
 
-## 21.11 Multipart input presentation
+## 18.11 Multipart input presentation
 
-The conformance harness must also present the complete accepted program in Section 21.1 as at least two ordered source parts. It splits the program after a delimiter-depth-zero logical newline, assigns a distinct stable identity to each part, and otherwise preserves every source byte and the declared order. The expected output remains `Y`.
+The conformance harness must also present the complete accepted program in Section 18.1 as at least two ordered source parts. It splits the program after a delimiter-depth-zero logical newline, assigns a distinct stable identity to each part, and otherwise preserves every source byte and the declared order. The expected output remains `Y`.
 
 For the diagnostic case, the harness introduces an undeclared name in the second part. The compiler diagnostic must identify the second part's stable identity and the position of that name within the part. A separate run may use different physical files or transport chunks, but those changes must not alter tokens, declaration visibility, validity, or program behaviour.
 
-The harness must also construct the same ordered parts from this flat manifest, using one selected base directory:
+The packaging mechanism is not part of this conformance case. Whether the host
+uses an explicit list or dependency discovery, it must present the same two
+parts in the same order. Diagnostics for the second part use `main.nu` as its
+diagnostic name.
 
-```text
-model.nu
+<div id="1812-case-sensitive-names-and-forward-parameters" class="nucleus-source-anchor"></div>
 
-main.nu
-```
-
-It emits `model.nu` first and `main.nu` second. The blank line adds no part. The manifest text is not presented to the Nucleus tokenizer, and diagnostics for the second part use `main.nu` as its diagnostic name.
-
-<div id="2112-case-sensitive-names-and-forward-parameters" class="nucleus-source-anchor"></div>
-
-## 21.12 Case-sensitive names and forward parameters
+## 18.12 Case-sensitive names and forward parameters
 
 This complete program uses three distinct case variants and a forward parameter binding:
 
 ```nucleus
 forward sub render(Player as u8) as u8
 
+var Player as u8 = 9
 var player as u8 = 1
 var PLAYER as u8 = 2
 
@@ -467,13 +485,17 @@ sub main() fails
 end
 ```
 
-The expected standard output is byte value 6. The lowercase keywords are recognized as keywords; `Player`, `player`, and `PLAYER` are distinct identifiers. The abbreviated body obtains `Player` from the forward signature.
+The expected standard output is byte value 6. The lowercase keywords are
+recognized as keywords; `Player`, `player`, and `PLAYER` are distinct
+identifiers. Inside `render`, the forward parameter `Player` shadows the
+program variable with the same exact identity, so the argument value 3 is used.
+The abbreviated body obtains that parameter binding from the forward signature.
 
 Changing the body header to `sub Render` makes the program invalid because no incomplete forward named `Render` exists. Writing `SUB render` is also invalid: `SUB` is a `NAME`, not the keyword `sub`.
 
-<div id="2113-caller-supplied-aggregate-destination" class="nucleus-source-anchor"></div>
+<div id="1813-caller-supplied-aggregate-destination" class="nucleus-source-anchor"></div>
 
-## 21.13 Caller-supplied aggregate destination
+## 18.13 Caller-supplied aggregate destination
 
 This program copies and changes a record through aggregate parameters without declaring aggregate storage inside the routine:
 
@@ -500,9 +522,9 @@ end
 
 `input` and `output` are fixed aliases to caller storage. Complete assignment copies `source` into `destination`, after which the scalar-field assignment changes only `destination`. The expected standard output is `Y`.
 
-<div id="2114-aggregate-selection-and-forwarding" class="nucleus-source-anchor"></div>
+<div id="1814-aggregate-selection-and-forwarding" class="nucleus-source-anchor"></div>
 
-## 21.14 Aggregate selection and forwarding
+## 18.14 Aggregate selection and forwarding
 
 This program returns and forwards an alias to one selected array element:
 
@@ -513,12 +535,12 @@ end
 
 var samples as Sample[2] = [(3), (7)]
 
-sub select(items as Sample[2], index as u8) as Sample
+sub choose(items as Sample[2], index as u8) as Sample
     return items[index]
 end
 
 sub forwardSelection(items as Sample[2], index as u8) as Sample
-    return select(items, index)
+    return choose(items, index)
 end
 
 sub replace(item as Sample, value as u8)
@@ -535,9 +557,9 @@ end
 
 Both result-bearing routines transfer transient aliases to storage inside `samples`. `replace` receives the forwarded alias and mutates the selected original object without an aggregate copy. The expected standard output is `Y`.
 
-<div id="2115-inferred-constant-types" class="nucleus-source-anchor"></div>
+<div id="1815-inferred-constant-types" class="nucleus-source-anchor"></div>
 
-## 21.15 Inferred constant types
+## 18.15 Inferred constant types
 
 This program uses one exact integer constant in both integer widths and retains a separate Boolean constant:
 
@@ -556,9 +578,9 @@ end
 
 `sharedValue` adopts `u8` for `byteUse` and `u16` for `wordUse`. `enabled` has type `boolean`. The expected standard output is `Y`.
 
-<div id="2116-integer-literal-spellings" class="nucleus-source-anchor"></div>
+<div id="1816-integer-literal-spellings" class="nucleus-source-anchor"></div>
 
-## 21.16 Integer literal spellings
+## 18.16 Integer literal spellings
 
 This program exercises hexadecimal and binary literals at ordinary and maximum word values:
 
@@ -577,9 +599,9 @@ end
 
 All three literal spellings produce the same exact integer category. The expected standard output is byte value 176.
 
-<div id="2117-integer-exclusive-or" class="nucleus-source-anchor"></div>
+<div id="1817-integer-exclusive-or" class="nucleus-source-anchor"></div>
 
-## 21.17 Integer exclusive OR
+## 18.17 Integer exclusive OR
 
 This program exercises constant and runtime `xor` at both integer widths. It also distinguishes left association at the shared `or` and `xor` precedence level:
 
@@ -591,13 +613,14 @@ var wordValue as u16 = $f0f0
 sub main() fails
     byteValue = byteValue xor $ff
     wordValue = wordValue xor $ffff
-    if folded = 3 and byteValue = $5a and wordValue = $0f0f
+    if folded = 3 and not byteValue = $a5 and wordValue = $0f0f
         writeOutputByte(byteValue) else fail
     end
 end
 ```
 
-The expected standard output is byte value 90.
+`not byteValue = $a5` means `(not byteValue) = $a5`; unary `not` binds before
+comparison. The expected standard output is byte value 90.
 
 Boolean operands are invalid:
 
@@ -610,9 +633,9 @@ end
 
 The second program is rejected at `xor` because exclusive OR is integer-only.
 
-<div id="2118-integer-remainder" class="nucleus-source-anchor"></div>
+<div id="1818-integer-remainder" class="nucleus-source-anchor"></div>
 
-## 21.18 Integer remainder
+## 18.18 Integer remainder
 
 This program exercises constant and runtime `mod` at both integer widths:
 
@@ -643,9 +666,9 @@ end
 
 The second program is rejected at the zero divisor with the same division-by-zero diagnostic used by `/ 0`.
 
-<div id="2119-compile-time-assertions" class="nucleus-source-anchor"></div>
+<div id="1819-compile-time-assertions" class="nucleus-source-anchor"></div>
 
-## 21.19 Compile-time assertions
+## 18.19 Compile-time assertions
 
 This program states and uses a relationship between two earlier constants:
 
@@ -685,11 +708,13 @@ end
 
 The third program is rejected at `assert` because an exact integer is not a Boolean condition.
 
-<div id="2120-aggregate-constants" class="nucleus-source-anchor"></div>
+<div id="1820-aggregate-constants" class="nucleus-source-anchor"></div>
 
-## 21.20 Aggregate constants
+## 18.20 Aggregate constants
 
-This program reads record, array, and bounded-string constants, copies a constant into mutable storage, and deliberately demonstrates the non-transitive alias rule:
+This program reads record, array, and bounded-string constants, uses earlier
+aggregate constants as complete static initializer nodes, and deliberately
+demonstrates the non-transitive alias rule:
 
 ```nucleus
 record Pair
@@ -698,16 +723,16 @@ record Pair
 end
 
 const Origin as Pair = (7, 300)
+const Clone as Pair = Origin
 const Values as u8[3] = [1, 2, 3]
 const Text as string[3] = "A\0B"
-var target as Pair
+var target as Pair = Clone
 
 sub mutate(item as Pair)
     item.left = 9
 end
 
 sub main() fails
-    target = Origin
     if target.left = 7 and Values[1] = 2 and Text.length = 3 and Text[2] = 'B'
         mutate(Origin)
         if Origin.left = 9 and target.left = 7
@@ -717,7 +742,14 @@ sub main() fails
 end
 ```
 
-The direct named roots are readable aggregate sources. `target = Origin` copies the complete value. Passing `Origin` to `mutate` loses the direct-root read-only marker, so the mutation is permitted; this conformance execution uses writable proof storage and therefore observes the change. Portable programs do not depend on that mutation when a target places constants in physical read-only memory. The expected standard output is `Y`.
+`Clone` is established by copying the complete value of the earlier `Origin`
+constant during static initialization. `target` is then initialized from
+`Clone` before `main`; neither copy performs a runtime storage read. Passing
+`Origin` to `mutate` loses the direct-root read-only marker, so the mutation is
+permitted; this conformance execution uses writable proof storage and therefore
+observes the change. Portable programs do not depend on that mutation when a
+target places constants in physical read-only memory. The expected standard
+output is `Y`.
 
 A direct constant-rooted assignment is invalid:
 
@@ -734,3 +766,86 @@ end
 ```
 
 The second program is rejected at `Origin`. The same rule rejects assignment to the whole constant, an array element, or a bounded-string byte reached directly from its constant name.
+
+<div id="1821-open-array-library-routines" class="nucleus-source-anchor"></div>
+
+## 18.21 Open-array library routines
+
+This program uses one set of routines with concrete arrays of different lengths:
+
+```nucleus
+const tooLong = 5
+var small as u8[3] = [1, 2, 3]
+var large as u8[5]
+
+sub sum(data as u8[]) as u16
+    var total as u16 = 0
+    var i as u16
+
+    for i = 0 until data.length
+        total = total + u16(data[i])
+    end
+
+    return total
+end
+
+sub fill(data as u8[], value as u8)
+    var i as u16
+
+    for i = 0 until data.length
+        data[i] = value
+    end
+end
+
+sub copy(source as u8[], destination as u8[]) fails
+    var i as u16
+
+    if source.length > destination.length
+        fail tooLong
+    end
+
+    for i = 0 until source.length
+        destination[i] = source[i]
+    end
+end
+
+sub main() fails
+    writeOutputByte(u8(sum(small))) else fail
+    fill(large, 9)
+    copy(small, large) else fail
+    writeOutputByte(large[0]) else fail
+    writeOutputByte(large[4]) else fail
+end
+```
+
+The expected standard-output bytes are 6, 1, and 9. Each `T[]` binding denotes the complete concrete array and retains its actual `u16` element count. `copy` checks the destination length before writing; no source form can pass a shortened prefix or substitute another count.
+
+<div id="1822-ordered-integer-selection" class="nucleus-source-anchor"></div>
+
+## 18.22 Ordered integer selection
+
+This program evaluates one `u16` selector and writes 7. The values 1 and 2
+share their case body, while 300 selects the later body:
+
+```nucleus
+sub main() fails
+    select u16(300)
+    case 1, 2
+        writeOutputByte(1) else fail
+    case 300
+        writeOutputByte(7) else fail
+    else
+        writeOutputByte(9) else fail
+    end
+end
+```
+
+This program is rejected at `true` because a selector must be an integer:
+
+```nucleus
+sub main()
+    select true
+    case 1
+    end
+end
+```

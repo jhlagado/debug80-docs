@@ -27,7 +27,7 @@ Nucleus distinguishes four related concepts:
 
 | Concept               | Source meaning                                                                                                                         |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Scalar value          | One `u8`, `u16`, or `boolean` value. Scalar values can be copied.                                                                      |
+| Scalar value          | One `u8`, `u16`, `i8`, `i16`, or `boolean` value. Scalar values can be copied.                                                         |
 | Object                | Storage associated with a program variable.                                                                                            |
 | Subobject             | A record field, fixed-array element, or existing bounded-string byte. A bounded string may itself be an object or aggregate subobject. |
 | Typed aggregate alias | A non-owning, fixed binding to an existing record, fixed-array, or bounded-string object or subobject of one of those types.           |
@@ -54,13 +54,13 @@ Program-lifetime objects exist before the designated entry routine begins. Their
 
 The zero value of each admitted type is:
 
-| Type        | Zero value                                                  |
-| ----------- | ----------------------------------------------------------- |
-| `u8`, `u16` | integer zero                                                |
-| `boolean`   | `false`                                                     |
-| record      | the record whose fields recursively have their zero values  |
-| `T[N]`      | the array whose elements recursively have their zero values |
-| `string[N]` | the empty byte sequence                                     |
+| Type                     | Zero value                                                  |
+| ------------------------ | ----------------------------------------------------------- |
+| `u8`, `u16`, `i8`, `i16` | integer zero                                                |
+| `boolean`                | `false`                                                     |
+| record                   | the record whose fields recursively have their zero values  |
+| `T[N]`                   | the array whose elements recursively have their zero values |
+| `string[N]`              | the empty byte sequence                                     |
 
 This table defines values, not a byte layout or a universal initialization rule. Chapter 8 specifies which declarations receive a zero value and which require an explicit initializer. An implementation must establish the required semantic value without exposing padding, headers, addresses, or backend-specific representations.
 
@@ -72,7 +72,7 @@ Each routine invocation creates a distinct logical activation. An activation con
 
 A scalar parameter receives a copied value. Each scalar local belongs to one activation. Its source lifetime begins when execution reaches its declaration and Chapter 8 has established its initial value; its lifetime ends with the activation. A scalar result is copied from the returned expression to the caller. It is not shared storage in the callee.
 
-An aggregate parameter is a typed alias to caller-provided storage. Its binding belongs to the activation, but the target retains program lifetime. A routine has no other named aggregate binding.
+An aggregate parameter is a typed alias to caller-provided storage. Its binding belongs to the activation, but the target retains program lifetime. An open-string parameter also carries the referent's concrete capacity within the activation. An open-array parameter carries the concrete array's element count. A routine has no other named aggregate binding.
 
 Two simultaneously active invocations have distinct logical parameters and scalar locals. This rule applies even when the implementation assigns the same registers or physical storage to invocations that cannot overlap.
 
@@ -86,11 +86,11 @@ Programs declare every aggregate object at top level, pass required objects or s
 
 ## 7.6 Aggregate parameter binding
 
-An aggregate alias binds once when a call establishes an aggregate parameter. The argument is a compatible aggregate storage path rooted in a program variable, aggregate constant, or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result admitted by Section 7.9. Every admitted source ultimately denotes top-level program storage.
+An aggregate alias binds once when a call establishes an aggregate parameter. The argument is a compatible aggregate storage path rooted in a program variable, aggregate constant, or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result admitted by Section 7.9. Every admitted source ultimately denotes top-level program storage. A `string[]` binding records the address of one complete bounded string and its actual capacity. A `T[]` binding records the address of one complete concrete fixed array and its actual element count. Forwarding either view preserves both parts of its binding.
 
-The caller evaluates every field selection and checked index used to form the argument once before the call begins. The callee receives the resulting typed alias, and its binding cannot be changed. The target type must exactly match the parameter type under Chapter 6.
+The caller evaluates every field selection and checked index used to form the argument once before the call begins. The callee receives the resulting typed alias, and its binding cannot be changed. The target type must satisfy the parameter-compatibility rule in Chapter 6.
 
-An alias does not extend the target's lifetime. Scalar-leaf writes and exact-type aggregate assignment through an aggregate alias are allowed under the ordinary assignment rules, including when the original target was named by an aggregate constant. Read-only status belongs only to the direct constant-rooted source path; it is not carried in the alias type or checked dynamically.
+An alias does not extend the target's lifetime. Scalar-leaf writes and compatible aggregate assignment through an aggregate alias are allowed under the ordinary assignment rules, including when the original target was named by an aggregate constant. Read-only status belongs only to the direct constant-rooted source path; it is not carried in the alias type or checked dynamically.
 
 <div id="77-subobject-lifetime-and-identity" class="nucleus-source-anchor"></div>
 
@@ -108,11 +108,11 @@ Two aliases may denote the same object or overlapping objects. Nucleus provides 
 
 Scalar assignment copies a value into a scalar destination. The destination may be a scalar variable, parameter, record field, fixed-array element, or existing bounded-string byte. After the assignment, later changes to the source do not change the destination.
 
-Aggregate assignment requires a mutable aggregate destination and an aggregate source of the exact same type. It copies the complete aggregate value into the destination. The direct backend copies exactly the type's packed fixed byte extent. A bounded-string copy includes its logical length and complete fixed-capacity object representation.
+Aggregate assignment requires a mutable aggregate destination and an aggregate source of the exact same concrete type. It copies the complete packed value into the destination. Two bounded strings are assignment-compatible only when their capacities are equal. An open-string or open-array parameter is a view and cannot be a whole-object assignment operand.
 
 The compiler evaluates the destination storage path once, then the source storage path or transient aggregate-alias result once, and validates both complete extents before the first destination byte changes. If evaluation or validation traps, no byte of the aggregate destination changes. A source and destination that denote the same object or subobject produce no change.
 
-Under the Nucleus 0.1 type and containment rules, two designators of one exact aggregate type are either identical or disjoint. A proper partial overlap would require recursive by-value containment, an overlaid layout, a slice, or arbitrary address formation, all of which are absent. Aggregate assignment therefore needs no runtime overlap check.
+Under the Nucleus 0.1 type and containment rules, two designators admitted by aggregate assignment are either identical or disjoint. A proper partial overlap would require assignment between different containment levels, an overlaid layout, a slice, or arbitrary address formation; none has compatible source types here. Aggregate assignment therefore needs no runtime overlap check.
 
 Aggregate alias binding is not assignment. Once established, an aggregate parameter cannot be rebound. When an aggregate parameter is the destination of aggregate assignment, the copy changes its referent. It does not change the binding.
 
@@ -128,7 +128,7 @@ Program-lifetime storage consists of top-level variable and aggregate-constant o
 
 An aggregate return source is a storage path rooted in a visible program variable, aggregate constant, or aggregate parameter, a field or fixed-array element reached from such a root, or a transient aggregate result forwarded from another call. Field selection and checked indexing continue to denote program-lifetime subobjects because every aggregate subobject has the lifetime of its containing object.
 
-The caller must consume a returned aggregate alias immediately. It may discard the result, forward it as an aggregate argument or aggregate return, select a field or element from it, or use it as the source of exact-type aggregate assignment. Assignment is the materialization operation: it copies the complete aggregate into program storage or into the referent of an aggregate parameter. A result cannot be stored as a carrier or survive beyond the containing source operation. Code that needs to retain the value assigns it to a program object or caller-supplied destination.
+The caller must consume a returned aggregate alias immediately. It may discard the result, forward it as an aggregate argument or aggregate return, select a field or element from it, or use it as an aggregate-assignment source compatible under Section 7.8. Assignment is the materialization operation: it copies the value into program storage or into the referent of an aggregate parameter. A result cannot be stored as a carrier or survive beyond the containing source operation. Code that needs to retain the value assigns it to a program object or caller-supplied destination.
 
 Immediate consumption does not permit a later call to destroy the transient carrier before it is used. When evaluation of another argument, index, or suffix can call a routine, the compiler must stage or preserve the typed carrier as live implementation state. This staging is not a source alias and ends with the containing operation.
 
@@ -224,4 +224,9 @@ An implementation may bound scalar locals, aggregate-parameter bindings, or the 
 
 Runtime activation capacity is implementation-defined under Chapter 13. An implementation may bound simultaneous activation depth, activation-storage consumption, or both. Reaching either published limit at runtime performs the activation-capacity trap defined by Chapter 15. The limits and trap do not change the source lifetime of an activation that begins successfully.
 
-Nucleus 0.1 exposes no raw pointer value, address arithmetic, heap allocation, manual deallocation, open slice or view, variable-sized local, or storage-layout query through this chapter. Field byte offsets, array byte offsets, bounded-string encoding, address carriers, aggregate-copy lowering, and call-state layouts belong to the Z80 runtime and backend contract.
+Nucleus 0.1 exposes no raw pointer value, address arithmetic, heap allocation,
+manual deallocation, open slice or view other than the parameter-only
+`string[]` and `T[]` views, variable-sized local, or storage-layout query through this
+chapter. Field byte offsets, array byte offsets, bounded-string encoding,
+address carriers, aggregate-copy lowering, and call-state layouts belong to the
+Z80 runtime and backend contract.

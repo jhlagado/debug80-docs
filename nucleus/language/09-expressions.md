@@ -28,25 +28,25 @@ The reusable expression fragment is:
 ```text
 expression             ::= or-expression
 or-expression          ::= and-expression { ( "or" | "xor" ) and-expression }
-and-expression         ::= not-expression { "and" not-expression }
-not-expression         ::= "not" not-expression | comparison
+and-expression         ::= comparison { "and" comparison }
 comparison             ::= additive [ comparison-operator additive ]
 comparison-operator    ::= "=" | "<>" | "<" | "<=" | ">" | ">="
 additive               ::= multiplicative
                            { ( "+" | "-" ) multiplicative }
 multiplicative         ::= unary { ( "*" | "/" | "mod" ) unary }
-unary                  ::= ( "+" | "-" ) unary | postfix-expression
+unary                  ::= ( "+" | "-" | "not" ) unary | postfix-expression
 postfix-expression     ::= primary { postfix-suffix }
 primary                ::= NUMBER | CHARACTER | "true" | "false"
                          | NAME | conversion | "(" expression ")"
-conversion             ::= ( "u8" | "u16" ) "(" expression ")"
+conversion             ::= ( "u8" | "u16" | "i8" | "i16" )
+                           "(" expression ")"
 postfix-suffix         ::= argument-list | "[" expression "]" | "." NAME
 argument-list          ::= "(" [ expression { "," expression } ] ")"
 ```
 
 Chapter 17 incorporates this fragment into the complete grammar. The semantic restrictions below reject suffix combinations that the compact syntactic loop can recognize but Nucleus does not admit.
 
-A string literal is not a general expression primary. Chapter 8 permits it as a bounded-string initializer. A later system or bounded-string operation may accept a string literal in an explicitly defined operand position without turning it into a copyable aggregate value.
+A string literal is not a general expression primary. Chapter 8 permits it as a bounded-string initializer, and Section 13.4 permits it in the argument position selected by a `string[]` formal. That contextual argument does not turn the literal into a copyable aggregate value.
 
 <div id="93-names-calls-and-postfix-operations" class="nucleus-source-anchor"></div>
 
@@ -56,9 +56,9 @@ The compiler resolves each `NAME` before interpreting its postfix suffixes. A vi
 
 An argument-list suffix in an ordinary expression invokes only an infallible source routine named by the primary. Nucleus has no routine values, indirect calls, callable results, overload resolution, or invocation of an arbitrary parenthesized expression. A second argument-list suffix is invalid. Chapter 13 defines argument and result compatibility, and Chapter 14 gives failable calls their restricted statement, initializer, and assignment positions.
 
-An index suffix requires a fixed-array or bounded-string storage path or typed alias. Its expression must have type `u8` or `u16`. For a fixed array, the result has the array's exact element type; the compiler diagnoses a statically out-of-range index and emits a checked access for a dynamic index unless it proves the index is in range. For a bounded string, the result is a `u8` storage path and the implementation checks the index against the current logical length before every access unless it proves that access safe. A failed check occurs before the element or byte is read or written.
+An index suffix requires a concrete or open array, or a concrete or open bounded-string storage path or typed alias. Its expression may have any integer type. A signed value is checked for negativity before the ordinary upper-bound and region checks. For an array, the result has the exact element type; a concrete array uses its fixed bound and an open array uses its retained actual count. The compiler diagnoses a statically out-of-range concrete index and emits a checked access for a dynamic index unless it proves the index is in range. For a bounded string, the result is a `u8` storage path and the implementation checks the index against the current logical length before every access unless it proves that access safe. A failed check occurs before an element, byte, or aggregate alias is produced, read, or written.
 
-A field suffix on a record storage path or typed record alias resolves the field name only in that record's field scope and produces the field's declared type. A `.length` suffix on a bounded-string storage path or alias produces its read-only `u8` logical length. Other field suffixes on bounded strings are invalid. Selection does not expose an offset, header, or address to source code.
+A field suffix on a record storage path or typed record alias resolves the field name only in that record's field scope and produces the field's declared type. A `.length` suffix on a concrete or open bounded-string path produces its `u8` logical length. A `.length` suffix on a concrete or open array produces its read-only `u16` element count. A `.capacity` suffix on an open `string[]` parameter produces its read-only actual capacity. Other field suffixes on bounded strings and arrays are invalid. Selection does not expose an offset, header, or address to source code.
 
 Index and field suffixes may follow an aggregate result from a routine call. The result remains a transient typed alias to the object established by Chapter 13; the suffix does not copy that object. A scalar result cannot be indexed or selected, and a result-free call cannot take another suffix.
 
@@ -79,19 +79,17 @@ Expression checking records both a type and one of these source categories:
 
 A **storage path** begins with a visible program variable, aggregate constant, parameter, or local and continues through zero or more field and index suffixes. Each suffix preserves the root object's identity while selecting a subobject. An aggregate-constant-rooted path is readable but not a direct assignment target. A scalar constant and a routine call are not storage-path roots. A call that returns an aggregate alias may be selected or indexed in a value context, but Chapter 10 does not admit it as an assignment root.
 
-A bare aggregate storage path is valid where a rule requires compatible aggregate storage, an alias, or the source or destination of exact-type aggregate assignment. It is not a general expression value. Nucleus has no aggregate comparison, truth test, automatic argument copy, or automatic result copy.
+A bare aggregate storage path is valid where a rule requires compatible aggregate storage, an alias, or an aggregate-assignment operand. It is not otherwise a general expression value. Nucleus has no aggregate comparison, aggregate truth test, automatic argument copy, or automatic result copy.
 
 <div id="95-explicit-integer-conversions" class="nucleus-source-anchor"></div>
 
 ## 9.5 Explicit integer conversions
 
-`u16(expression)` performs the explicit form of the `u8`-to-`u16` conversion. Its operand must have type `u8` or `u16`. A `u8` operand is widened without changing its value; a `u16` operand is unchanged.
+`u8(expression)`, `u16(expression)`, `i8(expression)`, and `i16(expression)` convert among the four integer types. The operand is evaluated once as its mathematical signed or unsigned value. The result is valid only when that value lies in the destination range. A statically known failure is a source diagnostic; a dynamic failure performs the Chapter 15 `narrowing` trap before producing or storing a result.
 
-`u8(expression)` performs checked narrowing. Its operand must have type `u8` or `u16`. A `u8` operand is unchanged. A known `u16` value outside 0 through 255 makes the source invalid. For a value known only at runtime, the generated program checks the range and performs the Chapter 15 narrowing trap before producing a result when the value is outside that range.
+The conversions are numeric. They do not reinterpret sign bits, extract a low byte, wrap, or expose a machine representation. For example, `i16(i8Value)` sign-extends, `i16(u8Value)` zero-extends, and `u8(i8Value)` fails when the value is negative. `i8($FF)` is invalid because `$FF` is the nonnegative value 255; `i8(-1)` is valid.
 
-Both forms evaluate their operand once. They do not reinterpret bits, extract a low byte, wrap, or expose a machine representation. `boolean(expression)`, record conversions, array conversions, string-capacity conversions, and conversions between `u16` and an aggregate-alias carrier are absent.
-
-The type words in these two forms are fixed tokens, not routine names. A user declaration cannot override them, and conversion syntax does not participate in routine lookup.
+`boolean(expression)`, record conversions, array conversions, string-capacity conversions, and conversions between an integer and an aggregate-alias carrier are absent. The four integer type words are fixed tokens, not routine names. A user declaration cannot override them, and conversion syntax does not participate in routine lookup.
 
 <div id="96-precedence-and-associativity" class="nucleus-source-anchor"></div>
 
@@ -100,32 +98,43 @@ The type words in these two forms are fixed tokens, not routine names. A user de
 Precedence from highest to lowest is:
 
 1. routine invocation, indexing, field selection, and parenthesized grouping;
-2. unary `+` and unary `-`;
+2. unary `+`, unary `-`, and `not`;
 3. multiplication, division, and modulo;
 4. addition and subtraction;
 5. one comparison;
-6. `not`;
-7. `and`;
-8. `or` and `xor`.
+6. `and`;
+7. `or` and `xor`.
 
 Binary arithmetic, `and`, `or`, and `xor` associate from left to right. Unary `+`, unary `-`, and `not` associate from right to left. A comparison contains at most one comparison operator and therefore has no associativity.
 
-`not` binds less tightly than comparison. Thus `not left = right` means `not (left = right)`. An integer complement used as a comparison operand requires parentheses, as in `(not mask) = expected`.
+`not` is a unary operator with the same precedence as unary `+` and `-`. It therefore binds more tightly than multiplication, addition, and comparison. Thus `not mask = expected` means `(not mask) = expected`. Negating a complete comparison requires parentheses, as in `not (left = right)`.
 
-The repeated forms in Section 9.2 preserve left association without a left-recursive predictive grammar. The first handwritten compiler implements the binary levels with one precedence-driven loop and a compact operator table; comparison's single-use rule and Boolean short-circuit emission remain explicit cases in that loop. Separate parsing remains appropriate for primary, postfix, unary, and right-recursive `not`. Another conforming compiler may use a different parser family only if it accepts the same token sequences and produces the same association and evaluation order.
+The repeated forms in Section 9.2 preserve left association without a
+left-recursive grammar. A compiler may organize expression parsing differently,
+but it must accept the same token sequences and preserve this association and
+the evaluation order in Section 9.11.
 
 <div id="97-exact-integer-resolution" class="nucleus-source-anchor"></div>
 
 ## 9.7 Exact-integer resolution
 
-An exact integer literal or exact named integer constant adopts an expected `u8` or `u16` type when its value fits. The expected type may come from a declaration initializer, scalar destination, parameter, result, conversion operand, or a typed operand in the same arithmetic operation. An expected type never narrows an already typed operand implicitly.
+An exact integer literal or exact named integer constant adopts an expected integer type when its mathematical value fits. Negative exact values may adopt only `i8` or `i16`. The expected type may come from a declaration initializer, scalar destination, parameter, result, conversion operand, or a typed operand in the same arithmetic operation. An expected type never narrows an already typed operand implicitly.
 
 For an integer operation:
 
 - when one operand has integer type and the other is an exact integer constant, the constant adopts that type when it fits;
-- when the operands have types `u8` and `u16`, the `u8` operand widens and the operation uses `u16`;
-- when both operands are exact integer constants, an expected integer result type applies when both operands fit; otherwise the operation uses `u16`; and
-- when a standalone exact integer literal has no expected type, it uses `u16`.
+- when both operands are typed, the common type is selected by the table below;
+- when both operands are exact integer constants, an expected integer result type applies when both operands fit; otherwise the operation uses `i16` when either operand is negative and `u16` when both operands are nonnegative; and
+- when a standalone exact integer value has no expected type, a negative value uses `i16` and a nonnegative value uses `u16`.
+
+| Operand types | Common type |
+| ------------- | ----------- |
+| `u8`, `u16`   | `u16`       |
+| `i8`, `i16`   | `i16`       |
+| `u8`, `i16`   | `i16`       |
+| `u8`, `i8`    | `i16`       |
+
+The combinations `u16` with `i8`, `u16` with `i16`, and `i16` with `u16` have no implicit common type. Source must perform an explicit checked conversion before applying the operator. Nucleus does not use C-style unsigned dominance.
 
 An exact value that does not fit the selected type makes the source invalid. The compiler does not truncate the literal or select a wider intermediate type after the context has fixed a narrower operation.
 
@@ -135,23 +144,23 @@ A character literal has type `u8`. It follows the ordinary implicit widening rul
 
 ## 9.8 Integer arithmetic
 
-`+`, `-`, `*`, `/`, and `mod` accept integer operands. After literal resolution and implicit widening, both operands have the same type and the result has that type.
+`+`, `-`, `*`, `/`, and `mod` accept integer operands. After literal resolution and implicit conversion, both operands have the same type and the result has that type.
 
-Addition, subtraction, multiplication, and unary minus use arithmetic modulo 256 for `u8` and modulo 65,536 for `u16`. Unary minus is subtraction from zero in the selected width. Unary plus preserves the operand and its type. These rules define wraparound; overflow is neither undefined nor a narrowing conversion.
+Addition, subtraction, multiplication, and unary minus use arithmetic modulo 256 for byte types and modulo 65,536 for word types. Unary minus is subtraction from zero in the selected width, including for typed unsigned operands. Unary plus preserves the operand and its type. These rules define wraparound; overflow is neither undefined nor a narrowing conversion. An exact negative initializer is different: `var x as u8 = -1` is invalid, while `x = -x` remains modular unsigned arithmetic.
 
-Division produces the unsigned integer quotient with any remainder discarded. Modulo produces the unsigned remainder from the same division. A zero divisor for either operation performs the `division-by-zero` trap specified by Chapter 15 at the divisor. When the divisor is a compile-time constant zero, the source is invalid and the compiler issues the same diagnostic at that divisor instead of emitting a guaranteed trap.
+Unsigned division produces the unsigned quotient and remainder. Signed division truncates toward zero; signed modulo has the dividend's sign and satisfies `a = (a / b) * b + (a mod b)`. A zero divisor for either operation performs the `division-by-zero` trap specified by Chapter 15 at the divisor. When the divisor is a compile-time constant zero, the source is invalid and the compiler issues the same diagnostic at that divisor instead of emitting a guaranteed trap. The minimum signed value divided by -1 wraps to that same minimum value, with remainder zero; there is no division-overflow trap.
 
-The result width is determined before evaluation. Arithmetic does not widen merely because a mathematical result would exceed that width. A program that requires a wider result widens an operand explicitly or supplies a `u16` operand before the operation.
+The result width is determined before evaluation. Arithmetic does not widen merely because a mathematical result would exceed that width. A program that requires a wider result widens an operand explicitly or supplies a compatible `u16` or `i16` operand before the operation.
 
 <div id="99-comparison" class="nucleus-source-anchor"></div>
 
 ## 9.9 Comparison
 
-The six comparison operators accept compatible integer operands and produce `boolean`. Literal resolution and `u8`-to-`u16` widening follow Section 9.7. Integer comparison uses unsigned ordering.
+The six comparison operators accept compatible integer operands and produce `boolean`. Literal resolution and common-type selection follow Section 9.7. Equality and inequality compare the selected-width bit patterns. Ordering is signed when the common type is signed and unsigned otherwise.
 
 Boolean operands support only `=` and `<>`. Both operands must have type `boolean`. Boolean ordering is invalid.
 
-Records, fixed arrays, bounded strings, aggregate aliases, and alias carriers have no comparison operation in Nucleus 0.1. Equal layout, equal capacity, or identity of the referred object does not add an equality operator. A bounded-string content operation, if admitted at the system boundary, defines its own result and does not change this rule.
+Records, fixed arrays, and bounded strings, including aliases to them, have no comparison operation in Nucleus 0.1. Equal layout or identity of the referred object does not add an equality operator.
 
 Comparison chaining is invalid. `minimum <= value <= maximum` is not two comparisons; after the first comparison, the left side would be Boolean and the grammar permits no second comparison operator. The equivalent valid form is `minimum <= value and value <= maximum`.
 
@@ -159,7 +168,7 @@ Comparison chaining is invalid. `minimum <= value <= maximum` is not two compari
 
 ## 9.10 `not`, `and`, `or`, and `xor`
 
-`not` accepts one `boolean`, `u8`, or `u16` operand. For `boolean`, it exchanges `true` and `false`. For an integer, it complements every bit in the operand's declared width and produces the same integer type.
+`not` accepts one `boolean` or integer operand. For `boolean`, it exchanges `true` and `false`. For an integer, it complements every bit in the operand's declared width and produces the same integer type.
 
 `and` and `or` accept either two Boolean operands or two compatible integer operands. Mixed Boolean and integer operands are invalid. Integer operands use literal resolution and widening from Section 9.7, combine corresponding bits, evaluate both operands, and produce the resolved integer type.
 
@@ -176,7 +185,9 @@ Boolean `and` and `or` short-circuit. The left operand is evaluated first:
 
 An operand that is not evaluated performs no call, storage access, bounds check, conversion check, arithmetic trap, or other source operation. The Boolean and integer meanings are selected by static types and create no parsing ambiguity.
 
-Shifts, rotations, power, and symbolic Boolean operators are absent. A later proposal for one of these operators requires its own measured admission and a Chapter 3 token amendment when it uses a word.
+Shifts, rotations, power, and symbolic Boolean operators are absent. Adding one
+of these operators requires a language revision and, for a word operator, a
+Chapter 3 token amendment.
 
 <div id="911-evaluation-order" class="nucleus-source-anchor"></div>
 
@@ -201,7 +212,7 @@ A backend may reorder operations only when it proves that no result, call, mutat
 
 The scalar operators and conversions in this chapter are available to the scalar constant expressions defined by Chapter 8. The compiler applies the same literal resolution, width, wraparound, comparison, and short-circuit rules used at runtime.
 
-A constant division by zero is invalid. A checked `u8` conversion of a known value outside 0 through 255 is invalid. A short-circuited constant operand is not evaluated and therefore cannot contribute a fault.
+A constant division by zero is invalid. An explicit integer conversion of a known value outside its destination range is invalid. A short-circuited constant operand is not evaluated and therefore cannot contribute a fault.
 
 Routine calls and storage paths remain unavailable in constant expressions. The presence of a pure-looking routine or a program variable with a constant initializer does not extend the constant-expression grammar.
 
@@ -255,14 +266,15 @@ u8(wordValue)
 (not (mask and readyMask)) = 0
 ```
 
-The first expression contains two non-chained comparisons. The third performs checked narrowing. In the last expression, parentheses make the integer complement the left comparison operand; without them, `not` would apply to the Boolean comparison result.
+The first expression contains two non-chained comparisons. The third performs checked narrowing. In the last expression, parentheses make `not` complement the complete `mask and readyMask` result; without them, only `mask` would be complemented before `and`.
 
 Each of these forms is invalid:
 
 ```nucleus
 first < second < third  // comparisons do not chain
 flag + 1               // Boolean is not integer
-recordValue = other    // aggregate equality is absent
+recordValue = other    // record equality is absent
+shortText < longText   // strings have no comparison operators
 routineName            // a routine name is not a value
 boolean(value)          // Boolean conversion is absent
 ```

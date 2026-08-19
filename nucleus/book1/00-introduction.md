@@ -12,9 +12,11 @@ Z80 is an 8-bit processor used in early personal computers and in small
 machines built today. Its limited memory makes the cost of every program data
 structure matter.
 
-Nucleus has three scalar types with fixed ranges. Arrays have fixed lengths,
-strings have fixed capacities and records have fixed fields. The compiler
-checks those rules before it emits machine code, then inserts runtime checks
+Nucleus has five scalar types with fixed ranges: `u8`, `u16`, `i8`, `i16` and
+`boolean`. Arrays have fixed lengths, strings have fixed capacities and records
+have fixed fields. Parameter views let one routine work with arrays or strings
+of several capacities while the underlying storage remains fixed. The compiler
+checks these rules before it emits machine code, then inserts runtime checks
 for values known only while the program runs.
 
 The compiler itself is a Z80 program. It reads Nucleus source in order and
@@ -36,9 +38,9 @@ source.
 
 ## From source to a program
 
-You write Nucleus source in `.nu` files. The compiler reads those files in the
-order supplied by the build and produces Z80 machine code. The shortest route
-looks like this:
+You write Nucleus source in `.nu` files. The build supplies their contents to
+the compiler as one ordered stream, and the compiler produces Z80 machine code.
+The shortest route looks like this:
 
 ```text
 Nucleus source → Nucleus compiler → NOBJ

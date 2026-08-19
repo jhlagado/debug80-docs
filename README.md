@@ -48,7 +48,7 @@ Debug80, AZM, Glimmer, and Nucleus material.
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
 | [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and direct-Z80 compiler project.                            |
-| [Programming Nucleus](https://debug80.com/nucleus/book1/)                                      | A practical course in the language, compiler and Debug80 workflow.                  |
+| [Programming Nucleus](https://debug80.com/nucleus/book1/)                                      | An in-progress practical course in the language, compiler and Debug80 workflow.     |
 | [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/)                    | The complete source-language specification in a chapter-by-chapter reading edition. |
 | [Nucleus Z80 Runtime Contract](https://debug80.com/nucleus/runtime/)                           | The complete direct execution and backend contract.                                 |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/)                                                   | Reference material for the machine and its monitor.                                 |

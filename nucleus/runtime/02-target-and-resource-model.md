@@ -26,6 +26,18 @@ exposes, constructs, compares, converts, or calculates with one. A bank ordinal
 is also private target metadata. The compiler retains the type, extent, root
 category, and bank information required for every aggregate address carrier.
 
+The handwritten Z80 compiler is likewise independent of its assembly origin.
+The deployment platform chooses its origin and surrounding memory map; `$0000`
+in the repository proof layout is not part of the compiler ABI. CP/M may place
+the compiler at `$0100`, a TEC-1 configuration may place it at `$8000`, and
+another system may choose any address at which the complete image fits without
+overlap. Every compiler code and immutable-data pointer is an opaque 16-bit
+address. Compiler metadata must not be encoded in address bits, and compiler
+pointers must not be masked, truncated, or compressed on the assumption that
+the image occupies a particular half, page, alignment, or region of the Z80
+address space. Any alignment restriction must be an explicit deployment
+contract rather than an inference from a current build.
+
 <div id="22-separate-accounts" class="nucleus-source-anchor"></div>
 
 ## 2.2 Separate accounts
@@ -104,19 +116,22 @@ length. It does not identify one address-bound byte sequence. A mismatch is a
 target-configuration diagnostic, not a runnable artifact.
 
 The operating layer supplies fully linked helper bytes through a runtime
-provider keyed by that identity. The adapter gives it the complete validated
-link context: runtime base, writable/vector state addresses, service
-destinations, and every data or read-only-data bound consumed by the runtime.
+provider keyed by that identity. Before it invokes the provider, the adapter
+derives the complete validated link context from the target profile and the
+compiler's checked full-width layout state: runtime base, writable/vector state
+addresses, service destinations, and every data or read-only-data bound
+consumed by the runtime.
 The provider deterministically assembles or links the canonical source for
 that context and verifies the resulting length and helper offsets against the
 identity. The compiler retains the identity, expected length, vector layout,
-and helper offsets; it does not retain the linked image. At each derived
-runtime base it submits the bank, target address, identity, link context, and
-expected length to the bounded provider operation. The provider appends fully
-resolved bytes to the image spool as ordinary NOBJ `IMAGE` records. NOBJ
-contains no runtime relocation records. An unavailable source revision,
-unsupported context, identity, length, or helper-layout mismatch, or output
-failure aborts the generation before commit.
+and helper offsets; it does not retain the linked image. At each derived runtime
+base it submits the bank, target address, identity, and expected length. The
+adapter associates that bounded request with the validated link context; the
+private Z80 handoff need not serialize the context into every request. The
+provider appends fully resolved bytes to the image spool as ordinary NOBJ
+`IMAGE` records. NOBJ contains no runtime relocation records. An unavailable
+source revision, unsupported context, identity, length, or helper-layout
+mismatch, or output failure aborts the generation before commit.
 
 <div id="24-loaded-and-rom-mappings" class="nucleus-source-anchor"></div>
 

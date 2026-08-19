@@ -1,15 +1,15 @@
 ---
 layout: "default"
-title: "4. Program and file structure"
+title: "4. Program and compilation structure"
 parent: "Nucleus 0.1 Language Specification"
 nav_order: 4
 pageClass: "nucleus-specification"
 ---
 [← 3. Source text and lexical rules](03-source-text-and-lexical-rules.md) · [Contents](./) · [5. Names and scopes →](05-names-and-scopes.md)
 
-<div id="4-program-and-file-structure" class="nucleus-source-anchor"></div>
+<div id="4-program-and-compilation-structure" class="nucleus-source-anchor"></div>
 
-# 4. Program and file structure
+# 4. Program and compilation structure
 
 <div id="41-scope" class="nucleus-source-anchor"></div>
 
@@ -61,13 +61,25 @@ The compiler may consume each event and byte chunk incrementally. It need not ma
 
 The packaging layer must not add declarations, replace tokens, perform textual macro processing, or make accepted source depend on a part's physical origin. A diagnostic from multipart input must carry the stable source-part identity and the Chapter 3 position within that part, allowing the packaging layer to map it back to a physical source when such a mapping exists.
 
-#### 4.3.1 Flat source manifest
+#### 4.3.1 Host packaging
 
-The standard authoring convention for this abstract stream is a flat ordered manifest. Each nonblank logical line contains one physical source name. Blank lines are ignored. The build driver processes entries in their written order, resolves every name within one base directory or storage namespace selected for that build, reads the named source, and emits one source part for it. The listed name is the part's diagnostic name. Its stable source identity combines that name with the entry's position, so a driver that permits a duplicate entry can still identify each part.
+The packaging layer may obtain the ordered parts from an explicit file list or
+by discovering and ordering dependencies. Its project-file syntax, path rules,
+and dependency algorithm are host contracts, not Nucleus syntax.
 
-The manifest has no nesting, glob patterns, variables, conditional entries, dependency discovery, or recursive import meaning. It does not enter the source-byte stream, and the Nucleus tokenizer never sees it. The build driver defines how physical source names and line endings are encoded; a later compiler-input specification may define concrete multipart framing. Those transport choices do not change the ordered-part contract in Section 4.3.
+A host may recognize a dependency directive written inside a Nucleus `//`
+comment. The complete source bytes, including that comment, must still reach
+the compiler unchanged. To Nucleus it remains an ordinary comment: it produces
+no token, declaration, scope, or dependency rule. This permits dependency-aware
+tools without making the compiler aware of files or preprocessing.
 
-The driver reports a missing physical source or an unresolvable source name before compilation. It may reject a duplicate manifest entry. If it emits the duplicate instead, the compiler processes both parts in order and ordinarily reports duplicate source declarations. A forgotten dependency ordinarily produces an unknown-name diagnostic; a wrong order produces the applicable declaration-before-use diagnostic; and a forward that no later part completes fails at `EOF`. The compiler does not search for another file or reorder parts in response.
+The packaging layer reports missing inputs, invalid paths, dependency cycles,
+and other discovery failures before compilation. It suppresses duplicate
+physical dependencies when its format requires import-once behavior, assigns
+the final stable identities, and presents dependencies before the parts that
+use them. A forgotten dependency or incorrect explicit order can instead reach
+the compiler and produce the ordinary undeclared-name, declaration-order, or
+incomplete-forward diagnostic.
 
 <div id="44-top-level-declarations" class="nucleus-source-anchor"></div>
 
@@ -150,7 +162,8 @@ Execution enters an implicit implementation startup path, which establishes ever
 
 The startup entry is not a source declaration and cannot be called by source. Nucleus defines no source-visible reset, vector, interrupt, or alternate entry declaration.
 
-Program startup, initialization, termination, and system services are specified in Chapters 16 and 19.
+Program startup, initialization, termination, and system services are specified
+in Chapter 16.
 
 <div id="48-end-of-input-and-duplicate-completion" class="nucleus-source-anchor"></div>
 
@@ -165,7 +178,7 @@ At `EOF`, the compiler must verify that:
 - no top-level declaration remains structurally incomplete; and
 - exactly one defined `main` satisfies Section 4.7.
 
-The compiler may diagnose a duplicate declaration or mismatched completion as soon as it encounters the later declaration. It must not defer a detectable error merely because end-of-input validation also covers the condition. After any structural error, the initial compiler may stop under the diagnostic policy in Chapter 1; it must not report a successful translation.
+The compiler may diagnose a duplicate declaration or mismatched completion as soon as it encounters the later declaration. It must not defer a detectable error merely because end-of-input validation also covers the condition. After any structural error, it may stop under the diagnostic policy in Chapter 1; it must not report a successful translation.
 
 <div id="49-capacity-limits-and-source-parts" class="nucleus-source-anchor"></div>
 
@@ -174,5 +187,3 @@ The compiler may diagnose a duplicate declaration or mismatched completion as so
 Documented compiler capacities apply to the complete logical compilation unit. A source-part boundary must not reset a symbol count, forward-signature count, nesting limit, or other unit-wide resource. Dividing the same ordered source among more parts neither increases a language-defined capacity nor creates extra scopes. Chapter 3 source-position counters restart for each part because diagnostics use part-relative positions.
 
 An implementation may bound the complete logical source length, source-part count, source-identity or diagnostic-name length, number of declarations, number of unresolved forwards, or other storage required by this chapter. It must document each limit and issue a capacity diagnostic when the limit is exceeded. Under Chapter 1, that diagnostic does not make an otherwise conforming source program invalid.
-
-The first compiler's 16 KiB core gate does not change these structural rules. Project measurements account for the code and immutable data used to enforce them, while writable tables and source maps remain in their separately reported accounts under Chapter 2.

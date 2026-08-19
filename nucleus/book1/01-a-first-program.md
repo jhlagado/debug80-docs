@@ -165,7 +165,7 @@ With two calls, that version finishes with `total` equal to 270.
 - Declarations precede their uses.
 
 The exact rules appear in the specification chapters on
-[program structure](../language/04-program-and-file-structure.md),
+[program structure](../language/04-program-and-compilation-structure.md),
 [storage and lifetime](../language/07-storage-values-and-lifetime.md),
 [declarations](../language/08-constants-and-declarations.md),
 [statements](../language/10-statements.md) and
