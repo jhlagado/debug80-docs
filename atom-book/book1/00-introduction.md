@@ -7,14 +7,14 @@ nav_order: 0
 
 # Introduction
 
-Atom is a single-pass Z80 assembler for macOS. It reads Z80 assembly from one
-or more source files and produces a binary, Intel HEX, listing, D8 map and NOBJ
-object stream.
+Atom is a single-pass Z80 assembler. It reads one or more `.asm` files and
+produces Z80 machine code.
 
-This book defines the current source language and the public Mac interfaces. It
-covers source lines and symbols, expressions and forward references,
-instructions, data and storage, project composition, diagnostics and output
-artifacts. The appendices collect the JavaScript API and exact lookup tables.
+This book defines the current source language and its two command-line
+interfaces. The Node-hosted desktop command provides project files,
+preprocessing and development artifacts. The native CP/M command keeps the
+same assembler language but uses a smaller positional interface and CP/M file
+services. The appendices collect the JavaScript API and exact lookup tables.
 
 ## The intended reader
 
@@ -34,10 +34,12 @@ Atom separates assembly from operations that require access to files. The
 assembler handles symbols, expressions, instructions, directives and forward
 references in a single pass through the prepared source.
 
-Before that pass, the source-preparation stage resolves `%INCLUDE`, `%DEFINE`,
-`%IF`, `%ELSE`, `%ENDIF` and the file named by `INCBIN`. After assembly, Atom
-writes the requested artifacts. This distinction matters when choosing where a
-definition belongs: `%DEFINE` controls preprocessing, while `EQU` declares a
-value that assembly expressions can use.
+Before that pass, the desktop source-preparation stage resolves `%INCLUDE`,
+`%DEFINE`, `%IF`, `%ELSE`, `%ENDIF` and the file named by `INCBIN`. Native CP/M
+resolves leading `%INCLUDE` directives. After assembly, each host writes the
+requested output. This distinction matters when choosing where a definition
+belongs: `%DEFINE` controls desktop preprocessing, while `EQU` declares a value
+that assembly expressions can use on either host.
 
-The first chapter installs the command and assembles a small `.asm` program.
+The first chapter installs the desktop command, assembles a small program and
+shows the corresponding native CP/M command.

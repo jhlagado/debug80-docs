@@ -7,14 +7,14 @@ nav_order: 6
 
 # Diagnostics and Output
 
-A successful command publishes one complete artifact generation. A source,
-preprocessing, execution, rendering, or publication failure selects no partial
-generation and leaves any previously selected generation in place.
+A build either publishes every requested output or publishes none of them.
+Source, preprocessing, assembly, rendering and filesystem failures leave
+earlier output files in place.
 
 ## Source diagnostics
 
-Source failures name the project-relative file, one-based line, and one-based
-byte column:
+Desktop source failures name the project-relative file, one-based line and
+one-based byte column:
 
 ```text
 lib/device.asm:14:9: UNDEFINED SYMBOL PORTBASE
@@ -28,7 +28,13 @@ Dependency and preprocessing errors use the same project-relative paths.
 Missing files, root escapes, cycles, duplicate definitions, malformed
 conditionals, and invalid `INCBIN` paths stop the build before assembly.
 
-## Command status
+Native CP/M reports an assembly status, zero-based source-part ordinal and byte
+offset. File-provider failures identify the relevant CP/M name when available.
+The native command preflights the complete include graph, so a missing file,
+cycle or malformed include stops the build before the output transaction
+begins.
+
+## Desktop command status
 
 The command returns:
 
@@ -38,23 +44,37 @@ The command returns:
 | 1 | Assembly, preprocessing, artifact, or publication failed |
 | 2 | Command-line usage was invalid |
 
-## Artifact bundle
+## Select desktop outputs
 
-For `src/main.asm`, the default bundle is `build/main.atom`. The `current`
-symlink points to one content-addressed immutable generation:
+With no output path, the desktop command writes one BIN file:
 
 ```text
-build/main.atom/current/main.nobj
-build/main.atom/current/main.bin
-build/main.atom/current/main.hex
-build/main.atom/current/main.lst
-build/main.atom/current/main.d8.json
-build/main.atom/current/manifest.json
+atom src/main.asm
 ```
 
-Atom selects `current` only after every artifact has been written successfully.
-A failed build leaves the previous successful generation selected. Older
-successful generations remain in the bundle.
+This creates `build/main.bin`.
+
+Name each additional output after the input, or use repeatable `-o` options:
+
+```sh
+atom src/main.asm build/main.bin build/main.hex build/main.lst
+atom -o build/main.nobj -o build/main.d8.json src/main.asm
+```
+
+The suffix selects the format:
+
+| Suffix | Contents |
+| --- | --- |
+| `.bin` | Flat materialised bytes |
+| `.hex` | Intel HEX |
+| `.com` | Flat CP/M program loaded and entered at `$0100` |
+| `.nobj` | Append-only Atom object stream |
+| `.lst` | Source listing with final bytes |
+| `.d8.json` | Debug80 source and symbol map |
+
+Output selection is positive: Atom writes only the paths you name. A command
+cannot repeat a format or destination path. Every requested file is staged
+before any earlier output is replaced.
 
 ## NOBJ
 
@@ -73,18 +93,21 @@ entry, and CRC-16/CCITT-FALSE.
 NOBJ retains the distinction between emitted bytes, forward-reference patches,
 and reserved storage. The binary and HEX files are materialised launch views.
 
-## Flat binary and Intel HEX
+## BIN, Intel HEX and COM
 
-The flat binary begins at the configured target start and extends through the
-largest IMAGE end, logical high-water mark, or final cursor. The selected fill
-byte supplies gaps and uninitialised `DS` reservations. PATCH bytes overwrite
-their corresponding IMAGE placeholders.
+The flat binary begins at the lowest generated or reserved address and extends
+through the logical high-water mark. An initial `ORG 4000H` therefore does not
+add 16 KiB of zero bytes to the front of a BIN file. Zero bytes fill internal
+gaps and uninitialised `DS` reservations. PATCH bytes replace their IMAGE
+placeholders before the file is written.
 
 Intel HEX contains the same contiguous materialised image in 16-byte data
 records followed by the standard EOF record.
 
-`--fill` changes only materialisation. It does not change the IMAGE and PATCH
-records or convert uninitialised storage into emitted bytes.
+A COM file is also a flat binary; it has no header. Atom accepts COM output
+only when the load base and entry are both `$0100`. If no target was selected,
+a `.com` output selects the `cpm22` profile. Atom rejects incompatible source
+placement instead of silently relocating labels.
 
 ## Listing
 
@@ -104,20 +127,24 @@ code/data/directive classification, symbols, scope, visibility, entry address,
 and target segment. Debug80 can load it with the corresponding BIN or HEX file
 for source-level stepping and symbol lookup.
 
-## Manifest
+## Native CP/M output
 
-`manifest.json` records the ordered artifact names, byte counts, and SHA-256
-values. A tool can verify one generation before loading it without trusting the
-directory name or symlink alone.
+Native CP/M Atom writes one COM, BIN or HEX file per command:
 
-## Command options
+```text
+A>ATOM MAIN.ASM MAIN.HEX
 
-The common build options are:
-
-```sh
-atom --root . --origin 4000H --capacity 8000H \
-  --entry 4000H --fill 0 -DDEBUG=1 src/main.asm
+MAIN.HEX written
 ```
 
-`-o` or `--output` selects the bundle directory. The complete table appears in
-[Appendix 3](../appendices/03-cli-flags.md).
+COM and BIN contain the same logical bytes; COM selects the CP/M `$0100`
+load-and-entry convention. CP/M stores files in 128-byte records, so the
+physical COM or BIN file may have padding after the logical image. HEX may
+contain CP/M text padding after its end record.
+
+The native command writes a temporary `.$$$` file, preserves an earlier output
+as `.BAK` during replacement, and restores it if publication fails. Listing,
+D8 and NOBJ output remain desktop facilities.
+
+The complete desktop and native command forms appear in [Appendix
+3](../appendices/03-cli-flags.md).

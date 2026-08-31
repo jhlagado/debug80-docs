@@ -10,7 +10,7 @@ reading the markdown on GitHub.
 
 ## Projects documented here
 
-Four programming projects and the machine that anchors them.
+Five software projects and the machine that anchors them.
 
 **Debug80** is a VS Code extension: source-level debugging for Z80 assembly,
 with an emulated TEC-1 or TEC-1G in the sidebar and a path out to real hardware
@@ -25,8 +25,10 @@ remembers and how it responds; Glimmer generates the loop, the input polling
 and the change tracking, and compiles to readable Z80 assembly.
 
 **Atom** is a single-pass Z80 assembler whose native core is written in Z80.
-Its Mac command combines that core with host source preparation and artifact
-generation. **Nucleus** is a small, safe, statically typed language compiled directly to
+Its desktop command runs that core in a Z80 emulator, while native
+`ATOM.COM` runs it under CP/M 2.2.
+
+**Nucleus** is a small, safe, statically typed language compiled directly to
 Z80 machine code. Its first compiler is intended to be handwritten in Z80 and
 to fit, with its required immutable data, in one 16 KiB bank.
 
@@ -41,10 +43,10 @@ Debug80, AZM, Glimmer, and Nucleus material.
 | [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/)                           | The reference: syntax, directives, expressions, layouts, contracts.                 |
 | [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/)                           | The Z80 from the bare machine up, assuming nothing.                                 |
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                   |
-| [Atom](https://debug80.com/atom/)                                                              | Installation, first assembly, project links and entry points to the Atom books.      |
-| [Atom Book 1 — Assembler Reference](https://debug80.com/atom-book/book1/01-getting-started.html) | Atom syntax, preprocessing, instructions and output.                               |
-| [Atom Book 2 — Z80 Programming](https://debug80.com/atom-book/book2/00-introduction.html)       | The Z80 from first principles through algorithms and recursion using Atom.          |
-| [Atom Appendices](https://debug80.com/atom-book/appendices/01-directives.html)                  | Programming API and lookup tables for Atom and the Z80.                             |
+| [Atom](https://debug80.com/atom/)                                                              | Desktop and CP/M installation, first assembly, project links and book entry points. |
+| [Atom Book 1 — Assembler Reference](https://debug80.com/atom-book/book1/)                       | Atom syntax, preprocessing, instructions and output.                               |
+| [Atom Book 2 — Z80 Programming](https://debug80.com/atom-book/book2/)                           | The Z80 from first principles through algorithms and recursion using Atom.          |
+| [Atom and Z80 Reference](https://debug80.com/atom-book/appendices/)                             | Programming API and lookup tables for Atom and the Z80.                             |
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
 | [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and direct-Z80 compiler project.                            |

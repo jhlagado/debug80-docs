@@ -7,12 +7,14 @@ nav_order: 5
 
 # Source Composition and Conditional Assembly
 
-Atom's preprocessor reads `%` directives, resolves dependencies, and removes
-preprocessor-only text before assembly begins.
+Atom's host reads `%` directives, resolves dependencies, and removes
+host-only text before assembly begins. The Node host implements the complete
+preprocessing language. Native CP/M implements leading `%INCLUDE` directives
+but not definitions, conditionals or binary inclusion.
 
 ## A multipart entry
 
-An entry source can name dependencies in its leading header:
+On the desktop, an entry source can name dependencies in its leading header:
 
 ```asm
 %DEFINE DEBUG 1
@@ -101,11 +103,16 @@ DB 7 % 3
 
 ## Path rules
 
-An include path resolves relative to the importing source. Atom rejects
-absolute paths, `..` paths that escape the project root, symlink targets
-outside the root, references to the same file with conflicting
-capitalisation, missing files, repeated direct dependencies, and dependency
-cycles.
+On the desktop, an include path resolves relative to the importing source.
+Atom rejects absolute paths, `..` paths that escape the project root, symlink
+targets outside the root, references to the same file with conflicting
+capitalisation, missing files and dependency cycles. Repeated imports of the
+same file resolve to one source part.
 
 Diagnostics, listings and D8 maps use project-relative paths. Atom currently
 produces one flat, unbanked output image.
+
+Native CP/M accepts quoted current-drive 8.3 filenames such as
+`%INCLUDE "MATH.ASM"`. It resolves nested imports and dependency diamonds with
+the same import-once ordering, but has no directories or search paths. An
+include must remain in the leading header of its own file on both hosts.

@@ -1,22 +1,23 @@
 ---
 layout: default
-title: "Atom Appendices"
+title: "Atom and Z80 Reference"
 parent: "Atom Books"
 nav_order: 2
 has_children: true
 has_toc: false
-isolated: true
+sidebar_link: "Reference overview"
 ---
 
-# Atom Appendices
+# Atom and Z80 Reference
 
-Lookup material for the Atom assembler and Mac host.
+The first six sections document the assembler and its host interfaces. The
+remaining sections collect the Z80 tables used alongside the programming book.
 
 | | | |
 | --- | --- | --- |
 | 1 | [Directive Reference](01-directives.md) | Assembler and preprocessing directives |
 | 2 | [Expressions and Numeric Forms](02-expressions-and-numbers.md) | Operators, literals, ranges, and forward forms |
-| 3 | [CLI Flag Reference](03-cli-flags.md) | Command-line options and defaults |
+| 3 | [Command-line Reference](03-cli-flags.md) | Desktop and native CP/M commands |
 | 4 | [Built-in Functions](04-functions.md) | `LOW` and `HIGH` |
 | 5 | [Limits and Capacities](05-limits-and-capacities.md) | Source, symbol, expression, output, and project limits |
 | 6 | [Programming Interface](06-programming-interface.md) | Public JavaScript entry points, results, artifacts and errors |

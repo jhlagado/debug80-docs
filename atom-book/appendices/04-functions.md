@@ -1,9 +1,10 @@
 ---
 layout: default
 title: "Appendix 4 — Built-in Functions"
-parent: "Atom Appendices"
+parent: "Atom and Z80 Reference"
 grand_parent: "Atom Books"
 nav_order: 4
+nav_group: "Assembler reference"
 ---
 
 # Appendix 4 — Built-in Functions

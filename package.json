@@ -26,7 +26,7 @@
     "symbols": "node scripts/check-symbols.mjs"
   },
   "devDependencies": {
-    "atom-z80": "0.1.0",
+    "atom-z80": "0.2.0",
     "vitepress": "^1.6.3"
   }
 }

@@ -1,9 +1,10 @@
 ---
 layout: default
 title: "Appendix 7 — Numbers, Bits and ASCII"
-parent: "Atom Appendices"
+parent: "Atom and Z80 Reference"
 grand_parent: "Atom Books"
 nav_order: 7
+nav_group: "Z80 reference"
 ---
 # Appendix 7 — Numbers, Bits and ASCII
 
@@ -21,7 +22,7 @@ nav_order: 7
 
 ---
 
-## Hex Digit Table
+## Hex digit table
 
 | Hex | Binary | Decimal |
 |:---:|:------:|---:|
@@ -44,7 +45,7 @@ nav_order: 7
 
 ---
 
-## Common Hex Landmarks
+## Common hexadecimal landmarks
 
 | Value | Decimal | Why it matters |
 |------:|--------:|----------------|

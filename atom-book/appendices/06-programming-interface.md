@@ -1,9 +1,10 @@
 ---
 layout: default
 title: "Appendix 6 — Programming Interface"
-parent: "Atom Appendices"
+parent: "Atom and Z80 Reference"
 grand_parent: "Atom Books"
 nav_order: 6
+nav_group: "Assembler reference"
 ---
 
 # Appendix 6 — Programming Interface
@@ -11,11 +12,11 @@ nav_order: 6
 Tools can call Atom in the same process instead of spawning the command. The
 `atom-z80` package provides ECMAScript modules and requires Node.js 20 or later.
 
-## Assemble a project
+## Assemble and render
 
-`assembleAtomProject()` accepts a project root and entry file, runs source
-preparation and assembly, and returns the ordered project with its completed
-output generation:
+`assembleAtomProject()` prepares the source tree and runs the native Z80 core.
+`renderAtomArtifacts()` converts the completed output lifecycle into ordinary
+in-memory artifacts:
 
 ```js
 import {
@@ -27,7 +28,7 @@ const result = await assembleAtomProject({
   root: "/ABSOLUTE/PROJECT/ROOT",
   entry: "src/main.asm",
   definitions: { DEBUG: 1 },
-  target: { start: 0x4000, capacity: 0x8000 },
+  target: { start: 0x4000, capacity: 0x4000 },
 });
 
 const artifacts = renderAtomArtifacts(result, {
@@ -51,8 +52,27 @@ PATCH records, layout events, and declared symbols.
 | `d8` | `object` | D8 source and symbol map |
 | `d8Text` | `string` | Formatted D8 JSON |
 
-A debugger can validate and load `bin`, `hex`, and `d8` directly without
-creating an artifact directory.
+A debugger can load `bin`, `hex` and `d8` directly without creating temporary
+files. The caller remains responsible for choosing a target profile and a
+materialisation base that match its machine.
+
+## Publish selected files
+
+`publishAtomOutputFiles()` transactionally replaces exactly the paths named by
+the caller:
+
+```js
+import { publishAtomOutputFiles } from "atom-z80";
+
+await publishAtomOutputFiles([
+  { path: "build/main.hex", bytes: artifacts.hex },
+  { path: "build/main.d8.json", bytes: artifacts.d8Text },
+]);
+```
+
+The files are staged before either existing destination is replaced. A
+publication failure leaves the previous files in place. BIN, listing and NOBJ
+remain available in memory when a tool does not want them on disk.
 
 ## Prepare source separately
 
@@ -75,9 +95,9 @@ prepared bytes, dependencies, preprocessing information, and saved `INCBIN`
 data.
 
 `assembleResolvedAtomProject(project, options)` assembles an already prepared
-project. This is the appropriate entry point for a tool that supplies source
-from storage other than Node's filesystem. A project may contain 1 through 255
-parts; each part must use bank zero.
+project. This is the entry point for a tool that supplies source from storage
+other than Node's filesystem. A project may contain 1 through 255 parts; each
+part must use bank zero.
 
 The options are:
 
@@ -90,9 +110,9 @@ The options are:
 }
 ```
 
-Most callers need only `target`. The budget options bound assembly time. A
-custom sink receives the append-only output lifecycle; omit it to use Atom's
-in-memory sink.
+Most callers need only `target`. The budget options bound execution in the Z80
+emulator. A custom sink receives the append-only output lifecycle; omitting it
+selects Atom's in-memory sink.
 
 ## Materialise an output generation
 
@@ -109,34 +129,36 @@ const { base, end, bytes } = materializeAtomGeneration(result.generation, {
 
 The returned `Uint8Array` is a copy. Changing it does not alter the generation.
 
-## Publish an artifact bundle
+## NOBJ and individual formats
 
-`publishAtomArtifacts(destination, baseName, artifacts)` writes a complete
-content-addressed generation and returns its paths:
+The package exports `writeAtomNobj()`, `parseAtomNobj()` and
+`materializeAtomNobj()` for tools that store or consume Atom's append-only
+object stream. It also exports `writeIntelHex()`, `writeAtomCom()`,
+`writeAtomListing()` and `writeAtomD8()` when a caller needs one format rather
+than the complete rendered set.
 
-```js
-import { publishAtomArtifacts } from "atom-z80";
+`materializeAtomGeneration()` performs the same IMAGE-and-PATCH operation on a
+live assembly generation. `materializeAtomNobj()` starts from serialized NOBJ.
+Both return a flat image without introducing a general linker or symbol
+resolution stage.
 
-const published = await publishAtomArtifacts(
-  "/ABSOLUTE/PROJECT/ROOT/build/main.atom",
-  "main",
-  artifacts,
-);
+## Native host boundary
 
-console.log(published.paths.bin);
-console.log(published.paths.d8);
-```
+`createNamedObjectAtomAdapter()` and `createAtomToolServiceGateway()` expose
+the Z80 host boundary used by native systems. A provider supplies source
+objects, output transactions and diagnostics while the assembler core remains
+unchanged. The Node command and native CP/M program are two providers for that
+same division of responsibilities.
 
-The package also exports `writeAtomNobj()`, `parseAtomNobj()`,
-`writeIntelHex()`, `writeAtomListing()`, and `writeAtomD8()` for callers that
-need one format at a time.
+These interfaces are for host and operating-system integration. Ordinary Node
+tools should begin with `assembleAtomProject()`.
 
 ## Errors
 
-Source preparation throws `SourcePackagerError`. Assembly, rendering, and
+Source preparation throws `SourcePreparationError`. Assembly, rendering and
 publication throw `AtomAssemblyError`. Both provide machine-readable category
 and code values. Source errors also include a `diagnostic` object with the
-project-relative filename, part ordinal, byte offset, line, and column when
+project-relative filename, part ordinal, byte offset, line and column when
 that information is available.
 
 Import public functions from `atom-z80`, not files below `src/host/`. The
