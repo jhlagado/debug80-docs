@@ -43,6 +43,44 @@ function assemblyCode(text) {
   return text.replace(/"(?:\\.|[^"\\])*"/g, "\"\"").replace(/;.*/g, "");
 }
 
+async function verifyCommandDocumentation() {
+  const help = await run(atomExecutable, ["--help"], { cwd: repository });
+  assert.equal(help.status, 0, help.stderr);
+  for (const fragment of [
+    "atom [options] <input.asm> [output...]",
+    "atom --project <project.json> [output...]",
+    "atom self-host [output...]",
+    "With no output, Atom writes build/<input>.bin.",
+  ]) {
+    assert.ok(help.stdout.includes(fragment), `published Atom help omits ${fragment}`);
+  }
+
+  const appendix = await fs.readFile(
+    path.join(repository, "atom-book", "appendices", "03-cli-flags.md"),
+    "utf8",
+  );
+  const outputChapter = await fs.readFile(
+    path.join(repository, "atom-book", "book1", "06-diagnostics-and-output.md"),
+    "utf8",
+  );
+  for (const option of ["--project", "--output", "--target", "-DNAME", "--help", "--version"]) {
+    assert.ok(appendix.includes(option), `Atom CLI appendix omits ${option}`);
+  }
+  const suffixLine = help.stdout.match(/^Output suffixes: (.+)$/m);
+  assert.ok(suffixLine, "published Atom help has no output-suffix contract");
+  for (const suffix of suffixLine[1].split(/\s+/)) {
+    assert.ok(appendix.includes(suffix), `Atom CLI appendix omits ${suffix}`);
+    assert.ok(outputChapter.includes(suffix), `Atom output chapter omits ${suffix}`);
+  }
+
+  for (const command of ["ATOM", "ATOM SOURCE", "ATOM SOURCE OUTPUT"]) {
+    assert.ok(appendix.includes(command), `Atom CLI appendix omits ${command}`);
+  }
+  for (const name of ["INPUT.ASM", "OUTPUT.COM"]) {
+    assert.ok(appendix.includes(name), `Atom CLI appendix omits ${name}`);
+  }
+}
+
 async function markdownFiles(directory) {
   const files = [];
   for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
@@ -107,6 +145,8 @@ for (const filename of ["main.asm", path.join("lib", "device.asm")]) {
     `${filename} contains lowercase Atom source`,
   );
 }
+
+await verifyCommandDocumentation();
 for (const filename of await filesWithExtension(path.join(repository, "atom-book"), ".asm")) {
   assert.doesNotMatch(
     assemblyCode(await fs.readFile(filename, "utf8")),
