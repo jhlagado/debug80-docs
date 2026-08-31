@@ -58,28 +58,12 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      // Straight to the first page of each teaching series. Nucleus has two
-      // authorities, so its menu keeps the project overview within reach.
+      { text: "Home", link: "/" },
+      // Keep the main shelf compact. Each series landing page owns the route
+      // into its books and reference material.
       { text: "Debug80 Book", link: "/debug80-book/book1/01-install-debug80" },
       { text: "AZM Books", link: "/azm-book/book1/00-introduction" },
-      {
-        text: "Atom",
-        items: [
-          { text: "Atom overview", link: "/atom/" },
-          {
-            text: "Assembler Reference",
-            link: "/atom-book/book1/01-getting-started",
-          },
-          {
-            text: "Z80 Programming",
-            link: "/atom-book/book2/00-introduction",
-          },
-          {
-            text: "Appendices",
-            link: "/atom-book/appendices/01-directives",
-          },
-        ],
-      },
+      { text: "Atom", link: "/atom/" },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
       {
         text: "Nucleus",

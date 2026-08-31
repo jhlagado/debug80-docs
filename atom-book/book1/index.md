@@ -4,7 +4,7 @@ title: "Atom Book 1 — Assembler Reference"
 nav_order: 1
 has_children: true
 has_toc: false
-isolated: true
+sidebar_link: "Book overview"
 ---
 
 <Mark class="book-plate" book="atom" size="52" />
@@ -12,7 +12,8 @@ isolated: true
 # Atom Book 1 — Assembler Reference
 
 This manual documents the current Atom assembler for programmers and tool
-authors.
+authors. Chapter 1 starts with the desktop and native CP/M commands. Later
+chapters separate host-only facilities whenever the two environments differ.
 
 ## Main path
 
@@ -27,5 +28,5 @@ authors.
 
 ## Reference
 
-The [Atom appendices](../appendices/) contain the programming API and lookup
-tables for Atom and the Z80.
+The [Atom and Z80 reference](../appendices/) contains command tables, the
+programming API, implementation limits and Z80 lookup tables.

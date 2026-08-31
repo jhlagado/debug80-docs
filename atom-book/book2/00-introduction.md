@@ -40,6 +40,9 @@ is in the appendices.
 
 ## Prerequisites
 
-You need a computer that can run the Atom toolchain. A paper trace of register
-values is useful when a program produces an unexpected result. Chapter 1
-begins with the processor, memory and I/O.
+The easiest route is the Node-hosted `atom` command described in [Book 1,
+Chapter 1](../book1/01-getting-started.md). Native `ATOM.COM` can assemble on a
+CP/M 2.2 machine, although many examples in this book use a generic memory map
+rather than the CP/M `$0100` program layout. A paper trace of register values
+is useful when a program produces an unexpected result. Chapter 1 begins with
+the processor, memory and I/O.

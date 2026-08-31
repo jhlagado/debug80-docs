@@ -1,9 +1,10 @@
 ---
 layout: default
 title: "Appendix 9 — Addressing, Prefixes and Forms"
-parent: "Atom Appendices"
+parent: "Atom and Z80 Reference"
 grand_parent: "Atom Books"
 nav_order: 9
+nav_group: "Z80 reference"
 ---
 # Appendix 9 — Addressing, Prefixes and Forms
 
@@ -17,7 +18,7 @@ letter for the register-pair set accepted by that instruction, `N` for an
 for a condition code. Each instruction family determines the exact register
 set.
 
-## Addressing Shapes
+## Addressing shapes
 
 | Shape | Example | Meaning | Typical use |
 |-------|---------|---------|-------------|
@@ -33,7 +34,7 @@ set.
 
 ---
 
-## Prefix Families
+## Prefix families
 
 | Prefix | Family | What it usually means |
 |--------|--------|-----------------------|
@@ -49,7 +50,7 @@ set.
 
 ---
 
-## `LD` Quick Table
+## `LD` quick table
 
 | Family | Examples | Notes |
 |--------|----------|-------|
@@ -71,7 +72,7 @@ Memory-to-memory moves must go through a register.
 
 ---
 
-## Arithmetic, Logic and Compare Quick Table
+## Arithmetic, logic and compare quick table
 
 | Family | Main forms | Result goes to | Notes |
 |--------|------------|----------------|-------|
@@ -88,7 +89,7 @@ Memory-to-memory moves must go through a register.
 
 ---
 
-## Rotate, Shift, and Bit Quick Table
+## Rotate, shift and bit quick table
 
 | Family | Examples | Notes |
 |--------|----------|-------|
@@ -103,7 +104,7 @@ Memory-to-memory moves must go through a register.
 
 ---
 
-## Control Flow, Stack and Exchange Quick Table
+## Control flow, stack and exchange quick table
 
 | Family | Examples | Notes |
 |--------|----------|-------|
@@ -118,7 +119,7 @@ Memory-to-memory moves must go through a register.
 
 ---
 
-## Block Instructions At A Glance
+## Block instructions at a glance
 
 | Family | Mnemonics | What they do |
 |--------|-----------|--------------|

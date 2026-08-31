@@ -28,7 +28,7 @@ nav_order: 1
   <a class="volume volume--atom" href="/atom/">
     <span class="volume__tag">Vol $02 · assembler · 2 books</span>
     <span class="volume__head"><Mark book="atom" size="26" /><span class="volume__title">Atom</span></span>
-    <span class="volume__desc">A single-pass Z80 assembler written in Z80 — install the command, read the books or inspect its self-hosting core.</span>
+    <span class="volume__desc">A single-pass Z80 assembler written in Z80 — use it from a desktop command or directly under CP/M.</span>
     <span class="volume__enter">stream →</span>
   </a>
   <a class="volume volume--glimmer" href="/glimmer-book/book1/00-introduction">
@@ -102,7 +102,7 @@ You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debu
 Install the `atom` command, assemble a first `.asm` file and find the package,
 source and manuals from one place.
 
-### [Atom Book 1 — Assembler Reference](atom-book/book1/01-getting-started.md)
+### [Atom Book 1 — Assembler Reference](atom-book/book1/)
 
 The definitive reference for Atom source, expressions, instructions,
 directives, host preprocessing, binary inclusion, diagnostics and output
@@ -110,7 +110,7 @@ artifacts.
 
 For Z80 programmers and tool authors who need the exact current Atom rules.
 
-### [Atom Book 2 — Z80 Programming](atom-book/book2/00-introduction.md)
+### [Atom Book 2 — Z80 Programming](atom-book/book2/)
 
 A from-zero route through the Z80, followed by arithmetic, sorting, strings,
 packed flags and recursion in verified Atom programs.
@@ -118,7 +118,7 @@ packed flags and recursion in verified Atom programs.
 For readers learning assembly or moving from instruction exercises into
 complete routines.
 
-### [Atom Appendices](atom-book/appendices/01-directives.md)
+### [Atom and Z80 Reference](atom-book/appendices/)
 
 The programming API and compact references for Atom syntax, limits, Z80
 registers, addressing forms and instructions.
@@ -128,18 +128,18 @@ registers, addressing forms and instructions.
 ## About Atom
 
 Atom is a single-pass Z80 assembler whose native core is written in Z80
-assembly. The Mac command runs that core through Debug80 while a Node host
-resolves source dependencies, conditional assembly, binary inputs, listings,
-D8 maps, Intel HEX, and atomic artifact publication. The native core assembles
-its own checked source byte for byte and occupies 12,101 bytes including fixed
-workspace.
+assembly. The desktop command runs that core in a Z80 emulator while a Node
+host resolves source dependencies, conditional assembly, binary inputs,
+listings, D8 maps, Intel HEX and atomic output publication. Native `ATOM.COM`
+runs the same core under CP/M 2.2 with CP/M file services and a compact
+positional command.
 
 Atom source uses bare directives such as `ORG`, `DB`, and `DW`; a leading period
 marks a private symbol. Source and symbols are case-insensitive. The
 conventional source extension is `.asm`; build configuration selects the
 assembler flavour.
 
-Source: [github.com/jhlagado/atom](https://github.com/jhlagado/atom)
+Source: [github.com/jhlagado/debug80/tree/main/packages/atom](https://github.com/jhlagado/debug80/tree/main/packages/atom)
 
 ---
 

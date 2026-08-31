@@ -10,11 +10,10 @@ aside: false
 # Atom
 
 Atom is a single-pass Z80 assembler with an assembler core written in Z80. The
-native core fits in one 16 KiB bank and can assemble its own source. On a Mac,
-the `atom` command runs that core through the Debug80 runtime while a Node host
-handles files, conditional source, binary inputs and finished artifacts.
+same assembler runs in two settings: the desktop command executes it in a Z80
+emulator, while `ATOM.COM` executes it directly under CP/M 2.2.
 
-## Install Atom
+## Desktop command
 
 Atom is published as the public `atom-z80` package and requires Node.js 20 or
 later:
@@ -36,37 +35,54 @@ START:
 Then assemble it:
 
 ```sh
-atom --origin 4000H main.asm
+atom main.asm build/main.bin build/main.lst
 ```
 
-The build appears under `build/main.atom/current` as binary, Intel HEX, NOBJ,
-listing, D8 source map and manifest files.
+Atom writes only the outputs named on the command line. If no output is named,
+it writes `build/main.bin`. The desktop command can produce BIN, Intel HEX,
+CP/M COM, NOBJ, listing and D8 files.
+
+## Native CP/M command
+
+The npm package also contains `assets/atom-cpm22.com`. Copy it to a CP/M disk
+as `ATOM.COM`, then use the compact native command:
+
+```text
+A>ATOM HELLO
+
+HELLO.COM written
+```
+
+With one name, Atom reads `HELLO.ASM` and writes `HELLO.COM`. An explicit
+second name may select COM, BIN or Intel HEX output. Native CP/M uses current
+drive 8.3 filenames and leading `%INCLUDE` directives; it does not read Node
+project files.
 
 ## The language
 
-Atom covers the complete Z80 instruction set claimed by its AZM oracle,
-including indexed, CB and ED forms. Its source language provides global and
-period-prefixed private labels, `EQU`, `ORG`, `DB`, `DW`, `DS`, `ALIGN`,
-`INCBIN`, character and string data, arithmetic expressions and `LOW()` and
-`HIGH()`.
+Atom covers the complete Z80 instruction set, including indexed, CB, ED and
+classic undocumented forms. Its source language provides global and
+period-prefixed private labels, `EQU`, `ORG`, `DB`, `DW`, `DS`, `ALIGN`, string
+data, arithmetic expressions and `LOW()` and `HIGH()`. The desktop host also
+supports `INCBIN`.
 
-Host directives beginning with `%` select dependencies and conditional source.
-They are resolved before the native assembler reads the stream. Included files
-remain distinct source parts, so diagnostics and D8 mappings retain their
-original filenames and positions.
+On the desktop, host directives beginning with `%` select dependencies and
+conditional source. Native CP/M recognizes leading `%INCLUDE` directives only.
+Included files remain distinct source parts, preserving their filenames and
+positions in diagnostics and desktop D8 maps.
 
 ## Read and use
 
-- [Atom Book 1 — Assembler Reference](/atom-book/book1/01-getting-started.html)
+- [Atom Book 1 — Assembler Reference](/atom-book/book1/)
   defines the command, source language and output formats.
-- [Atom Book 2 — Z80 Programming](/atom-book/book2/00-introduction.html) begins
+- [Atom Book 2 — Z80 Programming](/atom-book/book2/) begins
   with registers and opcodes, then develops complete routines, algorithms and
   recursion.
-- [Atom Appendices](/atom-book/appendices/01-directives.html) contain the
+- [Atom and Z80 Reference](/atom-book/appendices/) contains the
   programming API and lookup tables for Atom and the Z80.
 - [Atom on npm](https://www.npmjs.com/package/atom-z80) provides the current
   package and version history.
-- [Atom source](https://github.com/jhlagado/atom) contains the Z80 core, host,
-  engineering manual and correctness proofs.
+- [Atom source](https://github.com/jhlagado/debug80/tree/main/packages/atom)
+  contains the assembler, desktop host and native platform providers.
 
 Atom is licensed under GPL-3.0-only.

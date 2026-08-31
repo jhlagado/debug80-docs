@@ -1,9 +1,10 @@
 ---
 layout: default
 title: "Appendix 10 — Z80 Instruction Reference"
-parent: "Atom Appendices"
+parent: "Atom and Z80 Reference"
 grand_parent: "Atom Books"
 nav_order: 10
+nav_group: "Z80 reference"
 ---
 # Appendix 10 — Z80 Instruction Reference
 
@@ -103,7 +104,7 @@ means a bit number from 0 through 7.
 
 ---
 
-## Notes On The Undocumented Forms Included Here
+## Undocumented forms included here
 
 - `IXH`, `IXL`, `IYH`, `IYL` in many 8-bit `LD`, `INC`, `DEC`, and ALU forms
 - `SLL` / `SLS`
@@ -112,7 +113,7 @@ means a bit number from 0 through 7.
 
 ---
 
-## Rotate and Shift Instructions in Detail
+## Rotate and shift instructions in detail
 
 ---
 

@@ -93,8 +93,9 @@ Both operands must already be resolved. Count and capacity are checked before
 the first output operation, so a failed directive publishes no partial span.
 
 Uninitialized reservations still affect later labels, the output length,
-listing rows, and D8 source ranges. The selected fill byte supplies their bytes
-in BIN and HEX; NOBJ records them as reserved storage.
+listing rows, and D8 source ranges. The command-line hosts use zero bytes for
+their BIN and HEX materialisation; the JavaScript API can select another fill
+value. NOBJ records the span as reserved storage.
 
 ## `ALIGN`
 
@@ -129,7 +130,8 @@ as `DB`.
 
 ## `INCBIN`
 
-`INCBIN` emits one complete host file as initialized bytes:
+`INCBIN` is a desktop-host facility that emits one complete file as initialized
+bytes:
 
 ```asm
 FONT: INCBIN "ASSETS/FONT.BIN"
@@ -144,7 +146,7 @@ One binary may contain 0 through 65,535 bytes. Atom does not accept offset or
 length operands. During source preparation, Atom replaces the line with an
 equal-length reservation for address calculation and attaches the saved binary
 bytes to the resulting output. Listings and D8 maps retain the original
-`INCBIN` line.
+`INCBIN` line. Native CP/M Atom does not implement `INCBIN`.
 
 ## Directive summary
 

@@ -160,13 +160,13 @@ try {
   await fs.cp(source, temporary, { recursive: true });
   const assembled = await run(
     atomExecutable,
-    ["--origin", "4000H", "main.asm"],
+    ["main.asm"],
     { cwd: temporary },
   );
   assert.equal(assembled.status, 0, assembled.stderr);
   assert.match(assembled.stdout, /Atom assembled 2 part\(s\), 18 byte\(s\)/);
   const binary = await fs.readFile(
-    path.join(temporary, "build", "main.atom", "current", "main.bin"),
+    path.join(temporary, "build", "main.bin"),
   );
   assert.deepEqual(
     binary,
@@ -181,13 +181,13 @@ try {
   await fs.copyFile(counterSource, path.join(counterDirectory, "counter.asm"));
   const counter = await run(
     atomExecutable,
-    ["--origin", "4000H", "counter.asm"],
+    ["counter.asm"],
     { cwd: counterDirectory },
   );
   assert.equal(counter.status, 0, counter.stderr);
   assert.deepEqual(
     await fs.readFile(
-      path.join(counterDirectory, "build", "counter.atom", "current", "counter.bin"),
+      path.join(counterDirectory, "build", "counter.bin"),
     ),
     Buffer.from([0x06, 0x08, 0x21, 0x09, 0x40, 0x34, 0x10, 0xfd, 0x76, 0x00]),
   );

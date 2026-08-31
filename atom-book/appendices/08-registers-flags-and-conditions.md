@@ -1,15 +1,16 @@
 ---
 layout: default
 title: "Appendix 8 — Registers, Flags and Conditions"
-parent: "Atom Appendices"
+parent: "Atom and Z80 Reference"
 grand_parent: "Atom Books"
 nav_order: 8
+nav_group: "Z80 reference"
 ---
 # Appendix 8 — Registers, Flags and Conditions
 
 ---
 
-## Main Registers
+## Main registers
 
 | Register | Width | Usual role | Notes |
 |----------|------:|------------|-------|
@@ -33,7 +34,7 @@ nav_order: 8
 
 ---
 
-## Shadow Registers
+## Shadow registers
 
 | Register set | What it is |
 |--------------|------------|
@@ -45,7 +46,7 @@ forms.
 
 ---
 
-## Flags Register
+## Flags register
 
 | Bit | Name | Meaning when set | Common beginner use |
 |----:|------|------------------|---------------------|
@@ -62,7 +63,7 @@ Not every instruction updates every flag.
 
 ---
 
-## Condition Codes
+## Condition codes
 
 | Condition | Meaning | Flag test |
 |-----------|---------|-----------|
@@ -80,7 +81,7 @@ These appear in conditional `JP`, `JR`, `CALL` and `RET` forms. `JR` supports
 
 ---
 
-## Signed and Unsigned Landmarks
+## Signed and unsigned landmarks
 
 | Width | Unsigned range | Signed range (two's complement) |
 |------:|----------------|---------------------------------|
@@ -98,7 +99,7 @@ Useful byte landmarks:
 
 ---
 
-## Relative Branch Range
+## Relative branch range
 
 | Instruction family | Range |
 |--------------------|-------|
