@@ -78,14 +78,6 @@ HELLO FROM ATOM
 Use the same A: setup on a physical CP/M computer: save `HELLO.ASM` on A: and
 run Atom with A: current.
 
-The same source can be built from Node. Node is the build host here; it does
-not provide the CP/M console that the program calls. Transfer the resulting
-COM file to a CP/M system before running it:
-
-```sh
-atom --target cpm22 HELLO.ASM build/hello.com
-```
-
 With one source name on CP/M, Atom derives a `.COM` output from the same
 basename. To choose the output name and format yourself, give the source and
 output as two arguments:
