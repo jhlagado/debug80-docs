@@ -39,14 +39,13 @@ Debug80, AZM, Glimmer, and Nucleus material.
 
 |                                                                                                |                                                                                     |
 | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| [Atom](https://debug80.com/atom/) | Node and CP/M guides, downloads and books. |
+| [Atom Book 1 — Assembler Reference](https://debug80.com/atom-book/book1/) | Source language and reference tables. |
+| [Atom Book 2 — Z80 Programming](https://debug80.com/atom-book/book2/) | The Z80 from first principles through algorithms, with instruction tables. |
 | [Debug80 Book 1 — Getting started](https://debug80.com/debug80-book/book1/)                    | Installation through to stepping code and sending HEX to a board.                   |
 | [AZM Book 1 — Assembler Manual](https://debug80.com/azm-book/book1/)                           | The reference: syntax, directives, expressions, layouts, contracts.                 |
 | [AZM Book 2 — Z80 Fundamentals](https://debug80.com/azm-book/book2/)                           | The Z80 from the bare machine up, assuming nothing.                                 |
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                   |
-| [Atom](https://debug80.com/atom/)                                                              | Desktop and CP/M installation, first assembly, project links and book entry points. |
-| [Atom Book 1 — Assembler Reference](https://debug80.com/atom-book/book1/)                       | Atom syntax, preprocessing, instructions and output.                               |
-| [Atom Book 2 — Z80 Programming](https://debug80.com/atom-book/book2/)                           | The Z80 from first principles through algorithms and recursion using Atom.          |
-| [Atom and Z80 Reference](https://debug80.com/atom-book/appendices/)                             | Programming API and lookup tables for Atom and the Z80.                             |
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
 | [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and direct-Z80 compiler project.                            |
@@ -108,8 +107,8 @@ not the SVGs.
 ```text
 debug80-book/     Debug80 Book 1
 azm-book/         AZM Books 1-3, plus appendices shared between them
-atom/             Atom product overview and installation
-atom-book/        Atom reference and teaching books, plus lookup appendices
+atom/             Atom landing page
+atom-book/        Node and CP/M guides, language reference and Z80 programming
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
 nucleus/          Programming Nucleus and two generated reading editions
 archive/          Retired research material; excluded from the public build
@@ -126,3 +125,8 @@ Navigation comes from the front matter of each page — `title`, `nav_order`,
 sidebar once `npm run sidebar` has run. A directory named `book*` is treated as
 a standalone book and gets its own sidebar; any other subdirectory of a series
 is shared reference and appears alongside each book in that series.
+
+Atom reference pages retain their published URLs under `appendices/` but are
+grouped with the guide or book named in their `parent` field. The Node guide
+contains command and API references, Book 1 has the language tables and Book 2
+has the Z80 tables.

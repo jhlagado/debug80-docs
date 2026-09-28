@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix 5 — Limits and Capacities"
-parent: "Atom and Z80 Reference"
+title: "Limits and Capacities"
+parent: "Atom Book 1 — Assembler Reference"
 grand_parent: "Atom Books"
-nav_order: 5
-nav_group: "Assembler reference"
+nav_order: 105
+nav_group: "Reference tables"
 ---
 
-# Appendix 5 — Limits and Capacities
+# Limits and Capacities
 
 ## Source projects
 
@@ -40,18 +40,20 @@ Atom currently produces one flat output image in bank zero.
 | --- | ---: | --- |
 | Desktop `generic` | At most 65,535 bytes | Source `ORG` within the flat 16-bit range |
 | Desktop `cpm22` | At most 65,279 bytes | Load and entry at `$0100` |
-| Native CP/M 2.2 | 18,304 bytes | `$0100` through `$487F` |
+| Native CP/M 2.2 | 65,280 bytes | `$0100` through `$FFFF` |
 
-The generic target uses a non-wrapping half-open range whose mathematical end
-may be no greater than `$FFFF`. Starting at zero therefore covers `$0000`
-through `$FFFE`. The native CP/M limit is set by that program's measured TPA
-memory map, not by the Atom source language.
+The desktop defaults reserve a range ending just before `$FFFF`. The
+programming API accepts an explicit range ending at `$10000`, with capacity
+still limited to 65,535 bytes. Native CP/M output can use the final address.
+Its image limit is independent of the RAM available to load and run that
+program. The [CP/M guide](../using-atom-on-cpm.md#limits-and-current-boundaries)
+gives the minimum memory requirement and disk-space constraints.
 
 ## Symbols and forward references
 
 | Host configuration | Simultaneous symbols | Simultaneous unresolved references |
 | --- | ---: | ---: |
-| Desktop command | 1,664 | 694 |
+| Desktop command | 3,040 | 1,170 |
 | Native CP/M 2.2 | 1,536 | 585 |
 
 Global symbols remain for the entire build. Private symbols are discarded

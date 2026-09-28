@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Atom Book 1 — Assembler Reference"
-nav_order: 1
+nav_order: 3
 has_children: true
 has_toc: false
 sidebar_link: "Book overview"
@@ -12,8 +12,10 @@ sidebar_link: "Book overview"
 # Atom Book 1 — Assembler Reference
 
 This manual documents the current Atom assembler for programmers and tool
-authors. Chapter 1 starts with the desktop and native CP/M commands. Later
-chapters separate host-only facilities whenever the two environments differ.
+authors. The [Node guide](../using-atom-on-node.md) and
+[CP/M guide](../using-atom-on-cpm.md) cover installation and invocation. The
+chapters here focus on the shared source language and explain host differences
+only where they affect the language or its outputs.
 
 ## Main path
 
@@ -28,5 +30,7 @@ chapters separate host-only facilities whenever the two environments differ.
 
 ## Reference
 
-The [Atom and Z80 reference](../appendices/) contains command tables, the
-programming API, implementation limits and Z80 lookup tables.
+- [Directives](../appendices/01-directives.md)
+- [Expressions and numeric forms](../appendices/02-expressions-and-numbers.md)
+- [Built-in functions](../appendices/04-functions.md)
+- [Limits and capacities](../appendices/05-limits-and-capacities.md)

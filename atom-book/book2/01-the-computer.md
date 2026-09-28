@@ -17,7 +17,7 @@ A Z80 computer has three main parts: a CPU, memory and I/O ports. The CPU does t
 
 A **bit** is a single binary digit: 0 or 1. A **byte** is eight bits: the smallest unit of data the Z80 can read, write or operate on directly. A byte holds values from 0 to 255. Two consecutive bytes form a **word**, a 16-bit value ranging from 0 to 65,535.
 
-The `%` prefix marks a binary number: `%01110101` is the binary representation of `$75` (117 in decimal). The full explanation of binary (how bits combine to make values, two's complement for signed numbers and bit-by-bit arithmetic) is in [Appendix 7](../appendices/07-numbers-bits-and-ascii.md).
+The `%` prefix marks a binary number: `%01110101` is the binary representation of `$75` (117 in decimal). The full explanation of binary (how bits combine to make values, two's complement for signed numbers and bit-by-bit arithmetic) is in [Numbers, Bits and ASCII](../appendices/07-numbers-bits-and-ascii.md).
 
 ---
 
@@ -36,7 +36,7 @@ Hexadecimal is base 16. It uses sixteen digits: `0`–`9` for values 0–9, then
 | E | 14 | 1110 |
 | F | 15 | 1111 |
 
-So `$75` is the byte `%0111 0101`, a `7` (0111) followed by a `5` (0101). And `$FF` is `%1111 1111`, which is 255. A four-digit hex number like `$8000` is a 16-bit address. The full conversion tables are in [Appendix 7](../appendices/07-numbers-bits-and-ascii.md).
+So `$75` is the byte `%0111 0101`, a `7` (0111) followed by a `5` (0101). And `$FF` is `%1111 1111`, which is 255. A four-digit hex number like `$8000` is a 16-bit address. The full conversion tables are in [Numbers, Bits and ASCII](../appendices/07-numbers-bits-and-ascii.md).
 
 ---
 
@@ -98,7 +98,7 @@ When B and C are used as the pair BC, B holds the high byte and C holds the low 
 
 The Z80 also has a hidden second copy of A, F, B, C, D, E, H and L called the
 **shadow registers**. They are listed in
-[Appendix 8](../appendices/08-registers-flags-and-conditions.md); the chapters
+[Registers, Flags and Conditions](../appendices/08-registers-flags-and-conditions.md); the chapters
 use the main register set.
 
 ![The whole register set. Each of the four main pairs is two 8-bit registers and one 16-bit register at the same time.](../../assets/images/atom-book/book2/register-file.svg)

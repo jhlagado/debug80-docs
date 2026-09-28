@@ -59,8 +59,8 @@ async function verifyCommandDocumentation() {
     path.join(repository, "atom-book", "appendices", "03-cli-flags.md"),
     "utf8",
   );
-  const outputChapter = await fs.readFile(
-    path.join(repository, "atom-book", "book1", "06-diagnostics-and-output.md"),
+  const nodeGuide = await fs.readFile(
+    path.join(repository, "atom-book", "using-atom-on-node.md"),
     "utf8",
   );
   for (const option of ["--project", "--output", "--target", "-DNAME", "--help", "--version"]) {
@@ -70,15 +70,17 @@ async function verifyCommandDocumentation() {
   assert.ok(suffixLine, "published Atom help has no output-suffix contract");
   for (const suffix of suffixLine[1].split(/\s+/)) {
     assert.ok(appendix.includes(suffix), `Atom CLI appendix omits ${suffix}`);
-    assert.ok(outputChapter.includes(suffix), `Atom output chapter omits ${suffix}`);
+    assert.ok(nodeGuide.includes(suffix), `Atom Node guide omits ${suffix}`);
   }
 
+  const cpmGuide = await fs.readFile(
+    path.join(repository, "atom-book", "using-atom-on-cpm.md"),
+    "utf8",
+  );
   for (const command of ["ATOM", "ATOM SOURCE", "ATOM SOURCE OUTPUT"]) {
-    assert.ok(appendix.includes(command), `Atom CLI appendix omits ${command}`);
+    assert.ok(cpmGuide.includes(command), `Atom CP/M guide omits ${command}`);
   }
-  for (const name of ["INPUT.ASM", "OUTPUT.COM"]) {
-    assert.ok(appendix.includes(name), `Atom CLI appendix omits ${name}`);
-  }
+  assert.ok(cpmGuide.includes("displays usage"), "Atom CP/M guide omits bare-command behavior");
 }
 
 async function markdownFiles(directory) {

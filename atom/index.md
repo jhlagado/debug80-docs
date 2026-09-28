@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Atom"
-nav_order: 6
+nav_order: 1
 aside: false
 ---
 
@@ -9,80 +9,32 @@ aside: false
 
 # Atom
 
-Atom is a single-pass Z80 assembler with an assembler core written in Z80. The
-same assembler runs in two settings: the desktop command executes it in a Z80
-emulator, while `ATOM.COM` executes it directly under CP/M 2.2.
+Atom is a single-pass Z80 assembler. Its core runs as a Node command on a
+desktop and as `ATOM.COM` on CP/M 2.2. The assembler language is shared; the
+way you install, invoke and run it depends on the host.
 
-## Desktop command
+## Choose your platform
 
-Atom is published as the public `atom-z80` package and requires Node.js 20 or
-later:
+- [Using Atom on Node](/atom-book/using-atom-on-node.html) covers installation,
+  desktop builds, output files and projects. Node is the build host. A program
+  assembled there runs on the target platform selected by the build.
+- [Using Atom on CP/M](/atom-book/using-atom-on-cpm.html) covers the compact
+  native command, current-drive files, CP/M output and diagnostics. It also
+  shows a small program using the CP/M BDOS calling convention.
 
-```sh
-npm install --global atom-z80
-```
+## Learn the assembler
 
-Create `main.asm`:
+- [Atom Book 1 — Assembler Reference](/atom-book/book1/) defines the source
+  language, symbols, directives and output model.
+- [Atom Book 2 — Z80 Programming](/atom-book/book2/) develops Z80 programs,
+  from registers and opcodes through routines and algorithms.
 
-```asm
-ORG 4000H
+Each book includes its reference tables. The Node guide also links to the
+command options and the programming API for tool authors.
 
-START:
-    LD A,42
-    HALT
-```
+## Project resources
 
-Then assemble it:
-
-```sh
-atom main.asm build/main.bin build/main.lst
-```
-
-Atom writes only the outputs named on the command line. If no output is named,
-it writes `build/main.bin`. The desktop command can produce BIN, Intel HEX,
-CP/M COM, NOBJ, listing and D8 files.
-
-## Native CP/M command
-
-The npm package also contains `assets/atom-cpm22.com`. Copy it to a CP/M disk
-as `ATOM.COM`, then use the compact native command:
-
-```text
-A>ATOM HELLO
-
-HELLO.COM written
-```
-
-With one name, Atom reads `HELLO.ASM` and writes `HELLO.COM`. An explicit
-second name may select COM, BIN or Intel HEX output. Native CP/M uses current
-drive 8.3 filenames and leading `%INCLUDE` directives; it does not read Node
-project files.
-
-## The language
-
-Atom covers the complete Z80 instruction set, including indexed, CB, ED and
-classic undocumented forms. Its source language provides global and
-period-prefixed private labels, `EQU`, `ORG`, `DB`, `DW`, `DS`, `ALIGN`, string
-data, arithmetic expressions and `LOW()` and `HIGH()`. The desktop host also
-supports `INCBIN`.
-
-On the desktop, host directives beginning with `%` select dependencies and
-conditional source. Native CP/M recognizes leading `%INCLUDE` directives only.
-Included files remain distinct source parts, preserving their filenames and
-positions in diagnostics and desktop D8 maps.
-
-## Read and use
-
-- [Atom Book 1 — Assembler Reference](/atom-book/book1/)
-  defines the command, source language and output formats.
-- [Atom Book 2 — Z80 Programming](/atom-book/book2/) begins
-  with registers and opcodes, then develops complete routines, algorithms and
-  recursion.
-- [Atom and Z80 Reference](/atom-book/appendices/) contains the
-  programming API and lookup tables for Atom and the Z80.
-- [Atom on npm](https://www.npmjs.com/package/atom-z80) provides the current
-  package and version history.
-- [Atom source](https://github.com/jhlagado/debug80/tree/main/packages/atom)
-  contains the assembler, desktop host and native platform providers.
-
-Atom is licensed under GPL-3.0-only.
+- [Atom on npm](https://www.npmjs.com/package/atom-z80) provides the desktop
+  package and release history.
+- [Atom source](https://github.com/jhlagado/atom) contains the assembler,
+  desktop host and native platform providers.

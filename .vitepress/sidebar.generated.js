@@ -1088,8 +1088,46 @@ export const sidebars = {
   ],
   "/atom-book/": [
     {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
       "text": "Atom Book 1 — Assembler Reference",
-      "collapsed": false,
+      "collapsed": true,
       "items": [
         {
           "text": "Book overview",
@@ -1122,6 +1160,28 @@ export const sidebars = {
         {
           "text": "Diagnostics and Output",
           "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
         }
       ]
     },
@@ -1204,65 +1264,25 @@ export const sidebars = {
         {
           "text": "Exercise Notes",
           "link": "/atom-book/book2/exercise-notes.html"
-        }
-      ]
-    },
-    {
-      "text": "Atom and Z80 Reference",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "Reference overview",
-          "link": "/atom-book/appendices/index.html"
         },
         {
-          "text": "Assembler reference",
+          "text": "Reference tables",
           "collapsed": false,
           "items": [
             {
-              "text": "Appendix 1 — Directive Reference",
-              "link": "/atom-book/appendices/01-directives.html"
-            },
-            {
-              "text": "Appendix 2 — Expressions and Numeric Forms",
-              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
-            },
-            {
-              "text": "Appendix 3 — Command-line Reference",
-              "link": "/atom-book/appendices/03-cli-flags.html"
-            },
-            {
-              "text": "Appendix 4 — Built-in Functions",
-              "link": "/atom-book/appendices/04-functions.html"
-            },
-            {
-              "text": "Appendix 5 — Limits and Capacities",
-              "link": "/atom-book/appendices/05-limits-and-capacities.html"
-            },
-            {
-              "text": "Appendix 6 — Programming Interface",
-              "link": "/atom-book/appendices/06-programming-interface.html"
-            }
-          ]
-        },
-        {
-          "text": "Z80 reference",
-          "collapsed": false,
-          "items": [
-            {
-              "text": "Appendix 7 — Numbers, Bits and ASCII",
+              "text": "Numbers, Bits and ASCII",
               "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
             },
             {
-              "text": "Appendix 8 — Registers, Flags and Conditions",
+              "text": "Registers, Flags and Conditions",
               "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
             },
             {
-              "text": "Appendix 9 — Addressing, Prefixes and Forms",
+              "text": "Addressing, Prefixes and Forms",
               "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
             },
             {
-              "text": "Appendix 10 — Z80 Instruction Reference",
+              "text": "Z80 Instruction Reference",
               "link": "/atom-book/appendices/10-z80-instruction-reference.html"
             }
           ]
@@ -1272,6 +1292,44 @@ export const sidebars = {
   ],
   "/atom-book/book1/": [
     {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
       "text": "Atom Book 1 — Assembler Reference",
       "collapsed": false,
       "items": [
@@ -1306,6 +1364,28 @@ export const sidebars = {
         {
           "text": "Diagnostics and Output",
           "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
         }
       ]
     },
@@ -1388,65 +1468,25 @@ export const sidebars = {
         {
           "text": "Exercise Notes",
           "link": "/atom-book/book2/exercise-notes.html"
-        }
-      ]
-    },
-    {
-      "text": "Atom and Z80 Reference",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Reference overview",
-          "link": "/atom-book/appendices/index.html"
         },
         {
-          "text": "Assembler reference",
+          "text": "Reference tables",
           "collapsed": false,
           "items": [
             {
-              "text": "Appendix 1 — Directive Reference",
-              "link": "/atom-book/appendices/01-directives.html"
-            },
-            {
-              "text": "Appendix 2 — Expressions and Numeric Forms",
-              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
-            },
-            {
-              "text": "Appendix 3 — Command-line Reference",
-              "link": "/atom-book/appendices/03-cli-flags.html"
-            },
-            {
-              "text": "Appendix 4 — Built-in Functions",
-              "link": "/atom-book/appendices/04-functions.html"
-            },
-            {
-              "text": "Appendix 5 — Limits and Capacities",
-              "link": "/atom-book/appendices/05-limits-and-capacities.html"
-            },
-            {
-              "text": "Appendix 6 — Programming Interface",
-              "link": "/atom-book/appendices/06-programming-interface.html"
-            }
-          ]
-        },
-        {
-          "text": "Z80 reference",
-          "collapsed": false,
-          "items": [
-            {
-              "text": "Appendix 7 — Numbers, Bits and ASCII",
+              "text": "Numbers, Bits and ASCII",
               "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
             },
             {
-              "text": "Appendix 8 — Registers, Flags and Conditions",
+              "text": "Registers, Flags and Conditions",
               "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
             },
             {
-              "text": "Appendix 9 — Addressing, Prefixes and Forms",
+              "text": "Addressing, Prefixes and Forms",
               "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
             },
             {
-              "text": "Appendix 10 — Z80 Instruction Reference",
+              "text": "Z80 Instruction Reference",
               "link": "/atom-book/appendices/10-z80-instruction-reference.html"
             }
           ]
@@ -1456,6 +1496,44 @@ export const sidebars = {
   ],
   "/atom-book/book2/": [
     {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
       "text": "Atom Book 1 — Assembler Reference",
       "collapsed": true,
       "items": [
@@ -1490,6 +1568,28 @@ export const sidebars = {
         {
           "text": "Diagnostics and Output",
           "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
         }
       ]
     },
@@ -1572,249 +1672,25 @@ export const sidebars = {
         {
           "text": "Exercise Notes",
           "link": "/atom-book/book2/exercise-notes.html"
-        }
-      ]
-    },
-    {
-      "text": "Atom and Z80 Reference",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Reference overview",
-          "link": "/atom-book/appendices/index.html"
         },
         {
-          "text": "Assembler reference",
+          "text": "Reference tables",
           "collapsed": false,
           "items": [
             {
-              "text": "Appendix 1 — Directive Reference",
-              "link": "/atom-book/appendices/01-directives.html"
-            },
-            {
-              "text": "Appendix 2 — Expressions and Numeric Forms",
-              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
-            },
-            {
-              "text": "Appendix 3 — Command-line Reference",
-              "link": "/atom-book/appendices/03-cli-flags.html"
-            },
-            {
-              "text": "Appendix 4 — Built-in Functions",
-              "link": "/atom-book/appendices/04-functions.html"
-            },
-            {
-              "text": "Appendix 5 — Limits and Capacities",
-              "link": "/atom-book/appendices/05-limits-and-capacities.html"
-            },
-            {
-              "text": "Appendix 6 — Programming Interface",
-              "link": "/atom-book/appendices/06-programming-interface.html"
-            }
-          ]
-        },
-        {
-          "text": "Z80 reference",
-          "collapsed": false,
-          "items": [
-            {
-              "text": "Appendix 7 — Numbers, Bits and ASCII",
+              "text": "Numbers, Bits and ASCII",
               "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
             },
             {
-              "text": "Appendix 8 — Registers, Flags and Conditions",
+              "text": "Registers, Flags and Conditions",
               "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
             },
             {
-              "text": "Appendix 9 — Addressing, Prefixes and Forms",
+              "text": "Addressing, Prefixes and Forms",
               "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
             },
             {
-              "text": "Appendix 10 — Z80 Instruction Reference",
-              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "/atom-book/appendices/": [
-    {
-      "text": "Atom Book 1 — Assembler Reference",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Book overview",
-          "link": "/atom-book/book1/index.html"
-        },
-        {
-          "text": "Introduction",
-          "link": "/atom-book/book1/00-introduction.html"
-        },
-        {
-          "text": "Getting Started with Atom",
-          "link": "/atom-book/book1/01-getting-started.html"
-        },
-        {
-          "text": "Source Syntax and Symbols",
-          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
-        },
-        {
-          "text": "Addresses, Constants and Expressions",
-          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
-        },
-        {
-          "text": "Instructions, Data and Storage",
-          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
-        },
-        {
-          "text": "Source Composition and Conditional Assembly",
-          "link": "/atom-book/book1/05-source-composition.html"
-        },
-        {
-          "text": "Diagnostics and Output",
-          "link": "/atom-book/book1/06-diagnostics-and-output.html"
-        }
-      ]
-    },
-    {
-      "text": "Atom Book 2 — Z80 Programming",
-      "collapsed": true,
-      "items": [
-        {
-          "text": "Book overview",
-          "link": "/atom-book/book2/index.html"
-        },
-        {
-          "text": "Introduction",
-          "link": "/atom-book/book2/00-introduction.html"
-        },
-        {
-          "text": "The Computer",
-          "link": "/atom-book/book2/01-the-computer.html"
-        },
-        {
-          "text": "Machine Code",
-          "link": "/atom-book/book2/02-machine-code.html"
-        },
-        {
-          "text": "Assembly Language",
-          "link": "/atom-book/book2/03-assembly-language.html"
-        },
-        {
-          "text": "Memory Access and Data",
-          "link": "/atom-book/book2/04-memory-access-and-data.html"
-        },
-        {
-          "text": "Flags, Comparisons and Jumps",
-          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
-        },
-        {
-          "text": "Counting Loops and DJNZ",
-          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
-        },
-        {
-          "text": "Data Tables and Indexed Access",
-          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
-        },
-        {
-          "text": "Stack and Subroutines",
-          "link": "/atom-book/book2/08-stack-and-subroutines.html"
-        },
-        {
-          "text": "I/O and Ports",
-          "link": "/atom-book/book2/09-io-and-ports.html"
-        },
-        {
-          "text": "A Complete Program",
-          "link": "/atom-book/book2/10-a-complete-program.html"
-        },
-        {
-          "text": "Subroutine Conventions",
-          "link": "/atom-book/book2/11-subroutine-conventions.html"
-        },
-        {
-          "text": "Arithmetic Routines",
-          "link": "/atom-book/book2/12-arithmetic-routines.html"
-        },
-        {
-          "text": "Sorting and Searching",
-          "link": "/atom-book/book2/13-sorting-and-searching.html"
-        },
-        {
-          "text": "Strings",
-          "link": "/atom-book/book2/14-strings.html"
-        },
-        {
-          "text": "Bit Patterns and Packed Flags",
-          "link": "/atom-book/book2/15-bit-patterns.html"
-        },
-        {
-          "text": "Recursion",
-          "link": "/atom-book/book2/16-recursion.html"
-        },
-        {
-          "text": "Exercise Notes",
-          "link": "/atom-book/book2/exercise-notes.html"
-        }
-      ]
-    },
-    {
-      "text": "Atom and Z80 Reference",
-      "collapsed": false,
-      "items": [
-        {
-          "text": "Reference overview",
-          "link": "/atom-book/appendices/index.html"
-        },
-        {
-          "text": "Assembler reference",
-          "collapsed": false,
-          "items": [
-            {
-              "text": "Appendix 1 — Directive Reference",
-              "link": "/atom-book/appendices/01-directives.html"
-            },
-            {
-              "text": "Appendix 2 — Expressions and Numeric Forms",
-              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
-            },
-            {
-              "text": "Appendix 3 — Command-line Reference",
-              "link": "/atom-book/appendices/03-cli-flags.html"
-            },
-            {
-              "text": "Appendix 4 — Built-in Functions",
-              "link": "/atom-book/appendices/04-functions.html"
-            },
-            {
-              "text": "Appendix 5 — Limits and Capacities",
-              "link": "/atom-book/appendices/05-limits-and-capacities.html"
-            },
-            {
-              "text": "Appendix 6 — Programming Interface",
-              "link": "/atom-book/appendices/06-programming-interface.html"
-            }
-          ]
-        },
-        {
-          "text": "Z80 reference",
-          "collapsed": false,
-          "items": [
-            {
-              "text": "Appendix 7 — Numbers, Bits and ASCII",
-              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
-            },
-            {
-              "text": "Appendix 8 — Registers, Flags and Conditions",
-              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
-            },
-            {
-              "text": "Appendix 9 — Addressing, Prefixes and Forms",
-              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
-            },
-            {
-              "text": "Appendix 10 — Z80 Instruction Reference",
+              "text": "Z80 Instruction Reference",
               "link": "/atom-book/appendices/10-z80-instruction-reference.html"
             }
           ]
@@ -2822,6 +2698,2658 @@ export const sidebars = {
         {
           "text": "Appendix and Useful Links",
           "link": "/tec1g/mon3/10-appendix-and-useful-links.html"
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/using-atom-on-node.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/using-atom-on-cpm.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/01-directives.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/02-expressions-and-numbers.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/03-cli-flags.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/04-functions.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/05-limits-and-capacities.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/06-programming-interface.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/07-numbers-bits-and-ascii.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/08-registers-flags-and-conditions.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/atom-book/appendices/10-z80-instruction-reference.html": [
+    {
+      "text": "Atom home",
+      "link": "/atom/"
+    },
+    {
+      "text": "Using Atom on Node",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-node.html"
+        },
+        {
+          "text": "Reference",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Node Command Reference",
+              "link": "/atom-book/appendices/03-cli-flags.html"
+            },
+            {
+              "text": "Appendix — Programming Interface",
+              "link": "/atom-book/appendices/06-programming-interface.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Using Atom on CP/M",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Guide",
+          "link": "/atom-book/using-atom-on-cpm.html"
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 1 — Assembler Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book1/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book1/00-introduction.html"
+        },
+        {
+          "text": "Getting Started with Atom",
+          "link": "/atom-book/book1/01-getting-started.html"
+        },
+        {
+          "text": "Source Syntax and Symbols",
+          "link": "/atom-book/book1/02-source-syntax-and-symbols.html"
+        },
+        {
+          "text": "Addresses, Constants and Expressions",
+          "link": "/atom-book/book1/03-addresses-constants-and-expressions.html"
+        },
+        {
+          "text": "Instructions, Data and Storage",
+          "link": "/atom-book/book1/04-instructions-data-and-storage.html"
+        },
+        {
+          "text": "Source Composition and Conditional Assembly",
+          "link": "/atom-book/book1/05-source-composition.html"
+        },
+        {
+          "text": "Diagnostics and Output",
+          "link": "/atom-book/book1/06-diagnostics-and-output.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Directive Reference",
+              "link": "/atom-book/appendices/01-directives.html"
+            },
+            {
+              "text": "Expressions and Numeric Forms",
+              "link": "/atom-book/appendices/02-expressions-and-numbers.html"
+            },
+            {
+              "text": "Built-in Functions",
+              "link": "/atom-book/appendices/04-functions.html"
+            },
+            {
+              "text": "Limits and Capacities",
+              "link": "/atom-book/appendices/05-limits-and-capacities.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Atom Book 2 — Z80 Programming",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/atom-book/book2/index.html"
+        },
+        {
+          "text": "Introduction",
+          "link": "/atom-book/book2/00-introduction.html"
+        },
+        {
+          "text": "The Computer",
+          "link": "/atom-book/book2/01-the-computer.html"
+        },
+        {
+          "text": "Machine Code",
+          "link": "/atom-book/book2/02-machine-code.html"
+        },
+        {
+          "text": "Assembly Language",
+          "link": "/atom-book/book2/03-assembly-language.html"
+        },
+        {
+          "text": "Memory Access and Data",
+          "link": "/atom-book/book2/04-memory-access-and-data.html"
+        },
+        {
+          "text": "Flags, Comparisons and Jumps",
+          "link": "/atom-book/book2/05-flags-comparisons-jumps.html"
+        },
+        {
+          "text": "Counting Loops and DJNZ",
+          "link": "/atom-book/book2/06-counting-loops-and-djnz.html"
+        },
+        {
+          "text": "Data Tables and Indexed Access",
+          "link": "/atom-book/book2/07-data-tables-and-indexed-access.html"
+        },
+        {
+          "text": "Stack and Subroutines",
+          "link": "/atom-book/book2/08-stack-and-subroutines.html"
+        },
+        {
+          "text": "I/O and Ports",
+          "link": "/atom-book/book2/09-io-and-ports.html"
+        },
+        {
+          "text": "A Complete Program",
+          "link": "/atom-book/book2/10-a-complete-program.html"
+        },
+        {
+          "text": "Subroutine Conventions",
+          "link": "/atom-book/book2/11-subroutine-conventions.html"
+        },
+        {
+          "text": "Arithmetic Routines",
+          "link": "/atom-book/book2/12-arithmetic-routines.html"
+        },
+        {
+          "text": "Sorting and Searching",
+          "link": "/atom-book/book2/13-sorting-and-searching.html"
+        },
+        {
+          "text": "Strings",
+          "link": "/atom-book/book2/14-strings.html"
+        },
+        {
+          "text": "Bit Patterns and Packed Flags",
+          "link": "/atom-book/book2/15-bit-patterns.html"
+        },
+        {
+          "text": "Recursion",
+          "link": "/atom-book/book2/16-recursion.html"
+        },
+        {
+          "text": "Exercise Notes",
+          "link": "/atom-book/book2/exercise-notes.html"
+        },
+        {
+          "text": "Reference tables",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Numbers, Bits and ASCII",
+              "link": "/atom-book/appendices/07-numbers-bits-and-ascii.html"
+            },
+            {
+              "text": "Registers, Flags and Conditions",
+              "link": "/atom-book/appendices/08-registers-flags-and-conditions.html"
+            },
+            {
+              "text": "Addressing, Prefixes and Forms",
+              "link": "/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html"
+            },
+            {
+              "text": "Z80 Instruction Reference",
+              "link": "/atom-book/appendices/10-z80-instruction-reference.html"
+            }
+          ]
         }
       ]
     }

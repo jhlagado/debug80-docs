@@ -32,7 +32,7 @@ A few examples from the Z80 instruction set:
 Address operands follow the little-endian convention from Chapter 1: low byte
 first, high byte second. The address `$8000` appears in the
 instruction stream as `$00 $80`. For a searchable reference of the full Z80
-instruction set, see [Appendix 10](../appendices/10-z80-instruction-reference.md).
+instruction set, see [Z80 Instruction Reference](../appendices/10-z80-instruction-reference.md).
 
 ---
 

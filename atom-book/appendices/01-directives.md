@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix 1 — Directive Reference"
-parent: "Atom and Z80 Reference"
+title: "Directive Reference"
+parent: "Atom Book 1 — Assembler Reference"
 grand_parent: "Atom Books"
-nav_order: 1
-nav_group: "Assembler reference"
+nav_order: 101
+nav_group: "Reference tables"
 ---
 
-# Appendix 1 — Directive Reference
+# Directive Reference
 
 Atom has two directive groups. Bare assembler directives control assembly.
 `%` directives control source preparation and are removed before assembly.

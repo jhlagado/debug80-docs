@@ -61,9 +61,9 @@ export default defineConfig({
       { text: "Home", link: "/" },
       // Keep the main shelf compact. Each series landing page owns the route
       // into its books and reference material.
+      { text: "Atom", link: "/atom/" },
       { text: "Debug80 Book", link: "/debug80-book/book1/01-install-debug80" },
       { text: "AZM Books", link: "/azm-book/book1/00-introduction" },
-      { text: "Atom", link: "/atom/" },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
       {
         text: "Nucleus",

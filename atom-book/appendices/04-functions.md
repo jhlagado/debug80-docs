@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix 4 — Built-in Functions"
-parent: "Atom and Z80 Reference"
+title: "Built-in Functions"
+parent: "Atom Book 1 — Assembler Reference"
 grand_parent: "Atom Books"
-nav_order: 4
-nav_group: "Assembler reference"
+nav_order: 104
+nav_group: "Reference tables"
 ---
 
-# Appendix 4 — Built-in Functions
+# Built-in Functions
 
 Atom has two byte-selection functions. Both are case-insensitive and run at
 assembly time.

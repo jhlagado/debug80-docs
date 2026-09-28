@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix 3 — Command-line Reference"
-parent: "Atom and Z80 Reference"
+title: "Node Command Reference"
+parent: "Using Atom on Node"
 grand_parent: "Atom Books"
-nav_order: 3
-nav_group: "Assembler reference"
+nav_order: 1
+nav_group: "Reference"
 ---
 
-# Appendix 3 — Command-line Reference
+# Node Command Reference
 
 ## Desktop command
 
@@ -61,26 +61,8 @@ that support more than one assembler.
 
 ## Native CP/M command
 
-```text
-ATOM
-ATOM SOURCE
-ATOM SOURCE OUTPUT
-ATOM ?
-```
-
-| Form | Input | Output |
-| --- | --- | --- |
-| `ATOM` | `INPUT.ASM` | `OUTPUT.COM` |
-| `ATOM HELLO` | `HELLO.ASM` | `HELLO.COM` |
-| `ATOM HELLO.ASM MADE.BIN` | `HELLO.ASM` | `MADE.BIN` |
-
-Names are current-drive CP/M 8.3 names. An explicit output suffix must be
-`.COM`, `.BIN` or `.HEX`. Drive prefixes, wildcards, extra arguments and
-directory paths are rejected. CP/M command input is case-insensitive.
-
-The native command does not accept project JSON, `-D`, target options, or
-multiple outputs. Its source-composition facility is leading `%INCLUDE` with
-current-drive 8.3 filenames.
+The [CP/M guide](../using-atom-on-cpm.md#the-command-line) contains the CP/M
+command forms, output formats and diagnostics.
 
 ## Desktop status values
 

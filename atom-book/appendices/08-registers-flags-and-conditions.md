@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Appendix 8 — Registers, Flags and Conditions"
-parent: "Atom and Z80 Reference"
+title: "Registers, Flags and Conditions"
+parent: "Atom Book 2 — Z80 Programming"
 grand_parent: "Atom Books"
-nav_order: 8
-nav_group: "Z80 reference"
+nav_order: 108
+nav_group: "Reference tables"
 ---
-# Appendix 8 — Registers, Flags and Conditions
+# Registers, Flags and Conditions
 
 ---
 

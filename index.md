@@ -13,23 +13,23 @@ nav_order: 1
 </div>
 
 <nav class="library-shelf">
+  <a class="volume volume--atom" href="/atom/">
+    <span class="volume__tag">Vol $00 · assembler · 2 books</span>
+    <span class="volume__head"><Mark book="atom" size="26" /><span class="volume__title">Atom</span></span>
+    <span class="volume__desc">A single-pass Z80 assembler written in Z80 — use it from a desktop command or directly under CP/M.</span>
+    <span class="volume__enter">stream →</span>
+  </a>
   <a class="volume volume--debug80" href="/debug80-book/book1/01-install-debug80">
-    <span class="volume__tag">Vol $00 · 1 book</span>
+    <span class="volume__tag">Vol $01 · 1 book</span>
     <span class="volume__head"><Mark book="debug80" size="26" /><span class="volume__title">Debug80</span></span>
     <span class="volume__desc">Source-level Z80 debugging in VS Code — from installation to stepping real hardware projects and sending HEX to the board.</span>
     <span class="volume__enter">run →</span>
   </a>
   <a class="volume volume--azm" href="/azm-book/book1/00-introduction">
-    <span class="volume__tag">Vol $01 · 3 books</span>
+    <span class="volume__tag">Vol $02 · 3 books</span>
     <span class="volume__head"><Mark book="azm" size="26" /><span class="volume__title">AZM</span></span>
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
-  </a>
-  <a class="volume volume--atom" href="/atom/">
-    <span class="volume__tag">Vol $02 · assembler · 2 books</span>
-    <span class="volume__head"><Mark book="atom" size="26" /><span class="volume__title">Atom</span></span>
-    <span class="volume__desc">A single-pass Z80 assembler written in Z80 — use it from a desktop command or directly under CP/M.</span>
-    <span class="volume__enter">stream →</span>
   </a>
   <a class="volume volume--glimmer" href="/glimmer-book/book1/00-introduction">
     <span class="volume__tag">Vol $03 · 2 books</span>
@@ -44,6 +44,27 @@ nav_order: 1
     <span class="volume__enter">inspect →</span>
   </a>
 </nav>
+
+## Atom
+
+### [Using Atom](atom/)
+
+Choose the Node guide for desktop builds or the CP/M guide for your own
+computer and the Triptych emulator.
+
+### [Book 1 — Assembler Reference](atom-book/book1/)
+
+Source syntax, symbols, expressions, instructions and directives, with the
+language reference tables alongside the chapters.
+
+### [Book 2 — Z80 Programming](atom-book/book2/)
+
+An introduction to the processor followed by loops, routines and algorithms.
+Register, addressing and instruction tables accompany the book.
+
+Source: [Atom on GitHub](https://github.com/jhlagado/atom)
+
+---
 
 ## Debug80
 
@@ -92,54 +113,6 @@ For readers who know the Z80 basics and want to build more substantial AZM progr
 AZM is an enhanced Z80 assembler with modern programming features. It keeps the generated machine code explicit, while adding assembler-time structure for larger programs: layout types, register contracts, op declarations, directive aliases, diagnostics, listings, Intel HEX output and Debug80 source maps.
 
 You can use AZM directly from the terminal with `@jhlagado/azm`, or through Debug80 when you build and debug `.asm` files in VS Code. The assembler output is meant to serve both paths: readable listings for the programmer, binary and HEX artifacts for machines, and `.d8.json` metadata for source-level debugging.
-
----
-
-## Atom
-
-### [Atom assembler](atom/)
-
-Install the `atom` command, assemble a first `.asm` file and find the package,
-source and manuals from one place.
-
-### [Atom Book 1 — Assembler Reference](atom-book/book1/)
-
-The definitive reference for Atom source, expressions, instructions,
-directives, host preprocessing, binary inclusion, diagnostics and output
-artifacts.
-
-For Z80 programmers and tool authors who need the exact current Atom rules.
-
-### [Atom Book 2 — Z80 Programming](atom-book/book2/)
-
-A from-zero route through the Z80, followed by arithmetic, sorting, strings,
-packed flags and recursion in verified Atom programs.
-
-For readers learning assembly or moving from instruction exercises into
-complete routines.
-
-### [Atom and Z80 Reference](atom-book/appendices/)
-
-The programming API and compact references for Atom syntax, limits, Z80
-registers, addressing forms and instructions.
-
----
-
-## About Atom
-
-Atom is a single-pass Z80 assembler whose native core is written in Z80
-assembly. The desktop command runs that core in a Z80 emulator while a Node
-host resolves source dependencies, conditional assembly, binary inputs,
-listings, D8 maps, Intel HEX and atomic output publication. Native `ATOM.COM`
-runs the same core under CP/M 2.2 with CP/M file services and a compact
-positional command.
-
-Atom source uses bare directives such as `ORG`, `DB`, and `DW`; a leading period
-marks a private symbol. Source and symbols are case-insensitive. The
-conventional source extension is `.asm`; build configuration selects the
-assembler flavour.
-
-Source: [github.com/jhlagado/debug80/tree/main/packages/atom](https://github.com/jhlagado/debug80/tree/main/packages/atom)
 
 ---
 

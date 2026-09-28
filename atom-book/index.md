@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Atom Books"
-nav_order: 7
+nav_order: 1
 has_children: true
 has_toc: false
 nav_exclude: true
@@ -12,17 +12,25 @@ nav_exclude: true
 # Atom Books
 
 The reference and teaching books for **Atom**, a single-pass Z80 assembler.
-For installation and project links, begin at the [Atom overview](/atom/).
+Choose a platform guide first, then continue into the shared language and
+programming books.
+
+## [Using Atom on Node](using-atom-on-node.md)
+
+Install the desktop command, build programs and prepare output for a target
+platform.
+
+## [Using Atom on CP/M](using-atom-on-cpm.md)
+
+Install and run the compact native command on a CP/M system.
 
 ---
 
 ## [Atom Book 1 — Assembler Reference](book1/)
 
-Covers installation, source syntax, symbols, expressions, supported Z80
-instructions, data and string directives, host preprocessing,
-binary inclusion, diagnostics, artifacts, the command line, and the
-programming API. It distinguishes the full desktop command from the compact
-native CP/M command wherever their facilities differ.
+Source syntax, symbols, expressions, Z80 instructions, data directives and
+source composition. Directive, expression and capacity tables accompany the
+chapters.
 
 ---
 
@@ -34,10 +42,6 @@ tools to arithmetic, sorting, strings, packed flags and recursion.
 
 ---
 
-## [Atom and Z80 Reference](appendices/)
-
-Command tables, the programming API, implementation limits and Z80 lookup
-tables.
-
-Book 1 is the language reference. Book 2 uses that language to teach Z80
-programming through runnable examples.
+The Z80 register and instruction tables accompany Book 2. For desktop tools,
+the Node guide has a [command reference](appendices/03-cli-flags.md) and a
+[programming API appendix](appendices/06-programming-interface.md).

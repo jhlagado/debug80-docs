@@ -7,144 +7,68 @@ nav_order: 6
 
 # Diagnostics and Output
 
-A build either publishes every requested output or publishes none of them.
-Source, preprocessing, assembly, rendering and filesystem failures leave
-earlier output files in place.
+Atom assigns addresses and produces instruction and data bytes as it reads
+the source. A successful build has resolved every referenced symbol and
+checked that each value fits its destination. A failed build reports the
+source location where assembly could not continue.
 
-## Source diagnostics
+## Source errors
 
-Desktop source failures name the project-relative file, one-based line and
-one-based byte column:
+A source diagnostic identifies the file, line and byte column when available.
+Line and column numbers begin at one. A tab occupies one source byte, so its
+reported column may differ from its visual position in an editor.
 
-```text
-lib/device.asm:14:9: UNDEFINED SYMBOL PORTBASE
+Included files retain their own names and source locations. Preprocessing
+preserves those locations even when a conditional block is omitted.
+
+Typical causes of failure include an unknown instruction, an invalid operand
+combination, a duplicate symbol, a value outside its allowed range or an
+unresolved symbol at the end of assembly. A reported location can be the point
+where an error becomes detectable. For example, a forward branch cannot be
+checked for range until its target address is known.
+
+The exact message format and status codes are documented in the
+[Node guide](../using-atom-on-node.md#diagnostics) and
+[CP/M guide](../using-atom-on-cpm.md#messages-and-status-codes).
+
+## Forward references
+
+An instruction may use a label declared later in the source. Atom emits space
+for the value and records a pending reference. When the label is declared,
+Atom checks the value and supplies the replacement bytes.
+
+```asm
+ORG 100H
+    JP START
+    DB 0
+START:
+    RET
 ```
 
-Preprocessing preserves line endings and byte positions, so diagnostics still
-refer to the source text you wrote. Undefined-symbol diagnostics show the
-case-insensitive symbol name.
+Here `START` is at `0104H`. The completed instruction is `C3 04 01`,
+followed by `00 C9`. The address bytes are in little-endian order.
 
-Dependency and preprocessing errors use the same project-relative paths.
-Missing files, root escapes, cycles, duplicate definitions, malformed
-conditionals, and invalid `INCBIN` paths stop the build before assembly.
+A pending reference must fit the original instruction. Atom does not expand
+an out-of-range `JR` into `JP`. The restrictions on unresolved expressions
+are described in [Addresses, Constants and Expressions](03-addresses-constants-and-expressions.md).
 
-Native CP/M reports an assembly status, zero-based source-part ordinal and byte
-offset. File-provider failures identify the relevant CP/M name when available.
-The native command preflights the complete include graph, so a missing file,
-cycle or malformed include stops the build before the output transaction
-begins.
+## Addresses and file contents
 
-## Desktop command status
+`ORG` changes the logical address. It does not produce an instruction or
+relocate code that has already been assembled. An initial `ORG 4000H` places
+the first emitted byte at address `4000H`; the address is distinct from its
+position in an output file.
 
-The command returns:
+`DS COUNT` reserves addresses without initialising them in the source.
+Materialised output fills reserved space and internal gaps with zero bytes.
+`DS COUNT,FILL` instead specifies the bytes to emit.
 
-| Status | Meaning |
-| ---: | --- |
-| 0 | Assembly and publication succeeded |
-| 1 | Assembly, preprocessing, artifact, or publication failed |
-| 2 | Command-line usage was invalid |
+Forward references must be patched before the program can run. COM and BIN
+files contain the completed bytes. Intel HEX also records the destination
+addresses. A COM file has no header and uses CP/M's load and entry address
+of `0100H`.
 
-## Select desktop outputs
-
-With no output path, the desktop command writes one BIN file:
-
-```text
-atom src/main.asm
-```
-
-This creates `build/main.bin`.
-
-Name each additional output after the input, or use repeatable `-o` options:
-
-```sh
-atom src/main.asm build/main.bin build/main.hex build/main.lst
-atom -o build/main.nobj -o build/main.d8.json src/main.asm
-```
-
-The suffix selects the format:
-
-| Suffix | Contents |
-| --- | --- |
-| `.bin` | Flat materialised bytes |
-| `.hex` | Intel HEX |
-| `.com` | Flat CP/M program loaded and entered at `$0100` |
-| `.nobj` | Append-only Atom object stream |
-| `.lst` | Source listing with final bytes |
-| `.d8.json` | Debug80 source and symbol map |
-
-Output selection is positive: Atom writes only the paths you name. A command
-cannot repeat a format or destination path. Every requested file is staged
-before any earlier output is replaced.
-
-## NOBJ
-
-Atom NOBJ profile 0.2 preserves the append-only assembly result:
-
-```text
-BEGIN IMAGE* PATCH* MAP COMMIT EOF
-```
-
-IMAGE records contain source-order bytes. PATCH records contain final
-replacement bytes in symbol-resolution order and carry no symbol name or
-expression. The flat MAP records entry address, used length, final cursor,
-source-part count, and bank-zero placement. COMMIT carries the record count,
-entry, and CRC-16/CCITT-FALSE.
-
-NOBJ retains the distinction between emitted bytes, forward-reference patches,
-and reserved storage. The binary and HEX files are materialised launch views.
-
-## BIN, Intel HEX and COM
-
-The flat binary begins at the lowest generated or reserved address and extends
-through the logical high-water mark. An initial `ORG 4000H` therefore does not
-add 16 KiB of zero bytes to the front of a BIN file. Zero bytes fill internal
-gaps and uninitialised `DS` reservations. PATCH bytes replace their IMAGE
-placeholders before the file is written.
-
-Intel HEX contains the same contiguous materialised image in 16-byte data
-records followed by the standard EOF record.
-
-A COM file is also a flat binary; it has no header. Atom accepts COM output
-only when the load base and entry are both `$0100`. If no target was selected,
-a `.com` output selects the `cpm22` profile. Atom rejects incompatible source
-placement instead of silently relocating labels.
-
-## Listing
-
-The listing uses original source rather than masked compiler text. It prints
-addresses and final patched bytes beside the line that produced them. A long
-line continues in rows of up to eight bytes. An uninitialised reservation has
-an address and a `<COUNT RESERVED>` marker. Included files retain their own
-logical names, and `INCBIN` bytes remain attached to the original directive.
-
-The trailer contains labels and constants with their source locations. Private
-names reused under different global labels remain separate declarations.
-
-## D8 map
-
-The D8 JSON artifact contains source files, line ranges, listing locations,
-code/data/directive classification, symbols, scope, visibility, entry address,
-and target segment. Debug80 can load it with the corresponding BIN or HEX file
-for source-level stepping and symbol lookup.
-
-## Native CP/M output
-
-Native CP/M Atom writes one COM, BIN or HEX file per command:
-
-```text
-A>ATOM MAIN.ASM MAIN.HEX
-
-MAIN.HEX written
-```
-
-COM and BIN contain the same logical bytes; COM selects the CP/M `$0100`
-load-and-entry convention. CP/M stores files in 128-byte records, so the
-physical COM or BIN file may have padding after the logical image. HEX may
-contain CP/M text padding after its end record.
-
-The native command writes a temporary `.$$$` file, preserves an earlier output
-as `.BAK` during replacement, and restores it if publication fails. Listing,
-D8 and NOBJ output remain desktop facilities.
-
-The complete desktop and native command forms appear in [Appendix
-3](../appendices/03-cli-flags.md).
+Output selection and storage depend on the host. The [Node guide](../using-atom-on-node.md#output-files)
+covers binary files, listings and debugger maps. The
+[CP/M guide](../using-atom-on-cpm.md#output-and-failed-builds) covers disk output
+and the ASO stream.

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Atom Book 2 — Z80 Programming"
-nav_order: 2
+nav_order: 4
 has_children: true
 has_toc: false
 sidebar_link: "Book overview"
@@ -41,3 +41,10 @@ sidebar_link: "Book overview"
 16. [Recursion](16-recursion.md)
 
 [Exercise Notes](exercise-notes.md)
+
+## Reference tables
+
+- [Numbers, bits and ASCII](../appendices/07-numbers-bits-and-ascii.md)
+- [Registers, flags and conditions](../appendices/08-registers-flags-and-conditions.md)
+- [Addressing, prefixes and instruction forms](../appendices/09-addressing-prefixes-and-instruction-forms.md)
+- [Z80 instruction reference](../appendices/10-z80-instruction-reference.md)
