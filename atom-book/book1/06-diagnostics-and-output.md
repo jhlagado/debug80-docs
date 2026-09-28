@@ -70,5 +70,5 @@ of `0100H`.
 
 Output selection and storage depend on the host. The [Node guide](../using-atom-on-node.md#output-files)
 covers binary files, listings and debugger maps. The
-[CP/M guide](../using-atom-on-cpm.md#output-and-failed-builds) covers disk output
-and the ASO stream.
+[CP/M guide](../using-atom-on-cpm.md#output-and-failed-builds) covers disk
+output and failed-build handling.

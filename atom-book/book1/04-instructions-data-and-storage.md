@@ -95,7 +95,7 @@ the first output operation, so a failed directive publishes no partial span.
 Uninitialized reservations still affect later labels, the output length,
 listing rows, and D8 source ranges. The command-line hosts use zero bytes for
 their BIN and HEX materialisation; the JavaScript API can select another fill
-value. NOBJ records the span as reserved storage.
+value. The span remains part of the materialised output image.
 
 ## `ALIGN`
 

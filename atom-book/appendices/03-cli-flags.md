@@ -1,10 +1,9 @@
 ---
 layout: default
 title: "Node Command Reference"
-parent: "Using Atom on Node"
-grand_parent: "Atom Books"
-nav_order: 1
-nav_group: "Reference"
+parent: "Book 0 — Using Atom"
+nav_order: 3
+nav_group: "Node"
 ---
 
 # Node Command Reference
@@ -28,7 +27,7 @@ atom --project project.json [output...]
 | `-V`, `--version` | Print the Atom package version |
 
 The first positional path is the input. Later paths are outputs. Output
-suffixes are `.bin`, `.hex`, `.com`, `.nobj`, `.lst` and `.d8.json`. The same
+suffixes are `.bin`, `.hex`, `.com`, `.lst` and `.d8.json`. The same
 paths may be supplied with `-o` when option form is more convenient. With no
 output, Atom writes `build/<input-name>.bin`.
 

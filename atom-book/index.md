@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Atom Books"
+title: "Book 0 — Using Atom"
 nav_order: 1
 has_children: true
 has_toc: false
@@ -9,20 +9,22 @@ nav_exclude: true
 
 <Mark class="book-plate" book="atom" size="52" />
 
-# Atom Books
+# Book 0 — Using Atom
 
-The reference and teaching books for **Atom**, a single-pass Z80 assembler.
-Choose a platform guide first, then continue into the shared language and
-programming books.
+This short book shows how to run **Atom**, a single-pass Z80 assembler. Choose
+the CP/M or Node section for the commands and setup that match your system.
 
-## [Using Atom on Node](using-atom-on-node.md)
+## CP/M
 
-Install the desktop command, build programs and prepare output for a target
-platform.
+Use `ATOM.COM` on a CP/M computer, or try the same steps in Triptych.
 
-## [Using Atom on CP/M](using-atom-on-cpm.md)
+**[Using Atom on CP/M](using-atom-on-cpm.md)**
 
-Install and run the compact native command on a CP/M system.
+## Node
+
+Install the desktop command, assemble source and choose output files.
+
+**[Using Atom on Node](using-atom-on-node.md)**
 
 ---
 
@@ -42,6 +44,6 @@ tools to arithmetic, sorting, strings, packed flags and recursion.
 
 ---
 
-The Z80 register and instruction tables accompany Book 2. For desktop tools,
-the Node guide has a [command reference](appendices/03-cli-flags.md) and a
-[programming API appendix](appendices/06-programming-interface.md).
+The Z80 register and instruction tables accompany Book 2. The Node section
+also includes a [command reference](appendices/03-cli-flags.md) and a
+[programming interface](appendices/06-programming-interface.md).

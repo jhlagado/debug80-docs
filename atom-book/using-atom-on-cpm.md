@@ -1,8 +1,9 @@
 ---
 layout: default
 title: "Using Atom on CP/M"
-parent: "Atom Books"
-nav_order: 3
+parent: "Book 0 — Using Atom"
+nav_order: 1
+nav_group: "CP/M"
 has_children: false
 ---
 
@@ -88,11 +89,10 @@ A>ATOM HELLO.ASM HELLO.COM
 HELLO.COM written
 ```
 
-An explicit output may be a `.COM`, `.BIN`, `.HEX` or `.ASO` file. The command
-writes one output per invocation. A COM file is a flat image loaded and
-entered at `0100H`; it has no header. BIN contains the same raw bytes. HEX
-contains addressed records with checksums and an end-of-file record. ASO keeps
-the ordered image-and-patch stream instead of materialising an executable.
+An explicit output may be a `.COM`, `.BIN` or `.HEX` file. The command writes
+one output per invocation. A COM file is a flat image loaded and entered at
+`0100H`; it has no header. BIN contains the same raw bytes. HEX contains
+addressed records with checksums and an end-of-file record.
 
 ## The command line
 
@@ -100,13 +100,11 @@ The native command accepts these forms:
 
 ```text
 ATOM
-ATOM ?
 ATOM SOURCE
 ATOM SOURCE OUTPUT
 ```
 
-Bare `ATOM` displays usage and returns to CP/M. `ATOM ?` is an alias for the
-same help.
+Bare `ATOM` displays usage and returns to CP/M.
 
 With one source name, Atom accepts the complete current-drive filename and
 derives the `.COM` output. `ATOM HELLO.ASM` reads `HELLO.ASM` and writes
@@ -152,13 +150,11 @@ conditional preprocessing and `INCBIN` remain Node-hosted facilities.
 ## Output and failed builds
 
 Atom assembles the complete include graph before replacing an output file.
-COM, BIN and HEX builds first write an internal ASO spool, then materialise
-the requested output in bounded memory windows. Atom publishes the completed
-file through a temporary `.$$$` file and preserves an existing output as
-`.BAK` until publication succeeds. An explicit `.ASO` output keeps the
-operation stream as the requested file. If assembly or publication fails,
-Atom removes temporary files and restores the earlier output when one exists.
-A failed build therefore does not leave a half-written output in place.
+Atom writes the completed file through a temporary `.$$$` file and preserves
+an existing output as `.BAK` until publication succeeds. If assembly or
+publication fails, Atom removes temporary files and restores the earlier
+output when one exists. A failed build therefore does not leave a
+half-written output in place.
 
 The image is a flat sequence of bytes beginning at `0100H`. `ORG` changes the
 logical address and uninitialised `DS` space is filled with zero bytes. CP/M
@@ -212,11 +208,11 @@ most 65,535 bytes. The output address span is 65,280 bytes, from `$0100` up to
 CP/M can load and run a program of that size. The target machine's TPA and
 BDOS placement determine how much program memory is actually available.
 Running Atom itself requires a TPA of at least 58,112 bytes, with BDOS at
-`$E400` or higher. CP/M disk capacity and the free space needed for the ASO
-spool and final output can impose lower practical limits.
+`$E400` or higher. CP/M disk capacity and the free space needed for the
+temporary and final output files can impose lower practical limits.
 
-The CP/M command writes COM, BIN, HEX and ASO files. Listings, D8 maps, NOBJ
-output and the JavaScript API remain Node-hosted facilities.
+The CP/M command writes COM, BIN and HEX files. Listings, D8 maps and the
+JavaScript API are available through the Node host.
 
 The [assembler reference](book1/) defines the source language and the
 [Z80 programming book](book2/) develops instruction-level techniques.

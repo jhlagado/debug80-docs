@@ -1,14 +1,14 @@
 ---
 layout: default
 title: "Atom Reference Tables"
-parent: "Atom Books"
+parent: "Book 0 — Using Atom"
 nav_order: 5
 has_toc: false
 ---
 
 # Atom Reference Tables
 
-These tables accompany the two Atom books and the Node guide.
+These tables accompany the two Atom books and Book 0.
 
 ## Assembler reference
 
@@ -30,7 +30,7 @@ For worked examples, start with [Book 2](../book2/).
 
 ## Using Atom
 
+- [CP/M guide and command reference](../using-atom-on-cpm.md)
 - [Node guide](../using-atom-on-node.md)
 - [Node command reference](03-cli-flags.md)
-- [Programming API appendix](06-programming-interface.md)
-- [CP/M guide and command reference](../using-atom-on-cpm.md)
+- [Programming interface](06-programming-interface.md)
