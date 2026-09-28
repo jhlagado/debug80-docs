@@ -27,17 +27,17 @@ does not change Atom's command or source language.
 
 To try it in a browser, open the [Atom downloads page](https://jhlagado.github.io/atom/)
 and choose **Run Atom in Triptych**. The supplied disk image starts CP/M from
-drive A and provides a writable Atom disk on drive B, containing `ATOM.COM`,
-`EDIT.COM`, `HELLO.ASM` and `HELLO.COM`. Switch to `B:` before assembling
-files there. For a physical CP/M computer, copy `ATOM.COM` and your source
-files onto a disk as described below.
+the writable A: drive. It contains `ATOM.COM`, `EDIT.COM`, `HELLO.ASM` and
+`HELLO.COM`. The examples below use A: for the source, assembler and output.
+On a physical CP/M computer, put `ATOM.COM` and your source files on a writable
+A: disk and make A: the current drive.
 
 ## Put `ATOM.COM` on a disk
 
 Download `ATOM.COM` from the [latest Atom release](https://github.com/jhlagado/atom/releases/latest)
-or copy it from the Atom disk image. Put it on the drive from which you will
-run the command. Source files and included files must be available on the
-current drive too.
+or copy it from the Atom disk image. Put it on A:. Keep source files and
+included files on A: as well, then make A: the current drive before running
+Atom.
 
 Atom uses CP/M's ordinary current-drive file services. It does not read a
 Node project file, search a directory tree or resolve a path outside the
@@ -65,18 +65,18 @@ This is a small CP/M program rather than an assembler-only example. CP/M's
 BDOS uses `CALL 5` as its entry point. Function 9, selected by putting `9` in
 `C`, writes the dollar-terminated string addressed by `DE`.
 
-In Triptych, switch to the writable drive and assemble and run it there:
+On the writable A: drive in Triptych, assemble and run the program:
 
 ```text
-B>ATOM HELLO.ASM
+A>ATOM HELLO.ASM
 
 HELLO.COM written
-B>HELLO
+A>HELLO
 HELLO FROM ATOM
 ```
 
-On other CP/M systems, the prompt may show a different current drive; the
-commands are otherwise the same.
+Use the same A: setup on a physical CP/M computer: save `HELLO.ASM` on A: and
+run Atom with A: current.
 
 The same source can be built from Node. Node is the build host here; it does
 not provide the CP/M console that the program calls. Transfer the resulting
