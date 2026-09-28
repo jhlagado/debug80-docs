@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix 6 — Programming Interface"
-parent: "Atom and Z80 Reference"
+title: "Appendix — Programming Interface"
+parent: "Using Atom on Node"
 grand_parent: "Atom Books"
-nav_order: 6
-nav_group: "Assembler reference"
+nav_order: 2
+nav_group: "Reference"
 ---
 
-# Appendix 6 — Programming Interface
+# Appendix — Programming Interface
 
 Tools can call Atom in the same process instead of spawning the command. The
 `atom-z80` package provides ECMAScript modules and requires Node.js 20 or later.

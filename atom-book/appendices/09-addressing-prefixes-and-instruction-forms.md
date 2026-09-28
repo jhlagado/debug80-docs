@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Appendix 9 — Addressing, Prefixes and Forms"
-parent: "Atom and Z80 Reference"
+title: "Addressing, Prefixes and Forms"
+parent: "Atom Book 2 — Z80 Programming"
 grand_parent: "Atom Books"
-nav_order: 9
-nav_group: "Z80 reference"
+nav_order: 109
+nav_group: "Reference tables"
 ---
-# Appendix 9 — Addressing, Prefixes and Forms
+# Addressing, Prefixes and Forms
 
 ---
 

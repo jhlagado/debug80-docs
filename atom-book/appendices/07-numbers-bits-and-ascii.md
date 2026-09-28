@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Appendix 7 — Numbers, Bits and ASCII"
-parent: "Atom and Z80 Reference"
+title: "Numbers, Bits and ASCII"
+parent: "Atom Book 2 — Z80 Programming"
 grand_parent: "Atom Books"
-nav_order: 7
-nav_group: "Z80 reference"
+nav_order: 107
+nav_group: "Reference tables"
 ---
-# Appendix 7 — Numbers, Bits and ASCII
+# Numbers, Bits and ASCII
 
 ---
 

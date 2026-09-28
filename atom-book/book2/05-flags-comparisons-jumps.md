@@ -53,7 +53,7 @@ and shift forms differ in whether they update P/V, so the instruction
 reference is the authority for each one.
 
 For the full flags reference and all condition codes, see
-[Appendix 8](../appendices/08-registers-flags-and-conditions.md).
+[Registers, Flags and Conditions](../appendices/08-registers-flags-and-conditions.md).
 
 ---
 
@@ -141,7 +141,7 @@ XOR A              ; A = 0; Z is set; C is clear
 
 All three instructions accept a register, an immediate byte, `(HL)` or an
 index register form. The quick reference for arithmetic and logical instruction
-forms is in [Appendix 9](../appendices/09-addressing-prefixes-and-instruction-forms.md).
+forms is in [Addressing, Prefixes and Forms](../appendices/09-addressing-prefixes-and-instruction-forms.md).
 
 ---
 
@@ -200,7 +200,7 @@ preceding result. A general signed less-than or greater-than comparison also
 has to account for signed overflow, which can flip the meaning of S. The `PE`
 and `PO` conditions test P/V; that flag represents
 parity after some instructions and signed overflow after others. The full list
-is in [Appendix 8](../appendices/08-registers-flags-and-conditions.md).
+is in [Registers, Flags and Conditions](../appendices/08-registers-flags-and-conditions.md).
 
 A `CP` or logical instruction sets a flag, after which a conditional `JP`
 selects which block runs:
@@ -281,7 +281,7 @@ rarely a problem. For anything that might be far away, or when you need `M`,
 `P`, `PE` or `PO`, `JP` is the safe choice. The assembler
 will tell you if a `JR` target is out of range. Jump range limits for `JR` and
 the related `DJNZ` instruction (Chapter 6) are in
-[Appendix 8](../appendices/08-registers-flags-and-conditions.md).
+[Registers, Flags and Conditions](../appendices/08-registers-flags-and-conditions.md).
 
 ---
 

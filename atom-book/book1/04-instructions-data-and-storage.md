@@ -152,4 +152,4 @@ bytes to the resulting output. Listings and D8 maps retain the original
 
 The assembler reserves the bare words `EQU`, `ORG`, `DB`, `DW`, `DS`,
 `ALIGN`, `INCBIN`, `CSTR`, `PSTR`, and `ISTR`. Dotted aliases are invalid.
-The complete table appears in [Appendix 1](../appendices/01-directives.md).
+The complete table appears in the [directive reference](../appendices/01-directives.md).

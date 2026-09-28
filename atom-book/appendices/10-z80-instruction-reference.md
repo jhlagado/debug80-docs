@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "Appendix 10 — Z80 Instruction Reference"
-parent: "Atom and Z80 Reference"
+title: "Z80 Instruction Reference"
+parent: "Atom Book 2 — Z80 Programming"
 grand_parent: "Atom Books"
-nav_order: 10
-nav_group: "Z80 reference"
+nav_order: 110
+nav_group: "Reference tables"
 ---
-# Appendix 10 — Z80 Instruction Reference
+# Z80 Instruction Reference
 
 This searchable table covers the Z80 instruction forms accepted by Atom. It
 includes the documented instructions, classic index-half registers, `SLL` with

@@ -35,14 +35,14 @@ and then relies on it in later programs. Complete companion sources begin in
 Chapter 12. Exercises appear along the way, with notes at the end of the book.
 
 [Atom Book 1](../book1/01-getting-started.md) is the companion reference for
-exact source syntax, directives and output formats. The [programming API](../appendices/06-programming-interface.md)
-is in the appendices.
+exact source syntax and directives. The [reference tables](index.md#reference-tables)
+provide instruction forms, flags and numeric conversions alongside this book.
 
 ## Prerequisites
 
-The easiest route is the Node-hosted `atom` command described in [Book 1,
-Chapter 1](../book1/01-getting-started.md). Native `ATOM.COM` can assemble on a
-CP/M 2.2 machine, although many examples in this book use a generic memory map
-rather than the CP/M `$0100` program layout. A paper trace of register values
+Start with the [Node guide](../using-atom-on-node.md) or the
+[CP/M guide](../using-atom-on-cpm.md) to install and invoke Atom. This book
+uses a generic memory map for most examples rather than the CP/M `$0100`
+program layout. A paper trace of register values
 is useful when a program produces an unexpected result. Chapter 1 begins with
 the processor, memory and I/O.

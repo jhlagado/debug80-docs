@@ -1,13 +1,13 @@
 ---
 layout: default
-title: "Appendix 2 — Expressions and Numeric Forms"
-parent: "Atom and Z80 Reference"
+title: "Expressions and Numeric Forms"
+parent: "Atom Book 1 — Assembler Reference"
 grand_parent: "Atom Books"
-nav_order: 2
-nav_group: "Assembler reference"
+nav_order: 102
+nav_group: "Reference tables"
 ---
 
-# Appendix 2 — Expressions and Numeric Forms
+# Expressions and Numeric Forms
 
 ## Operator table
 
