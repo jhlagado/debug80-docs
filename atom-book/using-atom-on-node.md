@@ -1,8 +1,9 @@
 ---
 layout: default
 title: "Using Atom on Node"
-parent: "Atom Books"
-nav_order: 1
+parent: "Book 0 — Using Atom"
+nav_order: 2
+nav_group: "Node"
 has_children: false
 ---
 
@@ -50,8 +51,7 @@ atom hello.asm build/hello.bin
 ```
 
 The output path selects the format. Atom recognises `.bin`, `.hex`, `.com`,
-`.nobj`, `.lst` and `.d8.json` outputs. You can request several formats in one
-build:
+`.lst` and `.d8.json` outputs. You can request several formats in one build:
 
 ```sh
 atom hello.asm build/hello.bin build/hello.lst build/hello.d8.json
@@ -109,7 +109,6 @@ Each output suffix selects a format:
 | `.bin` | Flat binary image |
 | `.hex` | Intel HEX with addresses and checksums |
 | `.com` | CP/M executable loaded and entered at `$0100` |
-| `.nobj` | Object stream for later materialisation |
 | `.lst` | Source listing with final addresses and bytes |
 | `.d8.json` | Debug80 source and symbol map |
 
@@ -131,8 +130,6 @@ separate scopes distinct.
 
 A D8 map supplies filenames, source locations and symbols for Debug80.
 Load it with the corresponding BIN or HEX file for source-level debugging.
-NOBJ preserves emitted bytes, replacement patches and layout information
-for tools that need to materialise the image later.
 
 Each format and destination may appear only once in a command. Atom stages
 all requested files before replacing previous outputs. Source, assembly or

@@ -13,14 +13,10 @@ Atom is a single-pass Z80 assembler. Its core runs as a Node command on a
 desktop and as `ATOM.COM` on CP/M 2.2. The assembler language is shared; the
 way you install, invoke and run it depends on the host.
 
-## Choose your platform
+## Start here
 
-- [Using Atom on Node](/atom-book/using-atom-on-node.html) covers installation,
-  desktop builds, output files and projects. Node is the build host. A program
-  assembled there runs on the target platform selected by the build.
-- [Using Atom on CP/M](/atom-book/using-atom-on-cpm.html) covers the compact
-  native command, current-drive files, CP/M output and diagnostics. It also
-  shows a small program using the CP/M BDOS calling convention.
+- [Book 0 — Using Atom](/atom-book/) covers both ways to run Atom: natively on
+  CP/M, or from a Node command line.
 
 ## Learn the assembler
 
@@ -29,8 +25,8 @@ way you install, invoke and run it depends on the host.
 - [Atom Book 2 — Z80 Programming](/atom-book/book2/) develops Z80 programs,
   from registers and opcodes through routines and algorithms.
 
-Each book includes its reference tables. The Node guide also links to the
-command options and the programming API for tool authors.
+Book 0 links to the Node command reference and programming interface. Books 1
+and 2 cover the assembler language and Z80 programming.
 
 ## Project resources
 

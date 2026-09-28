@@ -24,7 +24,9 @@ const programmingExamples = path.join(repository, "atom-book", "book2", "example
 
 function run(command, arguments_, options) {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, arguments_, {
+    const isNodeScript = command.endsWith(".mjs");
+    const child = spawn(isNodeScript ? process.execPath : command,
+      isNodeScript ? [command, ...arguments_] : arguments_, {
       ...options,
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -55,7 +57,7 @@ async function verifyCommandDocumentation() {
     assert.ok(help.stdout.includes(fragment), `published Atom help omits ${fragment}`);
   }
 
-  const appendix = await fs.readFile(
+  const commandReference = await fs.readFile(
     path.join(repository, "atom-book", "appendices", "03-cli-flags.md"),
     "utf8",
   );
@@ -64,12 +66,12 @@ async function verifyCommandDocumentation() {
     "utf8",
   );
   for (const option of ["--project", "--output", "--target", "-DNAME", "--help", "--version"]) {
-    assert.ok(appendix.includes(option), `Atom CLI appendix omits ${option}`);
+    assert.ok(commandReference.includes(option), `Atom command reference omits ${option}`);
   }
   const suffixLine = help.stdout.match(/^Output suffixes: (.+)$/m);
   assert.ok(suffixLine, "published Atom help has no output-suffix contract");
   for (const suffix of suffixLine[1].split(/\s+/)) {
-    assert.ok(appendix.includes(suffix), `Atom CLI appendix omits ${suffix}`);
+    assert.ok(commandReference.includes(suffix), `Atom command reference omits ${suffix}`);
     assert.ok(nodeGuide.includes(suffix), `Atom Node guide omits ${suffix}`);
   }
 
@@ -81,6 +83,13 @@ async function verifyCommandDocumentation() {
     assert.ok(cpmGuide.includes(command), `Atom CP/M guide omits ${command}`);
   }
   assert.ok(cpmGuide.includes("displays usage"), "Atom CP/M guide omits bare-command behavior");
+
+  const bookZero = await fs.readFile(
+    path.join(repository, "atom-book", "index.md"),
+    "utf8",
+  );
+  assert.ok(bookZero.indexOf("## CP/M") < bookZero.indexOf("## Node"), "Book 0 must put CP/M before Node");
+  assert.doesNotMatch(bookZero, /Appendix/i, "Book 0 should not label its programming interface as an appendix");
 }
 
 async function markdownFiles(directory) {

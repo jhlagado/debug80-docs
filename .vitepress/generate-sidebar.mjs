@@ -199,15 +199,17 @@ for (const book of BOOK_DIRS) {
 // under appendices/ does not create a separate, mixed reading sequence.
 const atomRoot = join(root, "atom-book");
 const atomGroups = [
-  { title: "Using Atom on Node", page: "using-atom-on-node.md" },
-  { title: "Using Atom on CP/M", page: "using-atom-on-cpm.md" },
+  { title: "Book 0 — Using Atom", page: "index.md" },
   { title: "Atom Book 1 — Assembler Reference", page: "book1/index.md" },
   { title: "Atom Book 2 — Z80 Programming", page: "book2/index.md" },
 ].map(({ title, page }) => ({
   title,
   page,
   items: [
-    { text: page.includes("/") ? "Book overview" : "Guide", link: pageLink(join(atomRoot, page)) },
+    {
+      text: page === "index.md" || page.includes("/") ? "Book overview" : "Guide",
+      link: pageLink(join(atomRoot, page)),
+    },
     ...chapterItems(atomRoot, title, true),
   ],
 }));

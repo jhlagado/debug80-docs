@@ -1,13 +1,12 @@
 ---
 layout: default
-title: "Appendix — Programming Interface"
-parent: "Using Atom on Node"
-grand_parent: "Atom Books"
-nav_order: 2
-nav_group: "Reference"
+title: "Programming Interface"
+parent: "Book 0 — Using Atom"
+nav_order: 4
+nav_group: "Node"
 ---
 
-# Appendix — Programming Interface
+# Programming Interface
 
 Tools can call Atom in the same process instead of spawning the command. The
 `atom-z80` package provides ECMAScript modules and requires Node.js 20 or later.
@@ -45,7 +44,6 @@ PATCH records, layout events, and declared symbols.
 
 | Field | Type | Contents |
 | --- | --- | --- |
-| `nobj` | `Uint8Array` | Atom NOBJ object stream |
 | `bin` | `Uint8Array` | Contiguous materialised image |
 | `hex` | `string` | Intel HEX |
 | `listing` | `string` | Source listing |
@@ -71,7 +69,7 @@ await publishAtomOutputFiles([
 ```
 
 The files are staged before either existing destination is replaced. A
-publication failure leaves the previous files in place. BIN, listing and NOBJ
+publication failure leaves the previous files in place. BIN and listing
 remain available in memory when a tool does not want them on disk.
 
 ## Prepare source separately
@@ -129,18 +127,15 @@ const { base, end, bytes } = materializeAtomGeneration(result.generation, {
 
 The returned `Uint8Array` is a copy. Changing it does not alter the generation.
 
-## NOBJ and individual formats
+## Individual formats
 
-The package exports `writeAtomNobj()`, `parseAtomNobj()` and
-`materializeAtomNobj()` for tools that store or consume Atom's append-only
-object stream. It also exports `writeIntelHex()`, `writeAtomCom()`,
+The package exports `writeIntelHex()`, `writeAtomCom()`,
 `writeAtomListing()` and `writeAtomD8()` when a caller needs one format rather
 than the complete rendered set.
 
-`materializeAtomGeneration()` performs the same IMAGE-and-PATCH operation on a
-live assembly generation. `materializeAtomNobj()` starts from serialized NOBJ.
-Both return a flat image without introducing a general linker or symbol
-resolution stage.
+`materializeAtomGeneration()` applies IMAGE and PATCH records from a live
+assembly generation and returns a flat image without introducing a general
+linker or symbol-resolution stage.
 
 ## Native host boundary
 
