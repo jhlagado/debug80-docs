@@ -33,7 +33,7 @@ atom --help
 
 ## Build a first program
 
-Save this source as `HELLO.ASM`:
+Save this source as `hello.asm`:
 
 ```asm
 ORG $4000
@@ -46,7 +46,7 @@ START:
 Assemble it from the directory containing the file:
 
 ```sh
-atom HELLO.ASM build/hello.bin
+atom hello.asm build/hello.bin
 ```
 
 The output path selects the format. Atom recognises `.bin`, `.hex`, `.com`,
@@ -54,7 +54,7 @@ The output path selects the format. Atom recognises `.bin`, `.hex`, `.com`,
 build:
 
 ```sh
-atom HELLO.ASM build/hello.bin build/hello.lst build/hello.d8.json
+atom hello.asm build/hello.bin build/hello.lst build/hello.d8.json
 ```
 
 When no output is named, Atom writes `build/hello.bin`.
