@@ -2618,6 +2618,82 @@ export const sidebars = {
       ]
     }
   ],
+  "/skate/": [
+    {
+      "text": "Programming Skate",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/skate/book1/index.html"
+        },
+        {
+          "text": "First programs",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Introduction",
+              "link": "/skate/book1/00-introduction.html"
+            },
+            {
+              "text": "A first program",
+              "link": "/skate/book1/01-first-program.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/skate/book1/": [
+    {
+      "text": "Programming Skate",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Book overview",
+          "link": "/skate/book1/index.html"
+        },
+        {
+          "text": "First programs",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Introduction",
+              "link": "/skate/book1/00-introduction.html"
+            },
+            {
+              "text": "A first program",
+              "link": "/skate/book1/01-first-program.html"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "/triptych/": [
+    {
+      "text": "CP/M essentials",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "CP/M overview",
+          "link": "/triptych/cpm/index.html"
+        }
+      ]
+    }
+  ],
+  "/triptych/cpm/": [
+    {
+      "text": "CP/M essentials",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "CP/M overview",
+          "link": "/triptych/cpm/index.html"
+        }
+      ]
+    }
+  ],
   "/tec1g/": [
     {
       "text": "MON-3 User Guide",
@@ -5107,7 +5183,7 @@ export const sidebars = {
     },
     {
       "text": "Atom Book 2 — Z80 Programming",
-      "collapsed": false,
+      "collapsed": true,
       "items": [
         {
           "text": "Book overview",

@@ -86,6 +86,16 @@ Source: [github.com/jhlagado/debug80](https://github.com/jhlagado/debug80)
 
 ---
 
+## Skate
+
+### [Programming Skate](skate/book1/)
+
+A course in Scheme on Z80 CP/M, starting with editing and running a small
+program. The introduction and first chapter are drafts. Later lessons develop
+lists, recursion, closures and an interactive adventure.
+
+[Skate overview](skate/) · [CP/M essentials](triptych/cpm/)
+
 ## AZM
 
 ### [AZM Book 1 — Assembler Manual](azm-book/book1/)

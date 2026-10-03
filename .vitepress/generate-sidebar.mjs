@@ -16,6 +16,8 @@ const BOOK_DIRS = [
   "atom-book",
   "glimmer-book",
   "nucleus",
+  "skate",
+  "triptych",
   "tec1g",
 ];
 
@@ -105,7 +107,7 @@ function sectionFor(dir) {
     return undefined;
   }
   const items = chapterItems(dir, fm.title, true);
-  if (items.length === 0) return undefined;
+  if (items.length === 0 && fm.sidebar_link === undefined) return undefined;
   if (fm.sidebar_link !== undefined) {
     items.unshift({ text: fm.sidebar_link, link: pageLink(indexFile) });
   }
