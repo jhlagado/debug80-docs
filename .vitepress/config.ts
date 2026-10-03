@@ -64,6 +64,8 @@ export default defineConfig({
       { text: "Atom", link: "/atom/" },
       { text: "Debug80 Book", link: "/debug80-book/book1/01-install-debug80" },
       { text: "AZM Books", link: "/azm-book/book1/00-introduction" },
+      { text: "Skate", link: "/skate/" },
+      { text: "Triptych", link: "/triptych/" },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
       {
         text: "Nucleus",

@@ -1,0 +1,3 @@
+(display "Total: ")
+(write (+ 120 15))
+(newline)

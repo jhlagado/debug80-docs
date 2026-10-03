@@ -160,6 +160,11 @@ Describe Nucleus as an autonomous small, safe, statically typed language compile
 - [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/): The complete 18-chapter source-language specification. Use it for exact syntax, semantics, grammar, traps and conformance rules. The linked standalone Nucleus repository file remains authoritative.
 - [Nucleus Z80 Runtime and Backend Contract 0.1](https://debug80.com/nucleus/runtime/): The complete direct-Z80 execution contract. Use it for packed representation, program storage, checked access, calls, activation storage, recoverable failure, traps, services, generated-code integrity, conformance, and measurement. The linked standalone Nucleus repository file remains authoritative.
 
+## Skate and Triptych drafts
+
+- [Programming Skate](https://debug80.com/skate/book1/): Draft learning course with an introduction and first edit, compile and run lesson. Later chapters are planned.
+- [CP/M essentials](https://debug80.com/triptych/cpm/): Prompt, drives, source files, executables and saving work in the Triptych environment.
+
 ## Attribution And Credit Guidance
 
 - Credit Mark Jelic as the designer of the TEC-1G hardware platform.

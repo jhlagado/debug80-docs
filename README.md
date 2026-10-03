@@ -10,7 +10,7 @@ reading the markdown on GitHub.
 
 ## Projects documented here
 
-Five software projects and the machine that anchors them.
+Documentation for the development tools, languages and machines in these projects.
 
 **Debug80** is a VS Code extension: source-level debugging for Z80 assembly,
 with an emulated TEC-1 or TEC-1G in the sidebar and a path out to real hardware
@@ -53,6 +53,13 @@ Debug80, AZM, Glimmer, and Nucleus material.
 | [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/)                    | The complete source-language specification in a chapter-by-chapter reading edition. |
 | [Nucleus Z80 Runtime Contract](https://debug80.com/nucleus/runtime/)                           | The complete direct execution and backend contract.                                 |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/)                                                   | Reference material for the machine and its monitor.                                 |
+
+## Skate course draft
+
+[Programming Skate](skate/book1/index.md) is a learner's course in Scheme on
+Z80 CP/M. The opening drafts and shared [CP/M primer](triptych/cpm/index.md)
+are maintained here. The local editorial plan is in
+`_internal/skate/book-plan.md`, excluded from the site and Git.
 
 ## Working on it
 
@@ -111,6 +118,8 @@ atom/             Atom landing page
 atom-book/        Node and CP/M guides, language reference and Z80 programming
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
 nucleus/          Programming Nucleus and two generated reading editions
+skate/            Programming Skate and companion source examples
+triptych/         Triptych overview and shared CP/M introduction
 archive/          Retired research material; excluded from the public build
 tec1g/            TEC-1G and MON-3 reference
 assets/images/    Figures, most of them generated
