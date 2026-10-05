@@ -1,8 +1,6 @@
 ---
-layout: default
 title: "Expressions and Numeric Forms"
 parent: "Atom Book 1 — Assembler Reference"
-grand_parent: "Atom Books"
 nav_order: 102
 nav_group: "Reference tables"
 ---

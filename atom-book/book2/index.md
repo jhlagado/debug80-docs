@@ -1,9 +1,6 @@
 ---
-layout: default
 title: "Atom Book 2 — Z80 Programming"
 nav_order: 4
-has_children: true
-has_toc: false
 sidebar_link: "Book overview"
 ---
 

@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Instructions, Data and Storage"
 parent: "Atom Book 1 — Assembler Reference"
 nav_order: 4
@@ -130,23 +129,33 @@ as `DB`.
 
 ## `INCBIN`
 
-`INCBIN` is a desktop-host facility that emits one complete file as initialized
-bytes:
+`INCBIN` emits bytes from a binary file as initialized data:
 
 ```asm
-FONT: INCBIN "ASSETS/FONT.BIN"
+FONT: INCBIN "FONT.BIN", 2048
 ```
 
-The path is relative to the source file containing the directive. It must use
-ASCII, resolve inside the project root, and match the filename's capitalisation.
-Symlink targets outside the root are rejected. Atom reads the complete binary
-before assembly, so one build uses one stable copy of the file.
+The optional second operand is a byte count. It must be a numeric literal and
+selects that many bytes from the start of the file. A count of zero is
+allowed. Node accepts `INCBIN "PATH"` without a count and emits the complete
+file. CP/M requires the count, so a source that must assemble on both hosts
+should give one.
 
-One binary may contain 0 through 65,535 bytes. Atom does not accept offset or
-length operands. During source preparation, Atom replaces the line with an
-equal-length reservation for address calculation and attaches the saved binary
-bytes to the resulting output. Listings and D8 maps retain the original
-`INCBIN` line. Native CP/M Atom does not implement `INCBIN`.
+On Node, the path is relative to the source file containing the directive. It
+must use ASCII, resolve inside the project root, and match the filename's
+capitalisation. Symlink targets outside the root are rejected. One binary may
+contain 0 through 65,535 bytes. Atom reads the selected bytes before assembly,
+so one build uses one stable copy of the file. During source preparation, Atom
+replaces the line with an equal-length reservation for address calculation and
+attaches the saved bytes to the resulting output. Listings and D8 maps retain
+the original `INCBIN` line.
+
+On CP/M, the name is a current-drive 8.3 filename and Atom reads the file's
+records in sequence during assembly. CP/M stores files in 128-byte records, so
+padding in the final record cannot be told apart from data. The count decides
+how many bytes are used. One CP/M assembly may have at most 32 active `INCBIN`
+statements. The [CP/M guide](../using-atom-on-cpm.md#binary-data) gives the
+details.
 
 ## Directive summary
 

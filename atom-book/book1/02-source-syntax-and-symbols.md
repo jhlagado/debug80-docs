@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Source Syntax and Symbols"
 parent: "Atom Book 1 — Assembler Reference"
 nav_order: 2

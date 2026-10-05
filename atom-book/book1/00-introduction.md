@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Introduction"
 parent: "Atom Book 1 — Assembler Reference"
 nav_order: 0
@@ -33,10 +32,11 @@ Atom separates assembly from operations that require access to files. The
 assembler handles symbols, expressions, instructions, directives and forward
 references in a single pass through the prepared source.
 
-Before that pass, the desktop source-preparation stage resolves `%INCLUDE`,
-`%DEFINE`, `%IF`, `%ELSE`, `%ENDIF` and the file named by `INCBIN`. Native CP/M
-resolves leading `%INCLUDE` directives. After assembly, each host writes the
-requested output. `%DEFINE` controls desktop preprocessing while `EQU` declares a value
-that assembly expressions can use on either host.
+Before that pass, the host's source-preparation stage resolves `%INCLUDE`,
+`%DEFINE`, `%IF`, `%ELSE` and `%ENDIF` and locates each file named by `INCBIN`.
+Node and CP/M both provide these facilities, with different path rules and
+limits. After assembly, each host writes the requested output. `%DEFINE`
+controls preprocessing while `EQU` declares a value that assembly expressions
+can use.
 
 The first chapter explains a small program and the bytes it produces.

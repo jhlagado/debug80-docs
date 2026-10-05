@@ -1,8 +1,6 @@
 ---
-layout: default
 title: "Built-in Functions"
 parent: "Atom Book 1 — Assembler Reference"
-grand_parent: "Atom Books"
 nav_order: 104
 nav_group: "Reference tables"
 ---

@@ -1,9 +1,6 @@
 ---
-layout: default
 title: "Atom Book 1 — Assembler Reference"
 nav_order: 3
-has_children: true
-has_toc: false
 sidebar_link: "Book overview"
 ---
 

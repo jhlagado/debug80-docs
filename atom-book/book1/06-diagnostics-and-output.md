@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Diagnostics and Output"
 parent: "Atom Book 1 — Assembler Reference"
 nav_order: 6

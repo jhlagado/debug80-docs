@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Getting Started with Atom"
 parent: "Atom Book 1 — Assembler Reference"
 nav_order: 1

@@ -1,8 +1,6 @@
 ---
-layout: default
 title: "Z80 Instruction Reference"
 parent: "Atom Book 2 — Z80 Programming"
-grand_parent: "Atom Books"
 nav_order: 110
 nav_group: "Reference tables"
 ---

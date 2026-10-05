@@ -1,16 +1,14 @@
 ---
-layout: default
 title: "Using Atom on Node"
 parent: "Book 0 — Using Atom"
 nav_order: 2
 nav_group: "Node"
-has_children: false
 ---
 
 # Using Atom on Node
 
-The Node command is Atom's desktop build host. It reads source and project
-files from the host operating system, runs the assembler core in a Z80
+The Node command runs Atom on a computer with Node.js. It reads source and
+project files from the host operating system, runs the assembler core in a Z80
 emulator and writes the formats requested on the command line. It does not
 provide a CP/M console for the program being assembled.
 
@@ -92,9 +90,13 @@ file:
 atom --project atom.json
 ```
 
-The Node host also supports project-relative `%INCLUDE`, `%DEFINE`, conditional
-source and `INCBIN`. These are host facilities. The native CP/M profile has a
-smaller command line and supports leading `%INCLUDE` only.
+Source files can use `%INCLUDE`, `%DEFINE`, conditional source and `INCBIN`.
+On Node, include and binary paths are relative to the source file and must
+stay inside the project root. `INCBIN "PATH"` includes the whole file;
+`INCBIN "PATH", COUNT` includes the first `COUNT` bytes. CP/M requires the
+count, so give one when the source must also assemble on CP/M. The CP/M
+command has a smaller command line and its own limits, described in the
+[CP/M guide](using-atom-on-cpm.md#definitions-and-conditional-source).
 
 For the complete option table and JavaScript API, use the
 [command-line reference](appendices/03-cli-flags.md) and
@@ -141,7 +143,7 @@ A source failure identifies the project-relative filename, line and byte
 column:
 
 ```text
-lib/device.asm:14:9: UNDEFINED SYMBOL PORTBASE
+lib/device.asm:14:9: undefined symbol PORTBASE
 ```
 
 Line and column numbers begin at one. Locations refer to the original source,

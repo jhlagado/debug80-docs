@@ -1,9 +1,7 @@
 ---
-layout: default
 title: "Atom Reference Tables"
 parent: "Book 0 — Using Atom"
 nav_order: 5
-has_toc: false
 ---
 
 # Atom Reference Tables

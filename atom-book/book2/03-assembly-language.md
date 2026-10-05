@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Assembly Language"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 3

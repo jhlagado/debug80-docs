@@ -1,8 +1,6 @@
 ---
-layout: default
 title: "Limits and Capacities"
 parent: "Atom Book 1 — Assembler Reference"
-grand_parent: "Atom Books"
 nav_order: 105
 nav_group: "Reference tables"
 ---
@@ -15,22 +13,25 @@ nav_group: "Reference tables"
 | --- | ---: |
 | Ordered source parts | 1 through 255 |
 | Bytes in one source part | 0 through 65,535 |
-| Dependency depth, including the entry file | 64 |
-| Desktop project-relative path | 255 ASCII bytes |
-| Desktop retained project-relative paths | 65,536 bytes |
-| One desktop `INCBIN` file | 0 through 65,535 bytes |
+| Node project-relative path | 255 ASCII bytes |
+| Node retained project-relative paths | 65,536 bytes |
+| One Node `INCBIN` file | 0 through 65,535 bytes |
+| CP/M `%DEFINE` values | 32 |
+| CP/M `%DEFINE` name | 17 characters |
+| CP/M conditional nesting | 16 levels |
+| CP/M active `INCBIN` statements | 32 |
 
 `%INCLUDE` adds each dependency once, so the part limit applies to distinct
 files in the resolved project rather than to the number of `%INCLUDE` lines.
 The total source may exceed 65,535 bytes as long as no individual part exceeds
 that size.
 
-The desktop host keeps immutable source snapshots outside emulated Z80 memory
-and returns bytes to the assembler as requested. Native CP/M reads each part
+The Node host keeps immutable source snapshots outside emulated Z80 memory
+and returns bytes to the assembler as requested. CP/M reads each part
 through a 128-byte random-record cache. Neither host needs to fit a complete
 multipart source tree in Z80 RAM.
 
-Native CP/M uses current-drive 8.3 names instead of project-relative paths.
+CP/M uses current-drive 8.3 names instead of project-relative paths.
 
 ## Output profiles
 
@@ -38,13 +39,13 @@ Atom currently produces one flat output image in bank zero.
 
 | Profile | Output capacity | Placement |
 | --- | ---: | --- |
-| Desktop `generic` | At most 65,535 bytes | Source `ORG` within the flat 16-bit range |
-| Desktop `cpm22` | At most 65,279 bytes | Load and entry at `$0100` |
-| Native CP/M 2.2 | 65,280 bytes | `$0100` through `$FFFF` |
+| Node `generic` | At most 65,535 bytes | Source `ORG` within the flat 16-bit range |
+| Node `cpm22` | At most 65,279 bytes | Load and entry at `$0100` |
+| CP/M 2.2 | 65,280 bytes | `$0100` through `$FFFF` |
 
-The desktop defaults reserve a range ending just before `$FFFF`. The
+The Node defaults reserve a range ending just before `$FFFF`. The
 programming API accepts an explicit range ending at `$10000`, with capacity
-still limited to 65,535 bytes. Native CP/M output can use the final address.
+still limited to 65,535 bytes. CP/M output can use the final address.
 Its image limit is independent of the RAM available to load and run that
 program. The [CP/M guide](../using-atom-on-cpm.md#limits-and-current-boundaries)
 gives the minimum memory requirement and disk-space constraints.
@@ -53,8 +54,8 @@ gives the minimum memory requirement and disk-space constraints.
 
 | Host configuration | Simultaneous symbols | Simultaneous unresolved references |
 | --- | ---: | ---: |
-| Desktop command | 3,040 | 1,170 |
-| Native CP/M 2.2 | 1,536 | 585 |
+| Node command | 3,040 | 1,170 |
+| CP/M 2.2 | 1,536 | 585 |
 
 Global symbols remain for the entire build. Private symbols are discarded
 when the next global label begins, so only the current private scope counts

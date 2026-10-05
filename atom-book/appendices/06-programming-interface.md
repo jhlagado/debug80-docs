@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Programming Interface"
 parent: "Book 0 — Using Atom"
 nav_order: 4
@@ -142,7 +141,7 @@ linker or symbol-resolution stage.
 `createNamedObjectAtomAdapter()` and `createAtomToolServiceGateway()` expose
 the Z80 host boundary used by native systems. A provider supplies source
 objects, output transactions and diagnostics while the assembler core remains
-unchanged. The Node command and native CP/M program are two providers for that
+unchanged. The Node command and the CP/M program are two providers for that
 same division of responsibilities.
 
 These interfaces are for host and operating-system integration. Ordinary Node

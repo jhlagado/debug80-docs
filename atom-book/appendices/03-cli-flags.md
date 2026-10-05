@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Node Command Reference"
 parent: "Book 0 — Using Atom"
 nav_order: 3
@@ -8,9 +7,9 @@ nav_group: "Node"
 
 # Node Command Reference
 
-## Desktop command
+## Node command
 
-The Node-hosted command accepts a source file or a project file:
+The Node command accepts a source file or a project file:
 
 ```text
 atom [options] input.asm [output...]
@@ -58,15 +57,15 @@ project output list, and command definitions override project definitions.
 The optional `assembler` field should be `atom` in a project shared with tools
 that support more than one assembler.
 
-## Native CP/M command
+## CP/M command
 
 The [CP/M guide](../using-atom-on-cpm.md#the-command-line) contains the CP/M
 command forms, output formats and diagnostics.
 
-## Desktop status values
+## Node status values
 
 | Status | Meaning |
 | ---: | --- |
 | 0 | Successful assembly and publication, help, or version |
 | 1 | Source preparation, assembly, rendering, or publication failure |
-| 2 | Invalid desktop command use |
+| 2 | Invalid command use |
