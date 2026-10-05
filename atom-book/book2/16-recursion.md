@@ -69,9 +69,9 @@ FSTACK EQU FACTN*FSTEP+FBASE
 ```
 
 Each of the five non-base levels contributes two bytes for saved BC and two for
-the recursive return address. The base call contributes its two-byte return
-address. The deepest occupancy is 5 × 4 + 2 = 22 bytes across six
-active calls.
+the recursive return address. The base-case invocation has no saved BC, but its
+caller still leaves a two-byte return address on the stack. The deepest
+occupancy is 5 × 4 + 2 = 22 bytes across six active calls.
 
 The constants document the bound; Atom does not perform stack-depth analysis.
 Changing `FACTN` requires checking both the 8-bit result range and the available
