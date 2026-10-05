@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Bit Patterns and Packed Flags"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 15

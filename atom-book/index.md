@@ -1,9 +1,6 @@
 ---
-layout: default
 title: "Book 0 — Using Atom"
 nav_order: 1
-has_children: true
-has_toc: false
 nav_exclude: true
 ---
 
@@ -22,7 +19,7 @@ Use `ATOM.COM` on a CP/M computer, or try the same steps in Triptych.
 
 ## Node
 
-Install the desktop command, assemble source and choose output files.
+Install the Node command, assemble source and choose output files.
 
 **[Using Atom on Node](using-atom-on-node.md)**
 
@@ -44,6 +41,8 @@ tools to arithmetic, sorting, strings, packed flags and recursion.
 
 ---
 
-The Z80 register and instruction tables accompany Book 2. The Node section
-also includes a [command reference](appendices/03-cli-flags.md) and a
+## [Atom Reference Tables](appendices/)
+
+Directive, expression, limit and Z80 instruction tables, with the Node
+[command reference](appendices/03-cli-flags.md) and
 [programming interface](appendices/06-programming-interface.md).

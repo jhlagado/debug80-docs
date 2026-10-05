@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Flags, Comparisons and Jumps"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 5

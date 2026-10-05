@@ -1,8 +1,6 @@
 ---
-layout: default
 title: "Addressing, Prefixes and Forms"
 parent: "Atom Book 2 — Z80 Programming"
-grand_parent: "Atom Books"
 nav_order: 109
 nav_group: "Reference tables"
 ---

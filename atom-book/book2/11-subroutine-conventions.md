@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Subroutine Conventions"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 11

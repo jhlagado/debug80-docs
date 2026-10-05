@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Data Tables and Indexed Access"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 7

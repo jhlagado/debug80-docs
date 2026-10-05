@@ -9,8 +9,8 @@ aside: false
 
 # Atom
 
-Atom is a single-pass Z80 assembler. Its core runs as a Node command on a
-desktop and as `ATOM.COM` on CP/M 2.2. The assembler language is shared; the
+Atom is a single-pass Z80 assembler. Its core runs as a Node command and as
+`ATOM.COM` on CP/M 2.2. The assembler language is shared; the
 way you install, invoke and run it depends on the host.
 
 ## Start here
@@ -30,7 +30,7 @@ and 2 cover the assembler language and Z80 programming.
 
 ## Project resources
 
-- [Atom on npm](https://www.npmjs.com/package/atom-z80) provides the desktop
+- [Atom on npm](https://www.npmjs.com/package/atom-z80) provides the Node
   package and release history.
 - [Atom source](https://github.com/jhlagado/atom) contains the assembler,
-  desktop host and native platform providers.
+  Node host and the CP/M program.

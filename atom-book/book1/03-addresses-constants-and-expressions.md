@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Addresses, Constants and Expressions"
 parent: "Atom Book 1 — Assembler Reference"
 nav_order: 3
@@ -26,7 +25,7 @@ backward only if subsequent output does not precede or overlap bytes already
 emitted. Artifact sizing follows the greatest address reached, even if a later
 `ORG` moves the cursor backward.
 
-The source owns placement through `ORG`. The desktop target profile sets the
+The source owns placement through `ORG`. The Node target profile sets the
 permitted address range; it does not relocate the program or override its
 labels. The generic profile covers the ordinary flat 16-bit address space. The
 `cpm22` profile requires a flat program loaded and entered at `$0100`.

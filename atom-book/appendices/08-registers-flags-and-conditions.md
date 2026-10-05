@@ -1,8 +1,6 @@
 ---
-layout: default
 title: "Registers, Flags and Conditions"
 parent: "Atom Book 2 — Z80 Programming"
-grand_parent: "Atom Books"
 nav_order: 108
 nav_group: "Reference tables"
 ---

@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Memory Access and Data"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 4

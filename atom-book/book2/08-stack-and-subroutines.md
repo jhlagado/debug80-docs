@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Stack and Subroutines"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 8

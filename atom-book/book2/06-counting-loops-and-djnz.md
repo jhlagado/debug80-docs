@@ -1,5 +1,4 @@
 ---
-layout: default
 title: "Counting Loops and DJNZ"
 parent: "Atom Book 2 — Z80 Programming"
 nav_order: 6
