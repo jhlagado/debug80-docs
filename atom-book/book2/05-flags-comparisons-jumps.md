@@ -112,8 +112,9 @@ OR $80             ; A = %10000011 - bit 7 now set
 
 `OR A` is a useful special case: A ORed with itself always equals A, so A keeps
 its value. Only the flags are updated: Z is set if A is zero, C is cleared.
-`CP 0` tests for zero the same way and also leaves A alone; the two differ in
-N, which `CP` sets and `OR` clears.
+`CP 0` also tests for zero without changing A, but it produces different flags.
+`CP` sets N and clears P/V for this subtraction; `OR A` clears N and sets P/V
+according to A's parity.
 
 ```asm
 LD A, 0
