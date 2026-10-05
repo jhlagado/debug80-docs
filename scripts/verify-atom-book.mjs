@@ -8,7 +8,7 @@ import {
   assembleAtomProject,
   materializeAtomGeneration,
 } from "atom-z80";
-import { MNEMONICS } from "../node_modules/atom-z80/src/abi.mjs";
+import { MNEMONICS } from "../node_modules/atom-z80/src/host/abi.mjs";
 import { createZ80Runtime } from "../node_modules/atom-z80/node_modules/@jhlagado/debug80-runtime/dist/index.js";
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
