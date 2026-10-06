@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="475" viewBox="0 0 840 475" role="img" aria-labelledby="figTitle figDesc">
+<title id="figTitle">Nested calls require separate working storage</title><desc id="figDesc">One source routine may have several live activations. A stack of main, even and odd activations approaches a marked finite storage boundary. A checked call traps before allocating beyond that boundary.</desc>
+<defs><style>
+:root { --ink:#182329; --secondary:#43535b; --fill:#fff; --accent:#14607e; --tint:#eaf3f6; --muted:#f0f1f2; }
+@media (prefers-color-scheme: dark) { :root { --ink:#e6e8ea; --secondary:#b8c3c8; --fill:#1c1f22; --accent:#74bdd6; --tint:#263b43; --muted:#292d30; } }
+.bg {fill:var(--fill);} .cell {fill:var(--fill);stroke:var(--ink);stroke-width:1.5;} .active {fill:var(--tint);stroke:var(--accent);stroke-width:2;}
+.empty {fill:var(--muted);stroke:var(--secondary);stroke-width:1.5;stroke-dasharray:5 4;}
+.edge {fill:none;stroke:var(--accent);stroke-width:2;} .access {fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4;}
+.n {font:16px system-ui,-apple-system,sans-serif;fill:var(--ink);} .ns {font:14px system-ui,-apple-system,sans-serif;fill:var(--secondary);} .heading {font:600 18px system-ui,-apple-system,sans-serif;fill:var(--ink);}
+</style><marker id="head" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="var(--accent)"/></marker></defs>
+<rect class="bg" width="840" height="475"/>
+<text class="heading" x="24" y="32">A routine is declared once</text><rect class="cell" x="24" y="66" width="260" height="104" rx="5"/><text class="n" x="38" y="92">sub even(n as u8)</text><text class="n" x="38" y="115">    ... odd(n - 1) ...</text><text class="n" x="38" y="138">end</text><text class="heading" x="418" y="32">Each active call needs storage</text><rect class="cell" x="418" y="62" width="300" height="53" rx="5"/><text class="n" x="432" y="88">main</text><rect class="cell" x="418" y="129" width="300" height="53" rx="5"/><text class="n" x="432" y="155">even(3)</text><rect class="cell" x="418" y="196" width="300" height="53" rx="5"/><text class="n" x="432" y="222">odd(2)</text><rect class="active" x="418" y="263" width="300" height="53" rx="5"/><text class="n" x="432" y="289">even(1)</text><text class="ns" x="440" y="364">next activation would exceed budget</text><path class="edge" d="M400 338 L800 338"/><text class="ns" x="24" y="415">Stack use depends on simultaneous active calls, not the number of routine declarations.</text><text class="ns" x="24" y="447">A checked call stops before its working storage could overlap other live storage.</text>
+</svg>

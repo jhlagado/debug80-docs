@@ -1,0 +1,31 @@
+record Job
+    number as u16
+end
+pool jobs as Job[1]
+sub inspectJob(item as Job) as u16
+    return item.number
+end
+sub incrementJob(var item as Job)
+    item.number = item.number + 1
+end
+sub consumeJob(item as jobs) as u16
+    return item.number
+end
+sub main()
+    var first = new jobs(7)
+    var remembered = id(first)
+    assert inspectJob(first) = 7
+    incrementJob(first)
+    assert first.number = 8
+    var result = consumeJob(move first)
+    assert result = 8
+    var replacement = new jobs(11)
+    assert replacement.number = 11
+    select remembered
+    case some(found)
+        result = found.number
+    case none
+        result = 99
+    end
+    assert result = 99
+end

@@ -1,0 +1,8 @@
+var measurement as u16 = 32
+var readings as u8[2] = [12, 20]
+sub main()
+    var small as u8 = u8(measurement)
+    var index as u8 = 1
+    assert small = 32
+    assert readings[index] = 20
+end

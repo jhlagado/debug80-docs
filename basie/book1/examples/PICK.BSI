@@ -1,0 +1,14 @@
+record Pair
+    left as u8
+    right as u8
+end
+sub pick(items as Pair[2], index as u8) as Pair from items
+    return items[index]
+end
+sub main()
+    var pairs as Pair[2] = [(3, 4), (8, 9)]
+    var saved = pick(pairs, 0)
+    pairs[0].left = 7
+    assert saved.left = 3
+    assert pick(pairs, 0).left = 7
+end

@@ -1,0 +1,17 @@
+include "FORMAT.BSI"
+include "TEXTIO.BSI"
+
+var subtotal as u16 = 120
+var postage as u16 = 15
+var total as u16 = 0
+
+sub main() fails
+    total = subtotal + postage
+    subtotal = 200
+    assert subtotal = 200
+    assert total = 135
+
+    var report as string[16]
+    appendU16(report, total) else fail
+    writeLine(console, report) else fail
+end

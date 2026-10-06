@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="270" viewBox="0 0 720 270" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">A calculated value stays independent of its inputs</title>
+  <desc id="figDesc">After total equals subtotal plus postage, subtotal holds 120 and total holds 135. After subtotal is assigned 200, total still holds 135. The two variables occupy separate storage cells.</desc>
+  <defs>
+    <style>
+      :root { --ink: #111417; --secondary: #454b52; --fill: #ffffff; --accent: #14607e; --tint: #eaf3f6; }
+      @media (prefers-color-scheme: dark) { :root { --ink: #e6e8ea; --secondary: #b3b9bf; --fill: #1c1f22; --accent: #5fa8c6; --tint: #263b43; } }
+      .cell { fill: var(--fill); stroke: var(--ink); stroke-width: 1.5; }
+      .changed { fill: var(--tint); stroke: var(--accent); stroke-width: 2; }
+      .t { font: 16px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--ink); }
+      .n { font: 15px system-ui, -apple-system, sans-serif; fill: var(--ink); }
+      .ns { font: 13px system-ui, -apple-system, sans-serif; fill: var(--secondary); }
+    </style>
+  </defs>
+  <text class="n" x="35" y="30">After calculating the total</text>
+  <text class="n" x="395" y="30">After changing the subtotal</text>
+  <text class="t" x="35" y="72">subtotal</text>
+  <rect class="cell" x="160" y="45" width="110" height="42" rx="3"/>
+  <text class="t" x="215" y="72" text-anchor="middle">120</text>
+  <text class="t" x="35" y="130">total</text>
+  <rect class="cell" x="160" y="103" width="110" height="42" rx="3"/>
+  <text class="t" x="215" y="130" text-anchor="middle">135</text>
+  <text class="t" x="395" y="72">subtotal</text>
+  <rect class="changed" x="520" y="45" width="110" height="42" rx="3"/>
+  <text class="t" x="575" y="72" text-anchor="middle">200</text>
+  <text class="t" x="395" y="130">total</text>
+  <rect class="cell" x="520" y="103" width="110" height="42" rx="3"/>
+  <text class="t" x="575" y="130" text-anchor="middle">135</text>
+  <text class="ns" x="35" y="186">The sum is stored in a separate cell.</text>
+  <text class="ns" x="395" y="186">Only subtotal changes.</text>
+  <text class="ns" x="35" y="238">Each box is distinct storage. Matching values would still be separate copies.</text>
+</svg>

@@ -10,6 +10,8 @@ export default defineConfig({
   srcExclude: [
     "_internal/**",
     "archive/**",
+    "basie/editorial/**",
+    "basie/programming-manual-plan.md",
     "01-basic-operation.md",
     "README.md",
   ],
@@ -35,7 +37,10 @@ export default defineConfig({
     languageAlias: { z80: "asm" },
     // Nucleus has no published Shiki grammar. A local TextMate grammar keeps
     // source examples distinct from plain text.
-    languages: [nucleusGrammar as never],
+    languages: [
+      nucleusGrammar as never,
+      { ...nucleusGrammar, name: "basie", scopeName: "source.basie" } as never,
+    ],
     // Warm-toned dark syntax theme to match the Nocturne palette.
     theme: "github-light",
   },

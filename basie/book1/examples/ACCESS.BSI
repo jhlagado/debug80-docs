@@ -1,0 +1,18 @@
+record Reading
+    value as u16
+    usable as boolean
+end
+var current as Reading = (12, true)
+sub inspect(item as Reading) as u16
+    return item.value
+end
+sub update(var item as Reading, value as u16)
+    item.value = value
+end
+sub main()
+    var saved as Reading
+    saved = current
+    update(current, 20)
+    assert inspect(current) = 20
+    assert saved.value = 12
+end

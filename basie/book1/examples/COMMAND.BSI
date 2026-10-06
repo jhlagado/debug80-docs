@@ -1,0 +1,42 @@
+include "PARSE.BSI"
+include "TEXTIO.BSI"
+include "FORMAT.BSI"
+
+const unknownCommand = 48
+const missingArgument = 49
+
+sub execute(text as string[]) as u16 fails
+    var command as string[8]
+    var argument as string[16]
+    var found = word(text, 0, command) else fail
+    if not found or not equal(command, "double")
+        fail unknownCommand
+    end
+    found = word(text, 1, argument) else fail
+    if not found
+        fail missingArgument
+    end
+    var value = parseU16(argument) else fail
+    if value > 32767
+        fail badNumber
+    end
+    return value * 2
+end
+
+sub main() fails
+    var result as u16 = execute("double 123") else fail
+    assert result = 246
+    var report as string[32]
+    append(report, "Result: ") else fail
+    appendU16(report, result) else fail
+    append(report, "\r\n") else fail
+    writeText(console, report) else fail
+
+    var code as u8
+    result = execute("double nope") handle code
+        assert code = badNumber
+        assert result = 246
+        writeText(console, "Invalid number\r\n") else fail
+    end
+    assert code = badNumber
+end
