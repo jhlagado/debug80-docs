@@ -1,0 +1,106 @@
+{
+  "name": "basie",
+  "scopeName": "source.basie",
+  "fileTypes": ["bsi"],
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#string" },
+    { "include": "#character" },
+    { "include": "#number" },
+    { "include": "#declaration" },
+    { "include": "#keyword" },
+    { "include": "#type" },
+    { "include": "#constant" },
+    { "include": "#operator" },
+    { "include": "#call" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.double-slash.basie",
+      "match": "//.*$"
+    },
+    "string": {
+      "name": "string.quoted.double.basie",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [{ "include": "#escape" }]
+    },
+    "character": {
+      "name": "string.quoted.single.basie",
+      "match": "'(?:\\\\(?:x[0-9A-Fa-f]{2}|[0nrt'\"\\\\])|[^'\\\\])'",
+      "captures": { "0": { "patterns": [{ "include": "#escape" }] } }
+    },
+    "escape": {
+      "name": "constant.character.escape.basie",
+      "match": "\\\\(?:x[0-9A-Fa-f]{2}|[0nrt'\"\\\\])"
+    },
+    "number": {
+      "patterns": [
+        { "name": "constant.numeric.hex.basie", "match": "\\$[0-9A-Fa-f]+\\b" },
+        { "name": "constant.numeric.binary.basie", "match": "%[01]+\\b" },
+        {
+          "name": "constant.numeric.decimal.basie",
+          "match": "\\b[0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?\\b|\\.[0-9]+(?:[eE][+-]?[0-9]+)?\\b"
+        }
+      ]
+    },
+    "declaration": {
+      "patterns": [
+        {
+          "match": "\\b(sub)\\s+([A-Za-z][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.function.basie" },
+            "2": { "name": "entity.name.function.basie" }
+          }
+        },
+        {
+          "match": "\\b(record|pool)\\s+([A-Za-z][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.basie" },
+            "2": { "name": "entity.name.type.basie" }
+          }
+        }
+      ]
+    },
+    "keyword": {
+      "patterns": [
+        {
+          "name": "keyword.control.basie",
+          "match": "\\b(if|elseif|else|end|while|for|to|until|step|continue|exit|select|case|return|fail|fails|handle|assert)\\b"
+        },
+        {
+          "name": "storage.modifier.basie",
+          "match": "\\b(var|const|forward|private|include|as|move|new|some|id)\\b"
+        },
+        {
+          "name": "storage.type.basie",
+          "match": "\\b(sub|record|pool)\\b"
+        }
+      ]
+    },
+    "type": {
+      "name": "support.type.basie",
+      "match": "\\b(u8|i8|u16|i16|u32|i32|f32|boolean|string|File)\\b"
+    },
+    "constant": {
+      "name": "constant.language.basie",
+      "match": "\\b(true|false|none|console|printer)\\b"
+    },
+    "operator": {
+      "patterns": [
+        {
+          "name": "keyword.operator.word.basie",
+          "match": "\\b(and|or|xor|not|mod|shl|shr)\\b"
+        },
+        {
+          "name": "keyword.operator.basie",
+          "match": "<>|<=|>=|[-+*/=<>?]"
+        }
+      ]
+    },
+    "call": {
+      "match": "\\b([A-Za-z][A-Za-z0-9_]*)\\s*(?=\\()",
+      "captures": { "1": { "name": "entity.name.function.call.basie" } }
+    }
+  }
+}

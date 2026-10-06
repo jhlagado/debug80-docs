@@ -13,6 +13,11 @@
  * at three different sizes used to look like three different marks: bloated at
  * 128px, an unreadable smudge at 20px. Geometry scales exactly.
  *
+ * Basie is a single note. The language takes its name from Count Basie,
+ * who played few notes and made each one count, so one note in the frame
+ * is the whole idea. A plain crotchet, with no flag or beam, stays legible
+ * at 20px where a quaver's flag turns to noise.
+ *
  * Glimmer is a lit pixel with four rays, not a star. The obvious drawing for
  * "glimmer" is a four-point sparkle, but that is Gemini's logo almost exactly,
  * so it is out however well it fits. A lit pixel is the better idea anyway:
@@ -21,7 +26,7 @@
  */
 withDefaults(
   defineProps<{
-    book?: "debug80" | "azm" | "atom" | "glimmer" | "nucleus";
+    book?: "debug80" | "azm" | "atom" | "glimmer" | "basie";
     size?: number | string;
   }>(),
   {
@@ -35,7 +40,7 @@ const LABEL = {
   azm: "AZM",
   atom: "Atom",
   glimmer: "Glimmer",
-  nucleus: "Nucleus",
+  basie: "Basie",
 };
 </script>
 
@@ -148,22 +153,20 @@ const LABEL = {
       >
         <rect x="4.2" y="4.2" width="15.6" height="15.6" rx="1.2" />
       </g>
-      <g
+      <ellipse
+        class="mark__accent--filled"
+        cx="11.2"
+        cy="15"
+        rx="2.3"
+        ry="1.65"
+        transform="rotate(-22 11.2 15)"
+      />
+      <path
         class="mark__accent"
         fill="none"
         stroke-width="1.5"
         stroke-linecap="square"
-      >
-        <path d="M8.1 9.4V8.1H9.4M14.6 8.1H15.9V9.4" />
-        <path d="M8.1 14.6V15.9H9.4M14.6 15.9H15.9V14.6" />
-      </g>
-      <rect
-        class="mark__accent--filled"
-        x="10"
-        y="10"
-        width="4"
-        height="4"
-        rx="0.4"
+        d="M13.25 14.4V7.4"
       />
     </template>
   </svg>
