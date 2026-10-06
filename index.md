@@ -19,29 +19,29 @@ nav_order: 1
     <span class="volume__desc">A single-pass Z80 assembler written in Z80 — use it from a desktop command or directly under CP/M.</span>
     <span class="volume__enter">stream →</span>
   </a>
+  <a class="volume volume--basie" href="/basie/book1/">
+    <span class="volume__tag">Vol $01 · language · 1 book</span>
+    <span class="volume__head"><Mark book="basie" size="26" /><span class="volume__title">Basie</span></span>
+    <span class="volume__desc">A memory-safe systems language for Z80 machines, compiled to native code by a compiler that runs under CP/M.</span>
+    <span class="volume__enter">count →</span>
+  </a>
   <a class="volume volume--debug80" href="/debug80-book/book1/01-install-debug80">
-    <span class="volume__tag">Vol $01 · 1 book</span>
+    <span class="volume__tag">Vol $02 · 1 book</span>
     <span class="volume__head"><Mark book="debug80" size="26" /><span class="volume__title">Debug80</span></span>
     <span class="volume__desc">Source-level Z80 debugging in VS Code — from installation to stepping real hardware projects and sending HEX to the board.</span>
     <span class="volume__enter">run →</span>
   </a>
   <a class="volume volume--azm" href="/azm-book/book1/00-introduction">
-    <span class="volume__tag">Vol $02 · 3 books</span>
+    <span class="volume__tag">Vol $03 · 3 books</span>
     <span class="volume__head"><Mark book="azm" size="26" /><span class="volume__title">AZM</span></span>
     <span class="volume__desc">An enhanced Z80 assembler — the reference manual, a from-zero teaching book, and algorithms in assembly.</span>
     <span class="volume__enter">assemble →</span>
   </a>
   <a class="volume volume--glimmer" href="/glimmer-book/book1/00-introduction">
-    <span class="volume__tag">Vol $03 · 2 books</span>
+    <span class="volume__tag">Vol $04 · 2 books</span>
     <span class="volume__head"><Mark book="glimmer" size="26" /><span class="volume__title">Glimmer</span></span>
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>
     <span class="volume__enter">react →</span>
-  </a>
-  <a class="volume volume--basie" href="/basie/book1/">
-    <span class="volume__tag">Vol $04 · language · 1 book</span>
-    <span class="volume__head"><Mark book="basie" size="26" /><span class="volume__title">Basie</span></span>
-    <span class="volume__desc">A memory-safe systems language for Z80 machines, compiled to native code by a compiler that runs under CP/M.</span>
-    <span class="volume__enter">count →</span>
   </a>
 </nav>
 
@@ -63,6 +63,34 @@ An introduction to the processor followed by loops, routines and algorithms.
 Register, addressing and instruction tables accompany the book.
 
 Source: [Atom on GitHub](https://github.com/jhlagado/atom)
+
+---
+
+## Basie
+
+### [Programming Basie](basie/book1/)
+
+A tutorial on writing memory-safe Z80 programs for CP/M, one complete program
+per chapter. It starts with three numbers and a total and works up through
+records, ownership of pool records and changing collections to a small
+command-processing utility. Every example checks its own results as it runs.
+
+For programmers who know variables, conditions and loops and want to write
+safe programs for a small machine.
+
+---
+
+## About Basie
+
+Basie is BASIC with the C dropped, and a nod to Count Basie, who played few
+notes and made every one of them count. It is a statically typed language for
+Z80 machines, compiled in one pass to native code by a compiler that itself
+runs under CP/M. Indexes, conversions and lifetimes are all checked, without a
+garbage collector: records passed to routines can't escape the call, pool
+records have exactly one owner and are released automatically, and a stale
+reference traps instead of reading the wrong record.
+
+Source: [Basie on GitHub](https://github.com/jhlagado/basie)
 
 ---
 
@@ -147,34 +175,6 @@ For readers ready to apply Glimmer to complete games.
 Glimmer is a reactive game language that compiles to readable Z80 assembly, built as a thin layer in front of the assembler. You declare a program's state, inputs, and rules; you write the behaviour in small blocks of real Z80 assembly; and Glimmer generates the running program around them as one readable AZM source file: the main loop, the input polling, the change tracking and the display glue.
 
 Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G emulation, with breakpoints and stepping landing in `.glim` source.
-
----
-
-## Basie
-
-### [Programming Basie](basie/book1/)
-
-A tutorial on writing memory-safe Z80 programs for CP/M, one complete program
-per chapter. It starts with three numbers and a total and works up through
-records, ownership of pool records and changing collections to a small
-command-processing utility. Every example checks its own results as it runs.
-
-For programmers who know variables, conditions and loops and want to write
-safe programs for a small machine.
-
----
-
-## About Basie
-
-Basie is BASIC with the C dropped, and a nod to Count Basie, who played few
-notes and made every one of them count. It is a statically typed language for
-Z80 machines, compiled in one pass to native code by a compiler that itself
-runs under CP/M. Indexes, conversions and lifetimes are all checked, without a
-garbage collector: records passed to routines can't escape the call, pool
-records have exactly one owner and are released automatically, and a stale
-reference traps instead of reading the wrong record.
-
-Source: [Basie on GitHub](https://github.com/jhlagado/basie)
 
 ---
 
