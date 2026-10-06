@@ -1,0 +1,5 @@
+sub change(text as string[])
+    text.length = 1
+end
+sub main()
+end

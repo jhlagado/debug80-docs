@@ -2618,6 +2618,150 @@ export const sidebars = {
       ]
     }
   ],
+  "/basie/": [
+    {
+      "text": "Programming Basie",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/basie/book1/00-introduction.html"
+        },
+        {
+          "text": "The Life of a Value",
+          "link": "/basie/book1/01-the-life-of-a-value.html"
+        },
+        {
+          "text": "Within Bounds",
+          "link": "/basie/book1/02-within-bounds.html"
+        },
+        {
+          "text": "Coming and Going",
+          "link": "/basie/book1/03-coming-and-going.html"
+        },
+        {
+          "text": "Two Names, One Object",
+          "link": "/basie/book1/04-two-names-one-object.html"
+        },
+        {
+          "text": "In Good Hands",
+          "link": "/basie/book1/05-in-good-hands.html"
+        },
+        {
+          "text": "On Loan",
+          "link": "/basie/book1/06-on-loan.html"
+        },
+        {
+          "text": "A Change of Plan",
+          "link": "/basie/book1/07-a-change-of-plan.html"
+        },
+        {
+          "text": "Room to Work",
+          "link": "/basie/book1/08-room-to-work.html"
+        },
+        {
+          "text": "A Wider View",
+          "link": "/basie/book1/09-a-wider-view.html"
+        },
+        {
+          "text": "Jobs Come and Go",
+          "link": "/basie/book1/10-jobs-come-and-go.html"
+        },
+        {
+          "text": "Taking the Measure",
+          "link": "/basie/book1/11-taking-the-measure.html"
+        },
+        {
+          "text": "A Place for Everything",
+          "link": "/basie/book1/12-a-place-for-everything.html"
+        },
+        {
+          "text": "One Call Too Many",
+          "link": "/basie/book1/13-one-call-too-many.html"
+        },
+        {
+          "text": "Putting It to Work",
+          "link": "/basie/book1/14-putting-it-to-work.html"
+        },
+        {
+          "text": "Following the Clues",
+          "link": "/basie/book1/15-following-the-clues.html"
+        }
+      ]
+    }
+  ],
+  "/basie/book1/": [
+    {
+      "text": "Programming Basie",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction",
+          "link": "/basie/book1/00-introduction.html"
+        },
+        {
+          "text": "The Life of a Value",
+          "link": "/basie/book1/01-the-life-of-a-value.html"
+        },
+        {
+          "text": "Within Bounds",
+          "link": "/basie/book1/02-within-bounds.html"
+        },
+        {
+          "text": "Coming and Going",
+          "link": "/basie/book1/03-coming-and-going.html"
+        },
+        {
+          "text": "Two Names, One Object",
+          "link": "/basie/book1/04-two-names-one-object.html"
+        },
+        {
+          "text": "In Good Hands",
+          "link": "/basie/book1/05-in-good-hands.html"
+        },
+        {
+          "text": "On Loan",
+          "link": "/basie/book1/06-on-loan.html"
+        },
+        {
+          "text": "A Change of Plan",
+          "link": "/basie/book1/07-a-change-of-plan.html"
+        },
+        {
+          "text": "Room to Work",
+          "link": "/basie/book1/08-room-to-work.html"
+        },
+        {
+          "text": "A Wider View",
+          "link": "/basie/book1/09-a-wider-view.html"
+        },
+        {
+          "text": "Jobs Come and Go",
+          "link": "/basie/book1/10-jobs-come-and-go.html"
+        },
+        {
+          "text": "Taking the Measure",
+          "link": "/basie/book1/11-taking-the-measure.html"
+        },
+        {
+          "text": "A Place for Everything",
+          "link": "/basie/book1/12-a-place-for-everything.html"
+        },
+        {
+          "text": "One Call Too Many",
+          "link": "/basie/book1/13-one-call-too-many.html"
+        },
+        {
+          "text": "Putting It to Work",
+          "link": "/basie/book1/14-putting-it-to-work.html"
+        },
+        {
+          "text": "Following the Clues",
+          "link": "/basie/book1/15-following-the-clues.html"
+        }
+      ]
+    }
+  ],
   "/skate/": [
     {
       "text": "Programming Skate",

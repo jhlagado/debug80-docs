@@ -1,0 +1,24 @@
+forward sub factorial(n as u8) as u32
+
+sub factorial
+    if n < 2
+        return 1
+    end
+    return u32(n) * factorial(n - 1)
+end
+
+sub product(n as u8) as u32
+    var result as u32 = 1
+    var k as u8
+    for k = 2 to n
+        result = result * u32(k)
+    end
+    return result
+end
+
+sub main()
+    assert product(0) = 1
+    assert product(5) = 120
+    assert product(12) = 479001600
+    assert factorial(12) = product(12)
+end

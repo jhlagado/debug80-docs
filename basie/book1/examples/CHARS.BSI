@@ -1,0 +1,6 @@
+sub main() fails
+    writeOutputByte('?') else fail
+    var character as u8 = readInputByte() else fail
+    writeOutputByte(character) else fail
+    writeText(console, "\r\n") else fail
+end
