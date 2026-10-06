@@ -28,12 +28,12 @@ and the change tracking, and compiles to readable Z80 assembly.
 Its desktop command runs that core in a Z80 emulator, while native
 `ATOM.COM` runs it under CP/M 2.2.
 
-**Nucleus** is a small, safe, statically typed language compiled directly to
-Z80 machine code. Its first compiler is intended to be handwritten in Z80 and
-to fit, with its required immutable data, in one 16 KiB bank.
+**Basie** is a memory-safe, statically typed systems language for Z80 machines,
+compiled to native code in a single pass by a compiler that runs under CP/M.
+It replaces the earlier Nucleus project, whose pages are now in `archive/`.
 
 **The TEC-1G** is the single-board computer at the centre of the current
-Debug80, AZM, Glimmer, and Nucleus material.
+Debug80, AZM and Glimmer material.
 
 ## The books
 
@@ -48,10 +48,8 @@ Debug80, AZM, Glimmer, and Nucleus material.
 | [AZM Book 3 — Algorithms and Data Structures](https://debug80.com/azm-book/book3/)             | Sorting, strings, records, recursion and a backtracking capstone.                   |
 | [Glimmer Book 1 — Reactive Programming for Z80 Games](https://debug80.com/glimmer-book/book1/) | The language and reactive model, developed through focused programs.                |
 | [Glimmer Book 2 — Building Complete Z80 Games](https://debug80.com/glimmer-book/book2/)        | Skyfall, Tetro and Rushlight across the matrix and TMS9918 displays.                |
-| [Nucleus](https://debug80.com/nucleus/)                                                        | The autonomous language and direct-Z80 compiler project.                            |
-| [Programming Nucleus](https://debug80.com/nucleus/book1/)                                      | An in-progress practical course in the language, compiler and Debug80 workflow.     |
-| [Nucleus 0.1 Language Specification](https://debug80.com/nucleus/language/)                    | The complete source-language specification in a chapter-by-chapter reading edition. |
-| [Nucleus Z80 Runtime Contract](https://debug80.com/nucleus/runtime/)                           | The complete direct execution and backend contract.                                 |
+| [Basie](https://debug80.com/basie/) | The memory-safe Z80 language and its CP/M compiler. |
+| [Programming Basie](https://debug80.com/basie/book1/) | Memory-safe Z80 programming on CP/M through complete, self-checking programs. |
 | [TEC-1G / MON-3](https://debug80.com/tec1g/)                                                   | Reference material for the machine and its monitor.                                 |
 
 ## Skate course draft
@@ -73,17 +71,6 @@ npm run dev
 `npm run build` produces the static site into `.vitepress/dist`. Pushing to
 `main` builds and publishes to GitHub Pages, which serves debug80.com.
 
-The Nucleus reading editions are generated from their single authoritative
-files; their chapter files are not independent sources. Both authoritative
-sources are in the standalone Nucleus repository. Update and verify them with:
-
-```sh
-npm run sync:nucleus -- /path/to/nucleus/docs/specification.md
-npm run check:nucleus -- /path/to/nucleus/docs/specification.md
-npm run sync:nucleus-runtime -- /path/to/nucleus/docs/z80-runtime-contract.md
-npm run check:nucleus-runtime -- /path/to/nucleus/docs/z80-runtime-contract.md
-```
-
 ### Checks
 
 These checks guard things that are easy to get wrong and hard to notice. CI
@@ -95,7 +82,7 @@ or locally linked packages run during the relevant editing workflow.
 | `npm run links`               | Every internal link resolves.                                                                                                                                                           |
 | `npm run symbols`             | Every symbol the prose names in backticks is one the code actually defines. AZM is case-sensitive, so `RenderTile` and `RENDER_TILE` are different symbols and only one of them exists. |
 | `npm run verify:debug80`      | Command names, panel labels and status strings quoted in Debug80 Book 1 match the extension source. Needs the extension checked out alongside this repo; skipped otherwise.             |
-| `npm run verify:nucleus-book` | Compiles and executes the complete Nucleus book examples through the locally linked authoritative compiler and runtime packages.                                                        |
+| `npm run verify:basie-book` | Compiles every Programming Basie example with the Basie reference compiler in `../basie` and runs it under a CP/M harness, checking assertions and console output. Needs Deno. |
 | `npm run verify:atom-book` | Assembles the checked Atom examples through published `atom-z80`, executes the Book 2 programs and enforces uppercase assembly source. |
 | `npm run sidebar`             | Regenerates the sidebars from front matter. Run after adding or renaming a page.                                                                                                        |
 | `npm run llms`                | Confirms that the public citation guide contains the current books and URLs.                                                                                                            |
@@ -117,7 +104,7 @@ azm-book/         AZM Books 1-3, plus appendices shared between them
 atom/             Atom landing page
 atom-book/        Node and CP/M guides, language reference and Z80 programming
 glimmer-book/     Glimmer Books 1-2, plus their shared reference
-nucleus/          Programming Nucleus and two generated reading editions
+basie/            Programming Basie and its checked example sources
 skate/            Programming Skate and companion source examples
 triptych/         Triptych overview and shared CP/M introduction
 archive/          Retired research material; excluded from the public build

@@ -37,11 +37,11 @@ nav_order: 1
     <span class="volume__desc">A reactive game language that compiles to readable Z80 — first the language and its model, then complete games on two displays.</span>
     <span class="volume__enter">react →</span>
   </a>
-  <a class="volume volume--nucleus" href="/nucleus/">
-    <span class="volume__tag">Vol $04 · 2 specifications</span>
-    <span class="volume__head"><Mark book="nucleus" size="26" /><span class="volume__title">Nucleus</span></span>
-    <span class="volume__desc">A compact typed language, handwritten compiler, and direct runtime contract for the Z80.</span>
-    <span class="volume__enter">inspect →</span>
+  <a class="volume volume--basie" href="/basie/book1/">
+    <span class="volume__tag">Vol $04 · language · 1 book</span>
+    <span class="volume__head"><Mark book="basie" size="26" /><span class="volume__title">Basie</span></span>
+    <span class="volume__desc">A memory-safe systems language for Z80 machines, compiled to native code by a compiler that runs under CP/M.</span>
+    <span class="volume__enter">count →</span>
   </a>
 </nav>
 
@@ -150,35 +150,31 @@ Glimmer programs build with `@jhlagado/glimmer` and run under Debug80's TEC-1G e
 
 ---
 
-## Nucleus
+## Basie
 
-### [Nucleus 0.1 Language Specification](nucleus/language/)
+### [Programming Basie](basie/book1/)
 
-The complete source-language contract, presented as 21 linked chapters while
-preserving the single repository source as the authority. It defines syntax,
-types, storage, control flow, routines, failure, grammar, semantics, and
-conformance.
+A tutorial on writing memory-safe Z80 programs for CP/M, one complete program
+per chapter. It starts with three numbers and a total and works up through
+records, ownership of pool records and changing collections to a small
+command-processing utility. Every example checks its own results as it runs.
 
-For compiler implementers and programmers who need the exact Nucleus rules.
-
-### [Nucleus Z80 Runtime and Backend Contract 0.1](nucleus/runtime/)
-
-The direct execution contract, presented as 10 linked chapters. It defines
-packed representation, storage, checked access, calls, activation state,
-failure, traps, services, generated-code integrity, and conformance evidence.
-
-For compiler, runtime, and target-adapter implementers.
+For programmers who know variables, conditions and loops and want to write
+safe programs for a small machine.
 
 ---
 
-## About Nucleus
+## About Basie
 
-Nucleus is a small, safe, statically typed language compiled directly to Z80
-machine code. Its first compiler is a handwritten Z80 program whose executable
-core and required immutable data must fit in one 16 KiB bank.
-The design uses fixed layouts, bounded resources, streaming compilation,
-predictive parsing, and explicit failure so that implementation cost remains
-visible and measurable.
+Basie is BASIC with the C dropped, and a nod to Count Basie, who played few
+notes and made every one of them count. It is a statically typed language for
+Z80 machines, compiled in one pass to native code by a compiler that itself
+runs under CP/M. Indexes, conversions and lifetimes are all checked, without a
+garbage collector: records passed to routines can't escape the call, pool
+records have exactly one owner and are released automatically, and a stale
+reference traps instead of reading the wrong record.
+
+Source: [Basie on GitHub](https://github.com/jhlagado/basie)
 
 ---
 

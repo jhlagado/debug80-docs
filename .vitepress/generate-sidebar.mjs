@@ -15,7 +15,6 @@ const BOOK_DIRS = [
   "azm-book",
   "atom-book",
   "glimmer-book",
-  "nucleus",
   "basie",
   "skate",
   "triptych",
@@ -122,8 +121,8 @@ function sectionFor(dir) {
 
 /**
  * Each numbered `book*` directory is a standalone book. A named directory can
- * opt into the same treatment with `standalone: true` on its index page (the
- * Nucleus specifications do this so each one has an isolated reading sidebar).
+ * opt into the same treatment with `standalone: true` on its index page, so a
+ * specification can have an isolated reading sidebar.
  * Other subdirectories are shared reference and ride along with every book in
  * the series. `isolated: true` keeps an independently named work's reading
  * sidebar to that work alone while leaving it discoverable from the series.

@@ -1,6 +1,6 @@
 import { defineConfig } from "vitepress";
 import { sidebars } from "./sidebar.generated.js";
-import nucleusGrammar from "./nucleus.tmLanguage.json" with { type: "json" };
+import basieGrammar from "./basie.tmLanguage.json" with { type: "json" };
 
 export default defineConfig({
   title: "Debug80 Docs",
@@ -35,12 +35,9 @@ export default defineConfig({
     // The books fence Z80 listings as ```z80; Shiki has no Z80 grammar, so
     // reuse the generic assembler grammar rather than falling back to txt.
     languageAlias: { z80: "asm" },
-    // Nucleus has no published Shiki grammar. A local TextMate grammar keeps
+    // Basie has no published Shiki grammar. A local TextMate grammar keeps
     // source examples distinct from plain text.
-    languages: [
-      nucleusGrammar as never,
-      { ...nucleusGrammar, name: "basie", scopeName: "source.basie" } as never,
-    ],
+    languages: [basieGrammar as never],
     // Warm-toned dark syntax theme to match the Nocturne palette.
     theme: "github-light",
   },
@@ -72,23 +69,7 @@ export default defineConfig({
       { text: "Skate", link: "/skate/" },
       { text: "Triptych", link: "/triptych/" },
       { text: "Glimmer Books", link: "/glimmer-book/book1/00-introduction" },
-      {
-        text: "Nucleus",
-        items: [
-          {
-            text: "Nucleus overview",
-            link: "/nucleus/",
-          },
-          {
-            text: "Nucleus 0.1 Language Specification",
-            link: "/nucleus/language/",
-          },
-          {
-            text: "Nucleus Z80 Runtime Contract",
-            link: "/nucleus/runtime/",
-          },
-        ],
-      },
+      { text: "Basie", link: "/basie/book1/" },
     ],
     sidebar: sidebars,
     search: { provider: "local" },
