@@ -1,0 +1,47 @@
+forward pool nodes
+
+record Node
+    value as u16
+    next as nodes?
+end
+
+pool nodes as Node[3]
+
+sub push(var list as nodes?, value as u16) as boolean
+    var candidate = new? nodes(value, move list)
+    select move candidate
+    case some(node)
+        list = move node
+        return true
+    case none
+        return false
+    end
+end
+
+sub pop(var list as nodes?) as u16
+    select move list
+    case some(top)
+        list = move top.next
+        return top.value
+    case none
+        return 0
+    end
+end
+
+sub main()
+    var stack as nodes?
+    assert push(stack, 7)
+    assert push(stack, 9)
+    assert push(stack, 11)
+    assert not push(stack, 13)
+    assert pop(stack) = 11
+    assert push(stack, 13)
+    stack = none
+    assert push(stack, 1)
+    assert push(stack, 2)
+    assert push(stack, 3)
+    assert pop(stack) = 3
+    assert pop(stack) = 2
+    assert pop(stack) = 1
+    assert pop(stack) = 0
+end

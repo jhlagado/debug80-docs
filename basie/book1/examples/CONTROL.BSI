@@ -1,0 +1,27 @@
+record Job
+    number as u16
+end
+pool jobs as Job[1]
+var observed as u16
+sub main()
+    if true
+        var first = new jobs(7)
+        var unavailable = new? jobs(9)
+        select move unavailable
+        case some(unexpected)
+            observed = unexpected.number
+        case none
+            observed = 1
+        end
+        assert first.number = 7
+    end
+    assert observed = 1
+    var available = new? jobs(9)
+    select move available
+    case some(accepted)
+        observed = accepted.number
+    case none
+        observed = 0
+    end
+    assert observed = 9
+end
