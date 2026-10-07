@@ -19,7 +19,7 @@ You'll start with three numbers and a total and finish with a small utility that
 - [1. The Life of a Value](01-the-life-of-a-value.md)
 - [2. Within Bounds](02-within-bounds.md)
 - [3. Coming and Going](03-coming-and-going.md)
-- [4. Two Names, One Object](04-two-names-one-object.md)
+- [4. The Original and the Copy](04-the-original-and-the-copy.md)
 - [5. In Good Hands](05-in-good-hands.md)
 - [6. On Loan](06-on-loan.md)
 - [7. A Change of Plan](07-a-change-of-plan.md)

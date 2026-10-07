@@ -97,7 +97,7 @@ Use the title to suggest the chapter's central experience, with the opening expl
 | 1 | The Life of a Value | `01-the-life-of-a-value.md` | Follow a value from its initial storage through copying and change. |
 | 2 | Within Bounds | `02-within-bounds.md` | Connect representable values with the bounds of an object. |
 | 3 | Coming and Going | `03-coming-and-going.md` | Follow calls and the local storage that begins and ends with them. |
-| 4 | Two Names, One Object | `04-two-names-one-object.md` | Make the difference between two copies and two access paths visible. |
+| 4 | The Original and the Copy | `04-the-original-and-the-copy.md` | Make the difference between two copies and two access paths visible. |
 | 5 | In Good Hands | `05-in-good-hands.md` | Introduce the one responsible owner and transfer between bindings. |
 | 6 | On Loan | `06-on-loan.md` | Use a record temporarily without taking responsibility for release. |
 | 7 | A Change of Plan | `07-a-change-of-plan.md` | Respond to changing conditions, repetition and expected failure. |
@@ -154,7 +154,7 @@ Introduce a routine, scalar parameters, results and local variables. Contrast pr
 
 **Illustration:** Caller/callee panels with persistent global storage and temporary locals.
 
-### 4. Two Names, One Object
+### 4. The Original and the Copy
 
 **Umbrella question:** How can a routine use an existing object without owning it?
 
@@ -374,7 +374,7 @@ Validate minimal early examples against the specification and execution evidence
 
 ## Console I/O in the opening progression
 
-Chapter 1 prints the calculated scalar through a bounded local report string. Explain include, failable calls and the storage needed for decimal digits in place. Chapter 2 reads and writes one scalar byte, distinguishing the echo policy from explicit output. Chapter 3 reads an edited line into caller-provided local storage and writes that string while it remains live. Chapter 4 then names the read-only and writable alias permissions already encountered.
+Chapter 1 prints the calculated scalar through a bounded local report string. Explain include, failable calls and the storage needed for decimal digits in place. Chapter 2 reads and writes one scalar byte, distinguishing the echo policy from explicit output. Chapter 4 names the read-only and writable alias permissions already encountered. Chapter 8 reads an edited line into a local string within its capacity, after strings are taught (moved from Chapter 3 on 2026-10-07).
 
 The authoritative source boundary is spec/16-system-boundary.md and docs/services.md, with source-library helpers in lib/TEXTIO.BSI and lib/FORMAT.BSI. Basic I/O is already defined. Most text behaviour remains userland. Console transport implements the shared byteGateway/0 roles, while line editing is a Basie/CP/M policy above that gateway. Rich command framing and external events are separate provider capabilities and are not implied by ordinary console output. No compiler changes are required to teach the existing console interface.
 

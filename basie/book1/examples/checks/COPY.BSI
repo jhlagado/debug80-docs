@@ -1,7 +1,9 @@
 record Job
     number as u16
 end
+
 pool jobs as Job[2]
+
 sub main()
     var first = new jobs(7)
     var second = first
