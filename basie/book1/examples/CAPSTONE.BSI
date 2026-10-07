@@ -1,30 +1,39 @@
 include "PARSE.BSI"
 include "TEXTIO.BSI"
 include "FORMAT.BSI"
+
 const unknownCommand = 48
 const missingArgument = 49
 const queueFull = 50
+
 record Job
     number as u16
 end
+
 pool jobs as Job[2]
+
 sub execute(text as string[]) as u16 fails
     var command as string[8]
     var argument as string[16]
+
     var found = word(text, 0, command) else fail
     if not found or not equal(command, "double")
         fail unknownCommand
     end
+
     found = word(text, 1, argument) else fail
     if not found
         fail missingArgument
     end
+
     var value = parseU16(argument) else fail
     if value > 32767
         fail badNumber
     end
+
     return value * 2
 end
+
 sub createJob(text as string[]) as jobs fails
     var number = execute(text) else fail
     var candidate = new? jobs(number)
@@ -35,6 +44,7 @@ sub createJob(text as string[]) as jobs fails
         fail queueFull
     end
 end
+
 sub reportJob(item as Job) fails
     var report as string[32]
     append(report, "Result: ") else fail
@@ -42,21 +52,25 @@ sub reportJob(item as Job) fails
     append(report, "\r\n") else fail
     writeText(console, report) else fail
 end
+
 sub main() fails
     var first = createJob("double 123") else fail
     assert first.number = 246
     reportJob(first) else fail
+
     var code as u8
     first = createJob("double nope") handle code
         assert code = badNumber
         assert first.number = 246
         writeText(console, "Invalid number\r\n") else fail
     end
+
     var second = createJob("double 3") else fail
     second = createJob("double 7") handle code
         assert code = queueFull
         assert second.number = 6
         writeText(console, "Queue full\r\n") else fail
     end
+
     assert code = queueFull
 end

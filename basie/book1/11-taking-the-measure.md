@@ -64,7 +64,7 @@ The inner loop's condition does two jobs:
 while at > 0 and values[at - 1].value > saved.value
 ```
 
-When `at` reaches zero there's nothing left to compare, and `values[at - 1]` would be `values[-1]`. It's never evaluated. For Boolean operands `and` stops as soon as its left side is false, so when `at > 0` fails the indexing on the right never happens. This is the ordinary way to protect an index in a condition, and Basie guarantees the left-to-right order it depends on. Every access that does happen is still bounds-checked.
+When `at` reaches zero there's nothing left to compare. `at` is a `u16`, so `at - 1` would wrap to 65,535 and the index would trap, but the right side is never evaluated. For Boolean operands `and` stops as soon as its left side is false, so when `at > 0` fails the indexing on the right never happens. This is the ordinary way to protect an index in a condition, and Basie guarantees the left-to-right order it depends on. Every access that does happen is still bounds-checked.
 
 ## A fractional result
 

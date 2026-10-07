@@ -8,18 +8,22 @@ const missingArgument = 49
 sub execute(text as string[]) as u16 fails
     var command as string[8]
     var argument as string[16]
+
     var found = word(text, 0, command) else fail
     if not found or not equal(command, "double")
         fail unknownCommand
     end
+
     found = word(text, 1, argument) else fail
     if not found
         fail missingArgument
     end
+
     var value = parseU16(argument) else fail
     if value > 32767
         fail badNumber
     end
+
     return value * 2
 end
 

@@ -56,7 +56,7 @@ This program uses three library parts to interpret a short command:
 
 `badNumber` isn't declared in this file at all. It's a constant from `PARSE.BSI`, the code that `parseU16` fails with when the text isn't a number, and `execute` uses it for a number too large to double.
 
-The declarations show how the data moves through the calls. The command text reaches `execute` as a ticket, an alias the routine can't change. `word` gets the text as a ticket too, and gets `command` or `argument` as a writable string to fill in. `parseU16` reads `argument` through a ticket and returns a copied `u16`. When `execute` returns, its two local strings end, and only the copied number reaches `main`.
+The declarations show how the data moves through the calls. The command text reaches `execute` as a read-only alias. `word` gets the text as a read-only alias too, and gets `command` or `argument` as a writable string to fill in. `parseU16` reads `argument` through a read-only alias and returns a copied `u16`. When `execute` returns, its two local strings end, and only the copied number reaches `main`.
 
 `main` runs two commands. The first succeeds and prints `Result: 246`. The second, `double nope`, fails inside `parseU16`, and the handler in `main` checks the code and prints `Invalid number`. Because the call failed, the assignment to `result` never happened, and `result` still holds 246.
 

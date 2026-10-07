@@ -1,15 +1,18 @@
 var subtotal as u16 = 120
 var postage as u16 = 15
 var total as u16
+
 sub amountDue(amount as u16, shipping as u16) as u16
     var due as u16 = amount + shipping
     amount = 0
     return due
 end
+
 sub main()
     total = amountDue(subtotal, postage)
     assert total = 135
     assert subtotal = 120
+
     total = amountDue(200, postage)
     assert total = 215
 end
