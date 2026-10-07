@@ -9,7 +9,7 @@ has_children: true
 
 *Few notes. Make them count.*
 
-Basie is a compiled language for Z80 machines in which every index, every conversion and every record's lifetime is checked, with no garbage collector and no wasted bytes. You learn it here the practical way, with a complete CP/M program at the heart of each chapter. Every program checks its own results as it runs, so when it finishes you know it did what the chapter said it would.
+Basie is a compiled language for Z80 machines in which every index, every conversion and every record's lifetime is checked, with no garbage collector and no wasted bytes. Each chapter is built around a complete CP/M program. Every program checks its own results as it runs, so a program that finishes has done what the chapter said it would.
 
 You'll start with three numbers and a total and finish with a small utility that parses commands, allocates records from a fixed pool and reports what it did. Along the way you'll learn to ask four questions of any piece of data: what is stored, where it lives, who may change it and when access ends.
 

@@ -1,0 +1,92 @@
+[
+  {
+    "number": 1,
+    "title": "The Life of a Value",
+    "filename": "01-the-life-of-a-value.md",
+    "theme": "Values in a running program"
+  },
+  {
+    "number": 2,
+    "title": "Within Bounds",
+    "filename": "02-within-bounds.md",
+    "theme": "Valid values and valid access"
+  },
+  {
+    "number": 3,
+    "title": "Coming and Going",
+    "filename": "03-coming-and-going.md",
+    "theme": "Calls, scope and lifetime"
+  },
+  {
+    "number": 4,
+    "title": "Two Names, One Object",
+    "filename": "04-two-names-one-object.md",
+    "theme": "Access without copying"
+  },
+  {
+    "number": 5,
+    "title": "In Good Hands",
+    "filename": "05-in-good-hands.md",
+    "theme": "One object, one responsibility"
+  },
+  {
+    "number": 6,
+    "title": "On Loan",
+    "filename": "06-on-loan.md",
+    "theme": "Temporary access to a live object"
+  },
+  {
+    "number": 7,
+    "title": "A Change of Plan",
+    "filename": "07-a-change-of-plan.md",
+    "theme": "Decisions, repetition and recoverable failure"
+  },
+  {
+    "number": 8,
+    "title": "Room to Work",
+    "filename": "08-room-to-work.md",
+    "theme": "Bounded collections and text"
+  },
+  {
+    "number": 9,
+    "title": "A Wider View",
+    "filename": "09-a-wider-view.md",
+    "theme": "Reusable routines over existing storage"
+  },
+  {
+    "number": 10,
+    "title": "Jobs Come and Go",
+    "filename": "10-jobs-come-and-go.md",
+    "theme": "A changing collection"
+  },
+  {
+    "number": 11,
+    "title": "Taking the Measure",
+    "filename": "11-taking-the-measure.md",
+    "theme": "Calculations over structured data"
+  },
+  {
+    "number": 12,
+    "title": "A Place for Everything",
+    "filename": "12-a-place-for-everything.md",
+    "theme": "Organising a complete program"
+  },
+  {
+    "number": 13,
+    "title": "One Call Too Many",
+    "filename": "13-one-call-too-many.md",
+    "theme": "Calls within a finite memory budget"
+  },
+  {
+    "number": 14,
+    "title": "Putting It to Work",
+    "filename": "14-putting-it-to-work.md",
+    "theme": "A complete CP/M utility"
+  },
+  {
+    "number": 15,
+    "title": "Following the Clues",
+    "filename": "15-following-the-clues.md",
+    "theme": "Building and investigating programs"
+  }
+]

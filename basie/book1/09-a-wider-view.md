@@ -10,7 +10,7 @@ search_exclude: true
 
 A routine that adds up an array of bytes ought to work for an array of two bytes and for an array of forty. With what we've seen so far, it can't. A parameter of type `u8[4]` accepts exactly a `u8[4]`, so summing arrays of three different lengths would mean three routines with identical bodies.
 
-C solves this by passing a pointer to the first element and leaving the length to a separate argument, or to luck. The routine then has no way to check its indexes, and a wrong length reads straight past the end of the array. Basie's answer keeps the length with the array.
+C passes a pointer to the first element and leaves the length to a separate argument. The routine then has no way to check its indexes, and a wrong length reads straight past the end of the array. Basie passes the length with the array.
 
 ## Open arrays
 
@@ -20,7 +20,7 @@ An **open array** parameter leaves the length out of the type:
 sub sum(values as u8[]) as u16
 ```
 
-`u8[]` accepts any complete array of `u8`, whatever its length. The element type is still fixed. Only the length is open. Each call passes the array together with its real length, and inside the routine `values.length` gives that length.
+`u8[]` accepts any complete array of `u8`, whatever its length. The element type is still fixed and only the length is open. Each call passes the array together with its real length, and inside the routine `values.length` gives that length.
 
 Like every record or array parameter, `values` is an alias for the caller's array, not a copy. It's read-only here because there's no `var`, and it lasts for the call.
 
@@ -34,7 +34,7 @@ for index = 0 until values.length
 end
 ```
 
-This loop is right for every array the routine is given. There's no constant to keep in step with a declaration somewhere else, which is the drift that the last exercise in Chapter 8 produced. Every index is still checked, against the length that came in with this particular call, so the routine can't read past the end of a short array even if its loop were wrong.
+This loop is right for every array the routine is given. There's no constant to keep in step with a declaration somewhere else, which is the drift that the last exercise in Chapter 8 produced. Every index is still checked against the length passed with this particular call, so the routine can't read past the end of a short array even if its loop were wrong.
 
 An open array is a view of a whole array. It isn't a slice, so you can't use it to pass part of an array, such as elements 2 through 5. It also can't be stored in a variable or a field. It's a parameter type and nothing else, which is part of what lets Basie guarantee it never outlives its array.
 
@@ -42,7 +42,7 @@ An open array is a view of a whole array. It isn't a slice, so you can't use it 
 
 An open string parameter, `string[]`, works the same way. It accepts a string of any capacity and passes both the current length and the capacity into the call. Inside the routine, `.length` gives the length and `.capacity` gives the capacity.
 
-A `var string[]` parameter is special in one respect: it's the one place where a string's length can be assigned directly. That's how routines build text in a string the caller supplies:
+A `var string[]` parameter is the one place where a string's length can be assigned directly. That's how routines build text in a string the caller supplies:
 
 ```basie
 sub writeOK(var text as string[])
@@ -54,19 +54,19 @@ end
 
 Setting the length to 2 first makes room for two bytes, which the next two lines fill. Any bytes the new length exposes start at zero, so a string never shows stale contents from some earlier use. If the caller's string had a capacity below 2, the length assignment would trap with `bounds` before anything was written.
 
-A careful library routine checks `.capacity` before it changes the length, and reports a failure instead of trapping. `append` and `appendU16` do exactly that, which is why they can fail with `lineTooLong` rather than stopping the program.
+A library routine can check `.capacity` before it changes the length and report a failure instead of trapping. `append` and `appendU16` do exactly that, which is why they can fail with `lineTooLong` rather than stopping the program.
 
-This arrangement divides the work cleanly. The caller owns the string and decides how big it is. The routine fills it in. The finished text is in the caller's storage, so it's still there after the routine returns, and no new storage was needed to get it out. A program that formats many reports can reuse one buffer for all of them.
+The caller supplies the string and decides how big it is, and the routine fills it in. The finished text is in the caller's storage, so it's still there after the routine returns, and no new storage was needed to get it out. A program that formats many reports can reuse one buffer for all of them.
 
 ## Both together
 
 <<< @/basie/book1/examples/09-open-views.BSI{basie}
 
-`sum` adds 2, 4, 6 and 8 to get 20. `writeOK` makes `message` two bytes long, so its length is 2. The final value is 22. The four-element array and the twelve-byte string each keep their real bounds through the calls, and either routine would work just as well with an array or string of a different size.
+`sum` adds 2, 4, 6 and 8 to get 20. `writeOK` makes `message` two bytes long, so its length is 2. The final value is 22.
 
 ## Returning access to existing data
 
-Chapter 3 showed that a routine can't return access to its own local storage, because that storage ends when the routine returns. But returning access to storage that *outlives* the routine is perfectly safe, and often useful. A routine that picks one record out of an array, for example, can return the record itself instead of a copy:
+Chapter 3 showed that a routine can't return access to its own local storage, because that storage ends when the routine returns. Returning access to storage that *outlives* the routine is safe and often useful. A routine that picks one record out of an array, for example, can return the record itself instead of a copy:
 
 ```basie
 sub pick(items as Pair[2], index as u8) as Pair from items
@@ -74,7 +74,7 @@ sub pick(items as Pair[2], index as u8) as Pair from items
 end
 ```
 
-The result clause, `as Pair from items`, says two things. The routine returns a `Pair`, and that `Pair` lives inside whatever the caller passed as `items`. The `from items` is what makes this safe. It tells the compiler, and anyone reading the declaration, that the result lives exactly as long as the argument does. The caller passed `items`, so the caller's storage outlasts the call, and so does the result.
+The result clause `as Pair from items` says that the routine returns a `Pair` and that the `Pair` lives inside whatever the caller passed as `items`. The `from items` makes this safe. It tells the compiler and anyone reading the declaration that the result lives exactly as long as that argument. The argument is the caller's storage, which outlasts the call, so the result does too.
 
 The result is an alias, like a parameter, and it's equally short-lived. The caller has to use it within the same statement: read a field from it, pass it to another routine, or copy it into storage of its own. It can't be kept in a variable as an alias for later.
 
@@ -84,7 +84,7 @@ This example shows the difference between copying a returned record and reading 
 
 <<< @/basie/book1/examples/PICK.BSI{basie}
 
-`var saved = pick(pairs, 0)` declares a new local and copies the selected record into it. `saved` is a separate `Pair` with its own storage, holding 3 and 4. The program then changes the original to 7. `saved` still holds 3, because it's a copy. A fresh `pick(pairs, 0).left` reads through the alias into the array and finds 7.
+`var saved = pick(pairs, 0)` declares a new local and copies the selected record into it. `saved` is a separate `Pair` with its own storage holding 3 and 4. The program then changes the original's `left` to 7. `saved` still holds 3, because it's a copy. A fresh `pick(pairs, 0).left` reads through the alias into the array and finds 7.
 
 If you passed `pick(pairs, 0)` straight to a routine with a `var Pair` parameter, the routine would be working on the record inside `pairs`, not a copy. That's only allowed when the result is writable, which the next section covers.
 
