@@ -1,9 +1,11 @@
 record Pair
     left as u8
 end
+
 sub bad() as Pair
     var localPair as Pair
     return localPair
 end
+
 sub main()
 end

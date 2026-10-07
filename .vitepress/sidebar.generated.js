@@ -2244,8 +2244,8 @@ export const sidebars = {
           "link": "/basie/book1/03-coming-and-going.html"
         },
         {
-          "text": "Two Names, One Object",
-          "link": "/basie/book1/04-two-names-one-object.html"
+          "text": "The Original and the Copy",
+          "link": "/basie/book1/04-the-original-and-the-copy.html"
         },
         {
           "text": "In Good Hands",
@@ -2316,8 +2316,8 @@ export const sidebars = {
           "link": "/basie/book1/03-coming-and-going.html"
         },
         {
-          "text": "Two Names, One Object",
-          "link": "/basie/book1/04-two-names-one-object.html"
+          "text": "The Original and the Copy",
+          "link": "/basie/book1/04-the-original-and-the-copy.html"
         },
         {
           "text": "In Good Hands",

@@ -95,6 +95,7 @@ This program converts 300 to a `u8`:
 
 ```basie
 var wide as u16 = 300
+
 sub main()
     var small = u8(wide)
 end

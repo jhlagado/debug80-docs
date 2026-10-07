@@ -40,7 +40,7 @@ sub createJob(text as string[]) as jobs fails
 sub reportJob(item as Job) fails
 ```
 
-`execute` reads a command through a ticket and returns a copied number. `createJob` reads a command and returns an owner, a new job for the caller to be responsible for. `reportJob` reads a `Job` record, which callers supply by leasing it from their owner. All three can fail, and each declaration says so with `fails`.
+`execute` reads a command through a read-only alias and returns a copied number. `createJob` reads a command and returns an owner, a new job for the caller to be responsible for. `reportJob` reads a `Job` record, which callers supply by leasing it from their owner. All three can fail, and each declaration says so with `fails`.
 
 ## Parsing the command
 
@@ -58,6 +58,7 @@ The program accepts the first two words and ignores anything after them. Rejecti
 if value > 32767
     fail badNumber
 end
+
 return value * 2
 ```
 

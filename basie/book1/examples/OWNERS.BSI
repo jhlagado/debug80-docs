@@ -11,8 +11,10 @@ end
 sub main()
     var first = new jobs(7)
     var second = new jobs(9)
+
     var answer = consume(move first)
     assert answer = 7
+
     var replacement = new jobs(11)
     assert replacement.number = 11
     assert second.number = 9

@@ -11,6 +11,7 @@ var samples as Reading[sampleCount] = [(12, true), (18, true), (16, true), (14, 
 sub total(values as Reading[]) as u32
     var sum as u32 = 0
     var index as u16
+
     for index = 0 until values.length
         if values[index].usable
             sum = sum + u32(values[index].value)
@@ -35,8 +36,10 @@ end
 sub main() fails
     var sum = total(samples)
     assert sum = 60
+
     sort(samples)
     assert samples[0].value = 12 and samples[3].value = 18
+
     var mean as f32 = f32(sum) / f32(sampleCount)
     var report as string[32]
     append(report, "Mean: ") else fail

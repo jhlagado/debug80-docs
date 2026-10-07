@@ -22,9 +22,7 @@ sub inspectJob(item as Job) as u16
 end
 ```
 
-`item` is a ticket for a `Job` record. It doesn't mention the pool at all. When the caller passes an owning handle, as in `inspectJob(first)`, Basie lends the record in that handle's slot to the routine for the call. This is a **lease**. The caller keeps ownership throughout. The routine receives a `Job` record, reads it and returns, and the job carries on.
-
-The routine receives no handle, so it has nothing it could move, overwrite or release.
+`item` is a read-only alias for a `Job` record. It doesn't mention the pool at all. When the caller passes an owning handle, as in `inspectJob(first)`, Basie lends the record in that handle's slot to the routine for the call. This is a **lease**. The caller keeps ownership throughout. The routine receives a `Job` record rather than a handle, reads it and returns, and the job carries on.
 
 ## Lending writable access
 
@@ -46,7 +44,7 @@ A lease is safe because the record can't be released while the routine is using 
 
 While a statement leases a record from an owner, that owner can't appear anywhere else in the same statement, apart from reading one of its scalar fields or taking `id(...)` of it. So a statement can't lend `first` to one argument while moving `first` into another, or assign a new handle to `first` while a call is using its record. The routine itself never receives the owner, so it can't release the record either. Between them those two facts cover every way the record could end during the call, and none of this needs a check at run time.
 
-A lease protects the record's *lifetime*, which is what keeps memory safe. It doesn't stop the routine or other code from changing the record's fields. Whether the routine may change them is what `var` says.
+A lease protects the record's *lifetime*, which is what keeps memory safe. It doesn't stop the routine or other code from changing the record's fields. `var` controls whether the routine may change them.
 
 ## Keeping an identity
 
@@ -62,7 +60,7 @@ An identifier is an ordinary value. It can be copied, stored in a variable or a 
 
 The record might be released while an identifier for it still exists. To detect this, every identifier carries two things: the slot and that slot's **generation**. Each slot has a generation number that changes every time a record in it is released. An identifier made for job 7 records the slot and the generation job 7 had. If job 7 is released and job 11 later takes the same slot, the slot's generation has moved on, and the identifier no longer matches.
 
-Every access through an identifier compares the two. If they match, the access goes ahead. If they don't, the program stops with a `stale-handle` trap rather than quietly reading job 11 as if it were job 7. In a language with ordinary pointers, that quiet wrong read is exactly what would happen, and a program could run for a long time on the wrong record before anything looked amiss.
+Every access through an identifier compares its generation with the slot's. If they match, the access goes ahead. If they don't, the program stops with a `stale-handle` trap rather than quietly reading job 11 as if it were job 7. In a language with ordinary pointers, that quiet wrong read is exactly what would happen, and a program could run for a long time on the wrong record before anything looked amiss.
 
 ## Testing an identifier first
 
@@ -107,7 +105,7 @@ Every routine that works with a job can now take exactly what it needs:
 | The routine needs to | Give it |
 | --- | --- |
 | use the job's number in a calculation | a `u16`, copied |
-| read the job | a `Job` ticket, leased |
+| read the job | a read-only `Job` parameter, leased |
 | change the job | a `var Job` parameter, leased |
 | finish with the job and release it | a `jobs` owner, moved |
 | find the job again later | an `id jobs` identifier, copied |
