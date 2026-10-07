@@ -1,0 +1,29 @@
+{
+  "method": "Reference compiler, ATOM-built runtime, generated Z80 in CP/M harness. Native toolchain and hardware execution not checked in this pass.",
+  "results": [
+    {
+      "name": "copy remains independent",
+      "imageBytes": 487,
+      "output": "",
+      "returnCode": 0
+    },
+    {
+      "name": "changed postage",
+      "imageBytes": 487,
+      "output": "",
+      "returnCode": 0
+    },
+    {
+      "name": "intentional false assertion",
+      "imageBytes": 487,
+      "output": "TRAP assertion at 02D8\r\n",
+      "returnCode": 65282
+    },
+    {
+      "name": "recalculate after change",
+      "imageBytes": 500,
+      "output": "",
+      "returnCode": 0
+    }
+  ]
+}
