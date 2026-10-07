@@ -70,7 +70,7 @@ Here's the trace one statement at a time:
 
 A single number such as 135 is a **scalar value**. Basie's scalars are the integers, the floating-point numbers and the Booleans `true` and `false`. A scalar is always copied when it moves. Assignment copies it into the destination, and passing it to a routine copies it into the routine's parameter. A routine that returns a scalar copies it back to the caller.
 
-So two variables that hold the same number are still two separate objects. If `total` and some other variable both held 135, a new value in one would leave the other alone.
+So two variables that hold the same number are still two separate objects. If `total` and some other variable both held 135, updating one would leave the other alone.
 
 For single numbers this is obvious. Records and arrays are less clear, because a routine can receive access to the original object instead of a copy. Chapter 4 draws that distinction, and every later chapter depends on keeping the two cases apart.
 
