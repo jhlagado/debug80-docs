@@ -22,7 +22,7 @@ The name is BASIC with the C dropped, and a nod to Count Basie, the bandleader f
 
 ## Four questions
 
-This book teaches you to write Basie programs and the way of thinking about storage that makes them safe. Every chapter returns to the same four questions about a piece of data:
+In this book you learn to write Basie programs and the way of thinking about storage that makes them safe. Every chapter returns to the same four questions about a piece of data:
 
 - **What is stored?** A number, a record, an array, a string or a handle to a record in a pool.
 - **Where does it live?** In program storage for the whole run, in a routine's working storage for the length of a call or in a pool slot for as long as its owner keeps it.
@@ -64,7 +64,7 @@ Basie uses a few words in specific ways. Each is defined where it's first needed
 
 | Term | Meaning |
 | --- | --- |
-| **alias** | A routine's access to a record, array or string that belongs to someone else. It lasts for the call. |
+| **alias** | A routine's access to a record, array or string that belongs to someone else. It lasts for the call and is read-only unless the parameter is marked `var`, which makes it a **mutable alias**. |
 | **pool** | A fixed number of slots for records of one type, used for data that comes and goes. |
 | **handle** | A value that refers to a pool slot. |
 | **owner** | The one handle responsible for a pool record. When the owner goes away, the record is released. |

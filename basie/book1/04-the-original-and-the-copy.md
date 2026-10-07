@@ -44,33 +44,17 @@ saved = current
 
 Both sides of a record assignment must have the same declared type. If you declared a second record type, say `Sample` with a `u16` and a `boolean`, you still couldn't assign a `Sample` to a `Reading`. Two types with the same layout might mean quite different things, so Basie matches record types by name and not by layout.
 
+## Constant records and arrays
+
+Records and arrays can be constants too:
+
+<<< @/basie/book1/examples/08-records.BSI{basie}
+
+`defaultCell` is a constant `Cell` and `masks` is a constant array of four bytes. A constant record or array must name its type, and no statement can change it. It can be read and copied into a variable like any other record or array. Here the program adds `current.value`, `defaultCell.value` and the last mask, 7 plus 7 plus 8, to get 22.
+
 ## Passing a record to a routine
 
-This routine sets a reading's value:
-
-```basie
-sub update(var item as Reading, value as u16)
-    item.value = value
-end
-```
-
-When the program calls `update(current, 20)`, Basie doesn't copy `current` into the routine. `item` becomes a second name for `current` itself, so `item.value = value` changes the caller's record. A second name for existing storage is called an **alias**. The other parameter, `value`, is a scalar and is still a copy, as in Chapter 3.
-
-![An aggregate copy creates independent contents, while a parameter supplies another path to one object.](../../assets/images/basie-book/book1/aggregate-storage-and-access.svg)
-
-The record still belongs to the caller. It is `current`, a program variable that existed before the call and goes on existing after it. The routine has access to it only for the length of the call. An alias can't be stored in a variable, kept in a field or returned, so the routine has no way to keep hold of the record once it returns. Assigning a whole record to `item` copies new contents into `current`. It doesn't make `item` refer to a different record.
-
-An alias is also cheap. Copying a large record or array into every call would cost time and stack space, both scarce on a Z80. An alias costs the same however large the record is.
-
-## The word `var`
-
-The only thing that lets `update` change the caller's record is one short word in its declaration:
-
-```basie
-sub update(var item as Reading, value as u16)
-```
-
-`var` in front of a record parameter means the routine may change the caller's record through it. Without `var` the parameter is a **read-only alias**:
+A routine that takes a record parameter doesn't receive a copy:
 
 ```basie
 sub inspect(item as Reading) as u16
@@ -78,21 +62,37 @@ sub inspect(item as Reading) as u16
 end
 ```
 
-`inspect` can read every field of the caller's record and return copies of them, but it can't change any of them. If you add `item.value = 0` to `inspect`, the compiler rejects the routine and reports that `item` is read-only.
+When the program calls `inspect(current)`, `item` becomes a second name for `current` itself. A second name for existing storage is called an **alias**. Nothing is copied, however large the record is, which saves time and stack space, both scarce on a Z80.
 
-`var` is easy to miss. It's three letters in the middle of a parameter list, and it decides whether a call can change your data. You can find that out from the declaration alone, without reading the routine's body. A record parameter without `var` can't change your record. One with `var` might.
+An alias is read-only. `inspect` can read every field of the caller's record and return copies of them, but it can't change any of them. If you add `item.value = 0` to `inspect`, the compiler rejects the routine and reports that `item` is read-only. Because nothing can be changed through it, an alias also accepts a constant record or a string literal.
 
-A read-only alias also accepts things a `var` parameter can't, such as a record constant or a string literal, because nothing can be changed through it.
+![An aggregate copy creates independent contents, while a parameter supplies another path to one object.](../../assets/images/basie-book/book1/aggregate-storage-and-access.svg)
+
+The record still belongs to the caller. It is `current`, a program variable that existed before the call and goes on existing after it. The routine has access to it only for the length of the call. An alias can't be stored in a variable, kept in a field or returned, so the routine has no way to keep hold of the record once it returns.
+
+## The word `var`
+
+To change the caller's record, a routine marks the parameter with `var`:
+
+```basie
+sub update(var item as Reading, value as u16)
+    item.value = value
+end
+```
+
+`var` makes `item` a **mutable alias**. When the program calls `update(current, 20)`, `item.value = value` changes `current` itself. Assigning a whole record to `item` would copy new contents into `current`. It can't make `item` refer to a different record. The other parameter, `value`, is a scalar and is still a copy, as in Chapter 3.
+
+`var` is easy to miss. It's three letters in the middle of a parameter list, and it decides whether a call can change your data. You can find that out from the declaration alone, without reading the routine's body. A record parameter without `var` can't change your record. One with `var` might. A mutable alias needs a record that can be changed, so it can't be given a constant or a string literal.
 
 ## One record, several names
 
-A read-only alias limits what one routine can do through one name. It doesn't freeze the record. If a routine has read-only access to `current` and also changes the program variable `current` by name, or calls another routine that does, the record changes and the change shows through the read-only alias too. There is only one record behind both names.
+An alias without `var` limits what one routine can do through one name. It doesn't freeze the record. If a routine has read-only access to `current` and also changes the program variable `current` by name, or calls another routine that does, the record changes and the change shows through the alias too. There is only one record behind both names.
 
-Basie doesn't guarantee that a `var` alias is the only name for its record. It does guarantee that no alias outlasts the storage it refers to or reaches outside it, and that is what keeps memory safe. Keeping track of who changes what is still part of designing the program, and the `var` in each declaration shows where changes can happen.
+Basie doesn't guarantee that a mutable alias is the only name for its record. It does guarantee that no alias outlasts the storage it refers to or reaches outside it, and that is what keeps memory safe. Keeping track of who changes what is still part of designing the program, and the `var` in each declaration shows where changes can happen.
 
 ## The complete comparison
 
-This program copies a record, changes the original through a `var` parameter and reads it through a read-only alias:
+This program copies a record, changes the original through a mutable alias and reads it through a read-only one:
 
 <<< @/basie/book1/examples/ACCESS.BSI{basie}
 
@@ -109,14 +109,6 @@ Here's the state at each step:
 ## A field or the whole record
 
 Passing `current.value` to a `u16` parameter copies one number, and the routine can't reach the record it came from. A routine that needs only the value should take a `u16`. It can't change the record by accident and it works with numbers that don't come from a record at all. Use a record parameter when the routine needs several fields together or needs to change the original.
-
-## Constant records and arrays
-
-Records and arrays can be constants too:
-
-<<< @/basie/book1/examples/08-records.BSI{basie}
-
-`defaultCell` is a constant `Cell` and `masks` is a constant array of four bytes. A constant record or array must name its type, and nothing can change it, whether directly or through a `var` parameter. It can be read, copied into a variable or passed to a read-only alias. Here the program adds `current.value`, `defaultCell.value` and the last mask, 7 plus 7 plus 8, to get 22.
 
 ## Responsibility for a record
 
@@ -135,7 +127,8 @@ Remove `var` from `update`'s `item` parameter and leave the assignment in place.
 - A record groups named fields of different types into one piece of storage.
 - Assigning one record to another copies all of its fields. The two records stay separate.
 - Record assignment needs the same declared type on both sides.
+- Records and arrays can be constants. Nothing can change a constant.
 - A record parameter is an alias for the caller's record. Nothing is copied, and the record still belongs to the caller.
-- `var` on a record parameter lets the routine change the caller's record. Without `var` the parameter is a read-only alias.
+- An alias is read-only. `var` on the parameter makes it a mutable alias, through which the routine can change the caller's record.
 - Several names may refer to one record, and a change through one shows through the others.
 - An alias lasts only for the call. It gives access to the record but no responsibility for its lifetime.
