@@ -10,7 +10,7 @@ search_exclude: true
 
 Chapter 1 stored three numbers in `u16` variables and never came close to the edges of that type. Real programs do come close. A byte read from the keyboard has to fit in a byte. A sensor reading may be negative. A buffer has a last element, and an index one past it points at somebody else's storage.
 
-This chapter covers the types Basie uses for single values, the constants that give fixed facts a name, and the two checks that keep values inside their limits. One check makes sure a value fits the type it is being converted to. The other makes sure an index falls inside the object it selects. Between them they close off a large class of bugs that, in C or assembly, corrupt memory quietly and surface much later somewhere else.
+Each of Basie's types for single values has a fixed range, constants give fixed facts a name and two checks keep values inside their limits. One check makes sure a value fits the type it is being converted to. The other makes sure an index falls inside the object it selects. In C or assembly the same mistakes corrupt memory quietly and surface much later somewhere else.
 
 ## Integer and Boolean types
 
@@ -32,7 +32,7 @@ Choose the smallest type that comfortably holds the values you need, but don't s
 
 The floating-point type `f32` holds fractional values. Chapter 11 introduces it at the point where a calculation needs it.
 
-A Boolean is not a number in Basie. Some languages treat zero as false and anything else as true, but in Basie a condition must be a `boolean`, and there's no conversion between Booleans and integers in either direction. That rules out a whole family of mistakes in which a count is tested as if it were a flag.
+A Boolean is not a number in Basie. Some languages treat zero as false and anything else as true, but in Basie a condition must be a `boolean`, and there's no conversion between Booleans and integers in either direction. That rules out testing a count as if it were a flag.
 
 ## Constants for fixed facts
 
@@ -59,7 +59,7 @@ const limit as u32 = 70000
 
 ## Writing numbers
 
-Decimal numbers need no prefix. A `$` introduces a hexadecimal number and a `%` introduces a binary one, so `$08`, `%1000` and `8` are the same value. A character in single quotes, such as `'A'`, is also an integer: the value of that byte, which for `A` is 65. Basie has no separate character type. A character is simply a byte.
+Decimal numbers need no prefix. A `$` introduces a hexadecimal number and a `%` introduces a binary one, so `$08`, `%1000` and `8` are the same value. A character in single quotes, such as `'A'`, is also an integer: the value of that byte, which for `A` is 65. Basie has no separate character type. A character is a byte.
 
 All of these forms are exact integers, so the place where they are used determines their type, just as it does for an untyped constant.
 
@@ -75,13 +75,13 @@ The program first writes a `?` as a prompt. `readInputByte` then waits for a key
 
 If you press Control-Z instead of a character, CP/M treats it as the end of input. `readInputByte` reports that as a failure rather than returning a byte, and `else fail` passes the failure out of `main`.
 
-Passing `character` to `writeOutputByte` copies the byte, just as Chapter 1's assignments copied numbers. The service gets the value and nothing else. It has no access to the variable `character` itself.
+Passing `character` to `writeOutputByte` copies the byte, just as Chapter 1's assignments copied numbers. The service has no access to the variable `character` itself.
 
 ## Checked conversion
 
 Some conversions can never lose information. Every `u8` value also fits in a `u16`, so Basie widens a `u8` to a `u16` automatically wherever one is needed. The same is true for `u8` to `i16`, for either 16-bit type to `i32` and for the other conversions that keep every possible value.
 
-The opposite direction is a different matter. A `u16` might hold 300, and a `u8` can't. Basie never narrows a value silently. You have to write the conversion, using the target type's name:
+Narrowing can lose information. A `u16` might hold 300 and a `u8` can't, so Basie never narrows a value silently. You have to write the conversion, using the target type's name:
 
 ```basie
 var byteValue as u8 = u8(wordValue)
@@ -89,9 +89,9 @@ var byteValue as u8 = u8(wordValue)
 
 `u8(wordValue)` means "this value, as a `u8`, provided it fits". When the program runs, the conversion checks the value. If it fits, the result is the same number in the smaller type. If it doesn't, the program stops with a **trap** before any wrong value can be produced.
 
-That's quite different from the usual behaviour in C or assembly, where converting 300 to a byte quietly keeps the low eight bits and gives you 44. The program carries on with a wrong number, and you find out much later, if ever. In Basie a conversion either gives the same number or stops the program at the line that tried.
+In C or assembly, converting 300 to a byte keeps the low eight bits and gives you 44 without any warning. The program carries on with a wrong number, and you find out much later, if ever.
 
-Here's a program that tries:
+This program converts 300 to a `u8`:
 
 ```basie
 var wide as u16 = 300
@@ -118,7 +118,7 @@ var readings as u8[2] = [12, 20]
 
 The suffix `[2]` makes `readings` an array of two `u8` elements, stored one after the other inside the array's storage. `readings[0]` is the first element and `readings[1]` is the second. Indexes start at zero, which means the element count, 2, is also the first index that doesn't exist.
 
-The number 2 fits in a `u8` without any difficulty, so type checking has nothing to say about `readings[2]`. The question is whether there is an element at that position, and that depends on the array, not the type of the index. Basie checks every index against the length of the array it selects. An index outside the array stops the program with a `bounds` trap before anything is read or written.
+The number 2 fits in a `u8`, so type checking can't catch `readings[2]`. Whether there is an element at that position depends on the array, not the type of the index. Basie checks every index against the length of the array it selects. An index outside the array stops the program with a `bounds` trap before anything is read or written.
 
 This example converts a measurement to a byte and reads the second element of the array. Both operations are checked:
 
@@ -126,10 +126,10 @@ This example converts a measurement to a byte and reads the second element of th
 
 Both checks pass here. Each one can be made to fail by changing a single number:
 
-- Change `measurement` to 300 and the conversion traps with `narrowing`. 300 is a perfectly good `u16`, but `u8` can't hold it.
-- Change `index` to 2 and the array access traps with `bounds`. 2 is a perfectly good `u8`, but `readings` has no element at that position.
+- Change `measurement` to 300 and the conversion traps with `narrowing`. 300 is a valid `u16`, but `u8` can't hold it.
+- Change `index` to 2 and the array access traps with `bounds`. 2 is a valid `u8`, but `readings` has no element at that position.
 
-The variables that hold 300 and 2 are fine. In each case the failure belongs to the operation that needs more of the value than its type guarantees. A bounds failure looks like this:
+In each case the variable is fine. The failure belongs to the operation that needs more of the value than its type guarantees. A bounds failure looks like this:
 
 ```text
 TRAP bounds at 02A0
@@ -139,15 +139,15 @@ Without that check, `readings[2]` would read whatever byte happens to follow the
 
 ## Compile time or run time
 
-Basie checks as much as it can while compiling and leaves the rest to the running program. The rule is simple. If every value in a check is a constant, the compiler evaluates the check and rejects the program if it fails. If any value comes from a variable, the check happens at run time, at the moment the operation runs.
+Basie checks as much as it can while compiling and leaves the rest to the running program. If every value in a check is a constant, the compiler evaluates the check and rejects the program if it fails. If any value comes from a variable, the check happens at run time, at the moment the operation runs.
 
-So `readings[2]` written with the constant 2 is a compile error, reported as "index 2 is out of range for u8[2]", while `readings[index]` with `index` holding 2 is a run-time trap. The compiler doesn't try to trace values through variables to predict a failure in advance. That keeps the rules for what compiles clear and the same for every compiler.
+So `readings[2]` written with the constant 2 is a compile error, reported as "index 2 is out of range for u8[2]", while `readings[index]` with `index` holding 2 is a run-time trap. The compiler doesn't trace values through variables to predict a failure in advance, which keeps the rules for what compiles clear and the same for every compiler.
 
 An array's length doesn't create a special range type for its index. The index is an ordinary `u8` or `u16`, and the check belongs to each indexing operation on each particular array.
 
 ## Assertions that check the design
 
-The constants at the start of this chapter came with an assertion:
+The constants `rows` and `columns` can be checked together with an assertion:
 
 ```basie
 assert rows * columns = %100000

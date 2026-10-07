@@ -1,0 +1,14 @@
+{
+  "method": "Reference compiler, ATOM-built runtime and generated Z80 in the CP/M harness. Native and hardware execution are not checked in this pass.",
+  "results": [
+    {
+      "check": "scalar/aggregate copy and aggregate aliases",
+      "imageBytes": 822,
+      "returnCode": 0
+    },
+    {
+      "check": "expired-local alias prevention",
+      "diagnostic": "alias-escapes"
+    }
+  ]
+}

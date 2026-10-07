@@ -1,0 +1,323 @@
+{
+  "compilerRevision": "3228ce98d0c220cb15daa51188ef8cd867414633",
+  "method": "Reference compiler, runtime assembled with ATOM into debug80-docs/_internal, generated Z80 under minimal CP/M harness. Assertions test chapter results. Native compiler and physical CP/M not verified.",
+  "results": [
+    {
+      "source": "01-postage.BSI",
+      "status": "pass",
+      "imageBytes": 1685,
+      "input": "",
+      "output": "135\r\n",
+      "expectedOutput": "135\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "02-values.BSI",
+      "status": "pass",
+      "imageBytes": 448,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "03-expressions.BSI",
+      "status": "pass",
+      "imageBytes": 676,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "04-decisions.BSI",
+      "status": "pass",
+      "imageBytes": 582,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "05-loops.BSI",
+      "status": "pass",
+      "imageBytes": 735,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "06-arrays.BSI",
+      "status": "pass",
+      "imageBytes": 685,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "07-strings.BSI",
+      "status": "pass",
+      "imageBytes": 592,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "08-records.BSI",
+      "status": "pass",
+      "imageBytes": 483,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "09-open-views.BSI",
+      "status": "pass",
+      "imageBytes": 819,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "10-routines.BSI",
+      "status": "pass",
+      "imageBytes": 636,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "11-aggregate-results.BSI",
+      "status": "pass",
+      "imageBytes": 617,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "12-forwards.BSI",
+      "status": "pass",
+      "imageBytes": 664,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "13-errors.BSI",
+      "status": "pass",
+      "imageBytes": 627,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "ACCESS.BSI",
+      "status": "pass",
+      "imageBytes": 614,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "CALLS.BSI",
+      "status": "pass",
+      "imageBytes": 599,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "CAPSTONE.BSI",
+      "status": "pass",
+      "imageBytes": 5093,
+      "input": "",
+      "output": "Result: 246\r\nInvalid number\r\nQueue full\r\n",
+      "expectedOutput": "Result: 246\r\nInvalid number\r\nQueue full\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "CHARS.BSI",
+      "status": "pass",
+      "imageBytes": 1013,
+      "input": "A",
+      "output": "?AA\r\n",
+      "expectedOutput": "?AA\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "COLLECT.BSI",
+      "status": "pass",
+      "imageBytes": 1822,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "COMMAND.BSI",
+      "status": "pass",
+      "imageBytes": 4061,
+      "input": "",
+      "output": "Result: 246\r\nInvalid number\r\n",
+      "expectedOutput": "Result: 246\r\nInvalid number\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "CONTROL.BSI",
+      "status": "pass",
+      "imageBytes": 1373,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "ECHO.BSI",
+      "status": "pass",
+      "imageBytes": 1593,
+      "input": "Ada\r",
+      "output": "Name? \nHello, Ada\r\n",
+      "expectedOutput": "Name? \nHello, Ada\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "ECHO.BSI/empty-line",
+      "status": "pass",
+      "input": "\r",
+      "output": "Name? \nHello, \r\n",
+      "expectedOutput": "Name? \nHello, \r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "ECHO.BSI/full-buffer",
+      "status": "pass",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r",
+      "output": "Name? \nHello, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\n",
+      "expectedOutput": "Name? \nHello, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "ECHO.BSI/capacity-limit",
+      "status": "pass",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r",
+      "output": "Name? \nHello, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\n",
+      "expectedOutput": "Name? \nHello, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "FACTOR.BSI",
+      "status": "pass",
+      "imageBytes": 1025,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "LEASE.BSI",
+      "status": "pass",
+      "imageBytes": 1620,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "NUMBERS.BSI",
+      "status": "pass",
+      "imageBytes": 634,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "OWNERS.BSI",
+      "status": "pass",
+      "imageBytes": 1289,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "PICK.BSI",
+      "status": "pass",
+      "imageBytes": 605,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "READINGS.BSI",
+      "status": "pass",
+      "imageBytes": 4938,
+      "input": "",
+      "output": "Mean: 15.0\r\n",
+      "expectedOutput": "Mean: 15.0\r\n",
+      "returnCode": 0
+    },
+    {
+      "source": "STACK.BSI",
+      "status": "pass",
+      "imageBytes": 1828,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "VALID.BSI",
+      "status": "pass",
+      "imageBytes": 522,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "checks/BOUNDS.BSI",
+      "status": "pass",
+      "expected": "bounds",
+      "observed": "bounds",
+      "output": "TRAP bounds at 02A0\r\n"
+    },
+    {
+      "source": "checks/NARROW.BSI",
+      "status": "pass",
+      "expected": "narrowing",
+      "observed": "narrowing",
+      "output": "TRAP narrowing at 029D\r\n"
+    },
+    {
+      "source": "checks/READONLY.BSI",
+      "status": "pass",
+      "expected": "not-writable",
+      "observed": "not-writable"
+    },
+    {
+      "source": "checks/COPY.BSI",
+      "status": "pass",
+      "expected": "needs-move",
+      "observed": "needs-move"
+    },
+    {
+      "source": "checks/ESCAPE.BSI",
+      "status": "pass",
+      "expected": "alias-escapes",
+      "observed": "alias-escapes"
+    }
+  ]
+}

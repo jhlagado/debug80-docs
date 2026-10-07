@@ -8,11 +8,9 @@ search_exclude: true
 
 # The Life of a Value
 
-Suppose an order costs 120 units and postage costs another 15. You want the amount due, and you want to keep that figure while you start work on the next order. That's about as small as a useful program gets, and it's enough to show the first and most basic idea in Basie: a variable is a named piece of storage, and assignment puts a value into it.
+Suppose an order costs 120 units and postage costs another 15. You want the amount due, and you want to keep that figure while you start work on the next order. That's about as small as a useful program gets, and it shows Basie's most basic idea: a variable is a named piece of storage, and assignment puts a value into it.
 
 ## The first declaration
-
-Here is a variable for the subtotal:
 
 ```basie
 var subtotal as u16 = 120
@@ -22,7 +20,7 @@ The line has four parts. `var` says that this is a variable, a place whose conte
 
 The type here is `u16`, an unsigned sixteen-bit integer. It holds whole numbers from 0 through 65,535 and occupies two bytes. Sixteen bits is the Z80's natural working size: it can add two 16-bit numbers in a single instruction, so `u16` is the type you'll reach for most often. Basie has smaller and larger integer types as well, and Chapter 2 sets them out. Every figure in this chapter fits comfortably in a `u16`.
 
-The type is a fixed part of the variable. Once `subtotal` is declared as `u16`, it holds a `u16` for the whole run. Basie checks every use against that type when it compiles the program, so nothing at run time has to work out what kind of value is in there.
+The type is a fixed part of the variable. Once `subtotal` is declared as `u16`, it holds a `u16` for the whole run. Basie checks every use against that type when it compiles the program, so the running program never has to check what kind of value the variable holds.
 
 ## The complete program
 
@@ -34,9 +32,9 @@ The three declarations at the top sit outside any routine, which makes them **pr
 
 `sub main()` begins the routine where execution starts. `sub` introduces any routine, `main` is the routine the runtime calls first, and the empty parentheses mean it takes no arguments. Everything down to the matching `end` is the routine's body.
 
-The word `fails` after the parentheses and the `else fail` at the end of two lines concern errors. Printing can go wrong on a real machine, and Basie requires every call that can fail to say what should happen if it does. `else fail` means "if this call fails, pass the failure on". Here it passes out of `main` to the runtime, which reports it. Chapter 7 explains this properly. For now you can read each `else fail` as "and stop if that didn't work".
+The word `fails` after the parentheses and the `else fail` at the end of two lines concern errors. Printing can go wrong on a real machine, and Basie requires every call that can fail to say what should happen if it does. `else fail` means "if this call fails, pass the failure on". Here it passes out of `main` to the runtime, which reports it. Chapter 7 explains failures in full.
 
-The two `include` lines at the top bring in library source for formatting numbers and writing lines of text. We'll come to them when we print the result.
+The two `include` lines at the top bring in library source for formatting numbers and writing lines of text, which the program uses to print its result.
 
 ## Calculating and storing a result
 
@@ -54,13 +52,13 @@ The next statement changes the subtotal:
 subtotal = 200
 ```
 
-Now `subtotal` holds 200. The question that the rest of this chapter turns on is what happens to `total`. It still holds 135. The earlier assignment stored a number in `total`, the result of the addition at the moment it ran. It didn't store the formula `subtotal + postage` to be worked out again whenever the inputs change. A spreadsheet cell behaves the second way. A variable behaves the first.
+Now `subtotal` holds 200, and `total` still holds 135. The earlier assignment stored a number in `total`, the result of the addition at the moment it ran. It didn't store the formula `subtotal + postage` to be worked out again whenever the inputs change. A spreadsheet cell behaves the second way. A variable behaves the first.
 
 ![Two separate storage cells after calculating the total and changing the subtotal.](../../assets/images/basie-book/book1/scalar-copy.svg)
 
-Each box in the diagram is a separate piece of storage. Writing 200 into `subtotal` changes that box and nothing else. This is exactly what you want when you need a finished result to stay put while you prepare new input.
+Each box in the diagram is a separate piece of storage. Writing 200 into `subtotal` changes that box and nothing else, so the finished total stays put while you prepare the next order.
 
-Tracing the program one statement at a time makes the sequence plain:
+Here's the trace one statement at a time:
 
 | Point in execution | `subtotal` | `postage` | `total` |
 | --- | ---: | ---: | ---: |
@@ -72,9 +70,9 @@ Tracing the program one statement at a time makes the sequence plain:
 
 A single number such as 135 is a **scalar value**. Basie's scalars are its integer types, its floating-point type and its Boolean type, which holds `true` or `false`. Whenever a scalar moves from one place to another, it is copied. Assignment copies it into the destination. Passing it to a routine copies it into the routine's parameter, and returning it from a routine copies it back to the caller.
 
-So two variables that hold the same number are still two separate objects. If `total` and some other variable both held 135, changing one would leave the other alone. There is never a hidden link from one to the other.
+So two variables that hold the same number are still two separate objects. If `total` and some other variable both held 135, changing one would leave the other alone.
 
-That sounds too obvious to mention, and for single numbers it is. It becomes far less obvious once values are grouped into records and arrays and handed to routines, because then a routine can be given access to the original object rather than a copy of it. Chapter 4 makes that distinction. Everything after it depends on keeping the two cases apart, and the scalar case, where every move is a copy, is the solid ground to start from.
+For single numbers this is obvious. It stops being obvious once values are grouped into records and arrays and passed to routines, because a routine can then be given access to the original object rather than a copy of it. Chapter 4 makes that distinction, and everything after it depends on keeping the two cases apart.
 
 ## Checking a prediction
 
@@ -87,9 +85,7 @@ assert total = 135
 
 `assert` takes a condition. Inside a condition, `=` compares two values for equality rather than storing anything, so `total = 135` is true when `total` holds 135. If the condition is true, execution carries on. If it's false, the program stops at once and reports an assertion trap.
 
-These two lines turn the trace table into something the machine checks. If changing `subtotal` had somehow changed `total` as well, the second assertion would fail and the program would stop with a report instead of printing its answer. A run that reaches the end has confirmed both predictions.
-
-Assertions are cheap to write and they make good habits. Throughout this book the examples use them to state what each step should have done, so that a successful run is evidence rather than hope.
+These two lines turn the trace table into something the machine checks. If changing `subtotal` had somehow changed `total` as well, the second assertion would fail and the program would stop with a report instead of printing its answer. A run that reaches the end has confirmed both predictions. The examples throughout this book use assertions the same way.
 
 ## Putting a number on the screen
 
@@ -103,11 +99,11 @@ appendU16(report, total) else fail
 writeLine(console, report) else fail
 ```
 
-The first line declares a local variable, `report`, inside `main`. Its type is `string[16]`, a string with room for up to sixteen bytes. It starts empty. Chapter 8 explains strings fully. The important point here is that the sixteen is a capacity, fixed when the string is declared, and nothing can write past it.
+The first line declares a local variable, `report`, inside `main`. Its type is `string[16]`, a string with room for up to sixteen bytes. It starts empty. The sixteen is a capacity, fixed when the string is declared, and nothing can write past it. Chapter 8 covers strings in full.
 
 `appendU16` takes a copy of the number in `total` and appends its decimal digits to `report`. If the string didn't have room for the digits, `appendU16` would report a failure rather than write beyond the string's end. Three digits fit easily into sixteen bytes.
 
-`writeLine` sends the string's contents to `console`, followed by a carriage return and a line feed. `console` is the program's standard connection to the terminal. On a CP/M machine that's normally the keyboard and screen, or a serial terminal. Your program never deals with hardware ports or device addresses. It hands text to the console and the runtime does the rest.
+`writeLine` sends the string's contents to `console`, followed by a carriage return and a line feed. `console` is the program's standard connection to the terminal. On a CP/M machine that's normally the keyboard and screen, or a serial terminal. Your program never deals with hardware ports or device addresses. It passes text to the console and the runtime handles the device.
 
 The program prints one line:
 
@@ -115,7 +111,7 @@ The program prints one line:
 135
 ```
 
-Both routines use `report` only for the length of their calls. Once they return, they keep no hold on it. We'll look much more closely at that kind of temporary access when routines start sharing records and arrays.
+Both routines use `report` only for the length of their calls and keep no access to it once they return. Later chapters look closely at this kind of temporary access, once routines share records and arrays.
 
 ## Building and running the program
 
@@ -142,7 +138,7 @@ The number is the address in the program where the check failed. Chapter 15 show
 
 ## Changing the calculation
 
-What would `total` hold if you repeated the calculation after changing the subtotal? Each assignment reads the values that exist at the moment it runs, so a second calculation reads the new subtotal:
+Each assignment reads the values that exist at the moment it runs, so repeating the calculation after the subtotal changes reads the new subtotal:
 
 ```basie
 total = subtotal + postage
