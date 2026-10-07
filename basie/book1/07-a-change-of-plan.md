@@ -8,9 +8,9 @@ search_exclude: true
 
 # A Change of Plan
 
-Every program so far has run straight through from top to bottom. Real programs have to react. The pool may already be full when a new job arrives. A number typed by the user may not be a number at all. A list of readings has to be worked through one at a time, and the work may need to stop early.
+Every example so far has run straight through from top to bottom, but real programs have to react. The pool may already be full when a new job arrives. A number typed by the user may not be a number at all. A list of readings is processed one at a time, and the loop may need to stop early.
 
-Basie's `if`, `select`, `while` and `for` work much as they do in other languages. What Basie adds is that ownership has to come out right on every path. Whichever way the program goes, each live record still has exactly one owner and each owner is released exactly once. Operations that can be expected to fail have their own mechanism, and every caller has to deal with it.
+Basie's `if`, `select`, `while` and `for` work much as they do in other languages. Basie also requires ownership to come out right on every path. Whichever way the program goes, each live record still has exactly one owner and each owner is released exactly once. Operations that may fail in normal use have their own mechanism, and every caller must deal with it.
 
 ## Choosing a path
 
@@ -26,13 +26,13 @@ else
 end
 ```
 
-The conditions are tested in order and only the first true one has its block run. If none is true, the `else` block runs. There can be any number of `elseif` clauses, both `elseif` and `else` are optional and a single `end` closes the whole chain.
+The conditions are tested in order, and only the block of the first true one runs. If none is true, the `else` block runs. A chain may have any number of `elseif` clauses. Both `elseif` and `else` are optional, and a single `end` closes the whole chain.
 
-Each block is a scope of its own. A local declared inside one arm exists only while that arm runs. If it's an owner, it's released when the arm finishes, unless it was moved somewhere else first.
+Each block is a scope of its own. A local declared inside an arm exists only while that arm runs. An owner declared there is released when the arm finishes, unless it was moved somewhere else first.
 
 ## Selecting on a value
 
-When the choice depends on one integer value, `select` is clearer than a chain of comparisons:
+When the choice depends on a single integer value, `select` is clearer than a chain of comparisons:
 
 ```basie
 select direction
@@ -45,7 +45,7 @@ case else
 end
 ```
 
-`select` evaluates `direction` once and runs the arm whose label matches. A label can be a single constant, a list such as `case 1, 3, 5` or a range such as `case 'A' to 'Z'`. `case else` catches every value the other labels don't cover. No value may be covered by two labels and the compiler reports any overlap. An arm never falls through into the next, so there's no equivalent of C's forgotten `break`.
+`select` evaluates `direction` once and runs the arm whose label matches. A label can be a single constant, a list such as `case 1, 3, 5` or a range such as `case 'A' to 'Z'`. `case else` catches every value the other labels don't cover. The compiler reports an error if two labels cover the same value. An arm never falls through into the next. C's forgotten `break` has no equivalent in Basie.
 
 Both statements appear in this example:
 
@@ -61,7 +61,7 @@ Chapter 5's `new` treats a full pool as a bug and traps. When a full pool is a n
 var candidate = new? jobs(9)
 ```
 
-The type of `candidate` is `jobs?`, read as "maybe a `jobs` owner". You can't reach a record through an optional owner directly, because there might not be a record. `select` finds out which it is:
+The type of `candidate` is `jobs?`, read as "maybe a `jobs` owner". An optional owner might be empty, so you can't reach a record through it directly. Use `select` to find out which it is:
 
 ```basie
 select move candidate
@@ -72,13 +72,13 @@ case none
 end
 ```
 
-`select move` takes the handle out of `candidate`, leaving it empty, and tests what it took. If there was a handle, the `some` arm runs and `job` is its owner. `job` is an ordinary non-optional owner, so the arm can reach the record through it. When the arm ends, `job` is released unless the arm moves it somewhere else. If there was no handle, the `none` arm runs and there's nothing to release.
+`select move` takes the handle out of `candidate`, leaving it empty, and tests what it took. If there was a handle, the `some` arm runs and `job` is its owner. `job` is an ordinary non-optional owner, so the arm can reach the record through it. When the arm ends, `job` is released unless the arm moves it somewhere else. If `candidate` was empty, the `none` arm runs and has nothing to release.
 
-When the pool is full, `new?` doesn't evaluate its arguments at all. If one of the arguments moves an owner into the new record, a full pool leaves that owner exactly where it was. The allocation never consumes something it had no room to keep.
+When the pool is full, `new?` doesn't evaluate its arguments at all. So if an argument would move an owner into the new record, that owner stays exactly where it was. An allocation consumes an owner only when it has room to keep it.
 
 ## Selecting without moving
 
-`select` without `move`, on an optional owner the routine holds itself, leaves ownership where it is. The `some` arm gets a lease on the record, like the leases in Chapter 6, and the original owner stays responsible for it. While the arm runs, the owner can't be moved or overwritten, so the record can't be released while the arm is using it. Choose `select move` when the arm should take the record over, and plain `select` when it only needs to use it.
+Plain `select` on an optional owner that the routine holds leaves ownership where it is. The `some` arm gets a lease on the record, as in Chapter 6, and the original owner stays responsible for it. While the arm runs, the owner can't be moved or overwritten. The record therefore stays alive for as long as the arm uses it. Choose `select move` to pass ownership into the arm, and plain `select` to leave the record with its owner.
 
 ## Both outcomes in one program
 
@@ -86,7 +86,7 @@ This program has a pool with a single slot. It fills the slot, tries for a secon
 
 <<< @/basie/book1/examples/CONTROL.BSI{basie}
 
-The `if true` makes a block, so that `first` has a shorter lifetime than `main` and the slot comes free partway through. Inside the block, `new jobs(7)` takes the only slot. `new? jobs(9)` finds the pool full and returns `none`, so the `none` arm sets `observed` to 1. When the block ends, its local `first` goes away and job 7 is released. Outside the block, the second `new?` finds the slot free. Its `some` arm reads 9, and `accepted` is released when the arm ends.
+The `if true` makes a block, so `first` has a shorter lifetime than `main`. The slot therefore comes free partway through. Inside the block, `new jobs(7)` takes the only slot. `new? jobs(9)` finds the pool full and returns `none`, so the `none` arm sets `observed` to 1. When the block ends, its local `first` goes away and job 7 is released. Outside the block, the second `new?` finds the slot free. Its `some` arm reads 9, and `accepted` is released when the arm ends.
 
 ## Repeating work
 
@@ -98,7 +98,7 @@ while value <= 0
 end
 ```
 
-`for` counts. The counter must be an integer local declared earlier in the routine:
+`for` steps a counter through a range. The counter must be an integer local declared earlier in the routine:
 
 ```basie
 var index as u16
@@ -109,9 +109,9 @@ end
 
 `until` stops before the bound, so this counts 0, 1, 2 and 3, the indexes of a four-element array. `to` includes the bound, so `for index = 1 to 4` counts 1, 2, 3 and 4. A `step` sets a different increment, which may be negative, as in `for index = 10 to 0 step -2`. The step must be a constant and can't be zero.
 
-The start and the bound are evaluated once, before the first pass. The counter is read-only inside the loop, so the body can't upset the count. The counter also never wraps around. If the next value would continue the loop but doesn't fit the counter's type, the loop stops with a `loop-range` trap instead of quietly wrapping round and running forever.
+The start and the bound are evaluated once, before the first pass. The counter is read-only inside the loop, so the body can't upset the count. The loop stops with a `loop-range` trap if the next value would continue the loop but doesn't fit the counter's type. This trap replaces the silent wrap-round that would otherwise keep the loop running forever.
 
-In either kind of loop, `continue` skips to the next pass and `exit` leaves the loop. Locals declared in a loop body are created afresh on every pass, and owners among them are released at the end of every pass, including passes ended early by `continue` or `exit`.
+In either kind of loop, `continue` skips to the next pass and `exit` leaves the loop. Locals declared in a loop body are created afresh on every pass. Owners among them are released at the end of each pass, even one ended early by `continue` or `exit`.
 
 Here are both loops and both early exits together:
 
@@ -121,7 +121,7 @@ The `for` loop counts from -3 to 3 in steps of 2, which gives -3, -1, 1 and 3. T
 
 ## Failures you expect
 
-Some operations fail for reasons that aren't bugs. The user types `nope` where a number was wanted, a file isn't there or a string has no room for the digits. Basie requires the program to deal with each of these.
+Some operations fail for reasons that aren't bugs. The user might type `nope` where a number was wanted. A file might be missing, or a string might be too short for the digits. Basie requires the program to deal with each of these.
 
 A routine that can fail says so with `fails` at the end of its declaration. Inside it, `fail` ends the routine with an error code, a `u8` value, instead of a normal result:
 
@@ -136,7 +136,7 @@ sub positive(value as i8) as u8 fails
 end
 ```
 
-Every call to a failable routine must say what to do if it fails, and there are exactly two choices. The first is to pass the failure on with `else fail`:
+Every call to a failable routine must say what to do if it fails. There are exactly two choices, and the first is to pass the failure on with `else fail`:
 
 ```basie
 var result as u8 = positive(value) else fail
@@ -153,27 +153,27 @@ observed = checked(-1) handle code
 end
 ```
 
-If the call succeeds, the assignment happens as usual and the handler block is skipped. If it fails, the assignment doesn't happen, the error code is stored in `code` and the handler block runs. `code` must be a `u8` variable declared beforehand. Because a failed call skips the assignment, the destination keeps whatever it held before. Chapter 14 relies on that guarantee to protect a job that's already stored.
+If the call succeeds, the assignment happens as usual and the handler block is skipped. If it fails, there is no assignment, so the destination keeps whatever it held before. The error code is stored in `code` and the handler block runs. `code` must be a `u8` variable declared beforehand. Chapter 14 relies on that guarantee to protect a job that's already stored.
 
 Here's the complete program:
 
 <<< @/basie/book1/examples/13-errors.BSI{basie}
 
-`positive` fails with code 7. `checked` passes the failure on. `main` handles it, so `observed` is set to 100 plus 7, or 107. If `main` passed a failure on instead and nothing handled it, the program would end with a report of the code, such as `FAIL 7`.
+`positive` fails with code 7, and `checked` passes the failure on. `main` handles it, so `observed` is set to 100 plus 7, or 107. Suppose `main` passed the failure on instead and nothing handled it. The program would then end with a report of the code, such as `FAIL 7`.
 
-Error codes are plain numbers and constants give them names. By convention codes 1 to 31 belong to the runtime's services, 32 to 47 to the standard library and 48 upwards to your programs, so codes from different sources don't collide.
+Error codes are plain numbers, named by constants. By convention codes 1 to 31 belong to the runtime's services, 32 to 47 to the standard library and 48 upwards to your programs. Codes from different sources therefore don't collide.
 
 ## Failures and traps
 
 Basie separates two kinds of things that go wrong.
 
-A **failure** is an outcome the program is expected to deal with. It comes from a `fail` statement in your code or in a library routine or service, and it travels back through `else fail` until a `handle` deals with it.
+A **failure** is an outcome the program is expected to deal with. It comes from a `fail` statement in your code or in a library routine or service. It travels back through `else fail` until a `handle` catches it.
 
-A **trap** means the program has tried to do something invalid: an index out of bounds, a conversion that doesn't fit, an access through a stale identifier, a false assertion. A trap stops the program on the spot. `handle` and `else fail` don't catch traps and nothing else does either. The program has a bug at that point, and carrying on would mean carrying on with bad data.
+A **trap** means the program has tried to do something invalid. Examples are an index out of bounds, a conversion that doesn't fit, an access through a stale identifier and a false assertion. A trap stops the program on the spot. Nothing can catch a trap, including `handle` and `else fail`. The program has a bug at that point, and any further work would use bad data.
 
 ## Things to try
 
-Change the pool capacity in `CONTROL.BSI` to 2. The allocation inside the `if` block now succeeds, so `observed` becomes 9 instead of 1 and the first `assert observed = 1` needs to change to match. Sketch the owners at the end of each arm and at the end of the `if` block. The program takes different paths now, and every live record still has one owner at every point.
+Change the pool capacity in `CONTROL.BSI` to 2. The allocation inside the `if` block now succeeds, so `observed` becomes 9 instead of 1. Change the first `assert observed = 1` to match. Sketch the owners at the end of each arm and at the end of the `if` block. The program now takes different paths, but every live record still has exactly one owner at each point.
 
 In `05-loops.BSI`, change `step 2` to `step 1` and work out the new total before you run it.
 

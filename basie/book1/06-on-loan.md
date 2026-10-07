@@ -8,9 +8,9 @@ search_exclude: true
 
 # On Loan
 
-In Chapter 5 a routine took ownership of a job and released it when it returned. That suits a routine whose purpose is to finish a job, but a routine that prints a job's details or bumps its priority should leave the job alive. If moving ownership were the only way to pass a job to a routine, every inspection would end the job.
+In Chapter 5 a routine took ownership of a job and released it when it returned. That suits a routine whose purpose is to finish a job. A routine that prints a job's details or bumps its priority should leave the job alive. If ownership had to move on every call, every inspection would end the job.
 
-Basie has two ways to reach a pool record without owning it. A **lease** lends the record to a routine for the length of one call. An **identifier** is a handle you can keep for as long as you like, and every use of it checks that its record still exists.
+Basie has two ways to reach a pool record without owning it. A **lease** lends the record to a routine for the length of a call. An **identifier** is a handle you can keep for as long as you like, and every use of it checks that its record still exists.
 
 ## Lending a record
 
@@ -22,7 +22,7 @@ sub inspectJob(item as Job) as u16
 end
 ```
 
-`item` is a read-only alias for a `Job` record. It doesn't mention the pool at all. When the caller passes an owning handle, as in `inspectJob(first)`, Basie lends the record in that handle's slot to the routine for the call. This is a **lease**. The caller keeps ownership throughout. The routine receives a `Job` record rather than a handle, reads it and returns, and the job carries on.
+`item` is a read-only alias for a `Job` record and doesn't mention the pool at all. When the caller passes an owning handle, as in `inspectJob(first)`, Basie lends the record in that handle's slot to the routine for the call. This loan is a **lease**, and the caller keeps ownership throughout. The routine receives a `Job` record rather than a handle. It reads the record and returns, and the job carries on.
 
 ## Lending writable access
 
@@ -34,7 +34,7 @@ sub incrementJob(var item as Job)
 end
 ```
 
-Calling `incrementJob(first)` changes the job's number in its pool slot. Ownership doesn't move. When the call returns the lease is over, and the caller carries on using `first` as before.
+Calling `incrementJob(first)` changes the job's number in its pool slot, but ownership stays with `first`. When the call returns the lease is over, and the caller carries on using `first` as before.
 
 ![The owner remains responsible while a routine has temporary access to its record.](../../assets/images/basie-book/book1/lease-access.svg)
 
@@ -42,13 +42,13 @@ Calling `incrementJob(first)` changes the job's number in its pool slot. Ownersh
 
 A lease is safe because the record can't be released while the routine is using it. Only the owner can release a record, and Basie makes sure that nothing can reach the owner while the lease lasts.
 
-While a statement leases a record from an owner, that owner can't appear anywhere else in the same statement, apart from reading one of its scalar fields or taking `id(...)` of it. So a statement can't lend `first` to one argument while moving `first` into another, or assign a new handle to `first` while a call is using its record. The routine itself never receives the owner, so it can't release the record either. Between them those two facts cover every way the record could end during the call, and none of this needs a check at run time.
+While a statement leases a record from an owner, that owner can't appear anywhere else in the same statement. The only exceptions are reading one of its scalar fields and taking `id(...)` of it. So a statement can't lend `first` to one argument and move `first` into another. It also can't assign a new handle to `first` while a call is using its record. The routine itself receives a record rather than the owner, so it has no way to release the record. Between them those two facts cover every way the record could end during the call. None of this needs a check at run time.
 
-A lease protects the record's *lifetime*, which is what keeps memory safe. It doesn't stop the routine or other code from changing the record's fields. `var` controls whether the routine may change them.
+A lease protects the record's *lifetime*, which is what keeps memory safe. Other code can still change the record's fields, and `var` controls whether the routine itself may change them.
 
 ## Keeping an identity
 
-A lease ends when the call ends. Sometimes you need to refer to a record for longer than that without owning it. A display routine might keep track of which job is selected, or one job might record which other job it's waiting for. Neither should be responsible for releasing the job, but both need to find it again later.
+A lease ends with the call, but sometimes you need to refer to a record for longer without owning it. A display routine might keep track of which job is selected. A job might record which other job it's waiting for. Neither should be responsible for releasing the job, but both need to find it again later.
 
 `id(first)` makes an **identifier** for the record that `first` owns:
 
@@ -56,15 +56,15 @@ A lease ends when the call ends. Sometimes you need to refer to a record for lon
 var remembered = id(first)
 ```
 
-An identifier is an ordinary value. It can be copied, stored in a variable or a record field, compared and passed around freely. It doesn't own the record, so it never keeps the record alive and never releases it. Copying it doesn't create a second owner.
+An identifier is an ordinary value that can be copied, stored in a variable or a record field, compared and passed around freely. An identifier and its copies have no effect on when the record is released.
 
-The record might be released while an identifier for it still exists. To detect this, every identifier carries two things: the slot and that slot's **generation**. Each slot has a generation number that changes every time a record in it is released. An identifier made for job 7 records the slot and the generation job 7 had. If job 7 is released and job 11 later takes the same slot, the slot's generation has moved on, and the identifier no longer matches.
+The record might be released while an identifier for it still exists. To detect this, every identifier carries two things: the slot and that slot's **generation**. Each slot has a generation number that changes every time a record in it is released. An identifier made for job 7 records the slot and the generation job 7 had. Suppose job 7 is released and job 11 later takes the same slot. The slot's generation has then moved on, and the identifier no longer matches.
 
-Every access through an identifier compares its generation with the slot's. If they match, the access goes ahead. If they don't, the program stops with a `stale-handle` trap rather than quietly reading job 11 as if it were job 7. In a language with ordinary pointers, that quiet wrong read is exactly what would happen, and a program could run for a long time on the wrong record before anything looked amiss.
+Every access through an identifier compares its generation with the slot's. If they match, the access goes ahead. If they don't, the program stops with a `stale-handle` trap rather than quietly reading job 11 as if it were job 7. With ordinary pointers, that quiet wrong read is exactly what would happen. A program could then run for a long time on the wrong record before anything looked amiss.
 
 ## Testing an identifier first
 
-A trap is right when a stale identifier means the program has a bug. Often, though, the record ending is a normal event, and the program should simply check. `select` tests an identifier without trapping:
+A trap is right when a stale identifier means the program has a bug. Often, though, the record ending is a normal event, and the program should simply check with `select`, which tests an identifier without trapping:
 
 ```basie
 select remembered
@@ -96,7 +96,7 @@ The pool has a single slot, which makes the reuse easy to follow:
 | `consumeJob(move first)` returns 8 | free | empty | stale |
 | `replacement = new jobs(11)` | job 11 | empty | stale |
 
-`consumeJob` returns the scalar 8 and releases the job, and job 11 then takes the pool's only slot. `remembered` still refers to that slot but to the old generation, so when `select` tests it the `none` arm runs even though the slot is occupied again, and `result` becomes 99. An identifier refers to a particular record, not to whatever is in the slot it once used.
+`consumeJob` returns the scalar 8 and releases the job, and job 11 then takes the pool's only slot. `remembered` still refers to that slot but to the old generation. When `select` tests it, the `none` arm runs even though the slot is occupied again, and `result` becomes 99. An identifier refers to a particular record, not to whatever is in the slot it once used.
 
 ## Choosing the right interface
 
@@ -110,25 +110,25 @@ Every routine that works with a job can now take exactly what it needs:
 | finish with the job and release it | a `jobs` owner, moved |
 | find the job again later | an `id jobs` identifier, copied |
 
-Choosing from that list is one of the main design decisions in a Basie program, and each routine's declaration records the choice where every caller can see it.
+Choosing from that list is one of the main design decisions in a Basie program. Each routine's declaration records the choice where every caller can see it.
 
 ## Things to try
 
 Add a second call to `inspectJob` just after `incrementJob` and assert that both inspections around it see the right number, 7 before and 8 after. Both leases reach the same live record, and neither creates an owner.
 
-Then replace the whole `select remembered` statement with a direct access, `result = remembered.number`. The program still compiles, because `remembered` is a non-optional identifier and the generation check happens when the access runs. Running it stops with a trap:
+Then replace the whole `select remembered` statement with a direct access, `result = remembered.number`. The program still compiles because `remembered` is a non-optional identifier. The generation check happens when the access runs, and it stops the program with a trap:
 
 ```text
 TRAP stale-handle at 0673
 ```
 
-At that point the slot holds job 11, and the generation check stops the program before it can read job 11 as the old job.
+At that point the slot holds job 11, and the trap prevents the program from reading job 11 as the old job.
 
 ## Summary
 
 - Passing an owning handle to a record parameter lends the record for the call. This is a lease.
-- A leased routine gets a record, not a handle, so it can't release it. A `var` lease may change its fields.
-- While a statement leases a record, its owner can't be used anywhere else in that statement, so the record can't end during the call.
+- A leased routine gets a record rather than a handle, so it has no way to release it. A `var` lease may change its fields.
+- While a statement leases a record, its owner can't be used anywhere else in that statement. The record therefore stays alive for the whole call.
 - `id(h)` makes an identifier: a copyable, storable reference that never owns its record.
 - Each identifier records its slot's generation. Access through a stale identifier traps with `stale-handle`.
 - `select` tests an identifier without trapping and runs `some` or `none`.
