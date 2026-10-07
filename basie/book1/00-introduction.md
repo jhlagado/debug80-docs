@@ -37,7 +37,7 @@ The first chapter starts small, with a program that calculates a postage total a
 
 You should already be comfortable with variables, conditions and loops in some language. JavaScript, Python or a structured BASIC is plenty. You don't need to know C or Pascal or have any experience with pointers or manual memory management. The book explains those ideas from scratch where they help.
 
-Basie compiles straight to machine code, and you can read that code if you're curious. You don't need to know Z80 assembly, though, because nothing in this book depends on it.
+You don't need to know Z80 assembly. Basie compiles straight to machine code, and you work only with the Basie source.
 
 ## Programs, traces and exercises
 
