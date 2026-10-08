@@ -130,6 +130,21 @@ an address and a `<COUNT RESERVED>` marker. A trailer lists labels and
 constants with their source locations, keeping private declarations in
 separate scopes distinct.
 
+The listing ends with two reports for tuning code size. `Routine sizes`
+gives each global label's address and the bytes up to the next global label.
+The jump report names every `JR` or `DJNZ` within four bytes of its range
+limit, which a small edit could push out of range, and every `JP` whose target
+is close enough for a two-byte `JR`. Only unconditional `JP` and `JP` on `Z`,
+`NZ`, `C` or `NC` qualify, because `JR` has no other conditions:
+
+```text
+Routine sizes:
+START        0100   126 bytes
+
+JP instructions that could be JR:
+017A  offset    1  t.asm:5                 .A: JP .B
+```
+
 A D8 map supplies filenames, source locations and symbols for Debug80.
 Load it with the corresponding BIN or HEX file for source-level debugging.
 
@@ -147,7 +162,9 @@ lib/device.asm:14:9: undefined symbol PORTBASE
 ```
 
 Line and column numbers begin at one. Locations refer to the original source,
-including files read through `%INCLUDE`.
+including files read through `%INCLUDE`. The messages are the same as on
+CP/M. [Diagnostic messages](appendices/11-diagnostic-messages.md) lists them
+with their usual causes.
 
 The command returns status 0 for success, help or version information,
 1 for a failed build and 2 for invalid command use.

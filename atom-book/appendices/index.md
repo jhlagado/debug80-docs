@@ -16,6 +16,7 @@ For source-language rules, start with [Book 1](../book1/).
 - [Expressions and numeric forms](02-expressions-and-numbers.md)
 - [Built-in functions](04-functions.md)
 - [Limits and capacities](05-limits-and-capacities.md)
+- [Diagnostic messages](11-diagnostic-messages.md)
 
 ## Z80 programming
 
