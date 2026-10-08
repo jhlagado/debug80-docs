@@ -54,8 +54,8 @@ gives the minimum memory requirement and disk-space constraints.
 
 | Host configuration | Simultaneous symbols | Simultaneous unresolved references |
 | --- | ---: | ---: |
-| Node command | 3,040 | 1,170 |
-| CP/M 2.2 | 1,536 | 585 |
+| Node command | 3,040 | 1,365 |
+| CP/M 2.2 | 1,536 | 455 |
 
 Global symbols remain for the entire build. Private symbols are discarded
 when the next global label begins, so only the current private scope counts

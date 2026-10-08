@@ -256,7 +256,7 @@ stores files in 128-byte records, so a physical COM or BIN file can contain
 padding after the logical image. That padding is not part of the assembled
 program.
 
-## Messages and status codes
+## Messages
 
 Atom always returns to CP/M through a warm boot, whether the build succeeds or
 fails.
@@ -291,37 +291,45 @@ plain-text message. `NAME` stands for the file concerned:
 `INCBIN` messages also give the source file, line and column of the
 statement.
 
-Errors found during assembly use a numbered form.
-
-An assembly error identifies the status, source file, line and column:
+An error in the source names the file, line and column, then says what is
+wrong:
 
 ```text
-Atom error 02 INPUT.ASM:2:1
+A>ATOM HANDLES
+
+HANDLES.ASM:230:5: relative jump to .NONE is out of range (offset 131); .NONE is on line 303
 ```
 
 Line and column numbers start at one. The column counts bytes in the source
 line. When an included file causes the error, Atom names that file rather than
 the root source.
 
+A forward reference is checked when its label is defined. If the jump or
+value no longer fits, Atom points at the instruction that made the reference
+and names the label and the line that defines it, as above. Other messages
+name the symbol or value involved where that helps:
+
+```text
+MAIN.ASM:12:8: undefined symbol PORTBASE
+MAIN.ASM:57:10: value of LIMIT (300) is out of range for this operand
+```
+
+[Diagnostic messages](appendices/11-diagnostic-messages.md) lists every
+message and its usual cause. The wording is the same on CP/M and Node.
+
 A disk or materialisation error names the destination file and has no source
 line or column:
 
 ```text
-Atom error 04 OUTPUT.COM
+OUTPUT.COM: could not write the output
 ```
-
-The status codes are:
-
-| Code | Meaning |
-| ---: | --- |
-| `01` | Invalid build configuration |
-| `02` | Source statement rejected |
-| `03` | Undefined symbol at the end of assembly |
-| `04` | Output service failure |
-| `05` | Internal invariant failure |
 
 If Atom cannot reread the source after an error, it reports the filename and
 the original hexadecimal byte offset instead of inventing a line and column.
+
+Atom checks four guard bytes at the bottom of its 512-byte stack before it
+exits. If they have changed, it prints `stack overflow`. Please report that
+with the source that caused it.
 
 ## Limits and current boundaries
 

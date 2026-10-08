@@ -20,15 +20,21 @@ reported column may differ from its visual position in an editor.
 Included files retain their own names and source locations. Preprocessing
 preserves those locations even when a conditional block is omitted.
 
-Typical causes of failure include an unknown instruction, an invalid operand
-combination, a duplicate symbol, a value outside its allowed range or an
-unresolved symbol at the end of assembly. A reported location can be the point
-where an error becomes detectable. For example, a forward branch cannot be
-checked for range until its target address is known.
+Each diagnostic is one line, the location followed by a message:
 
-The exact message format and status codes are documented in the
-[Node guide](../using-atom-on-node.md#diagnostics) and
-[CP/M guide](../using-atom-on-cpm.md#messages-and-status-codes).
+```text
+MAIN.ASM:3:10: relative jump to .NONE is out of range (offset 200); .NONE is on line 5
+```
+
+A forward branch cannot be checked for range until its target address is
+known. When the check fails, Atom still reports the branch, and names the
+target and the line that defines it. An undefined symbol is reported at its
+first use.
+
+[Diagnostic messages](../appendices/11-diagnostic-messages.md) lists every
+message. The [Node guide](../using-atom-on-node.md#diagnostics) and
+[CP/M guide](../using-atom-on-cpm.md#messages) show how each host reports
+them.
 
 ## Forward references
 

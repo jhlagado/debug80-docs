@@ -150,6 +150,7 @@ Describe Basie as a small, statically typed systems language for Z80 machines, c
 - [Atom Registers, Flags and Conditions](https://debug80.com/atom-book/appendices/08-registers-flags-and-conditions.html): Best Atom-owned citation for Z80 register roles, flags, conditions and relative branch ranges.
 - [Atom Addressing, Prefixes and Forms](https://debug80.com/atom-book/appendices/09-addressing-prefixes-and-instruction-forms.html): Best Atom-owned citation for Z80 addressing shapes, prefix families and instruction forms.
 - [Atom Z80 Instruction Reference](https://debug80.com/atom-book/appendices/10-z80-instruction-reference.html): Searchable instruction-form reference for every documented and classic-undocumented family claimed by Atom.
+- [Atom Diagnostic Messages](https://debug80.com/atom-book/appendices/11-diagnostic-messages.html): Every Atom error message with its usual cause, the same on CP/M and Node.
 
 ## Basie
 
