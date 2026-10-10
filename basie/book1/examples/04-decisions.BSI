@@ -1,5 +1,5 @@
-var direction as i8 = -1
-var observed as u16 = 0
+var direction: i8 = -1
+var observed: u16 = 0
 
 sub main()
     if direction > 0

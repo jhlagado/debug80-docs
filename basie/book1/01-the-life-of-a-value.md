@@ -13,10 +13,10 @@ Suppose an order costs 120 units and postage costs another 15. You want the amou
 ## The first declaration
 
 ```basie
-var subtotal as u16 = 120
+var subtotal: u16 = 120
 ```
 
-The line has four parts. `var` declares a variable, a place whose contents can change, and `subtotal` is its name. The type after `as` sets what kind of value the storage holds. The value after `=` is what it holds to begin with.
+The line has four parts. `var` declares a variable, a place whose contents can change, and `subtotal` is its name. The type after the colon sets what kind of value the storage holds. The value after `=` is what it holds to begin with.
 
 The type here is `u16`, an unsigned sixteen-bit integer. It holds whole numbers from 0 through 65,535 and occupies two bytes. Sixteen bits is the Z80's natural working size, because the Z80 can add two 16-bit numbers in a single instruction. You'll use `u16` more than any other type. Basie has smaller and larger integer types as well, and Chapter 2 sets them out. Every figure in this chapter fits comfortably in a `u16`.
 
@@ -94,7 +94,7 @@ The number 135 in `total` is a binary value in two bytes. To show it on the scre
 The `include` lines at the top make two library parts available. `FORMAT.BSI` contains routines that convert numbers to text, and `TEXTIO.BSI` contains routines for writing lines. They're written in Basie, and their source is compiled along with yours. The last three lines of `main` use them:
 
 ```basie
-var report as string[16]
+var report: string[16]
 appendU16(report, total) else fail
 writeLine(console, report) else fail
 ```

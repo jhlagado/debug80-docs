@@ -1,5 +1,5 @@
-var values as u8[2] = [3, 4]
-var index as u16 = 2
+var values: u8[2] = [3, 4]
+var index: u16 = 2
 
 sub main()
     var value = values[index]

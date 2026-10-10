@@ -17,7 +17,7 @@ C passes a pointer to the first element and leaves the length to a separate argu
 An **open array** parameter leaves the length out of the type:
 
 ```basie
-sub sum(values as u8[]) as u16
+sub sum(values: u8[]): u16
 ```
 
 `u8[]` accepts any complete array of `u8`, whatever its length. The element type is still fixed and only the length is open. Each call passes the array with its real length, which the routine reads as `values.length`.
@@ -45,7 +45,7 @@ An open string parameter, `string[]`, works the same way. It accepts a string of
 A `var string[]` parameter is the only place where a string's length can be assigned directly. Routines use it to build text in a string the caller supplies:
 
 ```basie
-sub writeOK(var text as string[])
+sub writeOK(var text: string[])
     text.length = 2
     text[0] = 'O'
     text[1] = 'K'
@@ -69,7 +69,7 @@ The caller supplies the string and chooses its capacity, and the routine fills i
 Chapter 3 showed that a routine can't return access to its own local storage, because that storage ends with the call. Returning access to storage that *outlives* the routine is safe and often useful. For example, a routine that picks a record out of an array can return the record itself instead of a copy:
 
 ```basie
-sub pick(items as Pair[2], index as u8) as Pair from items
+sub pick(items: Pair[2], index: u8): Pair from items
     return items[index]
 end
 ```

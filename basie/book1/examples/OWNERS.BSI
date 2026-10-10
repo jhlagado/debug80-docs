@@ -1,10 +1,10 @@
 record Job
-    number as u16
+    number: u16
 end
 
-pool jobs as Job[2]
+pool jobs: Job[2]
 
-sub consume(job as jobs) as u16
+sub consume(job: jobs): u16
     return job.number
 end
 

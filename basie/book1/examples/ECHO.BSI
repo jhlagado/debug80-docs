@@ -1,7 +1,7 @@
 include "TEXTIO.BSI"
 
 sub main() fails
-    var answer as string[32]
+    var answer: string[32]
     prompt("Name? ", answer) else fail
     writeText(console, "Hello, ") else fail
     writeLine(console, answer) else fail

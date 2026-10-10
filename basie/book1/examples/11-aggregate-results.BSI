@@ -1,20 +1,20 @@
 record Pair
-    left as u8
-    right as u8
+    left: u8
+    right: u8
 end
 
-var first as Pair = (3, 4)
-var second as Pair
-var observed as u16 = 0
+var first: Pair = (3, 4)
+var second: Pair
+var observed: u16 = 0
 
-sub selected(useFirst as boolean) as Pair
+sub selected(useFirst: boolean): Pair
     if useFirst
         return first
     end
     return second
 end
 
-sub copyPair(source as Pair, var destination as Pair)
+sub copyPair(source: Pair, var destination: Pair)
     destination = source
 end
 

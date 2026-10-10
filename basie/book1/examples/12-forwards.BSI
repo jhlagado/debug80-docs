@@ -1,6 +1,6 @@
-forward sub odd(value as u8) as boolean
+forward sub odd(value: u8): boolean
 
-sub even(value as u8) as boolean
+sub even(value: u8): boolean
     if value = 0
         return true
     end
@@ -14,7 +14,7 @@ sub odd
     return even(value - 1)
 end
 
-var observed as u16 = 0
+var observed: u16 = 0
 
 sub main()
     if odd(7)

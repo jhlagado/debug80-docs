@@ -7,14 +7,14 @@ const missingArgument = 49
 const queueFull = 50
 
 record Job
-    number as u16
+    number: u16
 end
 
-pool jobs as Job[2]
+pool jobs: Job[2]
 
-sub execute(text as string[]) as u16 fails
-    var command as string[8]
-    var argument as string[16]
+sub execute(text: string[]): u16 fails
+    var command: string[8]
+    var argument: string[16]
 
     var found = word(text, 0, command) else fail
     if not found or not equal(command, "double")
@@ -34,7 +34,7 @@ sub execute(text as string[]) as u16 fails
     return value * 2
 end
 
-sub createJob(text as string[]) as jobs fails
+sub createJob(text: string[]): jobs fails
     var number = execute(text) else fail
     var candidate = new? jobs(number)
     select move candidate
@@ -45,8 +45,8 @@ sub createJob(text as string[]) as jobs fails
     end
 end
 
-sub reportJob(item as Job) fails
-    var report as string[32]
+sub reportJob(item: Job) fails
+    var report: string[32]
     append(report, "Result: ") else fail
     appendU16(report, item.number) else fail
     append(report, "\r\n") else fail
@@ -58,7 +58,7 @@ sub main() fails
     assert first.number = 246
     reportJob(first) else fail
 
-    var code as u8
+    var code: u8
     first = createJob("double nope") handle code
         assert code = badNumber
         assert first.number = 246

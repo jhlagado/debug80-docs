@@ -5,9 +5,9 @@ include "FORMAT.BSI"
 const unknownCommand = 48
 const missingArgument = 49
 
-sub execute(text as string[]) as u16 fails
-    var command as string[8]
-    var argument as string[16]
+sub execute(text: string[]): u16 fails
+    var command: string[8]
+    var argument: string[16]
 
     var found = word(text, 0, command) else fail
     if not found or not equal(command, "double")
@@ -28,15 +28,15 @@ sub execute(text as string[]) as u16 fails
 end
 
 sub main() fails
-    var result as u16 = execute("double 123") else fail
+    var result: u16 = execute("double 123") else fail
     assert result = 246
-    var report as string[32]
+    var report: string[32]
     append(report, "Result: ") else fail
     appendU16(report, result) else fail
     append(report, "\r\n") else fail
     writeText(console, report) else fail
 
-    var code as u8
+    var code: u8
     result = execute("double nope") handle code
         assert code = badNumber
         assert result = 246

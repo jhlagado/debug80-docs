@@ -1,4 +1,4 @@
-sub change(text as string[])
+sub change(text: string[])
     text.length = 1
 end
 

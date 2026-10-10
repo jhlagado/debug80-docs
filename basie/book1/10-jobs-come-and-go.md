@@ -15,11 +15,11 @@ Chapters 5 and 6 worked with one or two jobs at a time, each owned by a local va
 The queue needs room for the job records themselves and room for the owners of the waiting jobs:
 
 ```basie
-pool jobs as Job[3]
+pool jobs: Job[3]
 ```
 
 ```basie
-var queue as jobs?[3]
+var queue: jobs?[3]
 ```
 
 The pool reserves three slots for `Job` records. The local array `queue` holds three optional owners, which all start as `none`. Each one can later hold a job's owning handle.
@@ -31,10 +31,10 @@ The pool limits how many job records can exist at once. The array limits how man
 Adding a job means allocating a record and putting its owner into a queue position. The routine has to store into the caller's array element, so it needs access to the place as well as the record:
 
 ```basie
-sub addJob(var place as jobs?, value as u16) as boolean
+sub addJob(var place: jobs?, value: u16): boolean
 ```
 
-A `var` parameter of an optional owner type, such as `var place as jobs?`, is called a **slot-holder**. It lends the routine an owning place, which is a variable, field or array element that holds a handle or `none`. The routine can move an owner into the place, move one out of it or overwrite it. A lease lends the record and can't release it. A slot-holder lends the owner's place, so the routine can change what the place owns.
+A `var` parameter of an optional owner type, such as `var place: jobs?`, is called a **slot-holder**. It lends the routine an owning place, which is a variable, field or array element that holds a handle or `none`. The routine can move an owner into the place, move one out of it or overwrite it. A lease lends the record and can't release it. A slot-holder lends the owner's place, so the routine can change what the place owns.
 
 Inside, `addJob` tries `new?` and selects the result with `move`. If the pool had room, it moves the new owner into `place`:
 
@@ -105,11 +105,11 @@ The queue keeps all its owners in one array. Some structures, such as a linked l
 forward pool nodes
 
 record Node
-    value as u16
-    next as nodes?
+    value: u16
+    next: nodes?
 end
 
-pool nodes as Node[3]
+pool nodes: Node[3]
 ```
 
 The record needs the pool's handle type, and the pool needs the record. `forward pool nodes` introduces the pool's name early, so the record can use `nodes?` ahead of the full pool declaration.

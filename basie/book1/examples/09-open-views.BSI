@@ -1,10 +1,10 @@
-var numbers as u8[4] = [2, 4, 6, 8]
-var message as string[12]
-var observed as u16 = 0
+var numbers: u8[4] = [2, 4, 6, 8]
+var message: string[12]
+var observed: u16 = 0
 
-sub sum(values as u8[]) as u16
-    var index as u16
-    var total as u16 = 0
+sub sum(values: u8[]): u16
+    var index: u16
+    var total: u16 = 0
 
     for index = 0 until values.length
         total = total + u16(values[index])
@@ -12,7 +12,7 @@ sub sum(values as u8[]) as u16
     return total
 end
 
-sub writeOK(var text as string[])
+sub writeOK(var text: string[])
     text.length = 2
     text[0] = 'O'
     text[1] = 'K'
