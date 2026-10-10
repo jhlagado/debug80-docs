@@ -28,17 +28,17 @@ sub main()
     var queue: jobs?[3]
     var extra: jobs?
 
-    assert addJob(queue[0], 7)
-    assert addJob(queue[1], 9)
-    assert addJob(queue[2], 11)
-    assert not addJob(extra, 13)
+    assert addJob(var queue[0], 7)
+    assert addJob(var queue[1], 9)
+    assert addJob(var queue[2], 11)
+    assert not addJob(var extra, 13)
 
-    var completed = takeJob(queue[0])
+    var completed = takeJob(var queue[0])
     assert completed = 7
-    assert addJob(queue[0], 13)
+    assert addJob(var queue[0], 13)
 
-    assert takeJob(queue[1]) = 9
-    assert takeJob(queue[2]) = 11
-    assert takeJob(queue[0]) = 13
-    assert takeJob(queue[0]) = 0
+    assert takeJob(var queue[1]) = 9
+    assert takeJob(var queue[2]) = 11
+    assert takeJob(var queue[0]) = 13
+    assert takeJob(var queue[0]) = 0
 end

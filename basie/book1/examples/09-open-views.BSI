@@ -19,7 +19,7 @@ sub writeOK(var text: string[])
 end
 
 sub main()
-    writeOK(message)
+    writeOK(var message)
     observed = sum(numbers) + u16(message.length)
     assert observed = 22
 end

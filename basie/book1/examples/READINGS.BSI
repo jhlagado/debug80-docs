@@ -37,13 +37,13 @@ sub main() fails
     var sum = total(samples)
     assert sum = 60
 
-    sort(samples)
+    sort(var samples)
     assert samples[0].value = 12 and samples[3].value = 18
 
     var mean: f32 = f32(sum) / f32(sampleCount)
     var report: string[32]
-    try append(report, "Mean: ")
-    try appendF32(report, mean, 1)
-    try append(report, "\r\n")
+    try append(var report, "Mean: ")
+    try appendF32(var report, mean, 1)
+    try append(var report, "\r\n")
     try writeText(console, report)
 end

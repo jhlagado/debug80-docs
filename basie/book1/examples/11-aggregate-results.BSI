@@ -19,7 +19,7 @@ sub copyPair(source: Pair, var destination: Pair)
 end
 
 sub main()
-    copyPair(selected(true), second)
+    copyPair(selected(true), var second)
     observed = u16(second.left) * 10 + u16(second.right)
     assert observed = 34
 end

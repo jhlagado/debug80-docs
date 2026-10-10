@@ -17,7 +17,7 @@ sub main()
     var saved: Reading
     saved = current
 
-    update(current, 20)
+    update(var current, 20)
     assert inspect(current) = 20
     assert saved.value = 12
 end
