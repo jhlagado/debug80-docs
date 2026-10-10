@@ -79,7 +79,7 @@ Each trap reason points to a particular question about your program:
 | `ownership-cycle` | Which store would make a record own itself through a chain of records? |
 | `assertion` | Which earlier step produced a state different from the one predicted? |
 
-An unhandled failure that passes all the way out of `main` is reported as `FAIL` followed by the error code, such as `FAIL 48`. Unlike a trap, it means that a routine reported an expected failure and nothing in the program handled it. The code identifies the failure: codes 1 to 31 come from services, 32 to 47 from the standard library and 48 upwards from your program's own constants.
+An unhandled failure that passes all the way out of `main` is reported as `FAIL` followed by the error code, such as `FAIL 4`. Unlike a trap, it means that a routine reported an expected failure and nothing in the program handled it. The code is the failing member's position in the enum that `main` fails with, counting from zero, so `FAIL 4` from a `main` that fails with `IoError` is `IoError.fileNotFound`.
 
 ## After a trap
 
