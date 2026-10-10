@@ -130,7 +130,7 @@ Hello, Ada
 The input service underneath `prompt` is `readLine`:
 
 ```basie
-readLine(console, answer) else fail
+try readLine(console, answer)
 ```
 
 It reads the line without a prompt and leaves the cursor at the end of the user's typing. CP/M's line editing echoes Return as a carriage return alone, so `prompt` also writes a line feed. `prompt` is ordinary Basie in the library, and you can read its source to see exactly what it does.

@@ -52,7 +52,7 @@ This program uses three library parts to interpret a short command:
 
 <<< @/basie/book1/examples/COMMAND.BSI{basie}
 
-`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSI` to copy the first word into the local string `command`. Then it uses `equal` from `STRINGS.BSI` to check that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSI` to turn it into a number. Each step that can fail passes the failure on with `else fail`. `execute` also has two failure codes of its own, for an unknown command and a missing argument.
+`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSI` to copy the first word into the local string `command`. Then it uses `equal` from `STRINGS.BSI` to check that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSI` to turn it into a number. Each step that can fail passes the failure on with `try`. `execute` also has two failure codes of its own, for an unknown command and a missing argument.
 
 `badNumber` isn't declared in this file at all. It's a constant from `PARSE.BSI`, the code that `parseU16` fails with when the text isn't a number. `execute` uses it for a number too large to double.
 
@@ -65,15 +65,15 @@ The first command in `main`, `double 123`, succeeds and prints `Result: 246`. Th
 A Basie program has no direct access to the hardware. It can't read a port, write to a screen address or call the operating system itself. It reaches the console, the printer, files, the disk drives and everything else outside the program through **services**. A service is a routine supplied by the runtime, and it's called like any other routine:
 
 ```basie
-writeText(console, report) else fail
+try writeText(console, report)
 ```
 
-`console` is a predeclared value of type `File` that stands for the terminal. `report` is passed to a read-only `string[]` parameter. `writeText` writes the string's bytes, respecting its length, and keeps no access to it after the call. Like any routine, a service that can fail is declared `fails`, so every call needs `else fail` or `handle`.
+`console` is a predeclared value of type `File` that stands for the terminal. `report` is passed to a read-only `string[]` parameter. `writeText` writes the string's bytes, respecting its length, and keeps no access to it after the call. Like any routine, a service that can fail is declared `fails`, so every call needs `try` or `handle`.
 
 A string literal can be passed straight to a read-only string parameter:
 
 ```basie
-writeText(console, "Ready\r\n") else fail
+try writeText(console, "Ready\r\n")
 ```
 
 The carriage return and line feed at the end finish the line on CP/M. The literal is a counted string like any other, with no zero byte marking its end.

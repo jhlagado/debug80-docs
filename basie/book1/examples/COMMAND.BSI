@@ -9,17 +9,17 @@ sub execute(text: string[]): u16 fails
     var command: string[8]
     var argument: string[16]
 
-    var found = word(text, 0, command) else fail
+    var found = try word(text, 0, command)
     if not found or not equal(command, "double")
         fail unknownCommand
     end
 
-    found = word(text, 1, argument) else fail
+    found = try word(text, 1, argument)
     if not found
         fail missingArgument
     end
 
-    var value = parseU16(argument) else fail
+    var value = try parseU16(argument)
     if value > 32767
         fail badNumber
     end
@@ -28,19 +28,19 @@ sub execute(text: string[]): u16 fails
 end
 
 sub main() fails
-    var result: u16 = execute("double 123") else fail
+    var result: u16 = try execute("double 123")
     assert result = 246
     var report: string[32]
-    append(report, "Result: ") else fail
-    appendU16(report, result) else fail
-    append(report, "\r\n") else fail
-    writeText(console, report) else fail
+    try append(report, "Result: ")
+    try appendU16(report, result)
+    try append(report, "\r\n")
+    try writeText(console, report)
 
     var code: u8
     result = execute("double nope") handle code
         assert code = badNumber
         assert result = 246
-        writeText(console, "Invalid number\r\n") else fail
+        try writeText(console, "Invalid number\r\n")
     end
     assert code = badNumber
 end

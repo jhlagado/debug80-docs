@@ -1,6 +1,6 @@
 sub main() fails
-    writeOutputByte('?') else fail
-    var character: u8 = readInputByte() else fail
-    writeOutputByte(character) else fail
-    writeText(console, "\r\n") else fail
+    try writeOutputByte('?')
+    var character: u8 = try readInputByte()
+    try writeOutputByte(character)
+    try writeText(console, "\r\n")
 end

@@ -16,17 +16,17 @@ sub execute(text: string[]): u16 fails
     var command: string[8]
     var argument: string[16]
 
-    var found = word(text, 0, command) else fail
+    var found = try word(text, 0, command)
     if not found or not equal(command, "double")
         fail unknownCommand
     end
 
-    found = word(text, 1, argument) else fail
+    found = try word(text, 1, argument)
     if not found
         fail missingArgument
     end
 
-    var value = parseU16(argument) else fail
+    var value = try parseU16(argument)
     if value > 32767
         fail badNumber
     end
@@ -35,7 +35,7 @@ sub execute(text: string[]): u16 fails
 end
 
 sub createJob(text: string[]): jobs fails
-    var number = execute(text) else fail
+    var number = try execute(text)
     var candidate = new? jobs(number)
     select move candidate
     case some(allocated)
@@ -47,29 +47,29 @@ end
 
 sub reportJob(item: Job) fails
     var report: string[32]
-    append(report, "Result: ") else fail
-    appendU16(report, item.number) else fail
-    append(report, "\r\n") else fail
-    writeText(console, report) else fail
+    try append(report, "Result: ")
+    try appendU16(report, item.number)
+    try append(report, "\r\n")
+    try writeText(console, report)
 end
 
 sub main() fails
-    var first = createJob("double 123") else fail
+    var first = try createJob("double 123")
     assert first.number = 246
-    reportJob(first) else fail
+    try reportJob(first)
 
     var code: u8
     first = createJob("double nope") handle code
         assert code = badNumber
         assert first.number = 246
-        writeText(console, "Invalid number\r\n") else fail
+        try writeText(console, "Invalid number\r\n")
     end
 
-    var second = createJob("double 3") else fail
+    var second = try createJob("double 3")
     second = createJob("double 7") handle code
         assert code = queueFull
         assert second.number = 6
-        writeText(console, "Queue full\r\n") else fail
+        try writeText(console, "Queue full\r\n")
     end
 
     assert code = queueFull

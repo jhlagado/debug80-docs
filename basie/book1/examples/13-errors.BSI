@@ -9,7 +9,7 @@ sub positive(value: i8): u8 fails
 end
 
 sub checked(value: i8): u8 fails
-    var result: u8 = positive(value) else fail
+    var result: u8 = try positive(value)
     return result
 end
 

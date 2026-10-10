@@ -12,6 +12,6 @@ sub main() fails
     assert total = 135
 
     var report: string[16]
-    appendU16(report, total) else fail
-    writeLine(console, report) else fail
+    try appendU16(report, total)
+    try writeLine(console, report)
 end

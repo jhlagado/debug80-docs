@@ -69,7 +69,7 @@ The largest accepted input is 32,767, which doubles to 65,534. Basie's safety ru
 `createJob` calls `execute`, passing any failure straight on. It tries to allocate only after it has a number:
 
 ```basie
-var number = execute(text) else fail
+var number = try execute(text)
 var candidate = new? jobs(number)
 select move candidate
 case some(allocated)
@@ -101,7 +101,7 @@ The second command in `main` assigns a new job to `first`, an owner that already
 first = createJob("double nope") handle code
     assert code = badNumber
     assert first.number = 246
-    writeText(console, "Invalid number\r\n") else fail
+    try writeText(console, "Invalid number\r\n")
 end
 ```
 
