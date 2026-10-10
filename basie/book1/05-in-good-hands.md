@@ -20,10 +20,10 @@ A **pool** reserves a fixed number of slots for records of one type:
 
 ```basie
 record Job
-    number as u16
+    number: u16
 end
 
-pool jobs as Job[2]
+pool jobs: Job[2]
 ```
 
 `jobs` has room for two `Job` records. The storage for both slots is reserved when the program is built, just like a program variable. The size of the pool is known in advance and can't grow. During the run only the set of slots in use changes, starting with both free. Allocating a record takes a free slot and starts that record's lifetime. Releasing it ends the lifetime and returns the slot for later use.
@@ -72,7 +72,7 @@ After the move, `first` is empty and can't be used to reach the record. The comp
 A routine can take ownership through a parameter whose type is a pool:
 
 ```basie
-sub consume(job as jobs) as u16
+sub consume(job: jobs): u16
     return job.number
 end
 ```

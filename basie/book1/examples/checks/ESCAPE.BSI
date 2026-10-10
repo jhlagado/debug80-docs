@@ -1,9 +1,9 @@
 record Pair
-    left as u8
+    left: u8
 end
 
-sub bad() as Pair
-    var localPair as Pair
+sub bad(): Pair
+    var localPair: Pair
     return localPair
 end
 

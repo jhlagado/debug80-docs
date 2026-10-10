@@ -5,7 +5,7 @@ const stepBack = -1
 
 assert rows * columns = %100000
 
-var observed as u16 = 0
+var observed: u16 = 0
 
 sub main()
     assert enabled

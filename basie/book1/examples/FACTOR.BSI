@@ -1,4 +1,4 @@
-forward sub factorial(n as u8) as u32
+forward sub factorial(n: u8): u32
 
 sub factorial
     if n < 2
@@ -7,9 +7,9 @@ sub factorial
     return u32(n) * factorial(n - 1)
 end
 
-sub product(n as u8) as u32
-    var result as u32 = 1
-    var k as u8
+sub product(n: u8): u32
+    var result: u32 = 1
+    var k: u8
     for k = 2 to n
         result = result * u32(k)
     end

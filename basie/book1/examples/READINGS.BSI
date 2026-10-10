@@ -1,16 +1,16 @@
 include "FORMAT.BSI"
 
 record Reading
-    value as u16
-    usable as boolean
+    value: u16
+    usable: boolean
 end
 
 const sampleCount = 4
-var samples as Reading[sampleCount] = [(12, true), (18, true), (16, true), (14, true)]
+var samples: Reading[sampleCount] = [(12, true), (18, true), (16, true), (14, true)]
 
-sub total(values as Reading[]) as u32
-    var sum as u32 = 0
-    var index as u16
+sub total(values: Reading[]): u32
+    var sum: u32 = 0
+    var index: u16
 
     for index = 0 until values.length
         if values[index].usable
@@ -20,11 +20,11 @@ sub total(values as Reading[]) as u32
     return sum
 end
 
-sub sort(var values as Reading[])
-    var cursor as u16
+sub sort(var values: Reading[])
+    var cursor: u16
     for cursor = 1 until values.length
         var saved = values[cursor]
-        var at as u16 = cursor
+        var at: u16 = cursor
         while at > 0 and values[at - 1].value > saved.value
             values[at] = values[at - 1]
             at = at - 1
@@ -40,8 +40,8 @@ sub main() fails
     sort(samples)
     assert samples[0].value = 12 and samples[3].value = 18
 
-    var mean as f32 = f32(sum) / f32(sampleCount)
-    var report as string[32]
+    var mean: f32 = f32(sum) / f32(sampleCount)
+    var report: string[32]
     append(report, "Mean: ") else fail
     appendF32(report, mean, 1) else fail
     append(report, "\r\n") else fail
