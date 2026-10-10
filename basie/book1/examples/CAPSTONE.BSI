@@ -16,12 +16,12 @@ sub execute(text: string[]): u16 fails
     var command: string[8]
     var argument: string[16]
 
-    var found = try word(text, 0, command)
+    var found = try word(text, 0, var command)
     if not found or not equal(command, "double")
         fail unknownCommand
     end
 
-    found = try word(text, 1, argument)
+    found = try word(text, 1, var argument)
     if not found
         fail missingArgument
     end
@@ -47,9 +47,9 @@ end
 
 sub reportJob(item: Job) fails
     var report: string[32]
-    try append(report, "Result: ")
-    try appendU16(report, item.number)
-    try append(report, "\r\n")
+    try append(var report, "Result: ")
+    try appendU16(var report, item.number)
+    try append(var report, "\r\n")
     try writeText(console, report)
 end
 

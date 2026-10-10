@@ -80,15 +80,15 @@ sub update(var item: Reading, value: u16)
 end
 ```
 
-`var` makes `item` a **mutable alias**. When the program calls `update(current, 20)`, `item.value = value` changes `current` itself. Assigning a whole record to `item` would copy new contents into `current`. It can't make `item` refer to a different record. The other parameter, `value`, is a scalar and is still a copy, as in Chapter 3.
+`var` makes `item` a **mutable alias**. The call says so too: the program writes `update(var current, 20)`, and `item.value = value` changes `current` itself. Assigning a whole record to `item` would copy new contents into `current`. It can't make `item` refer to a different record. The other parameter, `value`, is a scalar and is still a copy, as in Chapter 3.
 
-`var` is only three letters in the middle of a parameter list, so it is easy to miss. It is also how you tell whether a call can change your record. You can see it in the declaration without reading the routine's body. A mutable alias needs a record that can be changed, so you can't pass it a constant or a string literal.
+`var` is only three letters in the middle of a parameter list, so it would be easy to miss. That is why Basie asks for it at the call as well. Every call that can change your record says `var` where it passes it, and leaving it out, or writing it for a parameter that isn't `var`, is an error. You can see which calls write to a record without reading any routine's body. A mutable alias needs a record that can be changed, so you can't pass it a constant or a string literal.
 
 ## One record, several names
 
 A read-only alias stops a routine from writing to the record through that alias, but other code can still change the record. For example, the routine might assign to `current` directly or call another routine that does. The next time the routine reads `item`, it gets the new value, because `item` and `current` are the same record.
 
-Basie allows a record to be reached through more than one name. It makes sure that no alias outlasts the record or reaches outside it, and that is what keeps memory safe. You decide which routines may change a record, and the `var` in a declaration shows which ones can.
+Basie allows a record to be reached through more than one name. It makes sure that no alias outlasts the record or reaches outside it, and that is what keeps memory safe. You decide which routines may change a record, and `var`, in the declaration and at each call, shows which ones can.
 
 ## The complete comparison
 

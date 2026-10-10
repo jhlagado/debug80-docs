@@ -96,7 +96,7 @@ A routine can also return access to a program variable. Program storage lasts fo
 
 `selected(true)` returns access to the program variable `first`, and that alias goes straight to `copyPair`. The call to `selected` copies nothing, and the only copy is the assignment inside `copyPair`. That assignment writes `first` into `second`, so the result is 34.
 
-A result is read-only unless its declaration says `as var`, as in `as var Pair from items`. A writable result must come from a `var` parameter or from a program variable that isn't a constant. A routine therefore can't hand out write access to something it could only read.
+A result is read-only unless its declaration says `: var`, as in `: var Pair from items`. A writable result must come from a `var` parameter or from a program variable that isn't a constant. A routine therefore can't hand out write access to something it could only read.
 
 ## The rules in one place
 
@@ -124,4 +124,4 @@ Then pass a `string[4]` to `writeOK` and check that its length is also 2. Finall
 - Open views can't be stored, and each one covers a whole array.
 - A routine may return access to a parameter named in its `from` clause, or to program storage, but never to its own locals.
 - A returned alias must be used within the statement. Assigning it to a new variable copies the record.
-- `as var` makes a result writable, and only a writable source can supply one.
+- `: var` makes a result writable, and only a writable source can supply one.
