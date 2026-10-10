@@ -45,7 +45,7 @@ case else
 end
 ```
 
-`select` evaluates `direction` once and runs the arm whose label matches. A label can be a single constant, a list such as `case 1, 3, 5` or a range such as `case 'A' to 'Z'`. `case else` catches every value the other labels don't cover. The compiler reports an error if two labels cover the same value. An arm never falls through into the next. C's forgotten `break` has no equivalent in Basie.
+`select` evaluates `direction` once and runs the arm whose label matches. A label can be a single constant, a list such as `case 1, 3, 5` or a range such as `case 'A' to 'Z'`. `case else` catches every value the other labels don't cover. A `select` must have it unless its labels cover every value of the type, so a value with no arm never passes unnoticed; an empty `case else` says that the other values do nothing. The compiler reports an error if two labels cover the same value. An arm never falls through into the next. C's forgotten `break` has no equivalent in Basie.
 
 Both statements appear in this example:
 
@@ -123,14 +123,16 @@ The `for` loop counts from -3 to 3 in steps of 2, which gives -3, -1, 1 and 3. T
 
 Some operations fail for reasons that aren't bugs. The user might type `nope` where a number was wanted. A file might be missing, or a string might be too short for the digits. Basie requires the program to deal with each of these.
 
-A routine that can fail says so with `fails` at the end of its declaration. Inside it, `fail` ends the routine with an error code, a `u8` value, instead of a normal result:
+A routine that can fail says so with `fails` at the end of its declaration, followed by the enum its error codes come from. Inside it, `fail` ends the routine with one of that enum's members instead of a normal result:
 
 ```basie
-const invalidValue = 7
+enum ValueError
+    negative
+end
 
-sub positive(value: i8): u8 fails
+sub positive(value: i8): u8 fails ValueError
     if value < 0
-        fail invalidValue
+        fail ValueError.negative
     end
     return u8(value)
 end
@@ -142,26 +144,28 @@ Every call to a failable routine must say what to do if it fails. There are exac
 var result: u8 = try positive(value)
 ```
 
-If `positive` fails, the routine containing this line fails too, with the same code. That routine must be declared `fails` itself, so the possibility of failure is visible in every signature it passes through. This is the `try` you've been writing since Chapter 1. It goes directly before the call, and the call must be the whole statement, the whole initializer or the whole right side of an assignment.
+If `positive` fails, the routine containing this line fails too, with the same code. That routine must be declared `fails ValueError` itself, so the possibility of failure, and its kind, is visible in every signature it passes through. This is the `try` you've been writing since Chapter 1. It goes directly before the call, and the call must be the whole statement, the whole initializer or the whole right side of an assignment.
 
 The second is to handle the failure on the spot with `handle`:
 
 ```basie
-var code: u8
+var code: ValueError
 observed = checked(-1) handle code
-    observed = 100 + u16(code)
+    if code = ValueError.negative
+        observed = 107
+    end
 end
 ```
 
-If the call succeeds, the assignment happens as usual and the handler block is skipped. If it fails, there is no assignment, so the destination keeps whatever it held before. The error code is stored in `code` and the handler block runs. `code` must be a `u8` variable declared beforehand. Chapter 14 relies on that guarantee to protect a job that's already stored.
+If the call succeeds, the assignment happens as usual and the handler block is skipped. If it fails, there is no assignment, so the destination keeps whatever it held before. The error code is stored in `code` and the handler block runs. `code` must be a variable of the failure's enum, declared beforehand. Chapter 14 relies on that guarantee to protect a job that's already stored.
 
 Here's the complete program:
 
 <<< @/basie/book1/examples/13-errors.BSI{basie}
 
-`positive` fails with code 7, and `checked` passes the failure on. `main` handles it, so `observed` is set to 100 plus 7, or 107. Suppose `main` passed the failure on instead and nothing handled it. The program would then end with a report of the code, such as `FAIL 7`.
+`positive` fails with `ValueError.negative`, and `checked` passes the failure on. `main` handles it, so `observed` is set to 107. Suppose `main` passed the failure on instead and nothing handled it. The program would then end with a report of the code's position in its enum, such as `FAIL 0`.
 
-Error codes are plain numbers, named by constants. By convention codes 1 to 31 belong to the runtime's services, 32 to 47 to the standard library and 48 upwards to your programs. Codes from different sources therefore don't collide.
+Each kind of failure has its own enum. The runtime's services fail with the predeclared `IoError`, whose members include `IoError.endOfInput` and `IoError.fileNotFound`, and the standard library's number parsing fails with `ParseError`. `try` passes a failure on only to a routine that fails with the same enum, so a file error can never turn up where a parsing error was expected. To pass on a failure of another kind, handle it and fail with a member of your own enum. Chapter 12 does this.
 
 ## Failures and traps
 
@@ -180,10 +184,10 @@ In `05-loops.BSI`, change `step 2` to `step 1` and work out the new total before
 ## Summary
 
 - `if`, `elseif` and `else` choose between blocks by Boolean conditions. Each block is its own scope.
-- `select` chooses by an integer value, with single labels, lists and ranges, and `case else`. Arms never fall through.
+- `select` chooses by an integer or enum value, with single labels, lists and ranges, and `case else`, which it needs unless its labels cover every value. Arms never fall through.
 - `new?` returns `none` instead of trapping when the pool is full, and evaluates no arguments in that case.
 - `select move` takes ownership of an optional handle into its `some` arm. Plain `select` leases the record instead.
 - `while` repeats while a condition holds. `for` counts with `until` or `to`, an optional constant `step` and a read-only counter that never wraps.
 - `continue` starts the next pass and `exit` leaves the loop. Owners in the body are released at the end of every pass.
-- A `fails` routine reports expected failures with `fail`. Every call either passes the failure on with `try` or handles it with `handle`.
+- A `fails` routine names the enum of its failures and reports them with `fail`. Every call either passes the failure on with `try`, within the same enum, or handles it with `handle`.
 - A trap is not a failure. It stops the program and can't be caught.

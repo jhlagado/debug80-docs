@@ -5,7 +5,7 @@ var subtotal: u16 = 120
 var postage: u16 = 15
 var total: u16 = 0
 
-sub main() fails
+sub main() fails IoError
     total = subtotal + postage
     subtotal = 200
     assert subtotal = 200

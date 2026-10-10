@@ -35,16 +35,16 @@ The work is split into three routines, each with one job:
 Each stage's declaration says what it does with its data.
 
 ```basie
-sub execute(text: string[]): u16 fails
-sub createJob(text: string[]): jobs fails
-sub reportJob(item: Job) fails
+sub execute(text: string[]): u16 fails CommandError
+sub createJob(text: string[]): jobs fails CommandError
+sub reportJob(item: Job) fails CommandError
 ```
 
-`execute` reads a command through a read-only alias and returns a copied number. `createJob` reads a command and returns an owner, a new job that the caller is responsible for. `reportJob` reads a `Job` record, which callers supply by leasing it from their owner. All three can fail, and each declaration says so with `fails`.
+`execute` reads a command through a read-only alias and returns a copied number. `createJob` reads a command and returns an owner, a new job that the caller is responsible for. `reportJob` reads a `Job` record, which callers supply by leasing it from their owner. All three can fail, and each declaration says so with `fails CommandError`. That enum lists everything that can go wrong with a command, from `unknownCommand` to `queueFull`, so the whole utility reports its failures in one vocabulary.
 
 ## Parsing the command
 
-`execute` is the routine from Chapter 12. It copies the command's first word into a local `string[8]` and its second into a local `string[16]`, using `word` from the library. If the first word isn't `double`, it fails with `unknownCommand`. If there's no second word, it fails with `missingArgument`. It converts the second word with `parseU16`, which fails with `badNumber` if the text isn't a number that fits a `u16`.
+`execute` is the routine from Chapter 12. It copies the command's first word into a local `string[8]` and its second into a local `string[16]`, using `word` from the library. If the first word isn't `double`, it fails with `CommandError.unknownCommand`. If there's no second word, it fails with `CommandError.missingArgument`. It converts the second word with `parseU16`, which fails with `ParseError.badNumber` if the text isn't a number that fits a `u16`; `execute` handles that and fails with `CommandError.badNumber`.
 
 The two local strings exist only while `execute` runs. They're the routine's scratch space for taking the command apart, and they end when `execute` returns. The `u16` it returns is a copy, safe for the reasons Chapter 3 gave.
 
@@ -56,7 +56,7 @@ The program accepts the first two words and ignores anything after them. To reje
 
 ```basie
 if value > 32767
-    fail badNumber
+    fail CommandError.badNumber
 end
 
 return value * 2
@@ -75,13 +75,13 @@ select move candidate
 case some(allocated)
     return move allocated
 case none
-    fail queueFull
+    fail CommandError.queueFull
 end
 ```
 
 If allocation succeeds, `return move allocated` transfers ownership of the new job to the caller. The returned value is a fresh owner, so the caller can bind it to a variable without writing `move`. The job survives the end of `createJob` because it lives in the pool rather than in `createJob`'s activation.
 
-If the pool is full, `createJob` fails with `queueFull` and no job is made. The caller receives either a fully initialised job that it owns or nothing at all.
+If the pool is full, `createJob` fails with `CommandError.queueFull` and no job is made. The caller receives either a fully initialised job that it owns or nothing at all.
 
 Parsing comes first and allocation second, so a bad command never takes a slot from the pool, even briefly.
 
@@ -89,7 +89,7 @@ Parsing comes first and allocation second, so a bad command never takes a slot f
 
 `reportJob` takes its `Job` parameter as a read-only alias. When `main` passes its owner, as in `reportJob(first)`, the call leases the record. The routine reads the job number while `main` keeps ownership.
 
-`reportJob` builds its text in a local `string[32]` with `append` and `appendU16`. Either call could fail if the string ran out of room. The routine then sends the text to the console with `writeText`. The local string ends when `reportJob` returns, but the job survives because `reportJob` never owned it.
+The writing is done by `writeReport`, which builds the text in a local `string[32]` with `append` and `appendU16` and sends it to the console with `writeText`. Any of those calls could fail with an `IoError`, if the string ran out of room or the console failed. `reportJob` calls `writeReport` and handles such a failure by failing with `CommandError.cannotReport`, so the rest of the program deals only in `CommandError`. `say` does the same for the program's other messages. The local string ends when `writeReport` returns, but the job survives because neither routine ever owned it.
 
 ![Command parsing returns a copied number, job creation transfers ownership, and reporting uses a temporary lease.](../../assets/images/basie-book/book1/utility-flow.svg)
 
@@ -99,15 +99,15 @@ The second command in `main` assigns a new job to `first`, an owner that already
 
 ```basie
 first = createJob("double nope") handle code
-    assert code = badNumber
+    assert code = CommandError.badNumber
     assert first.number = 246
-    try writeText(console, "Invalid number\r\n")
+    try say("Invalid number\r\n")
 end
 ```
 
 If `createJob` succeeded, the assignment would release job 246 and store the new job in its place. Here `createJob` fails because `nope` isn't a number. Chapter 7 showed that a failed call skips its assignment, and here that rule protects real data. `first` still owns job 246, and the handler checks exactly that before printing its message.
 
-The fourth command is the same shape with a different failure. By then `main` owns two jobs, `first` with 246 and `second` with 6, and the pool is full. `createJob("double 7")` parses its command, tries to allocate and finds no slot, so it fails with `queueFull`. The assignment to `second` is skipped, and `second` still owns job 6.
+The fourth command is the same shape with a different failure. By then `main` owns two jobs, `first` with 246 and `second` with 6, and the pool is full. `createJob("double 7")` parses its command, tries to allocate and finds no slot, so it fails with `CommandError.queueFull`. The assignment to `second` is skipped, and `second` still owns job 6.
 
 This works because `createJob` allocates the new job *before* the old one would be released. As Chapter 10 explained, the old job is safe if anything goes wrong, but a successful replacement briefly needs a spare slot. To free the old job first, a program must assign `none` to the owner before it calls `createJob`. A failure would then leave the owner with no job at all.
 
@@ -136,7 +136,7 @@ The fixed commands make every path repeatable. A real utility would read command
 
 ## Extending the utility
 
-Add a `square` command that squares its argument. The largest input whose square fits in a `u16` is 255, so fail with `badNumber` above it. Keep recognising the command separate from checking the number, so that an unknown command and a bad number still give different codes. The new operation should leave job creation, reporting and release unchanged.
+Add a `square` command that squares its argument. The largest input whose square fits in a `u16` is 255, so fail with `CommandError.badNumber` above it. Keep recognising the command separate from checking the number, so that an unknown command and a bad number still give different codes. The new operation should leave job creation, reporting and release unchanged.
 
 Then add a way to remove a finished job before accepting another command. Decide what should happen if the new command then fails. Should the old job be gone regardless, or kept until a new one is ready? Write it both ways, and trace the jobs and their owners through each.
 
