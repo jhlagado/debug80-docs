@@ -21,7 +21,7 @@ sub main()
     var remembered = id(first)
 
     assert inspectJob(first) = 7
-    incrementJob(first)
+    incrementJob(var first)
     assert first.number = 8
 
     var result = consumeJob(move first)
