@@ -89,7 +89,7 @@ Floating point is for measurements, where a tiny rounding error doesn't affect t
 The program uses the library's `appendF32` to turn the mean into text:
 
 ```basie
-appendF32(report, mean, 1) else fail
+try appendF32(report, mean, 1)
 ```
 
 The last argument is the number of decimal places, here one. The routine rounds to that many places and appends the digits to `report`. It fails if the string has no room. The program then sends the report to the console:
