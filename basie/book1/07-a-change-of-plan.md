@@ -101,7 +101,7 @@ end
 `for` steps a counter through a range. The counter must be an integer local declared earlier in the routine:
 
 ```basie
-var index as u16
+var index: u16
 for index = 0 until 4
     // process one position
 end
@@ -128,7 +128,7 @@ A routine that can fail says so with `fails` at the end of its declaration. Insi
 ```basie
 const invalidValue = 7
 
-sub positive(value as i8) as u8 fails
+sub positive(value: i8): u8 fails
     if value < 0
         fail invalidValue
     end
@@ -139,7 +139,7 @@ end
 Every call to a failable routine must say what to do if it fails. There are exactly two choices, and the first is to pass the failure on with `else fail`:
 
 ```basie
-var result as u8 = positive(value) else fail
+var result: u8 = positive(value) else fail
 ```
 
 If `positive` fails, the routine containing this line fails too, with the same code. That routine must be declared `fails` itself, so the possibility of failure is visible in every signature it passes through. This is the `else fail` you've been writing since Chapter 1.
@@ -147,7 +147,7 @@ If `positive` fails, the routine containing this line fails too, with the same c
 The second is to handle the failure on the spot with `handle`:
 
 ```basie
-var code as u8
+var code: u8
 observed = checked(-1) handle code
     observed = 100 + u16(code)
 end

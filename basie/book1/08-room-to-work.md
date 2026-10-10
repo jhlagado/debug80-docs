@@ -15,7 +15,7 @@ A list of readings, a line of input and a report waiting to be printed are each 
 Chapter 2 declared a one-dimensional array, `u8[2]`. An array's elements can themselves be arrays:
 
 ```basie
-var grid as u8[3][2] = [[1, 2], [3, 4], [5, 6]]
+var grid: u8[3][2] = [[1, 2], [3, 4], [5, 6]]
 ```
 
 The type reads from left to right. `grid` is an array of three elements, and each of those elements is an array of two `u8` values. So `grid[0]` is the whole first row, `[1, 2]`, and `grid[0][1]` is the second byte of that row, 2. The initial value spells out the same shape, as three rows of two.
@@ -61,7 +61,7 @@ Basie checks indexes against all eight elements, because that's what keeps memor
 Text is common enough that Basie gives it a type of its own. A `string[N]` has a fixed capacity of `N` bytes and a current length that can be anything from zero up to `N`. The capacity can be from 1 to 253.
 
 ```basie
-var source as string[6] = "A\0B"
+var source: string[6] = "A\0B"
 ```
 
 This string has room for six bytes and currently holds three: `A`, zero and `B`. The `\0` is an escape for the byte with value zero. Other escapes include `\r` for carriage return, `\n` for line feed, `\t` for tab and `\x41` for a byte given in hexadecimal.
@@ -75,7 +75,7 @@ A Basie string stores its length with its contents. Unlike a C string, it isn't 
 Assigning one string to another copies its contents and its length:
 
 ```basie
-var copy as string[6]
+var copy: string[6]
 copy = source
 copy[2] = 'C'
 ```

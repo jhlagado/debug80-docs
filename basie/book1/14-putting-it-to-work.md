@@ -35,9 +35,9 @@ The work is split into three routines, each with one job:
 Each stage's declaration says what it does with its data.
 
 ```basie
-sub execute(text as string[]) as u16 fails
-sub createJob(text as string[]) as jobs fails
-sub reportJob(item as Job) fails
+sub execute(text: string[]): u16 fails
+sub createJob(text: string[]): jobs fails
+sub reportJob(item: Job) fails
 ```
 
 `execute` reads a command through a read-only alias and returns a copied number. `createJob` reads a command and returns an owner, a new job that the caller is responsible for. `reportJob` reads a `Job` record, which callers supply by leasing it from their owner. All three can fail, and each declaration says so with `fails`.

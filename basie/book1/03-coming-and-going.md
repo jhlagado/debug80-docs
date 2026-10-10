@@ -13,8 +13,8 @@ The postage calculation in Chapter 1 worked for one order. A shop has many order
 ## A routine for the calculation
 
 ```basie
-sub amountDue(amount as u16, shipping as u16) as u16
-    var due as u16 = amount + shipping
+sub amountDue(amount: u16, shipping: u16): u16
+    var due: u16 = amount + shipping
     amount = 0
     return due
 end

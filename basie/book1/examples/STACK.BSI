@@ -1,13 +1,13 @@
 forward pool nodes
 
 record Node
-    value as u16
-    next as nodes?
+    value: u16
+    next: nodes?
 end
 
-pool nodes as Node[3]
+pool nodes: Node[3]
 
-sub push(var list as nodes?, value as u16) as boolean
+sub push(var list: nodes?, value: u16): boolean
     var candidate = new? nodes(value, move list)
     select move candidate
     case some(node)
@@ -18,7 +18,7 @@ sub push(var list as nodes?, value as u16) as boolean
     end
 end
 
-sub pop(var list as nodes?) as u16
+sub pop(var list: nodes?): u16
     select move list
     case some(top)
         list = move top.next
@@ -29,7 +29,7 @@ sub pop(var list as nodes?) as u16
 end
 
 sub main()
-    var stack as nodes?
+    var stack: nodes?
 
     assert push(stack, 7)
     assert push(stack, 9)

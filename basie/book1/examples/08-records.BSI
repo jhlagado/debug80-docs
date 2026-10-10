@@ -1,12 +1,12 @@
 record Cell
-    value as u16
-    active as boolean
+    value: u16
+    active: boolean
 end
 
-const defaultCell as Cell = (7, true)
-const masks as u8[4] = [1, 2, 4, 8]
-var current as Cell = (7, true)
-var observed as u16 = 0
+const defaultCell: Cell = (7, true)
+const masks: u8[4] = [1, 2, 4, 8]
+var current: Cell = (7, true)
+var observed: u16 = 0
 
 sub main()
     if current.active
