@@ -1,4 +1,4 @@
-sub main() fails
+sub main() fails IoError
     try writeOutputByte('?')
     var character: u8 = try readInputByte()
     try writeOutputByte(character)

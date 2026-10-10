@@ -33,7 +33,7 @@ sub sort(var values: Reading[])
     end
 end
 
-sub main() fails
+sub main() fails IoError
     var sum = total(samples)
     assert sum = 60
 

@@ -1,6 +1,6 @@
 include "TEXTIO.BSI"
 
-sub main() fails
+sub main() fails IoError
     var answer: string[32]
     try prompt("Name? ", var answer)
     try writeText(console, "Hello, ")
