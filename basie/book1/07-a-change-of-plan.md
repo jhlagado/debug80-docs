@@ -136,13 +136,13 @@ sub positive(value: i8): u8 fails
 end
 ```
 
-Every call to a failable routine must say what to do if it fails. There are exactly two choices, and the first is to pass the failure on with `else fail`:
+Every call to a failable routine must say what to do if it fails. There are exactly two choices, and the first is to pass the failure on with `try`:
 
 ```basie
-var result: u8 = positive(value) else fail
+var result: u8 = try positive(value)
 ```
 
-If `positive` fails, the routine containing this line fails too, with the same code. That routine must be declared `fails` itself, so the possibility of failure is visible in every signature it passes through. This is the `else fail` you've been writing since Chapter 1.
+If `positive` fails, the routine containing this line fails too, with the same code. That routine must be declared `fails` itself, so the possibility of failure is visible in every signature it passes through. This is the `try` you've been writing since Chapter 1. It goes directly before the call, and the call must be the whole statement, the whole initializer or the whole right side of an assignment.
 
 The second is to handle the failure on the spot with `handle`:
 
@@ -167,9 +167,9 @@ Error codes are plain numbers, named by constants. By convention codes 1 to 31 b
 
 Basie separates two kinds of things that go wrong.
 
-A **failure** is an outcome the program is expected to deal with. It comes from a `fail` statement in your code or in a library routine or service. It travels back through `else fail` until a `handle` catches it.
+A **failure** is an outcome the program is expected to deal with. It comes from a `fail` statement in your code or in a library routine or service. It travels back through `try` until a `handle` catches it.
 
-A **trap** means the program has tried to do something invalid. Examples are an index out of bounds, a conversion that doesn't fit, an access through a stale identifier and a false assertion. A trap stops the program on the spot. Nothing can catch a trap, including `handle` and `else fail`. The program has a bug at that point, and any further work would use bad data.
+A **trap** means the program has tried to do something invalid. Examples are an index out of bounds, a conversion that doesn't fit, an access through a stale identifier and a false assertion. A trap stops the program on the spot. Nothing can catch a trap, including `handle` and `try`. The program has a bug at that point, and any further work would use bad data.
 
 ## Things to try
 
@@ -185,5 +185,5 @@ In `05-loops.BSI`, change `step 2` to `step 1` and work out the new total before
 - `select move` takes ownership of an optional handle into its `some` arm. Plain `select` leases the record instead.
 - `while` repeats while a condition holds. `for` counts with `until` or `to`, an optional constant `step` and a read-only counter that never wraps.
 - `continue` starts the next pass and `exit` leaves the loop. Owners in the body are released at the end of every pass.
-- A `fails` routine reports expected failures with `fail`. Every call either passes the failure on with `else fail` or handles it with `handle`.
+- A `fails` routine reports expected failures with `fail`. Every call either passes the failure on with `try` or handles it with `handle`.
 - A trap is not a failure. It stops the program and can't be caught.

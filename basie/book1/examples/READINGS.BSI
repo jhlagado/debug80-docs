@@ -42,8 +42,8 @@ sub main() fails
 
     var mean: f32 = f32(sum) / f32(sampleCount)
     var report: string[32]
-    append(report, "Mean: ") else fail
-    appendF32(report, mean, 1) else fail
-    append(report, "\r\n") else fail
-    writeText(console, report) else fail
+    try append(report, "Mean: ")
+    try appendF32(report, mean, 1)
+    try append(report, "\r\n")
+    try writeText(console, report)
 end

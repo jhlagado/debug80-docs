@@ -73,7 +73,7 @@ The program first writes a `?` as a prompt. `readInputByte` then waits for a key
 
 `readInputByte` echoes the key it reads, so the user sees what they typed. Typing `A` shows the prompt, the echoed `A` and a second `A` from the program, so the screen reads `?AA`. The final `writeText` sends a carriage return and a line feed, written in the string as `\r\n`, to finish the line.
 
-CP/M treats Control-Z as the end of input. `readInputByte` reports that as a failure rather than returning a byte, and `else fail` passes the failure out of `main`.
+CP/M treats Control-Z as the end of input. `readInputByte` reports that as a failure rather than returning a byte, and `try` passes the failure out of `main`.
 
 Passing `character` to `writeOutputByte` copies the byte, just as the assignments in Chapter 1 did with numbers. The service has no access to the variable `character` itself.
 

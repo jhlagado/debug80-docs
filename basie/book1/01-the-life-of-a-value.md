@@ -32,7 +32,7 @@ The three declarations at the top sit outside any routine, which makes them **pr
 
 `sub main()` begins the routine where execution starts. `sub` introduces any routine, `main` is the routine the runtime calls first, and the empty parentheses mean it takes no arguments. Everything down to the matching `end` is the routine's body.
 
-The word `fails` after the parentheses and the `else fail` at the end of two lines concern errors. Printing can go wrong on a real machine. Basie requires every call that can fail to say what happens when it does. `else fail` means "if this call fails, pass the failure on". Here the failure passes out of `main` to the runtime, which reports it. Chapter 7 explains failures in full.
+The word `fails` after the parentheses and the `try` at the start of two lines concern errors. Printing can go wrong on a real machine. Basie requires every call that can fail to say what happens when it does. `try` means "if this call fails, pass the failure on". Here the failure passes out of `main` to the runtime, which reports it. Chapter 7 explains failures in full.
 
 The two `include` lines at the top bring in library source for formatting numbers and writing lines of text. The program uses these routines to print its result.
 
@@ -95,8 +95,8 @@ The `include` lines at the top make two library parts available. `FORMAT.BSI` co
 
 ```basie
 var report: string[16]
-appendU16(report, total) else fail
-writeLine(console, report) else fail
+try appendU16(report, total)
+try writeLine(console, report)
 ```
 
 The first line declares a local variable, `report`, inside `main`. Its type is `string[16]`, an empty string with room for up to sixteen bytes. The sixteen is a capacity, fixed when the string is declared, and nothing can write past it. Chapter 8 covers strings in full.
