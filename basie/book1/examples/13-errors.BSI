@@ -1,23 +1,28 @@
-const invalidValue = 7
+enum ValueError
+    negative
+end
+
 var observed: u16 = 0
 
-sub positive(value: i8): u8 fails
+sub positive(value: i8): u8 fails ValueError
     if value < 0
-        fail invalidValue
+        fail ValueError.negative
     end
     return u8(value)
 end
 
-sub checked(value: i8): u8 fails
+sub checked(value: i8): u8 fails ValueError
     var result: u8 = try positive(value)
     return result
 end
 
 sub main()
-    var code: u8
+    var code: ValueError
 
     observed = checked(-1) handle code
-        observed = 100 + u16(code)
+        if code = ValueError.negative
+            observed = 107
+        end
     end
     assert observed = 107
 end
