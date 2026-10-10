@@ -31,22 +31,22 @@ end
 sub main()
     var stack: nodes?
 
-    assert push(stack, 7)
-    assert push(stack, 9)
-    assert push(stack, 11)
-    assert not push(stack, 13)
+    assert push(var stack, 7)
+    assert push(var stack, 9)
+    assert push(var stack, 11)
+    assert not push(var stack, 13)
 
-    assert pop(stack) = 11
-    assert push(stack, 13)
+    assert pop(var stack) = 11
+    assert push(var stack, 13)
 
     stack = none
 
-    assert push(stack, 1)
-    assert push(stack, 2)
-    assert push(stack, 3)
+    assert push(var stack, 1)
+    assert push(var stack, 2)
+    assert push(var stack, 3)
 
-    assert pop(stack) = 3
-    assert pop(stack) = 2
-    assert pop(stack) = 1
-    assert pop(stack) = 0
+    assert pop(var stack) = 3
+    assert pop(var stack) = 2
+    assert pop(var stack) = 1
+    assert pop(var stack) = 0
 end

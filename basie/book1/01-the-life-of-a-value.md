@@ -95,7 +95,7 @@ The `include` lines at the top make two library parts available. `FORMAT.BSI` co
 
 ```basie
 var report: string[16]
-try appendU16(report, total)
+try appendU16(var report, total)
 try writeLine(console, report)
 ```
 

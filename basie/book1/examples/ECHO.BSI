@@ -2,7 +2,7 @@ include "TEXTIO.BSI"
 
 sub main() fails
     var answer: string[32]
-    try prompt("Name? ", answer)
+    try prompt("Name? ", var answer)
     try writeText(console, "Hello, ")
     try writeLine(console, answer)
 end
