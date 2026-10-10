@@ -1,20 +1,20 @@
 record Reading
-    value as u16
-    usable as boolean
+    value: u16
+    usable: boolean
 end
 
-var current as Reading = (12, true)
+var current: Reading = (12, true)
 
-sub inspect(item as Reading) as u16
+sub inspect(item: Reading): u16
     return item.value
 end
 
-sub update(var item as Reading, value as u16)
+sub update(var item: Reading, value: u16)
     item.value = value
 end
 
 sub main()
-    var saved as Reading
+    var saved: Reading
     saved = current
 
     update(current, 20)

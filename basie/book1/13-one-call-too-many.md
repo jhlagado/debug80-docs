@@ -19,7 +19,7 @@ Basie's compiler reads the source once from top to bottom, and every routine mus
 A **forward declaration** gives a routine's complete signature in advance and leaves the body for later:
 
 ```basie
-forward sub odd(value as u8) as boolean
+forward sub odd(value: u8): boolean
 ```
 
 The body comes later, with a short header that names the routine and nothing else:

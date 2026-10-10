@@ -17,7 +17,7 @@ The program has two kinds of routine. One kind reads the readings and calculates
 The readings are the same `Reading` records as in Chapter 4. Each has a `u16` value and a flag saying whether the reading can be used. A routine that takes a read-only open array calculates the total:
 
 ```basie
-sub total(values as Reading[]) as u32
+sub total(values: Reading[]): u32
 ```
 
 The result is a `u32` because a total can be much larger than any single reading. Four readings can't overflow sixteen bits, but forty large ones could. The routine widens each usable reading to `u32` before adding it:
@@ -41,8 +41,8 @@ Conversion is checked instead, so `u8(...)` either gives the same number or trap
 An operation can combine two different integer types when one of them widens to the other without losing anything. A `u8` and a `u16` can be added, giving a `u16`. A `u16` and an `i16` can't be mixed, because neither holds every value of the other. The `u16` can be 40,000 and the `i16` can be -3. Basie has no rule for choosing between them. You convert one yourself, usually to `i32`, which holds every value of both:
 
 ```basie
-var a as u16 = 40000
-var b as i16 = -3
+var a: u16 = 40000
+var b: i16 = -3
 assert i32(a) + b = 39997
 ```
 
@@ -53,7 +53,7 @@ Once `a` is an `i32`, `b` widens to match and the sum is calculated in 32 bits.
 The sorting routine's parameter is a mutable alias, so its declaration shows that the routine changes the array:
 
 ```basie
-sub sort(var values as Reading[])
+sub sort(var values: Reading[])
 ```
 
 The routine is an insertion sort. Starting at the second record, it copies each one in turn into a local variable, `saved`. It then shifts the larger records before it one place to the right and puts `saved` into the gap. Each of these moves copies a whole `Reading`, so a value and its usable flag always stay together. The writes go through the alias, so the caller's array ends up sorted.
@@ -73,7 +73,7 @@ The mean of the four readings is 60 divided by 4, which is exactly 15. Change on
 Convert *before* dividing instead:
 
 ```basie
-var mean as f32 = f32(sum) / f32(sampleCount)
+var mean: f32 = f32(sum) / f32(sampleCount)
 ```
 
 `f32` is Basie's floating-point type, a standard single-precision number in four bytes. With both operands converted, the division is done in floating point and keeps the fraction.

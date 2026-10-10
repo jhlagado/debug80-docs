@@ -1,18 +1,18 @@
 record Job
-    number as u16
+    number: u16
 end
 
-pool jobs as Job[1]
+pool jobs: Job[1]
 
-sub inspectJob(item as Job) as u16
+sub inspectJob(item: Job): u16
     return item.number
 end
 
-sub incrementJob(var item as Job)
+sub incrementJob(var item: Job)
     item.number = item.number + 1
 end
 
-sub consumeJob(item as jobs) as u16
+sub consumeJob(item: jobs): u16
     return item.number
 end
 

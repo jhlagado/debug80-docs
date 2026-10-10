@@ -1,6 +1,6 @@
-var source as string[6] = "A\0B"
-var copy as string[6]
-var observed as u16 = 0
+var source: string[6] = "A\0B"
+var copy: string[6]
+var observed: u16 = 0
 
 sub main()
     copy = source

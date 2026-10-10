@@ -1,10 +1,10 @@
 record Job
-    number as u16
+    number: u16
 end
 
-pool jobs as Job[1]
+pool jobs: Job[1]
 
-var observed as u16
+var observed: u16
 
 sub main()
     if true

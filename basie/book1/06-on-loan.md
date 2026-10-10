@@ -17,7 +17,7 @@ Basie has two ways to reach a pool record without owning it. A **lease** lends t
 A routine that only reads a job can take an ordinary record parameter, exactly like the `Reading` parameters in Chapter 4:
 
 ```basie
-sub inspectJob(item as Job) as u16
+sub inspectJob(item: Job): u16
     return item.number
 end
 ```
@@ -29,7 +29,7 @@ end
 A `var` record parameter leases the record with permission to change it:
 
 ```basie
-sub incrementJob(var item as Job)
+sub incrementJob(var item: Job)
     item.number = item.number + 1
 end
 ```
