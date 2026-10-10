@@ -30,7 +30,7 @@ The `include` lines must come before any declarations in the file, so the depend
 
 Parts organise the source but put no walls between its pieces. The compiler reads all the parts as one stream of declarations, in order, and the ordinary rules apply across the boundaries. A name must be declared before it is used, whether its declaration is in the same part or an earlier one. Public names from every part share one space, so two parts can't both declare a public routine called `parse`.
 
-The interfaces between parts are the routine declarations you already know. A routine's parameters show what it copies, what it reads and what it changes. Its result type shows what it returns, and `fails` shows whether it can fail. Moving a routine into a different file leaves all of that the same, including lifetimes and ownership.
+The interfaces between parts are the routine declarations you already know. A routine's parameters show what it copies, what it reads and what it changes. Its result type shows what it returns, and `fails` shows whether it can fail, and with which enum of codes. Moving a routine into a different file leaves all of that the same, including lifetimes and ownership.
 
 ## Keeping helpers private
 
@@ -52,13 +52,13 @@ This program uses three library parts to interpret a short command:
 
 <<< @/basie/book1/examples/COMMAND.BSI{basie}
 
-`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSI` to copy the first word into the local string `command`. Then it uses `equal` from `STRINGS.BSI` to check that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSI` to turn it into a number. Each step that can fail passes the failure on with `try`. `execute` also has two failure codes of its own, for an unknown command and a missing argument.
+`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSI` to copy the first word into the local string `command`. Then it uses `equal` from `STRINGS.BSI` to check that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSI` to turn it into a number.
 
-`badNumber` isn't declared in this file at all. It's a constant from `PARSE.BSI`, the code that `parseU16` fails with when the text isn't a number. `execute` uses it for a number too large to double.
+`execute` fails with its own enum, `CommandError`, because the things that can go wrong with a command are its own: an unknown command, a missing argument or a bad number. The routines it calls fail with other enums. `word` fails with `IoError`, as the services do, and `parseU16` fails with `ParseError`. `try` can't pass those on from a routine that fails with `CommandError`, so `execute` handles each one and fails with the `CommandError` member that says what went wrong for the command. A failure never leaves `execute` as something its caller didn't ask for.
 
 The declarations show how the data moves through the calls. The command text reaches `execute` as a read-only alias. `word` also reads the text through a read-only alias, and it fills in `command` or `argument` through a mutable alias. `parseU16` reads `argument` through a read-only alias and returns a copied `u16`. When `execute` returns, its two local strings end, and only the copied number reaches `main`.
 
-The first command in `main`, `double 123`, succeeds and prints `Result: 246`. The second, `double nope`, fails inside `parseU16`. The handler in `main` checks the code and prints `Invalid number`. Because the call failed, the assignment to `result` never happened, so `result` still holds 246.
+The first command in `main`, `double 123`, succeeds and prints `Result: 246`. The second, `double nope`, fails inside `parseU16`, and `execute` turns that `ParseError` into `CommandError.badNumber`. The handler in `main` checks the code and prints `Invalid number`. Because the call failed, the assignment to `result` never happened, so `result` still holds 246.
 
 ## Reaching the console
 
@@ -68,7 +68,7 @@ A Basie program has no direct access to the hardware. It can't read a port, writ
 try writeText(console, report)
 ```
 
-`console` is a predeclared value of type `File` that stands for the terminal. `report` is passed to a read-only `string[]` parameter. `writeText` writes the string's bytes, respecting its length, and keeps no access to it after the call. Like any routine, a service that can fail is declared `fails`, so every call needs `try` or `handle`.
+`console` is a predeclared value of type `File` that stands for the terminal. `report` is passed to a read-only `string[]` parameter. `writeText` writes the string's bytes, respecting its length, and keeps no access to it after the call. Like any routine, a service that can fail is declared `fails`, with `IoError` as its failure enum, so every call needs `try` or `handle`.
 
 A string literal can be passed straight to a read-only string parameter:
 
@@ -98,7 +98,7 @@ Basie keeps that boundary small. Most of what a program needs, from formatting n
 
 Take the `sum` routine from Chapter 9 and put it in a part of its own named `SUMS.BSI`. Include that part in a small program that uses `sum`. Then give `sum` a private helper, perhaps one that widens a byte to `u16`. The program behaves exactly as before, but the main program can't call the helper.
 
-In `COMMAND.BSI`, change `"double nope"` to `"triple 4"`. The handler's assertion `code = badNumber` now fails, because the code is `unknownCommand`. Change both checks of `badNumber` to `unknownCommand`, in the handler and after it. The program then runs to the end again.
+In `COMMAND.BSI`, change `"double nope"` to `"triple 4"`. The handler's assertion `problem = CommandError.badNumber` now fails, because the code is `CommandError.unknownCommand`. Change both checks to `unknownCommand`, in the handler and after it. The program then runs to the end again.
 
 ## Summary
 

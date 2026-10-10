@@ -2,9 +2,13 @@ include "PARSE.BSI"
 include "TEXTIO.BSI"
 include "FORMAT.BSI"
 
-const unknownCommand = 48
-const missingArgument = 49
-const queueFull = 50
+enum CommandError
+    unknownCommand
+    missingArgument
+    badNumber
+    queueFull
+    cannotReport
+end
 
 record Job
     number: u16
@@ -12,40 +16,50 @@ end
 
 pool jobs: Job[2]
 
-sub execute(text: string[]): u16 fails
+sub execute(text: string[]): u16 fails CommandError
     var command: string[8]
     var argument: string[16]
+    var io: IoError
+    var parse: ParseError
+    var found: boolean
 
-    var found = try word(text, 0, var command)
+    found = word(text, 0, var command) handle io
+        fail CommandError.unknownCommand
+    end
     if not found or not equal(command, "double")
-        fail unknownCommand
+        fail CommandError.unknownCommand
     end
 
-    found = try word(text, 1, var argument)
+    found = word(text, 1, var argument) handle io
+        fail CommandError.badNumber
+    end
     if not found
-        fail missingArgument
+        fail CommandError.missingArgument
     end
 
-    var value = try parseU16(argument)
+    var value: u16
+    value = parseU16(argument) handle parse
+        fail CommandError.badNumber
+    end
     if value > 32767
-        fail badNumber
+        fail CommandError.badNumber
     end
 
     return value * 2
 end
 
-sub createJob(text: string[]): jobs fails
+sub createJob(text: string[]): jobs fails CommandError
     var number = try execute(text)
     var candidate = new? jobs(number)
     select move candidate
     case some(allocated)
         return move allocated
     case none
-        fail queueFull
+        fail CommandError.queueFull
     end
 end
 
-sub reportJob(item: Job) fails
+sub writeReport(item: Job) fails IoError
     var report: string[32]
     try append(var report, "Result: ")
     try appendU16(var report, item.number)
@@ -53,24 +67,38 @@ sub reportJob(item: Job) fails
     try writeText(console, report)
 end
 
-sub main() fails
+sub reportJob(item: Job) fails CommandError
+    var io: IoError
+    writeReport(item) handle io
+        fail CommandError.cannotReport
+    end
+end
+
+sub say(text: string[]) fails CommandError
+    var io: IoError
+    writeText(console, text) handle io
+        fail CommandError.cannotReport
+    end
+end
+
+sub main() fails CommandError
     var first = try createJob("double 123")
     assert first.number = 246
     try reportJob(first)
 
-    var code: u8
+    var code: CommandError
     first = createJob("double nope") handle code
-        assert code = badNumber
+        assert code = CommandError.badNumber
         assert first.number = 246
-        try writeText(console, "Invalid number\r\n")
+        try say("Invalid number\r\n")
     end
 
     var second = try createJob("double 3")
     second = createJob("double 7") handle code
-        assert code = queueFull
+        assert code = CommandError.queueFull
         assert second.number = 6
-        try writeText(console, "Queue full\r\n")
+        try say("Queue full\r\n")
     end
 
-    assert code = queueFull
+    assert code = CommandError.queueFull
 end
