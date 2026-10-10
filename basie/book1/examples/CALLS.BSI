@@ -1,9 +1,9 @@
-var subtotal as u16 = 120
-var postage as u16 = 15
-var total as u16
+var subtotal: u16 = 120
+var postage: u16 = 15
+var total: u16
 
-sub amountDue(amount as u16, shipping as u16) as u16
-    var due as u16 = amount + shipping
+sub amountDue(amount: u16, shipping: u16): u16
+    var due: u16 = amount + shipping
     amount = 0
     return due
 end

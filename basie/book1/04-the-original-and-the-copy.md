@@ -16,15 +16,15 @@ A record declaration describes the fields of a new type:
 
 ```basie
 record Reading
-    value as u16
-    usable as boolean
+    value: u16
+    usable: boolean
 end
 ```
 
 `Reading` is now a type, just like `u16`. Each `Reading` has two fields: a number called `value` and a Boolean called `usable`. You can declare a variable of the new type:
 
 ```basie
-var current as Reading = (12, true)
+var current: Reading = (12, true)
 ```
 
 The initial value lists the fields in the order they were declared, so `current.value` starts at 12 and `current.usable` starts at `true`. A dot selects a field, for reading or writing.
@@ -36,7 +36,7 @@ The initial value lists the fields in the order they were declared, so `current.
 Assignment copies a record just as it copies a number:
 
 ```basie
-var saved as Reading
+var saved: Reading
 saved = current
 ```
 
@@ -57,7 +57,7 @@ Records and arrays can be constants too:
 A routine that takes a record parameter doesn't receive a copy:
 
 ```basie
-sub inspect(item as Reading) as u16
+sub inspect(item: Reading): u16
     return item.value
 end
 ```
@@ -75,7 +75,7 @@ The record still belongs to the caller. It is `current`, a program variable that
 To change the caller's record, a routine marks the parameter with `var`:
 
 ```basie
-sub update(var item as Reading, value as u16)
+sub update(var item: Reading, value: u16)
     item.value = value
 end
 ```

@@ -1,8 +1,8 @@
 record Job
-    number as u16
+    number: u16
 end
 
-pool jobs as Job[2]
+pool jobs: Job[2]
 
 sub main()
     var first = new jobs(7)

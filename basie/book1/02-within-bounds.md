@@ -52,10 +52,10 @@ The constants above are **untyped**. `enabled` is a Boolean because its initial 
 To give a constant one particular type everywhere, write the type:
 
 ```basie
-const limit as u32 = 70000
+const limit: u32 = 70000
 ```
 
-`limit` is a `u32` wherever it appears, just as a `u32` variable would be. A floating-point constant must always be written this way, as in `const half as f32 = 0.5`.
+`limit` is a `u32` wherever it appears, just as a `u32` variable would be. A floating-point constant must always be written this way, as in `const half: f32 = 0.5`.
 
 ## Writing numbers
 
@@ -84,7 +84,7 @@ Some conversions always keep the value. Every `u8` value also fits in a `u16`, s
 Narrowing can lose information. A `u16` might hold 300, which is too large for a `u8`. Basie therefore narrows a value only when you write the conversion, using the target type's name:
 
 ```basie
-var byteValue as u8 = u8(wordValue)
+var byteValue: u8 = u8(wordValue)
 ```
 
 `u8(wordValue)` means "this value, as a `u8`, provided it fits". The conversion checks the value when the program runs. A value that fits becomes the same number in the smaller type. A value that doesn't fit stops the program with a **trap** before any wrong value can be produced.
@@ -94,7 +94,7 @@ In C or assembly, converting 300 to a byte silently keeps the low eight bits and
 This program converts 300 to a `u8`:
 
 ```basie
-var wide as u16 = 300
+var wide: u16 = 300
 
 sub main()
     var small = u8(wide)
@@ -114,7 +114,7 @@ TRAP narrowing at 029D
 A value can fit its type perfectly well and still be wrong for the job. Here's an array of two readings:
 
 ```basie
-var readings as u8[2] = [12, 20]
+var readings: u8[2] = [12, 20]
 ```
 
 The suffix `[2]` makes `readings` an array of two `u8` elements, stored one after the other inside the array's storage. `readings[0]` is the first element and `readings[1]` is the second. Indexes start at zero, so the element count, 2, is also the first position past the end.
@@ -176,7 +176,7 @@ The total is 97, and the final assertion confirms it. Now try setting `stepBack`
 
 - Basie has six signed and unsigned integer types of 8, 16 and 32 bits, plus `f32` and `boolean`.
 - A Boolean is not an integer. Conditions must be Boolean and there is no conversion either way.
-- An untyped constant such as `const rows = 4` is an exact integer that takes a suitable type at each use. A typed constant such as `const limit as u32 = 70000` keeps its type. Floating-point constants must be typed.
+- An untyped constant such as `const rows = 4` is an exact integer that takes a suitable type at each use. A typed constant such as `const limit: u32 = 70000` keeps its type. Floating-point constants must be typed.
 - `$` introduces hexadecimal, `%` introduces binary and `'A'` is the byte value of a character.
 - Widening that keeps every value happens automatically. Narrowing must be written, as `u8(x)`, and traps with `narrowing` if the value doesn't fit.
 - Every array index is checked against the array's length, and an index outside it traps with `bounds`.

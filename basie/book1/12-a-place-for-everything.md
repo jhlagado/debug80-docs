@@ -37,7 +37,7 @@ The interfaces between parts are the routine declarations you already know. A ro
 A part often has helper routines that only make sense inside it, and `private` keeps them there:
 
 ```basie
-private sub blank(b as u8) as boolean
+private sub blank(b: u8): boolean
     return b = ' ' or b = 9
 end
 ```
