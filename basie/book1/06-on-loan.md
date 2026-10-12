@@ -34,7 +34,7 @@ sub incrementJob(var item: Job)
 end
 ```
 
-Calling `incrementJob(first)` changes the job's number in its pool slot, but ownership stays with `first`. When the call returns the lease is over, and the caller carries on using `first` as before.
+Calling `incrementJob(var first)` changes the job's number in its pool slot, but ownership stays with `first`. When the call returns the lease is over, and the caller carries on using `first` as before.
 
 ![The owner remains responsible while a routine has temporary access to its record.](../../assets/images/basie-book/book1/lease-access.svg)
 
@@ -92,7 +92,7 @@ The pool has a single slot, which makes the reuse easy to follow:
 | `first = new jobs(7)` | job 7 | owns job 7 | not yet declared |
 | `remembered = id(first)` | job 7 | owns job 7 | identifies job 7 |
 | `inspectJob(first)` returns 7 | job 7 | owns job 7 | identifies job 7 |
-| `incrementJob(first)` | job 8 | owns job 8 | identifies job 8 |
+| `incrementJob(var first)` | job 8 | owns job 8 | identifies job 8 |
 | `consumeJob(move first)` returns 8 | free | empty | stale |
 | `replacement = new jobs(11)` | job 11 | empty | stale |
 
@@ -106,7 +106,7 @@ Every routine that works with a job can now take exactly what it needs:
 | --- | --- |
 | use the job's number in a calculation | a `u16`, copied |
 | read the job | a read-only `Job` parameter, leased |
-| change the job | a `var Job` parameter, leased |
+| change the job | a `var` parameter of type `Job`, leased |
 | finish with the job and release it | a `jobs` owner, moved |
 | find the job again later | an `id jobs` identifier, copied |
 

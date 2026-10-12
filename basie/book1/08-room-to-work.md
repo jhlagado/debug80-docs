@@ -98,19 +98,19 @@ The copy has length 3. Its first byte, `A`, is 65 and its new third byte, `C`, i
 
 ## Library help for strings
 
-`STRINGS.BSI` contains routines for the common jobs. All of them check each string's capacity and fail with a `lineTooLong` code if the result won't fit:
+`STRINGS.BSI` contains routines for the common jobs. The routines that add text check the capacity first. They fail with `IoError.lineTooLong` if the result won't fit:
 
 | Routine | Effect |
 | --- | --- |
-| `clear(s)` | makes `s` empty |
-| `append(s, t)` | adds the text of `t` to the end of `s` |
-| `appendByte(s, b)` | adds one byte to the end of `s` |
-| `copyFrom(dest, src, start, count)` | copies part of `src` into `dest` |
+| `clear(var s)` | makes `s` empty |
+| `append(var s, t)` | adds the text of `t` to the end of `s` |
+| `appendByte(var s, b)` | adds one byte to the end of `s` |
+| `copyFrom(var dest, src, start, count)` | copies part of `src` into `dest` |
 | `equal(a, b)` | tests whether two strings hold the same bytes |
 | `compare(a, b)` | gives -1, 0 or 1 for sorting |
 | `find(s, t)` | gives the position of `t` within `s` |
-| `toUpper(s)`, `toLower(s)` | change letter case |
-| `trim(s)` | removes leading and trailing spaces and tabs |
+| `toUpper(var s)`, `toLower(var s)` | change letter case |
+| `trim(var s)` | removes leading and trailing spaces and tabs |
 
 They're ordinary Basie routines, and their source uses the techniques Chapter 9 explains.
 

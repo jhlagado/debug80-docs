@@ -34,6 +34,24 @@ The floating-point type `f32` holds fractional values. Chapter 11 introduces it 
 
 A Boolean is not a number in Basie. Some languages treat zero as false and anything else as true. In Basie a condition must be a `boolean`, and Booleans and integers can't be converted to each other. A count therefore can't be tested as if it were a flag.
 
+## Enums for named choices
+
+Some values are one of a small fixed set, such as the colour of a traffic light. An **enum** declares a new type with a name for each value:
+
+```basie
+enum Light
+    red
+    amber
+    green
+end
+
+var signal: Light = Light.amber
+```
+
+Each member is written with its enum's name, as in `Light.red`. A variable of an enum type starts at the first member unless it has an initializer. Each value takes one byte.
+
+An enum is not a number either. You can't convert it to an integer or do arithmetic with it, and it can't be an index or a loop counter. Two values of the same enum can be compared with `=` and `<>`, and that's all. A `Light` therefore can't be mixed up with a count or with another enum. Chapter 7 uses enums to choose between cases and to name the ways a routine can fail.
+
 ## Constants for fixed facts
 
 A program often starts from facts rather than storage. A screen has a fixed number of rows. A protocol assigns a particular byte to each command. A feature is switched on or off. Basie gives those facts names with `const`:

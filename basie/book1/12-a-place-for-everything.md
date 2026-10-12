@@ -44,7 +44,7 @@ end
 
 A private declaration can be used only within its own part. Other parts can't call it, and its name stays out of the shared space. The standard library has three private routines called `blank`, in `STRINGS.BSI`, `PARSE.BSI` and `TEXTIO.BSI`, and they never conflict.
 
-`private` works on routines, constants, variables, records and pools. It controls where a name can be used and nothing more. Code that can see a record type can still see its fields, and a private item is stored like any other.
+`private` works on routines, constants, variables, records, enums and pools. It controls where a name can be used and nothing more. Code that can see a record type can still see its fields, and a private item is stored like any other.
 
 ## A command parser in three parts
 
@@ -84,9 +84,9 @@ Terminal control sequences, such as the codes that clear the screen or move the 
 
 ## Files
 
-`File` values also identify open disk files. The runtime has services that open a file for reading, writing or appending and close it again. Others transfer bytes, blocks and lines. Still others check whether a file exists, delete or rename a file and search a directory. Failures are reported as named codes such as `fileNotFound`, `diskFull` and `endOfInput`.
+`File` values also identify open disk files. The runtime has services that open a file for reading, writing or appending and close it again. Others transfer bytes, blocks and lines. Still others check whether a file exists, delete or rename a file and search a directory. Failures are members of `IoError`, such as `IoError.fileNotFound`, `IoError.diskFull` and `IoError.endOfInput`.
 
-A `File` is a value, not an owner. It can be copied and stored like a number, and copying it doesn't open the file twice. Your program closes a file explicitly by calling `close`. When the program ends, the runtime closes any that are still open. A `File` that has been closed stays closed. Any service given it fails with `fileClosed`, and it can never end up referring to another file opened later. Pools release their records automatically, but nothing closes a file when a variable goes out of scope.
+A `File` is a value, not an owner. It can be copied and stored like a number, and copying it doesn't open the file twice. Your program closes a file explicitly by calling `close`. When the program ends, the runtime closes any that are still open. A `File` that has been closed stays closed. Any service given it fails with `IoError.fileClosed`, and it can never end up referring to another file opened later. Pools release their records automatically, but nothing closes a file when a variable goes out of scope.
 
 ## The trusted boundary
 
