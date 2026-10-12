@@ -150,7 +150,7 @@ Some operations fail for reasons that aren't bugs. The user might type `nope` wh
 A routine that can fail says so with `fails` at the end of its declaration, followed by the enum its error codes come from. Inside it, `fail` ends the routine with one of that enum's members instead of a normal result:
 
 ```basie
-enum ValueError
+type ValueError = enum
     negative
 end
 

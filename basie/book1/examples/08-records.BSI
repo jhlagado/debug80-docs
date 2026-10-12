@@ -1,4 +1,4 @@
-record Cell
+type Cell = record
     value: u16
     active: boolean
 end

@@ -24,6 +24,15 @@ In storage the six bytes sit in row order, 1, 2, 3, 4, 5, 6, with the last index
 
 Every selection keeps its type and its bounds. `grid[row]` is a `u8[2]` and can be passed anywhere a `u8[2]` is accepted. `grid[row][column]` checks `row` against 3 and `column` against 2, each at its own level. A column index of 2 traps with `bounds`, even though `grid[0][2]` would fall inside the six bytes.
 
+A shape used in several places can be given a name with `type`, the declaration that names enums and records:
+
+```basie
+type Row = u8[2]
+var grid: Row[3] = [[1, 2], [3, 4], [5, 6]]
+```
+
+`Row` is exactly `u8[2]`, not a new type, so a `Row` and a `u8[2]` can be used interchangeably. Only `record` and `enum` definitions create new types. Any other `type` declaration just gives an existing type a second name.
+
 ## Index types
 
 An index can be any integer type, signed or unsigned, 8, 16 or 32 bits wide. It needs no conversion. In C, `a[-1]` reads the bytes just before the array. In Basie a negative index fails the bounds check and traps with `bounds`, just as an index past the end does. It can't wrap around to a large index that happens to be valid.
@@ -154,6 +163,7 @@ In `06-arrays.BSI`, change `grid` to `u8[4][2]` and add a fourth row, `[7, 8]`. 
 ## Summary
 
 - Each index into an array of arrays is checked against its own level.
+- `type Row = u8[2]` names an array type. The name means exactly that type.
 - An index can be any integer type. A negative index traps with `bounds`, like one past the end.
 - An array always has its declared number of elements. A separate count tracks how many hold meaningful data.
 - A `string[N]` has a fixed capacity of 1 to 253 bytes and a current length that changes.

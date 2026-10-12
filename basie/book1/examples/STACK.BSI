@@ -1,6 +1,6 @@
 forward pool nodes
 
-record Node
+type Node = record
     value: u16
     next: nodes?
 end
