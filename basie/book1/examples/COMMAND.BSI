@@ -2,7 +2,7 @@ include "PARSE.BSI"
 include "TEXTIO.BSI"
 include "FORMAT.BSI"
 
-enum CommandError
+type CommandError = enum
     unknownCommand
     missingArgument
     badNumber

@@ -1,4 +1,4 @@
-record Pair
+type Pair = record
     left: u8
     right: u8
 end
