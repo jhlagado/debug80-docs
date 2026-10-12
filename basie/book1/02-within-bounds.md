@@ -162,7 +162,7 @@ Basie checks as much as it can while compiling and leaves the rest to the runnin
 
 So `readings[2]` with the constant 2 is a compile error, reported as "index 2 is out of range for u8[2]". `readings[index]` with `index` holding 2 is a run-time trap. The compiler doesn't trace values through variables to predict failures. That keeps the rules for what compiles clear and the same for every compiler.
 
-An array's length doesn't create a special range type for its index. The index is an ordinary `u8` or `u16`, and Basie checks it each time it selects an element of a particular array.
+An array's length doesn't create a special range type for its index. The index is an ordinary integer of any type, and Basie checks it each time it selects an element of a particular array.
 
 ## Assertions that check the design
 
