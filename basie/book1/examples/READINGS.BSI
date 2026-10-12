@@ -1,6 +1,6 @@
 include "FORMAT.BSI"
 
-record Reading
+type Reading = record
     value: u16
     usable: boolean
 end

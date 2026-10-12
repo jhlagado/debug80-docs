@@ -104,7 +104,7 @@ The queue keeps all its owners in one array. Some structures, such as a linked l
 ```basie
 forward pool nodes
 
-record Node
+type Node = record
     value: u16
     next: nodes?
 end
