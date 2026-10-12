@@ -20,7 +20,7 @@ An **open array** parameter leaves the length out of the type:
 sub sum(values: u8[]): u16
 ```
 
-`u8[]` accepts any complete array of `u8`, whatever its length. The element type is still fixed and only the length is open. Each call passes the array with its real length, which the routine reads as `values.length`.
+`u8[]` accepts any array of `u8`, whatever its length. A read-only one also accepts part of an array, as a later section shows. The element type can be anything an array holds, including records, handles and enums. The element type is still fixed and only the length is open. Each call passes the array with its real length, which the routine reads as `values.length`.
 
 Like every record or array parameter, `values` is an alias for the caller's array, not a copy. Without `var` it's read-only, and it lasts for the call.
 
@@ -52,7 +52,7 @@ The call checks the slice before the routine starts. The start must not be past 
 
 A slice whose start equals its end is empty. `readings[0 until count]` passes the first `count` elements, and it passes none when `count` is 0. No `count - 1` appears anywhere, so nothing can wrap below zero.
 
-A slice is read-only. It can be passed only to an open array parameter without `var`, and nowhere else. It can't be stored, and nothing can follow it in the same path. Inside the routine it is an ordinary open array, so the routine can slice it again. The library's `writeBlock` accepts a slice too, which writes part of a buffer.
+A slice is read-only. It can be passed only to an open array parameter without `var`, and nowhere else. It can't be stored, and nothing can follow it in the same path. Inside the routine it is an ordinary open array, so the routine can slice it again. The `writeBlock` service accepts a slice too, so a program can write part of a buffer.
 
 <<< @/basie/book1/examples/09-slices.BSI{basie}
 
@@ -74,7 +74,7 @@ end
 
 Setting the length to 2 makes room for two bytes, and the next two lines fill them. Any bytes the new length exposes start at zero, so a string never shows stale contents from earlier use. If the caller's string had a capacity below 2, the length assignment would trap with `bounds` before anything was written.
 
-A library routine can check `.capacity` before it changes the length and report a failure instead of trapping. `append` and `appendU16` work this way and fail with `lineTooLong` when the text won't fit.
+A library routine can check `.capacity` before it changes the length and report a failure instead of trapping. `append` and `appendU16` work this way and fail with `IoError.lineTooLong` when the text won't fit.
 
 The caller supplies the string and chooses its capacity, and the routine fills it in. The finished text sits in the caller's storage. It remains there after the routine returns, and passing it back took no extra storage. A program that formats many reports can reuse one buffer for all of them.
 
@@ -106,7 +106,7 @@ This example shows the difference between copying a returned record and reading 
 
 `var saved = pick(pairs, 0)` declares a new local and copies the selected record into it. `saved` is a separate `Pair` holding 3 and 4 in its own storage. The program then changes the original's `left` to 7. `saved` still holds 3, because it's a copy. A fresh `pick(pairs, 0).left` reads through the alias into the array and finds 7.
 
-Passing `pick(pairs, 0)` straight to a routine with a `var Pair` parameter would let that routine work on the record inside `pairs` itself. That's only allowed when the result is writable, which the next section covers.
+Passing `pick(pairs, 0)` straight to a routine with a `var` parameter of type `Pair` would let that routine work on the record inside `pairs` itself. That's only allowed when the result is writable, which the next section covers.
 
 ## Results from program storage
 
@@ -139,7 +139,7 @@ Then pass a `string[4]` to `writeOK` and check that its length is also 2. Finall
 
 ## Summary
 
-- An open array, `T[]`, accepts a complete array of any length, and `.length` gives the real length inside the routine.
+- An open array, `T[]`, accepts an array of any length, or a slice of one if the parameter is read-only. `.length` gives the real length inside the routine.
 - An open string, `string[]`, accepts a string of any capacity, with `.length` and `.capacity` available.
 - A `var string[]` parameter can set the string's length, which is how library routines build text in caller storage.
 - Every index through an open view is checked against the real bounds of the caller's object.

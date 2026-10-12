@@ -45,6 +45,9 @@ Start at the position the diagnostic gives and work out what that operation was 
 - *A result can't refer to a local.* A routine returns access to its own local storage. Return a copy of the value, or have the caller pass in the storage the result should live in.
 - *A name is not declared.* The name is misspelled, or it's declared further down the file. Basie reads the source in order, so move the declaration up or add a forward declaration.
 - *Index out of range.* A constant index is outside a constant bound, so the access could never succeed and the compiler rejects it.
+- *A var parameter's argument is written var, and no other.* A call is missing `var` before an argument for a `var` parameter, or has one the parameter doesn't take. Add or remove the marker at the call.
+- *A select needs case else unless its cases cover every value.* Add the missing cases, or write an empty `case else` if the other values need nothing.
+- *`check` fails with another enum.* `try` can pass on a failure only within one enum. Handle the call, then `fail` with a member of your routine's own enum.
 
 In every case the right fix depends on what the program is supposed to do. Adding `var` makes a write compile. If the routine was meant to be read-only, the program now does something you didn't intend. Adding `move` makes an owner copy compile. If the code was meant to inspect the job, a routine that should only have looked at the job now releases it. A change that gets past the compiler is correct only if it still describes what you meant.
 
