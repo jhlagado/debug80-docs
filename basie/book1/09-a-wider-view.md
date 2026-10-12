@@ -36,7 +36,27 @@ end
 
 This loop is right for every array the routine receives. The bound comes from the array itself, so the drift from the last exercise in Chapter 8 can't happen. Each index is still checked against the length passed with the call. Even a wrong loop can't read past the end of a short array.
 
-An open array is a view of a whole array, not a slice. It can't pass part of an array, such as elements 2 through 5. It also can't be stored in a variable or a field. Open arrays exist only as parameter types. That is part of how Basie guarantees the view never outlives the array.
+An open array can't be stored in a variable or a field. Open arrays exist only as parameter types. That is part of how Basie guarantees the view never outlives the array.
+
+## Part of an array
+
+An open array parameter can also receive part of an array. A **slice** gives the first index and the index just past the end, joined by `until` as in a `for` loop:
+
+```basie
+observed = sum(readings[2 until 6])
+```
+
+This call passes elements 2, 3, 4 and 5 of `readings`. Inside `sum`, `values.length` is 4, and `values[0]` is the caller's `readings[2]`. Nothing is copied, and the routine reads the caller's elements where they are.
+
+The call checks the slice before the routine starts. The start must not be past the end, and the end must not be past the array's length. If either check fails, the program traps with `bounds`. The slice's length is worked out only after both checks pass. A reversed range therefore can't wrap round to a huge length.
+
+A slice whose start equals its end is empty. `readings[0 until count]` passes the first `count` elements, and it passes none when `count` is 0. No `count - 1` appears anywhere, so nothing can wrap below zero.
+
+A slice is read-only. It can be passed only to an open array parameter without `var`, and nowhere else. It can't be stored, and nothing can follow it in the same path. Inside the routine it is an ordinary open array, so the routine can slice it again. The library's `writeBlock` accepts a slice too, which writes part of a buffer.
+
+<<< @/basie/book1/examples/09-slices.BSI{basie}
+
+The first call adds the first four readings, 3, 5, 7 and 9, to get 24. The second adds elements 2 to 5 and gets 40. The last call passes an empty slice, and the sum is 0.
 
 ## Building text in the caller's string
 
@@ -74,7 +94,7 @@ sub pick(items: Pair[2], index: u8): Pair from items
 end
 ```
 
-The result clause `as Pair from items` says that the routine returns a `Pair` from inside whatever the caller passed as `items`. The `from items` part makes this safe, because it tells the compiler and the reader that the result lives exactly as long as that argument. The argument is the caller's storage, which outlasts the call, so the result outlasts it too.
+The result clause `: Pair from items` says that the routine returns a `Pair` from inside whatever the caller passed as `items`. The `from items` part makes this safe, because it tells the compiler and the reader that the result lives exactly as long as that argument. The argument is the caller's storage, which outlasts the call, so the result outlasts it too.
 
 Like a parameter, the result is an alias and just as short-lived. The caller must use it within the same statement. It can read a field, pass the result to another routine or copy it into its own storage. It can't keep the alias in a variable for later.
 
@@ -113,6 +133,8 @@ All of these checks happen at compile time and cost nothing at run time.
 
 Add a second array to `09-open-views.BSI`, such as a `u8[3]` holding 1, 2 and 3. Assert that the same `sum` routine returns 6 for it.
 
+Pass a slice of `numbers` to `sum`, such as `numbers[1 until 3]`, and assert that the result is 10. Then try `numbers[3 until 1]`. The compiler rejects it with `bounds`, because both endpoints are constants and the range is reversed. Put the 3 in a variable instead. The program now compiles, and the call traps with `bounds` when it runs.
+
 Then pass a `string[4]` to `writeOK` and check that its length is also 2. Finally pass a `string[1]` to `writeOK`, and the program still compiles. At run time the length assignment traps with `bounds`, because a length of 2 doesn't fit a capacity of 1.
 
 ## Summary
@@ -121,7 +143,8 @@ Then pass a `string[4]` to `writeOK` and check that its length is also 2. Finall
 - An open string, `string[]`, accepts a string of any capacity, with `.length` and `.capacity` available.
 - A `var string[]` parameter can set the string's length, which is how library routines build text in caller storage.
 - Every index through an open view is checked against the real bounds of the caller's object.
-- Open views can't be stored, and each one covers a whole array.
+- Open views can't be stored.
+- A slice, `xs[start until end]`, passes part of an array to a read-only open array parameter without copying it. The call traps with `bounds` unless the start is no later than the end and the end is within the array.
 - A routine may return access to a parameter named in its `from` clause, or to program storage, but never to its own locals.
 - A returned alias must be used within the statement. Assigning it to a new variable copies the record.
 - `: var` makes a result writable, and only a writable source can supply one.
