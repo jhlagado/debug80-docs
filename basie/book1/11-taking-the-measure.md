@@ -46,6 +46,8 @@ var b: i16 = -3
 assert i32(a) + b = 39997
 ```
 
+Comparisons are the exception. A comparison of a signed value with an unsigned one always gives the mathematically right answer, so `b < a` is true. Basie compares the two values in a type that holds both, usually `i32`, without being asked. A `u32` has no such type to share with a signed value, so comparing it with one still needs a conversion. A counted loop can also run a signed counter up to an unsigned bound, such as an array's `.length`. The bound is converted to the counter's type when the loop starts, and the conversion traps if the bound doesn't fit.
+
 Once `a` is an `i32`, `b` widens to match and the sum is calculated in 32 bits.
 
 ## Sorting complete records
@@ -130,7 +132,8 @@ Then put the 14 back but mark that reading unusable by changing its `true` to `f
 
 - Integer arithmetic happens in the type of its operands. Widen before the operation, not after.
 - Integer arithmetic wraps on overflow. That's safe for memory but may be wrong for your program, so choose types wide enough.
-- Mixed operations need one type that holds every value of both. Otherwise convert one operand explicitly.
+- Mixed arithmetic needs one type that holds every value of both. Otherwise convert one operand explicitly.
+- A comparison of signed with unsigned values gives the right answer without a conversion, except with a `u32`.
 - In `a and b`, `b` is evaluated only when `a` is true. That makes `at > 0 and values[at - 1]` safe.
 - `f32` is single-precision floating point with finite values only. Division by zero and overflow trap.
 - Convert integers to `f32` before dividing to keep the fraction. Use integers for exact quantities.

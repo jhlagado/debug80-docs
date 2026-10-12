@@ -26,7 +26,9 @@ Every selection keeps its type and its bounds. `grid[row]` is a `u8[2]` and can 
 
 ## Index types
 
-An index must be a `u8` or a `u16`, or a constant that fits a `u16`. A signed value such as an `i16` must be converted with `u16(...)` before it can be used as an index. In C, `a[-1]` reads the bytes just before the array. In Basie the conversion traps on a negative value, so it can't wrap around to a large index that happens to be valid.
+An index can be any integer type, signed or unsigned, 8, 16 or 32 bits wide. It needs no conversion. In C, `a[-1]` reads the bytes just before the array. In Basie a negative index fails the bounds check and traps with `bounds`, just as an index past the end does. It can't wrap around to a large index that happens to be valid.
+
+That means a loop counter can be the type that suits the calculation. A signed counter can index an array directly.
 
 ## Walking an array
 
@@ -152,7 +154,7 @@ In `06-arrays.BSI`, change `grid` to `u8[4][2]` and add a fourth row, `[7, 8]`. 
 ## Summary
 
 - Each index into an array of arrays is checked against its own level.
-- Indexes are `u8` or `u16`. A signed index must be converted first, and the conversion traps if it's negative.
+- An index can be any integer type. A negative index traps with `bounds`, like one past the end.
 - An array always has its declared number of elements. A separate count tracks how many hold meaningful data.
 - A `string[N]` has a fixed capacity of 1 to 253 bytes and a current length that changes.
 - Strings store their length. Zero bytes are ordinary content.
