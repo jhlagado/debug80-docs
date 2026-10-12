@@ -32,7 +32,7 @@ Each block is a scope of its own. A local declared inside an arm exists only whi
 
 ## Selecting on a value
 
-When the choice depends on a single integer value, `select` is clearer than a chain of comparisons:
+When the choice depends on a single integer or enum value, `select` is clearer than a chain of comparisons:
 
 ```basie
 select direction
@@ -45,7 +45,31 @@ case else
 end
 ```
 
-`select` evaluates `direction` once and runs the arm whose label matches. A label can be a single constant, a list such as `case 1, 3, 5` or a range such as `case 'A' to 'Z'`. `case else` catches every value the other labels don't cover. A `select` must have it unless its labels cover every value of the type, so a value with no arm never passes unnoticed; an empty `case else` says that the other values do nothing. The compiler reports an error if two labels cover the same value. An arm never falls through into the next. C's forgotten `break` has no equivalent in Basie.
+`select` evaluates `direction` once and runs the arm whose label matches. A label can be a single constant, a list such as `case 1, 3, 5` or a range such as `case 'A' to 'Z'`. `case else` catches every value the other labels don't cover. A `select` must have it unless its labels cover every value of the type, so a value with no arm never passes unnoticed; an empty `case else` says that the other values do nothing. The compiler reports an error if two labels cover the same value.
+
+A `select` on an enum usually names every member and needs no `case else`:
+
+```basie
+select signal
+case Light.red
+    wait = 3
+case Light.amber
+    wait = 1
+case Light.green
+    wait = 0
+end
+```
+
+If someone later adds a member to `Light`, this `select` stops compiling until it handles the new member. An empty `case else` says on purpose that the other values need no action:
+
+```basie
+select key
+case 'q'
+    finished = true
+case else
+end
+```
+ An arm never falls through into the next. C's forgotten `break` has no equivalent in Basie.
 
 Both statements appear in this example:
 

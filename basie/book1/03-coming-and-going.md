@@ -20,7 +20,7 @@ sub amountDue(amount: u16, shipping: u16): u16
 end
 ```
 
-`sub` begins the declaration and `amountDue` is the routine's name. `amount` and `shipping` are its **parameters**, each with a type. The `as u16` after the closing parenthesis is the type of the value the routine returns.
+`sub` begins the declaration and `amountDue` is the routine's name. `amount` and `shipping` are its **parameters**, each with a type. The `: u16` after the closing parenthesis is the type of the value the routine returns.
 
 A call supplies one **argument** for each parameter, in order:
 
