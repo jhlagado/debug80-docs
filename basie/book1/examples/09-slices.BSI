@@ -1,0 +1,26 @@
+var readings: u8[6] = [3, 5, 7, 9, 11, 13]
+var observed: u16 = 0
+
+sub sum(values: u8[]): u16
+    var index: u16
+    var total: u16 = 0
+
+    for index = 0 until values.length
+        total = total + u16(values[index])
+    end
+    return total
+end
+
+sub main()
+    var count: u16 = 4
+
+    observed = sum(readings[0 until count])
+    assert observed = 24
+
+    observed = sum(readings[2 until 6])
+    assert observed = 40
+
+    count = 0
+    observed = sum(readings[0 until count])
+    assert observed = 0
+end
