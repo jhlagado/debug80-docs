@@ -1,4 +1,4 @@
-record Job
+type Job = record
     number: u16
 end
 

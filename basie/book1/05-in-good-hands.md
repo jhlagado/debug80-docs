@@ -19,7 +19,7 @@ Basie has pools instead of a general heap, and a rule about responsibility that 
 A **pool** reserves a fixed number of slots for records of one type:
 
 ```basie
-record Job
+type Job = record
     number: u16
 end
 

@@ -2,7 +2,7 @@ include "PARSE.BSI"
 include "TEXTIO.BSI"
 include "FORMAT.BSI"
 
-enum CommandError
+type CommandError = enum
     unknownCommand
     missingArgument
     badNumber
@@ -10,7 +10,7 @@ enum CommandError
     cannotReport
 end
 
-record Job
+type Job = record
     number: u16
 end
 

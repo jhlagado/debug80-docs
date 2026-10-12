@@ -12,10 +12,10 @@ So far every value has been a single number, and every assignment and call has c
 
 ## A record type
 
-A record declaration describes the fields of a new type:
+A record is a new type made of named fields. Like an enum, it's created with a `type` declaration, this time with `record ... end` after the `=`:
 
 ```basie
-record Reading
+type Reading = record
     value: u16
     usable: boolean
 end

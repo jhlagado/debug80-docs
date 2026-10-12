@@ -36,10 +36,10 @@ A Boolean is not a number in Basie. Some languages treat zero as false and anyth
 
 ## Enums for named choices
 
-Some values are one of a small fixed set, such as the colour of a traffic light. An **enum** declares a new type with a name for each value:
+Some values are one of a small fixed set, such as the colour of a traffic light. An **enum** is a new type with a name for each value. A `type` declaration creates it and gives it a name:
 
 ```basie
-enum Light
+type Light = enum
     red
     amber
     green
@@ -48,7 +48,7 @@ end
 var signal: Light = Light.amber
 ```
 
-Each member is written with its enum's name, as in `Light.red`. A variable of an enum type starts at the first member unless it has an initializer. Each value takes one byte.
+`type` is how Basie names every type. After the `=` comes the type's definition, here `enum ... end`. Each member is written with its enum's name, as in `Light.red`. A variable of an enum type starts at the first member unless it has an initializer. Each value takes one byte.
 
 An enum is not a number either. You can't convert it to an integer or do arithmetic with it, and it can't be an index or a loop counter. Two values of the same enum can be compared with `=` and `<>`, and that's all. A `Light` therefore can't be mixed up with a count or with another enum. Chapter 7 uses enums to choose between cases and to name the ways a routine can fail.
 
