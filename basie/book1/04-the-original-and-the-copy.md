@@ -102,7 +102,7 @@ Here's the state at each step:
 | --- | ---: | ---: |
 | Start of `main` | 12 | 0 |
 | After `saved = current` | 12 | 12 |
-| After `update(current, 20)` | 20 | 12 |
+| After `update(var current, 20)` | 20 | 12 |
 
 `inspect` then reads the 20 and returns a copy of it. The assertions confirm that the original changed and the copy didn't.
 
