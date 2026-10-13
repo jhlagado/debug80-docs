@@ -89,11 +89,66 @@ Other routines have no check, because their stack use is already counted in the 
 
 The two compete for the same memory. Every pool slot, every program variable and every large local buffer takes space the stack could otherwise use. So making a pool bigger can make deep recursion fail sooner. When you plan a program's memory, count the pools and the program variables. Add the largest locals of the deepest call chain and the depth of any recursion, and make sure they all fit together. The `freeMemory` service reports how much space is left between the program's storage and the stack while the program runs.
 
+## Routines as values
+
+A sorting routine needs to know which of two values comes first. Ascending and descending order use the same steps, so two copies of the sort would differ in one comparison. Basie lets the caller pass that comparison as an argument.
+
+A **routine type** describes a routine's parameters and result:
+
+```basie
+type Compare = sub(a: u16, b: u16): boolean
+```
+
+A routine whose parameters and result match `Compare` is a value of that type. You write its name without an argument list:
+
+```basie
+sort(var readings, ascending)
+```
+
+This call passes the routine `ascending` to `sort`. Inside `sort`, the parameter `before` holds it, and `before(x, y)` calls it. The call is checked like any other call: the arguments must match the parameters, and a routine that can fail needs `try` or `handle`.
+
+The parameter names in a routine type are only documentation, so `descending(a: u16, b: u16)` and `ascending` both match. A routine can also take its header from the type. `sub ascending: Compare` gives `ascending` the parameters `a` and `b` and the result `boolean`, as if they were written out.
+
+<<< @/basie/book1/examples/13-orderings.BSI{basie}
+
+The first call sorts the readings into 10, 20, 30, 40 and 50, and the second sorts them back the other way. The sort is written once, and the order comes from the argument.
+
+A routine value can be stored in a variable, a field or an array element, and assigned like a number. Two routine values can't be compared with `=`. Services such as `writeText` are not values.
+
+## A call that can't be counted ahead
+
+A call through a routine value raises the same problem as recursion. The compiler doesn't know which routine `before` will hold, so it can't add that routine's stack need to the figure for `sort`.
+
+Basie keeps the routine's need beside it. A call through a value first checks that need against the free stack, as a forward-declared routine checks itself on entry. If the stack is too small, the program stops with an `activation-capacity` trap before the call starts. A direct call to a named routine still uses the figure worked out in advance.
+
+## A routine that may be missing
+
+A variable of type `Step?` holds either a routine or `none`. This suits a hook that a program fills in only when it needs one. Before you call it, a `select` takes it apart, as for an optional handle in Chapter 7:
+
+```basie
+select handler
+case some(action)
+    return action(value)
+case none
+    return value
+end
+```
+
+`action` holds the routine in the `some` arm and can be called there. It is read-only, so the arm can't assign to it.
+
+<<< @/basie/book1/examples/13-handlers.BSI{basie}
+
+`onTick` starts as `none`, so the first call returns 5 unchanged. After `onTick = double`, the call doubles 5 to give 10. Setting it back to `none` stops the doubling.
+
+A routine value without `?` always holds a routine, so it needs a value from the start. A local of type `Step` must have an initializer. A field or an array element of a routine type must be optional, because it starts as `none`.
+
 ## Things to try
 
 Change the input of `12-forwards.BSI` to `odd(8)`. 8 is even, so `odd(8)` returns `false`, `observed` stays at 0 and the assertion needs to expect 0. Sketch the chain of calls just before `even(0)` returns, and mark which values are separate copies.
 
 If you try `product(13)` in `FACTOR.BSI`, the program compiles and runs, but the multiplication wraps. The result isn't 6,227,020,800. `product(13)` agrees with `product(12) * 13` calculated in `u32`, both wrong in the same way. Wrapping is predictable, and a predictable wrong answer is easy to miss.
+
+Add a routine `byLastDigit: Compare` to `13-orderings.BSI` that orders numbers by their value `mod 10`. Sort the readings with it, and assert the first and last elements. Then try to compare two routine values with `=`, and read the compiler's report.
 
 ## Summary
 
@@ -104,3 +159,6 @@ If you try `product(13)` in `FACTOR.BSI`, the program compiles and runs, but the
 - The compiler works out each routine's stack need. Startup checks the need of `main` before running.
 - Every forward-declared routine checks the stack on entry and traps with `activation-capacity` rather than overrun it.
 - Pools, program storage and the stack share one memory budget. Plan them together.
+- A routine type, `sub(a: T): R`, describes a routine's parameters and result. A routine's name without arguments is a value of a matching type.
+- A call through a routine value checks the stack first and traps with `activation-capacity` if the routine won't fit.
+- An optional routine type, `T?`, may hold `none`. `select` with `case some` and `case none` takes it apart before a call.
