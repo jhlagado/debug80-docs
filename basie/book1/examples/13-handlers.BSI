@@ -1,0 +1,26 @@
+type Step = sub(value: u16): u16
+
+sub double: Step
+    return value * 2
+end
+
+var onTick: Step?
+
+sub apply(handler: Step?, value: u16): u16
+    select handler
+    case some(action)
+        return action(value)
+    case none
+        return value
+    end
+end
+
+sub main()
+    assert apply(onTick, 5) = 5
+
+    onTick = double
+    assert apply(onTick, 5) = 10
+
+    onTick = none
+    assert apply(onTick, 5) = 5
+end

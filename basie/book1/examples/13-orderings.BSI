@@ -1,0 +1,35 @@
+type Compare = sub(a: u16, b: u16): boolean
+
+sub ascending: Compare
+    return a < b
+end
+
+sub descending(a: u16, b: u16): boolean
+    return a > b
+end
+
+sub sort(var values: u16[], before: Compare)
+    var index: u16
+    var place: u16
+    for index = 1 until values.length
+        place = index
+        while place > 0 and before(values[place], values[place - 1])
+            var swap: u16 = values[place]
+            values[place] = values[place - 1]
+            values[place - 1] = swap
+            place = place - 1
+        end
+    end
+end
+
+var readings: u16[5] = [30, 10, 40, 20, 50]
+
+sub main()
+    sort(var readings, ascending)
+    assert readings[0] = 10
+    assert readings[4] = 50
+
+    sort(var readings, descending)
+    assert readings[0] = 50
+    assert readings[4] = 10
+end
