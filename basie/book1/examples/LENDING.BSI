@@ -2,7 +2,7 @@ type Job = record
     number: u16
 end
 
-pool jobs: Job[1]
+pool HJob: Job[1]
 
 sub inspectJob(item: Job): u16
     return item.number
@@ -12,23 +12,26 @@ sub incrementJob(var item: Job)
     item.number = item.number + 1
 end
 
-sub consumeJob(item: jobs): u16
+sub consumeJob(item: HJob): u16
     return item.number
 end
 
 sub main()
-    var first = new jobs(7)
-    var remembered: weak jobs = first
+    var first = new HJob(7)
+    var remembered: weak HJob = first
+    assert remembered = first
 
     assert inspectJob(first) = 7
     incrementJob(var first)
     assert first.number = 8
+    assert remembered.number = 8
 
     var result = consumeJob(move first)
     assert result = 8
 
-    var replacement = new jobs(11)
+    var replacement = new HJob(11)
     assert replacement.number = 11
+    assert remembered <> replacement
 
     select remembered
     case some(found)

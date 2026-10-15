@@ -1,0 +1,42 @@
+forward pool HNode
+
+type Node = record
+    value: u16
+    next: HNode?
+end
+
+pool HNode: Node[3]
+
+sub push(var list: HNode?, value: u16): boolean
+    select move new? HNode(value, move list)
+    case some(node)
+        list = move node
+        return true
+    case none
+        return false
+    end
+end
+
+sub pop(var list: HNode?): u16
+    select move list
+    case some(top)
+        list = move top.next
+        return top.value
+    case none
+        return 0
+    end
+end
+
+sub main()
+    var stack: HNode?
+
+    assert push(var stack, 7)
+    assert push(var stack, 9)
+
+    select stack
+    case some(top)
+        assert pop(var stack) = 9
+        assert top.value = 9
+    case none
+    end
+end

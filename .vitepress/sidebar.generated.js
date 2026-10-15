@@ -2252,7 +2252,7 @@ export const sidebars = {
           "link": "/basie/book1/05-in-good-hands.html"
         },
         {
-          "text": "On Loan",
+          "text": "Using Without Owning",
           "link": "/basie/book1/06-on-loan.html"
         },
         {
@@ -2324,7 +2324,7 @@ export const sidebars = {
           "link": "/basie/book1/05-in-good-hands.html"
         },
         {
-          "text": "On Loan",
+          "text": "Using Without Owning",
           "link": "/basie/book1/06-on-loan.html"
         },
         {

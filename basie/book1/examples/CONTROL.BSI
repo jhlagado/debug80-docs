@@ -2,14 +2,18 @@ type Job = record
     number: u16
 end
 
-pool jobs: Job[1]
+pool HJob: Job[1]
 
 var observed: u16
 
+sub incrementJob(var item: Job)
+    item.number = item.number + 1
+end
+
 sub main()
     if true
-        var first = new jobs(7)
-        var unavailable = new? jobs(9)
+        var first = new HJob(7)
+        var unavailable = new? HJob(9)
         select move unavailable
         case some(unexpected)
             observed = unexpected.number
@@ -21,12 +25,27 @@ sub main()
 
     assert observed = 1
 
-    var available = new? jobs(9)
-    select move available
-    case some(accepted)
-        observed = accepted.number
+    var spare = new? HJob(9)
+    select spare
+    case some(job)
+        observed = job.number
     case none
         observed = 0
     end
     assert observed = 9
+
+    select move spare
+    case some(job)
+        incrementJob(var job)
+        spare = move job
+    case none
+    end
+
+    select spare
+    case some(job)
+        observed = job.number
+    case none
+        observed = 0
+    end
+    assert observed = 10
 end

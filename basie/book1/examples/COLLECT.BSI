@@ -2,11 +2,10 @@ type Job = record
     number: u16
 end
 
-pool jobs: Job[3]
+pool HJob: Job[3]
 
-sub addJob(var place: jobs?, value: u16): boolean
-    var candidate = new? jobs(value)
-    select move candidate
+sub addJob(var place: HJob?, value: u16): boolean
+    select move new? HJob(value)
     case some(allocated)
         place = move allocated
         return true
@@ -15,7 +14,7 @@ sub addJob(var place: jobs?, value: u16): boolean
     end
 end
 
-sub takeJob(var place: jobs?): u16
+sub takeJob(var place: HJob?): u16
     select move place
     case some(taken)
         return taken.number
@@ -25,8 +24,8 @@ sub takeJob(var place: jobs?): u16
 end
 
 sub main()
-    var queue: jobs?[3]
-    var extra: jobs?
+    var queue: HJob?[3]
+    var extra: HJob?
 
     assert addJob(var queue[0], 7)
     assert addJob(var queue[1], 9)

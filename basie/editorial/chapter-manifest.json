@@ -31,9 +31,9 @@
   },
   {
     "number": 6,
-    "title": "On Loan",
+    "title": "Using Without Owning",
     "filename": "06-on-loan.md",
-    "theme": "Temporary access to a live object"
+    "theme": "Lending a record and referring to it with a weak handle"
   },
   {
     "number": 7,
