@@ -82,10 +82,10 @@ Both statements appear in this example:
 Chapter 5's `new` treats a full pool as a bug and traps. When a full pool is a normal outcome, use `new?` instead. It returns an **optional owner**: either an owning handle or `none`.
 
 ```basie
-var candidate = new? jobs(9)
+var candidate = new? HJob(9)
 ```
 
-The type of `candidate` is `jobs?`, read as "maybe a `jobs` owner". An optional owner might be empty, so you can't reach a record through it directly. Use `select` to find out which it is:
+The type of `candidate` is `HJob?`, read as "maybe an `HJob` owner". An optional owner might be empty, so you can't reach a record through it directly. Use `select` to find out which it is:
 
 ```basie
 select move candidate
@@ -98,19 +98,53 @@ end
 
 `select move` takes the handle out of `candidate`, leaving it empty, and tests what it took. If there was a handle, the `some` arm runs and `job` is its owner. `job` is an ordinary non-optional owner, so the arm can reach the record through it. When the arm ends, `job` is released unless the arm moves it somewhere else. If `candidate` was empty, the `none` arm runs and has nothing to release.
 
+`select move` can also take a fresh value directly, as in `select move new? HJob(9)`. The `some` arm then owns the new record, and no variable is needed.
+
 When the pool is full, `new?` doesn't evaluate its arguments at all. So if an argument would move an owner into the new record, that owner stays exactly where it was. An allocation consumes an owner only when it has room to keep it.
 
 ## Selecting without moving
 
-Plain `select` on an optional owner that the routine holds leaves ownership where it is. The `some` arm gets a lease on the record, as in Chapter 6, and the original owner stays responsible for it. While the arm runs, the owner can't be moved or overwritten. The record therefore stays alive for as long as the arm uses it. Choose `select move` to pass ownership into the arm, and plain `select` to leave the record with its owner.
+Plain `select`, without `move`, leaves ownership where it is:
+
+```basie
+select spare
+case some(job)
+    observed = job.number
+case none
+    observed = 0
+end
+```
+
+`spare` still owns the record, before, during and after the arm. In the `some` arm, `job` is a weak handle to the record, of type `weak HJob`, as in Chapter 6. The arm can read and write the record's fields through `job`, with a check at every access, but it can't lend the record. `spare` is an ordinary variable inside the arm. If the arm overwrites `spare` or moves its owner away, the record is released. The next access through `job` then traps with `stale-handle`.
+
+Plain `select` on a weak handle, as in Chapter 6, gives its arm a weak handle in the same way.
+
+## Lending what you select
+
+To lend the record to a routine, the arm needs an owner. `select move` provides one, but the arm then owns the record and releases it at the end. To keep the record, the arm moves the owner back where it came from:
+
+```basie
+select move spare
+case some(job)
+    incrementJob(var job)
+    spare = move job
+case none
+end
+```
+
+`job` is the arm's own non-optional owner, so `incrementJob(var job)` lends its record as in Chapter 6. The line `spare = move job` puts the owner back. If you forget that line, the program still compiles. `spare` was emptied by `select move`, and `job` releases the record when the arm ends. The record is gone, and `spare` is `none`.
+
+Use plain `select` to look at or change a record where it is. Use `select move` to take ownership into the arm. If the record should survive, the arm must store the owner somewhere before it ends.
 
 ## Both outcomes in one program
 
-This program has a pool with a single slot. It fills the slot, tries for a second and then tries again once the first has gone:
+This program has a pool with a single slot. It fills the slot, tries for a second and then tries again once the first has gone. It then selects the record without moving it, lends it and puts it back:
 
 <<< @/basie/book1/examples/CONTROL.BSI{basie}
 
-The `if true` makes a block, so `first` has a shorter lifetime than `main`. The slot therefore comes free partway through. Inside the block, `new jobs(7)` takes the only slot. `new? jobs(9)` finds the pool full and returns `none`, so the `none` arm sets `observed` to 1. When the block ends, its local `first` goes away and job 7 is released. Outside the block, the second `new?` finds the slot free. Its `some` arm reads 9, and `accepted` is released when the arm ends.
+The `if true` makes a block, so `first` has a shorter lifetime than `main`. The slot therefore comes free partway through. Inside the block, `new HJob(7)` takes the only slot. `new? HJob(9)` finds the pool full and returns `none`, so the `none` arm sets `observed` to 1. When the block ends, its local `first` goes away and job 7 is released.
+
+Outside the block, the second `new?` finds the slot free, and `spare` owns job 9. The plain `select` reads 9 through the weak handle `job`, and `spare` keeps the record. The `select move` lends the record to `incrementJob` and puts it back, so the last `select` reads 10.
 
 ## Repeating work
 
@@ -197,9 +231,11 @@ Basie separates two kinds of things that go wrong.
 
 A **failure** is an outcome the program is expected to deal with. It comes from a `fail` statement in your code or in a library routine or service. It travels back through `try` until a `handle` catches it.
 
-A **trap** means the program has tried to do something invalid. Examples are an index out of bounds, a conversion that doesn't fit, an access through a stale identifier and a false assertion. A trap stops the program on the spot. Nothing can catch a trap, including `handle` and `try`. The program has a bug at that point, and any further work would use bad data.
+A **trap** means the program has tried to do something invalid. Examples are an index out of bounds, a conversion that doesn't fit, an access through a stale weak handle and a false assertion. A trap stops the program on the spot. Nothing can catch a trap, including `handle` and `try`. The program has a bug at that point, and any further work would use bad data.
 
 ## Things to try
+
+In `CONTROL.BSI`, delete the line `spare = move job` and predict which assertion fails. The record is released at the end of the `select move` arm, so the last `select` takes its `none` arm and `observed` is 0.
 
 Change the pool capacity in `CONTROL.BSI` to 2. The allocation inside the `if` block now succeeds, so `observed` becomes 9 instead of 1. Change the first `assert observed = 1` to match. Sketch the owners at the end of each arm and at the end of the `if` block. The program now takes different paths, but every live record still has exactly one owner at each point.
 
@@ -210,7 +246,8 @@ In `05-loops.BSI`, change `step 2` to `step 1` and work out the new total before
 - `if`, `elseif` and `else` choose between blocks by Boolean conditions. Each block is its own scope.
 - `select` chooses by an integer or enum value, with single labels, lists and ranges, and `case else`, which it needs unless its labels cover every value. Arms never fall through.
 - `new?` returns `none` instead of trapping when the pool is full, and evaluates no arguments in that case.
-- `select move` takes ownership of an optional handle into its `some` arm. Plain `select` leases the record instead.
+- `select move` takes ownership of an optional owner, or a fresh `new?`, into its `some` arm. The arm releases the record at its end unless it moves the owner on or back.
+- Plain `select` leaves ownership where it is. Its `some` arm names the record through a weak handle, checked at every access, which can't be lent.
 - `while` repeats while a condition holds. `for` counts with `until` or `to`, an optional constant `step` and a read-only counter that never wraps.
 - `continue` starts the next pass and `exit` leaves the loop. Owners in the body are released at the end of every pass.
 - A `fails` routine names the enum of its failures and reports them with `fail`. Every call either passes the failure on with `try`, within the same enum, or handles it with `handle`.

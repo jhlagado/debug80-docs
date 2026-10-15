@@ -21,7 +21,7 @@ You'll start with three numbers and a total. By the end you'll have a small util
 - [3. Coming and Going](03-coming-and-going.md)
 - [4. The Original and the Copy](04-the-original-and-the-copy.md)
 - [5. In Good Hands](05-in-good-hands.md)
-- [6. On Loan](06-on-loan.md)
+- [6. Using Without Owning](06-on-loan.md)
 - [7. A Change of Plan](07-a-change-of-plan.md)
 - [8. Room to Work](08-room-to-work.md)
 - [9. A Wider View](09-a-wider-view.md)

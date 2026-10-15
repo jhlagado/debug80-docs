@@ -10,7 +10,7 @@ search_exclude: true
 
 The program in this chapter is a small command-processing utility. It reads a command, works out a result, stores that result in a job record allocated from a pool and prints a report. It also has to handle an unknown command, a number it can't parse and a full pool.
 
-None of the parts is new, but the program uses every kind of storage the book has covered. It has copied scalars, local strings, read-only and mutable aliases, owned pool records and a lease. The program is correct only if each one does the right job.
+None of the parts is new, but the program uses every kind of storage the book has covered. It has copied scalars, local strings, read-only and mutable aliases, owned pool records and a record lent for a call. The program is correct only if each one does the right job.
 
 ## The utility's behaviour
 
@@ -36,11 +36,11 @@ Each stage's declaration says what it does with its data.
 
 ```basie
 sub execute(text: string[]): u16 fails CommandError
-sub createJob(text: string[]): jobs fails CommandError
+sub createJob(text: string[]): HJob fails CommandError
 sub reportJob(item: Job) fails CommandError
 ```
 
-`execute` reads a command through a read-only alias and returns a copied number. `createJob` reads a command and returns an owner, a new job that the caller is responsible for. `reportJob` reads a `Job` record, which callers supply by leasing it from their owner. All three can fail, and each declaration says so with `fails CommandError`. That enum lists everything that can go wrong with a command, from `unknownCommand` to `queueFull`, so the whole utility reports its failures in one vocabulary.
+`execute` reads a command through a read-only alias and returns a copied number. `createJob` reads a command and returns an owner, a new job that the caller is responsible for. `reportJob` reads a `Job` record, which callers lend from their owner. All three can fail, and each declaration says so with `fails CommandError`. That enum lists everything that can go wrong with a command, from `unknownCommand` to `queueFull`, so the whole utility reports its failures in one vocabulary.
 
 ## Parsing the command
 
@@ -70,8 +70,7 @@ The largest accepted input is 32,767, which doubles to 65,534. Basie's safety ru
 
 ```basie
 var number = try execute(text)
-var candidate = new? jobs(number)
-select move candidate
+select move new? HJob(number)
 case some(allocated)
     return move allocated
 case none
@@ -87,11 +86,11 @@ Parsing comes first and allocation second, so a bad command never takes a slot f
 
 ## Reporting without consuming
 
-`reportJob` takes its `Job` parameter as a read-only alias. When `main` passes its owner, as in `reportJob(first)`, the call leases the record. The routine reads the job number while `main` keeps ownership.
+`reportJob` takes its `Job` parameter as a read-only alias. When `main` passes its owner, as in `reportJob(first)`, it lends the record for the call. The routine reads the job number while `main` keeps ownership.
 
 The writing is done by `writeReport`, which builds the text in a local `string[32]` with `append` and `appendU16` and sends it to the console with `writeText`. Any of those calls could fail with an `IoError`, if the string ran out of room or the console failed. `reportJob` calls `writeReport` and handles such a failure by failing with `CommandError.cannotReport`, so the rest of the program deals only in `CommandError`. `say` does the same for the program's other messages. The local string ends when `writeReport` returns, but the job survives because neither routine ever owned it.
 
-![Command parsing returns a copied number, job creation transfers ownership, and reporting uses a temporary lease.](../../assets/images/basie-book/book1/utility-flow.svg)
+![Command parsing returns a copied number, job creation transfers ownership, and main lends its job to reporting for the call.](../../assets/images/basie-book/book1/utility-flow.svg)
 
 ## A failed replacement keeps the old job
 

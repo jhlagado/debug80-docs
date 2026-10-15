@@ -48,7 +48,7 @@ Most chapters end with changes to try. These are small edits whose outcome you c
 The chapters fall into four parts:
 
 1. **Values and calls** (Chapters 1 to 4). Variables and types, checked conversions and bounds, routines with their own working storage and the difference between copying a record and giving a routine access to it.
-2. **Ownership** (Chapters 5 to 7). Pools of records that outlive the routines that create them, the single owner of each record, temporary loans of a record and the control flow that selects what happens next.
+2. **Ownership** (Chapters 5 to 7). Pools of records that outlive the routines that create them, the single owner of each record, lending a record to a routine, weak handles and the control flow that selects what happens next.
 3. **Working with collections** (Chapters 8 to 11). Arrays and strings with fixed capacities, routines that accept arrays of any length, a changing queue of jobs and the numeric types for real calculations.
 4. **Whole programs** (Chapters 12 to 15). Splitting source into parts, the limits on nested calls, a complete utility and what to do when a build fails or a program traps.
 
@@ -56,7 +56,7 @@ The chapters fall into four parts:
 
 To run the examples on CP/M, you need the Basie toolchain on your disk. That means the compiler `BASIE.COM` with its `BASIE.OVL` and `BASIE.MSG` files, the linker `BLINK.COM` and the runtime library `CPM22.BRL`. Programs that print or read text also need the source library parts they include, such as `FORMAT.BSI`, `TEXTIO.BSI` and `STRINGS.BSI`. A real Z80 machine works, and so does an emulator such as Triptych, which has its own [CP/M primer](../../triptych/cpm/index.md). Chapter 1 walks through the first build and Chapter 15 explains the files in more detail.
 
-Every complete example in this book has been compiled with Basie's reference compiler. Each one has run as Z80 code under a CP/M test harness, with its assertions and printed output checked. The native compiler that runs on CP/M itself is still being completed. At the time of writing, it rejects some ownership forms used in Chapters 5 to 7, 10 and 14. Those examples may need the reference toolchain until the native compiler catches up.
+Every complete example in this book has been compiled with Basie's reference compiler. Each one has run as Z80 code under a CP/M test harness, with its assertions and printed output checked. The native compiler that runs on CP/M itself compiles every example too, to the same code.
 
 ## A note on terms
 
@@ -66,11 +66,12 @@ Basie uses a few words in specific ways. Each is defined where it's first needed
 | --- | --- |
 | **alias** | A routine's access to a record, array or string that belongs to someone else. It lasts for the call and is read-only unless the parameter is marked `var`, which makes it a **mutable alias**. |
 | **pool** | A fixed number of slots for records of one type, used for data that comes and goes. |
-| **handle** | A value that refers to a pool slot. |
-| **owner** | The one handle responsible for a pool record. When the owner goes away, the record is released. |
+| **handle** | A value that refers to a record in a pool. |
+| **owner** | The one handle responsible for a pool record. Its type is the pool's name, such as `HJob`. When the owner goes away, the record is released. |
+| **fresh value** | The handle that `new`, `new?` or an owner-returning routine produces. No variable owns it yet, so it needs no `move`. |
 | **move** | Handing ownership to a new place, written `move x`. The old place is left empty. |
-| **lease** | Temporary access to a record that the caller still owns, for the length of a call. |
-| **identifier** | A non-owning handle that can be kept and checked later, written `id(h)`. |
+| **lend** | Passing a record to a record parameter for the length of a call. The caller keeps ownership. |
+| **weak handle** | A handle that refers to a pool record without owning it, written `weak HJob`. Every use checks that the record still exists. |
 | **trap** | A safety check that stops the program before an invalid operation can happen. |
 
 The chapters are meant to be read in order, because each one builds on the storage picture of the one before.

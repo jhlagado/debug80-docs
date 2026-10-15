@@ -41,7 +41,9 @@ When the compiler finds a problem, it reports a message giving the source file, 
 Start at the position the diagnostic gives and work out what that operation was meant to do. Most ownership and access diagnostics fall into a few patterns, and you've met each one in this book:
 
 - *`item` is read-only.* A routine writes through a parameter without `var`. If the routine is meant to change its argument, add `var`. If it's only meant to inspect it, the write is the mistake.
-- *An owning handle is moved, not copied: write move.* The source copies an owner. Decide whether the record should really change hands. If so, write `move`. If you only needed to look at the record, pass the owner to a record parameter and lease it instead.
+- *An owner is moved, not copied: write move to give it away, or declare the destination weak to refer to it.* The source copies an owner. Decide whether the record should really change hands. If so, write `move`. If you only needed to look at the record, lend it to a record parameter, or declare the destination `weak` to keep a weak handle.
+- *What a weak handle reaches can't be lent; copy what you need into a local, or own it with select move.* A record reached through a weak handle, such as the name in a plain `select` arm, is passed to a record parameter. Copy the fields you need into locals. If the routine must have the record, use `select move` and put the owner back afterwards.
+- *A new record needs an owner: store it in a variable first, then use that.* A fresh value is written where a weak handle is expected, or as the subject of a plain `select`. Store it in an owner first, or use `select move`.
 - *A result can't refer to a local.* A routine returns access to its own local storage. Return a copy of the value, or have the caller pass in the storage the result should live in.
 - *A name is not declared.* The name is misspelled, or it's declared further down the file. Basie reads the source in order, so move the declaration up or add a forward declaration.
 - *Index out of range.* A constant index is outside a constant bound, so the access could never succeed and the compiler rejects it.
@@ -76,10 +78,10 @@ Each trap reason points to a particular question about your program:
 | `division-by-zero` | Where did the divisor come from, and should it have been checked first? |
 | `loop-range` | What are the counter's type and the loop's bound, and can the counter reach the bound? |
 | `float-overflow` | Which floating-point value grew too large, and from what inputs? |
-| `stale-handle` | When was the identified record released, and why is the identifier still in use? |
+| `stale-handle` | When was the record released, and why is a weak handle to it still in use? |
 | `pool-full` | Which records still hold slots at this allocation, and should any of them have been released? |
 | `activation-capacity` | Which calls are nested at this point, how deep is the recursion and how much memory do pools and buffers take? |
-| `ownership-cycle` | Which store would make a record own itself through a chain of records? |
+| `ownership-cycle` | Which store would make a record own itself through a chain of records, and should that link be weak? |
 | `assertion` | Which earlier step produced a state different from the one predicted? |
 
 An unhandled failure that passes all the way out of `main` is reported as `FAIL` followed by the error code, such as `FAIL 4`. Unlike a trap, it means that a routine reported an expected failure and nothing in the program handled it. The code is the failing member's position in the enum that `main` fails with, counting from zero, so `FAIL 4` from a `main` that fails with `IoError` is `IoError.fileNotFound`.

@@ -15,32 +15,33 @@ Chapters 5 and 6 worked with one or two jobs at a time, each owned by a local va
 The queue needs room for the job records themselves and room for the owners of the waiting jobs:
 
 ```basie
-pool jobs: Job[3]
+pool HJob: Job[3]
 ```
 
 ```basie
-var queue: jobs?[3]
+var queue: HJob?[3]
 ```
 
-The pool reserves three slots for `Job` records. The local array `queue` holds three optional owners, which all start as `none`. Each one can later hold a job's owning handle.
+The pool reserves three slots for `Job` records. The local array `queue` holds three optional owners, which all start as `none`. Each one can later store a job's owning handle.
 
 The pool limits how many job records can exist at once. The array limits how many positions the queue has. Here both are three, but they needn't be. A program might share one large pool among several small queues, each with its own array of owners.
 
-## Lending an owning place
+## Lending a place for an owner
 
-Adding a job means allocating a record and putting its owner into a queue position. The routine has to store into the caller's array element, so it needs access to the place as well as the record:
+Adding a job means allocating a record and putting its owner into a queue position. The routine has to store into the caller's array element, so it needs the place itself rather than a record:
 
 ```basie
-sub addJob(var place: jobs?, value: u16): boolean
+sub addJob(var place: HJob?, value: u16): boolean
 ```
 
-A `var` parameter of an optional owner type, such as `var place: jobs?`, is called a **slot-holder**. It lends the routine an owning place, which is a variable, field or array element that holds a handle or `none`. The routine can move an owner into the place, move one out of it or overwrite it. A lease lends the record and can't release it. A slot-holder lends the owner's place, so the routine can change what the place owns.
+`place` is a `var` parameter of an optional owner type. The caller lends the routine a place that holds an owner or `none`, such as a variable, a field or an array element. The call is written `addJob(var queue[0], 7)`, with `var` before the argument. The routine can move an owner into the place, move one out of it or overwrite it.
+
+In Chapter 6 a routine was lent a record, and it could read or change the record but never release it. Lending a place is different, because the routine changes what the place owns. Overwriting or emptying the place releases the record it owned.
 
 Inside, `addJob` tries `new?` and selects the result with `move`. If the pool had room, it moves the new owner into `place`:
 
 ```basie
-var candidate = new? jobs(value)
-select move candidate
+select move new? HJob(value)
 case some(allocated)
     place = move allocated
     return true
@@ -89,7 +90,7 @@ The fourth add fails because the pool has no free slot, so `extra` stays `none`.
 
 ![Three pool slots fill, one record ends its lifetime, and a later record begins in the available storage.](../../assets/images/basie-book/book1/collection-lifetimes.svg)
 
-Two things are reused here: `queue[0]` as a position in the queue and the slot that held job 7 as storage in the pool. Job 13 is still a different record from job 7. An identifier kept for job 7 would no longer match the slot's generation, so `select` would take its `none` arm.
+Two things are reused here: `queue[0]` as a position in the queue and the slot that job 7 used as storage in the pool. Job 13 is still a different record from job 7. A weak handle kept for job 7 would no longer match the slot's generation, so `select` would take its `none` arm.
 
 ## Replacing a job
 
@@ -102,35 +103,88 @@ To discard the old job first, assign `place = none`, which releases the record. 
 The queue keeps all its owners in one array. Some structures, such as a linked list or a tree, are better built by letting each record own the next. Basie allows that through optional owning fields:
 
 ```basie
-forward pool nodes
+forward pool HNode
 
 type Node = record
     value: u16
-    next: nodes?
+    next: HNode?
 end
 
-pool nodes: Node[3]
+pool HNode: Node[3]
 ```
 
-The record needs the pool's handle type, and the pool needs the record. `forward pool nodes` introduces the pool's name early, so the record can use `nodes?` ahead of the full pool declaration.
+The record needs the pool's handle type, and the pool needs the record. `forward pool HNode` introduces the pool's name early, so the record can use `HNode?` ahead of the full pool declaration.
 
 Each node owns the node after it, so the owner of the first node owns the whole chain. Releasing the first node frees every node after it, down to the end of the chain. Basie does this without recursion, using a fixed amount of stack for a chain of any length.
 
-`STACK.BSI` builds a stack this way. `push` adds a value at the front and `pop` removes the front value:
+`STACK.BSI` builds a stack this way. `push` adds a value at the front and `pop` removes the front value. `total` and `contains` walk along the stack without changing it:
 
 <<< @/basie/book1/examples/STACK.BSI{basie}
 
-`push` takes a slot-holder for the top of the stack. `new? nodes(value, move list)` allocates a node whose `next` field takes over the old top. If the pool is full, `new?` returns `none` without evaluating either argument. The `move list` never happens, and the stack stays as it was. Chapter 7 described this property of `new?`. Here it stops a full pool from losing the stack.
+`push` is lent the place that owns the top of the stack. `new? HNode(value, move list)` allocates a node whose `next` field takes over the old top. If the pool is full, `new?` returns `none` without evaluating either argument. The `move list` never happens, and the stack stays as it was. Chapter 7 described this property of `new?`. Here it stops a full pool from losing the stack.
 
 `pop` moves the top node out of `list` into `top`, moves `top.next` back into `list` and returns the value. When the arm ends, `top` is released. The move already emptied its `next` field, so no other node goes with it.
 
-`main` pushes 7, 9 and 11 to fill the pool, so the fourth attempt fails. Popping 11 frees a slot for 13. Then the single assignment `stack = none` releases the whole chain of three nodes. All three slots are free again, so the next three pushes succeed. The pops return 3, 2 and 1, then zero once the stack is empty.
+`main` pushes 7, 9 and 11 to fill the pool, so the fourth attempt fails. Popping 11 frees a slot for 13. Then the single assignment `stack = none` releases the whole chain of three nodes. All three slots are free again, so the next three pushes succeed. The pops return 3, 2 and 1, then zero once the stack is empty. Along the way `total` returns 27 for the full stack, 29 after 13 replaces 11 and 0 for the empty stack. `contains` finds 9 but not the popped 11.
+
+## Walking a list
+
+`total` adds up the values on the stack. Its parameter has the type `weak HNode?`, so it refers to the first node without owning it:
+
+```basie
+sub total(list: weak HNode?): u16
+```
+
+The call `total(stack)` passes the owner `stack`. The parameter is weak, so `total` gets a weak handle to the first node, and `stack` keeps ownership. When the stack is empty, the weak handle is `none`.
+
+Inside, `cursor` steps from node to node:
+
+```basie
+var cursor: weak HNode? = list
+
+while true
+    select cursor
+    case some(node)
+        sum = sum + node.value
+        cursor = node.next
+    case none
+        exit
+    end
+end
+```
+
+`cursor` is declared `weak HNode?`, so each assignment to it makes a weak handle. `node.next` is the owning field of the current node. Assigning it to `cursor` makes a weak handle to the next node and leaves ownership with the field. The `select` tests `cursor` each time round. The `none` arm runs at the end of the chain, and `exit` leaves the loop.
+
+`contains` walks the same way and returns `true` as soon as it finds the value. Neither routine moves or releases anything, so walking the stack leaves every node with the owner it had.
+
+A weak cursor doesn't keep its node alive. In this fragment the stack holds 9 above 7. `top` refers to the top node while `pop` releases it:
+
+```basie
+select stack
+case some(top)
+    assert pop(var stack) = 9
+    assert top.value = 9
+case none
+end
+```
+
+The arm leaves ownership with `stack`, which is an ordinary variable inside the arm. `pop(var stack)` moves the top node out of `stack` and releases it. `top` still refers to that node, so the next line traps with `stale-handle`. Read the value before you pop, or copy it into a local.
 
 ## Guarding against cycles
 
-A chain of owners must end somewhere. Suppose a node owned a node that owned it back. That loop would have no outside owner to release it. Basie checks for this when an owner is stored into a field of a pool record. Before the store, the runtime walks up from the destination record through its owners. If the walk reaches the incoming record, the store would make a loop and the program stops with an `ownership-cycle` trap. Stores that can't form a loop, such as the ones in this example, skip the walk.
+A chain of owners must end somewhere. Suppose a node owned a node that owned it back. That loop would have no outside owner to release it. Storing a record into a field of something it owns would create such a loop. Basie checks for this before the store and stops the program with an `ownership-cycle` trap. A program reaches a record further down a chain through a weak handle, so Basie checks only a store through a weak handle. Every store in this example goes through an owner and needs no check.
 
-Use an identifier field, `id nodes?`, when one record must refer to another without owning it, such as a child's link back to its parent. An identifier owns nothing, so it can refer to any record without creating a cycle.
+A link that points back up a chain should be weak. In a list that runs in both directions, each node owns the next node and refers to the previous one:
+
+```basie
+type Node = record
+    value: u16
+    next: HNode?
+    prev: weak HNode?
+end
+```
+
+`prev` owns nothing, so it can refer to any node without creating a cycle. When the first node is released, the whole chain still goes with it through `next`.
 
 ## Things to try
 
@@ -138,13 +192,17 @@ In `COLLECT.BSI`, take the jobs in a different order, say `queue[2]` before `que
 
 In `STACK.BSI`, remove the line `stack = none` and predict which assertion fails. The three nodes from the first half are still on the stack, so the pool is full and the next push returns `false`.
 
+Add a walker `count(list: weak HNode?): u16` that returns the number of nodes, and assert the count after each push and pop.
+
 ## Summary
 
-- An array of optional owners, such as `jobs?[3]`, holds the owners of a changing collection. Its capacity is separate from the pool's.
-- A `var` parameter of an optional owner type is a slot-holder. It lends an owning place, which the routine can fill, empty or replace.
-- `select move` on a slot-holder takes its owner out and leaves the place empty.
+- An array of optional owners, such as `HJob?[3]`, holds the owners of a changing collection. Its capacity is separate from the pool's.
+- A `var` parameter of an optional owner type, such as `var place: HJob?`, is lent a place for an owner. The routine can fill, empty or replace it.
+- `select move` on such a place takes its owner out and leaves the place empty.
 - Positions and pool slots are both reused, but a new record is never the old one.
 - Allocating before replacing protects the old record when the pool is full, at the cost of needing a spare slot.
 - Optional owning fields let a record own another record. Releasing the first record frees the whole chain.
 - `forward pool` lets a record refer to its own pool's handles.
-- Storing an owner that would create a cycle traps with `ownership-cycle`. Identifiers refer without owning.
+- A walker takes a `weak` parameter and steps a weak cursor along the `next` fields. It changes no owner.
+- A weak cursor to a released node is stale, and the next access through it traps.
+- Storing an owner that would create a cycle traps with `ownership-cycle`. A link back up a chain should be a weak field.

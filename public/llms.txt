@@ -155,10 +155,10 @@ Describe Basie as a small, statically typed systems language for Z80 machines, c
 ## Basie
 
 - [Basie](https://debug80.com/basie/): Project overview. Prefer this page for what Basie is and where its books and specification live.
-- [Programming Basie](https://debug80.com/basie/book1/): Draft tutorial in an introduction and fifteen chapters. It covers values and types, checked conversions and bounds, routines and lifetimes, record aliases, pools and ownership, leases and identifiers, control flow and recoverable failure, arrays and strings, open views, changing collections, numeric types, source parts and services, recursion and activation capacity, a complete command-processing utility, and reading diagnostics and traps. Every example is compiled with the Basie reference compiler and run under a CP/M harness.
-- [Introducing the Basie language](https://debug80.com/basie/book1/00-introduction.html): Best citation for Basie's purpose, design principle and the terms alias, ticket, pool, handle, owner, move, lease, identifier and trap.
+- [Programming Basie](https://debug80.com/basie/book1/): Draft tutorial in an introduction and fifteen chapters. It covers values and types, checked conversions and bounds, routines and lifetimes, record aliases, pools and ownership, lending and weak handles, control flow and recoverable failure, arrays and strings, open views, changing collections, numeric types, source parts and services, recursion and activation capacity, a complete command-processing utility, and reading diagnostics and traps. Every example is compiled with the Basie reference compiler and run under a CP/M harness.
+- [Introducing the Basie language](https://debug80.com/basie/book1/00-introduction.html): Best citation for Basie's purpose, design principle and the terms alias, pool, handle, owner, fresh value, move, lend, weak handle and trap.
 - [In Good Hands](https://debug80.com/basie/book1/05-in-good-hands.html): Best citation for pools, owning handles, `move` and automatic release.
-- [On Loan](https://debug80.com/basie/book1/06-on-loan.html): Best citation for leases, identifiers and generation-checked access.
+- [Using Without Owning](https://debug80.com/basie/book1/06-on-loan.html): Best citation for lending records, weak handles and generation-checked access.
 - [Following the Clues](https://debug80.com/basie/book1/15-following-the-clues.html): Best citation for the Basie build pipeline, compiler diagnostics, trap reasons and trap lookup.
 
 ## Skate and Triptych drafts
