@@ -223,7 +223,7 @@ Here's the complete program:
 
 `positive` fails with `ValueError.negative`, and `checked` passes the failure on. `main` handles it, so `observed` is set to 107. Suppose `main` passed the failure on instead and nothing handled it. The program would then end with a report of the code's position in its enum, such as `FAIL 0`.
 
-Each kind of failure has its own enum. The runtime's services fail with the predeclared `IoError`, whose members include `IoError.endOfInput` and `IoError.fileNotFound`, and the standard library's number parsing fails with `ParseError`. `try` passes a failure on only to a routine that fails with the same enum, so a file error can never turn up where a parsing error was expected. To pass on a failure of another kind, handle it and fail with a member of your own enum. Chapter 12 does this.
+Each kind of failure has its own enum. The runtime's services fail with the predeclared `IoError`, whose members include `IoError.endOfInput` and `IoError.fileNotFound`, and the standard library's number parsing fails with `ParseError`. `try` passes a failure on only within the same enum or to a failure set that names it. A file error therefore never turns up where only a parsing error was expected. A routine can still pass on a failure of another kind. It can handle the failure and fail with a member of its own enum, or it can fail with a failure set. Chapter 12 shows both.
 
 ## Failures and traps
 
@@ -250,5 +250,5 @@ In `05-loops.BSI`, change `step 2` to `step 1` and work out the new total before
 - Plain `select` leaves ownership where it is. Its `some` arm names the record through a weak handle, checked at every access, which can't be lent.
 - `while` repeats while a condition holds. `for` counts with `until` or `to`, an optional constant `step` and a read-only counter that never wraps.
 - `continue` starts the next pass and `exit` leaves the loop. Owners in the body are released at the end of every pass.
-- A `fails` routine names the enum of its failures and reports them with `fail`. Every call either passes the failure on with `try`, within the same enum, or handles it with `handle`.
+- A `fails` routine names the enum of its failures and reports them with `fail`. Every call either passes the failure on with `try` or handles it with `handle`. `try` needs the same enum or a failure set that names it.
 - A trap is not a failure. It stops the program and can't be caught.

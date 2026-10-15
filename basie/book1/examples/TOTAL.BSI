@@ -1,0 +1,37 @@
+include "PARSE.BSI"
+include "TEXTIO.BSI"
+include "FORMAT.BSI"
+
+type LoadFailure = fails IoError, ParseError
+
+sub readCount(): u16 fails LoadFailure
+    var line: string[16]
+    try prompt("> ", var line)
+    var count = try parseU16(line)
+    return count
+end
+
+sub main() fails LoadFailure
+    var total: u16 = 0
+    var count: u16
+    var why: LoadFailure
+
+    while true
+        count = readCount() handle why
+            select why
+            case ParseError.badNumber
+                continue
+            case IoError.endOfInput
+                exit
+            case else
+                fail why
+            end
+        end
+        total = total + count
+    end
+
+    var report: string[24]
+    try append(var report, "\r\nTotal: ")
+    try appendU16(var report, total)
+    try writeLine(console, report)
+end

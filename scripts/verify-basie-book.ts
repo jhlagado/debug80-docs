@@ -27,6 +27,12 @@ const expectedOutput: Record<string, string> = {
   "READINGS.BSI": "Mean: 15.0\r\n",
   "COMMAND.BSI": "Result: 246\r\nInvalid number\r\n",
   "CAPSTONE.BSI": "Result: 246\r\nInvalid number\r\nQueue full\r\n",
+  "TOTAL.BSI": "> \n> \n> \n> \r\nTotal: 27\r\n",
+};
+const inputs: Record<string, string> = {
+  "CHARS.BSI": "A",
+  "ECHO.BSI": "Ada\r",
+  "TOTAL.BSI": "12\rnope\r15\r",
 };
 let failures = 0;
 const folder = `${docs}basie/book1/examples`;
@@ -41,8 +47,7 @@ for (const entry of entries) {
     results.push({ source: entry.name, status: "compile-failed", result });
     continue;
   }
-  const input = entry.name === "CHARS.BSI" ? "A"
-    : entry.name === "ECHO.BSI" ? "Ada\r" : "";
+  const input = inputs[entry.name] ?? "";
   const run = runCom(result.com, { input });
   const expected = expectedOutput[entry.name] ?? "";
   const ok = run.output === expected && run.returnCode === 0;

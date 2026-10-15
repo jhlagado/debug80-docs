@@ -15,7 +15,7 @@ Excluded from publication. The approved thematic plan and chapter manifest gover
 | 9. A Wider View | Reusable routines over existing storage | Open views, PICK and escaping-local rejection | Read through The interface preserves the relationship; first-draft prose complete. |
 | 10. Jobs Come and Go | A changing collection | COLLECT: full pool, removal, reuse and empty optional positions | Read through Owning aggregates and larger structures; first-draft prose complete. |
 | 11. Taking the Measure | Calculations over structured data | READINGS output and numeric checks | Read through Other integer operations; first-draft prose complete. |
-| 12. A Place for Everything | Organising a complete program | Includes in ECHO, READINGS, COMMAND and CAPSTONE | Read through The trusted boundary; first-draft prose complete. |
+| 12. A Place for Everything | Organising a complete program | Includes in ECHO, READINGS, COMMAND, TOTAL and CAPSTONE | Read through The trusted boundary; first-draft prose complete. |
 | 13. One Call Too Many | Calls within a finite memory budget | Mutual-recursion example | Read through Follow one more level; first-draft prose complete. |
 | 14. Putting It to Work | A complete CP/M utility | CAPSTONE output, error codes and preserved destination owners | Read through A useful extension; first-draft prose complete. |
 | 15. Following the Clues | Building and investigating programs | Safety-boundary diagnostics/traps and specification-checked build commands | Read through Evidence for a correction; first-draft prose complete. |
