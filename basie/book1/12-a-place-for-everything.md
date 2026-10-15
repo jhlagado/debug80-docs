@@ -30,7 +30,7 @@ The `include` lines must come before any declarations in the file, so the depend
 
 Parts organise the source but put no walls between its pieces. The compiler reads all the parts as one stream of declarations, in order, and the ordinary rules apply across the boundaries. A name must be declared before it is used, whether its declaration is in the same part or an earlier one. Public names from every part share one space, so two parts can't both declare a public routine called `parse`.
 
-The interfaces between parts are the routine declarations you already know. A routine's parameters show what it copies, what it reads and what it changes. Its result type shows what it returns, and `fails` shows whether it can fail, and with which enum of codes. Moving a routine into a different file leaves all of that the same, including lifetimes and ownership.
+The interfaces between parts are the routine declarations you already know. A routine's parameters show what it copies, what it reads and what it changes. Its result type shows what it returns, and `fails` shows whether it can fail, and which codes it can fail with. Moving a routine into a different file leaves all of that the same, including lifetimes and ownership.
 
 ## Keeping helpers private
 
@@ -88,6 +88,60 @@ Terminal control sequences, such as the codes that clear the screen or move the 
 
 A `File` is a value, not an owner. It can be copied and stored like a number, and copying it doesn't open the file twice. Your program closes a file explicitly by calling `close`. When the program ends, the runtime closes any that are still open. A `File` that has been closed stays closed. Any service given it fails with `IoError.fileClosed`, and it can never end up referring to another file opened later. Pools release their records automatically, but nothing closes a file when a variable goes out of scope.
 
+## Failures from two sources
+
+A routine that reads a number from the console calls two routines that can fail. `prompt` fails with an `IoError`, and `parseU16` fails with a `ParseError`. `execute` handled each one and failed with a `CommandError` member instead. That suits a caller that needs only the command's own codes. Other callers need the original code, such as `IoError.endOfInput` at the end of the input.
+
+A **failure set** combines failure enums into one type:
+
+```basie
+type LoadFailure = fails IoError, ParseError
+```
+
+The members of `LoadFailure` are the members of `IoError` and `ParseError`. A routine can name the set after `fails` in the same way as an enum. One rule then covers `try`, `fail` and `handle`: a routine passes on anything its set names.
+
+```basie
+sub readCount(): u16 fails LoadFailure
+    var line: string[16]
+    try prompt("> ", var line)
+    var count = try parseU16(line)
+    return count
+end
+```
+
+`LoadFailure` names both `IoError` and `ParseError`, so `try` passes either failure on. The code keeps its own enum on the way, so the caller still sees `IoError.endOfInput` or `ParseError.badNumber`.
+
+A variable of type `LoadFailure` can receive any of these codes. A handler can deal with some members and pass the rest on:
+
+```basie
+count = readCount() handle why
+    select why
+    case ParseError.badNumber
+        continue
+    case IoError.endOfInput
+        exit
+    case else
+        fail why
+    end
+end
+```
+
+A `select` on a set takes members of any of its enums. Without `case else`, it must name every member of every enum in the set. Here `case else` covers the other members of `IoError`, and `fail why` passes them on. That works because `main` fails with `LoadFailure` as well.
+
+This program adds up the numbers typed at the console and skips lines such as `nope`:
+
+<<< @/basie/book1/examples/TOTAL.BSI{basie}
+
+Given the lines `12`, `nope` and `15`, the program prints `Total: 27`. The line `nope` fails in `parseU16`, and the loop skips it. On CP/M you end the input by typing Control-Z at the start of a line. `prompt` then fails with `IoError.endOfInput`, and the loop ends.
+
+A set can also name another set. This one holds every code of `LoadFailure` and of `CommandError`:
+
+```basie
+type ReportFailure = fails LoadFailure, CommandError
+```
+
+The rule goes by the names in the list. A routine that fails with `ReportFailure` can `try` a call to `readCount`, because the list names `LoadFailure`. A set declared as `fails IoError, ParseError` under another name holds the same enums but doesn't name `LoadFailure`. The compiler rejects `try readCount()` in a routine that fails with it, with a `failure-domain` diagnostic.
+
 ## The trusted boundary
 
 Basie's safety rules cover your source but not the services, the runtime or CP/M itself. These are trusted to respect the bounds of every string and array passed to them. They must also honour read-only parameters and keep no access after a call returns.
@@ -97,6 +151,8 @@ Basie keeps that boundary small. Most of what a program needs, from formatting n
 ## Things to try
 
 Take the `sum` routine from Chapter 9 and put it in a part of its own named `SUMS.BSI`. Include that part in a small program that uses `sum`. Then give `sum` a private helper, perhaps one that widens a byte to `u16`. The program behaves exactly as before, but the main program can't call the helper.
+
+In `TOTAL.BSI`, remove the `case else` arm. The compiler now rejects the `select`, because it doesn't name every member of `IoError`.
 
 In `COMMAND.BSI`, change `"double nope"` to `"triple 4"`. The handler's assertion `problem = CommandError.badNumber` now fails, because the code is `CommandError.unknownCommand`. Change both checks to `unknownCommand`, in the handler and after it. The program then runs to the end again.
 
@@ -108,4 +164,6 @@ In `COMMAND.BSI`, change `"double nope"` to `"triple 4"`. The handler's assertio
 - The library parts `STRINGS.BSI`, `FORMAT.BSI`, `PARSE.BSI` and `TEXTIO.BSI` are ordinary Basie source.
 - Programs reach the console and files only through services, called like routines.
 - `File` identifies the console, the printer or an open file. It's copied like a value and closed explicitly.
+- A failure set, such as `type LoadFailure = fails IoError, ParseError`, combines failure enums. A routine passes on anything its set names.
+- A `select` on a set needs `case else` unless it names every member of every enum in the set.
 - The services and the runtime are trusted to respect the bounds and permissions of what they're given.

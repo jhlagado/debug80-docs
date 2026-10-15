@@ -31,7 +31,7 @@ type Row = u8[2]
 var grid: Row[3] = [[1, 2], [3, 4], [5, 6]]
 ```
 
-`Row` is exactly `u8[2]`, not a new type, so a `Row` and a `u8[2]` can be used interchangeably. Only `record` and `enum` definitions create new types. Any other `type` declaration just gives an existing type a second name.
+`Row` is exactly `u8[2]`, not a new type, so a `Row` and a `u8[2]` can be used interchangeably. Only `record` and `enum` definitions and the failure sets of Chapter 12 create new types. Any other `type` declaration just gives an existing type a second name.
 
 ## Index types
 

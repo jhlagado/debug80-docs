@@ -49,7 +49,7 @@ Start at the position the diagnostic gives and work out what that operation was 
 - *Index out of range.* A constant index is outside a constant bound, so the access could never succeed and the compiler rejects it.
 - *A var parameter's argument is written var, and no other.* A call is missing `var` before an argument for a `var` parameter, or has one the parameter doesn't take. Add or remove the marker at the call.
 - *A select needs case else unless its cases cover every value.* Add the missing cases, or write an empty `case else` if the other values need nothing.
-- *`check` fails with another enum.* `try` can pass on a failure only within one enum. Handle the call, then `fail` with a member of your routine's own enum.
+- *`check` fails with another enum.* Your routine's enum or failure set must name the callee's enum or set before `try` can pass the failure on. Add the name to your routine's failure set, or handle the call and `fail` with a member of your own enum.
 
 In every case the right fix depends on what the program is supposed to do. Adding `var` makes a write compile. If the routine was meant to be read-only, the program now does something you didn't intend. Adding `move` makes an owner copy compile. If the code was meant to inspect the job, a routine that should only have looked at the job now releases it. A change that gets past the compiler is correct only if it still describes what you meant.
 
@@ -84,7 +84,7 @@ Each trap reason points to a particular question about your program:
 | `ownership-cycle` | Which store would make a record own itself through a chain of records, and should that link be weak? |
 | `assertion` | Which earlier step produced a state different from the one predicted? |
 
-An unhandled failure that passes all the way out of `main` is reported as `FAIL` followed by the error code, such as `FAIL 4`. Unlike a trap, it means that a routine reported an expected failure and nothing in the program handled it. The code is the failing member's position in the enum that `main` fails with, counting from zero, so `FAIL 4` from a `main` that fails with `IoError` is `IoError.fileNotFound`.
+An unhandled failure that passes all the way out of `main` is reported as `FAIL` followed by the error code, such as `FAIL 4`. Unlike a trap, it means that a routine reported an expected failure and nothing in the program handled it. The code is the failing member's position in the enum or set that `main` fails with, counting from zero, so `FAIL 4` from a `main` that fails with `IoError` is `IoError.fileNotFound`. A set's members are numbered in the order of the enums in its list. In Chapter 12's `LoadFailure`, `IoError` comes first with 19 members, so `ParseError.badNumber` is `FAIL 19`.
 
 ## After a trap
 
