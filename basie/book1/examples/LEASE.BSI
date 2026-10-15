@@ -18,7 +18,7 @@ end
 
 sub main()
     var first = new jobs(7)
-    var remembered = id(first)
+    var remembered: weak jobs = first
 
     assert inspectJob(first) = 7
     incrementJob(var first)
