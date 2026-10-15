@@ -9,7 +9,7 @@ Excluded from publication. The approved thematic plan and chapter manifest gover
 | 3. Coming and Going | Calls, scope and lifetime | CALLS and 10-routines | 2026-10-07 edit: cut to about 1,160 words, echo pivot and duplicated copy explanation removed, dangling-return example reduced to prose, line input moved to Chapter 8. |
 | 4. The Original and the Copy | Access without copying | ACCESS, record example and readonly rejection | Read through Try a smaller change; first-draft prose complete. |
 | 5. In Good Hands | One object, one responsibility | OWNERS and owner-copy rejection | Read through Predict the next allocation; first-draft prose complete. |
-| 6. On Loan | Temporary access to a live object | LEASE: read, update, consume, release and stale identifier selection | Read through Choose the interface; first-draft prose complete. |
+| 6. Using Without Owning | Lending a record and referring to it with a weak handle | LENDING: lend, update, consume, release and stale weak-handle selection | Read through Choose the interface; first-draft prose complete. |
 | 7. A Change of Plan | Decisions, repetition and recoverable failure | CONTROL, decisions, loops and recoverable errors | Read through Safety checks stop invalid operations; first-draft prose complete. |
 | 8. Room to Work | Bounded collections and text | Arrays, strings, ECHO line input and bounds rejection | Read through Choosing the bound; first-draft prose complete. 2026-10-07: Reading a line section moved here from Chapter 3. |
 | 9. A Wider View | Reusable routines over existing storage | Open views, PICK and escaping-local rejection | Read through The interface preserves the relationship; first-draft prose complete. |

@@ -1,15 +1,14 @@
-forward pool nodes
+forward pool HNode
 
 type Node = record
     value: u16
-    next: nodes?
+    next: HNode?
 end
 
-pool nodes: Node[3]
+pool HNode: Node[3]
 
-sub push(var list: nodes?, value: u16): boolean
-    var candidate = new? nodes(value, move list)
-    select move candidate
+sub push(var list: HNode?, value: u16): boolean
+    select move new? HNode(value, move list)
     case some(node)
         list = move node
         return true
@@ -18,7 +17,7 @@ sub push(var list: nodes?, value: u16): boolean
     end
 end
 
-sub pop(var list: nodes?): u16
+sub pop(var list: HNode?): u16
     select move list
     case some(top)
         list = move top.next
@@ -28,18 +27,59 @@ sub pop(var list: nodes?): u16
     end
 end
 
+sub total(list: weak HNode?): u16
+    var sum: u16 = 0
+    var cursor: weak HNode? = list
+
+    while true
+        select cursor
+        case some(node)
+            sum = sum + node.value
+            cursor = node.next
+        case none
+            exit
+        end
+    end
+
+    return sum
+end
+
+sub contains(list: weak HNode?, value: u16): boolean
+    var cursor: weak HNode? = list
+
+    while true
+        select cursor
+        case some(node)
+            if node.value = value
+                return true
+            end
+            cursor = node.next
+        case none
+            exit
+        end
+    end
+
+    return false
+end
+
 sub main()
-    var stack: nodes?
+    var stack: HNode?
 
     assert push(var stack, 7)
     assert push(var stack, 9)
     assert push(var stack, 11)
     assert not push(var stack, 13)
+    assert total(stack) = 27
 
     assert pop(var stack) = 11
     assert push(var stack, 13)
+    assert total(stack) = 29
+    assert contains(stack, 9)
+    assert not contains(stack, 11)
+
 
     stack = none
+    assert total(stack) = 0
 
     assert push(var stack, 1)
     assert push(var stack, 2)
