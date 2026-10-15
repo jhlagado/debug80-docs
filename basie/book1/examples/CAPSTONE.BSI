@@ -14,7 +14,7 @@ type Job = record
     number: u16
 end
 
-pool jobs: Job[2]
+pool HJob: Job[2]
 
 sub execute(text: string[]): u16 fails CommandError
     var command: string[8]
@@ -48,10 +48,10 @@ sub execute(text: string[]): u16 fails CommandError
     return value * 2
 end
 
-sub createJob(text: string[]): jobs fails CommandError
+sub createJob(text: string[]): HJob fails CommandError
     var number = try execute(text)
-    var candidate = new? jobs(number)
-    select move candidate
+
+    select move new? HJob(number)
     case some(allocated)
         return move allocated
     case none

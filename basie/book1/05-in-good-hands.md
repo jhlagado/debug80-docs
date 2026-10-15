@@ -23,10 +23,10 @@ type Job = record
     number: u16
 end
 
-pool jobs: Job[2]
+pool HJob: Job[2]
 ```
 
-`jobs` has room for two `Job` records. The storage for both slots is reserved when the program is built, just like a program variable. The size of the pool is known in advance and can't grow. During the run only the set of slots in use changes, starting with both free. Allocating a record takes a free slot and starts that record's lifetime. Releasing it ends the lifetime and returns the slot for later use.
+`HJob` has room for two `Job` records. The storage for both slots is reserved when the program is built, just like a program variable. The size of the pool is known in advance and can't grow. During the run only the set of slots in use changes, starting with both free. Allocating a record takes a free slot and starts that record's lifetime. Releasing it ends the lifetime and returns the slot for later use.
 
 A fixed capacity is a real limitation, but you decide how many jobs the program can hold at once. The program never uses more memory than you planned for, however long it runs.
 
@@ -35,27 +35,29 @@ A fixed capacity is a real limitation, but you decide how many jobs the program 
 `new` allocates a record from a pool:
 
 ```basie
-var first = new jobs(7)
+var first = new HJob(7)
 ```
 
-`new jobs(7)` takes a free slot and fills the new record's fields from the arguments in order, so `number` is 7. It returns a **handle** to that slot. The handle's type is `jobs`, the name of the pool. The local variable `first` holds the handle, and `first.number` reaches the record's field through it.
+`new HJob(7)` takes a free slot and fills the new record's fields from the arguments in order, so `number` is 7. It returns a **handle** to that slot. The handle's type is `HJob`, the name of the pool. The local variable `first` stores the handle, and `first.number` reaches the record's field through it.
+
+A pool's name is the type of its handles, so in this book each pool is named for its handles. The name is singular and capitalised, with an `H` for handle in front: `HJob` for a pool of `Job` records. Basie doesn't require the convention, but it keeps the record type `Job` and the handle type `HJob` easy to tell apart.
 
 The handle and the record are separate. The handle lives in `first`, in `main`'s activation. The record lives in a pool slot, outside any activation. The handle is how you reach the record, rather like a cloakroom tag that identifies your coat. If `main` returned, its local `first` would end. That alone would not touch the record in the pool.
 
-Basie's rule for who is responsible for the record is **ownership**. A handle of type `jobs` is an **owning handle**, and every allocated record has exactly one owner. The owner is the place in the program responsible for that record's lifetime. When the owner goes away, the record is released.
+The record belongs to `first`, so it should go when `first` goes and nothing else should release it. Basie calls this rule **ownership**. A handle of type `HJob` is an **owning handle**, or **owner**, and every allocated record has exactly one owner. The owner is the place in the program responsible for that record's lifetime. When the owner goes away, the record is released.
 
 ## No copies of an owner
 
 A scalar can be copied freely because each copy is independent. An owning handle can't be copied, and this example shows what would go wrong if it could:
 
 ```basie
-var first = new jobs(7)
+var first = new HJob(7)
 var second = first
 ```
 
 Now there would be two owners for one record. When `first` goes away, the record is released. When `second` goes away, it would be released again, and by then the slot might already hold a different job. Two owners mean two releases, and one of them is always wrong.
 
-The compiler rejects that program and reports that "an owning handle is moved, not copied: write move". To transfer a record to a new owner, write `move`:
+The compiler rejects that program and reports that "an owner is moved, not copied". To transfer a record to a new owner, write `move`:
 
 ```basie
 var second = move first
@@ -65,14 +67,16 @@ var second = move first
 
 ![An ownership transfer changes the responsible binding while the pool record stays in its slot.](../../assets/images/basie-book/book1/ownership-transfer.svg)
 
-After the move, `first` is empty and can't be used to reach the record. The compiler tracks which owning locals have been moved from, through `if`, `select` and loops. It rejects any use of a local that might be empty. A fresh handle straight from `new` is used without `move`, because there is no previous owner to empty.
+After the move, `first` is empty and can't be used to reach the record. The compiler tracks which owning locals have been moved from, through `if`, `select` and loops. It rejects any use of a local that might be empty.
+
+The handle that `new` returns is a **fresh value**. It belongs to no variable yet, so it needs no `move`. The result of a routine that returns an owner is fresh in the same way. Every other owner goes to a new place only with `move`.
 
 ## Passing responsibility into a call
 
 A routine can take ownership through a parameter whose type is a pool:
 
 ```basie
-sub consume(job: jobs): u16
+sub consume(job: HJob): u16
     return job.number
 end
 ```
@@ -93,8 +97,8 @@ Instead of a `free` statement, Basie releases a record automatically whenever it
 
 - when an owning local reaches the end of its block, by any path, including an early `return`
 - when an owning parameter's routine returns
-- when an owning variable is assigned a new handle, which releases the record it held before
-- when the record or local array that holds an owner is itself released
+- when an owning variable is assigned a new handle, which releases the record it owned before
+- when the record or local array that contains an owner is itself released
 
 A moved-from owner is empty, so it releases nothing when it goes away. Every allocated record has exactly one owner, which releases it once. So every record is released exactly once, at the point its owner goes away.
 
@@ -110,10 +114,10 @@ Here are the slots and owners at each step:
 
 | Step | Slot A | Slot B | Owners in `main` |
 | --- | --- | --- | --- |
-| `first = new jobs(7)` | job 7 | free | `first` |
-| `second = new jobs(9)` | job 7 | job 9 | `first`, `second` |
+| `first = new HJob(7)` | job 7 | free | `first` |
+| `second = new HJob(9)` | job 7 | job 9 | `first`, `second` |
 | `consume(move first)` returns 7 | free | job 9 | `second` |
-| `replacement = new jobs(11)` | job 11 | job 9 | `second`, `replacement` |
+| `replacement = new HJob(11)` | job 11 | job 9 | `second`, `replacement` |
 | `main` ends | free | free | none |
 
 After the first two allocations the pool is full. Calling `consume` moves job 7 into the routine, which releases it on return, so the third allocation finds a free slot. The assertions confirm the returned 7, the new record's 11 and the untouched 9 in the second job.
@@ -131,9 +135,10 @@ After restoring the original order, use a copy of the listing to mark where each
 ## Summary
 
 - A pool reserves a fixed number of slots for records of one type. Its capacity never changes.
-- `new` allocates a record in a free slot and returns an owning handle. `new` traps with `pool-full` if no slot is free.
+- A pool's name is the type of its owning handles. This book names pools `HJob`, with an `H` for handle.
+- `new` allocates a record in a free slot and returns a fresh owning handle. `new` traps with `pool-full` if no slot is free.
 - Every allocated record has exactly one owner, responsible for its lifetime.
-- An owner can't be copied. `move` transfers it and leaves the source empty.
+- An owner can't be copied. `move` transfers it and leaves the source empty. A fresh value needs no `move`.
 - A routine with an owning parameter takes over the record. It is released when the routine finishes with it.
 - There is no `free`. A record is released automatically when its owner goes away or is overwritten.
 - Records and arrays containing owners can't be copied as a whole.

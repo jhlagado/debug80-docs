@@ -85,6 +85,7 @@ for (const entry of entries) {
 const boundaries = [
   { source: "BOUNDS.BSI", trap: "bounds" },
   { source: "NARROW.BSI", trap: "narrowing" },
+  { source: "STALE.BSI", trap: "stale-handle" },
   { source: "READONLY.BSI", diagnostic: "not-writable" },
   { source: "COPY.BSI", diagnostic: "needs-move" },
   { source: "ESCAPE.BSI", diagnostic: "alias-escapes" },
