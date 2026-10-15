@@ -1,5 +1,5 @@
 {
-  "compilerRevision": "f9810a22f1b918bd469da43c9a630ab1db7264a1",
+  "compilerRevision": "fa3aabe32d67ac96a8e91d19a600f4620c5989ca",
   "method": "Reference compiler, runtime assembled with ATOM into debug80-docs/_internal, generated Z80 under minimal CP/M harness. Assertions test chapter results. Native compiler and physical CP/M not verified.",
   "results": [
     {
@@ -303,6 +303,15 @@
       "input": "",
       "output": "",
       "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "TOTAL.BSI",
+      "status": "pass",
+      "imageBytes": 3744,
+      "input": "12\rnope\r15\r",
+      "output": "> \n> \n> \n> \r\nTotal: 27\r\n",
+      "expectedOutput": "> \n> \n> \n> \r\nTotal: 27\r\n",
       "returnCode": 0
     },
     {
