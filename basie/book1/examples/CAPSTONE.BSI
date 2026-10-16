@@ -27,7 +27,7 @@ sub execute(text: string[]): u16 fails CommandError
     found = word(text, 0, var command) handle io
         fail CommandError.unknownCommand
     end
-    if not found or not equal(command, "double")
+    if not found or command <> "double"
         fail CommandError.unknownCommand
     end
 
