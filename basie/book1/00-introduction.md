@@ -54,7 +54,7 @@ The chapters fall into four parts:
 
 ## Tools and status
 
-To run the examples on CP/M, you need the Basie toolchain on your disk. That means the compiler `BASIE.COM` with its `BASIE.OVL` and `BASIE.MSG` files, the linker `BLINK.COM` and the runtime library `CPM22.BRL`. Programs that print or read text also need the source library parts they include, such as `FORMAT.BSI`, `TEXTIO.BSI` and `STRINGS.BSI`. A real Z80 machine works, and so does an emulator such as Triptych, which has its own [CP/M primer](../../triptych/cpm/index.md). Chapter 1 walks through the first build and Chapter 15 explains the files in more detail.
+To run the examples on CP/M, you need the Basie toolchain on your disk. That means the compiler `BASIE.COM` with its `BASIE.OVL` and `BASIE.MSG` files, the linker `BLINK.COM` and the runtime library `CPM22.BRL`. Programs that print or read text also need the compiled library modules they import, such as `FORMAT.BSM`, `TEXTIO.BSM` and `STRINGS.BSM`. A real Z80 machine works, and so does an emulator such as Triptych, which has its own [CP/M primer](../../triptych/cpm/index.md). Chapter 1 walks through the first build and Chapter 15 explains the files in more detail.
 
 Every complete example in this book has been compiled with Basie's reference compiler. Each one has run as Z80 code under a CP/M test harness, with its assertions and printed output checked. The native compiler that runs on CP/M itself compiles every example too, to the same code.
 

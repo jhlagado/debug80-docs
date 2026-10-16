@@ -1,5 +1,5 @@
 {
-  "compilerRevision": "fce25e53113bb0ceb8300d9360a06c858b416cf7",
+  "compilerRevision": "c3349a75a507963342285830b730f01c1b0c9d0a",
   "method": "Reference compiler, runtime assembled with ATOM into debug80-docs/_internal, generated Z80 under minimal CP/M harness. Assertions test chapter results. Native compiler and physical CP/M not verified.",
   "results": [
     {
