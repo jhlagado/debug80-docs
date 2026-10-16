@@ -119,11 +119,11 @@ The copy has length 3. Its first byte, `A`, is 65 and its new third byte, `C`, i
 | `copyFrom(var dest, src, start, count)` | copies part of `src` into `dest` |
 | `equal(a, b)` | tests whether two strings hold the same bytes |
 | `compare(a, b)` | gives -1, 0 or 1 for sorting |
-| `find(s, t)` | gives the position of `t` within `s` |
+| `find(s, t)` | gives the position of `t` within `s`, or `$FFFF` if it's absent |
 | `toUpper(var s)`, `toLower(var s)` | change letter case |
 | `trim(var s)` | removes leading and trailing spaces and tabs |
 
-They're ordinary Basie routines, and their source uses the techniques Chapter 9 explains.
+They're ordinary Basie routines, and their source uses the techniques Chapter 9 explains. Chapter 9 also shows that `equal`, `compare` and `find` read byte arrays as well as strings.
 
 ## Reading a line
 
