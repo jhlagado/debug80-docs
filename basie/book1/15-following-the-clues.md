@@ -42,7 +42,7 @@ Start at the position the diagnostic gives and work out what that operation was 
 
 - *`item` is read-only.* A routine writes through a parameter without `var`. If the routine is meant to change its argument, add `var`. If it's only meant to inspect it, the write is the mistake.
 - *An owner is moved, not copied: write move to give it away, or declare the destination weak to refer to it.* The source copies an owner. Decide whether the record should really change hands. If so, write `move`. If you only needed to look at the record, lend it to a record parameter, or declare the destination `weak` to keep a weak handle.
-- *What a weak handle reaches can't be lent; copy what you need into a local, or own it with select move.* A record reached through a weak handle, such as the name in a plain `select` arm, is passed to a record parameter. Copy the fields you need into locals. If the routine must have the record, use `select move` and put the owner back afterwards.
+- *What a weak handle reaches can't be lent; copy what you need into a local, or own it with select move.* A record reached through a weak handle, such as the name in a plain `select` arm, is passed to a record parameter. Copy the record into a local of its record type, as in `var saved: Job = found`, and pass the copy. If the routine must have the record, use `select move` and put the owner back afterwards.
 - *A new record needs an owner: store it in a variable first, then use that.* A fresh value is written where a weak handle is expected, or as the subject of a plain `select`. Store it in an owner first, or use `select move`.
 - *A result can't refer to a local.* A routine returns access to its own local storage. Return a copy of the value, or have the caller pass in the storage the result should live in.
 - *A name is not declared.* The name is misspelled, or it's declared further down the file. Basie reads the source in order, so move the declaration up or add a forward declaration.
@@ -68,6 +68,8 @@ A>BASIE BOUNDS [T=02A0]
 ```
 
 With option `T`, `BASIE` reads the line table instead of compiling. It prints the source file, line and column of the statement that trapped, followed by the line itself. It reports a missing or out-of-date line table instead of giving a wrong line.
+
+A trap can happen inside a library routine, such as one from `STRINGS.BSM`. The line table also covers the code that the linker takes from modules. The lookup then prints the module's own source file and line, such as `STRINGS.BSI`. It reads that file from the program's drive, like the program's own source. If the file isn't there, the lookup prints only the position. The line in the library is where the check failed. The cause is usually in your program's call to that routine.
 
 Each trap reason points to a particular question about your program:
 
