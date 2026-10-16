@@ -1,5 +1,5 @@
 {
-  "compilerRevision": "fa3aabe32d67ac96a8e91d19a600f4620c5989ca",
+  "compilerRevision": "fce25e53113bb0ceb8300d9360a06c858b416cf7",
   "method": "Reference compiler, runtime assembled with ATOM into debug80-docs/_internal, generated Z80 under minimal CP/M harness. Assertions test chapter results. Native compiler and physical CP/M not verified.",
   "results": [
     {
@@ -69,6 +69,15 @@
       "source": "08-records.BSI",
       "status": "pass",
       "imageBytes": 541,
+      "input": "",
+      "output": "",
+      "expectedOutput": "",
+      "returnCode": 0
+    },
+    {
+      "source": "09-bytes.BSI",
+      "status": "pass",
+      "imageBytes": 1714,
       "input": "",
       "output": "",
       "expectedOutput": "",
@@ -167,7 +176,7 @@
     {
       "source": "CAPSTONE.BSI",
       "status": "pass",
-      "imageBytes": 5283,
+      "imageBytes": 5416,
       "input": "",
       "output": "Result: 246\r\nInvalid number\r\nQueue full\r\n",
       "expectedOutput": "Result: 246\r\nInvalid number\r\nQueue full\r\n",
@@ -194,7 +203,7 @@
     {
       "source": "COMMAND.BSI",
       "status": "pass",
-      "imageBytes": 4184,
+      "imageBytes": 4317,
       "input": "",
       "output": "Result: 246\r\nInvalid number\r\n",
       "expectedOutput": "Result: 246\r\nInvalid number\r\n",
@@ -308,7 +317,7 @@
     {
       "source": "TOTAL.BSI",
       "status": "pass",
-      "imageBytes": 3744,
+      "imageBytes": 3800,
       "input": "12\rnope\r15\r",
       "output": "> \n> \n> \n> \r\nTotal: 27\r\n",
       "expectedOutput": "> \n> \n> \n> \r\nTotal: 27\r\n",
