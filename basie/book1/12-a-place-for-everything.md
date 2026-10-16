@@ -8,7 +8,7 @@ search_exclude: true
 
 # A Place for Everything
 
-The readings analyser in Chapter 11 is about forty lines long, plus the library routines it includes. A command-driven utility needs routines to split a line into words and to turn words into numbers. It also needs routines to build its reports and code that ties them together. In one file it's hard to find anything, and hard to reuse the useful pieces in the next program.
+The readings analyser in Chapter 11 is about forty lines long, plus the library routines it imports. A command-driven utility needs routines to split a line into words and to turn words into numbers. It also needs routines to build its reports and code that ties them together. In one file it's hard to find anything, and hard to reuse the useful pieces in the next program.
 
 Basie splits a program into **source parts**, separate files combined into one compilation.
 
@@ -17,14 +17,29 @@ Basie splits a program into **source parts**, separate files combined into one c
 A part names the other parts it depends on with `include` lines at its very start:
 
 ```basie
-include "PARSE.BSI"
-include "TEXTIO.BSI"
-include "FORMAT.BSI"
+include "BOARD.BSI"
+include "SCORE.BSI"
 ```
 
-The compiler processes each included part before the declarations that follow. The routines and constants it declares are then available to the rest of the file. A part can have `include` lines of its own. `FORMAT.BSI` and `TEXTIO.BSI` both include `STRINGS.BSI`, for instance. Each part is compiled only once, however many parts name it. A part that ends up including itself, directly or through others, is reported as an error.
+The compiler processes each included part before the declarations that follow. The routines and constants it declares are then available to the rest of the file. A part can have `include` lines of its own. Each part is compiled only once, however many parts name it. A part that ends up including itself, directly or through others, is reported as an error.
 
 The `include` lines must come before any declarations in the file, so the dependencies always come first and the code that uses them follows.
+
+## Importing library modules
+
+The standard library comes as five compiled **modules**. They are `STRINGS.BSM`, `FORMAT.BSM`, `PARSE.BSM`, `RANDOM.BSM` and `TEXTIO.BSM`. A part brings in a module with an `import` line. `import` lines go among the `include` lines, before the first declaration:
+
+```basie
+import "TEXTIO.BSM"
+import "STRINGS.BSM"
+include "BOARD.BSI"
+```
+
+The two kinds of line differ in when the code is compiled. An included part is compiled with your program, every time you build it. An imported module was compiled once, earlier. The compiler reads only a short list of the module's routines, constants and types. The linker later adds the code of the routines your program calls.
+
+Imports aren't passed on. `FORMAT.BSM` and `TEXTIO.BSM` both import `STRINGS.BSM`, but importing `FORMAT.BSM` declares only the names from `FORMAT`. A program that calls `append` or `equal` imports `STRINGS.BSM` itself. The `import` lines of a part therefore name every module it uses. The disk still needs `STRINGS.BSM` for a program that imports only `FORMAT.BSM`, because `FORMAT.BSM` uses it. Importing the same module twice does no harm.
+
+Use `include` for the parts of your own program and `import` for the library. A program can still include a library part's source, such as `TEXTIO.BSI`. The compiler then compiles that source again in every build.
 
 ## One program, in order
 
@@ -42,17 +57,17 @@ private sub blank(b: u8): boolean
 end
 ```
 
-A private declaration can be used only within its own part. Other parts can't call it, and its name stays out of the shared space. The standard library has three private routines called `blank`, in `STRINGS.BSI`, `PARSE.BSI` and `TEXTIO.BSI`, and they never conflict.
+A private declaration can be used only within its own part. Other parts can't call it, and its name stays out of the shared space. The standard library has three private routines called `blank`, in the sources of `STRINGS`, `PARSE` and `TEXTIO`. They never conflict, and a module doesn't declare its private names in a program that imports it.
 
 `private` works on routines, constants, variables, records, enums and pools. It controls where a name can be used and nothing more. Code that can see a record type can still see its fields, and a private item is stored like any other.
 
-## A command parser in three parts
+## A command parser
 
-This program uses three library parts to interpret a short command:
+This program imports four library modules to interpret a short command:
 
 <<< @/basie/book1/examples/COMMAND.BSI{basie}
 
-`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSI` to copy the first word into the local string `command`. Then it uses `equal` from `STRINGS.BSI` to check that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSI` to turn it into a number.
+`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSM` to copy the first word into the local string `command`. Then it uses `equal` from `STRINGS.BSM` to check that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSM` to turn it into a number.
 
 `execute` fails with its own enum, `CommandError`, because the things that can go wrong with a command are its own: an unknown command, a missing argument or a bad number. The routines it calls fail with other enums. `word` fails with `IoError`, as the services do, and `parseU16` fails with `ParseError`. `try` can't pass those on from a routine that fails with `CommandError`, so `execute` handles each one and fails with the `CommandError` member that says what went wrong for the command. A failure never leaves `execute` as something its caller didn't ask for.
 
@@ -159,9 +174,11 @@ In `COMMAND.BSI`, change `"double nope"` to `"triple 4"`. The handler's assertio
 ## Summary
 
 - `include` lines at the start of a part name the parts it depends on. Each part is compiled once.
+- `import` lines name compiled modules. An included part is compiled with your program, and an imported module was compiled once, earlier.
+- Imports aren't passed on, so a program imports every module whose names it uses.
 - All parts form one program, read in order. Names are declared before use across part boundaries.
 - `private` limits a declaration to its own part. Private helpers in different parts don't conflict.
-- The library parts `STRINGS.BSI`, `FORMAT.BSI`, `PARSE.BSI` and `TEXTIO.BSI` are ordinary Basie source.
+- The library modules `STRINGS.BSM`, `FORMAT.BSM`, `PARSE.BSM`, `RANDOM.BSM` and `TEXTIO.BSM` are compiled from ordinary Basie source.
 - Programs reach the console and files only through services, called like routines.
 - `File` identifies the console, the printer or an open file. It's copied like a value and closed explicitly.
 - A failure set, such as `type LoadFailure = fails IoError, ParseError`, combines failure enums. A routine passes on anything its set names.

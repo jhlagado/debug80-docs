@@ -87,7 +87,7 @@ A character typed at the console is a byte as well. This short program reads one
 
 <<< @/basie/book1/examples/CHARS.BSI{basie}
 
-The program first writes a `?` as a prompt. `readInputByte` then waits for a key and returns the byte it read as a `u8`, which the program stores in the local variable `character`. `writeOutputByte` writes that byte back to the console. Both are services built into the runtime, so this program needs no library include.
+The program first writes a `?` as a prompt. `readInputByte` then waits for a key and returns the byte it read as a `u8`, which the program stores in the local variable `character`. `writeOutputByte` writes that byte back to the console. Both are services built into the runtime, so this program needs no library import.
 
 `readInputByte` echoes the key it reads, so the user sees what they typed. Typing `A` shows the prompt, the echoed `A` and a second `A` from the program, so the screen reads `?AA`. The final `writeText` sends a carriage return and a line feed, written in the string as `\r\n`, to finish the line.
 
