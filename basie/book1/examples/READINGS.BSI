@@ -1,4 +1,5 @@
-include "FORMAT.BSI"
+import "FORMAT.BSM"
+import "STRINGS.BSM"
 
 type Reading = record
     value: u16

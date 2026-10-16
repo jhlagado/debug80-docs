@@ -34,7 +34,7 @@ The three declarations at the top sit outside any routine, which makes them **pr
 
 The words `fails IoError` after the parentheses and the `try` at the start of two lines concern errors. `IoError` names the kind of failure, here the input and output errors the runtime reports. Printing can go wrong on a real machine. Basie requires every call that can fail to say what happens when it does. `try` means "if this call fails, pass the failure on". Here the failure passes out of `main` to the runtime, which reports it. Chapter 7 explains failures in full.
 
-The two `include` lines at the top bring in library source for formatting numbers and writing lines of text. The program uses these routines to print its result.
+The two `import` lines at the top bring in library routines for formatting numbers and writing lines of text. The program uses these routines to print its result.
 
 ## Calculating and storing a result
 
@@ -91,7 +91,7 @@ These two lines turn the trace table into something the machine checks. Suppose 
 
 The number 135 in `total` is a binary value in two bytes. To show it on the screen, the program needs the three characters `1`, `3` and `5`. Turning the number into those characters is a separate job, and Basie does it with ordinary library routines.
 
-The `include` lines at the top make two library parts available. `FORMAT.BSI` contains routines that convert numbers to text, and `TEXTIO.BSI` contains routines for writing lines. They're written in Basie, and their source is compiled along with yours. The last three lines of `main` use them:
+The `import` lines at the top make two library modules available. `FORMAT.BSM` contains routines that convert numbers to text, and `TEXTIO.BSM` contains routines for writing lines. A module is library code that has already been compiled. These modules are written in Basie, but they aren't compiled again with your program. The last three lines of `main` use them:
 
 ```basie
 var report: string[16]
@@ -115,7 +115,7 @@ Both routines use `report` only for the length of their calls and keep no access
 
 ## Building and running the program
 
-Save the listing as `POSTAGE.BSI` on your CP/M disk. The disk needs the toolchain: `BASIE.COM` with its companion files `BASIE.OVL` and `BASIE.MSG`, the linker `BLINK.COM` and the runtime library `CPM22.BRL`. The program includes `FORMAT.BSI` and `TEXTIO.BSI`, so those files need to be there too. Both of them include `STRINGS.BSI`, so the disk needs that as well.
+Save the listing as `POSTAGE.BSI` on your CP/M disk. The disk needs the toolchain: `BASIE.COM` with its companion files `BASIE.OVL` and `BASIE.MSG`, the linker `BLINK.COM` and the runtime library `CPM22.BRL`. The program imports `FORMAT.BSM` and `TEXTIO.BSM`, so those files need to be there too. Both of them import `STRINGS.BSM`, so the disk needs that as well.
 
 Two commands build the program and run it:
 

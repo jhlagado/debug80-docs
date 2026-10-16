@@ -109,7 +109,7 @@ The copy has length 3. Its first byte, `A`, is 65 and its new third byte, `C`, i
 
 ## Library help for strings
 
-`STRINGS.BSI` contains routines for the common jobs. The routines that add text check the capacity first. They fail with `IoError.lineTooLong` if the result won't fit:
+The library module `STRINGS.BSM` contains routines for the common jobs. A program that calls them begins with `import "STRINGS.BSM"`. The routines that add text check the capacity first. They fail with `IoError.lineTooLong` if the result won't fit:
 
 | Routine | Effect |
 | --- | --- |
@@ -131,7 +131,7 @@ Keyboard input also goes into a string. This program reads a name from the keybo
 
 <<< @/basie/book1/examples/ECHO.BSI{basie}
 
-`answer` is a local `string[32]` that starts empty. `prompt`, a routine from `TEXTIO.BSI`, writes `Name? ` and then reads a line from the keyboard into `answer`. On CP/M the user can correct typing mistakes with the usual line-editing keys before pressing Return. The characters go into the string and set its length, but the Return key isn't stored. Next the program prints `Hello, ` with no line ending. Then `writeLine` prints the name and finishes the line:
+`answer` is a local `string[32]` that starts empty. `prompt`, a routine from `TEXTIO.BSM`, writes `Name? ` and then reads a line from the keyboard into `answer`. On CP/M the user can correct typing mistakes with the usual line-editing keys before pressing Return. The characters go into the string and set its length, but the Return key isn't stored. Next the program prints `Hello, ` with no line ending. Then `writeLine` prints the name and finishes the line:
 
 ```text
 Name? Ada

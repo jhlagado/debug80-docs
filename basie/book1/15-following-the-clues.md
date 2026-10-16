@@ -20,15 +20,15 @@ Basie source files use the `.BSI` extension. With the toolchain on your disk, on
 A>BASIE CAPSTONE
 ```
 
-`BASIE.COM` compiles `CAPSTONE.BSI` and every part it includes, and writes intermediate files. If compilation succeeds, it starts the linker, `BLINK.COM`. The linker combines the compiled code with the runtime helpers it needs from `CPM22.BRL` and writes `CAPSTONE.COM`. Two companion files, `BASIE.OVL` and `BASIE.MSG`, hold the less used parts of the compiler and the text of its messages. They must come from the same release as `BASIE.COM`.
+`BASIE.COM` compiles `CAPSTONE.BSI` and every part it includes, and writes intermediate files. From each module the program imports, it reads only the list of names the module declares. If compilation succeeds, it starts the linker, `BLINK.COM`. The linker combines the compiled code with the routines it needs from the modules and the runtime helpers it needs from `CPM22.BRL`. Then it writes `CAPSTONE.COM`. Two companion files, `BASIE.OVL` and `BASIE.MSG`, hold the less used parts of the compiler and the text of its messages. They must come from the same release as `BASIE.COM`.
 
 ```text
 .BSI source → BASIE compiler → intermediate files → BLINK linker → .COM program
-                                                       ↑
-                                                  runtime library
+                     ↑                                    ↑
+               .BSM modules                 .BSM modules, runtime library
 ```
 
-The compiler generates Z80 machine code directly, so there's no assembler step. The linker places only the routines, data and runtime helpers that the program can reach from `main`. An uncalled routine costs nothing, so you can include `STRINGS.BSI` for a single routine and the linker leaves out the rest. If you build with the `M` option, as in `BASIE CAPSTONE [M]`, the linker writes a map that lists what it kept and what it removed.
+The compiler generates Z80 machine code directly, so there's no assembler step. The linker places only the routines, data and runtime helpers that the program can reach from `main`. An uncalled routine costs nothing, so you can import `STRINGS.BSM` for a single routine and the linker leaves out the rest. If you build with the `M` option, as in `BASIE CAPSTONE [M]`, the linker writes a map that lists what it kept and what it removed.
 
 A successful build also writes `CAPSTONE.LIN`, a line table that maps program addresses to source positions. A trap's address is traced to its source line through this table.
 

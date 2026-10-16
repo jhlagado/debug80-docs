@@ -1,4 +1,4 @@
-include "TEXTIO.BSI"
+import "TEXTIO.BSM"
 
 sub main() fails IoError
     var answer: string[32]
