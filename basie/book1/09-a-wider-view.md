@@ -20,7 +20,7 @@ An **open array** parameter leaves the length out of the type:
 sub sum(values: u8[]): u16
 ```
 
-`u8[]` accepts any array of `u8`, whatever its length. A read-only one also accepts part of an array, as a later section shows. The element type can be anything an array holds, including records, handles and enums. The element type is still fixed and only the length is open. Each call passes the array with its real length, which the routine reads as `values.length`.
+`u8[]` accepts any array of `u8`, whatever its length. A read-only one also accepts part of an array or a string, as later sections show. The element type can be anything an array holds, including records, handles and enums. The element type is still fixed and only the length is open. Each call passes the array with its real length, which the routine reads as `values.length`.
 
 Like every record or array parameter, `values` is an alias for the caller's array, not a copy. Without `var` it's read-only, and it lasts for the call.
 
@@ -84,6 +84,20 @@ The caller supplies the string and chooses its capacity, and the routine fills i
 
 `sum` adds 2, 4, 6 and 8 to get 20. `writeOK` sets the length of `message` to 2. The program adds the two results to get 22.
 
+## Strings as bytes
+
+A program can hold text in two forms. A string suits short text such as a name or a command. It knows its own length, but its capacity is at most 253 bytes. Longer text goes in a byte array such as a `u8[2048]`. The program keeps a separate count of the bytes in use, just as Chapter 8 kept a count beside an array.
+
+A routine that only reads text can work on both forms. A read-only `u8[]` parameter accepts a string, a `string[]` parameter or a string literal. The routine sees the string's bytes as an ordinary open array. Its `.length` is the string's length at the moment of the call. The rest of the capacity is outside the view. A byte array passes only its used part, as a slice such as `buffer[0 until used]`.
+
+The parameter must be read-only, and a `var u8[]` parameter refuses a string. The compiler reports `not-writable` at the argument. A write through a byte view could leave the string's length wrong for its contents.
+
+<<< @/basie/book1/examples/09-bytes.BSI{basie}
+
+The loop copies the 13 bytes of `line` into `buffer` and counts them in `used`. `count` then reads three kinds of text. It finds two `t` bytes in the string, three `a` bytes in the literal and the same two `t` bytes in the buffer's used part. The last two assertions use `equal` and `find` from `STRINGS.BSI` on the buffer.
+
+The library's reading routines take `u8[]` parameters for this reason. `equal`, `compare` and `find` accept a string, a literal or a buffer's used part. So do the `parse` routines in `PARSE.BSI` and `word` in `TEXTIO.BSI`. Positions in these routines are `u16`, because a view's length is a `u16`. Routines that change a string, such as `append` and `trim`, still take a `var string[]`.
+
 ## Returning access to existing data
 
 Chapter 3 showed that a routine can't return access to its own local storage, because that storage ends with the call. Returning access to storage that *outlives* the routine is safe and often useful. For example, a routine that picks a record out of an array can return the record itself instead of a copy:
@@ -137,11 +151,15 @@ Pass a slice of `numbers` to `sum`, such as `numbers[1 until 3]`, and assert tha
 
 Then pass a `string[4]` to `writeOK` and check that its length is also 2. Finally pass a `string[1]` to `writeOK`, and the program still compiles. At run time the length assignment traps with `bounds`, because a length of 2 doesn't fit a capacity of 1.
 
+In `09-bytes.BSI`, declare the parameter of `count` as `var text: u8[]` and write the first call as `count(var line, 't')`. The compiler rejects that call with `not-writable`, because a string's bytes are passed read-only.
+
 ## Summary
 
 - An open array, `T[]`, accepts an array of any length, or a slice of one if the parameter is read-only. `.length` gives the real length inside the routine.
 - An open string, `string[]`, accepts a string of any capacity, with `.length` and `.capacity` available.
 - A `var string[]` parameter can set the string's length, which is how library routines build text in caller storage.
+- A read-only `u8[]` parameter also accepts a string, a `string[]` or a string literal, with the string's length at the call. A `var u8[]` parameter refuses a string.
+- The library's `equal`, `compare`, `find`, the `parse` routines and `word` take `u8[]`. They read a string or a byte buffer's used part.
 - Every index through an open view is checked against the real bounds of the caller's object.
 - Open views can't be stored.
 - A slice, `xs[start until end]`, passes part of an array to a read-only open array parameter without copying it. The call traps with `bounds` unless the start is no later than the end and the end is within the array.

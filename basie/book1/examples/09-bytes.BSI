@@ -1,0 +1,39 @@
+include "STRINGS.BSI"
+
+var buffer: u8[64]
+var used: u16 = 0
+var observed: u16 = 0
+
+sub count(text: u8[], wanted: u8): u16
+    var index: u16
+    var total: u16 = 0
+
+    for index = 0 until text.length
+        if text[index] = wanted
+            total = total + 1
+        end
+    end
+    return total
+end
+
+sub main()
+    var line: string[16] = "fill the tank"
+    var index: u8
+
+    for index = 0 until line.length
+        buffer[used] = line[index]
+        used = used + 1
+    end
+
+    observed = count(line, 't')
+    assert observed = 2
+
+    observed = count("banana", 'a')
+    assert observed = 3
+
+    observed = count(buffer[0 until used], 't')
+    assert observed = 2
+
+    assert equal(buffer[0 until used], line)
+    assert find(buffer[0 until used], "tank") = 9
+end
