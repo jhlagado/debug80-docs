@@ -115,13 +115,13 @@ case none
 end
 ```
 
-`spare` still owns the record, before, during and after the arm. In the `some` arm, `job` is a weak handle to the record, of type `weak HJob`, as in Chapter 6. The arm can read and write the record's fields through `job`, with a check at every access, but it can't lend the record. `spare` is an ordinary variable inside the arm. If the arm overwrites `spare` or moves its owner away, the record is released. The next access through `job` then traps with `stale-handle`.
+`spare` still owns the record, before, during and after the arm. In the `some` arm, `job` is a weak handle to the record, of type `weak HJob`, as in Chapter 6. The arm can read and write the record's fields through `job`, with a check at every access, but it can't lend the record. `var saved: Job = job` copies the whole record into a local, which the arm can lend. Changes to the copy leave the pool's record as it was. `spare` is an ordinary variable inside the arm. If the arm overwrites `spare` or moves its owner away, the record is released. The next access through `job` then traps with `stale-handle`.
 
 Plain `select` on a weak handle, as in Chapter 6, gives its arm a weak handle in the same way.
 
 ## Lending what you select
 
-To lend the record to a routine, the arm needs an owner. `select move` provides one, but the arm then owns the record and releases it at the end. To keep the record, the arm moves the owner back where it came from:
+To lend the record itself to a routine, the arm needs an owner. `select move` provides one, but the arm then owns the record and releases it at the end. To keep the record, the arm moves the owner back where it came from:
 
 ```basie
 select move spare

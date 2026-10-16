@@ -91,7 +91,9 @@ copy = source
 copy[2] = 'C'
 ```
 
-Whole-string assignment needs both strings to have the same capacity, just as record assignment needs the same record type. After the assignment, `copy` holds `A`, zero and `B`, and its length is 3. Setting its third byte to `C` leaves `source` unchanged. Like every copy in Basie, the two strings are separate objects.
+After the assignment, `copy` holds `A`, zero and `B`, and its length is 3. Setting its third byte to `C` leaves `source` unchanged. Like every copy in Basie, the two strings are separate objects.
+
+The destination needs at least the capacity of the source. Here both have a capacity of 6. A `string[10]` would also accept `source`, by assignment or as a local's initial value. A `string[4]` would not, even though the three bytes would fit. That copy would fail whenever `source` held more than four bytes, so the compiler rejects it. The library routines in the next section can copy into a smaller string. They fail cleanly when the text won't fit.
 
 ## Existing bytes and spare room
 
@@ -168,7 +170,7 @@ In `06-arrays.BSI`, change `grid` to `u8[4][2]` and add a fourth row, `[7, 8]`. 
 - An array always has its declared number of elements. A separate count tracks how many hold meaningful data.
 - A `string[N]` has a fixed capacity of 1 to 253 bytes and a current length that changes.
 - Strings store their length. Zero bytes are ordinary content.
-- String assignment copies contents and length, and needs equal capacities.
+- String assignment copies contents and length. The destination's capacity must be at least the source's.
 - String indexing is checked against the current length, so indexing can't extend a string.
 - The library's string routines check capacity and fail cleanly when text won't fit.
 - Line input fills a string up to its capacity and never beyond it.
