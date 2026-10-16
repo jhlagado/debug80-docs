@@ -92,7 +92,7 @@ Every access through a weak handle compares its generation with the slot's. If t
 
 Access through `first` needs no check, because `first` is the routine's own non-optional owner. The statement rule stops anything from releasing its record while the routine reaches through it. A record parameter needs no check for the same reason, and every other access is checked.
 
-The check holds only at the moment it's made, so a record reached through a weak handle can't be lent. The compiler rejects `inspectJob(remembered)` and reports that a record reached through a weak handle can't be lent. During the call, the record's owner could release it. If a routine needs a value from the record, copy it into a local first, as in `var number = remembered.number`. Chapter 7 shows how to take ownership of a record so it can be lent.
+The check holds only at the moment it's made, so a record reached through a weak handle can't be lent. The compiler rejects `inspectJob(remembered)` and reports that a record reached through a weak handle can't be lent. During the call, the record's owner could release it. If a routine needs the record's contents, copy them into a local first. `var number = remembered.number` copies one field. `var saved: Job = remembered` copies the whole record, after checking that it still exists. The local `saved` can then be lent, as in `inspectJob(saved)`. The record type has to be written, because `var saved = remembered` would make another weak handle. As Chapter 5 said, a record that contains owners can't be copied as a whole. Chapter 7 shows how to take ownership of a record so it can be lent.
 
 ## Testing a weak handle first
 
@@ -164,5 +164,5 @@ At that point the slot holds job 11, and the trap prevents the program from read
 - A statement can't both move an owner and reach through it. Overwriting an owner is allowed.
 - A weak handle, of type `weak HJob`, refers to a record without owning it. Writing an owner where a weak handle is expected makes one, and the declared type decides.
 - Every access through a weak handle checks the slot's generation. A stale access traps with `stale-handle`.
-- A record reached through a weak handle can't be lent.
+- A record reached through a weak handle can't be lent. `var saved: Job = remembered` copies it into a local instead.
 - `select` tests a weak handle without trapping and runs `some` or `none`. A weak handle is never compared with `none`.
