@@ -1,6 +1,7 @@
-include "PARSE.BSI"
-include "TEXTIO.BSI"
-include "FORMAT.BSI"
+import "PARSE.BSM"
+import "TEXTIO.BSM"
+import "FORMAT.BSM"
+import "STRINGS.BSM"
 
 type CommandError = enum
     unknownCommand

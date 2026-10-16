@@ -94,9 +94,9 @@ The parameter must be read-only, and a `var u8[]` parameter refuses a string. Th
 
 <<< @/basie/book1/examples/09-bytes.BSI{basie}
 
-The loop copies the 13 bytes of `line` into `buffer` and counts them in `used`. `count` then reads three kinds of text. It finds two `t` bytes in the string, three `a` bytes in the literal and the same two `t` bytes in the buffer's used part. The last two assertions use `equal` and `find` from `STRINGS.BSI` on the buffer.
+The loop copies the 13 bytes of `line` into `buffer` and counts them in `used`. `count` then reads three kinds of text. It finds two `t` bytes in the string, three `a` bytes in the literal and the same two `t` bytes in the buffer's used part. The last two assertions use `equal` and `find` from `STRINGS.BSM` on the buffer.
 
-The library's reading routines take `u8[]` parameters for this reason. `equal`, `compare` and `find` accept a string, a literal or a buffer's used part. So do the `parse` routines in `PARSE.BSI` and `word` in `TEXTIO.BSI`. Positions in these routines are `u16`, because a view's length is a `u16`. Routines that change a string, such as `append` and `trim`, still take a `var string[]`.
+The library's reading routines take `u8[]` parameters for this reason. `equal`, `compare` and `find` accept a string, a literal or a buffer's used part. So do the `parse` routines in `PARSE.BSM` and `word` in `TEXTIO.BSM`. Positions in these routines are `u16`, because a view's length is a `u16`. Routines that change a string, such as `append` and `trim`, still take a `var string[]`.
 
 ## Returning access to existing data
 

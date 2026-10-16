@@ -1,4 +1,4 @@
-include "STRINGS.BSI"
+import "STRINGS.BSM"
 
 var buffer: u8[64]
 var used: u16 = 0
