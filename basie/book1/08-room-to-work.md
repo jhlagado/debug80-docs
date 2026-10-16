@@ -95,6 +95,20 @@ After the assignment, `copy` holds `A`, zero and `B`, and its length is 3. Setti
 
 The destination needs at least the capacity of the source. Here both have a capacity of 6. A `string[10]` would also accept `source`, by assignment or as a local's initial value. A `string[4]` would not, even though the three bytes would fit. That copy would fail whenever `source` held more than four bytes, so the compiler rejects it. The library routines in the next section can copy into a smaller string. They fail cleanly when the text won't fit.
 
+## Comparing strings
+
+Two strings compare with `=` and `<>`. They're equal when their lengths are equal and so are their bytes, zero bytes included. Their capacities don't matter. A literal can stand on the right:
+
+```basie
+var name: string[10] = "A\0B"
+assert name = source
+assert name <> "AB"
+```
+
+`name` has a larger capacity than `source` but the same three bytes, so the first assertion holds.
+
+A `select` can test a string against literal labels. It runs the first arm with a matching label, and it always needs `case else`, because no list of labels covers every string. Strings have no order: `<` and `>` don't apply to them. The library's `compare` gives an order for sorting.
+
 ## Existing bytes and spare room
 
 String indexing is checked against the current length, not the capacity. A `string[6]` holding three bytes accepts indexes 0, 1 and 2. Index 3 is within the capacity, but there's no byte there yet. Reading or writing `copy[3]` traps with `bounds`.
@@ -119,7 +133,7 @@ The library module `STRINGS.BSM` contains routines for the common jobs. A progra
 | `append(var s, t)` | adds the text of `t` to the end of `s` |
 | `appendByte(var s, b)` | adds one byte to the end of `s` |
 | `copyFrom(var dest, src, start, count)` | copies part of `src` into `dest` |
-| `equal(a, b)` | tests whether two strings hold the same bytes |
+| `equal(a, b)` | tests whether two byte sequences hold the same bytes |
 | `compare(a, b)` | gives -1, 0 or 1 for sorting |
 | `find(s, t)` | gives the position of `t` within `s`, or `$FFFF` if it's absent |
 | `toUpper(var s)`, `toLower(var s)` | change letter case |
@@ -171,6 +185,7 @@ In `06-arrays.BSI`, change `grid` to `u8[4][2]` and add a fourth row, `[7, 8]`. 
 - A `string[N]` has a fixed capacity of 1 to 253 bytes and a current length that changes.
 - Strings store their length. Zero bytes are ordinary content.
 - String assignment copies contents and length. The destination's capacity must be at least the source's.
+- `=` and `<>` compare two strings by length and bytes. A `select` on a string needs `case else`.
 - String indexing is checked against the current length, so indexing can't extend a string.
 - The library's string routines check capacity and fail cleanly when text won't fit.
 - Line input fills a string up to its capacity and never beyond it.

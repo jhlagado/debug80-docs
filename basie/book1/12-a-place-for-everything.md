@@ -37,7 +37,7 @@ include "BOARD.BSI"
 
 The two kinds of line differ in when the code is compiled. An included part is compiled with your program, every time you build it. An imported module was compiled once, earlier. The compiler reads only a short list of the module's routines, constants and types. The linker later adds the code of the routines your program calls.
 
-Imports aren't passed on. `FORMAT.BSM` and `TEXTIO.BSM` both import `STRINGS.BSM`, but importing `FORMAT.BSM` declares only the names from `FORMAT`. A program that calls `append` or `equal` imports `STRINGS.BSM` itself. The `import` lines of a part therefore name every module it uses. The disk still needs `STRINGS.BSM` for a program that imports only `FORMAT.BSM`, because `FORMAT.BSM` uses it. Importing the same module twice does no harm.
+Imports aren't passed on. `FORMAT.BSM` and `TEXTIO.BSM` both import `STRINGS.BSM`, but importing `FORMAT.BSM` declares only the names from `FORMAT`. A program that calls `append` or `find` imports `STRINGS.BSM` itself. The `import` lines of a part therefore name every module it uses. The disk still needs `STRINGS.BSM` for a program that imports only `FORMAT.BSM`, because `FORMAT.BSM` uses it. Importing the same module twice does no harm.
 
 Use `include` for the parts of your own program and `import` for the library. A program can still include a library part's source, such as `TEXTIO.BSI`. The compiler then compiles that source again in every build.
 
@@ -67,7 +67,7 @@ This program imports four library modules to interpret a short command:
 
 <<< @/basie/book1/examples/COMMAND.BSI{basie}
 
-`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSM` to copy the first word into the local string `command`. Then it uses `equal` from `STRINGS.BSM` to check that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSM` to turn it into a number.
+`execute` takes a command such as `double 123` as a read-only open string. It uses `word` from `TEXTIO.BSM` to copy the first word into the local string `command`. Then it checks with `<>` that the word is `double`. It copies the second word into `argument` and uses `parseU16` from `PARSE.BSM` to turn it into a number.
 
 `execute` fails with its own enum, `CommandError`, because the things that can go wrong with a command are its own: an unknown command, a missing argument or a bad number. The routines it calls fail with other enums. `word` fails with `IoError`, as the services do, and `parseU16` fails with `ParseError`. `try` can't pass those on from a routine that fails with `CommandError`, so `execute` handles each one and fails with the `CommandError` member that says what went wrong for the command. A failure never leaves `execute` as something its caller didn't ask for.
 
