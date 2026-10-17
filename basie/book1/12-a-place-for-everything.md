@@ -57,7 +57,7 @@ private sub blank(b: u8): boolean
 end
 ```
 
-A private declaration can be used only within its own part. Other parts can't call it, and its name stays out of the shared space. The standard library has three private routines called `blank`, in the sources of `STRINGS`, `PARSE` and `TEXTIO`. They never conflict, and a module doesn't declare its private names in a program that imports it.
+A private declaration can be used only within its own part. Other parts can't call it, and its name stays out of the shared space. The standard library has two private routines called `blank`, in the sources of `STRINGS` and `PARSE`. They never conflict, and a module doesn't declare its private names in a program that imports it.
 
 `private` works on routines, constants, variables, records, enums and pools. It controls where a name can be used and nothing more. Code that can see a record type can still see its fields, and a private item is stored like any other.
 
