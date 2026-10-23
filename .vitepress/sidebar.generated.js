@@ -2366,6 +2366,16 @@ export const sidebars = {
       ]
     }
   ],
+  "/origo/": [
+    {
+      "text": "Chapter outline",
+      "link": "/origo/outline.html"
+    },
+    {
+      "text": "Examples, notation and figures",
+      "link": "/origo/examples.html"
+    }
+  ],
   "/skate/": [
     {
       "text": "Programming Skate",

@@ -16,6 +16,7 @@ const BOOK_DIRS = [
   "atom-book",
   "glimmer-book",
   "basie",
+  "origo",
   "skate",
   "triptych",
   "tec1g",
