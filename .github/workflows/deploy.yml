@@ -26,9 +26,14 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: .github/site/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        # Rendering and the checks below need VitePress, not the compiler's
+        # Git-based development dependencies used by optional example tools.
+        run: |
+          npm ci --prefix .github/site
+          ln -s .github/site/node_modules node_modules
 
       - name: Generate sidebars from front matter
         run: npm run sidebar
