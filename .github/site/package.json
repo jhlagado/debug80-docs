@@ -1,0 +1,8 @@
+{
+  "name": "debug80-site-build",
+  "private": true,
+  "version": "0.1.0",
+  "devDependencies": {
+    "vitepress": "1.6.4"
+  }
+}
