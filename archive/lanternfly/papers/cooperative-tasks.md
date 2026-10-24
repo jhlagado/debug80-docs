@@ -70,27 +70,6 @@ embedded executors and none in BASIC's own family.
 on this mechanism; [Reactive Lanternfly](reactive.md) defines the
 reactive layer beside it.
 
-### Nucleus-level desugaring
-
-The later Nucleus design narrows the hand-written base pattern. A task step is
-an ordinary result-free routine with exactly one aggregate record parameter.
-That record contains the continuation-state field and every value that must
-persist between calls. The routine performs one bounded unit of work with an
-explicit `if`/`elseif` state machine, updates the record, and returns. A static
-scheduler calls each known step routine with its program-lifetime record.
-
-Nucleus needs no task keyword, hidden task stack, continuation object, record
-subtype, dynamic dispatch, or task-specific VM operation. Its aggregate
-compatibility remains nominal. When several task records share common state,
-each record contains a field of the declared common record type, and callers
-pass that field explicitly to a routine that accepts the common type.
-Definition order and record layout do not create subtyping.
-
-Lanternfly may still provide `task` and `yield` as surface sugar. Such sugar
-must lower to this record-plus-state-machine form, which remains writable
-directly. The conclusion strengthens the pattern described below without
-making tasks a Nucleus language feature.
-
 ## 3. The pattern in Lanternfly 0.5
 
 Code fences in this paper are module excerpts. Routines they call and
