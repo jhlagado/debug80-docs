@@ -39,13 +39,6 @@ it is a language for writing the program itself.
 - [Lanternfly Book 2 — Language Reference](book2/) defines the 0.4 syntax and
   semantics, including types, exact storage, expressions, control flow,
   routines, modules, native boundaries, grammar and diagnostics.
-- [Nucleus 0.1 Language Specification](nucleus/) publishes the complete
-  normative source-language specification as a chapter-by-chapter reading
-  edition. Nucleus is a distinct language, housed here while its own
-  documentation area develops.
-- [Nucleus Virtual Machine 0.1 Specification](nucleus-vm/) defines the bytecode
-  image, instruction set, execution state, traps, services, and backend
-  equivalence used by the first Nucleus implementation.
 
 ## White papers
 

@@ -30,7 +30,6 @@ Its desktop command runs that core in a Z80 emulator, while native
 
 **Basie** is a memory-safe, statically typed systems language for Z80 machines,
 compiled to native code in a single pass by a compiler that runs under CP/M.
-It replaces the earlier Nucleus project, whose pages are now in `archive/`.
 
 **The TEC-1G** is the single-board computer at the centre of the current
 Debug80, AZM and Glimmer material.

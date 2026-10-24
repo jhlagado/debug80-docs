@@ -7,8 +7,6 @@ search_exclude: true
 # Basie Book Draft Status
 
 The working manuscript contains an introduction and fifteen chapters.
-Its source material was one Nucleus teaching book, which remains separate.
-The Nucleus language and runtime reference editions were not copied.
 
 On 2026-10-07 the prose of every chapter was rewritten and expanded for
 voice and teaching flow. Chapter structure, filenames and example sources
