@@ -49,12 +49,17 @@ display in turn and takes the first that is present:
 The Matrix switch says whether the matrix keyboard is fitted. Without it
 neither display has a keyboard, so TEC-OS uses the serial port.
 
-The graphics LCD console works differently from the others. Its driver is a
-file, `GLCD.PRL`, on drive A of the starter card. On a board with the graphics
+The graphics LCD console works differently from the others. It is a
+resident program in a file, `GLCD.PRL`, on drive A of the starter card. On a board with the graphics
 LCD and no PICO9918, TEC-OS prints its banner and drives on the serial port
 and the 20 × 4 LCD. It then loads `A:GLCD.PRL` before the first prompt, and
 the prompt appears on the graphics LCD. If the file is missing, the console
 stays on the serial port and the 20 × 4 LCD shows `GLCD?`.
+
+Like any resident, the graphics LCD console sits in memory just below the
+BDOS entry, so on a board that loads it programs have 768 bytes less: 46,086
+on the starter card instead of 46,854. A board without a graphics LCD loses
+nothing. Chapter 8 describes residents.
 
 ## Changing the console
 

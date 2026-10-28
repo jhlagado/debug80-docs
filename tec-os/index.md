@@ -30,17 +30,18 @@ also runs TEC-OS in a web page. TEC-OS has not yet run on a physical board.
 - [The command line](03-the-command-line.md): file names, the built-in
   commands, user areas, command history and nested command processors.
 - [Cards and volumes](04-cards-and-volumes.md): the container on the card,
-  `tecvol` on a PC and mounting volumes while TEC-OS runs.
+  `tecvol` on a PC, the block cache, writing behind and mounting volumes
+  while TEC-OS runs.
 - [Memory](05-memory.md): the address space, a program's view, page zero
-  and storing data in EXPAND 1.
+  and what TEC-OS keeps in EXPAND 1.
 - [A first program](06-a-first-program.md): calling the BDOS, assembling
   and running a program, and reading a file.
 - [The hardware services](07-the-hardware-services.md): the table at
   `FF00h` and the services for the LCD, digits, LEDs, PICO9918, clock and
   serial port.
-- [Relocatable programs, residents and drivers](08-relocatable-programs.md):
-  PRL files, making them, and the three kinds of code TEC-OS loads from
-  them.
+- [Relocatable programs and residents](08-relocatable-programs.md):
+  PRL files, making them, residents, shelling out and the graphics LCD
+  console.
 
 ## Planned chapters
 

@@ -9,8 +9,8 @@ nav_order: 4
 A CP/M drive holds one disk. A TEC-OS card holds many disks, called
 volumes, and TEC-OS puts up to four of them on drives A to D. This chapter
 describes how a card is laid out, how to build and change one on a PC with
-`tecvol`, and how to change which volumes are on which drives while TEC-OS
-runs.
+`tecvol`, how TEC-OS caches the card's blocks and writes a volume behind,
+and how to change which volumes are on which drives while TEC-OS runs.
 
 ## Volumes and the container
 
@@ -21,7 +21,8 @@ container, with its own directory and files, and each has:
 - a label of up to 11 characters, such as `SYSTEM`;
 - a geometry, which sets its size and layout;
 - a drive letter it is mounted on at start-up, or none;
-- a read-only flag.
+- a read-only flag;
+- a written-behind flag, described below.
 
 There are two geometries:
 
@@ -69,7 +70,9 @@ container: format 1.0, 36864 blocks (18874368 bytes), 3 volume(s)
 ```
 
 `GAMES` has no drive, so TEC-OS leaves it off the drives at start-up. Add
-`:ro` after the drive to make a volume read-only.
+`:ro` after the drive to make a volume read-only, or `:wb` to have it
+written behind, as `G8M:WORK:B:wb`. One volume on a card at most can be
+written behind, and not one that is read-only. `info` shows `wb` beside it.
 
 ### Copying files
 
@@ -108,9 +111,45 @@ node tools/tecvol.mjs install card.img /dev/rdiskN --yes
 The device name depends on the PC. `install` replaces everything on the
 card, so check the name before running it.
 
-TEC-OS keeps a map of each drive's free space in memory. Never change a
-card on a PC while the TEC-1G is using it, and reset the TEC-1G after
-putting a changed card back.
+TEC-OS keeps a map of each drive's free space in memory, and on a volume
+written behind it also holds changes the card hasn't had yet. Never change
+a card on a PC while the TEC-1G is using it. Type `^C` at the prompt before
+taking the card out, and reset the TEC-1G after putting a changed card back.
+
+## The block cache
+
+TEC-OS keeps the 30 card blocks it used most recently, 15 KiB in all, in
+memory that programs never see (Chapter 5). Every volume's reads go through
+this cache. A block read before and still held costs a copy in memory, not
+a read from the card, so a 12 KiB file read a second time comes back about
+five times faster than from the card.
+
+Writes on most volumes go straight to the card, as before: when a program's
+write returns, the card has the block. A volume written behind is
+different. Its writes go into the cache, and the card catches up in
+batches:
+
+- when a file on the volume is closed, or anything else changes its
+  directory
+- when every block in the cache holds changes and another block is needed
+- at every warm boot, so `^C` at the prompt writes everything
+- when `MOUNT` changes a drive
+
+Each time, TEC-OS writes the changed data blocks first and the directory
+block last, so the directory on the card never names data the card hasn't
+got.
+
+Writing a block once instead of once for each of its four records makes a
+16 KiB `SAVE` about three times faster. The cost is that a reset, a power
+cut or a card taken out loses what the volume has been given since the last
+of those. A closed file is safe, which is CP/M's own rule. Data written to
+a file still open is not.
+
+The starter card's `WORK` volume, drive B, is written behind. Type `^C` at
+the prompt before you press reset, turn the board off or take the card out.
+If a block can't be written, it stays in the cache and each warm boot tries
+it again and says `Write lost` while it still fails. Only a reset gives it
+up.
 
 ## Volumes at run time
 
@@ -182,5 +221,7 @@ node tools/tecvol.mjs create card.img --volume G1M:SYSTEM:A --volume G8M:WORK:B 
 
 On that card `MOUNT C: GAMES` works, and any of the four drives can take
 any volume. The cost is memory: the word at `0006h` falls from `B806h` to
-`B506h`, and programs have 46,086 bytes. That is the smallest TEC-OS ever
-gives, so a program that fits in 46,086 bytes runs with any card.
+`B506h`, and programs have 46,086 bytes. That is the smallest any card
+gives. A board that loads the graphics LCD console, from Chapter 2, gives
+768 bytes less again, 45,318, so a program that fits in 45,318 bytes runs
+on any board with any card.

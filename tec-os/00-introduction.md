@@ -16,8 +16,8 @@ business machines of the late 1970s and early 1980s.
 TEC-OS lives in a 16 KiB ROM at `C000h–FFFFh`. That one chip holds the
 whole system: the command processor, the disk operating system, a set of
 services for the board's hardware and the drivers for the SD card and the
-displays. Apart from one display driver, programs load from the card only
-when you run them.
+displays. Apart from the graphics LCD's console, which TEC-OS loads from the
+card at start-up, programs load from the card only when you run them.
 
 ## The CP/M interface
 
@@ -46,8 +46,10 @@ TEC-OS is more than a port of CP/M. It adds:
   without knowing their ports
 - command history at the prompt and command processors nested one inside
   another
-- relocatable programs that stay resident below the system or load as
-  drivers into memory that programs never see
+- relocatable programs, some of which stay resident below the system
+- a 15 KiB cache of card blocks, so a file read a second time comes from
+  memory
+- a work volume whose writes reach the card in batches
 
 ## Requirements
 

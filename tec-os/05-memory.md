@@ -50,7 +50,9 @@ whose address is the word at `0006h`. On the starter card that word is
 `B806h`. The figure changes with the card and with any resident programs, so
 programs read it rather than assume it. Chapter 4 explains how the drives
 a card mounts move it down, and Chapter 8 shows a resident program moving it
-down further.
+down further. On a board that loads the graphics LCD console, a resident
+itself, the word is `B506h` on the starter card and programs have 46,086
+bytes.
 
 Above the BDOS entry is TEC-OS's workspace in EXPAND 0. It holds the
 drives' maps of free space, the disk buffers and the stacks of the BIOS,
@@ -97,11 +99,19 @@ zeros and a `RET`. An `RST` that later reaches one returns at once.
 
 Programs can't see EXPAND 1's 16 KiB. EXPAND 0 occupies the same
 addresses, and it holds the BDOS entry, TEC-OS's workspace and the top of
-the program area. TEC-OS uses the top of EXPAND 1 for itself: the command history,
-the saved state of nested command processors and any drivers. The rest is
-free for programs to use as storage, reached by copying.
+the program area. TEC-OS uses all of EXPAND 1 for itself:
 
-Two entries in the table at `FF00h` do the copying. They work as CP/M 3's
+| Addresses | Contents |
+| --- | --- |
+| `8000h–BBFFh` | The block cache's 30 blocks of 512 bytes (Chapter 4) |
+| `BC00h–BCFFh` | The cache's table: the card block each one holds, and whether it holds changes |
+| `BD00h–BDFFh` | The command history (Chapter 3) |
+| `BE00h–BEFFh` | The saved state of nested command processors (Chapter 3) |
+| `BF00h–BFFFh` | Reserved |
+
+A reset clears it all.
+
+Two entries in the table at `FF00h` copy memory. They work as CP/M 3's
 BIOS functions of the same names:
 
 - `XMOVE` at `FF12h` sets the source and destination of the next copy. `C`
@@ -112,74 +122,14 @@ BIOS functions of the same names:
   outside its region.
 
 In the program's memory, the region is `0000h` up to the BDOS entry. In
-EXPAND 1 it is `8000h` up to a low mark, below which EXPAND 1 is free. The
-word at `FF18h` holds the address of a byte that holds the mark's page.
-After a reset the mark is `BDh`, so programs have `8000h–BCFFh`, 15,616
-bytes. A driver loaded later takes its pages from the top of the free space
-and lowers the mark.
-
-This program copies a message into EXPAND 1, overwrites the original and
-copies the message back before printing it:
-
-```asm
-; STASH.COM: copy a message into EXPAND 1, clear it here, copy it back
-; and print it. XMOVE at FF12h sets the banks for the next MOVE at FF15h:
-; 0 is the program's memory, 1 is EXPAND 1.
-BDOS    EQU     $0005
-XMOVE   EQU     $FF12
-MOVE    EQU     $FF15
-LEN     EQU     20              ; the message's length
-
-        ORG     $0100
-        LD      B,1             ; to EXPAND 1
-        LD      C,0             ; from the program's memory
-        CALL    XMOVE
-        LD      HL,$8000        ; destination in EXPAND 1
-        LD      DE,MSG          ; source here
-        LD      BC,LEN
-        CALL    MOVE
-        OR      A
-        JR      NZ,FAIL         ; A = FFh: nothing copied
-
-        LD      HL,MSG          ; wipe the copy here
-        LD      B,LEN
-WIPE:   LD      (HL),'$'
-        INC     HL
-        DJNZ    WIPE
-
-        LD      B,0             ; back to the program's memory
-        LD      C,1             ; from EXPAND 1
-        CALL    XMOVE
-        LD      HL,MSG
-        LD      DE,$8000
-        LD      BC,LEN
-        CALL    MOVE
-        LD      DE,MSG
-        LD      C,9
-        JP      BDOS
-
-FAIL:   LD      DE,FAILMSG
-        LD      C,9
-        JP      BDOS
-
-MSG:    DB      "Back from EXPAND 1",13,10
-        DB      "$"
-FAILMSG:DB      "MOVE refused",13,10,"$"
-```
-
-It prints:
-
-```text
-A>B:STASH
-Back from EXPAND 1
-
-A>
-```
-
-Data in EXPAND 1 survives warm boot, so one program can pass data there to
-the next. A reset clears it. Nothing reserves the space, so two programs
-that both use `8000h` overwrite each other's data.
+EXPAND 1 it is `8000h` up to a low mark, and the word at `FF18h` holds the
+address of a byte that holds the mark's page. The mark is `80h`, so EXPAND
+1 has no region for programs and `MOVE` refuses every copy that touches
+it. A CP/M 3 program that checks the result carries on without the extra
+memory. Between two places in the program's own memory, with both banks 0,
+`MOVE` copies as `LDIR` does.
 
 A program should not switch EXPAND 1 in by writing the latch itself. With
 EXPAND 1 in view, the BDOS entry and TEC-OS's workspace are gone, and so is
-the top of the program.
+the top of the program. Anything it wrote there would also overwrite the
+cache's blocks, and with them changes on their way to the card.

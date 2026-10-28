@@ -107,13 +107,14 @@ EDIT NAME.TXT      full-screen editor, if present: ^S save, ^Q quit
 VOLS               list the card's volumes
 MOUNT B: NAME      put a volume on a drive; MOUNT B: takes it off
 
-B: is an empty work disk.
+B: is an empty work disk, written behind: its changes reach the card when a
+file is closed, at ^C and at MOUNT. Press ^C at A> before reset or power off.
 ```
 
 A file ending in `.COM` is a program. To run one, type its name without the
-extension. `GLCD.PRL` is different: it is the driver for the graphics LCD
-console, which TEC-OS loads itself on a board whose only display is the
-graphics LCD. Chapter 8 explains `.PRL` files.
+extension. `GLCD.PRL` is different: it is the graphics LCD console, a
+resident program that TEC-OS loads itself on a board whose only display is
+the graphics LCD. Chapter 8 explains `.PRL` files.
 
 Typing a drive letter and a colon changes the current drive:
 
@@ -125,7 +126,10 @@ B>A:
 A>
 ```
 
-Drive B holds nothing yet. It is the place for your own files.
+Drive B holds nothing yet. It is the place for your own files. TEC-OS
+holds what you write to it in memory and writes it to the card in batches,
+so before you press reset, turn the board off or take the card out, type
+`^C` at the prompt. Chapter 4 explains why.
 
 ## Running a program
 
@@ -179,4 +183,5 @@ the SD driver's errors.
 
 Never change a card on a PC while the TEC-1G is using it. TEC-OS keeps a map
 of each drive's free space in memory, and a card changed behind its back no
-longer matches that map. Reset the board after putting a changed card back.
+longer matches that map. Type `^C` at the prompt before taking the card out,
+and reset the board after putting a changed card back.
