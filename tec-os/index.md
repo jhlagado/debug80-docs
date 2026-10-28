@@ -7,8 +7,8 @@ nav_exclude: true
 
 # TEC-OS: CP/M in ROM for the TEC-1G
 
-**Book in development.** The introduction and the first two chapters are written.
-The rest of this page is the plan for the chapters that follow.
+Chapters are added as they are written. The ones listed under Chapters are
+complete, and the plan for the rest follows them.
 
 TEC-OS is an operating system for the TEC-1G held entirely in its 16 KiB
 ROM. It runs CP/M 2.2 programs from volumes on an SD card and gives them the
