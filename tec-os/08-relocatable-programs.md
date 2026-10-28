@@ -1,18 +1,17 @@
 ---
-title: Relocatable programs, residents and drivers
+title: Relocatable programs and residents
 parent: TEC-OS
 nav_order: 8
 ---
 
-# Relocatable programs, residents and drivers
+# Relocatable programs and residents
 
 A `.COM` file runs at `0100h` and nowhere else, because its addresses are
 fixed when it is assembled. A `.PRL` file can be loaded at any page. It
 carries a map of the bytes that hold addresses, and the loader adjusts those
 bytes for wherever it puts the code. Digital Research defined the format
-for MP/M and CP/M 3. TEC-OS loads three kinds of code from PRL files: ordinary programs,
-residents that stay below the BDOS after they run, and drivers in
-EXPAND 1.
+for MP/M and CP/M 3. TEC-OS loads two kinds of code from PRL files: ordinary programs,
+and residents that stay below the BDOS after they run.
 
 ## The PRL format
 
@@ -69,24 +68,27 @@ The command processor looks for `NAME.COM` first and, if there is none, for
   if it were a `.COM` file.
 - **A resident.** Code with the module header and kind 1 is installed below
   the BDOS and stays there.
-- **A driver.** Code with the module header and kind 2 is installed in
-  EXPAND 1.
+
+Any other kind is refused, and the command processor answers with the name
+and a question mark, as for a command it can't find. Kind 2 was a driver in
+EXPAND 1 in earlier versions of TEC-OS. EXPAND 1 now belongs to TEC-OS
+(Chapter 5), and the one driver there was, the graphics LCD console, is a
+resident.
 
 ## The module header
 
-A resident or a driver starts with this header:
+A resident starts with this header:
 
 | Offset | Size | Contents |
 | ---: | ---: | --- |
 | 0 | 3 | `TNM` |
 | 3 | 1 | Version, 1 |
-| 4 | 1 | Kind: 1 resident, 2 driver |
+| 4 | 1 | Kind: 1, a resident |
 | 5 | 1 | Zero |
 | 6 | 3 | `JP 0`, which TEC-OS fills in for a resident |
 | 9 | 2 | The address of `INIT`, called once after loading |
 | 11 | 2 | The address of `REMOVE`, called before unloading |
 | 13 | 8 | A name, padded with spaces |
-| 21 | | A driver's list of hooks |
 
 The addresses at 9 and 11 are assembled like any others, so the loader
 relocates them along with the code.
@@ -190,28 +192,48 @@ none left, `UNLOAD` answers `UNLOAD?`.
 A resident survives warm boot, so it stays through any number of programs.
 A reset clears it and rebuilds the BIOS jump table it patched.
 
-## Drivers
+## Shelling out
 
-A driver goes into EXPAND 1 instead of the program area, so it costs
-programs no memory at all. TEC-OS takes whole pages for it from the top of
-EXPAND 1's free space and lowers the low mark at `FF18h`.
+A resident can start a nested command processor, from Chapter 3, and carry
+on when you type `EXIT`. The entry at `FF1Ah` starts one with its prompt,
+and the entry at `FF1Dh` runs one command line, which `DE` points at as a
+length byte and then the text, with no prompt. Both take `HL = 0100h`.
+The nested command processor loads programs at `0100h` as usual and keeps
+nothing of the program area, which is why only code outside it, a resident,
+can use them. Any other value in `HL` is refused with carry set. At `EXIT`
+TEC-OS gives the caller back its stack, drive, user area and mounted
+volumes, and returns in `HL` the code the last program left with BDOS
+function 108. The command processor rebuilds page zero, so the caller keeps
+for itself anything it needs from the default FCBs and the command tail.
 
-Code in EXPAND 1 can't be called directly, because EXPAND 0 is normally in
-view at the same addresses. TEC-OS reaches a driver through a dispatcher
-called `XCALL`. A call through `XCALL` switches EXPAND 1 in with interrupts
-off, moves to a stack in EXPAND 1, calls the driver's routine, then
-switches back. The driver lists its routines after its module header: a
-count, then a slot number and an address for each one. The slots are fixed
-points in TEC-OS where a driver can take over.
+`UNLOAD` is refused in a nested command processor, because the resident it
+would remove may be the one that `EXIT` returns to.
 
-The graphics LCD console on the starter card, `GLCD.PRL`, is a driver. It takes the six slots the video terminal draws through. They put a
-character, read a character back, clear to the end of a line, restore the
-screen after a program, read a row and write a row. TEC-OS's own terminal code, from Chapter 2, interprets the
-escape sequences and calls those six routines to draw the result. The
-driver's code, its copy of the screen's text and its stack are all in
-EXPAND 1.
+## The graphics LCD console
 
-A driver never touches EXPAND 0, which is out of view while it runs. It reads
-the console font through the address at `FF23h` and moves rows through a
-transfer buffer in EXPAND 1. `UNLOAD` removes a driver once no resident is
-left above it.
+The graphics LCD console on the starter card, `GLCD.PRL`, is a resident
+like `COUNT`. It takes three pages, 768 bytes, below the BDOS entry: its
+code and its copy of the 168 characters on the screen. TEC-OS loads it
+before the first prompt on a board whose only display is the graphics LCD,
+and `CON UC1:` loads it on a board that has both displays.
+
+TEC-OS's own terminal code, from Chapter 2, interprets the escape sequences
+and draws the result through six routines: put a character, read a
+character back, clear to the end of a line, restore the screen after a
+program, read a row and write a row. The resident's `INIT` hands TEC-OS a
+table of its own six routines through the entry at `FF25h`, which returns
+in `HL` the address of the buffer the row routines use. The terminal then
+calls the routines directly, on the caller's stack. They read the console
+font through the address at `FF23h`.
+
+`FF25h` keeps one table. If it holds one already, as when `GLCD.PRL` is
+loaded a second time, it returns carry set and changes nothing, and that
+copy leaves the console alone. The resident's `REMOVE` calls `FF25h` with
+`HL = 0`, which drops the table and puts the console back on the serial
+port. `UNLOAD` removes the graphics LCD console when it is the most recent
+resident.
+
+The routines run with the caller's interrupts as they find them, so an
+interrupt routine must not print through the console. A program that
+pushes anything on its stack before calling the BIOS's console output
+directly should set up a stack of its own first.

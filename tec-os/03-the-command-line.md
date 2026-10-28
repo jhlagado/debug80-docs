@@ -201,7 +201,14 @@ Command processors nest six deep. `EXIT` at the first one is refused with
 `EXIT?`.
 
 A nested command processor is more useful to a program than to you at the
-prompt. An editor can start one to let you run a command and then carry on
-where it was. While the nested command processor runs, TEC-OS keeps the
-program's memory in EXPAND 1 and puts it back at `EXIT`. Chapter 5 explains
-EXPAND 1.
+prompt. A resident program, one that stays in memory below the BDOS, can
+start one to let you run a command and then carry on where it was after
+`EXIT`. The programs you run in the nested command processor load at
+`0100h` as usual, so TEC-OS keeps nothing of the program area. An ordinary
+program that asks TEC-OS to keep its memory there is refused, so only a
+resident, which lives outside the program area, can step aside this way.
+Chapter 8 describes residents.
+
+`UNLOAD` works only in the first command processor. In a nested one it
+answers `UNLOAD?`, because the resident it would remove may be the one the
+nested command processor returns to.

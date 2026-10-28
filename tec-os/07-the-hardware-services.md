@@ -23,14 +23,15 @@ every later one.
 | --- | --- |
 | `FF00h` | The signature `TNA` |
 | `FF03h` | The major version, 2 |
-| `FF04h` | The minor version, 6 at present |
+| `FF04h` | The minor version, 7 at present |
 | `FF09h` | The address of the console size: columns, then rows |
 | `FF0Bh` | `JP` to the hardware services |
-| `FF12h`, `FF15h` | `JP XMOVE` and `JP MOVE`, for copies to and from EXPAND 1 (Chapter 5) |
-| `FF18h` | The address of EXPAND 1's low mark (Chapter 5) |
+| `FF12h`, `FF15h` | `JP XMOVE` and `JP MOVE`, CP/M 3's memory copy, which refuses EXPAND 1 (Chapter 5) |
+| `FF18h` | The address of EXPAND 1's low mark, `80h`: none of EXPAND 1 is for programs (Chapter 5) |
 | `FF1Ah`, `FF1Dh` | `JP` to a nested command processor, or to one command line (Chapter 3) |
 | `FF20h` | `JP` to the volume service that `MOUNT` uses (Chapter 4) |
-| `FF23h` | The address of the console font, for drivers (Chapter 8) |
+| `FF23h` | The address of the console font, for the graphics LCD console (Chapter 8) |
+| `FF25h` | `JP` to the entry the graphics LCD console hands its drawing routines to (Chapter 8) |
 
 A program first checks the signature and the version. A CP/M program that
 finds no signature is on another system, and it can carry on without the
@@ -70,7 +71,7 @@ such as a hook on the BIOS jump table.
 | 7 | `JOY` | | `B` = the joystick, a bit set for each switch pressed |
 | 8 | `KEYS` | `HL` → 8-byte buffer | The matrix keyboard's 8 rows, a bit set for each key down |
 | 9 | `SERIAL` | `B` = 0 to send `A`, or 1 to wait up to `DE` ms | `B` = the byte received, or status 3 |
-| 10 | `BLOCK` | `HL` → 4-byte block number, `DE` → 512-byte buffer | The card's raw block, or status 4 |
+| 10 | `BLOCK` | `HL` → 4-byte block number, `DE` → 512-byte buffer | The card's raw block, from the cache when it holds it, or status 4 |
 | 11 | `DELAY` | `DE` = milliseconds | |
 | 12 | `VREG` | `B` = register, `A` = value | A PICO9918 register written |
 | 13 | `VFILL` | `HL` = VRAM address, `DE` = count, `A` = value | VRAM filled |
@@ -181,5 +182,7 @@ file-transfer program needs. With `B = 1` it waits up to `DE` milliseconds
 for a byte and returns status 3 if none arrives.
 
 `BLOCK` reads one 512-byte block from the card, by its number from the
-card's start, into the program's buffer. It reads only. Chapter 4 describes
-what the blocks hold.
+card's start, into the program's buffer. It reads only. A block the cache
+holds comes from the cache, so a block on a volume written behind reads as
+TEC-OS has it, even before the card has had it. Chapter 4 describes what
+the blocks hold and the cache.
