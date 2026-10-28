@@ -2388,6 +2388,14 @@ export const sidebars = {
     {
       "text": "The console",
       "link": "/tec-os/02-the-console.html"
+    },
+    {
+      "text": "The command line",
+      "link": "/tec-os/03-the-command-line.html"
+    },
+    {
+      "text": "Cards and volumes",
+      "link": "/tec-os/04-cards-and-volumes.html"
     }
   ],
   "/skate/": [

@@ -27,15 +27,12 @@ also runs TEC-OS in a web page. TEC-OS has not yet run on a physical board.
   first commands.
 - [The console](02-the-console.md): the four console devices, choosing and
   changing the console, the video terminal and the matrix keyboard.
+- [The command line](03-the-command-line.md): file names, the built-in
+  commands, user areas, command history and nested command processors.
+- [Cards and volumes](04-cards-and-volumes.md): the container on the card,
+  `tecvol` on a PC and mounting volumes while TEC-OS runs.
 
 ## Planned chapters
-
-**Part I: Using TEC-OS**
-
-3. **The command line.** The built-in commands, drives and user areas,
-   command history, and running one command processor inside another.
-4. **Cards and volumes.** The container on the card, `tecvol` on a PC, the
-   starter card and mounting volumes at run time.
 
 **Part II: Programming TEC-OS**
 
