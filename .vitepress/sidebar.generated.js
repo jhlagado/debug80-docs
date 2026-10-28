@@ -2396,6 +2396,22 @@ export const sidebars = {
     {
       "text": "Cards and volumes",
       "link": "/tec-os/04-cards-and-volumes.html"
+    },
+    {
+      "text": "Memory",
+      "link": "/tec-os/05-memory.html"
+    },
+    {
+      "text": "A first program",
+      "link": "/tec-os/06-a-first-program.html"
+    },
+    {
+      "text": "The hardware services",
+      "link": "/tec-os/07-the-hardware-services.html"
+    },
+    {
+      "text": "Relocatable programs, residents and drivers",
+      "link": "/tec-os/08-relocatable-programs.html"
     }
   ],
   "/skate/": [
