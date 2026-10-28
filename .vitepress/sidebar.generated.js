@@ -2384,6 +2384,10 @@ export const sidebars = {
     {
       "text": "First boot",
       "link": "/tec-os/01-first-boot.html"
+    },
+    {
+      "text": "The console",
+      "link": "/tec-os/02-the-console.html"
     }
   ],
   "/skate/": [
