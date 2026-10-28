@@ -2376,6 +2376,16 @@ export const sidebars = {
       "link": "/origo/examples.html"
     }
   ],
+  "/tec-os/": [
+    {
+      "text": "Introduction",
+      "link": "/tec-os/00-introduction.html"
+    },
+    {
+      "text": "First boot",
+      "link": "/tec-os/01-first-boot.html"
+    }
+  ],
   "/skate/": [
     {
       "text": "Programming Skate",
