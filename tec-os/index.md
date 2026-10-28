@@ -31,19 +31,18 @@ also runs TEC-OS in a web page. TEC-OS has not yet run on a physical board.
   commands, user areas, command history and nested command processors.
 - [Cards and volumes](04-cards-and-volumes.md): the container on the card,
   `tecvol` on a PC and mounting volumes while TEC-OS runs.
+- [Memory](05-memory.md): the address space, a program's view, page zero
+  and storing data in EXPAND 1.
+- [A first program](06-a-first-program.md): calling the BDOS, assembling
+  and running a program, and reading a file.
+- [The hardware services](07-the-hardware-services.md): the table at
+  `FF00h` and the services for the LCD, digits, LEDs, PICO9918, clock and
+  serial port.
+- [Relocatable programs, residents and drivers](08-relocatable-programs.md):
+  PRL files, making them, and the three kinds of code TEC-OS loads from
+  them.
 
 ## Planned chapters
-
-**Part II: Programming TEC-OS**
-
-5. **Memory.** MAIN and EXPAND, the 46K program area, page zero and
-   reaching EXPAND 1 by copying.
-6. **A first program.** Assembling a COM file, calling the BDOS and running
-   it in Debug80.
-7. **The hardware services.** The table at `FF00h`: the LCD, the
-   7-segment digits, the 8 × 8 LEDs, the PICO9918, the clock and sound.
-8. **Relocatable programs, residents and drivers.** PRL files and the three
-   things TEC-OS can do with them.
 
 **Part III: How TEC-OS works**
 
