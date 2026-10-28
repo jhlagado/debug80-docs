@@ -1,35 +1,56 @@
 ---
-title: Examples, notation and figures
-parent: Origo
-nav_order: 2
+title: "Examples, notation and figures"
+parent: "Delete the Implementation"
+nav_order: 91
 ---
 
 # Examples, notation and figures
 
-Each recurring example has a different job. COPY introduces observable intent.
-A bounded string introduces precise relations and composition. A temporary
-buffer introduces event ordering. The compiler case studies add physical
-constraints after these ideas are familiar.
+Each recurring example has its own job. The file copy introduces an
+author's decisions without any notation. The floating-point round shows
+the loop at work. The warm boot shows a stage built once. The bounded
+string introduces precise conditions in the specification language.
 
-## COPY: the author's decisions
+## The file copy: the author's decisions
 
-The opening state table can begin without invented language syntax:
+Chapter 2 opens with a table of situations and the result each one needs:
 
 | Situation | Required result | Decision still needed |
 | --- | --- | --- |
-| Source exists, destination absent | Destination has the source's bytes; source is unchanged | File metadata to preserve |
-| Destination already exists | Behaviour must be explicit | Refuse, confirm or replace |
-| Source and destination identify the same file | Behaviour must be explicit; preserve existing contents | How to report the request |
-| Destination disk fills | Source remains unchanged | Partial destination and old destination policy |
+| Source exists, destination absent | The destination has the source's bytes and the source is unchanged | The file details to preserve |
+| Destination already exists | The behaviour is stated | Refuse, confirm or replace |
+| Source and destination are the same file | The behaviour is stated and the contents are kept | How the request is reported |
+| The destination disk fills | The source is unchanged | What is left of the destination |
 
-These are proposed teaching requirements rather than an adopted CPC contract.
-The chapter must settle its example policies before claiming a complete
-specification. It should also distinguish logical content from CP/M's
-record-level representation if the example becomes a runnable CP/M utility.
+These are teaching requirements, not an adopted contract. The chapter
+settles its example policies before it calls the specification complete,
+and separates a file's contents from CP/M's 128-byte records if the example
+becomes a runnable utility.
 
-## Bounded strings: defined experimental notation
+## The floating-point round
 
-This uses the frozen LR-01A fragment from the first language trial:
+Fourteen holes, five candidates each, 70 in all, written by two generators
+from their bundles alone. 57 passed every gate at the first attempt and 12
+landed. The twelve routines shrank from 1,217 bytes to 810, and FMUL's
+worst case fell from 20,541 to 4,028 T-states (P1: CDR-3). Chapter 4 uses
+one of the fourteen routines as its worked round. The routine is chosen for
+its size, and its contract, bundle and scoreboard are quoted from the
+round's records.
+
+## The warm boot
+
+A warm boot took 3,866,040 T-states, 99.6 percent of it in rebuilding the
+disk's allocation map from the whole directory. The stage kept each
+drive's map across a warm boot when the drive was unchanged, and rebuilt it
+only to the directory's high-water mark when it had been written. A clean
+warm boot then took 81,040 T-states and read no disk blocks (P3: KS18).
+Chapter 7 follows the stage through each step, with the model's figures,
+the gate's five parts and the measurement.
+
+## The bounded string: experimental notation
+
+This uses the first experimental fragment of the specification language
+(P1: LR-01A):
 
 ```text
 ; @lr01a version 1
@@ -38,61 +59,67 @@ This uses the frozen LR-01A fragment from the first language trial:
 ; @lr01a requires old_length <= capacity
 ```
 
-HL supplies the address of the old length byte. D supplies the capacity. STR
-must be declared by the enclosing bundle and the byte must lie inside it.
-For old length 5 and capacity 8 the predicate holds. For 9 and 8 it is false.
-This excludes the latter call from the specified domain. It instructs no
-runtime check. Publication of a runnable example requires the region binding,
-entry snapshot and actual evaluator invocation alongside this fragment.
+HL holds the address of the old length byte and D holds the capacity. STR
+is declared by the enclosing bundle, and the byte lies inside it. For an
+old length of 5 and a capacity of 8 the condition holds. For 9 and 8 it is
+false, and that call is outside the specified domain. The line requires no
+check at run time. A runnable example needs the region binding, the entry
+snapshot and a run of the evaluator beside the fragment.
 
-The existing LR-01A evaluator tests all 65,536 byte pairs for this relation.
-Its generation trial did not isolate a benefit over English because other
-bundle material still revealed the conditions. The tutorial must retain that
-limit when explaining the example.
+The fragment's evaluator tests all 65,536 byte pairs for this relation. Its
+generation trial showed no benefit over English, because other material in
+the bundle still revealed the conditions. Chapter 12 states that limit
+wherever it uses the example.
 
-## Reuse: a proposed abstraction
+## Proposed notation
 
 ```text
 define valid(s) = length(s) <= capacity(s)
 ```
 
-This is illustrative spelling, not a currently supported declaration. Its
-purpose is to replace repeated conditions with a shared meaning. A chapter
-must define the observation state, object identity and representation binding
-before using it as an operation's guarantee or requirement.
-
-## Temporary memory: a proposed protocol
-
 ```text
 acquire -> hold output -> successful write -> release -> reuse
 ```
 
-This is an event sketch, not executable notation. A contrasting trace places
-reuse before the write. Another attempts a write that fails. Both test why an
-attempted flush is insufficient evidence that output has been preserved.
-The proposed protocol experiment has not yet established a language feature.
+Both are illustrative spellings, not supported notation. The first
+replaces a repeated condition with a shared meaning. The second is an event
+sketch. A contrasting trace reuses the buffer before the write, and another
+writes and fails, which shows why an attempted write is not evidence that
+the output is kept.
 
-## Figure progression
+## Labels
 
-| Figure | Reader's question | Required content |
+Every example of notation carries one label:
+
+- **Working:** parsed and evaluated by the current tools, with its expected
+  results and at least one rejected input;
+- **Experimental:** defined and run in a recorded trial, with the trial's
+  limits stated;
+- **Illustrative:** a spelling used to explain an idea, with no tool behind
+  it.
+
+## Figures
+
+| Figure | Reader's question | Content |
 | --- | --- | --- |
-| Before and after COPY | What exactly must remain true? | Named files, bytes and outcome |
-| Generation and acceptance | Where is the implementation freedom? | Contract, alternative candidates, independent checks and feedback |
-| Logical values and storage | Why do registers appear in a specification? | A relation above its target-specific bindings |
-| Connected operations | What does one component establish for another? | Producer outcome, object identity, consumer entry and open premises |
-| Buffer lifetime | When can these bytes be reused? | Writes, failure, release and premature reuse |
-| Compiler memory | What occupies the machine? | Fixed regions, changing data, stack and operating-system boundary |
-| Handover | What survives replacing the executable? | Three successive maps with the same retained objects |
+| Before and after the copy | What must remain true? | Named files, bytes and outcome |
+| Generation and acceptance | Where is the implementation free? | The contract, several candidates, the checks and the feedback |
+| The deletion radius | How much can be regenerated? | Holes attempted, holes with a passing candidate |
+| Gates in order | What judges a candidate first? | Each gate, its cost and what ends the scoring |
+| The stage track | What must exist before each step? | The nine steps and their entry conditions |
+| Logical values and storage | Why do registers appear in a contract? | A condition above its register and memory bindings |
+| Warm boot time | Where did the time go? | The cost before and after, by part |
+| Handover | What survives replacing a program? | Three memory maps with the same kept data |
 
-Figures should introduce one relationship at a time. Physical memory drawings
-need a named build and matching addresses. Proposed structures need a design
-label. Timeline arrows indicate ordering and do not imply proof that every
-machine execution follows that order.
+A figure introduces one relationship at a time. A memory drawing names its
+build and uses that build's addresses. A proposed structure carries a
+design label.
 
-## Evidence before tutorial code
+## Evidence before writing
 
-Working-language snippets need parser and evaluator runs with expected results
-and at least one rejected input. Diagrams need checking against those same
-examples. Proposed constructs need explicit semantics before executable
-claims. Historical case studies need their frozen reports and measured scope.
-All-path proof, recorded execution checks and assumptions must remain distinct.
+- A notation example is run through its parser and evaluator before the
+  prose around it is written.
+- A figure is checked against the same example.
+- A case study quotes its frozen report and says how much it measured.
+- Proof over all paths, checks on recorded runs and assumptions are kept
+  apart.

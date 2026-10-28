@@ -2368,7 +2368,15 @@ export const sidebars = {
   ],
   "/origo/": [
     {
-      "text": "Chapter outline",
+      "text": "Preface",
+      "link": "/origo/00-preface.html"
+    },
+    {
+      "text": "1. Deleting the implementation",
+      "link": "/origo/01-deleting-the-implementation.html"
+    },
+    {
+      "text": "Outline",
       "link": "/origo/outline.html"
     },
     {
