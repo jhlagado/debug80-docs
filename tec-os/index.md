@@ -7,7 +7,7 @@ nav_exclude: true
 
 # TEC-OS: CP/M in ROM for the TEC-1G
 
-**Book in development.** The introduction and the first chapter are written.
+**Book in development.** The introduction and the first two chapters are written.
 The rest of this page is the plan for the chapters that follow.
 
 TEC-OS is an operating system for the TEC-1G held entirely in its 16 KiB
@@ -25,14 +25,13 @@ also runs TEC-OS in a web page. TEC-OS has not yet run on a physical board.
   who the book is for.
 - [First boot](01-first-boot.md): starting TEC-OS, the starter card and the
   first commands.
+- [The console](02-the-console.md): the four console devices, choosing and
+  changing the console, the video terminal and the matrix keyboard.
 
 ## Planned chapters
 
 **Part I: Using TEC-OS**
 
-2. **The console.** The serial terminal, the PICO9918, the GLCD and the
-   matrix keyboard. The IOBYTE and the `CON` command. The video terminal's
-   escape sequences.
 3. **The command line.** The built-in commands, drives and user areas,
    command history, and running one command processor inside another.
 4. **Cards and volumes.** The container on the card, `tecvol` on a PC, the
