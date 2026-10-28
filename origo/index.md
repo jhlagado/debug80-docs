@@ -1,47 +1,49 @@
 ---
-title: Origo
+title: "Delete the Implementation"
 nav_order: 12
 has_children: true
 nav_exclude: true
 ---
 
-# Origo: specifying replaceable software
+# Delete the Implementation
 
-**Book in development.** This first edition is a reading plan with proposed
-examples and figures. Chapters will be written as the method and notation are
-tested. The outline describes the questions the book will investigate.
+**Book in development.** The preface and chapter 1 are first drafts. The
+other chapters are plans, written up as their examples and evidence are
+checked.
 
-Origo explores software development in which a specification defines acceptable
-behaviour and resource limits. A generator supplies an implementation. Separate
-checks examine whether it satisfies those requirements. The specification and
-its evidence remain available when an implementation is replaced.
+Origo is a method for building software from contracts under measured
+gates. I write down what a routine must do, precisely enough for a machine
+to check. A generator writes candidates from that description alone.
+Deterministic tools judge each one, and a candidate replaces the existing
+code only when it passes every check and the decision is recorded. The
+contract and its evidence are kept, and the implementation becomes
+replaceable.
 
-The practical experiment is a BASIC compiler for a small Z80 computer. The
-broader question is whether people can specify useful software through a
-precise, reusable language without supplying its implementation themselves.
-That question is still open.
+The method's test is the book's title. Can I delete the implementation
+without losing the software? The book explains the method well enough for a
+reader to run a study of their own. It also reports what three studies
+found, including where the method did not pay and where it was not
+followed.
 
-This book is for a reader interested in how software is made. No knowledge of
-Z80 assembly, formal logic or the compiler's internals is assumed. Ordinary
-examples introduce each idea before the compiler case studies add physical
-constraints.
+The book is for a working programmer who uses code generators or is
+considering them and wants evidence. You need to read code comfortably. The
+examples are in Z80 assembly and each one is explained as it appears, so no
+Z80 knowledge is assumed.
 
-## Reading plan
+## Contents
 
-- [Chapter outline](outline.md): the progression from intentions to reusable
-  contracts and protocols.
+- [Preface](00-preface.md)
+- [1. Deleting the implementation](01-deleting-the-implementation.md)
+- [Outline](outline.md): every chapter, its job and its example
 - [Examples, notation and figures](examples.md): the recurring examples and
-  the evidence each example needs before it becomes a tutorial.
+  the evidence each one needs before it is written up
 
-## The three undertakings
+## Three strands
 
-**Origo Compiler (OC)** is the executable toolchain being developed.
-**Origo Method (OM)** is the process of specifying components, generating
-replacements and examining their results. **Origo Language (OL)** is the
-specification notation under investigation. This book concentrates on the last
-two and uses the compiler as a source of concrete evidence.
-
-Examples will be labelled as working notation, experimental notation or
-illustrative sketches. Tested behaviour and proposed capabilities will remain
-distinct. The book will develop from complete small examples rather than from
-a catalogue of directives.
+**The method** is the order of work: contracts, gates, rounds of
+regeneration and stages built once. **The studies** are the projects the
+method has been applied to, and supply every figure in the book. **The
+specification language** is the notation being developed to state, without
+English, the obligations a contract still holds in prose. The book treats
+the language as research and labels each example of it as working,
+experimental or illustrative.

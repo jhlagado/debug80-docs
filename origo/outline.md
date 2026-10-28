@@ -1,187 +1,184 @@
 ---
-title: Chapter outline
-parent: Origo
-nav_order: 1
+title: "Outline"
+parent: "Delete the Implementation"
+nav_order: 90
 ---
 
-# Chapter outline
+# Outline
 
-The proposed progression starts with a desired outcome, makes the requirements
-precise and then examines how those requirements can be reused. Machine details
-follow the logical rule they represent. This is an outline, not a list of
-completed chapters or implemented language features.
+The book climbs a ladder of six ideas. Each part depends on the one before
+it.
 
-## Part I: defining the software
+1. Software can be specified as a contract that admits many
+   implementations.
+2. A contract is only as good as the checks that judge it.
+3. A loop of generation and judgement can replace an implementation, and
+   what it adds over one careful attempt can be measured.
+4. Where the loop adds nothing, the same checks still govern engineering
+   that is built once.
+5. The obligations a contract states in English can be moved, one construct
+   at a time, into notation with a fixed meaning.
+6. A study has records, authority and boundaries, and three studies show
+   where all of this works and where it does not.
 
-### 1. A result worth specifying
+Two examples run through the book: a round of regeneration on fourteen
+floating-point routines (P1: CDR-3), and the stage that made a warm boot 48
+times faster (P3: KS18). Smaller examples open each part.
 
-**Purpose.** Establish the work a specification author does before introducing
-notation. A small COPY utility supplies the running example: copying a file
-to a new name is easy to describe until the destination exists or storage fills.
+## Part I: The proposition
 
-**Development.** Begin with the ordinary successful copy. Add source
-preservation, identity of contents, overwrite policy and failure behaviour.
-Distinguish decisions the author must make from algorithm choices left open.
+### 1. Deleting the implementation
 
-**Example and figure.** A before-and-after directory with source and destination
-bytes. A failure table records what survives each outcome. It includes an
-explicit undecided overwrite policy rather than inventing a product decision.
+The proposition, its test and the deletion radius as the measure of
+progress. What the radius shows and what it does not, and how the
+proposition can fail class by class (M1, MD-2). *First draft.*
 
-**Connection.** Once the required result is clear, several implementations may
-qualify. Chapter 2 describes that freedom.
+### 2. Contracts
 
-### 2. The space of acceptable implementations
+The chapter opens away from the Z80, with a file copy. Copying a file to a
+new name is easy to describe until the destination exists, the source and
+destination are the same file or the disk fills. A table of those
+situations separates what the author must decide from what any
+implementation may choose. The chapter then gives a Z80 routine's contract
+line by line: what it computes, registers in and out, what it changes and
+keeps, memory read and written, size and cycle budgets and traps.
+Declared incompleteness and don't-care follow, with the reason comments are
+not contracts (R1 to R11).
 
-**Purpose.** Explain contracts, holes, candidates and incumbents through a
-replacement attempt. Introduce a generator only after explaining its task.
+### 3. Oracles and gates
 
-**Development.** Compare two copy strategies against the same outcome and
-memory limit. Explain which changes preserve the software and which alter it.
-Introduce resource constraints as part of the required result.
+A requirement is separate from the evidence that it is met. A copy that
+passes ordinary examples fails on an empty file or a full disk. The chapter
+introduces visible and held-out cases, a second case source and the
+mutation score, and shows that a test can expose a mistake in the
+specification as well as the code. Gates are registered before the result
+they judge, each with an input shown to fail (M3, M8, R18 to R24).
 
-**Example and figure.** A requirement table with two hypothetical candidates.
-A diagram places generation inside the specification and acceptance boundaries.
-Candidate figures are illustrative until measurements exist.
+## Part II: The loop
 
-### 3. Evidence for acceptance
+### 4. A round
 
-**Purpose.** Separate a requirement from evidence that it has been met.
+The twelve steps of a round on one small routine, from bundle to landing:
+the bundle, candidates in separate contexts, scoring cheapest first, the
+differential prober, triage into don't-care or a tighter contract, and the
+landing (P1: CDR-3).
 
-**Development.** Follow a copy that passes ordinary examples but fails on an
-empty file or a full destination disk. Introduce withheld cases, independent
-expectations and counterexamples. Explain repeatability, coverage and proof as
-different properties. Tests can expose a specification mistake too.
+### 5. Large routines
 
-**Example and figure.** A missing-case investigation followed by the verified
-Origo negative-zero case study. A coverage table separates stated rules,
-executed checks and remaining assumptions.
+Small holes passed at high rates and large ones at none until their
+interfaces were written as rules, each round's notes naming the next rule
+(P1: CDR-5, CDR-6, R12, R13).
 
-## Part II: precise statements
+### 6. Loop gain
 
-### 4. Values, names and conditions
+The first-attempt control, what the loop adds over it, the overlap of two
+generators' failures, and the classes of hole where generation does not pay
+(M1, M9).
 
-**Purpose.** Introduce the first implemented experimental fragment through a
-bounded value, before describing a register or address.
+## Part III: The stage
 
-**Development.** Explain length, capacity and an unsigned byte. Introduce names,
-comparisons and conjunction. Then connect those names to physical storage.
-Distinguish a caller's precondition from a runtime error the operation must
-handle. Use the frozen LR-01A grammar and its actual diagnostics.
+### 7. Built once
 
-**Example and figure.** Walk through `old_length <= capacity` with admitted and
-excluded calls. A two-layer figure connects logical names to registers and
-bytes. Run the snippets through the experimental parser before publication.
+The stage track: need, brief, review, model, gate, build, measure, record,
+review. The running example is the warm boot, from its measured cost of
+3,866,040 T-states to 81,040 (P3: KS18).
 
-### 5. Outcomes and permitted change
+### 8. The model before the gate
 
-**Purpose.** Describe a complete operation rather than just its admitted inputs.
+Three stages were re-cut on a host model's figures before any Z80 was
+written. The chapter shows why a figure set from the model is still set
+before the measurement it judges (P3: KD-53, KD-61, KD-64).
 
-**Development.** Return to COPY: success, refusal and I/O failure need distinct
-observable results. Introduce entry and exit state, preserved data and permitted
-effects. Compare these needs with the current language's entry-only scope.
+### 9. Structural change through contracts
 
-**Example and figure.** An outcome table and state snapshots. Postcondition
-snippets remain explicitly proposed until their semantics are implemented.
+The first study's largest gains came from design changes modelled first
+and built through contracts: memory regions, overlays and the handover of
+data from one program to the next. The chapter follows what survives when
+one program's code is replaced by another's, and separates measured stages
+from a design's modelled benefit (P1: CDR-12 to CDR-19).
 
-## Part III: building with contracts
+### 10. Reviews find most defects
 
-### 6. Defining a valid object once
+The defect ledger records what found each defect. Across the studies,
+review and use found most of them and the oracles found few. The chapter
+shows how reviews are planned and scored as a stage of the loop (M4, M5;
+P2: the brief reviews; P3: the defect ledger).
 
-**Purpose.** Make abstraction solve a demonstrated repetition problem.
+## Part IV: The specification language
 
-**Development.** Repeat a bounded-string condition across several contracts,
-then factor it into a named predicate. Investigate parameters and constrained
-types. Separate an object's logical capacity from its memory layout. Explain
-which operation boundaries require validity.
+### 11. Obligations still in English
 
-**Example and figure.** The repeated and factored forms side by side, expanded
-back to the same obligations. A record figure distinguishes the length byte
-from payload capacity. These abstractions are research proposals.
+Rounds keep producing obligations stated in prose: a sign byte that must
+hold bit 7 alone, a counter a routine leaves for its caller, a callback
+protocol. The language track records them and tests whether notation can
+carry them. A candidate passing under new notation shows the bundle was
+usable, not that the notation meant one thing.
 
-### 7. A guarantee passed to a caller
+### 12. Notation with a fixed meaning
 
-**Purpose.** Explain composition through an object transferred between routines.
+Values, names and conditions, starting with a bounded value before any
+register or address: a string's length against its capacity, stated in the
+first experimental fragment and checked by its evaluator over all 65,536
+byte pairs (P1: LR-01A). Outcomes and permitted change follow, with the
+limits of what the fragment can state.
 
-**Development.** Follow a string through a length-setting operation into a
-comparison. List the producer's guarantees and both consumer operands'
-requirements. Include identity, intervening changes and the other operand.
-Distinguish an abstract implication from testing machine executions.
+### 13. Reuse, composition and protocols
 
-**Example and figure.** A handover timeline with valid and broken transfers.
-The chapter awaits an accepted composition experiment and its results.
+Proposed constructs, labelled as research: a predicate defined once and
+reused, a guarantee passed from one routine to its caller, and obligations
+over time such as a buffer that must not be reused before its output is
+written. The chapter ends by asking whether the constructs justify their
+cost, and reports a negative result if abstraction gives little practical
+benefit.
 
-### 8. Obligations over time
+## Part V: Running a study
 
-**Purpose.** Extend conditions at a boundary to a protocol across events.
+### 14. Records
 
-**Development.** Start with a small output buffer: append, write, release and
-reuse. Explain why authoritative output must be persisted while cached copies
-can be discarded. Introduce state transitions and reference lifetimes only as
-needed to describe safe reuse.
+Decisions with their authority, the ledgers, and cost against outcome (M6,
+M11, M12).
 
-**Example and figure.** Legal and illegal event traces, including a failed disk
-write. A timeline marks live references and permitted reuse. The language
-construct and checker are proposed research, not existing features.
+### 15. Studies apart
 
-## Part IV: the compiler as an experiment
+Separation, lexicons, pins and proposals between studies that depend on
+each other.
 
-### 9. A machine with finite room
+### 16. The protocol
 
-**Purpose.** Give the compiler constraints a physical explanation.
+The order of work, what must exist before each step, and when the person
+driving a study stops and asks (MD-8).
 
-**Development.** Introduce the application memory budget, resident code,
-overlays and the source window. Follow source bytes and generated records
-through compilation. Explain offsets before discussing moving references.
+## Part VI: What the studies show
 
-**Example and figure.** A layered memory map and a sequence of window positions.
-Use a frozen landed build for exact addresses. Show active development as a
-separate design state.
+### 17. The first study
 
-### 10. Data across a change of program
+A language toolchain for CP/M, regenerated hole by hole and restructured
+through contracts.
 
-**Purpose.** Combine identity, lifetimes, effects and resource constraints in an
-architectural example.
+### 18. The second study
 
-**Development.** Compare intermediate disk files with the proposed memory-file
-handover. Trace what survives replacing compiler code with linker code. Explain
-the required equivalence and disk fallback. Separate measured stages from the
-complete architecture's modelled benefit.
+Assembly tools built on another study's operating system, pinned to one of
+its commits and moved only by decision.
 
-**Example and figure.** Before, during and after handover memory maps, with
-retained data identified consistently. A record-level comparison illustrates
-the equivalence to be checked. The chapter depends on the implementation's
-eventual evidence.
+### 19. The third study
 
-### 11. Revising a specification from evidence
+An operating system improved stage by stage, with no regeneration, and the
+places where the method was not followed (P3: the method review).
 
-**Purpose.** Present the method as an inspectable sequence of decisions.
+### 20. Open problems
 
-**Development.** Follow a failed candidate from observation through diagnosis
-to a revised requirement and new check. Compare a missing interface with an
-implementation mistake and a faulty budget. Explain protected acceptance tools
-and why the incumbent can also be wrong.
+Independence, specification correctness, generator diversity, static
+checks of what a routine changes, and what a byte is worth.
 
-**Example and figure.** The documented table-bound and stack-accounting cases.
-A decision record connects each revision to its evidence without treating a
-higher pass rate as proof of completeness.
+## Back matter
 
-### 12. An authoring language people can use
+- **Appendix A.** The rules in short.
+- **Appendix B.** Record formats: a contract, a gate, a decision, a defect
+  row.
+- **Glossary.**
 
-**Purpose.** Assess whether the accumulated constructs justify their cost.
+## Open decisions
 
-**Development.** Revisit the opening COPY specification. Investigate how much
-repetition named definitions, parameters and composition remove. Identify the
-bindings a tool can derive and decisions an author must review. Compare
-authoring effort, clarity and checkable obligations alongside generation results.
-
-**Example and figure.** A before-and-after specification and an explicit list of
-obligations still in English. The conclusion must follow the experiments,
-including a negative result if abstraction provides little practical benefit.
-
-## First writing increment
-
-Draft chapters 1 and 2 after reviewing this outline. Establish COPY's example
-policies and check its state tables first. Keep the rest as chapter plans until
-their examples and evidence support full treatment. A short glossary can grow
-from terms already introduced in the text. A later reference appendix should
-contain only versioned notation with defined semantics.
+- The title.
+- Whether the studies' records are published beside the book, since every
+  citation points into them.
