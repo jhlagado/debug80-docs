@@ -58,7 +58,7 @@ used for programs.
 | `REN NEW=OLD` | Rename a file |
 | `SAVE n NAME` | Save `n` pages of memory from `0100h` as a file |
 | `USER n` | Change the user area |
-| `COPY SOURCE DEST` | Copy a file |
+| `COPY SOURCE DEST` | Copy a file, to a name or to a drive |
 | `CON` | Show or change the console (Chapter 2) |
 | `CCP`, `EXIT` | Start a nested command processor, and leave it |
 | `UNLOAD` | Remove the most recent resident program (Chapter 8) |
@@ -83,20 +83,27 @@ won't work. When nothing matches, `DIR` prints `NO FILE`.
 
 ### COPY
 
-`COPY` copies one file. The destination needs a full name, with a drive if
-it is on another one:
+`COPY` copies one file. The destination can be a full name, with a drive
+if it is on another one, or just a drive, and then the copy takes the
+source's name:
 
 ```text
-A>COPY EDIT.COM B:EDIT.COM
+A>COPY EDIT.COM B:
 COPIED 003E
 
 A>
 ```
 
-The number after `COPIED` counts the 128-byte records copied, in
-hexadecimal. `3Eh` is 62 records, 7,936 bytes. A destination that is only a
-drive, such as `B:`, is not a name, and `COPY` answers `COPY?`. An existing
-file of the same name is replaced.
+That makes `B:EDIT.COM`, as `COPY EDIT.COM B:EDIT.COM` would. The number
+after `COPIED` counts the 128-byte records copied, in hexadecimal. `3Eh` is
+62 records, 7,936 bytes. A destination with a type but no name, such as
+`B:.TXT`, also takes the whole of the source's name, type included, so it
+too makes `B:EDIT.COM`. An existing file of the same name is replaced.
+
+A file can't be copied onto itself. `COPY EDIT.COM EDIT.COM`, `COPY
+EDIT.COM A:` on drive A and `COPY EDIT.COM` with no destination all answer
+`COPY?` and change nothing. A name with no drive means the current drive,
+so `COPY A:EDIT.COM EDIT.COM` on drive A is refused too.
 
 ### TYPE, ERA and REN
 
