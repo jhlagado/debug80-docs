@@ -14,21 +14,24 @@ introduces precise conditions in the specification language.
 
 Fourteen holes, five candidates each, 70 in all, written by two generators
 from their bundles alone. 57 passed every gate at the first attempt and 12
-landed. The twelve routines shrank from 1,217 bytes to 810, and FMUL's
-worst case fell from 20,541 to 4,028 T-states (P1: CDR-3). Chapter 2 opens
-with FMUL's contract, and chapter 4 uses another of the fourteen routines
-as its worked round. The routine is chosen for its size, and its contract,
-bundle and scoreboard are quoted from the round's records.
+landed. The twelve routines shrank from 1,217 bytes to 810, and FMUL's worst
+case fell from 20,541 to 4,028 T-states (P1: CDR-3). Chapter 2 opens with
+FMUL's contract, and chapter 4 uses another of the fourteen routines as its
+worked round. The routine is chosen for its size, and its contract, bundle
+and scoreboard are quoted from the round's records.
 
 ## The warm boot
 
-A warm boot took 3,866,040 T-states, 99.6 percent of it in rebuilding the
-disk's allocation map from the whole directory. The stage kept each
-drive's map across a warm boot when the drive was unchanged, and rebuilt it
-only to the directory's high-water mark when it had been written. A clean
-warm boot then took 81,040 T-states and read no disk blocks (P3: KS18).
-Chapter 7 follows the stage through each step, with the model's figures,
-the gate's five parts and the measurement.
+With the serial console a warm boot took 3,866,040 T-states (P3: KB-6). Of
+that, 99.6 percent went in rebuilding the disk's allocation map from the
+whole directory. The stage kept each drive's map across a warm boot when the
+drive was unchanged, and rebuilt it only to the directory's high-water mark
+when it had been written. On the same console a clean warm boot then took
+81,040 T-states and read no disk blocks (P3: KD-72). The stage ran before
+the stage track was written. Chapter 7 uses it to show the track. It quotes
+the model's figures, the gate with the five parts the method requires (M3)
+and the measurement. The chapter also names each step where the stage
+departed from the track.
 
 ## The bounded string: experimental notation
 
@@ -42,17 +45,17 @@ This uses the first experimental fragment of the specification language
 ; @lr01a requires old_length <= capacity
 ```
 
-HL holds the address of the old length byte and D holds the capacity. STR
-is declared by the enclosing bundle, and the byte lies inside it. For an
-old length of 5 and a capacity of 8 the condition holds. For 9 and 8 it is
+HL holds the address of the old length byte and D holds the capacity. STR is
+declared by the enclosing bundle, and the byte lies inside it. For an old
+length of 5 and a capacity of 8 the condition holds. For 9 and 8 it is
 false, and that call is outside the specified domain. The line requires no
 check at run time. A runnable example needs the region binding, the entry
 snapshot and a run of the evaluator beside the fragment.
 
 The fragment's evaluator tests all 65,536 byte pairs for this relation. Its
-generation trial showed no benefit over English, because other material in
-the bundle still revealed the conditions. Chapter 11 states that limit
-wherever it uses the example.
+generation trial could not show that the notation changed an outcome
+(P1: LR-01A). The remaining prose and the visible cases still revealed each
+condition. Chapter 11 states that limit wherever it uses the example.
 
 ## Proposed notation
 
@@ -64,12 +67,12 @@ define valid(s) = length(s) <= capacity(s)
 acquire -> hold output -> successful write -> release -> reuse
 ```
 
-Both are illustrative spellings with no record behind them, not supported
-notation. The first
-replaces a repeated condition with a shared meaning. The second is an event
-sketch. A contrasting trace reuses the buffer before the write, and another
-writes and fails, which shows why an attempted write is not evidence that
-the output is kept.
+Both are illustrative spellings, and no tool parses them. The first replaces
+a repeated condition with a shared meaning. The second is an event sketch
+for a protocol experiment that is drafted but not run
+(P1: the temporary-memory protocol). A contrasting trace reuses the buffer
+before the write, and another writes and fails, which shows why an attempted
+write is not evidence that the output is kept.
 
 ## Labels
 
@@ -92,8 +95,8 @@ Every example of notation carries one label:
 | Handover | What survives replacing a program? | Three memory maps with the same kept data |
 
 A figure introduces one relationship at a time. A memory drawing names its
-build and uses that build's addresses. A proposed structure carries a
-design label.
+build and uses that build's addresses. A proposed structure carries a design
+label.
 
 ## Evidence before writing
 
