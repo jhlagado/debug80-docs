@@ -77,24 +77,26 @@ its worst case became about five times faster (P1: CDR-3). Chapter 2 opens
 with FMUL's contract, and Part II follows the round from its bundles to its
 landings.
 
-The second is a stage from the third study. When a program ends, TEC-OS
-returns to its command prompt through a warm boot. With the serial console a
-warm boot took 3,866,040 T-states, almost a second at the board's 4 MHz
-clock (P3: KB-6). In that stage the time was measured first. A design was
-then modelled on the host, the computer the emulator and tools run on,
-before any Z80 was written.
+The second is a stage from the third study. Its figures are all with the
+serial console, the console on the board's serial port, used from a terminal
+at the other end. When a program ends, TEC-OS returns to its command prompt
+through a warm boot. A warm boot took 3,866,040 T-states, almost a second at
+the board's 4 MHz clock (P3: KB-6). In that stage the time was measured
+first. A design was then modelled on the host, the computer the emulator and
+tools run on, before any Z80 was written.
 
-As built, a clean warm boot took 81,040 T-states with the serial console
-(P3: KD-72). `SAVE` is the command that writes memory to a disk file. A warm
-boot after it took 327,424 T-states with the serial console (P3: KD-72).
+A clean warm boot is one with no file written since the disks were last
+read. As built, a clean warm boot took 81,040 T-states (P3: KD-72). `SAVE`
+is the command that writes memory to a disk file. A warm boot after it took
+327,424 T-states (P3: KD-72).
 
 The method now sets out a stage track for such work, nine steps that end in
-a review of the result (MD-8). Each study has a backlog, a list of the
-problems it has measured. The first step is a backlog item with a measured
-cost or a request of mine. Among the nine are a brief and its review, a
-model and one build. The warm-boot stage ran before the track was written
-and departed from it in four places, which chapter 7 sets out. Part III
-describes that stage from its measured cost to its landing.
+a review of the result (MD-8). The protocol gives each study a backlog, a
+list of the problems it has measured. The track's first step starts from a
+backlog item with a measured cost or a request of mine. Among the nine are a
+brief and its review, a model and one build. A brief is the stage's written
+plan. The warm-boot stage ran before the track was written and departed from
+it in four places, which chapter 7 sets out.
 
 Part I covers the proposition, contracts and the checks that judge them.
 Part II describes the loop of generation and judgement. Part III shows the

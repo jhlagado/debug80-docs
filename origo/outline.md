@@ -88,19 +88,20 @@ generators' failures, and the classes of hole where generation does not pay
 
 The nine steps of a stage built once: need, brief, review, model, gate,
 build, measure, record and review (MD-8). The running example is the warm
-boot. With the serial console a clean warm boot fell from 3,866,040 T-states
-to 81,040 (P3: KB-6, KD-72). The stage ran before the track was written, and
-the chapter names where it departed from it. Its gate was registered before
-the model, and a limit raised after the build was recorded as delegated. It
-took four decisions where the track asks for one (P3: KD-69 to KD-72). No
-review of its brief or its result is recorded.
+boot. With the serial console a clean warm boot took 3,866,040 T-states
+before the stage (P3: KB-6). After the stage it took 81,040 (P3: KD-72). The
+stage ran before the track was written, and the chapter names where it
+departed from it. Its gate was registered before the model, and a limit
+raised after the build was recorded as delegated. It took four decisions
+where the track asks for one (P3: KD-69 to KD-72). No review of its brief or
+its result is recorded.
 
 ### 8. The model before the gate
 
 One stage was re-cut on a host model's figures before any Z80 was written
-(P3: KD-64). Two others were re-cut after a first full build had exceeded
-its ROM limit (P3: KD-53, KD-61). A figure taken from the model is still set
-before the measurement it judges.
+(P3: KD-64). Another was re-cut after a first full build had exceeded its
+ROM limit (P3: KD-53). One more was re-cut for the same reason (P3: KD-61).
+A figure taken from the model is still set before the measurement it judges.
 
 ### 9. Structural change through contracts
 
@@ -164,7 +165,7 @@ other.
 ### 15. The protocol
 
 The order of work and what must exist before each step. The cases in which
-the person driving a study stops and asks (MD-8).
+the study's driver stops and asks (MD-8).
 
 ## Part VI: The studies' results
 
