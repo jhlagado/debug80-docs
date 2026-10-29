@@ -155,11 +155,11 @@ fail in any of them.
 The method's checks do not depend on generation. The second study applied
 them to assembly tools, and Part VI reports how. The third study generated
 no candidates and improved an operating system stage by stage. From the
-stage that built the system's memory allocator to the warm-boot stage, every
-stage was modelled on the host before any Z80 was written
-(P3: the method review). The study's gates and recorded decisions governed
-that work as they do a round. So did its defect ledger, the record of each
-defect and the mechanism that found it.
+stage that built an allocator for one of the board's two banks of expansion
+memory to the warm-boot stage, every stage was modelled on the host before
+any Z80 was written (P3: the method review). The study's gates and recorded
+decisions governed that work as they do a round. So did its defect ledger,
+the record of each defect and the mechanism that found it.
 
 Two of its stages recovered 231 bytes of ROM (P3: the method review). Those
 bytes paid for a history of command lines and a faster warm boot. Each study

@@ -72,18 +72,18 @@ The first is a round of regeneration on the first study's floating-point
 routines. A generator writes each candidate from a bundle of the routine's
 contract and some of its tests, with none of its code. Most of the round's
 candidates passed every check, and the ones that landed made the routines
-smaller. FMUL is the routine that multiplies two floating-point numbers, and
-its worst case became about five times faster (P1: CDR-3). Chapter 2 opens
-with FMUL's contract, and Part II follows the round from its bundles to its
+smaller. FMUL is the routine that multiplies two floating-point numbers. Its
+worst case became about five times faster (P1: CDR-3). Chapter 2 opens with
+FMUL's contract, and Part II follows the round from its bundles to its
 landings.
 
 The second is a stage from the third study. When a program ends, TEC-OS
 returns to its command prompt through a warm boot. A warm boot took
 3,866,040 T-states, almost a second at the board's 4 MHz clock (P3: KB-6).
-The stage's figures are all with the serial console, the console on the
+The figures here are all with the serial console. That is the console on the
 board's serial port, used from a terminal at the other end. In that stage
-the time was measured first. A design was then modelled on the host, the
-computer the emulator and tools run on, before any Z80 was written.
+the time was measured first. The host is the computer the emulator and tools
+run on. A design was then modelled on it before any Z80 was written.
 
 A clean warm boot is one where nothing has changed a disk's directory or its
 record of used blocks since that directory was last read. As built, a clean
@@ -91,8 +91,8 @@ warm boot took 81,040 T-states and read no disk block (P3: KD-72). `SAVE` is
 the command that writes memory to a disk file. A warm boot after it read one
 block and took 327,424 T-states (P3: KD-72).
 
-The method's protocol, its written order of work, now sets out a stage track
-for work built once like this, nine steps that end in a review of the result
+The method's protocol is its written order of work. It now sets out a stage
+track for work built once, nine steps that end in a review of the result
 (MD-8). The method gives each study a backlog, a list of the problems it has
 measured. The track's first step starts from a backlog item with a measured
 cost or a request of mine. Among the nine are a written plan called a brief,
