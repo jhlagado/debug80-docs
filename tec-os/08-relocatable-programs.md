@@ -18,14 +18,20 @@ and residents that stay below the BDOS after they run.
 A PRL file has three parts:
 
 1. A 256-byte header. The word at offset 1 is the length of the code in
-   bytes. The rest of the header is zero for the files in this chapter.
-2. The code, assembled for origin `0000h`.
+   bytes, and the word at offset 4 is any extra memory the program needs
+   beyond its code. The rest of the header is zero.
+2. The code, assembled for origin `0100h`, where a `.COM` file runs.
 3. A bitmap with one bit for each byte of code, the most significant bit
    first. A set bit marks the high byte of an address.
 
-To load the code at a page `p`, the loader adds `p` to every byte whose bit
-is set. Only the high bytes need it, because the code moves by whole pages
-and the low byte of every address stays the same.
+This is Digital Research's format, as the CP/M 3 Programmer's Guide gives
+it in Appendix B, so a PRL made by Digital Research's `LINK` with its `[OP]`
+option loads on TEC-OS too.
+
+To load the code at a page `p`, the loader adds `p - 1` to every byte whose
+bit is set. Only the high bytes need it, because the code moves by whole
+pages and the low byte of every address stays the same. Code loaded at
+`0100h` needs no change at all.
 
 ## Making a PRL
 
@@ -55,8 +61,9 @@ node mkprl.mjs count.asm COUNT.PRL
 
 The source must contain the line `ORG $0100` exactly once. `makePrl`
 assembles it with Atom as it stands, then assembles a copy with the line
-changed to `ORG $0000`, and builds the file from the two results. It
-reports any byte that differs by more than one.
+changed to `ORG $0000`, and builds the file from the two results: the
+code from the first, at `0100h`, and the bitmap from the bytes that differ.
+It reports any byte that differs by more than one.
 
 ## Running a PRL
 
@@ -64,8 +71,8 @@ The command processor looks for `NAME.COM` first and, if there is none, for
 `NAME.PRL`. What it does with a PRL depends on the first bytes of the code:
 
 - **A program.** Code that doesn't begin with TEC-OS's module header is an
-  ordinary program. TEC-OS relocates it for `0100h` and runs it there, as
-  if it were a `.COM` file.
+  ordinary program. TEC-OS loads it at `0100h`, where it needs no
+  relocation, and runs it there as if it were a `.COM` file.
 - **A resident.** Code with the module header and kind 1 is installed below
   the BDOS and stays there.
 
