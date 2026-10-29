@@ -55,8 +55,10 @@ obligatory case and a tighter contract. An earlier case table that passed
 two wrong candidates on negative zero is cited briefly (P1: CDR-1).
 
 The chapter then introduces visible and held-out cases, an adversarial
-second source and the mutation score. Gates are registered before the result
-they judge, each with an input shown to fail (M3, M8, R18 to R24).
+second source and the mutation score. A gate is registered when it is
+written and hashed in the study's gate file (MD-8). Gates are registered
+before the result they judge, each with an input shown to fail
+(M3, M8, R18 to R24).
 
 ## Part II: The loop
 
@@ -115,10 +117,10 @@ from a design's modelled benefit.
 
 The defect ledger records each defect and what found it. In the second
 study's ledger, review found 102 of 131 and use found 16
-(P2: the defect ledger). In the third study's, review found 24 of 44 and use
-12 (P3: the defect ledger). The oracles found few in either, and the first
-study keeps no defect ledger. Reviews are planned and scored as a stage of
-the loop (M4, M5).
+(P2: the defect ledger). Of the third study's first 44 defects, review found
+24 and use 12 (P3: the method review). The oracles found few in either, and
+the first study keeps no defect ledger. Reviews are planned and scored as a
+stage of the loop (M4, M5).
 
 ## Part IV: The specification language
 
@@ -133,9 +135,10 @@ bundle was usable, not that the notation meant one thing.
 
 The first experimental fragment then states values, names and conditions. It
 starts with a bounded value before any register or address: a string's
-length against its capacity. The fragment's evaluator checked that condition
-over all 65,536 byte pairs (P1: LR-01A). Outcomes and permitted change
-follow, with the limits of what the fragment can state.
+length against its capacity. The fragment's evaluator was checked on all
+65,536 byte pairs for that condition, each against truth computed separately
+(P1: LR-01A). Outcomes and permitted change follow, with the limits of what
+the fragment can state.
 
 ### 12. Reuse, composition and protocols
 
