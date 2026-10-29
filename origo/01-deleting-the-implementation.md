@@ -100,10 +100,10 @@ meaning.
 The prober found 1,729 inputs on which a candidate behaved differently from
 the incumbent. Eleven of them fell under don't-care lines that already
 existed. Two internal routines set the carry flag on overflow, and triage
-added a line to both contracts. It declares DE and HL a don't-care when the
-carry is set on return. Of the inputs, 1,445 fell under it. The other 273
-came from a single gap in a routine's contract and became one new obligatory
-case and a tighter contract.
+added a line to both contracts. It declares the registers DE and HL a
+don't-care when the carry is set on return. Of the inputs, 1,445 fell under
+it. The other 273 came from a single gap in a routine's contract and became
+one new obligatory case and a tighter contract.
 
 One candidate for those two routines differed from the incumbent only under
 the new line. It was still held back, because the landing rule as run
@@ -154,20 +154,23 @@ fail in any of them.
 
 The method's checks do not depend on generation. The second study applied
 them to assembly tools, and Part VI reports how. The third study generated
-no candidates and improved an operating system stage by stage. From
-(P3: KS11) on, every stage was modelled on the host before any Z80 was
-written. The study's gates and recorded decisions governed that work as they
-do a round. So did its defect ledger, the record of each defect and the
-mechanism that found it.
+no candidates and improved an operating system stage by stage. The study
+numbered its stages, and the warm-boot stage was the eighteenth. Each from
+the eleventh to the eighteenth was modelled on the host before any Z80 was
+written (P3: KS11 to KS18). The study's gates and recorded decisions
+governed that work as they do a round. So did its defect ledger, the record
+of each defect and the mechanism that found it.
 
 Two of its stages recovered 231 bytes of ROM (P3: the method review). Those
 bytes paid for a history of command lines and a faster warm boot. Three of
-the third study's gates had a ROM limit raised after a first full build had
-exceeded it. Those three changes were recorded as delegated. They should
-have come to me as new gates, since the method never delegates such a change
+the third study's gates set a ROM limit, the most bytes of ROM a stage's
+build could add. Each limit was raised after a first full build had exceeded
+it. Those changes were recorded as delegated, made by the person driving the
+study under authority I had handed over (MD-5). They should have come to me
+as new gates, since the method never delegates such a change
 (P3: the method review). Part III describes the stage track that now sets
 the order of such work. Part VI reports what the first three studies found,
-those three gates among it.
+including those three gates.
 
 ## The durable part
 

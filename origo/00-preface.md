@@ -54,17 +54,17 @@ regeneration, routine by routine, gave smaller ones.
 
 A study's work is divided into stages. Each is one planned piece of work
 with its own record. The second study ran its first three stages without
-generation (P2: T0 to T2). In the next it generated six candidates (P2: T3).
-The round was meant to keep each generator's first attempt as a control, to
-measure what the rest of the round adds. Those first files were not
-archived, so the control is lost (P2: T3). After the candidates were scored
-again, I decided that three of them land (P2: the fix round).
+generation (P2: T0 to T2). In the next it generated six candidates in a
+round, one pass of generation and judgement (P2: T3). The round was meant to
+keep each generator's first attempt as a control, to measure what the rest
+of the round adds. Those first files were not archived, so the control is
+lost (P2: T3). After the candidates were scored again, I decided that three
+of them land (P2: the fix round).
 
-The third study generated no candidates at all and used the method's checks
-to govern ordinary engineering. A review written after its warm-boot stage
-lists the places where the method was not followed well
-(P3: the method review). I include all of it, because a method that reports
-only its successes gives you no reason to believe them.
+A review written after the third study's warm-boot stage lists the places
+where the method was not followed well (P3: the method review). I include
+all of it, because a method that reports only its successes gives you no
+reason to believe them.
 
 ## Two examples
 
@@ -80,23 +80,21 @@ landings.
 The second is a stage from the third study. When a program ends, TEC-OS
 returns to its command prompt through a warm boot. With the serial console a
 warm boot took 3,866,040 T-states, almost a second at the board's 4 MHz
-clock (P3: KB-6). In one stage the time was measured and a design was
-modelled on the host before any Z80 was written.
-
-The method now sets out a stage track for such work, nine steps from a
-measured need to a review of the result (MD-8). Between them come a brief
-and its review, a model, a gate and one build. The warm-boot stage ran
-before the track was written, and it departed from it in four places. Its
-gate was registered from the draft brief before the model existed. Its ROM
-limit was raised after the first full build and the change was recorded as
-delegated. Its design, its limit and its result took four decisions where
-the track asks for one (P3: KD-69 to KD-72). No review of its brief or of
-its result is recorded.
+clock (P3: KB-6). In that stage the time was measured first. A design was
+then modelled on the host, the computer the emulator and tools run on,
+before any Z80 was written.
 
 As built, a clean warm boot took 81,040 T-states with the serial console
 (P3: KD-72). `SAVE` is the command that writes memory to a disk file. A warm
 boot after it took 327,424 T-states with the serial console (P3: KD-72).
-Part III describes that stage from its measured cost to its landing.
+
+The method now sets out a stage track for such work, nine steps that end in
+a review of the result (MD-8). Each study has a backlog, a list of the
+problems it has measured. The first step is a backlog item with a measured
+cost or a request of mine. Among the nine are a brief and its review, a
+model and one build. The warm-boot stage ran before the track was written
+and departed from it in four places, which chapter 7 sets out. Part III
+describes that stage from its measured cost to its landing.
 
 Part I covers the proposition, contracts and the checks that judge them.
 Part II describes the loop of generation and judgement. Part III shows the

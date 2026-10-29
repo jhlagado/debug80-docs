@@ -22,16 +22,17 @@ and scoreboard are quoted from the round's records.
 
 ## The warm boot
 
-With the serial console a warm boot took 3,866,040 T-states (P3: KB-6). Of
-that, 99.6 percent went in rebuilding the disk's allocation map from the
-whole directory. The stage kept each drive's map across a warm boot when the
-drive was unchanged, and rebuilt it only to the directory's high-water mark
-when it had been written. On the same console a clean warm boot then took
-81,040 T-states and read no disk blocks (P3: KD-72). The stage ran before
-the stage track was written. Chapter 7 uses it to show the track. It quotes
-the model's figures, the gate with the five parts the method requires (M3)
-and the measurement. The chapter also names each step where the stage
-departed from the track.
+With the serial console a warm boot took 3,866,040 T-states (P3: KB-6). The
+BDOS is CP/M's disk operating system, and 99.6 percent of that time was its
+function 13, the disk reset (P3: KB-6). The reset rebuilt drive A's
+allocation map from the whole directory (P3: KS18). The stage kept each
+drive's map across a warm boot when the drive was unchanged, and rebuilt it
+only to the directory's high-water mark when it had been written. On the
+same console a clean warm boot then took 81,040 T-states and read no disk
+blocks (P3: KD-72). The stage ran before the stage track was written.
+Chapter 7 uses it to show the track. It quotes the model's figures, the gate
+with the five parts the method requires (M3) and the measurement. The
+chapter also names each step where the stage departed from the track.
 
 ## The bounded string: experimental notation
 
@@ -52,10 +53,12 @@ false, and that call is outside the specified domain. The line requires no
 check at run time. A runnable example needs the region binding, the entry
 snapshot and a run of the evaluator beside the fragment.
 
-The fragment's evaluator tests all 65,536 byte pairs for this relation. Its
-generation trial could not show that the notation changed an outcome
-(P1: LR-01A). The remaining prose and the visible cases still revealed each
-condition. Chapter 11 states that limit wherever it uses the example.
+The fragment's evaluator was checked on all 65,536 byte pairs for this
+relation, each against truth computed separately (P1: LR-01A). The
+fragment's generation trial could not show that the notation changed an
+outcome (P1: LR-01A). The remaining prose and the visible cases still
+revealed each condition. Chapter 11 states that limit wherever it uses the
+example.
 
 ## Proposed notation
 
