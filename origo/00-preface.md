@@ -80,10 +80,10 @@ landings.
 The second is a stage from the third study. When a program ends, TEC-OS
 returns to its command prompt through a warm boot. A warm boot took
 3,866,040 T-states, almost a second at the board's 4 MHz clock (P3: KB-6).
-The figures here are all with the serial console. That is the console on the
-board's serial port, used from a terminal at the other end. In that stage
-the time was measured first. The host is the computer the emulator and tools
-run on. A design was then modelled on it before any Z80 was written.
+The board's serial port carries the serial console, used from a terminal at
+the other end. The figures here are all with that console. In that stage the
+time was measured first. A design was then modelled on the host, the
+computer the emulator and tools run on, before any Z80 was written.
 
 A clean warm boot is one where nothing has changed a disk's directory or its
 record of used blocks since that directory was last read. As built, a clean
