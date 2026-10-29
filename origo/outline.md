@@ -88,9 +88,9 @@ generators' failures, and the classes of hole where generation does not pay
 
 The nine steps of a stage built once: need, brief, review, model, gate,
 build, measure, record and review (MD-8). The running example is the warm
-boot. With the serial console a clean warm boot took 3,866,040 T-states
-before the stage (P3: KB-6). After the stage it took 81,040 (P3: KD-72). The
-stage ran before the track was written, and the chapter names where it
+boot. With the serial console a warm boot took 3,866,040 T-states before the
+stage (P3: KB-6). After the stage a clean warm boot took 81,040 (P3: KD-72).
+The stage ran before the track was written, and the chapter names where it
 departed from it. Its gate was registered before the model, and a limit
 raised after the build was recorded as delegated. It took four decisions
 where the track asks for one (P3: KD-69 to KD-72). No review of its brief or

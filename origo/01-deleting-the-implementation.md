@@ -154,26 +154,24 @@ fail in any of them.
 
 The method's checks do not depend on generation. The second study applied
 them to assembly tools, and Part VI reports how. The third study generated
-no candidates and improved an operating system stage by stage. The board has
-two banks of expansion memory, each of 16K. An allocator is the code that
-hands out a bank's memory in pages. From the stage that built the allocator
-for the board's second expansion memory bank, every stage was modelled on
-the host before any Z80 was written (P3: the method review). The study's
-gates and recorded decisions governed that work as they do a round. So did
-its defect ledger, the record of each defect and the mechanism that found
-it.
+no candidates and improved an operating system stage by stage. From the
+stage that built the system's memory allocator to the warm-boot stage, every
+stage was modelled on the host before any Z80 was written
+(P3: the method review). The study's gates and recorded decisions governed
+that work as they do a round. So did its defect ledger, the record of each
+defect and the mechanism that found it.
 
 Two of its stages recovered 231 bytes of ROM (P3: the method review). Those
-bytes paid for a history of command lines and a faster warm boot. Three of
-the third study's gates had their ROM limit, the most bytes of ROM a stage's
-build could add, raised after a first full build had exceeded it. Each study
-has a driver, the role that carries out the protocol's steps and judges each
-build. Those changes were recorded as delegated, made by the study's driver
-under authority I had handed over (MD-5). They should have come to me as new
-gates, since the method never delegates such a change
-(P3: the method review). Part III describes the stage track that now sets
-the order of such work. Part VI reports what the first three studies found,
-including those three gates.
+bytes paid for a history of command lines and a faster warm boot. Each study
+has a driver, the role that drafts its briefs, registers its gates, records
+its decisions and judges each build. Three of the third study's gates had
+their ROM limit, the most bytes of ROM a stage's build could add, raised
+after a first full build had exceeded it. Those changes were recorded as
+delegated, made by the driver under authority I had handed over (MD-5). They
+should have come to me as new gates, since the method never delegates such a
+change (P3: the method review). Part III describes the stage track that now
+sets the order of such work. Part VI reports what the first three studies
+found, including those three gates.
 
 ## The durable part
 
