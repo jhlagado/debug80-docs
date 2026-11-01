@@ -53,12 +53,12 @@ system gate with no recorded difference from the incumbent (P1: CDR-3). The
 prober now compares memory unmasked.
 
 Chapter 1 tells what the gap became, one obligatory case and a tighter contract.
-The tighter contract reaches beyond one routine. FP_INT turns an integer's
-magnitude and the sign in SR into a floating-point number. The contracts of
-FP_UNPK, FP_PACK and FP_INT and FP_VAR's layout now say the sign bytes hold bit
-7 alone. FP_UNPK's cases now check the whole byte, and the case that showed the
-stray bits is obligatory. The candidate now fails all 50 of its visible cases
-(P1: CDR-3).
+The tighter contract reaches beyond one routine. The contracts of FP_UNPK,
+FP_PACK and FP_INT and FP_VAR's layout now say the sign bytes hold bit 7 alone.
+FP_INT is among them because it reads SR, turning an integer's magnitude and the
+sign in SR into a floating-point number. FP_UNPK's cases now check the whole
+byte, and an obligatory case holds an input on which the candidate left stray
+bits. The candidate now fails all 50 of its visible cases (P1: CDR-3).
 
 The contract named the sign's bit but did not say the other bits must be clear,
 and the cases did not test them. Every check but the last trusted the cases.
@@ -151,10 +151,10 @@ mutants not shown to be equivalent (MD-3). Each mutant that survives is sorted,
 as triage sorts the prober's differences. It becomes a new case or is recorded
 as equivalent (M8).
 
-The first study's rounds came before the rule, and none of the first study's
-records mentions mutants. The second study's first scored round has the earliest
-scores. Its first mutants exposed three gaps in the cases, and the gaps were
-closed (P2: T3). The cases then killed 98.3 to 100 percent of the non-equivalent
+The first study's rounds came before the rule, and none of its round reports
+mentions mutants. The second study's first scored round has the earliest scores.
+Its first mutants exposed three gaps in the cases, and the gaps were closed
+(P2: T3). The cases then killed 98.3 to 100 percent of the non-equivalent
 mutants for five of its six candidates. The sixth's survivors were not triaged
 (P2: T3).
 
@@ -188,9 +188,10 @@ protocol a stage's gates are registered before its one build (MD-8).
 
 The third study's system gate shows the parts at work. Its figure is the
 operating system's whole test suite passing, with no test skipped (P3: gates).
-One of its inputs shown to fail is a build with one instruction changed in the
-routine that writes to disk. With that build, a test of the system's disk calls
-fails (P3: gates). The stage that showed it calls the build a mutant (P3: KS0).
+One of its inputs shown to fail is a build in which one constant, in the routine
+that writes to disk, is moved by one. With that build, a test of the system's
+disk calls fails (P3: gates). The stage that showed it calls the build a mutant
+(P3: KS0).
 
 The study keeps its hashes in a lock file, a separate file that holds the
 SHA-256 hash of each gate's section. It also keeps the hash of every
@@ -209,6 +210,6 @@ test was removed from the operating system's suite. The gate's figure moved
 to the smaller suite, and it was registered again. Results judged under the
 earlier list stand as they were reported (P3: gates).
 
-The contract, the cases, the system tests and the gates all exist before a
-candidate is scored. Chapter 4 follows a round on one small routine, from its
-bundle to its landing, with these checks at each step.
+In the protocol a round's gates are registered before anything is scored (MD-8).
+Chapter 4 follows a round on one small routine, from its bundle to its landing,
+with these checks at each step.
