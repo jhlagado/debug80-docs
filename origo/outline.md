@@ -59,7 +59,7 @@ The chapter then introduces visible and held-out cases, an adversarial
 second source and the mutation score. A gate is registered when it is
 written and hashed in the study's gate file (MD-8). Gates are registered
 before the result they judge, each with an input shown to fail
-(M3, M8, R18 to R24).
+(M3, M8, R18, R19, R21, R22, R24). *The chapter is in first draft.*
 
 ## Part II: The loop
 
