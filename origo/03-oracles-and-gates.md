@@ -7,9 +7,9 @@ nav_order: 4
 # 3. Oracles and gates
 
 A requirement is one thing, and the evidence that it is met is another. The
-contract states the requirement. The cases, the system's tests and the
-measurements are the evidence. Where the two part, a candidate can satisfy
-the evidence and still break the requirement. The round that chapter 1
+contract states the requirement, as far as its words go. The cases, the system's
+tests and the measurements are the evidence. Where the two part, a candidate can
+satisfy the evidence and still break the requirement. The round that chapter 1
 follows had one such gap, and this chapter starts with it.
 
 ## The sign bytes
@@ -21,12 +21,13 @@ and a sign (P1: FP_UNPK's contract, contracts file at Origo d2eb868). Each
 sign goes into a byte of its own, SA for the left operand and SB for the
 right. A third sign byte, SR, holds the sign of a result.
 
-A stray bit in those bytes matters because of how a result is built. FADD,
-FMUL and FDIV each form SR from SA and SB, the signs of the two operands.
-FP_PACK then ORs the whole of SR into the result's top byte, so every bit
-set in SR is set there too. Only bit 7 of that byte is the sign. The other
-seven bits belong to the exponent. A stray bit in SA or SB can therefore
-reach the result's exponent and change the number (P1: CDR-3).
+A stray bit in those bytes matters because of how a result is built. FADD, FMUL
+and FDIV, the floating-point add, multiply and divide, each form SR from SA and
+SB, the signs of the two operands. FP_PACK then combines the whole of SR with
+the result's top byte, so every bit set in SR is set there too. Only bit 7 of
+that byte is the sign. The other seven bits belong to the exponent. A stray bit
+in SA or SB can therefore reach the result's exponent and change the number
+(P1: CDR-3).
 
 The contract said "sign in bit 7" and nothing about the other bits
 (P1: CDR-3). A case can mask bits of the memory it checks, and the checks
@@ -45,28 +46,29 @@ applications with the method's own conformance programs beside them
 (P1: CDR-3). With this candidate in place, four conformance programs failed.
 The system gate caught what every earlier gate had passed (P1: CDR-3).
 
-The prober should have caught it sooner. It runs a candidate and the
-incumbent side by side, as chapter 1 describes. But it compared memory
-through the cases' masks, so it could not see the sign-byte bits either.
-The candidate reached the system gate with no recorded difference from the
-incumbent (P1: CDR-3). The prober now compares memory unmasked.
+The prober should have caught it too. It runs a candidate and the incumbent side
+by side, as chapter 1 describes. But it compared memory through the cases'
+masks, so it could not see the sign-byte bits either. The candidate reached the
+system gate with no recorded difference from the incumbent (P1: CDR-3). The
+prober now compares memory unmasked.
 
-Chapter 1 tells what the gap became, one obligatory case and a tighter
-contract. With that case added, the candidate fails all 50 of its visible
-cases (P1: CDR-3). The tighter contract reaches beyond one routine. The
-contracts of FP_UNPK, FP_PACK and FP_INT and FP_VAR's layout now say the
-sign bytes hold bit 7 alone. FP_UNPK's cases now check the whole byte
+Chapter 1 tells what the gap became, one obligatory case and a tighter contract.
+The tighter contract reaches beyond one routine. FP_INT turns an integer's
+magnitude and the sign in SR into a floating-point number. The contracts of
+FP_UNPK, FP_PACK and FP_INT and FP_VAR's layout now say the sign bytes hold bit
+7 alone. FP_UNPK's cases now check the whole byte, and the case that showed the
+stray bits is obligatory. The candidate now fails all 50 of its visible cases
 (P1: CDR-3).
 
-The requirement had been in the contract's words from the start. The cases
-did not test it, and every check but the last trusted the cases.
+The contract named the sign's bit but did not say the other bits must be clear,
+and the cases did not test them. Every check but the last trusted the cases.
 
 ## Negative zero
 
-Chapter 2 left one question open. It asked what else F2U's two smoke
-candidates got wrong. Both trapped on negative zero, the zero whose sign bit
-is set. The language converts negative zero to 0, and the incumbent returns
-0 (P1: CDR-1).
+Chapter 2 left one question open. It asked what else F2U's two smoke candidates
+got wrong. Both trapped on negative zero, the zero whose sign bit is set.
+Converted to an unsigned integer, negative zero becomes 0 in the language, and
+the incumbent returns 0 (P1: CDR-1).
 
 No F2U case held negative zero. So both candidates passed all 208 of F2U's
 cases (P1: CDR-1). A system test is one of the programs the system gate
@@ -74,12 +76,12 @@ runs. Both also passed all 271 system tests (P1: CDR-1). Chapter 2 tells
 how only the stack figure saw their other fault, the trap they called where
 the incumbent jumped.
 
-A hole is only as specified as the checks that judge it. Where no case and
-no test covers an input, every check can pass a wrong body with full marks
-(R18). The next report made negative zero an obligatory input of F2U. Both
-candidates then failed 45 of 74 visible cases (P1: CDR-2). A conformance
-program of the method's own now converts negative zero, so the system gate
-sees it too (R21).
+A hole is only as specified as the checks that judge it. Where no case and no
+test covers an input, every check can pass a wrong body with full marks (R18).
+The next report made negative zero an obligatory input of F2U. Both candidates
+then failed 45 of 74 visible cases, on negative zero and on every case that
+traps (P1: CDR-2). A conformance program of the method's own now converts
+negative zero, so the system gate sees it too (R21).
 
 ## Visible, held-out and adversarial cases
 
@@ -94,11 +96,10 @@ saw also passes unseen ones. Cases of the same kind test it within that
 kind, not against an adversary (P1: CDR-1). A body tuned to the visible
 cases can exploit anything the held-out cases share with them.
 
-So the method asks for more before any figure is believed. A second source
-of cases, built from the contract's types and their boundaries, is required
-before any pass rate is quoted (R19). The adversarial cases are that second
-source. Chapter 2 describes them, chosen at the edges of each type, such as
-zeros and the smallest normal. They are all held out, and their pass rates
+So the method asks for a second source of cases, built from the contract's types
+and their boundaries, before any pass rate is quoted (R19). The adversarial
+cases are that second source. Chapter 2 describes those at the edges of each
+type. The rest are random values. They are all held out, and their pass rates
 are reported apart (P1: CDR-2).
 
 A candidate sees only its visible cases. The held-out cases, the
@@ -123,39 +124,39 @@ becomes a system test that the system gate runs. The candidate that exposed
 the gap must fail that test (R21).
 
 The rule does not make a routine's own cases redundant. A system gate checks
-only what its programs ask for. A later round had a large routine, 997
-bytes that run a whole phase of the language's linker (P1: CDR-5). Each of
-its five candidates wrote a wrong map, one of the files the linker writes.
-The system gate passed all five, because no test in the system asks for a
-map. The routine's own cases were stricter each time (R22).
-So a routine keeps its own cases wherever the system's programs do not
+only what its programs ask for. A later round had a large routine of 997 bytes
+in the linker, the program that joins separately compiled pieces into one
+runnable file (P1: CDR-5). Each of its five candidates wrote a wrong map, one of
+the files the linker writes. The system gate passed all five, because no test in
+the system asks for a map. The routine's own cases were stricter each time
+(R22). So a routine keeps its own cases wherever the system's programs do not
 reach.
 
 The two measures are therefore counted apart. Correctness at the hole and
-integration in the system each find what the other misses. When the two
-agree on the same candidates, the round's gaps are closed (R24). That
+integration in the system each find what the other misses. Their agreement on
+the same candidates is the signal that the round's gaps are closed (R24). That
 agreement shows only if they are counted apart.
 
 ## The mutation score
 
-Cases can be measured as well as candidates. A mutant is a copy of a body
-with one small change. One instruction or operator is changed, one branch
-is inverted or one constant is moved by one (M8). A case kills a mutant
-when the mutant fails it. The mutation score is the share of the mutants
-that the cases kill (M8).
+Cases can be measured as well as candidates. A mutant is a copy of a body with
+one small change. One instruction or operator is changed, one condition on a
+jump, call or return is reversed or one constant is moved by one (M8). A case
+kills a mutant when the mutant fails it. The mutation score is the share of the
+mutants that the cases kill (M8).
 
-Some mutants are equivalent, behaving exactly as the body does, so no case
-can kill them. A hole is not bundled until its cases kill at least 95
-percent of the mutants not shown to be equivalent (MD-3). Each mutant that
-survives is triaged. It becomes a new case or is recorded as equivalent
-(M8).
+Some mutants are equivalent, behaving exactly as the body does, so no case can
+kill them. A hole is not bundled until its cases kill at least 95 percent of the
+mutants not shown to be equivalent (MD-3). Each mutant that survives is sorted,
+as triage sorts the prober's differences. It becomes a new case or is recorded
+as equivalent (M8).
 
-The first study's round came before the rule. None of the first study's
-records mentions mutants. The second study's first scored round has the
-earliest scores. Its first mutants exposed three gaps in the cases, and the
-gaps were closed (P2: T3). The cases then killed 98.3 to 100 percent of the
-non-equivalent mutants for five of its six candidates. The sixth's
-survivors were not triaged (P2: T3).
+The first study's rounds came before the rule, and none of the first study's
+records mentions mutants. The second study's first scored round has the earliest
+scores. Its first mutants exposed three gaps in the cases, and the gaps were
+closed (P2: T3). The cases then killed 98.3 to 100 percent of the non-equivalent
+mutants for five of its six candidates. The sixth's survivors were not triaged
+(P2: T3).
 
 The same record corrects itself. It had said the 95 percent floor applied
 only from the next round. It withdraws that sentence (P2: T3). It also
@@ -186,22 +187,21 @@ shows that the gate judged its result in the form it was registered. In the
 protocol a stage's gates are registered before its one build (MD-8).
 
 The third study's system gate shows the parts at work. Its figure is the
-operating system's whole test suite passing, with no test skipped
-(P3: gates). One of its inputs shown to fail is a build with one
-instruction changed in the routine that writes a disk record. That build is
-a mutant of one instruction, and with it a test of the system's disk calls
-fails (P3: gates).
+operating system's whole test suite passing, with no test skipped (P3: gates).
+One of its inputs shown to fail is a build with one instruction changed in the
+routine that writes to disk. With that build, a test of the system's disk calls
+fails (P3: gates). The stage that showed it calls the build a mutant (P3: KS0).
 
 The study keeps its hashes in a lock file, a separate file that holds the
 SHA-256 hash of each gate's section. It also keeps the hash of every
 earlier registration, and each stage report quotes the hashes of the gates
 it judged (P3: gates).
 
-A gate can still change, but not quietly. A gate's figure changed after a
-result it judges needs my decision, whatever delegation is in force
-(MD-8). Chapter 1 tells of three gates whose limits were raised after a
-build and recorded as delegated. Those changes should have come to me. A
-gate whose reference or reading changes is a new gate, and it also needs my
+A gate can still change, but not quietly. A gate's figure changed after a result
+it judges needs my decision, whatever delegation is in force (MD-8). Chapter 1
+tells of three gates whose limits were raised after a build and recorded as
+delegated. Those changes should have come to me. A gate whose reference or
+reading changes after a result it judges is a new gate, and it also needs my
 decision. The old gate's result is reported beside the new one (M3).
 
 The third study's system gate has changed in this way. By my decision a
@@ -210,5 +210,5 @@ to the smaller suite, and it was registered again. Results judged under the
 earlier list stand as they were reported (P3: gates).
 
 The contract, the cases, the system tests and the gates all exist before a
-candidate is written. Chapter 4 follows a round on one small routine, from
-its bundle to its landing, with these checks at each step.
+candidate is scored. Chapter 4 follows a round on one small routine, from its
+bundle to its landing, with these checks at each step.
