@@ -64,7 +64,7 @@ what the line states for FMUL and what a candidate is checked against.
 | Size, `size<=` | At most 349 bytes | The size of the assembled body |
 | Stack, `stack=` | Stack use no larger than the figures its bundle gives | The stack measured over its cases |
 | Cycles, `cycles<=` | At most 4,655 T-states for any recorded case that returns | Its slowest case that returns, counting the routines it calls |
-| The trap, `traps=` | TRAP_FOV, the trap for an overflow, reporting the call into FMUL as its site | The site reported by each case that traps |
+| The trap, `traps=` | TRAP_FOV, the trap for an overflow, reporting the call into FMUL as its site | The site reported each time a case traps |
 | Obligatory cases, `@cases include=` | Two products of a zero with a sign | Nothing in the candidate. The hole's own cases must hold them |
 | Hazards and don't-care, `@hazard` and `@dontcare` | Overflow traps through TRAP_FOV. Some values and some operands are left open | Nothing. The bundle carries the hazard, and the don't-care lines release the differences they name |
 
@@ -94,22 +94,22 @@ limits of a callee, a routine F2U calls, but not what the callee computed
 (P1: CDR-2).
 
 FMUL's rounding came from a disagreement. Some of the adversarial cases are
-chosen at the edges of each type, such as powers of two and every class of
-float. Six of them, for FMUL, had a product that lay below the smallest normal
+chosen at the edges of each type, such as zeros, powers of two and the smallest
+normal. Six of them, for FMUL, had a product that lay below the smallest normal
 by half the gap between two neighbouring subnormal values (P1: CDR-2). The
-incumbent flushed each to zero. The language's own test model, the code its
-tests use to work out expected results, rounded each up to the smallest normal.
+incumbent flushed each to zero. The language's tests work out expected results
+with code of their own, and that code rounded each up to the smallest normal.
 The incumbent judged a result too small before rounding to subnormal precision,
-and the test model judged after.
+and that code judged after.
 
 The language's two compilers, the reference compiler and the native one, also
 gave the smallest normal when they worked out such a product while compiling.
-Three implementations agreed against the incumbent, so the contract followed
-them (P1: CDR-2, O11). The incumbent became the defect. The rule is that the
-incumbent's answers are evidence, not the authority (R10). The fix was a 26-byte
-change to FP_PACK, the internal routine through which FMUL rounds and packs its
-result. It differs from the old body on exactly the six edge cases, in FP_PACK
-and in FMUL (P1: CDR-2).
+That code and the two compilers agreed against the incumbent, so the contract
+followed them (P1: CDR-2, O11). The incumbent became the defect. The rule is
+that the incumbent's answers are evidence, not the authority (R10). The fix was
+a 26-byte change to FP_PACK, the internal routine through which FMUL rounds and
+packs its result. It differs from the old body on exactly the six edge cases, in
+FP_PACK and in FMUL (P1: CDR-2).
 
 ## Registers in and out
 
@@ -127,13 +127,13 @@ Every register outside the ones it may change or return must hold its value on
 return, and that is checked on every case.
 
 The first contracts took these lists from each routine's header comments. Those
-are its In, Out, Clobbers and Memory lines (P1: CDR-1). Run on the pinned
-runtime, the checks disagreed with them in three places. One routine, FCMP,
-which compares two floating-point values, also changes the shadow D register.
-Two others, I2F and U2F, which convert an integer to floating point, write
-FP_VAR, which their comments do not name. None of the three is FMUL. The
-contracts now state what the code does as the checks measure it. The rule behind
-this is the subject of the chapter's last section.
+are its In, Out, Clobbers and Memory lines (P1: CDR-1). Run on the runtime
+before any candidate had landed in it, the checks disagreed with them in three
+places. One routine, FCMP, which compares two floating-point values, also
+changes the shadow D register. Two others, I2F and U2F, which convert an integer
+to floating point, write FP_VAR, which their comments do not name. None of the
+three is FMUL. The contracts now state what the code does as the checks measure
+it. The rule behind this is the subject of the chapter's last section.
 
 ## Memory written
 
@@ -223,8 +223,8 @@ contract states the bound on input size that its budget implies (R7).
 The line `traps=TRAP_FOV@caller-site` names the trap that may end the program
 and the site it must report. TRAP_FOV reports a floating-point overflow. The
 caller site is the return address of the call into FMUL. It points back into the
-program that called the routine. The checks record the site reported by each
-case that traps and compare it with the line.
+program that called the routine. The checks record the site reported each time a
+case traps and compare it with the line.
 
 The notation came from the same smoke run. Its report proposed it to replace a
 free-text hazard with something the checks can test from the reported site
