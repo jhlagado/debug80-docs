@@ -7,7 +7,7 @@ nav_exclude: true
 
 # Delete the Implementation
 
-**Book in development.** The preface and chapter 1 are first drafts. The
+**Book in development.** The preface and chapters 1 and 2 are first drafts. The
 other chapters are plans, written up as their examples and evidence are
 checked.
 
@@ -34,6 +34,7 @@ Z80 knowledge is assumed.
 
 - [Preface](00-preface.md)
 - [1. Deleting the implementation](01-deleting-the-implementation.md)
+- [2. Contracts](02-contracts.md)
 - [Outline](outline.md): every chapter, its job and its example
 - [Examples, notation and figures](examples.md): the recurring examples and
   the evidence each one needs before it is written up

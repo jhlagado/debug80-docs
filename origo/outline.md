@@ -36,12 +36,13 @@ in first draft.*
 The chapter opens with the contract of FMUL, the floating-point multiply
 that chapter 1 sketches, from the round the book follows (P1: CDR-3). The
 contract is quoted from the records at a named commit. Its cycle limit of
-4,655 T-states was set after the round, when a later round returned FMUL to
+4,655 T-states was set after the round, when a later landing returned FMUL to
 an earlier body (P1: CDR-6). Its size limit of 349 bytes dates from before
 the round (P1: CDR-1). A table takes it line by line: what it computes,
 registers in and out, what it changes and keeps, memory read and written,
 size and cycle budgets and its trap. Declared incompleteness and don't-care
-follow, with the reason comments are not contracts (R1 to R11).
+follow, with the reason comments are not contracts (R1 to R11). *The
+chapter is in first draft.*
 
 ### 3. Oracles and gates
 

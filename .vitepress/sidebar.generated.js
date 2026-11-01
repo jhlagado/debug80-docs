@@ -2376,6 +2376,10 @@ export const sidebars = {
       "link": "/origo/01-deleting-the-implementation.html"
     },
     {
+      "text": "2. Contracts",
+      "link": "/origo/02-contracts.html"
+    },
+    {
       "text": "Outline",
       "link": "/origo/outline.html"
     },
