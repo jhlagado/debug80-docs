@@ -53,10 +53,10 @@ system gate with no recorded difference from the incumbent (P1: CDR-3). The
 prober now compares memory unmasked.
 
 Chapter 1 tells what the gap became, one obligatory case and a tighter contract.
-The tighter contract reaches beyond one routine. The contracts of FP_UNPK,
-FP_PACK and FP_INT and FP_VAR's layout now say the sign bytes hold bit 7 alone.
-FP_INT is among them because it reads SR, turning an integer's magnitude and the
-sign in SR into a floating-point number. FP_UNPK's cases now check the whole
+The tighter contract reaches beyond one routine. FP_VAR's layout and the
+contracts of FP_UNPK and FP_PACK now say the sign bytes hold bit 7 alone. So
+does the contract of FP_INT, which reads SR, turning an integer's magnitude and
+the sign in SR into a floating-point number. FP_UNPK's cases now check the whole
 byte, and an obligatory case holds an input on which the candidate left stray
 bits. The candidate now fails all 50 of its visible cases (P1: CDR-3).
 
@@ -140,10 +140,11 @@ agreement shows only if they are counted apart.
 ## The mutation score
 
 Cases can be measured as well as candidates. A mutant is a copy of a body with
-one small change. One instruction or operator is changed, one condition on a
-jump, call or return is reversed or one constant is moved by one (M8). A case
-kills a mutant when the mutant fails it. The mutation score is the share of the
-mutants that the cases kill (M8).
+one small change. One instruction or operator is changed or one constant is
+moved by one (M8). A branch is a jump, call or return taken only when a flag is
+set or clear. One branch may instead be inverted, so that it is taken when the
+flag is the other way (M8). A case kills a mutant when the mutant fails it. The
+mutation score is the share of the mutants that the cases kill (M8).
 
 Some mutants are equivalent, behaving exactly as the body does, so no case can
 kill them. A hole is not bundled until its cases kill at least 95 percent of the
