@@ -42,10 +42,13 @@ carries out of the top bit.
 
 The stack is memory the Z80 uses for return addresses and saved registers. A
 call pushes a return address, the address of the instruction after the call. A
-return pops it, and a jump pushes nothing. A trap is a routine that reports an
-error and ends the program. The runtime's floating-point routines work on
-numbers in IEEE single, the standard 32-bit format for floating-point numbers.
-IEEE single has two zeros, and the sign bit tells them apart.
+return pops it, and a jump pushes nothing.
+
+Two things in the lines belong to the runtime, not the Z80. A trap is a routine
+of the runtime that reports an error and ends the program. The runtime's
+floating-point routines work on numbers in IEEE single, the standard 32-bit
+format for floating-point numbers. IEEE single has two zeros, and a single bit,
+the sign, tells them apart.
 
 ## The contract line by line
 
@@ -60,7 +63,7 @@ what the line states for FMUL and what a candidate is checked against.
 | Memory read and written, `writes=` | It may write FP_VAR, working memory it shares with other routines | No write outside FP_VAR and its own stack |
 | Size, `size<=` | At most 349 bytes | The size of the assembled body |
 | Stack, `stack=` | Stack use no larger than the figures its bundle gives | The stack measured over its cases |
-| Cycles, `cycles<=` | At most 4,655 T-states for any one of its recorded cases | Its slowest case that returns, counting the routines it calls |
+| Cycles, `cycles<=` | At most 4,655 T-states for any recorded case that returns | Its slowest case that returns, counting the routines it calls |
 | The trap, `traps=` | TRAP_FOV, the trap for an overflow, reporting the call into FMUL as its site | The site each trap case reports |
 | Obligatory cases, `@cases include=` | Two products of a zero with a sign | Nothing in the candidate. The hole's own cases must hold them |
 | Hazards and don't-care, `@hazard` and `@dontcare` | Overflow traps through TRAP_FOV. Some values and some operands are left open | Nothing. The bundle carries the hazard, and the don't-care lines release the differences they name |
@@ -84,12 +87,13 @@ values the format can hold, and the even one when they are equally close.
 For a tiny result FMUL rounds at subnormal precision first. It then flushes
 any result below the smallest normal to zero. An overflow traps.
 
-The line itself came from a gap the first report found. F2U's bundle gave the
-registers and limits of a callee, a routine F2U calls, but not what the callee
-computed (P1: CDR-1). The second report added a `@does` line to every contracted
-routine (P1: CDR-2).
+The line itself came from a gap the first report found. The bundle of F2U, which
+converts a floating-point value to an unsigned integer, gave the registers and
+limits of a callee, a routine F2U calls, but not what the callee computed
+(P1: CDR-1). The second report added a `@does` line to every contracted routine
+(P1: CDR-2).
 
-FMUL's rounding came from a disagreement. The adversarial source generates cases
+FMUL's rounding came from a disagreement. The adversarial source produces cases
 at the edges of each type, such as powers of two and every class of float. It
 found six FMUL cases where a product lay below the smallest normal by half the
 gap between two neighbouring subnormal values (P1: CDR-2). The incumbent flushed
@@ -124,8 +128,9 @@ value on return, and the oracle checks that on every case.
 
 The first contracts took these lists from each routine's header comments. Those
 are its In, Out, Clobbers and Memory lines (P1: CDR-1). The oracle disagreed
-with them in three places. One routine, FCMP, also changes the shadow D
-register. Two others, I2F and U2F, write FP_VAR, which their comments do not
+with them in three places. One routine, FCMP, which compares two floating-point
+values, also changes the shadow D register. Two others, I2F and U2F, which
+convert an integer to floating point, write FP_VAR, which their comments do not
 name. None of the three is FMUL. The contracts now state what the code does as
 the oracle measures it. The rule behind this is the subject of the chapter's
 last section.
@@ -154,23 +159,22 @@ The line `size<=349` limits FMUL's body to 349 bytes. The pinned body is the
 incumbent as it stood before any candidate replaced it. The first contracts set
 every size limit at 125 percent of the pinned body's size (P1: CDR-1). FMUL's
 was 279 bytes, which gave its limit of 349. The limit dates from those first
-contracts, before the round. The landing tool is the tool that puts a landed
-candidate into the runtime. It resets cycle limits only, so the size limit has
-not been reset since (P1: CDR-6). Landings are numbered in order, and FMUL's
+contracts, before the round. The landing tool is the tool that puts a candidate
+into the runtime when it lands. It resets cycle limits only, so the size limit
+has not been reset since (P1: CDR-6). Landings are numbered in order, and FMUL's
 body has been 118 bytes since landing L9, about a third of its limit (P1: L9).
 
 ## The stack figure
 
 A routine's stack figures are the bytes of stack it was measured to use, and its
-bundle gives them. The line `stack=published` says that FMUL's must not grow
-beyond the figures its bundle gives.
+bundle gives them. The line `stack=published` says that FMUL's stack use must
+not grow beyond them.
 
-The line's history comes from another routine, F2U, which converts a
-floating-point value to an unsigned integer. In the smoke run, two candidates
-for F2U called a trap where the incumbent jumped to it (P1: CDR-1). The call
-pushed a return address that the jump did not. The trap then reported a site
-inside F2U instead of the program's call. The ending stack grew from 36 bytes to
-38.
+The line's history comes from another routine, F2U. In the smoke run, two
+candidates for F2U called a trap where the incumbent jumped to it (P1: CDR-1).
+The call pushed a return address that the jump did not. The trap then reported a
+site inside F2U instead of the program's call. The ending stack grew from 36
+bytes to 38.
 
 The oracle then checked only that a trap case ended the program. Only the
 stack figure caught the change. Those two candidates were smoke tests written
@@ -189,8 +193,8 @@ included.
 The first contracts set each cycle limit at 125 percent of the pinned body's
 worst case (P1: CDR-1). Later the limits began to follow landings. After every
 landing, the landing tool resets each landed hole's cycle limit (P1: CDR-6). The
-new limit is 125 percent of the new incumbent's worst case over all three
-sources of its cases.
+new limit is 125 percent of the new incumbent's worst case over all three sets
+of its cases.
 
 FMUL's limit of 4,655 T-states comes from such a reset after the round. Landing
 L7 gave FMUL a new body. That body made an application written in floating point
@@ -230,11 +234,11 @@ else those two candidates got wrong belongs to chapter 3.
 
 A hole's case table is its set of recorded inputs with their expected results.
 The line `@cases include=` lists inputs the table must contain. The contract
-checker, the first check a candidate meets, fails a hole whose cases lack one.
-FMUL's are two products of a signed zero, -0.0 by 1.0 and 0.0 by -1.0. No record
-gives the reason for FMUL's two. The rule behind the line is that a contract
-names its obligatory inputs (R3). An edge case is then closed by the contract,
-not by the luck of a generator.
+checker, which runs before any case, fails a hole whose cases lack one. FMUL's
+are two products of a signed zero, -0.0 by 1.0 and 0.0 by -1.0. No record gives
+the reason for FMUL's two. The rule behind the line is that a contract names its
+obligatory inputs (R3). An edge case is then closed by the contract, not by the
+luck of what the cases happen to hold.
 
 ## The hazard and the don't-care lines
 
@@ -243,23 +247,24 @@ No record gives its reason. A regenerated routine does not inherit the record of
 what went wrong with the old one. So each hole keeps a list of hazards, filled
 from failed candidates (R11). The syntax card is a page given with every bundle,
 stating which Z80 instruction forms exist. Once it stated the forms, seven
-hazards about instruction forms left the contracts of FADD, FMUL, FSUB, FDIV and
-FCMP (P1: CDR-6). Every hazard left concerns a hole's own interface. Lessons
-about the instruction set concern no one hole, so they belong in the syntax card
-(R42).
+hazards about instruction forms left the contracts of five floating-point
+routines, FMUL among them (P1: CDR-6). Every remaining hazard concerns a hole's
+own interface. Lessons about the instruction set concern no one hole, so they
+belong in the syntax card (R42).
 
 Two `@dontcare` lines leave things open. The first leaves open the values FMUL
 leaves in FP_VAR, and no record gives its reason. The second sets aside two
 kinds of operand. One has exponent 255, the pattern of infinity and NaN. The
-other is subnormal, and the language never produces either. FADD's contract has
-the same line. A candidate for FADD differed from the incumbent on ten inputs
-with a NaN operand, and every difference fell under FADD's line (P1: CDR-3).
+other is subnormal, and the language never produces either. FADD, the
+floating-point add, has the same line in its contract. A candidate for FADD
+differed from the incumbent on ten inputs with a NaN operand, and every
+difference fell under FADD's line (P1: CDR-3).
 
 The subnormal part is a decision. The adversarial source found the helpers
 treating subnormal operands inconsistently. The decision that the language's
 floating-point values are never subnormal put those operands outside every
 floating-point helper's contract (P1: CDR-2, O10). A contract names the inputs
-it does not cover, and the case generators produce nothing there (R2).
+it does not cover, and none of its cases lies there (R2).
 
 ## Declared incompleteness and don't-care
 
