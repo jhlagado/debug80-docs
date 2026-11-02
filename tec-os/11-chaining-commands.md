@@ -332,4 +332,4 @@ Other ways a command can end leave the rest of the line to run. A program that
 prints its own error message and returns has succeeded unless it set the code.
 Esc or `Q` at `[more]` ends a `TYPE` or `DIR` listing and lets the line's next
 piece run, as it does after a listing that ran to its end. The key test clears
-one bit of the key, so `#` at `[more]` acts as `^C` and `;` acts as Esc.
+one bit of the key, so `#` at `[more]` reads as `^C` and `;` reads as Esc.
