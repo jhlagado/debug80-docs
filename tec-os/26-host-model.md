@@ -226,10 +226,10 @@ whose SHA-256 differs fails its test. A missing one skips it, or fails it with
 `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`,
 `package.json:18`).
 
-Every test is evidence from the model. The model may differ from the board as
-its documents describe it, as in a write under the boot overlay or the
-decoding of the latch's upper bits. A behaviour of that kind gives a passing
-test and may give a different board. Chapter 24 describes the diagnostics ROM,
+Every test is evidence from the model. In some behaviours the model differs
+from the board as its documents describe it, such as a write under the boot
+overlay or the decoding of the latch's upper bits. Such a behaviour gives a
+passing test and may give a different board. Chapter 24 describes the diagnostics ROM,
 which tests those points on a board.
 
 ## The web page
@@ -293,8 +293,8 @@ prepares the card with `prepareCard` from `host/card.mjs`
 (`web/src/main.mjs:66-83`). `prepareCard` checks that drive A has the
 display's driver file, in the format this ROM loads. If it does, the first
 line of `STARTUP.CMD` becomes that file's name, followed by `GLCD.DRV` on a
-board with the PICO9918. The file's other lines stay if they name no display
-driver (`host/card.mjs:21-54`). A card that fails the check is left as it is,
+board with the PICO9918. `STARTUP.CMD`'s other lines stay if they name no
+display driver (`host/card.mjs:21-54`). A card that fails the check is left as it is,
 and the reason goes to the serial terminal with the words `[power on]`. The
 reason is no drive A, no such driver or a driver of another format.
 
