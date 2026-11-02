@@ -67,9 +67,9 @@ the table. The `RET` sends such a call straight back with nothing done
 are the first of the block, the CCP's keyword `TYPE` and its zero
 (`src/data.asm:11-12`).
 
-The code starts at `COLD` and runs through every routine of TEC-OS. It ends at
-the label `CODEEND`, which `src/end.asm:2` defines after the last file. The
-free space is the rest of the ROM, in one gap, and the build fills it with
+The code starts at `COLD` and runs through every routine of TEC-OS to the label
+`CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
+the rest of the ROM, in one gap, and the build fills it with
 `FFh` (`tools/build.mjs:256-259`).
 
 ## The source files and their order
@@ -101,7 +101,7 @@ The list goes on through `bios.asm`, `console.asm`, `term.asm`, `video.asm`,
 The first four files emit no bytes. `gen/config.asm` and `gen/format.asm` are
 equates. So is `layout.asm`, which names the ports, the system latch's values,
 TEC-OS's bytes in page zero and the fixed addresses in RAM
-(`src/layout.asm:8-95`). `ram.asm` names the resident workspace. It sets the
+(`src/layout.asm:8-95`). `ram.asm` names the resident workspace: it sets the
 origin to `WSBASE` and reserves each variable with `DS`, which defines a label
 and moves the address on without emitting anything (`src/ram.asm:6`,
 `src/ram.asm:9-186`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
@@ -112,14 +112,15 @@ describes that memory. Bytes start with `reset.asm` and its `ORG $C000`
 The table follows the reset jump because `abi.asm` follows `reset.asm`. The
 data follows the table because the four data files come next, and the code
 follows the data because every file after `data3.asm` is code. So a code
-file's routines are in the code block. Its strings and tables are in the data
-block, under a heading with the file's name.
+file's routines are in the code block, and its strings and tables are in the
+data block, under a heading with the file's name.
 
 ## The generated files
 
-Before it assembles, the build writes three files into `src/gen/`. Each is
-headed with a line saying it is generated and not to be edited
-(`tools/build.mjs:63-139`).
+The source needs settings that depend on the build, and a container layout it
+shares with the tools on the PC. So before it assembles, the build writes three
+files into `src/gen/`, each headed with a line saying it is generated and not
+to be edited (`tools/build.mjs:63-139`).
 
 `gen/config.asm` holds the settings that depend on the build. `WSBASE` is the
 first byte of the resident workspace, which the build places as the next
@@ -129,7 +130,7 @@ the banner and the LCD's top row print from (`src/data.asm:17`,
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
-`tools/build.mjs:40-61`). At 98c6416 they are 49, 105, 50, 74 and 77. The
+`tools/build.mjs:40-61`). At 98c6416 they are 49, 105, 50, 74 and 77, and the
 build stops with an error if a count would not fit in a byte
 (`tools/build.mjs:48-50`). Chapter 15 explains the loops and the arithmetic
 behind the counts.
@@ -150,8 +151,8 @@ payload in blocks and the address of its disk parameter block
 (`tools/build.mjs:117-137`).
 
 `tools/lib/format.mjs` reads the same `format.json`, and `tecvol` and the other
-tools on the PC use that module. The ROM and the tools therefore take the
-container's layout from one file. `geometryInfo` in the module checks each
+tools on the PC use that module, so the ROM and the tools take the container's
+layout from one file. `geometryInfo` in the module checks each
 geometry before either uses it. A geometry must have 64 records a track, no
 reserved tracks and no check vector. Its allocation vector must be at most 256
 bytes. Its `EXM` and directory blocks must match the block size and the number
@@ -161,7 +162,7 @@ fields, and Chapter 18 the container.
 ## ATOM and the two assemblies
 
 The assembler is ATOM, the npm package `atom-z80` at version 0.3.7.
-`npm run build` runs `tools/build.mjs`, which calls ATOM as a library. It calls
+`npm run build` runs `tools/build.mjs`, which calls ATOM as a library: first
 `assembleAtomProject` with `src/` as the root and `rom.asm` as the entry, then
 `writeAtomD8` for the symbol map (`tools/build.mjs:208-214`).
 
@@ -176,8 +177,8 @@ takes `8000h` from it (`tools/build.mjs:244-248`). At 98c6416 that part is
 (`tools/build.mjs:249-251`).
 
 The second assembly's output is the ROM. `materializeAtomGeneration` turns it
-into bytes from `C000h`, filling every gap with `FFh`. The build copies them
-into a 16,384-byte array that is `FFh` everywhere else
+into bytes from `C000h`, filling every gap with `FFh`, and the build copies
+them into a 16,384-byte array that is `FFh` everywhere else
 (`tools/build.mjs:256-259`).
 
 A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
@@ -244,8 +245,8 @@ The PICO9918's width is set by the driver loaded at startup (Chapter 5), so
 every board takes the same image. The build's four profile names, `debug80`,
 `debug80t40`, `debug80g32` and `board`, all name that image
 (`tools/build.mjs:28-35`). The build assembles the first profile and copies its
-image and map to the other three. Only the name and the description change in
-each census (`tools/build.mjs:335-349`). `npm run build` prints one line for
+image and map to the other three, and only the name and the description change
+in each census (`tools/build.mjs:335-349`). `npm run build` prints one line for
 each:
 
 ```text
