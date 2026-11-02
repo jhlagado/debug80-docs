@@ -200,8 +200,8 @@ were, as the board's reset button does (`host/machine.mjs:522-582`).
 with Node.js's own test runner (`package.json:17`). There are 34 such files,
 from `arith.test.mjs` to `xmove.test.mjs`, each on one part of TEC-OS. Most
 build their machines with `boot` in `test/lib/fixtures.mjs`. It reads the ROM
-of a profile from `build/` and, when the board has a display, puts a display
-driver and a startup file on the card. It then runs to the first prompt with
+of a profile from `build/` and, when the board has a matrix keyboard, puts a
+display driver and a startup file on the card. It then runs to the first prompt with
 the clock at the tests' starting time (`test/lib/fixtures.mjs:21-26`,
 `test/lib/fixtures.mjs:136-144`, `test/lib/fixtures.mjs:147-154`).
 
