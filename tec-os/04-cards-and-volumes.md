@@ -336,7 +336,9 @@ half of the board's second RAM chip that is TEC-OS's own. Every drive's
 reads go through this block cache: a block TEC-OS read before and still
 holds is copied from memory, and only a block it doesn't hold is read from
 the card. A block written to the card is also brought up to date in the
-cache, so the cache never holds a stale copy.
+cache, so the cache never holds a stale copy. On the model, a program took
+1.66 seconds to read a 12 KiB file the first time and 0.33 seconds, a fifth
+of that, the second; Chapter 19 gives the method.
 
 On every volume but one, a write reaches the card before TEC-OS reports it
 done: when a program writes a record, TEC-OS writes the record's whole block
@@ -357,9 +359,12 @@ them to the card later:
 Writing behind saves card writes when a program writes a file a record at a
 time: the four records of a block reach the card in one write of the block,
 and a block written many times between two flushes reaches the card once.
-The order of the writes keeps the card's directory true to its data: TEC-OS
-writes a directory block only after every changed data block the cache
-holds, so the directory never names a block whose data isn't on the card.
+On the model, `SAVE 64`, which writes 16 KiB, took 7.71 seconds on a G8M
+volume written through and 2.48 seconds, about a third of that, on one
+written behind. The order of the writes keeps the card's directory true to
+its data: TEC-OS writes a directory block only after every changed data
+block the cache holds, so the directory never names a block whose data isn't
+on the card.
 
 When a changed data block can't be written, it stays in the cache, and each
 warm boot tries it again and prints `Write lost` while the write still
