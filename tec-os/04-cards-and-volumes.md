@@ -111,14 +111,13 @@ node tools/tecvol.mjs create my.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb
 `create` fails if the image exists already. A card must have a volume on drive
 A, and no two volumes on one drive.
 
-`tecvol put` fills the empty volumes, copying a file from the PC onto a volume
-named by its drive letter or its label, and `tecvol dir` lists a volume. A
-PC's file name becomes the CP/M name in capitals, and a fourth argument gives
-another name. `--text` turns each line feed into a carriage return and line
-feed and ends the file with `^Z`, CP/M's end of a text file. That is the form
-in which CP/M programs and `TYPE` read text. These commands put two programs
-on `SYSTEM`, one on `GAMES` and a text file, `hello.txt`, holding the line
-`Hello from the PC.`, on `SPARE`:
+`tecvol put` then copies a file from the PC onto a volume, named by its drive
+letter or its label, and `tecvol dir` lists a volume. A PC's file name becomes
+the CP/M name in capitals, and a fourth argument gives another name. `--text`
+turns each line feed into a carriage return and line feed and ends the file with
+`^Z`, CP/M's end of a text file. That is the form in which CP/M programs and
+`TYPE` read text. These commands put two programs on `SYSTEM`, one on `GAMES`
+and a text file, `hello.txt`, holding the line `Hello from the PC.`, on `SPARE`:
 
 ```sh
 node tools/tecvol.mjs put my.img A dist/files/VOLS.COM
@@ -164,11 +163,11 @@ container: format 1.1, 38912 blocks (19922944 bytes), 4 volume(s), 4 drive(s) wa
   -: SPARE       id 4 G1M start 36864 rw 1 file(s), 1038336 bytes free
 ```
 
-`GAMES` and `SPARE` have `-` for their drive, because TEC-OS puts them on no
-drive at cold boot. `tecvol info` and `tecvol verify` both check each volume's
-directory and print any problem in it under the volume's line. `verify` also
-exits with status 1 when there is one, as the last section of this chapter
-describes.
+`GAMES` and `SPARE` have `-` for their drive: their descriptors name none, so
+TEC-OS puts them on no drive at cold boot. `tecvol info` and `tecvol verify`
+both check each volume's directory and print any problem in it under the
+volume's line. `verify` also exits with status 1 when there is one, as the last
+section of this chapter describes.
 
 ## Recipes and the starter card
 
@@ -285,12 +284,12 @@ A>
 
 ## Drives and their cost in memory
 
-A volume on a drive costs memory, because the BDOS keeps an allocation vector
-for each drive that has one. The vector has one bit for each allocation block
-of the volume, set when a file uses the block. It is the map of the drive's
-free space, built from the directory when the drive is first used, and with it
-the BDOS finds a free block without reading the directory. A G1M volume's
-vector is 64 bytes and a G8M volume's 256 bytes.
+A drive that cold boot sets up costs memory, because the BDOS keeps an
+allocation vector for it. The vector has one bit for each allocation block of
+the volume, set when a file uses the block. It is the map of the drive's free
+space, built from the directory when the drive is first used, and with it the
+BDOS finds a free block without reading the directory. A G1M volume's vector is
+64 bytes and a G8M volume's 256 bytes.
 
 The vectors are directly below TEC-OS's workspace, and the BDOS's entry is
 below them, so they come out of the TPA, the memory programs have. Cold boot
@@ -361,10 +360,11 @@ TEC-OS writes them to the card later:
 
 Writing behind saves card writes when a program writes a file a record at a
 time, because the four records of a block reach the card in one write of the
-block. A *flush* writes all the cache's changes to the card, and a block
-written many times between two flushes reaches the card once. On the model,
-`SAVE 64`, which writes 16 KiB, took 7.71 seconds on a G8M volume written
-through and 2.48 seconds, about a third of that, on one written behind.
+block. A *flush* writes all the cache's changes to the card, and a block written
+many times between two flushes reaches the card once, unless the cache fills
+between them. On the model, `SAVE 64`, which writes 16 KiB, took 7.71 seconds on
+a G8M volume written through and 2.48 seconds, about a third of that, on one
+written behind.
 
 The order of the writes keeps the card's directory true to its data. TEC-OS
 writes a directory block only after every changed data block the cache holds,
