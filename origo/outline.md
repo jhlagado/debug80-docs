@@ -65,10 +65,12 @@ before the result they judge, each with an input shown to fail
 
 ### 4. A round
 
-The twelve steps of a round on one small routine, from bundle to landing.
-The steps cover the bundle, candidates in separate contexts and scoring
-cheapest first. Then come the differential prober, triage into don't-care or
-a tighter contract and the landing (P1: CDR-3).
+The twelve steps of a round on one small routine, F2U, from its contract to
+its review. The steps cover the bundle, candidates in separate contexts and
+scoring cheapest first. Then come the differential prober, triage into
+don't-care or a tighter contract and the landing (P1: CDR-3). The round ran
+before the amendments, so the chapter says which steps it lacks and takes
+those from the second study's round (P2: T3).
 
 ### 5. Large routines
 
