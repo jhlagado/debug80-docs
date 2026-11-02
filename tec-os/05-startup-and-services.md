@@ -33,10 +33,10 @@ doesn't list them. A loaded service can publish named *records* in TEC-OS's
 registry, and a program finds the service through them. Chapter 10 describes
 records and how a service is made.
 
-A service takes whole pages of 256 bytes, and those bytes come from the memory
-programs have. Installing one lowers the word at `0006h`, the address that
-gives a program the top of its memory (Chapter 7). The pages that loaded
-services hold, from the lowest service up to TEC-OS's workspace, are the
+A service takes whole pages of 256 bytes, and those bytes come from the TPA,
+the memory programs have. Installing one lowers the word at `0006h`, the
+address that gives a program the top of its memory (Chapter 7). The pages that
+loaded services hold, from the lowest service up to TEC-OS's workspace, are the
 *service resident memory*. A display driver on the starter card takes six
 pages, and a run on the model gives:
 
@@ -153,9 +153,9 @@ A>
 
 A line can start a program, and the next line runs when the program ends.
 Chapter 11's `!` and `:` work in a startup line too. A `.SVC` file that
-doesn't install counts as a failed command, so a `:` piece after it is
-dropped. Here the first line is `PICO.SVC!:VOLS` on the board with only a
-serial terminal:
+doesn't install counts as a failed command, so a command after it that
+starts with `:` is dropped. Here the first line is `PICO.SVC!:VOLS` on the
+board with only a serial terminal:
 
 ```sh
 printf 'PICO.SVC!:VOLS\nGLCD.SVC\n' > startup.cmd
@@ -357,7 +357,7 @@ TEC-OS writes one of three words there:
 - `CARD?` appears each time a card won't mount, with the diagnostic prompt of
   Chapter 1.
 
-Here a card with no startup file boots on the PICO9918's board, and a later
+Here a card with no startup file boots on the web page's board, and a later
 `PICO.SVC` clears the word:
 
 ```sh
