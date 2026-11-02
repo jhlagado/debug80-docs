@@ -82,7 +82,7 @@ than the largest `.COM` file, as Chapter 21 explains with the figures.
 ## Code that stays
 
 A program's memory is reused as soon as it ends, so nothing of it runs after
-that. A *service* stays. TEC-OS reads a `.SVC` file into pages immediately below the
+that. A *service* stays. TEC-OS reads a `.SVC` file into pages below the
 BDOS and lowers the word at `0006h` below them, as Chapter 5 describes, and
 the code stays there through every warm boot until a reset or `UNLOAD`. From
 there it can change the BIOS's table of entries, so that its own code runs
