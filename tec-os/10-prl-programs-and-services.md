@@ -14,25 +14,24 @@ card's `TAS.COM`, from Thorium 7604daa, SHA-256
 Every program written so far has been a `.COM` file, which runs at `0100h` and
 is gone when it ends. This chapter describes two other kinds of file. A `.PRL`
 file is a program in a relocatable format, and a `.SVC` file stays in memory
-after its command ends. You first make a PRL, then write a service that counts
-the console's characters, install it and measure what it costs. You then
-publish the count for a program to find. Chapter 21 explains the relocation
-data in both files, and Chapter 20 the loader.
+after its command ends. You first make a PRL. You then write a service that
+counts the console's characters, install it, measure what it costs and publish
+the count for a program to find. Chapter 21 explains the relocation data in
+both files, and Chapter 20 the loader.
 
 ## PRL programs
 
-A PRL file is in Digital Research's page relocatable format. It holds a
-program's code and a bitmap of the bytes that hold addresses. Chapter 21 gives
-its layout.
-
+A PRL file is in Digital Research's page relocatable format: a program's code
+and a bitmap of the bytes that hold addresses, in the layout Chapter 21 gives.
 The bitmap is for a loader that puts the code somewhere else. To run the code
 at page `p`, such a loader adds `p - 1` to every byte whose bit is set.
-TEC-OS's loader never does this. A program on TEC-OS always runs at `0100h`,
-where the code was made to run. The loader therefore moves the code down over
-the header and starts it with no byte of it changed. On TEC-OS a PRL does what
-a `.COM` file does and takes more room on the card and in memory.
 
-`TAS` doesn't write PRL files. The repository's `makePrl` does, from the
+TEC-OS's loader never does this, because a program on TEC-OS always runs at
+`0100h`, where the code was made to run. The loader moves the code down over
+the header and starts it with no byte of it changed, so on TEC-OS a PRL does
+what a `.COM` file does and takes more room on the card and in memory.
+
+`TAS` doesn't write PRL files, but the repository's `makePrl` does, from the
 source of a program. Here it makes one from `area.asm`, the `AREA` program of
 Chapter 7, on a copy of the starter card that later sections use too:
 
@@ -78,20 +77,20 @@ largest `.COM` file. Chapter 21 explains this with the figures.
 
 A program's memory is reused as soon as it ends, so nothing of it runs after
 that. A *service* stays. TEC-OS reads a `.SVC` file into pages below the BDOS,
-in the service resident memory. It lowers the word at `0006h` below them, as
+in the service resident memory, and lowers the word at `0006h` below them, as
 Chapter 5 describes. The code stays there through every warm boot until a
-reset or `UNLOAD`. From there it can change the BIOS jump table, so
-that its own code runs under whatever program comes next. A service can also
-be a *library*, with routines for programs to share. The example here does
+reset or `UNLOAD`, and from there it can change the BIOS jump table, so that
+its own code runs under whatever program comes next. A service can also be a
+*library*, with routines for programs to share, and the example here does
 both.
 
 The BIOS jump table is in RAM, at `BF00h`, and Chapter 15 lists its entries. The
 word at `0001h` holds the address of its `WBOOT` entry. Each entry is a 3-byte
-`JP`, and warm boot leaves the table as it finds it. The BDOS reaches the
-console and the disk through those entries. A replaced entry therefore
-receives all the console output of a program and of the CCP. A *hook* on an
-entry is a routine that does its own work and then jumps to the address the
-entry held.
+`JP`, and warm boot leaves the table as it finds it, so a changed entry lasts
+through every warm boot. The BDOS reaches the console and the disk through
+those entries, so a replaced entry receives all the console output of a
+program and of the CCP. A *hook* on an entry is a routine that does its own
+work and then jumps to the address the entry held.
 
 `COUNT.SVC` hooks `CONOUT` and counts the characters that pass through it:
 
@@ -161,12 +160,12 @@ CHARS:	DW	0		; the count itself
 ### The header
 
 The first 25 bytes of the file are the header, and the source writes it as
-data at `0100h`. A service sets a few of its fields. The tool that makes the
-file, `TAS` or `makeSvc`, fills in the rest, so the source leaves those at 0.
-The tool finds `INIT` and `REMOVE` by those label names, and every service has
-both, even one that `UNLOAD` can't remove. The flags byte's bit 0 lets
-`UNLOAD` remove the service. A service that needs a buffer past its image
-gives the size as its extra memory. The loader sets aside that many bytes, not
+data at `0100h`. A service sets a few of its fields and leaves the rest at 0,
+for the tool that makes the file, `TAS` or `makeSvc`, to fill in. The tool
+finds `INIT` and `REMOVE` by those label names, and every service has both,
+even one that `UNLOAD` can't remove. The flags byte's bit 0 lets `UNLOAD`
+remove the service. A service that needs a buffer past its image gives the
+size as its extra memory, and the loader sets aside that many bytes, not
 cleared. The name, 8 bytes padded with spaces, is what `SERVICES` prints.
 
 | Offset | Bytes | Contents | Written by |
@@ -191,40 +190,42 @@ data.
 ### INIT
 
 `INIT` runs once, after the loader has put the service in its pages and
-adjusted the addresses in the image. `CONSLOT` finds the entry. After the
-`WBOOT` entry come `CONST`, `CONIN` and `CONOUT`, so `CONOUT`'s `JP` is at the
-word's value plus 9. The `+ 1` steps past the `JP`'s opcode to the two bytes
-of its target. `INIT` saves those two bytes in `OLDCO` and writes the address
-of `MYCO` over them. A return with carry clear means that the service is
-ready, and `HL` gives its record, which a later section describes. A service
-that publishes no record returns `HL` = 0. `test/programs/res.asm` in the
-repository does this: that file is this hook with no record.
+adjusted the addresses in the image. `CONSLOT` finds `CONOUT`'s entry from the
+word at `0001h`. After the `WBOOT` entry come `CONST`, `CONIN` and `CONOUT`, so
+`CONOUT`'s `JP` is at the word's value plus 9, and the `+ 1` steps past the
+`JP`'s opcode to the two bytes of its target. `INIT` saves those two bytes in
+`OLDCO` and writes the address of `MYCO` over them.
+
+A return with carry clear means that the service is ready, and `HL` gives its
+record, which a later section describes. A service that publishes no record
+returns `HL` = 0. `test/programs/res.asm` in the repository does this: that
+file is this hook with no record.
 
 ### The hook
 
-`MYCO` runs inside every console output. `CONOUT` takes its character in `C`.
-`MYCO` puts back the one register it uses, so the entry it replaced runs with
-the registers it would have had. Its last instruction is a `JP` written as
-data, whose target is `OLDCO`, the two bytes `INIT` filled in. The old
-`CONOUT` then returns straight to the caller.
+`MYCO` runs inside every console output. `CONOUT` takes its character in `C`,
+and `MYCO` puts back the one register it uses, so the entry it replaced runs
+with the registers it would have had. `MYCO`'s last instruction is a `JP`
+written as data, whose target is `OLDCO`, the two bytes `INIT` filled in, so
+the old `CONOUT` returns straight to the caller.
 
 ### REMOVE
 
 `REMOVE` undoes `INIT`, and `UNLOAD` calls it. A return with carry clear lets
-the removal go ahead. Carry set stops it with nothing changed, which is how
-`PICO.SVC` stays while the PICO9918 is the console.
+the removal go ahead, and carry set stops it with nothing changed, which is
+how `PICO.SVC` stays while the PICO9918 is the console.
 
 ## Assembling and installing
 
 Assembling a service follows Chapter 9's route, with one step more.
-`TAS NAME OUT.TYP` writes the output file named. The `TAS.COM` on this starter
-card makes a service only for the output type `.DRV`, the type of older cards.
-For that type it fills in the header's fields and the relocation data. For any
-other type it writes a flat image, so `TAS COUNT COUNT.SVC` gives a file that
-won't install. The format is the same under either name, so the file then
-takes its proper name with `REN`. When `COUNT.SVC` is already on the drive,
-`REN` prints `FILE EXISTS` and changes nothing, so `ERA COUNT.SVC` comes
-first.
+`TAS NAME OUT.TYP` writes the output file named, but the `TAS.COM` on this
+starter card makes a service only for the output type `.DRV`, the type of older
+cards. For that type it fills in the header's fields and the relocation data.
+For any other type it writes a flat image, so `TAS COUNT COUNT.SVC` gives a
+file that won't install. The format is the same under either name, so you
+assemble to `COUNT.DRV` and give that file its proper name with `REN`. When
+`COUNT.SVC` is already on the drive, `REN` prints `FILE EXISTS` and changes
+nothing, so `ERA COUNT.SVC` comes first.
 
 `count.asm` and `chars.asm` go on the card, along with `HWLIB.ASM` from
 Chapter 9. `chars.asm` reads the count that `COUNT.SVC` publishes, and it is
@@ -287,15 +288,15 @@ B>
 ```
 
 The file is 100 bytes of header and image and 11 of relocation data. It takes
-a whole page, so the TPA falls by 256 bytes and `SERVICES` shows 1
-page. `UNLOAD` gives the bytes back. The count rose by 18h, 24, between the
-two `CHARS` commands, the characters the console printed in between. The hook
-stayed through each program's warm boot.
+a whole page, so the TPA falls by 256 bytes and `SERVICES` shows 1 page, and
+`UNLOAD` gives the bytes back. The count rose by 18h, 24, between the two
+`CHARS` commands, the characters the console printed in between, because the
+hook stayed through each program's warm boot.
 
 On a PC the repository's `makeSvc` does the same job as `TAS`, by the two
-assemblies that `makePrl` uses. It needs the same `ORG $0100` line. It writes
-the same 111 bytes, where `TAS`'s file is rounded up to the record's 128.
-`makeSvc`'s output can have the type `.SVC` from the start:
+assemblies that `makePrl` uses, so it needs the same `ORG $0100` line. It
+writes the same 111 bytes, where `TAS`'s file is rounded up to the record's
+128, and its output can have the type `.SVC` from the start:
 
 ```sh
 node --input-type=module -e '
@@ -355,8 +356,9 @@ right. Chapter 20 describes the code.
 `INIT` returns carry set only after undoing everything it did, and the load
 then fails with the name and a question mark. `GLCD.SVC` and `PICO.SVC` fail
 this way on a board without their display. `INIT` makes its hooks last, as
-`COUNT` does. A warm boot during `INIT` takes the pages back with no call to
-the service, so a hook already made would point into free memory.
+`COUNT` does, because a warm boot during `INIT` takes the pages back with no
+call to the service, and a hook already made would then point into free
+memory.
 
 After a failed `INIT` the loader reads the 17 entries of the BIOS jump table for
 one that points into the service. If it finds one it keeps the pages, marks
@@ -364,11 +366,11 @@ them as not removable and publishes no record. The scan covers the BIOS jump tab
 alone, so the service itself must undo a vector anywhere else, such as a video
 table handed to `ABIGLCD`.
 
-`REMOVE` restores hooks in the reverse order of `INIT`. It may also run after
-a good `INIT` whose records the loader rejected. `UNLOAD` calls it from the
-CCP, so no program is running. Only the lowest service can go, so when each
-`REMOVE` puts back what its `INIT` found, a hook on a hook comes off in the
-right order.
+`REMOVE` restores hooks in the reverse order of `INIT`. Only the lowest service
+can go, so when each `REMOVE` puts back what its `INIT` found, a hook on a hook
+comes off in the right order. `UNLOAD` calls `REMOVE` from the CCP, so no
+program is running. `REMOVE` may also run after a good `INIT` whose records
+the loader rejected.
 
 While `INIT` or `REMOVE` runs, another load or removal is rejected. No command
 can reach that case, and the test stops a service that calls the ROM's
@@ -380,18 +382,18 @@ last until its `REMOVE`.
 
 A service calls the ROM only through the ROM table at `C003h`, with
 `abi.inc`'s names, because the addresses behind it change from one build to
-the next. `makeSvc` rejects a source that writes a ROM address in hexadecimal.
-`TAS` makes no such test. A service makes no test of the table's version,
+the next. `makeSvc` rejects a source that writes a ROM address in hexadecimal,
+but `TAS` makes no such test. A service makes no test of the table's version,
 since a file of format 3 loads only on a ROM with this table.
 
 ## Stacks
 
 A service's code runs on its caller's stack, and TEC-OS's three stacks are
-small. Each header gives the bytes the service adds to each of them, in the
-order BDOS, BIOS, CCP. `MYCO` pushes one word while it runs inside `CONOUT`.
-`CONOUT` can be called on any of the three, so `COUNT` declares 2, 2 and 2.
+small, so each header gives the bytes the service adds to each of them, in the
+order BDOS, BIOS, CCP. `MYCO` pushes one word while it runs inside `CONOUT`,
+and `CONOUT` can be called on any of the three, so `COUNT` declares 2, 2 and 2.
 
-The loader adds each figure to those of the services already in. The load
+The loader adds each figure to those of the services already in, and the load
 fails if a sum would pass the limit: 8 bytes on the BDOS's stack, 12 on the
 BIOS's and 6 on the CCP's. At this commit `GLCD.SVC` declares 6 for the CCP's,
 so it and `COUNT.SVC` can't both be in. A copy of `COUNT` that declares 9 for
@@ -408,15 +410,16 @@ B>
 ```
 
 The figures are the programmer's count, and the loader can't check them. A
-service running on the BDOS's stack may not call the BDOS, so a hook on
-`CONOUT` can't print through function 9. A program's own stack can't be
-checked either, so a service's documentation states what it needs there.
+program's own stack can't be checked either, so a service's documentation
+states what it needs there. A service running on the BDOS's stack may not call
+the BDOS, so a hook on `CONOUT` can't print through function 9.
 
 ## Publishing a record
 
-So far the count can't be read. A service reaches programs by publishing named
-*records* in TEC-OS's *registry*, a list that the ROM holds. A record is 13
-bytes in the service's own memory:
+To read the count, as `CHARS` did in the run above, a program needs a way to
+find it. A service reaches programs by publishing named *records* in TEC-OS's
+*registry*, a list that the ROM holds. A record is 13 bytes in the service's
+own memory:
 
 | Offset | Bytes | Contents |
 | ---: | ---: | --- |
@@ -428,13 +431,13 @@ bytes in the service's own memory:
 `INIT` returns the address of its first record in `HL`, and the records are
 linked through their first words. `COUNT` has one, `REC`, and the loader
 writes the link when it joins the list to the older records. The loader checks
-that each record and its table's address lie in the service's pages. It can't
-check what is in a table.
+that each record and its table's address lie in the service's pages, but it
+can't check what is in a table.
 
 The layout of an entry table is the service's own, and the record's name and
 version identify it. Version 1 of `COUNT`'s table is one `JP`, at offset 0, to
 a routine that returns the count in `HL`. A later version can add entries
-after it. A program or service that names version 1 still works, because a
+after it, and a program or service that names version 1 still works, because a
 find takes any record at that version or above.
 
 A client is a program or service that uses a record. It finds the table with
@@ -483,13 +486,13 @@ CRLF:	DB	13,10,"$"
 
 The Z80 has no indirect call, so a `CALL` to a `JP (HL)` does the job. The
 test at the top comes first because `ABISVC` is an address on TEC-OS with ABI
-4 alone. On any other system a call to `C015h` would run whatever is there. In
-the transcript above, `no COUNT record` is what `CHARS` printed once the
-service had gone.
+4 alone, and on any other system a call to `C015h` would run whatever is
+there. In the transcript above, `no COUNT record` is what `CHARS` printed once
+the service had gone.
 
-With `C` = 1 and `B` a number from 0, `ABISVC` enumerates. It returns the
-record itself in `HL`, the newest first, and carry set past the last. This
-program lists every record:
+`ABISVC` also enumerates the registry. With `C` = 1 and `B` a number from 0, it
+returns the record itself in `HL`, the newest first, and carry set past the
+last. This program lists every record:
 
 ```asm
 ; RECS: list the registry, newest record first: each record's name, its
@@ -588,14 +591,14 @@ do with it depends on what the client is:
 
 The *generation* is a byte that each removal raises by one, and `ABISVC`
 returns it in `A` from both calls. A service that kept a pointer compares the
-generation it stored with the one `ABISVC` returns now. A difference means
+generation it stored with the one `ABISVC` returns now, and a difference means
 that some service has gone. The byte wraps, so after exactly 256 removals a
 stale pointer passes the comparison.
 
 A dependency is 9 bytes: the least version, then the record's name. In a `TAS`
-source they come at the end, after a label `DEPS`. `TAS` counts them for the
-header, keeps them out of the image and writes them after it. `NEEDS.SVC` does
-nothing but bind to `COUNT`:
+source they come at the end, after a label `DEPS`, and `TAS` counts them for
+the header, keeps them out of the image and writes them after it. `NEEDS.SVC`
+does nothing but bind to `COUNT`:
 
 ```asm
 ; NEEDS.SVC: a service that names COUNT's record as a dependency and binds to
@@ -631,8 +634,8 @@ DEPS:	DB	1,"COUNT   "	; the least version, then the record's name
 ```
 
 The loader checks each dependency before it changes anything, so `INIT`'s find
-can't fail. With no `COUNT.SVC` the load fails. With it the two go in and come
-out last in, first out:
+can't fail. With no `COUNT.SVC` the load fails, and with it the two go in and
+come out last in, first out:
 
 <!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS NEEDS NEEDS.DRV" "REN NEEDS.SVC=NEEDS.DRV" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
 ```text
@@ -754,7 +757,7 @@ VRAM
 B>
 ```
 
-The record exists only while the driver is in. On the serial board the program
-prints `no PICO record`. It prints the same on a board with a PICO9918 and no
-matrix keyboard, where the driver's load fails. A program on such a board
-claims the chip and writes the ports.
+The record exists only while the driver is in, so on the serial board the
+program prints `no PICO record`. It prints the same on a board with a PICO9918
+and no matrix keyboard, where the driver's load fails. A program on such a
+board claims the chip and writes the ports.
