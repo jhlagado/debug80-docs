@@ -120,7 +120,7 @@ seconds.
 With those pages proved, the ROM clears its variables, installs an NMI handler
 at `0066h` that counts NMIs, reads the Matrix switch and prints its banner
 (`diag/main.asm:4-28`). It then waits about 5 seconds for a key
-(`diag/main.asm:29-35`). `I` or `Y` chooses the interactive tests as well as the
+(`diag/main.asm:29-35`). `I` or `Y` selects the interactive tests as well as the
 automatic ones, and anything else, or nothing, runs the automatic tests alone.
 `GETKEY` takes a key from the serial port, from the hex keypad, or from the
 matrix keyboard when the Matrix switch is on, with a time-out counted in half
