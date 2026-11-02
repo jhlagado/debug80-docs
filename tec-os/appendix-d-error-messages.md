@@ -17,7 +17,7 @@ each table links to the chapter that explains the message or its subject and
 gives the source.
 
 In a message, `d` stands for a drive letter, `nn` for a code in hexadecimal and
-`NAME` for a word from the command line. The rest is the text the ROM holds.
+`NAME` for a word from the command line. The rest is printed as it stands.
 `tecvol` runs on a PC, and Appendix F describes it. The diagnostics ROM is a
 separate image, and Chapter 24 describes it.
 
