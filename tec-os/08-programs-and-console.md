@@ -64,14 +64,25 @@ depend on `BF00h`:
 | 4 | `BF0Ch` | `CONOUT` | prints the character in `C` |
 
 The BIOS acts on no key: `^C`, `^S` and `^P` from `CONIN` are bytes like any
-other, and `CONOUT` expands no tab and checks for no key. This program reads
-keys through `CONIN` and prints each one's code through `CONOUT` until
-Return:
+other, and `CONOUT` expands no tab and checks for no key.
+
+These calls run on the caller's stack, and on a display so do the ROM's
+terminal and the routines of `PICO.DRV` or `GLCD.DRV` beneath them. The 28
+bytes of the CCP's stack hold a direct call with nothing pushed, so a program
+that pushes anything before it calls the BIOS sets up a stack of its own
+first. The routines also run with the caller's interrupt state, and they
+keep the cursor and the escape sequence in the fixed bytes at `0046h–004Ch`,
+so an interrupt routine must not print through the console.
+
+This program reads keys through `CONIN` and prints each one's code through
+`CONOUT` until Return. It pushes before it calls the BIOS, so it starts by
+setting `SP` to a stack of its own:
 
 ```asm
 ; KEY: read keys through the BIOS and print each one's code in hex, until
 ; Return.
         ORG     $0100
+        LD      SP,STACK        ; the BIOS's routines run on this stack
         LD      HL,($0001)      ; the BIOS's warm boot entry, table + 3
         LD      DE,6
         ADD     HL,DE
@@ -90,6 +101,8 @@ NEXT:   CALL    CONIN           ; wait for a key; A = its code
         LD      C,13
         CALL    CONOUT
         LD      C,10
+        CALL    CONOUT
+        JP      $0000           ; no return word on this stack
 CONOUT: JP      0               ; print C; the address goes here
 CONIN:  JP      0               ; the address goes here
 
@@ -107,13 +120,15 @@ DIGIT:  AND     $0F
         ADD     A,'A'-'9'-1
 DIGIT1: LD      C,A
         JR      CONOUT
+
+        DS      64
+STACK:
 ```
 
 The program writes each entry's address into a `JP` of its own, at `CONIN`
-and `CONOUT`, so that a `CALL` to the label reaches the BIOS. The last
-`CONOUT`, reached by falling into it rather than by a call, prints the line
-feed, and the BIOS's `RET` then returns to the CCP's `0000h`. Assembled and
-copied to drive B of a copy of the starter card, with `size.asm` from the
+and `CONOUT`, so that a `CALL` to the label reaches the BIOS. Its stack holds no
+return word, so it ends with `JP $0000`, as Chapter 6 describes. Assembled
+and copied to drive B of a copy of the starter card, with `size.asm` from the
 section on the console's size:
 
 ```sh
@@ -218,6 +233,9 @@ AB
 
 A>
 ```
+
+With anything after its name, as in `TERM S`, `TERM` goes on to print 30
+numbered lines, `L00` to `L29`, which scroll the screen.
 
 ## The cursor
 
