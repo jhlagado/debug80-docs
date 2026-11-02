@@ -11,12 +11,12 @@ Checked against TEC-OS bd15528.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
-routines at the end of `src/svc.asm`: `STBOOT` reads the file, `STLINE` hands
-the CCP one line at a time, and `STDONE` runs once when the lines are finished.
-This chapter follows them in that order, and then the path a display line
-takes, the flag bit behind the LCD's words, and the web page's rewrite of the
-file. `test/startup.test.mjs` and `test/pico.test.mjs` check these rules on the
-host model of Chapter 26.
+routines in `src/svc.asm`: `STBOOT` reads the file, `STLINE` hands the CCP one
+line at a time, and `STDONE` runs once when the lines are finished. This
+chapter follows them in that order, and then the path a display line takes,
+the flag bit behind the LCD's words, and the web page's rewrite of the file.
+`test/startup.test.mjs` and `test/pico.test.mjs` check these rules on the host
+model of Chapter 26.
 
 ## One byte of state
 
@@ -28,17 +28,17 @@ kinds of value (`src/svc.asm:327-330`):
 | --- | --- |
 | `00h` | `STBOOT` hasn't run since cold boot |
 | `01h–7Fh` | A record holds lines: the next byte's offset in `STREC`, plus 1 |
-| `80h` | Finished, and `STDONE` hasn't run |
+| `80h`, `81h` | Finished, and `STDONE` hasn't run; `81h` after a CR or LF in the record's last byte |
 | `FFh` | Finished, and `STDONE` has run |
 
-The three paths of Chapter 5 divide on this byte. The block that holds it starts
-above the RAM BIOS table (`src/ram.asm:192`), past `BDOSRME`, the end of the
-range `CPMINIT` clears (`src/boot.asm:273-277`, `src/ram.asm:190`). An ordinary
-exit is a warm boot, which calls `CPMINIT` and never comes to `COLD`
+This byte separates an ordinary exit from a reset. The block that holds it
+starts above the RAM BIOS table (`src/ram.asm:192`), past `BDOSRME`, the end
+of the range `CPMINIT` clears (`src/boot.asm:273-277`, `src/ram.asm:190`). An
+ordinary exit is a warm boot, which calls `CPMINIT` and never comes to `COLD`
 (`src/boot.asm:4-7`, `src/boot.asm:59-82`), so `STPOS` and `STREC` keep their
 values through every program in the file. Both kinds of reset enter at `COLD`.
-A recognised reset differs from an unrecognised one only in what `RSLCAP` copies
-to `RSLBUF` before the clear, the drive table (`src/boot.asm:14`,
+A recognised reset differs from an unrecognised one only in what `RSLCAP`
+copies to `RSLBUF` before the clear, the drive table (`src/boot.asm:14`,
 `src/boot.asm:131-138`). Cold boot then clears the whole workspace, `STPOS`
 included (`src/boot.asm:23-27`, `src/ram.asm:241-242`). A retry from the
 diagnostic prompt returns to `COLDRT`, after that clear, with `STPOS` still 0,
@@ -60,13 +60,14 @@ can't repeat. `test/startup.test.mjs:172-192` makes the card fail at the file's
 block and reaches a prompt with nothing from the file run.
 
 The keypad test comes next (`src/svc.asm:336-338`). `STSPORT` is port `03h`
-(`src/layout.asm:11`), and bit 6 is low while a keypad key is down, as Appendix
-G describes. A low bit returns from `STBOOT` with `STPOS` at `80h`, so a skip
-is the same state as a file that wasn't there. The port is read this one time.
-On the model's PICO9918 board with the starter card, `STBOOT` starts 5,864,626
-T-states after reset, about 1.47 seconds. `test/startup.test.mjs:46-58` holds a
-key through reset to get past a service whose `INIT` never returns, and
-`:194-207` does the same for a file that resets the board at every boot.
+(`src/layout.asm:11`), and bit 6 is low while a keypad key is down, as
+Appendix G describes. A low bit returns from `STBOOT` with `STPOS` at `80h`,
+so a skip is the same state as a file that wasn't there. Bit 6 is tested this
+one time. On the model's PICO9918 board with the starter card, `STBOOT` starts
+5,864,626 T-states after reset, about 1.47 seconds.
+`test/startup.test.mjs:46-58` holds a key through reset to get past a service
+whose `INIT` never returns, and `:194-207` does the same for a file that
+resets the board at every boot.
 
 `STBOOT` then makes the read in the CCP's own file control block. It copies 12
 bytes of `STFCB`, a drive byte of 1 and the name `STARTUP CMD`, to `CMDFCB`
@@ -121,14 +122,17 @@ the next line starts in the right place.
 
 There are two ways out. A CR or LF jumps to `STL2` with `HL` past it. The
 record's end, a zero or `^Z` jumps to `STLE`, which first sets `L` to the
-record's last byte, `STLAST` (`src/svc.asm:24`, `src/svc.asm:398`). `STL2` then computes the
-next byte's offset plus 1 from `L` and stores it (`src/svc.asm:399-401`). From
-`STLE` that sum is exactly `80h`, finished, and any characters already in
-`CMDTXT` still run as a line, which is how a line cut off by the record's end
-runs as far as it goes. The same value comes out of a CR or LF that leaves the
-next byte at offset 127, which is why a line starting at the 128th byte never
-runs: its position would be `80h`. A test fills the record to its last byte with
-a line at the end, and that line runs (`test/startup.test.mjs:74-79`).
+record's last byte, `STLAST` (`src/svc.asm:24`, `src/svc.asm:398`). `STL2`
+then computes the next byte's offset plus 1 from `L` and stores it
+(`src/svc.asm:399-401`). From `STLE` that sum is exactly `80h`, finished, and
+any characters already in `CMDTXT` still run as a line, which is how a line
+cut off by the record's end runs as far as it goes. The same value comes out
+of a CR or LF that leaves the next byte at offset 127, which is why a line
+starting at the 128th byte never runs: its position would be `80h`. A CR or LF
+in the record's last byte leaves `HL` one past the record, and `STL2` stores
+`81h`, also finished (`src/svc.asm:399-401`). A test fills the record to its
+last byte with a line at the end, and that line runs
+(`test/startup.test.mjs:74-79`).
 
 If no character was copied the line was blank, and `STLINE` goes round again
 (`src/svc.asm:402-404`). A CR and LF therefore take two passes, the CR ending
@@ -180,11 +184,11 @@ what `CHPOS` does for a line's pieces.
 ## STDONE
 
 `STLINE` jumps to `STDONE` at every prompt once the file has finished, with
-carry set and `A` holding `STPOS` rotated left: `01h` for `80h`, and `FFh` for
-`FFh`. `INC A` leaves carry alone and gives zero only for `FFh`, so every prompt
-after the first returns at once with carry set, for the keyboard
-(`src/svc.asm:420-421`). The first one stores `FFh` and tests the board
-(`src/svc.asm:422`).
+carry set and `A` holding `STPOS` rotated left: `01h` for `80h`, `03h` for
+`81h`, and `FFh` for `FFh`. `INC A` leaves carry alone and gives zero only for
+`FFh`, so every prompt after the first returns at once with carry set, for the
+keyboard (`src/svc.asm:420-421`). The first one stores `FFh` and tests the
+board (`src/svc.asm:422`).
 
 The test is a piece of arithmetic on `CONDEV`, the byte at `0045h` that records
 the console devices (`src/layout.asm:42`, `src/layout.asm:54-58`):
@@ -206,12 +210,13 @@ for the return, and any non-zero result leaves (`src/svc.asm:428-429`). A zero
 result writes `PICO?` with `LCDWRD`, which also returns carry set
 (`src/svc.asm:430-431`, `src/lcd.asm:45-46`).
 
-That one test gives the cases Chapter 5 lists. A missing file, a bad file, an
-empty one and a skip all arrive with nothing in `PIVEC` and `CDGLC` clear. A bad
-`PICO.SVC` followed by a good `GLCD.SVC` sets `CDGLC`, and a good load followed
-by `CON TTY` leaves the table in `PIVEC`, so neither shows a word. A board with
-no matrix keyboard has `CDMTX` clear and can't reach zero. The test runs at this
-one prompt, and nothing later writes `PICO?`.
+That one test gives the cases Chapter 5 lists. No `STARTUP.CMD`, an empty one,
+a driver's file missing or bad with no other driver in, and a skip all arrive
+with nothing in `PIVEC` and `CDGLC` clear. A bad `PICO.SVC` followed by a good
+`GLCD.SVC` sets `CDGLC`, and a good load followed by `CON TTY` leaves the
+table in `PIVEC`, so neither shows a word. A board with no matrix keyboard has
+`CDMTX` clear and can't reach zero. The test runs at this one prompt, and
+nothing later writes `PICO?`.
 
 ## The path of a display line
 
@@ -227,16 +232,18 @@ A display driver's load fails from inside. `PICO.SVC`'s `INIT` calls hardware
 service `INFO` for whether a PICO9918 answered at cold boot
 (`drivers/pico.asm:47-51`). Each driver then passes its table to `GLHOOK`
 through `ABIGLCD` (`drivers/pico.asm:52-55`, `drivers/glcd.asm:46-49`), and
-`GLHOOK` returns carry if `CDMTX` is clear or if that slot already holds a table
-(`src/glcd.asm:17-26`). Those are the two rules that
-a driver needs the matrix keyboard, and that a second `PICO40.SVC` fails while
-`PICO.SVC` is in. `GLCD.SVC` has one more test, ahead of those
-(`drivers/glcd.asm:34-42`). If the `CON:` field of the IOBYTE is 3, `UC1:`, it
-goes on. Otherwise it reads the word that `ABIVID` points at, the console's
-columns, and fails if that isn't 0, which it isn't while any display is the
-console. `CMDCON` writes the field before it calls `GLCLD`
-(`src/cpm/ccp.asm:1113-1119`), so `CON UC1` reaches the load with the field
-already 3, and a startup line `GLCD.SVC` under a PICO9918 console doesn't.
+`GLHOOK` returns carry if `CDMTX` is clear or if that slot already holds a
+table (`src/glcd.asm:17-26`). So a driver needs the matrix keyboard, and
+`PICO40.SVC` fails while `PICO.SVC` is in. `GLCD.SVC` has two more tests, both
+ahead of those. If the `CON:` field of the IOBYTE is 3, `UC1:`, it goes on.
+Otherwise it reads the byte that `ABIVID` points at, the console's columns,
+and fails if that isn't 0, which it isn't while any display is the console
+(`drivers/glcd.asm:34-42`, `src/abi.asm:10`). `CMDCON` writes the field before
+it calls `GLCLD` (`src/cpm/ccp.asm:1113-1119`), so `CON UC1` reaches the load
+with the field already 3, and a startup line `GLCD.SVC` under a PICO9918
+console doesn't. `GLCD.SVC` then calls `GLCWAIT`, and a controller that
+doesn't answer fails the load (`drivers/glcd.asm:43-45`), as `INFO`'s answer
+does for `PICO.SVC`.
 
 After a good load `SVCGO` compares `SVCHEAD`, the new service's page, with the
 page of each display's table (`src/glcd.asm:72-79`). A match with `PIVEC`
