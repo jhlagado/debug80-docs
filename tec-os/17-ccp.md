@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
@@ -20,7 +20,7 @@ program with its page zero, and the CCP's RAM and stack.
 ## The CCP in the ROM
 
 The CCP's code is `src/cpm/ccp.asm`. In the debug80 build (Chapter 12) it runs
-from `CCPBAS`, `D795h`, to `E0C9h`, 2,357 bytes, followed directly by the
+from `CCPBAS`, `D796h`, to `E0DFh`, 2,378 bytes, followed directly by the
 BDOS. Its messages and the names of its built-in commands are in the ROM's
 data block (`src/data3.asm:7-71`), except for `TYPE`, whose name sits in front
 of the `RET` at `C01Dh` (`src/data.asm:8-13`). What the CCP changes has to be
@@ -39,8 +39,8 @@ IOBYTE and the top of the TPA at `0007h`. It also sets the BDOS's flags
 `HFLAG` and `WRFLAG`, and it reads and sets the return code `PRGCODE`
 (`src/cpm/ccp.asm:52-53`, `src/cpm/ccp.asm:86-87`, `src/cpm/ccp.asm:128`,
 `src/cpm/ccp.asm:159`, `src/cpm/ccp.asm:352`). It calls a few of TEC-OS's
-routines directly: startup's `STBOOT` and `STLINE`, the driver loader and the
-driver commands' routines `CMDDRV` and `DRVUNL`. The others are `GLCLD` for
+routines directly: startup's `STBOOT` and `STLINE`, the service loader and the
+service commands' routines `CMDSVC` and `SVCUNL`. The others are `GLCLD` for
 `CON UC1`, the PRL loader and the BDOS's division, `DIV16`
 (`src/cpm/ccp.asm:260-263`, `src/cpm/ccp.asm:1082`, `src/cpm/ccp.asm:1119`).
 
@@ -55,50 +55,47 @@ it falls into warm boot (`src/boot.asm:51-52`), and warm boot's `PZINIT`
 leaves it as the CCP last wrote it (`src/boot.asm:215-217`).
 
 `CCPENT` sets its stack and keeps the drive in `BOOTDRV`
-(`src/cpm/ccp.asm:30-33`). It then sets `WRFLAG` and calls function 13, the
+(`src/cpm/ccp.asm:30-44`). It then sets `WRFLAG` and calls function 13, the
 disk reset, which with that flag keeps the drives whose allocation vectors are
-unchanged, as Chapter 16 describes. The reset leaves drive A and user 0, so
-`CCPENT` calls function 32 with the user number from the byte
-(`src/cpm/ccp.asm:45-59`). `STBOOT` comes next: it reads `A:STARTUP.CMD` the
+unchanged, as Chapter 16 describes. Warm boot has cleared the user number with
+the rest of the BDOS's variables, so `CCPENT` calls function 32 with the user
+number from the byte (`src/cpm/ccp.asm:45-59`). `STBOOT` comes next: it reads `A:STARTUP.CMD` the
 first time it is called after a cold boot and does nothing later
 (`src/cpm/ccp.asm:60`, `src/svc.asm:327-360`). Chapter 22 describes startup.
 Last, if the drive is not A, the CCP selects it with function 14
 (`src/cpm/ccp.asm:61-66`), then prints a new line and starts its loop at
 `STARTED` (`src/cpm/ccp.asm:68-70`).
 
-The selection at the end can fail. If the drive in the byte has lost its
-volume, function 14 gives the `Select` error. After a key, the error's warm
-boot comes back to `CCPENT` with the same byte, so the same drive is selected
-again and the error repeats. That happens when a program unmounts the current
-drive. Here `MOUNT`, from drive A, takes the volume off drive B while B is the
-current drive. Each of the two keys `x` and Return after it gives the error
-again, and only the reset button, whose cold boot sets the byte to 0, ends it:
+That selection would fail on a drive with no volume: function 14 would give the
+`Select` error, and the error's warm boot would come back to `CCPENT` with the
+same byte. `CCPENT` therefore tests the drive first, and a drive past D or with
+no volume becomes drive A (`src/cpm/ccp.asm:33-44`). `SAVEDU` writes A into the
+byte at the next prompt. A program that unmounts the current drive gives this
+case. Here `MOUNT`, from drive A, takes the volume off drive B while B is the
+current drive, so the prompt comes back on A. The reset button then starts a
+cold boot:
 
-<!-- node tools/capture.mjs B: "@start A:MOUNT B:" "@start x" "@reset" -->
+<!-- node tools/capture.mjs B: "A:MOUNT B:" "@reset" -->
 ```text
 A>B:
 B>A:MOUNT B:
 Unmounted
 
-Bdos Err On B: Select
-Bdos Err On B: Select
-Bdos Err On B: Select
+A>
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 
-A>PICO.DRV
-PICO.DRV?
+A>PICO.SVC
+PICO.SVC?
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
 A>
 ```
 
 The reset finds the card's volumes again with drive B left empty, because the
 selection a reset keeps is the one that was in RAM, as Chapter 14 describes.
-`MOUNT B:` from drive A, or `A:` before it, leaves the drive byte on A and
-gives no error.
 
 ## The prompt and the line
 
@@ -141,7 +138,7 @@ arguments. A word that doesn't parse as a file name is a bad command already
 
 The CCP then compares the word with the names of its ten built-in commands, in
 the order `DIR`, `TYPE`, `ERA`, `REN`, `SAVE`, `USER`, `CON`, `COPY`, `UNLOAD`
-and `DRIVERS` (`src/cpm/ccp.asm:234-263`). `ISCMD` compares the text at
+and `SERVICES` (`src/cpm/ccp.asm:234-263`). `ISCMD` compares the text at
 `CMDSTRT`, not the FCB, and requires a space or the end of the piece after the
 name (`src/cpm/ccp.asm:1510-1530`). So `A:DIR` and `DIR.COM` are not the
 built-in. The first is the program `DIR` on drive A and the second the program
@@ -149,7 +146,7 @@ built-in. The first is the program `DIR` on drive A and the second the program
 
 A word that is none of the built-ins names a program, and must be a single
 file name with no wildcard (`src/cpm/ccp.asm:264-266`). The type selects what
-follows. A type of `DRV` installs a driver through `DRVGO`
+follows. A type of `SVC` installs a service through `SVCGO`
 (`src/cpm/ccp.asm:267-276`, `src/glcd.asm:65-93`), which Chapter 20 describes.
 Any other type, or none, is replaced by `COM` (`src/cpm/ccp.asm:277-282`), so
 `VOLS.TXT` runs `VOLS.COM`.
@@ -189,8 +186,8 @@ name and any `?` (`src/cpm/ccp.asm:1422-1450`).
 
 ## The built-in commands
 
-Each built-in is a routine in `ccp.asm` or, for the driver commands, in
-`drv.asm`:
+Each built-in is a routine in `ccp.asm` or, for the service commands, in
+`svc.asm`:
 
 | Command | Routine | Source |
 | --- | --- | --- |
@@ -203,7 +200,7 @@ Each built-in is a routine in `ccp.asm` or, for the driver commands, in
 | `CON` | `CMDCON` | `src/cpm/ccp.asm:1086-1146` |
 | `COPY` | `CMDCOPY` | `src/cpm/ccp.asm:946-1078` |
 | `UNLOAD` | `CMDUNL` | `src/cpm/ccp.asm:1080-1084`, `src/svc.asm:26-52` |
-| `DRIVERS` | `CMDDRV` | `src/svc.asm:301-325` |
+| `SERVICES` | `CMDSVC` | `src/svc.asm:301-325` |
 
 `DIR` turns a missing name into eleven `?`, sets the DMA address to `LOADBUF`
 and lists the entries that function 17 and then function 18 return
@@ -234,7 +231,9 @@ multiple of 8 at a tab. It counts a new line at LF and at a character that
 would pass the last column, as the screen wraps it. When the rows are full it
 prints `[more]` and waits with function 6, so that the key is not echoed.
 `UNMORE` then writes a CR, six spaces and a CR over `[more]`. `^C`, Esc and
-`Q` or `q` stop the listing, and any other key shows the next screen.
+`Q` or `q` stop the listing, and `^C` also drops the rest of a chained line.
+The test clears one bit of the key, so `#` reads as `^C` and `;` as Esc. Any
+other key shows the next screen.
 
 `TYPE` opens its one file and reads it a record at a time into `LOADBUF`. It
 prints each byte through the pager up to the first `^Z`, `1Ah`, or the end of
@@ -265,7 +264,7 @@ gives `NO SPACE`.
 
 `CON` with no argument names the console in use. With `TTY`, `CRT`, `BAT` or
 `UC1`, a colon after it allowed, it sets the IOBYTE's console field, and for
-`UC1` it also loads `GLCD.DRV` if it is not in (`src/cpm/ccp.asm:1086-1146`).
+`UC1` it also loads `GLCD.SVC` if it is not in (`src/cpm/ccp.asm:1086-1146`).
 Chapter 15 describes the BIOS's side.
 
 `COPY SOURCE DEST` copies a file within the user area
@@ -277,8 +276,8 @@ copy goes a record at a time through the default DMA buffer at `0080h`, so it
 uses none of the TPA. The count of records is kept in `DIRNUM` and printed in
 hexadecimal after `COPIED` (`src/cpm/ccp.asm:1006-1051`).
 
-`DRIVERS` prints each driver's name and its pages from the list of drivers,
-and `UNLOAD` removes the lowest. `NAME.DRV` as a command installs one. Chapter
+`SERVICES` prints each service's name and its pages from the list of services,
+and `UNLOAD` removes the lowest. `NAME.SVC` as a command installs one. Chapter
 20 describes the three.
 
 ## Loading a program
@@ -301,8 +300,8 @@ closed (`src/cpm/ccp.asm:402-412`).
 
 The largest program is therefore the 256-byte pages from `0100h` up to the
 page that holds the BDOS entry. On the starter card, whose entry is at
-`B806h`, that is 46,848 bytes, six fewer than the TPA. With a driver loaded
-the word at `0006h` is the driver's jump, at offset 6 of the driver's first
+`B806h`, that is 46,848 bytes, six fewer than the TPA. With a service loaded
+the word at `0006h` is the service's jump, at offset 6 of the service's first
 page, and the limit is then that page.
 
 The examples from here on use a copy of the starter card with three files on
@@ -483,7 +482,7 @@ moves to the BDOS's stack, so a program's calls of `0005h` use only two bytes
 of the program's stack.
 
 The CCP keeps nothing in the TPA: it leaves the TPA from `0100h` untouched
-until it loads a program or a driver there, a driver for `NAME.DRV` or
+until it loads a program or a service there, a service for `NAME.SVC` or
 `CON UC1` (`src/glcd.asm:68`, `src/svc.asm:54`). Only `SAVE` reads that area,
-which is how `SAVE` writes what a program or a loaded driver file left in
+which is how `SAVE` writes what a program or a loaded service file left in
 memory.
