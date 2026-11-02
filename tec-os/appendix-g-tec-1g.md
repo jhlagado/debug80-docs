@@ -13,7 +13,7 @@ This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
 socket U9, the hex keypad, the 8 × 8 LEDs, the DS1302 clock and the SD card
 adaptor. It describes the board as the code uses it. TEC-OS has run only on
-the Debug80 model of the board, and where the model and the TEC-1G's own
+the host model, and where the model and the TEC-1G's own
 documents differ, the difference is noted with the test of the diagnostics ROM
 that settles it (Chapter 24).
 
@@ -39,7 +39,7 @@ in the files that drive them.
 | `FFh` | out | System latch | Overlay, banks and the Caps lamp |
 
 The read of port `00h` takes nothing from the keypad. It is there for the
-Debug80 model, whose serial input starts a queued byte at a read of that port
+Debug80 runtime, whose serial input starts a queued byte at a read of that port
 (`src/layout.asm:9`, `src/console.asm:129`, `src/console.asm:183`,
 `src/console.asm:282`).
 
@@ -75,7 +75,7 @@ TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
 - **Bit 7, the serial line's input.** Read by the serial routines
   (`src/console.asm:131`, `src/console.asm:184`, `src/console.asm:198`).
 
-The TEC-1G's documents and the Debug80 model describe the other bits of port
+The TEC-1G's documents and the Debug80 runtime describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
 down, which is how TEC-OS reads it (`src/drv.asm:336-338`).
 `docs/diagnostics.md` records the comparison, and test T11 reads the port on a
@@ -106,7 +106,7 @@ TEC-OS's next write to the latch is made from the copy.
 EXPAND is set only while no stack is in use, since the stacks TEC-OS uses once
 cold boot has set them up are in `8000h–BFFFh`, in EXPAND 0
 (`src/history.asm:16-42`, `src/cache.asm:11-14`). Bits 3 to 6 are a bank field
-for the window in the Debug80 model, and unconnected to U9 in the board's
+for the window in the Debug80 runtime, and unconnected to U9 in the board's
 documents. TEC-OS uses bit 2 for EXPAND 1 and bit 3 only for the test above.
 Test T12 of the diagnostics ROM reports what a board does with them.
 
@@ -138,7 +138,7 @@ off. A press with the jumper fitted is a crash.
 ## The 8 × 8 LEDs
 
 No TEC-OS service drives the 8 × 8 LEDs, and the ROM never writes their ports.
-`DEMO` on the starter card writes them itself, as the Debug80 model decodes
+`DEMO` on the starter card writes them itself, as the Debug80 runtime decodes
 them: port `05h` selects a row, and `06h`, `F8h` and `F9h` light its red,
 green and blue columns (`test/programs/demo.asm:14-17`,
 `test/programs/demo.asm:273-286`). The TEC-1G port list makes `05h` and `06h`
