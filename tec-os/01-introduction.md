@@ -7,11 +7,13 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 1. Introduction and first boot
 
-Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from
-Edit 845d062. That build's SHA-256 is
-`2c9e7d0ec588019b9184ca89543e5a644fafda864bb940445375edb50bbb0fe6`, and the
-card's copy, with its ABI byte set to 4 by `npm run media`, is
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
+845d062 and its `TAS.COM` from Thorium 7604daa. That Edit build's SHA-256 is
+`2c9e7d0ec588019b9184ca89543e5a644fafda864bb940445375edb50bbb0fe6`, the card's
+copy, with its ABI byte set to 4 by `npm run media`, is
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and
+`TAS.COM`'s is
+`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
 The TEC-1G starts in MON-3, its monitor ROM, which you work from the hex
 keypad. With TEC-OS in the ROM socket instead, the same board is a small disk
@@ -45,9 +47,9 @@ disk.
 On a typical CP/M machine the BDOS and the CCP were loaded from the disk into
 RAM when the machine started, but on the TEC-1G all three are in a 16 KiB ROM
 at `C000h–FFFFh`. The ROM also holds the driver for the SD card, the serial
-terminal, the keyboard scan and a table of services for the board's own
-hardware. From the card TEC-OS reads the programs you run, a startup file of
-commands and the drivers you install, which are code added to TEC-OS in
+terminal, the keyboard scan and the hardware services, calls for the board's
+own devices. From the card TEC-OS reads the programs you run, a startup file of
+commands and the services you install, which are code added to TEC-OS in
 memory.
 
 TEC-OS has more than CP/M 2.2 had:
@@ -60,9 +62,10 @@ TEC-OS has more than CP/M 2.2 had:
 - A work volume whose writes reach the card in batches.
 - A console on the PICO9918 video card, on the 128 × 64 graphics LCD or on a
   serial terminal. Each display's console is a driver loaded from the card.
-- A table of services at `C003h`. Through it a program reaches the 7-segment
-  digits, the 20 × 4 LCD, the PICO9918's graphics, the speaker, the joystick
-  and the clock with no port numbers of its own.
+- Hardware services, numbered calls through the ROM table at `C003h`. With them
+  a program reaches the 7-segment digits, the 20 × 4 LCD, the PICO9918's
+  graphics, the speaker, the joystick and the clock with no port numbers of its
+  own.
 - A startup file of commands run before the first prompt.
 - A history of the command lines typed at the prompt.
 
@@ -107,12 +110,18 @@ host model runs on. `npm run build` assembles the ROM, and `npm run media`
 writes the ROM images, the starter card and its files to `dist/`. The starter
 card is `dist/starter.img`, an image of a whole SD card.
 
+The starter card always holds `TAS.COM`, an assembler that runs on TEC-OS.
+`npm run media` reads it from the path in the environment variable `TAS_COM` or
+else from `../thorium/build/tas/TAS.COM`, beside the clone. The command stops
+if the file isn't there or if its SHA-256 differs from the one in
+`test/inputs.json`.
+
 The starter card holds the Edit program only when `npm run media` finds a
 build of Edit outside the repository, at the path in the environment variable
 `EDIT_COM` or else at `../edit/dist/EDIT.COM`, beside the clone. The build
 must carry Edit's screen configuration, the tag `ECFG` at `0103h`, and an
 older build is left off the card with a message. Without Edit the card has
-eleven files, and the figures `DIR` prints below change with it.
+twelve files, and the figures `DIR` prints below change with it.
 
 ## Running TEC-OS in a web page
 
@@ -231,11 +240,11 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
-PICO.DRV?
+A>PICO.SVC
+PICO.SVC?
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
 A>
 ```
@@ -263,22 +272,23 @@ B: WORK
 
 After a blank line comes the prompt, `A>`. The letter is the current drive,
 the one a command uses when it names a file with no drive. Here the prompt is
-followed at once by `PICO.DRV`, though nobody typed it. Before the CCP waits
+followed at once by `PICO.SVC`, though nobody typed it. Before the CCP waits
 for the first line from the keyboard, it reads the first 128 bytes of the file
 `STARTUP.CMD` from drive A, if the file is there, and runs each line as a
 command, echoed after the prompt as if it had been typed. The starter card's
-`STARTUP.CMD` has two lines, `PICO.DRV` and `GLCD.DRV`.
+`STARTUP.CMD` has two lines, `PICO.SVC` and `GLCD.SVC`.
 
-A command that names a `.DRV` file installs a driver from that file: TEC-OS
-loads the driver from the card into memory below the BDOS, where it stays
-until a reset or until the `UNLOAD` command removes it. `PICO.DRV` holds the
-PICO9918's console at 80 columns and makes the PICO9918 the console when it is
-installed. `GLCD.DRV` holds the graphics LCD's console and makes the graphics
-LCD the console unless `PICO.DRV` is in.
+A command that names a `.SVC` file installs a service from that file: TEC-OS
+loads the service from the card into memory below the BDOS, where it stays
+until a reset or until the `UNLOAD` command removes it. A service that drives
+hardware is a driver. `PICO.SVC` holds the PICO9918's console at 80 columns and
+makes the PICO9918 the console when it is installed. `GLCD.SVC` holds the
+graphics LCD's console and makes the graphics LCD the console unless `PICO.SVC`
+is in.
 
 This board has neither display nor a matrix keyboard, so both installations
 fail and the CCP prints the name of each failed command with a question mark:
-`PICO.DRV?` and `GLCD.DRV?`. The console stays on the serial terminal. The
+`PICO.SVC?` and `GLCD.SVC?`. The console stays on the serial terminal. The
 startup file is read only once, after cold boot, and a program's exit doesn't
 run it again.
 
@@ -293,35 +303,36 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
+A>PICO.SVC
 
 ```
 
-When `PICO.DRV` installs, the PICO9918 becomes the console, and from then on
-TEC-OS writes nothing more to the serial terminal and reads the matrix
-keyboard in place of the serial port. TEC-OS clears the screen when `PICO.DRV`
-takes the console, so the PICO9918 shows only what followed:
+When `PICO.SVC` installs, the PICO9918 becomes the console, and from then on
+TEC-OS writes nothing more to the serial terminal and reads the matrix keyboard
+in place of the serial port. The BIOS clears the screen when `PICO.SVC` takes
+the console, so the PICO9918 shows only what followed:
 
 <!-- node tools/capture.mjs --board pico --screen -->
 ```text
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
 A>
 ```
 
-`GLCD.DRV` fails here because the PICO9918 is already the console. The
+`GLCD.SVC` fails here because the PICO9918 is already the console. The
 graphics LCD's driver installs only while the console is the serial terminal,
 or for the command `CON UC1`, which moves the console to the graphics LCD.
 Chapter 5 gives the rules for display drivers.
 
 A display driver takes 1,536 bytes of memory below the BDOS, which leaves less
 for programs. CP/M calls the memory a program may use the TPA, the Transient
-Program Area. It starts at `0100h` and ends below the BDOS's entry, whose
-address is the word at `0006h`. On the starter card with no driver the word is
-`B806h`, and programs have 46,854 bytes. With `PICO.DRV` installed it is
-`B206h`, and programs have 45,318. Chapter 7 explains a program's memory.
+Program Area. It starts at `0100h` and ends below the address in the word at
+`0006h`, which is the BDOS's entry or, with a service installed, the lowest
+service's jump to it. On the starter card with no service the word is `B806h`,
+and programs have 46,854 bytes. With `PICO.SVC` installed it is `B206h`, and
+programs have 45,318. Chapter 7 explains a program's memory.
 
 A board with a PICO9918 and the matrix keyboard has a dark screen if no display
 driver was installed by the time of the first prompt, and the 20 × 4 LCD's last
@@ -334,24 +345,27 @@ row then shows `PICO?`. That board may have no serial terminal attached.
 <!-- node tools/capture.mjs DIR -->
 ```text
 A>DIR
-TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     PICO.DRV
-PICO40.DRV   PICO32.DRV   GLCD.DRV     STARTUP.CMD  EDIT.COM     README.TXT
-12 files, 986K free
+TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     PICO.SVC
+PICO40.SVC   PICO32.SVC   GLCD.SVC     STARTUP.CMD  EDIT.COM     TAS.COM
+README.TXT  
+13 files, 976K free
 A>
 ```
 
 A file name has up to eight characters, a full stop and a type of up to three.
 A file of type `.COM` is a program, and its name without the type is the
-command that runs it. `PICO40.DRV` and `PICO32.DRV` hold the PICO9918's
+command that runs it. `PICO40.SVC` and `PICO32.SVC` hold the PICO9918's
 console at 40 columns and at 32 columns, and a line in `STARTUP.CMD` naming
-one of them in place of `PICO.DRV` selects the width. The last line of the
+one of them in place of `PICO.SVC` selects the width. The last line of the
 listing is the number of files and the space left on the drive. A card made
-without Edit lists eleven files and ends `11 files, 994K free`.
+without Edit lists twelve files and ends `12 files, 984K free`.
 
 `TYPE` prints a text file, and the starter card's `README.TXT` lists the
-programs:
+programs. The file is longer than the terminal's 24 rows, so `TYPE` stops at
+`[more]` before its last line, and a key, `x` in this run, rubs out `[more]`
+and goes on:
 
-<!-- node tools/capture.mjs "TYPE README.TXT" -->
+<!-- node tools/capture.mjs "TYPE README.TXT" "@key x" -->
 ```text
 A>TYPE README.TXT
 TEC-OS starter disk
@@ -361,11 +375,23 @@ TERM               draw on the video console; TERM S also scrolls
 PROBE              exercise the BDOS file functions
 DEMO               the LCD, digits, 8x8 LEDs and PICO9918; any key stops
 EDIT NAME.TXT      full-screen editor, if present: ^S save, ^Q quit
+TAS NAME           assemble NAME.ASM to NAME.COM and NAME.DBG
 VOLS               list the card's volumes
 MOUNT B: NAME      put a volume on a drive; MOUNT B: takes it off
 
+NAME.SVC           install a service, such as a display's driver
+SERVICES           list the services installed, each with its pages
+UNLOAD             remove the last service installed
+
+A line chains commands with !, and a piece that starts with : runs only if the
+last command succeeded: ERA X.COM!EDIT X.ASM!TAS X!:X
+
 B: is an empty work disk, written behind: its changes reach the card when a
 file is closed, at ^C and at MOUNT. Press ^C at A> before reset or power off.
+
+A card with .DRV files is from an older TEC-OS and this ROM won't load them.
+Make a new starter card, or rename each file .SVC if its format is 3 and change
+STARTUP.CMD to match.
 
 A>
 ```
@@ -493,13 +519,12 @@ R retry, H header> H
 R retry, H header> 
 ```
 
-The number after `error` is a code in hexadecimal. Codes `01` to `08` come
-from the SD card driver and identify the step of talking to the card that
-failed. `01` is no answer to the first command sent to the card, which is what
-an empty socket gives. Codes `20` to `2A` come from the checks on the
-container: `21` is a block 0 that doesn't start with the container's name,
-`TECOSVOL`, and `2A` is a card with no volume for drive A. Appendix D lists
-them all.
+The number after `error` is a code in hexadecimal. Codes `01` to `04` come from
+the SD card driver and identify the step of starting the card that failed. `01`
+is no answer to the first command sent to the card, which is what an empty
+socket gives. Codes `20` to `2A` come from the checks on the container: `21` is
+a block 0 that doesn't start with the container's name, `TECOSVOL`, and `2A` is
+a card with no volume for drive A. Appendix D lists them all.
 
 `H` prints the first 64 bytes of the last block read from the card, in
 hexadecimal, and they show whether the card holds a TEC-OS container at all.
