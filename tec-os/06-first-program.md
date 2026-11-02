@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 98c6416, with the ATOM assembler from the
-repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, `ATOM.COM` from
-ATOM 505cee1 (`assets/atom-cpm22.com`), SHA-256
-`c99135936bcccfaffb29c98679ed4dbb5d2d6a76c62080de15a1831da2403be7`. The
+Checked against TEC-OS 718c01b, with the ATOM assembler from the
+repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
+`TAS.COM` from Thorium 7604daa, with the SHA-256
+`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`. The
 starter card's `EDIT.COM` is from Edit 845d062, and its copy on the card has
 the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
@@ -35,7 +35,7 @@ returns a byte returns it in `A`, and one that returns a word returns it in
 in its own memory, or on its stack, every value it uses after the call.
 
 The word at `0006h`, inside the jump at `0005h`, is the address that jump
-leads to: the BDOS's entry or a driver's jump on to it. It is also the end of
+leads to: the BDOS's entry or a service's jump on to it. It is also the end of
 the memory a program may use, as Chapter 7 explains. A program may read that
 word, but it makes its calls at `0005h`.
 
@@ -261,30 +261,25 @@ the same message.
 
 ## Assembling on the TEC-1G
 
-ATOM also runs on TEC-OS itself, as a CP/M program, `ATOM.COM`, which the ATOM
-repository holds as `assets/atom-cpm22.com`. With a clone of ATOM beside the
-TEC-OS clone, `tecvol` copies it onto drive B under its CP/M name:
+`TAS` is a Z80 assembler that runs on TEC-OS itself, as a CP/M program, and
+`TAS.COM` is on the starter card's drive A. It takes the language of ATOM's CP/M
+assembler, so `HELLO.ASM` assembles unchanged.
 
-```sh
-node tools/tecvol.mjs put work.img B ../atom/assets/atom-cpm22.com ATOM.COM
-```
+`A:TAS HELLO` assembles `HELLO.ASM`, the copy of the source that `SHOW`
+printed, from the current drive. It writes `HELLO.COM` beside it, with a debug
+file, `HELLO.DBG`. Here the `HELLO.COM` from the PC is erased first, so that the
+one `DIR` lists is `TAS`'s:
 
-`ATOM HELLO` assembles `HELLO.ASM`, the copy of the source that `SHOW`
-printed, from the current drive and writes `HELLO.COM` beside it. Here the
-`HELLO.COM` from the PC is erased first, so that the one `DIR` lists is
-ATOM's:
-
-<!-- node tools/capture.mjs --card work.img B: "ERA HELLO.COM" "ATOM HELLO" DIR HELLO -->
+<!-- node tools/capture.mjs --card work.img B: "ERA HELLO.COM" "A:TAS HELLO" DIR HELLO -->
 ```text
 A>B:
 B>ERA HELLO.COM
-B>ATOM HELLO
-
+B>A:TAS HELLO
 HELLO.COM written
 
 B>DIR
-SHOW.COM     HELLO.ASM    ATOM.COM     HELLO.COM   
-4 files, 8140K free
+HELLO.DBG    SHOW.COM     HELLO.ASM    HELLO.COM   
+4 files, 8160K free
 B>HELLO
 Hello from the TEC-1G
 
@@ -315,7 +310,8 @@ program set, keeping only a jump into the ROM. The warm boot then starts the
 CCP again and prints the prompt on the drive and in the user area held in the
 byte at `0004h`. The CCP writes that byte before it starts a program, so the
 prompt is on the drive and user area current then, unless the program changed
-the byte. Drivers stay installed, and the IOBYTE keeps its value. Chapter 14
+the byte. If the byte names a drive with no volume, the CCP takes drive A.
+Services stay installed, and the IOBYTE keeps its value. Chapter 14
 describes the warm boot step by step.
 
 The stack the CCP gives a program is the CCP's own, with 28 bytes free below
