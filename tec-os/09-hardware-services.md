@@ -189,7 +189,8 @@ DONE:	DB	"Written and beeped",13,10,"$"
 %INCLUDE "HWLIB.ASM"
 ```
 
-`TAS`, on drive A of the starter card, assembles the program on the board, so
+`TAS` is a Z80 assembler that runs on TEC-OS, and the starter card at this
+chapter's commit has it on drive A. It assembles the program on the board, so
 `ABI.INC` and `HWLIB.ASM` go on the card beside the source. On a PC, these
 commands put the three files on a copy of the starter card:
 
@@ -231,11 +232,11 @@ B: WORK
 The row stays after the program ends. On a ROM whose major version isn't 4,
 the same program prints `not TEC-OS with ABI 4` and leaves the LCD alone.
 
-A program may write row 3 as freely as the others, and that row has one rule
-of its own. TEC-OS puts the words `PICO?` and `GLCD?` there, as Chapter 5
-describes, and it blanks the row when a display driver takes the console, but
-only while its own word is there. `LCD` on row 3 clears the mark that records
-the word, so a program's text there isn't blanked.
+A program may write row 3 as freely as the others, and that row has one rule of
+its own. TEC-OS puts the words `PICO?` and `GLCD?` there, as Chapter 5
+describes, and it blanks the word when a display driver takes the console, but
+only while the word is there. `LCD` on row 3 clears the mark that records the
+word, so a program's text there isn't blanked.
 
 ## The speaker
 
@@ -830,6 +831,6 @@ makes a pass of `DIGIT` with a hexadecimal counter, draws the ball and polls
 for a key. At the end `DEMO` releases the chip.
 
 No hardware service drives the 8 × 8 LEDs, so `DEMO` makes its rainbow by
-writing their ports itself, as Appendix G describes, a pass of the eight rows
-in each round of the loop. Those ports carry nothing of the serial line or the
-console, so TEC-OS has no state there to protect.
+writing their ports itself, one pass of the eight rows in each round of the
+loop, as Appendix G describes. Those ports carry nothing of the serial line or
+the console, so TEC-OS has no state there to protect.
