@@ -25,8 +25,8 @@ it with the service number in `C` and its arguments in `B`, `DE` and `HL`. The
 dispatcher therefore has only `A` and the flags to work with until it has saved
 what it needs.
 
-`HWBASE` is 19 so that the numbers of the table's previous major version fail
-(`src/hwsvc.asm:27`). The range test is one comparison: `SUB HWBASE` takes 19
+The service numbers start at `HWBASE`, 19, so that the numbers of the table's
+previous major version fail (`src/hwsvc.asm:27`). The range test is one comparison: `SUB HWBASE` takes 19
 from the number, so a number below 19 wraps to a large one, and `CP HWCOUNT`
 then tests both ends (`src/hwsvc.asm:52-54`). The `LD A,HWEBAD` that follows
 leaves the flags alone, so a number out of range leaves through `HWERR` with
@@ -170,12 +170,13 @@ to move lines to and from EXPAND 1 (`src/cache.asm:262-269`,
 `src/cache.asm:365-370`). Its cross-bank path is therefore the cache's alone,
 since a program's `MOVE` to bank 1 never gets past `MVRANGE`.
 
-A count of 0 returns at once (`src/xmove.asm:37-39`). `LD A,I` copies the
-interrupt enable to the flag `P/V`, and `DI` and `PUSH AF` keep it for the end
-(`src/xmove.asm:40-42`). The two latch values are built in the alternate
-registers: `C'` is the port, and `D'` and `E'` are `LATCHV` with `LATEXP` set
-for each end in bank 1 (`src/xmove.asm:43-57`). The old values of those
-registers go on the stack, so they are kept. Equal values mean one bank, and
+A count of 0 returns at once (`src/xmove.asm:37-39`). Any other copy moves the
+latch with interrupts off, so `LD A,I` copies the interrupt enable to the flag
+`P/V`, and `DI` and `PUSH AF` keep it for the end (`src/xmove.asm:40-42`). `BC`,
+`DE` and `HL` hold the copy's own values, so the two latch values go in the
+alternate registers, whose old values are pushed first: `C'` is the port, and
+`D'` and `E'` are `LATCHV` with `LATEXP` set for each end in bank 1
+(`src/xmove.asm:43-57`). Equal values mean one bank, and
 `MVLDIR` writes that latch, does an `LDIR` and goes to `MVEND`
 (`src/xmove.asm:58-61`, `src/xmove.asm:122-127`).
 
@@ -208,9 +209,10 @@ as a name with a question mark.
 
 ## The seven steps
 
-The steps are ordered so that a load can fail at any of them. Nothing but the
-file changes before the move in step 5, and the write of `PZTOP` in step 7 is
-the commit.
+Before the move in step 5 a load changes only the file and the loader's own
+variables, so a failure in the first four steps leaves the rest of memory as it
+was (`src/svc.asm:54-56`). The write of `PZTOP` in step 7 is the commit: until
+then a warm boot gives the pages back, as step 6 describes.
 
 ### 1. The file's checks
 
@@ -240,8 +242,8 @@ stack across the lookup (`src/svc.asm:97`). A missing record ends the load
 
 The relocation data must lie within the records read too
 (`src/svc.asm:110-113`). A service's code runs on its caller's stack, as the
-section on the stack figures describes, so `HL` then points at the room left
-on the three stacks: `SVCLIM` with no service in, and otherwise offset 12 of
+section on the stack figures describes, so each load has to fit its figures
+into the room left. `HL` then points at that room on the three stacks: `SVCLIM` with no service in, and otherwise offset 12 of
 the newest service's header (`src/svc.asm:114-119`). The loop takes each
 figure in the new header from that room and fails on a borrow, and it stores
 the difference over the figure in the new header (`src/svc.asm:120-130`). The
