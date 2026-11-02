@@ -42,7 +42,7 @@ reader is the serial port and its list device discards what it is given. So on
 `BAT:` TEC-OS reads the serial port and prints nothing. Chapter 8 describes
 the reader and the list device.
 
-The 20 × 4 character LCD is never the console. TEC-OS writes its version and
+The 20 × 4 LCD is never the console. TEC-OS writes its version and
 the drives there at cold boot, and programs write to it through the services
 in Chapter 9.
 
@@ -57,7 +57,8 @@ was, and the console with it.
 replies are `CON: TTY: serial terminal`, `CON: CRT: PICO9918`,
 `CON: BAT: reader and list` and `CON: UC1: GLCD`.
 
-`CON` followed by a device name sets the IOBYTE's console bits to that device.
+`CON` followed by a device name sets the IOBYTE's console field, its low two
+bits, to that device.
 The names are `TTY`, `CRT`, `BAT` and `UC1`, and a colon may follow them. The
 BIOS acts on the new bits at its next console call. The first call after the
 change is the one that prints `CON`'s reply, so the reply appears on the new
@@ -75,7 +76,7 @@ A>
 `PICO.DRV` makes the PICO9918 the console on a board with a PICO9918 and the
 matrix keyboard. There, `CON TTY` typed on the matrix keyboard moves the
 console to the serial terminal. The command's echo appears on the PICO9918.
-The reply and the next prompt appear on the PC's terminal, which shows this:
+The reply and the next prompt appear on the serial terminal, which shows this:
 
 <!-- node book/capture.mjs --board pico --serial "CON TTY" -->
 ```text
@@ -93,8 +94,9 @@ console to the PICO9918. It then shows nothing more until the reply to
 `CON TTY`. The PICO9918 goes on showing what was on it, but TEC-OS writes
 nothing more there and stops reading the matrix keyboard. `CON CRT` typed on
 the PC moves the console back. Whenever a display becomes the console, the
-BIOS clears its screen and puts the cursor at the top left. After `CON CRT`
-the PICO9918 therefore shows only the reply and the prompt:
+BIOS clears its screen and puts the cursor at the top left, unless the display
+is the PICO9918 and a program has claimed it, as Chapter 9 describes. After
+`CON CRT` the PICO9918 therefore shows only the reply and the prompt:
 
 <!-- node book/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
 ```text
@@ -104,8 +106,8 @@ A>
 
 `CRT:` and `UC1:` need their display, its driver and the matrix keyboard. If
 any of them is missing, the BIOS uses the serial terminal, so there is always
-a console. On a board with only a serial terminal, `CON CRT` sets the IOBYTE's
-bits to 1 and the console stays on the serial terminal. `CON` reports that:
+a console. On a board with only a serial terminal, `CON CRT` sets the console
+field to 1 and the console stays on the serial terminal. `CON` reports that:
 
 <!-- node book/capture.mjs CON "CON CRT" "CON UC1" CON -->
 ```text
@@ -211,7 +213,8 @@ memory, as Chapter 1 explained. With both displays' drivers installed,
 programs have 3,072 bytes less. Chapter 5 gives the rules for the startup file
 and for installing and removing drivers.
 
-On a display, TEC-OS is the terminal. It draws each character at the cursor
+A console on a display is a *video console*, and there TEC-OS is the terminal.
+It draws each character at the cursor
 and moves the cursor on. It acts on the control characters and the ANSI escape
 sequences that Chapter 8 lists. While TEC-OS waits for a key on a display, the
 cursor is drawn as the reverse image of the character under it. The next
