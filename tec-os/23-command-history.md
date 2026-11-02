@@ -12,20 +12,19 @@ Checked against TEC-OS 62d47ed, with the starter card's `EDIT.COM` from Edit
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 At the CCP's prompt, `^W` brings back the line typed before, and `^N` the line
-after the one shown. Chapter 3 describes the keys from the prompt. This
-chapter describes the store behind them: a ring of 256 bytes in EXPAND 1, the
-way a line goes into it, the way `^W` and `^N` walk it inside BDOS function
-10, and what a warm boot and a reset leave of it. All of it is in
-`src/history.asm`, with a few lines in the BDOS's line input and the CCP.
+after the one shown. Chapter 3 describes the keys from the prompt. This chapter
+describes the store behind them, a ring of 256 bytes in EXPAND 1. It also
+describes the way a line goes into the ring, the way `^W` and `^N` walk it
+inside BDOS function 10 and what a warm boot and a reset leave of it. All of it
+is in `src/history.asm`, with a few lines in the BDOS's line input and the CCP.
 
 ## Recalling a line
 
-`^W` at an empty prompt puts the newest line from the history in the line
-buffer and echoes it, as if it had been typed. A second `^W` replaces it with
-the line before that. The line can then be edited with the keys of BDOS
-function 10, such as backspace, and Return runs it. Here two lines were typed,
-and then `^W`, `^W` and Return; the screen shows the recalled `CON` after the
-prompt, and its reply:
+`^W` at an empty prompt puts the newest line from the history in the line buffer
+and echoes it, as if it had been typed. A second `^W` replaces it with the line
+before that. The line can then be edited with the keys of BDOS function 10, such
+as backspace, and Return runs it. Here two lines were typed, and then `^W`, `^W`
+and Return. The screen shows the recalled `CON` after the prompt, and its reply:
 
 <!-- node book/capture.mjs --board pico --screen CON "TYPE STARTUP.CMD" "@start "$'\x17\x17' -->
 ```text
@@ -42,14 +41,14 @@ A>
 
 Most of the transcripts in this chapter come from the PICO9918's screen. A
 recall erases the line already on the console with a backspace, a space and a
-backspace for each character, and the screen shows the result of the erasure
-where the serial output would show the bytes. The capture's `@start` line
-types its keys and a Return together; `$'\x17'` is the shell's way of writing
-`^W`, `$'\x0e'` `^N` and `$'\x08'` backspace.
+backspace for each character. The screen shows the result of the erasure where
+the serial output would show the bytes. The capture's `@start` line types its
+keys and a Return together. `$'\x17'` is the shell's way of writing `^W`,
+`$'\x0e'` `^N` and `$'\x08'` backspace.
 
 A recalled line is the start of a new line, not a fixed copy. Here `DIR *.DRV`
-was recalled with `^W`, its last three characters were taken off with
-backspace and `CMD` was typed in their place:
+was recalled with `^W`, its last three characters were taken off with backspace
+and `CMD` was typed in their place:
 
 <!-- node book/capture.mjs --board pico --screen "DIR *.DRV" "@start "$'\x17\x08\x08\x08CMD' -->
 ```text
@@ -63,9 +62,9 @@ A>
 ```
 
 `^N` moves the other way, toward the newest line, and one step past the newest
-it leaves an empty line. In this run `^W` `^W` showed `CON`, `^N` showed `DIR
-*.CMD`, and a second `^N` emptied the line, so the Return ran nothing and the
-CCP printed the prompt again:
+it leaves an empty line. In this run `^W` `^W` showed `CON` and `^N` showed `DIR
+*.CMD`. A second `^N` emptied the line, so the Return ran nothing and the CCP
+printed the prompt again:
 
 <!-- node book/capture.mjs --board pico --screen CON "DIR *.CMD" "@start "$'\x17\x17\x0e\x0e' -->
 ```text
@@ -83,53 +82,55 @@ nothing.
 
 ## The ring at BD00h
 
-The history is the page at `BD00h` in EXPAND 1, `HRING`
-(`src/history.asm:14`). Chapter 13 lists EXPAND 1's other pages, and explains
-why programs can't reach it through `XMOVE` and `MOVE` and why no stack is in
-use while it is in view.
+The history is the page at `BD00h` in EXPAND 1, `HRING` (`src/history.asm:14`).
+Chapter 13 lists EXPAND 1's other pages. It also explains why programs can't
+reach this page through `XMOVE` and `MOVE` and why no stack is in use while it
+is in view.
 
 Two routines read and write the ring a byte at a time. `HGET` returns the byte
 at offset `L` in `A`, and `HPUT` writes `A` there, with `H` holding the ring's
-page, `BDh` (`src/history.asm:16-42`). Each saves the interrupt state, turns
-interrupts off, writes the latch with `LATEXP` added to TEC-OS's copy of it at
-`0040h`, makes the access, writes the latch back as it was, and turns
-interrupts on again if they were on before.
+page, `BDh` (`src/history.asm:16-42`). Each saves the interrupt state and turns
+interrupts off. Each then writes the latch with `LATEXP` added to TEC-OS's copy
+of it at `0040h`, makes the access and writes the latch back as it was. Last, it
+turns interrupts on again if they were on before.
 
-The offset into the page is `L` alone, so moving from offset `FFh` to the next
-byte with `INC L` reaches offset `00h`, and the page is a ring with no end.
-Each line is stored as its characters followed by a byte of 0, written forward
-from the offset in `HHEAD`, a byte of the workspace in EXPAND 0
-(`src/ram.asm:220-221`). After a line's 0, `HHEAD` holds the offset of the
-byte that follows it.
+The offset into the page is `L` alone. `INC L` from offset `FFh` reaches offset
+`00h`, so the page is a ring with no end. Each line is stored as its characters
+followed by a byte of 0. It is written forward from the offset in `HHEAD`, a
+byte of the workspace in EXPAND 0 (`src/ram.asm:220-221`). After a line's 0,
+`HHEAD` holds the offset of the byte that follows it.
 
 The ring is kept so that the byte at `HHEAD` is always 0, and so is the byte
 before it, the newest line's terminator (`src/history.asm:6-10`). A 0 that
 follows another 0 is an empty entry. The empty entry at `HHEAD` separates the
-newest line from the oldest, and a walk back from the newest line stops when
-it reaches an empty entry.
+newest line from the oldest. A walk back from the newest line stops when it
+reaches an empty entry.
 
 ## Storing a line
 
 With no chained piece and no startup line left, the CCP reads a command line
-with BDOS function 10, and before the call it sets the byte `HFLAG` to `FFh`
+with BDOS function 10. Before the call it sets the byte `HFLAG` to `FFh`
 (`src/cpm/ccp.asm:80-89`, `src/ram.asm:141`). Function 10 ends at `LINDONE`,
 after Return, after a line feed or when the buffer is full. There it reads
-`HFLAG`, clears it, and calls `HSTORE` if the flag was set and the line has
-at least one character (`src/cpm/bdos.asm:442-455`). When a program calls function 10 itself, `HFLAG`
-is clear: `LINDONE` cleared it after the CCP's line, and every warm boot
-clears it too, with the rest of the RAM from `CCPCLR` up, for a line the CCP
-abandoned at `^C` (`src/cpm/bdos.asm:451-453`, `src/boot.asm:73`,
-`src/boot.asm:273-277`). So only the lines typed at the CCP's prompt go into
-the history. A chained line (Chapter 11) goes in once, whole, with its `!` and
-`:`, so `^W` brings all of it back. The CCP takes the line's pieces, and a
-command from function 47, from `CMDTXT` with no call of function 10, and they
-add no entry (`src/cpm/ccp.asm:80-81`). The lines of `STARTUP.CMD` don't go in
-either: the CCP takes each of them from `STLINE` in place of function 10
-(`src/cpm/ccp.asm:83-84`), so after cold boot the history is empty.
+`HFLAG`, clears it and calls `HSTORE` if the flag was set and the line has at
+least one character (`src/cpm/bdos.asm:442-455`).
 
-`HSTORE` stores the line as function 10 returns it, before the CCP turns small
-letters into capitals, which it does a piece at a time
-(`src/cpm/ccp.asm:140-152`), so a recalled line comes back as it was typed:
+When a program calls function 10 itself, `HFLAG` is clear. `LINDONE` cleared it
+after the CCP's line (`src/cpm/bdos.asm:451-453`). For a line the CCP abandoned
+at `^C`, every warm boot clears it too, with the rest of the RAM from `CCPCLR`
+up (`src/boot.asm:73`, `src/boot.asm:273-277`). So only the lines typed at the
+CCP's prompt go into the history.
+
+A chained line (Chapter 11) goes in once, whole, with its `!` and `:`, so `^W`
+brings all of it back. The CCP takes the line's pieces, and a command from
+function 47, from `CMDTXT` with no call of function 10, and they add no entry
+(`src/cpm/ccp.asm:80-81`). The lines of `STARTUP.CMD` don't go in either, because
+the CCP takes each of them from `STLINE` in place of function 10
+(`src/cpm/ccp.asm:83-84`). After cold boot the history is therefore empty.
+
+`HSTORE` stores the line as function 10 returns it. The CCP turns small letters
+into capitals later, a piece at a time (`src/cpm/ccp.asm:140-152`), so a recalled
+line comes back as it was typed:
 
 <!-- node book/capture.mjs --board pico --screen con "@start "$'\x17' -->
 ```text
@@ -140,15 +141,15 @@ CON: CRT: PICO9918
 A>
 ```
 
-Two lines are not stored (`src/history.asm:104-130`). One that holds a byte of
-0 would end early in the ring, and `HSTORE` passes over it. One that is the
-same as the newest line, of the same length, is left out, so a command
-repeated at the prompt takes one entry. To find the newest line `HSTORE`
-starts from its terminator at `HHEAD − 1` and goes back to its first byte with
-`HSTART`, which steps back until the byte before is 0
-(`src/history.asm:44-51`). The comparison goes on to the end of the new line,
-counting differences in `C`, and the line counts as a repeat only if there
-were none and the newest line ends at the same place.
+Two kinds of line are not stored (`src/history.asm:104-130`). One that holds a
+byte of 0 would end early in the ring, and `HSTORE` passes over it. One that is
+the same as the newest line, of the same length, is left out, so a command
+repeated at the prompt takes one entry. To find the newest line, `HSTORE` starts
+from its terminator at `HHEAD − 1`. It goes back to the line's first byte with
+`HSTART`, which steps back until the byte before is 0 (`src/history.asm:44-51`).
+The comparison goes on to the end of the new line, counting differences in `C`.
+The line counts as a repeat only if there were none and the newest line ends at
+the same place.
 
 Here `CON` was typed twice and `DIR *.CMD` once. The ring holds two lines, so
 `^W` three times reached `CON` and stayed there:
@@ -167,28 +168,27 @@ CON: CRT: PICO9918
 A>
 ```
 
-A line to be stored is written from `HHEAD` with `HPUT`, then its 0, and
-`HHEAD` moves past the 0 (`src/history.asm:133-144`). When the ring is full,
-the new line overwrites the oldest lines, and the last one it reaches may be
-cut part way through. The loop at `HSCLR` deals with that remnant: it writes 0
-forward from the new `HHEAD`, up to and including the first byte that was 0
-already (`src/history.asm:145-151`). That byte is the terminator of the line
-partly overwritten, so the remnant is gone, the byte at `HHEAD` is 0, and the
-ring holds only whole lines. When nothing was overwritten, the byte at `HHEAD`
-was already 0, and the loop clears that one byte.
+A line to be stored is written from `HHEAD` with `HPUT`, then its 0, and `HHEAD`
+moves past the 0 (`src/history.asm:133-144`). When the ring is full, the new line
+overwrites the oldest lines, and the last one it reaches may be cut part way
+through. The loop at `HSCLR` deals with that remnant. It writes 0 forward from
+the new `HHEAD`, up to and including the first byte that was 0 already
+(`src/history.asm:145-151`). That byte is the terminator of the line partly
+overwritten, so the remnant is gone and the byte at `HHEAD` is 0. The ring holds
+only whole lines. When nothing was overwritten, the byte at `HHEAD` was already
+0, and the loop clears that one byte.
 
 Each line takes its length and one byte more. The CCP's buffer holds up to 127
-characters (`src/boot.asm:280-281`), so a line of that length takes 128 bytes
-of the ring, half of it, and short commands such as `DIR` take four bytes
-each.
+characters (`src/boot.asm:280-281`), so a line of that length takes 128 bytes of
+the ring, half of it. Short commands such as `DIR` take four bytes each.
 
 ## ^W and ^N in function 10
 
-Function 10 passes `^W` and `^N`, codes 23 and 14 (`src/cpm/bdos.asm:41-42`),
-to `LINHIST` (`src/cpm/bdos.asm:302-305`). With `HFLAG` clear, in a program's
-call, `LINHIST` sends the code on as an ordinary character into the buffer, as
-CP/M 2.2's function 10 does (`src/cpm/bdos.asm:333-336`). With it set, it
-calls `HREC` (`src/cpm/bdos.asm:337`).
+Function 10 passes `^W` and `^N`, codes 23 and 14 (`src/cpm/bdos.asm:41-42`), to
+`LINHIST` (`src/cpm/bdos.asm:302-305`). With `HFLAG` clear, in a program's call,
+`LINHIST` sends the code on as an ordinary character into the buffer, as CP/M
+2.2's function 10 does (`src/cpm/bdos.asm:333-336`). With it set, it calls
+`HREC` (`src/cpm/bdos.asm:337`).
 
 `HPOS` records the line shown, as the offset of its terminator
 (`src/ram.asm:142`). Each call of function 10 starts with `HPOS` equal to
@@ -199,7 +199,7 @@ calls `HREC` (`src/cpm/bdos.asm:337`).
 - For `^W` it steps back to the first byte of the shown entry with `HSTART`.
   The byte before that is the terminator of the entry before, and the byte
   before that terminator is that entry's last character. If that character is
-  0, the entry before is empty: the walk has reached the oldest line, and
+  0, the entry before is empty. The walk has reached the oldest line, and
   `HREC` returns with the line as it is (`src/history.asm:62-68`). Otherwise
   the entry before's terminator becomes `HPOS`.
 - For `^N` with no line shown, `HPOS` equal to `HHEAD`, `HREC` returns at once
@@ -209,18 +209,18 @@ calls `HREC` (`src/cpm/bdos.asm:337`).
   `HHEAD`, so the entry shown is the empty one and the line becomes empty.
 
 To show the entry, `HREC` erases what is in the buffer with `LINERASE`, the
-routine behind `^X`, which takes the characters off one at a time and erases
-each on the console (`src/cpm/bdos.asm:429-440`). It then copies the entry's
-bytes into the buffer with `HGET`, counting and echoing each one, as if it had
-been typed, up to the buffer's maximum (`src/history.asm:83-102`). From then
-on function 10 goes on reading keys, and the recalled characters are edited
+routine behind `^X`. `LINERASE` takes the characters off one at a time and
+erases each on the console (`src/cpm/bdos.asm:429-440`). It then copies the
+entry's bytes into the buffer with `HGET`, counting and echoing each one, as if
+it had been typed, up to the buffer's maximum (`src/history.asm:83-102`).
+Function 10 then goes on reading keys, and the recalled characters are edited
 like typed ones.
 
 ## Warm boot and reset
 
 A warm boot leaves the history as it was. Nothing in the warm boot path writes
-to EXPAND 1's page at `BD00h`, and `HHEAD` is in the part of the workspace
-above the RAM BIOS table at `BF00h`, outside the RAM that `CPMINIT` clears
+to EXPAND 1's page at `BD00h`. `HHEAD` is in the part of the workspace above the
+RAM BIOS table at `BF00h`, outside the RAM that `CPMINIT` clears
 (`src/boot.asm:59-82`, `src/boot.asm:273-277`, `src/ram.asm:190`,
 `src/ram.asm:221`). A program's exit, a `^C` at the prompt and BDOS function 0
 all keep it. Here `^C` at the prompt was followed by `^W`:
@@ -236,13 +236,13 @@ A>
 ```
 
 A reset clears it. Cold boot clears the resident workspace, `HHEAD` with it
-(`src/boot.asm:23-27`), and `MEMINIT` fills all of EXPAND 1 with 0 before it
-marks the cache's lines empty (`src/boot.asm:149-160`). The page at `BD00h` is
-then all zeros, `HHEAD` is 0, and the byte before it, at offset `FFh`, is 0:
-the ring is empty and still kept as `HSTORE` and `HREC` require. This holds
-for a recognised reset too, the one that keeps the selected volumes, since
-only the drives' table is carried across it (`src/boot.asm:131-135`). After
-the reset in this run, `^W` and Return gave an empty line:
+(`src/boot.asm:23-27`). `MEMINIT` fills all of EXPAND 1 with 0 before it marks
+the cache's lines empty (`src/boot.asm:149-160`). The page at `BD00h` is then
+all zeros, `HHEAD` is 0 and the byte before it, at offset `FFh`, is 0. The ring
+is empty and still kept as `HSTORE` and `HREC` require. This holds for a
+recognised reset too, the one that keeps the selected volumes, since only the
+drives' table is carried across it (`src/boot.asm:131-135`). After the reset in
+this run, `^W` and Return gave an empty line:
 
 <!-- node book/capture.mjs CON "@reset" "@start "$'\x17' -->
 ```text
