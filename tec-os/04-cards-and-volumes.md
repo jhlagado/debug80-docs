@@ -338,7 +338,8 @@ holds is copied from memory, and only a block it doesn't hold is read from
 the card. A block written to the card is also brought up to date in the
 cache, so the cache never holds a stale copy. On the model, a program took
 1.66 seconds to read a 12 KiB file the first time and 0.33 seconds, a fifth
-of that, the second; Chapter 19 gives the method.
+of that, the second. A file too large for the cache took as long the second
+time. Chapter 19 gives the method.
 
 On every volume but one, a write reaches the card before TEC-OS reports it
 done: when a program writes a record, TEC-OS writes the record's whole block
