@@ -26,7 +26,8 @@ dispatcher therefore has only `A` and the flags to work with until it has saved
 what it needs.
 
 The service numbers start at `HWBASE`, 19, so that the numbers of the table's
-previous major version fail (`src/hwsvc.asm:27`). The range test is one comparison: `SUB HWBASE` takes 19
+previous major version fail (`src/hwsvc.asm:27`). The range test is one
+comparison: `SUB HWBASE` takes 19
 from the number, so a number below 19 wraps to a large one, and `CP HWCOUNT`
 then tests both ends (`src/hwsvc.asm:52-54`). The `LD A,HWEBAD` that follows
 leaves the flags alone, so a number out of range leaves through `HWERR` with
@@ -243,7 +244,8 @@ stack across the lookup (`src/svc.asm:97`). A missing record ends the load
 The relocation data must lie within the records read too
 (`src/svc.asm:110-113`). A service's code runs on its caller's stack, as the
 section on the stack figures describes, so each load has to fit its figures
-into the room left. `HL` then points at that room on the three stacks: `SVCLIM` with no service in, and otherwise offset 12 of
+into the room left. `HL` then points at that room on the three stacks: `SVCLIM`
+with no service in, and otherwise offset 12 of
 the newest service's header (`src/svc.asm:114-119`). The loop takes each
 figure in the new header from that room and fails on a borrow, and it stores
 the difference over the figure in the new header (`src/svc.asm:120-130`). The
