@@ -210,7 +210,7 @@ Function 10 passes `^W` and `^N`, codes 23 and 14 (`src/cpm/bdos.asm:41-42`), to
 
 To show the entry, `HREC` erases what is in the buffer with `LINERASE`, the
 routine behind `^X`. `LINERASE` takes the characters off one at a time and
-erases each on the console (`src/cpm/bdos.asm:429-440`). It then copies the
+erases each on the console (`src/cpm/bdos.asm:429-440`). `HREC` then copies the
 entry's bytes into the buffer with `HGET`, counting and echoing each one, as if
 it had been typed, up to the buffer's maximum (`src/history.asm:83-102`).
 Function 10 then goes on reading keys, and the recalled characters are edited
