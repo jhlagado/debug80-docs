@@ -89,7 +89,7 @@ a `rom-write`, and a write to `0000h–07FFh` while the boot overlay is on is
 recorded as an `overlay-write`. Each goes in `violations` with the address and
 the program counter.
 
-On a board the first reaches the ROM chip, and the second goes to RAM in the
+On a board the first reaches the ROM chip. The second goes to RAM in the
 runtime but to the ROM in the TEC-1G's own documents (`docs/diagnostics.md`,
 T08). TEC-OS never makes either write, and 23 of the test files check that
 `violations` is empty.
