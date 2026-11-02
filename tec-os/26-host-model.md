@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 26. The host model and the web page
 
-Checked against TEC-OS 98c6416, with `@jhlagado/debug80-runtime` 0.3.1, the
+Checked against TEC-OS 718c01b, with `@jhlagado/debug80-runtime` 0.3.1, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -91,7 +91,7 @@ the program counter.
 
 On a board the first reaches the ROM chip. The second goes to RAM in the
 runtime but to the ROM in the TEC-1G's own documents (`docs/diagnostics.md`,
-T08). TEC-OS never makes either write, and 23 of the test files check that
+T08). TEC-OS never makes either write, and 24 of the test files check that
 `violations` is empty.
 
 A second watch covers EXPAND 1 (`host/machine.mjs:180-222`). From cold boot's
@@ -127,17 +127,17 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
-PICO.DRV?
+A>PICO.SVC
+PICO.SVC?
 
-A>GLCD.DRV
+A>GLCD.SVC
 
 A>CON
 CON: UC1: GLCD
 A>
 ```
 
-The serial record stops where `GLCD.DRV` took the console:
+The serial record stops where `GLCD.SVC` took the console:
 
 <!-- node tools/capture.mjs --board glcd --serial CON -->
 ```text
@@ -145,10 +145,10 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
-PICO.DRV?
+A>PICO.SVC
+PICO.SVC?
 
-A>GLCD.DRV
+A>GLCD.SVC
 
 ```
 
@@ -195,7 +195,7 @@ were, as the board's reset button does (`host/machine.mjs:522-582`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 34 such files, from
+Node.js's own test runner (`package.json:17`). There are 38 such files, from
 `arith.test.mjs` to `xmove.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the ROM of a
 profile from `build/` and, when the board has a matrix keyboard, puts a display
@@ -208,19 +208,20 @@ a source in `test/programs/` with ATOM and keeps the result in
 `build/test-programs` (`test/lib/fixtures.mjs:80-95`), filed under a digest of
 the source and every file it includes, so that a changed include assembles again
 (`test/lib/fixtures.mjs:29-41`). `prl` makes a PRL file from two assemblies, and
-`driver` a `.DRV` file with `makeDrv` (`test/lib/fixtures.mjs:58-79`,
+`service` a `.SVC` file with `makeSvc` (`test/lib/fixtures.mjs:57-78`,
 `test/lib/fixtures.mjs:114-115`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
 (`test/lib/fixtures.mjs:96-103`), and `volume` opens a drive of it as a CP/M
 file system for a test to write files into.
 
-Three inputs the tests use come from outside the repository: ATOM's CP/M build,
-`ATOM.COM`, the Edit program, `EDIT.COM`, and a directory of the package
-`triptych-headless`. `test/inputs.json` records the default path and SHA-256 of
-each, and the size of each file. `test/lib/inputs.mjs` reads each from its
-environment variable or its default path beside the clone. A file whose SHA-256
-differs fails its test, and a missing one skips it, or fails it with `STRICT=1`,
-which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`, `package.json:18`).
+Three inputs the tests use come from outside the repository: the starter card's
+assembler, `TAS.COM`, the Edit program, `EDIT.COM`, and a directory of the
+package `triptych-headless`. `test/inputs.json` records the default path and
+SHA-256 of each, and the size of each file. It also has an entry for ATOM's CP/M
+build, `ATOM.COM`, which no `.test.mjs` file reads. `test/lib/inputs.mjs` reads
+each from its environment variable or its default path beside the clone. A file
+whose SHA-256 differs fails its test, and a missing one skips it, or fails it
+with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`, `package.json:18`).
 
 Every test is evidence from the model. In some behaviours the model differs from
 the board as its documents describe it, such as a write under the boot overlay
@@ -287,11 +288,15 @@ change to either of them, the Power cycle button or a new card, and it first
 prepares the card with `prepareCard` from `host/card.mjs`
 (`web/src/main.mjs:66-83`). `prepareCard` checks that drive A has the display's
 driver file, in the format this ROM loads. If it does, the first line of
-`STARTUP.CMD` becomes that file's name, followed by `GLCD.DRV` on a board with
-the PICO9918, and `STARTUP.CMD`'s other lines stay if they name no display
-driver (`host/card.mjs:24-80`). A card that fails the check is left as it is,
-and the reason goes to the serial terminal with the words `[power on]`. The
-reason is no drive A, no such driver or a driver of another format.
+`STARTUP.CMD` becomes that file's name, followed by `GLCD.SVC` on a board with
+the PICO9918. `STARTUP.CMD`'s other lines stay, less their display pieces, and a
+`:` piece that followed a display piece loses its `:` and runs as an ordinary
+line (`host/card.mjs:24-80`). A card that fails the check is left as it is, and
+the reason goes to the serial terminal with the words `[power on]`. The reason
+is no drive A, a `.DRV` display file from an older TEC-OS, no such driver or a
+driver of another format. The message for an older card names the display's own
+`.DRV` file if the card has it, and otherwise the first `.DRV` display file in
+the directory (`host/card.mjs:35-38`).
 
 "Copy file to drive" writes to a copy of the card while the machine is paused
 and saves it. It then copies it into the card the machine is using and presses
