@@ -113,9 +113,9 @@ it reaches an empty entry.
 With no chained piece and no startup line left, the CCP reads a command line
 with BDOS function 10, and before the call it sets the byte `HFLAG` to `FFh`
 (`src/cpm/ccp.asm:80-89`, `src/ram.asm:141`). Function 10 ends at `LINDONE`,
-after Return, after a line feed or when the buffer is full. There it reads `HFLAG`, clears it, and calls `HSTORE` if the
-flag was set and the line has at least one character
-(`src/cpm/bdos.asm:442-455`). When a program calls function 10 itself, `HFLAG`
+after Return, after a line feed or when the buffer is full. There it reads
+`HFLAG`, clears it, and calls `HSTORE` if the flag was set and the line has
+at least one character (`src/cpm/bdos.asm:442-455`). When a program calls function 10 itself, `HFLAG`
 is clear: `LINDONE` cleared it after the CCP's line, and every warm boot
 clears it too, with the rest of the RAM from `CCPCLR` up, for a line the CCP
 abandoned at `^C` (`src/cpm/bdos.asm:451-453`, `src/boot.asm:73`,
