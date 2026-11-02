@@ -9,7 +9,9 @@ nav_group: "Appendices"
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit
 845d062, whose card copy has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`. What this
+appendix says about `tecvol`'s checks of the descriptors' order and of the
+drives field is checked against TEC-OS bd15528.
 
 A TEC-OS card holds one container: block 0 is its header, and its volumes
 follow, each an ordinary CP/M disk. This appendix lists the header's fields,
@@ -151,14 +153,11 @@ returns its code, which cold boot prints at the diagnostic prompt (Chapter
 
 The ascending order behind `28h` is checked on every card, 1.0 and 1.1 alike,
 and it is what keeps two volumes from overlapping: each must start at or after
-the end of the one before it in the table. It also means that the ROM rejects
-a 1.0 card whose descriptors are out of order, although `tecvol` accepts one.
-`tecvol`'s check of a 1.0 card tests for overlap between every pair and
-requires the order only of a 1.1 card (`tools/lib/container.mjs:172`,
-`tools/lib/container.mjs:179`). A card whose two descriptors were swapped,
-with its checksum made good, passes `tecvol verify`, and the ROM stops at the
-diagnostic prompt with code `28h`. One Node.js command makes such a card,
-`build/swapped.img`, from the starter card:
+the end of the one before it in the table. `tecvol` makes the same check on
+every card (`tools/lib/container.mjs:174`). A card whose two descriptors were
+swapped, with its checksum made good, fails `tecvol verify`, and the ROM stops
+at the diagnostic prompt with code `28h`. One Node.js command makes such a
+card, `build/swapped.img`, from the starter card:
 
 ```sh
 node --input-type=module -e '
@@ -180,9 +179,7 @@ node tools/tecvol.mjs verify build/swapped.img
 ```
 
 ```text
-container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
-  A: SYSTEM      id 1 G1M start 2048 rw 12 file(s), 1009664 bytes free
+tecvol: volume 1: not after volume 0
 ```
 
 <!-- node book/capture.mjs --card build/swapped.img -->
@@ -197,35 +194,23 @@ order, so a card made by either passes the ROM's order check.
 
 The drives field limits the drive bytes. On a 1.1 card that gives N drives, a
 volume may name only drives A to the Nth. With N of 0, or on a 1.0 card, any
-of the four (`src/vol.asm:222-226`). `tecvol` checks only that a drive byte is
-`FFh` or 0 to 3 (`tools/lib/container.mjs:175`), so a 1.1 card made with
-`--drives 2` and a volume on drive C passes `tecvol verify`, and the ROM stops
-at the diagnostic prompt with code `29h`:
+of the four (`src/vol.asm:222-226`). The ROM stops a card that breaks this at
+the diagnostic prompt with code `29h`. `tecvol` makes the same check
+(`tools/lib/container.mjs:178`), so `tecvol verify` rejects such a card, and
+`tecvol create` rejects a volume on drive C with `--drives 2`:
 
 ```sh
 node tools/tecvol.mjs create build/drv2.img --volume G1M:SYSTEM:A --volume G1M:EXTRA:C --drives 2
-node tools/tecvol.mjs verify build/drv2.img
 ```
 
 ```text
-container: format 1.1, 6144 blocks (3145728 bytes), 2 volume(s), 2 drive(s) wanted
-  A: SYSTEM      id 1 G1M start 2048 rw 0 file(s), 1040384 bytes free
-  C: EXTRA       id 2 G1M start 4096 rw 0 file(s), 1040384 bytes free
+tecvol: volume 1: drive C is past the card's 2 drive(s)
 ```
 
-<!-- node book/capture.mjs --card build/drv2.img -->
-```text
-TEC-OS 0.1 for TEC-1G
-No volume mounted, error 29
-R retry, H header> 
-```
-
-`tecvol` makes the ROM's checks, except two, and more
-(`tools/lib/container.mjs:127-191`). The two it misses are the descriptors'
-order on a 1.0 card, code `28h`, and a volume on a drive beyond the number the
-drives field gives, code `29h`. It also requires at most 8 volumes on a 1.0
-card, a known cache flag, volume ids different from each other, unique labels
-on a 1.1 card, no volume both read-only and written behind, at most one
+`tecvol` makes all the ROM's checks, and more
+(`tools/lib/container.mjs:130-194`). It also requires at most 8 volumes on a
+1.0 card, a known cache flag, volume ids different from each other, unique
+labels on a 1.1 card, no volume both read-only and written behind, at most one
 written behind, and an image as long as the header's container length. The ROM
 checks none of the cache byte, the label, the reserved bytes or whether two
 volumes share an id, and it can't check the card's size.
