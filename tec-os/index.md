@@ -30,14 +30,14 @@ Part I works through transcripts. Each one is a real run of TEC-OS: what you
 type at the prompt and what TEC-OS printed in reply, copied unchanged, with
 the command that produced it. You can repeat every one in the web page that
 the repository builds. You can also repeat it on a PC with TEC-OS's script
-`book/capture.mjs`, which runs the same TEC-1G model from Node.js. Part II
+`book/capture.mjs`, which runs the same host model from Node.js. Part II
 explains the code itself. Each of its statements about the code gives the
 source file and line it rests on, so you can follow the explanation into the
 ROM.
 
-Every example was run on the Debug80 TEC-1G model, a software TEC-1G. TEC-OS
-has not yet run on a physical board, so what the book says about a board is
-what the code requires of one.
+Every example was run on the host model, a software TEC-1G on the Debug80
+TEC-1G runtime. TEC-OS has not yet run on a physical board, so what the book
+says about a board is what the code requires of one.
 
 Each chapter names, at its top, the TEC-OS commit its claims were checked
 against. The code is the authority: where a chapter's statement differs from
@@ -98,7 +98,7 @@ caret, so `^C` means Ctrl and C together.
    it, then assemble it again on the TEC-1G itself. The chapter ends with the
    ways a program returns to TEC-OS.
 7. **[Memory for programs](07-memory.md).** The Z80's 64 KiB on a TEC-1G, the
-   program area and the word at `0006h` that marks its end, page zero and
+   TPA and the word at `0006h` that marks its end, page zero and
    TEC-OS's own bytes at `0040h`. The chapter ends with EXPAND 1, reserved for
    TEC-OS, and CP/M 3's `XMOVE` and `MOVE`.
 8. **[Programs and the console](08-programs-and-console.md).** The console as
@@ -141,11 +141,11 @@ caret, so `^C` means Ctrl and C together.
 15. **[The BIOS and the console path](15-bios-and-console.md).** The RAM BIOS
     table at `BF00h`, the console by IOBYTE, and the list, punch and reader
     entries. The chapter also covers the bit-banged serial port, the matrix
-    keyboard scan, the terminal's escape parser, the video drivers with
+    keyboard scan, the terminal's escape parser, the display drivers with
     `ABIGLCD` and the 20 × 4 LCD.
 16. **[The BDOS](16-bdos.md).** The entry, the function table and the console
     functions, then files, extents and records, and the allocation vectors
-    with the scan at warm boot. The chapter ends with disk errors, function 50
+    with the scan at warm boot. The chapter ends with BDOS errors, function 50
     with `MOVE` and `XMOVE`, functions 108 and 47 and the differences from
     Digital Research's BDOS.
 17. **[The CCP](17-ccp.md).** The entry from boot, the prompt, and the parsing
@@ -154,7 +154,7 @@ caret, so `^C` means Ctrl and C together.
     and stack.
 18. **[The SD card and the volumes](18-sd-card-and-volumes.md).** The layers
     between the BDOS's 128-byte records and the card's 512-byte blocks. The
-    chapter covers the SPI driver and its error codes, the container's checks,
+    chapter covers the SD card driver and its error codes, the container's checks,
     the drive table, deblocking and the mount service, `ABIVOL`. Chapter 13
     describes the allocation vectors at cold boot.
 19. **[The block cache](19-block-cache.md).** Thirty lines in EXPAND 1, reads
