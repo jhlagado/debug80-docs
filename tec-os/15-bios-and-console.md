@@ -79,8 +79,8 @@ its four consoles (`src/console.asm:1-6`, `src/layout.asm:60-65`):
 | 2 | `BAT:` | the serial port | the list device, which discards it |
 | 3 | `UC1:` | the matrix keyboard | the graphics LCD |
 
-An odd value is a video display with the matrix keyboard. The IOBYTE's field is
-what a program or the CCP's `CON` command writes, and the console mode in effect
+An odd value is a display with the matrix keyboard. The IOBYTE's console field
+is what a program or the CCP's `CON` command writes, and the console mode in effect
 is a separate byte, `CONMOD`. Every console entry starts with `CONSEL`, which
 compares the field with `CONACT`, the field it last acted on. It does nothing
 when they match (`src/console.asm:46-58`). When they differ, `CONSW` switches
@@ -120,7 +120,7 @@ change.
 
 A display driver takes the console by the same route. `DRVGO` runs when the
 loader has installed a driver whose page holds a video table. It writes the
-mode into the IOBYTE's field and sets `CONACT` to `FFh`, a value no field has,
+mode into the console field and sets `CONACT` to `FFh`, a value no field has,
 so that the `CONSEL` it calls next switches (`src/glcd.asm:65-93`). `PICO.DRV` always
 takes the console, and `GLCD.DRV` takes it only when `PICO.DRV` is not in.
 
@@ -147,7 +147,7 @@ it shows the cursor and scans the keyboard one row at a time until a key is
 delivered. It then takes the key and hides the cursor. On the serial terminal
 it loops reading port `03h` until bit 7 goes low, the start bit, and receives
 the byte. Bit 7 of every serial byte is cleared. A `NUL` is skipped, because
-the Debug80 model sends one ahead of its first input byte
+the Debug80 runtime sends one ahead of its first input byte
 (`src/console.asm:148-149`). Each wait for the serial input reads port `00h`
 first. On the board that port is the hex keypad's encoder and the read does
 nothing. On the model the read lets a queued input byte start
@@ -204,7 +204,7 @@ input. TEC-OS has no printer, and it puts the other two on the serial port
 - `READER` waits for a start bit on the serial input and returns the byte
   with `RXBITS`, all eight bits, with no `NUL` skipped.
 
-The punch and reader are the serial port even while the console is a video
+The punch and reader are the serial port even while the console is a
 display. A program on the PICO9918's console can therefore exchange binary data
 with a PC over the serial line. A byte that `CONST` has already received stays
 in `RXCHAR` for the console, and `READER` does not return it
@@ -321,7 +321,7 @@ next character of output removes it first, so that output does not pay for
 drawing a cursor on every character (`src/term.asm:16-17`, `src/term.asm:24`).
 There is no cursor cell while a wrap is pending.
 
-## The video drivers and ABIGLCD
+## The display drivers and ABIGLCD
 
 The terminal's code is in the ROM, and the drivers for the two displays are on
 the card. `PICO.DRV`, in its three widths, and `GLCD.DRV` each give the ROM a
@@ -359,13 +359,13 @@ claim ends with the service's release or at warm boot, when `HWVREL` gives the
 display back to the driver (`src/boot.asm:74`).
 
 The ROM's own part of the PICO9918 is the probe at cold boot. `TMSINIT` writes
-`5Ah` to video RAM address `3FFFh` through ports `BFh` and `BEh` and reads it
+`5Ah` to VRAM address `3FFFh` through ports `BFh` and `BEh` and reads it
 back, then does the same with `A5h`. If both come back, `VIDINIT` sets `CDTMS`
 in `CONDEV` (`src/tms.asm:1-30`, `src/video.asm:7-11`).
 
 ## The 20 × 4 LCD
 
-The character LCD is an HD44780 on port `04h` for commands and `84h` for data
+The 20 × 4 LCD is an HD44780 on port `04h` for commands and `84h` for data
 (`src/lcd.asm:1-6`). `LCDINIT` sends four commands, `38h`, `0Ch`, `06h` and
 `01h`. They set an eight-bit interface with two-line addressing, the display on
 with no cursor and the address moving right after each character. The last
