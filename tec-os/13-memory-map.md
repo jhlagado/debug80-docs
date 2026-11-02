@@ -27,8 +27,8 @@ RAM, `8000h–BFFFh` is a window onto one half of the RAM chip in U9, and
 `C000h–FFFFh` is the ROM (`src/layout.asm:3-6`). The window's two halves are
 EXPAND 0 and EXPAND 1, each 16 KiB.
 
-The system latch at port `FFh` selects what is in view. Bit 2, `LATEXP`,
-selects EXPAND 1 when it is set (`src/layout.asm:13`, `src/layout.asm:18`).
+The system latch at port `FFh` (`src/layout.asm:13`) selects what is in view.
+Bit 2, `LATEXP`, selects EXPAND 1 when it is set (`src/layout.asm:18`).
 Bit 3, `LATMAIN`, selects a second 32 KiB at `0000h–7FFFh`, MAIN 1, on a board
 that has one (`src/layout.asm:20`). Bit 0, `LATSHAD`, high, turns off the copy
 of the ROM's first 2 KiB that the board shows at `0000h` after a reset
@@ -146,8 +146,8 @@ and DMA address the BDOS last set, and the block and record they map to. Next
 is the 512-byte deblocking buffer `BLKBUF` at `B966h` with its key
 (`src/ram.asm:16-20`). After it come the drive table and the drives' DPHs,
 which Chapter 18 describes, and the 128-byte directory buffer `DIRBUF` that
-every drive shares. Then come the word `STUBAD` that holds the BDOS entry
-jump's address and the mount service's scratch bytes. The video terminal's
+every drive shares. Then come the word `STUBAD`, which holds the BDOS entry
+jump's address, and the mount service's scratch bytes. The video terminal's
 state follows: an 80-byte row buffer for scrolling, the seven vectors into the
 display driver, the scroll region and the console mode (`src/ram.asm:45-58`).
 
