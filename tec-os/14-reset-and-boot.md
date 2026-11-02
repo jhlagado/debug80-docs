@@ -36,11 +36,14 @@ ROM proper. `COLD` executes `DI`, loads the stack pointer and then writes
 off, `0000h–07FFh` is RAM again, and the latch now has MAIN 0 and EXPAND 0 in
 view (`src/layout.asm:16`, `src/layout.asm:19`).
 
-The Z80 comes out of reset with interrupts off. TEC-OS executes `EI` only to
+The Z80 comes out of reset with interrupts off. The ROM executes `EI` only to
 restore a state it saved (`src/cache.asm:32`, `src/history.asm:39`,
-`src/xmove.asm:136`). Its routines that must run with interrupts off put them
-back as they were at entry. Interrupts therefore come on only if a program
-enables them. Chapter 19 describes what that costs a program that does.
+`src/xmove.asm:136`). The one other `EI` is in page zero: `PZINIT` writes it
+at `0038h` (`src/boot.asm:231-234`), and it runs only on an interrupt, with
+interrupts already on, or on a program's `RST 38h`. The ROM's routines that
+must run with interrupts off put them back as they were at entry. Interrupts
+therefore come on only if a program enables them. Chapter 19 describes what
+that costs a program that does.
 
 ## Cold boot
 
@@ -112,7 +115,7 @@ the bus itself (`src/boot.asm:292-294`). If either byte is wrong, `RAMBAD` sends
 `TEC-OS needs 64K RAM` to the serial port and stops in a loop
 (`src/boot.asm:311-320`). It calls the transmit routine `TXBYTE` directly,
 since the console isn't started yet and that routine uses only the port and
-the stack.
+the stack (`src/boot.asm:22`, `src/boot.asm:29`, `src/console.asm:218-236`).
 
 The second check is in `MEMINIT`, near the end of cold boot, and it tests for
 EXPAND 1 (`src/boot.asm:143-148`). It uses `DETECT`, the routine that also
