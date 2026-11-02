@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. Chaining inside
 
-Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
@@ -86,7 +86,7 @@ program that a startup line started. This card's startup file has three lines,
 and the first two hold `!`:
 
 ```sh
-printf 'DIR *.CMD!:TYPE STARTUP.CMD\nPICO.DRV!:VOLS\nUSER 0\n' > startup.cmd
+printf 'DIR *.CMD!:TYPE STARTUP.CMD\nPICO.SVC!:VOLS\nUSER 0\n' > startup.cmd
 cp dist/starter.img start.img
 node tools/tecvol.mjs put start.img A startup.cmd --text
 ```
@@ -99,14 +99,14 @@ B: WORK
 
 A>DIR *.CMD!:TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 986K free
+1 file, 976K free
 A>:TYPE STARTUP.CMD
 DIR *.CMD!:TYPE STARTUP.CMD
-PICO.DRV!:VOLS
+PICO.SVC!:VOLS
 USER 0
 
-A>PICO.DRV!:VOLS
-PICO.DRV?
+A>PICO.SVC!:VOLS
+PICO.SVC?
 
 A>:VOLS
 A>USER 0
@@ -115,7 +115,7 @@ A>
 
 `STLINE` echoes each line of the file whole, through BDOS function 9, so a `$`
 in a line would end its echo there (`src/svc.asm:407-411`). The CCP echoes the
-later pieces after their own prompts. `PICO.DRV` fails on this serial
+later pieces after their own prompts. `PICO.SVC` fails on this serial
 board, so `:VOLS` is dropped, and the loop goes on to the startup file's third
 line.
 
@@ -156,7 +156,7 @@ typed line and `STLINE` a startup line, so neither goes through `MLECHO`.
 The CCP then tests what the piece is. A drive letter and a colon alone select
 the drive (`src/cpm/ccp.asm:164-185`), and anything else goes to `NOTDRIVE`
 (Chapter 17), which compares the command with the built-ins' names and otherwise
-loads a program or a driver (`src/cpm/ccp.asm:227-300`).
+loads a program or installs a service (`src/cpm/ccp.asm:227-300`).
 
 Every routine after `MLTAKE` reads the piece through `ARGSTRT` and stops at its
 0, so a built-in or a program reads its own piece and nothing of the pieces
@@ -210,7 +210,7 @@ built-ins' messages go there by `JP ERRGO`: `NO FILE` from `FILENO`,
 through `CPFAIL` (`src/cpm/ccp.asm:849-851`, `src/cpm/ccp.asm:942-944`,
 `src/cpm/ccp.asm:1276-1278`, `src/cpm/ccp.asm:1052-1053`).
 
-A program that isn't found or fails to load, or a driver that fails to install,
+A program that isn't found or fails to load, or a service that fails to install,
 reaches `BADCMD` (`src/cpm/ccp.asm:264-293`). Every other end of a built-in
 leaves the code at 0, including `COPY`'s `COPIED` line, which is printed through
 `PRTGO`, the entry after the store (`src/cpm/ccp.asm:1044-1051`,
@@ -229,9 +229,9 @@ through `CHDROP`:
   a program reads has anything to drop.
 - A BDOS error. `DISKERR` prints `Bdos Err On`, the drive and the cause, and
   waits for a key (`src/cpm/bdos.asm:2458-2468`). The routine for each cause
-  then jumps to `CHDROP`: `File R/O` from function 19, `R/O` from `CHKRO`,
+  then jumps to `CHDROP`: `File R/O` from `ROTEST`, `R/O` from `CHKRO`,
   `Select` from `SELFAIL` and `Bad Sector` from `BADSECT`
-  (`src/cpm/bdos.asm:712`, `src/cpm/bdos.asm:2417-2437`,
+  (`src/cpm/bdos.asm:686-694`, `src/cpm/bdos.asm:2417-2437`,
   `src/cpm/bdos.asm:2453-2456`). A failed read of a directory record goes to
   `RDFAIL`, which jumps to `CHDROP` with no message (`src/cpm/bdos.asm:1886`,
   `src/cpm/bdos.asm:2450-2451`).
@@ -239,17 +239,18 @@ through `CHDROP`:
 A reset drops the line by clearing `CHPOS` with the rest of the workspace
 (`src/boot.asm:23-27`).
 
-Two ends of a command leave `CHPOS` as it was, and the line runs on. The first
-is `[more]`. `PGWAIT` reads a key, clears its bit 5 with `AND DFh` and compares
-it with `03h`, `1Bh` and `Q`, so `^C`, Esc, `Q` and `q` stop a listing, and so
-do `#` and `;`, which the mask turns into `^C` and Esc. A key that stops it sets
-carry in `PGNEWL`, and `DIR` and `TYPE` then end through `STARTED` like a
-listing that ran to its end (`src/cpm/ccp.asm:721-751`, `src/cpm/ccp.asm:500`,
+A `[more]` pause drops the line only on `^C`. `PGWAIT` reads a key, clears its
+bit 5 with `AND DFh` and compares it with `03h`, `1Bh` and `Q`, so `^C`, Esc,
+`Q` and `q` stop a listing, and so do `#` and `;`, which the mask turns into `^C`
+and Esc. `^C` and `#` go to `PGDROP`, which clears `CHPOS`. The other keys leave
+`CHPOS` as it was, and the line runs on. A key that stops the listing sets carry
+in `PGNEWL`, and `DIR` and `TYPE` then end through `STARTED` like a listing that
+ran to its end (`src/cpm/ccp.asm:721-751`, `src/cpm/ccp.asm:500`,
 `src/cpm/ccp.asm:562`, `src/cpm/ccp.asm:838-847`).
 
-The second is `Write lost`, which `CWBOOT` prints at a warm boot when a cache
-write has failed since the last one. `CWBOOT` returns to `WBOOTR`, and that
-jumps to the CCP's entry with nothing changed in `CHPOS` (`src/ram.asm:202`,
+`Write lost` drops the line too. `CWBOOT` prints that message at a warm boot when
+a cache write has failed since the last one, after clearing `CFAIL` and `CHPOS`.
+`WBOOTR` then jumps to the CCP's entry with `CHPOS` at 0 (`src/ram.asm:202`,
 `src/cache.asm:191`, `src/cache.asm:347-358`, `src/boot.asm:79-82`).
 
 ## Function 47
@@ -277,8 +278,8 @@ here on the line is read only up to its 0.
 `FNCHAIN` then jumps to `BIOWBT`, the warm boot entry of the RAM BIOS table at
 `BF03h` (`src/cpm/bdos.asm:14`, `src/cpm/bdos.asm:71`). A program that has
 replaced that entry gets the call, as it does for the other warm boots the BDOS
-makes. The warm boot keeps `CMDTXT` and `CHPOS`, and at `MAINLOOP` `CHSKIP`
-finds the line's first piece. The loop echoes it with `MLECHO` and takes it with
+makes. The warm boot keeps `CMDTXT`, and `CHPOS` too unless a cache write has
+failed, and at `MAINLOOP` `CHSKIP` finds the line's first piece. The loop echoes it with `MLECHO` and takes it with
 `MLTAKE` as it does any chained piece, so a `:` at its start tests the code the
 calling program left.
 
