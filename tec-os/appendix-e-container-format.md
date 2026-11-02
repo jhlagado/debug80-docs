@@ -219,7 +219,7 @@ volumes share an id, and it can't check the card's size.
 ## The geometries
 
 Both geometries have 128-byte records, 64 records to a track, no reserved
-tracks, no sector skew and no checksum vector, since the card is not removable
+tracks, no sector skew and no check vector, since the card is not removable
 media in CP/M's sense (`format/format.json`, `geometries`). Record `r` of a
 volume is the 128 bytes at `128 × r` in its payload, so four records share a
 block.
@@ -241,7 +241,7 @@ Their disk parameter blocks, as `src/gen/geom.asm` holds them:
 | DRM | 511 | 255 | The highest directory entry number |
 | AL0 | `F0h` | `F0h` | The allocation blocks the directory takes: the first four |
 | AL1 | 0 | 0 | |
-| CKS | 0 | 0 | No checksum vector |
+| CKS | 0 | 0 | No check vector |
 | OFF | 0 | 0 | No reserved tracks |
 
 The directory takes four allocation blocks in each: 512 entries of 32 bytes
