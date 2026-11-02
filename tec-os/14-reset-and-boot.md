@@ -186,7 +186,7 @@ step, or at the diagnostic prompt, fails the test too.
 
 Cold boot is about to clear the drive table, so when the RAM passes, `RSLCAP`
 copies it, 32 bytes, to `RSLBUF` at `0100h` in the TPA (`src/boot.asm:131-135`,
-`src/layout.asm:89-95`). Nothing writes there between `COLD` and `MEMINIT`, so
+`src/layout.asm:90-96`). Nothing writes there between `COLD` and `MEMINIT`, so
 the copy survives the clearing of the workspace and is still there for the
 diagnostic prompt's retry. When the RAM fails, `RSLCAP` puts 0 in drive A's
 geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:136-138`).
@@ -212,7 +212,7 @@ The run below unmounts drive B with `MOUNT B:`, then presses reset. The kept
 selection has no volume on B and the starter card's two volumes still match, so
 after the reset only A is listed:
 
-<!-- node book/capture.mjs "MOUNT B:" "@reset" -->
+<!-- node tools/capture.mjs "MOUNT B:" "@reset" -->
 ```text
 A>MOUNT B:
 Unmounted
@@ -274,7 +274,7 @@ such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2434-2437`,
 `src/cpm/bdos.asm:2453-2456`). A `^C` at the prompt is the first case, since
 the CCP reads its line with function 10:
 
-<!-- node book/capture.mjs ^C -->
+<!-- node tools/capture.mjs ^C -->
 ```text
 A>^C
 A>

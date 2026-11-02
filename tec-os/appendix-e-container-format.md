@@ -65,7 +65,7 @@ The header's fields (`format/format.json`, `header`):
 | 32 | 32 each | The first 15 volume descriptors | 2 |
 
 The checksum is the 16-bit sum of all 512 bytes of block 0 except the two
-bytes of the checksum itself (`tools/lib/container.mjs:49-57`). The ROM sums
+bytes of the checksum itself (`tools/lib/container.mjs:51-59`). The ROM sums
 all 512 and then takes the two checksum bytes back out
 (`src/vol.asm:781-802`). The sum covers the descriptors in block 0 as well as
 the header's fields, so a change to any byte of block 0 needs a new checksum.
@@ -73,7 +73,7 @@ the header's fields, so a change to any byte of block 0 needs a new checksum.
 A card's minor version sets three things. A 1.0 card has no drives field and
 no table sum, and `tecvol` gives it at most 8 volumes. A 1.1 card may have up
 to 127, may give a number of drives and has the table sum
-(`tools/lib/container.mjs:74-78`, `tools/lib/container.mjs:138-146`).
+(`tools/lib/container.mjs:76-80`, `tools/lib/container.mjs:140-148`).
 `tecvol create` makes a 1.1 card when it is given more than 8 volumes or
 `--drives`, and a 1.0 card otherwise. The ROM treats any minor version other
 than 0 as 1.1 (`src/vol.asm:83-85`).
@@ -102,27 +102,27 @@ written behind, labelled `WORK`.
 
 The drive byte is the drive the volume takes at cold boot. The volume id is
 the name that stays with the volume. At most one volume is written behind, and
-never a read-only one (`tools/lib/container.mjs:83-84`,
-`tools/lib/container.mjs:184-185`). `tecvol create` starts the first volume at
+never a read-only one (`tools/lib/container.mjs:85-86`,
+`tools/lib/container.mjs:187-188`). `tecvol create` starts the first volume at
 block 2,048, 1 MiB into the card, and each next one at the next multiple of
 2,048 blocks after the one before, unless `--align` gives another multiple of
-8 (`tools/lib/container.mjs:12`, `tools/lib/container.mjs:87-97`). It fills
+8 (`tools/lib/container.mjs:14`, `tools/lib/container.mjs:89-99`). It fills
 each payload with `E5h`, an empty CP/M directory
-(`tools/lib/container.mjs:119`).
+(`tools/lib/container.mjs:121`).
 
 ## The table beyond block 0
 
 Block 0 holds the header and descriptors 0 to 14, at offsets 32 to 511. A 1.1
 card with more than 15 volumes goes on in blocks 1 to 7, 16 descriptors to a
 block, which with block 0's 15 gives the limit of 127
-(`tools/lib/container.mjs:31-40`, `format/format.json`). Descriptor `i`, for
+(`tools/lib/container.mjs:33-42`, `format/format.json`). Descriptor `i`, for
 `i` of 15 or more, is in block `1 + (i − 15) / 16`, at `32 × ((i − 15) mod
 16)` within it. No volume can start below block 8, so blocks 1 to 7 are free
 on every card, whether or not the table uses them.
 
 The table sum in the header, at offset 23, is the 16-bit sum of every byte of
 the blocks after block 0 that hold descriptors
-(`tools/lib/container.mjs:42-47`). The ROM reads `count / 16` of them, rounded
+(`tools/lib/container.mjs:44-49`). The ROM reads `count / 16` of them, rounded
 down, and sums them (`src/vol.asm:93-134`). With 15 descriptors in block 0,
 that is the number of blocks the table needs. A difference gives code `25h`,
 as the header's checksum does.
@@ -155,7 +155,7 @@ returns its code, which cold boot prints at the diagnostic prompt (Chapter
 The ascending order behind `28h` is checked on every card, 1.0 and 1.1 alike.
 It keeps two volumes from overlapping: each must start at or after the end of
 the one before it in the table. `tecvol` makes the same check on every card
-(`tools/lib/container.mjs:174`). A card whose two descriptors were swapped,
+(`tools/lib/container.mjs:176`). A card whose two descriptors were swapped,
 with its checksum made good, fails `tecvol verify`, and the ROM stops at the
 diagnostic prompt with code `28h`. One Node.js command makes such a card,
 `build/swapped.img`, from the starter card:
@@ -183,7 +183,7 @@ node tools/tecvol.mjs verify build/swapped.img
 tecvol: volume 1: not after volume 0
 ```
 
-<!-- node book/capture.mjs --card build/swapped.img -->
+<!-- node tools/capture.mjs --card build/swapped.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 28
@@ -197,7 +197,7 @@ The drives field limits the drive bytes. On a 1.1 card that gives N drives, a
 volume may name only drives A to the Nth. With N of 0, or on a 1.0 card, a
 volume may name any of the four (`src/vol.asm:222-226`). The ROM stops a card
 that breaks this at the diagnostic prompt with code `29h`. `tecvol` makes the
-same check (`tools/lib/container.mjs:178`), so `tecvol verify` rejects such a
+same check (`tools/lib/container.mjs:181`), so `tecvol verify` rejects such a
 card, and `tecvol create` rejects a volume on drive C with `--drives 2`:
 
 ```sh
@@ -209,7 +209,7 @@ tecvol: volume 1: drive C is past the card's 2 drive(s)
 ```
 
 `tecvol` makes all the ROM's checks and more
-(`tools/lib/container.mjs:130-194`). It also requires at most 8 volumes on a
+(`tools/lib/container.mjs:132-197`). It also requires at most 8 volumes on a
 1.0 card, a known cache flag, volume ids different from each other, unique
 labels on a 1.1 card, no volume both read-only and written behind, at most one
 written behind and an image as long as the header's container length. The ROM
@@ -258,7 +258,7 @@ requires its two high bytes to be 0 (`src/vol.asm:161-175`).
 ## The cost in memory
 
 TEC-OS's workspace has a 16-byte disk parameter header for each of the four
-drives (`src/ram.asm:30`, `src/layout.asm:86`). The allocation vectors, one
+drives (`src/ram.asm:30`, `src/layout.asm:87`). The allocation vectors, one
 bit for each allocation block of a volume, go below the workspace. `ALVINIT`
 sizes the vectors at cold boot (`src/vol.asm:503-563`). On a 1.1 card that
 gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M

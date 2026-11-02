@@ -153,12 +153,12 @@ the board off and on.
 ## Running TEC-OS from Node.js
 
 The web page and the tests run the same host model, `host/machine.mjs`. For a
-run with no browser, the script `book/capture.mjs` boots the model from a PC's
+run with no browser, the script `tools/capture.mjs` boots the model from a PC's
 command line with the starter card, types the commands it is given and prints
 everything TEC-OS sent to the console. The book's examples come from it:
 
 ```sh
-node book/capture.mjs DIR
+node tools/capture.mjs DIR
 ```
 
 With no options the board has a serial terminal and nothing else: no PICO9918,
@@ -225,7 +225,7 @@ at `8000h–BFFFh`, clears the workspace, starts the serial terminal and prints
 the banner. Here is the whole of a first boot on a board with only a serial
 terminal:
 
-<!-- node book/capture.mjs -->
+<!-- node tools/capture.mjs -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -254,7 +254,7 @@ which Chapter 4 describes.
 
 The 20 × 4 LCD shows the version and the drives at the same time:
 
-<!-- node book/capture.mjs --lcd -->
+<!-- node tools/capture.mjs --lcd -->
 ```text
 TEC-OS 0.1  TEC-1G
 A: SYSTEM
@@ -287,7 +287,7 @@ run it again.
 The web page's board has a PICO9918, the graphics LCD and the matrix keyboard,
 and there the boot goes differently. Its serial terminal shows this:
 
-<!-- node book/capture.mjs --board pico --serial -->
+<!-- node tools/capture.mjs --board pico --serial -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -302,7 +302,7 @@ TEC-OS writes nothing more to the serial terminal and reads the matrix
 keyboard in place of the serial port. TEC-OS clears the screen when `PICO.DRV`
 takes the console, so the PICO9918 shows only what followed:
 
-<!-- node book/capture.mjs --board pico --screen -->
+<!-- node tools/capture.mjs --board pico --screen -->
 ```text
 
 A>GLCD.DRV
@@ -331,7 +331,7 @@ row then shows `PICO?`. That board may have no serial terminal attached.
 
 `DIR` lists the files on the current drive:
 
-<!-- node book/capture.mjs DIR -->
+<!-- node tools/capture.mjs DIR -->
 ```text
 A>DIR
 TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     PICO.DRV
@@ -351,7 +351,7 @@ without Edit lists eleven files and ends `11 files, 994K free`.
 `TYPE` prints a text file, and the starter card's `README.TXT` lists the
 programs:
 
-<!-- node book/capture.mjs "TYPE README.TXT" -->
+<!-- node tools/capture.mjs "TYPE README.TXT" -->
 ```text
 A>TYPE README.TXT
 TEC-OS starter disk
@@ -372,7 +372,7 @@ A>
 
 A drive letter and a colon, typed alone, change the current drive:
 
-<!-- node book/capture.mjs B: DIR A: -->
+<!-- node tools/capture.mjs B: DIR A: -->
 ```text
 A>B:
 B>DIR
@@ -400,7 +400,7 @@ Any key stops it. Here it ran on the serial board, the one with only a serial
 terminal, until a key press stopped it. The run took 50 million T-states, the
 Z80's clock cycles, which is 12.5 seconds:
 
-<!-- node book/capture.mjs --lcd "@start DEMO" "@key x" -->
+<!-- node tools/capture.mjs --lcd "@start DEMO" "@key x" -->
 ```text
 A>DEMO
 
@@ -436,7 +436,7 @@ explains the warm boot.
 A command that is neither built into the CCP nor the name of a program file on
 the drive is printed back with a question mark:
 
-<!-- node book/capture.mjs NOSUCH -->
+<!-- node tools/capture.mjs NOSUCH -->
 ```text
 A>NOSUCH
 NOSUCH?
@@ -446,7 +446,7 @@ A>
 
 `CON` names the console in use:
 
-<!-- node book/capture.mjs CON -->
+<!-- node tools/capture.mjs CON -->
 ```text
 A>CON
 CON: TTY: serial terminal
@@ -481,7 +481,7 @@ When the card doesn't answer, or its contents don't pass the checks, cold boot
 stops after the banner and prints the diagnostic prompt. Here the socket is
 empty, and `H` was typed at the prompt:
 
-<!-- node book/capture.mjs --card none --lcd H -->
+<!-- node tools/capture.mjs --card none --lcd H -->
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 01

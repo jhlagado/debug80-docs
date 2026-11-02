@@ -26,7 +26,7 @@ describes the code behind them.
 after the first is echoed after its own prompt, so the screen reads as if you
 had typed the commands one at a time:
 
-<!-- node book/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "vols!!  ! dir b:!" -->
+<!-- node tools/capture.mjs "DIR *.CMD!TYPE STARTUP.CMD" "vols!!  ! dir b:!" -->
 ```text
 A>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
@@ -55,7 +55,7 @@ A piece is a whole command, and whatever it changes holds for the pieces
 after it, so a drive change or a `USER` command in one piece is the drive or
 user area of the next:
 
-<!-- node book/capture.mjs "B:!COPY A:STARTUP.CMD NOTES.TXT!DIR" -->
+<!-- node tools/capture.mjs "B:!COPY A:STARTUP.CMD NOTES.TXT!DIR" -->
 ```text
 A>B:!COPY A:STARTUP.CMD NOTES.TXT!DIR
 B>COPY A:STARTUP.CMD NOTES.TXT
@@ -87,7 +87,7 @@ A piece that starts with `:` runs only if the command before it succeeded. If
 that command failed, the `:` piece is echoed and nothing runs, and the rest of
 the line is dropped, the pieces without `:` after it included:
 
-<!-- node book/capture.mjs "NOSUCH!:DIR *.CMD!DIR *.DRV" "DIR *.DRV!:DIR *.CMD" ":DIR *.CMD" -->
+<!-- node tools/capture.mjs "NOSUCH!:DIR *.CMD!DIR *.DRV" "DIR *.DRV!:DIR *.CMD" ":DIR *.CMD" -->
 ```text
 A>NOSUCH!:DIR *.CMD!DIR *.DRV
 NOSUCH?
@@ -173,7 +173,7 @@ node tools/tecvol.mjs put chain.img B run.com
 `EXISTS NOTES.TXT!:TYPE NOTES.TXT` then types `NOTES.TXT` only if it is
 there. Here the line runs once before `NOTES.TXT` is made and once after:
 
-<!-- node book/capture.mjs --card chain.img B: "EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR" "COPY A:STARTUP.CMD NOTES.TXT" "EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR" -->
+<!-- node tools/capture.mjs --card chain.img B: "EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR" "COPY A:STARTUP.CMD NOTES.TXT" "EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR" -->
 ```text
 A>B:
 B>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR
@@ -201,7 +201,7 @@ and the `DIR` after it were dropped. The second time both ran.
 A piece without `:` runs whatever the command before it returned, so a
 failure stops the line only at a piece that starts with `:`:
 
-<!-- node book/capture.mjs --card chain.img B: "EXISTS NONE.TXT!DIR" "EXISTS NONE.TXT" ":DIR" "USER 0" ":DIR" -->
+<!-- node tools/capture.mjs --card chain.img B: "EXISTS NONE.TXT!DIR" "EXISTS NONE.TXT" ":DIR" "USER 0" ":DIR" -->
 ```text
 A>B:
 B>EXISTS NONE.TXT!DIR
@@ -255,7 +255,7 @@ for function 47, with the space before its first word, which the CCP passes
 over. `RUN DIR` therefore runs `DIR`. A line from function 47 takes the place
 of what was left of the line, so in `RUN A:VOLS!DIR` the `DIR` never runs:
 
-<!-- node book/capture.mjs --card chain.img B: "RUN DIR" "RUN A:VOLS!DIR" "RUN NOSUCH!DIR" "RUN" -->
+<!-- node tools/capture.mjs --card chain.img B: "RUN DIR" "RUN A:VOLS!DIR" "RUN NOSUCH!DIR" "RUN" -->
 ```text
 A>B:
 B>RUN DIR
@@ -317,7 +317,7 @@ starts again from the startup file. After the others the CCP prints the prompt
 and waits for a new line. Here the BDOS error for a drive with no volume,
 ended by the key `x`, drops the `VOLS` after it:
 
-<!-- node book/capture.mjs "@start DIR C:!VOLS" "@key x" -->
+<!-- node tools/capture.mjs "@start DIR C:!VOLS" "@key x" -->
 ```text
 A>DIR C:!VOLS
 

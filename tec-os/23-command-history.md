@@ -27,7 +27,7 @@ such as backspace, and Return runs it. Here two lines were typed, and then `^W`,
 `^W` and Return, so the screen shows the recalled `CON` after the prompt, and
 its reply:
 
-<!-- node book/capture.mjs --board pico --screen CON "TYPE STARTUP.CMD" "@start "$'\x17\x17' -->
+<!-- node tools/capture.mjs --board pico --screen CON "TYPE STARTUP.CMD" "@start "$'\x17\x17' -->
 ```text
 A>CON
 CON: CRT: PICO9918
@@ -51,7 +51,7 @@ A recalled line is the start of a new line, not a fixed copy. Here `DIR *.DRV`
 was recalled with `^W`, its last three characters were taken off with backspace
 and `CMD` was typed in their place:
 
-<!-- node book/capture.mjs --board pico --screen "DIR *.DRV" "@start "$'\x17\x08\x08\x08CMD' -->
+<!-- node tools/capture.mjs --board pico --screen "DIR *.DRV" "@start "$'\x17\x08\x08\x08CMD' -->
 ```text
 A>DIR *.DRV
 PICO.DRV     PICO40.DRV   PICO32.DRV   GLCD.DRV
@@ -67,7 +67,7 @@ it leaves an empty line. In this run `^W` `^W` showed `CON` and `^N` showed `DIR
 *.CMD`. A second `^N` emptied the line, so the Return ran nothing and the CCP
 printed the prompt again:
 
-<!-- node book/capture.mjs --board pico --screen CON "DIR *.CMD" "@start "$'\x17\x17\x0e\x0e' -->
+<!-- node tools/capture.mjs --board pico --screen CON "DIR *.CMD" "@start "$'\x17\x17\x0e\x0e' -->
 ```text
 A>CON
 CON: CRT: PICO9918
@@ -134,7 +134,7 @@ the CCP takes each of them from `STLINE` in place of function 10
 into capitals later, a piece at a time (`src/cpm/ccp.asm:140-152`), so a recalled
 line comes back as it was typed:
 
-<!-- node book/capture.mjs --board pico --screen con "@start "$'\x17' -->
+<!-- node tools/capture.mjs --board pico --screen con "@start "$'\x17' -->
 ```text
 A>con
 CON: CRT: PICO9918
@@ -156,7 +156,7 @@ at the same place.
 Here `CON` was typed twice and `DIR *.CMD` once. The ring holds two lines, so
 `^W` three times reached `CON` and stayed there:
 
-<!-- node book/capture.mjs --board pico --screen CON CON "DIR *.CMD" "@start "$'\x17\x17\x17' -->
+<!-- node tools/capture.mjs --board pico --screen CON CON "DIR *.CMD" "@start "$'\x17\x17\x17' -->
 ```text
 A>CON
 CON: CRT: PICO9918
@@ -227,7 +227,7 @@ the RAM BIOS table at `BF00h`, outside the RAM that `CPMINIT` clears
 `src/ram.asm:221`). A program's exit, a `^C` at the prompt and BDOS function 0
 all keep it. Here `^C` at the prompt was followed by `^W`:
 
-<!-- node book/capture.mjs CON "^C" "@start "$'\x17' -->
+<!-- node tools/capture.mjs CON "^C" "@start "$'\x17' -->
 ```text
 A>CON
 CON: TTY: serial terminal
@@ -246,7 +246,7 @@ a recognised reset too, the one that keeps the selected volumes, since only the
 drive table is carried across it (`src/boot.asm:131-135`). After the reset in
 this run, `^W` and Return gave an empty line:
 
-<!-- node book/capture.mjs CON "@reset" "@start "$'\x17' -->
+<!-- node tools/capture.mjs CON "@reset" "@start "$'\x17' -->
 ```text
 A>CON
 CON: TTY: serial terminal

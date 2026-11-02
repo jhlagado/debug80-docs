@@ -133,8 +133,8 @@ node tools/tecvol.mjs put time.img A read.com
 node tools/tecvol.mjs put time.img A data.bin
 ```
 
-`book/capture.mjs` prints no count. The figures come from a script that drives
-`Machine` as `book/capture.mjs` does. It reads the model's T-state count,
+`tools/capture.mjs` prints no count. The figures come from a script that drives
+`Machine` as `tools/capture.mjs` does. It reads the model's T-state count,
 `cycles` (`host/machine.mjs:261`), twice: when `READ DATA.BIN` has been typed
 and echoed, before the Return that ends it, and at the next prompt. After a
 cold boot, the command's first run took 6,628,187 T-states, 1.66 seconds, and

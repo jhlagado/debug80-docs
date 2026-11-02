@@ -30,7 +30,7 @@ Part I works through transcripts. Each one is a real run of TEC-OS: what you
 type at the prompt and what TEC-OS printed in reply, copied unchanged, with
 the command that produced it. You can repeat every one in the web page that
 the repository builds. You can also repeat it on a PC with TEC-OS's script
-`book/capture.mjs`, which runs the same host model from Node.js. Part II
+`tools/capture.mjs`, which runs the same host model from Node.js. Part II
 explains the code itself. Each of its statements about the code gives the
 source file and line it rests on, so you can follow the explanation into the
 ROM.

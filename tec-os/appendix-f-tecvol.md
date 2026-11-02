@@ -47,7 +47,7 @@ so a failure leaves the image as it was (`tools/tecvol.mjs:17-19`,
 `tools/tecvol.mjs:52-58`).
 
 `DRIVE` names a volume by its drive letter, with or without a colon, by its
-label or by its id, tried in that order (`tools/lib/container.mjs:198-206`). A
+label or by its id, tried in that order (`tools/lib/container.mjs:201-209`). A
 volume on no drive is reached by its label or id. `--user N` selects user area
 `N`, 0 to 15. Without it `put`, `get` and `era` use user area 0, and `dir`
 lists every user area (`tools/tecvol.mjs:94`, `tools/tecvol.mjs:123`).
@@ -78,11 +78,11 @@ or the card out, and press reset after putting it back.
   most one volume and never with `:ro`.
 
 `--align N` places each volume at a multiple of `N` blocks, which must be a
-multiple of 8. The default is 2,048, 1 MiB (`tools/lib/container.mjs:12`,
-`tools/lib/container.mjs:87-97`). `--drives N`, 1 to 4, records in the header
+multiple of 8. The default is 2,048, 1 MiB (`tools/lib/container.mjs:14`,
+`tools/lib/container.mjs:89-99`). `--drives N`, 1 to 4, records in the header
 the number of drives TEC-OS is to set up at cold boot. With `--drives`, or
 with more than 8 volumes, the card is format 1.1, and otherwise 1.0
-(`tools/lib/container.mjs:77-78`). Every payload is filled with `E5h`, so each
+(`tools/lib/container.mjs:79-80`). Every payload is filled with `E5h`, so each
 volume starts as an empty CP/M disk. One volume must be on drive A.
 
 This card has a system volume on A, a work volume written behind on B and a
@@ -238,7 +238,7 @@ erased the file from user area 3 and printed nothing.
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
 the volumes and the files to put on them (`tools/tecvol.mjs:155-161`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
-and builds `dist/starter.img` from it (`tools/media.mjs:218-237`). A recipe
+and builds `dist/starter.img` from it (`tools/media.mjs:245-264`). A recipe
 has the schema `tecos-file-recipe-v1`, a list of `volumes` and a list of
 `components`, each with `files`. Each volume is in `create`'s terms: a
 geometry, a label, a drive and `readOnly` or `writeBehind`. Each file has a
@@ -300,7 +300,7 @@ node tools/tecvol.mjs dir build/my.img A
 The card boots with its two drives, and the text file reads back with TEC-OS's
 `TYPE`:
 
-<!-- node book/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" VOLS -->
+<!-- node tools/capture.mjs --card build/my.img DIR "TYPE HELLO.TXT" VOLS -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     

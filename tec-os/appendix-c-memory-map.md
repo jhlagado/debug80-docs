@@ -22,8 +22,8 @@ a G8M volume on drive B, and no driver installed.
 ## Taking the figures from the build
 
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
-build's census, `build/debug80/census.json` (`tools/media.mjs:78-177`,
-`tools/media.mjs:238`). The address of any label is in the build's symbol
+build's census, `build/debug80/census.json` (`tools/media.mjs:101-200`,
+`tools/media.mjs:265`). The address of any label is in the build's symbol
 file, `build/debug80/tecos.d8.json`. This command prints the addresses of the
 labels named after it:
 
@@ -121,7 +121,7 @@ Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
 (`src/boot.asm:15-21`, `src/boot.asm:215-265`). The CCP writes the byte at
 `0004h` at each prompt and the FCBs and the tail before it runs a program
-(`src/cpm/ccp.asm:192-211`, `src/cpm/ccp.asm:1261-1294`).
+(`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1280-1313`).
 
 TEC-OS's own bytes are the sixteen that CP/M 2.2 leaves to the BIOS
 (`src/layout.asm:35-52`):
@@ -283,7 +283,7 @@ The cache's addresses are in `src/layout.asm:24-26` and the history's page in
 | CCP | `BE59h–BE76h` | 30 | the CCP, and a program from its start, with `0000h` pushed |
 | BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes |
 
-The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:76-82`. A
+The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:76-83`. A
 loaded driver runs on its caller's stack, and `DRVLIM` gives what the drivers
 together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
 (`src/data3.asm:112`).

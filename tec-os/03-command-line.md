@@ -26,7 +26,7 @@ the editing keys that Chapter 2 lists. Return ends the line, which holds up to
 searches for the command, the CCP turns every lower-case letter into a
 capital, so `dir *.com` and `DIR *.COM` are the same command:
 
-<!-- node book/capture.mjs "dir *.com" "DIR ????.COM" "DIR A:P*.*" "DIR B:" -->
+<!-- node tools/capture.mjs "dir *.com" "DIR ????.COM" "DIR A:P*.*" "DIR B:" -->
 ```text
 A>dir *.com
 TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     EDIT.COM
@@ -65,7 +65,7 @@ of a name's parts. A name that breaks these rules, or a part that is too long,
 makes the command fail, and the CCP prints back the word it was reading with a
 question mark:
 
-<!-- node book/capture.mjs "DIR VERYLONGNAME.TXT" "TYPE *.CMD" "DIR A: B:" -->
+<!-- node tools/capture.mjs "DIR VERYLONGNAME.TXT" "TYPE *.CMD" "DIR A: B:" -->
 ```text
 A>DIR VERYLONGNAME.TXT
 VERYLONGNAME.TXT?
@@ -158,7 +158,7 @@ different layout.
 and stops at the first `^Z`, the byte `1Ah` that ends a CP/M text file, or at
 the end of the file's last record:
 
-<!-- node book/capture.mjs "TYPE STARTUP.CMD" -->
+<!-- node tools/capture.mjs "TYPE STARTUP.CMD" -->
 ```text
 A>TYPE STARTUP.CMD
 PICO.DRV
@@ -187,7 +187,7 @@ name is erased first, so `COPY` replaces it.
 after it, as CP/M 2.2 has it. `ERA` erases files. Here a copy of `README.TXT`
 is made on drive B under two names, and one is renamed and then erased:
 
-<!-- node book/capture.mjs "COPY README.TXT B:" "COPY README.TXT B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=README.TXT" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
+<!-- node tools/capture.mjs "COPY README.TXT B:" "COPY README.TXT B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=README.TXT" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
 ```text
 A>COPY README.TXT B:
 COPIED 0005
@@ -229,7 +229,7 @@ that covers `COPY README.TXT A:`, `COPY A:README.TXT README.TXT` and
 current drive. Here the first copy has a type and no name, and the next two
 fail:
 
-<!-- node book/capture.mjs "COPY README.TXT B:.DOC" "DIR B:" "COPY A:README.TXT README.TXT" "COPY README.TXT" -->
+<!-- node tools/capture.mjs "COPY README.TXT B:.DOC" "DIR B:" "COPY A:README.TXT README.TXT" "COPY README.TXT" -->
 ```text
 A>COPY README.TXT B:.DOC
 COPIED 0005
@@ -257,7 +257,7 @@ Before it erases with a name that matches every file, such as `*.*` or
 `B:*.*`, `ERA` prints `ALL (Y/N)?` and reads a line. A `Y` as the line's first
 character, in either case, erases the files, and anything else leaves them:
 
-<!-- node book/capture.mjs "COPY README.TXT B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
+<!-- node tools/capture.mjs "COPY README.TXT B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
 ```text
 A>COPY README.TXT B:
 COPIED 0005
@@ -291,7 +291,7 @@ The pages must stay below the BDOS, whose entry is the word at `0006h`, so the
 number must be less than the high byte of that word. On the starter card with
 no driver installed the word is `B806h`, and `SAVE` takes up to 183 pages:
 
-<!-- node book/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 184 BIG.COM" DIR -->
+<!-- node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 184 BIG.COM" DIR -->
 ```text
 A>B:
 B>SAVE 2 TWO.COM
@@ -316,7 +316,7 @@ put one there, as Chapter 4 describes. The starter card has volumes on A and
 B. Selecting a drive with no volume, or naming a file on one, gives the BDOS's
 error for an empty drive, and the prompt stays on the drive it was on:
 
-<!-- node book/capture.mjs B: "@start C:" "@key x" "@start DIR C:" "@key x" -->
+<!-- node tools/capture.mjs B: "@start C:" "@key x" "@start DIR C:" "@key x" -->
 ```text
 A>B:
 B>C:
@@ -345,7 +345,7 @@ where the starter card's files all are, and `USER` and a number select another
 area. The prompt doesn't show the area, so the files of area 0 disappear from
 view after `USER 3`:
 
-<!-- node book/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" VOLS "USER 0" "DIR B:" -->
+<!-- node tools/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" VOLS "USER 0" "DIR B:" -->
 ```text
 A>USER 3
 A>SAVE 1 B:MINE.COM
@@ -382,7 +382,7 @@ driver installed. On the web page's board, where `PICO.DRV` is installed at
 startup, the PICO9918's screen shows this, from the startup file's second line
 on:
 
-<!-- node book/capture.mjs --board pico --screen DRIVERS UNLOAD -->
+<!-- node tools/capture.mjs --board pico --screen DRIVERS UNLOAD -->
 ```text
 
 A>GLCD.DRV
@@ -411,7 +411,7 @@ directory of the current drive, in the current user area, for the file
 relocatable PRL format, which Chapter 10 describes. A drive in front of the
 name runs the program from that drive, and the CCP searches no other:
 
-<!-- node book/capture.mjs B: "A:VOLS" VOLS "README.TXT" -->
+<!-- node tools/capture.mjs B: "A:VOLS" VOLS "README.TXT" -->
 ```text
 A>B:
 B>A:VOLS
@@ -486,7 +486,7 @@ node tools/tecvol.mjs create build/errs.img --volume G1M:SYSTEM:A --volume G8M:W
 node tools/tecvol.mjs put build/errs.img B dist/files/README.TXT --ro
 ```
 
-<!-- node book/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:README.TXT" "@key x" "DIR B:" -->
+<!-- node tools/capture.mjs --card build/errs.img "@start SAVE 1 C:X.COM" "@key x" "@start ERA B:README.TXT" "@key x" "DIR B:" -->
 ```text
 A>SAVE 1 C:X.COM
 
@@ -516,7 +516,7 @@ with Return, as if it had been typed. Here `DIR *.DRV` and `CON` were typed,
 then `^W`, `^W` and Return, and the PICO9918's screen shows `DIR *.DRV`
 brought back and run again:
 
-<!-- node book/capture.mjs --board pico --screen "DIR *.DRV" CON "@start "$'\x17\x17' -->
+<!-- node tools/capture.mjs --board pico --screen "DIR *.DRV" CON "@start "$'\x17\x17' -->
 ```text
 
 A>GLCD.DRV

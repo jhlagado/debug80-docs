@@ -25,14 +25,14 @@ scope: "most", "about" and "on the model" stay where they are true.
 
 **Examples are real.** Each example of TEC-OS's output was produced by a run,
 on the host model or on the web page, from the named commit, and is copied
-into the chapter unchanged. `book/capture.mjs` produces it from the host
+into the chapter unchanged. `tools/capture.mjs` produces it from the host
 model:
 
 ```sh
 npm run build && npm run media
-node book/capture.mjs DIR "TYPE README.TXT"
-node book/capture.mjs --board pico --screen CON
-node book/capture.mjs --card none --lcd H
+node tools/capture.mjs DIR "TYPE README.TXT"
+node tools/capture.mjs --board pico --screen CON
+node tools/capture.mjs --card none --lcd H
 ```
 
 The script's header lists its options (the board, the card, the ROM, and the
@@ -44,7 +44,7 @@ card's `EDIT.COM` build, on stderr.
 
 **Each example names its run.** The capture command for an example is given in
 the sentence that introduces it, or in an HTML comment on the line before the
-example, `<!-- node book/capture.mjs ... -->`. A transcript may start at the
+example, `<!-- node tools/capture.mjs ... -->`. A transcript may start at the
 prompt where its first command is typed, leaving out the boot before it. When
 it leaves out anything else, such as lines between two commands, the text
 says what is missing.

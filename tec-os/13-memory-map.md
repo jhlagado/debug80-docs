@@ -155,7 +155,7 @@ display driver, the scroll region and the console mode (`src/ram.asm:45-58`).
 The second block is the CCP's, from `CCPRAM` at `BCEBh` (`src/ram.asm:64-65`).
 It holds the CCP's two FCBs, the command buffer with its 128 characters, the
 state of the directory listing and the pager, and a 128-byte scratch buffer,
-`LOADBUF`. A guard and the CCP's stack follow (`src/ram.asm:67-124`).
+`LOADBUF`. A guard and the CCP's stack follow (`src/ram.asm:67-128`).
 
 The third block is the BDOS's, from `BDOSRAM` at `BE77h`. It starts with the
 saved stack pointer, the console column and the line editor's state. Then come
@@ -163,13 +163,13 @@ saved stack pointer, the console column and the line editor's state. Then come
 the read-only vector and the drives to rebuild at warm boot. The pointers into
 the bound drive's DPH, its disk parameter block, the DPB, and its vector
 follow, then the directory search state, the file's position and the BDOS's
-stack (`src/ram.asm:126-186`). The block ends at `BDOSRME`, `BF00h`.
+stack (`src/ram.asm:130-190`). The block ends at `BDOSRME`, `BF00h`.
 
 `BF00h–BF32h` is the RAM BIOS table, seventeen three-byte jumps at the start
 of a page (`src/layout.asm:73-74`). Chapter 15 describes it.
 
 Above the table, from `SDBYTE` at `BF33h`, is state that the build puts at a
-fixed offset from it, 51 bytes on (`src/ram.asm:192`). It starts with the SD
+fixed offset from it, 51 bytes on (`src/ram.asm:196`). It starts with the SD
 card driver's command argument, block address and last error. The block cache's
 next line, failure flag and saved interrupt state follow. Next are the matrix
 keyboard's scan state, the two display drivers' table addresses, the history's
@@ -177,9 +177,9 @@ head, `XMOVE`'s banks, `PZTOP` and the program return code `PRGCODE`. After
 them come the PRL and driver loader's state and the driver registry's head.
 The last items are the 128-byte record of `A:STARTUP.CMD` that startup reads,
 and `CHPOS`, the next command, or piece, of a chained line (Chapter 11,
-`src/ram.asm:193-240`). This state ends at
+`src/ram.asm:197-245`). This state ends at
 `WSEND`, `BFE6h`, and the build checks that it ends by `C000h`
-(`src/ram.asm:241-242`, `tools/build.mjs:277`).
+(`src/ram.asm:246-247`, `tools/build.mjs:283`).
 
 ## The allocation vectors and the BDOS entry
 
@@ -218,15 +218,15 @@ driver loaded, `PZTOP`, the word `PZINIT` puts at `0006h`, is this address
 Every TEC-OS resident keeps that form. A driver's header and image are moved to
 a page boundary below the BDOS entry jump, so the header's bytes at offset 6
 are at an address of the form `xx06h`. They become the driver's jump, and
-loading the driver lowers the word at `0006h` to that jump (`src/drv.asm:1-5`,
-`src/drv.asm:16`, `src/boot.asm:121-124`). Chapter 20 describes the loader.
+loading the driver lowers the word at `0006h` to that jump (`src/svc.asm:1-5`,
+`src/svc.asm:16`, `src/boot.asm:121-124`). Chapter 20 describes the loader.
 
 The word at `0006h` is the top of the TPA, so the card sets how much memory
 programs have. The starter card gives 46,854 bytes, from `0100h` to `B805h`.
 The largest card, four G8M volumes, takes four 256-byte vectors, puts the entry
 at `B506h` and leaves 46,086 bytes. The build works out both figures in its
 census and checks that the starter card's TPA is at least 45,830 bytes
-(`tools/build.mjs:226-236`, `tools/build.mjs:280-281`).
+(`tools/build.mjs:232-242`, `tools/build.mjs:286-287`).
 
 ## The four stacks
 
@@ -245,23 +245,23 @@ boot sets it as soon as EXPAND 0 is back in view (`src/boot.asm:66-69`), and
 the diagnostic prompt sets it again on entry (`src/diag.asm:5`).
 
 The CCP's stack, `CSTKBAS` to `CSTKTOP`, is 30 bytes at `BE59h–BE76h`
-(`src/ram.asm:121-123`). The CCP sets it on entry and at the top of its main
+(`src/ram.asm:125-127`). The CCP sets it on entry and at the top of its main
 loop. It is also the stack a program starts with. The CCP sets it again, pushes
 the address of warm boot and jumps to `0100h`, which leaves the program 28
-bytes below that return word (`src/cpm/ccp.asm:210-216`). CP/M 2.2 gives a
+bytes below that return word (`src/cpm/ccp.asm:294-300`). CP/M 2.2 gives a
 program eight levels of stack and the return word, and with an NMI's frame
 those take 20 of the 30 bytes (`src/layout.asm:77-79`). Below the stack is a
 guard of 13 bytes, `STKGUARD`, which warm boot fills with `A5h`
-(`src/ram.asm:115-120`, `src/boot.asm:281-285`), so a guard byte that is no
+(`src/ram.asm:119-124`, `src/boot.asm:282-286`), so a guard byte that is no
 longer `A5h` shows that the stack went past its bottom.
 
 The BDOS's stack, `STKBASE` to `STKTOP`, is 54 bytes at `BECAh–BEFFh`
-(`src/ram.asm:183-185`). The BDOS moves to it on entry, keeping the caller's
+(`src/ram.asm:187-189`). The BDOS moves to it on entry, keeping the caller's
 stack pointer in `OLDSP`. It runs every function on this stack, the BIOS calls
 from the BDOS included.
 
 The three sizes in the workspace are equates in `layout.asm`: 54 for the BDOS,
-30 for the CCP and 38 for the BIOS (`src/layout.asm:80-82`). The comment above
+30 for the CCP and 38 for the BIOS (`src/layout.asm:81-83`). The comment above
 them gives the rule: each is the deepest use and a quarter more
 (`src/layout.asm:76-79`).
 
@@ -271,7 +271,7 @@ volume written behind, without a card and on the CCP's deepest paths. It
 records every write to memory, the clearing `LDIR`s excepted, and the lowest
 address written in each stack gives its depth. It passes when each stack's
 deepest use leaves at least a quarter of it free and no guard byte has changed
-(`test/stacks.test.mjs:182`, `test/stacks.test.mjs:208-211`). It presses the
+(`test/stacks.test.mjs:210`, `test/stacks.test.mjs:237-240`). It presses the
 keypad's NMI at each new depth only while `0066h` holds a `RETN`
 (`test/stacks.test.mjs:62-69`). TEC-OS puts no handler there, so at 98c6416 the
 measured depths include no NMI frame, though the comment at `src/layout.asm:77`

@@ -107,7 +107,7 @@ npx atom top.asm top.com
 node tools/tecvol.mjs put mem.img B top.com
 ```
 
-<!-- node book/capture.mjs --card mem.img B:TOP -->
+<!-- node tools/capture.mjs --card mem.img B:TOP -->
 ```text
 A>B:TOP
 B806h
@@ -119,7 +119,7 @@ On the web page's board the startup file installs `PICO.DRV` and `CON UC1`
 then installs `GLCD.DRV`, so the word falls twice. `B:TOP`, its reply and the
 echo of `CON UC1` appeared on the PICO9918, and the rest on the graphics LCD:
 
-<!-- node book/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
+<!-- node tools/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
 ```text
 A>B:TOP
 B206h
@@ -199,7 +199,7 @@ npx atom area.asm area.com
 node tools/tecvol.mjs put mem.img B area.com
 ```
 
-<!-- node book/capture.mjs --card mem.img B:AREA -->
+<!-- node tools/capture.mjs --card mem.img B:AREA -->
 ```text
 A>B:AREA
 46854 bytes
@@ -397,7 +397,7 @@ npx atom banks.asm banks.com
 node tools/tecvol.mjs put mem.img B banks.com
 ```
 
-<!-- node book/capture.mjs --card mem.img B:BANKS -->
+<!-- node tools/capture.mjs --card mem.img B:BANKS -->
 ```text
 A>B:BANKS
 FF

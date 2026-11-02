@@ -157,7 +157,7 @@ card's first byte was changed from `T` to `X` with
 `printf X | dd of=/tmp/bad.img bs=1 seek=0 conv=notrunc` on a copy of
 `dist/starter.img`. `H` was then typed at the prompt:
 
-<!-- node book/capture.mjs --card /tmp/bad.img H -->
+<!-- node tools/capture.mjs --card /tmp/bad.img H -->
 ```text
 TEC-OS 0.1 for TEC-1G
 No volume mounted, error 21
@@ -214,7 +214,7 @@ fixed media.
 To keep a drive logged in across a warm boot, TEC-OS's BDOS uses the three
 scratch words for a sum of its allocation vector, a flag set when it has
 changed and a mark, the number of directory entries to read when the vector is
-rebuilt (`src/cpm/bdos.asm:468-507`). Chapter 16 describes that, and Chapter
+rebuilt (`src/cpm/bdos.asm:503-542`). Chapter 16 describes that, and Chapter
 13 how `ALVINIT` places the vectors at cold boot.
 
 ## Deblocking
@@ -240,7 +240,7 @@ tracks, and a G1M volume has 128 tracks.
 cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1, which the BDOS reports, for a
-file's data, as `Bad Sector` (`src/cpm/bdos.asm:850-864`).
+file's data, as `Bad Sector` (`src/cpm/bdos.asm:898-905`).
 
 A write to the directory can change which blocks are in use, so `WRITE` then
 tests for one of the directory's blocks, the first 32 blocks of a G8M volume
@@ -316,7 +316,7 @@ whose two drives have vector slots, and whose C and D have none.
 unmounted because C has no slot. `MOUNT B: WORK` puts it back, and `VOLS`
 lists the container through the describe function:
 
-<!-- node book/capture.mjs "MOUNT C: WORK" "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" VOLS -->
+<!-- node tools/capture.mjs "MOUNT C: WORK" "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" VOLS -->
 ```text
 A>MOUNT C: WORK
 Cannot mount: in use or too large
