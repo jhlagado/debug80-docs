@@ -56,8 +56,8 @@ obligatory case and a tighter contract. An earlier case table that passed
 two wrong candidates on negative zero is cited briefly (P1: CDR-1).
 
 The chapter then introduces visible and held-out cases, an adversarial
-second source and the mutation score. A gate is registered when it is
-written and hashed in the study's gate file (MD-8). Gates are registered
+second source and the mutation score. A gate is registered by the commit that writes it into the study's gate file
+(M3, MD-11). Gates are registered
 before the result they judge, each with an input shown to fail
 (M3, M8, R18, R19, R21, R22, R24). *The chapter is in first draft.*
 
@@ -155,8 +155,7 @@ abstraction gives little practical benefit.
 
 ### 13. Records
 
-Decisions with their authority, the ledgers and cost against outcome
-(M6, M11, M12).
+Decisions with their authority and the ledgers (M6, M12).
 
 ### 14. Studies apart
 
