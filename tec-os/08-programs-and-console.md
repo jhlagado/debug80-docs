@@ -51,7 +51,7 @@ screen unchanged.
 
 ## The BIOS's console calls
 
-The BDOS reaches the console through three entries of the BIOS's jump table,
+The BDOS reaches the console through three entries of the BIOS jump table,
 and a program can call them too. The table is in RAM at `BF00h`, with a jump
 of three bytes for each of the BIOS's functions. They are numbered from 0 for
 cold boot and 1 for warm boot. The word at `0001h` is the address of function
@@ -264,10 +264,11 @@ then uses 80 by 24, as the CCP does for `[more]`.
 
 The ROM's table of services at `C003h`, which Chapter 9 describes, has the
 same bytes through a pointer. It starts with the letters `TNA` and the table's
-major version, 4, its ABI version. The word at `C008h` is the address of the
-columns, with the rows in the byte after. A program can check the letters and
-the version and then read the size through the word. It then works on every
-TEC-OS with this version of the table, wherever a later ROM keeps the bytes:
+major version, 4, the version of its ABI, its application binary interface. The
+word at `C008h` is the address of the columns, with the rows in the byte after.
+A program can check the letters and the version and then read the size through
+the word. It then works on every TEC-OS with this version of the table,
+wherever a later ROM keeps the bytes:
 
 ```asm
 ; SIZE: print the console's size, read through TEC-OS's table.
@@ -367,7 +368,7 @@ after it changes the console, and a later run reads it afresh.
 
 CP/M's IOBYTE at `0003h` has four fields of two bits: the console in bits
 0–1, the reader in bits 2–3, the punch in bits 4–5 and the list device in
-bits 6–7. TEC-OS reads only the console's field. Each of the other devices
+bits 6–7. TEC-OS reads only the console field. Each of the other devices
 has one fixed meaning, whatever its field holds:
 
 - The list device, BDOS function 5 and the BIOS's `LIST`, is the printer in
@@ -376,7 +377,7 @@ has one fixed meaning, whatever its field holds:
   never waits.
 - The punch, BDOS function 4 and the BIOS's `PUNCH`, sends its byte to the
   serial port, all eight bits, whichever device is the console. On a serial
-  console its bytes reach the PC's terminal between the console's own.
+  console its bytes reach the serial terminal between the console's own.
 - The reader, BDOS function 3 and the BIOS's `READER`, waits for a byte from
   the serial port and returns all eight bits. It has no timeout, so a program
   that reads it waits until a byte arrives. A byte the console has already
