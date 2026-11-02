@@ -15,7 +15,7 @@ A CP/M program puts a function number in `C` and an argument in `E` or `DE`,
 then calls `0005h`, as Chapter 6 describes. This chapter describes the BDOS
 from that entry: the function table, the console functions, the way a file's
 records are found and the allocation vectors with the scan at warm boot. It
-then covers the disk errors, the three functions whose meanings come from CP/M
+then covers the BDOS errors, the three functions whose meanings come from CP/M
 3 and the differences from Digital Research's BDOS.
 
 ## The BDOS in the ROM
@@ -23,9 +23,9 @@ then covers the disk errors, the three functions whose meanings come from CP/M
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the
-debug80 build it runs from `E0CAh`, `BDOSBAS`, to `EFE0h`, 3,863 bytes of the
-ROM. Its table of functions and its error messages are in the ROM's data block
-(`src/data3.asm:73-90`). None of it can be patched.
+debug80 build (Chapter 12) it runs from `E0CAh`, `BDOSBAS`, to `EFE0h`, 3,863
+bytes of the ROM. Its table of functions and its error messages are in the
+ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
 The BDOS's variables and its 54-byte stack are in RAM, in the block from
 `BDOSRAM` to `BDOSRME`, `BE77h` to `BEFFh` (`src/ram.asm:130-190`,
@@ -40,10 +40,10 @@ allocation vector the BDOS has built from its directory, as the section on
 allocation vectors below describes. `PRGCODE`, the code of function 108, is
 above the RAM BIOS table, where cold boot clears it and warm boot does not
 (`src/ram.asm:229`, `src/boot.asm:23-27`). The rest of what the BDOS keeps for
-a drive is in the drive's disk parameter header, the DPH. This is the BIOS's
-16-byte record of the drive's tables, which Chapter 18 describes.
+a drive is in the drive's disk parameter header, the DPH. This is 16 bytes
+holding the addresses of the drive's tables, which Chapter 18 describes.
 
-The BDOS reaches the BIOS through the RAM copy of the BIOS's jump table at
+The BDOS reaches the BIOS through the RAM BIOS table at
 `BF00h`. Its names for the BIOS entries are offsets from `RAMBIOS`
 (`src/cpm/bdos.asm:10-28`). A program that replaces an entry there therefore
 receives the BDOS's own calls, as Chapter 15 describes. The one exception is
@@ -87,8 +87,9 @@ any other function it is the `Select` error.
 The selection itself, `SELDRV`, rejects a drive of 16 or more. It calls
 `LOGIN` unless the drive is the one already bound and is logged in
 (`src/cpm/bdos.asm:561-575`). The BDOS has two drive variables for this.
-`CURDRV` is the drive the current function works on, which an FCB may change.
-`DEFDRV` is the default, which only function 14 and the disk reset change
+`CURDRV` is the drive the current function works on, the bound drive, which an
+FCB may change. `DEFDRV` is the default drive, the current drive that the prompt
+shows, which only function 14 and the disk reset change
 (`src/cpm/bdos.asm:549-559`). The FCB's drive byte is read and never
 rewritten.
 
@@ -198,9 +199,10 @@ IOBYTE at `0003h` (`src/cpm/bdos.asm:212-250`).
 A CP/M file is a sequence of 128-byte records. The BDOS finds them through the
 directory, a table of 32-byte entries at the start of the volume. Each entry
 names a file in a user area and lists up to 16 bytes of allocation block
-numbers, the blocks of the volume that hold the file's records. A program
-names a file in an FCB of 36 bytes. The BDOS fills the FCB from the entry and
-keeps it up to date as the program reads and writes:
+numbers, the blocks of the volume that hold the file's records. In this chapter
+*block* alone means an allocation block, and a *card block* is 512 bytes of the
+card. A program names a file in an FCB of 36 bytes. The BDOS fills the FCB from
+the entry and keeps it up to date as the program reads and writes:
 
 | Offset | Field | Contents |
 | ---: | --- | --- |
@@ -380,7 +382,7 @@ taken, before the file is closed. A block that a program has written but not
 yet closed is therefore already in use for every other file.
 
 A vector is built when a drive is logged in, the first time it is selected
-after a reset of the disk system (`src/cpm/bdos.asm:1921-2023`). `LOGIN` calls
+after a disk reset (`src/cpm/bdos.asm:1921-2023`). `LOGIN` calls
 the BIOS's `SELDSK` for the drive's DPH, and a drive with no volume gets 0,
 which is the `Select` error (`src/cpm/bdos.asm:1930-1938`). It copies from the
 DPH the addresses of the translation table, the directory buffer, the DPB and
@@ -401,13 +403,13 @@ puts the following in them:
 | Offset | Contents | Written by |
 | ---: | --- | --- |
 | 2 | the sum of the vector's bytes at the end of the last scan | `LOGDONE` (`src/cpm/bdos.asm:2045-2060`) |
-| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1232-1239`) and BIOS `WRITE` of a directory block (`src/bios.asm:210-227`) set it; `LOGDONE` clears it |
-| 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdos.asm:2062-2080`), BIOS `WRITE` of a directory block (`src/bios.asm:228-248`) |
+| 4 | the changed flag: 1 once the vector may differ from the directory | `ALFOUND` (`src/cpm/bdos.asm:1232-1239`) and BIOS `WRITE` of a directory card block (`src/bios.asm:210-227`) set it; `LOGDONE` clears it |
+| 6 | the directory mark, `DIRUSED` | `DUSAVE` (`src/cpm/bdos.asm:2062-2080`), BIOS `WRITE` of a directory card block (`src/bios.asm:228-248`) |
 
-The BIOS's part is in its `WRITE`. It tests whether the block being written is
-one of the directory's, the first 16 card blocks of a G1M volume or 32 of a
-G8M volume. For such a block it sets the changed flag and raises the mark to
-the end of that block's 16 entries (`src/bios.asm:210-248`). It does that for
+The BIOS's part is in its `WRITE`. It tests whether the card block being written
+is one of the directory's, the first 16 card blocks of a G1M volume or 32 of a
+G8M volume. For such a card block it sets the changed flag and raises the mark to
+the end of that card block's 16 entries (`src/bios.asm:210-248`). It does that for
 every write, so a program's own directory write through BIOS `WRITE` sets the
 flag and raises the mark as well. `DUSAVE` writes the BDOS's mark only when it
 is higher than the one there, and so keeps the higher of the two.
@@ -444,7 +446,7 @@ number again from page zero. At the end of each full or partial scan,
 `LOGDONE` saves the mark, stores the new sum and clears the changed flag and
 the drive's bit in `WARMV` (`src/cpm/bdos.asm:2045-2060`).
 
-A warm boot after a program that wrote nothing therefore reads no block. One
+A warm boot after a program that wrote nothing therefore reads no card block. One
 after a program that changed drive A reads A's directory only as far as its
 last entry in use.
 
@@ -455,7 +457,7 @@ the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
 (`src/cpm/bdos.asm:1600-1614`). The mount service calls it for a drive whose
 volume it has changed (`src/vol.asm:662-673`).
 
-## Disk errors
+## BDOS errors
 
 The BDOS has four error messages, each printed after `Bdos Err On` and the
 drive letter (`src/data3.asm:86-90`):
@@ -475,7 +477,7 @@ drive letter (`src/data3.asm:86-90`):
 key already kept, if one was typed during output
 (`src/cpm/bdos.asm:2431-2450`). `CHDROP` then ends the program by warm boot,
 whatever the key (`src/cpm/bdos.asm:73-77`). The function never returns to the
-program. `CHDROP` also drops the rest of a chained command line, which Chapter
+program. `CHDROP` also drops the rest of a chained line, which Chapter
 25 describes. One failure has no message: a directory record that won't read,
 in a search or a login, takes `RDFAIL` straight to `CHDROP`
 (`src/cpm/bdos.asm:1858-1859`, `src/cpm/bdos.asm:2423-2424`).
@@ -489,8 +491,8 @@ boot clears it.
 
 ## Function 50, MOVE and XMOVE
 
-Function 50 is CP/M 3's direct BIOS call. `DE` points at a block of seven
-bytes, the BIOSPB: the BIOS function's number, then the values for `A`, `BC`,
+Function 50 is CP/M 3's direct BIOS call. `DE` points at eight bytes, the
+BIOSPB: the BIOS function's number, then the values for `A`, `BC`,
 `DE` and `HL` (`src/cpm/bdos.asm:135-182`). Functions 0 to 16 are the entries
 of the RAM BIOS table, at `BF00h` plus three times the number. A program's
 hook there therefore receives them. Function 25 is `MOVE` and 29 is `XMOVE`,
@@ -541,9 +543,6 @@ Research shipped are these:
   nothing, and a hook goes in the RAM BIOS table.
 - Functions 47, 50 and 108 have meanings that come from CP/M 3, and every
   other function above 40 returns 0.
-- After a disk error, any key ends the program by warm boot. In Digital
-  Research's BDOS, after `Bad Sector`, a key other than `^C` ignores the error
-  and the program goes on.
 - A key after `^S` resumes the output and is discarded, `^C` included. In
   Digital Research's BDOS a `^C` there ends the program.
 - Function 13 sets the user number to 0 (`src/cpm/bdos.asm:490-492`). Digital
