@@ -25,8 +25,8 @@ run a program.
 CP/M was the operating system of many 8080 and Z80 machines of the late 1970s
 and early 1980s. A CP/M program reaches everything outside its own memory
 through one interface. A program uses it to read a key, print a character,
-open a file or read 128 bytes of it. The program puts a function number in
-register `C` and calls address `0005h`. That address leads to the BDOS, the
+open a file or read 128 bytes of the file. The program puts a function number
+in register `C` and calls address `0005h`. That address leads to the BDOS, the
 Basic Disk Operating System, which does the work and returns.
 
 Many programs were written to that interface: editors, assemblers, compilers,
@@ -171,8 +171,8 @@ about a second.
 
 ## Running TEC-OS on a board
 
-TEC-OS has not yet run on a physical TEC-1G. This section gives the board as
-the code and the repository's documents describe it.
+TEC-OS has not yet run on a physical TEC-1G. What follows comes from the code
+and the repository's documents.
 
 On a TEC-1G, TEC-OS replaces MON-3. Its image for the board is
 `dist/tecos-board.rom`, 16 KiB for `C000h–FFFFh`. In a 32 KiB ROM chip the
@@ -210,8 +210,8 @@ install and the console stays on the serial terminal.
 Keep off the hex keypad while a program runs. With the board's keypad NMI
 jumper fitted, a key press interrupts the Z80 at `0066h`, and TEC-OS has no
 handler there. That address is inside CP/M's default file control block at
-`005Ch`, the record of a file name that a program uses. `docs/board-run.md`
-lists TEC-OS as running with that jumper off.
+`005Ch`, the block of memory that names a file for a program.
+`docs/board-run.md` lists TEC-OS as running with that jumper off.
 
 ## The first boot
 
@@ -382,11 +382,11 @@ A>
 Drive B is empty, and it is the place for your own files. Its volume is
 *written behind*: TEC-OS holds what a program writes to it in the block cache
 and writes it to the card later. `README.TXT` lists some of those times. One
-of them is a `^C` typed at the prompt, which ends the CCP, starts it again and
-writes to the card every change the cache holds. A `^C` at the prompt before
-you press reset, turn the board off or take the card out therefore puts every
-change on the card. Chapter 4 explains the cache and what a power cut can
-lose.
+of them is a `^C`, Ctrl and C together, typed at the prompt, which ends the
+CCP, writes to the card every change the cache holds and starts the CCP again.
+A `^C` at the prompt before you press reset, turn the board off or take the
+card out therefore puts every change on the card. Chapter 4 explains the cache
+and what a power cut can lose.
 
 ## Running a program
 
