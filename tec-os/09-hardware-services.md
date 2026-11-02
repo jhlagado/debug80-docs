@@ -280,9 +280,9 @@ terminal. The bits of `B` are these:
 | 4 | `10h` | the PICO9918 is claimed |
 | 7 | `80h` | a word of the ROM's, `PICO?` or `GLCD?`, is on LCD row 3 |
 
-`INFO` tests bit 3 at each call by reading the clock's seconds, so it takes
-about 1,550 T-states. `DE` holds the major version in `D` and the minor in
-`E`, so `0001h` is version 0.1. This program prints all of it, then calls
+`INFO` sets bit 3 afresh at each call by reading the clock's seconds, so it
+takes about 1,550 T-states. `DE` holds the major version in `D` and the minor
+in `E`, so `0001h` is version 0.1. This program prints all of it, then calls
 number 18 to show a failure:
 
 ```asm
@@ -338,7 +338,8 @@ MSGNC:	DB	", carry clear",13,10,"$"
 %INCLUDE "HWLIB.ASM"
 ```
 
-On the board with only a serial terminal, the clock is the one device:
+On the board with only a serial terminal, where the clock is the one device,
+`BOARD` prints this:
 
 <!-- node tools/capture.mjs --card hw.img B: "A:TAS BOARD" BOARD -->
 ```text
@@ -798,8 +799,8 @@ B>
 
 Status 2 also comes back while the PICO9918 is claimed and is the console.
 With the console on the graphics LCD, a claim of the PICO9918 doesn't affect
-`PUTAT`. A portable program uses `PUTAT` only after it has found the
-signature, and it keeps a path through the BDOS for status 2.
+`PUTAT`. A portable program uses `PUTAT` only after it has found the table's
+letters and version, and it keeps a path through the BDOS for status 2.
 
 The gain depends on the display. These are T-states for one character in the
 middle of a row, measured on the model with no scrolling. The run was 60 cells
