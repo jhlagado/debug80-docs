@@ -264,6 +264,6 @@ sizes the vectors at cold boot (`src/vol.asm:503-563`). On a 1.1 card that
 gives N drives, each of drives A to the Nth gets 256 bytes, enough for a G8M
 volume, whether or not a volume is on it, so that any drive can take any
 volume later. On any other card each mounted drive gets a vector sized for its
-volume, `DSM / 8 + 1` bytes: 256 for G8M and 64 for G1M. A drive with no
+volume, `DSM / 8 + 1` bytes: 256 for G8M and 64 for G1M, and a drive with no
 volume gets none. The starter card, 1.0 with a G1M and a G8M volume, takes 320
 bytes of vectors.
