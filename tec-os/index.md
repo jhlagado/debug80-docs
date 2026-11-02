@@ -9,10 +9,9 @@ nav_exclude: true
 
 TEC-OS is an operating system for the TEC-1G, held entirely in the board's 16
 KiB ROM. It runs CP/M 2.2 programs from volumes on an SD card, and it gives
-programs the board's displays, keyboards, LEDs and clock through a table of
-services. Part I of this book explains how to use TEC-OS and write programs
-for it. Part II explains how it works inside, and the appendices are the
-reference.
+programs the board's displays, keyboards, LEDs and clock through the hardware
+services. Part I of this book explains how to use TEC-OS and write programs for
+it. Part II explains how it works inside, and the appendices are the reference.
 
 ## The reader
 
@@ -27,13 +26,13 @@ fits in 16 KiB, and the reasons for its layout.
 ## Examples and sources
 
 Part I works through transcripts. Each one is a real run of TEC-OS: what you
-type at the prompt and what TEC-OS printed in reply, copied unchanged, with
-the command that produced it. You can repeat every one in the web page that
-the repository builds. You can also repeat it on a PC with TEC-OS's script
-`tools/capture.mjs`, which runs the same host model from Node.js. Part II
-explains the code itself. Each of its statements about the code gives the
-source file and line it rests on, so you can follow the explanation into the
-ROM.
+type at the prompt and what TEC-OS printed in reply, copied unchanged, with the
+command that produced it. You can repeat any run on a PC with TEC-OS's script
+`tools/capture.mjs`, which runs the same host model from Node.js. In the web
+page that the repository builds you can repeat a run on a board with a display.
+Part II explains the code itself. Each of its statements about the code gives
+the source file and line it rests on, so you can follow the explanation into
+the ROM.
 
 Every example was run on the host model, a software TEC-1G on the Debug80
 TEC-1G runtime. TEC-OS has not yet run on a physical board, so what the book
@@ -94,8 +93,8 @@ caret, so `^C` means Ctrl and C together.
    LCD, and the commands that install, list and remove a service.
 6. **[A first program](06-first-program.md).** Two programs that call the
    BDOS: one prints a line, and the other prints the file named on its command
-   line. You assemble the first with ATOM on a PC, copy it to a card and run
-   it, then assemble it again on the TEC-1G itself. The chapter ends with the
+   line. You assemble the first on a PC, copy it to a card and run it, then
+   assemble it again on the TEC-1G with `TAS`. The chapter ends with the
    ways a program returns to TEC-OS.
 7. **[Memory for programs](07-memory.md).** The Z80's 64 KiB on a TEC-1G, the
    TPA and the word at `0006h` that marks its end, page zero and
@@ -107,8 +106,8 @@ caret, so `^C` means Ctrl and C together.
    on, and the cursor. The chapter ends with the console's size at `0048h` and
    the IOBYTE's other devices, the list device, the punch and the reader.
 9. **[The hardware services](09-hardware-services.md).** The calls TEC-OS has
-   for the board's own devices. The chapter starts with the table at `C003h`
-   and the check for TEC-OS. It then covers the nine services, most with a
+   for the board's own devices. The chapter starts with the ROM table and the
+   check for TEC-OS. It then covers the nine hardware services, most with a
    program of their own, and `DEMO`, which uses them together.
 10. **[PRL programs and services](10-prl-programs-and-services.md).** Two
     kinds of file beyond `.COM`. A `.PRL` file is a program in a relocatable
@@ -155,7 +154,7 @@ caret, so `^C` means Ctrl and C together.
 18. **[The SD card and the volumes](18-sd-card-and-volumes.md).** The layers
     between the BDOS's 128-byte records and the card's 512-byte blocks. The
     chapter covers the SD card driver and its error codes, the container's checks,
-    the drive table, deblocking and the mount service, `ABIVOL`. Chapter 13
+    the drive table, deblocking and the mount entry, `ABIVOL`. Chapter 13
     describes the allocation vectors at cold boot.
 19. **[The block cache](19-block-cache.md).** Thirty lines in EXPAND 1, reads
     through the cache, and writes through and behind. The chapter also covers
@@ -164,11 +163,11 @@ caret, so `^C` means Ctrl and C together.
 20. **[The hardware services and the service
     loader](20-hardware-services-and-service-loader.md).** The code behind
     Chapters 9 and 10: the dispatcher at `ABIHW` and each of the nine
-    services, then `XMOVE` and `MOVE`. The chapter ends with the seven steps
-    of a service's load, the registry, removal and the stack figures.
+    hardware services, then `XMOVE` and `MOVE`. The chapter ends with the seven
+    steps of a service's load, the registry, removal and the stack figures.
 21. **[PRL relocation](21-prl-relocation.md).** The relocation of a file
     loaded at an address chosen at load time. The chapter follows a `.PRL`
-    file from the tool that makes it to the jump to `0100h`, then a `.DRV`
+    file from the tool that makes it to the jump to `0100h`, then a `.SVC`
     file's relocation data from the tool to the bytes in memory.
 22. **[Startup](22-startup.md).** `STBOOT`, `STLINE` and `STDONE`, with the
     one byte of state and the 128-byte record behind them. The chapter then
@@ -197,9 +196,9 @@ caret, so `^C` means Ctrl and C together.
 - **[A. BDOS functions](appendix-a-bdos-functions.md).** Each function from 0
   to 40, with 47, 50 and 108: its registers, its result and any difference
   from CP/M 2.2.
-- **[B. ROM services](appendix-b-rom-services.md).** The table at `C003h`
-  entry by entry, the hardware services by number with their registers and
-  status codes, and the entries `ABIVOL`, `ABIGLCD` and `ABISVC`.
+- **[B. The ROM table and hardware services](appendix-b-rom-services.md).**
+  The ROM table entry by entry, the hardware services by number with their
+  registers and status codes, and the entries `ABIVOL`, `ABIGLCD` and `ABISVC`.
 - **[C. Memory map](appendix-c-memory-map.md).** The CPU's address space, the
   ROM, page zero, the resident workspace, EXPAND 1 and the stacks, with the
   figures taken from the build.
