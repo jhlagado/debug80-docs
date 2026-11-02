@@ -185,8 +185,8 @@ time, for the web page's run loop and for `capture.mjs`
 (`host/machine.mjs:464-516`). Either way the model paces input to TEC-OS. A
 terminal on a board sends each character when it is typed.
 
-The rest reads the board's state. `screen` turns the PICO9918's name table
-into rows of text, from the layout its registers select
+The rest reads or sets the board's state. `screen` turns the PICO9918's name
+table into rows of text, from the layout its registers select
 (`host/machine.mjs:376-401`). `glcdScreen` matches each 6 × 8 cell of the
 graphics LCD's memory against the font, which the caller supplies in
 `Machine.font` since the ROM holds none (`host/machine.mjs:405-445`).
@@ -202,8 +202,8 @@ from `arith.test.mjs` to `xmove.test.mjs`, each on one part of TEC-OS. Most
 build their machines with `boot` in `test/lib/fixtures.mjs`. It reads the ROM
 of a profile from `build/` and, when the board has a display, puts a display
 driver and a startup file on the card. It then runs to the first prompt with
-the clock at the tests' starting time (`test/lib/fixtures.mjs:21-27`,
-`test/lib/fixtures.mjs:136-154`).
+the clock at the tests' starting time (`test/lib/fixtures.mjs:21-26`,
+`test/lib/fixtures.mjs:136-144`, `test/lib/fixtures.mjs:147-154`).
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program`
 assembles a source in `test/programs/` with ATOM and keeps the result in
