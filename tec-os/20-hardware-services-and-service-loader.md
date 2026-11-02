@@ -166,7 +166,7 @@ since a program's `MOVE` to bank 1 never gets past `MVRANGE`. A count of 0
 returns at once (`src/xmove.asm:37-39`). `LD A,I` copies the interrupt enable to
 the flag `P/V`, and `DI` and `PUSH AF` keep it for the end
 (`src/xmove.asm:40-42`). The two latch values are built in the alternate
-registers: `C'` is the port, and `D'` and `E'` are `LATCHV` with `LATEXP` set
+registers. `C'` is the port, and `D'` and `E'` are `LATCHV` with `LATEXP` set
 for each end in bank 1 (`src/xmove.asm:43-57`). The old values of those
 registers go on the stack, so they are kept. Equal values mean one bank, and
 `MVLDIR` writes that latch, does an `LDIR` and goes to `MVEND`
@@ -174,13 +174,13 @@ registers go on the stack, so they are kept. Equal values mean one bank, and
 
 EXPAND 0 and EXPAND 1 share the addresses `8000h–BFFFh`, so a copy between them
 can't have both in view. The part of the bank-0 end below `8000h` is in MAIN 0,
-which stays in view, so that part goes by one `LDIR` with EXPAND 1 selected
+which stays in view. That part goes by one `LDIR` with EXPAND 1 selected
 (`src/xmove.asm:62-99`). The part in EXPAND 0 goes one byte at a time, with the
 latch written between the read and the write (`src/xmove.asm:104-120`). While
-EXPAND 1 is in view the code uses no stack, because the caller's stack may be
-in EXPAND 0 (`src/xmove.asm:21-22`).
+EXPAND 1 is in view the code uses no stack, because the caller's stack may be in
+EXPAND 0 (`src/xmove.asm:21-22`).
 
-`MVEND` writes `LATCHV` back to the latch, pops the alternates, and enables
+`MVEND` writes `LATCHV` back to the latch, pops the alternates and enables
 interrupts only if `P/V` shows they were on (`src/xmove.asm:128-136`). A copy
 never selects another MAIN (`src/xmove.asm:6`).
 
@@ -240,14 +240,15 @@ prints.
 
 ### 4. The relocation
 
-Chapter 21 describes this pass. Each byte of the list is a gap, 255 is a gap
-and no fixup, and the check stops a list running past the image
+Chapter 21 describes this pass. Each byte of the list is a gap, 255 is a gap and
+no fixup, and the check stops a list running past the image
 (`src/svc.asm:133-161`). `HL` starts at `DF+DHLEN-1`, the byte before the image
-(`src/svc.asm:136`), so a list whose first gap is 0 adds the page to header byte
-24, the name's last. `makeSvc` never writes such a list, since its first gap
-counts from the byte before the image to a fixup at offset 0 or later
+(`src/svc.asm:136`). A list whose first gap is 0 therefore adds the page to
+header byte 24, the name's last. `makeSvc` never writes such a list, since its
+first gap counts from the byte before the image to a fixup at offset 0 or later
 (`tools/lib/svc.mjs:37-44`). The loader doesn't test for one. This file is
 `COUNT.SVC` from Chapter 10 with a 0 put at the front of its list:
+
 ```sh
 node -e '
 const { readFileSync, writeFileSync } = require("node:fs");
@@ -323,6 +324,7 @@ final `CP 1` and `CCF` turn `SVCRC` into the carry (`src/svc.asm:248-254`).
 Until `SVCMOV` nothing but the file has changed, and each failure returns carry
 with `SVCRC` at 0. After the move there are three outcomes, and the labels
 `SVCSCAN`, `SVCRF` and `SVCKEEP` separate them.
+
 | `SVCRC` | Case | State after |
 | ---: | --- | --- |
 | 0 | Rejected before the move | As it was |
@@ -362,10 +364,10 @@ the generation in `A` (`src/svc.asm:443-455`, `src/svc.asm:486-488`). `REGFIND`
 compares 8 bytes at offset 2 and tests the version at offset 10 with `CP C`. On
 a match it returns the table's address from offset 11 (`src/svc.asm:458-488`).
 Newer records are at the front of the list, so a find reaches the newest of a
-name first, and a removal uncovers the older (`test/svc.test.mjs:499`).
+name first. A removal uncovers the older (`test/svc.test.mjs:499`).
 
-`B` is 0 at `REGF1`, so `DJNZ` allows 256 rounds, and a list made into a cycle
-by a program can't hold the caller (`src/svc.asm:496-498`,
+`B` is 0 at `REGF1`, so `DJNZ` allows 256 rounds. A list made into a cycle by a
+program therefore can't hold the caller (`src/svc.asm:496-498`,
 `test/svc.test.mjs:543`). That walk uses at most 8 bytes of the caller's stack,
 three `PUSH`es and the return address (`src/svc.asm:463-465`). The registry has
 no entry for removal, so a selector of 2 returns carry
@@ -381,8 +383,8 @@ header true. Each header holds the state from before its own load, and the
 states are stacked in memory in the order of the loads.
 
 `UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1082-1084`). `SVCUNL` rejects the
-command while `SVCBSY` is set, and it uses the 0 it read there as `L`, making
-`HL` the base of the page in `PZTOP` (`src/svc.asm:28-32`). That page must equal
+command while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL`
+the base of the page in `PZTOP` (`src/svc.asm:28-32`). That page must equal
 `SVCHEAD`, which is 0 with no service in, so the test then fails. Bit 0 of the
 flags must also be set (`src/svc.asm:33-38`).
 
