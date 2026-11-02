@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Diagnostics
 
-Checked against TEC-OS 98c6416. The diagnostics ROM in this chapter is version
+Checked against TEC-OS 718c01b. The diagnostics ROM in this chapter is version
 0.2, image `D90143609F53FAAB`, as `npm run diag` builds it from that commit.
 
 Two parts of the repository report what is wrong with a board. The TEC-OS ROM
@@ -24,9 +24,10 @@ with its remedy.
 Cold boot sets up the LCD and the card at `COLDRT` (`src/boot.asm:34`). It
 starts the card with `SDINIT` and checks the container with `MOUNT`, and a
 failure of either jumps to `DIAG` with an error code in `A`
-(`src/boot.asm:37-40`). The code is one of the SD card driver's, `01h` to `08h`,
-or one of the container's, `20h` to `2Ah`. The banner is printed before the card
-is touched (`src/boot.asm:29-31`), so it appears whatever the card holds.
+(`src/boot.asm:37-40`). The code is one of `SDINIT`'s, `01h` to `04h`, or one of
+`MOUNT`'s, `20h` to `2Ah` (`src/sd.asm:10-13`, `src/vol.asm:8-18`). The banner is
+printed before the card is touched (`src/boot.asm:29-31`), so it appears
+whatever the card holds.
 
 `DIAG` resets the stack to the BIOS's, since a mount that failed part way may
 have left it deep, and keeps the code on it (`src/diag.asm:5-6`). It writes
