@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Command history
 
-Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 62d47ed, with the starter card's `EDIT.COM` from Edit
 845d062, whose card copy has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
@@ -99,7 +99,7 @@ The offset into the page is `L` alone, so moving from offset `FFh` to the next
 byte with `INC L` reaches offset `00h`, and the page is a ring with no end.
 Each line is stored as its characters followed by a byte of 0, written forward
 from the offset in `HHEAD`, a byte of the workspace in EXPAND 0
-(`src/ram.asm:216-217`). After a line's 0, `HHEAD` holds the offset of the
+(`src/ram.asm:220-221`). After a line's 0, `HHEAD` holds the offset of the
 byte that follows it.
 
 The ring is kept so that the byte at `HHEAD` is always 0, and so is the byte
@@ -110,23 +110,26 @@ it reaches an empty entry.
 
 ## Storing a line
 
-The CCP reads a command line with BDOS function 10, and before the call it
-sets the byte `HFLAG` to `FFh` (`src/cpm/ccp.asm:67-71`, `src/ram.asm:137`).
-Function 10 ends at `LINDONE`, after Return, after a line feed or when the
-buffer is full. There it reads `HFLAG`, clears it, and calls `HSTORE` if the
+With no chained piece and no startup line left, the CCP reads a command line
+with BDOS function 10, and before the call it sets the byte `HFLAG` to `FFh`
+(`src/cpm/ccp.asm:80-89`, `src/ram.asm:141`). Function 10 ends at `LINDONE`,
+after Return, after a line feed or when the buffer is full. There it reads `HFLAG`, clears it, and calls `HSTORE` if the
 flag was set and the line has at least one character
-(`src/cpm/bdos.asm:407-420`). When a program calls function 10 itself, `HFLAG`
+(`src/cpm/bdos.asm:442-455`). When a program calls function 10 itself, `HFLAG`
 is clear: `LINDONE` cleared it after the CCP's line, and every warm boot
-clears it too, with the rest of the CCP's and the BDOS's RAM, for a line the
-CCP abandoned at `^C` (`src/cpm/bdos.asm:416-418`, `src/boot.asm:73`,
-`src/boot.asm:272-276`). So only the lines typed at the CCP's prompt go into
-the history. The lines of `STARTUP.CMD` don't: the CCP takes each of them from
-`STLINE` in place of function 10 (`src/cpm/ccp.asm:65-66`), so after cold boot
-the history is empty.
+clears it too, with the rest of the RAM from `CCPCLR` up, for a line the CCP
+abandoned at `^C` (`src/cpm/bdos.asm:451-453`, `src/boot.asm:73`,
+`src/boot.asm:273-277`). So only the lines typed at the CCP's prompt go into
+the history. A chained line (Chapter 11) goes in once, whole, with its `!` and
+`:`, so `^W` brings all of it back. The CCP takes the line's pieces, and a
+command from function 47, from `CMDTXT` with no call of function 10, and they
+add no entry (`src/cpm/ccp.asm:80-81`). The lines of `STARTUP.CMD` don't go in
+either: the CCP takes each of them from `STLINE` in place of function 10
+(`src/cpm/ccp.asm:83-84`), so after cold boot the history is empty.
 
-`HSTORE` stores the line as function 10 returns it, before the CCP turns its
-small letters into capitals (`src/cpm/ccp.asm:73-92`), so a recalled line
-comes back as it was typed:
+`HSTORE` stores the line as function 10 returns it, before the CCP turns small
+letters into capitals, which it does a piece at a time
+(`src/cpm/ccp.asm:140-152`), so a recalled line comes back as it was typed:
 
 <!-- node book/capture.mjs --board pico --screen con "@start "$'\x17' -->
 ```text
@@ -175,22 +178,22 @@ ring holds only whole lines. When nothing was overwritten, the byte at `HHEAD`
 was already 0, and the loop clears that one byte.
 
 Each line takes its length and one byte more. The CCP's buffer holds up to 127
-characters (`src/boot.asm:279-280`), so a line of that length takes 128 bytes
+characters (`src/boot.asm:280-281`), so a line of that length takes 128 bytes
 of the ring, half of it, and short commands such as `DIR` take four bytes
 each.
 
 ## ^W and ^N in function 10
 
 Function 10 passes `^W` and `^N`, codes 23 and 14 (`src/cpm/bdos.asm:41-42`),
-to `LINHIST` (`src/cpm/bdos.asm:267-270`). With `HFLAG` clear, in a program's
+to `LINHIST` (`src/cpm/bdos.asm:302-305`). With `HFLAG` clear, in a program's
 call, `LINHIST` sends the code on as an ordinary character into the buffer, as
-CP/M 2.2's function 10 does (`src/cpm/bdos.asm:298-301`). With it set, it
-calls `HREC` (`src/cpm/bdos.asm:302`).
+CP/M 2.2's function 10 does (`src/cpm/bdos.asm:333-336`). With it set, it
+calls `HREC` (`src/cpm/bdos.asm:337`).
 
 `HPOS` records the line shown, as the offset of its terminator
-(`src/ram.asm:138`). Each call of function 10 starts with `HPOS` equal to
+(`src/ram.asm:142`). Each call of function 10 starts with `HPOS` equal to
 `HHEAD`, the empty entry, which means no line is shown yet
-(`src/cpm/bdos.asm:232-233`). `HREC` works from `HPOS`
+(`src/cpm/bdos.asm:267-268`). `HREC` works from `HPOS`
 (`src/history.asm:53-102`):
 
 - For `^W` it steps back to the first byte of the shown entry with `HSTART`.
@@ -207,7 +210,7 @@ calls `HREC` (`src/cpm/bdos.asm:302`).
 
 To show the entry, `HREC` erases what is in the buffer with `LINERASE`, the
 routine behind `^X`, which takes the characters off one at a time and erases
-each on the console (`src/cpm/bdos.asm:394-405`). It then copies the entry's
+each on the console (`src/cpm/bdos.asm:429-440`). It then copies the entry's
 bytes into the buffer with `HGET`, counting and echoing each one, as if it had
 been typed, up to the buffer's maximum (`src/history.asm:83-102`). From then
 on function 10 goes on reading keys, and the recalled characters are edited
@@ -218,8 +221,8 @@ like typed ones.
 A warm boot leaves the history as it was. Nothing in the warm boot path writes
 to EXPAND 1's page at `BD00h`, and `HHEAD` is in the part of the workspace
 above the RAM BIOS table at `BF00h`, outside the RAM that `CPMINIT` clears
-(`src/boot.asm:59-82`, `src/boot.asm:272-276`, `src/ram.asm:186`,
-`src/ram.asm:217`). A program's exit, a `^C` at the prompt and BDOS function 0
+(`src/boot.asm:59-82`, `src/boot.asm:273-277`, `src/ram.asm:190`,
+`src/ram.asm:221`). A program's exit, a `^C` at the prompt and BDOS function 0
 all keep it. Here `^C` at the prompt was followed by `^W`:
 
 <!-- node book/capture.mjs CON "^C" "@start "$'\x17' -->
