@@ -13,11 +13,12 @@ repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 Chapter 2 described the console as you use it at the prompt. This chapter
-describes it as a program uses it. It starts with the BDOS's console functions
-and the BIOS's own console calls beneath them. It then gives the control
+describes it as a program uses it, starting with the BDOS's console functions
+and the BIOS's own console calls beneath them. It then explains the control
 characters and escape sequences TEC-OS acts on when the console is a display,
-and the cursor. It ends with the console's size and where a program reads it,
-then the IOBYTE's other devices: the list device, the punch and the reader.
+and how the cursor is drawn. It ends with the console's size and where a
+program reads it, then the IOBYTE's other devices: the list device, the punch
+and the reader.
 
 ## The BDOS's console functions
 
@@ -263,10 +264,10 @@ then uses 80 by 24, as the CCP does for `[more]`.
 
 The ROM's table of services at `C003h`, which Chapter 9 describes, has the
 same bytes through a pointer. It starts with the letters `TNA` and the table's
-major version, 4. The word at `C008h` is the address of the columns, with the
-rows in the byte after. A program can check the letters and the version and
-then read the size through the word. It then works on every TEC-OS with this
-version of the table, wherever a later ROM keeps the bytes:
+major version, 4, its ABI version. The word at `C008h` is the address of the
+columns, with the rows in the byte after. A program can check the letters and
+the version and then read the size through the word. It then works on every
+TEC-OS with this version of the table, wherever a later ROM keeps the bytes:
 
 ```asm
 ; SIZE: print the console's size, read through TEC-OS's table.
