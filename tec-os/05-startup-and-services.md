@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 5. Startup and services
 
-Checked against TEC-OS bd15528.
+Checked against TEC-OS 718c01b.
 
 Chapter 1's first boot ran two commands that nobody typed, and on the web
 page's board the first of them moved the console to the PICO9918. This chapter
@@ -124,7 +124,7 @@ A>
 The rest of the rules are about a line's edges:
 
 - A line ends at CR or at LF, and blank lines are passed over.
-- `^Z`, a zero byte or the record's last byte ends the file, and nothing after
+- `^Z`, a zero byte or the end of the record ends the file, and nothing after
   a `^Z` or a zero runs.
 - A line runs its first 127 characters, the limit of a line typed at the
   prompt, and the rest of it is passed over. A line of 127 characters runs
@@ -320,7 +320,8 @@ The web page's "Display" and "ROM" controls change these lines for you,
 through `host/card.mjs`. At each power-on the page makes the card's first line
 the file for the chosen display and width, adds `GLCD.SVC` as the second on a
 board with the PICO9918 and keeps your other lines. A display driver chained
-in one of those lines is taken out and the rest of the line kept.
+in one of those lines is taken out and the rest of the line kept. A piece after
+it that starts with `:` loses the `:`, so the piece runs as an ordinary command.
 
 ## The keypad skip
 
@@ -474,11 +475,11 @@ A>
 ```
 
 `CON UC1` installs `A:GLCD.SVC` if it isn't in, which is how a board with both
-displays gets the second driver after the first. The two rules together give a
-way to change the PICO9918's width with no reset. Moving the console to the
-serial terminal lets `UNLOAD` remove the driver, and the driver for the new
-width takes the console back. As one chained line the change works from the
-matrix keyboard too:
+displays gets the second driver after the first. The PICO9918's width can
+change with no reset, because a PICO9918 driver takes the console when it
+installs. Moving the console to the serial terminal lets `UNLOAD` remove the
+driver, and the driver for the new width takes the console back. As one chained
+line the change works from the matrix keyboard too:
 
 <!-- node tools/capture.mjs --board pico "CON TTY!UNLOAD!PICO40.SVC!CON" -->
 ```text
@@ -498,8 +499,9 @@ A>
 Older cards hold their services in files of type `.DRV`, and this ROM doesn't
 load them. The CCP takes `PICO.DRV` as the name of a program and prints it
 with a question mark, so the board keeps its console on the serial terminal.
-The web page reports such a card when it powers on and leaves the card as it
-is.
+The web page reports such a card when it powers on, naming the `.DRV` file of
+the chosen display and width if the card has that file, and leaves the card as
+it is.
 
 `README.TXT` on the starter card gives the two ways out. "New starter card",
 or a new image from `npm run media`, replaces the card. The other way keeps
