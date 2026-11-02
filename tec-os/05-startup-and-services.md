@@ -316,9 +316,7 @@ The web page's "Display" and "ROM" controls change these lines for you, through
 `host/card.mjs`. At each power-on the page makes the card's first line the
 file for the chosen display and width, adds `GLCD.SVC` as the second on a board
 with the PICO9918, and keeps your other lines. A display driver chained in one
-of those lines is taken out and the rest of the line kept, so
-`PICO.SVC!:VOLS` leaves the line `:VOLS`. That `:` then tests the line before
-it, and on the PICO9918's board, where `GLCD.SVC` fails, `VOLS` doesn't run.
+of those lines is taken out and the rest of the line kept.
 
 ## The keypad skip
 

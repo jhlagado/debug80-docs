@@ -300,7 +300,4 @@ that is a display driver's name under either type, with or without a leading
 `:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:52-56`). Lines left
 blank are dropped. The new file is the display's file, `GLCD.SVC` on a PICO9918
 board, and the remaining lines, and nothing is written if that equals the old
-text (`host/card.mjs:59-68`). A `:` piece that stood after a display driver
-stays at the head of its line, where the CCP tests it against the command
-before it, as it would any other line's: `MLTAKE` reads `PRGCODE`, which the
-previous line set (`src/cpm/ccp.asm:125-137`).
+text (`host/card.mjs:59-68`).
