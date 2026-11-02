@@ -29,9 +29,9 @@ The ROM has five parts, in this order:
 | `F8CDh–FFFFh` | 1,843 | free |
 
 The figures are those of the build at commit 98c6416. The build writes them to
-`build/debug80/census.json` and, through `npm run media`, to the ROM table
-in `docs/memory-map.md`. The used part, from `C000h` to the end of the code,
-is 14,541 of the 16,384 bytes.
+`build/debug80/census.json` and, through `npm run media`, to the table of the
+ROM's regions in `docs/memory-map.md`. The used part, from `C000h` to the end
+of the code, is 14,541 of the 16,384 bytes.
 
 The first three bytes are a jump, `JP COLD` (`src/reset.asm:6`), to `C33Dh`,
 the first byte of the code. Chapter 14 describes how the Z80 reaches it at
@@ -42,7 +42,7 @@ The table at `C003h` is the fixed interface for programs and drivers
 and minor version, 4 and 0. Next comes a word, `0048h`, that points at the
 console's columns and rows in page zero. After it are a jump to the hardware
 services at `C00Ah` and a word at `C00Dh` that points at the count of MAIN
-regions. Three more jumps follow: the mount service at `C00Fh`, the video
+regions. Three more jumps follow: the mount service at `C00Fh`, the display
 drivers' hook at `C012h` and the driver registry at `C015h`. Chapter 9
 describes the table from a program's side and Chapter 20 the services behind
 it. The table ends at `C018h`, where the data begins.
@@ -155,8 +155,8 @@ container's layout from one file. `geometryInfo` in the module checks each
 geometry before either uses it. A geometry must have 64 records a track, no
 reserved tracks and no check vector. Its allocation vector must be at most 256
 bytes. Its `EXM` and directory blocks must match the block size and the number
-of directory entries (`tools/lib/format.mjs:9-41`). Chapter 18 describes the
-container.
+of directory entries (`tools/lib/format.mjs:9-41`). Chapter 16 describes those
+fields, and Chapter 18 the container.
 
 ## ATOM and the two assemblies
 
@@ -166,13 +166,14 @@ The assembler is ATOM, the npm package `atom-z80` at version 0.3.7.
 `writeAtomD8` for the symbol map (`tools/build.mjs:208-214`).
 
 The build assembles the ROM twice, because the workspace's position depends on
-its size. The workspace runs up to the RAM BIOS table at `BF00h`, which has a
-fixed address. Its first byte, `WSBASE`, is therefore `BF00h` less the
-workspace's size, and the size is known only after an assembly. The first
-assembly is a probe, with `WSBASE` set to `8000h`. The build reads the address
-of `BDOSRME`, the label at the workspace's end, and takes `8000h` from it
-(`tools/build.mjs:244-248`). At 98c6416 the workspace is 1,448 bytes, so the
-second assembly has `WSBASE` at `B958h` (`tools/build.mjs:249-251`).
+its size. The fixed workspace, the part below the RAM BIOS table, runs up to
+the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
+therefore `BF00h` less the workspace's size, and the size is known only after
+an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
+build reads the address of `BDOSRME`, the label at the workspace's end, and
+takes `8000h` from it (`tools/build.mjs:244-248`). At 98c6416 that part is
+1,448 bytes, so the second assembly has `WSBASE` at `B958h`
+(`tools/build.mjs:249-251`).
 
 The second assembly's output is the ROM. `materializeAtomGeneration` turns it
 into bytes from `C000h`, filling every gap with `FFh`. The build copies them
@@ -214,7 +215,7 @@ with `placement check failed:` and the rule's text
   where an older table was (`tools/build.mjs:190-197`).
 - Each driver's source reaches the ROM only through the
   names in `abi.inc` (`tools/build.mjs:200-206`).
-- The RAM BIOS table is at `BF00h`, and the workspace ends exactly there. The
+- The RAM BIOS table is at `BF00h`, and the fixed workspace ends exactly there. The
   state above the table starts 51 bytes after it, at `SDBYTE`, and all of it
   ends by `C000h` (`tools/build.mjs:274-277`).
 - The BIOS stack ends at or below the start of the
@@ -226,12 +227,14 @@ The last check works out the TPA without running the ROM. `cardLayout` follows
 the arithmetic of cold boot's `ALVINIT`, which Chapter 13 describes: the
 allocation vectors packed down from `WSBASE`, and the BDOS entry jump below
 them (`tools/build.mjs:232-236`). The starter card has two volumes, a G1M
-with `DSM` 511 and a G8M with `DSM` 2047. Their vectors take 320 bytes and the
-entry is at `B806h`, which leaves 46,854 bytes from `0100h`.
+whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
+vectors take 320 bytes and the entry is at `B806h`, which leaves 46,854 bytes
+from `0100h`.
 
 ## One image, four names
 
-When the checks pass, the build writes three files into `build/<profile>/`.
+When the checks pass, the build writes three files into `build/<profile>/`,
+a directory for each of the profile names below.
 `tecos.rom` is the image. `tecos.d8.json` is the symbol map in Debug80's D8
 format, which `book/capture.mjs` reads to find TEC-OS's labels. `census.json`
 holds the figures for the ROM's parts, the RAM's regions and the stacks

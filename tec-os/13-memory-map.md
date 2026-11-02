@@ -30,17 +30,18 @@ EXPAND 0 and EXPAND 1, each 16 KiB.
 The system latch at port `FFh` (`src/layout.asm:13`) selects what is in view.
 Bit 2, `LATEXP`, selects EXPAND 1 when it is set (`src/layout.asm:18`).
 Bit 3, `LATMAIN`, selects a second 32 KiB at `0000h–7FFFh`, MAIN 1, on a board
-that has one (`src/layout.asm:20`). Bit 0, `LATSHAD`, high, turns off the copy
-of the ROM's first 2 KiB that the board shows at `0000h` after a reset
-(`src/layout.asm:16`). TEC-OS runs with the latch at `LATCLAS`, `01h`: the copy
-off, MAIN 0 and EXPAND 0 in view (`src/layout.asm:19`).
+that has one (`src/layout.asm:20`). Bit 0, `LATSHAD`, high, turns off the boot
+overlay, the copy of the ROM's first 2 KiB that the board shows at `0000h` after a
+reset (`src/layout.asm:16`). TEC-OS runs with the latch at `LATCLAS`, `01h`: the
+overlay off, MAIN 0 and EXPAND 0 in view (`src/layout.asm:19`).
 
 The latch can be written but not read, so TEC-OS keeps what it last wrote in a
 byte of page zero, `LATCHV` at `0040h` (`src/layout.asm:37`). A routine that
 changes a bank for a moment reads `LATCHV`, sets its bit and writes the result
 to the port. When it is done, it writes `LATCHV` to the port unchanged. The
 block cache's lookup is an example. It writes `LATCHV` with `LATEXP` added to
-put EXPAND 1 in view and searches the table of lines there. It ends with
+put EXPAND 1 in view and searches the table of cache lines there,
+as Chapter 19 describes. It ends with
 `LD A,(LATCHV)` and `OUT (SYSLAT),A` (`src/cache.asm:42-44`,
 `src/cache.asm:74-75`).
 
@@ -101,7 +102,7 @@ TEC-OS keeps there the state that has to be in view whatever the window shows
 | `004Ch` | `ESCP2` | second numeric parameter |
 | `004Dh` | `KBLAST` | matrix key held at the last poll, `FFh` none |
 | `004Eh` | `VATTR` | `80h` while reverse video is on |
-| `004Fh` | `VCURV` | 1 while the cursor cell is inverted |
+| `004Fh` | `VCURV` | 1 while the cursor cell is drawn as its reverse image |
 
 Two of these are published. The table at `C003h` has a word at `C008h` that
 points at `VWID`, so a program can find the console's size. A word at `C00Dh`
@@ -115,9 +116,9 @@ in view therefore still reaches warm boot.
 
 ## The resident workspace
 
-TEC-OS's working memory is at the top of EXPAND 0, from the BDOS entry jump
-to `BFFFh`. With the starter card in the socket and no driver loaded it is
-laid out like this:
+The workspace is at the top of EXPAND 0, above the BDOS entry jump and the
+allocation vectors. With the starter card in the socket and no driver loaded,
+memory from that jump to `BFFFh` is laid out like this:
 
 | Addresses | Bytes | Region |
 | --- | ---: | --- |
@@ -129,14 +130,14 @@ laid out like this:
 | `BCEBh–BE76h` | 396 | CCP state and stack |
 | `BE77h–BEFFh` | 137 | BDOS state and stack |
 | `BF00h–BF32h` | 51 | RAM BIOS table |
-| `BF33h–BFE5h` | 179 | SD, keyboard and GLCD state |
+| `BF33h–BFE5h` | 179 | SD, keyboard and graphics LCD state |
 | `BFE6h–BFFFh` | 26 | unused |
 
 The image initialises none of it. `ram.asm` reserves each byte with `DS`, and
 cold boot and warm boot clear and set it (`src/ram.asm:1-4`).
 
-The middle part, from `WSBASE` at `B958h` to `BEFFh`, has fixed addresses for
-a given build. Its size, 1,448 bytes, sets `WSBASE`. Chapter 12 describes how
+The fixed workspace, from `WSBASE` at `B958h` to `BEFFh`, has fixed addresses
+for a given build. Its size, 1,448 bytes, sets `WSBASE`. Chapter 12 describes how
 the build places it so that it ends at `BF00h`. The part is three blocks, one
 after the other (`src/ram.asm:1-3`).
 
@@ -144,9 +145,10 @@ The first block is the BIOS's, from `DSKCUR` to the BIOS stack
 (`src/ram.asm:8-62`). It begins with the disk state: the drive, track, sector
 and DMA address the BDOS last set, and the block and record they map to. Next
 is the 512-byte deblocking buffer `BLKBUF` at `B966h` with its key
-(`src/ram.asm:16-20`). After it come the drive table and the drives' DPHs,
-which Chapter 18 describes, and the 128-byte directory buffer `DIRBUF` that
-every drive shares. Then come the word `STUBAD`, which holds the BDOS entry
+(`src/ram.asm:16-20`). After it come the drive table, the drives' disk
+parameter headers, the DPHs, and the 128-byte directory buffer `DIRBUF` that
+every drive shares. Chapter 18 describes deblocking and these tables. Then come
+the word `STUBAD`, which holds the BDOS entry
 jump's address, and the mount service's scratch bytes. The video terminal's
 state follows: an 80-byte row buffer for scrolling, the seven vectors into the
 display driver, the scroll region and the console mode (`src/ram.asm:45-58`).
@@ -158,10 +160,11 @@ state of the directory listing and the pager, and a 128-byte scratch buffer,
 
 The third block is the BDOS's, from `BDOSRAM` at `BE77h`. It starts with the
 saved stack pointer, the console column and the line editor's state. Then come
-the current and default drives, the user number, the read-only vector and the
-drives to rebuild at warm boot. The pointers into the current drive's DPH, DPB
-and vector follow, then the directory search state, the file's position and the
-BDOS's stack (`src/ram.asm:126-186`). The block ends at `BDOSRME`, `BF00h`.
+`CURDRV`, the bound drive, `DEFDRV`, the default drive, the user number,
+the read-only vector and the drives to rebuild at warm boot. The pointers into
+the bound drive's DPH, its disk parameter block, the DPB, and its vector
+follow, then the directory search state, the file's position and the BDOS's
+stack (`src/ram.asm:126-186`). The block ends at `BDOSRME`, `BF00h`.
 
 `BF00h–BF32h` is the RAM BIOS table, seventeen three-byte jumps at the start
 of a page (`src/layout.asm:73-74`). Chapter 15 describes it.
@@ -170,11 +173,12 @@ Above the table, from `SDBYTE` at `BF33h`, is state that the build puts at a
 fixed offset from it, 51 bytes on (`src/ram.asm:192`). It starts with the SD
 card driver's command argument, block address and last error. The block cache's
 next line, failure flag and saved interrupt state follow. Next are the matrix
-keyboard's scan state, the two video drivers' table addresses, the history's
+keyboard's scan state, the two display drivers' table addresses, the history's
 head, `XMOVE`'s banks, `PZTOP` and the program return code `PRGCODE`. After
 them come the PRL and driver loader's state and the driver registry's head.
 The last items are the 128-byte record of `A:STARTUP.CMD` that startup reads,
-and `CHPOS`, the next piece of a chained command line (`src/ram.asm:193-240`). This state ends at
+and `CHPOS`, the next command, or piece, of a chained line (Chapter 11,
+`src/ram.asm:193-240`). This state ends at
 `WSEND`, `BFE6h`, and the build checks that it ends by `C000h`
 (`src/ram.asm:241-242`, `tools/build.mjs:277`).
 
@@ -182,7 +186,8 @@ and `CHPOS`, the next piece of a chained command line (`src/ram.asm:193-240`). T
 
 A CP/M drive's allocation vector has one bit for each allocation block of its
 disk, set while the block is in use. The BDOS keeps the vector in memory while
-the drive is logged in. Its size is `DSM / 8 + 1` bytes, where `DSM` is the
+the drive is logged in, which it is once the BDOS has built the vector from
+the directory (Chapter 16). Its size is `DSM / 8 + 1` bytes, where `DSM` is the
 number of the disk's last allocation block. A G1M volume, with `DSM` 511,
 needs 64 bytes, and a G8M volume, with `DSM` 2047, needs 256.
 
@@ -191,7 +196,7 @@ each drive gets depends on the card. `ALVINIT` starts at `WSBASE` and works
 down. It gives each drive its vector in drive order and puts each one's address
 in the drive's DPH (`src/vol.asm:496-570`).
 
-A card of container format 1.1 whose header has a drive count of N gets a
+A card of container format 1.1 whose drives field is N gets a
 256-byte slot for each of drives A to the Nth, mounted or not. Any of those
 drives can then later take any volume. Any other card, including every format 1.0 card, gets a slot for each
 drive it mounts, of the size its volume needs (`src/vol.asm:517-545`).
@@ -262,15 +267,16 @@ them gives the rule: each is the deepest use and a quarter more
 (`src/layout.asm:76-79`).
 
 The measurement is `test/stacks.test.mjs`. The test boots the model under the
-heaviest workloads of the test suite. It runs them on each console, with a
-write-behind drive, without a card and on the CCP's deepest paths. It records every write to
-memory, the clearing `LDIR`s excepted, and the lowest address written in each
-stack gives its depth. It passes when each stack's deepest use leaves at least
-a quarter of it free and no guard byte has changed (`test/stacks.test.mjs:182`,
-`test/stacks.test.mjs:208-211`). It presses the keypad's NMI at each new depth
-only while `0066h` holds a `RETN` (`test/stacks.test.mjs:62-69`). TEC-OS puts
-no handler there, so at 98c6416 the measured depths include no NMI frame,
-though the comment at `src/layout.asm:77` says they do.
+heaviest workloads of the test suite. It runs them on each console, on a
+volume written behind, without a card and on the CCP's deepest paths. It
+records every write to memory, the clearing `LDIR`s excepted, and the lowest
+address written in each stack gives its depth. It passes when each stack's
+deepest use leaves at least a quarter of it free and no guard byte has changed
+(`test/stacks.test.mjs:182`, `test/stacks.test.mjs:208-211`). It presses the
+keypad's NMI at each new depth only while `0066h` holds a `RETN`
+(`test/stacks.test.mjs:62-69`). TEC-OS puts no handler there, so at 98c6416 the
+measured depths include no NMI frame, though the comment at `src/layout.asm:77`
+says they do.
 
 A loaded driver runs on its caller's stack, so the drivers' own depths add to
 these. `DRVLIM` gives the most that the drivers together may add to each stack.
@@ -287,7 +293,7 @@ as Chapter 14 describes. Its pages are:
 | --- | ---: | --- |
 | `8000h–BBFFh` | 15,360 | the block cache's 30 lines, 512 bytes each |
 | `BC00h–BC77h` | 120 | each line's card block, 4 bytes, `FFFFFFFFh` while empty |
-| `BC80h–BC9Dh` | 30 | each line's dirty byte |
+| `BC80h–BC9Dh` | 30 | each line's dirty byte, nonzero while the line holds changes the card lacks |
 | `BD00h–BDFFh` | 256 | the command history |
 | `BE00h–BEFFh` | 256 | free |
 | `BF00h–BFFFh` | 256 | reserved |
