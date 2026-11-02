@@ -41,7 +41,7 @@ for the length read, `CMDLEN`, and 128 bytes of characters, `CMDTXT`, at `BD35h`
 `BDOSRME`, the end of the BDOS's RAM, 331 bytes, so the command buffer and the
 two FCBs before it are kept (`src/boot.asm:270-277`, `src/boot.asm:73`). The
 FCBs need no clearing, since each use of them parses a name into them in full
-and clears the rest (`src/cpm/ccp.asm:1318-1343`).
+and clears the rest (`src/cpm/ccp.asm:1334-1359`).
 
 The position of the next piece is `CHPOS`, one byte at `BFE5h`, in the part of
 the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
@@ -63,7 +63,7 @@ too (`src/cpm/bdos.asm:51-64`).
 With that limit a piece's command tail fits the page-zero buffer at `0080h`. A
 program's name has at least one character, so its tail has at most 126.
 `PREPPAGE` (Chapter 17) copies the tail to `0081h` with a 0 after it, and the 0
-lands at `00FFh` at the latest (`src/cpm/ccp.asm:1292-1309`). A tail one
+lands at `00FFh` at the latest (`src/cpm/ccp.asm:1308-1325`). A tail one
 character longer would put its 0 at `0100h`, the first byte of the program,
 which `LOADCOM` (Chapter 17) has already loaded by then
 (`src/cpm/ccp.asm:283-294`).
@@ -163,7 +163,7 @@ loads a program or installs a service (`src/cpm/ccp.asm:227-300`).
 Every routine after `MLTAKE` reads the piece through `ARGSTRT` and stops at its
 0, so a built-in or a program reads its own piece and nothing of the pieces
 after it. `PREPPAGE` copies the command tail from `ARGSTRT` up to the 0, which
-leaves the tail at `0080h` ending at the `!` (`src/cpm/ccp.asm:1281-1309`).
+leaves the tail at `0080h` ending at the `!` (`src/cpm/ccp.asm:1297-1325`).
 
 `CHPOS` is set before the command runs. A program that ends normally, by `RET`,
 by a jump to `0000h` or by BDOS function 0 (`src/cpm/bdos.asm:132-133`), reaches
@@ -209,13 +209,13 @@ message at `DE` before it goes to `STARTED` (`src/cpm/ccp.asm:20`,
 a question mark, falls through into it (`src/cpm/ccp.asm:329-352`). The
 built-ins' messages go there by `JP ERRGO`: `NO FILE` from `FILENO`,
 `FILE EXISTS` from `REN`, `NO SPACE` from `SAVE` and `COPY`'s four messages
-through `CPFAIL` (`src/cpm/ccp.asm:849-851`, `src/cpm/ccp.asm:942-944`,
-`src/cpm/ccp.asm:1276-1278`, `src/cpm/ccp.asm:1052-1053`).
+through `CPFAIL` (`src/cpm/ccp.asm:849-851`, `src/cpm/ccp.asm:961-963`,
+`src/cpm/ccp.asm:1292-1294`, `src/cpm/ccp.asm:1071-1072`).
 
 A program that isn't found or fails to load, or a service that fails to install,
 reaches `BADCMD` (`src/cpm/ccp.asm:264-293`). Every other end of a built-in
 leaves the code at 0, including `COPY`'s `COPIED` line, which is printed through
-`PRTGO`, the entry after the store (`src/cpm/ccp.asm:1044-1051`,
+`PRTGO`, the entry after the store (`src/cpm/ccp.asm:1063-1070`,
 `src/cpm/ccp.asm:353`).
 
 ## Paths that drop the rest
@@ -230,13 +230,13 @@ through `CHDROP`:
   with `CHPOS` at 0, so at its own prompt no piece is left, and only a line that
   a program reads has anything to drop.
 - A BDOS error. `DISKERR` prints `Bdos Err On`, the drive and the cause, and
-  waits for a key (`src/cpm/bdos.asm:2458-2468`). The routine for each cause
+  waits for a key (`src/cpm/bdos.asm:2470-2480`). The routine for each cause
   then jumps to `CHDROP`: `File R/O` from `ROTEST`, `R/O` from `CHKRO`,
   `Select` from `SELFAIL` and `Bad Sector` from `BADSECT`
-  (`src/cpm/bdos.asm:686-694`, `src/cpm/bdos.asm:2417-2437`,
-  `src/cpm/bdos.asm:2453-2456`). A failed read of a directory record goes to
-  `RDFAIL`, which jumps to `CHDROP` with no message (`src/cpm/bdos.asm:1886`,
-  `src/cpm/bdos.asm:2450-2451`).
+  (`src/cpm/bdos.asm:686-694`, `src/cpm/bdos.asm:2415-2435`,
+  `src/cpm/bdos.asm:2448-2451`). A failed read of a directory record goes to
+  `RDFAIL`, which jumps to `CHDROP` with no message (`src/cpm/bdos.asm:1885`,
+  `src/cpm/bdos.asm:2447`).
 
 A reset drops the line by clearing `CHPOS` with the rest of the workspace
 (`src/boot.asm:23-27`).

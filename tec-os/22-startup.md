@@ -153,7 +153,7 @@ the line and the LF being a blank line. The starter card's file has 21 bytes,
 
 With a line in hand, `STLINE` stores its length in `CMDLEN`, writes CR and `$`
 after it and prints the line from `CMDTXT` through `PUTSTR`, which is BDOS
-function 9 (`src/svc.asm:405-411`, `src/cpm/ccp.asm:1532-1534`). Function 9 ends
+function 9 (`src/svc.asm:405-411`, `src/cpm/ccp.asm:1548-1550`). Function 9 ends
 at the first `$`, so a `$` in the line ends the echo there, but the characters
 in `CMDTXT` aren't changed and the line runs whole. The CCP's own `CRLFMSG` at
 `NOTDRIVE` ends the echo's row whether or not the CR was reached
@@ -177,7 +177,7 @@ from that difference of letter case.
 
 The next line comes by whatever route the CCP takes back to `MLREAD`. A built-in
 or a failed command jumps to `STARTED` or `MAINLOOP` (`src/cpm/ccp.asm:68-74`,
-`src/cpm/ccp.asm:276`, `src/cpm/ccp.asm:1135`). A program returns to the `WBOOT`
+`src/cpm/ccp.asm:276`, `src/cpm/ccp.asm:1151`). A program returns to the `WBOOT`
 address that `CMDRUN` pushed (`src/cpm/ccp.asm:298-299`), and the warm boot
 enters the CCP at `CCPENT`, where `STBOOT` returns at once. The loop then
 reaches `STLINE` with `STPOS` where the last line left it. A `^C` that ends a
@@ -231,7 +231,7 @@ The CCP separates a service from a program by the three type bytes in `CMDFCB`.
 `.COM` file, which is what becomes of an old card's `PICO.DRV` (`src/cpm/ccp.asm:267-277`).
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
 failure of either returns carry to `BADCMD` for the name and question mark
-(`src/glcd.asm:68-71`, `src/cpm/ccp.asm:274-275`). Chapter 21 describes the file
+(`src/glcd.asm:71-74`, `src/cpm/ccp.asm:274-275`). Chapter 21 describes the file
 and its relocation, and Chapter 20 the loader.
 
 A display driver's load fails from inside, in the driver's own `INIT`.
@@ -247,19 +247,19 @@ IOBYTE is 3, `UC1:`, it goes on. Otherwise it reads the byte that `ABIVID`
 points at, the console's columns, and it fails if that byte isn't 0, which is
 the case while any display is the console (`drivers/glcd.asm:34-42`,
 `src/abi.asm:10`). `CMDCON` writes the field before it calls `GLCLD`
-(`src/cpm/ccp.asm:1113-1119`), so `CON UC1` reaches the load with the field
+(`src/cpm/ccp.asm:1132-1135`), so `CON UC1` reaches the load with the field
 already 3, and a startup line `GLCD.SVC` under a PICO9918 console doesn't.
 `GLCD.SVC` then calls `GLCWAIT`, and a controller that doesn't answer fails the
 load (`drivers/glcd.asm:43-45`), as `INFO`'s answer does for `PICO.SVC`.
 
 After a good load `SVCGO` compares `SVCHEAD`, the new service's page, with the
-page of each display's table (`src/glcd.asm:72-79`). A match with `PIVEC`
+page of each display's table (`src/glcd.asm:75-82`). A match with `PIVEC`
 selects `CMCRT` and goes to `CONSET`. No match with `GLVEC` means some other
 service, and the console stays. A match with `GLVEC` sets `CDGLC`, and then only
 if `PIVEC` is empty does it select `CMUC1` and go to `CONSET`
-(`src/glcd.asm:80-85`). `CONSET` writes the mode into the console field of the
+(`src/glcd.asm:83-88`). `CONSET` writes the mode into the console field of the
 IOBYTE and sets `CONACT` to `FFh` so that the field counts as changed, and it
-then jumps to `CONSEL`, which moves the console (`src/glcd.asm:86-93`,
+then jumps to `CONSEL`, which moves the console (`src/glcd.asm:89-93`,
 `src/console.asm:47-58`).
 
 ## The LCD's words
@@ -274,15 +274,15 @@ the words, all three having five characters.
 
 `PICO?` and `GLCD?` go through `LCDWRD`, which sets `CDWRD` first
 (`src/lcd.asm:36-39`). `GLCD?` comes from `GLCLD`, the path of `CON UC1`, when
-`SVCGO` returns carry (`src/glcd.asm:53-63`). `GLCLD` returns with `GLCD.SVC`
+`SVCGO` returns carry (`src/glcd.asm:53-66`). `GLCLD` returns with `GLCD.SVC`
 already in at `src/glcd.asm:55`, so that case writes nothing.
 
 A take of the console clears a word from the LCD, but by then the row may be a
 program's, and `CDWRD` separates the two cases. `WRDCLR` writes the blanks only
-if the bit is set, and clears the bit (`src/glcd.asm:98-107`). `CONSET` calls
-it, so any take of the console clears a word (`src/glcd.asm:86`), and `GLCD.SVC`
+if the bit is set, and clears the bit (`src/glcd.asm:105-114`). `CONSET` calls
+it, so any take of the console clears a word (`src/glcd.asm:89`), and `GLCD.SVC`
 loading under `PICO.SVC`, which keeps the console, clears one too
-(`src/glcd.asm:84`). Hardware service `LCD` clears the bit, with no write of
+(`src/glcd.asm:87`). Hardware service `LCD` clears the bit, with no write of
 blanks, when a program writes row 3 (`src/hwsvc.asm:114-118`), so the row is
 then the program's and a later take leaves it alone. `DEMO`'s row shows this in
 Chapter 5, and `test/pico.test.mjs:561` and `:570` check it for both words. A
@@ -313,10 +313,10 @@ display file in the directory.
 `setDisplayLine` reads the file up to its `^Z` and splits it into lines. Each
 line goes through `withoutDisplay`, which splits it at `!`, drops every piece
 that is a display driver's name under either type, with or without a leading
-`:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:57-68`). The piece
+`:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:58-79`). The piece
 after a dropped one loses a leading `:`, so the line `PICO.SVC!:VOLS` becomes
 `VOLS`, an ordinary line that runs even after a failed `GLCD.SVC` on the line
-before it (`test/pico.test.mjs:712-724`). Lines left blank are dropped. The new
+before it (`test/pico.test.mjs:765-777`). Lines left blank are dropped. The new
 file is the display's file, then `GLCD.SVC` on a PICO9918 board, then the
 remaining lines, and nothing is written if that equals the old text
-(`host/card.mjs:71-80`).
+(`host/card.mjs:82-91`).

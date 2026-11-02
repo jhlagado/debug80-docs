@@ -270,8 +270,8 @@ The BDOS goes there itself through `CHDROP`, which first drops the rest of a
 chained line, a line split at `!` (Chapter 11, `src/cpm/bdos.asm:75-77`). The
 BDOS takes that route after a `^C` typed as the first key of a line read with
 function 10 (`src/cpm/bdos.asm:371-375`), and after it has reported a BDOS error
-such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2434-2437`,
-`src/cpm/bdos.asm:2453-2456`). A `^C` at the prompt is the first case, since
+such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2432-2435`,
+`src/cpm/bdos.asm:2448-2451`). A `^C` at the prompt is the first case, since
 the CCP reads its line with function 10:
 
 <!-- node tools/capture.mjs ^C -->

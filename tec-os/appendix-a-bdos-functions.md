@@ -34,24 +34,24 @@ allowed only for function 17.
 A function that can't be carried out at all prints one of the BDOS's errors
 and waits for a key, or takes the key already kept if one was typed during
 output. It then ends the program by warm boot, whatever the key, and does not
-return (`src/cpm/bdos.asm:2431-2468`). The errors are:
+return (`src/cpm/bdos.asm:2429-2480`). The errors are:
 
 - `Bdos Err On d: Select`, for a drive with no volume, a drive past D or a `?`
   drive byte outside function 17.
 - `Bdos Err On d: R/O`, for a change to a drive that function 28 has made
   read-only, by function 19, 21, 22, 23, 30, 34 or 40
-  (`src/cpm/bdos.asm:2417-2429`).
+  (`src/cpm/bdos.asm:2415-2427`).
 - `Bdos Err On d: File R/O`, for function 19 or 23 on a directory entry whose
   read-only attribute is set, and for function 21, 34 or 40 through an FCB
   that has it (`src/cpm/bdos.asm:683-694`).
 - `Bdos Err On d: Bad Sector`, for a record or a directory record that can't
   be written, a record of a file that can't be read or an allocation block number
-  past the end of the volume (`src/cpm/bdos.asm:2346-2356`,
-  `src/cpm/bdos.asm:2453-2456`). A failed write includes every write to a
+  past the end of the volume (`src/cpm/bdos.asm:2355`,
+  `src/cpm/bdos.asm:2448-2451`). A failed write includes every write to a
   volume the card marks read-only.
 
 A directory record that can't be read ends the program by warm boot with no
-message (`src/cpm/bdos.asm:1885-1886`, `src/cpm/bdos.asm:2450-2451`).
+message (`src/cpm/bdos.asm:1884-1885`, `src/cpm/bdos.asm:2447`).
 
 The file functions return a directory code in `A` where CP/M 2.2 does: 0 to 3,
 the place in the 128-byte directory record of the entry found, or `FFh` for
@@ -73,7 +73,7 @@ and backspace.
 columns. Before each character the BDOS checks for a key. `^S` stops the
 output until the next key, which is discarded. `^P` turns the copy of the
 output to the list device on or off. Any other key is kept for the next input
-call (`src/cpm/bdos.asm:2491-2508`, `src/cpm/bdos.asm:2558-2581`). In CP/M 2.2
+call (`src/cpm/bdos.asm:2503-2520`, `src/cpm/bdos.asm:2570-2593`). In CP/M 2.2
 a `^C` after `^S` ends the program. In TEC-OS it resumes the output like any
 other key.
 
@@ -131,7 +131,7 @@ or with no volume is the `Select` error.
 
 **15 Open file.** Searches for the FCB's file and extent and copies the
 directory entry into the FCB, so that `?` in the name is replaced
-(`src/cpm/bdos.asm:598-603`, `src/cpm/bdos.asm:1720-1766`). Returns the
+(`src/cpm/bdos.asm:598-603`, `src/cpm/bdos.asm:1719-1765`). Returns the
 directory code, or `FFh` if there is no such file. The FCB's `CR` is not
 changed: a program sets it to 0 before reading from the start.
 
@@ -153,95 +153,95 @@ returns every directory entry of the default drive, in use or not.
 found (`src/cpm/bdos.asm:678-681`). `DE` is not used.
 
 **19 Delete file.** Erases every entry that matches the FCB, `?` allowed, and
-frees its allocation blocks (`src/cpm/bdos.asm:696-727`). Returns 0, or `FFh`
+frees its allocation blocks (`src/cpm/bdos.asm:696-726`). Returns 0, or `FFh`
 if no file matched. A matching file with its read-only attribute set is the
 `File R/O` error. The entries erased before it stay erased.
 
 **20 Read sequential.** Reads the record at the FCB's `CR` into the DMA
 address and moves on, to the next extent after record 127
-(`src/cpm/bdos.asm:964-1010`). Returns 0, or 1 at the end of the file.
+(`src/cpm/bdos.asm:963-1009`). Returns 0, or 1 at the end of the file.
 
 **21 Write sequential.** Writes the record at the DMA address at the FCB's
 `CR` and moves on, taking a new allocation block and a new extent when it needs them
-(`src/cpm/bdos.asm:812-962`). Returns 0, 1 if the directory has no entry for a
+(`src/cpm/bdos.asm:811-961`). Returns 0, 1 if the directory has no entry for a
 new extent, or 2 if the drive is full. After a 1 the FCB stays on its extent
 with `CR` at 128, so a write after an entry is freed makes the extent it needs
-(`src/cpm/bdos.asm:907-943`). An FCB with the read-only attribute set is the
+(`src/cpm/bdos.asm:906-942`). An FCB with the read-only attribute set is the
 `File R/O` error (`src/cpm/bdos.asm:686-694`).
 
 **22 Make file.** Creates an empty entry for the FCB's name in the current
 user area, writes it to the directory and opens it
-(`src/cpm/bdos.asm:729-810`). Returns the directory code, or `FFh` if the
+(`src/cpm/bdos.asm:728-809`). Returns the directory code, or `FFh` if the
 directory is full. Does not test for a file of the same name. The FCB's `EX`
 and `S2` are set to 0, so the entry is always the file's first extent
-(`src/cpm/bdos.asm:761-769`). CP/M 2.2 keeps them.
+(`src/cpm/bdos.asm:760-768`). CP/M 2.2 keeps them.
 
 **23 Rename file.** Gives every entry of the file named in the FCB's first 16
-bytes the name and type at offsets 17 to 27 (`src/cpm/bdos.asm:825-863`).
+bytes the name and type at offsets 17 to 27 (`src/cpm/bdos.asm:824-862`).
 Returns 0, or `FFh` if there is no such file. The second drive byte, at offset
 16, is not read. An entry with its read-only attribute set is the `File R/O`
-error (`src/cpm/bdos.asm:847-853`).
+error (`src/cpm/bdos.asm:846-852`).
 
 **24 Return login vector.** Returns in `HL` a bit for each logged-in drive,
-bit 0 for A (`src/cpm/bdos.asm:1444-1446`).
+bit 0 for A (`src/cpm/bdos.asm:1443-1445`).
 
 **25 Return current disk.** Returns the default drive in `A`, 0 for A
-(`src/cpm/bdos.asm:1448-1450`).
+(`src/cpm/bdos.asm:1447-1449`).
 
 **26 Set DMA address.** Sets the address of the 128-byte record buffer to `DE`
-(`src/cpm/bdos.asm:1452-1458`).
+(`src/cpm/bdos.asm:1451-1457`).
 
 **27 Get allocation vector address.** Returns in `HL` the address of the
-default drive's allocation vector (`src/cpm/bdos.asm:1460-1462`).
+default drive's allocation vector (`src/cpm/bdos.asm:1459-1461`).
 
 **28 Write protect disk.** Sets the default drive's bit in the read-only
 vector, so that a later change to the drive is the `R/O` error, until the next
 warm boot, disk reset or function 37 for the drive
-(`src/cpm/bdos.asm:1464-1476`, `src/cpm/bdos.asm:1637-1638`).
+(`src/cpm/bdos.asm:1463-1475`, `src/cpm/bdos.asm:1636-1637`).
 
 **29 Get read-only vector.** Returns the read-only vector in `HL`, bit 0 for A
-(`src/cpm/bdos.asm:1478-1480`). A volume that the card marks read-only does
+(`src/cpm/bdos.asm:1477-1479`). A volume that the card marks read-only does
 not appear in it.
 
 **30 Set file attributes.** Copies the FCB's name and type, with their bit 7
-attributes, into every entry of the file (`src/cpm/bdos.asm:819-823`,
-`src/cpm/bdos.asm:833-863`). Returns 0, or `FFh` if there is no such file. Bit
+attributes, into every entry of the file (`src/cpm/bdos.asm:818-822`,
+`src/cpm/bdos.asm:832-862`). Returns 0, or `FFh` if there is no such file. Bit
 7 of the first type byte is the read-only attribute and of the second the
 system attribute, which `DIR` hides.
 
 **31 Get disk parameter block address.** Returns in `HL` the address of the
-default drive's DPB (`src/cpm/bdos.asm:1482-1484`).
+default drive's DPB (`src/cpm/bdos.asm:1481-1483`).
 
 **32 Set or get user code.** With `E` = `FFh`, returns the user number in `A`.
 With any other `E`, sets the user number to the low five bits of `E` and
-returns 0, as in CP/M 2.2 (`src/cpm/bdos.asm:1486-1498`). The CCP's `USER`
+returns 0, as in CP/M 2.2 (`src/cpm/bdos.asm:1485-1497`). The CCP's `USER`
 command takes 0 to 15, and the byte at `0004h` holds only four bits of the
 number (`src/cpm/ccp.asm:206-225`).
 
 **33 Read random.** Reads the record whose number is in the FCB's `R0` and
 `R1` into the DMA address and leaves the FCB's extent and `CR` at that record,
 so that a sequential read after it reads the same record
-(`src/cpm/bdos.asm:1012-1018`, `src/cpm/bdos.asm:1037-1148`). Returns 0, or 1 if
+(`src/cpm/bdos.asm:1011-1017`, `src/cpm/bdos.asm:1036-1147`). Returns 0, or 1 if
 the record has not been written, 3 if the current extent can't be closed, 4 if
 the extent has not been written or 6 if `R2` is not 0.
 
 **34 Write random.** Writes the record at the DMA address to the record whose
 number is in `R0` and `R1`, making its extent if needed
-(`src/cpm/bdos.asm:1020-1148`). Returns 0, or 2 if the drive is full, 3 if the
+(`src/cpm/bdos.asm:1019-1147`). Returns 0, or 2 if the drive is full, 3 if the
 current extent can't be closed, 5 if the directory has no entry for the extent
 or 6 if `R2` is not 0. An FCB with the read-only attribute set is the
 `File R/O` error.
 
 **35 Compute file size.** Sets `R0` to `R2` to the file's size in records,
 from whichever of its entries ends highest, or to 0 if there is no such file
-(`src/cpm/bdos.asm:1500-1568`). Returns `FFh` in `A`.
+(`src/cpm/bdos.asm:1499-1567`). Returns `FFh` in `A`.
 
 **36 Set random record.** Sets `R0` to `R2` from the FCB's extent and `CR`,
 the record the next sequential call would read or write
-(`src/cpm/bdos.asm:1570-1593`). Returns 0.
+(`src/cpm/bdos.asm:1569-1592`). Returns 0.
 
 **37 Reset drive.** Logs out each drive whose bit is set in `DE`, bit 0 for A,
-and clears its bit in the read-only vector (`src/cpm/bdos.asm:1627-1641`).
+and clears its bit in the read-only vector (`src/cpm/bdos.asm:1626-1640`).
 Returns 0. The drive is logged in again, and its directory read, at its next
 selection.
 
@@ -250,7 +250,7 @@ does not define. Both return 0 and do nothing (`src/data3.asm:83`).
 
 **40 Write random with zero fill.** Function 34, with each allocation block the
 write newly allocates filled with zeros before the record is written
-(`src/cpm/bdos.asm:1020-1031`, `src/cpm/bdos.asm:1282-1331`).
+(`src/cpm/bdos.asm:1019-1030`, `src/cpm/bdos.asm:1281-1330`).
 
 **47 Chain to program.** Replaces what is left of the CCP's command line with
 the command at the DMA address, which ends with a 0 within its first 128

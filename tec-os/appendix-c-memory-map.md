@@ -22,8 +22,8 @@ a G8M volume on drive B, and no service installed.
 ## Taking the figures from the build
 
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
-build's census, `build/debug80/census.json` (`tools/media.mjs:101-200`,
-`tools/media.mjs:265`). The address of any label is in the build's symbol
+build's census, `build/debug80/census.json` (`tools/media.mjs:102-201`,
+`tools/media.mjs:266`). The address of any label is in the build's symbol
 file, `build/debug80/tecos.d8.json`. This command prints the addresses of the
 labels named after it:
 
@@ -99,8 +99,8 @@ Within the code, the CCP is at `D796h–E0DFh`, 2,378 bytes, and the BDOS at
 `E0E0h–F014h`, 3,893 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:24-26`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
-(`src/data.asm:20-36`, `src/boot.asm:45-48`). The byte at `C01Dh` is a `RET`
-(`src/data.asm:8-13`).
+(`src/data.asm:21-37`, `src/boot.asm:45-48`). The byte at `C01Dh` is a `RET`
+(`src/data.asm:9-14`).
 
 ## Page zero
 
@@ -121,7 +121,7 @@ Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
 (`src/boot.asm:15-21`, `src/boot.asm:215-265`). The CCP writes the byte at
 `0004h` at each prompt and the FCBs and the tail before it runs a program
-(`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1280-1313`).
+(`src/cpm/ccp.asm:206-225`, `src/cpm/ccp.asm:1296-1329`).
 
 TEC-OS's own bytes are the sixteen that CP/M 2.2 leaves to the BIOS
 (`src/layout.asm:35-52`):

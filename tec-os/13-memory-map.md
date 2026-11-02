@@ -272,7 +272,7 @@ deepest paths. It
 records every write to memory, the clearing `LDIR`s excepted, and the lowest
 address written in each stack gives its depth. It passes when each stack's
 deepest use leaves at least a quarter of it free and no guard byte has changed
-(`test/stacks.test.mjs:210`, `test/stacks.test.mjs:237-240`). It presses the
+(`test/stacks.test.mjs:211`, `test/stacks.test.mjs:243-246`). It presses the
 keypad's NMI at each new depth only while `0066h` holds a `RETN`
 (`test/stacks.test.mjs:62-69`). TEC-OS puts no handler there, so the measured
 depths include no NMI frame, as the comment at `src/layout.asm:77-79` says.

@@ -47,26 +47,26 @@ drivers' hook at `C012h` and the registry at `C015h`. Chapter 9 describes the
 table from a program's side and Chapter 20 the hardware services and the
 registry behind it. The table ends at `C018h`, where the data begins.
 
-The data block runs from the label `ROMDATA` (`src/data.asm:6`) to `ROMCODE`
+The data block runs from the label `ROMDATA` (`src/data.asm:7`) to `ROMCODE`
 (`src/data3.asm:114`). Four files that follow one another in the assembly make
 it up: `data.asm`, `data2.asm`, the generated `gen/geom.asm` and `data3.asm`
 (`src/rom.asm:10-13`). They hold the messages, the keyword strings, the
 keyboard's tables, the container's name and disk parameters, the BDOS's
-function table and the hardware services' table (`src/data.asm:39-41`,
+function table and the hardware services' table (`src/data.asm:40-42`,
 `src/data3.asm:22-39`, `src/data3.asm:76`, `src/data3.asm:94`). Each group is headed by the name of the source file
 whose code uses it, so `CWMSG`, the text `Write lost`, sits under `cache.asm`
 (`src/data3.asm:108-109`). Apart from the `RET` at `C01Dh`, described below,
 nothing in the block runs where it is. The BIOS jump table `BIOSBAS`
-(`src/data.asm:20-36`) is in the block as the source of the copy that programs
+(`src/data.asm:21-37`) is in the block as the source of the copy that programs
 and the BDOS call, which Chapter 15 describes.
 
-The `RET` at `C01Dh` (`src/data.asm:13`) is there for programs from the
+The `RET` at `C01Dh` (`src/data.asm:14`) is there for programs from the
 previous ABI. ABI 3 had its mount entry at `C01Dh`, and a card from that
 time can hold a `MOUNT.COM` or `VOLS.COM` that calls `C01Dh` without testing
 the table. The `RET` sends such a call straight back with nothing done
-(`src/data.asm:8-10`). The five bytes between the table's end and that address
+(`src/data.asm:9-11`). The five bytes between the table's end and that address
 are the first of the block, the CCP's keyword `TYPE` and its zero
-(`src/data.asm:11-12`).
+(`src/data.asm:12-13`).
 
 The code starts at `COLD` and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
@@ -127,7 +127,7 @@ to be edited (`tools/build.mjs:63-139`).
 `gen/config.asm` holds the settings that depend on the build. `WSBASE` is the
 first byte of the resident workspace, which the build places as the next
 section describes. `VERHI`, `VERLO` and `ROMVER` are the version, 0.1, which
-the banner and the LCD's top row print from (`src/data.asm:17`,
+the banner and the LCD's top row print from (`src/data.asm:18`,
 `src/data2.asm:8`). The last five, `TXDLY`, `TXSTOP`, `RXDLY`, `RXHALF` and
 `RXPOLL`, are the delay counts for the bit-banged serial port. The build works
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
@@ -188,8 +188,8 @@ A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
 (`tools/lib/assemble.mjs:10-20`). `npm run media` uses it to build the starter
 card's own programs, and the ROM's build does not. The card's `TAS.COM` and
-`EDIT.COM` are built outside this repository (`tools/media.mjs:59-67`,
-`tools/media.mjs:227-233`).
+`EDIT.COM` are built outside this repository (`tools/media.mjs:60-68`,
+`tools/media.mjs:228-234`).
 
 ## The build's checks
 
@@ -265,7 +265,7 @@ board: ROM 14778/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 debba41f1c4b
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
 media` then copies each profile's three files to `dist/` as
 `tecos-<profile>.rom`, `tecos-<profile>.d8.json` and
-`tecos-<profile>.census.json` (`tools/media.mjs:208-213`). It also writes
+`tecos-<profile>.census.json` (`tools/media.mjs:209-214`). It also writes
 `docs/memory-map.md` from the `debug80` census. The four ROM files in `dist/`
 have the same SHA-256,
 `debba41f1c4bbdbfcb34bb118956dd38cab88ca00ad76848474b10ee3848a301`.

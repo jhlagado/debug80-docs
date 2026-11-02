@@ -199,9 +199,9 @@ never selects another MAIN (`src/xmove.asm:6`).
 A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
 (`src/cpm/ccp.asm:267-276`). `SVCGO` calls `LOADCOM`, the routine that reads a
 `.COM` file to `0100h`. The file is then in the TPA, up to the page of the
-word at `0006h`, and `LOADTOP` gives its end (`src/glcd.asm:68-69`,
+word at `0006h`, and `LOADTOP` gives its end (`src/glcd.asm:71-72`,
 `src/cpm/ccp.asm:359-371`, `src/ram.asm:230`). `SVCGO` then calls `SVCLOAD`
-(`src/glcd.asm:70`). Chapter 22 describes what the console does after a good
+(`src/glcd.asm:73`). Chapter 22 describes what the console does after a good
 load.
 
 `SVCLOAD` works on the file at `DF`, `0100h`, where the header's fields have
@@ -403,7 +403,7 @@ header saves, the registry's head and the lowest service's page. Each header
 holds that state from before its own load (Chapter 21), and the states are
 stacked in memory in the order of the loads.
 
-`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1082-1084`), which rejects the
+`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1101-1103`), which rejects the
 command while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL`
 the base of the page in `PZTOP` (`src/svc.asm:28-32`). That page must equal
 `SVCHEAD`, which is 0 with no service in, so the test then fails. Bit 0 of the
@@ -498,10 +498,10 @@ reserves three stacks, of the sizes at `src/layout.asm:81-83`:
 
 The census column is the deepest use of each stack in `test/stacks.test.mjs`,
 which records every write to memory under the heaviest workloads. The test
-passes only with a quarter of each stack free (`test/stacks.test.mjs:238-239`).
+passes only with a quarter of each stack free (`test/stacks.test.mjs:244-245`).
 Base is the same figure from its runs on the serial terminal and the PICO9918
 alone, with the run on a volume written behind: 32, 16 and 16
-(`test/stacks.test.mjs:211-222`). The census is higher for the BDOS and the CCP
+(`test/stacks.test.mjs:212-223`). The census is higher for the BDOS and the CCP
 because of the runs with `GLCD.SVC`, which give 34 and 22.
 
 `SVCLIM` holds the limits (`src/data3.asm:112`), and they are counted from the
