@@ -47,7 +47,7 @@ the drives there at cold boot, and programs write to it through the services
 in Chapter 9.
 
 Cold boot, after power-on or a reset, clears page zero, the first 256 bytes of
-memory. The IOBYTE goes with it, so the console always starts on `TTY:`. A
+memory. That sets the IOBYTE to 0, so the console always starts on `TTY:`. A
 warm boot, the restart of the CCP when a program ends, leaves the IOBYTE as it
 was, and the console with it.
 
@@ -185,8 +185,9 @@ The board has no hardware to hold an incoming byte, and TEC-OS takes no
 interrupt from the serial line. TEC-OS catches a byte only while it polls the
 line. It polls while a program waits for a key and for a moment before each
 character the BDOS prints. A byte that arrives while TEC-OS is doing anything
-else is lost. Keys typed by hand at the prompt are caught. Text pasted into
-the terminal program, or typed ahead of a busy program, can lose characters.
+else is lost. Keys typed by hand at the prompt are caught, but text pasted
+into the terminal program, or typed ahead of a busy program, can lose
+characters.
 
 ## A display as the console
 
@@ -231,7 +232,7 @@ held together send nothing unless one of them is a modifier.
 
 The Caps key turns Caps Lock on and off. The CAPS lamp, bit 7 of the board's
 system latch, lights while it is on. With Caps Lock on, the letter keys give
-capitals, with Shift or without it. The `{` key gives `[`, and the other keys
+capitals, with Shift or without it, and the `{` key gives `[`. The other keys
 are unchanged.
 
 Return sends `0Dh` and Esc `1Bh`. `^H` is backspace, `08h`, and `^I` is tab,
