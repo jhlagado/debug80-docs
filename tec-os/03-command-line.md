@@ -7,9 +7,11 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 3. The command line
 
-Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy on the card has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+`TAS.COM` from Thorium 7604daa, with the SHA-256
+`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
 Everything you do at the `A>` prompt goes through the CCP, the command
 processor that Chapter 1 introduced. The CCP reads the line you type, finds
@@ -30,13 +32,14 @@ capital, so `dir *.com` and `DIR *.COM` are the same command:
 ```text
 A>dir *.com
 TERM.COM     PROBE.COM    DEMO.COM     MOUNT.COM    VOLS.COM     EDIT.COM
-6 files, 986K free
+TAS.COM     
+7 files, 976K free
 A>DIR ????.COM
-TERM.COM     DEMO.COM     VOLS.COM     EDIT.COM    
-4 files, 986K free
+TERM.COM     DEMO.COM     VOLS.COM     EDIT.COM     TAS.COM     
+5 files, 976K free
 A>DIR A:P*.*
-PROBE.COM    PICO.DRV     PICO40.DRV   PICO32.DRV  
-4 files, 986K free
+PROBE.COM    PICO.SVC     PICO40.SVC   PICO32.SVC  
+4 files, 976K free
 A>DIR B:
 NO FILE
 A>
@@ -54,7 +57,7 @@ with `:` runs only if the one before it succeeded. Chapter 11 describes both.
 ## File names
 
 A CP/M file name has up to eight characters, then a full stop and a type of up
-to three: `README.TXT`, `PICO.DRV`. The type may be left out, with its full
+to three: `README.TXT`, `PICO.SVC`. The type may be left out, with its full
 stop, and then it is three spaces. A drive letter and a colon in front of the
 name, as in `B:NOTES.TXT`, name a file on another drive. Without one, the name
 is on the current drive, the one the prompt shows.
@@ -123,9 +126,9 @@ The CCP's built-in commands are these:
 | `USER N` | Selects user area `N` |
 | `B:` | Selects drive B, and so on for the other drives |
 | `CON` | Names or changes the console (Chapter 2) |
-| `NAME.DRV` | Installs the driver in the file `NAME.DRV` |
-| `DRIVERS` | Lists the drivers installed |
-| `UNLOAD` | Removes the driver installed last |
+| `NAME.SVC` | Installs the service in the file `NAME.SVC` |
+| `SERVICES` | Lists the services installed |
+| `UNLOAD` | Removes the service installed last |
 
 A built-in's name is matched only as a whole word, followed by a space or the
 end of the line, so `DIRX` is the name of a program, not `DIR` with something
@@ -161,8 +164,8 @@ the end of the file's last record:
 <!-- node tools/capture.mjs "TYPE STARTUP.CMD" -->
 ```text
 A>TYPE STARTUP.CMD
-PICO.DRV
-GLCD.DRV
+PICO.SVC
+GLCD.SVC
 
 A>
 ```
@@ -180,7 +183,7 @@ alone, as in `COPY README.TXT B:`, the copy has the source's name. A
 destination with a type and no name, such as `B:.DOC` or `B:.*`, also takes
 the whole of the source's name, and the type you typed has no effect. The copy
 goes a record at a time, and `COPIED` and a number report the records copied,
-in hexadecimal: `0005` is five records, 640 bytes. A file of the destination's
+in hexadecimal: `000A` is ten records, 1,280 bytes. A file of the destination's
 name is erased first, so `COPY` replaces it.
 
 `REN` renames a file, with the new name first, an equals sign and the old name
@@ -190,10 +193,10 @@ is made on drive B under two names, and one is renamed and then erased:
 <!-- node tools/capture.mjs "COPY README.TXT B:" "COPY README.TXT B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=README.TXT" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
 ```text
 A>COPY README.TXT B:
-COPIED 0005
+COPIED 000A
 
 A>COPY README.TXT B:COPY.TXT
-COPIED 0005
+COPIED 000A
 
 A>B:
 B>DIR
@@ -214,7 +217,7 @@ README.TXT
 B>
 ```
 
-Each 640-byte file takes 4 KiB of the drive, since the volume on drive B,
+Each 1,280-byte file takes 4 KiB of the drive, since the volume on drive B,
 `WORK`, gives space to files in allocation blocks of 4 KiB. Chapter 4
 describes the volumes and their allocation blocks. The second `REN` fails
 because a file of the new name, `NOTES.TXT`, is there already, and `REN`
@@ -232,7 +235,7 @@ fail:
 <!-- node tools/capture.mjs "COPY README.TXT B:.DOC" "DIR B:" "COPY A:README.TXT README.TXT" "COPY README.TXT" -->
 ```text
 A>COPY README.TXT B:.DOC
-COPIED 0005
+COPIED 000A
 
 A>DIR B:
 README.TXT  
@@ -260,7 +263,7 @@ character, in either case, erases the files, and anything else leaves them:
 <!-- node tools/capture.mjs "COPY README.TXT B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
 ```text
 A>COPY README.TXT B:
-COPIED 0005
+COPIED 000A
 
 A>B:
 B>ERA *.*
@@ -287,9 +290,9 @@ left there. In CP/M 2.2 it was the way to keep a program loaded and patched
 with a debugger. The number is decimal and may be 0, which makes an empty
 file.
 
-The pages must stay below the BDOS, whose entry is the word at `0006h`, so the
-number must be less than the high byte of that word. On the starter card with
-no driver installed the word is `B806h`, and `SAVE` takes up to 183 pages:
+The pages must stay below the address in the word at `0006h`, so the number
+must be less than the high byte of that word. On the starter card with no
+service installed the word is `B806h`, and `SAVE` takes up to 183 pages:
 
 <!-- node tools/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 184 BIG.COM" DIR -->
 ```text
@@ -333,8 +336,8 @@ letters `E:` to `P:` name drives as CP/M 2.2 has them and give the same error,
 but `Q:` and the letters after it aren't drives, so the CCP prints `Q:?`.
 
 The CCP stores the drive and the user area in the byte at `0004h` each time it
-prints the prompt. A program's end leaves the prompt on that drive, and a
-reset returns it to drive A.
+prints the prompt. A program's end leaves the prompt on that drive, or on drive
+A if the drive has lost its volume, and a reset returns it to drive A.
 
 ## User areas
 
@@ -370,25 +373,25 @@ Chapter 4, puts a file from a PC into area `N`. A number outside 0 to 15, or
 The user area survives a program's end and a warm boot, like the drive, and a
 reset returns to area 0.
 
-## Drivers
+## Services
 
-A command that names a file of type `.DRV` installs the driver it holds. A
-driver is code that TEC-OS keeps in memory below the BDOS until a reset or
-`UNLOAD`, as Chapter 1 explained for the display drivers. `DRIVERS` lists the
-drivers installed, the newest first, each with the number of 256-byte pages it
-takes. `UNLOAD` removes the newest one if that driver can be removed, and
+A command that names a file of type `.SVC` installs the service it holds. A
+service is code that TEC-OS keeps in memory below the BDOS until a reset or
+`UNLOAD`, as Chapter 1 explained for the display drivers. `SERVICES` lists the
+services installed, the newest first, each with the number of 256-byte pages it
+takes. `UNLOAD` removes the newest one if that service can be removed, and
 otherwise it changes nothing and prints `UNLOAD?`. It prints the same with no
-driver installed. On the web page's board, where `PICO.DRV` is installed at
+service installed. On the web page's board, where `PICO.SVC` is installed at
 startup, the PICO9918's screen shows this, from the startup file's second line
 on:
 
-<!-- node tools/capture.mjs --board pico --screen DRIVERS UNLOAD -->
+<!-- node tools/capture.mjs --board pico --screen SERVICES UNLOAD -->
 ```text
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
-A>DRIVERS
+A>SERVICES
 PICO 6
 A>UNLOAD
 UNLOAD?
@@ -396,11 +399,11 @@ UNLOAD?
 A>
 ```
 
-`PICO.DRV` takes six pages, 1,536 bytes, and its removal fails while the
-PICO9918 is the console. A `.DRV` file that isn't there, or that doesn't
-install, gives the command's name with a question mark, as `GLCD.DRV?` shows
-here. Chapter 5 gives the rules for installing and removing drivers, and
-Chapter 10 describes how a driver is made.
+`PICO.SVC` takes six pages, 1,536 bytes, and its removal fails while the
+PICO9918 is the console. A `.SVC` file that isn't there, or that doesn't
+install, gives the command's name with a question mark, as `GLCD.SVC?` shows
+here. Chapter 5 gives the rules for installing and removing services, and
+Chapter 10 describes how a service is made.
 
 ## Running a program
 
@@ -429,13 +432,13 @@ B>
 
 A type after a program's name is replaced, so `VOLS.COM` runs `VOLS`, and
 `README.TXT` as a command searches for `README.COM` and then `README.PRL` and
-finds neither. The exception is `.DRV`, which installs a driver.
+finds neither. The exception is `.SVC`, which installs a service.
 
 The command fails, with its name and a question mark, when neither file is
-there. It also fails when `NAME.COM` is there but is too large for the memory
-between `0100h` and the BDOS. A `NAME.COM` that is too large is not passed over
-for a `NAME.PRL`. A read that fails on the card gives the BDOS's `Bad Sector`
-message, described below, and no question mark.
+there. It also fails when `NAME.COM` is there but is too large for the TPA. A
+`NAME.COM` that is too large is not passed over for a `NAME.PRL`. A read that
+fails on the card gives the BDOS's `Bad Sector` message, described below, and
+no question mark.
 
 The rest of the line after the program's name is the command tail. The CCP
 copies it to `0080h` for the program and fills the two file control blocks at
@@ -450,7 +453,7 @@ When a command fails, the CCP prints one of these messages:
 
 | Message | Printed by | Cause |
 | --- | --- | --- |
-| `NAME?` | any command | an unknown command, a bad name or argument, a program that won't load, a driver that won't install |
+| `NAME?` | any command | an unknown command, a bad name or argument, a program that won't load, a service that won't install |
 | `NO FILE` | `DIR`, `TYPE`, `ERA`, `REN` | no file of that name, or none that matches |
 | `FILE EXISTS` | `REN` | the new name is taken |
 | `NO SPACE` | `SAVE` | the drive or its directory is full |
@@ -470,7 +473,7 @@ The message is `Bdos Err On`, the drive and one of four causes:
 | --- | --- |
 | `Bdos Err On C: Select` | the drive has no volume |
 | `Bdos Err On C: Bad Sector` | a record couldn't be read from the card or written to it, or the volume is read-only |
-| `Bdos Err On B: File R/O` | the file to be erased has its read-only attribute set |
+| `Bdos Err On B: File R/O` | the file to be written, renamed or erased has its read-only attribute set |
 | `Bdos Err On B: R/O` | the drive was made read-only by BDOS function 28 |
 
 After printing the message, the BDOS waits for a key, and any key ends the
@@ -512,24 +515,24 @@ describes. `^W` at the prompt replaces the line being typed with the line
 typed before it, and a second `^W` with the one before that. `^N` moves the
 other way, toward the newest, and one step past the newest leaves an empty
 line. A line brought back can be edited with the keys of Chapter 2 and run
-with Return, as if it had been typed. Here `DIR *.DRV` and `CON` were typed,
-then `^W`, `^W` and Return, and the PICO9918's screen shows `DIR *.DRV`
+with Return, as if it had been typed. Here `DIR *.SVC` and `CON` were typed,
+then `^W`, `^W` and Return, and the PICO9918's screen shows `DIR *.SVC`
 brought back and run again:
 
-<!-- node tools/capture.mjs --board pico --screen "DIR *.DRV" CON "@start "$'\x17\x17' -->
+<!-- node tools/capture.mjs --board pico --screen "DIR *.SVC" CON "@start "$'\x17\x17' -->
 ```text
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
-A>DIR *.DRV
-PICO.DRV     PICO40.DRV   PICO32.DRV   GLCD.DRV
-4 files, 986K free
+A>DIR *.SVC
+PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
+4 files, 976K free
 A>CON
 CON: CRT: PICO9918
-A>DIR *.DRV
-PICO.DRV     PICO40.DRV   PICO32.DRV   GLCD.DRV
-4 files, 986K free
+A>DIR *.SVC
+PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
+4 files, 976K free
 A>
 ```
 
