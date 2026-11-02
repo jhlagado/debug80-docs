@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 23. Command history
 
-Checked against TEC-OS 62d47ed, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
 845d062, whose card copy has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
@@ -32,8 +32,8 @@ its reply:
 A>CON
 CON: CRT: PICO9918
 A>TYPE STARTUP.CMD
-PICO.DRV
-GLCD.DRV
+PICO.SVC
+GLCD.SVC
 
 A>CON
 CON: CRT: PICO9918
@@ -47,18 +47,18 @@ in this chapter come from that screen. The capture's `@start` line types its
 keys and a Return together. `$'\x17'` is the shell's way of writing `^W`,
 `$'\x0e'` `^N` and `$'\x08'` backspace.
 
-A recalled line is the start of a new line, not a fixed copy. Here `DIR *.DRV`
+A recalled line is the start of a new line, not a fixed copy. Here `DIR *.SVC`
 was recalled with `^W`, its last three characters were taken off with backspace
 and `CMD` was typed in their place:
 
-<!-- node tools/capture.mjs --board pico --screen "DIR *.DRV" "@start "$'\x17\x08\x08\x08CMD' -->
+<!-- node tools/capture.mjs --board pico --screen "DIR *.SVC" "@start "$'\x17\x08\x08\x08CMD' -->
 ```text
-A>DIR *.DRV
-PICO.DRV     PICO40.DRV   PICO32.DRV   GLCD.DRV
-4 files, 986K free
+A>DIR *.SVC
+PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC
+4 files, 976K free
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 986K free
+1 file, 976K free
 A>
 ```
 
@@ -73,7 +73,7 @@ A>CON
 CON: CRT: PICO9918
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 986K free
+1 file, 976K free
 A>
 A>
 ```
@@ -164,7 +164,7 @@ A>CON
 CON: CRT: PICO9918
 A>DIR *.CMD
 STARTUP.CMD
-1 file, 986K free
+1 file, 976K free
 A>CON
 CON: CRT: PICO9918
 A>
@@ -255,11 +255,11 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
-PICO.DRV?
+A>PICO.SVC
+PICO.SVC?
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
 A>
 A>
