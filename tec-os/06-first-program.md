@@ -90,17 +90,17 @@ between them.
 
 ## Copying the program to a card
 
-`tecvol`, from Chapter 4, puts the program on a card image, and a copy of the
-starter card keeps the original as it was:
+`tecvol`, from Chapter 4, puts the program on a card image. These commands work
+on a copy, so the starter card stays as it was:
 
 ```sh
 cp dist/starter.img work.img
 node tools/tecvol.mjs put work.img B hello.com
 ```
 
-`put` names the file `HELLO.COM` on drive B. `book/capture.mjs` boots
-`work.img` and types the commands, and on a board `tecvol install` from
-Chapter 4 writes `work.img` to the card. `B:` makes drive B current, `DIR`
+`put` names the file `HELLO.COM` on drive B. `book/capture.mjs` boots `work.img`
+and types the commands in the transcript below. On a board, `tecvol install`
+from Chapter 4 writes `work.img` to the card. `B:` makes drive B current, `DIR`
 shows the program, and `HELLO`, the program's name without its type, runs it:
 
 <!-- node book/capture.mjs --card work.img B: DIR HELLO -->
@@ -121,16 +121,15 @@ before it prints the prompt again. The CCP searches for the program on the
 current drive only, so at `A>` the command `HELLO` gives `HELLO?`, and
 `B:HELLO` runs the program from drive B.
 
-The web page copies a file from the PC to its card without `tecvol`. Its
-"Drive" list holds the drives the card's header names, and "Copy file to
-drive" writes the chosen files onto the volume of the drive selected there.
-Each name becomes the CP/M name in capitals, and "as text" makes the copy a
-text file, as `tecvol put --text` does. The page then presses the board's
-reset, so that TEC-OS starts again with the changed card. The reset loses any
-change still in the block cache, so a `^C` at the prompt before the copy puts
-those changes on the card first. The list below the button shows the files on
-the selected drive, each with a "Download" button that copies it back to the
-PC.
+The web page copies a file from the PC to its card without `tecvol`. Its "Drive"
+list holds the drives the card's header names, and "Copy file to drive" writes
+the chosen files onto the volume of the drive selected there. Each name becomes
+the CP/M name in capitals, and "as text" makes the copy a text file, as
+`tecvol put --text` does. The page then presses the board's reset, so that
+TEC-OS starts again with the changed card. The reset loses any change still in
+the block cache. A `^C` at the prompt before the copy puts those changes on the
+card first. The list below the button shows the files on the selected drive,
+each with a "Download" button that copies it back to the PC.
 
 ## The command line
 
