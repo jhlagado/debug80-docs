@@ -378,9 +378,10 @@ can't find its own record during `INIT` (`test/svc.test.mjs:424`).
 
 ## Removal
 
-Only the lowest service can go, and that rule keeps the bytes saved in each
-header true. Each header holds the state from before its own load, and the
-states are stacked in memory in the order of the loads.
+Only the lowest service can go, and that rule keeps true the three bytes each
+header saves, the registry's head and the lowest service's page. Each header
+holds that state from before its own load (Chapter 21), and the states are
+stacked in memory in the order of the loads.
 
 `UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1082-1084`). `SVCUNL` rejects the
 command while `SVCBSY` is set. It uses the 0 it read there as `L`, making `HL`
