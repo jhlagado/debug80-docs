@@ -2418,6 +2418,10 @@ export const sidebars = {
           "link": "/tec-os/04-cards-and-volumes.html"
         },
         {
+          "text": "Startup and services",
+          "link": "/tec-os/05-startup-and-services.html"
+        },
+        {
           "text": "A first program",
           "link": "/tec-os/06-first-program.html"
         },
@@ -2428,6 +2432,14 @@ export const sidebars = {
         {
           "text": "Programs and the console",
           "link": "/tec-os/08-programs-and-console.html"
+        },
+        {
+          "text": "The hardware services",
+          "link": "/tec-os/09-hardware-services.html"
+        },
+        {
+          "text": "PRL programs and services",
+          "link": "/tec-os/10-prl-programs-and-services.html"
         },
         {
           "text": "Chaining commands",
@@ -2472,8 +2484,16 @@ export const sidebars = {
           "link": "/tec-os/19-block-cache.html"
         },
         {
+          "text": "The hardware services and the service loader",
+          "link": "/tec-os/20-hardware-services-and-service-loader.html"
+        },
+        {
           "text": "PRL relocation",
           "link": "/tec-os/21-prl-relocation.html"
+        },
+        {
+          "text": "Startup",
+          "link": "/tec-os/22-startup.html"
         },
         {
           "text": "Command history",
@@ -2500,6 +2520,10 @@ export const sidebars = {
         {
           "text": "A. BDOS functions",
           "link": "/tec-os/appendix-a-bdos-functions.html"
+        },
+        {
+          "text": "B. ROM services",
+          "link": "/tec-os/appendix-b-rom-services.html"
         },
         {
           "text": "C. Memory map",
