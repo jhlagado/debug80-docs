@@ -473,10 +473,8 @@ The message is `Bdos Err On`, the drive and one of four causes:
 | `Bdos Err On B: File R/O` | the file to be erased has its read-only attribute set |
 | `Bdos Err On B: R/O` | the drive was made read-only by BDOS function 28 |
 
-After printing the message, the BDOS waits for a key. When the key comes it
-ends the command, or the program that made the call, with a warm boot. In CP/M
-2.2 any key but `^C` there passes over a `Bad Sector` error and the program
-goes on. In TEC-OS every key ends it.
+After printing the message, the BDOS waits for a key. Any key ends the
+command, or the program that made the call, with a warm boot.
 
 A write to a read-only volume, such as one made with `tecvol create`'s `:ro`
 in Chapter 4, gives `Bad Sector`, the message for a failed disk write. This
