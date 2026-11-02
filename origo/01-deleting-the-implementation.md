@@ -67,18 +67,19 @@ on a measured figure. A candidate meets them in this order:
 - the visible cases, the held-out cases and the adversarial cases
 - the registers and memory it changes, and its trap site
 - its size, stack and cycles
+- a differential prober, which compares it with the incumbent
 - the full system suite with the candidate in place
 
-The cheapest checks run first, and the first failure ends the scoring.
+The cheapest checks run first, and the first failure now ends the scoring.
 
 A candidate that passes every gate can replace the incumbent, and that
-replacement is called a landing. A landing needs more than a pass. A
-differential prober runs the candidate and the incumbent side by side on all
-three sets of cases and on random inputs. Each input that gives different
-results goes to triage. It falls under an existing don't-care line or one
-that triage adds. Otherwise it becomes a new case and a tighter contract.
-The candidate must also be smaller or faster than the incumbent, and the
-decision to land it is recorded with the evidence that allowed it.
+replacement is called a landing. The prober runs the candidate and the
+incumbent side by side on all three sets of cases and on random inputs. Each
+input that gives different results goes to triage. It falls under an existing
+don't-care line or one that triage adds. Otherwise it becomes a new case and a
+tighter contract. A landing needs more than a pass. The candidate must also be
+smaller or faster than the incumbent, and the decision to land it is recorded
+with the evidence that allowed it.
 
 ## The deletion radius
 
