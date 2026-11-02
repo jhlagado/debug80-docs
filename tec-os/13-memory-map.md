@@ -258,8 +258,8 @@ from the BDOS included.
 
 The three sizes in the workspace are equates in `layout.asm`: 54 for the BDOS,
 30 for the CCP and 38 for the BIOS (`src/layout.asm:80-82`). The comment above
-them gives the rule: each is the deepest use, measured with an NMI's frame on
-it, and a quarter more (`src/layout.asm:76-79`).
+them gives the rule: each is the deepest use and a quarter more
+(`src/layout.asm:76-79`).
 
 The measurement is `test/stacks.test.mjs`. The test boots the model under the
 heaviest workloads of the test suite. It runs them on each console, with a
@@ -269,7 +269,8 @@ stack gives its depth. It passes when each stack's deepest use leaves at least
 a quarter of it free and no guard byte has changed (`test/stacks.test.mjs:182`,
 `test/stacks.test.mjs:208-211`). It presses the keypad's NMI at each new depth
 only while `0066h` holds a `RETN` (`test/stacks.test.mjs:62-69`). TEC-OS puts
-no handler there, so at 98c6416 the measured depths include no NMI frame.
+no handler there, so at 98c6416 the measured depths include no NMI frame,
+though the comment at `src/layout.asm:77` says they do.
 
 A loaded driver runs on its caller's stack, so the drivers' own depths add to
 these. `DRVLIM` gives the most that the drivers together may add to each stack.
@@ -307,7 +308,8 @@ window, so that bank 1 has no bytes a program may copy to or from
 rejects every range in bank 1 that does not lie between `8000h` and the mark.
 In bank 0 it rejects every range that does not end by the word at `0006h`
 (`src/xmove.asm:147-169`). TEC-OS's own copies, from the cache's lines to the
-DMA buffer and back, use the same routine without the check, `MVCOPY`.
+DMA buffer and back, use the same routine without the check, `MVCOPY`
+(`src/xmove.asm:27-37`, `src/cache.asm:259-269`).
 
 All three resident stacks are in the window, so the routines that put EXPAND 1
 in view use no stack until EXPAND 0 is back. A `PUSH` with EXPAND 1 in view
