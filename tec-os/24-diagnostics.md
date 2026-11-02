@@ -103,10 +103,10 @@ the digits, the speaker, the 8 × 8 LEDs and the SD card
 (`diag/boot.asm:29-40`).
 
 The ROM's own variables are at `7E00h–7EFFh` and its stack at `7F00h–7FFFh`,
-in the fixed RAM (`diag/defs.asm:43-44`). Every later test depends on that
-RAM, so test T01 checks it first, with no stack and using registers alone. It
-makes four passes that fill the RAM with a pattern from each address and read
-it back (`diag/boot.asm:43-73`).
+in the fixed RAM (`diag/defs.asm:43-44`). Every later test depends on
+`7E00h–7FFFh`, so test T01 checks those two pages first, with no stack and
+using registers alone. It makes four passes that fill them with a pattern from
+each address and read them back (`diag/boot.asm:43-73`).
 
 On a failure the ROM sends one line to the serial port, again without a stack,
 from the pattern `HCTEXT` (`diag/boot.asm:127-128`). The line is
@@ -119,7 +119,7 @@ comes back about every 7 seconds.
 
 ## The run
 
-With that RAM proved, the ROM clears its variables, installs an NMI handler at
+With those pages proved, the ROM clears its variables, installs an NMI handler at
 `0066h` that counts NMIs, reads the Matrix switch and prints its banner
 (`diag/main.asm:4-28`). It then waits about 5 seconds for a key
 (`diag/main.asm:29-35`). `GETKEY` takes a key from the serial port, from the
@@ -183,8 +183,9 @@ The six results are these (`diag/defs.asm:49-56`, `diag/out.asm:706-711`):
 
 ## The tests
 
-The automatic tests run in the order `diag/main.asm:56-87` calls them, so T35
-and T36 follow T18 and T37 follows T20. The RAM tests T02 to T04 run before
+The automatic tests run in the order `diag/main.asm:56-87` calls them, which
+is not the order of their numbers: T35 and T36 follow T18, and T37 follows
+T20. The RAM tests T02 to T04 run before
 T01's line is printed, and their lines come after it. The interactive tests
 run after T26 when they were chosen at the start, or later from the report's
 prompt (`diag/main.asm:88-119`). Each test's title is the text its `TBEGIN`
