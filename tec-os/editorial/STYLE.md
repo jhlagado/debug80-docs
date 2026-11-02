@@ -43,7 +43,9 @@ output on any machine. The script prints the card's SHA-256 on stderr, and for
 the starter card the SHA-256 of its `EDIT.COM`.
 
 A program in an example is assembled on the model by the starter card's `TAS`,
-and the transcript shows `TAS`'s own output. ATOM builds the ROM on the PC.
+and the transcript shows `TAS`'s own output. The exception is a program a
+chapter builds on the PC, where its header names ATOM's version. ATOM also builds
+the ROM on the PC.
 
 **Each example names its run.** The capture command for an example is given in
 the sentence that introduces it, or in an HTML comment on the line before the

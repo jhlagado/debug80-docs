@@ -55,7 +55,7 @@ names, as these programs do.
 
 ## Checking for TEC-OS
 
-A CP/M program may run on a machine with no table at `C003h`, so it tests
+A CP/M program may run on a machine with no ROM table at `C003h`, so it tests
 before it calls. The test has two parts: the three letters, and a major
 version of exactly 4. A later major version may move the entries after
 `ABIMAIN` and renumber the services, so a program written for 4 can't use a 5

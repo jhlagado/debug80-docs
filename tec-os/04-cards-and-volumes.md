@@ -347,9 +347,9 @@ second time. Chapter 19 gives the method.
 A volume is *written through* by default: a write reaches the card before
 TEC-OS reports it done. When a program writes a record, TEC-OS writes the
 record's whole block to the card and waits until the card reports it accepted.
-The exception is a volume whose descriptor marks it written behind, `WORK` on
-the starter card, and `tecvol` marks one at most. Its writes go into the cache
-and stay there, and TEC-OS writes them to the card later:
+The exception is a volume whose descriptor marks it written behind, and
+`tecvol` marks one at most. On the starter card that is `WORK`. The volume's
+writes go into the cache and stay there, and TEC-OS writes them to the card later:
 
 - When a program writes to the volume's directory, for instance by closing a
   file, TEC-OS first writes every data block the cache holds changed, and then
