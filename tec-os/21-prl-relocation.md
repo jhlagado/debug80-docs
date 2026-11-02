@@ -12,9 +12,9 @@ Checked against TEC-OS 98c6416.
 A `.COM` file holds code assembled for one address, `0100h`, and runs only
 there. Code that is to run at an address chosen at load time has to carry a list
 of the bytes that hold addresses, so that the loader can change them. TEC-OS
-reads two files of that kind. A `.PRL` file is Digital Research's page
-relocatable format, which the CCP runs as a program at `0100h`. A `.DRV` file is
-TEC-OS's own, and the driver loader places it in whole pages below the BDOS.
+reads two files of that kind. A `.PRL` file is in Digital Research's page
+relocatable format, and the CCP runs it as a program at `0100h`. A `.DRV` file is
+in TEC-OS's own, and the driver loader places it in whole pages below the BDOS.
 This chapter follows a `.PRL` file from the tool that makes it to the jump to
 `0100h`, and then a `.DRV` file's relocation data from the tool to the bytes in
 memory. Chapter 10 describes both files from a programmer's side, and Chapter 20
@@ -233,7 +233,7 @@ bytes of image would take 160.
 `44h` and format 3 (`src/drv.asm:11`, `src/drv.asm:62-65`), and then that the
 header and image lie within the records read (`src/drv.asm:66-69`).
 
-The loader chooses the page from the size. It adds the extra memory named in the
+The loader works out the page from the size. It adds the extra memory named in the
 header, the word at offset 8, to the size of the header and image, subtracts one
 and takes the high byte (`src/drv.asm:76-79`). The driver's page is the current
 top's page, less one, less that high byte (`src/drv.asm:80-82`), and `PZTOP`
