@@ -233,7 +233,7 @@ prints:
 
 The tests use TEC-OS's own ways of reaching the hardware where TEC-OS has
 them. The serial output is bit-banged as TEC-OS's is (`diag/out.asm:1-5`).
-T19's card start is TEC-OS's SD driver, recording each answer the card gives
+T19's card start is TEC-OS's SD card driver, recording each answer the card gives
 (`diag/sd.asm:1-2`). T17 detects the PICO9918 as TEC-OS does and sets the
 registers of TEC-OS's 80-column console (`diag/display.asm:334`,
 `diag/display.asm:353`). T35 checks the page flip that console uses

@@ -29,7 +29,7 @@ entry. `test/chain.test.mjs` checks these rules on the host model of Chapter
 ## The line kept across a warm boot
 
 A program in a piece of a line ends with a warm boot. The warm boot clears the
-CCP's and the BDOS's working memory as a fresh load of them from disk would
+CCP's and the BDOS's state as a fresh load of them from disk would
 leave it (Chapter 14). The rest of the line survives because the CCP's RAM is
 in two parts. Its first 202 bytes run from `CMDFCB` at `BCEBh` to `CCPCLR` at
 `BDB5h`. They hold the two FCBs the built-ins parse names into and the command
@@ -117,7 +117,7 @@ A>
 
 `STLINE` echoes each line of the file whole, through BDOS function 9, so a `$`
 in a line would end its echo there (`src/drv.asm:407-411`). The CCP echoes the
-later pieces after their own prompts. `PICO.DRV` fails on this serial-only
+later pieces after their own prompts. `PICO.DRV` fails on this serial
 board, so `:VOLS` is dropped, and the loop goes on to the startup file's third
 line.
 
@@ -232,7 +232,7 @@ go through `CHDROP`:
   jumps to `CHDROP` (`src/cpm/bdos.asm:365-375`). The CCP calls function 10
   only with `CHPOS` at 0, so at its own prompt no piece is left. Only a line
   that a program reads has anything to drop.
-- A disk error. `DISKERR` prints `Bdos Err On`, the drive and the cause, and
+- A BDOS error. `DISKERR` prints `Bdos Err On`, the drive and the cause, and
   waits for a key (`src/cpm/bdos.asm:2431-2441`). The routine for each cause
   then jumps to `CHDROP`: `File R/O` from function 19, `R/O` from `CHKRO`,
   `Select` from `SELFAIL` and `Bad Sector` from `BADSECT`

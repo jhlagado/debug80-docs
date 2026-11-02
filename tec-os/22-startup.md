@@ -65,12 +65,13 @@ The keypad test comes next (`src/svc.asm:336-338`). `STSPORT` is port `03h`
 (`src/layout.asm:11`), and bit 6 is low while a keypad key is down, as Appendix
 G describes. A low bit returns from `STBOOT` with `STPOS` at `80h`, so a skip is
 the same state as a file that wasn't there. Bit 6 is tested this one time. On the
-model's PICO9918 board with the starter card, `STBOOT` starts 5,864,626 T-states
-after reset, about 1.47 seconds. `test/startup.test.mjs:46-58` holds a key
-through reset to get past a service whose `INIT` never returns, and `:194-207`
-does the same for a file that resets the board at every boot.
+model, with the web page's board and the starter card, `STBOOT` starts
+5,864,626 T-states after reset, about 1.47 seconds.
+`test/startup.test.mjs:46-58` holds a key through reset to get past a service
+whose `INIT` never returns, and `:194-207` does the same for a file that resets
+the board at every boot.
 
-`STBOOT` then makes the read in the CCP's own file control block. It copies 12
+`STBOOT` then makes the read in the CCP's own FCB. It copies 12
 bytes of `STFCB`, a drive byte of 1 and the name `STARTUP CMD`, to `CMDFCB`
 (`src/svc.asm:339-342`, `src/data3.asm:106`). Cold boot's clear has left the
 rest of `CMDFCB` zero. Drive byte 1 is drive A whichever drive is current, and
@@ -236,7 +237,7 @@ returns carry if `CDMTX` is clear or if that slot already holds a table
 (`src/glcd.asm:17-26`). So a driver needs the matrix keyboard, and `PICO40.SVC`
 fails while `PICO.SVC` is in.
 
-`GLCD.SVC` has two more tests, both ahead of those. If the `CON:` field of the
+`GLCD.SVC` has two more tests, both ahead of those. If the console field of the
 IOBYTE is 3, `UC1:`, it goes on. Otherwise it reads the byte that `ABIVID`
 points at, the console's columns. It fails if that byte isn't 0, which is the
 case while any display is the console (`drivers/glcd.asm:34-42`,
@@ -251,7 +252,7 @@ page of each display's table (`src/glcd.asm:72-79`). A match with `PIVEC` select
 `CMCRT` and goes to `CONSET`. No match with `GLVEC` means some other service, and
 the console stays. A match with `GLVEC` sets `CDGLC`, and then only if `PIVEC` is
 empty does it select `CMUC1` and go to `CONSET` (`src/glcd.asm:80-85`). `CONSET`
-writes the mode into the `CON:` field of the IOBYTE and sets `CONACT` to `FFh` so
+writes the mode into the console field of the IOBYTE and sets `CONACT` to `FFh` so
 that the field counts as changed. It then jumps to `CONSEL`, which moves the
 console (`src/glcd.asm:86-93`, `src/console.asm:47-58`).
 
