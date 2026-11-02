@@ -9,26 +9,26 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 Checked against TEC-OS bd15528.
 
-Chapter 1's first boot ran two commands that nobody typed. On the web page's
-board the first of them moved the console to the PICO9918. This chapter
-explains what those commands install and the file they come from. It gives the
-startup file's rules and the times it runs. Then come the lines that set a
-display and its width and the way to skip the file. The chapter then describes
-the words TEC-OS shows on the 20 × 4 LCD and the commands that install, list
-and remove what the file installs.
+Chapter 1's first boot ran two commands that nobody typed, and on the web
+page's board the first of them moved the console to the PICO9918. This chapter
+explains what those commands install and the file they come from, with the
+startup file's rules and the times it runs. It then gives the lines that set a
+display and its width, the way to skip the file, the words TEC-OS shows on the
+20 × 4 LCD and the commands that install, list and remove what the file
+installs.
 
 ## Services
 
 A *service* is what a `.SVC` file installs. It is code that TEC-OS reads from
-the card into memory just below the BDOS. It stays there until a reset or
-until the `UNLOAD` command removes it, and a program's end leaves it in place.
-A *driver* is a service that drives hardware, and a *library* is a service
-that provides routines for programs. The starter card's four services are all
-drivers. `PICO.SVC`, `PICO40.SVC` and `PICO32.SVC` each hold the PICO9918's
-console, at 80, 40 and 32 columns. `GLCD.SVC` holds the graphics LCD's.
+the card into memory just below the BDOS, where it stays until a reset or
+until the `UNLOAD` command removes it. A program's end leaves it in place. A
+*driver* is a service that drives hardware, and a *library* is a service that
+provides routines for programs. The starter card's four services are all
+drivers: `PICO.SVC`, `PICO40.SVC` and `PICO32.SVC` each hold the PICO9918's
+console, at 80, 40 and 32 columns, and `GLCD.SVC` holds the graphics LCD's.
 
 The *hardware services* of Chapter 9 are another thing. They are numbered
-calls inside the ROM. Nothing is loaded for them, and the `SERVICES` command
+calls inside the ROM, so nothing is loaded for them and the `SERVICES` command
 doesn't list them. A loaded service can publish named *records* in TEC-OS's
 registry, and a program finds the service through them. Chapter 10 describes
 records and how a service is made.
@@ -95,9 +95,9 @@ B>
 At each prompt the CCP takes the next line in place of the keyboard. The line
 is echoed as it stands in the file, so `vols` appears in small letters, and it
 then runs as if typed. The CCP prints a failed line's usual message and the
-next line runs. Each line's effects last. `B:` and `USER 3` change the drive
-and the user area for the lines after them. That is why `VOLS` isn't found and
-why the first prompt you can type at is `B>`.
+next line runs. Each line's effects last: `B:` and `USER 3` change the drive
+and the user area for the lines after them, which is why `VOLS` isn't found
+and why the first prompt you can type at is `B>`.
 
 TEC-OS reads the file once, into memory, before the first line runs, so the
 changes of drive and user area had no effect on reading it. It reads one
@@ -131,9 +131,9 @@ The rest of the rules are about a line's edges:
   whole.
 - A line that would start at the record's last byte, the 128th, doesn't run.
 
-The echo stops at a `$`, but the line itself runs whole. The echo goes through
-the BDOS's function for printing a string, which ends there. This card has a
-file named `NOTE$.TXT`, and its startup line types it:
+The echo stops at a `$`, but the line itself runs whole, because the echo goes
+through the BDOS's function for printing a string, which ends there. This card
+has a file named `NOTE$.TXT`, and its startup line types it:
 
 ```sh
 printf 'It ran whole.\n' > 'NOTE$.TXT'
@@ -194,15 +194,15 @@ TEC-OS restarts by one of three paths:
   The drives take the volumes the card's header names, and everything else is
   rebuilt.
 
-Each reset is a cold boot. It removes every service and returns to drive A and
-user area 0. It also puts the console on the serial terminal. The startup file
-then runs once, on either kind of reset, and its display line puts the console
-back on the display.
+Each reset is a cold boot, so it removes every service, returns to drive A and
+user area 0 and puts the console on the serial terminal. The startup file then
+runs once, on either kind of reset, and its display line puts the console back
+on the display.
 
 The file is the one on the drive A of that moment, in user area 0. After a
-recognised reset drive A may hold another volume. That volume's `STARTUP.CMD`
-then runs, or nothing runs if it has no such file. This card has a third
-volume, `SPARE`, with its own startup file:
+recognised reset drive A may hold another volume, and then that volume's
+`STARTUP.CMD` runs, or nothing runs if it has no such file. This card has a
+third volume, `SPARE`, with its own startup file:
 
 ```sh
 node tools/tecvol.mjs create spare.img --volume G1M:SYSTEM:A --volume G8M:WORK:B:wb --volume G1M:SPARE --drives 4
@@ -238,8 +238,8 @@ A>
 ```
 
 Every recognised reset puts the selection back. A board whose selected drive A
-has no display driver stays without one until the board loses power or you
-mount the other volume back, which needs `MOUNT.COM` on a drive that is
+has no display driver therefore stays without one until the board loses power
+or you mount the other volume back. That needs `MOUNT.COM` on a drive that is
 mounted. On this card only a loss of power puts `SYSTEM` back on drive A.
 
 ## Display lines
@@ -254,8 +254,8 @@ and moves the console there:
 
 Each driver needs its display and the matrix keyboard. Where either is missing
 the installation fails, the CCP prints the line's name with a question mark
-and the next line runs. One card therefore starts each of the boards below.
-The starter card's two lines give these results on the three boards of
+and the next line runs, so one card starts each of the boards below. The
+starter card's two lines give these results on the three boards of
 `tools/capture.mjs`:
 
 | Board | `PICO.SVC` | `GLCD.SVC` | Console at the first prompt |
@@ -266,7 +266,7 @@ The starter card's two lines give these results on the three boards of
 
 Until a display's line runs, the banner and the volumes go to the serial
 terminal and the 20 × 4 LCD. On a board with both displays, a file with
-`GLCD.SVC` first installs both drivers. The PICO9918 takes the console and
+`GLCD.SVC` first installs both drivers, so the PICO9918 takes the console and
 programs have 1,536 bytes less:
 
 ```sh
@@ -290,7 +290,7 @@ A>
 ```
 
 The ROM is one image for every board, so a startup line sets the PICO9918's
-width. `PICO.SVC` gives 80 columns, `PICO40.SVC` 40 and `PICO32.SVC` 32. The
+width: `PICO.SVC` gives 80 columns, `PICO40.SVC` 40 and `PICO32.SVC` 32. The
 starter card carries all three and names `PICO.SVC`. A copy whose first line
 is `PICO32.SVC` wraps a long line at the 32nd column:
 
@@ -316,8 +316,8 @@ A>
 
 The web page's "Display" and "ROM" controls change these lines for you,
 through `host/card.mjs`. At each power-on the page makes the card's first line
-the file for the chosen display and width. It adds `GLCD.SVC` as the second on
-a board with the PICO9918 and keeps your other lines. A display driver chained
+the file for the chosen display and width, adds `GLCD.SVC` as the second on a
+board with the PICO9918 and keeps your other lines. A display driver chained
 in one of those lines is taken out and the rest of the line kept.
 
 ## The keypad skip
@@ -325,17 +325,17 @@ in one of those lines is taken out and the rest of the line kept.
 A startup line that hangs, or that resets the board, would run at every boot.
 To get past one, hold any key on the hex keypad from the reset until the
 prompt appears. With the board's keypad NMI jumper fitted a key press is a
-crash. The skip is therefore for a board with that jumper off, as [Chapter
+crash, so the skip is for a board with that jumper off, as [Chapter
 1](01-introduction.md#running-tec-os-on-a-board) and [Appendix
 G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) describe. TEC-OS reads the
 keypad's state once, just before it opens the file, about 1.5 seconds after a
-reset on the model. With a key down it doesn't read the file.
+reset on the model, and with a key down it doesn't read the file.
 `test/startup.test.mjs` runs the case: with a key held, a card whose service
 hangs while installing reaches a prompt.
 
 After a skip there are no services. The board has the 20 × 4 LCD and the
 serial terminal and nothing else, because the matrix keyboard is read only
-once a display's driver is in. On the board, recovery needs the serial
+once a display's driver is in. So on the board recovery needs the serial
 terminal: `ERA STARTUP.CMD` or a corrected file, and then a reset. Otherwise
 take the card to a PC and use `tecvol`. A recognised reset with a skip keeps
 the drives' volumes as one without a skip does. The web page has no keypad, so
@@ -399,26 +399,26 @@ B: WORK
 GLCD?
 ```
 
-A display driver that takes the console clears `PICO?` or `GLCD?`. So does
+A display driver that takes the console clears `PICO?` or `GLCD?`, and so does
 `GLCD.SVC` loading under `PICO.SVC`, which leaves the console where it is.
 Clearing writes blanks only over the word itself. A program that writes the
-LCD's last row through the LCD's hardware service replaces the word. When a
-driver later takes the console, that row is left alone. `DEMO` is such a
+LCD's last row through the LCD's hardware service replaces the word, and when
+a driver later takes the console, that row is left alone. `DEMO` is such a
 program, and its last screen stays through a later `PICO.SVC`. A program that
-writes over the word at the LCD's port bypasses TEC-OS. The next driver to
-take the console then writes five blanks over the start of the row. `CARD?`
-goes when `R` at the diagnostic prompt starts the LCD again, so a retry that
-works clears it.
+writes over the word at the LCD's port bypasses TEC-OS, so the next driver to
+take the console writes five blanks over the start of the row. `CARD?` goes
+when `R` at the diagnostic prompt starts the LCD again, so a retry that works
+clears it.
 
 ## Installing, listing and removing services
 
 A command that names a file of type `.SVC` installs the service in it. The
 file comes from the current drive or from a drive named in the command, such
-as `B:NAME.SVC`. The type must be typed: `NAME` alone looks for `NAME.COM` and
-then `NAME.PRL`. `NAME.DRV` is an ordinary file name to the CCP, which looks
-for a program. `SERVICES` lists what is installed and `UNLOAD` removes it. On
-a card with no startup file, on the serial board, nothing is installed and
-neither display driver can be:
+as `B:NAME.SVC`. The command must include the type: at `NAME` alone the CCP
+searches for `NAME.COM` and then `NAME.PRL`. `NAME.DRV` is an ordinary file
+name to the CCP, which searches for a program. `SERVICES` lists what is
+installed and `UNLOAD` removes it. On a card with no startup file, on the
+serial board, nothing is installed and neither display driver can be:
 
 <!-- node tools/capture.mjs --card nostart.img SERVICES UNLOAD PICO PICO.DRV PICO.SVC -->
 ```text
@@ -453,9 +453,9 @@ warm boot keeps all of them, and a reset empties the list.
 
 The display drivers each have their own rule. `PICO.SVC` can't be removed
 while the PICO9918 is the console, since `CON CRT` can't load it back.
-`GLCD.SVC`, once it is the newest, can always be removed. If it is the
-console, the console goes to the PICO9918 if a PICO9918 driver is in, and
-otherwise to the serial terminal:
+`GLCD.SVC`, once it is the newest, can always be removed. If the graphics LCD
+is the console, the console goes to the PICO9918 if a PICO9918 driver is in,
+and otherwise to the serial terminal:
 
 <!-- node tools/capture.mjs --board pico "CON UC1" SERVICES UNLOAD CON -->
 ```text
@@ -494,13 +494,14 @@ A>
 ## A card from an older TEC-OS
 
 Older cards hold their services in files of type `.DRV`, and this ROM doesn't
-load them. `PICO.DRV` goes down the path for a program and comes back with a
-question mark. The board then keeps its console on the serial terminal. The
-web page reports such a card when it powers on and leaves the card as it is.
+load them. The CCP takes `PICO.DRV` as the name of a program and prints it
+with a question mark, so the board keeps its console on the serial terminal.
+The web page reports such a card when it powers on and leaves the card as it
+is.
 
 `README.TXT` on the starter card gives the two ways out. "New starter card",
 or a new image from `npm run media`, replaces the card. The other way keeps
-the card: rename each file `.SVC` and change `STARTUP.CMD` to match. This
+the card: rename each file `.SVC` and change `STARTUP.CMD` to match, which
 works if the file's format, its second byte, is 3, the format this ROM loads.
 This image is a copy of the starter card with its display drivers under the
 old type:
