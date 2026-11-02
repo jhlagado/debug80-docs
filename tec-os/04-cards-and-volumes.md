@@ -62,8 +62,8 @@ A container holds up to 127 volumes, and up to four of them are on drives at a
 time, as drives A to D. The header's format number, 1.0 or 1.1, sets how many
 volumes the container can hold. A 1.0 container holds up to 8. A container of
 more than 8 is format 1.1, which continues the table of descriptors into
-blocks 1 to 7. Format 1.1 also has a field for the number of drives the card
-is to have, which the section on memory explains. Appendix E gives the header
+blocks 1 to 7. Format 1.1 also has a drives field, the number of drives the
+card is to have, which the section on memory explains. Appendix E gives the header
 and the descriptor byte by byte.
 
 Before it mounts anything, cold boot checks the header: its name, its version,
@@ -291,8 +291,8 @@ the drive is first used. With it the BDOS finds a free block without reading
 the directory. A G1M volume's vector is 64 bytes and a G8M volume's 256 bytes.
 
 The vectors are directly below TEC-OS's workspace, and the BDOS's entry is
-below them, so they come out of the memory programs have. Cold boot gives out
-the space in one of two ways.
+below them, so they come out of the TPA, the memory programs have. Cold boot
+gives out the space in one of two ways.
 
 A card in format 1.0, or one in format 1.1 whose header gives no number of
 drives, gets a vector for each drive cold boot puts a volume on. Each vector
@@ -326,7 +326,7 @@ and its vectors take 1,024 bytes. The word at `0006h` is `B506h`, and programs
 have 46,086 bytes. That is 768 fewer than on the starter card, since the
 BDOS's entry goes at offset 6 of the page below the vectors. A drive past the
 Nth gets no vector. A card whose header puts a volume on such a drive fails
-the checks at cold boot. Chapter 7 describes the memory programs have, and
+the checks at cold boot. Chapter 7 describes the TPA, and
 Chapter 13 the rest of the map.
 
 ## The block cache and the volume written behind
@@ -359,10 +359,10 @@ TEC-OS writes them to the card later:
 
 Writing behind saves card writes when a program writes a file a record at a
 time. The four records of a block reach the card in one write of the block. A
-block written many times between two flushes of the cache reaches the card
-once. On the model, `SAVE 64`, which writes 16 KiB, took 7.71 seconds on a G8M
-volume written through. On one written behind it took 2.48 seconds, about a
-third of that.
+block written many times between two flushes of the cache, writes of all its
+changes to the card, reaches the card once. On the model, `SAVE 64`, which
+writes 16 KiB, took 7.71 seconds on a G8M volume written through. On one
+written behind it took 2.48 seconds, about a third of that.
 
 The order of the writes keeps the card's directory true to its data. TEC-OS
 writes a directory block only after every changed data block the cache holds.
@@ -378,10 +378,10 @@ directory is read from the card again. A reset or a power cut discards both.
 A reset runs cold boot, and cold boot rebuilds TEC-OS's memory. The cache, the
 drivers, the command history and the open files are all gone after it. So is
 any change in the cache that hadn't reached the card. The one thing a reset
-can keep is the drives' volumes. It keeps them if TEC-OS had reached a prompt
-before the reset and each volume on a drive is still on the card, at the same
-place and of the same size and kind. The drives then hold the same volumes
-after the reset as before it:
+can keep is the selection of volumes on the drives. It keeps it if TEC-OS had
+reached a prompt before the reset and each volume on a drive is still on the
+card, at the same place and of the same size and kind. The drives then hold the
+same volumes after the reset as before it:
 
 <!-- node book/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" VOLS -->
 ```text
@@ -406,9 +406,9 @@ A>
 ```
 
 If any of the volumes doesn't match a descriptor on the card in the socket,
-the whole choice is dropped. The drives then get the volumes the header names,
+the whole selection is dropped. The drives then get the volumes the header names,
 as after a power cycle. Turning the board off always gives the header's
-drives, since the choice is held only in RAM. Chapter 14 describes the test
+drives, since the selection is held only in RAM. Chapter 14 describes the test
 cold boot applies to the RAM a reset leaves.
 
 A `^C` at the prompt before a reset puts the cache's changes on the card, as
@@ -427,7 +427,7 @@ node tools/tecvol.mjs install my.img /dev/rdiskN --yes
 form and on Linux one such as `/dev/sdb`. As Chapter 1 says, `install`
 overwrites the device from block 0, and it does nothing without `--yes`. The
 card must be at least as large as the container. TEC-OS can't read the card's
-size. A volume that runs past the end of a smaller card fails with a disk
+size. A volume that runs past the end of a smaller card fails with a BDOS
 error when TEC-OS reaches the missing blocks.
 
 The web page's "Open image" loads an image file from the PC into the page's
@@ -448,9 +448,9 @@ entry are both on the card. A power cut or a reset can lose a file still being
 written, in one of these ways:
 
 - On a volume written through, a cut between the data and the directory leaves
-  new data in blocks the directory doesn't name. The file reads back as it was
-  before, and the blocks are free space again the next time the drive's
-  allocation vector is built.
+  new data in allocation blocks the directory doesn't name. The file reads back
+  as it was before, and the blocks are free space again the next time the
+  drive's allocation vector is built.
 - On the volume written behind, a change since the last directory write, warm
   boot or `MOUNT` is lost if it is still in the cache. A block TEC-OS has
   already written to make room in a full cache is on the card, and so are the
@@ -470,13 +470,13 @@ node tools/tecvol.mjs verify card.img
 ```
 
 `tecvol verify` reads each volume's directory and reports the faults that
-would make files share or lose blocks:
+would make files share or lose allocation blocks:
 
-- A block that two files claim.
-- A block number past the end of the volume.
+- An allocation block that two files claim.
+- An allocation block number past the end of the volume.
 - Two directory entries for the same part of a file.
 - An entry with a record count above 128.
-- An entry that names more blocks than its records need.
+- An entry that names more allocation blocks than its records need.
 
 It exits with status 1 if it found a problem. `tecvol get` copies off what it
 can read. A fresh image built with `create` and `put`, or from a recipe, goes
