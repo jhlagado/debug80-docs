@@ -1,13 +1,13 @@
 ---
-title: B. ROM services
+title: B. The ROM table and hardware services
 parent: TEC-OS
 nav_order: 102
 nav_group: "Appendices"
 ---
 
-# Appendix B. ROM services
+# Appendix B. The ROM table and hardware services
 
-Checked against TEC-OS bd15528.
+Checked against TEC-OS 718c01b.
 
 This appendix lists the ROM table at `C003h` entry by entry, then the hardware
 services by number, and then the three other entries a program or a service
@@ -172,7 +172,7 @@ is removed. The console draws it again when it next waits for a key
 Text is clipped at the right edge. A row past the bottom writes nothing and
 returns status 0, and so does a count of 0, which also leaves the cursor
 alone. Status 2 means the console is the serial terminal, or the PICO9918 is
-claimed and is the console (`src/term.asm:533-543`). A claim doesn't stop
+claimed and is the console (`src/term.asm:533-544`). A claim doesn't stop
 `PUTAT` on the graphics LCD. The stack is 22 bytes on the graphics LCD and 16
 on `PICO.SVC` with a cursor to remove, and 18 and 12 with none. A cell along a
 row takes about 423 T-states on `PICO.SVC` at 80 columns and about 35,100 on
