@@ -91,10 +91,10 @@ the drives there.
 
 ## Building TEC-OS
 
-The TEC-OS repository holds the ROM's source, the tools for building it and
-the card, the web page and the host model, a software TEC-1G. Building it
-requires Node.js 20 or later, and from a clone of the repository three
-commands build everything this chapter uses:
+The TEC-OS repository holds the ROM's source, the tools for building it and the
+card, the host model, a software TEC-1G, and the web page. Building it requires
+Node.js 20 or later, and from a clone of the repository three commands build
+everything this chapter uses:
 
 ```sh
 npm ci
@@ -165,10 +165,10 @@ With no options the board has a serial terminal and nothing else: no PICO9918,
 no graphics LCD and no matrix keyboard. `--board pico` gives it the PICO9918,
 the graphics LCD and the matrix keyboard, as the web page has. `--lcd` prints
 the 20 × 4 LCD's rows at the end, `--screen` the display's text and `--serial`
-what left the serial port. `--card none` boots with the socket empty, and the
-comment at the top of the script lists the rest. On stderr the script prints
-the SHA-256 of the card and of the card's `EDIT.COM`, which show whether your
-card is the one an example was captured from. A run of a few commands takes
+what left the serial port. `--card none` boots with the socket empty. The
+comment at the top of the script lists the rest. On stderr the script prints the
+SHA-256 of the card and of the card's `EDIT.COM`. The two hashes show whether
+your card is the one an example was captured from. A run of a few commands takes
 about a second.
 
 ## Running TEC-OS on a board
@@ -323,9 +323,9 @@ address is the word at `0006h`. On the starter card with no driver the word is
 `B806h`, and programs have 46,854 bytes. With `PICO.DRV` installed it is
 `B206h`, and programs have 45,318. Chapter 7 explains a program's memory.
 
-A board with a PICO9918 and the matrix keyboard has a dark screen if no
-display driver was installed by the time of the first prompt, and it may have
-no serial terminal attached. The 20 × 4 LCD's last row then shows `PICO?`.
+A board with a PICO9918 and the matrix keyboard has a dark screen if no display
+driver was installed by the time of the first prompt, and the 20 × 4 LCD's last
+row then shows `PICO?`. That board may have no serial terminal attached.
 
 ## The starter card
 
@@ -392,12 +392,12 @@ and what a power cut can lose.
 
 ## Running a program
 
-`DEMO` uses the hardware services described in Chapter 9. It beeps, puts a
-title on the 20 × 4 LCD, counts in hexadecimal on the 7-segment digits and
-moves a rainbow across the 8 × 8 LEDs. On a PICO9918 it also draws colour bars
-and a bouncing ball, and with a DS1302 clock fitted the LCD's last row shows
-the time. Any key stops it. Here it ran on the serial board, the one with only
-a serial terminal, until a key press stopped it after 50 million T-states, the
+`DEMO` uses the hardware services described in Chapter 9. It beeps, puts a title
+on the 20 × 4 LCD, counts in hexadecimal on the 7-segment digits and moves a
+rainbow across the 8 × 8 LEDs. On a PICO9918 it also draws colour bars and a
+bouncing ball, and with a DS1302 clock fitted the LCD's last row shows the time.
+Any key stops it. Here it ran on the serial board, the one with only a serial
+terminal, until a key press stopped it. The run took 50 million T-states, the
 Z80's clock cycles, which is 12.5 seconds:
 
 <!-- node book/capture.mjs --lcd "@start DEMO" "@key x" -->
@@ -460,15 +460,15 @@ another.
 
 ## Reset and power
 
-Pressing reset runs cold boot again, so the banner, the volumes and the
-startup file's lines appear, the console starts on the serial terminal and the
-prompt is on drive A in user area 0. One thing survives a reset pressed after
-TEC-OS has reached a prompt: the drives hold again any other volumes put there
-while TEC-OS ran, as long as the card still has those volumes. Everything else
-TEC-OS holds in memory, the cache included, is rebuilt, so a change in the
-cache that hadn't reached the card is lost. Turning the board off loses the
-RAM, and the drives then hold the volumes the card's header names. Chapter 4
-describes how volumes are moved between drives.
+Pressing reset runs cold boot again, so the banner, the volumes and the startup
+file's lines appear, the console starts on the serial terminal and the prompt is
+on drive A in user area 0. One thing survives a reset pressed after TEC-OS has
+reached a prompt: the selection of volumes on the drives. A volume put on a
+drive while TEC-OS ran is on that drive again after the reset, as long as the
+card still has it. Everything else TEC-OS holds in memory, the cache included,
+is rebuilt, so a change in the cache that hadn't reached the card is lost.
+Turning the board off loses the RAM, and the drives then hold the volumes the
+card's header names. Chapter 4 describes how volumes are moved between drives.
 
 A card must never be changed on a PC while the TEC-1G is using it. TEC-OS
 holds a map of each drive's free space in memory, and after a change made on
