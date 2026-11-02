@@ -66,13 +66,19 @@ depend on `BF00h`:
 The BIOS acts on no key: `^C`, `^S` and `^P` from `CONIN` are bytes like any
 other, and `CONOUT` expands no tab and checks for no key.
 
-These calls run on the caller's stack, and on a display so do the ROM's
-terminal and the routines of `PICO.DRV` or `GLCD.DRV` beneath them. The 28
-bytes of the CCP's stack hold a direct call with nothing pushed, so a program
-that pushes anything before it calls the BIOS sets up a stack of its own
-first. The routines also run with the caller's interrupt state, and they
-keep the cursor and the escape sequence in the fixed bytes at `0046h–004Ch`,
-so an interrupt routine must not print through the console.
+The routines behind these calls run with the caller's interrupt state, and
+they keep the cursor at `0046h–0047h`, the escape sequence at `004Ah–004Ch`
+and the video attributes at `004Eh` and `004Fh`, all fixed bytes, so an
+interrupt routine must not print through the console.
+
+The calls also run on the caller's stack, and on a display so do the ROM's
+terminal and the routines of `PICO.DRV` or `GLCD.DRV` beneath them. Measured
+on the model as the lowest `SP` below its value at the program's entry, a
+direct call with nothing pushed went at most 24 bytes down the CCP's 28,
+counting the call's return word, on a call that cleared a display after a
+change to the IOBYTE. That is the deepest path measured and not a proved
+worst case, so a program that pushes before it calls the BIOS sets up a stack
+of its own first.
 
 This program reads keys through `CONIN` and prints each one's code through
 `CONOUT` until Return. It pushes before it calls the BIOS, so it starts by
@@ -126,8 +132,8 @@ STACK:
 ```
 
 The program writes each entry's address into a `JP` of its own, at `CONIN`
-and `CONOUT`, so that a `CALL` to the label reaches the BIOS. Its stack holds no
-return word, so it ends with `JP $0000`, as Chapter 6 describes. Assembled
+and `CONOUT`, so that a `CALL` to the label reaches the BIOS. Its stack holds
+no return word, so it ends with `JP $0000`, as Chapter 6 describes. Assembled
 and copied to drive B of a copy of the starter card, with `size.asm` from the
 section on the console's size:
 
