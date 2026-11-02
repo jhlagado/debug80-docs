@@ -7,8 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 17. The CCP
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy on the card has the SHA-256
+Checked against TEC-OS 718c01b, with the ATOM assembler from the repository's
+`atom-z80` 0.3.7 and the starter card's `EDIT.COM` from Edit
+845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 The CCP prints the prompt, reads a command line and carries it out, as Chapter

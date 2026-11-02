@@ -147,7 +147,8 @@ is the 512-byte deblocking buffer `BLKBUF` at `B966h` with its key
 parameter headers, the DPHs, and the 128-byte directory buffer `DIRBUF` that
 every drive shares. Chapter 18 describes deblocking and these tables. Then come
 the word `STUBAD`, which holds the BDOS entry
-jump's address, and the mount entry's scratch bytes. The video terminal's
+jump's address, and the `MOUNT` routine's scratch bytes, which the mount entry
+also uses. The video terminal's
 state follows: an 80-byte row buffer for scrolling, the seven vectors into the
 display driver, the scroll region and the console mode (`src/ram.asm:45-58`).
 

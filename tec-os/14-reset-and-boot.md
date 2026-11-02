@@ -8,7 +8,7 @@ nav_group: "Part II: Inside TEC-OS"
 # 14. Reset, cold boot and warm boot
 
 Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from
-Edit 845d062, whose copy on the card has the SHA-256
+Edit 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
 timings below were measured on that card.
 

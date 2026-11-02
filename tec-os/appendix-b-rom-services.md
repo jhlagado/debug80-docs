@@ -23,7 +23,7 @@ measured on the model, the T-states from the `JP` at the entry to the final
 The table is ABI 4.0. A program tests for `TNA` at `ABITAB` and for a major
 version of exactly 4 at `ABIMAJ` before it uses anything after them
 (`src/abi.inc:2-4`), since a new major version may move what follows `ABIMAIN`
-and renumber the services (`src/abi.asm:3-5`,
+and renumber the hardware services (`src/abi.asm:3-5`,
 `test/programs/demo.asm:29-30`). ABI 4 isn't frozen until a release, and the
 table may gain entries at its end, `C018h`.
 
@@ -67,7 +67,7 @@ The failures return through `src/hwsvc.asm:72-74`. Every number outside 19 to
 no stack used (`src/hwsvc.asm:52-56`). `abi.inc` names the first number
 `HWBASE`, 19, and the count `HWCOUNT`, 9.
 
-No service calls the BDOS. Each runs on the caller's stack, and the deepest
+No hardware service calls the BDOS. Each runs on the caller's stack, and the deepest
 takes 22 bytes below its return address (`src/hwsvc.asm:4-6`). The only state
 they keep is the claim byte, `VCLAIM`, in the workspace (`src/ram.asm:57`).
 

@@ -8,7 +8,7 @@ nav_group: "Appendices"
 # Appendix E. The container format
 
 Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
-845d062, whose card copy has the SHA-256
+845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 This appendix lists the container format: the header's fields, the volume

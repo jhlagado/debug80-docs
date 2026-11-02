@@ -13,10 +13,10 @@ Chapter 7 stay as they are.
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
 | TPA | | `0100h` up to the byte below the word at `0006h` | Chapter 1, again in 7 | "programs have N bytes" is a plain statement of the TPA's size. "Transient Program Area" is the expansion, in Chapters 1 and 7. |
-| resident workspace | workspace | TEC-OS's variables, buffers and stacks, `WSBASE` to `WSEND`, with the RAM BIOS table inside it. The allocation vectors and the BDOS entry jump are below it. | Chapter 1, in full 13 | fixed workspace: the part from `WSBASE` to `BEFFh`, whose size the build measures (Chapters 12, 13) |
+| resident workspace | workspace | TEC-OS's variables, buffers and stacks, `WSBASE` to `WSEND`, with the RAM BIOS table inside it. The allocation vectors and the BDOS entry jump are below it. | Chapter 7, in full 13 | fixed workspace: the part from `WSBASE` to `BEFFh`, whose size the build measures (Chapters 12, 13) |
 | page | | 256 bytes | Chapter 3 | page zero, `0000h–00FFh` (Chapter 2); a web page; a PICO9918 page (Chapter 15) |
 | BIOS jump table | | CP/M's table of 17 jumps | Chapter 7, in full 15 | RAM BIOS table: the copy at `BF00h` that every caller uses. `BIOSBAS`: the ROM's copy, never called. |
-| BDOS entry jump | BDOS's entry | The `JP BENTRY` in RAM at the address of the form `xx06h` | Chapter 1, in full 13 | `BENTRY`: the routine in the ROM, also "the BDOS's entry" in Chapters 16 and 25, where the code follows |
+| BDOS entry jump | BDOS's entry | The `JP BENTRY` in RAM at the address of the form `xx06h` | Chapter 5, in full 13 | `BENTRY`: the routine in the ROM, also "the BDOS's entry" in Chapters 16 and 25, where the code follows |
 | boot overlay | overlay | The ROM's first 2 KiB, shown at `0000h–07FFh` while latch bit 0 is low | Chapter 13, in full 14 | Chapter 1 says "the copy" for a reader who has no need of the name. `LATSHAD` and SHADOW are the code's and the board's names for the bit. |
 | fixed RAM | | `0000h–7FFFh`; MAIN 0 is its name beside MAIN 1 | Chapters 1 and 7 | MAIN 1, the second 32 KiB a board may have |
 | EXPAND 0, EXPAND 1 | | The two halves of the RAM in U9 | Chapter 1 | expansion RAM: the chip as a whole. Bank 1: CP/M 3's name for EXPAND 1 in `MOVE` and `XMOVE`. The diagnostics ROM's "banks" are the runtime's. |
@@ -39,14 +39,14 @@ Chapter 7 stay as they are.
 | --- | --- | --- | --- | --- |
 | SD card | the card | The card in the board's SD card adaptor | Chapter 1 | video card: the PICO9918. A "card" in `tecvol` and the page is a card or its image. |
 | starter card | | The image `npm run media` builds, and a card holding it | Chapter 1 | |
-| image | | A card image, in Chapters 1, 4 and F | Chapter 4 | ROM image (Chapter 12). A service's image, its bytes after the header (Chapter 10). |
+| image | | A card image, in Chapters 1, 4 and F | Chapter 4 | ROM image (Chapter 1). A service's bytes after the header are its image (Chapter 10). |
 | container | | The header and the volumes on a card | Chapter 4 | |
 | volume | | One CP/M disk in the container | Chapter 1 | CP/M's word *disk* stays where CP/M is the subject: disk parameters, disk reset, the BIOS's disk entries |
 | drive | | A letter, A to D, through which programs reach a volume | Chapter 1 | |
 | current drive | | The drive the prompt shows, used by a name with no drive | Chapter 1 | default drive: the same drive in the BDOS's terms, `DEFDRV`, what an FCB's 0 selects (Chapters 16, A). Bound drive: `CURDRV`, the drive the running function works on, which an FCB may change (Chapter 16). Function 25's name, "Return current disk", is CP/M's. |
 | drives field | | Byte 22 of a 1.1 header, the number of drives to set up | Chapter 4, in full E | |
 | block | | The card's 512 bytes | Chapter 4 | allocation block: 2 or 4 KiB of a volume (Chapter 4). Chapter 16 states that its *block* alone means an allocation block, and it writes *card block* for the other. Data block and directory block: card blocks holding those. The data block of the ROM (Chapter 12) and the BIOS's, CCP's and BDOS's blocks of RAM (Chapter 13) are regions of memory. |
-| record | | CP/M's 128 bytes | Chapter 3, in full 4 | a registry record (Chapter 5) |
+| record | | CP/M's 128 bytes | Chapter 3, in full 4 | a service's record (Chapter 5) |
 | sector | | CP/M's number for a record within a track | Chapters 16 and 18 | `Bad Sector`, a message |
 | extent | | 128 records of a file | Chapter 16 | |
 | directory mark | mark | The number of directory entries up to the last in use | Chapter 16 | low mark, `XMARK` (Chapter 13) |
@@ -55,16 +55,16 @@ Chapter 7 stay as they are.
 | DMA address | | The address the BDOS reads a record to or writes it from | Chapter 6 | default DMA buffer: `0080h–00FFh` |
 | FCB | | A file control block | Chapter 1 by name, in full 6 and 16 | `CR` in an FCB is its current record, and CR elsewhere is a carriage return |
 | drive table | | `DRVTAB` | Chapter 18 | |
-| vector slot | slot | The space cold boot gives a drive's allocation vector | Chapter 13 | |
-| BDOS error | | A `Bdos Err On` message | Chapter 3 | |
+| vector slot | slot | The space cold boot gives a drive's allocation vector | Chapter 14 | |
+| BDOS error | | A `Bdos Err On` message | Chapter 4 | |
 
 ## The block cache
 
 | Form | Short form | Meaning | Explained in | Correct and distinct |
 | --- | --- | --- | --- | --- |
 | block cache | the cache | 30 lines in EXPAND 1 | Chapter 1, in full 4 and 19 | |
-| cache line | line | The place for one card block | Chapter 7, in full 19 | a line of text, a command line, the serial line, a screen row |
-| dirty line | | A line holding changes the card lacks | Chapter 13, in full 19 | Part I and Appendix D say "changes" and "changed block", for a reader with no lines in view |
+| cache line | line | The place for one card block | Chapter 7, again in 19 | a line of text, a command line, the serial line, a screen row |
+| dirty line | | A line holding changes the card lacks | Chapter 14, in full 19 | Part I and Appendix D say "changes" and "changed block", for a reader with no lines in view |
 | flush | | Writing the dirty lines to the card | Chapter 4, in full 19 | |
 | written behind | | A volume whose writes wait in the cache; *written-behind* before a noun | Chapter 1, in full 4 | written through, *written-through* before a noun |
 
@@ -111,7 +111,7 @@ Chapter 7 stay as they are.
 | service | | What a `.SVC` file installs: code in pages below the BDOS, kept until a reset or `UNLOAD` | Chapter 5, in full 10 and 20 | hardware service, a call in the ROM. `SERVICES`, the built-in that lists loaded services. |
 | library | | A service that provides routines for programs | Chapter 5, again in 10 | |
 | driver | | A service that drives hardware | Chapter 5 | display driver, one that holds a display's console. The SD card driver and the hardware drivers of Chapter 15 are code in the ROM. |
-| registry record | record, where the registry is the subject | What a service publishes in the registry | Chapter 5, in full 10 | CP/M's record of 128 bytes |
+| record, of a service | | What a service publishes in the registry | Chapter 5, in full 10 | CP/M's record of 128 bytes |
 | hardware service | | A numbered call in the ROM, through `ABIHW` | Chapter 1 by name, in full 9, 20 and B | a service, which is loaded from the card |
 | ROM table | | The ROM's table at `C003h` | Chapter 1 by name, in full 9 | RAM BIOS table, the copy at `BF00h` |
 | mount entry | | The ROM table's jump `ABIVOL` at `C00Fh`, which goes to `VOLSVC` | Chapter 18 | `MOUNT`, the program and the ROM routine |
@@ -122,7 +122,7 @@ Chapter 7 stay as they are.
 | --- | --- | --- | --- | --- |
 | host model | the model | `host/machine.mjs` on the runtime, the software TEC-1G | Chapter 1, in full 26 | Debug80 TEC-1G runtime, short form *the runtime*: the npm package under it, and the name to use for what the runtime does (Chapters 15, 26, G). `Machine`, "the machine": the class in Chapter 26. |
 | serial board | | A board with only a serial terminal | Chapter 1 | `--board serial` |
-| web page's board | | A board with the PICO9918, the graphics LCD and the matrix keyboard | Chapter 1 | `--board pico` |
+| web page's board | | A board with the PICO9918, the graphics LCD and the matrix keyboard, with Display on the PICO9918 | Chapter 1 | `--board pico`. With Display on the graphics LCD the page's board is `--board glcd`. |
 | web page | the page | The browser build | Chapter 1 | |
 
 ## Forms changed to these
@@ -176,7 +176,7 @@ table* and its jump `ABIVOL` is the *mount entry*. *Service resident memory* is
 the pages services hold.
 
 `.DRV` names appear only where the text is about an old card or `TAS`'s output
-at its pin, as in Chapters 5, 10 and 22. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
+at its pin, as in Chapters 1, 5, 10, 22 and 26 and Appendix D. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
 disk drives. `VOLSVC` is the routine behind the mount entry. The SD card driver
 and the hardware drivers of Chapter 15 are code in the ROM, so *driver* there
 has its older sense. "Registry's records" and "service's records" are in use,

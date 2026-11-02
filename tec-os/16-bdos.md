@@ -8,8 +8,10 @@ nav_group: "Part II: Inside TEC-OS"
 # 16. The BDOS
 
 Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy on the card has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+845d062, whose copy in `dist/files` has the SHA-256
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+`TAS.COM` from Thorium 7604daa, with the SHA-256
+`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
 A CP/M program puts a function number in `C` and an argument in `E` or `DE`,
 then calls `0005h`, as Chapter 6 describes. This chapter describes the BDOS

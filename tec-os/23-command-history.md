@@ -8,8 +8,10 @@ nav_group: "Part II: Inside TEC-OS"
 # 23. Command history
 
 Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
-845d062, whose card copy has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+845d062, whose copy in `dist/files` has the SHA-256
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+`TAS.COM` from Thorium 7604daa, with the SHA-256
+`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
 At the CCP's prompt, `^W` brings back the line typed before, and `^N` the line
 after the one shown. Chapter 3 describes the keys from the prompt. This chapter
