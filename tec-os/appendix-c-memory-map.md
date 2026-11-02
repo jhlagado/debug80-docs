@@ -70,7 +70,7 @@ MAIN 0 and EXPAND 0 in view, TEC-OS uses them in this way:
 
 The latch is the system latch at port `FFh`, which TEC-OS writes from the copy
 it keeps at `0040h` (`src/layout.asm:13-23`). Its value while TEC-OS runs is
-`01h`: the copy of the ROM at `0000h` off, MAIN 0 and EXPAND 0 in view. It is
+`01h`: the boot overlay off, MAIN 0 and EXPAND 0 in view. It is
 `81h` while the matrix keyboard's Caps Lock is on, which sets bit 7
 (`src/console.asm:392-397`).
 
@@ -115,7 +115,7 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 | `0040h–004Fh` | TEC-OS's state, below |
 | `005Ch` | the default FCB |
 | `006Ch` | the second FCB, overlapping the first's last 20 bytes |
-| `0080h–00FFh` | the command tail and the default DMA record |
+| `0080h–00FFh` | the command tail and the default DMA buffer |
 
 Cold boot clears page zero, and `PZINIT` writes it at cold boot and at every
 warm boot, leaving the IOBYTE and the drive and user byte as they are
@@ -143,7 +143,7 @@ TEC-OS's own bytes are the sixteen that CP/M 2.2 leaves to the BIOS
 | `004Ch` | `ESCP2` | its second |
 | `004Dh` | `KBLAST` | the matrix key held at the last poll, `FFh` for none |
 | `004Eh` | `VATTR` | `80h` while reverse video is on |
-| `004Fh` | `VCURV` | 1 while the cursor cell is inverted |
+| `004Fh` | `VCURV` | 1 while the cursor cell is drawn as its reverse image |
 
 ## The resident workspace
 
@@ -159,7 +159,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 | `BCEBh–BE76h` | 396 | the CCP's state and stack |
 | `BE77h–BEFFh` | 137 | the BDOS's state and stack |
 | `BF00h–BF32h` | 51 | the RAM BIOS table, 17 jumps |
-| `BF33h–BFE5h` | 179 | the SD card's, cache's, keyboard's, video drivers', loaders', startup's and chained line's state |
+| `BF33h–BFE5h` | 179 | the SD card's, cache's, keyboard's, display drivers', loaders', startup's and chained line's state |
 | `BFE6h–BFFFh` | 26 | unused |
 
 The part from `WSBASE`, `B958h`, to `BEFFh` has the same addresses on every
@@ -191,7 +191,7 @@ the BDOS's block and leaves the rest (`src/boot.asm:270-289`).
 | `BC52h–BC53h` | 2 | `STUBAD` | the BDOS entry jump's address |
 | `BC54h–BC61h` | 14 | `MNTCNT` to `MNTCB` | the mount service's scratch |
 | `BC62h–BCB1h` | 80 | `LINEBUF` | one display row, for scrolling |
-| `BCB2h–BCBFh` | 14 | `VPUTV` to `VFNV` | the seven vectors into the video driver |
+| `BCB2h–BCBFh` | 14 | `VPUTV` to `VFNV` | the seven vectors into the display driver |
 | `BCC0h–BCC4h` | 5 | `VSTOP` to `CONMOD` | the scroll region, the console field acted on, the PICO9918's claim and the console mode |
 | `BCC5h–BCEAh` | 38 | `BSTKB` | the BIOS stack, up to `BSTK` |
 
@@ -241,7 +241,7 @@ clears the rest:
 | `BF33h–BF3Dh` | 11 | `SDBYTE` to `SDXB` | the SD card driver's state |
 | `BF3Eh–BF43h` | 6 | `CNEXT` to `CIFF` | the block cache's state |
 | `BF44h–BF4Ah` | 7 | `KBMASK` to `KBT2` | the matrix keyboard's scan |
-| `BF4Bh–BF4Eh` | 4 | `PIVEC`, `GLVEC` | the video drivers' tables |
+| `BF4Bh–BF4Eh` | 4 | `PIVEC`, `GLVEC` | the display drivers' tables |
 | `BF4Fh` | 1 | `HHEAD` | the history's head |
 | `BF50h–BF54h` | 5 | `XMDST` to `XMARK` | `XMOVE`'s banks and EXPAND 1's low mark |
 | `BF55h–BF56h` | 2 | `PZTOP` | the word warm boot puts at `0006h` |

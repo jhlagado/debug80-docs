@@ -36,7 +36,7 @@ table may gain entries at its end, `C018h`.
 | `C00Ah` | 3 | `ABIHW` | `JP` to the hardware services |
 | `C00Dh` | 2 | `ABIMAIN` | The address of the count of MAIN regions fitted, 1 or 2, `0041h` |
 | `C00Fh` | 3 | `ABIVOL` | `JP` to mount, unmount and describe |
-| `C012h` | 3 | `ABIGLCD` | `JP` to take a video driver's table |
+| `C012h` | 3 | `ABIGLCD` | `JP` to take a display driver's table |
 | `C015h` | 3 | `ABISVC` | `JP` to the registry of services |
 
 The rows are `src/abi.asm:7-19`, and the two addresses are `src/layout.asm:38`
@@ -159,7 +159,7 @@ unconfirmed.
 `HL`, row 0 first, 1 for each key down (`src/hwsvc.asm:205-212`). Each read is
 of port `FEh` with one bit low in the high byte of the address, `FEh` for row
 0 to `7Fh` for row 7. Status is always 0. 588 T-states. `HWBMTX` reports
-whether there is a keyboard.
+whether there is a matrix keyboard.
 
 **26 PUTAT.** On a video console, writes `B` characters from `HL` at row `D`,
 column `E`, both from 0, through the driver's cell routine
@@ -208,9 +208,9 @@ the drive by BDOS function 37 (`src/vol.asm:621`, `src/vol.asm:658`,
 A mount or an unmount therefore can't be called from inside a BDOS call,
 unlike the hardware services. The call changes `BC`, `DE` and `HL`, and on the
 model a mount or a describe also changed `IX`. The most stack measured was 22
-bytes, for a mount or an unmount with a changed cache line to write.
+bytes, for a mount or an unmount with a dirty cache line to write.
 
-## ABIGLCD, a video driver's table
+## ABIGLCD, a display driver's table
 
 A display driver calls this from its `INIT` with `A` = 1 for `CRT:` or 3 for
 `UC1:` and `HL` pointing at its table (`src/glcd.asm:5-11`). The table is

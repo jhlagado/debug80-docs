@@ -44,15 +44,13 @@ return (`src/cpm/bdos.asm:2404-2441`). The errors are:
 - `Bdos Err On d: File R/O`, for function 19 on a file whose read-only
   attribute is set (`src/cpm/bdos.asm:697-705`).
 - `Bdos Err On d: Bad Sector`, for a record or a directory record that can't
-  be written, a record of a file that can't be read or a block number past the
-  end of the volume (`src/cpm/bdos.asm:2319-2329`,
+  be written, a record of a file that can't be read or an allocation block number
+  past the end of the volume (`src/cpm/bdos.asm:2319-2329`,
   `src/cpm/bdos.asm:2426-2429`). A failed write includes every write to a
   volume the card marks read-only.
 
 A directory record that can't be read ends the program by warm boot with no
-message (`src/cpm/bdos.asm:1858-1859`, `src/cpm/bdos.asm:2423-2424`). In CP/M
-2.2 a key other than `^C` after `Bad Sector` passes over the error and the
-program goes on.
+message (`src/cpm/bdos.asm:1858-1859`, `src/cpm/bdos.asm:2423-2424`).
 
 The file functions return a directory code in `A` where CP/M 2.2 does: 0 to 3,
 the place in the 128-byte directory record of the entry found, or `FFh` for
@@ -152,16 +150,16 @@ returns every directory entry of the default drive, in use or not.
 found (`src/cpm/bdos.asm:678-681`). `DE` is not used.
 
 **19 Delete file.** Erases every entry that matches the FCB, `?` allowed, and
-frees its blocks (`src/cpm/bdos.asm:683-722`). Returns 0, or `FFh` if no file
-matched. A matching file with its read-only attribute set is the `File R/O`
-error. The entries erased before it stay erased.
+frees its allocation blocks (`src/cpm/bdos.asm:683-722`). Returns 0, or `FFh`
+if no file matched. A matching file with its read-only attribute set is the
+`File R/O` error. The entries erased before it stay erased.
 
 **20 Read sequential.** Reads the record at the FCB's `CR` into the DMA
 address and moves on, to the next extent after record 127
 (`src/cpm/bdos.asm:941-987`). Returns 0, or 1 at the end of the file.
 
 **21 Write sequential.** Writes the record at the DMA address at the FCB's
-`CR` and moves on, taking a new block and a new extent when it needs them
+`CR` and moves on, taking a new allocation block and a new extent when it needs them
 (`src/cpm/bdos.asm:807-939`). Returns 0, 1 if the directory has no entry for a
 new extent, or 2 if the drive is full. The 1 comes from the call after the
 write of record 127, which returns 0. Each later call moves the FCB's `EX` on
@@ -248,8 +246,8 @@ selection.
 **38 Access drive** and **39 Free drive.** MP/M's functions, which CP/M 2.2
 does not define. Both return 0 and do nothing (`src/data3.asm:83`).
 
-**40 Write random with zero fill.** Function 34, with each block the write
-newly allocates filled with zeros before the record is written
+**40 Write random with zero fill.** Function 34, with each allocation block the
+write newly allocates filled with zeros before the record is written
 (`src/cpm/bdos.asm:997-1007`, `src/cpm/bdos.asm:1258-1307`).
 
 **47 Chain to program.** Replaces what is left of the CCP's command line with
