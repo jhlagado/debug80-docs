@@ -12,10 +12,10 @@ Checked against TEC-OS bd15528.
 Chapter 1's first boot ran two commands that nobody typed. On the web page's
 board the first of them moved the console to the PICO9918. This chapter
 explains what those commands install and the file they come from. It gives the
-startup file's rules and the times it runs, the lines that set a display and
-its width, and the way to skip the file. It then describes the words TEC-OS
-shows on the 20 × 4 LCD and the commands that install, list and remove what
-the file installs.
+startup file's rules and the times it runs. Then come the lines that set a
+display and its width and the way to skip the file. The chapter then describes
+the words TEC-OS shows on the 20 × 4 LCD and the commands that install, list
+and remove what the file installs.
 
 ## Services
 
@@ -184,20 +184,19 @@ still runs. A `^C` at a program's line input drops the rest of a line that holds
 TEC-OS restarts by one of three paths:
 
 - An *ordinary exit* is a program's return, a `^C` or a jump to `0000h`. It is
-  a warm boot: services stay, the drives hold the volumes they held, and the
-  startup file doesn't run.
-- A *recognised reset* is a press of the reset button, or a program's call of
-  the BIOS's cold boot entry, that finds a running TEC-OS's marks in RAM. The
-  drives keep the volumes that were on them, if the card still has those
-  volumes, and everything else TEC-OS holds in memory is rebuilt.
-- An *unrecognised reset* is a reset that finds no such marks, as at power-on.
-  The drives take the volumes the card's header names, and everything else is
-  rebuilt.
+  a warm boot: services stay, the drives hold the volumes they held and the
+  startup file doesn't run. - A *recognised reset* is a press of the reset
+  button, or a program's call of the BIOS's cold boot entry, that finds a
+  running TEC-OS's marks in RAM. The drives keep the volumes that were on
+  them, if the card still has those volumes, and everything else TEC-OS holds
+  in memory is rebuilt. - An *unrecognised reset* is a reset that finds no
+  such marks, as at power-on. The drives take the volumes the card's header
+  names, and everything else is rebuilt.
 
-Each reset is a cold boot. It removes every service, returns to drive A and
-user area 0, and puts the console on the serial terminal. The startup file then
-runs once, on either kind of reset, and its display line puts the console back
-on the display.
+Each reset is a cold boot. It removes every service and returns to drive A and
+user area 0. It also puts the console on the serial terminal. The startup file
+then runs once, on either kind of reset, and its display line puts the console
+back on the display.
 
 The file is the one on the drive A of that moment, in user area 0. After a
 recognised reset drive A may hold another volume. That volume's `STARTUP.CMD`
