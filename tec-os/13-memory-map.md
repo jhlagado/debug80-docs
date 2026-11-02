@@ -306,8 +306,8 @@ jump.
 
 CP/M 3's `XMOVE` and `MOVE` copy between banks, and TEC-OS gives them to
 programs through BDOS function 50 (`src/cpm/bdos.asm:135-137`). They treat
-bank 1 as EXPAND 1 from `8000h` up to a low mark, `XMARK`. Cold boot sets the mark to `80h`, the start of the
-window, so that bank 1 has no bytes a program may copy to or from
+bank 1 as EXPAND 1 from `8000h` up to a low mark, `XMARK`. Cold boot sets the
+mark to `80h`, the start of the window, so that bank 1 has no bytes a program may copy to or from
 (`src/xmove.asm:1-7`, `src/boot.asm:163-165`, `src/layout.asm:23`). `MVRANGE`
 rejects every range in bank 1 that does not lie between `8000h` and the mark,
 and in bank 0 every range that does not end by the word at `0006h`
