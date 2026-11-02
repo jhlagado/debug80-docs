@@ -123,11 +123,11 @@ CON: TTY: serial terminal
 A>
 ```
 
-If `GLCD.DRV`, the graphics LCD's driver, isn't installed, `CON UC1` first
-loads it from drive A. On a board with both displays `CON UC1` is how the
-console reaches the graphics LCD, because the startup file's `GLCD.DRV` line
-installs nothing while the PICO9918 is the console. The web page's board is
-one, and its graphics LCD shows this after `CON UC1`:
+If `GLCD.DRV`, the graphics LCD's driver, isn't installed, `CON UC1` first loads
+it from drive A. On a board with both displays and the starter card's startup
+file, `CON UC1` is how the console reaches the graphics LCD, because that file's
+`GLCD.DRV` line installs nothing while the PICO9918 is the console. The web
+page's board is one, and its graphics LCD shows this after `CON UC1`:
 
 <!-- node book/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
@@ -181,8 +181,8 @@ TEC-OS passes every byte to the serial terminal unchanged, and the terminal
 program interprets control characters and escape sequences itself. A program
 that moves the cursor or clears the screen therefore needs a terminal program
 that follows the ANSI conventions, as most do. The serial terminal has no size
-that TEC-OS can read, so the CCP counts lines and columns for 80 columns and
-24 rows, which is what most programs written for CP/M use.
+that TEC-OS can read, so the CCP takes it to be 80 columns by 24 rows, which is
+what most programs written for CP/M use.
 
 The board has no hardware to hold an incoming byte and TEC-OS takes no
 interrupt from the serial line, so TEC-OS catches a byte only while it polls
@@ -276,17 +276,17 @@ which gives the keys that edit a line before Return ends it:
 | `^W`, `^N` | Bring back an earlier command line, at the prompt only |
 
 Return or `^J` ends the line. So does a full line: the CCP's line holds 127
-characters. A `^C` anywhere but at the start of the line is ignored. Chapter 3
-describes the history of command lines behind `^W` and `^N`, and in a line
-read by a program they are characters like any other.
+characters. A `^C` anywhere but at the start of the line is ignored. In a line
+read by a program, `^W` and `^N` are characters like any other. Chapter 3
+describes the history of command lines behind them.
 
 Two keys act while the BDOS prints. `^S` stops the output, and the next key
 starts it again. That key is used up and does nothing else, so a `^C` then
-doesn't end the program as it does in CP/M 2.2. `^P` turns the copy to the
-list device on or off, as it does in a line, but since TEC-OS's list device
-discards what it is sent, `^P` has no effect that you can see. The first other
-key typed during output is kept for the program's next console read, and while
-it waits there TEC-OS reads no further key.
+doesn't end the program as it does in CP/M 2.2. `^P` turns the copy to the list
+device on or off, as it does in a line, but since TEC-OS's list device discards
+what it is sent, `^P` has no effect that you can see. The first other key typed
+during output is kept for the program's next console read, and until the program
+reads it TEC-OS reads no further key.
 
 ## Pauses in long listings
 
