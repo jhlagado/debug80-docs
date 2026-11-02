@@ -238,9 +238,10 @@ A>
 ```
 
 Every recognised reset puts the selection back. A board whose selected drive A
-has no display driver therefore stays without one until the board loses power
-or you mount the other volume back. That needs `MOUNT.COM` on a drive that is
-mounted. On this card only a loss of power puts `SYSTEM` back on drive A.
+has no display driver therefore stays without one until the board loses power or
+you mount the other volume back. That needs `MOUNT.COM` on a drive that is
+mounted. On this card it is only on `SYSTEM`, so only a loss of power puts
+`SYSTEM` back on drive A.
 
 ## Display lines
 
@@ -266,8 +267,9 @@ starter card's two lines give these results on the three boards of
 
 Until a display's line runs, the banner and the volumes go to the serial
 terminal and the 20 × 4 LCD. On a board with both displays, a file with
-`GLCD.SVC` first installs both drivers, so the PICO9918 takes the console and
-programs have 1,536 bytes less:
+`GLCD.SVC` first installs both drivers. `PICO.SVC` takes the console whenever it
+installs, so the PICO9918 has it. Programs have 1,536 bytes less than with the
+starter card's file, which installs one driver:
 
 ```sh
 printf 'GLCD.SVC\nPICO.SVC\n' > startup.cmd
@@ -333,13 +335,13 @@ reset on the model, and with a key down it doesn't read the file.
 `test/startup.test.mjs` runs the case: with a key held, a card whose service
 hangs while installing reaches a prompt.
 
-After a skip there are no services. The board has the 20 × 4 LCD and the
-serial terminal and nothing else, because the matrix keyboard is read only
-once a display's driver is in. So on the board recovery needs the serial
-terminal: `ERA STARTUP.CMD` or a corrected file, and then a reset. Otherwise
-take the card to a PC and use `tecvol`. A recognised reset with a skip keeps
-the drives' volumes as one without a skip does. The web page has no keypad, so
-a bad file there is replaced with "Copy file to drive" or "New starter card".
+After a skip there are no services. The board has the 20 × 4 LCD and the serial
+terminal and nothing else, because the matrix keyboard is read only once a
+display's driver is in. So on the board, recovery needs the serial terminal:
+`ERA STARTUP.CMD` or a corrected file, and then a reset. Otherwise take the card
+to a PC and use `tecvol`. A recognised reset with a skip keeps the drives'
+volumes as one without a skip does. The web page has no keypad, so a bad file
+there is replaced with "Copy file to drive" or "New starter card".
 
 ## Words on the LCD
 
@@ -412,13 +414,13 @@ clears it.
 
 ## Installing, listing and removing services
 
-A command that names a file of type `.SVC` installs the service in it. The
-file comes from the current drive or from a drive named in the command, such
-as `B:NAME.SVC`. The command must include the type: at `NAME` alone the CCP
-searches for `NAME.COM` and then `NAME.PRL`. `NAME.DRV` is an ordinary file
+A command that names a file of type `.SVC` installs the service in it. The file
+comes from the current drive or from a drive named in the command, such as
+`B:NAME.SVC`. The command must include the type, because `NAME` alone makes the
+CCP search for `NAME.COM` and then `NAME.PRL`. `NAME.DRV` is an ordinary file
 name to the CCP, which searches for a program. `SERVICES` lists what is
-installed and `UNLOAD` removes it. On a card with no startup file, on the
-serial board, nothing is installed and neither display driver can be:
+installed and `UNLOAD` removes it. On a card with no startup file, on the serial
+board, nothing is installed and neither display driver can be:
 
 <!-- node tools/capture.mjs --card nostart.img SERVICES UNLOAD PICO PICO.DRV PICO.SVC -->
 ```text
