@@ -2530,6 +2530,10 @@ export const sidebars = {
           "link": "/tec-os/appendix-c-memory-map.html"
         },
         {
+          "text": "D. Error messages",
+          "link": "/tec-os/appendix-d-error-messages.html"
+        },
+        {
           "text": "E. The container format",
           "link": "/tec-os/appendix-e-container-format.html"
         },
