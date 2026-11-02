@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 16. The BDOS
 
-Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
@@ -23,7 +23,7 @@ then covers the BDOS errors, the three functions whose meanings come from CP/M
 TEC-OS's BDOS comes from Portable CP/M, an implementation of the documented
 CP/M 2.2 interface that uses no Digital Research source
 (`src/cpm/PROVENANCE.md:3-7`). Its code is in `src/cpm/bdos.asm`. In the
-debug80 build (Chapter 12) it runs from `E0CAh`, `BDOSBAS`, to `EFE0h`, 3,863
+debug80 build (Chapter 12) it runs from `E0E0h`, `BDOSBAS`, to `F014h`, 3,893
 bytes of the ROM. Its table of functions and its error messages are in the
 ROM's data block (`src/data3.asm:73-90`). None of it can be patched.
 
@@ -54,7 +54,7 @@ while no key is waiting (`src/console.asm:104-108`).
 ## The entry
 
 The jump at `0005h` leads to a jump at an address of the form `xx06h` below
-the allocation vectors, or to a driver's jump that leads on to it, as Chapter
+the allocation vectors, or to a service's jump that leads on to it, as Chapter
 13 describes (`src/vol.asm:571-576`, `src/boot.asm:218-230`). That jump goes
 to `BENTRY` (`src/cpm/bdos.asm:79-117`).
 
@@ -161,11 +161,11 @@ At the prompt, a `^U` partway through `TYPE X` starts the line again, and a
 A>TYPE X#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 986K free
+1 file, 976K free
 A>DIR *.CMD#
 DIR *.CMD
 STARTUP.CMD 
-1 file, 986K free
+1 file, 976K free
 A>
 ```
 
@@ -177,7 +177,7 @@ typed:
 ```text
 A>TYPEEPYTDIR *.CMD
 STARTUP.CMD 
-1 file, 986K free
+1 file, 976K free
 A>
 ```
 
@@ -322,15 +322,15 @@ has no block for it, `ALLOCBLK` takes the first free block of the drive, and the
 record then goes to the BIOS with write type 2, which marks the block as new
 (`src/cpm/bdos.asm:880-891`). The BIOS's other write types are 0, an ordinary
 data write, and 1, a write of the directory, which every directory write uses
-(`src/cpm/bdos.asm:1907-1913`). After record 127 the write closes the extent
-and makes or opens the next (`src/cpm/bdos.asm:900-933`).
+(`src/cpm/bdos.asm:1907-1913`). The write after record 127 finds `CR` at 128,
+and it first closes the extent and makes or opens the next
+(`src/cpm/bdos.asm:866-875`, `src/cpm/bdos.asm:907-933`).
 
 The write returns 2 when the drive has no free block. It returns 1 when the
 file needs a new directory entry for its next extent and the directory has
-none. The 1 comes from the next call, not from the write of record 127, which
-returns 0. Each later call moves the FCB's `EX` on by one, so a write that
-succeeds after an entry is freed makes a later extent and leaves a gap
-(`src/cpm/bdos.asm:900-933`, `src/cpm/bdos.asm:1408-1426`).
+none. The FCB then goes back to its extent with `CR` still at 128, so a write
+after an entry is freed makes the extent it needs
+(`src/cpm/bdos.asm:907-943`).
 
 Functions 33 and 34 read and write a record by number, from `R0` and `R1`
 (`src/cpm/bdos.asm:1012-1045`). `RANDPREP` splits the number into the record
@@ -437,8 +437,8 @@ binds the drive's pointers and reads nothing, and tests the drive's DPH:
   `LOGINV`, to be scanned in full at its next selection.
 
 After the loop `WRESET` joins the ordinary reset at `RSTAIL`, which clears the
-read-only vector, sets drive A and user 0, sets the DMA address to `0080h` and
-logs in drive A (`src/cpm/bdos.asm:491-502`). The CCP then sets the user
+read-only vector, sets drive A, sets the DMA address to `0080h` and logs in
+drive A (`src/cpm/bdos.asm:491-502`). The CCP then sets the user
 number again from page zero. At the end of each full or partial scan,
 `LOGDONE` saves the mark, stores the new sum and clears the changed flag and
 the drive's bit in `WARMV` (`src/cpm/bdos.asm:2072-2087`).
@@ -451,7 +451,7 @@ A program's own call of function 13 finds `WRFLAG` clear, and empties `LOGINV`
 and `WARMV`. Every drive is then scanned in full at its next selection, as in
 CP/M 2.2 (`src/cpm/bdos.asm:487-490`). Function 37 takes the drives named by
 the bits of `DE` out of `LOGINV`, the read-only vector and `WARMV`
-(`src/cpm/bdos.asm:1627-1641`). The mount service calls it for a drive whose
+(`src/cpm/bdos.asm:1627-1641`). The mount entry calls it for a drive whose
 volume it has changed (`src/vol.asm:662-673`).
 
 ## BDOS errors
@@ -464,8 +464,9 @@ drive letter (`src/data3.asm:86-90`):
   (`src/cpm/bdos.asm:2431-2437`).
 - `R/O`, for a change to a drive that function 28 has made read-only
   (`src/cpm/bdos.asm:2417-2429`).
-- `File R/O`, for function 19 on a file with the read-only attribute
-  (`src/cpm/bdos.asm:710-712`).
+- `File R/O`, for function 19 or 23 on a directory entry with the read-only
+  attribute, and for function 21, 34 or 40 through an FCB that has it
+  (`src/cpm/bdos.asm:683-694`).
 - `Bad Sector`, for a BIOS `READ` or `WRITE` of a file's record that fails, a
   failed directory write and a block number past the end of the volume
   (`src/cpm/bdos.asm:2453-2456`).
@@ -541,19 +542,9 @@ Research shipped are these:
   other function above 40 returns 0.
 - A key after `^S` resumes the output and is discarded, `^C` included. In
   Digital Research's BDOS a `^C` there ends the program.
-- Function 13 sets the user number to 0 (`src/cpm/bdos.asm:491-492`). Digital
-  Research's leaves it as it is.
 - The CCP's disk reset at warm boot keeps each drive whose vector is
   unchanged, and rebuilds a changed one from its directory up to the mark. A
   program's function 13 resets every drive, as in CP/M 2.2.
-- The read-only attribute is tested only by function 19. Digital Research's
-  BDOS also reports `File R/O` for a write (functions 21, 34 and 40) and a
-  rename (23) of such a file.
-- Function 32 stores the user number as it is given, with no mask
-  (`src/cpm/bdos.asm:1488-1494`). With `E5h` the file functions match erased
-  entries, whose user byte is `E5h`. A number of 16 or more is cut to its low
-  four bits in `0004h` at the next prompt. Digital Research's keeps the low
-  five bits.
 - Function 22 always makes extent 0, with `EX` and `S2` cleared
   (`src/cpm/bdos.asm:761-769`). Digital Research's keeps the FCB's `EX` and
   `S2`.
