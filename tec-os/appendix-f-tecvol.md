@@ -11,14 +11,14 @@ Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit
 845d062, whose card copy has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
-`tecvol` is the repository's tool for TEC-OS cards on a PC. It makes a card
-image, lists and checks one, copies files to and from its volumes, builds a
-card from a recipe and writes an image to a card. It runs with Node.js from a
-clone of the repository, as `node tools/tecvol.mjs`, and `package.json` also
-names it as the command `tecvol` (`package.json:11-13`). This appendix lists
-its nine commands with their options, each with an example, and ends with the
-card those examples make. Appendix E describes the container the commands work
-on.
+This appendix lists the nine commands of `tecvol`, the repository's tool for
+TEC-OS cards on a PC, with their options and an example of each, and ends with
+the card those examples make. `tecvol` makes a card image, lists and checks
+one, copies files to and from its volumes, builds a card from a recipe and
+writes an image to a card. It runs with Node.js from a clone of the
+repository, as `node tools/tecvol.mjs`, and `package.json` also names it as
+the command `tecvol` (`package.json:11-13`). Appendix E describes the
+container the commands work on.
 
 ## Common rules
 
@@ -40,22 +40,23 @@ tecvol install IMAGE DEVICE --yes
 The options may come anywhere after the command, and an unknown option is an
 error (`tools/tecvol.mjs:33-50`). Every command but `create` and `recipe`
 opens an existing image and checks it as a container first, with the checks
-Appendix E lists; an image that fails is not used (`tools/tecvol.mjs:60-63`).
+Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:60-63`).
 A command that changes an image writes the result to a temporary file beside
-it, checks that file as a container, and only then renames it over the image,
+it, checks that file as a container and only then renames it over the image,
 so a failure leaves the image as it was (`tools/tecvol.mjs:17-19`,
 `tools/tecvol.mjs:52-58`).
 
 `DRIVE` names a volume by its drive letter, with or without a colon, by its
 label or by its id, tried in that order (`tools/lib/container.mjs:198-206`). A
 volume on no drive is reached by its label or id. `--user N` selects user area
-`N`, 0 to 15; without it `put`, `get` and `era` use user area 0, and `dir`
+`N`, 0 to 15. Without it `put`, `get` and `era` use user area 0, and `dir`
 lists every user area (`tools/tecvol.mjs:94`, `tools/tecvol.mjs:123`).
 
-A mistake in the command line prints the reason, then a line of usage, and
-ends with exit status 2. Any other failure, such as a bad container, a full
-volume or a missing file, prints `tecvol: ` and the reason, and ends with exit
-status 1 (`tools/tecvol.mjs:27-31`, `tools/tecvol.mjs:179-184`).
+For a mistake in the command line, `tecvol` prints the reason and a line of
+usage and ends with exit status 2. For any other failure, such as a bad
+container, a full volume or a missing file, it prints `tecvol: ` and the
+reason and ends with exit status 1 (`tools/tecvol.mjs:27-31`,
+`tools/tecvol.mjs:179-184`).
 
 `tecvol` and TEC-OS must never change the same card at the same time
 (`tools/tecvol.mjs:18-19`). TEC-OS holds each drive's map of free space in
@@ -70,14 +71,14 @@ or the card out, and press reset after putting it back.
 `--volume` adds one volume, in the order given, from a spec of the form
 `GEOMETRY:LABEL:DRIVE[:ro][:wb]` (`tools/tecvol.mjs:72-76`):
 
-- `GEOMETRY` is `G1M` or `G8M`;
-- `LABEL` is up to 11 characters, put in capitals, and labels must differ;
-- `DRIVE` is `A` to `D`, or empty for a volume on no drive;
+- `GEOMETRY` is `G1M` or `G8M`.
+- `LABEL` is up to 11 characters, put in capitals, and labels must differ.
+- `DRIVE` is `A` to `D`, or empty for a volume on no drive.
 - `:ro` makes the volume read-only, and `:wb` makes it written behind, for at
   most one volume and never with `:ro`.
 
 `--align N` places each volume at a multiple of `N` blocks, which must be a
-multiple of 8; it is 2,048, 1 MiB, by default (`tools/lib/container.mjs:12`,
+multiple of 8. The default is 2,048, 1 MiB (`tools/lib/container.mjs:12`,
 `tools/lib/container.mjs:87-97`). `--drives N`, 1 to 4, records in the header
 the number of drives TEC-OS is to set up at cold boot. With `--drives`, or
 with more than 8 volumes, the card is format 1.1, and otherwise 1.0
@@ -115,13 +116,13 @@ container: format 1.0, 22528 blocks (11534336 bytes), 3 volume(s)
 ```
 
 `WORK` ends at block 20,480, a multiple of 2,048, so the third volume starts
-there. A G1M volume's free bytes are its 512 blocks less the directory's four,
-at 2 KiB each.
+there. A G1M volume's free bytes are its 512 allocation blocks less the
+directory's four, at 2 KiB each.
 
-`verify IMAGE` prints the same lines, and ends with exit status 1 if any
-volume has a fault. A container that fails its own checks fails both commands
-before they print anything. A copy of the starter card with one header byte
-changed gives:
+`verify IMAGE` prints the same lines and ends with exit status 1 if any volume
+has a fault. A container that fails its own checks fails both commands before
+they print anything. A copy of the starter card with one header byte changed
+gives:
 
 ```sh
 cp dist/starter.img build/badsum.img
@@ -160,7 +161,7 @@ node tools/tecvol.mjs dir dist/starter.img A
  0 VOLS.COM          384
 ```
 
-`TERM.COM` is 95 bytes on the PC, and one record on the card.
+`TERM.COM` is 95 bytes on the PC and one record on the card.
 
 ## put
 
@@ -174,7 +175,7 @@ image is left as it was (`tools/lib/cpmfs.mjs:157-190`).
 
 The file is stored in whole records of 128 bytes. A binary file's last record
 is padded with zeros. With `--text`, each line end becomes CR LF, a `^Z` is
-added at the end, and the last record is padded with `^Z`, as CP/M text files
+added at the end and the last record is padded with `^Z`, as CP/M text files
 are kept (`tools/lib/cpmfs.mjs:161-173`). `--ro` sets the file's read-only
 attribute and `--sys` its system attribute. `--user N` puts it in user area
 `N`.
@@ -229,20 +230,20 @@ tecvol: TERM.COM not found
 usage: tecvol create|info|verify|dir|put|get|era|recipe|install ... (see tools/tecvol.mjs)
 ```
 
-The first command searched user area 0, which has no `TERM.COM`; the second
+The first command searched user area 0, which has no `TERM.COM`. The second
 erased the file from user area 3 and printed nothing.
 
 ## recipe
 
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
-the volumes and the files to put on them (`tools/tecvol.mjs:155-161`). `npm
-run media` writes the starter card's recipe as `dist/starter.recipe.json` and
-builds `dist/starter.img` from it (`tools/media.mjs:218-237`). A recipe has
-the schema `tecos-file-recipe-v1`, a list of `volumes` in `create`'s terms (a
-geometry, a label, a drive, and `readOnly` or `writeBehind`), and a list of
-`components`, each with `files`. Each file has a name, a `url`, a drive, a
-size in `bytes`, a `sha256` and optionally a user area
-(`tools/lib/recipe.mjs:13-26`).
+the volumes and the files to put on them (`tools/tecvol.mjs:155-161`).
+`npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
+and builds `dist/starter.img` from it (`tools/media.mjs:218-237`). A recipe
+has the schema `tecos-file-recipe-v1`, a list of `volumes` and a list of
+`components`, each with `files`. Each volume is in `create`'s terms: a
+geometry, a label, a drive and `readOnly` or `writeBehind`. Each file has a
+name, a `url`, a drive, a size in `bytes`, a `sha256` and optionally a user
+area (`tools/lib/recipe.mjs:13-26`).
 
 `tecvol` reads a file's `url` as a web address if it starts `http://` or
 `https://`, and otherwise as a path from the recipe's own folder
@@ -269,14 +270,14 @@ PC.
 
 `install IMAGE DEVICE --yes` writes the image to a device, from its first
 block (`tools/tecvol.mjs:162-173`). It checks the image as a container and
-writes it whole, over whatever the device held; without `--yes` it stops with
-a usage error:
+writes it whole, over whatever the device held. Without `--yes` it stops with
+a usage error.
 
 ```sh
 node tools/tecvol.mjs install dist/starter.img /dev/rdiskN --yes
 ```
 
-`/dev/rdiskN` stands for the card's raw device on a Mac; on Linux it is a
+`/dev/rdiskN` stands for the card's raw device on a Mac. On Linux it is a
 device such as `/dev/sdX`. Opening a device usually needs the PC's
 administrator rights. `install` checks nothing about the device, so the device
 name needs checking twice before the command runs: given the PC's own disk, it
