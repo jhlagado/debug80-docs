@@ -67,18 +67,19 @@ on a measured figure. A candidate meets them in this order:
 - the visible cases, the held-out cases and the adversarial cases
 - the registers and memory it changes, and its trap site
 - its size, stack and cycles
+- a differential prober, which compares it with the incumbent
 - the full system suite with the candidate in place
 
-The cheapest checks run first, and the first failure ends the scoring.
+The cheapest checks run first, and the first failure now ends the scoring.
 
 A candidate that passes every gate can replace the incumbent, and that
-replacement is called a landing. A landing needs more than a pass. A
-differential prober runs the candidate and the incumbent side by side on all
-three sets of cases and on random inputs. Each input that gives different
-results goes to triage. It falls under an existing don't-care line or one
-that triage adds. Otherwise it becomes a new case and a tighter contract.
-The candidate must also be smaller or faster than the incumbent, and the
-decision to land it is recorded with the evidence that allowed it.
+replacement is called a landing. The prober runs the candidate and the
+incumbent side by side on all three sets of cases and on random inputs. Each
+input that gives different results goes to triage. It falls under an existing
+don't-care line or one that triage adds. Otherwise it becomes a new case and a
+tighter contract. A landing needs more than a pass. The candidate must also be
+smaller or faster than the incumbent, and the decision to land it is recorded
+with the evidence that allowed it.
 
 ## The deletion radius
 
@@ -87,12 +88,12 @@ set of holes attempted, the deletion radius is the share that has at least
 one candidate passing every gate. A hole inside the radius can be deleted
 and regenerated. A hole outside it cannot be, yet.
 
-The first round measured on Origo's first study produced a radius of 14 of
-14 (P1: CDR-3). The holes were fourteen floating-point routines in the
-runtime of a CP/M language. Each received five candidates, written in fresh
-contexts by two generators from the bundle alone. The generators worked
-without an assembler or the runtime's source. Of the 70 candidates, 57
-passed every gate at the first attempt. Ten of the 13 failures never
+The first round measured on Origo's first study produced a radius of 14 of 14
+(P1: CDR-3). The holes were fourteen floating-point routines in the runtime of a
+CP/M language. Each received five candidates, written in fresh contexts by two
+generators from the bundle alone. The generators worked without an assembler or
+the runtime's source. Of the 70 candidates, 57 passed every gate then in force,
+the prober not among them, at the first attempt. Ten of the 13 failures never
 assembled. Seven used a relative jump beyond its range, and three used an
 instruction form the Z80 does not have. The other three failures were about
 meaning.
