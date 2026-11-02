@@ -21,9 +21,9 @@ This chapter takes the layers from the bottom up, and ends with the mount
 service, through which `MOUNT` and `VOLS` change and list the drives. Chapter
 19 describes the block cache, which every read passes through.
 
-## The SPI driver
+## The SD card driver
 
-The card is on the TEC-1G's SD adaptor at port `FDh` (`src/layout.asm:12`).
+The card is on the TEC-1G's SD card adaptor at port `FDh` (`src/layout.asm:12`).
 Three output bits drive the card's lines: bit 0 its data in (MOSI), bit 1 its
 clock and bit 2 its chip select, active low. Bit 7 of the input is the card's
 data out, MISO (`src/sd.asm:1-6`). Data changes while the clock is low and the
@@ -101,15 +101,15 @@ while it is (`src/sd.asm:258-262`, `src/sd.asm:356-359`, `src/sd.asm:364-368`,
 The card holds one container, and its block 0 is the header. The header has
 the name `TECOSVOL`, the format's version and the sizes of the header and of a
 volume descriptor. It also has the number of volumes, the container's length
-in blocks and a checksum. In format 1.1 it adds a drive count and a sum over
+in blocks and a checksum. In format 1.1 it adds a drives field and a sum over
 the rest of the table. The volume descriptors follow, 32 bytes each, fifteen
 in block 0 and sixteen in each of blocks 1 to 7. Chapter 4 describes the
 container from the user's side and Appendix E lists its fields. The offsets
 the ROM uses come from `format/format.json` through the generated
 `gen/format.asm`, as Chapter 12 describes.
 
-`MOUNT` reads block 0 into `BLKBUF` and checks it in a fixed order, stopping
-at the first failure with that check's code (`src/vol.asm:8-18`,
+The ROM's `MOUNT` routine reads block 0 into `BLKBUF` and checks it in a fixed
+order, stopping at the first failure with that check's code (`src/vol.asm:8-18`,
 `src/vol.asm:20-135`):
 
 | Code | Check |
@@ -117,7 +117,7 @@ at the first failure with that check's code (`src/vol.asm:8-18`,
 | `20h` | block 0, or a block of the table, reads |
 | `21h` | the first eight bytes are `TECOSVOL` |
 | `22h` | the major version is 1 |
-| `23h` | the header is 512 bytes and a descriptor 32; in 1.1, the drive count is at most 4 |
+| `23h` | the header is 512 bytes and a descriptor 32; in 1.1, the drives field is at most 4 |
 | `24h` | the volume count is from 1 to 127 |
 | `25h` | the header's checksum, the 16-bit sum of its other 510 bytes; in 1.1, the table's sum |
 
@@ -134,7 +134,7 @@ it as it goes (`src/vol.asm:136-243`):
 | `26h` | the volume id is not 0; no flag but read-only is set; the geometry is known; the length is that geometry's payload exactly; the start block is not 0 and a multiple of 8 |
 | `28h` | the start is at or after the previous volume's end |
 | `27h` | start plus length has no carry out of 32 bits, and ends within the container |
-| `29h` | the drive byte is `FFh` or 0 to 3, below a 1.1 header's drive count when that count is not 0, and not a drive already taken |
+| `29h` | the drive byte is `FFh` or 0 to 3, below a 1.1 header's drives field when that field is not 0, and not a drive already taken |
 | `2Ah` | after the last descriptor, drive A has a volume |
 
 The order check makes overlapping volumes impossible, since each must start
@@ -185,7 +185,7 @@ each drive holds, as its index in the container plus 1, 0 for none
 such a drive the BIOS's `SELDSK` returns 0, no such drive
 (`src/bios.asm:23-43`).
 
-`MNDPH` builds the drive's disk parameter header, the 16-byte block through
+`MNDPH` builds the drive's disk parameter header, the 16 bytes through
 which the BDOS reaches a drive's parameters and buffers
 (`src/vol.asm:353-389`):
 
@@ -289,7 +289,7 @@ is `VSLOT`'s. A volume of 4,096 blocks or more, a G8M, needs a 256-byte slot,
 and any other needs a slot of either size (`src/vol.asm:638-651`). Chapter 13
 describes how cold boot gives out the slots.
 
-Before a mount or unmount changes a drive, `VFLUSH` writes every changed line
+Before a mount or unmount changes a drive, `VFLUSH` writes every dirty line
 of the block cache to the card, with interrupts off. The service fails if any
 write fails, so that a volume's data is on the card before the volume leaves
 its drive (`src/vol.asm:678-690`). A mount then clears the drive's old entry,
@@ -329,7 +329,7 @@ A>VOLS
 A>
 ```
 
-A card of format 1.1 with a drive count of 4 gives each of A to D a 256-byte
+A card of format 1.1 with a drives field of 4 gives each of A to D a 256-byte
 slot at cold boot. On such a card `MOUNT C:` with a volume that is on no other
 drive succeeds. The slots cost TPA: with four of them the TPA is 46,086 bytes,
 768 fewer than the starter card gives.

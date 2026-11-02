@@ -19,7 +19,7 @@ program with its page zero, and the CCP's RAM and stack.
 
 ## The CCP in the ROM
 
-The CCP's code is `src/cpm/ccp.asm`. In the debug80 build it runs from
+The CCP's code is `src/cpm/ccp.asm`. In the debug80 build (Chapter 12) it runs from
 `CCPBAS`, `D795h`, to `E0C9h`, 2,357 bytes, followed directly by the BDOS. Its
 messages and the names of its built-in commands are in the ROM's data block
 (`src/data3.asm:7-71`). The exception is `TYPE`, whose name sits in front of
@@ -265,9 +265,9 @@ Chapter 15 describes the BIOS's side.
 in a 0 drive byte, so that they can be compared. A destination with no name
 takes the source's whole name. A destination equal to the source, all 12
 bytes, is a bad command, with nothing opened (`src/cpm/ccp.asm:960-986`). The
-copy goes a record at a time through the default DMA record at `0080h`, so it
+copy goes a record at a time through the default DMA buffer at `0080h`, so it
 uses none of the TPA. The count of records is kept in `DIRNUM` and printed in
-hex after `COPIED` (`src/cpm/ccp.asm:987-1032`).
+hexadecimal after `COPIED` (`src/cpm/ccp.asm:987-1032`).
 
 `DRIVERS` prints each driver's name and its pages from the list of drivers,
 and `UNLOAD` removes the lowest. `NAME.DRV` as a command installs one. Chapter
@@ -469,7 +469,7 @@ that needs more sets its own stack, as many CP/M programs do. Every BDOS call
 moves to the BDOS's stack, so a program's calls of `0005h` use only two bytes
 of the program's stack.
 
-The CCP keeps nothing in the TPA. It leaves the program area from `0100h`
+The CCP keeps nothing in the TPA. It leaves the TPA from `0100h`
 untouched until it loads a program or a driver there, a driver for `NAME.DRV`
 or `CON UC1` (`src/glcd.asm:68`, `src/drv.asm:54`). Only `SAVE` reads that
 area, which is how `SAVE` writes what a program or a loaded driver file left
