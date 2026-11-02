@@ -90,6 +90,21 @@ the CCP's loads at `0100h` and up, takes from 5,763 T-states, and a miss
 the directory's blocks are in the cache, and `DIR`'s three BIOS reads are all
 hits.
 
+A whole command shows the gain. These figures, measured at TEC-OS 62d47ed,
+are the model's T-state count, `cycles` (`host/machine.mjs:261`), from the
+Return that ends a command to the next prompt, on a card that this command
+makes:
+
+```sh
+node tools/tecvol.mjs create time.img --volume G1M:SYSTEM:A --volume G8M:THROUGH:B --volume G8M:BEHIND:C:wb
+```
+
+Drive A holds a file of 12,288 bytes and a 24-byte program that opens the
+file named on its command line and reads it to `0080h` with function 20.
+After a cold boot, the program's first run took 6,626,025 T-states, 1.66
+seconds, and its second 1,327,847, 0.33 seconds, a fifth of that. Both
+figures include loading the program from drive A.
+
 ## Writes through
 
 A volume whose descriptor does not have the written-behind flag is written
@@ -152,6 +167,12 @@ what eighteen do on drive A, which is written through (Chapter 18). A larger
 file fills the lines: in `SAVE 160 Z.COM` on B, 80 blocks, `CTAKE` writes
 three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
+
+On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
+30,823,173 T-states, 7.71 seconds, on `THROUGH` and 9,905,832, 2.48 seconds,
+about a third of that, on `BEHIND`. Each run followed a cold boot and a
+change to the drive, and the count, taken as for the reads, leaves out the
+change of drive.
 
 ## The order of a flush
 
