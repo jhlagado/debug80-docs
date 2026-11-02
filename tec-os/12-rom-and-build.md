@@ -70,7 +70,7 @@ are the first of the block, the CCP's keyword `TYPE` and its zero
 The code starts at `COLD` and runs through every routine of TEC-OS to the label
 `CODEEND`, which `src/end.asm:2` defines after the last file. The free space is
 the rest of the ROM, in one gap, and the build fills it with
-`FFh` (`tools/build.mjs:256-259`).
+`FFh` (`tools/build.mjs:262-265`).
 
 ## The source files and their order
 
@@ -101,11 +101,11 @@ The list goes on through `bios.asm`, `console.asm`, `term.asm`, `video.asm`,
 The first four files emit no bytes. `gen/config.asm` and `gen/format.asm` are
 equates. So is `layout.asm`, which names the ports, the system latch's values,
 TEC-OS's bytes in page zero and the fixed addresses in RAM
-(`src/layout.asm:8-95`). `ram.asm` names the resident workspace: it sets the
+(`src/layout.asm:8-96`). `ram.asm` names the resident workspace: it sets the
 origin to `WSBASE` and reserves each variable with `DS`, which defines a label
 and moves the address on without emitting anything (`src/ram.asm:6`,
-`src/ram.asm:9-186`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
-that sits above the RAM BIOS table (`src/ram.asm:188-237`). Chapter 13
+`src/ram.asm:9-190`). A second origin, at `RAMBIOS+BIOSLEN`, places the state
+that sits above the RAM BIOS table (`src/ram.asm:192-242`). Chapter 13
 describes that memory. Bytes start with `reset.asm` and its `ORG $C000`
 (`src/reset.asm:5`), and from there each file's bytes follow the last's.
 
@@ -164,7 +164,7 @@ fields, and Chapter 18 the container.
 The assembler is ATOM, the npm package `atom-z80` at version 0.3.7.
 `npm run build` runs `tools/build.mjs`, which calls ATOM as a library: first
 `assembleAtomProject` with `src/` as the root and `rom.asm` as the entry, then
-`writeAtomD8` for the symbol map (`tools/build.mjs:208-214`).
+`writeAtomD8` for the symbol map (`tools/build.mjs:214-220`).
 
 The build assembles the ROM twice, because the workspace's position depends on
 its size. The fixed workspace, the part below the RAM BIOS table, runs up to
@@ -172,14 +172,14 @@ the table at `BF00h`, which has a fixed address. Its first byte, `WSBASE`, is
 therefore `BF00h` less the workspace's size, and the size is known only after
 an assembly. The first assembly is a probe, with `WSBASE` set to `8000h`. The
 build reads the address of `BDOSRME`, the label at the workspace's end, and
-takes `8000h` from it (`tools/build.mjs:244-248`). At 98c6416 that part is
+takes `8000h` from it (`tools/build.mjs:250-254`). At 98c6416 that part is
 1,448 bytes, so the second assembly has `WSBASE` at `B958h`
-(`tools/build.mjs:249-251`).
+(`tools/build.mjs:255-257`).
 
 The second assembly's output is the ROM. `materializeAtomGeneration` turns it
 into bytes from `C000h`, filling every gap with `FFh`, and the build copies
 them into a 16,384-byte array that is `FFh` everywhere else
-(`tools/build.mjs:256-259`).
+(`tools/build.mjs:262-265`).
 
 A separate module, `tools/lib/assemble.mjs`, assembles stand-alone programs
 with the same assembler, at `0100h` for a `.COM` file
@@ -191,43 +191,43 @@ card's programs, and the ROM's build does not.
 Between the second assembly and writing the image, the build checks the result
 against the rules the layout depends on. When a rule fails, the build stops
 with `placement check failed:` and the rule's text
-(`tools/build.mjs:222-224`). The checks are:
+(`tools/build.mjs:228-230`). The checks are:
 
 - Every byte the assembly emitted is at `C000h` or above, so that no part of
   the source puts bytes in RAM, and the image is at most 16 KiB
-  (`tools/build.mjs:253-257`).
+  (`tools/build.mjs:259-263`).
 - `RESET` is at `C000h` and the table at `C003h`. The data block starts where
   the table ends, and the `RET` at `C01Dh` is a `C9h`
-  (`tools/build.mjs:262-265`).
+  (`tools/build.mjs:268-271`).
 - The table, the data and the code are in that order, and the code ends
-  within the ROM (`tools/build.mjs:266-267`).
+  within the ROM (`tools/build.mjs:272-273`).
 - Every address in `src/abi.inc`, the include file that programs and drivers
   assemble with, equals the address of the matching label in `abi.asm`. Every
-  label there has an entry (`tools/build.mjs:145-151`, `tools/build.mjs:268`).
+  label there has an entry (`tools/build.mjs:145-152`, `tools/build.mjs:274`).
 - The hardware services' numbers and status codes in `abi.inc` are the ones
   in `hwsvc.asm`, and their bits match the `CD` bits of `layout.asm`
-  (`tools/build.mjs:155-165`).
+  (`tools/build.mjs:156-166`).
 - The PICO driver's table offsets in `abi.inc` name the right entries in each
-  width of `PICO.DRV`, which the check builds (`tools/build.mjs:169-181`).
+  width of `PICO.DRV`, which the check builds (`tools/build.mjs:170-182`).
 - `drivers/font.asm` is the font that
-  `format/font5x7.txt` gives (`tools/build.mjs:185-187`).
+  `format/font5x7.txt` gives (`tools/build.mjs:186-188`).
 - No `.asm` file in `src`, `drivers`, `diag` or `test/programs` names an
   address from `FF00h` to `FF27h`,
-  where an older table was (`tools/build.mjs:190-197`).
+  where an older table was (`tools/build.mjs:191-198`).
 - Each driver's source reaches the ROM only through the
-  names in `abi.inc` (`tools/build.mjs:200-206`).
+  names in `abi.inc` (`tools/build.mjs:201-212`).
 - The RAM BIOS table is at `BF00h`, and the fixed workspace ends exactly there. The
   state above the table starts 51 bytes after it, at `SDBYTE`, and all of it
-  ends by `C000h` (`tools/build.mjs:274-277`).
+  ends by `C000h` (`tools/build.mjs:280-283`).
 - The BIOS stack ends at or below the start of the
-  CCP's workspace (`tools/build.mjs:278`).
+  CCP's workspace (`tools/build.mjs:284`).
 - On the starter card the TPA is at
-  least 45,830 bytes (`tools/build.mjs:280-281`).
+  least 45,830 bytes (`tools/build.mjs:286-287`).
 
 The last check works out the TPA without running the ROM. `cardLayout` follows
 the arithmetic of cold boot's `ALVINIT`, which Chapter 13 describes: the
 allocation vectors packed down from `WSBASE`, and the BDOS entry jump below
-them (`tools/build.mjs:232-236`). The starter card has two volumes, a G1M
+them (`tools/build.mjs:238-242`). The starter card has two volumes, a G1M
 whose last allocation block, `DSM`, is 511 and a G8M whose `DSM` is 2047. Their
 vectors take 320 bytes and the entry is at `B806h`, which leaves 46,854 bytes
 from `0100h`.
@@ -237,9 +237,9 @@ from `0100h`.
 When the checks pass, the build writes three files into `build/<profile>/`,
 a directory for each of the profile names below.
 `tecos.rom` is the image. `tecos.d8.json` is the symbol map in Debug80's D8
-format, which `book/capture.mjs` reads to find TEC-OS's labels. `census.json`
+format, which `tools/capture.mjs` reads to find TEC-OS's labels. `census.json`
 holds the figures for the ROM's parts, the RAM's regions and the stacks
-(`tools/build.mjs:283-331`).
+(`tools/build.mjs:289-337`).
 
 The PICO9918's width is set by the driver loaded at startup (Chapter 5), so
 every board takes the same image. The build keeps four profile names,
@@ -247,7 +247,7 @@ every board takes the same image. The build keeps four profile names,
 a ROM by its profile's name still has a file to read, and all four name that
 image (`tools/build.mjs:28-35`). The build assembles the first profile and copies its
 image and map to the other three, and only the name and the description change
-in each census (`tools/build.mjs:335-349`). `npm run build` prints one line for
+in each census (`tools/build.mjs:341-355`). `npm run build` prints one line for
 each:
 
 ```text
@@ -260,7 +260,7 @@ board: ROM 14541/16384 bytes, TPA $0100-$B805 (46854 bytes), sha256 59f01f21287f
 The hash is the first 16 hexadecimal digits of the image's SHA-256. `npm run
 media` then copies each profile's three files to `dist/` as
 `tecos-<profile>.rom`, `tecos-<profile>.d8.json` and
-`tecos-<profile>.census.json` (`tools/media.mjs:183-188`). It also writes
+`tecos-<profile>.census.json` (`tools/media.mjs:208-213`). It also writes
 `docs/memory-map.md` from the `debug80` census. The four ROM files in `dist/`
 have the same SHA-256,
 `59f01f21287f0d9b1b6dd30b3fbe8df5f1971a14b9bb033715c90bd592d95932`.

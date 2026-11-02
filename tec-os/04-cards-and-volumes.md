@@ -215,7 +215,7 @@ Cold boot puts each volume on the drive its descriptor names and prints the
 drives that have one. On `my.img` the boot prints this, with the prompt
 following at once because the card has no startup file:
 
-<!-- node book/capture.mjs --card my.img -->
+<!-- node tools/capture.mjs --card my.img -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -229,7 +229,7 @@ volumes while TEC-OS runs. `VOLS` lists every volume in the container with its
 index, its label, its geometry and the drive it is on. `MOUNT` puts a volume
 on a drive, by label or by the index `VOLS` prints:
 
-<!-- node book/capture.mjs --card my.img VOLS "MOUNT C: GAMES" "MOUNT D: 3" VOLS "DIR C:" "TYPE D:HELLO.TXT" "MOUNT C: SPARE" -->
+<!-- node tools/capture.mjs --card my.img VOLS "MOUNT C: GAMES" "MOUNT D: 3" VOLS "DIR C:" "TYPE D:HELLO.TXT" "MOUNT C: SPARE" -->
 ```text
 A>VOLS
 00 SYSTEM      G1M A:
@@ -275,7 +275,7 @@ holds, and it reads the directory again the next time the drive is used.
 A drive with no volume can't be selected. On the starter card, where drive C
 has none, `C:` gives a BDOS error, and a key returns to the prompt on drive A:
 
-<!-- node book/capture.mjs "@start C:" "@key x" -->
+<!-- node tools/capture.mjs "@start C:" "@key x" -->
 ```text
 A>C:
 Bdos Err On C: Select
@@ -303,7 +303,7 @@ vector, so on the starter card no volume can be mounted on them. A drive keeps
 its vector when `MOUNT` empties it, and drive B's, of 256 bytes, can take a
 G1M or a G8M volume:
 
-<!-- node book/capture.mjs "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" -->
+<!-- node tools/capture.mjs "MOUNT B:" "MOUNT C: WORK" "MOUNT B: WORK" -->
 ```text
 A>MOUNT B:
 Unmounted
@@ -386,7 +386,7 @@ TEC-OS had reached a prompt before the reset and each volume on a drive is
 still on the card, at the same place and of the same size and kind. The drives
 then hold the same volumes after the reset as before it:
 
-<!-- node book/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" VOLS -->
+<!-- node tools/capture.mjs --card my.img "MOUNT C: GAMES" "MOUNT B:" "@reset" VOLS -->
 ```text
 A>MOUNT C: GAMES
 C: GAMES      

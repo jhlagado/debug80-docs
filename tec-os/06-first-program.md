@@ -98,12 +98,12 @@ cp dist/starter.img work.img
 node tools/tecvol.mjs put work.img B hello.com
 ```
 
-`put` names the file `HELLO.COM` on drive B. `book/capture.mjs` boots `work.img`
+`put` names the file `HELLO.COM` on drive B. `tools/capture.mjs` boots `work.img`
 and types the commands in the transcript below. On a board, `tecvol install`
 from Chapter 4 writes `work.img` to the card. `B:` makes drive B current, `DIR`
 shows the program, and `HELLO`, the program's name without its type, runs it:
 
-<!-- node book/capture.mjs --card work.img B: DIR HELLO -->
+<!-- node tools/capture.mjs --card work.img B: DIR HELLO -->
 ```text
 A>B:
 B>DIR
@@ -236,7 +236,7 @@ node tools/tecvol.mjs put work.img B show.com
 node tools/tecvol.mjs put work.img B hello.asm --text
 ```
 
-<!-- node book/capture.mjs --card work.img B: "SHOW HELLO.ASM" "SHOW NOSUCH.TXT" -->
+<!-- node tools/capture.mjs --card work.img B: "SHOW HELLO.ASM" "SHOW NOSUCH.TXT" -->
 ```text
 A>B:
 B>SHOW HELLO.ASM
@@ -274,7 +274,7 @@ printed, from the current drive and writes `HELLO.COM` beside it. Here the
 `HELLO.COM` from the PC is erased first, so that the one `DIR` lists is
 ATOM's:
 
-<!-- node book/capture.mjs --card work.img B: "ERA HELLO.COM" "ATOM HELLO" DIR HELLO -->
+<!-- node tools/capture.mjs --card work.img B: "ERA HELLO.COM" "ATOM HELLO" DIR HELLO -->
 ```text
 A>B:
 B>ERA HELLO.COM

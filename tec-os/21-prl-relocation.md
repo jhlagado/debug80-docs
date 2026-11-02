@@ -36,7 +36,7 @@ assemblies is left alone, because it is no part of an address of the program's
 own, or it is the low byte of one, which a move by whole pages doesn't change. A
 byte that is one greater in the second assembly is the high byte of an address.
 Any other difference is an error, reported as `byte N is not relocatable`
-(`tools/lib/prl.mjs:35`, `tools/lib/drv.mjs:75`). Such a difference comes from
+(`tools/lib/prl.mjs:35`, `tools/lib/svc.mjs:75`). Such a difference comes from
 an expression the page rule can't relocate, such as half an address or twice
 one, which differ between the two assemblies by something other than one.
 
@@ -111,9 +111,9 @@ hold no such file: they make their PRL files with the repository's own code
 ## A PRL program at 0100h
 
 The CCP opens `NAME.PRL` only after an open of `NAME.COM` has failed
-(`src/cpm/ccp.asm:193-206`). If `NAME.COM` is on the drive but doesn't load,
+(`src/cpm/ccp.asm:277-290`). If `NAME.COM` is on the drive but doesn't load,
 because it is too large or a read fails, the command fails there, with no search
-for the PRL (`src/cpm/ccp.asm:201`). With `SAY.PRL` copied to the starter card,
+for the PRL (`src/cpm/ccp.asm:285`). With `SAY.PRL` copied to the starter card,
 the command `SAY` runs it:
 
 ```sh
@@ -121,23 +121,23 @@ cp dist/starter.img build/say.img
 node tools/tecvol.mjs put build/say.img A build/SAY.PRL
 ```
 
-<!-- node book/capture.mjs --card build/say.img SAY -->
+<!-- node tools/capture.mjs --card build/say.img SAY -->
 ```text
 A>SAY
 PRL
 A>
 ```
 
-`LOADCOM` (`src/cpm/ccp.asm:271`) reads the file the same way for both types. It
+`LOADCOM` (`src/cpm/ccp.asm:359`) reads the file the same way for both types. It
 opens the file and then reads it one record of 128 bytes at a time into memory
-from `0100h` up (`src/cpm/ccp.asm:280-296`), stopping at the page given by the
+from `0100h` up (`src/cpm/ccp.asm:368-384`), stopping at the page given by the
 high byte of the word at `0006h`, the page holding the BDOS's entry
-(`src/cpm/ccp.asm:281`). A file with more records than that is read one record
+(`src/cpm/ccp.asm:369`). A file with more records than that is read one record
 further into a scratch buffer, and that read separates a file that exactly fills
-the space from one that is too large (`src/cpm/ccp.asm:300-312`). For a file
+the space from one that is too large (`src/cpm/ccp.asm:388-400`). For a file
 that fits, `LOADCOM` stores the address just past its last record in `LOADTOP`
-(`src/cpm/ccp.asm:319`, `src/ram.asm:226`), and for a PRL file the CCP then
-calls `PRLGO` (`src/cpm/ccp.asm:208`).
+(`src/cpm/ccp.asm:407`, `src/ram.asm:230`), and for a PRL file the CCP then
+calls `PRLGO` (`src/cpm/ccp.asm:292`).
 
 At that moment the whole file is in memory: the header at `0100h`, the code at
 `0200h` and the bitmap after it. The code was assembled for `0100h`, one page
@@ -161,10 +161,10 @@ the first one that fails (`src/prl.asm:14-53`):
    the start of the page holding the BDOS's entry.
 
 A check that fails changes nothing, and the CCP prints the command with a
-question mark, as for a command it can't find (`src/cpm/ccp.asm:208-209`,
-`src/cpm/ccp.asm:245-267`). When all five pass, the `LDIR` runs, and the CCP
+question mark, as for a command it can't find (`src/cpm/ccp.asm:292-293`,
+`src/cpm/ccp.asm:329-355`). When all five pass, the `LDIR` runs, and the CCP
 then sets up page zero and jumps to `0100h` as it does for a `.COM` file
-(`src/cpm/ccp.asm:210-216`).
+(`src/cpm/ccp.asm:294-300`).
 
 The file is in memory whole before the code moves, so a PRL program has less
 room than a `.COM` file. On the starter card with no driver installed the load
@@ -177,24 +177,24 @@ ends with its command printed back with a question mark.
 
 A driver is the code that does move. The loader puts it in whole pages
 immediately below the current top of the TPA, so its page depends on the drivers
-already installed. `makeDrv` in `tools/lib/drv.mjs:87` assembles the driver's
+already installed. `makeDrv` in `tools/lib/svc.mjs:87` assembles the driver's
 source at `0000h` and at `0100h` and keeps the first assembly, made for page 0,
-with the driver's 25-byte header at its start (`tools/lib/drv.mjs:103-113`).
+with the driver's 25-byte header at its start (`tools/lib/svc.mjs:103-113`).
 Placed at page `p`, every address in it needs `p` added to its high byte.
 
 The bytes that need it, the fixups, are found by the same comparison as a PRL's
-(`tools/lib/drv.mjs:71-80`). A difference inside the 25-byte header is an error
-(`tools/lib/drv.mjs:76`), since the relocation data can mark only bytes of the
+(`tools/lib/svc.mjs:71-80`). A difference inside the 25-byte header is an error
+(`tools/lib/svc.mjs:76`), since the relocation data can mark only bytes of the
 image. Each fixup is counted from the end of the header, so fixup 0 is the
 image's first byte.
 
-The fixups are recorded as a list of gaps (`tools/lib/drv.mjs:37-47`). Each byte
+The fixups are recorded as a list of gaps (`tools/lib/svc.mjs:37-47`). Each byte
 of the list is the distance from one fixup to the next, the first counted from
 the byte before the image. A gap of 255 or more is written as bytes of 255, each
 moving 255 bytes on with nothing fixed, and then the rest. Fixups at image bytes
 2 and 9 become the list `3 7`, and one fixup at byte 600 becomes `255 255 91`:
 601 bytes from the byte before the image, 255 and 255 and 91 more
-(`test/drv.test.mjs:323-324`). When the rest is 0, the last byte of the list for
+(`test/svc.test.mjs:340-341`). When the rest is 0, the last byte of the list for
 that fixup is 0, a gap of 0 that fixes the byte the 255s reached.
 
 `PICO.DRV` on the starter card shows the list in a real file. Its header gives
@@ -228,34 +228,34 @@ bytes of image would take 160.
 
 ## The loader's relocation pass
 
-`DRVLOAD` (`src/drv.asm:57`) works on the file where `LOADCOM` read it, at
+`DRVLOAD` (`src/svc.asm:57`) works on the file where `LOADCOM` read it, at
 `0100h`, and relocates it there before it moves it. It first checks the magic,
-`44h` and format 3 (`src/drv.asm:11`, `src/drv.asm:62-65`), and then that the
-header and image lie within the records read (`src/drv.asm:66-69`).
+`44h` and format 3 (`src/svc.asm:11`, `src/svc.asm:62-65`), and then that the
+header and image lie within the records read (`src/svc.asm:66-69`).
 
 The loader works out the page from the size. It adds the extra memory named in the
 header, the word at offset 8, to the size of the header and image, subtracts one
-and takes the high byte (`src/drv.asm:76-79`). The driver's page is the current
-top's page, less one, less that high byte (`src/drv.asm:80-82`), and `PZTOP`
+and takes the high byte (`src/svc.asm:76-79`). The driver's page is the current
+top's page, less one, less that high byte (`src/svc.asm:80-82`), and `PZTOP`
 holds the current top, the word that warm boot puts at `0006h`
-(`src/ram.asm:224`). A driver larger than the space below the top fails the load
-(`src/drv.asm:83`), and so does a page below `80h` (`src/drv.asm:84-85`). The
-page goes into `PRLDL` (`src/drv.asm:86`, `src/ram.asm:228`). For `PICO.DRV` on
+(`src/ram.asm:228`). A driver larger than the space below the top fails the load
+(`src/svc.asm:83`), and so does a page below `80h` (`src/svc.asm:84-85`). The
+page goes into `PRLDL` (`src/svc.asm:86`, `src/ram.asm:232`). For `PICO.DRV` on
 the starter card, the top is `B806h`, and 1,301 bytes less one is `0514h`, so
 the page is `B7h − 05h`, `B2h`.
 
 The relocation data follows the image and the dependencies, and it must lie
-within the records read too (`src/drv.asm:110-113`). The pass is at
-`src/drv.asm:133-161`. `HL` starts at `0118h`, the file's offset 24, the byte
-before the image (`src/drv.asm:136`), and `BC` counts the bytes of the list. For
+within the records read too (`src/svc.asm:110-113`). The pass is at
+`src/svc.asm:133-161`. `HL` starts at `0118h`, the file's offset 24, the byte
+before the image (`src/svc.asm:136`), and `BC` counts the bytes of the list. For
 each byte, the loader:
 
-1. adds the gap to `HL` (`src/drv.asm:141-146`);
+1. adds the gap to `HL` (`src/svc.asm:141-146`);
 2. checks that `HL` is still inside the header and image, below `0100h` plus
-   the size at offset 6, and fails the load if not (`src/drv.asm:148-155`);
+   the size at offset 6, and fails the load if not (`src/svc.asm:148-155`);
 3. if the gap was 255, goes on to the next byte with nothing fixed
-   (`src/drv.asm:147`, `src/drv.asm:156-157`);
-4. otherwise adds `PRLDL` to the byte at `HL` (`src/drv.asm:158-160`).
+   (`src/svc.asm:147`, `src/svc.asm:156-157`);
+4. otherwise adds `PRLDL` to the byte at `HL` (`src/svc.asm:158-160`).
 
 The check in step 2 is made for a gap of 255 too, so a list can't step past the
 image even with nothing fixed. A failure here leaves the file at `0100h` partly
@@ -263,21 +263,21 @@ relocated, and nothing else changed: the driver's pages, `0006h` and `PZTOP` are
 as they were. The CCP reports it with the command's name and a question mark.
 
 When the list is used up, the loader writes its own fields into the header
-(`src/drv.asm:163-171`). Offsets 0 to 2 take the registry's head and the lowest
+(`src/svc.asm:163-171`). Offsets 0 to 2 take the registry's head and the lowest
 driver's page from before this load, and offset 6 takes a `JP` to the old top,
 written over the size that the pass needed until then. One `LDIR` then moves the
 header and image together to the chosen page, and `0006h` becomes that page's
-`xx06h`, where the `JP` now is (`src/drv.asm:172-179`).
+`xx06h`, where the `JP` now is (`src/svc.asm:172-179`).
 
 On the web page's board the startup file installs `PICO.DRV` at `B200h`. After
 the move the image's table there reads `B379h`, `B384h`, `B38Dh`, each high byte
 raised by `B2h`. Offset 6 holds `JP B806h`, a jump to the BDOS entry that was
 the top before the driver. Offsets 12 to 14 hold `08h`, `0Ch` and `06h`, the
 room left on each of the three stacks, which the loader wrote over the driver's
-declared use (`src/drv.asm:114-130`). The word at `0006h` is `B206h`, and
+declared use (`src/svc.asm:114-130`). The word at `0006h` is `B206h`, and
 `DRIVERS` lists the driver with its pages:
 
-<!-- node book/capture.mjs --board pico DRIVERS -->
+<!-- node tools/capture.mjs --board pico DRIVERS -->
 ```text
 A>DRIVERS
 PICO 6
@@ -286,6 +286,6 @@ A>
 
 `DRIVERS` prints each page count as the page above the driver, the high byte of
 the `JP`'s address at offset 8, less the driver's own page
-(`src/drv.asm:314-319`). That byte is the old top's page, `B8h`, so the count
+(`src/svc.asm:314-319`). That byte is the old top's page, `B8h`, so the count
 includes the part of the last page the driver doesn't fill. `PICO.DRV`'s 1,301
 bytes take six pages, 1,536 bytes of the TPA.

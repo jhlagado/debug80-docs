@@ -56,7 +56,7 @@ entry, `BF03h`, and a program reaches the table the way CP/M 2.2 programs do, by
 taking that word and subtracting 3. The BDOS calls the same copy, since its
 names for the BIOS entries are offsets from `RAMBIOS`
 (`src/cpm/bdos.asm:14-28`). Its function 50, the direct BIOS call of CP/M 3,
-sends functions 0 to 16 through the copy as well (`src/cpm/bdos.asm:100-102`).
+sends functions 0 to 16 through the copy as well (`src/cpm/bdos.asm:135-137`).
 
 Because every caller goes through RAM, the table is a set of hooks. A program
 may write its own jump over an entry, to receive every character the BDOS
@@ -104,7 +104,7 @@ with `PICO.DRV` as the console. It writes the IOBYTE, and the reply is the
 first thing to reach the serial port after the boot, which had ended there with
 `PICO.DRV`:
 
-<!-- node book/capture.mjs --board pico --serial CON "CON TTY" CON -->
+<!-- node tools/capture.mjs --board pico --serial CON "CON TTY" CON -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -199,7 +199,7 @@ calls `CONIN` or `READER`.
 CP/M 2.2 gives a program three more character devices through the BIOS. The
 list device, a printer, and the punch are for output, and the reader is for
 input. TEC-OS has no printer, and it puts the other two on the serial port
-(`src/console.asm:271-287`):
+(`src/console.asm:271-288`):
 
 - `LIST` returns at once, so whatever a program prints to the list device is
   discarded. `LISTST` returns `FFh`, ready, so a program that waits for the
@@ -212,7 +212,7 @@ input. TEC-OS has no printer, and it puts the other two on the serial port
 The punch and reader are the serial port even while the console is a display,
 so a program on the PICO9918's console can exchange binary data with a PC over
 the serial line. A byte that `CONST` has already received stays in `RXCHAR` for
-the console, and `READER` does not return it (`src/console.asm:277-278`). The
+the console, and `READER` does not return it (`src/console.asm:278-279`). The
 console mode `BAT:` takes its input from the serial port, as the reader does,
 but `CONIN` serves it through `CINLP`, which clears bit 7 and skips `NUL`
 (`src/console.asm:155-157`, `src/console.asm:182-190`). It sends its output to
@@ -225,7 +225,7 @@ with `C` at `FEh` puts `B` on the high half of the address bus, and the low bit
 in `B` selects one of eight rows. The byte read has a low bit for each key down
 in that row. Key number k is row k / 8, bit k mod 8. Keys 0, 1 and 2 are Shift,
 Ctrl and Fn, keys 3 to 6 are the arrows and key 7 is Caps Lock
-(`src/console.asm:291-295`, `src/console.asm:366-367`).
+(`src/console.asm:292-295`, `src/console.asm:366-367`).
 
 TEC-OS reads the keyboard only when the board's Matrix switch was on at cold
 boot. `CONINIT` copies bit 0 of port `03h` into `CONDEV`'s bit `CDMTX`
@@ -392,9 +392,9 @@ drives A and B on rows 1 and 2. Drives C and D have no row
 Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/diag.asm:7-8`). `GLCD?` appears when `CON UC1` can't load `GLCD.DRV`
-(`src/cpm/ccp.asm:1025`, `src/glcd.asm:49-63`). `PICO?` appears when a board
+(`src/cpm/ccp.asm:1119`, `src/glcd.asm:49-63`). `PICO?` appears when a board
 with a PICO9918 reaches its first prompt with no display driver
-(`src/drv.asm:423-424`).
+(`src/svc.asm:430-431`).
 
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS

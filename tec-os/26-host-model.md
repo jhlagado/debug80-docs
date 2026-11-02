@@ -13,7 +13,7 @@ version `package.json` names.
 Every transcript in this book came from a TEC-1G that exists only as software.
 The repository runs TEC-OS on the Debug80 TEC-1G runtime, a model of the board's
 CPU, memory, latch and devices, through one module, `host/machine.mjs`, which
-the tests, the web page and `book/capture.mjs` all use. This chapter describes
+the tests, the web page and `tools/capture.mjs` all use. This chapter describes
 that module, then the tests and the web page built on it.
 
 ## One machine for the tests, the page and the book
@@ -77,7 +77,7 @@ the same emulated seconds (`host/machine.mjs:86-119`).
 
 The time a run reads is then the same on any PC, however fast it runs. The tests
 start the clock at 1 January 2026, 12:00 (`test/lib/fixtures.mjs:111-112`), and
-`book/capture.mjs` at 1 November 2026, 12:00, so the capture of `DEMO` in
+`tools/capture.mjs` at 1 November 2026, 12:00, so the capture of `DEMO` in
 Chapter 1 shows `12:00:14` on any PC.
 
 ## Checks on every write
@@ -121,7 +121,7 @@ Two runs of `capture.mjs` on the board with only the graphics LCD show the two
 records apart, one printing the console and one the serial port. The console
 record has the whole boot and the `CON` command:
 
-<!-- node book/capture.mjs --board glcd --screen CON -->
+<!-- node tools/capture.mjs --board glcd --screen CON -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -139,7 +139,7 @@ A>
 
 The serial record stops where `GLCD.DRV` took the console:
 
-<!-- node book/capture.mjs --board glcd --serial CON -->
+<!-- node tools/capture.mjs --board glcd --serial CON -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -201,7 +201,7 @@ their machines with `boot` in `test/lib/fixtures.mjs`, which reads the ROM of a
 profile from `build/` and, when the board has a matrix keyboard, puts a display
 driver and a startup file on the card. It then runs to the first prompt with the
 clock at the tests' starting time (`test/lib/fixtures.mjs:21-26`,
-`test/lib/fixtures.mjs:136-144`, `test/lib/fixtures.mjs:147-154`).
+`test/lib/fixtures.mjs:144-152`, `test/lib/fixtures.mjs:155-162`).
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program` assembles
 a source in `test/programs/` with ATOM and keeps the result in
@@ -289,7 +289,7 @@ prepares the card with `prepareCard` from `host/card.mjs`
 driver file, in the format this ROM loads. If it does, the first line of
 `STARTUP.CMD` becomes that file's name, followed by `GLCD.DRV` on a board with
 the PICO9918, and `STARTUP.CMD`'s other lines stay if they name no display
-driver (`host/card.mjs:21-54`). A card that fails the check is left as it is,
+driver (`host/card.mjs:24-80`). A card that fails the check is left as it is,
 and the reason goes to the serial terminal with the words `[power on]`. The
 reason is no drive A, no such driver or a driver of another format.
 

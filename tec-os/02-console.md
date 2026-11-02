@@ -64,7 +64,7 @@ is the call that prints `CON`'s reply, so the reply appears on the new
 console. A name that isn't one of the four is printed back with a question
 mark:
 
-<!-- node book/capture.mjs "CON XYZ" -->
+<!-- node tools/capture.mjs "CON XYZ" -->
 ```text
 A>CON XYZ
 XYZ?
@@ -78,7 +78,7 @@ console to the serial terminal. The command's echo appears on the PICO9918,
 and the reply and the next prompt appear on the serial terminal, which shows
 this:
 
-<!-- node book/capture.mjs --board pico --serial "CON TTY" -->
+<!-- node tools/capture.mjs --board pico --serial "CON TTY" -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -98,7 +98,7 @@ screen and puts the cursor at the top left, unless the display is the PICO9918
 and a program has claimed it, as Chapter 9 describes. So after `CON CRT` the
 PICO9918 shows only the reply and the prompt:
 
-<!-- node book/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
+<!-- node tools/capture.mjs --board pico --screen "CON TTY" "CON CRT" -->
 ```text
 CON: CRT: PICO9918
 A>
@@ -110,7 +110,7 @@ a console. On a board with only a serial terminal, `CON CRT` sets the console
 field to 1 but the console stays on the serial terminal, and `CON` reports
 that:
 
-<!-- node book/capture.mjs CON "CON CRT" "CON UC1" CON -->
+<!-- node tools/capture.mjs CON "CON CRT" "CON UC1" CON -->
 ```text
 A>CON
 CON: TTY: serial terminal
@@ -129,7 +129,7 @@ file, `CON UC1` is how the console reaches the graphics LCD, because that file's
 `GLCD.DRV` line installs nothing while the PICO9918 is the console. The web
 page's board is one, and its graphics LCD shows this after `CON UC1`:
 
-<!-- node book/capture.mjs --board pico --screen "CON UC1" CON -->
+<!-- node tools/capture.mjs --board pico --screen "CON UC1" CON -->
 ```text
 CON: UC1: GLCD
 A>CON
@@ -146,7 +146,7 @@ and `CON TTY` typed blind brings the console back. In this run `DIR` was typed
 after `CON BAT` and ran, but its listing went nowhere, so the terminal shows
 only the line before and the reply after:
 
-<!-- node book/capture.mjs --serial "@start CON BAT" "@start DIR" "CON TTY" -->
+<!-- node tools/capture.mjs --serial "@start CON BAT" "@start DIR" "CON TTY" -->
 ```text
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
@@ -300,7 +300,7 @@ The graphics LCD, with 8 rows of 21 characters, shows the pause soonest. On a
 board with the graphics LCD and no PICO9918, `TYPE README.TXT` stops after
 seven rows, and the screen shows this:
 
-<!-- node book/capture.mjs --board glcd --screen "TYPE README.TXT" -->
+<!-- node tools/capture.mjs --board glcd --screen "TYPE README.TXT" -->
 ```text
 TEC-OS starter disk
 
@@ -317,7 +317,7 @@ rows. The count starts at the listing's first row, so the command line above
 it has scrolled away by the time `[more]` appears. A key, `x` in this run,
 rubs out `[more]` and prints the next seven rows:
 
-<!-- node book/capture.mjs --board glcd --screen "TYPE README.TXT" "@key x" -->
+<!-- node tools/capture.mjs --board glcd --screen "TYPE README.TXT" "@key x" -->
 ```text
 aw on the video conso
 le; TERM S also scrol
@@ -333,7 +333,7 @@ DEMO               th
 the listing there. After `q` at the first pause the CCP starts a new line for
 the prompt, below the row `[more]` was on. The graphics LCD shows this:
 
-<!-- node book/capture.mjs --board glcd --screen "TYPE README.TXT" "@key q" -->
+<!-- node tools/capture.mjs --board glcd --screen "TYPE README.TXT" "@key q" -->
 ```text
 
 COPY SOURCE DEST   co

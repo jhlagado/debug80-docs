@@ -148,7 +148,7 @@ node tools/tecvol.mjs put con.img B key.com
 
 Here `a`, `Z`, `^C`, Esc and Return were typed at the serial terminal:
 
-<!-- node book/capture.mjs --card con.img "@start B:KEY" $'@key aZ\x03\x1b\r' -->
+<!-- node tools/capture.mjs --card con.img "@start B:KEY" $'@key aZ\x03\x1b\r' -->
 ```text
 A>B:KEY
 61 5A 03 1B 0D 
@@ -231,7 +231,7 @@ reverse `R` after it. Its source is `test/programs/term.asm`. On the PICO9918
 the screen shows this after it ends. The screen text that `capture.mjs` prints
 leaves out reverse video, so the `R` appears as an ordinary letter:
 
-<!-- node book/capture.mjs --board pico --screen --card con.img TERM -->
+<!-- node tools/capture.mjs --board pico --screen --card con.img TERM -->
 ```text
 AB
 
@@ -337,7 +337,7 @@ NOTMSG: DB      "not TEC-OS with ABI 4",13,10,"$"
 borrow leaves `A` 10 below the units, so adding `10+'0'` gives the units
 digit. On a board with only a serial terminal the program prints this:
 
-<!-- node book/capture.mjs --card con.img B:SIZE -->
+<!-- node tools/capture.mjs --card con.img B:SIZE -->
 ```text
 A>B:SIZE
 serial terminal
@@ -349,7 +349,7 @@ On the web page's board the PICO9918 is the console at 80 columns, and after
 `CON UC1` the graphics LCD is. The lines up to the echo of `CON UC1` were on
 the PICO9918, and the rest on the graphics LCD:
 
-<!-- node book/capture.mjs --board pico --card con.img B:SIZE "CON UC1" B:SIZE -->
+<!-- node tools/capture.mjs --board pico --card con.img B:SIZE "CON UC1" B:SIZE -->
 ```text
 A>B:SIZE
 80 columns, 24 rows

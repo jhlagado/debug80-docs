@@ -304,14 +304,14 @@ controls, and it keeps the card's first lines in step with them. At each
 power-on `powerOn` calls `prepareCard` (`web/src/main.mjs:66-67`), which leaves
 the card alone if `cardProblem` finds drive A missing, the display's file
 missing or that file in another format, and otherwise calls `setDisplayLine`
-(`host/card.mjs:25-49`). A card with no such file but with a `.DRV` display file
+(`host/card.mjs:25-50`). A card with no such file but with a `.DRV` display file
 gets a message of its own, and the test for it reads the directory only
-(`host/card.mjs:13`, `host/card.mjs:35-37`).
+(`host/card.mjs:13`, `host/card.mjs:35-38`).
 
 `setDisplayLine` reads the file up to its `^Z` and splits it into lines. Each
 line goes through `withoutDisplay`, which splits it at `!`, drops every piece
 that is a display driver's name under either type, with or without a leading
-`:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:52-56`). Lines left
+`:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:53-57`). Lines left
 blank are dropped. The new file is the display's file, then `GLCD.SVC` on a
 PICO9918 board, then the remaining lines, and nothing is written if that equals
-the old text (`host/card.mjs:59-68`).
+the old text (`host/card.mjs:71-80`).

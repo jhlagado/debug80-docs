@@ -41,7 +41,7 @@ in the files that drive them.
 The read of port `00h` takes nothing from the keypad. It is there for the
 Debug80 runtime, whose serial input starts a queued byte at a read of that port
 (`src/layout.asm:9`, `src/console.asm:129`, `src/console.asm:183`,
-`src/console.asm:282`).
+`src/console.asm:283`).
 
 ## Port 01h and the serial line
 
@@ -71,13 +71,13 @@ TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
   matrix keyboard, and both display drivers fail to install, since each needs
   the keyboard.
 - **Bit 6, a keypad key down.** Read once, at cold boot, just before the
-  startup file is opened. A low bit skips the file (`src/drv.asm:336-338`).
+  startup file is opened. A low bit skips the file (`src/svc.asm:336-338`).
 - **Bit 7, the serial line's input.** Read by the serial routines
   (`src/console.asm:131`, `src/console.asm:184`, `src/console.asm:198`).
 
 The TEC-1G's documents and the Debug80 runtime describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
-down, which is how TEC-OS reads it (`src/drv.asm:336-338`).
+down, which is how TEC-OS reads it (`src/svc.asm:336-338`).
 `docs/diagnostics.md` records the comparison, and test T11 reads the port on a
 board. The Protect and Expand switches are not read.
 
@@ -119,7 +119,7 @@ and EXPAND 1. The board's recommended build leaves U9 empty, and
 EXPAND jumpers set for a 32 KiB chip. Cold boot tests `8000h–BFFFh` before it
 prints anything, and EXPAND 1 later, and stops with `TEC-OS needs 64K RAM` on
 the serial terminal if either is missing (`src/boot.asm:22`,
-`src/boot.asm:143-148`, `src/boot.asm:290-302`). Chapter 1 describes the two
+`src/boot.asm:143-148`, `src/boot.asm:291-303`). Chapter 1 describes the two
 checks, and Chapter 13 what TEC-OS keeps in each half.
 
 ## The hex keypad and its NMI
