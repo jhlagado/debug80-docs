@@ -23,8 +23,9 @@ measured on the model, the T-states from the `JP` at the entry to the final
 The table is ABI 4.0. A program tests for `TNA` at `ABITAB` and for a major
 version of exactly 4 at `ABIMAJ` before it uses anything after them
 (`src/abi.inc:2-4`), since a new major version may move what follows `ABIMAIN`
-and renumber the services (`src/abi.asm:3-5`). ABI 4 isn't frozen until a
-release, and the table may gain entries at its end, `C018h`.
+and renumber the services (`src/abi.asm:3-5`,
+`test/programs/demo.asm:29-30`). ABI 4 isn't frozen until a release, and the
+table may gain entries at its end, `C018h`.
 
 | Address | Bytes | Name | Contents |
 | --- | ---: | --- | --- |
@@ -104,8 +105,9 @@ added (`src/hwsvc.asm:32-39`):
 at `HL`, the leftmost digit first (`src/hwsvc.asm:93-107`). For each it writes
 the pattern to port `02h` and the digit's bit to port `01h`, bit 5 for the
 leftmost and bit 0 for the rightmost, with bit 6 held high. A digit stays lit
-for a `DJNZ` count of 256, 3,323 T-states or 0.83 ms, and it is then turned
-off. All are off at the end. Status is always 0. 20,677 T-states.
+for 3,348 T-states, 0.84 ms, of which a `DJNZ` count of 256 is 3,323, and it
+is then turned off. All are off at the end. Status is always 0. 20,677
+T-states.
 
 **21 LCD.** Writes the 20 characters at `HL` to row `B`, 0 to 3, of the 20 × 4
 LCD (`src/hwsvc.asm:109-132`). A row above 3 returns status 1. Row 3 also
@@ -124,8 +126,9 @@ A release with no claim does nothing and returns status 0. Otherwise it clears
 `VCLAIM` and, with `PICO.SVC` in, calls the driver's restore routine for its
 text mode, font and page. If the PICO9918 is the console it then clears the
 screen and homes the cursor. With no `PICO.SVC`, nothing is restored. A
-release costs 213,242 T-states at 80 columns, and warm boot makes the same
-call (`src/boot.asm:74`).
+release with the PICO9918 as the console costs 213,242 T-states at 80 columns,
+and 145,685 with the console elsewhere. Warm boot makes the same call
+(`src/boot.asm:74`).
 
 **23 TONE.** Makes a square wave on port `01h` bit 7, with bit 6 held high,
 for `DE` half cycles, each of 16 × `B` + 51 T-states
@@ -146,9 +149,11 @@ that bound it.
 **24 JOY.** Returns the joystick in `B`, 1 for each active line, read from
 port `FEh` with `BC` = `F7FEh` and complemented (`src/hwsvc.asm:199-203`).
 Status is always 0. 221 T-states. That port address also selects row 3 of the
-matrix keyboard, so a key in that row sets a bit here. The diagnostics ROM's
-test names the bits `01h` up, `02h` down, `04h` left, `08h` right, `10h` fire
-2, `20h` pin 9, `40h` fire 1 and `80h` fire 3 (`diag/interact.asm:556`).
+matrix keyboard, so a key in that row sets a bit here, and a line here reads
+as a key in that row. The diagnostics ROM's test labels the bits, after MON-3,
+`01h` up, `02h` down, `04h` left, `08h` right, `10h` fire 2, `20h` pin 9,
+`40h` fire 1 and `80h` fire 3 (`diag/interact.asm:556`), and those labels are
+unconfirmed.
 
 **25 KEYS.** Reads the matrix keyboard's eight rows into the eight bytes at
 `HL`, row 0 first, 1 for each key down (`src/hwsvc.asm:205-212`). Each read is
@@ -168,9 +173,10 @@ Text is clipped at the right edge. A row past the bottom writes nothing and
 returns status 0, and so does a count of 0, which also leaves the cursor
 alone. Status 2 means the console is the serial terminal, or the PICO9918 is
 claimed and is the console (`src/term.asm:533-543`). A claim doesn't stop
-`PUTAT` on the graphics LCD. The stack is 22 bytes on the graphics LCD and 12
-on `PICO.SVC`. A cell along a row costs about 423 T-states on `PICO.SVC` at 80
-columns and about 35,400 on `GLCD.SVC`.
+`PUTAT` on the graphics LCD. The stack is 22 bytes on the graphics LCD and 16
+on `PICO.SVC` with a cursor to remove, and 18 and 12 with none. A cell along a
+row costs about 423 T-states on `PICO.SVC` at 80 columns and about 35,100 on
+`GLCD.SVC`.
 
 **27 RTC.** With `B` = 0, reads the DS1302 into the seven bytes at `HL`; with
 `B` not 0, sets it from them (`src/hwsvc.asm:258-289`). The bytes are BCD:
@@ -184,23 +190,25 @@ chip's write protect first and writes 0 to its control byte last.
 
 | `A` | Takes | Effect |
 | ---: | --- | --- |
-| 0 | `C` = drive, `E` = container index | Mounts that volume on the drive |
+| 0 | `C` = drive, `E` = container index | Mounts that volume on the drive, in place of any volume there |
 | 1 | `C` = drive | Unmounts the drive |
 | 2 | `E` = container index, `HL` → 32 bytes | Copies the volume's descriptor there, with its byte 14 the drive it is on now, or `FFh` for none |
 
 Drives count from 0 for A. Appendix E gives the descriptor's fields. The call
 returns `A` = 0, or `A` = `FFh` with nothing changed: for an index past the
-table, a drive past D, a volume already on another drive, a slot too small for
-the volume, an attempt to leave drive A empty, or any other value of `A`. A
-program tests `A`, since the flags mean nothing on the failure.
+table, a drive past D, a volume already on a drive, a drive with no slot or a
+slot too small for the volume, an attempt to leave drive A empty, a failed
+write of the cache, or any other value of `A`. A format 1.0 card gives a slot
+only to the drives mounted at cold boot. A program tests `A`, since the flags
+mean nothing on the failure.
 
 A mount or an unmount writes the cache's changes for the card first, and
 resets the drive by BDOS function 37 (`src/vol.asm:621`, `src/vol.asm:658`,
 `src/vol.asm:662-672`), so that the next access logs it in from its directory.
 A mount or an unmount therefore can't be called from inside a BDOS call,
 unlike the hardware services. The call changes `BC`, `DE` and `HL`, and on the
-model a mount or a describe also changed `IX`. The most stack measured was 20
-bytes, for a describe.
+model a mount or a describe also changed `IX`. The most stack measured was 22
+bytes, for a mount or an unmount with a changed cache line to write.
 
 ## ABIGLCD, a video driver's table
 
@@ -218,13 +226,13 @@ a table already, or there is no matrix keyboard.
 
 `HL` = 0 drops the mode's table, with carry clear, and the console is chosen
 again at its next call (`src/glcd.asm:34-48`). Each `REMOVE` calls it that
-way. `A` and `DE` are changed, `BC` is kept, and no stack is used beyond the
-return address.
+way. `A`, `DE` and `HL` are changed, `BC` is kept, and no stack is used beyond
+the return address.
 
 ## ABISVC, the registry
 
 `ABISVC` finds the records that services have published
-(`src/svc.asm:435-498`). `abi.inc` also calls it `ABIDRV`.
+(`src/svc.asm:435-498`).
 
 | `C` | Takes | Returns |
 | ---: | --- | --- |
@@ -243,7 +251,7 @@ The generation is `SVCGEN`, raised by each removal (`src/ram.asm:236`). It is
 8 bits, so after 256 removals it repeats. A program can keep a record's
 address until it exits, as no service can leave while it runs. A service that
 looks a record up later compares the generation, or names the record as a
-dependency, as `docs/services.md` describes.
+dependency, as Chapter 10 describes.
 
 `PICO.SVC` publishes one record, `PICO`, version 2, at each width
 (`drivers/pico.asm:35-41`). Its table is the eight words above, followed by
