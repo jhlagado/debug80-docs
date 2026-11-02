@@ -75,16 +75,17 @@ used.
 
 ## The routine's result
 
-The `@does` line says what FMUL computes, a product in IEEE single. A value in that format has a sign bit, an 8-bit exponent and a 23-bit fraction called
-the mantissa. The smallest normal is the smallest value that keeps the format's
-full precision. Below it lie the subnormal values, which lose precision as they
+The `@does` line says what FMUL computes, a product in IEEE single. A value in
+that format has a sign bit, an 8-bit exponent and a 23-bit fraction called the
+mantissa. The smallest normal is the smallest value that keeps the format's full
+precision. Below it lie the subnormal values, which lose precision as they
 shrink. An exponent of 255 is kept for infinity and for NaN, short for "not a
 number".
 
 FMUL rounds to nearest, with ties to even. That picks the closer of the two
-values the format can hold, and the even one when they are equally close.
-For a tiny result FMUL rounds at subnormal precision first. It then flushes any result below the smallest normal to zero, and an overflow
-traps.
+values the format can hold, and the even one when they are equally close. For a
+tiny result FMUL rounds at subnormal precision first. It then flushes any result
+below the smallest normal to zero, and an overflow traps.
 
 The line itself came from a gap the first report found. F2U converts a
 floating-point value to an unsigned integer. Its bundle gave the registers and
@@ -99,16 +100,16 @@ by half the gap between two neighbouring subnormal values (P1: CDR-2). The
 incumbent flushed each to zero. The language's tests work out expected results
 with code of their own, and that code rounded each up to the smallest normal.
 The incumbent compared a result with the smallest normal before rounding to
-subnormal precision, and that code compared it after.
+subnormal precision, and the test code compared it after.
 
-Both of the language's compilers, the reference and the native, also gave the
-smallest normal when they worked out such a product at compile time.
-That code and the two compilers agreed against the incumbent, so the contract followed them and the incumbent's result became the defect
-(P1: CDR-2, O11). The rule is
-that the incumbent's answers are evidence, not the authority (R10). The fix was
-a 26-byte change to FP_PACK, the internal routine through which FMUL rounds and
-packs its result. It differs from the old body on exactly the six edge cases, in
-FP_PACK and in FMUL (P1: CDR-2).
+Both of the language's compilers, the reference compiler and the native one,
+also gave the smallest normal when they worked out such a product at compile
+time. The test code and the two compilers agreed against the incumbent, so the
+contract followed them and the incumbent's result became the defect (P1: CDR-2,
+O11). The rule is that the incumbent's answers are evidence, not the authority
+(R10). The fix was a 26-byte change to FP_PACK, the internal routine through
+which FMUL rounds and packs its result. It differs from the old body on exactly
+the six edge cases, in FP_PACK and in FMUL (P1: CDR-2).
 
 ## Registers in and out
 
@@ -129,8 +130,8 @@ The first contracts took these lists from each routine's header comments. Those
 are its In, Out, Clobbers and Memory lines (P1: CDR-1). Run on the runtime
 before any candidate had landed in it, the checks disagreed with them in three
 places. One routine, FCMP, which compares two floating-point values, also
-changes the shadow D register. Two others, I2F and U2F, convert an integer to floating point and write FP_VAR,
-and their comments leave it out. None of the
+changes the shadow D register. Two others, I2F and U2F, convert an integer to
+floating point and write FP_VAR, and their comments leave it out. None of the
 three is FMUL. The contracts now state what the code does as the checks measure
 it. The rule behind this is the subject of the chapter's last section.
 
@@ -156,12 +157,13 @@ depend on is a contract even when no routine owns it (R6).
 
 The line `size<=349` limits FMUL's body to 349 bytes. The pinned body is the
 incumbent as it stood before any candidate replaced it. The first contracts set
-every size limit at 125 percent of the pinned body's size
-(P1: the contracts file's header at Origo 7c48de8). FMUL's was 279 bytes, which
-gave its limit of 349. The limit dates from those first contracts, before the
-round. The landing tool puts a candidate into the runtime. It resets cycle limits
-only, so the size limit has stood since then (P1: CDR-6). Landings are numbered in order, and FMUL's body has been 118
-bytes since landing L9, about a third of its limit (P1: L9).
+every size limit at 125 percent of the pinned body's size (P1: the contracts
+file's header at Origo 7c48de8). FMUL's was 279 bytes, which gave its limit of
+349. The limit dates from those first contracts, before the round. The landing
+tool puts a candidate into the runtime. It resets cycle limits only, so the size
+limit has stood since those first contracts (P1: CDR-6). Landings are numbered
+in order, and FMUL's body has been 118 bytes since landing L9, about a third of
+its limit (P1: L9).
 
 ## The stack figure
 
@@ -191,8 +193,8 @@ included.
 
 The first contracts set each cycle limit at 125 percent of the pinned body's
 worst case (P1: the contracts file's header at Origo 7c48de8). Later the limits
-began to follow landings. The landing tool resets a hole's cycle limit each time a body lands there
-(P1: CDR-6). The new limit is 125 percent of the new
+began to follow landings. The landing tool resets a hole's cycle limit each time
+a body lands there (P1: CDR-6). The new limit is 125 percent of the new
 incumbent's worst case over all three sets of its cases.
 
 FMUL's limit of 4,655 T-states comes from such a reset after the round. Landing
@@ -201,10 +203,10 @@ throughout 3.66 percent slower (P1: CDR-6). Landing L9 returned FMUL to the body
 it had from landing L6. Its worst case went from 8,809 T-states to 3,724, and
 its limit from 11,012 to 4,655 (P1: L9).
 
-A candidate is judged by the contract in force at that moment (R9), so one
-written under an old limit is judged against the new one. The sidecar's lines
-replace any in a candidate's own files whenever the candidate is checked or
-scored.
+A candidate is judged by the contract in force at that moment (R9), so a
+candidate written under an old limit is judged against the new one. The
+sidecar's contract lines replace any in a candidate's own files whenever the
+candidate is checked or scored.
 
 A cycle limit on recorded cases can also imply a bound on the size of an input.
 FMUL's operands are always 32 bits, so its limit implies none. A routine that
@@ -219,12 +221,13 @@ contract states the bound on input size that its budget implies (R7).
 ## The trap and its site
 
 The line `traps=TRAP_FOV@caller-site` names the trap that may end the program
-and the site it must report. The caller site is the return address of the call into FMUL. It points back into the
-program that called the routine. The checks record the site reported each time a
-case traps and compare it with the line.
+and the site it must report. The caller site is the return address of the call
+into FMUL. It points back into the program that called the routine. The checks
+record the site reported each time a case traps and compare it with the line.
 
-The notation came from the same smoke run. Its report proposed the notation in place of a free-text hazard, because the
-checks can test it against the site a trap gives (P1: CDR-1). The second report adopted it (P1: CDR-2). What else those two
+The notation came from the same smoke run. Its report proposed the notation in
+place of a free-text hazard, because the checks can test it against the reported
+site (P1: CDR-1). The second report adopted it (P1: CDR-2). What else those two
 candidates got wrong belongs to chapter 3.
 
 ## Obligatory cases
@@ -234,7 +237,8 @@ The line `@cases include=` lists inputs the table must contain. The contract
 checker, which runs before any case, fails a hole whose cases lack one. FMUL's
 are two products of a signed zero, -0.0 by 1.0 and 0.0 by -1.0. No record gives
 the reason for FMUL's two. The rule behind the line is that a contract names its
-obligatory inputs (R3). An edge input then stays in the table by rule and not by luck.
+obligatory inputs (R3). An edge input then stays in the table by rule and not by
+luck.
 
 ## The hazard and the don't-care lines
 
@@ -256,11 +260,11 @@ floating-point add, has the same line in its contract. A candidate for FADD
 differed from the incumbent on ten inputs with a NaN operand, and every
 difference fell under FADD's line (P1: CDR-3).
 
-The adversarial cases found the helpers
-treating subnormal operands inconsistently. The decision that the language's
-floating-point values are never subnormal put those operands outside every
-floating-point helper's contract (P1: CDR-2, O10). A contract names the inputs
-it does not cover, and none of its cases lies there (R2).
+On subnormal operands, the adversarial cases found the helpers inconsistent. The
+decision that the language's floating-point values are never subnormal put those
+operands outside every floating-point helper's contract (P1: CDR-2, O10). A
+contract names the inputs it does not cover, and none of its cases lies there
+(R2).
 
 ## Declared incompleteness and don't-care
 
@@ -283,15 +287,16 @@ line to both contracts.
 ## Comments are not contracts
 
 A contract's lines are comments to the builder, but they are not the routine's
-own comments. Those describe the routine in its header. The first contracts were taken from the headers, and the checks found three of
-them wrong, as the section on registers changed and kept describes. A header
-that says what a routine keeps is a claim to be checked, and it is often stale.
+own comments. Those describe the routine in its header. The first contracts were
+taken from the headers, and the checks found three of them wrong, as the section
+on registers changed and kept describes. A header that says what a routine keeps
+is a claim to be checked, and it is often stale.
 
 Contracts are derived from the code and from what the checks measure, and the
 comments are corrected to match (R1). In every bundle a callee's contract
 outranks its header. The standing check, a nightly run of the checks on every
-incumbent, compares each routine's header with the registers that change during its
-cases. It reports a header that leaves one out.
+incumbent, compares each routine's header with the registers that change during
+its cases. It reports a header that leaves one out.
 
 A contract is only as good as the checks that judge it. Chapter 3 describes
 those checks, the oracles and the gates.
