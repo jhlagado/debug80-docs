@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix G. The TEC-1G as TEC-OS uses it
 
-Checked against TEC-OS 98c6416.
+Checked against TEC-OS 718c01b.
 
 This appendix lists the parts of the TEC-1G that TEC-OS reads and writes: its
 ports, the bits of the system latch, the configuration switches, the RAM in
@@ -26,16 +26,16 @@ in the files that drive them.
 | --- | --- | --- | --- |
 | `00h` | in | Hex keypad encoder | Read and discarded in each serial wait loop |
 | `01h` | out | Digit select and serial | Bits 0 to 5 select the 7-segment digits, bit 6 is the serial line's output, bit 7 the speaker |
-| `02h` | out | 7-segment segments | Service `DIGIT` |
+| `02h` | out | 7-segment segments | Hardware service `DIGIT` |
 | `03h` | in | System input | Bit 0 the Matrix switch, bit 6 a keypad key down, bit 7 the serial line's input |
 | `04h` | in, out | 20 × 4 LCD, instructions and status | The busy flag, the LCD's setup and its rows |
 | `84h` | out | 20 × 4 LCD, data | The same |
-| `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No service; `DEMO` writes them |
-| `07h`, `87h` | in, out | Graphics LCD, ST7920 | `GLCD.DRV` only |
-| `BEh`, `BFh` | in, out | PICO9918, data and control | The probe at cold boot; the console and service `VIDEO`'s restore, both in `PICO.DRV` |
-| `FCh` | in, out | DS1302 clock | Services `INFO` and `RTC` |
+| `05h`, `06h`, `F8h`, `F9h` | out | 8 × 8 LEDs | No hardware service; `DEMO` writes them |
+| `07h`, `87h` | in, out | Graphics LCD, ST7920 | `GLCD.SVC` only |
+| `BEh`, `BFh` | in, out | PICO9918, data and control | The probe at cold boot; the console and hardware service `VIDEO`'s restore, both in `PICO.SVC` |
+| `FCh` | in, out | DS1302 clock | Hardware services `INFO` and `RTC` |
 | `FDh` | in, out | SD card adaptor | The SD card driver |
-| `FEh` | in | Matrix keyboard and joystick | The keyboard scan, services `KEYS` and `JOY` |
+| `FEh` | in | Matrix keyboard and joystick | The keyboard scan, hardware services `KEYS` and `JOY` |
 | `FFh` | out | System latch | Overlay, banks and the Caps lamp |
 
 The read of port `00h` takes nothing from the keypad. It is there for the
@@ -48,11 +48,12 @@ Debug80 runtime, whose serial input starts a queued byte at a read of that port
 Port `01h` carries three things at once: the digit select in bits 0 to 5, the
 serial line's output in bit 6 and the speaker in bit 7 (`src/layout.asm:10`).
 Every write to it has to keep bit 6 high when the serial line is idle, or the
-terminal receives a start bit. The ROM's own writes do: the `DIGIT` service
-lights each digit with bit 6 set, and the `TONE` service toggles bit 7 with
-bit 6 set (`src/hwsvc.asm:45`, `src/hwsvc.asm:91-104`,
-`src/hwsvc.asm:180-197`). That shared port is why programs reach the digits
-and the speaker through the services of Chapter 9 and not by writing the port.
+terminal receives a start bit. The ROM's own writes do: the hardware service
+`DIGIT` lights each digit with bit 6 set, and `TONE` toggles bit 7 with bit 6
+set (`src/hwsvc.asm:45`, `src/hwsvc.asm:93-107`,
+`src/hwsvc.asm:177-196`). That shared port is why programs reach the digits
+and the speaker through the hardware services of Chapter 9 and not by writing
+the port.
 
 The serial line is bit-banged: TEC-OS sends each bit by writing bit 6 of port
 `01h` and receives by sampling bit 7 of port `03h`, at 4800 baud, 8 data bits,
@@ -137,7 +138,7 @@ off. A press with the jumper fitted is a crash.
 
 ## The 8 × 8 LEDs
 
-No TEC-OS service drives the 8 × 8 LEDs, and the ROM never writes their ports.
+No hardware service drives the 8 × 8 LEDs, and the ROM never writes their ports.
 `DEMO` on the starter card writes them itself, as the Debug80 runtime decodes
 them: port `05h` selects a row, and `06h`, `F8h` and `F9h` light its red,
 green and blue columns (`test/programs/demo.asm:14-17`,
@@ -154,8 +155,8 @@ clock, bit 7 the data sent to it, bit 5 set to read and the data read on bit 0
 significant bit first (`src/hwsvc.asm:311-317`). TEC-OS counts the clock as
 present when a read of the seconds register gives a value below `60h`, which a
 clock that answers gives and an empty port's `FFh` doesn't
-(`src/hwsvc.asm:292-303`). The `INFO` service reports it in bit 3 of `B`, and
-the `RTC` service reads and sets its seven BCD registers (Chapter 9).
+(`src/hwsvc.asm:292-303`). The hardware service `INFO` reports it in bit 3 of
+`B`, and `RTC` reads and sets its seven BCD registers (Chapter 9).
 
 ## The SD card adaptor
 
