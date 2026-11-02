@@ -426,7 +426,8 @@ makes the same call, function 13, but sets `WRFLAG` first
 binds the drive's pointers and reads nothing, and tests the drive's DPH:
 
 - If the changed flag is set, the drive is taken out of `LOGINV` and put in
-  `WARMV`. At its next selection `LOGIN` builds the vector again, but reads
+  `WARMV`, the vector of drives to rebuild to their mark (`src/ram.asm:149`).
+  At its next selection `LOGIN` builds the allocation vector again, but reads
   the directory only up to the mark (`src/cpm/bdos.asm:1990-2004`). No entry
   beyond the mark is in use, so none of them can hold a block.
 - If the flag is clear, `ALVSUM` adds up the vector's bytes
