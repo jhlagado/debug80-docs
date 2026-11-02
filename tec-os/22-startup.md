@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 22. Startup
 
-Checked against TEC-OS bd15528.
+Checked against TEC-OS 718c01b.
 
 Chapter 5 describes the startup file, the display lines and the LCD's words as
 you use them. Behind them are one byte of state, a 128-byte buffer and three
@@ -306,12 +306,17 @@ the card alone if `cardProblem` finds drive A missing, the display's file
 missing or that file in another format, and otherwise calls `setDisplayLine`
 (`host/card.mjs:25-50`). A card with no such file but with a `.DRV` display file
 gets a message of its own, and the test for it reads the directory only
-(`host/card.mjs:13`, `host/card.mjs:35-38`).
+(`host/card.mjs:13`, `host/card.mjs:35-38`). The message names the `.DRV` file of
+the chosen display and width if the card has it, and otherwise the first `.DRV`
+display file in the directory.
 
 `setDisplayLine` reads the file up to its `^Z` and splits it into lines. Each
 line goes through `withoutDisplay`, which splits it at `!`, drops every piece
 that is a display driver's name under either type, with or without a leading
-`:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:53-57`). Lines left
-blank are dropped. The new file is the display's file, then `GLCD.SVC` on a
-PICO9918 board, then the remaining lines, and nothing is written if that equals
-the old text (`host/card.mjs:71-80`).
+`:`, and joins the rest (`host/card.mjs:12`, `host/card.mjs:57-68`). The piece
+after a dropped one loses a leading `:`, so the line `PICO.SVC!:VOLS` becomes
+`VOLS`, an ordinary line that runs even after a failed `GLCD.SVC` on the line
+before it (`test/pico.test.mjs:712-724`). Lines left blank are dropped. The new
+file is the display's file, then `GLCD.SVC` on a PICO9918 board, then the
+remaining lines, and nothing is written if that equals the old text
+(`host/card.mjs:71-80`).
