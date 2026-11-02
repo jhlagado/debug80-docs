@@ -7,10 +7,10 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from
+Checked against TEC-OS 62d47ed, with the starter card's `EDIT.COM` from
 Edit 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
-timings and traces below were made on that card.
+timings and traces below were made on that card unless the text names another.
 
 Reading a block from the SD card takes TEC-OS about 55 milliseconds, because
 every bit of it passes through a port one at a time, as Chapter 18 describes.
@@ -44,10 +44,11 @@ in the workspace above the RAM BIOS table, at fixed addresses: `CNEXT`, the
 next line to give out; `CFAIL`, set when a line's write has failed since the
 last warm boot; `CSKIP`, the line a flush leaves alone; `CWTYPE`, the write
 type of the current BIOS `WRITE`; and `CIFF`, the interrupt state at the
-current BIOS call's entry (`src/ram.asm:196-201`). To read or write the table, a routine
-takes from `CXON` the latch value with `LATEXP` added to `LATCHV`, writes it
-to the latch, reads or writes the bytes with no `PUSH`, `POP` or `CALL` in
-between, and writes `LATCHV` back to the latch (`src/cache.asm:36-44`).
+current BIOS call's entry (`src/ram.asm:200-205`). To read or write the
+table, a routine takes from `CXON` the latch value with `LATEXP` added to
+`LATCHV`, writes it to the latch, reads or writes the bytes with no `PUSH`,
+`POP` or `CALL` in between, and writes `LATCHV` back to the latch
+(`src/cache.asm:36-44`).
 Chapter 13 explains why no stack may be used while EXPAND 1 is in view.
 
 ## Reads through the cache
@@ -82,28 +83,58 @@ the routine behind `XMOVE` and `MOVE` (`src/cache.asm:250-269`), and a copy
 between EXPAND 1 and an address in EXPAND 0, such as `DIRBUF`, goes a byte at
 a time with the latch switched between each read and its write; a DMA
 address below `8000h`, in MAIN, is copied with one `LDIR` while EXPAND 1 is
-in view (`src/xmove.asm:21-26`). A hit to a DMA address below `8000h`, such as
-the CCP's loads at `0100h` and up, takes from 5,763 T-states, and a miss
-226,419.
+in view (`src/xmove.asm:21-26`). A hit to a DMA address below `8000h`, such
+as the CCP's loads at `0100h` and up, takes from 4,726 T-states, in line 0,
+and a miss 226,419.
 
 `DIR` on the starter card's drive A shows the effect. After the first prompt
 the directory's blocks are in the cache, and `DIR`'s three BIOS reads are all
 hits.
 
-A whole command shows the gain. These figures, measured at TEC-OS 62d47ed,
-are the model's T-state count, `cycles` (`host/machine.mjs:261`), from the
-Return that ends a command to the next prompt, on a card that this command
-makes:
+A program that reads a file shows the gain over a whole file. This one
+assembles to 24 bytes, opens the file named on its command line and reads it
+to `0080h` with function 20:
 
-```sh
-node tools/tecvol.mjs create time.img --volume G1M:SYSTEM:A --volume G8M:THROUGH:B --volume G8M:BEHIND:C:wb
+```asm
+; READ: open the file named on the command line and read it to the end.
+BDOS    EQU     $0005
+FCB     EQU     $005C           ; the name from the command line
+        ORG     $0100
+        LD      DE,FCB
+        LD      C,15            ; BDOS function 15: open a file
+        CALL    BDOS
+        INC     A               ; FFh, no such file, becomes 0
+        RET     Z
+NEXT:   LD      DE,FCB
+        LD      C,20            ; BDOS function 20: read a record to 0080h
+        CALL    BDOS
+        OR      A               ; 0: a record was read
+        JR      Z,NEXT
+        JP      $0000
 ```
 
-Drive A holds a file of 12,288 bytes and a 24-byte program that opens the
-file named on its command line and reads it to `0080h` with function 20.
-After a cold boot, the program's first run took 6,626,025 T-states, 1.66
-seconds, and its second 1,327,847, 0.33 seconds, a fifth of that. Both
+These commands make a card with the program and a file of 12,288 bytes on
+drive A:
+
+```sh
+npx atom read.asm read.com
+head -c 12288 /dev/zero > data.bin
+node tools/tecvol.mjs create time.img --volume G1M:SYSTEM:A --volume G8M:THROUGH:B --volume G8M:BEHIND:C:wb
+node tools/tecvol.mjs put time.img A read.com
+node tools/tecvol.mjs put time.img A data.bin
+```
+
+`book/capture.mjs` prints no count, so the figures come from a script that
+drives `Machine` as `book/capture.mjs` does and reads the model's T-state
+count, `cycles` (`host/machine.mjs:261`), twice: when `READ DATA.BIN` has
+been typed and echoed, before the Return that ends it, and at the next
+prompt. After a cold boot, the command's first run took 6,628,187 T-states,
+1.66 seconds, and its second 1,329,981, 0.33 seconds, a fifth of that. Both
 figures include loading the program from drive A.
+
+The gain needs the whole file in the cache. A file of 15,360 bytes took about
+2.0 seconds and then about 2.1, because `CTAKE` had given up each line before
+the second read reached it.
 
 ## Writes through
 
@@ -118,7 +149,7 @@ cache (`src/bios.asm:127-164`).
 The cache is kept up to date after such a write. `CREFR` looks the block up, and if
 a line holds it copies the 512 bytes of `BLKBUF` over the line, so that a
 later read cannot return the old contents (`src/bios.asm:298`,
-`src/cache.asm:357-368`). A block not in the cache is not added to it. If the
+`src/cache.asm:360-371`). A block not in the cache is not added to it. If the
 card write fails, the block's line is dropped, since neither it nor
 `BLKBUF` can be known to match the card (`src/bios.asm:291-297`). A written
 through volume's lines are therefore always clean.
@@ -169,7 +200,7 @@ three of the first 32 data blocks early, because all 30 lines are dirty
 before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
-30,823,173 T-states, 7.71 seconds, on `THROUGH` and 9,905,832, 2.48 seconds,
+30,822,909 T-states, 7.71 seconds, on `THROUGH` and 9,905,568, 2.48 seconds,
 about a third of that, on `BEHIND`. Each run followed a cold boot and a
 change to the drive, and the count, taken as for the reads, leaves out the
 change of drive.
@@ -199,7 +230,7 @@ occasions:
 - a directory write on the volume written behind, as above;
 - `CTAKE` with every line dirty, which writes one line;
 - every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:79`,
-  `src/cache.asm:347-355`);
+  `src/cache.asm:347-358`);
 - every call of the mount service that mounts or unmounts a drive, whose
   `VFLUSH` calls `CFLALL` before any drive changes, and fails if it fails
   (`src/vol.asm:678-690`).
@@ -214,7 +245,7 @@ changes in the cache at the time of a reset are lost.
 `CWBOOT` writes every dirty line and then tests `CFAIL`. If a line's write
 has failed since the last warm boot, including the flush it has just made,
 it clears `CFAIL` and prints `Write lost` on its own line
-(`src/cache.asm:347-355`, `src/data3.asm:109`). The failed lines are still
+(`src/cache.asm:347-358`, `src/data3.asm:109`). The failed lines are still
 dirty and still hold their data, so each warm boot writes them again, and
 prints the message again while the write still fails. A card taken out while
 TEC-OS runs gives that: every write fails, the message comes at each `^C`,
