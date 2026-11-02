@@ -1,3 +1,10 @@
+---
+title: A. BDOS functions
+parent: TEC-OS
+nav_order: 101
+nav_group: "Appendices"
+---
+
 # Appendix A. BDOS functions
 
 Checked against TEC-OS 08da4d6.

@@ -2386,40 +2386,126 @@ export const sidebars = {
   ],
   "/tec-os/": [
     {
-      "text": "Introduction",
-      "link": "/tec-os/00-introduction.html"
+      "text": "Part I: Using and programming TEC-OS",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "Introduction and first boot",
+          "link": "/tec-os/01-introduction.html"
+        },
+        {
+          "text": "The console",
+          "link": "/tec-os/02-console.html"
+        },
+        {
+          "text": "The command line",
+          "link": "/tec-os/03-command-line.html"
+        },
+        {
+          "text": "Cards and volumes",
+          "link": "/tec-os/04-cards-and-volumes.html"
+        },
+        {
+          "text": "A first program",
+          "link": "/tec-os/06-first-program.html"
+        },
+        {
+          "text": "Memory for programs",
+          "link": "/tec-os/07-memory.html"
+        },
+        {
+          "text": "Programs and the console",
+          "link": "/tec-os/08-programs-and-console.html"
+        },
+        {
+          "text": "Chaining commands",
+          "link": "/tec-os/11-chaining-commands.html"
+        }
+      ]
     },
     {
-      "text": "First boot",
-      "link": "/tec-os/01-first-boot.html"
+      "text": "Part II: Inside TEC-OS",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "The ROM and its build",
+          "link": "/tec-os/12-rom-and-build.html"
+        },
+        {
+          "text": "The memory map",
+          "link": "/tec-os/13-memory-map.html"
+        },
+        {
+          "text": "Reset, cold boot and warm boot",
+          "link": "/tec-os/14-reset-and-boot.html"
+        },
+        {
+          "text": "The BIOS and the console path",
+          "link": "/tec-os/15-bios-and-console.html"
+        },
+        {
+          "text": "The BDOS",
+          "link": "/tec-os/16-bdos.html"
+        },
+        {
+          "text": "The CCP",
+          "link": "/tec-os/17-ccp.html"
+        },
+        {
+          "text": "The SD card and the volumes",
+          "link": "/tec-os/18-sd-card-and-volumes.html"
+        },
+        {
+          "text": "The block cache",
+          "link": "/tec-os/19-block-cache.html"
+        },
+        {
+          "text": "PRL relocation",
+          "link": "/tec-os/21-prl-relocation.html"
+        },
+        {
+          "text": "Command history",
+          "link": "/tec-os/23-command-history.html"
+        },
+        {
+          "text": "Diagnostics",
+          "link": "/tec-os/24-diagnostics.html"
+        },
+        {
+          "text": "Chaining inside",
+          "link": "/tec-os/25-chaining-inside.html"
+        },
+        {
+          "text": "The host model and the web page",
+          "link": "/tec-os/26-host-model.html"
+        }
+      ]
     },
     {
-      "text": "The console",
-      "link": "/tec-os/02-the-console.html"
-    },
-    {
-      "text": "The command line",
-      "link": "/tec-os/03-the-command-line.html"
-    },
-    {
-      "text": "Cards and volumes",
-      "link": "/tec-os/04-cards-and-volumes.html"
-    },
-    {
-      "text": "Memory",
-      "link": "/tec-os/05-memory.html"
-    },
-    {
-      "text": "A first program",
-      "link": "/tec-os/06-a-first-program.html"
-    },
-    {
-      "text": "The hardware services",
-      "link": "/tec-os/07-the-hardware-services.html"
-    },
-    {
-      "text": "Relocatable programs, residents and drivers",
-      "link": "/tec-os/08-relocatable-programs.html"
+      "text": "Appendices",
+      "collapsed": false,
+      "items": [
+        {
+          "text": "A. BDOS functions",
+          "link": "/tec-os/appendix-a-bdos-functions.html"
+        },
+        {
+          "text": "C. Memory map",
+          "link": "/tec-os/appendix-c-memory-map.html"
+        },
+        {
+          "text": "E. The container format",
+          "link": "/tec-os/appendix-e-container-format.html"
+        },
+        {
+          "text": "F. `tecvol`",
+          "link": "/tec-os/appendix-f-tecvol.html"
+        },
+        {
+          "text": "G. The TEC-1G as TEC-OS uses it",
+          "link": "/tec-os/appendix-g-tec-1g.html"
+        }
+      ]
     }
   ],
   "/skate/": [

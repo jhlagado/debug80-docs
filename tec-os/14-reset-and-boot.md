@@ -1,3 +1,10 @@
+---
+title: Reset, cold boot and warm boot
+parent: TEC-OS
+nav_order: 14
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 14. Reset, cold boot and warm boot
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from

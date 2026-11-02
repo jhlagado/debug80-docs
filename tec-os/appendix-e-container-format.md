@@ -1,3 +1,10 @@
+---
+title: E. The container format
+parent: TEC-OS
+nav_order: 105
+nav_group: "Appendices"
+---
+
 # Appendix E. The container format
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit

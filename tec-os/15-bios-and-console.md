@@ -1,3 +1,10 @@
+---
+title: The BIOS and the console path
+parent: TEC-OS
+nav_order: 15
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 15. The BIOS and the console path
 
 Checked against TEC-OS 98c6416.

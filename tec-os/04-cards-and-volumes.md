@@ -1,3 +1,10 @@
+---
+title: Cards and volumes
+parent: TEC-OS
+nav_order: 4
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 4. Cards and volumes
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit

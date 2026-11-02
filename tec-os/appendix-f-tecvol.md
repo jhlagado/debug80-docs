@@ -1,3 +1,10 @@
+---
+title: "F. `tecvol`"
+parent: TEC-OS
+nav_order: 106
+nav_group: "Appendices"
+---
+
 # Appendix F. `tecvol`
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit

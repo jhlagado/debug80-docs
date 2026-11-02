@@ -1,3 +1,10 @@
+---
+title: The command line
+parent: TEC-OS
+nav_order: 3
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 3. The command line
 
 Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit

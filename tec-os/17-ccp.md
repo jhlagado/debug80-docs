@@ -1,3 +1,10 @@
+---
+title: The CCP
+parent: TEC-OS
+nav_order: 17
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 17. The CCP
 
 Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit

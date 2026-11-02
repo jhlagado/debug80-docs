@@ -1,3 +1,10 @@
+---
+title: The console
+parent: TEC-OS
+nav_order: 2
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 2. The console
 
 Checked against TEC-OS 98c6416.

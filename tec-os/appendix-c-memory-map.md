@@ -1,3 +1,10 @@
+---
+title: C. Memory map
+parent: TEC-OS
+nav_order: 103
+nav_group: "Appendices"
+---
+
 # Appendix C. Memory map
 
 Checked against TEC-OS 08da4d6.

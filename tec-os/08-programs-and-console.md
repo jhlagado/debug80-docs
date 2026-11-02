@@ -1,3 +1,10 @@
+---
+title: Programs and the console
+parent: TEC-OS
+nav_order: 8
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 8. Programs and the console
 
 Checked against TEC-OS 98c6416, with the ATOM assembler from the

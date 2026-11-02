@@ -1,3 +1,10 @@
+---
+title: The SD card and the volumes
+parent: TEC-OS
+nav_order: 18
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 18. The SD card and the volumes
 
 Checked against TEC-OS 98c6416.

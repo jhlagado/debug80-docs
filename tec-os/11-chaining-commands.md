@@ -1,3 +1,10 @@
+---
+title: Chaining commands
+parent: TEC-OS
+nav_order: 11
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 11. Chaining commands
 
 Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit

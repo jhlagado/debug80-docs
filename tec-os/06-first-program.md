@@ -1,3 +1,10 @@
+---
+title: A first program
+parent: TEC-OS
+nav_order: 6
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 6. A first program
 
 Checked against TEC-OS 98c6416, with the ATOM assembler from the

@@ -1,3 +1,10 @@
+---
+title: Chaining inside
+parent: TEC-OS
+nav_order: 25
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 25. Chaining inside
 
 Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit

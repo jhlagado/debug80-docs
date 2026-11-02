@@ -1,3 +1,10 @@
+---
+title: Diagnostics
+parent: TEC-OS
+nav_order: 24
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 24. Diagnostics
 
 Checked against TEC-OS 98c6416. The diagnostics ROM in this chapter is version
