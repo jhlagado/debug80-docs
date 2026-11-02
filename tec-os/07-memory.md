@@ -50,12 +50,12 @@ own copy of page zero, but TEC-OS uses no other byte of it.
 
 ## The TPA and the word at 0006h
 
-The memory a program has varies with the card and the drivers, so a CP/M
-program reads the figure when it runs. The figure is the word at `0006h`, the
-address in page zero's jump at `0005h`, through which every call to the BDOS
-goes. CP/M also defines that word as the end of the TPA, so a program may use
-memory from `0100h` up to the byte below that address. A program that sizes
-its buffers from the word runs on any card and with any drivers.
+The memory a program has varies with the card and the drivers, so a program that
+sizes its buffers reads its limit when it runs. The limit is the word at
+`0006h`, the address in page zero's jump at `0005h`, through which every call to
+the BDOS goes. CP/M also defines that word as the end of the TPA, so a program
+may use memory from `0100h` up to the byte below that address. A program that
+sizes its buffers from the word runs on any card and with any drivers.
 
 Cold boot puts the BDOS's entry just below the allocation vectors, so the word
 depends on the card's drives, as Chapter 4 explains. Each driver installed
@@ -316,16 +316,15 @@ service that gives a program space there.
 ## XMOVE and MOVE
 
 CP/M 3 gives programs two BIOS calls for copying memory between banks,
-separately switched regions of memory that share addresses, and TEC-OS has
-them with CP/M 3's numbers and registers. `XMOVE`, BIOS function 29, takes the
+separately switched regions of memory that share addresses, and TEC-OS has both
+calls with CP/M 3's numbers and registers. `XMOVE`, BIOS function 29, takes the
 destination bank in `B` and the source bank in `C` for the next copy. `MOVE`,
 BIOS function 25, copies `BC` bytes from the address in `DE` to the address in
 `HL`, forwards as `LDIR` does. It copies between the banks `XMOVE` named, or
-within bank 0 if `XMOVE` wasn't called. Each `MOVE` uses the banks once, and
-the next is in bank 0 again. A program reaches both through BDOS function 50,
-CP/M 3's direct BIOS call. `DE` points at a BIOS parameter block of eight
-bytes, which holds the BIOS function and then the values for `A`, `BC`, `DE`
-and `HL`.
+within bank 0 if `XMOVE` wasn't called. Each `MOVE` uses the banks once, and the
+next is in bank 0 again. A program reaches both through BDOS function 50, CP/M
+3's direct BIOS call. `DE` points at a BIOS parameter block of eight bytes,
+which holds the BIOS function and then the values for `A`, `BC`, `DE` and `HL`.
 
 On TEC-OS, bank 0 is the program's view of memory, from `0000h` up to the word
 at `0006h`, and bank 1 is EXPAND 1. Since EXPAND 1 is TEC-OS's, bank 1 has no
