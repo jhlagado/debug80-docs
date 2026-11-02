@@ -74,12 +74,12 @@ routine must not print through the console.
 
 The calls also run on the caller's stack, and on a display so do the ROM's
 terminal and the routines of `PICO.DRV` or `GLCD.DRV` beneath them. On the
-model, a direct call with nothing pushed used at most 24 of the CCP's 28
-bytes. That figure is the lowest `SP` below its value at the program's entry,
-and it counts the call's return word. It came from a call that cleared a
-display after a change to the IOBYTE, which is the deepest path measured and
-not a proved worst case. A program that pushes before it calls the BIOS
-therefore sets up a stack of its own first.
+model, a direct call with nothing pushed used at most 24 of the CCP's 28 bytes.
+That figure is the lowest `SP` below its value at the program's entry, and it
+counts the call's return word. It came from a call that cleared a display after
+a change to the IOBYTE. That is the deepest path measured and not a proved worst
+case. A program that pushes before it calls the BIOS therefore sets up a stack
+of its own first.
 
 This program reads keys through `CONIN` and prints each one's code through
 `CONOUT` until Return. It pushes before it calls the BIOS, so it starts by
