@@ -36,7 +36,7 @@ records and how a service is made.
 A service takes whole pages of 256 bytes, and those bytes come from the TPA,
 the memory programs have. Installing one lowers the word at `0006h`, the
 address that gives a program the top of its memory (Chapter 7). The pages that
-loaded services hold, from the lowest service up to TEC-OS's workspace, are the
+loaded services hold, from the lowest service up to the BDOS entry jump, are the
 *service resident memory*. A display driver on the starter card takes six
 pages, and a run on the model gives:
 
