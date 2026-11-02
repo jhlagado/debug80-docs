@@ -87,11 +87,11 @@ both.
 
 The BIOS's table is in RAM, at `BF00h`, and Chapter 15 lists its entries. The
 word at `0001h` holds the address of its `WBOOT` entry. Each entry is a 3-byte
-`JP`, and warm boot leaves the table's other entries as it finds them. The
-BDOS reaches the console and the disk through those entries. A replaced entry
-therefore receives all the console output of a program and of the CCP. A
-*hook* on an entry is a routine that does its own work and then jumps to the
-address the entry held.
+`JP`, and warm boot leaves the table as it finds it. The BDOS reaches the
+console and the disk through those entries. A replaced entry therefore
+receives all the console output of a program and of the CCP. A *hook* on an
+entry is a routine that does its own work and then jumps to the address the
+entry held.
 
 `COUNT.SVC` hooks `CONOUT` and counts the characters that pass through it:
 
