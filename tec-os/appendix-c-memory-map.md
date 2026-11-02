@@ -14,7 +14,7 @@ ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
 program's side. The figures are those of the debug80 build at 08da4d6, whose
 ROM has the SHA-256
-`524b9440f7bb628f519915a1601159eff824d9186596430da1a39d79536cd4b5`; the
+`524b9440f7bb628f519915a1601159eff824d9186596430da1a39d79536cd4b5`. The
 build's four profile names give the same image. Where the figures depend on
 the card they are those of the starter card, with a G1M volume on drive A and
 a G8M volume on drive B, and no driver installed.
@@ -24,8 +24,8 @@ a G8M volume on drive B, and no driver installed.
 `npm run media` writes the summary tables to `docs/memory-map.md` from the
 build's census, `build/debug80/census.json` (`tools/media.mjs:78-177`,
 `tools/media.mjs:238`). The address of any label is in the build's symbol
-file, `build/debug80/tecos.d8.json`; this command prints those of the labels
-named after it:
+file, `build/debug80/tecos.d8.json`. This command prints the addresses of the
+labels named after it:
 
 ```sh
 node -e '
@@ -44,8 +44,8 @@ CHPOS BFE5h
 
 Every address in the workspace tables below comes from that file. A change to
 the source can move any of them, except the few the code fixes: page zero,
-`BF00h` for the RAM BIOS table, the table at `C003h`, and EXPAND 1's cache,
-cache table and history page.
+EXPAND 1's cache, cache table and history page, `BF00h` for the RAM BIOS table
+and the table at `C003h`.
 
 ## The CPU's address space
 
@@ -163,7 +163,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 | `BFE6h–BFFFh` | 26 | unused |
 
 The part from `WSBASE`, `B958h`, to `BEFFh` has the same addresses on every
-card; the build places `WSBASE` so that it ends at `BF00h`
+card. The build places `WSBASE` so that the part ends at `BF00h`
 (`src/gen/config.asm:2`, `src/layout.asm:69-72`). The part above the table
 starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:192`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `B958h` to `BFE5h`
@@ -254,10 +254,10 @@ clears the rest:
 
 ## EXPAND 1
 
-Cold boot clears all of it. No BDOS or BIOS call gives a program a range in
-it: `MOVE` rejects every range in bank 1 (`src/xmove.asm:1-7`). A program that
-writes the latch can still switch it in, and the jump at `BF03h` is for one
-that ends that way.
+Cold boot clears all of EXPAND 1. No BDOS or BIOS call gives a program a range
+in it: `MOVE` rejects every range in bank 1 (`src/xmove.asm:1-7`). A program
+that writes the latch can still switch it in, and the jump at `BF03h` is for
+one that ends with it switched in.
 
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
