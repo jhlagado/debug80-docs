@@ -166,8 +166,8 @@ volume's lines are therefore always clean.
 ## Writes behind
 
 Writing through costs four card writes for each block of a new file, as
-Chapter 18 shows, so the volume written behind keeps its records in the cache
-and sends them to the card in batches. A volume is written behind when its
+Chapter 18 shows, so the block cache keeps the records of the volume written
+behind and sends them to the card in batches. A volume is written behind when its
 descriptor has bit 0 of its cache byte, byte 15, set. `tecvol` sets the bit on
 one volume at most, and the ROM writes behind any volume that has it. `MNFILL`
 copies that bit into bit 1 of the drive's flags in the drive table
