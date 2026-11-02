@@ -352,7 +352,8 @@ The seventh vector carries three functions that only the PICO9918's driver
 needs (`src/video.asm:26-45`). That driver has two name tables in VRAM, its two
 pages, one shown and one hidden, so a move of rows can be built out of sight and
 shown with one register write (`drivers/pico.asm:17-18`,
-`drivers/pico.asm:301-305`). Function 0 shows the page the terminal has drawn. `CONST` and `CONIN` call it, so that by the time a program
+`drivers/pico.asm:301-305`). Function 0 shows the page the terminal has drawn.
+`CONST` and `CONIN` call it, so that by the time a program
 waits for a key the screen shows what it drew (`src/console.asm:118`,
 `src/console.asm:151`). Functions 1 and 2 begin and end a move of rows, around a
 scroll or a line insert or delete (`src/term.asm:465`, `src/term.asm:524`). The
