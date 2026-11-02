@@ -651,9 +651,9 @@ fire 3. The model has no joystick of its own to confirm those names.
 
 ## Claiming the PICO9918
 
-For graphics on the PICO9918, a program claims it first, with `VIDEO`, number
-22. Any nonzero `B` claims and `B = 0` releases. On a board with no PICO9918
-both return status 2.
+For graphics on the PICO9918, a program first claims it with `VIDEO`, service
+number 22. Any nonzero `B` claims and `B = 0` releases. On a board with no
+PICO9918 both return status 2.
 
 While the chip is claimed, the terminal code leaves it alone: output to it is
 dropped, no cursor is drawn and no pages flip. The program may set any mode
