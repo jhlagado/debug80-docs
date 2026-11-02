@@ -118,7 +118,7 @@ data block, under a heading with the file's name.
 ## The generated files
 
 The source needs settings that depend on the build, and a container layout it
-shares with the tools on the PC. So before it assembles, the build writes three
+shares with the tools on the PC. So before assembling, the build writes three
 files into `src/gen/`, each headed with a line saying it is generated and not
 to be edited (`tools/build.mjs:63-139`).
 
@@ -242,9 +242,10 @@ holds the figures for the ROM's parts, the RAM's regions and the stacks
 (`tools/build.mjs:283-331`).
 
 The PICO9918's width is set by the driver loaded at startup (Chapter 5), so
-every board takes the same image. The build's four profile names, `debug80`,
-`debug80t40`, `debug80g32` and `board`, all name that image
-(`tools/build.mjs:28-35`). The build assembles the first profile and copies its
+every board takes the same image. The build keeps four profile names,
+`debug80`, `debug80t40`, `debug80g32` and `board`, so that anything that reads
+a ROM by its profile's name still has a file to read, and all four name that
+image (`tools/build.mjs:28-35`). The build assembles the first profile and copies its
 image and map to the other three, and only the name and the description change
 in each census (`tools/build.mjs:335-349`). `npm run build` prints one line for
 each:
@@ -262,6 +263,4 @@ media` then copies each profile's three files to `dist/` as
 `tecos-<profile>.census.json` (`tools/media.mjs:183-188`). It also writes
 `docs/memory-map.md` from the `debug80` census. The four ROM files in `dist/`
 have the same SHA-256,
-`59f01f21287f0d9b1b6dd30b3fbe8df5f1971a14b9bb033715c90bd592d95932`. The names
-are kept so that anything that reads a ROM by its profile's name still has a
-file to read.
+`59f01f21287f0d9b1b6dd30b3fbe8df5f1971a14b9bb033715c90bd592d95932`.
