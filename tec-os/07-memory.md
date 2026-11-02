@@ -13,11 +13,11 @@ repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
-TEC-OS's. This chapter describes the Z80's 64 KiB as TEC-OS lays it out on a
-TEC-1G, then the program area and the word at `0006h` that marks its end,
-page zero and the bytes TEC-OS keeps there, the second half of the expansion
-RAM, which TEC-OS keeps for itself, and the two CP/M 3 calls with which a
-program copies memory.
+TEC-OS's. This chapter starts with the Z80's 64 KiB as TEC-OS lays it out on a
+TEC-1G. It then describes the program area and the word at `0006h` that marks
+its end, then page zero and the bytes TEC-OS keeps there. It ends with the
+second half of the expansion RAM, which TEC-OS keeps for itself, and the two
+CP/M 3 calls that copy memory.
 
 ## The Z80's 64 KiB
 
@@ -30,38 +30,37 @@ three parts:
 | `8000h–BFFFh` | 16 KiB | EXPAND 0 or EXPAND 1, the two halves of the RAM in socket U9 |
 | `C000h–FFFFh` | 16 KiB | the TEC-OS ROM |
 
-The window at `8000h–BFFFh` shows one half of the RAM chip in U9 at a time,
-and bit 2 of the board's system latch, at port `FFh`, selects which. EXPAND
-0 is in view when TEC-OS starts a program. So a program has 48 KiB of RAM
+The window at `8000h–BFFFh` shows one half of the RAM chip in U9 at a time.
+Bit 2 of the board's system latch, at port `FFh`, selects which. EXPAND 0 is
+in view when TEC-OS starts a program. A program therefore has 48 KiB of RAM
 from `0000h` to `BFFFh`, with the ROM above it.
 
 TEC-OS uses the top of that RAM, and programs have the rest. Page zero,
 `0000h–00FFh`, holds the jumps and buffers through which a program reaches
 TEC-OS. The program area, which CP/M calls the TPA, runs from `0100h` up to
 TEC-OS's resident workspace at the top of EXPAND 0. The workspace holds the
-BDOS's entry, the drives' allocation vectors, the buffer for card blocks,
-the stacks and state of the BIOS, the CCP and the BDOS, and at `BF00h` the
-BIOS's jump table.
+BDOS's entry, the drives' allocation vectors and the buffer for card blocks.
+It also holds the stacks and state of the BIOS, the CCP and the BDOS, and at
+`BF00h` the BIOS's jump table.
 
-Cold boot also tests for a second 32 KiB at `0000h–7FFFh`, which bit 3 of
-the latch would put in view in place of the fixed RAM. It stores 1 or 2 at
-`0041h` for the number of regions, and gives the second its own copy of page
-zero; TEC-OS uses no other byte of it.
+Cold boot also tests for a second 32 KiB at `0000h–7FFFh`. Bit 3 of the latch
+would put it in view in place of the fixed RAM. Cold boot stores 1 or 2 at
+`0041h` for the number of regions and gives the second its own copy of page
+zero. TEC-OS uses no other byte of it.
 
 ## The program area and the word at 0006h
 
 Page zero has a jump at `0005h`, and every call to the BDOS goes through it.
-The word at `0006h` is the jump's address, and CP/M defines it as the end of
-the program area as well: a program may use memory from `0100h` up to the
-byte below that address. CP/M programs read the word to find how much memory
-they have, and a program that sizes its buffers from it runs on any card and
-with any drivers.
+The word at `0006h` is the jump's address. CP/M also defines it as the end of
+the program area. A program may use memory from `0100h` up to the byte below
+that address. CP/M programs read the word to find how much memory they have. A
+program that sizes its buffers from it runs on any card and with any drivers.
 
-The word moves. Cold boot puts the BDOS's entry just below the allocation
-vectors, so the word depends on the card's drives, as Chapter 4 explains,
-and each driver installed lowers it again: TEC-OS loads the driver below the
-old address, and the driver's own jump on to the BDOS becomes the target of
-the jump at `0005h`. This program prints the word:
+Cold boot puts the BDOS's entry just below the allocation vectors, so the word
+depends on the card's drives, as Chapter 4 explains. Each driver installed
+lowers it again. TEC-OS loads the driver below the old address, and the
+driver's own jump on to the BDOS becomes the target of the jump at `0005h`.
+This program prints the word:
 
 ```asm
 ; TOP: print the word at 0006h, the first byte above the program area.
@@ -95,11 +94,11 @@ CRLF:   DB      "h",13,10,"$"
 ```
 
 `DIGIT` turns the low four bits of `A` into a character from `0` to `F` and
-prints it with function 2, and `HEX` calls it for the high four bits and
-then falls into it for the low four. `DIGIT` ends with `JP BDOS`, so the
-BDOS's return is the return of both. Assembled as Chapter 6 describes and
-copied to drive B of a copy of the starter card, it runs on a board with
-only a serial terminal:
+prints it with function 2. `HEX` calls it for the high four bits and then
+falls into it for the low four. `DIGIT` ends with `JP BDOS`, so the BDOS's
+return is the return of both. The program is assembled as Chapter 6 describes
+and copied to drive B of a copy of the starter card. Here it runs on a board
+with only a serial terminal:
 
 ```sh
 cp dist/starter.img mem.img
@@ -115,9 +114,9 @@ B806h
 A>
 ```
 
-On the web page's board, `PICO.DRV` is installed by the startup file, and
-`CON UC1` then installs `GLCD.DRV`. `B:TOP`, its reply and the echo of `CON
-UC1` appeared on the PICO9918, and the rest on the graphics LCD:
+On the web page's board the startup file installs `PICO.DRV`, and `CON UC1`
+then installs `GLCD.DRV`. `B:TOP`, its reply and the echo of `CON UC1`
+appeared on the PICO9918, and the rest on the graphics LCD:
 
 <!-- node book/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
 ```text
@@ -132,16 +131,16 @@ AC06h
 A>
 ```
 
-Each display driver takes 1,536 bytes, six pages of 256, and so the program
-area is 46,854 bytes on the starter card with no driver, 45,318 with one and
-43,782 with both. On a card whose header gives four drives, such as `my.img`
-from Chapter 4, the word is `B506h` with no driver, and the program area
+Each display driver takes 1,536 bytes, six pages of 256. The program area is
+therefore 46,854 bytes on the starter card with no driver, 45,318 with one and
+43,782 with both. A card whose header gives four drives, such as `my.img` from
+Chapter 4, has `B506h` in the word with no driver. Its program area is then
 46,086 bytes.
 
 Cold boot sets up at most four drives, A to D, each with a vector of at most
-256 bytes, so every card gives at least 46,086 bytes with no driver, 44,550
-with one display driver and 43,014 with both, when the word is `A906h`. Any
-other driver takes its own pages from those figures.
+256 bytes. Every card therefore gives at least 46,086 bytes with no driver,
+44,550 with one display driver and 43,014 with both, when the word is `A906h`.
+Any other driver takes its own pages from those figures.
 
 A program that sizes its buffers works from the area's size, the word less
 `0100h`. This program finds it and prints it in decimal:
@@ -191,9 +190,9 @@ BYTES:	DB	" bytes",13,10,"$"
 ```
 
 `PUTDEC` finds each digit by adding a negative power of ten to `HL` and
-counting until the total falls below zero, which clears the carry, and
-`SBC HL,BC` then adds that power back. Assembled and copied to `mem.img`, the
-program gives the figure for the starter card with no driver:
+counting until the total falls below zero, which clears the carry. `SBC HL,BC`
+then adds that power back. Assembled and copied to `mem.img`, the program
+gives the figure for the starter card with no driver:
 
 ```sh
 npx atom area.asm area.com
@@ -208,26 +207,26 @@ A>B:AREA
 A>
 ```
 
-The CCP loads a `.COM` file a record of 128 bytes at a time from `0100h`,
-and it stops at the 256-byte page that holds the address in the word at
-`0006h`. On the starter card with no driver the last record ends at `B7FFh`,
-so the largest program file that loads is 46,848 bytes, six bytes short of
-the program area. A file one record longer is refused like a missing one,
-with its name and a question mark. By the same rule, the largest file that
-loads on a four-drive card with both display drivers is 43,008 bytes. A
-program's data may go on to the byte below the word at `0006h`.
+The CCP loads a `.COM` file from `0100h`, a record of 128 bytes at a time. It
+stops at the 256-byte page that holds the address in the word at `0006h`. On
+the starter card with no driver the last record ends at `B7FFh`. The largest
+program file that loads is therefore 46,848 bytes, six bytes short of the
+program area. A file one record longer fails like a missing one, with its name
+and a question mark. By the same rule, the largest file that loads on a
+four-drive card with both display drivers is 43,008 bytes. A program's data
+may go on to the byte below the word at `0006h`.
 
-The workspace above the word is TEC-OS's: a program that writes there
-corrupts the drives' allocation vectors or the BDOS's state, and what
-follows is a damaged card or a crash. The stack a program starts on is the
-CCP's, in the workspace, with 28 bytes free below the return address, as
-Chapter 6 says; a program that uses more sets `SP` to a stack of its own
-below the word at `0006h`.
+The workspace above the word is TEC-OS's. A program that writes there corrupts
+the drives' allocation vectors or the BDOS's state, and what follows is a
+damaged card or a crash. The stack a program starts on is the CCP's, in the
+workspace, with 28 bytes free below the return address, as Chapter 6 says. A
+program that uses more sets `SP` to a stack of its own below the word at
+`0006h`.
 
-On CP/M 2.2 the CCP is in RAM below the BDOS, and a program may overwrite
-it, since warm boot reads the CCP back from disk. On TEC-OS that gains a
-program nothing: the CCP and the BDOS are in the ROM, and the program area
-already runs up to the word at `0006h`.
+On CP/M 2.2 the CCP is in RAM below the BDOS. A program may overwrite it,
+since warm boot reads the CCP back from disk. On TEC-OS that gains a program
+nothing. The CCP and the BDOS are in the ROM, and the program area already
+runs up to the word at `0006h`.
 
 ## Page zero
 
@@ -248,27 +247,27 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 
 The word at `0001h`, `BF03h`, is the address of the warm boot entry in the
 BIOS's jump table, the table's second entry. A program finds the table by
-subtracting 3 from it, and Chapter 8 describes the console's entries there.
+subtracting 3 from it. Chapter 8 describes the console's entries there.
 
 The restart vectors are free for a program, and for a debugger, while the
 program runs. At each warm boot TEC-OS writes seven zeros and a `RET` into
-each one that doesn't hold a jump into the ROM, so that an `RST` through a
-vector a finished program set returns at once. The Z80 enters `0038h` on an
-interrupt in mode 1, the mode cold boot sets, and TEC-OS has nothing there
-but the return. Warm boot disables interrupts and nothing in TEC-OS enables
-them, so a program starts with them off; a program that enables them keeps
-them on, except while TEC-OS reads or writes a card block, when it holds
-them off and then restores them.
+each one that doesn't hold a jump into the ROM. An `RST` through a vector a
+finished program set then returns at once. The Z80 enters `0038h` on an
+interrupt in mode 1, the mode cold boot sets. TEC-OS has nothing there but the
+return. Warm boot disables interrupts and nothing in TEC-OS enables them, so a
+program starts with them off. A program that enables them keeps them on,
+except while TEC-OS reads or writes a card block. TEC-OS holds them off for
+that and then restores them.
 
 `0066h`, where the Z80 goes on a non-maskable interrupt, lies inside the FCB
 at `005Ch`. On a board with the keypad's NMI jumper fitted, a key on the hex
-keypad lands there, which is why Chapter 1 says to keep off the keypad while
-a program runs.
+keypad lands there. Chapter 1 therefore says to keep off the keypad while a
+program runs.
 
 ## TEC-OS's bytes at 0040h
 
-CP/M 2.2 leaves `0040h–004Fh` to the BIOS, and TEC-OS keeps there the state
-that must stay in view whichever half of the expansion RAM is in the window:
+CP/M 2.2 leaves `0040h–004Fh` to the BIOS. TEC-OS keeps there the state that
+must stay in view whichever half of the expansion RAM is in the window:
 
 | Address | Contents |
 | --- | --- |
@@ -286,10 +285,10 @@ that must stay in view whichever half of the expansion RAM is in the window:
 | `004Fh` | 1 while the cursor's cell is drawn inverted |
 
 A program reads the console's size at `0048h`, as Chapter 8 describes, and
-leaves the rest alone. The latch at port `FFh` can only be written, so
-`0040h` is TEC-OS's record of what it holds: a program that writes the latch
-itself writes the same value to `0040h`, or TEC-OS's next change to the
-latch puts back the bits as `0040h` recorded them.
+leaves the rest alone. The latch at port `FFh` can only be written, so `0040h`
+is TEC-OS's record of what it holds. A program that writes the latch itself
+writes the same value to `0040h`. Otherwise TEC-OS's next change to the latch
+puts back the bits as `0040h` recorded them.
 
 ## EXPAND 1
 
@@ -304,35 +303,35 @@ clears it, and TEC-OS keeps in it:
 | `BE00h–BEFFh` | free |
 | `BF00h–BFFFh` | reserved |
 
-EXPAND 1 in the window takes EXPAND 0 out of it, and with it the BDOS's
-entry, the BIOS's jump table, the workspace and any of the program above
-`7FFFh`. The jump at `0005h` then leads into a line of the cache, and the
-return word on the CCP's stack is out of view, so a program on that stack has
-lost its stack and the BDOS before it writes a byte. A write to the window
-then damages the cache, and the next flush can write wrong data to the card.
-TEC-OS has no service that gives a program space there.
+EXPAND 1 in the window takes EXPAND 0 out of it. The BDOS's entry, the BIOS's
+jump table, the workspace and any of the program above `7FFFh` go with it. The
+jump at `0005h` then leads into a line of the cache, and the return word on
+the CCP's stack is out of view. A program on that stack has lost its stack and
+the BDOS before it writes a byte. A write to the window then damages the
+cache, and the next flush can write wrong data to the card. TEC-OS has no
+service that gives a program space there.
 
 ## XMOVE and MOVE
 
 CP/M 3 gives programs two BIOS calls for copying memory between banks,
-separately switched regions of memory that share addresses, and TEC-OS has
-them with CP/M 3's numbers and registers. `XMOVE`, BIOS function 29, takes
-the destination bank in `B` and the source bank in `C` for the next copy.
-`MOVE`, BIOS function 25, copies `BC` bytes from the address in `DE` to the
-address in `HL`, forwards as `LDIR` does, between the banks `XMOVE` named,
-or within bank 0 if `XMOVE` wasn't called; each `MOVE` uses the banks once,
-and the next is in bank 0 again. A program reaches both through BDOS
-function 50, CP/M 3's direct BIOS call, with `DE` pointing at a BIOS
-parameter block of eight bytes: the BIOS function, then the values for `A`,
-`BC`, `DE` and `HL`.
+separately switched regions of memory that share addresses. TEC-OS has them
+with CP/M 3's numbers and registers. `XMOVE`, BIOS function 29, takes the
+destination bank in `B` and the source bank in `C` for the next copy. `MOVE`,
+BIOS function 25, copies `BC` bytes from the address in `DE` to the address in
+`HL`, forwards as `LDIR` does. It copies between the banks `XMOVE` named, or
+within bank 0 if `XMOVE` wasn't called. Each `MOVE` uses the banks once, and
+the next is in bank 0 again. A program reaches both through BDOS function 50,
+CP/M 3's direct BIOS call. `DE` points at a BIOS parameter block of eight
+bytes, which holds the BIOS function and then the values for `A`, `BC`, `DE`
+and `HL`.
 
-On TEC-OS, bank 0 is the program's view of memory, from `0000h` up to the
-word at `0006h`, and bank 1 is EXPAND 1. Since EXPAND 1 is TEC-OS's, bank 1
-has no bytes a program may use: a `MOVE` with any byte in bank 1 copies
-nothing and returns `FFh` in `A`. A `MOVE` within bank 0 copies and returns
-0. A copy that runs past the word at `0006h` is refused in the same way, and
-a copy puts the latch and the interrupt state back as they were before it.
-This program tries both:
+On TEC-OS, bank 0 is the program's view of memory, from `0000h` up to the word
+at `0006h`. Bank 1 is EXPAND 1. Since EXPAND 1 is TEC-OS's, bank 1 has no
+bytes a program may use. A `MOVE` with any byte in bank 1 copies nothing and
+returns `FFh` in `A`. A copy that runs past the word at `0006h` does the same.
+A `MOVE` within bank 0 copies and returns 0. A copy puts the latch and the
+interrupt state back as they were before it. This program makes a `MOVE` into
+bank 1 and one within bank 0:
 
 ```asm
 ; BANKS: try CP/M 3's MOVE into bank 1, then within bank 0, and print the
