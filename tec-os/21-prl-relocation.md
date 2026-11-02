@@ -101,13 +101,12 @@ Digital Research's header also has a word at offset 4, the extra data memory
 the program needs beyond its code (`src/prl.asm:2`). `makePrl` leaves it 0,
 and TEC-OS's loader doesn't read it.
 
-Digital Research defined the format for MP/M and CP/M 3, and Appendix B of
-the CP/M 3 Programmer's Guide describes it. Digital Research's `LINK` writes
-a PRL with its `[OP]` option. TEC-OS's loader reads the length and checks
-that the code and the bitmap are in the records loaded (`src/prl.asm:14-53`),
-and a file from `LINK` has the same layout, though none has been through the
-loader: the tests make their PRL files with the repository's own code
-(`test/prl.test.mjs:37`, `test/lib/fixtures.mjs:63`).
+Digital Research defined the format for MP/M, and CP/M 3 loads it too;
+Appendix B of the CP/M 3 Programmer's Guide describes it. Digital Research's
+linker, LINK-80, writes a PRL with its `[OP]` option. By Appendix B, a file
+from LINK-80 has the layout that TEC-OS's loader checks (`src/prl.asm:14-53`).
+The tests hold no such file: they make their PRL files with the repository's
+own code (`test/prl.test.mjs:37`, `test/lib/fixtures.mjs:63`).
 
 ## A PRL program at 0100h
 
