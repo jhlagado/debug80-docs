@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 7. Memory for programs
 
-Checked against TEC-OS 98c6416, with the ATOM assembler from the
+Checked against TEC-OS 718c01b, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
 845d062, and its copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
@@ -38,10 +38,11 @@ is in view when TEC-OS starts a program, so a program has 48 KiB of RAM from
 TEC-OS uses the top of that RAM, and programs have the rest. Page zero,
 `0000h–00FFh`, holds the jumps and buffers through which a program reaches
 TEC-OS. The TPA, CP/M's Transient Program Area, runs from `0100h` up to the
-BDOS's entry, with the drives' allocation vectors above it. Above them, at the
-top of EXPAND 0, is TEC-OS's resident workspace. The workspace holds the buffer
-for card blocks, the stacks and state of the BIOS, the CCP and the BDOS, and at
-`BF00h` the BIOS jump table.
+BDOS's entry or, with a service installed, up to the lowest service's jump on to
+that entry. The drives' allocation vectors are above the BDOS's entry. Above
+them, at the top of EXPAND 0, is TEC-OS's resident workspace. The workspace
+holds the buffer for card blocks, the stacks and state of the BIOS, the CCP and
+the BDOS, and at `BF00h` the BIOS jump table.
 
 Cold boot also tests for a second 32 KiB at `0000h–7FFFh`, MAIN 1, which bit 3
 of the latch would put in view in place of the fixed RAM, MAIN 0. Cold boot
@@ -50,17 +51,17 @@ own copy of page zero, but TEC-OS uses no other byte of it.
 
 ## The TPA and the word at 0006h
 
-The memory a program has varies with the card and the drivers, so a program that
+The memory a program has varies with the card and the services, so a program that
 sizes its buffers reads its limit when it runs. The limit is the word at
 `0006h`, the address in page zero's jump at `0005h`, through which every call to
 the BDOS goes. CP/M also defines that word as the end of the TPA, so a program
 may use memory from `0100h` up to the byte below that address. A program that
-sizes its buffers from the word runs on any card and with any drivers.
+sizes its buffers from the word runs on any card and with any services.
 
 Cold boot puts the BDOS's entry just below the allocation vectors, so the word
-depends on the card's drives, as Chapter 4 explains. Each driver installed
-lowers it again, because TEC-OS loads the driver below the old address and the
-driver's own jump on to the BDOS becomes the target of the jump at `0005h`.
+depends on the card's drives, as Chapter 4 explains. Each service installed
+lowers it again, because TEC-OS loads the service below the old address and the
+service's own jump on to the BDOS becomes the target of the jump at `0005h`.
 This program prints the word:
 
 ```asm
@@ -115,8 +116,8 @@ B806h
 A>
 ```
 
-On the web page's board the startup file installs `PICO.DRV` and `CON UC1`
-then installs `GLCD.DRV`, so the word falls twice. `B:TOP`, its reply and the
+On the web page's board the startup file installs `PICO.SVC` and `CON UC1`
+then installs `GLCD.SVC`, so the word falls twice. `B:TOP`, its reply and the
 echo of `CON UC1` appeared on the PICO9918, and the rest on the graphics LCD:
 
 <!-- node tools/capture.mjs --board pico --card mem.img B:TOP "CON UC1" B:TOP -->
@@ -133,14 +134,15 @@ A>
 ```
 
 Each display driver takes 1,536 bytes, six pages of 256, so the TPA is 46,854
-bytes on the starter card with no driver, 45,318 with one and 43,782 with
-both. A card whose header gives four drives, such as `my.img` from Chapter 4,
-has `B506h` in the word with no driver, and its TPA is then 46,086 bytes.
+bytes on the starter card with no service, 45,318 with one display driver and
+43,782 with both. A card whose header gives four drives, such as `my.img` from
+Chapter 4, has `B506h` in the word with no service, and its TPA is then 46,086
+bytes.
 
 Cold boot sets up at most four drives, A to D, each with a vector of at most
-256 bytes, so every card gives at least 46,086 bytes with no driver, 44,550
+256 bytes, so every card gives at least 46,086 bytes with no service, 44,550
 with one display driver and 43,014 with both, when the word is `A906h`. Any
-other driver takes its own pages from those figures.
+other service takes its own pages from those figures.
 
 A program that sizes its buffers works from the TPA's size, the word less
 `0100h`. This program finds it and prints it in decimal:
@@ -192,7 +194,7 @@ BYTES:	DB	" bytes",13,10,"$"
 `PUTDEC` finds each digit by adding a negative power of ten to `HL` and
 counting until the total falls below zero, which clears the carry. `SBC HL,BC`
 then adds that power back. Assembled and copied to `mem.img`, the program
-gives the figure for the starter card with no driver:
+gives the figure for the starter card with no service:
 
 ```sh
 npx atom area.asm area.com
@@ -209,7 +211,7 @@ A>
 
 The CCP loads a `.COM` file from `0100h`, a record of 128 bytes at a time, and
 stops at the 256-byte page that holds the address in the word at `0006h`. On
-the starter card with no driver the last record ends at `B7FFh`, so the
+the starter card with no service the last record ends at `B7FFh`, so the
 largest program file that loads is 46,848 bytes, six bytes short of the TPA. A
 file one record longer fails like a missing one, with its name and a question
 mark. By the same rule, the largest file that loads on a four-drive card with
@@ -222,6 +224,12 @@ damaged card or a crash. The stack a program starts on is up there too: it is
 the CCP's, in the workspace, with 28 bytes free below the return address, as
 Chapter 6 says. A program that uses more sets `SP` to a stack of its own below
 the word at `0006h`.
+
+With a service installed, the word points 6 bytes into the lowest service's
+first page. Those 6 bytes hold the service's links, its flags and the offset of
+its `REMOVE`. A stack started at the word, or data that reaches the byte below
+it, overwrites them, and Chapter 10 describes the result. A stack started 6
+bytes lower leaves them alone.
 
 On CP/M 2.2 the CCP is in RAM below the BDOS, and a program may overwrite it,
 since warm boot reads the CCP back from disk. On TEC-OS that gains a program
@@ -311,7 +319,7 @@ it. The jump at `0005h` then leads into a cache line, and the return word on
 the CCP's stack is out of view. A program on that stack has lost its stack and
 the BDOS before it writes a byte. A write to the window then damages the
 cache, and the next flush can write wrong data to the card. TEC-OS has no
-service that gives a program space there.
+call that gives a program space there.
 
 ## XMOVE and MOVE
 
