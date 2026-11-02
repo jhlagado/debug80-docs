@@ -10,11 +10,11 @@ nav_group: "Appendices"
 Checked against TEC-OS bd15528.
 
 This appendix lists every message TEC-OS prints, with its cause and its
-remedy, in the order a run can meet them: cold boot and the diagnostic prompt,
-the LCD's words, the CCP, the BDOS and the block cache. `MOUNT` and `VOLS`
-follow, and then the lines that report no fault. The last column of each table
-links to the chapter that explains the message or its subject and gives the
-source.
+remedy, in the order a run can reach them: cold boot and the diagnostic
+prompt, the LCD's words, the CCP, the BDOS and the block cache. `MOUNT` and
+`VOLS` follow, and then the lines that report no fault. The `See` column of
+each table links to the chapter that explains the message or its subject and
+gives the source.
 
 In a message, `d` stands for a drive letter, `nn` for a code in hexadecimal and
 `NAME` for a word from the command line. The rest is the text the ROM holds.
@@ -59,18 +59,18 @@ Codes `01h` to `04h` come from `SDINIT`, the start of the card
 | `04` | `CMD16`, which sets a standard-capacity card's block length, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-spi-driver), `src/sd.asm:187-196` |
 
 Codes `05h` to `08h` are the SD driver's codes for a block read or write:
-command rejected, no data token, write not accepted, and card stayed busy
+command rejected, no data token, write not accepted and card stayed busy
 (`src/sd.asm:14-17`). They never reach this prompt. The driver stores them in
-`SDERR`, which nothing reads. A failed read during the mount is code `20`, and
-a failed read or write after it is a BDOS error, `Write lost` or, for a
-directory read, no message at all. `MOUNT`'s own reads and writes give the
-messages in its table below.
+`SDERR`, which nothing reads. A failed read during the mount is code `20h`,
+and a failed read or write after it is a BDOS error, `Write lost` or, for a
+directory read, no message at all. The `MOUNT` program's own reads and writes
+give the messages in its table below.
 
-Codes `20h` to `2Ah` come from `MOUNT`, the ROM's check of the container. The
-first check to fail stops the mount, and no drive stays mounted
+Codes `20h` to `2Ah` come from the ROM's `MOUNT` routine, its check of the
+container. The first check to fail stops the mount, and no drive stays mounted
 (`src/vol.asm:251-255`).
-[Appendix E](appendix-e-container-format.md#the-checks-and-their-codes)
-gives every check in order, and
+[Appendix E](appendix-e-container-format.md#the-checks-and-their-codes) gives
+every check in order, and
 [Chapter 18](18-sd-card-and-volumes.md#the-container-s-checks) explains them.
 
 | Code | Cause | Constant |
@@ -87,8 +87,8 @@ gives every check in order, and
 | `29` | A drive letter is invalid, past the number of drives the header gives, or used twice. | `src/vol.asm:17` |
 | `2A` | No volume is on drive A. | `src/vol.asm:18` |
 
-For code `20`, press `R`. For the others, and for a `20` that comes back, `R`
-gives the same code until the card changes. Copy the card to a PC and run
+For code `20h`, press `R`. For the others, and for a `20h` that comes back,
+`R` gives the same code until the card changes. Copy the card to a PC and run
 `tecvol verify` on the copy, as Chapter 4's
 [recovery section](04-cards-and-volumes.md#recovery-after-a-power-cut) shows.
 `tecvol verify` prints the fault in words. `tecvol get` makes the same check,
@@ -110,7 +110,7 @@ written and cleared.
 
 ## The CCP's failures
 
-Each message in this section sets the return code to `FF00h`, and a `:` piece
+Each failure in this section sets the return code to `FF00h`, and a `:` piece
 after it in a chained line then drops the rest of the line
 (`src/cpm/ccp.asm:351-355`, `src/cpm/ccp.asm:125-137`).
 [Chapter 11](11-chaining-commands.md#a-command-that-depends-on-the-one-before)
@@ -156,9 +156,9 @@ The bad characters in a name are `<>,;:[]%|()/\`, from `BADCHARS`
 
 ## The BDOS's errors
 
-The BDOS prints these messages when a disk operation can't be done at all. Each
-starts a new line, waits for a key, and ends the program or command by warm
-boot with the rest of a chained line dropped, whatever the key
+The BDOS prints these messages when a disk operation can't be done at all.
+Each starts a new line. The BDOS then waits for a key and ends the program or
+command by warm boot with the rest of a chained line dropped, whatever the key
 (`src/cpm/bdos.asm:75-77`, `src/cpm/bdos.asm:2458-2468`).
 [Chapter 16](16-bdos.md#disk-errors) explains them and
 [Appendix A](appendix-a-bdos-functions.md#calling-a-function) lists them by
@@ -168,16 +168,16 @@ function.
 | --- | --- | --- | --- |
 | `Bdos Err On d: Select` | The drive has no volume or is past D, or a program's FCB has `?` in its drive byte outside function 17. The warm boot gives a prompt on drive A if the drive at `0004h` has no volume (`src/cpm/ccp.asm:33-43`). | `MOUNT` a volume on the drive, or use another drive. | [Chapter 3](03-command-line.md#drives), `src/cpm/bdos.asm:2434-2437`, `src/data3.asm:87` |
 | `Bdos Err On d: R/O` | A program changed a drive that function 28 made read-only: a write, make, delete, rename or attribute change. | The warm boot clears the state, as CP/M 2.2's does. Run the program again, and correct a program that writes to a drive it protected. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:2417-2429`, `src/cpm/bdos.asm:508-509`, `src/data3.asm:89` |
-| `Bdos Err On d: File R/O` | A delete, rename, or sequential or random write met a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:686-694`, `src/cpm/bdos.asm:813`, `src/cpm/bdos.asm:848-853`, `src/cpm/bdos.asm:1032`, `src/data3.asm:90` |
+| `Bdos Err On d: File R/O` | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:686-694`, `src/cpm/bdos.asm:813`, `src/cpm/bdos.asm:848-853`, `src/cpm/bdos.asm:1032`, `src/data3.asm:90` |
 | `Bdos Err On d: Bad Sector` | A write to a volume the card marks read-only. The BIOS rejects the write, and the BDOS reports any failed write this way. `R/O` is for function 28 alone. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/bios.asm:204-208`, `src/cpm/bdos.asm:904-905`, `src/data3.asm:88` |
 | `Bdos Err On d: Bad Sector` | A record of a file couldn't be read from the card, or a record or a directory record couldn't be written. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#disk-errors), `src/cpm/bdos.asm:1005`, `src/cpm/bdos.asm:1316`, `src/cpm/bdos.asm:1921` |
 | `Bdos Err On d: Bad Sector` | A directory entry names a block past the end of the volume: the directory is damaged. The first use of the drive gives this, whichever file is named. On drive A it comes at cold boot and after each key, and no prompt appears. | Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdos.asm:2318`, `src/cpm/bdos.asm:2348-2356` |
 
-A directory record that can't be read prints nothing. The program ends by warm
-boot, with no key to wait for and the rest of a chained line dropped
-(`src/cpm/bdos.asm:1886`, `src/cpm/bdos.asm:2450-2451`). A program that returns
-to the prompt early with no message can have met this, and the remedy is the
-one for a `Bad Sector` from the card.
+A directory record that can't be read gives no message. The program ends by
+warm boot, with no key to wait for and the rest of a chained line dropped
+(`src/cpm/bdos.asm:1886`, `src/cpm/bdos.asm:2450-2451`). An early return to
+the prompt with no message can have this cause, and the remedy is the one for
+a `Bad Sector` from the card.
 
 ## `Write lost`
 
@@ -210,8 +210,9 @@ the volume written behind.
 ## `MOUNT` and `VOLS`
 
 These two programs on the starter card print their own messages
-(`test/programs/mount.asm:171-178`, `test/programs/vols.asm:27`). Each message
-returns to the prompt with a return code of 0, so a `:` piece after it runs.
+(`test/programs/mount.asm:171-178`, `test/programs/vols.asm:27`). After each
+message the program returns to the prompt with a return code of 0, so a `:`
+piece after it runs.
 [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount) explains the
 programs, and [Chapter 18](18-sd-card-and-volumes.md#the-mount-service) the
 service behind them.
