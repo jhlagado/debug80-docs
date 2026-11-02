@@ -72,8 +72,9 @@ TEC-OS needs a TEC-1G with 64 KiB of RAM. The board's fixed RAM is 32 KiB at
 `0000h–7FFFh`. The other 32 KiB is a RAM chip in socket U9, which the board's
 recommended build leaves empty. Its two 16 KiB halves, EXPAND 0 and EXPAND 1,
 share the addresses `8000h–BFFFh`. A bit in the board's system latch selects
-the half that is there. Programs and TEC-OS's own working memory use EXPAND 0,
-and TEC-OS holds its block cache and command history in EXPAND 1.
+the half that is there. Programs and TEC-OS's workspace, the memory that holds
+its variables, buffers and stacks, use EXPAND 0, and TEC-OS holds its block
+cache and command history in EXPAND 1.
 
 Cold boot, the start after power-on or a reset, checks the RAM twice. Before
 it prints anything it tests `8000h–BFFFh`. With no RAM there it sends
@@ -81,7 +82,7 @@ it prints anything it tests `8000h–BFFFh`. With no RAM there it sends
 printing the volumes on the card. A board without EXPAND 1 gets the same
 message there, and in both cases TEC-OS then stops.
 
-TEC-OS also needs an SD card on the board's SD adaptor and a console, the
+TEC-OS also needs an SD card on the board's SD card adaptor and a console, the
 device you type on and read from. The console is a terminal program on a PC
 connected to the board's FTDI serial port. It can also be a PICO9918 video
 card or the graphics LCD, each with the matrix keyboard. The 20 × 4 character
@@ -91,9 +92,9 @@ drives there.
 ## Building TEC-OS
 
 The TEC-OS repository holds the ROM's source, the tools for building it and
-the card, the TEC-1G model and the web page. Building it requires Node.js 20
-or later. From a clone of the repository, three commands build everything this
-chapter uses:
+the card, the host model, a software TEC-1G, and the web page. Building it
+requires Node.js 20 or later. From a clone of the repository, three commands
+build everything this chapter uses:
 
 ```sh
 npm ci
@@ -101,10 +102,10 @@ npm run build
 npm run media
 ```
 
-`npm ci` installs the assembler, ATOM, and the TEC-1G model. `npm run build`
-assembles the ROM, and `npm run media` writes the ROM images, the starter card
-and its files to `dist/`. The starter card is `dist/starter.img`, an image of
-a whole SD card.
+`npm ci` installs the assembler, ATOM, and the Debug80 TEC-1G runtime that the
+host model runs on. `npm run build` assembles the ROM, and `npm run media`
+writes the ROM images, the starter card and its files to `dist/`. The starter
+card is `dist/starter.img`, an image of a whole SD card.
 
 The starter card holds the Edit program only when `npm run media` finds a
 build of Edit outside the repository. It uses the path in the environment
@@ -115,7 +116,7 @@ eleven files, and the figures `DIR` prints below change with it.
 
 ## Running TEC-OS in a web page
 
-The web page runs the TEC-1G model at 4 MHz with TEC-OS in its ROM. It draws
+The web page runs the host model at 4 MHz with TEC-OS in its ROM. It draws
 the board's displays: the PICO9918's screen, the 7-segment digits, the 20 × 4
 LCD, the 8 × 8 LEDs and the graphics LCD. Below them is a serial terminal. Two
 more commands build the page and serve it, the second with Python 3:
@@ -150,7 +151,7 @@ the board off and on.
 
 ## Running TEC-OS from Node.js
 
-The web page and the tests run the same TEC-1G model, `host/machine.mjs`. The
+The web page and the tests run the same host model, `host/machine.mjs`. The
 script `book/capture.mjs` boots it from a PC's command line with the starter
 card. It types the commands it is given and prints everything TEC-OS sent to
 the console. The book's examples come from it:
@@ -219,7 +220,7 @@ At reset the TEC-1G shows the first 2 KiB of the ROM at `0000h` as well as at
 `C000h`, so the Z80, which starts at `0000h`, runs ROM code. The first
 instruction jumps to cold boot at its address in the ROM, above `C000h`. Cold
 boot turns the copy at `0000h` off, leaving RAM there. It then checks the RAM
-at `8000h–BFFFh`, clears TEC-OS's working memory, starts the serial terminal
+at `8000h–BFFFh`, clears the workspace, starts the serial terminal
 and prints the banner. Here is the whole of a first boot on a board with only
 a serial terminal:
 
@@ -394,9 +395,9 @@ and what a power cut can lose.
 title on the 20 × 4 LCD, counts in hexadecimal on the 7-segment digits and
 moves a rainbow across the 8 × 8 LEDs. On a PICO9918 it also draws colour bars
 and a bouncing ball. With a DS1302 clock fitted the LCD's last row shows the
-time. Any key stops it. Here it ran on the serial-only board for 50 million
-T-states, the Z80's clock cycles, which is 12.5 seconds. A key press then
-stopped it:
+time. Any key stops it. Here it ran on the serial board, the one with only a serial
+terminal, for 50 million T-states, the Z80's clock cycles, which is 12.5
+seconds. A key press then stopped it:
 
 <!-- node book/capture.mjs --lcd "@start DEMO" "@key x" -->
 ```text
