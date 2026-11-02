@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS bd15528. The six bytes below were left by the starter
+Checked against TEC-OS 718c01b. The six bytes below were left by the starter
 card's `TAS.COM`, from Thorium 7604daa, SHA-256
 `ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
@@ -93,7 +93,8 @@ display address, and then 20 characters go out, each after `LCDWAIT`
 records a PICO9918 answering at cold boot (`src/hwsvc.asm:138-141`,
 `src/layout.asm:55`). A claim hides the cursor if the PICO9918 is the console,
 and stores `CDCLM` in `VCLAIM` (`src/hwsvc.asm:145-150`). The console tests
-only that byte, through `VTOWN` (`src/term.asm:535-537`).
+that byte and `CONMOD` through `VTOWN`, so a claim stops it only while the
+PICO9918 is the console (`src/term.asm:533-544`).
 
 A release with no claim returns at once. A real release clears the byte and
 then needs the driver to restore the chip. `PIVEC` holds `PICO.SVC`'s table,
@@ -109,9 +110,9 @@ it (`src/boot.asm:74`).
 `01h` (`src/hwsvc.asm:182-184`). The inner loop counts `B` with `C`, and `A`
 then holds the output while `C` is borrowed to test `DE` for zero
 (`src/hwsvc.asm:185-193`). Counted from the instructions, a half cycle is 16 ×
-`B` + 51 T-states, as Chapter 9's measurements show, although the comment at
-`src/hwsvc.asm:177-178` says 59. `B` = 0 reaches `DEC C` with 0 and goes round
-256 times. The routine ends with `TXIDLE`, so the speaker stops low
+`B` + 51 T-states, as Chapter 9's measurements show (`src/hwsvc.asm:177-178`).
+`B` = 0 reaches `DEC C` with 0 and goes round 256 times. The routine ends with
+`TXIDLE`, so the speaker stops low
 (`src/hwsvc.asm:194-195`).
 
 `JOY` and `KEYS` read the same port. `IN A,(C)` puts `B` on the top address
@@ -197,8 +198,8 @@ never selects another MAIN (`src/xmove.asm:6`).
 
 A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
 (`src/cpm/ccp.asm:267-276`). `SVCGO` calls `LOADCOM`, the routine that reads a
-`.COM` file to `0100h`. The file is then in the TPA, up to the BDOS
-entry's page, and `LOADTOP` gives its end (`src/glcd.asm:68-69`,
+`.COM` file to `0100h`. The file is then in the TPA, up to the page of the
+word at `0006h`, and `LOADTOP` gives its end (`src/glcd.asm:68-69`,
 `src/cpm/ccp.asm:359-371`, `src/ram.asm:230`). `SVCGO` then calls `SVCLOAD`
 (`src/glcd.asm:70`). Chapter 22 describes what the console does after a good
 load.
@@ -425,7 +426,7 @@ empties both lists (`src/boot.asm:23-27`, `test/svc.test.mjs:353`).
 
 ## The bytes below 0006h
 
-At bd15528 the word at `0006h` points at `xx06h` because the BDOS entry has
+At 718c01b the word at `0006h` points at `xx06h` because the BDOS entry has
 that form in CP/M 2.2, as Chapter 13 explains, and the header keeps it by
 placing its `JP` at offset 6 (`src/svc.asm:177-179`). So offsets 0 to 5 of the
 lowest service lie below the word, in the TPA. Those six bytes are
