@@ -275,9 +275,8 @@ NO FILE
 B>
 ```
 
-A name with wildcards that matches only some files, such as `ERA *.TXT`,
-erases them with no question. `$'@key n\r'` in the capture command above is
-the shell's way of writing the keys `n` and Return.
+A name with wildcards that matches only some files, such as `ERA *.TXT`, erases
+them with no question.
 
 ## SAVE
 
@@ -433,9 +432,10 @@ A type after a program's name is replaced, so `VOLS.COM` runs `VOLS`, and
 finds neither. The exception is `.DRV`, which installs a driver.
 
 The command fails, with its name and a question mark, when neither file is
-there. It also fails when `NAME.COM` is there but doesn't load, because a read
-of it fails or because it is too large for the memory between `0100h` and the
-BDOS. A `NAME.COM` that doesn't load is not passed over for a `NAME.PRL`.
+there. It also fails when `NAME.COM` is there but is too large for the memory
+between `0100h` and the BDOS. A `NAME.COM` that is too large is not passed over
+for a `NAME.PRL`. A read that fails on the card gives the BDOS's `Bad Sector`
+message, described below, and no question mark.
 
 The rest of the line after the program's name is the command tail. The CCP
 copies it to `0080h` for the program and fills the two file control blocks at
@@ -533,9 +533,8 @@ PICO.DRV     PICO40.DRV   PICO32.DRV   GLCD.DRV
 A>
 ```
 
-`$'\x17'` is the shell's way of writing `^W`, and the capture's `@start` line
-types its keys and a Return together. The history holds 256 bytes of lines,
-and the oldest go first when it fills. A line the same as the newest is not
-stored again, and the lines of the startup file are not stored at all. A warm
-boot keeps the history, and a reset empties it. In a line that a program reads
-with function 10, `^W` and `^N` are characters like any other.
+The history holds 256 bytes of lines, and the oldest go first when it fills. A
+line the same as the newest is not stored again, and the lines of the startup
+file are not stored at all. A warm boot keeps the history, and a reset empties
+it. In a line that a program reads with function 10, `^W` and `^N` are
+characters like any other.
