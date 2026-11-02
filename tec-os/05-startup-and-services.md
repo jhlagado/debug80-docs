@@ -91,21 +91,21 @@ B>USER 0
 B>
 ```
 
-Each prompt takes the next line in place of the keyboard, and the line is
-echoed as it stands in the file, so `vols` appears in small letters, and it
-then runs as if typed. A line that fails prints its usual message and the next
-line runs. Each line's effects last: `B:` and `USER 3` change the drive and the
-user area for the lines after them, which is why `VOLS` isn't found, and the
-first prompt you can type at is `B>`.
+At each prompt the CCP takes the next line in place of the keyboard, and the
+line is echoed as it stands in the file, so `vols` appears in small letters,
+and it then runs as if typed. The CCP prints a failed line's usual message and
+the next line runs. Each line's effects last: `B:` and `USER 3` change the
+drive and the user area for the lines after them, which is why `VOLS` isn't
+found, and the first prompt you can type at is `B>`.
 
 The commands that changed the drive and the user area had no effect on reading
 the file, because TEC-OS reads it once, into memory, before the first line
-runs. It reads one record, CP/M's unit of a file, of 128 bytes, and anything
-after that record never runs. A line cut off by the record's end runs as far as
-it goes. Sixty
-blank lines take up 120 bytes here, since `--text` gives each a CR and an LF,
-so the record's last 8 bytes hold the start of `DIR *.CMD`, and `USER 3` is
-past its end:
+runs. It reads one 128-byte record, CP/M's unit of a file and a different
+thing from a service's records, and anything after that record never runs. A
+line cut off by the record's end runs as far as it goes. Sixty blank lines
+take up 120 bytes here, since `--text` gives each a CR and an LF, so the
+record's last 8 bytes hold the start of `DIR *.CMD`, and `USER 3` is past its
+end:
 
 ```sh
 printf '\n%.0s' $(seq 60) > startup.cmd
@@ -181,14 +181,14 @@ still runs. A `^C` at a program's line input drops the rest of a line that holds
 
 ## When the file runs
 
-TEC-OS comes back from a program, or from a press of the reset button, by one
-of three paths:
+TEC-OS restarts by one of three paths:
 
 - An *ordinary exit* is a program's return, a `^C` or a jump to `0000h`. It is
   a warm boot: services stay, the drives hold the volumes they held, and the
   startup file doesn't run.
-- A *recognised reset* is a reset that finds a running TEC-OS's marks in RAM.
-  The drives keep the volumes that were on them, if the card still has those
+- A *recognised reset* is a press of the reset button, or a program's call of
+  the BIOS's cold boot entry, that finds a running TEC-OS's marks in RAM. The
+  drives keep the volumes that were on them, if the card still has those
   volumes, and everything else TEC-OS holds in memory is rebuilt.
 - An *unrecognised reset* is a reset that finds no such marks, as at power-on.
   The drives take the volumes the card's header names, and everything else is
@@ -239,12 +239,13 @@ A>
 
 Every recognised reset puts the selection back, so a board whose selected
 drive A has no display driver stays without one until you mount the other
-volume back or the board loses power.
+volume back, which needs `MOUNT.COM` on a drive that is mounted, or the board
+loses power. On this card only a loss of power puts `SYSTEM` back on drive A.
 
 ## Display lines
 
-A line that names a display driver installs it and, if the board has the
-display, moves the console there:
+On a board with the display, a line that names a display driver installs it
+and moves the console there:
 
 - `PICO.SVC`, `PICO40.SVC` or `PICO32.SVC` makes the PICO9918 the console.
 - `GLCD.SVC` makes the graphics LCD the console if no PICO9918 driver is in.
@@ -252,9 +253,10 @@ display, moves the console there:
   `CON UC1` installs the file.
 
 Each driver needs its display and the matrix keyboard. Where either is missing
-the installation fails, the line prints its name with a question mark and the
-next line runs, so one card can start every board. The starter card's two lines
-give these results on the three boards of `tools/capture.mjs`:
+the installation fails, the CCP prints the line's name with a question mark
+and the next line runs, so one card starts each of the boards below. The
+starter card's two lines give these results on the three boards of
+`tools/capture.mjs`:
 
 | Board | `PICO.SVC` | `GLCD.SVC` | Console at the first prompt |
 | --- | --- | --- | --- |
@@ -265,7 +267,7 @@ give these results on the three boards of `tools/capture.mjs`:
 Until a display's line runs, the banner and the volumes go to the serial
 terminal and the 20 × 4 LCD. The order of the lines matters on a board with
 both displays. With `GLCD.SVC` first, both drivers install, the PICO9918 takes
-the console and programs have 3,072 bytes less:
+the console and programs have 1,536 bytes less:
 
 ```sh
 printf 'GLCD.SVC\nPICO.SVC\n' > startup.cmd
@@ -321,19 +323,23 @@ of those lines is taken out and the rest of the line kept.
 ## The keypad skip
 
 A startup line that hangs, or that resets the board, would run at every boot.
-To get past one, hold any key on the hex keypad from the reset until the prompt
-appears. TEC-OS reads the keypad's state once, about 1.5 seconds after a reset
-on the model, just before it opens the file, and with a key down it doesn't
-read the file. `tools/capture.mjs` has no option for holding a key, so this
-chapter has no transcript of a skip; `test/startup.test.mjs` runs the case, in
-which a service that hangs while installing reaches a prompt with a key held.
+To get past one, hold any key on the hex keypad from the reset until the
+prompt appears. With the board's keypad NMI jumper fitted a key press is a
+crash, so the skip is for a board with that jumper off, as
+[Chapter 1](01-introduction.md#running-tec-os-on-a-board) and
+[Appendix G](appendix-g-tec-1g.md#the-hex-keypad-and-its-nmi) describe. TEC-OS
+reads the keypad's state once, about 1.5 seconds after a reset on the model,
+just before it opens the file, and with a key down it doesn't read the file.
+`test/startup.test.mjs` runs the case: with a key held, a card whose service
+hangs while installing reaches a prompt.
 
 After a skip there are no services, so the board has the 20 × 4 LCD and the
-serial terminal and nothing else, because the matrix keyboard is read only once
-a display's driver is in. Recovery needs the serial terminal: `ERA STARTUP.CMD`
-or a corrected file, and then a reset. A recognised reset with a skip keeps the
-drives' volumes as one without a skip does. The web page has no keypad, so a bad
-file there is replaced with "Copy file to drive" or "New starter card".
+serial terminal and nothing else, because the matrix keyboard is read only
+once a display's driver is in. On the board, recovery needs the serial
+terminal: `ERA STARTUP.CMD` or a corrected file, and then a reset. Otherwise
+take the card to a PC and use `tecvol`. A recognised reset with a skip keeps
+the drives' volumes as one without a skip does. The web page has no keypad, so
+a bad file there is replaced with "Copy file to drive" or "New starter card".
 
 ## Words on the LCD
 
@@ -341,10 +347,13 @@ The 20 × 4 LCD's last row is for a board that may have no terminal attached.
 TEC-OS writes one of three words there:
 
 - `PICO?` appears once, at the first prompt after startup, on a board with a
-  PICO9918 and a matrix keyboard if no display driver is installed. It covers a
-  missing file, a bad file, no `STARTUP.CMD`, a file with no display line and a
-  skip. That board's screen is dark.
-- `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`.
+  PICO9918 and a matrix keyboard if no display driver is installed. It covers
+  a driver's file that is missing or bad with no other display driver
+  installed, no `STARTUP.CMD`, a file with no display line and a skip. That
+  board's screen is dark.
+- `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`. The console is then on
+  the serial terminal, even from the PICO9918, and `CON CRT` typed there moves
+  it back.
 - `CARD?` appears each time a card won't mount, with the diagnostic prompt of
   Chapter 1.
 
@@ -373,10 +382,11 @@ B: WORK
 ```
 
 The board with only a serial terminal never shows `PICO?`, and neither does a
-board with no matrix keyboard, where both drivers fail anyway. `PICO?` stays
-away too when the graphics LCD has taken the console after a bad `PICO.SVC`,
-and after a good load followed by `CON TTY`. `GLCD?` is what a failed `CON UC1`
-leaves, here on the serial board, where the driver's installation fails:
+board with no matrix keyboard, where both drivers fail anyway. TEC-OS doesn't
+write `PICO?` either when the graphics LCD has taken the console after a bad
+`PICO.SVC`, or after a good load followed by `CON TTY`. `GLCD?` is what a
+failed `CON UC1` leaves, here on the serial board, where the driver's
+installation fails:
 
 <!-- node tools/capture.mjs --card nostart.img --lcd "CON UC1" -->
 ```text
@@ -391,23 +401,25 @@ GLCD?
 ```
 
 A display driver that takes the console clears `PICO?` or `GLCD?`, and so does
-`GLCD.SVC` loading under `PICO.SVC`, which leaves the console where it is. A
-word goes only if it is still there: a program that writes row 3 through the
-LCD's hardware service takes over the row, and a later take of the console
-leaves what the program wrote. `DEMO` is such a program, and its last screen
-stays through a later `PICO.SVC`. A write to the LCD's port by a program goes
-unrecorded, so a take then writes five blanks over what is at the start of the
-row. `CARD?` goes when `R` at the diagnostic prompt starts the LCD again, so a
-retry that works clears it.
+`GLCD.SVC` loading under `PICO.SVC`, which leaves the console where it is.
+Clearing writes blanks only over the word itself. A program that writes the
+LCD's last row through the LCD's hardware service replaces the word, and when
+a driver later takes the console that row is left alone. `DEMO` is such a
+program, and its last screen stays through a later `PICO.SVC`. A program that
+writes over the word at the LCD's port bypasses TEC-OS, so the next driver to
+take the console writes five blanks over the start of the row. `CARD?` goes
+when `R` at the diagnostic prompt starts the LCD again, so a retry that works
+clears it.
 
 ## Installing, listing and removing services
 
-A command that names a file of type `.SVC` installs the service in it, from the
-current drive or from a drive named in the command, such as `B:NAME.SVC`. The
-type must be typed: `NAME` alone looks for `NAME.COM` and then `NAME.PRL`, and
-`NAME.DRV` is an ordinary file name to the CCP, which looks for a program.
+A command that names a file of type `.SVC` installs the service in it, from
+the current drive or from a drive named in the command, such as `B:NAME.SVC`.
+The type must be typed: `NAME` alone looks for `NAME.COM` and then `NAME.PRL`,
+and `NAME.DRV` is an ordinary file name to the CCP, which looks for a program.
 `SERVICES` lists what is installed and `UNLOAD` removes it. On a card with no
-startup file, on the serial board, nothing is installed and nothing can be:
+startup file, on the serial board, nothing is installed and neither display
+driver can be:
 
 <!-- node tools/capture.mjs --card nostart.img SERVICES UNLOAD PICO PICO.DRV PICO.SVC -->
 ```text
@@ -427,11 +439,12 @@ PICO.SVC?
 A>
 ```
 
-`SERVICES` prints one line for each service, the newest first: its name and the
-number of pages it holds. With nothing installed it prints nothing. A file that
-doesn't read, that isn't a service, or that fails while installing gives its
-name with a question mark, whatever the reason, and so does a second driver for
-a display that already has one: `PICO40.SVC` fails while `PICO.SVC` is in.
+`SERVICES` prints one line for each service, the newest first: its name and
+the number of pages it holds. With nothing installed it prints nothing. If a
+file doesn't read, isn't a service or fails while installing, the CCP prints
+its name with a question mark, whatever the reason. A second driver for a
+display that already has one fails the same way: `PICO40.SVC` fails while
+`PICO.SVC` is in.
 
 `UNLOAD` removes the newest service, the one lowest in memory, and the word at
 `0006h` goes back up by its pages. If that service can't be removed, nothing
@@ -439,11 +452,11 @@ changes and `UNLOAD?` is printed. Services therefore go in the opposite order to
 their installation, and an older one stays until every newer one has gone. A
 warm boot keeps all of them, and a reset empties the list.
 
-The display drivers each have their own rule. `PICO.SVC` can't be removed while
-the PICO9918 is the console, since `CON CRT` can't load it back, or while a
-program has claimed the PICO9918. `GLCD.SVC`, once it is the newest, can always
-be removed. If it is the console, the console goes to the PICO9918 if a PICO9918
-driver is in, and otherwise to the serial terminal:
+The display drivers each have their own rule. `PICO.SVC` can't be removed
+while the PICO9918 is the console, since `CON CRT` can't load it back.
+`GLCD.SVC`, once it is the newest, can always be removed. If it is the
+console, the console goes to the PICO9918 if a PICO9918 driver is in, and
+otherwise to the serial terminal:
 
 <!-- node tools/capture.mjs --board pico "CON UC1" SERVICES UNLOAD CON -->
 ```text
@@ -486,12 +499,12 @@ load them: `PICO.DRV` goes down the path for a program and comes back with a
 question mark. The board then keeps its console on the serial terminal. The web
 page reports such a card when it powers on and leaves the card as it is.
 
-`README.TXT` on the starter card gives the two ways out. "New starter card", or
-a new image from `npm run media`, replaces the card. Or you can keep the card
-and rename each file `.SVC`, if its format is 3, the format this ROM loads, and
-change `STARTUP.CMD` to match. A format 3 file is good under its new name. This
-image is a copy of the starter card with its display drivers under the old
-type:
+`README.TXT` on the starter card gives the two ways out. "New starter card",
+or a new image from `npm run media`, replaces the card. Or you can keep the
+card and rename each file `.SVC`, if its format, the file's second byte, is 3,
+the format this ROM loads, and change `STARTUP.CMD` to match. A format 3 file
+is good under its new name. This image is a copy of the starter card with its
+display drivers under the old type:
 
 ```sh
 cp dist/starter.img old.img
@@ -522,5 +535,7 @@ A>
 
 `STARTUP.CMD` still names the old files, so the next reset prints the same two
 failures until a new file replaces it, with `tecvol put` on a PC or "Copy file
-to drive" on the web page. A file of an older format fails under the new name
-too, as `PICO.SVC?`, and only a new starter card's copy replaces it.
+to drive" on the web page. There, "Power cycle" does it too when the chosen
+display's file is on the card, since the page's rewrite drops a display line
+of either type. A file of an older format fails under the new name too, as
+`PICO.SVC?`, and only a new starter card's copy replaces it.
