@@ -7,11 +7,9 @@ nav_group: "Appendices"
 
 # Appendix E. The container format
 
-Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
 845d062, whose card copy has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`. What this
-appendix says about `tecvol`'s checks of the descriptors' order and of the
-drives field is checked against TEC-OS bd15528.
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 This appendix lists the container format: the header's fields, the volume
 descriptors, the table's blocks beyond block 0, the ROM's checks with their
@@ -22,7 +20,7 @@ CP/M disk. Chapter 4 describes the container from the user's side and Chapter
 
 The format is defined once, in `format/format.json`. The build generates the
 ROM's field offsets and its geometry table from that file, as
-`src/gen/format.asm` and `src/gen/geom.asm` (`tools/build.mjs:83-137`), and
+`src/gen/format.asm` and `src/gen/geom.asm` (`tools/build.mjs:82-137`), and
 `tools/lib/container.mjs` and `tecvol` read the same file through
 `tools/lib/format.mjs`. All numbers of more than one byte are little-endian. A
 block is 512 bytes, and block numbers count from the start of the container,
@@ -155,7 +153,7 @@ returns its code, which cold boot prints at the diagnostic prompt (Chapter
 The ascending order behind `28h` is checked on every card, 1.0 and 1.1 alike.
 It keeps two volumes from overlapping: each must start at or after the end of
 the one before it in the table. `tecvol` makes the same check on every card
-(`tools/lib/container.mjs:176`). A card whose two descriptors were swapped,
+(`tools/lib/container.mjs:174`). A card whose two descriptors were swapped,
 with its checksum made good, fails `tecvol verify`, and the ROM stops at the
 diagnostic prompt with code `28h`. One Node.js command makes such a card,
 `build/swapped.img`, from the starter card:
@@ -197,7 +195,7 @@ The drives field limits the drive bytes. On a 1.1 card that gives N drives, a
 volume may name only drives A to the Nth. With N of 0, or on a 1.0 card, a
 volume may name any of the four (`src/vol.asm:222-226`). The ROM stops a card
 that breaks this at the diagnostic prompt with code `29h`. `tecvol` makes the
-same check (`tools/lib/container.mjs:181`), so `tecvol verify` rejects such a
+same check (`tools/lib/container.mjs:178`), so `tecvol verify` rejects such a
 card, and `tecvol create` rejects a volume on drive C with `--drives 2`:
 
 ```sh
@@ -209,7 +207,7 @@ tecvol: volume 1: drive C is past the card's 2 drive(s)
 ```
 
 `tecvol` makes all the ROM's checks and more
-(`tools/lib/container.mjs:132-197`). It also requires at most 8 volumes on a
+(`tools/lib/container.mjs:130-194`). It also requires at most 8 volumes on a
 1.0 card, a known cache flag, volume ids different from each other, unique
 labels on a 1.1 card, no volume both read-only and written behind, at most one
 written behind and an image as long as the header's container length. The ROM
