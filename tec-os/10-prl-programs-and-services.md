@@ -204,9 +204,9 @@ file is this hook with no record.
 
 ### The hook
 
-`MYCO` runs inside every call of the `CONOUT` entry. `CONOUT` takes its character in `C`,
-and `MYCO` puts back the one register it uses, so the entry it replaced runs
-with the registers it would have had. `MYCO`'s last instruction is a `JP`
+`MYCO` runs inside every call of the `CONOUT` entry. `CONOUT` takes its
+character in `C`, and `MYCO` puts back the one register it uses, so the entry
+it replaced runs with the registers it would have had. `MYCO`'s last instruction is a `JP`
 written as data, whose target is `OLDCO`, the two bytes `INIT` filled in, so
 the old `CONOUT` returns straight to the caller.
 
