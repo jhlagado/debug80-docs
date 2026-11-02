@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 62d47ed, with the starter card's `EDIT.COM` from
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from
 Edit 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
 timings below were measured on that card.
@@ -17,7 +17,7 @@ button and when a program calls the RAM BIOS table's first entry
 (`src/boot.asm:4`), and it builds everything from nothing: page zero, the
 workspace, the card's drives, the cache. Warm boot runs at the end of every
 program, so it puts back only what a program may have changed and keeps the
-drives, the drivers and the cache. This chapter follows cold boot from the
+drives, the services and the cache. This chapter follows cold boot from the
 first instruction at `0000h` to the point where it falls into warm boot, and
 then follows warm boot as far as the CCP, with its cost in T-states. On the way
 it describes the two checks of the RAM, the count of the memory regions and the
@@ -43,9 +43,9 @@ with interrupts off, and the ROM executes `EI` only to restore a state it saved:
 the routines that must run with interrupts off put them back as they were at
 entry (`src/cache.asm:32`, `src/history.asm:39`, `src/xmove.asm:136`). The one
 other `EI` is in page zero. `PZINIT` writes it at `0038h`
-(`src/boot.asm:231-234`), and it runs only on an interrupt, with interrupts
-already on, or on a program's `RST 38h`. Chapter 19 describes what interrupts
-cost a program that enables them.
+(`src/boot.asm:231-234`). It runs on an interrupt, which needs interrupts on
+already, and on a program's `RST 38h`, which turns them on. Chapter 19
+describes what interrupts cost a program that enables them.
 
 ## Cold boot
 
@@ -72,7 +72,7 @@ its lines in order:
 9. `ALVINIT`, which places the allocation vectors and the BDOS entry jump,
    and `RESEL`, which applies the kept selection if the card still has it
    (`src/boot.asm:41-42`).
-10. `PZTOP`, the top of the TPA, set to the BDOS entry jump, since no driver
+10. `PZTOP`, the top of the TPA, set to the BDOS entry jump, since no service
     is loaded yet (`src/boot.asm:43-44`).
 11. The BIOS jump table copied from the ROM to `BF00h` (`src/boot.asm:45-48`).
 12. The volumes printed on the console and on the LCD (`src/boot.asm:49-50`).
@@ -99,7 +99,7 @@ the host model. Three steps take most of it. The banner is 25 characters at
 9,372 T-states each through `CONOUT`, the read of the container's block 0 takes
 219,137 T-states and `MEMINIT` takes about 347,000, most of it the clearing of
 EXPAND 1. The startup file's commands then run before the first prompt, so the
-CCP's first call of `CONIN` at that prompt comes 8,907,139 T-states after reset.
+CCP's first call of `CONIN` at that prompt comes 8,910,182 T-states after reset.
 
 ## The two RAM checks
 
@@ -145,8 +145,8 @@ found, it uses `DETECT`'s latch value to put EXPAND 1 in view and clears all
 which marks every line empty, and puts EXPAND 0 back (`src/boot.asm:149-162`).
 It sets EXPAND 1's low mark to `80h`, which closes it to programs' copies
 (`src/boot.asm:163-165`). The count of MAIN regions goes to `MAINS` at `0041h`,
-which the table at `C00Dh` points at. With a second MAIN, `MNCOPY` copies page
-zero into it a byte at a time, switching the latch between each read and its
+which the ROM table's word at `C00Dh` points at. With a second MAIN, `MNCOPY`
+copies page zero into it a byte at a time, switching the latch between each read and its
 write (`src/boot.asm:172-183`). MAIN 1's `0000h` then also jumps to the RAM
 BIOS table, so a program that ends with MAIN 1 in view still reaches warm boot
 (`src/boot.asm:140-142`).
@@ -173,9 +173,9 @@ reads. The RAM passes when all of these hold:
 - The word at `0006h` is of the form `xx06h`, at least `8000h`, and no
   higher than `STUBAD`'s page.
 
-The last condition allows for drivers, which lower the word at `0006h`. The
+The last condition allows for services, which lower the word at `0006h`. The
 word is not compared with `PZTOP`, so that a reset pressed to recover from a
-driver's `INIT` that hung still passes (`src/boot.asm:88-89`). The test depends
+service's `INIT` that hung still passes (`src/boot.asm:88-89`). The test depends
 on two addresses of this build, `STUBAD`'s own and `BENTRY`, so RAM left by a
 build with either one elsewhere fails it (`src/boot.asm:90-91`).
 
@@ -221,17 +221,17 @@ A>
 TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 
-A>PICO.DRV
-PICO.DRV?
+A>PICO.SVC
+PICO.SVC?
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
 A>
 ```
 
 The selection is all that a reset keeps. Cold boot clears page zero, the
-workspace and EXPAND 1 as on any cold boot, so drivers, the registry, the cache,
+workspace and EXPAND 1 as on any cold boot, so services, the registry, the cache,
 open files and the history are gone and the console is the serial terminal again
 (`src/boot.asm:15-28`, `src/boot.asm:149-155`). A change the cache held for the
 card is lost. Once a recognised reset has applied a selection, the next reset
@@ -290,7 +290,7 @@ Warm boot's steps are:
    back, and the stack set to the BIOS stack (`src/boot.asm:66-69`). The
    latch comes before the stack because the BIOS stack is in EXPAND 0.
 3. `PZINIT`, as above (`src/boot.asm:70`).
-4. `DRVBSY` cleared, so that a driver's `INIT` or `REMOVE` that a program's
+4. `SVCBSY` cleared, so that a service's `INIT` or `REMOVE` that a program's
    end interrupted is not taken to be still running (`src/boot.asm:71-72`).
 5. `CPMINIT`, which clears the CCP's state and the BDOS's,
    331 bytes from `CCPCLR` to `BDOSRME`, as a fresh load of them from disk
@@ -318,7 +318,7 @@ what `CPMINIT` clears too. So are the two FCBs and the command buffer, the 202
 bytes of the CCP's RAM below `CCPCLR`, and `CHPOS`, the byte above the RAM BIOS
 table that marks a chained line's next piece. The rest of the line therefore
 outlives the warm boot (`src/ram.asm:68-81`, `src/ram.asm:240`), as Chapter 25
-describes. The drivers below the BDOS entry are kept too, and so are the
+describes. The services below the BDOS entry are kept too, and so are the
 registry's head and the display drivers' tables above the RAM BIOS table. The
 cache's lines and the history in EXPAND 1 stay as well.
 
@@ -351,11 +351,11 @@ boot reads no block. Of it, `CPMINIT` takes 7,427 T-states, the cache's flush in
 `CWBOOT`, with no line to write, takes 8,002 and the CCP's entry with its disk
 reset 13,828.
 
-A warm boot after `SAVE 8 X.COM` on drive A takes 119,508 T-states on the same
-measure. The extra 88,000 or so are the rebuild of A's vector from its directory
+A warm boot after `SAVE 8 X.COM` on drive A takes 122,499 T-states on the same
+measure. The extra 91,000 or so are the rebuild of A's vector from its directory
 up to the last entry in use, and the directory is read from the block cache with
 no card access. For comparison, a disk reset of the kind a program makes drops
-drive A and scans its whole directory again, which takes 1,035,496 T-states on
+drive A and scans its whole directory again, which takes 1,038,529 T-states on
 the starter card even with the directory in the cache. The first scan of drive
 B's 512 entries, with the card read for each of its 32 directory blocks, takes
 9,163,477. The test `test/warmboot.test.mjs` checks the unchanged case on its
