@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 8. Programs and the console
 
-Checked against TEC-OS 98c6416, with the ATOM assembler from the
+Checked against TEC-OS 718c01b, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
 845d062, and its copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
@@ -73,7 +73,7 @@ video attributes at `004Eh` and `004Fh`, all fixed bytes, so an interrupt
 routine must not print through the console.
 
 The calls also run on the caller's stack, and on a display so do the ROM's
-terminal and the routines of `PICO.DRV` or `GLCD.DRV` beneath them. On the
+terminal and the routines of `PICO.SVC` or `GLCD.SVC` beneath them. On the
 model, a direct call with nothing pushed used at most 24 of the CCP's 28 bytes.
 That figure is the lowest `SP` below its value at the program's entry, and it
 counts the call's return word. It came from a call that cleared a display after
@@ -169,8 +169,8 @@ The BDOS calls the BIOS through the same table in RAM, so a program that
 writes its own jump into an entry receives the BDOS's console calls as well as
 its own. An entry at `CONOUT` gets every character the BDOS prints. The BDOS's
 check for a key during output is the exception: it calls the ROM's `CONST`
-directly, not through the table. Warm boot leaves the table as it is, as in
-CP/M 2.2, so a program that replaces an entry, the warm boot entry included,
+directly, not through the table. Warm boot leaves the table in EXPAND 0 as it
+is, as in CP/M 2.2, so a program that replaces an entry, the warm boot entry included,
 puts the old jump back before it ends.
 
 ## The video terminal
@@ -263,8 +263,8 @@ and TEC-OS keeps the columns at `0048h` and the rows at `0049h`. Both are 0
 while the console is the serial terminal, whose size TEC-OS can't read, so a
 program then uses 80 by 24, as the CCP does for `[more]`.
 
-The ROM's table of services at `C003h`, which Chapter 9 describes, has the
-same bytes through a pointer. It starts with the letters `TNA` and the table's
+The ROM table at `C003h`, which Chapter 9 describes, has the same bytes through
+a pointer. It starts with the letters `TNA` and the table's
 major version, 4, the version of its ABI, its application binary interface.
 The word at `C008h` is the address of the columns, with the rows in the byte
 after. A program that checks the letters and the version and then reads the
