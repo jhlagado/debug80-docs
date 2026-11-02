@@ -1,3 +1,10 @@
+---
+title: PRL relocation
+parent: TEC-OS
+nav_order: 21
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 21. PRL relocation
 
 Checked against TEC-OS 98c6416.

@@ -1,3 +1,10 @@
+---
+title: The memory map
+parent: TEC-OS
+nav_order: 13
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 13. The memory map
 
 Checked against TEC-OS 98c6416, and the state above the RAM BIOS table, from

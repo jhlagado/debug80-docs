@@ -1,3 +1,10 @@
+---
+title: G. The TEC-1G as TEC-OS uses it
+parent: TEC-OS
+nav_order: 107
+nav_group: "Appendices"
+---
+
 # Appendix G. The TEC-1G as TEC-OS uses it
 
 Checked against TEC-OS 98c6416.

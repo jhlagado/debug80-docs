@@ -1,3 +1,10 @@
+---
+title: The host model and the web page
+parent: TEC-OS
+nav_order: 26
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 26. The host model and the web page
 
 Checked against TEC-OS 98c6416, with `@jhlagado/debug80-runtime` 0.3.1, the

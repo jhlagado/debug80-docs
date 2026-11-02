@@ -1,3 +1,10 @@
+---
+title: Memory for programs
+parent: TEC-OS
+nav_order: 7
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 7. Memory for programs
 
 Checked against TEC-OS 98c6416, with the ATOM assembler from the

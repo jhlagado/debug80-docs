@@ -1,3 +1,10 @@
+---
+title: The ROM and its build
+parent: TEC-OS
+nav_order: 12
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 12. The ROM and its build
 
 Checked against TEC-OS 98c6416.

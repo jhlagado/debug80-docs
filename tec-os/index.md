@@ -1,3 +1,10 @@
+---
+title: TEC-OS
+nav_order: 13
+has_children: true
+nav_exclude: true
+---
+
 # TEC-OS: CP/M in ROM for the TEC-1G
 
 TEC-OS is an operating system for the TEC-1G, held entirely in the board's
@@ -21,8 +28,8 @@ fits in 16 KiB, and the reasons for its layout.
 Part I works through transcripts. Each one is a real run of TEC-OS: what you
 type at the prompt and what TEC-OS printed in reply, copied unchanged, with
 the command that produced it. You can repeat every one in the web page that
-the repository builds, or on a PC with the script [capture.mjs](capture.mjs),
-which runs the same TEC-1G model from Node.js. Part II explains the code
+the repository builds, or on a PC with TEC-OS's script
+`book/capture.mjs`, which runs the same TEC-1G model from Node.js. Part II explains the code
 itself, and each of its statements about the code gives the source file and
 line it rests on, so you can follow the explanation into the ROM.
 
@@ -33,7 +40,7 @@ what the code expects of one.
 Each chapter names, at its top, the TEC-OS commit its claims were checked
 against. The code is the authority: where a chapter's statement differs from
 the source at that commit, the source is right and the statement is a fault
-to correct. [STYLE.md](STYLE.md) is the guide for the chapters' writers.
+to correct.
 
 ## Conventions
 
@@ -57,10 +64,9 @@ caret, so `^C` means Ctrl and C together.
 
 ## Contents
 
-Chapters 1, 2, 3, 4, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23,
-24, 25 and 26 and appendices A, C, E, F and G are written. The entries for the other chapters list
-their planned subjects and the source files their statements are to be
-checked against.
+An entry with a link is written. An entry without one is planned, and lists
+its subjects. Each entry names the source files its statements are checked
+against.
 
 ### Part I: Using and programming TEC-OS
 
@@ -75,7 +81,7 @@ checked against.
    `src/cpm/ccp.asm`, `src/cpm/bdos.asm`, `drivers/glcd.asm`,
    `test/programs/demo.asm`, `host/card.mjs`, `web/`, `tools/media.mjs`,
    `tools/tecvol.mjs`, `docs/board-run.md`, `book/capture.mjs`.
-2. **The console.** The console devices `TTY:`, `CRT:`, `BAT:` and `UC1:`;
+2. **[The console](02-console.md).** The console devices `TTY:`, `CRT:`, `BAT:` and `UC1:`;
    `CON`; the serial terminal and its settings; a display driver taking the
    console; the matrix keyboard, its Shift, Ctrl and Caps keys and its
    arrows; `[more]` in long listings. Sources: `docs/console.md`,
@@ -87,7 +93,7 @@ checked against.
    error messages; command history with `^W` and `^N`. Sources:
    `src/cpm/ccp.asm`, `src/cpm/bdos.asm`, `src/history.asm`,
    `src/data3.asm`, `docs/compatibility.md`.
-4. **Cards and volumes.** The container and its volumes; the two geometries;
+4. **[Cards and volumes](04-cards-and-volumes.md).** The container and its volumes; the two geometries;
    building and changing a card image with `tecvol`; recipes and the starter
    card; the block cache and the volume written behind; `VOLS` and `MOUNT`;
    drives and their cost in memory; what a reset keeps; putting an image on a
@@ -100,17 +106,17 @@ checked against.
    `GLCD?` and `CARD?` on the LCD; installing, listing and removing drivers.
    Sources: `docs/drivers.md`, `src/drv.asm`, `src/glcd.asm`, `src/lcd.asm`,
    `src/data3.asm`, `drivers/pico.asm`, `drivers/glcd.asm`, `host/card.mjs`.
-6. **A first program.** Calling the BDOS; a program that prints, and one that
+6. **[A first program](06-first-program.md).** Calling the BDOS; a program that prints, and one that
    reads the file named on its command line; assembling with ATOM; copying
    the program to the card with `tecvol` or the web page's "Copy file to
    drive"; the ways a program ends. Sources: `src/cpm/bdos.asm`,
    `src/cpm/ccp.asm`, `test/programs/say.asm`, `test/programs/readf.asm`,
    `test/atom.test.mjs`, `web/src/main.mjs`.
-7. **Memory for programs.** The Z80's 64 KiB on a TEC-1G; the program area
+7. **[Memory for programs](07-memory.md).** The Z80's 64 KiB on a TEC-1G; the program area
    and the word at `0006h`; page zero; TEC-OS's own bytes at `0040h`;
    EXPAND 1, reserved for TEC-OS; CP/M 3's `XMOVE` and `MOVE`. Sources:
    `docs/memory-map.md`, `src/layout.asm`, `src/ram.asm`, `src/xmove.asm`.
-8. **Programs and the console.** The BIOS console calls; the control
+8. **[Programs and the console](08-programs-and-console.md).** The BIOS console calls; the control
    characters and the ANSI escape sequences the video terminal acts on; the
    cursor; the console size at `0048h` and through the table; the IOBYTE's
    other devices, the list device, the punch and the reader. Sources:
@@ -138,23 +144,23 @@ checked against.
 
 ### Part II: Inside TEC-OS
 
-12. **The ROM and its build.** The layout from `C000h`: the reset jump, the
+12. **[The ROM and its build](12-rom-and-build.md).** The layout from `C000h`: the reset jump, the
     table, one block of data, one block of code and the free space; the
     generated include files; ATOM and `tools/build.mjs`; the build's checks;
     one image under four profile names. Sources: `src/rom.asm`,
     `src/layout.asm`, `src/end.asm`, `tools/build.mjs`,
     `tools/lib/assemble.mjs`, `format/format.json`.
-13. **The memory map.** Page zero and `0040h–004Fh`; the resident workspace
+13. **[The memory map](13-memory-map.md).** Page zero and `0040h–004Fh`; the resident workspace
     from the BDOS entry to `BFFFh`; the allocation vectors; the four stacks
     and their limits; EXPAND 1's cache, history and free page. Sources:
     `src/ram.asm`, `src/layout.asm`, `docs/memory-map.md`,
     `test/stacks.test.mjs`.
-14. **Reset, cold boot and warm boot.** The boot overlay; `COLD`; the two RAM
+14. **[Reset, cold boot and warm boot](14-reset-and-boot.md).** The boot overlay; `COLD`; the two RAM
     checks; counting MAIN and EXPAND; the reset test and keeping the
     selected volumes; rebuilding page zero; the warm boot path and its cost.
     Sources: `src/reset.asm`, `src/boot.asm`, `src/vol.asm`, `src/ram.asm`,
     `docs/recovery.md`.
-15. **The BIOS and the console path.** The RAM BIOS table at `BF00h` and its
+15. **[The BIOS and the console path](15-bios-and-console.md).** The RAM BIOS table at `BF00h` and its
     hooks; `CONST`, `CONIN` and `CONOUT` by IOBYTE; the list, punch and
     reader entries; the bit-banged serial port and its timing; the matrix
     keyboard scan; the terminal's escape parser; the video driver's table and
@@ -170,12 +176,12 @@ checked against.
     built-ins; `LOADCOM`, `PREPPAGE` and the jump to `0100h`; `.COM` before
     `.PRL`; the CCP's RAM and stack. Sources: `src/cpm/ccp.asm`,
     `src/data3.asm`, `src/ram.asm`.
-18. **The SD card and the volumes.** The SPI driver and its error codes; the
+18. **[The SD card and the volumes](18-sd-card-and-volumes.md).** The SPI driver and its error codes; the
     container checks; the drive table; allocation vectors at cold boot; the
     mount service, `ABIVOL`; deblocking 128-byte records into 512-byte
     blocks. Sources: `src/sd.asm`, `src/vol.asm`, `src/bios.asm`,
     `format/format.json`, `docs/container-format.md`.
-19. **The block cache.** Thirty lines in EXPAND 1; reads through the cache;
+19. **[The block cache](19-block-cache.md).** Thirty lines in EXPAND 1; reads through the cache;
     write-through and write-behind; the order of a flush; the flush at warm
     boot; `Write lost`; interrupts held off across a block. Sources:
     `src/cache.asm`, `src/bios.asm`, `src/layout.asm`, `docs/recovery.md`.
@@ -184,7 +190,7 @@ checked against.
     the registry and its generation; removal; the stack census. Sources:
     `src/hwsvc.asm`, `src/xmove.asm`, `src/drv.asm`, `src/abi.asm`,
     `docs/drivers.md`, `docs/rom-services.md`.
-21. **PRL relocation.** A PRL file's header, code and bitmap; how the CCP
+21. **[PRL relocation](21-prl-relocation.md).** A PRL file's header, code and bitmap; how the CCP
     loads one at `0100h`; the `.DRV` relocation list of gaps and how the
     loader applies it. Sources: `src/prl.asm`, `src/drv.asm`,
     `tools/lib/prl.mjs`, `tools/lib/drv.mjs`.
@@ -192,10 +198,10 @@ checked against.
     keypad bit; the LCD's words and the rules for clearing them. Sources:
     `src/drv.asm`, `src/cpm/ccp.asm`, `src/lcd.asm`, `src/glcd.asm`,
     `src/data3.asm`, `drivers/glcd.asm`.
-23. **Command history.** The 256-byte ring at `BD00h` in EXPAND 1; storing a
+23. **[Command history](23-command-history.md).** The 256-byte ring at `BD00h` in EXPAND 1; storing a
     line; `^W` and `^N` in the CCP's line input; the effect of a warm boot
     and of a reset. Sources: `src/history.asm`, `src/cpm/bdos.asm`.
-24. **Diagnostics.** The diagnostic prompt in the ROM; the separate
+24. **[Diagnostics](24-diagnostics.md).** The diagnostic prompt in the ROM; the separate
     diagnostics ROM, its tests and its report; running it on a board.
     Sources: `src/diag.asm`, `diag/`, `tools/diag.mjs`,
     `docs/diagnostics.md`, `docs/board-run.md`.
@@ -206,37 +212,37 @@ checked against.
     paths that drop the rest of a line; function 47's checks and copy.
     Sources: `src/cpm/ccp.asm`, `src/cpm/bdos.asm`, `src/ram.asm`,
     `src/boot.asm`, `src/drv.asm`, `src/cache.asm`.
-26. **The host model and the web page.** `host/machine.mjs` and the Debug80
+26. **[The host model and the web page](26-host-model.md).** `host/machine.mjs` and the Debug80
     TEC-1G runtime; the SD card and clock attached to it; the tests; the web
     page's build, its card in IndexedDB and its controls. Sources:
     `host/machine.mjs`, `host/card.mjs`, `web/`, `test/lib/`.
 
 ### Appendices
 
-- **A. BDOS functions.** Each function from 0 to 40, with 47, 50 and 108: its
+- **[A. BDOS functions](appendix-a-bdos-functions.md).** Each function from 0 to 40, with 47, 50 and 108: its
   registers, its result and any difference from CP/M 2.2. Sources:
   `src/cpm/bdos.asm`, `docs/compatibility.md`.
 - **B. ROM services.** The table at `C003h` entry by entry, the hardware
   services by number with their registers and status codes, and `ABIDRV`.
   Sources: `src/abi.asm`, `src/abi.inc`, `src/hwsvc.asm`,
   `docs/rom-services.md`.
-- **C. Memory map.** The CPU's address space, page zero, the resident
+- **[C. Memory map](appendix-c-memory-map.md).** The CPU's address space, page zero, the resident
   workspace, EXPAND 1 and the stacks, generated from the build. Sources:
   `docs/memory-map.md`, `tools/media.mjs`, `src/ram.asm`.
 - **D. Error messages.** Every message TEC-OS prints, with its cause and the
   remedy: the CCP's, the BDOS's, the diagnostic prompt's codes, the LCD's
   words and `Write lost`. Sources: `src/data.asm`, `src/data2.asm`,
   `src/data3.asm`, `src/sd.asm`, `src/vol.asm`.
-- **E. The container format.** The header's fields, the volume descriptors,
+- **[E. The container format](appendix-e-container-format.md).** The header's fields, the volume descriptors,
   the table beyond block 0, the checks and their codes, and the G1M and G8M
   geometries with their disk parameters. Sources:
   `docs/container-format.md`, `format/format.json`,
   `tools/lib/container.mjs`, `src/vol.asm`.
-- **F. `tecvol`.** Each command, `create`, `info`, `verify`, `dir`, `put`,
+- **[F. `tecvol`](appendix-f-tecvol.md).** Each command, `create`, `info`, `verify`, `dir`, `put`,
   `get`, `era`, `recipe` and `install`, with its options and an example.
   Sources: `tools/tecvol.mjs`, `tools/lib/container.mjs`,
   `tools/lib/cpmfs.mjs`, `tools/lib/recipe.mjs`.
-- **G. The TEC-1G as TEC-OS uses it.** The ports TEC-OS reads and writes,
+- **[G. The TEC-1G as TEC-OS uses it](appendix-g-tec-1g.md).** The ports TEC-OS reads and writes,
   among them `00h`, `01h`, `03h`, `FDh` and `FFh`; the system latch's bits;
   the configuration switches, the Matrix switch and the keypad bit; U9 and
   its jumpers; the hex keypad and the NMI a key press raises; the 8 × 8 LEDs,

@@ -1,3 +1,10 @@
+---
+title: Command history
+parent: TEC-OS
+nav_order: 23
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 23. Command history
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit

@@ -1,3 +1,10 @@
+---
+title: Introduction and first boot
+parent: TEC-OS
+nav_order: 1
+nav_group: "Part I: Using and programming TEC-OS"
+---
+
 # 1. Introduction and first boot
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from

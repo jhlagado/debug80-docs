@@ -11,6 +11,7 @@ export default defineConfig({
     "_internal/**",
     "archive/**",
     "basie/editorial/**",
+    "tec-os/editorial/**",
     "basie/programming-manual-plan.md",
     "01-basic-operation.md",
     "README.md",

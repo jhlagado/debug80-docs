@@ -1,3 +1,10 @@
+---
+title: The block cache
+parent: TEC-OS
+nav_order: 19
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 19. The block cache
 
 Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from

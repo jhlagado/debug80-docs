@@ -1,3 +1,10 @@
+---
+title: The BDOS
+parent: TEC-OS
+nav_order: 16
+nav_group: "Part II: Inside TEC-OS"
+---
+
 # 16. The BDOS
 
 Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
