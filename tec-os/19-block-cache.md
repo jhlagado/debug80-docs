@@ -151,7 +151,7 @@ A volume whose descriptor does not have the written-behind flag is written
 through: a BIOS `WRITE` returns only after the card has the block. Its path is
 in `bios.asm`, and Chapter 18 describes it. The block is read into the
 deblocking buffer `BLKBUF` unless that holds it already or the write needs no
-read, the record is merged, and `SDWRITE` writes `BLKBUF` to the card. The
+read. The record is then merged and `SDWRITE` writes `BLKBUF` to the card. The
 read into `BLKBUF`, when there is one, comes from the card, not from the cache
 (`src/bios.asm:127-164`).
 
@@ -266,7 +266,7 @@ then tests `CFAIL`, which is set if a line's write has failed since the last
 warm boot, including the flush it has just made. If it is set, `CWBOOT` clears
 it and prints `Write lost` on its own line (`src/cache.asm:347-358`,
 `src/data3.asm:109`). The failed lines are still dirty and still hold their
-data, so each warm boot writes them again, and prints the message again while
+data, so each warm boot writes them again and prints the message again while
 the write still fails.
 
 A card taken out while TEC-OS runs gives that: every write fails and the
