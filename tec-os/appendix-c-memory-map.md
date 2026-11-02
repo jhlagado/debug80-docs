@@ -7,17 +7,17 @@ nav_group: "Appendices"
 
 # Appendix C. Memory map
 
-Checked against TEC-OS 08da4d6.
+Checked against TEC-OS 718c01b.
 
 This appendix gives the addresses TEC-OS uses: the CPU's address space, the
 ROM, page zero, the resident workspace at the top of EXPAND 0, EXPAND 1 and
 the stacks. Chapter 13 explains the layout and Chapter 7 describes it from a
-program's side. The figures are those of the debug80 build at 08da4d6, whose
+program's side. The figures are those of the debug80 build at 718c01b, whose
 ROM has the SHA-256
-`524b9440f7bb628f519915a1601159eff824d9186596430da1a39d79536cd4b5`. The
+`debba41f1c4bbdbfcb34bb118956dd38cab88ca00ad76848474b10ee3848a301`. The
 build's four profile names give the same image. Where the figures depend on
 the card they are those of the starter card, with a G1M volume on drive A and
-a G8M volume on drive B, and no driver installed.
+a G8M volume on drive B, and no service installed.
 
 ## Taking the figures from the build
 
@@ -45,7 +45,7 @@ CHPOS BFE5h
 Every address in the workspace tables below comes from that file. A change to
 the source can move any of them, except the few the code fixes: page zero,
 EXPAND 1's cache, cache table and history page, `BF00h` for the RAM BIOS table
-and the table at `C003h`.
+and the ROM table at `C003h`.
 
 ## The CPU's address space
 
@@ -77,7 +77,7 @@ it keeps at `0040h` (`src/layout.asm:13-23`). Its value while TEC-OS runs is
 The TPA ends below the BDOS entry jump, whose address is in the word at
 `0006h`. Cold boot places the jump below the allocation vectors of the card's
 drives: it takes the lowest vector's address, subtracts 9 and sets the low
-byte to 6 (`src/vol.asm:571-576`). A driver goes in whole pages below the jump
+byte to 6 (`src/vol.asm:571-576`). A service goes in whole pages below the jump
 and lowers the word at `0006h` to its own jump, at offset 6 of its first page.
 
 | Card | Vectors | BDOS entry | TPA |
@@ -90,13 +90,13 @@ and lowers the word at `0006h` to its own jump, at offset 6 of its first page.
 | Addresses | Bytes | Contents |
 | --- | ---: | --- |
 | `C000h–C002h` | 3 | the reset jump, `JP COLD` |
-| `C003h–C017h` | 21 | the table of ROM services |
-| `C018h–C33Ch` | 805 | the read-only data, `ROMDATA` to `ROMCODE` |
-| `C33Dh–F982h` | 13,894 | the code |
-| `F983h–FFFFh` | 1,661 | free |
+| `C003h–C017h` | 21 | the ROM table |
+| `C018h–C33Dh` | 806 | the read-only data, `ROMDATA` to `ROMCODE` |
+| `C33Eh–F9B9h` | 13,948 | the code |
+| `F9BAh–FFFFh` | 1,606 | free |
 
-Within the code, the CCP is at `D795h–E0C9h`, 2,357 bytes, and the BDOS at
-`E0CAh–EFE0h`, 3,863 bytes, in the order `src/rom.asm` includes them
+Within the code, the CCP is at `D796h–E0DFh`, 2,378 bytes, and the BDOS at
+`E0E0h–F014h`, 3,893 bytes, in the order `src/rom.asm` includes them
 (`src/rom.asm:24-26`). The ROM's own copy of the BIOS jump table is in the
 data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 (`src/data.asm:20-36`, `src/boot.asm:45-48`). The byte at `C01Dh` is a `RET`
@@ -109,7 +109,7 @@ data, at `BIOSBAS`, and is never called: cold boot copies it to `BF00h`
 | `0000h` | `JP BF03h`, warm boot through the RAM BIOS table |
 | `0003h` | the IOBYTE; TEC-OS acts on its console field, bits 0 and 1 |
 | `0004h` | the current drive in bits 0–3 and the user number in bits 4–7 |
-| `0005h` | `JP` to the BDOS entry or the lowest driver; the word at `0006h` is the top of the TPA |
+| `0005h` | `JP` to the BDOS entry or the lowest service; the word at `0006h` is the top of the TPA |
 | `0008h–0037h` | restart vectors 1 to 6: each a `RET` after seven zeros, unless it holds a jump into the ROM |
 | `0038h` | `EI`, `RETI`, for restart 7 and the interrupt of mode 1 |
 | `0040h–004Fh` | TEC-OS's state, below |
@@ -154,7 +154,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 | `B806h–B808h` | 3 | the BDOS entry jump, `JP BENTRY` |
 | `B809h–B817h` | 15 | unused |
 | `B818h–B957h` | 320 | the allocation vectors: B's 256 bytes at `B818h`, then A's 64 at `B918h` |
-| `B958h–BCC4h` | 877 | the BIOS's disk state and buffers, the mount service's scratch and the video terminal's state |
+| `B958h–BCC4h` | 877 | the BIOS's disk state and buffers, the mount entry's scratch and the video terminal's state |
 | `BCC5h–BCEAh` | 38 | the BIOS stack |
 | `BCEBh–BE76h` | 396 | the CCP's state and stack |
 | `BE77h–BEFFh` | 137 | the BDOS's state and stack |
@@ -164,7 +164,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 
 The part from `WSBASE`, `B958h`, to `BEFFh` has the same addresses on every
 card. The build places `WSBASE` so that the part ends at `BF00h`
-(`src/gen/config.asm:2`, `src/layout.asm:69-72`). The part above the table
+(`tools/build.mjs:250-257`, `src/layout.asm:69-72`). The part above the table
 starts at `BF33h`, 51 bytes after `BF00h` (`src/ram.asm:192`). Cold boot
 clears the workspace from `WSBASE` up to `WSEND`, `B958h` to `BFE5h`
 (`src/boot.asm:23-27`). Warm boot clears the part from `CCPCLR` to the end of
@@ -189,7 +189,7 @@ the BDOS's block and leaves the rest (`src/boot.asm:270-289`).
 | `BBD0h–BC4Fh` | 128 | `DIRBUF` | the directory buffer every drive shares |
 | `BC50h–BC51h` | 2 | `CSVDUM` | the unused check vector |
 | `BC52h–BC53h` | 2 | `STUBAD` | the BDOS entry jump's address |
-| `BC54h–BC61h` | 14 | `MNTCNT` to `MNTCB` | the mount service's scratch |
+| `BC54h–BC61h` | 14 | `MNTCNT` to `MNTCB` | the mount entry's scratch |
 | `BC62h–BCB1h` | 80 | `LINEBUF` | one display row, for scrolling |
 | `BCB2h–BCBFh` | 14 | `VPUTV` to `VFNV` | the seven vectors into the display driver |
 | `BCC0h–BCC4h` | 5 | `VSTOP` to `CONMOD` | the scroll region, the console field acted on, the PICO9918's claim and the console mode |
@@ -247,7 +247,7 @@ clears the rest:
 | `BF55h–BF56h` | 2 | `PZTOP` | the word warm boot puts at `0006h` |
 | `BF57h–BF58h` | 2 | `PRGCODE` | function 108's return code |
 | `BF59h–BF5Dh` | 5 | `LOADTOP` to `PRLDL` | the CCP's and the PRL loader's figures |
-| `BF5Eh–BF63h` | 6 | `DRVBSY` to `DRVRC` | the driver loader's and registry's state |
+| `BF5Eh–BF63h` | 6 | `SVCBSY` to `SVCRC` | the service loader's and registry's state |
 | `BF64h` | 1 | `STPOS` | startup's position |
 | `BF65h–BFE4h` | 128 | `STREC` | the record of `A:STARTUP.CMD` |
 | `BFE5h` | 1 | `CHPOS` | the chained line's next piece |
@@ -284,6 +284,6 @@ The cache's addresses are in `src/layout.asm:24-26` and the history's page in
 | BDOS | `BECAh–BEFFh` | 54 | every BDOS function and the BIOS calls it makes |
 
 The sizes are `BIOSSTN`, `CCPSTN` and `BDOSSTN` in `src/layout.asm:76-83`. A
-loaded driver runs on its caller's stack, and `DRVLIM` gives what the drivers
+loaded service runs on its caller's stack, and `SVCLIM` gives what the services
 together may add: 8 bytes to the BDOS's, 12 to the BIOS's and 6 to the CCP's
 (`src/data3.asm:112`).
