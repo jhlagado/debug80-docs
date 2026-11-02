@@ -85,7 +85,7 @@ that its own code runs under whatever program comes next. A service can also
 be a *library*, with routines for programs to share. The example here does
 both.
 
-The BIOS's table is in RAM, at `BF00h`, and Chapter 8 lists its entries. The
+The BIOS's table is in RAM, at `BF00h`, and Chapter 15 lists its entries. The
 word at `0001h` holds the address of its `WBOOT` entry. Each entry is a 3-byte
 `JP`, and warm boot leaves the table's other entries as it finds them. The
 BDOS reaches the console and the disk through those entries. A replaced entry
@@ -294,8 +294,8 @@ stayed through each program's warm boot.
 
 On a PC the repository's `makeSvc` does the same job as `TAS`, by the two
 assemblies that `makePrl` uses. It needs the same `ORG $0100` line. It writes
-the same 111 bytes, where `TAS`'s file is rounded up to the record's 128. Its
-output can have the type `.SVC` from the start:
+the same 111 bytes, where `TAS`'s file is rounded up to the record's 128.
+`makeSvc`'s output can have the type `.SVC` from the start:
 
 ```sh
 node --input-type=module -e '
@@ -666,7 +666,7 @@ how another service or a program finds the driver. Its table starts with the
 eight words it hands to `ABIGLCD`, and four words follow them, at offsets 16
 to 22. `abi.inc` names them `PICOREG`, `PICOFIL`, `PICOWR` and `PICORD`, and
 [Appendix B](appendix-b-rom-services.md) lists their registers. They write a
-VDP register, fill VRAM and copy between RAM and VRAM.
+register of the PICO9918's video chip, fill VRAM and copy between RAM and VRAM.
 
 A caller of these entries must hold the claim of Chapter 9, as a program
 writing the ports must, and the entries check nothing. `VTEST` claims the
