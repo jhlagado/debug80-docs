@@ -297,7 +297,7 @@ A>PICO.DRV
 
 `PICO.DRV` installs, and the PICO9918 becomes the console. From then on TEC-OS
 writes nothing more to the serial terminal and reads the matrix keyboard in
-place of the serial port. `PICO.DRV` clears the screen when it takes the
+place of the serial port. TEC-OS clears the screen when `PICO.DRV` takes the
 console, so the PICO9918 shows only what followed:
 
 <!-- node book/capture.mjs --board pico --screen -->
