@@ -138,77 +138,10 @@ area is 46,854 bytes on the starter card with no driver, 45,318 with one and
 from Chapter 4, the word is `B506h` with no driver, and the program area
 46,086 bytes.
 
-That card is the smallest case. Cold boot sets up at most four drives, A to
-D, each with a vector of at most 256 bytes, so every card gives at least
-46,086 bytes with no driver, 44,550 with one display driver and 43,014 with
-both, when the word is `A906h`. Any other driver takes its own pages from
-those figures.
-
-`TOP` prints the word in hexadecimal. This program prints the size of the
-program area in decimal:
-
-```asm
-; AREA: print the size of the program area in bytes, in decimal.
-BDOS	EQU	$0005
-
-	ORG	$0100
-	LD	HL,($0006)	; the first byte above the area
-	LD	DE,$0100	; the area's first byte
-	OR	A		; clear carry for the subtraction
-	SBC	HL,DE		; HL = the size in bytes
-	CALL	PUTDEC
-	LD	DE,BYTES	; the text after the number
-	LD	C,9		; BDOS function 9: print a string
-	JP	BDOS		; print, and return from there
-
-; PUTDEC: print HL in decimal, always as five digits. Takes HL.
-; Returns nothing. Changes AF, BC, DE and HL.
-PUTDEC:	LD	BC,-10000	; the ten-thousands digit
-	CALL	DIGIT
-	LD	BC,-1000	; the thousands, from what is left
-	CALL	DIGIT
-	LD	BC,-100		; the hundreds
-	CALL	DIGIT
-	LD	BC,-10		; the tens
-	CALL	DIGIT
-	LD	BC,-1		; the units: fall into DIGIT
-
-; DIGIT: print how many times a power of ten goes into HL. Takes the
-; negative of the power in BC and the number in HL. Returns the
-; remainder in HL. Changes AF, BC and DE.
-DIGIT:	LD	A,'0'-1		; one below the character for 0
-DLOOP:	INC	A		; the next digit
-	ADD	HL,BC		; take off one power of ten
-	JR	C,DLOOP		; carry: HL is still 0 or more
-	SBC	HL,BC		; one too many: add the power back
-	PUSH	HL		; function 2 changes the registers
-	LD	E,A
-	LD	C,2		; BDOS function 2: print E
-	CALL	BDOS
-	POP	HL
-	RET
-
-BYTES:	DB	" bytes",13,10,"$"
-```
-
-`PUTDEC` finds each digit by adding a negative power of ten to `HL` and
-counting until the total falls below zero, which clears the carry, and
-`SBC HL,BC` then adds that power back. It always prints five digits, leading
-zeros included. Assembled and copied to `mem.img`, the program gives the
-figure for the starter card with no driver:
-
-```sh
-npx atom area.asm area.com
-node tools/tecvol.mjs put mem.img B area.com
-```
-
-<!-- node book/capture.mjs --card mem.img B:AREA -->
-```text
-A>B:AREA
-46854 bytes
-
-A>
-```
+Cold boot sets up at most four drives, A to D, each with a vector of at most
+256 bytes, so every card gives at least 46,086 bytes with no driver, 44,550
+with one display driver and 43,014 with both, when the word is `A906h`. Any
+other driver takes its own pages from those figures.
 
 The CCP loads a `.COM` file a record of 128 bytes at a time from `0100h`,
 and it stops at the 256-byte page that holds the address in the word at
@@ -226,10 +159,10 @@ CCP's, in the workspace, with 28 bytes free below the return address, as
 Chapter 6 says; a program that uses more sets `SP` to a stack of its own
 below the word at `0006h`.
 
-On CP/M 2.2 the CCP's 2 KiB are in RAM below the BDOS, and a program may
-overwrite them, since warm boot reads the CCP back from disk. On TEC-OS that
-gains a program nothing: the CCP and the BDOS are in the ROM, and the program
-area already runs up to the word at `0006h`.
+On CP/M 2.2 the CCP is in RAM below the BDOS, and a program may overwrite
+it, since warm boot reads the CCP back from disk. On TEC-OS that gains a
+program nothing: the CCP and the BDOS are in the ROM, and the program area
+already runs up to the word at `0006h`.
 
 ## Page zero
 
