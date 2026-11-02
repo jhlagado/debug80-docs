@@ -216,8 +216,8 @@ These two programs on the starter card print their own messages
 message the program returns to the prompt with a return code of 0, so a `:`
 piece after it runs.
 [Chapter 4](04-cards-and-volumes.md#drives-vols-and-mount) explains the
-programs, and [Chapter 18](18-sd-card-and-volumes.md#the-mount-service) the
-service behind them.
+programs, and [Chapter 18](18-sd-card-and-volumes.md#the-mount-entry) the
+ROM entry behind them.
 
 | Message | Cause | Remedy | See |
 | --- | --- | --- | --- |
