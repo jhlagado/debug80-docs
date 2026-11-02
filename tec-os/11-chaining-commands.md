@@ -11,14 +11,14 @@ Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
-A command line in TEC-OS can hold more than one command, with `!` between
-them. The CCP runs them in turn, each after the one before has ended, whether
-that was a built-in or a program. A command written with `:` in front runs only
-if the one before it succeeded, and a program reports success or failure
-through a return code that it sets with BDOS function 108. A program can also
-end by handing the CCP a new command line, with BDOS function 47. CP/M 2.2 runs
-one command per line, and TEC-OS takes these rules from CP/M 3's CCP. Chapter
-25 describes the code behind them.
+A command line in TEC-OS can hold more than one command, with `!` between them.
+The CCP runs them in turn, each after the one before has ended, whether that was
+a built-in or a program. A command written with `:` in front runs only if the
+one before it succeeded, and a program reports success or failure through a
+return code that it sets with BDOS function 108. A program can also end by
+handing the CCP a new command line, with BDOS function 47. CP/M 2.2 runs one
+command per line, but TEC-OS takes these rules from CP/M 3's CCP. Chapter 25
+describes the code behind them.
 
 ## Several commands on one line
 
@@ -125,9 +125,10 @@ counts as a success.
 
 The CCP sets the code to 0 as it takes each piece, after testing a `:` and
 before it looks for the command. A program that reads the code when it starts
-always finds 0, since the CCP cleared it before loading the program. A built-in that succeeds leaves the code at 0, and so does a program that never
-calls function 108, so an ordinary CP/M 2.2 program always succeeds. The code
-is also 0 after a reset.
+always finds 0, since the CCP cleared it before loading the program. A built-in
+that succeeds leaves the code at 0, and so does a program that never calls
+function 108, so an ordinary CP/M 2.2 program always succeeds. The code is also
+0 after a reset.
 
 The CCP sets the code to `FF00h` when a command fails at the CCP. That covers a
 command that isn't found, a program that won't load and a driver that won't
