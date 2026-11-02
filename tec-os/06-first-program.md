@@ -83,9 +83,9 @@ npx atom hello.asm hello.com
 
 The output file's type, `.com`, gives a CP/M program: the bytes of the code
 from `0100h` on, with nothing before them. The CCP reads those bytes to
-`0100h` as they stand, so any assembler that writes a binary for origin
-`0100h` will do, though the syntax of `EQU` lines and strings varies between
-them.
+`0100h` as they stand, so any Z80 assembler that writes a binary for origin
+`0100h` will do, though the syntax of numbers, `EQU` lines and strings varies
+between them.
 
 ## Copying the program to a card
 
