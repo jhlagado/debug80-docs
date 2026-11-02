@@ -6,17 +6,17 @@ nav_order: 5
 
 # 4. A round
 
-F2U is 21 bytes long. It converts a floating-point value to an unsigned 32-bit
+F2U was 21 bytes long. It converts a floating-point value to an unsigned 32-bit
 integer, and the two smoke candidates of chapters 2 and 3 got it wrong. In the
 round that chapter 1 follows it received five more candidates (P1: CDR-3). All
 five passed, and one of them replaced the body. This chapter takes that hole
 through the twelve steps of the loop.
 
 The round ran on 18 October 2026. I adopted the method's amendments on 26
-October (MD-1), so the round lacks parts of the loop as it now stands. The
-table gives each step and the record F2U has for it. Where F2U has none, I say
-so here and take the example from the second study's round, under that study's
-name.
+October (MD-1), so the round lacks parts of the loop as it now stands. The table
+gives each step and the record F2U has for it. Where F2U has none, I say so here
+and take the example from the second study's round where it has one, under that
+study's name.
 
 | Step | What it does | F2U's record |
 | --- | --- | --- |
@@ -30,7 +30,7 @@ name.
 | 8 | Probe the candidates and triage each difference | One difference, under a don't-care line |
 | 9 | Record the scoreboard, the control and the hazards | The scoreboard. No control, and no new hazard |
 | 10 | Land a candidate | Landed with eleven others |
-| 11 | Turn each gap into a conformance program | Two programs, from the smoke run's gap |
+| 11 | Turn each gap into a conformance program | Two programs, from the smoke run's gaps |
 | 12 | Have someone else review the report | None |
 
 ## The hole and its contract
@@ -53,16 +53,17 @@ convention of chapter 2. This is its contract, from the contracts file at Origo
 > ```
 
 An f32 is the runtime's name for a value in IEEE single, and a u32 is an
-unsigned 32-bit integer. Vea is the language of the first study. TRAP_NAR is
-the trap for a narrowing, a value that does not fit its new type. Negative
-values trap, so -0.5 traps though it would truncate to zero. Negative zero
-converts to 0.
+unsigned 32-bit integer. Vea is the language of the first study. TRAP_NAR is the
+trap for a narrowing, a value that does not fit its new type. Negative values
+trap, so -0.5 traps though it would truncate to zero. Negative zero converts to
+0. A `$` marks a number written in hexadecimal.
 
-The candidates in the round saw two figures that differ from this text. The
-size limit was already 27, which is 125 percent of the 21-byte incumbent,
-rounded up. The cycle limit was 1,529, which is 125 percent of the incumbent's
-worst case of 1,223. It reads 1,250 now because a landing resets the limit, and
-the landed body's worst case in place is 1,000 (P1: CDR-3).
+The candidates in the round saw one figure that differs from this text. The
+cycle limit was 1,529, which is 125 percent of the incumbent's worst case of
+1,223. It reads 1,250 now because a later rule resets the limit at each landing
+and F2U was brought up to it, 125 percent of the landed body's worst case in
+place of 1,000 (P1: CDR-3, CDR-6). The size limit of 27 is 125 percent of the
+21-byte incumbent, rounded up.
 
 Step 2 checks a contract against the incumbent before any candidate exists. The
 incumbent passed all three of its case sets, its contract lines held and it
@@ -93,9 +94,9 @@ second study (P2: T3).
 
 Step 5 writes the bundle, which is all a generator sees. It holds the contract
 and the runtime's conventions. It adds the contracts of the hole's callees and
-callers and the memory layouts it may name. Its visible cases and the syntax
-card complete it. A leak test refuses any bundle that holds a line of the
-incumbent's body (P1: CDR-3).
+callers and the memory layouts it may name. The shared constants, its visible
+cases and the syntax card complete it. A leak test refuses any bundle that holds
+a line of the incumbent's body (P1: CDR-3).
 
 F2U's own bundle from this round was not archived, so I can't show it. The
 candidates' notes show what it gave them, including the limits and the budget
@@ -118,9 +119,9 @@ of 1,454. They also record an assumption, that FP_MAG sets the carry flag for
 NaN and for infinity, which its contract left unstated.
 
 The step also keeps each generator's first attempt, untriaged, as the control
-(M1). The round kept none, and no round of the first study did
-(P1: round readings). The second study's round tried to keep its control and
-lost the files (P2: T3). So the question that chapter 1 raises, what the loop
+(M1). The round kept none, and no round of the first study did (P1: round
+readings). The second study's round meant to keep its control and did not
+archive the files (P2: T3). So the question that chapter 1 raises, what the loop
 adds over one careful attempt, has no direct answer for F2U.
 
 ## Scoring
@@ -145,16 +146,16 @@ can return zero for negative zero itself, or fall through to FP_MAG and let that
 routine return it. Both are within the contract, which says nothing about how
 the body works.
 
-Chapter 1 says that the first failure ends the scoring. That rule came later
-(P1: CDR-6). In this round every check ran on every candidate that assembled. So
-a candidate of another hole could fail most of its cases and still pass the
-system gate (P1: CDR-3). The scoring tool now runs the probe of step 8 before
-the system gate, since the system gate costs the most (P1: CDR-6). The loop's
-text still lists them the other way round.
+The first failure now ends the scoring, as chapter 1 says. That rule came after
+this round (P1: CDR-6). In this round every check ran on every candidate that
+assembled. So a candidate of another hole could fail most of its cases and still
+pass the system gate (P1: CDR-3). The scoring tool now runs the probe of step 8
+before the system gate, since the system gate costs the most (P1: CDR-6). The
+loop's text still lists them the other way round.
 
 ## The prober and triage
 
-Step 8 runs the prober over each candidate and the incumbent. For F2U it
+Step 8 runs the prober over each passing candidate and the incumbent. For F2U it
 compared 1,964 inputs, the 964 cases and 1,000 random values (P1: CDR-3). The
 landed candidate gave no difference of any kind.
 
@@ -229,17 +230,18 @@ or the carry flag is in that state. This is the incumbent.
 
 This is the candidate that replaced it, with its comments shortened.
 
-> Example (P1: F2U candidate a0e898fe3680)
+> Example (P1: F2U candidate a0e898fe3680, at Origo 1252390)
 >
 > ```
-> F2U:    LD      A,D                ; Copy the sign and high exponent byte.
->         ADD     A,A                ; Move the sign into CF and drop it from A.
+> F2U:
+>         LD      A,D                ; Copy the sign and high exponent byte.
+>         ADD     A,A                ; Move the sign into carry and drop it from A.
 >         JR      NC,.POS            ; A positive value goes straight to conversion.
 >         OR      E                  ; Merge in the second byte,
 >         OR      H                  ; the third,
 >         OR      L                  ; and the lowest: A is zero only for -0.
 >         JP      NZ,TRAP_NAR        ; Any negative value other than -0 traps.
-> .POS:   CALL    FP_MAG             ; Truncate the magnitude, CF at 2^32 or more.
+> .POS:   CALL    FP_MAG             ; Truncate the magnitude, carry at 2^32 or more.
 >         RET     NC                 ; Return the u32 when it fits.
 >         JP      TRAP_NAR           ; A magnitude of 2^32 or more traps.
 > ```
@@ -263,22 +265,23 @@ F2U has not changed since.
 
 Step 11 turns a gap found at one hole into a conformance program, so that the
 system gate carries it from then on (R21). This round found no gap at F2U. The
-smoke run had found one, which chapter 3 describes, and two conformance programs
-of the method's own came from it (P1: CDR-2). One prints the results of
-converting -0.0 and 0.0, and expects `0 0`. The other checks the site that a
+smoke run had found two, described in chapters 2 and 3, and a conformance
+program of the method's own came from each (P1: CDR-2). One prints the results
+of converting -0.0 and 0.0, and expects `0 0`. The other checks the site that a
 narrowing trap reports. The system gate ran both on all five candidates, and
-none of the five had trapped on negative zero. The round's own gap produced a
-program for I2F, described in chapter 3.
+none of the five had trapped on negative zero. This round's I2F gap produced a
+program of its own, described in chapter 3.
 
-Step 12 has the round's report reviewed against the pinned trees by someone who
-did not build it, before the next round opens (M5). No such review of this round
-is on record, and the next round opened the following day. The second study's
-round shows what the step does. Two reviews followed its report. Their
-corrections withdrew a sentence deferring the 95 percent floor. They also
+Step 12 has the round's report reviewed against the exact source it measured by
+someone who did not build it, before the next round opens (M5). No such review
+of this round is on record, and the next round opened the following day. The
+second study's round shows what the step does. Two reviews followed its report.
+Their corrections withdrew a sentence deferring the 95 percent floor. They also
 withdrew a set of overlap figures, which measured the order of the cases and not
-independence (P2: T3). The three landings had been made under delegation, and
-landing is a decision that the method keeps for me (R61). They stayed as
-provisional bodies until I decided them (P2: the fix round).
+whether the generators fail independently (P2: T3). The three landings had been
+made under delegation, and landing is a decision that the method keeps for me
+(R61). They stayed as provisional bodies until I decided them (P2: the fix
+round).
 
 F2U is the kind of hole where the loop has little left to find. Its contract
 carried the lessons of the smoke run, and all five candidates passed. Chapter 5
