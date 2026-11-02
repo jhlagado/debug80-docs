@@ -130,8 +130,9 @@ the banner and the LCD's top row print from (`src/data.asm:17`,
 them out from the CPU's clock, 4,000,000 Hz, the baud rate, 4800, and the
 T-states of the loops in `console.asm` (`tools/build.mjs:24-25`,
 `tools/build.mjs:40-61`). At 98c6416 they are 49, 105, 50, 74 and 77. The
-build stops with an error if a count would not fit in a byte. Chapter 15
-explains the loops and the arithmetic behind the counts.
+build stops with an error if a count would not fit in a byte
+(`tools/build.mjs:48-50`). Chapter 15 explains the loops and the arithmetic
+behind the counts.
 
 `gen/format.asm` and `gen/geom.asm` come from `format/format.json`, the one
 definition of the card's container. That file gives the container's name,
