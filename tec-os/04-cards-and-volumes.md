@@ -451,10 +451,12 @@ written, in one of these ways:
   new data in blocks the directory doesn't name. The file reads back as it was
   before, and the blocks are free space again the next time the drive's
   allocation vector is built.
-- On the volume written behind, every change since the last directory write,
-  warm boot or `MOUNT` is still in the cache and is lost. A cut during a flush
-  leaves some new data blocks that no directory entry names, as above. It
-  never leaves an entry naming a block whose data isn't there.
+- On the volume written behind, a change since the last directory write, warm
+  boot or `MOUNT` is lost if it is still in the cache. A block TEC-OS has
+  already written to make room in a full cache is on the card, and so are the
+  blocks a flush finished before the cut. Any new data block among them has no
+  directory entry naming it, as above. A cut never leaves an entry naming a
+  block whose data isn't there.
 - A cut during the write of one block can leave that block with old, new or
   mixed contents. If the block is part of a directory, it holds 16 directory
   entries, and any of them can be damaged.
