@@ -475,8 +475,8 @@ A>
 displays gets the second driver after the first. The two rules together give a
 way to change the PICO9918's width with no reset. Moving the console to the
 serial terminal lets `UNLOAD` remove the driver, and the driver for the new
-width takes the console back. As one chained line it works from the matrix
-keyboard too:
+width takes the console back. As one chained line the change works from the
+matrix keyboard too:
 
 <!-- node tools/capture.mjs --board pico "CON TTY!UNLOAD!PICO40.SVC!CON" -->
 ```text
