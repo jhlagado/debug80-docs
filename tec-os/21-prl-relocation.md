@@ -133,8 +133,8 @@ opens the file, then reads it one record of 128 bytes at a time into memory from
 `0100h` up (`src/cpm/ccp.asm:280-296`). It stops at the page given by the high
 byte of the word at `0006h`, the page holding the BDOS's entry
 (`src/cpm/ccp.asm:281`). A file with more records than that is read one record
-further into a scratch buffer, which tells a file that exactly fills the space
-from one that is too large (`src/cpm/ccp.asm:300-312`). For a file that fits,
+further into a scratch buffer. That read separates a file that exactly fills
+the space from one that is too large (`src/cpm/ccp.asm:300-312`). For a file that fits,
 `LOADCOM` stores the address just past its last record in `LOADTOP`
 (`src/cpm/ccp.asm:319`, `src/ram.asm:226`). For a PRL file the CCP then calls
 `PRLGO` (`src/cpm/ccp.asm:208`).
