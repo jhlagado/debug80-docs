@@ -217,13 +217,38 @@ name, `NOTES.TXT`, is there already, and `REN` changes nothing then. A `REN`
 whose old name isn't there prints `NO FILE`, and so does an `ERA` that
 matches no file, as the second `ERA` above shows.
 
-`COPY` works in the current user area, on both drives. A destination that
-names the source itself, such as `COPY README.TXT A:` on drive A, fails with
-`COPY?` before any file is opened. `COPY` has four messages of its own:
-`NO SOURCE` when the source isn't there, `CANNOT MAKE DEST` when the
-destination's directory is full, `WRITE ERROR` when a record can't be
-written, as on a full drive, and `CLOSE ERROR` when the finished copy can't
-be closed.
+A destination with a type and no name, such as `B:.DOC` or `B:.*`, also
+takes the whole of the source's name, so the type you typed has no effect.
+
+`COPY` works in the current user area, on both drives. A name with no drive
+means the current drive, and a destination that is then the same file as the
+source fails with `COPY?` before any file is opened. On drive A that covers
+`COPY README.TXT A:`, `COPY A:README.TXT README.TXT` and `COPY README.TXT`
+with no destination, which has the source's name and the current drive:
+
+<!-- node book/capture.mjs "COPY README.TXT B:.DOC" "DIR B:" "COPY A:README.TXT README.TXT" "COPY README.TXT" -->
+```text
+A>COPY README.TXT B:.DOC
+COPIED 0005
+
+A>DIR B:
+README.TXT  
+1 file, 8172K free
+A>COPY A:README.TXT README.TXT
+COPY?
+
+A>COPY README.TXT
+COPY?
+
+A>
+```
+
+The same rule makes `COPY A:README.TXT` on drive B a copy to drive B.
+
+`COPY` has four messages of its own: `NO SOURCE` when the source isn't there,
+`CANNOT MAKE DEST` when the destination's directory is full, `WRITE ERROR`
+when a record can't be written, as on a full drive, and `CLOSE ERROR` when
+the finished copy can't be closed.
 
 Before it erases with a name that matches every file, such as `*.*` or
 `B:*.*`, `ERA` prints `ALL (Y/N)?` and reads a line; a `Y` as the line's first
