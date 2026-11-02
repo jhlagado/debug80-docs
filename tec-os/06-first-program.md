@@ -11,8 +11,7 @@ Checked against TEC-OS 718c01b, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium 7604daa, with the SHA-256
 `ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`. The
-starter card's `EDIT.COM` is from Edit 845d062, and its copy on the card has
-the SHA-256
+starter card's `EDIT.COM` is from Edit 845d062, and its copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 A program for TEC-OS is a CP/M program: Z80 code that TEC-OS loads at `0100h`

@@ -9,7 +9,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 Checked against TEC-OS 718c01b, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
-845d062, and its copy on the card has the SHA-256
+845d062, and its copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 Chapter 2 described the console as you use it at the prompt. This chapter

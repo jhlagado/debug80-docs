@@ -136,7 +136,9 @@ directory code, or `FFh` if there is no such file. The FCB's `CR` is not
 changed: a program sets it to 0 before reading from the start.
 
 **16 Close file.** Writes the FCB's extent, record count and allocation map
-back to the file's directory entry (`src/cpm/bdos.asm:605-649`). Returns the
+back to the file's directory entry (`src/cpm/bdos.asm:605-649`). An FCB on an
+earlier extent than its entry's writes back only the allocation map
+(`src/cpm/bdos.asm:617-619`, `src/cpm/bdos.asm:637-644`). Returns the
 directory code, or `FFh` if the entry is not found. If nothing has been
 written through the FCB since its open, the call writes nothing and returns 0.
 
@@ -194,7 +196,8 @@ default drive's allocation vector (`src/cpm/bdos.asm:1460-1462`).
 
 **28 Write protect disk.** Sets the default drive's bit in the read-only
 vector, so that a later change to the drive is the `R/O` error, until the next
-warm boot or disk reset (`src/cpm/bdos.asm:1464-1476`).
+warm boot, disk reset or function 37 for the drive
+(`src/cpm/bdos.asm:1464-1476`, `src/cpm/bdos.asm:1637-1638`).
 
 **29 Get read-only vector.** Returns the read-only vector in `HL`, bit 0 for A
 (`src/cpm/bdos.asm:1478-1480`). A volume that the card marks read-only does

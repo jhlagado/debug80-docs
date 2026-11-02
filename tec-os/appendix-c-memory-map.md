@@ -154,7 +154,7 @@ From the BDOS entry jump to `BFFFh`, on the starter card:
 | `B806h–B808h` | 3 | the BDOS entry jump, `JP BENTRY` |
 | `B809h–B817h` | 15 | unused |
 | `B818h–B957h` | 320 | the allocation vectors: B's 256 bytes at `B818h`, then A's 64 at `B918h` |
-| `B958h–BCC4h` | 877 | the BIOS's disk state and buffers, the mount entry's scratch and the video terminal's state |
+| `B958h–BCC4h` | 877 | the BIOS's disk state and buffers, the `MOUNT` routine's scratch and the video terminal's state |
 | `BCC5h–BCEAh` | 38 | the BIOS stack |
 | `BCEBh–BE76h` | 396 | the CCP's state and stack |
 | `BE77h–BEFFh` | 137 | the BDOS's state and stack |
@@ -189,7 +189,7 @@ the BDOS's block and leaves the rest (`src/boot.asm:270-289`).
 | `BBD0h–BC4Fh` | 128 | `DIRBUF` | the directory buffer every drive shares |
 | `BC50h–BC51h` | 2 | `CSVDUM` | the unused check vector |
 | `BC52h–BC53h` | 2 | `STUBAD` | the BDOS entry jump's address |
-| `BC54h–BC61h` | 14 | `MNTCNT` to `MNTCB` | the mount entry's scratch |
+| `BC54h–BC61h` | 14 | `MNTCNT` to `MNTCB` | the `MOUNT` routine's scratch, which the mount entry also uses |
 | `BC62h–BCB1h` | 80 | `LINEBUF` | one display row, for scrolling |
 | `BCB2h–BCBFh` | 14 | `VPUTV` to `VFNV` | the seven vectors into the display driver |
 | `BCC0h–BCC4h` | 5 | `VSTOP` to `CONMOD` | the scroll region, the console field acted on, the PICO9918's claim and the console mode |

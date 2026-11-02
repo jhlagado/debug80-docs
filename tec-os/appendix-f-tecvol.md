@@ -8,8 +8,10 @@ nav_group: "Appendices"
 # Appendix F. `tecvol`
 
 Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
-845d062, whose card copy has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+845d062, whose copy in `dist/files` has the SHA-256
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+`TAS.COM` from Thorium 7604daa, with the SHA-256
+`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
 This appendix lists the nine commands of `tecvol`, the repository's tool for
 TEC-OS cards on a PC, with their options and an example of each, and ends with
@@ -41,8 +43,8 @@ The options may come anywhere after the command, and an unknown option is an
 error (`tools/tecvol.mjs:33-50`). Every command but `create` and `recipe`
 opens an existing image and checks it as a container first, with the checks
 Appendix E lists. An image that fails is not used (`tools/tecvol.mjs:60-63`).
-A command that changes an image writes the result to a temporary file beside
-it, checks that file as a container and only then renames it over the image,
+A command that changes an image checks the result as a container, writes it to
+a temporary file beside the image and renames that file over the image,
 so a failure leaves the image as it was (`tools/tecvol.mjs:17-19`,
 `tools/tecvol.mjs:52-58`).
 
