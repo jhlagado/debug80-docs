@@ -111,7 +111,7 @@ was dropped with the rest of the line. In the second line `DIR *.DRV`
 succeeded and `:DIR *.CMD` ran. The third line starts with `:`, and the
 command it tests is the last one of the line before, the `DIR *.CMD` that
 succeeded. A `:` at the start of a line typed after a failure runs nothing. On
-the serial-only board and on the web page's board, the starter card's last
+the serial board and on the web page's board, the starter card's last
 startup line `GLCD.DRV` fails. A `:` that starts the first line typed runs
 nothing there too.
 
@@ -225,12 +225,12 @@ B>
 
 A program can end by giving the CCP a command line to run next, with BDOS
 function 47, which CP/M 3 calls *chain to program*. The program puts the line
-in memory, ended by a 0 byte, sets the DMA address to it with function 26 and
-calls function 47. When the line is accepted the call doesn't return. TEC-OS
-copies the line and ends the program with a warm boot. The CCP then runs the
-line next, in place of whatever was left of the line the program came from.
-This program, `RUN`, ends by running the rest of its own command line as a
-command:
+in memory, ended by a 0 byte, sets the DMA address (Chapter 6) to it with
+function 26 and calls function 47. When the line is accepted the call doesn't
+return. TEC-OS copies the line and ends the program with a warm boot. The CCP
+then runs the line next, in place of whatever was left of the line the program
+came from. This program, `RUN`, ends by running the rest of its own command
+line as a command:
 
 ```asm
 ; RUN: end by running the rest of the command line as a command.

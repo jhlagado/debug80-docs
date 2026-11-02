@@ -80,12 +80,12 @@ A program's memory is reused as soon as it ends, so nothing of it runs after
 that. A *service* stays. TEC-OS reads a `.SVC` file into pages below the BDOS,
 in the service resident memory. It lowers the word at `0006h` below them, as
 Chapter 5 describes. The code stays there through every warm boot until a
-reset or `UNLOAD`. From there it can change the BIOS's table of entries, so
+reset or `UNLOAD`. From there it can change the BIOS jump table, so
 that its own code runs under whatever program comes next. A service can also
 be a *library*, with routines for programs to share. The example here does
 both.
 
-The BIOS's table is in RAM, at `BF00h`, and Chapter 15 lists its entries. The
+The BIOS jump table is in RAM, at `BF00h`, and Chapter 15 lists its entries. The
 word at `0001h` holds the address of its `WBOOT` entry. Each entry is a 3-byte
 `JP`, and warm boot leaves the table as it finds it. The BDOS reaches the
 console and the disk through those entries. A replaced entry therefore
@@ -253,7 +253,7 @@ COUNT.DRV written
 B>REN COUNT.SVC=COUNT.DRV
 ```
 
-`AREA` now measures the program area before and after the service, and
+`AREA` now measures the TPA before and after the service, and
 `UNLOAD` takes it out again. The rest of the same run:
 
 <!-- the same run, continued -->
@@ -287,7 +287,7 @@ B>
 ```
 
 The file is 100 bytes of header and image and 11 of relocation data. It takes
-a whole page, so the program area falls by 256 bytes and `SERVICES` shows 1
+a whole page, so the TPA falls by 256 bytes and `SERVICES` shows 1
 page. `UNLOAD` gives the bytes back. The count rose by 18h, 24, between the
 two `CHARS` commands, the characters the console printed in between. The hook
 stayed through each program's warm boot.
@@ -310,7 +310,7 @@ node tools/tecvol.mjs put svc.img B COUNT.SVC
 Run `TAS` before you install a service. At the commit named at the head of
 this chapter, the word at `0006h` points 6 bytes into the lowest service's
 first page. Those 6 bytes hold the service's links, its flags and the offset
-of its `REMOVE`, and the word puts them in the program area. `TAS` starts its
+of its `REMOVE`, and the word puts them in the TPA. `TAS` starts its
 stack at that word, as `EDIT` does and as many CP/M programs do, so its first
 pushes land on them, and a program that fills the area reaches them too. With
 `COUNT.SVC` in, a run of `TAS` leaves `SERVICES` printing lines of stray
@@ -358,9 +358,9 @@ this way on a board without their display. `INIT` makes its hooks last, as
 `COUNT` does. A warm boot during `INIT` takes the pages back with no call to
 the service, so a hook already made would point into free memory.
 
-After a failed `INIT` the loader reads the 17 entries of the BIOS table for
+After a failed `INIT` the loader reads the 17 entries of the BIOS jump table for
 one that points into the service. If it finds one it keeps the pages, marks
-them as not removable and publishes no record. The scan covers the BIOS table
+them as not removable and publishes no record. The scan covers the BIOS jump table
 alone, so the service itself must undo a vector anywhere else, such as a video
 table handed to `ABIGLCD`.
 

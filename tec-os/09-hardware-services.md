@@ -43,7 +43,7 @@ fixed addresses. Everything else can move from one build to the next. Chapter
 | `C00Ah` | `ABIHW` | a jump: the hardware services |
 | `C00Dh` | `ABIMAIN` | a word: the address of the count of MAIN regions fitted |
 | `C00Fh` | `ABIVOL` | a jump: mount, unmount and describe volumes |
-| `C012h` | `ABIGLCD` | a jump: a video driver hands the ROM its table |
+| `C012h` | `ABIGLCD` | a jump: a display driver hands the ROM its table |
 | `C015h` | `ABISVC` | a jump: the registry of services |
 
 The version is the table's ABI, its application binary interface, here 4.0.
@@ -155,7 +155,7 @@ The services run on the caller's stack. The deepest is `PUTAT` on the graphics
 LCD, which takes 22 bytes on top of the `CALL`'s return address. That fits the
 28 bytes of the CCP's stack in a program that has pushed nothing. No service
 calls the BDOS. A program can therefore call one from code that runs inside a
-BDOS call, such as a routine reached through its own jump in the BIOS's table.
+BDOS call, such as a routine reached through its own jump in the BIOS jump table.
 The services keep their one byte of state, the claim on the PICO9918 described
 later in this chapter, in TEC-OS's workspace.
 
@@ -556,7 +556,7 @@ which a game reads. `JOY`, number 24, returns the joystick in `B`, again with
 a 1 for each line active.
 
 Both always return status 0, and `INFO`'s bit 0 reports whether there is a
-keyboard. `ROWS` tests that bit, waits for a key and prints what the two
+matrix keyboard. `ROWS` tests that bit, waits for a key and prints what the two
 services returned:
 
 ```asm
@@ -670,10 +670,11 @@ PICO9918 both return status 2.
 
 While the chip is claimed, the terminal code leaves it alone: output to it is
 dropped, no cursor is drawn and no pages flip. The program may set any mode
-and use all of the VRAM. It reaches the chip by its ports, `BEh` for data and
-`BFh` for control, or through the graphics entries of `PICO.SVC`, which
-Appendix B lists. Nothing the program prints reaches the PICO9918 until the
-release, so its messages go on the LCD or are printed before the claim.
+and use all of the VRAM, the chip's video memory. It reaches the chip by its
+ports, `BEh` for data and `BFh` for control, or through the graphics entries of
+`PICO.SVC`, which Appendix B lists. Nothing the program prints reaches the
+PICO9918 until the release, so its messages go on the LCD or are printed before
+the claim.
 
 A release with `PICO.SVC` in restores the driver's text mode, font and page.
 If the PICO9918 is the console it also clears the screen and puts the cursor
@@ -824,7 +825,7 @@ on the drawing and the three paths come out close.
 which devices it found. It beeps with `B = 120` and `DE = 400` and writes the
 LCD's four rows. If bit 1 was set it claims the PICO9918. Its main loop then
 reads the clock one pass in 32 and shows it on LCD row 3. The loop also makes
-a pass of `DIGIT` with a hex counter, draws the ball and polls for a key. At
+a pass of `DIGIT` with a hexadecimal counter, draws the ball and polls for a key. At
 the end `DEMO` releases the chip.
 
 No hardware service drives the 8 × 8 LEDs. `DEMO` makes its rainbow by writing
