@@ -14,7 +14,7 @@ repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
 
 A program on TEC-OS has most of the Z80's memory to itself, and the rest is
 TEC-OS's. This chapter starts with the Z80's 64 KiB as TEC-OS lays it out on a
-TEC-1G. It then describes the program area and the word at `0006h` that marks
+TEC-1G. It then describes the TPA and the word at `0006h` that marks
 its end, then page zero and the bytes TEC-OS keeps there. It ends with the
 second half of the expansion RAM, which TEC-OS keeps for itself, and the two
 CP/M 3 calls that copy memory.
@@ -37,22 +37,22 @@ from `0000h` to `BFFFh`, with the ROM above it.
 
 TEC-OS uses the top of that RAM, and programs have the rest. Page zero,
 `0000h–00FFh`, holds the jumps and buffers through which a program reaches
-TEC-OS. The program area, which CP/M calls the TPA, runs from `0100h` up to
-TEC-OS's resident workspace at the top of EXPAND 0. The workspace holds the
-BDOS's entry, the drives' allocation vectors and the buffer for card blocks.
-It also holds the stacks and state of the BIOS, the CCP and the BDOS, and at
-`BF00h` the BIOS's jump table.
+TEC-OS. The TPA, CP/M's Transient Program Area, runs from `0100h` up to the
+BDOS's entry, with the drives' allocation vectors above it. Above them, at the
+top of EXPAND 0, is TEC-OS's resident workspace. The workspace holds the buffer
+for card blocks, the stacks and state of the BIOS, the CCP and the BDOS, and at
+`BF00h` the BIOS jump table.
 
-Cold boot also tests for a second 32 KiB at `0000h–7FFFh`. Bit 3 of the latch
-would put it in view in place of the fixed RAM. Cold boot stores 1 or 2 at
-`0041h` for the number of regions and gives the second its own copy of page
-zero. TEC-OS uses no other byte of it.
+Cold boot also tests for a second 32 KiB at `0000h–7FFFh`, MAIN 1. Bit 3 of the
+latch would put it in view in place of the fixed RAM, MAIN 0. Cold boot stores
+1 or 2 at `0041h` for the number of regions and gives the second its own copy
+of page zero. TEC-OS uses no other byte of it.
 
-## The program area and the word at 0006h
+## The TPA and the word at 0006h
 
 Page zero has a jump at `0005h`, and every call to the BDOS goes through it.
 The word at `0006h` is the jump's address. CP/M also defines it as the end of
-the program area. A program may use memory from `0100h` up to the byte below
+the TPA. A program may use memory from `0100h` up to the byte below
 that address. CP/M programs read the word to find how much memory they have. A
 program that sizes its buffers from it runs on any card and with any drivers.
 
@@ -131,10 +131,10 @@ AC06h
 A>
 ```
 
-Each display driver takes 1,536 bytes, six pages of 256. The program area is
+Each display driver takes 1,536 bytes, six pages of 256. The TPA is
 therefore 46,854 bytes on the starter card with no driver, 45,318 with one and
 43,782 with both. A card whose header gives four drives, such as `my.img` from
-Chapter 4, has `B506h` in the word with no driver. Its program area is then
+Chapter 4, has `B506h` in the word with no driver. Its TPA is then
 46,086 bytes.
 
 Cold boot sets up at most four drives, A to D, each with a vector of at most
@@ -142,7 +142,7 @@ Cold boot sets up at most four drives, A to D, each with a vector of at most
 44,550 with one display driver and 43,014 with both, when the word is `A906h`.
 Any other driver takes its own pages from those figures.
 
-A program that sizes its buffers works from the area's size, the word less
+A program that sizes its buffers works from the TPA's size, the word less
 `0100h`. This program finds it and prints it in decimal:
 
 ```asm
@@ -211,12 +211,12 @@ The CCP loads a `.COM` file from `0100h`, a record of 128 bytes at a time. It
 stops at the 256-byte page that holds the address in the word at `0006h`. On
 the starter card with no driver the last record ends at `B7FFh`. The largest
 program file that loads is therefore 46,848 bytes, six bytes short of the
-program area. A file one record longer fails like a missing one, with its name
+TPA. A file one record longer fails like a missing one, with its name
 and a question mark. By the same rule, the largest file that loads on a
 four-drive card with both display drivers is 43,008 bytes. A program's data
 may go on to the byte below the word at `0006h`.
 
-The workspace above the word is TEC-OS's. A program that writes there corrupts
+The memory above the word is TEC-OS's. A program that writes there corrupts
 the drives' allocation vectors or the BDOS's state, and what follows is a
 damaged card or a crash. The stack a program starts on is the CCP's, in the
 workspace, with 28 bytes free below the return address, as Chapter 6 says. A
@@ -225,7 +225,7 @@ program that uses more sets `SP` to a stack of its own below the word at
 
 On CP/M 2.2 the CCP is in RAM below the BDOS. A program may overwrite it,
 since warm boot reads the CCP back from disk. On TEC-OS that gains a program
-nothing. The CCP and the BDOS are in the ROM, and the program area already
+nothing. The CCP and the BDOS are in the ROM, and the TPA already
 runs up to the word at `0006h`.
 
 ## Page zero
@@ -237,7 +237,7 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 | `0000h–0002h` | a jump to the BIOS's warm boot, at `BF03h` |
 | `0003h` | the IOBYTE |
 | `0004h` | the current drive, in bits 0–3, and user area, in bits 4–7 |
-| `0005h–0007h` | the jump to the BDOS, whose address is the end of the program area |
+| `0005h–0007h` | the jump to the BDOS, whose address is the end of the TPA |
 | `0008h–0037h` | the restart vectors of `RST 08h` to `RST 30h` |
 | `0038h–003Ah` | `EI` and `RETI`, the return from an interrupt in mode 1 |
 | `0040h–004Fh` | TEC-OS's own bytes, below |
@@ -246,7 +246,7 @@ CP/M fixes the use of the first 256 bytes, and TEC-OS follows it:
 | `0080h–00FFh` | the command tail, then the default DMA buffer |
 
 The word at `0001h`, `BF03h`, is the address of the warm boot entry in the
-BIOS's jump table, the table's second entry. A program finds the table by
+BIOS jump table, the table's second entry. A program finds the table by
 subtracting 3 from it. Chapter 8 describes the console's entries there.
 
 The restart vectors are free for a program, and for a debugger, while the
@@ -260,7 +260,7 @@ except while TEC-OS reads or writes a card block. TEC-OS holds them off for
 that and then restores them.
 
 `0066h`, where the Z80 goes on a non-maskable interrupt, lies inside the FCB
-at `005Ch`. On a board with the keypad's NMI jumper fitted, a key on the hex
+at `005Ch`. On a board with the keypad NMI jumper fitted, a key on the hex
 keypad lands there. Chapter 1 therefore says to keep off the keypad while a
 program runs.
 
@@ -282,7 +282,7 @@ must stay in view whichever half of the expansion RAM is in the window:
 | `004Ah–004Ch` | the state of the escape sequence being read, and its two numbers |
 | `004Dh` | the matrix key down at the last scan, FFh for none |
 | `004Eh` | 80h while reverse video is on |
-| `004Fh` | 1 while the cursor's cell is drawn inverted |
+| `004Fh` | 1 while the cursor's cell is drawn as its reverse image |
 
 A program reads the console's size at `0048h`, as Chapter 8 describes, and
 leaves the rest alone. The latch at port `FFh` can only be written, so `0040h`
@@ -297,15 +297,15 @@ clears it, and TEC-OS keeps in it:
 
 | Addresses | Contents |
 | --- | --- |
-| `8000h–BBFFh` | the block cache's 30 blocks of 512 bytes |
+| `8000h–BBFFh` | the block cache's 30 lines, each with room for one card block of 512 bytes |
 | `BC00h–BC9Dh` | the cache's table: the card block each line holds, and whether it has changes |
 | `BD00h–BDFFh` | the history of command lines |
 | `BE00h–BEFFh` | free |
 | `BF00h–BFFFh` | reserved |
 
-EXPAND 1 in the window takes EXPAND 0 out of it. The BDOS's entry, the BIOS's
+EXPAND 1 in the window takes EXPAND 0 out of it. The BDOS's entry, the BIOS
 jump table, the workspace and any of the program above `7FFFh` go with it. The
-jump at `0005h` then leads into a line of the cache, and the return word on
+jump at `0005h` then leads into a cache line, and the return word on
 the CCP's stack is out of view. A program on that stack has lost its stack and
 the BDOS before it writes a byte. A write to the window then damages the
 cache, and the next flush can write wrong data to the card. TEC-OS has no
