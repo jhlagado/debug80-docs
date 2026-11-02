@@ -175,7 +175,9 @@ that isn't there gives `NO FILE`, and so does `TYPE` with no name. Like
 
 `COPY` copies one file to another name, to another drive, or both. Chapter 1
 showed it in the starter card's `README.TXT`. When the destination is a
-drive alone, as in `COPY README.TXT B:`, the copy has the source's name. The
+drive alone, as in `COPY README.TXT B:`, the copy has the source's name. A
+destination with a type and no name, such as `B:.DOC` or `B:.*`, also takes
+the whole of the source's name, so the type you typed has no effect. The
 copy goes a record at a time, and `COPIED` and a number report the records
 copied, in hexadecimal: `0005` is five records, 640 bytes. A file of the
 destination's name is erased first, so `COPY` replaces it. `REN` renames a
@@ -217,14 +219,12 @@ name, `NOTES.TXT`, is there already, and `REN` changes nothing then. A `REN`
 whose old name isn't there prints `NO FILE`, and so does an `ERA` that
 matches no file, as the second `ERA` above shows.
 
-A destination with a type and no name, such as `B:.DOC` or `B:.*`, also
-takes the whole of the source's name, so the type you typed has no effect.
-
 `COPY` works in the current user area, on both drives. A name with no drive
 means the current drive, and a destination that is then the same file as the
 source fails with `COPY?` before any file is opened. On drive A that covers
 `COPY README.TXT A:`, `COPY A:README.TXT README.TXT` and `COPY README.TXT`
-with no destination, which has the source's name and the current drive:
+with no destination, which has the source's name and the current drive. Here
+the first copy has a type and no name, and the next two fail:
 
 <!-- node book/capture.mjs "COPY README.TXT B:.DOC" "DIR B:" "COPY A:README.TXT README.TXT" "COPY README.TXT" -->
 ```text
