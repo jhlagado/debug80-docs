@@ -15,29 +15,29 @@ starter card's `EDIT.COM` is from Edit 845d062, and its copy on the card has
 the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
-A program for TEC-OS is a CP/M program. It is Z80 code that TEC-OS loads at
-`0100h`, and it reaches the console and the files through the BDOS. This
-chapter describes two of them. You assemble the first, which prints a line,
-with ATOM on a PC, then copy it to a card and run it. The second prints the
-file named on its command line. Through it the chapter explains how the CCP
-passes a command line to a program and how a program opens and reads a file.
-You then assemble the first program again on the TEC-1G itself. The last
-section describes the ways a program returns to TEC-OS.
+A program for TEC-OS is a CP/M program: Z80 code that TEC-OS loads at `0100h`
+and that reaches the console and the files through the BDOS. This chapter
+describes two of them. You assemble the first, which prints a line, with ATOM
+on a PC, then copy it to a card and run it. The second prints the file named
+on its command line. Through it the chapter explains how the CCP passes a
+command line to a program and how a program opens and reads a file. You then
+assemble the first program again on the TEC-1G itself. The last section
+describes the ways a program returns to TEC-OS.
 
 ## Calling the BDOS
 
 A program calls one of the BDOS's functions by putting the function's number
 in register `C` and calling address `0005h`. A function that takes a byte,
-such as a character to print, takes it in register `E`. One that takes an
+such as a character to print, takes it in register `E`, and one that takes an
 address, such as a string's or a file's, takes it in `DE`. A function that
 returns a byte returns it in `A`, and one that returns a word returns it in
-`HL`. CP/M 2.2 defines no register as kept across a call. A program therefore
-saves in its own memory, or on its stack, every value it uses after the call.
+`HL`. CP/M 2.2 defines no register as kept across a call, so a program saves
+in its own memory, or on its stack, every value it uses after the call.
 
 The word at `0006h`, inside the jump at `0005h`, is the address that jump
-leads to. That is the BDOS's entry or a driver's jump on to it. It is also the
-end of the memory a program may use, as Chapter 7 explains. A program may read
-that word, but it makes its calls at `0005h`.
+leads to: the BDOS's entry or a driver's jump on to it. It is also the end of
+the memory a program may use, as Chapter 7 explains. A program may read that
+word, but it makes its calls at `0005h`.
 
 The functions this chapter uses are in the table below. An FCB, which two of
 them take, is a block of memory that names a file, and the section on the
@@ -71,8 +71,8 @@ MESSAGE:DB      "Hello from the TEC-1G",13,10,"$"
 `ORG $0100` places it at `0100h`, where the CCP loads every program and starts
 it. Function 9 prints each character from the address in `DE` up to the `$`,
 which isn't printed. The 13 and 10 before the `$`, a carriage return and a
-line feed, end the line. The `RET` at the end returns to TEC-OS, as the last
-section explains.
+line feed, end the line, and the `RET` at the end returns to TEC-OS, as the
+last section explains.
 
 ATOM is a Z80 assembler that runs on a PC and on CP/M, and `npm ci` installs
 it with the repository. Saved as `hello.asm` in the clone, the program
@@ -90,7 +90,7 @@ between them.
 
 ## Copying the program to a card
 
-`tecvol`, from Chapter 4, puts the program on a card image. A copy of the
+`tecvol`, from Chapter 4, puts the program on a card image, and a copy of the
 starter card keeps the original as it was:
 
 ```sh
@@ -99,9 +99,9 @@ node tools/tecvol.mjs put work.img B hello.com
 ```
 
 `put` names the file `HELLO.COM` on drive B. `book/capture.mjs` boots
-`work.img` and types the commands. On a board, `tecvol install` from Chapter 4
-writes `work.img` to the card. `B:` makes drive B current, `DIR` shows the
-program, and `HELLO`, the program's name without its type, runs it:
+`work.img` and types the commands, and on a board `tecvol install` from
+Chapter 4 writes `work.img` to the card. `B:` makes drive B current, `DIR`
+shows the program, and `HELLO`, the program's name without its type, runs it:
 
 <!-- node book/capture.mjs --card work.img B: DIR HELLO -->
 ```text
@@ -118,18 +118,19 @@ B>
 The transcript leaves out the boot before `B:`. The blank line before the
 prompt comes from TEC-OS: when a program ends, the CCP starts a new line
 before it prints the prompt again. The CCP searches for the program on the
-current drive only. At `A>` the command `HELLO` therefore comes back as
-`HELLO?`, and `B:HELLO` runs the program from drive B.
+current drive only, so at `A>` the command `HELLO` gives `HELLO?`, and
+`B:HELLO` runs the program from drive B.
 
 The web page copies a file from the PC to its card without `tecvol`. Its
-"Drive" list holds the drives the card's header names. "Copy file to drive"
-writes the chosen files onto the volume of the drive selected there. Each name
-becomes the CP/M name in capitals, and "as text" makes the copy a text file,
-as `tecvol put --text` does. The page then presses the board's reset, so that
-TEC-OS starts again with the changed card. The reset loses any change still in
-the block cache. A `^C` at the prompt before the copy puts those changes on
-the card first. The list below the button shows the files on the selected
-drive, each with a "Download" button that copies it back to the PC.
+"Drive" list holds the drives the card's header names, and "Copy file to
+drive" writes the chosen files onto the volume of the drive selected there.
+Each name becomes the CP/M name in capitals, and "as text" makes the copy a
+text file, as `tecvol put --text` does. The page then presses the board's
+reset, so that TEC-OS starts again with the changed card. The reset loses any
+change still in the block cache, so a `^C` at the prompt before the copy puts
+those changes on the card first. The list below the button shows the files on
+the selected drive, each with a "Download" button that copies it back to the
+PC.
 
 ## The command line
 
@@ -146,13 +147,13 @@ at `0080h` is 14, and `0081h` onwards holds ` B:HELLO.ASM X`.
 
 The second is a file control block, an FCB, of 36 bytes. A program names a
 file to the BDOS through it, and the BDOS keeps its place in the file there.
-The CCP fills the FCB at `005Ch` from the first word of the tail. It fills the
-16 bytes at `006Ch` from the second word, if there is one. An FCB starts with
-the drive, 0 for the current drive or 1 to 16 for A to P. Then come 8 bytes of
+The CCP fills the FCB at `005Ch` from the first word of the tail and the 16
+bytes at `006Ch` from the second word, if there is one. An FCB starts with the
+drive, 0 for the current drive or 1 to 16 for A to P, and then come 8 bytes of
 name and 3 of type, each padded with spaces. For `SHOW b:hello.asm x` the FCB
-at `005Ch` holds 2, for drive B, then `HELLO   ASM`. The bytes at `006Ch` hold 0
-and `X`, padded. A program that takes one file name opens the FCB at `005Ch`
-as it stands.
+at `005Ch` holds 2, for drive B, then `HELLO   ASM`, and the bytes at `006Ch`
+hold 0 and `X`, padded. A program that takes one file name opens the FCB at
+`005Ch` as it stands.
 
 The FCB's byte 32, at `007Ch` for the FCB at `005Ch`, is the current record.
 This is the number of the next 128-byte record that a sequential read takes,
@@ -204,10 +205,10 @@ NOFILE: LD      DE,NOMSG
 NOMSG:  DB      "No such file",13,10,"$"
 ```
 
-Function 15 opens the file the FCB names. It finds the file's directory entry
-and copies the entry's allocation into the FCB. It returns FFh in `A` if there
-is no such file. `INC A` turns FFh into 0 and sets the zero flag, so `JR Z`
-takes that case. Function 20 then reads one record of 128 bytes into the DMA
+Function 15 opens the file the FCB names. It finds the file's directory entry,
+copies the entry's allocation into the FCB and returns FFh in `A` if there is
+no such file. `INC A` turns FFh into 0 and sets the zero flag, so `JR Z` takes
+that case. Function 20 then reads one record of 128 bytes into the DMA
 address, the buffer the BDOS reads into and writes from. That address is
 `0080h` until a program changes it with function 26. The same 128 bytes held
 the command tail, so a program that uses its tail copies it before the first
@@ -261,9 +262,9 @@ the same message.
 
 ## Assembling on the TEC-1G
 
-ATOM also runs on TEC-OS itself, as a CP/M program, `ATOM.COM`. The ATOM
-repository holds it as `assets/atom-cpm22.com`. With a clone of ATOM beside
-the TEC-OS clone, `tecvol` copies it onto drive B under its CP/M name:
+ATOM also runs on TEC-OS itself, as a CP/M program, `ATOM.COM`, which the ATOM
+repository holds as `assets/atom-cpm22.com`. With a clone of ATOM beside the
+TEC-OS clone, `tecvol` copies it onto drive B under its CP/M name:
 
 ```sh
 node tools/tecvol.mjs put work.img B ../atom/assets/atom-cpm22.com ATOM.COM
@@ -291,9 +292,8 @@ Hello from the TEC-1G
 B>
 ```
 
-`A:EDIT HELLO.ASM` runs the starter card's editor on the source. The whole
-cycle of editing, assembling and running a program then takes place on the
-TEC-1G.
+`A:EDIT HELLO.ASM` runs the starter card's editor on the source, so the whole
+cycle of editing, assembling and running a program takes place on the TEC-1G.
 
 ## The ways a program ends
 
@@ -310,16 +310,16 @@ is a warm boot:
 - a key pressed after a BDOS error such as `Bdos Err On B: Bad Sector`
 
 The warm boot writes the block cache's changes to the card and puts back the
-jumps in page zero. It clears each restart vector at `0008h–0037h` that a
-program set, keeping only a jump into the ROM. These are the addresses that
-`RST` instructions call (Chapter 7). The warm boot then starts the CCP again
-and prints the prompt on the drive and in the user area held in the byte at
-`0004h`. The CCP writes that byte before it starts a program. The prompt is
-therefore on the drive and user area current then, unless the program changed
+jumps in page zero. The restart vectors at `0008h–0037h` are the addresses
+that `RST` instructions call (Chapter 7), and the warm boot clears each one a
+program set, keeping only a jump into the ROM. The warm boot then starts the
+CCP again and prints the prompt on the drive and in the user area held in the
+byte at `0004h`. The CCP writes that byte before it starts a program, so the
+prompt is on the drive and user area current then, unless the program changed
 the byte. Drivers stay installed, and the IOBYTE keeps its value. Chapter 14
 describes the warm boot step by step.
 
-The stack the CCP gives a program is the CCP's own. It has 28 bytes free below
+The stack the CCP gives a program is the CCP's own, with 28 bytes free below
 the return address, enough for a few levels of calls and pushes. A program
 that uses more points `SP` at a stack in its own memory. A `RET` at the end
 then doesn't reach `0000h`, so such a program ends with function 0 or
