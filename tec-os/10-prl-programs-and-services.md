@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 10. PRL programs and services
 
-Checked against TEC-OS bd15528. The programs were assembled by the starter
+Checked against TEC-OS 718c01b. The programs were assembled by the starter
 card's `TAS.COM`, from Thorium 7604daa, SHA-256
 `ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
@@ -86,10 +86,11 @@ both.
 
 The BIOS jump table is in RAM, at `BF00h`, and Chapter 15 lists its entries. The
 word at `0001h` holds the address of its `WBOOT` entry. Each entry is a 3-byte
-`JP`, and warm boot leaves the table as it finds it, so a changed entry lasts
-through every warm boot. The BDOS reaches the console and the disk through
-those entries, so a replaced entry receives all the console output of a
-program and of the CCP. A *hook* on an entry is a routine that does its own
+`JP`, and warm boot leaves the table in EXPAND 0 as it is, so a changed entry
+lasts through every warm boot. The BDOS reaches the console and the disk
+through those entries, so a replaced entry receives the console output of a
+program and of the CCP. `PUTAT` and the ROM's own messages go straight to the
+ROM's routines and miss the entry. A *hook* on an entry is a routine that does its own
 work and then jumps to the address the entry held.
 
 `COUNT.SVC` hooks `CONOUT` and counts the characters that pass through it:
@@ -171,7 +172,7 @@ cleared. The name, 8 bytes padded with spaces, is what `SERVICES` prints.
 | Offset | Bytes | Contents | Written by |
 | ---: | ---: | --- | --- |
 | 0 | 1 | The letter `D`, `44h` | the source |
-| 1 | 1 | The format, 3 | the source |
+| 1 | 1 | The format, 3 | the source, and `makeSvc` writes 3 over it |
 | 2 | 1 | Number of dependencies | the tool |
 | 3 | 1 | Flags: bit 0, removable | the source |
 | 4 | 2 | `REMOVE`, from the header's start | the tool |
@@ -203,7 +204,7 @@ file is this hook with no record.
 
 ### The hook
 
-`MYCO` runs inside every console output. `CONOUT` takes its character in `C`,
+`MYCO` runs inside every call of the `CONOUT` entry. `CONOUT` takes its character in `C`,
 and `MYCO` puts back the one register it uses, so the entry it replaced runs
 with the registers it would have had. `MYCO`'s last instruction is a `JP`
 written as data, whose target is `OLDCO`, the two bytes `INIT` filled in, so
@@ -418,8 +419,8 @@ the BDOS, so a hook on `CONOUT` can't print through function 9.
 
 To read the count, as `CHARS` did in the run above, a program needs a way to
 find it. A service reaches programs by publishing named *records* in TEC-OS's
-*registry*, a list that TEC-OS keeps. A record is 13 bytes in the service's own
-memory:
+*registry*, a linked list with its head in TEC-OS's workspace. A record is 13
+bytes in the service's own memory:
 
 | Offset | Bytes | Contents |
 | ---: | ---: | --- |
