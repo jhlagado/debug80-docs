@@ -221,7 +221,8 @@ SHA-256 of each, and the size of each file. It also has an entry for ATOM's CP/M
 build, `ATOM.COM`, which no `.test.mjs` file reads. `test/lib/inputs.mjs` reads
 each from its environment variable or its default path beside the clone. A file
 whose SHA-256 differs fails its test, and a missing one skips it, or fails it
-with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`, `package.json:18`).
+with `STRICT=1`, which `npm run test:strict` sets (`test/lib/inputs.mjs:1-6`,
+`package.json:18`).
 
 Every test is evidence from the model. In some behaviours the model differs from
 the board as its documents describe it, such as a write under the boot overlay
