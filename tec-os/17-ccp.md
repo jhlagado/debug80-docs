@@ -292,7 +292,8 @@ when the address reaches the page of the word at `0006h`, the byte at `0007h`
 (`src/cpm/ccp.asm:352-370`).
 
 A file may end exactly at that page, so `LOADLIM` reads one more record, into
-`LOADBUF`, where it can't reach the resident CCP, to find out. If that read is the end of the file the load is
+`LOADBUF`, where it can't reach the resident CCP, to find out. If that read
+is the end of the file the load is
 complete. Otherwise the file is too large, and the carry flag is set with the
 zero flag clear (`src/cpm/ccp.asm:372-386`). A file that fits leaves in
 `LOADTOP` the address after its last record, which the PRL loader uses, and is
