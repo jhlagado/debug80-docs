@@ -119,7 +119,7 @@ The CCP's built-in commands are these:
 | `COPY SOURCE DEST` | Copies a file |
 | `REN NEW=OLD` | Renames a file |
 | `ERA NAME` | Erases a file, or every file a name with wildcards matches |
-| `SAVE N NAME` | Writes the first `N` pages of the program area to a file |
+| `SAVE N NAME` | Writes the first `N` pages of the TPA (Chapter 1) to a file |
 | `USER N` | Selects user area `N` |
 | `B:` | Selects drive B, and so on for the other drives |
 | `CON` | Names or changes the console (Chapter 2) |
@@ -215,11 +215,11 @@ B>
 ```
 
 Each 640-byte file takes 4 KiB of the drive, since the volume on drive B,
-`WORK`, gives space to files in blocks of 4 KiB. Chapter 4 describes the
-volumes and their blocks. The second `REN` fails because a file of the new
-name, `NOTES.TXT`, is there already, and `REN` changes nothing then. A `REN`
-whose old name isn't there prints `NO FILE`. So does an `ERA` that matches no
-file, as the second `ERA` above shows.
+`WORK`, gives space to files in allocation blocks of 4 KiB. Chapter 4
+describes the volumes and their allocation blocks. The second `REN` fails
+because a file of the new name, `NOTES.TXT`, is there already, and `REN`
+changes nothing then. A `REN` whose old name isn't there prints `NO FILE`. So
+does an `ERA` that matches no file, as the second `ERA` above shows.
 
 `COPY` works in the current user area, on both drives. A name with no drive
 means the current drive. A destination that is then the same file as the
