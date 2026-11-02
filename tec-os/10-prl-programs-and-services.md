@@ -294,9 +294,9 @@ a whole page, so the TPA falls by 256 bytes and `SERVICES` shows 1 page, and
 hook stayed through each program's warm boot.
 
 On a PC the repository's `makeSvc` does the same job as `TAS`, by the two
-assemblies that `makePrl` uses, so it needs the same `ORG $0100` line. It
-writes the same 111 bytes, where `TAS`'s file is rounded up to the record's
-128, and its output can have the type `.SVC` from the start:
+assemblies that `makePrl` uses, so it needs the same `ORG $0100` line. It writes
+the same 111 bytes, where `TAS`'s file is rounded up to the record's 128.
+`makeSvc`'s output can have the type `.SVC` from the start:
 
 ```sh
 node --input-type=module -e '
@@ -418,8 +418,8 @@ the BDOS, so a hook on `CONOUT` can't print through function 9.
 
 To read the count, as `CHARS` did in the run above, a program needs a way to
 find it. A service reaches programs by publishing named *records* in TEC-OS's
-*registry*, a list that the ROM holds. A record is 13 bytes in the service's
-own memory:
+*registry*, a list that TEC-OS keeps. A record is 13 bytes in the service's own
+memory:
 
 | Offset | Bytes | Contents |
 | ---: | ---: | --- |
@@ -634,8 +634,8 @@ DEPS:	DB	1,"COUNT   "	; the least version, then the record's name
 ```
 
 The loader checks each dependency before it changes anything, so `INIT`'s find
-can't fail. With no `COUNT.SVC` the load fails, and with it the two go in and
-come out last in, first out:
+can't fail. With no `COUNT.SVC` the load fails. With `COUNT.SVC` in, the two go
+in and come out last in, first out:
 
 <!-- node tools/tecvol.mjs put svc.img B needs.asm --text; node tools/capture.mjs --card svc.img B: "A:TAS NEEDS NEEDS.DRV" "REN NEEDS.SVC=NEEDS.DRV" NEEDS.SVC COUNT.SVC NEEDS.SVC SERVICES UNLOAD UNLOAD SERVICES -->
 ```text
