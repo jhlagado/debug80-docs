@@ -242,8 +242,9 @@ and `NO FILE` when nothing matched (`src/cpm/ccp.asm:869-878`).
 `REN NEW=OLD` parses the new name into `RENFCB` and the old one into `CMDFCB`,
 and searches for the new name first. If it is there the command gives
 `FILE EXISTS` with nothing changed (`src/cpm/ccp.asm:880-910`). Otherwise the
-new name is copied to offset 16 of `CMDFCB`, the place function 23 reads it.
-The rename gives `NO FILE` if the old name is not there
+first 12 bytes of `RENFCB` are copied to offset 16 of `CMDFCB`. Offset 16 is
+the second drive byte, and the new name follows it at offset 17, the place
+function 23 reads it. The rename gives `NO FILE` if the old name is not there
 (`src/cpm/ccp.asm:912-925`).
 
 `SAVE N NAME` reads a decimal count of 256-byte pages and rejects any count
