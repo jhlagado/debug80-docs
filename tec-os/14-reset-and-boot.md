@@ -13,7 +13,7 @@ Edit 845d062, whose copy on the card has the SHA-256
 timings below were measured on that card.
 
 TEC-OS starts in two ways. Cold boot runs after power-on, after the reset
-button and when a program calls the BIOS table's first entry
+button and when a program calls the RAM BIOS table's first entry
 (`src/boot.asm:4`). It builds everything from nothing: page zero, the
 workspace, the card's drives, the cache. Warm boot runs at the end of every
 program. It puts back only what a program may have changed, and it keeps the
@@ -26,15 +26,15 @@ test that separates a reset from a power-on.
 ## The boot overlay
 
 When the TEC-1G comes out of reset its system latch is `00h`. With bit 0 of
-the latch low, the board shows the ROM's first 2 KiB at `0000h–07FFh` as well
-as at `C000h–C7FFh`. The Z80 starts at `0000h`, so it runs ROM code before any
-RAM has been written. The ROM's first instruction is `JP COLD`
-(`src/reset.asm:5-6`), and the Z80 runs it from the copy at `0000h`. The jump's
-target is an address in `C000h–FFFFh`, so the next instruction comes from the
-ROM proper. `COLD` executes `DI`, loads the stack pointer and then writes
-`LATCLAS`, `01h`, to the latch (`src/boot.asm:9-12`). Bit 0 high turns the copy
-off, `0000h–07FFh` is RAM again, and the latch now has MAIN 0 and EXPAND 0 in
-view (`src/layout.asm:16`, `src/layout.asm:19`).
+the latch low, the board shows the ROM's first 2 KiB, the boot overlay, at
+`0000h–07FFh` as well as at `C000h–C7FFh`. The Z80 starts at `0000h`, so it
+runs ROM code before any RAM has been written. The ROM's first instruction is
+`JP COLD` (`src/reset.asm:5-6`), and the Z80 runs it from the overlay at
+`0000h`. The jump's target is an address in `C000h–FFFFh`, so the next
+instruction comes from the ROM proper. `COLD` executes `DI`, loads the stack
+pointer and then writes `LATCLAS`, `01h`, to the latch (`src/boot.asm:9-12`).
+Bit 0 high turns the overlay off, `0000h–07FFh` is RAM again, and the latch now
+has MAIN 0 and EXPAND 0 in view (`src/layout.asm:16`, `src/layout.asm:19`).
 
 The Z80 comes out of reset with interrupts off. The ROM executes `EI` only to
 restore a state it saved (`src/cache.asm:32`, `src/history.asm:39`,
@@ -232,7 +232,7 @@ open files and the history are gone, and the console is the serial terminal
 again (`src/boot.asm:15-28`, `src/boot.asm:149-155`). A change the cache held
 for the card is lost. Once a recognised reset has applied a selection, the next
 reset passes the test again while the card still holds those volumes. Only
-losing the RAM returns the drives to the card's own choice, and
+losing the RAM returns the card's own drives, and
 `docs/recovery.md` sets out these limits for the user.
 
 ## Page zero
@@ -253,8 +253,8 @@ program pointed into the TPA therefore does not outlive the program
 ## Warm boot
 
 Warm boot is `WBOOTR`, `src/boot.asm:56-82`. It is the second entry of the
-BIOS table, and the jump at `0000h` leads to it through the RAM table at
-`BF03h`. A program reaches it by returning from `0100h`, since the CCP pushes
+BIOS jump table, and the jump at `0000h` leads to it through the RAM BIOS table
+at `BF03h`. A program reaches it by returning from `0100h`, since the CCP pushes
 `0000h` before it jumps there (`src/cpm/ccp.asm:14`,
 `src/cpm/ccp.asm:297-300`). A program also reaches it by jumping to `0000h` or
 by calling BDOS function 0 (`src/cpm/bdos.asm:132-133`). A call of BDOS function
@@ -263,7 +263,7 @@ by calling BDOS function 0 (`src/cpm/bdos.asm:132-133`). A call of BDOS function
 The BDOS goes there itself through `CHDROP`, which first drops the rest of a
 chained line, a line split at `!` (Chapter 11, `src/cpm/bdos.asm:75-77`). The
 BDOS takes that route after a `^C` typed as the first key of a line read with
-function 10 (`src/cpm/bdos.asm:371-375`), and after it has reported a disk error
+function 10 (`src/cpm/bdos.asm:371-375`), and after it has reported a BDOS error
 such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2434-2437`,
 `src/cpm/bdos.asm:2453-2456`). A `^C` at the prompt is the first case, since
 the CCP reads its line with function 10:
@@ -286,7 +286,7 @@ Warm boot's steps are:
 3. `PZINIT`, as above (`src/boot.asm:70`).
 4. `DRVBSY` cleared, so that a driver's `INIT` or `REMOVE` that a program's
    end interrupted is not taken to be still running (`src/boot.asm:71-72`).
-5. `CPMINIT`, which clears the CCP's working memory and the BDOS's state,
+5. `CPMINIT`, which clears the CCP's state and the BDOS's,
    331 bytes from `CCPCLR` to `BDOSRME`, as a fresh load of them from disk
    would leave it. It keeps the command buffer below `CCPCLR` for a chained
    line's next piece. It puts the DMA address back at `0080h`, sets the command
@@ -294,27 +294,27 @@ Warm boot's steps are:
    It marks the deblocking buffer empty so that a changed card is read again
    (`src/boot.asm:270-289`, `src/ram.asm:68-81`).
 6. The console put right. `HWVREL` gives back the PICO9918 if a program
-   claimed it, `VREST` restores the video display's mode if the console is
+   claimed it, `VREST` restores the display's mode if the console is
    on one, and `VTREGR` resets the scroll region to the whole screen
    (`src/boot.asm:74-78`).
-7. `CWBOOT`, which writes every changed line of the cache to the card. If any
-   write has failed since the last warm boot, it prints `Write lost` and
-   drops the rest of a chained line (`src/boot.asm:79`,
+7. `CWBOOT`, which writes every dirty line of the cache (Chapter 19) to the
+   card. If any write has failed since the last warm boot, it prints
+   `Write lost` and drops the rest of a chained line (`src/boot.asm:79`,
    `src/cache.asm:347-358`).
 8. A jump to the CCP's entry, `CCPENT`, with `C` holding the drive and user
    byte from `0004h` (`src/boot.asm:80-82`).
 
 Warm boot leaves the rest alone. The drive table, the DPHs and `LOGINV`, the
-BDOS's record of the logged-in drives, are in the BIOS's part of the workspace,
-which `CPMINIT` does not clear (`src/ram.asm:22-34`). The allocation vectors
-below `WSBASE` and the BIOS table at `BF00h` are outside what `CPMINIT` clears
-too. So are the two FCBs and the command buffer, the 202 bytes of the CCP's RAM below
-`CCPCLR`. So is `CHPOS`, the byte above the BIOS table that marks a chained
-line's next piece. The rest of the line therefore outlives the warm boot
-(`src/ram.asm:68-81`, `src/ram.asm:240`), as Chapter 25 describes. The drivers
-below the BDOS entry are kept too. So are the registry's head and the video
-drivers' tables above the BIOS table, and the cache's lines and the history in
-EXPAND 1.
+BDOS's record of the logged-in drives (Chapter 16), are in the BIOS's part of
+the workspace, which `CPMINIT` does not clear (`src/ram.asm:22-34`). The
+allocation vectors below `WSBASE` and the RAM BIOS table at `BF00h` are outside
+what `CPMINIT` clears too. So are the two FCBs and the command buffer, the 202
+bytes of the CCP's RAM below `CCPCLR`. So is `CHPOS`, the byte above the RAM
+BIOS table that marks a chained line's next piece. The rest of the line
+therefore outlives the warm boot (`src/ram.asm:68-81`, `src/ram.asm:240`), as
+Chapter 25 describes. The drivers below the BDOS entry are kept too. So are the
+registry's head and the display drivers' tables above the RAM BIOS table, and
+the cache's lines and the history in EXPAND 1.
 
 The CCP's entry does the rest (`src/cpm/ccp.asm:29-66`). It sets its stack and
 puts A: in place of a drive past D: or with no volume. Selecting such a drive
