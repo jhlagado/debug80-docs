@@ -16,8 +16,10 @@ prompt, the LCD's words, the CCP, the BDOS and the block cache. `MOUNT` and
 each table links to the chapter that explains the message or its subject and
 gives the source.
 
-In a message, `d` stands for a drive letter, `nn` for a code in hexadecimal and
-`NAME` for a word from the command line. The rest is printed as it stands.
+In a message, `d` stands for a drive letter, `n` for a decimal number, `NAME` for
+a word from the command line and `LABEL` for a volume's label. `nn` stands for a
+code in hexadecimal, except in the lines `VOLS` prints, where it is a volume's
+index in decimal. The rest is printed as it stands.
 `tecvol` runs on a PC, and Appendix F describes it. The diagnostics ROM is a
 separate image, and Chapter 24 describes it.
 
@@ -53,12 +55,12 @@ Codes `01h` to `04h` come from `SDINIT`, the start of the card
 
 | Code | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| `01` | No answer to `CMD0`, the first command, in 10 tries. An empty socket gives this code. | Put a card in and press `R`. | [Chapter 18](18-sd-card-and-volumes.md#the-spi-driver), `src/sd.asm:119-137` |
-| `02` | `ACMD41` didn't report the card ready in 256 tries. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-spi-driver), `src/sd.asm:152-170` |
-| `03` | `CMD58`, which reads the card's capacity type, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-spi-driver), `src/sd.asm:171-198` |
-| `04` | `CMD16`, which sets a standard-capacity card's block length, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-spi-driver), `src/sd.asm:187-196` |
+| `01` | No answer to `CMD0`, the first command, in 10 tries. An empty socket gives this code. | Put a card in and press `R`. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:119-137` |
+| `02` | `ACMD41` didn't report the card ready in 256 tries. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:152-170` |
+| `03` | `CMD58`, which reads the card's capacity type, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:171-198` |
+| `04` | `CMD16`, which sets a standard-capacity card's block length, failed. | Press `R`. If the code comes back, use another card. | [Chapter 18](18-sd-card-and-volumes.md#the-sd-card-driver), `src/sd.asm:187-196` |
 
-Codes `05h` to `08h` are the SD driver's codes for a block read or write:
+Codes `05h` to `08h` are the SD card driver's codes for a block read or write:
 command rejected, no data token, write not accepted and card stayed busy
 (`src/sd.asm:14-17`). They never reach this prompt. The driver stores them in
 `SDERR`, which nothing reads. A failed read during the mount is code `20h`,
@@ -106,7 +108,7 @@ written and cleared.
 | --- | --- | --- | --- |
 | `CARD?` | TEC-OS is waiting at the diagnostic prompt. | As for the prompt. `R` starts the LCD again, so a retry that works clears the word. | [Chapter 22](22-startup.md#the-lcd-s-words), `src/diag.asm:7-8`, `src/data3.asm:103` |
 | `PICO?` | At the first prompt after startup, a board with a PICO9918 and a matrix keyboard has no display driver in. The driver's file may be missing or bad, `STARTUP.CMD` may be missing or have no display line, or startup was skipped. | Correct the card from the serial terminal or on a PC. On a running board, a `PICO.SVC` that loads clears the word. | [Chapter 22](22-startup.md#stdone), `src/svc.asm:420-431`, `src/data3.asm:104` |
-| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no GLCD or no matrix keyboard. The console is on the serial terminal. | Put `GLCD.SVC` on drive A, or go back with `CON CRT` from the serial terminal. The word stays until a display driver takes the console or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/glcd.asm:53-63`, `src/glcd.asm:84-86`, `drivers/glcd.asm:43-45`, `src/data3.asm:102` |
+| `GLCD?` | `CON UC1` couldn't load or install `A:GLCD.SVC`: the file is missing or bad, or the board has no graphics LCD or no matrix keyboard. The console is on the serial terminal. | Put `GLCD.SVC` on drive A, or go back with `CON CRT` from the serial terminal. The word stays until a display driver takes the console or a reset. | [Chapter 5](05-startup-and-services.md#words-on-the-lcd), `src/glcd.asm:53-63`, `src/glcd.asm:84-86`, `drivers/glcd.asm:43-45`, `src/data3.asm:102` |
 
 ## The CCP's failures
 
@@ -120,10 +122,10 @@ explains the code.
 | --- | --- | --- | --- |
 | `NO FILE` | `DIR` matched nothing, or only files with the system attribute. `TYPE` found no such file or was given no name. `ERA` matched nothing. `REN` found no file of the old name. | Check the name, the drive and the user area: a file in another user area isn't found. | [Chapter 3](03-command-line.md#the-ccp-s-messages), `src/cpm/ccp.asm:555-558`, `src/cpm/ccp.asm:849-851`, `src/data3.asm:10-11` |
 | `FILE EXISTS` | `REN` found a file with the new name. The test reads the drive written with the new name, and the rename acts on the drive written with the old one, so `REN B:NEW=OLD` tests drive B and renames on the current drive. `REN NEW=B:OLD` tests the current drive and renames on drive B, and can leave two files of one name there. | `ERA` that file or choose another name. Write the same drive on both sides. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:925-944`, `src/data3.asm:64-65` |
-| `NO SPACE` | `SAVE` couldn't make the file, write a record or close the file: the drive or its directory is full. `SAVE` erases any file of that name first, so an old copy is gone and a part of the new file can remain, in whole extents of 16 KiB. | `ERA` files on the drive, or `SAVE` to another drive. Press `^C` before `DIR` to see the space free: the blocks of the unclosed extent stay counted as used until a warm boot. | [Chapter 3](03-command-line.md#save), `src/cpm/ccp.asm:1227-1236`, `src/cpm/ccp.asm:1254-1278`, `src/data3.asm:66-67` |
+| `NO SPACE` | `SAVE` couldn't make the file, write a record or close the file: the drive or its directory is full. `SAVE` erases any file of that name first, so an old copy is gone and a part of the new file can remain, in whole extents of 16 KiB. | `ERA` files on the drive, or `SAVE` to another drive. Press `^C` before `DIR` to see the space free: the allocation blocks of the unclosed extent stay counted as used until a warm boot. | [Chapter 3](03-command-line.md#save), `src/cpm/ccp.asm:1227-1236`, `src/cpm/ccp.asm:1254-1278`, `src/data3.asm:66-67` |
 | `NO SOURCE` | `COPY`'s source isn't on its drive in the current user area. Nothing has changed. | Check the name, the drive and the user area. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1010-1014`, `src/data3.asm:40-41` |
 | `CANNOT MAKE DEST` | `COPY` couldn't make the destination: its directory is full. | `ERA` files on that drive, or copy to another drive. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1015-1021`, `src/data3.asm:42-43` |
-| `WRITE ERROR` | `COPY` couldn't write a record: the drive is full, or the directory has no entry for the next extent. The destination isn't closed. It keeps only the extents already written to its directory, so its length is a multiple of 16 KiB, and 0 if the first extent was the one being written. | `ERA` the destination, free some space, press `^C` to give back the blocks of the unclosed extent, and copy again. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1028-1033`, `src/data3.asm:44-45` |
+| `WRITE ERROR` | `COPY` couldn't write a record: the drive is full, or the directory has no entry for the next extent. The destination isn't closed. It keeps only the extents already written to its directory, so its length is a multiple of 16 KiB, and 0 if the first extent was the one being written. | `ERA` the destination, free some space, press `^C` to give back the allocation blocks of the unclosed extent, and copy again. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1028-1033`, `src/data3.asm:44-45` |
 | `CLOSE ERROR` | `COPY` read the whole source, but function 16 found no directory entry for the destination. On the host model this message came only from a run that altered the destination's name in the FCB. | `DIR` the destination and copy again. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:1038-1043`, `src/data3.asm:46-47` |
 
 ### `NAME?`
@@ -160,7 +162,7 @@ The BDOS prints these messages when a disk operation can't be done at all.
 Each starts a new line. The BDOS then waits for a key and ends the program or
 command by warm boot with the rest of a chained line dropped, whatever the key
 (`src/cpm/bdos.asm:75-77`, `src/cpm/bdos.asm:2458-2468`).
-[Chapter 16](16-bdos.md#disk-errors) explains them and
+[Chapter 16](16-bdos.md#bdos-errors) explains them and
 [Appendix A](appendix-a-bdos-functions.md#calling-a-function) lists them by
 function.
 
@@ -170,8 +172,8 @@ function.
 | `Bdos Err On d: R/O` | A program changed a drive that function 28 made read-only: a write, make, delete, rename or attribute change. | The warm boot clears the state, as CP/M 2.2's does. Run the program again, and correct a program that writes to a drive it protected. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:2417-2429`, `src/cpm/bdos.asm:508-509`, `src/data3.asm:89` |
 | `Bdos Err On d: File R/O` | A delete, a rename or a sequential or random write reached a file with the read-only attribute. `ERA`, `REN`, `SAVE` and `COPY` onto such a file give it too. An `ERA` with a wildcard has already erased the matching files before it in the directory. | Clear the attribute with BDOS function 30, or on a PC `tecvol get` the file and `tecvol put` it without `--ro`. The CCP has no command for it. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/cpm/bdos.asm:686-694`, `src/cpm/bdos.asm:813`, `src/cpm/bdos.asm:848-853`, `src/cpm/bdos.asm:1032`, `src/data3.asm:90` |
 | `Bdos Err On d: Bad Sector` | A write to a volume the card marks read-only. The BIOS rejects the write, and the BDOS reports any failed write this way. `R/O` is for function 28 alone. | Use a volume that takes writes. The volume's read-only flag is set when the card is built. | [Chapter 3](03-command-line.md#the-bdos-s-messages), `src/bios.asm:204-208`, `src/cpm/bdos.asm:904-905`, `src/data3.asm:88` |
-| `Bdos Err On d: Bad Sector` | A record of a file couldn't be read from the card, or a record or a directory record couldn't be written. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#disk-errors), `src/cpm/bdos.asm:1005`, `src/cpm/bdos.asm:1316`, `src/cpm/bdos.asm:1921` |
-| `Bdos Err On d: Bad Sector` | A directory entry names a block past the end of the volume: the directory is damaged. The first use of the drive gives this, whichever file is named. On drive A it comes at cold boot and after each key, and no prompt appears. | Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdos.asm:2318`, `src/cpm/bdos.asm:2348-2356` |
+| `Bdos Err On d: Bad Sector` | A record of a file couldn't be read from the card, or a record or a directory record couldn't be written. | Copy the card to a PC and run `tecvol verify`. Replace a card that keeps failing. | [Chapter 16](16-bdos.md#bdos-errors), `src/cpm/bdos.asm:1005`, `src/cpm/bdos.asm:1316`, `src/cpm/bdos.asm:1921` |
+| `Bdos Err On d: Bad Sector` | A directory entry names an allocation block past the end of the volume: the directory is damaged. The first use of the drive gives this, whichever file is named. On drive A it comes at cold boot and after each key, and no prompt appears. | Run `tecvol verify` on a copy, as in [Chapter 4](04-cards-and-volumes.md#recovery-after-a-power-cut). | [Chapter 16](16-bdos.md#files-extents-and-records), `src/cpm/bdos.asm:2318`, `src/cpm/bdos.asm:2348-2356` |
 
 A directory record that can't be read gives no message. The program ends by
 warm boot, with no key to wait for and the rest of a chained line dropped
