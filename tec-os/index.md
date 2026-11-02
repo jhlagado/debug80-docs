@@ -101,7 +101,7 @@ against.
    `docs/recovery.md`, `tools/tecvol.mjs`, `tools/lib/container.mjs`,
    `tools/lib/cpmfs.mjs`, `tools/lib/recipe.mjs`, `tools/lib/starter.mjs`,
    `src/cache.asm`, `test/programs/mount.asm`, `test/programs/vols.asm`.
-5. **Startup and drivers.** `A:STARTUP.CMD` and its rules; the display lines
+5. **[Startup and services](05-startup-and-services.md).** `A:STARTUP.CMD` and its rules; the display lines
    and the PICO9918's three widths; the keypad skip; the words `PICO?`,
    `GLCD?` and `CARD?` on the LCD; installing, listing and removing drivers.
    Sources: `docs/drivers.md`, `src/drv.asm`, `src/glcd.asm`, `src/lcd.asm`,
@@ -123,13 +123,13 @@ against.
    `docs/console.md`, `docs/compatibility.md`, `src/bios.asm`,
    `src/term.asm`, `src/console.asm`, `test/programs/term.asm`,
    `test/programs/punrdr.asm`.
-9. **The hardware services.** The table at `C003h` and ABI 4; checking for
+9. **[The hardware services](09-hardware-services.md).** The table at `C003h` and ABI 4; checking for
    TEC-OS; the nine services: board information, the 7-segment digits, the
    LCD, the PICO9918, the speaker, the joystick, the matrix keyboard's rows,
    text at a screen position and the clock; `DEMO` as an example. Sources:
    `docs/rom-services.md`, `src/abi.asm`, `src/abi.inc`, `src/hwsvc.asm`,
    `src/layout.asm`, `test/programs/demo.asm`.
-10. **PRL programs and drivers.** Digital Research's PRL format as TEC-OS
+10. **[PRL programs and services](10-prl-programs-and-services.md).** Digital Research's PRL format as TEC-OS
     loads it; the `.DRV` format; `INIT` and `REMOVE`; the service registry
     and `ABIDRV`; the `PICO` service; writing and installing a small driver.
     Sources: `src/prl.asm`, `src/drv.asm`, `docs/drivers.md`, `drivers/`,
@@ -185,7 +185,7 @@ against.
     write-through and write-behind; the order of a flush; the flush at warm
     boot; `Write lost`; interrupts held off across a block. Sources:
     `src/cache.asm`, `src/bios.asm`, `src/layout.asm`, `docs/recovery.md`.
-20. **The ROM services and the driver loader.** The dispatcher at `ABIHW` and
+20. **[The hardware services and the service loader](20-hardware-services-and-service-loader.md).** The dispatcher at `ABIHW` and
     each service; `XMOVE` and `MOVE`; the seven steps of a driver's load;
     the registry and its generation; removal; the stack census. Sources:
     `src/hwsvc.asm`, `src/xmove.asm`, `src/drv.asm`, `src/abi.asm`,
@@ -194,7 +194,7 @@ against.
     loads one at `0100h`; the `.DRV` relocation list of gaps and how the
     loader applies it. Sources: `src/prl.asm`, `src/drv.asm`,
     `tools/lib/prl.mjs`, `tools/lib/drv.mjs`.
-22. **Startup.** `STBOOT`, `STLINE` and `STDONE`; one record read once; the
+22. **[Startup](22-startup.md).** `STBOOT`, `STLINE` and `STDONE`; one record read once; the
     keypad bit; the LCD's words and the rules for clearing them. Sources:
     `src/drv.asm`, `src/cpm/ccp.asm`, `src/lcd.asm`, `src/glcd.asm`,
     `src/data3.asm`, `drivers/glcd.asm`.
@@ -222,7 +222,7 @@ against.
 - **[A. BDOS functions](appendix-a-bdos-functions.md).** Each function from 0 to 40, with 47, 50 and 108: its
   registers, its result and any difference from CP/M 2.2. Sources:
   `src/cpm/bdos.asm`, `docs/compatibility.md`.
-- **B. ROM services.** The table at `C003h` entry by entry, the hardware
+- **[B. ROM services](appendix-b-rom-services.md).** The table at `C003h` entry by entry, the hardware
   services by number with their registers and status codes, and `ABIDRV`.
   Sources: `src/abi.asm`, `src/abi.inc`, `src/hwsvc.asm`,
   `docs/rom-services.md`.
