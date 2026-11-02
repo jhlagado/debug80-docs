@@ -161,7 +161,9 @@ first read. The CCP clears it already, but a program that opens a file from
 its own FCB, or opens the same FCB again, sets it itself.
 
 ## A program that reads a file
+
 This is `SHOW`:
+
 ```asm
 ; SHOW NAME: print the text file NAME on the console.
 BDOS    EQU     $0005
