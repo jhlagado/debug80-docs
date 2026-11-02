@@ -209,7 +209,10 @@ display. A program on the PICO9918's console can therefore exchange binary data
 with a PC over the serial line. A byte that `CONST` has already received stays
 in `RXCHAR` for the console, and `READER` does not return it
 (`src/console.asm:277-278`). The console mode `BAT:` takes its input from the
-reader and sends its output to the list device, and so discards it.
+serial port, as the reader does, but `CONIN` serves it through `CINLP`, which
+clears bit 7 and skips `NUL` (`src/console.asm:155-157`,
+`src/console.asm:182-190`). It sends its output to the list device, and so
+discards it (`src/console.asm:215-216`).
 
 ## The matrix keyboard
 
