@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 15. The BIOS and the console path
 
-Checked against TEC-OS 98c6416.
+Checked against TEC-OS 718c01b.
 
 The BIOS is the part of a CP/M system written for one machine, and on the TEC-1G
 most of it is the console. That console has a serial port made of two port bits
@@ -95,14 +95,14 @@ terminal. With a driver it copies the driver's seven vectors and the screen's
 columns and rows into the workspace, then resets the scroll region and sets the
 mode. Unless a program has claimed the PICO9918, it also restores the display's
 mode, homes the cursor and clears the screen. For `TTY:` or `BAT:` it sets
-`VWID` and `VHGT` at `0048h` to 0, so a program reading them through the table
-at `C008h` gets 0: the console has no screen of known size.
+`VWID` and `VHGT` at `0048h` to 0, so a program reading them through the ROM
+table's word at `C008h` gets 0: the console has no screen of known size.
 
 Since `CONSEL` runs at the next console call, a change to the IOBYTE takes
 effect at the next character. `CON TTY` shows this on the web page's board,
-with `PICO.DRV` as the console. It writes the IOBYTE, and the reply is the
+with `PICO.SVC` as the console. It writes the IOBYTE, and the reply is the
 first thing to reach the serial port after the boot, which had ended there with
-`PICO.DRV`:
+`PICO.SVC`:
 
 <!-- node tools/capture.mjs --board pico --serial CON "CON TTY" CON -->
 ```text
@@ -110,7 +110,7 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
+A>PICO.SVC
 CON: TTY: serial terminal
 A>CON
 CON: TTY: serial terminal
@@ -118,14 +118,15 @@ A>
 ```
 
 The `CON` typed before the change, its reply and the line `CON TTY` itself
-went to the PICO9918's screen, and so did everything after `PICO.DRV` up to the
+went to the PICO9918's screen, and so did everything after `PICO.SVC` up to the
 change.
 
-A display driver takes the console by the same route. `DRVGO` runs when the
-loader has installed a driver whose page holds a video table. It writes the
-mode into the console field and sets `CONACT` to `FFh`, a value no field has,
-so that the `CONSEL` it calls next switches (`src/glcd.asm:65-93`). `PICO.DRV` always
-takes the console, and `GLCD.DRV` takes it only when `PICO.DRV` is not in.
+A display driver takes the console by the same route. `SVCGO` calls the
+loader, and when the service installed has a video table in its page, `SVCGO`
+writes the mode into the console field and sets `CONACT` to `FFh`, a value no
+field has, so that the `CONSEL` it calls next switches (`src/glcd.asm:65-93`).
+`PICO.SVC` always takes the console, and `GLCD.SVC` takes it only when
+`PICO.SVC` is not in.
 
 ## Console input
 
@@ -328,8 +329,8 @@ output does not pay for drawing a cursor on every character
 ## The display drivers and ABIGLCD
 
 The terminal's code is in the ROM and the drivers for the two displays are on
-the card, so the ROM needs the addresses of each driver's routines. `PICO.DRV`,
-in its three widths, and `GLCD.DRV` each give the ROM a table through `ABIGLCD`,
+the card, so the ROM needs the addresses of each driver's routines. `PICO.SVC`,
+in its three widths, and `GLCD.SVC` each give the ROM a table through `ABIGLCD`,
 the jump at `C012h`, which goes to `GLHOOK` (`src/abi.asm:15-16`,
 `src/glcd.asm:1-10`). The table is eight words. The first six are the terminal
 vectors `VPUT`, `VGET`, `VCLREOL`, `VREST`, `VRDROW` and `VWRROW`. The seventh is
@@ -364,8 +365,8 @@ A program claims the PICO9918 through the hardware services, to draw on it
 directly (`src/hwsvc.asm:134-150`). While it is claimed and is the console,
 `VTOWN` reports it and the terminal leaves the display alone: `BCONOUT` drops
 output, and there is no cursor and no page flip (`src/term.asm:533-544`). The
-claim ends with the service's release or at warm boot, when `HWVREL` gives the
-display back to the driver (`src/boot.asm:74`).
+claim ends with the hardware service's release or at warm boot, when `HWVREL`
+gives the display back to the driver (`src/boot.asm:74`).
 
 The ROM's own part of the PICO9918 is the probe at cold boot. `TMSINIT` writes
 `5Ah` to VRAM address `3FFFh` through ports `BFh` and `BEh` and reads it
@@ -391,7 +392,7 @@ drives A and B on rows 1 and 2. Drives C and D have no row
 
 Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
-(`src/diag.asm:7-8`). `GLCD?` appears when `CON UC1` can't load `GLCD.DRV`
+(`src/diag.asm:7-8`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
 (`src/cpm/ccp.asm:1119`, `src/glcd.asm:49-63`). `PICO?` appears when a board
 with a PICO9918 reaches its first prompt with no display driver
 (`src/svc.asm:430-431`).
