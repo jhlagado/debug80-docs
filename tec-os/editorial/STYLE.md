@@ -12,8 +12,8 @@ and Chapter 1 is to be fixed.
 `Checked against TEC-OS <commit>.`, with the short hash of the commit whose
 code the chapter's claims were checked against. When the chapter's examples
 depend on a file from outside the repository, such as the starter card's
-`EDIT.COM`, the same line names that file's build and SHA-256. A revision that
-rechecks the chapter against a later commit changes the line.
+`EDIT.COM` or `TAS.COM`, the same line names that file's build and SHA-256. A
+revision that rechecks the chapter against a later commit changes the line.
 
 **The code is the authority.** Every number, address, message, file name and
 behaviour in a chapter is checked against the source at the named commit, not
@@ -39,8 +39,11 @@ The script's header lists its options (the board, the card, the ROM, and the
 LCD, screen or serial output) and its special lines (a control key, a key to
 stop a program, a program that runs until a key, a pause and the reset
 button). Its clock starts at 1 November 2026, 12:00, so a run gives the same
-output on any machine. The script prints the card's SHA-256, and the starter
-card's `EDIT.COM` build, on stderr.
+output on any machine. The script prints the card's SHA-256 on stderr, and for
+the starter card the SHA-256 of its `EDIT.COM`.
+
+A program in an example is assembled on the model by the starter card's `TAS`,
+and the transcript shows `TAS`'s own output. ATOM builds the ROM on the PC.
 
 **Each example names its run.** The capture command for an example is given in
 the sentence that introduces it, or in an HTML comment on the line before the
@@ -109,7 +112,7 @@ thinks, remembers, notices, wonders, decides, chooses, cares, wants, wishes,
 prefers, hopes, expects, agrees, deserves, owes, demands, forgives, asks,
 promises, tells, teaches, learns, tries, sees, faces, offers, declines,
 earns, observes, forgets, refuses or gives way. Something *owns* a resource
-only where the code defines the ownership, as a driver's pages are recorded
+only where the code defines the ownership, as a service's pages are recorded
 against it. For a person, name the person: *you* or *the programmer*. For a
 mechanism, use the verb for what it does: TEC-OS *reads*, *writes*, *stores*,
 *checks*, *tests*, *compares*, *selects*, *copies*, *reports*, *rejects*,
@@ -154,7 +157,7 @@ checked.
 
 **Explanation instead of commands.** Teaching prose says what an action does,
 why it is done and what the reader sees after it: "`DIR` lists the files on
-the current drive, and on the starter card it shows twelve." Literal commands
+the current drive, and on the starter card it shows thirteen." Literal commands
 in code blocks, the steps of a procedure and short safety warnings stay as
 commands. Attention directions such as *Notice*, *Look closely* and *Keep in
 mind* are left out; the detail goes in the sentence itself.
@@ -191,7 +194,7 @@ controls of the web page, the steps of a procedure. A paragraph has one job.
   Commands for a PC's shell go in an `sh` block, and Z80 source in an `asm`
   block.
 - File names in the text are as TEC-OS shows them, in capitals: `README.TXT`,
-  `PICO.DRV`.
+  `PICO.SVC`.
 
 ## What the book leaves out
 
