@@ -59,7 +59,7 @@ other entry.
 A BDOS error during the read ends in a warm boot, so `STBOOT` marks the file
 finished before it touches the card. Its next instruction sets bit 7, making
 `STPOS` `80h`, before any part of the read (`src/svc.asm:335`). After a failure
-the next call of `STBOOT` returns at the same test, and an unreadable file can't
+the next call of `STBOOT` returns at the same test, so an unreadable file can't
 repeat. `test/startup.test.mjs:172-192` makes the card fail at the file's block
 and reaches a prompt with nothing from the file run.
 
@@ -70,8 +70,9 @@ holds a key through reset to get past a service whose `INIT` never returns, and
 `STSPORT` is port `03h` (`src/layout.asm:11`), and bit 6 is low while a keypad
 key is down, as Appendix G describes. A low bit returns from `STBOOT` with
 `STPOS` at `80h`, so a skip is the same state as a file that wasn't there. Bit 6
-is tested this one time. On the model, with the web page's board and the starter
-card, `STBOOT` starts 5,864,626 T-states after reset, about 1.47 seconds.
+is tested this one time, so the key has to be down when `STBOOT` starts, which
+on the model, with the web page's board and the starter card, is 5,864,626
+T-states after reset, about 1.47 seconds.
 
 `STBOOT` then makes the read in the CCP's own FCB. It copies 12 bytes of
 `STFCB`, a drive byte of 1 and the name `STARTUP CMD`, to `CMDFCB`
