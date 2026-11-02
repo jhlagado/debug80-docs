@@ -36,12 +36,13 @@ in first draft.*
 The chapter opens with the contract of FMUL, the floating-point multiply
 that chapter 1 sketches, from the round the book follows (P1: CDR-3). The
 contract is quoted from the records at a named commit. Its cycle limit of
-4,655 T-states was set after the round, when a later round returned FMUL to
+4,655 T-states was set after the round, when a later landing returned FMUL to
 an earlier body (P1: CDR-6). Its size limit of 349 bytes dates from before
 the round (P1: CDR-1). A table takes it line by line: what it computes,
 registers in and out, what it changes and keeps, memory read and written,
 size and cycle budgets and its trap. Declared incompleteness and don't-care
-follow, with the reason comments are not contracts (R1 to R11).
+follow, with the reason comments are not contracts (R1 to R11). *The
+chapter is in first draft.*
 
 ### 3. Oracles and gates
 
@@ -55,10 +56,10 @@ obligatory case and a tighter contract. An earlier case table that passed
 two wrong candidates on negative zero is cited briefly (P1: CDR-1).
 
 The chapter then introduces visible and held-out cases, an adversarial
-second source and the mutation score. A gate is registered when it is
-written and hashed in the study's gate file (MD-8). Gates are registered
+second source and the mutation score. A gate is registered by the commit that writes it into the study's gate file
+(M3, MD-11). Gates are registered
 before the result they judge, each with an input shown to fail
-(M3, M8, R18 to R24).
+(M3, M8, R18, R19, R21, R22, R24). *The chapter is in first draft.*
 
 ## Part II: The loop
 
@@ -154,8 +155,7 @@ abstraction gives little practical benefit.
 
 ### 13. Records
 
-Decisions with their authority, the ledgers and cost against outcome
-(M6, M11, M12).
+Decisions with their authority and the ledgers (M6, M12).
 
 ### 14. Studies apart
 
