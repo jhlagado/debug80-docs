@@ -394,7 +394,8 @@ Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/diag.asm:7-8`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
 (`src/cpm/ccp.asm:1119`, `src/glcd.asm:49-63`). `PICO?` appears when a board
-with a PICO9918 reaches its first prompt with no display driver
+with a PICO9918 and the matrix keyboard reaches its first prompt with no display
+driver
 (`src/svc.asm:430-431`).
 
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and

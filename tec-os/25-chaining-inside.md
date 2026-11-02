@@ -42,7 +42,7 @@ FCBs need no clearing, since each use of them parses a name into them in full
 and clears the rest (`src/cpm/ccp.asm:1318-1343`).
 
 The position of the next piece is `CHPOS`, one byte at `BFE5h`, in the part of
-the workspace above the RAM BIOS table, which warm boot doesn't clear
+the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
 (`src/ram.asm:192`, `src/ram.asm:240`). It holds the piece's offset in `CMDTXT`
 plus one, and 0 when no piece is left, so one byte covers the 128 offsets with 0
 to spare. The return code, `PRGCODE` at `BF57h`, is in the same block
