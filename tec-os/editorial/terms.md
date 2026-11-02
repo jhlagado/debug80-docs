@@ -100,9 +100,21 @@ Chapter 7 stay as they are.
 | return code | | The word function 108 sets | Chapter 11 | |
 | user area | | One of CP/M's 16 groups of files | Chapter 1 | user number: its number in a directory entry, the BDOS or the byte at `0004h` |
 | startup file | | `STARTUP.CMD` | Chapter 1 | |
-| `MOUNT` | | The starter card's program | Chapter 4 | the ROM's `MOUNT` routine, its check of the container (Chapters 14, 18). The mount service, `ABIVOL` (Chapter 18). |
+| `MOUNT` | | The starter card's program | Chapter 4 | the ROM's `MOUNT` routine, its check of the container (Chapters 14, 18). The mount entry, `ABIVOL` (Chapter 18). |
 | ABI | | The ROM table's application binary interface | Chapter 8, again in 9 | |
 | signature | | The letters `TNA` | Chapter 12 | Chapters 8 and 9 say "the letters" |
+
+## Services and the ROM's entries
+
+| Form | Short form | Meaning | Explained in | Correct and distinct |
+| --- | --- | --- | --- | --- |
+| service | | What a `.SVC` file installs: code in pages below the BDOS, kept until a reset or `UNLOAD` | Chapter 5, in full 10 and 20 | hardware service, a call in the ROM. `SERVICES`, the built-in that lists loaded services. |
+| library | | A service that provides routines for programs | Chapter 5, again in 10 | |
+| driver | | A service that drives hardware | Chapter 5 | display driver, one that holds a display's console. The SD card driver and the hardware drivers of Chapter 15 are code in the ROM. |
+| registry record | record, where the registry is the subject | What a service publishes in the registry | Chapter 5, in full 10 | CP/M's record of 128 bytes |
+| hardware service | | A numbered call in the ROM, through `ABIHW` | Chapter 1 by name, in full 9, 20 and B | a service, which is loaded from the card |
+| ROM table | | The ROM's table at `C003h` | Chapter 1 by name, in full 9 | RAM BIOS table, the copy at `BF00h` |
+| mount entry | | The ROM table's jump `ABIVOL` at `C00Fh`, which goes to `VOLSVC` | Chapter 18 | `MOUNT`, the program and the ROM routine |
 
 ## The model and the page
 
@@ -143,67 +155,29 @@ Chapter 7 stay as they are.
 | changed line, in Part II and Appendix B | dirty line |
 | checksum vector | check vector |
 | hex, in prose | hexadecimal |
+| `.DRV`, for a file on a current card | `.SVC` |
+| `DRIVERS` | `SERVICES` |
+| module, resident module, resident driver, for a loaded file | service |
+| driver loader | service loader |
+| driver registry | registry |
+| table at `C003h`, table of services, ROM's table of services | ROM table |
+| ROM services, for the calls through `ABIHW` | hardware services |
+| mount service | mount entry |
+| `book/capture.mjs` | `tools/capture.mjs` |
+| ATOM on the card | `TAS` |
 
-## The rename pass
+## Words in force
 
-The words of the rename are left alone here. The pass follows design 3 of
-`~/projects/origo/studies/p3-tec-os/stages/ks33.md` and its list in
-`evidence/ks33/names-d107784.md`, by exact token. Chapters 5, 9, 10, 20 and 22
-and Appendices B and D are already at bd15528. The rest need it, each with its
-`Checked against` line moved to the landed commit and every citation read again
-there.
-
-**The words, from design 3.** A *service* is what a `.SVC` file installs, and a
-*library* is a service offering routines. A *driver* is a service that drives
+A *service* is what a `.SVC` file installs. A *library* is a service that
+provides routines for programs, and a *driver* is a service that drives
 hardware. What a service publishes in the registry is a *record*. The numbered
-calls through `ABIHW` are *hardware services*, and the table at `C003h` is the
-*ROM table*. *Service resident memory* is the term for the pages services hold.
-"Module" and "resident module" are retired.
+calls through `ABIHW` are *hardware services*, the table at `C003h` is the *ROM
+table* and its jump `ABIVOL` is the *mount entry*. *Service resident memory* is
+the pages services hold.
 
-**In each chapter still at an older commit:**
-
-- `.DRV` becomes `.SVC`, in text, in transcripts by a new capture, and in the
-  HTML comments that give a run. `PICO.DRV`, `PICO40.DRV`, `PICO32.DRV` and
-  `GLCD.DRV` become `PICO.SVC`, `PICO40.SVC`, `PICO32.SVC` and `GLCD.SVC`.
-  A `.DRV` name stays only where the text is about an old card or `TAS`'s output
-  at its pin, as in Chapters 5, 10 and 22.
-- `DRIVERS` becomes `SERVICES`, `UNLOAD` stays.
-- A driver that is any loaded service becomes a service: "the driver loader" the
-  service loader, "the driver registry" the registry, "installs the driver" where
-  the file need not drive hardware. The display drivers stay drivers.
-- `DRV` symbols follow the list: `DRVGO` `SVCGO`, `DRVLOAD` `SVCLOAD`, `DRVUNL`
-  `SVCUNL`, `DRVBSY` `SVCBSY`, `DRVHEAD` `SVCHEAD`, `DRVLIM` `SVCLIM`, `CMDDRV`
-  `CMDSVC`, `DRVSVC` `SVCREG`, `DRVNAME` `HDRNAME`, the record's `SVCNAME` and
-  `SVCVER` `RECNAME` and `RECVER`. `DRVTAB`, `DRVIDX` and `DRVSLOT` are disk
-  drives and stay.
-- Paths follow: `src/drv.asm` `src/svc.asm`, `tools/lib/drv.mjs`
-  `tools/lib/svc.mjs`, `makeDrv` `makeSvc`, `test/drv.test.mjs`
-  `test/svc.test.mjs`, `build/drv` `build/svc`, `docs/drivers.md`
-  `docs/services.md`. `drivers/` and `src/hwsvc.asm` keep their names.
-- `book/capture.mjs` becomes `tools/capture.mjs`, in text and in the HTML comment
-  of every capture.
-- ATOM on the card becomes `TAS`, by KD-155: `ATOM.COM` `TAS.COM`, with `ERA X.COM`
-  kept in the chain while `TAS` needs it. ATOM stays where it builds the ROM on
-  the PC (Chapter 12). `EDIT.COM` stays until `TED.COM` is offered.
-- "the table at `C003h`", "the table of services" and "the ROM's table of
-  services" become the ROM table. Those forms remain in Chapters 1, 8, 12, 13 and
-  15, in Appendix C and in the index. Appendix B's title, "ROM services", needs a
-  decision of its own.
-- "A table of services" in Chapter 1 and the index, and "ROM services" as a name
-  for the calls through `ABIHW`, become hardware services.
-- "registry's records" and "service's records" stay, and a line that would read
-  "a service offering one service" is reworded by hand, from the list's sections
-  3 and 8.
-- "resident driver", "TEC-OS resident" and any "module" for a loaded file go, in
-  Chapter 13 most of all. A JavaScript module stays a module.
-
-**Three words stay and need a look when the pass reaches them:** the SD card
-driver and the hardware drivers of Chapter 15 are code in the ROM, not services,
-so "driver" there keeps its old sense; the mount service of Chapter 18 is a ROM
-entry, not a service in design 3's sense; the record of `A:STARTUP.CMD` and every
-128-byte record are CP/M's records. Open decision: whether "mount service" keeps
-its name once *service* has design 3's meaning.
-
-**After the words,** each transcript holding a changed name is captured again
-from the landed commit, Chapter 5's run first, and the figures in Chapters 1, 4,
-5, 7, 12 and 13 are read again from the census.
+`.DRV` names appear only where the text is about an old card or `TAS`'s output
+at its pin, as in Chapters 5, 10 and 22. `DRVTAB`, `DRVIDX` and `DRVSLOT` name
+disk drives. `VOLSVC` is the routine behind the mount entry. The SD card driver
+and the hardware drivers of Chapter 15 are code in the ROM, so *driver* there
+has its older sense. "Registry's records" and "service's records" are in use,
+and every 128-byte record is CP/M's. A JavaScript module is a module.
