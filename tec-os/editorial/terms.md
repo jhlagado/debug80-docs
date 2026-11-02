@@ -1,8 +1,8 @@
 # Terms of the TEC-OS book
 
 This list holds each term's one form, what it means, the chapter that explains
-it, and the variants that are correct because they name something else. The
-code at a chapter's commit decides what a term means. A short form is the full
+it, and the variants that are correct because they name something else. A
+term means what the code at a chapter's commit makes it mean. A short form is the full
 form with a word left out, used once the full form has appeared in the chapter.
 Fenced blocks and captured output keep their own words, so `README.TXT`'s
 "starter disk" and the "program area" in the comments of `TOP` and `AREA` in
@@ -47,7 +47,7 @@ Chapter 7 stay as they are.
 | drives field | | Byte 22 of a 1.1 header, the number of drives to set up | Chapter 4, in full E | |
 | block | | The card's 512 bytes | Chapter 4 | allocation block: 2 or 4 KiB of a volume (Chapter 4). Chapter 16 states that its *block* alone means an allocation block, and it writes *card block* for the other. Data block and directory block: card blocks holding those. The data block of the ROM (Chapter 12) and the BIOS's, CCP's and BDOS's blocks of RAM (Chapter 13) are regions of memory. |
 | record | | CP/M's 128 bytes | Chapter 3, in full 4 | a registry record (Chapter 5) |
-| sector | | CP/M's number for a record within a track | Chapter 18 | `Bad Sector`, a message |
+| sector | | CP/M's number for a record within a track | Chapters 16 and 18 | `Bad Sector`, a message |
 | extent | | 128 records of a file | Chapter 16 | |
 | directory mark | mark | The number of directory entries up to the last in use | Chapter 16 | low mark, `XMARK` (Chapter 13) |
 | logged in | | A drive whose allocation vector the BDOS has built | Chapter 13, in full 16 | |
@@ -96,7 +96,7 @@ Chapter 7 stay as they are.
 | built-in | | A command in the CCP | Chapter 3 | |
 | command line | line | What is typed at the prompt | Chapter 2 | startup line; display line (Chapter 5) |
 | command tail | tail | The rest of a line, at `0080h` | Chapter 3, in full 6 | |
-| chained line | | A line split at `!` | Chapter 3 by name, in full 11 | piece: one command of it (Chapter 11) |
+| chained line | | A line split at `!` | Chapter 11 | piece: one command of it (Chapter 11) |
 | return code | | The word function 108 sets | Chapter 11 | |
 | user area | | One of CP/M's 16 groups of files | Chapter 1 | user number: its number in a directory entry, the BDOS or the byte at `0004h` |
 | startup file | | `STARTUP.CMD` | Chapter 1 | |
@@ -144,7 +144,7 @@ Chapter 7 stay as they are.
 | checksum vector | check vector |
 | hex, in prose | hexadecimal |
 
-## What the rename pass must do
+## The rename pass
 
 The words of the rename are left alone here. The pass follows design 3 of
 `~/projects/origo/studies/p3-tec-os/stages/ks33.md` and its list in
