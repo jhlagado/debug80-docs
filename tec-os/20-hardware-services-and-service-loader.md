@@ -1,0 +1,463 @@
+---
+title: The hardware services and the service loader
+parent: TEC-OS
+nav_order: 20
+nav_group: "Part II: Inside TEC-OS"
+---
+
+# 20. The hardware services and the service loader
+
+Checked against TEC-OS bd15528.
+
+Chapters 9 and 10 use two sets of ROM routines from a program's side. This
+chapter follows the code behind them: the dispatcher at `ABIHW` and each of
+the nine hardware services, then `XMOVE` and `MOVE`, then the seven steps of a
+service's load, the registry, removal, and the stack figures the loader
+enforces. Chapter 21 describes the `.SVC` file's relocation data, and Chapter
+22 the path of a display line after the load.
+
+## The dispatcher
+
+`ABIHW`, at `C00Ah`, is a `JP` to `HWSVC` (`src/abi.asm:11`). A program calls
+it with the number in `C` and its arguments in `B`, `DE` and `HL`, so the
+dispatcher has only `A` and the flags to work with until it has saved what it
+needs.
+
+The range test is one comparison. `SUB HWBASE` takes 19 from the number, so
+that a number below 19 wraps to a large one, and `CP HWCOUNT` then tests both
+ends (`src/hwsvc.asm:52-54`). `LD A,HWEBAD` follows, which leaves the flags
+alone, and a number out of range leaves through `HWERR` with status 1 and
+carry set, and with `B`, `DE` and `HL` unchanged (`src/hwsvc.asm:55-56`,
+`src/hwsvc.asm:72-74`). `HWBASE` is 19 so that the numbers of the table's
+previous major version fail (`src/hwsvc.asm:27`).
+
+The lookup needs a register pair, and all three carry arguments. So `HWSVC`
+pushes `HL` and `DE`, doubles the number into `DE`, and adds it to `HWTAB0`,
+the table's address less twice `HWBASE` (`src/hwsvc.asm:46`,
+`src/hwsvc.asm:57-64`). `HWTAB`, the 18 bytes of routine addresses, is in the
+ROM's data block (`src/data3.asm:94-98`). The routine's address goes to `HL`,
+the caller's `DE` comes back, and then two instructions finish the job: `EX
+(SP),HL` swaps the routine's address with the saved `HL` on the stack, and
+`RET` jumps to it (`src/hwsvc.asm:65-71`). The routine starts with every
+argument in place and the dispatcher's two words gone from the stack. The two
+exits are `HWERR` and `HWOK`, whose `XOR A` gives status 0 with zero set and
+carry clear (`src/hwsvc.asm:72-76`). `IX`, `IY` and the alternate registers
+aren't touched by any routine (`src/hwsvc.asm:3-4`).
+
+## The routines
+
+The dispatcher and its exits and the nine routines are 467 bytes of the ROM's
+code, by the symbol map of the `debug80` build, and with `HWTAB` the whole set
+is 485:
+
+| Number | Name | Routine | Bytes |
+| ---: | --- | --- | ---: |
+| | dispatcher, exits | `HWSVC` | 32 |
+| 19 | `INFO` | `HWSINFO` | 24 |
+| 20 | `DIGIT` | `HWSDIG` | 26 |
+| 21 | `LCD` | `HWSLCD` | 44 |
+| 22 | `VIDEO` | `HWSVID` | 81 |
+| 23 | `TONE` | `HWSTONE` | 29 |
+| 24 | `JOY` | `HWSJOY` | 10 |
+| 25 | `KEYS` | `HWSKEYS` | 15 |
+| 26 | `PUTAT` | `HWSPUT` | 68 |
+| 27 | `RTC` | `HWSRTC`, with its clock routines | 138 |
+
+`INFO` calls `RTCHAS` first, whose zero flag reports the clock, and that flag
+survives the `LD A,(CONDEV)` after it (`src/hwsvc.asm:81-85`). `B` is
+therefore the byte `CONDEV`, with bit 3 added if the clock answered and with
+`VCLAIM` ORed in. `VCLAIM` holds `CDCLM`, which has the value of `INFO`'s bit
+4, while the chip is claimed (`src/hwsvc.asm:86-88`, `src/ram.asm:57`,
+`src/layout.asm:57`). `DE` is `ROMVER`, and one 16-bit load from `VWID` gets
+`L` and `H`, because the columns and rows are adjacent bytes at `0048h` and
+`0049h` (`src/hwsvc.asm:89-91`, `src/layout.asm:45-46`).
+
+`DIGIT` walks one set bit in `C` from `20h` down, one bit for each digit, and
+stops when `SRL C` empties the register (`src/hwsvc.asm:94`,
+`src/hwsvc.asm:105-106`). For each digit it writes the pattern to `SEGPORT`
+and the select bit with `TXIDLE` to `DIGPORT`, waits through 256 rounds of
+`DJNZ`, and writes `TXIDLE` alone (`src/hwsvc.asm:95-103`). Each write to port
+`01h` carries bit 6, so the serial line stays high.
+
+`LCD` tests the row before it does anything, then clears `CDWRD` for row 3, as
+Chapter 22 explains (`src/hwsvc.asm:109-118`). `LCDROWS` gives the row's
+display address, and then 20 characters go out, each after `LCDWAIT`
+(`src/hwsvc.asm:119-131`, `src/data2.asm:6`).
+
+`VIDEO` returns status 2 unless `CDTMS` is set (`src/hwsvc.asm:138-141`). A
+claim hides the cursor if the PICO9918 is the console, and stores `CDCLM` in
+`VCLAIM` (`src/hwsvc.asm:145-150`). That one byte is what the console tests,
+through `VTOWN` (`src/term.asm:535-537`). A release with no claim returns at
+once. A real release clears the byte, and then needs the driver: `PIVEC` holds
+`PICO.SVC`'s table, and with 0 there the routine returns and the chip stays as
+the program left it (`src/hwsvc.asm:151-159`). Otherwise it reads the word at
+offset 6, the table's fourth entry, `VREST`, and calls it through `VHLJP`
+(`src/hwsvc.asm:160-166`, `src/video.asm:20`). If the PICO9918 is the console,
+it also clears the screen and homes the cursor (`src/hwsvc.asm:167-174`). Warm
+boot calls `HWVREL` directly, which is why a program's claim doesn't outlive
+it (`src/boot.asm:74`).
+
+`TONE` toggles bit 7 of `A`, which starts as `TXIDLE`, and writes it to port
+`01h` (`src/hwsvc.asm:182-184`). The inner loop counts `B` with `C`, and `A`
+then holds the output while `C` is borrowed to test `DE` for zero
+(`src/hwsvc.asm:185-193`). Counted from the instructions, a half cycle is 16 ×
+`B` + 51 T-states, as Chapter 9's measurements show, although the comment at
+`src/hwsvc.asm:177-178` says 59. `B` = 0 reaches `DEC C` with 0 and goes round
+256 times. The routine ends with `TXIDLE`, so the speaker stops low
+(`src/hwsvc.asm:194-195`).
+
+`JOY` and `KEYS` read the same port. `IN A,(C)` puts `B` on the top address
+lines, and `HWSKEYS` starts with `BC` = `FEFEh` and rotates `B` left, so one
+address line is low at a time (`src/hwsvc.asm:205-210`). `RLC B` moves the old
+top bit into carry, and after the eighth read that bit is the 0, so the loop
+stops at 8 rows (`src/hwsvc.asm:210-211`). `HWSJOY` makes one read with `BC` =
+`F7FEh`, and that is the fourth value of `HWSKEYS`'s `B`, which is why the
+joystick shares row 3 (`src/hwsvc.asm:199-200`). Both complement the byte, so
+a key down reads 1.
+
+`PUTAT` has two tests at its head. `VTOWN` gives nonzero for a claimed
+console, and `RRCA` on `CONMOD` puts bit 0 in carry, which is set for `CMCRT`
+and `CMUC1` and clear for the other two modes (`src/hwsvc.asm:218-224`). A
+count of 0 returns before anything changes (`src/hwsvc.asm:225-227`). The
+cursor comes off, and a row past `VHGT` leaves with status 0
+(`src/hwsvc.asm:231-238`). The loop then clips each cell against `VWID` and
+calls `VPUT`, the driver's routine, with `A`, `B` and `C` as the driver takes
+them (`src/hwsvc.asm:239-255`). `VPUT` jumps through the driver's table
+(`src/video.asm:13`). It is the deepest hardware service, at 22 bytes on a
+`GLCD.SVC` console (`src/hwsvc.asm:4-6`).
+
+`RTC` tests for the clock with `RTCHAS`, which reads the seconds register and
+counts any value below `60h` as an answer, on the ground that a seconds
+register holds BCD (`src/hwsvc.asm:292-303`). `RTCCMD` raises the enable bit,
+and `RTCWR` clocks a byte out least significant bit first
+(`src/hwsvc.asm:312-325`). `HWSRTC` uses the DS1302's burst modes, command
+`BFh` to read and `BEh` to write. A write first clears write protect with
+`RTCPUT`, and its burst carries the 7 bytes and then the control byte, 0
+(`src/hwsvc.asm:268-286`).
+
+None of these routines calls the BDOS, and they hold their one byte of state,
+`VCLAIM`, in the workspace (`src/hwsvc.asm:4-6`).
+
+## XMOVE and MOVE
+
+Chapter 16 follows function 50 to these two routines, and Chapter 7 uses them.
+`XMOVE` stores its two bank numbers in `XMDST` and `XMSRC` and does nothing
+else (`src/xmove.asm:10-14`, `src/ram.asm:224-225`). `MOVE` checks each end
+against its bank with `MVRANGE`, destination first, swapping `HL` and `DE` for
+the second call (`src/xmove.asm:27-34`).
+
+`MVRANGE` rejects a bank number of 2 or more (`src/xmove.asm:151-152`). For
+bank 0, the limit is the word at `0006h`, read at each call. For bank 1, the
+address must have bit 7 set, and the limit is `XMARK`'s page
+(`src/xmove.asm:153-160`). Either way it adds the count, and an overflow or an
+end past the limit gives carry (`src/xmove.asm:161-166`). Cold boot sets
+`XMARK` to `80h` (`src/boot.asm:163-164`, `src/layout.asm:23`), so the limit
+is `8000h`, the first address the range can hold, and every byte in bank 1 is
+rejected. A failed check goes to `MVBAD`, which gives `A` = `FFh` with nothing
+copied, and every exit clears both bank numbers, so that `XMOVE` lasts for one
+`MOVE` (`src/xmove.asm:139-145`).
+
+`MVCOPY` is the copy without those checks. The block cache calls it directly
+to move lines to and from EXPAND 1 (`src/cache.asm:262-269`,
+`src/cache.asm:365-370`), so its cross-bank path is the cache's alone: a
+program's `MOVE` to bank 1 never gets past `MVRANGE`. A count of 0 returns at
+once (`src/xmove.asm:37-39`). `LD A,I` copies the interrupt enable to the flag
+`P/V`, and `DI` and `PUSH AF` keep it for the end (`src/xmove.asm:40-42`). The
+two latch values are built in the alternate registers: `C'` is the port, and
+`D'` and `E'` are `LATCHV` with `LATEXP` set for each end in bank 1
+(`src/xmove.asm:43-57`). Their old values go on the stack, so the alternates
+that the routine uses are kept. Equal values mean one bank, and `MVLDIR`
+writes that latch, does an `LDIR` and goes to `MVEND` (`src/xmove.asm:58-61`,
+`src/xmove.asm:122-127`).
+
+The cross-bank path has a difficulty. EXPAND 0 and EXPAND 1 share the
+addresses `8000h–BFFFh`, and a copy between them can't have both in view. The
+part of the bank-0 end that lies below `8000h` is in MAIN 0, which stays in
+view, so that part goes by one `LDIR` with EXPAND 1 selected
+(`src/xmove.asm:62-99`). The part in EXPAND 0 goes one byte at a time, with
+the latch written between the read and the write (`src/xmove.asm:104-120`).
+While EXPAND 1 is in view the code uses no stack, because the caller's stack
+may be in EXPAND 0 (`src/xmove.asm:21-22`).
+
+`MVEND` writes `LATCHV` back to the latch, pops the alternates, and enables
+interrupts only if `P/V` shows they were on (`src/xmove.asm:128-136`). A copy
+never selects another MAIN (`src/xmove.asm:6`).
+
+## From the command to the loader
+
+A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
+(`src/cpm/ccp.asm:267-276`). `SVCGO` calls `LOADCOM`, the routine that reads a
+`.COM` file to `0100h`, so the file is in the program area, up to the BDOS
+entry's page, and `LOADTOP` gives its end (`src/glcd.asm:68-69`,
+`src/cpm/ccp.asm:359-371`, `src/ram.asm:230`). It then calls `SVCLOAD`
+(`src/glcd.asm:70`). What the console does after a good load is in Chapter 22.
+
+`SVCLOAD` works on the file at `DF`, `0100h`, where the header's fields have
+the offsets in Chapter 10's table (`src/svc.asm:11-22`). It reports through
+carry and `SVCRC` (`src/svc.asm:54-56`), and the CCP treats every carry alike,
+as a name with a question mark.
+
+## The seven steps
+
+### 1. The file's checks
+
+`SVCLOAD` zeroes `SVCRC` and tests `SVCBSY`, which is `80h` while an `INIT` or
+`REMOVE` runs (`src/svc.asm:57-61`, `src/ram.asm:233`). It compares the first
+two bytes with `DMAGIC`, the letter `D` and format 3 (`src/svc.asm:11`,
+`src/svc.asm:62-65`). The size at offset 6 must lie within the records read,
+by `SVCEXT` (`src/svc.asm:66-69`, `src/svc.asm:284-290`). `INIT` and `REMOVE`
+must each lie between the header and the image's end, by `SVCIN`
+(`src/svc.asm:70-75`, `src/svc.asm:293-299`).
+
+The page comes next. The extra memory and the size are added, and an overflow
+fails the load (`src/svc.asm:76-78`). The sum less one, in pages, is taken
+from the page below the current top, which is `PZTOP`'s high byte less one
+(`src/svc.asm:79-82`). A borrow or a page below `80h` fails it, and the page
+goes in `PRLDL` (`src/svc.asm:83-86`). For `COUNT.SVC` on the serial board,
+with the top at `B806h` and 100 bytes, the page is `B7h`.
+
+### 2. The dependencies
+
+They follow the image, and `HL` walks them with a count from offset 2
+(`src/svc.asm:87-92`). Each must lie within the records read, and `REGFIND`,
+described below, looks up its 8-byte name with its least version in `C`
+(`src/svc.asm:95-103`). `EX (SP),HL` keeps the next entry's address on the
+stack across the lookup (`src/svc.asm:97`). A missing record ends the load
+(`src/svc.asm:104-106`).
+
+### 3. The stacks
+
+The relocation data must lie within the records read too
+(`src/svc.asm:110-113`). `HL` then points at the room left on the three
+stacks: `SVCLIM` with no service in, and otherwise offset 12 of the newest
+service's header (`src/svc.asm:114-119`). The loop takes each figure in the
+new header from that room, fails on a borrow, and stores the difference over
+the figure in the new header (`src/svc.asm:120-130`). The header in memory
+then holds the room left below this service, and the loader keeps no other
+total. On the serial board, with limits 8, 12 and 6, `COUNT.SVC`'s figures of
+2 each leave `06h`, `0Ah` and `04h` at `B70Ch`, as a read of memory on the
+model shows.
+
+### 4. The relocation
+
+Chapter 21 describes this pass: each byte of the list is a gap, 255 is a gap
+and no fixup, and the check stops a list running past the image
+(`src/svc.asm:133-161`). `HL` starts at `DF+DHLEN-1`, the byte before the
+image (`src/svc.asm:136`), so a list whose first gap is 0 adds the page to
+header byte 24, the name's last. `makeSvc` never writes such a list, since its
+first gap counts from the byte before the image to a fixup at offset 0 or
+later (`tools/lib/svc.mjs:37-44`), and the loader doesn't test for one. This
+file is `COUNT.SVC` from Chapter 10 with a 0 put at the front of its list:
+
+```sh
+node -e '
+const { readFileSync, writeFileSync } = require("node:fs");
+const f = readFileSync("COUNT.SVC");
+const out = Buffer.concat([f.subarray(0, 100), Buffer.from([0]), f.subarray(100)]);
+out[10] += 1;
+writeFileSync("GAPZERO.SVC", out);
+'
+node tools/tecvol.mjs put svc.img B GAPZERO.SVC
+```
+
+<!-- node tools/capture.mjs --card svc.img B: GAPZERO.SVC SERVICES -->
+```text
+A>B:
+B>GAPZERO.SVC
+
+B>SERVICES
+COUNTW 1
+B>
+```
+
+The space at byte 24 has become `20h` + `B7h`, `D7h`, and `PUTTRIM` masks bit
+7 (`src/cpm/ccp.asm:755-757`), so the name prints with a `W`.
+
+### 5. The move
+
+The loader now writes its own fields into the header, over those it has
+finished with (`src/svc.asm:163-171`). Three bytes from `REGHEAD` go over
+offsets 0 to 2, which are `REGHEAD` and then `SVCHEAD`
+(`src/ram.asm:234-235`): the registry's head and the lowest service's page, as
+they were before this load. A `JP` to the old top goes over offsets 6 to 8.
+One `LDIR` moves the header and image to the page, and the low byte is `L`, 0
+(`src/svc.asm:172-176`). The word at `0006h` becomes the page's `xx06h`, where
+the `JP` now is (`src/svc.asm:177-179`). `PZTOP` isn't written.
+
+The JP's address bytes have a second use. Offset 8, its high byte, is the old
+top's page, the page above this service's last, so `SERVICES` and the loader's
+bounds both read it there (`src/svc.asm:268-273`, `src/svc.asm:314-316`).
+
+### 6. INIT
+
+`SVCCALL` sets `SVCBSY`, reads the 2-byte offset at `HL`, adds the page to its
+high byte and jumps (`src/svc.asm:180-181`, `src/svc.asm:257-265`). The header
+is on a page boundary, so no 16-bit addition is needed. `INIT` returns to the
+instruction after the call, on the CCP's stack (`src/cpm/ccp.asm:274`).
+
+`PZTOP` being untouched is what makes a warm boot during `INIT` harmless to
+the ceiling. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:223-224`), and
+warm boot clears `SVCBSY` (`src/boot.asm:71-72`), so the pages go back as if
+the load had never started, and `test/svc.test.mjs:432-445` checks that a
+later load works. A hook already in the table then points below the ceiling,
+which is why hooks go last (`test/svc.test.mjs:461-468`). A reset during a
+hung `INIT` is recognised all the same, because `RSLCAP` doesn't compare the
+word at `0006h` with `PZTOP` (`src/boot.asm:88-89`).
+
+### 7. The records and the commit
+
+`SVCBND` loads `D` with the service's page and `E` with the page above its
+last, and carry from `INIT` goes to the failure path (`src/svc.asm:182-183`,
+`src/svc.asm:268-273`). With `HL` at the first record, the walk checks each
+record's first byte, then its last, then the high byte of its table address,
+each with `SVCCK` against `D` and `E` (`src/svc.asm:186-205`,
+`src/svc.asm:276-281`). Since `SVCCK` compares pages, a record can't cross out
+of the service and a link can't leave it. `B` starts at 0, so `DJNZ` allows
+255 records, and a list of 256, or one that loops, ends the walk
+(`src/svc.asm:185`, `src/svc.asm:206`, `test/svc.test.mjs:256`).
+
+With the walk done, `SVCLK` writes the first record's address to `REGHEAD` and
+the old head into the last record's link, which `PRLN` has held
+(`src/svc.asm:233-242`). So a service's records join the front of the list as
+one chain, and a service with none leaves the list alone
+(`src/svc.asm:234-236`). `SVCCOM` sets `SVCHEAD` to this page and writes
+`PZTOP`, and that write is the commit (`src/svc.asm:243-247`). `SVCSHUT`
+clears `SVCBSY`, and a final `CP 1` and `CCF` turn `SVCRC` into the carry
+(`src/svc.asm:248-254`).
+
+## A failed load
+
+Until `SVCMOV` nothing but the file has changed, and each failure returns
+carry with `SVCRC` at 0. After the move there are three outcomes, and the
+labels `SVCSCAN`, `SVCRF` and `SVCKEEP` separate them.
+
+| `SVCRC` | Case | State after |
+| ---: | --- | --- |
+| 0 | Rejected before the move | As it was |
+| 1 | `INIT` or a record failed, nothing left behind | As it was; `0006h` put back |
+| 2 | A hook left behind, or `REMOVE` rejected the undo | Pages kept |
+
+A carry from `INIT` goes straight to `SVCSCAN`, since a failed `INIT` has
+undone its own work (`src/svc.asm:182-183`). A record that fails its check
+goes to `SVCRF`, which calls `REMOVE` to undo a good `INIT`
+(`src/svc.asm:207-210`). If `REMOVE` fails, `SVCKEEP` records 2 and commits
+with the pages kept and no record linked (`src/svc.asm:211-212`,
+`src/svc.asm:230-232`, `test/svc.test.mjs:400`).
+
+`SVCSCAN` tests the high byte of each of the 17 targets in the RAM BIOS table
+against the service's pages (`src/svc.asm:214-222`, `src/layout.asm:74`). With
+no hit, the word at `0006h` goes back to `PZTOP` and the result is 1
+(`src/svc.asm:223-226`). A hit writes 0 over the flags, so `UNLOAD` will
+reject the service, and it goes to `SVCKEEP` (`src/svc.asm:227-232`). A hook
+left in the table then points at pages the service still holds, and
+`test/svc.test.mjs:386-398` shows them surviving a warm boot. The scan reads
+only that table, so `ABIGLCD`'s vectors are beyond it
+(`test/svc.test.mjs:535`).
+
+A service kept this way appears in `SERVICES`, because `CMDSVC` walks the
+owner list from `SVCHEAD`, not the registry (`src/svc.asm:302-325`). Each
+header's offset 2 is the link to the next page down the list, 0 at the end.
+
+## The registry
+
+`ABISVC`, at `C015h`, jumps to `SVCREG` (`src/abi.asm:19`), which moves `B` to
+`C`, clears `B`, and divides on the selector. Any selector but 0 or 1 returns
+carry (`src/svc.asm:435-442`). `ABIDRV`, in `abi.inc`, is an old name for the
+same entry (`src/abi.inc:17`).
+
+Enumerate walks from `REGHEAD`, counting `C` down, and returns the record with
+the generation in `A` (`src/svc.asm:443-455`, `src/svc.asm:486-488`).
+`REGFIND` compares 8 bytes at offset 2, tests the version at offset 10 with
+`CP C`, and on a match returns the table's address from offset 11
+(`src/svc.asm:458-488`). Newer records are at the front of the list, so a find
+reaches the newest of a name first, and a removal uncovers the older
+(`test/svc.test.mjs:499`).
+
+`B` is 0 at `REGF1`, so `DJNZ` allows 256 rounds, and a list made into a cycle
+by a program can't hold the caller (`src/svc.asm:496-498`,
+`test/svc.test.mjs:543`). That walk uses at most 8 bytes of the caller's
+stack, three `PUSH`es and the return address (`src/svc.asm:463-465`). The
+registry has no entry for removal, so a selector of 2 returns carry
+(`test/svc.test.mjs:346`).
+
+A record is visible to a client only once `SVCLK` has linked it, so a service
+can't find its own record during `INIT` (`test/svc.test.mjs:424`).
+
+## Removal
+
+`UNLOAD` calls `SVCUNL` (`src/cpm/ccp.asm:1082-1084`). It rejects the command
+while `SVCBSY` is set, and it uses the 0 it read there as `L`, making `HL` the
+base of the page in `PZTOP` (`src/svc.asm:28-32`). That page must equal
+`SVCHEAD`, which is false with no service in, since `SVCHEAD` is then 0, and
+bit 0 of the flags must be set (`src/svc.asm:33-38`).
+
+`SVCCALL` then runs `REMOVE`. `SVCSHUT` clears `SVCBSY` without touching the
+flags, and carry from `REMOVE` returns with nothing changed
+(`src/svc.asm:39-44`). With no carry, `A` is the 0 from `SVCSHUT`, so `LD L,A`
+points `HL` at the header's start, and `LDIR` copies 3 bytes back to `REGHEAD`
+and `SVCHEAD` (`src/svc.asm:45-48`). This one copy removes all the service's
+records, whatever their number. `DE` is left at `SVCGEN`, and the code raises
+it by swapping registers for one `INC (HL)` (`src/svc.asm:49-51`,
+`src/ram.asm:236`). `PRLTOP` reads the old top from the `JP`'s address at
+offset 7 and writes it to `PZTOP` and `0006h` (`src/svc.asm:52`,
+`src/prl.asm:60-67`).
+
+The rule that only the lowest service can go is what keeps those saved bytes
+true. Each header holds the state from before its own load, and the states are
+stacked in memory in the order of the loads.
+
+A warm boot keeps all of this, since `REGHEAD`, `SVCHEAD` and `PZTOP` lie past
+`BDOSRME`, the end of the range `CPMINIT` clears (`src/ram.asm:190-192`).
+Chapter 22 describes that boundary. Cold boot clears the workspace, so a reset
+empties both lists (`src/boot.asm:23-27`, `test/svc.test.mjs:353`).
+
+## The bytes below 0006h
+
+The word at `0006h` points at `xx06h` because the BDOS entry has that form in
+CP/M 2.2, as Chapter 13 explains, and the header keeps it by placing its `JP`
+at offset 6 (`src/svc.asm:177-179`). So offsets 0 to 5 of the lowest service
+lie below the word, in memory that a program takes as its own. Those six bytes
+are live: `SERVICES` reads the owner link at offset 2 (`src/svc.asm:323-324`),
+`UNLOAD` reads the flags at offset 3, `REMOVE`'s offset at 4 and 5, and
+restores from offsets 0 to 2 (`src/svc.asm:36-48`).
+
+`LOADCOM` stops short of that page (`src/cpm/ccp.asm:369-371`), so loading a
+file can't reach them, but a running program that fills memory up to the word
+writes over them, and nothing tests for that. The starter card's `TAS.COM`
+does: on the model, with `COUNT.SVC` at `B700h`, a run of `TAS` left `7Fh`,
+`1Eh`, `C6h`, `17h`, `B7h`, `17h` there. `SERVICES` then followed the owner
+link to page `C6h`, in the ROM, and printed what it found there. The `UNLOAD`
+after it took `17B7h` as `REMOVE`'s offset and jumped into the ROM at `CEB7h`,
+and with no hook restored it freed the page with `CONOUT`'s target still at
+`B742h`.
+
+## The stack figures
+
+A service's code runs on its caller's stack (`drivers/glcd.asm:5`), and the
+ROM reserves three stacks, of the sizes at `src/layout.asm:81-83`:
+
+| Stack | Reserved | Base | Census | `SVCLIM` |
+| --- | ---: | ---: | ---: | ---: |
+| BDOS | 54 | 32 | 34 | 8 |
+| BIOS | 38 | 16 | 16 | 12 |
+| CCP | 30 | 16 | 22 | 6 |
+
+The census column is the deepest use of each stack in `test/stacks.test.mjs`,
+which records every write to memory under the heaviest workloads, and it
+passes only with a quarter of each stack free
+(`test/stacks.test.mjs:238-239`). Base is the same figure from its runs on the
+serial terminal and the PICO9918 alone, with the write-behind run: 32, 16 and
+16. The census is higher for the BDOS and the CCP because of the runs with
+`GLCD.SVC`, which give 34 and 22.
+
+`SVCLIM` holds the limits (`src/data3.asm:112`), and they are counted from the
+base. Each limit is the largest even figure that, added to the base, leaves a
+quarter of the stack free: 40 of 54, 28 of 38 and 22 of 30. `GLCD.SVC`
+declares 2, 0 and 6 (`drivers/glcd.asm:19`), the difference between the base
+and the census, so it takes the whole of the CCP's allowance, and `COUNT.SVC`
+with its 2 can't then load. `PICO.SVC` declares 0, 0 and 0, since its figures
+are in the base (`drivers/pico.asm:29`).
+
+The loader can check only the sum of what the headers state.
+`test/svc.test.mjs:694` shows the way to prove a figure: a stack watch on the
+model, in which a service that declares 2 and uses 6 still loads.
