@@ -7,8 +7,9 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
-845d062, whose copy on the card has the SHA-256
+Checked against TEC-OS 718c01b, with the ATOM assembler from the
+repository's `atom-z80` 0.3.7. The starter card's `EDIT.COM` is from Edit
+845d062, and its copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 A command line in TEC-OS can hold more than one command, with `!` between them.
@@ -30,10 +31,10 @@ had typed the commands one at a time:
 ```text
 A>DIR *.CMD!TYPE STARTUP.CMD
 STARTUP.CMD 
-1 file, 986K free
+1 file, 976K free
 A>TYPE STARTUP.CMD
-PICO.DRV
-GLCD.DRV
+PICO.SVC
+GLCD.SVC
 
 A>vols!!  ! dir b:!
 00 SYSTEM      G1M A:
@@ -87,31 +88,31 @@ A piece that starts with `:` runs only if the command before it succeeded. If
 that command failed, the `:` piece is echoed and nothing runs, and the rest of
 the line is dropped, the pieces without `:` after it included:
 
-<!-- node tools/capture.mjs "NOSUCH!:DIR *.CMD!DIR *.DRV" "DIR *.DRV!:DIR *.CMD" ":DIR *.CMD" -->
+<!-- node tools/capture.mjs "NOSUCH!:DIR *.CMD!DIR *.SVC" "DIR *.SVC!:DIR *.CMD" ":DIR *.CMD" -->
 ```text
-A>NOSUCH!:DIR *.CMD!DIR *.DRV
+A>NOSUCH!:DIR *.CMD!DIR *.SVC
 NOSUCH?
 
 A>:DIR *.CMD
-A>DIR *.DRV!:DIR *.CMD
-PICO.DRV     PICO40.DRV   PICO32.DRV   GLCD.DRV    
-4 files, 986K free
+A>DIR *.SVC!:DIR *.CMD
+PICO.SVC     PICO40.SVC   PICO32.SVC   GLCD.SVC    
+4 files, 976K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 986K free
+1 file, 976K free
 A>:DIR *.CMD
 STARTUP.CMD 
-1 file, 986K free
+1 file, 976K free
 A>
 ```
 
-`NOSUCH` isn't a command, so `:DIR *.CMD` didn't run and `DIR *.DRV` after it
-was dropped with the rest of the line. In the second line `DIR *.DRV`
+`NOSUCH` isn't a command, so `:DIR *.CMD` didn't run and `DIR *.SVC` after it
+was dropped with the rest of the line. In the second line `DIR *.SVC`
 succeeded and `:DIR *.CMD` ran. The third line starts with `:`, and the
 command it tests is the last one of the line before, the `DIR *.CMD` that
 succeeded. A `:` at the start of a line typed after a failure runs nothing. On
 the serial board and on the web page's board, the starter card's last
-startup line `GLCD.DRV` fails, so a `:` that starts the first line typed runs
+startup line `GLCD.SVC` fails, so a `:` that starts the first line typed runs
 nothing there too.
 
 ## Return codes
@@ -131,7 +132,7 @@ function 108, so an ordinary CP/M 2.2 program always succeeds. The code is also
 0 after a reset.
 
 The CCP sets the code to `FF00h` when a command fails at the CCP. That covers a
-command that isn't found, a program that won't load and a driver that won't
+command that isn't found, a program that won't load and a service that won't
 install. It also covers every built-in that prints `NAME?`, `NO FILE`,
 `FILE EXISTS`, `NO SPACE` or one of `COPY`'s messages. An `ERA *.*` answered
 with `N` erases nothing and is a success.
@@ -185,8 +186,8 @@ COPIED 0001
 B>EXISTS NOTES.TXT!:TYPE NOTES.TXT!DIR
 
 B>:TYPE NOTES.TXT
-PICO.DRV
-GLCD.DRV
+PICO.SVC
+GLCD.SVC
 
 B>DIR
 EXISTS.COM   RUN.COM      NOTES.TXT   
@@ -309,7 +310,9 @@ These events drop what is left of a line:
 - a call to function 47, whose line replaces the rest
 - `^C` typed while a line that a program reads with BDOS function 10 is
   empty
+- `^C` at the `[more]` of a `TYPE` or `DIR` listing
 - the key that ends a BDOS error, such as `Bdos Err On C: Select`
+- a `Write lost` message at a warm boot, which Chapter 4 describes
 - a reset
 
 After function 47 its own line runs in place of the rest. After a reset TEC-OS
@@ -327,8 +330,6 @@ A>
 
 Other ways a command can end leave the rest of the line to run. A program that
 prints its own error message and returns has succeeded unless it set the code.
-A key that ends a `TYPE` or `DIR` listing at `[more]` lets the line's next
-piece run, as it does after a listing that ran to its end. Those keys are
-`^C`, Esc and `Q`, and also `#` and `;`. The last two differ from `^C` and Esc
-only in the bit the key test clears. A `Write lost` message at a warm boot,
-which Chapter 4 describes, also leaves the rest of the line to run.
+Esc or `Q` at `[more]` ends a `TYPE` or `DIR` listing and lets the line's next
+piece run, as it does after a listing that ran to its end. The key test clears
+one bit of the key, so `#` at `[more]` acts as `^C` and `;` acts as Esc.
