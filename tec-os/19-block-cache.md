@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 19. The block cache
 
-Checked against TEC-OS 62d47ed, with the starter card's `EDIT.COM` from
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from
 Edit 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
 timings and traces below were made on that card unless the text names another.
@@ -97,7 +97,7 @@ below `8000h`, such as the CCP's loads at `0100h` and up, takes from 4,726
 T-states, in line 0. A miss to such an address takes 226,419.
 
 `DIR` on the starter card's drive A shows the effect: after the first prompt
-the directory's blocks are in the cache, and `DIR`'s three BIOS reads are all
+the directory's blocks are in the cache, and `DIR`'s four BIOS reads are all
 hits.
 
 A program that reads a file shows the gain over a whole file. This one
@@ -248,7 +248,7 @@ A flush has four occasions:
 - `CTAKE` with every line dirty, which writes one line
 - every warm boot, whose `CWBOOT` calls `CFLALL` (`src/boot.asm:79`,
   `src/cache.asm:347-358`)
-- every call of the mount service that mounts or unmounts a drive, whose
+- every call of the mount entry that mounts or unmounts a drive, whose
   `VFLUSH` calls `CFLALL` before any drive changes, and fails if it fails
   (`src/vol.asm:678-690`)
 
@@ -264,8 +264,8 @@ unchanged, so a failure when its line goes to the card later needs a report of
 its own. That report is `Write lost`. `CWBOOT` writes every dirty line and
 then tests `CFAIL`, which is set if a line's write has failed since the last
 warm boot, including the flush it has just made. If it is set, `CWBOOT` clears
-it and prints `Write lost` on its own line (`src/cache.asm:347-358`,
-`src/data3.asm:109`). The failed lines are still dirty and still hold their
+it, drops the rest of a chained line and prints `Write lost` on its own line
+(`src/cache.asm:347-358`, `src/data3.asm:109`). The failed lines are still dirty and still hold their
 data, so each warm boot writes them again and prints the message again while
 the write still fails.
 
@@ -290,7 +290,7 @@ saves the flags in `CIFF` (`src/cache.asm:17-24`). `BRET` at each exit turns
 the result's Z flag into `A`, 0 for success and 1 for an error. `CEI` turns
 interrupts on again only if `CIFF` shows they were on at entry
 (`src/cache.asm:25-34`, `src/bios.asm:181-184`, `src/bios.asm:195-199`), so a
-call made with interrupts off returns with them off. The mount service's
+call made with interrupts off returns with them off. The mount entry's
 `VFLUSH` uses the same pair around its flush (`src/vol.asm:681-690`). `MVCOPY`
 and the history's routines keep their own copy of the state in the same way
 (`src/xmove.asm:40-42`, `src/history.asm:25-27`).
