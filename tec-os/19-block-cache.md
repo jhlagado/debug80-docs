@@ -159,7 +159,7 @@ If a line holds it, `CREFR` copies the 512 bytes of `BLKBUF` over the line, so
 that a later read cannot return the old contents (`src/bios.asm:298`,
 `src/cache.asm:360-371`). A block not in the cache is not added to it. If the
 card write fails, the block's line is dropped, since neither it nor `BLKBUF`
-can be known to match the card (`src/bios.asm:291-297`). A written through
+can be known to match the card (`src/bios.asm:291-297`). A written-through
 volume's lines are therefore always clean.
 
 ## Writes behind
@@ -178,11 +178,11 @@ Two cases follow, decided by the same rule `WRITE` uses for `BLKBUF`: whether
 the block holds anything the card's copy has to supply. If it might, the line
 is filled from the card first, unless it already held the block.
 
-It can't when the write is CP/M's type 2, the first to a newly allocated
-block, or a write to the next block of an allocation block whose first block
-was handled that way. The line is then cleared to zeros instead, with no read.
-`BLKBUF`'s key is set to record that block as cleared, so that the rule holds
-for the block after it (`src/cache.asm:298-316`).
+It can't when the write is CP/M's type 2, the first to a new allocation
+block, or a write to the next card block of an allocation block whose first
+card block was handled that way. The line is then cleared to zeros instead,
+with no read. `BLKBUF`'s key is set to record that block as cleared, so that
+the rule holds for the block after it (`src/cache.asm:298-316`).
 
 Either way, the record's 128 bytes are then copied from the DMA address into
 the line with `CWRREC`, and `CDSET` marks the line dirty. A data write ends
