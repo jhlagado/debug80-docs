@@ -41,7 +41,7 @@ in the files that drive them.
 The read of port `00h` takes nothing from the keypad. It is there for the
 Debug80 model, whose serial input starts a queued byte at a read of that port
 (`src/layout.asm:9`, `src/console.asm:129`, `src/console.asm:183`,
-`src/console.asm:282`). The value is thrown away at once.
+`src/console.asm:282`).
 
 ## Port 01h and the serial line
 
@@ -71,9 +71,9 @@ TEC-OS reads three bits of port `03h` (`src/layout.asm:11`):
   matrix keyboard, and both display drivers fail to install, since each needs
   the keyboard.
 - **Bit 6, a keypad key down.** Read once, at cold boot, just before the
-  startup file is opened; a low bit skips the file (`src/drv.asm:336-338`).
-- **Bit 7, the serial line's input** (`src/console.asm:131`,
-  `src/console.asm:184`, `src/console.asm:198`).
+  startup file is opened. A low bit skips the file (`src/drv.asm:336-338`).
+- **Bit 7, the serial line's input.** Read by the serial routines
+  (`src/console.asm:131`, `src/console.asm:184`, `src/console.asm:198`).
 
 The TEC-1G's documents and the Debug80 model describe the other bits of port
 `03h` differently. On bit 6 the two agree: it is low while a keypad key is
@@ -103,18 +103,18 @@ writes `01h` to the latch (`src/reset.asm:1-6`, `src/boot.asm:9-12`). A
 program that writes the latch itself has to write `0040h` to match, since
 TEC-OS's next write to the latch is made from the copy.
 
-EXPAND is set only with no stack in use while it is, since the stacks TEC-OS
-uses once cold boot has set them up are in `8000h–BFFFh` in EXPAND 0
+EXPAND is set only while no stack is in use, since the stacks TEC-OS uses once
+cold boot has set them up are in `8000h–BFFFh`, in EXPAND 0
 (`src/history.asm:16-42`, `src/cache.asm:11-14`). Bits 3 to 6 are a bank field
 for the window in the Debug80 model, and unconnected to U9 in the board's
-documents; TEC-OS uses bit 2 for EXPAND 1 and bit 3 only for the test above.
+documents. TEC-OS uses bit 2 for EXPAND 1 and bit 3 only for the test above.
 Test T12 of the diagnostics ROM reports what a board does with them.
 
 ## U9 and the RAM
 
-TEC-OS needs 64 KiB of RAM: the board's fixed 32 KiB at `0000h–7FFFh`, and a
-32 KiB RAM in socket U9 for `8000h–BFFFh`, whose two 16 KiB halves are EXPAND
-0 and EXPAND 1. The board's recommended build leaves U9 empty, and
+TEC-OS needs 64 KiB of RAM: the board's fixed 32 KiB at `0000h–7FFFh` and a 32
+KiB RAM in socket U9 for `8000h–BFFFh`, whose two 16 KiB halves are EXPAND 0
+and EXPAND 1. The board's recommended build leaves U9 empty, and
 `docs/board-run.md` gives the chip as a 62256 or similar, with the board's
 EXPAND jumpers set for a 32 KiB chip. Cold boot tests `8000h–BFFFh` before it
 prints anything, and EXPAND 1 later, and stops with `TEC-OS needs 64K RAM` on
@@ -133,7 +133,7 @@ interrupt, and the Z80 pushes its return address and jumps to `0066h`. TEC-OS
 puts no handler there. `0066h` is inside CP/M's default file control block,
 `005Ch–007Fh`, which programs and the CCP write, so an NMI runs whatever bytes
 the FCB holds. `docs/board-run.md` lists TEC-OS as running with the jumper
-off. A press with the jumper fitted is a crash, not an input.
+off. A press with the jumper fitted is a crash.
 
 ## The 8 × 8 LEDs
 
@@ -149,11 +149,11 @@ shows.
 ## The DS1302 clock
 
 The DS1302 is an add-on on port `FCh`, with bit 4 the chip's enable, bit 6 its
-clock, bit 7 the data sent to it, bit 5 set to read, and the data read on bit
-0 (`src/hwsvc.asm:41-42`). Each register is reached by a command byte sent
-least significant bit first (`src/hwsvc.asm:311-317`). TEC-OS counts the clock
-as present when a read of the seconds register gives a value below `60h`,
-which a clock that answers gives and an empty port's `FFh` doesn't
+clock, bit 7 the data sent to it, bit 5 set to read and the data read on bit 0
+(`src/hwsvc.asm:41-42`). Each register is reached by a command byte sent least
+significant bit first (`src/hwsvc.asm:311-317`). TEC-OS counts the clock as
+present when a read of the seconds register gives a value below `60h`, which a
+clock that answers gives and an empty port's `FFh` doesn't
 (`src/hwsvc.asm:292-303`). The `INFO` service reports it in bit 3 of `B`, and
 the `RTC` service reads and sets its seven BCD registers (Chapter 9).
 
