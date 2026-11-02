@@ -228,7 +228,7 @@ writes `PICO?`.
 
 The CCP separates a service from a program by the three type bytes in `CMDFCB`.
 `SVC` calls `SVCGO`, and any other type goes on to `CMDCOM` and the search for a
-`.COM` file, which is what becomes of `PICO.DRV` (`src/cpm/ccp.asm:267-277`).
+`.COM` file, which is what becomes of an old card's `PICO.DRV` (`src/cpm/ccp.asm:267-277`).
 `SVCGO` reads the file with `LOADCOM` and installs it with `SVCLOAD`, and a
 failure of either returns carry to `BADCMD` for the name and question mark
 (`src/glcd.asm:68-71`, `src/cpm/ccp.asm:274-275`). Chapter 21 describes the file

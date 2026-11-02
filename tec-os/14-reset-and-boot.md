@@ -317,7 +317,7 @@ allocation vectors below `WSBASE` and the RAM BIOS table at `BF00h` are outside
 what `CPMINIT` clears too. So are the two FCBs and the command buffer, the 202
 bytes of the CCP's RAM below `CCPCLR`, and `CHPOS`, the byte above the RAM BIOS
 table that marks a chained line's next piece. The rest of the line therefore
-outlives the warm boot (`src/ram.asm:68-81`, `src/ram.asm:240`), as Chapter 25
+outlives `CPMINIT` (`src/ram.asm:68-81`, `src/ram.asm:240`), as Chapter 25
 describes. The services below the BDOS entry are kept too, and so are the
 registry's head and the display drivers' tables above the RAM BIOS table. The
 cache's lines and the history in EXPAND 1 stay as well.
