@@ -2384,6 +2384,10 @@ export const sidebars = {
       "link": "/origo/03-oracles-and-gates.html"
     },
     {
+      "text": "4. A round",
+      "link": "/origo/04-a-round.html"
+    },
+    {
       "text": "Outline",
       "link": "/origo/outline.html"
     },
