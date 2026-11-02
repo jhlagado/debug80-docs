@@ -171,8 +171,9 @@ carry into `00h` or `40h` with `SBC A,A` and `AND 40h` and writes the port, then
 waits `TXDLY` passes of a 16-T-state delay and shifts the next bit into the
 carry. A pass takes 49 + 16 × `TXDLY` T-states, so with `TXDLY` at 49 it takes
 833, one bit at 4800 baud from a 4 MHz clock. The stop bits are the line held
-high for `TXSTOP` passes, 105. On the model a whole character takes 9,217
-T-states, so the serial terminal shows about 430 characters a second.
+high for `TXSTOP` passes, 105. On the model `TXBYTE` takes 9,217 T-states for a
+whole character, and `BCONOUT`'s tests before it bring that to 9,372, so the
+serial terminal shows about 430 characters a second.
 
 `RXBITS` receives a byte (`src/console.asm:192-206`). It is called just after a
 poll has read the start bit, so it first waits `RXHALF` passes, 74, to reach the
@@ -232,8 +233,8 @@ boot. `CONINIT` copies bit 0 of port `03h` into `CONDEV`'s bit `CDMTX`
 (`src/console.asm:299-301`).
 
 `KBSTEP` reads one row each time it is called (`src/console.asm:311-342`).
-`CONIN` calls it in a loop, a row at a time, and `CONST` calls `KBPOLL`, which
-runs the eight steps of one full scan (`src/console.asm:159-160`,
+`CONIN` calls it in a loop, and `CONST` calls `KBPOLL`, which runs the eight
+steps of one full scan (`src/console.asm:159-160`,
 `src/console.asm:297-309`). `KBMASK` holds the row's select byte, rotated left
 after each row, and `KBBASE` the number of the row's first key. For each key
 down, `KBSTEP` moves the last key seen, `KBE`, into `KBD` and records the new
@@ -258,7 +259,7 @@ Shift or Caps Lock, and as control codes 01h to 1Ah with Ctrl.
 ## The video terminal
 
 On the serial terminal the terminal program on the PC interprets escape
-sequences, and `BCONOUT` sends its bytes untouched. A display has no such
+sequences, and `BCONOUT` sends every byte untouched. A display has no such
 program, so on a video console every character of output goes through `VTOUT`, a
 terminal emulator of the VT100's kind (`src/term.asm:1-21`).
 
@@ -348,10 +349,10 @@ table and sets the mode back to the serial terminal. It also sets `CONACT` to
 (`src/glcd.asm:34-48`).
 
 The seventh vector carries three functions that only the PICO9918's driver
-needs (`src/video.asm:26-45`). That driver keeps two copies of the screen in
-VRAM, its pages, so a move of rows can be built out of sight and shown with one
-register write (`drivers/pico.asm:17-18`). Function 0 shows the page the
-terminal has drawn. `CONST` and `CONIN` call it, so that by the time a program
+needs (`src/video.asm:26-45`). That driver has two name tables in VRAM, its two
+pages, one shown and one hidden, so a move of rows can be built out of sight and
+shown with one register write (`drivers/pico.asm:17-18`,
+`drivers/pico.asm:301-305`). Function 0 shows the page the terminal has drawn. `CONST` and `CONIN` call it, so that by the time a program
 waits for a key the screen shows what it drew (`src/console.asm:118`,
 `src/console.asm:151`). Functions 1 and 2 begin and end a move of rows, around a
 scroll or a line insert or delete (`src/term.asm:465`, `src/term.asm:524`). The
