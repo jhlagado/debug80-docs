@@ -258,9 +258,9 @@ by calling BDOS function 0 (`src/cpm/bdos.asm:132-133`). A call of BDOS function
 47 that succeeds ends there too (`src/cpm/bdos.asm:65-71`).
 
 The BDOS goes there itself through `CHDROP`, which first drops the rest of a
-chained line, a line split at `!` (Chapter 11, `src/cpm/bdos.asm:75-77`). It
-does so after a `^C` typed as the first key of a line read with function 10
-(`src/cpm/bdos.asm:371-375`). It does so too after it has reported a disk error
+chained line, a line split at `!` (Chapter 11, `src/cpm/bdos.asm:75-77`). The
+BDOS takes that route after a `^C` typed as the first key of a line read with
+function 10 (`src/cpm/bdos.asm:371-375`), and after it has reported a disk error
 such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2434-2437`,
 `src/cpm/bdos.asm:2453-2456`). A `^C` at the prompt is the first case, since
 the CCP reads its line with function 10:
@@ -301,12 +301,11 @@ Warm boot's steps are:
 8. A jump to the CCP's entry, `CCPENT`, with `C` holding the drive and user
    byte from `0004h` (`src/boot.asm:80-82`).
 
-Warm boot leaves the rest alone. The drive table, the DPHs and `LOGINV` are in
-the BIOS's part of the workspace, which `CPMINIT` does not clear
-(`src/ram.asm:22-34`). `LOGINV` is the BDOS's record of the logged-in drives.
-The allocation vectors
-below `WSBASE` and the BIOS table at `BF00h` are outside what it clears too. So
-are the two FCBs and the command buffer, the 202 bytes of the CCP's RAM below
+Warm boot leaves the rest alone. The drive table, the DPHs and `LOGINV`, the
+BDOS's record of the logged-in drives, are in the BIOS's part of the workspace,
+which `CPMINIT` does not clear (`src/ram.asm:22-34`). The allocation vectors
+below `WSBASE` and the BIOS table at `BF00h` are outside what `CPMINIT` clears
+too. So are the two FCBs and the command buffer, the 202 bytes of the CCP's RAM below
 `CCPCLR`. So is `CHPOS`, the byte above the BIOS table that marks a chained
 line's next piece. The rest of the line therefore outlives the warm boot
 (`src/ram.asm:68-81`, `src/ram.asm:240`), as Chapter 25 describes. The drivers
