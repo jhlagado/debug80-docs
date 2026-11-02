@@ -7,12 +7,14 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy on the card has the SHA-256
-`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
+`ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
+`TAS.COM` from Thorium 7604daa, with the SHA-256
+`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
 
 TEC-OS reads everything but its own code from one SD card: the programs it
-runs, its drivers, its startup file and your own files. This chapter describes
+runs, its services, its startup file and your own files. This chapter describes
 the card's layout, a container of volumes, and how you build and change a card
 on a PC with `tecvol`. It then describes how TEC-OS uses the card: `MOUNT`,
 what each drive costs in memory, the block cache and what a reset keeps. The
@@ -42,7 +44,7 @@ node tools/tecvol.mjs info dist/starter.img
 
 ```text
 container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 12 file(s), 1009664 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 13 file(s), 999424 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
 ```
 
@@ -342,12 +344,12 @@ took 1.66 seconds to read a 12 KiB file the first time and 0.33 seconds the
 second time, a fifth of that. A file too large for the cache took as long the
 second time. Chapter 19 gives the method.
 
-Every volume but one is *written through*: a write reaches the card before
+A volume is *written through* by default: a write reaches the card before
 TEC-OS reports it done. When a program writes a record, TEC-OS writes the
 record's whole block to the card and waits until the card reports it accepted.
-The exception is the one volume whose descriptor marks it written behind,
-`WORK` on the starter card. Its writes go into the cache and stay there, and
-TEC-OS writes them to the card later:
+The exception is a volume whose descriptor marks it written behind, `WORK` on
+the starter card, and `tecvol` marks one at most. Its writes go into the cache
+and stay there, and TEC-OS writes them to the card later:
 
 - When a program writes to the volume's directory, for instance by closing a
   file, TEC-OS first writes every data block the cache holds changed, and then
@@ -373,13 +375,13 @@ so the directory never names a block whose data isn't on the card.
 When a changed data block can't be written, it stays in the cache, and each
 warm boot repeats the write and prints `Write lost` while the write still
 fails. A directory block that can't be written is dropped from the cache, and
-the directory is read from the card again. A reset or a power cut discards
-both.
+the directory is read from the card again. A reset or a power cut discards a
+data block held in this way.
 
 ## The drives after a reset
 
 A reset runs cold boot, and cold boot rebuilds TEC-OS's memory, so the cache,
-the drivers, the command history and the open files are all gone after it. So
+the services, the command history and the open files are all gone after it. So
 is any change in the cache that hadn't reached the card. The one thing a reset
 can keep is the selection of volumes on the drives. The selection survives if
 TEC-OS had reached a prompt before the reset and each volume on a drive is
