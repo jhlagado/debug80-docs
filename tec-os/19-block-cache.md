@@ -12,9 +12,9 @@ Edit 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
 timings and traces below were made on that card unless the text names another.
 
-Reading a block from the SD card takes TEC-OS about 55 milliseconds. Every bit
-of it passes through a port one at a time, as Chapter 18 describes. A CP/M
-program reads the same blocks again and again, the directory above all. The
+Reading a block from the SD card takes TEC-OS about 55 milliseconds, because
+every bit of it passes through a port one at a time, as Chapter 18 describes.
+A CP/M program reads the same blocks again and again, the directory above all. The
 block cache keeps the blocks it has read in EXPAND 1, so that a second read of
 a block is a copy in memory. The same cache holds the writes to one volume,
 the volume written behind, and writes them to the card in batches.
@@ -141,8 +141,8 @@ its second 1,329,981, 0.33 seconds, a fifth of that. Both figures include
 loading the program from drive A.
 
 The gain needs the whole file in the cache. A file of 15,360 bytes took about
-2.0 seconds and then about 2.1. `CTAKE` had given up each line before the
-second read reached it.
+2.0 seconds and then about 2.1, because `CTAKE` had given up each line before
+the second read reached it.
 
 ## Writes through
 
@@ -178,16 +178,16 @@ Two cases follow, decided by the same rule `WRITE` uses for `BLKBUF`: whether
 the block holds anything the card's copy has to supply. If it might, the line
 is filled from the card first, unless it already held the block.
 
-The block holds nothing the card has to supply in two cases: CP/M's type 2,
-the first write to a newly allocated block, and a write to the next block of
-an allocation block whose first block was handled that way. The line is then
-cleared to zeros instead, with no read. `BLKBUF`'s key is set to record that
-block as cleared, so that the rule holds for the block after it
-(`src/cache.asm:298-316`). The record's 128 bytes are copied from the DMA
-address into the line with `CWRREC`, and `CDSET` marks the line dirty.
+It can't when the write is CP/M's type 2, the first to a newly allocated
+block, or a write to the next block of an allocation block whose first block
+was handled that way. The line is then cleared to zeros instead, with no read.
+`BLKBUF`'s key is set to record that block as cleared, so that the rule holds
+for the block after it (`src/cache.asm:298-316`).
 
-A data write ends there and returns success with the card unchanged. A write
-of type 1, a directory write, goes on (`src/cache.asm:333-345`). `CFLUSH`
+Either way, the record's 128 bytes are then copied from the DMA address into
+the line with `CWRREC`, and `CDSET` marks the line dirty. A data write ends
+there and returns success with the card unchanged. A write of type 1, a
+directory write, goes on (`src/cache.asm:333-345`). `CFLUSH`
 writes every dirty line except the directory's, and then `CWRITE` writes the
 directory's line. The data reaches the card before the directory block that
 names it. The card's directory therefore never lists a block whose contents
@@ -208,8 +208,8 @@ recording `SDLBA` at each call of `SDWRITE`. Six card writes do what eighteen
 do on drive A, which is written through (Chapter 18).
 
 A larger file fills the lines. In `SAVE 160 Z.COM` on B, 80 blocks, `CTAKE`
-writes three of the first 32 data blocks early. All 30 lines are dirty before
-the BDOS next writes the directory.
+writes three of the first 32 data blocks early, because all 30 lines are dirty
+before the BDOS next writes the directory.
 
 On `time.img`, from the section on reads, `SAVE 64 X.COM`, 16 KiB, took
 30,822,909 T-states, 7.71 seconds, on `THROUGH`. On `BEHIND` it took
