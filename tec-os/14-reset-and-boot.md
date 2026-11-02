@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 14. Reset, cold boot and warm boot
 
-Checked against TEC-OS 98c6416, with the starter card's `EDIT.COM` from
+Checked against TEC-OS 62d47ed, with the starter card's `EDIT.COM` from
 Edit 845d062, whose copy on the card has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`; the
 timings below were measured on that card.
@@ -88,14 +88,14 @@ The diagnostic prompt's `R` jumps back to `COLDRT`, step 7
 the card again and mounts it, without clearing the memory or printing the
 banner a second time.
 
-On the starter card with the serial board, cold boot takes 1,283,603
+On the starter card with the serial board, cold boot takes 1,279,382
 T-states from the first instruction to the CCP's entry, about 0.32 seconds,
 measured on the host model. Three steps take most of it: the banner, 25
 characters at 9,372 T-states each through `CONOUT`; the read of the
 container's block 0, 219,137 T-states; and `MEMINIT`, about 347,000, most
 of it the clearing of EXPAND 1. The startup file's commands then run before
-the first prompt. The CCP's first call of `CONIN` after the `A>` of that
-prompt comes 8,892,118 T-states after reset.
+the first prompt. The CCP's first call of `CONIN` at that prompt comes
+8,907,139 T-states after reset.
 
 ## The two RAM checks
 
@@ -103,13 +103,13 @@ TEC-OS needs RAM at `8000h–BFFFh`, because its workspace and stacks are there,
 and it needs both halves of U9, because EXPAND 1 holds the cache.
 
 The first check, `RAMCHK`, runs before anything has been printed, on the
-boot stack in fixed RAM (`src/boot.asm:290-308`). It writes `55h` at `8000h`
+boot stack in fixed RAM (`src/boot.asm:291-309`). It writes `55h` at `8000h`
 and `AAh` at `BFFFh`, then reads both back, and does it again with the
 patterns swapped. Both ends are written before either is read, so that a
 board with nothing in U9, whose data bus floats, can't return the byte just
-written from the bus itself (`src/boot.asm:291-293`). If either byte is
+written from the bus itself (`src/boot.asm:292-294`). If either byte is
 wrong, `RAMBAD` sends `TEC-OS needs 64K RAM` to the serial port and stops in
-a loop (`src/boot.asm:310-319`). It calls the transmit routine `TXBYTE`
+a loop (`src/boot.asm:311-320`). It calls the transmit routine `TXBYTE`
 directly, since the console isn't started yet and that routine uses only the
 port and the stack.
 
@@ -153,8 +153,9 @@ up with, and after the button it still holds what TEC-OS left there.
 TEC-OS uses that to keep one thing across a reset, the selection of volumes
 on the drives, so that a reset of a board whose drives were changed with
 `MOUNT` comes back with the same drives. The test is `RSLCAP`
-(`src/boot.asm:84-138`), and it reads only fixed addresses and runs none of
-the code it reads. The RAM passes it when all of these hold:
+(`src/boot.asm:84-138`), and it reads only page zero, the word `STUBAD`, the
+three bytes at the address that word holds and the drive table, and it runs
+none of the code it reads. The RAM passes it when all of these hold:
 
 - `0000h` holds a `JP` to `BF03h`, the RAM BIOS table's warm boot entry;
 - `0005h` holds a `JP`;
@@ -247,13 +248,15 @@ Warm boot is `WBOOTR`, `src/boot.asm:56-82`. It is the second entry of the
 BIOS table, and the jump at `0000h` leads to it through the RAM table at
 `BF03h`. A program reaches it by returning from `0100h`, since the CCP
 pushes `0000h` before it jumps there (`src/cpm/ccp.asm:14`,
-`src/cpm/ccp.asm:213-216`), by jumping to `0000h`, or by calling BDOS
-function 0 (`src/cpm/bdos.asm:97-98`). The BDOS goes there itself after a
-`^C` typed as the first key of a line read with function 10
-(`src/cpm/bdos.asm:336-340`) and after it has reported a disk error such as
-`Bdos Err On B: Select` (`src/cpm/bdos.asm:2372-2375`,
-`src/cpm/bdos.asm:2391-2394`). A `^C` at the prompt
-is the first case, since the CCP reads its line with function 10:
+`src/cpm/ccp.asm:297-300`), by jumping to `0000h`, by calling BDOS function 0
+(`src/cpm/bdos.asm:132-133`), or by a call of BDOS function 47 that succeeds
+(`src/cpm/bdos.asm:65-71`). The BDOS goes there itself, through `CHDROP`,
+which first drops the rest of a chained line, a line split at `!` (Chapter
+11; `src/cpm/bdos.asm:75-77`), after a `^C` typed as the first key of a line
+read with function 10 (`src/cpm/bdos.asm:371-375`) and after it has reported
+a disk error such as `Bdos Err On B: Select` (`src/cpm/bdos.asm:2434-2437`,
+`src/cpm/bdos.asm:2453-2456`). A `^C` at the prompt is the first case, since
+the CCP reads its line with function 10:
 
 <!-- node book/capture.mjs ^C -->
 ```text
@@ -273,19 +276,21 @@ Warm boot's steps are:
 3. `PZINIT`, as above (`src/boot.asm:70`).
 4. `DRVBSY` cleared, so that a driver's `INIT` or `REMOVE` that a program's
    end interrupted is not taken to be still running (`src/boot.asm:71-72`).
-5. `CPMINIT`, which clears the CCP's and the BDOS's state, 533 bytes from
-   `CCPRAM` to `BDOSRME`, as a fresh load of them from disk would leave it,
-   puts the DMA address back at `0080h`, sets the command buffer's maximum
-   length to 127, fills the CCP stack's guard with `A5h` and marks the
-   deblocking buffer empty so that a changed card is read again
-   (`src/boot.asm:270-288`).
+5. `CPMINIT`, which clears the CCP's working memory and the BDOS's state,
+   331 bytes from `CCPCLR` to `BDOSRME`, as a fresh load of them from disk
+   would leave it, keeps the command buffer below `CCPCLR` for a chained
+   line's next piece, puts the DMA address back at `0080h`, sets the command
+   buffer's maximum length to 127, fills the CCP stack's guard with `A5h` and
+   marks the deblocking buffer empty so that a changed card is read again
+   (`src/boot.asm:270-289`, `src/ram.asm:68-81`).
 6. The console put right: `HWVREL` gives back the PICO9918 if a program
    claimed it, `VREST` restores the video display's mode if the console is
    on one, and `VTREGR` resets the scroll region to the whole screen
    (`src/boot.asm:74-78`).
-7. `CWBOOT`, which writes every changed line of the cache to the card and
-   prints `Write lost` if any write has failed since the last warm boot
-   (`src/boot.asm:79`, `src/cache.asm:347-355`).
+7. `CWBOOT`, which writes every changed line of the cache to the card and,
+   if any write has failed since the last warm boot, prints `Write lost` and
+   drops the rest of a chained line (`src/boot.asm:79`,
+   `src/cache.asm:347-358`).
 8. A jump to the CCP's entry, `CCPENT`, with `C` holding the drive and user
    byte from `0004h` (`src/boot.asm:80-82`).
 
@@ -293,41 +298,48 @@ Warm boot leaves the rest alone. The drive table, the DPHs and `LOGINV`, the
 BDOS's record of the logged-in drives, are in the BIOS's part of the
 workspace, which `CPMINIT` does not clear (`src/ram.asm:22-34`); the
 allocation vectors below `WSBASE` and the BIOS table at `BF00h` are outside
-what it clears too. The
-drivers below the BDOS entry, the registry's head and the video drivers'
-tables above the BIOS table, and the cache's lines and the history in EXPAND
-1 are kept too.
+what it clears too. The two FCBs and the command buffer, the 202 bytes of the
+CCP's RAM below `CCPCLR`, are outside it as well, and so is `CHPOS`, the byte
+above the BIOS table that marks a chained line's next piece, so the rest of
+the line outlives the warm boot (`src/ram.asm:68-81`, `src/ram.asm:240`), as
+Chapter 25 describes. The drivers below the BDOS entry, the registry's head
+and the video drivers' tables above the BIOS table, and the cache's lines and
+the history in EXPAND 1 are kept too.
 
-The CCP's entry does the rest (`src/cpm/ccp.asm:25-50`). It sets its
-stack and sets `WRFLAG` before it calls BDOS function 13, the disk reset.
-With that flag set, function 13 keeps each logged-in drive whose vector
-nothing has changed since it was last built and that still sums as it did
-then; a drive that a write has changed is marked to be rebuilt, at its next
+The CCP's entry does the rest (`src/cpm/ccp.asm:29-66`). It sets its stack,
+puts A: in place of a drive past D: or with no volume, since selecting one
+would give a `Select` error and a warm boot back to the same place
+(`src/cpm/ccp.asm:33-44`), and sets `WRFLAG` before it calls BDOS function
+13, the disk reset. With that flag set, function 13 keeps each logged-in
+drive whose vector nothing has changed since it was last built and that still
+sums as it did then; a drive that a write has changed is marked to be rebuilt, at its next
 selection, from its directory entries up to the highest one in use; any
 other is dropped and is scanned in full when it is next selected
-(`src/cpm/bdos.asm:445-507`). A program's own call of function 13 has no flag
+(`src/cpm/bdos.asm:481-542`). A program's own call of function 13 has no flag
 set and drops every drive, as CP/M 2.2 does. The CCP then sets the user
 number from the byte it was given, calls `STBOOT`, which starts the startup
 file once after a cold boot (Chapter 22 describes it), and selects the drive
-if it is not A.
+if it is not A. Its main loop then takes a chained line's next piece, if one
+is left, before the startup file's next line and before the console
+(`src/cpm/ccp.asm:80-84`).
 
 ## The cost of a warm boot
 
-On the starter card with the serial board, warm boot takes 35,602 T-states,
-about 9 milliseconds, from the first instruction of `WBOOTR` to the CCP's
+On the starter card with the serial board, warm boot takes 31,455 T-states,
+about 8 milliseconds, from the first instruction of `WBOOTR` to the CCP's
 label `STARTED`, where it starts printing the prompt. That figure was
 measured on the host model with nothing changed since the last warm boot. It
-reads no block. Of it, `CPMINIT` takes 11,669 T-states, the cache's flush in
+reads no block. Of it, `CPMINIT` takes 7,427 T-states, the cache's flush in
 `CWBOOT`, with no line to write, 8,002, and the CCP's entry with its disk
-reset 13,733.
+reset 13,828.
 
-A warm boot after `SAVE 8 X.COM` on drive A takes 123,655 T-states on the
+A warm boot after `SAVE 8 X.COM` on drive A takes 119,508 T-states on the
 same measure. The extra 88,000 or so are the rebuild of A's vector from its
 directory up to the last entry in use, read from the block cache with no
 card access. For comparison, a disk reset of the kind a program makes, which
-drops drive A and scans its whole directory again, takes 1,035,495 T-states
+drops drive A and scans its whole directory again, takes 1,035,496 T-states
 on the starter card even with the directory in the cache, and the first scan
 of drive B's 512 entries, with the card read for each of its 32 directory
-blocks, takes 9,163,463. The test `test/warmboot.test.mjs` checks the
+blocks, takes 9,163,477. The test `test/warmboot.test.mjs` checks the
 unchanged case on its own card: a warm boot that reads no block and takes at
 most 386,604 T-states (`test/warmboot.test.mjs:11-17`).
