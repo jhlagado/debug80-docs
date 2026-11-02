@@ -13,8 +13,8 @@ The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
 bottom is a driver that exchanges data with the card over SPI, bit by bit
 through one port. Above it, cold boot reads the container in the card's first
-blocks, checks it and then builds a drive table and a disk parameter header
-for each drive. At the top, the BIOS's disk entries turn a track and sector
+blocks, checks it and then builds the drive table and each drive's disk
+parameter header. At the top, the BIOS's disk entries turn a track and sector
 into a block of the card and a quarter of that block.
 
 This chapter takes the layers from the bottom up, and ends with the mount
@@ -110,9 +110,10 @@ container from the user's side and Appendix E lists its fields. The offsets
 the ROM uses come from `format/format.json` through the generated
 `gen/format.asm`, as Chapter 12 describes.
 
-A card can hold anything, so the ROM's `MOUNT` routine reads block 0 into
-`BLKBUF` and checks it in a fixed order, stopping at the first failure with
-that check's code (`src/vol.asm:8-18`, `src/vol.asm:20-135`):
+A card can hold anything, so the ROM's `MOUNT` routine checks block 0 before it
+uses any of it (`src/vol.asm:3-6`). It reads the block into `BLKBUF` and makes
+the checks in a fixed order, stopping at the first failure with that check's
+code (`src/vol.asm:8-18`, `src/vol.asm:20-135`):
 
 | Code | Check |
 | --- | --- |
@@ -182,7 +183,7 @@ start block `0800h`, length `0800h`, geometry 2, flags 0, drive 0, cache byte
 The BIOS needs a volume's place on the card and the BDOS needs its parameters,
 so mounting builds an entry in the drive table and a DPH. Each descriptor that
 names a drive is mounted by `MNONE` (`src/vol.asm:308-320`). `MNFILL` writes
-the drive's eight-byte entry in `DRVTAB`, which holds the start block in four
+the drive's eight-byte entry in `DRVTAB`: the start block in four
 bytes, the length in blocks in two, the geometry and a flags byte with
 read-only in bit 0 and written-behind in bit 1 (`src/vol.asm:322-351`,
 `src/ram.asm:22`). `DRVIDX` records which volume each drive holds, as its
