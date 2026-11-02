@@ -38,29 +38,28 @@ overlay off, MAIN 0 and EXPAND 0 in view (`src/layout.asm:19`).
 The latch can be written but not read, so TEC-OS keeps what it last wrote in a
 byte of page zero, `LATCHV` at `0040h` (`src/layout.asm:37`). A routine that
 changes a bank for a moment reads `LATCHV`, sets its bit and writes the result
-to the port. When it is done, it writes `LATCHV` to the port unchanged. The
+to the port, and when it is done it writes `LATCHV` to the port unchanged. The
 block cache's lookup is an example. It writes `LATCHV` with `LATEXP` added to
-put EXPAND 1 in view and searches the table of cache lines there,
-as Chapter 19 describes. It ends with
-`LD A,(LATCHV)` and `OUT (SYSLAT),A` (`src/cache.asm:42-44`,
-`src/cache.asm:74-75`).
+put EXPAND 1 in view and searches the table of cache lines there, as Chapter 19
+describes, and it ends with `LD A,(LATCHV)` and `OUT (SYSLAT),A`
+(`src/cache.asm:42-44`, `src/cache.asm:74-75`).
 
 Because each routine starts from `LATCHV`, a bank change leaves the latch's
 other bits as they were. Those are bit 0, bit 1, which the board calls PROTECT,
-and bit 7, CAPS. The equate `LATKEEP`, `83h`, names those bits, and no routine uses it
-(`src/layout.asm:17`). The matrix keyboard's Caps key toggles bit 7 in `LATCHV`
-and in the latch (`src/console.asm:392-397`).
+and bit 7, CAPS. The equate `LATKEEP`, `83h`, names those bits, but no routine
+uses it (`src/layout.asm:17`). The matrix keyboard's Caps key toggles bit 7 in
+`LATCHV` and in the latch (`src/console.asm:392-397`).
 
 The latch moves `8000h–BFFFh` from one half to the other, so anything TEC-OS
 must reach while EXPAND 1 is in view has to be outside the window. `LATCHV` is
-one such byte. It is in page zero, with the rest of the state TEC-OS keeps out
-of the window.
+one such byte, in page zero with the rest of the state TEC-OS keeps out of the
+window.
 
 ## Page zero
 
 CP/M puts its fixed addresses in the first 256 bytes of memory, and TEC-OS
 writes them as CP/M 2.2 does. Cold boot clears all of page zero
-(`src/boot.asm:15-21`). `PZINIT`, at cold boot and at every warm boot, writes
+(`src/boot.asm:15-21`), and `PZINIT`, at cold boot and at every warm boot, writes
 the parts TEC-OS sets (`src/boot.asm:218-265`):
 
 | Address | Contents |
@@ -81,7 +80,7 @@ of the lowest resident driver or, with none, the BDOS entry jump itself
 (`src/boot.asm:223-224`). At each warm boot `PZINIT` also rewrites the restart
 vectors, as Chapter 14 describes.
 
-The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS.
+The bytes `0040h–004Fh` are the sixteen that CP/M 2.2 leaves to the BIOS, and
 TEC-OS keeps there the state that has to be in view whatever the window shows
 (`src/layout.asm:35-52`):
 
@@ -105,14 +104,14 @@ TEC-OS keeps there the state that has to be in view whatever the window shows
 | `004Fh` | `VCURV` | 1 while the cursor cell is drawn as its reverse image |
 
 Two of these are published. The table at `C003h` has a word at `C008h` that
-points at `VWID`, so a program can find the console's size. A word at `C00Dh`
-points at `MAINS` (`src/abi.asm:10-13`). Chapter 15 describes the console's
-bytes.
+points at `VWID`, so a program can find the console's size, and a word at
+`C00Dh` that points at `MAINS` (`src/abi.asm:10-13`). Chapter 15 describes the
+console's bytes.
 
 On a board with MAIN 1, cold boot copies page zero into it as well
 (`src/boot.asm:140-142`, `src/boot.asm:172-183`). The jump at MAIN 1's `0000h`
-then leads to the RAM BIOS table in EXPAND 0. A program that ends with MAIN 1
-in view therefore still reaches warm boot.
+then leads to the RAM BIOS table in EXPAND 0, so a program that ends with
+MAIN 1 in view still reaches warm boot.
 
 ## The resident workspace
 
@@ -137,9 +136,9 @@ The image initialises none of it. `ram.asm` reserves each byte with `DS`, and
 cold boot and warm boot clear and set it (`src/ram.asm:1-4`).
 
 The fixed workspace, from `WSBASE` at `B958h` to `BEFFh`, has fixed addresses
-for a given build. Its size, 1,448 bytes, sets `WSBASE`. Chapter 12 describes how
-the build places it so that it ends at `BF00h`. The part is three blocks, one
-after the other (`src/ram.asm:1-3`).
+for a given build. Its size, 1,448 bytes, sets `WSBASE`, and Chapter 12
+describes how the build places it so that it ends at `BF00h`. This part is
+three blocks, one after the other (`src/ram.asm:1-3`).
 
 The first block is the BIOS's, from `DSKCUR` to the BIOS stack
 (`src/ram.asm:8-62`). It begins with the disk state: the drive, track, sector
@@ -193,13 +192,13 @@ needs 64 bytes, and a G8M volume, with `DSM` 2047, needs 256.
 
 Cold boot places the vectors after it has read the card, because the space
 each drive gets depends on the card. `ALVINIT` starts at `WSBASE` and works
-down. It gives each drive its vector in drive order and puts each one's address
-in the drive's DPH (`src/vol.asm:496-570`).
+down, giving each drive its vector in drive order and putting each one's
+address in the drive's DPH (`src/vol.asm:496-570`).
 
-A card of container format 1.1 whose drives field is N gets a
-256-byte slot for each of drives A to the Nth, mounted or not. Any of those
-drives can then later take any volume. Any other card, including every format 1.0 card, gets a slot for each
-drive it mounts, of the size its volume needs (`src/vol.asm:517-545`).
+A card of container format 1.1 whose drives field is N gets a 256-byte slot for
+each of drives A to the Nth, mounted or not, so any of those drives can later
+take any volume. Any other card, including every format 1.0 card, gets a slot
+for each drive it mounts, of the size its volume needs (`src/vol.asm:517-545`).
 `DRVSLOT` records each drive's slot: 0 for none, 1 for 64 bytes and 2 for 256
 (`src/ram.asm:29`, `src/vol.asm:546-551`). The starter card is format 1.0 with
 a G1M volume on A and a G8M volume on B. Its vectors take 64 and 256 bytes, 320
@@ -217,16 +216,16 @@ driver loaded, `PZTOP`, the word `PZINIT` puts at `0006h`, is this address
 (`src/ram.asm:34`, `src/boot.asm:223-230`).
 
 Every TEC-OS resident keeps that form. A driver's header and image are moved to
-a page boundary below the BDOS entry jump. The header's bytes at offset 6
-become the driver's jump, and loading the driver lowers the word at `0006h` to
-that jump (`src/drv.asm:1-5`, `src/drv.asm:16`, `src/boot.asm:121-124`). Chapter
-20 describes the loader.
+a page boundary below the BDOS entry jump, so the header's bytes at offset 6
+are at an address of the form `xx06h`. They become the driver's jump, and
+loading the driver lowers the word at `0006h` to that jump (`src/drv.asm:1-5`,
+`src/drv.asm:16`, `src/boot.asm:121-124`). Chapter 20 describes the loader.
 
 The word at `0006h` is the top of the TPA, so the card sets how much memory
 programs have. The starter card gives 46,854 bytes, from `0100h` to `B805h`.
 The largest card, four G8M volumes, takes four 256-byte vectors, puts the entry
 at `B506h` and leaves 46,086 bytes. The build works out both figures in its
-census. It checks that the starter card's TPA is at least 45,830 bytes
+census and checks that the starter card's TPA is at least 45,830 bytes
 (`tools/build.mjs:226-236`, `tools/build.mjs:280-281`).
 
 ## The four stacks
@@ -253,8 +252,8 @@ bytes below that return word (`src/cpm/ccp.asm:210-216`). CP/M 2.2 gives a
 program eight levels of stack and the return word, and with an NMI's frame
 those take 20 of the 30 bytes (`src/layout.asm:77-79`). Below the stack is a
 guard of 13 bytes, `STKGUARD`, which warm boot fills with `A5h`
-(`src/ram.asm:115-120`, `src/boot.asm:281-285`). A guard byte that is no longer
-`A5h` shows that the stack went past its bottom.
+(`src/ram.asm:115-120`, `src/boot.asm:281-285`), so a guard byte that is no
+longer `A5h` shows that the stack went past its bottom.
 
 The BDOS's stack, `STKBASE` to `STKTOP`, is 54 bytes at `BECAh–BEFFh`
 (`src/ram.asm:183-185`). The BDOS moves to it on entry, keeping the caller's
@@ -267,7 +266,7 @@ them gives the rule: each is the deepest use and a quarter more
 (`src/layout.asm:76-79`).
 
 The measurement is `test/stacks.test.mjs`. The test boots the model under the
-heaviest workloads of the test suite. It runs them on each console, on a
+heaviest workloads of the test suite, and it runs them on each console, on a
 volume written behind, without a card and on the CCP's deepest paths. It
 records every write to memory, the clearing `LDIR`s excepted, and the lowest
 address written in each stack gives its depth. It passes when each stack's
@@ -279,8 +278,8 @@ measured depths include no NMI frame, though the comment at `src/layout.asm:77`
 says they do.
 
 A loaded driver runs on its caller's stack, so the drivers' own depths add to
-these. `DRVLIM` gives the most that the drivers together may add to each stack.
-The limits are 8 bytes on the BDOS's, 12 on the BIOS's and 6 on the CCP's
+these. `DRVLIM` gives the most that the drivers together may add to each stack:
+8 bytes on the BDOS's, 12 on the BIOS's and 6 on the CCP's
 (`src/data3.asm:112`). Chapter 20 describes how the loader uses them.
 
 ## EXPAND 1
@@ -311,8 +310,8 @@ programs through BDOS function 50. They treat bank 1 as EXPAND 1 from `8000h`
 up to a low mark, `XMARK`. Cold boot sets the mark to `80h`, the start of the
 window, so that bank 1 has no bytes a program may copy to or from
 (`src/xmove.asm:1-7`, `src/boot.asm:163-165`, `src/layout.asm:23`). `MVRANGE`
-rejects every range in bank 1 that does not lie between `8000h` and the mark.
-In bank 0 it rejects every range that does not end by the word at `0006h`
+rejects every range in bank 1 that does not lie between `8000h` and the mark,
+and in bank 0 every range that does not end by the word at `0006h`
 (`src/xmove.asm:147-169`). TEC-OS's own copies, from the cache's lines to the
 DMA buffer and back, use the same routine without the check, `MVCOPY`
 (`src/xmove.asm:27-37`, `src/cache.asm:259-269`).
