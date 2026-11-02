@@ -177,7 +177,7 @@ ends with its command printed back with a question mark.
 ## The DRV file and its relocation data
 
 A driver is the code that does move. The loader puts it in whole pages
-immediately below the current top of the program area. The page depends on the
+immediately below the current top of the TPA. The page depends on the
 drivers already installed. `makeDrv` in `tools/lib/drv.mjs:87` assembles the
 driver's source at `0000h` and at `0100h`. It keeps the first assembly, made for
 page 0, with the driver's 25-byte header at its start
@@ -290,4 +290,4 @@ A>
 the `JP`'s address at offset 8, less the driver's own page
 (`src/drv.asm:314-319`). That byte is the old top's page, `B8h`, so the count
 includes the part of the last page the driver doesn't fill. `PICO.DRV`'s 1,301
-bytes take six pages, 1,536 bytes of the program area.
+bytes take six pages, 1,536 bytes of the TPA.

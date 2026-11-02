@@ -188,7 +188,7 @@ never selects another MAIN (`src/xmove.asm:6`).
 
 A command whose type is `SVC` calls `SVCGO`, as Chapter 17 explains
 (`src/cpm/ccp.asm:267-276`). `SVCGO` calls `LOADCOM`, the routine that reads a
-`.COM` file to `0100h`. The file is then in the program area, up to the BDOS
+`.COM` file to `0100h`. The file is then in the TPA, up to the BDOS
 entry's page, and `LOADTOP` gives its end (`src/glcd.asm:68-69`,
 `src/cpm/ccp.asm:359-371`, `src/ram.asm:230`). `SVCGO` then calls `SVCLOAD`
 (`src/glcd.asm:70`). Chapter 22 describes what the console does after a good
@@ -293,7 +293,7 @@ A warm boot during `INIT` leaves the word at `0006h` correct, because `PZTOP` is
 untouched. `PZINIT` writes `PZTOP` to `0006h` (`src/boot.asm:223-224`), and warm
 boot clears `SVCBSY` (`src/boot.asm:71-72`). The pages go back as if the load
 had never started, and `test/svc.test.mjs:432-445` checks that a later load
-works. A hook already in the table then points into the program area, which is
+works. A hook already in the table then points into the TPA, which is
 why hooks go last (`test/svc.test.mjs:461-468`). A reset during a hung `INIT` is
 recognised all the same, because `RSLCAP` doesn't compare the word at `0006h`
 with `PZTOP` (`src/boot.asm:88-89`).
@@ -409,7 +409,7 @@ empties both lists (`src/boot.asm:23-27`, `test/svc.test.mjs:353`).
 At bd15528 the word at `0006h` points at `xx06h` because the BDOS entry has
 that form in CP/M 2.2, as Chapter 13 explains, and the header keeps it by
 placing its `JP` at offset 6 (`src/svc.asm:177-179`). So offsets 0 to 5 of the
-lowest service lie below the word, in the program area. Those six bytes are
+lowest service lie below the word, in the TPA. Those six bytes are
 live: `SERVICES` reads the owner link at offset 2 (`src/svc.asm:323-324`),
 `UNLOAD` reads the flags at offset 3, `REMOVE`'s offset at 4 and 5, and
 restores from offsets 0 to 2 (`src/svc.asm:36-48`).
@@ -480,7 +480,7 @@ The census column is the deepest use of each stack in `test/stacks.test.mjs`,
 which records every write to memory under the heaviest workloads. The test
 passes only with a quarter of each stack free (`test/stacks.test.mjs:238-239`).
 Base is the same figure from its runs on the serial terminal and the PICO9918
-alone, with the write-behind run: 32, 16 and 16
+alone, with the run on a volume written behind: 32, 16 and 16
 (`test/stacks.test.mjs:211-222`). The census is higher for the BDOS and the CCP
 because of the runs with `GLCD.SVC`, which give 34 and 22.
 
