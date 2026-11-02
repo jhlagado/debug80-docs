@@ -12,20 +12,19 @@ Checked against TEC-OS 08da4d6, with the starter card's `EDIT.COM` from Edit
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`.
 
 Everything you do at the `A>` prompt goes through the CCP, the command
-processor that Chapter 1 introduced: it reads the line you type, finds the
-command it names and runs it. This chapter describes how a line is read and
-how file names and wildcards are written in it, then each command built into
-the CCP, the way a program is found and started, user areas, and the
-messages the CCP and the BDOS print when a command fails. It ends with the
-history of command lines behind `^W` and `^N`.
+processor that Chapter 1 introduced. The CCP reads the line you type, finds
+the command the line names and runs it. This chapter describes the line, its
+file names and wildcards, and each command built into the CCP. It then
+describes how a program is found and started, user areas, the messages a
+failed command prints and the history of command lines behind `^W` and `^N`.
 
 ## The line
 
-The CCP reads a line with BDOS function 10, CP/M's line input, with the
-editing keys that Chapter 2 lists, and Return ends it. The line holds up to
+The CCP reads a line with BDOS function 10, CP/M's line input, which gives you
+the editing keys that Chapter 2 lists. Return ends the line. It holds up to
 127 characters, and a 127th character ends it as Return would. Before it
-searches for the command, the CCP turns every lower-case letter into a capital,
-so `dir *.com` and `DIR *.COM` are the same command:
+searches for the command, the CCP turns every lower-case letter into a
+capital, so `dir *.com` and `DIR *.COM` are the same command:
 
 <!-- node book/capture.mjs "dir *.com" "DIR ????.COM" "DIR A:P*.*" "DIR B:" -->
 ```text
@@ -43,28 +42,28 @@ NO FILE
 A>
 ```
 
-The echo of the line is what you typed, in lower case if you typed it so.
-The first word of the line is the command, and the words after it, separated
-by spaces, are its arguments. A command is a built-in, one of the commands
-the CCP carries in the ROM, or else the name of a program file on the card.
+The echo of the line is what you typed, in lower case if you typed it so. The
+first word of the line is the command, and the words after it, separated by
+spaces, are its arguments. A command is a built-in, one of the commands the
+CCP carries in the ROM, or else the name of a program file on the card.
 
-Two characters have a meaning of their own in a line. `!` separates
-commands, so `DIR!TYPE README.TXT` runs `DIR` and then `TYPE`, and a command
-that starts with `:` runs only if the one before it succeeded. Chapter 11
-describes both.
+Two characters have a meaning of their own in a line. `!` separates commands,
+so `DIR!TYPE README.TXT` runs `DIR` and then `TYPE`. A command that starts
+with `:` runs only if the one before it succeeded. Chapter 11 describes both.
 
 ## File names
 
-A CP/M file name has up to eight characters, then a full stop and a type of
-up to three: `README.TXT`, `PICO.DRV`. The type may be left out, with its
-full stop, and then it is three spaces. A drive letter and a colon in front
-of the name, as in `B:NOTES.TXT`, name a file on another drive; without one,
-the name is on the current drive, the one the prompt shows. A name may hold
-any character but a space and these: `<`, `>`, `,`, `;`, `:`, `[`, `]`,
-`%`, `|`, `(`, `)`, `/` and `\`, with `.` and `=` taken as the ends of a
-name's parts. A name that breaks these rules, or a part that is too long,
-makes the command fail, and the CCP prints the word it was reading back with
-a question mark:
+A CP/M file name has up to eight characters, then a full stop and a type of up
+to three: `README.TXT`, `PICO.DRV`. The type may be left out, with its full
+stop, and then it is three spaces. A drive letter and a colon in front of the
+name, as in `B:NOTES.TXT`, name a file on another drive. Without one, the name
+is on the current drive, the one the prompt shows.
+
+A name may hold any character but a space and these: `<`, `>`, `,`, `;`, `:`,
+`[`, `]`, `%`, `|`, `(`, `)`, `/` and `\`. `.` and `=` are taken as the ends
+of a name's parts. A name that breaks these rules, or a part that is too long,
+makes the command fail. The CCP prints the word it was reading back with a
+question mark:
 
 <!-- node book/capture.mjs "DIR VERYLONGNAME.TXT" "TYPE *.CMD" "DIR A: B:" -->
 ```text
@@ -82,30 +81,32 @@ A>
 
 `TYPE *.CMD` fails because `TYPE` takes one file and `*.CMD` is a wildcard,
 which the next section explains. `DIR A: B:` fails because `DIR` takes one
-argument, and the word printed back is the command's first argument, `A:`,
-not the extra one after it. Every built-in but `COPY` and `UNLOAD` prints
-its first argument so, and one that needs an argument and has none prints
-the question mark alone (`TYPE` prints `NO FILE`): `ERA` with no name prints
-`?`. `COPY` and `UNLOAD` print their own names, `COPY?` and `UNLOAD?`, and so
-do an unknown command and a program that won't load.
+argument. The word printed back is the command's first argument, `A:`, not the
+extra one after it.
+
+Every built-in but `COPY` and `UNLOAD` prints its first argument in this way.
+A built-in that needs an argument and has none prints the question mark alone:
+`ERA` with no name prints `?`. The exception is `TYPE`, which prints
+`NO FILE`. `COPY` and `UNLOAD` print their own names, `COPY?` and `UNLOAD?`.
+So do an unknown command and a program that won't load.
 
 ## Wildcards
 
-Two characters in a name match a group of files. `?` matches any one
-character in its place, and `*` matches the rest of the part it is in: in the
-name, up to eight characters, or in the type, up to three. The CCP turns a
-`*` into `?` characters to the end of its part, so `P*.*` is
-`P???????.???` and matches every file whose name starts with `P`, whatever
-its type. Characters after a `*` in the same part are passed over, so `D*X`
-is the same as `D*`. A `?` also matches a space, and a name shorter than eight
-characters is padded with spaces, so `????.COM` is `????` and four spaces:
-in the transcript above it matches the names of up to four characters with
-the type `COM`, and not `PROBE.COM` or `MOUNT.COM`.
+Two characters in a name match a group of files. `?` matches any one character
+in its place. `*` matches the rest of the part it is in: in the name, up to
+eight characters, or in the type, up to three. The CCP turns a `*` into `?`
+characters to the end of its part. So `P*.*` is `P???????.???` and matches
+every file whose name starts with `P`, whatever its type. Characters after a
+`*` in the same part are passed over, so `D*X` is the same as `D*`.
+
+A `?` also matches a space, and a name shorter than eight characters is padded
+with spaces. So `????.COM` is `????` and four spaces. In the transcript above
+it matches the names of up to four characters with the type `COM`, and not
+`PROBE.COM` or `MOUNT.COM`.
 
 Only `DIR` and `ERA` take a name with wildcards. `TYPE`, `REN`, `SAVE` and
-`COPY` each work on one file, and a wildcard in their names makes the
-command fail, as `TYPE *.CMD` did. The command's own name may hold no
-wildcard either.
+`COPY` each work on one file, and a wildcard in their names makes the command
+fail, as `TYPE *.CMD` did. The command's own name may hold no wildcard either.
 
 ## The built-in commands
 
@@ -126,35 +127,35 @@ The CCP's built-in commands are these:
 | `DRIVERS` | Lists the drivers installed |
 | `UNLOAD` | Removes the driver installed last |
 
-A built-in's name is matched only as a whole word, followed by a space or
-the end of the line, so `DIRX` is the name of a program, not `DIR` with
-something after it. A drive in front of a built-in's name, as in `A:DIR`,
-also makes it the name of a program, here `DIR.COM` on drive A.
+A built-in's name is matched only as a whole word, followed by a space or the
+end of the line. So `DIRX` is the name of a program, not `DIR` with something
+after it. A drive in front of a built-in's name, as in `A:DIR`, also makes it
+the name of a program, here `DIR.COM` on drive A.
 
 ## DIR
 
 `DIR` with no argument lists every file on the current drive, and `DIR B:`
 every file on drive B. A name, with or without a drive, lists only the files
 it matches. Each file appears as its name and type, in columns 13 characters
-wide, as many as fit the console's width: six on the serial terminal and on
-the PICO9918 at 80 columns, and one on the graphics LCD. The last line gives
-the number of files listed and the free space on the drive listed, in KiB.
-When no file matches, `DIR` prints `NO FILE`.
+wide. The console's width sets how many columns fit: six on the serial
+terminal and on the PICO9918 at 80 columns, and one on the graphics LCD. The
+last line gives the number of files listed and the free space on the drive
+listed, in KiB. When no file matches, `DIR` prints `NO FILE`.
 
-A listing longer than the screen stops with `[more]`, as Chapter 2
-describes. `DIR` lists only the files of the current user area, described
-below, and it leaves out a file whose system attribute is set. `tecvol put
---sys` sets that attribute on a file put on a card from a PC, and a program
-can set it with BDOS function 30. A system file is still there for every
-other command: `TYPE` prints it and a command runs it.
+A listing longer than the screen stops with `[more]`, as Chapter 2 describes.
+`DIR` lists only the files of the current user area, described below, and it
+leaves out a file whose system attribute is set. `tecvol put --sys` sets that
+attribute on a file put on a card from a PC, and a program can set it with
+BDOS function 30. A system file is still there for every other command: `TYPE`
+prints it and a command runs it.
 
 `DIR`'s layout is TEC-OS's own, and CP/M 2.2's `DIR` prints the names in a
 different layout.
 
 ## TYPE
 
-`TYPE` prints a text file. It reads the file a record of 128 bytes at a time
-and stops at the first `^Z`, the byte `1Ah` that ends a CP/M text file, or at
+`TYPE` prints a text file. It reads the file a record of 128 bytes at a time.
+It stops at the first `^Z`, the byte `1Ah` that ends a CP/M text file, or at
 the end of the file's last record:
 
 <!-- node book/capture.mjs "TYPE STARTUP.CMD" -->
@@ -166,24 +167,25 @@ GLCD.DRV
 A>
 ```
 
-`STARTUP.CMD` ends its last line with a carriage return and a line feed, and
-the blank line after it is the one the CCP prints before the prompt. A file
-that isn't there gives `NO FILE`, and so does `TYPE` with no name. Like
-`DIR`, `TYPE` stops at `[more]` when the screen fills.
+`STARTUP.CMD` ends its last line with a carriage return and a line feed. The
+blank line after it is the one the CCP prints before the prompt. A file that
+isn't there gives `NO FILE`, and so does `TYPE` with no name. Like `DIR`,
+`TYPE` stops at `[more]` when the screen fills.
 
 ## COPY, REN and ERA
 
-`COPY` copies one file to another name, to another drive, or both. Chapter 1
-showed it in the starter card's `README.TXT`. When the destination is a
-drive alone, as in `COPY README.TXT B:`, the copy has the source's name. A
+`COPY` copies one file to another name, to another drive or both. Chapter 1
+showed it in the starter card's `README.TXT`. When the destination is a drive
+alone, as in `COPY README.TXT B:`, the copy has the source's name. A
 destination with a type and no name, such as `B:.DOC` or `B:.*`, also takes
-the whole of the source's name, so the type you typed has no effect. The
-copy goes a record at a time, and `COPIED` and a number report the records
-copied, in hexadecimal: `0005` is five records, 640 bytes. A file of the
-destination's name is erased first, so `COPY` replaces it. `REN` renames a
-file, with the new name first, an equals sign and the old name after it, as
-CP/M 2.2 has it. `ERA` erases files. Here a copy of `README.TXT` is made on
-drive B under two names, one is renamed and then erased:
+the whole of the source's name. The type you typed has no effect. The copy
+goes a record at a time. `COPIED` and a number report the records copied, in
+hexadecimal: `0005` is five records, 640 bytes. A file of the destination's
+name is erased first, so `COPY` replaces it.
+
+`REN` renames a file, with the new name first, an equals sign and the old name
+after it, as CP/M 2.2 has it. `ERA` erases files. Here a copy of `README.TXT`
+is made on drive B under two names, and one is renamed and then erased:
 
 <!-- node book/capture.mjs "COPY README.TXT B:" "COPY README.TXT B:COPY.TXT" B: DIR "REN NOTES.TXT=COPY.TXT" "REN NOTES.TXT=README.TXT" DIR "ERA NOTES.TXT" "ERA NOTES.TXT" DIR -->
 ```text
@@ -213,14 +215,14 @@ B>
 ```
 
 Each 640-byte file takes 4 KiB of the drive, since the volume on drive B,
-`WORK`, gives space to files in blocks of 4 KiB; Chapter 4 describes the
+`WORK`, gives space to files in blocks of 4 KiB. Chapter 4 describes the
 volumes and their blocks. The second `REN` fails because a file of the new
 name, `NOTES.TXT`, is there already, and `REN` changes nothing then. A `REN`
-whose old name isn't there prints `NO FILE`, and so does an `ERA` that
-matches no file, as the second `ERA` above shows.
+whose old name isn't there prints `NO FILE`. So does an `ERA` that matches no
+file, as the second `ERA` above shows.
 
 `COPY` works in the current user area, on both drives. A name with no drive
-means the current drive, and a destination that is then the same file as the
+means the current drive. A destination that is then the same file as the
 source fails with `COPY?` before any file is opened. On drive A that covers
 `COPY README.TXT A:`, `COPY A:README.TXT README.TXT` and `COPY README.TXT`
 with no destination, which has the source's name and the current drive. Here
@@ -245,13 +247,13 @@ A>
 
 The same rule makes `COPY A:README.TXT` on drive B a copy to drive B.
 
-`COPY` has four messages of its own: `NO SOURCE` when the source isn't there,
-`CANNOT MAKE DEST` when the destination's directory is full, `WRITE ERROR`
-when a record can't be written, as on a full drive, and `CLOSE ERROR` when
-the finished copy can't be closed.
+`COPY` has four messages of its own. `NO SOURCE` means the source isn't there,
+and `CANNOT MAKE DEST` means the destination's directory is full.
+`WRITE ERROR` means a record can't be written, as on a full drive.
+`CLOSE ERROR` means the finished copy can't be closed.
 
 Before it erases with a name that matches every file, such as `*.*` or
-`B:*.*`, `ERA` prints `ALL (Y/N)?` and reads a line; a `Y` as the line's first
+`B:*.*`, `ERA` prints `ALL (Y/N)?` and reads a line. A `Y` as the line's first
 character, in either case, erases the files, and anything else leaves them:
 
 <!-- node book/capture.mjs "COPY README.TXT B:" B: "@start ERA *.*" $'@key n\r' DIR "@start ERA *.*" $'@key y\r' DIR -->
@@ -281,12 +283,13 @@ B>
 `SAVE` writes memory to a file, from `0100h`, in pages of 256 bytes:
 `SAVE 2 TWO.COM` writes the 512 bytes at `0100h–02FFh`. `0100h` is where the
 CCP loads each program, so `SAVE` keeps whatever the last program loaded or
-left there. In CP/M 2.2 it was the way to keep a program loaded and patched with a
-debugger. The number is decimal and may be 0, which makes an empty file.
+left there. In CP/M 2.2 it was the way to keep a program loaded and patched
+with a debugger. The number is decimal and may be 0, which makes an empty
+file.
 
-The pages must stay below the BDOS, whose entry is the word at `0006h`, so
-the number must be less than the high byte of that word. On the starter card
-with no driver installed the word is `B806h`, and `SAVE` takes up to 183
+The pages must stay below the BDOS, whose entry is the word at `0006h`. The
+number must therefore be less than the high byte of that word. On the starter
+card with no driver installed the word is `B806h`, and `SAVE` takes up to 183
 pages:
 
 <!-- node book/capture.mjs B: "SAVE 2 TWO.COM" "SAVE 184 BIG.COM" DIR -->
@@ -307,13 +310,12 @@ full, `SAVE` prints `NO SPACE`.
 
 ## Drives
 
-A drive letter and a colon, alone on the line, select that drive: the prompt
-shows it, and file names with no drive are on it. TEC-OS has four drives, A
-to D, and a drive has a volume only when the card's header or the `MOUNT`
-program put one there; Chapter 4 describes both. The starter card has
-volumes on A and B. Selecting a drive with no volume, or naming a file on
-one, gives the BDOS's error for an empty drive, and the prompt stays on the
-drive it was on:
+A drive letter and a colon, alone on the line, select that drive. The prompt
+shows it, and file names with no drive are on it. TEC-OS has four drives, A to
+D. A drive has a volume only when the card's header or the `MOUNT` program put
+one there, as Chapter 4 describes. The starter card has volumes on A and B.
+Selecting a drive with no volume, or naming a file on one, gives the BDOS's
+error for an empty drive. The prompt stays on the drive it was on:
 
 <!-- node book/capture.mjs B: "@start C:" "@key x" "@start DIR C:" "@key x" -->
 ```text
@@ -326,24 +328,23 @@ Bdos Err On C: Select
 B>
 ```
 
-After the message TEC-OS waits for a key, `x` in this run, and then prints
-the prompt. The section on the BDOS's messages, below, explains the wait.
-The letters `E:` to `P:` name drives as CP/M 2.2 has them, and they give the
-same error; `Q:` and the letters after it aren't drives, and the CCP prints
-`Q:?`.
+After the message TEC-OS waits for a key, `x` in this run, and then prints the
+prompt. The section on the BDOS's messages, below, explains the wait. The
+letters `E:` to `P:` name drives as CP/M 2.2 has them, and they give the same
+error. `Q:` and the letters after it aren't drives, and the CCP prints `Q:?`.
 
-The CCP stores the drive and the user area in the byte at `0004h` each time
-it prints the prompt, and a program's end leaves the prompt on that drive. A reset
-returns the prompt to drive A.
+The CCP stores the drive and the user area in the byte at `0004h` each time it
+prints the prompt. A program's end leaves the prompt on that drive, and a
+reset returns it to drive A.
 
 ## User areas
 
-CP/M divides the files on a drive into 16 user areas, numbered 0 to 15.
-Every file belongs to one, and a command, a program and `DIR` work only on the
-files of the current user area, on every drive. TEC-OS starts in user area
-0, and the starter card's files are all there. `USER` and a number select
-another area. The prompt doesn't show the area, so the files of area 0
-disappear from view after `USER 3`:
+CP/M divides the files on a drive into 16 user areas, numbered 0 to 15. Every
+file belongs to one. A command, a program and `DIR` work only on the files of
+the current user area, on every drive. TEC-OS starts in user area 0, and the
+starter card's files are all there. `USER` and a number select another area.
+The prompt doesn't show the area, so the files of area 0 disappear from view
+after `USER 3`:
 
 <!-- node book/capture.mjs "USER 3" "SAVE 1 B:MINE.COM" "DIR B:" VOLS "USER 0" "DIR B:" -->
 ```text
@@ -361,26 +362,26 @@ NO FILE
 A>
 ```
 
-In area 3 the program `VOLS` isn't found, since `VOLS.COM` is in area 0, and
-back in area 0 `MINE.COM` is out of view. `COPY` works within one area, so
-it can't move a file from one area to another. `tecvol put --user N`, from
-Chapter 4, puts a file from a PC into area `N`. A number outside 0 to 15,
-or `USER` with no number, fails with a question mark.
+In area 3 the program `VOLS` isn't found, since `VOLS.COM` is in area 0. Back
+in area 0, `MINE.COM` is out of view. `COPY` works within one area, so it
+can't move a file from one area to another. `tecvol put --user N`, from
+Chapter 4, puts a file from a PC into area `N`. A number outside 0 to 15, or
+`USER` with no number, fails with a question mark.
 
-The user area survives a program's end and a warm boot, like the drive, and
-a reset returns to area 0.
+The user area survives a program's end and a warm boot, like the drive, and a
+reset returns to area 0.
 
 ## Drivers
 
 A command that names a file of type `.DRV` installs the driver it holds. A
 driver is code that TEC-OS keeps in memory below the BDOS until a reset or
 `UNLOAD`, as Chapter 1 explained for the display drivers. `DRIVERS` lists the
-drivers installed, the newest first, each with the number of 256-byte pages
-it takes. `UNLOAD` removes the newest one, if that driver can be removed;
-otherwise it changes nothing and prints `UNLOAD?`, and it prints the same
-with no driver installed. On the web page's board, where `PICO.DRV` is
-installed at startup, the PICO9918's screen shows this, from the startup
-file's second line on:
+drivers installed, the newest first, each with the number of 256-byte pages it
+takes. `UNLOAD` removes the newest one if that driver can be removed.
+Otherwise it changes nothing and prints `UNLOAD?`, and it prints the same with
+no driver installed. On the web page's board, where `PICO.DRV` is installed at
+startup, the PICO9918's screen shows this, from the startup file's second line
+on:
 
 <!-- node book/capture.mjs --board pico --screen DRIVERS UNLOAD -->
 ```text
@@ -406,10 +407,10 @@ Chapter 10 describes how a driver is made.
 
 A command that isn't a built-in names a program. The CCP searches the
 directory of the current drive, in the current user area, for the file
-`NAME.COM`, loads it at `0100h` and starts it. If there is no `NAME.COM`, it
-searches for `NAME.PRL`, a program in Digital Research's relocatable PRL format, which
-Chapter 10 describes. A drive in front of the name runs the program from
-that drive, and the CCP searches no other:
+`NAME.COM`. It loads the file at `0100h` and starts it. If there is no
+`NAME.COM`, it searches for `NAME.PRL`, a program in Digital Research's
+relocatable PRL format, which Chapter 10 describes. A drive in front of the
+name runs the program from that drive, and the CCP searches no other:
 
 <!-- node book/capture.mjs B: "A:VOLS" VOLS "README.TXT" -->
 ```text
@@ -427,20 +428,20 @@ README.TXT?
 B>
 ```
 
-A type typed after a program's name is replaced: `VOLS.COM` runs `VOLS`, and
-`README.TXT` as a command searches for `README.COM` and then `README.PRL`,
-and finds neither. The one exception is `.DRV`, which installs a driver.
+A type typed after a program's name is replaced: `VOLS.COM` runs `VOLS`.
+`README.TXT` as a command searches for `README.COM` and then `README.PRL` and
+finds neither. The exception is `.DRV`, which installs a driver.
 
 The command fails, with its name and a question mark, when neither file is
-there, and also when `NAME.COM` is there but doesn't load: when a read of it
-fails, or when it is too large for the memory between `0100h` and the BDOS.
+there. It also fails when `NAME.COM` is there but doesn't load. A read of it
+may fail, or it may be too large for the memory between `0100h` and the BDOS.
 A `NAME.COM` that doesn't load is not passed over for a `NAME.PRL`.
 
 The rest of the line after the program's name is the command tail. The CCP
-copies it to `0080h` for the program, and it fills the two file control
-blocks at `005Ch` and `006Ch` from its first two words, so that a program
-that takes a file name finds it ready. Chapter 6 describes both. When the
-program ends, TEC-OS runs a warm boot, and the CCP starts a new line and
+copies it to `0080h` for the program. It also fills the two file control
+blocks at `005Ch` and `006Ch` from the tail's first two words. A file name is
+then ready for a program that takes one. Chapter 6 describes both. When the
+program ends, TEC-OS runs a warm boot. The CCP then starts a new line and
 prints the prompt.
 
 ## The CCP's messages
@@ -463,7 +464,7 @@ Appendix D lists every message TEC-OS prints.
 ## The BDOS's messages
 
 The BDOS prints its own message when a disk operation can't be done at all.
-The message is `Bdos Err On`, the drive, and one of four causes:
+The message is `Bdos Err On`, the drive and one of four causes:
 
 | Message | Cause |
 | --- | --- |
@@ -473,9 +474,9 @@ The message is `Bdos Err On`, the drive, and one of four causes:
 | `Bdos Err On B: R/O` | the drive was made read-only by BDOS function 28 |
 
 After printing the message, the BDOS waits for a key. When the key comes it
-ends the command, or the program that made the call, with a warm boot. In
-CP/M 2.2 any key but `^C` there passes over a `Bad Sector` error and the
-program goes on; in TEC-OS every key ends it.
+ends the command, or the program that made the call, with a warm boot. In CP/M
+2.2 any key but `^C` there passes over a `Bad Sector` error and the program
+goes on. In TEC-OS every key ends it.
 
 A write to a read-only volume, such as one made with `tecvol create`'s `:ro`
 in Chapter 4, gives `Bad Sector`, the message for a failed disk write. This
@@ -509,12 +510,12 @@ cause of `R/O`, stays so until the next warm boot.
 
 TEC-OS keeps the lines typed at the CCP's prompt, in a store that Chapter 23
 describes. `^W` at the prompt replaces the line being typed with the line
-typed before it, and a second `^W` with the one before that; `^N` moves the
+typed before it, and a second `^W` with the one before that. `^N` moves the
 other way, toward the newest, and one step past the newest leaves an empty
-line. A line brought back can be edited with the keys
-of Chapter 2 and run with Return, as if it had been typed. Here `DIR *.DRV`
-and `CON` were typed, then `^W`, `^W` and Return; the PICO9918's screen
-shows `DIR *.DRV` brought back and run again:
+line. A line brought back can be edited with the keys of Chapter 2 and run
+with Return, as if it had been typed. Here `DIR *.DRV` and `CON` were typed,
+then `^W`, `^W` and Return. The PICO9918's screen shows `DIR *.DRV` brought
+back and run again:
 
 <!-- node book/capture.mjs --board pico --screen "DIR *.DRV" CON "@start "$'\x17\x17' -->
 ```text
@@ -533,9 +534,9 @@ PICO.DRV     PICO40.DRV   PICO32.DRV   GLCD.DRV
 A>
 ```
 
-`$'\x17'` is the shell's way of writing `^W`, and the capture's `@start`
-line types its keys and a Return together. The history holds 256 bytes of
-lines, and the oldest go first when it fills. A line the same as the newest
-is not stored again, and the lines of the startup file are not stored at all.
-A warm boot keeps the history, and a reset empties it. In a line that a
-program reads with function 10, `^W` and `^N` are characters like any other.
+`$'\x17'` is the shell's way of writing `^W`, and the capture's `@start` line
+types its keys and a Return together. The history holds 256 bytes of lines,
+and the oldest go first when it fills. A line the same as the newest is not
+stored again. The lines of the startup file are not stored at all. A warm boot
+keeps the history, and a reset empties it. In a line that a program reads with
+function 10, `^W` and `^N` are characters like any other.
