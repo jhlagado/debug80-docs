@@ -35,8 +35,10 @@ does. `DIR` lists with functions 17 and 18, `TYPE` reads with function 20 and
 
 Outside that interface the CCP reads a few of TEC-OS's own bytes: the
 console's width and height at `0048h` and `0049h`, the console mode, the
-IOBYTE and the top of the TPA at `0007h`. It also reads the BDOS's flags
-`HFLAG` and `WRFLAG` and the return code `PRGCODE`. It calls a few of TEC-OS's
+IOBYTE and the top of the TPA at `0007h`. It also sets the BDOS's flags
+`HFLAG` and `WRFLAG`, and it reads and sets the return code `PRGCODE`
+(`src/cpm/ccp.asm:38-39`, `src/cpm/ccp.asm:72-73`, `src/cpm/ccp.asm:114`,
+`src/cpm/ccp.asm:145`, `src/cpm/ccp.asm:338`). It calls a few of TEC-OS's
 routines directly: startup's `STBOOT` and `STLINE`, the driver loader and the
 driver commands' routines `CMDDRV` and `DRVUNL`. The others are `GLCLD` for
 `CON UC1`, the PRL loader and the BDOS's division, `DIV16`
@@ -289,8 +291,8 @@ record's place from `0100h` up. The reading stops at the end of the file or
 when the address reaches the page of the word at `0006h`, the byte at `0007h`
 (`src/cpm/ccp.asm:352-370`).
 
-At that page the file still has to end, so `LOADLIM` reads one more record
-into `LOADBUF` to find out. If that read is the end of the file the load is
+A file may end exactly at that page, so `LOADLIM` reads one more record, into
+`LOADBUF`, where it can't reach the resident CCP, to find out. If that read is the end of the file the load is
 complete. Otherwise the file is too large, and the carry flag is set with the
 zero flag clear (`src/cpm/ccp.asm:372-386`). A file that fits leaves in
 `LOADTOP` the address after its last record, which the PRL loader uses, and is
@@ -444,10 +446,11 @@ before the prompt.
 
 ## The CCP's RAM and stack
 
-The next piece of a chained line has to survive the program before it, so the
-CCP's block of RAM has two parts, divided at `CCPCLR` (`src/ram.asm:67-128`).
-Below it are the parts that warm boot keeps: the two FCBs and the command
-line. From `CCPCLR` on, warm boot clears the CCP's bytes along with the BDOS's
+The next piece of a chained line has to survive the program before it, so warm
+boot clears the CCP's block of RAM only from `CCPCLR` (`src/ram.asm:67-128`).
+Below that label is the command line, and before it the two FCBs, which need no
+clearing because each use parses them in full (`src/ram.asm:68-70`). From
+`CCPCLR` on, warm boot clears the CCP's bytes along with the BDOS's
 (`src/boot.asm:270-277`).
 
 | Addresses | Bytes | Name | Contents |
