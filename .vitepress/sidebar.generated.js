@@ -2522,7 +2522,7 @@ export const sidebars = {
           "link": "/tec-os/appendix-a-bdos-functions.html"
         },
         {
-          "text": "B. ROM services",
+          "text": "B. The ROM table and hardware services",
           "link": "/tec-os/appendix-b-rom-services.html"
         },
         {
