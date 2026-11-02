@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 18. The SD card and the volumes
 
-Checked against TEC-OS 98c6416.
+Checked against TEC-OS 718c01b.
 
 The BDOS reads and writes tracks and sectors of 128 bytes, and the SD card
 stores numbered blocks of 512. TEC-OS joins the two in three layers. At the
@@ -18,7 +18,7 @@ parameter header. At the top, the BIOS's disk entries turn a track and sector
 into a block of the card and a quarter of that block.
 
 This chapter takes the layers from the bottom up, and ends with the mount
-service, through which `MOUNT` and `VOLS` change and list the drives. Chapter
+entry, through which `MOUNT` and `VOLS` change and list the drives. Chapter
 19 describes the block cache, which every read passes through.
 
 ## The SD card driver
@@ -214,7 +214,7 @@ fixed media.
 To keep a drive logged in across a warm boot, TEC-OS's BDOS uses the three
 scratch words for a sum of its allocation vector, a flag set when it has
 changed and a mark, the number of directory entries to read when the vector is
-rebuilt (`src/cpm/bdos.asm:503-542`). Chapter 16 describes that, and Chapter
+rebuilt (`src/cpm/bdos.asm:504-543`). Chapter 16 describes that, and Chapter
 13 how `ALVINIT` places the vectors at cold boot.
 
 ## Deblocking
@@ -277,12 +277,11 @@ for each block, since the block goes to the card after each of its records.
 and two of the directory. It reads the directory's block from the card before
 each of those two writes, since the data has replaced it in `BLKBUF`.
 
-## The mount service
+## The mount entry
 
 `MOUNT` and `VOLS` on the starter card are programs, so they change and list
-the drives through the mount service, `VOLSVC`, which a program reaches
-through the jump `ABIVOL` at `C00Fh` (`src/abi.asm:14`,
-`src/vol.asm:578-584`). It has three functions, chosen by `A`:
+the drives through the mount entry, the jump `ABIVOL` at `C00Fh`, which goes
+to `VOLSVC` (`src/abi.asm:14`, `src/vol.asm:578-584`). It has three functions, chosen by `A`:
 
 - `A` = 0 mounts the volume at container index `E` on drive `C`.
 - `A` = 1 unmounts drive `C`.
@@ -299,14 +298,14 @@ describes how cold boot gives out the slots.
 
 A volume's data has to be on the card before the volume leaves its drive. So
 before a mount or unmount changes a drive, `VFLUSH` writes every dirty line of
-the block cache to the card, with interrupts off, and the service fails if any
+the block cache to the card, with interrupts off, and the call fails if any
 write fails (`src/vol.asm:678-690`). A mount then clears the drive's old
 entry, fills the new one and its DPH with `MNONE`, and records the index. An
-unmount clears the entry. Either way the service ends by marking `BLKBUF`
+unmount clears the entry. Either way `VOLSVC` ends by marking `BLKBUF`
 empty and calling BDOS function 37 to reset the drive, so that the drive's
 next access logs it in from its new directory (`src/vol.asm:662-674`).
 
-The service writes nothing of its own to the card, so the card's header still
+`VOLSVC` writes nothing of its own to the card, so the card's header still
 names its own drives, and a power-off, or a reset whose kept selection no
 longer matches, brings them back.
 
