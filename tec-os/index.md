@@ -229,7 +229,7 @@ against.
 - **[C. Memory map](appendix-c-memory-map.md).** The CPU's address space, page zero, the resident
   workspace, EXPAND 1 and the stacks, generated from the build. Sources:
   `docs/memory-map.md`, `tools/media.mjs`, `src/ram.asm`.
-- **D. Error messages.** Every message TEC-OS prints, with its cause and the
+- **[D. Error messages](appendix-d-error-messages.md).** Every message TEC-OS prints, with its cause and the
   remedy: the CCP's, the BDOS's, the diagnostic prompt's codes, the LCD's
   words and `Write lost`. Sources: `src/data.asm`, `src/data2.asm`,
   `src/data3.asm`, `src/sd.asm`, `src/vol.asm`.
