@@ -29,14 +29,14 @@ only the positions of the high bytes of addresses, and it adds the same number
 to each.
 
 The tools in the repository find those bytes by assembling the source twice.
-`assembleAt` in `tools/lib/prl.mjs:12` assembles a copy of the source with its
+`assembleAt` in `tools/lib/prl.mjs:15` assembles a copy of the source with its
 `ORG $0100` line changed to another origin, and `makePrl` and `makeSvc` both
 assemble at `0000h` and at `0100h`. A byte that is the same in the two
 assemblies is left alone, because it is no part of an address of the program's
 own, or it is the low byte of one, which a move by whole pages doesn't change. A
 byte that is one greater in the second assembly is the high byte of an address.
 Any other difference is an error, reported as `byte N is not relocatable`
-(`tools/lib/prl.mjs:35`, `tools/lib/svc.mjs:75`). Such a difference comes from
+(`tools/lib/prl.mjs:37`, `tools/lib/svc.mjs:75`). Such a difference comes from
 an expression the page rule can't relocate, such as half an address or twice
 one, which differ between the two assemblies by something other than one.
 
@@ -46,14 +46,14 @@ BDOS wherever the code is put.
 
 ## The PRL file
 
-`makePrl` in `tools/lib/prl.mjs:27` writes a PRL file in three parts:
+`makePrl` in `tools/lib/prl.mjs:29` writes a PRL file in three parts:
 
 - a header of 256 bytes, all zero except the code's length `n` as a word at
-  offset 1 (`tools/lib/prl.mjs:39`);
-- the `n` bytes of code assembled for `0100h` (`tools/lib/prl.mjs:40`);
+  offset 1 (`tools/lib/prl.mjs:41`);
+- the `n` bytes of code assembled for `0100h` (`tools/lib/prl.mjs:42`);
 - a bitmap of `n / 8` bytes, rounded up, with one bit for each byte of code,
   the most significant bit of each byte first, set for each byte that is the
-  high byte of an address (`tools/lib/prl.mjs:32-37`).
+  high byte of an address (`tools/lib/prl.mjs:34-39`).
 
 The test program `test/programs/say.asm` is a small example that prints `PRL`
 through BDOS function 9 and returns:
@@ -179,7 +179,7 @@ A service is the code that does move. The loader puts it in whole pages
 immediately below the current top of the TPA, so its page depends on the services
 already installed. `makeSvc` in `tools/lib/svc.mjs:87` assembles the service's
 source at `0000h` and at `0100h` and keeps the first assembly, made for page 0,
-with the service's 25-byte header at its start (`tools/lib/svc.mjs:103-113`).
+with the service's 25-byte header at its start (`tools/lib/svc.mjs:103-114`).
 Placed at page `p`, every address in it needs `p` added to its high byte.
 
 The bytes that need it, the fixups, are found by the same comparison as a PRL's

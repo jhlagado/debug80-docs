@@ -240,7 +240,7 @@ tracks, and a G1M volume has 128 tracks.
 cache, as Chapter 19 describes. `WRITE` has more to do
 (`src/bios.asm:188-300`). After mapping it rejects a write to a read-only
 volume before anything changes, with error 1, which the BDOS reports, for a
-file's data, as `Bad Sector` (`src/cpm/bdos.asm:898-905`).
+file's data, as `Bad Sector` (`src/cpm/bdos.asm:897-904`).
 
 A write to the directory can change which blocks are in use, so `WRITE` then
 tests for one of the directory's blocks, the first 32 blocks of a G8M volume

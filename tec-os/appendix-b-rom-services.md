@@ -44,7 +44,7 @@ and `src/layout.asm:45-46`. `abi.inc` keeps `ABIDRV` as another name for
 `ABISVC`, for older sources (`src/abi.inc:17`).
 
 The only other fixed address in the ROM is `C01Dh`, which holds a `RET`
-(`src/data.asm:8-13`). The previous version of the table had its mount entry
+(`src/data.asm:9-14`). The previous version of the table had its mount entry
 there, and a card can still hold a `MOUNT.COM` or `VOLS.COM` from that time
 that tests nothing. The `RET` returns to such a program with nothing done. The
 build checks that it stays.

@@ -26,7 +26,7 @@ table.
 CP/M 2.2 defines the BIOS as a table of jumps at the start of a page, one for
 each function, in a fixed order, so the BDOS and programs reach a machine's BIOS
 at the same offsets wherever its routines are. TEC-OS's table has the seventeen
-entries of CP/M 2.2 (`src/data.asm:20-36`):
+entries of CP/M 2.2 (`src/data.asm:21-37`):
 
 | Offset | Entry | Routine |
 | ---: | --- | --- |
@@ -124,7 +124,7 @@ change.
 A display driver takes the console by the same route. `SVCGO` calls the
 loader, and when the service installed has a video table in its page, `SVCGO`
 writes the mode into the console field and sets `CONACT` to `FFh`, a value no
-field has, so that the `CONSEL` it calls next switches (`src/glcd.asm:65-93`).
+field has, so that the `CONSEL` it calls next switches (`src/glcd.asm:68-93`).
 `PICO.SVC` always takes the console, and `GLCD.SVC` takes it only when
 `PICO.SVC` is not in.
 
@@ -393,7 +393,7 @@ drives A and B on rows 1 and 2. Drives C and D have no row
 Row 3 is for one of three words that TEC-OS shows when a board may have no
 terminal to show a message on. `CARD?` appears at the diagnostic prompt
 (`src/diag.asm:7-8`). `GLCD?` appears when `CON UC1` can't load `GLCD.SVC`
-(`src/cpm/ccp.asm:1119`, `src/glcd.asm:49-63`). `PICO?` appears when a board
+(`src/cpm/ccp.asm:1135`, `src/glcd.asm:49-66`). `PICO?` appears when a board
 with a PICO9918 and the matrix keyboard reaches its first prompt with no display
 driver
 (`src/svc.asm:430-431`).
@@ -401,5 +401,5 @@ driver
 Writing `PICO?` or `GLCD?` sets `CDWRD` in `CONDEV` (`src/lcd.asm:34-39`), and
 `WRDCLR` writes blanks over the row only while that bit is set. A word TEC-OS
 wrote is therefore cleared when a display driver is installed, and a row a
-program wrote is left alone (`src/glcd.asm:95-107`). Programs reach the LCD
+program wrote is left alone (`src/glcd.asm:102-114`). Programs reach the LCD
 through the hardware services, as Chapter 9 describes.

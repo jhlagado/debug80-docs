@@ -200,14 +200,14 @@ Node.js's own test runner (`package.json:17`). There are 38 such files, from
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the ROM of a
 profile from `build/` and, when the board has a matrix keyboard, puts a display
 driver and a startup file on the card. It then runs to the first prompt with the
-clock at the tests' starting time (`test/lib/fixtures.mjs:21-26`,
+clock at the tests' starting time (`test/lib/fixtures.mjs:22-27`,
 `test/lib/fixtures.mjs:144-152`, `test/lib/fixtures.mjs:155-162`).
 
 `test/lib/fixtures.mjs` also makes the files the tests load. `program` assembles
 a source in `test/programs/` with ATOM and keeps the result in
 `build/test-programs` (`test/lib/fixtures.mjs:80-95`), filed under a digest of
 the source and every file it includes, so that a changed include assembles again
-(`test/lib/fixtures.mjs:29-41`). `prl` makes a PRL file from two assemblies, and
+(`test/lib/fixtures.mjs:30-42`). `prl` makes a PRL file from two assemblies, and
 `service` a `.SVC` file with `makeSvc` (`test/lib/fixtures.mjs:57-78`,
 `test/lib/fixtures.mjs:114-115`). `standardCard` is a new container with the
 starter card's two volumes, `SYSTEM` on A and `WORK` on B, both empty
@@ -292,7 +292,7 @@ driver file, in the format this ROM loads. If it does, the first line of
 `STARTUP.CMD` becomes that file's name, followed by `GLCD.SVC` on a board with
 the PICO9918. `STARTUP.CMD`'s other lines stay, less their display pieces, and a
 `:` piece that followed a display piece loses its `:` and runs as an ordinary
-line (`host/card.mjs:24-80`). A card that fails the check is left as it is, and
+line (`host/card.mjs:24-91`). A card that fails the check is left as it is, and
 the reason goes to the serial terminal with the words `[power on]`. The reason
 is no drive A, a `.DRV` display file from an older TEC-OS, no such driver or a
 driver of another format. The message for an older card names the display's own

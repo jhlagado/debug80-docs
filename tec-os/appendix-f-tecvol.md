@@ -241,7 +241,7 @@ erased the file from user area 3 and printed nothing.
 `recipe RECIPE.json IMAGE` builds a card from a recipe, a JSON file that lists
 the volumes and the files to put on them (`tools/tecvol.mjs:155-161`).
 `npm run media` writes the starter card's recipe as `dist/starter.recipe.json`
-and builds `dist/starter.img` from it (`tools/media.mjs:245-264`). A recipe
+and builds `dist/starter.img` from it (`tools/media.mjs:246-265`). A recipe
 has the schema `tecos-file-recipe-v1`, a list of `volumes` and a list of
 `components`, each with `files`. Each volume is in `create`'s terms: a
 geometry, a label, a drive and `readOnly` or `writeBehind`. Each file has a
