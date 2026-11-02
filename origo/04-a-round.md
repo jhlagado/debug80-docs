@@ -38,7 +38,7 @@ study's name.
 The loop starts with a hole whose callers all reach it through a documented
 interface. F2U is a helper, called by compiled programs under the calling
 convention of chapter 2. This is its contract, from the contracts file at Origo
-`1252390`.
+`1252390`. A `$` marks a number written in hexadecimal.
 
 > Example (P1: F2U's contract, contracts file at Origo 1252390)
 >
@@ -56,13 +56,13 @@ An f32 is the runtime's name for a value in IEEE single, and a u32 is an
 unsigned 32-bit integer. Vea is the language of the first study. TRAP_NAR is the
 trap for a narrowing, a value that does not fit its new type. Negative values
 trap, so -0.5 traps though it would truncate to zero. Negative zero converts to
-0. A `$` marks a number written in hexadecimal.
+0.
 
 The candidates in the round saw one figure that differs from this text. The
 cycle limit was 1,529, which is 125 percent of the incumbent's worst case of
 1,223. It reads 1,250 now because a later rule resets the limit at each landing
-and F2U was brought up to it, 125 percent of the landed body's worst case in
-place of 1,000 (P1: CDR-3, CDR-6). The size limit of 27 is 125 percent of the
+and F2U was brought up to it, 125 percent of the landed body's in-place worst
+case, 1,000 (P1: CDR-3, CDR-6). The size limit of 27 is 125 percent of the
 21-byte incumbent, rounded up.
 
 Step 2 checks a contract against the incumbent before any candidate exists. The
