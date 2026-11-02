@@ -106,8 +106,8 @@ the CP/M 3 Programmer's Guide describes it. Digital Research's `LINK` writes
 a PRL with its `[OP]` option. TEC-OS's loader reads the length and checks
 that the code and the bitmap are in the records loaded (`src/prl.asm:14-53`),
 and a file from `LINK` has the same layout, though none has been through the
-loader: the tests make their PRL files with `makePrl`
-(`test/prl.test.mjs:37`).
+loader: the tests make their PRL files with the repository's own code
+(`test/prl.test.mjs:37`, `test/lib/fixtures.mjs:63`).
 
 ## A PRL program at 0100h
 
