@@ -185,13 +185,14 @@ TEC-OS restarts by one of three paths:
 
 - An *ordinary exit* is a program's return, a `^C` or a jump to `0000h`. It is
   a warm boot: services stay, the drives hold the volumes they held and the
-  startup file doesn't run. - A *recognised reset* is a press of the reset
-  button, or a program's call of the BIOS's cold boot entry, that finds a
-  running TEC-OS's marks in RAM. The drives keep the volumes that were on
-  them, if the card still has those volumes, and everything else TEC-OS holds
-  in memory is rebuilt. - An *unrecognised reset* is a reset that finds no
-  such marks, as at power-on. The drives take the volumes the card's header
-  names, and everything else is rebuilt.
+  startup file doesn't run.
+- A *recognised reset* is a press of the reset button, or a program's call of
+  the BIOS's cold boot entry, that finds a running TEC-OS's marks in RAM. The
+  drives keep the volumes that were on them, if the card still has those
+  volumes, and everything else TEC-OS holds in memory is rebuilt.
+- An *unrecognised reset* is a reset that finds no such marks, as at power-on.
+  The drives take the volumes the card's header names, and everything else is
+  rebuilt.
 
 Each reset is a cold boot. It removes every service and returns to drive A and
 user area 0. It also puts the console on the serial terminal. The startup file
@@ -345,8 +346,8 @@ a bad file there is replaced with "Copy file to drive" or "New starter card".
 The 20 × 4 LCD's last row is for a board that may have no terminal attached.
 TEC-OS writes one of three words there:
 
-- `PICO?` appears once, at the first prompt after startup, if no display
-  driver is installed on a board with a PICO9918 and a matrix keyboard. The
+- `PICO?` appears once, at the first prompt after startup, on a board with a
+  PICO9918 and a matrix keyboard if no display driver is installed. The
   causes are a driver's file that is missing or bad with no other display
   driver installed, no `STARTUP.CMD`, a file with no display line and a skip.
   That board's screen is dark.
