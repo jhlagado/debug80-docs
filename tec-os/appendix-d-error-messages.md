@@ -7,7 +7,7 @@ nav_group: "Appendices"
 
 # Appendix D. Error messages
 
-Checked against TEC-OS bd15528.
+Checked against TEC-OS 718c01b.
 
 This appendix lists every message TEC-OS prints, with its cause and its
 remedy, in the order a run can reach them: cold boot and the diagnostic
@@ -139,12 +139,12 @@ alone when it needs an argument and has none.
 
 | Word or command | Cause | Remedy | See |
 | --- | --- | --- | --- |
-| A program's name | No `NAME.COM` and no `NAME.PRL` on the drive in the current user area. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:277-291` |
+| A program's name | No `NAME.COM` and no `NAME.PRL` on the drive in the current user area. A type other than `.SVC` is ignored, so `PICO.DRV` looks for `PICO.COM`. The web page reports a card with `.DRV` display files when it powers on, naming the chosen display's `.DRV` file if the card has it and another of them if not. | Check the name, the drive and the user area, or name the drive, as `B:NAME`. A card from an older TEC-OS needs the steps in [Chapter 5](05-startup-and-services.md#a-card-from-an-older-tec-os). | [Chapter 3](03-command-line.md#running-a-program), `src/cpm/ccp.asm:277-291`, `host/card.mjs:35-38` |
 | A program's name | The name is ambiguous or has no name part, is longer than 8 and 3 characters, has a bad character or names a drive past P. | Correct the name. | [Chapter 3](03-command-line.md#file-names), `src/cpm/ccp.asm:232`, `src/cpm/ccp.asm:264-266`, `src/cpm/ccp.asm:1318-1420`, `src/cpm/ccp.asm:1425-1475` |
 | A program's name | `NAME.COM` doesn't fit below the BDOS's entry, the address in the word at `0006h`. | Use `UNLOAD` to free service resident memory. | [Chapter 17](17-ccp.md#loading-a-program), `src/cpm/ccp.asm:369-371`, `src/cpm/ccp.asm:388-400` |
 | A program's name | `NAME.PRL` is too short for its header, its code and its bitmap, its code length is 0, or the code doesn't fit. | Replace the file, or use `UNLOAD` to free service resident memory. | [Chapter 17](17-ccp.md#loading-a-program), `src/prl.asm:14-53` |
 | `NAME.SVC` | The file is missing or doesn't read, isn't a service of format 3, or fails while installing. A display driver also fails when its display or the matrix keyboard is missing, or when that display has a driver already. `GLCD.SVC` also fails while the PICO9918 is the console, and only `CON UC1` installs it then, so the starter card's `STARTUP.CMD` gives `GLCD.SVC?` at each boot on a board with both displays. | Check the board, the name and `SERVICES`. A card from an older TEC-OS needs the steps in Chapter 5. With the PICO9918 as the console, `GLCD.SVC?` from `STARTUP.CMD` needs no remedy. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), [Chapter 20](20-hardware-services-and-service-loader.md#a-failed-load), `src/glcd.asm:68-83`, `src/svc.asm:57-85`, `drivers/pico.asm:47-59`, `drivers/glcd.asm:34-53` |
-| `UNLOAD` | No service is installed, or the newest can't be removed, as `PICO.SVC` can't be while the PICO9918 is the console. | `CON TTY` first for a console driver. Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1082-1084`, `src/svc.asm:28-37` |
+| `UNLOAD` | No service is installed, or the newest can't be removed, as `PICO.SVC` can't be while the PICO9918 is the console. | `CON TTY` first for a console driver. Services go newest first. | [Chapter 5](05-startup-and-services.md#installing-listing-and-removing-services), `src/cpm/ccp.asm:1082-1084`, `src/svc.asm:28-38` |
 | `COPY` | A name is missing or has a wildcard, or the destination is the source. | Name one source and a destination that differs. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:979-1005` |
 | `ERA` | No name, more than one, or a bad name. | `ERA NAME`. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:854-858` |
 | `REN` | The form isn't `NEW=OLD`, a name has a wildcard, or a name is missing. | `REN NEW=OLD`. | [Chapter 3](03-command-line.md#copy-ren-and-era), `src/cpm/ccp.asm:901-920` |
