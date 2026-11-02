@@ -7,7 +7,7 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 2. The console
 
-Checked against TEC-OS 98c6416.
+Checked against TEC-OS 718c01b.
 
 The console is the device you type commands on and read TEC-OS's replies from.
 A TEC-1G can carry a serial terminal, a PICO9918 video card and a graphics LCD
@@ -43,8 +43,8 @@ reader is the serial port and its list device discards what it is given, so on
 the reader and the list device.
 
 The 20 × 4 LCD is never the console. TEC-OS writes its version and the drives
-there at cold boot, and programs write to it through the services in Chapter
-9.
+there at cold boot, and programs write to it through the hardware services in
+Chapter 9.
 
 Cold boot, after power-on or a reset, clears page zero, the first 256 bytes of
 memory. That sets the IOBYTE to 0, so the console always starts on `TTY:`. A
@@ -72,7 +72,7 @@ XYZ?
 A>
 ```
 
-On a board with a PICO9918 and the matrix keyboard, where `PICO.DRV` has made
+On a board with a PICO9918 and the matrix keyboard, where `PICO.SVC` has made
 the PICO9918 the console, `CON TTY` typed on the matrix keyboard moves the
 console to the serial terminal. The command's echo appears on the PICO9918,
 and the reply and the next prompt appear on the serial terminal, which shows
@@ -84,12 +84,12 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
+A>PICO.SVC
 CON: TTY: serial terminal
 A>
 ```
 
-The terminal shows the boot as far as `PICO.DRV`, the line that moved the
+The terminal shows the boot as far as `PICO.SVC`, the line that moved the
 console to the PICO9918, and then nothing more until the reply to `CON TTY`.
 The PICO9918 goes on showing what was on it, but TEC-OS writes nothing more
 there and stops reading the matrix keyboard. `CON CRT` typed on the PC moves
@@ -123,10 +123,10 @@ CON: TTY: serial terminal
 A>
 ```
 
-If `GLCD.DRV`, the graphics LCD's driver, isn't installed, `CON UC1` first loads
+If `GLCD.SVC`, the graphics LCD's driver, isn't installed, `CON UC1` first loads
 it from drive A. On a board with both displays and the starter card's startup
 file, `CON UC1` is how the console reaches the graphics LCD, because that file's
-`GLCD.DRV` line installs nothing while the PICO9918 is the console. The web
+`GLCD.SVC` line installs nothing while the PICO9918 is the console. The web
 page's board is one, and its graphics LCD shows this after `CON UC1`:
 
 <!-- node tools/capture.mjs --board pico --screen "CON UC1" CON -->
@@ -152,11 +152,11 @@ TEC-OS 0.1 for TEC-1G
 A: SYSTEM     
 B: WORK       
 
-A>PICO.DRV
-PICO.DRV?
+A>PICO.SVC
+PICO.SVC?
 
-A>GLCD.DRV
-GLCD.DRV?
+A>GLCD.SVC
+GLCD.SVC?
 
 A>CON BAT
 CON: TTY: serial terminal
@@ -200,11 +200,11 @@ memory below the BDOS. Chapter 1 showed the starter card's startup file
 installing these drivers before the first prompt. Installing a display driver
 can move the console:
 
-- `PICO.DRV`, `PICO40.DRV` or `PICO32.DRV` makes the PICO9918 the console, at
+- `PICO.SVC`, `PICO40.SVC` or `PICO32.SVC` makes the PICO9918 the console, at
   80, 40 or 32 columns.
-- `GLCD.DRV` makes the graphics LCD the console unless a PICO9918 driver is
+- `GLCD.SVC` makes the graphics LCD the console unless a PICO9918 driver is
   already installed, in which case the console stays where it was. While a
-  display is the console, `GLCD.DRV` installs only for `CON UC1`.
+  display is the console, `GLCD.SVC` installs only for `CON UC1`.
 
 Each driver installs only on a board that has its display and the matrix
 keyboard, with the board's Matrix configuration switch on. Otherwise the
@@ -212,7 +212,7 @@ installation fails and the console stays where it was, which on a board with
 only a serial terminal is that terminal. A display driver takes 1,536 bytes of
 memory, as Chapter 1 explained, so with both displays' drivers installed
 programs have 3,072 bytes less. Chapter 5 gives the rules for the startup file
-and for installing and removing drivers.
+and for installing and removing services.
 
 A console on a display is a *video console*, and there TEC-OS is the terminal.
 It draws each character at the cursor and moves the cursor on, and it acts on
