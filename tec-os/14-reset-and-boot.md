@@ -312,10 +312,10 @@ would give a `Select` error and a warm boot back to the same place
 (`src/cpm/ccp.asm:33-44`), and sets `WRFLAG` before it calls BDOS function
 13, the disk reset. With that flag set, function 13 keeps each logged-in
 drive whose vector nothing has changed since it was last built and that still
-sums as it did then; a drive that a write has changed is marked to be rebuilt, at its next
-selection, from its directory entries up to the highest one in use; any
-other is dropped and is scanned in full when it is next selected
-(`src/cpm/bdos.asm:481-542`). A program's own call of function 13 has no flag
+sums as it did then; a drive that a write has changed is marked to be
+rebuilt, at its next selection, from its directory entries up to the highest
+one in use; any other is dropped and is scanned in full when it is next
+selected (`src/cpm/bdos.asm:481-542`). A program's own call of function 13 has no flag
 set and drops every drive, as CP/M 2.2 does. The CCP then sets the user
 number from the byte it was given, calls `STBOOT`, which starts the startup
 file once after a cold boot (Chapter 22 describes it), and selects the drive
