@@ -195,10 +195,10 @@ geometry byte in `RSLBUF`, which means no selection (`src/boot.asm:136-138`).
 and `ALVINIT` has given its drives their vectors in the usual way, so neither
 the slots nor the TPA varies with the selection (`src/vol.asm:391-480`). The card
 in the socket may no longer hold the kept volumes, so `RESEL` works in two steps
-and changes the drives only if the first step succeeds. The first step reads and
-changes nothing in the drive table. It walks the card's descriptors and compares
-each with every kept drive, on the eight bytes a drive-table entry holds: the
-start, the length, the geometry and the flags. A descriptor goes to the first
+and changes the drives only if the first step succeeds. The first step changes
+no drive. It walks the card's descriptors and compares each with every kept
+drive in `RSLBUF`, on the eight bytes a drive-table entry holds: the start, the
+length, the geometry and the flags. A descriptor goes to the first
 kept drive it matches, and the volume must fit that drive's vector slot. `RESEL`
 returns and the card's own drives stand in three cases: a read fails, a matching
 volume would not fit its slot, or a kept drive is left with no match.
@@ -235,14 +235,16 @@ workspace and EXPAND 1 as on any cold boot, so drivers, the registry, the cache,
 open files and the history are gone and the console is the serial terminal again
 (`src/boot.asm:15-28`, `src/boot.asm:149-155`). A change the cache held for the
 card is lost. Once a recognised reset has applied a selection, the next reset
-passes the test again while the card still holds those volumes, so only losing
-the RAM returns the card's own drives. `docs/recovery.md` sets out these limits
-for the user.
+passes the test and applies it again while the card still holds those volumes.
+That card's own drives come back at a reset only when the test fails, as it does
+after a power cycle or for a reset pressed during cold boot. `docs/recovery.md`
+sets out these limits for the user.
 
 ## Page zero
 
-A program is free to write over page zero, so `PZINIT` writes its fixed parts
-at every warm boot as well as at the end of cold boot (`src/boot.asm:215-265`).
+A program is free to write over page zero, so `PZINIT` writes page zero's fixed
+parts at every warm boot as well as at the end of cold boot
+(`src/boot.asm:215-265`).
 It puts `JP BF03h` at `0000h`, a `JP` at `0005h` to `PZTOP` and `JP BENTRY` at
 the address in `STUBAD`. It writes `EI` and `RETI` at `0038h`, where interrupt
 mode 1 and `RST 38h` go, and it rewrites the restart vectors at `0008h–0037h`.
