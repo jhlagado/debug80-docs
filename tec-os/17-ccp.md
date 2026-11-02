@@ -54,8 +54,8 @@ was on.
 `CCPENT` sets its stack and keeps the drive in `BOOTDRV`
 (`src/cpm/ccp.asm:27-30`). It sets `WRFLAG` and calls function 13, the disk
 reset. With that flag the reset keeps the drives whose allocation vectors are
-unchanged, as Chapter 16 describes. It then calls function 32 with the user
-number from the byte (`src/cpm/ccp.asm:31-45`). `STBOOT` reads `A:STARTUP.CMD`
+unchanged, as Chapter 16 describes. `CCPENT` then calls function 32 with the
+user number from the byte (`src/cpm/ccp.asm:31-45`). `STBOOT` reads `A:STARTUP.CMD`
 the first time it is called after a cold boot and does nothing later
 (`src/cpm/ccp.asm:46`, `src/drv.asm:327-360`). Chapter 22 describes startup.
 Last, if the drive is not A, the CCP selects it with function 14
