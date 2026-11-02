@@ -12,7 +12,7 @@ Checked against TEC-OS bd15528.
 This appendix lists every message TEC-OS prints, with its cause and its
 remedy, in the order a run can reach them: cold boot and the diagnostic
 prompt, the LCD's words, the CCP, the BDOS and the block cache. `MOUNT` and
-`VOLS` follow, and then the lines that report no fault. The `See` column of
+`VOLS` follow, and then the lines that report no fault. The last column of
 each table links to the chapter that explains the message or its subject and
 gives the source.
 

@@ -45,9 +45,9 @@ return (`src/cpm/bdos.asm:2404-2441`). The errors are:
   attribute is set (`src/cpm/bdos.asm:697-705`).
 - `Bdos Err On d: Bad Sector`, for a record or a directory record that can't
   be written, a record of a file that can't be read or a block number past the
-  end of the volume. A failed write includes every write to a volume the card
-  marks read-only (`src/cpm/bdos.asm:2319-2329`,
-  `src/cpm/bdos.asm:2426-2429`).
+  end of the volume (`src/cpm/bdos.asm:2319-2329`,
+  `src/cpm/bdos.asm:2426-2429`). A failed write includes every write to a
+  volume the card marks read-only.
 
 A directory record that can't be read ends the program by warm boot with no
 message (`src/cpm/bdos.asm:1858-1859`, `src/cpm/bdos.asm:2423-2424`). In CP/M

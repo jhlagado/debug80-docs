@@ -265,5 +265,5 @@ four more:
 | 22 | `PICORD` | `HL` = VRAM address, `DE` = destination, `BC` = count | Copies VRAM to RAM |
 
 The caller must hold the claim. Each entry checks nothing and changes `AF`,
-`BC`, `DE` and `HL`. A count of 0 moves nothing (`drivers/pico.asm:164-199`,
-`src/abi.inc:48-54`).
+`BC`, `DE` and `HL` (`src/abi.inc:48-54`). A count of 0 moves nothing
+(`drivers/pico.asm:164-199`).
