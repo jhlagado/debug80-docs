@@ -7,9 +7,9 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. Chaining inside
 
-Checked against TEC-OS 4d6eeaa, with the starter card's `TED.COM` from Thorium
-8fcc6ea, whose copy in `dist/files` has the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`, and its
+Checked against TEC-OS 60e0768, with the starter card's `TED.COM` from Thorium
+676075a, whose copy in `dist/files` has the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -43,11 +43,11 @@ two FCBs before it are kept (`src/boot.asm:251-258`, `src/boot.asm:72`). The
 FCBs need no clearing, since each use of them parses a name into them in full
 and clears the rest (`src/cpm/ccp.asm:1336-1361`).
 
-The position of the next piece is `CHPOS`, one byte at `BFE5h`, in the part of
+The position of the next piece is `CHPOS`, one byte at `BFE4h`, in the part of
 the workspace above the RAM BIOS table, which `CPMINIT` doesn't clear
 (`src/ram.asm:192`, `src/ram.asm:239`). It holds the piece's offset in `CMDTXT`
 plus one, and 0 when no piece is left, so one byte covers the 128 offsets with 0
-to spare. The return code, `PRGCODE` at `BF57h`, is in the same block
+to spare. The return code, `PRGCODE` at `BF56h`, is in the same block
 (`src/ram.asm:228`). Cold boot clears the whole resident workspace, from
 `WSBASE` to `WSEND`, which ends after `CHPOS` (`src/boot.asm:23-27`,
 `src/ram.asm:240-241`), so after a reset no piece is left and the code is 0.
@@ -158,7 +158,10 @@ typed line and `STLINE` a startup line, so neither goes through `MLECHO`.
 The CCP then tests what the piece is. A drive letter and a colon alone select
 the drive (`src/cpm/ccp.asm:164-185`), and anything else goes to `NOTDRIVE`
 (Chapter 17), which compares the command with the built-ins' names and otherwise
-loads a program or installs a service (`src/cpm/ccp.asm:227-302`).
+loads a program or installs a service (`src/cpm/ccp.asm:227-302`). A program not
+on the current drive is looked for on A:, when the command names no drive and
+the current drive isn't A:, so `B:NAME` looks on B: alone
+(`src/cpm/ccp.asm:283-295`).
 
 Every routine after `MLTAKE` reads the piece through `ARGSTRT` and stops at its
 0, so a built-in or a program reads its own piece and nothing of the pieces
@@ -179,7 +182,7 @@ on.
 ## The return code and the `:` test
 
 BDOS function 108 is `FNRETC` (`src/cpm/bdos.asm:133-145`), and the BDOS's entry
-sends function 108 there before its table, as it does 50 and 47
+sends function 108 there before its table, as it does 47
 (`src/cpm/bdos.asm:79-88`). `FNRETC` tests `DE`: `H AND L` is `FFh` only for
 `FFFFh`. For that value it returns `PRGCODE` in `HL`, with `A` and `B` set from
 it as for every word the BDOS returns (`src/cpm/bdos.asm:124-128`). Any other
@@ -212,8 +215,8 @@ built-ins' messages go there by `JP ERRGO`: `NO FILE` from `FILENO`,
 through `CPFAIL` (`src/cpm/ccp.asm:851-853`, `src/cpm/ccp.asm:963-965`,
 `src/cpm/ccp.asm:1294-1296`, `src/cpm/ccp.asm:1073-1074`).
 
-A program that isn't found or fails to load, or a service that fails to install,
-reaches `BADCMD` (`src/cpm/ccp.asm:264-293`). Every other end of a built-in
+A program that isn't found on the drives the search looks at, or fails to load,
+or a service that fails to install, reaches `BADCMD` (`src/cpm/ccp.asm:264-295`). Every other end of a built-in
 leaves the code at 0, including `COPY`'s `COPIED` line, which is printed through
 `PRTGO`, the entry after the store (`src/cpm/ccp.asm:1065-1072`,
 `src/cpm/ccp.asm:355`).
