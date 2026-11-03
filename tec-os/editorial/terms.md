@@ -115,7 +115,7 @@ in the comments of `TOP` and `AREA` in Chapter 7 stays as it is.
 | driver | | A service that drives hardware | Chapter 5 | display driver, one that holds a display's console. The SD card driver and the hardware drivers of Chapter 15 are code in the ROM. |
 | record, of a service | | What a service publishes in the registry | Chapter 5, in full 10 | CP/M's record of 128 bytes |
 | numbered service | | A call in the ROM through `ABICALL`, by its number in `C`, 0 to 14 | Chapter 9, in full B | a service, which is loaded from the card |
-| hardware service | | Numbered services 0 to 8, in `src/hwsvc.asm` | Chapter 1 by name, in full 9, 20 and B | the volume services, 9 to 11, the display drivers' service, 12, and the registry's, 13 and 14 |
+| hardware service | | Numbered services 0 to 8, in `src/services.asm` | Chapter 1 by name, in full 9, 20 and B | the volume services, 9 to 11, the display drivers' service, 12, and the registry's, 13 and 14 |
 | volume services | | Numbered services 9 to 11, `MOUNT`, `UNMNT` and `DESC`, in `src/vol.asm` | Chapter 18 | `MOUNT`, the program and the ROM routine |
 | ROM table | | The ROM's table at `C003h`: `TNA`, the version and the jump `ABICALL` | Chapter 1 by name, in full 9 | RAM BIOS table, the copy at `BF00h` |
 | stub | | The BDOS entry jump directly below the allocation vectors, at `STUBAD`, which `(0006h)` addresses when no service is in | Chapter 20 | a service's entry at `xx00h`, which `(0006h)` addresses when a service is in |
