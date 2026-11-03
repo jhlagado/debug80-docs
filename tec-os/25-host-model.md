@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 25. The host model and the web page
 
-Checked against TEC-OS 7458352, with `@jhlagado/debug80-runtime` 0.3.3, the
+Checked against TEC-OS 7935507, with `@jhlagado/debug80-runtime` 0.3.3, the
 version `package.json` names.
 
 Every transcript in this book came from a TEC-1G that exists only as software.
@@ -103,7 +103,7 @@ runtime but to the ROM in the TEC-1G's own documents (`docs/diagnostics.md`,
 T08). TEC-OS never makes either write, and 26 of the test files check that
 `violations` is empty.
 
-A second watch covers EXPAND 1 (`host/machine.mjs:177-223`). From cold boot's
+A second watch covers EXPAND 1 (`host/machine.mjs:177-226`). From cold boot's
 clear of EXPAND 1 until the next cold boot, only the block cache may write
 `8000h–BCFFh`, and nothing may write the free pages `BE00h–BFFFh` in that time.
 The machine takes the end of the clear from its `LDIR` in `MEMINIT`, and the
@@ -205,7 +205,7 @@ were, as the board's reset button does (`host/machine.mjs:526-586`).
 ## The tests
 
 `npm test` runs every file in `test/` that ends `.test.mjs`, one at a time, with
-Node.js's own test runner (`package.json:17`). There are 45 such files, from
+Node.js's own test runner (`package.json:17`). There are 48 such files, from
 `arith.test.mjs` to `write.test.mjs`, each on one part of TEC-OS. Most build
 their machines with `boot` in `test/lib/fixtures.mjs`, which reads the one ROM,
 `build/tecos/tecos.rom`, and, when the board has a matrix keyboard, puts a
