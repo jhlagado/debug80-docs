@@ -7,11 +7,11 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 4. Cards and volumes
 
-Checked against TEC-OS 718c01b, with the starter card's `EDIT.COM` from Edit
+Checked against TEC-OS ea9c1c0, with the starter card's `EDIT.COM` from Edit
 845d062, whose copy in `dist/files` has the SHA-256
 `ed88337e6dfa2626dd37a225a0ec09332f4927a0bde62114bbf8661d2d0fdc78`, and its
-`TAS.COM` from Thorium 7604daa, with the SHA-256
-`ff18734807206127d4ede7a96bbd26acf36310361834a1c9ae998b20e2f98292`.
+`TAS.COM` from Thorium dbee66a, with the SHA-256
+`45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
 TEC-OS reads everything but its own code from one SD card: the programs it
 runs, its services, its startup file and your own files. This chapter describes
@@ -44,7 +44,7 @@ node tools/tecvol.mjs info dist/starter.img
 
 ```text
 container: format 1.0, 20480 blocks (10485760 bytes), 2 volume(s)
-  A: SYSTEM      id 1 G1M start 2048 rw 13 file(s), 999424 bytes free
+  A: SYSTEM      id 1 G1M start 2048 rw 13 file(s), 997376 bytes free
   B: WORK        id 2 G8M start 4096 rw wb 0 file(s), 8372224 bytes free
 ```
 
@@ -376,7 +376,10 @@ When a changed data block can't be written, it stays in the cache, and each
 warm boot repeats the write and prints `Write lost` while the write still
 fails. A directory block that can't be written is dropped from the cache, and
 the directory is read from the card again. A reset or a power cut discards a
-data block held in this way.
+data block held in this way. When a card comes out with changes in the cache,
+they stay held in this way even if the same card goes back: only cold boot
+starts a card, so each warm boot prints `Write lost` again, and the reset that
+starts the card discards them.
 
 ## The drives after a reset
 
