@@ -7,12 +7,12 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 6. A first program
 
-Checked against TEC-OS 1f9542d, with the ATOM assembler from the
+Checked against TEC-OS 7458352, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7 on the PC and, on the TEC-1G, the starter card's
 `TAS.COM` from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`. The
-starter card's `TED.COM` is from Thorium 04ec086, with the SHA-256
-`d42b6d2a5ea3158ff76774abaef1d290a42dc76ea9bb34aa564e3ae87add7344`.
+starter card's `TED.COM` is from Thorium 128edb7, with the SHA-256
+`2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`.
 
 A program for TEC-OS is a CP/M program: Z80 code that TEC-OS loads at `0100h`
 and that reaches the console and the files through the BDOS. This chapter
@@ -321,22 +321,24 @@ installs. On a board with both displays one driver installs as it boots, and
 `TED` holds 31,510 bytes.
 
 The source is on drive B, and `TED.COM` and `TAS.COM` are on drive A. With
-drive B current, the CCP runs `TED` from drive A, and the commands `TED` chains,
-`TAS` and `TED` itself, run from there too. `TED` also takes a drive in its
-argument, so `TED B:HELLO.ASM` typed at `A>` opens the same file.
+drive B current, the CCP runs `TED` from drive A. `TED` reads the byte at
+`0050h` and names the drive it came from in each command it chains, so here it
+chains `A:TAS` and `A:TED`. A `TED` run from another drive, as `C:TED` typed at
+`B>`, chains `C:TAS` and `C:TED` in the same way. `TED` also takes a drive in
+its argument, so `TED B:HELLO.ASM` typed at `A>` opens the same file.
 
 A mistake shows the round of `^T B`. Here `B:` made drive B current,
 `TED HELLO.ASM 7` opened the source on the PICO9918 and a `1` was typed at the
-start of line 7. `^T B` saved the file and chained `TAS HELLO.ASM` and then
-`TED`. The screen showed this before `TED` drew its own again:
+start of line 7. `^T B` saved the file and chained `A:TAS HELLO.ASM` and then
+`A:TED`. The screen showed this before `TED` drew its own again:
 
-<!-- a run on the host model with work.img, driven as test/ted.test.mjs at 1f9542d drives TED: B:, TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
+<!-- a run on the host model with work.img, driven as test/ted.test.mjs at 7458352 drives TED: B:, TED HELLO.ASM 7, 1, ^T B, Right, ^H, ^T R, a space, ^Q, DIR -->
 ```text
 
-B>TAS HELLO.ASM
+B>A:TAS HELLO.ASM
 HELLO.ASM:7:1: expected a label, instruction or directive
 
-B>TED
+B>A:TED
 ```
 
 `TAS`'s message gives the file, the line and the column of the error. `TED`
@@ -369,15 +371,15 @@ its screen again:
 <!-- the same run -->
 ```text
 
-B>TAS HELLO.ASM
+B>A:TAS HELLO.ASM
 HELLO.COM written
 
-B>TED
+B>A:TED
 
 B>HELLO
 Hello from the TEC-1G
 
-B>TED
+B>A:TED
 Press a key
 ```
 
