@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 20. The hardware services and the service loader
 
-Checked against TEC-OS 1f9542d, with the starter card's `TAS.COM` from Thorium
+Checked against TEC-OS 7458352, with the starter card's `TAS.COM` from Thorium
 dbee66a, SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
@@ -58,7 +58,7 @@ services, 9 to 11, are in `src/vol.asm` and Chapter 18 describes them. `DRVR`,
 and `FIND` and `LIST`, 13 and 14, are the registry's, described below
 (`src/hwsvc.asm:4-6`, `src/data3.asm:94-101`).
 
-The dispatcher, its exits and the nine hardware routines are 458 bytes of the
+The dispatcher, its exits and the nine hardware routines are 474 bytes of the
 ROM's code, by the symbol map of the build:
 
 | Number | Name | Routine | Bytes |
@@ -67,12 +67,12 @@ ROM's code, by the symbol map of the build:
 | 0 | `INFO` | `HWSINFO` | 17 |
 | 1 | `DIGIT` | `HWSDIG` | 26 |
 | 2 | `LCD` | `HWSLCD` | 44 |
-| 3 | `VIDEO` | `HWSVID` | 81 |
+| 3 | `VIDEO` | `HWSVID` | 89 |
 | 4 | `TONE` | `HWSTONE` | 29 |
 | 5 | `JOY` | `HWSJOY` | 10 |
 | 6 | `KEYS` | `HWSKEYS` | 15 |
 | 7 | `PUTAT` | `HWSPUT` | 68 |
-| 8 | `RTC` | `HWSRTC`, with its clock routines | 138 |
+| 8 | `RTC` | `HWSRTC`, with its clock routines | 146 |
 
 `INFO` reads no device. `B` is the byte `CONDEV`, the devices found at cold
 boot, with `VCLAIM` ORed in (`src/hwsvc.asm:49-53`). Bit 3 of `CONDEV`,
@@ -95,9 +95,10 @@ Chapter 21 explains (`src/hwsvc.asm:74-83`). `LCDROWS` gives the row's
 display address, and then 20 characters go out, each after `LCDWAIT`
 (`src/hwsvc.asm:84-96`, `src/data2.asm:6`).
 
-`VIDEO` returns status 2 unless `CDTMS` is set, the bit of `CONDEV` that
-records a PICO9918 answering at cold boot (`src/hwsvc.asm:103-110`,
-`src/layout.asm:52`). A claim hides the cursor if the PICO9918 is the console,
+`VIDEO` refuses any `B` but 0 and 1 with `TNEBAD`, before anything changes
+(`src/hwsvc.asm:103-106`). It then returns status 2 unless `CDTMS` is set, the
+bit of `CONDEV` that records a PICO9918 answering at cold boot
+(`src/hwsvc.asm:107-110`, `src/layout.asm:52`). A claim hides the cursor if the PICO9918 is the console,
 and stores `CDCLM` in `VCLAIM` (`src/hwsvc.asm:114-119`). The console tests
 that byte and `CONMOD` through `VTOWN`, so a claim stops it only while the
 PICO9918 is the console (`src/term.asm:533-544`).
@@ -140,12 +141,13 @@ with status 0 (`src/hwsvc.asm:200-207`). The loop then clips each cell against
 `VWID` and calls `VPUT`, the driver's routine, with `A`, `B` and `C` as the
 driver takes them (`src/hwsvc.asm:208-224`). `VPUT` jumps through the driver's
 table (`src/video.asm:13`). `PUTAT` is the deepest hardware service, and
-`abi.inc` states 22 bytes of stack for it, the dispatcher's included
-(`src/abi.inc:23-24`, `src/abi.inc:47-52`).
+`abi.inc` gives 22 bytes as the bound on its stack, the dispatcher's included
+(`src/abi.inc:24-25`, `src/abi.inc:47-52`).
 
-`RTC` tests for the clock with `RTCHAS`, which reads the seconds register. It
-counts any value below `60h` as an answer, on the ground that a seconds register
-holds BCD (`src/hwsvc.asm:265-276`). `RTCCMD` raises the enable bit, and `RTCWR`
+`RTC` refuses any `B` but 0 and 1 with `TNEBAD`, the clock untouched
+(`src/hwsvc.asm:229-232`). It then tests for the clock with `RTCHAS`, which
+reads the seconds register. It counts any value below `60h` as an answer, on
+the ground that a seconds register holds BCD (`src/hwsvc.asm:265-276`). `RTCCMD` raises the enable bit, and `RTCWR`
 clocks a byte out least significant bit first (`src/hwsvc.asm:285-298`).
 `HWSRTC` uses the DS1302's burst modes, command `BFh` to read and `BEh` to
 write. A write first clears write protect with `RTCPUT`, and its burst carries
@@ -491,8 +493,8 @@ A program can make the list into a cycle, so the walk has a limit. `B` is 0 at
 `REGF1`, so `DJNZ` allows 256 rounds, and such a list can't hold the caller
 (`src/svc.asm:554-556`, `test/svc.test.mjs:539`). That walk uses at most 8
 bytes of the caller's stack, three `PUSH`es and the return address
-(`src/svc.asm:521-523`). `abi.inc` states 8 bytes for each of the two, the
-dispatcher's included (`src/abi.inc:79-87`). The registry has no service for
+(`src/svc.asm:521-523`). `abi.inc` gives 8 bytes as the bound for each of the
+two, the dispatcher's included (`src/abi.inc:79-87`). The registry has no service for
 removal. Number 15, one past `LIST`, returns carry from the dispatcher, and the
 service stays found (`test/svc.test.mjs:342`).
 
