@@ -7,7 +7,7 @@ nav_group: "Part II: Inside TEC-OS"
 
 # 24. Chaining inside
 
-Checked against TEC-OS 7935507, with the starter card's `TED.COM` from Thorium
+Checked against TEC-OS 626ee41, with the starter card's `TED.COM` from Thorium
 128edb7, whose copy in `dist/files` has the SHA-256
 `2b9291a8c50fc2fbf6673112627bcfc849cf0f7578d20e4104b86f9e1516e49f`, and its
 `TAS.COM` from Thorium dbee66a, with the SHA-256
@@ -130,7 +130,7 @@ empty pieces and spaces between pieces are passed over there, and a line that
 ends with `!` ends the same as one without it.
 
 When a piece is left, the loop goes to `MLECHO`, which prints the piece after
-the prompt, from `HL` up to its `!` or the line's 0 (`src/cpm/ccp.asm:105-115`).
+the prompt, from `HL` up to its `!` or the line's 0 (`src/cpm/ccp.asm:105-116`).
 The text is printed before the piece is turned into capitals, so the echo keeps
 the case of what was typed.
 
@@ -160,7 +160,7 @@ typed line and `STLINE` a startup line, so neither goes through `MLECHO`.
 The CCP then tests what the piece is. A drive letter and a colon alone select
 the drive (`src/cpm/ccp.asm:162-183`), and anything else goes to `NOTDRIVE`
 (Chapter 17), which compares the command with the built-ins' names and otherwise
-loads a program or installs a service (`src/cpm/ccp.asm:224-294`). A program is
+loads a program or installs a service (`src/cpm/ccp.asm:225-294`). A program is
 looked for on the drive named, or the current drive, in the current user and
 then in that drive's user 0. One not found there is looked for on A:, in the
 current user and then in user 0, when the command names no drive and the
@@ -213,7 +213,7 @@ The CCP sets the code to a failure in one place, `ERRGO`, which Chapter 17
 describes with `BADCMD`. `ERRGO` stores `RCFAIL`, `FF00h`, and prints the
 message at `DE` before it goes to `STARTED` (`src/cpm/ccp.asm:20`,
 `src/cpm/ccp.asm:341-347`). `BADCMD`, which prints a command or argument with
-a question mark, falls through into it (`src/cpm/ccp.asm:323-343`). The
+a question mark, falls through into it (`src/cpm/ccp.asm:323-344`). The
 built-ins' messages go there by `JP ERRGO`: `NO FILE` from `FILENO`,
 `FILE EXISTS` from `REN`, `NO SPACE` from `SAVE` and `COPY`'s four messages
 through `CPFAIL` (`src/cpm/ccp.asm:846-848`, `src/cpm/ccp.asm:956-958`,
