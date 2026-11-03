@@ -7,10 +7,10 @@ nav_group: "Part I: Using and programming TEC-OS"
 
 # 11. Chaining commands
 
-Checked against TEC-OS 19ad916, with the ATOM assembler from the
+Checked against TEC-OS 60e0768, with the ATOM assembler from the
 repository's `atom-z80` 0.3.7. The starter card's `TED.COM` is from Thorium
-8fcc6ea, and its copy in `dist/files` has the SHA-256
-`9a9936cf9daeb285b585470faaf6f5885926c8aa00c227de2fafe79f762a413e`. Its
+676075a, and its copy in `dist/files` has the SHA-256
+`373d866bb667b26370933d494d3e0fca5af8f330090b085182ad450d952ac64a`. Its
 `TAS.COM` is from Thorium dbee66a, with the SHA-256
 `45c0cf054c089163b18d40d9d009715d01a691ffee1c797a61333c3fb7963bd2`.
 
